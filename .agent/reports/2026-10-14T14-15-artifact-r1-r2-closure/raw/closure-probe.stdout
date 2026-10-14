@@ -1,0 +1,31 @@
+{"name":"R1 new YAML has own locked browser before each checkout consumer","result":"PASS"}
+{"name":"R1 old YAML still fails equivalent ordering contract","result":"PASS"}
+{"name":"PG setup body byte exact approved main financial workflow","result":"PASS"}
+{"name":"PG stage precedes deps and publishes fixed PG17 PATH / OS USER","result":"PASS"}
+{"name":"permissions/events/action refs and all unmodified steps remain equal","result":"PASS"}
+{"name":"parser valid 155 records / 31 ordered PCR mock control","result":"PASS"}
+{"name":"parser valid npm prefix and diagnostic durations control","result":"PASS"}
+{"name":"parser rejects only31","result":"PASS"}
+{"name":"parser rejects duplicateResultIds","result":"PASS"}
+{"name":"parser rejects contradictoryNotOk","result":"PASS"}
+{"name":"parser rejects duplicatePlan","result":"PASS"}
+{"name":"parser rejects duplicateHeader","result":"PASS"}
+{"name":"parser rejects skip","result":"PASS"}
+{"name":"parser rejects todo","result":"PASS"}
+{"name":"parser rejects bailout","result":"PASS"}
+{"name":"parser rejects wrongFailSummary","result":"PASS"}
+{"name":"parser rejects wrongPCR","result":"PASS"}
+{"name":"parser rejects doubleSummary","result":"PASS"}
+{"name":"parser rejects missingResult","result":"PASS"}
+{"name":"parser rejects extraResult","result":"PASS"}
+{"name":"parser rejects wrongPlan","result":"PASS"}
+{"name":"parser rejects cancelled","result":"PASS"}
+{"name":"parser rejects missingHeader","result":"PASS"}
+{"name":"parser rejects reorderedIds","result":"PASS"}
+{"name":"parser rejects leadingZeroId","result":"PASS"}
+{"name":"parser rejects lowercaseSkip","result":"PASS"}
+{"name":"historical exact df still accepts original only31","result":"PASS"}
+{"name":"historical exact df still accepts original duplicateResultIds","result":"PASS"}
+{"name":"historical exact df still accepts original contradictoryNotOk","result":"PASS"}
+{"name":"historical exact df still accepts original duplicatePlan","result":"PASS"}
+{"checks":30,"pass":30,"fail":0,"skip":0,"parserNegativeCases":19,"mockedCanonicalNotActualExecution":true,"pgBodySha256":"8ea1c4492350ba84e20e550d85319d681719b074c45aebac489af6cc807ad902"}

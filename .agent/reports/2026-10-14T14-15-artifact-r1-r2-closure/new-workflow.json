@@ -1,0 +1,131 @@
+{
+  "name": "Reviewed publication source Linux artifact",
+  "on": {
+    "pull_request": {
+      "paths": [
+        ".github/workflows/reviewed-publication-tail-artifact.yml",
+        "docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md"
+      ]
+    },
+    "workflow_dispatch": ""
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "reviewed-linux-dd59817f750684b093965f539dd4de466be13077",
+    "cancel-in-progress": "false"
+  },
+  "jobs": {
+    "prepare": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": "30",
+      "env": {
+        "REVIEWED_SOURCE": "dd59817f750684b093965f539dd4de466be13077",
+        "REVIEW_EVIDENCE": "c2b146adb6d03814f2bd9a7af72baf003bb48812",
+        "REVIEWED_TREE": "6a9a08af70fb94b50ed2b5eee6aaf3686f648b99",
+        "REVIEWED_WEB_TREE": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+        "NEXT_TELEMETRY_DISABLED": "1",
+        "PLAYWRIGHT_BROWSERS_PATH": "0"
+      },
+      "steps": [
+        {
+          "name": "Retrieve the actual builder subject for fresh canonical tests",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "fetch-depth": "0",
+            "persist-credentials": "false"
+          }
+        },
+        {
+          "name": "Set up the existing pinned Node runtime",
+          "uses": "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "with": {
+            "node-version": "22.14.0"
+          }
+        },
+        {
+          "name": "Provision original isolated PostgreSQL fixtures before canonical tests",
+          "shell": "bash",
+          "run": "set -euo pipefail\nkey=\"$RUNNER_TEMP/pgdg.asc\"\ncurl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc -o \"$key\"\nfingerprint=$(gpg --batch --show-keys --with-colons \"$key\" | awk -F: '$1==\"fpr\" {print $10; exit}')\ntest \"$fingerprint\" = B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8\nsudo install -d -m 0755 /usr/share/postgresql-common/pgdg\nsudo install -m 0644 \"$key\" /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc\nprintf '%s\\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null\nsudo apt-get update\nsudo apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17\nbin=/usr/lib/postgresql/17/bin\nfor tool in pg_config initdb pg_ctl psql; do test -x \"$bin/$tool\"; done\n\"$bin/pg_config\" --version | grep -E '^PostgreSQL 17\\.'\necho \"$bin\" >> \"$GITHUB_PATH\"\necho \"USER=$(id -un)\" >> \"$GITHUB_ENV\"\n"
+        },
+        {
+          "name": "Install the actual builder's exact locked dependencies",
+          "run": "npm ci\nnpm --prefix web ci\n"
+        },
+        {
+          "name": "Provision the builder's locked browser before its canonical consumers",
+          "working-directory": "web",
+          "run": "./node_modules/.bin/playwright install --with-deps chromium"
+        },
+        {
+          "name": "Run fresh canonical correctness on the actual builder subject",
+          "shell": "bash",
+          "run": "set -euo pipefail\ntest \"$(node --version)\" = v22.14.0\ntest \"$(git rev-parse HEAD)\" = \"$GITHUB_SHA\"\nmkdir -m 0700 \"$RUNNER_TEMP/standalone-export\"\nnpm run test:source-led-opportunity-v3:product-correctness 2>&1 | tee \"$RUNNER_TEMP/standalone-export/builder-canonical.log\"\ngit diff --exit-code\nnode --input-type=module <<'NODE'\nimport fs from 'node:fs';\nimport assert from 'node:assert/strict';\nimport { createHash } from 'node:crypto';\nimport { execFileSync } from 'node:child_process';\nconst dir = process.env.RUNNER_TEMP + '/standalone-export';\nconst log = fs.readFileSync(dir + '/builder-canonical.log', 'utf8');\nassert.ok(Buffer.byteLength(log, 'utf8') <= 4 * 1024 * 1024);\nconst start = log.indexOf('TAP version 13\\n');\nassert.ok(start >= 0);\nconst tap = log.slice(start);\nassert.equal([...tap.matchAll(/^TAP version 13$/gmu)].length, 1);\nassert.doesNotMatch(tap, /^\\s*(?:not ok\\b|Bail out!)/mu);\nconst plans = [...tap.matchAll(/^1\\.\\.(\\d+)$/gmu)];\nassert.equal(plans.length, 1);\nassert.equal(plans[0][1], '155');\nconst resultLines = [...tap.matchAll(/^(?:not )?ok\\b.*$/gmu)].map(m => m[0]);\nassert.equal(resultLines.length, 155);\nfor (const [index, line] of resultLines.entries()) {\n  const result = /^ok (\\d+) - (.+)$/u.exec(line);\n  assert.ok(result);\n  assert.equal(result[1], String(index + 1));\n  assert.doesNotMatch(result[2], /\\s+#\\s*(?:SKIP|TODO)\\b/iu);\n}\nfor (const [name, expected] of Object.entries({ tests: 155, pass: 155, fail: 0, cancelled: 0, skipped: 0, todo: 0 })) {\n  const rows = [...tap.matchAll(new RegExp('^# ' + name + ' (\\\\d+)$', 'gmu'))];\n  assert.equal(rows.length, 1);\n  assert.equal(Number(rows[0][1]), expected);\n}\nconst pcr = [...tap.matchAll(/^ok \\d+ - acceptance (PCR-\\d{3})$/gmu)].map(m => m[1]);\nassert.deepEqual(pcr, Array.from({ length: 31 }, (_, i) => 'PCR-' + String(i + 1).padStart(3, '0')));\nconst git = ref => execFileSync('git', ['rev-parse', ref], { encoding: 'utf8' }).trim();\nassert.equal(git('HEAD'), process.env.GITHUB_SHA);\nassert.match(process.env.GITHUB_WORKFLOW_SHA ?? '', /^[a-f0-9]{40}$/u);\nconst hash = bytes => createHash('sha256').update(bytes).digest('hex');\nfs.writeFileSync(dir + '/builder-canonical.tap', tap, { flag: 'wx' });\nfs.writeFileSync(dir + '/builder-correctness.json', JSON.stringify({\n  executionSubject: git('HEAD'), executionTree: git('HEAD^{tree}'), executionWebTree: git('HEAD:web'),\n  builderWorkflowSha: process.env.GITHUB_WORKFLOW_SHA, workflowRef: process.env.GITHUB_WORKFLOW_REF,\n  triggerCommit: process.env.GITHUB_SHA, runId: process.env.GITHUB_RUN_ID,\n  command: 'npm run test:source-led-opportunity-v3:product-correctness',\n  canonicalTests: 155, pass: 155, fail: 0, cancelled: 0, skipped: 0, todo: 0,\n  namedPCR: pcr, canonicalSectionSha256: hash(tap),\n  rootLockSha256: hash(fs.readFileSync('package-lock.json')),\n  webLockSha256: hash(fs.readFileSync('web/package-lock.json')),\n  artifactApplicationSubject: process.env.REVIEWED_SOURCE,\n  artifactApplicationTestsAttributedToBuilder: false,\n}, null, 2) + '\\n', { flag: 'wx' });\nNODE\n"
+        },
+        {
+          "name": "Retrieve genuine direct-child evidence and source history",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "ref": "c2b146adb6d03814f2bd9a7af72baf003bb48812",
+            "fetch-depth": "0",
+            "persist-credentials": "false"
+          }
+        },
+        {
+          "name": "Select the reviewed source, without copying evidence into it",
+          "shell": "bash",
+          "run": "set -euo pipefail\ntest \"$(git show -s --format=%P \"$REVIEW_EVIDENCE\")\" = \"$REVIEWED_SOURCE\"\ngit checkout --detach \"$REVIEWED_SOURCE\"\ntest \"$(git rev-parse HEAD)\" = \"$REVIEWED_SOURCE\"\ntest \"$(git rev-parse HEAD^{tree})\" = \"$REVIEWED_TREE\"\ntest \"$(git rev-parse HEAD:web)\" = \"$REVIEWED_WEB_TREE\"\ntest -z \"$(git status --porcelain --untracked-files=all)\"\n"
+        },
+        {
+          "name": "Verify original review binding and record distinct builder identity",
+          "shell": "bash",
+          "run": "set -euo pipefail\ntest \"$(node --version)\" = v22.14.0\nnode --input-type=module <<'NODE'\nimport fs from 'node:fs';\nimport assert from 'node:assert/strict';\nimport { createRequire } from 'node:module';\nconst { resolveReviewedRuntimeRelease } = createRequire(import.meta.url)('./scripts/runtime/reviewed-runtime-release.js');\nconst release = resolveReviewedRuntimeRelease({ repositoryRoot: process.cwd(), sourceCommit: process.env.REVIEWED_SOURCE, attestationCommit: process.env.REVIEW_EVIDENCE });\nassert.equal(release.commitSha, process.env.REVIEWED_SOURCE);\nassert.equal(release.treeSha, process.env.REVIEWED_TREE);\nassert.match(process.env.GITHUB_WORKFLOW_SHA ?? '', /^[a-f0-9]{40}$/u);\nassert.match(process.env.GITHUB_SHA ?? '', /^[a-f0-9]{40}$/u);\nfs.writeFileSync(process.env.RUNNER_TEMP + '/standalone-export/review-binding.json', JSON.stringify({\n  sourceCommit: release.commitSha, sourceTree: release.treeSha,\n  directChildEvidence: process.env.REVIEW_EVIDENCE, reviewAttestationSha256: release.reviewAttestationSha256,\n  builderWorkflowSha: process.env.GITHUB_WORKFLOW_SHA, triggerCommit: process.env.GITHUB_SHA,\n  builderCorrectnessReceipt: 'builder-correctness.json',\n  workflowRef: process.env.GITHUB_WORKFLOW_REF, runId: process.env.GITHUB_RUN_ID,\n  databaseConnectionAttempted: false, deploymentPerformed: false,\n}, null, 2) + '\\n', { flag: 'wx' });\nNODE\n"
+        },
+        {
+          "name": "Install the exact locked build dependencies",
+          "run": "npm ci\nnpm --prefix web ci\n"
+        },
+        {
+          "name": "Verify source calculations, packaging, types and lint",
+          "run": "node web/scripts/sync-official-authority.mjs --check\nnpm run test:tw-entry-plan\nnode --test scripts/package-standalone-release.test.mjs\nnpm --prefix web run typecheck\nnpm --prefix web run lint\ngit diff --exit-code\n"
+        },
+        {
+          "name": "Verify source fixture navigation separately from packaged production",
+          "run": "cd web\nnpx playwright install --with-deps chromium\nnpx playwright test --config playwright.trade-plan.config.ts\n"
+        },
+        {
+          "name": "Build production after the separate development fixture server has stopped",
+          "run": "npm --prefix web run build"
+        },
+        {
+          "name": "Package and verify the approved source, not the merge or builder commit",
+          "shell": "bash",
+          "run": "set -euo pipefail\ntest \"$(git rev-parse HEAD)\" = \"$REVIEWED_SOURCE\"\ntest -z \"$(git status --porcelain --untracked-files=no)\"\ndestination=\"$RUNNER_TEMP/reviewed-standalone\"\nexport_dir=\"$RUNNER_TEMP/standalone-export\"\nmkdir -m 0700 \"$destination\"\nnode scripts/package-standalone-release.mjs \"$GITHUB_WORKSPACE\" \"$GITHUB_WORKSPACE\" \"$destination\" \"$REVIEWED_SOURCE\" \"$REVIEWED_SOURCE\" > \"$export_dir/package.json\"\nnode scripts/verify-standalone-release.mjs \"$destination/$REVIEWED_SOURCE\" > \"$export_dir/verification.json\"\ncp \"$destination/$REVIEWED_SOURCE/release-manifest.json\" \"$export_dir/release-manifest.json\"\ngit rev-parse HEAD HEAD^{tree} HEAD:web > \"$export_dir/source-identity.txt\"\n"
+        },
+        {
+          "name": "Boot the packaged production entrypoint without credentials",
+          "shell": "bash",
+          "run": "set -euo pipefail\nnode --input-type=module <<'NODE'\nimport fs from 'node:fs';\nimport path from 'node:path';\nimport assert from 'node:assert/strict';\nimport { createHash } from 'node:crypto';\nimport { spawn } from 'node:child_process';\nimport { setTimeout as pause } from 'node:timers/promises';\nconst exportDir = path.join(process.env.RUNNER_TEMP, 'standalone-export');\nconst root = path.join(process.env.RUNNER_TEMP, 'reviewed-standalone', process.env.REVIEWED_SOURCE);\nconst { manifest } = JSON.parse(fs.readFileSync(path.join(root, 'release-manifest.json'), 'utf8'));\nassert.equal(manifest.sourceCommit, process.env.REVIEWED_SOURCE);\nconst entry = path.resolve(root, manifest.entrypoint);\nassert.ok(entry.startsWith(root + path.sep));\nconst asset = manifest.files.find(f => /\\/\\.next\\/static\\/.+\\.(?:js|css)$/u.test(f.path));\nassert.ok(asset);\nconst assetUrl = '/_next/static/' + asset.path.split('/.next/static/')[1];\nconst child = spawn(process.execPath, [entry], { cwd: path.dirname(entry), env: {\n  PATH: process.env.PATH, HOME: process.env.HOME, LANG: 'C.UTF-8', TZ: 'UTC',\n  NODE_ENV: 'production', HOSTNAME: '127.0.0.1', PORT: '3114', NEXT_TELEMETRY_DISABLED: '1',\n}, stdio: ['ignore', 'pipe', 'pipe'] });\nchild.stdout.pipe(fs.createWriteStream(path.join(exportDir, 'packaged-boot.stdout')));\nchild.stderr.pipe(fs.createWriteStream(path.join(exportDir, 'packaged-boot.stderr')));\nlet closed = false, stopping = false, unexpectedExit = false;\nconst ended = new Promise((resolve, reject) => {\n  child.once('error', reject);\n  child.once('close', (code, signal) => { closed = true; unexpectedExit = !stopping; resolve({ code, signal }); });\n});\n// Observe asynchronous spawn failure while startup requests are pending.\nvoid ended.catch(() => {});\nconst get = route => fetch('http://127.0.0.1:3114' + route, { signal: AbortSignal.timeout(3000), redirect: 'error' });\nlet proof;\ntry {\n  const until = Date.now() + 30000;\n  let auth;\n  while (!auth) {\n    assert.equal(closed, false, 'packaged process exited before probe');\n    try { auth = await get('/api/internal/health-check'); }\n    catch (error) { if (Date.now() >= until) throw error; await pause(100); }\n  }\n  assert.equal(auth.status, 500);\n  assert.deepEqual(await auth.json(), { ok: false, error: 'INTERNAL_API_KEY/CRON_SECRET not configured' });\n  assert.equal((await get('/trade-plan-fixture')).status, 404);\n  const staticResponse = await get(assetUrl);\n  assert.equal(staticResponse.status, 200);\n  assert.ok(staticResponse.body);\n  const digest = createHash('sha256'); let staticBytes = 0;\n  for await (const chunk of staticResponse.body) {\n    staticBytes += chunk.byteLength; assert.ok(staticBytes <= asset.bytes);\n    digest.update(chunk);\n  }\n  assert.equal(staticBytes, asset.bytes);\n  const staticHash = digest.digest('hex');\n  assert.equal(staticHash, asset.sha256);\n  assert.equal(closed, false);\n  assert.equal(child.exitCode, null);\n  assert.equal(child.signalCode, null);\n  proof = { sourceCommit: process.env.REVIEWED_SOURCE, nodeVersion: process.versions.node,\n    productionEntrypoint: manifest.entrypoint, credentialEnvironment: 'absent',\n    unconfiguredAuthStatus: 500, fixtureUnavailableStatus: 404,\n    assetPath: asset.path, assetSha256: staticHash, databaseOrApiMutationPerformed: false,\n    productionReadinessProven: false, privatePeerOrLiveDataProven: false };\n} finally {\n  stopping = true;\n  if (!closed) child.kill('SIGTERM');\n  if (!closed) await Promise.race([ended, pause(5000)]);\n  if (!closed) child.kill('SIGKILL');\n  const exit = await Promise.race([ended, pause(5000).then(() => { throw Error('packaged_process_cleanup_unconfirmed'); })]);\n  assert.equal(unexpectedExit, false);\n  if (proof) { proof.confirmedProcessExit = exit; fs.writeFileSync(path.join(exportDir, 'packaged-boot.json'), JSON.stringify(proof, null, 2) + '\\n', { flag: 'wx' }); }\n}\nNODE\n"
+        },
+        {
+          "name": "Seal the downloadable binary and receipts",
+          "shell": "bash",
+          "run": "set -euo pipefail\nexport_dir=\"$RUNNER_TEMP/standalone-export\"\ntar -czf \"$export_dir/stockinsider-linux.tar.gz\" -C \"$RUNNER_TEMP/reviewed-standalone\" \"$REVIEWED_SOURCE\"\n(cd \"$export_dir\" && sha256sum stockinsider-linux.tar.gz release-manifest.json package.json verification.json source-identity.txt review-binding.json builder-canonical.log builder-canonical.tap builder-correctness.json packaged-boot.json packaged-boot.stdout packaged-boot.stderr > SHA256SUMS)\n"
+        },
+        {
+          "name": "Retain the new fixed-target package outside Git history",
+          "if": "always()",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "reviewed-linux-standalone-dd59817f750684b093965f539dd4de466be13077-${{ github.run_id }}-${{ job.status }}",
+            "path": "${{ runner.temp }}/standalone-export/",
+            "if-no-files-found": "error",
+            "retention-days": "14",
+            "compression-level": "0"
+          }
+        }
+      ]
+    }
+  }
+}

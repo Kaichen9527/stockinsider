@@ -1,0 +1,785 @@
+TAP version 13
+# Subtest: acceptance PCR-001
+ok 1 - acceptance PCR-001
+  ---
+  duration_ms: 1.810482
+  ...
+# Subtest: acceptance PCR-002
+ok 2 - acceptance PCR-002
+  ---
+  duration_ms: 0.15214
+  ...
+# Subtest: acceptance PCR-003
+ok 3 - acceptance PCR-003
+  ---
+  duration_ms: 0.06011
+  ...
+# Subtest: acceptance PCR-004
+ok 4 - acceptance PCR-004
+  ---
+  duration_ms: 0.055344
+  ...
+# Subtest: acceptance PCR-005
+ok 5 - acceptance PCR-005
+  ---
+  duration_ms: 0.163106
+  ...
+# Subtest: acceptance PCR-006
+ok 6 - acceptance PCR-006
+  ---
+  duration_ms: 0.077667
+  ...
+# Subtest: acceptance PCR-007
+ok 7 - acceptance PCR-007
+  ---
+  duration_ms: 0.163627
+  ...
+# Subtest: acceptance PCR-008
+ok 8 - acceptance PCR-008
+  ---
+  duration_ms: 0.060352
+  ...
+# Subtest: acceptance PCR-009
+ok 9 - acceptance PCR-009
+  ---
+  duration_ms: 0.192711
+  ...
+# Subtest: acceptance PCR-010
+ok 10 - acceptance PCR-010
+  ---
+  duration_ms: 0.376338
+  ...
+# Subtest: acceptance PCR-011
+ok 11 - acceptance PCR-011
+  ---
+  duration_ms: 0.241335
+  ...
+# Subtest: acceptance PCR-012
+ok 12 - acceptance PCR-012
+  ---
+  duration_ms: 0.051908
+  ...
+# Subtest: acceptance PCR-013
+ok 13 - acceptance PCR-013
+  ---
+  duration_ms: 0.038018
+  ...
+# Subtest: acceptance PCR-014
+ok 14 - acceptance PCR-014
+  ---
+  duration_ms: 0.094513
+  ...
+# Subtest: acceptance PCR-015
+ok 15 - acceptance PCR-015
+  ---
+  duration_ms: 0.040041
+  ...
+# Subtest: acceptance PCR-016
+ok 16 - acceptance PCR-016
+  ---
+  duration_ms: 0.03295
+  ...
+# Subtest: acceptance PCR-017
+ok 17 - acceptance PCR-017
+  ---
+  duration_ms: 0.028934
+  ...
+# Subtest: acceptance PCR-018
+ok 18 - acceptance PCR-018
+  ---
+  duration_ms: 0.028393
+  ...
+# Subtest: acceptance PCR-019
+ok 19 - acceptance PCR-019
+  ---
+  duration_ms: 0.029024
+  ...
+# Subtest: acceptance PCR-020
+ok 20 - acceptance PCR-020
+  ---
+  duration_ms: 0.032579
+  ...
+# Subtest: acceptance PCR-021
+ok 21 - acceptance PCR-021
+  ---
+  duration_ms: 0.027952
+  ...
+# Subtest: acceptance PCR-022
+ok 22 - acceptance PCR-022
+  ---
+  duration_ms: 0.028763
+  ...
+# Subtest: acceptance PCR-023
+ok 23 - acceptance PCR-023
+  ---
+  duration_ms: 0.027321
+  ...
+# Subtest: acceptance PCR-024
+ok 24 - acceptance PCR-024
+  ---
+  duration_ms: 0.02626
+  ...
+# Subtest: acceptance PCR-025
+ok 25 - acceptance PCR-025
+  ---
+  duration_ms: 0.025669
+  ...
+# Subtest: acceptance PCR-026
+ok 26 - acceptance PCR-026
+  ---
+  duration_ms: 0.027011
+  ...
+# Subtest: acceptance PCR-027
+ok 27 - acceptance PCR-027
+  ---
+  duration_ms: 0.02626
+  ...
+# Subtest: acceptance PCR-028
+ok 28 - acceptance PCR-028
+  ---
+  duration_ms: 0.027752
+  ...
+# Subtest: acceptance PCR-029
+ok 29 - acceptance PCR-029
+  ---
+  duration_ms: 0.054913
+  ...
+# Subtest: acceptance PCR-030
+ok 30 - acceptance PCR-030
+  ---
+  duration_ms: 0.035574
+  ...
+# Subtest: acceptance PCR-031
+ok 31 - acceptance PCR-031
+  ---
+  duration_ms: 0.105469
+  ...
+# Subtest: synthetic reporter control 32
+ok 32 - synthetic reporter control 32
+  ---
+  duration_ms: 0.067602
+  ...
+# Subtest: synthetic reporter control 33
+ok 33 - synthetic reporter control 33
+  ---
+  duration_ms: 0.05995
+  ...
+# Subtest: synthetic reporter control 34
+ok 34 - synthetic reporter control 34
+  ---
+  duration_ms: 0.058288
+  ...
+# Subtest: synthetic reporter control 35
+ok 35 - synthetic reporter control 35
+  ---
+  duration_ms: 0.054232
+  ...
+# Subtest: synthetic reporter control 36
+ok 36 - synthetic reporter control 36
+  ---
+  duration_ms: 0.129655
+  ...
+# Subtest: synthetic reporter control 37
+ok 37 - synthetic reporter control 37
+  ---
+  duration_ms: 0.036224
+  ...
+# Subtest: synthetic reporter control 38
+ok 38 - synthetic reporter control 38
+  ---
+  duration_ms: 0.028633
+  ...
+# Subtest: synthetic reporter control 39
+ok 39 - synthetic reporter control 39
+  ---
+  duration_ms: 0.064647
+  ...
+# Subtest: synthetic reporter control 40
+ok 40 - synthetic reporter control 40
+  ---
+  duration_ms: 0.033711
+  ...
+# Subtest: synthetic reporter control 41
+ok 41 - synthetic reporter control 41
+  ---
+  duration_ms: 0.028624
+  ...
+# Subtest: synthetic reporter control 42
+ok 42 - synthetic reporter control 42
+  ---
+  duration_ms: 0.027872
+  ...
+# Subtest: synthetic reporter control 43
+ok 43 - synthetic reporter control 43
+  ---
+  duration_ms: 0.028002
+  ...
+# Subtest: synthetic reporter control 44
+ok 44 - synthetic reporter control 44
+  ---
+  duration_ms: 0.03977
+  ...
+# Subtest: synthetic reporter control 45
+ok 45 - synthetic reporter control 45
+  ---
+  duration_ms: 0.208354
+  ...
+# Subtest: synthetic reporter control 46
+ok 46 - synthetic reporter control 46
+  ---
+  duration_ms: 0.051328
+  ...
+# Subtest: synthetic reporter control 47
+ok 47 - synthetic reporter control 47
+  ---
+  duration_ms: 0.04027
+  ...
+# Subtest: synthetic reporter control 48
+ok 48 - synthetic reporter control 48
+  ---
+  duration_ms: 0.117758
+  ...
+# Subtest: synthetic reporter control 49
+ok 49 - synthetic reporter control 49
+  ---
+  duration_ms: 0.054873
+  ...
+# Subtest: synthetic reporter control 50
+ok 50 - synthetic reporter control 50
+  ---
+  duration_ms: 0.465783
+  ...
+# Subtest: synthetic reporter control 51
+ok 51 - synthetic reporter control 51
+  ---
+  duration_ms: 0.050125
+  ...
+# Subtest: synthetic reporter control 52
+ok 52 - synthetic reporter control 52
+  ---
+  duration_ms: 0.037096
+  ...
+# Subtest: synthetic reporter control 53
+ok 53 - synthetic reporter control 53
+  ---
+  duration_ms: 0.03984
+  ...
+# Subtest: synthetic reporter control 54
+ok 54 - synthetic reporter control 54
+  ---
+  duration_ms: 0.05918
+  ...
+# Subtest: synthetic reporter control 55
+ok 55 - synthetic reporter control 55
+  ---
+  duration_ms: 0.042494
+  ...
+# Subtest: synthetic reporter control 56
+ok 56 - synthetic reporter control 56
+  ---
+  duration_ms: 0.041051
+  ...
+# Subtest: synthetic reporter control 57
+ok 57 - synthetic reporter control 57
+  ---
+  duration_ms: 0.033591
+  ...
+# Subtest: synthetic reporter control 58
+ok 58 - synthetic reporter control 58
+  ---
+  duration_ms: 0.056695
+  ...
+# Subtest: synthetic reporter control 59
+ok 59 - synthetic reporter control 59
+  ---
+  duration_ms: 0.036245
+  ...
+# Subtest: synthetic reporter control 60
+ok 60 - synthetic reporter control 60
+  ---
+  duration_ms: 0.035213
+  ...
+# Subtest: synthetic reporter control 61
+ok 61 - synthetic reporter control 61
+  ---
+  duration_ms: 0.140612
+  ...
+# Subtest: synthetic reporter control 62
+ok 62 - synthetic reporter control 62
+  ---
+  duration_ms: 0.040781
+  ...
+# Subtest: synthetic reporter control 63
+ok 63 - synthetic reporter control 63
+  ---
+  duration_ms: 0.096866
+  ...
+# Subtest: synthetic reporter control 64
+ok 64 - synthetic reporter control 64
+  ---
+  duration_ms: 0.042044
+  ...
+# Subtest: synthetic reporter control 65
+ok 65 - synthetic reporter control 65
+  ---
+  duration_ms: 0.038138
+  ...
+# Subtest: synthetic reporter control 66
+ok 66 - synthetic reporter control 66
+  ---
+  duration_ms: 0.116195
+  ...
+# Subtest: synthetic reporter control 67
+ok 67 - synthetic reporter control 67
+  ---
+  duration_ms: 0.043576
+  ...
+# Subtest: synthetic reporter control 68
+ok 68 - synthetic reporter control 68
+  ---
+  duration_ms: 0.037367
+  ...
+# Subtest: synthetic reporter control 69
+ok 69 - synthetic reporter control 69
+  ---
+  duration_ms: 0.61661
+  ...
+# Subtest: synthetic reporter control 70
+ok 70 - synthetic reporter control 70
+  ---
+  duration_ms: 0.061853
+  ...
+# Subtest: synthetic reporter control 71
+ok 71 - synthetic reporter control 71
+  ---
+  duration_ms: 0.038568
+  ...
+# Subtest: synthetic reporter control 72
+ok 72 - synthetic reporter control 72
+  ---
+  duration_ms: 0.036295
+  ...
+# Subtest: synthetic reporter control 73
+ok 73 - synthetic reporter control 73
+  ---
+  duration_ms: 0.034652
+  ...
+# Subtest: synthetic reporter control 74
+ok 74 - synthetic reporter control 74
+  ---
+  duration_ms: 0.036395
+  ...
+# Subtest: synthetic reporter control 75
+ok 75 - synthetic reporter control 75
+  ---
+  duration_ms: 0.037777
+  ...
+# Subtest: synthetic reporter control 76
+ok 76 - synthetic reporter control 76
+  ---
+  duration_ms: 0.19229
+  ...
+# Subtest: synthetic reporter control 77
+ok 77 - synthetic reporter control 77
+  ---
+  duration_ms: 0.051157
+  ...
+# Subtest: synthetic reporter control 78
+ok 78 - synthetic reporter control 78
+  ---
+  duration_ms: 0.037266
+  ...
+# Subtest: synthetic reporter control 79
+ok 79 - synthetic reporter control 79
+  ---
+  duration_ms: 0.035874
+  ...
+# Subtest: synthetic reporter control 80
+ok 80 - synthetic reporter control 80
+  ---
+  duration_ms: 0.037617
+  ...
+# Subtest: synthetic reporter control 81
+ok 81 - synthetic reporter control 81
+  ---
+  duration_ms: 0.037496
+  ...
+# Subtest: synthetic reporter control 82
+ok 82 - synthetic reporter control 82
+  ---
+  duration_ms: 0.033521
+  ...
+# Subtest: synthetic reporter control 83
+ok 83 - synthetic reporter control 83
+  ---
+  duration_ms: 0.487827
+  ...
+# Subtest: synthetic reporter control 84
+ok 84 - synthetic reporter control 84
+  ---
+  duration_ms: 0.075484
+  ...
+# Subtest: synthetic reporter control 85
+ok 85 - synthetic reporter control 85
+  ---
+  duration_ms: 0.118969
+  ...
+# Subtest: synthetic reporter control 86
+ok 86 - synthetic reporter control 86
+  ---
+  duration_ms: 0.070206
+  ...
+# Subtest: synthetic reporter control 87
+ok 87 - synthetic reporter control 87
+  ---
+  duration_ms: 0.388586
+  ...
+# Subtest: synthetic reporter control 88
+ok 88 - synthetic reporter control 88
+  ---
+  duration_ms: 0.108894
+  ...
+# Subtest: synthetic reporter control 89
+ok 89 - synthetic reporter control 89
+  ---
+  duration_ms: 0.04623
+  ...
+# Subtest: synthetic reporter control 90
+ok 90 - synthetic reporter control 90
+  ---
+  duration_ms: 0.037056
+  ...
+# Subtest: synthetic reporter control 91
+ok 91 - synthetic reporter control 91
+  ---
+  duration_ms: 0.034762
+  ...
+# Subtest: synthetic reporter control 92
+ok 92 - synthetic reporter control 92
+  ---
+  duration_ms: 0.040751
+  ...
+# Subtest: synthetic reporter control 93
+ok 93 - synthetic reporter control 93
+  ---
+  duration_ms: 1.139991
+  ...
+# Subtest: synthetic reporter control 94
+ok 94 - synthetic reporter control 94
+  ---
+  duration_ms: 0.047782
+  ...
+# Subtest: synthetic reporter control 95
+ok 95 - synthetic reporter control 95
+  ---
+  duration_ms: 0.029334
+  ...
+# Subtest: synthetic reporter control 96
+ok 96 - synthetic reporter control 96
+  ---
+  duration_ms: 0.025279
+  ...
+# Subtest: synthetic reporter control 97
+ok 97 - synthetic reporter control 97
+  ---
+  duration_ms: 0.023345
+  ...
+# Subtest: synthetic reporter control 98
+ok 98 - synthetic reporter control 98
+  ---
+  duration_ms: 0.02624
+  ...
+# Subtest: synthetic reporter control 99
+ok 99 - synthetic reporter control 99
+  ---
+  duration_ms: 0.022434
+  ...
+# Subtest: synthetic reporter control 100
+ok 100 - synthetic reporter control 100
+  ---
+  duration_ms: 0.021442
+  ...
+# Subtest: synthetic reporter control 101
+ok 101 - synthetic reporter control 101
+  ---
+  duration_ms: 0.020952
+  ...
+# Subtest: synthetic reporter control 102
+ok 102 - synthetic reporter control 102
+  ---
+  duration_ms: 0.020862
+  ...
+# Subtest: synthetic reporter control 103
+ok 103 - synthetic reporter control 103
+  ---
+  duration_ms: 0.020992
+  ...
+# Subtest: synthetic reporter control 104
+ok 104 - synthetic reporter control 104
+  ---
+  duration_ms: 0.021763
+  ...
+# Subtest: synthetic reporter control 105
+ok 105 - synthetic reporter control 105
+  ---
+  duration_ms: 0.022203
+  ...
+# Subtest: synthetic reporter control 106
+ok 106 - synthetic reporter control 106
+  ---
+  duration_ms: 0.021833
+  ...
+# Subtest: synthetic reporter control 107
+ok 107 - synthetic reporter control 107
+  ---
+  duration_ms: 0.021432
+  ...
+# Subtest: synthetic reporter control 108
+ok 108 - synthetic reporter control 108
+  ---
+  duration_ms: 0.021462
+  ...
+# Subtest: synthetic reporter control 109
+ok 109 - synthetic reporter control 109
+  ---
+  duration_ms: 0.058869
+  ...
+# Subtest: synthetic reporter control 110
+ok 110 - synthetic reporter control 110
+  ---
+  duration_ms: 0.224139
+  ...
+# Subtest: synthetic reporter control 111
+ok 111 - synthetic reporter control 111
+  ---
+  duration_ms: 0.029815
+  ...
+# Subtest: synthetic reporter control 112
+ok 112 - synthetic reporter control 112
+  ---
+  duration_ms: 0.02677
+  ...
+# Subtest: synthetic reporter control 113
+ok 113 - synthetic reporter control 113
+  ---
+  duration_ms: 0.023515
+  ...
+# Subtest: synthetic reporter control 114
+ok 114 - synthetic reporter control 114
+  ---
+  duration_ms: 0.021152
+  ...
+# Subtest: synthetic reporter control 115
+ok 115 - synthetic reporter control 115
+  ---
+  duration_ms: 0.021112
+  ...
+# Subtest: synthetic reporter control 116
+ok 116 - synthetic reporter control 116
+  ---
+  duration_ms: 0.021552
+  ...
+# Subtest: synthetic reporter control 117
+ok 117 - synthetic reporter control 117
+  ---
+  duration_ms: 0.021352
+  ...
+# Subtest: synthetic reporter control 118
+ok 118 - synthetic reporter control 118
+  ---
+  duration_ms: 0.140932
+  ...
+# Subtest: synthetic reporter control 119
+ok 119 - synthetic reporter control 119
+  ---
+  duration_ms: 0.0593
+  ...
+# Subtest: synthetic reporter control 120
+ok 120 - synthetic reporter control 120
+  ---
+  duration_ms: 0.054822
+  ...
+# Subtest: synthetic reporter control 121
+ok 121 - synthetic reporter control 121
+  ---
+  duration_ms: 0.049875
+  ...
+# Subtest: synthetic reporter control 122
+ok 122 - synthetic reporter control 122
+  ---
+  duration_ms: 0.046921
+  ...
+# Subtest: synthetic reporter control 123
+ok 123 - synthetic reporter control 123
+  ---
+  duration_ms: 0.050245
+  ...
+# Subtest: synthetic reporter control 124
+ok 124 - synthetic reporter control 124
+  ---
+  duration_ms: 0.129606
+  ...
+# Subtest: synthetic reporter control 125
+ok 125 - synthetic reporter control 125
+  ---
+  duration_ms: 0.055825
+  ...
+# Subtest: synthetic reporter control 126
+ok 126 - synthetic reporter control 126
+  ---
+  duration_ms: 0.050736
+  ...
+# Subtest: synthetic reporter control 127
+ok 127 - synthetic reporter control 127
+  ---
+  duration_ms: 0.0598
+  ...
+# Subtest: synthetic reporter control 128
+ok 128 - synthetic reporter control 128
+  ---
+  duration_ms: 0.051508
+  ...
+# Subtest: synthetic reporter control 129
+ok 129 - synthetic reporter control 129
+  ---
+  duration_ms: 0.042925
+  ...
+# Subtest: synthetic reporter control 130
+ok 130 - synthetic reporter control 130
+  ---
+  duration_ms: 0.08597
+  ...
+# Subtest: synthetic reporter control 131
+ok 131 - synthetic reporter control 131
+  ---
+  duration_ms: 0.054402
+  ...
+# Subtest: synthetic reporter control 132
+ok 132 - synthetic reporter control 132
+  ---
+  duration_ms: 0.050866
+  ...
+# Subtest: synthetic reporter control 133
+ok 133 - synthetic reporter control 133
+  ---
+  duration_ms: 0.060352
+  ...
+# Subtest: synthetic reporter control 134
+ok 134 - synthetic reporter control 134
+  ---
+  duration_ms: 0.047011
+  ...
+# Subtest: synthetic reporter control 135
+ok 135 - synthetic reporter control 135
+  ---
+  duration_ms: 0.048693
+  ...
+# Subtest: synthetic reporter control 136
+ok 136 - synthetic reporter control 136
+  ---
+  duration_ms: 0.082304
+  ...
+# Subtest: synthetic reporter control 137
+ok 137 - synthetic reporter control 137
+  ---
+  duration_ms: 0.046069
+  ...
+# Subtest: synthetic reporter control 138
+ok 138 - synthetic reporter control 138
+  ---
+  duration_ms: 0.044737
+  ...
+# Subtest: synthetic reporter control 139
+ok 139 - synthetic reporter control 139
+  ---
+  duration_ms: 0.098158
+  ...
+# Subtest: synthetic reporter control 140
+ok 140 - synthetic reporter control 140
+  ---
+  duration_ms: 0.043265
+  ...
+# Subtest: synthetic reporter control 141
+ok 141 - synthetic reporter control 141
+  ---
+  duration_ms: 0.044637
+  ...
+# Subtest: synthetic reporter control 142
+ok 142 - synthetic reporter control 142
+  ---
+  duration_ms: 0.045218
+  ...
+# Subtest: synthetic reporter control 143
+ok 143 - synthetic reporter control 143
+  ---
+  duration_ms: 0.042915
+  ...
+# Subtest: synthetic reporter control 144
+ok 144 - synthetic reporter control 144
+  ---
+  duration_ms: 0.042434
+  ...
+# Subtest: synthetic reporter control 145
+ok 145 - synthetic reporter control 145
+  ---
+  duration_ms: 0.045529
+  ...
+# Subtest: synthetic reporter control 146
+ok 146 - synthetic reporter control 146
+  ---
+  duration_ms: 0.047391
+  ...
+# Subtest: synthetic reporter control 147
+ok 147 - synthetic reporter control 147
+  ---
+  duration_ms: 0.045629
+  ...
+# Subtest: synthetic reporter control 148
+ok 148 - synthetic reporter control 148
+  ---
+  duration_ms: 0.047442
+  ...
+# Subtest: synthetic reporter control 149
+ok 149 - synthetic reporter control 149
+  ---
+  duration_ms: 0.045119
+  ...
+# Subtest: synthetic reporter control 150
+ok 150 - synthetic reporter control 150
+  ---
+  duration_ms: 0.085759
+  ...
+# Subtest: synthetic reporter control 151
+ok 151 - synthetic reporter control 151
+  ---
+  duration_ms: 0.050356
+  ...
+# Subtest: synthetic reporter control 152
+ok 152 - synthetic reporter control 152
+  ---
+  duration_ms: 0.040902
+  ...
+# Subtest: synthetic reporter control 153
+ok 153 - synthetic reporter control 153
+  ---
+  duration_ms: 0.042113
+  ...
+# Subtest: synthetic reporter control 154
+ok 154 - synthetic reporter control 154
+  ---
+  duration_ms: 0.03968
+  ...
+# Subtest: synthetic reporter control 155
+ok 155 - synthetic reporter control 155
+  ---
+  duration_ms: 0.040881
+  ...
+1..155
+# tests 155
+# suites 0
+# pass 155
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 56.830896

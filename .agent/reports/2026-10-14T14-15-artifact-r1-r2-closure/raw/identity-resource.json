@@ -1,0 +1,17 @@
+{
+  "subject": "e902021ee9df537d4a8da2a2eaff3921084d44d7",
+  "tree": "f1d217954ef7c9d0f759d1649879d34646faa0d8",
+  "webtree": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "base": "5189547f76bf24c002b8e8b11669081ba67ad2c6",
+  "deltaFromPrior": "35\t1\t.github/workflows/reviewed-publication-tail-artifact.yml\n4\t2\tdocs/operations/2026-10-14/reviewed-publication-artifact-handoff.md\n",
+  "wholeBaseDiff": "A\t.github/workflows/reviewed-publication-tail-artifact.yml\nA\tdocs/operations/2026-10-14/reviewed-publication-artifact-handoff.md\n",
+  "worktreeStatus": "",
+  "sourceCount": 23,
+  "unchangedInheritedSourceCount": 21,
+  "node": "v22.14.0",
+  "sampleAt": "2026-10-14T14:19:29.942589+00:00",
+  "freeBytes": {
+    "/workspace": 8606244864,
+    "/tmp": 15401275392
+  }
+}

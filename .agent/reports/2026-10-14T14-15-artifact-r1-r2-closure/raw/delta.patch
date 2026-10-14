@@ -1,0 +1,93 @@
+diff --git a/.github/workflows/reviewed-publication-tail-artifact.yml b/.github/workflows/reviewed-publication-tail-artifact.yml
+index e323559d..2609cd2a 100644
+--- a/.github/workflows/reviewed-publication-tail-artifact.yml
++++ b/.github/workflows/reviewed-publication-tail-artifact.yml
+@@ -24,6 +24,7 @@ jobs:
+       REVIEWED_TREE: 6a9a08af70fb94b50ed2b5eee6aaf3686f648b99
+       REVIEWED_WEB_TREE: c516655efaac8260b1bcf5938f8f4d65ab61ad44
+       NEXT_TELEMETRY_DISABLED: '1'
++      PLAYWRIGHT_BROWSERS_PATH: '0'
+     steps:
+       - name: Retrieve the actual builder subject for fresh canonical tests
+         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+@@ -34,10 +35,31 @@ jobs:
+         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+         with:
+           node-version: '22.14.0'
++      - name: Provision original isolated PostgreSQL fixtures before canonical tests
++        shell: bash
++        run: |
++          set -euo pipefail
++          key="$RUNNER_TEMP/pgdg.asc"
++          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc -o "$key"
++          fingerprint=$(gpg --batch --show-keys --with-colons "$key" | awk -F: '$1=="fpr" {print $10; exit}')
++          test "$fingerprint" = B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
++          sudo install -d -m 0755 /usr/share/postgresql-common/pgdg
++          sudo install -m 0644 "$key" /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc
++          printf '%s\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null
++          sudo apt-get update
++          sudo apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17
++          bin=/usr/lib/postgresql/17/bin
++          for tool in pg_config initdb pg_ctl psql; do test -x "$bin/$tool"; done
++          "$bin/pg_config" --version | grep -E '^PostgreSQL 17\.'
++          echo "$bin" >> "$GITHUB_PATH"
++          echo "USER=$(id -un)" >> "$GITHUB_ENV"
+       - name: Install the actual builder's exact locked dependencies
+         run: |
+           npm ci
+           npm --prefix web ci
++      - name: Provision the builder's locked browser before its canonical consumers
++        working-directory: web
++        run: ./node_modules/.bin/playwright install --with-deps chromium
+       - name: Run fresh canonical correctness on the actual builder subject
+         shell: bash
+         run: |
+@@ -58,12 +80,24 @@ jobs:
+           const start = log.indexOf('TAP version 13\n');
+           assert.ok(start >= 0);
+           const tap = log.slice(start);
++          assert.equal([...tap.matchAll(/^TAP version 13$/gmu)].length, 1);
++          assert.doesNotMatch(tap, /^\s*(?:not ok\b|Bail out!)/mu);
++          const plans = [...tap.matchAll(/^1\.\.(\d+)$/gmu)];
++          assert.equal(plans.length, 1);
++          assert.equal(plans[0][1], '155');
++          const resultLines = [...tap.matchAll(/^(?:not )?ok\b.*$/gmu)].map(m => m[0]);
++          assert.equal(resultLines.length, 155);
++          for (const [index, line] of resultLines.entries()) {
++            const result = /^ok (\d+) - (.+)$/u.exec(line);
++            assert.ok(result);
++            assert.equal(result[1], String(index + 1));
++            assert.doesNotMatch(result[2], /\s+#\s*(?:SKIP|TODO)\b/iu);
++          }
+           for (const [name, expected] of Object.entries({ tests: 155, pass: 155, fail: 0, cancelled: 0, skipped: 0, todo: 0 })) {
+             const rows = [...tap.matchAll(new RegExp('^# ' + name + ' (\\d+)$', 'gmu'))];
+             assert.equal(rows.length, 1);
+             assert.equal(Number(rows[0][1]), expected);
+           }
+-          assert.match(tap, /^1\.\.155$/mu);
+           const pcr = [...tap.matchAll(/^ok \d+ - acceptance (PCR-\d{3})$/gmu)].map(m => m[1]);
+           assert.deepEqual(pcr, Array.from({ length: 31 }, (_, i) => 'PCR-' + String(i + 1).padStart(3, '0')));
+           const git = ref => execFileSync('git', ['rev-parse', ref], { encoding: 'utf8' }).trim();
+diff --git a/docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md b/docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md
+index 086df587..0fc99f42 100644
+--- a/docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md
++++ b/docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md
+@@ -4,9 +4,9 @@ The target is **dd59817f750684b093965f539dd4de466be13077**, directly reviewed by
+ 
+ The existing artifact workflow381238005 has two runs,38138212902 and38192054066. Its current fixed source is old8bcd. The retained8bcd archive and manifest remain unchanged. A bounded local receipt search and the complete two-run history of that known workflow found no dd package; this is not a universal absence claim about arbitrary other workflows. Before triggering this candidate, check again for an existing successful same-target receipt and avoid duplicate builds.
+ 
+-This new workflow uses the existing pinned checkout/setup-node/upload actions and Node22.14. It first checks out the actual event subject and installs that subject's exact locks, then executes the original canonical product-correctness command. The complete log/TAP, all155 passing cases and31 distinct named PCR cases, execution commit/full tree/web tree, actual lock hashes and workflow/trigger/run identities are recorded in builder-correctness.json. This is a new execution required by the workflow; no hosted result is claimed before it runs. The original source-led ordinary workflow paths do not cover this new workflow, so this fresh test stage is explicit here. Protected workflows, their trust policy and their paths are unchanged.
++This new workflow uses the existing pinned checkout/setup-node/upload actions and Node22.14. It first checks out the actual event subject, provisions the original isolated PostgreSQL fixtures using the already approved official PG17 signing fingerprint/setup, installs that subject's exact locks and locked Chromium with required libraries, then executes the original canonical product-correctness command. Browser consumers precede neither their own browser installation nor checkout's dependencies. Project-local browser storage is explicit for both checkouts; the second subject installs its own browser after checkout cleaning. The complete log/TAP, all155 passing cases and31 distinct named PCR cases, execution commit/full tree/web tree, actual lock hashes and workflow/trigger/run identities are recorded in builder-correctness.json. The parser checks exactly one header/plan, all155 ordered unique result IDs, no failing/bailout/skip/todo records and consistent summaries; summary claims alone cannot establish success. This is a new execution required by the workflow; no hosted result is claimed before it runs. The original source-led ordinary workflow paths do not cover this new workflow, so this fresh test stage is explicit here. Protected workflows, their trust policy and their paths are unchanged.
+ 
+-Only after that stage succeeds does a second pinned checkout retrieve c2b with full history, remove the builder working tree/dependencies and detach to dd. It checks both exact approved trees and clean source, then uses the unchanged runtime-release resolver and installs dd's own locks. Source/packager both remain dd. Receipts outside the workspace retain both subjects separately: builder155/PCR31 is not application-dd testing, and dd's build/browser/package results are not builder testing. The export records the builder workflow/trigger identities separately. No input can choose a different artifact source, approval, root or deploy target. Permissions are contents:read; there are no secrets, production credentials, database calls, migration, deployment or approval issuance.
++Only after that stage succeeds does a second pinned checkout retrieve c2b with full history, remove the builder working tree/dependencies and detach to dd. It checks both exact approved trees and clean source, then uses the unchanged runtime-release resolver and installs dd's own locks. Source/packager both remain dd. Receipts outside the workspace retain both subjects separately: builder155/PCR31 is not application-dd testing, and dd's build/browser/package results are not builder testing. The export records the builder workflow/trigger identities separately. No input can choose a different artifact source, approval, root or deploy target. Permissions are contents:read; there are no secrets, production credentials, production database accesses, production migrations, deployment or approval issuance. The canonical command transitively runs its original isolated local PostgreSQL fixture contracts; those are not formal financial/publication installation or live database validation.
+ 
+ Calculation/package/type/lint/build and the existing development-only trade-plan browser suite run sequentially on a fresh Ubuntu job. That browser suite starts a dev fixture server; its result must not be called packaged production verification. A separate probe starts the actual packaged server.js with NODE_ENV=production, an explicit minimal credential-free child environment and loopback binding. It checks the exact missing-auth configuration response, production fixture404 and a served static member matching the package manifest SHA. A500 auth rejection is expected fail-closed behavior, **not healthy production readiness**. Confirmed child shutdown is required. No synthetic production token or fixture-enabling production flag is supplied.
+ 
+@@ -14,4 +14,6 @@ The original packager and verifier bind all release members and reject forbidden
+ 
+ The upload step also retains any available partial receipts from a failed job, and its artifact name includes the actual job status. Such partial output is diagnostic evidence only. A valid release package requires a successful complete job, the full archive/verifier/boot receipts and matching SHA256SUMS; an uploaded failure artifact does not establish packaging or readiness.
+ 
++Independent review of the original builder df18448d requested changes for missing browser provisioning before canonical and incomplete TAP result validation. Its two RED regressions and review remain on evidence93f6b60a. This correction preserves the original command and155/31 expectations, provisions the browser before its first consumer, declares the suite's original isolated PG prerequisite using the unchanged approved setup, and rejects incomplete, duplicate or contradictory TAP result streams. Root parser probes use mocked streams and the retained dd TAP only; they are not a new canonical suite run. A fresh independent closure review and hosted execution are still required.
++
+ The package is application/runtime release preparation. It does not install the financial50 or publication26 SQL, enable the unfinished versioned-input protocol, establish fixed private peer transport, qualify sources/articles or grant strategy authority. Last read-only production observation at2026-10-14T12:14:19Z still points to169aad1b6cfa747f78ae3464b614f43c0749d806. Available15967711232 is below the unchanged19998441472 binary guard by4030730240bytes. No heavy admission or deployment was attempted, reserves were not lowered, and the existing capacity decision was not re-asked.

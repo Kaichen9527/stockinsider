@@ -1,0 +1,1 @@
+Initial review-harness extraction failed with IndexError: list index out of range. Predicate matched the later SHA256SUMS step containing builder-canonical.log, which has no NODE heredoc. No product/probe test ran. Corrected extraction requires the NODE heredoc as well; source workflow unchanged. Initial sha256sum also reported old-parser.mjs absent.

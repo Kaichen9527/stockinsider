@@ -1,0 +1,205 @@
+[
+  {
+    "label": "syntax-step-02",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-02.sh"
+    ],
+    "start": "2026-10-14T14:18:16.886457+00:00",
+    "durationSeconds": 0.0017784539377316833,
+    "exit": 0,
+    "childrenMaxRssKiB": 9344
+  },
+  {
+    "label": "syntax-step-03",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-03.sh"
+    ],
+    "start": "2026-10-14T14:18:16.888263+00:00",
+    "durationSeconds": 0.0017605109605938196,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-04",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-04.sh"
+    ],
+    "start": "2026-10-14T14:18:16.890037+00:00",
+    "durationSeconds": 0.0016311820363625884,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-05",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-05.sh"
+    ],
+    "start": "2026-10-14T14:18:16.891680+00:00",
+    "durationSeconds": 0.0015104199992492795,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-07",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-07.sh"
+    ],
+    "start": "2026-10-14T14:18:16.893201+00:00",
+    "durationSeconds": 0.001399136963300407,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-08",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-08.sh"
+    ],
+    "start": "2026-10-14T14:18:16.894611+00:00",
+    "durationSeconds": 0.0014213350368663669,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-09",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-09.sh"
+    ],
+    "start": "2026-10-14T14:18:16.896043+00:00",
+    "durationSeconds": 0.001182815060019493,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-10",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-10.sh"
+    ],
+    "start": "2026-10-14T14:18:16.897236+00:00",
+    "durationSeconds": 0.0015713609755039215,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-11",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-11.sh"
+    ],
+    "start": "2026-10-14T14:18:16.898817+00:00",
+    "durationSeconds": 0.001367915072478354,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-12",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-12.sh"
+    ],
+    "start": "2026-10-14T14:18:16.900197+00:00",
+    "durationSeconds": 0.0012649899581447244,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-13",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-13.sh"
+    ],
+    "start": "2026-10-14T14:18:16.901473+00:00",
+    "durationSeconds": 0.0013813540572300553,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-14",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-14.sh"
+    ],
+    "start": "2026-10-14T14:18:16.902866+00:00",
+    "durationSeconds": 0.0014093159697949886,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-15",
+    "command": [
+      "bash",
+      "-n",
+      "/tmp/artifact-r1r2-closure-o14/extracted/step-15.sh"
+    ],
+    "start": "2026-10-14T14:18:16.904285+00:00",
+    "durationSeconds": 0.0014703989727422595,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-inline-05",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "/tmp/artifact-r1r2-closure-o14/extracted/inline-05.mjs"
+    ],
+    "start": "2026-10-14T14:18:16.905985+00:00",
+    "durationSeconds": 0.026150755933485925,
+    "exit": 0,
+    "childrenMaxRssKiB": 22992
+  },
+  {
+    "label": "syntax-inline-08",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "/tmp/artifact-r1r2-closure-o14/extracted/inline-08.mjs"
+    ],
+    "start": "2026-10-14T14:18:16.932159+00:00",
+    "durationSeconds": 0.0224590040743351,
+    "exit": 0,
+    "childrenMaxRssKiB": 22992
+  },
+  {
+    "label": "syntax-inline-14",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "/tmp/artifact-r1r2-closure-o14/extracted/inline-14.mjs"
+    ],
+    "start": "2026-10-14T14:18:16.954652+00:00",
+    "durationSeconds": 0.023083616979420185,
+    "exit": 0,
+    "childrenMaxRssKiB": 22996
+  },
+  {
+    "label": "closure-probe",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "/tmp/artifact-r1r2-closure-o14/closure-probe.mjs"
+    ],
+    "start": "2026-10-14T14:18:16.977777+00:00",
+    "durationSeconds": 0.0743391620926559,
+    "exit": 0,
+    "childrenMaxRssKiB": 38092
+  }
+]
