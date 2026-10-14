@@ -1,0 +1,76 @@
+{
+  "schema": "root-prerequisite-forensic-review-v1",
+  "files": [
+    {
+      "path": "cloud-state.json",
+      "bytes": 274,
+      "sha256": "c046e16bbece9111cf3361231bd2b2a8a2f65dc53ef49231649b2b31dfc95a85"
+    },
+    {
+      "path": "maker-receipt.json",
+      "bytes": 13175,
+      "sha256": "70114de284e063e8d0ebd4aacca43b660ccfb6a0fe770b0a9bb6e11de7b035fe"
+    },
+    {
+      "path": "maker-source-manifest.json",
+      "bytes": 33590,
+      "sha256": "93f624c77a57bb9d58c85c6f7c0da76935680ca4faa27eec8570af42f5a800d4"
+    },
+    {
+      "path": "next-local-profile-task.txt",
+      "bytes": 4945,
+      "sha256": "fccc51c8fadf0e010a2e90aff8e8ec27a6f723141d0713e7904fa1e925883766"
+    },
+    {
+      "path": "review.md",
+      "bytes": 5362,
+      "sha256": "e33e1d01c843b48ad032726a447a41daedfdb8d26523b1533c0c3875529fda29"
+    },
+    {
+      "path": "root-source-verification.json",
+      "bytes": 433,
+      "sha256": "8d79eed47f04e959c916fb14e29b1d204aa6870b4055959353c681040abd9314"
+    },
+    {
+      "path": "schema-hypothesis/compatible-new-binding-contract-negative.test.mjs",
+      "bytes": 2593,
+      "sha256": "fd3b3d636ca18d6f62cb27933474d8749c44419310912ca2044ff9cd25210a36"
+    },
+    {
+      "path": "schema-hypothesis/compatible-new-binding-contract-probe-v2.test.mjs",
+      "bytes": 2869,
+      "sha256": "942211a5e8c181ca4fd847e851d7a05693674a9382cdf2590af86c4e56c69c6b"
+    },
+    {
+      "path": "schema-hypothesis/compatible-new-binding-negative.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "schema-hypothesis/compatible-new-binding-negative.stdout",
+      "bytes": 3512,
+      "sha256": "5a0776b5204df1c6a9c31eba0f6be6265c305740299a205b3841c7477f9b1efe"
+    },
+    {
+      "path": "schema-hypothesis/compatible-new-binding-probe-v2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "schema-hypothesis/compatible-new-binding-probe-v2.stdout",
+      "bytes": 1179,
+      "sha256": "a9c6a584ce48422ce2e8baabc82f06a264cf2a2faca78943b5750f55ffd11fa0"
+    },
+    {
+      "path": "schema-hypothesis/schema-hypothesis-diagnosis.md",
+      "bytes": 847,
+      "sha256": "1a64ac3362e1461325d8bbbc924e9145380ca48207a7aab67c860a3678de3688"
+    }
+  ],
+  "rawVerified": 62,
+  "sourceVerified": 142,
+  "rootNativeRun": false,
+  "rootBuildRun": false,
+  "formalProtocolApproval": false,
+  "productionMutation": false
+}

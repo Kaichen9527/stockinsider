@@ -1,0 +1,12 @@
+{
+  "receiptSHA256": "70114de284e063e8d0ebd4aacca43b660ccfb6a0fe770b0a9bb6e11de7b035fe",
+  "delivery": "5b24dd0ee952c403637e534bde1ffe44fe19fe42",
+  "sourceSubject": "b69c7d90774c144dda4d88e2677143141d89b4cb",
+  "auditRunSource": "6db9e79f2ee609aedbd066947e8284e55c408d09",
+  "rawVerified": 62,
+  "sourceVerified": 142,
+  "rootRanNative": false,
+  "rootRanBuild": false,
+  "productUnchanged": true,
+  "productionPermission": false
+}

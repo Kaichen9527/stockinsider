@@ -1,0 +1,54 @@
+TAP version 13
+# (node:86186) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:86186) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-versioned-input-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-release-root-review-oct14/web/package.json.
+# Subtest: 2409 compatible new execution binding must accept its own financial wrapper
+not ok 1 - 2409 compatible new execution binding must accept its own financial wrapper
+  ---
+  duration_ms: 8.518
+  location: '/private/tmp/stockinsider-versioned-input-protocol-root-inspection-oct14/compatible-new-binding-contract-negative.test.mjs:13:37'
+  failureType: 'testCodeFailure'
+  error: 'unexpected original schema dialect'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    instantiate (file:///private/tmp/stockinsider-versioned-input-protocol-root-inspection-oct14/compatible-new-binding-contract-negative.test.mjs:12:341)
+    file:///private/tmp/stockinsider-versioned-input-protocol-root-inspection-oct14/compatible-new-binding-contract-negative.test.mjs:12:183
+    Array.map (<anonymous>)
+    instantiate (file:///private/tmp/stockinsider-versioned-input-protocol-root-inspection-oct14/compatible-new-binding-contract-negative.test.mjs:12:167)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-versioned-input-protocol-root-inspection-oct14/compatible-new-binding-contract-negative.test.mjs:17:16)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: 2383 compatible new execution binding must accept its own financial wrapper
+not ok 2 - 2383 compatible new execution binding must accept its own financial wrapper
+  ---
+  duration_ms: 2.881
+  location: '/private/tmp/stockinsider-versioned-input-protocol-root-inspection-oct14/compatible-new-binding-contract-negative.test.mjs:13:37'
+  failureType: 'testCodeFailure'
+  error: 'unexpected original schema dialect'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    instantiate (file:///private/tmp/stockinsider-versioned-input-protocol-root-inspection-oct14/compatible-new-binding-contract-negative.test.mjs:12:341)
+    file:///private/tmp/stockinsider-versioned-input-protocol-root-inspection-oct14/compatible-new-binding-contract-negative.test.mjs:12:183
+    Array.map (<anonymous>)
+    instantiate (file:///private/tmp/stockinsider-versioned-input-protocol-root-inspection-oct14/compatible-new-binding-contract-negative.test.mjs:12:167)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-versioned-input-protocol-root-inspection-oct14/compatible-new-binding-contract-negative.test.mjs:17:16)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 278.427

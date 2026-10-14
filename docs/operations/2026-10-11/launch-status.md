@@ -1,5 +1,13 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 21:35台灣時間：兩owner缺public.USAGE真診斷獨立核62raw142source；單件隔離prerequisite候選與合法fixture活動
+
+Audit5b24dd0e/source6db9e79f/finalb69c7d90/receipt70114de2 Root逐byte/hash/blob核62raw142source，讀實際RR/RO transaction/catalog/roles/schemaACL/resolver及original26來源。PG17.11真42501是preparation/source-fence owner缺public.USAGE；public owner/grantor pg_database_owner，preparation NOINHERIT/source原INHERIT=true/兩者低權NOLOGIN無membership保持。43literalcallee EXECUTE真但非完整dynamic/RLS證明。Auditexit0非business/nativePASS，無額外grant/role修補，ownedPG真cleanup；原1PASS5FAIL/未firstseal保持。Root只scoped forensicreview，不完整protocol批准/未親跑nativebuild。
+
+Cloudauditcompleted+cursor50 trueidle後，只一件30min codex/research-versioned-prerequisite-profile-oct14/base36，turn01a13a99-9a52-7562-80f2-7fd3d229986d/cursor57859559-a812-4f98-bcdc-46a2a9f908f6:51 inProgress。Owned新disabled engineering-only有限profile/helper/ADR/tests/合法RPCfixture/handoff；Root不重疊。Root明確只允許自有隔離PG兩既有owner USAGE候選，精確old或兩entrysuccessor/ownergrantor/nongrantable、sameinstallerlock-BEGIN-rollback，partial/unknown漂移mutation前拒絕，原角色OID/attrs/ACL/RLS/authority保持。不得改原48/49/50/26SQL/plan/catalogexpectations或productionCLI，不是永久VPSgrant/正式安裝批准。合法roster→prioritystore/internalenqueue→claim/internalreservation→neutralprep→controller，不directjob/sealedinsert或stubguard；新input才新native，未完pending。
+
+Rootconst77 schema疑慮已證錯：原64hexpatterns+semanticbinding。初Rootprobe0/2是harness未支援pattern在productassert前失敗，修harness後2PASS，兩原stdout/source留存，不改app/schema或捏P2。Artifact8dd/ae1e尚未PR/獨立review/hostedbuild；新增workflow本身還需actualbuilder canonical155/PCR31後分開checkoutapproveddd/c2b打包，不能舊DD結果冒newbuilder、不能改protected/source-ledpaths繞過，此修訂pending。正式169/NOLOGIN-1/capacity4030730240缺口保持最後真值，本輪無VPS/remoteDB/roleACL/HTTP/crawl/CIrerun/merge/deploy/cache。PR370..380terminal不再helper，Goal完整active。Report.agent/reports/2026-10-14T21-35-versioned-prerequisite-independent-review/。
+
 ## 2026-10-14 20:55台灣時間：protocol真native1PASS5FAIL未firstseal；唯讀權限診斷單件活動，dd新打包workflow候選已封存
 
 Protocolcode36ea8f0c/evidence574a0fd5/receipt9b7549e9 Root真核42raw74source38exactcopies，nativeSubjectcf897862/qualityf69/final36分開歸因。Maker112pure/type-lint-normalbuildPASS/33warnings/BUILD_IDR8b3ud1u3kwCXfHUWYZk5/1798是maker真結果，Root未重跑/非wholecompiledprotocol。ActualPG原schema+financial50selected(保留supersededskip、不稱50executed)+26tail+candidateDDL setup真PASS，4bindingcalls42501publicschema拒絕，後directjobfixtureINSERT正被observed_job_requires_scoped_rpc拒；native1PASS5FAIL含parent不是6獨立business例，未firstseal/replay/quota。原sandboxpg_configEPERM0/1與typeTS18046/修後成果/原1/5全保留。Final新增preflight未跑不能倒填原failuretimecatalog。無新grant/guardbypass/期待放寬，不CODEapprove或拿pure代native。
