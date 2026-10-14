@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-14T20:47:56.549103+00:00",
+  "files": [
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+      "bytes": 12425,
+      "sha256": "e7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+      "bytes": 10729,
+      "sha256": "0e4d9921297713ed3ebef93249d760fd4ebe4aeaa57ac0a47aeb784b3c9ea419"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+      "bytes": 11395,
+      "sha256": "f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json",
+      "bytes": 714,
+      "sha256": "4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-14T20:51:20.240369+00:00",
+  "base": "8c58e297e92422c1c3f52856a36bff12b1868100",
+  "files": [
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+      "bytes": 9440,
+      "sha256": "549945d4309465d5ce6a3e1ded1ec3febd5fb150b2f11cd213a5755c2dd55855",
+      "blob": "d7555c9c4f4121f0dad7132ccdc3002d5061745e"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+      "bytes": 12425,
+      "sha256": "e7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f",
+      "blob": "9938b20135b1065781c058467ee219248b7014b9"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+      "bytes": 11235,
+      "sha256": "15b129e55228a09263f375cd1700ac0de3bef90544a07754ebba54943e632ffc",
+      "blob": "5c3f5c378efdb0737ce7c19f4b4452888b409810"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+      "bytes": 11395,
+      "sha256": "f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af",
+      "blob": "dd72ccd256a6ce12410fcf9ae1f35369357acc7e"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json",
+      "bytes": 714,
+      "sha256": "4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72",
+      "blob": "391ff7866dde6f79bf04e5db19117d85ad934a2c"
+    }
+  ]
+}

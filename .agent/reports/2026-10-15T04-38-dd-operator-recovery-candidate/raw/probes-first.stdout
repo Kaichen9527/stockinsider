@@ -1,0 +1,1 @@
+{"shellProbe": {"name": "term-pointer", "exit": 143, "stdout": "POINTER_current_/inert/old\n", "stderr": "recovery_required:uncertain_state; owned_receipts_retained=/tmp/dd-operator-hermetic-uhcng7w2/term-pointer/work\n", "events": "REVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}

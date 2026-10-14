@@ -1,0 +1,25 @@
+[
+  {
+    "command": [
+      "bash",
+      "-n",
+      "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh"
+    ],
+    "exit": 0,
+    "seconds": 0.0026136150117963552,
+    "stdout": "syntax-final.stdout",
+    "stderr": "syntax-final.stderr",
+    "maxChildRssKiB": 9216
+  },
+  {
+    "command": [
+      "python3",
+      "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py"
+    ],
+    "exit": 0,
+    "seconds": 6.741091368952766,
+    "stdout": "probes-final.stdout",
+    "stderr": "probes-final.stderr",
+    "maxChildRssKiB": 14104
+  }
+]

@@ -1,0 +1,142 @@
+{
+  "subject": "a87432e939b389f64aad3baffb176fee3954c346",
+  "tree": "74ccd03c2302d17f556483565b49f6798b24a3c2",
+  "base": "8c58e297e92422c1c3f52856a36bff12b1868100",
+  "changedPaths": [
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json"
+  ],
+  "outsideOwnedPathsChanged": false,
+  "sourceCount": 18,
+  "files": [
+    {
+      "subject": "a87432e939b389f64aad3baffb176fee3954c346",
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+      "bytes": 9440,
+      "sha256": "549945d4309465d5ce6a3e1ded1ec3febd5fb150b2f11cd213a5755c2dd55855",
+      "blob": "d7555c9c4f4121f0dad7132ccdc3002d5061745e"
+    },
+    {
+      "subject": "a87432e939b389f64aad3baffb176fee3954c346",
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+      "bytes": 12425,
+      "sha256": "e7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f",
+      "blob": "9938b20135b1065781c058467ee219248b7014b9"
+    },
+    {
+      "subject": "a87432e939b389f64aad3baffb176fee3954c346",
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+      "bytes": 11235,
+      "sha256": "15b129e55228a09263f375cd1700ac0de3bef90544a07754ebba54943e632ffc",
+      "blob": "5c3f5c378efdb0737ce7c19f4b4452888b409810"
+    },
+    {
+      "subject": "a87432e939b389f64aad3baffb176fee3954c346",
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+      "bytes": 11395,
+      "sha256": "f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af",
+      "blob": "dd72ccd256a6ce12410fcf9ae1f35369357acc7e"
+    },
+    {
+      "subject": "a87432e939b389f64aad3baffb176fee3954c346",
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json",
+      "bytes": 714,
+      "sha256": "4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72",
+      "blob": "391ff7866dde6f79bf04e5db19117d85ad934a2c"
+    },
+    {
+      "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "path": "deployment/vps/activate-writer-release.sh",
+      "bytes": 2811,
+      "sha256": "0719de5667f23f571357f2db7750297de7f7f405d2d8c06bc2d39105b237e243",
+      "blob": "4866bdc1b012840a2cb64f8e9a266f8af56998fb"
+    },
+    {
+      "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "bytes": 1312,
+      "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb",
+      "blob": "0b4147366ab040772d66485115619c3c9c08f440"
+    },
+    {
+      "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "path": "deployment/vps/systemd/stockinsider-internal-worker.service",
+      "bytes": 1374,
+      "sha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e",
+      "blob": "35dfb8decee33e266b5273111a2c6a4841ff38e4"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "deployment/vps/activate-writer-release.sh",
+      "bytes": 2811,
+      "sha256": "0719de5667f23f571357f2db7750297de7f7f405d2d8c06bc2d39105b237e243",
+      "blob": "4866bdc1b012840a2cb64f8e9a266f8af56998fb"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "bytes": 1312,
+      "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb",
+      "blob": "0b4147366ab040772d66485115619c3c9c08f440"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "deployment/vps/systemd/stockinsider-internal-worker.service",
+      "bytes": 1374,
+      "sha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e",
+      "blob": "35dfb8decee33e266b5273111a2c6a4841ff38e4"
+    },
+    {
+      "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "path": "deployment/vps/install-contabo-data-plane.sh",
+      "bytes": 3356,
+      "sha256": "e18e0e59f894613d3aa1a521eb4c0411d7c9a1664a7edc90b06114589a1df467",
+      "blob": "0ee08627390c2e6b0bd2b4e714fbc12bf84c8128"
+    },
+    {
+      "subject": "bf72316a6f8e0d251351ed50acb441d87186352a",
+      "path": ".agent/reports/2026-10-15T03-30-response-loss-native-review/unexecuted-deploy-draft/deploy.sh",
+      "bytes": 8142,
+      "sha256": "33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973",
+      "blob": "6157aedb3d3dae704713d14fb52957c3c4873591"
+    },
+    {
+      "subject": "8c58e297e92422c1c3f52856a36bff12b1868100",
+      "path": "package.json",
+      "bytes": 24733,
+      "sha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc",
+      "blob": "f25f4bebad793fb7eabc03e2320e4472553a0fb9"
+    },
+    {
+      "subject": "8c58e297e92422c1c3f52856a36bff12b1868100",
+      "path": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+    },
+    {
+      "subject": "8c58e297e92422c1c3f52856a36bff12b1868100",
+      "path": "web/package.json",
+      "bytes": 1943,
+      "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+      "blob": "446f308a2990f45dcd3dca14030068f878fae490"
+    },
+    {
+      "subject": "8c58e297e92422c1c3f52856a36bff12b1868100",
+      "path": "web/package-lock.json",
+      "bytes": 274088,
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+      "blob": "a41fd447e28f3b36829b689828c345e042619a38"
+    },
+    {
+      "subject": "8c58e297e92422c1c3f52856a36bff12b1868100",
+      "path": ".nvmrc",
+      "bytes": 8,
+      "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+      "blob": "7d41c735d7127c4a2530ebe846b14ffbf38b8031"
+    }
+  ]
+}

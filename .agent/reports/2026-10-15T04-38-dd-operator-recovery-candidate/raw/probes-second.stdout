@@ -1,0 +1,86 @@
+{"shellProbe": {"name": "term-pointer", "exit": 143, "stdout": "POINTER_current_/inert/old\nMOCK_WRITER\ncanonical_previous_current_writer_units_and_health_restored\n", "stderr": "", "events": "REVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}
+{"shellProbe": {"name": "term-activation-1", "exit": 143, "stdout": "POINTER_current_/inert/old\nMOCK_WRITER\ncanonical_previous_current_writer_units_and_health_restored\n", "stderr": "", "events": "FORWARD_CHILD_START\nFORWARD_CHILD_END\nREVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}
+{"shellProbe": {"name": "term-activation-2", "exit": 143, "stdout": "POINTER_current_/inert/old\nMOCK_WRITER\ncanonical_previous_current_writer_units_and_health_restored\n", "stderr": "", "events": "FORWARD_CHILD_START\nFORWARD_CHILD_END\nREVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}
+{"shellProbe": {"name": "ordinary", "exit": 42, "stdout": "POINTER_current_/inert/old\nMOCK_WRITER\ncanonical_previous_current_writer_units_and_health_restored\n", "stderr": "", "events": "FORWARD_CHILD_START\nFORWARD_CHILD_END\nREVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}
+{"shellProbe": {"name": "uncertain", "exit": 125, "stdout": "", "stderr": "Traceback (most recent call last):\n  File \"/tmp/dd-operator-hermetic-nex4yjkz/dummy-driver.py\", line 6, in <module>\n    r=json.loads(pathlib.Path(a[1]).read_text());m.confirm_settled(r,int(a[2]));raise SystemExit(0)\n                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/si-pubtail-o14/docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py\", line 124, in confirm_settled\n    assert result['settledForRollback'] and not result['forced'] and result['error'] is None\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\nactivation_settlement_uncertain:manual_reconciliation_required\nTraceback (most recent call last):\n  File \"/tmp/dd-operator-hermetic-nex4yjkz/dummy-driver.py\", line 6, in <module>\n    r=json.loads(pathlib.Path(a[1]).read_text());m.confirm_settled(r,int(a[2]));raise SystemExit(0)\n                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/si-pubtail-o14/docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py\", line 124, in confirm_settled\n    assert result['settledForRollback'] and not result['forced'] and result['error'] is None\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\nactivation_settlement_uncertain:manual_reconciliation_required\nrecovery_required:uncertain_state; owned_receipts_retained=/tmp/dd-operator-hermetic-nex4yjkz/uncertain/work\n", "events": "FORWARD_CHILD_START\n"}}
+{"shellProbe": {"name": "cleanup", "exit": 74, "stdout": "", "stderr": "activation_complete=true; owned_cleanup_unconfirmed\n", "events": ""}}
+{"shellProbe": {"name": "success", "exit": 0, "stdout": "approved_dd_binary_current_writer_core_health_and_cleanup_verified\n", "stderr": "", "events": ""}}
+{
+  "scope": "isolated candidate components only; no production procedure or approved activation executed",
+  "count": 18,
+  "results": [
+    {
+      "name": "finite exact nonsecret bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "extra setting rejects",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown mode rejects",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown owner rejects",
+      "status": "PASS"
+    },
+    {
+      "name": "missing profile rejects",
+      "status": "PASS"
+    },
+    {
+      "name": "symlink rejects",
+      "status": "PASS"
+    },
+    {
+      "name": "hardlink rejects",
+      "status": "PASS"
+    },
+    {
+      "name": "nonzero activation is uncertain even after process settlement",
+      "status": "PASS"
+    },
+    {
+      "name": "wait for descendant after leader exit",
+      "status": "PASS"
+    },
+    {
+      "name": "forced containment never authorizes reverse",
+      "status": "PASS"
+    },
+    {
+      "name": "inspection failure uncertain, owned child contained",
+      "status": "PASS"
+    },
+    {
+      "name": "TERM after pointer arms confirmed reverse",
+      "status": "PASS"
+    },
+    {
+      "name": "TERM during real dummy activation waits before reverse",
+      "status": "PASS"
+    },
+    {
+      "name": "double TERM does not reenter recovery",
+      "status": "PASS"
+    },
+    {
+      "name": "ordinary failure preserves original status after confirmed recovery",
+      "status": "PASS"
+    },
+    {
+      "name": "unconfirmed activation prevents all reverse mutation",
+      "status": "PASS"
+    },
+    {
+      "name": "healthy activation cleanup-only failure is nonzero without rollback",
+      "status": "PASS"
+    },
+    {
+      "name": "full success emitted only after cleanup",
+      "status": "PASS"
+    }
+  ],
+  "formalApproval": false
+}

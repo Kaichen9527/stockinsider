@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-14T20:50:45.967829+00:00",
+  "files": [
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+      "sha256": "a5aee7c81ed4d3f0695218c9b3a99c35f48499d84b5f38dde3b3c3f3ccae530e"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+      "sha256": "e7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+      "sha256": "15b129e55228a09263f375cd1700ac0de3bef90544a07754ebba54943e632ffc"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+      "sha256": "f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json",
+      "sha256": "4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72"
+    }
+  ]
+}

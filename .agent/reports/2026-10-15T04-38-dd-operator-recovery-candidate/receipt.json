@@ -1,0 +1,75 @@
+{
+  "kind": "maker-unexecuted-operator-procedure-candidate",
+  "subject": "a87432e939b389f64aad3baffb176fee3954c346",
+  "tree": "74ccd03c2302d17f556483565b49f6798b24a3c2",
+  "base": "8c58e297e92422c1c3f52856a36bff12b1868100",
+  "branch": "codex/dd-binary-operator-recovery-fix-oct15",
+  "startedAt": "2026-10-14T20:38:04Z",
+  "sealedAt": "2026-10-14T20:52:25.823414+00:00",
+  "deadline": "2026-10-14T21:08:04Z",
+  "originalDraftSha256": "33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973",
+  "originalReview": "a04d6a7f42c349edab562fe6135036f34fbdf004",
+  "originalEvidence": "89b6e463baf380d4d2ccffae8bc278f1d06aa1ad",
+  "changedPaths": [
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json"
+  ],
+  "sourceInputs": 18,
+  "rawCount": 37,
+  "rawBytes": 80647,
+  "results": {
+    "finalIsolatedProbeGroups": 35,
+    "fail": 0,
+    "finalBashSyntaxExit": 0,
+    "native": 0,
+    "appBuild": 0,
+    "deployment": 0,
+    "productionProcedureOrApprovedHelperExecuted": false
+  },
+  "preservedRED": {
+    "firstCandidateProbeExit": 1,
+    "cause": "interruption flag propagated during reverse finish before settlement; repaired without changing expectation",
+    "originalDeployBytesRetained": true,
+    "initialWipHashInventoryRetained": true,
+    "fullIntermediateSupportSourceArchive": false,
+    "note": "Final support/probe bytes are sealed in Git; intermediate run inputs retain hashes; first RED deploy bytes retained. Intermediate counts overlap and are not added."
+  },
+  "toolingErrors": [
+    "literal backslash-n suffix in original WIP-third JSON retained with separate readable copy",
+    "one read-only exec transport disconnected; no product test rerun for this error"
+  ],
+  "resources": {
+    "at": "2026-10-14T20:51:20.257772+00:00",
+    "freeBytes": {
+      "/workspace": 8595738624,
+      "/tmp": 15374348288
+    },
+    "floor": 8589934592,
+    "rssCeiling": 8589934592,
+    "measurement": "getrusage(RUSAGE_CHILDREN) command highwater; not aggregate instantaneous process-tree peak",
+    "finalProbeMaxChildRssKiB": 14136,
+    "ownedProductionServicesStarted": 0,
+    "cacheDeleted": false,
+    "scope": "isolated temporary dummy processes and files only; no application/native/build",
+    "finalFreeBytes": {
+      "/workspace": 8595681280,
+      "/tmp": 15374168064
+    }
+  },
+  "independentApproval": false,
+  "productionAuthorized": false,
+  "pending": [
+    "Root independent exact candidate review",
+    "fresh supported canonical predecessor/effective systemd profile on real host",
+    "fresh unchanged three-lock capacity/writer/lease admission",
+    "real systemd/API activation and reverse settlement",
+    "immutable artifact custody and approved operator execution scope",
+    "SIGKILL/power-loss/manual uncertain-state reconciliation",
+    "full application/wholeclosure/four callers/Q-R/cash citations/formal articles/strategy scheduling"
+  ],
+  "sourceInventorySha256": "dc242e867a85dfa4eb6239279111fe32ecdb22e6ec1f6a7c127858b06ec2ef45",
+  "rawInventorySha256": "268b6028f889652ec099fd41c9c87b068ac77c95152735702ffada59f2a9e6c4"
+}

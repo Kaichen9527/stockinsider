@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/tmp/si-pubtail-o14/docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py", line 78, in <module>
+    probe('TERM after pointer arms confirmed reverse',term_pointer)
+  File "/tmp/si-pubtail-o14/docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py", line 7, in probe
+    fn();results.append({'name':name,'status':'PASS'})
+    ^^^^
+  File "/tmp/si-pubtail-o14/docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py", line 77, in term_pointer
+    assert r['exit']==143 and 'REVERSE_CHILD_END' in r['events'] and 'canonical_previous' in r['stdout']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

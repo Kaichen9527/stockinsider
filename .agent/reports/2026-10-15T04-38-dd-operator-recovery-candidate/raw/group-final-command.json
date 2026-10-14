@@ -1,0 +1,9 @@
+{
+  "command": [
+    "python3",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py"
+  ],
+  "exit": 0,
+  "seconds": 7.402783876983449,
+  "maxChildRssKiB": 14136
+}

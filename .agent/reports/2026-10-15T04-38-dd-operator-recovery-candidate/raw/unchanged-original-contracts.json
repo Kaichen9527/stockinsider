@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-14T20:46:41.560216+00:00",
+  "originalSha256": "33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973",
+  "checks": [
+    {
+      "name": "capacity",
+      "bytes": 833,
+      "sha256": "719fc7bd8d93f70febda371e21e6a31f8e5822ed9a1a51efc7b65e339c7e1104",
+      "exactEqual": true
+    },
+    {
+      "name": "writer",
+      "bytes": 1280,
+      "sha256": "7531aecbe3e2c96846d1dff4c1386826b544916aaa79df3e0016b0e9413ead90",
+      "exactEqual": true
+    },
+    {
+      "name": "atomic-pointer",
+      "bytes": 397,
+      "sha256": "9cebe13179c2e823b15cade27b07b1af1c996ce4822b9ef4c97a1c2184d9a64e",
+      "exactEqual": true
+    },
+    {
+      "name": "stream-and-tar",
+      "bytes": 2142,
+      "sha256": "73fa342d7a625b09563675d53a97e657533f59bf9350e807dcb0ceb73f51267f",
+      "exactEqual": true
+    },
+    {
+      "literal": "archive_sha",
+      "value": "398e71768ea0e7a5935282432c0edfcb2f47c953712b715562def95c3745add4",
+      "exactEqual": true
+    },
+    {
+      "literal": "manifest_sha",
+      "value": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+      "exactEqual": true
+    },
+    {
+      "literal": "activation_sha",
+      "value": "0719de5667f23f571357f2db7750297de7f7f405d2d8c06bc2d39105b237e243",
+      "exactEqual": true
+    },
+    {
+      "literal": "old",
+      "value": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "exactEqual": true
+    },
+    {
+      "literal": "new",
+      "value": "dd59817f750684b093965f539dd4de466be13077",
+      "exactEqual": true
+    },
+    {
+      "literal": "root",
+      "value": "/opt/stockinsider-standalone/releases",
+      "exactEqual": true
+    },
+    {
+      "literal": "current",
+      "value": "/opt/stockinsider/current",
+      "exactEqual": true
+    },
+    {
+      "literal": "previous",
+      "value": "/opt/stockinsider/previous",
+      "exactEqual": true
+    }
+  ]
+}

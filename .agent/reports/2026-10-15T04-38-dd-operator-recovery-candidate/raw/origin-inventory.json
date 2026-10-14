@@ -1,0 +1,30 @@
+[
+  {
+    "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "path": "deployment/vps/install-contabo-data-plane.sh",
+    "bytes": 3356,
+    "sha256": "e18e0e59f894613d3aa1a521eb4c0411d7c9a1664a7edc90b06114589a1df467",
+    "blob": "0ee08627390c2e6b0bd2b4e714fbc12bf84c8128"
+  },
+  {
+    "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "path": "deployment/vps/activate-writer-release.sh",
+    "bytes": 2811,
+    "sha256": "0719de5667f23f571357f2db7750297de7f7f405d2d8c06bc2d39105b237e243",
+    "blob": "4866bdc1b012840a2cb64f8e9a266f8af56998fb"
+  },
+  {
+    "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+    "bytes": 1312,
+    "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb",
+    "blob": "0b4147366ab040772d66485115619c3c9c08f440"
+  },
+  {
+    "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "path": "deployment/vps/systemd/stockinsider-internal-worker.service",
+    "bytes": 1374,
+    "sha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e",
+    "blob": "35dfb8decee33e266b5273111a2c6a4841ff38e4"
+  }
+]

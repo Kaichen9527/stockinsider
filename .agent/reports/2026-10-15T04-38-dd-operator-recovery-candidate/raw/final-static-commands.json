@@ -1,0 +1,49 @@
+[
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "v22.14.0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "Python 3.12.14\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "bash",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "GNU bash, version 5.2.37(1)-release (x86_64-pc-linux-gnu)\nCopyright (C) 2022 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n\nThis is free software; you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "bash",
+      "-n",
+      "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "kind": "candidate-control-flow RED",
+  "cause": "Original interrupted flag caused reverse activate_owned to return143 before settling its dummy child during finish; reverse child completed but recovery was correctly not claimed.",
+  "repair": "Only propagate interrupted flag from normal activation; finishing always settles the already registered reverse child. No expectation changed.",
+  "originalProbeExit": 1
+}
