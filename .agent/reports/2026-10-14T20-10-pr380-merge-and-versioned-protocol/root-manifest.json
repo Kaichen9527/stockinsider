@@ -1,0 +1,222 @@
+[
+  {
+    "file": "automation-generation-error.json",
+    "bytes": 217,
+    "sha256": "1ec1699c037de3dd624b35bd7f0610dcd36d4c43c9b4bb5e21e1556fc5f0d46d"
+  },
+  {
+    "file": "cloud-activity.json",
+    "bytes": 668,
+    "sha256": "5f054ff86b5240fdf84074ca7be855cf3fdefaa8288e0b39b0030e89fe2ecd2a"
+  },
+  {
+    "file": "design-review/ADR.md",
+    "bytes": 29076,
+    "sha256": "0480b431fa72c22315be623ee49a265896ed2de5b7d73c3761bd02099991f12d"
+  },
+  {
+    "file": "design-review/heavy-release-message.txt",
+    "bytes": 1147,
+    "sha256": "7c1d66f568cfe342930765bd46585a476a37d536700a11886413a70062f8df16"
+  },
+  {
+    "file": "design-review/maker/absence-matrix.json",
+    "bytes": 18059,
+    "sha256": "de82c32d2b024baeef2136511659b5a3b71ebe3223f1c93f6c3ca72e5de18199"
+  },
+  {
+    "file": "design-review/maker/actual-call-boundaries.json",
+    "bytes": 12555,
+    "sha256": "9ebd47245af1094fe4ba544806250e400e1b66d2ad1d24a0fbe1fb9894810bca"
+  },
+  {
+    "file": "design-review/maker/actual-functions.json",
+    "bytes": 52929,
+    "sha256": "b3ef39eab75e498aae8e2a022a56328b3163801db8b365a496a013a9c01bf861"
+  },
+  {
+    "file": "design-review/maker/cash-numeric-path-inventory-NOT-approved-allowlist.json",
+    "bytes": 58787,
+    "sha256": "7e9f2bdf9d2ed36484eb86cec5ae568f4ee441d52f48b65bddd101ea940eb408"
+  },
+  {
+    "file": "design-review/maker/downstream-guards.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "design-review/maker/downstream-version-tag-excerpts.txt",
+    "bytes": 11471,
+    "sha256": "1e4b92c9541d3a339208aaed59c524dda37a1e46f997ecb97b750234afbf810c"
+  },
+  {
+    "file": "design-review/maker/enumerate-initial-error.py",
+    "bytes": 5967,
+    "sha256": "76053d4f12e77e6764ab7550e35ad96e9c279cdb7e4e14ccfd438c2a952db8b2"
+  },
+  {
+    "file": "design-review/maker/enumerate.py",
+    "bytes": 5968,
+    "sha256": "0054c0efedeb578a4e1808fa7cf74cedf7566404cd345666ecedaf6d9eb16b25"
+  },
+  {
+    "file": "design-review/maker/enumeration.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "design-review/maker/enumeration.stdout",
+    "bytes": 117,
+    "sha256": "175fb822d955cb0a952e822ba160de3c9bb639868c7ba9599f853b1fe315e6ed"
+  },
+  {
+    "file": "design-review/maker/extend.py",
+    "bytes": 3199,
+    "sha256": "ebe32234d1cc6f18c2ad3ab5dbb59703109cc6a12adf147224a1366672a16c4b"
+  },
+  {
+    "file": "design-review/maker/external-dependencies.json",
+    "bytes": 6932,
+    "sha256": "d4faea486ba726592035c18c6eb79fb1c8cb92ad5bb7528552b307475d49ceea"
+  },
+  {
+    "file": "design-review/maker/fixed-installation-inputs-50-plus-26.json",
+    "bytes": 36369,
+    "sha256": "b01ead1d20600007948ee693e66b470fa1ee364bbd895438b3b9eb0cad6674a2"
+  },
+  {
+    "file": "design-review/maker/historical77b1-proof.json",
+    "bytes": 4070,
+    "sha256": "04e87289b5fafab8b40eda3bc4774c413a2f733a9cca14903adbb72f3a0565df"
+  },
+  {
+    "file": "design-review/maker/initial-errors.txt",
+    "bytes": 511,
+    "sha256": "7fbf724bfdc5964a153f82985b334b8639475a308eb6f8844289a62f595a1fbf"
+  },
+  {
+    "file": "design-review/maker/legacy-mapping-keys.json",
+    "bytes": 142,
+    "sha256": "dee3e52f55c453fb2dbda3db1b3f04c1fdb4b6db1b2465d8caf86bde4bbf6273"
+  },
+  {
+    "file": "design-review/maker/prior-contract.md",
+    "bytes": 22907,
+    "sha256": "23186513b91a3a086f8295f412a731b8bd5204e9d7ac66ad236f3d298526d782"
+  },
+  {
+    "file": "design-review/maker/receipt.json",
+    "bytes": 5917,
+    "sha256": "7158651a9109b31968b7ab36916ba63b070d1f76765650d293542529e8df0acc"
+  },
+  {
+    "file": "design-review/maker/reusable-test-fixture-inputs.json",
+    "bytes": 3343,
+    "sha256": "9c1ec53da288da2838af1a996ab873d7ae925f37ba9eedd6e63330f0fc500cf3"
+  },
+  {
+    "file": "design-review/maker/root-engineering-decision-and-next-session-boundary.md",
+    "bytes": 4026,
+    "sha256": "21162fd11b4c693adb8b09e3d647d463b84e5b7b1096620e686d130712bd65cc"
+  },
+  {
+    "file": "design-review/maker/root-verification.json",
+    "bytes": 756,
+    "sha256": "1eb4faf71ba724f67f520e2ff82e71c588cba814b45365f87cff30f6a2661fed"
+  },
+  {
+    "file": "design-review/maker/scope-and-timing.txt",
+    "bytes": 570,
+    "sha256": "bc7d0a2e053cace9630dc95644128ff41273573c865236750a877eb0bac815e3"
+  },
+  {
+    "file": "design-review/maker/source-enumeration.json",
+    "bytes": 28817,
+    "sha256": "9a3d11eaf559e51719fef1b51a95cf954c30c48f07ef43a4e23b2074174641fb"
+  },
+  {
+    "file": "design-review/maker/sql-boundary-excerpts.json",
+    "bytes": 27093,
+    "sha256": "8917545da852f0935e42dfe633560ece1cd587afe4d65d75c8e184e5e0df9bab"
+  },
+  {
+    "file": "design-review/maker/sql-signatures.json",
+    "bytes": 19558,
+    "sha256": "fc0cfcd649a5f039df29c80f8252ff5cb6123adf10cb8c85ebc08a1095490c00"
+  },
+  {
+    "file": "design-review/maker/sql-source-enumeration.json",
+    "bytes": 19657,
+    "sha256": "0fbb7f0c512e5762ab05cce217142ecb22d1cf8ed6336fa8145f4f75a08b4619"
+  },
+  {
+    "file": "design-review/maker/static-import-edges.json",
+    "bytes": 38002,
+    "sha256": "5a1882697c0563fb3664b4123a510aa6216c6df3b9a7defdbe6c26b9d40fd9c5"
+  },
+  {
+    "file": "design-review/maker/tail-descriptor-original.json",
+    "bytes": 9805,
+    "sha256": "9410e8f3391c372439fc1f970214c69f1cfd9cb0a4cbebb324364bc493b349fe"
+  },
+  {
+    "file": "design-review/maker/unresolved-dynamic-edges.json",
+    "bytes": 3,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+    "file": "design-review/maker/verification.json",
+    "bytes": 11364,
+    "sha256": "88bbea973c567ce1a378d3aab5653e2204d0013adab213613a6bcf10c10335d1"
+  },
+  {
+    "file": "design-review/next-protocol-task.txt",
+    "bytes": 6888,
+    "sha256": "e9a29b3969052738d983d0861fddcb65bb2fa0a897a2203ec91ca6523a132292"
+  },
+  {
+    "file": "design-review/review-and-engineering-adoption.md",
+    "bytes": 3902,
+    "sha256": "14b4766fca344d7bdd5b90eac7a91a7ec051931e62ffabe6f02926de74e4e8b0"
+  },
+  {
+    "file": "design-review/root-source-verification.json",
+    "bytes": 778,
+    "sha256": "5ad6e8891a203f602df253baa3f700fc543a7e2889a00c10c8b9b2c1b6acc221"
+  },
+  {
+    "file": "design-review/source-index.md",
+    "bytes": 14297,
+    "sha256": "4ac0c84ff804e8016975d5d5c42e9c96ea2e2eb301fb7fa784b84f6f0a24ff57"
+  },
+  {
+    "file": "merge/merge-verification.json",
+    "bytes": 690,
+    "sha256": "6c45b542d3873c5a3ede3ef1e3de7f4c74eb90bd5a5cb0e82a24ce0c2e4aa483"
+  },
+  {
+    "file": "merge/normal-merge-audit.json",
+    "bytes": 5802,
+    "sha256": "89111bec50881996b648e4ade91fad16f56c8dd71dfb10dce7221ae9505f5b00"
+  },
+  {
+    "file": "merge/ready-jobs.json",
+    "bytes": 17580,
+    "sha256": "8a9f3188e7b85eae929d66ca0b0f0a3d046d4544b55389a1bedbc8af0178cc29"
+  },
+  {
+    "file": "merge/ready-run-logs.zip",
+    "bytes": 354333,
+    "sha256": "a8601f3811563ca556a0dfea22c83a644d2b8765c5f7cfe33d0b48d360becab9"
+  },
+  {
+    "file": "merge/ready-run.json",
+    "bytes": 13215,
+    "sha256": "b37737da7073ed9deb92384a125431a8c59ebf6890abc1855cb77d82476bee64"
+  },
+  {
+    "file": "report.md",
+    "bytes": 3505,
+    "sha256": "0b7b6c3c0b36e8b2ebaac1ca0d0e8f2c46d38d1390a515a91acb04df8218b512"
+  }
+]

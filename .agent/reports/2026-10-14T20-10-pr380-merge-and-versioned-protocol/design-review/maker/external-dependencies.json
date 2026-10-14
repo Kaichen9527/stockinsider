@@ -1,0 +1,290 @@
+[
+  {
+    "from": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 1,
+    "specifier": "next/server",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-complete-input.ts",
+    "line": 1,
+    "specifier": "node:path",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-complete-input.ts",
+    "line": 2,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-author-assignment.ts",
+    "line": 1,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-author-packet.ts",
+    "line": 1,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-author-result.ts",
+    "line": 1,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-author-handoff.ts",
+    "line": 1,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 1,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-result.ts",
+    "line": 1,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-atomic-publication.ts",
+    "line": 1,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-financial-supplement.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-supplement.ts",
+    "line": 2,
+    "specifier": "node:path",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-supplement.ts",
+    "line": 3,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-deep-author-input.ts",
+    "line": 1,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-deep-author-input.ts",
+    "line": 43,
+    "specifier": " | ",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-deep-claim-context.ts",
+    "line": 1,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-deep-claim-context.ts",
+    "line": 119,
+    "specifier": "> & Partial<Pick<SupabaseClient,",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-v3-finite-material.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-cash-financial-reader.ts",
+    "line": 2,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/internal-auth.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-file-reader.ts",
+    "line": 1,
+    "specifier": "node:fs",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-file-reader.ts",
+    "line": 2,
+    "specifier": "node:fs/promises",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-file-reader.ts",
+    "line": 3,
+    "specifier": "node:fs/promises",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-file-reader.ts",
+    "line": 4,
+    "specifier": "node:fs",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-file-reader.ts",
+    "line": 5,
+    "specifier": "node:path",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-file-reader.ts",
+    "line": 6,
+    "specifier": "node:perf_hooks",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-file-reader.ts",
+    "line": 7,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-complete-canonical.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-execution-binding.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-business-calculator.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 1,
+    "specifier": "crypto",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-agent-qualification.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-source-association.ts",
+    "line": 1,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-source-association.ts",
+    "line": 167,
+    "specifier": " | ",
+    "kind": "locked package/runtime"
+  },
+  {
+    "from": "web/src/lib/research-v3-material-canonical.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-historical-cash-projection.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-io-owner.ts",
+    "line": 1,
+    "specifier": "node:perf_hooks",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-io-owner.ts",
+    "line": 2,
+    "specifier": "node:fs/promises",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-io-engine.ts",
+    "line": 1,
+    "specifier": "node:fs",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-io-engine.ts",
+    "line": 2,
+    "specifier": "node:fs/promises",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-io-engine.ts",
+    "line": 3,
+    "specifier": "node:path",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-financial-io-engine.ts",
+    "line": 4,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/research-compatible-financial-projection.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/data-plane-runtime.ts",
+    "line": 1,
+    "specifier": "node:crypto",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/data-plane-runtime.ts",
+    "line": 2,
+    "specifier": "node:fs",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/data-plane-runtime.ts",
+    "line": 3,
+    "specifier": "node:path",
+    "kind": "builtin"
+  },
+  {
+    "from": "web/src/lib/data-plane-runtime.ts",
+    "line": 4,
+    "specifier": "@supabase/supabase-js",
+    "kind": "locked package/runtime"
+  }
+]

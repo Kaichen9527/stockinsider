@@ -1,0 +1,627 @@
+[
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 18,
+    "text": "  UNIQUE (stock_id, week_start),"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 43,
+    "text": "  PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 60,
+    "text": "  PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 100,
+    "text": "CREATE UNIQUE INDEX IF NOT EXISTS uq_candidate_dossier_kind_revision_v6"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 116,
+    "text": "  UNIQUE (job_id, attempt)"
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 39,
+    "text": " PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 59,
+    "text": "  PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 84,
+    "text": "  PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261008_research_observed_priority_v1.sql",
+    "line": 57,
+    "text": " UNIQUE(issuer_key,admission_week),"
+  },
+  {
+    "file": "migrations/20261008_research_observed_priority_v1.sql",
+    "line": 186,
+    "text": " IF NOT FOUND OR p_as_of IS NULL OR NOT isfinite(p_as_of) OR p_as_of>clock_timestamp() OR p_input_hash IS NULL OR octet_length(coalesce(p_rows::text,''))+octet_length(coalesce(p_attempts::text,''))+octet_length(coalesce(p_scope_receipt::text,''))>16000000 OR p_input_hash !~ '^[a-f0-9]{64}$' OR jsonb_typeof(p_rows) IS DISTINCT FROM 'array' OR jsonb_array_length(p_rows)<>snap.included_count OR jsonb_typeof(p_queue) IS DISTINCT FROM 'array' OR jsonb_array_length(p_queue)>20 OR jsonb_typeof(p_attempts) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'observed_priority_input_invalid'; END IF;"
+  },
+  {
+    "file": "migrations/20261008_research_observed_priority_v1.sql",
+    "line": 235,
+    "text": " PERFORM pg_advisory_xact_lock(2409,6002);n:=clock_timestamp();"
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "line": 16,
+    "text": " UNIQUE(market,symbol), UNIQUE(market,isin), UNIQUE(research_company_id,symbol,exchange,isin)"
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "line": 40,
+    "text": " PRIMARY KEY(snapshot_hash,research_company_id), UNIQUE(snapshot_hash,symbol),"
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "line": 89,
+    "text": "   SELECT packet,''::text,0 UNION ALL"
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "line": 92,
+    "text": "    UNION ALL SELECT a.value,''::text FROM jsonb_array_elements(CASE WHEN jsonb_typeof(n.value)='array' THEN n.value ELSE '[]'::jsonb END)a"
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "line": 153,
+    "text": "  UNION ALL"
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "line": 14,
+    "text": " canonical_request jsonb NOT NULL,"
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "line": 23,
+    "text": " UNIQUE(job_id,attempt)"
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "line": 49,
+    "text": "  OR revision->'canonical_request' IS DISTINCT FROM p_request"
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "line": 51,
+    "text": "  OR payload->>'schemaVersion' IS DISTINCT FROM 'research-article-input-v2'"
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "line": 97,
+    "text": " IF saved.canonical_request IS DISTINCT FROM p_request OR saved.input_revision_id IS DISTINCT FROM p_revision_id"
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "line": 124,
+    "text": "  research_company_id,snapshot_hash,controller_principal,work_owner,canonical_request,assigned_at,"
+  },
+  {
+    "file": "migrations/20261009_research_author_handoffs_v2.sql",
+    "line": 19,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);"
+  },
+  {
+    "file": "migrations/20261009_research_author_handoffs_v2.sql",
+    "line": 20,
+    "text": " PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261009_research_author_handoffs_v2.sql",
+    "line": 26,
+    "text": "  OR a.canonical_request IS DISTINCT FROM p_request OR v.canonical_request IS DISTINCT FROM p_request"
+  },
+  {
+    "file": "migrations/20261009_research_author_packet_v2.sql",
+    "line": 69,
+    "text": " result:=jsonb_build_object('assignment',a-'controller_principal'-'canonical_request',"
+  },
+  {
+    "file": "migrations/20261009_research_author_results_v2.sql",
+    "line": 5,
+    "text": " assignment_id uuid NOT NULL UNIQUE REFERENCES public.research_author_assignments_v2(assignment_id),"
+  },
+  {
+    "file": "migrations/20261009_research_author_results_v2.sql",
+    "line": 6,
+    "text": " invocation_id text NOT NULL UNIQUE CHECK(length(invocation_id) BETWEEN 1 AND 200),"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 4,
+    "text": " revision_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), preparation_id uuid NOT NULL UNIQUE REFERENCES public.research_input_preparations_v2(preparation_id),"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 8,
+    "text": " request_hash text NOT NULL CHECK(request_hash ~ '^[a-f0-9]{64}$'), canonical_request jsonb NOT NULL,"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 10,
+    "text": " logical_bytes integer NOT NULL CHECK(logical_bytes BETWEEN 1 AND 524288), admitted_at timestamptz NOT NULL, research_cutoff timestamptz NOT NULL CHECK(research_cutoff=admitted_at),"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 60,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 75,
+    "text": " IF saved.canonical_request IS DISTINCT FROM p_request OR saved.request_hash IS DISTINCT FROM public.research_complete_hash_v2(p_request) THEN RAISE EXCEPTION 'complete_replay_conflict';END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 84,
+    "text": " IF p_calculation IS NULL OR octet_length(p_calculation::text)>262144 THEN RAISE EXCEPTION 'complete_calculation_bound';END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 89,
+    "text": " IF octet_length(projection::text)>160000 THEN RAISE EXCEPTION 'complete_projection_bound';END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 92,
+    "text": " IF NOT isfinite(known) OR known>n OR known<(m->>'modelCutoff')::timestamptz OR (parent->>'admitted_at')::timestamptz>n OR (parent->>'admitted_at')::timestamptz<n-interval '120 seconds' THEN RAISE EXCEPTION 'complete_freshness';END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 96,
+    "text": " material:=jsonb_build_object('schemaVersion','research-article-input-v2','assemblyStatus','complete','evidenceStatus','incomplete','producerAttribution','internal_controller_asserted',"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 109,
+    "text": " UNION ALL SELECT logical_bytes FROM public.research_article_input_revisions_v2 WHERE job_id=(parent->>'job_id')::uuid AND attempt=(parent->>'attempt')::int AND reservation_id=(parent->>'reservation_id')::uuid) history;"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 110,
+    "text": " IF used_count>=4 THEN RAISE EXCEPTION 'complete_count_bound';END IF;IF used_bytes+charge>524288 THEN RAISE EXCEPTION 'complete_byte_bound';END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 113,
+    "text": " INSERT INTO public.research_article_input_revisions_v2(preparation_id,job_id,attempt,reservation_id,research_company_id,research_scope,snapshot_hash,request_hash,canonical_request,input_hash,canonical_payload,logical_bytes,admitted_at,research_cutoff,source_seal_id)"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 118,
+    "text": " IF (SELECT encode(sha256(convert_to(prosrc,'UTF8')),'hex') FROM pg_proc WHERE oid='public.prepare_research_input_v2(jsonb)'::regprocedure) IS DISTINCT FROM '4836fbda90ab63490d24d425394244b85c8313d9b581dc738653be611940defb' OR (SELECT pg_get_userbyid(proowner) FROM pg_proc WHERE oid='public.prepare_research_input_v2(jsonb)'::regprocedure) IS DISTINCT FROM 'research_input_preparation_owner_v2' THEN RAISE EXCEPTION 'complete_predecessor_not_exact';END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 120,
+    "text": "CREATE OR REPLACE FUNCTION public.prepare_research_input_v2(p_request jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 142,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 143,
+    "text": " PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 176,
+    "text": "  UNION ALL SELECT logical_bytes FROM public.research_article_input_revisions_v2 WHERE job_id=j.job_id AND attempt=j.attempts AND reservation_id=r.reservation_id) history;"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 202,
+    "text": " IF used_bytes+charged_bytes>524288 THEN RAISE EXCEPTION 'input_preparation_byte_bound'; END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparation_assert_v2.sql",
+    "line": 12,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparation_assert_v2.sql",
+    "line": 13,
+    "text": " PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparation_assert_v2.sql",
+    "line": 18,
+    "text": " replay:=public.prepare_research_input_v2(p_request);"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 11,
+    "text": " payload jsonb NOT NULL, logical_bytes integer NOT NULL CHECK(logical_bytes BETWEEN 1 AND 524288), source_seal_id uuid REFERENCES public.research_source_seals_v2(seal_id),"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 13,
+    "text": " UNIQUE(job_id,attempt,reservation_id,request_hash)"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 45,
+    "text": "CREATE FUNCTION public.prepare_research_input_v2(p_request jsonb) RETURNS jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 68,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 69,
+    "text": " PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 128,
+    "text": " IF used_bytes+charged_bytes>524288 THEN RAISE EXCEPTION 'input_preparation_byte_bound'; END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 134,
+    "text": "ALTER FUNCTION public.prepare_research_input_v2(jsonb) OWNER TO research_input_preparation_owner_v2;"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 135,
+    "text": "REVOKE ALL ON FUNCTION public.prepare_research_input_v2(jsonb) FROM PUBLIC,anon,authenticated;"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 136,
+    "text": "GRANT EXECUTE ON FUNCTION public.prepare_research_input_v2(jsonb) TO service_role;"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 12,
+    "text": "  OR (revision_kind='research_input_v2' AND revision_id IS NULL AND published_revision_id IS NULL"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 15,
+    "text": "CREATE UNIQUE INDEX research_bundle_input_unique_v2 ON public.candidate_dossier_bundles(research_input_revision_id,input_hash)"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 16,
+    "text": " WHERE revision_kind='research_input_v2';"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 26,
+    "text": "  OR (revision_kind='research_input_v2' AND revision_id IS NULL AND publication_kind='deep'"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 30,
+    "text": "CREATE UNIQUE INDEX research_outbox_input_unique_v2 ON public.candidate_dossier_outbox_v5(research_input_revision_id,input_hash,publication_kind)"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 31,
+    "text": " WHERE revision_kind='research_input_v2';"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 39,
+    "text": "  IF OLD.revision_kind='research_input_v2' THEN RAISE EXCEPTION 'research_publication_v2_inert';END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 44,
+    "text": "  IF OLD.revision_kind='research_input_v2' THEN RAISE EXCEPTION 'research_publication_v2_inert';END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 57,
+    "text": " IF NEW.revision_kind IS DISTINCT FROM 'research_input_v2' THEN RAISE EXCEPTION 'research_publication_branch_invalid';END IF;"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 73,
+    "text": "  IF NOT FOUND OR b.revision_kind IS DISTINCT FROM 'research_input_v2'"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 97,
+    "text": " IF (TG_TABLE_NAME='candidate_dossier_bundles' AND EXISTS(SELECT FROM public.candidate_dossier_bundles WHERE revision_kind='research_input_v2'))"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 98,
+    "text": "  OR (TG_TABLE_NAME='candidate_dossier_outbox_v5' AND EXISTS(SELECT FROM public.candidate_dossier_outbox_v5 WHERE revision_kind='research_input_v2'))"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 114,
+    "text": " TO research_input_preparation_owner_v2 WITH CHECK(revision_kind='research_input_v2');"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 120,
+    "text": " TO research_observed_rpc_owner WITH CHECK(revision_kind='research_input_v2');"
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 16,
+    "text": " seal_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), request_hash text NOT NULL UNIQUE,"
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 46,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);"
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 65,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);"
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 93,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);"
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 143,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "line": 4,
+    "text": " author_assignment_id uuid NOT NULL UNIQUE REFERENCES public.research_author_assignments_v2(assignment_id),"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "line": 5,
+    "text": " author_result_id uuid NOT NULL UNIQUE REFERENCES public.research_author_results_v2(result_id),"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "line": 13,
+    "text": " reservation_id uuid NOT NULL UNIQUE REFERENCES public.research_model_reservations_v1(reservation_id),"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "line": 19,
+    "text": " UNIQUE(job_id,attempt)"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_results_v2.sql",
+    "line": 8,
+    "text": " result_id uuid NOT NULL UNIQUE,"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_results_v2.sql",
+    "line": 20,
+    "text": " assignment_id uuid NOT NULL UNIQUE REFERENCES public.research_reviewer_assignments_v2(assignment_id),"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_results_v2.sql",
+    "line": 21,
+    "text": " invocation_id text NOT NULL UNIQUE CHECK(length(invocation_id) BETWEEN 1 AND 200),"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 16,
+    "text": "  OR (revision_kind='research_input_v2' AND detail_snapshot_id IS NULL AND narrative_kind='codex_enriched'"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 35,
+    "text": "  OR (revision_kind='research_input_v2' AND revision_id IS NULL AND status='accepted'"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 40,
+    "text": "CREATE UNIQUE INDEX research_dossier_exact_input_v2 ON public.candidate_research_dossiers(research_input_revision_id,input_hash)"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 41,
+    "text": " WHERE revision_kind='research_input_v2';"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 42,
+    "text": "CREATE UNIQUE INDEX research_receipt_exact_input_v2 ON public.candidate_dossier_submission_receipts(research_input_revision_id,input_hash)"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 43,
+    "text": " WHERE revision_kind='research_input_v2';"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 75,
+    "text": " VALUES(gen_random_uuid(),'research_input_v2',i.revision_id,i.research_company_id,i.snapshot_hash,i.input_hash,i.canonical_payload->'researchIdentity'->>'symbol',v)"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 76,
+    "text": " ON CONFLICT(research_input_revision_id,input_hash) WHERE revision_kind='research_input_v2' DO NOTHING;"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 77,
+    "text": " SELECT * INTO b FROM public.candidate_dossier_bundles WHERE revision_kind='research_input_v2' AND research_input_revision_id=i.revision_id AND input_hash=i.input_hash;"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 108,
+    "text": " IF NEW.revision_kind IS DISTINCT FROM 'research_input_v2' OR current_user<>'research_observed_rpc_owner'"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 115,
+    "text": "  OR b.revision_kind IS DISTINCT FROM 'research_input_v2' OR b.research_input_revision_id IS DISTINCT FROM i.revision_id"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 130,
+    "text": "  IF d.id IS NULL OR d.revision_kind IS DISTINCT FROM 'research_input_v2' OR d.bundle_id IS DISTINCT FROM NEW.bundle_id"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 145,
+    "text": " IF (TG_TABLE_NAME='candidate_research_dossiers' AND EXISTS(SELECT FROM public.candidate_research_dossiers WHERE revision_kind='research_input_v2'))"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 146,
+    "text": "  OR (TG_TABLE_NAME='candidate_dossier_submission_receipts' AND EXISTS(SELECT FROM public.candidate_dossier_submission_receipts WHERE revision_kind='research_input_v2'))"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 156,
+    "text": "CREATE POLICY research_publication_dossier_insert_v2 ON public.candidate_research_dossiers FOR INSERT TO research_observed_rpc_owner WITH CHECK(revision_kind='research_input_v2');"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 158,
+    "text": "CREATE POLICY research_publication_receipt_insert_v2 ON public.candidate_dossier_submission_receipts FOR INSERT TO research_observed_rpc_owner WITH CHECK(revision_kind='research_input_v2');"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 168,
+    "text": "  IF OLD.revision_kind='research_input_v2' THEN RAISE EXCEPTION 'research_publication_v2_inert';END IF;"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 173,
+    "text": "  IF OLD.revision_kind='research_input_v2' THEN"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 190,
+    "text": "    IF c.status='accepted' AND c.revision_kind='research_input_v2' AND c.bundle_id=OLD.bundle_id"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 209,
+    "text": " IF NEW.revision_kind IS DISTINCT FROM 'research_input_v2' THEN RAISE EXCEPTION 'research_publication_branch_invalid';END IF;"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 225,
+    "text": "  IF NOT FOUND OR b.revision_kind IS DISTINCT FROM 'research_input_v2'"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 264,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 271,
+    "text": "  OR i.research_scope IS DISTINCT FROM 'research_observed_v1' OR i.canonical_request IS DISTINCT FROM p_request"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 272,
+    "text": "  OR i.input_hash IS DISTINCT FROM p_input_hash OR a.canonical_request IS DISTINCT FROM p_request"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 323,
+    "text": "  OR b.revision_kind IS DISTINCT FROM 'research_input_v2' OR b.research_input_revision_id IS DISTINCT FROM i.revision_id"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 325,
+    "text": "  OR b.input_hash IS DISTINCT FROM i.input_hash OR o.revision_kind IS DISTINCT FROM 'research_input_v2'"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 328,
+    "text": "  OR c.revision_kind IS DISTINCT FROM 'research_input_v2' OR d.revision_kind IS DISTINCT FROM 'research_input_v2'"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 405,
+    "text": " VALUES(b,'research_input_v2',i.revision_id,i.research_company_id,i.snapshot_hash,i.input_hash,'deep',j.job_id,i.attempt)"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 406,
+    "text": " ON CONFLICT(research_input_revision_id,input_hash,publication_kind) WHERE revision_kind='research_input_v2' DO NOTHING;"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 407,
+    "text": " SELECT * INTO o FROM public.candidate_dossier_outbox_v5 WHERE revision_kind='research_input_v2'"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 422,
+    "text": "  'research_input_v2',i.revision_id,i.research_company_id,i.snapshot_hash,ar.result_id,rr.result_id,i.source_seal_id) RETURNING id INTO d;"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 425,
+    "text": " VALUES(b,i.input_hash,d,sh,'accepted','research_input_v2',i.revision_id,i.research_company_id,i.snapshot_hash,ar.result_id,rr.result_id,i.source_seal_id,rh) RETURNING submission_id INTO c;"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 445,
+    "text": "CREATE POLICY research_publication_outbox_update_v2 ON public.candidate_dossier_outbox_v5 FOR UPDATE TO research_observed_rpc_owner USING(revision_kind='research_input_v2') WITH CHECK(revision_kind='research_input_v2');"
+  },
+  {
+    "file": "migrations/20261010_research_publication_view_v2.sql",
+    "line": 5,
+    "text": " WHERE revision_kind='research_input_v2' AND validation_status='valid';"
+  },
+  {
+    "file": "migrations/20261010_research_publication_view_v2.sql",
+    "line": 18,
+    "text": " PERFORM pg_advisory_xact_lock(610091002::bigint);PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261010_research_publication_view_v2.sql",
+    "line": 22,
+    "text": "  AND revision_kind='research_input_v2' AND validation_status='valid'"
+  },
+  {
+    "file": "migrations/20261010_research_publication_view_v2.sql",
+    "line": 36,
+    "text": " v:=public.read_completed_research_publication_v2(i.canonical_request,i.revision_id,i.input_hash,"
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 53,
+    "text": "  PERFORM pg_advisory_xact_lock(2409,6002);"
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 170,
+    "text": " IF NOT FOUND OR p_as_of IS NULL OR NOT isfinite(p_as_of) OR p_as_of>clock_timestamp() OR p_input_hash IS NULL OR octet_length(coalesce(p_rows::text,''))+octet_length(coalesce(p_attempts::text,''))+octet_length(coalesce(p_scope_receipt::text,''))>16000000 OR p_input_hash !~ '^[a-f0-9]{64}$' OR jsonb_typeof(p_rows) IS DISTINCT FROM 'array' OR jsonb_array_length(p_rows)<>snap.included_count OR jsonb_typeof(p_queue) IS DISTINCT FROM 'array' OR jsonb_array_length(p_queue)>20 OR jsonb_typeof(p_attempts) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'observed_priority_input_invalid'; END IF;"
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 215,
+    "text": " PERFORM pg_advisory_xact_lock(2409,6002);n:=clock_timestamp();"
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 266,
+    "text": " PERFORM pg_advisory_xact_lock(2409,6002);"
+  }
+]

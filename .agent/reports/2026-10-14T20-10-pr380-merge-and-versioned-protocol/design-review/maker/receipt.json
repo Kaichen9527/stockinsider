@@ -1,0 +1,179 @@
+{
+  "kind": "maker-design-evidence-not-independent-approval",
+  "base": "72f639801d4000f375bea879de5139f6b1232580",
+  "designCommit": "6bc724971b0875af0688e441a756bc07f1f06b8d",
+  "designTree": "d2081724c5934695c45386869366cc08ce5fc11e",
+  "finishedAt": "2026-10-14T11:52:59.534467+00:00",
+  "raw": [
+    {
+      "file": "absence-matrix.json",
+      "bytes": 18059,
+      "sha256": "de82c32d2b024baeef2136511659b5a3b71ebe3223f1c93f6c3ca72e5de18199"
+    },
+    {
+      "file": "actual-call-boundaries.json",
+      "bytes": 12555,
+      "sha256": "9ebd47245af1094fe4ba544806250e400e1b66d2ad1d24a0fbe1fb9894810bca"
+    },
+    {
+      "file": "actual-functions.json",
+      "bytes": 52929,
+      "sha256": "b3ef39eab75e498aae8e2a022a56328b3163801db8b365a496a013a9c01bf861"
+    },
+    {
+      "file": "cash-numeric-path-inventory-NOT-approved-allowlist.json",
+      "bytes": 58787,
+      "sha256": "7e9f2bdf9d2ed36484eb86cec5ae568f4ee441d52f48b65bddd101ea940eb408"
+    },
+    {
+      "file": "downstream-guards.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "downstream-version-tag-excerpts.txt",
+      "bytes": 11471,
+      "sha256": "1e4b92c9541d3a339208aaed59c524dda37a1e46f997ecb97b750234afbf810c"
+    },
+    {
+      "file": "enumerate-initial-error.py",
+      "bytes": 5967,
+      "sha256": "76053d4f12e77e6764ab7550e35ad96e9c279cdb7e4e14ccfd438c2a952db8b2"
+    },
+    {
+      "file": "enumerate.py",
+      "bytes": 5968,
+      "sha256": "0054c0efedeb578a4e1808fa7cf74cedf7566404cd345666ecedaf6d9eb16b25"
+    },
+    {
+      "file": "enumeration.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "enumeration.stdout",
+      "bytes": 117,
+      "sha256": "175fb822d955cb0a952e822ba160de3c9bb639868c7ba9599f853b1fe315e6ed"
+    },
+    {
+      "file": "extend.py",
+      "bytes": 3199,
+      "sha256": "ebe32234d1cc6f18c2ad3ab5dbb59703109cc6a12adf147224a1366672a16c4b"
+    },
+    {
+      "file": "external-dependencies.json",
+      "bytes": 6932,
+      "sha256": "d4faea486ba726592035c18c6eb79fb1c8cb92ad5bb7528552b307475d49ceea"
+    },
+    {
+      "file": "fixed-installation-inputs-50-plus-26.json",
+      "bytes": 36369,
+      "sha256": "b01ead1d20600007948ee693e66b470fa1ee364bbd895438b3b9eb0cad6674a2"
+    },
+    {
+      "file": "historical77b1-proof.json",
+      "bytes": 4070,
+      "sha256": "04e87289b5fafab8b40eda3bc4774c413a2f733a9cca14903adbb72f3a0565df"
+    },
+    {
+      "file": "initial-errors.txt",
+      "bytes": 511,
+      "sha256": "7fbf724bfdc5964a153f82985b334b8639475a308eb6f8844289a62f595a1fbf"
+    },
+    {
+      "file": "legacy-mapping-keys.json",
+      "bytes": 142,
+      "sha256": "dee3e52f55c453fb2dbda3db1b3f04c1fdb4b6db1b2465d8caf86bde4bbf6273"
+    },
+    {
+      "file": "prior-contract.md",
+      "bytes": 22907,
+      "sha256": "23186513b91a3a086f8295f412a731b8bd5204e9d7ac66ad236f3d298526d782"
+    },
+    {
+      "file": "reusable-test-fixture-inputs.json",
+      "bytes": 3343,
+      "sha256": "9c1ec53da288da2838af1a996ab873d7ae925f37ba9eedd6e63330f0fc500cf3"
+    },
+    {
+      "file": "root-engineering-decision-and-next-session-boundary.md",
+      "bytes": 4026,
+      "sha256": "21162fd11b4c693adb8b09e3d647d463b84e5b7b1096620e686d130712bd65cc"
+    },
+    {
+      "file": "root-verification.json",
+      "bytes": 756,
+      "sha256": "1eb4faf71ba724f67f520e2ff82e71c588cba814b45365f87cff30f6a2661fed"
+    },
+    {
+      "file": "scope-and-timing.txt",
+      "bytes": 570,
+      "sha256": "bc7d0a2e053cace9630dc95644128ff41273573c865236750a877eb0bac815e3"
+    },
+    {
+      "file": "source-enumeration.json",
+      "bytes": 28817,
+      "sha256": "9a3d11eaf559e51719fef1b51a95cf954c30c48f07ef43a4e23b2074174641fb"
+    },
+    {
+      "file": "sql-boundary-excerpts.json",
+      "bytes": 27093,
+      "sha256": "8917545da852f0935e42dfe633560ece1cd587afe4d65d75c8e184e5e0df9bab"
+    },
+    {
+      "file": "sql-signatures.json",
+      "bytes": 19558,
+      "sha256": "fc0cfcd649a5f039df29c80f8252ff5cb6123adf10cb8c85ebc08a1095490c00"
+    },
+    {
+      "file": "sql-source-enumeration.json",
+      "bytes": 19657,
+      "sha256": "0fbb7f0c512e5762ab05cce217142ecb22d1cf8ed6336fa8145f4f75a08b4619"
+    },
+    {
+      "file": "static-import-edges.json",
+      "bytes": 38002,
+      "sha256": "5a1882697c0563fb3664b4123a510aa6216c6df3b9a7defdbe6c26b9d40fd9c5"
+    },
+    {
+      "file": "tail-descriptor-original.json",
+      "bytes": 9805,
+      "sha256": "9410e8f3391c372439fc1f970214c69f1cfd9cb0a4cbebb324364bc493b349fe"
+    },
+    {
+      "file": "unresolved-dynamic-edges.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "verification.json",
+      "bytes": 11364,
+      "sha256": "88bbea973c567ce1a378d3aab5653e2204d0013adab213613a6bcf10c10335d1"
+    }
+  ],
+  "rawBytes": 402977,
+  "actualChecks": {
+    "gitSourceRecords": 71,
+    "historicalClosureFiles": 22,
+    "staticImportEdges": 135,
+    "fixedInstallationSteps": 76,
+    "runtimeEdits": 0,
+    "newPGTests": 0,
+    "newAppTests": 0,
+    "builds": 0
+  },
+  "limits": [
+    "Regex source scan is not a final compiled dependency proof.",
+    "Exact final protocol/schema/registry and whole execution closure not implemented or approved.",
+    "Max30-source final-wrapper mixed quota/races pending real protocol PG tests.",
+    "Existing ce64 PG sizes referenced only; no rerun.",
+    "No formal cutover/peer/role/publication/production approval."
+  ],
+  "remainingImplementation": "Next bounded slice: additive finite versioned SQL plus common controller and real captured-PG old replay/compat/v3 tests.",
+  "resources": {
+    "workspaceFreeBytes": 8609755136,
+    "tmpFreeBytes": 15435345920,
+    "noOwnedServicesStarted": true,
+    "rssPeakMeasured": false
+  }
+}

@@ -1,0 +1,292 @@
+[
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 18,
+    "text": "      const { handleResearchPublication } = await import('@/lib/research-atomic-publication');"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 21,
+    "text": "    const {FinancialDeadline}=await import('@/lib/research-financial-file-reader');"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 22,
+    "text": "    const {readCompleteBody,parseCompleteRequest,runCompleteInput}=await import('@/lib/research-complete-input');"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 24,
+    "text": "    try {const body=await readCompleteBody(request,deadline);({action,...input}=body);if(action!=='sealResearchInput'&&action!=='readResearchInputRevision')throw new Error('action');input=parseCompleteRequest(input);}"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 26,
+    "text": "    try {const revision=await runCompleteInput(getSupabaseServerClient(),input,action==='sealResearchInput',deadline);deadline.check();return NextResponse.json({ok:true,revision,dispatchReady:false});}"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 43,
+    "text": "      const { parseFinancialSupplementRequest, loadResearchFinancialSupplement } = await import('@/lib/research-financial-supplement');"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 62,
+    "text": "      const result = await getSupabaseServerClient().rpc('prepare_research_input_v2', { p_request: input });"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 110,
+    "text": "      const result = observed ? await db.rpc('claim_research_observed_job_v2', {p_owner:owner,p_snapshot_hash:body.snapshotHash}) : await db.rpc('claim_research_deep_job_v1', { p_owner: owner });"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 151,
+    "text": "    const result = await db.rpc('claim_candidate_deep_outbox_v1', {"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 163,
+    "text": "    const result = await db.rpc('handoff_research_deep_model_v1', { p_job_id: body.jobId,"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 180,
+    "text": "    const result = await db.rpc('finish_research_deep_job_v2', {"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 12,
+    "text": "export function parseCompleteRequest(value:unknown):CompleteRequest {"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 43,
+    "text": "export function validateCompleteResponse(request:CompleteRequest,response:Row):void {"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 44,
+    "text": " parseCompleteRequest(request);ensure(response.dispatchReady===false&&(response.status==='absent'||response.status==='sealed'));"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 66,
+    "text": "export async function runCompleteInput(db:Pick<SupabaseClient,'rpc'>,request:CompleteRequest,seal:boolean,deadline:FinancialDeadline,root?:string):Promise<Row>{"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 67,
+    "text": " const rpc=async(name:string,args:Row)=>{deadline.check();const response=await deadline.wait(db.rpc(name,args).abortSignal(deadline.controller.signal));ensure(!response.error&&response.data&&typeof response.data==='object');return response.data as Row;};"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 70,
+    "text": " validateCompleteResponse(request,before);deadline.check();if(before.status!=='absent'||!seal)return before;"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 73,
+    "text": " phase='seal_validate';validateCompleteResponse(request,saved);ensure(saved.status==='sealed');deadline.check();return saved;"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 5,
+    "text": "import { readCompleteBody, parseCompleteRequest, runCompleteInput, type CompleteRequest } from './research-complete-input.ts';"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 24,
+    "text": "  return { action: value.action, input: parseCompleteRequest(value.input), inputRevisionId: value.inputRevisionId, inputHash: value.inputHash };"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 33,
+    "text": "  const revision = await runCompleteInput(db, request.input, false, deadline);"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 37,
+    "text": "  const result = await deadline.wait(db.rpc(request.action === 'assignAuthor' ? 'assign_research_author_v2' : 'read_research_author_assignment_v2', {"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 66,
+    "text": "    const { handleResearchAuthorHandoff } = await import('./research-author-handoff.ts');"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 70,
+    "text": "    const { handleResearchAuthorResult } = await import('./research-author-result.ts');"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 78,
+    "text": "      const { runResearchAuthorPacket, assertResearchAuthorPacketWindow } = await import('./research-author-packet.ts');"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 3,
+    "text": "import { runCompleteInput, validateCompleteResponse, type CompleteRequest } from './research-complete-input.ts';"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 36,
+    "text": "  deadline.check(); validateCompleteResponse(request.input, revision);"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 130,
+    "text": "  const revision = await runCompleteInput(db, request.input, false, deadline);"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 132,
+    "text": "  const response = await deadline.wait(db.rpc('read_research_author_packet_v2', {"
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "line": 5,
+    "text": "import { parseCompleteRequest, runCompleteInput } from './research-complete-input.ts';"
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "line": 30,
+    "text": "    const input = parseCompleteRequest(body.input); deadline.check();"
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "line": 39,
+    "text": "  const revision = await runCompleteInput(db, request.input, false, deadline);"
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "line": 73,
+    "text": "  const saved = await deadline.wait(db.rpc(envelope ? 'receive_research_author_result_v2' : 'read_research_author_result_v2', args).abortSignal(deadline.controller.signal));"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 5,
+    "text": "import { parseCompleteRequest, validateCompleteResponse, type CompleteRequest } from './research-complete-input.ts';"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 31,
+    "text": "    const input = parseCompleteRequest(row.input); deadline.check(); return { ...row, input } as AuthorHandoffRequest;"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 53,
+    "text": "  const rpc = async (name: string) => { deadline.check(); const response = await deadline.wait(db.rpc(name, args).abortSignal(deadline.controller.signal)); ensure(!response.error); return response.data; };"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 64,
+    "text": "  validateCompleteResponse(request.input, revision);"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 4,
+    "text": "import { parseCompleteRequest, validateCompleteResponse, type CompleteRequest } from './research-complete-input.ts';"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 29,
+    "text": "    const input = parseCompleteRequest(row.input); deadline.check(); return { ...row, input } as ReviewerAssignmentRequest;"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 47,
+    "text": "  validateCompleteResponse(request.input, revision); ensure(revision.status === 'sealed' && revision.revision_id === request.inputRevisionId && revision.input_hash === request.inputHash);"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 98,
+    "text": "  const rpc = async (name: string) => { deadline.check(); const r = await deadline.wait(db.rpc(name, args).abortSignal(deadline.controller.signal)); ensure(!r.error); return r.data; };"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 4,
+    "text": "import { parseCompleteRequest } from './research-complete-input.ts';"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 33,
+    "text": "    const input = parseCompleteRequest(row.input); deadline.check(); return { ...row, input } as ReviewResultRequest;"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 60,
+    "text": "  const rpc = async (name: string, extra: Row = {}) => { deadline.check(); const r = await deadline.wait(db.rpc(name, { ...args, ...extra }).abortSignal(deadline.controller.signal)); ensure(!r.error); return r.data; };"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 7,
+    "text": "import { parseCompleteRequest, type CompleteRequest } from './research-complete-input.ts';"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 34,
+    "text": "    return { ...row, input: parseCompleteRequest(row.input) } as ResearchPublicationRequest;"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 98,
+    "text": "  const rpc = async(name: string, a: Row) => { deadline.check(); const result = await deadline.wait(db.rpc(name,a).abortSignal(deadline.controller.signal)); ensure(!result.error); return result.data; };"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 2,
+    "text": "import { validateCompleteResponse, type CompleteRequest } from './research-complete-input.ts';"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 106,
+    "text": "  validateCompleteResponse(context.request, context.revision); ensure(context.revision.status === 'sealed');"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 140,
+    "text": "    const result=await deadline.wait(db.rpc('assert_research_input_preparation_v2',{p_request:input.request,p_preparation_id:input.preparationId,p_input_hash:input.preparationInputHash}).abortSignal(deadline.controller.signal));"
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "line": 125,
+    "text": "      const heads = await read(db.rpc('research_evidence_heads_v1', { p_ids: input.sourceDocumentIds, p_cutoff: cutoff })"
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "line": 204,
+    "text": "  context: import('./research-deep-claim-context.ts').ResearchDeepClaimContext, now: string) {"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 130,
+    "text": "    const response = await read(db.rpc('read_research_observed_claim_v2', {p_owner:expected.owner,p_snapshot_hash:expected.snapshotHash,p_job_id:expected.jobId ?? null,p_attempt:expected.attempt ?? null}));"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 197,
+    "text": "      const latest = await read(db.rpc('research_evidence_heads_v1', { p_ids: batch, p_cutoff: dataCutoff })"
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "line": 2,
+    "text": "import { readFileSync } from 'node:fs';"
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "line": 31,
+    "text": "    return readFileSync(path.join(directory, name));"
+  },
+  {
+    "file": "web/scripts/sync-official-authority.mjs",
+    "line": 2,
+    "text": "import { lstat, mkdir, readFile, rename, writeFile } from 'node:fs/promises';"
+  },
+  {
+    "file": "web/scripts/sync-official-authority.mjs",
+    "line": 19,
+    "text": "  const bytes = await readFile(filename);"
+  }
+]

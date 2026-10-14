@@ -1,0 +1,17 @@
+{
+  "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+  "hostId": "durable",
+  "designTurn": "01a13a36-7d98-7462-9c24-0994ae96dc4c",
+  "designCursor": "57859559-a812-4f98-bcdc-46a2a9f908f6:45",
+  "designState": "completed/idle",
+  "currentTurn": "01a13a4b-0a49-7188-89d5-e25305925bad",
+  "currentCursor": "57859559-a812-4f98-bcdc-46a2a9f908f6:46",
+  "latestTurnStatus": "inProgress",
+  "threadStatusObserved": "idle",
+  "threadIdleNotTurnComplete": true,
+  "branch": "codex/research-versioned-input-protocol-oct14",
+  "base": "6bc724971b0875af0688e441a756bc07f1f06b8d",
+  "boundedMinutes": 30,
+  "heavyReleasedAfterProtectedAndMerge": true,
+  "noRedispatch": true
+}

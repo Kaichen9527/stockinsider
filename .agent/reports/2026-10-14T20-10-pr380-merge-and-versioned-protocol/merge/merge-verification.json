@@ -1,0 +1,23 @@
+{
+  "remoteMain": "5189547f76bf24c002b8e8b11669081ba67ad2c6",
+  "parents": [
+    "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+    "dd59817f750684b093965f539dd4de466be13077"
+  ],
+  "tree": "6a9a08af70fb94b50ed2b5eee6aaf3686f648b99",
+  "webTree": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "prAfter": {
+    "baseRefOid": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+    "headRefOid": "dd59817f750684b093965f539dd4de466be13077",
+    "mergeCommit": {
+      "oid": "5189547f76bf24c002b8e8b11669081ba67ad2c6"
+    },
+    "mergedAt": "2026-10-14T12:05:17Z",
+    "state": "MERGED"
+  },
+  "treeVerified": true,
+  "admin": false,
+  "bypass": false,
+  "mainDirectPush": false,
+  "deployment": false
+}

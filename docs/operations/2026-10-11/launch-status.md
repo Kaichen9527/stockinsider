@@ -1,5 +1,16 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 20:10台灣時間：PR380正常protected七綠後標準merge終態；真versionedSQL/controller候選單件活動
+
+PR380已2026-10-14T12:05:17Z正常標準merge，remote main5189547f76bf24c002b8e8b11669081ba67ad2c6/parents1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4+dd59817f750684b093965f539dd4de466be13077/tree6a9a08af70fb94b50ed2b5eee6aaf3686f648b99/webc516655efaac8260b1bcf5938f8f4d65ab61ad44，fulltree等exactreviewdd。Ready事件38559013100 attempt1全部7真SUCCESS，完整7job/run/logZIP354333bytes/SHAa8601f3811563ca556a0dfea22c83a644d2b8765c5f7cfe33d0b48d360becab9保存。Root核三ordinary/freshc2b/sourcebase/rules20177392active/bypass[]及全headrun終態後，只一次gh pr merge--merge--match-head-commit dd，無admin/bypass/directmainpush，保護完整JSON前後相同。Audit/tmp/stockinsider-pr380-normal-merge-audit-oct14.json成功消耗；380加入370..379terminal，永不再checks/watch/ready/rerun/merge/helper。C2b直接attestdd不是merged5189，工程merge不是正式安裝/部署/來源資格。
+
+Design6bc72497/evidence267184ec/receipt7158651a Root真核29raw/71app+45SQL/76selected/old22→77b1，全文ADR+actualsource已review。採sameledgers/storagefamily/neutral8key prep/firstseal10key freeze/oldsealedexactreplay/freshcompatible，Root明確refine newselectorHb綁Hs/Hc、B不selfhash、postbindingQ/R由externalA同pin、sealedstoredHb READ與absentFRESH分開。Regexgraph非compiledwholeclosure，非原設計self簽或正式registry批准。
+
+Designturn已cursor45真idle，才單件30min newbranchcodex/research-versioned-input-protocol-oct14/base6bc；turn01a13a4b-0a49-7188-89d5-e25305925bad/cursor57859559-a812-4f98-bcdc-46a2a9f908f6:46 latestTurninProgress，thread短idle不等完、不重派。Owned最小newSQL+commoncontroller+missingexactdeps+capturedPG/tests/handoff/evidence，Root只report/review。先heavyheld，真新protected終態+merge後Root只發同task heavyrelease，原期限/範圍/8GiBfree-RSS8GiB-singleheavy/Node22exactlocks不變，不延長/新任務。實際oldsealed/freshcompat/v3 firstseal-replay/混合conflict/真quota拒絕要realPG原fences，不stub/補權限/放寬cap/fakewholeC；currentcode/native/build尚無結果，pending據實。
+
+Report.agent/reports/2026-10-14T20-10-pr380-merge-and-versioned-protocol/，Rootreceipt678d7db5716969ab3052fce022f5ba0377db4221d0bd1d3c0f60c0e549b2f384。Goal完整active，formal所有未完仍待，無VPS/remoteDB/roleACL/HTTP/crawl/PTT/部署/cache，正式169/NOLOGIN-1/容量3902640128缺口仍最後已核，不重問/重跑同必敗heavy。原20:10以前open/活動段落是當時歷史不可覆寫。
+
+
 ## 2026-10-14 19:50台灣時間：PR380原attempt2七綠已保存並只一次normalready；自然新protected38559013100活動
 
 Protected38548049951 attempt2真終態SUCCESS，bootstrap/requirements/architecture/exact/model/product/aggregate全部7SUCCESS；完整7jobs/run/300076byte logZIP CRC/SHA db0707bb87259bf86934b1daf828485441057180d9abb5a2334d85bcc7f38ce8保存。舊initialmissingrefRED與已用failedrerun audit保持，綠run禁止再rerun；readonlywatch已自然exit0。

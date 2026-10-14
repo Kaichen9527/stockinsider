@@ -1,0 +1,21 @@
+{
+  "design": "6bc724971b0875af0688e441a756bc07f1f06b8d",
+  "evidence": "267184ec666e91df0815a3e268fe4764ef1021ce",
+  "receiptSha256": "7158651a9109b31968b7ab36916ba63b070d1f76765650d293542529e8df0acc",
+  "rawVerified": 29,
+  "sources": {
+    "source-enumeration.json": 71,
+    "sql-source-enumeration.json": 45,
+    "fixed-installation-inputs-50-plus-26.json": 76
+  },
+  "historicalClosureVerified": 22,
+  "historicalHash": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+  "docsOnlyVerified": [
+    "docs/operations/2026-10-14/versioned-protocol-design/ADR.md",
+    "docs/operations/2026-10-14/versioned-protocol-design/source-index.md"
+  ],
+  "newRuntimeSql": false,
+  "rootPgBuildTests": false,
+  "formalApproved": false,
+  "regexGraphScopeOnly": true
+}

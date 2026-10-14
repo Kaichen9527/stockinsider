@@ -1,0 +1,209 @@
+{
+  "startedAt": "2026-10-14T12:05:14.189124+00:00",
+  "action": [
+    "gh",
+    "pr",
+    "merge",
+    "380",
+    "--repo",
+    "Kaichen9527/stockinsider",
+    "--merge",
+    "--match-head-commit",
+    "dd59817f750684b093965f539dd4de466be13077"
+  ],
+  "head": "dd59817f750684b093965f539dd4de466be13077",
+  "base": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+  "tree": "6a9a08af70fb94b50ed2b5eee6aaf3686f648b99",
+  "exactEvidence": "c2b146adb6d03814f2bd9a7af72baf003bb48812",
+  "prBefore": {
+    "baseRefOid": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+    "headRefOid": "dd59817f750684b093965f539dd4de466be13077",
+    "isDraft": false,
+    "mergeStateStatus": "CLEAN",
+    "state": "OPEN"
+  },
+  "rulesBefore": {
+    "id": 20177392,
+    "name": "stockinsider-v3-gate-root",
+    "target": "branch",
+    "source_type": "Repository",
+    "source": "Kaichen9527/stockinsider",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "exclude": [],
+        "include": [
+          "~DEFAULT_BRANCH"
+        ]
+      }
+    },
+    "rules": [
+      {
+        "type": "deletion"
+      },
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 0,
+          "dismiss_stale_reviews_on_push": false,
+          "required_reviewers": [],
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": false,
+          "require_extra_approval_for_unattributed_changes": true,
+          "allowed_merge_methods": [
+            "merge",
+            "squash",
+            "rebase"
+          ]
+        }
+      },
+      {
+        "type": "required_status_checks",
+        "parameters": {
+          "strict_required_status_checks_policy": false,
+          "do_not_enforce_on_create": false,
+          "required_status_checks": [
+            {
+              "context": "stockinsider-v3-gate-root",
+              "integration_id": 15368
+            }
+          ]
+        }
+      }
+    ],
+    "node_id": "RRS_lACqUmVwb3NpdG9yec5Fu2YfzgEz4fA",
+    "created_at": "2026-08-01T17:15:31.389+08:00",
+    "updated_at": "2026-10-12T08:07:59.507+08:00",
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/Kaichen9527/stockinsider/rulesets/20177392"
+      },
+      "html": {
+        "href": "https://github.com/Kaichen9527/stockinsider/rules/20177392"
+      }
+    }
+  },
+  "ordinary": [
+    {
+      "id": 38548050159,
+      "head_sha": "dd59817f750684b093965f539dd4de466be13077",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 38548049985,
+      "head_sha": "dd59817f750684b093965f539dd4de466be13077",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 38548049946,
+      "head_sha": "dd59817f750684b093965f539dd4de466be13077",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "newProtectedRun": 38559013100,
+  "newProtectedSevenTrueSuccess": true,
+  "admin": false,
+  "bypass": false,
+  "mainDirectPush": false,
+  "deployment": false,
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "",
+  "commandFinishedAt": "2026-10-14T12:05:18.497236+00:00",
+  "prAfter": {
+    "baseRefOid": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+    "headRefOid": "dd59817f750684b093965f539dd4de466be13077",
+    "mergeCommit": {
+      "oid": "5189547f76bf24c002b8e8b11669081ba67ad2c6"
+    },
+    "mergedAt": "2026-10-14T12:05:17Z",
+    "state": "MERGED"
+  },
+  "rulesAfter": {
+    "id": 20177392,
+    "name": "stockinsider-v3-gate-root",
+    "target": "branch",
+    "source_type": "Repository",
+    "source": "Kaichen9527/stockinsider",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "exclude": [],
+        "include": [
+          "~DEFAULT_BRANCH"
+        ]
+      }
+    },
+    "rules": [
+      {
+        "type": "deletion"
+      },
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 0,
+          "dismiss_stale_reviews_on_push": false,
+          "required_reviewers": [],
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": false,
+          "require_extra_approval_for_unattributed_changes": true,
+          "allowed_merge_methods": [
+            "merge",
+            "squash",
+            "rebase"
+          ]
+        }
+      },
+      {
+        "type": "required_status_checks",
+        "parameters": {
+          "strict_required_status_checks_policy": false,
+          "do_not_enforce_on_create": false,
+          "required_status_checks": [
+            {
+              "context": "stockinsider-v3-gate-root",
+              "integration_id": 15368
+            }
+          ]
+        }
+      }
+    ],
+    "node_id": "RRS_lACqUmVwb3NpdG9yec5Fu2YfzgEz4fA",
+    "created_at": "2026-08-01T17:15:31.389+08:00",
+    "updated_at": "2026-10-12T08:07:59.507+08:00",
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/Kaichen9527/stockinsider/rulesets/20177392"
+      },
+      "html": {
+        "href": "https://github.com/Kaichen9527/stockinsider/rules/20177392"
+      }
+    }
+  },
+  "remoteMain": "5189547f76bf24c002b8e8b11669081ba67ad2c6",
+  "parents": [
+    "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+    "dd59817f750684b093965f539dd4de466be13077"
+  ],
+  "treeVerified": true,
+  "webTree": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "finishedAt": "2026-10-14T12:05:25.681904+00:00"
+}

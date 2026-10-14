@@ -1,0 +1,4 @@
+1. ff3ae088 object not initially local; fetched explicit progressbranch, then object resolved.
+2. Requested versioned-contract subdirectory absent; actual path is contract/. Read exact actual Root decision and verification there.
+3. First enumeration helper SyntaxError '__name__for'; helper-only spacing fixed, original script preserved.
+4. Guessed research-publication-tail.mjs absent; used actual research-publication-tail-descriptor.json found via git ls-tree. No runtime, SQL or expected behavior changed.

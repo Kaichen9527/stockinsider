@@ -1,0 +1,5 @@
+{
+  "error": "Python stdin Non-UTF-8 SyntaxError during initial large prompt generation; request was not written or applied",
+  "repair": "ASCII JSON escapes input; no app/source changes",
+  "productFailure": false
+}

@@ -1,0 +1,1082 @@
+[
+  {
+    "from": "web/src/app/api/internal/research-deep-job/route.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "@/lib/internal-auth",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/internal-auth.ts"
+  },
+  {
+    "from": "web/src/app/api/internal/research-deep-job/route.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "@/lib/supabase-server",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/supabase-server.ts"
+  },
+  {
+    "from": "web/src/app/api/internal/research-deep-job/route.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "@/lib/research-deep-claim-context",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-deep-claim-context.ts"
+  },
+  {
+    "from": "web/src/app/api/internal/research-deep-job/route.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "@/lib/research-deep-author-input",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-deep-author-input.ts"
+  },
+  {
+    "from": "web/src/app/api/internal/research-deep-job/route.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 18,
+    "specifier": "@/lib/research-atomic-publication",
+    "literalDynamic": true,
+    "resolved": "web/src/lib/research-atomic-publication.ts"
+  },
+  {
+    "from": "web/src/app/api/internal/research-deep-job/route.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 21,
+    "specifier": "@/lib/research-financial-file-reader",
+    "literalDynamic": true,
+    "resolved": "web/src/lib/research-financial-file-reader.ts"
+  },
+  {
+    "from": "web/src/app/api/internal/research-deep-job/route.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 22,
+    "specifier": "@/lib/research-complete-input",
+    "literalDynamic": true,
+    "resolved": "web/src/lib/research-complete-input.ts"
+  },
+  {
+    "from": "web/src/app/api/internal/research-deep-job/route.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 43,
+    "specifier": "@/lib/research-financial-supplement",
+    "literalDynamic": true,
+    "resolved": "web/src/lib/research-financial-supplement.ts"
+  },
+  {
+    "from": "web/src/lib/research-complete-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./research-complete-schema-bundles.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-schema-bundles.ts"
+  },
+  {
+    "from": "web/src/lib/research-complete-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./research-complete-mapping.json",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-mapping.json"
+  },
+  {
+    "from": "web/src/lib/research-complete-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-financial-inventory.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-inventory.ts"
+  },
+  {
+    "from": "web/src/lib/research-complete-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./research-financial-supplement.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-supplement.ts"
+  },
+  {
+    "from": "web/src/lib/research-complete-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 7,
+    "specifier": "./research-financial-file-reader.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-file-reader.ts"
+  },
+  {
+    "from": "web/src/lib/research-complete-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 8,
+    "specifier": "./research-complete-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./internal-auth.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/internal-auth.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./research-execution-binding.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-execution-binding.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./supabase-server.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/supabase-server.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-complete-input.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-input.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./research-complete-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 7,
+    "specifier": "./research-financial-file-reader.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-file-reader.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 66,
+    "specifier": "./research-author-handoff.ts",
+    "literalDynamic": true,
+    "resolved": "web/src/lib/research-author-handoff.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 70,
+    "specifier": "./research-author-result.ts",
+    "literalDynamic": true,
+    "resolved": "web/src/lib/research-author-result.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 78,
+    "specifier": "./research-author-packet.ts",
+    "literalDynamic": true,
+    "resolved": "web/src/lib/research-author-packet.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-packet.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./research-author-assignment.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-author-assignment.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-packet.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./research-complete-input.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-input.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-packet.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./research-financial-file-reader.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-file-reader.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-packet.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-packet.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./research-complete-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-packet.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 7,
+    "specifier": "./research-business-calculator.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-business-calculator.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-packet.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 8,
+    "specifier": "./public-source-url.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/public-source-url.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-packet.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 9,
+    "specifier": "./research-business-article.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-business-article.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./internal-auth.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/internal-auth.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./research-execution-binding.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-execution-binding.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./supabase-server.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/supabase-server.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-complete-input.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-input.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./research-complete-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 7,
+    "specifier": "./research-financial-file-reader.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-file-reader.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 8,
+    "specifier": "./research-author-packet.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-author-packet.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 9,
+    "specifier": "./research-business-article.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-business-article.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 10,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-handoff.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./internal-auth.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/internal-auth.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-handoff.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./research-execution-binding.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-execution-binding.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-handoff.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./supabase-server.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/supabase-server.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-handoff.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-complete-input.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-input.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-handoff.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./research-complete-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-handoff.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 7,
+    "specifier": "./research-financial-file-reader.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-file-reader.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-handoff.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 8,
+    "specifier": "./research-business-article.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-business-article.ts"
+  },
+  {
+    "from": "web/src/lib/research-author-handoff.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 9,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./research-execution-binding.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-execution-binding.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./supabase-server.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/supabase-server.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./research-complete-input.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-input.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-complete-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./research-financial-file-reader.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-file-reader.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 7,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 8,
+    "specifier": "./research-business-article.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-business-article.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-assignment.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 9,
+    "specifier": "./research-author-packet.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-author-packet.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./research-execution-binding.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-execution-binding.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./supabase-server.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/supabase-server.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./research-complete-input.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-input.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-complete-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./research-financial-file-reader.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-file-reader.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 7,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 8,
+    "specifier": "./research-reviewer-assignment.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-reviewer-assignment.ts"
+  },
+  {
+    "from": "web/src/lib/research-reviewer-result.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 9,
+    "specifier": "./research-editorial-review.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-editorial-review.ts"
+  },
+  {
+    "from": "web/src/lib/research-atomic-publication.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./supabase-server.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/supabase-server.ts"
+  },
+  {
+    "from": "web/src/lib/research-atomic-publication.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./internal-auth.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/internal-auth.ts"
+  },
+  {
+    "from": "web/src/lib/research-atomic-publication.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-execution-binding.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-execution-binding.ts"
+  },
+  {
+    "from": "web/src/lib/research-atomic-publication.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./research-complete-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-atomic-publication.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 7,
+    "specifier": "./research-complete-input.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-input.ts"
+  },
+  {
+    "from": "web/src/lib/research-atomic-publication.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 8,
+    "specifier": "./research-financial-file-reader.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-file-reader.ts"
+  },
+  {
+    "from": "web/src/lib/research-atomic-publication.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 9,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-atomic-publication.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 10,
+    "specifier": "./research-reviewer-assignment.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-reviewer-assignment.ts"
+  },
+  {
+    "from": "web/src/lib/research-atomic-publication.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 11,
+    "specifier": "./research-editorial-review.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-editorial-review.ts"
+  },
+  {
+    "from": "web/src/lib/research-business-article.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 1,
+    "specifier": "./research-complete-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-business-article.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./research-complete-input.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-input.ts"
+  },
+  {
+    "from": "web/src/lib/research-business-article.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./research-business-calculator.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-business-calculator.ts"
+  },
+  {
+    "from": "web/src/lib/research-business-article.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-business-article.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-deep-article.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-deep-article.ts"
+  },
+  {
+    "from": "web/src/lib/research-business-article.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./public-source-url.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/public-source-url.ts"
+  },
+  {
+    "from": "web/src/lib/research-financial-supplement.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./research-financial-inventory.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-inventory.ts"
+  },
+  {
+    "from": "web/src/lib/research-financial-supplement.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-deep-author-input.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-deep-author-input.ts"
+  },
+  {
+    "from": "web/src/lib/research-financial-supplement.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./research-financial-file-reader.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-file-reader.ts"
+  },
+  {
+    "from": "web/src/lib/research-financial-supplement.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 7,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-financial-supplement.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 8,
+    "specifier": "./research-business-calculator.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-business-calculator.ts"
+  },
+  {
+    "from": "web/src/lib/research-deep-author-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./candidate-dossier-contract.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/candidate-dossier-contract.ts"
+  },
+  {
+    "from": "web/src/lib/research-deep-author-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./research-agent-qualification.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-agent-qualification.ts"
+  },
+  {
+    "from": "web/src/lib/research-deep-author-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./research-deep-claim-context.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-deep-claim-context.ts"
+  },
+  {
+    "from": "web/src/lib/research-deep-author-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-source-association.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-source-association.ts"
+  },
+  {
+    "from": "web/src/lib/research-deep-author-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 6,
+    "specifier": "./public-source-url.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/public-source-url.ts"
+  },
+  {
+    "from": "web/src/lib/research-deep-author-input.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 204,
+    "specifier": "./research-deep-claim-context.ts",
+    "literalDynamic": true,
+    "resolved": "web/src/lib/research-deep-claim-context.ts"
+  },
+  {
+    "from": "web/src/lib/research-v3-finite-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 2,
+    "specifier": "./research-v3-material-schemas/2409-raw.json",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-v3-material-schemas/2409-raw.json"
+  },
+  {
+    "from": "web/src/lib/research-v3-finite-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 3,
+    "specifier": "./research-v3-material-schemas/2383-raw.json",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-v3-material-schemas/2383-raw.json"
+  },
+  {
+    "from": "web/src/lib/research-v3-finite-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 4,
+    "specifier": "./research-v3-material-schemas/2409-normalized.json",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-v3-material-schemas/2409-normalized.json"
+  },
+  {
+    "from": "web/src/lib/research-v3-finite-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 5,
+    "specifier": "./research-v3-material-schemas/2383-normalized.json",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-v3-material-schemas/2383-normalized.json"
+  },
+  {
+    "from": "web/src/lib/research-v3-finite-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 6,
+    "specifier": "./research-v3-material-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-v3-material-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-v3-finite-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 7,
+    "specifier": "./research-historical-cash-pins.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-historical-cash-pins.ts"
+  },
+  {
+    "from": "web/src/lib/research-v3-finite-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 8,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-v3-finite-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 9,
+    "specifier": "./research-business-calculator.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-business-calculator.ts"
+  },
+  {
+    "from": "web/src/lib/research-cash-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 1,
+    "specifier": "./research-v3-finite-material.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-v3-finite-material.ts"
+  },
+  {
+    "from": "web/src/lib/research-cash-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 3,
+    "specifier": "./research-historical-cash-pins.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-historical-cash-pins.ts"
+  },
+  {
+    "from": "web/src/lib/research-cash-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 4,
+    "specifier": "./research-historical-cash-projection.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-historical-cash-projection.ts"
+  },
+  {
+    "from": "web/src/lib/research-cash-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 5,
+    "specifier": "./research-scenario-cash-material.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-scenario-cash-material.ts"
+  },
+  {
+    "from": "web/src/lib/research-cash-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 6,
+    "specifier": "./research-financial-io-owner.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-io-owner.ts"
+  },
+  {
+    "from": "web/src/lib/research-cash-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 7,
+    "specifier": "./research-financial-io-engine.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-io-engine.ts"
+  },
+  {
+    "from": "web/src/lib/research-compatible-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 1,
+    "specifier": "./research-compatible-financial-inventory.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-compatible-financial-inventory.ts"
+  },
+  {
+    "from": "web/src/lib/research-compatible-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 2,
+    "specifier": "./research-compatible-financial-projection.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-compatible-financial-projection.ts"
+  },
+  {
+    "from": "web/src/lib/research-compatible-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 3,
+    "specifier": "./research-business-calculator.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-business-calculator.ts"
+  },
+  {
+    "from": "web/src/lib/research-compatible-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 4,
+    "specifier": "./research-financial-io-owner.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-io-owner.ts"
+  },
+  {
+    "from": "web/src/lib/research-compatible-financial-reader.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 5,
+    "specifier": "./research-financial-io-engine.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-io-engine.ts"
+  },
+  {
+    "from": "web/src/lib/supabase-server.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 1,
+    "specifier": "./data-plane-runtime.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/data-plane-runtime.ts"
+  },
+  {
+    "from": "web/src/lib/research-complete-canonical.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-business-calculator.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 2,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-editorial-review.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 1,
+    "specifier": "./research-complete-canonical.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-complete-canonical.ts"
+  },
+  {
+    "from": "web/src/lib/research-editorial-review.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-deep-article.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 1,
+    "specifier": "./research-agent-qualification.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-agent-qualification.ts"
+  },
+  {
+    "from": "web/src/lib/candidate-dossier-contract.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 2,
+    "specifier": "./public-source-url.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/public-source-url.ts"
+  },
+  {
+    "from": "web/src/lib/research-source-association.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./research-agent-qualification.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-agent-qualification.ts"
+  },
+  {
+    "from": "web/src/lib/research-source-association.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 3,
+    "specifier": "./research-source-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-source-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-source-association.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 4,
+    "specifier": "./public-source-url.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/public-source-url.ts"
+  },
+  {
+    "from": "web/src/lib/research-source-association.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 5,
+    "specifier": "./research-source-roots.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-source-roots.ts"
+  },
+  {
+    "from": "web/src/lib/research-v3-material-canonical.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 2,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-historical-cash-projection.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 2,
+    "specifier": "./research-historical-cash-core.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-historical-cash-core.ts"
+  },
+  {
+    "from": "web/src/lib/research-historical-cash-projection.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 3,
+    "specifier": "./research-historical-cash-pins.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-historical-cash-pins.ts"
+  },
+  {
+    "from": "web/src/lib/research-scenario-cash-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 2,
+    "specifier": "./research-historical-cash-pins.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-historical-cash-pins.ts"
+  },
+  {
+    "from": "web/src/lib/research-scenario-cash-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 3,
+    "specifier": "./research-historical-cash-projection.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-historical-cash-projection.ts"
+  },
+  {
+    "from": "web/src/lib/research-scenario-cash-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 4,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-scenario-cash-material.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 5,
+    "specifier": "./research-business-calculator.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-business-calculator.ts"
+  },
+  {
+    "from": "web/src/lib/research-financial-io-engine.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 5,
+    "specifier": "./research-financial-io-owner.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-io-owner.ts"
+  },
+  {
+    "from": "web/src/lib/research-compatible-financial-projection.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 2,
+    "specifier": "./research-compatible-financial-inventory.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-compatible-financial-inventory.ts"
+  },
+  {
+    "from": "web/src/lib/research-compatible-financial-projection.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 3,
+    "specifier": "./research-financial-io-owner.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-io-owner.ts"
+  },
+  {
+    "from": "web/src/lib/research-compatible-financial-projection.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 4,
+    "specifier": "./research-financial-io-engine.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-io-engine.ts"
+  },
+  {
+    "from": "web/src/lib/research-compatible-financial-projection.ts",
+    "subject": "72f639801d4000f375bea879de5139f6b1232580",
+    "line": 5,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-source-clock.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 1,
+    "specifier": "./research-financial-clock.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-financial-clock.ts"
+  },
+  {
+    "from": "web/src/lib/research-source-roots.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 1,
+    "specifier": "./research-source-registry.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-source-registry.ts"
+  },
+  {
+    "from": "web/src/lib/research-source-roots.ts",
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "line": 2,
+    "specifier": "./research-agent-priority.ts",
+    "literalDynamic": false,
+    "resolved": "web/src/lib/research-agent-priority.ts"
+  }
+]

@@ -1,0 +1,712 @@
+[
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-v3-finite-material.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-cash-financial-reader.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-reader.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/internal-auth.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/src/lib/supabase-server.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/src/lib/research-financial-file-reader.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-complete-schema-bundles.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-complete-mapping.json",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-financial-inventory.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-complete-canonical.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-execution-binding.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-financial-clock.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/public-source-url.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/src/lib/research-editorial-review.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-deep-article.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/src/lib/research-agent-qualification.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-v3-material-schemas/2409-raw.json",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-v3-material-schemas/2383-raw.json",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-v3-material-schemas/2409-normalized.json",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-v3-material-schemas/2383-normalized.json",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-v3-material-canonical.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-pins.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-projection.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-financial-io-owner.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-inventory.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/src/lib/research-source-clock.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-source-roots.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": false,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/src/lib/research-source-registry.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-agent-priority.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": ".nvmrc",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "package.json",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "package-lock.json",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/package.json",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/package-lock.json",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/tsconfig.json",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/next.config.ts",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/scripts/sync-official-authority.mjs",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/package-lock.json",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/src/lib/public-source-url.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-complete-2383.schema.json",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-complete-2409.schema.json",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-discovery-evidence.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "web/src/lib/research-financial-clock.ts",
+    "sourceSubject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "file": "scripts/runtime/codec.js",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "scripts/runtime/official-market-authority-v314.js",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "scripts/runtime/official-calendar-v314.js",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "scripts/runtime/official-mops-v314.js",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "file": "scripts/runtime/official-twse-valuation.js",
+    "sourceSubject": "72f639801d4000f375bea879de5139f6b1232580",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  }
+]
