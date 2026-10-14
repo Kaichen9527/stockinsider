@@ -1,0 +1,36 @@
+{
+  "schema": "continuation-state-evidence-v1",
+  "files": [
+    {
+      "file": "automation-readback.json",
+      "bytes": 14687,
+      "sha256": "04bb5ee4f60cfe70309b074bd175e39d4bdec1c83f1c3b0cf635cb0ca601d8b5"
+    },
+    {
+      "file": "automation-update-request.json",
+      "bytes": 14627,
+      "sha256": "777bde3ddf03d6714f62ceb7d811d94e6214977583eef6a3fafedb08678d5f53"
+    },
+    {
+      "file": "note.md",
+      "bytes": 695,
+      "sha256": "b36962b0514bac41cbbb7b0aaffb2df3d727bd736bc4e1b291068735c9f67691"
+    },
+    {
+      "file": "raw-evidence-whitespace-check.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw-evidence-whitespace-check.stdout",
+      "bytes": 3576,
+      "sha256": "a80fcb75a376c6d716be072cc5df04784fd3ed447d3dbd7a25e307c5dfcec925"
+    },
+    {
+      "file": "verification.json",
+      "bytes": 758,
+      "sha256": "0e325620cbbceb7527b71d33da06409f5af7a18df7501d29e0b204e3263a0fa2"
+    }
+  ],
+  "formalCompletion": false
+}

@@ -1,0 +1,40 @@
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/integration/independent-c2c/portable-fix.diff:6: trailing whitespace.
++ 
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/integration/independent-c2c/portable-fix.diff:8: trailing whitespace.
++ 
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/integration/independent-c2c/portable-fix.diff:11: trailing whitespace.
++ 
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/integration/independent-c2c/portable-fix.diff:13: trailing whitespace.
++ 
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/integration/independent-c2c/raw/build.stdout:19: trailing whitespace.
++  Generating static pages using 4 workers (22/91) 
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/integration/independent-c2c/raw/build.stdout:20: trailing whitespace.
++  Generating static pages using 4 workers (45/91) 
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/integration/independent-c2c/raw/build.stdout:21: trailing whitespace.
++  Generating static pages using 4 workers (68/91) 
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/integration/independent-c2c/raw/build.stdout:149: new blank line at EOF.
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/integration/independent-c2c/raw/lint.stdout:57: new blank line at EOF.
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/integration/independent-c2c/raw/typecheck.stdout:9: new blank line at EOF.
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/actual-fs-r1-child.stdout:11: trailing whitespace.
++    
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/actual-fs-r1-child.stdout:14: trailing whitespace.
++    
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/actual-fs-r1-child.stdout:38: trailing whitespace.
++    
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/actual-fs-r1-child.stdout:41: trailing whitespace.
++    
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/actual-fs-r1-child.stdout:94: trailing whitespace.
++    
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/actual-fs-r1-child.stdout:96: trailing whitespace.
++    
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/final-lint.stdout:57: new blank line at EOF.
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/final-normal-build.stdout:19: trailing whitespace.
++  Generating static pages using 4 workers (22/91) 
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/final-normal-build.stdout:20: trailing whitespace.
++  Generating static pages using 4 workers (45/91) 
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/final-normal-build.stdout:21: trailing whitespace.
++  Generating static pages using 4 workers (68/91) 
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/final-normal-build.stdout:149: new blank line at EOF.
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/final-typecheck.stdout:9: new blank line at EOF.
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/lint-r1.stdout:57: new blank line at EOF.
+.agent/reports/2026-10-14T17-45-scenario-reader-integration/reader/maker-evidence/raw/typecheck-r2.stdout:9: new blank line at EOF.

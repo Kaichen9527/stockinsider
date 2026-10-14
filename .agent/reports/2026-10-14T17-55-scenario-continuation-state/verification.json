@@ -1,0 +1,17 @@
+{
+  "integration": {
+    "head": "1ff6d59a0bd4e37c69a251a2ea2b144a66ebb479",
+    "status": ""
+  },
+  "portable": {
+    "head": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "status": ""
+  },
+  "at": "2026-10-14T09:46:27.854754+00:00",
+  "remote": "6b8a648e96eeca7de1b67ca5a3da50af92f4f3f8\trefs/heads/codex/research-release-review-evidence-oct11\n1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4\trefs/heads/main\n",
+  "automationReadbackExact": true,
+  "rawEvidenceCheckExit": 2,
+  "humanAuthoredDocsCheckExit": 0,
+  "rawWhitespaceKeptByteExact": true,
+  "note": "Original evidence logs retain CR progress lines, blank lines and patch context. Overall diff-check reported those raw whitespace warnings; no raw log was normalized or original receipt rewritten."
+}
