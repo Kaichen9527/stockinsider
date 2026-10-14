@@ -1,0 +1,64 @@
+{
+  "source": "955782d3c61b2bc8149eea69c3466186f422e5b2",
+  "evidence": "85ba71196ae24f73a58d9df114f0784d72f40a8f",
+  "makerReceiptSha256": "ab9b1f6912d3318581e61410d3eb99db98d542a14e12f6a20d01d41ac385ba04",
+  "verifiedRawFiles": 52,
+  "verifiedSourceFiles": 51,
+  "verifiedFrozenAddendumFiles": 12,
+  "rootPure": {
+    "pass": 43,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "rootIndependentDecimal": {
+    "auo": 379,
+    "emc": 483
+  },
+  "originalSemanticFieldEquality": {
+    "auo": 24,
+    "emc": 29
+  },
+  "originalManifestPrefixEquality": {
+    "auo": 7,
+    "emc": 5
+  },
+  "makerBuildOnly": {
+    "node": "22.14.0",
+    "next": "16.3.8",
+    "lockMatchesEvidenceBase": true,
+    "buildId": "WXeFytiV7-qE7_CwlUs-1",
+    "notApprovedMainBuild": true
+  },
+  "rootBuildRun": false,
+  "rootNativeRun": false,
+  "review": {
+    "verdict": "REQUEST_CHANGES",
+    "p0": 0,
+    "p1": 0,
+    "p2": 2,
+    "findings": [
+      {
+        "id": "R1",
+        "path": "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+        "line": 178,
+        "cause": "canonical hash includes top-level inputManifest, while existing real loader excludes that field",
+        "observed": "both loadReadOnlyWorkingDraft calls fail draft model/binding mismatch",
+        "consumerPath": "web/src/lib/research-working-draft-loader.ts",
+        "consumerLine": 52
+      },
+      {
+        "id": "R2",
+        "paths": [
+          "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json",
+          "docs/research/2026-10-08-emc-company-model/draft-metadata.json"
+        ],
+        "cause": "primary cutoff/authored clocks still October8 paired with October14 successor model/article identities; real parser reads these primary fields",
+        "observed": "parseWorkingDraft returns October8 cutoff/authored despite new source extraction on October14; loader also requires model.asOf equals metadata primary cutoff"
+      }
+    ]
+  },
+  "formalArticleReviewApproved": false,
+  "productionPublished": false,
+  "repairScope": "same branch only consumer-compatible canonical data binding and genuine successor metadata clocks; no production loader/parser relaxation; original forecasts unchanged"
+}

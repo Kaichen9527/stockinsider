@@ -1,0 +1,112 @@
+{
+  "createdAt": "2026-10-14T03:17:00.087074+00:00",
+  "pr": {
+    "baseRefOid": "3e1be377de3f6cac58f6de1626e8df994b9df146",
+    "headRefOid": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+    "isDraft": true,
+    "number": 378,
+    "state": "OPEN"
+  },
+  "rules": {
+    "id": 20177392,
+    "name": "stockinsider-v3-gate-root",
+    "target": "branch",
+    "source_type": "Repository",
+    "source": "Kaichen9527/stockinsider",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "exclude": [],
+        "include": [
+          "~DEFAULT_BRANCH"
+        ]
+      }
+    },
+    "rules": [
+      {
+        "type": "deletion"
+      },
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 0,
+          "dismiss_stale_reviews_on_push": false,
+          "required_reviewers": [],
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": false,
+          "require_extra_approval_for_unattributed_changes": true,
+          "allowed_merge_methods": [
+            "merge",
+            "squash",
+            "rebase"
+          ]
+        }
+      },
+      {
+        "type": "required_status_checks",
+        "parameters": {
+          "strict_required_status_checks_policy": false,
+          "do_not_enforce_on_create": false,
+          "required_status_checks": [
+            {
+              "context": "stockinsider-v3-gate-root",
+              "integration_id": 15368
+            }
+          ]
+        }
+      }
+    ],
+    "node_id": "RRS_lACqUmVwb3NpdG9yec5Fu2YfzgEz4fA",
+    "created_at": "2026-08-01T17:15:31.389+08:00",
+    "updated_at": "2026-10-12T08:07:59.507+08:00",
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/Kaichen9527/stockinsider/rulesets/20177392"
+      },
+      "html": {
+        "href": "https://github.com/Kaichen9527/stockinsider/rules/20177392"
+      }
+    }
+  },
+  "ordinary": [
+    {
+      "id": 38503491252,
+      "head": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 38503491209,
+      "head": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 38503491181,
+      "head": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "initialRun": {
+    "id": 38503491190,
+    "head": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+    "attempt": 1,
+    "status": "completed",
+    "conclusion": "failure"
+  },
+  "refs": "18b1fba4c7fa89108cbf8892a0a7205860989995\trefs/heads/codex/financial-document-owned-lease-oct14\n73fafb9ec5c4d3fc67afe00c9fdc6a7f85b1d5f0\trefs/heads/evidence/source-led-opportunity-v3-exact-review-18b1fba4c7fa89108cbf8892a0a7205860989995\n3e1be377de3f6cac58f6de1626e8df994b9df146\trefs/heads/main\n",
+  "newEvidence": "73fafb9ec5c4d3fc67afe00c9fdc6a7f85b1d5f0",
+  "action": "gh run rerun 38503491190 --failed only once after genuine fresh evidence ref",
+  "result": "accepted",
+  "completedAt": "2026-10-14T03:17:01.604114+00:00",
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": ""
+}

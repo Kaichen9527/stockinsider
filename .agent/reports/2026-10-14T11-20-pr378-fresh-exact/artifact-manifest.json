@@ -1,0 +1,122 @@
+[
+  {
+    "file": "canonical155.stdout",
+    "bytes": 36785,
+    "sha256": "ae1e786a26dddd36e8d029c67aa239363c3e8a479aaa53e61426feb7ac863741"
+  },
+  {
+    "file": "exact-commit-review-final.md",
+    "bytes": 7442,
+    "sha256": "4b0713f0e35aa727fb88b3ac978de90881d2ab0abf84ea80b8769838814951a9"
+  },
+  {
+    "file": "exact-working-copies-cleared.json",
+    "bytes": 921,
+    "sha256": "2d721d0de34f1263aff01f1ad1f9f66de497ba3ad52abedcdae2992e7ff635b9"
+  },
+  {
+    "file": "fresh-product-summary.json",
+    "bytes": 1455,
+    "sha256": "7c21095669d90d637009dd321c0d4ac39ed444cbee91e721f9a5649ccaa923c3"
+  },
+  {
+    "file": "gha-job-115655578763.log",
+    "bytes": 422294,
+    "sha256": "796f75a3155c356150a0c9e783c07c81e39890fb408d8e718d46510dfdaf23e2"
+  },
+  {
+    "file": "gha-job-115655578821.log",
+    "bytes": 76736,
+    "sha256": "c7a066837a381cf53fb20c11bdd10f4855890545b25dd7e9de4515120056a65b"
+  },
+  {
+    "file": "gha-run-38503491181-jobs.json",
+    "bytes": 6940,
+    "sha256": "9b48ceb7d39d4ecb4e12dd65be35bbbee6b17a6e59b651e11d6651c35d834a64"
+  },
+  {
+    "file": "gha-run-38503491181.json",
+    "bytes": 13152,
+    "sha256": "4b8db7f06f5ad99ff7e335511dcdaab58556089051b8f53f0e531a122c4c51c2"
+  },
+  {
+    "file": "gha-run-38503491209-jobs.json",
+    "bytes": 2567,
+    "sha256": "1db9c69f50547c108113a4f4a2f27e486827333ad00c6cb6a482e3091d131265"
+  },
+  {
+    "file": "gha-run-38503491209.json",
+    "bytes": 13167,
+    "sha256": "0cd45e4214d99b420510e33f2c106efdccb3131ba15d225c991a69caec580570"
+  },
+  {
+    "file": "independent-review-request.txt",
+    "bytes": 2687,
+    "sha256": "bc0fd2d36a45b062e3dc3b85f07fd14f1204f19c2c2d3c897c12cabcedcd5b53"
+  },
+  {
+    "file": "independent-review-thread.json",
+    "bytes": 39715,
+    "sha256": "1027e6ee47b3edb9bf7a316ac814548a79ddee277e0ddfa356a2e1252cef2cf2"
+  },
+  {
+    "file": "pcr-fulfillment-record-v1.json",
+    "bytes": 24824,
+    "sha256": "043985fd179d7e7cd213aff74bb0471e0443d0694ca9957f512db0792ae9b711"
+  },
+  {
+    "file": "protected-attempt2-active-jobs.json",
+    "bytes": 14081,
+    "sha256": "143d8f429fe5e9cbad71a249c9af2cf8d0881e68d522e205ecee860cf980a56a"
+  },
+  {
+    "file": "protected-attempt2-active.json",
+    "bytes": 13275,
+    "sha256": "c8433530e1eed307b315014ef6e2ec90ea95e698ce46c9254c7c5e887c26fb75"
+  },
+  {
+    "file": "readonly-plan.mjs",
+    "bytes": 971,
+    "sha256": "28b4d95aa1ee1558131e94e0c50976e8e693914f3ac2a1c852bc7d9bdfc838a5"
+  },
+  {
+    "file": "readonly-plan.stdout.json",
+    "bytes": 19700,
+    "sha256": "323f73b1857e1ced0f90902827b3e7fa1e13bb965a6e8cfa67594249e28afa1a"
+  },
+  {
+    "file": "receipt.json",
+    "bytes": 1965,
+    "sha256": "65198e278800a14f62567b17622ea40bf6ea5085fcd922d7d5669457ac73299f"
+  },
+  {
+    "file": "runtime-review-attestation.json",
+    "bytes": 457,
+    "sha256": "aae3ec25ddfe2cbebb5347ccd138dfd39143ef6f4b02b36f486b53a88d49143d"
+  },
+  {
+    "file": "stockinsider-18b1fba4-exact-result-oct14.json",
+    "bytes": 405,
+    "sha256": "68335881bac77efce71701f671a97271ac6c50277797bd1e0b0a14d090ee6923"
+  },
+  {
+    "file": "stockinsider-financial-document-exact-review-source-oct14.md",
+    "bytes": 5668,
+    "sha256": "311ce1cd33ab52ad09aa70ab6a6ac1e91d41d36924c4cd674fcd753e01bb6765"
+  },
+  {
+    "file": "stockinsider-pr378-protected-fresh-ref-rerun-oct14.json",
+    "bytes": 3334,
+    "sha256": "8c2b1828aec4e2113f4641d7eeb35b21ec79fc2d8530690510f4b9213ffc8677"
+  },
+  {
+    "file": "stockinsider-pr378-protected-fresh-ref-rerun-oct14.py",
+    "bytes": 2698,
+    "sha256": "046a0034aefda187fd43a2dffbc204a7e7ceb9c2a8a748dac6ca94ccd324cf23"
+  },
+  {
+    "file": "stockinsider-write-financial-document-exact-evidence-oct14.mjs",
+    "bytes": 6967,
+    "sha256": "96ec60ea8160fa7ac99ad3e3064552b711d0f1880dbe0ce3ba8dd3b86356ed88"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "python3",
+    "docs/research/2026-10-08-emc-company-model/verify-output.py"
+  ],
+  "source": "955782d3c61b2bc8149eea69c3466186f422e5b2",
+  "evidence": "85ba71196ae24f73a58d9df114f0784d72f40a8f",
+  "startedAt": "2026-10-14T03:07:51.684557+00:00",
+  "finishedAt": "2026-10-14T03:07:51.741084+00:00",
+  "exitCode": 0
+}

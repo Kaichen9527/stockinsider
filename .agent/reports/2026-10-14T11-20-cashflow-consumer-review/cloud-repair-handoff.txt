@@ -1,0 +1,13 @@
+上一件955782d3/85ba7119已真正completed，Root compact cursor57859559-a812-4f98-bcdc-46a2a9f908f6:5確認idle後才送這件。請只做20分鐘最小consumer binding/clock修補，同branch codex/research-cashflow-model-integration-oct14/base85ba71196ae24f73a58d9df114f0784d72f40a8f。Root只report/review，不重疊source。
+
+Root已真核52raw/51source/12sealedaddendum，親跑43pure全PASS、兩Python379/483PASS，原24/29 semanticfields與7/5原manifestprefix逐欄相同、cash原算式正確；不改原forecast/EPS/price/sourceclocks/股數/財務數字。最新Root scoped review REQUEST_CHANGES，P0=0/P1=0/P2=2，不把前次maker綠改成全部integration完成：
+
+R1 canonical identity不相容：既有 web/src/lib/research-working-draft-loader.ts:52-56明確{canonicalHash,inputManifest,...body}後hash(body)，新integrateHistoricalCashFlow卻hash包含top-level inputManifest的body。Root直接用既有loadReadOnlyWorkingDraft(root,'2409'/'2383')兩者真draft model/binding mismatch，consumerRED source955下兩篇均拒。Root既有loader hash3fa656b6/0142fc61不同model8027bfa2/ac94e037。不得改loader/hashvalidator/production/UI接受範圍或移除manifest binding。允許最小資料設計：將完整exact原manifest+packet放在新historicalCashFlow內例如sourceInputManifest（被body canonical真正涵蓋），top inputManifest保留同完整副本作既有loader兼容；對exact完整manifest與嵌套副本相等/唯一packet/originalprefix做適當驗證，按既有排除top inputManifest的canonical範圍封新hash。CLI及storedmodel/meta/hashes同步。可採等價有限設計，但不可假裝只排除manifest而未在另一canonical欄完整綁定。
+
+R2 successor primary metadata仍倒指Oct8：parseWorkingDraft讀meta.authoredAndCheckedAt??authoredAndVerifiedAt及cutoffAt??evidenceCutoffAt；兩篇輸出model.asOf真Oct14但primarycutoff仍Oct8、primaryauthored仍Oct8，現有loader亦明確要求model.asOf==primarycutoff。Nested historicalCashSuccessor.availableAt不覆蓋此實際consumer。應保留原source/model/author clocks到明示original*欄，successor primarycutoff用真newasOf，primaryauthored/verified用實際本次artifact完成時鐘（不得選假fraction配測試），不改原市場/來源時鐘或造formal IDs。
+
+Root原RED腳本可自行以node22直接import既有loader重現；兩個現有preview實際artifacttests同樣應恢復。Owned仍兩model/recompute/render/result/article/meta/ledger/hash/README/test/handoff，額外僅允許web/src/lib/research-working-draft.test.ts中原特定Oct8 fraction負例的fixture時間生成改為對任何真authored clock+1ns的等價negative；不得改test期望或production loader/parser。完整working-draft、FIFO、原兩模型pure、兩Python/新canonical+inputmanifest/sourceclock正負例都真跑，不能只43綠。測metadata/model/hash任何一處drift仍拒，原Oct8 cutoff/correctnewsource不可混，futureauthored/cutoff仍拒；newauthoredclock+1nsnegative維持。
+
+先封WIP bytes+original consumerRED，再修；source/evidence分開push，保存955/85與所有原結果/RED。必要typeslintnormalbuild按repo；8GiBfree/RSS/singleheavy/Node22exactlock，若空間不足真pending不得刪unknown/唯一證據、降reserve或冒稱build。進度base之lockNext16.3.8是真本branch版本，只能歸因這個researchbranch，不冒稱approvedmainNext16.3.4新build。Mac不fullbuild／Chromium403不重試，無VPS/HTTP/remoteDB/crawl/PTT/343/SQL金融runtime/authority/roles/grants/pins/workflow/API/UI/strategyapproval/正式研究排程/PR/merge/deploy/CIrerun，maker不得自簽獨立文章批准。20min未完各項pending。
+
+另外Root已建PR378對main3e的金融文件route lease孤立修補，與你的owned研究source不重疊；不要修改或重派該PR工作。

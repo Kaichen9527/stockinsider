@@ -1,0 +1,73 @@
+{
+  "recordedAt": "2026-10-14T03:19:07.562225+00:00",
+  "subject": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+  "base": "3e1be377de3f6cac58f6de1626e8df994b9df146",
+  "evidence": "73fafb9ec5c4d3fc67afe00c9fdc6a7f85b1d5f0",
+  "directChildThreeFiles": true,
+  "ordinary": {
+    "route8": 38503491252,
+    "candidate164": 38503491209,
+    "canonical155": 38503491181,
+    "allSuccess": true,
+    "pcrDistinct": 31
+  },
+  "codeIndependentReview": {
+    "thread": "01a137fc-e83b-7bc0-bc54-8fca40edc2a3",
+    "turn": "01a1385e-1785-7c43-aa53-62d6689718be",
+    "codeVerdict": "PASS",
+    "overallVerdict": "PENDING",
+    "newBlockingDefects": 0,
+    "genuineUnsignedNotAstraOrFormalArticleReview": true
+  },
+  "readonlyPlanConnectionAttempted": false,
+  "failedRerunPerformedOnce": true,
+  "singleUseAudit": "/tmp/stockinsider-pr378-protected-fresh-ref-rerun-oct14.json",
+  "protected": {
+    "run": 38503491190,
+    "attempt": 2,
+    "status": "in_progress",
+    "conclusion": null,
+    "jobs": [
+      {
+        "id": 115661771533,
+        "name": "exact-review",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 115661771767,
+        "name": "requirements",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 115661771801,
+        "name": "architecture",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 115661773466,
+        "name": "stockinsider-v3-gate-bootstrap",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 115661872267,
+        "name": "model-runner-code-gate",
+        "status": "in_progress",
+        "conclusion": null
+      },
+      {
+        "id": 115661872307,
+        "name": "product-runtime-code-gate",
+        "status": "in_progress",
+        "conclusion": null
+      }
+    ]
+  },
+  "ready": false,
+  "merged": false,
+  "deployed": false,
+  "productionFactsAdded": 0
+}

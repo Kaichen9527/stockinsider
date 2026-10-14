@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/usr/bin/arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-auo-four-segment-model.test.mjs",
+    "scripts/research-emc-company-model.test.mjs"
+  ],
+  "source": "955782d3c61b2bc8149eea69c3466186f422e5b2",
+  "evidence": "85ba71196ae24f73a58d9df114f0784d72f40a8f",
+  "startedAt": "2026-10-14T03:07:51.213400+00:00",
+  "finishedAt": "2026-10-14T03:07:51.611148+00:00",
+  "exitCode": 0
+}

@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "/usr/bin/arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "/tmp/stockinsider-cashflow-successor-root-review-oct14/consumer-reproduction.mjs"
+  ],
+  "exitCode": 1,
+  "observedAt": "2026-10-14T03:10:40.510435+00:00"
+}

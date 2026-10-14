@@ -1,0 +1,25 @@
+{
+  "source": "955782d3c61b2bc8149eea69c3466186f422e5b2",
+  "actualConsumerResults": [
+    {
+      "symbol": "2409",
+      "consumerError": "draft model/binding mismatch",
+      "modelCanonicalHash": "8027bfa234faf4bdfdc8b71330f4b3d7b71242c1fb9417c5b9f139affe8ea909",
+      "existingLoaderComputedHash": "3fa656b69b5578a43a226ce72a8b202aa6e04a1382273bf3426627aa3588ecc3",
+      "successorModelAsOf": "2026-10-14T02:34:47.456437+00:00",
+      "consumerCutoff": "2026-10-08T10:20:00Z",
+      "consumerAuthoredAt": "2026-10-08T12:00:37.360909+00:00",
+      "newExtractionAvailableAt": "2026-10-14T02:34:47.456437+00:00"
+    },
+    {
+      "symbol": "2383",
+      "consumerError": "draft model/binding mismatch",
+      "modelCanonicalHash": "ac94e0370cf844291cab963852762b0597f53af43af74592f0a0c9fbdc56246a",
+      "existingLoaderComputedHash": "0142fc614a75792f8ea0711594b287fc2e3b9ef8d40ee897362db3fe50abc04d",
+      "successorModelAsOf": "2026-10-14T02:34:47.456437+00:00",
+      "consumerCutoff": "2026-10-08T12:12:00Z",
+      "consumerAuthoredAt": "2026-10-08T12:16:10.051875+00:00",
+      "newExtractionAvailableAt": "2026-10-14T02:34:47.456437+00:00"
+    }
+  ]
+}

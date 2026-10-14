@@ -1,0 +1,22 @@
+{
+  "source": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+  "evidence": "73fafb9ec5c4d3fc67afe00c9fdc6a7f85b1d5f0",
+  "files": [
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+      "bytes": 7442,
+      "sha256": "4b0713f0e35aa727fb88b3ac978de90881d2ab0abf84ea80b8769838814951a9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+      "bytes": 24824,
+      "sha256": "043985fd179d7e7cd213aff74bb0471e0443d0694ca9957f512db0792ae9b711"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json",
+      "bytes": 457,
+      "sha256": "aae3ec25ddfe2cbebb5347ccd138dfd39143ef6f4b02b36f486b53a88d49143d"
+    }
+  ],
+  "operation": "preserved only own untracked exact evidence after byte match; source tree clean"
+}

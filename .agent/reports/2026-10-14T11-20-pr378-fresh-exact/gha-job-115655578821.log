@@ -1,0 +1,1052 @@
+﻿2026-10-14T02:54:32.4659794Z Current runner version: '2.337.0'
+2026-10-14T02:54:32.4696554Z ##[group]Runner Image Provisioner
+2026-10-14T02:54:32.4698017Z Hosted Compute Agent
+2026-10-14T02:54:32.4699146Z Version: 20261002.596
+2026-10-14T02:54:32.4700641Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-14T02:54:32.4701963Z Build Date: 2026-10-02T22:28:27Z
+2026-10-14T02:54:32.4703137Z Worker ID: {da053d75-1623-4d62-8fc3-f74282ee0e85}
+2026-10-14T02:54:32.4704271Z Region: canadaeast
+2026-10-14T02:54:32.4705115Z Cloud: Azure
+2026-10-14T02:54:32.4705792Z ##[endgroup]
+2026-10-14T02:54:32.4707654Z ##[group]Operating System
+2026-10-14T02:54:32.4708383Z Ubuntu
+2026-10-14T02:54:32.4708929Z 24.04.5
+2026-10-14T02:54:32.4709441Z LTS
+2026-10-14T02:54:32.4710086Z ##[endgroup]
+2026-10-14T02:54:32.4710738Z ##[group]Runner Image
+2026-10-14T02:54:32.4711371Z Image: ubuntu-24.04
+2026-10-14T02:54:32.4711949Z Version: 20261004.327.1
+2026-10-14T02:54:32.4713290Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-14T02:54:32.4714876Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-14T02:54:32.4715878Z ##[endgroup]
+2026-10-14T02:54:32.4717312Z ##[group]GITHUB_TOKEN Permissions
+2026-10-14T02:54:32.4719573Z Contents: read
+2026-10-14T02:54:32.4720212Z Metadata: read
+2026-10-14T02:54:32.4720781Z ##[endgroup]
+2026-10-14T02:54:32.4722818Z Secret source: Actions
+2026-10-14T02:54:32.4723829Z Cache mode: write
+2026-10-14T02:54:32.4724943Z Prepare workflow directory
+2026-10-14T02:54:32.5123823Z Prepare all required actions
+2026-10-14T02:54:32.5193784Z Getting action download info
+2026-10-14T02:54:32.7530055Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-14T02:54:32.8374323Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-14T02:54:33.0419444Z Complete job name: Candidate discovery admission and UI diagnostics
+2026-10-14T02:54:33.1185708Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-14T02:54:33.1187103Z with:
+2026-10-14T02:54:33.1187568Z   persist-credentials: false
+2026-10-14T02:54:33.1188113Z   repository: Kaichen9527/stockinsider
+2026-10-14T02:54:33.1191678Z   token: ***
+2026-10-14T02:54:33.1192119Z   ssh-strict: true
+2026-10-14T02:54:33.1192562Z   ssh-user: git
+2026-10-14T02:54:33.1192986Z   clean: true
+2026-10-14T02:54:33.1193439Z   sparse-checkout-cone-mode: true
+2026-10-14T02:54:33.1193961Z   fetch-depth: 1
+2026-10-14T02:54:33.1194390Z   fetch-tags: false
+2026-10-14T02:54:33.1194835Z   show-progress: true
+2026-10-14T02:54:33.1195286Z   lfs: false
+2026-10-14T02:54:33.1195698Z   submodules: false
+2026-10-14T02:54:33.1196318Z   set-safe-directory: true
+2026-10-14T02:54:33.1196826Z   allow-unsafe-pr-checkout: false
+2026-10-14T02:54:33.1197616Z ##[endgroup]
+2026-10-14T02:54:33.2137462Z Syncing repository: Kaichen9527/stockinsider
+2026-10-14T02:54:33.2139882Z ##[group]Getting Git version info
+2026-10-14T02:54:33.2140632Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T02:54:33.2142376Z [command]/usr/bin/git version
+2026-10-14T02:54:33.2211660Z git version 2.55.0
+2026-10-14T02:54:33.2233703Z ##[endgroup]
+2026-10-14T02:54:33.2248460Z Temporarily overriding HOME='/home/runner/work/_temp/14e34ad3-f071-475a-9ddd-fa3c68b86e75' before making global git config changes
+2026-10-14T02:54:33.2250378Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T02:54:33.2252995Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T02:54:33.2313416Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T02:54:33.2317713Z ##[group]Initializing the repository
+2026-10-14T02:54:33.2321754Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+2026-10-14T02:54:33.2424544Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-14T02:54:33.2426912Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-14T02:54:33.2428541Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-14T02:54:33.2429879Z hint: call:
+2026-10-14T02:54:33.2430311Z hint:
+2026-10-14T02:54:33.2430847Z hint: 	git config --global init.defaultBranch <name>
+2026-10-14T02:54:33.2431491Z hint:
+2026-10-14T02:54:33.2432107Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-14T02:54:33.2433029Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-14T02:54:33.2433967Z hint:
+2026-10-14T02:54:33.2434396Z hint: 	git branch -m <name>
+2026-10-14T02:54:33.2434877Z hint:
+2026-10-14T02:54:33.2435512Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-14T02:54:33.2437254Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+2026-10-14T02:54:33.2441432Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+2026-10-14T02:54:33.2489745Z ##[endgroup]
+2026-10-14T02:54:33.2490544Z ##[group]Disabling automatic garbage collection
+2026-10-14T02:54:33.2494053Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-14T02:54:33.2524354Z ##[endgroup]
+2026-10-14T02:54:33.2525079Z ##[group]Setting up auth
+2026-10-14T02:54:33.2532289Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T02:54:33.2564704Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T02:54:33.2919103Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T02:54:33.2957256Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T02:54:33.3184690Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T02:54:33.3221774Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T02:54:33.3437719Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-14T02:54:33.3477269Z ##[endgroup]
+2026-10-14T02:54:33.3478042Z ##[group]Fetching the repository
+2026-10-14T02:54:33.3487234Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ced76b8d416f88e95a95119dea1cc02fbb15e689:refs/remotes/pull/378/merge
+2026-10-14T02:54:34.8407370Z From https://github.com/Kaichen9527/stockinsider
+2026-10-14T02:54:34.8409759Z  * [new ref]         ced76b8d416f88e95a95119dea1cc02fbb15e689 -> pull/378/merge
+2026-10-14T02:54:34.8413815Z ##[endgroup]
+2026-10-14T02:54:34.8416450Z ##[group]Determining the checkout info
+2026-10-14T02:54:34.8418873Z ##[endgroup]
+2026-10-14T02:54:34.8420141Z [command]/usr/bin/git sparse-checkout disable
+2026-10-14T02:54:34.8473552Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-14T02:54:34.8512380Z ##[group]Checking out the ref
+2026-10-14T02:54:34.8521972Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/378/merge
+2026-10-14T02:54:35.0345957Z Note: switching to 'refs/remotes/pull/378/merge'.
+2026-10-14T02:54:35.0347610Z 
+2026-10-14T02:54:35.0348742Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-14T02:54:35.0351548Z changes and commit them, and you can discard any commits you make in this
+2026-10-14T02:54:35.0354308Z state without impacting any branches by switching back to a branch.
+2026-10-14T02:54:35.0355937Z 
+2026-10-14T02:54:35.0356939Z If you want to create a new branch to retain commits you create, you may
+2026-10-14T02:54:35.0359649Z do so (now or later) by using -c with the switch command. Example:
+2026-10-14T02:54:35.0360760Z 
+2026-10-14T02:54:35.0361180Z   git switch -c <new-branch-name>
+2026-10-14T02:54:35.0362235Z 
+2026-10-14T02:54:35.0363041Z Or undo this operation with:
+2026-10-14T02:54:35.0364203Z 
+2026-10-14T02:54:35.0365013Z   git switch -
+2026-10-14T02:54:35.0366173Z 
+2026-10-14T02:54:35.0367636Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-14T02:54:35.0369657Z 
+2026-10-14T02:54:35.0371996Z HEAD is now at ced76b8 Merge 18b1fba4c7fa89108cbf8892a0a7205860989995 into 3e1be377de3f6cac58f6de1626e8df994b9df146
+2026-10-14T02:54:35.0385016Z ##[endgroup]
+2026-10-14T02:54:35.0433490Z [command]/usr/bin/git log -1 --format=%H
+2026-10-14T02:54:35.0464656Z ced76b8d416f88e95a95119dea1cc02fbb15e689
+2026-10-14T02:54:35.0502781Z ##[group]Removing auth
+2026-10-14T02:54:35.0505936Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T02:54:35.0541083Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T02:54:35.0793927Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T02:54:35.1280311Z http.https://github.com/.extraheader
+2026-10-14T02:54:35.1310879Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-14T02:54:35.2278834Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T02:54:35.2500465Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T02:54:35.2531682Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T02:54:35.2745927Z ##[endgroup]
+2026-10-14T02:54:35.4403896Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-14T02:54:35.4404725Z with:
+2026-10-14T02:54:35.4405176Z   node-version: 22.14.0
+2026-10-14T02:54:35.4405642Z   always-auth: false
+2026-10-14T02:54:35.4406361Z   check-latest: false
+2026-10-14T02:54:35.4410916Z   token: ***
+2026-10-14T02:54:35.4411371Z ##[endgroup]
+2026-10-14T02:54:35.6183481Z Attempting to download 22.14.0...
+2026-10-14T02:54:35.6298069Z (node:2397) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T02:54:35.6299470Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T02:54:36.5045865Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+2026-10-14T02:54:36.9185862Z Extracting ...
+2026-10-14T02:54:36.9303533Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/e8cc31e8-cbd6-493f-b5a7-af4231fb202a -f /home/runner/work/_temp/0b3286bb-37ec-4372-860f-c1b10fefba0d
+2026-10-14T02:54:38.0753287Z Adding to the cache ...
+2026-10-14T02:54:40.2134089Z ##[group]Environment details
+2026-10-14T02:54:40.4147360Z node: v22.14.0
+2026-10-14T02:54:40.4147799Z npm: 10.9.2
+2026-10-14T02:54:40.4149667Z yarn: 1.22.22
+2026-10-14T02:54:40.4150542Z ##[endgroup]
+2026-10-14T02:54:40.4317506Z ##[group]Run npm --prefix web ci --ignore-scripts
+2026-10-14T02:54:40.4317998Z [36;1mnpm --prefix web ci --ignore-scripts[0m
+2026-10-14T02:54:40.4567679Z shell: /usr/bin/bash -e {0}
+2026-10-14T02:54:40.4567976Z ##[endgroup]
+2026-10-14T02:54:41.7961228Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-10-14T02:54:57.0883528Z 
+2026-10-14T02:54:57.0884362Z added 432 packages, and audited 433 packages in 17s
+2026-10-14T02:54:57.0884860Z 
+2026-10-14T02:54:57.0885190Z 169 packages are looking for funding
+2026-10-14T02:54:57.0886481Z   run `npm fund` for details
+2026-10-14T02:54:57.2207073Z 
+2026-10-14T02:54:57.2208039Z 11 vulnerabilities (10 high, 1 critical)
+2026-10-14T02:54:57.2208554Z 
+2026-10-14T02:54:57.2208995Z To address issues that do not require attention, run:
+2026-10-14T02:54:57.2209538Z   npm audit fix
+2026-10-14T02:54:57.2209839Z 
+2026-10-14T02:54:57.2210314Z To address all issues (including breaking changes), run:
+2026-10-14T02:54:57.2211345Z   npm audit fix --force
+2026-10-14T02:54:57.2211723Z 
+2026-10-14T02:54:57.2212027Z Run `npm audit` for details.
+2026-10-14T02:54:57.3222381Z ##[group]Run node web/scripts/sync-official-authority.mjs
+2026-10-14T02:54:57.3222864Z [36;1mnode web/scripts/sync-official-authority.mjs[0m
+2026-10-14T02:54:57.3288834Z shell: /usr/bin/bash -e {0}
+2026-10-14T02:54:57.3289098Z ##[endgroup]
+2026-10-14T02:54:57.4040445Z Official authority build bridge verified (5 canonical modules).
+2026-10-14T02:54:57.4094701Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 web/src/lib/candidate-discovery-admission.test.ts web/src/lib/live-discovery-evidence-adapter.test.ts web/src/lib/discovery-revision-publisher-reader.test.ts web/src/lib/discovery-frozen-snapshot-reader.test.ts scripts/candidate-discovery-admission-ui.test.mjs
+2026-10-14T02:54:57.4097479Z [36;1mnode --experimental-strip-types --test --test-concurrency=1 web/src/lib/candidate-discovery-admission.test.ts web/src/lib/live-discovery-evidence-adapter.test.ts web/src/lib/discovery-revision-publisher-reader.test.ts web/src/lib/discovery-frozen-snapshot-reader.test.ts scripts/candidate-discovery-admission-ui.test.mjs[0m
+2026-10-14T02:54:57.4162495Z shell: /usr/bin/bash -e {0}
+2026-10-14T02:54:57.4162765Z ##[endgroup]
+2026-10-14T02:54:57.4630575Z TAP version 13
+2026-10-14T02:54:57.5614927Z # (node:2470) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-14T02:54:57.5637066Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-14T02:54:57.5639278Z # (node:2470) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-discovery-admission.ts is not specified and it doesn't parse as CommonJS.
+2026-10-14T02:54:57.5641566Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-14T02:54:57.5642870Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-14T02:54:58.1381149Z # Subtest: actual main card displays technical dated close and reference method, hides old price and upside
+2026-10-14T02:54:58.1386964Z ok 1 - actual main card displays technical dated close and reference method, hides old price and upside
+2026-10-14T02:54:58.1388035Z   ---
+2026-10-14T02:54:58.1388468Z   duration_ms: 10.597172
+2026-10-14T02:54:58.1388975Z   ...
+2026-10-14T02:54:58.1397398Z # Subtest: actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+2026-10-14T02:54:58.1398323Z ok 2 - actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+2026-10-14T02:54:58.1398807Z   ---
+2026-10-14T02:54:58.1399012Z   duration_ms: 1.625867
+2026-10-14T02:54:58.1399264Z   ...
+2026-10-14T02:54:58.1399815Z # Subtest: missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+2026-10-14T02:54:58.1417217Z ok 3 - missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+2026-10-14T02:54:58.1418097Z   ---
+2026-10-14T02:54:58.1418499Z   duration_ms: 1.355251
+2026-10-14T02:54:58.1418838Z   ...
+2026-10-14T02:54:58.1419645Z # Subtest: actual main defaults to existing clues while research admission remains explicitly pending
+2026-10-14T02:54:58.1420451Z ok 4 - actual main defaults to existing clues while research admission remains explicitly pending
+2026-10-14T02:54:58.1420899Z   ---
+2026-10-14T02:54:58.1421081Z   duration_ms: 11.776355
+2026-10-14T02:54:58.1421564Z   ...
+2026-10-14T02:54:58.1422085Z # Subtest: existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+2026-10-14T02:54:58.1422906Z ok 5 - existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+2026-10-14T02:54:58.1423359Z   ---
+2026-10-14T02:54:58.1423540Z   duration_ms: 1.401347
+2026-10-14T02:54:58.1423735Z   ...
+2026-10-14T02:54:58.1427400Z # Subtest: actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+2026-10-14T02:54:58.1436736Z ok 6 - actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+2026-10-14T02:54:58.1437473Z   ---
+2026-10-14T02:54:58.1437674Z   duration_ms: 27.910349
+2026-10-14T02:54:58.1437892Z   ...
+2026-10-14T02:54:58.1438755Z # Subtest: actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+2026-10-14T02:54:58.1439703Z ok 7 - actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+2026-10-14T02:54:58.1440200Z   ---
+2026-10-14T02:54:58.1440577Z   duration_ms: 4.306123
+2026-10-14T02:54:58.1440849Z   ...
+2026-10-14T02:54:58.1441382Z # Subtest: saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+2026-10-14T02:54:58.1442226Z ok 8 - saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+2026-10-14T02:54:58.1442683Z   ---
+2026-10-14T02:54:58.1442862Z   duration_ms: 8.773736
+2026-10-14T02:54:58.1443075Z   ...
+2026-10-14T02:54:58.2337490Z # (node:2481) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-14T02:54:58.2339337Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-14T02:54:58.2608946Z # (node:2481) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-discovery-admission.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-14T02:54:58.2634042Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-14T02:54:58.2652489Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-14T02:54:58.3000765Z # Subtest: only a pair with different canonical publishers and roots enters general research
+2026-10-14T02:54:58.3034455Z ok 9 - only a pair with different canonical publishers and roots enters general research
+2026-10-14T02:54:58.3066608Z   ---
+2026-10-14T02:54:58.3067292Z   duration_ms: 2.487756
+2026-10-14T02:54:58.3077067Z   ...
+2026-10-14T02:54:58.3077858Z # Subtest: same author across platforms
+2026-10-14T02:54:58.3078790Z ok 10 - same author across platforms
+2026-10-14T02:54:58.3079538Z   ---
+2026-10-14T02:54:58.3080186Z   duration_ms: 0.185447
+2026-10-14T02:54:58.3080848Z   ...
+2026-10-14T02:54:58.3081580Z # Subtest: syndicated original root
+2026-10-14T02:54:58.3082437Z ok 11 - syndicated original root
+2026-10-14T02:54:58.3083163Z   ---
+2026-10-14T02:54:58.3083742Z   duration_ms: 0.127699
+2026-10-14T02:54:58.3084379Z   ...
+2026-10-14T02:54:58.3085568Z # Subtest: same-platform original authors with independent roots qualify; platform diversity is display-only
+2026-10-14T02:54:58.3087564Z ok 12 - same-platform original authors with independent roots qualify; platform diversity is display-only
+2026-10-14T02:54:58.3088662Z   ---
+2026-10-14T02:54:58.3089225Z   duration_ms: 0.297947
+2026-10-14T02:54:58.3089797Z   ...
+2026-10-14T02:54:58.3090620Z # Subtest: retracted root cannot be laundered by a current repost
+2026-10-14T02:54:58.3091755Z ok 13 - retracted root cannot be laundered by a current repost
+2026-10-14T02:54:58.3092579Z   ---
+2026-10-14T02:54:58.3093124Z   duration_ms: 0.438569
+2026-10-14T02:54:58.3093720Z   ...
+2026-10-14T02:54:58.3094776Z # Subtest: industry-only and unresolved aliases cannot count as direct company confirmation
+2026-10-14T02:54:58.3096733Z ok 14 - industry-only and unresolved aliases cannot count as direct company confirmation
+2026-10-14T02:54:58.3097572Z   ---
+2026-10-14T02:54:58.3097970Z   duration_ms: 0.260657
+2026-10-14T02:54:58.3098353Z   ...
+2026-10-14T02:54:58.3099110Z # Subtest: bounded legacy links, counters and missing PTT detail are unsupported
+2026-10-14T02:54:58.3100155Z ok 15 - bounded legacy links, counters and missing PTT detail are unsupported
+2026-10-14T02:54:58.3100863Z   ---
+2026-10-14T02:54:58.3101176Z   duration_ms: 0.303587
+2026-10-14T02:54:58.3101526Z   ...
+2026-10-14T02:54:58.3102104Z # Subtest: PTT 19/20 actual different stock-mention authors boundary
+2026-10-14T02:54:58.3102931Z ok 16 - PTT 19/20 actual different stock-mention authors boundary
+2026-10-14T02:54:58.3103464Z   ---
+2026-10-14T02:54:58.3103757Z   duration_ms: 0.689998
+2026-10-14T02:54:58.3104080Z   ...
+2026-10-14T02:54:58.3105197Z # Subtest: PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+2026-10-14T02:54:58.3106847Z ok 17 - PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+2026-10-14T02:54:58.3107708Z   ---
+2026-10-14T02:54:58.3108058Z   duration_ms: 0.637791
+2026-10-14T02:54:58.3108395Z   ...
+2026-10-14T02:54:58.3109177Z # Subtest: PTT requires stock in body, current article, and one post, not pooled reply totals
+2026-10-14T02:54:58.3110410Z ok 18 - PTT requires stock in body, current article, and one post, not pooled reply totals
+2026-10-14T02:54:58.3111187Z   ---
+2026-10-14T02:54:58.3111560Z   duration_ms: 0.616521
+2026-10-14T02:54:58.3111945Z   ...
+2026-10-14T02:54:58.3112821Z # Subtest: reasoned new official event can enter low-volume lane, never multi-source confirmation
+2026-10-14T02:54:58.3114154Z ok 19 - reasoned new official event can enter low-volume lane, never multi-source confirmation
+2026-10-14T02:54:58.3114976Z   ---
+2026-10-14T02:54:58.3115362Z   duration_ms: 0.304278
+2026-10-14T02:54:58.3115814Z   ...
+2026-10-14T02:54:58.3117039Z # Subtest: high-impact new lead requires explained known direct source; ordinary news is not official
+2026-10-14T02:54:58.3118486Z ok 20 - high-impact new lead requires explained known direct source; ordinary news is not official
+2026-10-14T02:54:58.3119228Z   ---
+2026-10-14T02:54:58.3119562Z   duration_ms: 0.152205
+2026-10-14T02:54:58.3119899Z   ...
+2026-10-14T02:54:58.3120718Z # Subtest: existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+2026-10-14T02:54:58.3122115Z ok 21 - existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+2026-10-14T02:54:58.3122932Z   ---
+2026-10-14T02:54:58.3123312Z   duration_ms: 0.855408
+2026-10-14T02:54:58.3123754Z   ...
+2026-10-14T02:54:58.3124701Z # Subtest: bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+2026-10-14T02:54:58.3126358Z ok 22 - bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+2026-10-14T02:54:58.3127234Z   ---
+2026-10-14T02:54:58.3127560Z   duration_ms: 0.710327
+2026-10-14T02:54:58.3127893Z   ...
+2026-10-14T02:54:58.3128729Z # Subtest: technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+2026-10-14T02:54:58.3130045Z ok 23 - technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+2026-10-14T02:54:58.3130787Z   ---
+2026-10-14T02:54:58.3131073Z   duration_ms: 0.562351
+2026-10-14T02:54:58.3131373Z   ...
+2026-10-14T02:54:58.3132275Z # Subtest: PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+2026-10-14T02:54:58.3133672Z ok 24 - PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+2026-10-14T02:54:58.3134454Z   ---
+2026-10-14T02:54:58.3134749Z   duration_ms: 0.829529
+2026-10-14T02:54:58.3135073Z   ...
+2026-10-14T02:54:58.3135819Z # Subtest: missing, future, malformed dates never manufacture a displayed current close
+2026-10-14T02:54:58.3137602Z ok 25 - missing, future, malformed dates never manufacture a displayed current close
+2026-10-14T02:54:58.3138357Z   ---
+2026-10-14T02:54:58.3138705Z   duration_ms: 0.182962
+2026-10-14T02:54:58.3139136Z   ...
+2026-10-14T02:54:58.3140257Z # Subtest: clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+2026-10-14T02:54:58.3141966Z ok 26 - clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+2026-10-14T02:54:58.3155500Z   ---
+2026-10-14T02:54:58.3155801Z   duration_ms: 1.03356
+2026-10-14T02:54:58.3156337Z   ...
+2026-10-14T02:54:58.3157151Z # Subtest: coverage states distinguish retired/blocked/duplicate without inventing source enablement
+2026-10-14T02:54:58.3158390Z ok 27 - coverage states distinguish retired/blocked/duplicate without inventing source enablement
+2026-10-14T02:54:58.3159297Z   ---
+2026-10-14T02:54:58.3159588Z   duration_ms: 0.381713
+2026-10-14T02:54:58.3159910Z   ...
+2026-10-14T02:54:58.3160722Z # Subtest: coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+2026-10-14T02:54:58.3161989Z ok 28 - coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+2026-10-14T02:54:58.3162700Z   ---
+2026-10-14T02:54:58.3163015Z   duration_ms: 0.376904
+2026-10-14T02:54:58.3163349Z   ...
+2026-10-14T02:54:58.3864386Z # (node:2492) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-14T02:54:58.3866228Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-14T02:54:58.3994362Z # (node:2492) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/discovery-frozen-snapshot-reader.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-14T02:54:58.3996589Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-14T02:54:58.3998523Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-14T02:54:58.5277412Z # Subtest: fixed RR/RO query order, sole UUID parameters, exact populations and private packet never escapes
+2026-10-14T02:54:58.5297535Z ok 29 - fixed RR/RO query order, sole UUID parameters, exact populations and private packet never escapes
+2026-10-14T02:54:58.5327150Z   ---
+2026-10-14T02:54:58.5372457Z   duration_ms: 13.8942
+2026-10-14T02:54:58.5376553Z   ...
+2026-10-14T02:54:58.5377215Z # Subtest: over bound rejects before any population fetch
+2026-10-14T02:54:58.5377929Z ok 30 - over bound rejects before any population fetch
+2026-10-14T02:54:58.5378253Z   ---
+2026-10-14T02:54:58.5378449Z   duration_ms: 1.12981
+2026-10-14T02:54:58.5378664Z   ...
+2026-10-14T02:54:58.5379007Z # Subtest: aggregate bound rejects before any population fetch
+2026-10-14T02:54:58.5379508Z ok 31 - aggregate bound rejects before any population fetch
+2026-10-14T02:54:58.5379848Z   ---
+2026-10-14T02:54:58.5380041Z   duration_ms: 1.107458
+2026-10-14T02:54:58.5380252Z   ...
+2026-10-14T02:54:58.5380586Z # Subtest: bytes bound rejects before any population fetch
+2026-10-14T02:54:58.5381030Z ok 32 - bytes bound rejects before any population fetch
+2026-10-14T02:54:58.5381328Z   ---
+2026-10-14T02:54:58.5381571Z   duration_ms: 1.044531
+2026-10-14T02:54:58.5381946Z   ...
+2026-10-14T02:54:58.5382352Z # Subtest: missing has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5382941Z ok 33 - missing has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5383299Z   ---
+2026-10-14T02:54:58.5383480Z   duration_ms: 0.873622
+2026-10-14T02:54:58.5383687Z   ...
+2026-10-14T02:54:58.5384081Z # Subtest: ambiguous has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5384675Z ok 34 - ambiguous has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5385043Z   ---
+2026-10-14T02:54:58.5385635Z   duration_ms: 1.313533
+2026-10-14T02:54:58.5386728Z   ...
+2026-10-14T02:54:58.5387486Z # Subtest: truncated has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5388591Z ok 35 - truncated has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5389265Z   ---
+2026-10-14T02:54:58.5389585Z   duration_ms: 1.570043
+2026-10-14T02:54:58.5389950Z   ...
+2026-10-14T02:54:58.5390732Z # Subtest: wrongSnapshot has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5391562Z ok 36 - wrongSnapshot has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5391961Z   ---
+2026-10-14T02:54:58.5392155Z   duration_ms: 2.684865
+2026-10-14T02:54:58.5392365Z   ...
+2026-10-14T02:54:58.5392797Z # Subtest: badVisibility has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5393635Z ok 37 - badVisibility has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5394047Z   ---
+2026-10-14T02:54:58.5394232Z   duration_ms: 1.069017
+2026-10-14T02:54:58.5394434Z   ...
+2026-10-14T02:54:58.5394838Z # Subtest: badIsolation has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5395468Z ok 38 - badIsolation has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5395849Z   ---
+2026-10-14T02:54:58.5396369Z   duration_ms: 0.920679
+2026-10-14T02:54:58.5396637Z   ...
+2026-10-14T02:54:58.5397019Z # Subtest: fail has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5397577Z ok 39 - fail has no false success, sanitized error and confirmed cleanup
+2026-10-14T02:54:58.5397937Z   ---
+2026-10-14T02:54:58.5398133Z   duration_ms: 1.304356
+2026-10-14T02:54:58.5398348Z   ...
+2026-10-14T02:54:58.5398704Z # Subtest: invalid UUID does no I/O; owned client cannot be reused
+2026-10-14T02:54:58.5399219Z ok 40 - invalid UUID does no I/O; owned client cannot be reused
+2026-10-14T02:54:58.5399547Z   ---
+2026-10-14T02:54:58.5399741Z   duration_ms: 3.849419
+2026-10-14T02:54:58.5399947Z   ...
+2026-10-14T02:54:58.5400390Z # Subtest: database timestamps are requested as fixed UTC microsecond text, never JS Date
+2026-10-14T02:54:58.5401087Z ok 41 - database timestamps are requested as fixed UTC microsecond text, never JS Date
+2026-10-14T02:54:58.5401522Z   ---
+2026-10-14T02:54:58.5401708Z   duration_ms: 6.644908
+2026-10-14T02:54:58.5401905Z   ...
+2026-10-14T02:54:58.5402347Z # Subtest: primary DB failure survives failed cleanup without exposing either private error
+2026-10-14T02:54:58.5403032Z ok 42 - primary DB failure survives failed cleanup without exposing either private error
+2026-10-14T02:54:58.5403437Z   ---
+2026-10-14T02:54:58.5403613Z   duration_ms: 0.635948
+2026-10-14T02:54:58.5403814Z   ...
+2026-10-14T02:55:18.6157903Z # Subtest: stalled owned end returns bounded pending cleanup and cannot report a successful read
+2026-10-14T02:55:18.6159270Z ok 43 - stalled owned end returns bounded pending cleanup and cannot report a successful read
+2026-10-14T02:55:18.6161140Z   ---
+2026-10-14T02:55:18.6161451Z   duration_ms: 9999.686372
+2026-10-14T02:55:18.6161840Z   ...
+2026-10-14T02:55:18.6162562Z # Subtest: late synchronous cleanup settlement cannot beat an expired monotonic deadline
+2026-10-14T02:55:18.6189600Z ok 44 - late synchronous cleanup settlement cannot beat an expired monotonic deadline
+2026-10-14T02:55:18.6190367Z   ---
+2026-10-14T02:55:18.6191975Z   duration_ms: 10102.875746
+2026-10-14T02:55:18.6192360Z   ...
+2026-10-14T02:55:18.7037841Z # (node:2510) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-14T02:55:18.7066903Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-14T02:55:18.7383167Z # (node:2510) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/discovery-revision-publisher-reader.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-14T02:55:18.7418001Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-14T02:55:18.7431127Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-14T02:55:19.0978581Z # Subtest: actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+2026-10-14T02:55:19.0980022Z ok 45 - actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+2026-10-14T02:55:19.1053006Z   ---
+2026-10-14T02:55:19.1053537Z   duration_ms: 10.332496
+2026-10-14T02:55:19.1054089Z   ...
+2026-10-14T02:55:19.1054822Z # Subtest: precise offset microseconds and invalid dates
+2026-10-14T02:55:19.1086761Z ok 46 - precise offset microseconds and invalid dates
+2026-10-14T02:55:19.1109148Z   ---
+2026-10-14T02:55:19.1109862Z   duration_ms: 0.644502
+2026-10-14T02:55:19.1117011Z   ...
+2026-10-14T02:55:19.1147468Z # Subtest: future revision collected_at 1us cannot replace known head
+2026-10-14T02:55:19.1154343Z ok 47 - future revision collected_at 1us cannot replace known head
+2026-10-14T02:55:19.1155318Z   ---
+2026-10-14T02:55:19.1155939Z   duration_ms: 6.192222
+2026-10-14T02:55:19.1156817Z   ...
+2026-10-14T02:55:19.1157700Z # Subtest: future revision recorded_at 1us cannot replace known head
+2026-10-14T02:55:19.1158865Z ok 48 - future revision recorded_at 1us cannot replace known head
+2026-10-14T02:55:19.1159706Z   ---
+2026-10-14T02:55:19.1160293Z   duration_ms: 3.944839
+2026-10-14T02:55:19.1186498Z   ...
+2026-10-14T02:55:19.1187677Z # Subtest: future authority approved_at cannot mask known authority
+2026-10-14T02:55:19.1188859Z ok 49 - future authority approved_at cannot mask known authority
+2026-10-14T02:55:19.1189718Z   ---
+2026-10-14T02:55:19.1190296Z   duration_ms: 4.011263
+2026-10-14T02:55:19.1190911Z   ...
+2026-10-14T02:55:19.1191820Z # Subtest: future authority recorded_at cannot mask known authority
+2026-10-14T02:55:19.1192905Z ok 50 - future authority recorded_at cannot mask known authority
+2026-10-14T02:55:19.1193624Z   ---
+2026-10-14T02:55:19.1194102Z   duration_ms: 3.660238
+2026-10-14T02:55:19.1194623Z   ...
+2026-10-14T02:55:19.1195414Z # Subtest: future authority valid_from cannot mask known authority
+2026-10-14T02:55:19.1196666Z ok 51 - future authority valid_from cannot mask known authority
+2026-10-14T02:55:19.1197442Z   ---
+2026-10-14T02:55:19.1197974Z   duration_ms: 3.917538
+2026-10-14T02:55:19.1198537Z   ...
+2026-10-14T02:55:19.1199319Z # Subtest: latest inactive source never revives prior active
+2026-10-14T02:55:19.1200339Z ok 52 - latest inactive source never revives prior active
+2026-10-14T02:55:19.1201080Z   ---
+2026-10-14T02:55:19.1201606Z   duration_ms: 3.559801
+2026-10-14T02:55:19.1202178Z   ...
+2026-10-14T02:55:19.1202984Z # Subtest: latest inactive publisher never revives prior active
+2026-10-14T02:55:19.1204048Z ok 53 - latest inactive publisher never revives prior active
+2026-10-14T02:55:19.1204828Z   ---
+2026-10-14T02:55:19.1205383Z   duration_ms: 3.241668
+2026-10-14T02:55:19.1206190Z   ...
+2026-10-14T02:55:19.1207018Z # Subtest: latest invalid acquisition cannot revive old complete
+2026-10-14T02:55:19.1208072Z ok 54 - latest invalid acquisition cannot revive old complete
+2026-10-14T02:55:19.1208847Z   ---
+2026-10-14T02:55:19.1209358Z   duration_ms: 3.892943
+2026-10-14T02:55:19.1209924Z   ...
+2026-10-14T02:55:19.1210818Z # Subtest: same-time contradictory revisions heads fail closed, both orders
+2026-10-14T02:55:19.1211981Z ok 55 - same-time contradictory revisions heads fail closed, both orders
+2026-10-14T02:55:19.1212745Z   ---
+2026-10-14T02:55:19.1213218Z   duration_ms: 3.299124
+2026-10-14T02:55:19.1213746Z   ...
+2026-10-14T02:55:19.1214580Z # Subtest: same-time contradictory publishers heads fail closed, both orders
+2026-10-14T02:55:19.1215732Z ok 56 - same-time contradictory publishers heads fail closed, both orders
+2026-10-14T02:55:19.1216819Z   ---
+2026-10-14T02:55:19.1217294Z   duration_ms: 2.913896
+2026-10-14T02:55:19.1217847Z   ...
+2026-10-14T02:55:19.1218739Z # Subtest: same-time contradictory sourceAuthorities heads fail closed, both orders
+2026-10-14T02:55:19.1220254Z ok 57 - same-time contradictory sourceAuthorities heads fail closed, both orders
+2026-10-14T02:55:19.1221111Z   ---
+2026-10-14T02:55:19.1221601Z   duration_ms: 2.295923
+2026-10-14T02:55:19.1222135Z   ...
+2026-10-14T02:55:19.1222839Z # Subtest: frozen population run mismatch is not complete
+2026-10-14T02:55:19.1223801Z ok 58 - frozen population run mismatch is not complete
+2026-10-14T02:55:19.1224576Z   ---
+2026-10-14T02:55:19.1225084Z   duration_ms: 0.797778
+2026-10-14T02:55:19.1225646Z   ...
+2026-10-14T02:55:19.1226664Z # Subtest: frozen population cutoff mismatch is not complete
+2026-10-14T02:55:19.1227726Z ok 59 - frozen population cutoff mismatch is not complete
+2026-10-14T02:55:19.1228475Z   ---
+2026-10-14T02:55:19.1229061Z   duration_ms: 0.824519
+2026-10-14T02:55:19.1229720Z   ...
+2026-10-14T02:55:19.1230791Z # Subtest: frozen population count mismatch is not complete
+2026-10-14T02:55:19.1231917Z ok 60 - frozen population count mismatch is not complete
+2026-10-14T02:55:19.1232923Z   ---
+2026-10-14T02:55:19.1233623Z   duration_ms: 0.487209
+2026-10-14T02:55:19.1234295Z   ...
+2026-10-14T02:55:19.1235123Z # Subtest: frozen population hash mismatch is not complete
+2026-10-14T02:55:19.1236405Z ok 61 - frozen population hash mismatch is not complete
+2026-10-14T02:55:19.1237199Z   ---
+2026-10-14T02:55:19.1237778Z   duration_ms: 0.571877
+2026-10-14T02:55:19.1238389Z   ...
+2026-10-14T02:55:19.1239135Z # Subtest: verification source_run_id binding mismatch
+2026-10-14T02:55:19.1240108Z ok 62 - verification source_run_id binding mismatch
+2026-10-14T02:55:19.1240853Z   ---
+2026-10-14T02:55:19.1241418Z   duration_ms: 1.663312
+2026-10-14T02:55:19.1242018Z   ...
+2026-10-14T02:55:19.1242780Z # Subtest: verification source_cutoff binding mismatch
+2026-10-14T02:55:19.1243750Z ok 63 - verification source_cutoff binding mismatch
+2026-10-14T02:55:19.1244497Z   ---
+2026-10-14T02:55:19.1245069Z   duration_ms: 1.80674
+2026-10-14T02:55:19.1245694Z   ...
+2026-10-14T02:55:19.1246659Z # Subtest: verification revision_id binding mismatch
+2026-10-14T02:55:19.1247621Z ok 64 - verification revision_id binding mismatch
+2026-10-14T02:55:19.1248363Z   ---
+2026-10-14T02:55:19.1248932Z   duration_ms: 1.52252
+2026-10-14T02:55:19.1249536Z   ...
+2026-10-14T02:55:19.1250311Z # Subtest: verification publisher_manifest_id binding mismatch
+2026-10-14T02:55:19.1251293Z ok 65 - verification publisher_manifest_id binding mismatch
+2026-10-14T02:55:19.1252189Z   ---
+2026-10-14T02:55:19.1261677Z   duration_ms: 1.82255
+2026-10-14T02:55:19.1262321Z   ...
+2026-10-14T02:55:19.1263174Z # Subtest: verification canonical_content_hash binding mismatch
+2026-10-14T02:55:19.1264319Z ok 66 - verification canonical_content_hash binding mismatch
+2026-10-14T02:55:19.1265100Z   ---
+2026-10-14T02:55:19.1265631Z   duration_ms: 1.835114
+2026-10-14T02:55:19.1266445Z   ...
+2026-10-14T02:55:19.1267187Z # Subtest: verification collected_at binding mismatch
+2026-10-14T02:55:19.1268111Z ok 67 - verification collected_at binding mismatch
+2026-10-14T02:55:19.1268835Z   ---
+2026-10-14T02:55:19.1269369Z   duration_ms: 1.858306
+2026-10-14T02:55:19.1269951Z   ...
+2026-10-14T02:55:19.1270676Z # Subtest: verification recorded_at binding mismatch
+2026-10-14T02:55:19.1271650Z ok 68 - verification recorded_at binding mismatch
+2026-10-14T02:55:19.1272114Z   ---
+2026-10-14T02:55:19.1272458Z   duration_ms: 1.567293
+2026-10-14T02:55:19.1272816Z   ...
+2026-10-14T02:55:19.1273296Z # Subtest: manifest root_hash cannot be asserted by count alone
+2026-10-14T02:55:19.1273910Z ok 69 - manifest root_hash cannot be asserted by count alone
+2026-10-14T02:55:19.1274369Z   ---
+2026-10-14T02:55:19.1274696Z   duration_ms: 1.593844
+2026-10-14T02:55:19.1275016Z   ...
+2026-10-14T02:55:19.1275446Z # Subtest: manifest page_hash cannot be asserted by count alone
+2026-10-14T02:55:19.1276201Z ok 70 - manifest page_hash cannot be asserted by count alone
+2026-10-14T02:55:19.1276672Z   ---
+2026-10-14T02:55:19.1276976Z   duration_ms: 1.216079
+2026-10-14T02:55:19.1277537Z   ...
+2026-10-14T02:55:19.1278015Z # Subtest: manifest payload cannot be asserted by count alone
+2026-10-14T02:55:19.1278611Z ok 71 - manifest payload cannot be asserted by count alone
+2026-10-14T02:55:19.1279069Z   ---
+2026-10-14T02:55:19.1279392Z   duration_ms: 1.165465
+2026-10-14T02:55:19.1279740Z   ...
+2026-10-14T02:55:19.1280218Z # Subtest: manifest rows_missing cannot be asserted by count alone
+2026-10-14T02:55:19.1280844Z ok 72 - manifest rows_missing cannot be asserted by count alone
+2026-10-14T02:55:19.1281303Z   ---
+2026-10-14T02:55:19.1281624Z   duration_ms: 1.411593
+2026-10-14T02:55:19.1281966Z   ...
+2026-10-14T02:55:19.1282433Z # Subtest: manifest institution cannot be asserted by count alone
+2026-10-14T02:55:19.1283046Z ok 73 - manifest institution cannot be asserted by count alone
+2026-10-14T02:55:19.1283743Z   ---
+2026-10-14T02:55:19.1284236Z   duration_ms: 1.602128
+2026-10-14T02:55:19.1284831Z   ...
+2026-10-14T02:55:19.1285478Z # Subtest: manifest authority_bytes cannot be asserted by count alone
+2026-10-14T02:55:19.1286611Z ok 74 - manifest authority_bytes cannot be asserted by count alone
+2026-10-14T02:55:19.1287183Z   ---
+2026-10-14T02:55:19.1287497Z   duration_ms: 1.636553
+2026-10-14T02:55:19.1287836Z   ...
+2026-10-14T02:55:19.1288417Z # Subtest: manifest run_binding cannot be asserted by count alone
+2026-10-14T02:55:19.1289108Z ok 75 - manifest run_binding cannot be asserted by count alone
+2026-10-14T02:55:19.1289586Z   ---
+2026-10-14T02:55:19.1289930Z   duration_ms: 1.144194
+2026-10-14T02:55:19.1290299Z   ...
+2026-10-14T02:55:19.1291051Z # Subtest: legacy raw mapping missing is unsupported, never UUID/hash/url join
+2026-10-14T02:55:19.1292202Z ok 76 - legacy raw mapping missing is unsupported, never UUID/hash/url join
+2026-10-14T02:55:19.1292871Z   ---
+2026-10-14T02:55:19.1293069Z   duration_ms: 1.329501
+2026-10-14T02:55:19.1293282Z   ...
+2026-10-14T02:55:19.1293701Z # Subtest: legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+2026-10-14T02:55:19.1294317Z ok 77 - legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+2026-10-14T02:55:19.1294685Z   ---
+2026-10-14T02:55:19.1294872Z   duration_ms: 1.117044
+2026-10-14T02:55:19.1295070Z   ...
+2026-10-14T02:55:19.1295482Z # Subtest: bounded populations defer every supplied input, not truncation success
+2026-10-14T02:55:19.1296411Z ok 78 - bounded populations defer every supplied input, not truncation success
+2026-10-14T02:55:19.1296821Z   ---
+2026-10-14T02:55:19.1297015Z   duration_ms: 160.41323
+2026-10-14T02:55:19.1297235Z   ...
+2026-10-14T02:55:19.1297649Z # Subtest: same revision UUID with conflicting family cannot produce two bindings
+2026-10-14T02:55:19.1298265Z ok 79 - same revision UUID with conflicting family cannot produce two bindings
+2026-10-14T02:55:19.1298632Z   ---
+2026-10-14T02:55:19.1298811Z   duration_ms: 2.113002
+2026-10-14T02:55:19.1299013Z   ...
+2026-10-14T02:55:19.1299459Z # Subtest: exact duplicate revision is accounted once as binding, deterministic projection
+2026-10-14T02:55:19.1300568Z ok 80 - exact duplicate revision is accounted once as binding, deterministic projection
+2026-10-14T02:55:19.1301270Z   ---
+2026-10-14T02:55:19.1301464Z   duration_ms: 2.346217
+2026-10-14T02:55:19.1301670Z   ...
+2026-10-14T02:55:19.1302042Z # Subtest: equal cutoff is included and valid_to equal cutoff is expired
+2026-10-14T02:55:19.1302582Z ok 81 - equal cutoff is included and valid_to equal cutoff is expired
+2026-10-14T02:55:19.1302928Z   ---
+2026-10-14T02:55:19.1303107Z   duration_ms: 1.465706
+2026-10-14T02:55:19.1303311Z   ...
+2026-10-14T02:55:19.1303680Z # Subtest: invalid collected_at is explicitly rejected, not a chosen head
+2026-10-14T02:55:19.1304222Z ok 82 - invalid collected_at is explicitly rejected, not a chosen head
+2026-10-14T02:55:19.1304570Z   ---
+2026-10-14T02:55:19.1304749Z   duration_ms: 1.160696
+2026-10-14T02:55:19.1304939Z   ...
+2026-10-14T02:55:19.1305284Z # Subtest: invalid recorded_at is explicitly rejected, not a chosen head
+2026-10-14T02:55:19.1306798Z ok 83 - invalid recorded_at is explicitly rejected, not a chosen head
+2026-10-14T02:55:19.1307411Z   ---
+2026-10-14T02:55:19.1307650Z   duration_ms: 1.161336
+2026-10-14T02:55:19.1307850Z   ...
+2026-10-14T02:55:19.1308258Z # Subtest: partial page with lower local count cannot match previously counted packet
+2026-10-14T02:55:19.1308854Z ok 84 - partial page with lower local count cannot match previously counted packet
+2026-10-14T02:55:19.1309210Z   ---
+2026-10-14T02:55:19.1309385Z   duration_ms: 0.465819
+2026-10-14T02:55:19.1309570Z   ...
+2026-10-14T02:55:19.1309971Z # Subtest: recomputation keeps supplied source clocks, does not substitute snapshot time
+2026-10-14T02:55:19.1310585Z ok 85 - recomputation keeps supplied source clocks, does not substitute snapshot time
+2026-10-14T02:55:19.1310955Z   ---
+2026-10-14T02:55:19.1311120Z   duration_ms: 1.373022
+2026-10-14T02:55:19.1311306Z   ...
+2026-10-14T02:55:19.1312080Z # Subtest: root section row count/manifest page membership must agree
+2026-10-14T02:55:19.1312702Z ok 86 - root section row count/manifest page membership must agree
+2026-10-14T02:55:19.1313018Z   ---
+2026-10-14T02:55:19.1313205Z   duration_ms: 1.056491
+2026-10-14T02:55:19.1313433Z   ...
+2026-10-14T02:55:19.1313769Z # Subtest: no URL or family/hash changes create root or creator proof
+2026-10-14T02:55:19.1314246Z ok 87 - no URL or family/hash changes create root or creator proof
+2026-10-14T02:55:19.1314545Z   ---
+2026-10-14T02:55:19.1314716Z   duration_ms: 0.805643
+2026-10-14T02:55:19.1314908Z   ...
+2026-10-14T02:55:19.1315295Z # Subtest: publisher class is the existing enum, not an invented news authority
+2026-10-14T02:55:19.1315840Z ok 88 - publisher class is the existing enum, not an invented news authority
+2026-10-14T02:55:19.1316443Z   ---
+2026-10-14T02:55:19.1316617Z   duration_ms: 0.719602
+2026-10-14T02:55:19.1316829Z   ...
+2026-10-14T02:55:19.1317225Z # Subtest: public_research institution required by original authority schema
+2026-10-14T02:55:19.1317801Z ok 89 - public_research institution required by original authority schema
+2026-10-14T02:55:19.1318157Z   ---
+2026-10-14T02:55:19.1318326Z   duration_ms: 0.719212
+2026-10-14T02:55:19.1318530Z   ...
+2026-10-14T02:55:19.1318947Z # Subtest: unbounded strings and depth fail before projection, no truncation success
+2026-10-14T02:55:19.1319565Z ok 90 - unbounded strings and depth fail before projection, no truncation success
+2026-10-14T02:55:19.1319934Z   ---
+2026-10-14T02:55:19.1320118Z   duration_ms: 34.128749
+2026-10-14T02:55:19.1320314Z   ...
+2026-10-14T02:55:19.1320694Z # Subtest: future same-UUID collected_at cannot poison known family/identity
+2026-10-14T02:55:19.1321222Z ok 91 - future same-UUID collected_at cannot poison known family/identity
+2026-10-14T02:55:19.1321586Z   ---
+2026-10-14T02:55:19.1321752Z   duration_ms: 1.740638
+2026-10-14T02:55:19.1321953Z   ...
+2026-10-14T02:55:19.1322317Z # Subtest: future same-UUID recorded_at cannot poison known family/identity
+2026-10-14T02:55:19.1322859Z ok 92 - future same-UUID recorded_at cannot poison known family/identity
+2026-10-14T02:55:19.1323202Z   ---
+2026-10-14T02:55:19.1323394Z   duration_ms: 1.562085
+2026-10-14T02:55:19.1323596Z   ...
+2026-10-14T02:55:19.1324030Z # Subtest: manifest full retained publisher head population, not merely one matching row
+2026-10-14T02:55:19.1324692Z ok 93 - manifest full retained publisher head population, not merely one matching row
+2026-10-14T02:55:19.1325074Z   ---
+2026-10-14T02:55:19.1325246Z   duration_ms: 1.58644
+2026-10-14T02:55:19.1325456Z   ...
+2026-10-14T02:55:19.1325846Z # Subtest: known latest head cutoff+1us blocks older complete family, both orders
+2026-10-14T02:55:19.1326705Z ok 94 - known latest head cutoff+1us blocks older complete family, both orders
+2026-10-14T02:55:19.1327089Z   ---
+2026-10-14T02:55:19.1327271Z   duration_ms: 1.586109
+2026-10-14T02:55:19.1327458Z   ...
+2026-10-14T02:55:19.1327902Z # Subtest: known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+2026-10-14T02:55:19.1328591Z ok 95 - known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+2026-10-14T02:55:19.1329137Z   ---
+2026-10-14T02:55:19.1329323Z   duration_ms: 1.434246
+2026-10-14T02:55:19.1329527Z   ...
+2026-10-14T02:55:19.1330024Z # Subtest: known latest head before-cutoff-after-collection blocks older complete family, both orders
+2026-10-14T02:55:19.1330770Z ok 96 - known latest head before-cutoff-after-collection blocks older complete family, both orders
+2026-10-14T02:55:19.1331200Z   ---
+2026-10-14T02:55:19.1331373Z   duration_ms: 1.519265
+2026-10-14T02:55:19.1331559Z   ...
+2026-10-14T02:55:19.1332085Z # Subtest: known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+2026-10-14T02:55:19.1332893Z ok 97 - known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+2026-10-14T02:55:19.1333341Z   ---
+2026-10-14T02:55:19.1333525Z   duration_ms: 1.355028
+2026-10-14T02:55:19.1333716Z   ...
+2026-10-14T02:55:19.1334209Z # Subtest: known latest head invalid-clock blocks older complete family, both orders
+2026-10-14T02:55:19.1334853Z ok 98 - known latest head invalid-clock blocks older complete family, both orders
+2026-10-14T02:55:19.1335236Z   ---
+2026-10-14T02:55:19.1335427Z   duration_ms: 2.155982
+2026-10-14T02:55:19.1335629Z   ...
+2026-10-14T02:55:19.1336198Z # Subtest: known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+2026-10-14T02:55:19.1336905Z ok 99 - known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+2026-10-14T02:55:19.1337309Z   ---
+2026-10-14T02:55:19.1337504Z   duration_ms: 2.258143
+2026-10-14T02:55:19.1337706Z   ...
+2026-10-14T02:55:19.1338170Z # Subtest: known latest head with published null is allowed when verification also preserves null
+2026-10-14T02:55:19.1338897Z ok 100 - known latest head with published null is allowed when verification also preserves null
+2026-10-14T02:55:19.1339316Z   ---
+2026-10-14T02:55:19.1339503Z   duration_ms: 2.019647
+2026-10-14T02:55:19.1339706Z   ...
+2026-10-14T02:55:19.1340137Z # Subtest: known legal head at publication=collection remains usable with all microseconds
+2026-10-14T02:55:19.1340808Z ok 101 - known legal head at publication=collection remains usable with all microseconds
+2026-10-14T02:55:19.1341218Z   ---
+2026-10-14T02:55:19.1341386Z   duration_ms: 1.893352
+2026-10-14T02:55:19.1341590Z   ...
+2026-10-14T02:55:19.1342133Z # Subtest: truly future collected_at with invalid publication remains unknown without UUID poisoning
+2026-10-14T02:55:19.1342940Z ok 102 - truly future collected_at with invalid publication remains unknown without UUID poisoning
+2026-10-14T02:55:19.1343477Z   ---
+2026-10-14T02:55:19.1343706Z   duration_ms: 2.74984
+2026-10-14T02:55:19.1343976Z   ...
+2026-10-14T02:55:19.1344548Z # Subtest: truly future recorded_at with invalid publication remains unknown without UUID poisoning
+2026-10-14T02:55:19.1345533Z ok 103 - truly future recorded_at with invalid publication remains unknown without UUID poisoning
+2026-10-14T02:55:19.1346130Z   ---
+2026-10-14T02:55:19.1346346Z   duration_ms: 1.585929
+2026-10-14T02:55:19.1346550Z   ...
+2026-10-14T02:55:19.1347080Z # Subtest: single known head with malformed publication is blocked with explicit family disposition
+2026-10-14T02:55:19.1347882Z ok 104 - single known head with malformed publication is blocked with explicit family disposition
+2026-10-14T02:55:19.1348363Z   ---
+2026-10-14T02:55:19.1348562Z   duration_ms: 1.326896
+2026-10-14T02:55:19.1348765Z   ...
+2026-10-14T02:55:19.2136793Z # (node:2521) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-14T02:55:19.2154965Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-14T02:55:19.2469099Z # (node:2521) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/live-discovery-evidence-adapter.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-14T02:55:19.2497269Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-14T02:55:19.2519663Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-14T02:55:19.6722017Z # Subtest: real retained provenance maps scoped row identity, never URL/hash/publisher authority
+2026-10-14T02:55:19.6723498Z ok 105 - real retained provenance maps scoped row identity, never URL/hash/publisher authority
+2026-10-14T02:55:19.6737165Z   ---
+2026-10-14T02:55:19.6737714Z   duration_ms: 2.788923
+2026-10-14T02:55:19.6738393Z   ...
+2026-10-14T02:55:19.6739687Z # Subtest: 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+2026-10-14T02:55:19.6757079Z ok 106 - 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+2026-10-14T02:55:19.6757719Z   ---
+2026-10-14T02:55:19.6758044Z   duration_ms: 3.915635
+2026-10-14T02:55:19.6758720Z   ...
+2026-10-14T02:55:19.6759306Z # Subtest: authors are counted once within one conversation, never pooled across posts
+2026-10-14T02:55:19.6760083Z ok 107 - authors are counted once within one conversation, never pooled across posts
+2026-10-14T02:55:19.6760590Z   ---
+2026-10-14T02:55:19.6760903Z   duration_ms: 1.925872
+2026-10-14T02:55:19.6761229Z   ...
+2026-10-14T02:55:19.6761889Z # Subtest: non-explicit reply 👍👍👍 does not count
+2026-10-14T02:55:19.6762462Z ok 108 - non-explicit reply 👍👍👍 does not count
+2026-10-14T02:55:19.6762875Z   ---
+2026-10-14T02:55:19.6763188Z   duration_ms: 0.27342
+2026-10-14T02:55:19.6763512Z   ...
+2026-10-14T02:55:19.6763942Z # Subtest: non-explicit reply 推 does not count
+2026-10-14T02:55:19.6764473Z ok 109 - non-explicit reply 推 does not count
+2026-10-14T02:55:19.6764874Z   ---
+2026-10-14T02:55:19.6765177Z   duration_ms: 0.265706
+2026-10-14T02:55:19.6765497Z   ...
+2026-10-14T02:55:19.6765939Z # Subtest: non-explicit reply 台積電 does not count
+2026-10-14T02:55:19.6826999Z ok 110 - non-explicit reply 台積電 does not count
+2026-10-14T02:55:19.6856629Z   ---
+2026-10-14T02:55:19.6886808Z   duration_ms: 0.286584
+2026-10-14T02:55:19.6903082Z   ...
+2026-10-14T02:55:19.6903633Z # Subtest: non-explicit reply 12409 does not count
+2026-10-14T02:55:19.6904324Z ok 111 - non-explicit reply 12409 does not count
+2026-10-14T02:55:19.6904797Z   ---
+2026-10-14T02:55:19.6905115Z   duration_ms: 0.201185
+2026-10-14T02:55:19.6936258Z   ...
+2026-10-14T02:55:19.6936821Z # Subtest: non-explicit reply a2409 does not count
+2026-10-14T02:55:19.6937575Z ok 112 - non-explicit reply a2409 does not count
+2026-10-14T02:55:19.6938056Z   ---
+2026-10-14T02:55:19.6938366Z   duration_ms: 0.232894
+2026-10-14T02:55:19.6938710Z   ...
+2026-10-14T02:55:19.6939170Z # Subtest: non-explicit reply 2409x does not count
+2026-10-14T02:55:19.6939892Z ok 113 - non-explicit reply 2409x does not count
+2026-10-14T02:55:19.6940363Z   ---
+2026-10-14T02:55:19.6940658Z   duration_ms: 0.503539
+2026-10-14T02:55:19.6940986Z   ...
+2026-10-14T02:55:19.6941706Z # Subtest: hash mismatch, missing author/parent/index and read failure do not count
+2026-10-14T02:55:19.6942775Z ok 114 - hash mismatch, missing author/parent/index and read failure do not count
+2026-10-14T02:55:19.6943406Z   ---
+2026-10-14T02:55:19.6943717Z   duration_ms: 1.320484
+2026-10-14T02:55:19.6944053Z   ...
+2026-10-14T02:55:19.6944943Z # Subtest: withheld/retracted mention never becomes active evidence; missing root heads block all admission
+2026-10-14T02:55:19.6946621Z ok 115 - withheld/retracted mention never becomes active evidence; missing root heads block all admission
+2026-10-14T02:55:19.6947446Z   ---
+2026-10-14T02:55:19.6947766Z   duration_ms: 0.33226
+2026-10-14T02:55:19.6948107Z   ...
+2026-10-14T02:55:19.6948994Z # Subtest: cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+2026-10-14T02:55:19.6950364Z ok 116 - cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+2026-10-14T02:55:19.6951174Z   ---
+2026-10-14T02:55:19.6951481Z   duration_ms: 0.212396
+2026-10-14T02:55:19.6952117Z   ...
+2026-10-14T02:55:19.6952921Z # Subtest: backdated availability cannot admit a newly received row into an older observation
+2026-10-14T02:55:19.6954125Z ok 117 - backdated availability cannot admit a newly received row into an older observation
+2026-10-14T02:55:19.6954853Z   ---
+2026-10-14T02:55:19.6955169Z   duration_ms: 0.164908
+2026-10-14T02:55:19.6955509Z   ...
+2026-10-14T02:55:19.6956566Z # Subtest: same instant offset notation, exact date validation and invalid clocks
+2026-10-14T02:55:19.6957634Z ok 118 - same instant offset notation, exact date validation and invalid clocks
+2026-10-14T02:55:19.6958266Z   ---
+2026-10-14T02:55:19.6958576Z   duration_ms: 0.688564
+2026-10-14T02:55:19.6958917Z   ...
+2026-10-14T02:55:19.6959701Z # Subtest: stable accounting retains duplicates, foreign stock and incomplete window as gaps
+2026-10-14T02:55:19.6961148Z ok 119 - stable accounting retains duplicates, foreign stock and incomplete window as gaps
+2026-10-14T02:55:19.6961926Z   ---
+2026-10-14T02:55:19.6962255Z   duration_ms: 0.207006
+2026-10-14T02:55:19.6962612Z   ...
+2026-10-14T02:55:19.6963313Z # Subtest: bound exhaustion reports unexamined rows, never truncation-success
+2026-10-14T02:55:19.6964377Z ok 120 - bound exhaustion reports unexamined rows, never truncation-success
+2026-10-14T02:55:19.6965042Z   ---
+2026-10-14T02:55:19.6965368Z   duration_ms: 0.372855
+2026-10-14T02:55:19.6965724Z   ...
+2026-10-14T02:55:19.6966846Z # Subtest: untrusted getters, prototype and object index cannot execute or acquire authority
+2026-10-14T02:55:19.6968146Z ok 121 - untrusted getters, prototype and object index cannot execute or acquire authority
+2026-10-14T02:55:19.6968880Z   ---
+2026-10-14T02:55:19.6969200Z   duration_ms: 0.303206
+2026-10-14T02:55:19.6969546Z   ...
+2026-10-14T02:55:19.6970390Z # Subtest: server real initializer audits complete pre-link rows rather than eight display sources
+2026-10-14T02:55:19.6971707Z ok 122 - server real initializer audits complete pre-link rows rather than eight display sources
+2026-10-14T02:55:19.6972345Z   ---
+2026-10-14T02:55:19.6972541Z   duration_ms: 326.105526
+2026-10-14T02:55:19.6972763Z   ...
+2026-10-14T02:55:19.6973181Z # Subtest: missing or mismatched row URL cannot borrow retained document provenance
+2026-10-14T02:55:19.6973810Z ok 123 - missing or mismatched row URL cannot borrow retained document provenance
+2026-10-14T02:55:19.6974191Z   ---
+2026-10-14T02:55:19.6974374Z   duration_ms: 0.510182
+2026-10-14T02:55:19.6974575Z   ...
+2026-10-14T02:55:19.6975092Z # Subtest: two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders
+2026-10-14T02:55:19.6975886Z ok 124 - two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders
+2026-10-14T02:55:19.6976739Z   ---
+2026-10-14T02:55:19.6977060Z   duration_ms: 0.387784
+2026-10-14T02:55:19.6977457Z   ...
+2026-10-14T02:55:19.6978311Z # Subtest: conflicting text and correct hashes invalidate the whole key in both orders
+2026-10-14T02:55:19.6979587Z ok 125 - conflicting text and correct hashes invalidate the whole key in both orders
+2026-10-14T02:55:19.6980344Z   ---
+2026-10-14T02:55:19.6980669Z   duration_ms: 0.400116
+2026-10-14T02:55:19.6981029Z   ...
+2026-10-14T02:55:19.6981870Z # Subtest: exact comment replay across UUIDs counts once, same author across keys still once
+2026-10-14T02:55:19.6983181Z ok 126 - exact comment replay across UUIDs counts once, same author across keys still once
+2026-10-14T02:55:19.6983981Z   ---
+2026-10-14T02:55:19.6984326Z   duration_ms: 0.328142
+2026-10-14T02:55:19.6984713Z   ...
+2026-10-14T02:55:19.6985540Z # Subtest: twenty authors containing one conflicting comment cannot be counted as twenty
+2026-10-14T02:55:19.6987082Z ok 127 - twenty authors containing one conflicting comment cannot be counted as twenty
+2026-10-14T02:55:19.6987878Z   ---
+2026-10-14T02:55:19.6988230Z   duration_ms: 2.564303
+2026-10-14T02:55:19.6988625Z   ...
+2026-10-14T02:55:19.6989279Z # Subtest: same-row UUID conflict cannot hide behind row dedup
+2026-10-14T02:55:19.6990463Z ok 128 - same-row UUID conflict cannot hide behind row dedup
+2026-10-14T02:55:19.6991058Z   ---
+2026-10-14T02:55:19.6991414Z   duration_ms: 0.365262
+2026-10-14T02:55:19.6991798Z   ...
+2026-10-14T02:55:19.6992602Z # Subtest: actual page reader capped at100/request750 cannot prove total200 exhaustion
+2026-10-14T02:55:19.6993828Z ok 129 - actual page reader capped at100/request750 cannot prove total200 exhaustion
+2026-10-14T02:55:19.6994574Z   ---
+2026-10-14T02:55:19.6994925Z   duration_ms: 2.494865
+2026-10-14T02:55:19.6995321Z   ...
+2026-10-14T02:55:19.6996503Z # Subtest: available_at future1us sameUUID changed-author first cannot affect known evidence
+2026-10-14T02:55:19.6997895Z ok 130 - available_at future1us sameUUID changed-author first cannot affect known evidence
+2026-10-14T02:55:19.6998625Z   ---
+2026-10-14T02:55:19.6998975Z   duration_ms: 0.957075
+2026-10-14T02:55:19.6999216Z   ...
+2026-10-14T02:55:19.6999945Z # Subtest: available_at future1us sameUUID changed-author last cannot affect known evidence
+2026-10-14T02:55:19.7000727Z ok 131 - available_at future1us sameUUID changed-author last cannot affect known evidence
+2026-10-14T02:55:19.7001189Z   ---
+2026-10-14T02:55:19.7001381Z   duration_ms: 0.462813
+2026-10-14T02:55:19.7001617Z   ...
+2026-10-14T02:55:19.7002112Z # Subtest: available_at future1us sameUUID changed-index first cannot affect known evidence
+2026-10-14T02:55:19.7002873Z ok 132 - available_at future1us sameUUID changed-index first cannot affect known evidence
+2026-10-14T02:55:19.7003326Z   ---
+2026-10-14T02:55:19.7003528Z   duration_ms: 0.342449
+2026-10-14T02:55:19.7003756Z   ...
+2026-10-14T02:55:19.7004210Z # Subtest: available_at future1us sameUUID changed-index last cannot affect known evidence
+2026-10-14T02:55:19.7004944Z ok 133 - available_at future1us sameUUID changed-index last cannot affect known evidence
+2026-10-14T02:55:19.7005390Z   ---
+2026-10-14T02:55:19.7005599Z   duration_ms: 0.310589
+2026-10-14T02:55:19.7005824Z   ...
+2026-10-14T02:55:19.7006502Z # Subtest: created_at future1us sameUUID changed-author first cannot affect known evidence
+2026-10-14T02:55:19.7007232Z ok 134 - created_at future1us sameUUID changed-author first cannot affect known evidence
+2026-10-14T02:55:19.7007679Z   ---
+2026-10-14T02:55:19.7007861Z   duration_ms: 0.334494
+2026-10-14T02:55:19.7008078Z   ...
+2026-10-14T02:55:19.7008544Z # Subtest: created_at future1us sameUUID changed-author last cannot affect known evidence
+2026-10-14T02:55:19.7009257Z ok 135 - created_at future1us sameUUID changed-author last cannot affect known evidence
+2026-10-14T02:55:19.7009679Z   ---
+2026-10-14T02:55:19.7009877Z   duration_ms: 0.351205
+2026-10-14T02:55:19.7010091Z   ...
+2026-10-14T02:55:19.7010541Z # Subtest: created_at future1us sameUUID changed-index first cannot affect known evidence
+2026-10-14T02:55:19.7011258Z ok 136 - created_at future1us sameUUID changed-index first cannot affect known evidence
+2026-10-14T02:55:19.7011685Z   ---
+2026-10-14T02:55:19.7011865Z   duration_ms: 0.314757
+2026-10-14T02:55:19.7012082Z   ...
+2026-10-14T02:55:19.7012545Z # Subtest: created_at future1us sameUUID changed-index last cannot affect known evidence
+2026-10-14T02:55:19.7013254Z ok 137 - created_at future1us sameUUID changed-index last cannot affect known evidence
+2026-10-14T02:55:19.7013671Z   ---
+2026-10-14T02:55:19.7013866Z   duration_ms: 0.278319
+2026-10-14T02:55:19.7014085Z   ...
+2026-10-14T02:55:19.7014514Z # Subtest: as_of future1us sameUUID changed-author first cannot affect known evidence
+2026-10-14T02:55:19.7015202Z ok 138 - as_of future1us sameUUID changed-author first cannot affect known evidence
+2026-10-14T02:55:19.7015625Z   ---
+2026-10-14T02:55:19.7015805Z   duration_ms: 0.293928
+2026-10-14T02:55:19.7016170Z   ...
+2026-10-14T02:55:19.7016631Z # Subtest: as_of future1us sameUUID changed-author last cannot affect known evidence
+2026-10-14T02:55:19.7017328Z ok 139 - as_of future1us sameUUID changed-author last cannot affect known evidence
+2026-10-14T02:55:19.7017737Z   ---
+2026-10-14T02:55:19.7018082Z   duration_ms: 0.31069
+2026-10-14T02:55:19.7018325Z   ...
+2026-10-14T02:55:19.7018762Z # Subtest: as_of future1us sameUUID changed-index first cannot affect known evidence
+2026-10-14T02:55:19.7019424Z ok 140 - as_of future1us sameUUID changed-index first cannot affect known evidence
+2026-10-14T02:55:19.7019836Z   ---
+2026-10-14T02:55:19.7020035Z   duration_ms: 0.266217
+2026-10-14T02:55:19.7020260Z   ...
+2026-10-14T02:55:19.7020703Z # Subtest: as_of future1us sameUUID changed-index last cannot affect known evidence
+2026-10-14T02:55:19.7021390Z ok 141 - as_of future1us sameUUID changed-index last cannot affect known evidence
+2026-10-14T02:55:19.7021808Z   ---
+2026-10-14T02:55:19.7022007Z   duration_ms: 0.258532
+2026-10-14T02:55:19.7022209Z   ...
+2026-10-14T02:55:19.7022671Z # Subtest: mentioned_at future1us sameUUID changed-author first cannot affect known evidence
+2026-10-14T02:55:19.7023555Z ok 142 - mentioned_at future1us sameUUID changed-author first cannot affect known evidence
+2026-10-14T02:55:19.7024001Z   ---
+2026-10-14T02:55:19.7024182Z   duration_ms: 0.290782
+2026-10-14T02:55:19.7024379Z   ...
+2026-10-14T02:55:19.7024845Z # Subtest: mentioned_at future1us sameUUID changed-author last cannot affect known evidence
+2026-10-14T02:55:19.7025557Z ok 143 - mentioned_at future1us sameUUID changed-author last cannot affect known evidence
+2026-10-14T02:55:19.7026084Z   ---
+2026-10-14T02:55:19.7026303Z   duration_ms: 0.268851
+2026-10-14T02:55:19.7026512Z   ...
+2026-10-14T02:55:19.7026957Z # Subtest: mentioned_at future1us sameUUID changed-index first cannot affect known evidence
+2026-10-14T02:55:19.7027692Z ok 144 - mentioned_at future1us sameUUID changed-index first cannot affect known evidence
+2026-10-14T02:55:19.7028154Z   ---
+2026-10-14T02:55:19.7028340Z   duration_ms: 0.25718
+2026-10-14T02:55:19.7028565Z   ...
+2026-10-14T02:55:19.7029044Z # Subtest: mentioned_at future1us sameUUID changed-index last cannot affect known evidence
+2026-10-14T02:55:19.7029781Z ok 145 - mentioned_at future1us sameUUID changed-index last cannot affect known evidence
+2026-10-14T02:55:19.7030229Z   ---
+2026-10-14T02:55:19.7030435Z   duration_ms: 0.260255
+2026-10-14T02:55:19.7030654Z   ...
+2026-10-14T02:55:19.7031063Z # Subtest: available_at future differentUUID first cannot affect known comment
+2026-10-14T02:55:19.7031700Z ok 146 - available_at future differentUUID first cannot affect known comment
+2026-10-14T02:55:19.7032100Z   ---
+2026-10-14T02:55:19.7032279Z   duration_ms: 0.30575
+2026-10-14T02:55:19.7032503Z   ...
+2026-10-14T02:55:19.7032893Z # Subtest: available_at invalid sameUUID first cannot steal known UUID
+2026-10-14T02:55:19.7033489Z ok 147 - available_at invalid sameUUID first cannot steal known UUID
+2026-10-14T02:55:19.7033853Z   ---
+2026-10-14T02:55:19.7034054Z   duration_ms: 0.288999
+2026-10-14T02:55:19.7034275Z   ...
+2026-10-14T02:55:19.7034706Z # Subtest: available_at future differentUUID last cannot affect known comment
+2026-10-14T02:55:19.7035332Z ok 148 - available_at future differentUUID last cannot affect known comment
+2026-10-14T02:55:19.7035733Z   ---
+2026-10-14T02:55:19.7035915Z   duration_ms: 0.315278
+2026-10-14T02:55:19.7036239Z   ...
+2026-10-14T02:55:19.7036632Z # Subtest: available_at invalid sameUUID last cannot steal known UUID
+2026-10-14T02:55:19.7037189Z ok 149 - available_at invalid sameUUID last cannot steal known UUID
+2026-10-14T02:55:19.7037556Z   ---
+2026-10-14T02:55:19.7037752Z   duration_ms: 0.437836
+2026-10-14T02:55:19.7037968Z   ...
+2026-10-14T02:55:19.7038362Z # Subtest: created_at future differentUUID first cannot affect known comment
+2026-10-14T02:55:19.7038982Z ok 150 - created_at future differentUUID first cannot affect known comment
+2026-10-14T02:55:19.7039415Z   ---
+2026-10-14T02:55:19.7039615Z   duration_ms: 0.297646
+2026-10-14T02:55:19.7039816Z   ...
+2026-10-14T02:55:19.7040195Z # Subtest: created_at invalid sameUUID first cannot steal known UUID
+2026-10-14T02:55:19.7040733Z ok 151 - created_at invalid sameUUID first cannot steal known UUID
+2026-10-14T02:55:19.7041099Z   ---
+2026-10-14T02:55:19.7041453Z   duration_ms: 0.343951
+2026-10-14T02:55:19.7041673Z   ...
+2026-10-14T02:55:19.7042059Z # Subtest: created_at future differentUUID last cannot affect known comment
+2026-10-14T02:55:19.7042663Z ok 152 - created_at future differentUUID last cannot affect known comment
+2026-10-14T02:55:19.7043053Z   ---
+2026-10-14T02:55:19.7043252Z   duration_ms: 0.294309
+2026-10-14T02:55:19.7043473Z   ...
+2026-10-14T02:55:19.7043803Z # Subtest: created_at invalid sameUUID last cannot steal known UUID
+2026-10-14T02:55:19.7044306Z ok 153 - created_at invalid sameUUID last cannot steal known UUID
+2026-10-14T02:55:19.7044629Z   ---
+2026-10-14T02:55:19.7044825Z   duration_ms: 0.286264
+2026-10-14T02:55:19.7045019Z   ...
+2026-10-14T02:55:19.7045374Z # Subtest: as_of future differentUUID first cannot affect known comment
+2026-10-14T02:55:19.7046399Z ok 154 - as_of future differentUUID first cannot affect known comment
+2026-10-14T02:55:19.7047012Z   ---
+2026-10-14T02:55:19.7047592Z   duration_ms: 0.296403
+2026-10-14T02:55:19.7048044Z   ...
+2026-10-14T02:55:19.7048696Z # Subtest: as_of invalid sameUUID first cannot steal known UUID
+2026-10-14T02:55:19.7049480Z ok 155 - as_of invalid sameUUID first cannot steal known UUID
+2026-10-14T02:55:19.7049872Z   ---
+2026-10-14T02:55:19.7050158Z   duration_ms: 0.259244
+2026-10-14T02:55:19.7050573Z   ...
+2026-10-14T02:55:19.7051279Z # Subtest: as_of future differentUUID last cannot affect known comment
+2026-10-14T02:55:19.7052099Z ok 156 - as_of future differentUUID last cannot affect known comment
+2026-10-14T02:55:19.7052669Z   ---
+2026-10-14T02:55:19.7052949Z   duration_ms: 0.2629
+2026-10-14T02:55:19.7053259Z   ...
+2026-10-14T02:55:19.7053801Z # Subtest: as_of invalid sameUUID last cannot steal known UUID
+2026-10-14T02:55:19.7054502Z ok 157 - as_of invalid sameUUID last cannot steal known UUID
+2026-10-14T02:55:19.7055009Z   ---
+2026-10-14T02:55:19.7055303Z   duration_ms: 0.255677
+2026-10-14T02:55:19.7055604Z   ...
+2026-10-14T02:55:19.7056683Z # Subtest: mentioned_at future differentUUID first cannot affect known comment
+2026-10-14T02:55:19.7057713Z ok 158 - mentioned_at future differentUUID first cannot affect known comment
+2026-10-14T02:55:19.7058210Z   ---
+2026-10-14T02:55:19.7058403Z   duration_ms: 2.080951
+2026-10-14T02:55:19.7058729Z   ...
+2026-10-14T02:55:19.7059358Z # Subtest: mentioned_at invalid sameUUID first cannot steal known UUID
+2026-10-14T02:55:19.7060280Z ok 159 - mentioned_at invalid sameUUID first cannot steal known UUID
+2026-10-14T02:55:19.7060873Z   ---
+2026-10-14T02:55:19.7061185Z   duration_ms: 0.268832
+2026-10-14T02:55:19.7061521Z   ...
+2026-10-14T02:55:19.7062170Z # Subtest: mentioned_at future differentUUID last cannot affect known comment
+2026-10-14T02:55:19.7063148Z ok 160 - mentioned_at future differentUUID last cannot affect known comment
+2026-10-14T02:55:19.7063752Z   ---
+2026-10-14T02:55:19.7064031Z   duration_ms: 0.254134
+2026-10-14T02:55:19.7064344Z   ...
+2026-10-14T02:55:19.7064935Z # Subtest: mentioned_at invalid sameUUID last cannot steal known UUID
+2026-10-14T02:55:19.7065802Z ok 161 - mentioned_at invalid sameUUID last cannot steal known UUID
+2026-10-14T02:55:19.7066549Z   ---
+2026-10-14T02:55:19.7066837Z   duration_ms: 0.239036
+2026-10-14T02:55:19.7067162Z   ...
+2026-10-14T02:55:19.7067867Z # Subtest: a future-only UUID must not mark a later known row with that UUID as duplicate
+2026-10-14T02:55:19.7068951Z ok 162 - a future-only UUID must not mark a later known row with that UUID as duplicate
+2026-10-14T02:55:19.7069609Z   ---
+2026-10-14T02:55:19.7069896Z   duration_ms: 0.567909
+2026-10-14T02:55:19.7070216Z   ...
+2026-10-14T02:55:19.7070989Z # Subtest: in-cutoff sameUUID different comment keys invalidate the whole UUID in both orders
+2026-10-14T02:55:19.7072185Z ok 163 - in-cutoff sameUUID different comment keys invalidate the whole UUID in both orders
+2026-10-14T02:55:19.7072895Z   ---
+2026-10-14T02:55:19.7073184Z   duration_ms: 0.344843
+2026-10-14T02:55:19.7073502Z   ...
+2026-10-14T02:55:19.7074305Z # Subtest: sameUUID exact comment/content replay cannot add an author from its excluded duplicate
+2026-10-14T02:55:19.7075826Z ok 164 - sameUUID exact comment/content replay cannot add an author from its excluded duplicate
+2026-10-14T02:55:19.7076784Z   ---
+2026-10-14T02:55:19.7077095Z   duration_ms: 0.257811
+2026-10-14T02:55:19.7077436Z   ...
+2026-10-14T02:55:19.7110171Z 1..164
+2026-10-14T02:55:19.7110501Z # tests 164
+2026-10-14T02:55:19.7126734Z # suites 0
+2026-10-14T02:55:19.7135895Z # pass 164
+2026-10-14T02:55:19.7146765Z # fail 0
+2026-10-14T02:55:19.7147570Z # cancelled 0
+2026-10-14T02:55:19.7148191Z # skipped 0
+2026-10-14T02:55:19.7148855Z # todo 0
+2026-10-14T02:55:19.7149263Z # duration_ms 22262.104893
+2026-10-14T02:55:19.7306603Z Post job cleanup.
+2026-10-14T02:55:19.8451849Z (node:2532) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T02:55:19.8452614Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T02:55:19.8655613Z Post job cleanup.
+2026-10-14T02:55:19.9491747Z [command]/usr/bin/git version
+2026-10-14T02:55:19.9532741Z git version 2.55.0
+2026-10-14T02:55:19.9575273Z Temporarily overriding HOME='/home/runner/work/_temp/e673e4c1-6e95-4354-ab7d-4e25865bb8f9' before making global git config changes
+2026-10-14T02:55:19.9577117Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T02:55:19.9581785Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T02:55:19.9620398Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T02:55:19.9654716Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T02:55:19.9909889Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T02:55:19.9944591Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T02:55:20.0191388Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T02:55:20.0228789Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T02:55:20.0618061Z Cleaning up orphan processes
+2026-10-14T02:55:20.0893625Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

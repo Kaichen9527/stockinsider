@@ -1,0 +1,11 @@
+請接一件與你剛才官方補件失敗直接相關的唯讀獨立 code review，最長20分鐘；沿用人類已授權跨聊天修復/審查。不是重跑本日補件，不呼叫任何VPS/HTTP/DB、不改source或正式lease/identity、不取得憑證、不上傳文件或造facts。你前一輪已終態，Root先compact確認未載入且latestTurn completed才送本件。
+
+Root已定位：正式169與main3e的candidate-financial-documents upload/worker沒有acquireProductionWriteLease，而Contabo register_private_artifact_receipt_v1呼叫assert_stockinsider_backend_request_v1(true)要求production-data-plane lease；same-release writer activation不取得lease。這是待你驗證的假說，不是要求批准。
+
+請獨立讀GitHub PR378 https://github.com/Kaichen9527/stockinsider/pull/378 ，exacthead18b1fba4c7fa89108cbf8892a0a7205860989995/base3e1be377de3f6cac58f6de1626e8df994b9df146。Root assembly只逐byte抽oldmaker3953e7c00c1e58055c5b9bdd9cf02c27b13464d6的兩route+既有8route tests，加小ordinaryworkflow/handoff共5檔；沒有整PR303/364merge或改SQL/helper/roles/pins/protected。你是本次獨立檢查者，不是此修補作者。不要依Root自評或歷史PASS代替實讀。
+
+讀原SQL/backend/assert/acquire/release、原artifact/worker dependencies與diff，驗auth/writer/body/domain前置、busy/throw不寫、artifact/receipt/joblink在ownlease、workerpartial/rejected處理、GETreadonly、finally自有owner清理、未暗加globalrecovery/bypass、TTL/false-release/多重失敗診斷風險與CI coverage。區分新引入問題、既有helper限制、production驗收尚未完成；若有真P0/P1/P2請精確檔行/觸發/反例，不為湊finding猜測，也不要因8tests綠直接批准。
+
+Root原main実跑3PASS5FAIL、exactcopies8PASS；新ordinary38503491252/job115655578815 8PASS；product38503491181/job115655578763新canonical155/PCR31/typeslintnormalbuild/migration/performance/9browserPASS，candidate38503491209/164PASS。這是工程證據，不是production補件或formal article approval。Initialprotected38503491190 missingexactref原FAIL保持，尚未freshref/ready/merge/deploy。請可讀真log但不rerun任何CI。
+
+不要依賴或修改你的本機projectcheckout；可用gh api讀exactGit blobs、或自有新/tmp目錄下載精確檔案跑合適的隔離檢核，不能Macfullbuild。最後給實際review scope、exacthead/base、檔案/blob核對、真正執行的檢核、finding severities及PASS/REQUEST_CHANGES/PENDING，不聲稱受保護簽章、Astra、formal modelreservation或已修復VPS。結果留你chat真終態便可，Root會compact/read取得；不需回訊其他chat或代碼push。
