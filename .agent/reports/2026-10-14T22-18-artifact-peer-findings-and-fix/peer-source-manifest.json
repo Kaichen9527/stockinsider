@@ -1,0 +1,161 @@
+[
+  {
+    "path": ".github/workflows/reviewed-publication-tail-artifact.yml",
+    "blob": "e323559dc551cae4a0dd6ac99814b977b0c0f483",
+    "bytes": 14400,
+    "sha256": "ee3d0a02d0d0a6964dd3652ba7bae4c701a4b96507b2d40497e8bb1ae0b36d0e"
+  },
+  {
+    "path": "docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md",
+    "blob": "086df587dffbd859b54a6638a4ba5b90548ab972",
+    "bytes": 4965,
+    "sha256": "f0ec6a996875a8741c68c9bdcc181b7d387f232f0815574ab3bc4fb31a953f48"
+  },
+  {
+    "path": ".github/workflows/financial-installation-quality.yml",
+    "blob": "934821e44764d5f2e59a1d58f0daf38b28f9f904",
+    "bytes": 3980,
+    "sha256": "f330d468ee0ec35b6f30c888576eb221fb8e45099a2ac05cc2e9688ae909fff4",
+    "sameAsDd": true
+  },
+  {
+    "path": ".github/workflows/source-led-opportunity-v3.yml",
+    "blob": "c1155632a340bce18664e4b96cec19b87606d6e9",
+    "bytes": 6242,
+    "sha256": "c47a58d5ef45b7806fcc22f25007d3242210de38be140a3b4cc3480ce6418b4b",
+    "sameAsDd": true
+  },
+  {
+    "path": "scripts/runtime/reviewed-runtime-release.js",
+    "blob": "26977929788d365c3e787702f16f754289067fc3",
+    "bytes": 6857,
+    "sha256": "be7467a59df2322804493be740c7344df9e330c37820d655feccf335b6b98c48",
+    "sameAsDd": true
+  },
+  {
+    "path": "scripts/runtime/codec.js",
+    "blob": "1683982f54a10c401cd0f7b521abc073bdb05ea1",
+    "bytes": 2566,
+    "sha256": "c1cd7bc6b391ee88137c792ab6b6b280e2f5ccad77d8e6e815b754d73d76cfbb",
+    "sameAsDd": true
+  },
+  {
+    "path": "scripts/runtime/tracked-runtime-bundle.js",
+    "blob": "5624783657bbb05c48fbbff50b5687f811d7dbfe",
+    "bytes": 5965,
+    "sha256": "c582b3b9760bd47f178af28f41e4077ad280419d4a9cc7b2ef615c4376b899ca",
+    "sameAsDd": true
+  },
+  {
+    "path": "scripts/runtime/auth-source-worker-installation.js",
+    "blob": "a3fa6154e55d1c7fb8584873d064fc4de379d9d6",
+    "bytes": 11543,
+    "sha256": "165739dd256e92a3ffdaf1db34438ab9c88c8fd88b68a3616875ee014a109cb7",
+    "sameAsDd": true
+  },
+  {
+    "path": "scripts/package-standalone-release.mjs",
+    "blob": "9642738b5404b3e9a8cc8691d4787d8e2c49a223",
+    "bytes": 8664,
+    "sha256": "a9ebafd241a6c0d6bb0a82b4e1704790d6220abb3238090b8eed7329474592c8",
+    "sameAsDd": true
+  },
+  {
+    "path": "scripts/verify-standalone-release.mjs",
+    "blob": "6e1d6b2d07125201326fbe783fad0b970890e363",
+    "bytes": 3901,
+    "sha256": "1e4bb10d2ee694eefd0493653a71d54b8d94deade74fa66a86b579b25ebe930b",
+    "sameAsDd": true
+  },
+  {
+    "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+    "blob": "973a36660634e9301716dcdb6b8956325609f7a9",
+    "bytes": 170307,
+    "sha256": "2f597af461622793cd0f917d4e24b1902f9560e8131a2a94caa2b8507cedac6b",
+    "sameAsDd": true
+  },
+  {
+    "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+    "blob": "6bafd20a5816a109670f1933ae52054a169bcd54",
+    "bytes": 74957,
+    "sha256": "9c809a743f0f1aa695dcd13e5c4dffcd016766c58bdbb250ea0e9c60b7357477",
+    "sameAsDd": true
+  },
+  {
+    "path": "scripts/opportunity-v3/migration-contract.test.mjs",
+    "blob": "f394220058bdb1b9d7290c23960d34f33f14bb5c",
+    "bytes": 516977,
+    "sha256": "83953d8acc313b2b109b8ba6d5f4d52d1473a2fcd7223805d3183e8034fd108b",
+    "sameAsDd": true
+  },
+  {
+    "path": "web/playwright.v3-correctness.config.ts",
+    "blob": "d3356392b70cd075ccfbbe5937a992adbd7482ad",
+    "bytes": 1759,
+    "sha256": "e0e44973dd214c634301aeef961b173a3e4d37017b5e45b944ac22962f9d0730",
+    "sameAsDd": true
+  },
+  {
+    "path": "web/playwright.trade-plan.config.ts",
+    "blob": "4dac0eaf47c2be170b887874f5d4ca6eaf3f6290",
+    "bytes": 876,
+    "sha256": "d1687919bd81990d275dca71290b38139460ea63786d269215875215d3fc8f31",
+    "sameAsDd": true
+  },
+  {
+    "path": "web/src/app/api/internal/health-check/route.ts",
+    "blob": "87d7659c5c10a8c244b8cd309bed74d421248632",
+    "bytes": 23945,
+    "sha256": "2b5a6e3e94646e4516c09ef7a6a2b9310fc7300a8d27959f363a2bee1dc3238d",
+    "sameAsDd": true
+  },
+  {
+    "path": "web/src/app/trade-plan-fixture/page.tsx",
+    "blob": "957e8e92ca8f05ae804ebfc409dc8e9f85497aa5",
+    "bytes": 3763,
+    "sha256": "dd91611b707d68568d9f849aeebd6b76e896be431698f27a65c1a4bbb3ab8b8e",
+    "sameAsDd": true
+  },
+  {
+    "path": "web/src/lib/internal-auth.ts",
+    "blob": "0fd74428dd60f0b434babf5d55d19f70bc0534de",
+    "bytes": 1774,
+    "sha256": "71174062e76c7f346a2aeb4fcdc820c36b95eba53feebccc26f10f8177cb8d63",
+    "sameAsDd": true
+  },
+  {
+    "path": "package.json",
+    "blob": "f25f4bebad793fb7eabc03e2320e4472553a0fb9",
+    "bytes": 24733,
+    "sha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc",
+    "sameAsDd": true
+  },
+  {
+    "path": "package-lock.json",
+    "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "sameAsDd": true
+  },
+  {
+    "path": "web/package.json",
+    "blob": "446f308a2990f45dcd3dca14030068f878fae490",
+    "bytes": 1943,
+    "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+    "sameAsDd": true
+  },
+  {
+    "path": "web/package-lock.json",
+    "blob": "a41fd447e28f3b36829b689828c345e042619a38",
+    "bytes": 274088,
+    "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+    "sameAsDd": true
+  },
+  {
+    "path": ".nvmrc",
+    "blob": "7d41c735d7127c4a2530ebe846b14ffbf38b8031",
+    "bytes": 8,
+    "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+    "sameAsDd": true
+  }
+]

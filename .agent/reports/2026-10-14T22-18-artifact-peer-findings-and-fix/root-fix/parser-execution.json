@@ -1,0 +1,10 @@
+{
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "/tmp/stockinsider-artifact-r1-r2-fix-oct14/parser-regression.mjs"
+  ],
+  "exit": 0,
+  "fresh155Run": false
+}

@@ -1,0 +1,10 @@
+{
+  "reviewDelivery": "93f6b60a5ad9d326d7ef9d67b6a673162a2a2fda",
+  "subject": "df18448dfd26627cd26e0156db0a8ea66e2b886a",
+  "receiptSHA256": "c617e53a41db8ce50071588e7034e1d49505a04e70c3a38be636bd0e57e5cafe",
+  "rawVerified": 55,
+  "reportFilesVerified": 76,
+  "sourceVerified": 23,
+  "verdict": "REQUEST_CHANGES",
+  "P2": 2
+}

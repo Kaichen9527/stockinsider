@@ -1,0 +1,11 @@
+{
+  "yaml": true,
+  "shells": 13,
+  "node22Inline": 3,
+  "firstBrowserBeforeCanonical": true,
+  "browserStages": 2,
+  "projectLocalBrowserPath": true,
+  "pg17SetupByteEqualApproved": true,
+  "workflowExecuted": false,
+  "browserDownloaded": false
+}

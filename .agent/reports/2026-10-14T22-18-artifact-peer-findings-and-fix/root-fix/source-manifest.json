@@ -1,0 +1,17 @@
+{
+  "subject": "e902021ee9df537d4a8da2a2eaff3921084d44d7",
+  "files": [
+    {
+      "path": ".github/workflows/reviewed-publication-tail-artifact.yml",
+      "bytes": 16658,
+      "sha256": "5aee67472a1a7240a57e09aba0516364206f3b0971cb38e28515ac23f0d4f6fe",
+      "blob": "2609cd2aad8ca054bb47b700b912f14397640eb8"
+    },
+    {
+      "path": "docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md",
+      "bytes": 6437,
+      "sha256": "db455c1cff7c432b4d442d7d78179df7016ad834544100cf16d0958905a5e255",
+      "blob": "0fc99f42e0c09cf1c3decda7f489d0f755ea1467"
+    }
+  ]
+}
