@@ -1,0 +1,227 @@
+[
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/coverage.md",
+    "bytes": 4730,
+    "sha256": "c1d829010d251c7f71c268757f4242a39a8cc8b282aa7065c67f1ffc34ba2d9b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/equivalence.json",
+    "bytes": 1304,
+    "sha256": "17be1358f492c134f3ec59d2243520c745cf9d54af2e4cbbc526642fda12d4c2"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/first-coverage.md",
+    "bytes": 4050,
+    "sha256": "d03018e22c3be2c90d5f751cb05807ce62a287543515c980fa1d898b6611257c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/first-equivalence.json",
+    "bytes": 1162,
+    "sha256": "04646f9c2211dc9e06bb6ceacda6001d705126fcc4fcbf586755e2933e05fc48"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/first-original-function-profile-proof.json",
+    "bytes": 2900,
+    "sha256": "7804d888946e45248d3b4ae619b920057cbf70dbed61afe75f7713ce2bea28d7"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/first-raw-manifest.json",
+    "bytes": 3936,
+    "sha256": "01eab4945783fda5f674ac12ef84ed85ebae85969f83fe7403bf5b2555e08499"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/first-raw-path-map.json",
+    "bytes": 726,
+    "sha256": "ab3ba7e367f02633c183ddd0271210c191bbbdd617260223b1cd0792f8846715"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/first-receipt.json",
+    "bytes": 4167,
+    "sha256": "69bfa4148513ebb563a20a582a3a61b2715bb03cf4809d4c7a19f64d6058d03a"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/first-source-manifest.json",
+    "bytes": 31923,
+    "sha256": "13b9043e3908894ab78326ee4eef1b926d8732b958e46900a6ddc02ee0583c40"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-a.meta.json",
+    "bytes": 326,
+    "sha256": "66baf6702627bf871ac0c20b034e4c9307b414c3424c2dbbcf39ed0bebc667f4"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-a.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-a.stdout",
+    "bytes": 8570,
+    "sha256": "003a383dba0571c769c07e552dd21198477235a74697ae864060b7e5717577fd"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-b.meta.json",
+    "bytes": 326,
+    "sha256": "06350f190335bae5d39c5ca09cbeab86b6dcb50e470a1c1605d1256cde8c6169"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-b.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-b.stdout",
+    "bytes": 8707,
+    "sha256": "815c7ca97ddd8dae757e47e9648362c1b7708a9f5f9614be4b363c9efd67ca8d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/cleanup.json",
+    "bytes": 150,
+    "sha256": "5a17853618625dadebc1ceb7eb1db1aeecf25b41c6f9c8b214d2fc8a608ad4f8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/coverage-summary.json",
+    "bytes": 166494,
+    "sha256": "c514c891dd0c37184110635737e27f671945fa34b965acf87edf3580014d81f5"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/financial50-input-baseline-summary.json",
+    "bytes": 1650,
+    "sha256": "098a242e235ce87d11ec07357186edd330ca5957c2d109bba4ff0636c647afce"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/financial50-result.json",
+    "bytes": 10804,
+    "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/helper-p2-L147.json",
+    "bytes": 5132,
+    "sha256": "d3c5d4ebc14af7090d820971158f7c899ca50ae5992b32654828631e30a84d39"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/helper-p3-L271.json",
+    "bytes": 5132,
+    "sha256": "3c1a019ab0568482146d79150d5d9c66332336d0b74895539ae371409cabb565"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/matrix.json",
+    "bytes": 131344,
+    "sha256": "d6ef6a4aadf688fed067f985a54b4d2b5a19d08cec516735a8ea2b6202b82db6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/pending.json",
+    "bytes": 208,
+    "sha256": "8256fee4b9de3ca2798d043f110c19b12cce3e0c99fd6766a5c8bc27fbd469d9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/post50-baseline-compact.json",
+    "bytes": 1810,
+    "sha256": "ebd2ad7580e6ae1c30a6729b59466b827484cb964eabfdb7f173d1b4b211eab3"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/postgres.log",
+    "bytes": 1387,
+    "sha256": "4249a7d069c21962072438cb3bb683d011cb4b8e2b612f3e021f34ea3da42add"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/restore-input.json",
+    "bytes": 633,
+    "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-final/seed.json",
+    "bytes": 1123,
+    "sha256": "37badd4b0bb725635a549e71d850ec316ab2426006ed146181816481445599d7"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/cleanup.json",
+    "bytes": 150,
+    "sha256": "bb1d22b40cc47ea7a27bb5d1702524649864868d49dfd828fa642ad36c233a51"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/coverage-summary.json",
+    "bytes": 164472,
+    "sha256": "566f1e2e71b09ec908e976e82401d493d668a974c0274fab81edac39c29ed9ee"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/financial50-input-baseline-summary.json",
+    "bytes": 1650,
+    "sha256": "640c4abd7d3465111287c1ac88b27ae0122a07eaa85117a61c7ac99ee1c61810"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/financial50-result.json",
+    "bytes": 10804,
+    "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/helper-p2-L147.json",
+    "bytes": 5132,
+    "sha256": "2fa5cebbcd36415e8f7aaa3b81c09b918224b9ec1e1931403d126c2be8fdec0e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/helper-p3-L271.json",
+    "bytes": 5132,
+    "sha256": "ba7f173529c33c02de3c4d205679ef531c14ee19ac9f1c22b127ec8871254f31"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/matrix.json",
+    "bytes": 129030,
+    "sha256": "93cb3ac9222026827019e6a2bf1f01b595141efb0a41157b5aa71bb0bfe3b99e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/pending.json",
+    "bytes": 208,
+    "sha256": "8256fee4b9de3ca2798d043f110c19b12cce3e0c99fd6766a5c8bc27fbd469d9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/post50-baseline-compact.json",
+    "bytes": 1810,
+    "sha256": "62c944159b787746da80585392b06b404da91901aa5705f90f6c35a86110710b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/postgres.log",
+    "bytes": 1387,
+    "sha256": "5fd5c19f88f7f50ef8a813837ff5037e41ed14607210b25a1e0b6c5401ba2a12"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/restore-input.json",
+    "bytes": 633,
+    "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-first/seed.json",
+    "bytes": 1123,
+    "sha256": "41d12eeb90053945cd54b01eb112fa68b726d56f1230cbe2d839946920acd196"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/node-check.json",
+    "bytes": 187,
+    "sha256": "ec8d9d6c9541d369331cfa9fa7260deb517d5e8695a8514e421004f76b51c277"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/node-check.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/node-check.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/original-function-profile-proof.json",
+    "bytes": 2672,
+    "sha256": "c97fa61616d6bbda6871b8c6d0dc3e57deb152b3a9a812ef3968ac7cf0e7f57c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/source-manifest.json",
+    "bytes": 31923,
+    "sha256": "7f06f4a1e3075a1c67e13202e8b8399a579f904681fc1b0c4046ef2d1b394714"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/versions.json",
+    "bytes": 633,
+    "sha256": "7632463902a9a5b11ba078f569d6e0abb74f97adb4b90717ad0f7bc24cbf44e1"
+  }
+]

@@ -1,0 +1,133 @@
+{
+  "schema": "publication-tail-original-fragments-maker-v1",
+  "startedUTC": "2026-10-14T05:38:57Z",
+  "deadlineUTC": "2026-10-14T06:03:57Z",
+  "completedUTC": "2026-10-14T05:49:37.900289+00:00",
+  "sourceHead": "9a702238b91402bf9085f5580c15133d248905a3",
+  "sourceTree": "466628d89dcb9103b829668de66177e57825e500",
+  "webTree": "c550748ca0a3320396ce5b0210750114fdecf848",
+  "branch": "codex/research-publication-tail-fragments-oct14",
+  "sourceFiles": 126,
+  "sourceManifestSHA256": "13b9043e3908894ab78326ee4eef1b926d8732b958e46900a6ddc02ee0583c40",
+  "fixtureSHA256": "0155d271a95947f5b7690bada80ba0fc6ef338551ec0f314a94ec3a1e29b2936",
+  "inventoryStatements": 116,
+  "selectedFragments": 49,
+  "nativeTests": {
+    "pass": 53,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "accounting": "1 parent +1 financial50 setup +49 matrix controls +2 helper controls"
+  },
+  "coverage": {
+    "independentOriginalFragments": 13,
+    "dependencyOnlyNonIsolatableTargetsNotExecuted": 36,
+    "sourceProofOnlyAncillaryStatements": 67,
+    "actualCommittedFragmentHelperCases": [
+      "p2-L147",
+      "p3-L271"
+    ],
+    "tailBodiesExecutedByNegativeHelper": 0,
+    "rollbackNamespaceCatalogFinancialFactsObservationsUnchanged": true,
+    "facts": 1,
+    "observations": 1,
+    "independentFunctionProfileObservations": 6
+  },
+  "nativeResource": {
+    "command": [
+      "node",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs"
+    ],
+    "start_utc": "2026-10-14T05:46:12Z",
+    "seconds": 25.496994495391846,
+    "exit": 0,
+    "peak_sampled_process_tree_rss_bytes": 263913472,
+    "min_free_bytes": 8620081152
+  },
+  "newNodeCheck": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs"
+    ],
+    "exit": 0
+  },
+  "Node": "22.14.0",
+  "PG": "17.11",
+  "pgDependency": "8.18.0",
+  "buildReusedNotNew": {
+    "source": "42c5dd10805a0122568617831978f2236e8d68d3",
+    "finalSource": "0fe5d5a90ae95949eec1fb3dd9433359db466d88",
+    "webTree": "c550748ca0a3320396ce5b0210750114fdecf848",
+    "webAndPrebuildInputsByteIdenticalToFinal": true,
+    "notRelabeledAsNewBuild": "Final followup only strengthens new standalone guard namespace metadata/baseline; fresh9pure/24native on final source. No web/prebuild/lock/old source input changed.",
+    "buildId": "cp8ZCyLKRWjLVGGBq0jma",
+    "next": "16.3.4",
+    "serverFiles": 1798,
+    "serverManifestSha256": "2bedb4a9bd7011f1a96fb854dd0a060e7b0bff7228cfdf14e48446325ff3362a",
+    "dotenvFilenameInventory": []
+  },
+  "nativeOld24Financial28Pure9NotRerun": true,
+  "rawManifestFiles": 19,
+  "rawBytes": 370462,
+  "rawManifestSHA256": "01eab4945783fda5f674ac12ef84ed85ebae85969f83fe7403bf5b2555e08499",
+  "cleanup": {
+    "ownedClusterStopped": true,
+    "clusterPath": "/tmp/si-tail-pg-yAHYzF",
+    "removedRebuildableOwnedPgData": true,
+    "rawEvidencePreserved": true
+  },
+  "noSourceOrExpectationMutation": true,
+  "nonApplicableTargets": [
+    "p2-L16",
+    "p2-L36",
+    "p2-L58",
+    "p2-L60",
+    "p2-L63",
+    "p2-L77",
+    "p2-L98",
+    "p2-L207",
+    "p2-L219",
+    "p2-L245",
+    "p2-L281",
+    "p2-L294",
+    "p2-L346",
+    "p2-L347",
+    "p2-L385",
+    "p2-L386",
+    "p2-L387",
+    "p2-L472",
+    "p3-L3",
+    "p3-L22",
+    "p3-L29",
+    "p3-L32",
+    "p3-L37",
+    "p3-L54",
+    "p3-L100",
+    "p3-L105",
+    "p3-L109",
+    "p3-L122",
+    "p3-L165",
+    "p3-L210",
+    "p3-L280",
+    "p3-L326",
+    "p4-L5",
+    "p4-L30",
+    "p5-L4",
+    "p5-L22"
+  ],
+  "pending": {
+    "selectedMatrixUnprocessed": [],
+    "productionFormalPeerAuthorityDeployment": "not in scope; not run",
+    "targetIsolationFor36DependencyDominatedFragments": "not causally applicable on sealed post50; not separately proven",
+    "ancillaryACLTriggerDataAndConstraintStatements": "source-proof inventory only, no independent injection"
+  },
+  "newRED": [],
+  "historicalReferences": [
+    "5aad27050b43d62ebe3929a9b9c2ee22c60e7fda",
+    "0fe5d5a90ae95949eec1fb3dd9433359db466d88"
+  ],
+  "independentReviewApprovalClaimed": false
+}

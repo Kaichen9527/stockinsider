@@ -1,0 +1,8 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--check",
+    "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs"
+  ],
+  "exit": 0
+}

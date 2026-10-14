@@ -1,0 +1,3300 @@
+[
+  {
+    "id": "p2-L3",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "d6a2260d804af1ef5e077400c31bcd99fa4a4fbc54fdcb0f4a87edc91b903bf0",
+      "catalog": "8587e661226a6cba9f324f59bbadeb96223f6c8b80f37fa42c1d75b8442547c3",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L16",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "d6a2260d804af1ef5e077400c31bcd99fa4a4fbc54fdcb0f4a87edc91b903bf0",
+      "catalog": "8587e661226a6cba9f324f59bbadeb96223f6c8b80f37fa42c1d75b8442547c3",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L22",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "4bb9655d4e7feb34cb6153505801f27e9b5d69264e6fe9f0b0efeff303f35446",
+      "catalog": "29d89355554b3cc6ffa31c9619dbfa3fab6f64ad4843c825976fecf7c0c86e52",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L36",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L22",
+        "sha256": "3425587f554c2b2b4461e72975c76e589e2bcb6a0fed306aaedbad1e39810820"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "4bb9655d4e7feb34cb6153505801f27e9b5d69264e6fe9f0b0efeff303f35446",
+      "catalog": "29d89355554b3cc6ffa31c9619dbfa3fab6f64ad4843c825976fecf7c0c86e52",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L42",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "86f3ebabd3ed8b8c6e3c364594e0b4a236488cf4b63f980a645164da0b07a768",
+      "catalog": "a2279f09cc294ab66424be690bf712f8d118c7571a866759a45c0df2e57b93b9",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L58",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L42",
+        "sha256": "402a16c9924e24236fb04c70ed5f072edf29c1a9825d9b83f163ef6fa036a0bd"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "86f3ebabd3ed8b8c6e3c364594e0b4a236488cf4b63f980a645164da0b07a768",
+      "catalog": "a2279f09cc294ab66424be690bf712f8d118c7571a866759a45c0df2e57b93b9",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L60",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L42",
+        "sha256": "402a16c9924e24236fb04c70ed5f072edf29c1a9825d9b83f163ef6fa036a0bd"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "86f3ebabd3ed8b8c6e3c364594e0b4a236488cf4b63f980a645164da0b07a768",
+      "catalog": "a2279f09cc294ab66424be690bf712f8d118c7571a866759a45c0df2e57b93b9",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L63",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L42",
+        "sha256": "402a16c9924e24236fb04c70ed5f072edf29c1a9825d9b83f163ef6fa036a0bd"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "86f3ebabd3ed8b8c6e3c364594e0b4a236488cf4b63f980a645164da0b07a768",
+      "catalog": "a2279f09cc294ab66424be690bf712f8d118c7571a866759a45c0df2e57b93b9",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L77",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L42",
+        "sha256": "402a16c9924e24236fb04c70ed5f072edf29c1a9825d9b83f163ef6fa036a0bd"
+      },
+      {
+        "id": "p2-L63",
+        "sha256": "2b1bd012972f84e4133a8e2540a47e29b7a8195308c17d4be28b52c17cba7710"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "cfc7bbd41788c3046dfa534ca7a8ba7ebac11783706fcadd1d32cbf6e01ddb4f",
+      "catalog": "85c66fe326a5606466ee72a7fdfcff369e619bbae0c94f2127b041afa160d2d9",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L98",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L42",
+        "sha256": "402a16c9924e24236fb04c70ed5f072edf29c1a9825d9b83f163ef6fa036a0bd"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "86f3ebabd3ed8b8c6e3c364594e0b4a236488cf4b63f980a645164da0b07a768",
+      "catalog": "a2279f09cc294ab66424be690bf712f8d118c7571a866759a45c0df2e57b93b9",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L147",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "09a7690bd0dbe5015b0fb071783d54d7e77283084cad8b5f1ad2982b6d5d4b3d",
+      "catalog": "c5ab8fca28448abd8f84aff5e7bf90279692189c281ec010795bdc994b7a0920",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "functionProfile": [
+      {
+        "signature": "research_source_heads_page_v1(timestamp with time zone,integer,integer)",
+        "owner": "postgres",
+        "config": [
+          "search_path=public, pg_temp"
+        ],
+        "security_definer": true,
+        "acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+        "body_sha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56"
+      }
+    ],
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L196",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "6c22d22bf49e8a1ba339736500aeb249f7feb2fbe219ee9974fc49df58e565ef",
+      "catalog": "ef934de323b96fc5aa19070da9c9b51e85c499a87575691e87c1a004bd340714",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L207",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L196",
+        "sha256": "d829a2c850a36f51adc8169f1ffb91c14b17edd11ef7092ea43e6eaad70ea7d9"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "6c22d22bf49e8a1ba339736500aeb249f7feb2fbe219ee9974fc49df58e565ef",
+      "catalog": "ef934de323b96fc5aa19070da9c9b51e85c499a87575691e87c1a004bd340714",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L213",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "fc5da2bbbca8171fb438bfb73db7bd34b8feaf15416b98ea73a22c0dbb8afef5",
+      "catalog": "597bf492ccb3491a90492e3909fe74240f8f52656d6d4703d57ff46150da8bc9",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "functionProfile": [
+      {
+        "signature": "research_model_lease_fits_day_v1(timestamp with time zone)",
+        "owner": "postgres",
+        "config": null,
+        "security_definer": false,
+        "acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+        "body_sha256": "1765b0450a419c09bf8dfeb939ddf9ff86e4ab40ccc5081d678d14fd02ac7bb0"
+      }
+    ],
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L219",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L196",
+        "sha256": "d829a2c850a36f51adc8169f1ffb91c14b17edd11ef7092ea43e6eaad70ea7d9"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "6c22d22bf49e8a1ba339736500aeb249f7feb2fbe219ee9974fc49df58e565ef",
+      "catalog": "ef934de323b96fc5aa19070da9c9b51e85c499a87575691e87c1a004bd340714",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L245",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L196",
+        "sha256": "d829a2c850a36f51adc8169f1ffb91c14b17edd11ef7092ea43e6eaad70ea7d9"
+      },
+      {
+        "id": "p2-L207",
+        "sha256": "084d6000221039f29d160303e4cdae09332db4c988ae6cb4de1f22d67e9f3f0e"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "424f2b5f4b5f7b20a6f1a8dfe74b2dcff21b06ec2aeab6d5603bd160c7ecc300",
+      "catalog": "9b954c9b178028bbf2b0f3c0d4a74d56cd4a4e0c0a307338998b86a2d90f2381",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L281",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "d6a2260d804af1ef5e077400c31bcd99fa4a4fbc54fdcb0f4a87edc91b903bf0",
+      "catalog": "8587e661226a6cba9f324f59bbadeb96223f6c8b80f37fa42c1d75b8442547c3",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L294",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "d6a2260d804af1ef5e077400c31bcd99fa4a4fbc54fdcb0f4a87edc91b903bf0",
+      "catalog": "8587e661226a6cba9f324f59bbadeb96223f6c8b80f37fa42c1d75b8442547c3",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L334",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "cc2e6eeeb1ca6377784727c40dd9b9a3f828e9d4a75907632ff1bf74b569acef",
+      "catalog": "22d986b83f53e7f5f26af12634ab6e047ec49dea4dfec7010381875a8988268d",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L346",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L334",
+        "sha256": "19c8ba96901a1f3690c09418711a2d4c70d5beb19e6d9421cb4eb08544dcf01a"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "cc2e6eeeb1ca6377784727c40dd9b9a3f828e9d4a75907632ff1bf74b569acef",
+      "catalog": "22d986b83f53e7f5f26af12634ab6e047ec49dea4dfec7010381875a8988268d",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L347",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L334",
+        "sha256": "19c8ba96901a1f3690c09418711a2d4c70d5beb19e6d9421cb4eb08544dcf01a"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "cc2e6eeeb1ca6377784727c40dd9b9a3f828e9d4a75907632ff1bf74b569acef",
+      "catalog": "22d986b83f53e7f5f26af12634ab6e047ec49dea4dfec7010381875a8988268d",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L374",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "6cd3904a52928c6c96b29f3e1afadcf2f8f9c11c886e089aaaa3392a269a9286",
+      "catalog": "fbb93854ea8e15f1f249b0e754f89bc8a62c7e07d9a8f32da92f46a90e4ebdad",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L385",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L374",
+        "sha256": "abbaf0eb7bcd0c5907a4bc2bb97c7329c00981830338ff62a5a1dabdc450e4aa"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "6cd3904a52928c6c96b29f3e1afadcf2f8f9c11c886e089aaaa3392a269a9286",
+      "catalog": "fbb93854ea8e15f1f249b0e754f89bc8a62c7e07d9a8f32da92f46a90e4ebdad",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L386",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L374",
+        "sha256": "abbaf0eb7bcd0c5907a4bc2bb97c7329c00981830338ff62a5a1dabdc450e4aa"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "6cd3904a52928c6c96b29f3e1afadcf2f8f9c11c886e089aaaa3392a269a9286",
+      "catalog": "fbb93854ea8e15f1f249b0e754f89bc8a62c7e07d9a8f32da92f46a90e4ebdad",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L387",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L374",
+        "sha256": "abbaf0eb7bcd0c5907a4bc2bb97c7329c00981830338ff62a5a1dabdc450e4aa"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "6cd3904a52928c6c96b29f3e1afadcf2f8f9c11c886e089aaaa3392a269a9286",
+      "catalog": "fbb93854ea8e15f1f249b0e754f89bc8a62c7e07d9a8f32da92f46a90e4ebdad",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L416",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "9c2feedcb8a76c8f9545573e227bae7cca45071ab40a5145a381073bd4e25188",
+      "catalog": "e56a9b45371c563119d5ce21436fa865ddab58e0f9902211b72a8fe940d2d530",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "functionProfile": [
+      {
+        "signature": "research_evidence_heads_v1(uuid[],timestamp with time zone)",
+        "owner": "postgres",
+        "config": [
+          "search_path=public, pg_temp"
+        ],
+        "security_definer": true,
+        "acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+        "body_sha256": "9eef1d732166fba094ba2763d22bf29aff28f2b3cd66a11ebc2d369c779aad61"
+      }
+    ],
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L456",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "342347f07e0b540539b0f1adb67bdd9a32a7e7f3a0691cff093c23b030f529e3",
+      "catalog": "8e427079cdb14bcbe932ee5270aae1010193eb7f0cf47215bbd3ab378709838c",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "functionProfile": [
+      {
+        "signature": "research_thesis_heads_page_v1(timestamp with time zone,integer,integer)",
+        "owner": "postgres",
+        "config": [
+          "search_path=public, pg_temp"
+        ],
+        "security_definer": true,
+        "acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+        "body_sha256": "34e7f8768b0489e2230ec7df5b111c93cf3d08113aaa48e7525cd708e294bffa"
+      }
+    ],
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L472",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L334",
+        "sha256": "19c8ba96901a1f3690c09418711a2d4c70d5beb19e6d9421cb4eb08544dcf01a"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "cc2e6eeeb1ca6377784727c40dd9b9a3f828e9d4a75907632ff1bf74b569acef",
+      "catalog": "22d986b83f53e7f5f26af12634ab6e047ec49dea4dfec7010381875a8988268d",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p2-L477",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "2c6821a5c2ea1bb4510855f3220e840d8ba0f544aae76f4d0432631b6e091470",
+      "catalog": "ee520f502a39be7a9ca5da082e1198ab1f24d2c0e970c31c8868550443d27e85",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "functionProfile": [
+      {
+        "signature": "research_execution_policy_matches_v1(jsonb)",
+        "owner": "postgres",
+        "config": [
+          "search_path=public, pg_temp"
+        ],
+        "security_definer": false,
+        "acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+        "body_sha256": "352bfd1e4673cc5bf502e1620e183981e3d097a72e2bc9bc15bad383ad270c90"
+      }
+    ],
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L3",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "d6a2260d804af1ef5e077400c31bcd99fa4a4fbc54fdcb0f4a87edc91b903bf0",
+      "catalog": "8587e661226a6cba9f324f59bbadeb96223f6c8b80f37fa42c1d75b8442547c3",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L22",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      },
+      {
+        "id": "p3-L3",
+        "sha256": "1d8ccf438196b8eeb7a17d4879d96c8008ab8a0b7f3a28e6055d6068f089ff78"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "a4881b62b1ee0778807c573d390abf9cc575c7592ec4aa910e8e5c768924386e",
+      "catalog": "ba21c9425fc092ae64464746c792ab5000ed62488ab5665459d9a5c3e9cd8275",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L29",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      },
+      {
+        "id": "p3-L3",
+        "sha256": "1d8ccf438196b8eeb7a17d4879d96c8008ab8a0b7f3a28e6055d6068f089ff78"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "a4881b62b1ee0778807c573d390abf9cc575c7592ec4aa910e8e5c768924386e",
+      "catalog": "ba21c9425fc092ae64464746c792ab5000ed62488ab5665459d9a5c3e9cd8275",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L32",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L22",
+        "sha256": "3425587f554c2b2b4461e72975c76e589e2bcb6a0fed306aaedbad1e39810820"
+      },
+      {
+        "id": "p2-L196",
+        "sha256": "d829a2c850a36f51adc8169f1ffb91c14b17edd11ef7092ea43e6eaad70ea7d9"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "6aa19d49089f66f5ccae48da282189bb632aee1084837c491c5a93bdb2a2a533",
+      "catalog": "af39cb5138458501c93051e55f4b31e25bcc204bdee92f4eb9e5f07ce927adc6",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L37",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      },
+      {
+        "id": "p3-L3",
+        "sha256": "1d8ccf438196b8eeb7a17d4879d96c8008ab8a0b7f3a28e6055d6068f089ff78"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "a4881b62b1ee0778807c573d390abf9cc575c7592ec4aa910e8e5c768924386e",
+      "catalog": "ba21c9425fc092ae64464746c792ab5000ed62488ab5665459d9a5c3e9cd8275",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L54",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      },
+      {
+        "id": "p3-L3",
+        "sha256": "1d8ccf438196b8eeb7a17d4879d96c8008ab8a0b7f3a28e6055d6068f089ff78"
+      },
+      {
+        "id": "p2-L196",
+        "sha256": "d829a2c850a36f51adc8169f1ffb91c14b17edd11ef7092ea43e6eaad70ea7d9"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "9f11ad6825ccb8897873624ac5bf434a35543a537e2e93f9afcf0aead9c2e798",
+      "catalog": "9fd7a19387ca617c5f830a8389117d7bb688e904728a07cef56535aa04d428a3",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L97",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_catalog_mismatch"
+    },
+    "inside": {
+      "namespace": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "catalog": "c808eaad89bf6c009e8c750aefb27bed9b5b557abafef1fa64f09b1eb03e6341",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L99",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "b24d3825022b07ba13ba036727cfe6f74572cc34b20bb4ef21e6e196916ce485",
+      "catalog": "ec24b5cce1286e184f2985ac205e6020fcdd0d20ae4e5e62b0fffec2cec91d2c",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L100",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p3-L97",
+        "sha256": "e328fcb4e3fbc9537212ca64ee6c4a23c84255ea1f5cc0822995ac95bf1a58b3"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_catalog_mismatch"
+    },
+    "inside": {
+      "namespace": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+      "catalog": "c808eaad89bf6c009e8c750aefb27bed9b5b557abafef1fa64f09b1eb03e6341",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L105",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      },
+      {
+        "id": "p3-L3",
+        "sha256": "1d8ccf438196b8eeb7a17d4879d96c8008ab8a0b7f3a28e6055d6068f089ff78"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "a4881b62b1ee0778807c573d390abf9cc575c7592ec4aa910e8e5c768924386e",
+      "catalog": "ba21c9425fc092ae64464746c792ab5000ed62488ab5665459d9a5c3e9cd8275",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L109",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      },
+      {
+        "id": "p3-L3",
+        "sha256": "1d8ccf438196b8eeb7a17d4879d96c8008ab8a0b7f3a28e6055d6068f089ff78"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "a4881b62b1ee0778807c573d390abf9cc575c7592ec4aa910e8e5c768924386e",
+      "catalog": "ba21c9425fc092ae64464746c792ab5000ed62488ab5665459d9a5c3e9cd8275",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L122",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "d6a2260d804af1ef5e077400c31bcd99fa4a4fbc54fdcb0f4a87edc91b903bf0",
+      "catalog": "8587e661226a6cba9f324f59bbadeb96223f6c8b80f37fa42c1d75b8442547c3",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L165",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      },
+      {
+        "id": "p3-L3",
+        "sha256": "1d8ccf438196b8eeb7a17d4879d96c8008ab8a0b7f3a28e6055d6068f089ff78"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "a4881b62b1ee0778807c573d390abf9cc575c7592ec4aa910e8e5c768924386e",
+      "catalog": "ba21c9425fc092ae64464746c792ab5000ed62488ab5665459d9a5c3e9cd8275",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L210",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      },
+      {
+        "id": "p3-L3",
+        "sha256": "1d8ccf438196b8eeb7a17d4879d96c8008ab8a0b7f3a28e6055d6068f089ff78"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "a4881b62b1ee0778807c573d390abf9cc575c7592ec4aa910e8e5c768924386e",
+      "catalog": "ba21c9425fc092ae64464746c792ab5000ed62488ab5665459d9a5c3e9cd8275",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L271",
+    "status": "covered-independent-original-fragment",
+    "targetFragmentExecuted": true,
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "4bf7c0397909461f051e3e53d6638e63e6e3cee8f98ee0dd1607a1c165091d29",
+      "catalog": "312a6d4872599c1539fdc47e63ea12a090191a2476af03a1ab7d7474724cf408",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "functionProfile": [
+      {
+        "signature": "finish_research_deep_job_v1(uuid,text,boolean,uuid,text)",
+        "owner": "postgres",
+        "config": [
+          "search_path=public, pg_temp"
+        ],
+        "security_definer": true,
+        "acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+        "body_sha256": "638eea282a24695d551a39571a49f6e83534fcb38c383994f391f503b34a1c15"
+      }
+    ],
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L280",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      },
+      {
+        "id": "p3-L3",
+        "sha256": "1d8ccf438196b8eeb7a17d4879d96c8008ab8a0b7f3a28e6055d6068f089ff78"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "a4881b62b1ee0778807c573d390abf9cc575c7592ec4aa910e8e5c768924386e",
+      "catalog": "ba21c9425fc092ae64464746c792ab5000ed62488ab5665459d9a5c3e9cd8275",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p3-L326",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L3",
+        "sha256": "bcba5c6bc9e3de370ebf1cdba8d623096c2c0150807398ffc5229d6b999d430c"
+      },
+      {
+        "id": "p3-L3",
+        "sha256": "1d8ccf438196b8eeb7a17d4879d96c8008ab8a0b7f3a28e6055d6068f089ff78"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "a4881b62b1ee0778807c573d390abf9cc575c7592ec4aa910e8e5c768924386e",
+      "catalog": "ba21c9425fc092ae64464746c792ab5000ed62488ab5665459d9a5c3e9cd8275",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p4-L5",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L42",
+        "sha256": "402a16c9924e24236fb04c70ed5f072edf29c1a9825d9b83f163ef6fa036a0bd"
+      },
+      {
+        "id": "p2-L63",
+        "sha256": "2b1bd012972f84e4133a8e2540a47e29b7a8195308c17d4be28b52c17cba7710"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "cfc7bbd41788c3046dfa534ca7a8ba7ebac11783706fcadd1d32cbf6e01ddb4f",
+      "catalog": "85c66fe326a5606466ee72a7fdfcff369e619bbae0c94f2127b041afa160d2d9",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p4-L30",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L42",
+        "sha256": "402a16c9924e24236fb04c70ed5f072edf29c1a9825d9b83f163ef6fa036a0bd"
+      },
+      {
+        "id": "p2-L63",
+        "sha256": "2b1bd012972f84e4133a8e2540a47e29b7a8195308c17d4be28b52c17cba7710"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "cfc7bbd41788c3046dfa534ca7a8ba7ebac11783706fcadd1d32cbf6e01ddb4f",
+      "catalog": "85c66fe326a5606466ee72a7fdfcff369e619bbae0c94f2127b041afa160d2d9",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p5-L4",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L196",
+        "sha256": "d829a2c850a36f51adc8169f1ffb91c14b17edd11ef7092ea43e6eaad70ea7d9"
+      },
+      {
+        "id": "p2-L207",
+        "sha256": "084d6000221039f29d160303e4cdae09332db4c988ae6cb4de1f22d67e9f3f0e"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "424f2b5f4b5f7b20a6f1a8dfe74b2dcff21b06ec2aeab6d5603bd160c7ecc300",
+      "catalog": "9b954c9b178028bbf2b0f3c0d4a74d56cd4a4e0c0a307338998b86a2d90f2381",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  },
+  {
+    "id": "p5-L22",
+    "status": "not-causally-isolatable",
+    "dependencyOnly": [
+      {
+        "id": "p2-L196",
+        "sha256": "d829a2c850a36f51adc8169f1ffb91c14b17edd11ef7092ea43e6eaad70ea7d9"
+      },
+      {
+        "id": "p2-L207",
+        "sha256": "084d6000221039f29d160303e4cdae09332db4c988ae6cb4de1f22d67e9f3f0e"
+      },
+      {
+        "id": "p5-L4",
+        "sha256": "debb2ab4a5f74dc32f991343aac160abafdca538de780546d6bf51858cc9a676"
+      }
+    ],
+    "targetFragmentExecuted": false,
+    "reason": "Exact parent/column dependency alone already violates post50 predecessor; target effect cannot be isolated on supported baseline.",
+    "refusal": {
+      "name": "Error",
+      "message": "publication_tail_predecessor_namespace_mismatch"
+    },
+    "inside": {
+      "namespace": "42d9113bc721dd00c6e2b577a6473c2aa62068f8ff811667f66036cf06d9a57d",
+      "catalog": "6287696c12a056ede5b7b1a6dcb037ad3b6f39c12f07774f55f3441ef43a721e",
+      "financial": "5e10c8d714d14dcc6f3e694893680121b8afdab6b1b0f230c08e61c37ee565f1",
+      "facts": [
+        {
+          "unit": "TWD",
+          "value": 100,
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "fact_key": "net_asset_value",
+          "provider": "twse",
+          "stock_id": "71300000-0000-4000-8000-000000000083",
+          "period_end": "2025-01-01",
+          "source_ref": "twse-openapi:synthetic-atomic-rollback",
+          "unit_valid": null,
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "period_start": null,
+          "schema_valid": null,
+          "duration_kind": "instant",
+          "estimate_kind": "reported",
+          "authority_tier": "official_filing",
+          "estimate_horizon": "reported_period",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "consistency_valid": null,
+          "upstream_provider": null,
+          "validation_status": "pending",
+          "filing_published_at": "2025-01-02T00:00:00+00:00",
+          "point_in_time_valid": null,
+          "filing_restatement_id": null,
+          "validation_recorded_at": null
+        }
+      ],
+      "observations": [
+        {
+          "fact_id": "9ff24f2a-e035-430d-8326-929f1ecd3a9c",
+          "input_hash": "af9343443db1856fa8e76614680d9de3840157b2b5ac9c84f93fbe59e903aaaa",
+          "recorded_at": "2026-10-14T05:51:41.565508+00:00",
+          "collected_at": "2025-01-02T01:00:00+00:00",
+          "observation_id": "8144b62f-1253-481e-a0b9-807afd3bbf26",
+          "observation_kind": "legacy_fact",
+          "source_timestamp": "2025-01-02T00:00:00+00:00",
+          "caller_principal_id": null,
+          "filing_published_at": "2025-01-02T00:00:00+00:00"
+        }
+      ]
+    },
+    "rollbackBaselineUnchanged": true,
+    "tailStatementsExecuted": 0
+  }
+]

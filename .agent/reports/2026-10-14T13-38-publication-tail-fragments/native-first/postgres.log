@@ -1,0 +1,10 @@
+2026-10-14 05:46:13.240 UTC [540873] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-14 05:46:13.240 UTC [540873] LOG:  listening on Unix socket "/tmp/si-tail-pg-yAHYzF/.s.PGSQL.57842"
+2026-10-14 05:46:13.241 UTC [540876] LOG:  database system was shut down at 2026-10-14 05:46:13 UTC
+2026-10-14 05:46:13.244 UTC [540873] LOG:  database system is ready to accept connections
+2026-10-14 05:46:37.032 UTC [540874] LOG:  checkpoint starting: immediate force wait
+2026-10-14 05:46:37.044 UTC [540874] LOG:  checkpoint complete: wrote 1914 buffers (11.7%); 0 WAL file(s) added, 0 removed, 2 recycled; write=0.008 s, sync=0.004 s, total=0.012 s; sync files=1897, longest=0.001 s, average=0.001 s; distance=34714 kB, estimate=34714 kB; lsn=0/36F1680, redo lsn=0/36F1628
+2026-10-14 05:46:37.778 UTC [540874] LOG:  checkpoint starting: immediate force wait
+2026-10-14 05:46:37.779 UTC [540874] LOG:  checkpoint complete: wrote 24 buffers (0.1%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.001 s; sync files=8, longest=0.001 s, average=0.000 s; distance=14734 kB, estimate=32716 kB; lsn=0/4554EB8, redo lsn=0/4554E60
+2026-10-14 05:46:37.789 UTC [540873] LOG:  received immediate shutdown request
+2026-10-14 05:46:37.794 UTC [540873] LOG:  database system is shut down

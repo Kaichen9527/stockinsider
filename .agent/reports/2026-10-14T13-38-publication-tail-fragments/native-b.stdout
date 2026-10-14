@@ -1,0 +1,281 @@
+TAP version 13
+# Subtest: source-derived prerequisites2..5 isolated fragments and dependency-only controls
+    # Subtest: main actual financial50 and original operator helper first COMMIT
+    ok 1 - main actual financial50 and original operator helper first COMMIT
+      ---
+      duration_ms: 658.064093
+      ...
+    # Subtest: p2-L3: independent-original-DDL
+    ok 2 - p2-L3: independent-original-DDL
+      ---
+      duration_ms: 416.924823
+      ...
+    # Subtest: p2-L16: dependency-only-control-required
+    ok 3 - p2-L16: dependency-only-control-required
+      ---
+      duration_ms: 387.512415
+      ...
+    # Subtest: p2-L22: independent-original-DDL
+    ok 4 - p2-L22: independent-original-DDL
+      ---
+      duration_ms: 394.49232
+      ...
+    # Subtest: p2-L36: dependency-only-control-required
+    ok 5 - p2-L36: dependency-only-control-required
+      ---
+      duration_ms: 384.77973
+      ...
+    # Subtest: p2-L42: independent-original-DDL
+    ok 6 - p2-L42: independent-original-DDL
+      ---
+      duration_ms: 380.44018
+      ...
+    # Subtest: p2-L58: dependency-only-control-required
+    ok 7 - p2-L58: dependency-only-control-required
+      ---
+      duration_ms: 380.113057
+      ...
+    # Subtest: p2-L60: dependency-only-control-required
+    ok 8 - p2-L60: dependency-only-control-required
+      ---
+      duration_ms: 381.761725
+      ...
+    # Subtest: p2-L63: dependency-only-control-required
+    ok 9 - p2-L63: dependency-only-control-required
+      ---
+      duration_ms: 382.894685
+      ...
+    # Subtest: p2-L77: dependency-only-control-required
+    ok 10 - p2-L77: dependency-only-control-required
+      ---
+      duration_ms: 395.598489
+      ...
+    # Subtest: p2-L98: dependency-only-control-required
+    ok 11 - p2-L98: dependency-only-control-required
+      ---
+      duration_ms: 400.988865
+      ...
+    # Subtest: p2-L147: independent-original-DDL
+    ok 12 - p2-L147: independent-original-DDL
+      ---
+      duration_ms: 393.696115
+      ...
+    # Subtest: p2-L196: independent-original-DDL
+    ok 13 - p2-L196: independent-original-DDL
+      ---
+      duration_ms: 404.337336
+      ...
+    # Subtest: p2-L207: dependency-only-control-required
+    ok 14 - p2-L207: dependency-only-control-required
+      ---
+      duration_ms: 438.449973
+      ...
+    # Subtest: p2-L213: independent-original-DDL
+    ok 15 - p2-L213: independent-original-DDL
+      ---
+      duration_ms: 412.182047
+      ...
+    # Subtest: p2-L219: dependency-only-control-required
+    ok 16 - p2-L219: dependency-only-control-required
+      ---
+      duration_ms: 394.547148
+      ...
+    # Subtest: p2-L245: dependency-only-control-required
+    ok 17 - p2-L245: dependency-only-control-required
+      ---
+      duration_ms: 421.658769
+      ...
+    # Subtest: p2-L281: dependency-only-control-required
+    ok 18 - p2-L281: dependency-only-control-required
+      ---
+      duration_ms: 414.016265
+      ...
+    # Subtest: p2-L294: dependency-only-control-required
+    ok 19 - p2-L294: dependency-only-control-required
+      ---
+      duration_ms: 394.414869
+      ...
+    # Subtest: p2-L334: independent-original-DDL
+    ok 20 - p2-L334: independent-original-DDL
+      ---
+      duration_ms: 377.716635
+      ...
+    # Subtest: p2-L346: dependency-only-control-required
+    ok 21 - p2-L346: dependency-only-control-required
+      ---
+      duration_ms: 376.628423
+      ...
+    # Subtest: p2-L347: dependency-only-control-required
+    ok 22 - p2-L347: dependency-only-control-required
+      ---
+      duration_ms: 388.28063
+      ...
+    # Subtest: p2-L374: independent-original-DDL
+    ok 23 - p2-L374: independent-original-DDL
+      ---
+      duration_ms: 379.9127
+      ...
+    # Subtest: p2-L385: dependency-only-control-required
+    ok 24 - p2-L385: dependency-only-control-required
+      ---
+      duration_ms: 378.497284
+      ...
+    # Subtest: p2-L386: dependency-only-control-required
+    ok 25 - p2-L386: dependency-only-control-required
+      ---
+      duration_ms: 391.137353
+      ...
+    # Subtest: p2-L387: dependency-only-control-required
+    ok 26 - p2-L387: dependency-only-control-required
+      ---
+      duration_ms: 392.870117
+      ...
+    # Subtest: p2-L416: independent-original-DDL
+    ok 27 - p2-L416: independent-original-DDL
+      ---
+      duration_ms: 381.087674
+      ...
+    # Subtest: p2-L456: independent-original-DDL
+    ok 28 - p2-L456: independent-original-DDL
+      ---
+      duration_ms: 402.67749
+      ...
+    # Subtest: p2-L472: dependency-only-control-required
+    ok 29 - p2-L472: dependency-only-control-required
+      ---
+      duration_ms: 437.305897
+      ...
+    # Subtest: p2-L477: independent-original-DDL
+    ok 30 - p2-L477: independent-original-DDL
+      ---
+      duration_ms: 399.055663
+      ...
+    # Subtest: p3-L3: dependency-only-control-required
+    ok 31 - p3-L3: dependency-only-control-required
+      ---
+      duration_ms: 425.627239
+      ...
+    # Subtest: p3-L22: dependency-only-control-required
+    ok 32 - p3-L22: dependency-only-control-required
+      ---
+      duration_ms: 394.401766
+      ...
+    # Subtest: p3-L29: dependency-only-control-required
+    ok 33 - p3-L29: dependency-only-control-required
+      ---
+      duration_ms: 401.581753
+      ...
+    # Subtest: p3-L32: dependency-only-control-required
+    ok 34 - p3-L32: dependency-only-control-required
+      ---
+      duration_ms: 384.603366
+      ...
+    # Subtest: p3-L37: dependency-only-control-required
+    ok 35 - p3-L37: dependency-only-control-required
+      ---
+      duration_ms: 399.991683
+      ...
+    # Subtest: p3-L54: dependency-only-control-required
+    ok 36 - p3-L54: dependency-only-control-required
+      ---
+      duration_ms: 399.402924
+      ...
+    # Subtest: p3-L97: independent-original-DDL
+    ok 37 - p3-L97: independent-original-DDL
+      ---
+      duration_ms: 811.664838
+      ...
+    # Subtest: p3-L99: independent-original-DDL
+    ok 38 - p3-L99: independent-original-DDL
+      ---
+      duration_ms: 395.983013
+      ...
+    # Subtest: p3-L100: dependency-only-control-required
+    ok 39 - p3-L100: dependency-only-control-required
+      ---
+      duration_ms: 758.51085
+      ...
+    # Subtest: p3-L105: dependency-only-control-required
+    ok 40 - p3-L105: dependency-only-control-required
+      ---
+      duration_ms: 394.977315
+      ...
+    # Subtest: p3-L109: dependency-only-control-required
+    ok 41 - p3-L109: dependency-only-control-required
+      ---
+      duration_ms: 401.14235
+      ...
+    # Subtest: p3-L122: dependency-only-control-required
+    ok 42 - p3-L122: dependency-only-control-required
+      ---
+      duration_ms: 398.867335
+      ...
+    # Subtest: p3-L165: dependency-only-control-required
+    ok 43 - p3-L165: dependency-only-control-required
+      ---
+      duration_ms: 398.822448
+      ...
+    # Subtest: p3-L210: dependency-only-control-required
+    ok 44 - p3-L210: dependency-only-control-required
+      ---
+      duration_ms: 403.579518
+      ...
+    # Subtest: p3-L271: independent-original-DDL
+    ok 45 - p3-L271: independent-original-DDL
+      ---
+      duration_ms: 399.952855
+      ...
+    # Subtest: p3-L280: dependency-only-control-required
+    ok 46 - p3-L280: dependency-only-control-required
+      ---
+      duration_ms: 403.96489
+      ...
+    # Subtest: p3-L326: dependency-only-control-required
+    ok 47 - p3-L326: dependency-only-control-required
+      ---
+      duration_ms: 416.872512
+      ...
+    # Subtest: p4-L5: dependency-only-control-required
+    ok 48 - p4-L5: dependency-only-control-required
+      ---
+      duration_ms: 414.923971
+      ...
+    # Subtest: p4-L30: dependency-only-control-required
+    ok 49 - p4-L30: dependency-only-control-required
+      ---
+      duration_ms: 407.009936
+      ...
+    # Subtest: p5-L4: dependency-only-control-required
+    ok 50 - p5-L4: dependency-only-control-required
+      ---
+      duration_ms: 381.014311
+      ...
+    # Subtest: p5-L22: dependency-only-control-required
+    ok 51 - p5-L22: dependency-only-control-required
+      ---
+      duration_ms: 452.732048
+      ...
+    # Subtest: p2-L147: actual helper refuses committed isolated fragment
+    ok 52 - p2-L147: actual helper refuses committed isolated fragment
+      ---
+      duration_ms: 772.018294
+      ...
+    # Subtest: p3-L271: actual helper refuses committed isolated fragment
+    ok 53 - p3-L271: actual helper refuses committed isolated fragment
+      ---
+      duration_ms: 759.766604
+      ...
+    1..53
+ok 1 - source-derived prerequisites2..5 isolated fragments and dependency-only controls
+  ---
+  duration_ms: 24994.816129
+  ...
+1..1
+# tests 54
+# suites 0
+# pass 54
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 25093.633783

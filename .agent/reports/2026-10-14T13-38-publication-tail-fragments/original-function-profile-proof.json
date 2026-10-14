@@ -1,0 +1,66 @@
+[
+  {
+    "id": "p2-L147",
+    "exactBodySHA256Verified": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+    "actualOwner": "postgres",
+    "actualConfig": [
+      "search_path=public, pg_temp"
+    ],
+    "actualSecurityDefiner": true,
+    "originalAlterOwnerExists": false,
+    "scope": "Exact original routine creation on absent baseline; deferred PL/pgSQL body not invoked; no counterfactual owner/config ALTER fabricated."
+  },
+  {
+    "id": "p2-L213",
+    "exactBodySHA256Verified": "1765b0450a419c09bf8dfeb939ddf9ff86e4ab40ccc5081d678d14fd02ac7bb0",
+    "actualOwner": "postgres",
+    "actualConfig": null,
+    "actualSecurityDefiner": false,
+    "originalAlterOwnerExists": false,
+    "scope": "Exact original routine creation on absent baseline; deferred PL/pgSQL body not invoked; no counterfactual owner/config ALTER fabricated."
+  },
+  {
+    "id": "p2-L416",
+    "exactBodySHA256Verified": "9eef1d732166fba094ba2763d22bf29aff28f2b3cd66a11ebc2d369c779aad61",
+    "actualOwner": "postgres",
+    "actualConfig": [
+      "search_path=public, pg_temp"
+    ],
+    "actualSecurityDefiner": true,
+    "originalAlterOwnerExists": false,
+    "scope": "Exact original routine creation on absent baseline; deferred PL/pgSQL body not invoked; no counterfactual owner/config ALTER fabricated."
+  },
+  {
+    "id": "p2-L456",
+    "exactBodySHA256Verified": "34e7f8768b0489e2230ec7df5b111c93cf3d08113aaa48e7525cd708e294bffa",
+    "actualOwner": "postgres",
+    "actualConfig": [
+      "search_path=public, pg_temp"
+    ],
+    "actualSecurityDefiner": true,
+    "originalAlterOwnerExists": false,
+    "scope": "Exact original routine creation on absent baseline; deferred PL/pgSQL body not invoked; no counterfactual owner/config ALTER fabricated."
+  },
+  {
+    "id": "p2-L477",
+    "exactBodySHA256Verified": "352bfd1e4673cc5bf502e1620e183981e3d097a72e2bc9bc15bad383ad270c90",
+    "actualOwner": "postgres",
+    "actualConfig": [
+      "search_path=public, pg_temp"
+    ],
+    "actualSecurityDefiner": false,
+    "originalAlterOwnerExists": false,
+    "scope": "Exact original routine creation on absent baseline; deferred PL/pgSQL body not invoked; no counterfactual owner/config ALTER fabricated."
+  },
+  {
+    "id": "p3-L271",
+    "exactBodySHA256Verified": "638eea282a24695d551a39571a49f6e83534fcb38c383994f391f503b34a1c15",
+    "actualOwner": "postgres",
+    "actualConfig": [
+      "search_path=public, pg_temp"
+    ],
+    "actualSecurityDefiner": true,
+    "originalAlterOwnerExists": false,
+    "scope": "Exact original routine creation on absent baseline; deferred PL/pgSQL body not invoked; no counterfactual owner/config ALTER fabricated."
+  }
+]

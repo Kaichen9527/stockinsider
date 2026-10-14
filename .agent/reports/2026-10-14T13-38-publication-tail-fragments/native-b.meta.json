@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs"
+  ],
+  "start_utc": "2026-10-14T05:51:40Z",
+  "seconds": 25.194716453552246,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 255791104,
+  "min_free_bytes": 8620023808
+}

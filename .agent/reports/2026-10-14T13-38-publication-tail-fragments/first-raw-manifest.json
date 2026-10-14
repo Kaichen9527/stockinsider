@@ -1,0 +1,97 @@
+[
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/coverage.md",
+    "bytes": 4050,
+    "sha256": "d03018e22c3be2c90d5f751cb05807ce62a287543515c980fa1d898b6611257c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/equivalence.json",
+    "bytes": 1162,
+    "sha256": "04646f9c2211dc9e06bb6ceacda6001d705126fcc4fcbf586755e2933e05fc48"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/cleanup.json",
+    "bytes": 150,
+    "sha256": "bb1d22b40cc47ea7a27bb5d1702524649864868d49dfd828fa642ad36c233a51"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/coverage-summary.json",
+    "bytes": 164472,
+    "sha256": "566f1e2e71b09ec908e976e82401d493d668a974c0274fab81edac39c29ed9ee"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/financial50-input-baseline-summary.json",
+    "bytes": 1650,
+    "sha256": "640c4abd7d3465111287c1ac88b27ae0122a07eaa85117a61c7ac99ee1c61810"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/financial50-result.json",
+    "bytes": 10804,
+    "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/helper-p2-L147.json",
+    "bytes": 5132,
+    "sha256": "2fa5cebbcd36415e8f7aaa3b81c09b918224b9ec1e1931403d126c2be8fdec0e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/helper-p3-L271.json",
+    "bytes": 5132,
+    "sha256": "ba7f173529c33c02de3c4d205679ef531c14ee19ac9f1c22b127ec8871254f31"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/matrix.json",
+    "bytes": 129030,
+    "sha256": "93cb3ac9222026827019e6a2bf1f01b595141efb0a41157b5aa71bb0bfe3b99e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/pending.json",
+    "bytes": 208,
+    "sha256": "8256fee4b9de3ca2798d043f110c19b12cce3e0c99fd6766a5c8bc27fbd469d9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/post50-baseline-compact.json",
+    "bytes": 1810,
+    "sha256": "62c944159b787746da80585392b06b404da91901aa5705f90f6c35a86110710b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/postgres.log",
+    "bytes": 1387,
+    "sha256": "5fd5c19f88f7f50ef8a813837ff5037e41ed14607210b25a1e0b6c5401ba2a12"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/restore-input.json",
+    "bytes": 633,
+    "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native/seed.json",
+    "bytes": 1123,
+    "sha256": "41d12eeb90053945cd54b01eb112fa68b726d56f1230cbe2d839946920acd196"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-a.meta.json",
+    "bytes": 326,
+    "sha256": "66baf6702627bf871ac0c20b034e4c9307b414c3424c2dbbcf39ed0bebc667f4"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-a.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/native-a.stdout",
+    "bytes": 8570,
+    "sha256": "003a383dba0571c769c07e552dd21198477235a74697ae864060b7e5717577fd"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/original-function-profile-proof.json",
+    "bytes": 2900,
+    "sha256": "7804d888946e45248d3b4ae619b920057cbf70dbed61afe75f7713ce2bea28d7"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-38-publication-tail-fragments/source-manifest.json",
+    "bytes": 31923,
+    "sha256": "13b9043e3908894ab78326ee4eef1b926d8732b958e46900a6ddc02ee0583c40"
+  }
+]

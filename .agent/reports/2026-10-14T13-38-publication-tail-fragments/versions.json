@@ -1,0 +1,30 @@
+[
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "v22.14.0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/postgres",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "-e",
+      "console.log(require('pg/package.json').version)"
+    ],
+    "exit": 0,
+    "stdout": "8.18.0\n",
+    "stderr": ""
+  }
+]

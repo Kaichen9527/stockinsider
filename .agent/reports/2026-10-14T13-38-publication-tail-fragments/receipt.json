@@ -1,0 +1,137 @@
+{
+  "schema": "publication-tail-original-fragments-maker-v1",
+  "startedUTC": "2026-10-14T05:38:57Z",
+  "deadlineUTC": "2026-10-14T06:03:57Z",
+  "completedUTC": "2026-10-14T05:54:40.002685+00:00",
+  "sourceHead": "7309fba04e0ae3bb7800bd2aad11e5992b91020d",
+  "sourceTree": "69c4eac1ca568c135039806247696a4d2676f9a4",
+  "webTree": "c550748ca0a3320396ce5b0210750114fdecf848",
+  "base": "5aad27050b43d62ebe3929a9b9c2ee22c60e7fda",
+  "branch": "codex/research-publication-tail-fragments-oct14",
+  "codeCommits": [
+    "9a702238b91402bf9085f5580c15133d248905a3",
+    "7309fba04e0ae3bb7800bd2aad11e5992b91020d"
+  ],
+  "sourceFiles": 126,
+  "sourceManifestSHA256": "7f06f4a1e3075a1c67e13202e8b8399a579f904681fc1b0c4046ef2d1b394714",
+  "fixtureSHA256": "a005fcdbe3a263fdf9d5f309a0ce5d780fc6a39e309f01a4031e42ec0ad42317",
+  "inventory": {
+    "statements": 116,
+    "selectedFragments": 50,
+    "ancillarySourceProofOnly": 66
+  },
+  "runs": [
+    {
+      "source": "9a702238b91402bf9085f5580c15133d248905a3",
+      "pass": 53,
+      "fail": 0,
+      "skip": 0,
+      "resource": {
+        "command": [
+          "node",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs"
+        ],
+        "start_utc": "2026-10-14T05:46:12Z",
+        "seconds": 25.496994495391846,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 263913472,
+        "min_free_bytes": 8620081152
+      },
+      "rawDirectory": "native-first"
+    },
+    {
+      "source": "7309fba04e0ae3bb7800bd2aad11e5992b91020d",
+      "pass": 54,
+      "fail": 0,
+      "skip": 0,
+      "resource": {
+        "command": [
+          "node",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs"
+        ],
+        "start_utc": "2026-10-14T05:51:40Z",
+        "seconds": 25.194716453552246,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 255791104,
+        "min_free_bytes": 8620023808
+      },
+      "rawDirectory": "native-final",
+      "inputDifference": "Added exact original p3-L99 DROP INDEX to selected matrix; previously source-proof-only. All54 final tests actually ran on sealed7309 subject; not relabeled first53."
+    }
+  ],
+  "finalCounts": {
+    "pass": 54,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "accounting": "1 parent+1 actual financial50 setup+50 fragment controls+2 helper controls"
+  },
+  "coverage": {
+    "independentOriginalFragments": 14,
+    "dependencyOnlyNonIsolatableTargetsNotExecuted": 36,
+    "actualHelperCommittedFragments": [
+      "p2-L147",
+      "p3-L271"
+    ],
+    "helperTailBodiesExecuted": 0,
+    "allRollbackComparisonsUnchanged": true,
+    "nonemptyFacts": 1,
+    "nonemptyObservations": 1,
+    "originalFunctionProfilesObserved": 6
+  },
+  "diskFinalBytes": {
+    "/workspace": 8620007424,
+    "/tmp": 15374991360
+  },
+  "maxSampledRSSBytes": 263913472,
+  "minSampledFreeBytes": 8620023808,
+  "newNodeCheckExit": 0,
+  "equivalence": "123previous source bytes/blob and1798actual compiled server bytes unchanged; old type/lint/build reused, not rerun",
+  "buildReusedNotNew": {
+    "source": "42c5dd10805a0122568617831978f2236e8d68d3",
+    "finalSource": "0fe5d5a90ae95949eec1fb3dd9433359db466d88",
+    "webTree": "c550748ca0a3320396ce5b0210750114fdecf848",
+    "webAndPrebuildInputsByteIdenticalToFinal": true,
+    "notRelabeledAsNewBuild": "Final followup only strengthens new standalone guard namespace metadata/baseline; fresh9pure/24native on final source. No web/prebuild/lock/old source input changed.",
+    "buildId": "cp8ZCyLKRWjLVGGBq0jma",
+    "next": "16.3.4",
+    "serverFiles": 1798,
+    "serverManifestSha256": "2bedb4a9bd7011f1a96fb854dd0a060e7b0bff7228cfdf14e48446325ff3362a",
+    "dotenvFilenameInventory": []
+  },
+  "rawFiles": 45,
+  "rawBytes": 755640,
+  "rawManifestSHA256": "21664fd6a29156bad64f8431007e1c0f486c07866a6545c07f80ec9b8cc44a16",
+  "cleanup": [
+    {
+      "ownedClusterStopped": true,
+      "clusterPath": "/tmp/si-tail-pg-yAHYzF",
+      "removedRebuildableOwnedPgData": true,
+      "rawEvidencePreserved": true
+    },
+    {
+      "ownedClusterStopped": true,
+      "clusterPath": "/tmp/si-tail-pg-meHzka",
+      "removedRebuildableOwnedPgData": true,
+      "rawEvidencePreserved": true
+    }
+  ],
+  "newRED": [],
+  "historicalREDReferences": [
+    "5aad27050b43d62ebe3929a9b9c2ee22c60e7fda",
+    "0fe5d5a90ae95949eec1fb3dd9433359db466d88"
+  ],
+  "pending": {
+    "unprocessedSelectedTargets": [],
+    "36TargetsSeparateCausalIsolation": "Not applicable on supported captured post50 due exact parent-only refusals; target effects not independently proven. Individually enumerated in coverage.md/matrix.json.",
+    "66AncillaryStatements": "Source-proof-only inventory; not injected or counted as native cases.",
+    "productionFormalPeerAuthorityModelPublicationDeployment": "Not in scope, not performed."
+  },
+  "independentApprovalClaimed": false,
+  "protectedApprovalClaimed": false,
+  "firstRawPathRelocation": "first-raw-path-map.json"
+}

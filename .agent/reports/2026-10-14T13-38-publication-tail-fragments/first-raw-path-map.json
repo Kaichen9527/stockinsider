@@ -1,0 +1,14 @@
+{
+  "originalFirstReceiptSHA256": "69bfa4148513ebb563a20a582a3a61b2715bb03cf4809d4c7a19f64d6058d03a",
+  "preservedOriginalManifestNotRewritten": true,
+  "pathRelocations": {
+    "native/": "native-first/",
+    "receipt.json": "first-receipt.json",
+    "source-manifest.json": "first-source-manifest.json",
+    "equivalence.json": "first-equivalence.json",
+    "original-function-profile-proof.json": "first-original-function-profile-proof.json",
+    "coverage.md": "first-coverage.md",
+    "raw-manifest.json": "first-raw-manifest.json"
+  },
+  "note": "Original first53 source/raw bytes preserved; final raw manifest records current archive paths. Initial manifest original path names require this explicit relocation map."
+}
