@@ -1,0 +1,30 @@
+{
+  "96ff5d0a": [
+    {
+      "path": "scripts/opportunity-v3/research-versioned-prerequisite-profile.mjs",
+      "sameBytes": true
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-prerequisite-profile.json",
+      "sameBytes": true
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-prerequisite-profile-native.test.mjs",
+      "sameBytes": true
+    }
+  ],
+  "77201116": [
+    {
+      "path": "scripts/opportunity-v3/research-versioned-prerequisite-profile.test.mjs",
+      "sameBytes": true
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legal-fixture-native.test.mjs",
+      "sameBytes": true
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+      "sameBytes": true
+    }
+  ]
+}

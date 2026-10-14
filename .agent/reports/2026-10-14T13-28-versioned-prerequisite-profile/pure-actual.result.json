@@ -1,0 +1,19 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-versioned-prerequisite-profile.test.mjs"
+  ],
+  "start": "2026-10-14T13:40:05.240983+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.25,
+  "peakProcessTreeRss": 27705344,
+  "minFree": {
+    "/workspace": 8608288768,
+    "/tmp": 15401259008
+  },
+  "user": "agent",
+  "exit": 0,
+  "seconds": 0.3019375801086426
+}

@@ -1,0 +1,84 @@
+{
+  "opensInitial": 0,
+  "opensBefore": 9,
+  "opensAfter": 9,
+  "closed": 9,
+  "ledgerUnchanged": true,
+  "auditBefore": {
+    "research_input_preparations_v2": {
+      "count": 1,
+      "hash": "61751244e8dee7c3bcadba8c48f5af700fe201814b2626ed605c6c130802810f"
+    },
+    "research_article_input_revisions_v2": {
+      "count": 1,
+      "hash": "91ce755a2ec2dfee788a0fc4188c5fdd70f45aa1a77be8cbe4bc5a7c98412e57"
+    },
+    "research_source_seals_v2": {
+      "count": 1,
+      "hash": "4d9e9136ad358ef3ec0bab4051da37264b155b0db22dd88d898a19562a8f69dc"
+    },
+    "research_deep_jobs_v1": {
+      "count": 1,
+      "hash": "733b2dde5382aaa9365a95cc9b409648b6be5bb9ca5b22221853fdb7992c0d67"
+    },
+    "research_deep_job_attempts_v1": {
+      "count": 1,
+      "hash": "7d6443dc09613509474a31442e6462c4e8aca2843a26875fcc216965dbec3ef5"
+    },
+    "research_deep_admission_charges_v1": {
+      "count": 1,
+      "hash": "2a337f2fe188c61b686828faf5a1efa195fdea91aa83dd42c9cffa06e39e131c"
+    },
+    "research_model_reservations_v1": {
+      "count": 1,
+      "hash": "092819e8f3890ce656ae065c583ea56089cb8b55f5e61072e3652896d0273006"
+    },
+    "research_model_completions_v1": {
+      "count": 0,
+      "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "source_raw_documents": {
+      "count": 1,
+      "hash": "8aee1db06e8543da129f45062750d8d3f38b187c594a8c3c89deb93d666e1d26"
+    }
+  },
+  "auditAfter": {
+    "research_input_preparations_v2": {
+      "count": 1,
+      "hash": "61751244e8dee7c3bcadba8c48f5af700fe201814b2626ed605c6c130802810f"
+    },
+    "research_article_input_revisions_v2": {
+      "count": 1,
+      "hash": "91ce755a2ec2dfee788a0fc4188c5fdd70f45aa1a77be8cbe4bc5a7c98412e57"
+    },
+    "research_source_seals_v2": {
+      "count": 1,
+      "hash": "4d9e9136ad358ef3ec0bab4051da37264b155b0db22dd88d898a19562a8f69dc"
+    },
+    "research_deep_jobs_v1": {
+      "count": 1,
+      "hash": "733b2dde5382aaa9365a95cc9b409648b6be5bb9ca5b22221853fdb7992c0d67"
+    },
+    "research_deep_job_attempts_v1": {
+      "count": 1,
+      "hash": "7d6443dc09613509474a31442e6462c4e8aca2843a26875fcc216965dbec3ef5"
+    },
+    "research_deep_admission_charges_v1": {
+      "count": 1,
+      "hash": "2a337f2fe188c61b686828faf5a1efa195fdea91aa83dd42c9cffa06e39e131c"
+    },
+    "research_model_reservations_v1": {
+      "count": 1,
+      "hash": "092819e8f3890ce656ae065c583ea56089cb8b55f5e61072e3652896d0273006"
+    },
+    "research_model_completions_v1": {
+      "count": 0,
+      "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "source_raw_documents": {
+      "count": 1,
+      "hash": "8aee1db06e8543da129f45062750d8d3f38b187c594a8c3c89deb93d666e1d26"
+    }
+  },
+  "missingRootReplaySucceeded": true
+}

@@ -1,0 +1,12 @@
+{
+  "receivedAt": "2026-10-14T13:38:08.952564+00:00",
+  "snapshotHash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42",
+  "entryEligible": false,
+  "excludedCount": 10,
+  "includedCount": 1978,
+  "mappingDigest": "0b9a4cab9ea96d7bb550437f235decc216af68f303ca61e926e721a5b62b8feb",
+  "idempotentReplay": false,
+  "latestObservedAt": "2026-10-08T12:21:15.657943+00:00",
+  "strategyApproved": false,
+  "researchQualified": false
+}

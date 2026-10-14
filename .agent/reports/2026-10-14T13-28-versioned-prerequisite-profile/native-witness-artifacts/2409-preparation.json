@@ -1,0 +1,75 @@
+{
+  "job_id": "a86d7f3d-ef8b-4d25-9592-bc056122e1cc",
+  "replay": false,
+  "attempt": 1,
+  "payload": {
+    "gaps": [
+      "financial_input_revision_missing",
+      "trusted_calculator_not_bound",
+      "original_model_not_selected",
+      "trusted_execution_authority_unavailable"
+    ],
+    "scope": "research_observed_v1",
+    "status": "draft_incomplete",
+    "symbol": "2409",
+    "stockId": null,
+    "financial": null,
+    "calculator": null,
+    "originalJob": {
+      "jobId": "a86d7f3d-ef8b-4d25-9592-bc056122e1cc",
+      "owner": "synthetic-prerequisite-2409",
+      "attempt": 1,
+      "leaseExpiresAt": "2026-10-14T14:10:55.145635+00:00"
+    },
+    "snapshotHash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42",
+    "entryEligible": false,
+    "mappingDigest": "b1367097b0e32200de598eadd7f3c21da8cae7814ebe052cd8c5bd611416ef99",
+    "priorityRunId": "450886ca-f64b-4a6b-b4a1-b096a1febcf0",
+    "schemaVersion": "research-input-preparation-v2",
+    "researchCutoff": "2026-10-14T13:40:55.237277+00:00",
+    "sourceManifest": [
+      {
+        "id": "6acc5f3f-1301-4f8f-8e00-d19617b6cc2d",
+        "root": "https://example.invalid/synthetic-prerequisite-2409",
+        "rights": "public_citation",
+        "rowHash": "f65bbac1369395f19644feadedf09e80ffb58ff9ee4f7a70c361823877343176",
+        "observedAt": "2026-10-14T13:38:54.648+00:00",
+        "publishedAt": "2026-10-14T13:38:54.648+00:00"
+      }
+    ],
+    "discoveryCutoff": "2026-10-14T13:40:54.651579+00:00",
+    "modelDispatched": false,
+    "strategyApproved": false,
+    "priorityInputHash": "4dc3d53be32ffe0bc0289e723589cd5409432559221db6ac6c55703c9f0b49c8",
+    "researchCompanyId": "2180efbb-6285-4d2b-be11-f06ff03dd760",
+    "researchQualified": false,
+    "originalModelCutoff": null,
+    "originalReservation": {
+      "startedAt": "2026-10-14T13:40:55.145635+00:00",
+      "reservationId": "b4620220-b51b-45be-af06-5d315f8f65d5",
+      "leaseExpiresAt": "2026-10-14T14:10:55.145635+00:00"
+    },
+    "publishableResearch": false,
+    "sourceSelectionComplete": false
+  },
+  "request": {
+    "jobId": "a86d7f3d-ef8b-4d25-9592-bc056122e1cc",
+    "owner": "synthetic-prerequisite-2409",
+    "scope": "research_observed_v1",
+    "attempt": 1,
+    "bundleId": null,
+    "snapshotHash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42",
+    "reservationId": "b4620220-b51b-45be-af06-5d315f8f65d5",
+    "sourceDocumentIds": [
+      "6acc5f3f-1301-4f8f-8e00-d19617b6cc2d"
+    ]
+  },
+  "input_hash": "9969a3c7ffd725222054e022168782c549ac56c40b227123b8e6d5275e1c7436",
+  "admitted_at": "2026-10-14T13:40:55.237277+00:00",
+  "request_hash": "8fadec31e886e110a27746256006fd4c935fa15dacff9d684e18f2597eb55c19",
+  "dispatchReady": false,
+  "logical_bytes": 2584,
+  "preparation_id": "1e9c9616-b5b6-4b98-974f-b498a671a6a0",
+  "reservation_id": "b4620220-b51b-45be-af06-5d315f8f65d5",
+  "source_seal_id": "97bb4fb4-4a2a-467d-8759-54a84c97d47b"
+}

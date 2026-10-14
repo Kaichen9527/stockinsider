@@ -1,0 +1,206 @@
+{
+  "schema": {
+    "acl": [
+      [
+        "pg_database_owner",
+        "anon",
+        "USAGE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "authenticated",
+        "USAGE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "legacy_correctness_rpc_owner",
+        "USAGE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "opportunity_v3_rpc_owner",
+        "USAGE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "pg_database_owner",
+        "CREATE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "pg_database_owner",
+        "USAGE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "postgres",
+        "USAGE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "research_input_preparation_owner_v2",
+        "USAGE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "research_observed_rpc_owner",
+        "USAGE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "research_source_fence_owner_v2",
+        "USAGE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "service_role",
+        "USAGE",
+        false
+      ],
+      [
+        "pg_database_owner",
+        "stockinsider_runtime_v319",
+        "USAGE",
+        false
+      ]
+    ],
+    "name": "public",
+    "owner": "pg_database_owner",
+    "effectiveAcl": [
+      [
+        "anon",
+        true,
+        false
+      ],
+      [
+        "authenticated",
+        true,
+        false
+      ],
+      [
+        "authenticator",
+        false,
+        false
+      ],
+      [
+        "dashboard_user",
+        false,
+        false
+      ],
+      [
+        "legacy_correctness_rpc_owner",
+        true,
+        false
+      ],
+      [
+        "opportunity_v3_rpc_owner",
+        true,
+        false
+      ],
+      [
+        "pgbouncer",
+        false,
+        false
+      ],
+      [
+        "postgres",
+        true,
+        true
+      ],
+      [
+        "research_input_preparation_owner_v2",
+        true,
+        false
+      ],
+      [
+        "research_observed_rpc_owner",
+        true,
+        false
+      ],
+      [
+        "research_source_fence_owner_v2",
+        true,
+        false
+      ],
+      [
+        "service_role",
+        true,
+        false
+      ],
+      [
+        "stockinsider",
+        false,
+        false
+      ],
+      [
+        "stockinsider_runtime_v319",
+        true,
+        false
+      ],
+      [
+        "supabase_admin",
+        false,
+        false
+      ],
+      [
+        "supabase_auth_admin",
+        false,
+        false
+      ],
+      [
+        "supabase_realtime_admin",
+        false,
+        false
+      ],
+      [
+        "supabase_storage_admin",
+        false,
+        false
+      ]
+    ]
+  },
+  "roles": [
+    {
+      "name": "research_input_preparation_owner_v2",
+      "limit": -1,
+      "login": false,
+      "super": false,
+      "config": null,
+      "inherit": false,
+      "createDb": false,
+      "bypassRls": false,
+      "createRole": false,
+      "validUntil": null,
+      "replication": false,
+      "passwordNull": true
+    },
+    {
+      "name": "research_source_fence_owner_v2",
+      "limit": -1,
+      "login": false,
+      "super": false,
+      "config": null,
+      "inherit": true,
+      "createDb": false,
+      "bypassRls": false,
+      "createRole": false,
+      "validUntil": null,
+      "replication": false,
+      "passwordNull": true
+    }
+  ],
+  "memberships": [],
+  "namespaceHash": "cb22ccfeb504b6fd82cc1af0d954fe220427d562120dd6089fc9accb9bffd29f",
+  "catalogHash": "4afc6fe90ae3d65acbc3858003695fc9b3c9c4122ef129f92ae174f0ea6bf9e4",
+  "schemaOwner": "pg_database_owner"
+}

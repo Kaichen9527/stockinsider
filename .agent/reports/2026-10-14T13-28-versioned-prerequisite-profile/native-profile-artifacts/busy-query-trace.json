@@ -1,0 +1,3 @@
+[
+  "SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked"
+]

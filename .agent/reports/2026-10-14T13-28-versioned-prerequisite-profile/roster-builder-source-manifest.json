@@ -1,0 +1,98 @@
+[
+  {
+    "file": "docs/research/2026-10-08-discovery-live/observed-security-classification.json",
+    "bytes": 408377,
+    "sha256": "fd67de061af77d5098c65a0c5402f2e96d9b74b594122818a00cb13e5ecb8a57",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "docs/research/2026-10-08-discovery-live/official-security-scope-reconciliation.json",
+    "bytes": 411340,
+    "sha256": "2a39e4973ecd0f1396a77e8d24354732cd51cb748e59da4c43c6ccf8090b8fb9",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/bulltalk-feed.ts",
+    "bytes": 5711,
+    "sha256": "747fa4f5a79ad9bd2db793f4087641dcc478bfbaf0ca8c38bb6f64a34c8e8698",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/public-source-url.ts",
+    "bytes": 1821,
+    "sha256": "f1f4a47c2984a59be316b94586796171adda680e64910c981b5cede88260dcea",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-agent-priority.ts",
+    "bytes": 8382,
+    "sha256": "2f6e9be35bca12d3042ad668fef75447936b1427dffdd69ae621cc9540081318",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-agent-qualification.ts",
+    "bytes": 8864,
+    "sha256": "690de1fb4265366c0431da990fbe2519057562600727de6f44340060c9d34da0",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "bytes": 12714,
+    "sha256": "c6016ca331d77cff78b05c26642ebbb8ce040a285293eebdca9fecf20f3b680c",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-financial-clock.ts",
+    "bytes": 807,
+    "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-inbox.ts",
+    "bytes": 10599,
+    "sha256": "e3c7cf8b721f103eb962c4f0db7f0e70f44ba2c34a78f37d9705c41922446a58",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-observed-classifier.mjs",
+    "bytes": 6394,
+    "sha256": "9eb59b03bd3b89cbe9813a93f49dc2247e5d7e12a6e31e145d042fef493f8f63",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-observed-roster.ts",
+    "bytes": 5109,
+    "sha256": "6feabf5f45a932499e2529788003e13881664a2075a006933579483198b12168",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-source-attempt-controller.ts",
+    "bytes": 33759,
+    "sha256": "f58f418cabe11d727b4b60e458ebc7b849c09d9b649d9f5ba2ebf1c4ea92e388",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-source-clock.ts",
+    "bytes": 1023,
+    "sha256": "219b6367df8c9da6ff9184028c646ba344c0554255adb2a85f6ba89ab2f7b933",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-source-registry.ts",
+    "bytes": 1585,
+    "sha256": "64cf50ad4f4dc65310fcef6916f9f2c5be48830fa8fd3b7e700446bce9965e61",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/research-source-roots.ts",
+    "bytes": 3552,
+    "sha256": "aa3471022cb87235f3cdb84c7e674d0af799b858735774025b6eebb3a3e6110f",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  },
+  {
+    "file": "web/src/lib/source-policy.ts",
+    "bytes": 7577,
+    "sha256": "b108f146eec4c8b33e411d1af4db1d360ceebce0a984587c2839a905f2a9b498",
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "start": "2026-10-14T13:28:39Z",
+  "deadline": "2026-10-14T13:58:39Z",
+  "head": "a1a0233c4b189acf97314b8b60e85e3102bb5981",
+  "node": "22.14.0",
+  "pg": "17.11",
+  "USER": "OS-derived agent",
+  "proxyCa": "inherited unchanged, values not exported",
+  "productionAuthorized": false,
+  "newAuthorityOrPlan": false,
+  "capturedOriginalProfile": "schema-only VPS capture with original synthetic bootstrap; no live VPS query",
+  "singleHeavy": true,
+  "rssMethod": "0.25s process session plus owned cluster command; not exhaustive cgroup peak"
+}

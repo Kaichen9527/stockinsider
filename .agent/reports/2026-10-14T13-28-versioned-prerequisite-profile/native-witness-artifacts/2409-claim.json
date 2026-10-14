@@ -1,0 +1,32 @@
+{
+  "job": {
+    "jobId": "a86d7f3d-ef8b-4d25-9592-bc056122e1cc",
+    "owner": "synthetic-prerequisite-2409",
+    "symbol": "2409",
+    "attempt": 1,
+    "priorityRunId": "450886ca-f64b-4a6b-b4a1-b096a1febcf0",
+    "leaseExpiresAt": "2026-10-14T14:10:55.145635+00:00"
+  },
+  "observedAt": "2026-10-14T13:40:55.146774+00:00",
+  "schemaVersion": "research-deep-claim-context-v2",
+  "modelCompletion": null,
+  "modelReservation": {
+    "role": "company_research",
+    "owner": "synthetic-prerequisite-2409",
+    "workKey": "deep:a86d7f3d-ef8b-4d25-9592-bc056122e1cc:1",
+    "startedAt": "2026-10-14T13:40:55.145635+00:00",
+    "reservationId": "b4620220-b51b-45be-af06-5d315f8f65d5",
+    "leaseExpiresAt": "2026-10-14T14:10:55.145635+00:00"
+  },
+  "researchIdentity": {
+    "scope": "research_observed_v1",
+    "stockId": null,
+    "priorityAsOf": "2026-10-14T13:40:54.651579+00:00",
+    "snapshotHash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42",
+    "mappingDigest": "b1367097b0e32200de598eadd7f3c21da8cae7814ebe052cd8c5bd611416ef99",
+    "priorityInputHash": "4dc3d53be32ffe0bc0289e723589cd5409432559221db6ac6c55703c9f0b49c8",
+    "researchCompanyId": "2180efbb-6285-4d2b-be11-f06ff03dd760",
+    "snapshotObservedAt": "2026-10-08T12:21:15.657943+00:00",
+    "snapshotReceivedAt": "2026-10-14T13:40:53.247516+00:00"
+  }
+}

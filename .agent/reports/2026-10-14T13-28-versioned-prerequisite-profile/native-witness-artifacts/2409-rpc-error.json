@@ -1,0 +1,6 @@
+{
+  "name": "read_research_article_input_candidate_v3",
+  "code": "P0001",
+  "message": "complete_replay_conflict",
+  "where": "PL/pgSQL function read_research_article_input_candidate_v3(jsonb) line 12 at RAISE"
+}

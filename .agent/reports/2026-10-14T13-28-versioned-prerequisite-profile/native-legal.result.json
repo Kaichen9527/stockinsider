@@ -1,0 +1,20 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-versioned-legal-fixture-native.test.mjs"
+  ],
+  "start": "2026-10-14T13:36:37.811213+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.25,
+  "peakProcessTreeRss": 385048576,
+  "minFree": {
+    "/workspace": 8606441472,
+    "/tmp": 15321886720
+  },
+  "user": "agent",
+  "exit": 1,
+  "seconds": 9.252883434295654
+}

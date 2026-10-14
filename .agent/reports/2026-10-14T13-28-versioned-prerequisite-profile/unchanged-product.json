@@ -1,0 +1,23 @@
+{
+  "base": "36ea8f0c0f7e5c3f9d52499c97882be60acbf538",
+  "head": "a1a0233c4b189acf97314b8b60e85e3102bb5981",
+  "changes": [
+    "A\tdocs/operations/2026-10-14/versioned-prerequisite-profile/ADR.md",
+    "A\tdocs/operations/2026-10-14/versioned-prerequisite-profile/HANDOFF.md",
+    "A\tscripts/fixtures/research-versioned-prerequisite/README.md",
+    "A\tscripts/fixtures/research-versioned-prerequisite/observed-roster-original2e.json.gz",
+    "A\tscripts/opportunity-v3/research-versioned-legal-fixture-native.test.mjs",
+    "A\tscripts/opportunity-v3/research-versioned-prerequisite-capture.mjs",
+    "A\tscripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+    "A\tscripts/opportunity-v3/research-versioned-prerequisite-profile-native.test.mjs",
+    "A\tscripts/opportunity-v3/research-versioned-prerequisite-profile.json",
+    "A\tscripts/opportunity-v3/research-versioned-prerequisite-profile.mjs",
+    "A\tscripts/opportunity-v3/research-versioned-prerequisite-profile.test.mjs"
+  ],
+  "existingTrackedFilesChanged": false,
+  "baseWebTree": "f598362714c3d3eecfe110c10d2cb7520c065afc",
+  "currentWebTree": "f598362714c3d3eecfe110c10d2cb7520c065afc",
+  "newAppBuild": false,
+  "historicalBuildId": "R8b3ud1u3kwCXfHUWYZk5",
+  "originalBuildEvidence": "574a0fd5f21cb5adc38ba4f00dbaef9a5c269d6b"
+}

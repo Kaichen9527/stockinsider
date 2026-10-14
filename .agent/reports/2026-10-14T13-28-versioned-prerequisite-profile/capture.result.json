@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--experimental-strip-types",
+    "scripts/opportunity-v3/research-versioned-prerequisite-capture.mjs"
+  ],
+  "start": "2026-10-14T13:30:28.104486+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.25,
+  "peakProcessTreeRss": 248737792,
+  "minFree": {
+    "/workspace": 8608604160,
+    "/tmp": 15325679616
+  },
+  "user": "agent",
+  "exit": 0,
+  "seconds": 4.084936618804932
+}

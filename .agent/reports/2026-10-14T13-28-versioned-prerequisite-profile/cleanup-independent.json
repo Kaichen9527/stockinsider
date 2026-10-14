@@ -1,0 +1,61 @@
+{
+  "clusters": [
+    {
+      "receipt": "native-witness-artifacts/2383-cleanup.json",
+      "clusterPath": "/tmp/vp3profile-55a9MY",
+      "clusterAbsent": true,
+      "stopped": true,
+      "stage": "business complete"
+    },
+    {
+      "receipt": "native-witness-artifacts/2409-cleanup.json",
+      "clusterPath": "/tmp/vp3profile-7eR4JD",
+      "clusterAbsent": true,
+      "stopped": true,
+      "stage": "business complete"
+    },
+    {
+      "receipt": "native-legal-observer-artifacts/2383-cleanup.json",
+      "clusterPath": "/tmp/vp3profile-KNmhHB",
+      "clusterAbsent": true,
+      "stopped": true,
+      "stage": "business complete"
+    },
+    {
+      "receipt": "native-legal-observer-artifacts/2409-cleanup.json",
+      "clusterPath": "/tmp/vp3profile-uUOIbk",
+      "clusterAbsent": true,
+      "stopped": true,
+      "stage": "business complete"
+    },
+    {
+      "receipt": "native-legal-artifacts/2409-cleanup.json",
+      "clusterPath": "/tmp/vp3profile-8bcAIA",
+      "clusterAbsent": true,
+      "stopped": true,
+      "stage": "actual sameowner first seal"
+    },
+    {
+      "receipt": "native-profile-artifacts/cleanup.json",
+      "clusterPath": "/tmp/vp3profile-uMqDRl",
+      "clusterAbsent": true,
+      "stopped": true,
+      "stage": "profile matrix complete"
+    },
+    {
+      "receipt": "capture-artifacts/cleanup.json",
+      "clusterPath": "/tmp/vp3profile-LI2tLi",
+      "clusterAbsent": true,
+      "stopped": true,
+      "stage": "capture complete"
+    }
+  ],
+  "activeOwnedProcesses": [],
+  "remainingOwnedSecureTrees": [],
+  "rawPreserved": true,
+  "cacheDeleted": false,
+  "freeAfter": {
+    "/workspace": 8608215040,
+    "/tmp": 15399268352
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+  "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+  "texts": [
+    "{\"artifactRootId\":\"original75d-fixed8or6\",\"compiledFingerprintIdentity\":\"d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9\",\"financialProfile\":\"oct08_compatible_financial_candidate_v1\",\"inventoryHash\":\"182992205534182b1e349da5c6806085574a3ca760273d0464f66eba6ce8c496\",\"schemaTemplateIdentity\":\"8fbf24b9672f7bb11e7986ea74f90844b66472f669454f4712474baec73e47f1\",\"sourceExecutionHash\":\"32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c\",\"symbol\":\"2383\",\"validationContract\":\"research-versioned-input-candidate-v3\",\"wireVersion\":\"research-article-input-v2\"}",
+    "{\"artifactRootId\":\"historical15d4-fixed9or7\",\"compiledFingerprintIdentity\":\"d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9\",\"financialProfile\":\"oct14_historical_cash_v1\",\"inventoryHash\":\"5f9c5114f7cd239f840d5c47dd9cb47dfcada5791b954aa99eafafcac89f456d\",\"schemaTemplateIdentity\":\"47023a6f757896abf5dd814ed2ea42a10bb754594ab609b3656b160f52eb25e9\",\"sourceExecutionHash\":\"32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c\",\"symbol\":\"2383\",\"validationContract\":\"research-versioned-input-candidate-v3\",\"wireVersion\":\"research-article-input-v3\"}"
+  ],
+  "wholeClosureApproved": false,
+  "notNextExecutor": true
+}

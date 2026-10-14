@@ -1,0 +1,7 @@
+2026-10-14 13:32:55.983 UTC [572814] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-14 13:32:55.983 UTC [572814] LOG:  listening on Unix socket "/tmp/vp3profile-uMqDRl/.s.PGSQL.58485"
+2026-10-14 13:32:55.985 UTC [572817] LOG:  database system was shut down at 2026-10-14 13:32:55 UTC
+2026-10-14 13:32:55.988 UTC [572814] LOG:  database system is ready to accept connections
+2026-10-14 13:33:06.805 UTC [572830] LOG:  unexpected EOF on client connection with an open transaction
+2026-10-14 13:33:14.838 UTC [572814] LOG:  received immediate shutdown request
+2026-10-14 13:33:14.841 UTC [572814] LOG:  database system is shut down

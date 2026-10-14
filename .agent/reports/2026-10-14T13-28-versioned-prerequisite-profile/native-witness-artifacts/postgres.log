@@ -1,0 +1,9 @@
+2026-10-14 13:40:58.263 UTC [573707] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-14 13:40:58.263 UTC [573707] LOG:  listening on Unix socket "/tmp/vp3profile-55a9MY/.s.PGSQL.58145"
+2026-10-14 13:40:58.265 UTC [573710] LOG:  database system was shut down at 2026-10-14 13:40:58 UTC
+2026-10-14 13:40:58.267 UTC [573707] LOG:  database system is ready to accept connections
+2026-10-14 13:41:05.721 UTC [573719] ERROR:  complete_replay_conflict
+2026-10-14 13:41:05.721 UTC [573719] CONTEXT:  PL/pgSQL function read_research_article_input_candidate_v3(jsonb) line 12 at RAISE
+2026-10-14 13:41:05.721 UTC [573719] STATEMENT:  SELECT public.read_research_article_input_candidate_v3($1) v
+2026-10-14 13:41:06.710 UTC [573707] LOG:  received immediate shutdown request
+2026-10-14 13:41:06.713 UTC [573707] LOG:  database system is shut down
