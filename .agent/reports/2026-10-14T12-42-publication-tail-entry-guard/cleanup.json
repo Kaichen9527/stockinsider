@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-14T05:06:57.777553+00:00",
+  "ownedActiveHeavyOrPg": [],
+  "allLocalClustersStoppedAndRebuildablePgDataRemoved": true,
+  "noOldRawOrUniqueEvidenceDeleted": true,
+  "freeBytes": {
+    "/workspace": 8624496640,
+    "/tmp": 15376904192
+  }
+}

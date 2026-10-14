@@ -1,0 +1,10 @@
+{
+  "calls": [
+    {
+      "kind": "SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration",
+      "sha256": "191f6c3587eb99bc57bf2f477e9343049fc1cd185df32d6a19fb3ec458bf20a5"
+    }
+  ],
+  "beforeBegin": true,
+  "zeroMutation": true
+}

@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs"
+  ],
+  "start_utc": "2026-10-14T04:54:28Z",
+  "seconds": 13.188859701156616,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 219910144,
+  "min_free_bytes": 8624693248
+}

@@ -1,0 +1,55 @@
+TAP version 13
+# Subtest: baseline is genuinely separate finite post50 descriptor, no production authority
+ok 1 - baseline is genuinely separate finite post50 descriptor, no production authority
+  ---
+  duration_ms: 1.088213
+  ...
+# Subtest: missing rejected before any query and client closed
+ok 2 - missing rejected before any query and client closed
+  ---
+  duration_ms: 1.885907
+  ...
+# Subtest: duplicate rejected before any query and client closed
+ok 3 - duplicate rejected before any query and client closed
+  ---
+  duration_ms: 2.005808
+  ...
+# Subtest: wronghash rejected before any query and client closed
+ok 4 - wronghash rejected before any query and client closed
+  ---
+  duration_ms: 0.842892
+  ...
+# Subtest: reordered rejected before any query and client closed
+ok 5 - reordered rejected before any query and client closed
+  ---
+  duration_ms: 1.089525
+  ...
+# Subtest: unknown rejected before any query and client closed
+ok 6 - unknown rejected before any query and client closed
+  ---
+  duration_ms: 1.175094
+  ...
+# Subtest: busy rejected before BEGIN with no mutation
+ok 7 - busy rejected before BEGIN with no mutation
+  ---
+  duration_ms: 24.445737
+  ...
+# Subtest: namespace unreadable or different never becomes predecessor success
+ok 8 - namespace unreadable or different never becomes predecessor success
+  ---
+  duration_ms: 9.940724
+  ...
+# Subtest: caller accessors are read once into owned buffers before asynchronous queries
+ok 9 - caller accessors are read once into owned buffers before asynchronous queries
+  ---
+  duration_ms: 11.522191
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 124.962111

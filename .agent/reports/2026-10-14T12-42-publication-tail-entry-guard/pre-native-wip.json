@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-14T04:53:57.276641+00:00",
+  "files": [
+    {
+      "path": "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs",
+      "bytes": 2260,
+      "sha256": "2a1c2f3ac255357748cb8c371e8f2f3611758ba1766acb62c9a2332120bb6eaa"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-tail-entry-baseline.test.mjs",
+      "bytes": 11177,
+      "sha256": "b6a327d465c60f47c0df4a2f0f435c0a8758e16b49ea56fee55ee206c58ecae5"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-tail-entry-guard.mjs",
+      "bytes": 2173,
+      "sha256": "4df669ea6e28d78a4d25c030198256070a9845831fe2fbcac35859008b180b89"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs",
+      "bytes": 2156,
+      "sha256": "d3ce06d53fbfb7b238c755c93d3f73608bcc17c6f58b98d7148fb7623d249d1d"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-tail-entry-namespace.mjs",
+      "bytes": 2012,
+      "sha256": "6d8e7ca38165973a438a63126667d340c804ae91e7d02452ce4401959985bcdd"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+      "bytes": 19029,
+      "sha256": "52f44d6997f90eda20b66675f4daa6ff3894f369aec157b3c4fed92d98bc297b"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-tail-post50-baseline.json",
+      "bytes": 150652,
+      "sha256": "1c238655d5e1696c6775fba212c2b6b12633c1fe059d385117e62c9657c86a30"
+    }
+  ]
+}

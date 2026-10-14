@@ -1,0 +1,866 @@
+{
+  "schema": "publication26-entry-guard-maker-v1",
+  "started": "2026-10-14T04:42:31Z",
+  "deadline": "2026-10-14T05:12:31Z",
+  "completedAt": "2026-10-14T05:06:57.815891+00:00",
+  "base": "fd1feab958d0038590f51ce9c618aea0d2e7d748",
+  "branch": "codex/research-publication-tail-entry-guard-oct14",
+  "sourceHead": "0fe5d5a90ae95949eec1fb3dd9433359db466d88",
+  "sourceTree": "b4e8c3d0698a5de09ae0672561376546a9eae821",
+  "sourceFileCount": 123,
+  "sourceManifestSHA256": "df5ca9c1501bcdd4029d668dd9f213b39a7aec7b815342009caa03b491409398",
+  "codeCommits": [
+    "42c5dd10805a0122568617831978f2236e8d68d3",
+    "0fe5d5a90ae95949eec1fb3dd9433359db466d88"
+  ],
+  "baseline": {
+    "sha256": "63677c0b92f9778f316dd5e7f68a8dd93f9d78fe2c013d7272417c1806ee33e4",
+    "schema": "captured-post-financial50-tail-predecessor-v1",
+    "captureInputSHA256": "39043cff83c64f570738e3bb50eef89b8e61aeefdd2b5dd5ef573490e8761717",
+    "namespaceSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+    "scopeCounts": {
+      "tables": 253,
+      "functions": 242,
+      "roles": 30,
+      "types": 120
+    },
+    "notOldBeforeBaseOrBeforePublication": true,
+    "noAclNormalization": true,
+    "supportsOnlyExactCapturedPost50Profile": true
+  },
+  "oldFirstPrefixMissPreserved": true,
+  "selectionCopiesValidateBeforeAnyQuery": true,
+  "actualGuardBeforeAnyTailMutation": true,
+  "nativeMatrix": {
+    "freshReadonlyGuard": true,
+    "fullFirstPrerequisitePrefixes": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "isolatedPartials": {
+      "actualOutboxV6Column": true,
+      "actualOutboxV6Function": true,
+      "counterfactualIndexOnRealTable": true
+    },
+    "existingRoutineBodyOwnerConfigAclSecdefOverloadAndColumnAclDrifts": true,
+    "committedV6PartialRejectedByActualHelperZeroTail": true,
+    "actualHelperBusyBeforeBegin": true,
+    "actualHelperForcedErrorAfterGenuineTailSql": true,
+    "actualHelperSocketLossDuringTailBeforeCommit": {
+      "backendPid": 538957,
+      "backendGone": true,
+      "realTailDDLReached": true,
+      "observerBaselineUnchanged": true
+    },
+    "actualHelperNormalCommitAndIndependentObserver": true,
+    "installedSecondHelperRefusedZeroReplay": true,
+    "factsCount": 1,
+    "observationsCount": 1,
+    "pendingPerPrerequisiteIsolatedFragments": "Only v6 column/function and a real-table counterfactual index isolated separately; exact isolated column/index/function-only fragments for prerequisites2..5 are not separately proven when they require newly introduced parent tables/types. Full1..5 prefixes are proven. Do not describe this as all per-fragment cases."
+  },
+  "results": {
+    "purePass": 9,
+    "pureFail": 0,
+    "pureSkip": 0,
+    "nativePass": 24,
+    "nativeFail": 0,
+    "nativeSkip": 0,
+    "nativeParent": 1,
+    "nativeSubtests": 23,
+    "typecheckExit": 0,
+    "lintExit": 0,
+    "lintErrors": 0,
+    "lintWarnings": 33,
+    "normalBuildExit": 0
+  },
+  "sourceEquivalence": "Final namespace/baseline metadata followup only new Node files.9/24 final sealed execution; web/type/lint/build inputs unchanged from42c5dd10 actual run. No additional build claimed.",
+  "originalRed": "Native test generator computed splice indices before inserting imports, causing SyntaxError before PG; raw original native stdout/stderr/exit1 and corrected run preserved. No product SQL/expectation/permission fix.",
+  "build": {
+    "source": "42c5dd10805a0122568617831978f2236e8d68d3",
+    "finalSource": "0fe5d5a90ae95949eec1fb3dd9433359db466d88",
+    "webTree": "c550748ca0a3320396ce5b0210750114fdecf848",
+    "webAndPrebuildInputsByteIdenticalToFinal": true,
+    "notRelabeledAsNewBuild": "Final followup only strengthens new standalone guard namespace metadata/baseline; fresh9pure/24native on final source. No web/prebuild/lock/old source input changed.",
+    "buildId": "cp8ZCyLKRWjLVGGBq0jma",
+    "next": "16.3.4",
+    "serverFiles": 1798,
+    "serverManifestSha256": "2bedb4a9bd7011f1a96fb854dd0a060e7b0bff7228cfdf14e48446325ff3362a",
+    "dotenvFilenameInventory": []
+  },
+  "resources": {
+    "limitsBytes": 8589934592,
+    "sampling": "250ms process-tree RSS/min free across /workspace,/tmp; not kernel high-water proof",
+    "peakSampledRssBytes": 1573822464,
+    "minSampledFreeBytes": 8624496640,
+    "commands": {
+      "native-sealed.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs"
+        ],
+        "start_utc": "2026-10-14T05:01:26Z",
+        "seconds": 12.972942113876343,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 269553664,
+        "min_free_bytes": 8624496640
+      },
+      "pure-sealed.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs"
+        ],
+        "start_utc": "2026-10-14T05:01:26Z",
+        "seconds": 0.2718997001647949,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 24522752,
+        "min_free_bytes": 8624496640
+      },
+      "baseline-capture-final.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/research-publication-tail-entry-baseline.test.mjs"
+        ],
+        "start_utc": "2026-10-14T05:00:36Z",
+        "seconds": 3.0371439456939697,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 164265984,
+        "min_free_bytes": 8624574464
+      },
+      "normal-build.meta.json": {
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "build"
+        ],
+        "start_utc": "2026-10-14T04:58:55Z",
+        "seconds": 30.19949746131897,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 800489472,
+        "min_free_bytes": 8624574464
+      },
+      "lint.meta.json": {
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "lint"
+        ],
+        "start_utc": "2026-10-14T04:58:35Z",
+        "seconds": 20.501265048980713,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 1573822464,
+        "min_free_bytes": 8624574464
+      },
+      "typecheck.meta.json": {
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "typecheck"
+        ],
+        "start_utc": "2026-10-14T04:58:19Z",
+        "seconds": 15.930603265762329,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 1216237568,
+        "min_free_bytes": 8624574464
+      },
+      "native-final.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs"
+        ],
+        "start_utc": "2026-10-14T04:58:05Z",
+        "seconds": 13.821308135986328,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 237240320,
+        "min_free_bytes": 8624574464
+      },
+      "pure-final.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs"
+        ],
+        "start_utc": "2026-10-14T04:58:05Z",
+        "seconds": 0.2872598171234131,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 24330240,
+        "min_free_bytes": 8624574464
+      },
+      "native-generator-corrected.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs"
+        ],
+        "start_utc": "2026-10-14T04:54:28Z",
+        "seconds": 13.188859701156616,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 219910144,
+        "min_free_bytes": 8624693248
+      },
+      "native.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs"
+        ],
+        "start_utc": "2026-10-14T04:53:57Z",
+        "seconds": 0.28752636909484863,
+        "exit": 1,
+        "peak_sampled_process_tree_rss_bytes": 24489984,
+        "min_free_bytes": 8624693248
+      },
+      "pure.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs"
+        ],
+        "start_utc": "2026-10-14T04:49:34Z",
+        "seconds": 0.278167724609375,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 24330240,
+        "min_free_bytes": 8624693248
+      },
+      "baseline-capture.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/research-publication-tail-entry-baseline.test.mjs"
+        ],
+        "start_utc": "2026-10-14T04:45:50Z",
+        "seconds": 3.0219805240631104,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 236134400,
+        "min_free_bytes": 8624693248
+      }
+    }
+  },
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-capture-final.meta.json",
+      "bytes": 358,
+      "sha256": "02399e401c6c26f1857f41f6d31f74bcc99b97810602162c9712c349a636d2df"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-capture-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-capture-final.stdout",
+      "bytes": 530,
+      "sha256": "2c4e5d7c6422eac5e5efdb58b3920ac419a264b16385bdc20ab0fb6b3e7c23c3"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-capture.meta.json",
+      "bytes": 358,
+      "sha256": "28a45187c6a7b0b98b48c5d7a2894ff7a1a2504639e0c8f8d571aff640af3643"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-capture.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-capture.stdout",
+      "bytes": 530,
+      "sha256": "6cceb3abdcac56988bbc0c2de8063078e22d9b5109007bc5e9cc3a5b2a9b27a4"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-final/cleanup.json",
+      "bytes": 150,
+      "sha256": "73c7ae50f3d39f84fb0857e15a2daafcfebb319f282bba9e067376ec6039fab1"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-final/financial50-baseline.json",
+      "bytes": 3229697,
+      "sha256": "c519311f42b57481afa3f91280c93055964bf5ed94f268efa86f985bd48203a4"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-final/financial50-result.json",
+      "bytes": 10804,
+      "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-final/pending.json",
+      "bytes": 250,
+      "sha256": "cc57078a42a3d4a741969c23f79b72956ace6ecb63454db91115d0f59f1858c5"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-final/post50-expanded-baseline.json",
+      "bytes": 11233515,
+      "sha256": "39043cff83c64f570738e3bb50eef89b8e61aeefdd2b5dd5ef573490e8761717"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-final/postgres.log",
+      "bytes": 617,
+      "sha256": "6a46c86a40f3c7e04fe95b5b590576ac7b99e063c6696810a274f98da5d63010"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-final/restore-input.json",
+      "bytes": 633,
+      "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-final/seed.json",
+      "bytes": 1123,
+      "sha256": "c03c6e69334f5204aeab3a71f5f38dcac85ce25549af41ebe06a643446c8ac85"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-initial/cleanup.json",
+      "bytes": 150,
+      "sha256": "0f5187356955ba5321cfa9d795c77a22a7a80a3b6f412c09fa00f70ec8b9961d"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-initial/financial50-baseline.json",
+      "bytes": 3229693,
+      "sha256": "453a7fe4b6edb2c3cf4f301f1b8659f6a208513bcf2bd6b012236cef1232ebbc"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-initial/financial50-result.json",
+      "bytes": 10804,
+      "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-initial/pending.json",
+      "bytes": 250,
+      "sha256": "cc57078a42a3d4a741969c23f79b72956ace6ecb63454db91115d0f59f1858c5"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-initial/post50-expanded-baseline.json",
+      "bytes": 11035774,
+      "sha256": "826314b469d853d575ada33ccd1a7b462207834fa4616742db5f0752a0568863"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-initial/postgres.log",
+      "bytes": 617,
+      "sha256": "4eb0f81391ca2a49e294b3b7a379192aa49ac3bdd349a594184036429ed8e755"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-initial/restore-input.json",
+      "bytes": 633,
+      "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/baseline-initial/seed.json",
+      "bytes": 1121,
+      "sha256": "48ede472fc25cbb33522738cf71a18865b5f6f54c3d8156a59a65925051f48ef"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/build-identity.json",
+      "bytes": 634,
+      "sha256": "ef2e52800af54fd89efc8d24ef9ff570e105e8bb66704b94802fd1c605df0c4f"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/cleanup.json",
+      "bytes": 258,
+      "sha256": "c600d67a60629936ccc9ddb42caef5a4a37a199516db485f9ab7b753cf7ac383"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/compiled-server-manifest.json",
+      "bytes": 333583,
+      "sha256": "2bedb4a9bd7011f1a96fb854dd0a060e7b0bff7228cfdf14e48446325ff3362a"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/lint.meta.json",
+      "bytes": 252,
+      "sha256": "5a20cf011d1b5f3acb4ca3c49198304ae868b63d0618cb966defbdd98ebde5ef"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/lint.stderr",
+      "bytes": 138,
+      "sha256": "43919f745e4a9e3b8b8e2bfa6b44040e1e34905f65e07c81370c80739295d84d"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/lint.stdout",
+      "bytes": 4426,
+      "sha256": "f35ce3c852e9c501133c403f7a9a209ef94b087b9722ea86005eafdf7afa8a2a"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/actual-helper-commit.json",
+      "bytes": 2499,
+      "sha256": "ee378dafe7ec3e4c9384cad9efa997c3e84d7b480691d970860c2274a573ecd1"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/cleanup.json",
+      "bytes": 150,
+      "sha256": "a0b1958c87bbbcc60d1531308e362eca8b6b2bc25f0af8a5b76811d3405b46b5"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/committed-partial-proof.json",
+      "bytes": 55,
+      "sha256": "e304b5d406e910fe44179674951282893759f1a07e50034b46347d55143dfa1d"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/committed-prefix-helper-rejection.json",
+      "bytes": 4888,
+      "sha256": "4b63b93368e1e39445aec9c96d0d132b37b3e091748ceb9a81df057fa0a2acc2"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/disconnect-inside-compact.json",
+      "bytes": 1945,
+      "sha256": "a5cd71d9c044ed6ed367aacc16fbd31055ce3b3d8be1134efcf33e8e739ecf69"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/financial50-baseline.json",
+      "bytes": 3229697,
+      "sha256": "3dee6a7efcef70c0588b6a2ed758fced9106acd2ab7b9fb2dca27414ad7422cb"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/financial50-result.json",
+      "bytes": 10804,
+      "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/forced-helper-rollback.json",
+      "bytes": 66,
+      "sha256": "97eea7c6ea483a848024f259ae3a54fd6771ca104d0d31b6552db29355eff19f"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/forced-inside-compact.json",
+      "bytes": 1814,
+      "sha256": "5ccf96c589de29b5bfe5a6a63bf8259aa9da695c50ceff9c23a24e3efee0d1ba"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/guarded-baseline-compact.json",
+      "bytes": 1814,
+      "sha256": "4041adc28dd92a4046add36196a1c4b48ec621fb88a604605399e3cb832a6307"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/helper-busy-before-begin.json",
+      "bytes": 261,
+      "sha256": "beaa03e3b57bfc88a409c2198b83506f49351c3a9f74c0bf5bb9359532a8a706"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/installed-second-helper-rejection.json",
+      "bytes": 1077,
+      "sha256": "870f7dbbf632925fc14263da51168c9a703298b54f5154a6aa207ae8f1e6f3a9"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/pending.json",
+      "bytes": 218,
+      "sha256": "6d9221826c51239f54b5b92b2d11f57e17ae6b53f21c8e6840a76ecf88fad163"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/postgres.log",
+      "bytes": 721,
+      "sha256": "a6071555bd0328d72360001cbf2d989ab2cffadc9be4c441b5896ab861fec6f0"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/restore-input.json",
+      "bytes": 633,
+      "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/seed.json",
+      "bytes": 1123,
+      "sha256": "8c6c3a798e57ee2a0f8b71d4be16bdf53fcfd8c3067d59a5b29f0cf0b95cbb16"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/socket-client-error.json",
+      "bytes": 73,
+      "sha256": "e735d65154bae7470235b23e0695485db8fc937de98c197b5b926c4177bd1223"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-before-metadata-completion/socket-disconnect-rollback.json",
+      "bytes": 117,
+      "sha256": "d2be1ec58e0dc4a8fb4d690933e9e2babe6549444741b2b1428c7f176fb4d274"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-final.meta.json",
+      "bytes": 356,
+      "sha256": "0c8b27acf5d684e4250487ae26cbb9b76563f6d5ec5ff41b1dca49ceb41ca61f"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-final.stdout",
+      "bytes": 4683,
+      "sha256": "b0f4cd6976c8ce3c1b49c60288d579a7e095be84f7ab782e1b9b3cd5cd913859"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/actual-helper-commit.json",
+      "bytes": 2499,
+      "sha256": "f04aa19d2900c697ff401b60052b7d0de2c8a468685fe4e1a34b47667c6bde33"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/cleanup.json",
+      "bytes": 150,
+      "sha256": "656d7977f9dd05eb3f45518d8e5936ff5c3be7e155ec3778658c3a5557ade42c"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/committed-partial-proof.json",
+      "bytes": 55,
+      "sha256": "e304b5d406e910fe44179674951282893759f1a07e50034b46347d55143dfa1d"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/committed-prefix-helper-rejection.json",
+      "bytes": 4888,
+      "sha256": "cb2bf040f5a017f9f30099104a169454565778958de753b237ae10ab47f849cb"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/disconnect-inside-compact.json",
+      "bytes": 1945,
+      "sha256": "d744cd0094bf0d90ed39f90c30a1bac3b82af08e43c00d8168b0d26117e96615"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/financial50-baseline.json",
+      "bytes": 3229697,
+      "sha256": "a1a26a215096338492068fe037fb7d48ea42dd656d295ff72d4134380e7c9bfc"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/financial50-result.json",
+      "bytes": 10804,
+      "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/forced-helper-rollback.json",
+      "bytes": 66,
+      "sha256": "97eea7c6ea483a848024f259ae3a54fd6771ca104d0d31b6552db29355eff19f"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/forced-inside-compact.json",
+      "bytes": 1814,
+      "sha256": "47f882ed4ed238e68fedddc509a55b6495b536dcaee724cacdbbda43fcc02636"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/guarded-baseline-compact.json",
+      "bytes": 1814,
+      "sha256": "122a7dc94f9cb779fe6444f487543f86d0ac5de2e30ee18b19d7ab087b293b48"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/helper-busy-before-begin.json",
+      "bytes": 261,
+      "sha256": "beaa03e3b57bfc88a409c2198b83506f49351c3a9f74c0bf5bb9359532a8a706"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/installed-second-helper-rejection.json",
+      "bytes": 1077,
+      "sha256": "870f7dbbf632925fc14263da51168c9a703298b54f5154a6aa207ae8f1e6f3a9"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/pending.json",
+      "bytes": 218,
+      "sha256": "6d9221826c51239f54b5b92b2d11f57e17ae6b53f21c8e6840a76ecf88fad163"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/postgres.log",
+      "bytes": 721,
+      "sha256": "d0a057d2c670aa0bb6d8ee8fef4cda032e45a0f9c7ae44a18ddd4ff219c1bdca"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/restore-input.json",
+      "bytes": 633,
+      "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/seed.json",
+      "bytes": 1123,
+      "sha256": "147e03a3485aeffc47f116b6536c5e8c3fc40aa6ba88117a9015c6164e603fe3"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/socket-client-error.json",
+      "bytes": 73,
+      "sha256": "e735d65154bae7470235b23e0695485db8fc937de98c197b5b926c4177bd1223"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected/socket-disconnect-rollback.json",
+      "bytes": 117,
+      "sha256": "072d62551037043a2294cccf86fcd79cedf7c98d0923248fcfd9bab2193adb93"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected.meta.json",
+      "bytes": 356,
+      "sha256": "dda41900a48606eaeda161b21daa0989893d5aaf5a58e667d4adaae2e3f1172b"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-generator-corrected.stdout",
+      "bytes": 4681,
+      "sha256": "c52a5d7abe954c28530c6baa05c7d499154b59d49c9741b4ac85a630a3661861"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-matrix.json",
+      "bytes": 1177,
+      "sha256": "af162cd0dcd10ba93ccaf3d4e47367c53d52621946c34d1befc995109954211d"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/actual-helper-commit.json",
+      "bytes": 2497,
+      "sha256": "419038cfad7527222420cc473596c9323c23214bb63292db36cb5c45fd5ee5ed"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/cleanup.json",
+      "bytes": 150,
+      "sha256": "083184f364b98009c19e5fad3364e75a669a263b236f78322abc643c901e8d6c"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/committed-partial-proof.json",
+      "bytes": 55,
+      "sha256": "e304b5d406e910fe44179674951282893759f1a07e50034b46347d55143dfa1d"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/committed-prefix-helper-rejection.json",
+      "bytes": 4884,
+      "sha256": "5763cec3b09f152ed4de17a13cb61d16505d485017d2700bb7cbf343da9e8996"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/disconnect-inside-compact.json",
+      "bytes": 1943,
+      "sha256": "1f7e32eabe1af31f7c32dcf2b64567c7357893adc000547fa976965a2fdeceb5"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/financial50-baseline.json",
+      "bytes": 3229695,
+      "sha256": "1ce664bbdc366cd3efdaee22d048618444f480b133e87e9a9d84aea67112b22f"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/financial50-result.json",
+      "bytes": 10804,
+      "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/forced-helper-rollback.json",
+      "bytes": 66,
+      "sha256": "97eea7c6ea483a848024f259ae3a54fd6771ca104d0d31b6552db29355eff19f"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/forced-inside-compact.json",
+      "bytes": 1812,
+      "sha256": "f4b23dbbe55995546393ace2269166dff3b11f9fb687c26c939f1d115a57b301"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/guarded-baseline-compact.json",
+      "bytes": 1812,
+      "sha256": "4a862536b2ae9d8d73dbd3999fe8d7b388ff7708c59358e04d5c5d70ef41e1ce"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/helper-busy-before-begin.json",
+      "bytes": 261,
+      "sha256": "beaa03e3b57bfc88a409c2198b83506f49351c3a9f74c0bf5bb9359532a8a706"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/installed-second-helper-rejection.json",
+      "bytes": 1077,
+      "sha256": "8dbd64e8748e8e16af8c9775b8c990d1ce7c545136dfefe703d3b9e4e406540c"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/pending.json",
+      "bytes": 218,
+      "sha256": "6d9221826c51239f54b5b92b2d11f57e17ae6b53f21c8e6840a76ecf88fad163"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/postgres.log",
+      "bytes": 721,
+      "sha256": "9ea877aea298ae3e1735af4efb957ba3e9ce234df3218bcfdb69c4a488a3d0ed"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/restore-input.json",
+      "bytes": 633,
+      "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/seed.json",
+      "bytes": 1122,
+      "sha256": "7c4394551c28d69a7e5abe4c568ae2ad3c0b7185309b3bd5deac7c7455919a37"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/socket-client-error.json",
+      "bytes": 73,
+      "sha256": "e735d65154bae7470235b23e0695485db8fc937de98c197b5b926c4177bd1223"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed/socket-disconnect-rollback.json",
+      "bytes": 117,
+      "sha256": "d899c29cc353f4ce7eed00e93a53cf2de981d30bb1d4b7b96ef121b28a645eed"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed.meta.json",
+      "bytes": 356,
+      "sha256": "d8521c11c4dcb6c87776dd8091a3347b34858f42ef50fb3d562f2a940abff253"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native-sealed.stdout",
+      "bytes": 4680,
+      "sha256": "c5a4dd9c6d673f8d6961960878e816e3d8b46144781e596adea27deaaf71bdaf"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native.meta.json",
+      "bytes": 356,
+      "sha256": "7a587f92f64ce52b5da7a801db14eb437ca428a9dad808fabf67c3c0938f38cf"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/native.stdout",
+      "bytes": 1954,
+      "sha256": "3be47dd7d2b8e1f97e827a0f0b671dffe3a6ae447d7b3f19e92daea5d4a35d0e"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/normal-build.meta.json",
+      "bytes": 251,
+      "sha256": "65745b0288bf9e5e54e814b1257e4105e937be1400c8ae0efa66c54446b9d34e"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/normal-build.stdout",
+      "bytes": 5555,
+      "sha256": "36b1375423ed18698b2409c871f30af7d8073651bd7d02e8f0a8fd0ed21ba495"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/original-first-prefix-miss.json",
+      "bytes": 380,
+      "sha256": "d02cedf17abfe93ced3cb8a210c533a11a55bc8d74ee1f6004c7dbafcce926fd"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/pre-native-wip.json",
+      "bytes": 1490,
+      "sha256": "5cd0b4a682f2f9854ee38f218b7ad9bced543d730caca813d85c05c56be2e599"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/pure-final.meta.json",
+      "bytes": 326,
+      "sha256": "55428803f26d7564a4cbd26f5330b58dfdb2eec7e5290a25948833744d7c2653"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/pure-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/pure-final.stdout",
+      "bytes": 1679,
+      "sha256": "81aec7d4b585a05c993beb7f51eec5337b49a5133757f11d971ad86ca2f10299"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/pure-sealed.meta.json",
+      "bytes": 326,
+      "sha256": "6bfcdb15ece00121d09ae4c35fb89b5fb5aaec3c589abbe540ac667a2a2b8ff3"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/pure-sealed.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/pure-sealed.stdout",
+      "bytes": 1681,
+      "sha256": "ed6a7da5567f3263e82a737570e3f4146fb4913839be295ab01dedaeb7ead011"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/pure.meta.json",
+      "bytes": 325,
+      "sha256": "65521acf1bd3e0baae33d287f58a7df8e0a9579ba7814754befba3fa56b5357d"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/pure.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/pure.stdout",
+      "bytes": 1469,
+      "sha256": "d110c8251c46c3450c5d94b2f80dfa2ce6474343afa8d73c43a4d7bf2d7d4990"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/sealed-precode-wip.json",
+      "bytes": 1691,
+      "sha256": "94d9e5557d2e0089c85d28a198fe436bbcfbfe8ed01788fbdbd377bcaae9d24e"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/source-manifest.json",
+      "bytes": 31509,
+      "sha256": "df5ca9c1501bcdd4029d668dd9f213b39a7aec7b815342009caa03b491409398"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/typecheck.meta.json",
+      "bytes": 257,
+      "sha256": "691d41994033366268bddb46cbb1f38c464fbd420aa6c094f7de47ac86941294"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T12-42-publication-tail-entry-guard/unchanged-original-inputs.json",
+      "bytes": 22288,
+      "sha256": "10c7e53f0dabb5c3832d87d2444716b984980629c4e54734e7721bdb2613c96b"
+    }
+  ],
+  "rawBytes": 38958762,
+  "rawManifestSHA256": "b0cb6f7a912db85be3697343b34feebad4eb9ed21fceea58cdd171f05c347497",
+  "cleanup": {
+    "at": "2026-10-14T05:06:57.777553+00:00",
+    "ownedActiveHeavyOrPg": [],
+    "allLocalClustersStoppedAndRebuildablePgDataRemoved": true,
+    "noOldRawOrUniqueEvidenceDeleted": true,
+    "freeBytes": {
+      "/workspace": 8624496640,
+      "/tmp": 15376904192
+    }
+  },
+  "pending": [
+    "Exact independent source/baseline/receipt review",
+    "Per-prerequisite2..5 separately isolated fragments noted in native matrix; dependencies prevent claiming their isolation from freshpost50",
+    "Approved production profile/action/exactreview binding, genuine peer/HBA/authority/capacity transport",
+    "Real publisher/run/input and author/reviewer model roles/publication remain unexecuted"
+  ],
+  "productionAuthorized": false,
+  "formalPeerVerified": false,
+  "formalRoleExecutionOrArticleApproval": false,
+  "prRefMergeDeployOrCiRerun": false,
+  "originalSqlOrderedDescriptorInstalledExpectationsAndFinancialAuthorityUnchanged": true
+}

@@ -1,0 +1,131 @@
+TAP version 13
+# Subtest: actual guarded26 helper on genuine captured post-main50 predecessor
+    # Subtest: main actual financial50 and original operator helper first COMMIT
+    ok 1 - main actual financial50 and original operator helper first COMMIT
+      ---
+      duration_ms: 700.571889
+      ...
+    # Subtest: fresh finite readonly guard succeeds without writes
+    ok 2 - fresh finite readonly guard succeeds without writes
+      ---
+      duration_ms: 689.351314
+      ...
+    # Subtest: first1 prerequisite prefix rejected before tail
+    ok 3 - first1 prerequisite prefix rejected before tail
+      ---
+      duration_ms: 262.957669
+      ...
+    # Subtest: first2 prerequisite prefix rejected before tail
+    ok 4 - first2 prerequisite prefix rejected before tail
+      ---
+      duration_ms: 241.640074
+      ...
+    # Subtest: first3 prerequisite prefix rejected before tail
+    ok 5 - first3 prerequisite prefix rejected before tail
+      ---
+      duration_ms: 251.994943
+      ...
+    # Subtest: first4 prerequisite prefix rejected before tail
+    ok 6 - first4 prerequisite prefix rejected before tail
+      ---
+      duration_ms: 246.565553
+      ...
+    # Subtest: first5 prerequisite prefix rejected before tail
+    ok 7 - first5 prerequisite prefix rejected before tail
+      ---
+      duration_ms: 247.363403
+      ...
+    # Subtest: column-only original v6 partial rejected with outer rollback
+    ok 8 - column-only original v6 partial rejected with outer rollback
+      ---
+      duration_ms: 605.062723
+      ...
+    # Subtest: index-only counterfactual on real table rejected with outer rollback
+    ok 9 - index-only counterfactual on real table rejected with outer rollback
+      ---
+      duration_ms: 219.543435
+      ...
+    # Subtest: function-only exact original v6 partial rejected with outer rollback
+    ok 10 - function-only exact original v6 partial rejected with outer rollback
+      ---
+      duration_ms: 227.953988
+      ...
+    # Subtest: body drift rejected with outer rollback
+    ok 11 - body drift rejected with outer rollback
+      ---
+      duration_ms: 220.481395
+      ...
+    # Subtest: owner drift rejected with outer rollback
+    ok 12 - owner drift rejected with outer rollback
+      ---
+      duration_ms: 220.804081
+      ...
+    # Subtest: config drift rejected with outer rollback
+    ok 13 - config drift rejected with outer rollback
+      ---
+      duration_ms: 207.997468
+      ...
+    # Subtest: routine ACL drift rejected with outer rollback
+    ok 14 - routine ACL drift rejected with outer rollback
+      ---
+      duration_ms: 215.522465
+      ...
+    # Subtest: column ACL drift rejected with outer rollback
+    ok 15 - column ACL drift rejected with outer rollback
+      ---
+      duration_ms: 630.595099
+      ...
+    # Subtest: SECDEF drift rejected with outer rollback
+    ok 16 - SECDEF drift rejected with outer rollback
+      ---
+      duration_ms: 220.775144
+      ...
+    # Subtest: overload unknown profile rejected with outer rollback
+    ok 17 - overload unknown profile rejected with outer rollback
+      ---
+      duration_ms: 221.784482
+      ...
+    # Subtest: committed first v6 partial rejected by actual helper before tail mutation
+    ok 18 - committed first v6 partial rejected by actual helper before tail mutation
+      ---
+      duration_ms: 713.009257
+      ...
+    # Subtest: actual helper busy refuses before BEGIN and zero mutation
+    ok 19 - actual helper busy refuses before BEGIN and zero mutation
+      ---
+      duration_ms: 192.048556
+      ...
+    # Subtest: actual helper forced error after real26 DDL rolls back everything
+    ok 20 - actual helper forced error after real26 DDL rolls back everything
+      ---
+      duration_ms: 1094.943172
+      ...
+    # Subtest: actual writer socket loss during26 before COMMIT has backendgone and fullrollback
+    ok 21 - actual writer socket loss during26 before COMMIT has backendgone and fullrollback
+      ---
+      duration_ms: 983.620373
+      ...
+    # Subtest: actual helper26 COMMIT original full catalog/financial/nonemptyrows and independent observer
+    ok 22 - actual helper26 COMMIT original full catalog/financial/nonemptyrows and independent observer
+      ---
+      duration_ms: 1493.372548
+      ...
+    # Subtest: installed second actual helper refuses without replay
+    ok 23 - installed second actual helper refuses without replay
+      ---
+      duration_ms: 646.326919
+      ...
+    1..23
+ok 1 - actual guarded26 helper on genuine captured post-main50 predecessor
+  ---
+  duration_ms: 13580.742867
+  ...
+1..1
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13686.103571

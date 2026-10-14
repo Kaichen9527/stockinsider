@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs"
+  ],
+  "start_utc": "2026-10-14T04:49:34Z",
+  "seconds": 0.278167724609375,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 24330240,
+  "min_free_bytes": 8624693248
+}

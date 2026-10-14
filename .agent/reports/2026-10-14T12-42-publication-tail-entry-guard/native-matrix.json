@@ -1,0 +1,30 @@
+{
+  "freshReadonlyGuard": true,
+  "fullFirstPrerequisitePrefixes": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "isolatedPartials": {
+    "actualOutboxV6Column": true,
+    "actualOutboxV6Function": true,
+    "counterfactualIndexOnRealTable": true
+  },
+  "existingRoutineBodyOwnerConfigAclSecdefOverloadAndColumnAclDrifts": true,
+  "committedV6PartialRejectedByActualHelperZeroTail": true,
+  "actualHelperBusyBeforeBegin": true,
+  "actualHelperForcedErrorAfterGenuineTailSql": true,
+  "actualHelperSocketLossDuringTailBeforeCommit": {
+    "backendPid": 538957,
+    "backendGone": true,
+    "realTailDDLReached": true,
+    "observerBaselineUnchanged": true
+  },
+  "actualHelperNormalCommitAndIndependentObserver": true,
+  "installedSecondHelperRefusedZeroReplay": true,
+  "factsCount": 1,
+  "observationsCount": 1,
+  "pendingPerPrerequisiteIsolatedFragments": "Only v6 column/function and a real-table counterfactual index isolated separately; exact isolated column/index/function-only fragments for prerequisites2..5 are not separately proven when they require newly introduced parent tables/types. Full1..5 prefixes are proven. Do not describe this as all per-fragment cases."
+}

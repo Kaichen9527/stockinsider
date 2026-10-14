@@ -1,0 +1,12 @@
+{
+  "source": "42c5dd10805a0122568617831978f2236e8d68d3",
+  "finalSource": "0fe5d5a90ae95949eec1fb3dd9433359db466d88",
+  "webTree": "c550748ca0a3320396ce5b0210750114fdecf848",
+  "webAndPrebuildInputsByteIdenticalToFinal": true,
+  "notRelabeledAsNewBuild": "Final followup only strengthens new standalone guard namespace metadata/baseline; fresh9pure/24native on final source. No web/prebuild/lock/old source input changed.",
+  "buildId": "cp8ZCyLKRWjLVGGBq0jma",
+  "next": "16.3.4",
+  "serverFiles": 1798,
+  "serverManifestSha256": "2bedb4a9bd7011f1a96fb854dd0a060e7b0bff7228cfdf14e48446325ff3362a",
+  "dotenvFilenameInventory": []
+}
