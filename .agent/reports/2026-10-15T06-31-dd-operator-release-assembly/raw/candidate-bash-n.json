@@ -1,0 +1,10 @@
+{
+  "command": [
+    "bash",
+    "-n",
+    "/tmp/si-pubtail-o14/docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh"
+  ],
+  "exit": 0,
+  "stdout": "",
+  "stderr": ""
+}

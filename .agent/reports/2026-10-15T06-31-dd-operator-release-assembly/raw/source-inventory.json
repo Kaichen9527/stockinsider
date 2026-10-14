@@ -1,0 +1,142 @@
+[
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": ".github/workflows/dd-binary-operator-quality.yml",
+    "blob": "d8a434703d0ab48dd2fdf5747f3ec3d07addf034",
+    "bytes": 5351,
+    "sha256": "3254c8f6c56621d2b96692b1bb3ef9b6f794318180b8735658002c9d19839830"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+    "blob": "d7555c9c4f4121f0dad7132ccdc3002d5061745e",
+    "bytes": 9440,
+    "sha256": "549945d4309465d5ce6a3e1ded1ec3febd5fb150b2f11cd213a5755c2dd55855"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+    "blob": "9938b20135b1065781c058467ee219248b7014b9",
+    "bytes": 12425,
+    "sha256": "e7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+    "blob": "5c3f5c378efdb0737ce7c19f4b4452888b409810",
+    "bytes": 11235,
+    "sha256": "15b129e55228a09263f375cd1700ac0de3bef90544a07754ebba54943e632ffc"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+    "blob": "dd72ccd256a6ce12410fcf9ae1f35369357acc7e",
+    "bytes": 11395,
+    "sha256": "f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json",
+    "blob": "391ff7866dde6f79bf04e5db19117d85ad934a2c",
+    "bytes": 714,
+    "sha256": "4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "docs/operations/2026-10-15/dd-binary-operator-release/HANDOFF.md",
+    "blob": "1ed2ad8a81b83786cc1928aa66e6a82ba05b8c87",
+    "bytes": 4339,
+    "sha256": "dc2273b340762ab82a7732737b2d28d15f5bcaf46601efebef74469a5c1e5771"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "docs/operations/2026-10-15/dd-binary-operator-release/receipt-index.json",
+    "blob": "40877087f06d13d9c971401ca6546e8c58a83727",
+    "bytes": 2376,
+    "sha256": "04c96ccb9966d74a286f8a23c2501ba54ef1d87cafe27c5ca5d0c76e15bebac3"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": ".github/workflows/research-publication-tail-quality.yml",
+    "blob": "0b5cdb0e3617819cef88d44c1a25897113f1156e",
+    "bytes": 4341,
+    "sha256": "e092eb80ddf3c6df8664ae19ae5c4a2b9d6721285100dd51369ea24d43bfb717"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": ".github/workflows/source-led-opportunity-external-gate.yml",
+    "blob": "da2cfc5194dff81310c5072998876c06418a6f7f",
+    "bytes": 14710,
+    "sha256": "a9573672c1e56833e5f59ae98d33eea5755d5cee9eb36231919b4e592be9d286"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": ".github/workflows/source-led-opportunity-v3.yml",
+    "blob": "c1155632a340bce18664e4b96cec19b87606d6e9",
+    "bytes": 6242,
+    "sha256": "c47a58d5ef45b7806fcc22f25007d3242210de38be140a3b4cc3480ce6418b4b"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "AGENTS.md",
+    "blob": "ba622842bbd621b2c58eaccbcbd244035bd36b2c",
+    "bytes": 6685,
+    "sha256": "0e4af0349489576004271dfdca3736df6e83cc74b1ed4fda30d765d68c4f0dc5"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "AGENTS.loop-engineering.md",
+    "blob": "949ec986070218064d9d357f419f2dc396e4c596",
+    "bytes": 288,
+    "sha256": "abe955039ea82b46b5a19b2642b3b1b58282bde37bb06c9722bfdc8a4757965b"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "docs/engineering/LOOP_ENGINEERING.md",
+    "blob": "47b44374694ed87d81e9780439422a3091ba8a3f",
+    "bytes": 513,
+    "sha256": "c03bbf09972f7cb5b7faf7571837a1002b426a41925ff6e209b9bd03efb34a76"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": ".loop-engineering/policy.yaml",
+    "blob": "13cd30990e4ebe0572a9c2f36efa22a2feb9b7f8",
+    "bytes": 437,
+    "sha256": "864340b85ede15640e966b0bc1367f9fc5c688afe18e895a47258a898ee4abd4"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": ".specify/memory/constitution.md",
+    "blob": "da2b450382a0b64d8a124caa1f034f95ca1c7efb",
+    "bytes": 2050,
+    "sha256": "a04297d87e437bffa52b41ba77205d98b6d7256138a9c2d41b6ca9bb63717412"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "scripts/contabo-host-resource-check.mjs",
+    "blob": "f7597d979a1dce95a95823e44daee325c8c4af13",
+    "bytes": 3891,
+    "sha256": "27f042bdbe34e3ca3dd8f4527c39d99746b60acedffd6f526e38a96120608fde"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "scripts/contabo-capacity-guard.mjs",
+    "blob": "189a017a54e952d93966583a6db9beef6b1b1f6e",
+    "bytes": 2072,
+    "sha256": "8b33b9f19a4d72b7ce2fab173a97dc9e3172774af9ce5de154d01f239f1c741c"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "scripts/verify-standalone-release.mjs",
+    "blob": "6e1d6b2d07125201326fbe783fad0b970890e363",
+    "bytes": 3901,
+    "sha256": "1e4bb10d2ee694eefd0493653a71d54b8d94deade74fa66a86b579b25ebe930b"
+  },
+  {
+    "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+    "path": "deployment/vps/activate-writer-release.sh",
+    "blob": "4866bdc1b012840a2cb64f8e9a266f8af56998fb",
+    "bytes": 2811,
+    "sha256": "0719de5667f23f571357f2db7750297de7f7f405d2d8c06bc2d39105b237e243"
+  }
+]

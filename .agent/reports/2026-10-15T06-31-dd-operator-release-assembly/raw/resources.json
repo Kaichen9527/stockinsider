@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-14T22:37:19.073888+00:00",
+  "freeBytes": {
+    "/workspace": 8595484672,
+    "/tmp": 15374159872
+  },
+  "initialFreeBytes": {
+    "/workspace": 8595533824,
+    "/tmp": 15374163968
+  },
+  "floorBytes": 8589934592,
+  "rssLimitBytes": 8589934592,
+  "measurement": "Light-only command/process snapshots; no continuous aggregate peak RSS claim. Initial largest codex RSS36704KiB. No owned services or dummy processes started.",
+  "heavyRuns": 0,
+  "cleanup": "No data/cache deleted; no owned PG/server/activation processes started."
+}

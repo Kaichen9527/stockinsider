@@ -1,0 +1,20 @@
+{
+  "subject": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "tree": "fe30bedc11f231899418f845e57875c76c62c70c",
+  "base": "8c58e297e92422c1c3f52856a36bff12b1868100",
+  "changedPaths": [
+    ".github/workflows/dd-binary-operator-quality.yml",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+    "docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json",
+    "docs/operations/2026-10-15/dd-binary-operator-release/HANDOFF.md",
+    "docs/operations/2026-10-15/dd-binary-operator-release/receipt-index.json"
+  ],
+  "oldWorkflowBlobsAllIdentical": true,
+  "webSqlScriptsDeploymentLocksPolicyIdentical": true,
+  "newWorkflowSha256": "3254c8f6c56621d2b96692b1bb3ef9b6f794318180b8735658002c9d19839830",
+  "originalFiveOrigin": "a87432e939b389f64aad3baffb176fee3954c346",
+  "originalLinux35NotRerun": true
+}

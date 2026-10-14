@@ -1,0 +1,51 @@
+{
+  "at": "2026-10-14T22:35:38.005929+00:00",
+  "base": "8c58e297e92422c1c3f52856a36bff12b1868100",
+  "files": [
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json",
+      "bytes": 714,
+      "sha256": "4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+      "bytes": 11395,
+      "sha256": "f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+      "bytes": 11235,
+      "sha256": "15b129e55228a09263f375cd1700ac0de3bef90544a07754ebba54943e632ffc"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+      "bytes": 12425,
+      "sha256": "e7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+      "bytes": 9440,
+      "sha256": "549945d4309465d5ce6a3e1ded1ec3febd5fb150b2f11cd213a5755c2dd55855"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-release/receipt-index.json",
+      "bytes": 2376,
+      "sha256": "04c96ccb9966d74a286f8a23c2501ba54ef1d87cafe27c5ca5d0c76e15bebac3"
+    },
+    {
+      "path": "docs/operations/2026-10-15/dd-binary-operator-release/HANDOFF.md",
+      "bytes": 4339,
+      "sha256": "dc2273b340762ab82a7732737b2d28d15f5bcaf46601efebef74469a5c1e5771"
+    },
+    {
+      "path": ".github/workflows/dd-binary-operator-quality.yml",
+      "bytes": 5351,
+      "sha256": "3254c8f6c56621d2b96692b1bb3ef9b6f794318180b8735658002c9d19839830"
+    },
+    {
+      "path": "/tmp/dd-operator-release-o15/static-check.py",
+      "bytes": 6153,
+      "sha256": "5d889f9c522c59b545ca146bafbcb42797549fad935299ba1583c2f43d1691a8"
+    }
+  ]
+}

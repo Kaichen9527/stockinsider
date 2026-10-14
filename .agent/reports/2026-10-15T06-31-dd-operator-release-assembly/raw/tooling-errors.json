@@ -1,0 +1,18 @@
+[
+  {
+    "action": "initial sandbox git ls-remote",
+    "result": "proxy port8080 unreachable in sandbox",
+    "resolution": "same read-only operation allowed escalated; exact8c58 verified; no auth/proxy changes"
+  },
+  {
+    "action": "read candidate after switching base before copying",
+    "exit": 2,
+    "error": "sed file missing",
+    "resolution": "copied exact5 froma874 then read; not product or probe failure"
+  },
+  {
+    "action": "optional old local evidence directory ls on clean base",
+    "exit": 2,
+    "resolution": "historical receipt read through exact Git object; no recreation or rewrite"
+  }
+]

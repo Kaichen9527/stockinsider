@@ -1,0 +1,11 @@
+{
+  "web": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "migrations": "7b6056791f1b29cdd52e7f055f7266c16e102c5e",
+  "scripts": "c56d43ace5e6e9ca3f69c32ec00ec0a53d2628c6",
+  "deployment": "d5b853bd90083e8df7b6c1e0d239846c935ebc59",
+  ".github/workflows": "b875c2f32ecbfee1f01baf4c7e2b467c71996ebc",
+  "package-lock.json": "576ca62506b95d23da7088c47ecf9c6173c9355c",
+  "web/package-lock.json": "a41fd447e28f3b36829b689828c345e042619a38",
+  ".nvmrc": "7d41c735d7127c4a2530ebe846b14ffbf38b8031",
+  ".loop-engineering": "e1890d4faa387a988f22d9c4318ababd6afd7e61"
+}

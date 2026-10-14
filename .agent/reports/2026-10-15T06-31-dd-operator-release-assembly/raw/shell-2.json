@@ -1,0 +1,10 @@
+{
+  "command": [
+    "bash",
+    "-n",
+    "/tmp/dd-operator-release-o15/workflow-step-2.sh"
+  ],
+  "exit": 0,
+  "stdout": "",
+  "stderr": ""
+}
