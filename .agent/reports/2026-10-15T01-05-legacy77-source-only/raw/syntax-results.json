@@ -1,0 +1,42 @@
+[
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-legacy77-child-driver.mjs"
+    ],
+    "startedAt": "2026-10-14T17:12:29.642773+00:00",
+    "endedAt": "2026-10-14T17:12:29.676751+00:00",
+    "exit": 0
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-legacy77-realm-fixture.mjs"
+    ],
+    "startedAt": "2026-10-14T17:12:29.676767+00:00",
+    "endedAt": "2026-10-14T17:12:29.704640+00:00",
+    "exit": 0
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-legacy77-native.test.mjs"
+    ],
+    "startedAt": "2026-10-14T17:12:29.704655+00:00",
+    "endedAt": "2026-10-14T17:12:29.731931+00:00",
+    "exit": 0
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs"
+    ],
+    "startedAt": "2026-10-14T17:12:29.731946+00:00",
+    "endedAt": "2026-10-14T17:12:29.754626+00:00",
+    "exit": 0
+  }
+]

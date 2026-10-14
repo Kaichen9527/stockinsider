@@ -1,0 +1,27 @@
+{
+  "subject": "305074af2547316078e930de8ad81a910860c8c0",
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "originalClosure": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+  "closureMembersCompared": 22,
+  "totalCopiedOriginalFiles": 26,
+  "copiedOriginalBytes": 1361761,
+  "oldArtifactBytesCompared": 14,
+  "sqlByteComparisons": 2,
+  "candidateChangedPaths": [
+    "docs/operations/2026-10-15/legacy77-source-only-handoff.md",
+    "scripts/fixtures/research-legacy77/source-index.json",
+    "scripts/fixtures/research-legacy77/source-realm-15d4.json.gz",
+    "scripts/opportunity-v3/research-legacy77-child-driver.mjs",
+    "scripts/opportunity-v3/research-legacy77-realm-fixture.mjs",
+    "scripts/opportunity-v3/research-versioned-legacy77-native.test.mjs",
+    "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs"
+  ],
+  "fixture": {
+    "path": "scripts/fixtures/research-legacy77/source-realm-15d4.json.gz",
+    "bytes": 284579,
+    "sha256": "db77eec4c3a7ca4d217396aa4035174d4ba1bcaf4db3218122db114c1047253b",
+    "expandedBytes": 1824546
+  },
+  "native": "NOT_RUN",
+  "appImports": "NOT_RUN"
+}

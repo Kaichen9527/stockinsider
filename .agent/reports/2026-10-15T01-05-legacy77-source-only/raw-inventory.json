@@ -1,0 +1,80 @@
+{
+  "scope": "Source-only static/syntax evidence; no PG/private business raw produced",
+  "files": [
+    {
+      "path": "raw/check-1.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/check-1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/check-2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/check-2.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/check-3.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/check-3.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/check-4.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/check-4.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/process-inventory.txt",
+      "bytes": 35307,
+      "sha256": "60b4188a6db92956f142397e84115b745e71f4ace0cd1dda1edfa1a110b8add2"
+    },
+    {
+      "path": "raw/sealed-wip.json",
+      "bytes": 1896,
+      "sha256": "575ee2847539bde5143e5328a45cdb281d394f1e94b5d581102c5ac1f25e51fc"
+    },
+    {
+      "path": "raw/static-audit-command.json",
+      "bytes": 230,
+      "sha256": "ccb6fe63d12484d668548ae02741f341635096f7d3e447c4ead472e5e1513328"
+    },
+    {
+      "path": "raw/static-audit.py",
+      "bytes": 2833,
+      "sha256": "e2656bd94271256a3657fc9e975800d27fed6c1c9403cb3567fb1789b7c86373"
+    },
+    {
+      "path": "raw/static-audit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/static-audit.stdout",
+      "bytes": 1150,
+      "sha256": "62b6cb03b41231a633dc24f19dabd913165371dcc797e8663b988acd0985fe8c"
+    },
+    {
+      "path": "raw/syntax-results.json",
+      "bytes": 1202,
+      "sha256": "b1ce2e19a276a80f2183e35f9ef8539dc0dd8796ba30ca3574b25c18fd2ea649"
+    }
+  ]
+}

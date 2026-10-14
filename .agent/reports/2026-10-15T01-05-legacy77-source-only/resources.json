@@ -1,0 +1,18 @@
+{
+  "initialFreeBytes": {
+    "/workspace": 8605261824,
+    "/tmp": 15384100864
+  },
+  "finalFreeBytes": {
+    "/workspace": 8604889088,
+    "/tmp": 15383810048
+  },
+  "minimumRequired": 8589934592,
+  "sampledProcessInventory": "raw/process-inventory.txt",
+  "nonZombieNodeOrPgObserved": 0,
+  "ownedServicesStarted": 0,
+  "ownedServiceCleanupRequired": false,
+  "peakRSSBytes": null,
+  "peakRSSLimitBytes": 8589934592,
+  "peakRSSNote": "Not sampled for the short syntax subprocesses; no heavy/native/app execution."
+}

@@ -1,0 +1,87 @@
+{
+  "task": "legacy77 original source realm/native test SOURCE ONLY",
+  "startedAt": "2026-10-14T17:05:38Z",
+  "deadline": "2026-10-14T17:25:38Z",
+  "sealedAt": "2026-10-14T17:15:50.461175+00:00",
+  "branch": "codex/research-versioned-legacy77-source-oct15",
+  "base": "c462a51ceea1b69026b38ec40b105eb971d24116",
+  "codeCommit": "305074af2547316078e930de8ad81a910860c8c0",
+  "codeTree": "446db42e0e2617cea73b1cd38320d9e7f6731ba8",
+  "changes": {
+    "files": 7,
+    "runtimeSqlAuthorityLocksChanged": false,
+    "privateFixtureChange": "Finite original-v2 preparation option; existing default path unchanged"
+  },
+  "originalSource": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "originalClosureHash": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+  "copiedOriginalFiles": 26,
+  "closureMembers": 22,
+  "copiedOriginalBytes": 1361761,
+  "oldArtifactFilesByteCompared": 14,
+  "originalSqlFilesByteCompared": 2,
+  "staticImportEdges": 47,
+  "fixtureGzipSha": "db77eec4c3a7ca4d217396aa4035174d4ba1bcaf4db3218122db114c1047253b",
+  "syntax": {
+    "commands": 4,
+    "exit0": 4,
+    "applicationImports": 0,
+    "testsExecuted": 0
+  },
+  "plannedNative": {
+    "children": 2,
+    "parent": 1,
+    "2409": "NOT_RUN",
+    "2383": "NOT_RUN",
+    "parentStatus": "NOT_RUN"
+  },
+  "sourceInventory": {
+    "files": 255,
+    "inheritedUnchanged": 248,
+    "inheritedFixtureChanged": 1
+  },
+  "rawInventory": {
+    "files": 15,
+    "bytes": 42618
+  },
+  "resources": {
+    "initialFreeBytes": {
+      "/workspace": 8605261824,
+      "/tmp": 15384100864
+    },
+    "finalFreeBytes": {
+      "/workspace": 8604889088,
+      "/tmp": 15383810048
+    },
+    "minimumRequired": 8589934592,
+    "sampledProcessInventory": "raw/process-inventory.txt",
+    "nonZombieNodeOrPgObserved": 0,
+    "ownedServicesStarted": 0,
+    "ownedServiceCleanupRequired": false,
+    "peakRSSBytes": null,
+    "peakRSSLimitBytes": 8589934592,
+    "peakRSSNote": "Not sampled for the short syntax subprocesses; no heavy/native/app execution."
+  },
+  "nodeBinary": {
+    "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "expectedVersion": "22.14.0",
+    "freshVersionCommandRun": false
+  },
+  "pending": [
+    "all PG setup/catalog/permission checks and both original first seals",
+    "original child source execution and IPC/FD lifecycle; currently syntax/static only",
+    "missing-root read/seal replay and conflict/fresh77 refusal native assertions",
+    "actual per-case cluster/backend/process cleanup evidence",
+    "formal original compiled Next identity, retained support/drain/cutover/whole S-C-B-Q-R-A",
+    "prior byte-rejected exact wouldcharge/total remains null; long-root publication compatibility unproven"
+  ],
+  "limitations": [
+    "Exact historical application sources do not prove historical installed npm tree or compiled Next realm",
+    "No pure/native/module import/build/service execution this turn",
+    "Peak RSS for short syntax subprocesses not measured; resource requirement not represented as a measured peak",
+    "static-audit stdout oldArtifactBytesCompared=14 is a file count; exact bytes/pins are in source-index"
+  ],
+  "formalApproval": false,
+  "independentReview": false,
+  "productionActivated": false
+}

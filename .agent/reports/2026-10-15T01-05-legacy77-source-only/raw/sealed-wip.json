@@ -1,0 +1,48 @@
+{
+  "sealedAt": "2026-10-14T17:12:17.609231+00:00",
+  "base": "c462a51ceea1b69026b38ec40b105eb971d24116",
+  "files": [
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+      "bytes": 16931,
+      "sha256": "03e0fc4f1e288843785bc3e3713d31fd80dde6154359d865eef98803c1eec368",
+      "blob": "dae23c7599a3771d097e760d295f455900669dba"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-legacy77-child-driver.mjs",
+      "bytes": 3863,
+      "sha256": "75a0baf8d4e0a556bd6f26b3df81661ba736f6fb3e6ffaefd19746f87c56f9e7",
+      "blob": "ee864a372ebda1ebf47f78e14e32b5ccf5c8a1cd"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-legacy77-realm-fixture.mjs",
+      "bytes": 5021,
+      "sha256": "ea7f86ad00baddda9684b2ccd139ff61373e6ab142c1d5337d7fe282e4a1b2fe",
+      "blob": "c562a98ca7adf2b07f51b68ee1712f638f4675fe"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legacy77-native.test.mjs",
+      "bytes": 6400,
+      "sha256": "b34894b92397b5230388dc0b106ebcb53fa48ee2bad9068a5b501211197b0140",
+      "blob": "11ad6e5e81da3dbc0f100545ecbe5d082301d6bc"
+    },
+    {
+      "path": "scripts/fixtures/research-legacy77/source-realm-15d4.json.gz",
+      "bytes": 284579,
+      "sha256": "db77eec4c3a7ca4d217396aa4035174d4ba1bcaf4db3218122db114c1047253b",
+      "blob": "c512fa2dc4f4fe0b251e2f27d7be3925ac05992e"
+    },
+    {
+      "path": "scripts/fixtures/research-legacy77/source-index.json",
+      "bytes": 19105,
+      "sha256": "8496e165adcd6e1a892ea9edb9b7d4755de81ff2a8b51fce28fc0029f8ca4356",
+      "blob": "ef44b2dcd8cf92080d679b1b501c3837cedf365e"
+    },
+    {
+      "path": "docs/operations/2026-10-15/legacy77-source-only-handoff.md",
+      "bytes": 6718,
+      "sha256": "7c63341728a0c1c0239260c48b8d3d1905dd01cd61fc96da9b09e1688b70c07c",
+      "blob": "e85f041f7be8567546884f5ebe27374991948d08"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "command": [
+    "python3",
+    ".agent/reports/2026-10-15T01-05-legacy77-source-only/raw/static-audit.py"
+  ],
+  "startedAt": "2026-10-14T17:14:56.086207+00:00",
+  "endedAt": "2026-10-14T17:14:56.337831+00:00",
+  "exit": 0
+}
