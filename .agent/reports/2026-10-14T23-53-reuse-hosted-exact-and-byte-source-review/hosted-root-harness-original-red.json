@@ -1,0 +1,11 @@
+{
+  "scope": "Root archive-check harness, not hosted product failure",
+  "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 23, in <module>\nAssertionError\n",
+  "originalExpression": "assert not re.search(r'^\\s*(?:not ok\\b|Bail out!)',tap,re.M) and not re.search(r'\\s+#\\s*(?:SKIP|TODO)\\b',tap,re.I)",
+  "actualMatch": "\n# todo 0\n# durat",
+  "cause": "unanchored all-TAP directive regex wrongly treats zero todo summary as an actual result directive",
+  "tapSHA256": "db8383e251caa11faa87f5097b7cc8b814ed7bb086e61712f5ed0f0e259e5f4e",
+  "correction": "check annotation only on each anchored result line, matching original workflow predicate",
+  "hostedResultChanged": false,
+  "CIrerun": false
+}

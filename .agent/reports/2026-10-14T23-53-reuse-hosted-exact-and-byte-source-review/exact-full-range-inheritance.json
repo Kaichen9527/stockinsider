@@ -1,0 +1,13 @@
+{
+  "base": "5189547f76bf24c002b8e8b11669081ba67ad2c6",
+  "head": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+  "inheritedEntriesByteModeTypeIdentical": 2190,
+  "addedPaths": [
+    ".github/workflows/reviewed-publication-tail-artifact.yml",
+    "docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md"
+  ],
+  "supportingSourceRowsVerified": 10,
+  "applicationRuntimeSQLAuthorityLocksProtectedUnchanged": true,
+  "rootAppBuild": false,
+  "independentCodeReviewEvidence": "d2640246c5b7136fcf8e2420156508987632929e"
+}

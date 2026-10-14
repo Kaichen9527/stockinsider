@@ -1,0 +1,9 @@
+{
+  "source": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+  "directChild": "c83f103c3ddd1e582b4544c168bc46a2a80c056c",
+  "ref": "refs/heads/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+  "force": false,
+  "exit": 0,
+  "stdout": "",
+  "stderr": "remote: \nremote: Create a pull request for 'evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82' on GitHub by visiting:        \nremote:      https://github.com/Kaichen9527/stockinsider/pull/new/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82        \nremote: \nTo github.com:Kaichen9527/stockinsider.git\n * [new branch]        c83f103c3ddd1e582b4544c168bc46a2a80c056c -> evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82\n"
+}

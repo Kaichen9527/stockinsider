@@ -1,0 +1,44 @@
+{
+  "artifactId": 11907303023,
+  "zipBytes": 28349911,
+  "zipSHA256": "08d629fb9b8de20ac15b833c77944c0e40847ad75ffd394a795e03f9d6369e84",
+  "memberCount": 25,
+  "allSHA256SUMSVerified": true,
+  "all13UpstreamFilesByteEqualToOriginal": true,
+  "canonical155": true,
+  "PCR31": true,
+  "canonicalSectionSHA256": "db8383e251caa11faa87f5097b7cc8b814ed7bb086e61712f5ed0f0e259e5f4e",
+  "builderSubject": "ad17f462753ce22b072c835529be0fc282137f11",
+  "builderTree": "8ab201731bcf2a1a99e71393ac9a7e18d01ed36c",
+  "applicationRebuilt": false,
+  "currentFullVerifier": {
+    "releaseVerified": true,
+    "releaseId": "dd59817f750684b093965f539dd4de466be13077",
+    "sourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+    "packagerCommit": "dd59817f750684b093965f539dd4de466be13077",
+    "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+    "bytes": 79354761,
+    "entrypoint": "app/server.js"
+  },
+  "currentPackagedBoot": {
+    "sourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+    "nodeVersion": "22.14.0",
+    "reusedArtifactId": 11904225538,
+    "applicationBuildRunId": "38580440366",
+    "productionEntrypoint": "app/server.js",
+    "credentialEnvironment": "absent",
+    "unconfiguredAuthStatus": 500,
+    "fixtureUnavailableStatus": 404,
+    "assetPath": "app/.next/static/chunks/0cz1d0mv5g_q7.js",
+    "assetSha256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683",
+    "databaseOrApiMutationPerformed": false,
+    "productionReadinessProven": false,
+    "privatePeerOrLiveDataProven": false,
+    "confirmedProcessExit": {
+      "code": 143,
+      "signal": null
+    }
+  },
+  "logsZipSHA256": "d5c2d2cadc57b06a4ec122e3a5eb92e1f3796434303630cfd5a3b9796d001cde",
+  "rootBuildOrBoot": false
+}

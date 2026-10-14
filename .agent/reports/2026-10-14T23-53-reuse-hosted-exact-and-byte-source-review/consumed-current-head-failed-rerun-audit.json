@@ -1,0 +1,22 @@
+{
+  "runId": 38590829287,
+  "expectedAttempt": 1,
+  "source": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+  "base": "5189547f76bf24c002b8e8b11669081ba67ad2c6",
+  "freshEvidence": "c83f103c3ddd1e582b4544c168bc46a2a80c056c",
+  "inputChanged": "genuine new subject-addressed exact direct child published after actual hosted execution",
+  "command": [
+    "gh",
+    "run",
+    "rerun",
+    "38590829287",
+    "--repo",
+    "Kaichen9527/stockinsider",
+    "--failed"
+  ],
+  "at": "2026-10-14T15:49:14.403034+00:00",
+  "exit": 0,
+  "stdout": "",
+  "stderr": "",
+  "priorE902ConsumedAuditUntouched": true
+}

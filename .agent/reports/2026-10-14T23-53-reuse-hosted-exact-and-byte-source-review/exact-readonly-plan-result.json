@@ -1,0 +1,25 @@
+{
+  "source": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+  "evidence": "c83f103c3ddd1e582b4544c168bc46a2a80c056c",
+  "connectionAttempted": false,
+  "default48": {
+    "selected": 48,
+    "chain": "37dfacc252ec24a719b898b2b3ea31fc77c1631db083211f1f171c956772c613"
+  },
+  "financial49": {
+    "selected": 49,
+    "chain": "cec630ce83aea1f7bdcafae815990e2e964ebbf599a3441e08d978e4427f46cd"
+  },
+  "profile50": {
+    "baseSelected": 49,
+    "preludeSelected": 1,
+    "ordered": "acdee42a8ca130d259541b5c0b4b14e228c355528b60a2ac4ea3ef9633d611d9",
+    "operator": "97697bc3f8a2c3c1bd4676c579eaa9b33e4273c9e98e0a0045998698b736a42b"
+  },
+  "runtime": {
+    "commitSha": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+    "treeSha": "8ab201731bcf2a1a99e71393ac9a7e18d01ed36c",
+    "reviewAttestationSha256": "908f2b37f1f7926a98a8ff3e787d2b1e33d00f283ddb29701f0be9c35861d739"
+  },
+  "formalPeerOrDBMutation": false
+}

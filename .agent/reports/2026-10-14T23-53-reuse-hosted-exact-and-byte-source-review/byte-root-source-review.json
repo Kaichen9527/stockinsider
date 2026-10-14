@@ -1,0 +1,23 @@
+{
+  "source": "594eaf16457ffb7526f0888922fc8612e893ac75",
+  "evidence": "d10e50901b67d3d04a0aa667d7903309fa2b2dbf",
+  "receiptSHA256": "2ba6d7062fca10916d6c6b04ac098e749af1ed7af222e1d5f39d95b89161a860",
+  "rawFilesVerified": 11,
+  "sourceBlobsVerified": 17,
+  "rootNodeSyntax": [
+    {
+      "path": "scripts/opportunity-v3/research-versioned-byte-rejection-native.test.mjs",
+      "exit": 0
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+      "exit": 0
+    }
+  ],
+  "scopedStaticReview": "no confirmed new P0/P1/P2 in finite fixture option and two actual assertion callbacks",
+  "predictionsNotMeasurements": true,
+  "allNativeCasesNotRun": true,
+  "originalAppSQLProfileAndOldCasesUnchanged": true,
+  "formalApproval": false,
+  "heavyReleaseGranted": false
+}

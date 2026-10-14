@@ -1,0 +1,117 @@
+{
+  "kind": "byte-rejection-native-source-only",
+  "base": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+  "codeCommit": "594eaf16457ffb7526f0888922fc8612e893ac75",
+  "codeTree": "132970e6b79d1445bdc474de903be2344b91cf66",
+  "historicalNativeEvidence": "e8dba9c2a5bb44fc9a571a68d9b0fcc6ba453d29",
+  "historicalReceiptSha256": "fceed1a6eba857595f40d73282b67f2ba0eab747744ff64e0a6bc5a7ac8b136f",
+  "startedAt": "2026-10-14T15:37:51Z",
+  "deadline": "2026-10-14T15:49:51Z",
+  "sealedAt": "2026-10-14T15:42:19.196544+00:00",
+  "execution": {
+    "node": "v22.14.0",
+    "syntaxChecks": 2,
+    "syntaxPass": 2,
+    "syntaxFail": 0,
+    "moduleImports": 0,
+    "nativeCasesExecuted": 0,
+    "testCommands": 0,
+    "PG": false,
+    "npm": false,
+    "build": false,
+    "HTTP": false
+  },
+  "cases": [
+    {
+      "case": "AUOcompatible30-to-v3-29 +400 ASCII/root",
+      "status": "NOT_RUN",
+      "sourceDerivedPredictedTotal": 533717,
+      "actualRejectedWouldCharge": null
+    },
+    {
+      "case": "EMCv3-30-to-compatible29 +1300 ASCII/root",
+      "status": "NOT_RUN",
+      "sourceDerivedPredictedTotal": 534378,
+      "actualRejectedWouldCharge": null
+    }
+  ],
+  "pending": [
+    "all new native outcomes and runtime validity of bounded locator fixture",
+    "exact byte-bound rejection/transaction rollback and lifecycle observations",
+    "actual rejected would-charge unavailable from original SQL",
+    "long locator author-packet/publication compatibility",
+    "formal wholeclosure/four-callers/production authorization"
+  ],
+  "limitsChanged": false,
+  "makerIndependentApproval": false,
+  "resources": {
+    "finalFreeBytes": {
+      "/workspace": 8605503488,
+      "/tmp": 15392223232
+    },
+    "RSS": "not continuously measured; syntax/static work only",
+    "servicesStarted": 0,
+    "cacheDeleted": false
+  },
+  "sourceCount": 17,
+  "sourceManifestSha256": "4292a236e52fbd12c6f48a55313be124b3abae906911794e6e58776fb69acd8c",
+  "rawCount": 11,
+  "rawBytes": 28305,
+  "raw": [
+    {
+      "path": "raw/historical-baselines.json",
+      "bytes": 1088,
+      "sha256": "bbc6a9fc4c19b3584f6eeebb52cd0701e53943fc9246172a0bf896268ce94797"
+    },
+    {
+      "path": "raw/input-seal.json",
+      "bytes": 365,
+      "sha256": "671a4b6203643d096caf187755cdf385011c1a1d7ecbba032a35813da8ecf308"
+    },
+    {
+      "path": "raw/original-helper.mjs",
+      "bytes": 15909,
+      "sha256": "92848b6cce2828f2f4a10ddeb855508aee3414f31c8f1d48cf6866d40d03a490"
+    },
+    {
+      "path": "raw/research-versioned-byte-rejection-native.test.mjs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/research-versioned-byte-rejection-native.test.mjs.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/research-versioned-legal-fixture-helper.mjs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/research-versioned-legal-fixture-helper.mjs.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/sealed-wip.json",
+      "bytes": 540,
+      "sha256": "057f3462ce69356b36b03ec4427f25a2fc1b96a0e2ec3df47e5f8c7201275322"
+    },
+    {
+      "path": "raw/source-analysis.json",
+      "bytes": 9810,
+      "sha256": "b2f6352ec4d84e2ec481a1cc58127dabcd2e4974ae71b659e2f05bcabedfc4a2"
+    },
+    {
+      "path": "raw/static-comparison.json",
+      "bytes": 185,
+      "sha256": "d29b53220ec1ca1a7f708737339f8a1a94b9ab316857eb3883251fb25b7e32a9"
+    },
+    {
+      "path": "raw/syntax-results.json",
+      "bytes": 408,
+      "sha256": "0b4040ac852ac73e44ccf304a2ed80572da79d25aec13e876e6da049d285dbba"
+    }
+  ]
+}

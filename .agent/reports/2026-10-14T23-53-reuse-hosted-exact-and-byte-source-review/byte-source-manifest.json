@@ -1,0 +1,104 @@
+[
+  {
+    "path": "scripts/opportunity-v3/research-versioned-byte-rejection-native.test.mjs",
+    "bytes": 9339,
+    "sha256": "5a679ee5c4aa756c789705738258d84f9a5ca6552c8f6c3a88418afb5b39022c",
+    "blob": "846c92f8c50b294bde58104962cc5d9042be333a"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+    "bytes": 16647,
+    "sha256": "022b505ee1272c96e76001e03ce87eb250c979144838250920f9b8c1349255e4",
+    "blob": "b3254f01b8ba2d008b442bec5ed28c99f8229986"
+  },
+  {
+    "path": "docs/operations/2026-10-14/versioned-byte-rejection/HANDOFF.md",
+    "bytes": 6366,
+    "sha256": "fb75f419bc1cc7494a4c4dff686137329b250ce276091aa1fd7cea768080c0f3",
+    "blob": "1dda3b611e2181bcffada023496aae9eca0561c3"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-cross-wire-native.test.mjs",
+    "bytes": 12355,
+    "sha256": "a7fd88533072f78c325f3672464f9f4a5f896b065600db9d3503ef5faaac6555",
+    "blob": "19a66d873cb092bb0f4cfa383bfe10ddb8b83c77"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-legal-fixture-native.test.mjs",
+    "bytes": 3019,
+    "sha256": "fe162c6229f532b6a746daf7500c11cd029c2e552bfb6bfb08801ed24d5a5313",
+    "blob": "c83d00bcefe9161afec36270d26d6f2a8d2a2305"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+    "bytes": 763,
+    "sha256": "b7e0124ab08b7293cf787b086b373af249a2ab6346d8151e74a38c4b49706cc5",
+    "blob": "ac75fcbb88229afaecc3f55142a06ad7812524e3"
+  },
+  {
+    "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+    "bytes": 22325,
+    "sha256": "f089f44375f80da89be49215cad35626998bcb5775166efc23e93af224ec284f",
+    "blob": "855cd31a01d16809c5b7b9ce0fbfc135d4aa930d"
+  },
+  {
+    "path": "migrations/20261009_research_input_preparations_v2.sql",
+    "bytes": 14713,
+    "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e",
+    "blob": "2440f63c869ba9bace2f2c74986edcf1b512b3b5"
+  },
+  {
+    "path": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "bytes": 12454,
+    "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621",
+    "blob": "299513a305099968756fccd617da268f352047b1"
+  },
+  {
+    "path": "web/src/lib/research-versioned-complete-input.ts",
+    "bytes": 8561,
+    "sha256": "6c748235f5aebd3bdfa254de400e752e42bf15aae53c840b8ec09b543a29e906",
+    "blob": "a7c035844cfaf44834b755e1250fc3cae1d7a6d5"
+  },
+  {
+    "path": "web/src/lib/research-versioned-input-binding.ts",
+    "bytes": 4004,
+    "sha256": "1ec1bee664b793295b41de982818e767446b85e801efb164324217510d0fd940",
+    "blob": "093bd0ac201a4da0b1a5c7372f84b7570497840a"
+  },
+  {
+    "path": "web/src/lib/research-v3-material-canonical.ts",
+    "bytes": 4343,
+    "sha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+    "blob": "59895e540b67258eea998ee7a2e2ab9eb4b8cf6f"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-prerequisite-profile.mjs",
+    "bytes": 5935,
+    "sha256": "2e6c2196dcc780d9f2f6a56a6a9c5d851c23b12d3834bb22e52bae6b62c5830b",
+    "blob": "1fe388bdcf22cc46b1f4eb09548ebc65aa3cb0de"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-prerequisite-profile.json",
+    "bytes": 8281,
+    "sha256": "3d6cf36330519a9382f2cce8fa1a6cc9484843a594d0df312ecc2ab60a0436db",
+    "blob": "b3e76e70d466d4540f729fa2cfe07e12131043d1"
+  },
+  {
+    "path": "package-lock.json",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+  },
+  {
+    "path": "web/package-lock.json",
+    "bytes": 274088,
+    "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+    "blob": "a41fd447e28f3b36829b689828c345e042619a38"
+  },
+  {
+    "path": ".nvmrc",
+    "bytes": 8,
+    "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+    "blob": "7d41c735d7127c4a2530ebe846b14ffbf38b8031"
+  }
+]
