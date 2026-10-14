@@ -1,0 +1,293 @@
+{
+  "schema": "unsigned-model-agent-integration-review-v1",
+  "source": "1ff6d59a0bd4e37c69a251a2ea2b144a66ebb479",
+  "tree": "5ac6b728300a1bb3079e308a293c127981ec271c",
+  "webtree": "9d21b94849cfbaadfee128528430a910b0622ebb",
+  "base": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+  "reviewScope": "Root integration delta, portable fixture repair, descriptor and ordinary workflow; not independent reapproval of reviewer-authored6313 owner/engine",
+  "verdict": "scoped_CODE_PASS",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "sourceEdits": false,
+  "suite": {
+    "tests": 62,
+    "pass": 62,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "independentActualFDIntegrationCases": 6,
+  "quality": {
+    "suite": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-cash-single-owner-reader.test.mjs",
+        "scripts/research-historical-cash-core.test.mjs",
+        "scripts/research-historical-cash-projection.test.mjs",
+        "scripts/research-scenario-cash-material.test.mjs",
+        "scripts/research-scenario-cash-reader.test.mjs"
+      ],
+      "exit": 0,
+      "seconds": 10.335282752057537,
+      "peakSampledRSS": 226271232,
+      "minimumFree": {
+        "/workspace": 8617132032,
+        "/tmp": 15455043584
+      }
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "exit": 0,
+      "seconds": 3.4501077519962564,
+      "peakSampledRSS": 540884992,
+      "minimumFree": {
+        "/workspace": 8618115072,
+        "/tmp": 15454867456
+      }
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "exit": 0,
+      "seconds": 23.126604636898264,
+      "peakSampledRSS": 1669005312,
+      "minimumFree": {
+        "/workspace": 8618131456,
+        "/tmp": 15454822400
+      }
+    },
+    "independent": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "/tmp/scenario-reader-review-o14/probe.mjs"
+      ],
+      "exit": 0,
+      "seconds": 20.5311170630157,
+      "peakSampledRSS": 121122816,
+      "minimumFree": {
+        "/workspace": 8617136128,
+        "/tmp": 15454781440
+      }
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "exit": 0,
+      "seconds": 29.7698251910042,
+      "peakSampledRSS": 948359168,
+      "minimumFree": {
+        "/workspace": 8618131456,
+        "/tmp": 15453499392
+      }
+    }
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 33
+  },
+  "build": {
+    "buildId": "hBqUTTRdliBGyZ0YwXavx",
+    "compiler": "normal next build Turbopack",
+    "node": "v22.14.0",
+    "next": "16.3.4",
+    "fileCount": 1798,
+    "bytes": 59967117
+  },
+  "buildManifestSha256": "9f7f4cc3d377f3e712dde794c3a537bb7ee0f09249dc8deb91a4848cfe1e2a13",
+  "closureHash": "f28549ba9d63ff909e3470a144793d5ca4940491822f38684a65f126d4d54624",
+  "sourceClosureApproved": false,
+  "formalReleaseApproved": false,
+  "peakSampledRSS": 1669005312,
+  "minimumFree": {
+    "/workspace": 8617132032,
+    "/tmp": 15453499392
+  },
+  "deadline": "2026-10-14T09:33:16Z",
+  "sealedAt": "2026-10-14T09:16:18.824438+00:00",
+  "files": [
+    {
+      "file": "additional-inputs.json",
+      "bytes": 487,
+      "sha256": "69059474ebf70bd9752f2475b4ce9823962c52d51f9074309ac0ab8cbcf46e30"
+    },
+    {
+      "file": "build-manifest.json",
+      "bytes": 395066,
+      "sha256": "9f7f4cc3d377f3e712dde794c3a537bb7ee0f09249dc8deb91a4848cfe1e2a13"
+    },
+    {
+      "file": "cleanup.json",
+      "bytes": 43585,
+      "sha256": "1871ce15f6016a5d1f050545ca9dd8876c8b0e4cb8237ec76cadbbdd33dd2783"
+    },
+    {
+      "file": "full-diff.patch",
+      "bytes": 146811,
+      "sha256": "c5c7f97fcb332f0970775c6a9b5cd834c25e40bb447bd3aebe884c079a234d23"
+    },
+    {
+      "file": "portable-fix.diff",
+      "bytes": 5504,
+      "sha256": "2ed0055b011885c76e55a9a87c2f8d417a8dec07185c26c6d9ecea6dfe9651d6"
+    },
+    {
+      "file": "probe.mjs",
+      "bytes": 5092,
+      "sha256": "661e1e3515279e73b4329b500d881bd93e5efad8ad6bf632256b9bb29d6a22c1"
+    },
+    {
+      "file": "raw/build.run.json",
+      "bytes": 28681,
+      "sha256": "d977fabf152543e96d402477854b5091d4c4035758c879b50324020085f917e5"
+    },
+    {
+      "file": "raw/build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/build.stdout",
+      "bytes": 5555,
+      "sha256": "f374da755ae5d97db96e628f2fb5f2fe00a2efb6106fc5b1b85b081d2b83eda2"
+    },
+    {
+      "file": "raw/independent.run.json",
+      "bytes": 20323,
+      "sha256": "9c12f3d582282d0e72a01162a1a7f8b05a7f651286973fb9f5f10baf7de55dde"
+    },
+    {
+      "file": "raw/independent.stderr",
+      "bytes": 555,
+      "sha256": "e65c477c4538ae52debbedfcd39776e608394447ea870e8496c259803a29bf9e"
+    },
+    {
+      "file": "raw/independent.stdout",
+      "bytes": 1967,
+      "sha256": "9a4461295e035f700758dc47a343764e33d6c326c79274e1b9460786cacfdd06"
+    },
+    {
+      "file": "raw/lineage-initial-lookup-red.txt",
+      "bytes": 539,
+      "sha256": "c2cf6bc22fefd0203c9ea0faad10588f98ed459aec784e07f82368af454c209d"
+    },
+    {
+      "file": "raw/lint.run.json",
+      "bytes": 22421,
+      "sha256": "84c940796c813f4a3258559594701e49f1bdeefcdbc4a92b125b5072e7b8af34"
+    },
+    {
+      "file": "raw/lint.stderr",
+      "bytes": 138,
+      "sha256": "43919f745e4a9e3b8b8e2bfa6b44040e1e34905f65e07c81370c80739295d84d"
+    },
+    {
+      "file": "raw/lint.stdout",
+      "bytes": 4426,
+      "sha256": "f35ce3c852e9c501133c403f7a9a209ef94b087b9722ea86005eafdf7afa8a2a"
+    },
+    {
+      "file": "raw/suite.run.json",
+      "bytes": 10521,
+      "sha256": "a548eb90c47997d9f6ddbd1d6ce9ccb04e8e97a97a131dd8a2e3370757c71e60"
+    },
+    {
+      "file": "raw/suite.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/suite.stdout",
+      "bytes": 18225,
+      "sha256": "53367c0122d8a3ab165e1863c77f5fd9b81c768e589181d7f783db3ac7c3e5c9"
+    },
+    {
+      "file": "raw/typecheck.run.json",
+      "bytes": 3891,
+      "sha256": "27bb26bfef16fca8a0e80adbc9de8ea4cc84dd8328d032ac889e5766a57cb077"
+    },
+    {
+      "file": "raw/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": "review.md",
+      "bytes": 8655,
+      "sha256": "e73231172f05746770f281b427a4a4047124faff64a0b19fe74ea0bdb5699e6d"
+    },
+    {
+      "file": "run.py",
+      "bytes": 2097,
+      "sha256": "4e1c0a191baa3409c07624bd0efde72a1b72b9b76869650937cd131eef2b1a85"
+    },
+    {
+      "file": "seal.py",
+      "bytes": 3929,
+      "sha256": "aaa76840b2f2cbfbbd9e69ac193910337ae7dc2e703d87cd208d2f203c82686b"
+    },
+    {
+      "file": "source-manifest-before-origin-fetch.json",
+      "bytes": 12219,
+      "sha256": "c2327827be4b98c83fcff328e9faacbd6a82d4c8e2ce3ccf5f29a7b770038871"
+    },
+    {
+      "file": "source-manifest.json",
+      "bytes": 12282,
+      "sha256": "e50bdd48cc964ecb06928d6686c76e0a21cb1c8daad1bd93076da396b8eaabfa"
+    },
+    {
+      "file": "task.txt",
+      "bytes": 4400,
+      "sha256": "57d28b5f36d2f2252750a6d62924c31eade5cde0fca501fe9ca2533c7a538a99"
+    },
+    {
+      "file": "task.txt.gz",
+      "bytes": 2742,
+      "sha256": "df7d15a4c6c6272652136a9cd1e6494d85764f5b34db6c61ca9070cc5a3816f6"
+    }
+  ],
+  "rawAndReportFiles": 29,
+  "rawAndReportBytes": 760299,
+  "pending": [
+    "fullv3schema/versionedprepare-read-seal",
+    "oldsealedv2replay",
+    "crossprocesscutover/shared4slot524288/120sfreshness/fences",
+    "HTTPPG/author-review-publication",
+    "formalpeer/normalprotected/capacity/deploy"
+  ],
+  "preservedHistoricalReds": [
+    "Root stale constant 2ec3PASS6FAIL",
+    "6313portable fixture 0PASS1FAIL",
+    "Root manifestKeyError/guesspath",
+    "b513 clockformat probe"
+  ],
+  "currentReadOnlyLookupRed": "initial9dafmissinglocalobject; exactfetchresolved; originalerror retained"
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "file": "scripts/research-historical-cash-core.test.mjs",
+    "bytes": 8413,
+    "sha256": "fa67c47c836f2622ffee4544e0a86abc7c5222fac5bfc81077ec6a6e216fa649",
+    "blob": "c8f59a826032166a7e7c685678d4662d54ea660a"
+  },
+  {
+    "file": "scripts/fixtures/research-historical-cash/operands-and-decimal-vectors.json",
+    "bytes": 13463,
+    "sha256": "d581bd42715ff491552dc7e21ab94ac3536609e72feae55750143f68c446d0cb",
+    "blob": "088e920e42e777b6ae149cd7162fca3163eb255d"
+  }
+]
