@@ -1,0 +1,14 @@
+[
+  [
+    "research_complete_parent_v2(jsonb)",
+    "3515d35c4f8c5c756009cc22cedd8eee50b39d780e7bb7af8f777dbbd21ee57a"
+  ],
+  [
+    "read_research_article_input_revision_v2(jsonb)",
+    "1431ac8c0daabcbfd91fabad81bb0974b0a9643b1570e71cf13579b93566405a"
+  ],
+  [
+    "seal_research_article_input_revision_v2(jsonb,jsonb)",
+    "7065c97a368dd5e3d723fc9bf9a3c0a0ec3727e69a3e1ed1d4b9c1adc847dd4c"
+  ]
+]

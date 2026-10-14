@@ -1,0 +1,20 @@
+{
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "lint"
+  ],
+  "start": "2026-10-14T12:21:20.573788+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.25,
+  "peakProcessTreeRss": 1632063488,
+  "minFree": {
+    "/workspace": 8609460224,
+    "/tmp": 15433261056
+  },
+  "user": "agent",
+  "exit": 0,
+  "seconds": 22.910890102386475
+}

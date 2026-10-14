@@ -1,0 +1,72 @@
+{
+  "capturedSchemaPublicPrivileges": [
+    "GRANT USAGE ON SCHEMA public TO postgres;",
+    "GRANT USAGE ON SCHEMA public TO anon;",
+    "GRANT USAGE ON SCHEMA public TO authenticated;",
+    "GRANT USAGE ON SCHEMA public TO service_role;",
+    "GRANT USAGE ON SCHEMA public TO opportunity_v3_rpc_owner;",
+    "GRANT USAGE ON SCHEMA public TO legacy_correctness_rpc_owner;",
+    "GRANT USAGE ON SCHEMA public TO stockinsider_runtime_v319;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES TO anon;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES TO authenticated;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES TO service_role;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES TO anon;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES TO authenticated;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES TO service_role;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS TO postgres;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS TO anon;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS TO authenticated;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS TO service_role;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS TO postgres;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS TO anon;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS TO authenticated;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS TO service_role;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES TO postgres;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES TO anon;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES TO authenticated;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES TO service_role;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES TO postgres;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES TO anon;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES TO authenticated;",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES TO service_role;"
+  ],
+  "originalPreparationRoleLines": [
+    [
+      3,
+      "CREATE ROLE research_input_preparation_owner_v2 NOLOGIN NOINHERIT NOBYPASSRLS;"
+    ],
+    [
+      19,
+      "GRANT EXECUTE ON FUNCTION public.reject_research_source_receipt_mutation_v2(),public.research_observed_canonical_json_v1(jsonb),public.seal_research_sources_v2(jsonb,timestamptz),public.assert_research_source_seal_v2(uuid),public.research_source_root_v2(jsonb) TO research_input_preparation_owner_v2;"
+    ],
+    [
+      22,
+      "  EXECUTE format('GRANT SELECT ON public.%I TO research_input_preparation_owner_v2',name);"
+    ],
+    [
+      28,
+      "GRANT UPDATE(job_id) ON public.research_deep_jobs_v1 TO research_input_preparation_owner_v2;"
+    ],
+    [
+      29,
+      "GRANT UPDATE(reservation_id) ON public.research_model_reservations_v1 TO research_input_preparation_owner_v2;"
+    ],
+    [
+      43,
+      "GRANT SELECT ON public.research_source_seals_v2 TO research_input_preparation_owner_v2;"
+    ],
+    [
+      136,
+      "GRANT EXECUTE ON FUNCTION public.prepare_research_input_v2(jsonb) TO service_role;"
+    ]
+  ],
+  "sourceFenceRoleLines": [
+    [
+      7,
+      "  CREATE ROLE research_source_fence_owner_v2 NOLOGIN NOSUPERUSER NOBYPASSRLS;"
+    ]
+  ],
+  "diagnosis": "Native42501 occurred under SECURITY DEFINER preparation owner when resolving public schema. Captured public schema has no PUBLIC USAGE and original preparation migration supplies no USAGE to its new NOINHERIT owner. Static evidence plus actual error; no retained live pg_catalog query from the stopped cluster. No grant or owner change applied. All future privileges require separate approved correction."
+}

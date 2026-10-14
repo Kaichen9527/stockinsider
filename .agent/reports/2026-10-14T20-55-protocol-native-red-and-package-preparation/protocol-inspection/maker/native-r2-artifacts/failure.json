@@ -1,0 +1,6 @@
+{
+  "stage": "synthetic original lineage 2409",
+  "name": "error",
+  "code": "P0001",
+  "message": "observed_job_requires_scoped_rpc"
+}
