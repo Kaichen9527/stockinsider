@@ -1,0 +1,248 @@
+name: Reviewed publication source Linux artifact
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/reviewed-publication-tail-artifact.yml'
+      - 'docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md'
+  workflow_dispatch:
+
+# A fixed reviewed-source build only. No deployment, DB access or new approval.
+permissions:
+  contents: read
+concurrency:
+  group: reviewed-linux-dd59817f750684b093965f539dd4de466be13077
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      REVIEWED_SOURCE: dd59817f750684b093965f539dd4de466be13077
+      REVIEW_EVIDENCE: c2b146adb6d03814f2bd9a7af72baf003bb48812
+      REVIEWED_TREE: 6a9a08af70fb94b50ed2b5eee6aaf3686f648b99
+      REVIEWED_WEB_TREE: c516655efaac8260b1bcf5938f8f4d65ab61ad44
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - name: Retrieve the actual builder subject for fresh canonical tests
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up the existing pinned Node runtime
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Install the actual builder's exact locked dependencies
+        run: |
+          npm ci
+          npm --prefix web ci
+      - name: Run fresh canonical correctness on the actual builder subject
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(node --version)" = v22.14.0
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -m 0700 "$RUNNER_TEMP/standalone-export"
+          npm run test:source-led-opportunity-v3:product-correctness 2>&1 | tee "$RUNNER_TEMP/standalone-export/builder-canonical.log"
+          git diff --exit-code
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const dir = process.env.RUNNER_TEMP + '/standalone-export';
+          const log = fs.readFileSync(dir + '/builder-canonical.log', 'utf8');
+          assert.ok(Buffer.byteLength(log, 'utf8') <= 4 * 1024 * 1024);
+          const start = log.indexOf('TAP version 13\n');
+          assert.ok(start >= 0);
+          const tap = log.slice(start);
+          for (const [name, expected] of Object.entries({ tests: 155, pass: 155, fail: 0, cancelled: 0, skipped: 0, todo: 0 })) {
+            const rows = [...tap.matchAll(new RegExp('^# ' + name + ' (\\d+)$', 'gmu'))];
+            assert.equal(rows.length, 1);
+            assert.equal(Number(rows[0][1]), expected);
+          }
+          assert.match(tap, /^1\.\.155$/mu);
+          const pcr = [...tap.matchAll(/^ok \d+ - acceptance (PCR-\d{3})$/gmu)].map(m => m[1]);
+          assert.deepEqual(pcr, Array.from({ length: 31 }, (_, i) => 'PCR-' + String(i + 1).padStart(3, '0')));
+          const git = ref => execFileSync('git', ['rev-parse', ref], { encoding: 'utf8' }).trim();
+          assert.equal(git('HEAD'), process.env.GITHUB_SHA);
+          assert.match(process.env.GITHUB_WORKFLOW_SHA ?? '', /^[a-f0-9]{40}$/u);
+          const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+          fs.writeFileSync(dir + '/builder-canonical.tap', tap, { flag: 'wx' });
+          fs.writeFileSync(dir + '/builder-correctness.json', JSON.stringify({
+            executionSubject: git('HEAD'), executionTree: git('HEAD^{tree}'), executionWebTree: git('HEAD:web'),
+            builderWorkflowSha: process.env.GITHUB_WORKFLOW_SHA, workflowRef: process.env.GITHUB_WORKFLOW_REF,
+            triggerCommit: process.env.GITHUB_SHA, runId: process.env.GITHUB_RUN_ID,
+            command: 'npm run test:source-led-opportunity-v3:product-correctness',
+            canonicalTests: 155, pass: 155, fail: 0, cancelled: 0, skipped: 0, todo: 0,
+            namedPCR: pcr, canonicalSectionSha256: hash(tap),
+            rootLockSha256: hash(fs.readFileSync('package-lock.json')),
+            webLockSha256: hash(fs.readFileSync('web/package-lock.json')),
+            artifactApplicationSubject: process.env.REVIEWED_SOURCE,
+            artifactApplicationTestsAttributedToBuilder: false,
+          }, null, 2) + '\n', { flag: 'wx' });
+          NODE
+      - name: Retrieve genuine direct-child evidence and source history
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: c2b146adb6d03814f2bd9a7af72baf003bb48812
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Select the reviewed source, without copying evidence into it
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git show -s --format=%P "$REVIEW_EVIDENCE")" = "$REVIEWED_SOURCE"
+          git checkout --detach "$REVIEWED_SOURCE"
+          test "$(git rev-parse HEAD)" = "$REVIEWED_SOURCE"
+          test "$(git rev-parse HEAD^{tree})" = "$REVIEWED_TREE"
+          test "$(git rev-parse HEAD:web)" = "$REVIEWED_WEB_TREE"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Verify original review binding and record distinct builder identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(node --version)" = v22.14.0
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createRequire } from 'node:module';
+          const { resolveReviewedRuntimeRelease } = createRequire(import.meta.url)('./scripts/runtime/reviewed-runtime-release.js');
+          const release = resolveReviewedRuntimeRelease({ repositoryRoot: process.cwd(), sourceCommit: process.env.REVIEWED_SOURCE, attestationCommit: process.env.REVIEW_EVIDENCE });
+          assert.equal(release.commitSha, process.env.REVIEWED_SOURCE);
+          assert.equal(release.treeSha, process.env.REVIEWED_TREE);
+          assert.match(process.env.GITHUB_WORKFLOW_SHA ?? '', /^[a-f0-9]{40}$/u);
+          assert.match(process.env.GITHUB_SHA ?? '', /^[a-f0-9]{40}$/u);
+          fs.writeFileSync(process.env.RUNNER_TEMP + '/standalone-export/review-binding.json', JSON.stringify({
+            sourceCommit: release.commitSha, sourceTree: release.treeSha,
+            directChildEvidence: process.env.REVIEW_EVIDENCE, reviewAttestationSha256: release.reviewAttestationSha256,
+            builderWorkflowSha: process.env.GITHUB_WORKFLOW_SHA, triggerCommit: process.env.GITHUB_SHA,
+            builderCorrectnessReceipt: 'builder-correctness.json',
+            workflowRef: process.env.GITHUB_WORKFLOW_REF, runId: process.env.GITHUB_RUN_ID,
+            databaseConnectionAttempted: false, deploymentPerformed: false,
+          }, null, 2) + '\n', { flag: 'wx' });
+          NODE
+      - name: Install the exact locked build dependencies
+        run: |
+          npm ci
+          npm --prefix web ci
+      - name: Verify source calculations, packaging, types and lint
+        run: |
+          node web/scripts/sync-official-authority.mjs --check
+          npm run test:tw-entry-plan
+          node --test scripts/package-standalone-release.test.mjs
+          npm --prefix web run typecheck
+          npm --prefix web run lint
+          git diff --exit-code
+      - name: Verify source fixture navigation separately from packaged production
+        run: |
+          cd web
+          npx playwright install --with-deps chromium
+          npx playwright test --config playwright.trade-plan.config.ts
+      - name: Build production after the separate development fixture server has stopped
+        run: npm --prefix web run build
+      - name: Package and verify the approved source, not the merge or builder commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$REVIEWED_SOURCE"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          destination="$RUNNER_TEMP/reviewed-standalone"
+          export_dir="$RUNNER_TEMP/standalone-export"
+          mkdir -m 0700 "$destination"
+          node scripts/package-standalone-release.mjs "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE" "$destination" "$REVIEWED_SOURCE" "$REVIEWED_SOURCE" > "$export_dir/package.json"
+          node scripts/verify-standalone-release.mjs "$destination/$REVIEWED_SOURCE" > "$export_dir/verification.json"
+          cp "$destination/$REVIEWED_SOURCE/release-manifest.json" "$export_dir/release-manifest.json"
+          git rev-parse HEAD HEAD^{tree} HEAD:web > "$export_dir/source-identity.txt"
+      - name: Boot the packaged production entrypoint without credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { spawn } from 'node:child_process';
+          import { setTimeout as pause } from 'node:timers/promises';
+          const exportDir = path.join(process.env.RUNNER_TEMP, 'standalone-export');
+          const root = path.join(process.env.RUNNER_TEMP, 'reviewed-standalone', process.env.REVIEWED_SOURCE);
+          const { manifest } = JSON.parse(fs.readFileSync(path.join(root, 'release-manifest.json'), 'utf8'));
+          assert.equal(manifest.sourceCommit, process.env.REVIEWED_SOURCE);
+          const entry = path.resolve(root, manifest.entrypoint);
+          assert.ok(entry.startsWith(root + path.sep));
+          const asset = manifest.files.find(f => /\/\.next\/static\/.+\.(?:js|css)$/u.test(f.path));
+          assert.ok(asset);
+          const assetUrl = '/_next/static/' + asset.path.split('/.next/static/')[1];
+          const child = spawn(process.execPath, [entry], { cwd: path.dirname(entry), env: {
+            PATH: process.env.PATH, HOME: process.env.HOME, LANG: 'C.UTF-8', TZ: 'UTC',
+            NODE_ENV: 'production', HOSTNAME: '127.0.0.1', PORT: '3114', NEXT_TELEMETRY_DISABLED: '1',
+          }, stdio: ['ignore', 'pipe', 'pipe'] });
+          child.stdout.pipe(fs.createWriteStream(path.join(exportDir, 'packaged-boot.stdout')));
+          child.stderr.pipe(fs.createWriteStream(path.join(exportDir, 'packaged-boot.stderr')));
+          let closed = false, stopping = false, unexpectedExit = false;
+          const ended = new Promise((resolve, reject) => {
+            child.once('error', reject);
+            child.once('close', (code, signal) => { closed = true; unexpectedExit = !stopping; resolve({ code, signal }); });
+          });
+          // Observe asynchronous spawn failure while startup requests are pending.
+          void ended.catch(() => {});
+          const get = route => fetch('http://127.0.0.1:3114' + route, { signal: AbortSignal.timeout(3000), redirect: 'error' });
+          let proof;
+          try {
+            const until = Date.now() + 30000;
+            let auth;
+            while (!auth) {
+              assert.equal(closed, false, 'packaged process exited before probe');
+              try { auth = await get('/api/internal/health-check'); }
+              catch (error) { if (Date.now() >= until) throw error; await pause(100); }
+            }
+            assert.equal(auth.status, 500);
+            assert.deepEqual(await auth.json(), { ok: false, error: 'INTERNAL_API_KEY/CRON_SECRET not configured' });
+            assert.equal((await get('/trade-plan-fixture')).status, 404);
+            const staticResponse = await get(assetUrl);
+            assert.equal(staticResponse.status, 200);
+            assert.ok(staticResponse.body);
+            const digest = createHash('sha256'); let staticBytes = 0;
+            for await (const chunk of staticResponse.body) {
+              staticBytes += chunk.byteLength; assert.ok(staticBytes <= asset.bytes);
+              digest.update(chunk);
+            }
+            assert.equal(staticBytes, asset.bytes);
+            const staticHash = digest.digest('hex');
+            assert.equal(staticHash, asset.sha256);
+            assert.equal(closed, false);
+            assert.equal(child.exitCode, null);
+            assert.equal(child.signalCode, null);
+            proof = { sourceCommit: process.env.REVIEWED_SOURCE, nodeVersion: process.versions.node,
+              productionEntrypoint: manifest.entrypoint, credentialEnvironment: 'absent',
+              unconfiguredAuthStatus: 500, fixtureUnavailableStatus: 404,
+              assetPath: asset.path, assetSha256: staticHash, databaseOrApiMutationPerformed: false,
+              productionReadinessProven: false, privatePeerOrLiveDataProven: false };
+          } finally {
+            stopping = true;
+            if (!closed) child.kill('SIGTERM');
+            if (!closed) await Promise.race([ended, pause(5000)]);
+            if (!closed) child.kill('SIGKILL');
+            const exit = await Promise.race([ended, pause(5000).then(() => { throw Error('packaged_process_cleanup_unconfirmed'); })]);
+            assert.equal(unexpectedExit, false);
+            if (proof) { proof.confirmedProcessExit = exit; fs.writeFileSync(path.join(exportDir, 'packaged-boot.json'), JSON.stringify(proof, null, 2) + '\n', { flag: 'wx' }); }
+          }
+          NODE
+      - name: Seal the downloadable binary and receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          export_dir="$RUNNER_TEMP/standalone-export"
+          tar -czf "$export_dir/stockinsider-linux.tar.gz" -C "$RUNNER_TEMP/reviewed-standalone" "$REVIEWED_SOURCE"
+          (cd "$export_dir" && sha256sum stockinsider-linux.tar.gz release-manifest.json package.json verification.json source-identity.txt review-binding.json builder-canonical.log builder-canonical.tap builder-correctness.json packaged-boot.json packaged-boot.stdout packaged-boot.stderr > SHA256SUMS)
+      - name: Retain the new fixed-target package outside Git history
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: reviewed-linux-standalone-dd59817f750684b093965f539dd4de466be13077-${{ github.run_id }}
+          path: ${{ runner.temp }}/standalone-export/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
