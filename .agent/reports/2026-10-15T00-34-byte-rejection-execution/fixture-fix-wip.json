@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-14T16:37:28.504899+00:00",
+  "base": "594eaf16457ffb7526f0888922fc8612e893ac75",
+  "path": "scripts/opportunity-v3/research-versioned-byte-rejection-native.test.mjs",
+  "bytes": 9471,
+  "sha256": "aa6e7d04e2277cfb49575e0e0f83af7e283bc9a5c57ac15965412a6310c381c9",
+  "cause": "Material tagged canonical limit12 applied to extra ledger row/list envelope depth>=14; actual payload depth11 valid. Only audit hash codec changes, product canonical checks/deep ledger equality retained."
+}

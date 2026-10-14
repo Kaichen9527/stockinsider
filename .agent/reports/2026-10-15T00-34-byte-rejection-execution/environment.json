@@ -1,0 +1,10 @@
+{
+  "nodeVersion": "v22.14.0",
+  "nodeBinarySha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+  "postgresVersionFromActualServerLog": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu",
+  "postgresBinarySha256": "6468a969338215cb3912cf9c0b894bdbbd37b9a709926db078e9a5bf8bdc3e16",
+  "USER": "agent (OS-derived by runner)",
+  "proxyCA": "inherited unchanged; values not read/exported",
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "webLockSha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+}

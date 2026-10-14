@@ -1,0 +1,914 @@
+{
+  "kind": "public-safe-maker-derived-native-byte-rejection-witness",
+  "independentlyApproved": false,
+  "executedCode": "c462a51ceea1b69026b38ec40b105eb971d24116",
+  "originalCode": "594eaf16457ffb7526f0888922fc8612e893ac75",
+  "initial": {
+    "pass": 0,
+    "fail": 2,
+    "childCasesAttempted": 1,
+    "parentCases": 1,
+    "EMC": "NOT_RUN fail-fast",
+    "cause": "audit ledger envelope depth>=14 was sent to material canonical depth12 after valid first seal",
+    "originalREDRetained": true
+  },
+  "corrected": {
+    "pass": 3,
+    "fail": 0,
+    "children": 2,
+    "parents": 1,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "cases": [
+    {
+      "case": "2409-auo-byte-plus400",
+      "status": "PASS",
+      "expectedError": {
+        "code": "P0001",
+        "message": "complete_byte_bound"
+      },
+      "sourceIdentity": {
+        "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+        "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+        "kind": "partial-four-source actual Node engineering; not wholeclosure/Next/old77"
+      },
+      "sourceLocator": {
+        "extensionBytes": 400,
+        "documentCount": 30,
+        "rootBytes": [
+          451,
+          462,
+          462,
+          462,
+          462,
+          462,
+          462,
+          462,
+          462,
+          462,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463,
+          463
+        ],
+        "canonicalParentDocumentEqual": true,
+        "publisherCount": 1,
+        "discoveryRootCount": 1,
+        "independentNewsRootQualification": false,
+        "publicationCompatibilityProven": false
+      },
+      "stages": [
+        {
+          "stage": "01-initial-preparation",
+          "audit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "80553c54da8fe383cf2f43a5e123a18a753e25e0a91e3c70a3f882aa00d65470"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "20c17011c7e78c0bb22b75204c16328f290985cfca7f67d38cac32fad93fb35b"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "886671e2545e58d9509854dc27d3db53d83fa2d0cca678f441c29e7f68f23a22"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "505c2c3efb8de996139623f7f2136da2df2cb6f0cf792fb83cefad823b29df74"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "874fa78a0868466e8bc9125b07756a300ad06bff2c361463ae242b1012eee638"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "92c7730ee91cfe8a6b6fa1d35ea7207908a52d10ee401891d73ab3be66f99ee4"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 30,
+              "hash": "92362b303321c3cc06895deaecbccc5296b0880bcf2338e628573ae13a48a9c9"
+            }
+          },
+          "ledgerHash": "c5c3ab80362719c0ee82523673ab92d322bd383d8d41892eae1edbf6ba244767",
+          "ledgerHashAlgorithm": "SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)",
+          "charge": {
+            "count": 1,
+            "bytes": 45908
+          },
+          "fd": {
+            "opens": 0,
+            "closes": 0
+          }
+        },
+        {
+          "stage": "02-after-first-seal",
+          "audit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "80553c54da8fe383cf2f43a5e123a18a753e25e0a91e3c70a3f882aa00d65470"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "085cf0a93069e7e5d01c018e458f0c2677700eca94930ce0a539fab28fe33a40"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "20c17011c7e78c0bb22b75204c16328f290985cfca7f67d38cac32fad93fb35b"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "886671e2545e58d9509854dc27d3db53d83fa2d0cca678f441c29e7f68f23a22"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "505c2c3efb8de996139623f7f2136da2df2cb6f0cf792fb83cefad823b29df74"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "874fa78a0868466e8bc9125b07756a300ad06bff2c361463ae242b1012eee638"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "92c7730ee91cfe8a6b6fa1d35ea7207908a52d10ee401891d73ab3be66f99ee4"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 30,
+              "hash": "92362b303321c3cc06895deaecbccc5296b0880bcf2338e628573ae13a48a9c9"
+            }
+          },
+          "ledgerHash": "ae9957e4ac2d7c82b06efba25878095699aa83376ae03cc4c4fd87d91cd748f5",
+          "ledgerHashAlgorithm": "SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)",
+          "charge": {
+            "count": 2,
+            "bytes": 234965
+          },
+          "fd": {
+            "opens": 8,
+            "closes": 8
+          }
+        },
+        {
+          "stage": "03-before-second-preparation",
+          "audit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "80553c54da8fe383cf2f43a5e123a18a753e25e0a91e3c70a3f882aa00d65470"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "085cf0a93069e7e5d01c018e458f0c2677700eca94930ce0a539fab28fe33a40"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "20c17011c7e78c0bb22b75204c16328f290985cfca7f67d38cac32fad93fb35b"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "886671e2545e58d9509854dc27d3db53d83fa2d0cca678f441c29e7f68f23a22"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "505c2c3efb8de996139623f7f2136da2df2cb6f0cf792fb83cefad823b29df74"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "874fa78a0868466e8bc9125b07756a300ad06bff2c361463ae242b1012eee638"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "92c7730ee91cfe8a6b6fa1d35ea7207908a52d10ee401891d73ab3be66f99ee4"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 30,
+              "hash": "92362b303321c3cc06895deaecbccc5296b0880bcf2338e628573ae13a48a9c9"
+            }
+          },
+          "ledgerHash": "ae9957e4ac2d7c82b06efba25878095699aa83376ae03cc4c4fd87d91cd748f5",
+          "ledgerHashAlgorithm": "SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)",
+          "charge": {
+            "count": 2,
+            "bytes": 234965
+          },
+          "fd": {
+            "opens": 8,
+            "closes": 8
+          }
+        },
+        {
+          "stage": "04-after-second-preparation-before-rejection",
+          "audit": {
+            "research_input_preparations_v2": {
+              "count": 2,
+              "hash": "cfdcd009ef687aa0227be04cc563409de8911d151dec88701e43f479b0588d1e"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "085cf0a93069e7e5d01c018e458f0c2677700eca94930ce0a539fab28fe33a40"
+            },
+            "research_source_seals_v2": {
+              "count": 2,
+              "hash": "0218586be41b1ef504b3e8f7ec24f9934d08104dc01ce4b232837b1ba82db666"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "886671e2545e58d9509854dc27d3db53d83fa2d0cca678f441c29e7f68f23a22"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "505c2c3efb8de996139623f7f2136da2df2cb6f0cf792fb83cefad823b29df74"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "874fa78a0868466e8bc9125b07756a300ad06bff2c361463ae242b1012eee638"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "92c7730ee91cfe8a6b6fa1d35ea7207908a52d10ee401891d73ab3be66f99ee4"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 30,
+              "hash": "92362b303321c3cc06895deaecbccc5296b0880bcf2338e628573ae13a48a9c9"
+            }
+          },
+          "ledgerHash": "9bdb3f5b2967daaed04145894a65221531923f222c708f05e228c6e1c1328ae9",
+          "ledgerHashAlgorithm": "SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)",
+          "charge": {
+            "count": 3,
+            "bytes": 279407
+          },
+          "fd": {
+            "opens": 8,
+            "closes": 8
+          }
+        },
+        {
+          "stage": "05-after-second-seal-attempt",
+          "audit": {
+            "research_input_preparations_v2": {
+              "count": 2,
+              "hash": "cfdcd009ef687aa0227be04cc563409de8911d151dec88701e43f479b0588d1e"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "085cf0a93069e7e5d01c018e458f0c2677700eca94930ce0a539fab28fe33a40"
+            },
+            "research_source_seals_v2": {
+              "count": 2,
+              "hash": "0218586be41b1ef504b3e8f7ec24f9934d08104dc01ce4b232837b1ba82db666"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "886671e2545e58d9509854dc27d3db53d83fa2d0cca678f441c29e7f68f23a22"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "505c2c3efb8de996139623f7f2136da2df2cb6f0cf792fb83cefad823b29df74"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "874fa78a0868466e8bc9125b07756a300ad06bff2c361463ae242b1012eee638"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "92c7730ee91cfe8a6b6fa1d35ea7207908a52d10ee401891d73ab3be66f99ee4"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 30,
+              "hash": "92362b303321c3cc06895deaecbccc5296b0880bcf2338e628573ae13a48a9c9"
+            }
+          },
+          "ledgerHash": "9bdb3f5b2967daaed04145894a65221531923f222c708f05e228c6e1c1328ae9",
+          "ledgerHashAlgorithm": "SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)",
+          "charge": {
+            "count": 3,
+            "bytes": 279407
+          },
+          "fd": {
+            "opens": 17,
+            "closes": 17
+          }
+        }
+      ],
+      "firstStoredHashes": {
+        "inputHash": "1fe7d1a78a33bfacd36318ca9feb5e3b7115a4750661031c5c9cb8d87f0572d3",
+        "requestHash": "199cc8741186382dbe7c44ad4c6ed2be2f95cc4e3caac216e851e9719ad8b41d"
+      },
+      "firstClocksAndHashesUnchanged": true,
+      "fullLedgerUnchanged": true,
+      "allCapsFalse": {
+        "dispatchReady": false,
+        "entryEligible": false,
+        "modelDispatched": false,
+        "strategyApproved": false,
+        "financialVerified": false,
+        "researchQualified": false,
+        "publishableResearch": false,
+        "historicalPITEligible": false
+      },
+      "rpcFdOrder": [
+        {
+          "ordinal": 0,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 0,
+            "closes": 0
+          }
+        },
+        {
+          "ordinal": 1,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 0,
+            "closes": 0
+          }
+        },
+        {
+          "ordinal": 2,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 8,
+            "closes": 0
+          }
+        },
+        {
+          "ordinal": 3,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 8,
+            "closes": 8
+          }
+        },
+        {
+          "ordinal": 4,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 8,
+            "closes": 8
+          }
+        },
+        {
+          "ordinal": 5,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 8,
+            "closes": 8
+          }
+        },
+        {
+          "ordinal": 6,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 17,
+            "closes": 8
+          }
+        },
+        {
+          "ordinal": 7,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 17,
+            "closes": 17
+          }
+        }
+      ],
+      "lifecycle": [
+        {
+          "files": 8,
+          "preNoNewOpensFromSnapshot": true,
+          "postFdsRetained": true,
+          "sealAllFdsClosed": true
+        },
+        {
+          "files": 9,
+          "preNoNewOpensFromSnapshot": true,
+          "postFdsRetained": true,
+          "sealAllFdsClosed": true
+        }
+      ],
+      "chargeMeasurement": {
+        "initialPreparation": 45908,
+        "firstSeal": 189057,
+        "secondPreparation": 44442,
+        "usedBeforeSecondSeal": {
+          "count": 3,
+          "bytes": 279407
+        },
+        "actualRejectedWouldCharge": null
+      },
+      "actualRejectedWouldCharge": null,
+      "actualRejectedTotal": null,
+      "sourceDerivedPrediction": {
+        "historicalMeasuredTotal": 462917,
+        "addedAsciiBytesPerRoot": 400,
+        "rootOccurrences": 177,
+        "predictedDelta": 70800,
+        "predictedTotal": 533717
+      },
+      "predictionIsMeasurement": false,
+      "cleanup": {
+        "run": "native-corrected",
+        "case": "2409-auo-byte-plus400",
+        "clusterAbsent": true,
+        "writerPid": 584087,
+        "observerPid": 584088,
+        "writerAbsent": true,
+        "observerAbsent": true,
+        "readOnlyObserver": true,
+        "serverShutdownConfirmed": true,
+        "preCleanupLogRetained": true
+      },
+      "pending": [
+        "original rejected seal SQL returns no exact would-charge; source-derived prediction is not a measured rejection charge",
+        "publication/author-packet compatibility of long synthetic locators not established"
+      ]
+    },
+    {
+      "case": "2383-emc-byte-plus1300",
+      "status": "PASS",
+      "expectedError": {
+        "code": "P0001",
+        "message": "complete_byte_bound"
+      },
+      "sourceIdentity": {
+        "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+        "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+        "kind": "partial-four-source actual Node engineering; not wholeclosure/Next/old77"
+      },
+      "sourceLocator": {
+        "extensionBytes": 1300,
+        "documentCount": 30,
+        "rootBytes": [
+          1351,
+          1362,
+          1362,
+          1362,
+          1362,
+          1362,
+          1362,
+          1362,
+          1362,
+          1362,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363,
+          1363
+        ],
+        "canonicalParentDocumentEqual": true,
+        "publisherCount": 1,
+        "discoveryRootCount": 1,
+        "independentNewsRootQualification": false,
+        "publicationCompatibilityProven": false
+      },
+      "stages": [
+        {
+          "stage": "01-initial-preparation",
+          "audit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "0a6fb9c775ef8367851a7bc0c20f89ebc75c4b0043f857b26d474fc07385871f"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "1eb1a1b55bc60543189ec06fc694a958ba6b189b1f29d8fc25892883e1de2401"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "be0d20bdc33b6fcedfdf34f563f6421ad264840b632b22e4515afac5dfaa6055"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "7daf304b9bc3a53c51ed867e294070f1c4bac267ed3482b04a4d66d21f795032"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "b97130e38d0a26933d2ad8468748ed43afd72f45dfe6fdb48dc010d7a730f1c0"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "ef154ee6af50cbb9bf087c24045cc3b21f99983ae031f258001eced8685696ab"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 30,
+              "hash": "5e502d6d15cf862cc60eb8a51b762ebe9b1983c207f1f6e678cbb7ba52f2ae2f"
+            }
+          },
+          "ledgerHash": "6f0e93d1501f0dd2ce47d1d8c454cf8319af697cef1c3901c10a95fb59a2daf1",
+          "ledgerHashAlgorithm": "SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)",
+          "charge": {
+            "count": 1,
+            "bytes": 99909
+          },
+          "fd": {
+            "opens": 17,
+            "closes": 17
+          }
+        },
+        {
+          "stage": "02-after-first-seal",
+          "audit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "0a6fb9c775ef8367851a7bc0c20f89ebc75c4b0043f857b26d474fc07385871f"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "6d17d3b4d386f0ff69b151cb1e8c23002cee0f85a42de9782914e1caaaf766fe"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "1eb1a1b55bc60543189ec06fc694a958ba6b189b1f29d8fc25892883e1de2401"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "be0d20bdc33b6fcedfdf34f563f6421ad264840b632b22e4515afac5dfaa6055"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "7daf304b9bc3a53c51ed867e294070f1c4bac267ed3482b04a4d66d21f795032"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "b97130e38d0a26933d2ad8468748ed43afd72f45dfe6fdb48dc010d7a730f1c0"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "ef154ee6af50cbb9bf087c24045cc3b21f99983ae031f258001eced8685696ab"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 30,
+              "hash": "5e502d6d15cf862cc60eb8a51b762ebe9b1983c207f1f6e678cbb7ba52f2ae2f"
+            }
+          },
+          "ledgerHash": "41229715b810b235c483ef20d0f6e413610f4840e138344983f5e628cc689062",
+          "ledgerHashAlgorithm": "SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)",
+          "charge": {
+            "count": 2,
+            "bytes": 291343
+          },
+          "fd": {
+            "opens": 24,
+            "closes": 24
+          }
+        },
+        {
+          "stage": "03-before-second-preparation",
+          "audit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "0a6fb9c775ef8367851a7bc0c20f89ebc75c4b0043f857b26d474fc07385871f"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "6d17d3b4d386f0ff69b151cb1e8c23002cee0f85a42de9782914e1caaaf766fe"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "1eb1a1b55bc60543189ec06fc694a958ba6b189b1f29d8fc25892883e1de2401"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "be0d20bdc33b6fcedfdf34f563f6421ad264840b632b22e4515afac5dfaa6055"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "7daf304b9bc3a53c51ed867e294070f1c4bac267ed3482b04a4d66d21f795032"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "b97130e38d0a26933d2ad8468748ed43afd72f45dfe6fdb48dc010d7a730f1c0"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "ef154ee6af50cbb9bf087c24045cc3b21f99983ae031f258001eced8685696ab"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 30,
+              "hash": "5e502d6d15cf862cc60eb8a51b762ebe9b1983c207f1f6e678cbb7ba52f2ae2f"
+            }
+          },
+          "ledgerHash": "41229715b810b235c483ef20d0f6e413610f4840e138344983f5e628cc689062",
+          "ledgerHashAlgorithm": "SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)",
+          "charge": {
+            "count": 2,
+            "bytes": 291343
+          },
+          "fd": {
+            "opens": 24,
+            "closes": 24
+          }
+        },
+        {
+          "stage": "04-after-second-preparation-before-rejection",
+          "audit": {
+            "research_input_preparations_v2": {
+              "count": 2,
+              "hash": "6a1db42dc4804ea7896b5b96457c03d8f708c62837813fb3bab26c2c92868bce"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "6d17d3b4d386f0ff69b151cb1e8c23002cee0f85a42de9782914e1caaaf766fe"
+            },
+            "research_source_seals_v2": {
+              "count": 2,
+              "hash": "428b534ffbb033702f59897ae31762e7efd270905a32f7d05485242ae3feb679"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "be0d20bdc33b6fcedfdf34f563f6421ad264840b632b22e4515afac5dfaa6055"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "7daf304b9bc3a53c51ed867e294070f1c4bac267ed3482b04a4d66d21f795032"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "b97130e38d0a26933d2ad8468748ed43afd72f45dfe6fdb48dc010d7a730f1c0"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "ef154ee6af50cbb9bf087c24045cc3b21f99983ae031f258001eced8685696ab"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 30,
+              "hash": "5e502d6d15cf862cc60eb8a51b762ebe9b1983c207f1f6e678cbb7ba52f2ae2f"
+            }
+          },
+          "ledgerHash": "813f38c33f94f05f0c3c72781f5df24c2073654c558890022d1a96c3bd1ad960",
+          "ledgerHashAlgorithm": "SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)",
+          "charge": {
+            "count": 3,
+            "bytes": 387985
+          },
+          "fd": {
+            "opens": 24,
+            "closes": 24
+          }
+        },
+        {
+          "stage": "05-after-second-seal-attempt",
+          "audit": {
+            "research_input_preparations_v2": {
+              "count": 2,
+              "hash": "6a1db42dc4804ea7896b5b96457c03d8f708c62837813fb3bab26c2c92868bce"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "6d17d3b4d386f0ff69b151cb1e8c23002cee0f85a42de9782914e1caaaf766fe"
+            },
+            "research_source_seals_v2": {
+              "count": 2,
+              "hash": "428b534ffbb033702f59897ae31762e7efd270905a32f7d05485242ae3feb679"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "be0d20bdc33b6fcedfdf34f563f6421ad264840b632b22e4515afac5dfaa6055"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "7daf304b9bc3a53c51ed867e294070f1c4bac267ed3482b04a4d66d21f795032"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "b97130e38d0a26933d2ad8468748ed43afd72f45dfe6fdb48dc010d7a730f1c0"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "ef154ee6af50cbb9bf087c24045cc3b21f99983ae031f258001eced8685696ab"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 30,
+              "hash": "5e502d6d15cf862cc60eb8a51b762ebe9b1983c207f1f6e678cbb7ba52f2ae2f"
+            }
+          },
+          "ledgerHash": "813f38c33f94f05f0c3c72781f5df24c2073654c558890022d1a96c3bd1ad960",
+          "ledgerHashAlgorithm": "SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)",
+          "charge": {
+            "count": 3,
+            "bytes": 387985
+          },
+          "fd": {
+            "opens": 30,
+            "closes": 30
+          }
+        }
+      ],
+      "firstStoredHashes": {
+        "inputHash": "308158a45e055812f40162fd4e619094ec5b63857265e1d6c7ce745f4d77b5fe",
+        "requestHash": "51c707710aad5019c96882080ac36b42107b37913c8b6fe10776dafe22dff45a"
+      },
+      "firstClocksAndHashesUnchanged": true,
+      "fullLedgerUnchanged": true,
+      "allCapsFalse": {
+        "dispatchReady": false,
+        "entryEligible": false,
+        "modelDispatched": false,
+        "strategyApproved": false,
+        "financialVerified": false,
+        "researchQualified": false,
+        "publishableResearch": false,
+        "historicalPITEligible": false
+      },
+      "rpcFdOrder": [
+        {
+          "ordinal": 0,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 17,
+            "closes": 17
+          }
+        },
+        {
+          "ordinal": 1,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 17,
+            "closes": 17
+          }
+        },
+        {
+          "ordinal": 2,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 24,
+            "closes": 17
+          }
+        },
+        {
+          "ordinal": 3,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 24,
+            "closes": 24
+          }
+        },
+        {
+          "ordinal": 4,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 24,
+            "closes": 24
+          }
+        },
+        {
+          "ordinal": 5,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 24,
+            "closes": 24
+          }
+        },
+        {
+          "ordinal": 6,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 30,
+            "closes": 24
+          }
+        },
+        {
+          "ordinal": 7,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 30,
+            "closes": 30
+          }
+        }
+      ],
+      "lifecycle": [
+        {
+          "files": 7,
+          "preNoNewOpensFromSnapshot": true,
+          "postFdsRetained": true,
+          "sealAllFdsClosed": true
+        },
+        {
+          "files": 6,
+          "preNoNewOpensFromSnapshot": true,
+          "postFdsRetained": true,
+          "sealAllFdsClosed": true
+        }
+      ],
+      "chargeMeasurement": {
+        "initialPreparation": 99909,
+        "firstSeal": 191434,
+        "secondPreparation": 96642,
+        "usedBeforeSecondSeal": {
+          "count": 3,
+          "bytes": 387985
+        },
+        "actualRejectedWouldCharge": null
+      },
+      "actualRejectedWouldCharge": null,
+      "actualRejectedTotal": null,
+      "sourceDerivedPrediction": {
+        "historicalMeasuredTotal": 304278,
+        "addedAsciiBytesPerRoot": 1300,
+        "rootOccurrences": 177,
+        "predictedDelta": 230100,
+        "predictedTotal": 534378
+      },
+      "predictionIsMeasurement": false,
+      "cleanup": {
+        "run": "native-corrected",
+        "case": "2383-emc-byte-plus1300",
+        "clusterAbsent": true,
+        "writerPid": 584129,
+        "observerPid": 584130,
+        "writerAbsent": true,
+        "observerAbsent": true,
+        "readOnlyObserver": true,
+        "serverShutdownConfirmed": true,
+        "preCleanupLogRetained": true
+      },
+      "pending": [
+        "original rejected seal SQL returns no exact would-charge; source-derived prediction is not a measured rejection charge",
+        "publication/author-packet compatibility of long synthetic locators not established"
+      ]
+    }
+  ],
+  "privateRawPublic": false,
+  "formalApproval": false
+}
