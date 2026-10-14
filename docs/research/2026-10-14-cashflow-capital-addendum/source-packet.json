@@ -1,0 +1,877 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-14T02:34:47.456437+00:00",
+  "extractionAvailableAt": "2026-10-14T02:34:47.456437+00:00",
+  "status": "research_addendum_not_published",
+  "sourceCustody": "existing October 8 retained original PDF bytes rehashed; no network reacquisition, no production mutation",
+  "policy": {
+    "historicalOct08ModelsUnchanged": true,
+    "newExtractionBackdated": false,
+    "valuationApproved": false,
+    "published": false,
+    "investmentAdmission": false
+  },
+  "issuers": [
+    {
+      "issuer": "auo",
+      "stock": "2409",
+      "consolidated": true,
+      "unit": "TWD_thousands",
+      "periods": [
+        "2026-01-01/2026-06-30",
+        "2025-01-01/2025-06-30"
+      ],
+      "grain": "six-month cumulative flow, not standalone Q2",
+      "source": {
+        "label": "2026q2-consolidated-tc",
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q2026_TC.pdf",
+        "attemptedAt": "2026-10-08T09:36:32.144541+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 1578813,
+        "sha256": "94d74c75de96a6ec7b38d4d6c8a9f5d2d92750bf618543429b326ff6c95dcdb2",
+        "observedAt": "2026-10-08T09:36:32.926634+00:00",
+        "rawFile": "2026q2-consolidated-tc.pdf",
+        "textSha256": "5f69f4fba20a68e5ad98d9935d6f6feef25b384de72570b5e442a18fac792a6d"
+      },
+      "retainedPdfLocalPath": "/Users/kaerchen/.cache/stockinsider-workspaces/research-evidence/2026-10-08/auo-full-financial-oct08/2026q2-consolidated-tc.pdf",
+      "rawPdfReverifiedAt": "2026-10-14T02:34:47.456437+00:00",
+      "textExtractor": "pdftotext version 26.03.0",
+      "extractedTextSha256": "5f69f4fba20a68e5ad98d9935d6f6feef25b384de72570b5e442a18fac792a6d",
+      "facts": {
+        "pretax": {
+          "label": "本期稅前淨利",
+          "pdfPage": 8,
+          "sourceLine": "本期稅前淨利                    $    2,249,593      6,620,130",
+          "values": [
+            2249593,
+            6620130
+          ]
+        },
+        "depreciation": {
+          "label": "折舊費用",
+          "pdfPage": 8,
+          "sourceLine": "折舊費用                        13,078,942     13,877,319",
+          "values": [
+            13078942,
+            13877319
+          ]
+        },
+        "amortization": {
+          "label": "攤銷費用",
+          "pdfPage": 8,
+          "sourceLine": "攤銷費用                         1,458,846      1,175,136",
+          "values": [
+            1458846,
+            1175136
+          ]
+        },
+        "fvGain": {
+          "label": "透過損益按公允價值衡量之金融工具之淨利益",
+          "pdfPage": 8,
+          "sourceLine": "透過損益按公允價值衡量之金融工具之淨利益            (52,196)       (98,304)",
+          "values": [
+            -52196,
+            -98304
+          ]
+        },
+        "interestExpenseAdjustment": {
+          "label": "利息費用",
+          "pdfPage": 8,
+          "sourceLine": "利息費用                         1,302,614      1,522,339",
+          "values": [
+            1302614,
+            1522339
+          ]
+        },
+        "interestIncomeAdjustment": {
+          "label": "利息收入",
+          "pdfPage": 8,
+          "sourceLine": "利息收入                          (493,554)      (628,250)",
+          "values": [
+            -493554,
+            -628250
+          ]
+        },
+        "dividendIncomeAdjustment": {
+          "label": "股利收入",
+          "pdfPage": 8,
+          "sourceLine": "股利收入                           -                  (204)",
+          "values": [
+            0,
+            -204
+          ]
+        },
+        "shareCompensation": {
+          "label": "股份基礎給付酬勞成本",
+          "pdfPage": 8,
+          "sourceLine": "股份基礎給付酬勞成本                       17,580       -",
+          "values": [
+            17580,
+            0
+          ]
+        },
+        "equityMethodAdjustment": {
+          "label": "採用權益法認列之關聯企業及合資損益之份額",
+          "pdfPage": 8,
+          "sourceLine": "採用權益法認列之關聯企業及合資損益之份額          (431,357)       193,973",
+          "values": [
+            -431357,
+            193973
+          ]
+        },
+        "ppeDisposalGainAdjustment": {
+          "label": "處分及報廢不動產、廠房及設備利益",
+          "pdfPage": 8,
+          "sourceLine": "處分及報廢不動產、廠房及設備利益                (71,052)   (2,376,910)",
+          "values": [
+            -71052,
+            -2376910
+          ]
+        },
+        "rouDisposalLoss": {
+          "label": "處分使用權資產損失",
+          "pdfPage": 8,
+          "sourceLine": "處分使用權資產損失                           718       -",
+          "values": [
+            718,
+            0
+          ]
+        },
+        "heldForSaleGainAdjustment": {
+          "label": "處分待出售非流動資產損益",
+          "pdfPage": 8,
+          "sourceLine": "處分待出售非流動資產損益                (1,991,238)          6,236",
+          "values": [
+            -1991238,
+            6236
+          ]
+        },
+        "investmentGainAdjustment": {
+          "label": "處分投資利益淨額",
+          "pdfPage": 8,
+          "sourceLine": "處分投資利益淨額                      (113,145)    (2,164,382)",
+          "values": [
+            -113145,
+            -2164382
+          ]
+        },
+        "impairment": {
+          "label": "資產減損損失",
+          "pdfPage": 8,
+          "sourceLine": "資產減損損失                            6,309       418,950",
+          "values": [
+            6309,
+            418950
+          ]
+        },
+        "unrealizedFx": {
+          "label": "未實現外幣兌換利益",
+          "pdfPage": 8,
+          "sourceLine": "未實現外幣兌換利益                     (357,173)    (1,307,963)",
+          "values": [
+            -357173,
+            -1307963
+          ]
+        },
+        "otherAdjustment": {
+          "label": "其他 ",
+          "pdfPage": 8,
+          "sourceLine": "其他                              (60,750)        (1,001)",
+          "values": [
+            -60750,
+            -1001
+          ]
+        },
+        "receivables": {
+          "label": "應收票據及帳款",
+          "pdfPage": 8,
+          "sourceLine": "應收票據及帳款                     (1,355,982)    (1,297,769)",
+          "values": [
+            -1355982,
+            -1297769
+          ]
+        },
+        "relatedReceivables": {
+          "label": "應收關係人款項",
+          "pdfPage": 8,
+          "sourceLine": "應收關係人款項                         63,642         90,981",
+          "values": [
+            63642,
+            90981
+          ]
+        },
+        "inventory": {
+          "label": "存貨",
+          "pdfPage": 8,
+          "sourceLine": "存貨                          (4,642,777)       761,018",
+          "values": [
+            -4642777,
+            761018
+          ]
+        },
+        "contractCosts": {
+          "label": "履行合約成本",
+          "pdfPage": 8,
+          "sourceLine": "履行合約成本                      (1,201,494)    (1,432,280)",
+          "values": [
+            -1201494,
+            -1432280
+          ]
+        },
+        "otherOperatingAssets": {
+          "label": "其他營業資產",
+          "pdfPage": 8,
+          "sourceLine": "其他營業資產                        (139,221)    (1,012,344)",
+          "values": [
+            -139221,
+            -1012344
+          ]
+        },
+        "contractLiabilities": {
+          "label": "合約負債",
+          "pdfPage": 8,
+          "sourceLine": "合約負債                           270,657     (1,136,533)",
+          "values": [
+            270657,
+            -1136533
+          ]
+        },
+        "payables": {
+          "label": "應付票據及帳款",
+          "pdfPage": 8,
+          "sourceLine": "應付票據及帳款                      2,555,934       (597,381)",
+          "values": [
+            2555934,
+            -597381
+          ]
+        },
+        "relatedPayables": {
+          "label": "應付關係人款項",
+          "pdfPage": 8,
+          "sourceLine": "應付關係人款項                        217,903       (873,924)",
+          "values": [
+            217903,
+            -873924
+          ]
+        },
+        "provisions": {
+          "label": "負債準備",
+          "pdfPage": 8,
+          "sourceLine": "負債準備                            80,058       (141,052)",
+          "values": [
+            80058,
+            -141052
+          ]
+        },
+        "otherOperatingLiabilities": {
+          "label": "其他營業負債",
+          "pdfPage": 8,
+          "sourceLine": "其他營業負債                      (2,462,775)    (4,659,070)",
+          "values": [
+            -2462775,
+            -4659070
+          ]
+        },
+        "generatedCash": {
+          "label": "營運產生之現金流入",
+          "pdfPage": 8,
+          "sourceLine": "營運產生之現金流入                      7,930,082      6,938,715",
+          "values": [
+            7930082,
+            6938715
+          ]
+        },
+        "interestReceived": {
+          "label": "收取之利息",
+          "pdfPage": 8,
+          "sourceLine": "收取之利息                            460,072        671,627",
+          "values": [
+            460072,
+            671627
+          ]
+        },
+        "dividendReceived": {
+          "label": "收取之股利",
+          "pdfPage": 8,
+          "sourceLine": "收取之股利                            462,268        215,718",
+          "values": [
+            462268,
+            215718
+          ]
+        },
+        "interestPaid": {
+          "label": "支付之利息",
+          "pdfPage": 8,
+          "sourceLine": "支付之利息                         (1,324,703)    (1,564,397)",
+          "values": [
+            -1324703,
+            -1564397
+          ]
+        },
+        "taxPaid": {
+          "label": "支付之所得稅",
+          "pdfPage": 8,
+          "sourceLine": "支付之所得稅                          (650,305)    (1,143,565)",
+          "values": [
+            -650305,
+            -1143565
+          ]
+        },
+        "operatingCash": {
+          "label": "營業活動之淨現金流入",
+          "pdfPage": 8,
+          "sourceLine": "營業活動之淨現金流入                    6,877,414      5,118,098",
+          "values": [
+            6877414,
+            5118098
+          ]
+        },
+        "ppeCash": {
+          "label": "取得不動產、廠房及設備",
+          "pdfPage": 9,
+          "sourceLine": "取得不動產、廠房及設備                       (5,550,174)    (10,810,694)",
+          "values": [
+            -5550174,
+            -10810694
+          ]
+        },
+        "intangibleCash": {
+          "label": "取得無形資產",
+          "pdfPage": 9,
+          "sourceLine": "取得無形資產                              (192,628)        -",
+          "values": [
+            -192628,
+            0
+          ]
+        },
+        "ppeDisposalCash": {
+          "label": "處分不動產、廠房及設備",
+          "pdfPage": 9,
+          "sourceLine": "處分不動產、廠房及設備                          715,200         918,024",
+          "values": [
+            715200,
+            918024
+          ]
+        },
+        "heldForSaleDisposalCash": {
+          "label": "處分待出售非流動資產價款",
+          "pdfPage": 9,
+          "sourceLine": "處分待出售非流動資產價款                       2,284,775            1,317",
+          "values": [
+            2284775,
+            1317
+          ]
+        },
+        "subsidiaryDisposalCash": {
+          "label": "處分子公司(扣除除列之子公司現金)",
+          "pdfPage": 9,
+          "sourceLine": "處分子公司(扣除除列之子公司現金)                    948,835            2,128",
+          "values": [
+            948835,
+            2128
+          ]
+        },
+        "investingCash": {
+          "label": "投資活動之淨現金流出",
+          "pdfPage": 9,
+          "sourceLine": "投資活動之淨現金流出                       (2,059,522)     (7,561,587)",
+          "values": [
+            -2059522,
+            -7561587
+          ]
+        },
+        "shortBorrowings": {
+          "label": "舉借短期借款",
+          "pdfPage": 9,
+          "sourceLine": "舉借短期借款                            15,106,352       8,959,519",
+          "values": [
+            15106352,
+            8959519
+          ]
+        },
+        "shortRepayments": {
+          "label": "償還短期借款",
+          "pdfPage": 9,
+          "sourceLine": "償還短期借款                           (12,645,528)     (8,095,644)",
+          "values": [
+            -12645528,
+            -8095644
+          ]
+        },
+        "longBorrowings": {
+          "label": "舉借長期借款",
+          "pdfPage": 9,
+          "sourceLine": "舉借長期借款                            23,864,824      23,582,292",
+          "values": [
+            23864824,
+            23582292
+          ]
+        },
+        "longRepayments": {
+          "label": "償還長期借款",
+          "pdfPage": 9,
+          "sourceLine": "償還長期借款                           (34,383,886)    (30,393,900)",
+          "values": [
+            -34383886,
+            -30393900
+          ]
+        },
+        "leasePrincipal": {
+          "label": "租賃本金償還",
+          "pdfPage": 9,
+          "sourceLine": "租賃本金償還                              (402,683)       (389,829)",
+          "values": [
+            -402683,
+            -389829
+          ]
+        },
+        "financingCash": {
+          "label": "籌資活動之淨現金流出",
+          "pdfPage": 9,
+          "sourceLine": "籌資活動之淨現金流出                       (8,758,567)     (8,231,290)",
+          "values": [
+            -8758567,
+            -8231290
+          ]
+        },
+        "fxCash": {
+          "label": "匯率變動對現金及約當現金之影響",
+          "pdfPage": 9,
+          "sourceLine": "匯率變動對現金及約當現金之影響                     2,115,789      (3,420,869)",
+          "values": [
+            2115789,
+            -3420869
+          ]
+        },
+        "cashChange": {
+          "label": "本期現金及約當現金減少數",
+          "pdfPage": 9,
+          "sourceLine": "本期現金及約當現金減少數                       (1,824,886)    (14,095,648)",
+          "values": [
+            -1824886,
+            -14095648
+          ]
+        },
+        "openingCash": {
+          "label": "期初現金及約當現金餘額",
+          "pdfPage": 9,
+          "sourceLine": "期初現金及約當現金餘額                        55,616,637      68,446,514",
+          "values": [
+            55616637,
+            68446514
+          ]
+        },
+        "closingCash": {
+          "label": "期末現金及約當現金餘額",
+          "pdfPage": 9,
+          "sourceLine": "期末現金及約當現金餘額                   $    53,791,751      54,350,866",
+          "values": [
+            53791751,
+            54350866
+          ]
+        },
+        "revenue": {
+          "pdfPage": 6,
+          "label": "營業收入",
+          "values": [
+            139922549,
+            141338620
+          ],
+          "sourceLine": "4000   營業收入淨額(附註六(廿一)及七)              $ 70,891,194 100           69,236,749 100 139,922,549 100 141,338,620 100",
+          "columnSelection": "2026H1 and 2025H1, source income statement columns 3 and 4; percentages excluded"
+        },
+        "netProfit": {
+          "pdfPage": 6,
+          "label": "本期淨利",
+          "values": [
+            1080601,
+            5163501
+          ],
+          "sourceLine": "8200   本期淨利                                2,120,051         3    1,904,314         3    1,080,601         1    5,163,501         4",
+          "columnSelection": "2026H1 and 2025H1, source income statement columns 3 and 4; percentages excluded"
+        },
+        "ownersNetProfit": {
+          "pdfPage": 6,
+          "label": "母公司業主",
+          "values": [
+            199555,
+            5241612
+          ],
+          "sourceLine": "8610    母公司業主                         $    1,343,092         2    1,947,871         3      199,555     -        5,241,612         4",
+          "columnSelection": "2026H1 and 2025H1, source income statement columns 3 and 4; percentages excluded"
+        },
+        "nonControllingNetProfit": {
+          "pdfPage": 6,
+          "label": "非控制權益",
+          "values": [
+            881046,
+            -78111
+          ],
+          "sourceLine": "8620    非控制權益                                776,959         1      (43,557)    -          881,046         1      (78,111)    -",
+          "columnSelection": "2026H1 and 2025H1, source income statement columns 3 and 4; percentages excluded"
+        }
+      }
+    },
+    {
+      "issuer": "emc",
+      "stock": "2383",
+      "consolidated": true,
+      "unit": "TWD_thousands",
+      "periods": [
+        "2026-01-01/2026-06-30",
+        "2025-01-01/2025-06-30"
+      ],
+      "grain": "six-month cumulative flow, not standalone Q2",
+      "source": {
+        "label": "2026q2",
+        "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/115/273512_115Q2_%E5%90%88%E4%BD%B5_%E5%AE%8C%E7%A8%BF%E8%B2%A1%E5%A0%B1_IMSv1-%E9%9B%BB%E5%AD%90%E6%9B%B8_IMSv1.pdf",
+        "attemptedAt": "2026-10-08T09:21:30.333371+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 1113066,
+        "sha256": "245b41f9f54c9542ffac64141d546fde0f28d0537d9f36307028b081318e0f20",
+        "observedAt": "2026-10-08T09:21:30.635619+00:00",
+        "rawFile": "2026q2.pdf",
+        "textSha256": "1e784f0272aec1e423499f9e962778caf86f702a9556bdbf42d594a045e0abc6"
+      },
+      "retainedPdfLocalPath": "/Users/kaerchen/.cache/stockinsider-workspaces/research-evidence/2026-10-08/emc-originals-oct08/2026q2.pdf",
+      "rawPdfReverifiedAt": "2026-10-14T02:34:47.456437+00:00",
+      "textExtractor": "pdftotext version 26.03.0",
+      "extractedTextSha256": "1e784f0272aec1e423499f9e962778caf86f702a9556bdbf42d594a045e0abc6",
+      "facts": {
+        "pretax": {
+          "label": "本期稅前淨利",
+          "pdfPage": 7,
+          "sourceLine": "本期稅前淨利                                 $      19,979,409         9,134,498",
+          "values": [
+            19979409,
+            9134498
+          ]
+        },
+        "nonCashAdjustments": {
+          "label": "收益費損項目合計",
+          "pdfPage": 7,
+          "sourceLine": "收益費損項目合計                                    1,376,499         1,001,260",
+          "values": [
+            1376499,
+            1001260
+          ]
+        },
+        "operatingAssetChange": {
+          "label": "與營業活動相關之資產之淨變動合計",
+          "pdfPage": 7,
+          "sourceLine": "與營業活動相關之資產之淨變動合計                          (34,420,062)      (9,135,717)",
+          "values": [
+            -34420062,
+            -9135717
+          ]
+        },
+        "operatingLiabilityChange": {
+          "label": "與營業活動相關之負債之淨變動合計",
+          "pdfPage": 7,
+          "sourceLine": "與營業活動相關之負債之淨變動合計                            20,118,332        3,874,283",
+          "values": [
+            20118332,
+            3874283
+          ]
+        },
+        "workingCapital": {
+          "label": "與營業活動相關之資產及負債之淨變動合計",
+          "pdfPage": 7,
+          "sourceLine": "與營業活動相關之資產及負債之淨變動合計                       (14,301,730)      (5,261,434)",
+          "values": [
+            -14301730,
+            -5261434
+          ]
+        },
+        "adjustmentsTotal": {
+          "label": "調整項目合計",
+          "pdfPage": 7,
+          "sourceLine": "調整項目合計                                      (12,925,231)      (4,260,174)",
+          "values": [
+            -12925231,
+            -4260174
+          ]
+        },
+        "receivables": {
+          "label": "應收帳款",
+          "pdfPage": 7,
+          "sourceLine": "應收帳款                                       (27,421,398)      (7,058,369)",
+          "values": [
+            -27421398,
+            -7058369
+          ]
+        },
+        "notesReceivable": {
+          "label": "應收票據",
+          "pdfPage": 7,
+          "sourceLine": "應收票據                                           (25,500)         (12,068)",
+          "values": [
+            -25500,
+            -12068
+          ]
+        },
+        "inventory": {
+          "label": "存貨",
+          "pdfPage": 7,
+          "sourceLine": "存貨                                          (6,259,256)      (2,285,872)",
+          "values": [
+            -6259256,
+            -2285872
+          ]
+        },
+        "payables": {
+          "label": "應付帳款",
+          "pdfPage": 7,
+          "sourceLine": "應付帳款                                        14,729,114        2,371,503",
+          "values": [
+            14729114,
+            2371503
+          ]
+        },
+        "generatedCash": {
+          "label": "營運產生之現金流入",
+          "pdfPage": 7,
+          "sourceLine": "營運產生之現金流入                                      7,054,178        4,874,324",
+          "values": [
+            7054178,
+            4874324
+          ]
+        },
+        "interestReceived": {
+          "label": "收取之利息",
+          "pdfPage": 7,
+          "sourceLine": "收取之利息                                            130,500          113,979",
+          "values": [
+            130500,
+            113979
+          ]
+        },
+        "interestPaid": {
+          "label": "支付之利息",
+          "pdfPage": 7,
+          "sourceLine": "支付之利息                                           (288,004)        (202,626)",
+          "values": [
+            -288004,
+            -202626
+          ]
+        },
+        "taxPaid": {
+          "label": "支付之所得稅",
+          "pdfPage": 7,
+          "sourceLine": "支付之所得稅                                        (1,851,849)      (1,458,319)",
+          "values": [
+            -1851849,
+            -1458319
+          ]
+        },
+        "operatingCash": {
+          "label": "營業活動之淨現金流入",
+          "pdfPage": 7,
+          "sourceLine": "營業活動之淨現金流入                                    5,044,825        3,327,358",
+          "values": [
+            5044825,
+            3327358
+          ]
+        },
+        "ppeCash": {
+          "label": "取得不動產、廠房及設備",
+          "pdfPage": 7,
+          "sourceLine": "取得不動產、廠房及設備                                   (10,679,228)      (4,997,182)",
+          "values": [
+            -10679228,
+            -4997182
+          ]
+        },
+        "intangibleCash": {
+          "label": "取得無形資產",
+          "pdfPage": 7,
+          "sourceLine": "取得無形資產                                            (27,514)          (18,064)",
+          "values": [
+            -27514,
+            -18064
+          ]
+        },
+        "rouCash": {
+          "label": "取得使用權資產",
+          "pdfPage": 7,
+          "sourceLine": "取得使用權資產                                          (151,181)        -",
+          "values": [
+            -151181,
+            0
+          ]
+        },
+        "ppeDisposalCash": {
+          "label": "處分不動產、廠房及設備",
+          "pdfPage": 7,
+          "sourceLine": "處分不動產、廠房及設備                                           289               122",
+          "values": [
+            289,
+            122
+          ]
+        },
+        "investingCash": {
+          "label": "投資活動之淨現金流出",
+          "pdfPage": 7,
+          "sourceLine": "投資活動之淨現金流出                                   (10,851,462)      (5,024,255)",
+          "values": [
+            -10851462,
+            -5024255
+          ]
+        },
+        "shortBorrowingsNet": {
+          "label": "短期借款增加",
+          "pdfPage": 7,
+          "sourceLine": "短期借款增加                                         3,869,119         1,733,564",
+          "values": [
+            3869119,
+            1733564
+          ]
+        },
+        "longBorrowings": {
+          "label": "舉借長期借款",
+          "pdfPage": 7,
+          "sourceLine": "舉借長期借款                                         5,832,435         5,422,384",
+          "values": [
+            5832435,
+            5422384
+          ]
+        },
+        "longRepayments": {
+          "label": "償還長期借款",
+          "pdfPage": 7,
+          "sourceLine": "償還長期借款                                        (2,046,642)       (1,609,119)",
+          "values": [
+            -2046642,
+            -1609119
+          ]
+        },
+        "leasePrincipal": {
+          "label": "租賃本金償還",
+          "pdfPage": 7,
+          "sourceLine": "租賃本金償還                                           (26,673)          (20,529)",
+          "values": [
+            -26673,
+            -20529
+          ]
+        },
+        "financingCash": {
+          "label": "籌資活動之淨現金流入",
+          "pdfPage": 7,
+          "sourceLine": "籌資活動之淨現金流入                                    7,632,127         5,543,713",
+          "values": [
+            7632127,
+            5543713
+          ]
+        },
+        "fxCash": {
+          "label": "匯率變動對現金及約當現金之影響",
+          "pdfPage": 7,
+          "sourceLine": "匯率變動對現金及約當現金之影響                                   734,456        (1,214,883)",
+          "values": [
+            734456,
+            -1214883
+          ]
+        },
+        "cashChange": {
+          "label": "本期現金及約當現金增加數",
+          "pdfPage": 7,
+          "sourceLine": "本期現金及約當現金增加數                                    2,559,946         2,631,933",
+          "values": [
+            2559946,
+            2631933
+          ]
+        },
+        "openingCash": {
+          "label": "期初現金及約當現金餘額",
+          "pdfPage": 7,
+          "sourceLine": "期初現金及約當現金餘額                                    20,007,816        14,988,308",
+          "values": [
+            20007816,
+            14988308
+          ]
+        },
+        "closingCash": {
+          "label": "期末現金及約當現金餘額",
+          "pdfPage": 7,
+          "sourceLine": "期末現金及約當現金餘額                             $      22,567,762        17,620,241",
+          "values": [
+            22567762,
+            17620241
+          ]
+        },
+        "revenue": {
+          "pdfPage": 5,
+          "label": "營業收入",
+          "values": [
+            80342455,
+            44187758
+          ],
+          "sourceLine": "4000   營業收入(附註六(十七)及七)           $ 47,275,194 100             22,507,694 100          80,342,455 100          44,187,758 100",
+          "columnSelection": "2026H1 and 2025H1, source income statement columns 3 and 4; percentages excluded"
+        },
+        "netProfit": {
+          "pdfPage": 5,
+          "label": "本期淨利",
+          "values": [
+            15210423,
+            6944760
+          ],
+          "sourceLine": "8200   本期淨利                           9,871,646       21      3,477,606       15      15,210,423      19       6,944,760      16",
+          "columnSelection": "2026H1 and 2025H1, source income statement columns 3 and 4; percentages excluded"
+        },
+        "ownersNetProfit": {
+          "pdfPage": 5,
+          "label": "母公司業主",
+          "values": [
+            15213191,
+            6946779
+          ],
+          "sourceLine": "8610    母公司業主                    $    9,873,398       21      3,477,879       15      15,213,191      19       6,946,779      16",
+          "columnSelection": "2026H1 and 2025H1, source income statement columns 3 and 4; percentages excluded"
+        },
+        "nonControllingNetProfit": {
+          "pdfPage": 5,
+          "label": "非控制權益",
+          "values": [
+            -2768,
+            -2019
+          ],
+          "sourceLine": "8620    非控制權益                             (1,752)     -            (273)      -           (2,768)     -           (2,019)     -",
+          "columnSelection": "2026H1 and 2025H1, source income statement columns 3 and 4; percentages excluded"
+        }
+      }
+    }
+  ],
+  "auoJune30Capital": {
+    "instant": "2026-06-30",
+    "ownersEquityTwdThousands": 154397339,
+    "nonControllingEquityTwdThousands": 12504849,
+    "groupEquityTwdThousands": 166902188,
+    "paidCapitalTwdThousands": 75470990,
+    "parTwd": 10,
+    "issuedSharesThousands": 7547099,
+    "treasuryCarryingAmountTwdThousands": 0,
+    "treasurySharesThousands": null,
+    "scope": "June 30 historical share/equity basis only; no current October outstanding-share or P/B claim",
+    "evidence": [
+      {
+        "pdfPage": 7,
+        "printedPage": "6",
+        "observation": "2026-06-30 ending equity row has dash in treasury-stock column; owners equity 154,397,339; common capital 75,470,990; no 2026H1 treasury transaction rows"
+      },
+      {
+        "pdfPage": 38,
+        "printedPage": "36",
+        "observation": "paid capital 75,470,990 TWD thousand; par 10 TWD; 2025 cancellation 120,782 thousand shares"
+      },
+      {
+        "pdfPage": 40,
+        "printedPage": "38",
+        "observation": "treasury rollforward shown is 2025H1, NOT a new 2026 share count; considered with June 2026 equity statement"
+      }
+    ],
+    "treasuryShareCountStatus": "No direct 2026 share-register count extracted; zero carrying amount on June30 equity statement is verified. Derived historical metric explicitly uses issued common shares."
+  }
+}
