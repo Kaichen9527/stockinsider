@@ -1,0 +1,52 @@
+{
+  "schema": "root-formal-input-compatibility-v1",
+  "recordedAt": "2026-10-14T04:07:13.484061+00:00",
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "evidence": "ae8bb71744587a57cf49fbd82809d391d9f64169",
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "/tmp/stockinsider-formal-input-compatibility-oct14.mjs"
+  ],
+  "exit": 0,
+  "baselineOldAdapterAccepts": 2,
+  "successorAdapterRejects": 2,
+  "newModelSupportImplemented": false,
+  "externalPreparationRpc": "synthetic test seam only",
+  "rootBuildNativeExecuted": false,
+  "productionChanged": false,
+  "files": [
+    {
+      "file": "adapter-compatibility.json",
+      "bytes": 2798,
+      "sha256": "68ac4a8564452dd41038a8eb2cec5a4b31a6ebc9a382a35433bb3704a5c5d35c"
+    },
+    {
+      "file": "audited-source-manifest.json",
+      "bytes": 2772,
+      "sha256": "534a5b2bd9f04e0bd0a946d9264527d054684f264063350efe899d8fa7ff5772"
+    },
+    {
+      "file": "cloud-tail-task.md",
+      "bytes": 4738,
+      "sha256": "243ed619e07082fa20853d189beafa04f210bbce17745f545f6e44f5dd41c8d9"
+    },
+    {
+      "file": "independent-design-review-task.md",
+      "bytes": 3816,
+      "sha256": "9a1e6d3bb55f6a43807a6ef3e76824f4350462640efe43c5dacaddc6912a1dc6"
+    },
+    {
+      "file": "review.md",
+      "bytes": 2888,
+      "sha256": "103f4c4760cddc9f4e1e52b3ad9a946a9363b7e5f27ba051d4a64a574e925112"
+    },
+    {
+      "file": "root-probe.mjs",
+      "bytes": 4768,
+      "sha256": "5d7d2942090be7a482278944966cefdedfa40e10cde6fcf598f56a9c622cbcc4"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "file": "web/src/lib/research-financial-inventory.ts",
+    "bytes": 3294,
+    "sha256": "f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5",
+    "blob": "959089196afc0e678e02b6ca7fb6face0012df0d"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "bytes": 19142,
+    "sha256": "2f8d8150a3071109d3db2dee9c1df7dadcd97322357c21e8a45fd469df22372d",
+    "blob": "db88fc9330b14f7f3489668886949b2cc3dc6777"
+  },
+  {
+    "file": "web/src/lib/research-financial-file-reader.ts",
+    "bytes": 10211,
+    "sha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+    "blob": "356aba3e06fd1e3961143c14b0886e813987a510"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "bytes": 10526,
+    "sha256": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d",
+    "blob": "f315e8ad3af3428893ae6eedd45421f4086a8cd2"
+  },
+  {
+    "file": "web/src/lib/research-complete-mapping.json",
+    "bytes": 7953,
+    "sha256": "ba44549b7efdc14a0c61523dadd950321fd7f85e72b30059415a555629baf704",
+    "blob": "98284f2ff243d1efb2f094eab5961a7b04649f89"
+  },
+  {
+    "file": "web/src/lib/research-complete-2409.schema.json",
+    "bytes": 264752,
+    "sha256": "efedd65c7afcf9031cd34fe6a12d4f70c78dcc1d80cadbddfa87f11b23e57932",
+    "blob": "d86403ba399bcf6adc0a85e175c8d15e88d8ab51"
+  },
+  {
+    "file": "web/src/lib/research-complete-2383.schema.json",
+    "bytes": 151681,
+    "sha256": "e0bc5f27a4263d151395fd2fa35a69e868b2d94836b7e26173be545300d6d043",
+    "blob": "2a175ccbbfa41b63d3b53674c05d463217300140"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "bytes": 18454,
+    "sha256": "e589fd67c08831d650b80cbd091113508c428d2b1a217be31150b682ce37b7cc",
+    "blob": "0d8f30b39c4eb855329b417be8b932da9cabc1f0"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "bytes": 14206,
+    "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+    "blob": "81f4cb09ae2849fdf2dbde497f6675736c995f90"
+  },
+  {
+    "file": "openspec/changes/research-first-publication-v2/financial-adapter-files.json",
+    "bytes": 3091,
+    "sha256": "fc299201a7e49dee91416e3105bb3996a13514bc459476443967a7beeec5bd4d",
+    "blob": "c4eec9e48cda0f326c04301d8c7730b1233f545e"
+  },
+  {
+    "file": "openspec/changes/research-first-publication-v2/financial-adapter-slice.md",
+    "bytes": 12421,
+    "sha256": "c5a7a3e53eee0f2c41223fef6ee76cd6364904431c05d5e586085887598eaf6c",
+    "blob": "6eedeea9220ef299037fbc3546ae425b8b54397c"
+  },
+  {
+    "file": "openspec/changes/research-complete-input-v2/spec.md",
+    "bytes": 22355,
+    "sha256": "e0e63848f3a544653e597204d9077a8034827b093eee60990b3f9146339c5e78",
+    "blob": "8fc17e33bb19da459cc142b04fbd533fa4e79dfb"
+  }
+]

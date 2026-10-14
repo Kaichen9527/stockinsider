@@ -1,0 +1,67 @@
+{
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "evidence": "ae8bb71744587a57cf49fbd82809d391d9f64169",
+  "originalArtifactSource": "243db636",
+  "executedAt": "2026-10-14T04:02:53.269Z",
+  "results": [
+    {
+      "symbol": "2409",
+      "oldPin": {
+        "path": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+        "bytes": 88790,
+        "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965"
+      },
+      "oldHistoricalCanonical": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
+      "oldPositive": {
+        "status": "unsealed_calculation_only",
+        "rpcCalls": 2,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "newArtifact": {
+        "bytes": 113823,
+        "sha256": "6426ba0caaac2a446593a632ebce50f93e7851f4fdb4025ff427c2f011961209",
+        "canonicalHash": "cf7419b2204419dc1aca590bc355df36bb19600c5beaf2905c6819f5a040b57d",
+        "asOf": "2026-10-14T02:34:47.456437+00:00"
+      },
+      "newNegative": {
+        "failure": {
+          "name": "Error",
+          "message": "financial_file_invalid"
+        },
+        "rpcCalls": 1
+      },
+      "scope": "real production adapter and filesystem reader; external preparation RPC is synthetic test-only; no production/PG/network/model/publication operation"
+    },
+    {
+      "symbol": "2383",
+      "oldPin": {
+        "path": "docs/research/2026-10-08-emc-company-model/model-results.json",
+        "bytes": 54602,
+        "sha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c"
+      },
+      "oldHistoricalCanonical": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
+      "oldPositive": {
+        "status": "unsealed_calculation_only",
+        "rpcCalls": 2,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "newArtifact": {
+        "bytes": 71848,
+        "sha256": "30028ccf9e48d7cda79f55a8b6ffd5141bad513e277894c8e360479e606b6786",
+        "canonicalHash": "d10858110edee1dd2760791e00c8b0eea3dc4a80b6d643db70b62216541dc879",
+        "asOf": "2026-10-14T02:34:47.456437+00:00"
+      },
+      "newNegative": {
+        "failure": {
+          "name": "Error",
+          "message": "financial_file_invalid"
+        },
+        "rpcCalls": 1
+      },
+      "scope": "real production adapter and filesystem reader; external preparation RPC is synthetic test-only; no production/PG/network/model/publication operation"
+    }
+  ],
+  "interpretation": "Existing formal-input adapter correctly fails closed on unconfigured successor bytes. Working-draft consumer PASS does not establish complete-input/publication compatibility. A separately reviewed successor inventory/projection/schema/mapping is required; no guard or pin changed."
+}

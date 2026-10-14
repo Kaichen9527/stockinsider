@@ -1,5 +1,19 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 12:07台灣時間：正式文章input新缺口真重現，研究tail與版本化input契約各有單件活動工作
+
+Remote main69b9734c/progress79f58392/工作樹乾淨與兩chat trueidle先核；上一goal turn為實質progress（378正常merge與兩篇獨立內容審查完成），本輪未縮scope。PR370..378全部terminal禁止checks/watch/ready/rerun/merge/helper，沒有再跑378或375/376/377。
+
+Root直接import exact15d4ef54/ae8bb的loadResearchFinancialSupplement與readPinnedFinancialFiles，在新private cache fixture root先複製243db636的真原bytes，兩篇都真回unsealed_calculation_only/2次assert RPC seam；之後只把兩model同路徑換15d4 successor真bytes，兩篇都financial_file_invalid/1次RPC seam拒絕。Root只mock原test相同外部preparationRPC、檔案/productionadapter是真實；synthetic UUID沒有正式reservation/job/role含義，沒有PG/production/API/model/publication operation。舊AUO88790/SHA0bcaec17與EMC54602/SHAbe5903c2對新113823/SHA6426ba0c與71848/SHA30028ccf，guard按原pin拒絕是正確行為。
+
+這是下一formalinput release integration缺口，不追溯否定workingdraft62/consumer兩P2閉合或獨立兩article內容PASS。靜態核明：正式project仍hardcode Oct8 asOf/7或5原manifest；complete mapping/schema/sourceClosure77b1cc06仍釘舊model f70ec46f/19ddd96b。因此單改inventory hash不足。原8file/512KiB每file/1MiBaggregate/160000projection/262144result/10s及facts+monthly64不變，AUO已用滿8files；新cash不能默默超cap/分多次繞總量或drop必要來源裝complete。新successor須保留舊revision replay與原時鐘，newmodel/newcash provenance及cutoff分開，不能回填舊preparedinput或造formal資格。Root receipt9e4456e131974b06bfa37ab913a719da0b67c125367b9ff24fd50e062ca25bd3，.agent/reports/2026-10-14T12-07-formal-input-compatibility/含原probe、實際oldpositive/newnegative與sourceblob/hash。
+
+唯一Cloud「Set up stockinsider」01a106b8-a883-7185-9962-f7372109a093在cursor57859559-a812-4f98-bcdc-46a2a9f908f6:7 trueidle後只接30min新branchcodex/research-publication-tail-extraction-oct14/baseapprovedmain69；turn01a13890-f053-75e1-a542-81d613ab27d7/cursor:8真inProgress。Owned僅26tail exactSQL/descriptor/helper/nativeprobe/pure/handoff/evidence；從15d4原27研究extension除去main49已有financialhistory，保留其餘5prereq+21publication順序/bytes，逐項核pendingPR3642e078dfd來源。Main default48/49/separate50/plan/apply/operatoraction/HBA/authority/pins/expectedcatalog禁止改，不新增正式apply入口，不整歷史/76bundle merge。真localcapturedPG17先mainfinancial50工程apply COMMIT，之後同共享鎖新26tail transaction/完整sealedcatalog/financialpostcondition/nonemptyfacts；forcedfailure真DDL後rollback，時間容許再partial/disconnect/lock。只一次新input，遇新prereq或catalog差異封存samewriter exacterror，不暗加grant/prelude/期待或假formalID。30min/8GiBfree/RSS8GiB/singleheavy/Node22.14exactmainlock/必要typeslintnormalbuild/無Macfullbuild或Chromium403重試。未完逐項pending，Root只report/review不重疊。
+
+另一既有「StockInsider 官方文件補件」chat01a137fc-e83b-7bc0-bc54-8fca40edc2a3在內容review cursor1db0d1ce:5 trueidle後，僅接20min readonly formalinput successor requirements/design審查，requested GPT6Astra High；turn01a13896-9b9e-7781-b19e-a1adec30fd4e/cursor1db0d1ce-2ca7-401c-86d5-dbc402e8f541:6真inProgress。Owned只自有tmp報告，量化bytes/facts與有限profile/schema/clock/replay設計，不能改code/SQL/期待或稱已實作/批准。它與Cloud SQLtail scope不同，不重派活動工作。
+
+本輪無VPS/DB/roleACL/SQLproduction/API/HTTP/crawl/PTT/343/策略/正式研究排程/部署/cache操作，Root未build/native。正式169/NOLOGIN-1/原容量不足與人類待答reserve維持最後證據；不因本地審查或syntheticID稱正式發布。Goal active原三階段scope保持；下一先compact兩真handle終態，不因timeout或thread短暫idle重啟。活動工作終態後Root真獨立review/採實測結果再選下一最小工程。
+
 ## 2026-10-14 11:53台灣時間：PR378正常protected全通過，已標準merge commit
 
 Ready事件新protected38507395129 attempt1已真終態SUCCESS，bootstrap/requirements/architecture/exact/model/product/aggregate全7真SUCCESS，完整7jobJSON/zip/fulltextlog保存。Root重新核三ordinary38503491252/38503491209/38503491181真SUCCESS、fresh73fa/source18b1/base3e、PRclean/非draft、rules20177392 active/bypass[]，03:52:47Z只一次標準gh pr merge --merge --match-head-commit完成，沒有admin/bypass/auto/directmainpush，完整保護JSON前後相同。
