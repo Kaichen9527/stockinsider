@@ -2,6 +2,7 @@
 // Mandatory preload before ESM: research-versioned-prerequisite-fs-witness.mjs.
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {withLegalVersionedFixture} from './research-versioned-legal-fixture-helper.mjs';
 import {parseBindingCore} from '../../web/src/lib/research-versioned-input-binding.ts';
 import {completeHash,validateCompleteSchema} from '../../web/src/lib/research-v3-material-canonical.ts';
@@ -27,7 +28,7 @@ async function snapshot(x,label){
  SELECT logical_bytes FROM research_input_preparations_v2 WHERE job_id=$1 AND attempt=$2 AND reservation_id=$3
  UNION ALL SELECT logical_bytes FROM research_article_input_revisions_v2 WHERE job_id=$1 AND attempt=$2 AND reservation_id=$3) all_versions`,[x.req.jobId,x.req.attempt,x.req.reservationId])).rows[0];
  assert.equal(Object.keys(audit).length,9);assert.ok(charge.bytes<=524288);
- const result={audit,ledger,ledgerHash:completeHash(ledger),ledgerHashAlgorithm:'original tagged completeHash',charge,fd:{opens:x.witness.opens,closes:x.witness.closes}};
+ const result={audit,ledger,ledgerHash:createHash('sha256').update(JSON.stringify(ledger)).digest('hex'),ledgerHashAlgorithm:'SHA256 UTF8 JSON.stringify of exact observer ledger projection (audit only)',charge,fd:{opens:x.witness.opens,closes:x.witness.closes}};
  x.save(label+'.json',result);return result;
 }
 function checkLifecycle(x,start,initial,binding){
