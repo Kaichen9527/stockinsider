@@ -1,0 +1,8 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "/tmp/artifact-reuse-review-o14/resolver-probe.cjs"
+  ],
+  "exit": 0,
+  "context": "native execution only for read-only Git subprocess; initial sandbox resolver error retained"
+}

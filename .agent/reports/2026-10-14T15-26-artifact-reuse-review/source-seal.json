@@ -1,0 +1,25 @@
+{
+  "subject": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+  "tree": "8ab201731bcf2a1a99e71393ac9a7e18d01ed36c",
+  "startedAt": "2026-10-14T15:26:44Z",
+  "deadline": "2026-10-14T15:41:44Z",
+  "files": [
+    {
+      "path": ".github/workflows/reviewed-publication-tail-artifact.yml",
+      "bytes": 23507,
+      "sha256": "f0e0b82561082d106de19703e8448ed3b9f0b97328148b530211df85e6359cc9",
+      "blob": "2950c2c274888d809d85a8172c20b57f773d9a87"
+    },
+    {
+      "path": "docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md",
+      "bytes": 6318,
+      "sha256": "5aa236fc464940434c256d1e8d68349697a46dde4df5afb3bfd6d40df71172ed",
+      "blob": "1b896be494154ecfcecb6de3306df94dfcd44c74"
+    }
+  ],
+  "staticChecks": [
+    "first8steps unchanged including PG17 lockedbrowser canonical parser and exactsource selection",
+    "action pins unchanged",
+    "contents/read+actions/read only; token explicit only downloadstep"
+  ]
+}

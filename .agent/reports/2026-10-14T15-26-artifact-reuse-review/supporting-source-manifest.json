@@ -1,0 +1,72 @@
+[
+  {
+    "subject": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+    "path": "scripts/verify-standalone-release.mjs",
+    "bytes": 3901,
+    "sha256": "1e4bb10d2ee694eefd0493653a71d54b8d94deade74fa66a86b579b25ebe930b",
+    "blob": "6e1d6b2d07125201326fbe783fad0b970890e363"
+  },
+  {
+    "subject": "dd59817f750684b093965f539dd4de466be13077",
+    "path": "scripts/verify-standalone-release.mjs",
+    "bytes": 3901,
+    "sha256": "1e4bb10d2ee694eefd0493653a71d54b8d94deade74fa66a86b579b25ebe930b",
+    "blob": "6e1d6b2d07125201326fbe783fad0b970890e363"
+  },
+  {
+    "subject": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+    "path": "scripts/runtime/reviewed-runtime-release.js",
+    "bytes": 6857,
+    "sha256": "be7467a59df2322804493be740c7344df9e330c37820d655feccf335b6b98c48",
+    "blob": "26977929788d365c3e787702f16f754289067fc3"
+  },
+  {
+    "subject": "dd59817f750684b093965f539dd4de466be13077",
+    "path": "scripts/runtime/reviewed-runtime-release.js",
+    "bytes": 6857,
+    "sha256": "be7467a59df2322804493be740c7344df9e330c37820d655feccf335b6b98c48",
+    "blob": "26977929788d365c3e787702f16f754289067fc3"
+  },
+  {
+    "subject": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+    "path": "scripts/runtime/codec.js",
+    "bytes": 2566,
+    "sha256": "c1cd7bc6b391ee88137c792ab6b6b280e2f5ccad77d8e6e815b754d73d76cfbb",
+    "blob": "1683982f54a10c401cd0f7b521abc073bdb05ea1"
+  },
+  {
+    "subject": "dd59817f750684b093965f539dd4de466be13077",
+    "path": "scripts/runtime/codec.js",
+    "bytes": 2566,
+    "sha256": "c1cd7bc6b391ee88137c792ab6b6b280e2f5ccad77d8e6e815b754d73d76cfbb",
+    "blob": "1683982f54a10c401cd0f7b521abc073bdb05ea1"
+  },
+  {
+    "subject": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+    "path": "scripts/runtime/auth-source-worker-installation.js",
+    "bytes": 11543,
+    "sha256": "165739dd256e92a3ffdaf1db34438ab9c88c8fd88b68a3616875ee014a109cb7",
+    "blob": "a3fa6154e55d1c7fb8584873d064fc4de379d9d6"
+  },
+  {
+    "subject": "dd59817f750684b093965f539dd4de466be13077",
+    "path": "scripts/runtime/auth-source-worker-installation.js",
+    "bytes": 11543,
+    "sha256": "165739dd256e92a3ffdaf1db34438ab9c88c8fd88b68a3616875ee014a109cb7",
+    "blob": "a3fa6154e55d1c7fb8584873d064fc4de379d9d6"
+  },
+  {
+    "subject": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+    "path": "scripts/runtime/tracked-runtime-bundle.js",
+    "bytes": 5965,
+    "sha256": "c582b3b9760bd47f178af28f41e4077ad280419d4a9cc7b2ef615c4376b899ca",
+    "blob": "5624783657bbb05c48fbbff50b5687f811d7dbfe"
+  },
+  {
+    "subject": "dd59817f750684b093965f539dd4de466be13077",
+    "path": "scripts/runtime/tracked-runtime-bundle.js",
+    "bytes": 5965,
+    "sha256": "c582b3b9760bd47f178af28f41e4077ad280419d4a9cc7b2ef615c4376b899ca",
+    "blob": "5624783657bbb05c48fbbff50b5687f811d7dbfe"
+  }
+]

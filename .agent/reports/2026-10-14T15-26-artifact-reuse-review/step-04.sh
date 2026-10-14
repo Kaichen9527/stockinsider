@@ -1,0 +1,1 @@
+./node_modules/.bin/playwright install --with-deps chromium

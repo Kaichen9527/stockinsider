@@ -1,0 +1,1 @@
+{"code":"EPERM","syscall":"spawnSync /usr/bin/git","path":"/usr/bin/git","status":0,"message":"spawnSync /usr/bin/git EPERM"}

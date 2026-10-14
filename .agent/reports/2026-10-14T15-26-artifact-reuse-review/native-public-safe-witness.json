@@ -1,0 +1,1401 @@
+{
+  "kind": "public-safe-maker-derived-existing-native-witness",
+  "independentlyRawVerifiedByRoot": false,
+  "nativeRerun": false,
+  "executedSource": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+  "tap": {
+    "sha256": "48d73ecd42050707afb1fdc6fbfcd1088be324ddc378924993a9c5dcbcc06c40",
+    "children": 6,
+    "parents": 1,
+    "pass": 7,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "cases": [
+    {
+      "case": "2409-auo-compatible",
+      "sourceIdentity": {
+        "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+        "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+        "partialFourSource": true,
+        "actualNativeNodeEngineering": true,
+        "wholeClosureApproved": false
+      },
+      "stage": "business complete",
+      "connections": {
+        "writer": 579384,
+        "observer": 579396,
+        "observerReadOnly": true
+      },
+      "cleanup": {
+        "clusterPathAbsent": true,
+        "writerAbsent": true,
+        "observerAbsent": true,
+        "serverShutdownLogged": true,
+        "preAndPostLogsDistinctFiles": true
+      },
+      "rpcFdOrder": [
+        {
+          "ordinal": 0,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 0,
+            "closes": 0
+          }
+        },
+        {
+          "ordinal": 1,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 0,
+            "closes": 0
+          }
+        },
+        {
+          "ordinal": 2,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 8,
+            "closes": 0
+          }
+        },
+        {
+          "ordinal": 3,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 8,
+            "closes": 8
+          }
+        },
+        {
+          "ordinal": 4,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 8,
+            "closes": 8
+          }
+        },
+        {
+          "ordinal": 5,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 8,
+            "closes": 8
+          }
+        }
+      ],
+      "pending": [
+        "separate afterReplay/afterConflict nine-table snapshots were not retained; no invented duplicate snapshots"
+      ],
+      "fdLifecycleChecks": [
+        {
+          "files": 8,
+          "preAllClosed": true,
+          "postFdsRetained": true,
+          "sealAllClosed": true,
+          "openedOnceBeforePost": true
+        }
+      ],
+      "tableAudit": {
+        "storedAfterFirstSeal": {
+          "research_input_preparations_v2": {
+            "count": 1,
+            "hash": "1fccf2d28fcb543cca5ce7e0b7b2f4563f1bab4395f7caf24fbc5d0df907a080"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "hash": "678aeebe180f02436bb4cac9fa1017aafaeddb589e9ad6983bd644285951ef4d"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "hash": "e92f026768de1fe9d685827f05143200965c0f4ee54f6a649d057f3a9d7d620a"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "hash": "296beb51503f84fdbe007cfdd672d0745dfe0690fbb470d1875cd6f8c83c9c1c"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "hash": "1d403cbb280901ec9588e18d2e2e1e0257588a90922a89032ce87513595ab814"
+          },
+          "research_deep_admission_charges_v1": {
+            "count": 1,
+            "hash": "2559e7a0301639cada71a9505d699c0848acb73e99e390ef8ff3af27e188ed58"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "hash": "435bdce094c237b892fbdad97aeaefdf93308130e93c5ef90a36e19554a991c2"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "hash": "a0feeffab919e4beaa059f25674065b3b50dfc2017816692f5a4c7fa3fc6a797"
+          }
+        },
+        "afterReplay": null,
+        "afterConflict": null,
+        "equalityAssertionsPassedInCallback": true
+      },
+      "fdCounts": {
+        "expected": 8,
+        "opens": 8,
+        "closed": 8,
+        "replayNoIo": true,
+        "conflictNoIo": true
+      },
+      "expectedError": {
+        "code": "P0001",
+        "label": "complete_replay_conflict"
+      },
+      "rawEvidenceHashes": [
+        {
+          "file": "2409-auo-compatible-claim.json",
+          "bytes": 1345,
+          "sha256": "9604ba73c448c826770340bd1acf9e0dc30d82aee1599f8e3935053464cd6472"
+        },
+        {
+          "file": "2409-auo-compatible-cleanup.json",
+          "bytes": 93,
+          "sha256": "c8c6c2a56d1053e8c83706385dba94b9ab4245b753f656d621eb2f290b926643"
+        },
+        {
+          "file": "2409-auo-compatible-connections.json",
+          "bytes": 73,
+          "sha256": "245b01441d188bc70f92a1ebec383a884909ea2d5386a081a7d2ddb3244f58ba"
+        },
+        {
+          "file": "2409-auo-compatible-cross-wire-result.json",
+          "bytes": 2601534,
+          "sha256": "1c9d7d90805fd3436202e75a1f75b8177e46ea1f18761c94f5b261ba1e4f1d28"
+        },
+        {
+          "file": "2409-auo-compatible-engineering-bindings.json",
+          "bytes": 1474,
+          "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+        },
+        {
+          "file": "2409-auo-compatible-expected-binding-conflict.json",
+          "bytes": 63,
+          "sha256": "f96dc752ebeaaef6563f8100cc43cbc9fac38354ad28d8dc5d04ae8425abf285"
+        },
+        {
+          "file": "2409-auo-compatible-postgres-before-cleanup.log",
+          "bytes": 776,
+          "sha256": "deca8468aaa35f177eac7a0acd2712aa1b0e67289d9d029f3c7f520cbb6a111f"
+        },
+        {
+          "file": "2409-auo-compatible-postgres.log",
+          "bytes": 927,
+          "sha256": "5d1154900c99eddc642e608c86734eb96e76c5e9e565efbe59947ae884fabe20"
+        },
+        {
+          "file": "2409-auo-compatible-preparation.json",
+          "bytes": 2949,
+          "sha256": "72d68fe1d5d00208970a419175d6aeb7940388c955a2fe142bb8b04710c11ed0"
+        },
+        {
+          "file": "2409-auo-compatible-prerequisites.json",
+          "bytes": 186,
+          "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+        },
+        {
+          "file": "2409-auo-compatible-priority.json",
+          "bytes": 142,
+          "sha256": "84a6f6e55789a47f941bf18df6bc8efc393ebdb7f2c0ebbf033ad69bfbbf39c4"
+        },
+        {
+          "file": "2409-auo-compatible-profile.json",
+          "bytes": 332,
+          "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+        },
+        {
+          "file": "2409-auo-compatible-roster-admission.json",
+          "bytes": 448,
+          "sha256": "9a71f174476bbae0c176ae80ce5269a552254daee6510385970b20f1f5664e5d"
+        },
+        {
+          "file": "2409-auo-compatible-rpc-error.json",
+          "bytes": 214,
+          "sha256": "e22d1ef91018ae55c2b01f0502fee402d7646d040b6fd94dc8457039f2155452"
+        },
+        {
+          "file": "2409-auo-compatible-rpc-fd-order.json",
+          "bytes": 837,
+          "sha256": "267d8c1f87ba64b1d30035f6ce6191cf75aa6ec50ae09a76be1d1cf255bd81ea"
+        }
+      ]
+    },
+    {
+      "case": "2383-emc-v3",
+      "sourceIdentity": {
+        "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+        "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+        "partialFourSource": true,
+        "actualNativeNodeEngineering": true,
+        "wholeClosureApproved": false
+      },
+      "stage": "business complete",
+      "connections": {
+        "writer": 579428,
+        "observer": 579429,
+        "observerReadOnly": true
+      },
+      "cleanup": {
+        "clusterPathAbsent": true,
+        "writerAbsent": true,
+        "observerAbsent": true,
+        "serverShutdownLogged": true,
+        "preAndPostLogsDistinctFiles": true
+      },
+      "rpcFdOrder": [
+        {
+          "ordinal": 0,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 8,
+            "closes": 8
+          }
+        },
+        {
+          "ordinal": 1,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 8,
+            "closes": 8
+          }
+        },
+        {
+          "ordinal": 2,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 15,
+            "closes": 8
+          }
+        },
+        {
+          "ordinal": 3,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 15,
+            "closes": 15
+          }
+        },
+        {
+          "ordinal": 4,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 15,
+            "closes": 15
+          }
+        },
+        {
+          "ordinal": 5,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 15,
+            "closes": 15
+          }
+        }
+      ],
+      "pending": [
+        "separate afterReplay/afterConflict nine-table snapshots were not retained; no invented duplicate snapshots"
+      ],
+      "fdLifecycleChecks": [
+        {
+          "files": 7,
+          "preAllClosed": true,
+          "postFdsRetained": true,
+          "sealAllClosed": true,
+          "openedOnceBeforePost": true
+        }
+      ],
+      "tableAudit": {
+        "storedAfterFirstSeal": {
+          "research_input_preparations_v2": {
+            "count": 1,
+            "hash": "530d37495cf598c38e81ac36df8ee498e7189dd59bef32b1a5fa15336dabc109"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "hash": "733fe92b5af37f1885d8cc0cbdc72af5aa0fc1dda36bc689e6fe7bca90ab873c"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "hash": "97a469fa23c77d510692fd0afcd3d77a1cda6be73a6c8340ea0361fd55d16a09"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "hash": "a4efe8a5eaabf1c05ca2e5db09e8c335fc250b44ae3e9acc2a33aa755f868274"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "hash": "b5385e01563790016368fa531f7cf930e66cb4facd1d7a53b4d646534d7259a7"
+          },
+          "research_deep_admission_charges_v1": {
+            "count": 1,
+            "hash": "c14568950e3706ee1019e7aa7aa01173252374aca8be678e0fa220c8f860767c"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "hash": "c4cf8c5e302af032fbbfaf76df24e821f7bcb4fb378e1f2a34f2a73bf761ec1b"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "hash": "392d19b9e49f1488ac2885fb9b0b09d12c083ddd9c838ade4903ef2aa0e30359"
+          }
+        },
+        "afterReplay": null,
+        "afterConflict": null,
+        "equalityAssertionsPassedInCallback": true
+      },
+      "fdCounts": {
+        "expected": 7,
+        "opens": 7,
+        "closed": 7,
+        "replayNoIo": true,
+        "conflictNoIo": true
+      },
+      "expectedError": {
+        "code": "P0001",
+        "label": "complete_replay_conflict"
+      },
+      "rawEvidenceHashes": [
+        {
+          "file": "2383-emc-v3-claim.json",
+          "bytes": 1344,
+          "sha256": "434e1b6798c0fc7611a8a20297585e26919318c81e0a0e8c629ba067aa603622"
+        },
+        {
+          "file": "2383-emc-v3-cleanup.json",
+          "bytes": 93,
+          "sha256": "f6c1be9ec07897718720e47346fdf74a9e7f5c7970cbedc23a6d5bbd0d69ee17"
+        },
+        {
+          "file": "2383-emc-v3-connections.json",
+          "bytes": 73,
+          "sha256": "2badebbe2b1f30d07ea074a6ee5efd2b21ffb59fd3cfc3b054b288051a1b110a"
+        },
+        {
+          "file": "2383-emc-v3-cross-wire-result.json",
+          "bytes": 1584965,
+          "sha256": "82236c1e415f33f33d06dd7f4ded8d098717b5074a7a794944ac0b9756256a45"
+        },
+        {
+          "file": "2383-emc-v3-engineering-bindings.json",
+          "bytes": 1474,
+          "sha256": "f2a6ccf6911c4490a69fe948c697d5570aace5cd146da88e102083011a0381ce"
+        },
+        {
+          "file": "2383-emc-v3-expected-binding-conflict.json",
+          "bytes": 63,
+          "sha256": "f96dc752ebeaaef6563f8100cc43cbc9fac38354ad28d8dc5d04ae8425abf285"
+        },
+        {
+          "file": "2383-emc-v3-postgres-before-cleanup.log",
+          "bytes": 776,
+          "sha256": "e5ea5b4b696521d494d5f69f5afea0eb98073b3305103c9437d7d6b5d53e9497"
+        },
+        {
+          "file": "2383-emc-v3-postgres.log",
+          "bytes": 927,
+          "sha256": "6053489ea93c068f7db44978a504dfb877d8df79a412fb390bb681324bab22ef"
+        },
+        {
+          "file": "2383-emc-v3-preparation.json",
+          "bytes": 2949,
+          "sha256": "488653c063775fc5708291f0268f1001bfa8440720c106ee94286c3933eff976"
+        },
+        {
+          "file": "2383-emc-v3-prerequisites.json",
+          "bytes": 186,
+          "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+        },
+        {
+          "file": "2383-emc-v3-priority.json",
+          "bytes": 142,
+          "sha256": "0ce6d0ed450eebbbfb390bee0b139ecd3b2e02c24797c082857938b3314792bb"
+        },
+        {
+          "file": "2383-emc-v3-profile.json",
+          "bytes": 332,
+          "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+        },
+        {
+          "file": "2383-emc-v3-roster-admission.json",
+          "bytes": 448,
+          "sha256": "cbb87b1d4f87ee1bf4f8582c62338e131c6080b1cd0400867e0815099c469213"
+        },
+        {
+          "file": "2383-emc-v3-rpc-error.json",
+          "bytes": 214,
+          "sha256": "e22d1ef91018ae55c2b01f0502fee402d7646d040b6fd94dc8457039f2155452"
+        },
+        {
+          "file": "2383-emc-v3-rpc-fd-order.json",
+          "bytes": 844,
+          "sha256": "ccc16ef131fd00093bc99bca22f17dbd81b66851287293bfbe0d93457a422ce1"
+        }
+      ]
+    },
+    {
+      "case": "2409-mixed-v2-then-v3",
+      "sourceIdentity": {
+        "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+        "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+        "partialFourSource": true,
+        "actualNativeNodeEngineering": true,
+        "wholeClosureApproved": false
+      },
+      "stage": "business complete",
+      "connections": {
+        "writer": 579469,
+        "observer": 579470,
+        "observerReadOnly": true
+      },
+      "cleanup": {
+        "clusterPathAbsent": true,
+        "writerAbsent": true,
+        "observerAbsent": true,
+        "serverShutdownLogged": true,
+        "preAndPostLogsDistinctFiles": true
+      },
+      "rpcFdOrder": [
+        {
+          "ordinal": 0,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 15,
+            "closes": 15
+          }
+        },
+        {
+          "ordinal": 1,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 15,
+            "closes": 15
+          }
+        },
+        {
+          "ordinal": 2,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 23,
+            "closes": 15
+          }
+        },
+        {
+          "ordinal": 3,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 23,
+            "closes": 23
+          }
+        },
+        {
+          "ordinal": 4,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 23,
+            "closes": 23
+          }
+        },
+        {
+          "ordinal": 5,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 23,
+            "closes": 23
+          }
+        },
+        {
+          "ordinal": 6,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 32,
+            "closes": 23
+          }
+        },
+        {
+          "ordinal": 7,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 32,
+            "closes": 32
+          }
+        }
+      ],
+      "pending": [],
+      "fdLifecycleChecks": [
+        {
+          "files": 8,
+          "preAllClosed": true,
+          "postFdsRetained": true,
+          "sealAllClosed": true,
+          "openedOnceBeforePost": true
+        },
+        {
+          "files": 9,
+          "preAllClosed": true,
+          "postFdsRetained": true,
+          "sealAllClosed": true,
+          "openedOnceBeforePost": true
+        }
+      ],
+      "tableAudit": {
+        "before": {
+          "research_input_preparations_v2": {
+            "count": 2,
+            "hash": "337fc9c3316302a61bed9c43001bb64a512324702a5524df9ff8d232f2a3edb0"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 2,
+            "hash": "8bed56ea0cdb9c8e47fed715e6919683600b0da34e7b53221dc82cef8be68aa0"
+          },
+          "research_source_seals_v2": {
+            "count": 2,
+            "hash": "4333dc8494192b0d08ed073b7bc8183e663e191719b6e8c10bb88f6a0b9a4af4"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "hash": "fd9b8eb34aae2df30d2d0c4cc606580440db2dd6adb9317e0b6fef0bfcb7dfa9"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "hash": "95987b10a842ae2c49ec9ab6621dbb115c1dc8803d15b3c189a3da5d0add1821"
+          },
+          "research_deep_admission_charges_v1": {
+            "count": 1,
+            "hash": "ece49bbfa694bce9633684a92e786f014b1529d3f0579293db6bde9619431b42"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "hash": "978e2710e265bb2cc3b341f786897fc2dac9e260411ca2c232dca128e2428890"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 3,
+            "hash": "80b5928ecc103c14c45a26c735dfc2cf5b464f94a871c3b310c94dee0ceabc74"
+          }
+        },
+        "after": {
+          "research_input_preparations_v2": {
+            "count": 2,
+            "hash": "337fc9c3316302a61bed9c43001bb64a512324702a5524df9ff8d232f2a3edb0"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 2,
+            "hash": "8bed56ea0cdb9c8e47fed715e6919683600b0da34e7b53221dc82cef8be68aa0"
+          },
+          "research_source_seals_v2": {
+            "count": 2,
+            "hash": "4333dc8494192b0d08ed073b7bc8183e663e191719b6e8c10bb88f6a0b9a4af4"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "hash": "fd9b8eb34aae2df30d2d0c4cc606580440db2dd6adb9317e0b6fef0bfcb7dfa9"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "hash": "95987b10a842ae2c49ec9ab6621dbb115c1dc8803d15b3c189a3da5d0add1821"
+          },
+          "research_deep_admission_charges_v1": {
+            "count": 1,
+            "hash": "ece49bbfa694bce9633684a92e786f014b1529d3f0579293db6bde9619431b42"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "hash": "978e2710e265bb2cc3b341f786897fc2dac9e260411ca2c232dca128e2428890"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 3,
+            "hash": "80b5928ecc103c14c45a26c735dfc2cf5b464f94a871c3b310c94dee0ceabc74"
+          }
+        }
+      },
+      "charges": {
+        "count": 4,
+        "bytes": 404008
+      },
+      "expectedError": {
+        "code": "P0001",
+        "label": "input_preparation_count_bound"
+      },
+      "rawEvidenceHashes": [
+        {
+          "file": "2409-mixed-v2-then-v3-claim.json",
+          "bytes": 1344,
+          "sha256": "365bc722ef6676c81062b123512c88b81c7030ca1ec9e94a82bb8c94bc697429"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-cleanup.json",
+          "bytes": 93,
+          "sha256": "12dbc839e33eae2868c8d9ebcaaff52e562ff6a4911622dc23a0d50f99e3ee8d"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-connections.json",
+          "bytes": 73,
+          "sha256": "f7357951104950344c79f3a42531a83963f8c0dffaff9970528b38dd6c82517a"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-engineering-bindings.json",
+          "bytes": 1474,
+          "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-expected-count-bound.json",
+          "bytes": 68,
+          "sha256": "2dce8e8fa34eae85b1a9f445675268b0f5204a401f5efe93f386593a0e597ec4"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-mixed-count-bound.json",
+          "bytes": 600665,
+          "sha256": "e22be29b3d0894dede1a41ca4eeb4978085849c477a09897db7266984bf3ebbc"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-postgres-before-cleanup.log",
+          "bytes": 853,
+          "sha256": "5bd9a226a097d16c5c7c33a5734fe1e2588ca591ae8d175d5e1dc3288d9b8b0a"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-postgres.log",
+          "bytes": 1004,
+          "sha256": "03b3a8f5a2011435e71cbf1e189a492156deed8474fd5a2622c01dc09cdf7fc9"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-preparation.json",
+          "bytes": 2951,
+          "sha256": "e5f79273043088285c0f9e0548db34458537003f99766adbc869b2098b418bda"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-prerequisites.json",
+          "bytes": 186,
+          "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-priority.json",
+          "bytes": 142,
+          "sha256": "81524f8e0632598de13a9d4b33580e94401f2c2a598b8a56408bda19761cb5d7"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-profile.json",
+          "bytes": 332,
+          "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-roster-admission.json",
+          "bytes": 448,
+          "sha256": "aa61d9df5c7375f3266a8f9b54a11ab63cd185d34e5433ef903fe1965a566b02"
+        },
+        {
+          "file": "2409-mixed-v2-then-v3-rpc-fd-order.json",
+          "bytes": 1123,
+          "sha256": "994dc86261078430ce5182403cfce3183f639399689da50c5152c3dc2855c716"
+        }
+      ]
+    },
+    {
+      "case": "2383-mixed-v3-then-v2",
+      "sourceIdentity": {
+        "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+        "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+        "partialFourSource": true,
+        "actualNativeNodeEngineering": true,
+        "wholeClosureApproved": false
+      },
+      "stage": "business complete",
+      "connections": {
+        "writer": 579502,
+        "observer": 579503,
+        "observerReadOnly": true
+      },
+      "cleanup": {
+        "clusterPathAbsent": true,
+        "writerAbsent": true,
+        "observerAbsent": true,
+        "serverShutdownLogged": true,
+        "preAndPostLogsDistinctFiles": true
+      },
+      "rpcFdOrder": [
+        {
+          "ordinal": 0,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 32,
+            "closes": 32
+          }
+        },
+        {
+          "ordinal": 1,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 32,
+            "closes": 32
+          }
+        },
+        {
+          "ordinal": 2,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 39,
+            "closes": 32
+          }
+        },
+        {
+          "ordinal": 3,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 39,
+            "closes": 39
+          }
+        },
+        {
+          "ordinal": 4,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 39,
+            "closes": 39
+          }
+        },
+        {
+          "ordinal": 5,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 39,
+            "closes": 39
+          }
+        },
+        {
+          "ordinal": 6,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 45,
+            "closes": 39
+          }
+        },
+        {
+          "ordinal": 7,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 45,
+            "closes": 45
+          }
+        }
+      ],
+      "pending": [],
+      "fdLifecycleChecks": [
+        {
+          "files": 7,
+          "preAllClosed": true,
+          "postFdsRetained": true,
+          "sealAllClosed": true,
+          "openedOnceBeforePost": true
+        },
+        {
+          "files": 6,
+          "preAllClosed": true,
+          "postFdsRetained": true,
+          "sealAllClosed": true,
+          "openedOnceBeforePost": true
+        }
+      ],
+      "tableAudit": {
+        "before": {
+          "research_input_preparations_v2": {
+            "count": 2,
+            "hash": "81a93d91d07daaef02daa62c52c957eb34a35c9edc70555c6745ac7a03d338ab"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 2,
+            "hash": "867f9b4d2d00450bcf6b76990528fc26095fa845dd328ac1a2ed5281ada9c8d6"
+          },
+          "research_source_seals_v2": {
+            "count": 2,
+            "hash": "39203f8565201cb2ce4b9136c381cd3493b3bf0ae13f5f2ccd101a5f66b3a84a"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "hash": "753d0dcaad1a6ecd5c169bdc85bfed7bba425fa297c173fad9d9889e044af2b0"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "hash": "6e6321017b8530b15479c6fb9e5a460a91bc967c2b96dfd6664af1bc2b7cd71b"
+          },
+          "research_deep_admission_charges_v1": {
+            "count": 1,
+            "hash": "778c27d36395cff6ff6b890cbe81e3f90296c543caa9c79189c46682e5973dd4"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "hash": "278ec1254af91745c42200223f681d5e84059b85cf268986fbe44fc17677ee20"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 3,
+            "hash": "3217a59362d432afdd6dda3be3840f3067fd5124d51fad61c3f8ed5d8d1e89f7"
+          }
+        },
+        "after": {
+          "research_input_preparations_v2": {
+            "count": 2,
+            "hash": "81a93d91d07daaef02daa62c52c957eb34a35c9edc70555c6745ac7a03d338ab"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 2,
+            "hash": "867f9b4d2d00450bcf6b76990528fc26095fa845dd328ac1a2ed5281ada9c8d6"
+          },
+          "research_source_seals_v2": {
+            "count": 2,
+            "hash": "39203f8565201cb2ce4b9136c381cd3493b3bf0ae13f5f2ccd101a5f66b3a84a"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "hash": "753d0dcaad1a6ecd5c169bdc85bfed7bba425fa297c173fad9d9889e044af2b0"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "hash": "6e6321017b8530b15479c6fb9e5a460a91bc967c2b96dfd6664af1bc2b7cd71b"
+          },
+          "research_deep_admission_charges_v1": {
+            "count": 1,
+            "hash": "778c27d36395cff6ff6b890cbe81e3f90296c543caa9c79189c46682e5973dd4"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "hash": "278ec1254af91745c42200223f681d5e84059b85cf268986fbe44fc17677ee20"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 3,
+            "hash": "3217a59362d432afdd6dda3be3840f3067fd5124d51fad61c3f8ed5d8d1e89f7"
+          }
+        }
+      },
+      "charges": {
+        "count": 4,
+        "bytes": 246078
+      },
+      "expectedError": {
+        "code": "P0001",
+        "label": "input_preparation_count_bound"
+      },
+      "rawEvidenceHashes": [
+        {
+          "file": "2383-mixed-v3-then-v2-claim.json",
+          "bytes": 1345,
+          "sha256": "0a7ad10490f1f514eb8a454474e5dbb426d9604d9c0d51f5b0b2a3a969ccbeee"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-cleanup.json",
+          "bytes": 93,
+          "sha256": "737c23e9ec32368d999a41d8ade2b33e325c69f780e444eb489ceaff65d72b70"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-connections.json",
+          "bytes": 73,
+          "sha256": "729892eba2ca53dc94949bfd03ec547394fc7ec917d7d64b688a49c222923302"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-engineering-bindings.json",
+          "bytes": 1474,
+          "sha256": "f2a6ccf6911c4490a69fe948c697d5570aace5cd146da88e102083011a0381ce"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-expected-count-bound.json",
+          "bytes": 68,
+          "sha256": "2dce8e8fa34eae85b1a9f445675268b0f5204a401f5efe93f386593a0e597ec4"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-mixed-count-bound.json",
+          "bytes": 353420,
+          "sha256": "b6afd3f5c71f0834083a6d89d443a52cebd98a0d74922e1be9fcaefafc6d9dcd"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-postgres-before-cleanup.log",
+          "bytes": 853,
+          "sha256": "88e7983c9f8ad053b62baecd48900d6e2c69c114e670a2d0069fa58429bc0751"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-postgres.log",
+          "bytes": 1004,
+          "sha256": "62304f11dcd1dea4c7ea676ff3051310ae00899a2cacebf93b16a97061c2f78f"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-preparation.json",
+          "bytes": 2951,
+          "sha256": "19c38d63ccf519f5c8c3e7d5ae2bc2afc8daad6c61de6fe747a6986696f3d8bf"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-prerequisites.json",
+          "bytes": 186,
+          "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-priority.json",
+          "bytes": 142,
+          "sha256": "481dad01c9423f7c3b39d05d678599f6d86725573d18813dde32b7d4431fd56b"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-profile.json",
+          "bytes": 332,
+          "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-roster-admission.json",
+          "bytes": 448,
+          "sha256": "a26e97170ee7318d86bfe10e9e7e0a95d605fb804eaa36bfa9e3fd2c896ffbd3"
+        },
+        {
+          "file": "2383-mixed-v3-then-v2-rpc-fd-order.json",
+          "bytes": 1123,
+          "sha256": "3c5af5c3b65dbd60532d3fa621c7ef29a90f3f88faafad52c0eb8611110d0ebf"
+        }
+      ]
+    },
+    {
+      "case": "2409-max30-compatible-measure",
+      "sourceIdentity": {
+        "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+        "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+        "partialFourSource": true,
+        "actualNativeNodeEngineering": true,
+        "wholeClosureApproved": false
+      },
+      "stage": "business complete",
+      "connections": {
+        "writer": 579541,
+        "observer": 579543,
+        "observerReadOnly": true
+      },
+      "cleanup": {
+        "clusterPathAbsent": true,
+        "writerAbsent": true,
+        "observerAbsent": true,
+        "serverShutdownLogged": true,
+        "preAndPostLogsDistinctFiles": true
+      },
+      "rpcFdOrder": [
+        {
+          "ordinal": 0,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 45,
+            "closes": 45
+          }
+        },
+        {
+          "ordinal": 1,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 45,
+            "closes": 45
+          }
+        },
+        {
+          "ordinal": 2,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 53,
+            "closes": 45
+          }
+        },
+        {
+          "ordinal": 3,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 53,
+            "closes": 53
+          }
+        },
+        {
+          "ordinal": 4,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 53,
+            "closes": 53
+          }
+        },
+        {
+          "ordinal": 5,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 53,
+            "closes": 53
+          }
+        },
+        {
+          "ordinal": 6,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 62,
+            "closes": 53
+          }
+        },
+        {
+          "ordinal": 7,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 62,
+            "closes": 62
+          }
+        }
+      ],
+      "pending": [
+        "nine-table snapshots not serialized for successful max30 measurement; no fabricated before/after audit"
+      ],
+      "fdLifecycleChecks": [
+        {
+          "files": 8,
+          "preAllClosed": true,
+          "postFdsRetained": true,
+          "sealAllClosed": true,
+          "openedOnceBeforePost": true
+        },
+        {
+          "files": 9,
+          "preAllClosed": true,
+          "postFdsRetained": true,
+          "sealAllClosed": true,
+          "openedOnceBeforePost": true
+        }
+      ],
+      "max30": {
+        "sourceCount": 30,
+        "used": {
+          "count": 2,
+          "bytes": 198966
+        },
+        "preparationBytes": 21909,
+        "sealedCanonicalBytes": 177057,
+        "remainingBytes": 325322,
+        "remainingSlots": 2
+      },
+      "mixedBytes": {
+        "beforeCharge": {
+          "count": 3,
+          "bytes": 220208
+        },
+        "wouldCharge": 242709,
+        "afterCharge": {
+          "count": 4,
+          "bytes": 462917
+        },
+        "actualSecondSeal": true,
+        "byteRejection": {
+          "status": "PENDING",
+          "reason": "this legal bounded input remains within original byte cap; no reachable over-cap input proven"
+        }
+      },
+      "tableAudit": {
+        "before": null,
+        "after": null
+      },
+      "rawEvidenceHashes": [
+        {
+          "file": "2409-max30-compatible-measure-claim.json",
+          "bytes": 1345,
+          "sha256": "7f4bc44c861d0523caf1d6fba74c6224366e5b56ee776427c6c8cc6bf15446c1"
+        },
+        {
+          "file": "2409-max30-compatible-measure-cleanup.json",
+          "bytes": 93,
+          "sha256": "5103a5640f895fc18175af3ddbc2fcd9aa9de3a361e07a9496bc41f3ba526c5b"
+        },
+        {
+          "file": "2409-max30-compatible-measure-connections.json",
+          "bytes": 73,
+          "sha256": "0c038dd82216c7e4b055f11604702ffe979b8dc08ce814e4bd4bcba3151678b2"
+        },
+        {
+          "file": "2409-max30-compatible-measure-engineering-bindings.json",
+          "bytes": 1474,
+          "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+        },
+        {
+          "file": "2409-max30-compatible-measure-max30-byte-measurement.json",
+          "bytes": 279417,
+          "sha256": "8f0e822036c5c4011063c8997de083cf950f5f63d98db7344e749ebe31048917"
+        },
+        {
+          "file": "2409-max30-compatible-measure-mixed-byte-measurement.json",
+          "bytes": 365,
+          "sha256": "39e313064f76d6e699a7ddcdef93071e8dcbe56414ae68855b2e0d64431f629a"
+        },
+        {
+          "file": "2409-max30-compatible-measure-postgres-before-cleanup.log",
+          "bytes": 466,
+          "sha256": "5967107db88d0adbee515debcfa0b4deb47551a88ec7f549187a9a674b51eefd"
+        },
+        {
+          "file": "2409-max30-compatible-measure-postgres.log",
+          "bytes": 617,
+          "sha256": "1b5b88662176739bbaf964cb09480e4e627472dd132501e6aa70b122390ccaed"
+        },
+        {
+          "file": "2409-max30-compatible-measure-preparation.json",
+          "bytes": 15529,
+          "sha256": "f4e160745ed93f8b08a0c2837376ea2c3b672c24081d3be9c1036c10ed3bbb66"
+        },
+        {
+          "file": "2409-max30-compatible-measure-prerequisites.json",
+          "bytes": 186,
+          "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+        },
+        {
+          "file": "2409-max30-compatible-measure-priority.json",
+          "bytes": 142,
+          "sha256": "9ad8fc374dec6cbf7482a6f472dd861a5384e09131b5cf116f23cdd62b1e3cf0"
+        },
+        {
+          "file": "2409-max30-compatible-measure-profile.json",
+          "bytes": 332,
+          "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+        },
+        {
+          "file": "2409-max30-compatible-measure-roster-admission.json",
+          "bytes": 448,
+          "sha256": "c8e0566ea376dfa028ca2cc14f40789c06a6eae6853a4b045b9e30ae41964c11"
+        },
+        {
+          "file": "2409-max30-compatible-measure-rpc-fd-order.json",
+          "bytes": 1123,
+          "sha256": "5989b5029fb11f0d427d129e65958d0506647a1203f232601d165e15fbe2248e"
+        }
+      ]
+    },
+    {
+      "case": "2383-max30-v3-measure",
+      "sourceIdentity": {
+        "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+        "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+        "partialFourSource": true,
+        "actualNativeNodeEngineering": true,
+        "wholeClosureApproved": false
+      },
+      "stage": "business complete",
+      "connections": {
+        "writer": 579575,
+        "observer": 579585,
+        "observerReadOnly": true
+      },
+      "cleanup": {
+        "clusterPathAbsent": true,
+        "writerAbsent": true,
+        "observerAbsent": true,
+        "serverShutdownLogged": true,
+        "preAndPostLogsDistinctFiles": true
+      },
+      "rpcFdOrder": [
+        {
+          "ordinal": 0,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 62,
+            "closes": 62
+          }
+        },
+        {
+          "ordinal": 1,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 62,
+            "closes": 62
+          }
+        },
+        {
+          "ordinal": 2,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 69,
+            "closes": 62
+          }
+        },
+        {
+          "ordinal": 3,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 69,
+            "closes": 69
+          }
+        },
+        {
+          "ordinal": 4,
+          "name": "read_research_article_input_candidate_v3",
+          "before": {
+            "opens": 69,
+            "closes": 69
+          }
+        },
+        {
+          "ordinal": 5,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 69,
+            "closes": 69
+          }
+        },
+        {
+          "ordinal": 6,
+          "name": "assert_research_input_candidate_v3",
+          "before": {
+            "opens": 75,
+            "closes": 69
+          }
+        },
+        {
+          "ordinal": 7,
+          "name": "seal_research_article_input_candidate_v3",
+          "before": {
+            "opens": 75,
+            "closes": 75
+          }
+        }
+      ],
+      "pending": [
+        "nine-table snapshots not serialized for successful max30 measurement; no fabricated before/after audit"
+      ],
+      "fdLifecycleChecks": [
+        {
+          "files": 7,
+          "preAllClosed": true,
+          "postFdsRetained": true,
+          "sealAllClosed": true,
+          "openedOnceBeforePost": true
+        },
+        {
+          "files": 6,
+          "preAllClosed": true,
+          "postFdsRetained": true,
+          "sealAllClosed": true,
+          "openedOnceBeforePost": true
+        }
+      ],
+      "max30": {
+        "sourceCount": 30,
+        "used": {
+          "count": 2,
+          "bytes": 173980
+        },
+        "preparationBytes": 21667,
+        "sealedCanonicalBytes": 152313,
+        "remainingBytes": 350308,
+        "remainingSlots": 2
+      },
+      "mixedBytes": {
+        "beforeCharge": {
+          "count": 3,
+          "bytes": 194990
+        },
+        "wouldCharge": 109288,
+        "afterCharge": {
+          "count": 4,
+          "bytes": 304278
+        },
+        "actualSecondSeal": true,
+        "byteRejection": {
+          "status": "PENDING",
+          "reason": "this legal bounded input remains within original byte cap; no reachable over-cap input proven"
+        }
+      },
+      "tableAudit": {
+        "before": null,
+        "after": null
+      },
+      "rawEvidenceHashes": [
+        {
+          "file": "2383-max30-v3-measure-claim.json",
+          "bytes": 1345,
+          "sha256": "1834bbebff5451404c56b43ba5db01a190c5ab7164986766ba39470ce09ffd7a"
+        },
+        {
+          "file": "2383-max30-v3-measure-cleanup.json",
+          "bytes": 93,
+          "sha256": "836f91c5921e7027cdc1549dba0f4ea2c3f0409287efd41eb8d960c271fed22a"
+        },
+        {
+          "file": "2383-max30-v3-measure-connections.json",
+          "bytes": 73,
+          "sha256": "e6ddb3511eab0af90d23b005012f90f69c9b9585f27007df3b099dc81975d814"
+        },
+        {
+          "file": "2383-max30-v3-measure-engineering-bindings.json",
+          "bytes": 1474,
+          "sha256": "f2a6ccf6911c4490a69fe948c697d5570aace5cd146da88e102083011a0381ce"
+        },
+        {
+          "file": "2383-max30-v3-measure-max30-byte-measurement.json",
+          "bytes": 232933,
+          "sha256": "cf2fb70f54cfc5a31863aeb86ca3a2dedb87dcb13bc82762f59cd2a7829e20fd"
+        },
+        {
+          "file": "2383-max30-v3-measure-mixed-byte-measurement.json",
+          "bytes": 365,
+          "sha256": "e02fdde1094dcde73de946ac10e7efeab80e3eb96fe80ceec77126e2f9651aec"
+        },
+        {
+          "file": "2383-max30-v3-measure-postgres-before-cleanup.log",
+          "bytes": 466,
+          "sha256": "3fb0e22b8206596a69ae92ef5eacb40f1a9f1c09c8c3e09276f803cdb2d7d144"
+        },
+        {
+          "file": "2383-max30-v3-measure-postgres.log",
+          "bytes": 617,
+          "sha256": "a5f1e362decdee771e164f2246ad2b4445c0d1feea8590f8f87e216cd69ac62d"
+        },
+        {
+          "file": "2383-max30-v3-measure-preparation.json",
+          "bytes": 15407,
+          "sha256": "7da4ba40ec23f906f264eb88a65c66833a040c84a1735dbbf287c6bdf60a7d9e"
+        },
+        {
+          "file": "2383-max30-v3-measure-prerequisites.json",
+          "bytes": 186,
+          "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+        },
+        {
+          "file": "2383-max30-v3-measure-priority.json",
+          "bytes": 142,
+          "sha256": "5cf590d48387544a0e60b228cd8177b005e42c71fc7edecbf78d8ac31cd3a42e"
+        },
+        {
+          "file": "2383-max30-v3-measure-profile.json",
+          "bytes": 332,
+          "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+        },
+        {
+          "file": "2383-max30-v3-measure-roster-admission.json",
+          "bytes": 448,
+          "sha256": "50586b42bb9b315bc4e38658159fa63bfe7d06f73fe14d50bfafef18c147196b"
+        },
+        {
+          "file": "2383-max30-v3-measure-rpc-fd-order.json",
+          "bytes": 1123,
+          "sha256": "663334da16d91aca913db9ce22d3dd5b9ce899f90c1d0f5e58b9a5144cf7021e"
+        }
+      ]
+    }
+  ],
+  "formalApproval": false,
+  "privateRawPublished": false
+}

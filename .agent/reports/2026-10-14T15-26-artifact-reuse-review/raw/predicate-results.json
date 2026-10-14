@@ -1,0 +1,223 @@
+{
+  "scope": "isolated exact AST predicates; NOT full artifact validation/hosted workflow",
+  "checks": [
+    {
+      "case": "fixed metadata control (synthetic, not API)",
+      "expected": "accept",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "case": "metadata id",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "metadata name",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "metadata size_in_bytes",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "metadata expired",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "metadata digest",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "artifact run id",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "artifact run repository_id",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "artifact run head_repository_id",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "artifact run head_sha",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "run status",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "run conclusion",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "run head_sha",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "run id",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar regular+directory control",
+      "expected": "accept",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "case": "tar bad path /escape",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar bad path dd59817f750684b093965f539dd4de466be13077/../escape",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar bad path dd59817f750684b093965f539dd4de466be13077/./file",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar bad path dd59817f750684b093965f539dd4de466be13077//file",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar bad path dd59817f750684b093965f539dd4de466be13077/a\\b",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar bad path wrong/app/file",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar special b'2'",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar special b'1'",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar special b'6'",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar special b'3'",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar special b'4'",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar privilegedmode 0o4755",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar privilegedmode 0o2755",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar privilegedmode 0o1755",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "tar duplicate",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "zip valid",
+      "expected": "accept",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "case": "zip missing",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "zip unknown",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "zip traversal",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "zip duplicate",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    },
+    {
+      "case": "zip symlink",
+      "expected": "reject",
+      "result": "PASS",
+      "error": "AssertionError"
+    }
+  ],
+  "pass": 36,
+  "fail": 0
+}

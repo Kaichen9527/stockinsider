@@ -1,0 +1,14 @@
+[
+  {
+    "path": "node-5-0.mjs",
+    "exit": 0
+  },
+  {
+    "path": "node-8-0.mjs",
+    "exit": 0
+  },
+  {
+    "path": "node-11-0.mjs",
+    "exit": 0
+  }
+]

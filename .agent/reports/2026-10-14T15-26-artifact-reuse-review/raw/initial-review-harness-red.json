@@ -1,0 +1,6 @@
+{
+  "exit": 1,
+  "error": "AssertionError at overbroad index<9 equality: resolver receipt at index8 intentionally changed; not product failure",
+  "input": "first9steps equality probe",
+  "preserved": true
+}
