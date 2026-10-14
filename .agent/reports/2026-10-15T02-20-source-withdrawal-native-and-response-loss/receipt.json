@@ -1,0 +1,72 @@
+{
+  "subject": "eeb874de40508d69f07f3740dba2af990b6bf653",
+  "evidence": "e24d3a1929a6c6ed66b2ba9ead6d222083b6c2e0",
+  "sourceBlobsVerified": 259,
+  "publishedFilesRead": 6,
+  "privateRawBytesVerified": false,
+  "rootNativeExecuted": false,
+  "publicWitnessConsistency": "PASS",
+  "formalApproval": false,
+  "files": [
+    {
+      "path": "maker-HANDOFF.md",
+      "bytes": 5191,
+      "sha256": "723093c80c59ede19d87eb7193738cd102417ffed74a9666a7dc9dbf0bda684f"
+    },
+    {
+      "path": "maker-command-and-resources.json",
+      "bytes": 13066,
+      "sha256": "cdce8200b1d497e9e7a3ee0de5f5593d236c07808f09a3d99cf19587f6850e88"
+    },
+    {
+      "path": "maker-private-raw-inventory.json",
+      "bytes": 19404,
+      "sha256": "2f252869d389846a5701ba5fb609e8e07d3801119b3d403b4f6b72cc48067ada"
+    },
+    {
+      "path": "maker-public-safe-witness.json",
+      "bytes": 82857,
+      "sha256": "2f43131612d0a97b1993be4be3bc3838e29169ab92380ff3ce71e1a57f65ea39"
+    },
+    {
+      "path": "maker-receipt.json",
+      "bytes": 5217,
+      "sha256": "c4cfca7a5734f1a31e7cf19c4d15206c35597e531d702e976c036a8d5cf29e07"
+    },
+    {
+      "path": "maker-source-inventory.json",
+      "bytes": 64535,
+      "sha256": "24bb365a3c7939f38142815c46ecd37b6a36b0f4f25f84f607e0e56aada33d06"
+    },
+    {
+      "path": "review.md",
+      "bytes": 3700,
+      "sha256": "883dad93b186975262186cc48407031ba59b3280d414f6296b19d982e7949cdc"
+    },
+    {
+      "path": "root-passive-read-reset.json",
+      "bytes": 568,
+      "sha256": "e2246c22764658d9f76b013ccff1c61b289c92b7089ee1173df1283ac82d2960"
+    },
+    {
+      "path": "root-verification.json",
+      "bytes": 1113,
+      "sha256": "a31f11d8985e3746ffc5971ec941e9fb81f19d7d176fc19630c7e71058c7da4e"
+    },
+    {
+      "path": "verify-source-witness.py",
+      "bytes": 6522,
+      "sha256": "913c0b1d67e4a0bcba2b5b72935062edeb20198fc91b966b30820a79dd4d6273"
+    },
+    {
+      "path": "verify.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verify.stdout",
+      "bytes": 1113,
+      "sha256": "a31f11d8985e3746ffc5971ec941e9fb81f19d7d176fc19630c7e71058c7da4e"
+    }
+  ]
+}

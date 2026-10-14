@@ -1,0 +1,52 @@
+{
+  "sourceBlobsVerified": 259,
+  "publishedFilesRead": 6,
+  "privateRawInventoryOnly": {
+    "count": 100,
+    "bytes": 2446036
+  },
+  "privateRawBytesRootVerified": false,
+  "rootNativeExecuted": false,
+  "publicWitnessConsistency": "PASS",
+  "cases": [
+    {
+      "case": "2409-v3-pre-post-withdraw",
+      "stages": 5,
+      "chargeUnchanged": {
+        "count": 1,
+        "bytes": 2581
+      },
+      "newOpenedAndClosed": 9,
+      "commitOrdinal": 5,
+      "blockedOrdinal": 6
+    },
+    {
+      "case": "2383-compat-post-seal-withdraw",
+      "stages": 6,
+      "chargeUnchanged": {
+        "count": 1,
+        "bytes": 2580
+      },
+      "newOpenedAndClosed": 6,
+      "commitOrdinal": 7,
+      "blockedOrdinal": 8
+    },
+    {
+      "case": "2409-old77-exact-row-aba",
+      "stages": 8,
+      "chargeUnchanged": {
+        "count": 2,
+        "bytes": 168978
+      },
+      "sourceAEqualsRestoredA": true,
+      "durableInvalidationsAdded": 2,
+      "rejectedReadAndSeal": true
+    }
+  ],
+  "cleanup": {
+    "activeOwned": 0,
+    "clustersAbsent": 3,
+    "zombies": 3
+  },
+  "formalApproval": false
+}

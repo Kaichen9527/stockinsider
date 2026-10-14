@@ -1,0 +1,510 @@
+{
+  "privateRoot": "/tmp/source-withdrawal-exec-o15",
+  "permissions": "0o700",
+  "count": 100,
+  "bytes": 2446036,
+  "files": [
+    {
+      "path": "binaries.json",
+      "bytes": 2431,
+      "sha256": "7d1d4c5c60f2ce430673a1a0fdf5f56e940599f645c79b915a71723aa362ebb7"
+    },
+    {
+      "path": "cleanup-verification.json",
+      "bytes": 8242,
+      "sha256": "eb423db77be7b1f8f7755b351733bfdb7fca25d1868f77e2a747ffc358cc7c9c"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 681,
+      "sha256": "d4d460e65dfef0866122c7d9152776a9d430fc6d87bcba4407d893c217372e1f"
+    },
+    {
+      "path": "derive-witness.mjs",
+      "bytes": 7842,
+      "sha256": "d157eb4cfe58dd2225f71ba8bd898a2d48bf1c534bd1b4eb847742b06fb70beb"
+    },
+    {
+      "path": "derive-witness.mjs.initial-red",
+      "bytes": 7844,
+      "sha256": "62d0f8974d367e0c54f95f6b0e6e96b011675ccf48b8a657ef1362124c064745"
+    },
+    {
+      "path": "identity.json",
+      "bytes": 262,
+      "sha256": "ebcf8e6af3436eb1d017c12c299cf1966796cc998deb76c0b96f173cd125bfae"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-01-initial.json",
+      "bytes": 7682,
+      "sha256": "df03a565561415353a36a36a4293556f550ac9787e5cf060ee06f74d5305f7a2"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-02-barrier-before-withdrawal.json",
+      "bytes": 7684,
+      "sha256": "0f05981b16f5ce57c7e9ee97b38e9e10b97e174c683a57790ec9b6807257835b"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-03-withdrawal-intended-delta.json",
+      "bytes": 656,
+      "sha256": "c654cf4e547b1bd93283b418ab88c7b1a649ffaadb4b85db68dc7e250cb62b4c"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-03-withdrawal-observer-after-commit.json",
+      "bytes": 8127,
+      "sha256": "531fbfbf1f8aa32b3750740d6159a2179e9d095be8693212c05df81fd15a72f2"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-04-blocked-rpc-error.json",
+      "bytes": 73,
+      "sha256": "58a414013fadc29d8a57f149bb84cd3d9e91277f8b51fb1f2bfcdedf62923d02"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-05-after-blocked-rpc.json",
+      "bytes": 8127,
+      "sha256": "531fbfbf1f8aa32b3750740d6159a2179e9d095be8693212c05df81fd15a72f2"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-claim.json",
+      "bytes": 1341,
+      "sha256": "f2ed5ce106d1fc774b816bd36d92fac3a58932644c25f01c4ac42593a764383e"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-cleanup.json",
+      "bytes": 93,
+      "sha256": "cb4ba482b0c54b010e6b4a3cffe2b719dc30e9e90d815b295a193c53ce2ff6ec"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-connections.json",
+      "bytes": 73,
+      "sha256": "66693332b160835d907fab0d1ecfee537bb3ea2d30b489b84eadc1fec82dc9a0"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "f2a6ccf6911c4490a69fe948c697d5570aace5cd146da88e102083011a0381ce"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-postassert-success-state.json",
+      "bytes": 7683,
+      "sha256": "cc906d7998063e22d3ec26ec7e13f91ee5e4a47f9dfed89cd346430f08014081"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-postassert-success.json",
+      "bytes": 613,
+      "sha256": "472f4f3181a81693c665f20e372473c46fe67aa5a66939d5d48f7bb187b58199"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-postgres-before-cleanup.log",
+      "bytes": 1301,
+      "sha256": "a26f3f4d9b2db8c33eb7d25e9b5241a77d5c894a9f56539172fd31df08258a58"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-postgres.log",
+      "bytes": 1452,
+      "sha256": "1ff176caf7726d4c6ca83def7e73ce09fe89908fd9c12c28c0cf4d68d8dcf8f1"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-preassert-success-state.json",
+      "bytes": 7682,
+      "sha256": "df03a565561415353a36a36a4293556f550ac9787e5cf060ee06f74d5305f7a2"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-preassert-success.json",
+      "bytes": 460,
+      "sha256": "42dd8c64f393b19631356d44a645a924358026320fd4c31b5559beb58877a3c6"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-preparation.json",
+      "bytes": 2947,
+      "sha256": "79de5a48d261c4590c06f1186b9545daefa946a301cb82b02fe4f57b29690ca6"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-priority.json",
+      "bytes": 142,
+      "sha256": "6a7977479a3d000abf1974d831e4e9838c534dccb0c06c9e349e2c15dc944835"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-race-connections.json",
+      "bytes": 139,
+      "sha256": "d0a83d00b7db54daa8a8830bdf7cd50641d4a9c8f069396a3093d93d4ec9c14d"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-race-journal.json",
+      "bytes": 1715,
+      "sha256": "617e41abf9db18bd3fcecbed0692379676ddf2c8f9d417205e09906788089946"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-race-result.json",
+      "bytes": 396,
+      "sha256": "52bbb5156794a259bfe580a6d5102b8e591e390f8acc078ca56a52166f4c5220"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-roster-admission.json",
+      "bytes": 448,
+      "sha256": "8cafdcf4a518c107a3f2f5b694ec29d4c257cd4db7c53fe24accfb72fdfda52a"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-rpc-error.json",
+      "bytes": 735,
+      "sha256": "2edee2485d10b09409a2bfed0daac35b8ac98a0df4940b86bb8d548e7fae8bb5"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-rpc-fd-order.json",
+      "bytes": 558,
+      "sha256": "bdaa26b6274fdbac595254f7c17b309cd2a15d65e6537308a4894cf18130034d"
+    },
+    {
+      "path": "native-artifacts/2383-compat-post-seal-withdraw-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "1de743d3ed3778a24b515f8409d0f6cfc2edef696ecfe28fa3c241c0163d1c17"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-01-before-original-firstseal.json",
+      "bytes": 7688,
+      "sha256": "5b5b60687825844cac09ac9b36e9d18f8eb8644ddbb1352fbd0af95e67cd254c"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-02-original-sealed-A.json",
+      "bytes": 256188,
+      "sha256": "83f462a7cb306a8d512184cac5528d93b224695a98abc19cb2dbd47c15154640"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-03-withdraw-B-intended-delta.json",
+      "bytes": 656,
+      "sha256": "05a778e9a2c9acb5b23dcca5119dc9dfd46b2987319b3ba81ba42faa6e5717ed"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-03-withdraw-B-observer-after-commit.json",
+      "bytes": 256631,
+      "sha256": "3db23c4d7e5feea621e5c9271a29ebb2e1f0a00a744d40d84d1314622f610e8c"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-04-restore-A-intended-delta.json",
+      "bytes": 656,
+      "sha256": "98f26eb8dbab6ab72f2271f25d8076a88a33f6cff2508b6d7147552c9911dfbb"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-04-restore-A-observer-after-commit.json",
+      "bytes": 257084,
+      "sha256": "6be7dfd68cc79b2ca09cb7e74ffbb6d703780712fa30415db4da68deac2daf5b"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-05-read-replay-after.json",
+      "bytes": 257084,
+      "sha256": "6be7dfd68cc79b2ca09cb7e74ffbb6d703780712fa30415db4da68deac2daf5b"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-05-read-replay-before.json",
+      "bytes": 257084,
+      "sha256": "6be7dfd68cc79b2ca09cb7e74ffbb6d703780712fa30415db4da68deac2daf5b"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-05-read-replay-error.json",
+      "bytes": 73,
+      "sha256": "58a414013fadc29d8a57f149bb84cd3d9e91277f8b51fb1f2bfcdedf62923d02"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-06-seal-replay-after.json",
+      "bytes": 257084,
+      "sha256": "6be7dfd68cc79b2ca09cb7e74ffbb6d703780712fa30415db4da68deac2daf5b"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-06-seal-replay-before.json",
+      "bytes": 257084,
+      "sha256": "6be7dfd68cc79b2ca09cb7e74ffbb6d703780712fa30415db4da68deac2daf5b"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-06-seal-replay-error.json",
+      "bytes": 73,
+      "sha256": "58a414013fadc29d8a57f149bb84cd3d9e91277f8b51fb1f2bfcdedf62923d02"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-aba-result.json",
+      "bytes": 1394,
+      "sha256": "ed56087bd28fba9ba4c5e735eabfd191cbaf31e6dfd6b0947fbc5029928f0b62"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-claim.json",
+      "bytes": 1344,
+      "sha256": "a27eda819fb9b830f4ebac760682082b2691f5616f267c42b94ec6d6c9c1e4aa"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-cleanup.json",
+      "bytes": 93,
+      "sha256": "2033cb2fb363d72571c279f54a2ef7b0abc88dc64041c50804f32c18a4184b1e"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-connections.json",
+      "bytes": 73,
+      "sha256": "1bd11c2b096599a4d2d2135ddccaa1ddf83312a4827201c0f6d2762d8635e209"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-old-realm-child.json",
+      "bytes": 241455,
+      "sha256": "0b96715a68edc7c4a9cd1fef0c9f35c12f5934c79373b065ed0a5508960666e6"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-postgres-before-cleanup.log",
+      "bytes": 2072,
+      "sha256": "a435d5bcf65ff5dc31bc2ca654a07fba94ec79ae86a81a745f06f7320a35e507"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-postgres.log",
+      "bytes": 2223,
+      "sha256": "763e5062ae7fecaa8492f7126fc3c31e2418e864718fc3f549a00596850bd65e"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-preparation.json",
+      "bytes": 2951,
+      "sha256": "44f8a7ed1b63955a95866524ece064127d72242dfec1e9a83094b893b23ef042"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-priority.json",
+      "bytes": 142,
+      "sha256": "1b816bda0f3117b8a6297dc0402dbf1bae8ca52e3946b1a01ad560ecf573287a"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-race-connections.json",
+      "bytes": 139,
+      "sha256": "90202bb60208ba298ddb2b22338440191e4ec10e78e157b1efc3d8dc3d087a05"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-race-journal.json",
+      "bytes": 874,
+      "sha256": "cccda6a97822e02bd16d78a5ef3a83838c060ff61cd500d24a9b23b6cc77f205"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-roster-admission.json",
+      "bytes": 447,
+      "sha256": "a9e92c0f8743eab5b98168d641a1b00ac11f3828138c7e44bc0bab49c8960a9a"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-rpc-error.json",
+      "bytes": 709,
+      "sha256": "089dfccbbcf01996e727138dbbf320d156184b46c7de7c0093c07def43663963"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-rpc-fd-order.json",
+      "bytes": 289,
+      "sha256": "dae0746e460aa5de6e43e86774b515e2e490e5e80b564537e7f64f385ee1b9d9"
+    },
+    {
+      "path": "native-artifacts/2409-old77-exact-row-aba-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "569698b58fd2b3ad37bc8048d13fa2be773a78722826ba6c240e76c7a2243a94"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-01-initial.json",
+      "bytes": 7683,
+      "sha256": "e7bc2095605eb8cf379fd52bf8cfb55ad9d51f26e82babf2575672d4d1a1a4f3"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-02-barrier-before-withdrawal.json",
+      "bytes": 7683,
+      "sha256": "b1b7086b44edc400877c3c0cdd0e48894cd7001427c9f1c7bf3f798eb917fc71"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-03-withdrawal-intended-delta.json",
+      "bytes": 656,
+      "sha256": "cb6169bc45f3eb2bfcab064a14e4dfabf4e2e77c8d26fea8d0387007e3368e09"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-03-withdrawal-observer-after-commit.json",
+      "bytes": 8126,
+      "sha256": "6dcb2d777bab340d79573246a20d1210c4c4e403162ebd4216e94679c4d0ad36"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-04-blocked-rpc-error.json",
+      "bytes": 73,
+      "sha256": "58a414013fadc29d8a57f149bb84cd3d9e91277f8b51fb1f2bfcdedf62923d02"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-05-after-blocked-rpc.json",
+      "bytes": 8126,
+      "sha256": "fe611b9fe7ee82139d611b3bb068b4862d59c6daf481464e35b2c212cc22e9db"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-claim.json",
+      "bytes": 1342,
+      "sha256": "c35a8ef8acbf90ec5d5abaf37c8fe4012715b9ad4d2e2a67af56bacdfdc66baa"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-cleanup.json",
+      "bytes": 93,
+      "sha256": "5677407010629453370c3fa339a855edd9d1d01e3a0f05aa573ec0ffc5eee71a"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-connections.json",
+      "bytes": 73,
+      "sha256": "f265b61092780684eb0982bb83755de9370e1659b23c0b18ebff9397f9d9d344"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-postgres-before-cleanup.log",
+      "bytes": 1192,
+      "sha256": "ecf6fee0668e95f730b405faf2d087d7e0980a85ab398c1c0513e4754d0f0779"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-postgres.log",
+      "bytes": 1343,
+      "sha256": "f62c8a27f640a7407d9847cabe96af6c8ce95cc18fdf070cba0e4ce17ba3625d"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-preassert-success-state.json",
+      "bytes": 7683,
+      "sha256": "e7bc2095605eb8cf379fd52bf8cfb55ad9d51f26e82babf2575672d4d1a1a4f3"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-preassert-success.json",
+      "bytes": 460,
+      "sha256": "62ee35b4ff9454efe714a61b4b5e080b2617e16a26f8be1fce3581b6a5f2228a"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-preparation.json",
+      "bytes": 2948,
+      "sha256": "7401987e0513760293de9eeeb0fab74f3ac01ae63dc73f23a6f898ff4c8596a7"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-priority.json",
+      "bytes": 142,
+      "sha256": "bb763c5848060da870d4df58749347aeb974e914977bf7c387a79bf7698bba57"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-race-connections.json",
+      "bytes": 139,
+      "sha256": "d613bc1a697fed550ed61da884bb697b129702be30cdb46d6e86c25cd8498f90"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-race-journal.json",
+      "bytes": 1367,
+      "sha256": "0b5fe1f539bc640dda8c91acd959d76b682edf867b0b5fc5d28071169edabe2a"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-race-result.json",
+      "bytes": 395,
+      "sha256": "72c2c6caf59ace11e376e7f5fa189eb5a574e67b5f33b9f746ae9889d2e66f7a"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-roster-admission.json",
+      "bytes": 448,
+      "sha256": "6e2b84aef5427b2853bf860d9b612978652ff70ef5353843c0cfd5e88fe8ee50"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-rpc-error.json",
+      "bytes": 629,
+      "sha256": "4c5224f106599322131c72a3375a35a37002fdfdb54f71740afe479ef35c13b4"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-rpc-fd-order.json",
+      "bytes": 414,
+      "sha256": "3b016bc66a6c303b48c755d37002976cb5dbafc1f3b5da051a53c27cbbc4e0de"
+    },
+    {
+      "path": "native-artifacts/2409-v3-pre-post-withdraw-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "569698b58fd2b3ad37bc8048d13fa2be773a78722826ba6c240e76c7a2243a94"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 804,
+      "sha256": "8be3020e6e5c6f71519d8ea55eca3dc2be2c8ff16ccb2c97efd482adade7e524"
+    },
+    {
+      "path": "native.samples.jsonl",
+      "bytes": 84043,
+      "sha256": "6fd0510fd9494184833cd0f4eae5791bf7d3185a66c276be0727ee7b097168f9"
+    },
+    {
+      "path": "native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native.stdout",
+      "bytes": 1248,
+      "sha256": "31d22661327cdcf8da41e1a7c754a24301bdca1e1a8b85713b4c4766dab8f205"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 82857,
+      "sha256": "2f43131612d0a97b1993be4be3bc3838e29169ab92380ff3ce71e1a57f65ea39"
+    },
+    {
+      "path": "run.py",
+      "bytes": 3345,
+      "sha256": "ae208b0e048505200c09207a0569b65323e0232069a79c2d38e3ef2d5d2b5d3f"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 64535,
+      "sha256": "24bb365a3c7939f38142815c46ecd37b6a36b0f4f25f84f607e0e56aada33d06"
+    },
+    {
+      "path": "witness-derivation-correction.json",
+      "bytes": 324,
+      "sha256": "b67735a124a8115fd16758a4f8d0096dfae45f91710226cf86d98d313f12fdd6"
+    },
+    {
+      "path": "witness-derive.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "witness-derive.stderr.initial-red",
+      "bytes": 589,
+      "sha256": "98a191781ff6fc2d968e965793aa8ec5cfe3be1ff83a15da66ae94b79d5af854"
+    },
+    {
+      "path": "witness-derive.stdout",
+      "bytes": 1174,
+      "sha256": "5c92e95a21ff4f10589d45a1f55a487db964a43eae5658b416333249a120e35f"
+    },
+    {
+      "path": "witness-derive.stdout.initial-red",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "privatePayloadPublished": false,
+  "rootHasNotRetrievedPrivateRaw": true
+}

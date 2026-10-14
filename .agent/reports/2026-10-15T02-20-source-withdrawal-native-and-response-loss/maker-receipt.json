@@ -1,0 +1,161 @@
+{
+  "kind": "maker-local-native-engineering-receipt",
+  "executedSubject": "eeb874de40508d69f07f3740dba2af990b6bf653",
+  "runtimeSource": "870436576d89d1a7f34cddb10f197787978d42f3",
+  "tree": "eda60cb3986dd3bc7d347d076126e9e7d221af43",
+  "branch": "codex/research-versioned-source-withdrawal-execution-oct15",
+  "sourceChanges": [],
+  "taskStartedAt": "2026-10-14T18:03:57Z",
+  "taskDeadline": "2026-10-14T18:23:57Z",
+  "sealedAt": "2026-10-14T18:10:26.566367+00:00",
+  "counts": {
+    "tests": 4,
+    "children": 3,
+    "parent": 1,
+    "pass": 4,
+    "fail": 0,
+    "cancelled": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "nativeExit": 0,
+  "nativeSeconds": 26.435139179229736,
+  "selectedEntry": "scripts/opportunity-v3/research-versioned-source-withdrawal-native.test.mjs",
+  "priorGreenSuitesRerun": false,
+  "cases": [
+    {
+      "name": "2409-v3-pre-post-withdraw",
+      "status": "PASS",
+      "snapshotStages": 5,
+      "expectedError": {
+        "code": "P0001",
+        "message": "source_seal_invalidated_or_missing"
+      },
+      "checks": {
+        "independentCommitBeforeBlockedRpc": true,
+        "preassertSucceeded": true,
+        "postassertSucceeded": false,
+        "firstSealAttemptOnly": true,
+        "sealedRevisionCount": 0,
+        "allOtherEightTablesAndLedgerStable": true,
+        "failedRpcZeroMutation": true,
+        "intendedEventsAdded": 1,
+        "intendedInvalidationsAdded": 1,
+        "opened": 9,
+        "closed": 9
+      }
+    },
+    {
+      "name": "2383-compat-post-seal-withdraw",
+      "status": "PASS",
+      "snapshotStages": 6,
+      "expectedError": {
+        "code": "P0001",
+        "message": "source_seal_invalidated_or_missing"
+      },
+      "checks": {
+        "independentCommitBeforeBlockedRpc": true,
+        "preassertSucceeded": true,
+        "postassertSucceeded": true,
+        "firstSealAttemptOnly": true,
+        "sealedRevisionCount": 0,
+        "allOtherEightTablesAndLedgerStable": true,
+        "failedRpcZeroMutation": true,
+        "intendedEventsAdded": 1,
+        "intendedInvalidationsAdded": 1,
+        "opened": 6,
+        "closed": 6
+      }
+    },
+    {
+      "name": "2409-old77-exact-row-aba",
+      "status": "PASS",
+      "snapshotStages": 8,
+      "expectedError": {
+        "code": "P0001",
+        "message": "source_seal_invalidated_or_missing"
+      },
+      "checks": {
+        "originalProducerFirstSeal": true,
+        "fullSourceRowsAndHashesRestored": true,
+        "twoIndependentCommits": true,
+        "intendedEventsAdded": 2,
+        "durableInvalidationsAdded": 2,
+        "allOtherEightTablesAndLedgerStable": true,
+        "readAndSealReplayRejected": true,
+        "failedRpcsZeroMutation": true,
+        "originalRevisionChargeClockHashUnchanged": true,
+        "currentReplayNewOpens": 0,
+        "currentReplayNewCloses": 0
+      }
+    }
+  ],
+  "sourceInventoryCount": 259,
+  "privateRawFiles": 100,
+  "privateRawBytes": 2446036,
+  "publicWitnessSha256": "2f43131612d0a97b1993be4be3bc3838e29169ab92380ff3ce71e1a57f65ea39",
+  "limits": {
+    "floorBytes": 8589934592,
+    "rssLimitBytes": 8589934592,
+    "peakSampledSessionAndPgRssBytes": 548708352,
+    "minimumFreeBytes": {
+      "/workspace": 8600940544,
+      "/tmp": 15290810368
+    },
+    "samplingSeconds": 0.2,
+    "noCacheDeletion": true,
+    "clockOrCapChanges": false
+  },
+  "cleanup": {
+    "clusters": 3,
+    "clusterPathsAbsent": true,
+    "serverShutdownLogsConfirmed": true,
+    "processCount": 53,
+    "states": {
+      "absent": 50,
+      "zombie": 3
+    },
+    "activeOwned": 0,
+    "old77ChildExitCloseConfirmed": true,
+    "old77PendingRpcAtSave": 0,
+    "noKernelCancellationClaim": true
+  },
+  "newRed": {
+    "native": null,
+    "evidenceDerivation": {
+      "initialExit": 1,
+      "reason": "suffix-based selection accidentally excluded the case-specific blocked-rpc-error file, producing0 selected errors",
+      "correction": "exclude only the exact generic rpc-error filename",
+      "correctedExit": 0,
+      "rerunScope": "builtins-only local witness derivation, not tests/PG",
+      "originalFilesPreserved": true
+    }
+  },
+  "unchangedHistoricalRefs": [
+    "b3432984263ad59866af6fb077a45b802c087dbf",
+    "c7d6665068774c346e28303adeb06634abf5d556",
+    "305074af2547316078e930de8ad81a910860c8c0",
+    "c462a51ceea1b69026b38ec40b105eb971d24116"
+  ],
+  "scope": {
+    "capturedSchemaOnlyFixture": true,
+    "syntheticBootstrapRolesAndSources": true,
+    "explicitLocalTwoOwnerUsageProfileOnly": true,
+    "serviceRoleOwnedLeaseMutationObserved": true,
+    "activeProductionWriterReleaseVerified": false,
+    "independentNativeApproval": false,
+    "productionSourceQualification": false,
+    "formalPeer": false,
+    "historicalCompiledNextExecution": false
+  },
+  "pending": [
+    "formal active-production writer fence/release identity and private peer",
+    "full application S/C/B/Q/R/A and four caller activation",
+    "Q/R binding and cash citation allowlists",
+    "formal author/review/publication and live source rights",
+    "other lease/lockwait/response-loss races",
+    "previous byte-bound rejected would-charge remains null; not rerun"
+  ],
+  "noProductionOrRemoteDatabase": true,
+  "privateRawNotOnGit": true
+}

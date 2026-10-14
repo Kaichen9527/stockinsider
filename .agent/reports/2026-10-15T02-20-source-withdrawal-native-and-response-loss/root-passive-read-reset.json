@@ -1,0 +1,11 @@
+{
+  "scope": "Root coordination tooling; not native failure",
+  "initialError": "Task host changed during passive read",
+  "sameTurnRepolled": "01a13b95-94a4-7235-9794-bc946cc69886",
+  "hostRemained": "durable",
+  "cursorResetFrom": "57859559-a812-4f98-bcdc-46a2a9f908f6:82",
+  "cursorResetTo": "303427c2-9b66-4f3d-abd3-26255a0a19ef:1",
+  "terminalConfirmedAtCursor": "303427c2-9b66-4f3d-abd3-26255a0a19ef:3",
+  "duplicateTaskStarted": false,
+  "inventoryToolError": "list_threads limit100 rejected maximum50; unnecessary retry omitted after passive read recovered"
+}

@@ -1,0 +1,538 @@
+{
+  "execution": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--import",
+      "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/opportunity-v3/research-versioned-source-withdrawal-native.test.mjs"
+    ],
+    "start": "2026-10-14T18:05:47.355545+00:00",
+    "cwd": "/tmp/si-pubtail-o14",
+    "sampleSeconds": 0.2,
+    "peakSessionAndPgRssBytes": 548708352,
+    "minimumFreeBytes": {
+      "/workspace": 8600940544,
+      "/tmp": 15290810368
+    },
+    "user": "agent",
+    "artifactPath": "/tmp/source-withdrawal-exec-o15/native-artifacts",
+    "deadline": "2026-10-14T18:23:57Z",
+    "sessionPid": 590524,
+    "exit": 0,
+    "seconds": 26.435139179229736,
+    "end": "2026-10-14T18:06:13.790679+00:00"
+  },
+  "binaries": {
+    "at": "2026-10-14T18:05:18.823542+00:00",
+    "binaries": [
+      {
+        "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+        "bytes": 120177224,
+        "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1"
+      },
+      {
+        "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/postgres",
+        "bytes": 10189096,
+        "sha256": "6468a969338215cb3912cf9c0b894bdbbd37b9a709926db078e9a5bf8bdc3e16"
+      },
+      {
+        "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_config",
+        "bytes": 55616,
+        "sha256": "8fc0425c51a3d1772ea60aa5d88c26e5903f46e5ee37b0652cefe9ffea377427"
+      },
+      {
+        "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb",
+        "bytes": 196520,
+        "sha256": "a0363354125bc00f25075bb47fc32a2838fa7668c008326227f5bc04d628ca1d"
+      },
+      {
+        "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+        "bytes": 80568,
+        "sha256": "c8a0fa6df90600186575e3f3c47a352bafac73547416cf67675b41991b5b5d74"
+      },
+      {
+        "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+        "bytes": 822816,
+        "sha256": "3c94c29652ea7ff8803ab1ca35e48c38a39c8a94a8c8eeadbb1d87c68494506c"
+      }
+    ],
+    "versions": [
+      {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--version"
+        ],
+        "stdout": "v22.14.0\n",
+        "stderr": "",
+        "exit": 0
+      },
+      {
+        "command": [
+          "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_config",
+          "--bindir"
+        ],
+        "stdout": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin\n",
+        "stderr": "",
+        "exit": 0
+      },
+      {
+        "command": [
+          "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/postgres",
+          "--version"
+        ],
+        "stdout": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+        "stderr": "",
+        "exit": 0
+      },
+      {
+        "command": [
+          "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+          "--version"
+        ],
+        "stdout": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+        "stderr": "",
+        "exit": 0
+      }
+    ],
+    "user": "agent",
+    "proxyCA": "inherited unchanged; values not exported"
+  },
+  "admission": {
+    "at": "2026-10-14T18:04:50.401507+00:00",
+    "activeHeavy": [],
+    "head": "eeb874de40508d69f07f3740dba2af990b6bf653",
+    "tree": "eda60cb3986dd3bc7d347d076126e9e7d221af43",
+    "dirty": "",
+    "free": {
+      "/workspace": 8604278784,
+      "/tmp": 15378513920
+    }
+  },
+  "cleanup": {
+    "at": "2026-10-14T18:06:57.628864+00:00",
+    "processes": [
+      {
+        "pid": 590524,
+        "sampledComm": "node",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590530,
+        "sampledComm": "node",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590543,
+        "sampledComm": "initdb",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590552,
+        "sampledComm": "sh",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590553,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590559,
+        "sampledComm": "postgres",
+        "now": "zombie",
+        "state": "Z",
+        "comm": "postgres"
+      },
+      {
+        "pid": 590560,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590561,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590563,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590564,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590565,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590566,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590567,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590568,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590570,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590571,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590572,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590573,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590577,
+        "sampledComm": "initdb",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590586,
+        "sampledComm": "sh",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590587,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590590,
+        "sampledComm": "pg_ctl",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590593,
+        "sampledComm": "postgres",
+        "now": "zombie",
+        "state": "Z",
+        "comm": "postgres"
+      },
+      {
+        "pid": 590594,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590595,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590597,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590598,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590599,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590600,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590601,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590602,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590604,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590605,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590606,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590607,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590611,
+        "sampledComm": "initdb",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590620,
+        "sampledComm": "sh",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590621,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590627,
+        "sampledComm": "postgres",
+        "now": "zombie",
+        "state": "Z",
+        "comm": "postgres"
+      },
+      {
+        "pid": 590628,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590629,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590631,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590632,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590633,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590634,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590635,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590636,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590638,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590639,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590640,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590641,
+        "sampledComm": "postgres",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590642,
+        "sampledComm": "node",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      },
+      {
+        "pid": 590653,
+        "sampledComm": "pg_ctl",
+        "now": "absent",
+        "state": null,
+        "comm": null
+      }
+    ],
+    "clusters": [
+      {
+        "case": "2383-compat-post-seal-withdraw",
+        "stoppedReported": true,
+        "stage": "business complete",
+        "path": "/tmp/vp3profile-RXXAW9",
+        "pathAbsent": true,
+        "postmasterPidAbsent": true,
+        "beforeLogBytes": 1301,
+        "afterLogBytes": 1452,
+        "afterLogHasShutdown": true,
+        "beforeLogPreservedPrefix": true
+      },
+      {
+        "case": "2409-old77-exact-row-aba",
+        "stoppedReported": true,
+        "stage": "business complete",
+        "path": "/tmp/vp3profile-6a3WJS",
+        "pathAbsent": true,
+        "postmasterPidAbsent": true,
+        "beforeLogBytes": 2072,
+        "afterLogBytes": 2223,
+        "afterLogHasShutdown": true,
+        "beforeLogPreservedPrefix": true
+      },
+      {
+        "case": "2409-v3-pre-post-withdraw",
+        "stoppedReported": true,
+        "stage": "business complete",
+        "path": "/tmp/vp3profile-WZuzlg",
+        "pathAbsent": true,
+        "postmasterPidAbsent": true,
+        "beforeLogBytes": 1192,
+        "afterLogBytes": 1343,
+        "afterLogHasShutdown": true,
+        "beforeLogPreservedPrefix": true
+      }
+    ],
+    "activeOwned": 0,
+    "method": "sampled session/PG PIDs plus actual writer/observer/mutator/child IDs, /proc state and absent cluster paths; server shutdown logs preserved",
+    "noKernelIoCancellationClaim": true
+  },
+  "sourceChanged": false,
+  "proxyCA": "inherited unchanged; no secret inspection or export",
+  "noSetupConfigurationChange": true,
+  "finalFreeBytes": {
+    "/workspace": 8604278784,
+    "/tmp": 15375638528
+  }
+}
