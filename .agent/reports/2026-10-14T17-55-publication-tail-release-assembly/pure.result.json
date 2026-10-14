@@ -1,0 +1,14 @@
+{
+  "source": "b2a5f289af6ddbfe9e6731ce532e9ea9c1730ca4",
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-publication-tail-extraction.test.mjs",
+    "scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs"
+  ],
+  "exit": 0,
+  "at": "2026-10-14T09:52:17.169848+00:00"
+}

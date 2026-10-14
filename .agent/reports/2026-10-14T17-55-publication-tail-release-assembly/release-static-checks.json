@@ -1,0 +1,17 @@
+{
+  "source": "b2a5f289af6ddbfe9e6731ce532e9ea9c1730ca4",
+  "base": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+  "copied": 41,
+  "changedFiles": 44,
+  "webTree": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "webUnchangedFromApprovedMain": true,
+  "originalFinancialDefaultAndAuthorityUnchanged": true,
+  "protectedAndOracleUnchanged": true,
+  "PGDGAndNpmSetupByteExactToApprovedFinancialWorkflow": true,
+  "actions": [
+    "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+    "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+    "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02"
+  ],
+  "newNativeOrBuildExecutedByRoot": false
+}

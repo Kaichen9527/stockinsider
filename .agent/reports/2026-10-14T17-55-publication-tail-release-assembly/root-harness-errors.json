@@ -1,0 +1,12 @@
+[
+  {
+    "error": "first assembly manifest verifier assumed file; original manifests use path",
+    "productFailure": false,
+    "sourcesCopiedExactBeforeVerifierFailed": 41
+  },
+  {
+    "error": "readonly guessed docs/operations/2026-10-14/research-publication-tail-fragments-handoff.md absent",
+    "actualPath": "docs/operations/research-publication-tail-fragments-handoff.md",
+    "productFailure": false
+  }
+]

@@ -1,6 +1,21 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
 
+## 2026-10-14 17:55台灣時間：publication26已組裝最小release候選並真17pure；完整v3契約同handle活動中
+
+Remote main1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4/progress74fae77b與工作樹/Cloudcompact真核。上一goalturn是實質progress，本turn也有新branch/code/真測試，不縮原三階段。PR370..379全terminal，不再checks/watch/ready/rerun/merge/helper，正式169/容量reserve/NOLOGIN-1仍最後真值。本輪無VPS/remoteDB/roleACL/HTTP/crawl343/PTT/策略/正式排程/部署/cache。
+
+Root newbranchcodex/research-publication-tail-release-oct14/baseapprovedmain1f/codeb2a5f289af6ddbfe9e6731ce532e9ea9c1730ca4/final47fe9fe39600f2012940865be16743a441c18111已push。44file最小release：41exactcopies（26原SQL+13finalentry/catalog/runtime/tests來自0fe5d5a90ae95949eec1fb3dd9433359db466d88，fragmentfixture/native2來自7309fba04e0ae3bb7800bd2aad11e5992b91020d）+新ordinaryworkflow/sourceindex/handoff。26SQL對15d4/pending3642e078逐byte同，orderededc46d48/descriptor9410e8f3/原post50baseline/catalog/default48/49/50/hash/operator/HBA/authority/roles/locks不動。不merge歷史branch/PR364；不帶raw歷史/兩supersedednativecapture/三舊handoffs，原exactevidencebranches永保留。
+
+Root核兩原native manifests240重疊entries/121unique currentinputs逐byte同、manifestSHA合原receipt，唯一缺席是明示歷史docs/generators，不缺retainedruntime/fixture/SQL/locks。原entry24/fragment54只是同bytes可歸因，非本release親跑；24含parent/23children，54含parent/setup/50target/2helper；14independent/36dependency-only/66sourceproof不冒全50targeteffects、不加總overlap。Final47fe只handoff；Rootsealedb2真兩pure17PASS零fail/skip/todo、native兩Node22parse/YAMLparse/GitdiffcheckPASS。Webc516與approvedmain1f完全同，不Macfullbuild，不冒舊tailc550build為新build。
+
+新ordinaryresearch-publication-tail-quality.yml contentsread/nosecrets/pinnedcheckout/setupnode/Node22.14/原financialquality官方PGDGfingerprint/setup/npmciignore-scripts整段exact、onejob循序pure/entrynative/fragmentnative；原已釘uploadartifact action保存raw。未改protected/oracle/trust/financial/source-ledworkflow。Candidate尚無PR/ordinaryGHA/exactref/protected/ready/merge/部署；Root自己的assembly/workflow不能自簽獨立批准，下一需真delta/fullrange審查與freshCI。原helper仍engineeringOnly/productionAuthorizedfalse，無productionCLI/API/attestationbinding。
+
+唯一Cloudcontractturn01a139ca-a442-7209-b4e5-1f9dacf0dbc4/cursor57859559-a812-4f98-bcdc-46a2a9f908f6:30真inProgress，ownedADR/probes/contracts，Root只publicationreleaseassembly不重疊。實際commentary已核原source→global locks、sealed replay仍sourceleasechecks/noFS/nocharge、四caller與symbol-only mapping限制。先等同handle真終態，不重派、不能只HTTPwrapper或偷禁freshv2。完整schema/tuple/mapping/prepare-read-seal/sharedquota/allauthor-review-publication仍待。
+
+本report.agent/reports/2026-10-14T17-55-publication-tail-release-assembly/，Rootreceiptfdcca13848a20785867d5be18809d010621805d85425472307b197dd0b2c3992。RootmanifestpathKeyError/readonlyhandoffguesserror保存後精確修驗，未改SQL/期待或舊RED。前1ff actualFS完整scenariocash62/peer6FD/type-lint-normalbuild與157rawreceipt仍真終態不重跑，工程不是formal兩文章/Top20/研究資格/策略/部署/正式排程完成。Goalactive。
+
+
 ## 2026-10-14 17:45台灣時間：完整scenario/cash已接真正同owner檔案reader；62與6真FD probes及新normalbuild完成，v3契約單件活動中
 
 Remote main1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4/progress14a7與Root乾淨工作樹及Cloudcompact先核，歷史PR370..379全部terminal，不再checks/watch/ready/rerun/merge/helper。Goal仍原三階段active，沒有縮成pure工程或正式排程完成。User工作樹既有改動保持。

@@ -1,0 +1,77 @@
+{
+  "schema": "publication-tail-release-assembly-root-v1",
+  "at": "2026-10-14T17:55:00.079447+08:00",
+  "subject": "47fe9fe39600f2012940865be16743a441c18111",
+  "base": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+  "sourceFiles": 44,
+  "copiedFiles": 41,
+  "nativeInputEntries": 240,
+  "uniqueNativeInputFiles": 121,
+  "rootPurePass": 17,
+  "rootNativeExecuted": false,
+  "rootAppBuildExecuted": false,
+  "independentReleaseApproval": false,
+  "formalProductionApplyAuthorized": false,
+  "files": [
+    {
+      "file": "assembly.json",
+      "bytes": 80711,
+      "sha256": "308360bb89096ebb368ac9ea4ee671a249f4daf17f02e9b31f3d658427c41c87"
+    },
+    {
+      "file": "entry-original-receipt.json",
+      "bytes": 37199,
+      "sha256": "e747f200a2acdd3091222def7da606064877bf976926b51ea52f7444f97a8b77"
+    },
+    {
+      "file": "entry-original-source-manifest.json",
+      "bytes": 31509,
+      "sha256": "df5ca9c1501bcdd4029d668dd9f213b39a7aec7b815342009caa03b491409398"
+    },
+    {
+      "file": "final-source-manifest.json",
+      "bytes": 11743,
+      "sha256": "baee20d1cd1d9ec187c5aa619665ecfd533751106ab59ab5429d5b4cbc20540c"
+    },
+    {
+      "file": "fragment-original-receipt.json",
+      "bytes": 5085,
+      "sha256": "dde0be1c843385bafd09035b0c37168a37c75ebac5c2cdf9931e8bcece516df8"
+    },
+    {
+      "file": "fragment-original-source-manifest.json",
+      "bytes": 31923,
+      "sha256": "7f06f4a1e3075a1c67e13202e8b8399a579f904681fc1b0c4046ef2d1b394714"
+    },
+    {
+      "file": "pure.result.json",
+      "bytes": 383,
+      "sha256": "7e1736fd432e1b0ca973ee47b57b5a5adb8250c35861f217961ac2a921cbc125"
+    },
+    {
+      "file": "pure.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "pure.stdout",
+      "bytes": 2733,
+      "sha256": "1a3353ac96c73ed39b631d512c3ddc2a7cc510fa623d01ab01a7a3ec2c3f28a5"
+    },
+    {
+      "file": "release-static-checks.json",
+      "bytes": 673,
+      "sha256": "61924cdb729ef40d3695c16fec7b60e9de4893f9a3a1e6dc39509b8bf82d6b31"
+    },
+    {
+      "file": "review.md",
+      "bytes": 3599,
+      "sha256": "d3660bf6aa5ef380c20f0791b7ea32736d8c66e73a26e819eba2354e8764e338"
+    },
+    {
+      "file": "root-harness-errors.json",
+      "bytes": 416,
+      "sha256": "1dbb85e93bfd8c4813594b8702b9f04f0e48fa35e978f828902d1ac8e40380a2"
+    }
+  ]
+}

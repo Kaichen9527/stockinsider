@@ -1,0 +1,95 @@
+TAP version 13
+# Subtest: baseline is genuinely separate finite post50 descriptor, no production authority
+ok 1 - baseline is genuinely separate finite post50 descriptor, no production authority
+  ---
+  duration_ms: 0.956583
+  ...
+# Subtest: missing rejected before any query and client closed
+ok 2 - missing rejected before any query and client closed
+  ---
+  duration_ms: 0.898084
+  ...
+# Subtest: duplicate rejected before any query and client closed
+ok 3 - duplicate rejected before any query and client closed
+  ---
+  duration_ms: 0.280583
+  ...
+# Subtest: wronghash rejected before any query and client closed
+ok 4 - wronghash rejected before any query and client closed
+  ---
+  duration_ms: 0.730167
+  ...
+# Subtest: reordered rejected before any query and client closed
+ok 5 - reordered rejected before any query and client closed
+  ---
+  duration_ms: 0.192959
+  ...
+# Subtest: unknown rejected before any query and client closed
+ok 6 - unknown rejected before any query and client closed
+  ---
+  duration_ms: 0.207959
+  ...
+# Subtest: busy rejected before BEGIN with no mutation
+ok 7 - busy rejected before BEGIN with no mutation
+  ---
+  duration_ms: 12.660458
+  ...
+# Subtest: namespace unreadable or different never becomes predecessor success
+ok 8 - namespace unreadable or different never becomes predecessor success
+  ---
+  duration_ms: 11.16225
+  ...
+# Subtest: caller accessors are read once into owned buffers before asynchronous queries
+ok 9 - caller accessors are read once into owned buffers before asynchronous queries
+  ---
+  duration_ms: 5.381167
+  ...
+# Subtest: fixed26 exact original SQL excludes existing financial49 and has no apply authority
+ok 10 - fixed26 exact original SQL excludes existing financial49 and has no apply authority
+  ---
+  duration_ms: 0.35675
+  ...
+# Subtest: tail missing failclosed
+ok 11 - tail missing failclosed
+  ---
+  duration_ms: 0.239
+  ...
+# Subtest: tail duplicate failclosed
+ok 12 - tail duplicate failclosed
+  ---
+  duration_ms: 0.194375
+  ...
+# Subtest: tail reordered failclosed
+ok 13 - tail reordered failclosed
+  ---
+  duration_ms: 0.135333
+  ...
+# Subtest: tail unknown failclosed
+ok 14 - tail unknown failclosed
+  ---
+  duration_ms: 0.4755
+  ...
+# Subtest: tail wronghash failclosed
+ok 15 - tail wronghash failclosed
+  ---
+  duration_ms: 0.076958
+  ...
+# Subtest: tail wrongbytes failclosed
+ok 16 - tail wrongbytes failclosed
+  ---
+  duration_ms: 0.069166
+  ...
+# Subtest: fixed descriptor entries cannot be changed through the exported object
+ok 17 - fixed descriptor entries cannot be changed through the exported object
+  ---
+  duration_ms: 1.005208
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 121.615375
