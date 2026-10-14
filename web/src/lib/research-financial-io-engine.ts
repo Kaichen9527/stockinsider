@@ -23,9 +23,7 @@ export function checkFinancialIoInventory(root: string, pins: readonly Financial
 }
 /** Private engine session: all raw/FDs stay in ONE owner until confirmed cleanup.
  * Engine is not an accepted caller-path or arbitrary carrier encoding API. */
-export async function acquireFinancialIo(root: string, pins: readonly FinancialIoPin[], deadline: FinancialIoDeadline, io: FinancialIoDependencies = nativeIo) {
-  checkFinancialIoInventory(root, pins, 9);
-  const owner = new FinancialIoOwner();
+async function acquireWithOwnedSession(root: string, pins: readonly FinancialIoPin[], deadline: FinancialIoDeadline, owner: FinancialIoOwner, io: FinancialIoDependencies) {
   const parents = new Map<string, BigIntStats>();
   const files: Array<{ handle: FileHandle; filename: string; before: BigIntStats; pin: FinancialIoPin; raw: Buffer }> = [];
   const checkpoint = async (name: string) => { if (io.checkpoint) await deadline.wait(owner.start(async () => { deadline.check(); await io.checkpoint!(name); })); };
@@ -67,5 +65,34 @@ export async function acquireFinancialIo(root: string, pins: readonly FinancialI
     };
     await validate();
     return { files, validate, owner };
+  } catch (error) { await owner.cleanup(deadline, error); throw error; }
+}
+
+/** Original acquisition API: still acquires its own shared owner, returns open session. */
+export async function acquireFinancialIo(root: string, pins: readonly FinancialIoPin[], deadline: FinancialIoDeadline, io: FinancialIoDependencies = nativeIo) {
+  checkFinancialIoInventory(root, pins, 9);
+  return acquireWithOwnedSession(root, pins, deadline, new FinancialIoOwner(), io);
+}
+type OwnedFiles = Awaited<ReturnType<typeof acquireWithOwnedSession>>['files'];
+/** Trusted internal composition only. No owner parameter and no request callback API.
+ * Assertion promises remain owned even after timeout; no subsequent stage starts then.
+ * Realm-local callbacks must not start untracked background work or escape raw buffers. */
+export async function runFinancialIoSession<T>(root: string, pins: readonly FinancialIoPin[], deadline: FinancialIoDeadline,
+  assertion: () => Promise<string>, project: (files: OwnedFiles) => T | Promise<T>, io: FinancialIoDependencies = nativeIo): Promise<T> {
+  checkFinancialIoInventory(root, pins, FINANCIAL_IO_LIMITS.legacyFiles);
+  const owner = new FinancialIoOwner();
+  const tracked = <V>(work: () => V | Promise<V>) => deadline.wait(owner.start(async () => { deadline.check(); return await work(); }));
+  const witness = (value: unknown) => { if (typeof value !== 'string' || !/^[a-f0-9]{64}$/u.test(value)) throw new Error('financial_preparation_witness_invalid'); return value; };
+  try {
+    const before = witness(await tracked(assertion));
+    deadline.check();
+    const session = await acquireWithOwnedSession(root, pins, deadline, owner, io);
+    const result = await tracked(() => project(session.files));
+    await session.validate();
+    const after = witness(await tracked(assertion));
+    if (before !== after) throw new Error('financial_preparation_context_changed');
+    await session.validate();
+    await owner.cleanup(deadline); deadline.check();
+    return result;
   } catch (error) { await owner.cleanup(deadline, error); throw error; }
 }

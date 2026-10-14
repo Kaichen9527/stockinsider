@@ -1,8 +1,8 @@
 {
-  "schemaVersion": "scenario-cash-reader-candidate-closure-v1",
+  "schemaVersion": "compatible-scenario-cash-reader-candidate-closure-v1",
   "encoding": "sorted_compact_utf8_json_metadata_v1",
   "historicalLegacyClosure": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
-  "sourceClosureHash": "f28549ba9d63ff909e3470a144793d5ca4940491822f38684a65f126d4d54624",
+  "sourceClosureHash": "f5ad9a4d5ffcdf4cf4a741bba33bf684e807b3fb458165d46fa6372be9a42635",
   "enabledForLiveV2": false,
   "nodeVersion": "22.14.0",
   "files": [
@@ -42,14 +42,29 @@
       "sha256": "5eeff3f3f6f191e3f83544f830cc5fc3200521f25307e766bd8c34441c693e7a"
     },
     {
+      "file": "web/src/lib/research-compatible-financial-inventory.ts",
+      "bytes": 3601,
+      "sha256": "263643e3d8af3464ddc7b70f2bff91f604d131be1ca773918040b3ce54ff1c8d"
+    },
+    {
+      "file": "web/src/lib/research-compatible-financial-projection.ts",
+      "bytes": 14703,
+      "sha256": "d5fb31908d84753fbf83afed80093661167f77efe8ea980b4d1170e42971a4a8"
+    },
+    {
+      "file": "web/src/lib/research-compatible-financial-reader.ts",
+      "bytes": 3000,
+      "sha256": "6ad78b1197cb925646ca8de40b6a8412631c532a1b2cb4a0669ac6a28c7428a0"
+    },
+    {
       "file": "web/src/lib/research-financial-clock.ts",
       "bytes": 807,
       "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f"
     },
     {
       "file": "web/src/lib/research-financial-io-engine.ts",
-      "bytes": 5657,
-      "sha256": "c073220258c4a42bdffe784dbeced224230f7af2ef89be731e121b2a5cf41989"
+      "bytes": 7586,
+      "sha256": "c3a28c3c11800cdb20cfb2271b4ac7b0674078b00b6f5edb8a67f98f08ba7c41"
     },
     {
       "file": "web/src/lib/research-financial-io-owner.ts",
@@ -78,5 +93,9 @@
     }
   ],
   "previousReaderOnlyCandidateClosure": "02eda6145cc32dee8f7f2299fb9d0d940974d00c07d3ee4126d70dd594ee63fa",
-  "sourceClosureApproved": false
+  "sourceClosureApproved": false,
+  "previousCandidateClosures": [
+    "02eda6145cc32dee8f7f2299fb9d0d940974d00c07d3ee4126d70dd594ee63fa",
+    "f28549ba9d63ff909e3470a144793d5ca4940491822f38684a65f126d4d54624"
+  ]
 }
