@@ -8,9 +8,9 @@
     "4b3f4201af02b419c10c22c8b35e7d3de1477856"
   ],
   "review": "root-relayed Astra unsigned scoped DATA pass; exactmodel/article review pending",
-  "cutoffAt": "2026-10-08T12:12:00Z",
-  "authoredAndCheckedAt": "2026-10-08T12:16:10.051875+00:00",
-  "modelCanonicalHash": "ac94e0370cf844291cab963852762b0597f53af43af74592f0a0c9fbdc56246a",
+  "cutoffAt": "2026-10-14T02:34:47.456437+00:00",
+  "authoredAndCheckedAt": "2026-10-14T03:19:29.686Z",
+  "modelCanonicalHash": "d10858110edee1dd2760791e00c8b0eea3dc4a80b6d643db70b62216541dc879",
   "articleSha256": "65a5c805e45487dfa6daa91d5c8d7f5d5aae4a10ed7f6aa250cb6b11710b3064",
   "mainBodyHan": 4948,
   "published": false,
@@ -35,6 +35,10 @@
     "newIndependentArticleReview": "pending; maker execution of independent-language verifier is not reviewer approval",
     "historicalPITEligible": false,
     "forecastCash": null,
-    "rawPdfVerificationAttribution": "root retained PDF rehash; VM did not receive/reverify raw PDF"
-  }
+    "rawPdfVerificationAttribution": "root retained PDF rehash; VM did not receive/reverify raw PDF",
+    "artifactCompletedAt": "2026-10-14T03:19:29.686Z"
+  },
+  "originalAuthoredAndCheckedAt": "2026-10-08T12:16:10.051875+00:00",
+  "originalCutoffAt": "2026-10-08T12:12:00Z",
+  "successorArtifactCompletedAt": "2026-10-14T03:19:29.686Z"
 }

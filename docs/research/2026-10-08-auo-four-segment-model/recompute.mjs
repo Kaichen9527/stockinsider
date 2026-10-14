@@ -170,15 +170,61 @@ export function historicalCashFlow(packet,symbol,availableAt){
  if(capital){assert.equal(capital.instant,'2026-06-30');assert.equal(capital.paidCapitalTwdThousands/capital.parTwd,capital.issuedSharesThousands);assert.equal(capital.treasuryCarryingAmountTwdThousands,0);assert.equal(capital.treasurySharesThousands,null);assert.equal(capital.ownersEquityTwdThousands+capital.nonControllingEquityTwdThousands,capital.groupEquityTwdThousands);}
  return {schemaVersion:'historical-group-cash-bridge-v1',symbol,sourcePacketSha256:CASH_PACKET_SHA256,extractionAvailableAt:packet.extractionAvailableAt,originalSource:issuer.source,rawPdfRehashAttribution:{actor:'root retained-PDF rehash; not VM raw verification',at:issuer.rawPdfReverifiedAt},rows,sourceFacts:Object.fromEntries(Object.entries(facts).map(([key,f])=>[key,{pdfPage:f.pdfPage,label:f.label,sourceLine:f.sourceLine,values:f.values,sourceJsonPointer:`/issuers/${packet.issuers.indexOf(issuer)}/facts/${key}/values`}])),proxyDefinition:'CFO plus signed PPE and intangible cash acquisitions only; disposal proceeds excluded; not IFRS FCF, FCFE, maintenance capex or forecast',noFutureCash:true,forecastCash:null,valuationApproved:false,technicalAdmission:false,historicalCapital:capital?{...capital,ownersEquityPerIssuedCommonShareTwd:capital.ownersEquityTwdThousands/capital.issuedSharesThousands,octoberOutstandingShares:null,currentPB:null,targetPrice:null}:null};
 }
+const ORIGINAL_MANIFEST_HASHES={"2383": "312e309398d8cff95f425b5c14f5354e5e3338f8d4061746f7b9529589eb9eb1", "2409": "2d52e6939a72cb88aa995aee37a64e6910a1e89fdebe05a262d10e9b0b3c5908"};
+export function validateHistoricalCashManifest(manifest,symbol){
+ assert.ok(Object.hasOwn(ORIGINAL_MANIFEST_HASHES,symbol),'unsupported cash symbol');
+ assert.ok(Array.isArray(manifest)&&manifest.length===(symbol==='2409'?8:6),'complete cash manifest count');
+ assert.equal(new Set(manifest.map(r=>r.file)).size,manifest.length,'unique cash manifest');
+ assert.deepEqual(manifest.at(-1),{file:CASH_PACKET_FILE,bytes:30651,sha256:CASH_PACKET_SHA256},'exact cash packet manifest');
+ assert.equal(researchCanonicalHash(manifest.slice(0,-1)),ORIGINAL_MANIFEST_HASHES[symbol],'original manifest prefix');
+ return structuredClone(manifest);
+}
+export function assertHistoricalCashBinding(model){
+ const {canonicalHash,inputManifest,...body}=model;
+ const nested=model.historicalCashFlow?.sourceInputManifest;
+ validateHistoricalCashManifest(inputManifest,model.symbol);validateHistoricalCashManifest(nested,model.symbol);
+ assert.deepEqual(inputManifest,nested,'top/nested cash manifest equality');
+ assert.equal(canonicalHash,researchCanonicalHash(body),'working draft canonical scope');
+ assert.equal(model.historicalCashFlow.sourcePacketSha256,CASH_PACKET_SHA256,'cash packet hash binding');
+ return model;
+}
 export function integrateHistoricalCashFlow(model,packet,successorAt,inputManifest){
- const {canonicalHash,...original}=model;assert.ok(sourceControllerInstant(model.asOf)<=sourceControllerInstant(successorAt));
- const h=historicalCashFlow(packet,model.symbol,successorAt);
- assert.ok(Array.isArray(inputManifest)&&inputManifest.some(r=>r.file===CASH_PACKET_FILE&&r.sha256===CASH_PACKET_SHA256),'cash manifest binding');
- const body={...original,asOf:successorAt,originalModelAsOf:model.asOf,originalModelCanonicalHash:canonicalHash,inputManifest,historicalCashFlow:h};
- return {...body,canonicalHash:researchCanonicalHash(body)};
+ const {canonicalHash,inputManifest:oldManifest,...original}=model;
+ assert.equal(canonicalHash,researchCanonicalHash(original),'original model canonical identity');
+ const sourceInputManifest=validateHistoricalCashManifest(inputManifest,model.symbol);
+ if(oldManifest!==undefined)assert.deepEqual(oldManifest,sourceInputManifest.slice(0,-1),'original top manifest prefix');
+ assert.ok(sourceControllerInstant(model.asOf)<=sourceControllerInstant(successorAt));
+ const h={...historicalCashFlow(packet,model.symbol,successorAt),sourceInputManifest};
+ // Existing consumer excludes top-level inputManifest. The full duplicate below
+ // is compatibility data; nested manifest remains inside the canonical body.
+ const body={...original,asOf:successorAt,originalModelAsOf:model.asOf,originalModelCanonicalHash:canonicalHash,historicalCashFlow:h};
+ return assertHistoricalCashBinding({...body,canonicalHash:researchCanonicalHash(body),inputManifest:structuredClone(sourceInputManifest)});
+}
+export async function writeHistoricalCashMetadata(folder,model,article){
+ assertHistoricalCashBinding(model);
+ const meta=JSON.parse(await readFile(path.join(folder,'draft-metadata.json'),'utf8'));
+ const authorKey=Object.hasOwn(meta,'authoredAndCheckedAt')?'authoredAndCheckedAt':'authoredAndVerifiedAt';
+ const cutoffKey=Object.hasOwn(meta,'cutoffAt')?'cutoffAt':'evidenceCutoffAt';
+ meta['original'+authorKey[0].toUpperCase()+authorKey.slice(1)]??=meta[authorKey];
+ meta['original'+cutoffKey[0].toUpperCase()+cutoffKey.slice(1)]??=meta[cutoffKey];
+ const completedAt=new Date().toISOString();
+ meta[cutoffKey]=model.asOf;meta[authorKey]=completedAt;meta.successorArtifactCompletedAt=completedAt;
+ meta.modelCanonicalHash=model.canonicalHash;meta.articleSha256=createHash('sha256').update(article).digest('hex');
+ if(meta.historicalCashSuccessor)meta.historicalCashSuccessor.artifactCompletedAt=completedAt;
+ await writeFile(path.join(folder,'draft-metadata.json'),JSON.stringify(meta,null,2)+'\n');
+ const artifactHashes=JSON.parse(await readFile(path.join(folder,'hashes.json'),'utf8'));
+ const allowedHashFiles=new Set(["docs/research/2026-10-08-auo-four-segment-model/README.md", "docs/research/2026-10-08-auo-four-segment-model/article-template.md", "docs/research/2026-10-08-auo-four-segment-model/article.md", "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json", "docs/research/2026-10-08-auo-four-segment-model/model-results.json", "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs", "docs/research/2026-10-08-auo-four-segment-model/source-ledger.json", "docs/research/2026-10-08-auo-four-segment-model/verify-output.py", "docs/research/2026-10-08-emc-company-model/README.md", "docs/research/2026-10-08-emc-company-model/article-template.md", "docs/research/2026-10-08-emc-company-model/article.md", "docs/research/2026-10-08-emc-company-model/draft-metadata.json", "docs/research/2026-10-08-emc-company-model/model-results.json", "docs/research/2026-10-08-emc-company-model/recompute.mjs", "docs/research/2026-10-08-emc-company-model/source-ledger.json", "docs/research/2026-10-08-emc-company-model/verify-output.py", "scripts/lib/research-model-article.mjs", "scripts/research-emc-company-model.test.mjs"]);
+ assert.ok(Array.isArray(artifactHashes.files)&&artifactHashes.files.length<=32);
+ for(const row of artifactHashes.files){
+  assert.ok(allowedHashFiles.has(row.file),'fixed artifact hash path');
+  const bytes=await readFile(path.join(root,row.file));row.bytes=bytes.length;row.sha256=createHash('sha256').update(bytes).digest('hex');
+ }
+ artifactHashes.canonicalModelHash=model.canonicalHash;
+ await writeFile(path.join(folder,'hashes.json'),JSON.stringify(artifactHashes,null,2)+'\n');
+ return meta;
 }
 export function renderHistoricalCashTable(model){
- assert.ok(model.historicalCashFlow,'historical cash supplement required');
+ assertHistoricalCashBinding(model);
  const h=model.historicalCashFlow,n=x=>x===null?'unknown':(x/1000).toFixed(3);
  let table='|同期間合併歷史現金（百萬元）|2026H1|2025H1|\n|---|---:|---:|\n';
  for(const [label,key]of [['營業現金CFO','cfo'],['合併淨利（含NCI）','groupNetProfit'],['非現金等調整','nonCashAdjustments'],['營運資金現金影響','workingCapitalCashEffect'],['PPE取得現金（負號）','ppeCashAcquisition'],['無形資產取得現金（負號）','intangibleCashAcquisition'],['CFO減PPE與無形現金代理','cfoLessPpeAndIntangibleCashOutlay'],['ROU取得現金另列','rouCashAcquisitionSeparate'],['租賃本金另列','leasePrincipalSeparate'],['借款取得／償還淨現金','netBorrowingCash'],['現金變動','cashChange'],['期末現金','closingCash']])table+=`|${label}|${h.rows.map(r=>n(r[key])).join('|')}|\n`;
@@ -205,6 +251,7 @@ export async function loadInputs(){const files=['docs/research/2026-10-08-auo-fu
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const {values,manifest,context}=await loadInputs();const cash=await loadCashFlowPacket();const model=integrateHistoricalCashFlow(buildModel(...values,'2026-10-08T10:20:00Z',context),cash.packet,process.argv[2]??cash.packet.extractionAvailableAt,[...manifest,cash.manifest]);
   await writeFile(path.join(directory,'model-results.json'),JSON.stringify(model,null,2)+'\n');
-  await writeFile(path.join(directory,'article.md'),renderArticle(model,await readFile(path.join(directory,'article-template.md'),'utf8')));
+  const article=renderArticle(model,await readFile(path.join(directory,'article-template.md'),'utf8'));
+  await writeFile(path.join(directory,'article.md'),article);await writeHistoricalCashMetadata(directory,model,article);
   console.log(JSON.stringify({canonicalHash:model.canonicalHash,scenarios:model.scenarios.map(s=>({id:s.id,eps2026:s.calendar2026.dilutedEpsConditional,eps2027:s.calendar2027.dilutedEpsConditional,forward4:s.nextFourUnreported.dilutedEpsConditional})),sourceInputHashes:manifest.map(m=>m.sha256)}));
 }

@@ -53,6 +53,8 @@ for key,fact in facts.items():
  locator=h['sourceFacts'][key];assert locator['values']==fact['values']and locator['pdfPage']==fact['pdfPage']and locator['sourceLine']==fact['sourceLine'];assert locator['sourceJsonPointer']==f"/issuers/{packet['issuers'].index(issuer)}/facts/{key}/values";checks+=1
 if m['symbol']=='2409':
  capital=packet['auoJune30Capital'];check(D(capital['ownersEquityTwdThousands'])/D(capital['issuedSharesThousands']),h['historicalCapital']['ownersEquityPerIssuedCommonShareTwd']);assert h['historicalCapital']['treasurySharesThousands']is None and h['historicalCapital']['currentPB']is None and h['historicalCapital']['octoberOutstandingShares']is None;checks+=1
+assert h['sourceInputManifest']==m['inputManifest'];checks+=1
+assert m['originalModelAsOf'] in ['2026-10-08T10:20:00Z','2026-10-08T12:12:00Z'];checks+=1
 cash_decimal_checks=checks-original_checks
 
 print(json.dumps({'independentDecimalChecks':checks,'quarterBridges':18,'sourceHashes':len(m['inputManifest']),'historicalCashDecimalChecks':cash_decimal_checks,'mainBodyHan':count,'citations':len(refs),'valuationApproved':False}))

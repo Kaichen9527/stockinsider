@@ -4,8 +4,8 @@
   "baseSha": "e2df0d04c7be3f8805ef3309f51b9c81de0fcfd1",
   "evidenceSubject": "1b25393ad4b3790e6ca427bb3f6ab93fc622abd1",
   "reviewAttribution": "root reports Astra unsigned scoped DATA pass, not approval of this model/article",
-  "evidenceCutoffAt": "2026-10-08T10:20:00Z",
-  "authoredAndVerifiedAt": "2026-10-08T12:00:37.360909+00:00",
+  "evidenceCutoffAt": "2026-10-14T02:34:47.456437+00:00",
+  "authoredAndVerifiedAt": "2026-10-14T03:19:29.393Z",
   "mainBodyChineseCharacters": 4650,
   "published": false,
   "historicalPITEligible": false,
@@ -16,7 +16,7 @@
   "researchQualified": false,
   "strategyApproved": false,
   "targetPrice": null,
-  "modelCanonicalHash": "8027bfa234faf4bdfdc8b71330f4b3d7b71242c1fb9417c5b9f139affe8ea909",
+  "modelCanonicalHash": "cf7419b2204419dc1aca590bc355df36bb19600c5beaf2905c6819f5a040b57d",
   "articleSha256": "accb32669966843b008a345bfe732a13d41af3b008fcbfe2f716d6d580c8cda2",
   "futureSharesVerified": false,
   "forecastBasis": "reportedH1 plus explicit Q3/Q4 hypotheses, calendar2027, forward four unreported quarters kept separate",
@@ -36,6 +36,10 @@
     "newIndependentArticleReview": "pending; maker execution of independent-language verifier is not reviewer approval",
     "historicalPITEligible": false,
     "forecastCash": null,
-    "rawPdfVerificationAttribution": "root retained PDF rehash; VM did not receive/reverify raw PDF"
-  }
+    "rawPdfVerificationAttribution": "root retained PDF rehash; VM did not receive/reverify raw PDF",
+    "artifactCompletedAt": "2026-10-14T03:19:29.393Z"
+  },
+  "originalAuthoredAndVerifiedAt": "2026-10-08T12:00:37.360909+00:00",
+  "originalEvidenceCutoffAt": "2026-10-08T10:20:00Z",
+  "successorArtifactCompletedAt": "2026-10-14T03:19:29.393Z"
 }

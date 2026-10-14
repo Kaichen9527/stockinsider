@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFile}from 'node:fs/promises';
 import {buildModel,loadInputs,forecast,assumptions,renderArticle}from '../docs/research/2026-10-08-emc-company-model/recompute.mjs';
-import {conditionalEps,loadCashFlowPacket,integrateHistoricalCashFlow,historicalCashFlow}from '../docs/research/2026-10-08-auo-four-segment-model/recompute.mjs';
+import {conditionalEps,loadCashFlowPacket,integrateHistoricalCashFlow,historicalCashFlow,assertHistoricalCashBinding,validateHistoricalCashManifest}from '../docs/research/2026-10-08-auo-four-segment-model/recompute.mjs';
 import {renderResearchTokens,researchTable}from './lib/research-model-article.mjs';
 const {values,manifest}=await loadInputs(),cutoff='2026-10-08T12:12:00Z',m=buildModel(...values.slice(0,3),cutoff,...values.slice(3)),near=(a,b)=>assert.ok(Math.abs(a-b)<1e-6);
 test('eight real quarters reconcile signed tax/NCI without inventing derived EPS',()=>{assert.equal(m.actualQuarters.length,8);for(const q of m.actualQuarters){const v=q.values;near(v.netProfit,v.ownersNetProfit+v.nonControllingNetProfit);if(q.method!=='reported_quarter')assert.equal(v.reportedDilutedEps,undefined);}assert.equal(m.reportedQ1BasicEps,14.9);assert.notEqual(42.46-27.55,m.reportedQ1BasicEps);});
@@ -41,3 +41,44 @@ test('packet mutation sign/unit/grain/hash/clocks and pre-availability successor
 });
 
 test("successor stored result exactly recomputes with complete packet manifest",async()=>{const stored=JSON.parse(await readFile(new URL("../docs/research/2026-10-08-emc-company-model/model-results.json",import.meta.url),"utf8"));assert.deepEqual(stored,supplemented);});
+
+test('nested complete manifest is canonical-bound and top duplicate/prefix/unique packet remain exact',()=>{
+ assert.deepEqual(supplemented.inputManifest,supplemented.historicalCashFlow.sourceInputManifest);
+ assertHistoricalCashBinding(supplemented);
+ for(const mutate of [m=>m.inputManifest[0].sha256='0'.repeat(64),m=>m.historicalCashFlow.sourceInputManifest[0].sha256='0'.repeat(64),m=>m.inputManifest.pop(),m=>m.inputManifest.push(m.inputManifest.at(-1)),m=>m.inputManifest.reverse(),m=>m.historicalCashFlow.sourcePacketSha256='0'.repeat(64)]){const changed=structuredClone(supplemented);mutate(changed);assert.throws(()=>assertHistoricalCashBinding(changed));}
+ for(const mutate of [a=>a[0].bytes++,a=>a[0].file=a[1].file,a=>a.at(-1).bytes++,a=>a.splice(0,1),a=>a.push(a.at(-1))]){const a=structuredClone(supplemented.inputManifest);mutate(a);assert.throws(()=>validateHistoricalCashManifest(a,supplemented.symbol));}
+});
+test('real existing working draft consumer accepts successor and preserves original source/model clocks',async()=>{
+ const {loadReadOnlyWorkingDraft}=await import('../web/src/lib/research-working-draft-loader.ts');
+ const {parseWorkingDraft}=await import('../web/src/lib/research-working-draft.ts');
+ const root=new URL('../',import.meta.url).pathname;const draft=await loadReadOnlyWorkingDraft(root,supplemented.symbol);
+ assert.equal(draft.evidenceCutoffAt,supplemented.asOf);assert.equal(draft.sections.length,7);
+ const folder=new URL('../docs/research/2026-10-08-emc-company-model/',import.meta.url);const meta=JSON.parse(await readFile(new URL('draft-metadata.json',folder),'utf8'));const article=await readFile(new URL('article.md',folder),'utf8');
+ assert.equal(meta.cutoffAt,supplemented.asOf);assert.equal(meta.originalCutoffAt,supplemented.originalModelAsOf);assert.equal(meta.authoredAndCheckedAt,meta.successorArtifactCompletedAt);assert.notEqual(meta.authoredAndCheckedAt,meta.originalAuthoredAndCheckedAt);
+ assert.throws(()=>parseWorkingDraft(supplemented.symbol,article,{...meta,authoredAndCheckedAt:'2027-01-01T00:00:00Z'},'2026-10-14T02:34:47Z'),/future/);
+ assert.throws(()=>parseWorkingDraft(supplemented.symbol,article,{...meta,cutoffAt:'2027-01-01T00:00:00Z'}),/cutoff/);
+ assert.equal(draft.published,false);assert.equal(draft.strategyApproved,false);
+});
+
+test('actual loader rejects metadata/model/canonical drift even after updating only raw file manifests',async()=>{
+ const fs=await import('node:fs/promises');const {createHash}=await import('node:crypto');const path=await import('node:path');const os=await import('node:os');const {loadReadOnlyWorkingDraft}=await import('../web/src/lib/research-working-draft-loader.ts');
+ const folder='docs/research/2026-10-08-emc-company-model',root=new URL('../',import.meta.url).pathname;
+ const temp=await fs.mkdtemp(path.join(os.tmpdir(),'cash-consumer-drift-'));
+ const originalMeta=JSON.parse(await fs.readFile(path.join(root,folder,'draft-metadata.json'),'utf8'));
+ try{
+  for(const mutate of [x=>x.meta.cutoffAt=supplemented.originalModelAsOf,x=>x.meta.modelCanonicalHash='0'.repeat(64),x=>x.model.canonicalHash='0'.repeat(64),x=>x.model.historicalCashFlow.sourceInputManifest[0].sha256='0'.repeat(64),x=>x.model.inputManifest[0].bytes++]){
+   await fs.mkdir(path.join(temp,'docs/research'),{recursive:true});await fs.cp(path.join(root,folder),path.join(temp,folder),{recursive:true});
+   const value={meta:structuredClone(originalMeta),model:structuredClone(supplemented)};mutate(value);
+   await fs.writeFile(path.join(temp,folder,'draft-metadata.json'),JSON.stringify(value.meta));await fs.writeFile(path.join(temp,folder,'model-results.json'),JSON.stringify(value.model));
+   // Normal file manifest alone cannot replace the canonical nested binding.
+   // The top-only case deliberately retains original file hash to test raw drift.
+   if(value.model.inputManifest[0].bytes===supplemented.inputManifest[0].bytes){
+    const file=path.join(temp,folder,'hashes.json');const hashes=JSON.parse(await fs.readFile(file,'utf8'));
+    for(const name of ['draft-metadata.json','model-results.json']){const row=hashes.files.find(r=>r.file===folder+'/'+name),bytes=await fs.readFile(path.join(temp,folder,name));row.bytes=bytes.length;row.sha256=createHash('sha256').update(bytes).digest('hex');}
+    await fs.writeFile(file,JSON.stringify(hashes));
+   }
+   await assert.rejects(loadReadOnlyWorkingDraft(temp,supplemented.symbol),/mismatch/);
+   await fs.rm(path.join(temp,'docs'),{recursive:true});
+  }
+ }finally{await fs.rm(temp,{recursive:true,force:true});}
+});

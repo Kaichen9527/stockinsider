@@ -2294,48 +2294,6 @@
   "calculationComponent": "existing auo-deep-dive-model.calculateQuarter / requiredEarningsAtMultiple / calculateCommercializationBridge",
   "originalModelAsOf": "2026-10-08T10:20:00Z",
   "originalModelCanonicalHash": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
-  "inputManifest": [
-    {
-      "file": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
-      "bytes": 19837,
-      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf"
-    },
-    {
-      "file": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
-      "bytes": 40271,
-      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb"
-    },
-    {
-      "file": "docs/research/2026-10-08-auo/dataset.json",
-      "bytes": 86638,
-      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
-    },
-    {
-      "file": "docs/research/2026-10-08-auo-market/dataset.json",
-      "bytes": 393280,
-      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
-    },
-    {
-      "file": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
-      "bytes": 2910,
-      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189"
-    },
-    {
-      "file": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
-      "bytes": 3549,
-      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6"
-    },
-    {
-      "file": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
-      "bytes": 6599,
-      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
-    },
-    {
-      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
-      "bytes": 30651,
-      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
-    }
-  ],
   "historicalCashFlow": {
     "schemaVersion": "historical-group-cash-bridge-v1",
     "symbol": "2409",
@@ -2977,7 +2935,91 @@
       "octoberOutstandingShares": null,
       "currentPB": null,
       "targetPrice": null
-    }
+    },
+    "sourceInputManifest": [
+      {
+        "file": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+        "bytes": 19837,
+        "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf"
+      },
+      {
+        "file": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+        "bytes": 40271,
+        "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb"
+      },
+      {
+        "file": "docs/research/2026-10-08-auo/dataset.json",
+        "bytes": 86638,
+        "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
+      },
+      {
+        "file": "docs/research/2026-10-08-auo-market/dataset.json",
+        "bytes": 393280,
+        "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
+      },
+      {
+        "file": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+        "bytes": 2910,
+        "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189"
+      },
+      {
+        "file": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+        "bytes": 3549,
+        "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6"
+      },
+      {
+        "file": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+        "bytes": 6599,
+        "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
+      },
+      {
+        "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+        "bytes": 30651,
+        "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
+      }
+    ]
   },
-  "canonicalHash": "8027bfa234faf4bdfdc8b71330f4b3d7b71242c1fb9417c5b9f139affe8ea909"
+  "canonicalHash": "cf7419b2204419dc1aca590bc355df36bb19600c5beaf2905c6819f5a040b57d",
+  "inputManifest": [
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-market/dataset.json",
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
+    }
+  ]
 }

@@ -1,10 +1,10 @@
 {
-  "canonicalModelHash": "ac94e0370cf844291cab963852762b0597f53af43af74592f0a0c9fbdc56246a",
+  "canonicalModelHash": "d10858110edee1dd2760791e00c8b0eea3dc4a80b6d643db70b62216541dc879",
   "files": [
     {
       "file": "docs/research/2026-10-08-emc-company-model/README.md",
-      "bytes": 5362,
-      "sha256": "5d4bb16afe92d2b13cde1dca2941e447b10fb1b41512b7e93a028a2364f48ca7"
+      "bytes": 6196,
+      "sha256": "58ebc759d511ac7aac3a2078786de7e7be7613a5edb63cb2a48d141572e14eb9"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/article-template.md",
@@ -18,18 +18,18 @@
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/draft-metadata.json",
-      "bytes": 1872,
-      "sha256": "e62a3c50c6d90a8e49d1d946abafbe0e9e171abcfda99f2b8967e303c21535c4"
+      "bytes": 2109,
+      "sha256": "31a69490a34087491bbd8a459244919a5016388bb81da3324421d08a0ac59194"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/model-results.json",
-      "bytes": 70529,
-      "sha256": "846546059cd875ff993efe0a7cbba216dd8ad10123491441ac75b9120bfde3c4"
+      "bytes": 71848,
+      "sha256": "30028ccf9e48d7cda79f55a8b6ffd5141bad513e277894c8e360479e606b6786"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/recompute.mjs",
-      "bytes": 17302,
-      "sha256": "afabc54338d350af6755732c853ee6401f5a4388b2e82685044919009ff16e4c"
+      "bytes": 17404,
+      "sha256": "903b23c7b25c2a2cca75c66d9887d3f500b1c5df672ab03484433caf6cd958ae"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/source-ledger.json",
@@ -38,8 +38,8 @@
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/verify-output.py",
-      "bytes": 8707,
-      "sha256": "7ff98e9a5f0fe5018d2b8de99561c1abcb6e9cd3ac94b7f53f79578d5b7b1216"
+      "bytes": 8860,
+      "sha256": "b77aee357a243510a12677a374f64f0d1f2bee7ce05fef45d9e516200b91c078"
     },
     {
       "file": "scripts/lib/research-model-article.mjs",
@@ -48,8 +48,8 @@
     },
     {
       "file": "scripts/research-emc-company-model.test.mjs",
-      "bytes": 10396,
-      "sha256": "2cf81ee08939b21c2259e2d46abbcc4984735adbbba56d28dde138a4b0ee912b"
+      "bytes": 15020,
+      "sha256": "8144d3408b79ecc7f01f8e5a74f4f4dab09d2339b121f0cd559b36cab179951b"
     }
   ],
   "historicalCashSourcePacket": {

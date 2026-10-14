@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile, mkdtemp, mkdir, cp, writeFile, symlink, rm} from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import {sourceControllerInstant} from './research-source-attempt-controller.ts';
 import {parseWorkingDraft} from './research-working-draft.ts';
 import {loadReadOnlyWorkingDraft, workingDraftPreviewEnabled} from './research-working-draft-loader.ts';
 const root = path.resolve(import.meta.dirname,'../../..');
@@ -28,7 +29,10 @@ test('published/qualification/strategy/target mutations are never accepted as wo
     assert.throws(()=>parseWorkingDraft('2383',md,{...meta,[String(key)]:value}));
 });
 test('nanosecond cutoff after authored clock rejects, original clocks stay exact',()=>{
-  assert.throws(()=>parseWorkingDraft('2383',md,{...meta,cutoffAt:meta.authoredAndCheckedAt.replace('+00:00','Z').replace('.051875','.051875001')}));
+  const next=sourceControllerInstant(meta.authoredAndCheckedAt)+1n;
+  const second=new Date(Number(next/1_000_000_000n)*1000).toISOString().slice(0,19);
+  const nextNanosecond=second+'.'+(next%1_000_000_000n).toString().padStart(9,'0')+'Z';
+  assert.throws(()=>parseWorkingDraft('2383',md,{...meta,cutoffAt:nextNanosecond}));
   const d=parseWorkingDraft('2383',md,meta); assert.equal(d.evidenceCutoffAt,meta.cutoffAt);
 });
 test('private/credential/javascript citation URLs reject rather than silently disclose',()=>{

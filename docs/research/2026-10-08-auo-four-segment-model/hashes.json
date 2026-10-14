@@ -1,10 +1,10 @@
 {
-  "canonicalModelHash": "8027bfa234faf4bdfdc8b71330f4b3d7b71242c1fb9417c5b9f139affe8ea909",
+  "canonicalModelHash": "cf7419b2204419dc1aca590bc355df36bb19600c5beaf2905c6819f5a040b57d",
   "files": [
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/README.md",
-      "bytes": 4914,
-      "sha256": "ef43bff0c8aa4b1c74ef5d0c872bb72aa1a030fa0caf6688a07f0e6855b7adb9"
+      "bytes": 5748,
+      "sha256": "380dd3ece7ebb69cc51700680be91cbeb1a29e488ec885e0588dc4659be0c37c"
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/article-template.md",
@@ -18,18 +18,18 @@
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json",
-      "bytes": 2386,
-      "sha256": "67a1b658c6294e57caccb06d2a83b52f8f761959012c46bb6b8f59fd41977539"
+      "bytes": 2632,
+      "sha256": "17f302aa3826a1d270df151daacc3f3bee5a61104ce004e1f657d26cf1214c49"
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
-      "bytes": 112128,
-      "sha256": "9804ae47272e7b429a9109906a0b6d1d141d7921915c355f807a983454441822"
+      "bytes": 113823,
+      "sha256": "6426ba0caaac2a446593a632ebce50f93e7851f4fdb4025ff427c2f011961209"
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
-      "bytes": 26223,
-      "sha256": "eb953b8319941b693ed8b966afc53ffdc7b606623a93573ec01356608ade72de"
+      "bytes": 30851,
+      "sha256": "0d380225957bce4498b052ec6f5a4458d62b5366f01a845ec6f99077772d49b8"
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/source-ledger.json",
@@ -38,8 +38,8 @@
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/verify-output.py",
-      "bytes": 8227,
-      "sha256": "ed805e8c2c675acae7c6be51489b7149d21b4d02b8cd5ccb6bd9e494993aba00"
+      "bytes": 8380,
+      "sha256": "4ae10bf4d34fca5e461037fe08da5a986ca23f9ec544dcda3724d83be2e3f110"
     }
   ],
   "historicalCashSourcePacket": {

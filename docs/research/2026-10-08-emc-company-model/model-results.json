@@ -1432,38 +1432,6 @@
   ],
   "originalModelAsOf": "2026-10-08T12:12:00Z",
   "originalModelCanonicalHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
-  "inputManifest": [
-    {
-      "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
-      "bytes": 33734,
-      "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
-    },
-    {
-      "file": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
-      "bytes": 110526,
-      "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
-    },
-    {
-      "file": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
-      "bytes": 10693,
-      "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
-    },
-    {
-      "file": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
-      "bytes": 3630,
-      "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
-    },
-    {
-      "file": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
-      "bytes": 3671,
-      "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
-    },
-    {
-      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
-      "bytes": 30651,
-      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
-    }
-  ],
   "historicalCashFlow": {
     "schemaVersion": "historical-group-cash-bridge-v1",
     "symbol": "2383",
@@ -1882,7 +1850,71 @@
     "forecastCash": null,
     "valuationApproved": false,
     "technicalAdmission": false,
-    "historicalCapital": null
+    "historicalCapital": null,
+    "sourceInputManifest": [
+      {
+        "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+        "bytes": 33734,
+        "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
+      },
+      {
+        "file": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+        "bytes": 110526,
+        "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
+      },
+      {
+        "file": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+        "bytes": 10693,
+        "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
+      },
+      {
+        "file": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+        "bytes": 3630,
+        "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
+      },
+      {
+        "file": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+        "bytes": 3671,
+        "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
+      },
+      {
+        "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+        "bytes": 30651,
+        "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
+      }
+    ]
   },
-  "canonicalHash": "ac94e0370cf844291cab963852762b0597f53af43af74592f0a0c9fbdc56246a"
+  "canonicalHash": "d10858110edee1dd2760791e00c8b0eea3dc4a80b6d643db70b62216541dc879",
+  "inputManifest": [
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+      "bytes": 33734,
+      "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+      "bytes": 110526,
+      "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+      "bytes": 10693,
+      "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+      "bytes": 3630,
+      "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+      "bytes": 3671,
+      "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
+    }
+  ]
 }
