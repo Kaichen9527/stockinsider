@@ -1,0 +1,25 @@
+{
+  "finding": "P2 ordinary workflow misses six actually loaded transitive runtime source paths",
+  "changedFilesExample": [
+    "scripts/runtime/codec.js"
+  ],
+  "actualWorkflowWouldSelect": false,
+  "importActuallyLoaded": [
+    "scripts/runtime/auth-source-worker-installation.js",
+    "scripts/runtime/codec.js",
+    "scripts/runtime/credential-resolver.js",
+    "scripts/runtime/reviewed-runtime-release.js",
+    "scripts/runtime/runtime-health.js",
+    "scripts/runtime/tracked-runtime-bundle.js"
+  ],
+  "uncovered": [
+    "scripts/runtime/auth-source-worker-installation.js",
+    "scripts/runtime/codec.js",
+    "scripts/runtime/credential-resolver.js",
+    "scripts/runtime/reviewed-runtime-release.js",
+    "scripts/runtime/runtime-health.js",
+    "scripts/runtime/tracked-runtime-bundle.js"
+  ],
+  "noSourceMutation": true,
+  "noNativeOrDBRun": true
+}

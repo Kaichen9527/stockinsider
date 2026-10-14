@@ -1,0 +1,88 @@
+{
+  "subject": "47fe9fe39600f2012940865be16743a441c18111",
+  "tree": "6b85ecd34578cb65c045280c66cc4e814c053933",
+  "base": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+  "webTree": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "copyCount": 41,
+  "sqlTwoOriginComparisons": 52,
+  "changedFiles": 44,
+  "rootNewFiles": [
+    ".github/workflows/research-publication-tail-quality.yml",
+    "docs/operations/2026-10-14/publication-tail-release-handoff.md",
+    "docs/operations/2026-10-14/publication-tail-release-sources.json"
+  ],
+  "baseFilesUnchanged": 2146,
+  "nativeManifestEntries": 249,
+  "nativeExactEntries": 240,
+  "uniqueExactPaths": 121,
+  "absentNativeManifestEntries": [
+    {
+      "origin": "0fe5d5a90ae95949eec1fb3dd9433359db466d88",
+      "path": "docs/operations/2026-10-14/publication-tail-entry-guard-handoff.md",
+      "status": "absent",
+      "bytes": 3456,
+      "sha256": "511cb31cf3ab663004d08d5224f680d98c73d7077d0ead085fff77966bef3e6b"
+    },
+    {
+      "origin": "0fe5d5a90ae95949eec1fb3dd9433359db466d88",
+      "path": "docs/operations/2026-10-14/publication-tail-extraction-handoff.md",
+      "status": "absent",
+      "bytes": 3329,
+      "sha256": "d8a27d1f1b985d86e4b826d96e45e83733c14d260571de3655eba513c82a61b5"
+    },
+    {
+      "origin": "0fe5d5a90ae95949eec1fb3dd9433359db466d88",
+      "path": "scripts/opportunity-v3/research-publication-tail-entry-baseline.test.mjs",
+      "status": "absent",
+      "bytes": 11177,
+      "sha256": "b6a327d465c60f47c0df4a2f0f435c0a8758e16b49ea56fee55ee206c58ecae5"
+    },
+    {
+      "origin": "0fe5d5a90ae95949eec1fb3dd9433359db466d88",
+      "path": "scripts/opportunity-v3/research-publication-tail-native.test.mjs",
+      "status": "absent",
+      "bytes": 15534,
+      "sha256": "b8a30170bf9dbb4ace1b70e08f86aea907cfd4d2c87d01d918167bdeb584bce8"
+    },
+    {
+      "origin": "7309fba04e0ae3bb7800bd2aad11e5992b91020d",
+      "path": "docs/operations/2026-10-14/publication-tail-entry-guard-handoff.md",
+      "status": "absent",
+      "bytes": 3456,
+      "sha256": "511cb31cf3ab663004d08d5224f680d98c73d7077d0ead085fff77966bef3e6b"
+    },
+    {
+      "origin": "7309fba04e0ae3bb7800bd2aad11e5992b91020d",
+      "path": "docs/operations/2026-10-14/publication-tail-extraction-handoff.md",
+      "status": "absent",
+      "bytes": 3329,
+      "sha256": "d8a27d1f1b985d86e4b826d96e45e83733c14d260571de3655eba513c82a61b5"
+    },
+    {
+      "origin": "7309fba04e0ae3bb7800bd2aad11e5992b91020d",
+      "path": "docs/operations/research-publication-tail-fragments-handoff.md",
+      "status": "absent",
+      "bytes": 2330,
+      "sha256": "80220f56a333441bf3d186705ade9015ca7cfe99108c0bd33ebc4946c1b3e4b6"
+    },
+    {
+      "origin": "7309fba04e0ae3bb7800bd2aad11e5992b91020d",
+      "path": "scripts/opportunity-v3/research-publication-tail-entry-baseline.test.mjs",
+      "status": "absent",
+      "bytes": 11177,
+      "sha256": "b6a327d465c60f47c0df4a2f0f435c0a8758e16b49ea56fee55ee206c58ecae5"
+    },
+    {
+      "origin": "7309fba04e0ae3bb7800bd2aad11e5992b91020d",
+      "path": "scripts/opportunity-v3/research-publication-tail-native.test.mjs",
+      "status": "absent",
+      "bytes": 15534,
+      "sha256": "b8a30170bf9dbb4ace1b70e08f86aea907cfd4d2c87d01d918167bdeb584bce8"
+    }
+  ],
+  "setupCheckoutNodePgdgNpmBlockByteExact": true,
+  "uploadPinAlreadyInBase": true,
+  "relativeImportsResolved": 40,
+  "newWorkflowHash": "53de206b6c276e0351354495241b64de6554b523f6aa8a9c391eda18f8ce4aa7",
+  "descriptorHash": "9410e8f3391c372439fc1f970214c69f1cfd9cb0a4cbebb324364bc493b349fe"
+}
