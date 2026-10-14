@@ -1,0 +1,493 @@
+{
+  "schemaVersion": "retained-historical-cash-core-vectors-v1",
+  "packetSource": "732bb12e947945b0bd71574cafe6ca6509d9ea51",
+  "packetSha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3",
+  "independentExpectedSource": "Root retained PDF Python Decimal recompute, not the new TypeScript core",
+  "expectedFileSha256": "af4bf32b0d1e8becb97166ef7e75f7a17caf1495caeb5ed3674c6cb0fa76e14a",
+  "cases": [
+    {
+      "input": {
+        "schemaVersion": "historical-cash-operands-v1",
+        "symbol": "2409",
+        "unit": "TWD_thousands",
+        "consolidated": true,
+        "grain": "half_year_cumulative",
+        "periods": [
+          "2026-01-01/2026-06-30",
+          "2025-01-01/2025-06-30"
+        ],
+        "facts": {
+          "pretax": [
+            2249593,
+            6620130
+          ],
+          "depreciation": [
+            13078942,
+            13877319
+          ],
+          "amortization": [
+            1458846,
+            1175136
+          ],
+          "fvGain": [
+            -52196,
+            -98304
+          ],
+          "interestExpenseAdjustment": [
+            1302614,
+            1522339
+          ],
+          "interestIncomeAdjustment": [
+            -493554,
+            -628250
+          ],
+          "dividendIncomeAdjustment": [
+            0,
+            -204
+          ],
+          "shareCompensation": [
+            17580,
+            0
+          ],
+          "equityMethodAdjustment": [
+            -431357,
+            193973
+          ],
+          "ppeDisposalGainAdjustment": [
+            -71052,
+            -2376910
+          ],
+          "rouDisposalLoss": [
+            718,
+            0
+          ],
+          "heldForSaleGainAdjustment": [
+            -1991238,
+            6236
+          ],
+          "investmentGainAdjustment": [
+            -113145,
+            -2164382
+          ],
+          "impairment": [
+            6309,
+            418950
+          ],
+          "unrealizedFx": [
+            -357173,
+            -1307963
+          ],
+          "otherAdjustment": [
+            -60750,
+            -1001
+          ],
+          "receivables": [
+            -1355982,
+            -1297769
+          ],
+          "relatedReceivables": [
+            63642,
+            90981
+          ],
+          "inventory": [
+            -4642777,
+            761018
+          ],
+          "contractCosts": [
+            -1201494,
+            -1432280
+          ],
+          "otherOperatingAssets": [
+            -139221,
+            -1012344
+          ],
+          "contractLiabilities": [
+            270657,
+            -1136533
+          ],
+          "payables": [
+            2555934,
+            -597381
+          ],
+          "relatedPayables": [
+            217903,
+            -873924
+          ],
+          "provisions": [
+            80058,
+            -141052
+          ],
+          "otherOperatingLiabilities": [
+            -2462775,
+            -4659070
+          ],
+          "generatedCash": [
+            7930082,
+            6938715
+          ],
+          "interestReceived": [
+            460072,
+            671627
+          ],
+          "dividendReceived": [
+            462268,
+            215718
+          ],
+          "interestPaid": [
+            -1324703,
+            -1564397
+          ],
+          "taxPaid": [
+            -650305,
+            -1143565
+          ],
+          "operatingCash": [
+            6877414,
+            5118098
+          ],
+          "ppeCash": [
+            -5550174,
+            -10810694
+          ],
+          "intangibleCash": [
+            -192628,
+            0
+          ],
+          "ppeDisposalCash": [
+            715200,
+            918024
+          ],
+          "heldForSaleDisposalCash": [
+            2284775,
+            1317
+          ],
+          "subsidiaryDisposalCash": [
+            948835,
+            2128
+          ],
+          "investingCash": [
+            -2059522,
+            -7561587
+          ],
+          "shortBorrowings": [
+            15106352,
+            8959519
+          ],
+          "shortRepayments": [
+            -12645528,
+            -8095644
+          ],
+          "longBorrowings": [
+            23864824,
+            23582292
+          ],
+          "longRepayments": [
+            -34383886,
+            -30393900
+          ],
+          "leasePrincipal": [
+            -402683,
+            -389829
+          ],
+          "financingCash": [
+            -8758567,
+            -8231290
+          ],
+          "fxCash": [
+            2115789,
+            -3420869
+          ],
+          "cashChange": [
+            -1824886,
+            -14095648
+          ],
+          "openingCash": [
+            55616637,
+            68446514
+          ],
+          "closingCash": [
+            53791751,
+            54350866
+          ],
+          "revenue": [
+            139922549,
+            141338620
+          ],
+          "netProfit": [
+            1080601,
+            5163501
+          ],
+          "ownersNetProfit": [
+            199555,
+            5241612
+          ],
+          "nonControllingNetProfit": [
+            881046,
+            -78111
+          ]
+        },
+        "capital": {
+          "instant": "2026-06-30",
+          "ownersEquityTwdThousands": 154397339,
+          "nonControllingEquityTwdThousands": 12504849,
+          "groupEquityTwdThousands": 166902188,
+          "paidCapitalTwdThousands": 75470990,
+          "parTwd": 10,
+          "issuedSharesThousands": 7547099,
+          "treasuryCarryingAmountTwdThousands": 0,
+          "treasurySharesThousands": null
+        }
+      },
+      "expectedDecimalRows": [
+        {
+          "stock": "2409",
+          "period": "2026-01-01/2026-06-30",
+          "unit": "TWD_thousands",
+          "cfo": 6877414,
+          "groupNetProfit": 1080601,
+          "cfoDividedByGroupNetProfit": "6.364434236",
+          "nonCashAdjustments": 12294544,
+          "workingCapitalCashEffect": -6614055,
+          "ppeCashAcquisition": -5550174,
+          "intangibleCashAcquisition": -192628,
+          "cfoLessPpeCashOutlay": 1327240,
+          "cfoLessPpeAndIntangibleCashOutlay": 1134612,
+          "afterLeasePrincipalSensitivity": 731929,
+          "separateRouCashAcquisition": null,
+          "netBorrowingCash": -8058238,
+          "financingCash": -8758567,
+          "fxCash": 2115789,
+          "cashChange": -1824886,
+          "closingCash": 53791751,
+          "proxyDefinition": "CFO plus signed cash acquisition line(s); excludes disposal proceeds, M&A and financial-asset flows; not IFRS reported free cash flow, FCFE, maintenance capex or forecast"
+        },
+        {
+          "stock": "2409",
+          "period": "2025-01-01/2025-06-30",
+          "unit": "TWD_thousands",
+          "cfo": 5118098,
+          "groupNetProfit": 5163501,
+          "cfoDividedByGroupNetProfit": "0.991206935",
+          "nonCashAdjustments": 10616939,
+          "workingCapitalCashEffect": -10298354,
+          "ppeCashAcquisition": -10810694,
+          "intangibleCashAcquisition": 0,
+          "cfoLessPpeCashOutlay": -5692596,
+          "cfoLessPpeAndIntangibleCashOutlay": -5692596,
+          "afterLeasePrincipalSensitivity": -6082425,
+          "separateRouCashAcquisition": null,
+          "netBorrowingCash": -5947733,
+          "financingCash": -8231290,
+          "fxCash": -3420869,
+          "cashChange": -14095648,
+          "closingCash": 54350866,
+          "proxyDefinition": "CFO plus signed cash acquisition line(s); excludes disposal proceeds, M&A and financial-asset flows; not IFRS reported free cash flow, FCFE, maintenance capex or forecast"
+        }
+      ],
+      "expectedCapital": {
+        "instant": "2026-06-30",
+        "ownersEquityPerIssuedCommonShareTwd": "20.457839363",
+        "issuedCommonSharesThousands": 7547099,
+        "treasuryEquityCarryingAmountTwdThousands": 0,
+        "basis": "historical June30 issued common-share denominator supported by capital/equity statement; no October price-to-book, ending October share count or future equity approval"
+      }
+    },
+    {
+      "input": {
+        "schemaVersion": "historical-cash-operands-v1",
+        "symbol": "2383",
+        "unit": "TWD_thousands",
+        "consolidated": true,
+        "grain": "half_year_cumulative",
+        "periods": [
+          "2026-01-01/2026-06-30",
+          "2025-01-01/2025-06-30"
+        ],
+        "facts": {
+          "pretax": [
+            19979409,
+            9134498
+          ],
+          "nonCashAdjustments": [
+            1376499,
+            1001260
+          ],
+          "operatingAssetChange": [
+            -34420062,
+            -9135717
+          ],
+          "operatingLiabilityChange": [
+            20118332,
+            3874283
+          ],
+          "workingCapital": [
+            -14301730,
+            -5261434
+          ],
+          "adjustmentsTotal": [
+            -12925231,
+            -4260174
+          ],
+          "receivables": [
+            -27421398,
+            -7058369
+          ],
+          "notesReceivable": [
+            -25500,
+            -12068
+          ],
+          "inventory": [
+            -6259256,
+            -2285872
+          ],
+          "payables": [
+            14729114,
+            2371503
+          ],
+          "generatedCash": [
+            7054178,
+            4874324
+          ],
+          "interestReceived": [
+            130500,
+            113979
+          ],
+          "interestPaid": [
+            -288004,
+            -202626
+          ],
+          "taxPaid": [
+            -1851849,
+            -1458319
+          ],
+          "operatingCash": [
+            5044825,
+            3327358
+          ],
+          "ppeCash": [
+            -10679228,
+            -4997182
+          ],
+          "intangibleCash": [
+            -27514,
+            -18064
+          ],
+          "rouCash": [
+            -151181,
+            0
+          ],
+          "ppeDisposalCash": [
+            289,
+            122
+          ],
+          "investingCash": [
+            -10851462,
+            -5024255
+          ],
+          "shortBorrowingsNet": [
+            3869119,
+            1733564
+          ],
+          "longBorrowings": [
+            5832435,
+            5422384
+          ],
+          "longRepayments": [
+            -2046642,
+            -1609119
+          ],
+          "leasePrincipal": [
+            -26673,
+            -20529
+          ],
+          "financingCash": [
+            7632127,
+            5543713
+          ],
+          "fxCash": [
+            734456,
+            -1214883
+          ],
+          "cashChange": [
+            2559946,
+            2631933
+          ],
+          "openingCash": [
+            20007816,
+            14988308
+          ],
+          "closingCash": [
+            22567762,
+            17620241
+          ],
+          "revenue": [
+            80342455,
+            44187758
+          ],
+          "netProfit": [
+            15210423,
+            6944760
+          ],
+          "ownersNetProfit": [
+            15213191,
+            6946779
+          ],
+          "nonControllingNetProfit": [
+            -2768,
+            -2019
+          ]
+        },
+        "capital": null
+      },
+      "expectedDecimalRows": [
+        {
+          "stock": "2383",
+          "period": "2026-01-01/2026-06-30",
+          "unit": "TWD_thousands",
+          "cfo": 5044825,
+          "groupNetProfit": 15210423,
+          "cfoDividedByGroupNetProfit": "0.331668948",
+          "nonCashAdjustments": 1376499,
+          "workingCapitalCashEffect": -14301730,
+          "ppeCashAcquisition": -10679228,
+          "intangibleCashAcquisition": -27514,
+          "cfoLessPpeCashOutlay": -5634403,
+          "cfoLessPpeAndIntangibleCashOutlay": -5661917,
+          "afterLeasePrincipalSensitivity": -5688590,
+          "separateRouCashAcquisition": -151181,
+          "netBorrowingCash": 7654912,
+          "financingCash": 7632127,
+          "fxCash": 734456,
+          "cashChange": 2559946,
+          "closingCash": 22567762,
+          "proxyDefinition": "CFO plus signed cash acquisition line(s); excludes disposal proceeds, M&A and financial-asset flows; not IFRS reported free cash flow, FCFE, maintenance capex or forecast"
+        },
+        {
+          "stock": "2383",
+          "period": "2025-01-01/2025-06-30",
+          "unit": "TWD_thousands",
+          "cfo": 3327358,
+          "groupNetProfit": 6944760,
+          "cfoDividedByGroupNetProfit": "0.479117781",
+          "nonCashAdjustments": 1001260,
+          "workingCapitalCashEffect": -5261434,
+          "ppeCashAcquisition": -4997182,
+          "intangibleCashAcquisition": -18064,
+          "cfoLessPpeCashOutlay": -1669824,
+          "cfoLessPpeAndIntangibleCashOutlay": -1687888,
+          "afterLeasePrincipalSensitivity": -1708417,
+          "separateRouCashAcquisition": 0,
+          "netBorrowingCash": 5546829,
+          "financingCash": 5543713,
+          "fxCash": -1214883,
+          "cashChange": 2631933,
+          "closingCash": 17620241,
+          "proxyDefinition": "CFO plus signed cash acquisition line(s); excludes disposal proceeds, M&A and financial-asset flows; not IFRS reported free cash flow, FCFE, maintenance capex or forecast"
+        }
+      ],
+      "expectedCapital": null
+    }
+  ],
+  "sourceGrain": "six-month cumulative flow, not standalone Q2",
+  "normalization": "Explicit source six-month cumulative grain maps to closed half_year_cumulative operand enum; no value, unit or period changes."
+}
