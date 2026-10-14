@@ -131,7 +131,7 @@ function project(symbol: '2409'|'2383', files: Map<string,{pin:FinancialFilePin;
     clocks:{originalModelCutoff:model.originalModelAsOf,inputArtifactAsOf:model.asOf,financialRecordedAt:financial.data.recordedAt,shareNotesRecordedAt:notes.data.recordedAt,currentLocalReadKnownAt:now,databaseFinancialAdmissionAt:null},
     gaps:['reported_2026_ytd_plus_forecast_bridge_incomplete','no_normalized_earnings_verification','capacity_yield_asp_orders_not_quantifiable','no_complete_2025_segment_recast','no_verified_future_share_count'],
     observationsClockMeaning:'observedAt retains original artifact availability floor; admittedAt is current local in-memory acceptance only, not DB admission; monthly facts retain original source precision/clocks separately'};
-  assertFinancialJsonBytes(projection,FINANCIAL_READ_LIMITS.projection);return projection;
+  assertFinancialJsonBytes(projection,historicalCashPins.limits.projection);return projection;
 }
 /** Full scenario+cash candidate from the same exact private carrier. No I/O,
  * preparation, quota, source rights, role, mapping approval or publication.
