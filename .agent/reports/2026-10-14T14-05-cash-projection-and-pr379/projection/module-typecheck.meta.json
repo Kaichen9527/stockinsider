@@ -1,0 +1,15 @@
+{
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "/Users/kaerchen/.cache/stockinsider-workspaces/research-agents-oct04/web/node_modules/typescript/lib/tsc.js",
+    "--project",
+    "/tmp/stockinsider-historical-cash-projection-evidence-oct14/module-tsconfig.json"
+  ],
+  "exit": 0,
+  "seconds": 0.328025208,
+  "scope": "strict module-only; Node types with skipLibCheck; no Next app build",
+  "compiler": "5.9.3",
+  "source": "ca2d10b79ea74b42ee57320ff0809c99c9df22d8"
+}

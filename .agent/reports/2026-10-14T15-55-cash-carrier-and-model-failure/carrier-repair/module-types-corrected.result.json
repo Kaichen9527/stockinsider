@@ -1,0 +1,13 @@
+{
+  "source": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+  "exit": 0,
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "/Users/kaerchen/.cache/stockinsider-workspaces/research-agents-oct04/web/node_modules/typescript/lib/tsc.js",
+    "--project",
+    "/tmp/stockinsider-cash-carrier-fix-oct14/module-tsconfig.json"
+  ],
+  "at": "2026-10-14T07:45:53.758260+00:00"
+}

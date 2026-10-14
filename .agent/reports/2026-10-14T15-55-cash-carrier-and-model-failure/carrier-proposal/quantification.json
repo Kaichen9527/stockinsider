@@ -1,0 +1,20 @@
+[
+  {
+    "symbol": "2409",
+    "proposedPrivateCarrierBytes": 931023,
+    "proposedCarrierSha256": "823b80038e13779f4155327b3cd7d36b1dc5a833490da1bf692d33845c239590",
+    "decodedRawSourceBytes": 697558,
+    "fixedFiles": 9,
+    "status": "PROPOSAL_NOT_IMPLEMENTED_NOT_APPROVED",
+    "doesNotChangeRawPerFile512KiBOrAggregate1MiB": true
+  },
+  {
+    "symbol": "2383",
+    "proposedPrivateCarrierBytes": 353803,
+    "proposedCarrierSha256": "5fff5dd7e33ae7da30d8b72890f13414866b7820f54685af38b5cdd95d2b5564",
+    "decodedRawSourceBytes": 264753,
+    "fixedFiles": 7,
+    "status": "PROPOSAL_NOT_IMPLEMENTED_NOT_APPROVED",
+    "doesNotChangeRawPerFile512KiBOrAggregate1MiB": true
+  }
+]

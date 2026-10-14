@@ -1,0 +1,36 @@
+{
+  "run": 38516725291,
+  "action": "single gh run rerun --failed after genuine fresh independent ref publication",
+  "at": "2026-10-14T06:06:13.905121+00:00",
+  "source": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "base": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "evidence": "04d1d979a442a6a92ae0aded0ebbb57408d05427",
+  "ordinary": {
+    "38516725449": {
+      "conclusion": "success",
+      "attempt": 1,
+      "head": "b7796da8a92b99284b133a7a622e490a23bad11b"
+    },
+    "38516725320": {
+      "conclusion": "success",
+      "attempt": 1,
+      "head": "b7796da8a92b99284b133a7a622e490a23bad11b"
+    },
+    "38516725401": {
+      "conclusion": "success",
+      "attempt": 1,
+      "head": "b7796da8a92b99284b133a7a622e490a23bad11b"
+    }
+  },
+  "rulesEnforcement": "active",
+  "bypassActors": [],
+  "previousAttempt": 1,
+  "previousConclusion": "failure",
+  "initialRedPreserved": true,
+  "cloudTurn": "01a138eb-8b2e-77c6-99c7-0fb70b7af2c6 completed",
+  "reviewerTurn": "01a138f8-4dce-7ec1-a31a-0cc470b20a4a completed",
+  "status": "accepted",
+  "exit": 0,
+  "stdout": "",
+  "stderr": ""
+}

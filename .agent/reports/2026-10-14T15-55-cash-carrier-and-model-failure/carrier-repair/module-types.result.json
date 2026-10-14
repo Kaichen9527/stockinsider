@@ -1,0 +1,26 @@
+{
+  "source": "cdf3b4d8d03e9d3207efcd475588d03611a5f6f5",
+  "exit": 2,
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "/Users/kaerchen/.cache/stockinsider-workspaces/research-agents-oct04/web/node_modules/typescript/lib/tsc.js",
+    "--noEmit",
+    "--strict",
+    "--target",
+    "es2017",
+    "--module",
+    "nodenext",
+    "--moduleResolution",
+    "nodenext",
+    "--allowImportingTsExtensions",
+    "--skipLibCheck",
+    "--types",
+    "node",
+    "web/src/lib/research-historical-cash-core.ts",
+    "web/src/lib/research-historical-cash-pins.ts",
+    "web/src/lib/research-historical-cash-projection.ts"
+  ],
+  "at": "2026-10-14T07:44:40.246953+00:00"
+}

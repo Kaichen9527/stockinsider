@@ -1,0 +1,75 @@
+TAP version 13
+# (node:21168) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:21168) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/src/lib/research-historical-cash-projection.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/package.json.
+# Subtest: 2409 all exact source bytes project and recompute original cash without financial authority
+ok 1 - 2409 all exact source bytes project and recompute original cash without financial authority
+  ---
+  duration_ms: 5.295709
+  ...
+# Subtest: 2409 any exact inventory file mutation, length, omission, order or extra fails closed
+ok 2 - 2409 any exact inventory file mutation, length, omission, order or extra fails closed
+  ---
+  duration_ms: 4.770833
+  ...
+# Subtest: 2409 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+ok 3 - 2409 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+  ---
+  duration_ms: 4.767541
+  ...
+# Subtest: 2409 deadline exceptions at every successful checkpoint cannot return partial success
+ok 4 - 2409 deadline exceptions at every successful checkpoint cannot return partial success
+  ---
+  duration_ms: 69.27925
+  ...
+# Subtest: 2383 all exact source bytes project and recompute original cash without financial authority
+ok 5 - 2383 all exact source bytes project and recompute original cash without financial authority
+  ---
+  duration_ms: 1.78
+  ...
+# Subtest: 2383 any exact inventory file mutation, length, omission, order or extra fails closed
+ok 6 - 2383 any exact inventory file mutation, length, omission, order or extra fails closed
+  ---
+  duration_ms: 1.461792
+  ...
+# Subtest: 2383 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+ok 7 - 2383 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+  ---
+  duration_ms: 2.186083
+  ...
+# Subtest: 2383 deadline exceptions at every successful checkpoint cannot return partial success
+ok 8 - 2383 deadline exceptions at every successful checkpoint cannot return partial success
+  ---
+  duration_ms: 26.528458
+  ...
+# Subtest: unknown or substituted profiles/companies reject before injected material access
+ok 9 - unknown or substituted profiles/companies reject before injected material access
+  ---
+  duration_ms: 0.302833
+  ...
+# Subtest: native map and typed-array brands are bounded; accessors do not substitute pinned byte lengths
+ok 10 - native map and typed-array brands are bounded; accessors do not substitute pinned byte lengths
+  ---
+  duration_ms: 1.944209
+  ...
+# Subtest: each projected row carries exact two-period packet/model locators and private source-line hashes
+ok 11 - each projected row carries exact two-period packet/model locators and private source-line hashes
+  ---
+  duration_ms: 3.50625
+  ...
+# Subtest: wrong native Map cardinality is rejected before opening or advancing its iterator
+ok 12 - wrong native Map cardinality is rejected before opening or advancing its iterator
+  ---
+  duration_ms: 3.048291
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 193.766417

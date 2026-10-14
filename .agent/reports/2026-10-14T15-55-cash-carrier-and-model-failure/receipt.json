@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-10-14T07:53:39.630850+00:00",
+  "report": "2026-10-14T15-55-cash-carrier-and-model-failure",
+  "source": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+  "sourceTree": "0e177f9c7c6a9ae209647d9ce66ff838f5ff7eb8",
+  "rawCount": 114,
+  "rawManifestSha256": "38bfeda46a05e4465bbdac80d384df5a9a20636d0de22f5e39624b3cca5171b0",
+  "independentCodeReview": "pendingCloud01a13960cursor18",
+  "parent379ProtectedReady": "38522785296 FAILURE; no rerun/merge",
+  "formalAcceptance": false
+}

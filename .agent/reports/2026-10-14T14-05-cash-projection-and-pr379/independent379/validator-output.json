@@ -1,0 +1,34 @@
+{
+  "kind": "local-read-only-compatibility-validation",
+  "protectedEnvelopeProduced": false,
+  "sourceCommit": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "evidenceCommit": "04d1d979a442a6a92ae0aded0ebbb57408d05427",
+  "gateResultValidator": "PASS",
+  "runtimeReleaseResolver": "PASS",
+  "resolved": {
+    "commitSha": "b7796da8a92b99284b133a7a622e490a23bad11b",
+    "treeSha": "78bd213468fa08354ede8d213dfd6e76af0d380e",
+    "reviewAttestationSha256": "b1e412590246c8c6bf89a71b739eea0687bd07cf3ae8d75731dcda6eb30e0ae0",
+    "workerSha256": "11213ec448f09e699606105f78834f7a3bed184c44037657adb9914c152ebde6",
+    "configSha256": "1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2"
+  },
+  "plans": {
+    "default48": {
+      "count": 48,
+      "chainSha256": "37dfacc252ec24a719b898b2b3ea31fc77c1631db083211f1f171c956772c613"
+    },
+    "financial49": {
+      "count": 49,
+      "chainSha256": "cec630ce83aea1f7bdcafae815990e2e964ebbf599a3441e08d978e4427f46cd"
+    },
+    "profile50operator": {
+      "count": 49,
+      "chainSha256": "cec630ce83aea1f7bdcafae815990e2e964ebbf599a3441e08d978e4427f46cd",
+      "profileSteps": 50,
+      "profileSha256": "acdee42a8ca130d259541b5c0b4b14e228c355528b60a2ac4ea3ef9633d611d9",
+      "operatorSha256": "97697bc3f8a2c3c1bd4676c579eaa9b33e4273c9e98e0a0045998698b736a42b"
+    }
+  },
+  "connectionAttempted": false,
+  "sourceStatus": ""
+}

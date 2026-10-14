@@ -1,0 +1,57 @@
+TAP version 13
+# (node:544005) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:544005) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-historical-cash-projection.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# {"symbol":"2409","nativeMapSize":9,"materialized":10000,"deadlineChecks":1,"sourceLine":41}
+# {"symbol":"2383","nativeMapSize":7,"materialized":10000,"deadlineChecks":1,"sourceLine":41}
+# Subtest: 2409: rejected native Map metadata must not materialize an unbounded own-key population
+not ok 1 - 2409: rejected native Map metadata must not materialize an unbounded own-key population
+  ---
+  duration_ms: 15.062315
+  location: '/tmp/cash-review-e2d-20261014/own-properties-regression.mjs:4:37'
+  failureType: 'testCodeFailure'
+  error: 'bounded native9-entry admission materialized 10000 arbitrary own keys before rejection'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/cash-review-e2d-20261014/own-properties-regression.mjs:11:9)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: 2383: rejected native Map metadata must not materialize an unbounded own-key population
+not ok 2 - 2383: rejected native Map metadata must not materialize an unbounded own-key population
+  ---
+  duration_ms: 6.419168
+  location: '/tmp/cash-review-e2d-20261014/own-properties-regression.mjs:4:37'
+  failureType: 'testCodeFailure'
+  error: 'bounded native7-entry admission materialized 10000 arbitrary own keys before rejection'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/cash-review-e2d-20261014/own-properties-regression.mjs:11:9)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 132.381832

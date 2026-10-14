@@ -1,0 +1,15 @@
+{
+  "source": "9bf87128da637fd129f0399bae36120996624dc8",
+  "at": "2026-10-14T06:17:05.905258+00:00",
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-historical-cash-projection.test.mjs"
+  ],
+  "exit": 0,
+  "seconds": 0.223360333
+}

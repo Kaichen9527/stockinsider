@@ -1,0 +1,231 @@
+{
+  "reviewType": "unsigned_model_agent_code_review",
+  "reviewerParticipation": "Independent of these seven projection candidate files; no approval of own SQL-tail implementation",
+  "subject": "e2dcb6c20b71561dfb37d7728809b0be257d8fe2",
+  "tree": "8d5ed4a38fa861969ad052297018d67333b0c941",
+  "base": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "verdict": "REQUEST_CHANGES",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1
+  },
+  "newFinding": {
+    "id": "R2",
+    "severity": "P2",
+    "path": "web/src/lib/research-historical-cash-projection.ts",
+    "line": 41,
+    "title": "Correct-cardinality native Map still permits unbounded own-key materialization before rejection",
+    "evidence": [
+      {
+        "symbol": "2409",
+        "nativeMapSize": 9,
+        "extraOwnProperties": 10000,
+        "keysMaterialized": 10000,
+        "deadlineChecks": 1,
+        "rejected": true,
+        "line": 41
+      },
+      {
+        "symbol": "2383",
+        "nativeMapSize": 7,
+        "extraOwnProperties": 10000,
+        "keysMaterialized": 10000,
+        "deadlineChecks": 1,
+        "rejected": true,
+        "line": 41
+      }
+    ],
+    "failureTests": {
+      "command": "node --experimental-strip-types --test --test-concurrency=1 own-properties-regression.mjs",
+      "pass": 0,
+      "fail": 2,
+      "skip": 0,
+      "exit": 1
+    },
+    "scope": "Current bounded injected-Map validation, not a hypothetical future filesystem reader. Input native Map has exactly9/7 entries and10000 nonenumerable own properties. Original Reflect.ownKeys is called unchanged by the observer; the returned10000-key array is counted and passed through."
+  },
+  "priorR1": {
+    "closedForExactWrongCardinality": true,
+    "cases": [
+      {
+        "symbol": "2409",
+        "size": 10000,
+        "opened": 0,
+        "advanced": 0,
+        "checks": 1
+      },
+      {
+        "symbol": "2409",
+        "size": 0,
+        "opened": 0,
+        "advanced": 0,
+        "checks": 1
+      },
+      {
+        "symbol": "2409",
+        "size": 1,
+        "opened": 0,
+        "advanced": 0,
+        "checks": 1
+      },
+      {
+        "symbol": "2409",
+        "size": 10,
+        "opened": 0,
+        "advanced": 0,
+        "checks": 1
+      },
+      {
+        "symbol": "2383",
+        "size": 10000,
+        "opened": 0,
+        "advanced": 0,
+        "checks": 1
+      },
+      {
+        "symbol": "2383",
+        "size": 0,
+        "opened": 0,
+        "advanced": 0,
+        "checks": 1
+      },
+      {
+        "symbol": "2383",
+        "size": 1,
+        "opened": 0,
+        "advanced": 0,
+        "checks": 1
+      },
+      {
+        "symbol": "2383",
+        "size": 8,
+        "opened": 0,
+        "advanced": 0,
+        "checks": 1
+      }
+    ],
+    "oldReportsNotRelabeled": true
+  },
+  "validation": {
+    "originalProjectionSuite": {
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0
+    },
+    "strictModuleTypecheck": {
+      "compiler": "5.9.3",
+      "target": "ES2017",
+      "strict": true,
+      "exit": 0
+    },
+    "fixtureUniqueFiles": 15,
+    "fixtureOriginalGitBytes": 931660,
+    "fixtureGzipBytes": 202500,
+    "fixtureExpandedBytes": 1245186,
+    "originalSource": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "outputs": [
+      {
+        "symbol": "2409",
+        "bytes": 52077,
+        "projectionSha256": "b59bd42321ac7e9af6c3fcd1eba86fa359f2537d467a45e8fbef244e442c434d",
+        "files": 9,
+        "aggregate": 697558,
+        "facts": 52,
+        "numericCells": 104,
+        "capitalNumeric": 7,
+        "checkpoints": 67,
+        "successWipes": 9,
+        "deadlineWipes": 9,
+        "callerMutationIsolation": true
+      },
+      {
+        "symbol": "2383",
+        "bytes": 32598,
+        "projectionSha256": "a1965a0f56556c4c4b50f89f7f96ef263b6fd7b6aec529c919cce3b8bfa585d7",
+        "files": 7,
+        "aggregate": 264753,
+        "facts": 33,
+        "numericCells": 66,
+        "capitalNumeric": 0,
+        "checkpoints": 46,
+        "successWipes": 7,
+        "deadlineWipes": 7,
+        "callerMutationIsolation": true
+      }
+    ],
+    "semanticIndependentIntegerChecks": [
+      {
+        "symbol": "2409",
+        "period": "2026-01-01/2026-06-30",
+        "cfo": "6877414",
+        "proxy": "1134612",
+        "cashChange": "-1824886",
+        "closingCash": "53791751",
+        "unit": "TWD_thousands",
+        "groupDenominatorVerified": true
+      },
+      {
+        "symbol": "2409",
+        "period": "2025-01-01/2025-06-30",
+        "cfo": "5118098",
+        "proxy": "-5692596",
+        "cashChange": "-14095648",
+        "closingCash": "54350866",
+        "unit": "TWD_thousands",
+        "groupDenominatorVerified": true
+      },
+      {
+        "symbol": "2383",
+        "period": "2026-01-01/2026-06-30",
+        "cfo": "5044825",
+        "proxy": "-5661917",
+        "cashChange": "2559946",
+        "closingCash": "22567762",
+        "unit": "TWD_thousands",
+        "groupDenominatorVerified": true
+      },
+      {
+        "symbol": "2383",
+        "period": "2025-01-01/2025-06-30",
+        "cfo": "3327358",
+        "proxy": "-1687888",
+        "cashChange": "2631933",
+        "closingCash": "17620241",
+        "unit": "TWD_thousands",
+        "groupDenominatorVerified": true
+      }
+    ],
+    "credentialNamedFieldScan": 0,
+    "rawPdfRead": false
+  },
+  "environment": {
+    "startedUTC": "2026-10-14T06:34:45Z",
+    "deadlineUTC": "2026-10-14T06:49:45Z",
+    "completedUTC": "2026-10-14T06:43:27.446015+00:00",
+    "Node": "22.14.0",
+    "diskFreeBytes": {
+      "/workspace": 8619290624,
+      "/tmp": 15473733632
+    },
+    "semanticProcessMaxRSSKiB": 79300,
+    "wholeTaskPeakRSSMetered": false,
+    "singleLightweightWorkNoServicesStarted": true,
+    "initialSandboxNodeTestOutput": "file-level only, not attributed as12 case evidence; preserved separately",
+    "timeUtility": "/usr/bin/time unavailable127 preserved; semantic Node process.resourceUsage used instead"
+  },
+  "pending": [
+    "single-owner9/7 filesystem reader",
+    "O_NOFOLLOW/regularFD custody and cleanup",
+    "native10s wall deadline",
+    "full scenario+cash schema and mapping",
+    "oldv2 replay compatibility",
+    "shared quota/fences",
+    "compiled HTTP/PostgreSQL integration",
+    "actual author/reviewer/publication execution",
+    "formal/protected authority"
+  ],
+  "sourceEdits": false,
+  "formalRoleOrProtectedApproval": false
+}

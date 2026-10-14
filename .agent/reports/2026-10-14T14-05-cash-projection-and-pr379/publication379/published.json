@@ -1,0 +1,25 @@
+{
+  "source": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "evidence": "04d1d979a442a6a92ae0aded0ebbb57408d05427",
+  "base": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "reviewAuthorship": "Actual independent existing peer01a137fc / turn01a138f8; Root maker only verifies/publishes unchanged objects, not self-signing independent review.",
+  "directParentVerified": true,
+  "threePathsVerified": true,
+  "ref": "refs/heads/evidence/source-led-opportunity-v3-exact-review-b7796da8a92b99284b133a7a622e490a23bad11b",
+  "existingRemote": "",
+  "files": [
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+      "sha256": "0ea58419311d1d8732eef5a9dcc8ef36613f3556eff170c829949762f0e76aac"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+      "sha256": "17c03ba7452642ff5c666e3e0e738a8e452ef35f5dd92d935ae6fc58c69d3e49"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json",
+      "sha256": "b1e412590246c8c6bf89a71b739eea0687bd07cf3ae8d75731dcda6eb30e0ae0"
+    }
+  ],
+  "remoteExactVerified": true
+}

@@ -1,0 +1,15 @@
+{
+  "source": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "checkoutMerge": "c0e5468ffe45f29c8d7cb95ec97212f3448bd2f8",
+  "fullTree": "78bd213468fa08354ede8d213dfd6e76af0d380e",
+  "run": 38516725401,
+  "actualQualityMarkers": {
+    "type": true,
+    "lint": true,
+    "build": true,
+    "browser": true
+  },
+  "browserSummary": "  9 passed (12.6s)",
+  "canonicalSectionSha256": "08b6a85c6deec2775b0b290a94cedfe8f934874b61a55b663da26202b6faccb2",
+  "initialParserError": "First ZIP member lookup expected nonexistent0_product-runtime; inspected actual members and read1_product-runtime. Original StopIteration preserved in chat, no product rerun/source change."
+}

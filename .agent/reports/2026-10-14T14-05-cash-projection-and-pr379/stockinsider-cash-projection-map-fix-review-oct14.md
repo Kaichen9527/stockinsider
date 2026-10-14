@@ -1,0 +1,13 @@
+# Only active task — independent closure of projection R1
+
+Read again after compaction. No Root thread/official-document memory/VPS/SSH/HTTP/queue/PG/build/CI/ref/push/merge/deploy or source edits. One10min readonly task; output only your own/tmp report.
+
+Your9b8247a7 review completed atcursor25, REQUEST_CHANGES/P2=1. Preserve report /tmp/stockinsider-historical-cash-projection-independent-review-9b8247a7-oct14.md, SHA133563ce3fd18933d33b5f623d23e925f1d8b9ca4f6bfe8ae58cc6cb6ed5b023 and original10000→10001 iterator/115cleanup/852ownedwipe evidence. Do not rewrite it as PASS.
+
+Newexactsubjecte2dcb6c20b71561dfb37d7728809b0be257d8fe2/branchcodex/research-historical-cash-projection-oct14/stackedbaseb7796da8a92b99284b133a7a622e490a23bad11b. Worktree/tmp/stockinsider-discovery-snapshot-root-review-oct14 clean and fixed to newsubject. ParentPR379 protected38516725291 attempt2 is active elsewhere; no overlapheavy or modification of parent source/evidence.
+
+Root sealed regressioncf94e266 with unchanged9b runtime: actual11PASS1FAIL (wrongMapsize10000 openediterator before count check). Repairruntime9bf87128 checks native Map size getter BEFORE Reflect.ownKeys or iterator expansion; all path/byte/manifest/clock/semantic checks and count/perfile/aggregate/projection caps unchanged. Actual12PASS0fail/skip/todo and strict module-onlyTS5.9.3/ES2017/Node types/skipLibCheckPASS on sealed9bf. Finale2d onlyhandoff history, runtime/pins/fixture/test same blobs. Originalraw/meta retained in/tmp/stockinsider-historical-cash-projection-evidence-oct14/map-bound-{red,fixed}.* and fixed-typecheck.*.
+
+Read fullbase→new7file diff and old9b→newdelta. Independently repeat original largeMap probe plus newzero/undersized/wrong-map checks for both companies and actual12suite ifneeded; don't repeat unchanged15source/115cleanup/heavy tests just for counts. Confirm unknown sizes reject before iterator/materialization, preserve nativeMap/typedarraybrands/deadline/ownedcopy cleanup and all authenticitylimits. Check no expectedfinancialnumber/pin/fixture/legacyreader8/schema/SQL/authority/policy/API/UI changes. Original sourceLine/privatehostpathtestfixture staysprivate/unserved; no source/publication/actualfilesystem custody inferred from injected bytes.
+
+Root is maker; only genuine independent closure can give scoped CODEPASS0P0P1P2. Fullnewsubject app-quality/type-lint-build/normalprotected and actualv3reader/schema/replay/quota/fences/author-review-publication are stillpending. Return exactreportSHA/findings/actualprobes/sourceidentities/limits. No attestation/evidence ref now; originalP2/RED remain separate.

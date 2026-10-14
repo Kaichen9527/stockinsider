@@ -1,0 +1,7 @@
+{
+  "initialHarnessError": "StrictDeepEqual compared parser null-prototype object with plain object; original exit1 stderr retained. Corrected probe compares the same closed own fields in a plain copy. No repository source/expectation changed.",
+  "actualCIModelTerminalNotRetained": true,
+  "actualCIFailureCauseProven": false,
+  "oraclePolicyChanged": false,
+  "realModelOrProtectedGateExecutedByProbe": false
+}

@@ -1,0 +1,92 @@
+{
+  "kind": "unsigned engineering design recommendation; no runtime closure",
+  "admission": "2026-10-14T07:15:08Z",
+  "deadline": "2026-10-14T07:25:08Z",
+  "recordedAt": "2026-10-14T07:20:48.766962+00:00",
+  "reviewedSource": "e2dcb6c20b71561dfb37d7728809b0be257d8fe2",
+  "priorEvidence": "fbf454d4f7e89fd8415160c5e5f8cd1eb14b6ab0",
+  "R2": "OPEN, implementation pending",
+  "commands": [
+    {
+      "command": "node22 --experimental-strip-types /tmp/cash-carrier-design-20261014/measure.mjs",
+      "exit": 0,
+      "stdout": "measurement.json",
+      "stderr": "measurement.stderr"
+    },
+    {
+      "command": "node22 /tmp/cash-carrier-design-20261014/intrinsics.mjs",
+      "exit": 0,
+      "stdout": "intrinsics.json",
+      "stderr": "intrinsics.stderr"
+    }
+  ],
+  "source": [
+    {
+      "path": "web/src/lib/research-historical-cash-pins.ts",
+      "bytes": 6778,
+      "sha256": "0857d1b8b2e04fa9bedd9fcffbf072400d5ca51c0ac86b39a988bd6a1c442d41",
+      "blob": "9bbeb18f6c5a70ec28193b29cebd9d477c9f1430"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-projection.ts",
+      "bytes": 9817,
+      "sha256": "22370c7a074dd0539b55a38390f001d70dd2ebf688a819e94bca1696e09d9f6b",
+      "blob": "fe127920578b13c0141c283a0823376e677eb7a9"
+    },
+    {
+      "path": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+      "bytes": 202500,
+      "sha256": "afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f",
+      "blob": "00d9e80495ddb25048925ecb00a758356494bb94"
+    }
+  ],
+  "raw": [
+    {
+      "path": "intrinsics.json",
+      "bytes": 426,
+      "sha256": "c2623be25fdadc4f54544ce71815fc6a734d89f2e2b28ecec98d84979498237a"
+    },
+    {
+      "path": "intrinsics.mjs",
+      "bytes": 1660,
+      "sha256": "c8fdd509083da455c928a793e071d89287d16bf6b403b760808ba8934ab40ecc"
+    },
+    {
+      "path": "intrinsics.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "measure.mjs",
+      "bytes": 3882,
+      "sha256": "a38264b41fe4cbbf4cb28706b53aeba824c927972ad649d3108f4d48438cf392"
+    },
+    {
+      "path": "measurement.json",
+      "bytes": 4622,
+      "sha256": "4b6b8f8c67d0834f8ed9aa5d1e42dfd8ba85d1c5411b5fe82eb062958797be10"
+    },
+    {
+      "path": "measurement.stderr",
+      "bytes": 554,
+      "sha256": "12b142ebbc6ea8ec8f50bdc7b9263a228c3915138dcff1ecdd4e49d23e4e638b"
+    },
+    {
+      "path": "review.md",
+      "bytes": 9969,
+      "sha256": "adf84049b45a57163ca5d18132872dff9c78ba5500f7885b318228abf71c793e"
+    },
+    {
+      "path": "task.txt",
+      "bytes": 2214,
+      "sha256": "3d66859b941aa9f2e6cd94153828ce2b09e931c30fef84538ed80df90f46984e"
+    },
+    {
+      "path": "task.txt.gz",
+      "bytes": 1351,
+      "sha256": "b6060b2afd5fbe84d451f1fd718a9f8c1d882d5d977a52437f72df2f4c76d2a8"
+    }
+  ],
+  "servicesStarted": [],
+  "cleanup": "No owned services or DB clusters; no files deleted."
+}

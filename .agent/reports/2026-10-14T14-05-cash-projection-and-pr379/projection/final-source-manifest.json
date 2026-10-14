@@ -1,0 +1,50 @@
+{
+  "source": "9b8247a79f655f3e71905a1ecea4bb491305af79",
+  "base": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "preRunWip": "ca2d10b7",
+  "actualTests": "11PASS0FAIL0SKIP0TODO on WIP, final runtime/test/fixture same blobs; no new execution claimed",
+  "files": [
+    {
+      "path": ".github/workflows/research-historical-cash-quality.yml",
+      "bytes": 1418,
+      "sha256": "75dcf547dba1706ea22af0c5bf5286746c3cac7cbbd40ffcd1b636ee2d163bba",
+      "blob": "49910a2da7cdc0fd4e24e5ee16e2f6c0f9a247e1"
+    },
+    {
+      "path": ".github/workflows/source-led-opportunity-v3.yml",
+      "bytes": 6421,
+      "sha256": "b1b930edfb2bb746218bb6215c0a2ae8adc34eef2c5c3289fa61af44bb02bf2a",
+      "blob": "2ba40a34f81f36add0beff5a18786fc2e1ed7972"
+    },
+    {
+      "path": "docs/operations/2026-10-14/historical-cash-projection-handoff.md",
+      "bytes": 4381,
+      "sha256": "0dfd0e0e3a1e69cd7954bb846a3c60c4a7459640f012d0577a19f2f733fcf81d",
+      "blob": "5812f70a0e7f303d11591f1c7a6ea47b2ea8c29e"
+    },
+    {
+      "path": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+      "bytes": 202500,
+      "sha256": "afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f",
+      "blob": "00d9e80495ddb25048925ecb00a758356494bb94"
+    },
+    {
+      "path": "scripts/research-historical-cash-projection.test.mjs",
+      "bytes": 7158,
+      "sha256": "30125b883fde23b6f85371a236c8b374aa7d0fc05f0990a94efa6cb00f9a1102",
+      "blob": "02e897b6f0eaef51e83e7fad27a117493edc74e0"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-pins.ts",
+      "bytes": 6778,
+      "sha256": "0857d1b8b2e04fa9bedd9fcffbf072400d5ca51c0ac86b39a988bd6a1c442d41",
+      "blob": "9bbeb18f6c5a70ec28193b29cebd9d477c9f1430"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-projection.ts",
+      "bytes": 9699,
+      "sha256": "f7ec0b3d0be85f1d8fe9b111100a06157c1158223c9034f48a455d9341b51b0d",
+      "blob": "5a022aa99b7deab06f0ef8a5b687d14844986cd0"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "source": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+  "stackedBase": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "repairBase": "e2dcb6c20b71561dfb37d7728809b0be257d8fe2",
+  "tree": "0e177f9c7c6a9ae209647d9ce66ff838f5ff7eb8",
+  "changedPaths": [
+    "docs/operations/2026-10-14/historical-cash-projection-handoff.md",
+    "scripts/research-historical-cash-projection.test.mjs",
+    "web/src/lib/research-historical-cash-pins.ts",
+    "web/src/lib/research-historical-cash-projection.ts"
+  ],
+  "stacked7fileIdentities": [
+    {
+      "path": ".github/workflows/research-historical-cash-quality.yml",
+      "bytes": 1418,
+      "sha256": "75dcf547dba1706ea22af0c5bf5286746c3cac7cbbd40ffcd1b636ee2d163bba",
+      "blob": "49910a2da7cdc0fd4e24e5ee16e2f6c0f9a247e1"
+    },
+    {
+      "path": ".github/workflows/source-led-opportunity-v3.yml",
+      "bytes": 6421,
+      "sha256": "b1b930edfb2bb746218bb6215c0a2ae8adc34eef2c5c3289fa61af44bb02bf2a",
+      "blob": "2ba40a34f81f36add0beff5a18786fc2e1ed7972"
+    },
+    {
+      "path": "docs/operations/2026-10-14/historical-cash-projection-handoff.md",
+      "bytes": 8728,
+      "sha256": "6fbc2874299f19bf5f7aedfbcc1178c96954279104fcc76fbc055e202c8fa187",
+      "blob": "a811697c55cc71c69e22ab64cbe39f1173e83b80"
+    },
+    {
+      "path": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+      "bytes": 202500,
+      "sha256": "afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f",
+      "blob": "00d9e80495ddb25048925ecb00a758356494bb94"
+    },
+    {
+      "path": "scripts/research-historical-cash-projection.test.mjs",
+      "bytes": 13006,
+      "sha256": "cb090b563166ccf6ed8d4f6a57bbe9b434d45351a08c8dd16572896eb3dd41d6",
+      "blob": "443251836c3a974e80b77302a1b3ed8565eb2cd8"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-pins.ts",
+      "bytes": 7034,
+      "sha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5",
+      "blob": "5a9f2aeedfcbf5a57cbec25cffe3f5fc34ade92e"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-projection.ts",
+      "bytes": 11131,
+      "sha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719",
+      "blob": "af9928e8dcfc945c53f53d26fe9d6645729d251e"
+    }
+  ],
+  "originalPinsIdenticalAfterRemovingOnlyCarrierFields": true,
+  "unchangedPaths": [
+    "web/src/lib/research-historical-cash-core.ts",
+    "scripts/research-historical-cash-core.test.mjs",
+    "scripts/fixtures/research-historical-cash/operands-and-decimal-vectors.json",
+    "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+    ".github/workflows/research-historical-cash-quality.yml",
+    ".github/workflows/source-led-opportunity-v3.yml"
+  ],
+  "actualTests": "29 PASS = core14 + projection15; zero failures/skips/todos; not additive with previous 11/12",
+  "strictModuleOnlyTypes": true,
+  "appBuildLintTypesOrNativePG": "not run by Root; pending exact-lock ordinary quality",
+  "formalOrProtectedAcceptance": false,
+  "at": "2026-10-14T07:49:42.497986+00:00"
+}

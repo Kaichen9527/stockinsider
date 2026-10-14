@@ -1,0 +1,32 @@
+node:assert:128
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [Object: null prototype] {
+- {
+    modelAttempt: 'completed',
+    operation: 'make'
+  }
+
+    at [eval]:1:791
+    at runScriptInThisContext (node:internal/vm:209:10)
+    at node:internal/process/execution:449:12
+    at [eval]-wrapper:6:24
+    at runScriptInContext (node:internal/process/execution:447:60)
+    at evalFunction (node:internal/process/execution:87:30)
+    at evalScript (node:internal/process/execution:99:3)
+    at node:internal/main/eval_string:74:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [Object: null prototype] {
+    modelAttempt: 'completed',
+    operation: 'make'
+  },
+  expected: { modelAttempt: 'completed', operation: 'make' },
+  operator: 'deepStrictEqual'
+}
+
+Node.js v22.14.0

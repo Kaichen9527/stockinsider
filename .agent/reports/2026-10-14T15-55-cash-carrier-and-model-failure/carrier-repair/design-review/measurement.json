@@ -1,0 +1,150 @@
+{
+  "kind": "fixture-only representation measurement, not runtime acceptance",
+  "node": "v22.14.0",
+  "sourceCommit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "gzip": {
+    "bytes": 202500,
+    "sha256": "afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f"
+  },
+  "expandedBytes": 1245186,
+  "uniqueFiles": 15,
+  "companies": [
+    {
+      "symbol": "2409",
+      "fileCount": 9,
+      "carrierBytes": 931023,
+      "carrierSHA256": "823b80038e13779f4155327b3cd7d36b1dc5a833490da1bf692d33845c239590",
+      "rawTotal": 697558,
+      "largestRaw": 393280,
+      "largestEncoded": 524376,
+      "carrierPlusRawBytes": 1628581
+    },
+    {
+      "symbol": "2383",
+      "fileCount": 7,
+      "carrierBytes": 353803,
+      "carrierSHA256": "5fff5dd7e33ae7da30d8b72890f13414866b7820f54685af38b5cdd95d2b5564",
+      "rawTotal": 264753,
+      "largestRaw": 110526,
+      "largestEncoded": 147368,
+      "carrierPlusRawBytes": 618556
+    }
+  ],
+  "mutations": [
+    {
+      "symbol": "2409",
+      "name": "unknownKey",
+      "bytes": 931038,
+      "sha256": "5d6a1f6cd94ad10e0bb7cb2a7fe46717ec36467ab7a84a67ca601674b83c169d",
+      "wouldRejectAt": "static_length"
+    },
+    {
+      "symbol": "2409",
+      "name": "duplicateKey",
+      "bytes": 931039,
+      "sha256": "279971d4d9d8ce3163d7616b2b71226ca64e79a6ecf806df590709ec462d6f68",
+      "wouldRejectAt": "static_length"
+    },
+    {
+      "symbol": "2409",
+      "name": "omitted",
+      "bytes": 779166,
+      "sha256": "125ad71b0b9bf292aef1171c2667e57da797933ecf1c848f553d448bb0fcef09",
+      "wouldRejectAt": "static_length"
+    },
+    {
+      "symbol": "2409",
+      "name": "extra",
+      "bytes": 1082880,
+      "sha256": "2ac99b57f8854517db0c3f1b6ab6314b569cc1f84b0e73b3cbc3815d591bece6",
+      "wouldRejectAt": "static_length"
+    },
+    {
+      "symbol": "2409",
+      "name": "reordered",
+      "bytes": 931023,
+      "sha256": "438465ac44b1d31c61645e5dddd1dade55db75477aed18c3f716f2361fe2b343",
+      "wouldRejectAt": "whole_SHA_before_parse"
+    },
+    {
+      "symbol": "2409",
+      "name": "crossCompany",
+      "bytes": 931023,
+      "sha256": "ed7b22c765898bbd430528e09ea2dce5591615400e643d25103758746ea4c8ff",
+      "wouldRejectAt": "whole_SHA_before_parse"
+    },
+    {
+      "symbol": "2409",
+      "name": "badBase64",
+      "bytes": 931023,
+      "sha256": "85ffd024c98cde80388da7a1f2923eb2d36e013c7976076e803965ea41eb9ee8",
+      "wouldRejectAt": "whole_SHA_before_parse"
+    },
+    {
+      "symbol": "2409",
+      "name": "nonCanonicalWhitespace",
+      "bytes": 931024,
+      "sha256": "94858bce3abd447274ca1780f63c625b600bb211feb1953c45b6a5568a414c7a",
+      "wouldRejectAt": "static_length"
+    },
+    {
+      "symbol": "2383",
+      "name": "unknownKey",
+      "bytes": 353818,
+      "sha256": "5af23063b8331400e56eb5e400d747636354a98b78a65e6c9e21c50c22cd09e7",
+      "wouldRejectAt": "static_length"
+    },
+    {
+      "symbol": "2383",
+      "name": "duplicateKey",
+      "bytes": 353819,
+      "sha256": "a7ad484446981ba119d9a3033db81eb1897c117a4c0993ed0a5a4b400f611b09",
+      "wouldRejectAt": "static_length"
+    },
+    {
+      "symbol": "2383",
+      "name": "omitted",
+      "bytes": 257915,
+      "sha256": "855a297f13e5bf4b6ffa071ac08d64f9587cd0a26945eb8668f660d0427623b7",
+      "wouldRejectAt": "static_length"
+    },
+    {
+      "symbol": "2383",
+      "name": "extra",
+      "bytes": 449691,
+      "sha256": "bc9a9675dbd631a6298586c0bb66d306d784bf5d421be673d72b2ad631495729",
+      "wouldRejectAt": "static_length"
+    },
+    {
+      "symbol": "2383",
+      "name": "reordered",
+      "bytes": 353803,
+      "sha256": "22ef352746dbf4f1f10ba3b00d740090548755883a899a633ff38a50148d1f69",
+      "wouldRejectAt": "whole_SHA_before_parse"
+    },
+    {
+      "symbol": "2383",
+      "name": "crossCompany",
+      "bytes": 353803,
+      "sha256": "932b0230f7645abbc9642d7bc96bbd2cb07a0330f129b6056ddc7afe33ee2e9f",
+      "wouldRejectAt": "whole_SHA_before_parse"
+    },
+    {
+      "symbol": "2383",
+      "name": "badBase64",
+      "bytes": 353803,
+      "sha256": "b7403c30eb2d0f10e06b306ccb61e1cdbd4aaedadc40bc0847b15b9bc1088bd0",
+      "wouldRejectAt": "whole_SHA_before_parse"
+    },
+    {
+      "symbol": "2383",
+      "name": "nonCanonicalWhitespace",
+      "bytes": 353804,
+      "sha256": "c78a14900db583ddd40e5b1cbf2685e904e0df74cff772304b4263222266debd",
+      "wouldRejectAt": "static_length"
+    }
+  ],
+  "uniqueRawBytes": 931660,
+  "maxRSSKiB": 82412,
+  "note": "No candidate code changed or exercised. Hash mismatch verifies proposed representation identity only. Strings cannot be securely erased."
+}

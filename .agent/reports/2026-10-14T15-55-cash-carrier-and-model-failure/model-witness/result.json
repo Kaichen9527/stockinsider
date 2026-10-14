@@ -1,0 +1,44 @@
+{
+  "startedAt": "2026-10-14T07:25:32.704382+00:00",
+  "sourceHead": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "trustedModulesByteIdenticalToProtectedBase": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "files": [
+    {
+      "path": "scripts/model-runner-v3/real-model-attempt.js",
+      "sha256": "9f9171cfcb042a9b6f23943d115ed1421b96c263f7e61b00b15a34ed302feecc"
+    },
+    {
+      "path": "scripts/model-runner-v3/real-model-attempt-worker.js",
+      "sha256": "447bc18821835361f173b978b9e6f83e8802ea98e36e026faf61f2b9aaa34b9c"
+    },
+    {
+      "path": "scripts/model-runner-v3/execution.js",
+      "sha256": "dce543c28a0688f324ef14d64f18aba09332458f30ccd845af2fae273e8c73cc"
+    },
+    {
+      "path": "scripts/model-runner-v3/jsonlParser.js",
+      "sha256": "ed19f2a8587478090d13650d09c011faaa0038fbdab54f0c22f082d70086447d"
+    },
+    {
+      "path": "scripts/model-runner-v3/oracleRecovery.js",
+      "sha256": "cb963ff34eb78a4d068b60863d5186c6d033b6176cfa57d53a289896a016922a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json",
+      "sha256": "b19d8dbfd1649c355f675974f7354c6a7403080a0e91f9b1020bfd185588b816"
+    }
+  ],
+  "gateEnvelopeProduced": false,
+  "sourcePolicyPinsOrExpectationsModified": false,
+  "capture": "wrapper returns original validated terminal object unchanged; only safe operation/key-order/exit witness",
+  "originalOracleFenceAbsent": true,
+  "exit": 10,
+  "completedAt": "2026-10-14T07:26:43.653077+00:00",
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "/tmp/stockinsider-pr379-model-oracle-witness-oct14/observe-original-oracle.js"
+  ],
+  "oracleFenceAfter": false
+}

@@ -1,0 +1,54 @@
+{
+  "run": 38522785296,
+  "attempt": 1,
+  "conclusion": "failure",
+  "head": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "base": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "prDraft": false,
+  "prState": "open",
+  "mergeCommit": "c0e5468ffe45f29c8d7cb95ec97212f3448bd2f8",
+  "merged": false,
+  "rulesActiveNoBypass": true,
+  "jobs": [
+    {
+      "id": 115716092943,
+      "name": "stockinsider-v3-gate-bootstrap",
+      "conclusion": "success"
+    },
+    {
+      "id": 115716155899,
+      "name": "architecture",
+      "conclusion": "success"
+    },
+    {
+      "id": 115716155973,
+      "name": "exact-review",
+      "conclusion": "success"
+    },
+    {
+      "id": 115716156054,
+      "name": "requirements",
+      "conclusion": "success"
+    },
+    {
+      "id": 115716249327,
+      "name": "product-runtime-code-gate",
+      "conclusion": "success"
+    },
+    {
+      "id": 115716249346,
+      "name": "model-runner-code-gate",
+      "conclusion": "failure"
+    },
+    {
+      "id": 115719726360,
+      "name": "stockinsider-v3-gate-root",
+      "conclusion": "failure"
+    }
+  ],
+  "rerunPerformed": false,
+  "readyRepeated": false,
+  "mergePerformed": false,
+  "actualOldInternalError12RootCause": "unproven",
+  "witnessResult": "make/review actual strict success; verify TASK_FAILED/10; not full oracle success; not protected envelope"
+}

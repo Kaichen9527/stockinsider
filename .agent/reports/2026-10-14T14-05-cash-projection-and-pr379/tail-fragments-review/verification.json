@@ -1,0 +1,22 @@
+{
+  "source": "7309fba04e0ae3bb7800bd2aad11e5992b91020d",
+  "evidence": "9aef3bcfffd63727da70e7b920aee8009cb3c666",
+  "verifiedCounts": {
+    "raw-manifest.json": 45,
+    "source-manifest.json": 126
+  },
+  "unchangedPreviousSource": 123,
+  "exactOriginalStatementFragments": 116,
+  "nativeClassifications": {
+    "covered-independent-original-fragment": 14,
+    "not-causally-isolatable": 36
+  },
+  "sourceDefinitionsOnlyAncillary": 66,
+  "rootNativeRun": false,
+  "rootBuildRun": false,
+  "makerNativePass": 54,
+  "parentIncluded": true,
+  "initial53Separate": true,
+  "receiptSha256": "dde0be1c843385bafd09035b0c37168a37c75ebac5c2cdf9931e8bcece516df8",
+  "rootPathErrors": "Two initial handoff guesses used nonexistent dated paths; source-manifest changedPaths identified docs/operations/research-publication-tail-fragments-handoff.md. Native log first guessed native-final.stdout; rg identified exact native-b.stdout/native-a.stdout. Original patherrors retained, no product edit."
+}

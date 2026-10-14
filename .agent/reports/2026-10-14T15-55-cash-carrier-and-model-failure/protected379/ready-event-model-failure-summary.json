@@ -1,0 +1,15 @@
+{
+  "job": 115716249346,
+  "lines": [
+    "2026-10-14T06:32:56.9362980Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}",
+    "2026-10-14T06:34:14.6585760Z protected external gate worker failed: trusted host model oracle (protected_base) failed:",
+    "2026-10-14T06:34:14.6589190Z not ok 2 - pinned Codex propagates network denials through distinct ordinary process-group setsid fork double-fork and delayed descendants before an actual model attempt",
+    "2026-10-14T06:34:14.6590570Z   failureType: 'testCodeFailure'",
+    "2026-10-14T06:34:14.6590760Z   error: |-",
+    "2026-10-14T06:34:14.6591110Z     real model worker stderr: {\"code\":\"INTERNAL_ERROR\",\"exit\":12,\"message\":\"trusted runner invariant failed\",\"protocol\":\"loop-model-error-v3.5\"}",
+    "2026-10-14T06:34:14.6592020Z   name: 'AssertionError'",
+    "2026-10-14T06:34:14.6597420Z # fail 1",
+    "2026-10-14T06:34:14.6623990Z ##[error]Process completed with exit code 1."
+  ],
+  "captureErrorBeforeFix": "Initial GH api stdout safety refused terminal escapes; explicit documented api flag used only to save raw bytes, never execute/display raw escapes. This capture error is separate from CI failure."
+}
