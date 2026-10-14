@@ -1,0 +1,9 @@
+{
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "webTree": "d1fe8698beb17ffa93341f9c08d730a88ae4cef9",
+  "buildId": "9fGJMLZR5VYkeu2eEob_W",
+  "serverFiles": 2088,
+  "manifestSha256": "3b6dcfe37cbc78187ae5b6f8bd7e0ef83b8512ad5467b4e42d0ed4dd60ce937b",
+  "compiler": "normal Next16.3.8 Turbopack; branch exact lock, not approved main Next16.3.4",
+  "dotenvInventoryOnly": []
+}

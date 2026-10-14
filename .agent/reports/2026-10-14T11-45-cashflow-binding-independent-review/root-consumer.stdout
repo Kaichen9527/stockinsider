@@ -1,0 +1,25 @@
+{
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "actualConsumerResults": [
+    {
+      "symbol": "2409",
+      "consumerError": null,
+      "modelCanonicalHash": "cf7419b2204419dc1aca590bc355df36bb19600c5beaf2905c6819f5a040b57d",
+      "existingLoaderComputedHash": "cf7419b2204419dc1aca590bc355df36bb19600c5beaf2905c6819f5a040b57d",
+      "successorModelAsOf": "2026-10-14T02:34:47.456437+00:00",
+      "consumerCutoff": "2026-10-14T02:34:47.456437+00:00",
+      "consumerAuthoredAt": "2026-10-14T03:19:29.393Z",
+      "newExtractionAvailableAt": "2026-10-14T02:34:47.456437+00:00"
+    },
+    {
+      "symbol": "2383",
+      "consumerError": null,
+      "modelCanonicalHash": "d10858110edee1dd2760791e00c8b0eea3dc4a80b6d643db70b62216541dc879",
+      "existingLoaderComputedHash": "d10858110edee1dd2760791e00c8b0eea3dc4a80b6d643db70b62216541dc879",
+      "successorModelAsOf": "2026-10-14T02:34:47.456437+00:00",
+      "consumerCutoff": "2026-10-14T02:34:47.456437+00:00",
+      "consumerAuthoredAt": "2026-10-14T03:19:29.686Z",
+      "newExtractionAvailableAt": "2026-10-14T02:34:47.456437+00:00"
+    }
+  ]
+}

@@ -1,0 +1,301 @@
+{
+  "head": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "tree": "be050e9c1f189819b832fc499b11f7f1933aa842",
+  "webTree": "d1fe8698beb17ffa93341f9c08d730a88ae4cef9",
+  "files": [
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/CASHFLOW-INTEGRATION-HANDOFF.md",
+      "bytes": 3146,
+      "sha256": "10318a640b82d95e2e673153f6ee9140c549ed4f7ea584e82cc9f97cfc3e23a9",
+      "blob": "6fcf041ad5ff2f5813079f7ce05556e86bbe4bd3"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/README.md",
+      "bytes": 5748,
+      "sha256": "380dd3ece7ebb69cc51700680be91cbeb1a29e488ec885e0588dc4659be0c37c",
+      "blob": "b7f91defb89606e6081605369a98ade5244d2fe9"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json",
+      "bytes": 2632,
+      "sha256": "17f302aa3826a1d270df151daacc3f3bee5a61104ce004e1f657d26cf1214c49",
+      "blob": "c30dcb7f988f7360edef42403dad0a6dca44ed25"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/hashes.json",
+      "bytes": 1908,
+      "sha256": "c860888d0888dd7c355cb08ffc8dfd2f764fefb01ad376587fdf8f7cca04f473",
+      "blob": "633064ed5733fc0dc5dc6e2a6b32d8af7a3ddbd0"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 113823,
+      "sha256": "6426ba0caaac2a446593a632ebce50f93e7851f4fdb4025ff427c2f011961209",
+      "blob": "63e0191dcfae38a16de4e069d7a0dc37206576c2"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+      "bytes": 30851,
+      "sha256": "0d380225957bce4498b052ec6f5a4458d62b5366f01a845ec6f99077772d49b8",
+      "blob": "5458f7f49556a73f6d43aee8dfaad1e7e67735e7"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/verify-output.py",
+      "bytes": 8380,
+      "sha256": "4ae10bf4d34fca5e461037fe08da5a986ca23f9ec544dcda3724d83be2e3f110",
+      "blob": "e0bcb5687ce6af2b07e92ba0f5f9d106852d8972"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf",
+      "blob": "84c4cb6aff3981e3da67a58f359296cc466b8223"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189",
+      "blob": "ec1e7537dddbd92e0173e06711739fa85f0029e5"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb",
+      "blob": "a5a7e644eef47a8325711a5d89c435d040553720"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6",
+      "blob": "9294e73943108926bdda3ea01a08f14519676e6d"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103",
+      "blob": "de3a70adcd56d6df6a47a2ad26e1ab3bd192ff8d"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-market/dataset.json",
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582",
+      "blob": "7043daad19506b826bb9c3c823ab7c0a01cbe28c"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+      "blob": "5d90da3bb2e3210e9ad44ce6519cff791999121c"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/README.md",
+      "bytes": 6196,
+      "sha256": "58ebc759d511ac7aac3a2078786de7e7be7613a5edb63cb2a48d141572e14eb9",
+      "blob": "0c68f8d5ceca753f6e0a7fc3125f11b4ab4b637e"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/draft-metadata.json",
+      "bytes": 2109,
+      "sha256": "31a69490a34087491bbd8a459244919a5016388bb81da3324421d08a0ac59194",
+      "blob": "7f4eea37e62ee2b144b0efe94abc729859ee0b57"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/hashes.json",
+      "bytes": 2218,
+      "sha256": "6021b5500bad385f2f395e67bdc5e9f322452347636a07557ca2244683eeb591",
+      "blob": "107af39e503a30c6ebde638472adb0f54e4fc190"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/model-results.json",
+      "bytes": 71848,
+      "sha256": "30028ccf9e48d7cda79f55a8b6ffd5141bad513e277894c8e360479e606b6786",
+      "blob": "42d02610e0657637a61eeb1645a8ece8537c51ee"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+      "bytes": 17404,
+      "sha256": "903b23c7b25c2a2cca75c66d9887d3f500b1c5df672ab03484433caf6cd958ae",
+      "blob": "cf87e881fb355fb3e8dbb5b50f70a4dae0764fd9"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/verify-output.py",
+      "bytes": 8860,
+      "sha256": "b77aee357a243510a12677a374f64f0d1f2bee7ce05fef45d9e516200b91c078",
+      "blob": "744b031fedabee0fe690f65016f904faae334737"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+      "bytes": 10693,
+      "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5",
+      "blob": "a88b09128554d08e160393fb7d41a1d533034e67"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+      "bytes": 3671,
+      "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d",
+      "blob": "dd64b3c3504fc563ca95d645bee1d55c8314d121"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+      "bytes": 3630,
+      "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275",
+      "blob": "735c6b2d6958800e0c067b1153f6cc2d61724447"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+      "bytes": 33734,
+      "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+      "blob": "f3062cafcd24d446dcf76551a74fc86bde0a7276"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+      "bytes": 110526,
+      "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5",
+      "blob": "130bcd0d798643de3b3c73239ee9fffe354cf1cf"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/README.md",
+      "bytes": 7384,
+      "sha256": "1107f8bc4f1b030addb1613a778b50ba7bae02fc8425af6ec4ea0614931e1306",
+      "blob": "2d37d30827e8b05618d03d5b3d1a942c16df1efd"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-06.txt",
+      "bytes": 6727,
+      "sha256": "8ff9af88c367e2159d7627e27b7b21caf0d44b321f30dd5db4bbf23e08ace3ef",
+      "blob": "995a90743d130284d73a5af1f9be59910c77ef88"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-07.txt",
+      "bytes": 9429,
+      "sha256": "1ff0b31d3022073cb3db5818e50aff63ef51cbb9b4476a7aee05c57e2bd076e1",
+      "blob": "5824ede0e94b1765e3520219629f8fecaa3d66bd"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-08.txt",
+      "bytes": 2939,
+      "sha256": "fed267eacafed42b51ab76e3d0ddce44d492de6ccad301e764fb3a4384ef9305",
+      "blob": "84f542dec47443b264ab13ec0d22bf6075d99ca2"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-09.txt",
+      "bytes": 3103,
+      "sha256": "c7c3731da13ee8e73c5b8401f083a949925e6c46586e38eb8075e32f95ca1d82",
+      "blob": "b6e186567360dded645899a6a187efcb1cb8ad66"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-38.txt",
+      "bytes": 2475,
+      "sha256": "718fbcc287e3637405c030ef60043d8d0e6c3037f4f118f3ea780a8f232add4c",
+      "blob": "4b84b9c1ecde4e047bef5cc80a04eca45ee5df01"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-40.txt",
+      "bytes": 1919,
+      "sha256": "87abed305b006301dc12319b20b6c45586b8f4ea69d9aafe28425e0088910abc",
+      "blob": "4503280873f8f9cc56a7cfad86e7ad1ee3bbbec2"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/derived-results.json",
+      "bytes": 9503,
+      "sha256": "af4bf32b0d1e8becb97166ef7e75f7a17caf1495caeb5ed3674c6cb0fa76e14a",
+      "blob": "4d3e31676669ca764b1f252aaac75db521a7159b"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/emc-pdf-page-05.txt",
+      "bytes": 5450,
+      "sha256": "89a4446661ac6ad49bdb174e615846f6126d0e53f8db2dd35d348f1128969554",
+      "blob": "275bdcdc7f777a1b202940c62f40725922786310"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/emc-pdf-page-07.txt",
+      "bytes": 5008,
+      "sha256": "d8f66057bfd43c8619add201632d7253616b8d9737e410a57fced90c665ca84e",
+      "blob": "197f951b64c93f1305616375b71cd5baee5f8341"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/recompute.py",
+      "bytes": 4984,
+      "sha256": "bf6cc4d8f808752f4c58a2645b213e476491faee17395ee8cc582546e86840fe",
+      "blob": "230274d8f3d638779c650e022bde51a55a63e489"
+    },
+    {
+      "path": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3",
+      "blob": "832ee8ec64b478d6ecfa709b77d8146e056175b5"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+    },
+    {
+      "path": "scripts/research-auo-four-segment-model.test.mjs",
+      "bytes": 15854,
+      "sha256": "19a6be3ffea0586d253430ebe2bfa85b8ff82ff3cafe011b96bb0a6b6d030fc2",
+      "blob": "21b720465e63407bd7ccadd5f5c42a0aea953c7f"
+    },
+    {
+      "path": "scripts/research-emc-company-model.test.mjs",
+      "bytes": 15020,
+      "sha256": "8144d3408b79ecc7f01f8e5a74f4f4dab09d2339b121f0cd559b36cab179951b",
+      "blob": "092ff249bde8f07e4d26ac9dc455261d66429411"
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274090,
+      "sha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+      "blob": "f62dd3cd9195d739ca3fab5f2b5b4d6b65209ac2"
+    },
+    {
+      "path": "web/src/lib/research-working-draft-fifo.test.ts",
+      "bytes": 2037,
+      "sha256": "ad3b79bc9a7949096812de4b3ea52f39390b2dc57221f4da794c6b004a58dafe",
+      "blob": "d3905bab43b5b79c0cef50072fa8dbaffabfc80c"
+    },
+    {
+      "path": "web/src/lib/research-working-draft-loader.ts",
+      "bytes": 3801,
+      "sha256": "55144886948973e098216b5a3d09029134be2f60360949de7e97831ae4570c1c",
+      "blob": "5b0d05d92cbb63c35f0fa49f21121ab7f8ed298e"
+    },
+    {
+      "path": "web/src/lib/research-working-draft.test.ts",
+      "bytes": 5141,
+      "sha256": "9f926411ebc84cea25e14f26754a14e2026d9a6a4b56a8513ff0aab6b3f2d695",
+      "blob": "1395764236e2cce0eca90133ec224d6cd2fee674"
+    },
+    {
+      "path": "web/src/lib/research-working-draft.ts",
+      "bytes": 5130,
+      "sha256": "975cba8601fb8dc085f44c489d1ca6d0e743d5c7c8e4d93b7a609bfe48710b61",
+      "blob": "288aa198c7c46bc7373fbfd6ddf99defb7df1b92"
+    },
+    {
+      "path": "web/tsconfig.json",
+      "bytes": 710,
+      "sha256": "f399e24188640b031f844ec7c0285e65450e697b2daa5790e1cb801818fcc955",
+      "blob": "2e1433a9d842c16e6cbc9b49d74a7f7012419487"
+    }
+  ],
+  "changedPaths": [
+    "docs/research/2026-10-08-auo-four-segment-model/CASHFLOW-INTEGRATION-HANDOFF.md",
+    "docs/research/2026-10-08-auo-four-segment-model/README.md",
+    "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json",
+    "docs/research/2026-10-08-auo-four-segment-model/hashes.json",
+    "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+    "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+    "docs/research/2026-10-08-auo-four-segment-model/verify-output.py",
+    "docs/research/2026-10-08-emc-company-model/README.md",
+    "docs/research/2026-10-08-emc-company-model/draft-metadata.json",
+    "docs/research/2026-10-08-emc-company-model/hashes.json",
+    "docs/research/2026-10-08-emc-company-model/model-results.json",
+    "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+    "docs/research/2026-10-08-emc-company-model/verify-output.py",
+    "scripts/research-auo-four-segment-model.test.mjs",
+    "scripts/research-emc-company-model.test.mjs",
+    "web/src/lib/research-working-draft.test.ts"
+  ]
+}

@@ -1,0 +1,40 @@
+unknown command "view" for "gh"
+
+Usage:  gh <command> <subcommand> [flags]
+
+Available commands:
+  agent-task
+  alias
+  api
+  attestation
+  auth
+  browse
+  cache
+  co
+  codespace
+  completion
+  config
+  copilot
+  discussion
+  extension
+  gist
+  gpg-key
+  issue
+  label
+  licenses
+  org
+  pr
+  preview
+  project
+  release
+  repo
+  ruleset
+  run
+  search
+  secret
+  skill
+  ssh-key
+  status
+  variable
+  workflow
+

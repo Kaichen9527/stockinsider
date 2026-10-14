@@ -1,0 +1,32 @@
+[
+  {
+    "path": "web/src/lib/research-working-draft-loader.ts",
+    "sha256": "55144886948973e098216b5a3d09029134be2f60360949de7e97831ae4570c1c",
+    "blob": "5b0d05d92cbb63c35f0fa49f21121ab7f8ed298e"
+  },
+  {
+    "path": "web/src/lib/research-working-draft.ts",
+    "sha256": "975cba8601fb8dc085f44c489d1ca6d0e743d5c7c8e4d93b7a609bfe48710b61",
+    "blob": "288aa198c7c46bc7373fbfd6ddf99defb7df1b92"
+  },
+  {
+    "path": "web/src/lib/research-working-draft-fifo.test.ts",
+    "sha256": "ad3b79bc9a7949096812de4b3ea52f39390b2dc57221f4da794c6b004a58dafe",
+    "blob": "d3905bab43b5b79c0cef50072fa8dbaffabfc80c"
+  },
+  {
+    "path": "web/package-lock.json",
+    "sha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "blob": "f62dd3cd9195d739ca3fab5f2b5b4d6b65209ac2"
+  },
+  {
+    "path": "package-lock.json",
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+  },
+  {
+    "path": "web/tsconfig.json",
+    "sha256": "f399e24188640b031f844ec7c0285e65450e697b2daa5790e1cb801818fcc955",
+    "blob": "2e1433a9d842c16e6cbc9b49d74a7f7012419487"
+  }
+]

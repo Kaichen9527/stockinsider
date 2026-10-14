@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "docs/research/2026-10-08-auo-four-segment-model/verify-output.py"
+  ],
+  "cwd": "/tmp/stockinsider-discovery-snapshot-root-review-oct14",
+  "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "start": "2026-10-14T03:38:47.891144+00:00",
+  "exit": 0
+}

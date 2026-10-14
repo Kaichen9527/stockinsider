@@ -1,0 +1,160 @@
+{
+  "schema": "root-independent-consumer-review-v1",
+  "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "evidence": "ae8bb71744587a57cf49fbd82809d391d9f64169",
+  "recordedAt": "2026-10-14T03:42:34.825194+00:00",
+  "verified": {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "evidence": "ae8bb71744587a57cf49fbd82809d391d9f64169",
+    "rawVerified": 57,
+    "sourceVerified": 46,
+    "unchangedConsumers": 6,
+    "sealedAddendum": 12,
+    "fieldChecks": [
+      {
+        "symbol": "2409",
+        "originalSemanticFields": 24,
+        "originalManifestEntries": 7,
+        "articleBytesUnchangedFrom955": true
+      },
+      {
+        "symbol": "2383",
+        "originalSemanticFields": 29,
+        "originalManifestEntries": 5,
+        "articleBytesUnchangedFrom955": true
+      }
+    ],
+    "verifiedAt": "2026-10-14T03:38:47.134085+00:00"
+  },
+  "rootExecuted": {
+    "pure": {
+      "pass": 62,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0
+    },
+    "auoDecimal": 381,
+    "emcDecimal": 485,
+    "originalConsumerProbe": "both pass"
+  },
+  "scopedFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "articleReview": "separate existing chat requested; pending, not formal publication role record",
+  "rootNativeBuildExecuted": false,
+  "productionChanged": false,
+  "files": [
+    {
+      "file": "consumer-reproduction-fixed.mjs",
+      "bytes": 1713,
+      "sha256": "a8a0fcba11870ba87b2474eefc21b4f9596a0196df8980896ea95f1f65cbf1b3"
+    },
+    {
+      "file": "independent-article-review-request.md",
+      "bytes": 3455,
+      "sha256": "e10557c96802c5fc60c46233dd0c8364eadd0ccd05a2887d408df4b2238dad0d"
+    },
+    {
+      "file": "maker-build-identity.json",
+      "bytes": 387,
+      "sha256": "2f9ff56f10f9655eeb1376d95948a3c2744731881485bb3c723ae7f57e5e62f4"
+    },
+    {
+      "file": "maker-field-clock-equality.json",
+      "bytes": 2731,
+      "sha256": "5005b252bbfeb1b3dae6b7f6b73619b7853c5167c77b7fb39b5fdabae8334a28"
+    },
+    {
+      "file": "maker-receipt.json",
+      "bytes": 24444,
+      "sha256": "276b751f7d777d5106fe99ec952ebd274d97a123afdca3d5f1b8e940508c281d"
+    },
+    {
+      "file": "maker-source-manifest.json",
+      "bytes": 12864,
+      "sha256": "134860f0321e5bcc3be19866040547b0c3467a66e82a57f86741fb331a1ec4e3"
+    },
+    {
+      "file": "maker-unchanged-production-consumer.json",
+      "bytes": 1157,
+      "sha256": "d4804bcbee7c72b9f716bfe2356e4fa270ed7e1ad57961b04d8482ef7ddf23cd"
+    },
+    {
+      "file": "review.md",
+      "bytes": 3222,
+      "sha256": "4d13af7f672ec452b1203f59e364033b5477772d937ebc0d0189f2340ec81d0c"
+    },
+    {
+      "file": "root-auo-decimal.meta.json",
+      "bytes": 293,
+      "sha256": "118f1bcf8c996fed33f99571b947d4c0c0ee3ab1643002dcf1ff4110107d8e13"
+    },
+    {
+      "file": "root-auo-decimal.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "root-auo-decimal.stdout",
+      "bytes": 250,
+      "sha256": "d6455512cfbfe13e8183031da0f14e821b06bc4a44d408f74743865540cfe233"
+    },
+    {
+      "file": "root-consumer.meta.json",
+      "bytes": 385,
+      "sha256": "6f60051d7a31d3cafcd380adcaabef81d67425afadb1ed9b7598ac4812c663a0"
+    },
+    {
+      "file": "root-consumer.stderr",
+      "bytes": 638,
+      "sha256": "f7fba9c911a71db0d0601d1144e66a416ce363c81ad62b89c5dd04b32c4a87dc"
+    },
+    {
+      "file": "root-consumer.stdout",
+      "bytes": 1122,
+      "sha256": "47789489de69e16b825b40f4ffae7c5903425445f12012a31bad444f2955e6e1"
+    },
+    {
+      "file": "root-emc-decimal.meta.json",
+      "bytes": 288,
+      "sha256": "5ff4c211e5e1a06115cc21a66a09fcc465b7c75f196050bc72e1e592cc079213"
+    },
+    {
+      "file": "root-emc-decimal.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "root-emc-decimal.stdout",
+      "bytes": 176,
+      "sha256": "0d0f7e9f7057084ea0ddd8b60046c85e3972000c3a7f84e35a0aa5ba24a96de2"
+    },
+    {
+      "file": "root-harness-initial-error.txt",
+      "bytes": 269,
+      "sha256": "4e5e6944752d454e858e927830e66bf517c312a33334eaca90d667e35ed61ada"
+    },
+    {
+      "file": "root-pure.meta.json",
+      "bytes": 547,
+      "sha256": "3000a945d021bc7ea41bb10b4326080fc23abc3d6ec45da686a639094d2ff7e5"
+    },
+    {
+      "file": "root-pure.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "root-pure.stdout",
+      "bytes": 16173,
+      "sha256": "7da698ff587254877478328f539d4bda3d0c178ffbfd6dd61b52049e675629dc"
+    },
+    {
+      "file": "verification.json",
+      "bytes": 593,
+      "sha256": "8919bb497f2c37459faa217a69687411484c120930cfb023383ce392ca8084ba"
+    }
+  ]
+}

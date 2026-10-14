@@ -1,0 +1,13 @@
+{
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "/tmp/stockinsider-cashflow-binding-root-review-oct14/consumer-reproduction-fixed.mjs"
+  ],
+  "cwd": "/tmp/stockinsider-discovery-snapshot-root-review-oct14",
+  "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "start": "2026-10-14T03:38:48.005241+00:00",
+  "exit": 0
+}

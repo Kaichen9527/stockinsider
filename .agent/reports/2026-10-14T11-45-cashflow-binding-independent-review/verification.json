@@ -1,0 +1,23 @@
+{
+  "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "evidence": "ae8bb71744587a57cf49fbd82809d391d9f64169",
+  "rawVerified": 57,
+  "sourceVerified": 46,
+  "unchangedConsumers": 6,
+  "sealedAddendum": 12,
+  "fieldChecks": [
+    {
+      "symbol": "2409",
+      "originalSemanticFields": 24,
+      "originalManifestEntries": 7,
+      "articleBytesUnchangedFrom955": true
+    },
+    {
+      "symbol": "2383",
+      "originalSemanticFields": 29,
+      "originalManifestEntries": 5,
+      "articleBytesUnchangedFrom955": true
+    }
+  ],
+  "verifiedAt": "2026-10-14T03:38:47.134085+00:00"
+}

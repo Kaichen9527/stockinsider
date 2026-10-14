@@ -1,0 +1,18 @@
+{
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-auo-four-segment-model.test.mjs",
+    "scripts/research-emc-company-model.test.mjs",
+    "web/src/lib/research-working-draft.test.ts",
+    "web/src/lib/research-working-draft-fifo.test.ts"
+  ],
+  "cwd": "/tmp/stockinsider-discovery-snapshot-root-review-oct14",
+  "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "start": "2026-10-14T03:38:47.134883+00:00",
+  "exit": 0
+}

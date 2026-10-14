@@ -1,0 +1,1 @@
+Initial gh --allow-escape-sequences run view invocation was rejected as unknown command view. No ready occurred; original stderr kept. Correct gh api flag writes raw zip, never executes log contents.

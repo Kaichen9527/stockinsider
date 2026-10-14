@@ -1,0 +1,16 @@
+{
+  "schema": "single-ready-event-v1",
+  "pr": 378,
+  "subject": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+  "base": "3e1be377de3f6cac58f6de1626e8df994b9df146",
+  "prior_protected_run": 38503491190,
+  "prior_protected_attempt": 2,
+  "seven_actual_success": true,
+  "rules_active": true,
+  "bypass_actors": [],
+  "requested_at": "2026-10-14T03:39:36.770494+00:00",
+  "status": "ready_requested",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "\u2713 Pull request Kaichen9527/stockinsider#378 is marked as \"ready for review\"\n"
+}

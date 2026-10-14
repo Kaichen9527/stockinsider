@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-10-14T03:27:03.309721+00:00",
+  "remoteObservationClockReturned": false,
+  "operation": "one readonly SSH Python subprocess node --version and require.resolve(pg) from exact known deployed current/app paths, no secret/environment reads, no file writes or database connection",
+  "sshExitCode": 0,
+  "sshStderr": "",
+  "stdout": {
+    "node": {
+      "exitCode": 0,
+      "stdout": "v22.23.1",
+      "stderr": ""
+    },
+    "pg_module": {
+      "exitCode": 4,
+      "stdout": "",
+      "stderr": ""
+    },
+    "current": "/opt/stockinsider-standalone/releases/169aad1b6cfa747f78ae3464b614f43c0749d806"
+  },
+  "resolutionPaths": [
+    "/opt/stockinsider/current/app",
+    "/opt/stockinsider/current"
+  ],
+  "scope": "Only default PATH node and pg resolution from these known release paths were checked. Does not prove no other pinned node/pg tool bundle exists anywhere on the host.",
+  "actualPeerValidatorExecuted": false,
+  "actualPeerHbaPassed": false,
+  "actualRoleMutation": false,
+  "capacityHeavyPreflightRun": false,
+  "migrationOrDeployment": false,
+  "pending": "Use a real approved operator runtime/dependency artifact and exact-source guards before executing fixed private-peer CLI acceptance. Do not install arbitrary modules or substitute local trust-PG results."
+}

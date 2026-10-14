@@ -1,0 +1,1 @@
+Readonly manifest harness initially used consumer row['file']; actual schema uses row['path']. KeyError before tests, source unmodified. Initial ready log capture used unsupported global flag placement; no ready invoked. Errors retained separately from product checks.
