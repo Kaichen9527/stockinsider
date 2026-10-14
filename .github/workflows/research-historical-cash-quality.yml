@@ -4,7 +4,10 @@ on:
     paths:
       - '.github/workflows/research-historical-cash-quality.yml'
       - 'web/src/lib/research-historical-cash-core.ts'
+      - 'web/src/lib/research-historical-cash-pins.ts'
+      - 'web/src/lib/research-historical-cash-projection.ts'
       - 'scripts/research-historical-cash-core.test.mjs'
+      - 'scripts/research-historical-cash-projection.test.mjs'
       - 'scripts/fixtures/research-historical-cash/**'
       - '.nvmrc'
       - 'package.json'
@@ -29,4 +32,4 @@ jobs:
       - name: Verify actual runtime and dependency-free arithmetic contracts
         run: |
           test "$(node --version)" = v22.14.0
-          node --experimental-strip-types --test --test-concurrency=1 scripts/research-historical-cash-core.test.mjs
+          node --experimental-strip-types --test --test-concurrency=1 scripts/research-historical-cash-core.test.mjs scripts/research-historical-cash-projection.test.mjs
