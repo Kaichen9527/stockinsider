@@ -11,7 +11,7 @@
         "symbol": "2409",
         "unit": "TWD_thousands",
         "consolidated": true,
-        "grain": "six-month cumulative flow, not standalone Q2",
+        "grain": "half_year_cumulative",
         "periods": [
           "2026-01-01/2026-06-30",
           "2025-01-01/2025-06-30"
@@ -298,7 +298,7 @@
         "symbol": "2383",
         "unit": "TWD_thousands",
         "consolidated": true,
-        "grain": "six-month cumulative flow, not standalone Q2",
+        "grain": "half_year_cumulative",
         "periods": [
           "2026-01-01/2026-06-30",
           "2025-01-01/2025-06-30"
@@ -487,5 +487,7 @@
       ],
       "expectedCapital": null
     }
-  ]
+  ],
+  "sourceGrain": "six-month cumulative flow, not standalone Q2",
+  "normalization": "Explicit source six-month cumulative grain maps to closed half_year_cumulative operand enum; no value, unit or period changes."
 }
