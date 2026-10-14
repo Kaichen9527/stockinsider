@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-15 01:30台灣時間：old77原realm source-only255source/15raw真核，隔離child lifecycle負例P2阻擋heavy；單件source修補活動
+
+Source305074af2547316078e930de8ad81a910860c8c0/evidence6a136516934a3fe8442a47b55c8f450b897102a5/receipt9231af220d74dbb0e74991e18b7a8d3f6ccabcd0d985e4d40c07efd83bacc4e2已真終態；Root獨立核255actualGitblobs/15publishedraw42618bytes，decode26original15d4檔、22closure重算77b1cc06、14原75dfinancial及2SQL逐byte相同。原producer source不是historical compiledNext/currentC77；兩nativechildren+parent全部NOT_RUN，未import app/PG/native/npm/build。
+
+Root scoped source review REQUEST_CHANGES P0=0/P1=0/P2=1。R1 helperchild error即resolve exitpromise、clear watchdog且無條件confirmedChildExit:true；隔離exactmodule mockchild errorwhilealive真負例exit1，childAlive=true/exit0/close0/kill0但receipt confirmedtrue。這是harness lifecycle RED，不是native/PG/產品FAIL。需error與真close分開、ownedchild必要terminate並等stdio drain/realclose、pendingRPC settlement保持，未確認不允許cleanup成功。原runCompleteInput deadline.wait已守10s，沒有把shim abort缺listener臆測成延長budget。Root原guessedfixture readonlypath128錯誤保留、後核actual兼容fixture成功，不改舊RED。
+
+Cloud前sourceonlyturn01a13b60真completed+cursor73idle後，只派一件15min SOURCEONLY codex/research-legacy77-child-lifecycle-oct15/base6a136516。Turn01a13b76-58db-71d2-bc13-2e352b3d8eb3/cursor57859559-a812-4f98-bcdc-46a2a9f908f6:74 inProgress，先compactwait同handle，不重派。Owned最小helperlifecycle/isolated builtins probes/handoff/evidence，Root只report/review；禁PG/app/native/既有pure矩陣/npm/build/browser/HTTP/CI/PR/merge/deploy/cache，8GiBfree/RSS8GiB/singleheavy維持。原source/caps/SQL/role/grant/driver/businessassertion不改，原RED永久保留。修後Rootreview才另給heavy，不將sourceonly或mock當old77 firstseal/replayPASS。
+
+Main8c58仍remote真值，PR370..381terminal不再checks/watch/ready/rerun/merge/helper；DD包不重建/不冒含未mergedprotocol。正式169/NOLOGIN-1/容量缺4030730240最後已核，無本輪VPS/DB/roleACL/HTTP/crawl/PTT/策略/正式排程/部署/cache。Fullgoal仍active，來源Top20/兩formal文章/四caller+supplement/Q-R/wholeS-C-B-A/formalpeer/capacity/install/deploy/技術觀察策略排程仍pending。Root report.agent/reports/2026-10-15T01-30-legacy77-source-lifecycle-review/receipta1d72ea7174c167ef9c244b4673801a27dddd54c1a8457d9f68302239c2272c8。
+
 ## 2026-10-15 01:15台灣時間：兩個真byte-bound拒絕已閉合；Root核各249source與五階段9表witness，old77原realm source-only單件活動
 
 Byte code原594eaf16457ffb7526f0888922fc8612e893ac75/修後實測c462a51ceea1b69026b38ec40b105eb971d24116/evidencebe9da96ca8c118db7845691956eaa4c6c3eca44a/receipt5ac68f579b7572a332f9401ad85983203a07d0ad39c88631118135b3f9246006已真終態。Original594第一次native0PASS2FAIL(1AUO child+parent，EMC未跑failfast)：真firstseal後test audit ledger深度>=14錯送產品material canonical depth12；exactRED/WIP/source/實際raw保留，不當產品限額FAIL或把原RED改PASS。最小修後只一testfile3line：audit envelope用SHA256 UTF8 JSON.stringify observer ledger，產品request/payload taggedcompleteHash/depth12/fullschema、原SQL/app/grants/caps/expected/全部拒絕斷言不改。根helper400/1300也未再改，不靠增加caps。
