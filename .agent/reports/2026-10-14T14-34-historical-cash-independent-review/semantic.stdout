@@ -1,0 +1,64 @@
+{
+  "semanticResults": [
+    {
+      "symbol": "2409",
+      "period": "2026-01-01/2026-06-30",
+      "cfo": "6877414",
+      "proxy": "1134612",
+      "cashChange": "-1824886",
+      "closingCash": "53791751",
+      "unit": "TWD_thousands",
+      "groupDenominatorVerified": true
+    },
+    {
+      "symbol": "2409",
+      "period": "2025-01-01/2025-06-30",
+      "cfo": "5118098",
+      "proxy": "-5692596",
+      "cashChange": "-14095648",
+      "closingCash": "54350866",
+      "unit": "TWD_thousands",
+      "groupDenominatorVerified": true
+    },
+    {
+      "symbol": "2383",
+      "period": "2026-01-01/2026-06-30",
+      "cfo": "5044825",
+      "proxy": "-5661917",
+      "cashChange": "2559946",
+      "closingCash": "22567762",
+      "unit": "TWD_thousands",
+      "groupDenominatorVerified": true
+    },
+    {
+      "symbol": "2383",
+      "period": "2025-01-01/2025-06-30",
+      "cfo": "3327358",
+      "proxy": "-1687888",
+      "cashChange": "2631933",
+      "closingCash": "17620241",
+      "unit": "TWD_thousands",
+      "groupDenominatorVerified": true
+    }
+  ],
+  "credentialFieldCount": 0,
+  "rawPdfLoaded": false,
+  "usage": {
+    "userCPUTime": 205369,
+    "systemCPUTime": 23926,
+    "maxRSS": 79300,
+    "sharedMemorySize": 0,
+    "unsharedDataSize": 0,
+    "unsharedStackSize": 0,
+    "minorPageFault": 23790,
+    "majorPageFault": 0,
+    "swappedOut": 0,
+    "fsRead": 0,
+    "fsWrite": 0,
+    "ipcSent": 0,
+    "ipcReceived": 0,
+    "signalsCount": 0,
+    "voluntaryContextSwitches": 164,
+    "involuntaryContextSwitches": 5
+  }
+}

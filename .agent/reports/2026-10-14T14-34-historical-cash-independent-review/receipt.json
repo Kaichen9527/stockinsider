@@ -1,0 +1,23 @@
+{
+  "subject": "e2dcb6c20b71561dfb37d7728809b0be257d8fe2",
+  "tree": "8d5ed4a38fa861969ad052297018d67333b0c941",
+  "base": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "verdict": "REQUEST_CHANGES",
+  "P0": 0,
+  "P1": 0,
+  "P2": 1,
+  "reportSHA256": "2223f72c1654a49f8762a3e0e178bd4aaf2868d310389a8d2fc9614d4993c23f",
+  "reviewJSONSHA256": "581603db75fcd127887176191e9edfa8727433e9550dc2e1684e88f7fcad607e",
+  "sourceManifestSHA256": "4ba06a41e58b87ed473fb2f567bbfc2e1506d64385f0406847a8a836e44feb7f",
+  "rawManifestSHA256": "8b43cd3134cc281dd780f9ef0709de1c583c472382e9b2bcaf0cb01dc60b1661",
+  "rawFiles": 35,
+  "rawBytes": 54967,
+  "completedUTC": "2026-10-14T06:44:50.076969+00:00",
+  "deadlineUTC": "2026-10-14T06:49:45Z",
+  "formalApproval": false,
+  "sourceEdited": false,
+  "resourceFreeBytes": {
+    "/workspace": 8619290624,
+    "/tmp": 15473709056
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "error": "spawnSync git EPERM under sandbox",
+  "syscall": "spawnSync git",
+  "exit": 1,
+  "originalPrivatePath": "/tmp/cash-review-e2d-20261014/probe-initial-private.stderr",
+  "originalBytes": 2818,
+  "originalSHA256": "00e4d9424a3691d924890ae5a89e60d113d337ea080dec0b55a4da112d625a41",
+  "notExportedReason": "Node error renderer included a prefix of source bytes; original private raw retained, this sanitized metadata preserves cause/hash without republishing raw source.",
+  "resolvedExecutionEnvironment": "Same read-only Git/Node probe under allowed escalation; source and assertions unchanged except sanitizing child errors."
+}

@@ -1,0 +1,51 @@
+{
+  "subject": "e2dcb6c20b71561dfb37d7728809b0be257d8fe2",
+  "tree": "8d5ed4a38fa861969ad052297018d67333b0c941",
+  "base": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "files": [
+    {
+      "path": ".github/workflows/research-historical-cash-quality.yml",
+      "bytes": 1418,
+      "sha256": "75dcf547dba1706ea22af0c5bf5286746c3cac7cbbd40ffcd1b636ee2d163bba",
+      "blob": "49910a2da7cdc0fd4e24e5ee16e2f6c0f9a247e1"
+    },
+    {
+      "path": ".github/workflows/source-led-opportunity-v3.yml",
+      "bytes": 6421,
+      "sha256": "b1b930edfb2bb746218bb6215c0a2ae8adc34eef2c5c3289fa61af44bb02bf2a",
+      "blob": "2ba40a34f81f36add0beff5a18786fc2e1ed7972"
+    },
+    {
+      "path": "docs/operations/2026-10-14/historical-cash-projection-handoff.md",
+      "bytes": 5223,
+      "sha256": "da802e8402e31e71c608b2725d9edac9c89e33e635c9b3890044376d8b74532a",
+      "blob": "b1c1338151ba03d6919bebc5ed8fc59f3f0d974b"
+    },
+    {
+      "path": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+      "bytes": 202500,
+      "sha256": "afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f",
+      "blob": "00d9e80495ddb25048925ecb00a758356494bb94"
+    },
+    {
+      "path": "scripts/research-historical-cash-projection.test.mjs",
+      "bytes": 7981,
+      "sha256": "5035b95ef45a5770a46bb3f4d7e9e05d511ab585ee50f6af17f6e2d24004955f",
+      "blob": "2b6139158d2a490909979c5c3d143262b50a0cb9"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-pins.ts",
+      "bytes": 6778,
+      "sha256": "0857d1b8b2e04fa9bedd9fcffbf072400d5ca51c0ac86b39a988bd6a1c442d41",
+      "blob": "9bbeb18f6c5a70ec28193b29cebd9d477c9f1430"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-projection.ts",
+      "bytes": 9817,
+      "sha256": "22370c7a074dd0539b55a38390f001d70dd2ebf688a819e94bca1696e09d9f6b",
+      "blob": "fe127920578b13c0141c283a0823376e677eb7a9"
+    }
+  ],
+  "unchangedCoreBlob": "37aa911d5289faabf9a604d0768fe821a43b6487",
+  "repairRuntimeTestPinsFixtureIdenticalTo9bf": true
+}
