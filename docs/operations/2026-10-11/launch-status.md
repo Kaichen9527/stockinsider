@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 11:53台灣時間：PR378正常protected全通過，已標準merge commit
+
+Ready事件新protected38507395129 attempt1已真終態SUCCESS，bootstrap/requirements/architecture/exact/model/product/aggregate全7真SUCCESS，完整7jobJSON/zip/fulltextlog保存。Root重新核三ordinary38503491252/38503491209/38503491181真SUCCESS、fresh73fa/source18b1/base3e、PRclean/非draft、rules20177392 active/bypass[]，03:52:47Z只一次標準gh pr merge --merge --match-head-commit完成，沒有admin/bypass/auto/directmainpush，完整保護JSON前後相同。
+
+Remote main現69b9734c5766b2e196e8133d63df1f1148959046，真parents3e1be377de3f6cac58f6de1626e8df994b9df146＋18b1fba4c7fa89108cbf8892a0a7205860989995，tree1bd61aa690379cd1a76f1a501eb590919658204b等於已審source，webc550748ca0a3320396ce5b0210750114fdecf848。Audit/tmp/stockinsider-pr378-normal-merge-audit-oct14.json已存在成功；PR378加入370..377終態禁止checks/watch/ready/rerun/merge/helper，375/376/377舊helper也不可碰。原38503491190 attempt1缺refFAIL、原main route3PASS5FAIL以及工具capture/metadata錯誤全保持，不重跑舊綠或改舊RED。
+
+這是upload/worker自有lease修補真正合併，尚未部署到正式169、未新增五件receipt/facts或動正式lease/role/SQL/ACL。Genuine directchild73fafb9ec5c4d3fc67afe00c9fdc6a7f85b1d5f0只attests exact18b1，不直接attest merge69雖fulltree相同；正式安裝/新Linux包需明示exactapprovedsource18b1或真正相符新subject evidence，不能換metadata或把舊staged8bcd包冒稱含本程式。先核同target既有收據再準備新包，Mac不fullbuild。Formalpeer CLI仍需可用approvedruntime/pg依賴與固定peer/HBA驗收，03:27小probe只是knownpaths未解析pg，非全host盤點。Capacity最後16116408320/門檻19998441472差3882033152與reserve待答維持，不重測必敗heavy/不降門檻/不重問/付費。
+
+Receipt ad150c71d57457601fd049b77da01451d57c6428f21177911e28371306fa9133，.agent/reports/2026-10-14T11-52-pr378-normal-merge/。兩篇exact15d4/ae8bb的獨立內容審查已真完成（11:49收據），但未創formal reservation/preparedinput/rolejob/publisher/publication紀錄，無投資/策略批准；不能用merge或scoped內容PASS當正式發布。Cloudcursor57859559:7/reviewercursor1db0d1ce:5均idle，未重派binding/assembly/native/內容review。下一有界工程優先真文章發布鏈與來源補完，或必要exactapprovedrelease準備，避免無限pure框架。Goal仍active且原三階段scope不縮；正式研究排程及其完整原驗收未達成，heartbeat保持。
+
 ## 2026-10-14 11:49台灣時間：友達與台光電兩篇exact successor獨立內容審查真完成
 
 另一既有「StockInsider 官方文件補件」chat的reviewturn01a13880-0df8-7650-8807-4c0268767783於03:47:25Z真completed，cursor1db0d1ce-2ca7-401c-86d5-dbc402e8f541:5/idle。對exactsource15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb/evidenceae8bb71744587a57cf49fbd82809d391d9f64169，兩篇articleSHA/canonical/blob與指定值相符，來源樹前後乾淨；逐篇scoped PASS，零已成立P0/P1/P2。不是Cloudmaker自審或Root代簽；requested GPT6Astra High已依原授權dispatch，實際thread與execution outputs留存。

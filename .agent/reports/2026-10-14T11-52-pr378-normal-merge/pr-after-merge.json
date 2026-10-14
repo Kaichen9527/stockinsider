@@ -1,0 +1,11 @@
+{
+  "baseRefOid": "3e1be377de3f6cac58f6de1626e8df994b9df146",
+  "headRefOid": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+  "isDraft": false,
+  "mergeCommit": {
+    "oid": "69b9734c5766b2e196e8133d63df1f1148959046"
+  },
+  "mergedAt": "2026-10-14T03:52:47Z",
+  "state": "MERGED",
+  "url": "https://github.com/Kaichen9527/stockinsider/pull/378"
+}

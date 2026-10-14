@@ -1,0 +1,64 @@
+{
+  "schema": "root-normal-merge-evidence-v1",
+  "pr": 378,
+  "subject": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+  "merge": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "productionChanged": false,
+  "files": [
+    {
+      "file": "log-api.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "normal-merge-audit.json",
+      "bytes": 1214,
+      "sha256": "b87646bf26c90ccf55d032151faaeb9b49c1b17b606be813dc88ddf2be2fab42"
+    },
+    {
+      "file": "ordinary-terminal.json",
+      "bytes": 465,
+      "sha256": "089df972b229a02dbcc303fd465a2f617624b2ae4a2a9ba886d17d2e110e1707"
+    },
+    {
+      "file": "pr-after-merge.json",
+      "bytes": 345,
+      "sha256": "45f17f6937cb1b991cc3b2909a5e30fa6915420b96b2f04c6b63ab4a382c9906"
+    },
+    {
+      "file": "pr-before-merge.json",
+      "bytes": 8452,
+      "sha256": "2726ffa2ab3b77e498f867c8fa1e76b50d2a7a90e259ca6d56c1ed5930fd2a1e"
+    },
+    {
+      "file": "ready-event-protected-logs.zip",
+      "bytes": 348931,
+      "sha256": "9933cfbc87c24036298598eeaa7b9634ed167625f547ef9284a45d6fa9766de6"
+    },
+    {
+      "file": "ready-event-protected.json",
+      "bytes": 18489,
+      "sha256": "563b69330dcffa804d918321fd73cfc645116dce917007f3af6b976382f9bcfc"
+    },
+    {
+      "file": "ready-event-protected.log",
+      "bytes": 1917628,
+      "sha256": "98c222dcb6cfcb1305c16e75bf7273f4e24858ab655448d578f2f29d1b446d42"
+    },
+    {
+      "file": "remote-refs-before.txt",
+      "bytes": 293,
+      "sha256": "5ff079f313f8e2d4f04db28c7acfd32dd00f58d907d0f2507c3e202222b0b9e3"
+    },
+    {
+      "file": "rules-after-merge.json",
+      "bytes": 1224,
+      "sha256": "b016eaa2fe9f0f291e6baf5664b6c955bb8ebfce8ef16b1fefd6332e41e84d88"
+    },
+    {
+      "file": "rules-before-merge.json",
+      "bytes": 1224,
+      "sha256": "b016eaa2fe9f0f291e6baf5664b6c955bb8ebfce8ef16b1fefd6332e41e84d88"
+    }
+  ]
+}
