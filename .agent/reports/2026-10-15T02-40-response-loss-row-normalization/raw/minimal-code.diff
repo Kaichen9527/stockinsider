@@ -1,0 +1,22 @@
+diff --git a/scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs b/scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs
+index 8e2b9089..84faf1bb 100644
+--- a/scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs
++++ b/scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs
+@@ -10,7 +10,7 @@ async function snapshot(x,label){
+  const value={audit,ledger,ledgerSha256:sha(ledger),fences,fencesSha256:sha(fences),charge,fd:{...x.witness}};assert.equal(Object.keys(audit).length,9);x.save(label+'.json',value);return value;
+ }
+ function unchanged(a,b){assert.deepEqual(b.audit,a.audit);assert.deepEqual(b.ledger,a.ledger);assert.deepEqual(b.charge,a.charge);assert.deepEqual(b.fences,a.fences);assert.deepEqual(b.fd,a.fd);}
+-function storedResponse(response){const {status,replay,dispatchReady,...row}=response;assert.equal(status,'sealed');assert.equal(replay,true);assert.equal(dispatchReady,false);return row;}
++function storedResponse(response,expectedBinding){const {status,replay,dispatchReady,binding,...row}=response;assert.equal(status,'sealed');assert.equal(replay,true);assert.equal(dispatchReady,false);assert.deepEqual(binding,expectedBinding);return row;}
+ async function lossCase(x){
+  x.setStage('private Unix PG relay and dedicated service-role writer');const lab=await x.createResponseLossLab();
+  const observer=(await x.audit.query('SELECT pg_backend_pid() pid')).rows[0].pid,fixtureWriter=(await x.c.query('SELECT pg_backend_pid() pid')).rows[0].pid;
+@@ -44,7 +44,7 @@ async function lossCase(x){
+  for(const root of Object.values(x.roots)){fs.rmSync(root,{recursive:true});assert.equal(fs.existsSync(root),false);} // only owned fixture files
+  x.setStage('new service-role connection: missing-root exact read and seal replay');const replay=await x.createSourceMutator(),replayIdentity=(await replay.query('SELECT pg_backend_pid() pid,current_user role')).rows[0];assert.equal(replayIdentity.role,'service_role');assert.notEqual(replayIdentity.pid,lab.identity.pid);assert.notEqual(replayIdentity.pid,observer);x.save('reconcile-connection.json',replayIdentity);
+  const replayTrace=[],replayRpc={rpc:async(name,args)=>{assert.equal(name,'read_research_article_input_candidate_v3','reconciliation must not re-prepare/reclaim/renew or call sealer');replayTrace.push({name,fd:{...x.witness}});return{data:(await replay.query('SELECT read_research_article_input_candidate_v3($1) v',[args.p_request])).rows[0].v,error:null};}};
+- for(const seal of[false,true]){const label=seal?'06-seal-replay':'05-read-reconcile',before=await snapshot(x,label+'-before'),result=await x.controller.runCompleteInput(replayRpc,x.req,seal);assert.deepEqual(storedResponse(result),stored);assert.deepEqual(result.canonical_payload.clocks,stored.canonical_payload.clocks);const after=await snapshot(x,label+'-after');unchanged(before,after);unchanged(committed,after);}
++ for(const seal of[false,true]){const label=seal?'06-seal-replay':'05-read-reconcile',before=await snapshot(x,label+'-before'),result=await x.controller.runCompleteInput(replayRpc,x.req,seal);assert.deepEqual(storedResponse(result,x.selected),stored);assert.deepEqual(result.canonical_payload.clocks,stored.canonical_payload.clocks);const after=await snapshot(x,label+'-after');unchanged(before,after);unchanged(committed,after);}
+  assert.equal(replayTrace.length,2);x.save('reconcile-rpc-order.json',replayTrace);x.save('response-loss-result.json',{symbol:x.symbol,callerInitiallyUncertain:true,realPgPromiseRejected:true,zeroForwardedSealBytes:true,independentCommittedRowConfirmed:true,reconciledExactRow:true,replayedWithoutIoOrCharge:true,slotCount:2,logicalBytes:committed.charge.bytes,fd:{opens:n,closes:n},formalPeer:false,productionWriterVerified:false,wholeExecutionClosureApproved:false});
+ }
+ await test('real local PG held-response loss: two new wire cases only',async t=>{

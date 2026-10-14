@@ -1,0 +1,13 @@
+24: export function parseBindingCore(text:unknown) {
+25:  ensure(typeof text==='string'&&text.length<=16384&&Buffer.byteLength(text)<=16384);
+26:  const c=parseCompleteJson(text) as BindingCore;
+27:  ensure(c&&Object.keys(c).sort().join(',')==='artifactRootId,compiledFingerprintIdentity,financialProfile,inventoryHash,schemaTemplateIdentity,sourceExecutionHash,symbol,validationContract,wireVersion');
+28:  ensure(c.symbol==='2409'||c.symbol==='2383');ensure(c.wireVersion==='research-article-input-v2'||c.wireVersion==='research-article-input-v3');
+29:  const old=c.wireVersion==='research-article-input-v2';ensure(c.financialProfile===(old?compat.profile:cash.profile)&&c.artifactRootId===(old?'original75d-fixed8or6':'historical15d4-fixed9or7'));
+30:  ensure(c.validationContract==='research-versioned-input-candidate-v3');for(const v of Object.values(c))ensure(typeof v==='string');
+31:  for(const key of ['compiledFingerprintIdentity','inventoryHash','schemaTemplateIdentity','sourceExecutionHash'] as const)ensure(/^[a-f0-9]{64}$/u.test(c[key]));
+32:  const registration=fixedBindingInputs(c.symbol,c.wireVersion);
+33:  ensure(c.inventoryHash===completeHash(registration.inventory)&&c.schemaTemplateIdentity===bindingSha(bindingCanonical(registration.schemaTemplate))&&text===bindingCanonical(c));
+34:  ensure(registration.knownFloor!=='undefined');
+35:  return {bindingCapsuleIdentity:bindingSha(text),core:Object.freeze(c),registration};
+36: }

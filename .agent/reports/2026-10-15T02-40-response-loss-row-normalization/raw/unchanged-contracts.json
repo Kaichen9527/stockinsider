@@ -1,0 +1,30 @@
+[
+  {
+    "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+    "bytes": 22325,
+    "sha256": "f089f44375f80da89be49215cad35626998bcb5775166efc23e93af224ec284f",
+    "blob": "855cd31a01d16809c5b7b9ce0fbfc135d4aa930d",
+    "unchanged": true
+  },
+  {
+    "path": "web/src/lib/research-versioned-input-binding.ts",
+    "bytes": 4004,
+    "sha256": "1ec1bee664b793295b41de982818e767446b85e801efb164324217510d0fd940",
+    "blob": "093bd0ac201a4da0b1a5c7372f84b7570497840a",
+    "unchanged": true
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+    "bytes": 18984,
+    "sha256": "6c2e271118a7ae12676aa8cb7c3fef3e3336bb0c4ae932f05051b3d19a90870b",
+    "blob": "14dff5eb7bcf12913ccbc82b8164d97bfec01159",
+    "unchanged": true
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-response-loss-transport.mjs",
+    "bytes": 6842,
+    "sha256": "ff148367233299d0012254e0f87b38f0bb3feecd10d0ce0ae0d7052f15917027",
+    "blob": "32d6eac23ac483666c2650d6736ca7fa28052495",
+    "unchanged": true
+  }
+]

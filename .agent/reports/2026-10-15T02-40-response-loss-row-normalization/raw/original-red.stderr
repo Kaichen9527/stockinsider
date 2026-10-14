@@ -1,0 +1,91 @@
+node:internal/modules/run_main:122
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    admitted_at: '2026-10-15T02:40:00.123456Z',
++   binding: {
++     bindingCapsuleIdentity: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
++     core: {
++       inventoryHash: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
++       symbol: '2409',
++       wireVersion: 'research-article-input-v3'
++     },
++     registration: {
++       inventory: [
++         {
++           bytes: 2,
++           file: 'synthetic.json',
++           sha256: 'cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc'
++         }
++       ],
++       modelCutoff: '2026-10-08T00:00:00.000000Z'
++     }
++   },
+    canonical_payload: {
+      capabilities: {
+        publishableResearch: false
+      },
+      clocks: {
+
+    at file:///tmp/response-loss-normalization-o15/normalization-probes.mjs:9:175
+    at probe (file:///tmp/response-loss-normalization-o15/normalization-probes.mjs:8:25)
+    at file:///tmp/response-loss-normalization-o15/normalization-probes.mjs:9:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: {
+    revision_id: 'synthetic-row',
+    preparation_id: 'synthetic-preparation',
+    request_hash: 'dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
+    input_hash: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    logical_bytes: 123,
+    canonical_request: { owner: 'synthetic-fixture-only' },
+    canonical_payload: {
+      clocks: { researchCutoff: '2026-10-15T02:40:00.123456Z' },
+      capabilities: { publishableResearch: false }
+    },
+    admitted_at: '2026-10-15T02:40:00.123456Z',
+    research_cutoff: '2026-10-15T02:40:00.123456Z',
+    binding: {
+      bindingCapsuleIdentity: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      core: {
+        symbol: '2409',
+        wireVersion: 'research-article-input-v3',
+        inventoryHash: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+      },
+      registration: {
+        inventory: [
+          {
+            file: 'synthetic.json',
+            bytes: 2,
+            sha256: 'cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc'
+          }
+        ],
+        modelCutoff: '2026-10-08T00:00:00.000000Z'
+      }
+    }
+  },
+  expected: {
+    revision_id: 'synthetic-row',
+    preparation_id: 'synthetic-preparation',
+    request_hash: 'dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
+    input_hash: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    logical_bytes: 123,
+    canonical_request: { owner: 'synthetic-fixture-only' },
+    canonical_payload: {
+      clocks: { researchCutoff: '2026-10-15T02:40:00.123456Z' },
+      capabilities: { publishableResearch: false }
+    },
+    admitted_at: '2026-10-15T02:40:00.123456Z',
+    research_cutoff: '2026-10-15T02:40:00.123456Z'
+  },
+  operator: 'deepStrictEqual'
+}
+
+Node.js v22.14.0

@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "/tmp/response-loss-normalization-o15/normalization-probes.mjs",
+    "/tmp/response-loss-normalization-o15/original-native.test.mjs.txt",
+    "red"
+  ],
+  "exit": 1,
+  "seconds": null,
+  "durationNotRecorded": true,
+  "scope": "builtins-only exact original normalizer; synthetic data; not PG/socket/native",
+  "stdout": "original-red.stdout",
+  "stderr": "original-red.stderr"
+}

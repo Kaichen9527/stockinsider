@@ -1,0 +1,62 @@
+{
+  "scope": "isolated exact-function synthetic normalization contract, not SQL/native/schema approval",
+  "source": "scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs",
+  "exactFunction": "function storedResponse(response,expectedBinding){const {status,replay,dispatchReady,binding,...row}=response;assert.equal(status,'sealed');assert.equal(replay,true);assert.equal(dispatchReady,false);assert.deepEqual(binding,expectedBinding);return row;}",
+  "exactFunctionSha256": "7c77525c624757035e135b09d03b08ec5cec110296248d2b015b676921e03066",
+  "count": 13,
+  "results": [
+    {
+      "name": "exact binding stripped only after validation; all row fields preserved",
+      "status": "PASS"
+    },
+    {
+      "name": "wrong nested binding rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "missing binding rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "null binding rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown extra binding metadata rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "missing nested registration rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "extra persisted field survives normalization and fails full row comparison",
+      "status": "PASS"
+    },
+    {
+      "name": "missing persisted field fails full row comparison",
+      "status": "PASS"
+    },
+    {
+      "name": "changed stored hash fails full row comparison",
+      "status": "PASS"
+    },
+    {
+      "name": "changed stored clock fails full row comparison",
+      "status": "PASS"
+    },
+    {
+      "name": "metadata status expectation unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "metadata replay expectation unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "metadata dispatchReady expectation unchanged",
+      "status": "PASS"
+    }
+  ],
+  "native": "NOT_RUN"
+}
