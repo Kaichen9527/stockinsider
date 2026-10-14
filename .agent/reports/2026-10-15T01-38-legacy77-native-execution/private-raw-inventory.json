@@ -1,0 +1,414 @@
+{
+  "localRoot": "/tmp/legacy77-exec-o15",
+  "payloadPolicy": "Raw payload, source content, private principals, SQL results, TAP and server logs are not committed. Hash inventory only.",
+  "files": [
+    {
+      "path": "cleanup-verification.json",
+      "bytes": 6189,
+      "sha256": "fe27505902e043ce165417ac881ecb7e4de72be81986257ca8cce57f0554a884",
+      "localOnly": true
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 663,
+      "sha256": "b1d598e51234308a61cedbdb55ffa6ce99a0d06858a830b0eb22c6b66e3505bc",
+      "localOnly": true
+    },
+    {
+      "path": "derive-witness.py",
+      "bytes": 5921,
+      "sha256": "c40eb8df486d98af1947ac9ad911c357c5d6ad1121ff656e53f3b2a93127cf22",
+      "localOnly": true
+    },
+    {
+      "path": "identity.json",
+      "bytes": 2539,
+      "sha256": "e8c403018791cedd20252a465ff2a47f7f9f67d708dd8f056f5e8e0b20ad709f",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-01-original-preparation.json",
+      "bytes": 4911,
+      "sha256": "bc662137b88de49b8026456e067697d1bc2eda330d03c8d15a43bd4affbbf986",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-02-original-first-seal.json",
+      "bytes": 146433,
+      "sha256": "45444f47c5ee7647fa6b04b504ce58d579791ac96e935ca5a3cb552bad3b0ec2",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-03-before-read-replay.json",
+      "bytes": 146433,
+      "sha256": "45444f47c5ee7647fa6b04b504ce58d579791ac96e935ca5a3cb552bad3b0ec2",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-04-after-read-replay.json",
+      "bytes": 146433,
+      "sha256": "45444f47c5ee7647fa6b04b504ce58d579791ac96e935ca5a3cb552bad3b0ec2",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-05-before-seal-replay.json",
+      "bytes": 146433,
+      "sha256": "45444f47c5ee7647fa6b04b504ce58d579791ac96e935ca5a3cb552bad3b0ec2",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-06-after-seal-replay.json",
+      "bytes": 146433,
+      "sha256": "45444f47c5ee7647fa6b04b504ce58d579791ac96e935ca5a3cb552bad3b0ec2",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-07-before-conflict.json",
+      "bytes": 146433,
+      "sha256": "45444f47c5ee7647fa6b04b504ce58d579791ac96e935ca5a3cb552bad3b0ec2",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-08-after-conflict.json",
+      "bytes": 146433,
+      "sha256": "45444f47c5ee7647fa6b04b504ce58d579791ac96e935ca5a3cb552bad3b0ec2",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-09-before-fresh77.json",
+      "bytes": 149789,
+      "sha256": "6a0cf3b19a422d1e5db95f0978f19769933c8dd67f7326ecbc02998dcb3c40ab",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-10-after-fresh77.json",
+      "bytes": 149789,
+      "sha256": "6a0cf3b19a422d1e5db95f0978f19769933c8dd67f7326ecbc02998dcb3c40ab",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-claim.json",
+      "bytes": 1345,
+      "sha256": "cebcdc0cd8b647e34af049df0deb3b7ecc1712bd393df4d4b6eabe2cde3808a0",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-cleanup.json",
+      "bytes": 93,
+      "sha256": "b53eeac4054d3a9f333918ef2d433af161465b61a8972f960d49642bebee524e",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-conflict-error.json",
+      "bytes": 63,
+      "sha256": "f96dc752ebeaaef6563f8100cc43cbc9fac38354ad28d8dc5d04ae8425abf285",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-connections.json",
+      "bytes": 73,
+      "sha256": "b61a42d3de4d2c0999f782ac24f6b3002c55bffb7cf761dad24ec5011083ceb4",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "f2a6ccf6911c4490a69fe948c697d5570aace5cd146da88e102083011a0381ce",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-fresh-error.json",
+      "bytes": 71,
+      "sha256": "06efa837ed933f14d6fb81159cdf357a3dc0288372b78cfdb80fcddecaa3492d",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-legacy77-result.json",
+      "bytes": 800,
+      "sha256": "3022f6921d50fee3112a65a53db2dfa267f2fe7d90736e7d57fd49f8730ca38e",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-old-realm-child.json",
+      "bytes": 138579,
+      "sha256": "2b10507df7d7b2bae2095805ac18b467818d967d40449ef09b46f0ef23ccf30f",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-postgres-before-cleanup.log",
+      "bytes": 776,
+      "sha256": "80ff040dd3bde30068f961ae388e57b6dbd1ea82c5f3cd73111ad46cad83b2d5",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-postgres.log",
+      "bytes": 927,
+      "sha256": "6f0016c1382331f0fe3ba4021b52a1a461a77492e5c2f2dabfe8ed20adc6b887",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-preparation.json",
+      "bytes": 2951,
+      "sha256": "2d34089459fdb14c6850239600359ea505089c833c5bc7f0f8f0b3328867201f",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-priority.json",
+      "bytes": 142,
+      "sha256": "f0c9d0bde29523f938b3d9817342b1664e0f816904a8222e57862444b2090444",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-roster-admission.json",
+      "bytes": 448,
+      "sha256": "bf686cc06dd9b226465bc71cee4b6ecbd8821cf1210bfe2983dd9cdefdebc262",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-rpc-error.json",
+      "bytes": 214,
+      "sha256": "e22d1ef91018ae55c2b01f0502fee402d7646d040b6fd94dc8457039f2155452",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-rpc-fd-order.json",
+      "bytes": 567,
+      "sha256": "c71cbefdf07103cce53483c9da32ddbaabdef78ff5ebbad8c1c21897bf4d7ec5",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2383-legacy77-2383-source-locator-shape.json",
+      "bytes": 506,
+      "sha256": "46e9e77ae32943dea1f24e2c6c5eb0a4503da925e23b4b655802f25458e55a69",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-01-original-preparation.json",
+      "bytes": 4911,
+      "sha256": "e2822d9f34891b53dff77844ace8746c83fcfa565d9ce0187c1a2b57edcd10f0",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-02-original-first-seal.json",
+      "bytes": 253411,
+      "sha256": "db3169bdc45fbfbb3ca284b217efa184b9024209f2c41018be138571c741329b",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-03-before-read-replay.json",
+      "bytes": 253411,
+      "sha256": "db3169bdc45fbfbb3ca284b217efa184b9024209f2c41018be138571c741329b",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-04-after-read-replay.json",
+      "bytes": 253411,
+      "sha256": "db3169bdc45fbfbb3ca284b217efa184b9024209f2c41018be138571c741329b",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-05-before-seal-replay.json",
+      "bytes": 253411,
+      "sha256": "db3169bdc45fbfbb3ca284b217efa184b9024209f2c41018be138571c741329b",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-06-after-seal-replay.json",
+      "bytes": 253411,
+      "sha256": "db3169bdc45fbfbb3ca284b217efa184b9024209f2c41018be138571c741329b",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-07-before-conflict.json",
+      "bytes": 253411,
+      "sha256": "db3169bdc45fbfbb3ca284b217efa184b9024209f2c41018be138571c741329b",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-08-after-conflict.json",
+      "bytes": 253411,
+      "sha256": "db3169bdc45fbfbb3ca284b217efa184b9024209f2c41018be138571c741329b",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-09-before-fresh77.json",
+      "bytes": 256767,
+      "sha256": "81a26a79da54c36e6941740da12384ea4ce60266000c76829b9b799487f61a93",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-10-after-fresh77.json",
+      "bytes": 256767,
+      "sha256": "81a26a79da54c36e6941740da12384ea4ce60266000c76829b9b799487f61a93",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-claim.json",
+      "bytes": 1345,
+      "sha256": "11d654a7905f3b79a9167b11459604f107601ea67f89021787d5de4534b37ee9",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-cleanup.json",
+      "bytes": 93,
+      "sha256": "73b6f969674b9deab8a22cc568ab7d4d0ba68b5a97691376f857604da7f84529",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-conflict-error.json",
+      "bytes": 63,
+      "sha256": "f96dc752ebeaaef6563f8100cc43cbc9fac38354ad28d8dc5d04ae8425abf285",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-connections.json",
+      "bytes": 73,
+      "sha256": "2e0958939e7b56beacc345114d1b3f7e052ab3c88de52786eb0f45c516898af8",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-fresh-error.json",
+      "bytes": 71,
+      "sha256": "06efa837ed933f14d6fb81159cdf357a3dc0288372b78cfdb80fcddecaa3492d",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-legacy77-result.json",
+      "bytes": 800,
+      "sha256": "b85f8ca228cc7f6fbab9e57c8f524c0344f08a5966f97d8c02b17944150466f5",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-old-realm-child.json",
+      "bytes": 241455,
+      "sha256": "2a0766af81487c3da90fac52517b68bf77d0b54ce535881b37843f630d81b733",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-postgres-before-cleanup.log",
+      "bytes": 776,
+      "sha256": "0ada08a7a574baf9118f0e0e05e2cf9176ca5a6416bc3ea19c8789a592a5325a",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-postgres.log",
+      "bytes": 927,
+      "sha256": "8e35acdad24a2ffd55ef49967932b633eca0d2f72e70f329918751a3336ddb7c",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-preparation.json",
+      "bytes": 2951,
+      "sha256": "b08ebe937883441656f455bc1f73a83a8e779699c0dfd6ca0896874b963e60f7",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-priority.json",
+      "bytes": 142,
+      "sha256": "6474a72d09046e70b8a89bddf19103937d1991fd1df00f1ca2bcf51581bd3f74",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-roster-admission.json",
+      "bytes": 448,
+      "sha256": "1bfa871d8d62460a700b11f32543d6075810078845c35ad798217c9b4cad5e56",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-rpc-error.json",
+      "bytes": 214,
+      "sha256": "e22d1ef91018ae55c2b01f0502fee402d7646d040b6fd94dc8457039f2155452",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-rpc-fd-order.json",
+      "bytes": 567,
+      "sha256": "c71cbefdf07103cce53483c9da32ddbaabdef78ff5ebbad8c1c21897bf4d7ec5",
+      "localOnly": true
+    },
+    {
+      "path": "native-artifacts/2409-legacy77-2409-source-locator-shape.json",
+      "bytes": 506,
+      "sha256": "e89b483eaadebe3b82ca4179c6cfb8512536f29a62af87a1ba8fbc816ea18e61",
+      "localOnly": true
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 786,
+      "sha256": "374c82ff9a02a4be6eaba4b69c25942a725c76e0a873db2e67b007cf41362a7e",
+      "localOnly": true
+    },
+    {
+      "path": "native.samples.jsonl",
+      "bytes": 56900,
+      "sha256": "ec1e5a6375209a3741b89c31c46046be13c20d0e1d9c8dc91ff36250349426d7",
+      "localOnly": true
+    },
+    {
+      "path": "native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "localOnly": true
+    },
+    {
+      "path": "native.stdout",
+      "bytes": 1142,
+      "sha256": "e64d27e3ab5f1a8610eac08adcad07a18fd253d41de08e89b006ffb839cbd156",
+      "localOnly": true
+    },
+    {
+      "path": "preflight-parser-red.json",
+      "bytes": 829,
+      "sha256": "34eaecc5aa1c0cdcf5e7681150d2781b668c909908a5e8956f88027909cb1359",
+      "localOnly": true
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 61333,
+      "sha256": "618fd5cc17c0a31d0fa63f994c939aa5b84eae348cbc65fe3db281ee50fb6586",
+      "localOnly": true
+    },
+    {
+      "path": "run.py",
+      "bytes": 3327,
+      "sha256": "520c7b7ff7691424c954a5645a9912357ec7ea2d802b3607c7ebc6a63a706088",
+      "localOnly": true
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 64070,
+      "sha256": "81f3bc857d3799044354d8ec5b94f7fb2d8812cee0fac0056735d46fed1a789b",
+      "localOnly": true
+    }
+  ]
+}

@@ -1,0 +1,1740 @@
+{
+  "schema": "legacy77-native-public-safe-maker-witness-v1",
+  "derivedAt": "2026-10-14T17:43:17.112990+00:00",
+  "executedSubject": "9d68b4d62b1af0fcbe221ed2e5689534e0b9da42",
+  "runtimeCode": "c7d6665068774c346e28303adeb06634abf5d556",
+  "makerDerived": true,
+  "rootPrivateRawReviewClaimed": false,
+  "independentNativeApproval": false,
+  "cases": [
+    {
+      "symbol": "2409",
+      "syntheticLocalFixture": true,
+      "sourceIdentity": {
+        "historicalSource": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+        "sourceClosure": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+        "newExecutionClaimed77": false,
+        "historicalCompiledNextVerified": false
+      },
+      "currentEngineeringIdentity": {
+        "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+        "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+        "wholeClosureApproved": false,
+        "notNextExecutor": true
+      },
+      "originalProducer": {
+        "pid": 588336,
+        "nodeVersion": "v22.14.0",
+        "nodeBinarySha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+        "sourceFilesVerified": 26,
+        "rpcTrace": [
+          {
+            "ordinal": 0,
+            "name": "read_research_article_input_revision_v2",
+            "fd": {
+              "opens": 0,
+              "closes": 0
+            },
+            "writerPid": 588334
+          },
+          {
+            "ordinal": 1,
+            "name": "assert_research_input_preparation_v2",
+            "fd": {
+              "opens": 0,
+              "closes": 0
+            },
+            "writerPid": 588334
+          },
+          {
+            "ordinal": 2,
+            "name": "assert_research_input_preparation_v2",
+            "fd": {
+              "opens": 8,
+              "closes": 0
+            },
+            "writerPid": 588334
+          },
+          {
+            "ordinal": 3,
+            "name": "seal_research_article_input_revision_v2",
+            "fd": {
+              "opens": 8,
+              "closes": 8
+            },
+            "writerPid": 588334
+          }
+        ],
+        "fd": {
+          "opens": 8,
+          "closes": 8
+        },
+        "terminal": {
+          "code": 0,
+          "signal": null,
+          "exitEvent": {
+            "code": 0,
+            "signal": null
+          }
+        },
+        "confirmedExit": true,
+        "confirmedClose": true,
+        "pendingRpcAtSave": 0,
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrBytes": 632,
+        "stderrSha256": "07bfb1202e914248dc57af14e7aac923644e97f5bb8bfcb0dac8737d0cedb277"
+      },
+      "connections": {
+        "writer": 588334,
+        "observer": 588335,
+        "observerReadOnly": true
+      },
+      "firstRequestHash": "92dfe6a27895d4394009dd57f5627f60a14058f69a7fab4331aa9e56e4e57550",
+      "firstInputHash": "a8e75868474b2756bd4030bf04e02315ce5730a8f174bc27a98ce337ff5152aa",
+      "firstStoredClocksHash": "866d8865d544d9d8030942667fc490b78391d3e9d38de2f7ec52b9de56949092",
+      "clockHashEncoding": "SHA256 Python sorted compact UTF8 JSON, audit only (not product canonical)",
+      "stages": [
+        {
+          "stage": "01-original-preparation",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "567c43ca41be2af151103755b368c30cbe23eabbffdae377cb4f874cc1be1592"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "82d4649c00c3bf9de715c33f33912a0402a45a71aacc9aa97cd556c8155cfc08"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "bd7775eb5fb4ca7dd5db45a77020870c61cc6b785282d0694b6686ddd18ee8b5"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "65c19629f531eba22f34ec8015ddf206ba2a5f3eb9130939aa3ecd745fa4fd70"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "858d0f4be4fb9d5b06252a19cbc3f52b9c7b4a2b5896aa9f13ac4f1d49e2c3fb"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "be7cd1c2ce190979d5cbf3e17e1249154a170ed87a254b42e49f3667e78fd352"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "9514c5906f12f6c1fa3691c3187dc4cc72943523699b0d0a59c01baebde387db"
+            }
+          },
+          "fullLedgerSha256": "11eb4b29db48db30409d887ee6d12a204b005fa4f64c83e1b0aaa7560cea42de",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 1,
+            "bytes": 2584
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 0,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": []
+          }
+        },
+        {
+          "stage": "02-original-first-seal",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "567c43ca41be2af151103755b368c30cbe23eabbffdae377cb4f874cc1be1592"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "98ec7f55a522fd59d4a6239b432b9d8f650276238f2fb7b9d549741f158030e4"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "82d4649c00c3bf9de715c33f33912a0402a45a71aacc9aa97cd556c8155cfc08"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "bd7775eb5fb4ca7dd5db45a77020870c61cc6b785282d0694b6686ddd18ee8b5"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "65c19629f531eba22f34ec8015ddf206ba2a5f3eb9130939aa3ecd745fa4fd70"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "858d0f4be4fb9d5b06252a19cbc3f52b9c7b4a2b5896aa9f13ac4f1d49e2c3fb"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "be7cd1c2ce190979d5cbf3e17e1249154a170ed87a254b42e49f3667e78fd352"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "9514c5906f12f6c1fa3691c3187dc4cc72943523699b0d0a59c01baebde387db"
+            }
+          },
+          "fullLedgerSha256": "5e25d5860314d6b643f3174d80f1d97a62b957fd49cf1335282c3ea3cb500eb3",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 168978
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              166394
+            ]
+          }
+        },
+        {
+          "stage": "03-before-read-replay",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "567c43ca41be2af151103755b368c30cbe23eabbffdae377cb4f874cc1be1592"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "98ec7f55a522fd59d4a6239b432b9d8f650276238f2fb7b9d549741f158030e4"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "82d4649c00c3bf9de715c33f33912a0402a45a71aacc9aa97cd556c8155cfc08"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "bd7775eb5fb4ca7dd5db45a77020870c61cc6b785282d0694b6686ddd18ee8b5"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "65c19629f531eba22f34ec8015ddf206ba2a5f3eb9130939aa3ecd745fa4fd70"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "858d0f4be4fb9d5b06252a19cbc3f52b9c7b4a2b5896aa9f13ac4f1d49e2c3fb"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "be7cd1c2ce190979d5cbf3e17e1249154a170ed87a254b42e49f3667e78fd352"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "9514c5906f12f6c1fa3691c3187dc4cc72943523699b0d0a59c01baebde387db"
+            }
+          },
+          "fullLedgerSha256": "5e25d5860314d6b643f3174d80f1d97a62b957fd49cf1335282c3ea3cb500eb3",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 168978
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              166394
+            ]
+          }
+        },
+        {
+          "stage": "04-after-read-replay",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "567c43ca41be2af151103755b368c30cbe23eabbffdae377cb4f874cc1be1592"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "98ec7f55a522fd59d4a6239b432b9d8f650276238f2fb7b9d549741f158030e4"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "82d4649c00c3bf9de715c33f33912a0402a45a71aacc9aa97cd556c8155cfc08"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "bd7775eb5fb4ca7dd5db45a77020870c61cc6b785282d0694b6686ddd18ee8b5"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "65c19629f531eba22f34ec8015ddf206ba2a5f3eb9130939aa3ecd745fa4fd70"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "858d0f4be4fb9d5b06252a19cbc3f52b9c7b4a2b5896aa9f13ac4f1d49e2c3fb"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "be7cd1c2ce190979d5cbf3e17e1249154a170ed87a254b42e49f3667e78fd352"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "9514c5906f12f6c1fa3691c3187dc4cc72943523699b0d0a59c01baebde387db"
+            }
+          },
+          "fullLedgerSha256": "5e25d5860314d6b643f3174d80f1d97a62b957fd49cf1335282c3ea3cb500eb3",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 168978
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              166394
+            ]
+          }
+        },
+        {
+          "stage": "05-before-seal-replay",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "567c43ca41be2af151103755b368c30cbe23eabbffdae377cb4f874cc1be1592"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "98ec7f55a522fd59d4a6239b432b9d8f650276238f2fb7b9d549741f158030e4"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "82d4649c00c3bf9de715c33f33912a0402a45a71aacc9aa97cd556c8155cfc08"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "bd7775eb5fb4ca7dd5db45a77020870c61cc6b785282d0694b6686ddd18ee8b5"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "65c19629f531eba22f34ec8015ddf206ba2a5f3eb9130939aa3ecd745fa4fd70"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "858d0f4be4fb9d5b06252a19cbc3f52b9c7b4a2b5896aa9f13ac4f1d49e2c3fb"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "be7cd1c2ce190979d5cbf3e17e1249154a170ed87a254b42e49f3667e78fd352"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "9514c5906f12f6c1fa3691c3187dc4cc72943523699b0d0a59c01baebde387db"
+            }
+          },
+          "fullLedgerSha256": "5e25d5860314d6b643f3174d80f1d97a62b957fd49cf1335282c3ea3cb500eb3",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 168978
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              166394
+            ]
+          }
+        },
+        {
+          "stage": "06-after-seal-replay",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "567c43ca41be2af151103755b368c30cbe23eabbffdae377cb4f874cc1be1592"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "98ec7f55a522fd59d4a6239b432b9d8f650276238f2fb7b9d549741f158030e4"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "82d4649c00c3bf9de715c33f33912a0402a45a71aacc9aa97cd556c8155cfc08"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "bd7775eb5fb4ca7dd5db45a77020870c61cc6b785282d0694b6686ddd18ee8b5"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "65c19629f531eba22f34ec8015ddf206ba2a5f3eb9130939aa3ecd745fa4fd70"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "858d0f4be4fb9d5b06252a19cbc3f52b9c7b4a2b5896aa9f13ac4f1d49e2c3fb"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "be7cd1c2ce190979d5cbf3e17e1249154a170ed87a254b42e49f3667e78fd352"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "9514c5906f12f6c1fa3691c3187dc4cc72943523699b0d0a59c01baebde387db"
+            }
+          },
+          "fullLedgerSha256": "5e25d5860314d6b643f3174d80f1d97a62b957fd49cf1335282c3ea3cb500eb3",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 168978
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              166394
+            ]
+          }
+        },
+        {
+          "stage": "07-before-conflict",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "567c43ca41be2af151103755b368c30cbe23eabbffdae377cb4f874cc1be1592"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "98ec7f55a522fd59d4a6239b432b9d8f650276238f2fb7b9d549741f158030e4"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "82d4649c00c3bf9de715c33f33912a0402a45a71aacc9aa97cd556c8155cfc08"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "bd7775eb5fb4ca7dd5db45a77020870c61cc6b785282d0694b6686ddd18ee8b5"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "65c19629f531eba22f34ec8015ddf206ba2a5f3eb9130939aa3ecd745fa4fd70"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "858d0f4be4fb9d5b06252a19cbc3f52b9c7b4a2b5896aa9f13ac4f1d49e2c3fb"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "be7cd1c2ce190979d5cbf3e17e1249154a170ed87a254b42e49f3667e78fd352"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "9514c5906f12f6c1fa3691c3187dc4cc72943523699b0d0a59c01baebde387db"
+            }
+          },
+          "fullLedgerSha256": "5e25d5860314d6b643f3174d80f1d97a62b957fd49cf1335282c3ea3cb500eb3",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 168978
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              166394
+            ]
+          }
+        },
+        {
+          "stage": "08-after-conflict",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "567c43ca41be2af151103755b368c30cbe23eabbffdae377cb4f874cc1be1592"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "98ec7f55a522fd59d4a6239b432b9d8f650276238f2fb7b9d549741f158030e4"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "82d4649c00c3bf9de715c33f33912a0402a45a71aacc9aa97cd556c8155cfc08"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "bd7775eb5fb4ca7dd5db45a77020870c61cc6b785282d0694b6686ddd18ee8b5"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "65c19629f531eba22f34ec8015ddf206ba2a5f3eb9130939aa3ecd745fa4fd70"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "858d0f4be4fb9d5b06252a19cbc3f52b9c7b4a2b5896aa9f13ac4f1d49e2c3fb"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "be7cd1c2ce190979d5cbf3e17e1249154a170ed87a254b42e49f3667e78fd352"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "9514c5906f12f6c1fa3691c3187dc4cc72943523699b0d0a59c01baebde387db"
+            }
+          },
+          "fullLedgerSha256": "5e25d5860314d6b643f3174d80f1d97a62b957fd49cf1335282c3ea3cb500eb3",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 168978
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              166394
+            ]
+          }
+        },
+        {
+          "stage": "09-before-fresh77",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 2,
+              "hash": "c8147674eac2eb2127fcdfa4bcbf03ecc67a1142c493d974d3d3e11d2f1aa2e2"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "98ec7f55a522fd59d4a6239b432b9d8f650276238f2fb7b9d549741f158030e4"
+            },
+            "research_source_seals_v2": {
+              "count": 2,
+              "hash": "aeff4b75d728a4162b293ae0b7533c8fd747e7971ce5f60425bf71c1c85deb07"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "bd7775eb5fb4ca7dd5db45a77020870c61cc6b785282d0694b6686ddd18ee8b5"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "65c19629f531eba22f34ec8015ddf206ba2a5f3eb9130939aa3ecd745fa4fd70"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "858d0f4be4fb9d5b06252a19cbc3f52b9c7b4a2b5896aa9f13ac4f1d49e2c3fb"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "be7cd1c2ce190979d5cbf3e17e1249154a170ed87a254b42e49f3667e78fd352"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "9514c5906f12f6c1fa3691c3187dc4cc72943523699b0d0a59c01baebde387db"
+            }
+          },
+          "fullLedgerSha256": "21e266cd01d78d1481205d5287cc3dc25913c061f66cd47ae60f8780e4f8c75c",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 3,
+            "bytes": 171583
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584,
+              2605
+            ],
+            "revisions": [
+              166394
+            ]
+          }
+        },
+        {
+          "stage": "10-after-fresh77",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 2,
+              "hash": "c8147674eac2eb2127fcdfa4bcbf03ecc67a1142c493d974d3d3e11d2f1aa2e2"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "98ec7f55a522fd59d4a6239b432b9d8f650276238f2fb7b9d549741f158030e4"
+            },
+            "research_source_seals_v2": {
+              "count": 2,
+              "hash": "aeff4b75d728a4162b293ae0b7533c8fd747e7971ce5f60425bf71c1c85deb07"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "bd7775eb5fb4ca7dd5db45a77020870c61cc6b785282d0694b6686ddd18ee8b5"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "65c19629f531eba22f34ec8015ddf206ba2a5f3eb9130939aa3ecd745fa4fd70"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "858d0f4be4fb9d5b06252a19cbc3f52b9c7b4a2b5896aa9f13ac4f1d49e2c3fb"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "be7cd1c2ce190979d5cbf3e17e1249154a170ed87a254b42e49f3667e78fd352"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "9514c5906f12f6c1fa3691c3187dc4cc72943523699b0d0a59c01baebde387db"
+            }
+          },
+          "fullLedgerSha256": "21e266cd01d78d1481205d5287cc3dc25913c061f66cd47ae60f8780e4f8c75c",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 3,
+            "bytes": 171583
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584,
+              2605
+            ],
+            "revisions": [
+              166394
+            ]
+          }
+        }
+      ],
+      "pairsUnchanged": [
+        {
+          "before": "03-before-read-replay",
+          "after": "04-after-read-replay",
+          "allNineTablesLedgerChargeFDUnchanged": true
+        },
+        {
+          "before": "05-before-seal-replay",
+          "after": "06-after-seal-replay",
+          "allNineTablesLedgerChargeFDUnchanged": true
+        },
+        {
+          "before": "07-before-conflict",
+          "after": "08-after-conflict",
+          "allNineTablesLedgerChargeFDUnchanged": true
+        },
+        {
+          "before": "09-before-fresh77",
+          "after": "10-after-fresh77",
+          "allNineTablesLedgerChargeFDUnchanged": true
+        }
+      ],
+      "oldSavedRowRequestPayloadClocksUnchanged": true,
+      "replayWithBothRootsMissing": true,
+      "currentRpcNames": [
+        "read_research_article_input_candidate_v3",
+        "read_research_article_input_candidate_v3",
+        "read_research_article_input_candidate_v3",
+        "read_research_article_input_candidate_v3"
+      ],
+      "currentZeroIo": true,
+      "conflictError": {
+        "code": "P0001",
+        "message": "complete_replay_conflict"
+      },
+      "freshOld77Error": {
+        "message": "original_fresh_v2_requires_retained_execution_realm"
+      },
+      "allCapabilitiesFalse": true
+    },
+    {
+      "symbol": "2383",
+      "syntheticLocalFixture": true,
+      "sourceIdentity": {
+        "historicalSource": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+        "sourceClosure": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+        "newExecutionClaimed77": false,
+        "historicalCompiledNextVerified": false
+      },
+      "currentEngineeringIdentity": {
+        "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+        "hc": "d17248f138a52db16a84c3f9e37af28effaa2f8a20091ecbc6749ffd5ef0e0b9",
+        "wholeClosureApproved": false,
+        "notNextExecutor": true
+      },
+      "originalProducer": {
+        "pid": 588380,
+        "nodeVersion": "v22.14.0",
+        "nodeBinarySha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+        "sourceFilesVerified": 26,
+        "rpcTrace": [
+          {
+            "ordinal": 0,
+            "name": "read_research_article_input_revision_v2",
+            "fd": {
+              "opens": 0,
+              "closes": 0
+            },
+            "writerPid": 588378
+          },
+          {
+            "ordinal": 1,
+            "name": "assert_research_input_preparation_v2",
+            "fd": {
+              "opens": 0,
+              "closes": 0
+            },
+            "writerPid": 588378
+          },
+          {
+            "ordinal": 2,
+            "name": "assert_research_input_preparation_v2",
+            "fd": {
+              "opens": 6,
+              "closes": 0
+            },
+            "writerPid": 588378
+          },
+          {
+            "ordinal": 3,
+            "name": "seal_research_article_input_revision_v2",
+            "fd": {
+              "opens": 6,
+              "closes": 6
+            },
+            "writerPid": 588378
+          }
+        ],
+        "fd": {
+          "opens": 6,
+          "closes": 6
+        },
+        "terminal": {
+          "code": 0,
+          "signal": null,
+          "exitEvent": {
+            "code": 0,
+            "signal": null
+          }
+        },
+        "confirmedExit": true,
+        "confirmedClose": true,
+        "pendingRpcAtSave": 0,
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrBytes": 632,
+        "stderrSha256": "52487a5ccedae6e44a843bf15c37ef0dddbaea4d1877213b2084e09491297da9"
+      },
+      "connections": {
+        "writer": 588378,
+        "observer": 588379,
+        "observerReadOnly": true
+      },
+      "firstRequestHash": "662111f3c9c159d73ab9dd629d1753ead9db4447dc04eb86ef51f3b267c412a8",
+      "firstInputHash": "1444a8700362e76868b51b80338729c4d4a48bdb6e1faf739dfb66c753ca51b8",
+      "firstStoredClocksHash": "6d4f288ae161de231bd3dfda412948013967c92bfe55cfd8c9b7bebb6c55be5f",
+      "clockHashEncoding": "SHA256 Python sorted compact UTF8 JSON, audit only (not product canonical)",
+      "stages": [
+        {
+          "stage": "01-original-preparation",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "2f801c00087c62dbdde687c0bc1f4010c6944272f0c8dc576638334a883a2eff"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "8a49302276d59a8f0bae4261f1458610f4cce4e4342f8c2cbe8210f9bacc3ff6"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "c5c4fe5d3fe3eb42bac03122337c9d3cac907e66983055019debbfb82694d772"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "b7e5fec7ee724e7145b06c9b2037f310a1b72a4158f20c149ffe95b685cf79cd"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "0289544bbaaac267e1c72ae1655875ee854587b4075a602752fa5cdbb407eb76"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "85577083b07289820e73cba6ae5df87e10a2d95ea9b6f172a2fb6c196a9d8150"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "c92f710245826ffd05950af7c32e57e33dc34a11081a886779f02692e2183839"
+            }
+          },
+          "fullLedgerSha256": "1d62df4bb63489ea23ce36219f89b2eadb77eba80ae7f3ccfbb173bae03d1ca5",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 1,
+            "bytes": 2584
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 0,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": []
+          }
+        },
+        {
+          "stage": "02-original-first-seal",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "2f801c00087c62dbdde687c0bc1f4010c6944272f0c8dc576638334a883a2eff"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "91e23f2410e80c547a9497fdb025f89d49429e66136675188a11d59a8dcd807e"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "8a49302276d59a8f0bae4261f1458610f4cce4e4342f8c2cbe8210f9bacc3ff6"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "c5c4fe5d3fe3eb42bac03122337c9d3cac907e66983055019debbfb82694d772"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "b7e5fec7ee724e7145b06c9b2037f310a1b72a4158f20c149ffe95b685cf79cd"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "0289544bbaaac267e1c72ae1655875ee854587b4075a602752fa5cdbb407eb76"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "85577083b07289820e73cba6ae5df87e10a2d95ea9b6f172a2fb6c196a9d8150"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "c92f710245826ffd05950af7c32e57e33dc34a11081a886779f02692e2183839"
+            }
+          },
+          "fullLedgerSha256": "5fb922071a1d1f7b3100ffa176fc65289654f18208e39a36d8c0ad4f73453df2",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 101693
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              99109
+            ]
+          }
+        },
+        {
+          "stage": "03-before-read-replay",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "2f801c00087c62dbdde687c0bc1f4010c6944272f0c8dc576638334a883a2eff"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "91e23f2410e80c547a9497fdb025f89d49429e66136675188a11d59a8dcd807e"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "8a49302276d59a8f0bae4261f1458610f4cce4e4342f8c2cbe8210f9bacc3ff6"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "c5c4fe5d3fe3eb42bac03122337c9d3cac907e66983055019debbfb82694d772"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "b7e5fec7ee724e7145b06c9b2037f310a1b72a4158f20c149ffe95b685cf79cd"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "0289544bbaaac267e1c72ae1655875ee854587b4075a602752fa5cdbb407eb76"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "85577083b07289820e73cba6ae5df87e10a2d95ea9b6f172a2fb6c196a9d8150"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "c92f710245826ffd05950af7c32e57e33dc34a11081a886779f02692e2183839"
+            }
+          },
+          "fullLedgerSha256": "5fb922071a1d1f7b3100ffa176fc65289654f18208e39a36d8c0ad4f73453df2",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 101693
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              99109
+            ]
+          }
+        },
+        {
+          "stage": "04-after-read-replay",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "2f801c00087c62dbdde687c0bc1f4010c6944272f0c8dc576638334a883a2eff"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "91e23f2410e80c547a9497fdb025f89d49429e66136675188a11d59a8dcd807e"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "8a49302276d59a8f0bae4261f1458610f4cce4e4342f8c2cbe8210f9bacc3ff6"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "c5c4fe5d3fe3eb42bac03122337c9d3cac907e66983055019debbfb82694d772"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "b7e5fec7ee724e7145b06c9b2037f310a1b72a4158f20c149ffe95b685cf79cd"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "0289544bbaaac267e1c72ae1655875ee854587b4075a602752fa5cdbb407eb76"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "85577083b07289820e73cba6ae5df87e10a2d95ea9b6f172a2fb6c196a9d8150"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "c92f710245826ffd05950af7c32e57e33dc34a11081a886779f02692e2183839"
+            }
+          },
+          "fullLedgerSha256": "5fb922071a1d1f7b3100ffa176fc65289654f18208e39a36d8c0ad4f73453df2",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 101693
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              99109
+            ]
+          }
+        },
+        {
+          "stage": "05-before-seal-replay",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "2f801c00087c62dbdde687c0bc1f4010c6944272f0c8dc576638334a883a2eff"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "91e23f2410e80c547a9497fdb025f89d49429e66136675188a11d59a8dcd807e"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "8a49302276d59a8f0bae4261f1458610f4cce4e4342f8c2cbe8210f9bacc3ff6"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "c5c4fe5d3fe3eb42bac03122337c9d3cac907e66983055019debbfb82694d772"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "b7e5fec7ee724e7145b06c9b2037f310a1b72a4158f20c149ffe95b685cf79cd"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "0289544bbaaac267e1c72ae1655875ee854587b4075a602752fa5cdbb407eb76"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "85577083b07289820e73cba6ae5df87e10a2d95ea9b6f172a2fb6c196a9d8150"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "c92f710245826ffd05950af7c32e57e33dc34a11081a886779f02692e2183839"
+            }
+          },
+          "fullLedgerSha256": "5fb922071a1d1f7b3100ffa176fc65289654f18208e39a36d8c0ad4f73453df2",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 101693
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              99109
+            ]
+          }
+        },
+        {
+          "stage": "06-after-seal-replay",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "2f801c00087c62dbdde687c0bc1f4010c6944272f0c8dc576638334a883a2eff"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "91e23f2410e80c547a9497fdb025f89d49429e66136675188a11d59a8dcd807e"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "8a49302276d59a8f0bae4261f1458610f4cce4e4342f8c2cbe8210f9bacc3ff6"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "c5c4fe5d3fe3eb42bac03122337c9d3cac907e66983055019debbfb82694d772"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "b7e5fec7ee724e7145b06c9b2037f310a1b72a4158f20c149ffe95b685cf79cd"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "0289544bbaaac267e1c72ae1655875ee854587b4075a602752fa5cdbb407eb76"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "85577083b07289820e73cba6ae5df87e10a2d95ea9b6f172a2fb6c196a9d8150"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "c92f710245826ffd05950af7c32e57e33dc34a11081a886779f02692e2183839"
+            }
+          },
+          "fullLedgerSha256": "5fb922071a1d1f7b3100ffa176fc65289654f18208e39a36d8c0ad4f73453df2",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 101693
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              99109
+            ]
+          }
+        },
+        {
+          "stage": "07-before-conflict",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "2f801c00087c62dbdde687c0bc1f4010c6944272f0c8dc576638334a883a2eff"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "91e23f2410e80c547a9497fdb025f89d49429e66136675188a11d59a8dcd807e"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "8a49302276d59a8f0bae4261f1458610f4cce4e4342f8c2cbe8210f9bacc3ff6"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "c5c4fe5d3fe3eb42bac03122337c9d3cac907e66983055019debbfb82694d772"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "b7e5fec7ee724e7145b06c9b2037f310a1b72a4158f20c149ffe95b685cf79cd"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "0289544bbaaac267e1c72ae1655875ee854587b4075a602752fa5cdbb407eb76"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "85577083b07289820e73cba6ae5df87e10a2d95ea9b6f172a2fb6c196a9d8150"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "c92f710245826ffd05950af7c32e57e33dc34a11081a886779f02692e2183839"
+            }
+          },
+          "fullLedgerSha256": "5fb922071a1d1f7b3100ffa176fc65289654f18208e39a36d8c0ad4f73453df2",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 101693
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              99109
+            ]
+          }
+        },
+        {
+          "stage": "08-after-conflict",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 1,
+              "hash": "2f801c00087c62dbdde687c0bc1f4010c6944272f0c8dc576638334a883a2eff"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "91e23f2410e80c547a9497fdb025f89d49429e66136675188a11d59a8dcd807e"
+            },
+            "research_source_seals_v2": {
+              "count": 1,
+              "hash": "8a49302276d59a8f0bae4261f1458610f4cce4e4342f8c2cbe8210f9bacc3ff6"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "c5c4fe5d3fe3eb42bac03122337c9d3cac907e66983055019debbfb82694d772"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "b7e5fec7ee724e7145b06c9b2037f310a1b72a4158f20c149ffe95b685cf79cd"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "0289544bbaaac267e1c72ae1655875ee854587b4075a602752fa5cdbb407eb76"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "85577083b07289820e73cba6ae5df87e10a2d95ea9b6f172a2fb6c196a9d8150"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "c92f710245826ffd05950af7c32e57e33dc34a11081a886779f02692e2183839"
+            }
+          },
+          "fullLedgerSha256": "5fb922071a1d1f7b3100ffa176fc65289654f18208e39a36d8c0ad4f73453df2",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 2,
+            "bytes": 101693
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584
+            ],
+            "revisions": [
+              99109
+            ]
+          }
+        },
+        {
+          "stage": "09-before-fresh77",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 2,
+              "hash": "682e50587ce4014b8d0aa6654b34318798d537c306745ac17a5554afb5b3862a"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "91e23f2410e80c547a9497fdb025f89d49429e66136675188a11d59a8dcd807e"
+            },
+            "research_source_seals_v2": {
+              "count": 2,
+              "hash": "267419d524e4e65b26d22483aba7334ce02a99da825d8926f84795ce63d2d837"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "c5c4fe5d3fe3eb42bac03122337c9d3cac907e66983055019debbfb82694d772"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "b7e5fec7ee724e7145b06c9b2037f310a1b72a4158f20c149ffe95b685cf79cd"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "0289544bbaaac267e1c72ae1655875ee854587b4075a602752fa5cdbb407eb76"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "85577083b07289820e73cba6ae5df87e10a2d95ea9b6f172a2fb6c196a9d8150"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "c92f710245826ffd05950af7c32e57e33dc34a11081a886779f02692e2183839"
+            }
+          },
+          "fullLedgerSha256": "a2c67e54e67d119a3606321f5f80c4ae666ac46f3a0ac1142536295521241b8c",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 3,
+            "bytes": 104299
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584,
+              2606
+            ],
+            "revisions": [
+              99109
+            ]
+          }
+        },
+        {
+          "stage": "10-after-fresh77",
+          "fullNineTableAudit": {
+            "research_input_preparations_v2": {
+              "count": 2,
+              "hash": "682e50587ce4014b8d0aa6654b34318798d537c306745ac17a5554afb5b3862a"
+            },
+            "research_article_input_revisions_v2": {
+              "count": 1,
+              "hash": "91e23f2410e80c547a9497fdb025f89d49429e66136675188a11d59a8dcd807e"
+            },
+            "research_source_seals_v2": {
+              "count": 2,
+              "hash": "267419d524e4e65b26d22483aba7334ce02a99da825d8926f84795ce63d2d837"
+            },
+            "research_deep_jobs_v1": {
+              "count": 1,
+              "hash": "c5c4fe5d3fe3eb42bac03122337c9d3cac907e66983055019debbfb82694d772"
+            },
+            "research_deep_job_attempts_v1": {
+              "count": 1,
+              "hash": "b7e5fec7ee724e7145b06c9b2037f310a1b72a4158f20c149ffe95b685cf79cd"
+            },
+            "research_deep_admission_charges_v1": {
+              "count": 1,
+              "hash": "0289544bbaaac267e1c72ae1655875ee854587b4075a602752fa5cdbb407eb76"
+            },
+            "research_model_reservations_v1": {
+              "count": 1,
+              "hash": "85577083b07289820e73cba6ae5df87e10a2d95ea9b6f172a2fb6c196a9d8150"
+            },
+            "research_model_completions_v1": {
+              "count": 0,
+              "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            "source_raw_documents": {
+              "count": 2,
+              "hash": "c92f710245826ffd05950af7c32e57e33dc34a11081a886779f02692e2183839"
+            }
+          },
+          "fullLedgerSha256": "a2c67e54e67d119a3606321f5f80c4ae666ac46f3a0ac1142536295521241b8c",
+          "ledgerShaEncoding": "exact native audit SHA256 UTF8 JSON.stringify observer projection",
+          "charge": {
+            "count": 3,
+            "bytes": 104299
+          },
+          "parentFd": {
+            "opens": 0,
+            "closes": 0
+          },
+          "storedRevisionCount": 1,
+          "savedLogicalCharges": {
+            "preparations": [
+              2584,
+              2606
+            ],
+            "revisions": [
+              99109
+            ]
+          }
+        }
+      ],
+      "pairsUnchanged": [
+        {
+          "before": "03-before-read-replay",
+          "after": "04-after-read-replay",
+          "allNineTablesLedgerChargeFDUnchanged": true
+        },
+        {
+          "before": "05-before-seal-replay",
+          "after": "06-after-seal-replay",
+          "allNineTablesLedgerChargeFDUnchanged": true
+        },
+        {
+          "before": "07-before-conflict",
+          "after": "08-after-conflict",
+          "allNineTablesLedgerChargeFDUnchanged": true
+        },
+        {
+          "before": "09-before-fresh77",
+          "after": "10-after-fresh77",
+          "allNineTablesLedgerChargeFDUnchanged": true
+        }
+      ],
+      "oldSavedRowRequestPayloadClocksUnchanged": true,
+      "replayWithBothRootsMissing": true,
+      "currentRpcNames": [
+        "read_research_article_input_candidate_v3",
+        "read_research_article_input_candidate_v3",
+        "read_research_article_input_candidate_v3",
+        "read_research_article_input_candidate_v3"
+      ],
+      "currentZeroIo": true,
+      "conflictError": {
+        "code": "P0001",
+        "message": "complete_replay_conflict"
+      },
+      "freshOld77Error": {
+        "message": "original_fresh_v2_requires_retained_execution_realm"
+      },
+      "allCapabilitiesFalse": true
+    }
+  ],
+  "cleanup": {
+    "at": "2026-10-14T17:41:16.021001+00:00",
+    "processes": [
+      {
+        "pid": 588287,
+        "observedCommDuringRun": "node",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588293,
+        "observedCommDuringRun": "node",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588306,
+        "observedCommDuringRun": "initdb",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588313,
+        "observedCommDuringRun": "sh",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588314,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588315,
+        "observedCommDuringRun": "sh",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588316,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588322,
+        "observedCommDuringRun": "postgres",
+        "postState": "Z",
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588323,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588324,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588326,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588327,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588328,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588329,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588330,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588331,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588333,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588334,
+        "observedCommDuringRun": "writer-backend",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588335,
+        "observedCommDuringRun": "observer-backend",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588336,
+        "observedCommDuringRun": "original77-child",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588350,
+        "observedCommDuringRun": "initdb",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588359,
+        "observedCommDuringRun": "sh",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588360,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588363,
+        "observedCommDuringRun": "pg_ctl",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588366,
+        "observedCommDuringRun": "postgres",
+        "postState": "Z",
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588367,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588368,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588370,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588371,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588372,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588373,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588374,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588375,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588377,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588378,
+        "observedCommDuringRun": "writer-backend",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588379,
+        "observedCommDuringRun": "observer-backend",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588380,
+        "observedCommDuringRun": "original77-child",
+        "postState": null,
+        "absentOrZombie": true
+      }
+    ],
+    "clusters": [
+      {
+        "symbol": "2409",
+        "clusterPath": "/tmp/vp3profile-YBI2Pt",
+        "clusterPathAbsent": true,
+        "cleanupReportedStopped": true,
+        "logs": {
+          "postgres-before-cleanup.log": {
+            "bytes": 776,
+            "sha256": "0ada08a7a574baf9118f0e0e05e2cf9176ca5a6416bc3ea19c8789a592a5325a"
+          },
+          "postgres.log": {
+            "bytes": 927,
+            "sha256": "8e35acdad24a2ffd55ef49967932b633eca0d2f72e70f329918751a3336ddb7c"
+          }
+        },
+        "stage": "business complete"
+      },
+      {
+        "symbol": "2383",
+        "clusterPath": "/tmp/vp3profile-gWLdlN",
+        "clusterPathAbsent": true,
+        "cleanupReportedStopped": true,
+        "logs": {
+          "postgres-before-cleanup.log": {
+            "bytes": 776,
+            "sha256": "80ff040dd3bde30068f961ae388e57b6dbd1ea82c5f3cd73111ad46cad83b2d5"
+          },
+          "postgres.log": {
+            "bytes": 927,
+            "sha256": "6f0016c1382331f0fe3ba4021b52a1a461a77492e5c2f2dabfe8ed20adc6b887"
+          }
+        },
+        "stage": "business complete"
+      }
+    ],
+    "method": "OS /proc observations after runner completion plus absence of exact owned cluster paths; absent/zombie distinguishes no running backend from reaped PID",
+    "liveOwnedProcesses": 0
+  },
+  "pending": [
+    "formal compiled Next/whole S-C-B-Q-R-A identity and activation",
+    "four caller wiring/cutover/versioned production support",
+    "source/lease revocation, ABA, response-loss and broader quota races",
+    "prior byte-rejection rejected wouldcharge/total remains null; long-root publication compatibility pending"
+  ]
+}
