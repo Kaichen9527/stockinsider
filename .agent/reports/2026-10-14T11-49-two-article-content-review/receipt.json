@@ -1,0 +1,51 @@
+{
+  "schema": "independent-scoped-article-content-review-v1",
+  "recordedAt": "2026-10-14T03:49:17.928316+00:00",
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "evidence": "ae8bb71744587a57cf49fbd82809d391d9f64169",
+  "reviewerThread": "01a137fc-e83b-7bc0-bc54-8fca40edc2a3",
+  "reviewerTurn": "01a13880-0df8-7650-8807-4c0268767783",
+  "cursor": "1db0d1ce-2ca7-401c-86d5-dbc402e8f541:5",
+  "reviewerStatus": "completed/idle",
+  "requestedModel": "gpt-6-astra",
+  "requestedThinking": "high",
+  "makerDistinct": true,
+  "verdicts": {
+    "2409": "scoped PASS",
+    "2383": "scoped PASS"
+  },
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "independentArithmetic": "36 forecast quarters plus annual/forward share weighting, EPS reversals, four half-year cash proxies, actual financial/Other/disposal/equity checks; report enumerates original pages and limits",
+  "formalReservationOrPublicationRecord": false,
+  "unsigned": true,
+  "formalPublicationApproved": false,
+  "strategyInvestmentApproved": false,
+  "rootReperformedReviewerCalculations": false,
+  "productionChanged": false,
+  "files": [
+    {
+      "file": "auo-cash.png",
+      "bytes": 290444,
+      "sha256": "9b453d43b7bbbe5ff1336f3d6f603b7a25799711da173c4e70552438b3df3d27"
+    },
+    {
+      "file": "emc-cash.png",
+      "bytes": 368543,
+      "sha256": "235214146cca42e76981d7781327e6422e2731ea72d2e42d34a698cdb4660260"
+    },
+    {
+      "file": "independent-review-thread.json",
+      "bytes": 254514,
+      "sha256": "3a5b3415550d4384e469cc69fc919d2f101e1429f8e15b58ad4477b0ab33e37a"
+    },
+    {
+      "file": "review.md",
+      "bytes": 8794,
+      "sha256": "93970e5e1ef5c68edf0b51c432f6e56161dad7fa1c8a25490b2e5efd95738150"
+    }
+  ]
+}
