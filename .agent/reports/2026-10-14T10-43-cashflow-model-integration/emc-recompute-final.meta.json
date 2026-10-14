@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "docs/research/2026-10-08-emc-company-model/recompute.mjs"
+  ],
+  "start_utc": "2026-10-14T02:57:38Z",
+  "seconds": 0.27437686920166016,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 20705280,
+  "min_free_bytes": 8809549824
+}

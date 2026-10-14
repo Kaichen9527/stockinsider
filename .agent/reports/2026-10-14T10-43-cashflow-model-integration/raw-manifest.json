@@ -1,0 +1,262 @@
+[
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/ad-hoc-import-red.txt",
+    "bytes": 574,
+    "sha256": "50197addc37094bc3f2b078a59793c02b15ee665592b3f53215871c1b1f0302e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal-final.meta.json",
+    "bytes": 276,
+    "sha256": "cd0c1517cb5322a47f995e1ede087990af0583a219633e54ba3899c1ba608750"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal-final.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal-final.stdout",
+    "bytes": 250,
+    "sha256": "9eb110a29d7bdc39ea17cdad6c30fd3b21731c8ba07d60c532c48dccc88e8708"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal.meta.json",
+    "bytes": 276,
+    "sha256": "f1e61081e8ee1b6f3420ec37b3e7caf7767d7d1d9c6d5dae3c9b809c6086b042"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal.stdout",
+    "bytes": 250,
+    "sha256": "dded70efc854d22437615babada7c21c4a7607e595f9fc14e07f446683cf1913"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-four-segment-baseline-model.json",
+    "bytes": 88790,
+    "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute-final.meta.json",
+    "bytes": 304,
+    "sha256": "2334f8babb9cfd81c91dc766afcb2c1d29433e4ef232ce6eb445ab652fd37189"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute-final.stderr",
+    "bytes": 613,
+    "sha256": "bcd2f9e4449a2088c502e4fd68863e4c024ab0be481f2fc830c75a5876b5070a"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute-final.stdout",
+    "bytes": 899,
+    "sha256": "cd43f72f3358ae0dbaa4262f65489978cc44fe97be9ca56eb98d43483e87943d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute.meta.json",
+    "bytes": 304,
+    "sha256": "5161a65c67bb3c81c854fad368887708539e616c64822876283bf063042ad39d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute.stderr",
+    "bytes": 598,
+    "sha256": "519cab9cbe4c727175ab222fc003085690c2a7314cefb0331e5d6481854aafa9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute.stdout",
+    "bytes": 899,
+    "sha256": "cd43f72f3358ae0dbaa4262f65489978cc44fe97be9ca56eb98d43483e87943d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/baseline-and-source.json",
+    "bytes": 3324,
+    "sha256": "04e0cb837c68c032a6caabb25a58aa9cd6a6f4ffd44c360ab5367f07e41b5235"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/build-identity.json",
+    "bytes": 476,
+    "sha256": "b5871ee3fa7f39678e22ea620dabb19829f7cde7eaa3a264a13e2bc13911c7f2"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/canonical-field-equality.json",
+    "bytes": 13316,
+    "sha256": "4b20686ae8a9f21c360d3ef7a747c0d6f16837e30ae32c798efd0fd499cdf6a9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/cleanup.json",
+    "bytes": 430,
+    "sha256": "ba2c3c9a24192046f754ddee0e361c677fbf12f2841e6757e23431abe33a2a4e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/compiled-server-manifest.json",
+    "bytes": 387190,
+    "sha256": "01183f7ea1cfde02ec0e5115b8fbb3f89548017143f7d2bff38e97bb8e135ffa"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/dependency-admission.json",
+    "bytes": 542,
+    "sha256": "404daeb8844424f5aaa017073514ff899e005876534d2596719bdc6a6f7cd909"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-company-baseline-model.json",
+    "bytes": 54602,
+    "sha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal-final.meta.json",
+    "bytes": 271,
+    "sha256": "992e8f4e12a5dc3b72dd336eb290a8f91bd160d5230a6dea1886034f36a8e141"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal-final.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal-final.stdout",
+    "bytes": 176,
+    "sha256": "f954c390fe41733e5cca8fec5043104ab4d8624ebce95183e1b9c6cec33f5c32"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal.meta.json",
+    "bytes": 271,
+    "sha256": "ce7528c9fb4abcdad9e241d1b113b20618215236a626cc063289a6d89d57abb6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal.stdout",
+    "bytes": 176,
+    "sha256": "269270fbd7160224c9aa194f16d1f779106390ced223eb9b2fa7c86971d178d7"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute-final.meta.json",
+    "bytes": 300,
+    "sha256": "497d355ae49c423d3d07710ef18b2b503c04dc05ae92cf80baf46c70aef17648"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute-final.stderr",
+    "bytes": 598,
+    "sha256": "2cc0ff26ec2504f3f95809f58f63e53c57a3b53a8b0f52af2e104fda7a29b885"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute-final.stdout",
+    "bytes": 1776,
+    "sha256": "029f7f48d1c3489801c89d696a6f92c9766216c76db9f78d8bcb42e580a471ac"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute.meta.json",
+    "bytes": 299,
+    "sha256": "c82c757d84393d90c4e8ad815d89d8be9d8b805828d15769415291e70c82a1dd"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute.stderr",
+    "bytes": 598,
+    "sha256": "f4932bc36b5b74c13bcd00bcd20fd4c8c4ad4db394a08a808cc569c256446d39"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute.stdout",
+    "bytes": 1776,
+    "sha256": "029f7f48d1c3489801c89d696a6f92c9766216c76db9f78d8bcb42e580a471ac"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/lint.meta.json",
+    "bytes": 251,
+    "sha256": "e7627e6d4cb3f236c3ef031aa190a722420b7d897686182965d8f4cc7354dc94"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/lint.stderr",
+    "bytes": 165,
+    "sha256": "7279b957dba9fd516374b707edba9f912d6c1de4375ea3dc858241c7714bfc8c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/lint.stdout",
+    "bytes": 4588,
+    "sha256": "8df5855b14f315aff14b5134842c2d31a35846f87297d90c6e51438568118692"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure-final.meta.json",
+    "bytes": 384,
+    "sha256": "32c9d44d3a16f3e4989924eeabb53ce014e508369bd2476c989da25763e0287c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure-final.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure-final.stdout",
+    "bytes": 10494,
+    "sha256": "9db163531d467c8fc9bde0da86300a02c171ad0199653213440ddf172be5e2d2"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure.meta.json",
+    "bytes": 384,
+    "sha256": "4aa63f48e7aec3e347c281f9e03f27b5d347e58aa5fb00a2dd62aa058a27c0d0"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure.stdout",
+    "bytes": 10078,
+    "sha256": "72798ce10642e4914eb5941042dbfe3189245042d53a2597adcb81a3172057dc"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/normal-build.meta.json",
+    "bytes": 253,
+    "sha256": "d79db08717db620ec43e6f088618b9777bcb324cb59aa91b20cb70060fcf7b8a"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/normal-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/normal-build.stdout",
+    "bytes": 6500,
+    "sha256": "231ee45e6363ccb0813b7c131b505874f4b4467aac7892dfa8bf6624704a6b80"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/original-field-equality.json",
+    "bytes": 1949,
+    "sha256": "fe00c5d92f3ae6f1bd7b543ca015a3c6378707b72a6bfb65abb1678fe9c8dc5e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/pre-execution-wip.json",
+    "bytes": 1740,
+    "sha256": "ecc34dfa4f396d54c117c602d3788d179a103ae1b641bfaa318615e47217ef61"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/sealed-addendum-final.json",
+    "bytes": 2602,
+    "sha256": "0ab8234124a8db8f0472be738226dbda33c23544901f3d1dfb261ce9d4fbb1a6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/source-manifest.json",
+    "bytes": 14544,
+    "sha256": "c58af7657caa5890fce89feb79987d98e0419e831a813c096720bf1678d5d791"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/typecheck.meta.json",
+    "bytes": 256,
+    "sha256": "fa5234aad0c6061aee76a60fda844d6cd797701f4fba62c71ddafa0e05cdac23"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/typecheck.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/typecheck.stdout",
+    "bytes": 188,
+    "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+  }
+]

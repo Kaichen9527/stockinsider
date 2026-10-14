@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-14T02:52:54.635750+00:00",
+  "files": {
+    "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs": {
+      "sha256": "f0f19e1125a0e7385aa21194de89f71521f154de8531537d63495fd6bd941ce1",
+      "bytes": 26038
+    },
+    "docs/research/2026-10-08-emc-company-model/recompute.mjs": {
+      "sha256": "afabc54338d350af6755732c853ee6401f5a4388b2e82685044919009ff16e4c",
+      "bytes": 17302
+    },
+    "docs/research/2026-10-08-auo-four-segment-model/article-template.md": {
+      "sha256": "e444ac586d5db8a351563379566462a54e2bcfd74efec918dfb4854eec9eac02",
+      "bytes": 20939
+    },
+    "docs/research/2026-10-08-emc-company-model/article-template.md": {
+      "sha256": "c2673739e9dd81b0c3eae636634efc4d23ec8d4d92b8b001726798fa8fc3aa88",
+      "bytes": 20223
+    },
+    "docs/research/2026-10-08-auo-four-segment-model/verify-output.py": {
+      "sha256": "ed805e8c2c675acae7c6be51489b7149d21b4d02b8cd5ccb6bd9e494993aba00",
+      "bytes": 8227
+    },
+    "docs/research/2026-10-08-emc-company-model/verify-output.py": {
+      "sha256": "7ff98e9a5f0fe5018d2b8de99561c1abcb6e9cd3ac94b7f53f79578d5b7b1216",
+      "bytes": 8707
+    },
+    "scripts/research-emc-company-model.test.mjs": {
+      "sha256": "fa56a94798dd1600218fcd31403fe1cdbe6d2b5ce54e6956dd8d4afda8bda210",
+      "bytes": 10123
+    },
+    "scripts/research-auo-four-segment-model.test.mjs": {
+      "sha256": "54e5e4bab1506229dd513aa276ed5f4807a7e28da654e3a7d51b135cb60ad892",
+      "bytes": 10906
+    }
+  },
+  "adHocImportRed": "First canonical pin compute imported researchCanonicalHash from wrong module research-model-article.mjs; SyntaxError missing export; no model output written. Corrected to existing research-agent-qualification.ts export."
+}

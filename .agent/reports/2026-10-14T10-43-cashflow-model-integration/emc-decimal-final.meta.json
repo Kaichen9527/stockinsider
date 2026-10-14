@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "docs/research/2026-10-08-emc-company-model/verify-output.py"
+  ],
+  "start_utc": "2026-10-14T03:00:15Z",
+  "seconds": 0.27159905433654785,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 8712192,
+  "min_free_bytes": 8634458112
+}

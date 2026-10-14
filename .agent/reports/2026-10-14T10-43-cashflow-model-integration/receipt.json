@@ -1,0 +1,544 @@
+{
+  "schemaVersion": "cashflow-historical-model-integration-maker-v1",
+  "taskAdmissionUtc": "2026-10-14T02:43:24Z",
+  "taskDeadlineUtc": "2026-10-14T03:13:24Z",
+  "finishedAt": "2026-10-14T03:03:35.760458+00:00",
+  "timeBasis": "Manual engineering window only; not a model role budget",
+  "branch": "codex/research-cashflow-model-integration-oct14",
+  "base": "243db636b1eaea0141ad91aa45f4b6e7b6a8132d",
+  "sourceHead": "955782d3c61b2bc8149eea69c3466186f422e5b2",
+  "sourceTree": "746d0f476b3634eedebb04008de97e0a2858122e",
+  "sourceWebTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+  "sourceManifestSha256": "c58af7657caa5890fce89feb79987d98e0419e831a813c096720bf1678d5d791",
+  "sourceFileCount": 51,
+  "frozenAddendumSubject": "732bb12e947945b0bd71574cafe6ca6509d9ea51",
+  "sealedAddendumFileCount": 12,
+  "frozenPacketSha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3",
+  "rootPdfReceiptAttributionSha256": "ae9a24f469c1f7f235dbc36a0708a3211cf04619d85b77e90e2b3613fac70957",
+  "rawPdfReverifiedByVm": false,
+  "outputs": {
+    "auo-four-segment": {
+      "canonicalHash": "8027bfa234faf4bdfdc8b71330f4b3d7b71242c1fb9417c5b9f139affe8ea909",
+      "modelSha256": "9804ae47272e7b429a9109906a0b6d1d141d7921915c355f807a983454441822",
+      "articleSha256": "accb32669966843b008a345bfe732a13d41af3b008fcbfe2f716d6d580c8cda2",
+      "modelAsOf": "2026-10-14T02:34:47.456437+00:00",
+      "originalModelAsOf": "2026-10-08T10:20:00Z",
+      "priceSession": "2026-10-08",
+      "chapters": 7,
+      "mainBodyHan": 4650,
+      "proxy2026H1TwdThousands": 1134612
+    },
+    "emc-company": {
+      "canonicalHash": "ac94e0370cf844291cab963852762b0597f53af43af74592f0a0c9fbdc56246a",
+      "modelSha256": "846546059cd875ff993efe0a7cbba216dd8ad10123491441ac75b9120bfde3c4",
+      "articleSha256": "65a5c805e45487dfa6daa91d5c8d7f5d5aae4a10ed7f6aa250cb6b11710b3064",
+      "modelAsOf": "2026-10-14T02:34:47.456437+00:00",
+      "originalModelAsOf": "2026-10-08T12:12:00Z",
+      "priceSession": "2026-10-08",
+      "chapters": 7,
+      "mainBodyHan": 4948,
+      "proxy2026H1TwdThousands": -5661917
+    }
+  },
+  "originalAllFieldsExceptEnvelopeEqual": true,
+  "originalManifestPrefixEqual": true,
+  "canonicalPerFieldEvidence": "canonical-field-equality.json",
+  "tests": {
+    "finalModelPure": {
+      "pass": 43,
+      "fail": 0,
+      "skip": 0
+    },
+    "auoIndependentDecimal": {
+      "checks": 379,
+      "cashChecks": 109
+    },
+    "emcIndependentDecimal": {
+      "checks": 483,
+      "cashChecks": 86
+    },
+    "languageIndependentButMakerExecuted": true,
+    "typecheckExit": 0,
+    "lintExit": 0,
+    "lintErrors": 0,
+    "lintWarnings": 33,
+    "normalBuildExit": 0,
+    "priorFocusedPass": 41,
+    "priorFocusedNotRelabeledAsFinal": true
+  },
+  "typeLintScope": "Executed before code seal; all web files and locks are byte-identical to sealed source web tree. Final changes after these runs were research-doc renderer/table text and model test additions, not web TS/lint inputs. Normal build executed on sealed source head.",
+  "build": {
+    "source": "955782d3c61b2bc8149eea69c3466186f422e5b2",
+    "tree": "746d0f476b3634eedebb04008de97e0a2858122e",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "compiler": "normal next build Turbopack",
+    "node": "22.14.0",
+    "next": "16.3.8",
+    "buildId": "WXeFytiV7-qE7_CwlUs-1",
+    "serverFileCount": 2088,
+    "uncompressedServerBytes": 67439593,
+    "manifestSha256": "01183f7ea1cfde02ec0e5115b8fbb3f89548017143f7d2bff38e97bb8e135ffa",
+    "dotenvInventoryOnly": []
+  },
+  "resources": {
+    "sampling": "250ms process-tree RSS and statvfs; sampled peak, not kernel high-water proof",
+    "peakSampledRssBytes": 2060943360,
+    "minimumMeasuredWorkspaceFreeBytes": 8634458112,
+    "limitEachRssAndDiskReserveBytes": 8589934592,
+    "commands": {
+      "emc-decimal.meta.json": {
+        "command": [
+          "python3",
+          "docs/research/2026-10-08-emc-company-model/verify-output.py"
+        ],
+        "start_utc": "2026-10-14T02:54:13Z",
+        "seconds": 0.2759742736816406,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 10436608,
+        "min_free_bytes": 8820797440
+      },
+      "normal-build.meta.json": {
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "build"
+        ],
+        "start_utc": "2026-10-14T02:58:52Z",
+        "seconds": 52.337687492370605,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 2060943360,
+        "min_free_bytes": 8634503168
+      },
+      "models-pure-final.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/research-auo-four-segment-model.test.mjs",
+          "scripts/research-emc-company-model.test.mjs"
+        ],
+        "start_utc": "2026-10-14T03:00:14Z",
+        "seconds": 0.5478389263153076,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 59322368,
+        "min_free_bytes": 8634474496
+      },
+      "emc-recompute-final.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "docs/research/2026-10-08-emc-company-model/recompute.mjs"
+        ],
+        "start_utc": "2026-10-14T02:57:38Z",
+        "seconds": 0.27437686920166016,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 20705280,
+        "min_free_bytes": 8809549824
+      },
+      "auo-recompute-final.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs"
+        ],
+        "start_utc": "2026-10-14T02:57:22Z",
+        "seconds": 0.2719087600708008,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 23293952,
+        "min_free_bytes": 8809562112
+      },
+      "models-pure.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/research-auo-four-segment-model.test.mjs",
+          "scripts/research-emc-company-model.test.mjs"
+        ],
+        "start_utc": "2026-10-14T02:53:40Z",
+        "seconds": 0.5474123954772949,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 32673792,
+        "min_free_bytes": 8820813824
+      },
+      "auo-decimal-final.meta.json": {
+        "command": [
+          "python3",
+          "docs/research/2026-10-08-auo-four-segment-model/verify-output.py"
+        ],
+        "start_utc": "2026-10-14T03:00:14Z",
+        "seconds": 0.27297043800354004,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 9453568,
+        "min_free_bytes": 8634466304
+      },
+      "auo-decimal.meta.json": {
+        "command": [
+          "python3",
+          "docs/research/2026-10-08-auo-four-segment-model/verify-output.py"
+        ],
+        "start_utc": "2026-10-14T02:53:58Z",
+        "seconds": 0.27315568923950195,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 8957952,
+        "min_free_bytes": 8820805632
+      },
+      "emc-recompute.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "docs/research/2026-10-08-emc-company-model/recompute.mjs"
+        ],
+        "start_utc": "2026-10-14T02:53:10Z",
+        "seconds": 0.2813866138458252,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 24690688,
+        "min_free_bytes": 8820850688
+      },
+      "emc-decimal-final.meta.json": {
+        "command": [
+          "python3",
+          "docs/research/2026-10-08-emc-company-model/verify-output.py"
+        ],
+        "start_utc": "2026-10-14T03:00:15Z",
+        "seconds": 0.27159905433654785,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 8712192,
+        "min_free_bytes": 8634458112
+      },
+      "auo-recompute.meta.json": {
+        "command": [
+          "node",
+          "--experimental-strip-types",
+          "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs"
+        ],
+        "start_utc": "2026-10-14T02:52:54Z",
+        "seconds": 0.2734215259552002,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 23527424,
+        "min_free_bytes": 8820887552
+      },
+      "lint.meta.json": {
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "lint"
+        ],
+        "start_utc": "2026-10-14T02:56:33Z",
+        "seconds": 24.15980839729309,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 1048866816,
+        "min_free_bytes": 8809570304
+      },
+      "typecheck.meta.json": {
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "typecheck"
+        ],
+        "start_utc": "2026-10-14T02:55:44Z",
+        "seconds": 17.59444236755371,
+        "exit": 0,
+        "peak_sampled_process_tree_rss_bytes": 1398128640,
+        "min_free_bytes": 8809574400
+      }
+    }
+  },
+  "cleanup": {
+    "at": "2026-10-14T03:03:35.754879+00:00",
+    "ownedActiveNodeNpmPostgres": [],
+    "ownedServicesStarted": 0,
+    "noClustersOrNetworkSourcesCreated": true,
+    "noCachesOrUniqueEvidenceDeleted": true,
+    "oldDependenciesRetained": ".agent/retained-dependencies/cashflow-next16.3.4",
+    "workspaceFreeBytes": 8634019840,
+    "tmpFreeBytes": 16834076672,
+    "measurement": "/proc comm + cwd inventory; no process env or credentials read"
+  },
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/ad-hoc-import-red.txt",
+      "bytes": 574,
+      "sha256": "50197addc37094bc3f2b078a59793c02b15ee665592b3f53215871c1b1f0302e"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal-final.meta.json",
+      "bytes": 276,
+      "sha256": "cd0c1517cb5322a47f995e1ede087990af0583a219633e54ba3899c1ba608750"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal-final.stdout",
+      "bytes": 250,
+      "sha256": "9eb110a29d7bdc39ea17cdad6c30fd3b21731c8ba07d60c532c48dccc88e8708"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal.meta.json",
+      "bytes": 276,
+      "sha256": "f1e61081e8ee1b6f3420ec37b3e7caf7767d7d1d9c6d5dae3c9b809c6086b042"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-decimal.stdout",
+      "bytes": 250,
+      "sha256": "dded70efc854d22437615babada7c21c4a7607e595f9fc14e07f446683cf1913"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-four-segment-baseline-model.json",
+      "bytes": 88790,
+      "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute-final.meta.json",
+      "bytes": 304,
+      "sha256": "2334f8babb9cfd81c91dc766afcb2c1d29433e4ef232ce6eb445ab652fd37189"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute-final.stderr",
+      "bytes": 613,
+      "sha256": "bcd2f9e4449a2088c502e4fd68863e4c024ab0be481f2fc830c75a5876b5070a"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute-final.stdout",
+      "bytes": 899,
+      "sha256": "cd43f72f3358ae0dbaa4262f65489978cc44fe97be9ca56eb98d43483e87943d"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute.meta.json",
+      "bytes": 304,
+      "sha256": "5161a65c67bb3c81c854fad368887708539e616c64822876283bf063042ad39d"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute.stderr",
+      "bytes": 598,
+      "sha256": "519cab9cbe4c727175ab222fc003085690c2a7314cefb0331e5d6481854aafa9"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/auo-recompute.stdout",
+      "bytes": 899,
+      "sha256": "cd43f72f3358ae0dbaa4262f65489978cc44fe97be9ca56eb98d43483e87943d"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/baseline-and-source.json",
+      "bytes": 3324,
+      "sha256": "04e0cb837c68c032a6caabb25a58aa9cd6a6f4ffd44c360ab5367f07e41b5235"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/build-identity.json",
+      "bytes": 476,
+      "sha256": "b5871ee3fa7f39678e22ea620dabb19829f7cde7eaa3a264a13e2bc13911c7f2"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/canonical-field-equality.json",
+      "bytes": 13316,
+      "sha256": "4b20686ae8a9f21c360d3ef7a747c0d6f16837e30ae32c798efd0fd499cdf6a9"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/cleanup.json",
+      "bytes": 430,
+      "sha256": "ba2c3c9a24192046f754ddee0e361c677fbf12f2841e6757e23431abe33a2a4e"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/compiled-server-manifest.json",
+      "bytes": 387190,
+      "sha256": "01183f7ea1cfde02ec0e5115b8fbb3f89548017143f7d2bff38e97bb8e135ffa"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/dependency-admission.json",
+      "bytes": 542,
+      "sha256": "404daeb8844424f5aaa017073514ff899e005876534d2596719bdc6a6f7cd909"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-company-baseline-model.json",
+      "bytes": 54602,
+      "sha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal-final.meta.json",
+      "bytes": 271,
+      "sha256": "992e8f4e12a5dc3b72dd336eb290a8f91bd160d5230a6dea1886034f36a8e141"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal-final.stdout",
+      "bytes": 176,
+      "sha256": "f954c390fe41733e5cca8fec5043104ab4d8624ebce95183e1b9c6cec33f5c32"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal.meta.json",
+      "bytes": 271,
+      "sha256": "ce7528c9fb4abcdad9e241d1b113b20618215236a626cc063289a6d89d57abb6"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-decimal.stdout",
+      "bytes": 176,
+      "sha256": "269270fbd7160224c9aa194f16d1f779106390ced223eb9b2fa7c86971d178d7"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute-final.meta.json",
+      "bytes": 300,
+      "sha256": "497d355ae49c423d3d07710ef18b2b503c04dc05ae92cf80baf46c70aef17648"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute-final.stderr",
+      "bytes": 598,
+      "sha256": "2cc0ff26ec2504f3f95809f58f63e53c57a3b53a8b0f52af2e104fda7a29b885"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute-final.stdout",
+      "bytes": 1776,
+      "sha256": "029f7f48d1c3489801c89d696a6f92c9766216c76db9f78d8bcb42e580a471ac"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute.meta.json",
+      "bytes": 299,
+      "sha256": "c82c757d84393d90c4e8ad815d89d8be9d8b805828d15769415291e70c82a1dd"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute.stderr",
+      "bytes": 598,
+      "sha256": "f4932bc36b5b74c13bcd00bcd20fd4c8c4ad4db394a08a808cc569c256446d39"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/emc-recompute.stdout",
+      "bytes": 1776,
+      "sha256": "029f7f48d1c3489801c89d696a6f92c9766216c76db9f78d8bcb42e580a471ac"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/lint.meta.json",
+      "bytes": 251,
+      "sha256": "e7627e6d4cb3f236c3ef031aa190a722420b7d897686182965d8f4cc7354dc94"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/lint.stderr",
+      "bytes": 165,
+      "sha256": "7279b957dba9fd516374b707edba9f912d6c1de4375ea3dc858241c7714bfc8c"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/lint.stdout",
+      "bytes": 4588,
+      "sha256": "8df5855b14f315aff14b5134842c2d31a35846f87297d90c6e51438568118692"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure-final.meta.json",
+      "bytes": 384,
+      "sha256": "32c9d44d3a16f3e4989924eeabb53ce014e508369bd2476c989da25763e0287c"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure-final.stdout",
+      "bytes": 10494,
+      "sha256": "9db163531d467c8fc9bde0da86300a02c171ad0199653213440ddf172be5e2d2"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure.meta.json",
+      "bytes": 384,
+      "sha256": "4aa63f48e7aec3e347c281f9e03f27b5d347e58aa5fb00a2dd62aa058a27c0d0"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/models-pure.stdout",
+      "bytes": 10078,
+      "sha256": "72798ce10642e4914eb5941042dbfe3189245042d53a2597adcb81a3172057dc"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/normal-build.meta.json",
+      "bytes": 253,
+      "sha256": "d79db08717db620ec43e6f088618b9777bcb324cb59aa91b20cb70060fcf7b8a"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/normal-build.stdout",
+      "bytes": 6500,
+      "sha256": "231ee45e6363ccb0813b7c131b505874f4b4467aac7892dfa8bf6624704a6b80"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/original-field-equality.json",
+      "bytes": 1949,
+      "sha256": "fe00c5d92f3ae6f1bd7b543ca015a3c6378707b72a6bfb65abb1678fe9c8dc5e"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/pre-execution-wip.json",
+      "bytes": 1740,
+      "sha256": "ecc34dfa4f396d54c117c602d3788d179a103ae1b641bfaa318615e47217ef61"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/sealed-addendum-final.json",
+      "bytes": 2602,
+      "sha256": "0ab8234124a8db8f0472be738226dbda33c23544901f3d1dfb261ce9d4fbb1a6"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/source-manifest.json",
+      "bytes": 14544,
+      "sha256": "c58af7657caa5890fce89feb79987d98e0419e831a813c096720bf1678d5d791"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/typecheck.meta.json",
+      "bytes": 256,
+      "sha256": "fa5234aad0c6061aee76a60fda844d6cd797701f4fba62c71ddafa0e05cdac23"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-14T10-43-cashflow-model-integration/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    }
+  ],
+  "rawTotalBytes": 614530,
+  "rawManifestSha256": "d8df9c9d9ea7b267b96283589fb43bb3406608869025110e58012061ac07b7f9",
+  "originalFailures": "Ad-hoc canonical pin import SyntaxError retained; no model-suite failures. Historical source/review receipts remain on frozen evidence base.",
+  "pending": [
+    "True independent exact successor article/model review",
+    "Guarded formal author/reviewer/publication with real identities and approved inputs",
+    "Future cash and October outstanding shares/current PB/target price remain unknown",
+    "No protected approval claimed; evidence base cannot be merged wholesale into main"
+  ],
+  "productionImported": false,
+  "published": false,
+  "investmentAdmission": false,
+  "strategyApproved": false,
+  "technicalAdmission": false,
+  "formalRoleExecution": false,
+  "newPrOrApprovalRef": false
+}

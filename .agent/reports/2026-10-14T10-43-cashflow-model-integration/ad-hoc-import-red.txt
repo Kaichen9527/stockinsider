@@ -1,0 +1,5 @@
+Retained diagnostic from tool response; not a model test failure.
+Command tried to import researchCanonicalHash from scripts/lib/research-model-article.mjs while calculating the packet pin.
+SyntaxError: The requested module ./scripts/lib/research-model-article.mjs does not provide an export named researchCanonicalHash
+Node.js v22.14.0, exit 1. No model output written.
+Corrected to the existing web/src/lib/research-agent-qualification.ts export. Original detailed tool output remains in the conversation; this is a concise transcript, not claimed to be raw shell stdout.

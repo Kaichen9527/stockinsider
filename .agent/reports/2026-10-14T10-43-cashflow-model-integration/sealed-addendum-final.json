@@ -1,0 +1,74 @@
+[
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/emc-pdf-page-07.txt",
+    "bytes": 5008,
+    "sha256": "d8f66057bfd43c8619add201632d7253616b8d9737e410a57fced90c665ca84e",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-08.txt",
+    "bytes": 2939,
+    "sha256": "fed267eacafed42b51ab76e3d0ddce44d492de6ccad301e764fb3a4384ef9305",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/README.md",
+    "bytes": 7384,
+    "sha256": "1107f8bc4f1b030addb1613a778b50ba7bae02fc8425af6ec4ea0614931e1306",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/derived-results.json",
+    "bytes": 9503,
+    "sha256": "af4bf32b0d1e8becb97166ef7e75f7a17caf1495caeb5ed3674c6cb0fa76e14a",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-07.txt",
+    "bytes": 9429,
+    "sha256": "1ff0b31d3022073cb3db5818e50aff63ef51cbb9b4476a7aee05c57e2bd076e1",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/recompute.py",
+    "bytes": 4984,
+    "sha256": "bf6cc4d8f808752f4c58a2645b213e476491faee17395ee8cc582546e86840fe",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-38.txt",
+    "bytes": 2475,
+    "sha256": "718fbcc287e3637405c030ef60043d8d0e6c3037f4f118f3ea780a8f232add4c",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-40.txt",
+    "bytes": 1919,
+    "sha256": "87abed305b006301dc12319b20b6c45586b8f4ea69d9aafe28425e0088910abc",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/emc-pdf-page-05.txt",
+    "bytes": 5450,
+    "sha256": "89a4446661ac6ad49bdb174e615846f6126d0e53f8db2dd35d348f1128969554",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+    "bytes": 30651,
+    "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-09.txt",
+    "bytes": 3103,
+    "sha256": "c7c3731da13ee8e73c5b8401f083a949925e6c46586e38eb8075e32f95ca1d82",
+    "unchanged": true
+  },
+  {
+    "path": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-06.txt",
+    "bytes": 6727,
+    "sha256": "8ff9af88c367e2159d7627e27b7b21caf0d44b321f30dd5db4bbf23e08ace3ef",
+    "unchanged": true
+  }
+]

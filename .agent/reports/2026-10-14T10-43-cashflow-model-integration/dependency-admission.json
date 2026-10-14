@@ -1,0 +1,11 @@
+{
+  "exactSourceWebLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "next": "16.3.8",
+  "node": "22.14.0",
+  "nonOptionalLockedVersionAndIntegrityMismatches": [],
+  "reuse": "hardlinks from /workspace/stockinsider/web/node_modules; no network/install/lock edit",
+  "previousDepsRetainedAt": ".agent/retained-dependencies/cashflow-next16.3.4",
+  "priorBuildId": "qMFmQWaQTx8UniDlXk7nv",
+  "priorBuildNotRelabeled": true
+}

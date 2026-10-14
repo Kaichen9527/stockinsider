@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-14T03:03:35.754879+00:00",
+  "ownedActiveNodeNpmPostgres": [],
+  "ownedServicesStarted": 0,
+  "noClustersOrNetworkSourcesCreated": true,
+  "noCachesOrUniqueEvidenceDeleted": true,
+  "oldDependenciesRetained": ".agent/retained-dependencies/cashflow-next16.3.4",
+  "workspaceFreeBytes": 8634019840,
+  "tmpFreeBytes": 16834076672,
+  "measurement": "/proc comm + cwd inventory; no process env or credentials read"
+}

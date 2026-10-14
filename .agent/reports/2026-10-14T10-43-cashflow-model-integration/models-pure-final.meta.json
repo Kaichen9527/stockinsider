@@ -1,0 +1,15 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-auo-four-segment-model.test.mjs",
+    "scripts/research-emc-company-model.test.mjs"
+  ],
+  "start_utc": "2026-10-14T03:00:14Z",
+  "seconds": 0.5478389263153076,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 59322368,
+  "min_free_bytes": 8634474496
+}

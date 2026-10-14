@@ -1,0 +1,271 @@
+{
+  "auo-four-segment": {
+    "schemaVersion": {
+      "originalCanonicalHash": "f5cd449fb0c3aab90ea66fac0f01418daf88fa30bae2b3be1e5110cd8d2dd615",
+      "successorCanonicalHash": "f5cd449fb0c3aab90ea66fac0f01418daf88fa30bae2b3be1e5110cd8d2dd615",
+      "equal": true
+    },
+    "symbol": {
+      "originalCanonicalHash": "3585af09e8f248f4d0a73914c0421fbdce93ae94bffdcb4805858e18e9b7308b",
+      "successorCanonicalHash": "3585af09e8f248f4d0a73914c0421fbdce93ae94bffdcb4805858e18e9b7308b",
+      "equal": true
+    },
+    "unit": {
+      "originalCanonicalHash": "ad9c093002bf0bb34640172987c2dca3ca21aa0805b2d6172c26b9f1c63dde36",
+      "successorCanonicalHash": "ad9c093002bf0bb34640172987c2dca3ca21aa0805b2d6172c26b9f1c63dde36",
+      "equal": true
+    },
+    "status": {
+      "originalCanonicalHash": "d815d81bfa7326187ffa276cf58fd67d7d1ed49d0d2b2a8fb389abf677e17ee2",
+      "successorCanonicalHash": "d815d81bfa7326187ffa276cf58fd67d7d1ed49d0d2b2a8fb389abf677e17ee2",
+      "equal": true
+    },
+    "historicalPITEligible": {
+      "originalCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "successorCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "equal": true
+    },
+    "published": {
+      "originalCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "successorCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "equal": true
+    },
+    "researchQualified": {
+      "originalCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "successorCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "equal": true
+    },
+    "strategyApproved": {
+      "originalCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "successorCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "equal": true
+    },
+    "price": {
+      "originalCanonicalHash": "0dffcd0e785a7e3f1360c7c2b45d2e44de5c45884df06084a33fe68a2a99e835",
+      "successorCanonicalHash": "0dffcd0e785a7e3f1360c7c2b45d2e44de5c45884df06084a33fe68a2a99e835",
+      "equal": true
+    },
+    "priceSession": {
+      "originalCanonicalHash": "6b9df6402709e9e818c2543649efa60495b29313d05ce6e8eacc7ac607078444",
+      "successorCanonicalHash": "6b9df6402709e9e818c2543649efa60495b29313d05ce6e8eacc7ac607078444",
+      "equal": true
+    },
+    "actualH1": {
+      "originalCanonicalHash": "7503223874f7ad07f0734feb39a9e2c5969884f3fe44cf02a7467865843d0f40",
+      "successorCanonicalHash": "7503223874f7ad07f0734feb39a9e2c5969884f3fe44cf02a7467865843d0f40",
+      "equal": true
+    },
+    "actualQ2": {
+      "originalCanonicalHash": "f05cbfd3aae93947aef0617ac4b93903c159424867a4244b35ee1b84bfd816b6",
+      "successorCanonicalHash": "f05cbfd3aae93947aef0617ac4b93903c159424867a4244b35ee1b84bfd816b6",
+      "equal": true
+    },
+    "segmentActuals": {
+      "originalCanonicalHash": "f91d8d0183ce0b1203667a1285dffff2d6c28bbe22ecb57d51b7633cb6ff823d",
+      "successorCanonicalHash": "f91d8d0183ce0b1203667a1285dffff2d6c28bbe22ecb57d51b7633cb6ff823d",
+      "equal": true
+    },
+    "segmentComparability": {
+      "originalCanonicalHash": "9e04c17e7fd216dda409ea2ade54e0077c7056f34982ea89c87973ded5323db8",
+      "successorCanonicalHash": "9e04c17e7fd216dda409ea2ade54e0077c7056f34982ea89c87973ded5323db8",
+      "equal": true
+    },
+    "exactTtm": {
+      "originalCanonicalHash": "00c9f117d9373d54ccd21623ef6e7061f3f64513fd51377c63302d2c7379d875",
+      "successorCanonicalHash": "00c9f117d9373d54ccd21623ef6e7061f3f64513fd51377c63302d2c7379d875",
+      "equal": true
+    },
+    "q3KnownMonthlyRevenue": {
+      "originalCanonicalHash": "3b8f0f97ee2c1a33b2e52d4fecce9c2184c8604caf52bdddba5fa6c2ee3e9d21",
+      "successorCanonicalHash": "3b8f0f97ee2c1a33b2e52d4fecce9c2184c8604caf52bdddba5fa6c2ee3e9d21",
+      "equal": true
+    },
+    "dilutedShares": {
+      "originalCanonicalHash": "18551c64e3d86310cb1762376b7a446acc241aa2e46de890c35907b63c200f1b",
+      "successorCanonicalHash": "18551c64e3d86310cb1762376b7a446acc241aa2e46de890c35907b63c200f1b",
+      "equal": true
+    },
+    "scenarios": {
+      "originalCanonicalHash": "5164ee3c4998f6e4b4cd20dd2756caea59b62b9af9dbf43a70f9a63388599046",
+      "successorCanonicalHash": "5164ee3c4998f6e4b4cd20dd2756caea59b62b9af9dbf43a70f9a63388599046",
+      "equal": true
+    },
+    "normalizationSensitivity": {
+      "originalCanonicalHash": "cf3c4f18b8785f1cec1939af0cc3e6b6147fe84c813d3b1d172c7d776552aac3",
+      "successorCanonicalHash": "cf3c4f18b8785f1cec1939af0cc3e6b6147fe84c813d3b1d172c7d776552aac3",
+      "equal": true
+    },
+    "reversePriceSensitivity": {
+      "originalCanonicalHash": "809cde61dee147eade568cf055264f0d686b0fa136bde722518fbfa608b6cfdf",
+      "successorCanonicalHash": "809cde61dee147eade568cf055264f0d686b0fa136bde722518fbfa608b6cfdf",
+      "equal": true
+    },
+    "commercialization": {
+      "originalCanonicalHash": "349439ab045c06b1e7f64fd5b5a8d033441928f378156b17519b73aaed1f618a",
+      "successorCanonicalHash": "349439ab045c06b1e7f64fd5b5a8d033441928f378156b17519b73aaed1f618a",
+      "equal": true
+    },
+    "legacyPaperPlanDaily": {
+      "originalCanonicalHash": "349278b33495e8e43139e8d3c9ed792f59ea0a30155277a65add4c2d7797ec24",
+      "successorCanonicalHash": "349278b33495e8e43139e8d3c9ed792f59ea0a30155277a65add4c2d7797ec24",
+      "equal": true
+    },
+    "limitations": {
+      "originalCanonicalHash": "3d7925a67e94df88b299bb8ac23dc505cf3a34a949d3fa3cacd252a014341ead",
+      "successorCanonicalHash": "3d7925a67e94df88b299bb8ac23dc505cf3a34a949d3fa3cacd252a014341ead",
+      "equal": true
+    },
+    "calculationComponent": {
+      "originalCanonicalHash": "51b6563dd397d598d79a495a8080add8c9d4a2fdc082b8cf38367d3f6eff3b4c",
+      "successorCanonicalHash": "51b6563dd397d598d79a495a8080add8c9d4a2fdc082b8cf38367d3f6eff3b4c",
+      "equal": true
+    }
+  },
+  "emc-company": {
+    "schemaVersion": {
+      "originalCanonicalHash": "29d661a1c1fec6c5ff419d38ef46c192e7ff7f27a756f6987a020c88b7188e1a",
+      "successorCanonicalHash": "29d661a1c1fec6c5ff419d38ef46c192e7ff7f27a756f6987a020c88b7188e1a",
+      "equal": true
+    },
+    "symbol": {
+      "originalCanonicalHash": "70819d6f8875a3eea00ec865632cdbd6de3c6bf011475b3aa60759921d209be6",
+      "successorCanonicalHash": "70819d6f8875a3eea00ec865632cdbd6de3c6bf011475b3aa60759921d209be6",
+      "equal": true
+    },
+    "unit": {
+      "originalCanonicalHash": "ad9c093002bf0bb34640172987c2dca3ca21aa0805b2d6172c26b9f1c63dde36",
+      "successorCanonicalHash": "ad9c093002bf0bb34640172987c2dca3ca21aa0805b2d6172c26b9f1c63dde36",
+      "equal": true
+    },
+    "status": {
+      "originalCanonicalHash": "d815d81bfa7326187ffa276cf58fd67d7d1ed49d0d2b2a8fb389abf677e17ee2",
+      "successorCanonicalHash": "d815d81bfa7326187ffa276cf58fd67d7d1ed49d0d2b2a8fb389abf677e17ee2",
+      "equal": true
+    },
+    "historicalPITEligible": {
+      "originalCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "successorCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "equal": true
+    },
+    "published": {
+      "originalCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "successorCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "equal": true
+    },
+    "strategyApproved": {
+      "originalCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "successorCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "equal": true
+    },
+    "qualifiedEntry": {
+      "originalCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "successorCanonicalHash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "equal": true
+    },
+    "price": {
+      "originalCanonicalHash": "8d284220975da66c6cba4a32aaedfa0b897187d86ed9f7a2419c9bd10a103505",
+      "successorCanonicalHash": "8d284220975da66c6cba4a32aaedfa0b897187d86ed9f7a2419c9bd10a103505",
+      "equal": true
+    },
+    "priceSession": {
+      "originalCanonicalHash": "6b9df6402709e9e818c2543649efa60495b29313d05ce6e8eacc7ac607078444",
+      "successorCanonicalHash": "6b9df6402709e9e818c2543649efa60495b29313d05ce6e8eacc7ac607078444",
+      "equal": true
+    },
+    "actualQuarters": {
+      "originalCanonicalHash": "bb91913f6eb8bb81927475f80afd4d84063a1ccb81df187f6b42a76ea015a95e",
+      "successorCanonicalHash": "bb91913f6eb8bb81927475f80afd4d84063a1ccb81df187f6b42a76ea015a95e",
+      "equal": true
+    },
+    "actualH1": {
+      "originalCanonicalHash": "bcb2dc0c7ea7c6a4caa5533c6dbf0bd435c09cf8a9b4a067440e46948de5c0dc",
+      "successorCanonicalHash": "bcb2dc0c7ea7c6a4caa5533c6dbf0bd435c09cf8a9b4a067440e46948de5c0dc",
+      "equal": true
+    },
+    "reportedQ1BasicEps": {
+      "originalCanonicalHash": "142010b8139d2f5ae179c41aa8401c12160483478f7fad02854bfdea936cf039",
+      "successorCanonicalHash": "142010b8139d2f5ae179c41aa8401c12160483478f7fad02854bfdea936cf039",
+      "equal": true
+    },
+    "shares": {
+      "originalCanonicalHash": "d75aea2a88bd3722cee3edc3cdd2c3c73a22909047b5bc84906b5da7e39c9df9",
+      "successorCanonicalHash": "d75aea2a88bd3722cee3edc3cdd2c3c73a22909047b5bc84906b5da7e39c9df9",
+      "equal": true
+    },
+    "reportedProductRevenue": {
+      "originalCanonicalHash": "11235953510061420b997253fca4ce10e11878e60f85bd81e3d1cafedf35720b",
+      "successorCanonicalHash": "11235953510061420b997253fca4ce10e11878e60f85bd81e3d1cafedf35720b",
+      "equal": true
+    },
+    "reportedNonopNotes": {
+      "originalCanonicalHash": "fb2563d423804a7288ad8bc6ec5a27136b6a06fa6dc2f0025465dab253c1ccf8",
+      "successorCanonicalHash": "fb2563d423804a7288ad8bc6ec5a27136b6a06fa6dc2f0025465dab253c1ccf8",
+      "equal": true
+    },
+    "currentMediaExpectations": {
+      "originalCanonicalHash": "a6734a2f232a1d40c221e72a235719c593b52f2d55a25706653c1da9e8a78a9a",
+      "successorCanonicalHash": "a6734a2f232a1d40c221e72a235719c593b52f2d55a25706653c1da9e8a78a9a",
+      "equal": true
+    },
+    "currentExpectationReverse": {
+      "originalCanonicalHash": "c40bd59db92e96893407e51872cd53bc355391599f0ca02dc55e2e7929cd9bdc",
+      "successorCanonicalHash": "c40bd59db92e96893407e51872cd53bc355391599f0ca02dc55e2e7929cd9bdc",
+      "equal": true
+    },
+    "media38GrossMarginSensitivity": {
+      "originalCanonicalHash": "8a4eda8c858847ee9bc67be28c3dd250bc02b10055fa01247e0e9c35b082f12e",
+      "successorCanonicalHash": "8a4eda8c858847ee9bc67be28c3dd250bc02b10055fa01247e0e9c35b082f12e",
+      "equal": true
+    },
+    "q3KnownMonthlyRevenue": {
+      "originalCanonicalHash": "1e5860e7da2ab5261615f763aad1f10e2869f6373599fb2e235a1c942ced686d",
+      "successorCanonicalHash": "1e5860e7da2ab5261615f763aad1f10e2869f6373599fb2e235a1c942ced686d",
+      "equal": true
+    },
+    "monthlyReconciliation": {
+      "originalCanonicalHash": "028b581eb675804bba0f881dd6c3457895bc339929c63f4c3fb4c569f5de10ec",
+      "successorCanonicalHash": "028b581eb675804bba0f881dd6c3457895bc339929c63f4c3fb4c569f5de10ec",
+      "equal": true
+    },
+    "scenarios": {
+      "originalCanonicalHash": "0e7880ecafafde337708b0c199b2e488039b13c86ec6f04390e3e63b22c51a5d",
+      "successorCanonicalHash": "0e7880ecafafde337708b0c199b2e488039b13c86ec6f04390e3e63b22c51a5d",
+      "equal": true
+    },
+    "capacityPlan": {
+      "originalCanonicalHash": "8cf74d91e4909c665ded18e4a7f38cfef038f4b080fc32da7ca841c938e9af1a",
+      "successorCanonicalHash": "8cf74d91e4909c665ded18e4a7f38cfef038f4b080fc32da7ca841c938e9af1a",
+      "equal": true
+    },
+    "capacityStatus": {
+      "originalCanonicalHash": "7758f4f6b38c6d6797aa78aa1f0f3ad9db0a15e6a309361bd821c10184f4ee46",
+      "successorCanonicalHash": "7758f4f6b38c6d6797aa78aa1f0f3ad9db0a15e6a309361bd821c10184f4ee46",
+      "equal": true
+    },
+    "productEconomics": {
+      "originalCanonicalHash": "3cd53b1e205631320134b765a209435e8e4c96c951aa6d0c84e0175902053c4d",
+      "successorCanonicalHash": "3cd53b1e205631320134b765a209435e8e4c96c951aa6d0c84e0175902053c4d",
+      "equal": true
+    },
+    "rawTechnicalDiagnostic": {
+      "originalCanonicalHash": "838c9f2d87e4464d48aa95cea07ccd7dc3625ab723e21b85e361b276123fffa2",
+      "successorCanonicalHash": "838c9f2d87e4464d48aa95cea07ccd7dc3625ab723e21b85e361b276123fffa2",
+      "equal": true
+    },
+    "reversePriceSensitivity": {
+      "originalCanonicalHash": "4c271d8cbcee7f6de89481f5f3d5d4445d5e8e1f5658a0e1e4f2b50d81b7eebd",
+      "successorCanonicalHash": "4c271d8cbcee7f6de89481f5f3d5d4445d5e8e1f5658a0e1e4f2b50d81b7eebd",
+      "equal": true
+    },
+    "contextUse": {
+      "originalCanonicalHash": "6ce5fe697ca9a941609e3e1b39a45b904b6c3d676e3dc2587ad80ea0aaab291f",
+      "successorCanonicalHash": "6ce5fe697ca9a941609e3e1b39a45b904b6c3d676e3dc2587ad80ea0aaab291f",
+      "equal": true
+    },
+    "limitations": {
+      "originalCanonicalHash": "fdbe9e43842fdad3aeddc99f0fe362354b77c600340dcfe5d907448ccda7040a",
+      "successorCanonicalHash": "fdbe9e43842fdad3aeddc99f0fe362354b77c600340dcfe5d907448ccda7040a",
+      "equal": true
+    }
+  }
+}
