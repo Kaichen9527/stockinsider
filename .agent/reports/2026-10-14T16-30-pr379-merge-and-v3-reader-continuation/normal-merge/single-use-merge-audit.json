@@ -1,0 +1,44 @@
+{
+  "action": "standard gh pr merge --merge --match-head-commit",
+  "pr": 379,
+  "head": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "base": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "freshReviewRef": "04d1d979a442a6a92ae0aded0ebbb57408d05427",
+  "protectedRun": 38522785296,
+  "attempt": 2,
+  "allSevenActualSuccess": true,
+  "ordinary": [
+    {
+      "id": 38516725449,
+      "head": "b7796da8a92b99284b133a7a622e490a23bad11b",
+      "conclusion": "success"
+    },
+    {
+      "id": 38516725320,
+      "head": "b7796da8a92b99284b133a7a622e490a23bad11b",
+      "conclusion": "success"
+    },
+    {
+      "id": 38516725401,
+      "head": "b7796da8a92b99284b133a7a622e490a23bad11b",
+      "conclusion": "success"
+    }
+  ],
+  "rulesActiveBypassEmpty": true,
+  "adminOrBypassOrDirectMainPush": false,
+  "originalFailurePreserved": true,
+  "startedAt": "2026-10-14T08:15:11.018251+00:00",
+  "dispatchCompleted": true,
+  "dispatchExit": 0,
+  "completedAt": "2026-10-14T08:15:15.923526+00:00",
+  "merged": true,
+  "mergedAt": "2026-10-14T08:15:14Z",
+  "mergeCommit": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+  "parents": [
+    "69b9734c5766b2e196e8133d63df1f1148959046",
+    "b7796da8a92b99284b133a7a622e490a23bad11b"
+  ],
+  "tree": "78bd213468fa08354ede8d213dfd6e76af0d380e",
+  "rulesUnchangedAfter": true,
+  "deployPerformed": false
+}

@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-14T08:06:08.392531+00:00",
+  "source": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "base69UnchangedModules": [
+    {
+      "path": "scripts/model-runner-v3/real-model-attempt.js",
+      "bytes": 2713,
+      "sha256": "9f9171cfcb042a9b6f23943d115ed1421b96c263f7e61b00b15a34ed302feecc"
+    },
+    {
+      "path": "scripts/model-runner-v3/execution.js",
+      "bytes": 62080,
+      "sha256": "dce543c28a0688f324ef14d64f18aba09332458f30ccd845af2fae273e8c73cc"
+    },
+    {
+      "path": "scripts/model-runner-v3/processLifecycle.js",
+      "bytes": 6133,
+      "sha256": "68408b100e15ae54b5725645c7cc5a4579c222aa2dfcb0cc360f22bd9238ccd1"
+    },
+    {
+      "path": "scripts/model-runner-v3/jsonlParser.js",
+      "bytes": 6425,
+      "sha256": "ed19f2a8587478090d13650d09c011faaa0038fbdab54f0c22f082d70086447d"
+    },
+    {
+      "path": "scripts/model-runner-v3/oracleRecovery.js",
+      "bytes": 3231,
+      "sha256": "cb963ff34eb78a4d068b60863d5186c6d033b6176cfa57d53a289896a016922a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json",
+      "bytes": 2252,
+      "sha256": "b19d8dbfd1649c355f675974f7354c6a7403080a0e91f9b1020bfd185588b816"
+    }
+  ],
+  "currentMacFree": 19894886400,
+  "originalOracleFenceAbsent": true,
+  "diagnosticOnly": "verify-only original executor, original strict terminal comparison; observe process events with original callbacks/streams unmodified; not a protected oracle pass"
+}

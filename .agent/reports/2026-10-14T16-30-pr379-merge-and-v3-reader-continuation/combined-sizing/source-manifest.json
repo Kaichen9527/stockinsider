@@ -1,0 +1,32 @@
+[
+  {
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "web/src/lib/research-complete-canonical.ts",
+    "sha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+    "bytes": 4343
+  },
+  {
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "web/src/lib/research-financial-clock.ts",
+    "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+    "bytes": 807
+  },
+  {
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "web/src/lib/research-complete-2409.schema.json",
+    "sha256": "efedd65c7afcf9031cd34fe6a12d4f70c78dcc1d80cadbddfa87f11b23e57932",
+    "bytes": 264752
+  },
+  {
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "web/src/lib/research-complete-2383.schema.json",
+    "sha256": "e0bc5f27a4263d151395fd2fa35a69e868b2d94836b7e26173be545300d6d043",
+    "bytes": 151681
+  },
+  {
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "web/src/lib/research-complete-mapping.json",
+    "sha256": "ba44549b7efdc14a0c61523dadd950321fd7f85e72b30059415a555629baf704",
+    "bytes": 7953
+  }
+]

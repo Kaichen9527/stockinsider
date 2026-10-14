@@ -1,0 +1,16 @@
+{
+  "action": "single gh run rerun --failed",
+  "runId": 38522785296,
+  "head": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "base": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "freshEvidence": "04d1d979a442a6a92ae0aded0ebbb57408d05427",
+  "originalFailurePreserved": true,
+  "actualChangedCondition": "original strict same-attempt make/review/verify now all PASS at08:08:38Z; previous verify failed10; original CI12 rootcause remains unproven",
+  "recoveryResultSha256": "6ca295c5d2ed29280cad3f0d84d68cb35e18710de624fe03ffee590fcc7ec688",
+  "rulesActiveBypassEmptyUnchanged": true,
+  "policyPinsSourceExpectationChanges": false,
+  "startedAt": "2026-10-14T08:09:57.289113+00:00",
+  "dispatchCompleted": true,
+  "dispatchExit": 0,
+  "completedAt": "2026-10-14T08:09:58.945917+00:00"
+}

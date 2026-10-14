@@ -1,0 +1,10 @@
+{
+  "sha256": "c52653be51676a8953fa40a763789674622dc898819f47fb5838a7d2dc5e9660",
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "/tmp/stockinsider-pr379-verify-process-diagnostic-oct14/diagnostic.js"
+  ],
+  "startedAt": "2026-10-14T08:06:08.468841+00:00"
+}

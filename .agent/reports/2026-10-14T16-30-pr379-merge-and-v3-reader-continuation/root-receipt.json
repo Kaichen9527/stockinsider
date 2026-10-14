@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-14T08:29:33.385021+00:00",
+  "report": "2026-10-14T16-30-pr379-merge-and-v3-reader-continuation",
+  "rawCount": 90,
+  "manifestSha256": "a3c5b67c8bb190776ac89a4db4ce99564e41ecafa7196a0a179016bd480cdb90",
+  "main": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+  "pr379TerminalMerged": true,
+  "originalFailurePreserved": true,
+  "deployed": false,
+  "cloudActive": "01a1397f-4a28-768c-aca8-6daa45532261:cursor23",
+  "goalActive": true
+}

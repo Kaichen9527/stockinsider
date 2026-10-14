@@ -1,0 +1,63 @@
+{
+  "cashSource": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+  "legacySchemaSource": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "results": [
+    {
+      "symbol": "2409",
+      "measurementKind": "exact legacy static-schema instantiation plus actual new pinned cash output; additive-shape sizing PROPOSAL only",
+      "syntheticClock": "2026-10-14T00:00:00.000000Z",
+      "legacySchemaValid": true,
+      "legacyProjectionJsonBytes": 81113,
+      "legacyMaterialJsonBytes": 128165,
+      "cashProjectionJsonBytes": 52077,
+      "combinedProjectionJsonBytes": 133208,
+      "combinedMaterialJsonBytes": 180260,
+      "combinedEnvelopeJsonBytes": 184625,
+      "projectionCap160000": true,
+      "materialCap262144": true,
+      "envelopeMaxDepth": {
+        "depth": 11,
+        "path": "/financial/material/projection/projected/scenarios/0/quarters/0/segments/0/grossMargin"
+      },
+      "originalCanonicalDepth12Accepted": true,
+      "canonicalError": null,
+      "taggedRequestBytes": 687,
+      "taggedEnvelopeBytes": 228740,
+      "minimumOneSourceRevisionCharge": 229427,
+      "priorPreparationChargesIncluded": false,
+      "maximumSourceManifestIncluded": false,
+      "newScenarioProjectorOrSchemaImplemented": false,
+      "fullHTTPPGQuotaAcceptance": false,
+      "admissionOrPublication": false
+    },
+    {
+      "symbol": "2383",
+      "measurementKind": "exact legacy static-schema instantiation plus actual new pinned cash output; additive-shape sizing PROPOSAL only",
+      "syntheticClock": "2026-10-14T00:00:00.000000Z",
+      "legacySchemaValid": true,
+      "legacyProjectionJsonBytes": 49344,
+      "legacyMaterialJsonBytes": 76084,
+      "cashProjectionJsonBytes": 32598,
+      "combinedProjectionJsonBytes": 81960,
+      "combinedMaterialJsonBytes": 108700,
+      "combinedEnvelopeJsonBytes": 112771,
+      "projectionCap160000": true,
+      "materialCap262144": true,
+      "envelopeMaxDepth": {
+        "depth": 10,
+        "path": "/financial/material/projection/projected/scenarios/0/quarters/0/shares/fractionOutstanding"
+      },
+      "originalCanonicalDepth12Accepted": true,
+      "canonicalError": null,
+      "taggedRequestBytes": 687,
+      "taggedEnvelopeBytes": 137993,
+      "minimumOneSourceRevisionCharge": 138680,
+      "priorPreparationChargesIncluded": false,
+      "maximumSourceManifestIncluded": false,
+      "newScenarioProjectorOrSchemaImplemented": false,
+      "fullHTTPPGQuotaAcceptance": false,
+      "admissionOrPublication": false
+    }
+  ],
+  "currentRssBytes": 114884608
+}

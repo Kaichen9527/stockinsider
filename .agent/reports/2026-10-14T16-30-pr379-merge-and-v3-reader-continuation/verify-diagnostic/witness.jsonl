@@ -1,0 +1,10 @@
+{"stage":"original_run_model_process_start","timeout":90,"at":"2026-10-14T08:06:18.602Z"}
+{"stage":"model_spawned","detached":true,"at":"2026-10-14T08:06:24.936Z"}
+{"stage":"model_event","type":"thread.started","at":"2026-10-14T08:06:25.837Z"}
+{"stage":"model_event","type":"turn.started","at":"2026-10-14T08:06:25.840Z"}
+{"stage":"model_event","type":"item.completed","itemType":"agent_message","textBytes":49,"textSha256":"690b46195fe9bd9f9e5336ab918ee05d151eeae6536611d735b0e1789c0f75ab","closedOracleKeys":true,"keyOrder":["modelAttempt","operation"],"completed":true,"verify":true,"originalStrictStringifyPredicate":true,"at":"2026-10-14T08:06:38.036Z"}
+{"stage":"model_event","type":"turn.completed","at":"2026-10-14T08:06:38.138Z"}
+{"stage":"model_process_exit","code":0,"signal":null,"at":"2026-10-14T08:06:39.207Z"}
+{"stage":"model_process_close","code":0,"signal":null,"counts":{"stdout":397,"stderr":0},"stdoutSha256":"055ae92ffb4f19e0f6ed68bfc30a3995092b37bcadac777ebf30ef9b6effab6a","stderrSha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","stderrClasses":{"rate_limit":false,"connection":false,"timeout":false,"auth":false,"server":false,"sandbox":false},"observerTruncated":false,"at":"2026-10-14T08:06:39.208Z"}
+{"stage":"original_run_model_process_success","stdoutBytes":397,"at":"2026-10-14T08:06:42.196Z"}
+{"stage":"diagnostic_verify_pass","verifyOnly":true,"originalStrictTerminal":true,"fullOracleAcceptance":false,"protectedEnvelopeProduced":false,"at":"2026-10-14T08:06:42.209Z"}

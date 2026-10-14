@@ -1,0 +1,9 @@
+15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:web/src/app/api/internal/research-deep-job/route.ts:22:    const {readCompleteBody,parseCompleteRequest,runCompleteInput}=await import('@/lib/research-complete-input');
+15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:web/src/app/api/internal/research-deep-job/route.ts:26:    try {const revision=await runCompleteInput(getSupabaseServerClient(),input,action==='sealResearchInput',deadline);deadline.check();return NextResponse.json({ok:true,revision,dispatchReady:false});}
+15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:web/src/lib/research-author-assignment.ts:5:import { readCompleteBody, parseCompleteRequest, runCompleteInput, type CompleteRequest } from './research-complete-input.ts';
+15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:web/src/lib/research-author-assignment.ts:33:  const revision = await runCompleteInput(db, request.input, false, deadline);
+15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:web/src/lib/research-author-packet.ts:3:import { runCompleteInput, validateCompleteResponse, type CompleteRequest } from './research-complete-input.ts';
+15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:web/src/lib/research-author-packet.ts:130:  const revision = await runCompleteInput(db, request.input, false, deadline);
+15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:web/src/lib/research-author-result.ts:5:import { parseCompleteRequest, runCompleteInput } from './research-complete-input.ts';
+15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:web/src/lib/research-author-result.ts:39:  const revision = await runCompleteInput(db, request.input, false, deadline);
+15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:web/src/lib/research-complete-input.ts:66:export async function runCompleteInput(db:Pick<SupabaseClient,'rpc'>,request:CompleteRequest,seal:boolean,deadline:FinancialDeadline,root?:string):Promise<Row>{

@@ -1,0 +1,130 @@
+{
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "actualClosureHash": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+  "originalSourceFilesVerified": 22,
+  "readerIsInOriginalClosure": true,
+  "traceNamedFiles": [
+    "web/src/lib/research-financial-file-reader.ts",
+    "web/src/lib/research-financial-supplement.ts",
+    "web/src/lib/research-complete-input.ts",
+    "web/src/lib/research-complete-mapping.json",
+    "scripts/research-complete-input.test.mjs",
+    "scripts/research-financial-cleanup.test.mjs"
+  ],
+  "originalClosure": [
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274090,
+      "sha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516"
+    },
+    {
+      "path": "web/src/lib/candidate-dossier-contract.ts",
+      "bytes": 11851,
+      "sha256": "33920f44ffa719802476da3171baf5d8806c81877f6ae9eedfd64ecea8427887"
+    },
+    {
+      "path": "web/src/lib/public-source-url.ts",
+      "bytes": 1821,
+      "sha256": "f1f4a47c2984a59be316b94586796171adda680e64910c981b5cede88260dcea"
+    },
+    {
+      "path": "web/src/lib/research-agent-priority.ts",
+      "bytes": 8382,
+      "sha256": "2f6e9be35bca12d3042ad668fef75447936b1427dffdd69ae621cc9540081318"
+    },
+    {
+      "path": "web/src/lib/research-agent-qualification.ts",
+      "bytes": 8864,
+      "sha256": "690de1fb4265366c0431da990fbe2519057562600727de6f44340060c9d34da0"
+    },
+    {
+      "path": "web/src/lib/research-business-calculator.ts",
+      "bytes": 14206,
+      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb"
+    },
+    {
+      "path": "web/src/lib/research-complete-2383.schema.json",
+      "bytes": 151681,
+      "sha256": "e0bc5f27a4263d151395fd2fa35a69e868b2d94836b7e26173be545300d6d043"
+    },
+    {
+      "path": "web/src/lib/research-complete-2409.schema.json",
+      "bytes": 264752,
+      "sha256": "efedd65c7afcf9031cd34fe6a12d4f70c78dcc1d80cadbddfa87f11b23e57932"
+    },
+    {
+      "path": "web/src/lib/research-complete-canonical.ts",
+      "bytes": 4343,
+      "sha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5"
+    },
+    {
+      "path": "web/src/lib/research-complete-input.ts",
+      "bytes": 10526,
+      "sha256": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d"
+    },
+    {
+      "path": "web/src/lib/research-complete-schema-bundles.ts",
+      "bytes": 463467,
+      "sha256": "ca5bc876d5820c3f910a4847c84f504a952896f7affe5d9e88a9f224df3b0d98"
+    },
+    {
+      "path": "web/src/lib/research-deep-author-input.ts",
+      "bytes": 22617,
+      "sha256": "4e4dd8e2f792071cf974631d08ffa852ad87b2c5e9edd11a3ccee71b27eeaf94"
+    },
+    {
+      "path": "web/src/lib/research-deep-claim-context.ts",
+      "bytes": 12714,
+      "sha256": "c6016ca331d77cff78b05c26642ebbb8ce040a285293eebdca9fecf20f3b680c"
+    },
+    {
+      "path": "web/src/lib/research-discovery-evidence.ts",
+      "bytes": 6788,
+      "sha256": "832e279429951e548bc12e8a0dd578a9c38c4e7ffa18e3e2e2bc649941517896"
+    },
+    {
+      "path": "web/src/lib/research-financial-clock.ts",
+      "bytes": 807,
+      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f"
+    },
+    {
+      "path": "web/src/lib/research-financial-file-reader.ts",
+      "bytes": 10211,
+      "sha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49"
+    },
+    {
+      "path": "web/src/lib/research-financial-inventory.ts",
+      "bytes": 3294,
+      "sha256": "f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5"
+    },
+    {
+      "path": "web/src/lib/research-financial-supplement.ts",
+      "bytes": 19142,
+      "sha256": "2f8d8150a3071109d3db2dee9c1df7dadcd97322357c21e8a45fd469df22372d"
+    },
+    {
+      "path": "web/src/lib/research-source-association.ts",
+      "bytes": 22950,
+      "sha256": "59d5b00d7b2126eca5dc125093346770d3ae43179a5180d281afb16207667cc7"
+    },
+    {
+      "path": "web/src/lib/research-source-clock.ts",
+      "bytes": 1023,
+      "sha256": "219b6367df8c9da6ff9184028c646ba344c0554255adb2a85f6ba89ab2f7b933"
+    },
+    {
+      "path": "web/src/lib/research-source-registry.ts",
+      "bytes": 1585,
+      "sha256": "64cf50ad4f4dc65310fcef6916f9f2c5be48830fa8fd3b7e700446bce9965e61"
+    },
+    {
+      "path": "web/src/lib/research-source-roots.ts",
+      "bytes": 3552,
+      "sha256": "aa3471022cb87235f3cdb84c7e674d0af799b858735774025b6eebb3a3e6110f"
+    }
+  ],
+  "readerMax8": true,
+  "newFixedAUOInventory9": true,
+  "constraint": "cannot append/refactor original reader while claiming same physical original22file closure; cannot independentreader resourcegate or8+1 batches claim singleowner originaldeadline/custody",
+  "status": "DESIGN_IN_PROGRESS_CLOUD20_NOT_CODE_APPROVAL"
+}

@@ -1,0 +1,1 @@
+{"protocol":"model-runner-real-attempt-v2","status":"pass","completedRoutes":[{"operation":"make","model":"gpt-6.1-sol","reasoningEffort":"high"},{"operation":"review","model":"gpt-6-astra","reasoningEffort":"high"},{"operation":"verify","model":"gpt-6-astra","reasoningEffort":"high"}]}

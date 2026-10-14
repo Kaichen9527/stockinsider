@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-14T08:24:22.382249+00:00",
+  "exit": 0,
+  "scriptSha256": "e74a0265b49d665e60014fda76719ce3bbcd9efbda5d72d7305e5f7114ba091d",
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "/tmp/stockinsider-v3-combined-material-sizing-oct14/measure.mjs"
+  ]
+}
