@@ -1,0 +1,15 @@
+接續本聊天已授權的研究補完。已 compact 確認你目前 latest turn 01a13727 completed、true idle；不重派已完成 discovery/financial/assembly/native。這次只接一件 30 分鐘、有界的友達＋台光電歷史現金機制整合，maker 工作，不自簽任何獨立文章審查或正式批准。
+
+新 branch codex/research-cashflow-model-integration-oct14，base remote codex/research-release-review-evidence-oct11 exact 243db636b1eaea0141ad91aa45f4b6e7b6a8132d。這是研究 evidence 基底，含未批准歷史，不可整 branch PR/merge 到 main；本輪不 PR/exactref/ready/merge/CIrerun/deploy。Remote main 已 3e1be377，PR370/371/372/374/375/376/377 全終態禁止重跑。
+
+Root 已完成 docs/research/2026-10-14-cashflow-capital-addendum/ source 732bb12e947945b0bd71574cafe6ca6509d9ea51；source-packet.json SHA b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3，12 source files／85雙期原行／111檢核＋11獨立總額重算。原PDF已真 rehash94d74c75/245b41f9，圖文/receipt ae9a24f469c1f7f235dbc36a0708a3211cf04619d85b77e90e2b3613fac70957 在 .agent/reports/2026-10-14T10-40-research-cashflow-capital/。不得修改這份已封 sourcepacket/期待/原PDF，先核 exact bytes。兩個原模型本輪 Root 原 independent verifier 分別268/395 PASS，不等正式文章批准。
+
+Owned 僅 docs/research/2026-10-08-auo-four-segment-model/ 與 docs/research/2026-10-08-emc-company-model/ 中最小 recompute/render、結果/文章/metadata/README/sourceledger，加對應 scripts/research-*-company-or-four-segment-model.test.mjs 必要契約與新handoff/evidence。不改其他工作，Root 只 report/review、不重疊 owned source。若 source ownership/paths 與預期不同先記錄，不展開新框架。
+
+目標：將已真抽取2026H1/2025H1同期間現金橋整合兩篇既有研究稿與可重算結果，補實質現金/資本機制，不重寫整篇。維持既有所有季度/年度條件 forecast、反稀釋、EPS、股數假設、normalization、media時態、估值上限未批准、technical admission false。先封 exact WIP 或code再執行。對原 scenarios/price/normalization/reverse sensitivity 保存前後 canonical equality，新增獨立 historicalCashFlow 區塊，不把H1當Q2、不得把歷史cash生造未來cash。新萃取 availableAt 真Oct14，successor metadata/rootasof可前進但所有舊行情/原來源 clock保持Oct8，不能改稱即時行情/PIT-approved；原 article/model exactcommit歷史保留，不改原收據為PASS。
+
+文章須包含：友達2026H1 CFO6877.414m／減PPE+intangible後研究代理1134.612m、營運資金占用6614.055m、非現金調整及處分利益已扣不重扣、現金整體下降；台光電CFO5044.825m／同定義代理-5661.917m、應收帳款占用27421.398m/存貨6259.256m/應付提供14729.114m、借款淨現金7654.912m與現金餘額上升機制。代理值明示不是IFRS FCF/FCFE/維持性capex/forecast，ROU acquisition及leaseprincipal另列。CFO ratio 用合併groupnetprofit不混母公司EPS。友達僅June30 owners equity/issuedcommonshare basis20.457839363，2026 treasury carrying amount0；直接2026share register未抽，2025庫藏註銷表不能改成2026，無October流通股/PB/目標價完成聲稱。原七章／4000–6000漢字與可追頁碼/來源連結保持，未知future inputs仍unknown。
+
+先實核原recompute/render/validator/schema是否有既有接線可用，新增最小純資料讀取，不新production CLI/connector/authority。必要 pure contracts 應驗兩issuer兩H1橋、sign/unit/grain/sourcehash/newavailableclock、CFO groupdenominator、代理排除asset-disposal/no future cash等實質邊界。跑兩個獨立Python verifier，新增cash區塊需用不import共用JS helper的Decimal實核。code與evidence分開 commit/push；handoff逐檔SHA/raw receipts，沒有真的執行不稱PASS。30min未完逐項pending，不能放寬期待以收尾。
+
+Node22.14 exactlock／8GiB free及RSS8GiB/singleheavy；必要兩模型pure及repo types/lint/normalbuild按真變更，Cloud可一次normalbuild，Mac禁止fullbuild。Chromium403已證不重試。無 VPS/remoteDB/HTTP/crawl/343/PTT/正式研究排程/strategy approval/roleACL/金融runtime/schema/workflow/UI/API/pins/部署/刪cache；不建立fake formal job/reservation/preparedInput/publisher/review ID。正式獨立文章審查與guarded發布另待真工作完成。

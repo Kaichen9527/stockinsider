@@ -10,6 +10,8 @@ Root先核remote main3e1be377/progress9b1e5e45與工作樹乾淨；Cloud compact
 
 新補件docs/research/2026-10-14-cashflow-capital-addendum/為research share-with-caveats；原兩份文章/model/forecast/cutoff未覆寫，新萃取availableAt真Oct14，不倒填Oct8。尚需把現金機制整合到successor文章與真正獨立文章審查/正式輸入發布鏈，沒有創formaljob/reservation/approval ID、合理價或策略批准。Root本輪沒有新native/build、production client/frozenrun/publisher/rootcreator接線或正式SQL/role/ACL/HTTP/crawl/343/PTT/研究排程變更。Sourcepacket與原頁/重算影像/收據在.agent/reports/2026-10-14T10-40-research-cashflow-capital/。
 
+唯一Cloud在上述trueidle後只接一件30min cashflow model/article successor整合，newbranch codex/research-cashflow-model-integration-oct14/base243db636；turn01a1384a-c3cc-72e1-a0f3-71263ca026b7、cursor57859559-a812-4f98-bcdc-46a2a9f908f6:2 inProgress。先compactwait真終態，勿重派/改owned兩model/recompute/render/article/metadata/tests。封存原forecast/scenario/reverse敏感度等效，只增歷史H1現金區塊與文章機制/新Oct14 availableAt；不得編未來現金/目標價或倒填Oct8，舊行情仍Oct8。Maker不得自簽formalreview；無VPS/HTTP/crawl/343/PTT/研究排程/SQL金融runtime/workflow/merge/CIrerun。整branch含歷史不可直接PR/merge，code/evidence分開push，下一輪Root真獨立核結果再議最小publicationassembly。
+
 輕量只讀SSH於02:21:48Z真核filesystem154894188544、可用16116408320bytes，current仍/opt/stockinsider-standalone/releases/169aad1b6cfa747f78ae3464b614f43c0749d806；距原19998441472門檻差3882033152bytes，尚未達准入，不執行必敗heavy/舊main169-deploy.sh、不降reserve、不重問容量/付費/清理。此為current-path/capacity觀測，未新核writer或DB role。另一官方文件補件chat已終態報backendlease_required/0receipt/0facts；本輪僅讀其狀態避免重複領件，不與其工作重疊或偷偷修正式lease。
 
 

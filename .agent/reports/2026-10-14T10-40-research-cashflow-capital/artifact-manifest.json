@@ -20,6 +20,16 @@
     "sha256": "bd59e613c0a8a3a3bcdce749759ac501f3a2184318474ffdf7667b73799896a6"
   },
   {
+    "file": "cloud-handoff.txt",
+    "bytes": 4450,
+    "sha256": "0efcefef1cc59efbd5b6ea3525ddc0baa691bff0fbb20afb631151813724f30c"
+  },
+  {
+    "file": "cloud-status.json",
+    "bytes": 675,
+    "sha256": "935c98fb379c94cb15cfb8279d6fd67df61be19217b1aa8bf125e630a06334af"
+  },
+  {
     "file": "emc-cashflow-07.png",
     "bytes": 508226,
     "sha256": "b04515bf67ce3c0d22339440c185ac2c6257c138b8ae19d3798c31776fb5987d"
