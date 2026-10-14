@@ -1,0 +1,68 @@
+{
+  "at": "2026-10-14T15:22:40.287408+00:00",
+  "cases": [
+    {
+      "case": "2383-emc-v3",
+      "clusterAbsent": true,
+      "writerAbsent": true,
+      "observerAbsent": true,
+      "preCleanupLogBytes": 776,
+      "postCleanupLogBytes": 927,
+      "serverShutdownConfirmed": true,
+      "observerReadOnly": true
+    },
+    {
+      "case": "2383-max30-v3-measure",
+      "clusterAbsent": true,
+      "writerAbsent": true,
+      "observerAbsent": true,
+      "preCleanupLogBytes": 466,
+      "postCleanupLogBytes": 617,
+      "serverShutdownConfirmed": true,
+      "observerReadOnly": true
+    },
+    {
+      "case": "2383-mixed-v3-then-v2",
+      "clusterAbsent": true,
+      "writerAbsent": true,
+      "observerAbsent": true,
+      "preCleanupLogBytes": 853,
+      "postCleanupLogBytes": 1004,
+      "serverShutdownConfirmed": true,
+      "observerReadOnly": true
+    },
+    {
+      "case": "2409-auo-compatible",
+      "clusterAbsent": true,
+      "writerAbsent": true,
+      "observerAbsent": true,
+      "preCleanupLogBytes": 776,
+      "postCleanupLogBytes": 927,
+      "serverShutdownConfirmed": true,
+      "observerReadOnly": true
+    },
+    {
+      "case": "2409-max30-compatible-measure",
+      "clusterAbsent": true,
+      "writerAbsent": true,
+      "observerAbsent": true,
+      "preCleanupLogBytes": 466,
+      "postCleanupLogBytes": 617,
+      "serverShutdownConfirmed": true,
+      "observerReadOnly": true
+    },
+    {
+      "case": "2409-mixed-v2-then-v3",
+      "clusterAbsent": true,
+      "writerAbsent": true,
+      "observerAbsent": true,
+      "preCleanupLogBytes": 853,
+      "postCleanupLogBytes": 1004,
+      "serverShutdownConfirmed": true,
+      "observerReadOnly": true
+    }
+  ],
+  "activePostgres": [],
+  "servicesStartedOutsideTests": 0,
+  "cacheDeleted": false
+}

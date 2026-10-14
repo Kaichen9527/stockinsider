@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--experimental-strip-types",
+    "--import",
+    "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-versioned-cross-wire-native.test.mjs"
+  ],
+  "start": "2026-10-14T15:21:02.819224+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.25,
+  "peakProcessTreeRss": 533512192,
+  "minFree": {
+    "/workspace": 8604012544,
+    "/tmp": 15307337728
+  },
+  "user": "agent",
+  "exit": 0,
+  "seconds": 53.60787773132324
+}
