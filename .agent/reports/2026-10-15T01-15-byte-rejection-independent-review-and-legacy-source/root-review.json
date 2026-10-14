@@ -1,0 +1,69 @@
+{
+  "initialSubject": "594eaf16457ffb7526f0888922fc8612e893ac75",
+  "correctedSubject": "c462a51ceea1b69026b38ec40b105eb971d24116",
+  "delivery": "be9da96ca8c118db7845691956eaa4c6c3eca44a",
+  "makerReceiptSHA256": "5ac68f579b7572a332f9401ad85983203a07d0ad39c88631118135b3f9246006",
+  "publicReceiptFilesHashVerified": 10,
+  "sourceBlobRowsPerSubjectVerified": 249,
+  "overlapNotSummed": true,
+  "privateRawFiles": 89,
+  "privateRawBytesIndependentlyVerifiedByRoot": false,
+  "makerNativeCorrected": {
+    "pass": 3,
+    "fail": 0,
+    "children": 2,
+    "parents": 1,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "rootNativeReexecution": false,
+  "scopedCodeReview": "only audit envelope SHA changed; product material canonical/depth12/schema and all assertions unchanged, no new confirmed P0/P1/P2",
+  "originalAppSQLRoleGrantCapsUnchanged": true,
+  "cases": [
+    {
+      "case": "2409-auo-byte-plus400",
+      "error": {
+        "code": "P0001",
+        "message": "complete_byte_bound"
+      },
+      "fiveStageNineTableWitnessConsistent": true,
+      "ledgerBeforeAfterHash": "9bdb3f5b2967daaed04145894a65221531923f222c708f05e228c6e1c1328ae9",
+      "usedBeforeAndAfterRejection": {
+        "count": 3,
+        "bytes": 279407
+      },
+      "originalWouldChargeUnknown": true,
+      "fdFinal": {
+        "opens": 17,
+        "closes": 17
+      },
+      "cleanupConfirmedInWitness": true
+    },
+    {
+      "case": "2383-emc-byte-plus1300",
+      "error": {
+        "code": "P0001",
+        "message": "complete_byte_bound"
+      },
+      "fiveStageNineTableWitnessConsistent": true,
+      "ledgerBeforeAfterHash": "813f38c33f94f05f0c3c72781f5df24c2073654c558890022d1a96c3bd1ad960",
+      "usedBeforeAndAfterRejection": {
+        "count": 3,
+        "bytes": 387985
+      },
+      "originalWouldChargeUnknown": true,
+      "fdFinal": {
+        "opens": 30,
+        "closes": 30
+      },
+      "cleanupConfirmedInWitness": true
+    }
+  ],
+  "fullFormalApproval": false,
+  "pending": [
+    "exact rejected would-charge/total not returned by original RPC",
+    "long synthetic locator downstream author-packet/publication compatibility",
+    "formal wholeclosure/four-callers/old77/ABA/freshness/response-loss/production authorization"
+  ]
+}

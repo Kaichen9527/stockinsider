@@ -1,0 +1,162 @@
+{
+  "kind": "bounded-local-byte-rejection-engineering-receipt",
+  "base": "594eaf16457ffb7526f0888922fc8612e893ac75",
+  "executedCorrectedCode": "c462a51ceea1b69026b38ec40b105eb971d24116",
+  "executedCorrectedTree": "33f4b56e0acdd21f322821f93c727d2a22adb66a",
+  "handoffCommit": "e218587d7eb63605fa44dc593d7e90b1d96a5929",
+  "startedAt": "2026-10-14T16:34:18Z",
+  "deadline": "2026-10-14T16:54:18Z",
+  "sealedAt": "2026-10-14T16:41:58.609719+00:00",
+  "initial": {
+    "pass": 0,
+    "fail": 2,
+    "childCasesAttempted": 1,
+    "parentCases": 1,
+    "EMC": "NOT_RUN fail-fast",
+    "cause": "audit ledger envelope depth>=14 was sent to material canonical depth12 after valid first seal",
+    "originalREDRetained": true
+  },
+  "corrected": {
+    "pass": 3,
+    "fail": 0,
+    "children": 2,
+    "parents": 1,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "runs": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--import",
+        "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/research-versioned-byte-rejection-native.test.mjs"
+      ],
+      "start": "2026-10-14T16:35:50.167608+00:00",
+      "cwd": "/tmp/si-pubtail-o14",
+      "sampleSeconds": 0.25,
+      "peakProcessTreeRss": 550432768,
+      "minFree": {
+        "/workspace": 8603537408,
+        "/tmp": 15305752576
+      },
+      "user": "agent",
+      "exit": 1,
+      "seconds": 9.75713038444519
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--import",
+        "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/research-versioned-byte-rejection-native.test.mjs"
+      ],
+      "start": "2026-10-14T16:38:33.954215+00:00",
+      "cwd": "/tmp/si-pubtail-o14",
+      "sampleSeconds": 0.25,
+      "peakProcessTreeRss": 527605760,
+      "minFree": {
+        "/workspace": 8603508736,
+        "/tmp": 15300825088
+      },
+      "user": "agent",
+      "exit": 0,
+      "seconds": 21.29236888885498
+    }
+  ],
+  "minimumObservedFreeBytes": {
+    "/workspace": 8603508736,
+    "/tmp": 15300825088
+  },
+  "peakSampledRSSBytes": 550432768,
+  "sampleMethod": "250ms aggregate runner session + all PostgreSQL processes (none other active), including detached daemons; not instantaneous peak",
+  "newInputAfterRED": "only test audit ledger hash codec; material canonical/depth/schema and all rejection assertions unchanged",
+  "oldGreenEntriesRerun": false,
+  "privateRaw": {
+    "localOnly": true,
+    "root": "/tmp/byte-rejection-exec-o15",
+    "count": 89,
+    "bytes": 7678521
+  },
+  "sourceInventory": {
+    "initial": 249,
+    "corrected": 249,
+    "overlapNotSummed": true,
+    "wholeClosureApproval": false
+  },
+  "witness": {
+    "file": "public-safe-witness.json",
+    "makerDerived": true,
+    "independentApproval": false
+  },
+  "actualRejectedWouldCharge": null,
+  "actualRejectedTotal": null,
+  "pending": [
+    "exact rejected would-charge/total not returned by original RPC",
+    "long synthetic locator downstream author-packet/publication compatibility",
+    "formal wholeclosure/four-callers/old77/ABA/freshness/response-loss/production authorization"
+  ],
+  "servicesCleaned": true,
+  "cacheDeleted": false,
+  "buildNpmBrowserHTTP": "NOT_RUN",
+  "authorityChanged": false,
+  "files": [
+    {
+      "path": "cleanup-independent.json",
+      "bytes": 1110,
+      "sha256": "b2cdf41d5e6aafb30882a14013de5a6721e46965101a38a7566e815a75673bab"
+    },
+    {
+      "path": "corrected-source-seal.json",
+      "bytes": 62131,
+      "sha256": "bf3837ca945fcf8baa0922f6c1b61858823e35d2483e566f45144d7a1062098e"
+    },
+    {
+      "path": "derive-public-witness.py",
+      "bytes": 4330,
+      "sha256": "3f79689c165c2d36b523c4aae5c91277ff452725589466128cd672334d146077"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 602,
+      "sha256": "d35d401a3dda6d81de865b2361c231a600bb40dfcdae47f5180658684752ea28"
+    },
+    {
+      "path": "fixture-fix-wip.json",
+      "bytes": 501,
+      "sha256": "00fd91798b24c52d86a3600eda9a03de4f0aa28247a26e95e5597ab80ed09aef"
+    },
+    {
+      "path": "local-raw-manifest.json",
+      "bytes": 17154,
+      "sha256": "61c92331d3c867863b46915a1acd3b036d2a6b3da6a4bd2c2a9e944c84a43e8e"
+    },
+    {
+      "path": "native-corrected.result.json",
+      "bytes": 609,
+      "sha256": "fdfc6c9f551e216260a23c9016625680cde39ebe43fd4beebc7f6f4846d361de"
+    },
+    {
+      "path": "native-initial.result.json",
+      "bytes": 608,
+      "sha256": "afa9151fc159b6ce2471ce6453d08bebfec0336f09c906505cc775e210dff4b3"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 31348,
+      "sha256": "4a96a26e52450c902e08f9f9c14f95a030c2cd97af84376f6d40630b3f5f65f9"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 62131,
+      "sha256": "45135d3305394b68a28feb19137a98244865e57972a76d55f9065f3cebaea5e3"
+    }
+  ]
+}

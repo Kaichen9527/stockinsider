@@ -1,0 +1,79 @@
+{
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 4780,
+      "sha256": "a4e63ffa4870260dfac7d8c100ab939af39239645c9846e3ef2cba94ce305fe6"
+    },
+    {
+      "path": "cleanup-independent.json",
+      "bytes": 1110,
+      "sha256": "b2cdf41d5e6aafb30882a14013de5a6721e46965101a38a7566e815a75673bab"
+    },
+    {
+      "path": "corrected-source-seal.json",
+      "bytes": 62131,
+      "sha256": "bf3837ca945fcf8baa0922f6c1b61858823e35d2483e566f45144d7a1062098e"
+    },
+    {
+      "path": "derive-public-witness.py",
+      "bytes": 4330,
+      "sha256": "3f79689c165c2d36b523c4aae5c91277ff452725589466128cd672334d146077"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 602,
+      "sha256": "d35d401a3dda6d81de865b2361c231a600bb40dfcdae47f5180658684752ea28"
+    },
+    {
+      "path": "fixture-fix-wip.json",
+      "bytes": 501,
+      "sha256": "00fd91798b24c52d86a3600eda9a03de4f0aa28247a26e95e5597ab80ed09aef"
+    },
+    {
+      "path": "local-raw-manifest.json",
+      "bytes": 17154,
+      "sha256": "61c92331d3c867863b46915a1acd3b036d2a6b3da6a4bd2c2a9e944c84a43e8e"
+    },
+    {
+      "path": "native-corrected.result.json",
+      "bytes": 609,
+      "sha256": "fdfc6c9f551e216260a23c9016625680cde39ebe43fd4beebc7f6f4846d361de"
+    },
+    {
+      "path": "native-initial.result.json",
+      "bytes": 608,
+      "sha256": "afa9151fc159b6ce2471ce6453d08bebfec0336f09c906505cc775e210dff4b3"
+    },
+    {
+      "path": "next-legacy77-source-task.txt",
+      "bytes": 3792,
+      "sha256": "3de7a0f49899eef4f39c24bc1adcb7a7fdf0ab723747ef30ead77a107148cc50"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 31348,
+      "sha256": "4a96a26e52450c902e08f9f9c14f95a030c2cd97af84376f6d40630b3f5f65f9"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 5150,
+      "sha256": "5ac68f579b7572a332f9401ad85983203a07d0ad39c88631118135b3f9246006"
+    },
+    {
+      "path": "root-review.json",
+      "bytes": 2258,
+      "sha256": "6499223e6268ef8f9e496a2d327c79f5b8154c7ff04c959b6d315e54f6127a3d"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 62131,
+      "sha256": "45135d3305394b68a28feb19137a98244865e57972a76d55f9065f3cebaea5e3"
+    },
+    {
+      "path": "verify-source-and-witness.py",
+      "bytes": 3917,
+      "sha256": "1728e192be26349597d9c614bdcdfceb03367f7a9660d0658424193c2356a8a6"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "cases": [
+    {
+      "run": "native-initial",
+      "case": "2409-auo-byte-plus400",
+      "clusterAbsent": true,
+      "writerPid": 583699,
+      "observerPid": 583700,
+      "writerAbsent": true,
+      "observerAbsent": true,
+      "readOnlyObserver": true,
+      "serverShutdownConfirmed": true,
+      "preCleanupLogRetained": true
+    },
+    {
+      "run": "native-corrected",
+      "case": "2383-emc-byte-plus1300",
+      "clusterAbsent": true,
+      "writerPid": 584129,
+      "observerPid": 584130,
+      "writerAbsent": true,
+      "observerAbsent": true,
+      "readOnlyObserver": true,
+      "serverShutdownConfirmed": true,
+      "preCleanupLogRetained": true
+    },
+    {
+      "run": "native-corrected",
+      "case": "2409-auo-byte-plus400",
+      "clusterAbsent": true,
+      "writerPid": 584087,
+      "observerPid": 584088,
+      "writerAbsent": true,
+      "observerAbsent": true,
+      "readOnlyObserver": true,
+      "serverShutdownConfirmed": true,
+      "preCleanupLogRetained": true
+    }
+  ],
+  "activePostgres": [],
+  "cacheDeleted": false,
+  "servicesStartedOutsideFixture": 0
+}
