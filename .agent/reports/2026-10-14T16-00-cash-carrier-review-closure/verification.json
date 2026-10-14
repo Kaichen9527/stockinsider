@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-14T07:56:06.247753+00:00",
+  "reviewedSource": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+  "peerEvidence": "65ebd83e930a295ab5d9b8d25dffc6e7eef98070",
+  "rawFiles": 20,
+  "sourceFiles": 7,
+  "peerReceiptSha256": "b28c519f69e3994e948c188ce6c78c386fe59f21ca6e623cb047939df96c40ed",
+  "allRawHashesAndSourceBlobsVerified": true,
+  "verdict": "SCOPED_CODE_PASS",
+  "P0": 0,
+  "P1": 0,
+  "P2": 0,
+  "actual29Suite": true,
+  "independent38Probe": true,
+  "deadlineFailurePoints": 137,
+  "freshOriginalGitFiles": 15,
+  "rootNewNativeOrBuild": false,
+  "formalAcceptance": false,
+  "cloudCursor": "57859559-a812-4f98-bcdc-46a2a9f908f6:19",
+  "cloudState": "idle"
+}

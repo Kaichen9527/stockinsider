@@ -1,0 +1,8 @@
+{
+  "reviewedSource": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+  "peerEvidence": "65ebd83e930a295ab5d9b8d25dffc6e7eef98070",
+  "rawCount": 22,
+  "manifestSha256": "94b368e11d2bb8c85e0a5abd2bbb010561a0be1629626be8d2d466b73d43cd15",
+  "independentScopedCodePass": true,
+  "formalAcceptance": false
+}
