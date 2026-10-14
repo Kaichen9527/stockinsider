@@ -1,0 +1,77 @@
+[
+  {
+    "file": "known-artifact-workflow-history.json",
+    "bytes": 451,
+    "sha256": "cb13e6727c90ae4df4ae5afbfb03ae22c10f192ca2e24b954147d87eab2d5514"
+  },
+  {
+    "file": "old-artifact-origin.json",
+    "bytes": 798,
+    "sha256": "7f429bb32c20063383c253e0f38e41717ecfcffb19f5fecbd55d5a1881e0554d"
+  },
+  {
+    "file": "old-fixed-source-workflow.yml",
+    "bytes": 3214,
+    "sha256": "5cb1f3cdd9753979bff65b90ff4dd46471c11aed5b0cf5e696123fdd7c38e254"
+  },
+  {
+    "file": "readonly-capacity/result.json",
+    "bytes": 674,
+    "sha256": "58c8825d4a93529785a0e9018f1e3db63da0b9e235f3d86ba2812b69c7f3e92f"
+  },
+  {
+    "file": "readonly-capacity/stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "readonly-capacity/stdout",
+    "bytes": 150,
+    "sha256": "fbf65aa3c2780aa434100e69cad63260dfcae4802a93c18c4883e042a75ebf1a"
+  },
+  {
+    "file": "reviewed-publication-artifact-handoff.md",
+    "bytes": 3401,
+    "sha256": "299ee935be65b56a82473822bd2ac9acd423048e175d97f7bd035b1483c475ab"
+  },
+  {
+    "file": "reviewed-publication-tail-artifact.yml",
+    "bytes": 10835,
+    "sha256": "dd9baa4d7dd289466577a9c3e82a21ca5e2d616b5fbcb49f427c987f693737f8"
+  },
+  {
+    "file": "static/code-handoff.md",
+    "bytes": 641,
+    "sha256": "4a9caeb7f06b2e2559fee72233348089a9fcfc137901b47e909ab9ccbc811da3"
+  },
+  {
+    "file": "static/inline-1-check.json",
+    "bytes": 48,
+    "sha256": "732883d74fff105b6916110dd67928d04765fdfa4fce96791f3d3be410b4440f"
+  },
+  {
+    "file": "static/inline-1.mjs",
+    "bytes": 1218,
+    "sha256": "44a6395d250fa9de581bba773b294f74a5787c938a4cfe4a81f2cd57f2125148"
+  },
+  {
+    "file": "static/inline-2-check.json",
+    "bytes": 48,
+    "sha256": "732883d74fff105b6916110dd67928d04765fdfa4fce96791f3d3be410b4440f"
+  },
+  {
+    "file": "static/inline-2.mjs",
+    "bytes": 3804,
+    "sha256": "9e340082bfc5cfb9a0481b8de561a03a378c4fee0b24b8b6b7762e3e492c93d2"
+  },
+  {
+    "file": "static/original-resolver-object-check.json",
+    "bytes": 382,
+    "sha256": "33570aadaf5ab236a5e73f1578b43ed948d869db32aeb266a0a43621dc29ae06"
+  },
+  {
+    "file": "static/static-verification.json",
+    "bytes": 1728,
+    "sha256": "73c3b3cc1a7e29d79f318e833c61009d8a3ddc8a6e9b5f32b5258be9b9456cee"
+  }
+]
