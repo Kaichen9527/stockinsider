@@ -1,5 +1,19 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-15 02:43台灣時間：VPS磁碟真READY但原鎖內memory短60231680 bytes；response-loss source新P2 normalization原RED，單件最小修補活動
+
+Root18:22:13Z readonlySSH真核filesystem154894188544不變、available26194227200>原19998441472/current169，無Root刪檔/prune/擴容/付費，不猜空間增加原因。原15967711232/缺4030730240已是歷史，磁碟不再是目前fail維度。18:34:59Z原3OS鎖+current169原checker真fresh准入exit1：diskREADY available26193682432/projected22301368320>=15GiB16106127360；但memory_below_required_reserve，available2624122880−原1GiB1073741824=1550381056<原1.5GiB1610612736，短60231680，總需要2684354560。全部WAL1GiB/tmp0.5GiB/deploy128MiB/growth2GiB/hardfloor15GiB/peakmemory1GiB/minreserve1.5GiB數值不改，僅measurementBasis改成明示approvedDD實測包。新memoryFAIL真stdout/原scriptSHA/diffbasis保存，不降門檻/不改別App/不刪cache或唯一資料；memory實變才再原鎖fresh准入，不反覆同輸入失敗heavy。
+
+DDtarget dd59817f750684b093965f539dd4de466be13077/directc2b/manifest34448958/tar398e7176原包保留，無重建/不改標main8c58。Verifiedcontent79354761/2586+manifest600997=79955758 regularbytes/2587files，archive27574426bytes仍RAM/原1GiBpeak。Capacitymeasurement非deploy或migration准入。18:36:48.184141Z readonly5sstatement/2slock/ROLLBACK PG170011 stockinsider真核writer1/VPS169與current一致、dataPlaneLeaseRows0/unexpired0；無secret/principal/role查詢、無DB/lease/rolewrites，不冒formalpeer/HBA驗收。金融NOLOGIN-1仍舊rolequery最後值，不稱本輪重核。舊main169-deploy.sh含已套SQL永不執行；未cutover/未正式安裝，後續需reviewed binary-only DD procedure、freshcurrent-writer/容量/桌手機，不能靠容量bytes過關當發布完成。
+
+Response-loss source7eceacf9f5921d42ee30022b5174183b0df08b31/evidence462aae78f3ade860b5d5eb49a094a3750c24dd4c/receipt60e87d9dbd1b2ac2156d13a7aca9974e5ff3348b211dd2be7805ee4a701d82b4已source-only終態。Root真核262Gitblobs/33publishedraw130381bytes、讀完整transport/native/helperdelta；maker3syntax/24hermeticframegroups非native，CommandComplete高位元ASCII decode原RED與Buffer.equals修補保持。兩actualnativechildren+parent NOT_RUN，尚無socket/PGloss證明。
+
+Root scoped REQUEST_CHANGES P0=0/P1=0/P2=1：native.test:13 storedResponse只stripstatus/replay/dispatchReady，保留SQLsealedreturn額外binding；:47直接和實際storedDBrow deepEqual會falseFAIL。Rootextract exactfn unchanged+syntheticactualSQLenvelope形狀，隔離normalization contract真exit1/diff extra binding，無PG/app/socket，原source/SQLreturn/RED永久保留。只准明確strip已驗證binding metadata，先assert.deepEqual(binding,x.selected)，不得泛filter/忽略錯binding或放寬任何storedrow/hash/clocks比較；wrong/missingbinding和extra persistedfield必須拒絕。
+
+Cloud前turn01a13ba1 completed+cursor303427c2-9b66-4f3d-abd3-26255a0a19ef:5真idle後，只一件15min SOURCEONLY codex/research-response-loss-row-normalization-oct15/base462aae78。Turn01a13bb7-5098-721e-92fc-cf0f5d2bf0e1/cursor303427c2-9b66-4f3d-abd3-26255a0a19ef:6 inProgress，先同handlecompactwait，不重派/重疊。Ownednormalizer/callsite/最小isolatedprobes/handoff/evidence；禁PG/app/socket/native/既有green/npm/build/browser/HTTP/CI/PR/exactref/merge/deploy/VPS，不改產品/SQL/transport/fixture/roles/grants/caps/limits。Node22.14/8GiBfree/RSS8GiB/singleheavy，Root修後review才另heavy，原P2不改舊綠。
+
+本輪僅Root只讀VPS資源/metadata與原鎖准入，無部署/正式SQL/role/ACL/HTTP/crawl/資料批次/正式研究排程/策略/cache操作。Main8c58/allPR370..381terminal永不helper，sourcewithdrawal4PASS/old773PASS/byte3PASS各自歷史不加總。Fullgoalactive，四caller+supplement/Q-R/cashcitations/wholeS-C-B-A/來源Top20/兩formal文章/技術觀察/策略排程/peer-install-deploy都仍待。Report.agent/reports/2026-10-15T02-43-capacity-change-and-response-loss-review/receiptc6f36a76c24835ddee470ee8aa4affa1c8b6e415cbaa3c87f2a12f81b7f3a113。
+
 ## 2026-10-15 02:20台灣時間：來源撤回/完整rowABA真4PASS；Root259source與5/6/8stage witness核實，下一件真response-loss source-only
 
 Executed eeb874de40508d69f07f3740dba2af990b6bf653/runtime87043657/evidencee24d3a1929a6c6ed66b2ba9ead6d222083b6c2e0/receiptc4cfca7a5734f1a31e7cf19c4d15206c35597e531d702e976c036a8d5cf29e07終態，無source改動。ActualPG17.11/Node22.14單次26.435s、3children+parent4PASS零fail/cancel/skip/todo，舊green入口未重跑/不加總。AUOv3 pre後post前withdraw commitordinal5<blocked6，9/9FD關閉/no revision/count1/2581bytes；EMCcompat post後seal前ordinal7<8，6/6close/no revision/count1/2580。都精確P0001source_seal_invalidated_or_missing，failedRPC全9table/ledger/source/events/invalidations零額外mutation。

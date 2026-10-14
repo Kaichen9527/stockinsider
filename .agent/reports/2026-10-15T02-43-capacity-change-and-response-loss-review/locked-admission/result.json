@@ -1,0 +1,39 @@
+{
+  "startedAt": "2026-10-14T18:34:57.548277+00:00",
+  "completedAt": "2026-10-14T18:34:59.373397+00:00",
+  "exit": 1,
+  "target": "dd59817f750684b093965f539dd4de466be13077",
+  "originalScriptSha256": "73c426155b45ca633670ce4bd5701aa0d34af82729da1ef7e142e0a166e837c1",
+  "scriptSha256": "d9f67e3dd234680c7f48573fb85191b485b1d3269f4bf70ed67b340bbfdf64d3",
+  "onlyMeasurementBasisChanged": true,
+  "budgetsUnchanged": true,
+  "threeOriginalOsLocks": true,
+  "currentExpected": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "deploymentPerformed": false,
+  "dbOrRoleOrLeaseMutation": false,
+  "admission": [
+    {
+      "schema": "stockinsider-host-resource-check-v1",
+      "availableBytes": 26193682432,
+      "availableMemoryBytes": 2624122880,
+      "swapFreeBytes": 414404608,
+      "observedAt": "2026-10-14T18:34:59.382Z",
+      "allowed": false,
+      "disposition": "blocked",
+      "reasons": [
+        "memory_below_required_reserve"
+      ],
+      "disk": {
+        "disposition": "ready",
+        "allowed": true,
+        "reasons": [],
+        "additionalPeakBytes": 3892314112,
+        "projectedAvailableBytes": 22301368320,
+        "minimumReserveBytes": 16106127360
+      },
+      "peakMemoryBytes": 1073741824,
+      "projectedAvailableMemoryBytes": 1550381056,
+      "minimumAvailableMemoryBytes": 1610612736
+    }
+  ]
+}

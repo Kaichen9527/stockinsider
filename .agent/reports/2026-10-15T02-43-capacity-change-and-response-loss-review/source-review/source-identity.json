@@ -1,0 +1,17 @@
+{
+  "subject": "7eceacf9f5921d42ee30022b5174183b0df08b31",
+  "path": "scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs",
+  "sha256": "823866411d07109e1031945845f1afd8f938bb33a7ff4d64d0ee53a9ea8b974f",
+  "bytes": 9470,
+  "functionExact": "function storedResponse(response){const {status,replay,dispatchReady,...row}=response;assert.equal(status,'sealed');assert.equal(replay,true);assert.equal(dispatchReady,false);return row;}",
+  "inventory": {
+    "source-inventory.json": {
+      "files": 262,
+      "bytes": 9378858
+    },
+    "raw-inventory.json": {
+      "files": 33,
+      "bytes": 130381
+    }
+  }
+}

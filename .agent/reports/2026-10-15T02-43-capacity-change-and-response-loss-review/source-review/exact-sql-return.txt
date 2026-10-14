@@ -1,0 +1,1 @@
+ RETURN to_jsonb(saved)||jsonb_build_object('status','sealed','replay',true,'dispatchReady',false,'binding',b);

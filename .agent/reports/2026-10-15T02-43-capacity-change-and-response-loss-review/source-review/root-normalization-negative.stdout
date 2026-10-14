@@ -1,0 +1,1 @@
+{"scope":"isolated exact test-helper normalization contract; no PG/app/socket","extraOutputKeys":["binding"],"bindingIsResponseMetadataFromActualSql":true}

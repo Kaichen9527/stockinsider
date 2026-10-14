@@ -1,0 +1,5 @@
+BEGIN
+SET
+SET
+{"observedAt" : "2026-10-14T18:36:48.184141Z", "database" : "stockinsider", "user" : "postgres", "serverVersionNum" : "170011", "activeWriterCount" : 1, "activeWriters" : [{"releaseId" : "169aad1b6cfa747f78ae3464b614f43c0749d806", "writerKind" : "vps", "active" : true}], "dataPlaneLeaseRows" : 0, "unexpiredDataPlaneLeaseRows" : 0}
+ROLLBACK

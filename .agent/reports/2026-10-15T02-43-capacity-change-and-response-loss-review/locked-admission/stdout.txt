@@ -1,0 +1,2 @@
+2026-10-14T18:34:59Z
+{"schema":"stockinsider-host-resource-check-v1","availableBytes":26193682432,"availableMemoryBytes":2624122880,"swapFreeBytes":414404608,"observedAt":"2026-10-14T18:34:59.382Z","allowed":false,"disposition":"blocked","reasons":["memory_below_required_reserve"],"disk":{"disposition":"ready","allowed":true,"reasons":[],"additionalPeakBytes":3892314112,"projectedAvailableBytes":22301368320,"minimumReserveBytes":16106127360},"peakMemoryBytes":1073741824,"projectedAvailableMemoryBytes":1550381056,"minimumAvailableMemoryBytes":1610612736}

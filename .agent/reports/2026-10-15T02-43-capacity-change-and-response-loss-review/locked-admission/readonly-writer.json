@@ -1,0 +1,35 @@
+{
+  "startedAt": "2026-10-14T18:36:46.374353+00:00",
+  "completedAt": "2026-10-14T18:36:48.151025+00:00",
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "runuser -u postgres -- env -i PATH=/usr/bin:/bin PGCONNECT_TIMEOUT=5 /usr/bin/psql -h /var/run/postgresql -p 5432 -U postgres -d stockinsider -X -w -A -t -v ON_ERROR_STOP=1"
+  ],
+  "exit": 0,
+  "readOnlyTransaction": true,
+  "dbMutation": false,
+  "formalPeerAttestation": false,
+  "observations": [
+    {
+      "observedAt": "2026-10-14T18:36:48.184141Z",
+      "database": "stockinsider",
+      "user": "postgres",
+      "serverVersionNum": "170011",
+      "activeWriterCount": 1,
+      "activeWriters": [
+        {
+          "releaseId": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+          "writerKind": "vps",
+          "active": true
+        }
+      ],
+      "dataPlaneLeaseRows": 0,
+      "unexpiredDataPlaneLeaseRows": 0
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "subject": "7eceacf9f5921d42ee30022b5174183b0df08b31",
+  "review": "REQUEST_CHANGES",
+  "P0": 0,
+  "P1": 0,
+  "P2": 1,
+  "finding": "storedResponse leaves known transient binding metadata in persisted-row comparison",
+  "isolatedExactFunctionProbeExit": 1,
+  "nativeExecuted": false,
+  "applicationImported": false,
+  "socketStarted": false,
+  "sourceBlobsVerified": 262,
+  "rawFilesVerified": 33,
+  "rawBytesVerified": 130381
+}

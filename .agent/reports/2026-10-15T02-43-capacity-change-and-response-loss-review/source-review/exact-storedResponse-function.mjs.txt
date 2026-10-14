@@ -1,0 +1,1 @@
+function storedResponse(response){const {status,replay,dispatchReady,...row}=response;assert.equal(status,'sealed');assert.equal(replay,true);assert.equal(dispatchReady,false);return row;}

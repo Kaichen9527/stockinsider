@@ -1,0 +1,27 @@
+{
+  "startedAt": "2026-10-14T18:22:11.039879+00:00",
+  "completedAt": "2026-10-14T18:22:13.808412+00:00",
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "date -u +%Y-%m-%dT%H:%M:%SZ; df -B1 --output=size,avail /opt/stockinsider-standalone; readlink -f /opt/stockinsider/current"
+  ],
+  "exit": 0,
+  "readOnly": true,
+  "dbOrApiOrLeaseOrRoleOrDeploy": false,
+  "heavyAdmissionPerformed": false,
+  "reserveChanged": false,
+  "priorCompletedAt": "2026-10-14T12:14:19.216934+00:00",
+  "priorAvailableBytes": 15967711232,
+  "observedAt": "2026-10-14T18:22:13Z",
+  "filesystemBytes": 154894188544,
+  "availableBytes": 26194227200,
+  "requiredBytes": 19998441472,
+  "deficitBytes": 0,
+  "currentPath": "/opt/stockinsider-standalone/releases/169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "capacityGuardPassByBytesOnly": true
+}
