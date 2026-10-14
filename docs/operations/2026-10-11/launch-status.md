@@ -1,5 +1,13 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 21:42台灣時間：發布包workflow已乾淨組裝並分離builder155與approveddd打包，尚待獨立review
+
+Root newbranchcodex/reviewed-publication-artifact-release-oct14/base5189，初649a2ab3/finaldf18448dfd26627cd26e0156db0a8ea66e2b886a/treeadefefe973d17c956c42c476c05f4fe271c99c81/webc516保持，僅新增workflow/handoff兩檔，無歷史raw/SQL/runtime/authority/locks/financial/protected改動；舊8dd/ae1e完整留原branch。新workflow先actualeventHEAD/原locks/真canonicalcommand155+31PCR/完整log-TAP及實際Git/workflow/lockidentity，後第二checkoutgenuinec2b→approveddd單獨QA/devbrowser→freshproductionbuild/package/verify/loopbackboot。不能dd155冒builder或反向歸因。Contentsread/noinputs/secrets/DB/deploy，原actionpins保持；failedjob partialdiagnostics alwaysupload並標actualstatus，非成功package。
+
+Root真YAML/11shellsyntax/3Node22inlineparse/完整2file-webtree/whitespace核；parser用原dd PR380 retainedTAP做1正4負PASS，不冒新155執行。初Rootchecker誤index5 KeyError:with在syntax/product前失敗，修checker非workflow，摘要/原tool錯誤保留。Finaldf未PR/獨立review/hostedbuild/archive/native/browser/新exactref；觸發前仍需核同target成功收據免重複，不重建舊8bcd冒新。
+
+Cloud唯一profiletask01a13a99-9a52-7562-80f2-7fd3d229986d/cursor51同handle60s compactwait真inProgress，未重派/第二task/重疊source；完成+trueidle後才另做Root兩檔獨立review。兩owner隔離local候選、原1PASS5FAIL與formal未完沿21:35，不把新workflow當部署。PR370..380terminal不碰，無VPS/remoteDB/roleACL/HTTP/crawl/CIrerun/merge/deploy/cache。Goal完整active。Report.agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/。
+
 ## 2026-10-14 21:35台灣時間：兩owner缺public.USAGE真診斷獨立核62raw142source；單件隔離prerequisite候選與合法fixture活動
 
 Audit5b24dd0e/source6db9e79f/finalb69c7d90/receipt70114de2 Root逐byte/hash/blob核62raw142source，讀實際RR/RO transaction/catalog/roles/schemaACL/resolver及original26來源。PG17.11真42501是preparation/source-fence owner缺public.USAGE；public owner/grantor pg_database_owner，preparation NOINHERIT/source原INHERIT=true/兩者低權NOLOGIN無membership保持。43literalcallee EXECUTE真但非完整dynamic/RLS證明。Auditexit0非business/nativePASS，無額外grant/role修補，ownedPG真cleanup；原1PASS5FAIL/未firstseal保持。Root只scoped forensicreview，不完整protocol批准/未親跑nativebuild。

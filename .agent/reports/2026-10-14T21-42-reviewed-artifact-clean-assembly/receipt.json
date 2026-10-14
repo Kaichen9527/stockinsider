@@ -1,0 +1,145 @@
+{
+  "schema": "root-clean-artifact-assembly-v1",
+  "source": "df18448dfd26627cd26e0156db0a8ea66e2b886a",
+  "files": [
+    {
+      "path": "review.md",
+      "bytes": 4835,
+      "sha256": "d6257b56823134126d49586e783062c5c6f3548aa1b67ed6853d23aed72cc1d4"
+    },
+    {
+      "path": "source/.github/workflows/reviewed-publication-tail-artifact.yml",
+      "bytes": 14400,
+      "sha256": "ee3d0a02d0d0a6964dd3652ba7bae4c701a4b96507b2d40497e8bb1ae0b36d0e"
+    },
+    {
+      "path": "source/docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md",
+      "bytes": 4965,
+      "sha256": "f0ec6a996875a8741c68c9bdcc181b7d387f232f0815574ab3bc4fb31a953f48"
+    },
+    {
+      "path": "static/initial-checker-error.json",
+      "bytes": 185,
+      "sha256": "c367ff060fb67ccaf252c68d4635be82a25052f443760aa412795bb4290b8989"
+    },
+    {
+      "path": "static/inline-1.mjs",
+      "bytes": 2137,
+      "sha256": "0a8b74e53df869397342c98c5214575c94430c39688b738f2c66d716a1c8bee7"
+    },
+    {
+      "path": "static/inline-1.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "static/inline-2.mjs",
+      "bytes": 1275,
+      "sha256": "0449ac39bd23481da475bce3960c9d40873c3a4861c40962ae3fb07ca1cda152"
+    },
+    {
+      "path": "static/inline-2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "static/inline-3.mjs",
+      "bytes": 3804,
+      "sha256": "9e340082bfc5cfb9a0481b8de561a03a378c4fee0b24b8b6b7762e3e492c93d2"
+    },
+    {
+      "path": "static/inline-3.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "static/recorded-tap-parser-probe.mjs",
+      "bytes": 1327,
+      "sha256": "ff33f2879079777c6adf16fe8cdfe86478d363455e7475f341608856cc49f303"
+    },
+    {
+      "path": "static/recorded-tap-parser-provenance.json",
+      "bytes": 375,
+      "sha256": "49efae6428cc230805984f9e78354779ea3ac13f595847db536c4c6dbad94478"
+    },
+    {
+      "path": "static/recorded-tap-parser.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "static/recorded-tap-parser.stdout",
+      "bytes": 83,
+      "sha256": "4f669509c603b76a45e92e1e8a99d6e89e595d923f736ad302db0444c4aaf534"
+    },
+    {
+      "path": "static/step-10.sh",
+      "bytes": 27,
+      "sha256": "d057368e2d27f843e328b13aa61f24b795cf7d93f2d33da492469c2a24548c56"
+    },
+    {
+      "path": "static/step-11.sh",
+      "bytes": 690,
+      "sha256": "629098da72e340da9a5b42e183725471cf0d1681740854208fdebd65da53e969"
+    },
+    {
+      "path": "static/step-12.sh",
+      "bytes": 3862,
+      "sha256": "8651dfd0c0e949044d785d21b749496edc2a3b2af9fb4bf0868d922860e2f451"
+    },
+    {
+      "path": "static/step-13.sh",
+      "bytes": 463,
+      "sha256": "eb25e5d36a9d77ce658d919984c50b44e3de833c45135ea4d8fc3ec477c79156"
+    },
+    {
+      "path": "static/step-2.sh",
+      "bytes": 28,
+      "sha256": "ff77facb562a26c8cc38c823c5b053bbf885e99317c8d0b5cb03639145f8fd17"
+    },
+    {
+      "path": "static/step-3.sh",
+      "bytes": 2469,
+      "sha256": "fa32de17e3b759ecb3e0903882fe1714bb8078924327503539c9fde33b33035c"
+    },
+    {
+      "path": "static/step-5.sh",
+      "bytes": 353,
+      "sha256": "353a22cad30a4231e3a7f78b0c963491e1d0ba932650f30f6da9cf91b42f75da"
+    },
+    {
+      "path": "static/step-6.sh",
+      "bytes": 1369,
+      "sha256": "d2806c814167c3fd04a559686cd607f454609f96d4293c06cbcf232bf685ec8e"
+    },
+    {
+      "path": "static/step-7.sh",
+      "bytes": 28,
+      "sha256": "ff77facb562a26c8cc38c823c5b053bbf885e99317c8d0b5cb03639145f8fd17"
+    },
+    {
+      "path": "static/step-8.sh",
+      "bytes": 215,
+      "sha256": "29eb8138fd37425888e416ca70b6f448e30aae1300dd07b301cf30bdd25372eb"
+    },
+    {
+      "path": "static/step-9.sh",
+      "bytes": 113,
+      "sha256": "cd1b06eeb2e7641ee3444bcc1a6232d9e1726884e83b4e15f6f9e9432eb9e6c8"
+    },
+    {
+      "path": "static/verification-at-649a2ab3.json",
+      "bytes": 1641,
+      "sha256": "99e9a148d326d01df0c121837b3abe22c6b27f507bd2ca6e519b0bf67b784177"
+    },
+    {
+      "path": "static/verification.json",
+      "bytes": 1933,
+      "sha256": "31b4b20169c1117b65c4fc33305abfc0a2b424c3c5c6d1e38d74eca4a7a713e3"
+    }
+  ],
+  "hostedExecution": false,
+  "independentApproval": false,
+  "rootBuildNativeBrowser": false,
+  "rootCanonical155Execution": false
+}

@@ -1,0 +1,60 @@
+{
+  "base": "5189547f76bf24c002b8e8b11669081ba67ad2c6",
+  "artifactSource": "dd59817f750684b093965f539dd4de466be13077",
+  "artifactEvidence": "c2b146adb6d03814f2bd9a7af72baf003bb48812",
+  "yamlParsed": true,
+  "actionPins": [
+    "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+    "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+    "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+    "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02"
+  ],
+  "inlineNode22SyntaxCount": 3,
+  "bashSyntaxSteps": [
+    2,
+    3,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "freshBuilderCanonicalExecutionRequired": true,
+  "sourceBuildSubjectDistinct": true,
+  "rootCanonicalExecution": false,
+  "rootNativeBuildBrowser": false,
+  "hostedExecution": false,
+  "independentReviewPending": true,
+  "files": [
+    {
+      "path": ".github/workflows/reviewed-publication-tail-artifact.yml",
+      "bytes": 14400,
+      "sha256": "ee3d0a02d0d0a6964dd3652ba7bae4c701a4b96507b2d40497e8bb1ae0b36d0e",
+      "gitBlob": "e323559dc551cae4a0dd6ac99814b977b0c0f483"
+    },
+    {
+      "path": "docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md",
+      "bytes": 4965,
+      "sha256": "f0ec6a996875a8741c68c9bdcc181b7d387f232f0815574ab3bc4fb31a953f48",
+      "gitBlob": "086df587dffbd859b54a6638a4ba5b90548ab972"
+    }
+  ],
+  "codeCommit": "df18448dfd26627cd26e0156db0a8ea66e2b886a",
+  "sourceTree": "adefefe973d17c956c42c476c05f4fe271c99c81",
+  "webTree": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "onlyTwoNewFiles": true,
+  "originalTrackedInputsUnchanged": true,
+  "failedJobPartialDiagnosticsRetained": true,
+  "artifactNameIncludesActualJobStatus": true,
+  "newInlineScriptsUnchangedSinceSyntaxCheck": true,
+  "recordedTapParserProbe": {
+    "positive": 1,
+    "negative": 4,
+    "inputIsHistoricalDdTap": true,
+    "freshCanonicalTestsRun": false
+  }
+}

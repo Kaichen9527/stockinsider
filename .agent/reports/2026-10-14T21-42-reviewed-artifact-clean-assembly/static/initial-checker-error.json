@@ -1,0 +1,4 @@
+{
+  "error": "KeyError: with",
+  "cause": "Root checker assumed review checkout at index5; actual index4. Failed before syntax/product assertions. Workflow unchanged for correction."
+}
