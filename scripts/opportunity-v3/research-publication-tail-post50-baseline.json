@@ -1,0 +1,3512 @@
+{
+  "schema": "captured-post-financial50-tail-predecessor-v1",
+  "sourceBase": "fd1feab958d0038590f51ce9c618aea0d2e7d748",
+  "sourceFinancialMain": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "capturedSchemaSha256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+  "captureInputSha256": "39043cff83c64f570738e3bb50eef89b8e61aeefdd2b5dd5ef573490e8761717",
+  "tailOrderedSha256": "edc46d48235d1542426c2ba729e24265d1722d757070a8ed5f97061ec843798e",
+  "namespaceSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+  "scope": {
+    "tables": [
+      "agent_findings",
+      "agent_profiles",
+      "agent_review_queue",
+      "agent_runs",
+      "agent_tasks",
+      "broker_consensus_snapshots",
+      "broker_report_documents",
+      "broker_report_sections",
+      "candidate_daily_stage_snapshots",
+      "candidate_detail_snapshots",
+      "candidate_dossier_bundles",
+      "candidate_dossier_outbox_v5",
+      "candidate_dossier_submission_receipts",
+      "candidate_enterprise_multiple_snapshots_v6",
+      "candidate_financial_acquisition_cursors_v4",
+      "candidate_financial_acquisition_jobs_v4",
+      "candidate_financial_document_fact_links_v8",
+      "candidate_financial_document_job_links_v9",
+      "candidate_financial_document_receipts_v6",
+      "candidate_financial_document_retry_audit",
+      "candidate_financial_fact_provenance_v4",
+      "candidate_financial_parser_evidence_v8",
+      "candidate_history_authority_reconciliations_v1",
+      "candidate_history_backfill_attempts_v1",
+      "candidate_history_backfill_months_v1",
+      "candidate_issuer_document_domains_v6",
+      "candidate_issuer_ir_document_queue_v4",
+      "candidate_official_facts",
+      "candidate_research_dossiers",
+      "candidate_research_run_items",
+      "candidate_research_runs",
+      "candidate_shadow_attempts",
+      "candidate_shadow_manifests",
+      "candidate_shadow_replay_payloads",
+      "candidate_shadow_session_observations",
+      "candidate_signal_tracking",
+      "candidate_source_mentions",
+      "candidate_stage_events",
+      "company_events",
+      "conference_transcripts",
+      "connector_runs",
+      "cross_theme_discovery_events",
+      "daily_catalysts",
+      "daily_market_snapshot",
+      "daily_related_links",
+      "daily_risks",
+      "daily_suggestions",
+      "daily_tech_quickview",
+      "daily_top10_items",
+      "daily_trade_ideas",
+      "entry_plan_authority_jobs_v1",
+      "entry_plan_authority_runs_v1",
+      "fundamental_snapshots",
+      "hf_training_runs",
+      "industry_entry_exit_ideas",
+      "industry_hot_themes",
+      "industry_latest_dynamics",
+      "industry_news_digest",
+      "industry_pre_market_checklist",
+      "industry_suggestions",
+      "industry_supply_chain_signals",
+      "industry_theme_leaders",
+      "industry_watchlist_risks",
+      "institutional_signals",
+      "internal_principal_nonces_v3",
+      "internal_principal_role_bindings_v3",
+      "kol_episodes",
+      "kol_profiles",
+      "kol_sources",
+      "kol_summaries",
+      "kol_transcripts",
+      "legacy_analysis_evaluations_v3_11",
+      "legacy_analysis_revision_payloads_v3_13",
+      "legacy_analysis_revisions_v3_11",
+      "legacy_approved_source_profiles_v3_13",
+      "legacy_candidate_discovery_ledger_v3_11",
+      "legacy_decision_revision_evaluations_v3_13",
+      "legacy_decision_revisions_v3_13",
+      "legacy_frozen_source_authorities_v3_13",
+      "legacy_frozen_source_revisions_v3_11",
+      "legacy_official_ingestion_applications_v3_15",
+      "legacy_official_ingestion_chunks_v3_14",
+      "legacy_producer_authority_pages_v3_11",
+      "legacy_producer_job_payloads_v3_11",
+      "legacy_producer_job_results_v3_11",
+      "legacy_producer_jobs_v3_11",
+      "legacy_producer_runs_v3_11",
+      "legacy_provider_acquisition_conflicts_v3_16_21",
+      "legacy_provider_acquisition_revisions_v3_16_21",
+      "legacy_radar_projections_v3_11",
+      "legacy_release_checkpoints_v3_19",
+      "legacy_runtime_failure_diagnostics_v3_14",
+      "legacy_runtime_health_observations_v3_11",
+      "legacy_source_acquisition_outcomes_v3_13",
+      "legacy_source_append_context_v3_13",
+      "legacy_source_connector_attempts_v3_13",
+      "legacy_source_document_persistence_v3_13",
+      "legacy_source_item_outcomes_v3_13",
+      "legacy_source_processing_outcomes_v3_13",
+      "legacy_source_sync_cursors_v3_19",
+      "line_alert_events",
+      "line_subscriptions",
+      "market_data",
+      "market_evidence_snapshots",
+      "market_snapshots",
+      "missed_hot_symbol_reports",
+      "ml_forecast_snapshots",
+      "model_feature_attributions",
+      "model_outputs",
+      "model_signal_scores",
+      "model_training_runs",
+      "official_financial_validation_receipts",
+      "official_market_evidence_history",
+      "official_multiple_history",
+      "official_price_history",
+      "opportunity_assistive_artifact_registrations_v3",
+      "opportunity_authority_stream_registry_v3",
+      "opportunity_candidate_snapshots",
+      "opportunity_corporate_action_events_v3",
+      "opportunity_corporate_action_feed_evidence_v3",
+      "opportunity_corporate_action_snapshots_v3",
+      "opportunity_deep_candidate_results_v3",
+      "opportunity_detail_projections_v3",
+      "opportunity_evaluation_results_v3",
+      "opportunity_exchange_reported_pe_v3",
+      "opportunity_financial_fact_series_registry_v3",
+      "opportunity_financial_facts_v3",
+      "opportunity_financial_observations_v1",
+      "opportunity_job_payloads_v3",
+      "opportunity_job_results_v3",
+      "opportunity_job_staging_v3",
+      "opportunity_link_audit_labels",
+      "opportunity_link_audit_samples",
+      "opportunity_manifest_pages_v3",
+      "opportunity_manifest_rows_v3",
+      "opportunity_manifests_v3",
+      "opportunity_market_context_snapshots",
+      "opportunity_market_observations_v3",
+      "opportunity_mover_audit_symbols_v3",
+      "opportunity_mover_audits_v3",
+      "opportunity_outcomes",
+      "opportunity_portfolio_allocations_v3",
+      "opportunity_price_observations_v3",
+      "opportunity_public_projections_v3",
+      "opportunity_rpc_audit_v3",
+      "opportunity_run_inputs",
+      "opportunity_run_jobs_v3",
+      "opportunity_run_manifest_inputs",
+      "opportunity_run_warning_facts_v3",
+      "opportunity_runs",
+      "opportunity_score_snapshots",
+      "opportunity_sector_cycle_snapshots",
+      "opportunity_shallow_candidate_results_v3",
+      "opportunity_source_claims",
+      "opportunity_source_connector_accounting",
+      "opportunity_source_document_outcomes",
+      "opportunity_source_mentions",
+      "opportunity_stock_flow_observations_v3",
+      "peer_market_snapshots",
+      "peer_relationships",
+      "pipeline_dead_letters",
+      "pipeline_runs",
+      "podcast_episodes",
+      "podcast_transcripts",
+      "price_snapshots",
+      "private_artifact_receipts_v1",
+      "production_write_leases",
+      "production_writer_releases",
+      "profiles",
+      "provider_credentials_encrypted_v1",
+      "ptt_post_signals",
+      "publisher_verification_authorities_v3",
+      "radar_public_snapshots",
+      "radar_publication_state",
+      "recommendations",
+      "reports",
+      "research_memos",
+      "research_reports",
+      "retention_archive_content_objects_v2",
+      "retention_archive_manifest_rows_v1",
+      "retention_archive_manifests_v1",
+      "retention_archive_manifests_v2",
+      "retention_archive_pin_events_v1",
+      "retention_archive_policies_v1",
+      "retention_archive_rows_v2",
+      "retention_legacy_authority_page_refs_v2",
+      "retention_legacy_content_objects_v2",
+      "retention_legacy_frozen_revision_refs_v2",
+      "retention_legacy_job_payload_refs_v2",
+      "retention_legacy_job_result_refs_v2",
+      "retention_legacy_processing_outcome_refs_v2",
+      "revenue_signals",
+      "runtime_artifacts",
+      "sentiments",
+      "social_broker_mentions",
+      "social_signals",
+      "source_audits",
+      "source_connector_cursors",
+      "source_connector_registry",
+      "source_credentials_registry",
+      "source_discovery_queue",
+      "source_document_revisions_v3",
+      "source_entities",
+      "source_health_checks",
+      "source_identity_authorities_v3",
+      "source_publication_verifications_v3",
+      "source_raw_documents",
+      "source_registry",
+      "source_review_queue",
+      "source_revision_family_registry_v3",
+      "source_run_ledger",
+      "source_sessions",
+      "source_watchlists",
+      "stock_aliases_v3",
+      "stock_instruments_v3",
+      "stock_metadata",
+      "stock_peer_relationship_reviewers_v3",
+      "stock_peer_relationships_v3",
+      "stock_prices_daily",
+      "stock_sector_assignments_v3",
+      "stock_signals",
+      "stockinsider_backend_identities_v1",
+      "stockinsider_data_plane_settings_v1",
+      "stockinsider_legacy_compaction_receipts_v1",
+      "stocks",
+      "story_candidates",
+      "story_evidence_items",
+      "strategies",
+      "strategy_actions",
+      "taiwan_data_canonical_results_v5",
+      "taiwan_data_provider_attempts_v5",
+      "taiwan_data_publication_metadata_v5",
+      "taiwan_data_refresh_queue_v5",
+      "taiwan_data_refresh_scopes_v6",
+      "technical_feature_snapshots",
+      "theme_heat",
+      "thesis_evidence_matrix",
+      "thesis_models",
+      "threads_data_deletion_requests",
+      "tw_trading_sessions_v3",
+      "valuation_cases",
+      "valuation_data_quality_events",
+      "valuation_data_quality_row_audit",
+      "valuation_scenarios",
+      "valuation_snapshots",
+      "valuation_verifications_v3",
+      "weekly_industry_report",
+      "weekly_last_week_review_items",
+      "weekly_stock_analysis_items",
+      "weekly_top10_items",
+      "worker_job_runs",
+      "worker_job_states",
+      "worker_logs"
+    ],
+    "functions": [
+      "acquire_legacy_producer_lease_v3_11",
+      "acquire_production_write_lease",
+      "activate_stockinsider_backend_release_v1",
+      "append_assistive_artifact_registration_v3",
+      "append_candidate_enterprise_multiple_snapshot_v6",
+      "append_exchange_reported_valuation_transaction_v3_16_9",
+      "append_exchange_reported_valuation_v3_13",
+      "append_financial_fact_pre_history_v1",
+      "append_financial_fact_pre_v3_16_16",
+      "append_financial_fact_v3",
+      "append_instrument_roster_authority_v3",
+      "append_legacy_analysis_evaluation_v3_11",
+      "append_legacy_analysis_revision_v3_11",
+      "append_legacy_candidate_discovery_v3_11",
+      "append_legacy_expired_producer_diagnostic_v3_20",
+      "append_legacy_official_ingestion_chunk_rest_v3_15",
+      "append_legacy_official_ingestion_chunk_v3_14",
+      "append_legacy_radar_projection_v3_11",
+      "append_legacy_runtime_failure_diagnostic_v3_14",
+      "append_legacy_runtime_health_rest_v3_15",
+      "append_legacy_source_shard_v3_19",
+      "append_manual_stock_alias_authority_v3",
+      "append_market_observation_v3",
+      "append_opportunity_manifest_page_v3",
+      "append_peer_relationship_authority_v3",
+      "append_peer_reviewer_authority_v3",
+      "append_price_authority_v3",
+      "append_publisher_verification_authority_v3",
+      "append_source_document_revision_v3",
+      "append_source_identity_authority_v3",
+      "append_stock_flow_observation_v3",
+      "append_stock_sector_assignment_v3",
+      "append_trading_session_v3",
+      "append_valuation_verification_v3",
+      "apply_legacy_official_ingestion_chunk_base_v3_15",
+      "apply_legacy_official_ingestion_chunk_v3_14",
+      "assert_stockinsider_backend_request_v1",
+      "begin_opportunity_run_v3",
+      "can_read_report",
+      "can_read_subscriber_report",
+      "candidate_financial_canonical_json_v10",
+      "candidate_financial_document_job_evidence_v9",
+      "candidate_financial_document_job_requirements_v9",
+      "candidate_financial_fact_has_structural_proof_as_of_v10",
+      "candidate_financial_fact_has_structural_proof_v10",
+      "candidate_financial_parser_document_ready_v10",
+      "candidate_research_official_sessions",
+      "candidate_research_official_sessions_page",
+      "candidate_research_stock_authority",
+      "candidate_research_stock_authority_page",
+      "candidate_shadow_progress",
+      "claim_candidate_dossier_outbox_v5",
+      "claim_candidate_financial_acquisition_jobs_v4",
+      "claim_candidate_financial_document_receipts_v6",
+      "claim_legacy_mention_barrier_transport_v3_15",
+      "claim_legacy_producer_job_authoritative_v3_13",
+      "claim_legacy_producer_job_authoritative_v3_15",
+      "claim_legacy_producer_job_authoritative_v3_16",
+      "claim_legacy_producer_job_authoritative_v3_16_15",
+      "claim_legacy_producer_job_authoritative_v3_16_18",
+      "claim_legacy_producer_job_candidate_authority_base_v3_19_10",
+      "claim_legacy_producer_job_candidate_retention_base_v3_18",
+      "claim_legacy_producer_job_evaluation_clock_base_v3_16_20",
+      "claim_legacy_producer_job_full_candidate_authority_base_v3_19_1",
+      "claim_legacy_producer_job_pre_handoff_v3_19_16",
+      "claim_legacy_producer_job_pre_kol_authority_v3_20",
+      "claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1",
+      "claim_legacy_producer_job_pre_source_terminal_projection_v3_20_",
+      "claim_legacy_producer_job_provider_acquisition_base_v3_16_21",
+      "claim_legacy_producer_job_rest_v3_15",
+      "claim_legacy_producer_job_v3_11",
+      "claim_opportunity_job_v3",
+      "claim_taiwan_data_refresh_jobs_v5",
+      "claim_taiwan_data_refresh_jobs_v6",
+      "complete_candidate_financial_acquisition_job_v4",
+      "complete_candidate_financial_document_receipt_parser_v10",
+      "complete_candidate_financial_document_receipt_parser_v7",
+      "complete_candidate_financial_document_receipt_parser_v8",
+      "complete_candidate_financial_document_receipt_v6",
+      "complete_candidate_history_month_v1",
+      "complete_legacy_producer_job_authoritative_v3_13",
+      "complete_legacy_producer_job_authoritative_v3_19",
+      "complete_legacy_producer_job_rest_v3_15",
+      "complete_legacy_producer_job_v3_11",
+      "complete_legacy_producer_job_v3_14",
+      "complete_opportunity_job_v3",
+      "complete_opportunity_manifest_v3",
+      "complete_taiwan_data_refresh_job_v5",
+      "consume_internal_nonce_v3",
+      "create_opportunity_manifest_v3",
+      "derive_manifest_page_descriptor_v3_internal",
+      "enforce_candidate_shadow_identity_immutable_v4",
+      "enforce_candidate_shadow_manifest_immutable_v4",
+      "enforce_candidate_shadow_replay_payload_immutable_v5",
+      "enforce_opportunity_candidate_anchor_v3",
+      "enforce_opportunity_detail_evidence_v3",
+      "enforce_production_writer_fence",
+      "enqueue_next_opportunity_job_v3_internal",
+      "enqueue_taiwan_data_refresh_batch_v6",
+      "enqueue_taiwan_data_refresh_v5",
+      "enrich_legacy_analysis_prior_payloads_v3_16_15",
+      "enrich_legacy_retained_candidate_authority_v3_19_11_internal",
+      "fail_candidate_financial_acquisition_job_v6",
+      "fail_legacy_producer_job_v3_11",
+      "fail_opportunity_job_v3",
+      "fail_opportunity_manifest_v3",
+      "finalize_candidate_financial_document_validation_v8",
+      "finalize_opportunity_run_v3",
+      "freeze_legacy_provider_acquisition_v3_16_21",
+      "freeze_legacy_source_authorities_v3_13",
+      "get_link_audit_assignment_v3",
+      "guard_financial_document_full_readiness_v10",
+      "guard_financial_document_job_completion_v9",
+      "guard_legacy_radar_projection_insert_v3_13",
+      "handle_new_user",
+      "heartbeat_legacy_producer_job_v3_11",
+      "heartbeat_opportunity_job_v3",
+      "internal_principal_role_is_exact_v3_internal",
+      "is_subscriber",
+      "legacy_canonical_json_v3_13",
+      "legacy_correctness_immutable_v3_11",
+      "legacy_relative_valuation_authority_v3_13",
+      "legacy_valid_decision_envelope_strict_v3_13",
+      "legacy_valid_decision_envelope_v3_13",
+      "legacy_valid_decision_envelope_v3_14",
+      "legacy_valid_https_url_v3_13",
+      "legacy_valid_relative_valuation_authority_v3_13",
+      "legacy_valid_rfc3339_v3_13",
+      "list_connector_retention_archive_candidates_v2",
+      "list_retention_archive_candidates_v1",
+      "mark_radar_publication_failed",
+      "opportunity_adjusted_price_evidence_v3_internal",
+      "opportunity_authority_selected_stream_count_v3_internal",
+      "opportunity_candidate_plan_v3_internal",
+      "opportunity_global_observation_v3_internal",
+      "opportunity_levenshtein_v3_internal",
+      "opportunity_manifest_native_rows_v3_internal",
+      "opportunity_market_zscore_v3_internal",
+      "opportunity_peer_authority_header_counts_v3_internal",
+      "opportunity_raise_pt409_v3_internal",
+      "persist_taiwan_data_canonical_result_v5",
+      "prepare_opportunity_financial_fact_series_v3",
+      "prepare_retention_archive_manifest_v1",
+      "preserve_first_recommended_at",
+      "protect_published_candidate_detail_revision_v4",
+      "publish_radar_public_snapshots",
+      "purge_internal_nonces_v3",
+      "read_financial_facts_as_of",
+      "read_financial_facts_for_stocks_as_of",
+      "read_financial_history_page_v1",
+      "read_legacy_authority_pages_v2",
+      "read_legacy_candidate_fact_plane_authoritative_v3_12",
+      "read_legacy_candidate_fact_plane_authoritative_v3_13",
+      "read_legacy_candidate_fact_plane_decision_integrity_v3_13",
+      "read_legacy_candidate_fact_plane_v3_11",
+      "read_legacy_candidate_fact_plane_v3_16_11_internal",
+      "read_legacy_discovery_authority_v3_11",
+      "read_legacy_frozen_revision_v3_11",
+      "read_legacy_frozen_revisions_v2",
+      "read_legacy_job_payload_v2",
+      "read_legacy_job_result_v2",
+      "read_legacy_mention_barrier_transport_v3_15",
+      "read_legacy_prior_candidate_result_v3_19_12_internal",
+      "read_legacy_processing_outcomes_v2",
+      "read_legacy_provider_acquisition_v3_16_21",
+      "read_legacy_release_checkpoints_v3_19",
+      "read_legacy_run_compact_counts_v2",
+      "read_legacy_runtime_health_rest_v3_15",
+      "read_provider_credential_envelope_v1",
+      "read_provider_credential_state_v1",
+      "read_taiwan_data_candidate_universe_v5",
+      "read_taiwan_data_candidate_universe_v6",
+      "read_taiwan_data_publication_metadata_v5",
+      "read_taiwan_data_refresh_progress_v6",
+      "read_v320_authorized_investanchors_revision_ids_internal",
+      "read_v320_revalidated_kol_retention_internal",
+      "reap_legacy_expired_producer_run_v3_20",
+      "reap_legacy_producer_jobs_v3_11",
+      "reap_opportunity_jobs_v3",
+      "reconcile_candidate_financial_document_job_v9",
+      "reconcile_pending_financial_document_jobs_v9",
+      "record_candidate_dossier_submission_v4",
+      "record_candidate_financial_document_receipt_v6",
+      "record_candidate_financial_fallback_v5",
+      "record_candidate_financial_fallback_v6",
+      "record_candidate_shadow_observation",
+      "record_official_financial_validation",
+      "record_retention_archive_export_v1",
+      "record_retention_archive_restore_v1",
+      "record_taiwan_data_publication_metadata_v5",
+      "register_private_artifact_receipt_v1",
+      "register_production_writer_release",
+      "register_taiwan_data_refresh_scope_v6",
+      "register_taiwan_data_refresh_scope_v7",
+      "reject_candidate_dossier_revision_mutation_v4",
+      "reject_financial_document_job_link_mutation_v9",
+      "reject_financial_parser_evidence_mutation_v10",
+      "reject_retention_archive_direct_mutation_v1",
+      "reject_stockinsider_compaction_receipt_mutation_v1",
+      "release_production_write_lease",
+      "replace_provider_credential_cas_v1",
+      "resolve_legacy_analysis_prior_payloads_v3_16_18",
+      "resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal",
+      "resolve_legacy_instrument_authority_v3_13",
+      "resolve_legacy_instrument_authority_v3_13_internal",
+      "resolve_legacy_instrument_symbol_authority_v3_13",
+      "resolve_legacy_instrument_symbol_authority_v3_13_internal",
+      "resolve_legacy_official_shares_result_v3_13",
+      "resolve_legacy_official_shares_v3_13",
+      "resolve_legacy_provider_acquisition_lineage_v3_19_7_internal",
+      "resolve_legacy_scheduled_occurrence_v3_11",
+      "resolve_legacy_sector_authority_v3_13",
+      "resolve_legacy_sector_authority_v3_13_internal",
+      "resolve_legacy_trading_session_authority_v3_13",
+      "resolve_legacy_trading_session_dependency_v3_16_9_internal",
+      "resolve_legacy_trading_session_window_v3_13",
+      "retain_legacy_radar_projection_v3_13",
+      "retention_archive_active_pins_v1",
+      "retention_archive_current_row_hash_v1",
+      "retention_archive_deletion_readiness_v1",
+      "retention_archive_eligibility_v1",
+      "retention_legacy_direct_pins_v2",
+      "retention_legacy_jsonb_pins_v2",
+      "retention_legacy_run_plan_v2",
+      "retry_candidate_financial_document_runtime",
+      "revoke_provider_credential_cas_v1",
+      "schedule_legacy_source_shard_successor_v3_19",
+      "seal_opportunity_run_inputs_v3",
+      "seed_financial_document_job_link_v9",
+      "seed_v320_kol_source_authorities",
+      "select_opportunity_public_projection_v3",
+      "source_document_coverage",
+      "stage_opportunity_job_output_v3",
+      "submit_link_audit_label_v3",
+      "terminalize_candidate_financial_prelisting_job_v7",
+      "terminalize_legacy_expired_producer_run_v3_20",
+      "validate_candidate_financial_fact_scope_v10",
+      "validate_finmind_financial_fact_v6",
+      "validate_opportunity_financial_fact_series_v3",
+      "validate_opportunity_manifest_lifecycle_v3",
+      "validate_opportunity_manifest_page_rows_v3",
+      "verify_legacy_claim_delegation_chain_v3_20"
+    ],
+    "roles": [
+      "anon",
+      "authenticated",
+      "authenticator",
+      "dashboard_user",
+      "legacy_correctness_rpc_owner",
+      "opportunity_v3_rpc_owner",
+      "pg_checkpoint",
+      "pg_create_subscription",
+      "pg_database_owner",
+      "pg_execute_server_program",
+      "pg_maintain",
+      "pg_monitor",
+      "pg_read_all_data",
+      "pg_read_all_settings",
+      "pg_read_all_stats",
+      "pg_read_server_files",
+      "pg_signal_backend",
+      "pg_stat_scan_tables",
+      "pg_use_reserved_connections",
+      "pg_write_all_data",
+      "pg_write_server_files",
+      "pgbouncer",
+      "postgres",
+      "service_role",
+      "stockinsider",
+      "stockinsider_runtime_v319",
+      "supabase_admin",
+      "supabase_auth_admin",
+      "supabase_realtime_admin",
+      "supabase_storage_admin"
+    ],
+    "types": [
+      "alias_source_v3",
+      "analysis_evaluation_input_v3_11",
+      "analysis_revision_input_v3_11",
+      "assistive_artifact_kind_v3",
+      "assistive_artifact_registration_input_v3",
+      "assistive_artifact_status_v3",
+      "authority_status_v3",
+      "authority_stream_family_v3",
+      "candidate_discovery_input_v3_11",
+      "canonical_sector_key_v3",
+      "corporate_action_event_input_v3",
+      "corporate_action_feed_evidence_input_v3",
+      "corporate_action_kind_v3",
+      "corporate_action_snapshot_input_v3",
+      "exchange_reported_pe_input_v3",
+      "exchange_reported_valuation_input_v3_13",
+      "financial_acquisition_terminal_reason_v4",
+      "financial_authority_tier_v3",
+      "financial_duration_kind_v3",
+      "financial_estimate_horizon_v3",
+      "financial_estimate_kind_v3",
+      "financial_fact_input_v3",
+      "financial_fact_key_v3",
+      "financial_provider_v3",
+      "financial_unit_v3",
+      "human_authority_failure_code_v3",
+      "instrument_authority_input_v3",
+      "instrument_type_v3",
+      "internal_principal_role_v3",
+      "legacy_discovery_authority_page_v3_11",
+      "legacy_frozen_revision_read_v3_11",
+      "legacy_producer_claim_v3_11",
+      "legacy_producer_lease_v3_11",
+      "legacy_radar_projection_input_v3_11",
+      "legacy_scheduled_occurrence_v3_11",
+      "link_audit_assignment_disposition_v3",
+      "link_audit_failure_code_v3",
+      "link_audit_label_role_v3",
+      "listing_status_v3",
+      "manual_alias_authority_input_v3",
+      "market_fact_key_v3",
+      "market_observation_input_v3",
+      "market_provider_v3",
+      "market_scope_key_v3",
+      "market_unit_v3",
+      "official_roster_provider_v3",
+      "opportunity_analysis_evaluation_disposition_v3_11",
+      "opportunity_begin_disposition_v3",
+      "opportunity_candidate_discovery_disposition_v3_11",
+      "opportunity_candidate_discovery_reason_v3_11",
+      "opportunity_candidate_origin_v3",
+      "opportunity_candidate_research_disposition_v3_11",
+      "opportunity_candidate_research_reason_v3_11",
+      "opportunity_candidate_seed_membership_v3_11",
+      "opportunity_claim_evidence_stance_v3",
+      "opportunity_claim_outcome_v3",
+      "opportunity_deep_status_v3",
+      "opportunity_document_outcome_v3",
+      "opportunity_engine_warning_v3",
+      "opportunity_evidence_verification_tier_v3",
+      "opportunity_failure_code_v3",
+      "opportunity_horizon_v3",
+      "opportunity_job_counts_v3",
+      "opportunity_job_output_kind_v3",
+      "opportunity_job_payload_kind_v3",
+      "opportunity_job_stage_v3",
+      "opportunity_job_status_v3",
+      "opportunity_legacy_authority_page_kind_v3_11",
+      "opportunity_legacy_producer_failure_code_v3_11",
+      "opportunity_legacy_producer_job_kind_v3_11",
+      "opportunity_legacy_producer_job_status_v3_11",
+      "opportunity_legacy_producer_stage_v3_11",
+      "opportunity_link_mode_v3",
+      "opportunity_link_outcome_family_v3",
+      "opportunity_manifest_failure_code_v3",
+      "opportunity_manifest_kind_v3",
+      "opportunity_manifest_page_status_v3",
+      "opportunity_manifest_row_input_v3",
+      "opportunity_manifest_section_key_v3",
+      "opportunity_manifest_status_v3",
+      "opportunity_mention_outcome_v3",
+      "opportunity_mention_reason_v3",
+      "opportunity_mode_v3",
+      "opportunity_mover_audit_status_v3",
+      "opportunity_outcome_maturity_v3",
+      "opportunity_research_maturity_v3_11",
+      "opportunity_rpc_audit_disposition_v3",
+      "opportunity_rpc_function_name_v3",
+      "opportunity_rpc_subject_kind_v3",
+      "opportunity_run_input_role_v3",
+      "opportunity_run_purpose_v3",
+      "opportunity_run_status_v3",
+      "opportunity_seal_disposition_v3",
+      "opportunity_shallow_status_v3",
+      "opportunity_source_connector_status_v3",
+      "opportunity_staging_status_v3",
+      "opportunity_worker_read_kind_v3",
+      "peer_relationship_authority_input_v3",
+      "peer_reviewer_authority_input_v3",
+      "price_authority_input_v3",
+      "price_authority_kind_v3",
+      "price_observation_input_v3",
+      "price_provider_v3",
+      "publisher_authority_input_v3",
+      "sector_assignment_input_v3",
+      "source_acquisition_status_v3",
+      "source_class_v3",
+      "source_document_revision_input_v3",
+      "source_identity_authority_input_v3",
+      "source_key_v3",
+      "stock_exchange_v3",
+      "stock_flow_fact_key_v3",
+      "stock_flow_observation_input_v3",
+      "stock_flow_provider_v3",
+      "stock_flow_unit_v3",
+      "trading_session_input_v3",
+      "trading_session_status_v3",
+      "tw_market_v3",
+      "valuation_verification_decision_v3",
+      "valuation_verification_input_v3"
+    ]
+  },
+  "fingerprints": {
+    "roles": [
+      {
+        "name": "anon",
+        "sha256": "d6bea6de08fb3c0cac6118ef64bf59c086a3a349e33cf22717542d57017c61a3"
+      },
+      {
+        "name": "authenticated",
+        "sha256": "51b2b4a0bf57a4920374a8c5106beddbb0d74e50650d1658551bcacb27219b56"
+      },
+      {
+        "name": "authenticator",
+        "sha256": "138970b2e934878263781fce16fbc9bd7391ba9ce2a02e0f4fd4afa0e8a84e32"
+      },
+      {
+        "name": "dashboard_user",
+        "sha256": "259a3c07195e7caa4ba26d97936560921722daa358052c133001f86b5aa2f480"
+      },
+      {
+        "name": "legacy_correctness_rpc_owner",
+        "sha256": "6446ff2744e4a3513b6d080dc46a96b5e7f4625d9532140982f4f68b56185da1"
+      },
+      {
+        "name": "opportunity_v3_rpc_owner",
+        "sha256": "230bb807298ad6d83fde6e96ddafed8cf4c86efe9b36706fedbfb15306f3d472"
+      },
+      {
+        "name": "pg_checkpoint",
+        "sha256": "5cfda224fd49b26bbc4e8035a69c3c98befa193da3e92375b25995b80b401703"
+      },
+      {
+        "name": "pg_create_subscription",
+        "sha256": "14e0bbc2fd790dff9ed3366c4eaa83da9f4d0967bdf102ee5f49a6ecb3e401c2"
+      },
+      {
+        "name": "pg_database_owner",
+        "sha256": "df50f10f2ae1455eafed232161bd6c1b80f1d8973e3ca77e2057898df1dab7db"
+      },
+      {
+        "name": "pg_execute_server_program",
+        "sha256": "5ee325bb3d676cad7e36144cd7865b56c65f47ac560d9f09d57cc85c5926d398"
+      },
+      {
+        "name": "pg_maintain",
+        "sha256": "ade441844a667233dc0fbc4f40efb1e67acdb45730c2f2e988012845b1abf110"
+      },
+      {
+        "name": "pg_monitor",
+        "sha256": "53578a128e7e80cfb6a822dcfd1112c8ff9c4bab25cd356344e33a8ba5149c58"
+      },
+      {
+        "name": "pg_read_all_data",
+        "sha256": "70520ec3f76cb543622b177f91af4d48676516e8fed2834ba66dfcc92172a5b9"
+      },
+      {
+        "name": "pg_read_all_settings",
+        "sha256": "f605362249186851b272bd332938a616d2e10bc53521a59f6f8c5c5f80735e4e"
+      },
+      {
+        "name": "pg_read_all_stats",
+        "sha256": "3a79817dedbf3f2d46f754527039f5b7930fb316c4fc98b54039804103b593dc"
+      },
+      {
+        "name": "pg_read_server_files",
+        "sha256": "7a4efa03c830e5cccbf6b5f51e3ab8e3a34bf4fd8d623df25eca075623d96053"
+      },
+      {
+        "name": "pg_signal_backend",
+        "sha256": "17318badbd369bd99510852e95e458d3d3bf4f2766f09b4dddc5d75c7aae886b"
+      },
+      {
+        "name": "pg_stat_scan_tables",
+        "sha256": "695f83e3ce3b666cab1cd42ff376bdd7fafc3c782c39d9ba0e9b4e71d99c97a4"
+      },
+      {
+        "name": "pg_use_reserved_connections",
+        "sha256": "fa5b7cda7b4436b96349e1f5efb9dd1e98c9ccc52b4cd0226a36c18dacad491a"
+      },
+      {
+        "name": "pg_write_all_data",
+        "sha256": "a0f66c6d2d6ffc06e304a750137c5d5d3b166e1728657e1218ddef72bd86d0b5"
+      },
+      {
+        "name": "pg_write_server_files",
+        "sha256": "0639c15afb0ca732ebc60a6e973fb680263c84b53d7cd1a04e034a43793a22f7"
+      },
+      {
+        "name": "pgbouncer",
+        "sha256": "3ca27a7a89b5faa387612f53b24b2fd9361cb94d5b81e8f9db656482572608ab"
+      },
+      {
+        "name": "postgres",
+        "sha256": "8ddd1912a09d8f00f3c3c831369a6e5965324f83dd99debd5743fa3a6e1b7d86"
+      },
+      {
+        "name": "service_role",
+        "sha256": "8a84410bc787b681f6ec3a99132d061a34e9f63d0f5bd67a3f971cba4c528a47"
+      },
+      {
+        "name": "stockinsider",
+        "sha256": "51879c361b6fe6ab622b908a5c24a891e9d6fa7e836d4a237010e5da31727c1b"
+      },
+      {
+        "name": "stockinsider_runtime_v319",
+        "sha256": "85afb3cd14a8d4b7cf943f15cada3069b5e41af6dce531bf8088b3b87f8f36c0"
+      },
+      {
+        "name": "supabase_admin",
+        "sha256": "74c5c4d80eae9b9db1fcc374c1745123d00f15dd4e992e1e17cafffc90838529"
+      },
+      {
+        "name": "supabase_auth_admin",
+        "sha256": "b93b43239c3196c5166a0f3a10372782461473938398f92c00628066b130278d"
+      },
+      {
+        "name": "supabase_realtime_admin",
+        "sha256": "bbf9099bd62266b3249fe3f4e1eb3ca00710c9c1fe3537a218f8b65e1b9dbf87"
+      },
+      {
+        "name": "supabase_storage_admin",
+        "sha256": "8b800e9aff3e37b84a144e6032b44ac493254016669dc36de02074fcaae3deb5"
+      }
+    ],
+    "types": [
+      {
+        "name": "alias_source_v3",
+        "sha256": "333033864bd6bbcce33e95344c51287f69e621b9ca8e0ba34a2b53dba8f979b8"
+      },
+      {
+        "name": "analysis_evaluation_input_v3_11",
+        "sha256": "6d04376faee3a576806afbdc74a21d3e007d6e08f159cfca8791d6deb3f7e5f1"
+      },
+      {
+        "name": "analysis_revision_input_v3_11",
+        "sha256": "9c35791293d2a17733329753a245a2e5822de2ff42d9bcca4f50d78767518f0b"
+      },
+      {
+        "name": "assistive_artifact_kind_v3",
+        "sha256": "6bc7b6caf932acb47edd29839556ba454926abe2fc35d47496279e4bdb4fcb82"
+      },
+      {
+        "name": "assistive_artifact_registration_input_v3",
+        "sha256": "959f2947ac40636f864647dd0d810628f3c02c3ee6fae72fdc65f69de129c992"
+      },
+      {
+        "name": "assistive_artifact_status_v3",
+        "sha256": "c150b8e8d215080f5a465c4e7658f24661899ab9cb64b7f795407c0e56d14e7e"
+      },
+      {
+        "name": "authority_status_v3",
+        "sha256": "b47ce0d6cb6f02f6ee8ca794a6614511e7dd0a723a942a36bb3114e0a4b0c600"
+      },
+      {
+        "name": "authority_stream_family_v3",
+        "sha256": "c56c66fefbb6af84cdb8a80aec91e215b113a2e8c4a8a54b1710ddcf42d506a6"
+      },
+      {
+        "name": "candidate_discovery_input_v3_11",
+        "sha256": "001a008da29b0d5362b552efb34edbc6f479f5300ce1fe5d37e64d939794b047"
+      },
+      {
+        "name": "canonical_sector_key_v3",
+        "sha256": "ed7e816ff5a08d34087974d23251080f2b4256858f21492bcb5c9f7c9170fc0c"
+      },
+      {
+        "name": "corporate_action_event_input_v3",
+        "sha256": "dae4aebbedfa6467e24ad74f3caec1083edb1eae4c48c686526e1ef7dd888026"
+      },
+      {
+        "name": "corporate_action_feed_evidence_input_v3",
+        "sha256": "1c7b3144fcfb5d9d3c10d0190f4d8bbbb62883db24d043c1eb86723363d7c674"
+      },
+      {
+        "name": "corporate_action_kind_v3",
+        "sha256": "b7e68cfe58a6c6ebb1ad01d7c4bd9f5acddaf33c2dfd6ecfbdbc67d3134b8611"
+      },
+      {
+        "name": "corporate_action_snapshot_input_v3",
+        "sha256": "b86c14221e6a077d1235a5ebe4e1fe03545cb450732f2d07d18ebeffc495f8ee"
+      },
+      {
+        "name": "exchange_reported_pe_input_v3",
+        "sha256": "e169fa90cc2e2ee2ae9cbc6e595eddf49fd5110df9ec3284d90a44949521fa04"
+      },
+      {
+        "name": "exchange_reported_valuation_input_v3_13",
+        "sha256": "31c972059b64a38ebc9afd56588aed910e5fb699a81d5429126aeb149c8462c8"
+      },
+      {
+        "name": "financial_acquisition_terminal_reason_v4",
+        "sha256": "12825dd61f947e4f306754f4bdf6c8e4ee703288f7c4e8334b3e78ea0ddba245"
+      },
+      {
+        "name": "financial_authority_tier_v3",
+        "sha256": "c828415f7bc0936d708f312ac0389ea385a023e3c697cae8af1270109c8b2fed"
+      },
+      {
+        "name": "financial_duration_kind_v3",
+        "sha256": "b84fc534ef6e49b6f1695180a6bf9591a48061e93aa2d1f9bfa2ec322f281e66"
+      },
+      {
+        "name": "financial_estimate_horizon_v3",
+        "sha256": "08e0f0b7b02b0294ffea3d571a7b1f6cb5af179f75bf1db0f7598380f6466953"
+      },
+      {
+        "name": "financial_estimate_kind_v3",
+        "sha256": "af2e6a0c64ed29160cc778eea367a13db33450b2ac711e2369190ec866ad45dc"
+      },
+      {
+        "name": "financial_fact_input_v3",
+        "sha256": "b4880baa06ccc6e66bd0c3a3fa8c312ba3ae9d05c95fe6f6e5bac489cdd933b7"
+      },
+      {
+        "name": "financial_fact_key_v3",
+        "sha256": "19f8aff28b97e8af3a75c3798afd918031a8efb3e1e3465fb0f46e9e4b36e822"
+      },
+      {
+        "name": "financial_provider_v3",
+        "sha256": "75150f0263ae3bd6e7b05ff76dcfaa5d023609c5880df4e5a1862202bb4a38b7"
+      },
+      {
+        "name": "financial_unit_v3",
+        "sha256": "d37aa3188f477d13281735b616c2776913b68d150d93cc807b3a080ab2f80e7a"
+      },
+      {
+        "name": "human_authority_failure_code_v3",
+        "sha256": "70e83186d38cf59e5325f9c3e367baa5cf5bff051f5e003f665bcbebb197543b"
+      },
+      {
+        "name": "instrument_authority_input_v3",
+        "sha256": "22084cc1195d3e6b98f1fc5392212612066ea5d6278c4122ad5f424b3ccd3187"
+      },
+      {
+        "name": "instrument_type_v3",
+        "sha256": "ae377844b0a31b15458c74c907bd886a9c659ad2f85c63d7e914178b88eacc2e"
+      },
+      {
+        "name": "internal_principal_role_v3",
+        "sha256": "bf7391868c04ff15d9b8e998d80dcfd4eb57f931f776552dc74219704266f09e"
+      },
+      {
+        "name": "legacy_discovery_authority_page_v3_11",
+        "sha256": "f3c136649f19e5944ef1f20fee06a86e6ad2726ca6b5fa29de0209c7d5e4f6f8"
+      },
+      {
+        "name": "legacy_frozen_revision_read_v3_11",
+        "sha256": "5f192423f34a94ffa09d914a87fd3cfbcdb0db9f83a06e0ed1f8f05f82317aed"
+      },
+      {
+        "name": "legacy_producer_claim_v3_11",
+        "sha256": "24736c5468c821b4336018bf559a1a07088a202476183928c8bcde646ad0bb74"
+      },
+      {
+        "name": "legacy_producer_lease_v3_11",
+        "sha256": "9568e4c64906bb12031bc21c585e29b9b1117dfe73e6c85a152f36476669e884"
+      },
+      {
+        "name": "legacy_radar_projection_input_v3_11",
+        "sha256": "d0470ce29f4ebb8a5796076a51ea5cecfe80cbe00eedeacf1beea1115da34e71"
+      },
+      {
+        "name": "legacy_scheduled_occurrence_v3_11",
+        "sha256": "da29036e3f93c2e077a7f66e6f80bdfdf56dd67535b028177b0acc67d101b330"
+      },
+      {
+        "name": "link_audit_assignment_disposition_v3",
+        "sha256": "f5d6730c59f4fbda2ed2fc70de7c1cf3f0a78406577f7dc9e41c4163564f8709"
+      },
+      {
+        "name": "link_audit_failure_code_v3",
+        "sha256": "bfbec5c44682c7f5d882f2956ea47e1a484057881bec597aa3202ef0a002c73f"
+      },
+      {
+        "name": "link_audit_label_role_v3",
+        "sha256": "2724eaf4811ecd7fd3c2ad95097ddd1f31609efc1978e9302eb93753cb295860"
+      },
+      {
+        "name": "listing_status_v3",
+        "sha256": "0bf6420e464534843aa0eceb178ae96c515331ce41a37b1be548eb9472d015f4"
+      },
+      {
+        "name": "manual_alias_authority_input_v3",
+        "sha256": "8382c850f58546b05ae964ec4defc5070e377e0fdda97779154a3a2f61b4bf77"
+      },
+      {
+        "name": "market_fact_key_v3",
+        "sha256": "dedfba11ff6dd512b4488d5f0ead0967e3fef6089a2863f8912e6f0aab4d2208"
+      },
+      {
+        "name": "market_observation_input_v3",
+        "sha256": "6450304c8d72bac320ff71d65547c4e7cccc82c3f4086ab55b54f0e13618e121"
+      },
+      {
+        "name": "market_provider_v3",
+        "sha256": "b77e87126883a12c481a1eab531a7b103c985ea332971cfe8419d6fdb6bad42d"
+      },
+      {
+        "name": "market_scope_key_v3",
+        "sha256": "43718c873a825a52471713c4d3493f235a82664c6af7990b7f7babbd43ad790e"
+      },
+      {
+        "name": "market_unit_v3",
+        "sha256": "27e3799e1478099323e71a98977fed1c97c180bc104c846a0aff843d2bcb4a15"
+      },
+      {
+        "name": "official_roster_provider_v3",
+        "sha256": "8ce7a21ae26a335d61a933577ad0d1bd3ca4db9f87dd4a8d11ee6960cb73c7af"
+      },
+      {
+        "name": "opportunity_analysis_evaluation_disposition_v3_11",
+        "sha256": "830db32527942a53b27b4854143566cabb21192104e4c309a82a74770a731893"
+      },
+      {
+        "name": "opportunity_begin_disposition_v3",
+        "sha256": "7a1f70116ac5755cdc53a4a76282fe76c02c6d67387b313ef097e5e3846b0003"
+      },
+      {
+        "name": "opportunity_candidate_discovery_disposition_v3_11",
+        "sha256": "f734e8180305086c74949d90fc1eabc49808745d9acc751900441cce7e1b8351"
+      },
+      {
+        "name": "opportunity_candidate_discovery_reason_v3_11",
+        "sha256": "f60d0c10955ccd3ecced8a20e14af4eae77c36947c3825480c4518caa543ed68"
+      },
+      {
+        "name": "opportunity_candidate_origin_v3",
+        "sha256": "6cae7923236c5a2a4c81a03b1cbc79f67e9d65cb882903ffe49b0da33b08e0f9"
+      },
+      {
+        "name": "opportunity_candidate_research_disposition_v3_11",
+        "sha256": "1f90576fdeb29fa2876675c31330cdc343b0ac680694362fbfe5040332c320e5"
+      },
+      {
+        "name": "opportunity_candidate_research_reason_v3_11",
+        "sha256": "2050908ee74108d4bd8e621080891627f6e4bbca390e4b7f70ed8b6b81acca3a"
+      },
+      {
+        "name": "opportunity_candidate_seed_membership_v3_11",
+        "sha256": "e7a541a6ea513e82602e1123c607f332fe038d01a1877a038e70546f4feaa853"
+      },
+      {
+        "name": "opportunity_claim_evidence_stance_v3",
+        "sha256": "cc40b508cd7a1867983bad077eeb4d7e853cf99ef309b10b076d2e1529d69859"
+      },
+      {
+        "name": "opportunity_claim_outcome_v3",
+        "sha256": "2bf95730ba39ff5e29da2308610a3204970d1675c6ffaff022e48814777c1989"
+      },
+      {
+        "name": "opportunity_deep_status_v3",
+        "sha256": "3cd9f88f324824af3d436cbd421c72337e7f513e74ce5269a17d61a9759050ca"
+      },
+      {
+        "name": "opportunity_document_outcome_v3",
+        "sha256": "fae51acdc1052d8f5c778e57a4af4e1b767f831130b78a580974923dcf30a093"
+      },
+      {
+        "name": "opportunity_engine_warning_v3",
+        "sha256": "9d4e5d75bd1f167868ed93f40537ea7e19fa3904d235e1be143ecb7876d41156"
+      },
+      {
+        "name": "opportunity_evidence_verification_tier_v3",
+        "sha256": "64842209aec34487f5c67434986fe0be48f36e11d21e9d18a8717db822d3e74b"
+      },
+      {
+        "name": "opportunity_failure_code_v3",
+        "sha256": "c263f6f5d81d283dbe98ce06d9433688e95ff8d3b56a24421ddfe65457de765d"
+      },
+      {
+        "name": "opportunity_horizon_v3",
+        "sha256": "9833b65a145fb8c879a696c1939283f35cf54e686ae531e1f719f8209125feef"
+      },
+      {
+        "name": "opportunity_job_counts_v3",
+        "sha256": "d4c6d62ad84c304503ef3002e38a32ec2c69d5dc82fa3b67c577123f5261d23f"
+      },
+      {
+        "name": "opportunity_job_output_kind_v3",
+        "sha256": "920009e3f5c39ca708375f68a9cd30b6dcc118a01c26251083bb1c4f51c69bd0"
+      },
+      {
+        "name": "opportunity_job_payload_kind_v3",
+        "sha256": "f0102219c969db6ec2c1357601d321aae6d24f840c77671d7cb60c50cd534e53"
+      },
+      {
+        "name": "opportunity_job_stage_v3",
+        "sha256": "e9bdb490c346ca532a4db800754a40b51263678c2e514d6e97a0a3f684fe5e32"
+      },
+      {
+        "name": "opportunity_job_status_v3",
+        "sha256": "42fb529ed1ca26b8bbc60d69d7268cda39372cd6e2274fc24802bd92d4297cdc"
+      },
+      {
+        "name": "opportunity_legacy_authority_page_kind_v3_11",
+        "sha256": "79e9fbce7fb7fe2c54e6e0458b6f64983cda31e745a3ec6a5698a8432100d3ae"
+      },
+      {
+        "name": "opportunity_legacy_producer_failure_code_v3_11",
+        "sha256": "7a99a54b2c109aec9a58a1387b3c14742b42ba8ddaaa4cbe6bdaec32a2a177e3"
+      },
+      {
+        "name": "opportunity_legacy_producer_job_kind_v3_11",
+        "sha256": "73c462c24aef66bc700c41b45fcd34917cc72f1ec51275a4dcdd430713e5a002"
+      },
+      {
+        "name": "opportunity_legacy_producer_job_status_v3_11",
+        "sha256": "f5949df848861d1e5cfd599c87bdfcad98dc78f801e1a5da0ec51d9fbd22a488"
+      },
+      {
+        "name": "opportunity_legacy_producer_stage_v3_11",
+        "sha256": "8e01121bee6ac611ce8d57862f876bd44bc44edabfae304eb8defb536f28915a"
+      },
+      {
+        "name": "opportunity_link_mode_v3",
+        "sha256": "b73268a9ddfddfb7d0b2b16386e9d866aaa9f467ad41754dc95128d5cd09927e"
+      },
+      {
+        "name": "opportunity_link_outcome_family_v3",
+        "sha256": "fdee61a4e2ec848424104097ba05985575721b1a978d7f7fc39dc9da7e068917"
+      },
+      {
+        "name": "opportunity_manifest_failure_code_v3",
+        "sha256": "a78abbc6eded9c8a9cee9a7d5a1c47af81c8852466823561e2e230a2ee9a72ad"
+      },
+      {
+        "name": "opportunity_manifest_kind_v3",
+        "sha256": "f38dcf50de41ee0d0ced05a56436bcc484bb9bb17471188f314cb6ecdca2894f"
+      },
+      {
+        "name": "opportunity_manifest_page_status_v3",
+        "sha256": "2021a0000075592baad96b20992dccec299e629cdb0e8fddf25d04631f9759d1"
+      },
+      {
+        "name": "opportunity_manifest_row_input_v3",
+        "sha256": "1834736d4c9d035749f0a165bc9fb3bbe35d828b8f640e7d5bd07721c6241182"
+      },
+      {
+        "name": "opportunity_manifest_section_key_v3",
+        "sha256": "cd2f826dcaf4b1ee4d42bd2243f5a38d152e9b689cdb9343dd5f17db3e3f5bec"
+      },
+      {
+        "name": "opportunity_manifest_status_v3",
+        "sha256": "df90b284e7421bd6b2706c9d4724983bb5ee976c6d0a2986dbb45ae529302918"
+      },
+      {
+        "name": "opportunity_mention_outcome_v3",
+        "sha256": "ab8b8497fdaa8c186c5996babd866a6adf2b4ec6d3b8580fdce5f8714443b6db"
+      },
+      {
+        "name": "opportunity_mention_reason_v3",
+        "sha256": "fe9d890d779dfe88ffa40e14fb8dec8dc447cb729548c35008665df2ebbe3c91"
+      },
+      {
+        "name": "opportunity_mode_v3",
+        "sha256": "42dceb572ae5d9bedc923885d6abb2acd90577c18efef2b1be2fa2399cb99a68"
+      },
+      {
+        "name": "opportunity_mover_audit_status_v3",
+        "sha256": "0e681648c0ffe79454c4303be9ba4b0980157085788ce8c252d5f36f9ff6434c"
+      },
+      {
+        "name": "opportunity_outcome_maturity_v3",
+        "sha256": "bca7980ab4a068887b6fad54077235cd6e8cd813996f9cf696d64929db03298e"
+      },
+      {
+        "name": "opportunity_research_maturity_v3_11",
+        "sha256": "fc65751f2e29678ac9c9bd91fa29e8d4cfa02a74cfb86ff4c52c3a3cda7eb4e4"
+      },
+      {
+        "name": "opportunity_rpc_audit_disposition_v3",
+        "sha256": "046f85d5dd2612ae2a7344629bdf9d23bda05fcafb3d61021704ca28c5d274e0"
+      },
+      {
+        "name": "opportunity_rpc_function_name_v3",
+        "sha256": "42d9d89aad33469b074e62c1bc2de232a812c8cd51d1a929ff2ef6407dcc145f"
+      },
+      {
+        "name": "opportunity_rpc_subject_kind_v3",
+        "sha256": "a1e5ffbd2123aa4eaa505cae0e868f7778084e5e449dc7fe1e481976846b205d"
+      },
+      {
+        "name": "opportunity_run_input_role_v3",
+        "sha256": "106b73e99bf8141361e1ffc9312b74bfec406dbd158c390149ae4f40118b9b7c"
+      },
+      {
+        "name": "opportunity_run_purpose_v3",
+        "sha256": "3da2321993c0b60a089dd0af36cb264578c9aef5a4bfd7aa32c35c064a3b2909"
+      },
+      {
+        "name": "opportunity_run_status_v3",
+        "sha256": "d8cde1f0fdf157b37c86a0530f0f2c3bd0790aebf084ab93da8c322916e6597a"
+      },
+      {
+        "name": "opportunity_seal_disposition_v3",
+        "sha256": "54bee3308ac5b3ae224a2ef3fa69fce8f7f18766a6802a04636b4993343a21d1"
+      },
+      {
+        "name": "opportunity_shallow_status_v3",
+        "sha256": "1166a5e9d89c6aef7ae6009fe46a10896eb800a0311030104dda6e462e9dc1e6"
+      },
+      {
+        "name": "opportunity_source_connector_status_v3",
+        "sha256": "6c51ea4e993927fabffdea5bf324a375106625bbdc90ea5b2668fc4982bf4105"
+      },
+      {
+        "name": "opportunity_staging_status_v3",
+        "sha256": "60ebd171c3d0008678a2f43e372fe78df510516eec8585ff45a223161806becb"
+      },
+      {
+        "name": "opportunity_worker_read_kind_v3",
+        "sha256": "2f9325e731ed9b897b38d2ffa8d2c29a43133e52cc13612d9a94d8f5859a34dd"
+      },
+      {
+        "name": "peer_relationship_authority_input_v3",
+        "sha256": "f73b6a445d3e121a68822778f7fa7aa1a1217db79555ab317fa78a96045ca78c"
+      },
+      {
+        "name": "peer_reviewer_authority_input_v3",
+        "sha256": "c37069468a8460b5a5cd44f721640fd781611a566f1b61d77461897f442e21d7"
+      },
+      {
+        "name": "price_authority_input_v3",
+        "sha256": "01467767d4aa00ad8f52eb82ef62d55b719a00eed6ee0f1b7f888f6f33e40e95"
+      },
+      {
+        "name": "price_authority_kind_v3",
+        "sha256": "e36ed384b1eac0a58db28921768de44ab241dae61120f6c89649c4926f76f927"
+      },
+      {
+        "name": "price_observation_input_v3",
+        "sha256": "621b3408b5437f81c723af0bcda7956faf587fff37ee12201e27e457aadede8c"
+      },
+      {
+        "name": "price_provider_v3",
+        "sha256": "02a62bce49db315e2d2627268f347ec399f29cb73fe17705b58b59f32f424f94"
+      },
+      {
+        "name": "publisher_authority_input_v3",
+        "sha256": "43d490a9e1443648b121b2726064f719cb430ac55b1fadcac053176a21b4c7d3"
+      },
+      {
+        "name": "sector_assignment_input_v3",
+        "sha256": "7ab64da298293bdaeb1a801dd1309a5bca30bb624d87c50ae6645633b65791f4"
+      },
+      {
+        "name": "source_acquisition_status_v3",
+        "sha256": "296f69f3fb03e508b1285b72bc932255b74902fa1f1440a31b8718726ac4f708"
+      },
+      {
+        "name": "source_class_v3",
+        "sha256": "1645a705cfd241c8ca43f47388bed15a1b5981a72b60ec0a0b1870b70146683c"
+      },
+      {
+        "name": "source_document_revision_input_v3",
+        "sha256": "b17d6e78013cf2a15d91e2d5583db8a06f8db8e336926165a95ecbf2403bc172"
+      },
+      {
+        "name": "source_identity_authority_input_v3",
+        "sha256": "f0a62c7793aadd264a5080b36d5db6aff0116c9f3c4398a5edca3e26aa28049b"
+      },
+      {
+        "name": "source_key_v3",
+        "sha256": "79080fdcad0b74873808eca365d7535b82d04f85e1d6f08774d18f725842dca2"
+      },
+      {
+        "name": "stock_exchange_v3",
+        "sha256": "83e7729e53eaf68b64106447bf0bd7e299ffe5539a07e760dd88fee69dbaa572"
+      },
+      {
+        "name": "stock_flow_fact_key_v3",
+        "sha256": "97bf11efa22f6334ac40d366da6e31b3f234550fa7cba1e28aa9d639665e8454"
+      },
+      {
+        "name": "stock_flow_observation_input_v3",
+        "sha256": "b1a27ea26017f0bcd37912ba4c3fe83ff31cf77cc41ef2c747ca3a35454a76e6"
+      },
+      {
+        "name": "stock_flow_provider_v3",
+        "sha256": "7efa7e7ad16659a3dab949d3ab7f90d6fc00e5cd6431f33962b3e7ad84d140de"
+      },
+      {
+        "name": "stock_flow_unit_v3",
+        "sha256": "d32758df6f1570244089ff19d0bf70f51294a4d57a7c3d65f5eae6e5074d842c"
+      },
+      {
+        "name": "trading_session_input_v3",
+        "sha256": "b524863255768822fc22fb0964864fad57f04df9251d6e31924c8ab97ae060d0"
+      },
+      {
+        "name": "trading_session_status_v3",
+        "sha256": "4a553bcc527a0583d8594a8864133c253481d24c6861fa70ee3b9449d5bbf4f9"
+      },
+      {
+        "name": "tw_market_v3",
+        "sha256": "767aab34fc61aaf33eb82f08f506ae9acefc00ff614f2049269993fdf3ee6083"
+      },
+      {
+        "name": "valuation_verification_decision_v3",
+        "sha256": "0cb0933f9a2227432a247de569bf4bc9e960f61e5ecabe29f18b04921406203b"
+      },
+      {
+        "name": "valuation_verification_input_v3",
+        "sha256": "c57e5c71d5db24c4f0c9d4615e7736db1f73f62ab1ec17673787d9c5970c4409"
+      }
+    ],
+    "tables": [
+      {
+        "name": "agent_findings",
+        "sha256": "4ec4199e9229ae4e11e3bc3ea714888d2d7f78cf721fa8824b07aed1229cda19"
+      },
+      {
+        "name": "agent_profiles",
+        "sha256": "b79760cf08d9e4b2d155ad8bfe25e5a8092c3fd88867592f4d46bec5c6f05ee2"
+      },
+      {
+        "name": "agent_review_queue",
+        "sha256": "67f4b321bf0c74e45054595313dfe7487383833df93d481408ab11cfee4d2466"
+      },
+      {
+        "name": "agent_runs",
+        "sha256": "7b9c252c87fa19d5e01d725b28726e4c7127ad97b1a9f77a90e2f283c91ee239"
+      },
+      {
+        "name": "agent_tasks",
+        "sha256": "46d32649ba514bdcf412493ab4bb08800b6fae0618bf85dbeb7ab62a4a23a6a6"
+      },
+      {
+        "name": "broker_consensus_snapshots",
+        "sha256": "4a082d4f93ec9a5d3422bec7b8d781a435e2cd5938b59f27d2ace0b004558ae6"
+      },
+      {
+        "name": "broker_report_documents",
+        "sha256": "9c94a0562044b61a54bc06eb5880009e059f7a561f273c902dafbffdc3c5e116"
+      },
+      {
+        "name": "broker_report_sections",
+        "sha256": "00158c097fb43566753c360089f92463fbc98f78f52186bc6edebed29d559bf9"
+      },
+      {
+        "name": "candidate_daily_stage_snapshots",
+        "sha256": "5f08484989df25cf4c6ff11047206a0a23620856023a55ddeb27f2a5f0efa182"
+      },
+      {
+        "name": "candidate_detail_snapshots",
+        "sha256": "1f577d6de0678535a6bfb2bc5195f1ec9b8025845e41266e0228049901a245c9"
+      },
+      {
+        "name": "candidate_dossier_bundles",
+        "sha256": "bf9e839da9117b92835e58fce2b9c4347fff52fbc08d2e8b8f4456410fcc7859"
+      },
+      {
+        "name": "candidate_dossier_outbox_v5",
+        "sha256": "f0a54eb9e6989d6e564d854846be91c15131a40031a552b8697d22751d0d95ec"
+      },
+      {
+        "name": "candidate_dossier_submission_receipts",
+        "sha256": "3f1e0ab9181d4d1cd24bb9f1b9484bc8a00d41cb0cd62090772d62a788f47f96"
+      },
+      {
+        "name": "candidate_enterprise_multiple_snapshots_v6",
+        "sha256": "0d95cb3f6b742f7f4316780b7a70d2683385ad2656e524a519fe304ab77b0e61"
+      },
+      {
+        "name": "candidate_financial_acquisition_cursors_v4",
+        "sha256": "ac54b1256f943ae2939a8e8fbd48bc16570791649d3fa9ca0ffbd12a35ca2163"
+      },
+      {
+        "name": "candidate_financial_acquisition_jobs_v4",
+        "sha256": "618526392f2a9b91097620397d4ea354a527d95c37e4cfcbf69dbeb62ad29b36"
+      },
+      {
+        "name": "candidate_financial_document_fact_links_v8",
+        "sha256": "4dc59eb1487ab85d97d21b19128b4c96868a1770557b612492ddd2cdc93b9b8a"
+      },
+      {
+        "name": "candidate_financial_document_job_links_v9",
+        "sha256": "788a654fabff6f653f4dba302b2d962cea6ddcfff434c2897b1f799265347935"
+      },
+      {
+        "name": "candidate_financial_document_receipts_v6",
+        "sha256": "28c281320ad9302075eb51f6b9308bdcebe761d51110054d98e5cacfa38bde7f"
+      },
+      {
+        "name": "candidate_financial_document_retry_audit",
+        "sha256": "c4fa0f5e7393b8184fb28ed4e0e69e408e7096d8f4d9721868a71597789684d3"
+      },
+      {
+        "name": "candidate_financial_fact_provenance_v4",
+        "sha256": "32f6910b4a22c19c445fcfbed053df820379f9484b34f8333eaf62d5519d79eb"
+      },
+      {
+        "name": "candidate_financial_parser_evidence_v8",
+        "sha256": "6e1e56d2fcef14a6ec9245e9122b9de008d7cd1e47ebba7bfd4e04cbf5977735"
+      },
+      {
+        "name": "candidate_history_authority_reconciliations_v1",
+        "sha256": "7c1e6eceee700f8e05f0e2288555e3cc7655375d8e26c8d0eacc0723977ec90b"
+      },
+      {
+        "name": "candidate_history_backfill_attempts_v1",
+        "sha256": "c0f5d251aa6c5cb9ee75d2bfef33ec8c0dd267b0fb49d19e7f007727059a30f2"
+      },
+      {
+        "name": "candidate_history_backfill_months_v1",
+        "sha256": "3074a38ebfd735e0a42d6a98efdde0e2ddcba694ca76e957d9ad45105de61faf"
+      },
+      {
+        "name": "candidate_issuer_document_domains_v6",
+        "sha256": "4133583b7e03a329625163aaf45ff2b8d89b8a848a9ad32715f99ece9608be5a"
+      },
+      {
+        "name": "candidate_issuer_ir_document_queue_v4",
+        "sha256": "82ea8dd48675ab5920a8151d6ab1fc2c5b7e0ef07ef7bd52399e8f970417be8c"
+      },
+      {
+        "name": "candidate_official_facts",
+        "sha256": "dcddacb997fd582da8252d42881d80e413d7d44fe4bef51128e6d2c47c638253"
+      },
+      {
+        "name": "candidate_research_dossiers",
+        "sha256": "2b4542e11657906dc4321fc4375a01edcff64a495384787fb2f01c4aa2f4cd17"
+      },
+      {
+        "name": "candidate_research_run_items",
+        "sha256": "46873ae8a585488f0e165ec99fa9550217d7333894b68da772ffa37ef28690d1"
+      },
+      {
+        "name": "candidate_research_runs",
+        "sha256": "1f181fabbf64140069217fc1b3f56bcef0a85b42572d7ef88bf5c0da24ad3246"
+      },
+      {
+        "name": "candidate_shadow_attempts",
+        "sha256": "b043be1b1d829de2e18245caf94ed1983b62c8a06671360e9e88243828d5ff22"
+      },
+      {
+        "name": "candidate_shadow_manifests",
+        "sha256": "6d8c6a5ac45df78e14ddf9ceb60505b9fe91cfd578cf80cc4a10ba28213e57db"
+      },
+      {
+        "name": "candidate_shadow_replay_payloads",
+        "sha256": "2adea98623362f0282bef2c3e6057fb472e1bbd63582792ca8bd0ec5dea64b05"
+      },
+      {
+        "name": "candidate_shadow_session_observations",
+        "sha256": "dd6800a9be6b02c199c7a3d543a0edbd6a3f26b3da01292e2fb611f49fc3606b"
+      },
+      {
+        "name": "candidate_signal_tracking",
+        "sha256": "ef90bd87d2e00b05d671d1e926555af023c4d4eebc6e9b0902825a1414949ba3"
+      },
+      {
+        "name": "candidate_source_mentions",
+        "sha256": "8f333525845045ce830e590f277c0da188547b3442f6446ff72c1f3d8831bf0e"
+      },
+      {
+        "name": "candidate_stage_events",
+        "sha256": "bc7059ebb192af56fb7579e65550c91f3944e0686c280c2f75faaf4c79293b94"
+      },
+      {
+        "name": "company_events",
+        "sha256": "6891ca5063394dadc67ad5e8210abaa9f883953994bb35586eed490afbcac0e6"
+      },
+      {
+        "name": "conference_transcripts",
+        "sha256": "a166292fe51c6a0b5aaa2cc4cb20a8d10e261540913dccb39d2c920659f3d90d"
+      },
+      {
+        "name": "connector_runs",
+        "sha256": "09331654ececcf49b4266613b654ee102d5a3466c19444303784984dcdef3f55"
+      },
+      {
+        "name": "cross_theme_discovery_events",
+        "sha256": "616adacc9ec89d16c241d69a6781e87222a4aa6f692ceff1418eb48972e04858"
+      },
+      {
+        "name": "daily_catalysts",
+        "sha256": "e549e9fc0daa3a12b8bc62cc6c5cbd42f40cb04b3f2f8030c700186986b87079"
+      },
+      {
+        "name": "daily_market_snapshot",
+        "sha256": "eaa80245054879871c2c52c29845a1512878586cc913084387aa7992bfa465df"
+      },
+      {
+        "name": "daily_related_links",
+        "sha256": "28a784b27bb6c79157a403ecf608ed840760cf7d2317b0af2e804bb39721ffba"
+      },
+      {
+        "name": "daily_risks",
+        "sha256": "3609ce12deb2fd5e5fe69daff835cd61bfa390ab3a86e02228b2d849b77ac3eb"
+      },
+      {
+        "name": "daily_suggestions",
+        "sha256": "73cce7c7f26a40afc1ddeeb8f6cbd775a1ecd0b1368b5a251a7a03e05a116455"
+      },
+      {
+        "name": "daily_tech_quickview",
+        "sha256": "c811fc59a3dbcd6f2de666558f1819cb4dfe881a8f5452389a91681955b84bf8"
+      },
+      {
+        "name": "daily_top10_items",
+        "sha256": "011ddd394512de57bf0cc844a3045c652ee1706d7a909dc075b19911c2ab112b"
+      },
+      {
+        "name": "daily_trade_ideas",
+        "sha256": "f4cd75df8b244e96ca427080ebd179698ed1c51d472468e952b15188442dcedd"
+      },
+      {
+        "name": "entry_plan_authority_jobs_v1",
+        "sha256": "4b7e8ffa0ac4152cd038296c2f3c4a3eeee3e830b9d236bef1654ac7f7905f01"
+      },
+      {
+        "name": "entry_plan_authority_runs_v1",
+        "sha256": "cdc57032a153d35f49f7fd0b752717c07983bae7b09929fdd285fb4220f546e8"
+      },
+      {
+        "name": "fundamental_snapshots",
+        "sha256": "2a8d4c01d2d262a83b229eecd67fe3ccc1d4eaf044ec264fc66763a2d93b533f"
+      },
+      {
+        "name": "hf_training_runs",
+        "sha256": "37246d9e984cd9e701bdec1328ace3ff62a647f0f156b424ec9ebec911c15185"
+      },
+      {
+        "name": "industry_entry_exit_ideas",
+        "sha256": "21959721f52706f2ba02d38b4a91a5a29833dbeaf81ae909bf41c6446ed06143"
+      },
+      {
+        "name": "industry_hot_themes",
+        "sha256": "fdb1ba0a039303b34d483d630abe300852e74161b3257c21bba09bd95190dee5"
+      },
+      {
+        "name": "industry_latest_dynamics",
+        "sha256": "f65e7dbe2c4a970cef14cd44a9b03e3b6b3a98787d4dd6580030adf6fb1ed0e2"
+      },
+      {
+        "name": "industry_news_digest",
+        "sha256": "5f4dbf15e77e7c75fd9fed1bc3d99c8c92e75f3aff78b30f529c7746d7efb28a"
+      },
+      {
+        "name": "industry_pre_market_checklist",
+        "sha256": "adf1d9abbf73e914d043ab6ee99943cc2f5576da54aaae78123e112f60523301"
+      },
+      {
+        "name": "industry_suggestions",
+        "sha256": "cfbac51fbc9a07acb61e494da910d142583f004111656112185fd399c91156f1"
+      },
+      {
+        "name": "industry_supply_chain_signals",
+        "sha256": "d3c658e2ab71d01c1c7ec49c168521da95a297f616614bbf503bfd6be562070a"
+      },
+      {
+        "name": "industry_theme_leaders",
+        "sha256": "64c61a7a0c09f6416d8b9346a8692bdce4a028cfb008aa3107b8ffa7de20ae1f"
+      },
+      {
+        "name": "industry_watchlist_risks",
+        "sha256": "97e0845d30d457e7caca5f413c6e33b04d3c68f7474c8650e39dee8e8b4149a9"
+      },
+      {
+        "name": "institutional_signals",
+        "sha256": "5002fcd0e15d32ef41a9f8440907cf5019c7e59ff22529fd37a2e41cdfadd671"
+      },
+      {
+        "name": "internal_principal_nonces_v3",
+        "sha256": "5b4263cdb8be5aad7c993e93ef9bf9cc17a8ecf819ac8fb11109a9d4524586e3"
+      },
+      {
+        "name": "internal_principal_role_bindings_v3",
+        "sha256": "0fb25a66847a1d847b25a1487aff36dc701bd4c78bb0e7bf43ed97159f9a20a4"
+      },
+      {
+        "name": "kol_episodes",
+        "sha256": "ee85a0c6aefa19bb98015cfcd071aed42e8ba18f051b2d571eb5a042afd781be"
+      },
+      {
+        "name": "kol_profiles",
+        "sha256": "c6864e28bece95a92bca8bd2d8dbd75b9c790ddb59d5f6d59b1b2dabe2e9a0a5"
+      },
+      {
+        "name": "kol_sources",
+        "sha256": "2d6bb5ddc8d43f8df1f0c6c4ba0b7c464f3ec3a64db14649dafefbcccf3e9664"
+      },
+      {
+        "name": "kol_summaries",
+        "sha256": "126e1d6a4602e6f908f8e131c220b4cf98a4fa2d0409b1df75022f0b44d81a7e"
+      },
+      {
+        "name": "kol_transcripts",
+        "sha256": "f5eb3541d97591c357b1b3da260832a22e10c1a880777c146081fc3e47afd068"
+      },
+      {
+        "name": "legacy_analysis_evaluations_v3_11",
+        "sha256": "f5d9b2f5a6187644e379bd52afaa5cb3cac9f3d515ed22ae897f4c28716c75f9"
+      },
+      {
+        "name": "legacy_analysis_revision_payloads_v3_13",
+        "sha256": "0ea21ae149ba51f2bd1e1345954624b185a39594004f149148a3e6edc44c62d3"
+      },
+      {
+        "name": "legacy_analysis_revisions_v3_11",
+        "sha256": "7e4cabb1b7b27ffef4e6d1554f517e4a7248a5b54d77ee347a1ad452b8950890"
+      },
+      {
+        "name": "legacy_approved_source_profiles_v3_13",
+        "sha256": "7e006d3e2fa790498141a1a239c0daa1aa1590dbbd9e79bd1de7121f7dc9f2c9"
+      },
+      {
+        "name": "legacy_candidate_discovery_ledger_v3_11",
+        "sha256": "3c6d4ff59f188c62d6040aafbaa4249558f026c1e7c2b6363c8042545c78bbdc"
+      },
+      {
+        "name": "legacy_decision_revision_evaluations_v3_13",
+        "sha256": "41e06f2c08a6ee0ba16689bd98e64c0ae802e514a589b42dd10787ef7254db69"
+      },
+      {
+        "name": "legacy_decision_revisions_v3_13",
+        "sha256": "047025d9b9ca05c8690ecb8b976cb8661cf4642763f222cfc663386de34676b2"
+      },
+      {
+        "name": "legacy_frozen_source_authorities_v3_13",
+        "sha256": "14aa73724aba6c2dbfd504a838b733b6f71319ec43219ad20e0623ff74f7342c"
+      },
+      {
+        "name": "legacy_frozen_source_revisions_v3_11",
+        "sha256": "efeccfcf0c62330b36b6cc9dee42e93a3d5359c3f4d7964c24141672b33de2fb"
+      },
+      {
+        "name": "legacy_official_ingestion_applications_v3_15",
+        "sha256": "3ddabb912785498bd61cfd37c174e4dc16c2af57984810e7cafec782488b4512"
+      },
+      {
+        "name": "legacy_official_ingestion_chunks_v3_14",
+        "sha256": "51ff0b0b1761dbd47f00484f390ff7c99cd87e71e22ae0395554ca8e2bf57c2a"
+      },
+      {
+        "name": "legacy_producer_authority_pages_v3_11",
+        "sha256": "be18f981d4eaa02fda8d52e8bb071fbd6b55572fd193ad3544368ba33028f7c9"
+      },
+      {
+        "name": "legacy_producer_job_payloads_v3_11",
+        "sha256": "943bcfd82b67c902ee4a7ee559e6a1e78e3f274474d164ec4d34989d88fc452c"
+      },
+      {
+        "name": "legacy_producer_job_results_v3_11",
+        "sha256": "7553bf0df76df5b5f5837e3a655b20997d7dce19b30a5107f6a61ddc518edc30"
+      },
+      {
+        "name": "legacy_producer_jobs_v3_11",
+        "sha256": "50ae28b9d737f1189f455356308ade18f346d1a0ad793c30e008023d092deed5"
+      },
+      {
+        "name": "legacy_producer_runs_v3_11",
+        "sha256": "bdd6b4489183799ab262dc1186bf58aa015f723f6d3afa488caea2a5245e761c"
+      },
+      {
+        "name": "legacy_provider_acquisition_conflicts_v3_16_21",
+        "sha256": "f9b3cb556097df265483ecc2b29774deed6cb9713f93c05b4220247cda34ab17"
+      },
+      {
+        "name": "legacy_provider_acquisition_revisions_v3_16_21",
+        "sha256": "d022447e7e39e323732637ac02f607307b4f1b72aa2ba6e50ff57b4bbb08571d"
+      },
+      {
+        "name": "legacy_radar_projections_v3_11",
+        "sha256": "bb185ded315bc81b3fc07f3cf24df5cb093701f11e8c9bc4daf570e32860a448"
+      },
+      {
+        "name": "legacy_release_checkpoints_v3_19",
+        "sha256": "65ca59503bfae5cb4735166ff5a108e70cb5748e5ab2ec224a02d35fec712bc9"
+      },
+      {
+        "name": "legacy_runtime_failure_diagnostics_v3_14",
+        "sha256": "6c57dee237b3d42d009bb54ca96af7af8b3ea49bfa9ac688fe5cfe99819c12a9"
+      },
+      {
+        "name": "legacy_runtime_health_observations_v3_11",
+        "sha256": "31b96babe6d478de1b1da1ecf716fb406b4642e8d6ed6ab09c7bb2abe5059181"
+      },
+      {
+        "name": "legacy_source_acquisition_outcomes_v3_13",
+        "sha256": "dea28f80e60a6c6994da0f5b0b466f4226e49f06a48ef6634565f64b94b88bf2"
+      },
+      {
+        "name": "legacy_source_append_context_v3_13",
+        "sha256": "b87a8c0c7e739ef3b13d7e01755f08a321705329fcc9c1e5359e293ca8ebdb7f"
+      },
+      {
+        "name": "legacy_source_connector_attempts_v3_13",
+        "sha256": "436878a91593392d25bfc66a00db6e5e6069d3ed7b58c191a373ba0b368ae098"
+      },
+      {
+        "name": "legacy_source_document_persistence_v3_13",
+        "sha256": "573451a0a278498b75cac307de104314126d500c2066839b5fdb97e276dd527c"
+      },
+      {
+        "name": "legacy_source_item_outcomes_v3_13",
+        "sha256": "cb94972ffce99b369e334124ad09513c30f55402c0f135068100c3643cd9b8b9"
+      },
+      {
+        "name": "legacy_source_processing_outcomes_v3_13",
+        "sha256": "a59ce489d380bb873748a4a0ebd18132a54d2d571d0955e01916ecffbee4008d"
+      },
+      {
+        "name": "legacy_source_sync_cursors_v3_19",
+        "sha256": "170b721e29ebbe56b886662cfcb20467f16b11af51792dc8db2dc471549ef656"
+      },
+      {
+        "name": "line_alert_events",
+        "sha256": "97f45b8ad6c35af6a005791fb2864076b6785f3c26578eaa5eb29a9ddb083b07"
+      },
+      {
+        "name": "line_subscriptions",
+        "sha256": "1d1081bd44dc87236e28703862392fbe5f99d4c3e3a6c794990d20eb26081dec"
+      },
+      {
+        "name": "market_data",
+        "sha256": "51fa15798f4eb4fb47eb05dd65cef0e822dc309c90b61ae06076445b6f756c0d"
+      },
+      {
+        "name": "market_evidence_snapshots",
+        "sha256": "9ea8afbf803c365a6dcae5886a6cc279a871dc1ade7983909d7e3d26dd9a22e1"
+      },
+      {
+        "name": "market_snapshots",
+        "sha256": "c5549701fd0130f29aeefc0df72ae301bf492655e011580d75083485bff65bf5"
+      },
+      {
+        "name": "missed_hot_symbol_reports",
+        "sha256": "dfaa3de954ec07375523b8dc1393c2df67863cff6dc194d4f83aa12a4292f99f"
+      },
+      {
+        "name": "ml_forecast_snapshots",
+        "sha256": "46dbcd0ead3a90082bfe6f0597617a740659587a057ecb9b51a811f073daf3f5"
+      },
+      {
+        "name": "model_feature_attributions",
+        "sha256": "1f87fb18313ed012d409597021c9bd1a7f8c43952e5458531bdd952ef7bf73e7"
+      },
+      {
+        "name": "model_outputs",
+        "sha256": "06c5538fc733de43cc791b0057d9090274582dc3c3c5fad59c879303a5428aec"
+      },
+      {
+        "name": "model_signal_scores",
+        "sha256": "a2399819d6bb1096bf214bb68849519058f0fe1be1b19aaf458b3cd8440fd783"
+      },
+      {
+        "name": "model_training_runs",
+        "sha256": "496c348d2714208d6b89489c25369de4e03d6acdce3a250e01c7af28c6539965"
+      },
+      {
+        "name": "official_financial_validation_receipts",
+        "sha256": "40f2602f20b4e80eaa4c588dc680d82a28f90ea75ffa0e1cec8c53b6d6a46118"
+      },
+      {
+        "name": "official_market_evidence_history",
+        "sha256": "f0c4328c52b9d441c947e98e1449eaeb6841b0698a604f87d344ffa9f8af4568"
+      },
+      {
+        "name": "official_multiple_history",
+        "sha256": "73803fb5306d26f79141dc45e325978133ae1e670f54bbc7bf62d548d2eed39a"
+      },
+      {
+        "name": "official_price_history",
+        "sha256": "09ffb4abdb7fc21fcaf53f3101a8398bed57b47b72e3730f726fe06e8fb62607"
+      },
+      {
+        "name": "opportunity_assistive_artifact_registrations_v3",
+        "sha256": "9f8c8316ac4ffc78a881dfbeb9f74f4eed51bfdaed35933406b4b14c1e5bc685"
+      },
+      {
+        "name": "opportunity_authority_stream_registry_v3",
+        "sha256": "a855c852e6399a5270a75b90a816a768b6c17fbd0065ac1d2f0d210f0e6e5511"
+      },
+      {
+        "name": "opportunity_candidate_snapshots",
+        "sha256": "e3297a6f5a29dfa2e1c01344b3da048eafc43e97896c31c9f009735aec60d4ee"
+      },
+      {
+        "name": "opportunity_corporate_action_events_v3",
+        "sha256": "03a23781c6df05c2c960c363d94447d56f629ab1834c4c7fb60d88a7616ea809"
+      },
+      {
+        "name": "opportunity_corporate_action_feed_evidence_v3",
+        "sha256": "0b2e7e9c5a71f57cf4b0918f3c1bcf5889aac1b44e6289f29ea497bed4cc8336"
+      },
+      {
+        "name": "opportunity_corporate_action_snapshots_v3",
+        "sha256": "54e796c393078cf8fa0beb24ed7e022835cc836deb9cc09f04bf4273f6e494c4"
+      },
+      {
+        "name": "opportunity_deep_candidate_results_v3",
+        "sha256": "ea8c55fd409ac9c3de0c3f3b21287ff92bd85ff5be475a431935ff26527b455f"
+      },
+      {
+        "name": "opportunity_detail_projections_v3",
+        "sha256": "81ffefed13b7edee44b059d0a556296653ddb1f480ac7ac2ea23de164494b7ea"
+      },
+      {
+        "name": "opportunity_evaluation_results_v3",
+        "sha256": "f184a6b829d163f053301ccd82b78c02809044fed4fba8705f110a54e2a57784"
+      },
+      {
+        "name": "opportunity_exchange_reported_pe_v3",
+        "sha256": "c4659a976c3ee5bf3c1ca9642d45fd52cc80d5850bc25501d0e7682daa8e167a"
+      },
+      {
+        "name": "opportunity_financial_fact_series_registry_v3",
+        "sha256": "99c31f48a177535a3624e4055ca12ae23745a0663b64eaaf0b1d21692c892a7b"
+      },
+      {
+        "name": "opportunity_financial_facts_v3",
+        "sha256": "91e1108fbd5adda6d26520032e2bdf755d2e6fab5dfd674e41cb4960fbd4b7d5"
+      },
+      {
+        "name": "opportunity_financial_observations_v1",
+        "sha256": "51a3b94035ce02b683153e9bf7cd043576163533804ebca6ae0df6d79ec80dce"
+      },
+      {
+        "name": "opportunity_job_payloads_v3",
+        "sha256": "06a4d1db97a644ebd1c8202e7a7cf0322e5040f01f6aa3b239f0f4d45f61b88e"
+      },
+      {
+        "name": "opportunity_job_results_v3",
+        "sha256": "de23fe098a78d8c91ef967c6fd1ade15e543ccf29772bb54f56315b1c3c87507"
+      },
+      {
+        "name": "opportunity_job_staging_v3",
+        "sha256": "4fd83027357dceae881762ec4855b84cb71946bbb3ffe79bf9aeb4ba51394a59"
+      },
+      {
+        "name": "opportunity_link_audit_labels",
+        "sha256": "3bd8528f00308d5bd4f51b5c5937f19833f39b127836fd9bd7800803965de3f2"
+      },
+      {
+        "name": "opportunity_link_audit_samples",
+        "sha256": "8581f03a805696e0865e26ecc3df32fe26bb8ca63477462d9180391dcc823b2e"
+      },
+      {
+        "name": "opportunity_manifest_pages_v3",
+        "sha256": "f5fa8f9860328ad3edfb0476ceb156b305201050e33cd791e3a7c8cc973c3fd5"
+      },
+      {
+        "name": "opportunity_manifest_rows_v3",
+        "sha256": "aa50e039c55e55ec6f8cb01afd9d9b352a513df6bd71ee75f00d07d2ee2c6895"
+      },
+      {
+        "name": "opportunity_manifests_v3",
+        "sha256": "d95b29e276c70c340b674635747d922cce7d796ece5ba763ba0f77ad925565c2"
+      },
+      {
+        "name": "opportunity_market_context_snapshots",
+        "sha256": "d735e598e23c234c4dd7b314a7f02d1a3ff64e21a69a78fc8654b9d840d8138b"
+      },
+      {
+        "name": "opportunity_market_observations_v3",
+        "sha256": "cc28f74f33f33d3afc6c0cfb456e9cc1cf0ce146a3af7a1946ecf3d40119270e"
+      },
+      {
+        "name": "opportunity_mover_audit_symbols_v3",
+        "sha256": "da6db72adb3fbebebd747ef9b7049bc089850ad5a272cd182e01466f7bc1de6f"
+      },
+      {
+        "name": "opportunity_mover_audits_v3",
+        "sha256": "5e192d8e975cc28370c12603d86f1238414c0f838ed6b454707a60550b387d9a"
+      },
+      {
+        "name": "opportunity_outcomes",
+        "sha256": "e2fded69b3fcd91dfb28e5f78ad7574be2cd8d87c24a5ad35b9f81f431d8b2a4"
+      },
+      {
+        "name": "opportunity_portfolio_allocations_v3",
+        "sha256": "8521cd19eb4a10cc5d089012ae5734bee1ee9b434d191fefb87ced2ae1bf9f67"
+      },
+      {
+        "name": "opportunity_price_observations_v3",
+        "sha256": "fa9480569cf8a79707fe150182e914fc5dfc6800cafb075f9f95d5d6d3907327"
+      },
+      {
+        "name": "opportunity_public_projections_v3",
+        "sha256": "2d393e5c2eb147ed170a3c82b5e32b5dd85db80f724e6144002c3cb43cd262e2"
+      },
+      {
+        "name": "opportunity_rpc_audit_v3",
+        "sha256": "e6b70947d6056edb274bc24970d2916c302f935db687c837a9b9b77501fdbfe9"
+      },
+      {
+        "name": "opportunity_run_inputs",
+        "sha256": "eeca574c0959b33df6d8534d86047422fd339503abaf9bb80ff99b7c838f3a18"
+      },
+      {
+        "name": "opportunity_run_jobs_v3",
+        "sha256": "6d911c4fd78380eae47f5864a4268b8e068fbebd6b2502dd40b418a45ba50d70"
+      },
+      {
+        "name": "opportunity_run_manifest_inputs",
+        "sha256": "5458e8f77c2116d8bc9db052fb86f7a608018264950e022a143c9b0bf8234bf8"
+      },
+      {
+        "name": "opportunity_run_warning_facts_v3",
+        "sha256": "8840f149abbbde62b3ce298245b5769bdb53d0c236983d99c4796c06d870858e"
+      },
+      {
+        "name": "opportunity_runs",
+        "sha256": "dcf0ef5f990576de74f33c0bda716a3a77f6f092b1a82acbc99261efcd425c50"
+      },
+      {
+        "name": "opportunity_score_snapshots",
+        "sha256": "6b0bfa3dc6e1c1cf0d5ec493e3563ee730f586c6088181a5705c8736d16d39fc"
+      },
+      {
+        "name": "opportunity_sector_cycle_snapshots",
+        "sha256": "a27b35271bad1b77da5d8f8e91980464a5766fb1cc30efec3ea234724f053367"
+      },
+      {
+        "name": "opportunity_shallow_candidate_results_v3",
+        "sha256": "49ec6f7383fe1f8786b268444d98627845af1d6d69c2c3041e05bd28b4c47701"
+      },
+      {
+        "name": "opportunity_source_claims",
+        "sha256": "8afd1a73409972420787c5df26097297171d04dc41968f7b48f3cf1e1a24e17c"
+      },
+      {
+        "name": "opportunity_source_connector_accounting",
+        "sha256": "6420dee0e7dcd774be2a771304f1b958ed5c669d1624d2d71abbc20922d7295d"
+      },
+      {
+        "name": "opportunity_source_document_outcomes",
+        "sha256": "730cb90fef413fa68170821b80489caa9a9c65aeeb0490126faea3f0b9fb60a4"
+      },
+      {
+        "name": "opportunity_source_mentions",
+        "sha256": "d983aefd5128ce6bbd1356abd85a0da0cdd99929c96cc87e1a2f0f7639d93c93"
+      },
+      {
+        "name": "opportunity_stock_flow_observations_v3",
+        "sha256": "395bbf5641ae9191c0b667535d65eb12b09f3b88f695a5ad30b96052f176fb50"
+      },
+      {
+        "name": "peer_market_snapshots",
+        "sha256": "22156097746d974d70d177054b792bd73f5ee2c1dee6529c568453ebfa0854cf"
+      },
+      {
+        "name": "peer_relationships",
+        "sha256": "54ffdf525412ec34226c51b98d0e50656834e3b33ec945cbf4906d3b4e74ac77"
+      },
+      {
+        "name": "pipeline_dead_letters",
+        "sha256": "ff33d3c0c19c1d55c87c1c6dfa46c686cc46f6ec1422ec0cb96e56416572bab3"
+      },
+      {
+        "name": "pipeline_runs",
+        "sha256": "1421c61ec98ef01ed3b1c5a5a04b5523e7deddb9255aec40917ec24a55a8a19b"
+      },
+      {
+        "name": "podcast_episodes",
+        "sha256": "beda896b81d0f5fbd48aced276bb67117f04e412181934bc3b3cfc62d5ade608"
+      },
+      {
+        "name": "podcast_transcripts",
+        "sha256": "aa144f0d7787c068f651984050ec11780b002870bf99442398dc4c3e68bd30f6"
+      },
+      {
+        "name": "price_snapshots",
+        "sha256": "b27686d1da7bc5180875186b18679680e57981c15833fdf2c7728db646e345c1"
+      },
+      {
+        "name": "private_artifact_receipts_v1",
+        "sha256": "cd7a060c85b6a761bed5ef5301f46484983ad8b997bc95bce404dc6a23479740"
+      },
+      {
+        "name": "production_write_leases",
+        "sha256": "036d517c8beed1523116db8265b762e28697721c5d52207cda427e7bf0ff34cf"
+      },
+      {
+        "name": "production_writer_releases",
+        "sha256": "21f9214a8827f58a9d56239325f194491e4713704aede582e506a87132c13c79"
+      },
+      {
+        "name": "profiles",
+        "sha256": "7fb7d029f4a839eb88175024365a669983b14f3c60884ff44dc1338edb3ce9dc"
+      },
+      {
+        "name": "provider_credentials_encrypted_v1",
+        "sha256": "2607598c8bcf151acc20aa26b9add081dbbcb7de0f780fcf82f55d00d234ae36"
+      },
+      {
+        "name": "ptt_post_signals",
+        "sha256": "ff4a21fcb57c5d4bf5428c46d1d9ca527daf4c4754e3bf3b3bdf1a4b5f440bc0"
+      },
+      {
+        "name": "publisher_verification_authorities_v3",
+        "sha256": "4dd07e9b37e39066a36fc560de91bd3e642971ab54cd7a70b3c34c199a814411"
+      },
+      {
+        "name": "radar_public_snapshots",
+        "sha256": "2fe40be97e4f9c7eb0ea60ec665ac274d09cfca398c103492fdebfaeacafd71c"
+      },
+      {
+        "name": "radar_publication_state",
+        "sha256": "c43a7e4b3bad9b5aaf2bb249bbcbf21065e59111a9d26508becc1f048400c2fd"
+      },
+      {
+        "name": "recommendations",
+        "sha256": "22a746a30263a77fa852d952932d1c61b83cfb9efcbe43c740690b9840843457"
+      },
+      {
+        "name": "reports",
+        "sha256": "e6c5865f175a49018863df7b26a2e09fd0086fd7af62fe6de8cffa40f283f42a"
+      },
+      {
+        "name": "research_memos",
+        "sha256": "18704ab3c5fadc6802ae0d5ef5e3fc9ebc59ec07fb17ffa190231545b4b11001"
+      },
+      {
+        "name": "research_reports",
+        "sha256": "00e2361c9c9414e091d5a81d4574ac31b2c8086b10791de1bf0cb54f580b81a3"
+      },
+      {
+        "name": "retention_archive_content_objects_v2",
+        "sha256": "d9941edc759269b89e4591200cca6c88a2b2f795c19a8ed906aae9f8776c9b7f"
+      },
+      {
+        "name": "retention_archive_manifest_rows_v1",
+        "sha256": "49a8bb366797d58ed03e1edfa3c4f775bd9e10132da57245af6198a0ffd864f1"
+      },
+      {
+        "name": "retention_archive_manifests_v1",
+        "sha256": "6f4d8a1e018d85ff30f6356f6e176ef392a48d16643122857fd332f5006337ad"
+      },
+      {
+        "name": "retention_archive_manifests_v2",
+        "sha256": "cadce7cb7729fc1609945694482b9666d40f35e5b92f07e5c3ddc10ead68f928"
+      },
+      {
+        "name": "retention_archive_pin_events_v1",
+        "sha256": "9becbc0560b2c3c1b2cdeb1a4e74b1eb0c6cd7145014f49720ccac8758a4b435"
+      },
+      {
+        "name": "retention_archive_policies_v1",
+        "sha256": "78185627cb98fd4a0e5901909f3e17c840e54483216ed96ca3ef6e7795c2c795"
+      },
+      {
+        "name": "retention_archive_rows_v2",
+        "sha256": "96de3f31c746ca8f23e90d7cf2ea02672483f79ef0de2c6ce5bd00761ac18c37"
+      },
+      {
+        "name": "retention_legacy_authority_page_refs_v2",
+        "sha256": "4d92c4b08e5e188c5f6bae39c81943d5afdb24f16bf031f86354aa0d02427138"
+      },
+      {
+        "name": "retention_legacy_content_objects_v2",
+        "sha256": "f4c3a25f43bf6097b80f3af17c90627bd7fe6244eceff246bc34a7a77c78ffc8"
+      },
+      {
+        "name": "retention_legacy_frozen_revision_refs_v2",
+        "sha256": "4215b5fb7ff4cbd45e8fefd7b8ea31121d2cfbfde891bf6cbb4fc02af9ab525d"
+      },
+      {
+        "name": "retention_legacy_job_payload_refs_v2",
+        "sha256": "2c9a792adf51ad90682900a560964262b9d0972da5985274a81cc4e85be065b6"
+      },
+      {
+        "name": "retention_legacy_job_result_refs_v2",
+        "sha256": "6afb4c734f23ecd59deba93353e66004b7d3c0ebc52a73cb25954d52c7927b78"
+      },
+      {
+        "name": "retention_legacy_processing_outcome_refs_v2",
+        "sha256": "369f2f08e072309326046fe476bad14119722750c813ea35359067b075e6bf76"
+      },
+      {
+        "name": "revenue_signals",
+        "sha256": "985a04b654e5d5d7e98141785cc3b08d11b41ae48131536695d468fb0f9b4eae"
+      },
+      {
+        "name": "runtime_artifacts",
+        "sha256": "bc7cba2c6370cd54094922a164ed5980decfde34e095f39807ce95b05488dc0e"
+      },
+      {
+        "name": "sentiments",
+        "sha256": "5e4b6f9c1d7681dbc31ae954a000f28f4691d33227d2fe08a61b61ddcd2de668"
+      },
+      {
+        "name": "social_broker_mentions",
+        "sha256": "4cc62927c6da36671c88346b6322f01a28a56f3df3074cf6b6a2758abc8c9727"
+      },
+      {
+        "name": "social_signals",
+        "sha256": "ae5c2bd61b27c44317217fb544aa0de51c651aaa337cbbb8c417ff43cee9e88d"
+      },
+      {
+        "name": "source_audits",
+        "sha256": "3bd93e051881cafb7e288cb988283dd82c40ce7ec1f1649b06e0a0742d1eb7b2"
+      },
+      {
+        "name": "source_connector_cursors",
+        "sha256": "916c7b393ebf4fc854b068774ad88d54aae759daeafe36cb86303787f9722705"
+      },
+      {
+        "name": "source_connector_registry",
+        "sha256": "b19b652fea0ff8490c5b35f311f6379add86bade96d1ca84710f3c6c0fa7b1a7"
+      },
+      {
+        "name": "source_credentials_registry",
+        "sha256": "7dd831341d11bac9a513835abf05d226f5d799286b79efc638a68d5de6956161"
+      },
+      {
+        "name": "source_discovery_queue",
+        "sha256": "22a85e6ca06c5c3c1b1ab1e9276c469fa7829f0529161d81d57b8d64fa5f593c"
+      },
+      {
+        "name": "source_document_revisions_v3",
+        "sha256": "e25851967971f440dac1e1c4ac345585f45571f73d9d6e9f1fb5155cf1077431"
+      },
+      {
+        "name": "source_entities",
+        "sha256": "ba251cd0c820288d516e4b519d3b714621444d14441129e17b9ffa81cd9aaa23"
+      },
+      {
+        "name": "source_health_checks",
+        "sha256": "ef99d8f29290e934e01bac116a4227ad1d0cd4791f7d3183879258c8af4f3fa0"
+      },
+      {
+        "name": "source_identity_authorities_v3",
+        "sha256": "6c2b7824b5b4a2d55b66d0dae5a79c8ac7b519d76b49480119d8f910359372e5"
+      },
+      {
+        "name": "source_publication_verifications_v3",
+        "sha256": "4d4c75db4324d23b8e1e1b77088b6511c24ea975ba3df3b82ee51b74811bf188"
+      },
+      {
+        "name": "source_raw_documents",
+        "sha256": "87674f78ee6808dfbb68ef592ab9601365adfc74c8bb6b44f4bc1701fe87869a"
+      },
+      {
+        "name": "source_registry",
+        "sha256": "aa8ac9a66991b43c9f4bdc3bf16ae7b5288ed0e158b7d99337c1ffa8763eb331"
+      },
+      {
+        "name": "source_review_queue",
+        "sha256": "a37b65417ad219bd864d3e7be602fc0b77f92d9ba2a9fc6b33c2afa9715cecd2"
+      },
+      {
+        "name": "source_revision_family_registry_v3",
+        "sha256": "c22460beaaf4dda1bd149da8f69e1da4b8af3c7cfadab5b31f67dfedcaaf3d47"
+      },
+      {
+        "name": "source_run_ledger",
+        "sha256": "eebd6a724b67f81bd96899d4e50909dff04fb27e43e33646aed5377b3ef05c2b"
+      },
+      {
+        "name": "source_sessions",
+        "sha256": "e03cb1ef52a613d5f374f3b469f3eabfde759989564fbb630a27f9cda9afa78a"
+      },
+      {
+        "name": "source_watchlists",
+        "sha256": "61b45801ace3a6cd4499982039aff03012718d669ff9845ecd32c212c6ec68ce"
+      },
+      {
+        "name": "stock_aliases_v3",
+        "sha256": "b7927aece2178577317a3ecad6013ffff35b9f91665cdb57dcfaff02a6ae92da"
+      },
+      {
+        "name": "stock_instruments_v3",
+        "sha256": "c1e141e709366d1eab7721f66f0b4c5cf4fd913ccafdc9aba6e02057f217a28f"
+      },
+      {
+        "name": "stock_metadata",
+        "sha256": "6ec4fbfe8622e57127b90856a209eab2a66ef4d8a4db7f91fe681146eda7bef9"
+      },
+      {
+        "name": "stock_peer_relationship_reviewers_v3",
+        "sha256": "640ba9d85c9dd5fe7dab2eefa827322c8a401fdd2bd2ea1254aea8c86630a259"
+      },
+      {
+        "name": "stock_peer_relationships_v3",
+        "sha256": "ff3644ac0138143647a4ff680123f17fad970b413bafdfc8695f171b1c769137"
+      },
+      {
+        "name": "stock_prices_daily",
+        "sha256": "aafbad88eb0b6f22c0a730341501ded2536f84701d43e80f9264ed93f5626fb8"
+      },
+      {
+        "name": "stock_sector_assignments_v3",
+        "sha256": "c491723ec6507dcfe77de21d2c2391136c62f97d76861be4331999dc59fdfe99"
+      },
+      {
+        "name": "stock_signals",
+        "sha256": "43c2bfb8564a01094421e2a64471325825f70d2af1496eb239cdec9bd77fba60"
+      },
+      {
+        "name": "stockinsider_backend_identities_v1",
+        "sha256": "7d9ffe03ca030fbc5c2193063f8c3da783b17c6560d4d18b974b7e6f7bb4aa63"
+      },
+      {
+        "name": "stockinsider_data_plane_settings_v1",
+        "sha256": "b1f6f48f86673aa6db310e03109afe1b808d2bd629e129c049861a874fb4fd60"
+      },
+      {
+        "name": "stockinsider_legacy_compaction_receipts_v1",
+        "sha256": "2c7b2e8a71695745a81c0b57e3a146207dfed9b8559cf52d2196eaa5ae0a0e3e"
+      },
+      {
+        "name": "stocks",
+        "sha256": "8deb3e4c22250015a1e8a20968b302148a058c19ab54a71fde70c2d53cc5129b"
+      },
+      {
+        "name": "story_candidates",
+        "sha256": "56620215fe646677b83cd9bca9d700940ba48801fc4be4faa710ecb6a9accd85"
+      },
+      {
+        "name": "story_evidence_items",
+        "sha256": "cce19cf9c6e82bde8c3c813f0e03a439064097d2f1de131ea3c4fbaec0ddb816"
+      },
+      {
+        "name": "strategies",
+        "sha256": "96fff1fc7c5dd3b116c9e3680d75190f3db3eb8f968e95e1cca0c0fc8e4f4093"
+      },
+      {
+        "name": "strategy_actions",
+        "sha256": "be027bf7d8268339198e11dd237e2eb5b15ec252a60cf6433717ceb71d2d5ac6"
+      },
+      {
+        "name": "taiwan_data_canonical_results_v5",
+        "sha256": "129b2f59bba49a37c541fde810156c1c7c89f46ad45d0e4f952a58dd4a938cb9"
+      },
+      {
+        "name": "taiwan_data_provider_attempts_v5",
+        "sha256": "baf09ba0dc013644309c2342658a7195233b6218e9381c0d0a0592f0aeea3bd6"
+      },
+      {
+        "name": "taiwan_data_publication_metadata_v5",
+        "sha256": "9aed0a265d5e829b5edd237a9528ade2fa0951698bd836b8bbcea3961d10576a"
+      },
+      {
+        "name": "taiwan_data_refresh_queue_v5",
+        "sha256": "54b35f23a70f92ed215a5bec8919b2d70fb6d6edee1ec15d82e53f1887f0e711"
+      },
+      {
+        "name": "taiwan_data_refresh_scopes_v6",
+        "sha256": "60cdc23def7100ee86145753bff048950862998642731a778af9e9f22349b389"
+      },
+      {
+        "name": "technical_feature_snapshots",
+        "sha256": "6ee814fbe5ca9cf0baaa88e01adb79ef3dc006732583b1878b98c8c598cc7c24"
+      },
+      {
+        "name": "theme_heat",
+        "sha256": "f9d2289719df89adcb67e3ee5efa35a572ff2f8fbb892df3516f94451b975feb"
+      },
+      {
+        "name": "thesis_evidence_matrix",
+        "sha256": "c7cb354cabfa80dbf8626d8a2fd8e411fe7b547f31de44c2691dc6d23e022c5d"
+      },
+      {
+        "name": "thesis_models",
+        "sha256": "8663f48d6ea684ac240b1112194d09296f01212c65f2bc9aac034b90bdd90b6f"
+      },
+      {
+        "name": "threads_data_deletion_requests",
+        "sha256": "3964a787879988711f1dafcc2c9d3998ad2d46aea52dbb1d447460a0e7bb0068"
+      },
+      {
+        "name": "tw_trading_sessions_v3",
+        "sha256": "94eeeb2f335d93e1a92db27d95bff5dbdc47d95d626623c8923d602b4fd4403a"
+      },
+      {
+        "name": "valuation_cases",
+        "sha256": "d22235b0683a3684d3586f0cf8d3cd989619f47e0df04eef8f21dc5042c0d08c"
+      },
+      {
+        "name": "valuation_data_quality_events",
+        "sha256": "3706ac416a7306e209018d9ed0bd6265a405f09f9f7b42d53cfc7238067342e6"
+      },
+      {
+        "name": "valuation_data_quality_row_audit",
+        "sha256": "1f4919d0f49602952f0d0f94b025040b99f4933d542995ea57ebda362d2c9f6a"
+      },
+      {
+        "name": "valuation_scenarios",
+        "sha256": "864c3c1a4073f5e4651f0253fcd61f3110e904b979406aee7cbf91d0aaa86c73"
+      },
+      {
+        "name": "valuation_snapshots",
+        "sha256": "02de3a358e08a5342d44c8f44159581fb96c528537fb5f839f9d6da91f5096be"
+      },
+      {
+        "name": "valuation_verifications_v3",
+        "sha256": "03b49ac4f8a187d511601abeacf1ef59f61f19d8989ce3e1a33f078aeab9a5de"
+      },
+      {
+        "name": "weekly_industry_report",
+        "sha256": "3f6fc3cc982e69a73b74ff3fde19e1cc9293105ede50a4ade64c2aa5e691d020"
+      },
+      {
+        "name": "weekly_last_week_review_items",
+        "sha256": "427c6a3d7b515de954797ae1d48599c1d7b98c565d8ddce8dd4278a77eb911bc"
+      },
+      {
+        "name": "weekly_stock_analysis_items",
+        "sha256": "9f2bdf7b784f587bbaae7f05b7b90e4f316ab4a204bbd557e65c815db051b669"
+      },
+      {
+        "name": "weekly_top10_items",
+        "sha256": "45d7df6ee3d3a6a97f0512a8873671437d6c83507cb205120d6403057b34791e"
+      },
+      {
+        "name": "worker_job_runs",
+        "sha256": "4cc49428f6d94ed5d5f8111e4f277c050f2f4f1e7f82fa3ed8474ed7c2cfd81c"
+      },
+      {
+        "name": "worker_job_states",
+        "sha256": "a0236ebaaf227dd3ac5923aad3bffb01d879262e0568121c45cfed300da6fcf7"
+      },
+      {
+        "name": "worker_logs",
+        "sha256": "e71b3c6b144e38087c74745693cbb640b627c79762761d26e96f0f977c3158a6"
+      }
+    ],
+    "schemas": [
+      {
+        "name": "auth",
+        "sha256": "ba93401e2a55a69d04644ec01da7a6c9895cff39e7dd1b8ceda665f95d3c7973"
+      },
+      {
+        "name": "extensions",
+        "sha256": "427517092908438fad6b691938532a95d5ede45656497aa5ce861cc92da28480"
+      },
+      {
+        "name": "public",
+        "sha256": "d0c2e28f7d3e1b7bfcd776652539616a116d47430d03848b24165a62ab0df59a"
+      }
+    ],
+    "functions": [
+      {
+        "name": "acquire_legacy_producer_lease_v3_11",
+        "signature": "acquire_legacy_producer_lease_v3_11(text,text,text,bytea,text,uuid,integer)",
+        "sha256": "9e36db1e19cf2e3a483f64ac663e2e32110e12034bfb6f11ea584e2b5651fbf1"
+      },
+      {
+        "name": "acquire_production_write_lease",
+        "signature": "acquire_production_write_lease(text,uuid,integer)",
+        "sha256": "ce0d51ebac39192d53ca6816e2c960e8b0b5cdf117acc893976ff03e1c016503"
+      },
+      {
+        "name": "activate_stockinsider_backend_release_v1",
+        "signature": "activate_stockinsider_backend_release_v1(text,jsonb)",
+        "sha256": "8d402a1e3e5d009de678fafb66ecf7404bf65e6fc48e9e4cded7b8c4aaba28bd"
+      },
+      {
+        "name": "append_assistive_artifact_registration_v3",
+        "signature": "append_assistive_artifact_registration_v3(assistive_artifact_registration_input_v3,uuid)",
+        "sha256": "d422983049c2c6b6754fb40c3e7c75ba478daf89389056ba44d5d7ab1ae6a2df"
+      },
+      {
+        "name": "append_candidate_enterprise_multiple_snapshot_v6",
+        "signature": "append_candidate_enterprise_multiple_snapshot_v6(uuid,date,text,jsonb,uuid[],timestamp with time zone,uuid)",
+        "sha256": "f530423929e42aac6a67901ddd5e29d109666746b71327652cbb561b93b1b150"
+      },
+      {
+        "name": "append_exchange_reported_valuation_transaction_v3_16_9",
+        "signature": "append_exchange_reported_valuation_transaction_v3_16_9(exchange_reported_valuation_input_v3_13,uuid)",
+        "sha256": "5f736a3cfeedac877abbdc566896651fb7303559a191deb36a17ca76abd73848"
+      },
+      {
+        "name": "append_exchange_reported_valuation_v3_13",
+        "signature": "append_exchange_reported_valuation_v3_13(exchange_reported_valuation_input_v3_13,uuid)",
+        "sha256": "5a095c038efd632706aecea16e10d60ac5fb08e653804c27e1aa192370ad8277"
+      },
+      {
+        "name": "append_financial_fact_pre_history_v1",
+        "signature": "append_financial_fact_pre_history_v1(financial_fact_input_v3,uuid)",
+        "sha256": "59599920036a26614a2e9c3a4c7584605518af8a51518227ac6280616ba9d1fa"
+      },
+      {
+        "name": "append_financial_fact_pre_v3_16_16",
+        "signature": "append_financial_fact_pre_v3_16_16(financial_fact_input_v3,uuid)",
+        "sha256": "65ab7bb7fb46c28d093aca4afec8ead6678e452140054d587820e7138e94e70b"
+      },
+      {
+        "name": "append_financial_fact_v3",
+        "signature": "append_financial_fact_v3(financial_fact_input_v3,uuid)",
+        "sha256": "277ab021651e872feeb3aed60fdbe01e68d90661fb5017aa41a96382d699fbb1"
+      },
+      {
+        "name": "append_instrument_roster_authority_v3",
+        "signature": "append_instrument_roster_authority_v3(instrument_authority_input_v3,uuid)",
+        "sha256": "b33de863db16bae51408a1007ecae89a4fa985ea5bee622096c9e138b0e4c0ce"
+      },
+      {
+        "name": "append_legacy_analysis_evaluation_v3_11",
+        "signature": "append_legacy_analysis_evaluation_v3_11(analysis_evaluation_input_v3_11,uuid,uuid)",
+        "sha256": "db21e24f1ee28b4fbf30096d8a13eee7a4ecf0b242a8c4aa1b086fce39ac2e36"
+      },
+      {
+        "name": "append_legacy_analysis_revision_v3_11",
+        "signature": "append_legacy_analysis_revision_v3_11(analysis_revision_input_v3_11,uuid,uuid)",
+        "sha256": "7fbd740167614556051cce9f7ba60425bbf473632a9063f87a6a4251b21ae7a5"
+      },
+      {
+        "name": "append_legacy_candidate_discovery_v3_11",
+        "signature": "append_legacy_candidate_discovery_v3_11(candidate_discovery_input_v3_11,uuid,uuid)",
+        "sha256": "4c53f15b25b0338961a8c05c9cbf6f4f1c86372711bdf239edfd59ba66954c1c"
+      },
+      {
+        "name": "append_legacy_expired_producer_diagnostic_v3_20",
+        "signature": "append_legacy_expired_producer_diagnostic_v3_20(uuid,uuid,text,text,text,text,text,timestamp with time zone)",
+        "sha256": "917366cf8d1eed1e638974adb64ddfb90a1716ff4da1ff2d267a9430d191bd16"
+      },
+      {
+        "name": "append_legacy_official_ingestion_chunk_rest_v3_15",
+        "signature": "append_legacy_official_ingestion_chunk_rest_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamp with time zone)",
+        "sha256": "471f4a8da278dfb5fe029819bf8ee38ff1c35359f1ef83179ff96686396e5e59"
+      },
+      {
+        "name": "append_legacy_official_ingestion_chunk_v3_14",
+        "signature": "append_legacy_official_ingestion_chunk_v3_14(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamp with time zone)",
+        "sha256": "2f24b04e7b0749f9c0b4a4d12d79521a2872672da9cfba6fc0795e13bdc7a25d"
+      },
+      {
+        "name": "append_legacy_radar_projection_v3_11",
+        "signature": "append_legacy_radar_projection_v3_11(legacy_radar_projection_input_v3_11,uuid,uuid)",
+        "sha256": "15c61aed611eeadbf57247a6cfdd4e0a0e2b5f43a75508a28552796bdb2d5743"
+      },
+      {
+        "name": "append_legacy_runtime_failure_diagnostic_v3_14",
+        "signature": "append_legacy_runtime_failure_diagnostic_v3_14(uuid,uuid,uuid,text,text,text,text,text,text,text,integer,text,text,text,text,timestamp with time zone)",
+        "sha256": "fb68902a60bbd80ee3837f6eecafd2433fadd15597084419b6bb2c88fc7d6511"
+      },
+      {
+        "name": "append_legacy_runtime_health_rest_v3_15",
+        "signature": "append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamp with time zone)",
+        "sha256": "feb4da9206be07496e3131c54a4ba6987dfa1d0c9565eb8a4b7a142c4f455144"
+      },
+      {
+        "name": "append_legacy_source_shard_v3_19",
+        "signature": "append_legacy_source_shard_v3_19(uuid,uuid,text,jsonb)",
+        "sha256": "29771e5a7422757759371e94ad44c81a7cadc1d91a79ba256f53e6fd0bbade15"
+      },
+      {
+        "name": "append_manual_stock_alias_authority_v3",
+        "signature": "append_manual_stock_alias_authority_v3(manual_alias_authority_input_v3,uuid)",
+        "sha256": "7418b8877ffe4022e8ca66226e53bf1329ba2ee2c5e662ba55ebe3506d07acc4"
+      },
+      {
+        "name": "append_market_observation_v3",
+        "signature": "append_market_observation_v3(market_observation_input_v3,uuid)",
+        "sha256": "6ed387896a68cbe82476ce1d6db1df6a24460953e7afeeeaa6af7709228df2c7"
+      },
+      {
+        "name": "append_opportunity_manifest_page_v3",
+        "signature": "append_opportunity_manifest_page_v3(uuid,text,uuid,opportunity_manifest_section_key_v3,integer,bigint,bytea,jsonb,text,opportunity_manifest_row_input_v3[])",
+        "sha256": "9bad6d115b1447ef8701caf04a431c995233e6eee794c515d6ee38bf8f2643aa"
+      },
+      {
+        "name": "append_peer_relationship_authority_v3",
+        "signature": "append_peer_relationship_authority_v3(peer_relationship_authority_input_v3,uuid)",
+        "sha256": "8e18b28f273846dae55cd9bd1e906479d76ca950d9de2ae97da775164ec64a70"
+      },
+      {
+        "name": "append_peer_reviewer_authority_v3",
+        "signature": "append_peer_reviewer_authority_v3(peer_reviewer_authority_input_v3,uuid)",
+        "sha256": "2c96a2255925d69f70061a0b5f70aa8501bbe501cace5ddf4479a0e397f6baa2"
+      },
+      {
+        "name": "append_price_authority_v3",
+        "signature": "append_price_authority_v3(price_authority_input_v3,uuid)",
+        "sha256": "866923ee1f2438c6588ba86523c9b193e774d24664729494f873a9de4cf3eb9b"
+      },
+      {
+        "name": "append_publisher_verification_authority_v3",
+        "signature": "append_publisher_verification_authority_v3(publisher_authority_input_v3,uuid)",
+        "sha256": "22011b409821297df930f1da8e9c78aedcbb121c183b05b51a53d7828cdc5dc7"
+      },
+      {
+        "name": "append_source_document_revision_v3",
+        "signature": "append_source_document_revision_v3(source_document_revision_input_v3,uuid)",
+        "sha256": "db8a44ce91aa9766e0180006f583ac262a99fa3b06f8f90e0cb5487087b427ab"
+      },
+      {
+        "name": "append_source_identity_authority_v3",
+        "signature": "append_source_identity_authority_v3(source_identity_authority_input_v3,uuid)",
+        "sha256": "cec9d7d08894c0bfea371ff2144138768f02264bcf6939bd6a1ecfaadb189371"
+      },
+      {
+        "name": "append_stock_flow_observation_v3",
+        "signature": "append_stock_flow_observation_v3(stock_flow_observation_input_v3,uuid)",
+        "sha256": "93d5ca695567157d166f98324c7435d008b1b059a528f8c684dbfd1154674b80"
+      },
+      {
+        "name": "append_stock_sector_assignment_v3",
+        "signature": "append_stock_sector_assignment_v3(sector_assignment_input_v3,uuid)",
+        "sha256": "807b85970accada7583bd09a4eaac5bfd9eb6851cb78ff1ce38e2bf113b01ea1"
+      },
+      {
+        "name": "append_trading_session_v3",
+        "signature": "append_trading_session_v3(trading_session_input_v3,uuid)",
+        "sha256": "1c3fa380395bd86209a111fface1d060dc70fa77bf3a90375fe923955e000ac2"
+      },
+      {
+        "name": "append_valuation_verification_v3",
+        "signature": "append_valuation_verification_v3(valuation_verification_input_v3,uuid)",
+        "sha256": "e65f8e5035ddfd59ba288db41eb176ba7e4f54624aa0eecc4af5fa0c26c51785"
+      },
+      {
+        "name": "apply_legacy_official_ingestion_chunk_base_v3_15",
+        "signature": "apply_legacy_official_ingestion_chunk_base_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamp with time zone)",
+        "sha256": "728faddd7e73614325da6fd866ae085757dcfab43c48c5f7c7640da5eaf454b5"
+      },
+      {
+        "name": "apply_legacy_official_ingestion_chunk_v3_14",
+        "signature": "apply_legacy_official_ingestion_chunk_v3_14(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamp with time zone)",
+        "sha256": "201b8f02eceedc6deb08c34a0cfe63cd57a06a2b140ceb39f3c0105a79c15587"
+      },
+      {
+        "name": "assert_stockinsider_backend_request_v1",
+        "signature": "assert_stockinsider_backend_request_v1(boolean)",
+        "sha256": "8023d077595c7d888ebf56d528898a66c1fd6bc30606330ce0906263388badfd"
+      },
+      {
+        "name": "begin_opportunity_run_v3",
+        "signature": "begin_opportunity_run_v3(opportunity_mode_v3,opportunity_run_purpose_v3,timestamp with time zone,text,uuid)",
+        "sha256": "17917b806563fec38ce4d0f1f687a8d25057add42b0734a6604878e1c873bfcf"
+      },
+      {
+        "name": "can_read_report",
+        "signature": "can_read_report(uuid)",
+        "sha256": "1205ad2cad5ed699a622628bd0baf39554a2de2e78481a0f471f777d4b4de2c4"
+      },
+      {
+        "name": "can_read_subscriber_report",
+        "signature": "can_read_subscriber_report(uuid)",
+        "sha256": "da7dbf0d059927f8d0ccade28270956284c7d86cbbd78b9965653946101a5902"
+      },
+      {
+        "name": "candidate_financial_canonical_json_v10",
+        "signature": "candidate_financial_canonical_json_v10(jsonb)",
+        "sha256": "eb25338503c1247e36dcb708b8d5e2d52bcf0ae9216f160bac3d819271a73b22"
+      },
+      {
+        "name": "candidate_financial_document_job_evidence_v9",
+        "signature": "candidate_financial_document_job_evidence_v9(uuid,uuid,date,jsonb)",
+        "sha256": "10c1f32cc9af0a6a406ef5f7145934e02f449b55b58f4596b96c504fad698a43"
+      },
+      {
+        "name": "candidate_financial_document_job_requirements_v9",
+        "signature": "candidate_financial_document_job_requirements_v9(uuid,jsonb)",
+        "sha256": "40ddad433704dffae040ea470428e56f2c386775e798527f3c04bc5d97fec211"
+      },
+      {
+        "name": "candidate_financial_fact_has_structural_proof_as_of_v10",
+        "signature": "candidate_financial_fact_has_structural_proof_as_of_v10(uuid,timestamp with time zone,text,timestamp with time zone)",
+        "sha256": "674c23dd86e50ca9018ff4c32569344b2eff939a8e1c7b38e07182de17b543ab"
+      },
+      {
+        "name": "candidate_financial_fact_has_structural_proof_v10",
+        "signature": "candidate_financial_fact_has_structural_proof_v10(uuid,timestamp with time zone,text)",
+        "sha256": "8ffe199b02f9d16ebfde74bfdc632760a83e86e31f86cd0207475bb12e4f3c2f"
+      },
+      {
+        "name": "candidate_financial_parser_document_ready_v10",
+        "signature": "candidate_financial_parser_document_ready_v10(uuid,uuid,text)",
+        "sha256": "12108fd446385bfd6018666045d2f7ec42f435a8a3d1a44de674665615bcd7c0"
+      },
+      {
+        "name": "candidate_research_official_sessions",
+        "signature": "candidate_research_official_sessions(timestamp with time zone,integer)",
+        "sha256": "1def18e66d5b81f04efd36ac5dd08dffc5425f8b39447cc2b7907c8fc489dc0b"
+      },
+      {
+        "name": "candidate_research_official_sessions_page",
+        "signature": "candidate_research_official_sessions_page(timestamp with time zone,integer,integer)",
+        "sha256": "c34081b0b8614fb1b244a5c175d7087d91617636cd53e538a92a76b5b2cd8298"
+      },
+      {
+        "name": "candidate_research_stock_authority",
+        "signature": "candidate_research_stock_authority(timestamp with time zone)",
+        "sha256": "78cee55c8fc3d1cb17d833bd0b38275d17feb680af107cf75e1fbc068185e407"
+      },
+      {
+        "name": "candidate_research_stock_authority_page",
+        "signature": "candidate_research_stock_authority_page(timestamp with time zone,integer,integer)",
+        "sha256": "62e24dc4c1708d676247a7cd5b7b2465bdd326f66b0d8a1c2b8dff19e3bb41d7"
+      },
+      {
+        "name": "candidate_shadow_progress",
+        "signature": "candidate_shadow_progress(text,text)",
+        "sha256": "ac02f79709aed15f2209149affc1360a9815d67712ce1c334534b4d982bc6ce7"
+      },
+      {
+        "name": "claim_candidate_dossier_outbox_v5",
+        "signature": "claim_candidate_dossier_outbox_v5(text,integer)",
+        "sha256": "90a7173090a12cd8a12466d4ac309ce10459c8578c32d68e4d7e1e14080de4f1"
+      },
+      {
+        "name": "claim_candidate_financial_acquisition_jobs_v4",
+        "signature": "claim_candidate_financial_acquisition_jobs_v4(uuid[],text,integer,text,timestamp with time zone,timestamp with time zone)",
+        "sha256": "c8fc2552d09ce2d29f56d796f4baad1aee97987e251c8b3da53fbf89369dd4d3"
+      },
+      {
+        "name": "claim_candidate_financial_document_receipts_v6",
+        "signature": "claim_candidate_financial_document_receipts_v6(integer,text,timestamp with time zone,timestamp with time zone)",
+        "sha256": "88b78c7d2834af372ce884e37b79bc7a20d43b1b37561dc95fc4edd970ed945e"
+      },
+      {
+        "name": "claim_legacy_mention_barrier_transport_v3_15",
+        "signature": "claim_legacy_mention_barrier_transport_v3_15(uuid,uuid,uuid,integer)",
+        "sha256": "3d777436133beb434badb67031ae89220de3c2a2f76aa93b3aadc67082ef3fc4"
+      },
+      {
+        "name": "claim_legacy_producer_job_authoritative_v3_13",
+        "signature": "claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)",
+        "sha256": "e3e675d1874e24c062a274677af5c4dd4919a6641b048e4bac848c6578e7ff7b"
+      },
+      {
+        "name": "claim_legacy_producer_job_authoritative_v3_15",
+        "signature": "claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer)",
+        "sha256": "1b2ca831fa4f7fe64dad6219c2085e0f79d61666e9497168c79208b11f386b2f"
+      },
+      {
+        "name": "claim_legacy_producer_job_authoritative_v3_16",
+        "signature": "claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)",
+        "sha256": "2475909cfc318b92e3205fb913d9da65c531b2da7ff64731191fcaab53d19bee"
+      },
+      {
+        "name": "claim_legacy_producer_job_authoritative_v3_16_15",
+        "signature": "claim_legacy_producer_job_authoritative_v3_16_15(uuid,uuid,uuid,integer)",
+        "sha256": "93969967d1960506524572f5da7cac994b2dbf48114928f0f7bdae57e663cdc2"
+      },
+      {
+        "name": "claim_legacy_producer_job_authoritative_v3_16_18",
+        "signature": "claim_legacy_producer_job_authoritative_v3_16_18(uuid,uuid,uuid,integer)",
+        "sha256": "2ce82a864cf3fb1541203aa24049752b57abd8957429765f42f997e2f199ddce"
+      },
+      {
+        "name": "claim_legacy_producer_job_candidate_authority_base_v3_19_10",
+        "signature": "claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)",
+        "sha256": "2e90469dee5e79805643ccc0bf29d128ff399007938e4659def960ea221be361"
+      },
+      {
+        "name": "claim_legacy_producer_job_candidate_retention_base_v3_18",
+        "signature": "claim_legacy_producer_job_candidate_retention_base_v3_18(uuid,uuid,uuid,integer)",
+        "sha256": "c1863ea98be78a4e27589d1386b15f0d319cb0b8015bb2bdc7c149b7ae55955e"
+      },
+      {
+        "name": "claim_legacy_producer_job_evaluation_clock_base_v3_16_20",
+        "signature": "claim_legacy_producer_job_evaluation_clock_base_v3_16_20(uuid,uuid,uuid,integer)",
+        "sha256": "95d23547dcbb123fc6a75d6833c3e6de551fd93f920e36219e0eb5b87b5817ac"
+      },
+      {
+        "name": "claim_legacy_producer_job_full_candidate_authority_base_v3_19_1",
+        "signature": "claim_legacy_producer_job_full_candidate_authority_base_v3_19_1(uuid,uuid,uuid,integer)",
+        "sha256": "3a3dd688d30f9fa8a6e3af0867fda6574901576f1a5277c7d32f228d8eb298fd"
+      },
+      {
+        "name": "claim_legacy_producer_job_pre_handoff_v3_19_16",
+        "signature": "claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)",
+        "sha256": "73e557a9f5b65d1917b6b78f7a1e4f6869e8e0b4fe2703181ae4d36793f517a4"
+      },
+      {
+        "name": "claim_legacy_producer_job_pre_kol_authority_v3_20",
+        "signature": "claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer)",
+        "sha256": "21e5e03a9e9b13ad9d0b88bf30f7bc50447e79552e6a520990512026db9c3799"
+      },
+      {
+        "name": "claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1",
+        "signature": "claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)",
+        "sha256": "fcf57fb10cc7746ac59ea6d027b1c9a14562b24a3b6eb3a4509d66757d5a8aa9"
+      },
+      {
+        "name": "claim_legacy_producer_job_pre_source_terminal_projection_v3_20_",
+        "signature": "claim_legacy_producer_job_pre_source_terminal_projection_v3_20_(uuid,uuid,uuid,integer)",
+        "sha256": "a11affabfa3c9ffc5f094b37fe0a9f0573dc2bd000637e1caf2f62cbdfbde221"
+      },
+      {
+        "name": "claim_legacy_producer_job_provider_acquisition_base_v3_16_21",
+        "signature": "claim_legacy_producer_job_provider_acquisition_base_v3_16_21(uuid,uuid,uuid,integer)",
+        "sha256": "6bfc33e075ea04ad40b3c213c4b9dbd03d5739779ef614b3d8d5e98931f29271"
+      },
+      {
+        "name": "claim_legacy_producer_job_rest_v3_15",
+        "signature": "claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)",
+        "sha256": "8a3deb9895179b8fb7ea73718f17f1edc671233cb6e2ac659420b0548cf0e447"
+      },
+      {
+        "name": "claim_legacy_producer_job_v3_11",
+        "signature": "claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)",
+        "sha256": "8342ae3a356350f8b92c273fbe0f48c7929c68e02a18aa4830d72206a7a3bf7a"
+      },
+      {
+        "name": "claim_opportunity_job_v3",
+        "signature": "claim_opportunity_job_v3(uuid,uuid)",
+        "sha256": "d500aa4058386eafeb1fe7a3c9cc31085dd93330a30eaae66d1496ba1639bfe7"
+      },
+      {
+        "name": "claim_taiwan_data_refresh_jobs_v5",
+        "signature": "claim_taiwan_data_refresh_jobs_v5(integer,text,timestamp with time zone,timestamp with time zone)",
+        "sha256": "8fb0be22f45d5dae14900f2bfac7856951fc4de06a82081c3146693dac6b495c"
+      },
+      {
+        "name": "claim_taiwan_data_refresh_jobs_v6",
+        "signature": "claim_taiwan_data_refresh_jobs_v6(integer,text,timestamp with time zone,timestamp with time zone,date,text)",
+        "sha256": "1c586e77b9e398c053f538b5ead585dab00eb31ceadb304948e3ecc3b554893c"
+      },
+      {
+        "name": "complete_candidate_financial_acquisition_job_v4",
+        "signature": "complete_candidate_financial_acquisition_job_v4(uuid,text,uuid,jsonb,text,integer,timestamp with time zone)",
+        "sha256": "aa25425903295f8650ea8a8ba1dd62c43ee783d9bfd7502b5ee0c2f7708411a4"
+      },
+      {
+        "name": "complete_candidate_financial_document_receipt_parser_v10",
+        "signature": "complete_candidate_financial_document_receipt_parser_v10(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamp with time zone)",
+        "sha256": "e4c13ec5fc60484b4bab6c62c3b507896c082ff129ade5a9c98b8cb9fd8a990e"
+      },
+      {
+        "name": "complete_candidate_financial_document_receipt_parser_v7",
+        "signature": "complete_candidate_financial_document_receipt_parser_v7(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,timestamp with time zone)",
+        "sha256": "787c0ffd7c6ff68eeb41c8089d7db986e64be058f3e30a2b11d677f3d5a76dcf"
+      },
+      {
+        "name": "complete_candidate_financial_document_receipt_parser_v8",
+        "signature": "complete_candidate_financial_document_receipt_parser_v8(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamp with time zone)",
+        "sha256": "aad447c493c712e6ad8f356143d6b37024c629a56581313e74edc40d47fb1110"
+      },
+      {
+        "name": "complete_candidate_financial_document_receipt_v6",
+        "signature": "complete_candidate_financial_document_receipt_v6(uuid,text,uuid,jsonb,jsonb,jsonb,timestamp with time zone)",
+        "sha256": "578b788fe48453557a75343f962487752b4ae0423ba2f87471485b8e2faa4227"
+      },
+      {
+        "name": "complete_candidate_history_month_v1",
+        "signature": "complete_candidate_history_month_v1(uuid,text,date,timestamp with time zone,date,date,text,text,timestamp with time zone,text,text,jsonb,jsonb)",
+        "sha256": "a4c2fac3fd6ced561431c50cab84e249e6931b5ee2b8fe0fe264c90784f0dc70"
+      },
+      {
+        "name": "complete_legacy_producer_job_authoritative_v3_13",
+        "signature": "complete_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,bytea,jsonb,text)",
+        "sha256": "595f81658d5e2b52828cf1a82f1489da8dd4546ea599a4d20972f932d3ed181a"
+      },
+      {
+        "name": "complete_legacy_producer_job_authoritative_v3_19",
+        "signature": "complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)",
+        "sha256": "ee6ef18e6532c91704798227e78524179b6c4ddce30c30cd57ed8e83a082c954"
+      },
+      {
+        "name": "complete_legacy_producer_job_rest_v3_15",
+        "signature": "complete_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,bytea,jsonb,text,text)",
+        "sha256": "b423179304c83333208871ec6f3f5a05b5372268fac59cc1e2a549e85a0bee72"
+      },
+      {
+        "name": "complete_legacy_producer_job_v3_11",
+        "signature": "complete_legacy_producer_job_v3_11(uuid,uuid,uuid,bytea,jsonb,text)",
+        "sha256": "3275eb7d479a2ec9467d7b5a7abff04a6ff14d958fb54ee975322d47fa4fb107"
+      },
+      {
+        "name": "complete_legacy_producer_job_v3_14",
+        "signature": "complete_legacy_producer_job_v3_14(uuid,uuid,uuid,bytea,jsonb,text)",
+        "sha256": "301d74dfac44ecfe5f3f652eb305fefe162c7f140475898d1c6bd41d14fea58f"
+      },
+      {
+        "name": "complete_opportunity_job_v3",
+        "signature": "complete_opportunity_job_v3(uuid,text,text,opportunity_job_counts_v3)",
+        "sha256": "6b23917882d509989976293aef99987a4e702690e83e2174269d7deb60f70b12"
+      },
+      {
+        "name": "complete_opportunity_manifest_v3",
+        "signature": "complete_opportunity_manifest_v3(uuid,text,uuid,bigint,bytea,jsonb,text)",
+        "sha256": "a0e9237f7e226e5f95c0a8c10564f02792143ca1b82eeb3e5e97e6f7c698bd6b"
+      },
+      {
+        "name": "complete_taiwan_data_refresh_job_v5",
+        "signature": "complete_taiwan_data_refresh_job_v5(uuid,text,jsonb,timestamp with time zone)",
+        "sha256": "f71a361c212bb7317490a384b7430b3a80b03b33bc63c1137cedd610dbb42436"
+      },
+      {
+        "name": "consume_internal_nonce_v3",
+        "signature": "consume_internal_nonce_v3(uuid,internal_principal_role_v3,text,timestamp with time zone)",
+        "sha256": "82777e0d53fe535e79da5152056c333f228c18ea954b311d7bcea4fe4fb61dfb"
+      },
+      {
+        "name": "create_opportunity_manifest_v3",
+        "signature": "create_opportunity_manifest_v3(uuid,text,uuid,opportunity_manifest_kind_v3,text,timestamp with time zone,bytea,jsonb)",
+        "sha256": "1d5eab4cef4934b508cf329327754c5c61ce1c2277c94f10ce3f00b809317057"
+      },
+      {
+        "name": "derive_manifest_page_descriptor_v3_internal",
+        "signature": "derive_manifest_page_descriptor_v3_internal(uuid,opportunity_manifest_section_key_v3,integer,bigint)",
+        "sha256": "2cf6716ff80ea12ef81621590eb6fa18e91d8545a367dd3663db5792bc79e227"
+      },
+      {
+        "name": "enforce_candidate_shadow_identity_immutable_v4",
+        "signature": "enforce_candidate_shadow_identity_immutable_v4()",
+        "sha256": "118d8b68ab42308739762aa2e7b4d7979f3c3feb1e5f64b4cd899664b32588fa"
+      },
+      {
+        "name": "enforce_candidate_shadow_manifest_immutable_v4",
+        "signature": "enforce_candidate_shadow_manifest_immutable_v4()",
+        "sha256": "e785810a6a2796e94cd1317fa25026d595849e4f90eb4c745f1be6fbb765bb20"
+      },
+      {
+        "name": "enforce_candidate_shadow_replay_payload_immutable_v5",
+        "signature": "enforce_candidate_shadow_replay_payload_immutable_v5()",
+        "sha256": "130bc802aa1d93afc84a22d1ca00efa4cef62f100d468f38679e4bed6f8dd039"
+      },
+      {
+        "name": "enforce_opportunity_candidate_anchor_v3",
+        "signature": "enforce_opportunity_candidate_anchor_v3()",
+        "sha256": "cac7ffe8a6252bdc02d51d5722db9529a16ba3ec949ac2b83e7b138956fffe08"
+      },
+      {
+        "name": "enforce_opportunity_detail_evidence_v3",
+        "signature": "enforce_opportunity_detail_evidence_v3()",
+        "sha256": "dd12f3108c5951a34c31b7de0579c8dfec23752b1805fd19da09d5cd83817293"
+      },
+      {
+        "name": "enforce_production_writer_fence",
+        "signature": "enforce_production_writer_fence()",
+        "sha256": "2194bcb0dd285cd4dc77fec47f760a8aa85284e867b8134e1aa23140f4f80820"
+      },
+      {
+        "name": "enqueue_next_opportunity_job_v3_internal",
+        "signature": "enqueue_next_opportunity_job_v3_internal(uuid,uuid)",
+        "sha256": "d003054f9b4532a170d9f1c1c0a25429e60f846d3e6ca9643026784072d63bff"
+      },
+      {
+        "name": "enqueue_taiwan_data_refresh_batch_v6",
+        "signature": "enqueue_taiwan_data_refresh_batch_v6(jsonb,text,date,timestamp with time zone)",
+        "sha256": "1a52e38dcf4efa24b3237f5fa66e29bdd48d3969eeb30ed403b0e1b0cf62db68"
+      },
+      {
+        "name": "enqueue_taiwan_data_refresh_v5",
+        "signature": "enqueue_taiwan_data_refresh_v5(text,text,text,text,text,date,timestamp with time zone)",
+        "sha256": "7fda4f0035abcbf0670957c4069ea87f6f3fc790b478861aeb13cea30d376365"
+      },
+      {
+        "name": "enrich_legacy_analysis_prior_payloads_v3_16_15",
+        "signature": "enrich_legacy_analysis_prior_payloads_v3_16_15(jsonb)",
+        "sha256": "70549b81c8415185ed5a830ace2a0c895a3d10bcc93e4d46b40a83638c1a5939"
+      },
+      {
+        "name": "enrich_legacy_retained_candidate_authority_v3_19_11_internal",
+        "signature": "enrich_legacy_retained_candidate_authority_v3_19_11_internal(uuid,jsonb)",
+        "sha256": "f4ccad5e3bb0eb3bb9025de0693af892014848ba10f137341a74e3bcaf7880f2"
+      },
+      {
+        "name": "fail_candidate_financial_acquisition_job_v6",
+        "signature": "fail_candidate_financial_acquisition_job_v6(uuid,text,text,timestamp with time zone,boolean,boolean)",
+        "sha256": "b5f669b6c9f3886f9b495ab8b312c43f60fb55a0f5382fed02d6e508e201004e"
+      },
+      {
+        "name": "fail_legacy_producer_job_v3_11",
+        "signature": "fail_legacy_producer_job_v3_11(uuid,uuid,uuid,opportunity_legacy_producer_failure_code_v3_11)",
+        "sha256": "231d65ec0ac19e596931a2f0fbc8116cc53dc343576ea46b847271d114c1265c"
+      },
+      {
+        "name": "fail_opportunity_job_v3",
+        "signature": "fail_opportunity_job_v3(uuid,text,opportunity_failure_code_v3)",
+        "sha256": "7bf5a4f1a85bd5829159724a2e9b238d261910762223b1a5b0b1caecce30c735"
+      },
+      {
+        "name": "fail_opportunity_manifest_v3",
+        "signature": "fail_opportunity_manifest_v3(uuid,text,uuid,opportunity_manifest_failure_code_v3)",
+        "sha256": "25c9db05562eba19ed1ea7754c04cc7d1da226886ba60178210d4ba79a0fb265"
+      },
+      {
+        "name": "finalize_candidate_financial_document_validation_v8",
+        "signature": "finalize_candidate_financial_document_validation_v8(uuid,uuid,timestamp with time zone)",
+        "sha256": "ce7ee056a03f10848b07d181a2dd12bdb16805121ce2f78d288c4f524c8fca10"
+      },
+      {
+        "name": "finalize_opportunity_run_v3",
+        "signature": "finalize_opportunity_run_v3(uuid,text)",
+        "sha256": "5af06f52ce43e2294bf74960ddcaa01abf207f4bd0d08d82523316962f83b0d6"
+      },
+      {
+        "name": "freeze_legacy_provider_acquisition_v3_16_21",
+        "signature": "freeze_legacy_provider_acquisition_v3_16_21(uuid,uuid,uuid,text,text,text,timestamp with time zone,timestamp with time zone,text,integer,jsonb,text,text,text,boolean)",
+        "sha256": "e88b32215db96b627fea40f25668d8a8392515b97be780ca3c8522097a3fbc72"
+      },
+      {
+        "name": "freeze_legacy_source_authorities_v3_13",
+        "signature": "freeze_legacy_source_authorities_v3_13()",
+        "sha256": "564ba599915b6804e15735a4fc3dfe584a66df32158c8f47a8cb88aecfb9b9e7"
+      },
+      {
+        "name": "get_link_audit_assignment_v3",
+        "signature": "get_link_audit_assignment_v3(uuid,text,internal_principal_role_v3,uuid,text,timestamp with time zone)",
+        "sha256": "7dc19a0f30bac4f218ba2091528fa440c1f8049e112c4f358e28cdcf9f7d8b40"
+      },
+      {
+        "name": "guard_financial_document_full_readiness_v10",
+        "signature": "guard_financial_document_full_readiness_v10()",
+        "sha256": "455473e920530ec368a18e13636ca2efb07e72c127fd1af59f8e3ece9e1adc73"
+      },
+      {
+        "name": "guard_financial_document_job_completion_v9",
+        "signature": "guard_financial_document_job_completion_v9()",
+        "sha256": "57f5c75576f76bce1ab2468e5012b781fd436efe8c4edb35bf2d8950516b9b78"
+      },
+      {
+        "name": "guard_legacy_radar_projection_insert_v3_13",
+        "signature": "guard_legacy_radar_projection_insert_v3_13()",
+        "sha256": "4e33bca2a2df4c98d1ec95f124b0c9916e869aded19ec95888424075f8d03409"
+      },
+      {
+        "name": "handle_new_user",
+        "signature": "handle_new_user()",
+        "sha256": "db0d566a5338cb2571579711c5d0c40fc1a60e08c4cd66ec8cccec5b7ef91af5"
+      },
+      {
+        "name": "heartbeat_legacy_producer_job_v3_11",
+        "signature": "heartbeat_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)",
+        "sha256": "cec13b420624ddd892e0e9d107d3ba883c840cf309957a4b26e8688e58455784"
+      },
+      {
+        "name": "heartbeat_opportunity_job_v3",
+        "signature": "heartbeat_opportunity_job_v3(uuid,text)",
+        "sha256": "e73f20489a9d198405a706d5398358260f09d819eec8d051b816a0d07e3668e3"
+      },
+      {
+        "name": "internal_principal_role_is_exact_v3_internal",
+        "signature": "internal_principal_role_is_exact_v3_internal(uuid,internal_principal_role_v3,timestamp with time zone)",
+        "sha256": "9ccc42eb7bb4ef3f5d10174ab943510bdfc338bd61dfa5312c9ae513ef439fcb"
+      },
+      {
+        "name": "is_subscriber",
+        "signature": "is_subscriber()",
+        "sha256": "ab7fa49b84a21d31644f8ee5d744a6a65a963f962dc1d54ecf855ed0595b8b70"
+      },
+      {
+        "name": "legacy_canonical_json_v3_13",
+        "signature": "legacy_canonical_json_v3_13(jsonb)",
+        "sha256": "305d3be2f1d14a9d5d5e3414c1e532fd4aeeb41f72b3caf501296ba5da3bde10"
+      },
+      {
+        "name": "legacy_correctness_immutable_v3_11",
+        "signature": "legacy_correctness_immutable_v3_11()",
+        "sha256": "5e48bcb8f550206f69ec375b2dd1ad1143f63310dd3cfbf728daef0dddb9b6bc"
+      },
+      {
+        "name": "legacy_relative_valuation_authority_v3_13",
+        "signature": "legacy_relative_valuation_authority_v3_13(text,timestamp with time zone)",
+        "sha256": "aa27f44a9fb1fdb4f3f4a0094d1eff24f66b6942db667c5a51e078dee44d3de7"
+      },
+      {
+        "name": "legacy_valid_decision_envelope_strict_v3_13",
+        "signature": "legacy_valid_decision_envelope_strict_v3_13(jsonb)",
+        "sha256": "564ec562172a4bb591b56c93791a4707a542b324cc3f048748128970a36d06ca"
+      },
+      {
+        "name": "legacy_valid_decision_envelope_v3_13",
+        "signature": "legacy_valid_decision_envelope_v3_13(jsonb)",
+        "sha256": "d1feda2e71cdb53df1c46032ce604041ae75e6a9625abb5b8440e7edaa4c3c77"
+      },
+      {
+        "name": "legacy_valid_decision_envelope_v3_14",
+        "signature": "legacy_valid_decision_envelope_v3_14(jsonb)",
+        "sha256": "d9a2d1587c710f873acdad512224dd8afa3ec1d9b967e378c4d1f4734dfcb7dd"
+      },
+      {
+        "name": "legacy_valid_https_url_v3_13",
+        "signature": "legacy_valid_https_url_v3_13(text)",
+        "sha256": "010942ccf7cc1a871498edc193aa35a2354a6a7f36e299c797c1c89cbf050ea8"
+      },
+      {
+        "name": "legacy_valid_relative_valuation_authority_v3_13",
+        "signature": "legacy_valid_relative_valuation_authority_v3_13(text,timestamp with time zone,jsonb)",
+        "sha256": "ed58847ab4719e2a775e61d1f2cf7e0e6d585decb4ac462d7be335b850505c26"
+      },
+      {
+        "name": "legacy_valid_rfc3339_v3_13",
+        "signature": "legacy_valid_rfc3339_v3_13(text)",
+        "sha256": "440a889cbc592d98f6ed2e497e470e754221af8e9f84a94d0d079714f096f9f0"
+      },
+      {
+        "name": "list_connector_retention_archive_candidates_v2",
+        "signature": "list_connector_retention_archive_candidates_v2(timestamp with time zone,integer)",
+        "sha256": "d2bf6128fa85cea7090edf698ebde144718eb6ca7388f095c724b7aff4d735f3"
+      },
+      {
+        "name": "list_retention_archive_candidates_v1",
+        "signature": "list_retention_archive_candidates_v1(text,timestamp with time zone,integer)",
+        "sha256": "0bc25f5911eb55093cfc03e6883c136f2481478192ada3951e673c8a31aeff3d"
+      },
+      {
+        "name": "mark_radar_publication_failed",
+        "signature": "mark_radar_publication_failed(text,timestamp with time zone)",
+        "sha256": "a211df6f5f7acd4830e1b97b70a343939b8b9b6f7dd77b48b947c4773f35075f"
+      },
+      {
+        "name": "opportunity_adjusted_price_evidence_v3_internal",
+        "signature": "opportunity_adjusted_price_evidence_v3_internal(uuid,date,timestamp with time zone)",
+        "sha256": "04b1bcb223e04310af49ee8e3392a1c816429bc75e2bb430b9fdd900acf478da"
+      },
+      {
+        "name": "opportunity_authority_selected_stream_count_v3_internal",
+        "signature": "opportunity_authority_selected_stream_count_v3_internal(authority_stream_family_v3,timestamp with time zone)",
+        "sha256": "b7127d1695eab34baf065594f0816480da74f90870419e56deca5012ccfd8a6e"
+      },
+      {
+        "name": "opportunity_candidate_plan_v3_internal",
+        "signature": "opportunity_candidate_plan_v3_internal(uuid,text)",
+        "sha256": "58620adb1be5ee296f8864bfe52591d4d8dc1fd8a8a244c890e7e00a6f5d41d2"
+      },
+      {
+        "name": "opportunity_global_observation_v3_internal",
+        "signature": "opportunity_global_observation_v3_internal(market_fact_key_v3,market_scope_key_v3,text,timestamp with time zone)",
+        "sha256": "c939c8182181b71a6998912238946b7e7e8f63e8bfc04660e43bb508203859c1"
+      },
+      {
+        "name": "opportunity_levenshtein_v3_internal",
+        "signature": "opportunity_levenshtein_v3_internal(text,text)",
+        "sha256": "a89555c71149f7603639ae771da44c050458c229db4654cf7455e5479a499ce7"
+      },
+      {
+        "name": "opportunity_manifest_native_rows_v3_internal",
+        "signature": "opportunity_manifest_native_rows_v3_internal(uuid,uuid,opportunity_manifest_kind_v3,opportunity_manifest_section_key_v3,integer,integer)",
+        "sha256": "9973f07647e1069627357184f49f98116c687d7d1c14912ce4bf4d50dc0fd8f1"
+      },
+      {
+        "name": "opportunity_market_zscore_v3_internal",
+        "signature": "opportunity_market_zscore_v3_internal(market_fact_key_v3,market_scope_key_v3,market_provider_v3,text,date,double precision,timestamp with time zone)",
+        "sha256": "f46f637d943552a8a15206edd44edf754939f2061672bf4f812e0efb75507d75"
+      },
+      {
+        "name": "opportunity_peer_authority_header_counts_v3_internal",
+        "signature": "opportunity_peer_authority_header_counts_v3_internal(uuid,timestamp with time zone)",
+        "sha256": "eaf51a89feed5ccb38e0b3096a195a018ce50b703592c7fc3beece7aed4ca208"
+      },
+      {
+        "name": "opportunity_raise_pt409_v3_internal",
+        "signature": "opportunity_raise_pt409_v3_internal(text)",
+        "sha256": "ae0f09d9e93317eaddc6ba463eac59965da197107880caf1c4eb25d2474555ca"
+      },
+      {
+        "name": "persist_taiwan_data_canonical_result_v5",
+        "signature": "persist_taiwan_data_canonical_result_v5(uuid,text,jsonb,timestamp with time zone)",
+        "sha256": "bc04754c20555a83e03bd5a9ad90bba7e28b9c563360e5f9deb14133ed4c8eb9"
+      },
+      {
+        "name": "prepare_opportunity_financial_fact_series_v3",
+        "signature": "prepare_opportunity_financial_fact_series_v3()",
+        "sha256": "ad2ca59d5b03b303a0c7698741935d21f3cd3698eabf0cf18b8b5f0ed48d380c"
+      },
+      {
+        "name": "prepare_retention_archive_manifest_v1",
+        "signature": "prepare_retention_archive_manifest_v1(text,uuid,timestamp with time zone,text,text,jsonb,jsonb,text)",
+        "sha256": "dba7ac58b745020ffb63b0365ccacfa92a8d966fadefffb850b66ea213112886"
+      },
+      {
+        "name": "preserve_first_recommended_at",
+        "signature": "preserve_first_recommended_at()",
+        "sha256": "0e51f485c82cbf701e279881211f95d1ec283f33a350473689f4cf06a338a830"
+      },
+      {
+        "name": "protect_published_candidate_detail_revision_v4",
+        "signature": "protect_published_candidate_detail_revision_v4()",
+        "sha256": "5af0f75bbe2db4c176b92dcbd1a10efaa17575ef6230ef78c5dc0f1b5ebf25c6"
+      },
+      {
+        "name": "publish_radar_public_snapshots",
+        "signature": "publish_radar_public_snapshots(jsonb,text,text,jsonb,text,text,text,timestamp with time zone,uuid,text,text,timestamp with time zone)",
+        "sha256": "733bee88f69ca3014e2155473ecd00fc0c39ed423a0bddc269ef0f298188220e"
+      },
+      {
+        "name": "purge_internal_nonces_v3",
+        "signature": "purge_internal_nonces_v3(timestamp with time zone,uuid)",
+        "sha256": "b54e6e127e05701464d6903795a80c8a4cbf8dbe8b40dd63b38d17aead0ac9b5"
+      },
+      {
+        "name": "read_financial_facts_as_of",
+        "signature": "read_financial_facts_as_of(timestamp with time zone)",
+        "sha256": "0df6a9d3b272307a7780e9c918d4bd6684ae15c0b0fb83ef6fec6ad3dc2eb57e"
+      },
+      {
+        "name": "read_financial_facts_for_stocks_as_of",
+        "signature": "read_financial_facts_for_stocks_as_of(timestamp with time zone,uuid[])",
+        "sha256": "b226e074ecb39d12ddf91c324c64839ea19f23d65b20059349c42505d5e43558"
+      },
+      {
+        "name": "read_financial_history_page_v1",
+        "signature": "read_financial_history_page_v1(uuid,financial_fact_key_v3,financial_duration_kind_v3,financial_estimate_kind_v3,financial_estimate_horizon_v3,date,date,timestamp with time zone,uuid,integer,uuid)",
+        "sha256": "7b27493094d57ecff22ab36bc5ef6821ffca2533f31431c18437e028ae79c68c"
+      },
+      {
+        "name": "read_legacy_authority_pages_v2",
+        "signature": "read_legacy_authority_pages_v2(uuid)",
+        "sha256": "579c06226f9ff48eeb9e58d22d67d9b3f945cf5c0f5809efc56b119a92d25bfa"
+      },
+      {
+        "name": "read_legacy_candidate_fact_plane_authoritative_v3_12",
+        "signature": "read_legacy_candidate_fact_plane_authoritative_v3_12(timestamp with time zone,jsonb)",
+        "sha256": "8c54574521ae44d7e68c6347688006739c1cf3955296881b4cbd5db3fcb9228b"
+      },
+      {
+        "name": "read_legacy_candidate_fact_plane_authoritative_v3_13",
+        "signature": "read_legacy_candidate_fact_plane_authoritative_v3_13(timestamp with time zone,jsonb)",
+        "sha256": "8865a055cfdb6fd56f35829cfe0889d7f755682acacc00b1f1cd53a924664b98"
+      },
+      {
+        "name": "read_legacy_candidate_fact_plane_decision_integrity_v3_13",
+        "signature": "read_legacy_candidate_fact_plane_decision_integrity_v3_13(timestamp with time zone,jsonb)",
+        "sha256": "dc19a64e8cf53a8477ea55329dd2e6aa520e96b660d6f6bc48b62831e647c356"
+      },
+      {
+        "name": "read_legacy_candidate_fact_plane_v3_11",
+        "signature": "read_legacy_candidate_fact_plane_v3_11(timestamp with time zone,jsonb)",
+        "sha256": "1fe3fc8809b5733a9f092b5ab00146f0f0bc4f2939b43a963bf7ec3c9efeb938"
+      },
+      {
+        "name": "read_legacy_candidate_fact_plane_v3_16_11_internal",
+        "signature": "read_legacy_candidate_fact_plane_v3_16_11_internal(timestamp with time zone,jsonb)",
+        "sha256": "ad2fa2d52f74f17a29bd9982518616b48e908a4e987443bd887065c7d30893de"
+      },
+      {
+        "name": "read_legacy_discovery_authority_v3_11",
+        "signature": "read_legacy_discovery_authority_v3_11(uuid,text,text)",
+        "sha256": "f21a33ae2019059d0a8c9441f170e1cb1de341ec707bd129973a8fb47abed2aa"
+      },
+      {
+        "name": "read_legacy_frozen_revision_v3_11",
+        "signature": "read_legacy_frozen_revision_v3_11(uuid,uuid,text,uuid,text)",
+        "sha256": "87bf8a200285f5bd39fde928e386ca55bb787341321355833176e8af63d79a79"
+      },
+      {
+        "name": "read_legacy_frozen_revisions_v2",
+        "signature": "read_legacy_frozen_revisions_v2(uuid)",
+        "sha256": "b0c12d17da7c9da479bc3aa954d53af2f7d2bbc4f3f629dedf41d2d614b28378"
+      },
+      {
+        "name": "read_legacy_job_payload_v2",
+        "signature": "read_legacy_job_payload_v2(uuid)",
+        "sha256": "c89627fb4b22e1fb88f5798286946a267f15ad646f1d9857523007c95ae711ce"
+      },
+      {
+        "name": "read_legacy_job_result_v2",
+        "signature": "read_legacy_job_result_v2(uuid)",
+        "sha256": "08f0a1c74bbc912e0f0f10dc32a42ba765cdaa10c2cf8b80c2af03f37d56f6df"
+      },
+      {
+        "name": "read_legacy_mention_barrier_transport_v3_15",
+        "signature": "read_legacy_mention_barrier_transport_v3_15(uuid)",
+        "sha256": "0214bbffc0a3e034bb9bca801f7b8f12b35b55185c0b407f04c8b6e8dad64e8f"
+      },
+      {
+        "name": "read_legacy_prior_candidate_result_v3_19_12_internal",
+        "signature": "read_legacy_prior_candidate_result_v3_19_12_internal(uuid)",
+        "sha256": "e55ec40704f7ae2e175b7d3e8be570eabef431df5e1b7d220c6fe2f3ad19c723"
+      },
+      {
+        "name": "read_legacy_processing_outcomes_v2",
+        "signature": "read_legacy_processing_outcomes_v2(uuid)",
+        "sha256": "0369732edd4146528d02ef0c9a1cba0965b173bb823531d22bffe8296ef4c417"
+      },
+      {
+        "name": "read_legacy_provider_acquisition_v3_16_21",
+        "signature": "read_legacy_provider_acquisition_v3_16_21(text,text,timestamp with time zone)",
+        "sha256": "da537892aa9e714ccc4fc6baa13c7fe8ddde72de3a9d674ec5e57bc2cd0a9f61"
+      },
+      {
+        "name": "read_legacy_release_checkpoints_v3_19",
+        "signature": "read_legacy_release_checkpoints_v3_19()",
+        "sha256": "8ad597b0397d3fd91bd29a348a20c81561c2d44444b96b95092021414104c2ad"
+      },
+      {
+        "name": "read_legacy_run_compact_counts_v2",
+        "signature": "read_legacy_run_compact_counts_v2(uuid)",
+        "sha256": "f34c37583e5d8f0fd9980b7e0840bd157dc4d0b4a4cae47995c696388fcdbff0"
+      },
+      {
+        "name": "read_legacy_runtime_health_rest_v3_15",
+        "signature": "read_legacy_runtime_health_rest_v3_15()",
+        "sha256": "88981f8807b670835bdbeae04c03a1df316922d1c3032a6799b8388bbb079363"
+      },
+      {
+        "name": "read_provider_credential_envelope_v1",
+        "signature": "read_provider_credential_envelope_v1(text)",
+        "sha256": "c9c3b419ea3cf02256b37db9c686e4922ec50edd4fc9554766b1f5db00870312"
+      },
+      {
+        "name": "read_provider_credential_state_v1",
+        "signature": "read_provider_credential_state_v1(text)",
+        "sha256": "d87b7d43e47c6731235e64ea03a429947df9230bac89c2dc244f290763e2e996"
+      },
+      {
+        "name": "read_taiwan_data_candidate_universe_v5",
+        "signature": "read_taiwan_data_candidate_universe_v5(integer)",
+        "sha256": "51302acf638a0492d8b106f732f5037a1d1b9bef0ffccf0fd49ef2fd182c39b4"
+      },
+      {
+        "name": "read_taiwan_data_candidate_universe_v6",
+        "signature": "read_taiwan_data_candidate_universe_v6(timestamp with time zone,text,integer)",
+        "sha256": "2d087522940fb15f9b3ab3d691a47b33c7f92f9abd48982a68f4fb53d93144bc"
+      },
+      {
+        "name": "read_taiwan_data_publication_metadata_v5",
+        "signature": "read_taiwan_data_publication_metadata_v5(date,text)",
+        "sha256": "fa48164f7e037417989c62fa2ebe74a022a6afda35f5621c70f24cc9bc5cdfae"
+      },
+      {
+        "name": "read_taiwan_data_refresh_progress_v6",
+        "signature": "read_taiwan_data_refresh_progress_v6(date,text)",
+        "sha256": "3eb0ef1677e1d5ab150d41af33dd25ca49ed57e04cc4f3f62d8c1f891e78d446"
+      },
+      {
+        "name": "read_v320_authorized_investanchors_revision_ids_internal",
+        "signature": "read_v320_authorized_investanchors_revision_ids_internal(timestamp with time zone)",
+        "sha256": "9c2758a097f86c530e016b64956895771d7f52d33e43e11c184191ab9919968f"
+      },
+      {
+        "name": "read_v320_revalidated_kol_retention_internal",
+        "signature": "read_v320_revalidated_kol_retention_internal(timestamp with time zone)",
+        "sha256": "148f8a0ae3f83a9eed4535c74d63c0dc76e958c999df384d47214354caa33f07"
+      },
+      {
+        "name": "reap_legacy_expired_producer_run_v3_20",
+        "signature": "reap_legacy_expired_producer_run_v3_20(text,text,text)",
+        "sha256": "e4b35bbc4661d7228762f0dbe20ede4ba77548b6950fd4292cd292d555c94c7e"
+      },
+      {
+        "name": "reap_legacy_producer_jobs_v3_11",
+        "signature": "reap_legacy_producer_jobs_v3_11(integer)",
+        "sha256": "865e6b87b1f93c0510e5f18bde0f19a6609e503db1242fe484d457f7f697d009"
+      },
+      {
+        "name": "reap_opportunity_jobs_v3",
+        "signature": "reap_opportunity_jobs_v3(uuid)",
+        "sha256": "38c0f36aaf944377d9f16643dd30331d25846aa88d463cdccc60894bbe1a7112"
+      },
+      {
+        "name": "reconcile_candidate_financial_document_job_v9",
+        "signature": "reconcile_candidate_financial_document_job_v9(uuid,uuid,uuid)",
+        "sha256": "57eedbb89d1221449aa4c47f3cda9cc6809336c511ad338836e1db0d801a3b20"
+      },
+      {
+        "name": "reconcile_pending_financial_document_jobs_v9",
+        "signature": "reconcile_pending_financial_document_jobs_v9(uuid,integer,uuid)",
+        "sha256": "52f66d694343c624e7848a73ddf12ef776fdbe621d5cad24a6300d6b79b38b35"
+      },
+      {
+        "name": "record_candidate_dossier_submission_v4",
+        "signature": "record_candidate_dossier_submission_v4(uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+        "sha256": "e23cd371af9a6c5fe2ae4f18f186f414934670efdfa189057cb305c770d16351"
+      },
+      {
+        "name": "record_candidate_financial_document_receipt_v6",
+        "signature": "record_candidate_financial_document_receipt_v6(uuid,uuid,text,text,date,timestamp with time zone,text,text,text,integer,jsonb)",
+        "sha256": "1b0a5d6e7f3ccf4f2602649171f8736375cdda16e4c84b41655f30dc9ebe2d10"
+      },
+      {
+        "name": "record_candidate_financial_fallback_v5",
+        "signature": "record_candidate_financial_fallback_v5(uuid,text,uuid,jsonb,text,integer,timestamp with time zone,financial_acquisition_terminal_reason_v4,text,timestamp with time zone)",
+        "sha256": "fb08fb5b91609ee8b7e781473c42cfa2b5c41437de759c736be3c84d665dad73"
+      },
+      {
+        "name": "record_candidate_financial_fallback_v6",
+        "signature": "record_candidate_financial_fallback_v6(uuid,text,uuid,jsonb,text,integer,timestamp with time zone,financial_acquisition_terminal_reason_v4,text)",
+        "sha256": "0e99b0f163905dfd6facf56063e3898bb1152d59dcf65e72ab16db66f47b47d1"
+      },
+      {
+        "name": "record_candidate_shadow_observation",
+        "signature": "record_candidate_shadow_observation(date,text,text,uuid,uuid,jsonb,numeric,numeric,jsonb,text,text,boolean,jsonb,timestamp with time zone)",
+        "sha256": "ba9dbceefd171826e490c2371b203785d2a8fb2fd45456026abdd956d197bbe6"
+      },
+      {
+        "name": "record_official_financial_validation",
+        "signature": "record_official_financial_validation(uuid,timestamp with time zone,text,text,jsonb,uuid)",
+        "sha256": "7d675dc2363a0f08fdcb56d3bc1334115bf4cea240492a9dd736968079731783"
+      },
+      {
+        "name": "record_retention_archive_export_v1",
+        "signature": "record_retention_archive_export_v1(uuid,text,text,bigint,timestamp with time zone)",
+        "sha256": "64f50163f707eb4c770c45a374b0d081df78fb7cb385e2058f7916e3727db6a6"
+      },
+      {
+        "name": "record_retention_archive_restore_v1",
+        "signature": "record_retention_archive_restore_v1(uuid,text,integer,text,text,timestamp with time zone)",
+        "sha256": "0aa91994e17765f56874257038ca6dd8b90404ba02007d4692b5a0b1fe5e10c2"
+      },
+      {
+        "name": "record_taiwan_data_publication_metadata_v5",
+        "signature": "record_taiwan_data_publication_metadata_v5(date,text,timestamp with time zone,jsonb)",
+        "sha256": "2fda80fa0b881f0514ca66a352971ed35471ee000214a770b48d7062e13237a5"
+      },
+      {
+        "name": "register_private_artifact_receipt_v1",
+        "signature": "register_private_artifact_receipt_v1(text,bigint,text,text,jsonb)",
+        "sha256": "6694297e025f0378b3226634dc630166763ad2bc1ba2f725e2e0a2c45b7765f1"
+      },
+      {
+        "name": "register_production_writer_release",
+        "signature": "register_production_writer_release(text,jsonb)",
+        "sha256": "df798c873f1dacdefae430938d23c350eb2eae31cdb1a8f20a58e0d33dc694b0"
+      },
+      {
+        "name": "register_taiwan_data_refresh_scope_v6",
+        "signature": "register_taiwan_data_refresh_scope_v6(date,text,text[],timestamp with time zone)",
+        "sha256": "a7db783ec8ee85978186b1a96aaf001f0977fac18e5358ef3f286e25edc0fecf"
+      },
+      {
+        "name": "register_taiwan_data_refresh_scope_v7",
+        "signature": "register_taiwan_data_refresh_scope_v7(date,text,text[],timestamp with time zone,text)",
+        "sha256": "bbcb38cdc555cae7abdf1c7d63e93deca0085a7d744c39abc35bc6faac50b6e4"
+      },
+      {
+        "name": "reject_candidate_dossier_revision_mutation_v4",
+        "signature": "reject_candidate_dossier_revision_mutation_v4()",
+        "sha256": "3bdf1c4f0123bb2a61835a808471438bdbd2474b08b2e95cb9c924bb892f1e45"
+      },
+      {
+        "name": "reject_financial_document_job_link_mutation_v9",
+        "signature": "reject_financial_document_job_link_mutation_v9()",
+        "sha256": "8308a679a1f509dba4c8ba509d7ed74ae003e2ebf4f2fb54a8bc1294561ecd9b"
+      },
+      {
+        "name": "reject_financial_parser_evidence_mutation_v10",
+        "signature": "reject_financial_parser_evidence_mutation_v10()",
+        "sha256": "acc1b8af8d45eb7136c0d726ded0a3e33c4b957ee1aa2a0e26be88508213c291"
+      },
+      {
+        "name": "reject_retention_archive_direct_mutation_v1",
+        "signature": "reject_retention_archive_direct_mutation_v1()",
+        "sha256": "d87c153a84b0bd1f253b39feb30a7d3f5ef2be74002f94a50fe212692ce07cbc"
+      },
+      {
+        "name": "reject_stockinsider_compaction_receipt_mutation_v1",
+        "signature": "reject_stockinsider_compaction_receipt_mutation_v1()",
+        "sha256": "daab51f5864a5562c0919d4723905975d8e10508b24efb58cc24493c26f28c65"
+      },
+      {
+        "name": "release_production_write_lease",
+        "signature": "release_production_write_lease(text,uuid)",
+        "sha256": "2e14b4dceba0a46056e925f6fdf578897f1307a11d6ca32fb5f720eac5fc65c7"
+      },
+      {
+        "name": "replace_provider_credential_cas_v1",
+        "signature": "replace_provider_credential_cas_v1(text,bigint,uuid,text,text,text,text,text,timestamp with time zone,text)",
+        "sha256": "b044ac7492e8c544724b9b0566b92864b5a802ce52de659622c8572006784c6a"
+      },
+      {
+        "name": "resolve_legacy_analysis_prior_payloads_v3_16_18",
+        "signature": "resolve_legacy_analysis_prior_payloads_v3_16_18(jsonb)",
+        "sha256": "b02aa6116c76b7da3c34c23fc8cfc5a4a5c3a625d8d95e20a0922ea89cff6227"
+      },
+      {
+        "name": "resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal",
+        "signature": "resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(text)",
+        "sha256": "63cb865bfecb4a7b07b41766e08bfbd565078b5c9719288dc26d305ee2192df2"
+      },
+      {
+        "name": "resolve_legacy_instrument_authority_v3_13",
+        "signature": "resolve_legacy_instrument_authority_v3_13(uuid,timestamp with time zone)",
+        "sha256": "31eb8370a3442b16a4eae180e1ac388123b92e8dab9e84fef313f71d586b3719"
+      },
+      {
+        "name": "resolve_legacy_instrument_authority_v3_13_internal",
+        "signature": "resolve_legacy_instrument_authority_v3_13_internal(uuid,timestamp with time zone)",
+        "sha256": "356da79a9ceba74a992af0c03d67c7ac50564ae42cc2d318f7f64171afd808e6"
+      },
+      {
+        "name": "resolve_legacy_instrument_symbol_authority_v3_13",
+        "signature": "resolve_legacy_instrument_symbol_authority_v3_13(text,timestamp with time zone)",
+        "sha256": "b92207f413458d472036743dc1e6f8c56cca98dcd936c3811f72f52364894597"
+      },
+      {
+        "name": "resolve_legacy_instrument_symbol_authority_v3_13_internal",
+        "signature": "resolve_legacy_instrument_symbol_authority_v3_13_internal(text,timestamp with time zone)",
+        "sha256": "10f91541eff80b2367347736b0de6e0e5975ebac92d969583a8776e792e36724"
+      },
+      {
+        "name": "resolve_legacy_official_shares_result_v3_13",
+        "signature": "resolve_legacy_official_shares_result_v3_13(uuid,date,timestamp with time zone)",
+        "sha256": "3e7228086136dd7eaf6bbaf6ea6ed3ee409893b682b582c9815d7acab2db9b5b"
+      },
+      {
+        "name": "resolve_legacy_official_shares_v3_13",
+        "signature": "resolve_legacy_official_shares_v3_13(uuid,date,timestamp with time zone)",
+        "sha256": "81f5eae7a288f34ba10b796e16c0ae655783fd44ea01cd5baae23eb795f70869"
+      },
+      {
+        "name": "resolve_legacy_provider_acquisition_lineage_v3_19_7_internal",
+        "signature": "resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)",
+        "sha256": "1e5ee4c8f4b17aafd96c2b31cb47501f14b0082005b2779bfa46d36ceeffe28d"
+      },
+      {
+        "name": "resolve_legacy_scheduled_occurrence_v3_11",
+        "signature": "resolve_legacy_scheduled_occurrence_v3_11(text,text)",
+        "sha256": "701990ff5b868f49dd2274effce69e6090d28c30a0f3744bb56ffaffe9bcfecd"
+      },
+      {
+        "name": "resolve_legacy_sector_authority_v3_13",
+        "signature": "resolve_legacy_sector_authority_v3_13(uuid,tw_market_v3,timestamp with time zone)",
+        "sha256": "3dadd3bb4301caa0671a03b6307827195bd3310c056d025161181ce8090b1ff3"
+      },
+      {
+        "name": "resolve_legacy_sector_authority_v3_13_internal",
+        "signature": "resolve_legacy_sector_authority_v3_13_internal(uuid,tw_market_v3,timestamp with time zone)",
+        "sha256": "e50c50081a7103b5792999849e23c0c07250c785aa0599ae5c95396ce5c1bf3a"
+      },
+      {
+        "name": "resolve_legacy_trading_session_authority_v3_13",
+        "signature": "resolve_legacy_trading_session_authority_v3_13(date,tw_market_v3,timestamp with time zone)",
+        "sha256": "0b29e95a037ef9cead27c1945fac1949d40ea60282ceafa7e7549505fff84656"
+      },
+      {
+        "name": "resolve_legacy_trading_session_dependency_v3_16_9_internal",
+        "signature": "resolve_legacy_trading_session_dependency_v3_16_9_internal(date,tw_market_v3,timestamp with time zone,timestamp with time zone)",
+        "sha256": "ca91d1d999ba5d1aec5e1e5d5d152f46cc198a3696a4003c87808043bdd37d9c"
+      },
+      {
+        "name": "resolve_legacy_trading_session_window_v3_13",
+        "signature": "resolve_legacy_trading_session_window_v3_13(tw_market_v3,date,date,timestamp with time zone)",
+        "sha256": "0575f7fa68fc936938b63680542eedd7d8a523679a91f2c5b7538d6079200547"
+      },
+      {
+        "name": "retain_legacy_radar_projection_v3_13",
+        "signature": "retain_legacy_radar_projection_v3_13()",
+        "sha256": "0139829a86cc9ecef92c47a95211db9f660e3f9c483e1ad6bb15a16c6231d437"
+      },
+      {
+        "name": "retention_archive_active_pins_v1",
+        "signature": "retention_archive_active_pins_v1()",
+        "sha256": "997f340589c77b33c17d7f6bf9a85c39ed2ba5d458379e85c14e89f91de75b0b"
+      },
+      {
+        "name": "retention_archive_current_row_hash_v1",
+        "signature": "retention_archive_current_row_hash_v1(text,text)",
+        "sha256": "0f74d3c6fd0d6d356e7e5b2815d87a076126d8ba95ece1cb62cc291ee0eb6af3"
+      },
+      {
+        "name": "retention_archive_deletion_readiness_v1",
+        "signature": "retention_archive_deletion_readiness_v1(uuid)",
+        "sha256": "44e051dfd1ba775b233bf94e0c062e04bfbd2a3cf7acd12fe350f5055f2b260b"
+      },
+      {
+        "name": "retention_archive_eligibility_v1",
+        "signature": "retention_archive_eligibility_v1(text,uuid,timestamp with time zone)",
+        "sha256": "c636e442064112f4b21e46aa0349be485f0f647039059551603e966a0162a7b1"
+      },
+      {
+        "name": "retention_legacy_direct_pins_v2",
+        "signature": "retention_legacy_direct_pins_v2(uuid[])",
+        "sha256": "6460883bd82773dc3a34d383eadd016614b1d2c2f1104b5ac0fbb760a9d934b3"
+      },
+      {
+        "name": "retention_legacy_jsonb_pins_v2",
+        "signature": "retention_legacy_jsonb_pins_v2(uuid[])",
+        "sha256": "39e5e4db1361974b1355c5379da03229dbed87c7e3b894d84958b682fc4414ed"
+      },
+      {
+        "name": "retention_legacy_run_plan_v2",
+        "signature": "retention_legacy_run_plan_v2(timestamp with time zone,integer)",
+        "sha256": "151b4acca8a96da98cb2746f648763c2cd1139a86c29519bdaaf95b4a39468e6"
+      },
+      {
+        "name": "retry_candidate_financial_document_runtime",
+        "signature": "retry_candidate_financial_document_runtime(uuid,uuid,uuid)",
+        "sha256": "ce3d486cde069b3ebd8427279c690c9daa37edcaf965ac35e3e03c1b10ef8730"
+      },
+      {
+        "name": "revoke_provider_credential_cas_v1",
+        "signature": "revoke_provider_credential_cas_v1(text,bigint,text,text,text,text)",
+        "sha256": "960e41396210aba35093b415202ef96d13b89c6e928f6be60d74a8b5bd0aaa0f"
+      },
+      {
+        "name": "schedule_legacy_source_shard_successor_v3_19",
+        "signature": "schedule_legacy_source_shard_successor_v3_19(uuid,uuid,uuid,text,integer,uuid)",
+        "sha256": "91d72044cebb3c12f17042fa113b20db437ac4520f603642df0287952b220f08"
+      },
+      {
+        "name": "seal_opportunity_run_inputs_v3",
+        "signature": "seal_opportunity_run_inputs_v3(uuid,text)",
+        "sha256": "c7a20edb8e6bf32d5c4eb3cc3b3d3d1d7db82dc548023e2a7c7bb94f86703cf0"
+      },
+      {
+        "name": "seed_financial_document_job_link_v9",
+        "signature": "seed_financial_document_job_link_v9()",
+        "sha256": "1e2f65ea21cb4c0b946eb7db23b74263c527fc61f5c8b5ce17f42631ab480a30"
+      },
+      {
+        "name": "seed_v320_kol_source_authorities",
+        "signature": "seed_v320_kol_source_authorities()",
+        "sha256": "488511267e18dec3e22c4fe18cc6bb52f3ec94c95a73dbc36e7d59928b31b39f"
+      },
+      {
+        "name": "select_opportunity_public_projection_v3",
+        "signature": "select_opportunity_public_projection_v3(timestamp with time zone)",
+        "sha256": "9f29fd846f6f9a7a6ab83d9e6deefbd1ee5f6f9b52f8dcf557cebb15820b961c"
+      },
+      {
+        "name": "source_document_coverage",
+        "signature": "source_document_coverage(timestamp with time zone,timestamp with time zone,text,text,text,text,text[])",
+        "sha256": "a03b406d08321714554870da2427ed4f198861c51c16725e2d3886f53941db5d"
+      },
+      {
+        "name": "stage_opportunity_job_output_v3",
+        "signature": "stage_opportunity_job_output_v3(uuid,text,opportunity_job_output_kind_v3,bytea,jsonb,text,opportunity_job_counts_v3)",
+        "sha256": "50b1aca11e94bf33838d84d84e1861b8e478b8bab3457112b74f063c8f6e3284"
+      },
+      {
+        "name": "submit_link_audit_label_v3",
+        "signature": "submit_link_audit_label_v3(uuid,text,internal_principal_role_v3,link_audit_label_role_v3,text,boolean,uuid,text,timestamp with time zone)",
+        "sha256": "fc3872920ad3151ea0c43c475c9639ca55ad32a2421b74f36a559eb9df55595b"
+      },
+      {
+        "name": "terminalize_candidate_financial_prelisting_job_v7",
+        "signature": "terminalize_candidate_financial_prelisting_job_v7(uuid,text,timestamp with time zone)",
+        "sha256": "1790bb8a61d7bd2e72e03abbbeff9a01ad1d9057b5be75f9375ea437a2c4c736"
+      },
+      {
+        "name": "terminalize_legacy_expired_producer_run_v3_20",
+        "signature": "terminalize_legacy_expired_producer_run_v3_20(uuid,uuid,text,text,text)",
+        "sha256": "844e4d404be0d835177858d5b646b585246b4f0a37a25d74aee915c57ea30d0c"
+      },
+      {
+        "name": "validate_candidate_financial_fact_scope_v10",
+        "signature": "validate_candidate_financial_fact_scope_v10(jsonb,text,boolean)",
+        "sha256": "2d5bbfaefff5f4980827f75b2b30665006f23855e1fa513137473e1cf09ed5d5"
+      },
+      {
+        "name": "validate_finmind_financial_fact_v6",
+        "signature": "validate_finmind_financial_fact_v6(uuid,boolean,boolean,boolean,boolean,text)",
+        "sha256": "5ac1ee791438e7981b7782d96c0907a8e95596392ed630f56bd4be7cc0726a54"
+      },
+      {
+        "name": "validate_opportunity_financial_fact_series_v3",
+        "signature": "validate_opportunity_financial_fact_series_v3()",
+        "sha256": "ec9aa2eb0245a6c7698f22a9d5d6a1e2b9733788febeda9d87c199ef0e9a4e1e"
+      },
+      {
+        "name": "validate_opportunity_manifest_lifecycle_v3",
+        "signature": "validate_opportunity_manifest_lifecycle_v3()",
+        "sha256": "bb533d84d6aa294fed0e3abff68fcb2bac9ca9e2ab295767c2facd79d2550470"
+      },
+      {
+        "name": "validate_opportunity_manifest_page_rows_v3",
+        "signature": "validate_opportunity_manifest_page_rows_v3()",
+        "sha256": "85ce78dc4a0960cb33bd95f912615e44504618f19593b17a1c481a5f0b83b60a"
+      },
+      {
+        "name": "verify_legacy_claim_delegation_chain_v3_20",
+        "signature": "verify_legacy_claim_delegation_chain_v3_20()",
+        "sha256": "b3ca4ed1fa8c11b6dcc01fb62a2f9b7d355824a6e38edd992fb4baaa96f6dc16"
+      }
+    ]
+  },
+  "productionApplyAuthorized": false,
+  "support": "Exact captured PG17.11 + original synthetic bootstrap + genuine main financial50 profile only; no ACL normalization/alternative profiles"
+}
