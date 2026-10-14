@@ -1,0 +1,12 @@
+{
+  "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+  "hostId": "durable",
+  "turnId": "01a13be7-8548-7395-bf88-3dec86ba4843",
+  "cursor": "303427c2-9b66-4f3d-abd3-26255a0a19ef:9",
+  "latestTurn": "inProgress",
+  "threadStatusObserved": "idle",
+  "sourceProgress": "bf72316a",
+  "procedureSha256": "33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973",
+  "scope": "20min independent read-only procedure review; no production access/execution",
+  "responseLossNativeTerminal": true
+}
