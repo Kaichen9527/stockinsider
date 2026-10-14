@@ -1,0 +1,12 @@
+/** Fixed read-only metadata inventory; includes unknown namespace objects/overloads. */
+export async function readTailNamespace(client){
+ const result=await client.query(`SELECT jsonb_build_object(
+ 'relations',(SELECT jsonb_agg(jsonb_build_object('schema',n.nspname,'name',c.relname,'kind',c.relkind,'owner',pg_get_userbyid(c.relowner),'acl',c.relacl,'definition',CASE WHEN c.relkind IN ('v','m') THEN pg_get_viewdef(c.oid,true) ELSE NULL END) ORDER BY n.nspname,c.relname) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('public','auth','extensions')),
+ 'routines',(SELECT jsonb_agg(jsonb_build_object('schema',n.nspname,'signature',p.oid::regprocedure::text,'kind',p.prokind,'owner',pg_get_userbyid(p.proowner),'acl',p.proacl,'config',p.proconfig,'securityDefiner',p.prosecdef,'language',l.lanname,'body',p.prosrc,'binary',p.probin,'strict',p.proisstrict,'leakproof',p.proleakproof,'parallel',p.proparallel,'volatile',p.provolatile) ORDER BY n.nspname,p.oid::regprocedure::text) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace JOIN pg_language l ON l.oid=p.prolang WHERE n.nspname IN ('public','auth','extensions') AND p.prokind IN ('f','p')),
+ 'roles',(SELECT jsonb_agg(jsonb_build_object('name',rolname,'login',rolcanlogin,'inherit',rolinherit,'super',rolsuper,'createRole',rolcreaterole,'createDb',rolcreatedb,'replication',rolreplication,'bypassRls',rolbypassrls,'limit',rolconnlimit,'config',rolconfig,'validUntil',rolvaliduntil) ORDER BY rolname) FROM pg_roles),
+ 'types',(SELECT jsonb_agg(jsonb_build_object('schema',n.nspname,'name',t.typname,'kind',t.typtype,'owner',pg_get_userbyid(t.typowner)) ORDER BY n.nspname,t.typname) FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace WHERE n.nspname IN ('public','auth','extensions'))
+ ) AS namespace`);
+ const value=result.rows?.[0]?.namespace;
+ if(!value||!['relations','routines','roles','types'].every(k=>Array.isArray(value[k])))throw Error('publication_tail_namespace_unreadable');
+ return value;
+}
