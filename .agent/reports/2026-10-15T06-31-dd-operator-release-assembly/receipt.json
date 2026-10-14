@@ -5,13 +5,13 @@
   "base": "8c58e297e92422c1c3f52856a36bff12b1868100",
   "branch": "codex/dd-binary-operator-release-oct15",
   "startedAt": "2026-10-14T22:31:41Z",
-  "sealedAt": "2026-10-14T22:37:19.266817+00:00",
+  "sealedAt": "2026-10-14T22:38:00.204315+00:00",
   "deadline": "2026-10-14T22:51:41Z",
   "copyCount": 5,
   "changedFileCount": 8,
   "sourceInventoryCount": 20,
-  "rawCount": 25,
-  "rawBytes": 114288,
+  "rawCount": 24,
+  "rawBytes": 110574,
   "checks": {
     "staticGroups": 47,
     "staticFail": 0,
@@ -56,5 +56,10 @@
     "wholeclosure/sources/two formal articles/technical strategy scheduling"
   ],
   "prohibitedActionsExecuted": false,
-  "formalApproval": false
+  "formalApproval": false,
+  "evidencePackagingCorrection": {
+    "previousReceiptSha256": "22fa85e885f274ec504d2efca22424c28de396626b53203e8ada3c1058b7dbe5",
+    "previousEvidenceCommit": "06036041",
+    "reason": "Exclude parser scratch input containing historical dummy stdout records from final evidence tree; local scratch remains, parser control results/source are retained. No candidate/workflow/check result changed."
+  }
 }

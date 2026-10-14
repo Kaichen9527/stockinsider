@@ -35,11 +35,6 @@
     "sha256": "165b4eac8716f5e6abe6bb15042f28ff9041e5c2470bdc1f67be4915859f7b23"
   },
   {
-    "path": "raw/parser-input.json-stream",
-    "bytes": 3714,
-    "sha256": "d507eebb5d551b50b8ece16a899b26a70f05b74cda946718aa8038ce50577758"
-  },
-  {
     "path": "raw/resources.json",
     "bytes": 550,
     "sha256": "856ffbd477ca2525c9974e686778a8022e205dd496e52609acda9bea6042ecac"
