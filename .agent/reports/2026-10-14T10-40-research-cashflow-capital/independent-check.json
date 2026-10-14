@@ -1,0 +1,18 @@
+{
+  "source": "separate manually transcribed totals from inspected original rendered cash-flow pages; no shared helper import",
+  "checks": [
+    "2409:cfo",
+    "2409:cfoLessPpeCashOutlay",
+    "2409:cfoLessPpeAndIntangibleCashOutlay",
+    "2409:cashChange",
+    "2409:closingCash",
+    "2383:cfo",
+    "2383:cfoLessPpeCashOutlay",
+    "2383:cfoLessPpeAndIntangibleCashOutlay",
+    "2383:cashChange",
+    "2383:closingCash",
+    "2409:historical_book_equity"
+  ],
+  "passed": 11,
+  "formalArticleReview": false
+}

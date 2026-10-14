@@ -1,0 +1,31 @@
+{
+  "baselineSubject": "9b1e5e45851f633f7eea44200231c76fe9a19857",
+  "commands": [
+    {
+      "command": "python3 docs/research/2026-10-08-auo-four-segment-model/verify-output.py",
+      "exitCode": 0,
+      "stdout": {
+        "independentDecimalChecks": 268,
+        "mainBodyChineseCharacters": 4123,
+        "citationDefinitions": 18,
+        "quarterBridges": 18,
+        "sourceInputHashes": 7,
+        "historicalPITEligible": false,
+        "normalizedOrValuationApproved": false
+      }
+    },
+    {
+      "command": "python3 docs/research/2026-10-08-emc-company-model/verify-output.py",
+      "exitCode": 0,
+      "stdout": {
+        "independentDecimalChecks": 395,
+        "quarterBridges": 18,
+        "sourceHashes": 5,
+        "mainBodyHan": 4468,
+        "citations": 10,
+        "valuationApproved": false
+      }
+    }
+  ],
+  "scope": "Existing independent Python verifiers actually executed this turn. Counts are arithmetic/source checks, not new production tests or formal independent article approvals."
+}

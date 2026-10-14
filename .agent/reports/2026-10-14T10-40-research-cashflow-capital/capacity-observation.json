@@ -1,0 +1,13 @@
+{
+  "observed_at": "2026-10-14T02:21:48.071866+00:00",
+  "filesystem_bytes": 154894188544,
+  "available_bytes": 16116408320,
+  "current": "/opt/stockinsider-standalone/releases/169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "sshExitCode": 0,
+  "stderr": "",
+  "measurement": "read-only SSH Python os.statvfs and os.path.realpath; preceding tool output preserved here, no new SSH invocation",
+  "existing_guard_minimum_bytes": 19998441472,
+  "gap_bytes": 3882033152,
+  "heavyPreflightAttempted": false,
+  "capacityChangedSufficiently": false
+}

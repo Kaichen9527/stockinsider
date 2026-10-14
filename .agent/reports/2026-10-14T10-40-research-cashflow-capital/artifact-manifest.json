@@ -1,0 +1,52 @@
+[
+  {
+    "file": "auo-cashflow-08.png",
+    "bytes": 412195,
+    "sha256": "6465f4705b21b801a2177887be821c0837f9409012f71cae43fd472cb44682ce"
+  },
+  {
+    "file": "auo-cashflow-09.png",
+    "bytes": 435609,
+    "sha256": "13472e41d39c91b73a7dbe3e506fb28118b95674233a76e909e6faf2564bd547"
+  },
+  {
+    "file": "auo-equity-07.png",
+    "bytes": 415543,
+    "sha256": "bfa559d6e7eefc047db81d68f86b011835bf1cdae144b43ce93891da5a52b24d"
+  },
+  {
+    "file": "capacity-observation.json",
+    "bytes": 541,
+    "sha256": "bd59e613c0a8a3a3bcdce749759ac501f3a2184318474ffdf7667b73799896a6"
+  },
+  {
+    "file": "emc-cashflow-07.png",
+    "bytes": 508226,
+    "sha256": "b04515bf67ce3c0d22339440c185ac2c6257c138b8ae19d3798c31776fb5987d"
+  },
+  {
+    "file": "existing-model-verifier-results.json",
+    "bytes": 1028,
+    "sha256": "1ff5d3ef186332486db4c9b4252b3e46899999573f6fa19c083bafbcb5036911"
+  },
+  {
+    "file": "extract.py",
+    "bytes": 8326,
+    "sha256": "f2c90d4a6dc3c0ed490f94cc3ad509bd755aefce5bb1ff1aae90c405bbb8cf7f"
+  },
+  {
+    "file": "independent-check.json",
+    "bytes": 514,
+    "sha256": "9256648eeb721774dd7b715c13cdff463e175ba62844ba6f323a050e4fa993c2"
+  },
+  {
+    "file": "recompute.stdout.json",
+    "bytes": 3536,
+    "sha256": "87bb7744ad6b665ba2c2f3968d1af27242d99f8250ef9d414ce3986552b0ba45"
+  },
+  {
+    "file": "source-receipt.json",
+    "bytes": 4489,
+    "sha256": "ae9a24f469c1f7f235dbc36a0708a3211cf04619d85b77e90e2b3613fac70957"
+  }
+]

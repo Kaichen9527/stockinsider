@@ -1,5 +1,18 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 10:40台灣時間：兩產業歷史現金流與友達六月底股本補件已真勾稽
+
+Root先核remote main3e1be377/progress9b1e5e45與工作樹乾淨；Cloud compact cursor重設57859559-a812-4f98-bcdc-46a2a9f908f6:1、latestturn仍原01a13727 completed/idle，並非新工作完成，不重派來源/金融/native。PR370/371/372/374/375/376/377均終態，不再檢查/ready/rerun/merge/helper。
+
+本輪優先既有友達與第二產業台光電研究，不重寫舊稿。Root實際執行原兩份獨立Python Decimal verifier：友達268項／台光電395項全過，這是算式／來源檢核而非新的正式文章審查或生產測試數。再從10月8日已留存的兩份官方2026Q2合併PDF重新核bytes/SHA（友達94d74c75、台光電245b41f9），逐頁視讀現金流及友達權益表，封存85組雙期原行數字/8份頁文。新12檔source732bb12e947945b0bd71574cafe6ca6509d9ea51，receipt ae9a24f469c1f7f235dbc36a0708a3211cf04619d85b77e90e2b3613fac70957；85原行存在＋26跨表/現金勾稽共111PASS，另11項直接抄自視讀原頁的獨立總額驗算PASS，不與歷史test相加。
+
+實質新增：2026H1友達營業現金6,877.414百萬元、減設備及無形資產現金投入後代理值1,134.612；台光電營業現金5,044.825、同定義代理值-5,661.917，應收帳款現金占用27,421.398、存貨6,259.256、應付帳款提供14,729.114百萬元。四個半年列均從稅前/營運資金勾到營業現金，並從營業/投資/籌資/匯率勾到期末現金；不能把期末現金增加等同本業足供擴產。代理值不是IFRS原揭露FCF/股東可分配現金/維持性capex/預測，租賃本金與使用權資產現金另列，不混Q2單季、Q3月營收或母公司EPS分母。友達June30實收股本/面額對應7,547,099千股，權益表庫藏股票帳面零；母公司權益除同日已發行普通股為20.457839363元。直接2026股東名簿股數未萃取，僅歷史issued-share basis，不冒稱October當前流通股/PB或未來權益已補齊。
+
+新補件docs/research/2026-10-14-cashflow-capital-addendum/為research share-with-caveats；原兩份文章/model/forecast/cutoff未覆寫，新萃取availableAt真Oct14，不倒填Oct8。尚需把現金機制整合到successor文章與真正獨立文章審查/正式輸入發布鏈，沒有創formaljob/reservation/approval ID、合理價或策略批准。Root本輪沒有新native/build、production client/frozenrun/publisher/rootcreator接線或正式SQL/role/ACL/HTTP/crawl/343/PTT/研究排程變更。Sourcepacket與原頁/重算影像/收據在.agent/reports/2026-10-14T10-40-research-cashflow-capital/。
+
+輕量只讀SSH於02:21:48Z真核filesystem154894188544、可用16116408320bytes，current仍/opt/stockinsider-standalone/releases/169aad1b6cfa747f78ae3464b614f43c0749d806；距原19998441472門檻差3882033152bytes，尚未達准入，不執行必敗heavy/舊main169-deploy.sh、不降reserve、不重問容量/付費/清理。此為current-path/capacity觀測，未新核writer或DB role。另一官方文件補件chat已終態報backendlease_required/0receipt/0facts；本輪僅讀其狀態避免重複領件，不與其工作重疊或偷偷修正式lease。
+
+
 ## 2026-10-14 09:25台灣時間：來源PR377正常protected全通過，已標準合併
 
 Ready事件新protected38489616462已00:36:45Z終態SUCCESS，bootstrap/requirements/architecture/exact/model/product/aggregate全7真SUCCESS。Root保存完整log/7jobJSON，核四ordinarySUCCESS/fresh596a/sourcee9c/baseaa111/rules20177392active/bypass[]，01:25:41Z只一次標準gh pr merge --merge --match-head-commit完成，無admin/bypass/auto/directmainpush，完整保護JSON前後相同。

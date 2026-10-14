@@ -1,0 +1,112 @@
+{
+  "subject": "732bb12e947945b0bd71574cafe6ca6509d9ea51",
+  "parent": "9b1e5e45851f633f7eea44200231c76fe9a19857",
+  "remoteMainObserved": "3e1be377de3f6cac58f6de1626e8df994b9df146",
+  "files": [
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/README.md",
+      "bytes": 7384,
+      "sha256": "1107f8bc4f1b030addb1613a778b50ba7bae02fc8425af6ec4ea0614931e1306",
+      "gitBlob": "2d37d30827e8b05618d03d5b3d1a942c16df1efd"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-06.txt",
+      "bytes": 6727,
+      "sha256": "8ff9af88c367e2159d7627e27b7b21caf0d44b321f30dd5db4bbf23e08ace3ef",
+      "gitBlob": "995a90743d130284d73a5af1f9be59910c77ef88"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-07.txt",
+      "bytes": 9429,
+      "sha256": "1ff0b31d3022073cb3db5818e50aff63ef51cbb9b4476a7aee05c57e2bd076e1",
+      "gitBlob": "5824ede0e94b1765e3520219629f8fecaa3d66bd"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-08.txt",
+      "bytes": 2939,
+      "sha256": "fed267eacafed42b51ab76e3d0ddce44d492de6ccad301e764fb3a4384ef9305",
+      "gitBlob": "84f542dec47443b264ab13ec0d22bf6075d99ca2"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-09.txt",
+      "bytes": 3103,
+      "sha256": "c7c3731da13ee8e73c5b8401f083a949925e6c46586e38eb8075e32f95ca1d82",
+      "gitBlob": "b6e186567360dded645899a6a187efcb1cb8ad66"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-38.txt",
+      "bytes": 2475,
+      "sha256": "718fbcc287e3637405c030ef60043d8d0e6c3037f4f118f3ea780a8f232add4c",
+      "gitBlob": "4b84b9c1ecde4e047bef5cc80a04eca45ee5df01"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/auo-pdf-page-40.txt",
+      "bytes": 1919,
+      "sha256": "87abed305b006301dc12319b20b6c45586b8f4ea69d9aafe28425e0088910abc",
+      "gitBlob": "4503280873f8f9cc56a7cfad86e7ad1ee3bbbec2"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/derived-results.json",
+      "bytes": 9503,
+      "sha256": "af4bf32b0d1e8becb97166ef7e75f7a17caf1495caeb5ed3674c6cb0fa76e14a",
+      "gitBlob": "4d3e31676669ca764b1f252aaac75db521a7159b"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/emc-pdf-page-05.txt",
+      "bytes": 5450,
+      "sha256": "89a4446661ac6ad49bdb174e615846f6126d0e53f8db2dd35d348f1128969554",
+      "gitBlob": "275bdcdc7f777a1b202940c62f40725922786310"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/emc-pdf-page-07.txt",
+      "bytes": 5008,
+      "sha256": "d8f66057bfd43c8619add201632d7253616b8d9737e410a57fced90c665ca84e",
+      "gitBlob": "197f951b64c93f1305616375b71cd5baee5f8341"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/recompute.py",
+      "bytes": 4984,
+      "sha256": "bf6cc4d8f808752f4c58a2645b213e476491faee17395ee8cc582546e86840fe",
+      "gitBlob": "230274d8f3d638779c650e022bde51a55a63e489"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3",
+      "gitBlob": "832ee8ec64b478d6ecfa709b77d8146e056175b5"
+    }
+  ],
+  "sourcePdfHashMatches": 2,
+  "retainedPageTextFiles": 8,
+  "visualPagesInspected": [
+    "AUO PDF8",
+    "AUO PDF9",
+    "AUO PDF7 equity",
+    "EMC PDF7"
+  ],
+  "newRecomputation": {
+    "sourceLineChecks": 85,
+    "bridgeChecks": 26,
+    "total": 111,
+    "separateDirectTotalChecks": 11
+  },
+  "formalArticleApproval": false,
+  "historicalModelsModified": false,
+  "runtimeModified": false,
+  "buildRun": false,
+  "nativeRun": false,
+  "productionMutation": false,
+  "newSourceExtractionBackdated": false,
+  "cloud": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "cursor": "57859559-a812-4f98-bcdc-46a2a9f908f6:1",
+    "latestTurn": "01a13727-827e-74e1-8ac5-9c42df424f49",
+    "status": "completed/idle"
+  },
+  "pending": [
+    "Integrate historical cash-flow section into successor AUO and EMC articles/models without replacing forecasts with historical cash",
+    "Genuine independent formal article review and publication-chain inputs",
+    "Current October shares/corporate actions, normalized valuation and technical qualification",
+    "Formal peer/capacity/migration/deployment"
+  ]
+}
