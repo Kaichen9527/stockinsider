@@ -65,3 +65,15 @@ test('each projected row carries exact two-period packet/model locators and priv
   for(const ref of result.references){assert.deepEqual(ref.values,issuer.facts[ref.metric].values);assert.equal(ref.sourceLineSha256,createHash('sha256').update(issuer.facts[ref.metric].sourceLine).digest('hex'));assert.equal(ref.unit,'TWD_thousands');assert.equal(ref.periodKind,'half_year_cumulative');assert.match(ref.packetLocator.jsonPointer,new RegExp(`/facts/${ref.metric}/values$`));}
  }
 });
+test('wrong native Map cardinality is rejected before opening or advancing its iterator',()=>{
+ for(const symbol of ['2409','2383'])for(const size of [10000,0,1,historicalCashPins.companies[symbol].files.length+1]){
+  const files=new Map(Array.from({length:size},(_,i)=>[`unexpected_${i}`,new Uint8Array(0)]));
+  const original=Map.prototype.entries;let iterations=0,opened=0;
+  try{
+   Map.prototype.entries=function(){opened++;const iterator=original.call(this);return{[Symbol.iterator](){return this;},next(){iterations++;return iterator.next();}};};
+   assert.throws(()=>call(symbol,files),/projection_invalid/);
+   assert.equal(opened,0,`${symbol} size${size} iterator must not open`);
+   assert.equal(iterations,0,`${symbol} size${size} iterator must not advance`);
+  }finally{Map.prototype.entries=original;}
+ }
+});
