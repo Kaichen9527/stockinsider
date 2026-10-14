@@ -1,0 +1,612 @@
+{
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "closureRecomputed": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+  "fixture": {
+    "path": "scripts/fixtures/research-legacy77/source-realm-15d4.json.gz",
+    "bytes": 284579,
+    "sha256": "db77eec4c3a7ca4d217396aa4035174d4ba1bcaf4db3218122db114c1047253b",
+    "expandedBytes": 1824546
+  },
+  "files": [
+    {
+      "file": "web/package-lock.json",
+      "bytes": 274090,
+      "sha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+      "blob": "f62dd3cd9195d739ca3fab5f2b5b4d6b65209ac2"
+    },
+    {
+      "file": "web/src/lib/candidate-dossier-contract.ts",
+      "bytes": 11851,
+      "sha256": "33920f44ffa719802476da3171baf5d8806c81877f6ae9eedfd64ecea8427887",
+      "blob": "0e561c4ea1ac24791e12a166687956ccf9b335bd"
+    },
+    {
+      "file": "web/src/lib/public-source-url.ts",
+      "bytes": 1821,
+      "sha256": "f1f4a47c2984a59be316b94586796171adda680e64910c981b5cede88260dcea",
+      "blob": "6c58c75d99928ab95107a21690e3cb108c539a53"
+    },
+    {
+      "file": "web/src/lib/research-agent-priority.ts",
+      "bytes": 8382,
+      "sha256": "2f6e9be35bca12d3042ad668fef75447936b1427dffdd69ae621cc9540081318",
+      "blob": "f1f6f183e10f3093e4f3e443bd387de562c098ea"
+    },
+    {
+      "file": "web/src/lib/research-agent-qualification.ts",
+      "bytes": 8864,
+      "sha256": "690de1fb4265366c0431da990fbe2519057562600727de6f44340060c9d34da0",
+      "blob": "3b0618f0b1d4944b0dcdbb5d06c365520dd767b8"
+    },
+    {
+      "file": "web/src/lib/research-business-calculator.ts",
+      "bytes": 14206,
+      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+      "blob": "81f4cb09ae2849fdf2dbde497f6675736c995f90"
+    },
+    {
+      "file": "web/src/lib/research-complete-2383.schema.json",
+      "bytes": 151681,
+      "sha256": "e0bc5f27a4263d151395fd2fa35a69e868b2d94836b7e26173be545300d6d043",
+      "blob": "2a175ccbbfa41b63d3b53674c05d463217300140"
+    },
+    {
+      "file": "web/src/lib/research-complete-2409.schema.json",
+      "bytes": 264752,
+      "sha256": "efedd65c7afcf9031cd34fe6a12d4f70c78dcc1d80cadbddfa87f11b23e57932",
+      "blob": "d86403ba399bcf6adc0a85e175c8d15e88d8ab51"
+    },
+    {
+      "file": "web/src/lib/research-complete-canonical.ts",
+      "bytes": 4343,
+      "sha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "blob": "59895e540b67258eea998ee7a2e2ab9eb4b8cf6f"
+    },
+    {
+      "file": "web/src/lib/research-complete-input.ts",
+      "bytes": 10526,
+      "sha256": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d",
+      "blob": "f315e8ad3af3428893ae6eedd45421f4086a8cd2"
+    },
+    {
+      "file": "web/src/lib/research-complete-schema-bundles.ts",
+      "bytes": 463467,
+      "sha256": "ca5bc876d5820c3f910a4847c84f504a952896f7affe5d9e88a9f224df3b0d98",
+      "blob": "086c3ffa84bba3187e870c8e35692fe740f5ed33"
+    },
+    {
+      "file": "web/src/lib/research-deep-author-input.ts",
+      "bytes": 22617,
+      "sha256": "4e4dd8e2f792071cf974631d08ffa852ad87b2c5e9edd11a3ccee71b27eeaf94",
+      "blob": "c959684541854be703ee91d213bb3adc72914978"
+    },
+    {
+      "file": "web/src/lib/research-deep-claim-context.ts",
+      "bytes": 12714,
+      "sha256": "c6016ca331d77cff78b05c26642ebbb8ce040a285293eebdca9fecf20f3b680c",
+      "blob": "3d27095c13fb1926467e55f739b95f7193fe1aa1"
+    },
+    {
+      "file": "web/src/lib/research-discovery-evidence.ts",
+      "bytes": 6788,
+      "sha256": "832e279429951e548bc12e8a0dd578a9c38c4e7ffa18e3e2e2bc649941517896",
+      "blob": "700a591b931201fd9a336bbaa293482509c947f9"
+    },
+    {
+      "file": "web/src/lib/research-financial-clock.ts",
+      "bytes": 807,
+      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+      "blob": "bf6301733d6c5150093e94a870e7c6f54f1d8042"
+    },
+    {
+      "file": "web/src/lib/research-financial-file-reader.ts",
+      "bytes": 10211,
+      "sha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+      "blob": "356aba3e06fd1e3961143c14b0886e813987a510"
+    },
+    {
+      "file": "web/src/lib/research-financial-inventory.ts",
+      "bytes": 3294,
+      "sha256": "f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5",
+      "blob": "959089196afc0e678e02b6ca7fb6face0012df0d"
+    },
+    {
+      "file": "web/src/lib/research-financial-supplement.ts",
+      "bytes": 19142,
+      "sha256": "2f8d8150a3071109d3db2dee9c1df7dadcd97322357c21e8a45fd469df22372d",
+      "blob": "db88fc9330b14f7f3489668886949b2cc3dc6777"
+    },
+    {
+      "file": "web/src/lib/research-source-association.ts",
+      "bytes": 22950,
+      "sha256": "59d5b00d7b2126eca5dc125093346770d3ae43179a5180d281afb16207667cc7",
+      "blob": "973514e09dd684a68e0e98751bb52f286f4ef2af"
+    },
+    {
+      "file": "web/src/lib/research-source-clock.ts",
+      "bytes": 1023,
+      "sha256": "219b6367df8c9da6ff9184028c646ba344c0554255adb2a85f6ba89ab2f7b933",
+      "blob": "c5380eec563db43e3b3396a68d0c45feb8731315"
+    },
+    {
+      "file": "web/src/lib/research-source-registry.ts",
+      "bytes": 1585,
+      "sha256": "64cf50ad4f4dc65310fcef6916f9f2c5be48830fa8fd3b7e700446bce9965e61",
+      "blob": "cacec5d28bf9ebbcc7dd7b6d834178d8be26c5a2"
+    },
+    {
+      "file": "web/src/lib/research-source-roots.ts",
+      "bytes": 3552,
+      "sha256": "aa3471022cb87235f3cdb84c7e674d0af799b858735774025b6eebb3a3e6110f",
+      "blob": "ce31a37567a90d5e9e50be1d519db190afb0f60a"
+    },
+    {
+      "file": "web/src/lib/research-complete-mapping.json",
+      "bytes": 7953,
+      "sha256": "ba44549b7efdc14a0c61523dadd950321fd7f85e72b30059415a555629baf704",
+      "blob": "98284f2ff243d1efb2f094eab5961a7b04649f89"
+    },
+    {
+      "file": "web/package.json",
+      "bytes": 2137,
+      "sha256": "bd2b13381a5e9e5bdafe83a2a2803b753edd8fbf27f125710d191fa2d46a600b",
+      "blob": "adf57832d7c721079bbe923a33aca76878ea911e"
+    },
+    {
+      "file": "package.json",
+      "bytes": 32997,
+      "sha256": "c23aaf85d3bd53c959006693c67e92604a5e8f83216de03a4fa89e89f2a4e952",
+      "blob": "bb09e153c786053e84970fe8f65f569e4c00c3f3"
+    },
+    {
+      "file": ".nvmrc",
+      "bytes": 8,
+      "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+      "blob": "7d41c735d7127c4a2530ebe846b14ffbf38b8031"
+    }
+  ],
+  "imports": [
+    {
+      "from": "web/src/lib/candidate-dossier-contract.ts",
+      "specifier": "crypto",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/candidate-dossier-contract.ts",
+      "specifier": "./public-source-url.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/public-source-url.ts"
+    },
+    {
+      "from": "web/src/lib/research-agent-qualification.ts",
+      "specifier": "node:crypto",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-business-calculator.ts",
+      "specifier": "node:crypto",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-business-calculator.ts",
+      "specifier": "./research-financial-clock.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-complete-canonical.ts",
+      "specifier": "node:crypto",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-complete-canonical.ts",
+      "specifier": "./research-financial-clock.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-complete-input.ts",
+      "specifier": "node:path",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-complete-input.ts",
+      "specifier": "@supabase/supabase-js",
+      "typeOnly": true
+    },
+    {
+      "from": "web/src/lib/research-complete-input.ts",
+      "specifier": "./research-complete-schema-bundles.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-complete-schema-bundles.ts"
+    },
+    {
+      "from": "web/src/lib/research-complete-input.ts",
+      "specifier": "./research-complete-mapping.json",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-complete-mapping.json"
+    },
+    {
+      "from": "web/src/lib/research-complete-input.ts",
+      "specifier": "./research-financial-inventory.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-complete-input.ts",
+      "specifier": "./research-financial-supplement.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-financial-supplement.ts"
+    },
+    {
+      "from": "web/src/lib/research-complete-input.ts",
+      "specifier": "./research-financial-file-reader.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-financial-file-reader.ts"
+    },
+    {
+      "from": "web/src/lib/research-complete-input.ts",
+      "specifier": "./research-complete-canonical.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-complete-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-deep-author-input.ts",
+      "specifier": "@supabase/supabase-js",
+      "typeOnly": true
+    },
+    {
+      "from": "web/src/lib/research-deep-author-input.ts",
+      "specifier": "./candidate-dossier-contract.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/candidate-dossier-contract.ts"
+    },
+    {
+      "from": "web/src/lib/research-deep-author-input.ts",
+      "specifier": "./research-agent-qualification.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-agent-qualification.ts"
+    },
+    {
+      "from": "web/src/lib/research-deep-author-input.ts",
+      "specifier": "./research-deep-claim-context.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-deep-claim-context.ts"
+    },
+    {
+      "from": "web/src/lib/research-deep-author-input.ts",
+      "specifier": "./research-source-association.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-source-association.ts"
+    },
+    {
+      "from": "web/src/lib/research-deep-author-input.ts",
+      "specifier": "./public-source-url.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/public-source-url.ts"
+    },
+    {
+      "from": "web/src/lib/research-deep-claim-context.ts",
+      "specifier": "@supabase/supabase-js",
+      "typeOnly": true
+    },
+    {
+      "from": "web/src/lib/research-discovery-evidence.ts",
+      "specifier": "./research-source-clock.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-source-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-discovery-evidence.ts",
+      "specifier": "./research-agent-qualification.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-agent-qualification.ts"
+    },
+    {
+      "from": "web/src/lib/research-financial-file-reader.ts",
+      "specifier": "node:fs",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-financial-file-reader.ts",
+      "specifier": "node:fs/promises",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-financial-file-reader.ts",
+      "specifier": "node:fs/promises",
+      "typeOnly": true
+    },
+    {
+      "from": "web/src/lib/research-financial-file-reader.ts",
+      "specifier": "node:fs",
+      "typeOnly": true
+    },
+    {
+      "from": "web/src/lib/research-financial-file-reader.ts",
+      "specifier": "node:path",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-financial-file-reader.ts",
+      "specifier": "node:perf_hooks",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-financial-file-reader.ts",
+      "specifier": "node:crypto",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-financial-supplement.ts",
+      "specifier": "node:crypto",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-financial-supplement.ts",
+      "specifier": "node:path",
+      "typeOnly": false
+    },
+    {
+      "from": "web/src/lib/research-financial-supplement.ts",
+      "specifier": "@supabase/supabase-js",
+      "typeOnly": true
+    },
+    {
+      "from": "web/src/lib/research-financial-supplement.ts",
+      "specifier": "./research-financial-inventory.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-financial-supplement.ts",
+      "specifier": "./research-deep-author-input.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-deep-author-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-financial-supplement.ts",
+      "specifier": "./research-financial-file-reader.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-financial-file-reader.ts"
+    },
+    {
+      "from": "web/src/lib/research-financial-supplement.ts",
+      "specifier": "./research-financial-clock.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-financial-supplement.ts",
+      "specifier": "./research-business-calculator.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-source-association.ts",
+      "specifier": "@supabase/supabase-js",
+      "typeOnly": true
+    },
+    {
+      "from": "web/src/lib/research-source-association.ts",
+      "specifier": "./research-agent-qualification.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-agent-qualification.ts"
+    },
+    {
+      "from": "web/src/lib/research-source-association.ts",
+      "specifier": "./research-source-clock.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-source-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-source-association.ts",
+      "specifier": "./public-source-url.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/public-source-url.ts"
+    },
+    {
+      "from": "web/src/lib/research-source-association.ts",
+      "specifier": "./research-source-roots.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-source-roots.ts"
+    },
+    {
+      "from": "web/src/lib/research-source-clock.ts",
+      "specifier": "./research-financial-clock.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-source-roots.ts",
+      "specifier": "./research-source-registry.ts",
+      "typeOnly": false,
+      "resolved": "web/src/lib/research-source-registry.ts"
+    },
+    {
+      "from": "web/src/lib/research-source-roots.ts",
+      "specifier": "./research-agent-priority.ts",
+      "typeOnly": true,
+      "resolved": "web/src/lib/research-agent-priority.ts"
+    }
+  ],
+  "oldArtifactPins": [
+    {
+      "symbol": "2409",
+      "path": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 88790,
+      "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965",
+      "matches75d": true
+    },
+    {
+      "symbol": "2409",
+      "path": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf",
+      "matches75d": true
+    },
+    {
+      "symbol": "2409",
+      "path": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb",
+      "matches75d": true
+    },
+    {
+      "symbol": "2409",
+      "path": "docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+      "matches75d": true
+    },
+    {
+      "symbol": "2409",
+      "path": "docs/research/2026-10-08-auo-market/dataset.json",
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582",
+      "matches75d": true
+    },
+    {
+      "symbol": "2409",
+      "path": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189",
+      "matches75d": true
+    },
+    {
+      "symbol": "2409",
+      "path": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6",
+      "matches75d": true
+    },
+    {
+      "symbol": "2409",
+      "path": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103",
+      "matches75d": true
+    },
+    {
+      "symbol": "2383",
+      "path": "docs/research/2026-10-08-emc-company-model/model-results.json",
+      "bytes": 54602,
+      "sha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c",
+      "matches75d": true
+    },
+    {
+      "symbol": "2383",
+      "path": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+      "bytes": 33734,
+      "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+      "matches75d": true
+    },
+    {
+      "symbol": "2383",
+      "path": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+      "bytes": 110526,
+      "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5",
+      "matches75d": true
+    },
+    {
+      "symbol": "2383",
+      "path": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+      "bytes": 10693,
+      "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5",
+      "matches75d": true
+    },
+    {
+      "symbol": "2383",
+      "path": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+      "bytes": 3630,
+      "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275",
+      "matches75d": true
+    },
+    {
+      "symbol": "2383",
+      "path": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+      "bytes": 3671,
+      "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d",
+      "matches75d": true
+    }
+  ],
+  "staticImportClosure": {
+    "relativeImportsAllPresent": true,
+    "externalRuntimeImports": [
+      "node builtins only"
+    ],
+    "externalTypeOnly": [
+      "@supabase/supabase-js"
+    ],
+    "dynamicEdges": "Original copied TS inspected statically; no application modules imported/executed this turn"
+  },
+  "sqlComparisons": [
+    {
+      "file": "migrations/20261009_research_complete_input_v2.sql",
+      "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c",
+      "exact15d4": true
+    },
+    {
+      "file": "migrations/20261009_research_input_preparations_v2.sql",
+      "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e",
+      "exact15d4": true
+    }
+  ],
+  "dynamicImportScan": [
+    {
+      "path": "web/src/lib/research-deep-author-input.ts",
+      "line": 43,
+      "text": "export async function loadResearchDeepAuthorInput(db: Pick<SupabaseClient, 'from' | 'rpc'>,",
+      "classification": "lexical false positive: exported function type includes Supabase from key, not a re-export"
+    },
+    {
+      "path": "web/src/lib/research-deep-author-input.ts",
+      "line": 204,
+      "text": "  context: import('./research-deep-claim-context.ts').ResearchDeepClaimContext, now: string) {",
+      "classification": "TypeScript type import (erased; included source member)"
+    },
+    {
+      "path": "web/src/lib/research-deep-claim-context.ts",
+      "line": 119,
+      "text": "export async function loadResearchDeepClaimContext(db: Pick<SupabaseClient, 'from'> & Partial<Pick<SupabaseClient,'rpc'>>,",
+      "classification": "lexical false positive: exported function type includes Supabase from key, not a re-export"
+    },
+    {
+      "path": "web/src/lib/research-source-association.ts",
+      "line": 167,
+      "text": "export async function loadIndustryAssociations(db: Pick<SupabaseClient, 'from' | 'rpc'>, requests: AssociationRequests,",
+      "classification": "lexical false positive: exported function type includes Supabase from key, not a re-export"
+    }
+  ],
+  "originalCallerMetadata": [
+    {
+      "file": "web/src/app/api/internal/research-deep-job/route.ts",
+      "bytes": 12557,
+      "sha256": "d70ceae33eb8613da1b891a0790ff21a2a90bd67fedc73a7d7d9074668cba42a",
+      "blob": "083b5c06b2d4c81ebba2b4a823b1de112cd58e9b",
+      "copiedOrExecuted": false
+    },
+    {
+      "file": "web/src/lib/research-author-assignment.ts",
+      "bytes": 7161,
+      "sha256": "f3398447a07df929652e07ea3044bf8334e3e922f3344ad5802d39ea54b7d051",
+      "blob": "5dec5203555d1352f7f67cf64eb6585f3b389a3c",
+      "copiedOrExecuted": false
+    },
+    {
+      "file": "web/src/lib/research-author-packet.ts",
+      "bytes": 11061,
+      "sha256": "50cabf662e17609f75a8bbddbe9d711b540dfa70a170ee67febabd563e1647a5",
+      "blob": "01f1813d4ae703d5ddec3ca14df1570a4e74dcbd",
+      "copiedOrExecuted": false
+    },
+    {
+      "file": "web/src/lib/research-author-result.ts",
+      "bytes": 8436,
+      "sha256": "71b47dfe6a666498829e2bd6665e5688ca18de73e8e0938870e645983e5060e7",
+      "blob": "9002b4acae907f13dde377cc9b8c861c6b5dd986",
+      "copiedOrExecuted": false
+    }
+  ],
+  "dynamicImportScanConclusion": "No runtime dynamic import/require or re-export edge found in the exact historical TS members; type-only import resolves to retained research-deep-claim-context.ts."
+}
