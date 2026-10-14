@@ -1,0 +1,28 @@
+2026-10-14 12:45:25.695 UTC [570386] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-14 12:45:25.695 UTC [570386] LOG:  listening on Unix socket "/tmp/vp3audit-3cfSTy/.s.PGSQL.58457"
+2026-10-14 12:45:25.696 UTC [570389] LOG:  database system was shut down at 2026-10-14 12:45:25 UTC
+2026-10-14 12:45:25.698 UTC [570386] LOG:  database system is ready to accept connections
+2026-10-14 12:45:27.924 UTC [570396] ERROR:  permission denied for schema public at character 12
+2026-10-14 12:45:27.924 UTC [570396] QUERY:  
+	DECLARE b public.research_input_bindings_candidate_v3; c jsonb; q jsonb;
+	BEGIN
+	 SELECT * INTO b FROM public.research_input_bindings_candidate_v3 WHERE hb=p_hb;
+	 IF NOT FOUND OR EXISTS(SELECT FROM public.research_input_binding_revocations_candidate_v3 WHERE hb=p_hb AND (mode='read' OR p_fresh AND mode='fresh')) THEN RAISE EXCEPTION 'versioned_binding_unavailable';END IF;
+	 c:=b.core_text::jsonb;q:=b.registration;
+	 IF (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(c) key) IS DISTINCT FROM ARRAY['artifactRootId','compiledFingerprintIdentity','financialProfile','inventoryHash','schemaTemplateIdentity','sourceExecutionHash','symbol','validationContract','wireVersion']
+	 OR c->>'symbol' IS DISTINCT FROM p_symbol OR p_symbol NOT IN ('2409','2383') OR c->>'inventoryHash' IS DISTINCT FROM p_inventory
+	 OR c->>'validationContract' IS DISTINCT FROM 'research-versioned-input-candidate-v3'
+	 OR NOT ((c->>'wireVersion'='research-article-input-v2' AND c->>'financialProfile'='oct08_compatible_financial_candidate_v1' AND c->>'artifactRootId'='original75d-fixed8or6')
+	 OR (c->>'wireVersion'='research-article-input-v3' AND c->>'financialProfile'='oct14_historical_cash_v1' AND c->>'artifactRootId'='historical15d4-fixed9or7'))
+	 OR EXISTS(SELECT FROM jsonb_each(c) WHERE jsonb_typeof(value)<>'string')
+	 OR EXISTS(SELECT FROM jsonb_each_text(c) WHERE key IN ('compiledFingerprintIdentity','sourceExecutionHash','schemaTemplateIdentity','inventoryHash') AND value !~ '^[a-f0-9]{64}$') THEN RAISE EXCEPTION 'versioned_binding_shape';END IF;
+	 IF (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(q) key) IS DISTINCT FROM ARRAY['historicalHash','inventory','knownFloor','modelCutoff','schemaTemplate']
+	 OR public.research_complete_hash_v2(q->'inventory') IS DISTINCT FROM p_inventory
+	 OR encode(sha256(convert_to(public.research_observed_canonical_json_v1(q->'schemaTemplate'),'UTF8')),'hex') IS DISTINCT FROM c->>'schemaTemplateIdentity'
+	 OR q->>'historicalHash' !~ '^[a-f0-9]{64}$' THEN RAISE EXCEPTION 'versioned_registration_mismatch';END IF;
+	 RETURN jsonb_build_object('bindingCapsuleIdentity',b.hb,'core',c,'registration',q);
+	END 
+2026-10-14 12:45:27.924 UTC [570396] CONTEXT:  compilation of PL/pgSQL function "research_input_binding_candidate_v3" near line 2
+2026-10-14 12:45:27.924 UTC [570396] STATEMENT:  SELECT public.research_input_binding_candidate_v3($1,$2,$3,true)
+2026-10-14 12:45:27.930 UTC [570386] LOG:  received immediate shutdown request
+2026-10-14 12:45:27.932 UTC [570386] LOG:  database system is shut down

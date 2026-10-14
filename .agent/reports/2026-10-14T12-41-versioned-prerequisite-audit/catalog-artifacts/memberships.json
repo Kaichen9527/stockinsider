@@ -1,0 +1,90 @@
+[
+  {
+    "role": "anon",
+    "member": "authenticator",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": false,
+    "set_option": true
+  },
+  {
+    "role": "anon",
+    "member": "stockinsider",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": false,
+    "set_option": true
+  },
+  {
+    "role": "authenticated",
+    "member": "authenticator",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": false,
+    "set_option": true
+  },
+  {
+    "role": "authenticated",
+    "member": "stockinsider",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": false,
+    "set_option": true
+  },
+  {
+    "role": "legacy_correctness_rpc_owner",
+    "member": "postgres",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": true,
+    "set_option": true
+  },
+  {
+    "role": "opportunity_v3_rpc_owner",
+    "member": "postgres",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": true,
+    "set_option": true
+  },
+  {
+    "role": "pg_read_all_settings",
+    "member": "pg_monitor",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": true,
+    "set_option": true
+  },
+  {
+    "role": "pg_read_all_stats",
+    "member": "pg_monitor",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": true,
+    "set_option": true
+  },
+  {
+    "role": "pg_stat_scan_tables",
+    "member": "pg_monitor",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": true,
+    "set_option": true
+  },
+  {
+    "role": "service_role",
+    "member": "authenticator",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": false,
+    "set_option": true
+  },
+  {
+    "role": "service_role",
+    "member": "stockinsider",
+    "grantor": "postgres",
+    "admin_option": false,
+    "inherit_option": false,
+    "set_option": true
+  }
+]

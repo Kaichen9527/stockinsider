@@ -1,0 +1,21 @@
+{
+  "versions": {
+    "node": "v22.14.0",
+    "pg": "8.18.0",
+    "user": "agent"
+  },
+  "pgBin": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+  "proxyCa": "inherited unchanged; values not exported",
+  "noInstall": true,
+  "networkCalls": false,
+  "initialIdleCheck": {
+    "568794": "Zs postgres zombie",
+    "569401": "Z node zombie"
+  },
+  "freeAfter": {
+    "/workspace": 8609103872,
+    "/tmp": 15428071424
+  },
+  "rssMethod": "0.25s session members plus cmdline containing owned cluster prefix; not an exhaustive daemon descendant/cgroup peak",
+  "notProduction": true
+}

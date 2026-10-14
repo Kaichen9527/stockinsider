@@ -1,0 +1,4 @@
+{
+  "sql": "SELECT r.rolname,n.nspname,has_schema_privilege(r.oid,n.oid,'USAGE') usage,has_schema_privilege(r.oid,n.oid,'CREATE') create_privilege FROM pg_roles r CROSS JOIN pg_namespace n WHERE r.rolname !~ '^pg_' AND n.nspname IN ('public','extensions') ORDER BY 1,2",
+  "parameters": []
+}

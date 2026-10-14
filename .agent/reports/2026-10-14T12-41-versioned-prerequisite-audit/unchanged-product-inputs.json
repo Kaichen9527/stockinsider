@@ -1,0 +1,298 @@
+[
+  {
+    "file": ".nvmrc",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "deployment/vps/bootstrap-stockinsider-postgres.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "docs/operations/2026-10-14/versioned-input-protocol/ADR-addendum.md",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "docs/operations/2026-10-14/versioned-input-protocol/HANDOFF.md",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20260929_candidate_dossier_outbox_v6.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261004_research_cloud_receipts_v1.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261004_research_technical_identity_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261008_insider_snapshots_v1.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261008_research_observed_priority_v1.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_author_handoffs_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_author_packet_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_author_results_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_input_preparation_assert_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_results_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261010_research_publication_view_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261011_research_complete_mapping_precision_v2.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261011_research_insider_isolation_v1.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261011_research_thesis_isolation_v1.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "package-lock.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "package.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/fixtures/research-compatible-financial/pinned-original-source.json.gz",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-catalog.mjs",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-install-guard.mjs",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-install-inventory.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-install-profile.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-descriptor.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-guard.mjs",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-namespace.mjs",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-extraction.mjs",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-post50-baseline.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/opportunity-v3/research-versioned-input-protocol-native.test.mjs",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "scripts/research-versioned-input-protocol.test.mjs",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/package-lock.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/package.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-cash-financial-reader.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-inventory.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-reader.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-complete-mapping.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-complete-schema-bundles.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-financial-clock.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-financial-io-owner.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-pins.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-projection.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-v3-finite-material.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-v3-material-canonical.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-v3-material-schemas/2383-normalized.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-v3-material-schemas/2383-raw.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-v3-material-schemas/2409-normalized.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-v3-material-schemas/2409-raw.json",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-versioned-complete-input.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-versioned-input-binding.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-versioned-input-legacy-response.ts",
+    "sameAsPreviousManifest": true
+  },
+  {
+    "file": "web/src/lib/research-versioned-input-request.ts",
+    "sameAsPreviousManifest": true
+  }
+]

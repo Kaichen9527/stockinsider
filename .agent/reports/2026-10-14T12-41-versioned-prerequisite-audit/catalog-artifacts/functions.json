@@ -1,0 +1,4070 @@
+[
+  {
+    "oid": 24804,
+    "signature": "accept_research_cloud_result_v1(uuid,text,text,text,text,text,text)",
+    "proname": "accept_research_cloud_result_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "5eda5b6ce811cc53f9662e3f84def35c82ad9a73d6119070397c7919fcd32785"
+  },
+  {
+    "oid": 18048,
+    "signature": "acquire_legacy_producer_lease_v3_11(text,text,text,bytea,text,uuid,integer)",
+    "proname": "acquire_legacy_producer_lease_v3_11",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner,stockinsider_runtime_v319=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "56003d752d4d200bd498132dcd1db962ff569bd145ab5ced1fd487368e2a4123"
+  },
+  {
+    "oid": 18050,
+    "signature": "acquire_production_write_lease(text,uuid,integer)",
+    "proname": "acquire_production_write_lease",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "c74730fd121053911aa995aae7d84c5b4e76b7d52741ceca1132ef5b9a03471e"
+  },
+  {
+    "oid": 18051,
+    "signature": "activate_stockinsider_backend_release_v1(text,jsonb)",
+    "proname": "activate_stockinsider_backend_release_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "8230892871a5d98c351fae88b5acc5ec676f3dad25c4365b2bc6b1d253ae7c24"
+  },
+  {
+    "oid": 24891,
+    "signature": "admit_insider_snapshot_v1(uuid,integer,uuid,text,text,integer,timestamp with time zone,timestamp with time zone,text,text)",
+    "proname": "admit_insider_snapshot_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public, extensions"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "944a0fe6c2ec29afac5c5555157177bae272ce4fef24a184375362a02b2d607e"
+  },
+  {
+    "oid": 24969,
+    "signature": "admit_research_observed_roster_v1(text,text)",
+    "proname": "admit_research_observed_roster_v1",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "d73c4c2beb57d9c502932160145149eb8dfe43db3b91f952a9663670627d03ea"
+  },
+  {
+    "oid": 18052,
+    "signature": "append_assistive_artifact_registration_v3(assistive_artifact_registration_input_v3,uuid)",
+    "proname": "append_assistive_artifact_registration_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "d6555440913948589705040001c9ad7a02d4fe78faeb455cb5c1e896843ac8de"
+  },
+  {
+    "oid": 18053,
+    "signature": "append_candidate_enterprise_multiple_snapshot_v6(uuid,date,text,jsonb,uuid[],timestamp with time zone,uuid)",
+    "proname": "append_candidate_enterprise_multiple_snapshot_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, extensions, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "b95e653bcb568fc629df5143d789d4d2868516520ad0fb91dec588d806753929"
+  },
+  {
+    "oid": 18054,
+    "signature": "append_exchange_reported_valuation_transaction_v3_16_9(exchange_reported_valuation_input_v3_13,uuid)",
+    "proname": "append_exchange_reported_valuation_transaction_v3_16_9",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "f9f1096d2ed478bf0e76b39ec15d65df7cb36124f480538dba4bd4c7678adf18"
+  },
+  {
+    "oid": 18055,
+    "signature": "append_exchange_reported_valuation_v3_13(exchange_reported_valuation_input_v3_13,uuid)",
+    "proname": "append_exchange_reported_valuation_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "da3d933e995bab1c263300afdad622371d19ee68e1c40706d466fd6b18009c98"
+  },
+  {
+    "oid": 18058,
+    "signature": "append_financial_fact_pre_history_v1(financial_fact_input_v3,uuid)",
+    "proname": "append_financial_fact_pre_history_v1",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "be2f4bb28940b6f0d0c6a48e365a6eda3144ca2f4c91746402c61c514ff418b1"
+  },
+  {
+    "oid": 18056,
+    "signature": "append_financial_fact_pre_v3_16_16(financial_fact_input_v3,uuid)",
+    "proname": "append_financial_fact_pre_v3_16_16",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "d3848c9cf25968da79127c20896b840bd68a2080424d941b0f25cf855c012323"
+  },
+  {
+    "oid": 24466,
+    "signature": "append_financial_fact_v3(financial_fact_input_v3,uuid)",
+    "proname": "append_financial_fact_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "ee5843356767ef40eb9ac39eab973bbb6dda86eb3c24c9679d54c9badddab391"
+  },
+  {
+    "oid": 18059,
+    "signature": "append_instrument_roster_authority_v3(instrument_authority_input_v3,uuid)",
+    "proname": "append_instrument_roster_authority_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "f2c375031209cd880c6b06aac1f9f119e6ed9518a140343af6c3dad7771596ff"
+  },
+  {
+    "oid": 18061,
+    "signature": "append_legacy_analysis_evaluation_v3_11(analysis_evaluation_input_v3_11,uuid,uuid)",
+    "proname": "append_legacy_analysis_evaluation_v3_11",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "19e3dd62e97e3c22c80da63425ee85ff9341d99f68ecc11c1598d19701001d39"
+  },
+  {
+    "oid": 18062,
+    "signature": "append_legacy_analysis_revision_v3_11(analysis_revision_input_v3_11,uuid,uuid)",
+    "proname": "append_legacy_analysis_revision_v3_11",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "5f79562df69285b7265b0edf1b241adcb3d2c5c2e8e5a51d582c4c28ac1da262"
+  },
+  {
+    "oid": 18063,
+    "signature": "append_legacy_candidate_discovery_v3_11(candidate_discovery_input_v3_11,uuid,uuid)",
+    "proname": "append_legacy_candidate_discovery_v3_11",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "f3a5e769154acceff5e87c7da4e64d379484534fab24f08551214f3904ca8e8a"
+  },
+  {
+    "oid": 18064,
+    "signature": "append_legacy_expired_producer_diagnostic_v3_20(uuid,uuid,text,text,text,text,text,timestamp with time zone)",
+    "proname": "append_legacy_expired_producer_diagnostic_v3_20",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "6b6876d60ff3b86f9df9911764cbcb0cca21a790f116de3568402d4439bd690a"
+  },
+  {
+    "oid": 18065,
+    "signature": "append_legacy_official_ingestion_chunk_rest_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamp with time zone)",
+    "proname": "append_legacy_official_ingestion_chunk_rest_v3_15",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,stockinsider_runtime_v319=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "a15d0cf0967ee82455661daba99e65daf0f4ee955c66ede7012f817141fd9dd1"
+  },
+  {
+    "oid": 18066,
+    "signature": "append_legacy_official_ingestion_chunk_v3_14(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamp with time zone)",
+    "proname": "append_legacy_official_ingestion_chunk_v3_14",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "312a1aafd4d2dd34d6c2e29850702981a0ccb65e7e50d768d9176d5ca2d959fb"
+  },
+  {
+    "oid": 18067,
+    "signature": "append_legacy_radar_projection_v3_11(legacy_radar_projection_input_v3_11,uuid,uuid)",
+    "proname": "append_legacy_radar_projection_v3_11",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "35a2083492118c96dbd21879e006dcb70e49d6b9941117973f2dd991aed67880"
+  },
+  {
+    "oid": 18068,
+    "signature": "append_legacy_runtime_failure_diagnostic_v3_14(uuid,uuid,uuid,text,text,text,text,text,text,text,integer,text,text,text,text,timestamp with time zone)",
+    "proname": "append_legacy_runtime_failure_diagnostic_v3_14",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner,stockinsider_runtime_v319=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "ffacdc10fe1c8af06081e40e9622d576e2f3d0c740ac37115edd55e422b36c3b"
+  },
+  {
+    "oid": 18069,
+    "signature": "append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamp with time zone)",
+    "proname": "append_legacy_runtime_health_rest_v3_15",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "6c6f893a554bd21463f775db161ef35ebb8762507977249974c587da65c1f3a2"
+  },
+  {
+    "oid": 18070,
+    "signature": "append_legacy_source_shard_v3_19(uuid,uuid,text,jsonb)",
+    "proname": "append_legacy_source_shard_v3_19",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,opportunity_v3_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "7bd4f4282e2e758f042ad746185f417d3cfe0452afc3261aac656336b3b64ee2"
+  },
+  {
+    "oid": 18071,
+    "signature": "append_manual_stock_alias_authority_v3(manual_alias_authority_input_v3,uuid)",
+    "proname": "append_manual_stock_alias_authority_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "5c22e67b1730ee52bf2e8ba8e04ed7957970f42ba82dd693db0fc4260b7d34ca"
+  },
+  {
+    "oid": 18073,
+    "signature": "append_market_observation_v3(market_observation_input_v3,uuid)",
+    "proname": "append_market_observation_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "cc58a428853f9cf56fb15344f7c341ebdf931dd88e03f224c89ea8d2e598d2ac"
+  },
+  {
+    "oid": 18075,
+    "signature": "append_opportunity_manifest_page_v3(uuid,text,uuid,opportunity_manifest_section_key_v3,integer,bigint,bytea,jsonb,text,opportunity_manifest_row_input_v3[])",
+    "proname": "append_opportunity_manifest_page_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "25ccaec0f2984c23e596b9ec1cde7bb0e6a7e4667d3d4aee0f961bae297655f8"
+  },
+  {
+    "oid": 18077,
+    "signature": "append_peer_relationship_authority_v3(peer_relationship_authority_input_v3,uuid)",
+    "proname": "append_peer_relationship_authority_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "f712215179c94149bc3a3672fc4faa0577b148c9da9e92fdad21a4c6e241735d"
+  },
+  {
+    "oid": 18078,
+    "signature": "append_peer_reviewer_authority_v3(peer_reviewer_authority_input_v3,uuid)",
+    "proname": "append_peer_reviewer_authority_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "cc902866d30dcc75502eedab4295752a61349d10c9a480785d28baf1a1fad66b"
+  },
+  {
+    "oid": 18079,
+    "signature": "append_price_authority_v3(price_authority_input_v3,uuid)",
+    "proname": "append_price_authority_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "44f830748f0380cfa99d597652b22392f33e1b1bc345fa7d8823a2376ead1029"
+  },
+  {
+    "oid": 18081,
+    "signature": "append_publisher_verification_authority_v3(publisher_authority_input_v3,uuid)",
+    "proname": "append_publisher_verification_authority_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "473dae7dffbec9529b43d9549bdbdbee22203ec90bd98cab1c5e9de730418e0e"
+  },
+  {
+    "oid": 18082,
+    "signature": "append_source_document_revision_v3(source_document_revision_input_v3,uuid)",
+    "proname": "append_source_document_revision_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "10cf48fd49318cc9ee0c4cf91616f44cef62094f0f5d83fec38902605c47ba85"
+  },
+  {
+    "oid": 18084,
+    "signature": "append_source_identity_authority_v3(source_identity_authority_input_v3,uuid)",
+    "proname": "append_source_identity_authority_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "a67209c3d9d55d4c0e828eeda1a54288b3d824e181066bccab3ef7f32a513b7f"
+  },
+  {
+    "oid": 18085,
+    "signature": "append_stock_flow_observation_v3(stock_flow_observation_input_v3,uuid)",
+    "proname": "append_stock_flow_observation_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "4f578db1bff2bc448e8b3b54bc8cad56fabd1cf6e2cadefff8bc20db37a49b4a"
+  },
+  {
+    "oid": 18087,
+    "signature": "append_stock_sector_assignment_v3(sector_assignment_input_v3,uuid)",
+    "proname": "append_stock_sector_assignment_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "834588f5efb1eaa85fad950be806f46844e44b8c040a9fafcfb37c77ce5e2985"
+  },
+  {
+    "oid": 18089,
+    "signature": "append_trading_session_v3(trading_session_input_v3,uuid)",
+    "proname": "append_trading_session_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "561149f519e25b50029680bc603ebaee053d3644205428bf882d7d4baba85cd6"
+  },
+  {
+    "oid": 18090,
+    "signature": "append_valuation_verification_v3(valuation_verification_input_v3,uuid)",
+    "proname": "append_valuation_verification_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "692ca5549a6935c397c3f586dbfda40f4170e7c5bb897626cd0466805e9f4292"
+  },
+  {
+    "oid": 18091,
+    "signature": "apply_legacy_official_ingestion_chunk_base_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamp with time zone)",
+    "proname": "apply_legacy_official_ingestion_chunk_base_v3_15",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "31dac6ad45ab6f77b69323847446c6b71932c259ff78091cd329140047a54a20"
+  },
+  {
+    "oid": 18093,
+    "signature": "apply_legacy_official_ingestion_chunk_v3_14(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamp with time zone)",
+    "proname": "apply_legacy_official_ingestion_chunk_v3_14",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "dcdd7cb2f13d258b12a6bd73ebd3b1a5b3541564f4f5f341d583ae1be82bd0ca"
+  },
+  {
+    "oid": 25493,
+    "signature": "assert_research_editorial_review_v2(jsonb,jsonb)",
+    "proname": "assert_research_editorial_review_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+    "body_sha256": "85443213186836065125e2fd7193fd8956ef70f20fb4b0f69ae41b46898ef492"
+  },
+  {
+    "oid": 25667,
+    "signature": "assert_research_input_candidate_v3(jsonb,text)",
+    "proname": "assert_research_input_candidate_v3",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "d06f2bb96a969276434852693cb48cbd596337d237719f2a866d88a3ad1eff4c"
+  },
+  {
+    "oid": 25253,
+    "signature": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+    "proname": "assert_research_input_preparation_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "1911587126e62a87b0cb53eecc1c3caacc49449131ac30e462097bc1d72f3bb6"
+  },
+  {
+    "oid": 25195,
+    "signature": "assert_research_source_seal_v2(uuid)",
+    "proname": "assert_research_source_seal_v2",
+    "owner": "research_source_fence_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_source_fence_owner_v2=X/research_source_fence_owner_v2,research_input_preparation_owner_v2=X/research_source_fence_owner_v2,research_observed_rpc_owner=X/research_source_fence_owner_v2}",
+    "body_sha256": "e4cf543bc708d8b85920223e591527c5332ff62b96f3d2346205fb7c701e95af"
+  },
+  {
+    "oid": 18094,
+    "signature": "assert_stockinsider_backend_request_v1(boolean)",
+    "proname": "assert_stockinsider_backend_request_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "23f9db45de277921113fc088fb3f9fe2e46474fe7aafbc84163f89351188e453"
+  },
+  {
+    "oid": 25352,
+    "signature": "assign_research_author_v2(jsonb,uuid,text,text)",
+    "proname": "assign_research_author_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "35d895837c8faf5d75364af82fcafc247d7535fb49ed0b2d05c162724ddbe38b"
+  },
+  {
+    "oid": 25447,
+    "signature": "assign_research_reviewer_v2(jsonb,uuid,text,text,text,uuid,text)",
+    "proname": "assign_research_reviewer_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "82408d7930d278e202961ede6f69af4041eb617fcfdf28f57737e5f35a00b828"
+  },
+  {
+    "oid": 18095,
+    "signature": "begin_opportunity_run_v3(opportunity_mode_v3,opportunity_run_purpose_v3,timestamp with time zone,text,uuid)",
+    "proname": "begin_opportunity_run_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "9355ac89b40acff256a08799f2ca01afeca5daf7ffbdd03c0b0c3a78669e772d"
+  },
+  {
+    "oid": 18097,
+    "signature": "can_read_report(uuid)",
+    "proname": "can_read_report",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": null,
+    "raw_acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "51d52b7749901fb1234a50a8bc3882bea2b9fbcf4f644d5b9dea9504b8320079"
+  },
+  {
+    "oid": 18098,
+    "signature": "can_read_subscriber_report(uuid)",
+    "proname": "can_read_subscriber_report",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": null,
+    "raw_acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "2a6f667539c599655ff302aef05d147e50f518c5366cd4f8dd3ca4c286868331"
+  },
+  {
+    "oid": 18099,
+    "signature": "candidate_financial_canonical_json_v10(jsonb)",
+    "proname": "candidate_financial_canonical_json_v10",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "83891d11374658e1f54d1e9091451c4499e0a2dbcb8ec64720c2a9a16762732b"
+  },
+  {
+    "oid": 18100,
+    "signature": "candidate_financial_document_job_evidence_v9(uuid,uuid,date,jsonb)",
+    "proname": "candidate_financial_document_job_evidence_v9",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "9d9f4300e90eb59e3e14befe7b611804746510eb315fc97af6983fd805259417"
+  },
+  {
+    "oid": 18101,
+    "signature": "candidate_financial_document_job_requirements_v9(uuid,jsonb)",
+    "proname": "candidate_financial_document_job_requirements_v9",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "e1a7d76fcf1cac923e973ff0a9bcc05ce6e054c51d5341ca889af88591d87734"
+  },
+  {
+    "oid": 18102,
+    "signature": "candidate_financial_fact_has_structural_proof_as_of_v10(uuid,timestamp with time zone,text,timestamp with time zone)",
+    "proname": "candidate_financial_fact_has_structural_proof_as_of_v10",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "67b36db42304d076c38c582070a5cb67408a9417439124ac3593d3c8959ec8f6"
+  },
+  {
+    "oid": 18103,
+    "signature": "candidate_financial_fact_has_structural_proof_v10(uuid,timestamp with time zone,text)",
+    "proname": "candidate_financial_fact_has_structural_proof_v10",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{postgres=X/postgres,opportunity_v3_rpc_owner=X/postgres}",
+    "body_sha256": "bac80206042897448569a5d8a526a69156f54b3b794919f50e5df696029ec416"
+  },
+  {
+    "oid": 18104,
+    "signature": "candidate_financial_parser_document_ready_v10(uuid,uuid,text)",
+    "proname": "candidate_financial_parser_document_ready_v10",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "944ef0704e1256990f9b297c7668c51ecd45a5861ca45b6c1936c7e5ad9bdb08"
+  },
+  {
+    "oid": 18105,
+    "signature": "candidate_research_official_sessions(timestamp with time zone,integer)",
+    "proname": "candidate_research_official_sessions",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "554c31ed5b2204fdfd70e76ee8cbbeaad432c5890031da72039b6c8a223e9a78"
+  },
+  {
+    "oid": 18106,
+    "signature": "candidate_research_official_sessions_page(timestamp with time zone,integer,integer)",
+    "proname": "candidate_research_official_sessions_page",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "5ff20dbf0cd0941020e0898bf199f091256eb7af644984a9154c8709968a1b82"
+  },
+  {
+    "oid": 18107,
+    "signature": "candidate_research_stock_authority(timestamp with time zone)",
+    "proname": "candidate_research_stock_authority",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf"
+  },
+  {
+    "oid": 18108,
+    "signature": "candidate_research_stock_authority_page(timestamp with time zone,integer,integer)",
+    "proname": "candidate_research_stock_authority_page",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d"
+  },
+  {
+    "oid": 18109,
+    "signature": "candidate_shadow_progress(text,text)",
+    "proname": "candidate_shadow_progress",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "4df4d346de256bf7309eea03c839b9d15b2bd7d2d0f48f3a07533e3a3a2b5c98"
+  },
+  {
+    "oid": 24641,
+    "signature": "capture_research_first_discoveries_v1(uuid)",
+    "proname": "capture_research_first_discoveries_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "22887c927950388ae43f1a265d6916e8b4b38c838c8f09ea19c33423f238fd83"
+  },
+  {
+    "oid": 25121,
+    "signature": "charge_research_deep_admission_v1()",
+    "proname": "charge_research_deep_admission_v1",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner}",
+    "body_sha256": "3bb0190c2a3efbd619c7fda9260c1aa1fab5eef25ad3d7dd6b4367e03a240069"
+  },
+  {
+    "oid": 24773,
+    "signature": "claim_candidate_deep_outbox_v1(uuid,text,integer,uuid,text,text)",
+    "proname": "claim_candidate_deep_outbox_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "aa5507a22c3be51dcc9f3ee033d9dee2781c5d575e3e9cc0c09822097144a0b2"
+  },
+  {
+    "oid": 18125,
+    "signature": "claim_candidate_dossier_outbox_v5(text,integer)",
+    "proname": "claim_candidate_dossier_outbox_v5",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "854e624671e5840b46818964f70675fbfa534d58ad09ff2287ce21884268ab57"
+  },
+  {
+    "oid": 18126,
+    "signature": "claim_candidate_financial_acquisition_jobs_v4(uuid[],text,integer,text,timestamp with time zone,timestamp with time zone)",
+    "proname": "claim_candidate_financial_acquisition_jobs_v4",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "b5121d364e7523879e6eda8570a430943616165953e75743b714dec34892e8ec"
+  },
+  {
+    "oid": 18127,
+    "signature": "claim_candidate_financial_document_receipts_v6(integer,text,timestamp with time zone,timestamp with time zone)",
+    "proname": "claim_candidate_financial_document_receipts_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "830fffbb0cacbebd329d79d0a48ff39c5bb8d8637c4f1b1e4848001c47bb55f5"
+  },
+  {
+    "oid": 18128,
+    "signature": "claim_legacy_mention_barrier_transport_v3_15(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_mention_barrier_transport_v3_15",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,opportunity_v3_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "69931e90462a5e0924dc04fe1974a80e63f619cccf55ac9463d606de0e3c77be"
+  },
+  {
+    "oid": 18129,
+    "signature": "claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_authoritative_v3_13",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{postgres=X/postgres,opportunity_v3_rpc_owner=X/postgres}",
+    "body_sha256": "2376b4b1b7e3d66da0698ed006beb1a07d1040bdc732c8d0eb0b83e0fcf46d87"
+  },
+  {
+    "oid": 18131,
+    "signature": "claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_authoritative_v3_15",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "86108f3ab21c6a5e8215e09ea52fd3ee6a6b4fdb597ccc6f49de04407ba97591"
+  },
+  {
+    "oid": 18132,
+    "signature": "claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_authoritative_v3_16",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "ed8b4ffd9e9f8204dd55f6126f9f3d07eca0fb37a62d24a641272a43cd53db2d"
+  },
+  {
+    "oid": 18133,
+    "signature": "claim_legacy_producer_job_authoritative_v3_16_15(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_authoritative_v3_16_15",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "89f786520d6ce67f7ced38e52e2a63cc370d7fb5e05d0c1a740a172479c85002"
+  },
+  {
+    "oid": 18134,
+    "signature": "claim_legacy_producer_job_authoritative_v3_16_18(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_authoritative_v3_16_18",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "e6d93f73ac957ff7772010bce7690489493edde6881c445b220687e2026ed4e5"
+  },
+  {
+    "oid": 18135,
+    "signature": "claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_candidate_authority_base_v3_19_10",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "0489e4cfe443449b18af4fbc76b1b1dcd9faef71ffba9fe2f51b2c0b06b66cd5"
+  },
+  {
+    "oid": 18136,
+    "signature": "claim_legacy_producer_job_candidate_retention_base_v3_18(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_candidate_retention_base_v3_18",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "fa0f9b74ea28c43228cfcdb893c1f43b04e826f8903316cefbfbfdce7952fee7"
+  },
+  {
+    "oid": 18137,
+    "signature": "claim_legacy_producer_job_evaluation_clock_base_v3_16_20(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_evaluation_clock_base_v3_16_20",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "f37d5749d0964d613853e4e6a118b6a0c96619bfb81358d5bbcb22022bfe8eeb"
+  },
+  {
+    "oid": 18138,
+    "signature": "claim_legacy_producer_job_full_candidate_authority_base_v3_19_1(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_full_candidate_authority_base_v3_19_1",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "6a426dc92d65fa7676a0a916e4f4bdb35733a56ba03335fcd82e807ff3c1623c"
+  },
+  {
+    "oid": 18140,
+    "signature": "claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_pre_handoff_v3_19_16",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "f24abec0892aab8aa8fe77acc54036764c0e7bdf9f85fbb6f7bf8ee8c7df4e64"
+  },
+  {
+    "oid": 18141,
+    "signature": "claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_pre_kol_authority_v3_20",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "f775e3806c987fddf0feab2195dc42062ab338783c1ea7ab3ea5ac1df4c6b6d4"
+  },
+  {
+    "oid": 18142,
+    "signature": "claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "bc05e7f1c64db8ef83794e1001f6a1f6be50a9871ef7553aebbec020838a0df9"
+  },
+  {
+    "oid": 18145,
+    "signature": "claim_legacy_producer_job_pre_source_terminal_projection_v3_20_(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_pre_source_terminal_projection_v3_20_",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "b1d90da96c0c8210d16913a5f9e9b1f225c6fe5b2bcc6c2080491481eaaab981"
+  },
+  {
+    "oid": 18143,
+    "signature": "claim_legacy_producer_job_provider_acquisition_base_v3_16_21(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_provider_acquisition_base_v3_16_21",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "84ed8e1c1984780fce5a8080148b87f9bb7f08d9a3cb01e38b2f604cf74cbc00"
+  },
+  {
+    "oid": 18144,
+    "signature": "claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)",
+    "proname": "claim_legacy_producer_job_rest_v3_15",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "6161801fcf5d79e1cc3cb5b0589c443185a996ec6bf98f487fc197f33f01257a"
+  },
+  {
+    "oid": 24359,
+    "signature": "claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)",
+    "proname": "claim_legacy_producer_job_v3_11",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner,stockinsider_runtime_v319=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "9fac3366bd6b3715b27fe5bdc214c9dc26282ceb4e57a4c659c5f129c4707473"
+  },
+  {
+    "oid": 18146,
+    "signature": "claim_opportunity_job_v3(uuid,uuid)",
+    "proname": "claim_opportunity_job_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "6d4af0cc1cf41b213a83848251408f0578a2c6f508669a72fceff8ad0393ef84"
+  },
+  {
+    "oid": 24772,
+    "signature": "claim_research_deep_job_v1(text)",
+    "proname": "claim_research_deep_job_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "a7233d74acafc7661576b4e4426bdf4e95051d18fcd28800628ad73580e6adc6"
+  },
+  {
+    "oid": 25138,
+    "signature": "claim_research_observed_job_v2(text,text)",
+    "proname": "claim_research_observed_job_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "c950426c57c830ebe1bd83b20bf39fbc67ffdddbb073a2a68c9e4209b547bd96"
+  },
+  {
+    "oid": 18147,
+    "signature": "claim_taiwan_data_refresh_jobs_v5(integer,text,timestamp with time zone,timestamp with time zone)",
+    "proname": "claim_taiwan_data_refresh_jobs_v5",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "6cb4a368722e3f5288441e77091654074ebf8df488d82aa8ec3b412ef82f52ae"
+  },
+  {
+    "oid": 18148,
+    "signature": "claim_taiwan_data_refresh_jobs_v6(integer,text,timestamp with time zone,timestamp with time zone,date,text)",
+    "proname": "claim_taiwan_data_refresh_jobs_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "73e4fcf67f736b3d57b17b1f098a6207f5375393023dd0b78acc14f438859fc0"
+  },
+  {
+    "oid": 24896,
+    "signature": "commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer)",
+    "proname": "commit_insider_snapshot_page_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "6c9ac080f03ebe322944e05b6838ed34fe19defd2c845cf7605ba647512d99b6"
+  },
+  {
+    "oid": 25392,
+    "signature": "commit_research_author_handoff_v2(jsonb,uuid,text,text,uuid,text)",
+    "proname": "commit_research_author_handoff_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "ef7bfac8d0a74c2ce6dbd2a533ae15cce0d5d7ac0851d6ef8af5d5eaace3262a"
+  },
+  {
+    "oid": 18149,
+    "signature": "complete_candidate_financial_acquisition_job_v4(uuid,text,uuid,jsonb,text,integer,timestamp with time zone)",
+    "proname": "complete_candidate_financial_acquisition_job_v4",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "1245aa3e6d451a4f6c0da1a2a37c51a0716bb139916e32e500069549b18cc974"
+  },
+  {
+    "oid": 18151,
+    "signature": "complete_candidate_financial_document_receipt_parser_v10(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamp with time zone)",
+    "proname": "complete_candidate_financial_document_receipt_parser_v10",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, extensions, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "3ead0d5245f7c6864d3532bb1ee6174a1b60759bdce5298defb4ec5f5db7279f"
+  },
+  {
+    "oid": 18153,
+    "signature": "complete_candidate_financial_document_receipt_parser_v7(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,timestamp with time zone)",
+    "proname": "complete_candidate_financial_document_receipt_parser_v7",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "56c19594b4bb78ca1840fce82d1fa535ef331a12b6add263a6102b07de790446"
+  },
+  {
+    "oid": 18155,
+    "signature": "complete_candidate_financial_document_receipt_parser_v8(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamp with time zone)",
+    "proname": "complete_candidate_financial_document_receipt_parser_v8",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, extensions, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "2aef0a0b8b49f6e8617bd2afe607c4468da22c9d33f365c1ca9c8bb15c0c6374"
+  },
+  {
+    "oid": 18157,
+    "signature": "complete_candidate_financial_document_receipt_v6(uuid,text,uuid,jsonb,jsonb,jsonb,timestamp with time zone)",
+    "proname": "complete_candidate_financial_document_receipt_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "4dbdc01d8636c51461140eff3f93ad9ac5053bef6a462d99a3306262aab1f386"
+  },
+  {
+    "oid": 18159,
+    "signature": "complete_candidate_history_month_v1(uuid,text,date,timestamp with time zone,date,date,text,text,timestamp with time zone,text,text,jsonb,jsonb)",
+    "proname": "complete_candidate_history_month_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "1c1760cb97547a6db0f352a6e3148fcd80cc723d6e25ce24f546cb807be45e90"
+  },
+  {
+    "oid": 18161,
+    "signature": "complete_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,bytea,jsonb,text)",
+    "proname": "complete_legacy_producer_job_authoritative_v3_13",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{postgres=X/postgres,opportunity_v3_rpc_owner=X/postgres}",
+    "body_sha256": "32525a9b94377de1e394ab6ca8a3a61df759cbd274ae412a6389fc08ddbd20eb"
+  },
+  {
+    "oid": 18163,
+    "signature": "complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)",
+    "proname": "complete_legacy_producer_job_authoritative_v3_19",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "8e70502c44b8ba09c655259ab7259fc20a07a8e0154d586735e6acf272b3f8a3"
+  },
+  {
+    "oid": 18165,
+    "signature": "complete_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,bytea,jsonb,text,text)",
+    "proname": "complete_legacy_producer_job_rest_v3_15",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "954d8c8cc36ab57667534efdb8af1ed198322bb78d347d05be1cee4231de4695"
+  },
+  {
+    "oid": 18166,
+    "signature": "complete_legacy_producer_job_v3_11(uuid,uuid,uuid,bytea,jsonb,text)",
+    "proname": "complete_legacy_producer_job_v3_11",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "6eab2a8985065d5f875d1d11d9a7a28cbb3ba86d77476d09e5bf5cb4a1071fc6"
+  },
+  {
+    "oid": 18167,
+    "signature": "complete_legacy_producer_job_v3_14(uuid,uuid,uuid,bytea,jsonb,text)",
+    "proname": "complete_legacy_producer_job_v3_14",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner,stockinsider_runtime_v319=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "ef2a1e2452144fae26608236b95e73e3ba38982b0f55272fcd7ff5cbc417da00"
+  },
+  {
+    "oid": 18168,
+    "signature": "complete_opportunity_job_v3(uuid,text,text,opportunity_job_counts_v3)",
+    "proname": "complete_opportunity_job_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "33e7cd09f2f5311e7b7849b9b9bf3868391e37023d66a9ea572e96a84a3b7bb5"
+  },
+  {
+    "oid": 18170,
+    "signature": "complete_opportunity_manifest_v3(uuid,text,uuid,bigint,bytea,jsonb,text)",
+    "proname": "complete_opportunity_manifest_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "6cf663018a283e0a2c245b24e72651d19b86e01c4dabbd5d3abf0680235c01a3"
+  },
+  {
+    "oid": 18172,
+    "signature": "complete_taiwan_data_refresh_job_v5(uuid,text,jsonb,timestamp with time zone)",
+    "proname": "complete_taiwan_data_refresh_job_v5",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "0213eafd4e7c5bccdaf169212d812da2d7279dfff038984079c343b00dfd6482"
+  },
+  {
+    "oid": 18174,
+    "signature": "consume_internal_nonce_v3(uuid,internal_principal_role_v3,text,timestamp with time zone)",
+    "proname": "consume_internal_nonce_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "03bd960daef7df962ae0d6cff8be54bdf8f84955b28747a7d1d3e694d433792b"
+  },
+  {
+    "oid": 18175,
+    "signature": "create_opportunity_manifest_v3(uuid,text,uuid,opportunity_manifest_kind_v3,text,timestamp with time zone,bytea,jsonb)",
+    "proname": "create_opportunity_manifest_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "273b2e3fd756c68c7ea0e747837c25b18057816de8c30e18fbdd667f7a1cd48f"
+  },
+  {
+    "oid": 18176,
+    "signature": "derive_manifest_page_descriptor_v3_internal(uuid,opportunity_manifest_section_key_v3,integer,bigint)",
+    "proname": "derive_manifest_page_descriptor_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "c7e6ce4ef6aa03eaab9861732bbc935397fbb998f51c07c26b0ae8e7afddd4d0"
+  },
+  {
+    "oid": 18177,
+    "signature": "enforce_candidate_shadow_identity_immutable_v4()",
+    "proname": "enforce_candidate_shadow_identity_immutable_v4",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "85f96794bbecbf76e82db69e2235042988e954dad3d0e6e2722e3712e2605503"
+  },
+  {
+    "oid": 18178,
+    "signature": "enforce_candidate_shadow_manifest_immutable_v4()",
+    "proname": "enforce_candidate_shadow_manifest_immutable_v4",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "656cd3b3b689b0f460262c9165f4f7b49308b5a10cd2571b8958a262cd199944"
+  },
+  {
+    "oid": 18179,
+    "signature": "enforce_candidate_shadow_replay_payload_immutable_v5()",
+    "proname": "enforce_candidate_shadow_replay_payload_immutable_v5",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "5863e7f0b445b653f672e52244e7c56733d8d78213a95a9c6d248ee5b76a5b87"
+  },
+  {
+    "oid": 18180,
+    "signature": "enforce_opportunity_candidate_anchor_v3()",
+    "proname": "enforce_opportunity_candidate_anchor_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "9fae896153ea2eb4592b6af2de4b70160ac3a77e63e100c135cfe296c2d86f26"
+  },
+  {
+    "oid": 18181,
+    "signature": "enforce_opportunity_detail_evidence_v3()",
+    "proname": "enforce_opportunity_detail_evidence_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "9984710c4a09c512e74edbb7cdacf853e79578575308131a79bab9619eb50c17"
+  },
+  {
+    "oid": 18183,
+    "signature": "enforce_production_writer_fence()",
+    "proname": "enforce_production_writer_fence",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "8230515bef78902c9f955f5c87a77f8b04ef02fa22525a5c4828849f56a9273a"
+  },
+  {
+    "oid": 18184,
+    "signature": "enqueue_next_opportunity_job_v3_internal(uuid,uuid)",
+    "proname": "enqueue_next_opportunity_job_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "6dbe66c14ae396c6d07eaaf7ba256f8f190f1cc8fa7985d0232812afeba1749d"
+  },
+  {
+    "oid": 24771,
+    "signature": "enqueue_research_deep_jobs_v1(uuid)",
+    "proname": "enqueue_research_deep_jobs_v1",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "fca59bf364f852e606c66b3ac6a5aa96f1dccd55a6163d56c2898f7974d175ae"
+  },
+  {
+    "oid": 18186,
+    "signature": "enqueue_taiwan_data_refresh_batch_v6(jsonb,text,date,timestamp with time zone)",
+    "proname": "enqueue_taiwan_data_refresh_batch_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "2131142709cf7873085843612195f180fc7ea633701b8b0266b6ab0550494287"
+  },
+  {
+    "oid": 18187,
+    "signature": "enqueue_taiwan_data_refresh_v5(text,text,text,text,text,date,timestamp with time zone)",
+    "proname": "enqueue_taiwan_data_refresh_v5",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "3e83f8647b51faf47b7198900a021e9b0f3195d77590342c6d444b1011324b1e"
+  },
+  {
+    "oid": 18188,
+    "signature": "enrich_legacy_analysis_prior_payloads_v3_16_15(jsonb)",
+    "proname": "enrich_legacy_analysis_prior_payloads_v3_16_15",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "3eecd89e49a62c27e37c5fe3e17815a11dd552187ce8d070843d7d565c341cc9"
+  },
+  {
+    "oid": 18189,
+    "signature": "enrich_legacy_retained_candidate_authority_v3_19_11_internal(uuid,jsonb)",
+    "proname": "enrich_legacy_retained_candidate_authority_v3_19_11_internal",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "bde5744a3b69fb06730057d3201729ddb55d3174d830c194a290c7493e5b76d7"
+  },
+  {
+    "oid": 25603,
+    "signature": "ensure_research_publication_bundle_v2(uuid,text)",
+    "proname": "ensure_research_publication_bundle_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+    "body_sha256": "f48461ded08b77f5e9d6bf3928bdc60c959f0e1a8976ce6700810324a8e6be11"
+  },
+  {
+    "oid": 18191,
+    "signature": "fail_candidate_financial_acquisition_job_v6(uuid,text,text,timestamp with time zone,boolean,boolean)",
+    "proname": "fail_candidate_financial_acquisition_job_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "a2135f31ef8cf6294b45fb7dde310a38b1a4fd3d44e96516b440a9f9447b2d7e"
+  },
+  {
+    "oid": 18192,
+    "signature": "fail_legacy_producer_job_v3_11(uuid,uuid,uuid,opportunity_legacy_producer_failure_code_v3_11)",
+    "proname": "fail_legacy_producer_job_v3_11",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner,stockinsider_runtime_v319=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "7b33f16873eb39f0744298215a038d866d61a27c43e38c39468e2633a844a979"
+  },
+  {
+    "oid": 18193,
+    "signature": "fail_opportunity_job_v3(uuid,text,opportunity_failure_code_v3)",
+    "proname": "fail_opportunity_job_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "607c130a08580c32e23d21b9c3126306f2c22d7cb0cc68416a069db103f55090"
+  },
+  {
+    "oid": 18194,
+    "signature": "fail_opportunity_manifest_v3(uuid,text,uuid,opportunity_manifest_failure_code_v3)",
+    "proname": "fail_opportunity_manifest_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "1784f19b42717d79edb1e17270c7e5b78329f663677f342382a390dbd4226c5b"
+  },
+  {
+    "oid": 24585,
+    "signature": "fence_candidate_thesis_append_v1()",
+    "proname": "fence_candidate_thesis_append_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "e93aab1e75c3ba28eabed3b0c198182e12936b3e4bbb39259ff278bc2ebb7784"
+  },
+  {
+    "oid": 25142,
+    "signature": "fence_observed_model_completion_v2()",
+    "proname": "fence_observed_model_completion_v2",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "ffa179afbab06cb6073edc39bca8d9895d53c24dd6faaba5ad1c46dce5620242"
+  },
+  {
+    "oid": 24981,
+    "signature": "fence_observed_priority_insert_v1()",
+    "proname": "fence_observed_priority_insert_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "12c68a1aad0e6b37446859e76c386387bc1701cfc14e5230450fc07f2f35c2d0"
+  },
+  {
+    "oid": 25604,
+    "signature": "fence_research_dossier_insert_v2()",
+    "proname": "fence_research_dossier_insert_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner}",
+    "body_sha256": "fb6259e38e96eba6a87e6468941a1d5e77d94dc02b31809d8f38fb4b81889b32"
+  },
+  {
+    "oid": 25607,
+    "signature": "fence_research_dossier_truncate_v2()",
+    "proname": "fence_research_dossier_truncate_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner}",
+    "body_sha256": "282e0a0f44ae575550a37a95ec665cf298eb909397485610b28408fc3ca42183"
+  },
+  {
+    "oid": 25489,
+    "signature": "fence_research_execution_invocation_v2()",
+    "proname": "fence_research_execution_invocation_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "cba614bb5a0e4d51c149e90136c871cdd91befabc12df3e74675b3b9ed6e0c73"
+  },
+  {
+    "oid": 24690,
+    "signature": "fence_research_paper_book_append_v1()",
+    "proname": "fence_research_paper_book_append_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "ca7a460f0d8fb40d1df5edc07782c43ef812a0197c0e8328329e583f4acd9708"
+  },
+  {
+    "oid": 25530,
+    "signature": "fence_research_publication_lineage_v2()",
+    "proname": "fence_research_publication_lineage_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "7e92f389ab509d251de7d0522ad3c97347df1bab452b120ba3befe520fc44fb2"
+  },
+  {
+    "oid": 25533,
+    "signature": "fence_research_publication_truncate_v2()",
+    "proname": "fence_research_publication_truncate_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "90ca733c8a08c47f220042f262ed1ec4807f5b9d935174ad940c40ea716a9336"
+  },
+  {
+    "oid": 24663,
+    "signature": "fence_research_strategy_record_v1()",
+    "proname": "fence_research_strategy_record_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "b8676128e7b3f01c17870c87e406cf83306921e9ba73f0ddbddf7717f2457d0b"
+  },
+  {
+    "oid": 18195,
+    "signature": "finalize_candidate_financial_document_validation_v8(uuid,uuid,timestamp with time zone)",
+    "proname": "finalize_candidate_financial_document_validation_v8",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "a9659c701f9206a60a996bb87353a0af1eb50eddcee74b237db2fdba0f983ef5"
+  },
+  {
+    "oid": 18197,
+    "signature": "finalize_opportunity_run_v3(uuid,text)",
+    "proname": "finalize_opportunity_run_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "8c8771b08c836c1cfcbd91162ab663d64ede8722bf0dd6c913be182d0700c079"
+  },
+  {
+    "oid": 24774,
+    "signature": "finish_research_deep_job_v1(uuid,text,boolean,uuid,text)",
+    "proname": "finish_research_deep_job_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "638eea282a24695d551a39571a49f6e83534fcb38c383994f391f503b34a1c15"
+  },
+  {
+    "oid": 24775,
+    "signature": "finish_research_deep_job_v2(uuid,text,integer,boolean,uuid,text)",
+    "proname": "finish_research_deep_job_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "6d4a4ee2ce5067ff70e230ade71b05ad040078174afc50aa226e675b1905f1e0"
+  },
+  {
+    "oid": 24622,
+    "signature": "finish_research_model_v1(uuid,text,text,text)",
+    "proname": "finish_research_model_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "de4e4e2c5d7ca595b070f5aeb36a60ff5191acbe1aaf8b6df2b7327cd8f248f0"
+  },
+  {
+    "oid": 18198,
+    "signature": "freeze_legacy_provider_acquisition_v3_16_21(uuid,uuid,uuid,text,text,text,timestamp with time zone,timestamp with time zone,text,integer,jsonb,text,text,text,boolean)",
+    "proname": "freeze_legacy_provider_acquisition_v3_16_21",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,stockinsider_runtime_v319=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "de096bfe0cb1f0cd94c02966570864d2769993fbef2eeaafc7b440206e924ca8"
+  },
+  {
+    "oid": 18200,
+    "signature": "freeze_legacy_source_authorities_v3_13()",
+    "proname": "freeze_legacy_source_authorities_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "0b6b9eb25fa0eebb71344f93212b7822227ffaffe785920d842a16b959aa1b00"
+  },
+  {
+    "oid": 18201,
+    "signature": "get_link_audit_assignment_v3(uuid,text,internal_principal_role_v3,uuid,text,timestamp with time zone)",
+    "proname": "get_link_audit_assignment_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "0dc803c5eadcf0223060518f56aa6b16de02112eb2cb7a180460f7cad2c93ba9"
+  },
+  {
+    "oid": 18203,
+    "signature": "guard_financial_document_full_readiness_v10()",
+    "proname": "guard_financial_document_full_readiness_v10",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "33c472c54cb08786856a3eef1cef0579c394c641e71efa723bc0f40eb6636ca5"
+  },
+  {
+    "oid": 18204,
+    "signature": "guard_financial_document_job_completion_v9()",
+    "proname": "guard_financial_document_job_completion_v9",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "c26f13c044bf3365f07ac19983dbda36a579ca2d4a26474e92c4a01ff84440f8"
+  },
+  {
+    "oid": 18205,
+    "signature": "guard_legacy_radar_projection_insert_v3_13()",
+    "proname": "guard_legacy_radar_projection_insert_v3_13",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "bd285ee5724400b520e61dcb02b865eb82cb03dc20fb2eb807a32cf67ea9631a"
+  },
+  {
+    "oid": 18206,
+    "signature": "handle_new_user()",
+    "proname": "handle_new_user",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": null,
+    "raw_acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "05bb91ffbe46c39904d9840cb281ce7b95f691e722f45e2c5d3c74d1a82560fd"
+  },
+  {
+    "oid": 24737,
+    "signature": "handoff_research_deep_model_v1(uuid,text,integer,text)",
+    "proname": "handoff_research_deep_model_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "71537da339365ba7d863e46b8654c00987f6b7c2e7d99f25edffd7b5d0372ae9"
+  },
+  {
+    "oid": 24471,
+    "signature": "heartbeat_candidate_dossier_outbox_v6(uuid,text)",
+    "proname": "heartbeat_candidate_dossier_outbox_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "5d1c635d763d8fe1553cec123cf24d09443bf0938a2e53a49707d0102fd07951"
+  },
+  {
+    "oid": 18207,
+    "signature": "heartbeat_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)",
+    "proname": "heartbeat_legacy_producer_job_v3_11",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner,stockinsider_runtime_v319=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "8daeb894137364c4aabeb4897684ff1c20c5ab929337939e772f6df18a99757e"
+  },
+  {
+    "oid": 18208,
+    "signature": "heartbeat_opportunity_job_v3(uuid,text)",
+    "proname": "heartbeat_opportunity_job_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "5fa3da531e07fa1ef838587faf2d400696dca6e571afba106ffe1689a9191b81"
+  },
+  {
+    "oid": 24886,
+    "signature": "insider_dataset_v1(integer)",
+    "proname": "insider_dataset_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "e0ffcc4b8980c98ceb70cd3ac00bd567dda44bd80767c894797656dbcc6cc027"
+  },
+  {
+    "oid": 24893,
+    "signature": "insider_expected_document_v1(uuid,integer,jsonb)",
+    "proname": "insider_expected_document_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public, extensions"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "ed24284d9026210f5c324fe6e1254a11606dc87e2b76d143c21bc7dbd7055743"
+  },
+  {
+    "oid": 24883,
+    "signature": "insider_resolve_binding_v1()",
+    "proname": "insider_resolve_binding_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "f30f5cf4d54172fb547c2f762264c8a4075dc8aad45a6ab7f0362889a9a41ce3"
+  },
+  {
+    "oid": 24888,
+    "signature": "insider_row_v1(jsonb,integer)",
+    "proname": "insider_row_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "39302f10f90fab534da01e5e2ed54306c44f88872cf1f1848780442e83a9d5c2"
+  },
+  {
+    "oid": 24889,
+    "signature": "insider_snapshot_assert_v1(uuid)",
+    "proname": "insider_snapshot_assert_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public, extensions"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "57acea5ed2b360269d48c4e26fdde8bcefabc56066ebd31fc7f461b8e0cec601"
+  },
+  {
+    "oid": 24881,
+    "signature": "insider_snapshot_immutable_v1()",
+    "proname": "insider_snapshot_immutable_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "f20594b0544ad46ef9c0164dafcd95f8216a3903f05a8f5bda7fe11822e5c6bc"
+  },
+  {
+    "oid": 24894,
+    "signature": "insider_snapshot_projection_bound_v1(uuid)",
+    "proname": "insider_snapshot_projection_bound_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "66631e7eb273690c3cadbbabe2065bf851db2425efb3021dbedc7359c47bdf47"
+  },
+  {
+    "oid": 24890,
+    "signature": "insider_snapshot_run_v1(uuid)",
+    "proname": "insider_snapshot_run_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "92e1ad1c34de1383904c44f594159beb07103b5038b00de1d5ba734290d25bf7"
+  },
+  {
+    "oid": 24887,
+    "signature": "insider_trim_v1(text)",
+    "proname": "insider_trim_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "e03f2dc5e228f35950972c1fb2a23799911ffb78c06158f7af4d665d170f57c7"
+  },
+  {
+    "oid": 18209,
+    "signature": "internal_principal_role_is_exact_v3_internal(uuid,internal_principal_role_v3,timestamp with time zone)",
+    "proname": "internal_principal_role_is_exact_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "4eadaef2b0354bda20e7f33fa817f216ad5648a62a5610ced6955ea6b3d10fd5"
+  },
+  {
+    "oid": 18210,
+    "signature": "is_subscriber()",
+    "proname": "is_subscriber",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": null,
+    "raw_acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "6c7d529c900694bf9565e468a97e667679c4ef889810f0ba702ebf224104c803"
+  },
+  {
+    "oid": 18211,
+    "signature": "legacy_canonical_json_v3_13(jsonb)",
+    "proname": "legacy_canonical_json_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "28598c4f5b72b97071e7d05aa3242e072d13f9f2f80895c4e5984f5a945d539d"
+  },
+  {
+    "oid": 18212,
+    "signature": "legacy_correctness_immutable_v3_11()",
+    "proname": "legacy_correctness_immutable_v3_11",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{=X/legacy_correctness_rpc_owner,legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,anon=X/legacy_correctness_rpc_owner,authenticated=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "d2939e0ac56c169c32c85128cbe03988b08a5cf6ec1ddd12e1133a6b57695d6f"
+  },
+  {
+    "oid": 18213,
+    "signature": "legacy_relative_valuation_authority_v3_13(text,timestamp with time zone)",
+    "proname": "legacy_relative_valuation_authority_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "450d224ac37ac53317a0dc6415d2fa0092e3538060ae242030cc5efc7721589c"
+  },
+  {
+    "oid": 18214,
+    "signature": "legacy_valid_decision_envelope_strict_v3_13(jsonb)",
+    "proname": "legacy_valid_decision_envelope_strict_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "680bff5003156bf7235bc2b9fd70897c52ba3cb9210b69ac84749fb70c8ccf52"
+  },
+  {
+    "oid": 18216,
+    "signature": "legacy_valid_decision_envelope_v3_13(jsonb)",
+    "proname": "legacy_valid_decision_envelope_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "0490c96695d9fc4a1ebf17d58e3abb8424b91dcc1f2302456d86c4ef6512ead2"
+  },
+  {
+    "oid": 18217,
+    "signature": "legacy_valid_decision_envelope_v3_14(jsonb)",
+    "proname": "legacy_valid_decision_envelope_v3_14",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "fb66c420e30209c435c4ca72eed140543fd15d490c776b9104766cced8a38093"
+  },
+  {
+    "oid": 18219,
+    "signature": "legacy_valid_https_url_v3_13(text)",
+    "proname": "legacy_valid_https_url_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "a300c9cdbe0ec8cca1a45b7b3900ddc82619aaf17e537447868341de1614218d"
+  },
+  {
+    "oid": 18220,
+    "signature": "legacy_valid_relative_valuation_authority_v3_13(text,timestamp with time zone,jsonb)",
+    "proname": "legacy_valid_relative_valuation_authority_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "59908cbc955fac50d10e4f57845e7f6643b98c1a086cf91bd8e8d2878e27ce95"
+  },
+  {
+    "oid": 18221,
+    "signature": "legacy_valid_rfc3339_v3_13(text)",
+    "proname": "legacy_valid_rfc3339_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "cf641a08813f7da9226e3e7eb457a56726b2e01cf58bab2a2135e116009e3d02"
+  },
+  {
+    "oid": 18222,
+    "signature": "list_connector_retention_archive_candidates_v2(timestamp with time zone,integer)",
+    "proname": "list_connector_retention_archive_candidates_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "9f8c13f51b47bed976674415c06074dfb1b0900b46048b71232bbcd8c1a19cd9"
+  },
+  {
+    "oid": 18223,
+    "signature": "list_retention_archive_candidates_v1(text,timestamp with time zone,integer)",
+    "proname": "list_retention_archive_candidates_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "6f06930f5734df2be2b69f1b696268acefff85b04ccbeef3e03d8b2fb9bfd7cd"
+  },
+  {
+    "oid": 18224,
+    "signature": "mark_radar_publication_failed(text,timestamp with time zone)",
+    "proname": "mark_radar_publication_failed",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "22a3ded7824a57ff25495411f35d1b0b2b21abce2f50e51e6336c4f50f9218ce"
+  },
+  {
+    "oid": 18225,
+    "signature": "opportunity_adjusted_price_evidence_v3_internal(uuid,date,timestamp with time zone)",
+    "proname": "opportunity_adjusted_price_evidence_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "92ec6d20f168142fe9c058613c445e5401396e6f838e5fe3f44562f66a3d7ae0"
+  },
+  {
+    "oid": 18227,
+    "signature": "opportunity_authority_selected_stream_count_v3_internal(authority_stream_family_v3,timestamp with time zone)",
+    "proname": "opportunity_authority_selected_stream_count_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "4fba2da206272e4198b9c07fe58a9b094696cfc8bf9489d1b98d2ace888fc4eb"
+  },
+  {
+    "oid": 18229,
+    "signature": "opportunity_candidate_plan_v3_internal(uuid,text)",
+    "proname": "opportunity_candidate_plan_v3_internal",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "45eb2e1ea4e3f62d63ed35ef31e63b57ff39ee12cbc18f888c607e0e01eb5922"
+  },
+  {
+    "oid": 18231,
+    "signature": "opportunity_global_observation_v3_internal(market_fact_key_v3,market_scope_key_v3,text,timestamp with time zone)",
+    "proname": "opportunity_global_observation_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "36be1a9acf3b62c03eb6025e335fe11df6e7ab1a7a501ae56a5b9fd1a2d17e7c"
+  },
+  {
+    "oid": 18232,
+    "signature": "opportunity_levenshtein_v3_internal(text,text)",
+    "proname": "opportunity_levenshtein_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "30d5395926a43e1c833f80bfde8b07d6c88b1f7637fda19753fbd34b76480183"
+  },
+  {
+    "oid": 18233,
+    "signature": "opportunity_manifest_native_rows_v3_internal(uuid,uuid,opportunity_manifest_kind_v3,opportunity_manifest_section_key_v3,integer,integer)",
+    "proname": "opportunity_manifest_native_rows_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "d2c7b620411e994adc35325240cc6372965eb3f9abcae4b387146a28122efc2c"
+  },
+  {
+    "oid": 18235,
+    "signature": "opportunity_market_zscore_v3_internal(market_fact_key_v3,market_scope_key_v3,market_provider_v3,text,date,double precision,timestamp with time zone)",
+    "proname": "opportunity_market_zscore_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "2c07414e7808334f56ba06a7975390413cc5d67cf669e66103036f5d560ab060"
+  },
+  {
+    "oid": 18236,
+    "signature": "opportunity_peer_authority_header_counts_v3_internal(uuid,timestamp with time zone)",
+    "proname": "opportunity_peer_authority_header_counts_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "c9132db125b5f6647276db90718eef30abbf4837be9502a19a51b09996e1445d"
+  },
+  {
+    "oid": 18238,
+    "signature": "opportunity_raise_pt409_v3_internal(text)",
+    "proname": "opportunity_raise_pt409_v3_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "f63e5ecd0496ea9e2512dce0356d67533a6d604499b28cf6a51ab55f5cd68a0e"
+  },
+  {
+    "oid": 18239,
+    "signature": "persist_taiwan_data_canonical_result_v5(uuid,text,jsonb,timestamp with time zone)",
+    "proname": "persist_taiwan_data_canonical_result_v5",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "040956dd063b33fd28ed43a930d2ff287ad3b1f6f73a6e64990dc64b410847c8"
+  },
+  {
+    "oid": 18241,
+    "signature": "prepare_opportunity_financial_fact_series_v3()",
+    "proname": "prepare_opportunity_financial_fact_series_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "557f6cc65f4f67ad0b31a8b7993a8d7a82f00f07e2c17c0c53067dc3d4d0ffd3"
+  },
+  {
+    "oid": 25668,
+    "signature": "prepare_research_input_candidate_v3(jsonb,text,text)",
+    "proname": "prepare_research_input_candidate_v3",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "6a2fc23d9e8fa1c4f4959300fd91860c5d5ba5319be0b64009e0aedf42eb8809"
+  },
+  {
+    "oid": 25248,
+    "signature": "prepare_research_input_v2(jsonb)",
+    "proname": "prepare_research_input_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "ee23d2517bc387e7f141a013da4f9df299506184089a1c79c0260548a6ffeb42"
+  },
+  {
+    "oid": 18242,
+    "signature": "prepare_retention_archive_manifest_v1(text,uuid,timestamp with time zone,text,text,jsonb,jsonb,text)",
+    "proname": "prepare_retention_archive_manifest_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "fa89c6371b3b748def14d4f406acd41565ecfc7354295f770eb08d5cbc71c27f"
+  },
+  {
+    "oid": 18243,
+    "signature": "preserve_first_recommended_at()",
+    "proname": "preserve_first_recommended_at",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": null,
+    "raw_acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "700611f9b9623376f859d5a93b27dd71add7438051c8aa2446c904f64c1382f5"
+  },
+  {
+    "oid": 18244,
+    "signature": "protect_published_candidate_detail_revision_v4()",
+    "proname": "protect_published_candidate_detail_revision_v4",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "70d4b9418da899dbfd4258d328a9b3088025db9198264f8f6ff5720a191b571d"
+  },
+  {
+    "oid": 18245,
+    "signature": "publish_radar_public_snapshots(jsonb,text,text,jsonb,text,text,text,timestamp with time zone,uuid,text,text,timestamp with time zone)",
+    "proname": "publish_radar_public_snapshots",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "cdc8c2fafdc25186539018f5ac686d1c99c038c01c2373dec90748b64a56c6bd"
+  },
+  {
+    "oid": 25621,
+    "signature": "publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text)",
+    "proname": "publish_research_article_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "8ec9d3452346b993bb2f34733f466ea51f699771fefe84b240d610514fd51171"
+  },
+  {
+    "oid": 18246,
+    "signature": "purge_internal_nonces_v3(timestamp with time zone,uuid)",
+    "proname": "purge_internal_nonces_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "43d946f5661096bff75b2c0b12cafcff3ab06d730bbdaf2d2936da6cbdea7660"
+  },
+  {
+    "oid": 25616,
+    "signature": "read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text)",
+    "proname": "read_completed_research_publication_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "1f7c0574771d64c756d71c8905a8c91648681c06352cecc7602a4357b2346ea8"
+  },
+  {
+    "oid": 18259,
+    "signature": "read_financial_facts_as_of(timestamp with time zone)",
+    "proname": "read_financial_facts_as_of",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "cb7defc39665a982c916ade57299b879f4a3c48a66e27b175b974ae554cfbaa5"
+  },
+  {
+    "oid": 18260,
+    "signature": "read_financial_facts_for_stocks_as_of(timestamp with time zone,uuid[])",
+    "proname": "read_financial_facts_for_stocks_as_of",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "220620b91b5c0ffb41a8e33547b5fdc18642c477036dbdd8da8c619ba3b2d2f2"
+  },
+  {
+    "oid": 24467,
+    "signature": "read_financial_history_page_v1(uuid,financial_fact_key_v3,financial_duration_kind_v3,financial_estimate_kind_v3,financial_estimate_horizon_v3,date,date,timestamp with time zone,uuid,integer,uuid)",
+    "proname": "read_financial_history_page_v1",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "0a7367125481f12eb46735568f5c161d752f5fd8f5c2351399090ec1b9e93551"
+  },
+  {
+    "oid": 24895,
+    "signature": "read_insider_snapshot_page_v1(uuid,integer,uuid)",
+    "proname": "read_insider_snapshot_page_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "63181eda9bb8fae66bebdf469e3b9af1f1d6a23b2545da4f3e344a0f01072074"
+  },
+  {
+    "oid": 18261,
+    "signature": "read_legacy_authority_pages_v2(uuid)",
+    "proname": "read_legacy_authority_pages_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "ef86cb852ac1b247f8eae9b8ea954c8ff8d08b257bbf79fa0d9a2814587a40ea"
+  },
+  {
+    "oid": 18262,
+    "signature": "read_legacy_candidate_fact_plane_authoritative_v3_12(timestamp with time zone,jsonb)",
+    "proname": "read_legacy_candidate_fact_plane_authoritative_v3_12",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{postgres=X/postgres,legacy_correctness_rpc_owner=X/postgres}",
+    "body_sha256": "d0d82f0318962be1d6804d2339cbe86c3d6d9844f3c278f025b96874a072ba30"
+  },
+  {
+    "oid": 18264,
+    "signature": "read_legacy_candidate_fact_plane_authoritative_v3_13(timestamp with time zone,jsonb)",
+    "proname": "read_legacy_candidate_fact_plane_authoritative_v3_13",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{postgres=X/postgres,legacy_correctness_rpc_owner=X/postgres,opportunity_v3_rpc_owner=X/postgres}",
+    "body_sha256": "f5ee715850861fc225e34720fc61e8ac5e00076461c767844530f4695811a2b7"
+  },
+  {
+    "oid": 18266,
+    "signature": "read_legacy_candidate_fact_plane_decision_integrity_v3_13(timestamp with time zone,jsonb)",
+    "proname": "read_legacy_candidate_fact_plane_decision_integrity_v3_13",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{postgres=X/postgres,legacy_correctness_rpc_owner=X/postgres}",
+    "body_sha256": "9e863e973c430c23fefdf36c8b2196681d1b4c3a28254f69cffbf4ca04500c59"
+  },
+  {
+    "oid": 18268,
+    "signature": "read_legacy_candidate_fact_plane_v3_11(timestamp with time zone,jsonb)",
+    "proname": "read_legacy_candidate_fact_plane_v3_11",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "6c7302f1e886772f8cb9256cb132c7699c5dd09501d5ddc1a7830cbc6a961720"
+  },
+  {
+    "oid": 18269,
+    "signature": "read_legacy_candidate_fact_plane_v3_16_11_internal(timestamp with time zone,jsonb)",
+    "proname": "read_legacy_candidate_fact_plane_v3_16_11_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "ff48c30614ed1bb0f80c1fa0c22544cdd105c7f9c135ec71be237988016f18af"
+  },
+  {
+    "oid": 18271,
+    "signature": "read_legacy_discovery_authority_v3_11(uuid,text,text)",
+    "proname": "read_legacy_discovery_authority_v3_11",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "161781682dec1ea5f4ea667ecccc457dd1c8b84099c108cf3e02df937aff1bd4"
+  },
+  {
+    "oid": 18273,
+    "signature": "read_legacy_frozen_revision_v3_11(uuid,uuid,text,uuid,text)",
+    "proname": "read_legacy_frozen_revision_v3_11",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "bab4445211f20c229d7ec0f462e958a8cff49d73d58d01fe895ae18ba814e744"
+  },
+  {
+    "oid": 18274,
+    "signature": "read_legacy_frozen_revisions_v2(uuid)",
+    "proname": "read_legacy_frozen_revisions_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "4e4b69f2952c6b065d04e9cd7f92c29cbbef1b58c219c0ad12483241a2f62667"
+  },
+  {
+    "oid": 18275,
+    "signature": "read_legacy_job_payload_v2(uuid)",
+    "proname": "read_legacy_job_payload_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "fbb257289c51dea66e27671f2a11483c70cc0883fa2c6ce2f64b829ba1341243"
+  },
+  {
+    "oid": 18276,
+    "signature": "read_legacy_job_result_v2(uuid)",
+    "proname": "read_legacy_job_result_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "9f936dff34ea627efd8182136fea7f884d9ba1d0c88677bbc94a0cf63a9e177e"
+  },
+  {
+    "oid": 18277,
+    "signature": "read_legacy_mention_barrier_transport_v3_15(uuid)",
+    "proname": "read_legacy_mention_barrier_transport_v3_15",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,opportunity_v3_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "ea008b2f301785290fe7e6667f0901832ed8a33138783b0426d88426de1dbf50"
+  },
+  {
+    "oid": 18278,
+    "signature": "read_legacy_prior_candidate_result_v3_19_12_internal(uuid)",
+    "proname": "read_legacy_prior_candidate_result_v3_19_12_internal",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "6eab17a1f8fda517618a36ea5f389414a766452084b8b9bd4c4082182cee6849"
+  },
+  {
+    "oid": 18279,
+    "signature": "read_legacy_processing_outcomes_v2(uuid)",
+    "proname": "read_legacy_processing_outcomes_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "af1e6a6bdad2bf0179622c7b42d702cd7d60af5ff7425b8a20fe96cb5d0a7bf8"
+  },
+  {
+    "oid": 18280,
+    "signature": "read_legacy_provider_acquisition_v3_16_21(text,text,timestamp with time zone)",
+    "proname": "read_legacy_provider_acquisition_v3_16_21",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,stockinsider_runtime_v319=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "6b955bfc001bf542484e3a55f8d9a49b9112345c05fd1b1ceb815b73720aba0c"
+  },
+  {
+    "oid": 18281,
+    "signature": "read_legacy_release_checkpoints_v3_19()",
+    "proname": "read_legacy_release_checkpoints_v3_19",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "813934a6a5130d3aaf20ea9b39748427220b156b1a864c105d61f435cd21ed24"
+  },
+  {
+    "oid": 18282,
+    "signature": "read_legacy_run_compact_counts_v2(uuid)",
+    "proname": "read_legacy_run_compact_counts_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "39a132ad56774ec99c2faeced23de7913c1d9642c7542da1f796a245cdb821be"
+  },
+  {
+    "oid": 18283,
+    "signature": "read_legacy_runtime_health_rest_v3_15()",
+    "proname": "read_legacy_runtime_health_rest_v3_15",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "f85156f9efac409380e7c1d4b10259aa54a8a57c193b84440ea8a0993e8a0584"
+  },
+  {
+    "oid": 18284,
+    "signature": "read_provider_credential_envelope_v1(text)",
+    "proname": "read_provider_credential_envelope_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "578bd8e980d31ba40fafb8406b7715a809d160deb30551432b395f144dc0b8a0"
+  },
+  {
+    "oid": 18285,
+    "signature": "read_provider_credential_state_v1(text)",
+    "proname": "read_provider_credential_state_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "a1b8c55a23195c6e8c009f77491ba84e617c1fd231d607c1b9f70a2a0ce83558"
+  },
+  {
+    "oid": 25666,
+    "signature": "read_research_article_input_candidate_v3(jsonb)",
+    "proname": "read_research_article_input_candidate_v3",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "c265bfe3abae74271b66e5dd1766e3b8536e10a055f97b472e7179dfe2e84a57"
+  },
+  {
+    "oid": 25303,
+    "signature": "read_research_article_input_revision_v2(jsonb)",
+    "proname": "read_research_article_input_revision_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "1431ac8c0daabcbfd91fabad81bb0974b0a9643b1570e71cf13579b93566405a"
+  },
+  {
+    "oid": 25351,
+    "signature": "read_research_author_assignment_v2(jsonb,uuid,text,text)",
+    "proname": "read_research_author_assignment_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "35132922db329e7e51e0284646ed1a730535b26ab38bec014328c19bf4adf2b8"
+  },
+  {
+    "oid": 25387,
+    "signature": "read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text)",
+    "proname": "read_research_author_handoff_context_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+    "body_sha256": "ffb26f1274ab222166c0f7cfac2355cfacce2fcdb9ec5288e5ea089fc176ae1d"
+  },
+  {
+    "oid": 25353,
+    "signature": "read_research_author_packet_v2(jsonb,uuid,text,text)",
+    "proname": "read_research_author_packet_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "aab28c28adb8ff5fb725acc1a53d44058a04ff66d456a92310b21dc3ed4751fc"
+  },
+  {
+    "oid": 25380,
+    "signature": "read_research_author_result_v2(jsonb,uuid,text,text)",
+    "proname": "read_research_author_result_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "2d821365f7ce9ac22e7c2992c64baf916ded4ece58fc44e413d71f3dcd702b4d"
+  },
+  {
+    "oid": 25632,
+    "signature": "read_research_company_publication_v2(uuid)",
+    "proname": "read_research_company_publication_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "52d06b24f7d5c23b371720f69ee8483f3359760ff8df90eab04e1d58058126ae"
+  },
+  {
+    "oid": 25136,
+    "signature": "read_research_observed_claim_v2(text,text,uuid,integer)",
+    "proname": "read_research_observed_claim_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner,research_input_preparation_owner_v2=X/research_observed_rpc_owner}",
+    "body_sha256": "a7762c6190fa0f6bd592e47556608ebb6921503147f4886a1a6f764d93fe1bf9"
+  },
+  {
+    "oid": 25123,
+    "signature": "read_research_observed_roster_v1(text,timestamp with time zone,integer,integer)",
+    "proname": "read_research_observed_roster_v1",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "c05668eeb255d87c389dc58f181760585eb441ac9f52ffd4e06ebca9d93bf605"
+  },
+  {
+    "oid": 25446,
+    "signature": "read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text)",
+    "proname": "read_research_reviewer_context_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+    "body_sha256": "fa2286ffb66a36ba8ee194dd953396403abc49f18cccddf968cf2627123b04d4"
+  },
+  {
+    "oid": 25492,
+    "signature": "read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text)",
+    "proname": "read_research_reviewer_result_context_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+    "body_sha256": "7689bd1a4b7f78f9d94bed2814ff130eb986bc70bbef48cce3e9f186f08cce5b"
+  },
+  {
+    "oid": 25499,
+    "signature": "read_research_reviewer_result_sources_v2(jsonb,uuid,text,text,text,uuid,text)",
+    "proname": "read_research_reviewer_result_sources_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+    "body_sha256": "18cb4c3e6fad6645a98979aea92d8bec635ff89cc0daac940dc56e0e83c69a5f"
+  },
+  {
+    "oid": 25448,
+    "signature": "read_research_reviewer_sources_v2(jsonb,uuid,text,text,text,uuid,text)",
+    "proname": "read_research_reviewer_sources_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "99befff3243be4d1b6e3cf27ee4668ea282e489562089b49bf7ac52b27810a05"
+  },
+  {
+    "oid": 18286,
+    "signature": "read_taiwan_data_candidate_universe_v5(integer)",
+    "proname": "read_taiwan_data_candidate_universe_v5",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "4b958028a7adba654aa0f109ed60ed6efdb255b460231533c38ed2730f147dce"
+  },
+  {
+    "oid": 18287,
+    "signature": "read_taiwan_data_candidate_universe_v6(timestamp with time zone,text,integer)",
+    "proname": "read_taiwan_data_candidate_universe_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "56f394967e957cd54d0a056221fe20a3cf2558dc2a18044182424f44c5a823be"
+  },
+  {
+    "oid": 18288,
+    "signature": "read_taiwan_data_publication_metadata_v5(date,text)",
+    "proname": "read_taiwan_data_publication_metadata_v5",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "61f4349800c9ed2a7d223593f34b9b9b01009b219385a4adc38397a84e21c370"
+  },
+  {
+    "oid": 18289,
+    "signature": "read_taiwan_data_refresh_progress_v6(date,text)",
+    "proname": "read_taiwan_data_refresh_progress_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "0910500fb9ee7ce89fc1507a5fa2a31ef9cf2893fda2b056ebc48ca6f9e3a103"
+  },
+  {
+    "oid": 18290,
+    "signature": "read_v320_authorized_investanchors_revision_ids_internal(timestamp with time zone)",
+    "proname": "read_v320_authorized_investanchors_revision_ids_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "7ed40ae144346aff2826d1420c38eea5b66360e8c94eaf6b18808dce7548f793"
+  },
+  {
+    "oid": 18291,
+    "signature": "read_v320_revalidated_kol_retention_internal(timestamp with time zone)",
+    "proname": "read_v320_revalidated_kol_retention_internal",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "1a3a74dfff3c1ba3cbf1fe947bc3515421b888e0fc1f2ebef5d0180e681cae8a"
+  },
+  {
+    "oid": 25130,
+    "signature": "reap_expired_research_deep_jobs_v2()",
+    "proname": "reap_expired_research_deep_jobs_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "fbc8fe7b1f7cf75a4ebb40776116ce5aa724f53bacaa4fbc156aa3cc3fd65ea9"
+  },
+  {
+    "oid": 18292,
+    "signature": "reap_legacy_expired_producer_run_v3_20(text,text,text)",
+    "proname": "reap_legacy_expired_producer_run_v3_20",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner,stockinsider_runtime_v319=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "95596e856f26bfcc1cf721b31236eeb26e66909bfa9acd93074488ae8b9b36bc"
+  },
+  {
+    "oid": 18293,
+    "signature": "reap_legacy_producer_jobs_v3_11(integer)",
+    "proname": "reap_legacy_producer_jobs_v3_11",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "a9eb29ecf3cd28404c0d5014dd946133fcdfe3c625b820e26226c6770cd5bddb"
+  },
+  {
+    "oid": 18294,
+    "signature": "reap_opportunity_jobs_v3(uuid)",
+    "proname": "reap_opportunity_jobs_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "f79ef82df36214625de5516761f9ae53a392d5c5bbf419a591073800f379df77"
+  },
+  {
+    "oid": 25381,
+    "signature": "receive_research_author_result_v2(jsonb,uuid,text,text,jsonb)",
+    "proname": "receive_research_author_result_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "7cd8d5a20f2f4d2420790b4a46c28c1d9ece5920177c0a02807fdf3f45d9d297"
+  },
+  {
+    "oid": 25494,
+    "signature": "receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb)",
+    "proname": "receive_research_reviewer_result_v2",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "bf4366dd42828e570c0ba6d091c968845721fd5678251ab61b8451f4b1606087"
+  },
+  {
+    "oid": 18295,
+    "signature": "reconcile_candidate_financial_document_job_v9(uuid,uuid,uuid)",
+    "proname": "reconcile_candidate_financial_document_job_v9",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "fcdde0360c4db124ae7a27b56713b7b8353ccf696eced5a6379db388973f816a"
+  },
+  {
+    "oid": 18296,
+    "signature": "reconcile_pending_financial_document_jobs_v9(uuid,integer,uuid)",
+    "proname": "reconcile_pending_financial_document_jobs_v9",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "1eb9cfa2beb10de0b07ed0759c5d0b5f925b55dd715017f2551b406a1086f7cd"
+  },
+  {
+    "oid": 25124,
+    "signature": "reconcile_research_deep_admissions_v1()",
+    "proname": "reconcile_research_deep_admissions_v1",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner}",
+    "body_sha256": "e234c217de2776bc2b7882526ce90230e3d272b42afd853989dbb8e531d7abe0"
+  },
+  {
+    "oid": 24738,
+    "signature": "record_budgeted_deep_review_v1(uuid,integer,uuid,jsonb)",
+    "proname": "record_budgeted_deep_review_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "04dcb3bcf8e4325fe682dfeaf5ae34d8f6f4864d09424bad04b8b9babfb36b7c"
+  },
+  {
+    "oid": 24776,
+    "signature": "record_candidate_deep_submission_v1(uuid,text,integer,uuid,text,uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+    "proname": "record_candidate_deep_submission_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "ee39c8a461f4b0863b824b3030f774b61d60ab103f0ae06d4a2102a7dffdfc58"
+  },
+  {
+    "oid": 18297,
+    "signature": "record_candidate_dossier_submission_v4(uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+    "proname": "record_candidate_dossier_submission_v4",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "ceed32e52bea35d749d9b7f1121b2d2e2c589016b7049fc3f50fea6113cba37b"
+  },
+  {
+    "oid": 24473,
+    "signature": "record_candidate_dossier_submission_v6(uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+    "proname": "record_candidate_dossier_submission_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "18e0b63b002555c962e297e10ad7e16bfb25ed8d53bd9b6b3d1cd2cb8c0897ad"
+  },
+  {
+    "oid": 18298,
+    "signature": "record_candidate_financial_document_receipt_v6(uuid,uuid,text,text,date,timestamp with time zone,text,text,text,integer,jsonb)",
+    "proname": "record_candidate_financial_document_receipt_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "ce0d617bc0bc583f33175c9a86969d028dbd01d7b1f0d0509904780e6e063ade"
+  },
+  {
+    "oid": 18300,
+    "signature": "record_candidate_financial_fallback_v5(uuid,text,uuid,jsonb,text,integer,timestamp with time zone,financial_acquisition_terminal_reason_v4,text,timestamp with time zone)",
+    "proname": "record_candidate_financial_fallback_v5",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "1d633fc84b78c2052d9d5a5ea7057d41cebe02f1043d86cc91908f5e4b812f5c"
+  },
+  {
+    "oid": 18302,
+    "signature": "record_candidate_financial_fallback_v6(uuid,text,uuid,jsonb,text,integer,timestamp with time zone,financial_acquisition_terminal_reason_v4,text)",
+    "proname": "record_candidate_financial_fallback_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "72c4709563faea4efa104f2a5dcbe7338cbafbe87ab37099702f68874def6433"
+  },
+  {
+    "oid": 18304,
+    "signature": "record_candidate_shadow_observation(date,text,text,uuid,uuid,jsonb,numeric,numeric,jsonb,text,text,boolean,jsonb,timestamp with time zone)",
+    "proname": "record_candidate_shadow_observation",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "5ea1dc070b52ef85ad39e22975e698b58be7eafe70a4e55e5b525d7ae9d388c4"
+  },
+  {
+    "oid": 18305,
+    "signature": "record_official_financial_validation(uuid,timestamp with time zone,text,text,jsonb,uuid)",
+    "proname": "record_official_financial_validation",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "b506712e9f05b22736fd76c8ec9fe85f70418f4fdca76d998a30ecd4ea4f2754"
+  },
+  {
+    "oid": 18308,
+    "signature": "record_retention_archive_export_v1(uuid,text,text,bigint,timestamp with time zone)",
+    "proname": "record_retention_archive_export_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp",
+      "stockinsider.retention_rpc_transition=allowed"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "a6e21486671d9bfcebb60459ba9e75b71bd69350783dfea63513a3059f048183"
+  },
+  {
+    "oid": 18309,
+    "signature": "record_retention_archive_restore_v1(uuid,text,integer,text,text,timestamp with time zone)",
+    "proname": "record_retention_archive_restore_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp",
+      "stockinsider.retention_rpc_transition=allowed"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "87d9f4cac3a8e89ba5a0c433980229dba5088a12d349063977f5695de3ef3576"
+  },
+  {
+    "oid": 18310,
+    "signature": "record_taiwan_data_publication_metadata_v5(date,text,timestamp with time zone,jsonb)",
+    "proname": "record_taiwan_data_publication_metadata_v5",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "36de63dba7538dfca11e764ebab81608861f33150080b5dc02e73a33e4f98924"
+  },
+  {
+    "oid": 18311,
+    "signature": "register_private_artifact_receipt_v1(text,bigint,text,text,jsonb)",
+    "proname": "register_private_artifact_receipt_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "0e4c72c288d5041b770f78315018b0a724b1814a51c75eb10c06b4606644798f"
+  },
+  {
+    "oid": 18312,
+    "signature": "register_production_writer_release(text,jsonb)",
+    "proname": "register_production_writer_release",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "9654f86688d4d2f0fc2a203941dc27c8dfe3cf8b97aec3347b2c45b6d436634b"
+  },
+  {
+    "oid": 18313,
+    "signature": "register_taiwan_data_refresh_scope_v6(date,text,text[],timestamp with time zone)",
+    "proname": "register_taiwan_data_refresh_scope_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "3736a268a95e67207900ef04924fb67542786780c103694d9404834548b28f08"
+  },
+  {
+    "oid": 18314,
+    "signature": "register_taiwan_data_refresh_scope_v7(date,text,text[],timestamp with time zone,text)",
+    "proname": "register_taiwan_data_refresh_scope_v7",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "f4103139df33480030aae145a42872288478d084ca8bb69993620aa88a5029c5"
+  },
+  {
+    "oid": 18315,
+    "signature": "reject_candidate_dossier_revision_mutation_v4()",
+    "proname": "reject_candidate_dossier_revision_mutation_v4",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "87fd68c92bfe46b131ca26f0468965bc5bab286c70b3b57f583b3335190fdb41"
+  },
+  {
+    "oid": 18316,
+    "signature": "reject_financial_document_job_link_mutation_v9()",
+    "proname": "reject_financial_document_job_link_mutation_v9",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "b1d2b17f87ebd89dbc61a8c5511180cdd2de15b1ed08130f1b42f1134437add6"
+  },
+  {
+    "oid": 18317,
+    "signature": "reject_financial_parser_evidence_mutation_v10()",
+    "proname": "reject_financial_parser_evidence_mutation_v10",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "8cdfb4d58d81161af4faad86d818abc8145ae2c0cdc196608bc22249c15c103d"
+  },
+  {
+    "oid": 24960,
+    "signature": "reject_research_observed_mutation_v1()",
+    "proname": "reject_research_observed_mutation_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "8157dfb59d156d3e2585306c03c32b07ad17b50f56522f12785c1be51ef53b71"
+  },
+  {
+    "oid": 25196,
+    "signature": "reject_research_source_receipt_mutation_v2()",
+    "proname": "reject_research_source_receipt_mutation_v2",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": null,
+    "raw_acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres,research_input_preparation_owner_v2=X/postgres}",
+    "body_sha256": "a884e78bee20436878c41bcbe9a32157fc855b2bb05e03dd2381330c5f2207c8"
+  },
+  {
+    "oid": 18318,
+    "signature": "reject_retention_archive_direct_mutation_v1()",
+    "proname": "reject_retention_archive_direct_mutation_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "f34e443c5822dd869a69632d7248ce4a278783d5210dd1cc4b4afcad0189fa8e"
+  },
+  {
+    "oid": 18319,
+    "signature": "reject_stockinsider_compaction_receipt_mutation_v1()",
+    "proname": "reject_stockinsider_compaction_receipt_mutation_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "fbdcbd20175ba4c3ebf4769bb56c007dc176ca1cd4b9d18285b4d818bee84d8d"
+  },
+  {
+    "oid": 24472,
+    "signature": "release_candidate_dossier_outbox_v6(uuid,text,boolean,text)",
+    "proname": "release_candidate_dossier_outbox_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "de89f9e7130a22f28edf65e1e69a195b520b489f20de2089335bf771a5eeff58"
+  },
+  {
+    "oid": 18320,
+    "signature": "release_production_write_lease(text,uuid)",
+    "proname": "release_production_write_lease",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "925548baf9b7c66ece954bacc5e96241fc1096475c69d95f7550efc481598f6f"
+  },
+  {
+    "oid": 18321,
+    "signature": "replace_provider_credential_cas_v1(text,bigint,uuid,text,text,text,text,text,timestamp with time zone,text)",
+    "proname": "replace_provider_credential_cas_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "ec60a69c43c76039212f9b72f7b63e88ec396f2986675bdba776300c470c88b1"
+  },
+  {
+    "oid": 25350,
+    "signature": "research_author_assignment_context_v2(jsonb,uuid,text,text)",
+    "proname": "research_author_assignment_context_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "4d95cd7f2e7b019f7afc7faece96faa5b45182a28732e6d5d3eb54b7a3b813e5"
+  },
+  {
+    "oid": 25297,
+    "signature": "research_complete_canonical_v2(jsonb,integer)",
+    "proname": "research_complete_canonical_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+    "body_sha256": "eedda6a3b1235ff438a846b60d564cb0b70598068623faf5dbf77dfabe65fb0f"
+  },
+  {
+    "oid": 25298,
+    "signature": "research_complete_hash_v2(jsonb)",
+    "proname": "research_complete_hash_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+    "body_sha256": "e9cc7b6998c5722444848dac01df70c5c23996f061601e5fa6d71a7a9d0c6399"
+  },
+  {
+    "oid": 25300,
+    "signature": "research_complete_mapping_v2(text)",
+    "proname": "research_complete_mapping_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "4c9bd064d2debd1d5ec8333ad0e5d48430f358c9779d1ef1f6210a95e2513984"
+  },
+  {
+    "oid": 25665,
+    "signature": "research_complete_parent_candidate_v3(jsonb)",
+    "proname": "research_complete_parent_candidate_v3",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "a70d367dd9e814c8a0c81aacbd23290250166a93f10abec00b7cbb45d75b8cc0"
+  },
+  {
+    "oid": 25302,
+    "signature": "research_complete_parent_v2(jsonb)",
+    "proname": "research_complete_parent_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "3515d35c4f8c5c756009cc22cedd8eee50b39d780e7bb7af8f777dbbd21ee57a"
+  },
+  {
+    "oid": 25299,
+    "signature": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+    "proname": "research_complete_schema_check_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "f681dcc81cacfa254c0da635bc0687d2812f63756dfac0990c7dd9c6ac883ad6"
+  },
+  {
+    "oid": 24693,
+    "signature": "research_evidence_heads_v1(uuid[],timestamp with time zone)",
+    "proname": "research_evidence_heads_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "9eef1d732166fba094ba2763d22bf29aff28f2b3cd66a11ebc2d369c779aad61"
+  },
+  {
+    "oid": 24696,
+    "signature": "research_execution_policy_matches_v1(jsonb)",
+    "proname": "research_execution_policy_matches_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "352bfd1e4673cc5bf502e1620e183981e3d097a72e2bc9bc15bad383ad270c90"
+  },
+  {
+    "oid": 25664,
+    "signature": "research_input_binding_candidate_v3(text,text,text,boolean)",
+    "proname": "research_input_binding_candidate_v3",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "433f0d2da00ea4e73f7a742c31c1705d07685ef1b19c9f65cece5e5205fc95f7"
+  },
+  {
+    "oid": 25661,
+    "signature": "research_input_binding_immutable_candidate_v3()",
+    "proname": "research_input_binding_immutable_candidate_v3",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "1595060f9b0450a7ef2d835951fd9e6062e5521359339166e6b3fbc4ef41d938"
+  },
+  {
+    "oid": 25246,
+    "signature": "research_input_preparation_bytes_v2(jsonb,jsonb,jsonb)",
+    "proname": "research_input_preparation_bytes_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+    "body_sha256": "b60540ccb1462f4780c7fc9d109edc80a21a6bb8db49b21fe78c70a5f292ffcf"
+  },
+  {
+    "oid": 24620,
+    "signature": "research_model_lease_fits_day_v1(timestamp with time zone)",
+    "proname": "research_model_lease_fits_day_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": null,
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "1765b0450a419c09bf8dfeb939ddf9ff86e4ab40ccc5081d678d14fd02ac7bb0"
+  },
+  {
+    "oid": 24967,
+    "signature": "research_observed_canonical_json_v1(jsonb)",
+    "proname": "research_observed_canonical_json_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog"
+    ],
+    "raw_acl": "{postgres=X/postgres,research_observed_rpc_owner=X/postgres,research_input_preparation_owner_v2=X/postgres}",
+    "body_sha256": "c1b47a0478bf1cd601ad31830acbbfbef6a99b22f1e8cb49e561c461b7583f64"
+  },
+  {
+    "oid": 24968,
+    "signature": "research_observed_instant_v1(text)",
+    "proname": "research_observed_instant_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog"
+    ],
+    "raw_acl": "{postgres=X/postgres,research_observed_rpc_owner=X/postgres}",
+    "body_sha256": "9ec34237e5ea5b54594eb452b764af66813dd7d42cd0fb35c47e849c21c611a7"
+  },
+  {
+    "oid": 25602,
+    "signature": "research_publication_content_v2(jsonb)",
+    "proname": "research_publication_content_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+    "body_sha256": "6c765ad245a36d80a03ced0ee1170f2b373738a104fc2ac9b7cf8fb455562598"
+  },
+  {
+    "oid": 25615,
+    "signature": "research_publication_source_state_v2(uuid)",
+    "proname": "research_publication_source_state_v2",
+    "owner": "research_source_fence_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_source_fence_owner_v2=X/research_source_fence_owner_v2,research_observed_rpc_owner=X/research_source_fence_owner_v2}",
+    "body_sha256": "ef512b72d6d910ab2bf662fafd88eeff92b3cda0bb149e95fc4c85cb03092157"
+  },
+  {
+    "oid": 25188,
+    "signature": "research_source_fence_record_v2()",
+    "proname": "research_source_fence_record_v2",
+    "owner": "research_source_fence_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_source_fence_owner_v2=X/research_source_fence_owner_v2}",
+    "body_sha256": "28cf9e99f6898f299d918e952120cd1f81d82642318237a4dba0e586d023ff65"
+  },
+  {
+    "oid": 25185,
+    "signature": "research_source_fence_write_v2()",
+    "proname": "research_source_fence_write_v2",
+    "owner": "research_source_fence_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_source_fence_owner_v2=X/research_source_fence_owner_v2}",
+    "body_sha256": "b68ab0f608d7d6c18d26878b3e3d2ac9862473edb3338625277cc543924ec723"
+  },
+  {
+    "oid": 24587,
+    "signature": "research_source_heads_page_v1(timestamp with time zone,integer,integer)",
+    "proname": "research_source_heads_page_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres,research_observed_rpc_owner=X/postgres}",
+    "body_sha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56"
+  },
+  {
+    "oid": 25184,
+    "signature": "research_source_root_v2(jsonb)",
+    "proname": "research_source_root_v2",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=pg_catalog"
+    ],
+    "raw_acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres,research_source_fence_owner_v2=X/postgres,research_input_preparation_owner_v2=X/postgres}",
+    "body_sha256": "11c39052af949dabc3b13e1a7d90774940739a47adb720b7cb7f9dced150ed1b"
+  },
+  {
+    "oid": 24694,
+    "signature": "research_thesis_heads_page_v1(timestamp with time zone,integer,integer)",
+    "proname": "research_thesis_heads_page_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "34e7f8768b0489e2230ec7df5b111c93cf3d08113aaa48e7525cd708e294bffa"
+  },
+  {
+    "oid": 24621,
+    "signature": "reserve_research_model_v1(text,text,text)",
+    "proname": "reserve_research_model_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres,research_observed_rpc_owner=X/postgres}",
+    "body_sha256": "eb4c7cd312de8e493ca1f76a377187e88dd9c9a23b1a9f78db7cc04d27a5c9fc"
+  },
+  {
+    "oid": 18322,
+    "signature": "resolve_legacy_analysis_prior_payloads_v3_16_18(jsonb)",
+    "proname": "resolve_legacy_analysis_prior_payloads_v3_16_18",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "90deb2168ef7c8aba3f5fa109f4cdd6ff931d6d09cda3b8898eddb9ea53ccbaf"
+  },
+  {
+    "oid": 18323,
+    "signature": "resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(text)",
+    "proname": "resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "de39a8dfed15050e415e848d86d2dfbc2afe6d4e067575d72ba72573778866b0"
+  },
+  {
+    "oid": 18338,
+    "signature": "resolve_legacy_instrument_authority_v3_13(uuid,timestamp with time zone)",
+    "proname": "resolve_legacy_instrument_authority_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "5228b02ece581ad476f6feea3c1aa73d3937753d1ebb5b7838d97cab44b91a53"
+  },
+  {
+    "oid": 18339,
+    "signature": "resolve_legacy_instrument_authority_v3_13_internal(uuid,timestamp with time zone)",
+    "proname": "resolve_legacy_instrument_authority_v3_13_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "15b1e2f299deb61cb0380db2856d992190cc7ec53b47159826942b72e09fd468"
+  },
+  {
+    "oid": 18340,
+    "signature": "resolve_legacy_instrument_symbol_authority_v3_13(text,timestamp with time zone)",
+    "proname": "resolve_legacy_instrument_symbol_authority_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "636b70db373a75cd9972903c71f3eb25bddcb047112328b17b1682a5ce2ce422"
+  },
+  {
+    "oid": 18341,
+    "signature": "resolve_legacy_instrument_symbol_authority_v3_13_internal(text,timestamp with time zone)",
+    "proname": "resolve_legacy_instrument_symbol_authority_v3_13_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "fe39061d37a5ebef524da2eef3915df8919f05822ecc73f2fd03cb8c6eb0aa16"
+  },
+  {
+    "oid": 18342,
+    "signature": "resolve_legacy_official_shares_result_v3_13(uuid,date,timestamp with time zone)",
+    "proname": "resolve_legacy_official_shares_result_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "ea428b29d62a8cc89849d79b6912e16cb67024e4a278aa8c4a052dcb9afcd224"
+  },
+  {
+    "oid": 18343,
+    "signature": "resolve_legacy_official_shares_v3_13(uuid,date,timestamp with time zone)",
+    "proname": "resolve_legacy_official_shares_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "e19a65715d5232b2ec4cee8edc0f3e600b20a440237376569906a84617301fdf"
+  },
+  {
+    "oid": 18344,
+    "signature": "resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)",
+    "proname": "resolve_legacy_provider_acquisition_lineage_v3_19_7_internal",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "26b23c1e6d958d442c8a1471c23353d72a2c58be65db3d53394aca9693c095f6"
+  },
+  {
+    "oid": 18345,
+    "signature": "resolve_legacy_scheduled_occurrence_v3_11(text,text)",
+    "proname": "resolve_legacy_scheduled_occurrence_v3_11",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,legacy_correctness_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "349a87e9975a46c1902d7a744d676f8bd009d3c402017e5855692019c0363789"
+  },
+  {
+    "oid": 18357,
+    "signature": "resolve_legacy_sector_authority_v3_13(uuid,tw_market_v3,timestamp with time zone)",
+    "proname": "resolve_legacy_sector_authority_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "9bbfb5855f7d069feb1bffb9b4a09a1cc7c6eab78729f96d99b01680b44980b9"
+  },
+  {
+    "oid": 18358,
+    "signature": "resolve_legacy_sector_authority_v3_13_internal(uuid,tw_market_v3,timestamp with time zone)",
+    "proname": "resolve_legacy_sector_authority_v3_13_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "14281559d2667c9b4f4aa474b64ac5c1964fe89815f37de0c117bc028f0295d3"
+  },
+  {
+    "oid": 18372,
+    "signature": "resolve_legacy_trading_session_authority_v3_13(date,tw_market_v3,timestamp with time zone)",
+    "proname": "resolve_legacy_trading_session_authority_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "606afa255cd5d1d3ef3dfe598e762e34ee49d60e933b702691a6d626f87b1747"
+  },
+  {
+    "oid": 18373,
+    "signature": "resolve_legacy_trading_session_dependency_v3_16_9_internal(date,tw_market_v3,timestamp with time zone,timestamp with time zone)",
+    "proname": "resolve_legacy_trading_session_dependency_v3_16_9_internal",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "877cdb6a28f3aafa4f0c3e27f8fe78dbaf05521ccad7a1bf3d3ec8df5f062d93"
+  },
+  {
+    "oid": 18374,
+    "signature": "resolve_legacy_trading_session_window_v3_13(tw_market_v3,date,date,timestamp with time zone)",
+    "proname": "resolve_legacy_trading_session_window_v3_13",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "a4d2d6751b59015414c2279341019664e5bdac3f8edfaa08212650c79348c16b"
+  },
+  {
+    "oid": 18375,
+    "signature": "retain_legacy_radar_projection_v3_13()",
+    "proname": "retain_legacy_radar_projection_v3_13",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "eab0dc5bc9feb5ae454405b9ffd27e73368beed48843ae89c69b7fde2a64f8c5"
+  },
+  {
+    "oid": 18376,
+    "signature": "retention_archive_active_pins_v1()",
+    "proname": "retention_archive_active_pins_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "dbd4ef979eb7754c8df0cbe90afd6d73413489afb44f607b337771e77aded525"
+  },
+  {
+    "oid": 18377,
+    "signature": "retention_archive_current_row_hash_v1(text,text)",
+    "proname": "retention_archive_current_row_hash_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "44107e69028f81d5138c793fe5f128ad6917f2529a7d31b6f48a99e73b49bcd4"
+  },
+  {
+    "oid": 18378,
+    "signature": "retention_archive_deletion_readiness_v1(uuid)",
+    "proname": "retention_archive_deletion_readiness_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "d688f510cb1769a964ae82b02cd443af3d9f692a0c2da28928cc58cbc2b4b0a0"
+  },
+  {
+    "oid": 18379,
+    "signature": "retention_archive_eligibility_v1(text,uuid,timestamp with time zone)",
+    "proname": "retention_archive_eligibility_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "f9efe4b13d030c246cc1b5497003652dbca3d7bcbab04b4b6a546a6b1e230fa6"
+  },
+  {
+    "oid": 18381,
+    "signature": "retention_legacy_direct_pins_v2(uuid[])",
+    "proname": "retention_legacy_direct_pins_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "5b52a94e70f553eb5270a0a9ee8d29931ca4e979ac92364d6368a14c54a0790c"
+  },
+  {
+    "oid": 18382,
+    "signature": "retention_legacy_jsonb_pins_v2(uuid[])",
+    "proname": "retention_legacy_jsonb_pins_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "4744e63400e3240594dae76fd531c63b9065fbfee317774723405da258a83ab2"
+  },
+  {
+    "oid": 18383,
+    "signature": "retention_legacy_run_plan_v2(timestamp with time zone,integer)",
+    "proname": "retention_legacy_run_plan_v2",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "891fed319dfc4b6c6faa84aff1d22dd4eba6aa973c225eeb4d263e3ef6f2b5f7"
+  },
+  {
+    "oid": 18384,
+    "signature": "retry_candidate_financial_document_runtime(uuid,uuid,uuid)",
+    "proname": "retry_candidate_financial_document_runtime",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "7533fc0118b5ad04fbfa77637412d26d882af62e85b72f517edcebe73c87119e"
+  },
+  {
+    "oid": 18385,
+    "signature": "revoke_provider_credential_cas_v1(text,bigint,text,text,text,text)",
+    "proname": "revoke_provider_credential_cas_v1",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "3a64f7f5f37d41375fa8eaf19b820dc63bcad7d104aaae74ad0c3616ba63aadb"
+  },
+  {
+    "oid": 18386,
+    "signature": "schedule_legacy_source_shard_successor_v3_19(uuid,uuid,uuid,text,integer,uuid)",
+    "proname": "schedule_legacy_source_shard_successor_v3_19",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,opportunity_v3_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "4128a1520a08699a38c1d82bd15d266fdc49c21ebdaa18e3a73b467868caed90"
+  },
+  {
+    "oid": 18387,
+    "signature": "seal_opportunity_run_inputs_v3(uuid,text)",
+    "proname": "seal_opportunity_run_inputs_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "4f30d063f4b7708921bc8f6866bb65ec7c7c4de2848061dc1e3dc2425d5fe966"
+  },
+  {
+    "oid": 25669,
+    "signature": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+    "proname": "seal_research_article_input_candidate_v3",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "f87e8e2b9232000c8819cd1d503705914a9a7414332f4ac2e43311681b657042"
+  },
+  {
+    "oid": 25304,
+    "signature": "seal_research_article_input_revision_v2(jsonb,jsonb)",
+    "proname": "seal_research_article_input_revision_v2",
+    "owner": "research_input_preparation_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+    "body_sha256": "7065c97a368dd5e3d723fc9bf9a3c0a0ec3727e69a3e1ed1d4b9c1adc847dd4c"
+  },
+  {
+    "oid": 25190,
+    "signature": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+    "proname": "seal_research_sources_v2",
+    "owner": "research_source_fence_owner_v2",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=pg_catalog, public"
+    ],
+    "raw_acl": "{research_source_fence_owner_v2=X/research_source_fence_owner_v2,service_role=X/research_source_fence_owner_v2,research_input_preparation_owner_v2=X/research_source_fence_owner_v2}",
+    "body_sha256": "90f26718aeb382066efe1551c97ead057706de84c0af36c50e2946394f65b646"
+  },
+  {
+    "oid": 18389,
+    "signature": "seed_financial_document_job_link_v9()",
+    "proname": "seed_financial_document_job_link_v9",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "81f9cf89d2471f1e6f991354292dd62b219ea5c152cf6741ab98096ed0fa9651"
+  },
+  {
+    "oid": 18390,
+    "signature": "seed_v320_kol_source_authorities()",
+    "proname": "seed_v320_kol_source_authorities",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "76bfeafa6b707720dffba2b1d53136009ec42d5c836f93b1dc178b3ab0a7605e"
+  },
+  {
+    "oid": 18392,
+    "signature": "select_opportunity_public_projection_v3(timestamp with time zone)",
+    "proname": "select_opportunity_public_projection_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "3fe2881f134a360d19c4b461907559d305218008bc3affb12962b78f765efcf9"
+  },
+  {
+    "oid": 18393,
+    "signature": "source_document_coverage(timestamp with time zone,timestamp with time zone,text,text,text,text,text[])",
+    "proname": "source_document_coverage",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "151217a725c2d9f88bd33d41c65d56a66d6f472651a5455641f5158889559a10"
+  },
+  {
+    "oid": 18394,
+    "signature": "stage_opportunity_job_output_v3(uuid,text,opportunity_job_output_kind_v3,bytea,jsonb,text,opportunity_job_counts_v3)",
+    "proname": "stage_opportunity_job_output_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "b5732b235e7211225b1da853c6d9494e0522093f0a23d897dfca42654eca441d"
+  },
+  {
+    "oid": 25125,
+    "signature": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+    "proname": "store_observed_research_priority_v1",
+    "owner": "research_observed_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+    "body_sha256": "6cd5cca1f16f0f4064fcce24adcdd83041bfe8d3aa16ebef63bdf150762538d5"
+  },
+  {
+    "oid": 18396,
+    "signature": "submit_link_audit_label_v3(uuid,text,internal_principal_role_v3,link_audit_label_role_v3,text,boolean,uuid,text,timestamp with time zone)",
+    "proname": "submit_link_audit_label_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner,service_role=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "fd34a7acd363418e4008a17c8da7fa4e436b4668c7288d02619698c3d86bcd98"
+  },
+  {
+    "oid": 18398,
+    "signature": "terminalize_candidate_financial_prelisting_job_v7(uuid,text,timestamp with time zone)",
+    "proname": "terminalize_candidate_financial_prelisting_job_v7",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "ba00d5411924aa48c792f727afbd919aa195acffe2ebbf9abbed186152e2d5a1"
+  },
+  {
+    "oid": 18399,
+    "signature": "terminalize_legacy_expired_producer_run_v3_20(uuid,uuid,text,text,text)",
+    "proname": "terminalize_legacy_expired_producer_run_v3_20",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner,stockinsider_runtime_v319=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "68887a0bfa54ca64e52217d7f4cd6f4ceb900efd2b4e9bf14e98ee6c12ec7cc7"
+  },
+  {
+    "oid": 18400,
+    "signature": "validate_candidate_financial_fact_scope_v10(jsonb,text,boolean)",
+    "proname": "validate_candidate_financial_fact_scope_v10",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, extensions, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres}",
+    "body_sha256": "73d86f456c1e8bb40362a4f80250df64d4e3426efae4f80c5b389946b770fb9e"
+  },
+  {
+    "oid": 18402,
+    "signature": "validate_finmind_financial_fact_v6(uuid,boolean,boolean,boolean,boolean,text)",
+    "proname": "validate_finmind_financial_fact_v6",
+    "owner": "postgres",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+    "body_sha256": "c47a8b2b846951fa511c33c37963d30f153796d2386d8380e124b24d5199b7bc"
+  },
+  {
+    "oid": 18403,
+    "signature": "validate_opportunity_financial_fact_series_v3()",
+    "proname": "validate_opportunity_financial_fact_series_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "382a7f84a5282a13b6bb0434e6f19c278519e9712c2c925faabbe1bfb1447a12"
+  },
+  {
+    "oid": 18404,
+    "signature": "validate_opportunity_manifest_lifecycle_v3()",
+    "proname": "validate_opportunity_manifest_lifecycle_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "4f0e7f706c5272c9325a33fd111bf84e483fed58f1d824d88301bbc9cbad2d4f"
+  },
+  {
+    "oid": 18405,
+    "signature": "validate_opportunity_manifest_page_rows_v3()",
+    "proname": "validate_opportunity_manifest_page_rows_v3",
+    "owner": "opportunity_v3_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{opportunity_v3_rpc_owner=X/opportunity_v3_rpc_owner}",
+    "body_sha256": "447430f7ff42e24d0cd0cb4d237f84564cc13346b9e96bc362bac0427af4eb49"
+  },
+  {
+    "oid": 25102,
+    "signature": "validate_research_deep_scope_v1()",
+    "proname": "validate_research_deep_scope_v1",
+    "owner": "postgres",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=public, pg_temp"
+    ],
+    "raw_acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "body_sha256": "3206f117f3088454543cc0c5bf30589a209eebeb04795b74e76c745fd33b4df7"
+  },
+  {
+    "oid": 18406,
+    "signature": "verify_legacy_claim_delegation_chain_v3_20()",
+    "proname": "verify_legacy_claim_delegation_chain_v3_20",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "raw_acl": "{legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner}",
+    "body_sha256": "a7a0239564e8394562e7a022ec5f0d094212018b2daa59f00c1bd01f81e64f07"
+  }
+]

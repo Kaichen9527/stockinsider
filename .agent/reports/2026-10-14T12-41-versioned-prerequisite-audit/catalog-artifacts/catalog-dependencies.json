@@ -1,0 +1,272 @@
+[
+  {
+    "function": "assert_research_input_candidate_v3(jsonb,text)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "assert_research_input_candidate_v3(jsonb,text)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "assert_research_source_seal_v2(uuid)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "assert_research_source_seal_v2(uuid)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "claim_research_observed_job_v2(text,text)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "claim_research_observed_job_v2(text,text)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "enqueue_research_deep_jobs_v1(uuid)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "enqueue_research_deep_jobs_v1(uuid)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "prepare_research_input_candidate_v3(jsonb,text,text)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "prepare_research_input_candidate_v3(jsonb,text,text)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "prepare_research_input_v2(jsonb)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "prepare_research_input_v2(jsonb)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "read_research_article_input_candidate_v3(jsonb)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "read_research_article_input_candidate_v3(jsonb)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "read_research_article_input_revision_v2(jsonb)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "read_research_article_input_revision_v2(jsonb)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "read_research_observed_claim_v2(text,text,uuid,integer)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "read_research_observed_claim_v2(text,text,uuid,integer)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "read_research_observed_roster_v1(text,timestamp with time zone,integer,integer)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "read_research_observed_roster_v1(text,timestamp with time zone,integer,integer)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "reap_expired_research_deep_jobs_v2()",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "reap_expired_research_deep_jobs_v2()",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "reconcile_research_deep_admissions_v1()",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "reconcile_research_deep_admissions_v1()",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_complete_canonical_v2(jsonb,integer)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "research_complete_canonical_v2(jsonb,integer)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_complete_hash_v2(jsonb)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_complete_mapping_v2(text)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_complete_parent_candidate_v3(jsonb)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "research_complete_parent_candidate_v3(jsonb)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_complete_parent_v2(jsonb)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "research_complete_parent_v2(jsonb)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_input_binding_candidate_v3(text,text,text,boolean)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "research_input_binding_candidate_v3(text,text,text,boolean)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_input_preparation_bytes_v2(jsonb,jsonb,jsonb)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_model_lease_fits_day_v1(timestamp with time zone)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_observed_canonical_json_v1(jsonb)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "research_observed_canonical_json_v1(jsonb)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_source_heads_page_v1(timestamp with time zone,integer,integer)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "research_source_heads_page_v1(timestamp with time zone,integer,integer)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "research_source_root_v2(jsonb)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "reserve_research_model_v1(text,text,text)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "reserve_research_model_v1(text,text,text)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "reserve_research_model_v1(text,text,text)",
+    "dependency": "type research_model_reservations_v1",
+    "deptype": "n"
+  },
+  {
+    "function": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+    "dependency": "schema public",
+    "deptype": "n"
+  },
+  {
+    "function": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+    "dependency": "language plpgsql",
+    "deptype": "n"
+  },
+  {
+    "function": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+    "dependency": "schema public",
+    "deptype": "n"
+  }
+]

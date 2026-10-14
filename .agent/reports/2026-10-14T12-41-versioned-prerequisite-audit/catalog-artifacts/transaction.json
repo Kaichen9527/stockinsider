@@ -1,0 +1,11 @@
+[
+  {
+    "current_user": "postgres",
+    "session_user": "postgres",
+    "pg_backend_pid": 570396,
+    "pg_current_snapshot": "744:744:",
+    "read_only": "on",
+    "isolation": "repeatable read",
+    "version": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit"
+  }
+]

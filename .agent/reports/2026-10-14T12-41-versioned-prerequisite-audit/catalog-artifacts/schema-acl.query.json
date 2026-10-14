@@ -1,0 +1,4 @@
+{
+  "sql": "SELECT n.nspname,pg_get_userbyid(n.nspowner) owner,n.nspacl::text raw_acl,CASE WHEN a.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee) END grantee,pg_get_userbyid(a.grantor) grantor,a.privilege_type,a.is_grantable FROM pg_namespace n LEFT JOIN LATERAL aclexplode(coalesce(n.nspacl,acldefault('n',n.nspowner))) a ON true WHERE n.nspname IN ('public','extensions') ORDER BY 1,4,6",
+  "parameters": []
+}

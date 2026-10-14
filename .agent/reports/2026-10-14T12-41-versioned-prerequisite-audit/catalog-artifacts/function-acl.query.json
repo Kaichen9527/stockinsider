@@ -1,0 +1,36 @@
+{
+  "sql": "SELECT p.oid::regprocedure::text signature,CASE WHEN a.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee) END grantee,pg_get_userbyid(a.grantor) grantor,a.privilege_type,a.is_grantable FROM pg_proc p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE p.oid=ANY($1::oid[]) ORDER BY 1,2,4",
+  "parameters": [
+    [
+      25667,
+      25253,
+      25195,
+      25138,
+      24771,
+      25668,
+      25248,
+      25666,
+      25303,
+      25136,
+      25123,
+      25130,
+      25124,
+      25297,
+      25298,
+      25300,
+      25665,
+      25302,
+      25299,
+      25664,
+      25246,
+      24620,
+      24967,
+      24587,
+      25184,
+      24621,
+      25669,
+      25190,
+      25125
+    ]
+  ]
+}

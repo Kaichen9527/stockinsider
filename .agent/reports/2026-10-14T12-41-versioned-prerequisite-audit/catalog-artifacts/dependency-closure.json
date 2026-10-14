@@ -1,0 +1,737 @@
+{
+  "roots": [
+    "research_input_binding_candidate_v3",
+    "research_complete_parent_candidate_v3",
+    "read_research_article_input_candidate_v3",
+    "assert_research_input_candidate_v3",
+    "prepare_research_input_candidate_v3",
+    "seal_research_article_input_candidate_v3",
+    "store_observed_research_priority_v1",
+    "enqueue_research_deep_jobs_v1",
+    "claim_research_observed_job_v2",
+    "reserve_research_model_v1"
+  ],
+  "method": "literal public-qualified call scan; overloads retained; not a proof of dynamic/unqualified PLpgSQL completeness",
+  "edges": [
+    {
+      "from": "assert_research_input_candidate_v3(jsonb,text)",
+      "target": "research_complete_parent_candidate_v3",
+      "matchingSignatures": [
+        "research_complete_parent_candidate_v3(jsonb)"
+      ]
+    },
+    {
+      "from": "assert_research_input_candidate_v3(jsonb,text)",
+      "target": "research_input_binding_candidate_v3",
+      "matchingSignatures": [
+        "research_input_binding_candidate_v3(text,text,text,boolean)"
+      ]
+    },
+    {
+      "from": "claim_research_observed_job_v2(text,text)",
+      "target": "reap_expired_research_deep_jobs_v2",
+      "matchingSignatures": [
+        "reap_expired_research_deep_jobs_v2()"
+      ]
+    },
+    {
+      "from": "claim_research_observed_job_v2(text,text)",
+      "target": "reserve_research_model_v1",
+      "matchingSignatures": [
+        "reserve_research_model_v1(text,text,text)"
+      ]
+    },
+    {
+      "from": "claim_research_observed_job_v2(text,text)",
+      "target": "research_deep_job_attempts_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "claim_research_observed_job_v2(text,text)",
+      "target": "read_research_observed_claim_v2",
+      "matchingSignatures": [
+        "read_research_observed_claim_v2(text,text,uuid,integer)"
+      ]
+    },
+    {
+      "from": "enqueue_research_deep_jobs_v1(uuid)",
+      "target": "research_deep_admission_clocks_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "enqueue_research_deep_jobs_v1(uuid)",
+      "target": "reconcile_research_deep_admissions_v1",
+      "matchingSignatures": [
+        "reconcile_research_deep_admissions_v1()"
+      ]
+    },
+    {
+      "from": "enqueue_research_deep_jobs_v1(uuid)",
+      "target": "research_deep_jobs_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "enqueue_research_deep_jobs_v1(uuid)",
+      "target": "research_deep_run_admissions_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "prepare_research_input_candidate_v3(jsonb,text,text)",
+      "target": "research_input_binding_candidate_v3",
+      "matchingSignatures": [
+        "research_input_binding_candidate_v3(text,text,text,boolean)"
+      ]
+    },
+    {
+      "from": "prepare_research_input_candidate_v3(jsonb,text,text)",
+      "target": "prepare_research_input_v2",
+      "matchingSignatures": [
+        "prepare_research_input_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "read_research_article_input_candidate_v3(jsonb)",
+      "target": "read_research_article_input_revision_v2",
+      "matchingSignatures": [
+        "read_research_article_input_revision_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "read_research_article_input_candidate_v3(jsonb)",
+      "target": "research_complete_parent_candidate_v3",
+      "matchingSignatures": [
+        "research_complete_parent_candidate_v3(jsonb)"
+      ]
+    },
+    {
+      "from": "read_research_article_input_candidate_v3(jsonb)",
+      "target": "research_input_binding_candidate_v3",
+      "matchingSignatures": [
+        "research_input_binding_candidate_v3(text,text,text,boolean)"
+      ]
+    },
+    {
+      "from": "read_research_article_input_candidate_v3(jsonb)",
+      "target": "research_complete_hash_v2",
+      "matchingSignatures": [
+        "research_complete_hash_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "read_research_article_input_candidate_v3(jsonb)",
+      "target": "research_complete_schema_check_v2",
+      "matchingSignatures": [
+        "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)"
+      ]
+    },
+    {
+      "from": "research_complete_parent_candidate_v3(jsonb)",
+      "target": "research_input_binding_candidate_v3",
+      "matchingSignatures": [
+        "research_input_binding_candidate_v3(text,text,text,boolean)"
+      ]
+    },
+    {
+      "from": "research_complete_parent_candidate_v3(jsonb)",
+      "target": "assert_research_input_preparation_v2",
+      "matchingSignatures": [
+        "assert_research_input_preparation_v2(jsonb,uuid,text)"
+      ]
+    },
+    {
+      "from": "research_complete_parent_candidate_v3(jsonb)",
+      "target": "research_complete_hash_v2",
+      "matchingSignatures": [
+        "research_complete_hash_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "research_input_binding_candidate_v3(text,text,text,boolean)",
+      "target": "research_complete_hash_v2",
+      "matchingSignatures": [
+        "research_complete_hash_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "research_input_binding_candidate_v3(text,text,text,boolean)",
+      "target": "research_observed_canonical_json_v1",
+      "matchingSignatures": [
+        "research_observed_canonical_json_v1(jsonb)"
+      ]
+    },
+    {
+      "from": "reserve_research_model_v1(text,text,text)",
+      "target": "research_model_lease_fits_day_v1",
+      "matchingSignatures": [
+        "research_model_lease_fits_day_v1(timestamp with time zone)"
+      ]
+    },
+    {
+      "from": "reserve_research_model_v1(text,text,text)",
+      "target": "research_model_reservations_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+      "target": "read_research_article_input_candidate_v3",
+      "matchingSignatures": [
+        "read_research_article_input_candidate_v3(jsonb)"
+      ]
+    },
+    {
+      "from": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+      "target": "assert_research_input_candidate_v3",
+      "matchingSignatures": [
+        "assert_research_input_candidate_v3(jsonb,text)"
+      ]
+    },
+    {
+      "from": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+      "target": "research_complete_schema_check_v2",
+      "matchingSignatures": [
+        "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)"
+      ]
+    },
+    {
+      "from": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+      "target": "research_complete_hash_v2",
+      "matchingSignatures": [
+        "research_complete_hash_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+      "target": "research_complete_canonical_v2",
+      "matchingSignatures": [
+        "research_complete_canonical_v2(jsonb,integer)"
+      ]
+    },
+    {
+      "from": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+      "target": "research_article_input_revisions_v2",
+      "matchingSignatures": []
+    },
+    {
+      "from": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+      "target": "read_research_observed_roster_v1",
+      "matchingSignatures": [
+        "read_research_observed_roster_v1(text,timestamp with time zone,integer,integer)"
+      ]
+    },
+    {
+      "from": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+      "target": "research_source_heads_page_v1",
+      "matchingSignatures": [
+        "research_source_heads_page_v1(timestamp with time zone,integer,integer)"
+      ]
+    },
+    {
+      "from": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+      "target": "research_priority_runs_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+      "target": "research_observed_priority_store_receipts_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+      "target": "research_observed_first_discoveries_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+      "target": "research_observed_discovery_lineage_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+      "target": "enqueue_research_deep_jobs_v1",
+      "matchingSignatures": [
+        "enqueue_research_deep_jobs_v1(uuid)"
+      ]
+    },
+    {
+      "from": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+      "target": "prepare_research_input_v2",
+      "matchingSignatures": [
+        "prepare_research_input_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "prepare_research_input_v2(jsonb)",
+      "target": "research_observed_canonical_json_v1",
+      "matchingSignatures": [
+        "research_observed_canonical_json_v1(jsonb)"
+      ]
+    },
+    {
+      "from": "prepare_research_input_v2(jsonb)",
+      "target": "assert_research_source_seal_v2",
+      "matchingSignatures": [
+        "assert_research_source_seal_v2(uuid)"
+      ]
+    },
+    {
+      "from": "prepare_research_input_v2(jsonb)",
+      "target": "research_source_root_v2",
+      "matchingSignatures": [
+        "research_source_root_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "prepare_research_input_v2(jsonb)",
+      "target": "seal_research_sources_v2",
+      "matchingSignatures": [
+        "seal_research_sources_v2(jsonb,timestamp with time zone)"
+      ]
+    },
+    {
+      "from": "prepare_research_input_v2(jsonb)",
+      "target": "research_input_preparation_bytes_v2",
+      "matchingSignatures": [
+        "research_input_preparation_bytes_v2(jsonb,jsonb,jsonb)"
+      ]
+    },
+    {
+      "from": "prepare_research_input_v2(jsonb)",
+      "target": "research_input_preparations_v2",
+      "matchingSignatures": []
+    },
+    {
+      "from": "read_research_article_input_revision_v2(jsonb)",
+      "target": "research_complete_parent_v2",
+      "matchingSignatures": [
+        "research_complete_parent_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "read_research_article_input_revision_v2(jsonb)",
+      "target": "research_complete_hash_v2",
+      "matchingSignatures": [
+        "research_complete_hash_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "reap_expired_research_deep_jobs_v2()",
+      "target": "research_model_completions_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "reconcile_research_deep_admissions_v1()",
+      "target": "research_deep_admission_charges_v1",
+      "matchingSignatures": []
+    },
+    {
+      "from": "research_complete_canonical_v2(jsonb,integer)",
+      "target": "research_complete_canonical_v2",
+      "matchingSignatures": [
+        "research_complete_canonical_v2(jsonb,integer)"
+      ]
+    },
+    {
+      "from": "research_complete_hash_v2(jsonb)",
+      "target": "research_complete_canonical_v2",
+      "matchingSignatures": [
+        "research_complete_canonical_v2(jsonb,integer)"
+      ]
+    },
+    {
+      "from": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+      "target": "research_complete_schema_check_v2",
+      "matchingSignatures": [
+        "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)"
+      ]
+    },
+    {
+      "from": "research_observed_canonical_json_v1(jsonb)",
+      "target": "research_observed_canonical_json_v1",
+      "matchingSignatures": [
+        "research_observed_canonical_json_v1(jsonb)"
+      ]
+    },
+    {
+      "from": "research_complete_parent_v2(jsonb)",
+      "target": "research_complete_mapping_v2",
+      "matchingSignatures": [
+        "research_complete_mapping_v2(text)"
+      ]
+    },
+    {
+      "from": "research_complete_parent_v2(jsonb)",
+      "target": "assert_research_input_preparation_v2",
+      "matchingSignatures": [
+        "assert_research_input_preparation_v2(jsonb,uuid,text)"
+      ]
+    },
+    {
+      "from": "research_input_preparation_bytes_v2(jsonb,jsonb,jsonb)",
+      "target": "research_observed_canonical_json_v1",
+      "matchingSignatures": [
+        "research_observed_canonical_json_v1(jsonb)"
+      ]
+    },
+    {
+      "from": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+      "target": "research_source_root_v2",
+      "matchingSignatures": [
+        "research_source_root_v2(jsonb)"
+      ]
+    },
+    {
+      "from": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+      "target": "research_source_seals_v2",
+      "matchingSignatures": []
+    }
+  ],
+  "reachable": [
+    {
+      "oid": 25667,
+      "signature": "assert_research_input_candidate_v3(jsonb,text)",
+      "proname": "assert_research_input_candidate_v3",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+      "body_sha256": "d06f2bb96a969276434852693cb48cbd596337d237719f2a866d88a3ad1eff4c"
+    },
+    {
+      "oid": 25253,
+      "signature": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+      "proname": "assert_research_input_preparation_v2",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+      "body_sha256": "1911587126e62a87b0cb53eecc1c3caacc49449131ac30e462097bc1d72f3bb6"
+    },
+    {
+      "oid": 25195,
+      "signature": "assert_research_source_seal_v2(uuid)",
+      "proname": "assert_research_source_seal_v2",
+      "owner": "research_source_fence_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_source_fence_owner_v2=X/research_source_fence_owner_v2,research_input_preparation_owner_v2=X/research_source_fence_owner_v2,research_observed_rpc_owner=X/research_source_fence_owner_v2}",
+      "body_sha256": "e4cf543bc708d8b85920223e591527c5332ff62b96f3d2346205fb7c701e95af"
+    },
+    {
+      "oid": 25138,
+      "signature": "claim_research_observed_job_v2(text,text)",
+      "proname": "claim_research_observed_job_v2",
+      "owner": "research_observed_rpc_owner",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public, pg_temp"
+      ],
+      "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+      "body_sha256": "c950426c57c830ebe1bd83b20bf39fbc67ffdddbb073a2a68c9e4209b547bd96"
+    },
+    {
+      "oid": 24771,
+      "signature": "enqueue_research_deep_jobs_v1(uuid)",
+      "proname": "enqueue_research_deep_jobs_v1",
+      "owner": "research_observed_rpc_owner",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public, pg_temp"
+      ],
+      "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+      "body_sha256": "fca59bf364f852e606c66b3ac6a5aa96f1dccd55a6163d56c2898f7974d175ae"
+    },
+    {
+      "oid": 25668,
+      "signature": "prepare_research_input_candidate_v3(jsonb,text,text)",
+      "proname": "prepare_research_input_candidate_v3",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+      "body_sha256": "6a2fc23d9e8fa1c4f4959300fd91860c5d5ba5319be0b64009e0aedf42eb8809"
+    },
+    {
+      "oid": 25248,
+      "signature": "prepare_research_input_v2(jsonb)",
+      "proname": "prepare_research_input_v2",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+      "body_sha256": "ee23d2517bc387e7f141a013da4f9df299506184089a1c79c0260548a6ffeb42"
+    },
+    {
+      "oid": 25666,
+      "signature": "read_research_article_input_candidate_v3(jsonb)",
+      "proname": "read_research_article_input_candidate_v3",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+      "body_sha256": "c265bfe3abae74271b66e5dd1766e3b8536e10a055f97b472e7179dfe2e84a57"
+    },
+    {
+      "oid": 25303,
+      "signature": "read_research_article_input_revision_v2(jsonb)",
+      "proname": "read_research_article_input_revision_v2",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+      "body_sha256": "1431ac8c0daabcbfd91fabad81bb0974b0a9643b1570e71cf13579b93566405a"
+    },
+    {
+      "oid": 25136,
+      "signature": "read_research_observed_claim_v2(text,text,uuid,integer)",
+      "proname": "read_research_observed_claim_v2",
+      "owner": "research_observed_rpc_owner",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public, pg_temp"
+      ],
+      "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner,research_input_preparation_owner_v2=X/research_observed_rpc_owner}",
+      "body_sha256": "a7762c6190fa0f6bd592e47556608ebb6921503147f4886a1a6f764d93fe1bf9"
+    },
+    {
+      "oid": 25123,
+      "signature": "read_research_observed_roster_v1(text,timestamp with time zone,integer,integer)",
+      "proname": "read_research_observed_roster_v1",
+      "owner": "research_observed_rpc_owner",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public, pg_temp"
+      ],
+      "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+      "body_sha256": "c05668eeb255d87c389dc58f181760585eb441ac9f52ffd4e06ebca9d93bf605"
+    },
+    {
+      "oid": 25130,
+      "signature": "reap_expired_research_deep_jobs_v2()",
+      "proname": "reap_expired_research_deep_jobs_v2",
+      "owner": "research_observed_rpc_owner",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public, pg_temp"
+      ],
+      "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+      "body_sha256": "fbc8fe7b1f7cf75a4ebb40776116ce5aa724f53bacaa4fbc156aa3cc3fd65ea9"
+    },
+    {
+      "oid": 25124,
+      "signature": "reconcile_research_deep_admissions_v1()",
+      "proname": "reconcile_research_deep_admissions_v1",
+      "owner": "research_observed_rpc_owner",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public, pg_temp"
+      ],
+      "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner}",
+      "body_sha256": "e234c217de2776bc2b7882526ce90230e3d272b42afd853989dbb8e531d7abe0"
+    },
+    {
+      "oid": 25297,
+      "signature": "research_complete_canonical_v2(jsonb,integer)",
+      "proname": "research_complete_canonical_v2",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+      "body_sha256": "eedda6a3b1235ff438a846b60d564cb0b70598068623faf5dbf77dfabe65fb0f"
+    },
+    {
+      "oid": 25298,
+      "signature": "research_complete_hash_v2(jsonb)",
+      "proname": "research_complete_hash_v2",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,research_observed_rpc_owner=X/research_input_preparation_owner_v2}",
+      "body_sha256": "e9cc7b6998c5722444848dac01df70c5c23996f061601e5fa6d71a7a9d0c6399"
+    },
+    {
+      "oid": 25300,
+      "signature": "research_complete_mapping_v2(text)",
+      "proname": "research_complete_mapping_v2",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+      "body_sha256": "4c9bd064d2debd1d5ec8333ad0e5d48430f358c9779d1ef1f6210a95e2513984"
+    },
+    {
+      "oid": 25665,
+      "signature": "research_complete_parent_candidate_v3(jsonb)",
+      "proname": "research_complete_parent_candidate_v3",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+      "body_sha256": "a70d367dd9e814c8a0c81aacbd23290250166a93f10abec00b7cbb45d75b8cc0"
+    },
+    {
+      "oid": 25302,
+      "signature": "research_complete_parent_v2(jsonb)",
+      "proname": "research_complete_parent_v2",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+      "body_sha256": "3515d35c4f8c5c756009cc22cedd8eee50b39d780e7bb7af8f777dbbd21ee57a"
+    },
+    {
+      "oid": 25299,
+      "signature": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+      "proname": "research_complete_schema_check_v2",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+      "body_sha256": "f681dcc81cacfa254c0da635bc0687d2812f63756dfac0990c7dd9c6ac883ad6"
+    },
+    {
+      "oid": 25664,
+      "signature": "research_input_binding_candidate_v3(text,text,text,boolean)",
+      "proname": "research_input_binding_candidate_v3",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+      "body_sha256": "433f0d2da00ea4e73f7a742c31c1705d07685ef1b19c9f65cece5e5205fc95f7"
+    },
+    {
+      "oid": 25246,
+      "signature": "research_input_preparation_bytes_v2(jsonb,jsonb,jsonb)",
+      "proname": "research_input_preparation_bytes_v2",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2}",
+      "body_sha256": "b60540ccb1462f4780c7fc9d109edc80a21a6bb8db49b21fe78c70a5f292ffcf"
+    },
+    {
+      "oid": 24620,
+      "signature": "research_model_lease_fits_day_v1(timestamp with time zone)",
+      "proname": "research_model_lease_fits_day_v1",
+      "owner": "postgres",
+      "prosecdef": false,
+      "proconfig": null,
+      "raw_acl": "{postgres=X/postgres,service_role=X/postgres}",
+      "body_sha256": "1765b0450a419c09bf8dfeb939ddf9ff86e4ab40ccc5081d678d14fd02ac7bb0"
+    },
+    {
+      "oid": 24967,
+      "signature": "research_observed_canonical_json_v1(jsonb)",
+      "proname": "research_observed_canonical_json_v1",
+      "owner": "postgres",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog"
+      ],
+      "raw_acl": "{postgres=X/postgres,research_observed_rpc_owner=X/postgres,research_input_preparation_owner_v2=X/postgres}",
+      "body_sha256": "c1b47a0478bf1cd601ad31830acbbfbef6a99b22f1e8cb49e561c461b7583f64"
+    },
+    {
+      "oid": 24587,
+      "signature": "research_source_heads_page_v1(timestamp with time zone,integer,integer)",
+      "proname": "research_source_heads_page_v1",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public, pg_temp"
+      ],
+      "raw_acl": "{postgres=X/postgres,service_role=X/postgres,research_observed_rpc_owner=X/postgres}",
+      "body_sha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56"
+    },
+    {
+      "oid": 25184,
+      "signature": "research_source_root_v2(jsonb)",
+      "proname": "research_source_root_v2",
+      "owner": "postgres",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog"
+      ],
+      "raw_acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres,research_source_fence_owner_v2=X/postgres,research_input_preparation_owner_v2=X/postgres}",
+      "body_sha256": "11c39052af949dabc3b13e1a7d90774940739a47adb720b7cb7f9dced150ed1b"
+    },
+    {
+      "oid": 24621,
+      "signature": "reserve_research_model_v1(text,text,text)",
+      "proname": "reserve_research_model_v1",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public, pg_temp"
+      ],
+      "raw_acl": "{postgres=X/postgres,service_role=X/postgres,research_observed_rpc_owner=X/postgres}",
+      "body_sha256": "eb4c7cd312de8e493ca1f76a377187e88dd9c9a23b1a9f78db7cc04d27a5c9fc"
+    },
+    {
+      "oid": 25669,
+      "signature": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+      "proname": "seal_research_article_input_candidate_v3",
+      "owner": "research_input_preparation_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_input_preparation_owner_v2=X/research_input_preparation_owner_v2,service_role=X/research_input_preparation_owner_v2}",
+      "body_sha256": "f87e8e2b9232000c8819cd1d503705914a9a7414332f4ac2e43311681b657042"
+    },
+    {
+      "oid": 25190,
+      "signature": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+      "proname": "seal_research_sources_v2",
+      "owner": "research_source_fence_owner_v2",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public"
+      ],
+      "raw_acl": "{research_source_fence_owner_v2=X/research_source_fence_owner_v2,service_role=X/research_source_fence_owner_v2,research_input_preparation_owner_v2=X/research_source_fence_owner_v2}",
+      "body_sha256": "90f26718aeb382066efe1551c97ead057706de84c0af36c50e2946394f65b646"
+    },
+    {
+      "oid": 25125,
+      "signature": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+      "proname": "store_observed_research_priority_v1",
+      "owner": "research_observed_rpc_owner",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public, pg_temp"
+      ],
+      "raw_acl": "{research_observed_rpc_owner=X/research_observed_rpc_owner,service_role=X/research_observed_rpc_owner}",
+      "body_sha256": "6cd5cca1f16f0f4064fcce24adcdd83041bfe8d3aa16ebef63bdf150762538d5"
+    }
+  ],
+  "dynamicOrUnqualifiedReviewPending": true
+}

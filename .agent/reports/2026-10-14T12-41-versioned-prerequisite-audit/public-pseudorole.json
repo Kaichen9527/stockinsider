@@ -1,0 +1,7 @@
+{
+  "isPgRole": false,
+  "schemaAclEntries": [],
+  "explicitUsage": false,
+  "explicitCreate": false,
+  "note": "PUBLIC is ACL grantee oid 0, not pg_roles principal; no has_schema_privilege invented role call"
+}

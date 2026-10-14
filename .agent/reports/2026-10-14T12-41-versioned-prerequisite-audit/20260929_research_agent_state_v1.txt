@@ -1,0 +1,519 @@
+1: BEGIN;
+2: 
+3: CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (
+4:   run_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+5:   as_of TIMESTAMPTZ NOT NULL,
+6:   policy_version TEXT NOT NULL CHECK (policy_version = 'research-priority-v1'),
+7:   input_hash TEXT NOT NULL CHECK (input_hash ~ '^[0-9a-f]{64}$'),
+8:   expected_count INTEGER NOT NULL CHECK (expected_count BETWEEN 0 AND 20000),
+9:   accounted_count INTEGER NOT NULL CHECK (accounted_count = expected_count),
+10:   source_attempts JSONB NOT NULL CHECK (jsonb_typeof(source_attempts) = 'array'),
+11:   rows JSONB NOT NULL CHECK (jsonb_typeof(rows) = 'array'),
+12:   research_queue JSONB NOT NULL CHECK (jsonb_typeof(research_queue) = 'array'),
+13:   created_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp(),
+14:   UNIQUE (policy_version, input_hash)
+15: );
+16: CREATE INDEX IF NOT EXISTS idx_research_priority_runs_latest_v1
+17:   ON public.research_priority_runs_v1 (as_of DESC, created_at DESC);
+18: CREATE OR REPLACE TRIGGER trg_research_priority_runs_immutable_v1
+19:   BEFORE UPDATE OR DELETE ON public.research_priority_runs_v1
+20:   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
+21: 
+22: CREATE TABLE IF NOT EXISTS public.candidate_deep_article_reviews_v1 (
+23:   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+24:   revision_id UUID NOT NULL REFERENCES public.candidate_detail_snapshots(id) ON DELETE RESTRICT,
+25:   input_hash TEXT NOT NULL CHECK (input_hash ~ '^[0-9a-f]{64}$'),
+26:   article_hash TEXT NOT NULL CHECK (article_hash ~ '^[0-9a-f]{64}$'),
+27:   author_id TEXT NOT NULL,
+28:   reviewer_id TEXT NOT NULL CHECK (reviewer_id <> author_id),
+29:   decision TEXT NOT NULL CHECK (decision IN ('accepted','rejected')),
+30:   findings JSONB NOT NULL CHECK (jsonb_typeof(findings) = 'object'),
+31:   source_document_ids JSONB NOT NULL CHECK (jsonb_typeof(source_document_ids) = 'array'),
+32:   reviewed_at TIMESTAMPTZ NOT NULL,
+33:   created_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp(),
+34:   UNIQUE (revision_id, input_hash, article_hash, reviewer_id, decision)
+35: );
+36: CREATE INDEX IF NOT EXISTS idx_candidate_deep_article_reviews_v1
+37:   ON public.candidate_deep_article_reviews_v1 (revision_id, reviewed_at DESC);
+38: CREATE OR REPLACE TRIGGER trg_candidate_deep_article_reviews_immutable_v1
+39:   BEFORE UPDATE OR DELETE ON public.candidate_deep_article_reviews_v1
+40:   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
+41: 
+42: CREATE TABLE IF NOT EXISTS public.candidate_thesis_qualifications_v1 (
+43:   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+44:   parent_id UUID REFERENCES public.candidate_thesis_qualifications_v1(id) ON DELETE RESTRICT,
+45:   stock_id UUID NOT NULL REFERENCES public.stocks(id) ON DELETE RESTRICT,
+46:   detail_revision_id UUID NOT NULL REFERENCES public.candidate_detail_snapshots(id) ON DELETE RESTRICT,
+47:   dossier_id UUID NOT NULL REFERENCES public.candidate_research_dossiers(id) ON DELETE RESTRICT,
+48:   article_hash TEXT NOT NULL CHECK (article_hash ~ '^[0-9a-f]{64}$'),
+49:   evidence_snapshot_hash TEXT NOT NULL CHECK (evidence_snapshot_hash ~ '^[0-9a-f]{64}$'),
+50:   review_receipt_hash TEXT NOT NULL UNIQUE CHECK (review_receipt_hash ~ '^[0-9a-f]{64}$'),
+51:   status TEXT NOT NULL CHECK (status IN ('qualified','rejected','needs_evidence','stale','invalidated')),
+52:   horizon TEXT NOT NULL CHECK (horizon IN ('1-3m','3-6m','6-18m')),
+53:   payload JSONB NOT NULL CHECK (jsonb_typeof(payload) = 'object'),
+54:   qualified_at TIMESTAMPTZ NOT NULL,
+55:   next_review_at TIMESTAMPTZ NOT NULL CHECK (next_review_at >= qualified_at),
+56:   created_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp()
+57: );
+58: CREATE INDEX IF NOT EXISTS idx_candidate_thesis_latest_v1
+59:   ON public.candidate_thesis_qualifications_v1 (stock_id, qualified_at DESC, created_at DESC);
+60: CREATE UNIQUE INDEX IF NOT EXISTS uq_candidate_thesis_successor_v1
+61:   ON public.candidate_thesis_qualifications_v1 (parent_id) WHERE parent_id IS NOT NULL;
+62: 
+63: CREATE TABLE IF NOT EXISTS public.candidate_technical_decisions_v1 (
+64:   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+65:   stock_id UUID NOT NULL REFERENCES public.stocks(id) ON DELETE RESTRICT,
+66:   thesis_qualification_id UUID NOT NULL REFERENCES public.candidate_thesis_qualifications_v1(id) ON DELETE RESTRICT,
+67:   session_date DATE NOT NULL,
+68:   market_dataset_hash TEXT NOT NULL CHECK (market_dataset_hash ~ '^[0-9a-f]{64}$'),
+69:   calendar_hash TEXT NOT NULL CHECK (calendar_hash ~ '^[0-9a-f]{64}$'),
+70:   feature_version TEXT NOT NULL,
+71:   strategy_version TEXT NOT NULL,
+72:   snapshot JSONB NOT NULL CHECK (jsonb_typeof(snapshot) = 'object'),
+73:   observed_at TIMESTAMPTZ NOT NULL,
+74:   created_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp(),
+75:   UNIQUE (stock_id, thesis_qualification_id, session_date, market_dataset_hash, strategy_version)
+76: );
+77: CREATE INDEX IF NOT EXISTS idx_candidate_technical_latest_v1
+78:   ON public.candidate_technical_decisions_v1 (stock_id, session_date DESC, observed_at DESC);
+79: 
+80: ALTER TABLE public.research_priority_runs_v1 ENABLE ROW LEVEL SECURITY;
+81: ALTER TABLE public.candidate_deep_article_reviews_v1 ENABLE ROW LEVEL SECURITY;
+82: ALTER TABLE public.candidate_thesis_qualifications_v1 ENABLE ROW LEVEL SECURITY;
+83: ALTER TABLE public.candidate_technical_decisions_v1 ENABLE ROW LEVEL SECURITY;
+84: REVOKE ALL ON public.research_priority_runs_v1, public.candidate_thesis_qualifications_v1,
+85:   public.candidate_technical_decisions_v1, public.candidate_deep_article_reviews_v1 FROM PUBLIC, anon, authenticated;
+86: GRANT ALL ON public.research_priority_runs_v1, public.candidate_thesis_qualifications_v1,
+87:   public.candidate_technical_decisions_v1, public.candidate_deep_article_reviews_v1 TO service_role;
+88: 
+89: CREATE OR REPLACE TRIGGER trg_candidate_thesis_qualifications_immutable_v1
+90:   BEFORE UPDATE OR DELETE ON public.candidate_thesis_qualifications_v1
+91:   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
+92: CREATE OR REPLACE TRIGGER trg_candidate_technical_decisions_immutable_v1
+93:   BEFORE UPDATE OR DELETE ON public.candidate_technical_decisions_v1
+94:   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
+95: 
+96: -- Serialize append against the stock's current head. This also protects direct
+97: -- service-role inserts from a stale read or a second parentless review.
+98: CREATE OR REPLACE FUNCTION public.fence_candidate_thesis_append_v1()
+99: RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp
+100: AS $function$
+101: DECLARE v_head public.candidate_thesis_qualifications_v1;
+102: BEGIN
+103:   PERFORM pg_advisory_xact_lock(hashtextextended(NEW.stock_id::text, 6101));
+104:   SELECT * INTO v_head FROM public.candidate_thesis_qualifications_v1
+105:     WHERE stock_id=NEW.stock_id ORDER BY created_at DESC,id DESC LIMIT 1;
+106:   IF NEW.parent_id IS DISTINCT FROM v_head.id THEN
+107:     RAISE EXCEPTION 'research_thesis_head_changed';
+108:   END IF;
+109:   IF NEW.payload->>'reviewReceiptHash' IS DISTINCT FROM NEW.review_receipt_hash
+110:     OR NEW.payload->>'status' IS DISTINCT FROM NEW.status
+111:     OR NEW.payload->>'articleHash' IS DISTINCT FROM NEW.article_hash
+112:     OR (NEW.payload->>'qualifiedAt')::timestamptz IS DISTINCT FROM NEW.qualified_at
+113:     OR (NEW.payload->>'nextReviewAt')::timestamptz IS DISTINCT FROM NEW.next_review_at
+114:     OR jsonb_typeof(NEW.payload->'materialEventIds') IS DISTINCT FROM 'array' THEN
+115:     RAISE EXCEPTION 'research_thesis_payload_mismatch';
+116:   END IF;
+117:   IF v_head.id IS NOT NULL THEN
+118:     IF NOT ((NEW.payload->'materialEventIds') @> (v_head.payload->'materialEventIds')) THEN
+119:       RAISE EXCEPTION 'research_thesis_events_not_reconciled';
+120:     END IF;
+121:     IF NEW.status IN ('qualified','rejected','needs_evidence') THEN
+122:       IF NEW.qualified_at <= (CASE WHEN v_head.status IN ('stale','invalidated')
+123:         THEN v_head.next_review_at ELSE v_head.qualified_at END) THEN
+124:         RAISE EXCEPTION 'research_thesis_review_not_newer';
+125:       END IF;
+126:       IF v_head.status IN ('stale','invalidated') AND NEW.article_hash=v_head.article_hash THEN
+127:         RAISE EXCEPTION 'research_thesis_revised_article_required';
+128:       END IF;
+129:     ELSE
+130:       IF NEW.qualified_at<>v_head.qualified_at OR NEW.article_hash<>v_head.article_hash
+131:         OR NEW.next_review_at < (CASE WHEN v_head.status IN ('stale','invalidated')
+132:           THEN v_head.next_review_at ELSE v_head.qualified_at END) THEN
+133:         RAISE EXCEPTION 'research_thesis_event_clock_invalid';
+134:       END IF;
+135:     END IF;
+136:   END IF;
+137:   NEW.created_at := GREATEST(clock_timestamp(), coalesce(v_head.created_at + interval '1 microsecond',clock_timestamp()));
+138:   RETURN NEW;
+139: END $function$;
+140: CREATE OR REPLACE TRIGGER trg_candidate_thesis_append_fence_v1
+141:   BEFORE INSERT ON public.candidate_thesis_qualifications_v1
+142:   FOR EACH ROW EXECUTE FUNCTION public.fence_candidate_thesis_append_v1();
+143: REVOKE ALL ON FUNCTION public.fence_candidate_thesis_append_v1() FROM PUBLIC,anon,authenticated;
+144: 
+145: -- Oct-04 approved extension: bounded point-in-time heads retain old roots and
+146: -- their observed revisions. Pagination overflow is an explicit caller failure.
+147: CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(
+148:   p_cutoff timestamptz, p_offset integer, p_limit integer)
+149: RETURNS SETOF jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp
+150: AS $function$
+151: BEGIN
+152:   IF p_cutoff IS NULL OR p_cutoff>clock_timestamp() OR p_offset<0
+153:     OR p_offset>20000 OR p_limit NOT BETWEEN 1 AND 500 THEN
+154:     RAISE EXCEPTION 'research_source_head_request_invalid';
+155:   END IF;
+156:   RETURN QUERY
+157:   WITH available AS (
+158:     SELECT d.*, COALESCE(NULLIF(d.metadata->>'parent_source_url',''),NULLIF(d.metadata->>'canonical_url',''),
+159:       split_part(d.document_url,'#si-revision-',1)) || COALESCE('#insider-' ||
+160:         (d.metadata #>> '{insider_evidence,identity}'),'') AS root_key,
+161:       NULLIF(d.metadata->>'parent_source_url','') IS NULL
+162:         OR d.metadata->>'parent_source_url'=COALESCE(NULLIF(d.metadata->>'canonical_url',''),
+163:           split_part(d.document_url,'#si-revision-',1)) AS original_source,
+164:       COALESCE(NULLIF(d.metadata->>'revision_observed_at','')::timestamptz,
+165:         NULLIF(d.metadata->>'retracted_at','')::timestamptz,d.collected_at) AS revised_at,
+166:       COALESCE(NULLIF(d.metadata->>'first_observed_at','')::timestamptz,d.collected_at) AS first_at
+167:     FROM public.source_raw_documents d
+168:     WHERE d.published_at<=p_cutoff AND d.collected_at<=p_cutoff
+169:   ), eligible AS (
+170:     SELECT * FROM available WHERE first_at<=p_cutoff AND revised_at<=p_cutoff
+171:       AND first_at>=published_at AND revised_at>=first_at
+172:   ), numbered AS (
+173:     SELECT e.*, min(first_at) OVER (PARTITION BY root_key) AS earliest_at,
+174:       max(revised_at) OVER (PARTITION BY root_key) AS last_activity_at,
+175:       row_number() OVER (PARTITION BY root_key ORDER BY original_source DESC,revised_at DESC,
+176:         CASE WHEN metadata->>'retracted_at' IS NOT NULL THEN 2
+177:           WHEN metadata->>'claim_status'='denied' THEN 1 ELSE 0 END DESC,
+178:         COALESCE(canonical_content_hash,id::text) DESC) AS n
+179:     FROM eligible e
+180:   )
+181:   SELECT jsonb_build_object('id',n.id,'platform',n.platform,'document_url',n.document_url,
+182:     'published_at',n.published_at,'collected_at',n.collected_at,
+183:     'symbols',COALESCE((SELECT jsonb_agg(DISTINCT s.value) FROM eligible e,
+184:       LATERAL jsonb_array_elements_text(e.symbols) s WHERE e.root_key=n.root_key),'[]'::jsonb),
+185:     'canonical_content_hash',n.canonical_content_hash,'content_semantics',n.content_semantics,
+186:     'metadata',n.metadata || jsonb_build_object('first_observed_at',n.earliest_at,
+187:       'revision_observed_at',n.revised_at))
+188:   FROM numbered n WHERE n.n=1 AND n.last_activity_at>=p_cutoff-interval '14 days' ORDER BY n.root_key LIMIT p_limit OFFSET p_offset;
+189: END $function$;
+190: REVOKE ALL ON FUNCTION public.research_source_heads_page_v1(timestamptz,integer,integer)
+191:   FROM PUBLIC,anon,authenticated;
+192: GRANT EXECUTE ON FUNCTION public.research_source_heads_page_v1(timestamptz,integer,integer) TO service_role;
+193: 
+194: -- All model roles share a durable budget. Timeout/offline/retry reservations
+195: -- consume their full 30-minute envelope; finishing early does not refund it.
+196: CREATE TABLE IF NOT EXISTS public.research_model_reservations_v1 (
+197:   reservation_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+198:   role text NOT NULL CHECK(role IN ('discovery','company_research','counter_review','technical','strategy_research','independent_test')),
+199:   owner text NOT NULL CHECK(length(owner) BETWEEN 3 AND 120),
+200:   work_key text NOT NULL CHECK(length(work_key) BETWEEN 3 AND 200),
+201:   taipei_day date NOT NULL,
+202:   started_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+203:   lease_expires_at timestamptz NOT NULL,
+204:   reserved_seconds integer NOT NULL DEFAULT 1800 CHECK(reserved_seconds=1800),
+205:   UNIQUE(role,work_key), CHECK(lease_expires_at=started_at+interval '30 minutes')
+206: );
+207: CREATE TABLE IF NOT EXISTS public.research_model_completions_v1 (
+208:   reservation_id uuid PRIMARY KEY REFERENCES public.research_model_reservations_v1 ON DELETE RESTRICT,
+209:   owner text NOT NULL, outcome text NOT NULL CHECK(outcome IN ('completed','failed')),
+210:   result_hash text NOT NULL CHECK(result_hash ~ '^[0-9a-f]{64}$'),
+211:   finished_at timestamptz NOT NULL DEFAULT clock_timestamp()
+212: );
+213: CREATE OR REPLACE FUNCTION public.research_model_lease_fits_day_v1(p_started timestamptz)
+214: RETURNS boolean LANGUAGE sql IMMUTABLE AS $function$
+215:   SELECT (p_started AT TIME ZONE 'Asia/Taipei')::date=
+216:     ((p_started+interval '30 minutes') AT TIME ZONE 'Asia/Taipei')::date
+217: $function$;
+218: REVOKE ALL ON FUNCTION public.research_model_lease_fits_day_v1(timestamptz) FROM PUBLIC,anon,authenticated;
+219: CREATE OR REPLACE FUNCTION public.reserve_research_model_v1(p_role text,p_owner text,p_work_key text)
+220: RETURNS SETOF public.research_model_reservations_v1
+221: LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+222: DECLARE v_now timestamptz; v_day date; v_prior public.research_model_reservations_v1;
+223: BEGIN
+224:   IF p_role NOT IN ('discovery','company_research','counter_review','technical','strategy_research','independent_test')
+225:     OR length(trim(p_owner)) NOT BETWEEN 3 AND 120 OR length(p_work_key) NOT BETWEEN 3 AND 200
+226:     OR p_owner IS NULL OR p_work_key IS NULL THEN RAISE EXCEPTION 'research_model_reservation_invalid'; END IF;
+227:   PERFORM pg_advisory_xact_lock(2409,6002);
+228:   v_now:=clock_timestamp();
+229:   v_day:=(v_now AT TIME ZONE 'Asia/Taipei')::date;
+230:   SELECT * INTO v_prior FROM public.research_model_reservations_v1 WHERE role=p_role AND work_key=p_work_key;
+231:   IF FOUND THEN
+232:     IF v_prior.owner<>p_owner OR v_prior.lease_expires_at<=v_now
+233:       OR EXISTS(SELECT 1 FROM public.research_model_completions_v1 WHERE reservation_id=v_prior.reservation_id)
+234:       THEN RAISE EXCEPTION 'research_model_reservation_replay_closed'; END IF;
+235:     RETURN NEXT v_prior; RETURN;
+236:   END IF;
+237:   IF EXISTS(SELECT 1 FROM public.research_model_reservations_v1 r WHERE r.lease_expires_at>v_now
+238:       AND NOT EXISTS(SELECT 1 FROM public.research_model_completions_v1 c WHERE c.reservation_id=r.reservation_id))
+239:     OR (SELECT COALESCE(sum(reserved_seconds),0) FROM public.research_model_reservations_v1 WHERE taipei_day=v_day)+1800>7200
+240:     OR NOT public.research_model_lease_fits_day_v1(v_now)
+241:     THEN RETURN; END IF;
+242:   RETURN QUERY INSERT INTO public.research_model_reservations_v1(role,owner,work_key,taipei_day,started_at,lease_expires_at)
+243:     VALUES(p_role,p_owner,p_work_key,v_day,v_now,v_now+interval '30 minutes') RETURNING *;
+244: END $function$;
+245: CREATE OR REPLACE FUNCTION public.finish_research_model_v1(p_reservation uuid,p_owner text,p_outcome text,p_result_hash text)
+246: RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+247: DECLARE v_prior public.research_model_completions_v1;
+248: BEGIN
+249:   PERFORM pg_advisory_xact_lock(2409,6002);
+250:   SELECT * INTO v_prior FROM public.research_model_completions_v1 WHERE reservation_id=p_reservation;
+251:   IF FOUND THEN
+252:     IF v_prior.owner<>p_owner OR v_prior.outcome<>p_outcome OR v_prior.result_hash<>p_result_hash
+253:       THEN RAISE EXCEPTION 'research_model_completion_replay_mismatch'; END IF;
+254:     RETURN true;
+255:   END IF;
+256:   IF NOT EXISTS(SELECT 1 FROM public.research_model_reservations_v1
+257:     WHERE reservation_id=p_reservation AND owner=p_owner AND lease_expires_at>clock_timestamp())
+258:     THEN RAISE EXCEPTION 'research_model_lease_lost'; END IF;
+259:   INSERT INTO public.research_model_completions_v1(reservation_id,owner,outcome,result_hash)
+260:     VALUES(p_reservation,p_owner,p_outcome,p_result_hash);
+261:   RETURN true;
+262: END $function$;
+263: ALTER TABLE public.research_model_reservations_v1 ENABLE ROW LEVEL SECURITY;
+264: ALTER TABLE public.research_model_completions_v1 ENABLE ROW LEVEL SECURITY;
+265: REVOKE ALL ON public.research_model_reservations_v1,public.research_model_completions_v1 FROM PUBLIC,anon,authenticated;
+266: REVOKE INSERT,UPDATE,DELETE ON public.research_model_reservations_v1,public.research_model_completions_v1 FROM service_role;
+267: GRANT SELECT ON public.research_model_reservations_v1,public.research_model_completions_v1 TO service_role;
+268: CREATE OR REPLACE TRIGGER trg_research_model_reservations_immutable_v1
+269:   BEFORE UPDATE OR DELETE ON public.research_model_reservations_v1
+270:   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
+271: CREATE OR REPLACE TRIGGER trg_research_model_completions_immutable_v1
+272:   BEFORE UPDATE OR DELETE ON public.research_model_completions_v1
+273:   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
+274: REVOKE ALL ON FUNCTION public.reserve_research_model_v1(text,text,text),
+275:   public.finish_research_model_v1(uuid,text,text,text) FROM PUBLIC,anon,authenticated;
+276: GRANT EXECUTE ON FUNCTION public.reserve_research_model_v1(text,text,text),
+277:   public.finish_research_model_v1(uuid,text,text,text) TO service_role;
+278: 
+279: -- First observation freezes an actual quote or an explicit gap, never a
+280: -- later backfilled price dressed up as a quote known at discovery time.
+281: CREATE TABLE IF NOT EXISTS public.research_first_discoveries_v1 (
+282:   symbol text PRIMARY KEY CHECK(symbol ~ '^[0-9]{4}$'),
+283:   run_id uuid NOT NULL REFERENCES public.research_priority_runs_v1 ON DELETE RESTRICT,
+284:   first_seen_at timestamptz NOT NULL,
+285:   captured_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+286:   snapshot jsonb NOT NULL CHECK(jsonb_typeof(snapshot)='object')
+287: );
+288: CREATE OR REPLACE TRIGGER trg_research_first_discoveries_immutable_v1
+289:   BEFORE UPDATE OR DELETE ON public.research_first_discoveries_v1
+290:   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
+291: ALTER TABLE public.research_first_discoveries_v1 ENABLE ROW LEVEL SECURITY;
+292: REVOKE ALL ON public.research_first_discoveries_v1 FROM PUBLIC,anon,authenticated;
+293: GRANT SELECT,INSERT ON public.research_first_discoveries_v1 TO service_role;
+294: CREATE OR REPLACE FUNCTION public.capture_research_first_discoveries_v1(p_run_id uuid)
+295: RETURNS integer LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+296: DECLARE v_run public.research_priority_runs_v1; v_row jsonb; v_first timestamptz;
+297:   v_price jsonb; v_session date; v_stock uuid; v_count integer:=0; v_added integer;
+298: BEGIN
+299:   SELECT * INTO v_run FROM public.research_priority_runs_v1 WHERE run_id=p_run_id;
+300:   IF NOT FOUND THEN RAISE EXCEPTION 'research_priority_run_missing'; END IF;
+301:   FOR v_row IN SELECT value FROM jsonb_array_elements(v_run.rows) LOOP
+302:     IF COALESCE((v_row->>'hasDiscoveryEvidence')::boolean,false) IS NOT TRUE THEN CONTINUE; END IF;
+303:     IF EXISTS(SELECT 1 FROM public.research_first_discoveries_v1 WHERE symbol=v_row->>'symbol') THEN CONTINUE; END IF;
+304:     v_first:=COALESCE((v_row->>'firstSeenAt')::timestamptz,v_run.as_of);
+305:     IF v_first>v_run.as_of THEN RAISE EXCEPTION 'research_discovery_future_observation'; END IF;
+306:     SELECT id INTO v_stock FROM public.stocks WHERE symbol=v_row->>'symbol' AND market='TW';
+307:     -- Calendar close/source/observation clocks must all predate discovery.
+308:     SELECT max(session_id::date) INTO v_session FROM public.tw_trading_sessions_v3
+309:       WHERE status='completed' AND close_at<=v_first AND source_timestamp<=v_first
+310:         AND collected_at<=v_first AND recorded_at<=v_first;
+311:     SELECT jsonb_build_object('session',p.session_date,'close',p.close,'volume',p.volume,
+312:       'sourceUrl',p.source_url,'availableAt',p.available_at,'priceBasis','raw_exchange_quote') INTO v_price
+313:     FROM public.official_price_history p WHERE p.stock_id=v_stock AND p.session_date=v_session
+314:       AND p.available_at<=v_first AND p.as_of<=v_first AND p.close>0
+315:       AND p.source_url ~ '^https://([a-z0-9-]+[.])*(twse[.]com[.]tw|tpex[.]org[.]tw)/'
+316:       AND COALESCE(p.provenance->>'provider','') NOT LIKE '%finmind%'
+317:       AND COALESCE(p.provenance->>'integrityStatus','')<>'conflict'
+318:       AND COALESCE(p.provenance->>'integrity_status','')<>'conflict' LIMIT 1;
+319:     INSERT INTO public.research_first_discoveries_v1(symbol,run_id,first_seen_at,snapshot)
+320:       VALUES(v_row->>'symbol',p_run_id,v_first,jsonb_build_object('price',v_price,
+321:         'priceStatus',CASE WHEN v_price IS NULL THEN 'missing_at_discovery' ELSE 'official_quote' END,
+322:         'pricePhase','unknown','relative5d',NULL,'relative20d',NULL,'relative60d',NULL,
+323:         'gap','Adjusted price history and aligned benchmark are evaluated separately; a raw quote alone is not an early-entry signal.',
+324:         'factors',COALESCE(v_row->'factors','[]'::jsonb))) ON CONFLICT(symbol) DO NOTHING;
+325:     GET DIAGNOSTICS v_added=ROW_COUNT; v_count:=v_count+v_added;
+326:   END LOOP;
+327:   RETURN v_count;
+328: END $function$;
+329: REVOKE ALL ON FUNCTION public.capture_research_first_discoveries_v1(uuid) FROM PUBLIC,anon,authenticated;
+330: GRANT EXECUTE ON FUNCTION public.capture_research_first_discoveries_v1(uuid) TO service_role;
+331: 
+332: -- Failed assessments and validations remain immutable research records.
+333: -- Only the separately authenticated approval endpoint can issue adoption receipts.
+334: CREATE TABLE IF NOT EXISTS public.research_strategy_records_v1 (
+335:   record_hash text PRIMARY KEY CHECK(record_hash ~ '^[0-9a-f]{64}$'),
+336:   kind text NOT NULL CHECK(kind IN ('proposal','assessment','validation','approval')),
+337:   proposal_hash text NOT NULL CHECK(proposal_hash ~ '^[0-9a-f]{64}$'),
+338:   parent_hash text REFERENCES public.research_strategy_records_v1(record_hash) ON DELETE RESTRICT,
+339:   payload jsonb NOT NULL CHECK(jsonb_typeof(payload)='object'),
+340:   input_hash text NOT NULL CHECK(input_hash ~ '^[0-9a-f]{64}$'),
+341:   input_payload jsonb NOT NULL CHECK(jsonb_typeof(input_payload)='object'),
+342:   available_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+343:   CHECK((kind='proposal' AND parent_hash IS NULL AND proposal_hash=record_hash) OR
+344:     (kind<>'proposal' AND parent_hash IS NOT NULL))
+345: );
+346: CREATE INDEX IF NOT EXISTS idx_research_strategy_records_chain_v1 ON public.research_strategy_records_v1(proposal_hash,kind,available_at);
+347: CREATE OR REPLACE FUNCTION public.fence_research_strategy_record_v1()
+348: RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+349: DECLARE v_parent public.research_strategy_records_v1;
+350: BEGIN
+351:   IF NEW.available_at>clock_timestamp() THEN RAISE EXCEPTION 'research_strategy_future_record'; END IF;
+352:   IF NEW.kind='proposal' THEN
+353:     PERFORM pg_advisory_xact_lock(2409,6003);
+354:     IF EXISTS(SELECT 1 FROM public.research_strategy_records_v1 r WHERE r.kind='proposal'
+355:       AND date_trunc('week',r.available_at AT TIME ZONE 'Asia/Taipei')=
+356:         date_trunc('week',NEW.available_at AT TIME ZONE 'Asia/Taipei')
+357:       AND r.record_hash<>NEW.record_hash) THEN RAISE EXCEPTION 'research_strategy_weekly_hypothesis_cap'; END IF;
+358:   ELSE
+359:     SELECT * INTO v_parent FROM public.research_strategy_records_v1 WHERE record_hash=NEW.parent_hash;
+360:     IF NOT FOUND OR v_parent.proposal_hash<>NEW.proposal_hash OR v_parent.available_at>NEW.available_at
+361:       OR v_parent.kind<>(CASE NEW.kind WHEN 'assessment' THEN 'proposal' WHEN 'validation' THEN 'assessment' ELSE 'validation' END)
+362:       THEN RAISE EXCEPTION 'research_strategy_parent_binding_invalid'; END IF;
+363:   END IF;
+364:   RETURN NEW;
+365: END $function$;
+366: CREATE OR REPLACE TRIGGER trg_research_strategy_record_fence_v1 BEFORE INSERT ON public.research_strategy_records_v1
+367:   FOR EACH ROW EXECUTE FUNCTION public.fence_research_strategy_record_v1();
+368: CREATE OR REPLACE TRIGGER trg_research_strategy_records_immutable_v1 BEFORE UPDATE OR DELETE ON public.research_strategy_records_v1
+369:   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
+370: ALTER TABLE public.research_strategy_records_v1 ENABLE ROW LEVEL SECURITY;
+371: REVOKE ALL ON public.research_strategy_records_v1 FROM PUBLIC,anon,authenticated;
+372: GRANT SELECT,INSERT ON public.research_strategy_records_v1 TO service_role;
+373: 
+374: CREATE TABLE IF NOT EXISTS public.research_paper_book_revisions_v1 (
+375:   revision_hash text PRIMARY KEY CHECK(revision_hash ~ '^[0-9a-f]{64}$'),
+376:   book_id text NOT NULL CHECK(book_id IN ('conservative','growth')),
+377:   parent_hash text REFERENCES public.research_paper_book_revisions_v1(revision_hash) ON DELETE RESTRICT,
+378:   operation_key text NOT NULL CHECK(length(operation_key) BETWEEN 3 AND 200),
+379:   input_hash text NOT NULL CHECK(input_hash ~ '^[0-9a-f]{64}$'),
+380:   state jsonb NOT NULL CHECK(jsonb_typeof(state)='object'),
+381:   result jsonb NOT NULL CHECK(jsonb_typeof(result)='object'),
+382:   available_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+383:   UNIQUE(book_id,operation_key), CHECK(state->>'bookId'=book_id)
+384: );
+385: CREATE INDEX IF NOT EXISTS idx_research_paper_book_head_v1 ON public.research_paper_book_revisions_v1(book_id,available_at DESC);
+386: CREATE UNIQUE INDEX IF NOT EXISTS uq_research_paper_book_successor_v1 ON public.research_paper_book_revisions_v1(parent_hash) WHERE parent_hash IS NOT NULL;
+387: CREATE OR REPLACE FUNCTION public.fence_research_paper_book_append_v1()
+388: RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+389: DECLARE v_head public.research_paper_book_revisions_v1;
+390: BEGIN
+391:   PERFORM pg_advisory_xact_lock(hashtextextended(NEW.book_id,6102));
+392:   SELECT * INTO v_head FROM public.research_paper_book_revisions_v1 WHERE book_id=NEW.book_id
+393:     ORDER BY available_at DESC,revision_hash DESC LIMIT 1;
+394:   IF NEW.parent_hash IS DISTINCT FROM v_head.revision_hash THEN RAISE EXCEPTION 'research_paper_book_head_changed'; END IF;
+395:   IF v_head.revision_hash IS NOT NULL AND NEW.state->>'inceptionAt' IS DISTINCT FROM v_head.state->>'inceptionAt'
+396:     THEN RAISE EXCEPTION 'research_paper_book_inception_changed'; END IF;
+397:   IF v_head.state->>'activationAt' IS NOT NULL
+398:     AND NEW.state->>'activationAt' IS DISTINCT FROM v_head.state->>'activationAt'
+399:     THEN RAISE EXCEPTION 'research_paper_book_activation_changed'; END IF;
+400:   IF v_head.state->>'inceptionAt' IS NOT NULL AND v_head.state->>'activationAt' IS NULL
+401:     AND (NEW.state->>'activationAt')::timestamptz IS DISTINCT FROM
+402:       greatest((v_head.state->>'inceptionAt')::timestamptz,v_head.available_at)
+403:     THEN RAISE EXCEPTION 'research_paper_book_activation_invalid'; END IF;
+404:   IF NEW.available_at>clock_timestamp() OR (v_head.revision_hash IS NOT NULL AND NEW.available_at<=v_head.available_at)
+405:     THEN RAISE EXCEPTION 'research_paper_book_revision_time_invalid'; END IF;
+406:   RETURN NEW;
+407: END $function$;
+408: CREATE OR REPLACE TRIGGER trg_research_paper_book_append_v1 BEFORE INSERT ON public.research_paper_book_revisions_v1
+409:   FOR EACH ROW EXECUTE FUNCTION public.fence_research_paper_book_append_v1();
+410: CREATE OR REPLACE TRIGGER trg_research_paper_book_immutable_v1 BEFORE UPDATE OR DELETE ON public.research_paper_book_revisions_v1
+411:   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
+412: ALTER TABLE public.research_paper_book_revisions_v1 ENABLE ROW LEVEL SECURITY;
+413: REVOKE ALL ON public.research_paper_book_revisions_v1 FROM PUBLIC,anon,authenticated;
+414: GRANT SELECT,INSERT ON public.research_paper_book_revisions_v1 TO service_role;
+415: 
+416: CREATE OR REPLACE FUNCTION public.research_evidence_heads_v1(p_ids uuid[],p_cutoff timestamptz)
+417: RETURNS SETOF jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+418: BEGIN
+419:   IF p_ids IS NULL OR cardinality(p_ids)>100 OR p_cutoff IS NULL OR p_cutoff>clock_timestamp()
+420:     THEN RAISE EXCEPTION 'research_evidence_head_bound_invalid'; END IF;
+421:   RETURN QUERY SELECT jsonb_build_object('id',original.id,'headId',head.id,
+422:     'retracted',head.metadata->>'retracted_at' IS NOT NULL OR parent.metadata->>'retracted_at' IS NOT NULL,
+423:     'superseded',head.id IS DISTINCT FROM original.id AND (
+424:       COALESCE(head.canonical_content_hash,head.id::text) IS DISTINCT FROM COALESCE(original.canonical_content_hash,original.id::text)
+425:       OR head.metadata->>'claim_status' IS DISTINCT FROM original.metadata->>'claim_status'
+426:       OR head.metadata->>'retracted_at' IS DISTINCT FROM original.metadata->>'retracted_at')
+427:       OR COALESCE(parent.metadata->>'claim_status'='denied',false))
+428:   FROM public.source_raw_documents original
+429:   LEFT JOIN LATERAL (
+430:     SELECT d.* FROM public.source_raw_documents d
+431:     WHERE COALESCE(d.metadata->>'canonical_url',split_part(d.document_url,'#si-revision-',1))=
+432:       COALESCE(original.metadata->>'canonical_url',split_part(original.document_url,'#si-revision-',1))
+433:       AND (d.metadata #>> '{insider_evidence,identity}') IS NOT DISTINCT FROM
+434:         (original.metadata #>> '{insider_evidence,identity}')
+435:       AND d.published_at<=p_cutoff AND d.collected_at<=p_cutoff
+436:       AND COALESCE(NULLIF(d.metadata->>'revision_observed_at','')::timestamptz,d.collected_at)<=p_cutoff
+437:     ORDER BY COALESCE(NULLIF(d.metadata->>'revision_observed_at','')::timestamptz,d.collected_at) DESC,
+438:       CASE WHEN d.metadata->>'retracted_at' IS NOT NULL THEN 2 WHEN d.metadata->>'claim_status'='denied' THEN 1 ELSE 0 END DESC,
+439:       COALESCE(d.canonical_content_hash,d.id::text) DESC,d.id DESC LIMIT 1
+440:   ) head ON true
+441:   LEFT JOIN LATERAL (
+442:     SELECT d.metadata FROM public.source_raw_documents d
+443:     WHERE NULLIF(original.metadata->>'parent_source_url','') IS NOT NULL
+444:       AND COALESCE(d.metadata->>'canonical_url',split_part(d.document_url,'#si-revision-',1))=original.metadata->>'parent_source_url'
+445:       AND d.published_at<=p_cutoff AND d.collected_at<=p_cutoff
+446:       AND COALESCE(NULLIF(d.metadata->>'revision_observed_at','')::timestamptz,d.collected_at)<=p_cutoff
+447:     ORDER BY COALESCE(NULLIF(d.metadata->>'revision_observed_at','')::timestamptz,d.collected_at) DESC,
+448:       CASE WHEN d.metadata->>'retracted_at' IS NOT NULL THEN 2 WHEN d.metadata->>'claim_status'='denied' THEN 1 ELSE 0 END DESC,
+449:       COALESCE(d.canonical_content_hash,d.id::text) DESC,d.id DESC LIMIT 1
+450:   ) parent ON true
+451:   WHERE original.id=ANY(p_ids) AND original.collected_at<=p_cutoff AND original.published_at<=p_cutoff;
+452: END $function$;
+453: REVOKE ALL ON FUNCTION public.research_evidence_heads_v1(uuid[],timestamptz) FROM PUBLIC,anon,authenticated;
+454: GRANT EXECUTE ON FUNCTION public.research_evidence_heads_v1(uuid[],timestamptz) TO service_role;
+455: 
+456: CREATE OR REPLACE FUNCTION public.research_thesis_heads_page_v1(
+457:   p_cutoff timestamptz,p_offset integer,p_limit integer)
+458: RETURNS SETOF jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+459: BEGIN
+460:   IF p_cutoff IS NULL OR p_cutoff>clock_timestamp() OR p_offset NOT BETWEEN 0 AND 20000
+461:     OR p_limit NOT BETWEEN 1 AND 500 THEN RAISE EXCEPTION 'research_thesis_head_request_invalid'; END IF;
+462:   RETURN QUERY SELECT to_jsonb(head) FROM (
+463:     SELECT DISTINCT ON(stock_id) stock_id,id,payload,created_at
+464:     FROM public.candidate_thesis_qualifications_v1
+465:     WHERE qualified_at<=p_cutoff AND created_at<=p_cutoff
+466:     ORDER BY stock_id,created_at DESC,id DESC
+467:   ) head ORDER BY head.stock_id LIMIT p_limit OFFSET p_offset;
+468: END $function$;
+469: REVOKE ALL ON FUNCTION public.research_thesis_heads_page_v1(timestamptz,integer,integer) FROM PUBLIC,anon,authenticated;
+470: GRANT EXECUTE ON FUNCTION public.research_thesis_heads_page_v1(timestamptz,integer,integer) TO service_role;
+471: 
+472: CREATE INDEX IF NOT EXISTS idx_research_strategy_input_replay_v1
+473:   ON public.research_strategy_records_v1(kind,input_hash);
+474: 
+475: -- Compare actual installed routine bodies/attributes against the reviewed
+476: -- application manifest. Candidate declarations alone cannot authorize entries.
+477: CREATE OR REPLACE FUNCTION public.research_execution_policy_matches_v1(p_expected jsonb)
+478: RETURNS boolean LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=public,pg_temp
+479: AS $function$
+480: DECLARE v_item jsonb; v_proc record;
+481: BEGIN
+482:   IF jsonb_typeof(p_expected) IS DISTINCT FROM 'array' OR jsonb_array_length(p_expected) NOT BETWEEN 8 AND 100
+483:     THEN RETURN false; END IF;
+484:   FOR v_item IN SELECT value FROM jsonb_array_elements(p_expected) LOOP
+485:     IF v_item->>'name' !~ '^[a-z0-9_]+$' THEN RETURN false; END IF;
+486:     IF (SELECT count(*) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+487:       WHERE n.nspname='public' AND p.proname=v_item->>'name')<>1 THEN RETURN false; END IF;
+488:     SELECT p.* INTO v_proc FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+489:       WHERE n.nspname='public' AND p.proname=v_item->>'name';
+490:     IF encode(sha256(convert_to(v_proc.prosrc,'UTF8')),'hex') IS DISTINCT FROM v_item->>'bodySha256'
+491:       OR v_proc.prosecdef IS DISTINCT FROM (v_item->>'securityDefiner')::boolean
+492:       OR v_proc.provolatile::text IS DISTINCT FROM v_item->>'volatility'
+493:       OR v_proc.pronargs IS DISTINCT FROM (v_item->>'argumentCount')::integer
+494:       OR oidvectortypes(v_proc.proargtypes) IS DISTINCT FROM v_item->>'argumentTypes'
+495:       OR (SELECT coalesce(jsonb_agg(regexp_replace(setting,'[[:space:]"]','','g') ORDER BY setting),'[]'::jsonb)
+496:         FROM unnest(v_proc.proconfig) setting) IS DISTINCT FROM v_item->'configuration'
+497:       THEN RETURN false; END IF;
+498:   END LOOP;
+499:   IF EXISTS(SELECT 1 FROM (VALUES
+500:       ('candidate_thesis_qualifications_v1','trg_candidate_thesis_append_fence_v1','fence_candidate_thesis_append_v1',7),
+501:       ('candidate_thesis_qualifications_v1','trg_candidate_thesis_qualifications_immutable_v1','reject_candidate_dossier_revision_mutation_v4',27),
+502:       ('candidate_technical_decisions_v1','trg_candidate_technical_decisions_immutable_v1','reject_candidate_dossier_revision_mutation_v4',27),
+503:       ('research_strategy_records_v1','trg_research_strategy_record_fence_v1','fence_research_strategy_record_v1',7),
+504:       ('research_strategy_records_v1','trg_research_strategy_records_immutable_v1','reject_candidate_dossier_revision_mutation_v4',27),
+505:       ('research_paper_book_revisions_v1','trg_research_paper_book_append_v1','fence_research_paper_book_append_v1',7),
+506:       ('research_paper_book_revisions_v1','trg_research_paper_book_immutable_v1','reject_candidate_dossier_revision_mutation_v4',27)
+507:     ) expected(table_name,trigger_name,function_name,trigger_type)
+508:     WHERE NOT EXISTS(SELECT 1 FROM pg_trigger t JOIN pg_proc p ON p.oid=t.tgfoid
+509:       JOIN pg_namespace n ON n.oid=p.pronamespace
+510:       WHERE t.tgrelid=to_regclass('public.'||expected.table_name) AND t.tgname=expected.trigger_name
+511:         AND n.nspname='public' AND p.proname=expected.function_name
+512:         AND t.tgenabled='O' AND t.tgtype=expected.trigger_type AND t.tgqual IS NULL)) THEN RETURN false; END IF;
+513:   RETURN EXISTS(SELECT 1 FROM pg_attribute WHERE attrelid='public.candidate_technical_decisions_v1'::regclass
+514:     AND attname='decision_input_hash' AND attnotnull AND NOT attisdropped);
+515: END $function$;
+516: REVOKE ALL ON FUNCTION public.research_execution_policy_matches_v1(jsonb) FROM PUBLIC,anon,authenticated;
+517: GRANT EXECUTE ON FUNCTION public.research_execution_policy_matches_v1(jsonb) TO service_role;
+518: 
+519: COMMIT;

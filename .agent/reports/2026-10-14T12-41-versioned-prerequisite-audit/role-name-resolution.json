@@ -1,0 +1,300 @@
+[
+  {
+    "requestedName": "research_input_preparation_owner_v2",
+    "exists": true,
+    "role": {
+      "oid": 25200,
+      "rolname": "research_input_preparation_owner_v2",
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconnlimit": -1,
+      "rolconfig": null,
+      "rolvaliduntil": null,
+      "password_is_null": true
+    },
+    "publicSchema": {
+      "rolname": "research_input_preparation_owner_v2",
+      "nspname": "public",
+      "usage": false,
+      "create_privilege": false
+    },
+    "membershipsInvolvingRole": []
+  },
+  {
+    "requestedName": "research_source_owner_v2",
+    "exists": false,
+    "role": null,
+    "publicSchema": null,
+    "membershipsInvolvingRole": []
+  },
+  {
+    "requestedName": "research_source_fence_owner_v2",
+    "exists": true,
+    "role": {
+      "oid": 25147,
+      "rolname": "research_source_fence_owner_v2",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconnlimit": -1,
+      "rolconfig": null,
+      "rolvaliduntil": null,
+      "password_is_null": true
+    },
+    "publicSchema": {
+      "rolname": "research_source_fence_owner_v2",
+      "nspname": "public",
+      "usage": false,
+      "create_privilege": false
+    },
+    "membershipsInvolvingRole": []
+  },
+  {
+    "requestedName": "research_observed_rpc_owner",
+    "exists": true,
+    "role": {
+      "oid": 24899,
+      "rolname": "research_observed_rpc_owner",
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconnlimit": -1,
+      "rolconfig": null,
+      "rolvaliduntil": null,
+      "password_is_null": true
+    },
+    "publicSchema": {
+      "rolname": "research_observed_rpc_owner",
+      "nspname": "public",
+      "usage": true,
+      "create_privilege": false
+    },
+    "membershipsInvolvingRole": []
+  },
+  {
+    "requestedName": "research_deep_job_rpc_owner",
+    "exists": false,
+    "role": null,
+    "publicSchema": null,
+    "membershipsInvolvingRole": []
+  },
+  {
+    "requestedName": "research_model_rpc_owner",
+    "exists": false,
+    "role": null,
+    "publicSchema": null,
+    "membershipsInvolvingRole": []
+  },
+  {
+    "requestedName": "service_role",
+    "exists": true,
+    "role": {
+      "oid": 16386,
+      "rolname": "service_role",
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": true,
+      "rolconnlimit": -1,
+      "rolconfig": null,
+      "rolvaliduntil": null,
+      "password_is_null": true
+    },
+    "publicSchema": {
+      "rolname": "service_role",
+      "nspname": "public",
+      "usage": true,
+      "create_privilege": false
+    },
+    "membershipsInvolvingRole": [
+      {
+        "role": "service_role",
+        "member": "authenticator",
+        "grantor": "postgres",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "service_role",
+        "member": "stockinsider",
+        "grantor": "postgres",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      }
+    ]
+  },
+  {
+    "requestedName": "anon",
+    "exists": true,
+    "role": {
+      "oid": 16384,
+      "rolname": "anon",
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconnlimit": -1,
+      "rolconfig": null,
+      "rolvaliduntil": null,
+      "password_is_null": true
+    },
+    "publicSchema": {
+      "rolname": "anon",
+      "nspname": "public",
+      "usage": true,
+      "create_privilege": false
+    },
+    "membershipsInvolvingRole": [
+      {
+        "role": "anon",
+        "member": "authenticator",
+        "grantor": "postgres",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "anon",
+        "member": "stockinsider",
+        "grantor": "postgres",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      }
+    ]
+  },
+  {
+    "requestedName": "authenticated",
+    "exists": true,
+    "role": {
+      "oid": 16385,
+      "rolname": "authenticated",
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconnlimit": -1,
+      "rolconfig": null,
+      "rolvaliduntil": null,
+      "password_is_null": true
+    },
+    "publicSchema": {
+      "rolname": "authenticated",
+      "nspname": "public",
+      "usage": true,
+      "create_privilege": false
+    },
+    "membershipsInvolvingRole": [
+      {
+        "role": "authenticated",
+        "member": "authenticator",
+        "grantor": "postgres",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "authenticated",
+        "member": "stockinsider",
+        "grantor": "postgres",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      }
+    ]
+  },
+  {
+    "requestedName": "legacy_correctness_rpc_owner",
+    "exists": true,
+    "role": {
+      "oid": 16389,
+      "rolname": "legacy_correctness_rpc_owner",
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconnlimit": -1,
+      "rolconfig": null,
+      "rolvaliduntil": null,
+      "password_is_null": true
+    },
+    "publicSchema": {
+      "rolname": "legacy_correctness_rpc_owner",
+      "nspname": "public",
+      "usage": true,
+      "create_privilege": false
+    },
+    "membershipsInvolvingRole": [
+      {
+        "role": "legacy_correctness_rpc_owner",
+        "member": "postgres",
+        "grantor": "postgres",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      }
+    ]
+  },
+  {
+    "requestedName": "opportunity_v3_rpc_owner",
+    "exists": true,
+    "role": {
+      "oid": 16388,
+      "rolname": "opportunity_v3_rpc_owner",
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconnlimit": -1,
+      "rolconfig": null,
+      "rolvaliduntil": null,
+      "password_is_null": true
+    },
+    "publicSchema": {
+      "rolname": "opportunity_v3_rpc_owner",
+      "nspname": "public",
+      "usage": true,
+      "create_privilege": false
+    },
+    "membershipsInvolvingRole": [
+      {
+        "role": "opportunity_v3_rpc_owner",
+        "member": "postgres",
+        "grantor": "postgres",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      }
+    ]
+  }
+]

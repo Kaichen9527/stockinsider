@@ -1,0 +1,1 @@
+Preserved source-only discovery error (no PG retry): sed attempted migrations/20261009_research_source_fence_v2.sql; exit1: No such file or directory. Correct existing path found using rg --files: migrations/20261009_research_publication_source_fence_v2.sql. No files changed.

@@ -1,0 +1,4 @@
+{
+  "sql": "SELECT r.oid,r.rolname,r.rolsuper,r.rolinherit,r.rolcreaterole,r.rolcreatedb,r.rolcanlogin,r.rolreplication,r.rolbypassrls,r.rolconnlimit,r.rolconfig,r.rolvaliduntil::text,(a.rolpassword IS NULL) password_is_null FROM pg_roles r JOIN pg_authid a USING(oid) WHERE r.rolname !~ '^pg_' ORDER BY r.rolname",
+  "parameters": []
+}

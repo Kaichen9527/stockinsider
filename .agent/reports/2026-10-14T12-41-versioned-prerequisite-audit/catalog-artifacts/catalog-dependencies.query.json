@@ -1,0 +1,36 @@
+{
+  "sql": "SELECT p.oid::regprocedure::text function,pg_describe_object(d.refclassid,d.refobjid,d.refobjsubid) dependency,d.deptype FROM pg_depend d JOIN pg_proc p ON d.classid='pg_proc'::regclass AND d.objid=p.oid WHERE p.oid=ANY($1::oid[]) ORDER BY 1,2",
+  "parameters": [
+    [
+      25667,
+      25253,
+      25195,
+      25138,
+      24771,
+      25668,
+      25248,
+      25666,
+      25303,
+      25136,
+      25123,
+      25130,
+      25124,
+      25297,
+      25298,
+      25300,
+      25665,
+      25302,
+      25299,
+      25664,
+      25246,
+      24620,
+      24967,
+      24587,
+      25184,
+      24621,
+      25669,
+      25190,
+      25125
+    ]
+  ]
+}

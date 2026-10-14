@@ -1,0 +1,122 @@
+[
+  {
+    "relname": "candidate_dossier_bundles",
+    "attname": "bundle_id",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "candidate_dossier_outbox_v5",
+    "attname": "attempts",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "candidate_dossier_outbox_v5",
+    "attname": "last_submission_hash",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "candidate_dossier_outbox_v5",
+    "attname": "lease_expires_at",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "candidate_dossier_outbox_v5",
+    "attname": "lease_owner",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "candidate_dossier_outbox_v5",
+    "attname": "receipt_id",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "candidate_dossier_outbox_v5",
+    "attname": "status",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "candidate_dossier_outbox_v5",
+    "attname": "updated_at",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "completion_article_hash",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "completion_outbox_job_id",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "completion_outbox_owner",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "completion_owner",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "completion_reviewer_result_id",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "completion_submission_hash",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "finished_at",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "job_id",
+    "raw_column_acl": "{research_input_preparation_owner_v2=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "lease_expires_at",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "lease_owner",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "receipt_id",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "status",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_deep_jobs_v1",
+    "attname": "terminal_reason",
+    "raw_column_acl": "{research_observed_rpc_owner=w/postgres}"
+  },
+  {
+    "relname": "research_model_reservations_v1",
+    "attname": "reservation_id",
+    "raw_column_acl": "{research_input_preparation_owner_v2=w/postgres}"
+  },
+  {
+    "relname": "source_entities",
+    "attname": "display_name",
+    "raw_column_acl": "{opportunity_v3_rpc_owner=r/postgres}"
+  },
+  {
+    "relname": "source_entities",
+    "attname": "id",
+    "raw_column_acl": "{opportunity_v3_rpc_owner=r/postgres}"
+  }
+]

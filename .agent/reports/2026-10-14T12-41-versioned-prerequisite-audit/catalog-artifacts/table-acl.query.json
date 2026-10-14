@@ -1,0 +1,4 @@
+{
+  "sql": "SELECT t.relname,CASE WHEN a.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee) END grantee,pg_get_userbyid(a.grantor) grantor,a.privilege_type,a.is_grantable FROM pg_class t JOIN pg_namespace n ON n.oid=t.relnamespace CROSS JOIN LATERAL aclexplode(coalesce(t.relacl,acldefault('r',t.relowner))) a WHERE n.nspname='public' AND t.relkind IN ('r','p') ORDER BY 1,2,4",
+  "parameters": []
+}

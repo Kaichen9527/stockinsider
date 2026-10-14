@@ -1,0 +1,389 @@
+[
+  {
+    "caller": "assert_research_input_candidate_v3(jsonb,text)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_parent_candidate_v3(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "assert_research_input_candidate_v3(jsonb,text)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_input_binding_candidate_v3(text,text,text,boolean)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "claim_research_observed_job_v2(text,text)",
+    "callerOwner": "research_observed_rpc_owner",
+    "callerSecurityDefiner": true,
+    "callee": "reap_expired_research_deep_jobs_v2()",
+    "execute": true,
+    "schemaUsage": true,
+    "contextCaveat": null
+  },
+  {
+    "caller": "claim_research_observed_job_v2(text,text)",
+    "callerOwner": "research_observed_rpc_owner",
+    "callerSecurityDefiner": true,
+    "callee": "reserve_research_model_v1(text,text,text)",
+    "execute": true,
+    "schemaUsage": true,
+    "contextCaveat": null
+  },
+  {
+    "caller": "claim_research_observed_job_v2(text,text)",
+    "callerOwner": "research_observed_rpc_owner",
+    "callerSecurityDefiner": true,
+    "callee": "read_research_observed_claim_v2(text,text,uuid,integer)",
+    "execute": true,
+    "schemaUsage": true,
+    "contextCaveat": null
+  },
+  {
+    "caller": "enqueue_research_deep_jobs_v1(uuid)",
+    "callerOwner": "research_observed_rpc_owner",
+    "callerSecurityDefiner": true,
+    "callee": "reconcile_research_deep_admissions_v1()",
+    "execute": true,
+    "schemaUsage": true,
+    "contextCaveat": null
+  },
+  {
+    "caller": "prepare_research_input_candidate_v3(jsonb,text,text)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_input_binding_candidate_v3(text,text,text,boolean)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "prepare_research_input_candidate_v3(jsonb,text,text)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "prepare_research_input_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "read_research_article_input_candidate_v3(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "read_research_article_input_revision_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "read_research_article_input_candidate_v3(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_parent_candidate_v3(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "read_research_article_input_candidate_v3(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_input_binding_candidate_v3(text,text,text,boolean)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "read_research_article_input_candidate_v3(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_hash_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "read_research_article_input_candidate_v3(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "research_complete_parent_candidate_v3(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_input_binding_candidate_v3(text,text,text,boolean)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "research_complete_parent_candidate_v3(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "research_complete_parent_candidate_v3(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_hash_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "research_input_binding_candidate_v3(text,text,text,boolean)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_hash_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "research_input_binding_candidate_v3(text,text,text,boolean)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_observed_canonical_json_v1(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "reserve_research_model_v1(text,text,text)",
+    "callerOwner": "postgres",
+    "callerSecurityDefiner": true,
+    "callee": "research_model_lease_fits_day_v1(timestamp with time zone)",
+    "execute": true,
+    "schemaUsage": true,
+    "contextCaveat": null
+  },
+  {
+    "caller": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "read_research_article_input_candidate_v3(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "assert_research_input_candidate_v3(jsonb,text)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_hash_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_canonical_v2(jsonb,integer)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+    "callerOwner": "research_observed_rpc_owner",
+    "callerSecurityDefiner": true,
+    "callee": "read_research_observed_roster_v1(text,timestamp with time zone,integer,integer)",
+    "execute": true,
+    "schemaUsage": true,
+    "contextCaveat": null
+  },
+  {
+    "caller": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+    "callerOwner": "research_observed_rpc_owner",
+    "callerSecurityDefiner": true,
+    "callee": "research_source_heads_page_v1(timestamp with time zone,integer,integer)",
+    "execute": true,
+    "schemaUsage": true,
+    "contextCaveat": null
+  },
+  {
+    "caller": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+    "callerOwner": "research_observed_rpc_owner",
+    "callerSecurityDefiner": true,
+    "callee": "enqueue_research_deep_jobs_v1(uuid)",
+    "execute": true,
+    "schemaUsage": true,
+    "contextCaveat": null
+  },
+  {
+    "caller": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "prepare_research_input_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "prepare_research_input_v2(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_observed_canonical_json_v1(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "prepare_research_input_v2(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "assert_research_source_seal_v2(uuid)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "prepare_research_input_v2(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_source_root_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "prepare_research_input_v2(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "prepare_research_input_v2(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_input_preparation_bytes_v2(jsonb,jsonb,jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "read_research_article_input_revision_v2(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_parent_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "read_research_article_input_revision_v2(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_hash_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "research_complete_canonical_v2(jsonb,integer)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": false,
+    "callee": "research_complete_canonical_v2(jsonb,integer)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": "INVOKER actual effective role inherits upstream calling context; owner-only row is not a runtime assertion"
+  },
+  {
+    "caller": "research_complete_hash_v2(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": false,
+    "callee": "research_complete_canonical_v2(jsonb,integer)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": "INVOKER actual effective role inherits upstream calling context; owner-only row is not a runtime assertion"
+  },
+  {
+    "caller": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": false,
+    "callee": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": "INVOKER actual effective role inherits upstream calling context; owner-only row is not a runtime assertion"
+  },
+  {
+    "caller": "research_observed_canonical_json_v1(jsonb)",
+    "callerOwner": "postgres",
+    "callerSecurityDefiner": false,
+    "callee": "research_observed_canonical_json_v1(jsonb)",
+    "execute": true,
+    "schemaUsage": true,
+    "contextCaveat": "INVOKER actual effective role inherits upstream calling context; owner-only row is not a runtime assertion"
+  },
+  {
+    "caller": "research_complete_parent_v2(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_complete_mapping_v2(text)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "research_complete_parent_v2(jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  },
+  {
+    "caller": "research_input_preparation_bytes_v2(jsonb,jsonb,jsonb)",
+    "callerOwner": "research_input_preparation_owner_v2",
+    "callerSecurityDefiner": false,
+    "callee": "research_observed_canonical_json_v1(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": "INVOKER actual effective role inherits upstream calling context; owner-only row is not a runtime assertion"
+  },
+  {
+    "caller": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+    "callerOwner": "research_source_fence_owner_v2",
+    "callerSecurityDefiner": true,
+    "callee": "research_source_root_v2(jsonb)",
+    "execute": true,
+    "schemaUsage": false,
+    "contextCaveat": null
+  }
+]

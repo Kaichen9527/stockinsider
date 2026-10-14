@@ -1,0 +1,287 @@
+1: BEGIN;
+2: SELECT pg_advisory_xact_lock(2409,6001);
+3: ALTER TABLE public.research_priority_runs_v1
+4:  ADD COLUMN research_scope text NOT NULL DEFAULT 'formal_v1',
+5:  ADD COLUMN observed_snapshot_hash text REFERENCES public.research_observed_roster_snapshots_v1(snapshot_hash),
+6:  ADD COLUMN scope_receipt jsonb,
+7:  ADD CONSTRAINT research_priority_scope_v1 CHECK (
+8:   (research_scope='formal_v1' AND observed_snapshot_hash IS NULL AND scope_receipt IS NULL) OR
+9:   (research_scope='research_observed_v1' AND observed_snapshot_hash IS NOT NULL AND jsonb_typeof(scope_receipt)='object'));
+10: -- RLS bypass does not grant permission to manufacture an observed run.
+11: CREATE FUNCTION public.fence_observed_priority_insert_v1() RETURNS trigger LANGUAGE plpgsql SET search_path=public,pg_temp AS $$
+12: BEGIN
+13:  IF NEW.research_scope='research_observed_v1' AND current_user<>'research_observed_rpc_owner' THEN RAISE EXCEPTION 'observed_priority_requires_scoped_store';END IF;
+14:  RETURN NEW;
+15: END $$;
+16: CREATE TRIGGER observed_priority_store_fence_v1 BEFORE INSERT ON public.research_priority_runs_v1 FOR EACH ROW EXECUTE FUNCTION public.fence_observed_priority_insert_v1();
+17: REVOKE ALL ON FUNCTION public.fence_observed_priority_insert_v1() FROM PUBLIC,anon,authenticated,service_role;
+18: CREATE TABLE public.research_observed_priority_store_receipts_v1 (
+19:  run_id uuid PRIMARY KEY REFERENCES public.research_priority_runs_v1(run_id),
+20:  stored_run_hash text NOT NULL CHECK(stored_run_hash~'^[a-f0-9]{64}$'),
+21:  stored_at timestamptz NOT NULL DEFAULT clock_timestamp()
+22: );
+23: -- A single clock is captured inside the admission lock and reused by every
+24: -- job/charge in that transaction, even if the loop crosses Taipei Monday.
+25: CREATE TABLE public.research_deep_admission_clocks_v1 (
+26:  run_id uuid PRIMARY KEY REFERENCES public.research_priority_runs_v1(run_id),
+27:  admission_at timestamptz NOT NULL,admission_week date NOT NULL,
+28:  CHECK(isfinite(admission_at) AND admission_week=date_trunc('week',admission_at AT TIME ZONE 'Asia/Taipei')::date)
+29: );
+30: ALTER TABLE public.research_deep_jobs_v1
+31:  ALTER COLUMN stock_id DROP NOT NULL,
+32:  ADD COLUMN research_scope text NOT NULL DEFAULT 'formal_v1',
+33:  ADD COLUMN research_company_id uuid REFERENCES public.research_observed_companies_v1(research_company_id),
+34:  ADD COLUMN observed_snapshot_hash text,
+35:  ADD CONSTRAINT deep_observed_member_v1 FOREIGN KEY(observed_snapshot_hash,research_company_id) REFERENCES public.research_observed_roster_members_v1(snapshot_hash,research_company_id),
+36:  ADD CONSTRAINT deep_job_scope_v1 CHECK (
+37:   (research_scope='formal_v1' AND stock_id IS NOT NULL AND research_company_id IS NULL AND observed_snapshot_hash IS NULL) OR
+38:   (research_scope='research_observed_v1' AND research_company_id IS NOT NULL AND observed_snapshot_hash IS NOT NULL));
+39: CREATE TABLE public.research_observed_first_discoveries_v1 (
+40:  research_company_id uuid PRIMARY KEY REFERENCES public.research_observed_companies_v1(research_company_id),
+41:  symbol text NOT NULL,run_id uuid NOT NULL REFERENCES public.research_priority_runs_v1(run_id),
+42:  first_seen_at timestamptz NOT NULL,captured_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+43:  snapshot jsonb NOT NULL CHECK(jsonb_typeof(snapshot)='object'),
+44:  observed_snapshot_hash text NOT NULL,
+45:  FOREIGN KEY(observed_snapshot_hash,research_company_id) REFERENCES public.research_observed_roster_members_v1(snapshot_hash,research_company_id)
+46: );
+47: CREATE TABLE public.research_observed_discovery_lineage_v1 (
+48:  research_company_id uuid NOT NULL REFERENCES public.research_observed_first_discoveries_v1(research_company_id),
+49:  snapshot_hash text NOT NULL REFERENCES public.research_observed_roster_snapshots_v1(snapshot_hash),
+50:  run_id uuid NOT NULL REFERENCES public.research_priority_runs_v1(run_id),
+51:  recorded_at timestamptz NOT NULL DEFAULT clock_timestamp(),PRIMARY KEY(research_company_id,snapshot_hash,run_id)
+52: );
+53: CREATE TABLE public.research_deep_admission_charges_v1 (
+54:  job_id uuid PRIMARY KEY REFERENCES public.research_deep_jobs_v1(job_id),
+55:  issuer_key text NOT NULL CHECK(issuer_key ~ '^TW:[0-9]{4}$'),
+56:  admission_at timestamptz NOT NULL,admission_week date NOT NULL,
+57:  UNIQUE(issuer_key,admission_week),
+58:  CHECK(admission_week=(date_trunc('week',admission_at AT TIME ZONE 'Asia/Taipei'))::date)
+59: );
+60: CREATE TABLE public.research_deep_run_admissions_v1 (
+61:  run_id uuid PRIMARY KEY REFERENCES public.research_priority_runs_v1(run_id),
+62:  admission_at timestamptz NOT NULL,admission_week date NOT NULL,added_count integer NOT NULL CHECK(added_count BETWEEN 0 AND 5),
+63:  CHECK(admission_week=(date_trunc('week',admission_at AT TIME ZONE 'Asia/Taipei'))::date)
+64: );
+65: CREATE TABLE public.research_deep_admission_cutover_v1 (
+66:  singleton boolean PRIMARY KEY CHECK(singleton),installed_at timestamptz NOT NULL DEFAULT clock_timestamp()
+67: );
+68: INSERT INTO public.research_deep_admission_cutover_v1(singleton) VALUES(true);
+69: CREATE FUNCTION public.validate_research_deep_scope_v1() RETURNS trigger LANGUAGE plpgsql SET search_path=public,pg_temp AS $$
+70: DECLARE r public.research_priority_runs_v1; c public.research_observed_companies_v1; s public.stocks; admission_clock timestamptz;
+71: BEGIN
+72:  IF TG_OP='INSERT' THEN
+73:   PERFORM pg_advisory_xact_lock(2409,6001);admission_clock:=clock_timestamp();
+74:   IF current_user='research_observed_rpc_owner' THEN
+75:    SELECT admission_at INTO admission_clock FROM public.research_deep_admission_clocks_v1 WHERE run_id=NEW.priority_run_id;
+76:    IF NOT FOUND THEN RAISE EXCEPTION 'deep_scoped_admission_clock_missing';END IF;
+77:   END IF;
+78:   NEW.created_at:=admission_clock;NEW.week_start:=date_trunc('week',admission_clock AT TIME ZONE 'Asia/Taipei')::date;
+79:  END IF;
+80:  SELECT * INTO r FROM public.research_priority_runs_v1 WHERE run_id=NEW.priority_run_id;
+81:  IF r.research_scope IS DISTINCT FROM NEW.research_scope OR r.observed_snapshot_hash IS DISTINCT FROM NEW.observed_snapshot_hash THEN RAISE EXCEPTION 'deep_scope_run_binding_invalid'; END IF;
+82:  IF NEW.research_scope='research_observed_v1' THEN
+83:   IF current_user<>'research_observed_rpc_owner' THEN RAISE EXCEPTION 'observed_job_requires_scoped_rpc'; END IF;
+84:   SELECT * INTO c FROM public.research_observed_companies_v1 WHERE research_company_id=NEW.research_company_id;
+85:   IF NOT FOUND OR c.symbol<>NEW.symbol THEN RAISE EXCEPTION 'deep_scope_company_invalid'; END IF;
+86:  END IF;
+87:  IF NEW.stock_id IS NOT NULL THEN
+88:   SELECT * INTO s FROM public.stocks WHERE id=NEW.stock_id;
+89:   IF NOT FOUND OR s.market<>'TW' OR s.symbol<>NEW.symbol THEN RAISE EXCEPTION 'deep_scope_stock_mapping_invalid'; END IF;
+90:  END IF;
+91:  IF TG_OP='UPDATE' AND (OLD.research_scope,OLD.research_company_id,OLD.observed_snapshot_hash,OLD.stock_id,OLD.symbol,OLD.priority_run_id,OLD.week_start,OLD.created_at) IS DISTINCT FROM (NEW.research_scope,NEW.research_company_id,NEW.observed_snapshot_hash,NEW.stock_id,NEW.symbol,NEW.priority_run_id,NEW.week_start,NEW.created_at) THEN RAISE EXCEPTION 'deep_scope_lineage_immutable'; END IF;
+92:  RETURN NEW;
+93: END $$;
+94: CREATE TRIGGER research_deep_scope_binding_v1 BEFORE INSERT OR UPDATE ON public.research_deep_jobs_v1 FOR EACH ROW EXECUTE FUNCTION public.validate_research_deep_scope_v1();
+95: DO $$ DECLARE table_name text; BEGIN
+96:  FOREACH table_name IN ARRAY ARRAY['research_observed_priority_store_receipts_v1','research_deep_admission_clocks_v1','research_observed_first_discoveries_v1','research_observed_discovery_lineage_v1','research_deep_admission_charges_v1','research_deep_run_admissions_v1','research_deep_admission_cutover_v1'] LOOP
+97:   EXECUTE format('CREATE TRIGGER %I BEFORE UPDATE OR DELETE ON public.%I FOR EACH ROW EXECUTE FUNCTION public.reject_research_observed_mutation_v1()','immutable_observed_'||table_name,table_name);
+98:   EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY',table_name);
+99:   EXECUTE format('REVOKE ALL ON public.%I FROM PUBLIC,anon,authenticated,service_role',table_name);
+100:   EXECUTE format('GRANT SELECT,INSERT ON public.%I TO research_observed_rpc_owner',table_name);
+101:   EXECUTE format('CREATE POLICY observed_rpc_only ON public.%I TO research_observed_rpc_owner USING(true) WITH CHECK(true)',table_name);
+102:  END LOOP;
+103: END $$;
+104: -- Research first prices can only be read by the exact internal service; no direct write grant.
+105: GRANT SELECT ON public.research_observed_first_discoveries_v1 TO service_role;
+106: CREATE POLICY observed_first_read ON public.research_observed_first_discoveries_v1 FOR SELECT TO service_role USING(true);
+107: GRANT SELECT ON public.stocks,public.research_priority_runs_v1,public.research_deep_jobs_v1 TO research_observed_rpc_owner;
+108: GRANT INSERT ON public.research_priority_runs_v1,public.research_deep_jobs_v1 TO research_observed_rpc_owner;
+109: CREATE POLICY observed_priority_rpc ON public.research_priority_runs_v1 TO research_observed_rpc_owner USING(true) WITH CHECK(true);
+110: CREATE POLICY observed_job_rpc ON public.research_deep_jobs_v1 TO research_observed_rpc_owner USING(true) WITH CHECK(true);
+111: -- All inserts, including legacy formal writers, are charged at the authoritative
+112: -- admission clock; a caller-created past created_at/week cannot escape the cap.
+113: CREATE FUNCTION public.charge_research_deep_admission_v1() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$
+114: BEGIN
+115:  PERFORM pg_advisory_xact_lock(2409,6001);
+116:  IF (SELECT count(*)FROM public.research_deep_admission_charges_v1 WHERE admission_week=NEW.week_start)>=5 THEN RAISE EXCEPTION 'deep_admission_week_capacity'; END IF;
+117:  INSERT INTO public.research_deep_admission_charges_v1(job_id,issuer_key,admission_at,admission_week) VALUES(NEW.job_id,'TW:'||NEW.symbol,NEW.created_at,NEW.week_start);
+118:  RETURN NEW;
+119: END $$;
+120: ALTER FUNCTION public.charge_research_deep_admission_v1() OWNER TO research_observed_rpc_owner;
+121: REVOKE ALL ON FUNCTION public.charge_research_deep_admission_v1() FROM PUBLIC,anon,authenticated,service_role;
+122: CREATE TRIGGER charge_every_research_deep_insert_v1 AFTER INSERT ON public.research_deep_jobs_v1 FOR EACH ROW EXECUTE FUNCTION public.charge_research_deep_admission_v1();
+123: GRANT EXECUTE ON FUNCTION public.research_source_heads_page_v1(timestamptz,integer,integer) TO research_observed_rpc_owner;
+124: CREATE FUNCTION public.read_research_observed_roster_v1(p_snapshot_hash text,p_as_of timestamptz,p_offset integer,p_limit integer)
+125:  RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$
+126: DECLARE r public.research_observed_roster_snapshots_v1; members jsonb;
+127: BEGIN
+128:  IF p_offset IS NULL OR p_limit IS NULL OR p_offset<0 OR p_offset>5000 OR p_limit<1 OR p_limit>500 OR p_as_of IS NULL OR p_as_of>clock_timestamp() THEN RAISE EXCEPTION 'observed_roster_read_invalid'; END IF;
+129:  SELECT * INTO r FROM public.research_observed_roster_snapshots_v1 WHERE snapshot_hash=p_snapshot_hash AND received_at<=p_as_of AND latest_observed_at<=p_as_of;
+130:  IF NOT FOUND THEN RAISE EXCEPTION 'observed_snapshot_missing_or_future'; END IF;
+131:  SELECT coalesce(jsonb_agg(to_jsonb(m) ORDER BY m.symbol),'[]') INTO members FROM (
+132:   SELECT x.research_company_id,x.symbol,x.exchange,x.isin,x.observed_name AS name,x.observed_sector AS sector,x.cfi,x.observed_at FROM public.research_observed_roster_members_v1 x WHERE snapshot_hash=p_snapshot_hash ORDER BY symbol LIMIT p_limit OFFSET p_offset)m;
+133:  RETURN jsonb_build_object('snapshotHash',r.snapshot_hash,'mappingDigest',r.mapping_digest,'classifierHash',r.classifier_hash,'classificationHash',r.classification_hash,'schemaVersion',r.schema_version,'receivedAt',r.received_at,'latestObservedAt',r.latest_observed_at,'includedCount',r.included_count,'members',members);
+134: END $$;
+135: CREATE FUNCTION public.reconcile_research_deep_admissions_v1() RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$
+136: DECLARE j public.research_deep_jobs_v1; wk date;
+137: BEGIN
+138:  PERFORM pg_advisory_xact_lock(2409,6001);
+139:  FOR j IN SELECT jobs.* FROM public.research_deep_jobs_v1 jobs LEFT JOIN public.research_deep_admission_charges_v1 c USING(job_id) WHERE c.job_id IS NULL ORDER BY jobs.created_at,jobs.job_id LOOP
+140:   IF j.created_at IS NULL OR j.created_at>clock_timestamp() OR j.symbol !~ '^[0-9]{4}$' THEN RAISE EXCEPTION 'deep_legacy_admission_ambiguous'; END IF;
+141:   wk:=date_trunc('week',j.created_at AT TIME ZONE 'Asia/Taipei')::date;
+142:   INSERT INTO public.research_deep_admission_charges_v1(job_id,issuer_key,admission_at,admission_week) VALUES(j.job_id,'TW:'||j.symbol,j.created_at,wk);
+143:  END LOOP;
+144: END $$;
+145: SELECT public.reconcile_research_deep_admissions_v1();
+146: -- Already admitted runs retain their original server clock, not the caller's historical as_of.
+147: INSERT INTO public.research_deep_run_admissions_v1(run_id,admission_at,admission_week,added_count)
+148:  SELECT priority_run_id,min(created_at),date_trunc('week',min(created_at) AT TIME ZONE 'Asia/Taipei')::date,count(*) FROM public.research_deep_jobs_v1 GROUP BY priority_run_id;
+149: CREATE OR REPLACE FUNCTION public.enqueue_research_deep_jobs_v1(p_run_id uuid) RETURNS integer LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$
+150: DECLARE r public.research_priority_runs_v1; admission_clock timestamptz; wk date; used integer; added integer:=0; item jsonb; rank integer; stock uuid; company uuid; job uuid;
+151: BEGIN
+152:  PERFORM pg_advisory_xact_lock(2409,6001);admission_clock:=clock_timestamp();wk:=date_trunc('week',admission_clock AT TIME ZONE 'Asia/Taipei')::date;
+153:  SELECT * INTO r FROM public.research_priority_runs_v1 WHERE run_id=p_run_id;
+154:  IF NOT FOUND OR r.as_of>admission_clock OR jsonb_array_length(r.research_queue)>20 THEN RAISE EXCEPTION 'research_deep_priority_run_invalid'; END IF;
+155:  IF r.research_scope='research_observed_v1' AND NOT EXISTS(SELECT 1 FROM public.research_observed_priority_store_receipts_v1 receipt WHERE receipt.run_id=r.run_id AND receipt.stored_run_hash=encode(sha256(convert_to(to_jsonb(r)::text,'UTF8')),'hex')) THEN RAISE EXCEPTION 'observed_priority_store_lineage_missing';END IF;
+156:  IF EXISTS(SELECT 1 FROM public.research_deep_run_admissions_v1 WHERE run_id=p_run_id) THEN RETURN 0; END IF;
+157:  IF r.created_at<(SELECT installed_at FROM public.research_deep_admission_cutover_v1) THEN RAISE EXCEPTION 'deep_legacy_zero_admission_unproven'; END IF;
+158:  INSERT INTO public.research_deep_admission_clocks_v1(run_id,admission_at,admission_week)VALUES(p_run_id,admission_clock,wk);
+159:  PERFORM public.reconcile_research_deep_admissions_v1();
+160:  SELECT count(*) INTO used FROM public.research_deep_admission_charges_v1 WHERE admission_week=wk;
+161:  FOR item,rank IN SELECT value,ordinality::integer FROM jsonb_array_elements(r.research_queue)WITH ORDINALITY LOOP
+162:   EXIT WHEN used>=5;
+163:   IF item->>'disposition' NOT IN('queued','stale') OR coalesce((item->>'independentRootCount')::integer,0)<1 THEN CONTINUE; END IF;
+164:   IF EXISTS(SELECT 1 FROM public.research_deep_jobs_v1 WHERE symbol=item->>'symbol' AND status IN('queued','running')) OR EXISTS(SELECT 1 FROM public.research_deep_admission_charges_v1 WHERE issuer_key='TW:'||(item->>'symbol') AND admission_week=wk) THEN CONTINUE; END IF;
+165:   stock:=NULL;company:=NULL;
+166:   IF r.research_scope='formal_v1' THEN
+167:    SELECT id INTO stock FROM public.stocks WHERE symbol=item->>'symbol' AND market='TW';
+168:    IF stock IS NULL THEN RAISE EXCEPTION 'research_deep_stock_authority_missing'; END IF;
+169:   ELSE
+170:    SELECT research_company_id INTO company FROM public.research_observed_roster_members_v1 WHERE snapshot_hash=r.observed_snapshot_hash AND symbol=item->>'symbol';
+171:    IF company IS NULL THEN RAISE EXCEPTION 'research_deep_observed_membership_missing'; END IF;
+172:   END IF;
+173:   INSERT INTO public.research_deep_jobs_v1(priority_run_id,stock_id,symbol,week_start,queue_rank,research_scope,research_company_id,observed_snapshot_hash,created_at)
+174:    VALUES(p_run_id,stock,item->>'symbol',wk,rank,r.research_scope,company,r.observed_snapshot_hash,admission_clock) RETURNING job_id INTO job;
+175:   used:=used+1;added:=added+1;
+176:  END LOOP;
+177:  INSERT INTO public.research_deep_run_admissions_v1(run_id,admission_at,admission_week,added_count) VALUES(p_run_id,admission_clock,wk,added);
+178:  RETURN added;
+179: END $$;
+180: CREATE FUNCTION public.store_observed_research_priority_v1(p_snapshot_hash text,p_as_of timestamptz,p_input_hash text,p_attempts jsonb,p_rows jsonb,p_queue jsonb,p_scope_receipt jsonb)
+181:  RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$
+182: DECLARE snap public.research_observed_roster_snapshots_v1; id uuid; member record; row jsonb; first_at timestamptz; added integer; captures integer:=0; existing public.research_priority_runs_v1; heads jsonb:='[]'; page jsonb; source_offset integer:=0; actual_first timestamptz;
+183: BEGIN
+184:  PERFORM pg_advisory_xact_lock(2409,6001);
+185:  SELECT * INTO snap FROM public.research_observed_roster_snapshots_v1 WHERE snapshot_hash=p_snapshot_hash AND received_at<=p_as_of AND latest_observed_at<=p_as_of;
+186:  IF NOT FOUND OR p_as_of IS NULL OR NOT isfinite(p_as_of) OR p_as_of>clock_timestamp() OR p_input_hash IS NULL OR octet_length(coalesce(p_rows::text,''))+octet_length(coalesce(p_attempts::text,''))+octet_length(coalesce(p_scope_receipt::text,''))>16000000 OR p_input_hash !~ '^[a-f0-9]{64}$' OR jsonb_typeof(p_rows) IS DISTINCT FROM 'array' OR jsonb_array_length(p_rows)<>snap.included_count OR jsonb_typeof(p_queue) IS DISTINCT FROM 'array' OR jsonb_array_length(p_queue)>20 OR jsonb_typeof(p_attempts) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'observed_priority_input_invalid'; END IF;
+187:  IF p_scope_receipt IS DISTINCT FROM (public.read_research_observed_roster_v1(p_snapshot_hash,p_as_of,0,1)-'members') THEN RAISE EXCEPTION 'observed_priority_receipt_invalid'; END IF;
+188:  IF EXISTS(SELECT 1 FROM jsonb_array_elements(p_rows)r LEFT JOIN public.research_observed_roster_members_v1 m ON m.snapshot_hash=p_snapshot_hash AND m.symbol=r->>'symbol' WHERE m.symbol IS NULL) OR (SELECT count(DISTINCT r->>'symbol')FROM jsonb_array_elements(p_rows)r)<>snap.included_count OR EXISTS(SELECT 1 FROM jsonb_array_elements(p_queue)q WHERE NOT EXISTS(SELECT 1 FROM jsonb_array_elements(p_rows)r WHERE r @> q)) THEN RAISE EXCEPTION 'observed_priority_accounting_invalid'; END IF;
+189:  SELECT * INTO existing FROM public.research_priority_runs_v1 WHERE policy_version='research-priority-v1' AND input_hash=p_input_hash;
+190:  IF FOUND THEN
+191:   IF existing.research_scope<>'research_observed_v1' OR existing.observed_snapshot_hash<>p_snapshot_hash OR existing.as_of<>p_as_of OR existing.rows<>p_rows OR existing.research_queue<>p_queue OR existing.source_attempts<>p_attempts OR existing.scope_receipt<>p_scope_receipt THEN RAISE EXCEPTION 'observed_priority_replay_mismatch'; END IF;
+192:   IF NOT EXISTS(SELECT 1 FROM public.research_observed_priority_store_receipts_v1 receipt WHERE receipt.run_id=existing.run_id AND receipt.stored_run_hash=encode(sha256(convert_to(to_jsonb(existing)::text,'UTF8')),'hex'))THEN RAISE EXCEPTION 'observed_priority_store_lineage_missing';END IF;
+193:   RETURN jsonb_build_object('runId',existing.run_id,'newDeepResearchJobs',0,'firstDiscoveryCaptures',0,'idempotentReplay',true);
+194:  END IF;
+195:  -- Verify claimed root identities against actual bounded database source heads.
+196:  LOOP
+197:   SELECT coalesce(jsonb_agg(value),'[]') INTO page FROM public.research_source_heads_page_v1(p_as_of,source_offset,500)value;
+198:   heads:=heads||page;IF jsonb_array_length(heads)>20000 THEN RAISE EXCEPTION 'observed_source_head_bound'; END IF;
+199:   EXIT WHEN jsonb_array_length(page)<500;source_offset:=source_offset+500;
+200:  END LOOP;
+201:  FOR row IN SELECT value FROM jsonb_array_elements(p_rows) LOOP
+202:   IF jsonb_typeof(row->'rootIds') IS DISTINCT FROM 'array' OR jsonb_typeof(row->'independentRootCount') IS DISTINCT FROM 'number' OR row->>'independentRootCount' !~ '^[0-9]+$' OR (row->>'independentRootCount')::integer<>jsonb_array_length(row->'rootIds') OR (SELECT count(DISTINCT value)FROM jsonb_array_elements(row->'rootIds'))<>jsonb_array_length(row->'rootIds') THEN RAISE EXCEPTION 'observed_priority_root_count_invalid'; END IF;
+203:   IF EXISTS(SELECT 1 FROM jsonb_array_elements_text(row->'rootIds')root WHERE NOT EXISTS(SELECT 1 FROM jsonb_array_elements(heads)h WHERE h->'symbols' @> jsonb_build_array(row->'symbol') AND coalesce(h#>>'{metadata,subject_scope}','company_mentions')='company_mentions' AND coalesce(h#>>'{metadata,parent_source_url}',h#>>'{metadata,canonical_url}',split_part(h->>'document_url','#si-revision-',1))=root AND coalesce(h->>'content_semantics','')<>'metadata_only' AND coalesce(h#>>'{metadata,content_form}','')<>'chapter_titles' AND h#>>'{metadata,retracted_at}' IS NULL AND coalesce(h#>>'{metadata,claim_status}','')<>'denied')) THEN RAISE EXCEPTION 'observed_priority_source_binding_invalid'; END IF;
+204:   SELECT min((h#>>'{metadata,first_observed_at}')::timestamptz) INTO actual_first FROM jsonb_array_elements(heads)h WHERE h->'symbols' @> jsonb_build_array(row->'symbol') AND coalesce(h#>>'{metadata,subject_scope}','company_mentions')='company_mentions' AND coalesce(h->>'content_semantics','')<>'metadata_only' AND coalesce(h#>>'{metadata,content_form}','')<>'chapter_titles';
+205:   IF (row->'hasDiscoveryEvidence' IS DISTINCT FROM to_jsonb(actual_first IS NOT NULL)) OR (row->>'firstSeenAt')::timestamptz IS DISTINCT FROM actual_first THEN RAISE EXCEPTION 'observed_first_observation_binding_invalid'; END IF;
+206:  END LOOP;
+207:  INSERT INTO public.research_priority_runs_v1(as_of,policy_version,input_hash,expected_count,accounted_count,source_attempts,rows,research_queue,research_scope,observed_snapshot_hash,scope_receipt)
+208:   VALUES(p_as_of,'research-priority-v1',p_input_hash,snap.included_count,snap.included_count,p_attempts,p_rows,p_queue,'research_observed_v1',p_snapshot_hash,p_scope_receipt) RETURNING run_id INTO id;
+209:  INSERT INTO public.research_observed_priority_store_receipts_v1(run_id,stored_run_hash)SELECT run_id,encode(sha256(convert_to(to_jsonb(r)::text,'UTF8')),'hex')FROM public.research_priority_runs_v1 r WHERE run_id=id;
+210:  FOR member IN SELECT * FROM public.research_observed_roster_members_v1 WHERE snapshot_hash=p_snapshot_hash LOOP
+211:   SELECT value INTO row FROM jsonb_array_elements(p_rows) WHERE value->>'symbol'=member.symbol;
+212:   IF coalesce((row->>'hasDiscoveryEvidence')::boolean,false) THEN
+213:    first_at:=(row->>'firstSeenAt')::timestamptz;
+214:    IF first_at IS NULL OR first_at>p_as_of THEN RAISE EXCEPTION 'observed_discovery_clock_invalid'; END IF;
+215:    INSERT INTO public.research_observed_first_discoveries_v1(research_company_id,symbol,run_id,first_seen_at,snapshot,observed_snapshot_hash)
+216:     VALUES(member.research_company_id,member.symbol,id,first_at,jsonb_build_object('price',NULL,'priceStatus','missing_at_discovery','pricePhase','unknown','relative5d',NULL,'relative20d',NULL,'relative60d',NULL,'factors',row->'factors','scope','research_observed_v1'),p_snapshot_hash)ON CONFLICT(research_company_id)DO NOTHING;
+217:    IF FOUND THEN captures:=captures+1; END IF;
+218:    INSERT INTO public.research_observed_discovery_lineage_v1(research_company_id,snapshot_hash,run_id)VALUES(member.research_company_id,p_snapshot_hash,id)ON CONFLICT DO NOTHING;
+219:   END IF;
+220:  END LOOP;
+221:  added:=public.enqueue_research_deep_jobs_v1(id);
+222:  RETURN jsonb_build_object('runId',id,'newDeepResearchJobs',added,'firstDiscoveryCaptures',captures,'idempotentReplay',false);
+223: END $$;
+224: -- Every admission RPC shares the same lock/ledger; direct table mutation remains closed.
+225: ALTER FUNCTION public.read_research_observed_roster_v1(text,timestamptz,integer,integer) OWNER TO research_observed_rpc_owner;
+226: ALTER FUNCTION public.reconcile_research_deep_admissions_v1() OWNER TO research_observed_rpc_owner;
+227: ALTER FUNCTION public.enqueue_research_deep_jobs_v1(uuid) OWNER TO research_observed_rpc_owner;
+228: ALTER FUNCTION public.store_observed_research_priority_v1(text,timestamptz,text,jsonb,jsonb,jsonb,jsonb) OWNER TO research_observed_rpc_owner;
+229: REVOKE ALL ON FUNCTION public.read_research_observed_roster_v1(text,timestamptz,integer,integer),public.reconcile_research_deep_admissions_v1(),public.enqueue_research_deep_jobs_v1(uuid),public.store_observed_research_priority_v1(text,timestamptz,text,jsonb,jsonb,jsonb,jsonb) FROM PUBLIC,anon,authenticated,service_role;
+230: GRANT EXECUTE ON FUNCTION public.read_research_observed_roster_v1(text,timestamptz,integer,integer),public.enqueue_research_deep_jobs_v1(uuid),public.store_observed_research_priority_v1(text,timestamptz,text,jsonb,jsonb,jsonb,jsonb) TO service_role;
+231: GRANT EXECUTE ON FUNCTION public.reconcile_research_deep_admissions_v1(),public.enqueue_research_deep_jobs_v1(uuid) TO research_observed_rpc_owner;
+232: CREATE FUNCTION public.reap_expired_research_deep_jobs_v2() RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$
+233: DECLARE n timestamptz;
+234: BEGIN
+235:  PERFORM pg_advisory_xact_lock(2409,6002);n:=clock_timestamp();
+236:  INSERT INTO public.research_model_completions_v1(reservation_id,owner,outcome,result_hash)
+237:  SELECT r.reservation_id,r.owner,'failed',encode(sha256(convert_to('deep_lease_expired','UTF8')),'hex')FROM public.research_model_reservations_v1 r JOIN public.research_deep_jobs_v1 j ON r.role='company_research'AND r.work_key='deep:'||j.job_id||':'||j.attempts WHERE j.status='running'AND j.lease_expires_at<=n ON CONFLICT(reservation_id)DO NOTHING;
+238:  UPDATE public.research_deep_jobs_v1 SET status=CASE WHEN attempts>=3 THEN 'failed'ELSE 'queued'END,terminal_reason=CASE WHEN attempts>=3 THEN 'lease_expired_max_attempts'ELSE terminal_reason END,lease_owner=NULL,lease_expires_at=NULL,finished_at=CASE WHEN attempts>=3 THEN n ELSE NULL END WHERE status='running'AND lease_expires_at<=n;
+239: END $$;
+240: ALTER FUNCTION public.reap_expired_research_deep_jobs_v2() OWNER TO research_observed_rpc_owner;
+241: REVOKE ALL ON FUNCTION public.reap_expired_research_deep_jobs_v2() FROM PUBLIC,anon,authenticated;
+242: GRANT EXECUTE ON FUNCTION public.reap_expired_research_deep_jobs_v2() TO service_role;
+243: GRANT UPDATE ON public.research_deep_jobs_v1 TO research_observed_rpc_owner;
+244: -- In the complete production schema these tables already exist. The partial
+245: -- local profile installs the same grants/policies with the claim dependency.
+246: DO $$ BEGIN IF to_regclass('public.research_model_reservations_v1')IS NOT NULL THEN
+247:  GRANT SELECT ON public.research_model_reservations_v1,public.research_model_completions_v1 TO research_observed_rpc_owner;
+248:  GRANT INSERT ON public.research_model_completions_v1 TO research_observed_rpc_owner;
+249:  CREATE POLICY observed_expiry_reservation ON public.research_model_reservations_v1 FOR SELECT TO research_observed_rpc_owner USING(true);
+250:  CREATE POLICY observed_expiry_completion ON public.research_model_completions_v1 TO research_observed_rpc_owner USING(true)WITH CHECK(true);
+251: END IF;END $$;
+252: CREATE OR REPLACE FUNCTION public.claim_research_deep_job_v1(p_owner TEXT)
+253: RETURNS TABLE(job_id UUID, symbol TEXT, priority_run_id UUID, attempt INTEGER, lease_expires_at TIMESTAMPTZ)
+254: LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+255: AS $function$
+256: DECLARE v_job public.research_deep_jobs_v1; v_reservation uuid;
+257: BEGIN
+258:   IF p_owner IS NULL OR length(trim(p_owner)) < 3 OR length(p_owner) > 120 THEN
+259:     RAISE EXCEPTION 'research_deep_owner_invalid';
+260:   END IF;
+261:   PERFORM pg_advisory_xact_lock(2409, 6002);
+262:   PERFORM public.reap_expired_research_deep_jobs_v2();
+263:   IF EXISTS (SELECT 1 FROM public.research_deep_jobs_v1 WHERE status='running')
+264:     OR (SELECT count(*) FROM public.research_deep_job_attempts_v1
+265:        WHERE (claimed_at AT TIME ZONE 'Asia/Taipei')::date =
+266:          (clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date) >= 4 THEN
+267:     RETURN;
+268:   END IF;
+269:   SELECT * INTO v_job FROM public.research_deep_jobs_v1 AS jobs
+270:     WHERE jobs.research_scope='formal_v1' AND jobs.status='queued' AND jobs.attempts < 3
+271:     ORDER BY jobs.week_start, jobs.queue_rank, jobs.created_at, jobs.job_id
+272:     FOR UPDATE SKIP LOCKED LIMIT 1;
+273:   IF NOT FOUND THEN RETURN; END IF;
+274:   SELECT reservation_id INTO v_reservation FROM public.reserve_research_model_v1(
+275:     'company_research',p_owner,'deep:'||v_job.job_id||':'||(v_job.attempts+1)::text);
+276:   IF v_reservation IS NULL THEN RETURN; END IF;
+277:   UPDATE public.research_deep_jobs_v1 SET status='running', attempts=attempts+1,
+278:     lease_owner=p_owner, lease_expires_at=clock_timestamp()+interval '30 minutes'
+279:     WHERE research_deep_jobs_v1.job_id=v_job.job_id
+280:     RETURNING * INTO v_job;
+281:   INSERT INTO public.research_deep_job_attempts_v1(job_id,attempt,owner,lease_expires_at)
+282:     VALUES (v_job.job_id,v_job.attempts,p_owner,v_job.lease_expires_at);
+283:   RETURN QUERY SELECT v_job.job_id,v_job.symbol,v_job.priority_run_id,v_job.attempts,v_job.lease_expires_at;
+284: END $function$;
+285: REVOKE ALL ON FUNCTION public.claim_research_deep_job_v1(text) FROM PUBLIC,anon,authenticated;
+286: GRANT EXECUTE ON FUNCTION public.claim_research_deep_job_v1(text) TO service_role;
+287: COMMIT;

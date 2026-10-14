@@ -1,0 +1,382 @@
+{
+  "schema": "bounded-versioned-prerequisite-audit-v1",
+  "createdAt": "2026-10-14T12:51:49.338824+00:00",
+  "branch": "codex/research-versioned-protocol-prerequisite-audit-oct14",
+  "base": "36ea8f0c0f7e5c3f9d52499c97882be60acbf538",
+  "auditRunSource": "6db9e79f2ee609aedbd066947e8284e55c408d09",
+  "codeAndHandoffHead": "b69c7d90774c144dda4d88e2677143141d89b4cb",
+  "codeTree": "d8634af57777ea909b34d7bba5385ba7346a1ea6",
+  "webTree": "f598362714c3d3eecfe110c10d2cb7520c065afc",
+  "raw": [
+    {
+      "path": "20260929_research_agent_state_v1.txt",
+      "bytes": 37756,
+      "sha256": "774e36ad93946e57b3b365ba64b6977708440e3821d1d015aa01660d4b4d290f"
+    },
+    {
+      "path": "20261008_research_observed_claim_v2.txt",
+      "bytes": 27685,
+      "sha256": "b4b5646175fcc4a30d24078d95c4cc4fd20d7147c9cf6c8ba508cb373d7570b3"
+    },
+    {
+      "path": "20261008_research_observed_priority_v1.txt",
+      "bytes": 29906,
+      "sha256": "b8e4e73e42e277a8c2de8b13309f30153af86c091dc0a527a1e659d040da14ef"
+    },
+    {
+      "path": "20261009_research_input_preparations_v2.txt",
+      "bytes": 15290,
+      "sha256": "320617b3d1830353eec72a18b71f4199dc5802aad693c7da146219787c8a03ca"
+    },
+    {
+      "path": "26-schema-usage-source.json",
+      "bytes": 181,
+      "sha256": "85aa848534679cb013206a2b3a88961d88af19dae7e960338653961d308d1d7c"
+    },
+    {
+      "path": "26-source-comparison.json",
+      "bytes": 6222,
+      "sha256": "a5cff4834d3c45774117f0d88d02d310b1443d5fcbce6351ced657ce5729f606"
+    },
+    {
+      "path": "base48-paths.json",
+      "bytes": 2977,
+      "sha256": "48e89ded444198dd420b7ebc8ea06c09bb5cd9e9338877f386f749572dee301d"
+    },
+    {
+      "path": "catalog-artifacts/catalog-dependencies.json",
+      "bytes": 7270,
+      "sha256": "a0af19043f4958ed55eb3be565a6f896cd97600076e1fc385487d5634c396141"
+    },
+    {
+      "path": "catalog-artifacts/catalog-dependencies.query.json",
+      "bytes": 670,
+      "sha256": "241e2ac6e76a978c91ddb825f446043dbeae398ee8c1ffab8a3527b2ec534c6f"
+    },
+    {
+      "path": "catalog-artifacts/cleanup.json",
+      "bytes": 147,
+      "sha256": "cb5865e78c34c7bfe183a0789d79fd36aefa21acb521819b5459d4bf045038fe"
+    },
+    {
+      "path": "catalog-artifacts/dependency-bodies.json",
+      "bytes": 534141,
+      "sha256": "ddf2f98ccc2924ea4641bf7dd490d14ceb1978fa78f4fe1e66020810f0a6c3b5"
+    },
+    {
+      "path": "catalog-artifacts/dependency-closure.json",
+      "bytes": 27855,
+      "sha256": "2e20e6418f0fd329d2df6d2b09dddb5b23e563a281739231a1443d1cc61154f8"
+    },
+    {
+      "path": "catalog-artifacts/function-acl.json",
+      "bytes": 13634,
+      "sha256": "464e7aca27503bea6198ae6150abfe3b0a5e13f4218cd0dedbdbb1880e913da8"
+    },
+    {
+      "path": "catalog-artifacts/function-acl.query.json",
+      "bytes": 752,
+      "sha256": "bc48c5061bc019928c77ee5a8f4f96a39e7c79f07b287645c327592bbc19b2c5"
+    },
+    {
+      "path": "catalog-artifacts/function-effective.json",
+      "bytes": 85670,
+      "sha256": "ce8e030f28050a07d161bdef7a197b3ef0ebe3335ee7497138882d8173f6bc88"
+    },
+    {
+      "path": "catalog-artifacts/function-effective.query.json",
+      "bytes": 698,
+      "sha256": "c1cb02f0dc1ca707aa74f85dc1247e384371fe88db2799ed683d1c8c227dc5b2"
+    },
+    {
+      "path": "catalog-artifacts/functions.json",
+      "bytes": 158636,
+      "sha256": "cc99a85769f7df609e2ceaa5160db12429e64fa2b85c03f28303b77bc189276a"
+    },
+    {
+      "path": "catalog-artifacts/memberships.json",
+      "bytes": 1924,
+      "sha256": "9d44b723f9cdd7112813f73d51bf4a29cebd4ec39bf3d1c4f6554f13b3e789fe"
+    },
+    {
+      "path": "catalog-artifacts/memberships.query.json",
+      "bytes": 210,
+      "sha256": "c7d1a63fbc95af66a81373e437d9c5dfce4292895fcd46595680080beeed8f2f"
+    },
+    {
+      "path": "catalog-artifacts/postgres.log",
+      "bytes": 3166,
+      "sha256": "52d1c287b9475528395a7bfa4dd39d66b1b754c75300ee1168c28a5612968974"
+    },
+    {
+      "path": "catalog-artifacts/prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "catalog-artifacts/readonly-resolver-probe.json",
+      "bytes": 173,
+      "sha256": "9313f1e941b176df68bd3f7bc349a13cd5726c3cbbbed25dcf5d5dfd7ee01820"
+    },
+    {
+      "path": "catalog-artifacts/roles.json",
+      "bytes": 6314,
+      "sha256": "320670674e020d9242327bd8b3827290e7f9b9ec25131458a613f5326b5efb78"
+    },
+    {
+      "path": "catalog-artifacts/roles.query.json",
+      "bytes": 337,
+      "sha256": "374f2750ba41f7295f74380d98df596ea380fa8f06987199b5e34a12b220ecbe"
+    },
+    {
+      "path": "catalog-artifacts/schema-acl.json",
+      "bytes": 9953,
+      "sha256": "983a2f773f663c637d0e1e7baa43153d4c193de153a03926c0cd5f9c476cbd7f"
+    },
+    {
+      "path": "catalog-artifacts/schema-acl.query.json",
+      "bytes": 420,
+      "sha256": "389699a26d950892fff6604fd704e2e286dc90649b29723f49d6cb9b176cafa4"
+    },
+    {
+      "path": "catalog-artifacts/schema-effective.json",
+      "bytes": 4428,
+      "sha256": "5046aa3d7ff98d50efe48a8725f4fed8dce5b9919c1e10dbd4a2effd1fc2b685"
+    },
+    {
+      "path": "catalog-artifacts/schema-effective.query.json",
+      "bytes": 292,
+      "sha256": "a33a22a90c85cf4cf3277475a5e0e1fd10a8b300d05084cf1223f95fb32e4177"
+    },
+    {
+      "path": "catalog-artifacts/summary.json",
+      "bytes": 734,
+      "sha256": "ed3c85c017c544962b7c58da42e3a422bd4650341487b1b01474693218b26f49"
+    },
+    {
+      "path": "catalog-artifacts/table-acl.json",
+      "bytes": 951157,
+      "sha256": "15c8ea87f54c7b1d9201ef43f8f5ab0a3d71acf38ebee5cb487b457a463b505b"
+    },
+    {
+      "path": "catalog-artifacts/table-acl.query.json",
+      "bytes": 405,
+      "sha256": "310ddcf98443b4ceed8cdde63bca0f483c4c22fd26c39f0d928bebfcb88ec55a"
+    },
+    {
+      "path": "catalog-artifacts/table-column-acl.json",
+      "bytes": 3582,
+      "sha256": "c9947122a5058ff407067aa5bbe5ace6e7fff02e568d4c13171dfbf6efa111f4"
+    },
+    {
+      "path": "catalog-artifacts/table-column-acl.query.json",
+      "bytes": 293,
+      "sha256": "22d1d4e2d4d9f521ee40b5c6508f42c7b43723b7d44710ebf295d06df624d24f"
+    },
+    {
+      "path": "catalog-artifacts/table-effective.json",
+      "bytes": 1597774,
+      "sha256": "6949823cc6d33ab5e9fbf995d879cba625e7ae76bdfe1cfcd46b9d05cee891ba"
+    },
+    {
+      "path": "catalog-artifacts/table-effective.query.json",
+      "bytes": 547,
+      "sha256": "784a6232692837334c4065906ca85669f5df158cbe73d30d8b0bcbebe1d84f01"
+    },
+    {
+      "path": "catalog-artifacts/transaction.json",
+      "bytes": 337,
+      "sha256": "fddf3f8151adeab5ef15dacf16873cb4b53b97b06f51a423a2c95219ee44c1f2"
+    },
+    {
+      "path": "catalog-artifacts/transaction.query.json",
+      "bytes": 225,
+      "sha256": "a25c259914f7eb42d576b3425d719ed1a6b9c92da710775260bfa8f917797ee0"
+    },
+    {
+      "path": "catalog.result.json",
+      "bytes": 465,
+      "sha256": "308d23f743a087e7e907e92f73dc7f0ad51fc81a68ac7910bba8f7fe0285db4d"
+    },
+    {
+      "path": "catalog.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "catalog.stdout",
+      "bytes": 92,
+      "sha256": "4cee409bf7bc301bc5c85a8661b4fa599f6f415325ce6d93a94b57db35b9d49a"
+    },
+    {
+      "path": "cleanup-independent.json",
+      "bytes": 167,
+      "sha256": "853cce3ee84f6821b0a35ce9a2a5221ecef9500c2fd0cdbfbf486e2b2d1c0a0a"
+    },
+    {
+      "path": "direct-call-permission-edges.json",
+      "bytes": 13634,
+      "sha256": "b0a4d2d3cfffe63cd7c68c49a55918926882e0bd85fb9ea71936d8364ad16249"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 608,
+      "sha256": "38532d772020085c5471c44fc00da56fdf8efc53e04b692c713ec0c6d4deb9f0"
+    },
+    {
+      "path": "function-source-map.json",
+      "bytes": 16869,
+      "sha256": "deccb154271d14fd8d6a7519d26b250228ed031eb334506c9ac9272f889dce57"
+    },
+    {
+      "path": "historical-attribution.json",
+      "bytes": 558,
+      "sha256": "ee504f9002d239abcb0df624f41903d44c2b39e276075c6ab9615bd223d77b6d"
+    },
+    {
+      "path": "parse.result.json",
+      "bytes": 445,
+      "sha256": "2a39e7faf701dcad4f6e87dd534fc1b2f0dc25327ccefde84c2bb17860ec777c"
+    },
+    {
+      "path": "parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "parse.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pending-20261009_research_input_preparation_assert_v2.sql.txt",
+      "bytes": 2086,
+      "sha256": "c63a923be36e5f7ba06001a6d8be57287d80f5e6524dc866bad93b80666a9cbc"
+    },
+    {
+      "path": "pending-20261009_research_publication_source_fence_v2.sql.txt",
+      "bytes": 12454,
+      "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621"
+    },
+    {
+      "path": "pending-research-complete-input-postgres.test.mjs.txt",
+      "bytes": 18177,
+      "sha256": "163e44731013cf61f116362d2ffbc9fbac7fe1bdd4a17909195a956f6333724b"
+    },
+    {
+      "path": "pending-research-observed-priority-native.test.mjs.txt",
+      "bytes": 38102,
+      "sha256": "fafdeebe66ffe5719382410dfaf52a41bfc22d68ed07c183de0271edbca59d2e"
+    },
+    {
+      "path": "pending-research-publication-full-chain.test.mjs.txt",
+      "bytes": 9233,
+      "sha256": "6060ea7eb5853d84b9a6cd57b7697e1491c404cf3338f6f66a145d23c33da04d"
+    },
+    {
+      "path": "pending-research-publication-lineage-postgres.test.mjs.txt",
+      "bytes": 18569,
+      "sha256": "ea9d23739b50696a76db6de92aa0be0b032ae81c639d16960aaaef7800d22847"
+    },
+    {
+      "path": "pending-usage-search.json",
+      "bytes": 555,
+      "sha256": "5ce2c372814905d926fbd1133e267ac6635f4b19a4762337b13739235f7f0b0f"
+    },
+    {
+      "path": "public-pseudorole.json",
+      "bytes": 212,
+      "sha256": "782c550ac7d5d77778f7d41206f2c29cd1595aafd68d3f7b3b056ee2feab626f"
+    },
+    {
+      "path": "role-name-resolution.json",
+      "bytes": 7386,
+      "sha256": "0f9095036a4245c57fcf761e30b6052d2d157af1e4f8c7ce17469bb228570f70"
+    },
+    {
+      "path": "run.py",
+      "bytes": 2061,
+      "sha256": "da11053bac47df07c05a50067f91da1530be5464c760b8b7be3cc5657a609ab8"
+    },
+    {
+      "path": "source-discovery-error.txt",
+      "bytes": 277,
+      "sha256": "e9725d2fb4da01eaea8f654c9f9cc3c53329dc84b59e79814ce5ed1c4869953d"
+    },
+    {
+      "path": "source-manifest.json",
+      "bytes": 33590,
+      "sha256": "93f624c77a57bb9d58c85c6f7c0da76935680ca4faa27eec8570af42f5a800d4"
+    },
+    {
+      "path": "unchanged-product-inputs.json",
+      "bytes": 8247,
+      "sha256": "d14568ff6bd5449c2f6638a566dc847db2e0bdd659da3095ab6dc421ae1274aa"
+    },
+    {
+      "path": "unqualified-call-review.json",
+      "bytes": 173,
+      "sha256": "be0905a2e7a6cfafd473152e033e0cdb200a6eadf41ac1d92e7a784c776e9eda"
+    }
+  ],
+  "rawCount": 62,
+  "rawBytes": 3715907,
+  "sourceCount": 142,
+  "result": {
+    "singleFreshCapturedCatalogAuditExit": 0,
+    "syntaxExit": 0,
+    "businessNativeTestsRun": 0,
+    "firstSeal": false,
+    "resolverDiagnostic": "42501 permission denied for schema public",
+    "schemaUsageMissing": [
+      "research_input_preparation_owner_v2",
+      "research_source_fence_owner_v2"
+    ],
+    "roleAttributesPreserved": true,
+    "newGrantOrRevokeOrAlterRole": false,
+    "runtimeOrSqlChanges": false,
+    "fixturePatchMade": false
+  },
+  "resource": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "scripts/opportunity-v3/research-versioned-prerequisite-audit.mjs"
+    ],
+    "start": "2026-10-14T12:45:25.165947+00:00",
+    "cwd": "/tmp/si-pubtail-o14",
+    "sampleSeconds": 0.25,
+    "peakProcessTreeRss": 176250880,
+    "minFree": {
+      "/workspace": 8609153024,
+      "/tmp": 15349293056
+    },
+    "user": "agent",
+    "exit": 0,
+    "seconds": 3.0047614574432373
+  },
+  "memoryCaveat": "sampled session plus owned cluster command RSS; not exhaustive cgroup peak",
+  "history": {
+    "originalNativeSubject": "cf8978620ec26f2666dbf18b1f91fe5068343149",
+    "originalNative": {
+      "pass": 1,
+      "fail": 5,
+      "skip": 0,
+      "firstSealReached": false
+    },
+    "testOnlySuccessor": "f69e761e9b3d8f15a4346f12833ef35d56872383",
+    "testOnlySuccessorBusinessNativeExecuted": false,
+    "originalEvidence": "574a0fd5f21cb5adc38ba4f00dbaef9a5c269d6b",
+    "originalReceiptSHA256": "9b7549e9f75ced097115fb11dfc2eeb49b839c138ca8527956c8d36378034f81",
+    "newAuditSealedSource": "6db9e79f2ee609aedbd066947e8284e55c408d09",
+    "noRetroactiveRelabel": true
+  },
+  "pending": [
+    "Root decision on exact two-owner schema-USAGE prerequisite; proposal not executed",
+    "legal roster/source/store/enqueue/claim fixture implementation and business execution",
+    "full predecessor/candidate ACL/catalog and whole executor/release identity",
+    "old sealed-v2 replay, compatible/v3 first seal, quotas/races and allcaller integration",
+    "formal peer/production authority and capacity"
+  ],
+  "noIndependentSelfApproval": true
+}

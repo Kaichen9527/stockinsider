@@ -1,0 +1,329 @@
+1: BEGIN;
+2: -- Additive observed-only claim, using the same immutable 30m/120m/global1 model budget.
+3: GRANT SELECT,UPDATE ON public.research_deep_jobs_v1 TO research_observed_rpc_owner;
+4: GRANT SELECT,INSERT ON public.research_deep_job_attempts_v1 TO research_observed_rpc_owner;
+5: GRANT INSERT ON public.research_model_completions_v1 TO research_observed_rpc_owner;
+6: CREATE POLICY observed_attempt_rpc ON public.research_deep_job_attempts_v1 TO research_observed_rpc_owner USING(true) WITH CHECK(true);
+7: CREATE POLICY observed_reservation_rpc ON public.research_model_reservations_v1 FOR SELECT TO research_observed_rpc_owner USING(true);
+8: CREATE POLICY observed_completion_rpc ON public.research_model_completions_v1 TO research_observed_rpc_owner USING(true) WITH CHECK(true);
+9: GRANT SELECT ON public.research_model_reservations_v1,public.research_model_completions_v1 TO research_observed_rpc_owner;
+10: GRANT EXECUTE ON FUNCTION public.reserve_research_model_v1(text,text,text) TO research_observed_rpc_owner;
+11: CREATE FUNCTION public.read_research_observed_claim_v2(p_owner text,p_snapshot_hash text,p_job_id uuid DEFAULT NULL,p_attempt integer DEFAULT NULL)
+12: RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$
+13: DECLARE j public.research_deep_jobs_v1;r public.research_priority_runs_v1;s public.research_observed_roster_snapshots_v1;a public.research_deep_job_attempts_v1;m public.research_model_reservations_v1;done public.research_model_completions_v1;n timestamptz:=clock_timestamp();
+14: BEGIN
+15:  IF p_owner IS NULL OR p_owner !~ '^[A-Za-z0-9:_-]{3,120}$' OR p_snapshot_hash IS NULL OR p_snapshot_hash !~ '^[a-f0-9]{64}$' OR (p_job_id IS NULL)<>(p_attempt IS NULL) OR p_attempt NOT BETWEEN 1 AND 3 THEN RAISE EXCEPTION 'observed_claim_identity_invalid';END IF;
+16:  IF (SELECT count(*)FROM public.research_deep_jobs_v1 WHERE research_scope='research_observed_v1'AND observed_snapshot_hash=p_snapshot_hash AND lease_owner=p_owner AND status='running'AND lease_expires_at>n AND(p_job_id IS NULL OR(job_id=p_job_id AND attempts=p_attempt)))>1 THEN RAISE EXCEPTION 'observed_claim_ambiguous';END IF;
+17:  SELECT *INTO j FROM public.research_deep_jobs_v1 WHERE research_scope='research_observed_v1'AND observed_snapshot_hash=p_snapshot_hash AND lease_owner=p_owner AND status='running'AND lease_expires_at>n AND(p_job_id IS NULL OR(job_id=p_job_id AND attempts=p_attempt));IF NOT FOUND THEN RETURN NULL;END IF;
+18:  SELECT *INTO r FROM public.research_priority_runs_v1 WHERE run_id=j.priority_run_id AND research_scope=j.research_scope AND observed_snapshot_hash=j.observed_snapshot_hash;
+19:  IF NOT FOUND THEN RAISE EXCEPTION 'observed_claim_run_changed';END IF;
+20:  IF NOT EXISTS(SELECT 1 FROM public.research_observed_priority_store_receipts_v1 receipt WHERE receipt.run_id=r.run_id AND receipt.stored_run_hash=encode(sha256(convert_to(to_jsonb(r)::text,'UTF8')),'hex'))THEN RAISE EXCEPTION 'observed_claim_store_lineage_missing';END IF;
+21:  SELECT *INTO s FROM public.research_observed_roster_snapshots_v1 WHERE snapshot_hash=j.observed_snapshot_hash;
+22:  IF NOT FOUND OR s.received_at>r.as_of OR s.latest_observed_at>r.as_of OR r.as_of>n OR NOT EXISTS(SELECT 1 FROM public.research_observed_roster_members_v1 WHERE snapshot_hash=j.observed_snapshot_hash AND research_company_id=j.research_company_id AND symbol=j.symbol) OR NOT EXISTS(SELECT 1 FROM public.research_deep_admission_charges_v1 WHERE job_id=j.job_id AND issuer_key='TW:'||j.symbol) THEN RAISE EXCEPTION 'observed_claim_membership_changed';END IF;
+23:  IF j.stock_id IS NOT NULL AND NOT EXISTS(SELECT 1 FROM public.stocks WHERE id=j.stock_id AND symbol=j.symbol AND market='TW')THEN RAISE EXCEPTION 'observed_claim_mapping_changed';END IF;
+24:  SELECT *INTO a FROM public.research_deep_job_attempts_v1 WHERE job_id=j.job_id AND attempt=j.attempts AND owner=p_owner;
+25:  IF NOT FOUND OR a.lease_expires_at<>j.lease_expires_at THEN RAISE EXCEPTION 'observed_claim_attempt_changed';END IF;
+26:  SELECT *INTO m FROM public.research_model_reservations_v1 WHERE role='company_research'AND owner=p_owner AND work_key='deep:'||j.job_id||':'||j.attempts;
+27:  IF NOT FOUND OR a.claimed_at<m.started_at OR a.claimed_at>n OR j.lease_expires_at<>m.lease_expires_at THEN RAISE EXCEPTION 'observed_claim_reservation_changed';END IF;
+28:  SELECT *INTO done FROM public.research_model_completions_v1 WHERE reservation_id=m.reservation_id;
+29:  IF FOUND AND(done.owner<>p_owner OR done.finished_at<m.started_at OR done.finished_at>=m.lease_expires_at OR done.finished_at>n)THEN RAISE EXCEPTION 'observed_claim_completion_changed';END IF;
+30:  IF done.reservation_id IS NULL AND m.lease_expires_at<=n THEN RAISE EXCEPTION 'observed_claim_expired';END IF;
+31:  IF NOT EXISTS(SELECT 1 FROM public.research_deep_jobs_v1 x WHERE x.job_id=j.job_id AND to_jsonb(x)=to_jsonb(j)) THEN RAISE EXCEPTION 'observed_claim_changed_during_read';END IF;
+32:  RETURN jsonb_build_object('schemaVersion','research-deep-claim-context-v2','observedAt',n,'job',jsonb_build_object('jobId',j.job_id,'symbol',j.symbol,'priorityRunId',j.priority_run_id,'attempt',j.attempts,'owner',j.lease_owner,'leaseExpiresAt',j.lease_expires_at),'modelReservation',jsonb_build_object('reservationId',m.reservation_id,'role',m.role,'owner',m.owner,'workKey',m.work_key,'startedAt',m.started_at,'leaseExpiresAt',m.lease_expires_at),'modelCompletion',CASE WHEN done.reservation_id IS NULL THEN NULL ELSE jsonb_build_object('outcome',done.outcome,'resultHash',done.result_hash,'completedAt',done.finished_at)END,'researchIdentity',jsonb_build_object('scope','research_observed_v1','researchCompanyId',j.research_company_id,'snapshotHash',j.observed_snapshot_hash,'mappingDigest',s.mapping_digest,'stockId',j.stock_id,'priorityInputHash',r.input_hash,'snapshotReceivedAt',s.received_at,'snapshotObservedAt',s.latest_observed_at,'priorityAsOf',r.as_of));
+33: END $$;
+34: CREATE FUNCTION public.claim_research_observed_job_v2(p_owner text,p_snapshot_hash text)
+35: RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$
+36: DECLARE j public.research_deep_jobs_v1;m public.research_model_reservations_v1;
+37: BEGIN
+38:  IF p_owner IS NULL OR p_owner !~ '^[A-Za-z0-9:_-]{3,120}$' OR p_snapshot_hash IS NULL OR p_snapshot_hash !~ '^[a-f0-9]{64}$'THEN RAISE EXCEPTION 'observed_claim_identity_invalid';END IF;
+39:  PERFORM pg_advisory_xact_lock(2409,6002);
+40:  PERFORM public.reap_expired_research_deep_jobs_v2();
+41:  IF EXISTS(SELECT 1 FROM public.research_deep_jobs_v1 WHERE status='running'AND lease_expires_at>clock_timestamp())THEN RETURN NULL;END IF;
+42:  SELECT *INTO j FROM public.research_deep_jobs_v1 WHERE research_scope='research_observed_v1'AND observed_snapshot_hash=p_snapshot_hash AND status='queued'AND attempts<3 ORDER BY week_start,queue_rank,created_at,job_id FOR UPDATE SKIP LOCKED LIMIT 1;
+43:  IF NOT FOUND THEN RETURN NULL;END IF;
+44:  SELECT *INTO m FROM public.reserve_research_model_v1('company_research',p_owner,'deep:'||j.job_id||':'||(j.attempts+1));IF NOT FOUND THEN RETURN NULL;END IF;
+45:  UPDATE public.research_deep_jobs_v1 SET status='running',attempts=attempts+1,lease_owner=p_owner,lease_expires_at=m.lease_expires_at WHERE job_id=j.job_id RETURNING *INTO j;
+46:  INSERT INTO public.research_deep_job_attempts_v1(job_id,attempt,owner,lease_expires_at)VALUES(j.job_id,j.attempts,p_owner,j.lease_expires_at);
+47:  RETURN public.read_research_observed_claim_v2(p_owner,p_snapshot_hash,j.job_id,j.attempts);
+48: END $$;
+49: ALTER FUNCTION public.read_research_observed_claim_v2(text,text,uuid,integer) OWNER TO research_observed_rpc_owner;
+50: ALTER FUNCTION public.claim_research_observed_job_v2(text,text) OWNER TO research_observed_rpc_owner;
+51: REVOKE ALL ON FUNCTION public.read_research_observed_claim_v2(text,text,uuid,integer),public.claim_research_observed_job_v2(text,text) FROM PUBLIC,anon,authenticated;
+52: GRANT EXECUTE ON FUNCTION public.read_research_observed_claim_v2(text,text,uuid,integer),public.claim_research_observed_job_v2(text,text) TO service_role;
+53: CREATE OR REPLACE FUNCTION public.handoff_research_deep_model_v1(
+54:   p_job_id UUID,p_owner TEXT,p_attempt INTEGER,p_article_hash TEXT
+55: ) RETURNS BOOLEAN LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp
+56: AS $function$
+57: DECLARE v_job public.research_deep_jobs_v1; v_reservation uuid;
+58: BEGIN
+59:   PERFORM pg_advisory_xact_lock(2409,6002);
+60:   SELECT * INTO v_job FROM public.research_deep_jobs_v1 WHERE job_id=p_job_id AND research_scope='formal_v1' FOR UPDATE;
+61:   IF NOT FOUND OR v_job.status<>'running' OR v_job.lease_owner IS DISTINCT FROM p_owner
+62:     OR v_job.attempts<>p_attempt OR v_job.lease_expires_at<=clock_timestamp()
+63:     OR p_article_hash IS NULL OR p_article_hash !~ '^[a-f0-9]{64}$' THEN RAISE EXCEPTION 'research_deep_handoff_fence_lost'; END IF;
+64:   SELECT reservation_id INTO v_reservation FROM public.research_model_reservations_v1
+65:     WHERE role='company_research' AND owner=p_owner AND work_key='deep:'||p_job_id||':'||p_attempt::text;
+66:   IF v_reservation IS NULL THEN RAISE EXCEPTION 'research_deep_model_reservation_missing'; END IF;
+67:   RETURN public.finish_research_model_v1(v_reservation,p_owner,'completed',p_article_hash);
+68: END $function$;
+69: CREATE FUNCTION public.fence_observed_model_completion_v2() RETURNS trigger LANGUAGE plpgsql SET search_path=public,pg_temp AS $$
+70: BEGIN
+71:  IF current_user<>'research_observed_rpc_owner' AND EXISTS(SELECT 1 FROM public.research_model_reservations_v1 r JOIN public.research_deep_jobs_v1 j ON r.work_key='deep:'||j.job_id||':'||j.attempts WHERE r.reservation_id=NEW.reservation_id AND r.role='company_research'AND j.research_scope='research_observed_v1')THEN RAISE EXCEPTION 'observed_completion_requires_scoped_controller';END IF;RETURN NEW;
+72: END $$;
+73: CREATE TRIGGER observed_model_completion_scope_v2 BEFORE INSERT ON public.research_model_completions_v1 FOR EACH ROW EXECUTE FUNCTION public.fence_observed_model_completion_v2();
+74: REVOKE ALL ON FUNCTION public.handoff_research_deep_model_v1(uuid,text,integer,text) FROM PUBLIC,anon,authenticated;
+75: GRANT EXECUTE ON FUNCTION public.handoff_research_deep_model_v1(uuid,text,integer,text) TO service_role;
+76: 
+77: -- Existing v1 publication/review routines remain byte-equivalent except explicit formal lookup fences.
+78: CREATE OR REPLACE FUNCTION public.record_budgeted_deep_review_v1(
+79:   p_job_id UUID,p_attempt INTEGER,p_reservation_id UUID,p_review JSONB
+80: ) RETURNS UUID LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp
+81: AS $function$
+82: DECLARE v_job public.research_deep_jobs_v1; v_model public.research_model_reservations_v1; v_id uuid;
+83: BEGIN
+84:   PERFORM pg_advisory_xact_lock(2409,6002);
+85:   SELECT * INTO v_job FROM public.research_deep_jobs_v1 WHERE job_id=p_job_id AND research_scope='formal_v1' FOR UPDATE;
+86:   IF NOT FOUND THEN RAISE EXCEPTION 'research_deep_review_scope_invalid'; END IF;
+87:   SELECT * INTO v_model FROM public.research_model_reservations_v1 WHERE reservation_id=p_reservation_id;
+88:   IF v_model.role IS DISTINCT FROM 'counter_review'
+89:     OR v_model.owner IS DISTINCT FROM p_review->>'reviewer_id'
+90:     OR v_model.work_key IS DISTINCT FROM 'deep-review:'||p_job_id||':'||p_attempt||':'||(p_review->>'article_hash')
+91:     OR p_review->>'author_id'=p_review->>'reviewer_id'
+92:     OR NOT EXISTS(SELECT 1 FROM public.research_model_reservations_v1 r
+93:       JOIN public.research_model_completions_v1 c USING(reservation_id)
+94:       WHERE r.role='company_research' AND r.work_key='deep:'||p_job_id||':'||p_attempt
+95:         AND c.outcome='completed' AND c.result_hash=p_review->>'article_hash')
+96:     OR NOT EXISTS(SELECT 1 FROM public.candidate_detail_snapshots d
+97:       WHERE d.id=(p_review->>'revision_id')::uuid AND d.stock_id=v_job.stock_id)
+98:     THEN RAISE EXCEPTION 'research_deep_review_model_binding_invalid'; END IF;
+99:   SELECT id INTO v_id FROM public.candidate_deep_article_reviews_v1
+100:     WHERE revision_id=(p_review->>'revision_id')::uuid AND input_hash=p_review->>'input_hash'
+101:       AND article_hash=p_review->>'article_hash' AND reviewer_id=p_review->>'reviewer_id'
+102:       AND decision=p_review->>'decision' AND findings=p_review->'findings'
+103:       AND author_id=p_review->>'author_id' AND source_document_ids=p_review->'source_document_ids'
+104:       AND reviewed_at=(p_review->>'reviewed_at')::timestamptz
+105:       AND model_reservation_id=p_reservation_id;
+106:   IF v_id IS NOT NULL THEN RETURN v_id; END IF;
+107:   IF v_job.status IS DISTINCT FROM 'running' OR v_job.attempts IS DISTINCT FROM p_attempt
+108:     OR v_job.lease_expires_at<=clock_timestamp()
+109:     OR v_model.lease_expires_at<=clock_timestamp() OR EXISTS(SELECT 1 FROM public.research_model_completions_v1
+110:     WHERE reservation_id=p_reservation_id) THEN RAISE EXCEPTION 'research_deep_review_model_lease_lost'; END IF;
+111:   INSERT INTO public.candidate_deep_article_reviews_v1(revision_id,input_hash,article_hash,author_id,reviewer_id,
+112:     decision,findings,source_document_ids,reviewed_at,model_reservation_id)
+113:   VALUES((p_review->>'revision_id')::uuid,p_review->>'input_hash',p_review->>'article_hash',p_review->>'author_id',
+114:     p_review->>'reviewer_id',p_review->>'decision',p_review->'findings',p_review->'source_document_ids',
+115:     (p_review->>'reviewed_at')::timestamptz,p_reservation_id) RETURNING id INTO v_id;
+116:   PERFORM public.finish_research_model_v1(p_reservation_id,v_model.owner,'completed',p_review->>'article_hash');
+117:   RETURN v_id;
+118: END $function$;
+119: CREATE OR REPLACE FUNCTION public.claim_candidate_deep_outbox_v1(
+120:   p_deep_job_id UUID, p_deep_owner TEXT, p_deep_attempt INTEGER,
+121:   p_revision_id UUID, p_input_hash TEXT, p_outbox_owner TEXT
+122: )
+123: RETURNS TABLE(job_id UUID, bundle_id UUID, lease_expires_at TIMESTAMPTZ)
+124: LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+125: AS $function$
+126: DECLARE
+127:   v_job public.research_deep_jobs_v1;
+128:   v_outbox public.candidate_dossier_outbox_v5;
+129:   v_stock UUID;
+130: BEGIN
+131:   SELECT * INTO v_job FROM public.research_deep_jobs_v1
+132:     WHERE research_deep_jobs_v1.job_id=p_deep_job_id AND research_scope='formal_v1' FOR UPDATE;
+133:   IF NOT FOUND OR v_job.status<>'running' OR v_job.lease_owner IS DISTINCT FROM p_deep_owner
+134:     OR v_job.attempts<>p_deep_attempt OR v_job.lease_expires_at<=clock_timestamp() THEN
+135:     RAISE EXCEPTION 'research_deep_job_lease_lost';
+136:   END IF;
+137:   IF p_outbox_owner IS NULL OR length(trim(p_outbox_owner))<3 OR length(p_outbox_owner)>120 THEN
+138:     RAISE EXCEPTION 'research_deep_outbox_owner_invalid';
+139:   END IF;
+140:   SELECT detail.stock_id INTO v_stock FROM public.candidate_detail_snapshots detail
+141:     WHERE detail.id=p_revision_id;
+142:   IF v_stock IS DISTINCT FROM v_job.stock_id THEN
+143:     RAISE EXCEPTION 'research_deep_stock_revision_mismatch';
+144:   END IF;
+145:   INSERT INTO public.candidate_dossier_outbox_v5(bundle_id,revision_id,input_hash,publication_kind)
+146:     SELECT bundle.bundle_id,bundle.revision_id,bundle.input_hash,'deep' FROM public.candidate_dossier_bundles bundle
+147:     WHERE bundle.revision_id=p_revision_id AND bundle.input_hash=p_input_hash
+148:     ON CONFLICT (revision_id,input_hash,publication_kind) DO NOTHING;
+149:   SELECT * INTO v_outbox FROM public.candidate_dossier_outbox_v5 outbox
+150:     WHERE outbox.revision_id=p_revision_id AND outbox.input_hash=p_input_hash
+151:       AND outbox.publication_kind='deep' FOR UPDATE;
+152:   IF NOT FOUND THEN
+153:     RAISE EXCEPTION 'research_deep_outbox_unavailable';
+154:   END IF;
+155:   IF v_outbox.status='running' AND v_outbox.deep_job_id=p_deep_job_id
+156:     AND v_outbox.deep_attempt=p_deep_attempt
+157:     AND v_outbox.lease_owner=p_outbox_owner AND v_outbox.lease_expires_at>clock_timestamp() THEN
+158:     RETURN QUERY SELECT v_outbox.job_id,v_outbox.bundle_id,v_outbox.lease_expires_at;
+159:     RETURN;
+160:   END IF;
+161:   IF NOT (v_outbox.status IN ('queued','rejected') OR
+162:       (v_outbox.status='running' AND v_outbox.lease_expires_at<=clock_timestamp()
+163:         AND v_outbox.deep_job_id=p_deep_job_id AND v_outbox.deep_attempt<=p_deep_attempt))
+164:     OR v_outbox.attempts>=12
+165:     OR (v_outbox.status='rejected' AND (p_deep_attempt<2 OR v_outbox.deep_job_id IS DISTINCT FROM p_deep_job_id
+166:       OR v_outbox.deep_attempt>=p_deep_attempt))
+167:     OR (v_outbox.next_attempt_at IS NOT NULL AND v_outbox.next_attempt_at>clock_timestamp()) THEN
+168:     RAISE EXCEPTION 'research_deep_outbox_lease_lost';
+169:   END IF;
+170:   UPDATE public.candidate_dossier_outbox_v5 outbox SET
+171:     status='running', attempts=outbox.attempts+1, lease_owner=p_outbox_owner,
+172:     lease_expires_at=LEAST(v_job.lease_expires_at,clock_timestamp()+interval '20 minutes'),
+173:     deep_job_id=p_deep_job_id, deep_attempt=p_deep_attempt,
+174:     next_attempt_at=NULL, updated_at=clock_timestamp()
+175:     WHERE outbox.job_id=v_outbox.job_id RETURNING * INTO v_outbox;
+176:   RETURN QUERY SELECT v_outbox.job_id,v_outbox.bundle_id,v_outbox.lease_expires_at;
+177: END $function$;
+178: CREATE OR REPLACE FUNCTION public.finish_research_deep_job_v2(
+179:   p_job_id UUID, p_owner TEXT, p_attempt INTEGER,
+180:   p_success BOOLEAN, p_receipt_id UUID, p_reason TEXT
+181: )
+182: RETURNS BOOLEAN
+183: LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+184: AS $function$
+185: DECLARE v_job public.research_deep_jobs_v1;
+186: BEGIN
+187:   PERFORM pg_advisory_xact_lock(2409, 6002);
+188:   SELECT * INTO v_job FROM public.research_deep_jobs_v1 WHERE job_id=p_job_id AND research_scope='formal_v1' FOR UPDATE;
+189:   IF FOUND AND p_success AND v_job.status='completed' AND v_job.receipt_id=p_receipt_id
+190:     AND v_job.attempts=p_attempt AND v_job.completion_owner=p_owner THEN
+191:     RETURN TRUE;
+192:   END IF;
+193:   IF NOT FOUND OR v_job.status <> 'running' OR v_job.lease_owner IS DISTINCT FROM p_owner
+194:     OR v_job.attempts<>p_attempt OR v_job.lease_expires_at <= clock_timestamp() THEN
+195:     RAISE EXCEPTION 'research_deep_job_lease_lost';
+196:   END IF;
+197:   IF p_success THEN RAISE EXCEPTION 'research_deep_publication_receipt_required'; END IF;
+198:   -- Release the publication lease with the same deep attempt; a reported
+199:   -- failure must not strand the next attempt behind an active old lease.
+200:   UPDATE public.candidate_dossier_outbox_v5 SET
+201:     status=CASE WHEN v_job.attempts<3 THEN 'queued' ELSE 'failed' END,
+202:     lease_owner=NULL, lease_expires_at=NULL, next_attempt_at=NULL,
+203:     last_error=left(coalesce(p_reason,'research_failed'),500), updated_at=clock_timestamp()
+204:     WHERE publication_kind='deep' AND deep_job_id=p_job_id AND deep_attempt=p_attempt
+205:       AND status='running';
+206:   UPDATE public.research_deep_jobs_v1 SET
+207:     status=CASE WHEN attempts < 3 THEN 'queued' ELSE 'failed' END,
+208:     lease_owner=NULL,lease_expires_at=NULL,
+209:     receipt_id=NULL,
+210:     terminal_reason=left(coalesce(p_reason,'research_failed'),500),
+211:     finished_at=CASE WHEN attempts >= 3 THEN clock_timestamp() ELSE NULL END
+212:   WHERE research_deep_jobs_v1.job_id=p_job_id;
+213:   PERFORM public.finish_research_model_v1(r.reservation_id,p_owner,
+214:     CASE WHEN p_success THEN 'completed' ELSE 'failed' END,
+215:     encode(sha256(convert_to(COALESCE(p_receipt_id::text,p_reason),'UTF8')),'hex'))
+216:   FROM public.research_model_reservations_v1 r WHERE r.role='company_research'
+217:     AND r.work_key='deep:'||p_job_id||':'||p_attempt::text
+218:     AND NOT EXISTS(SELECT 1 FROM public.research_model_completions_v1 c WHERE c.reservation_id=r.reservation_id);
+219:   RETURN TRUE;
+220: END $function$;
+221: CREATE OR REPLACE FUNCTION public.record_candidate_deep_submission_v1(
+222:   p_deep_job_id UUID, p_deep_owner TEXT, p_deep_attempt INTEGER,
+223:   p_deep_review_id UUID, p_article_hash TEXT,
+224:   p_job_id UUID, p_owner TEXT, p_bundle_id UUID, p_revision_id UUID,
+225:   p_input_hash TEXT, p_submission_hash TEXT, p_content JSONB, p_claims JSONB,
+226:   p_source_references JSONB, p_claim_fact_map JSONB, p_validation_status TEXT,
+227:   p_rejection_reasons JSONB
+228: )
+229: RETURNS TABLE(submission_id UUID, dossier_id UUID, status TEXT, rejection_reasons JSONB, idempotent_replay BOOLEAN)
+230: LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+231: AS $function$
+232: DECLARE
+233:   v_job public.research_deep_jobs_v1;
+234:   v_outbox public.candidate_dossier_outbox_v5;
+235:   v_stock UUID;
+236:   v_receipt RECORD;
+237: BEGIN
+238:   SELECT * INTO v_job FROM public.research_deep_jobs_v1
+239:     WHERE research_deep_jobs_v1.job_id=p_deep_job_id AND research_scope='formal_v1' FOR UPDATE;
+240:   IF FOUND AND v_job.status='completed' AND v_job.attempts=p_deep_attempt
+241:     AND v_job.completion_owner=p_deep_owner
+242:     AND v_job.completion_outbox_owner=p_owner
+243:     AND v_job.completion_outbox_job_id=p_job_id
+244:     AND v_job.completion_review_id=p_deep_review_id
+245:     AND v_job.completion_article_hash=p_article_hash
+246:     AND v_job.completion_submission_hash=p_submission_hash
+247:     AND p_validation_status='valid'
+248:     AND p_content->'deepResearch'->>'articleHash'=p_article_hash THEN
+249:     RETURN QUERY SELECT receipt.submission_id,receipt.dossier_id,receipt.status,
+250:       receipt.rejection_reasons,TRUE
+251:       FROM public.candidate_dossier_submission_receipts receipt
+252:       JOIN public.candidate_research_dossiers dossier ON dossier.id=receipt.dossier_id
+253:       WHERE receipt.submission_id=v_job.receipt_id AND receipt.revision_id=p_revision_id
+254:         AND receipt.bundle_id=p_bundle_id AND receipt.input_hash=p_input_hash
+255:         AND receipt.submission_hash=p_submission_hash AND receipt.status='accepted'
+256:         AND dossier.content=p_content;
+257:     IF FOUND THEN RETURN; END IF;
+258:   END IF;
+259:   IF NOT FOUND OR v_job.status<>'running' OR v_job.lease_owner IS DISTINCT FROM p_deep_owner
+260:     OR v_job.attempts<>p_deep_attempt OR v_job.lease_expires_at<=clock_timestamp() THEN
+261:     RAISE EXCEPTION 'research_deep_job_lease_lost';
+262:   END IF;
+263:   SELECT * INTO v_outbox FROM public.candidate_dossier_outbox_v5 outbox
+264:     WHERE outbox.job_id=p_job_id FOR UPDATE;
+265:   IF NOT FOUND OR v_outbox.publication_kind<>'deep' OR v_outbox.status<>'running'
+266:     OR v_outbox.lease_expires_at<=clock_timestamp() OR v_outbox.deep_job_id IS DISTINCT FROM p_deep_job_id
+267:     OR v_outbox.deep_attempt IS DISTINCT FROM p_deep_attempt
+268:     OR v_outbox.lease_owner IS DISTINCT FROM p_owner
+269:     OR v_outbox.bundle_id IS DISTINCT FROM p_bundle_id
+270:     OR v_outbox.revision_id IS DISTINCT FROM p_revision_id
+271:     OR v_outbox.input_hash IS DISTINCT FROM p_input_hash THEN
+272:     RAISE EXCEPTION 'research_deep_outbox_binding_missing';
+273:   END IF;
+274:   SELECT detail.stock_id INTO v_stock FROM public.candidate_detail_snapshots detail
+275:     WHERE detail.id=p_revision_id;
+276:   IF v_stock IS DISTINCT FROM v_job.stock_id THEN
+277:     RAISE EXCEPTION 'research_deep_stock_revision_mismatch';
+278:   END IF;
+279:   IF p_validation_status='valid' AND (
+280:     p_content->'deepResearch'->>'articleHash' IS DISTINCT FROM p_article_hash
+281:     OR NOT EXISTS (
+282:       SELECT 1 FROM public.candidate_deep_article_reviews_v1 review
+283:       WHERE review.id=p_deep_review_id AND review.revision_id=p_revision_id
+284:         AND review.input_hash=p_input_hash AND review.article_hash=p_article_hash
+285:         AND review.decision='accepted' AND review.reviewed_at>=v_job.created_at
+286:         AND EXISTS(SELECT 1 FROM public.research_model_completions_v1 c
+287:           JOIN public.research_model_reservations_v1 r USING(reservation_id)
+288:           WHERE c.reservation_id=review.model_reservation_id AND c.outcome='completed'
+289:             AND c.result_hash=p_article_hash AND r.role='counter_review'
+290:             AND r.work_key='deep-review:'||p_deep_job_id||':'||p_deep_attempt||':'||p_article_hash)
+291:     )
+292:   ) THEN
+293:     RAISE EXCEPTION 'research_deep_exact_review_missing';
+294:   END IF;
+295:   SELECT * INTO v_receipt FROM public.record_candidate_dossier_submission_v4(
+296:     p_bundle_id,p_revision_id,p_input_hash,p_submission_hash,p_content,
+297:     p_claims,p_source_references,p_claim_fact_map,p_validation_status,p_rejection_reasons
+298:   );
+299:   IF NOT FOUND THEN RAISE EXCEPTION 'research_deep_publication_receipt_missing'; END IF;
+300:   UPDATE public.candidate_dossier_outbox_v5 SET
+301:     status=v_receipt.status, lease_owner=NULL, lease_expires_at=NULL,
+302:     receipt_id=CASE WHEN v_receipt.status='accepted' THEN v_receipt.submission_id ELSE NULL END,
+303:     last_submission_hash=p_submission_hash,
+304:     last_error=CASE WHEN v_receipt.status='rejected' THEN v_receipt.rejection_reasons::text ELSE NULL END,
+305:     updated_at=clock_timestamp() WHERE job_id=p_job_id;
+306:   UPDATE public.research_deep_jobs_v1 SET
+307:     status=CASE WHEN v_receipt.status='accepted' THEN 'completed'
+308:       WHEN attempts<3 THEN 'queued' ELSE 'failed' END,
+309:     lease_owner=NULL,lease_expires_at=NULL,
+310:     receipt_id=CASE WHEN v_receipt.status='accepted' THEN v_receipt.submission_id ELSE NULL END,
+311:     completion_owner=CASE WHEN v_receipt.status='accepted' THEN p_deep_owner ELSE NULL END,
+312:     completion_outbox_owner=CASE WHEN v_receipt.status='accepted' THEN p_owner ELSE NULL END,
+313:     completion_outbox_job_id=CASE WHEN v_receipt.status='accepted' THEN p_job_id ELSE NULL END,
+314:     completion_review_id=CASE WHEN v_receipt.status='accepted' THEN p_deep_review_id ELSE NULL END,
+315:     completion_article_hash=CASE WHEN v_receipt.status='accepted' THEN p_article_hash ELSE NULL END,
+316:     completion_submission_hash=CASE WHEN v_receipt.status='accepted' THEN p_submission_hash ELSE NULL END,
+317:     terminal_reason=CASE WHEN v_receipt.status='accepted' THEN NULL ELSE 'dossier_rejected' END,
+318:     finished_at=CASE WHEN v_receipt.status='accepted' OR attempts>=3 THEN clock_timestamp() ELSE NULL END
+319:     WHERE research_deep_jobs_v1.job_id=p_deep_job_id;
+320:   PERFORM public.finish_research_model_v1(r.reservation_id,p_deep_owner,
+321:     CASE WHEN v_receipt.status='accepted' THEN 'completed' ELSE 'failed' END,p_submission_hash)
+322:   FROM public.research_model_reservations_v1 r WHERE r.role='company_research'
+323:     AND r.work_key='deep:'||p_deep_job_id||':'||p_deep_attempt::text
+324:     AND NOT EXISTS(SELECT 1 FROM public.research_model_completions_v1 c WHERE c.reservation_id=r.reservation_id);
+325:   RETURN QUERY SELECT v_receipt.submission_id,v_receipt.dossier_id,v_receipt.status,
+326:     v_receipt.rejection_reasons,v_receipt.idempotent_replay;
+327: END $function$;
+328: DO $$DECLARE routine record;BEGIN FOR routine IN SELECT p.proname,pg_get_function_identity_arguments(p.oid)args FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public'AND p.proname=ANY(ARRAY['record_budgeted_deep_review_v1','claim_candidate_deep_outbox_v1','finish_research_deep_job_v2','record_candidate_deep_submission_v1'])LOOP EXECUTE format('REVOKE ALL ON FUNCTION public.%I(%s) FROM PUBLIC,anon,authenticated',routine.proname,routine.args);EXECUTE format('GRANT EXECUTE ON FUNCTION public.%I(%s) TO service_role',routine.proname,routine.args);END LOOP;END $$;
+329: COMMIT;

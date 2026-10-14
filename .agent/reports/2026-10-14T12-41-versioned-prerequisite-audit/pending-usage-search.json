@@ -1,0 +1,19 @@
+{
+  "command": [
+    "git",
+    "grep",
+    "-n",
+    "-E",
+    "GRANT USAGE ON SCHEMA public.*(research_input_preparation_owner_v2|research_source_fence_owner_v2)",
+    "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "--",
+    "migrations",
+    "scripts",
+    "deployment",
+    ":!*.json",
+    ":!*.gz"
+  ],
+  "exit": 0,
+  "stdout": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78:scripts/research-publication-lineage-postgres.test.mjs:38:   GRANT USAGE ON SCHEMA public TO research_input_preparation_owner_v2,research_observed_rpc_owner;\n",
+  "stderr": ""
+}

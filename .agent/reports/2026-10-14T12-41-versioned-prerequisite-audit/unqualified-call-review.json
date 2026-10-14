@@ -1,0 +1,4 @@
+{
+  "additional": [],
+  "limitations": "lexical only; SQL triggers/defaults/policies require source review, no claim catalog pg_depend captures PLpgSQL body dependencies"
+}

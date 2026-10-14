@@ -1,0 +1,5 @@
+{
+  "code": "42501",
+  "message": "permission denied for schema public",
+  "where": "compilation of PL/pgSQL function \"research_input_binding_candidate_v3\" near line 2"
+}

@@ -1,0 +1,4 @@
+{
+  "sql": "SELECT r.rolname,t.relname,pg_get_userbyid(t.relowner) owner,t.relrowsecurity,t.relforcerowsecurity,has_schema_privilege(r.oid,t.relnamespace,'USAGE') schema_usage,has_table_privilege(r.oid,t.oid,'SELECT') select_privilege,has_table_privilege(r.oid,t.oid,'INSERT') insert_privilege,has_table_privilege(r.oid,t.oid,'UPDATE') update_privilege FROM pg_roles r CROSS JOIN pg_class t JOIN pg_namespace n ON n.oid=t.relnamespace WHERE r.rolname !~ '^pg_' AND n.nspname='public' AND t.relkind IN ('r','p') ORDER BY 1,2",
+  "parameters": []
+}

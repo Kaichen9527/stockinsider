@@ -1,0 +1,7 @@
+[
+  {
+    "path": "migrations/20261008_research_observed_roster_v1.sql",
+    "line": 55,
+    "text": "GRANT USAGE ON SCHEMA public,extensions TO research_observed_rpc_owner;"
+  }
+]

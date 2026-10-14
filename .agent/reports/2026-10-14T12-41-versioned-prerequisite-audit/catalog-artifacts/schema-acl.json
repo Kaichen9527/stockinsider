@@ -1,0 +1,182 @@
+[
+  {
+    "nspname": "extensions",
+    "owner": "postgres",
+    "raw_acl": "{postgres=UC/postgres,anon=U/postgres,authenticated=U/postgres,service_role=U/postgres,dashboard_user=UC/postgres,opportunity_v3_rpc_owner=U/postgres,legacy_correctness_rpc_owner=U/postgres,research_observed_rpc_owner=U/postgres}",
+    "grantee": "anon",
+    "grantor": "postgres",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "extensions",
+    "owner": "postgres",
+    "raw_acl": "{postgres=UC/postgres,anon=U/postgres,authenticated=U/postgres,service_role=U/postgres,dashboard_user=UC/postgres,opportunity_v3_rpc_owner=U/postgres,legacy_correctness_rpc_owner=U/postgres,research_observed_rpc_owner=U/postgres}",
+    "grantee": "authenticated",
+    "grantor": "postgres",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "extensions",
+    "owner": "postgres",
+    "raw_acl": "{postgres=UC/postgres,anon=U/postgres,authenticated=U/postgres,service_role=U/postgres,dashboard_user=UC/postgres,opportunity_v3_rpc_owner=U/postgres,legacy_correctness_rpc_owner=U/postgres,research_observed_rpc_owner=U/postgres}",
+    "grantee": "dashboard_user",
+    "grantor": "postgres",
+    "privilege_type": "CREATE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "extensions",
+    "owner": "postgres",
+    "raw_acl": "{postgres=UC/postgres,anon=U/postgres,authenticated=U/postgres,service_role=U/postgres,dashboard_user=UC/postgres,opportunity_v3_rpc_owner=U/postgres,legacy_correctness_rpc_owner=U/postgres,research_observed_rpc_owner=U/postgres}",
+    "grantee": "dashboard_user",
+    "grantor": "postgres",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "extensions",
+    "owner": "postgres",
+    "raw_acl": "{postgres=UC/postgres,anon=U/postgres,authenticated=U/postgres,service_role=U/postgres,dashboard_user=UC/postgres,opportunity_v3_rpc_owner=U/postgres,legacy_correctness_rpc_owner=U/postgres,research_observed_rpc_owner=U/postgres}",
+    "grantee": "legacy_correctness_rpc_owner",
+    "grantor": "postgres",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "extensions",
+    "owner": "postgres",
+    "raw_acl": "{postgres=UC/postgres,anon=U/postgres,authenticated=U/postgres,service_role=U/postgres,dashboard_user=UC/postgres,opportunity_v3_rpc_owner=U/postgres,legacy_correctness_rpc_owner=U/postgres,research_observed_rpc_owner=U/postgres}",
+    "grantee": "opportunity_v3_rpc_owner",
+    "grantor": "postgres",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "extensions",
+    "owner": "postgres",
+    "raw_acl": "{postgres=UC/postgres,anon=U/postgres,authenticated=U/postgres,service_role=U/postgres,dashboard_user=UC/postgres,opportunity_v3_rpc_owner=U/postgres,legacy_correctness_rpc_owner=U/postgres,research_observed_rpc_owner=U/postgres}",
+    "grantee": "postgres",
+    "grantor": "postgres",
+    "privilege_type": "CREATE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "extensions",
+    "owner": "postgres",
+    "raw_acl": "{postgres=UC/postgres,anon=U/postgres,authenticated=U/postgres,service_role=U/postgres,dashboard_user=UC/postgres,opportunity_v3_rpc_owner=U/postgres,legacy_correctness_rpc_owner=U/postgres,research_observed_rpc_owner=U/postgres}",
+    "grantee": "postgres",
+    "grantor": "postgres",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "extensions",
+    "owner": "postgres",
+    "raw_acl": "{postgres=UC/postgres,anon=U/postgres,authenticated=U/postgres,service_role=U/postgres,dashboard_user=UC/postgres,opportunity_v3_rpc_owner=U/postgres,legacy_correctness_rpc_owner=U/postgres,research_observed_rpc_owner=U/postgres}",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "postgres",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "extensions",
+    "owner": "postgres",
+    "raw_acl": "{postgres=UC/postgres,anon=U/postgres,authenticated=U/postgres,service_role=U/postgres,dashboard_user=UC/postgres,opportunity_v3_rpc_owner=U/postgres,legacy_correctness_rpc_owner=U/postgres,research_observed_rpc_owner=U/postgres}",
+    "grantee": "service_role",
+    "grantor": "postgres",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "public",
+    "owner": "pg_database_owner",
+    "raw_acl": "{pg_database_owner=UC/pg_database_owner,postgres=U/pg_database_owner,anon=U/pg_database_owner,authenticated=U/pg_database_owner,service_role=U/pg_database_owner,opportunity_v3_rpc_owner=U/pg_database_owner,legacy_correctness_rpc_owner=U/pg_database_owner,stockinsider_runtime_v319=U/pg_database_owner,research_observed_rpc_owner=U/pg_database_owner}",
+    "grantee": "anon",
+    "grantor": "pg_database_owner",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "public",
+    "owner": "pg_database_owner",
+    "raw_acl": "{pg_database_owner=UC/pg_database_owner,postgres=U/pg_database_owner,anon=U/pg_database_owner,authenticated=U/pg_database_owner,service_role=U/pg_database_owner,opportunity_v3_rpc_owner=U/pg_database_owner,legacy_correctness_rpc_owner=U/pg_database_owner,stockinsider_runtime_v319=U/pg_database_owner,research_observed_rpc_owner=U/pg_database_owner}",
+    "grantee": "authenticated",
+    "grantor": "pg_database_owner",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "public",
+    "owner": "pg_database_owner",
+    "raw_acl": "{pg_database_owner=UC/pg_database_owner,postgres=U/pg_database_owner,anon=U/pg_database_owner,authenticated=U/pg_database_owner,service_role=U/pg_database_owner,opportunity_v3_rpc_owner=U/pg_database_owner,legacy_correctness_rpc_owner=U/pg_database_owner,stockinsider_runtime_v319=U/pg_database_owner,research_observed_rpc_owner=U/pg_database_owner}",
+    "grantee": "legacy_correctness_rpc_owner",
+    "grantor": "pg_database_owner",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "public",
+    "owner": "pg_database_owner",
+    "raw_acl": "{pg_database_owner=UC/pg_database_owner,postgres=U/pg_database_owner,anon=U/pg_database_owner,authenticated=U/pg_database_owner,service_role=U/pg_database_owner,opportunity_v3_rpc_owner=U/pg_database_owner,legacy_correctness_rpc_owner=U/pg_database_owner,stockinsider_runtime_v319=U/pg_database_owner,research_observed_rpc_owner=U/pg_database_owner}",
+    "grantee": "opportunity_v3_rpc_owner",
+    "grantor": "pg_database_owner",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "public",
+    "owner": "pg_database_owner",
+    "raw_acl": "{pg_database_owner=UC/pg_database_owner,postgres=U/pg_database_owner,anon=U/pg_database_owner,authenticated=U/pg_database_owner,service_role=U/pg_database_owner,opportunity_v3_rpc_owner=U/pg_database_owner,legacy_correctness_rpc_owner=U/pg_database_owner,stockinsider_runtime_v319=U/pg_database_owner,research_observed_rpc_owner=U/pg_database_owner}",
+    "grantee": "pg_database_owner",
+    "grantor": "pg_database_owner",
+    "privilege_type": "CREATE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "public",
+    "owner": "pg_database_owner",
+    "raw_acl": "{pg_database_owner=UC/pg_database_owner,postgres=U/pg_database_owner,anon=U/pg_database_owner,authenticated=U/pg_database_owner,service_role=U/pg_database_owner,opportunity_v3_rpc_owner=U/pg_database_owner,legacy_correctness_rpc_owner=U/pg_database_owner,stockinsider_runtime_v319=U/pg_database_owner,research_observed_rpc_owner=U/pg_database_owner}",
+    "grantee": "pg_database_owner",
+    "grantor": "pg_database_owner",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "public",
+    "owner": "pg_database_owner",
+    "raw_acl": "{pg_database_owner=UC/pg_database_owner,postgres=U/pg_database_owner,anon=U/pg_database_owner,authenticated=U/pg_database_owner,service_role=U/pg_database_owner,opportunity_v3_rpc_owner=U/pg_database_owner,legacy_correctness_rpc_owner=U/pg_database_owner,stockinsider_runtime_v319=U/pg_database_owner,research_observed_rpc_owner=U/pg_database_owner}",
+    "grantee": "postgres",
+    "grantor": "pg_database_owner",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "public",
+    "owner": "pg_database_owner",
+    "raw_acl": "{pg_database_owner=UC/pg_database_owner,postgres=U/pg_database_owner,anon=U/pg_database_owner,authenticated=U/pg_database_owner,service_role=U/pg_database_owner,opportunity_v3_rpc_owner=U/pg_database_owner,legacy_correctness_rpc_owner=U/pg_database_owner,stockinsider_runtime_v319=U/pg_database_owner,research_observed_rpc_owner=U/pg_database_owner}",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "pg_database_owner",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "public",
+    "owner": "pg_database_owner",
+    "raw_acl": "{pg_database_owner=UC/pg_database_owner,postgres=U/pg_database_owner,anon=U/pg_database_owner,authenticated=U/pg_database_owner,service_role=U/pg_database_owner,opportunity_v3_rpc_owner=U/pg_database_owner,legacy_correctness_rpc_owner=U/pg_database_owner,stockinsider_runtime_v319=U/pg_database_owner,research_observed_rpc_owner=U/pg_database_owner}",
+    "grantee": "service_role",
+    "grantor": "pg_database_owner",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  },
+  {
+    "nspname": "public",
+    "owner": "pg_database_owner",
+    "raw_acl": "{pg_database_owner=UC/pg_database_owner,postgres=U/pg_database_owner,anon=U/pg_database_owner,authenticated=U/pg_database_owner,service_role=U/pg_database_owner,opportunity_v3_rpc_owner=U/pg_database_owner,legacy_correctness_rpc_owner=U/pg_database_owner,stockinsider_runtime_v319=U/pg_database_owner,research_observed_rpc_owner=U/pg_database_owner}",
+    "grantee": "stockinsider_runtime_v319",
+    "grantor": "pg_database_owner",
+    "privilege_type": "USAGE",
+    "is_grantable": false
+  }
+]

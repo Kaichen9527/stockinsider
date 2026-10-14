@@ -1,0 +1,4 @@
+{
+  "sql": "SELECT current_user,session_user,pg_backend_pid(),pg_current_snapshot()::text,current_setting('transaction_read_only') read_only,current_setting('transaction_isolation') isolation,version()",
+  "parameters": []
+}

@@ -1,0 +1,30 @@
+{
+  "catalogAudit": true,
+  "roles": 18,
+  "functions": 340,
+  "reachableFunctions": 29,
+  "missingPublicUsage": [
+    "authenticator",
+    "dashboard_user",
+    "pgbouncer",
+    "research_input_preparation_owner_v2",
+    "research_source_fence_owner_v2",
+    "stockinsider",
+    "supabase_admin",
+    "supabase_auth_admin",
+    "supabase_realtime_admin",
+    "supabase_storage_admin"
+  ],
+  "emptyLedgers": {
+    "revisions": [],
+    "preparations": []
+  },
+  "resolver": {
+    "code": "42501",
+    "message": "permission denied for schema public",
+    "where": "compilation of PL/pgSQL function \"research_input_binding_candidate_v3\" near line 2"
+  },
+  "protocolFirstSeal": false,
+  "grantsAttempted": false,
+  "readOnly": true
+}

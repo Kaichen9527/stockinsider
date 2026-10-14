@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--check",
+    "scripts/opportunity-v3/research-versioned-prerequisite-audit.mjs"
+  ],
+  "start": "2026-10-14T12:51:23.232651+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.25,
+  "peakProcessTreeRss": 32690176,
+  "minFree": {
+    "/workspace": 8609103872,
+    "/tmp": 15428067328
+  },
+  "user": "agent",
+  "exit": 0,
+  "seconds": 0.2933781147003174
+}

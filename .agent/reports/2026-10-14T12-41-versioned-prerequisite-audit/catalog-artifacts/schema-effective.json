@@ -1,0 +1,218 @@
+[
+  {
+    "rolname": "anon",
+    "nspname": "extensions",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "anon",
+    "nspname": "public",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "authenticated",
+    "nspname": "extensions",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "authenticated",
+    "nspname": "public",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "authenticator",
+    "nspname": "extensions",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "authenticator",
+    "nspname": "public",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "dashboard_user",
+    "nspname": "extensions",
+    "usage": true,
+    "create_privilege": true
+  },
+  {
+    "rolname": "dashboard_user",
+    "nspname": "public",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "legacy_correctness_rpc_owner",
+    "nspname": "extensions",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "legacy_correctness_rpc_owner",
+    "nspname": "public",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "opportunity_v3_rpc_owner",
+    "nspname": "extensions",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "opportunity_v3_rpc_owner",
+    "nspname": "public",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "pgbouncer",
+    "nspname": "extensions",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "pgbouncer",
+    "nspname": "public",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "postgres",
+    "nspname": "extensions",
+    "usage": true,
+    "create_privilege": true
+  },
+  {
+    "rolname": "postgres",
+    "nspname": "public",
+    "usage": true,
+    "create_privilege": true
+  },
+  {
+    "rolname": "research_input_preparation_owner_v2",
+    "nspname": "extensions",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "research_input_preparation_owner_v2",
+    "nspname": "public",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "research_observed_rpc_owner",
+    "nspname": "extensions",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "research_observed_rpc_owner",
+    "nspname": "public",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "research_source_fence_owner_v2",
+    "nspname": "extensions",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "research_source_fence_owner_v2",
+    "nspname": "public",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "service_role",
+    "nspname": "extensions",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "service_role",
+    "nspname": "public",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "stockinsider",
+    "nspname": "extensions",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "stockinsider",
+    "nspname": "public",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "stockinsider_runtime_v319",
+    "nspname": "extensions",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "stockinsider_runtime_v319",
+    "nspname": "public",
+    "usage": true,
+    "create_privilege": false
+  },
+  {
+    "rolname": "supabase_admin",
+    "nspname": "extensions",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "supabase_admin",
+    "nspname": "public",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "supabase_auth_admin",
+    "nspname": "extensions",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "supabase_auth_admin",
+    "nspname": "public",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "supabase_realtime_admin",
+    "nspname": "extensions",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "supabase_realtime_admin",
+    "nspname": "public",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "supabase_storage_admin",
+    "nspname": "extensions",
+    "usage": false,
+    "create_privilege": false
+  },
+  {
+    "rolname": "supabase_storage_admin",
+    "nspname": "public",
+    "usage": false,
+    "create_privilege": false
+  }
+]

@@ -1,0 +1,429 @@
+[
+  {
+    "signature": "assert_research_input_candidate_v3(jsonb,text)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "assert_research_input_candidate_v3(jsonb,text)",
+    "grantee": "service_role",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+    "grantee": "service_role",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "assert_research_source_seal_v2(uuid)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_source_fence_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "assert_research_source_seal_v2(uuid)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "research_source_fence_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "assert_research_source_seal_v2(uuid)",
+    "grantee": "research_source_fence_owner_v2",
+    "grantor": "research_source_fence_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "claim_research_observed_job_v2(text,text)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "claim_research_observed_job_v2(text,text)",
+    "grantee": "service_role",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "enqueue_research_deep_jobs_v1(uuid)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "enqueue_research_deep_jobs_v1(uuid)",
+    "grantee": "service_role",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "prepare_research_input_candidate_v3(jsonb,text,text)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "prepare_research_input_candidate_v3(jsonb,text,text)",
+    "grantee": "service_role",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "prepare_research_input_v2(jsonb)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "prepare_research_input_v2(jsonb)",
+    "grantee": "service_role",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "read_research_article_input_candidate_v3(jsonb)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "read_research_article_input_candidate_v3(jsonb)",
+    "grantee": "service_role",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "read_research_article_input_revision_v2(jsonb)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "read_research_article_input_revision_v2(jsonb)",
+    "grantee": "service_role",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "read_research_observed_claim_v2(text,text,uuid,integer)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "read_research_observed_claim_v2(text,text,uuid,integer)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "read_research_observed_claim_v2(text,text,uuid,integer)",
+    "grantee": "service_role",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "read_research_observed_roster_v1(text,timestamp with time zone,integer,integer)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "read_research_observed_roster_v1(text,timestamp with time zone,integer,integer)",
+    "grantee": "service_role",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "reap_expired_research_deep_jobs_v2()",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "reap_expired_research_deep_jobs_v2()",
+    "grantee": "service_role",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "reconcile_research_deep_admissions_v1()",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_complete_canonical_v2(jsonb,integer)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_complete_canonical_v2(jsonb,integer)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_complete_hash_v2(jsonb)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_complete_hash_v2(jsonb)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_complete_mapping_v2(text)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_complete_parent_candidate_v3(jsonb)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_complete_parent_v2(jsonb)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_input_binding_candidate_v3(text,text,text,boolean)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_input_preparation_bytes_v2(jsonb,jsonb,jsonb)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_model_lease_fits_day_v1(timestamp with time zone)",
+    "grantee": "postgres",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_model_lease_fits_day_v1(timestamp with time zone)",
+    "grantee": "service_role",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_observed_canonical_json_v1(jsonb)",
+    "grantee": "postgres",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_observed_canonical_json_v1(jsonb)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_observed_canonical_json_v1(jsonb)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_source_heads_page_v1(timestamp with time zone,integer,integer)",
+    "grantee": "postgres",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_source_heads_page_v1(timestamp with time zone,integer,integer)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_source_heads_page_v1(timestamp with time zone,integer,integer)",
+    "grantee": "service_role",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_source_root_v2(jsonb)",
+    "grantee": "anon",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_source_root_v2(jsonb)",
+    "grantee": "authenticated",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_source_root_v2(jsonb)",
+    "grantee": "postgres",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_source_root_v2(jsonb)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_source_root_v2(jsonb)",
+    "grantee": "research_source_fence_owner_v2",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "research_source_root_v2(jsonb)",
+    "grantee": "service_role",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "reserve_research_model_v1(text,text,text)",
+    "grantee": "postgres",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "reserve_research_model_v1(text,text,text)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "reserve_research_model_v1(text,text,text)",
+    "grantee": "service_role",
+    "grantor": "postgres",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "seal_research_article_input_candidate_v3(jsonb,jsonb,text)",
+    "grantee": "service_role",
+    "grantor": "research_input_preparation_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+    "grantee": "research_input_preparation_owner_v2",
+    "grantor": "research_source_fence_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+    "grantee": "research_source_fence_owner_v2",
+    "grantor": "research_source_fence_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+    "grantee": "service_role",
+    "grantor": "research_source_fence_owner_v2",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+    "grantee": "research_observed_rpc_owner",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  },
+  {
+    "signature": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+    "grantee": "service_role",
+    "grantor": "research_observed_rpc_owner",
+    "privilege_type": "EXECUTE",
+    "is_grantable": false
+  }
+]
