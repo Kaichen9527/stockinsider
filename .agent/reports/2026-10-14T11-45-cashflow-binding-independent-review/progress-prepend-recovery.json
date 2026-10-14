@@ -1,0 +1,5 @@
+{
+  "recordedAt": "2026-10-14T03:46:46.957021+00:00",
+  "initialError": "SyntaxError Non-UTF-8 code starting with byte ef in stdin before launch-status update. Reports committed separately as bf66d9f0. Original product RED unchanged.",
+  "recovery": "Apply_patch prepends latest status, preserving all history; no product source change."
+}
