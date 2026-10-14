@@ -1,0 +1,24 @@
+{
+  "turn": "01a13bb7-5098-721e-92fc-cf0f5d2bf0e1",
+  "thread": "01a106b8-a883-7185-9962-f7372109a093",
+  "host": "durable",
+  "cursor": "303427c2-9b66-4f3d-abd3-26255a0a19ef:7",
+  "turnStatus": "completed",
+  "threadStatus": "idle",
+  "source": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+  "evidence": "b09a49eaccd82ba14c00f1a04a84d7683638f727",
+  "receiptSha256": "91028f2891615e1b45d3f3ba52876f4c2e5dc22ab09f4b3796c55bb6d0f9b936",
+  "makerClaims": {
+    "hermeticGroupsPass": 13,
+    "syntaxPass": 1,
+    "sourceIdentities": 263,
+    "rawFiles": 22,
+    "rawBytes": 28146,
+    "pgOrSocketStarted": false
+  },
+  "rootSourceReview": "PENDING",
+  "nativeChildren": "NOT_RUN",
+  "nativeParent": "NOT_RUN",
+  "heavyReleased": false,
+  "rootObservedAt": "2026-10-14T18:49:49.998664+00:00"
+}

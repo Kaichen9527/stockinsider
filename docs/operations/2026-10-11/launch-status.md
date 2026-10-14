@@ -1,5 +1,11 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-15 02:49台灣時間：normalization最小修補已交付待Rootreview，磁碟READY/memoryFAIL仍以真准入為準
+
+normalization最小修補已交付 source d33d6328763ee2591a41d849ff4bfadf75c2ff2e/evidenceb09a49eaccd82ba14c00f1a04a84d7683638f727/receipt91028f2891615e1b45d3f3ba52876f4c2e5dc22ab09f4b3796c55bb6d0f9b936。Maker報13hermeticgroups/1syntax PASS、263source/22raw28146bytes，Root尚未核新source或重跑probe；原7ece REQUEST_CHANGES/Root隔離RED永久保留，不把maker交付當Root批准。Cloud turn01a13bb7-5098-721e-92fc-cf0f5d2bf0e1已真completed/threadidle/cursor303427c2-9b66-4f3d-abd3-26255a0a19ef:7，勿重派同fix。下一先fetch/核d33-b09精確bytes與binding正負probe，source review零finding才另單件actualPG response-loss；兩children+parent仍NOT_RUN、heavy未放行。
+
+正式容量較舊段落以02:43報告真新值為準：diskREADY available26193682432/projected22301368320，原3OS鎖guard仍memoryFAIL短60231680bytes（available2624122880<2684354560），原budgets不降、memory實變才fresh准入，尚未deploy。18:36:48Z current與唯一VPSwriter169一致/leaseRows0，readonly非formalpeer。既有approvedDD包不重建/不改標main、不碰main169-deploy.sh或PR370..381終態helpers。Fullgoalactive，實際來源/兩正式文章/四caller/Q-R/cashcitations/wholeclosure/技術觀察/策略排程/peer-install-deploy仍未完成。新交付只保存狀態，不冒Root review或native結果。
+
 ## 2026-10-15 02:43台灣時間：VPS磁碟真READY但原鎖內memory短60231680 bytes；response-loss source新P2 normalization原RED，單件最小修補活動
 
 Root18:22:13Z readonlySSH真核filesystem154894188544不變、available26194227200>原19998441472/current169，無Root刪檔/prune/擴容/付費，不猜空間增加原因。原15967711232/缺4030730240已是歷史，磁碟不再是目前fail維度。18:34:59Z原3OS鎖+current169原checker真fresh准入exit1：diskREADY available26193682432/projected22301368320>=15GiB16106127360；但memory_below_required_reserve，available2624122880−原1GiB1073741824=1550381056<原1.5GiB1610612736，短60231680，總需要2684354560。全部WAL1GiB/tmp0.5GiB/deploy128MiB/growth2GiB/hardfloor15GiB/peakmemory1GiB/minreserve1.5GiB數值不改，僅measurementBasis改成明示approvedDD實測包。新memoryFAIL真stdout/原scriptSHA/diffbasis保存，不降門檻/不改別App/不刪cache或唯一資料；memory實變才再原鎖fresh准入，不反覆同輸入失敗heavy。
