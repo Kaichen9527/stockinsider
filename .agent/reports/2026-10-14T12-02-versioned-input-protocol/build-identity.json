@@ -1,0 +1,12 @@
+{
+  "source": "f69e761e9b3d8f15a4346f12833ef35d56872383",
+  "webTree": "f598362714c3d3eecfe110c10d2cb7520c065afc",
+  "BUILD_ID": "R8b3ud1u3kwCXfHUWYZk5",
+  "node": "22.14.0",
+  "next": "16.3.4",
+  "serverFiles": 1798,
+  "serverManifestSha256": "0ee398666ea4db36bce4ab02d59cedb6721b0e146b005698e451acafcb6909b0",
+  "appRoutesActivated": false,
+  "candidateModuleCompiledExecutionProved": false,
+  "note": "Normal app build/typecheck does not prove unused candidate module is an active compiled server route or bind a protocol Hc."
+}

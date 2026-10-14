@@ -1,0 +1,20 @@
+{
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "build"
+  ],
+  "start": "2026-10-14T12:22:21.195440+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.25,
+  "peakProcessTreeRss": 891142144,
+  "minFree": {
+    "/workspace": 8609476608,
+    "/tmp": 15432028160
+  },
+  "user": "agent",
+  "exit": 0,
+  "seconds": 30.30681824684143
+}

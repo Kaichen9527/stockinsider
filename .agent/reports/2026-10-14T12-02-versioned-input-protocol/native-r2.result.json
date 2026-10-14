@@ -1,0 +1,20 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-versioned-input-protocol-native.test.mjs"
+  ],
+  "start": "2026-10-14T12:16:32.376280+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.25,
+  "peakProcessTreeRss": 315273216,
+  "minFree": {
+    "/workspace": 8609513472,
+    "/tmp": 15353221120
+  },
+  "user": "agent",
+  "exit": 1,
+  "seconds": 3.621326208114624
+}

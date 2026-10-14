@@ -1,0 +1,24 @@
+{
+  "hs": "32dd192c67ae571f4e9884c72e575d2114677477301d61dc151c6d1a7ac6995c",
+  "hc": "1dc4ade4faf2bde30064615ed7f7ae04dbffed52d10d70aaccbab7991b99e0d9",
+  "input": [
+    {
+      "path": "web/src/lib/research-versioned-complete-input.ts",
+      "sha256": "6c748235f5aebd3bdfa254de400e752e42bf15aae53c840b8ec09b543a29e906"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-binding.ts",
+      "sha256": "1ec1bee664b793295b41de982818e767446b85e801efb164324217510d0fd940"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-request.ts",
+      "sha256": "cce94267308c7b3d3e1c20ad6214265c147fdcc7603defc186cd85b9e31b42b3"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "sha256": "a6d3f20e0b7749d9cfde09940d4959a4efe59456e2cd974a65c5a498a764d6b5"
+    }
+  ],
+  "wholeClosureApproved": false,
+  "notNextBuild": true
+}

@@ -1,0 +1,9 @@
+{
+  "firstNativeSource": "cf8978620ec26f2666dbf18b1f91fe5068343149",
+  "finalTestBuildSource": "f69e761e9b3d8f15a4346f12833ef35d56872383",
+  "runtimeDifference": "",
+  "delivery": "36ea8f0c0f7e5c3f9d52499c97882be60acbf538",
+  "deliveryDiffFromTestSource": "docs/operations/2026-10-14/versioned-input-protocol/HANDOFF.md",
+  "nativeFinalTestRerun": false,
+  "old104CountsNotAdded": true
+}
