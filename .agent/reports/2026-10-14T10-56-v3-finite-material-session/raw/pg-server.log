@@ -1,0 +1,127 @@
+2026-10-14 11:04:05.987 UTC [564182] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-14 11:04:05.987 UTC [564182] LOG:  listening on Unix socket "/tmp/v3pg-x4KWFw/sock/.s.PGSQL.55480"
+2026-10-14 11:04:05.988 UTC [564185] LOG:  database system was shut down at 2026-10-14 11:04:05 UTC
+2026-10-14 11:04:05.990 UTC [564182] LOG:  database system is ready to accept connections
+2026-10-14 11:04:06.224 UTC [564189] ERROR:  complete_schema_keys
+2026-10-14 11:04:06.224 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 7 at RAISE
+2026-10-14 11:04:06.224 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.254 UTC [564189] ERROR:  complete_schema_constant
+2026-10-14 11:04:06.254 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+2026-10-14 11:04:06.254 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.289 UTC [564189] ERROR:  complete_schema_constant
+2026-10-14 11:04:06.289 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+2026-10-14 11:04:06.289 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.324 UTC [564189] ERROR:  complete_schema_array
+2026-10-14 11:04:06.324 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 11 at RAISE
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+2026-10-14 11:04:06.324 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.336 UTC [564189] ERROR:  complete_schema_constant
+2026-10-14 11:04:06.336 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+2026-10-14 11:04:06.336 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.376 UTC [564189] ERROR:  complete_clock_binding
+2026-10-14 11:04:06.376 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 18 at RAISE
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+2026-10-14 11:04:06.376 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.453 UTC [564189] ERROR:  complete_schema_keys
+2026-10-14 11:04:06.453 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 7 at RAISE
+2026-10-14 11:04:06.453 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.470 UTC [564189] ERROR:  complete_schema_constant
+2026-10-14 11:04:06.470 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+2026-10-14 11:04:06.470 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.491 UTC [564189] ERROR:  complete_schema_constant
+2026-10-14 11:04:06.491 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+2026-10-14 11:04:06.491 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.517 UTC [564189] ERROR:  complete_schema_array
+2026-10-14 11:04:06.517 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 11 at RAISE
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+2026-10-14 11:04:06.517 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.523 UTC [564189] ERROR:  complete_schema_constant
+2026-10-14 11:04:06.523 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+2026-10-14 11:04:06.523 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.546 UTC [564189] ERROR:  complete_clock_binding
+2026-10-14 11:04:06.546 UTC [564189] CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 18 at RAISE
+	SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+	PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+2026-10-14 11:04:06.546 UTC [564189] STATEMENT:  SELECT public.research_complete_schema_check_v2($1::jsonb,$2::jsonb,$3::timestamptz)
+2026-10-14 11:04:06.548 UTC [564189] WARNING:  there is no transaction in progress
+2026-10-14 11:04:06.554 UTC [564182] LOG:  received immediate shutdown request
+2026-10-14 11:04:06.556 UTC [564182] LOG:  database system is shut down

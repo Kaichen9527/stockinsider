@@ -1,0 +1,27 @@
+{
+  "type": "singleheavy sequencing deviation",
+  "description": "typecheck began before prior suite last pending-close case completed; subsequently lint overlapped remaining tests briefly; normalbuild and PG were after preceding completion",
+  "overlapSeconds": 10.185953140258789,
+  "originalFullRunResult": {
+    "exit": 0,
+    "startedUnix": 1791975670.835313,
+    "seconds": 44.32437205314636,
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/research-historical-cash-core.test.mjs",
+      "scripts/research-historical-cash-projection.test.mjs",
+      "scripts/research-cash-single-owner-reader.test.mjs",
+      "scripts/research-scenario-cash-material.test.mjs",
+      "scripts/research-scenario-cash-reader.test.mjs",
+      "scripts/research-compatible-financial-reader.test.mjs",
+      "scripts/research-v3-finite-material-session.test.mjs"
+    ]
+  },
+  "qualityStagesSerial": true,
+  "notClaimedWhollySerial": true,
+  "testTreePeakRssNotMeasured": true,
+  "rawPreserved": true
+}

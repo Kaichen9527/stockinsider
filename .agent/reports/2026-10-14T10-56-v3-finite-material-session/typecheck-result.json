@@ -1,0 +1,26 @@
+{
+  "stage": "typecheck",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "typecheck"
+  ],
+  "cwd": "/tmp/si-pubtail-o14",
+  "startedAt": "2026-10-14T11:01:44.973732+00:00",
+  "durationSeconds": 4.204484462738037,
+  "exit": 0,
+  "boundStop": null,
+  "peakSampledProcessTreeRssBytes": 601550848,
+  "sampleIntervalSeconds": 0.25,
+  "samples": 15,
+  "minFreeBytes": {
+    "/workspace": 8614293504,
+    "/tmp": 15439949824
+  },
+  "beforeFreeBytes": {
+    "/workspace": 8614293504,
+    "/tmp": 15439953920
+  }
+}

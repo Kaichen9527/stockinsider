@@ -1,0 +1,110 @@
+TAP version 13
+# (node:563270) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:563270) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-cash-financial-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# Subtest: 2409 exact raw/normalized schema identities; original values and all qualification fields retained
+ok 1 - 2409 exact raw/normalized schema identities; original values and all qualification fields retained
+  ---
+  duration_ms: 126.15882
+  ...
+# Subtest: 2409 six dynamic hashes must satisfy raw canonical plus full actual recalculation
+ok 2 - 2409 six dynamic hashes must satisfy raw canonical plus full actual recalculation
+  ---
+  duration_ms: 151.5016
+  ...
+# Subtest: 2409 closed finite data rejects unknown/missing/array/flags/cash/unit/basis/pin/clock drift
+ok 3 - 2409 closed finite data rejects unknown/missing/array/flags/cash/unit/basis/pin/clock drift
+  ---
+  duration_ms: 205.463625
+  ...
+# Subtest: 2409 primitive ingress rejects metadata objects, oversized UTF8, duplicate keys and clock mismatch
+ok 4 - 2409 primitive ingress rejects metadata objects, oversized UTF8, duplicate keys and clock mismatch
+  ---
+  duration_ms: 34.328793
+  ...
+# Subtest: 2409 every cooperative normalization deadline rejects; no partially normalized success
+ok 5 - 2409 every cooperative normalization deadline rejects; no partially normalized success
+  ---
+  duration_ms: 306.598617
+  ...
+# Subtest: 2409 actual fixed FS full material holds all FD/raw through post assertion then closes and wipes
+ok 6 - 2409 actual fixed FS full material holds all FD/raw through post assertion then closes and wipes
+  ---
+  duration_ms: 199.424339
+  ...
+# Subtest: 2383 exact raw/normalized schema identities; original values and all qualification fields retained
+ok 7 - 2383 exact raw/normalized schema identities; original values and all qualification fields retained
+  ---
+  duration_ms: 52.268078
+  ...
+# Subtest: 2383 six dynamic hashes must satisfy raw canonical plus full actual recalculation
+ok 8 - 2383 six dynamic hashes must satisfy raw canonical plus full actual recalculation
+  ---
+  duration_ms: 83.342218
+  ...
+# Subtest: 2383 closed finite data rejects unknown/missing/array/flags/cash/unit/basis/pin/clock drift
+ok 9 - 2383 closed finite data rejects unknown/missing/array/flags/cash/unit/basis/pin/clock drift
+  ---
+  duration_ms: 119.973985
+  ...
+# Subtest: 2383 primitive ingress rejects metadata objects, oversized UTF8, duplicate keys and clock mismatch
+ok 10 - 2383 primitive ingress rejects metadata objects, oversized UTF8, duplicate keys and clock mismatch
+  ---
+  duration_ms: 18.759694
+  ...
+# Subtest: 2383 every cooperative normalization deadline rejects; no partially normalized success
+ok 11 - 2383 every cooperative normalization deadline rejects; no partially normalized success
+  ---
+  duration_ms: 171.631112
+  ...
+# Subtest: 2383 actual fixed FS full material holds all FD/raw through post assertion then closes and wipes
+ok 12 - 2383 actual fixed FS full material holds all FD/raw through post assertion then closes and wipes
+  ---
+  duration_ms: 90.450536
+  ...
+# Subtest: unknown selector/missing assertion/max10 reject before any callback/open, legacy still max8
+ok 13 - unknown selector/missing assertion/max10 reject before any callback/open, legacy still max8
+  ---
+  duration_ms: 0.709431
+  ...
+# Subtest: fixed old model cannot be supplied to new9 profile
+ok 14 - fixed old model cannot be supplied to new9 profile
+  ---
+  duration_ms: 5.057133
+  ...
+# Subtest: pre pending context expires, blocks all facades, late settlement permits actual reentry
+ok 15 - pre pending context expires, blocks all facades, late settlement permits actual reentry
+  ---
+  duration_ms: 10052.838621
+  ...
+# Subtest: post pending context expires, blocks all facades, late settlement permits actual reentry
+ok 16 - post pending context expires, blocks all facades, late settlement permits actual reentry
+  ---
+  duration_ms: 10051.849857
+  ...
+# Subtest: context mismatch and namespace replacement after full projection reject without success
+ok 17 - context mismatch and namespace replacement after full projection reject without success
+  ---
+  duration_ms: 90.170333
+  ...
+# Subtest: complete held-post blocks all facades and all four older facade acquisitions block complete
+ok 18 - complete held-post blocks all facades and all four older facade acquisitions block complete
+  ---
+  duration_ms: 127.591993
+  ...
+# Subtest: unconfirmed actual close rejects complete and retains same owner until late confirmed closure
+ok 19 - unconfirmed actual close rejects complete and retains same owner until late confirmed closure
+  ---
+  duration_ms: 10048.757659
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 32152.889075
