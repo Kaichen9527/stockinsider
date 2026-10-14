@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-14T18:23:31.210666+00:00",
+  "files": [
+    {
+      "path": "scripts/opportunity-v3/research-versioned-response-loss-transport.mjs",
+      "bytes": 6842,
+      "sha256": "ff148367233299d0012254e0f87b38f0bb3feecd10d0ce0ae0d7052f15917027",
+      "blob": "32d6eac23ac483666c2650d6736ca7fa28052495"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs",
+      "bytes": 9470,
+      "sha256": "823866411d07109e1031945845f1afd8f938bb33a7ff4d64d0ee53a9ea8b974f",
+      "blob": "8e2b90890981df67f910f3b01d6a10be5eedcb05"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+      "bytes": 18984,
+      "sha256": "6c2e271118a7ae12676aa8cb7c3fef3e3336bb0c4ae932f05051b3d19a90870b",
+      "blob": "14dff5eb7bcf12913ccbc82b8164d97bfec01159"
+    },
+    {
+      "path": "docs/operations/2026-10-15/response-loss-source-only-handoff.md",
+      "bytes": 7814,
+      "sha256": "ccf6aaf3b0f893b0b8e7456354cbde524d63d0aa0378a6ec670ed4203b0e94f3",
+      "blob": "554e58ec546a530932845722b593e9087836a0a2"
+    }
+  ]
+}

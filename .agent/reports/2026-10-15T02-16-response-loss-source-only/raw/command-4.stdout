@@ -1,0 +1,99 @@
+{
+  "scope": "hermetic frame parsing only; no socket/server/PG/app import",
+  "count": 23,
+  "results": [
+    {
+      "name": "fragment width 1",
+      "status": "PASS"
+    },
+    {
+      "name": "fragment width 2",
+      "status": "PASS"
+    },
+    {
+      "name": "fragment width 3",
+      "status": "PASS"
+    },
+    {
+      "name": "fragment width 4",
+      "status": "PASS"
+    },
+    {
+      "name": "fragment width 5",
+      "status": "PASS"
+    },
+    {
+      "name": "fragment width 7",
+      "status": "PASS"
+    },
+    {
+      "name": "fragment width 13",
+      "status": "PASS"
+    },
+    {
+      "name": "fragment width 48",
+      "status": "PASS"
+    },
+    {
+      "name": "every single split position",
+      "status": "PASS"
+    },
+    {
+      "name": "error then ready",
+      "status": "PASS"
+    },
+    {
+      "name": "ready alone",
+      "status": "PASS"
+    },
+    {
+      "name": "transaction not idle",
+      "status": "PASS"
+    },
+    {
+      "name": "wrong command",
+      "status": "PASS"
+    },
+    {
+      "name": "extra frame after ready",
+      "status": "PASS"
+    },
+    {
+      "name": "trailing partial header",
+      "status": "PASS"
+    },
+    {
+      "name": "no ready",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid declared length 0",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid declared length 3",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid declared length 4194304",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid declared length 4294967295",
+      "status": "PASS"
+    },
+    {
+      "name": "chunk over cap",
+      "status": "PASS"
+    },
+    {
+      "name": "frame count bound",
+      "status": "PASS"
+    },
+    {
+      "name": "retained incomplete frame wiped",
+      "status": "PASS"
+    }
+  ],
+  "native": "NOT_RUN"
+}

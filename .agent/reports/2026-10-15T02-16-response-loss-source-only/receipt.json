@@ -1,0 +1,119 @@
+{
+  "kind": "maker-source-only-candidate",
+  "code": "7eceacf9f5921d42ee30022b5174183b0df08b31",
+  "tree": "d9c747df873b1bf8473f31503586a129bd6bd967",
+  "base": "e24d3a1929a6c6ed66b2ba9ead6d222083b6c2e0",
+  "branch": "codex/research-versioned-response-loss-source-oct15",
+  "startedAt": "2026-10-14T18:16:51Z",
+  "deadline": "2026-10-14T18:36:51Z",
+  "sealedAt": "2026-10-14T18:26:16.853567+00:00",
+  "actualValidation": {
+    "node": "v22.14.0",
+    "syntax": {
+      "distinctFiles": 3,
+      "invocations": 5,
+      "exit0": 5
+    },
+    "initialHermeticFrameGroups": 23,
+    "correctedHermeticFrameGroups": 24,
+    "overlappingGroupsNotAdded": true,
+    "nativeTestsExecuted": 0,
+    "pgStarted": 0,
+    "socketServersStarted": 0,
+    "applicationImportsExecuted": 0,
+    "transportModuleImport": "builtins-only; factory not invoked",
+    "gitDiffCheck": 0
+  },
+  "actualRed": [
+    {
+      "kind": "hermetic-test-helper",
+      "exit": 1,
+      "subject": "raw/transport-before-exact-command.mjs.txt",
+      "probe": "exact CommandComplete high-bit bytes",
+      "cause": "ASCII decode masks high-bit bytes so an invalid CommandComplete tag was accepted",
+      "correction": "Buffer.equals exact SELECT1 command bytes",
+      "raw": "raw/command-bytes-red.stderr",
+      "nativeFailure": false,
+      "originalPreserved": true
+    }
+  ],
+  "plannedNative": {
+    "parent": "NOT_RUN",
+    "children": [
+      {
+        "symbol": "2409",
+        "wire": "research-article-input-v3",
+        "status": "NOT_RUN"
+      },
+      {
+        "symbol": "2383",
+        "wire": "research-article-input-v2",
+        "status": "NOT_RUN"
+      }
+    ]
+  },
+  "sourceInventory": {
+    "count": 262,
+    "inherited": 259,
+    "unchangedInherited": 258,
+    "changedInherited": [
+      {
+        "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+        "before": "9491391998cae6201e7bb055261dd4a4b1f1d9f5ff3bc55973db83643039269f",
+        "after": "6c2e271118a7ae12676aa8cb7c3fef3e3336bb0c4ae932f05051b3d19a90870b"
+      }
+    ]
+  },
+  "rawInventory": {
+    "count": 33,
+    "bytes": 130381
+  },
+  "resources": {
+    "reserveBytes": 8589934592,
+    "initialWorkspaceFree": 8604200960,
+    "initialTmpFree": 15375605760,
+    "measured": {
+      "at": "2026-10-14T18:21:21.932362+00:00",
+      "free": {
+        "/workspace": 8604192768,
+        "/tmp": 15375564800
+      },
+      "maxChildRssKiB": 39248,
+      "method": "wait4 highwater for serial syntax/builtins parser only",
+      "startedServices": []
+    },
+    "final": {
+      "at": "2026-10-14T18:25:25.881529+00:00",
+      "activeHeavy": [],
+      "startedServices": [],
+      "boundSockets": 0,
+      "deletedPaths": [],
+      "free": {
+        "/workspace": 8604135424,
+        "/tmp": 15375400960
+      }
+    }
+  },
+  "preserved": {
+    "productsSQLRolesBindingsCapsAuthorityPinsWorkflows": true,
+    "oldCasesBytes": true,
+    "previousGreenSuitesNotRerun": true,
+    "historicalRedUnchanged": true
+  },
+  "pending": [
+    "Root independent source review and separate explicit heavy release",
+    "two real Unix-socket PG native cases and parent",
+    "actual held successful response, independent committed row and zero-forwarded bytes",
+    "actual client query rejection/settlement and socket/server/timer cleanup",
+    "real original10s budget compatibility and observer-confirmation latency",
+    "missing-root exact read/seal replay with no new IO/charge or clock/hash changes",
+    "native full9table/ledger/fence data, FD/PID/server log and backend absence evidence",
+    "old77 response-loss case",
+    "whole S/C/B/Q/R/A, four caller wiring, Q/R/cash citations and formal article approval",
+    "formal active production writer/private peer/live source qualifications"
+  ],
+  "formalApproval": false,
+  "independentReview": false,
+  "servicesToStop": [],
+  "cacheDeletion": false
+}

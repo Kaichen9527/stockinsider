@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-14T18:21:21.932362+00:00",
+  "free": {
+    "/workspace": 8604192768,
+    "/tmp": 15375564800
+  },
+  "maxChildRssKiB": 39248,
+  "method": "wait4 highwater for serial syntax/builtins parser only",
+  "startedServices": []
+}

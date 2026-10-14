@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-14T18:22:08.960551+00:00",
+  "files": [
+    {
+      "path": "scripts/opportunity-v3/research-versioned-response-loss-transport.mjs",
+      "bytes": 6842,
+      "sha256": "ff148367233299d0012254e0f87b38f0bb3feecd10d0ce0ae0d7052f15917027",
+      "blob": "32d6eac23ac483666c2650d6736ca7fa28052495"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs",
+      "bytes": 9108,
+      "sha256": "c5c437a0273111ffbdd2b8b47b7859c4b443c6005c359f70434c6fc18db9da7b",
+      "blob": "357913ae1044ebd95a63130e6b0b4afd36c80072"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+      "bytes": 18984,
+      "sha256": "6c2e271118a7ae12676aa8cb7c3fef3e3336bb0c4ae932f05051b3d19a90870b",
+      "blob": "14dff5eb7bcf12913ccbc82b8164d97bfec01159"
+    }
+  ],
+  "correction": "test-only exact CommandComplete bytes; no SQL/application changes"
+}

@@ -1,0 +1,19 @@
+node:internal/modules/run_main:122
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Missing expected exception.
+    at file:///tmp/response-loss-source-o15/frame-probes.mjs:15:127
+    at probe (file:///tmp/response-loss-source-o15/frame-probes.mjs:6:42)
+    at file:///tmp/response-loss-source-o15/frame-probes.mjs:15:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: undefined,
+  operator: 'throws'
+}
+
+Node.js v22.14.0

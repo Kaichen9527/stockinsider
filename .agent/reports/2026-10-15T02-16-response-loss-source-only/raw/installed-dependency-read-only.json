@@ -1,0 +1,41 @@
+{
+  "pgVersion": "8.18.0",
+  "moduleImportsExecuted": false,
+  "files": [
+    {
+      "path": "node_modules/pg/package.json",
+      "bytes": 1668,
+      "sha256": "a396846a08e48080ed1dee4fca084bad81abdae95ef09004bab54c61ed51fafb"
+    },
+    {
+      "path": "node_modules/pg/lib/client.js",
+      "bytes": 21397,
+      "sha256": "6d9d05583d598740fd0f71a5c6c6adaf52e109070f743662e28749e15fcefc76"
+    },
+    {
+      "path": "node_modules/pg/lib/connection.js",
+      "bytes": 5147,
+      "sha256": "d9cd0c7e3b1dfb19a05fd1e763aa02a70578b07e78441fa33a563c538b83fcf4"
+    },
+    {
+      "path": "node_modules/pg/lib/connection-parameters.js",
+      "bytes": 5282,
+      "sha256": "12495010b781a1ac75e561ccfe0f71fda9872cb3c663931f541ddcfc0d907e2a"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38"
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274088,
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+    }
+  ],
+  "notes": [
+    "client.js domainSocket connects host/.s.PGSQL.port",
+    "connection.js close emits end; client end rejects actual pending queries with connection termination error",
+    "factory rejects PG environment and password challenge; no credential file accessed"
+  ]
+}

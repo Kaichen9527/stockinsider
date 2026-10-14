@@ -1,0 +1,66 @@
+[
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--version"
+    ],
+    "exit": 0,
+    "seconds": 0.008081436157226562,
+    "stdout": "command-0.stdout",
+    "stderr": "command-0.stderr"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-response-loss-transport.mjs"
+    ],
+    "exit": 0,
+    "seconds": 0.023090362548828125,
+    "stdout": "command-1.stdout",
+    "stderr": "command-1.stderr"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs"
+    ],
+    "exit": 0,
+    "seconds": 0.02873539924621582,
+    "stdout": "command-2.stdout",
+    "stderr": "command-2.stderr"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs"
+    ],
+    "exit": 0,
+    "seconds": 0.026323556900024414,
+    "stdout": "command-3.stdout",
+    "stderr": "command-3.stderr"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "/tmp/response-loss-source-o15/frame-probes.mjs"
+    ],
+    "exit": 0,
+    "seconds": 0.07165026664733887,
+    "stdout": "command-4.stdout",
+    "stderr": "command-4.stderr"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 0.006699562072753906,
+    "stdout": "command-5.stdout",
+    "stderr": "command-5.stderr"
+  }
+]

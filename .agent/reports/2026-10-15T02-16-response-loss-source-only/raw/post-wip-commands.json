@@ -1,0 +1,45 @@
+{
+  "commandBytesNegative": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "/tmp/response-loss-source-o15/frame-probes.mjs"
+    ],
+    "exit": 1,
+    "stdout": "command-bytes-red.stdout",
+    "stderr": "command-bytes-red.stderr",
+    "subject": "transport-before-exact-command.mjs.txt",
+    "reason": "ASCII decoding masks high-bit CommandComplete bytes; missing expected exception"
+  },
+  "correctedParserSyntax": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-response-loss-transport.mjs"
+    ],
+    "exit": 0,
+    "stdout": "corrected-syntax.stdout",
+    "stderr": "corrected-syntax.stderr"
+  },
+  "correctedProbes": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "/tmp/response-loss-source-o15/frame-probes.mjs"
+    ],
+    "exit": 0,
+    "stdout": "corrected-probes.stdout",
+    "stderr": "corrected-probes.stderr",
+    "count": 24
+  },
+  "finalNativeSyntax": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs"
+    ],
+    "exit": 0,
+    "stdout": "final-native-syntax.stdout",
+    "stderr": "final-native-syntax.stderr",
+    "subject": "7eceacf9f5921d42ee30022b5174183b0df08b31"
+  },
+  "timing": "These exit statuses observed in tool results; no separate elapsed time was captured for these additional commands."
+}

@@ -1,0 +1,215 @@
+diff --git a/docs/operations/2026-10-15/response-loss-source-only-handoff.md b/docs/operations/2026-10-15/response-loss-source-only-handoff.md
+new file mode 100644
+index 00000000..554e58ec
+--- /dev/null
++++ b/docs/operations/2026-10-15/response-loss-source-only-handoff.md
+@@ -0,0 +1,44 @@
++# Local PG response-loss transport: source-only candidate
++
++Base `e24d3a1929a6c6ed66b2ba9ead6d222083b6c2e0`. Two new children (AUO currentv3; EMC compatiblev2) plus parent are **NOT_RUN**. No socket, PostgreSQL, application import, HTTP, or prior native/pure matrix was executed in this task. Node syntax and hermetic backend-frame probes are separate scope. No production/controller/SQL/schema/binding/role/grant/cap/authority/pin/workflow change.
++
++## Reuse and fixed ownership
++
++No existing PG response-loss relay was found in the current fixture helpers/scripts. Existing HTTP/performance servers do not supply a PG framing or zero-response boundary. This adds one private builtins-only Unix relay, one new native entry, and a lazy fixture factory. Original captured50/26/candidate36/local two-owner USAGE setup, original lawful roster→lease-scoped source→priority enqueue→claim/reservation→neutral preparation, pinned original financial data and controller remain untouched.
++
++`createResponseLossLab()` takes no path/host/port/request selector. It closes over the existing fresh fixture base and port, creates a private0700 relay subdirectory, and pins upstream to that same cluster's `.s.PGSQL.<port>` Unix socket. No TCP/HTTP/connectors. The helper rejects PG-prefixed environment variables for this opt-in factory, uses explicit local host/port/database/user, ssl=false, and a password callback which refuses authentication rather than reading credentials. The lab connection's existing ability to SET ROLE service_role is inherited from the same synthetic local engineering context; no role/grant is added. This is not formal peer authentication. Default cases do not call the factory, allocate connections, listen, or gain extra cleanup output.
++
++Every proxy client enters the original fixture client set before connect. A transport cleanup callback is registered before connection. The factory's query wrapper tracks actual pg promises until their real settlement; it does not race/replace them with timeout results. Final cleanup closes relay sockets, waits pending query settlement, then normal fixture clients/cluster cleanup proceeds. Transport cleanup errors are recorded and cannot return success. Partial startup paths are source-reviewed candidates only, not live-verified cleanup.
++
++## Transport and exact success gate
++
++1. Single accepted downstream client; its frontend bytes pipe unchanged to the fixed upstream Unix socket. Backend frames are validated while ordinary responses pass through. Prior real PG queries must have settled, parser buffer empty and last ReadyForQuery idle before arm.
++2. Only the native adapter immediately before the actual seal RPC arms the relay. Pre/body/post and all9/6 FD closes must already have occurred. No original source/controller code changes.
++3. From arm onward every backend chunk is held and bounded. No held byte is forwarded. The counter compares actual total forwarded-byte writes with the captured count at arm; it is not merely an asserted zero constant.
++4. Framing uses5-byte headers, length>=4, total frame/buffer<=4MiB, <=4096 frames, and held-response aggregate<=4MiB. Fragmented/coalesced messages are handled. ErrorResponse, invalid lengths/types, extra data after Ready, non-idle Ready, or timeout fail closed. Successful gating requires exactly one complete `CommandComplete` with **exact bytes** `SELECT 1\0`, one DataRow, no ErrorResponse, and ReadyForQuery `I`; ReadyI alone is insufficient.
++5. Before destroying either socket, the independent existing read-only observer must find exactly one stored row for the preparation, exact canonical request/request hash/input hash/wire version and false capabilities, count2 and the full ledger. Other8 tables/preparation rows/source fence events/invalidations stay equal to pre-seal. Charge must equal original preparation charge plus original stored revision charge. This observes actual commit from another backend, not a SQL mock or response throw.
++6. Only after those checks are sockets destroyed without forwarding held bytes. Both actual socket close events are awaited. The controller must reject with the **same Error object returned by its actual pg query promise**, not a deadline facade, and that query must really settle. The successful relay receipt is a separate necessary gate; arbitrary connection errors cannot satisfy the native case.
++7. Caller outcome is recorded uncertain until reconciliation. A new tracked service_role connection reads the same exact request after deleting only the two owned financial fixture roots. Both current read(false) and seal replay(true) must return the original persisted row/request/input/hash/clocks, call only the read RPC, have0 new FS/charge and keep full9 tables/full ledger/source events/invalidations unchanged. No automatic prepare/claim/renew or new request.
++
++The relay has a5s test-containment timer beginning at arm. It never extends the original10s controller/session budget or turns unconfirmed IO into success. On timeout it destroys owned sockets and still waits actual confirmation-query and socket settlement; a live unresolved operation remains pending, not a cleanup success. Other original30s child/120s preparation/4slot524288/source<=30/material limits are unchanged. Four MiB is a transport-test containment cap, not a widened product bound or a total-memory claim. JS base64 strings cannot be wiped; held protocol copies are private, owned buffers are wiped on finish, and no private body goes to public evidence.
++
++## Source-only verification and retained RED
++
++Three changed/new `.mjs` files receive Node22.14 `--check`. A separate hermetic probe imports only the transport's builtin dependencies and never invokes its socket factory. It covers all single split positions, selected byte-sized fragment widths, coalesced frames, error/idle-only/non-idle/wrong-command/trailing/incomplete responses, invalid length/oversize/frame-count limits and pending-buffer wipe.
++
++A genuine new hermetic RED was preserved: ASCII decoding could mask high-bit CommandComplete bytes into `SELECT 1`. The private test helper was changed to exact Buffer equality; the added counterexample then rejects. This is a helper/parser correction, not a native result or product expectation change. Prior source-withdrawal4PASS, old77/cross-wire/byte green, all original RED and private raw remain historical and were not rerun.
++
++## Future command — NOT EXECUTED
++
++After separate source review and explicit heavy release, use the known Node22.14/PG17.11 context, OS USER, unchanged proxy/CA, and a fresh absent short absolute private artifact directory:
++
++```sh
++RESEARCH_PREREQUISITE_PROFILE_ARTIFACTS=/tmp/response-loss-exec-UNIQUE \
++node --import ./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs \
++  --experimental-strip-types --test --test-concurrency=1 \
++  scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs
++```
++
++Raw protocol/base64, payload, principals, URLs, ledger rows and logs stay private local. Public evidence must expose only source identities/hashes/counts/frame types/zero-forwarded/actual commit/FD/PIDs/close/charge/pending. Future execution must independently inspect backend absence and relay path removal; source-only declarations are not cleanup proof.
++
++Pending: both real socket/PG children+parent; actual relay connect/error/backpressure/close behavior, observer gate latency and existing10s compatibility, real caller rejection and missing-root reconciliation, process/FD/cluster cleanup. Old77 transport loss, other lease/lockwait races, whole S/C/B/Q/R/A, all four callers, cash citations, active production writer/private peer/live source and formal author-review-publication remain outside this slice. No PR/ref/CI run/merge/deploy or independent approval is created.
+diff --git a/scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs b/scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs
+index d696aa38..14dff5eb 100644
+--- a/scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs
++++ b/scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs
+@@ -1,4 +1,5 @@
+ // Private native fixture extraction from a1a0233c; no test registrations or production entrypoint.
++import {createOwnedPgLossRelay} from './research-versioned-response-loss-transport.mjs';
+ import{bindingCanonical,bindingSha,fixedBindingInputs,parseBindingCore}from'../../web/src/lib/research-versioned-input-binding.ts';import{completeHash}from'../../web/src/lib/research-v3-material-canonical.ts';import{createVersionedCompleteInputController}from'../../web/src/lib/research-versioned-complete-input.ts';
+ import {applyVersionedPrerequisiteEngineering,readPrerequisiteState,stateDescriptor,assertPrerequisiteDescriptor} from './research-versioned-prerequisite-profile.mjs';
+ import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import {execFileSync}from'node:child_process';import {gunzipSync}from'node:zlib';import {createHash,randomUUID}from'node:crypto';import {createRequire}from'node:module';
+@@ -11,7 +12,7 @@ export async function withLegalVersionedFixture(symbol,options,run){
+  const locatorExtensionBytes=options.locatorExtensionBytes===undefined?0:options.locatorExtensionBytes;assert.ok([0,400,1300].includes(locatorExtensionBytes),'finite synthetic locator extension');if(locatorExtensionBytes!==0)assert.equal(options.sourceCount,30);
+  assert.ok(globalThis[Symbol.for('stockinsider.local.prerequisite.fs-witness')],'preload witness before application ESM');
+  const casePrefix=symbol+'-'+options.label;
+- const bin=execFileSync('pg_config',['--bindir'],{encoding:'utf8'}).trim();assert.match(execFileSync(path.join(bin,'postgres'),['--version'],{encoding:'utf8'}),/17\.11/);const base=fs.mkdtempSync('/tmp/vp3profile-'),data=path.join(base,'pg'),port=58100+process.pid%400;let started=false,stage='initdb';const clients=new Set();let secure;const rpcTrace=[];const save=(n,v)=>fs.writeFileSync(path.join(out,casePrefix+'-'+n),JSON.stringify(v,null,2)+'\n');
++ const bin=execFileSync('pg_config',['--bindir'],{encoding:'utf8'}).trim();assert.match(execFileSync(path.join(bin,'postgres'),['--version'],{encoding:'utf8'}),/17\.11/);const base=fs.mkdtempSync('/tmp/vp3profile-'),data=path.join(base,'pg'),port=58100+process.pid%400;let started=false,stage='initdb';const clients=new Set(),transportClosers=[];let secure;const rpcTrace=[];const save=(n,v)=>fs.writeFileSync(path.join(out,casePrefix+'-'+n),JSON.stringify(v,null,2)+'\n');
+  const connect=async()=>{const c=new Client({host:base,port,user:'postgres',database:'postgres',statement_timeout:30000});c.on('error',e=>save('client-error.json',{code:e.code,message:e.message}));await c.connect();clients.add(c);return c;};const close=async c=>{await c.end();clients.delete(c);};
+  const ledger=async c=>(await c.query("SELECT jsonb_build_object('preparations',(SELECT coalesce(jsonb_agg(to_jsonb(p)ORDER BY preparation_id),'[]')FROM research_input_preparations_v2 p),'revisions',(SELECT coalesce(jsonb_agg(to_jsonb(r)ORDER BY revision_id),'[]')FROM research_article_input_revisions_v2 r)) AS v")).rows[0].v;
+  try{
+@@ -58,6 +59,15 @@ export async function withLegalVersionedFixture(symbol,options,run){
+   const witness=globalThis[Symbol.for('stockinsider.local.prerequisite.fs-witness')];assert.ok(witness,'required preload missing');const opensInitial=witness.opens,closesInitial=witness.closes;
+   const auditState=async()=>{const result={};for(const name of ['research_input_preparations_v2','research_article_input_revisions_v2','research_source_seals_v2','research_deep_jobs_v1','research_deep_job_attempts_v1','research_deep_admission_charges_v1','research_model_reservations_v1','research_model_completions_v1','source_raw_documents'])result[name]=(await audit.query(`SELECT count(*)::int count,encode(sha256(convert_to(coalesce(jsonb_agg(to_jsonb(t) ORDER BY to_jsonb(t)::text),'[]')::text,'UTF8')),'hex') hash FROM public.${name} t`)).rows[0];return result;};
+   const createSourceMutator=async()=>{const mutator=await connect();await mutator.query('SET ROLE service_role');assert.equal((await mutator.query('SELECT current_user role')).rows[0].role,'service_role');return mutator;};
+-  await run({symbol,selected,texts,hc,secure,roots,controller,rpc,c,audit,ledger,auditState,witness,opensInitial,closesInitial,req,prep,preq,sourceIds,rpcTrace,lineage:l,save,createSourceMutator,setStage:value=>{stage=value;}});
++  const createResponseLossLab=async()=>{
++   assert.equal(Object.keys(process.env).filter(k=>k.startsWith('PG')).length,0,'lab_transport_rejects_PG_environment');
++   const relay=await createOwnedPgLossRelay({base,port,save}),pending=new Set();let client;
++   transportClosers.push(async()=>{await relay.close();await Promise.allSettled([...pending]);assert.equal(pending.size,0);save('loss-transport-cleanup.json',{pendingQueries:0,relayClosed:true});});
++   client=new Client({host:relay.directory,port,user:'postgres',database:'postgres',ssl:false,password:()=>{throw Error('lab_password_not_allowed');},application_name:'source-loss-local-fixture',client_encoding:'UTF8',statement_timeout:30000,connectionTimeoutMillis:5000});clients.add(client);client.on('error',e=>save('loss-client-error.json',{code:e.code,message:e.message}));
++   const query=(...args)=>{const work=client.query(...args);pending.add(work);work.then(()=>pending.delete(work),()=>pending.delete(work));return work;};
++   await client.connect();await query('SET ROLE service_role');const identity=(await query('SELECT pg_backend_pid() pid,current_user role')).rows[0];assert.equal(identity.role,'service_role');
++   return{identity,query,loss:relay.loss,arm:confirm=>{assert.equal(pending.size,0,'prior_actual_queries_must_settle');relay.arm(confirm);},pendingCount:()=>pending.size};
++  };
++  await run({symbol,selected,texts,hc,secure,roots,controller,rpc,c,audit,ledger,auditState,witness,opensInitial,closesInitial,req,prep,preq,sourceIds,rpcTrace,lineage:l,save,createSourceMutator,createResponseLossLab,setStage:value=>{stage=value;}});
+   save('rpc-fd-order.json',rpcTrace);stage='business complete';
+- }catch(e){save('failure.json',{stage,code:e.code,message:e.message,where:e.where});throw e;}finally{save('rpc-fd-order.json',rpcTrace);if(fs.existsSync(path.join(base,'pg.log')))fs.copyFileSync(path.join(base,'pg.log'),path.join(out,casePrefix+'-postgres-before-cleanup.log'));for(const c of clients)try{await close(c)}catch{};if(started)execFileSync(path.join(bin,'pg_ctl'),['-D',data,'-m','immediate','-w','stop']);if(fs.existsSync(path.join(base,'pg.log')))fs.copyFileSync(path.join(base,'pg.log'),path.join(out,casePrefix+'-postgres.log'));if(secure)fs.rmSync(secure,{recursive:true,force:true});fs.rmSync(base,{recursive:true,force:true});save('cleanup.json',{stopped:started,removed:base,stage});}}
++ }catch(e){save('failure.json',{stage,code:e.code,message:e.message,where:e.where});throw e;}finally{save('rpc-fd-order.json',rpcTrace);if(fs.existsSync(path.join(base,'pg.log')))fs.copyFileSync(path.join(base,'pg.log'),path.join(out,casePrefix+'-postgres-before-cleanup.log'));const transportErrors=[];for(const cleanup of transportClosers)try{await cleanup();}catch(error){transportErrors.push(error.message);}if(transportClosers.length)save('transport-cleanup.json',{registered:transportClosers.length,errors:transportErrors});for(const c of clients)try{await close(c)}catch{};if(started)execFileSync(path.join(bin,'pg_ctl'),['-D',data,'-m','immediate','-w','stop']);if(fs.existsSync(path.join(base,'pg.log')))fs.copyFileSync(path.join(base,'pg.log'),path.join(out,casePrefix+'-postgres.log'));if(secure)fs.rmSync(secure,{recursive:true,force:true});fs.rmSync(base,{recursive:true,force:true});save('cleanup.json',{stopped:started,removed:base,stage});assert.equal(transportErrors.length,0,'transport cleanup unconfirmed');}}
+diff --git a/scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs b/scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs
+new file mode 100644
+index 00000000..8e2b9089
+--- /dev/null
++++ b/scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs
+@@ -0,0 +1,52 @@
++// SOURCE ONLY until separate heavy release: two new children + parent, no old entry imports.
++import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {createHash}from'node:crypto';
++import {completeHash}from'../../web/src/lib/research-v3-material-canonical.ts';
++import {withLegalVersionedFixture}from'./research-versioned-legal-fixture-helper.mjs';
++const sha=v=>createHash('sha256').update(JSON.stringify(v)).digest('hex'); // audit codec only
++const signatures={read_research_article_input_candidate_v3:['p_request'],assert_research_input_candidate_v3:['p_request','p_context_hash'],seal_research_article_input_candidate_v3:['p_request','p_calculation','p_context_hash']};
++async function snapshot(x,label){
++ const audit=await x.auditState(),ledger=await x.ledger(x.audit),fences=(await x.audit.query("SELECT jsonb_build_object('events',(SELECT coalesce(jsonb_agg(to_jsonb(e)ORDER BY event_id),'[]')FROM research_source_fence_events_v2 e),'invalidations',(SELECT coalesce(jsonb_agg(to_jsonb(i)ORDER BY seal_id,event_id),'[]')FROM research_source_seal_invalidations_v2 i)) v")).rows[0].v;
++ const charge=(await x.audit.query('SELECT count(*)::int count,coalesce(sum(logical_bytes),0)::int bytes FROM (SELECT logical_bytes FROM research_input_preparations_v2 WHERE job_id=$1 AND attempt=$2 AND reservation_id=$3 UNION ALL SELECT logical_bytes FROM research_article_input_revisions_v2 WHERE job_id=$1 AND attempt=$2 AND reservation_id=$3) mixed',[x.req.jobId,x.req.attempt,x.req.reservationId])).rows[0];
++ const value={audit,ledger,ledgerSha256:sha(ledger),fences,fencesSha256:sha(fences),charge,fd:{...x.witness}};assert.equal(Object.keys(audit).length,9);x.save(label+'.json',value);return value;
++}
++function unchanged(a,b){assert.deepEqual(b.audit,a.audit);assert.deepEqual(b.ledger,a.ledger);assert.deepEqual(b.charge,a.charge);assert.deepEqual(b.fences,a.fences);assert.deepEqual(b.fd,a.fd);}
++function storedResponse(response){const {status,replay,dispatchReady,...row}=response;assert.equal(status,'sealed');assert.equal(replay,true);assert.equal(dispatchReady,false);return row;}
++async function lossCase(x){
++ x.setStage('private Unix PG relay and dedicated service-role writer');const lab=await x.createResponseLossLab();
++ const observer=(await x.audit.query('SELECT pg_backend_pid() pid')).rows[0].pid,fixtureWriter=(await x.c.query('SELECT pg_backend_pid() pid')).rows[0].pid;
++ assert.equal(new Set([lab.identity.pid,observer,fixtureWriter]).size,3);assert.equal((await x.audit.query('SHOW transaction_read_only')).rows[0].transaction_read_only,'on');
++ x.save('loss-connections.json',{proxyWriter:lab.identity,observer,fixtureWriter,observerReadOnly:true});
++ const initial=await snapshot(x,'01-prepared');assert.equal(initial.charge.count,1);assert.equal(initial.ledger.revisions.length,0);
++ const n=x.symbol==='2409'?9:6,trace=[];let assertions=0,pre=false,post=false,armed=false,actualQueryError,controllerError,actualQuerySettled=false,committed,stored,sealPromise;
++ const rpc={rpc:async(name,args)=>{
++  assert.ok(Object.hasOwn(signatures,name));assert.equal(lab.pendingCount(),0);trace.push({name,stage:'call',fd:{...x.witness}});x.save('loss-rpc-order.json',trace);
++  if(name==='seal_research_article_input_candidate_v3'){
++   assert.ok(pre&&post);assert.equal(assertions,2);assert.deepEqual({...x.witness},{opens:initial.fd.opens+n,closes:initial.fd.closes+n});
++   const before=await snapshot(x,'02-before-seal-send');assert.equal(before.charge.count,1);assert.equal(before.ledger.revisions.length,0);
++   lab.arm(async()=>{
++    // Called only after complete held successful backend response, never ReadyI alone.
++    x.setStage('held response: independent observer confirms actual committed row');
++    const rows=(await x.audit.query('SELECT to_jsonb(r) AS row FROM research_article_input_revisions_v2 r WHERE preparation_id=$1',[x.req.preparationId])).rows;assert.equal(rows.length,1);stored=rows[0].row;
++    assert.deepEqual(stored.canonical_request,x.req);assert.equal(stored.request_hash,completeHash(x.req));assert.equal(stored.input_hash,completeHash(stored.canonical_payload));assert.equal(stored.canonical_payload.schemaVersion,x.selected.core.wireVersion);assert.ok(Object.values(stored.canonical_payload.capabilities).every(v=>v===false));
++    committed=await snapshot(x,'03-committed-response-held');assert.equal(committed.charge.count,2);assert.equal(committed.ledger.revisions.length,1);assert.deepEqual(committed.ledger.revisions[0],stored);assert.deepEqual(committed.ledger.preparations,initial.ledger.preparations);assert.deepEqual(committed.fences,initial.fences);for(const table of Object.keys(initial.audit))if(table!=='research_article_input_revisions_v2')assert.deepEqual(committed.audit[table],initial.audit[table]);assert.equal(committed.charge.bytes,initial.charge.bytes+stored.logical_bytes);x.save('observer-commit-confirmed.json',{writerPid:lab.identity.pid,observerPid:observer,requestHash:stored.request_hash,inputHash:stored.input_hash,rowHash:sha(stored),charge:committed.charge});
++   });armed=true;
++  }
++  const work=lab.query(`SELECT public.${name}(${signatures[name].map((_,i)=>'$'+(i+1)).join(',')}) v`,signatures[name].map(k=>args[k]));if(name==='seal_research_article_input_candidate_v3')sealPromise=work;
++  let response;try{response=await work;}catch(error){if(name==='seal_research_article_input_candidate_v3'){actualQueryError=error;actualQuerySettled=true;x.save('actual-pg-query-rejection.json',{code:error.code,message:error.message});}throw error;}
++  if(name==='seal_research_article_input_candidate_v3'){actualQuerySettled=true;assert.fail('held seal response must never reach the caller');}
++  trace.push({name,stage:'settled-success',fd:{...x.witness}});x.save('loss-rpc-order.json',trace);
++  if(name==='assert_research_input_candidate_v3'){assertions++;if(assertions===1){pre=true;assert.deepEqual({...x.witness},initial.fd);}else{post=true;assert.deepEqual({...x.witness},{opens:initial.fd.opens+n,closes:initial.fd.closes});}}
++  return{data:response.rows[0].v,error:null};
++ }};
++ x.setStage('actual controller first-seal response transport loss');try{await x.controller.runCompleteInput(rpc,x.req,true);}catch(error){controllerError=error;x.save('caller-uncertain.json',{code:error.code,message:error.message,outcome:'uncertain until exact read reconciliation'});}
++ assert.ok(armed&&sealPromise,'must reach real seal query');const loss=await lab.loss;await Promise.allSettled([sealPromise]);assert.ok(actualQueryError&&actualQuerySettled);assert.equal(controllerError,actualQueryError,'controller error must be the actual rejected PG promise, not a timeout facade');assert.equal(lab.pendingCount(),0);assert.equal(loss.forwardedAfterArm,0);assert.ok(loss.observerCommitConfirmed&&loss.actualTransportDrop&&loss.clientSocketClosed&&loss.upstreamSocketClosed);x.save('actual-transport-loss.json',loss);
++ assert.ok(committed&&stored);unchanged(committed,await snapshot(x,'04-after-actual-client-rejection'));
++ for(const root of Object.values(x.roots)){fs.rmSync(root,{recursive:true});assert.equal(fs.existsSync(root),false);} // only owned fixture files
++ x.setStage('new service-role connection: missing-root exact read and seal replay');const replay=await x.createSourceMutator(),replayIdentity=(await replay.query('SELECT pg_backend_pid() pid,current_user role')).rows[0];assert.equal(replayIdentity.role,'service_role');assert.notEqual(replayIdentity.pid,lab.identity.pid);assert.notEqual(replayIdentity.pid,observer);x.save('reconcile-connection.json',replayIdentity);
++ const replayTrace=[],replayRpc={rpc:async(name,args)=>{assert.equal(name,'read_research_article_input_candidate_v3','reconciliation must not re-prepare/reclaim/renew or call sealer');replayTrace.push({name,fd:{...x.witness}});return{data:(await replay.query('SELECT read_research_article_input_candidate_v3($1) v',[args.p_request])).rows[0].v,error:null};}};
++ for(const seal of[false,true]){const label=seal?'06-seal-replay':'05-read-reconcile',before=await snapshot(x,label+'-before'),result=await x.controller.runCompleteInput(replayRpc,x.req,seal);assert.deepEqual(storedResponse(result),stored);assert.deepEqual(result.canonical_payload.clocks,stored.canonical_payload.clocks);const after=await snapshot(x,label+'-after');unchanged(before,after);unchanged(committed,after);}
++ assert.equal(replayTrace.length,2);x.save('reconcile-rpc-order.json',replayTrace);x.save('response-loss-result.json',{symbol:x.symbol,callerInitiallyUncertain:true,realPgPromiseRejected:true,zeroForwardedSealBytes:true,independentCommittedRowConfirmed:true,reconciledExactRow:true,replayedWithoutIoOrCharge:true,slotCount:2,logicalBytes:committed.charge.bytes,fd:{opens:n,closes:n},formalPeer:false,productionWriterVerified:false,wholeExecutionClosureApproved:false});
++}
++await test('real local PG held-response loss: two new wire cases only',async t=>{
++ for(const[symbol,wireVersion]of[['2409','research-article-input-v3'],['2383','research-article-input-v2']]){let failure;await t.test(symbol+' committed response loss and no-IO reconciliation',async()=>{try{await withLegalVersionedFixture(symbol,{label:'response-loss-'+symbol,wireVersion},async x=>{try{await lossCase(x);}catch(error){try{await snapshot(x,'failure-before-cleanup');}catch(snapshotError){x.save('failure-snapshot-error.json',{message:snapshotError.message});}throw error;}});}catch(error){failure=error;throw error;}});if(failure)throw failure;}
++});
+diff --git a/scripts/opportunity-v3/research-versioned-response-loss-transport.mjs b/scripts/opportunity-v3/research-versioned-response-loss-transport.mjs
+new file mode 100644
+index 00000000..32d6eac2
+--- /dev/null
++++ b/scripts/opportunity-v3/research-versioned-response-loss-transport.mjs
+@@ -0,0 +1,64 @@
++// Private disposable-fixture transport. No listener is started by importing this module.
++import net from 'node:net';import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash}from'node:crypto';
++export const LOSS_LIMIT=4194304;
++export function backendFrames(onFrame){
++ let pending=Buffer.alloc(0),count=0;
++ return {get pendingBytes(){return pending.length;},push(chunk){
++  assert.ok(Buffer.isBuffer(chunk));assert.ok(chunk.length<=LOSS_LIMIT&&pending.length+chunk.length<=LOSS_LIMIT,'backend_buffer_bound');
++  const next=Buffer.concat([pending,chunk]);pending.fill(0);pending=next;
++  while(pending.length>=5){const length=pending.readUInt32BE(1);assert.ok(length>=4&&length+1<=LOSS_LIMIT,'backend_frame_length');if(pending.length<length+1)break;
++   assert.ok(++count<=4096,'backend_frame_count');const frame=Buffer.from(pending.subarray(0,length+1)),rest=Buffer.from(pending.subarray(length+1));pending.fill(0);pending=rest;
++   try{const type=String.fromCharCode(frame[0]);assert.match(type,/^[A-Za-z0-9]$/u,'backend_frame_type');onFrame(type,frame.subarray(5),frame.length);}finally{frame.fill(0);}
++  }
++ },wipe(){pending.fill(0);pending=Buffer.alloc(0);}};
++}
++export function sealResponseGate(){
++ const frames=[];let command=0,rows=0,ready=false,bytes=0;
++ return {frame(type,body,size){assert.ok(!ready,'backend_after_ready');bytes+=size;assert.ok(bytes<=LOSS_LIMIT,'held_response_bound');frames.push({type,bytes:size});
++  assert.notEqual(type,'E','backend_error_response');assert.ok(['1','2','T','D','C','Z','N'].includes(type),'unexpected_seal_frame');
++  if(type==='D')rows++;
++  if(type==='C'){assert.ok(body.equals(Buffer.from('SELECT 1\0','ascii')),'seal_command');command++;}
++  if(type==='Z'){assert.equal(body.length,1);assert.equal(body[0],73,'seal_not_idle');assert.equal(command,1);assert.equal(rows,1);ready=true;}
++ },get ready(){return ready;},receipt(){assert.ok(ready);return{frames,commandCount:command,dataRowCount:rows,ready:'I',errorResponse:false,framedBytes:bytes};}};
++}
++const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});promise.catch(()=>{});return{promise,resolve,reject};};
++// base/port originate only from withLegalVersionedFixture's freshly created cluster.
++export async function createOwnedPgLossRelay({base,port,save}){
++ const stat=fs.lstatSync(base);assert.ok(stat.isDirectory()&&!stat.isSymbolicLink());assert.equal(fs.realpathSync(base),base);assert.equal(stat.mode&0o777,0o700);assert.ok(Number.isInteger(port)&&port>=58100&&port<58500);
++ const upstreamPath=path.join(base,'.s.PGSQL.'+port);assert.ok(fs.lstatSync(upstreamPath).isSocket());const directory=path.join(base,'loss-relay');fs.mkdirSync(directory,{mode:0o700});const socketPath=path.join(directory,'.s.PGSQL.'+port);assert.ok(Buffer.byteLength(socketPath)<100);
++ let down,up,downClosed,upClosed,phase='passthrough',lastReady=null,held=[],heldBytes=0,forwardedBytes=0,forwardedAtArm=0,confirm,gate,timer,task,primary,accepted=0;
++ const done=deferred(),sockets=new Set();let server;
++ const wipe=()=>{for(const b of held)b.fill(0);held=[];parser.wipe();};
++ const destroy=()=>{down?.destroy();up?.destroy();};
++ const fail=error=>{primary??=error;destroy();if(!task)task=finish(false);};
++ const parser=backendFrames((type,body,size)=>{if(phase==='holding')gate.frame(type,body,size);else{if(type==='Z'){assert.equal(body.length,1);lastReady=String.fromCharCode(body[0]);}}});
++ async function finish(success){
++  try{
++   if(success){const protocol=gate.receipt();assert.equal(parser.pendingBytes,0);assert.equal(forwardedBytes-forwardedAtArm,0);phase='confirming';up.pause();
++    const raw=Buffer.concat(held);try{save('held-backend-response-private.json',{bytes:heldBytes,sha256:createHash('sha256').update(raw).digest('hex'),rawBase64:raw.toString('base64'),protocol});}finally{raw.fill(0);}
++    await confirm();if(primary)throw primary;phase='dropping';destroy();await Promise.all([downClosed,upClosed]);if(primary)throw primary;
++    done.resolve({protocol,heldBytes,forwardedAfterArm:forwardedBytes-forwardedAtArm,observerCommitConfirmed:true,clientSocketClosed:true,upstreamSocketClosed:true,actualTransportDrop:true});
++   }else{destroy();await Promise.all([downClosed,upClosed].filter(Boolean));done.reject(primary??new Error('relay_closed_without_loss'));}
++  }catch(error){primary??=error;destroy();await Promise.all([downClosed,upClosed].filter(Boolean));done.reject(primary);}
++  finally{clearTimeout(timer);wipe();phase='closed';}
++ }
++ server=net.createServer(client=>{
++  if(++accepted!==1){client.destroy();fail(new Error('relay_single_client'));return;}
++  down=client;sockets.add(down);downClosed=new Promise(resolve=>down.once('close',()=>{sockets.delete(down);resolve();if(!['dropping','closed'].includes(phase))fail(new Error('client_closed_before_loss_confirmation'));}));
++  up=net.createConnection({path:upstreamPath});sockets.add(up);upClosed=new Promise(resolve=>up.once('close',()=>{sockets.delete(up);resolve();if(!['dropping','closed'].includes(phase)&&!primary)fail(new Error('upstream_closed_before_loss_confirmation'));}));
++  down.on('error',fail);up.on('error',fail);down.pipe(up); // frontend bytes opaque; no SQL rewriting
++  up.on('data',chunk=>{try{
++   if(phase==='holding'){assert.ok(heldBytes+chunk.length<=LOSS_LIMIT,'held_response_bound');held.push(Buffer.from(chunk));heldBytes+=chunk.length;parser.push(chunk);if(gate.ready){assert.equal(parser.pendingBytes,0);task=finish(true);}}
++   else if(phase==='passthrough'){parser.push(chunk);forwardedBytes+=chunk.length;if(!down.write(chunk))up.pause();}
++   else throw new Error('backend_bytes_after_ready');
++  }catch(error){fail(error);}});down.on('drain',()=>{if(phase==='passthrough')up.resume();});
++ });
++ server.on('error',fail);
++ try{await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(socketPath,()=>{server.off('error',reject);resolve();});});}catch(error){await close();throw error;}
++ async function close(){
++  if(phase!=='closed'){primary??=new Error('relay_cleanup_before_confirmed_loss');destroy();if(!task)task=finish(false);await task;}
++  await new Promise(resolve=>server.close(()=>resolve()));assert.equal(sockets.size,0);clearTimeout(timer);wipe();
++  if(fs.existsSync(socketPath))fs.unlinkSync(socketPath);if(fs.existsSync(directory))fs.rmdirSync(directory);
++ }
++ return{directory,loss:done.promise,arm(confirmCommitted){assert.equal(phase,'passthrough');assert.equal(accepted,1);assert.ok(up&&!up.connecting&&!up.destroyed&&down&&!down.destroyed);assert.equal(parser.pendingBytes,0);assert.equal(lastReady,'I');assert.equal(typeof confirmCommitted,'function');confirm=confirmCommitted;forwardedAtArm=forwardedBytes;gate=sealResponseGate();phase='holding';timer=setTimeout(()=>fail(new Error('relay_containment_timeout')),5000);},close};
++}
