@@ -1,0 +1,13 @@
+{
+  "priorArtifact": {
+    "baseRefOid": "3852578bd0b0dcbd564836792926a46d757423cf",
+    "headRefOid": "6c054c9ea645c4e389886bcb99c706fb7c3e416f",
+    "mergedAt": "2026-09-24T00:50:32Z",
+    "number": 277,
+    "state": "MERGED",
+    "title": "Approve exact signed host pin v3.18 successor",
+    "url": "https://github.com/Kaichen9527/stockinsider/pull/277"
+  },
+  "operation": "remove old merged PR277 UI attachment only, then attach new PR378; GitHub state/content/source/evidence untouched",
+  "newPullRequest": "https://github.com/Kaichen9527/stockinsider/pull/378"
+}

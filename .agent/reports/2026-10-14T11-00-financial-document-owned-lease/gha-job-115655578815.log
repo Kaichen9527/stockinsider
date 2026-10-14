@@ -1,0 +1,242 @@
+﻿2026-10-14T02:54:32.3850971Z Current runner version: '2.337.0'
+2026-10-14T02:54:32.3872652Z ##[group]Runner Image Provisioner
+2026-10-14T02:54:32.3873540Z Hosted Compute Agent
+2026-10-14T02:54:32.3874136Z Version: 20261002.596
+2026-10-14T02:54:32.3874778Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-14T02:54:32.3875465Z Build Date: 2026-10-02T22:28:27Z
+2026-10-14T02:54:32.3876137Z Worker ID: {731baf28-7d91-4b2c-bfe9-c65c83729273}
+2026-10-14T02:54:32.3876802Z Region: centralus
+2026-10-14T02:54:32.3877312Z Cloud: Azure
+2026-10-14T02:54:32.3877875Z ##[endgroup]
+2026-10-14T02:54:32.3879178Z ##[group]Operating System
+2026-10-14T02:54:32.3879830Z Ubuntu
+2026-10-14T02:54:32.3880325Z 24.04.5
+2026-10-14T02:54:32.3880804Z LTS
+2026-10-14T02:54:32.3881357Z ##[endgroup]
+2026-10-14T02:54:32.3882062Z ##[group]Runner Image
+2026-10-14T02:54:32.3882661Z Image: ubuntu-24.04
+2026-10-14T02:54:32.3883211Z Version: 20261004.327.1
+2026-10-14T02:54:32.3884442Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-14T02:54:32.3885868Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-14T02:54:32.3886769Z ##[endgroup]
+2026-10-14T02:54:32.3887836Z ##[group]GITHUB_TOKEN Permissions
+2026-10-14T02:54:32.3889804Z Contents: read
+2026-10-14T02:54:32.3890359Z Metadata: read
+2026-10-14T02:54:32.3890877Z ##[endgroup]
+2026-10-14T02:54:32.3893004Z Secret source: Actions
+2026-10-14T02:54:32.3893930Z Cache mode: write
+2026-10-14T02:54:32.3894595Z Prepare workflow directory
+2026-10-14T02:54:32.4236004Z Prepare all required actions
+2026-10-14T02:54:32.4281685Z Getting action download info
+2026-10-14T02:54:32.6774485Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-14T02:54:32.7612403Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-14T02:54:32.9584342Z Complete job name: Financial document owned write lease route contracts
+2026-10-14T02:54:33.0337405Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-14T02:54:33.0338423Z with:
+2026-10-14T02:54:33.0338931Z   persist-credentials: false
+2026-10-14T02:54:33.0339536Z   repository: Kaichen9527/stockinsider
+2026-10-14T02:54:33.0343930Z   token: ***
+2026-10-14T02:54:33.0344636Z   ssh-strict: true
+2026-10-14T02:54:33.0345182Z   ssh-user: git
+2026-10-14T02:54:33.0345669Z   clean: true
+2026-10-14T02:54:33.0346181Z   sparse-checkout-cone-mode: true
+2026-10-14T02:54:33.0346794Z   fetch-depth: 1
+2026-10-14T02:54:33.0347281Z   fetch-tags: false
+2026-10-14T02:54:33.0347837Z   show-progress: true
+2026-10-14T02:54:33.0348361Z   lfs: false
+2026-10-14T02:54:33.0348871Z   submodules: false
+2026-10-14T02:54:33.0349409Z   set-safe-directory: true
+2026-10-14T02:54:33.0349966Z   allow-unsafe-pr-checkout: false
+2026-10-14T02:54:33.0350743Z ##[endgroup]
+2026-10-14T02:54:33.1369390Z Syncing repository: Kaichen9527/stockinsider
+2026-10-14T02:54:33.1372398Z ##[group]Getting Git version info
+2026-10-14T02:54:33.1373740Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T02:54:33.1375355Z [command]/usr/bin/git version
+2026-10-14T02:54:33.1402042Z git version 2.55.0
+2026-10-14T02:54:33.1419867Z ##[endgroup]
+2026-10-14T02:54:33.1432342Z Temporarily overriding HOME='/home/runner/work/_temp/74d19f53-b56b-4ea2-9f43-7fa0e69ff6b6' before making global git config changes
+2026-10-14T02:54:33.1434285Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T02:54:33.1436711Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T02:54:33.1481350Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T02:54:33.1486532Z ##[group]Initializing the repository
+2026-10-14T02:54:33.1489468Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+2026-10-14T02:54:33.1574337Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-14T02:54:33.1579206Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-14T02:54:33.1581334Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-14T02:54:33.1583198Z hint: call:
+2026-10-14T02:54:33.1583957Z hint:
+2026-10-14T02:54:33.1585156Z hint: 	git config --global init.defaultBranch <name>
+2026-10-14T02:54:33.1586222Z hint:
+2026-10-14T02:54:33.1587106Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-14T02:54:33.1588510Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-14T02:54:33.1589377Z hint:
+2026-10-14T02:54:33.1589879Z hint: 	git branch -m <name>
+2026-10-14T02:54:33.1591097Z hint:
+2026-10-14T02:54:33.1592218Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-14T02:54:33.1594130Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+2026-10-14T02:54:33.1596823Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+2026-10-14T02:54:33.1631623Z ##[endgroup]
+2026-10-14T02:54:33.1633208Z ##[group]Disabling automatic garbage collection
+2026-10-14T02:54:33.1634633Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-14T02:54:33.1662792Z ##[endgroup]
+2026-10-14T02:54:33.1663911Z ##[group]Setting up auth
+2026-10-14T02:54:33.1668613Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T02:54:33.1697879Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T02:54:33.2033153Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T02:54:33.2063654Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T02:54:33.2258978Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T02:54:33.2291336Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T02:54:33.2472595Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-14T02:54:33.2509160Z ##[endgroup]
+2026-10-14T02:54:33.2510592Z ##[group]Fetching the repository
+2026-10-14T02:54:33.2519490Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ced76b8d416f88e95a95119dea1cc02fbb15e689:refs/remotes/pull/378/merge
+2026-10-14T02:54:34.1795242Z From https://github.com/Kaichen9527/stockinsider
+2026-10-14T02:54:34.1797873Z  * [new ref]         ced76b8d416f88e95a95119dea1cc02fbb15e689 -> pull/378/merge
+2026-10-14T02:54:34.1804981Z ##[endgroup]
+2026-10-14T02:54:34.1807656Z ##[group]Determining the checkout info
+2026-10-14T02:54:34.1810558Z ##[endgroup]
+2026-10-14T02:54:34.1812486Z [command]/usr/bin/git sparse-checkout disable
+2026-10-14T02:54:34.1863641Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-14T02:54:34.1896336Z ##[group]Checking out the ref
+2026-10-14T02:54:34.1899582Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/378/merge
+2026-10-14T02:54:34.3192985Z Note: switching to 'refs/remotes/pull/378/merge'.
+2026-10-14T02:54:34.3194458Z 
+2026-10-14T02:54:34.3195609Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-14T02:54:34.3198131Z changes and commit them, and you can discard any commits you make in this
+2026-10-14T02:54:34.3200826Z state without impacting any branches by switching back to a branch.
+2026-10-14T02:54:34.3202745Z 
+2026-10-14T02:54:34.3203965Z If you want to create a new branch to retain commits you create, you may
+2026-10-14T02:54:34.3206886Z do so (now or later) by using -c with the switch command. Example:
+2026-10-14T02:54:34.3208396Z 
+2026-10-14T02:54:34.3209112Z   git switch -c <new-branch-name>
+2026-10-14T02:54:34.3210174Z 
+2026-10-14T02:54:34.3210872Z Or undo this operation with:
+2026-10-14T02:54:34.3212373Z 
+2026-10-14T02:54:34.3213139Z   git switch -
+2026-10-14T02:54:34.3214485Z 
+2026-10-14T02:54:34.3215706Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-14T02:54:34.3217178Z 
+2026-10-14T02:54:34.3218901Z HEAD is now at ced76b8 Merge 18b1fba4c7fa89108cbf8892a0a7205860989995 into 3e1be377de3f6cac58f6de1626e8df994b9df146
+2026-10-14T02:54:34.3225455Z ##[endgroup]
+2026-10-14T02:54:34.3242750Z [command]/usr/bin/git log -1 --format=%H
+2026-10-14T02:54:34.3273934Z ced76b8d416f88e95a95119dea1cc02fbb15e689
+2026-10-14T02:54:34.3280411Z ##[group]Removing auth
+2026-10-14T02:54:34.3282970Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T02:54:34.3304515Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T02:54:34.3483348Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T02:54:34.3504201Z http.https://github.com/.extraheader
+2026-10-14T02:54:34.3510831Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-14T02:54:34.3542343Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T02:54:34.3718332Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T02:54:34.3745698Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T02:54:34.3931038Z ##[endgroup]
+2026-10-14T02:54:34.4222526Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-14T02:54:34.4223638Z with:
+2026-10-14T02:54:34.4224477Z   node-version: 22.14.0
+2026-10-14T02:54:34.4225409Z   always-auth: false
+2026-10-14T02:54:34.4226284Z   check-latest: false
+2026-10-14T02:54:34.4229901Z   token: ***
+2026-10-14T02:54:34.4230740Z ##[endgroup]
+2026-10-14T02:54:34.5588878Z Attempting to download 22.14.0...
+2026-10-14T02:54:34.5690242Z (node:2391) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T02:54:34.5692419Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T02:54:35.3334981Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+2026-10-14T02:54:35.9573913Z Extracting ...
+2026-10-14T02:54:35.9674455Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/be24ddad-a6b7-4607-8315-da5282c93435 -f /home/runner/work/_temp/2868f136-ad2a-443d-9b32-450e563bfeff
+2026-10-14T02:54:37.1981402Z Adding to the cache ...
+2026-10-14T02:54:39.4483318Z ##[group]Environment details
+2026-10-14T02:54:39.6752226Z node: v22.14.0
+2026-10-14T02:54:39.6753041Z npm: 10.9.2
+2026-10-14T02:54:39.6753503Z yarn: 1.22.22
+2026-10-14T02:54:39.6754360Z ##[endgroup]
+2026-10-14T02:54:39.6899693Z ##[group]Run npm --prefix web ci --ignore-scripts
+2026-10-14T02:54:39.6900320Z [36;1mnpm --prefix web ci --ignore-scripts[0m
+2026-10-14T02:54:39.7084172Z shell: /usr/bin/bash -e {0}
+2026-10-14T02:54:39.7084609Z ##[endgroup]
+2026-10-14T02:54:40.8916828Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-10-14T02:54:55.6162567Z 
+2026-10-14T02:54:55.6164303Z added 432 packages, and audited 433 packages in 16s
+2026-10-14T02:54:55.6164829Z 
+2026-10-14T02:54:55.6165151Z 169 packages are looking for funding
+2026-10-14T02:54:55.6166027Z   run `npm fund` for details
+2026-10-14T02:54:55.7327075Z 
+2026-10-14T02:54:55.7328419Z 11 vulnerabilities (10 high, 1 critical)
+2026-10-14T02:54:55.7329325Z 
+2026-10-14T02:54:55.7329963Z To address issues that do not require attention, run:
+2026-10-14T02:54:55.7330985Z   npm audit fix
+2026-10-14T02:54:55.7331533Z 
+2026-10-14T02:54:55.7332776Z To address all issues (including breaking changes), run:
+2026-10-14T02:54:55.7333767Z   npm audit fix --force
+2026-10-14T02:54:55.7334078Z 
+2026-10-14T02:54:55.7334337Z Run `npm audit` for details.
+2026-10-14T02:54:55.7787952Z ##[group]Run node --test --test-concurrency=1 scripts/candidate-financial-document-write-lease-route.test.mjs
+2026-10-14T02:54:55.7788838Z [36;1mnode --test --test-concurrency=1 scripts/candidate-financial-document-write-lease-route.test.mjs[0m
+2026-10-14T02:54:55.7832985Z shell: /usr/bin/bash -e {0}
+2026-10-14T02:54:55.7833356Z ##[endgroup]
+2026-10-14T02:54:55.8259359Z TAP version 13
+2026-10-14T02:54:56.5224137Z # Subtest: FDL-01 exact auth and active writer precede any lease/artifact operation
+2026-10-14T02:54:56.5243529Z ok 1 - FDL-01 exact auth and active writer precede any lease/artifact operation
+2026-10-14T02:54:56.5244936Z   ---
+2026-10-14T02:54:56.5245805Z   duration_ms: 129.381599
+2026-10-14T02:54:56.5246594Z   ...
+2026-10-14T02:54:56.5273566Z # Subtest: FDL-02 invalid or oversized documents and invalid worker requests never acquire
+2026-10-14T02:54:56.5285761Z ok 2 - FDL-02 invalid or oversized documents and invalid worker requests never acquire
+2026-10-14T02:54:56.5287051Z   ---
+2026-10-14T02:54:56.5287707Z   duration_ms: 73.494574
+2026-10-14T02:54:56.5343010Z   ...
+2026-10-14T02:54:56.5373583Z # Subtest: FDL-03 contention and acquisition failure return explicit errors without writes or release
+2026-10-14T02:54:56.5417512Z ok 3 - FDL-03 contention and acquisition failure return explicit errors without writes or release
+2026-10-14T02:54:56.5418989Z   ---
+2026-10-14T02:54:56.5420250Z   duration_ms: 35.850417
+2026-10-14T02:54:56.5420998Z   ...
+2026-10-14T02:54:56.5422419Z # Subtest: FDL-04 upload lease encloses private artifact, receipt and idempotent linked-job reconciliation
+2026-10-14T02:54:56.5424122Z ok 4 - FDL-04 upload lease encloses private artifact, receipt and idempotent linked-job reconciliation
+2026-10-14T02:54:56.5425105Z   ---
+2026-10-14T02:54:56.5425801Z   duration_ms: 9.684544
+2026-10-14T02:54:56.5437279Z   ...
+2026-10-14T02:54:56.5438457Z # Subtest: FDL-05 storage, receipt, job-link errors and thrown mutations all release only their own lease
+2026-10-14T02:54:56.5440063Z ok 5 - FDL-05 storage, receipt, job-link errors and thrown mutations all release only their own lease
+2026-10-14T02:54:56.5440967Z   ---
+2026-10-14T02:54:56.5441560Z   duration_ms: 40.494216
+2026-10-14T02:54:56.5442429Z   ...
+2026-10-14T02:54:56.5445879Z # Subtest: FDL-06 bounded worker acquires its lease before processing and releases success/partial/error/throw
+2026-10-14T02:54:56.5447297Z ok 6 - FDL-06 bounded worker acquires its lease before processing and releases success/partial/error/throw
+2026-10-14T02:54:56.5448274Z   ---
+2026-10-14T02:54:56.5448900Z   duration_ms: 19.023463
+2026-10-14T02:54:56.5449541Z   ...
+2026-10-14T02:54:56.5450484Z # Subtest: FDL-07 read-only receipt GET never acquires or releases a write lease
+2026-10-14T02:54:56.5451677Z ok 7 - FDL-07 read-only receipt GET never acquires or releases a write lease
+2026-10-14T02:54:56.5452793Z   ---
+2026-10-14T02:54:56.5453395Z   duration_ms: 8.464768
+2026-10-14T02:54:56.5453936Z   ...
+2026-10-14T02:54:56.5454946Z # Subtest: FDL-08 a release failure cannot report a successful upload or worker response
+2026-10-14T02:54:56.5456265Z ok 8 - FDL-08 a release failure cannot report a successful upload or worker response
+2026-10-14T02:54:56.5458642Z   ---
+2026-10-14T02:54:56.5459329Z   duration_ms: 11.700615
+2026-10-14T02:54:56.5459914Z   ...
+2026-10-14T02:54:56.5673767Z 1..8
+2026-10-14T02:54:56.5674534Z # tests 8
+2026-10-14T02:54:56.5675103Z # suites 0
+2026-10-14T02:54:56.5676148Z # pass 8
+2026-10-14T02:54:56.5676719Z # fail 0
+2026-10-14T02:54:56.5677286Z # cancelled 0
+2026-10-14T02:54:56.5677948Z # skipped 0
+2026-10-14T02:54:56.5678465Z # todo 0
+2026-10-14T02:54:56.5679114Z # duration_ms 751.285323
+2026-10-14T02:54:56.6855564Z Post job cleanup.
+2026-10-14T02:54:56.8063293Z (node:2458) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T02:54:56.8064429Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T02:54:56.8379748Z Post job cleanup.
+2026-10-14T02:54:56.9251712Z [command]/usr/bin/git version
+2026-10-14T02:54:56.9288213Z git version 2.55.0
+2026-10-14T02:54:56.9319627Z Temporarily overriding HOME='/home/runner/work/_temp/9fa29c18-477c-42ff-a01b-1b7e0eba77b5' before making global git config changes
+2026-10-14T02:54:56.9321132Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T02:54:56.9325264Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T02:54:56.9527062Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T02:54:56.9559329Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T02:54:56.9766726Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T02:54:56.9822624Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T02:54:57.0080093Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T02:54:57.0120420Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T02:54:57.0542609Z Cleaning up orphan processes
+2026-10-14T02:54:57.0813130Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

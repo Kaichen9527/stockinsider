@@ -1,0 +1,93 @@
+{
+  "recordedAt": "2026-10-14T02:59:40.795499+00:00",
+  "subject": "18b1fba4c7fa89108cbf8892a0a7205860989995",
+  "base": "3e1be377de3f6cac58f6de1626e8df994b9df146",
+  "tree": "1bd61aa690379cd1a76f1a501eb590919658204b",
+  "priorMakerSubject": "3953e7c00c1e58055c5b9bdd9cf02c27b13464d6",
+  "exactCopiedFiles": 3,
+  "sourceFiles": [
+    {
+      "path": ".github/workflows/financial-document-write-lease-quality.yml",
+      "bytes": 1653,
+      "sha256": "0798a75e09b69737032c4f2a20dee6f02aa92623256f305fb1d53c3c4d6034ec",
+      "blob": "d35fe86238f13ff9110c37fc768320c0e9faf64d"
+    },
+    {
+      "path": "docs/operations/2026-10-14/financial-document-owned-lease-handoff.md",
+      "bytes": 3345,
+      "sha256": "99759ab5d8ac3356364a694fbf1241dfdefeea0af9ec1b98b77d8f20ddafaf9a",
+      "blob": "815b709ea1badfac444f46cf6e57d1b03f21d485"
+    },
+    {
+      "path": "scripts/candidate-financial-document-write-lease-route.test.mjs",
+      "bytes": 9201,
+      "sha256": "7ef91ccd098c7fc4f38bfb34b5bbb60de08001e97b15740ebf3619bcbf019c12",
+      "blob": "d0a0f901dcc545ef3d1a6d87c42e62a2a387f312"
+    },
+    {
+      "path": "web/src/app/api/internal/candidate-financial-documents/route.ts",
+      "bytes": 6663,
+      "sha256": "a062959a925cd2fe0a58a6d4d58eb0420d326829397b0bfa8cc220759e5847c0",
+      "blob": "161de9316ae91ce487d34288dabd12756b23e191"
+    },
+    {
+      "path": "web/src/app/api/internal/candidate-financial-documents/worker/route.ts",
+      "bytes": 1999,
+      "sha256": "eb5f1cef10bd99373ac1d4a34f27fafcba6f4c50c955e25654a02f160014d995",
+      "blob": "5a1f9bdcc7a33763f7dfafc09cd9ab8893398610"
+    }
+  ],
+  "unchangedSharedHelperAndSql": true,
+  "baselineTAP": {
+    "pass": 3,
+    "fail": 5,
+    "skip": 0,
+    "todo": 0,
+    "syntheticBoundaryOnly": true
+  },
+  "localCandidateTAP": {
+    "pass": 8,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "syntheticBoundaryOnly": true
+  },
+  "ordinaryRouteCI": {
+    "run": 38503491252,
+    "job": 115655578815,
+    "pass": 8,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "checkoutMerge": "ced76b8d416f88e95a95119dea1cc02fbb15e689",
+    "treeEqualsSubject": true
+  },
+  "ordinaryProductCI": {
+    "run": 38503491181,
+    "job": 115655578763,
+    "statusAtLastRead": "inProgress",
+    "notApprovedYet": true
+  },
+  "initialProtected": {
+    "run": 38503491190,
+    "attempt": 1,
+    "conclusion": "failure",
+    "actualReason": "missing source-addressed exact-review ref for 18b1fba4",
+    "rerunPerformed": false
+  },
+  "independentReviewScope": "Root read exact old-maker runtime, its dependencies and new-main diff; Root assembled unchanged runtime bytes and ordinary workflow. No independent article review or third-party signature claimed. Full final exact attestation waits for actual fresh product evidence.",
+  "productionRequests": 0,
+  "productionFactsAdded": 0,
+  "vpsChanges": false,
+  "pr": {
+    "number": 378,
+    "draft": true,
+    "attached": true
+  },
+  "pending": [
+    "Fresh product canonical155/PCR31/type/lint/normalbuild/migration/performance/browser evidence",
+    "Fresh exact source review/PCR/direct-child refs",
+    "Normal protected checks, ready event checks, standard merge",
+    "Capacity and deployment; actual guarded five-document retry and terminal facts"
+  ]
+}

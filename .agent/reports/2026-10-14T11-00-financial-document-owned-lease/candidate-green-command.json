@@ -1,0 +1,40 @@
+{
+  "argv": [
+    "/usr/bin/arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--test",
+    "scripts/candidate-financial-document-write-lease-route.test.mjs"
+  ],
+  "startedAt": "2026-10-14T02:52:09.787139+00:00",
+  "finishedAt": "2026-10-14T02:52:10.199663+00:00",
+  "exitCode": 0,
+  "nodeVersion": "v22.14.0",
+  "typescriptVersion": "5.9.3",
+  "sourceFiles": [
+    {
+      "path": "web/src/app/api/internal/candidate-financial-documents/route.ts",
+      "bytes": 6663,
+      "sha256": "a062959a925cd2fe0a58a6d4d58eb0420d326829397b0bfa8cc220759e5847c0",
+      "originalMakerSource": "3953e7c00c1e58055c5b9bdd9cf02c27b13464d6",
+      "blob": "161de9316ae91ce487d34288dabd12756b23e191"
+    },
+    {
+      "path": "web/src/app/api/internal/candidate-financial-documents/worker/route.ts",
+      "bytes": 1999,
+      "sha256": "eb5f1cef10bd99373ac1d4a34f27fafcba6f4c50c955e25654a02f160014d995",
+      "originalMakerSource": "3953e7c00c1e58055c5b9bdd9cf02c27b13464d6",
+      "blob": "5a1f9bdcc7a33763f7dfafc09cd9ab8893398610"
+    },
+    {
+      "path": "scripts/candidate-financial-document-write-lease-route.test.mjs",
+      "bytes": 9201,
+      "sha256": "7ef91ccd098c7fc4f38bfb34b5bbb60de08001e97b15740ebf3619bcbf019c12",
+      "originalMakerSource": "3953e7c00c1e58055c5b9bdd9cf02c27b13464d6",
+      "blob": "d0a0f901dcc545ef3d1a6d87c42e62a2a387f312"
+    }
+  ],
+  "syntheticBoundaryOnly": true,
+  "realDatabase": false,
+  "formalProductionAcceptance": false
+}

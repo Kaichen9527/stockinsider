@@ -1,5 +1,18 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 11:00台灣時間：官方補件lease根因已隔離，PR378新ordinary八項真通過
+
+Root核remote main3e/progress89bae，Cloud cashflow turn01a1384a仍真inProgress/cursor57859559:3，未重派或修改兩model ownedsource。正式文件補件另一chat的backendlease_required已追到exact169與main3e：upload/worker沒有acquireProductionWriteLease，而Contabo register_private_artifact_receipt_v1先assert_stockinsider_backend_request_v1(true)；same-release writer activation只rotate identity，不取得lease。Root未再呼叫正式activation/retry/DB或持foreignlease，不將這個錯誤猜成停機、SSH或密鑰失效。
+
+原main實際route regression3PASS5FAIL保留。從舊maker3953e7c00c1e58055c5b9bdd9cf02c27b13464d6逐byte只抽upload/worker/test三檔，default3e之上新branch codex/financial-document-owned-lease-oct14/source18b1fba4c7fa89108cbf8892a0a7205860989995，加最小ordinaryworkflow及handoff共5檔。Upload在auth/writer/domain/body-format驗證後自有300slease包artifact/receipt/immutablejoblink，worker自有3600s包原processing；busy409/unavailable503/ownrelease finally/read-onlyGET與原partial/reject保持，原helper/SQL/schema/authority/roleACL/pins/lockfiles/金融installer/protected未改。不是整合舊PR303(OPEN)整branch，也不是套PR364或新SQL。Root Node22.14/lockmatchingTS5.9.3真8PASS0fail/skip/todo；synthetic external boundaries，不稱realPG/productionfacts。
+
+已建attach草稿PR378 https://github.com/Kaichen9527/stockinsider/pull/378 ，head18b1/base3e。App100attachment已先保存舊MERGED277 exactpointer/state/head/base/title後只unlink其UIattachment，再attach378成功，GitHub內容/歷史/程式/證據未改；不再重試上限。新ordinary Financial document write lease quality38503491252/job115655578815真SUCCESS，8route全部0fail/skip/todo，checkoutmergeced76b8d416f88e95a95119dea1cc02fbb15e689 tree與head相同；這是新headGHA真實執行，不沿舊303或376/377結果。
+
+普通product38503491181/job115655578763仍inProgress、candidate38503491209亦待終態；下一先核actualcanonical155/PCR31/typeslintnormalbuild/migration/performance/browser，不冒稱全PASS。Initialprotected38503491190 attempt1 bootstrapSUCCESS，req/arch/exact實際log為缺refs/heads/evidence/source-led-opportunity-v3-exact-review-18b1fba4c7fa89108cbf8892a0a7205860989995而FAIL/aggregateFAIL/modelproductskip，原JSON/log保存，不同input未改不rerun。新head需真正fresh full-range review/新canonicalPCR/directchildrefs後正常protected，尚未建立exactref/ready/merge/deploy。Root source inspection不是formal文章review/第三方簽章，舊authorworkspace失敗不能代批准。
+
+Receipt c386a93f06dfcb637d9d1e0f878aec2633f1adf99d460e4a610cd6972a86b95a，25raw／5source／3exactcopies，.agent/reports/2026-10-14T11-00-financial-document-owned-lease/。本輪無production API/lease/SQL/roleACL/capacity/HTTP/crawl/343/PTT/研究排程/部署/cache或Macfullbuild；原五件仍未新增receipt/facts，真部署後guarded retry另驗。Formalcapacity仍02:21Z16116408320/差3882033152未達原reserve，PR370..377終態helper不碰。Cashflow successor Cloud持續，不因PR378誤重派或讓maker自簽文章。
+
+
 ## 2026-10-14 10:40台灣時間：兩產業歷史現金流與友達六月底股本補件已真勾稽
 
 Root先核remote main3e1be377/progress9b1e5e45與工作樹乾淨；Cloud compact cursor重設57859559-a812-4f98-bcdc-46a2a9f908f6:1、latestturn仍原01a13727 completed/idle，並非新工作完成，不重派來源/金融/native。PR370/371/372/374/375/376/377均終態，不再檢查/ready/rerun/merge/helper。

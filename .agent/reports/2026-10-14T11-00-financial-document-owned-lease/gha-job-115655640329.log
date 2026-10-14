@@ -1,0 +1,926 @@
+﻿2026-10-14T02:54:45.9557792Z Current runner version: '2.337.0'
+2026-10-14T02:54:45.9583727Z ##[group]Runner Image Provisioner
+2026-10-14T02:54:45.9584672Z Hosted Compute Agent
+2026-10-14T02:54:45.9585205Z Version: 20261002.596
+2026-10-14T02:54:45.9585761Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-14T02:54:45.9586435Z Build Date: 2026-10-02T22:28:27Z
+2026-10-14T02:54:45.9587030Z Worker ID: {18f139b8-de8e-4773-be71-44ac975bb891}
+2026-10-14T02:54:45.9587655Z Region: westus3
+2026-10-14T02:54:45.9588187Z Cloud: Azure
+2026-10-14T02:54:45.9588658Z ##[endgroup]
+2026-10-14T02:54:45.9590067Z ##[group]Operating System
+2026-10-14T02:54:45.9590638Z Ubuntu
+2026-10-14T02:54:45.9591145Z 24.04.5
+2026-10-14T02:54:45.9591822Z LTS
+2026-10-14T02:54:45.9592289Z ##[endgroup]
+2026-10-14T02:54:45.9592831Z ##[group]Runner Image
+2026-10-14T02:54:45.9593386Z Image: ubuntu-24.04
+2026-10-14T02:54:45.9593918Z Version: 20261004.327.1
+2026-10-14T02:54:45.9595080Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-14T02:54:45.9596444Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-14T02:54:45.9597318Z ##[endgroup]
+2026-10-14T02:54:45.9598416Z ##[group]GITHUB_TOKEN Permissions
+2026-10-14T02:54:45.9600527Z Actions: read
+2026-10-14T02:54:45.9601057Z Contents: read
+2026-10-14T02:54:45.9601752Z Metadata: read
+2026-10-14T02:54:45.9602245Z ##[endgroup]
+2026-10-14T02:54:45.9604325Z Secret source: Actions
+2026-10-14T02:54:45.9605237Z Cache mode: read
+2026-10-14T02:54:45.9605860Z Prepare workflow directory
+2026-10-14T02:54:45.9913016Z Prepare all required actions
+2026-10-14T02:54:45.9964411Z Getting action download info
+2026-10-14T02:54:46.3217178Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-14T02:54:47.4087455Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-14T02:54:47.7498529Z Complete job name: requirements
+2026-10-14T02:54:47.8328507Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-14T02:54:47.8329626Z with:
+2026-10-14T02:54:47.8329907Z   fetch-depth: 0
+2026-10-14T02:54:47.8330198Z   persist-credentials: false
+2026-10-14T02:54:47.8330561Z   ref: 3e1be377de3f6cac58f6de1626e8df994b9df146
+2026-10-14T02:54:47.8330961Z   repository: Kaichen9527/stockinsider
+2026-10-14T02:54:47.8334557Z   token: ***
+2026-10-14T02:54:47.8334820Z   ssh-strict: true
+2026-10-14T02:54:47.8335068Z   ssh-user: git
+2026-10-14T02:54:47.8335317Z   clean: true
+2026-10-14T02:54:47.8335591Z   sparse-checkout-cone-mode: true
+2026-10-14T02:54:47.8335892Z   fetch-tags: false
+2026-10-14T02:54:47.8336167Z   show-progress: true
+2026-10-14T02:54:47.8336432Z   lfs: false
+2026-10-14T02:54:47.8336665Z   submodules: false
+2026-10-14T02:54:47.8336922Z   set-safe-directory: true
+2026-10-14T02:54:47.8337224Z   allow-unsafe-pr-checkout: false
+2026-10-14T02:54:47.8337915Z ##[endgroup]
+2026-10-14T02:54:47.9368931Z Syncing repository: Kaichen9527/stockinsider
+2026-10-14T02:54:47.9371211Z ##[group]Getting Git version info
+2026-10-14T02:54:47.9372078Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T02:54:47.9373316Z [command]/usr/bin/git version
+2026-10-14T02:54:47.9392770Z git version 2.55.0
+2026-10-14T02:54:47.9440636Z ##[endgroup]
+2026-10-14T02:54:47.9447313Z Temporarily overriding HOME='/home/runner/work/_temp/b8472510-0375-405b-b5cc-4f8ab8383cb5' before making global git config changes
+2026-10-14T02:54:47.9448929Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T02:54:47.9452619Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T02:54:47.9503894Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T02:54:47.9508736Z ##[group]Initializing the repository
+2026-10-14T02:54:47.9513902Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+2026-10-14T02:54:47.9614429Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-14T02:54:47.9615274Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-14T02:54:47.9615973Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-14T02:54:47.9616803Z hint: call:
+2026-10-14T02:54:47.9617175Z hint:
+2026-10-14T02:54:47.9617637Z hint: 	git config --global init.defaultBranch <name>
+2026-10-14T02:54:47.9618088Z hint:
+2026-10-14T02:54:47.9618534Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-14T02:54:47.9619165Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-14T02:54:47.9619690Z hint:
+2026-10-14T02:54:47.9620054Z hint: 	git branch -m <name>
+2026-10-14T02:54:47.9620449Z hint:
+2026-10-14T02:54:47.9620914Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-14T02:54:47.9622214Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+2026-10-14T02:54:47.9630867Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+2026-10-14T02:54:47.9674791Z ##[endgroup]
+2026-10-14T02:54:47.9675296Z ##[group]Disabling automatic garbage collection
+2026-10-14T02:54:47.9679897Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-14T02:54:47.9708729Z ##[endgroup]
+2026-10-14T02:54:47.9709207Z ##[group]Setting up auth
+2026-10-14T02:54:47.9716382Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T02:54:47.9745148Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T02:54:48.0056322Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T02:54:48.0097992Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T02:54:48.0401188Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T02:54:48.0437770Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T02:54:48.0664598Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-14T02:54:48.0728012Z ##[endgroup]
+2026-10-14T02:54:48.0728576Z ##[group]Fetching the repository
+2026-10-14T02:54:48.0729360Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-10-14T02:54:50.9657024Z From https://github.com/Kaichen9527/stockinsider
+2026-10-14T02:54:50.9658603Z  * [new branch]        agent/protected-external-code-gate -> origin/agent/protected-external-code-gate
+2026-10-14T02:54:50.9659745Z  * [new branch]        archive/v319-exact-review-evidence-before-v320-20260829 -> origin/archive/v319-exact-review-evidence-before-v320-20260829
+2026-10-14T02:54:50.9661320Z  * [new branch]        archive/v320-0fa-before-evidence-topology-repair-20260829 -> origin/archive/v320-0fa-before-evidence-topology-repair-20260829
+2026-10-14T02:54:50.9662739Z  * [new branch]        codex/approve-host-pin-v317 -> origin/codex/approve-host-pin-v317
+2026-10-14T02:54:50.9663916Z  * [new branch]        codex/astra-host-recovery-20260930 -> origin/codex/astra-host-recovery-20260930
+2026-10-14T02:54:50.9665438Z  * [new branch]        codex/astra-insider-snapshot-fairness-oct08 -> origin/codex/astra-insider-snapshot-fairness-oct08
+2026-10-14T02:54:50.9667038Z  * [new branch]        codex/astra-jsonl-parser-successor-oct08 -> origin/codex/astra-jsonl-parser-successor-oct08
+2026-10-14T02:54:50.9668532Z  * [new branch]        codex/astra-native-successor-20261008 -> origin/codex/astra-native-successor-20261008
+2026-10-14T02:54:50.9669777Z  * [new branch]        codex/astra-process-lifecycle-successor-oct08 -> origin/codex/astra-process-lifecycle-successor-oct08
+2026-10-14T02:54:50.9671208Z  * [new branch]        codex/astra-recovery-installer-proposal-20261005 -> origin/codex/astra-recovery-installer-proposal-20261005
+2026-10-14T02:54:50.9672490Z  * [new branch]        codex/astra-recovery-status-20261008 -> origin/codex/astra-recovery-status-20261008
+2026-10-14T02:54:50.9673280Z  * [new branch]        codex/astra-successor-install-plan-20261008 -> origin/codex/astra-successor-install-plan-20261008
+2026-10-14T02:54:50.9674158Z  * [new branch]        codex/atomic-publication-linux-acceptance-oct10 -> origin/codex/atomic-publication-linux-acceptance-oct10
+2026-10-14T02:54:50.9674979Z  * [new branch]        codex/auo-2026-09-25-morning -> origin/codex/auo-2026-09-25-morning
+2026-10-14T02:54:50.9675607Z  * [new branch]        codex/auo-evidence-oct08 -> origin/codex/auo-evidence-oct08
+2026-10-14T02:54:50.9676250Z  * [new branch]        codex/auo-four-segment-model-oct08 -> origin/codex/auo-four-segment-model-oct08
+2026-10-14T02:54:50.9677102Z  * [new branch]        codex/auo-full-financial-evidence-oct08 -> origin/codex/auo-full-financial-evidence-oct08
+2026-10-14T02:54:50.9677827Z  * [new branch]        codex/auo-market-evidence-oct08 -> origin/codex/auo-market-evidence-oct08
+2026-10-14T02:54:50.9678446Z  * [new branch]        codex/auo-research-v1   -> origin/codex/auo-research-v1
+2026-10-14T02:54:50.9679106Z  * [new branch]        codex/auo-research-working-draft-oct08 -> origin/codex/auo-research-working-draft-oct08
+2026-10-14T02:54:50.9680248Z  * [new branch]        codex/author-assignment-route-vm-oct09 -> origin/codex/author-assignment-route-vm-oct09
+2026-10-14T02:54:50.9681047Z  * [new branch]        codex/author-handoff-http-vm-oct09 -> origin/codex/author-handoff-http-vm-oct09
+2026-10-14T02:54:50.9682102Z  * [new branch]        codex/author-packet-http-readiness-oct09 -> origin/codex/author-packet-http-readiness-oct09
+2026-10-14T02:54:50.9682886Z  * [new branch]        codex/author-packet-http-vm-oct09 -> origin/codex/author-packet-http-vm-oct09
+2026-10-14T02:54:50.9683723Z  * [new branch]        codex/author-packet-namespace-diagnostic-oct09 -> origin/codex/author-packet-namespace-diagnostic-oct09
+2026-10-14T02:54:50.9684564Z  * [new branch]        codex/author-result-http-vm-oct09 -> origin/codex/author-result-http-vm-oct09
+2026-10-14T02:54:50.9685257Z  * [new branch]        codex/authority-pagination-v2 -> origin/codex/authority-pagination-v2
+2026-10-14T02:54:50.9685966Z  * [new branch]        codex/batch-candidate-fundamentals -> origin/codex/batch-candidate-fundamentals
+2026-10-14T02:54:50.9686881Z  * [new branch]        codex/calendar-fact-binding-v16 -> origin/codex/calendar-fact-binding-v16
+2026-10-14T02:54:50.9688583Z  * [new branch]        codex/calendar-inbox-main325-validation-oct12 -> origin/codex/calendar-inbox-main325-validation-oct12
+2026-10-14T02:54:50.9689521Z  * [new branch]        codex/candidate-detail-fact-batching -> origin/codex/candidate-detail-fact-batching
+2026-10-14T02:54:50.9690731Z  * [new branch]        codex/candidate-discovery-admission-oct11 -> origin/codex/candidate-discovery-admission-oct11
+2026-10-14T02:54:50.9692566Z  * [new branch]        codex/candidate-main325-validation-oct12 -> origin/codex/candidate-main325-validation-oct12
+2026-10-14T02:54:50.9693891Z  * [new branch]        codex/candidate-price-access-guard -> origin/codex/candidate-price-access-guard
+2026-10-14T02:54:50.9695181Z  * [new branch]        codex/candidate-run-summary-compact -> origin/codex/candidate-run-summary-compact
+2026-10-14T02:54:50.9696378Z  * [new branch]        codex/candidate-shadow-perf -> origin/codex/candidate-shadow-perf
+2026-10-14T02:54:50.9697173Z  * [new branch]        codex/cloud-controller-handoff-oct05 -> origin/codex/cloud-controller-handoff-oct05
+2026-10-14T02:54:50.9698035Z  * [new branch]        codex/cloud-private-input-oct09 -> origin/codex/cloud-private-input-oct09
+2026-10-14T02:54:50.9698980Z  * [new branch]        codex/cloud-research-validation -> origin/codex/cloud-research-validation
+2026-10-14T02:54:50.9699722Z  * [new branch]        codex/cna-guarded-inbox-acceptance-oct09 -> origin/codex/cna-guarded-inbox-acceptance-oct09
+2026-10-14T02:54:50.9700440Z  * [new branch]        codex/cna-guarded-inbox-oct09 -> origin/codex/cna-guarded-inbox-oct09
+2026-10-14T02:54:50.9701189Z  * [new branch]        codex/complete-input-byte-boundary-vm-oct09 -> origin/codex/complete-input-byte-boundary-vm-oct09
+2026-10-14T02:54:50.9702217Z  * [new branch]        codex/complete-input-lock-expiry-vm-oct09 -> origin/codex/complete-input-lock-expiry-vm-oct09
+2026-10-14T02:54:50.9703021Z  * [new branch]        codex/contabo-current-database-backup -> origin/codex/contabo-current-database-backup
+2026-10-14T02:54:50.9703876Z  * [new branch]        codex/contabo-cutover-completion -> origin/codex/contabo-cutover-completion
+2026-10-14T02:54:50.9704590Z  * [new branch]        codex/contabo-data-plane -> origin/codex/contabo-data-plane
+2026-10-14T02:54:50.9705266Z  * [new branch]        codex/contabo-financial-schema-hotfix -> origin/codex/contabo-financial-schema-hotfix
+2026-10-14T02:54:50.9705987Z  * [new branch]        codex/contabo-post-cutover-fixes -> origin/codex/contabo-post-cutover-fixes
+2026-10-14T02:54:50.9706735Z  * [new branch]        codex/contabo-postgrest-response-buffer -> origin/codex/contabo-postgrest-response-buffer
+2026-10-14T02:54:50.9707513Z  * [new branch]        codex/contabo-runtime-packaging-fix -> origin/codex/contabo-runtime-packaging-fix
+2026-10-14T02:54:50.9708172Z  * [new branch]        codex/core-candidate-first -> origin/codex/core-candidate-first
+2026-10-14T02:54:50.9708786Z  * [new branch]        codex/deep-author-input-oct08 -> origin/codex/deep-author-input-oct08
+2026-10-14T02:54:50.9709451Z  * [new branch]        codex/deep-private-draft-oct08 -> origin/codex/deep-private-draft-oct08
+2026-10-14T02:54:50.9710312Z  * [new branch]        codex/deep-work-consumer-integrated-oct05 -> origin/codex/deep-work-consumer-integrated-oct05
+2026-10-14T02:54:50.9711199Z  * [new branch]        codex/discovery-authority-contract-audit-oct12 -> origin/codex/discovery-authority-contract-audit-oct12
+2026-10-14T02:54:50.9712339Z  * [new branch]        codex/discovery-frozen-snapshot-reader-oct14 -> origin/codex/discovery-frozen-snapshot-reader-oct14
+2026-10-14T02:54:50.9713128Z  * [new branch]        codex/discovery-history-core-oct09 -> origin/codex/discovery-history-core-oct09
+2026-10-14T02:54:50.9713875Z  * [new branch]        codex/discovery-price-enrichment-oct05 -> origin/codex/discovery-price-enrichment-oct05
+2026-10-14T02:54:50.9714656Z  * [new branch]        codex/discovery-price-integrated-oct05 -> origin/codex/discovery-price-integrated-oct05
+2026-10-14T02:54:50.9715446Z  * [new branch]        codex/discovery-price-supplements-oct05 -> origin/codex/discovery-price-supplements-oct05
+2026-10-14T02:54:50.9716237Z  * [new branch]        codex/discovery-public-evidence-oct08 -> origin/codex/discovery-public-evidence-oct08
+2026-10-14T02:54:50.9717099Z  * [new branch]        codex/discovery-revision-publisher-reader-oct12 -> origin/codex/discovery-revision-publisher-reader-oct12
+2026-10-14T02:54:50.9717960Z  * [new branch]        codex/discovery-snapshot-release-oct14 -> origin/codex/discovery-snapshot-release-oct14
+2026-10-14T02:54:50.9718657Z  * [new branch]        codex/emc-company-model-oct08 -> origin/codex/emc-company-model-oct08
+2026-10-14T02:54:50.9719309Z  * [new branch]        codex/emc-current-media-oct08 -> origin/codex/emc-current-media-oct08
+2026-10-14T02:54:50.9720053Z  * [new branch]        codex/emc-official-evidence-oct08 -> origin/codex/emc-official-evidence-oct08
+2026-10-14T02:54:50.9721056Z  * [new branch]        codex/entry-plan-calendar-pagination-oct11 -> origin/codex/entry-plan-calendar-pagination-oct11
+2026-10-14T02:54:50.9722346Z  * [new branch]        codex/evidence-research-no-global-shadow -> origin/codex/evidence-research-no-global-shadow
+2026-10-14T02:54:50.9723360Z  * [new branch]        codex/evidence-valuation-v6 -> origin/codex/evidence-valuation-v6
+2026-10-14T02:54:50.9724707Z  * [new branch]        codex/exact-review-3da42c12c964b880b4e1bc95a3864db6406f21e0 -> origin/codex/exact-review-3da42c12c964b880b4e1bc95a3864db6406f21e0
+2026-10-14T02:54:50.9725834Z  * [new branch]        codex/facebook-public-observation-oct08 -> origin/codex/facebook-public-observation-oct08
+2026-10-14T02:54:50.9726653Z  * [new branch]        codex/financial-backfill-throughput-v13 -> origin/codex/financial-backfill-throughput-v13
+2026-10-14T02:54:50.9727479Z  * [new branch]        codex/financial-bound-minimal-audit-oct12 -> origin/codex/financial-bound-minimal-audit-oct12
+2026-10-14T02:54:50.9728279Z  * [new branch]        codex/financial-cleanup-ci-sync-oct09 -> origin/codex/financial-cleanup-ci-sync-oct09
+2026-10-14T02:54:50.9729081Z  * [new branch]        codex/financial-document-owned-lease-oct14 -> origin/codex/financial-document-owned-lease-oct14
+2026-10-14T02:54:50.9730252Z  * [new branch]        codex/financial-document-write-lease-oct08 -> origin/codex/financial-document-write-lease-oct08
+2026-10-14T02:54:50.9731988Z  * [new branch]        codex/financial-existing-schema-owner-profile-oct12 -> origin/codex/financial-existing-schema-owner-profile-oct12
+2026-10-14T02:54:50.9733194Z  * [new branch]        codex/financial-failure-rpc-hotfix -> origin/codex/financial-failure-rpc-hotfix
+2026-10-14T02:54:50.9733949Z  * [new branch]        codex/financial-history-admission-oct05 -> origin/codex/financial-history-admission-oct05
+2026-10-14T02:54:50.9734821Z  * [new branch]        codex/financial-history-atomic-extraction-oct12 -> origin/codex/financial-history-atomic-extraction-oct12
+2026-10-14T02:54:50.9735761Z  * [new branch]        codex/financial-history-atomic-installer-oct12 -> origin/codex/financial-history-atomic-installer-oct12
+2026-10-14T02:54:50.9737013Z  * [new branch]        codex/financial-history-existing-schema-native-oct12 -> origin/codex/financial-history-existing-schema-native-oct12
+2026-10-14T02:54:50.9738017Z  * [new branch]        codex/financial-history-native-extraction-oct12 -> origin/codex/financial-history-native-extraction-oct12
+2026-10-14T02:54:50.9738882Z  * [new branch]        codex/financial-installation-release-oct13 -> origin/codex/financial-installation-release-oct13
+2026-10-14T02:54:50.9739820Z  * [new branch]        codex/financial-installer-finite-profile-closure-oct13 -> origin/codex/financial-installer-finite-profile-closure-oct13
+2026-10-14T02:54:50.9740846Z  * [new branch]        codex/financial-installer-postcondition-native-oct13 -> origin/codex/financial-installer-postcondition-native-oct13
+2026-10-14T02:54:50.9741950Z  * [new branch]        codex/financial-installer-wrapper-audit-oct13 -> origin/codex/financial-installer-wrapper-audit-oct13
+2026-10-14T02:54:50.9742790Z  * [new branch]        codex/financial-parent-diagnostic-oct09 -> origin/codex/financial-parent-diagnostic-oct09
+2026-10-14T02:54:50.9743580Z  * [new branch]        codex/financial-parser-validated-facts -> origin/codex/financial-parser-validated-facts
+2026-10-14T02:54:50.9744278Z  * [new branch]        codex/financial-queue-vm-oct09 -> origin/codex/financial-queue-vm-oct09
+2026-10-14T02:54:50.9744986Z  * [new branch]        codex/financial-queue-write-lease-oct09 -> origin/codex/financial-queue-write-lease-oct09
+2026-10-14T02:54:50.9745830Z  * [new branch]        codex/financial-supplement-repair-design-oct09 -> origin/codex/financial-supplement-repair-design-oct09
+2026-10-14T02:54:50.9746683Z  * [new branch]        codex/financial-supplement-repair-oct09 -> origin/codex/financial-supplement-repair-oct09
+2026-10-14T02:54:50.9747545Z  * [new branch]        codex/financial-vps-operator-prerequisite-oct12 -> origin/codex/financial-vps-operator-prerequisite-oct12
+2026-10-14T02:54:50.9748336Z  * [new branch]        codex/gate-inventory-transition -> origin/codex/gate-inventory-transition
+2026-10-14T02:54:50.9749065Z  * [new branch]        codex/gdelt-invalidated-mention-filter -> origin/codex/gdelt-invalidated-mention-filter
+2026-10-14T02:54:50.9749781Z  * [new branch]        codex/host-pin-v317     -> origin/codex/host-pin-v317
+2026-10-14T02:54:50.9750286Z  * [new branch]        codex/host-pin-v318     -> origin/codex/host-pin-v318
+2026-10-14T02:54:50.9750854Z  * [new branch]        codex/host-pin-v318-bootstrap -> origin/codex/host-pin-v318-bootstrap
+2026-10-14T02:54:50.9751675Z  * [new branch]        codex/host-v319-compatibility-20260926 -> origin/codex/host-v319-compatibility-20260926
+2026-10-14T02:54:50.9752501Z  * [new branch]        codex/industry-association-integrated-oct05 -> origin/codex/industry-association-integrated-oct05
+2026-10-14T02:54:50.9753280Z  * [new branch]        codex/industry-citation-scope-oct05 -> origin/codex/industry-citation-scope-oct05
+2026-10-14T02:54:50.9754024Z  * [new branch]        codex/industry-source-integrated-oct05 -> origin/codex/industry-source-integrated-oct05
+2026-10-14T02:54:50.9754758Z  * [new branch]        codex/insider-archive-codec-oct09 -> origin/codex/insider-archive-codec-oct09
+2026-10-14T02:54:50.9755480Z  * [new branch]        codex/insider-archive-contract-oct09 -> origin/codex/insider-archive-contract-oct09
+2026-10-14T02:54:50.9756313Z  * [new branch]        codex/insider-archive-fence-measurement-oct09 -> origin/codex/insider-archive-fence-measurement-oct09
+2026-10-14T02:54:50.9757153Z  * [new branch]        codex/insider-cursor-ci-discovery-oct09 -> origin/codex/insider-cursor-ci-discovery-oct09
+2026-10-14T02:54:50.9757905Z  * [new branch]        codex/insider-official-schema-oct08 -> origin/codex/insider-official-schema-oct08
+2026-10-14T02:54:50.9758616Z  * [new branch]        codex/insider-parser-coverage-oct08 -> origin/codex/insider-parser-coverage-oct08
+2026-10-14T02:54:50.9759420Z  * [new branch]        codex/insider-snapshot-fairness-contract-oct08 -> origin/codex/insider-snapshot-fairness-contract-oct08
+2026-10-14T02:54:50.9760330Z  * [new branch]        codex/integration-linux-acceptance-oct10 -> origin/codex/integration-linux-acceptance-oct10
+2026-10-14T02:54:50.9761060Z  * [new branch]        codex/internal-api-long-timeout -> origin/codex/internal-api-long-timeout
+2026-10-14T02:54:50.9761921Z  * [new branch]        codex/internal-worker-isolation-v1 -> origin/codex/internal-worker-isolation-v1
+2026-10-14T02:54:50.9762735Z  * [new branch]        codex/investanchors-podcast-description-oct08 -> origin/codex/investanchors-podcast-description-oct08
+2026-10-14T02:54:50.9763604Z  * [new branch]        codex/live-discovery-evidence-adapter-oct12 -> origin/codex/live-discovery-evidence-adapter-oct12
+2026-10-14T02:54:50.9764370Z  * [new branch]        codex/local-inbox-dataplane-oct08 -> origin/codex/local-inbox-dataplane-oct08
+2026-10-14T02:54:50.9765140Z  * [new branch]        codex/main-entry-plan-migration-linux-oct11 -> origin/codex/main-entry-plan-migration-linux-oct11
+2026-10-14T02:54:50.9765909Z  * [new branch]        codex/market-circuit-source-policy -> origin/codex/market-circuit-source-policy
+2026-10-14T02:54:50.9766617Z  * [new branch]        codex/market-evidence-pagination -> origin/codex/market-evidence-pagination
+2026-10-14T02:54:50.9767327Z  * [new branch]        codex/market-evidence-retained-index -> origin/codex/market-evidence-retained-index
+2026-10-14T02:54:50.9768111Z  * [new branch]        codex/merged-main-candidate-artifact-oct11 -> origin/codex/merged-main-candidate-artifact-oct11
+2026-10-14T02:54:50.9768852Z  * [new branch]        codex/model-runner-host-pin-0148 -> origin/codex/model-runner-host-pin-0148
+2026-10-14T02:54:50.9769561Z  * [new branch]        codex/monitor-benchmark-context-oct09 -> origin/codex/monitor-benchmark-context-oct09
+2026-10-14T02:54:50.9770264Z  * [new branch]        codex/monitor-benchmark-vm-oct09 -> origin/codex/monitor-benchmark-vm-oct09
+2026-10-14T02:54:50.9770982Z  * [new branch]        codex/monitor-fair-resume-oct08 -> origin/codex/monitor-fair-resume-oct08
+2026-10-14T02:54:50.9772166Z  * [new branch]        codex/monitor-worklist-consumer-oct05 -> origin/codex/monitor-worklist-consumer-oct05
+2026-10-14T02:54:50.9772947Z  * [new branch]        codex/monitoring-recovery-v4 -> origin/codex/monitoring-recovery-v4
+2026-10-14T02:54:50.9773651Z  * [new branch]        codex/namespace-diagnostic-bounds-oct09 -> origin/codex/namespace-diagnostic-bounds-oct09
+2026-10-14T02:54:50.9774459Z  * [new branch]        codex/native-planner-vm-verification-oct08 -> origin/codex/native-planner-vm-verification-oct08
+2026-10-14T02:54:50.9775506Z  * [new branch]        codex/native-successor-vm-verification-oct08 -> origin/codex/native-successor-vm-verification-oct08
+2026-10-14T02:54:50.9776689Z  * [new branch]        codex/normalize-official-name-before-research -> origin/codex/normalize-official-name-before-research
+2026-10-14T02:54:50.9777503Z  * [new branch]        codex/observed-consumer-9745-vm-oct09 -> origin/codex/observed-consumer-9745-vm-oct09
+2026-10-14T02:54:50.9778278Z  * [new branch]        codex/observed-priority-consumer-oct09 -> origin/codex/observed-priority-consumer-oct09
+2026-10-14T02:54:50.9779083Z  * [new branch]        codex/observed-priority-fences-repair-oct08 -> origin/codex/observed-priority-fences-repair-oct08
+2026-10-14T02:54:50.9779851Z  * [new branch]        codex/observed-priority-jobs-oct08 -> origin/codex/observed-priority-jobs-oct08
+2026-10-14T02:54:50.9780700Z  * [new branch]        codex/observed-quota-contract-oct08 -> origin/codex/observed-quota-contract-oct08
+2026-10-14T02:54:50.9781638Z  * [new branch]        codex/observed-research-contract-oct08 -> origin/codex/observed-research-contract-oct08
+2026-10-14T02:54:50.9782437Z  * [new branch]        codex/observed-roster-admission-oct08 -> origin/codex/observed-roster-admission-oct08
+2026-10-14T02:54:50.9783185Z  * [new branch]        codex/observed-roster-sql-repair-oct08 -> origin/codex/observed-roster-sql-repair-oct08
+2026-10-14T02:54:50.9783924Z  * [new branch]        codex/official-backfill-rate-limit -> origin/codex/official-backfill-rate-limit
+2026-10-14T02:54:50.9784711Z  * [new branch]        codex/official-calendar-backfill -> origin/codex/official-calendar-backfill
+2026-10-14T02:54:50.9785390Z  * [new branch]        codex/official-calendar-fail-fast -> origin/codex/official-calendar-fail-fast
+2026-10-14T02:54:50.9786153Z  * [new branch]        codex/official-calendar-secondary-authority -> origin/codex/official-calendar-secondary-authority
+2026-10-14T02:54:50.9786931Z  * [new branch]        codex/official-company-master-oct08 -> origin/codex/official-company-master-oct08
+2026-10-14T02:54:50.9787681Z  * [new branch]        codex/official-market-host-serialization -> origin/codex/official-market-host-serialization
+2026-10-14T02:54:50.9788442Z  * [new branch]        codex/official-market-transient-retry -> origin/codex/official-market-transient-retry
+2026-10-14T02:54:50.9789197Z  * [new branch]        codex/official-price-backfill-bridge -> origin/codex/official-price-backfill-bridge
+2026-10-14T02:54:50.9789912Z  * [new branch]        codex/official-security-scope-oct08 -> origin/codex/official-security-scope-oct08
+2026-10-14T02:54:50.9790647Z  * [new branch]        codex/official-technical-context-oct08 -> origin/codex/official-technical-context-oct08
+2026-10-14T02:54:50.9791337Z  * [new branch]        codex/outbox-pipe-drain-oct08 -> origin/codex/outbox-pipe-drain-oct08
+2026-10-14T02:54:50.9792168Z  * [new branch]        codex/paginate-candidate-authority -> origin/codex/paginate-candidate-authority
+2026-10-14T02:54:50.9792889Z  * [new branch]        codex/paper-anchor-action-head-oct08 -> origin/codex/paper-anchor-action-head-oct08
+2026-10-14T02:54:50.9793641Z  * [new branch]        codex/persist-official-candidate-names -> origin/codex/persist-official-candidate-names
+2026-10-14T02:54:50.9794294Z  * [new branch]        codex/pg-test-clock-oct09 -> origin/codex/pg-test-clock-oct09
+2026-10-14T02:54:50.9794933Z  * [new branch]        codex/podcast-controller-index-oct09 -> origin/codex/podcast-controller-index-oct09
+2026-10-14T02:54:50.9795678Z  * [new branch]        codex/podcast-offline-capability-oct09 -> origin/codex/podcast-offline-capability-oct09
+2026-10-14T02:54:50.9796474Z  * [new branch]        codex/podcast-offline-pilot-oct09 -> origin/codex/podcast-offline-pilot-oct09
+2026-10-14T02:54:50.9797251Z  * [new branch]        codex/podcast-offline-supervisor-repair-oct09 -> origin/codex/podcast-offline-supervisor-repair-oct09
+2026-10-14T02:54:50.9798044Z  * [new branch]        codex/podcast-publisher-probe-oct08 -> origin/codex/podcast-publisher-probe-oct08
+2026-10-14T02:54:50.9798770Z  * [new branch]        codex/podcast-supervisor-340-vm-oct09 -> origin/codex/podcast-supervisor-340-vm-oct09
+2026-10-14T02:54:50.9799532Z  * [new branch]        codex/postdeploy-source-publication-fix -> origin/codex/postdeploy-source-publication-fix
+2026-10-14T02:54:50.9800387Z  * [new branch]        codex/pr210-review-graph-bootstrap -> origin/codex/pr210-review-graph-bootstrap
+2026-10-14T02:54:50.9801421Z  * [new branch]        codex/pr279-protected-graph-registration -> origin/codex/pr279-protected-graph-registration
+2026-10-14T02:54:50.9802229Z  * [new branch]        codex/priority-local-profile-oct08 -> origin/codex/priority-local-profile-oct08
+2026-10-14T02:54:50.9802945Z  * [new branch]        codex/progress-convergence-1344-oct08 -> origin/codex/progress-convergence-1344-oct08
+2026-10-14T02:54:50.9803668Z  * [new branch]        codex/progress-convergence-1433-oct08 -> origin/codex/progress-convergence-1433-oct08
+2026-10-14T02:54:50.9804397Z  * [new branch]        codex/progress-convergence-1515-oct08 -> origin/codex/progress-convergence-1515-oct08
+2026-10-14T02:54:50.9805257Z  * [new branch]        codex/progress-convergence-oct08 -> origin/codex/progress-convergence-oct08
+2026-10-14T02:54:50.9806268Z  * [new branch]        codex/progress-convergence-oct09 -> origin/codex/progress-convergence-oct09
+2026-10-14T02:54:50.9807026Z  * [new branch]        codex/protected-cli-transition-review-oct11 -> origin/codex/protected-cli-transition-review-oct11
+2026-10-14T02:54:50.9807982Z  * [new branch]        codex/protected-gate-base-object-bootstrap -> origin/codex/protected-gate-base-object-bootstrap
+2026-10-14T02:54:50.9808747Z  * [new branch]        codex/protected-host-pin-v316-final -> origin/codex/protected-host-pin-v316-final
+2026-10-14T02:54:50.9809466Z  * [new branch]        codex/protected-host-pin-v316-final2 -> origin/codex/protected-host-pin-v316-final2
+2026-10-14T02:54:50.9810361Z  * [new branch]        codex/protected-host-pin-v316-final3 -> origin/codex/protected-host-pin-v316-final3
+2026-10-14T02:54:50.9811175Z  * [new branch]        codex/protected-runner-trust-migration-oct12 -> origin/codex/protected-runner-trust-migration-oct12
+2026-10-14T02:54:50.9812188Z  * [new branch]        codex/protected-v316-architecture-parser-bootstrap -> origin/codex/protected-v316-architecture-parser-bootstrap
+2026-10-14T02:54:50.9813057Z  * [new branch]        codex/protected-v316-finalgraph-bootstrap -> origin/codex/protected-v316-finalgraph-bootstrap
+2026-10-14T02:54:50.9813743Z  * [new branch]        codex/ptt-fetch-resilience -> origin/codex/ptt-fetch-resilience
+2026-10-14T02:54:50.9814376Z  * [new branch]        codex/ptt-main325-validation-oct12 -> origin/codex/ptt-main325-validation-oct12
+2026-10-14T02:54:50.9815064Z  * [new branch]        codex/ptt-mention-provenance-oct12 -> origin/codex/ptt-mention-provenance-oct12
+2026-10-14T02:54:50.9815737Z  * [new branch]        codex/ptt-missing-article-policy -> origin/codex/ptt-missing-article-policy
+2026-10-14T02:54:50.9816500Z  * [new branch]        codex/ptt-provenance-canonical-evidence-oct12 -> origin/codex/ptt-provenance-canonical-evidence-oct12
+2026-10-14T02:54:50.9817478Z  * [new branch]        codex/ptt-public-body-oct08 -> origin/codex/ptt-public-body-oct08
+2026-10-14T02:54:50.9818456Z  * [new branch]        codex/public-relay-priority-vm-oct08 -> origin/codex/public-relay-priority-vm-oct08
+2026-10-14T02:54:50.9819529Z  * [new branch]        codex/publication-fence-reviewed-oct09 -> origin/codex/publication-fence-reviewed-oct09
+2026-10-14T02:54:50.9820505Z  * [new branch]        codex/publication-view-linux-acceptance-oct10 -> origin/codex/publication-view-linux-acceptance-oct10
+2026-10-14T02:54:50.9821402Z  * [new branch]        codex/publication-webpack-linux-diagnostic-oct10 -> origin/codex/publication-webpack-linux-diagnostic-oct10
+2026-10-14T02:54:50.9822481Z  * [new branch]        codex/publication-webpack-native-linux-acceptance-oct10 -> origin/codex/publication-webpack-native-linux-acceptance-oct10
+2026-10-14T02:54:50.9823403Z  * [new branch]        codex/recover-orphaned-production-lease -> origin/codex/recover-orphaned-production-lease
+2026-10-14T02:54:50.9824207Z  * [new branch]        codex/refresh-protected-model-oracle-reuse -> origin/codex/refresh-protected-model-oracle-reuse
+2026-10-14T02:54:50.9824933Z  * [new branch]        codex/register-c74-review-graph -> origin/codex/register-c74-review-graph
+2026-10-14T02:54:50.9825602Z  * [new branch]        codex/register-host-pin-v314-graph -> origin/codex/register-host-pin-v314-graph
+2026-10-14T02:54:50.9826343Z  * [new branch]        codex/release-schema-rehearsal-oct05 -> origin/codex/release-schema-rehearsal-oct05
+2026-10-14T02:54:50.9827059Z  * [new branch]        codex/required-model-runner-gate-v6 -> origin/codex/required-model-runner-gate-v6
+2026-10-14T02:54:50.9827831Z  * [new branch]        codex/required-model-runner-gate-v6-reviewed -> origin/codex/required-model-runner-gate-v6-reviewed
+2026-10-14T02:54:50.9828646Z  * [new branch]        codex/research-admission-isolation-oct11 -> origin/codex/research-admission-isolation-oct11
+2026-10-14T02:54:50.9829468Z  * [new branch]        codex/research-admission-linux-evidence-oct11 -> origin/codex/research-admission-linux-evidence-oct11
+2026-10-14T02:54:50.9830370Z  * [new branch]        codex/research-admission-user-linux-evidence-oct11 -> origin/codex/research-admission-user-linux-evidence-oct11
+2026-10-14T02:54:50.9831241Z  * [new branch]        codex/research-agent-home-isolation-oct11 -> origin/codex/research-agent-home-isolation-oct11
+2026-10-14T02:54:50.9832290Z  * [new branch]        codex/research-article-contract-v2-oct09 -> origin/codex/research-article-contract-v2-oct09
+2026-10-14T02:54:50.9833069Z  * [new branch]        codex/research-atomic-publication-oct10 -> origin/codex/research-atomic-publication-oct10
+2026-10-14T02:54:50.9833839Z  * [new branch]        codex/research-attention-shadow-oct09 -> origin/codex/research-attention-shadow-oct09
+2026-10-14T02:54:50.9834595Z  * [new branch]        codex/research-attention-shadow-vm-oct09 -> origin/codex/research-attention-shadow-vm-oct09
+2026-10-14T02:54:50.9835373Z  * [new branch]        codex/research-author-assignment-oct09 -> origin/codex/research-author-assignment-oct09
+2026-10-14T02:54:50.9836172Z  * [new branch]        codex/research-author-assignment-route-oct09 -> origin/codex/research-author-assignment-route-oct09
+2026-10-14T02:54:50.9836942Z  * [new branch]        codex/research-author-handoff-oct09 -> origin/codex/research-author-handoff-oct09
+2026-10-14T02:54:50.9837645Z  * [new branch]        codex/research-author-packet-oct09 -> origin/codex/research-author-packet-oct09
+2026-10-14T02:54:50.9838334Z  * [new branch]        codex/research-author-result-oct09 -> origin/codex/research-author-result-oct09
+2026-10-14T02:54:50.9839143Z  * [new branch]        codex/research-budget-fixture-linux-evidence-oct11 -> origin/codex/research-budget-fixture-linux-evidence-oct11
+2026-10-14T02:54:50.9840027Z  * [new branch]        codex/research-budget-install-fixture-oct11 -> origin/codex/research-budget-install-fixture-oct11
+2026-10-14T02:54:50.9840848Z  * [new branch]        codex/research-business-calculator-v2-oct08 -> origin/codex/research-business-calculator-v2-oct08
+2026-10-14T02:54:50.9841672Z  * [new branch]        codex/research-combined-75d-vm-oct09 -> origin/codex/research-combined-75d-vm-oct09
+2026-10-14T02:54:50.9842441Z  * [new branch]        codex/research-complete-input-design-oct09 -> origin/codex/research-complete-input-design-oct09
+2026-10-14T02:54:50.9843274Z  * [new branch]        codex/research-complete-input-runtime-oct09 -> origin/codex/research-complete-input-runtime-oct09
+2026-10-14T02:54:50.9844184Z  * [new branch]        codex/research-complete-input-schema-oct09 -> origin/codex/research-complete-input-schema-oct09
+2026-10-14T02:54:50.9844967Z  * [new branch]        codex/research-cycle-cache-efficiency -> origin/codex/research-cycle-cache-efficiency
+2026-10-14T02:54:50.9845682Z  * [new branch]        codex/research-cycle-time-budget -> origin/codex/research-cycle-time-budget
+2026-10-14T02:54:50.9846312Z  * [new branch]        codex/research-decision-ui -> origin/codex/research-decision-ui
+2026-10-14T02:54:50.9846934Z  * [new branch]        codex/research-decision-ui-main -> origin/codex/research-decision-ui-main
+2026-10-14T02:54:50.9847671Z  * [new branch]        codex/research-development-converged-oct08 -> origin/codex/research-development-converged-oct08
+2026-10-14T02:54:50.9848491Z  * [new branch]        codex/research-development-converged-oct09 -> origin/codex/research-development-converged-oct09
+2026-10-14T02:54:50.9849268Z  * [new branch]        codex/research-discovery-clock-oct11 -> origin/codex/research-discovery-clock-oct11
+2026-10-14T02:54:50.9850003Z  * [new branch]        codex/research-execution-binding-oct09 -> origin/codex/research-execution-binding-oct09
+2026-10-14T02:54:50.9850840Z  * [new branch]        codex/research-financial-input-integration-oct09 -> origin/codex/research-financial-input-integration-oct09
+2026-10-14T02:54:50.9851797Z  * [new branch]        codex/research-first-publication-contract-oct08 -> origin/codex/research-first-publication-contract-oct08
+2026-10-14T02:54:50.9852670Z  * [new branch]        codex/research-full-pcr-linux-evidence-oct11 -> origin/codex/research-full-pcr-linux-evidence-oct11
+2026-10-14T02:54:50.9853504Z  * [new branch]        codex/research-full-schema-probe-linux-oct11 -> origin/codex/research-full-schema-probe-linux-oct11
+2026-10-14T02:54:50.9854198Z  * [new branch]        codex/research-funnel-v4 -> origin/codex/research-funnel-v4
+2026-10-14T02:54:50.9854910Z  * [new branch]        codex/research-immutable-input-oct09 -> origin/codex/research-immutable-input-oct09
+2026-10-14T02:54:50.9855634Z  * [new branch]        codex/research-inbox-precision-oct11 -> origin/codex/research-inbox-precision-oct11
+2026-10-14T02:54:50.9856430Z  * [new branch]        codex/research-installer-linux-evidence-oct11 -> origin/codex/research-installer-linux-evidence-oct11
+2026-10-14T02:54:50.9857275Z  * [new branch]        codex/research-installer-verification-oct11 -> origin/codex/research-installer-verification-oct11
+2026-10-14T02:54:50.9858018Z  * [new branch]        codex/research-integration-oct09 -> origin/codex/research-integration-oct09
+2026-10-14T02:54:50.9858752Z  * [new branch]        codex/research-io-pg-linux-evidence-oct11 -> origin/codex/research-io-pg-linux-evidence-oct11
+2026-10-14T02:54:50.9859572Z  * [new branch]        codex/research-lock-expiry-integration-oct09 -> origin/codex/research-lock-expiry-integration-oct09
+2026-10-14T02:54:50.9860412Z  * [new branch]        codex/research-package-linux-evidence-oct11 -> origin/codex/research-package-linux-evidence-oct11
+2026-10-14T02:54:50.9861239Z  * [new branch]        codex/research-package-linux-fixture-oct11 -> origin/codex/research-package-linux-fixture-oct11
+2026-10-14T02:54:50.9862101Z  * [new branch]        codex/research-pcr-caller-coverage-oct11 -> origin/codex/research-pcr-caller-coverage-oct11
+2026-10-14T02:54:50.9862930Z  * [new branch]        codex/research-pcr-caller-linux-evidence-oct11 -> origin/codex/research-pcr-caller-linux-evidence-oct11
+2026-10-14T02:54:50.9863887Z  * [new branch]        codex/research-precision-install-linux-evidence-oct11 -> origin/codex/research-precision-install-linux-evidence-oct11
+2026-10-14T02:54:50.9864833Z  * [new branch]        codex/research-protected-command-contract-oct11 -> origin/codex/research-protected-command-contract-oct11
+2026-10-14T02:54:50.9865693Z  * [new branch]        codex/research-publication-installer-oct11 -> origin/codex/research-publication-installer-oct11
+2026-10-14T02:54:50.9866572Z  * [new branch]        codex/research-publication-lineage-oct09 -> origin/codex/research-publication-lineage-oct09
+2026-10-14T02:54:50.9867359Z  * [new branch]        codex/research-publication-native-oct10 -> origin/codex/research-publication-native-oct10
+2026-10-14T02:54:50.9868174Z  * [new branch]        codex/research-publication-source-fence-oct09 -> origin/codex/research-publication-source-fence-oct09
+2026-10-14T02:54:50.9868975Z  * [new branch]        codex/research-publication-view-oct10 -> origin/codex/research-publication-view-oct10
+2026-10-14T02:54:50.9869739Z  * [new branch]        codex/research-release-artifacts-oct10 -> origin/codex/research-release-artifacts-oct10
+2026-10-14T02:54:50.9870583Z  * [new branch]        codex/research-release-fixes-linux-evidence-oct11 -> origin/codex/research-release-fixes-linux-evidence-oct11
+2026-10-14T02:54:50.9871482Z  * [new branch]        codex/research-release-io-linux-evidence-oct11 -> origin/codex/research-release-io-linux-evidence-oct11
+2026-10-14T02:54:50.9872455Z  * [new branch]        codex/research-release-io-repair-oct10 -> origin/codex/research-release-io-repair-oct10
+2026-10-14T02:54:50.9873262Z  * [new branch]        codex/research-release-review-evidence-oct11 -> origin/codex/research-release-review-evidence-oct11
+2026-10-14T02:54:50.9874060Z  * [new branch]        codex/research-review-assignment-oct09 -> origin/codex/research-review-assignment-oct09
+2026-10-14T02:54:50.9874794Z  * [new branch]        codex/research-review-result-oct09 -> origin/codex/research-review-result-oct09
+2026-10-14T02:54:50.9875524Z  * [new branch]        codex/research-saved-observation-oct09 -> origin/codex/research-saved-observation-oct09
+2026-10-14T02:54:50.9876229Z  * [new branch]        codex/research-strategy-agents -> origin/codex/research-strategy-agents
+2026-10-14T02:54:50.9876969Z  * [new branch]        codex/research-working-draft-preview-oct08 -> origin/codex/research-working-draft-preview-oct08
+2026-10-14T02:54:50.9877811Z  * [new branch]        codex/reviewed-linux-artifact-oct11 -> origin/codex/reviewed-linux-artifact-oct11
+2026-10-14T02:54:50.9878558Z  * [new branch]        codex/reviewer-assignment-http-vm-oct09 -> origin/codex/reviewer-assignment-http-vm-oct09
+2026-10-14T02:54:50.9879294Z  * [new branch]        codex/reviewer-result-http-vm-oct09 -> origin/codex/reviewer-result-http-vm-oct09
+2026-10-14T02:54:50.9880005Z  * [new branch]        codex/reviewer-result-pg-stdin-oct09 -> origin/codex/reviewer-result-pg-stdin-oct09
+2026-10-14T02:54:50.9880778Z  * [new branch]        codex/runner-recovery-current-native-oct11 -> origin/codex/runner-recovery-current-native-oct11
+2026-10-14T02:54:50.9881664Z  * [new branch]        codex/runner-trust-final-integration-oct12 -> origin/codex/runner-trust-final-integration-oct12
+2026-10-14T02:54:50.9882353Z  * [new branch]        codex/select-host-pin-v314 -> origin/codex/select-host-pin-v314
+2026-10-14T02:54:50.9882906Z  * [new branch]        codex/slack-health-alert -> origin/codex/slack-health-alert
+2026-10-14T02:54:50.9883555Z  * [new branch]        codex/source-attempt-controller-oct05 -> origin/codex/source-attempt-controller-oct05
+2026-10-14T02:54:50.9884270Z  * [new branch]        codex/source-center-ledger-summary -> origin/codex/source-center-ledger-summary
+2026-10-14T02:54:50.9884952Z  * [new branch]        codex/source-cohort-consumer-oct08 -> origin/codex/source-cohort-consumer-oct08
+2026-10-14T02:54:50.9885697Z  * [new branch]        codex/source-controller-integration-oct05 -> origin/codex/source-controller-integration-oct05
+2026-10-14T02:54:50.9886696Z  * [new branch]        codex/source-led-opportunity-engine-v3-architecture-evidence-v2 -> origin/codex/source-led-opportunity-engine-v3-architecture-evidence-v2
+2026-10-14T02:54:50.9887850Z  * [new branch]        codex/source-led-opportunity-engine-v3-exact-review-evidence -> origin/codex/source-led-opportunity-engine-v3-exact-review-evidence
+2026-10-14T02:54:50.9889039Z  * [new branch]        codex/source-led-opportunity-engine-v3-exact-review-evidence-v3164 -> origin/codex/source-led-opportunity-engine-v3-exact-review-evidence-v3164
+2026-10-14T02:54:50.9890277Z  * [new branch]        codex/source-led-opportunity-engine-v3-requirements-evidence -> origin/codex/source-led-opportunity-engine-v3-requirements-evidence
+2026-10-14T02:54:50.9891432Z  * [new branch]        codex/source-led-opportunity-engine-v3-v318-architecture-evidence -> origin/codex/source-led-opportunity-engine-v3-v318-architecture-evidence
+2026-10-14T02:54:50.9892682Z  * [new branch]        codex/source-led-opportunity-engine-v3-v318-exact-review-evidence -> origin/codex/source-led-opportunity-engine-v3-v318-exact-review-evidence
+2026-10-14T02:54:50.9894033Z  * [new branch]        codex/source-led-opportunity-engine-v3-v318-exact-review-evidence-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v318-exact-review-evidence-archive-20260823
+2026-10-14T02:54:50.9895685Z  * [new branch]        codex/source-led-opportunity-engine-v3-v318-exact-review-evidence-full-reviewed-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v318-exact-review-evidence-full-reviewed-archive-20260823
+2026-10-14T02:54:50.9897517Z  * [new branch]        codex/source-led-opportunity-engine-v3-v318-exact-review-evidence-rebased-first-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v318-exact-review-evidence-rebased-first-archive-20260823
+2026-10-14T02:54:50.9899321Z  * [new branch]        codex/source-led-opportunity-engine-v3-v318-exact-review-evidence-runtime-handoff-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v318-exact-review-evidence-runtime-handoff-archive-20260823
+2026-10-14T02:54:50.9900821Z  * [new branch]        codex/source-led-opportunity-engine-v3-v318-requirements-evidence -> origin/codex/source-led-opportunity-engine-v3-v318-requirements-evidence
+2026-10-14T02:54:50.9902227Z  * [new branch]        codex/source-led-opportunity-engine-v3-v318-retained-ledger-review-evidence -> origin/codex/source-led-opportunity-engine-v3-v318-retained-ledger-review-evidence
+2026-10-14T02:54:50.9903681Z  * [new branch]        codex/source-led-opportunity-engine-v3-v318-retained-ledger-review-evidence-final -> origin/codex/source-led-opportunity-engine-v3-v318-retained-ledger-review-evidence-final
+2026-10-14T02:54:50.9905025Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-architecture-evidence -> origin/codex/source-led-opportunity-engine-v3-v319-architecture-evidence
+2026-10-14T02:54:50.9906422Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-architecture-evidence-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v319-architecture-evidence-archive-20260823
+2026-10-14T02:54:50.9908040Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-architecture-evidence-declarator-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v319-architecture-evidence-declarator-archive-20260823
+2026-10-14T02:54:50.9909770Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-architecture-evidence-product-gate-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v319-architecture-evidence-product-gate-archive-20260823
+2026-10-14T02:54:50.9911268Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-exact-review-evidence -> origin/codex/source-led-opportunity-engine-v3-v319-exact-review-evidence
+2026-10-14T02:54:50.9912874Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-exact-review-evidence-declarator-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v319-exact-review-evidence-declarator-archive-20260823
+2026-10-14T02:54:50.9914621Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-exact-review-evidence-product-gate-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v319-exact-review-evidence-product-gate-archive-20260823
+2026-10-14T02:54:50.9916095Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-requirements-evidence -> origin/codex/source-led-opportunity-engine-v3-v319-requirements-evidence
+2026-10-14T02:54:50.9917525Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-requirements-evidence-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v319-requirements-evidence-archive-20260823
+2026-10-14T02:54:50.9919164Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-requirements-evidence-declarator-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v319-requirements-evidence-declarator-archive-20260823
+2026-10-14T02:54:50.9920907Z  * [new branch]        codex/source-led-opportunity-engine-v3-v319-requirements-evidence-product-gate-archive-20260823 -> origin/codex/source-led-opportunity-engine-v3-v319-requirements-evidence-product-gate-archive-20260823
+2026-10-14T02:54:50.9922442Z  * [new branch]        codex/source-led-opportunity-engine-v3-v31910-exact-review-evidence -> origin/codex/source-led-opportunity-engine-v3-v31910-exact-review-evidence
+2026-10-14T02:54:50.9923664Z  * [new branch]        codex/source-led-opportunity-engine-v3-v31910-rerooted-evidence -> origin/codex/source-led-opportunity-engine-v3-v31910-rerooted-evidence
+2026-10-14T02:54:50.9924852Z  * [new branch]        codex/source-led-opportunity-engine-v3-v320-architecture-evidence -> origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence
+2026-10-14T02:54:50.9926039Z  * [new branch]        codex/source-led-opportunity-engine-v3-v320-exact-review-evidence -> origin/codex/source-led-opportunity-engine-v3-v320-exact-review-evidence
+2026-10-14T02:54:50.9927221Z  * [new branch]        codex/source-led-opportunity-engine-v3-v320-requirements-evidence -> origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence
+2026-10-14T02:54:50.9928068Z  * [new branch]        codex/source-ranking-v2 -> origin/codex/source-ranking-v2
+2026-10-14T02:54:50.9928660Z  * [new branch]        codex/source-research-shadow-v2 -> origin/codex/source-research-shadow-v2
+2026-10-14T02:54:50.9929407Z  * [new branch]        codex/source-symbol-projection-v15 -> origin/codex/source-symbol-projection-v15
+2026-10-14T02:54:50.9930071Z  * [new branch]        codex/source-terminal-labels -> origin/codex/source-terminal-labels
+2026-10-14T02:54:50.9930747Z  * [new branch]        codex/standalone-release-admission-fix -> origin/codex/standalone-release-admission-fix
+2026-10-14T02:54:50.9931542Z  * [new branch]        codex/strategy-audit-integrated-oct05 -> origin/codex/strategy-audit-integrated-oct05
+2026-10-14T02:54:50.9932265Z  * [new branch]        codex/taiwan-market-endpoint-repair -> origin/codex/taiwan-market-endpoint-repair
+2026-10-14T02:54:50.9932900Z  * [new branch]        codex/taiwan-valuation-null -> origin/codex/taiwan-valuation-null
+2026-10-14T02:54:50.9933537Z  * [new branch]        codex/threads-official-readiness-v2 -> origin/codex/threads-official-readiness-v2
+2026-10-14T02:54:50.9934180Z  * [new branch]        codex/threads-readiness-main -> origin/codex/threads-readiness-main
+2026-10-14T02:54:50.9934864Z  * [new branch]        codex/tpex-financial-curl-fallback-v12 -> origin/codex/tpex-financial-curl-fallback-v12
+2026-10-14T02:54:50.9935557Z  * [new branch]        codex/tpex-insider-schema-oct08 -> origin/codex/tpex-insider-schema-oct08
+2026-10-14T02:54:50.9936261Z  * [new branch]        codex/tpex-ranged-official-transport-v11 -> origin/codex/tpex-ranged-official-transport-v11
+2026-10-14T02:54:50.9936906Z  * [new branch]        codex/truth-research-v3 -> origin/codex/truth-research-v3
+2026-10-14T02:54:50.9937424Z  * [new branch]        codex/tw-entry-plan-v1  -> origin/codex/tw-entry-plan-v1
+2026-10-14T02:54:50.9937936Z  * [new branch]        codex/tw-strategy-lab-v1 -> origin/codex/tw-strategy-lab-v1
+2026-10-14T02:54:50.9938534Z  * [new branch]        codex/twse-exchange-report-daily -> origin/codex/twse-exchange-report-daily
+2026-10-14T02:54:50.9939184Z  * [new branch]        codex/twse-infohub-revenue-v17 -> origin/codex/twse-infohub-revenue-v17
+2026-10-14T02:54:50.9939872Z  * [new branch]        codex/twse-market-index-candidate-bars -> origin/codex/twse-market-index-candidate-bars
+2026-10-14T02:54:50.9940743Z  * [new branch]        codex/v314-mixed-envelope-projection-repair -> origin/codex/v314-mixed-envelope-projection-repair
+2026-10-14T02:54:50.9941487Z  * [new branch]        codex/v315-activation-attestation -> origin/codex/v315-activation-attestation
+2026-10-14T02:54:50.9942246Z  * [new branch]        codex/v315-authority-cache-attestation -> origin/codex/v315-authority-cache-attestation
+2026-10-14T02:54:50.9942950Z  * [new branch]        codex/v315-chunk-apply-attestation -> origin/codex/v315-chunk-apply-attestation
+2026-10-14T02:54:50.9943595Z  * [new branch]        codex/v315-chunk-exact-repair -> origin/codex/v315-chunk-exact-repair
+2026-10-14T02:54:50.9944199Z  * [new branch]        codex/v315-final-attestation -> origin/codex/v315-final-attestation
+2026-10-14T02:54:50.9944802Z  * [new branch]        codex/v315-model-home-bootstrap -> origin/codex/v315-model-home-bootstrap
+2026-10-14T02:54:50.9945435Z  * [new branch]        codex/v315-opportunity-recovery -> origin/codex/v315-opportunity-recovery
+2026-10-14T02:54:50.9946007Z  * [new branch]        codex/v316-actionability -> origin/codex/v316-actionability
+2026-10-14T02:54:50.9946569Z  * [new branch]        codex/v316-jsonb-resume-repair -> origin/codex/v316-jsonb-resume-repair
+2026-10-14T02:54:50.9947191Z  * [new branch]        codex/v316-runtime-resume-repair -> origin/codex/v316-runtime-resume-repair
+2026-10-14T02:54:50.9947814Z  * [new branch]        codex/v3161-heartbeat-release -> origin/codex/v3161-heartbeat-release
+2026-10-14T02:54:50.9948473Z  * [new branch]        codex/v3161-thread-heartbeat-release -> origin/codex/v3161-thread-heartbeat-release
+2026-10-14T02:54:50.9949201Z  * [new branch]        codex/v31610-same-transaction-visibility -> origin/codex/v31610-same-transaction-visibility
+2026-10-14T02:54:50.9949888Z  * [new branch]        codex/v31611-calendar-recovery -> origin/codex/v31611-calendar-recovery
+2026-10-14T02:54:50.9950592Z  * [new branch]        codex/v31611-resolver-owner-repair -> origin/codex/v31611-resolver-owner-repair
+2026-10-14T02:54:50.9951244Z  * [new branch]        codex/v31611-schema-owner-repair -> origin/codex/v31611-schema-owner-repair
+2026-10-14T02:54:50.9951979Z  * [new branch]        codex/v31612-exact-evidence -> origin/codex/v31612-exact-evidence
+2026-10-14T02:54:50.9952569Z  * [new branch]        codex/v31612-fact-plane-bound -> origin/codex/v31612-fact-plane-bound
+2026-10-14T02:54:50.9953251Z  * [new branch]        codex/v31612-owner-transfer-evidence -> origin/codex/v31612-owner-transfer-evidence
+2026-10-14T02:54:50.9953937Z  * [new branch]        codex/v31612-owner-transfer-repair -> origin/codex/v31612-owner-transfer-repair
+2026-10-14T02:54:50.9954626Z  * [new branch]        codex/v31612-reviewed-apply-evidence -> origin/codex/v31612-reviewed-apply-evidence
+2026-10-14T02:54:50.9955342Z  * [new branch]        codex/v31612-reviewed-apply-repair-v2 -> origin/codex/v31612-reviewed-apply-repair-v2
+2026-10-14T02:54:50.9956099Z  * [new branch]        codex/v31613-valuation-dependency-repair -> origin/codex/v31613-valuation-dependency-repair
+2026-10-14T02:54:50.9956895Z  * [new branch]        codex/v31614-projection-size-repair -> origin/codex/v31614-projection-size-repair
+2026-10-14T02:54:50.9957575Z  * [new branch]        codex/v31615-analysis-payload-reuse -> origin/codex/v31615-analysis-payload-reuse
+2026-10-14T02:54:50.9958302Z  * [new branch]        codex/v31616-financial-fact-recollection -> origin/codex/v31616-financial-fact-recollection
+2026-10-14T02:54:50.9959086Z  * [new branch]        codex/v31616-financial-fact-recollection-v2 -> origin/codex/v31616-financial-fact-recollection-v2
+2026-10-14T02:54:50.9959858Z  * [new branch]        codex/v31617-decision-material-identity -> origin/codex/v31617-decision-material-identity
+2026-10-14T02:54:50.9960591Z  * [new branch]        codex/v31618-analysis-payload-evidence -> origin/codex/v31618-analysis-payload-evidence
+2026-10-14T02:54:50.9961357Z  * [new branch]        codex/v31618-analysis-payload-exact-reuse -> origin/codex/v31618-analysis-payload-exact-reuse
+2026-10-14T02:54:50.9962270Z  * [new branch]        codex/v31619-runtime-health-bootstrap-v2 -> origin/codex/v31619-runtime-health-bootstrap-v2
+2026-10-14T02:54:50.9962957Z  * [new branch]        codex/v3162-activation-window -> origin/codex/v3162-activation-window
+2026-10-14T02:54:50.9963629Z  * [new branch]        codex/v3162-activation-window-canonical -> origin/codex/v3162-activation-window-canonical
+2026-10-14T02:54:50.9964303Z  * [new branch]        codex/v31620-evaluation-clock -> origin/codex/v31620-evaluation-clock
+2026-10-14T02:54:50.9964920Z  * [new branch]        codex/v31620-evaluation-clock-v2 -> origin/codex/v31620-evaluation-clock-v2
+2026-10-14T02:54:50.9965546Z  * [new branch]        codex/v31621-frozen-acquisition -> origin/codex/v31621-frozen-acquisition
+2026-10-14T02:54:50.9966414Z  * [new branch]        codex/v31621-mops-roc-year -> origin/codex/v31621-mops-roc-year
+2026-10-14T02:54:50.9967197Z  * [new branch]        codex/v31621-oracle-cache-bootstrap2 -> origin/codex/v31621-oracle-cache-bootstrap2
+2026-10-14T02:54:50.9968226Z  * [new branch]        codex/v31621-production-cardinality-closure-v2 -> origin/codex/v31621-production-cardinality-closure-v2
+2026-10-14T02:54:50.9969051Z  * [new branch]        codex/v31621-production-cardinality-final -> origin/codex/v31621-production-cardinality-final
+2026-10-14T02:54:50.9969847Z  * [new branch]        codex/v31621-production-cardinality-release -> origin/codex/v31621-production-cardinality-release
+2026-10-14T02:54:50.9970649Z  * [new branch]        codex/v31621-production-cardinality-repair -> origin/codex/v31621-production-cardinality-repair
+2026-10-14T02:54:50.9971377Z  * [new branch]        codex/v31621-projection-evaluation -> origin/codex/v31621-projection-evaluation
+2026-10-14T02:54:50.9972139Z  * [new branch]        codex/v31621-release-state-evidence -> origin/codex/v31621-release-state-evidence
+2026-10-14T02:54:50.9972929Z  * [new branch]        codex/v3163-ingestion-retry-integrity -> origin/codex/v3163-ingestion-retry-integrity
+2026-10-14T02:54:50.9973604Z  * [new branch]        codex/v3164-heartbeat-recovery -> origin/codex/v3164-heartbeat-recovery
+2026-10-14T02:54:50.9974229Z  * [new branch]        codex/v3165-ephemeral-heartbeat -> origin/codex/v3165-ephemeral-heartbeat
+2026-10-14T02:54:50.9974867Z  * [new branch]        codex/v3166-claim-handoff-source -> origin/codex/v3166-claim-handoff-source
+2026-10-14T02:54:50.9975504Z  * [new branch]        codex/v3167-claim-timeout-source -> origin/codex/v3167-claim-timeout-source
+2026-10-14T02:54:50.9976166Z  * [new branch]        codex/v3168-ingestion-lease-repair -> origin/codex/v3168-ingestion-lease-repair
+2026-10-14T02:54:50.9976857Z  * [new branch]        codex/v3169-transaction-time-release -> origin/codex/v3169-transaction-time-release
+2026-10-14T02:54:50.9977596Z  * [new branch]        codex/v317-protected-host-compatibility -> origin/codex/v317-protected-host-compatibility
+2026-10-14T02:54:50.9978323Z  * [new branch]        codex/v317-source-led-actionability -> origin/codex/v317-source-led-actionability
+2026-10-14T02:54:50.9978998Z  * [new branch]        codex/v318-authority-digest-repair -> origin/codex/v318-authority-digest-repair
+2026-10-14T02:54:50.9979599Z  * [new branch]        codex/v318-host-bootstrap -> origin/codex/v318-host-bootstrap
+2026-10-14T02:54:50.9980217Z  * [new branch]        codex/v318-host-pin-closure-20260823 -> origin/codex/v318-host-pin-closure-20260823
+2026-10-14T02:54:50.9981005Z  * [new branch]        codex/v318-idle-pool-error-containment-20260823 -> origin/codex/v318-idle-pool-error-containment-20260823
+2026-10-14T02:54:50.9981893Z  * [new branch]        codex/v318-pooler-handoff-repair-20260823 -> origin/codex/v318-pooler-handoff-repair-20260823
+2026-10-14T02:54:50.9982717Z  * [new branch]        codex/v318-pooler-rpc-deadline-repair-20260823 -> origin/codex/v318-pooler-rpc-deadline-repair-20260823
+2026-10-14T02:54:50.9983464Z  * [new branch]        codex/v318-protected-bootstrap -> origin/codex/v318-protected-bootstrap
+2026-10-14T02:54:50.9984213Z  * [new branch]        codex/v318-release-candidate-20260822 -> origin/codex/v318-release-candidate-20260822
+2026-10-14T02:54:50.9984959Z  * [new branch]        codex/v318-retention-enum-repair-20260823 -> origin/codex/v318-retention-enum-repair-20260823
+2026-10-14T02:54:50.9985799Z  * [new branch]        codex/v318-retention-enum-repair-rebased-20260823 -> origin/codex/v318-retention-enum-repair-rebased-20260823
+2026-10-14T02:54:50.9986595Z  * [new branch]        codex/v318-source-led-research-final -> origin/codex/v318-source-led-research-final
+2026-10-14T02:54:50.9987326Z  * [new branch]        codex/v319-acquire-timeout-fix-20260827 -> origin/codex/v319-acquire-timeout-fix-20260827
+2026-10-14T02:54:50.9988103Z  * [new branch]        codex/v319-activation-heartbeat-fix-20260827 -> origin/codex/v319-activation-heartbeat-fix-20260827
+2026-10-14T02:54:50.9988930Z  * [new branch]        codex/v319-completion-heartbeat-fix-20260827 -> origin/codex/v319-completion-heartbeat-fix-20260827
+2026-10-14T02:54:50.9989751Z  * [new branch]        codex/v319-decision-identity-contract-source -> origin/codex/v319-decision-identity-contract-source
+2026-10-14T02:54:50.9990624Z  * [new branch]        codex/v319-decision-identity-exact-review-evidence -> origin/codex/v319-decision-identity-exact-review-evidence
+2026-10-14T02:54:50.9991444Z  * [new branch]        codex/v319-declarator-closure-20260823 -> origin/codex/v319-declarator-closure-20260823
+2026-10-14T02:54:50.9992448Z  * [new branch]        codex/v319-diagnostic-contract-20260827 -> origin/codex/v319-diagnostic-contract-20260827
+2026-10-14T02:54:50.9993310Z  * [new branch]        codex/v319-diagnostic-contract-exact-review-evidence -> origin/codex/v319-diagnostic-contract-exact-review-evidence
+2026-10-14T02:54:50.9994159Z  * [new branch]        codex/v319-doctor-identity-fix-20260827 -> origin/codex/v319-doctor-identity-fix-20260827
+2026-10-14T02:54:50.9995026Z  * [new branch]        codex/v319-fundamental-evidence-time-20260827 -> origin/codex/v319-fundamental-evidence-time-20260827
+2026-10-14T02:54:50.9995747Z  * [new branch]        codex/v319-host-bootstrap-0150 -> origin/codex/v319-host-bootstrap-0150
+2026-10-14T02:54:50.9996383Z  * [new branch]        codex/v319-migration-owner-repair -> origin/codex/v319-migration-owner-repair
+2026-10-14T02:54:50.9997149Z  * [new branch]        codex/v319-projection-dossier-contract-20260827 -> origin/codex/v319-projection-dossier-contract-20260827
+2026-10-14T02:54:50.9998064Z  * [new branch]        codex/v319-projection-dossier-exact-review-evidence -> origin/codex/v319-projection-dossier-exact-review-evidence
+2026-10-14T02:54:50.9998870Z  * [new branch]        codex/v319-protected-evidence-root -> origin/codex/v319-protected-evidence-root
+2026-10-14T02:54:50.9999611Z  * [new branch]        codex/v319-provider-freeze-timeout-20260827 -> origin/codex/v319-provider-freeze-timeout-20260827
+2026-10-14T02:54:51.0000408Z  * [new branch]        codex/v319-readonly-bootstrap-fix-20260827 -> origin/codex/v319-readonly-bootstrap-fix-20260827
+2026-10-14T02:54:51.0001202Z  * [new branch]        codex/v319-release-final-evidence-20260823 -> origin/codex/v319-release-final-evidence-20260823
+2026-10-14T02:54:51.0002122Z  * [new branch]        codex/v319-runtime-policy-canonical-repair-20260826 -> origin/codex/v319-runtime-policy-canonical-repair-20260826
+2026-10-14T02:54:51.0002984Z  * [new branch]        codex/v31910-retained-candidate-authority -> origin/codex/v31910-retained-candidate-authority
+2026-10-14T02:54:51.0003802Z  * [new branch]        codex/v31911-full-retained-candidate-authority -> origin/codex/v31911-full-retained-candidate-authority
+2026-10-14T02:54:51.0004751Z  * [new branch]        codex/v31911-full-retained-candidate-authority-evidence -> origin/codex/v31911-full-retained-candidate-authority-evidence
+2026-10-14T02:54:51.0005650Z  * [new branch]        codex/v31912-jsonb-cardinality-exact-review -> origin/codex/v31912-jsonb-cardinality-exact-review
+2026-10-14T02:54:51.0006458Z  * [new branch]        codex/v31912-jsonb-cardinality-fix -> origin/codex/v31912-jsonb-cardinality-fix
+2026-10-14T02:54:51.0007137Z  * [new branch]        codex/v31913-terminal-health-reroot -> origin/codex/v31913-terminal-health-reroot
+2026-10-14T02:54:51.0007809Z  * [new branch]        codex/v31914-detail-roundtrip-fix -> origin/codex/v31914-detail-roundtrip-fix
+2026-10-14T02:54:51.0008465Z  * [new branch]        codex/v31915-ui-diagnostic-labels -> origin/codex/v31915-ui-diagnostic-labels
+2026-10-14T02:54:51.0009103Z  * [new branch]        codex/v31916-claim-lease-refresh -> origin/codex/v31916-claim-lease-refresh
+2026-10-14T02:54:51.0009707Z  * [new branch]        codex/v31916-release-closure -> origin/codex/v31916-release-closure
+2026-10-14T02:54:51.0010327Z  * [new branch]        codex/v31916-release-closure-exact -> origin/codex/v31916-release-closure-exact
+2026-10-14T02:54:51.0011018Z  * [new branch]        codex/v3194-reviewed-migration-replay -> origin/codex/v3194-reviewed-migration-replay
+2026-10-14T02:54:51.0011877Z  * [new branch]        codex/v3194-reviewed-migration-replay-evidence -> origin/codex/v3194-reviewed-migration-replay-evidence
+2026-10-14T02:54:51.0012739Z  * [new branch]        codex/v3195-migration-postcondition-authority -> origin/codex/v3195-migration-postcondition-authority
+2026-10-14T02:54:51.0013659Z  * [new branch]        codex/v3195-migration-postcondition-authority-evidence -> origin/codex/v3195-migration-postcondition-authority-evidence
+2026-10-14T02:54:51.0014565Z  * [new branch]        codex/v3196-evaluation-schema-compatibility -> origin/codex/v3196-evaluation-schema-compatibility
+2026-10-14T02:54:51.0015343Z  * [new branch]        codex/v3197-reused-acquisition-lineage -> origin/codex/v3197-reused-acquisition-lineage
+2026-10-14T02:54:51.0016031Z  * [new branch]        codex/v3198-launchctl-stale-exit -> origin/codex/v3198-launchctl-stale-exit
+2026-10-14T02:54:51.0016749Z  * [new branch]        codex/v3199-registration-health-separation -> origin/codex/v3199-registration-health-separation
+2026-10-14T02:54:51.0017681Z  * [new branch]        codex/v320-active-graph-bootstrap -> origin/codex/v320-active-graph-bootstrap
+2026-10-14T02:54:51.0018368Z  * [new branch]        codex/v320-catalog-graph-bootstrap -> origin/codex/v320-catalog-graph-bootstrap
+2026-10-14T02:54:51.0018958Z  * [new branch]        codex/v320-kol-first    -> origin/codex/v320-kol-first
+2026-10-14T02:54:51.0019553Z  * [new branch]        codex/v320-protected-gate-bootstrap -> origin/codex/v320-protected-gate-bootstrap
+2026-10-14T02:54:51.0020294Z  * [new branch]        codex/v320-root-host-preflight-bootstrap -> origin/codex/v320-root-host-preflight-bootstrap
+2026-10-14T02:54:51.0021038Z  * [new branch]        codex/v320-runtime-circularity-final -> origin/codex/v320-runtime-circularity-final
+2026-10-14T02:54:51.0021808Z  * [new branch]        codex/v320-runtime-circularity-fix -> origin/codex/v320-runtime-circularity-fix
+2026-10-14T02:54:51.0022484Z  * [new branch]        codex/v320-runtime-circularity-v2 -> origin/codex/v320-runtime-circularity-v2
+2026-10-14T02:54:51.0023140Z  * [new branch]        codex/v320-runtime-circularity-v3 -> origin/codex/v320-runtime-circularity-v3
+2026-10-14T02:54:51.0023770Z  * [new branch]        codex/valuation-history-cache -> origin/codex/valuation-history-cache
+2026-10-14T02:54:51.0024341Z  * [new branch]        codex/vps-runtime-wiring -> origin/codex/vps-runtime-wiring
+2026-10-14T02:54:51.0024903Z  * [new branch]        codex/vps-source-resilience -> origin/codex/vps-source-resilience
+2026-10-14T02:54:51.0025473Z  * [new branch]        docs/codex-handoff-20260927 -> origin/docs/codex-handoff-20260927
+2026-10-14T02:54:51.0026434Z  * [new branch]        evidence/archive-v320-exact-review-a5c8b7021908fa1f6cd3f737ffeb37da84b90520 -> origin/evidence/archive-v320-exact-review-a5c8b7021908fa1f6cd3f737ffeb37da84b90520
+2026-10-14T02:54:51.0027747Z  * [new branch]        evidence/archive-v320-exact-review-ab1b4c2a2d7842a24875c0b22a4e20b152b00b7b -> origin/evidence/archive-v320-exact-review-ab1b4c2a2d7842a24875c0b22a4e20b152b00b7b
+2026-10-14T02:54:51.0029364Z  * [new branch]        evidence/archive/source-led-opportunity-v3-v319-architecture-pre-v320-bootstrap-graph-swap-20260829 -> origin/evidence/archive/source-led-opportunity-v3-v319-architecture-pre-v320-bootstrap-graph-swap-20260829
+2026-10-14T02:54:51.0031038Z  * [new branch]        evidence/archive/source-led-opportunity-v3-v319-exact-review-pre-v320-bootstrap-20260829 -> origin/evidence/archive/source-led-opportunity-v3-v319-exact-review-pre-v320-bootstrap-20260829
+2026-10-14T02:54:51.0032781Z  * [new branch]        evidence/archive/source-led-opportunity-v3-v319-requirements-pre-v320-bootstrap-graph-swap-20260829 -> origin/evidence/archive/source-led-opportunity-v3-v319-requirements-pre-v320-bootstrap-graph-swap-20260829
+2026-10-14T02:54:51.0034018Z  * [new branch]        evidence/chat-20260926-c3522ea-results -> origin/evidence/chat-20260926-c3522ea-results
+2026-10-14T02:54:51.0034760Z  * [new branch]        evidence/chat-owner-authorized-20260926 -> origin/evidence/chat-owner-authorized-20260926
+2026-10-14T02:54:51.0035540Z  * [new branch]        evidence/chat-protected-progress-20260927 -> origin/evidence/chat-protected-progress-20260927
+2026-10-14T02:54:51.0036383Z  * [new branch]        evidence/source-led-opportunity-v3-architecture -> origin/evidence/source-led-opportunity-v3-architecture
+2026-10-14T02:54:51.0037632Z  * [new branch]        evidence/source-led-opportunity-v3-architecture-01599c20d11044c0d0bac730df393c5c383ff78c -> origin/evidence/source-led-opportunity-v3-architecture-01599c20d11044c0d0bac730df393c5c383ff78c
+2026-10-14T02:54:51.0038939Z  * [new branch]        evidence/source-led-opportunity-v3-architecture-4b1e75f5 -> origin/evidence/source-led-opportunity-v3-architecture-4b1e75f5
+2026-10-14T02:54:51.0039985Z  * [new branch]        evidence/source-led-opportunity-v3-architecture-6ed9d39a -> origin/evidence/source-led-opportunity-v3-architecture-6ed9d39a
+2026-10-14T02:54:51.0041127Z  * [new branch]        evidence/source-led-opportunity-v3-architecture-c7b4776-final -> origin/evidence/source-led-opportunity-v3-architecture-c7b4776-final
+2026-10-14T02:54:51.0042311Z  * [new branch]        evidence/source-led-opportunity-v3-architecture-c7b4776-final2 -> origin/evidence/source-led-opportunity-v3-architecture-c7b4776-final2
+2026-10-14T02:54:51.0043384Z  * [new branch]        evidence/source-led-opportunity-v3-architecture-f0a7b874 -> origin/evidence/source-led-opportunity-v3-architecture-f0a7b874
+2026-10-14T02:54:51.0044551Z  * [new branch]        evidence/source-led-opportunity-v3-architecture-gate-bootstrap-20260906 -> origin/evidence/source-led-opportunity-v3-architecture-gate-bootstrap-20260906
+2026-10-14T02:54:51.0045779Z  * [new branch]        evidence/source-led-opportunity-v3-architecture-pr279-graph -> origin/evidence/source-led-opportunity-v3-architecture-pr279-graph
+2026-10-14T02:54:51.0046866Z  * [new branch]        evidence/source-led-opportunity-v3-architecture-v318-digest -> origin/evidence/source-led-opportunity-v3-architecture-v318-digest
+2026-10-14T02:54:51.0047945Z  * [new branch]        evidence/source-led-opportunity-v3-architecture-v325-digest -> origin/evidence/source-led-opportunity-v3-architecture-v325-digest
+2026-10-14T02:54:51.0049050Z  * [new branch]        evidence/source-led-opportunity-v3-contabo-architecture-f569888 -> origin/evidence/source-led-opportunity-v3-contabo-architecture-f569888
+2026-10-14T02:54:51.0050196Z  * [new branch]        evidence/source-led-opportunity-v3-contabo-requirements-f569888 -> origin/evidence/source-led-opportunity-v3-contabo-requirements-f569888
+2026-10-14T02:54:51.0051205Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review -> origin/evidence/source-led-opportunity-v3-exact-review
+2026-10-14T02:54:51.0052526Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-00bff955e74f01e849aa6bd32f135f6f8ce85796 -> origin/evidence/source-led-opportunity-v3-exact-review-00bff955e74f01e849aa6bd32f135f6f8ce85796
+2026-10-14T02:54:51.0054159Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-03254aac4ca67f8900a2d5fa613734e781a1172f -> origin/evidence/source-led-opportunity-v3-exact-review-03254aac4ca67f8900a2d5fa613734e781a1172f
+2026-10-14T02:54:51.0055723Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-03305487e83add2ca4f8b0686a3e3e32aa322d75 -> origin/evidence/source-led-opportunity-v3-exact-review-03305487e83add2ca4f8b0686a3e3e32aa322d75
+2026-10-14T02:54:51.0057288Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-03431bce75fa3e74dc0945ebc36eeaac251d754d -> origin/evidence/source-led-opportunity-v3-exact-review-03431bce75fa3e74dc0945ebc36eeaac251d754d
+2026-10-14T02:54:51.0058864Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-042fb5c4a3eec3e7c079ffd83ff65ba6333c8dd7 -> origin/evidence/source-led-opportunity-v3-exact-review-042fb5c4a3eec3e7c079ffd83ff65ba6333c8dd7
+2026-10-14T02:54:51.0060433Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-04ac04f203dfa9da1671ca6c02f2d44afae9d7b1 -> origin/evidence/source-led-opportunity-v3-exact-review-04ac04f203dfa9da1671ca6c02f2d44afae9d7b1
+2026-10-14T02:54:51.0062064Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-07c556f5bbb4c9371e13310e314a3ffc15e5d564 -> origin/evidence/source-led-opportunity-v3-exact-review-07c556f5bbb4c9371e13310e314a3ffc15e5d564
+2026-10-14T02:54:51.0063616Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-07fbf68eee2ee86e8f6c987cf79350dda8749a27 -> origin/evidence/source-led-opportunity-v3-exact-review-07fbf68eee2ee86e8f6c987cf79350dda8749a27
+2026-10-14T02:54:51.0065180Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-08d26fcec8cf8c5ac7648f230b0fdf82666f0f72 -> origin/evidence/source-led-opportunity-v3-exact-review-08d26fcec8cf8c5ac7648f230b0fdf82666f0f72
+2026-10-14T02:54:51.0066800Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-0b0592362622c6f8081574223b321274112eff6f -> origin/evidence/source-led-opportunity-v3-exact-review-0b0592362622c6f8081574223b321274112eff6f
+2026-10-14T02:54:51.0068351Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-0dbc1d85d11a9bd16457a380b42cebfcf2f93b6a -> origin/evidence/source-led-opportunity-v3-exact-review-0dbc1d85d11a9bd16457a380b42cebfcf2f93b6a
+2026-10-14T02:54:51.0069909Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-0fa9aeef745417120d7ffd7f343651aa4a33e571 -> origin/evidence/source-led-opportunity-v3-exact-review-0fa9aeef745417120d7ffd7f343651aa4a33e571
+2026-10-14T02:54:51.0071467Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-110a7197afadfca6fd4f570c68a9c216d11aa9b4 -> origin/evidence/source-led-opportunity-v3-exact-review-110a7197afadfca6fd4f570c68a9c216d11aa9b4
+2026-10-14T02:54:51.0073185Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-120e309c3c0d7722f48c02a9fa53de6ebe8870b6 -> origin/evidence/source-led-opportunity-v3-exact-review-120e309c3c0d7722f48c02a9fa53de6ebe8870b6
+2026-10-14T02:54:51.0074736Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-120fd35fb215e709adc3299c6367d6b0a68b356f -> origin/evidence/source-led-opportunity-v3-exact-review-120fd35fb215e709adc3299c6367d6b0a68b356f
+2026-10-14T02:54:51.0076291Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-128c01109bafadb298bf0df71238dd2b08e0f5cb -> origin/evidence/source-led-opportunity-v3-exact-review-128c01109bafadb298bf0df71238dd2b08e0f5cb
+2026-10-14T02:54:51.0077854Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-13692be1fe7e951edd8dadb161116a712bd0ea0b -> origin/evidence/source-led-opportunity-v3-exact-review-13692be1fe7e951edd8dadb161116a712bd0ea0b
+2026-10-14T02:54:51.0079420Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-18bed007486a81db4a4c1a7ee144d0b6c5b7a88f -> origin/evidence/source-led-opportunity-v3-exact-review-18bed007486a81db4a4c1a7ee144d0b6c5b7a88f
+2026-10-14T02:54:51.0081047Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-19cd27d6245c70c9b355a3b449134aa3464f7490 -> origin/evidence/source-led-opportunity-v3-exact-review-19cd27d6245c70c9b355a3b449134aa3464f7490
+2026-10-14T02:54:51.0083557Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-19f81c0d63c256f95068ed4aee24d12aaf4d790b -> origin/evidence/source-led-opportunity-v3-exact-review-19f81c0d63c256f95068ed4aee24d12aaf4d790b
+2026-10-14T02:54:51.0085121Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-1a79e530b5dcbbb31590fa968a8429b04061ed32 -> origin/evidence/source-led-opportunity-v3-exact-review-1a79e530b5dcbbb31590fa968a8429b04061ed32
+2026-10-14T02:54:51.0086667Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-1b732a216b26dd15009e29a583521a373cf5f6cf -> origin/evidence/source-led-opportunity-v3-exact-review-1b732a216b26dd15009e29a583521a373cf5f6cf
+2026-10-14T02:54:51.0088226Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-1b90e13cb047ee9e44a654f00f549f53f77c166e -> origin/evidence/source-led-opportunity-v3-exact-review-1b90e13cb047ee9e44a654f00f549f53f77c166e
+2026-10-14T02:54:51.0089785Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-1befd213449e515ac39b203d3f02392648eaf675 -> origin/evidence/source-led-opportunity-v3-exact-review-1befd213449e515ac39b203d3f02392648eaf675
+2026-10-14T02:54:51.0091330Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-1f154fe022d7dd1df5a7965ff3fb3366ee071586 -> origin/evidence/source-led-opportunity-v3-exact-review-1f154fe022d7dd1df5a7965ff3fb3366ee071586
+2026-10-14T02:54:51.0092962Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-21e7eb316bfd854e0ad5e7426dab561cc5f1232e -> origin/evidence/source-led-opportunity-v3-exact-review-21e7eb316bfd854e0ad5e7426dab561cc5f1232e
+2026-10-14T02:54:51.0094603Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-23ba3bc47608d8276e03800086dd43984c2814ee -> origin/evidence/source-led-opportunity-v3-exact-review-23ba3bc47608d8276e03800086dd43984c2814ee
+2026-10-14T02:54:51.0096560Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-24276199bb71aa28421ebabef1040824bcedfd26 -> origin/evidence/source-led-opportunity-v3-exact-review-24276199bb71aa28421ebabef1040824bcedfd26
+2026-10-14T02:54:51.0098115Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-245a9d779c7936c380178ab673195cab125db19c -> origin/evidence/source-led-opportunity-v3-exact-review-245a9d779c7936c380178ab673195cab125db19c
+2026-10-14T02:54:51.0099659Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-24be68ba5ff00989806883aeaa92fee28e589818 -> origin/evidence/source-led-opportunity-v3-exact-review-24be68ba5ff00989806883aeaa92fee28e589818
+2026-10-14T02:54:51.0101212Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-2962a192eba2eb58f65d218aa0170850f4373ccb -> origin/evidence/source-led-opportunity-v3-exact-review-2962a192eba2eb58f65d218aa0170850f4373ccb
+2026-10-14T02:54:51.0103003Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-299707cd4ede3711f061bafbd7ee2460260cb21d -> origin/evidence/source-led-opportunity-v3-exact-review-299707cd4ede3711f061bafbd7ee2460260cb21d
+2026-10-14T02:54:51.0104590Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-2a6281d50ea10248bcbaeb5bfd6e9f40ee8eb393 -> origin/evidence/source-led-opportunity-v3-exact-review-2a6281d50ea10248bcbaeb5bfd6e9f40ee8eb393
+2026-10-14T02:54:51.0106184Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-2e078dfdd74272d3d50dffdd4cc6c14df3152c78 -> origin/evidence/source-led-opportunity-v3-exact-review-2e078dfdd74272d3d50dffdd4cc6c14df3152c78
+2026-10-14T02:54:51.0107750Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-2e66f189e344431500c99d6cdb09add47c0e15ad -> origin/evidence/source-led-opportunity-v3-exact-review-2e66f189e344431500c99d6cdb09add47c0e15ad
+2026-10-14T02:54:51.0109432Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-30f4f596cf42c3f2d19da4edbe7722f398b603e4 -> origin/evidence/source-led-opportunity-v3-exact-review-30f4f596cf42c3f2d19da4edbe7722f398b603e4
+2026-10-14T02:54:51.0110997Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3338160a43dd9c23e4ea4b079fd7761501c29786 -> origin/evidence/source-led-opportunity-v3-exact-review-3338160a43dd9c23e4ea4b079fd7761501c29786
+2026-10-14T02:54:51.0112775Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-341c9919407ea43fa9f455bd38b5ff95d25507c5 -> origin/evidence/source-led-opportunity-v3-exact-review-341c9919407ea43fa9f455bd38b5ff95d25507c5
+2026-10-14T02:54:51.0114336Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3501fdbc3d6d8f63c0df8a72a3f5a129fccacc9a -> origin/evidence/source-led-opportunity-v3-exact-review-3501fdbc3d6d8f63c0df8a72a3f5a129fccacc9a
+2026-10-14T02:54:51.0115916Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3520da3f47795d092d51e0fbe1b7252a9a7b4694 -> origin/evidence/source-led-opportunity-v3-exact-review-3520da3f47795d092d51e0fbe1b7252a9a7b4694
+2026-10-14T02:54:51.0117479Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-355ccfb4a68ba68e026867d4f5021eb2110a4c75 -> origin/evidence/source-led-opportunity-v3-exact-review-355ccfb4a68ba68e026867d4f5021eb2110a4c75
+2026-10-14T02:54:51.0119027Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3734e3cab60997501c20087eba61147dfd1d9b3b -> origin/evidence/source-led-opportunity-v3-exact-review-3734e3cab60997501c20087eba61147dfd1d9b3b
+2026-10-14T02:54:51.0120577Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-373683b4aeec397c82a261516ffb1dfa0f7a00e1 -> origin/evidence/source-led-opportunity-v3-exact-review-373683b4aeec397c82a261516ffb1dfa0f7a00e1
+2026-10-14T02:54:51.0122307Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3793f402bcd091e4def3258a78c38a66cbc53299 -> origin/evidence/source-led-opportunity-v3-exact-review-3793f402bcd091e4def3258a78c38a66cbc53299
+2026-10-14T02:54:51.0123872Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-37c7366b2108d9746fefd0bc94181b9052c5aeaf -> origin/evidence/source-led-opportunity-v3-exact-review-37c7366b2108d9746fefd0bc94181b9052c5aeaf
+2026-10-14T02:54:51.0125435Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3874b3a67aca01db79f32d4ec7acdeee0675c96b -> origin/evidence/source-led-opportunity-v3-exact-review-3874b3a67aca01db79f32d4ec7acdeee0675c96b
+2026-10-14T02:54:51.0126988Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3879f770bb151b04a62d6017ce9c2753cc1c4dc2 -> origin/evidence/source-led-opportunity-v3-exact-review-3879f770bb151b04a62d6017ce9c2753cc1c4dc2
+2026-10-14T02:54:51.0128546Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3964800671147b338f3e50cded57564461baaa78 -> origin/evidence/source-led-opportunity-v3-exact-review-3964800671147b338f3e50cded57564461baaa78
+2026-10-14T02:54:51.0130206Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd -> origin/evidence/source-led-opportunity-v3-exact-review-399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd
+2026-10-14T02:54:51.0132046Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-39dea5bc43dc2a9334812bcc00632b1f709f348a -> origin/evidence/source-led-opportunity-v3-exact-review-39dea5bc43dc2a9334812bcc00632b1f709f348a
+2026-10-14T02:54:51.0133631Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3a28fb7116c3869c795b12afab98368e7ed2f8f0 -> origin/evidence/source-led-opportunity-v3-exact-review-3a28fb7116c3869c795b12afab98368e7ed2f8f0
+2026-10-14T02:54:51.0135220Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3b6e87bd4aa015190e1b293e68d799dbc80fe605 -> origin/evidence/source-led-opportunity-v3-exact-review-3b6e87bd4aa015190e1b293e68d799dbc80fe605
+2026-10-14T02:54:51.0136808Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3d87824ebb24d2e8c3344f28fd413c4e80132844 -> origin/evidence/source-led-opportunity-v3-exact-review-3d87824ebb24d2e8c3344f28fd413c4e80132844
+2026-10-14T02:54:51.0138474Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3da42c12c964b880b4e1bc95a3864db6406f21e0 -> origin/evidence/source-led-opportunity-v3-exact-review-3da42c12c964b880b4e1bc95a3864db6406f21e0
+2026-10-14T02:54:51.0140041Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3e2952a2cfe2da11c81ae2f9f3a2c74d7c3ab8ab -> origin/evidence/source-led-opportunity-v3-exact-review-3e2952a2cfe2da11c81ae2f9f3a2c74d7c3ab8ab
+2026-10-14T02:54:51.0141769Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3e57075fc0607bdba818ffd42cc633d590521696 -> origin/evidence/source-led-opportunity-v3-exact-review-3e57075fc0607bdba818ffd42cc633d590521696
+2026-10-14T02:54:51.0143982Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3ea854164269283480429c384e5e4176734d132c -> origin/evidence/source-led-opportunity-v3-exact-review-3ea854164269283480429c384e5e4176734d132c
+2026-10-14T02:54:51.0145538Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3eb087aca2aabc5307fc83c35351d18f73216bb0 -> origin/evidence/source-led-opportunity-v3-exact-review-3eb087aca2aabc5307fc83c35351d18f73216bb0
+2026-10-14T02:54:51.0147099Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-3fc35e4edc1c70b874b2654b1c41edc4c55e3233 -> origin/evidence/source-led-opportunity-v3-exact-review-3fc35e4edc1c70b874b2654b1c41edc4c55e3233
+2026-10-14T02:54:51.0148673Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-41b1f4ccd73bb9e1377674eb3ac87c954271d00b -> origin/evidence/source-led-opportunity-v3-exact-review-41b1f4ccd73bb9e1377674eb3ac87c954271d00b
+2026-10-14T02:54:51.0150323Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-449effb60d4138ca8a8982942264d7220faf7f69 -> origin/evidence/source-led-opportunity-v3-exact-review-449effb60d4138ca8a8982942264d7220faf7f69
+2026-10-14T02:54:51.0152158Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-47f96b9852d255903c420eb7807ca58e34a8f717 -> origin/evidence/source-led-opportunity-v3-exact-review-47f96b9852d255903c420eb7807ca58e34a8f717
+2026-10-14T02:54:51.0153710Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-4864777f258696710519d153d867f8caecf9f67c -> origin/evidence/source-led-opportunity-v3-exact-review-4864777f258696710519d153d867f8caecf9f67c
+2026-10-14T02:54:51.0155246Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-4a383009b0be2c81637a3a9092297076a8b8291b -> origin/evidence/source-led-opportunity-v3-exact-review-4a383009b0be2c81637a3a9092297076a8b8291b
+2026-10-14T02:54:51.0156808Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-4aff9de69872819840577c2ecfe3e7405de3b26d -> origin/evidence/source-led-opportunity-v3-exact-review-4aff9de69872819840577c2ecfe3e7405de3b26d
+2026-10-14T02:54:51.0158386Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-4ba3bf1cd06b8b3b503e766f69af95966db10fa9 -> origin/evidence/source-led-opportunity-v3-exact-review-4ba3bf1cd06b8b3b503e766f69af95966db10fa9
+2026-10-14T02:54:51.0160142Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-4bd9b1ec0e51741204f2fd9bacb96f8a34a6e2a4 -> origin/evidence/source-led-opportunity-v3-exact-review-4bd9b1ec0e51741204f2fd9bacb96f8a34a6e2a4
+2026-10-14T02:54:51.0161792Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-4d0a1f982ac338b9c5fe0346d77d5db9783d797e -> origin/evidence/source-led-opportunity-v3-exact-review-4d0a1f982ac338b9c5fe0346d77d5db9783d797e
+2026-10-14T02:54:51.0163673Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-4d7c5f2d30ffde812bc9513b194a3ad25e582a57 -> origin/evidence/source-led-opportunity-v3-exact-review-4d7c5f2d30ffde812bc9513b194a3ad25e582a57
+2026-10-14T02:54:51.0165252Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-4df5fbaebafb18aca86058a8f1ccf624720f96d3 -> origin/evidence/source-led-opportunity-v3-exact-review-4df5fbaebafb18aca86058a8f1ccf624720f96d3
+2026-10-14T02:54:51.0166932Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-50ba4ef411e5a7c058f3925ee53282b7724e3df1 -> origin/evidence/source-led-opportunity-v3-exact-review-50ba4ef411e5a7c058f3925ee53282b7724e3df1
+2026-10-14T02:54:51.0168474Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-51649140c05f65140235bb7a0532ec986c2545f4 -> origin/evidence/source-led-opportunity-v3-exact-review-51649140c05f65140235bb7a0532ec986c2545f4
+2026-10-14T02:54:51.0170032Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-53b19ab71caeb3bc5841d8c96a083493df16fa83 -> origin/evidence/source-led-opportunity-v3-exact-review-53b19ab71caeb3bc5841d8c96a083493df16fa83
+2026-10-14T02:54:51.0171720Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-53cc4bee57cfb0d71ca35cc07bdc79f92e9b5992 -> origin/evidence/source-led-opportunity-v3-exact-review-53cc4bee57cfb0d71ca35cc07bdc79f92e9b5992
+2026-10-14T02:54:51.0173304Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-540bc27eab3b941138ecdd02fde0153823b034b2 -> origin/evidence/source-led-opportunity-v3-exact-review-540bc27eab3b941138ecdd02fde0153823b034b2
+2026-10-14T02:54:51.0174866Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-54a45ef7095d61e928b7e23bcd0d8961a505acee -> origin/evidence/source-led-opportunity-v3-exact-review-54a45ef7095d61e928b7e23bcd0d8961a505acee
+2026-10-14T02:54:51.0176455Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-5776cec890e2c01046496420fa88f01fb97049ad -> origin/evidence/source-led-opportunity-v3-exact-review-5776cec890e2c01046496420fa88f01fb97049ad
+2026-10-14T02:54:51.0178015Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-58a57a5c4bb8b7be66ca690b3201663f92954384 -> origin/evidence/source-led-opportunity-v3-exact-review-58a57a5c4bb8b7be66ca690b3201663f92954384
+2026-10-14T02:54:51.0179661Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-591c1ff46ae88f7d669918c00294e9ad5a245e24 -> origin/evidence/source-led-opportunity-v3-exact-review-591c1ff46ae88f7d669918c00294e9ad5a245e24
+2026-10-14T02:54:51.0181210Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-59436c4220774d85a2396e9978270522e02cd762 -> origin/evidence/source-led-opportunity-v3-exact-review-59436c4220774d85a2396e9978270522e02cd762
+2026-10-14T02:54:51.0182814Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-59d1ce93013b3f71083cb11fc8a91128b879b7f0 -> origin/evidence/source-led-opportunity-v3-exact-review-59d1ce93013b3f71083cb11fc8a91128b879b7f0
+2026-10-14T02:54:51.0184382Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-5a12d0c8b384d2d1ace3e39b326fc0e995af23f3 -> origin/evidence/source-led-opportunity-v3-exact-review-5a12d0c8b384d2d1ace3e39b326fc0e995af23f3
+2026-10-14T02:54:51.0185955Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-5b210034bc5455990c9ef1ee0d44c47f15677f81 -> origin/evidence/source-led-opportunity-v3-exact-review-5b210034bc5455990c9ef1ee0d44c47f15677f81
+2026-10-14T02:54:51.0187523Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-5b2a1f7265bc33de1aeb466cad7342332d419b97 -> origin/evidence/source-led-opportunity-v3-exact-review-5b2a1f7265bc33de1aeb466cad7342332d419b97
+2026-10-14T02:54:51.0189102Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-5b6ecfbd1df3a6cd7dceb8428df72becc30d580f -> origin/evidence/source-led-opportunity-v3-exact-review-5b6ecfbd1df3a6cd7dceb8428df72becc30d580f
+2026-10-14T02:54:51.0190665Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-5b8a5c57e13079b76614235a762b7894914e7e86 -> origin/evidence/source-led-opportunity-v3-exact-review-5b8a5c57e13079b76614235a762b7894914e7e86
+2026-10-14T02:54:51.0192311Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-5b99cd7cd605286d152b9bcef0d3cffeba80c21d -> origin/evidence/source-led-opportunity-v3-exact-review-5b99cd7cd605286d152b9bcef0d3cffeba80c21d
+2026-10-14T02:54:51.0193954Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-5c0a7c2b6951fa66747d2eee74401c59176f4f8c -> origin/evidence/source-led-opportunity-v3-exact-review-5c0a7c2b6951fa66747d2eee74401c59176f4f8c
+2026-10-14T02:54:51.0195521Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-5d0457452e2fdaeddcf10ee8dac51de02d55e2bb -> origin/evidence/source-led-opportunity-v3-exact-review-5d0457452e2fdaeddcf10ee8dac51de02d55e2bb
+2026-10-14T02:54:51.0197073Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-5f14ab71114f7c89fc8891c5435d2c993cff6d9c -> origin/evidence/source-led-opportunity-v3-exact-review-5f14ab71114f7c89fc8891c5435d2c993cff6d9c
+2026-10-14T02:54:51.0198613Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-602c11bb850dbc7d85a372f21a2f65df2c881256 -> origin/evidence/source-led-opportunity-v3-exact-review-602c11bb850dbc7d85a372f21a2f65df2c881256
+2026-10-14T02:54:51.0200171Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-605b6bca2c5777893f5e03b2bcc27d49ee1f4c65 -> origin/evidence/source-led-opportunity-v3-exact-review-605b6bca2c5777893f5e03b2bcc27d49ee1f4c65
+2026-10-14T02:54:51.0201811Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-616278eb665be0dbafa1d41bc08ab3edfe615649 -> origin/evidence/source-led-opportunity-v3-exact-review-616278eb665be0dbafa1d41bc08ab3edfe615649
+2026-10-14T02:54:51.0203363Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-61cd46808f5753bef22cbea5cc4a70deb7a0747b -> origin/evidence/source-led-opportunity-v3-exact-review-61cd46808f5753bef22cbea5cc4a70deb7a0747b
+2026-10-14T02:54:51.0204954Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-62714206e2fc46ad4cda2ae6fde10f3c8bc65546 -> origin/evidence/source-led-opportunity-v3-exact-review-62714206e2fc46ad4cda2ae6fde10f3c8bc65546
+2026-10-14T02:54:51.0206574Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-63694e1084682db76391325fb75ec40a7ff8e27c -> origin/evidence/source-led-opportunity-v3-exact-review-63694e1084682db76391325fb75ec40a7ff8e27c
+2026-10-14T02:54:51.0208111Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-63e903db2c585c9256f834b482624d8f83a0c777 -> origin/evidence/source-led-opportunity-v3-exact-review-63e903db2c585c9256f834b482624d8f83a0c777
+2026-10-14T02:54:51.0209640Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-643973f585853756220d95ff677d1384d3cd6b40 -> origin/evidence/source-led-opportunity-v3-exact-review-643973f585853756220d95ff677d1384d3cd6b40
+2026-10-14T02:54:51.0211176Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-646ee2efdb6b25c5d9cf4afd736d1a4111477653 -> origin/evidence/source-led-opportunity-v3-exact-review-646ee2efdb6b25c5d9cf4afd736d1a4111477653
+2026-10-14T02:54:51.0212829Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-64c444520066ea378b6ebeffecdd935893942c04 -> origin/evidence/source-led-opportunity-v3-exact-review-64c444520066ea378b6ebeffecdd935893942c04
+2026-10-14T02:54:51.0214370Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-66285a858068b3ca086e439ac4546ab83159f9f9 -> origin/evidence/source-led-opportunity-v3-exact-review-66285a858068b3ca086e439ac4546ab83159f9f9
+2026-10-14T02:54:51.0215913Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-66550cb540d9e1ee657d7dcd54fc9dbeb52fc5b8 -> origin/evidence/source-led-opportunity-v3-exact-review-66550cb540d9e1ee657d7dcd54fc9dbeb52fc5b8
+2026-10-14T02:54:51.0217457Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-67e0ae78a6f77365761d1747df7cb42c25a1b8a9 -> origin/evidence/source-led-opportunity-v3-exact-review-67e0ae78a6f77365761d1747df7cb42c25a1b8a9
+2026-10-14T02:54:51.0219014Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-680d0c9d10ca185013d66f034e9fc03e1d7fcd69 -> origin/evidence/source-led-opportunity-v3-exact-review-680d0c9d10ca185013d66f034e9fc03e1d7fcd69
+2026-10-14T02:54:51.0220629Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-69d3843a00f8afc91f412cd41e4d3667b79c1ad2 -> origin/evidence/source-led-opportunity-v3-exact-review-69d3843a00f8afc91f412cd41e4d3667b79c1ad2
+2026-10-14T02:54:51.0222241Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-6a21149c6e614ad5e22057999abfcf52eea1095a -> origin/evidence/source-led-opportunity-v3-exact-review-6a21149c6e614ad5e22057999abfcf52eea1095a
+2026-10-14T02:54:51.0223760Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-6a4330b09b745bb0f248b73931685b602e090089 -> origin/evidence/source-led-opportunity-v3-exact-review-6a4330b09b745bb0f248b73931685b602e090089
+2026-10-14T02:54:51.0225303Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-6ce98c442054296b06587e063b6b3cf4f0b4a9d0 -> origin/evidence/source-led-opportunity-v3-exact-review-6ce98c442054296b06587e063b6b3cf4f0b4a9d0
+2026-10-14T02:54:51.0226837Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-6e2fd847757dc3f14879419ced5c8e080a7654c3 -> origin/evidence/source-led-opportunity-v3-exact-review-6e2fd847757dc3f14879419ced5c8e080a7654c3
+2026-10-14T02:54:51.0228386Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-6e5947fe376c9950baf5b89bcea6c1afaffab4f5 -> origin/evidence/source-led-opportunity-v3-exact-review-6e5947fe376c9950baf5b89bcea6c1afaffab4f5
+2026-10-14T02:54:51.0229934Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7056eb2300c55cc951a47619c4c34ab8e554df8a -> origin/evidence/source-led-opportunity-v3-exact-review-7056eb2300c55cc951a47619c4c34ab8e554df8a
+2026-10-14T02:54:51.0231474Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7150164cac2136bde3cc117be10b7f90c1cb63cb -> origin/evidence/source-led-opportunity-v3-exact-review-7150164cac2136bde3cc117be10b7f90c1cb63cb
+2026-10-14T02:54:51.0233156Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-741dbca0edefe71785b53184963e01952b4c2ff9 -> origin/evidence/source-led-opportunity-v3-exact-review-741dbca0edefe71785b53184963e01952b4c2ff9
+2026-10-14T02:54:51.0234703Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-748f676d9a3d6016d54c7e2f486d049788f03ac1 -> origin/evidence/source-led-opportunity-v3-exact-review-748f676d9a3d6016d54c7e2f486d049788f03ac1
+2026-10-14T02:54:51.0236262Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7496f05efea1d6d3918ac6ad365ac02c7a21203c -> origin/evidence/source-led-opportunity-v3-exact-review-7496f05efea1d6d3918ac6ad365ac02c7a21203c
+2026-10-14T02:54:51.0237824Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-75ad80e8fdd6518a62aa4d54a4284ce0d6d25665 -> origin/evidence/source-led-opportunity-v3-exact-review-75ad80e8fdd6518a62aa4d54a4284ce0d6d25665
+2026-10-14T02:54:51.0239405Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-764adbb8b1b1c065797589317a6306edc4ddf9bf -> origin/evidence/source-led-opportunity-v3-exact-review-764adbb8b1b1c065797589317a6306edc4ddf9bf
+2026-10-14T02:54:51.0240961Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-768b60f36b3a19ec11a55206257c734b127c0c61 -> origin/evidence/source-led-opportunity-v3-exact-review-768b60f36b3a19ec11a55206257c734b127c0c61
+2026-10-14T02:54:51.0242567Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-779d1db2e6d3e25a75c59410e920a7519fe9e0b2 -> origin/evidence/source-led-opportunity-v3-exact-review-779d1db2e6d3e25a75c59410e920a7519fe9e0b2
+2026-10-14T02:54:51.0244112Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-78ec5aa2f8879dff602baca825b16a6c12663781 -> origin/evidence/source-led-opportunity-v3-exact-review-78ec5aa2f8879dff602baca825b16a6c12663781
+2026-10-14T02:54:51.0245702Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-797574a7e39784804fb57205efad6a05d47c7426 -> origin/evidence/source-led-opportunity-v3-exact-review-797574a7e39784804fb57205efad6a05d47c7426
+2026-10-14T02:54:51.0247322Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7997490abfb6a67886999259fc62dbd24f8a985c -> origin/evidence/source-led-opportunity-v3-exact-review-7997490abfb6a67886999259fc62dbd24f8a985c
+2026-10-14T02:54:51.0248875Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-79deebd67dc5e5c0a893409a604b893137f895db -> origin/evidence/source-led-opportunity-v3-exact-review-79deebd67dc5e5c0a893409a604b893137f895db
+2026-10-14T02:54:51.0250459Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7bceac350e81c28298b512fa9fd2313aa85a1caa -> origin/evidence/source-led-opportunity-v3-exact-review-7bceac350e81c28298b512fa9fd2313aa85a1caa
+2026-10-14T02:54:51.0252102Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7bdd87b74b51ba8b8513b35f1f4b2a5df4bae0a7 -> origin/evidence/source-led-opportunity-v3-exact-review-7bdd87b74b51ba8b8513b35f1f4b2a5df4bae0a7
+2026-10-14T02:54:51.0253657Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7c881da50e0778e9780b5be5d54725b0b02a9317 -> origin/evidence/source-led-opportunity-v3-exact-review-7c881da50e0778e9780b5be5d54725b0b02a9317
+2026-10-14T02:54:51.0255208Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7cbd6e341b570cd85353b70c150096db338818f6 -> origin/evidence/source-led-opportunity-v3-exact-review-7cbd6e341b570cd85353b70c150096db338818f6
+2026-10-14T02:54:51.0256767Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7d40710da509a08f9fff737b9f0df3ccc253645b -> origin/evidence/source-led-opportunity-v3-exact-review-7d40710da509a08f9fff737b9f0df3ccc253645b
+2026-10-14T02:54:51.0258351Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7da6af31c0d04dea09ba53773e07d6ebbf1e462c -> origin/evidence/source-led-opportunity-v3-exact-review-7da6af31c0d04dea09ba53773e07d6ebbf1e462c
+2026-10-14T02:54:51.0259997Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7f461e74dc7d786a455106e20551df13d2c9131f -> origin/evidence/source-led-opportunity-v3-exact-review-7f461e74dc7d786a455106e20551df13d2c9131f
+2026-10-14T02:54:51.0261785Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-7fd3f7f88d8be568acb3467c7b00229258edcd88 -> origin/evidence/source-led-opportunity-v3-exact-review-7fd3f7f88d8be568acb3467c7b00229258edcd88
+2026-10-14T02:54:51.0263364Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-80e122faf99f1a4a0f82d587c5e18b11a8d104ee -> origin/evidence/source-led-opportunity-v3-exact-review-80e122faf99f1a4a0f82d587c5e18b11a8d104ee
+2026-10-14T02:54:51.0264935Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-81864957633edb654d668b27cb2d8efca90313d7 -> origin/evidence/source-led-opportunity-v3-exact-review-81864957633edb654d668b27cb2d8efca90313d7
+2026-10-14T02:54:51.0266487Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-830c9704ab62a406d6d157eade8cfdf8b15dd551 -> origin/evidence/source-led-opportunity-v3-exact-review-830c9704ab62a406d6d157eade8cfdf8b15dd551
+2026-10-14T02:54:51.0268031Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-83d72000244869ee36cf3d361b105c337295f743 -> origin/evidence/source-led-opportunity-v3-exact-review-83d72000244869ee36cf3d361b105c337295f743
+2026-10-14T02:54:51.0269570Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-849661bf93e87293bab764bae899a5d32e2701e8 -> origin/evidence/source-led-opportunity-v3-exact-review-849661bf93e87293bab764bae899a5d32e2701e8
+2026-10-14T02:54:51.0271115Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-86d4a8ef6b52c99cb2198a3e87b5857706309634 -> origin/evidence/source-led-opportunity-v3-exact-review-86d4a8ef6b52c99cb2198a3e87b5857706309634
+2026-10-14T02:54:51.0272726Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-881fc300092b0e176f60bb1eb4b338d63e669c2e -> origin/evidence/source-led-opportunity-v3-exact-review-881fc300092b0e176f60bb1eb4b338d63e669c2e
+2026-10-14T02:54:51.0274380Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-89d3c7c752e442a26537464b4d46e9cf5da22ddc -> origin/evidence/source-led-opportunity-v3-exact-review-89d3c7c752e442a26537464b4d46e9cf5da22ddc
+2026-10-14T02:54:51.0275934Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-8e69a1eeb85eac633f07bb2b3a6adc412ded4216 -> origin/evidence/source-led-opportunity-v3-exact-review-8e69a1eeb85eac633f07bb2b3a6adc412ded4216
+2026-10-14T02:54:51.0277490Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-8f4bb78dfbef305e676c24208fb79b85fb89fb22 -> origin/evidence/source-led-opportunity-v3-exact-review-8f4bb78dfbef305e676c24208fb79b85fb89fb22
+2026-10-14T02:54:51.0279047Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-92238782280da272537b4309f3312befcc9b6315 -> origin/evidence/source-led-opportunity-v3-exact-review-92238782280da272537b4309f3312befcc9b6315
+2026-10-14T02:54:51.0280585Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-950ef2fd98237e0aa31682d6c2216c0ad49f0f91 -> origin/evidence/source-led-opportunity-v3-exact-review-950ef2fd98237e0aa31682d6c2216c0ad49f0f91
+2026-10-14T02:54:51.0282209Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-95e50d6558ef746b69b6d7846519544c48452661 -> origin/evidence/source-led-opportunity-v3-exact-review-95e50d6558ef746b69b6d7846519544c48452661
+2026-10-14T02:54:51.0283759Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-9aeee820e1be2c53775b2bf8286574f88e18552a -> origin/evidence/source-led-opportunity-v3-exact-review-9aeee820e1be2c53775b2bf8286574f88e18552a
+2026-10-14T02:54:51.0285307Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-9b0f3fe5d233c04efad60259aa5300a2b7387c63 -> origin/evidence/source-led-opportunity-v3-exact-review-9b0f3fe5d233c04efad60259aa5300a2b7387c63
+2026-10-14T02:54:51.0286927Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-9b2377512e0bb5abfe1621ad34c43110982060fb -> origin/evidence/source-led-opportunity-v3-exact-review-9b2377512e0bb5abfe1621ad34c43110982060fb
+2026-10-14T02:54:51.0288475Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-9c4599db02ad286f11479340b0b6d0c44c707645 -> origin/evidence/source-led-opportunity-v3-exact-review-9c4599db02ad286f11479340b0b6d0c44c707645
+2026-10-14T02:54:51.0290027Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-9c52d85a059d59cbf6a591da6376206ba779eef9 -> origin/evidence/source-led-opportunity-v3-exact-review-9c52d85a059d59cbf6a591da6376206ba779eef9
+2026-10-14T02:54:51.0291655Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-9d504241572848f5464bc2c96443d9ceeecf234a -> origin/evidence/source-led-opportunity-v3-exact-review-9d504241572848f5464bc2c96443d9ceeecf234a
+2026-10-14T02:54:51.0293191Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-9f4715e0caec63f92310186b241c7ae613e8f89a -> origin/evidence/source-led-opportunity-v3-exact-review-9f4715e0caec63f92310186b241c7ae613e8f89a
+2026-10-14T02:54:51.0294727Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-a1d3582f3d343a610f746cbf067a5842331a9700 -> origin/evidence/source-led-opportunity-v3-exact-review-a1d3582f3d343a610f746cbf067a5842331a9700
+2026-10-14T02:54:51.0296272Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-a51fed40fe5c516f85ef14dbdf25c3d130fae363 -> origin/evidence/source-led-opportunity-v3-exact-review-a51fed40fe5c516f85ef14dbdf25c3d130fae363
+2026-10-14T02:54:51.0297578Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-a5ee7ca -> origin/evidence/source-led-opportunity-v3-exact-review-a5ee7ca
+2026-10-14T02:54:51.0298865Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-a5ee7cae42de9df391363c0b52e55f06b3a7496c -> origin/evidence/source-led-opportunity-v3-exact-review-a5ee7cae42de9df391363c0b52e55f06b3a7496c
+2026-10-14T02:54:51.0300501Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-a9a773e71dd3ca636ee66844cd62230541ceae16 -> origin/evidence/source-led-opportunity-v3-exact-review-a9a773e71dd3ca636ee66844cd62230541ceae16
+2026-10-14T02:54:51.0302114Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-a9b1cc1ce78cb8ecde818ae2f7b886c5684b01c0 -> origin/evidence/source-led-opportunity-v3-exact-review-a9b1cc1ce78cb8ecde818ae2f7b886c5684b01c0
+2026-10-14T02:54:51.0303672Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ab7211c8c5325736f0065b7916aaa7d8121f52a0 -> origin/evidence/source-led-opportunity-v3-exact-review-ab7211c8c5325736f0065b7916aaa7d8121f52a0
+2026-10-14T02:54:51.0305246Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ad7c3d5b84c97cfce43db1aba04410c3fda1dd07 -> origin/evidence/source-led-opportunity-v3-exact-review-ad7c3d5b84c97cfce43db1aba04410c3fda1dd07
+2026-10-14T02:54:51.0306819Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ae9fed38466bbe8281dba167db21609502d9ff91 -> origin/evidence/source-led-opportunity-v3-exact-review-ae9fed38466bbe8281dba167db21609502d9ff91
+2026-10-14T02:54:51.0308373Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-afcf5157725a9a4ad6b63cc18ec792b486e0518e -> origin/evidence/source-led-opportunity-v3-exact-review-afcf5157725a9a4ad6b63cc18ec792b486e0518e
+2026-10-14T02:54:51.0309928Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-b1f6d17f8dd93e4510db5fb2179950122596096d -> origin/evidence/source-led-opportunity-v3-exact-review-b1f6d17f8dd93e4510db5fb2179950122596096d
+2026-10-14T02:54:51.0311489Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-b43c041448a19eb7f5cb025b4fab8e7ab9cefd75 -> origin/evidence/source-led-opportunity-v3-exact-review-b43c041448a19eb7f5cb025b4fab8e7ab9cefd75
+2026-10-14T02:54:51.0313193Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-b5dbac60f3de302d3883ada5dd62a5b51b264e34 -> origin/evidence/source-led-opportunity-v3-exact-review-b5dbac60f3de302d3883ada5dd62a5b51b264e34
+2026-10-14T02:54:51.0314763Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ba62a146b56e7df38abdcee3c3b87e7cc9f6e240 -> origin/evidence/source-led-opportunity-v3-exact-review-ba62a146b56e7df38abdcee3c3b87e7cc9f6e240
+2026-10-14T02:54:51.0316326Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-bc1b6aff5315c0f0302cd1d2e74e7c1b238a4af3 -> origin/evidence/source-led-opportunity-v3-exact-review-bc1b6aff5315c0f0302cd1d2e74e7c1b238a4af3
+2026-10-14T02:54:51.0317884Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-bd6106f80c6001f29f8404859bcb2af823109b60 -> origin/evidence/source-led-opportunity-v3-exact-review-bd6106f80c6001f29f8404859bcb2af823109b60
+2026-10-14T02:54:51.0319443Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-bd721b7e7c43c8ce2d1273086a4dd4b9c3130550 -> origin/evidence/source-led-opportunity-v3-exact-review-bd721b7e7c43c8ce2d1273086a4dd4b9c3130550
+2026-10-14T02:54:51.0320991Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-c00f4b321a45aef3650f8752e7820306628e51f3 -> origin/evidence/source-led-opportunity-v3-exact-review-c00f4b321a45aef3650f8752e7820306628e51f3
+2026-10-14T02:54:51.0322587Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-c0ad855257297706d714727e461684f723ac5875 -> origin/evidence/source-led-opportunity-v3-exact-review-c0ad855257297706d714727e461684f723ac5875
+2026-10-14T02:54:51.0324111Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-c11c6f718b3e65affc4a0c7172adf7531b0f6eb2 -> origin/evidence/source-led-opportunity-v3-exact-review-c11c6f718b3e65affc4a0c7172adf7531b0f6eb2
+2026-10-14T02:54:51.0325663Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-c1877c1e520a828bb7788bde789fb45edef497c2 -> origin/evidence/source-led-opportunity-v3-exact-review-c1877c1e520a828bb7788bde789fb45edef497c2
+2026-10-14T02:54:51.0327351Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-c18df18fc4fddd04558c90acd3d1c8f9dc56012a -> origin/evidence/source-led-opportunity-v3-exact-review-c18df18fc4fddd04558c90acd3d1c8f9dc56012a
+2026-10-14T02:54:51.0328921Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-c1dea687bad6e7c881bce793712ad7e72c140345 -> origin/evidence/source-led-opportunity-v3-exact-review-c1dea687bad6e7c881bce793712ad7e72c140345
+2026-10-14T02:54:51.0330480Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-c384a18b075df48358d2ea32c127e26e8b953ec1 -> origin/evidence/source-led-opportunity-v3-exact-review-c384a18b075df48358d2ea32c127e26e8b953ec1
+2026-10-14T02:54:51.0332109Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e -> origin/evidence/source-led-opportunity-v3-exact-review-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e
+2026-10-14T02:54:51.0333663Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-c89c7884387f83878eb77bfbbf4b22c977510374 -> origin/evidence/source-led-opportunity-v3-exact-review-c89c7884387f83878eb77bfbbf4b22c977510374
+2026-10-14T02:54:51.0335215Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-cda1cd87efd411b4575dda10bc811d72a34d7ceb -> origin/evidence/source-led-opportunity-v3-exact-review-cda1cd87efd411b4575dda10bc811d72a34d7ceb
+2026-10-14T02:54:51.0336798Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-d05db9f08fadc4ffcb7f59a4ee452ae5ddb3478c -> origin/evidence/source-led-opportunity-v3-exact-review-d05db9f08fadc4ffcb7f59a4ee452ae5ddb3478c
+2026-10-14T02:54:51.0338381Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-d06d46a89b60ca1ba1cfb705820d82cee110660f -> origin/evidence/source-led-opportunity-v3-exact-review-d06d46a89b60ca1ba1cfb705820d82cee110660f
+2026-10-14T02:54:51.0340028Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-d24977824a0ff00beef6a26b53e6c8078144841b -> origin/evidence/source-led-opportunity-v3-exact-review-d24977824a0ff00beef6a26b53e6c8078144841b
+2026-10-14T02:54:51.0341649Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-d27c8761c287f763062ba845b669a6e61764e59a -> origin/evidence/source-led-opportunity-v3-exact-review-d27c8761c287f763062ba845b669a6e61764e59a
+2026-10-14T02:54:51.0343186Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-d2c10377f3959f6ca1aeb20aba5a8a76a85992be -> origin/evidence/source-led-opportunity-v3-exact-review-d2c10377f3959f6ca1aeb20aba5a8a76a85992be
+2026-10-14T02:54:51.0344731Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-da196830606c3c119c2b7d360839cd5dce740773 -> origin/evidence/source-led-opportunity-v3-exact-review-da196830606c3c119c2b7d360839cd5dce740773
+2026-10-14T02:54:51.0346292Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-dd23a285d47401e76edd90ca51dc17ccf82fc046 -> origin/evidence/source-led-opportunity-v3-exact-review-dd23a285d47401e76edd90ca51dc17ccf82fc046
+2026-10-14T02:54:51.0347850Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ddaff007b9df598bc7a434c133f6b3863ec3085e -> origin/evidence/source-led-opportunity-v3-exact-review-ddaff007b9df598bc7a434c133f6b3863ec3085e
+2026-10-14T02:54:51.0349420Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-de636d6d74bb192abfa4f1a6d47904c5f39e33a9 -> origin/evidence/source-led-opportunity-v3-exact-review-de636d6d74bb192abfa4f1a6d47904c5f39e33a9
+2026-10-14T02:54:51.0350965Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e06b14b8fc3f947c10f77b6d6c0c4d09f7efb2e8 -> origin/evidence/source-led-opportunity-v3-exact-review-e06b14b8fc3f947c10f77b6d6c0c4d09f7efb2e8
+2026-10-14T02:54:51.0352588Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e073aad9db3e7fe983e313a646c00c040a4bf713 -> origin/evidence/source-led-opportunity-v3-exact-review-e073aad9db3e7fe983e313a646c00c040a4bf713
+2026-10-14T02:54:51.0354225Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e1b5573b7faa144ec4d45c0549d599e82caa5241 -> origin/evidence/source-led-opportunity-v3-exact-review-e1b5573b7faa144ec4d45c0549d599e82caa5241
+2026-10-14T02:54:51.0355770Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e22600e3cf5ec921d735c81c6fa018f48dbd0a5b -> origin/evidence/source-led-opportunity-v3-exact-review-e22600e3cf5ec921d735c81c6fa018f48dbd0a5b
+2026-10-14T02:54:51.0357322Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e24ea452be598941f7ed97a11db57b23077dff8f -> origin/evidence/source-led-opportunity-v3-exact-review-e24ea452be598941f7ed97a11db57b23077dff8f
+2026-10-14T02:54:51.0358862Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e3db5d858935cd405ac1f3946a1c8beb202919ed -> origin/evidence/source-led-opportunity-v3-exact-review-e3db5d858935cd405ac1f3946a1c8beb202919ed
+2026-10-14T02:54:51.0360414Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e40b59340a66613b3496fc238cd04f80a9da0fa1 -> origin/evidence/source-led-opportunity-v3-exact-review-e40b59340a66613b3496fc238cd04f80a9da0fa1
+2026-10-14T02:54:51.0362053Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e4d093c8f5147c6401756d8ede60bdbafff5b0a0 -> origin/evidence/source-led-opportunity-v3-exact-review-e4d093c8f5147c6401756d8ede60bdbafff5b0a0
+2026-10-14T02:54:51.0363589Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e57223e72934283b0c46f3304c9a88c17a012434 -> origin/evidence/source-led-opportunity-v3-exact-review-e57223e72934283b0c46f3304c9a88c17a012434
+2026-10-14T02:54:51.0365127Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e5881a68d9dfcb3ae806becee0fd92b941187664 -> origin/evidence/source-led-opportunity-v3-exact-review-e5881a68d9dfcb3ae806becee0fd92b941187664
+2026-10-14T02:54:51.0366793Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e68a50db1679114f95679e33d7734d68aaa750dc -> origin/evidence/source-led-opportunity-v3-exact-review-e68a50db1679114f95679e33d7734d68aaa750dc
+2026-10-14T02:54:51.0368360Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e73089ce6b4078c1fb1e3df3ac7818adc6071b87 -> origin/evidence/source-led-opportunity-v3-exact-review-e73089ce6b4078c1fb1e3df3ac7818adc6071b87
+2026-10-14T02:54:51.0369904Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e85437c2d02081108af3fbf035743976eb659336 -> origin/evidence/source-led-opportunity-v3-exact-review-e85437c2d02081108af3fbf035743976eb659336
+2026-10-14T02:54:51.0371438Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e9c56d7cacb17f0ce5a5ea202cff09c7c49df610 -> origin/evidence/source-led-opportunity-v3-exact-review-e9c56d7cacb17f0ce5a5ea202cff09c7c49df610
+2026-10-14T02:54:51.0373091Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-e9f53dfd66e5175d93ce29e59218d505c743b1ce -> origin/evidence/source-led-opportunity-v3-exact-review-e9f53dfd66e5175d93ce29e59218d505c743b1ce
+2026-10-14T02:54:51.0374643Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ea2089142cca421c490ed15f83978615da17cbde -> origin/evidence/source-led-opportunity-v3-exact-review-ea2089142cca421c490ed15f83978615da17cbde
+2026-10-14T02:54:51.0376195Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ead9730c42d717cf27edd73fa38dd10e55f3fc17 -> origin/evidence/source-led-opportunity-v3-exact-review-ead9730c42d717cf27edd73fa38dd10e55f3fc17
+2026-10-14T02:54:51.0377747Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-eafb6b606465b12e8261d2ec470ecc84d6ec5c17 -> origin/evidence/source-led-opportunity-v3-exact-review-eafb6b606465b12e8261d2ec470ecc84d6ec5c17
+2026-10-14T02:54:51.0379316Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ec7a7f8f368f8bab47fe684ee87014153a06d137 -> origin/evidence/source-led-opportunity-v3-exact-review-ec7a7f8f368f8bab47fe684ee87014153a06d137
+2026-10-14T02:54:51.0380974Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ed14a17cc2140b65d0456c60875285d5295b398c -> origin/evidence/source-led-opportunity-v3-exact-review-ed14a17cc2140b65d0456c60875285d5295b398c
+2026-10-14T02:54:51.0382670Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ef242e5ad690c9072a75a7840cd6fba7ca46a52e -> origin/evidence/source-led-opportunity-v3-exact-review-ef242e5ad690c9072a75a7840cd6fba7ca46a52e
+2026-10-14T02:54:51.0384221Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f26ca6d823e8c979717a5c0c6e161d68db91fea6 -> origin/evidence/source-led-opportunity-v3-exact-review-f26ca6d823e8c979717a5c0c6e161d68db91fea6
+2026-10-14T02:54:51.0385778Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f2f7beadd32436bc4be8e19e3f182448fdab5e7a -> origin/evidence/source-led-opportunity-v3-exact-review-f2f7beadd32436bc4be8e19e3f182448fdab5e7a
+2026-10-14T02:54:51.0387333Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f34660f7fe8491a6710a0f74273468d8d2d51543 -> origin/evidence/source-led-opportunity-v3-exact-review-f34660f7fe8491a6710a0f74273468d8d2d51543
+2026-10-14T02:54:51.0388879Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f3c81f2d800946ecf1b8a8d7c862bcdd68e3ff43 -> origin/evidence/source-led-opportunity-v3-exact-review-f3c81f2d800946ecf1b8a8d7c862bcdd68e3ff43
+2026-10-14T02:54:51.0390433Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f62bf26b9c938747c3a454ee2f9f351d4ac4523e -> origin/evidence/source-led-opportunity-v3-exact-review-f62bf26b9c938747c3a454ee2f9f351d4ac4523e
+2026-10-14T02:54:51.0392055Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f666f7915be7fb7cad33054dfa3330a63579c814 -> origin/evidence/source-led-opportunity-v3-exact-review-f666f7915be7fb7cad33054dfa3330a63579c814
+2026-10-14T02:54:51.0393703Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f67df18313d5039b4ebb025875bd201a7a8bc3b8 -> origin/evidence/source-led-opportunity-v3-exact-review-f67df18313d5039b4ebb025875bd201a7a8bc3b8
+2026-10-14T02:54:51.0395249Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f683227d277e629e23f61098acb184a6ec951960 -> origin/evidence/source-led-opportunity-v3-exact-review-f683227d277e629e23f61098acb184a6ec951960
+2026-10-14T02:54:51.0396798Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f6a867f2dbcca929657b44b17aec35ebcac921ff -> origin/evidence/source-led-opportunity-v3-exact-review-f6a867f2dbcca929657b44b17aec35ebcac921ff
+2026-10-14T02:54:51.0398365Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f715adffe7908bc4c48315e79bf8ce59c815d2ce -> origin/evidence/source-led-opportunity-v3-exact-review-f715adffe7908bc4c48315e79bf8ce59c815d2ce
+2026-10-14T02:54:51.0399931Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f72aab83fd2ae1578de12e385fadd8a4135a9d91 -> origin/evidence/source-led-opportunity-v3-exact-review-f72aab83fd2ae1578de12e385fadd8a4135a9d91
+2026-10-14T02:54:51.0401580Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f72ee1ada533e175b4a81081ed4e5a383619cb7d -> origin/evidence/source-led-opportunity-v3-exact-review-f72ee1ada533e175b4a81081ed4e5a383619cb7d
+2026-10-14T02:54:51.0403146Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f85cb35eb4d79ede3f526ccbb49b9c6d9885cefd -> origin/evidence/source-led-opportunity-v3-exact-review-f85cb35eb4d79ede3f526ccbb49b9c6d9885cefd
+2026-10-14T02:54:51.0404697Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f9041f3baa9426129b9da61a0a4e707b9b723ca9 -> origin/evidence/source-led-opportunity-v3-exact-review-f9041f3baa9426129b9da61a0a4e707b9b723ca9
+2026-10-14T02:54:51.0406283Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-f9f5b844cd5f701ad70a970eb2f443c256ff3cde -> origin/evidence/source-led-opportunity-v3-exact-review-f9f5b844cd5f701ad70a970eb2f443c256ff3cde
+2026-10-14T02:54:51.0407942Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-fa2e32e1c3d27baf4114e11c3434ff6982f7af6f -> origin/evidence/source-led-opportunity-v3-exact-review-fa2e32e1c3d27baf4114e11c3434ff6982f7af6f
+2026-10-14T02:54:51.0409512Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-fb0d81694eca671d1a57fb5ad1c64e93979b6c36 -> origin/evidence/source-led-opportunity-v3-exact-review-fb0d81694eca671d1a57fb5ad1c64e93979b6c36
+2026-10-14T02:54:51.0411068Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55 -> origin/evidence/source-led-opportunity-v3-exact-review-fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55
+2026-10-14T02:54:51.0412712Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-fc04bfe5bef017701071b683c3fd04b012c5ee81 -> origin/evidence/source-led-opportunity-v3-exact-review-fc04bfe5bef017701071b683c3fd04b012c5ee81
+2026-10-14T02:54:51.0414261Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-fcdc21c8d21f53828b06a086e87920d110f2586a -> origin/evidence/source-led-opportunity-v3-exact-review-fcdc21c8d21f53828b06a086e87920d110f2586a
+2026-10-14T02:54:51.0415826Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-fcf4ccfc4fd5380d3f5f86277ef07663621c7451 -> origin/evidence/source-led-opportunity-v3-exact-review-fcf4ccfc4fd5380d3f5f86277ef07663621c7451
+2026-10-14T02:54:51.0417399Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-fd6d73d7a61e3a4dbbbbedc6c6bdab2c64a9cf08 -> origin/evidence/source-led-opportunity-v3-exact-review-fd6d73d7a61e3a4dbbbbedc6c6bdab2c64a9cf08
+2026-10-14T02:54:51.0418974Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-fe107bafb066aa74cbe12af2c6f85b06ea9cceb7 -> origin/evidence/source-led-opportunity-v3-exact-review-fe107bafb066aa74cbe12af2c6f85b06ea9cceb7
+2026-10-14T02:54:51.0420623Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ff2b15f7a85c3b8da5461dbe968d6a93822981ae -> origin/evidence/source-led-opportunity-v3-exact-review-ff2b15f7a85c3b8da5461dbe968d6a93822981ae
+2026-10-14T02:54:51.0422266Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ff727e1dc6c4cab62b3ef5718d89e60c7b16d59f -> origin/evidence/source-led-opportunity-v3-exact-review-ff727e1dc6c4cab62b3ef5718d89e60c7b16d59f
+2026-10-14T02:54:51.0423805Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-ff92727c6d7096eca1d53b31934c35638c85b4ba -> origin/evidence/source-led-opportunity-v3-exact-review-ff92727c6d7096eca1d53b31934c35638c85b4ba
+2026-10-14T02:54:51.0425202Z  * [new branch]        evidence/source-led-opportunity-v3-host-pin-v316-architecture-aa0c08b -> origin/evidence/source-led-opportunity-v3-host-pin-v316-architecture-aa0c08b
+2026-10-14T02:54:51.0426446Z  * [new branch]        evidence/source-led-opportunity-v3-host-pin-v316-architecture-ba3124f -> origin/evidence/source-led-opportunity-v3-host-pin-v316-architecture-ba3124f
+2026-10-14T02:54:51.0427680Z  * [new branch]        evidence/source-led-opportunity-v3-host-pin-v316-requirements-aa0c08b -> origin/evidence/source-led-opportunity-v3-host-pin-v316-requirements-aa0c08b
+2026-10-14T02:54:51.0428924Z  * [new branch]        evidence/source-led-opportunity-v3-host-pin-v316-requirements-ba3124f -> origin/evidence/source-led-opportunity-v3-host-pin-v316-requirements-ba3124f
+2026-10-14T02:54:51.0430150Z  * [new branch]        evidence/source-led-opportunity-v3-host-pin-v317-architecture-245cf0d -> origin/evidence/source-led-opportunity-v3-host-pin-v317-architecture-245cf0d
+2026-10-14T02:54:51.0431370Z  * [new branch]        evidence/source-led-opportunity-v3-host-pin-v317-architecture-4020588 -> origin/evidence/source-led-opportunity-v3-host-pin-v317-architecture-4020588
+2026-10-14T02:54:51.0432671Z  * [new branch]        evidence/source-led-opportunity-v3-host-pin-v317-requirements-245cf0d -> origin/evidence/source-led-opportunity-v3-host-pin-v317-requirements-245cf0d
+2026-10-14T02:54:51.0433900Z  * [new branch]        evidence/source-led-opportunity-v3-host-pin-v317-requirements-4020588 -> origin/evidence/source-led-opportunity-v3-host-pin-v317-requirements-4020588
+2026-10-14T02:54:51.0435064Z  * [new branch]        evidence/source-led-opportunity-v3-requirements -> origin/evidence/source-led-opportunity-v3-requirements
+2026-10-14T02:54:51.0436033Z  * [new branch]        evidence/source-led-opportunity-v3-requirements-4b1e75f5 -> origin/evidence/source-led-opportunity-v3-requirements-4b1e75f5
+2026-10-14T02:54:51.0437063Z  * [new branch]        evidence/source-led-opportunity-v3-requirements-6ed9d39a -> origin/evidence/source-led-opportunity-v3-requirements-6ed9d39a
+2026-10-14T02:54:51.0438138Z  * [new branch]        evidence/source-led-opportunity-v3-requirements-c7b4776-final -> origin/evidence/source-led-opportunity-v3-requirements-c7b4776-final
+2026-10-14T02:54:51.0439499Z  * [new branch]        evidence/source-led-opportunity-v3-requirements-ef3dbb25a599e9d132aec24041ddca96f244e003 -> origin/evidence/source-led-opportunity-v3-requirements-ef3dbb25a599e9d132aec24041ddca96f244e003
+2026-10-14T02:54:51.0440822Z  * [new branch]        evidence/source-led-opportunity-v3-requirements-f0a7b874 -> origin/evidence/source-led-opportunity-v3-requirements-f0a7b874
+2026-10-14T02:54:51.0442074Z  * [new branch]        evidence/source-led-opportunity-v3-requirements-gate-bootstrap-20260906 -> origin/evidence/source-led-opportunity-v3-requirements-gate-bootstrap-20260906
+2026-10-14T02:54:51.0443273Z  * [new branch]        evidence/source-led-opportunity-v3-requirements-pr279-graph -> origin/evidence/source-led-opportunity-v3-requirements-pr279-graph
+2026-10-14T02:54:51.0444353Z  * [new branch]        evidence/source-led-opportunity-v3-requirements-v318-digest -> origin/evidence/source-led-opportunity-v3-requirements-v318-digest
+2026-10-14T02:54:51.0445426Z  * [new branch]        evidence/source-led-opportunity-v3-requirements-v325-digest -> origin/evidence/source-led-opportunity-v3-requirements-v325-digest
+2026-10-14T02:54:51.0446569Z  * [new branch]        evidence/source-research-shadow-v2-architecture-fa523ba1 -> origin/evidence/source-research-shadow-v2-architecture-fa523ba1
+2026-10-14T02:54:51.0447601Z  * [new branch]        evidence/source-research-shadow-v2-requirements-90de150b -> origin/evidence/source-research-shadow-v2-requirements-90de150b
+2026-10-14T02:54:51.0448314Z  * [new branch]        main                    -> origin/main
+2026-10-14T02:54:51.0448915Z  * [new branch]        source-led-opportunity-gate-bootstrap -> origin/source-led-opportunity-gate-bootstrap
+2026-10-14T02:54:51.0449700Z  * [new branch]        source-led-opportunity-gate-root-fix-v2 -> origin/source-led-opportunity-gate-root-fix-v2
+2026-10-14T02:54:51.0451451Z [command]/usr/bin/git rev-parse --verify --quiet 3e1be377de3f6cac58f6de1626e8df994b9df146^{object}
+2026-10-14T02:54:51.0452189Z 3e1be377de3f6cac58f6de1626e8df994b9df146
+2026-10-14T02:54:51.0453054Z ##[endgroup]
+2026-10-14T02:54:51.0453485Z ##[group]Determining the checkout info
+2026-10-14T02:54:51.0453945Z ##[endgroup]
+2026-10-14T02:54:51.0454230Z [command]/usr/bin/git sparse-checkout disable
+2026-10-14T02:54:51.0454996Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-14T02:54:51.0455942Z ##[group]Checking out the ref
+2026-10-14T02:54:51.0456400Z [command]/usr/bin/git checkout --progress --force 3e1be377de3f6cac58f6de1626e8df994b9df146
+2026-10-14T02:54:51.1167680Z Note: switching to '3e1be377de3f6cac58f6de1626e8df994b9df146'.
+2026-10-14T02:54:51.1168137Z 
+2026-10-14T02:54:51.1174639Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-14T02:54:51.1175280Z changes and commit them, and you can discard any commits you make in this
+2026-10-14T02:54:51.1175853Z state without impacting any branches by switching back to a branch.
+2026-10-14T02:54:51.1176146Z 
+2026-10-14T02:54:51.1176365Z If you want to create a new branch to retain commits you create, you may
+2026-10-14T02:54:51.1176854Z do so (now or later) by using -c with the switch command. Example:
+2026-10-14T02:54:51.1177309Z 
+2026-10-14T02:54:51.1177460Z   git switch -c <new-branch-name>
+2026-10-14T02:54:51.1177653Z 
+2026-10-14T02:54:51.1177794Z Or undo this operation with:
+2026-10-14T02:54:51.1177979Z 
+2026-10-14T02:54:51.1178087Z   git switch -
+2026-10-14T02:54:51.1178242Z 
+2026-10-14T02:54:51.1178481Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-14T02:54:51.1178801Z 
+2026-10-14T02:54:51.1179127Z HEAD is now at 3e1be377 Merge pull request #377 from Kaichen9527/codex/discovery-snapshot-release-oct14
+2026-10-14T02:54:51.1181389Z ##[endgroup]
+2026-10-14T02:54:51.1221321Z [command]/usr/bin/git log -1 --format=%H
+2026-10-14T02:54:51.1242000Z 3e1be377de3f6cac58f6de1626e8df994b9df146
+2026-10-14T02:54:51.1252631Z ##[group]Removing auth
+2026-10-14T02:54:51.1254444Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T02:54:51.1280328Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T02:54:51.1456548Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T02:54:51.1480692Z http.https://github.com/.extraheader
+2026-10-14T02:54:51.1565432Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-14T02:54:51.1567355Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T02:54:51.1703578Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T02:54:51.1734172Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T02:54:51.1905692Z ##[endgroup]
+2026-10-14T02:54:51.2152241Z Prepare all required actions
+2026-10-14T02:54:51.2152941Z Getting action download info
+2026-10-14T02:54:51.3320067Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-14T02:54:51.4023812Z Download action repository 'actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+2026-10-14T02:54:52.1932706Z ##[group]Run ./.github/actions/prepare-source-led-external-subject
+2026-10-14T02:54:52.1933087Z with:
+2026-10-14T02:54:52.1933512Z   bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-18b1fba4c7fa89108cbf8892a0a7205860989995
+2026-10-14T02:54:52.1934074Z   subject-root: /home/runner/work/_temp/stockinsider-v3-subject
+2026-10-14T02:54:52.1934401Z ##[endgroup]
+2026-10-14T02:54:52.1997389Z ##[start-action display=Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020;id=__self.__actions_setup-node]
+2026-10-14T02:54:52.2087871Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-14T02:54:52.2088263Z with:
+2026-10-14T02:54:52.2088461Z   node-version: 22.14.0
+2026-10-14T02:54:52.2088682Z   always-auth: false
+2026-10-14T02:54:52.2088891Z   check-latest: false
+2026-10-14T02:54:52.2091477Z   token: ***
+2026-10-14T02:54:52.2091807Z ##[endgroup]
+2026-10-14T02:54:52.3489954Z Attempting to download 22.14.0...
+2026-10-14T02:54:52.3596911Z (node:2388) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T02:54:52.3598618Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T02:54:53.3898011Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+2026-10-14T02:54:54.1102657Z Extracting ...
+2026-10-14T02:54:54.1203858Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/627f4840-f92e-4464-b612-62630083e49b -f /home/runner/work/_temp/0a47231d-e5ee-459c-a1d9-2677454a97b8
+2026-10-14T02:54:55.2204945Z Adding to the cache ...
+2026-10-14T02:54:56.5533316Z ##[group]Environment details
+2026-10-14T02:54:56.7689497Z node: v22.14.0
+2026-10-14T02:54:56.7689900Z npm: 10.9.2
+2026-10-14T02:54:56.7690238Z yarn: 1.22.22
+2026-10-14T02:54:56.7690989Z ##[endgroup]
+2026-10-14T02:54:56.7798127Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=4579]
+2026-10-14T02:54:56.7801051Z ##[start-action display=Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093;id=__self.__actions_download-artifact]
+2026-10-14T02:54:56.7841947Z ##[group]Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+2026-10-14T02:54:56.7842339Z with:
+2026-10-14T02:54:56.7842688Z   name: stockinsider-v3-gate-bootstrap-18b1fba4c7fa89108cbf8892a0a7205860989995
+2026-10-14T02:54:56.7843179Z   path: /home/runner/work/_temp/stockinsider-v3-gate-bootstrap
+2026-10-14T02:54:56.7843534Z   merge-multiple: false
+2026-10-14T02:54:56.7843762Z   repository: Kaichen9527/stockinsider
+2026-10-14T02:54:56.7844034Z   run-id: 38503491190
+2026-10-14T02:54:56.7844236Z ##[endgroup]
+2026-10-14T02:54:56.9320824Z Downloading single artifact
+2026-10-14T02:54:56.9465069Z (node:2427) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T02:54:56.9466266Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T02:54:57.1703346Z Preparing to download the following artifacts:
+2026-10-14T02:54:57.1704900Z - stockinsider-v3-gate-bootstrap-18b1fba4c7fa89108cbf8892a0a7205860989995 (ID: 11866639209, Size: 661, Expected Digest: sha256:a72d6123532506790f15f93408f5e2de3997e2cc27b7424708370fa7afc2694a)
+2026-10-14T02:54:57.3974876Z Redirecting to blob download url: https://productionresultssa5.blob.core.windows.net/actions-results/996acd31-d015-8053-8d4a-1380cead38ed/workflow-job-run-c6f53ed9-6d62-5703-9916-6291282ec5ae/artifacts/e9cf71e70f629f80e80d92e2d88f4f2181eb89ffa99896a0c9f0c34e5266aa38.zip
+2026-10-14T02:54:57.3993071Z Starting download of artifact to: /home/runner/work/_temp/stockinsider-v3-gate-bootstrap
+2026-10-14T02:54:57.5990738Z (node:2427) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-10-14T02:54:57.6054109Z SHA256 digest of downloaded artifact is a72d6123532506790f15f93408f5e2de3997e2cc27b7424708370fa7afc2694a
+2026-10-14T02:54:57.6055385Z Artifact download completed successfully.
+2026-10-14T02:54:57.6056003Z Total of 1 artifact(s) downloaded
+2026-10-14T02:54:57.6083505Z Download artifact has finished successfully
+2026-10-14T02:54:57.6125900Z ##[end-action id=__self.__actions_download-artifact;outcome=success;conclusion=success;duration_ms=832]
+2026-10-14T02:54:57.6148953Z ##[start-action display=Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject";id=__self.__run]
+2026-10-14T02:54:57.6183338Z ##[group]Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject"
+2026-10-14T02:54:57.6185593Z [36;1mnode scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject"[0m
+2026-10-14T02:54:57.6372894Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T02:54:57.6373306Z ##[endgroup]
+2026-10-14T02:54:57.7798277Z From https://github.com/Kaichen9527/stockinsider
+2026-10-14T02:54:57.7799187Z  * branch              18b1fba4c7fa89108cbf8892a0a7205860989995 -> FETCH_HEAD
+2026-10-14T02:54:58.4652345Z fatal: couldn't find remote ref refs/heads/evidence/source-led-opportunity-v3-exact-review-18b1fba4c7fa89108cbf8892a0a7205860989995
+2026-10-14T02:54:58.4663846Z protected external gate worker failed: Command failed: /usr/bin/git fetch --no-tags origin refs/heads/evidence/source-led-opportunity-v3-exact-review-18b1fba4c7fa89108cbf8892a0a7205860989995:refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-18b1fba4c7fa89108cbf8892a0a7205860989995 refs/heads/evidence/source-led-opportunity-v3-requirements-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v325-digest refs/heads/evidence/source-led-opportunity-v3-architecture-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v325-digest
+2026-10-14T02:54:58.4706538Z ##[error]Process completed with exit code 1.
+2026-10-14T02:54:58.4714934Z ##[end-action id=__self.__run;outcome=failure;conclusion=failure;duration_ms=856]
+2026-10-14T02:54:58.4826062Z Post job cleanup.
+2026-10-14T02:54:58.4829572Z ##[start-action display=Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020;id=__f57b825d-0582-4a28-b964-c7e05fe4447c.__actions_setup-node]
+2026-10-14T02:54:58.4833702Z ##[end-action id=__f57b825d-0582-4a28-b964-c7e05fe4447c.__actions_setup-node;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-14T02:54:58.4898691Z Post job cleanup.
+2026-10-14T02:54:58.5734865Z [command]/usr/bin/git version
+2026-10-14T02:54:58.5772705Z git version 2.55.0
+2026-10-14T02:54:58.5809254Z Temporarily overriding HOME='/home/runner/work/_temp/5f75560c-649e-4718-8c52-7ce66e9c8da1' before making global git config changes
+2026-10-14T02:54:58.5810941Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T02:54:58.5814239Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T02:54:58.5853557Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T02:54:58.5886544Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T02:54:58.6136151Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T02:54:58.6169259Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T02:54:58.6380325Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T02:54:58.6440867Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T02:54:58.6840306Z Cleaning up orphan processes
+2026-10-14T02:54:58.7123652Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
