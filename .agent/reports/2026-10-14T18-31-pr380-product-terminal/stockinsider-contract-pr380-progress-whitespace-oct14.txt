@@ -1,0 +1,353 @@
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:103: trailing whitespace.
++2026-10-14T10:13:34.3945113Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:107: trailing whitespace.
++2026-10-14T10:13:34.3951078Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:110: trailing whitespace.
++2026-10-14T10:13:34.3955248Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:112: trailing whitespace.
++2026-10-14T10:13:34.3957020Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:114: trailing whitespace.
++2026-10-14T10:13:34.3958860Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:116: trailing whitespace.
++2026-10-14T10:13:34.3960859Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:118: trailing whitespace.
++2026-10-14T10:13:34.3964306Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:219: trailing whitespace.
++2026-10-14T10:13:45.2570911Z (Reading database ... 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:253: trailing whitespace.
++2026-10-14T10:13:49.8161643Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:255: trailing whitespace.
++2026-10-14T10:13:49.8162644Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:257: trailing whitespace.
++2026-10-14T10:13:49.8163049Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:259: trailing whitespace.
++2026-10-14T10:13:49.8163542Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:261: trailing whitespace.
++2026-10-14T10:13:49.8164080Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:271: trailing whitespace.
++2026-10-14T10:13:51.9217951Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:273: trailing whitespace.
++2026-10-14T10:13:51.9219540Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:276: trailing whitespace.
++2026-10-14T10:13:51.9232848Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:278: trailing whitespace.
++2026-10-14T10:13:51.9233409Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:281: trailing whitespace.
++2026-10-14T10:13:51.9234204Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:284: trailing whitespace.
++2026-10-14T10:14:09.2170268Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:286: trailing whitespace.
++2026-10-14T10:14:09.2171446Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:289: trailing whitespace.
++2026-10-14T10:14:09.3399824Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:291: trailing whitespace.
++2026-10-14T10:14:09.3401175Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:294: trailing whitespace.
++2026-10-14T10:14:09.3402126Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:297: trailing whitespace.
++2026-10-14T10:14:09.3403114Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:856: trailing whitespace.
++2026-10-14T10:13:34.3945105Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:860: trailing whitespace.
++2026-10-14T10:13:34.3951044Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:863: trailing whitespace.
++2026-10-14T10:13:34.3955220Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:865: trailing whitespace.
++2026-10-14T10:13:34.3956996Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:867: trailing whitespace.
++2026-10-14T10:13:34.3958828Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:869: trailing whitespace.
++2026-10-14T10:13:34.3960840Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:871: trailing whitespace.
++2026-10-14T10:13:34.3964284Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:974: trailing whitespace.
++2026-10-14T10:13:45.2570879Z (Reading database ... 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1008: trailing whitespace.
++2026-10-14T10:13:49.8161601Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1010: trailing whitespace.
++2026-10-14T10:13:49.8162641Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1012: trailing whitespace.
++2026-10-14T10:13:49.8163048Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1014: trailing whitespace.
++2026-10-14T10:13:49.8163540Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1016: trailing whitespace.
++2026-10-14T10:13:49.8164077Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1027: trailing whitespace.
++2026-10-14T10:13:51.9217881Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1029: trailing whitespace.
++2026-10-14T10:13:51.9219534Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1032: trailing whitespace.
++2026-10-14T10:13:51.9232837Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1034: trailing whitespace.
++2026-10-14T10:13:51.9233406Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1037: trailing whitespace.
++2026-10-14T10:13:51.9234202Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1040: trailing whitespace.
++2026-10-14T10:14:09.2170226Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1042: trailing whitespace.
++2026-10-14T10:14:09.2171438Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1045: trailing whitespace.
++2026-10-14T10:14:09.3399771Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1047: trailing whitespace.
++2026-10-14T10:14:09.3401172Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1050: trailing whitespace.
++2026-10-14T10:14:09.3402124Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/financial-combined.log:1053: trailing whitespace.
++2026-10-14T10:14:09.3403112Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:953: trailing whitespace.
++2026-10-14T10:13:46.6013070Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:957: trailing whitespace.
++2026-10-14T10:13:46.6014544Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:960: trailing whitespace.
++2026-10-14T10:13:46.6032954Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:962: trailing whitespace.
++2026-10-14T10:13:46.6033184Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:964: trailing whitespace.
++2026-10-14T10:13:46.6033383Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:966: trailing whitespace.
++2026-10-14T10:13:46.6033543Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:968: trailing whitespace.
++2026-10-14T10:13:46.6033878Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:1911: trailing whitespace.
++2026-10-14T10:13:46.6013064Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:1915: trailing whitespace.
++2026-10-14T10:13:46.6014540Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:1918: trailing whitespace.
++2026-10-14T10:13:46.6032949Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:1920: trailing whitespace.
++2026-10-14T10:13:46.6033181Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:1922: trailing whitespace.
++2026-10-14T10:13:46.6033381Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:1924: trailing whitespace.
++2026-10-14T10:13:46.6033541Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:1926: trailing whitespace.
++2026-10-14T10:13:46.6033875Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:2864: trailing whitespace.
++2026-10-14T10:13:46.1378328Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:2868: trailing whitespace.
++2026-10-14T10:13:46.1381627Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:2871: trailing whitespace.
++2026-10-14T10:13:46.1383715Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:2873: trailing whitespace.
++2026-10-14T10:13:46.1406118Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:2875: trailing whitespace.
++2026-10-14T10:13:46.1407020Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:2877: trailing whitespace.
++2026-10-14T10:13:46.1407652Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:2879: trailing whitespace.
++2026-10-14T10:13:46.1408900Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:3822: trailing whitespace.
++2026-10-14T10:13:46.1378323Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:3826: trailing whitespace.
++2026-10-14T10:13:46.1381623Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:3829: trailing whitespace.
++2026-10-14T10:13:46.1383707Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:3831: trailing whitespace.
++2026-10-14T10:13:46.1406089Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:3833: trailing whitespace.
++2026-10-14T10:13:46.1407013Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:3835: trailing whitespace.
++2026-10-14T10:13:46.1407645Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:3837: trailing whitespace.
++2026-10-14T10:13:46.1408894Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:4775: trailing whitespace.
++2026-10-14T10:13:46.1090948Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:4779: trailing whitespace.
++2026-10-14T10:13:46.1092623Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:4782: trailing whitespace.
++2026-10-14T10:13:46.1094007Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:4784: trailing whitespace.
++2026-10-14T10:13:46.1094358Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:4786: trailing whitespace.
++2026-10-14T10:13:46.1094730Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:4788: trailing whitespace.
++2026-10-14T10:13:46.1094997Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:4790: trailing whitespace.
++2026-10-14T10:13:46.1095590Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:5733: trailing whitespace.
++2026-10-14T10:13:46.1090944Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:5737: trailing whitespace.
++2026-10-14T10:13:46.1092620Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:5740: trailing whitespace.
++2026-10-14T10:13:46.1094004Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:5742: trailing whitespace.
++2026-10-14T10:13:46.1094355Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:5744: trailing whitespace.
++2026-10-14T10:13:46.1094728Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:5746: trailing whitespace.
++2026-10-14T10:13:46.1094994Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:5748: trailing whitespace.
++2026-10-14T10:13:46.1095588Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:6686: trailing whitespace.
++2026-10-14T10:13:35.8949815Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:6690: trailing whitespace.
++2026-10-14T10:13:35.8955538Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:6693: trailing whitespace.
++2026-10-14T10:13:35.8958392Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:6695: trailing whitespace.
++2026-10-14T10:13:35.8959368Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:6697: trailing whitespace.
++2026-10-14T10:13:35.8960303Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:6699: trailing whitespace.
++2026-10-14T10:13:35.8961071Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:6701: trailing whitespace.
++2026-10-14T10:13:35.8962929Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:7779: trailing whitespace.
++2026-10-14T10:13:35.8949772Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:7783: trailing whitespace.
++2026-10-14T10:13:35.8955533Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:7786: trailing whitespace.
++2026-10-14T10:13:35.8958388Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:7788: trailing whitespace.
++2026-10-14T10:13:35.8959363Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:7790: trailing whitespace.
++2026-10-14T10:13:35.8960299Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:7792: trailing whitespace.
++2026-10-14T10:13:35.8961067Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/protected-combined.log:7794: trailing whitespace.
++2026-10-14T10:13:35.8962925Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:104: trailing whitespace.
++2026-10-14T10:13:33.6141080Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:108: trailing whitespace.
++2026-10-14T10:13:33.6144307Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:111: trailing whitespace.
++2026-10-14T10:13:33.6145730Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:113: trailing whitespace.
++2026-10-14T10:13:33.6146344Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:115: trailing whitespace.
++2026-10-14T10:13:33.6146946Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:117: trailing whitespace.
++2026-10-14T10:13:33.6206851Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:119: trailing whitespace.
++2026-10-14T10:13:33.6207842Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:220: trailing whitespace.
++2026-10-14T10:13:50.6873120Z (Reading database ... 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:254: trailing whitespace.
++2026-10-14T10:13:54.8046549Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:256: trailing whitespace.
++2026-10-14T10:13:54.8047369Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:258: trailing whitespace.
++2026-10-14T10:13:54.8047644Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:260: trailing whitespace.
++2026-10-14T10:13:54.8047906Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:262: trailing whitespace.
++2026-10-14T10:13:54.8048209Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:272: trailing whitespace.
++2026-10-14T10:13:56.5847038Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:274: trailing whitespace.
++2026-10-14T10:13:56.5847835Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:277: trailing whitespace.
++2026-10-14T10:13:56.5858307Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:279: trailing whitespace.
++2026-10-14T10:13:56.5858760Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:282: trailing whitespace.
++2026-10-14T10:13:56.5859344Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:285: trailing whitespace.
++2026-10-14T10:14:09.8659271Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:287: trailing whitespace.
++2026-10-14T10:14:09.8660224Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:290: trailing whitespace.
++2026-10-14T10:14:09.9634636Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:292: trailing whitespace.
++2026-10-14T10:14:09.9635548Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:295: trailing whitespace.
++2026-10-14T10:14:09.9636349Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:298: trailing whitespace.
++2026-10-14T10:14:09.9637191Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1006: trailing whitespace.
++2026-10-14T10:13:33.6141072Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1010: trailing whitespace.
++2026-10-14T10:13:33.6144288Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1013: trailing whitespace.
++2026-10-14T10:13:33.6145726Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1015: trailing whitespace.
++2026-10-14T10:13:33.6146339Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1017: trailing whitespace.
++2026-10-14T10:13:33.6146943Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1019: trailing whitespace.
++2026-10-14T10:13:33.6206847Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1021: trailing whitespace.
++2026-10-14T10:13:33.6207836Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1124: trailing whitespace.
++2026-10-14T10:13:50.6873107Z (Reading database ... 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1158: trailing whitespace.
++2026-10-14T10:13:54.8046498Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1160: trailing whitespace.
++2026-10-14T10:13:54.8047366Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1162: trailing whitespace.
++2026-10-14T10:13:54.8047642Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1164: trailing whitespace.
++2026-10-14T10:13:54.8047905Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1166: trailing whitespace.
++2026-10-14T10:13:54.8048207Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1177: trailing whitespace.
++2026-10-14T10:13:56.5846991Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1179: trailing whitespace.
++2026-10-14T10:13:56.5847834Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1182: trailing whitespace.
++2026-10-14T10:13:56.5858290Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1184: trailing whitespace.
++2026-10-14T10:13:56.5858749Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1187: trailing whitespace.
++2026-10-14T10:13:56.5859341Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1190: trailing whitespace.
++2026-10-14T10:14:09.8659221Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1192: trailing whitespace.
++2026-10-14T10:14:09.8660221Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1195: trailing whitespace.
++2026-10-14T10:14:09.9634582Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1197: trailing whitespace.
++2026-10-14T10:14:09.9635545Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1200: trailing whitespace.
++2026-10-14T10:14:09.9636346Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-combined.log:1203: trailing whitespace.
++2026-10-14T10:14:09.9637189Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:104: trailing whitespace.
++2026-10-14T10:13:33.6141080Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:108: trailing whitespace.
++2026-10-14T10:13:33.6144307Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:111: trailing whitespace.
++2026-10-14T10:13:33.6145730Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:113: trailing whitespace.
++2026-10-14T10:13:33.6146344Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:115: trailing whitespace.
++2026-10-14T10:13:33.6146946Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:117: trailing whitespace.
++2026-10-14T10:13:33.6206851Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:119: trailing whitespace.
++2026-10-14T10:13:33.6207842Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:220: trailing whitespace.
++2026-10-14T10:13:50.6873120Z (Reading database ... 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:254: trailing whitespace.
++2026-10-14T10:13:54.8046549Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:256: trailing whitespace.
++2026-10-14T10:13:54.8047369Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:258: trailing whitespace.
++2026-10-14T10:13:54.8047644Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:260: trailing whitespace.
++2026-10-14T10:13:54.8047906Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:262: trailing whitespace.
++2026-10-14T10:13:54.8048209Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:272: trailing whitespace.
++2026-10-14T10:13:56.5847038Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:274: trailing whitespace.
++2026-10-14T10:13:56.5847835Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:277: trailing whitespace.
++2026-10-14T10:13:56.5858307Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:279: trailing whitespace.
++2026-10-14T10:13:56.5858760Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:282: trailing whitespace.
++2026-10-14T10:13:56.5859344Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:285: trailing whitespace.
++2026-10-14T10:14:09.8659271Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:287: trailing whitespace.
++2026-10-14T10:14:09.8660224Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:290: trailing whitespace.
++2026-10-14T10:14:09.9634636Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:292: trailing whitespace.
++2026-10-14T10:14:09.9635548Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:295: trailing whitespace.
++2026-10-14T10:14:09.9636349Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/ci/tail-job.log:298: trailing whitespace.
++2026-10-14T10:14:09.9637191Z 
+.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/contract/task.txt:6: new blank line at EOF.
