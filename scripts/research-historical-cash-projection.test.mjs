@@ -109,6 +109,7 @@ test('all allocated carrier/decode buffers are wiped on success and every cooper
   Uint8Array.prototype.set=function(...args){allocated.push(this);return set.apply(this,args);};
   observed=await import('../web/src/lib/research-historical-cash-projection.ts?cleanup-witness');
  }finally{Buffer.from=from;Uint8Array.prototype.set=set;}
+ allocated.length=0; // Exclude Node module-loader allocations before runtime observation.
  for(const symbol of ['2409','2383']){
   const carrier=material(symbol),before=Buffer.from(carrier);let total=0;
   observed.projectPinnedHistoricalCash(historicalCashPins.profile,symbol,carrier,{check(){total++;}});
