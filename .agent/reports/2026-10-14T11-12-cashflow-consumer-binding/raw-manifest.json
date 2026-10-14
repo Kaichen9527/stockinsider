@@ -1,0 +1,287 @@
+[
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/auo-decimal.meta.json",
+    "bytes": 275,
+    "sha256": "23964a0ff81f27a01332c30259d8b438e507244b2ce4429900cbcef4704c2ca5"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/auo-decimal.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/auo-decimal.stdout",
+    "bytes": 250,
+    "sha256": "d6455512cfbfe13e8183031da0f14e821b06bc4a44d408f74743865540cfe233"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/auo-recompute-final.meta.json",
+    "bytes": 303,
+    "sha256": "7a7700869b89c5450f8cdaeef176a4d748b06c1ec8326d8b5bb347ff408b067b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/auo-recompute-final.stderr",
+    "bytes": 607,
+    "sha256": "a1d91f93e4e285507c3f7ad0992c2fcc8a59e42ed71b3bf5f9aceed934248c6c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/auo-recompute-final.stdout",
+    "bytes": 899,
+    "sha256": "6fdc02281b5949110ec5f57ff281d722f0872e21c79c7dc0294b71ce710c1aa9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/auo-recompute.meta.json",
+    "bytes": 304,
+    "sha256": "9b89cbf9dfbef88953fdfe6d5ad0299d1d7a34b1f0d2830a9e2f85b81b045f18"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/auo-recompute.stderr",
+    "bytes": 598,
+    "sha256": "6aff3fe5bf6a798b65c73e662c5668ce7c6f9fabda7a1de800b9947b792cc8e9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/auo-recompute.stdout",
+    "bytes": 899,
+    "sha256": "6fdc02281b5949110ec5f57ff281d722f0872e21c79c7dc0294b71ce710c1aa9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/build-identity.json",
+    "bytes": 387,
+    "sha256": "2f9ff56f10f9655eeb1376d95948a3c2744731881485bb3c723ae7f57e5e62f4"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/cleanup.json",
+    "bytes": 198,
+    "sha256": "0db69c19823ab717a246a210fda3f05e8013392c456f7fb673cde84f84970690"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/compiled-server-manifest.json",
+    "bytes": 387190,
+    "sha256": "3b6dcfe37cbc78187ae5b6f8bd7e0ef83b8512ad5467b4e42d0ed4dd60ce937b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-green.meta.json",
+    "bytes": 273,
+    "sha256": "99463c268d9084323604d6cb14a8c122e819ba9864321f9a0454140f0a626978"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-green.stderr",
+    "bytes": 607,
+    "sha256": "7cd164a122e7c8def75f11464bc984f567d608f6d5a3f2b9583c3768d71cb6dd"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-green.stdout",
+    "bytes": 646,
+    "sha256": "24cfa9bd445ed48b68f38f0acf22af8e4ed30cf2880b35346dcf3ce744008c00"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-models-pure-final.meta.json",
+    "bytes": 489,
+    "sha256": "6dad741096470642e021396b0a1569954f088cef922d4bca5a2b2e99bdeab395"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-models-pure-final.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-models-pure-final.stdout",
+    "bytes": 16072,
+    "sha256": "0a041f5a4465ea9252361b5d346304c2f192f38d008f203967ff9c1d158b71e7"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-models-pure-sealed.meta.json",
+    "bytes": 490,
+    "sha256": "931a77b63ec7714af5ed99087a23bc7a3df4e1a060ac18a16f6f76eff6b01e1b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-models-pure-sealed.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-models-pure-sealed.stdout",
+    "bytes": 16080,
+    "sha256": "860119e7aefb39fa919f71a5c08c9758d73c5068f8d120a1176963fb635e7d20"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-models-pure.meta.json",
+    "bytes": 490,
+    "sha256": "8ba3101807ce85a78ac14a9a43cfcd852d1a925484a2146335a0318e9f8daa77"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-models-pure.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/consumer-models-pure.stdout",
+    "bytes": 15579,
+    "sha256": "27392c680ea5baa8e8698587715376a186b03bb539e573d710928401b27d3fb3"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/emc-decimal.meta.json",
+    "bytes": 271,
+    "sha256": "ba67dcb23b52e0fff949834e612f0c3bb80e78a39fa91751214a23b078737610"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/emc-decimal.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/emc-decimal.stdout",
+    "bytes": 176,
+    "sha256": "0d0f7e9f7057084ea0ddd8b60046c85e3972000c3a7f84e35a0aa5ba24a96de2"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/emc-recompute-final.meta.json",
+    "bytes": 300,
+    "sha256": "ab4f602d92484afc5569070e7223468a863ab348b13ef0311f8dfdfc455c5d50"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/emc-recompute-final.stderr",
+    "bytes": 598,
+    "sha256": "36ec3c34bf8667aa15dc9aed38b76139da7f82f0a8d3d1452a383284c80b4c54"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/emc-recompute-final.stdout",
+    "bytes": 1776,
+    "sha256": "2c1eb90af4d307b73e9cc54d756b3266de672a54d8598b3df9ef7ae5cacd2ce1"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/emc-recompute.meta.json",
+    "bytes": 299,
+    "sha256": "99a59b7547a76527394cdda633f056c4b8d1c5f24da18d9da132afb95176daa3"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/emc-recompute.stderr",
+    "bytes": 613,
+    "sha256": "163dee6886175f02e208e63bac1f4a1f7b9c92f96c37cf253be0ace839793c94"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/emc-recompute.stdout",
+    "bytes": 1776,
+    "sha256": "2c1eb90af4d307b73e9cc54d756b3266de672a54d8598b3df9ef7ae5cacd2ce1"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/field-clock-equality.json",
+    "bytes": 2731,
+    "sha256": "5005b252bbfeb1b3dae6b7f6b73619b7853c5167c77b7fb39b5fdabae8334a28"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/lint-final.meta.json",
+    "bytes": 251,
+    "sha256": "690b99f3ca53c60c58ffdf81fbd9c77289631bbe703b0186a6fda79a917c64cc"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/lint-final.stderr",
+    "bytes": 165,
+    "sha256": "7279b957dba9fd516374b707edba9f912d6c1de4375ea3dc858241c7714bfc8c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/lint-final.stdout",
+    "bytes": 4588,
+    "sha256": "8df5855b14f315aff14b5134842c2d31a35846f87297d90c6e51438568118692"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/lint.meta.json",
+    "bytes": 252,
+    "sha256": "82ba70c857b3aacd238bcac47b24b10c71f35fc454c60a4c2835dbaf1e7c6e08"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/lint.stderr",
+    "bytes": 165,
+    "sha256": "7279b957dba9fd516374b707edba9f912d6c1de4375ea3dc858241c7714bfc8c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/lint.stdout",
+    "bytes": 4588,
+    "sha256": "8df5855b14f315aff14b5134842c2d31a35846f87297d90c6e51438568118692"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/normal-build.meta.json",
+    "bytes": 253,
+    "sha256": "f97ac645fbd31bed8145c37c0733e477a5e2b7edd7e504e6731bc8b1a632483e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/normal-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/normal-build.stdout",
+    "bytes": 6499,
+    "sha256": "7edb9f4be9d486d0c7194129d8d94344bb8798fb9d22eb2503946ab7e4b8a100"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/original-consumer-probe.mjs.txt",
+    "bytes": 1058,
+    "sha256": "67477e5f4554a67cef69660bf7f798fe5263b1e5334c3c400e7a228c4699f61c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/original-consumer-red.meta.json",
+    "bytes": 273,
+    "sha256": "cbbbc7077efbde06fa6a5fb5e9e9ecfd6ed4b295687d897439d97e5a3a4195c6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/original-consumer-red.stderr",
+    "bytes": 608,
+    "sha256": "4fe9ad957bcd1510fa9fd3798169fd5a50ec2fce1c25dd9d8836faf8cb637c39"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/original-consumer-red.stdout",
+    "bytes": 716,
+    "sha256": "d68a2978fa139d18723367d2ea9829290143d30be9fdc551aeaf1c5b2a197cbb"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/original-wip-manifest.json",
+    "bytes": 5280,
+    "sha256": "3c21f194aa4a4f0e5742f4f4b3f153d02e33020bdf6d1ce30ea3cf85b0c04df3"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/pre-test-wip.json",
+    "bytes": 3216,
+    "sha256": "2dba5c4cdd04dff5054b12f4ec71a7e4d6dc07b49e3ab98312a341fe50f4213c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/source-manifest.json",
+    "bytes": 12864,
+    "sha256": "134860f0321e5bcc3be19866040547b0c3467a66e82a57f86741fb331a1ec4e3"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/typecheck-final.meta.json",
+    "bytes": 256,
+    "sha256": "b1c96f74bfc1395416ab1c5205e252397efd702a51e26b901fa5ae121f8f39e2"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/typecheck-final.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/typecheck-final.stdout",
+    "bytes": 188,
+    "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/typecheck.meta.json",
+    "bytes": 257,
+    "sha256": "c8258f9d3f36e3772a11bd37be38ef80eb87173b96f4971619fabfc101caa2ef"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/typecheck.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/typecheck.stdout",
+    "bytes": 575,
+    "sha256": "bf6cf133c19ca3b7d4f5ec76394acd56174fe9458220800084432d0c686b355f"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T11-12-cashflow-consumer-binding/unchanged-production-consumer.json",
+    "bytes": 1157,
+    "sha256": "d4804bcbee7c72b9f716bfe2356e4fa270ed7e1ad57961b04d8482ef7ddf23cd"
+  }
+]

@@ -1,0 +1,129 @@
+{
+  "source": "85ba71196ae24f73a58d9df114f0784d72f40a8f",
+  "at": "2026-10-14T03:14:12.584739+00:00",
+  "deadline": "2026-10-14T03:32:48Z",
+  "clean": true,
+  "workspaceFree": 8633663488,
+  "files": [
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+      "bytes": 26223,
+      "sha256": "eb953b8319941b693ed8b966afc53ffdc7b606623a93573ec01356608ade72de",
+      "blob": "1af17a44e0bba547cf8eb9f819899096d0dd3ff6"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/README.md",
+      "bytes": 4914,
+      "sha256": "ef43bff0c8aa4b1c74ef5d0c872bb72aa1a030fa0caf6688a07f0e6855b7adb9",
+      "blob": "3a88dc4ecc731140ae4f7a6dc51c1adfc41faf00"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/hashes.json",
+      "bytes": 1908,
+      "sha256": "1dd7feeb9da33442874921166e733fbe0ade2c43f275771387e03806a3b7eda1",
+      "blob": "55bb6e2cafeabe50a1bdb688785667b9e52d59f4"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/article.md",
+      "bytes": 23832,
+      "sha256": "accb32669966843b008a345bfe732a13d41af3b008fcbfe2f716d6d580c8cda2",
+      "blob": "2095c675e31848810368e0a69aa7a74360a5e60e"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json",
+      "bytes": 2386,
+      "sha256": "67a1b658c6294e57caccb06d2a83b52f8f761959012c46bb6b8f59fd41977539",
+      "blob": "8087c65e8f17542219ff1b0b8001652eb74fefea"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 112128,
+      "sha256": "9804ae47272e7b429a9109906a0b6d1d141d7921915c355f807a983454441822",
+      "blob": "23eaa1086d3ec6f88482664d00a1b3e5d85e6a5b"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/CASHFLOW-INTEGRATION-HANDOFF.md",
+      "bytes": 2291,
+      "sha256": "1665bea0e2027b4b8f84a3406c426e3efa5cfd021d0d14e1c189d873ce3d7c47",
+      "blob": "069e17480a36eaab2dfe48b95f201b1ea3313740"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/verify-output.py",
+      "bytes": 8227,
+      "sha256": "ed805e8c2c675acae7c6be51489b7149d21b4d02b8cd5ccb6bd9e494993aba00",
+      "blob": "e4b77e54c2ffcb6ed365390bacdfbe4689d9f1ce"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/article-template.md",
+      "bytes": 21001,
+      "sha256": "4b32b5d3f3e93c408548b4c039e608cea1009ec66077bb3b15a2f5a99c83ae45",
+      "blob": "7e630280a02f2b2a4d1d4c11735feff312822d75"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/source-ledger.json",
+      "bytes": 3460,
+      "sha256": "585954c72894c6187a3de1958fef9fe29871b559d66d966d5e3202792fbe1665",
+      "blob": "0a1b5c17af9244fc821e6c92c56fd31bdeedafc9"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+      "bytes": 17302,
+      "sha256": "afabc54338d350af6755732c853ee6401f5a4388b2e82685044919009ff16e4c",
+      "blob": "1535d97c0b21d2cc30c4081790fbf61849907408"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/README.md",
+      "bytes": 5362,
+      "sha256": "5d4bb16afe92d2b13cde1dca2941e447b10fb1b41512b7e93a028a2364f48ca7",
+      "blob": "fd0ad34c87916fcb8f43f96385c2a5a985a71f3c"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/hashes.json",
+      "bytes": 2218,
+      "sha256": "d64fee2d513b199b94f647c15f65d6667194f3f6fe4711e2d7c2969271d64a29",
+      "blob": "f80483852592d20581128c05cbf26221ad8ab670"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/article.md",
+      "bytes": 23472,
+      "sha256": "65a5c805e45487dfa6daa91d5c8d7f5d5aae4a10ed7f6aa250cb6b11710b3064",
+      "blob": "50d0f673c0051e1bd5d15eeddcf448bdea23f33c"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/draft-metadata.json",
+      "bytes": 1872,
+      "sha256": "e62a3c50c6d90a8e49d1d946abafbe0e9e171abcfda99f2b8967e303c21535c4",
+      "blob": "959d69f9e60af49c0404f170feb069997c4c3997"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/model-results.json",
+      "bytes": 70529,
+      "sha256": "846546059cd875ff993efe0a7cbba216dd8ad10123491441ac75b9120bfde3c4",
+      "blob": "7ba5bdce08b356a156b8a07cd4f0e7b2c2afbfa7"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/verify-output.py",
+      "bytes": 8707,
+      "sha256": "7ff98e9a5f0fe5018d2b8de99561c1abcb6e9cd3ac94b7f53f79578d5b7b1216",
+      "blob": "811bcd6ad10383bec8ad71b642bbea065ecf9c4e"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/article-template.md",
+      "bytes": 20264,
+      "sha256": "402cd96e8e4ce94696ffc7d11703e621d6ac769f9a6380bac59760af3557c829",
+      "blob": "03ad7fb7aba3110be2ceda13738ae16627ffbb0e"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/source-ledger.json",
+      "bytes": 3667,
+      "sha256": "e0e349ebdc09fd584b2b0b77be8e9738027d322623244fef0628a644b89648bf",
+      "blob": "be38f4520f2ebadc44f08b4b7193a2e48e021be5"
+    },
+    {
+      "path": "web/src/lib/research-working-draft.test.ts",
+      "bytes": 4863,
+      "sha256": "b1b8978b9d90906540d8e5483305ec1f88e242806bb07e8cfde2dd7e0beef51a",
+      "blob": "886174557c148d1777baa26fa7dfa983abb2c27a"
+    }
+  ]
+}

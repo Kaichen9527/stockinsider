@@ -1,0 +1,10 @@
+import {loadReadOnlyWorkingDraft}from '/workspace/cloud-financial-owner-profile-oct12/web/src/lib/research-working-draft-loader.ts';
+import {researchCanonicalHash}from '/workspace/cloud-financial-owner-profile-oct12/web/src/lib/research-agent-qualification.ts';
+import {readFile}from 'node:fs/promises';
+const root='/workspace/cloud-financial-owner-profile-oct12';
+for(const [symbol,name]of [['2409','auo-four-segment'],['2383','emc-company']]){
+ const folder=root+'/docs/research/2026-10-08-'+name+'-model';const m=JSON.parse(await readFile(folder+'/model-results.json'));const meta=JSON.parse(await readFile(folder+'/draft-metadata.json'));const {canonicalHash,inputManifest,...body}=m;
+ let error;try{await loadReadOnlyWorkingDraft(root,symbol);}catch(e){error=e.message;}
+ console.log(JSON.stringify({symbol,error,storedHash:canonicalHash,consumerHash:researchCanonicalHash(body),modelAsOf:m.asOf,primaryCutoff:meta.cutoffAt??meta.evidenceCutoffAt,primaryAuthored:meta.authoredAndCheckedAt??meta.authoredAndVerifiedAt}));
+ if(error)process.exitCode=1;
+}

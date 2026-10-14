@@ -1,0 +1,12 @@
+
+> web@0.1.0 pretypecheck
+> node scripts/sync-official-authority.mjs
+
+Official authority build bridge verified (5 canonical modules).
+
+> web@0.1.0 typecheck
+> tsc --noEmit --pretty false
+
+src/lib/research-working-draft.test.ts(32,65): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+src/lib/research-working-draft.test.ts(33,37): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+src/lib/research-working-draft.test.ts(34,41): error TS2737: BigInt literals are not available when targeting lower than ES2020.

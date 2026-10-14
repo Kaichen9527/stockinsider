@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "docs/research/2026-10-08-auo-four-segment-model/verify-output.py"
+  ],
+  "start_utc": "2026-10-14T03:20:11Z",
+  "seconds": 0.2720978260040283,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 9248768,
+  "min_free_bytes": 8633536512
+}

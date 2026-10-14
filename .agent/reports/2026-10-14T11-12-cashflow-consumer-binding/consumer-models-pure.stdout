@@ -1,0 +1,330 @@
+TAP version 13
+# (node:531057) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:531057) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-financial-owner-profile-oct12/web/src/lib/auo-deep-dive-model.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-financial-owner-profile-oct12/web/package.json.
+# Subtest: official exact four-segment H1/Q2 includes Other and reconciles
+ok 1 - official exact four-segment H1/Q2 includes Other and reconciles
+  ---
+  duration_ms: 0.973569
+  ...
+# Subtest: Q3 monthly total constrains all scenarios without inventing Q3 EPS
+ok 2 - Q3 monthly total constrains all scenarios without inventing Q3 EPS
+  ---
+  duration_ms: 0.136406
+  ...
+# Subtest: bear all six quarterly bridges independently reconcile to conditional EPS
+ok 3 - bear all six quarterly bridges independently reconcile to conditional EPS
+  ---
+  duration_ms: 0.333323
+  ...
+# Subtest: base all six quarterly bridges independently reconcile to conditional EPS
+ok 4 - base all six quarterly bridges independently reconcile to conditional EPS
+  ---
+  duration_ms: 0.153572
+  ...
+# Subtest: bull all six quarterly bridges independently reconcile to conditional EPS
+ok 5 - bull all six quarterly bridges independently reconcile to conditional EPS
+  ---
+  duration_ms: 0.109024
+  ...
+# Subtest: normalization sensitivity respects tax and differentiated ownership, no exact normalized claim
+ok 6 - normalization sensitivity respects tax and differentiated ownership, no exact normalized claim
+  ---
+  duration_ms: 0.147813
+  ...
+# Subtest: loss scenarios can incur positive jurisdiction tax; future shares not marked actual
+ok 7 - loss scenarios can incur positive jurisdiction tax; future shares not marked actual
+  ---
+  duration_ms: 0.150988
+  ...
+# Subtest: invalid units, missing Other, duplicate month and future microsecond evidence fail
+ok 8 - invalid units, missing Other, duplicate month and future microsecond evidence fail
+  ---
+  duration_ms: 13.592716
+  ...
+# Subtest: unknown commercialization inputs remain incomplete; no fabricated capacity or target
+ok 9 - unknown commercialization inputs remain incomplete; no fabricated capacity or target
+  ---
+  duration_ms: 0.378381
+  ...
+# Subtest: old paper target first observed September22 remains terminal every later daily row
+ok 10 - old paper target first observed September22 remains terminal every later daily row
+  ---
+  duration_ms: 0.513124
+  ...
+# Subtest: same evidence and cutoff regenerate same canonical model
+ok 11 - same evidence and cutoff regenerate same canonical model
+  ---
+  duration_ms: 2.829771
+  ...
+# Subtest: unpublished working article renders both tables and forecast claims from the same result
+ok 12 - unpublished working article renders both tables and forecast claims from the same result
+  ---
+  duration_ms: 31.77233
+  ...
+# Subtest: paper target lifecycle does not invent a hit when no post-reference high reaches it
+ok 13 - paper target lifecycle does not invent a hit when no post-reference high reaches it
+  ---
+  duration_ms: 3.665433
+  ...
+# Subtest: potential shares are excluded for annual loss rather than reducing loss per share
+ok 14 - potential shares are excluded for annual loss rather than reducing loss per share
+  ---
+  duration_ms: 0.090056
+  ...
+# Subtest: positive earnings include potential awards; losses exclude only potential shares
+ok 15 - positive earnings include potential awards; losses exclude only potential shares
+  ---
+  duration_ms: 0.064668
+  ...
+# Subtest: issued ordinary shares remain in loss denominator with actual-period weight
+ok 16 - issued ordinary shares remain in loss denominator with actual-period weight
+  ---
+  duration_ms: 1.279612
+  ...
+# Subtest: quarter and annual loss use their own profit and potential share weights
+ok 17 - quarter and annual loss use their own profit and potential share weights
+  ---
+  duration_ms: 0.108944
+  ...
+# Subtest: patent, annual and nine-month citations link directly to their primary sources
+ok 18 - patent, annual and nine-month citations link directly to their primary sources
+  ---
+  duration_ms: 1.679705
+  ...
+# Subtest: historical cash integration retains every original forecast/price field and binds full manifest
+ok 19 - historical cash integration retains every original forecast/price field and binds full manifest
+  ---
+  duration_ms: 0.242757
+  ...
+# Subtest: both signed H1 bridges use group denominator and exclude disposal and lease cash from proxy
+ok 20 - both signed H1 bridges use group denominator and exclude disposal and lease cash from proxy
+  ---
+  duration_ms: 0.411261
+  ...
+# Subtest: packet mutation sign/unit/grain/hash/clocks and pre-availability successor fail closed
+ok 21 - packet mutation sign/unit/grain/hash/clocks and pre-availability successor fail closed
+  ---
+  duration_ms: 3.543989
+  ...
+# Subtest: successor stored result exactly recomputes with complete packet manifest
+ok 22 - successor stored result exactly recomputes with complete packet manifest
+  ---
+  duration_ms: 2.911013
+  ...
+# Subtest: nested complete manifest is canonical-bound and top duplicate/prefix/unique packet remain exact
+ok 23 - nested complete manifest is canonical-bound and top duplicate/prefix/unique packet remain exact
+  ---
+  duration_ms: 7.008779
+  ...
+# Subtest: real existing working draft consumer accepts successor and preserves original source/model clocks
+ok 24 - real existing working draft consumer accepts successor and preserves original source/model clocks
+  ---
+  duration_ms: 16.38465
+  ...
+# (node:531069) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:531069) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-financial-owner-profile-oct12/web/src/lib/auo-deep-dive-model.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-financial-owner-profile-oct12/web/package.json.
+# Subtest: eight real quarters reconcile signed tax/NCI without inventing derived EPS
+ok 25 - eight real quarters reconcile signed tax/NCI without inventing derived EPS
+  ---
+  duration_ms: 1.414184
+  ...
+# Subtest: monthly quarter differences remain unexplained and Q3 EPS absent
+ok 26 - monthly quarter differences remain unexplained and Q3 EPS absent
+  ---
+  duration_ms: 0.113372
+  ...
+# Subtest: bear 6 profit bridges, signed NCI, annual and forward periods
+ok 27 - bear 6 profit bridges, signed NCI, annual and forward periods
+  ---
+  duration_ms: 0.224589
+  ...
+# Subtest: base 6 profit bridges, signed NCI, annual and forward periods
+ok 28 - base 6 profit bridges, signed NCI, annual and forward periods
+  ---
+  duration_ms: 0.130087
+  ...
+# Subtest: bull 6 profit bridges, signed NCI, annual and forward periods
+ok 29 - bull 6 profit bridges, signed NCI, annual and forward periods
+  ---
+  duration_ms: 0.095204
+  ...
+# Subtest: reported exact ordinary/potential shares and comparative numerator adjustments retained
+ok 30 - reported exact ordinary/potential shares and comparative numerator adjustments retained
+  ---
+  duration_ms: 0.092559
+  ...
+# Subtest: hypothetical loss excludes potential awards; negative NCI increases parent profit
+ok 31 - hypothetical loss excludes potential awards; negative NCI increases parent profit
+  ---
+  duration_ms: 0.280843
+  ...
+# Subtest: bad units, duplicate/month gap and altered financial bridge fail
+ok 32 - bad units, duplicate/month gap and altered financial bridge fail
+  ---
+  duration_ms: 5.335162
+  ...
+# Subtest: future nanos/reversed microseconds and future session fail
+ok 33 - future nanos/reversed microseconds and future session fail
+  ---
+  duration_ms: 4.376496
+  ...
+# Subtest: physical capacity plan and broker history cannot enter revenue as confirmed orders
+ok 34 - physical capacity plan and broker history cannot enter revenue as confirmed orders
+  ---
+  duration_ms: 0.33856
+  ...
+# Subtest: X0.00 remains named and unadjusted diagnostics cannot approve entry or total return
+ok 35 - X0.00 remains named and unadjusted diagnostics cannot approve entry or total return
+  ---
+  duration_ms: 0.181664
+  ...
+# Subtest: shared renderer checks rectangular tables and all required tokens
+ok 36 - shared renderer checks rectangular tables and all required tokens
+  ---
+  duration_ms: 8.24251
+  ...
+# Subtest: same evidence/cutoff hash and article exactly rebuild; 4–6k original narrative cites direct links
+ok 37 - same evidence/cutoff hash and article exactly rebuild; 4–6k original narrative cites direct links
+  ---
+  duration_ms: 39.169439
+  ...
+# Subtest: product revenues and interest/finance/FX reconcile without grade mix or double count
+ok 38 - product revenues and interest/finance/FX reconcile without grade mix or double count
+  ---
+  duration_ms: 0.266412
+  ...
+# Subtest: current187–226media expectations reverse to required revenue/margins, not adopted base
+ok 39 - current187–226media expectations reverse to required revenue/margins, not adopted base
+  ---
+  duration_ms: 0.137277
+  ...
+# Subtest: 2026 annual potential shares preserve reported H1 weight rather than adding rounded EPS
+ok 40 - 2026 annual potential shares preserve reported H1 weight rather than adding rounded EPS
+  ---
+  duration_ms: 0.075394
+  ...
+# Subtest: PE sensitivity consistently uses 2027 base diluted shares and names its basis
+ok 41 - PE sensitivity consistently uses 2027 base diluted shares and names its basis
+  ---
+  duration_ms: 0.085499
+  ...
+# Subtest: historical cash integration retains every original forecast/price field and binds full manifest
+ok 42 - historical cash integration retains every original forecast/price field and binds full manifest
+  ---
+  duration_ms: 0.236818
+  ...
+# Subtest: both signed H1 bridges use group denominator and exclude disposal and lease cash from proxy
+ok 43 - both signed H1 bridges use group denominator and exclude disposal and lease cash from proxy
+  ---
+  duration_ms: 0.283859
+  ...
+# Subtest: packet mutation sign/unit/grain/hash/clocks and pre-availability successor fail closed
+ok 44 - packet mutation sign/unit/grain/hash/clocks and pre-availability successor fail closed
+  ---
+  duration_ms: 4.753765
+  ...
+# Subtest: successor stored result exactly recomputes with complete packet manifest
+ok 45 - successor stored result exactly recomputes with complete packet manifest
+  ---
+  duration_ms: 7.330244
+  ...
+# Subtest: nested complete manifest is canonical-bound and top duplicate/prefix/unique packet remain exact
+ok 46 - nested complete manifest is canonical-bound and top duplicate/prefix/unique packet remain exact
+  ---
+  duration_ms: 6.577628
+  ...
+# Subtest: real existing working draft consumer accepts successor and preserves original source/model clocks
+ok 47 - real existing working draft consumer accepts successor and preserves original source/model clocks
+  ---
+  duration_ms: 14.890444
+  ...
+# (node:531081) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:531081) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-financial-owner-profile-oct12/web/src/lib/research-working-draft-fifo.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-financial-owner-profile-oct12/web/package.json.
+# Subtest: four concurrent FIFO artifacts refuse within bounded subprocess deadline without fs-pool exhaustion
+ok 48 - four concurrent FIFO artifacts refuse within bounded subprocess deadline without fs-pool exhaustion
+  ---
+  duration_ms: 228.229091
+  ...
+# Subtest: device and directory leaves reject before reading; symlink is not followed
+ok 49 - device and directory leaves reject before reading; symlink is not followed
+  ---
+  duration_ms: 2.154532
+  ...
+# (node:531105) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:531105) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-financial-owner-profile-oct12/web/src/lib/research-working-draft.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-financial-owner-profile-oct12/web/package.json.
+# Subtest: 2409 actual artifact renders seven chapters, original tables and direct citations without formal authority
+ok 50 - 2409 actual artifact renders seven chapters, original tables and direct citations without formal authority
+  ---
+  duration_ms: 27.920886
+  ...
+# Subtest: 2383 actual artifact renders seven chapters, original tables and direct citations without formal authority
+ok 51 - 2383 actual artifact renders seven chapters, original tables and direct citations without formal authority
+  ---
+  duration_ms: 9.485467
+  ...
+# Subtest: preview requires explicit local demo flag; default and production remain disabled
+ok 52 - preview requires explicit local demo flag; default and production remain disabled
+  ---
+  duration_ms: 0.283527
+  ...
+# Subtest: published/qualification/strategy/target mutations are never accepted as working draft
+ok 53 - published/qualification/strategy/target mutations are never accepted as working draft
+  ---
+  duration_ms: 0.612644
+  ...
+# Subtest: nanosecond cutoff after authored clock rejects, original clocks stay exact
+ok 54 - nanosecond cutoff after authored clock rejects, original clocks stay exact
+  ---
+  duration_ms: 1.128594
+  ...
+# Subtest: private/credential/javascript citation URLs reject rather than silently disclose
+ok 55 - private/credential/javascript citation URLs reject rather than silently disclose
+  ---
+  duration_ms: 1.126921
+  ...
+# Subtest: missing/duplicate references and malformed or oversized tables reject
+ok 56 - missing/duplicate references and malformed or oversized tables reject
+  ---
+  duration_ms: 1.68924
+  ...
+# Subtest: HTML stays plain paragraph data and local historical reference has no fabricated URL/date
+ok 57 - HTML stays plain paragraph data and local historical reference has no fabricated URL/date
+  ---
+  duration_ms: 0.877695
+  ...
+# Subtest: unsupported symbols never become paths
+ok 58 - unsupported symbols never become paths
+  ---
+  duration_ms: 0.517752
+  ...
+# Subtest: changed bytes, model/cutoff binding, and symlink artifact reject
+ok 59 - changed bytes, model/cutoff binding, and symlink artifact reject
+  ---
+  duration_ms: 29.227313
+  ...
+# Subtest: both future author and cutoff reject against actual reader clock; no historical clock rewriting
+ok 60 - both future author and cutoff reject against actual reader clock; no historical clock rewriting
+  ---
+  duration_ms: 0.323008
+  ...
+1..60
+# tests 60
+# suites 0
+# pass 60
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1153.412805

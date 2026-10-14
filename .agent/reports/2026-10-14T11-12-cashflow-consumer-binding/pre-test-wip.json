@@ -1,0 +1,86 @@
+{
+  "at": "2026-10-14T03:17:36.600598+00:00",
+  "parent": "85ba71196ae24f73a58d9df114f0784d72f40a8f",
+  "files": [
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/CASHFLOW-INTEGRATION-HANDOFF.md",
+      "bytes": 3146,
+      "sha256": "10318a640b82d95e2e673153f6ee9140c549ed4f7ea584e82cc9f97cfc3e23a9"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/README.md",
+      "bytes": 5748,
+      "sha256": "380dd3ece7ebb69cc51700680be91cbeb1a29e488ec885e0588dc4659be0c37c"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json",
+      "bytes": 2632,
+      "sha256": "3dd964f07a323c5c8b8bf260f0cd68ac2732933a2b408fa830c3fe7bc446cdd6"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/hashes.json",
+      "bytes": 1908,
+      "sha256": "299043b23ae02c049e3df4342b1b2243c503b14124c926abac6aee6b18825bd4"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 113823,
+      "sha256": "6426ba0caaac2a446593a632ebce50f93e7851f4fdb4025ff427c2f011961209"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+      "bytes": 29114,
+      "sha256": "95fe108b467deba38ead473ba179ffc129dd8cfebffe5f7599197ce2303a0ffd"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/verify-output.py",
+      "bytes": 8380,
+      "sha256": "4ae10bf4d34fca5e461037fe08da5a986ca23f9ec544dcda3724d83be2e3f110"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/README.md",
+      "bytes": 6196,
+      "sha256": "58ebc759d511ac7aac3a2078786de7e7be7613a5edb63cb2a48d141572e14eb9"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/draft-metadata.json",
+      "bytes": 2109,
+      "sha256": "736e66ea0fc07edefce04351359af0f3e156b77dfd595f635ea30c3616ff81fb"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/hashes.json",
+      "bytes": 2218,
+      "sha256": "81cfda31253ff390d77b3888ad968ac2fb464f0cdc28b4aa0953548f95b54b22"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/model-results.json",
+      "bytes": 71848,
+      "sha256": "30028ccf9e48d7cda79f55a8b6ffd5141bad513e277894c8e360479e606b6786"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+      "bytes": 17404,
+      "sha256": "903b23c7b25c2a2cca75c66d9887d3f500b1c5df672ab03484433caf6cd958ae"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/verify-output.py",
+      "bytes": 8860,
+      "sha256": "b77aee357a243510a12677a374f64f0d1f2bee7ce05fef45d9e516200b91c078"
+    },
+    {
+      "path": "scripts/research-auo-four-segment-model.test.mjs",
+      "bytes": 13585,
+      "sha256": "9c1268810ec725b7e7fe1c682bc572c1bcc6f7bdad8d91ff8f09b0c5a4625a71"
+    },
+    {
+      "path": "scripts/research-emc-company-model.test.mjs",
+      "bytes": 12764,
+      "sha256": "63401312d67f7ba2176f1040ef878185c19e72294214c861d1d71e13eaa6bb4d"
+    },
+    {
+      "path": "web/src/lib/research-working-draft.test.ts",
+      "bytes": 5120,
+      "sha256": "033e08ff244aaf3c6bf911ac193de8e495a155291101664eedbe290b0b997754"
+    }
+  ]
+}

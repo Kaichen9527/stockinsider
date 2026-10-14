@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "/tmp/cashflow-consumer-red.mjs"
+  ],
+  "start_utc": "2026-10-14T03:14:12Z",
+  "seconds": 0.2774515151977539,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 24432640,
+  "min_free_bytes": 8633655296
+}

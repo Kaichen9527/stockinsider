@@ -1,0 +1,17 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-auo-four-segment-model.test.mjs",
+    "scripts/research-emc-company-model.test.mjs",
+    "web/src/lib/research-working-draft.test.ts",
+    "web/src/lib/research-working-draft-fifo.test.ts"
+  ],
+  "start_utc": "2026-10-14T03:19:29Z",
+  "seconds": 1.375549077987671,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 143998976,
+  "min_free_bytes": 8633540608
+}

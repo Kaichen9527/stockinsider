@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "typecheck"
+  ],
+  "start_utc": "2026-10-14T03:23:19Z",
+  "seconds": 3.0930607318878174,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 575844352,
+  "min_free_bytes": 8633225216
+}

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs"
+  ],
+  "start_utc": "2026-10-14T03:19:29Z",
+  "seconds": 0.280789852142334,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 24465408,
+  "min_free_bytes": 8633581568
+}
