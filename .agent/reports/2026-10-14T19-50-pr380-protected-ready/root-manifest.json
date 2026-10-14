@@ -1,0 +1,42 @@
+[
+  {
+    "file": "attempt2-jobs.json",
+    "bytes": 24443,
+    "sha256": "d265ff9aee728bc2e7bba8f3dfedd450591590fe67cd28bfeed3c797823f36dc"
+  },
+  {
+    "file": "attempt2-logs.zip",
+    "bytes": 300076,
+    "sha256": "db0707bb87259bf86934b1daf828485441057180d9abb5a2334d85bcc7f38ce8"
+  },
+  {
+    "file": "attempt2-run.json",
+    "bytes": 14848,
+    "sha256": "08a6929a1dc2c1c9fe98bcf58bb04294cbbe794a3709db14e27af0039fd26296"
+  },
+  {
+    "file": "original-attempt2-readonly-watch.log",
+    "bytes": 34982,
+    "sha256": "583234055ccfd301b3b7eb4261a7c1e46768c1d0f29b72e7d64260826bf4e804"
+  },
+  {
+    "file": "ready-audit.json",
+    "bytes": 5286,
+    "sha256": "b277013f16c2fcbea98673943287ece490cedea8cdfe15dd2fa112d605d2491e"
+  },
+  {
+    "file": "ready-event-jobs.json",
+    "bytes": 14053,
+    "sha256": "dac34fcc303f66432902e92b1753533b3a314c1f3afd227fb66b7cb7b89f84e4"
+  },
+  {
+    "file": "ready-event-run.json",
+    "bytes": 13212,
+    "sha256": "8001e26e8e2f6b9d1a1cac651763f862196c834cb6c752c176e08f513e4c3fd5"
+  },
+  {
+    "file": "report.md",
+    "bytes": 2794,
+    "sha256": "0f98f7497c1ff6008de9d2b9ab979a349ce52bf0e39a5f41dd6d1e170016130a"
+  }
+]

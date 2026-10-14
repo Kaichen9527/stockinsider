@@ -1,0 +1,542 @@
+Refreshing run status every 60 seconds. Press Ctrl+C to quit.
+
+* codex/research-publication-tail-release-oct14 Source-led opportunity V3 protected gate root Kaichen9527/stockinsider#380 · 38548049951
+Triggered via pull_request_target about 11 minutes ago
+
+JOBS
+✓ architecture in 16s (ID 115828321626)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Architecture envelope
+  ✓ Publish immutable Architecture envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ requirements in 16s (ID 115828321874)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Requirements envelope
+  ✓ Publish immutable Requirements envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ exact-review in 18s (ID 115828321877)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected exact-review envelope
+  ✓ Publish immutable exact-review envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ stockinsider-v3-gate-bootstrap in 9s (ID 115828323974)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Verify protected authority invariants
+  ✓ Fetch subject object without executing subject files
+  ✓ Issue base-owned bootstrap attestation
+  ✓ Publish immutable bootstrap handoff
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+* product-runtime-code-gate (ID 115828448435)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Install PostgreSQL tools required by the product acceptance owner
+  ✓ Retrieve bootstrap and prepare detached subject
+  * Execute full protected product/runtime track and emit envelope
+  * Publish immutable product/runtime envelope
+  * Post Retrieve bootstrap and prepare detached subject
+  * Post Checkout only the protected pull-request base
+✓ model-runner-code-gate in 2m18s (ID 115828448442)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Execute pinned protected model-runner track and emit envelope
+  ✓ Publish immutable model-runner envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+architecture: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+requirements: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+exact-review: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+model-runner-code-gate: .github#2
+
+Refreshing run status every 60 seconds. Press Ctrl+C to quit.
+
+* codex/research-publication-tail-release-oct14 Source-led opportunity V3 protected gate root Kaichen9527/stockinsider#380 · 38548049951
+Triggered via pull_request_target about 12 minutes ago
+
+JOBS
+✓ architecture in 16s (ID 115828321626)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Architecture envelope
+  ✓ Publish immutable Architecture envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ requirements in 16s (ID 115828321874)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Requirements envelope
+  ✓ Publish immutable Requirements envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ exact-review in 18s (ID 115828321877)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected exact-review envelope
+  ✓ Publish immutable exact-review envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ stockinsider-v3-gate-bootstrap in 9s (ID 115828323974)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Verify protected authority invariants
+  ✓ Fetch subject object without executing subject files
+  ✓ Issue base-owned bootstrap attestation
+  ✓ Publish immutable bootstrap handoff
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+* product-runtime-code-gate (ID 115828448435)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Install PostgreSQL tools required by the product acceptance owner
+  ✓ Retrieve bootstrap and prepare detached subject
+  * Execute full protected product/runtime track and emit envelope
+  * Publish immutable product/runtime envelope
+  * Post Retrieve bootstrap and prepare detached subject
+  * Post Checkout only the protected pull-request base
+✓ model-runner-code-gate in 2m18s (ID 115828448442)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Execute pinned protected model-runner track and emit envelope
+  ✓ Publish immutable model-runner envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+architecture: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+requirements: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+exact-review: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+model-runner-code-gate: .github#2
+
+Refreshing run status every 60 seconds. Press Ctrl+C to quit.
+
+* codex/research-publication-tail-release-oct14 Source-led opportunity V3 protected gate root Kaichen9527/stockinsider#380 · 38548049951
+Triggered via pull_request_target about 13 minutes ago
+
+JOBS
+✓ architecture in 16s (ID 115828321626)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Architecture envelope
+  ✓ Publish immutable Architecture envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ requirements in 16s (ID 115828321874)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Requirements envelope
+  ✓ Publish immutable Requirements envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ exact-review in 18s (ID 115828321877)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected exact-review envelope
+  ✓ Publish immutable exact-review envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ stockinsider-v3-gate-bootstrap in 9s (ID 115828323974)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Verify protected authority invariants
+  ✓ Fetch subject object without executing subject files
+  ✓ Issue base-owned bootstrap attestation
+  ✓ Publish immutable bootstrap handoff
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+* product-runtime-code-gate (ID 115828448435)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Install PostgreSQL tools required by the product acceptance owner
+  ✓ Retrieve bootstrap and prepare detached subject
+  * Execute full protected product/runtime track and emit envelope
+  * Publish immutable product/runtime envelope
+  * Post Retrieve bootstrap and prepare detached subject
+  * Post Checkout only the protected pull-request base
+✓ model-runner-code-gate in 2m18s (ID 115828448442)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Execute pinned protected model-runner track and emit envelope
+  ✓ Publish immutable model-runner envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+architecture: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+requirements: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+exact-review: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+model-runner-code-gate: .github#2
+
+Refreshing run status every 60 seconds. Press Ctrl+C to quit.
+
+* codex/research-publication-tail-release-oct14 Source-led opportunity V3 protected gate root Kaichen9527/stockinsider#380 · 38548049951
+Triggered via pull_request_target about 14 minutes ago
+
+JOBS
+✓ architecture in 16s (ID 115828321626)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Architecture envelope
+  ✓ Publish immutable Architecture envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ requirements in 16s (ID 115828321874)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Requirements envelope
+  ✓ Publish immutable Requirements envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ exact-review in 18s (ID 115828321877)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected exact-review envelope
+  ✓ Publish immutable exact-review envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ stockinsider-v3-gate-bootstrap in 9s (ID 115828323974)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Verify protected authority invariants
+  ✓ Fetch subject object without executing subject files
+  ✓ Issue base-owned bootstrap attestation
+  ✓ Publish immutable bootstrap handoff
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+* product-runtime-code-gate (ID 115828448435)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Install PostgreSQL tools required by the product acceptance owner
+  ✓ Retrieve bootstrap and prepare detached subject
+  * Execute full protected product/runtime track and emit envelope
+  * Publish immutable product/runtime envelope
+  * Post Retrieve bootstrap and prepare detached subject
+  * Post Checkout only the protected pull-request base
+✓ model-runner-code-gate in 2m18s (ID 115828448442)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Execute pinned protected model-runner track and emit envelope
+  ✓ Publish immutable model-runner envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+architecture: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+requirements: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+exact-review: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+model-runner-code-gate: .github#2
+
+Refreshing run status every 60 seconds. Press Ctrl+C to quit.
+
+* codex/research-publication-tail-release-oct14 Source-led opportunity V3 protected gate root Kaichen9527/stockinsider#380 · 38548049951
+Triggered via pull_request_target about 15 minutes ago
+
+JOBS
+✓ architecture in 16s (ID 115828321626)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Architecture envelope
+  ✓ Publish immutable Architecture envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ requirements in 16s (ID 115828321874)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Requirements envelope
+  ✓ Publish immutable Requirements envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ exact-review in 18s (ID 115828321877)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected exact-review envelope
+  ✓ Publish immutable exact-review envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ stockinsider-v3-gate-bootstrap in 9s (ID 115828323974)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Verify protected authority invariants
+  ✓ Fetch subject object without executing subject files
+  ✓ Issue base-owned bootstrap attestation
+  ✓ Publish immutable bootstrap handoff
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+* product-runtime-code-gate (ID 115828448435)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Install PostgreSQL tools required by the product acceptance owner
+  ✓ Retrieve bootstrap and prepare detached subject
+  * Execute full protected product/runtime track and emit envelope
+  * Publish immutable product/runtime envelope
+  * Post Retrieve bootstrap and prepare detached subject
+  * Post Checkout only the protected pull-request base
+✓ model-runner-code-gate in 2m18s (ID 115828448442)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Execute pinned protected model-runner track and emit envelope
+  ✓ Publish immutable model-runner envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+architecture: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+requirements: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+exact-review: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+model-runner-code-gate: .github#2
+
+Refreshing run status every 60 seconds. Press Ctrl+C to quit.
+
+* codex/research-publication-tail-release-oct14 Source-led opportunity V3 protected gate root Kaichen9527/stockinsider#380 · 38548049951
+Triggered via pull_request_target about 16 minutes ago
+
+JOBS
+✓ architecture in 16s (ID 115828321626)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Architecture envelope
+  ✓ Publish immutable Architecture envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ requirements in 16s (ID 115828321874)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Requirements envelope
+  ✓ Publish immutable Requirements envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ exact-review in 18s (ID 115828321877)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected exact-review envelope
+  ✓ Publish immutable exact-review envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ stockinsider-v3-gate-bootstrap in 9s (ID 115828323974)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Verify protected authority invariants
+  ✓ Fetch subject object without executing subject files
+  ✓ Issue base-owned bootstrap attestation
+  ✓ Publish immutable bootstrap handoff
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ product-runtime-code-gate in 15m38s (ID 115828448435)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Install PostgreSQL tools required by the product acceptance owner
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Execute full protected product/runtime track and emit envelope
+  ✓ Publish immutable product/runtime envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ model-runner-code-gate in 2m18s (ID 115828448442)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Execute pinned protected model-runner track and emit envelope
+  ✓ Publish immutable model-runner envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+* stockinsider-v3-gate-root (ID 115834597893)
+  ✓ Set up job
+  ✓ Reject incomplete or failed Code Gate prerequisites
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Retrieve all five required immutable external envelopes
+  ✓ Assemble protected authoritative Code Gate aggregate
+  ✓ Publish immutable authoritative Code Gate aggregate
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  * Post Checkout only the protected pull-request base
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+architecture: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+requirements: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+exact-review: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+product-runtime-code-gate: .github#2
+
+✓ codex/research-publication-tail-release-oct14 Source-led opportunity V3 protected gate root Kaichen9527/stockinsider#380 · 38548049951
+Triggered via pull_request_target about 17 minutes ago
+
+JOBS
+✓ architecture in 16s (ID 115828321626)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Architecture envelope
+  ✓ Publish immutable Architecture envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ requirements in 16s (ID 115828321874)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected Requirements envelope
+  ✓ Publish immutable Requirements envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ exact-review in 18s (ID 115828321877)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Emit protected exact-review envelope
+  ✓ Publish immutable exact-review envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ stockinsider-v3-gate-bootstrap in 9s (ID 115828323974)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Verify protected authority invariants
+  ✓ Fetch subject object without executing subject files
+  ✓ Issue base-owned bootstrap attestation
+  ✓ Publish immutable bootstrap handoff
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ product-runtime-code-gate in 15m38s (ID 115828448435)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Install PostgreSQL tools required by the product acceptance owner
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Execute full protected product/runtime track and emit envelope
+  ✓ Publish immutable product/runtime envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ model-runner-code-gate in 2m18s (ID 115828448442)
+  ✓ Set up job
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Execute pinned protected model-runner track and emit envelope
+  ✓ Publish immutable model-runner envelope
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+✓ stockinsider-v3-gate-root in 18s (ID 115834597893)
+  ✓ Set up job
+  ✓ Reject incomplete or failed Code Gate prerequisites
+  ✓ Checkout only the protected pull-request base
+  ✓ Retrieve bootstrap and prepare detached subject
+  ✓ Retrieve all five required immutable external envelopes
+  ✓ Assemble protected authoritative Code Gate aggregate
+  ✓ Publish immutable authoritative Code Gate aggregate
+  ✓ Post Retrieve bootstrap and prepare detached subject
+  ✓ Post Checkout only the protected pull-request base
+  ✓ Complete job
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+architecture: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+requirements: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+exact-review: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+product-runtime-code-gate: .github#2
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+stockinsider-v3-gate-root: .github#2
+

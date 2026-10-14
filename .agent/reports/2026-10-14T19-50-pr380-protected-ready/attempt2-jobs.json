@@ -1,0 +1,675 @@
+{
+  "total_count": 7,
+  "jobs": [
+    {
+      "id": 115828321626,
+      "run_id": 38548049951,
+      "workflow_name": "Source-led opportunity V3 protected gate root",
+      "head_branch": "codex/research-publication-tail-release-oct14",
+      "run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/38548049951",
+      "run_attempt": 2,
+      "node_id": "CR_kwDORbtmH88AAAAa9-ftWg",
+      "head_sha": "dd59817f750684b093965f539dd4de466be13077",
+      "url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/jobs/115828321626",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38548049951/job/115828321626",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-14T11:29:37Z",
+      "started_at": "2026-10-14T11:29:39Z",
+      "completed_at": "2026-10-14T11:29:55Z",
+      "name": "architecture",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-14T11:29:40Z",
+          "completed_at": "2026-10-14T11:29:41Z"
+        },
+        {
+          "name": "Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-14T11:29:41Z",
+          "completed_at": "2026-10-14T11:29:44Z"
+        },
+        {
+          "name": "Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-14T11:29:44Z",
+          "completed_at": "2026-10-14T11:29:51Z"
+        },
+        {
+          "name": "Emit protected Architecture envelope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-14T11:29:51Z",
+          "completed_at": "2026-10-14T11:29:52Z"
+        },
+        {
+          "name": "Publish immutable Architecture envelope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-14T11:29:52Z",
+          "completed_at": "2026-10-14T11:29:53Z"
+        },
+        {
+          "name": "Post Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-14T11:29:53Z",
+          "completed_at": "2026-10-14T11:29:53Z"
+        },
+        {
+          "name": "Post Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-14T11:29:53Z",
+          "completed_at": "2026-10-14T11:29:53Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-14T11:29:53Z",
+          "completed_at": "2026-10-14T11:29:53Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/115828321626",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000010083,
+      "runner_name": "GitHub Actions 1000010083",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115828321874,
+      "run_id": 38548049951,
+      "workflow_name": "Source-led opportunity V3 protected gate root",
+      "head_branch": "codex/research-publication-tail-release-oct14",
+      "run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/38548049951",
+      "run_attempt": 2,
+      "node_id": "CR_kwDORbtmH88AAAAa9-fuUg",
+      "head_sha": "dd59817f750684b093965f539dd4de466be13077",
+      "url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/jobs/115828321874",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38548049951/job/115828321874",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-14T11:29:37Z",
+      "started_at": "2026-10-14T11:29:39Z",
+      "completed_at": "2026-10-14T11:29:55Z",
+      "name": "requirements",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-14T11:29:40Z",
+          "completed_at": "2026-10-14T11:29:41Z"
+        },
+        {
+          "name": "Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-14T11:29:41Z",
+          "completed_at": "2026-10-14T11:29:44Z"
+        },
+        {
+          "name": "Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-14T11:29:44Z",
+          "completed_at": "2026-10-14T11:29:51Z"
+        },
+        {
+          "name": "Emit protected Requirements envelope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-14T11:29:51Z",
+          "completed_at": "2026-10-14T11:29:52Z"
+        },
+        {
+          "name": "Publish immutable Requirements envelope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-14T11:29:52Z",
+          "completed_at": "2026-10-14T11:29:53Z"
+        },
+        {
+          "name": "Post Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-14T11:29:53Z",
+          "completed_at": "2026-10-14T11:29:53Z"
+        },
+        {
+          "name": "Post Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-14T11:29:53Z",
+          "completed_at": "2026-10-14T11:29:53Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-14T11:29:53Z",
+          "completed_at": "2026-10-14T11:29:53Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/115828321874",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000010084,
+      "runner_name": "GitHub Actions 1000010084",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115828321877,
+      "run_id": 38548049951,
+      "workflow_name": "Source-led opportunity V3 protected gate root",
+      "head_branch": "codex/research-publication-tail-release-oct14",
+      "run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/38548049951",
+      "run_attempt": 2,
+      "node_id": "CR_kwDORbtmH88AAAAa9-fuVQ",
+      "head_sha": "dd59817f750684b093965f539dd4de466be13077",
+      "url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/jobs/115828321877",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38548049951/job/115828321877",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-14T11:29:37Z",
+      "started_at": "2026-10-14T11:29:39Z",
+      "completed_at": "2026-10-14T11:29:57Z",
+      "name": "exact-review",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-14T11:29:40Z",
+          "completed_at": "2026-10-14T11:29:41Z"
+        },
+        {
+          "name": "Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-14T11:29:41Z",
+          "completed_at": "2026-10-14T11:29:44Z"
+        },
+        {
+          "name": "Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-14T11:29:44Z",
+          "completed_at": "2026-10-14T11:29:53Z"
+        },
+        {
+          "name": "Emit protected exact-review envelope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-14T11:29:53Z",
+          "completed_at": "2026-10-14T11:29:53Z"
+        },
+        {
+          "name": "Publish immutable exact-review envelope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-14T11:29:53Z",
+          "completed_at": "2026-10-14T11:29:54Z"
+        },
+        {
+          "name": "Post Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-14T11:29:54Z",
+          "completed_at": "2026-10-14T11:29:55Z"
+        },
+        {
+          "name": "Post Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-14T11:29:55Z",
+          "completed_at": "2026-10-14T11:29:55Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-14T11:29:55Z",
+          "completed_at": "2026-10-14T11:29:55Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/115828321877",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000010082,
+      "runner_name": "GitHub Actions 1000010082",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115828323974,
+      "run_id": 38548049951,
+      "workflow_name": "Source-led opportunity V3 protected gate root",
+      "head_branch": "codex/research-publication-tail-release-oct14",
+      "run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/38548049951",
+      "run_attempt": 2,
+      "node_id": "CR_kwDORbtmH88AAAAa9-f2hg",
+      "head_sha": "dd59817f750684b093965f539dd4de466be13077",
+      "url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/jobs/115828323974",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38548049951/job/115828323974",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-14T11:29:38Z",
+      "started_at": "2026-10-14T10:13:31Z",
+      "completed_at": "2026-10-14T10:13:40Z",
+      "name": "stockinsider-v3-gate-bootstrap",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-14T10:13:31Z",
+          "completed_at": "2026-10-14T10:13:32Z"
+        },
+        {
+          "name": "Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-14T10:13:32Z",
+          "completed_at": "2026-10-14T10:13:35Z"
+        },
+        {
+          "name": "Verify protected authority invariants",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-14T10:13:35Z",
+          "completed_at": "2026-10-14T10:13:36Z"
+        },
+        {
+          "name": "Fetch subject object without executing subject files",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-14T10:13:36Z",
+          "completed_at": "2026-10-14T10:13:36Z"
+        },
+        {
+          "name": "Issue base-owned bootstrap attestation",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-14T10:13:36Z",
+          "completed_at": "2026-10-14T10:13:37Z"
+        },
+        {
+          "name": "Publish immutable bootstrap handoff",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-14T10:13:37Z",
+          "completed_at": "2026-10-14T10:13:38Z"
+        },
+        {
+          "name": "Post Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-14T10:13:38Z",
+          "completed_at": "2026-10-14T10:13:38Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-14T10:13:38Z",
+          "completed_at": "2026-10-14T10:13:38Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/115828323974",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000010076,
+      "runner_name": "GitHub Actions 1000010076",
+      "runner_group_id": null,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115828448435,
+      "run_id": 38548049951,
+      "workflow_name": "Source-led opportunity V3 protected gate root",
+      "head_branch": "codex/research-publication-tail-release-oct14",
+      "run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/38548049951",
+      "run_attempt": 2,
+      "node_id": "CR_kwDORbtmH88AAAAa9-ncsw",
+      "head_sha": "dd59817f750684b093965f539dd4de466be13077",
+      "url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/jobs/115828448435",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38548049951/job/115828448435",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-14T11:29:57Z",
+      "started_at": "2026-10-14T11:29:59Z",
+      "completed_at": "2026-10-14T11:45:37Z",
+      "name": "product-runtime-code-gate",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-14T11:30:00Z",
+          "completed_at": "2026-10-14T11:30:01Z"
+        },
+        {
+          "name": "Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-14T11:30:01Z",
+          "completed_at": "2026-10-14T11:30:04Z"
+        },
+        {
+          "name": "Install PostgreSQL tools required by the product acceptance owner",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-14T11:30:04Z",
+          "completed_at": "2026-10-14T11:30:14Z"
+        },
+        {
+          "name": "Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-14T11:30:14Z",
+          "completed_at": "2026-10-14T11:30:22Z"
+        },
+        {
+          "name": "Execute full protected product/runtime track and emit envelope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-14T11:30:22Z",
+          "completed_at": "2026-10-14T11:45:32Z"
+        },
+        {
+          "name": "Publish immutable product/runtime envelope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-14T11:45:32Z",
+          "completed_at": "2026-10-14T11:45:33Z"
+        },
+        {
+          "name": "Post Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-14T11:45:33Z",
+          "completed_at": "2026-10-14T11:45:33Z"
+        },
+        {
+          "name": "Post Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-14T11:45:33Z",
+          "completed_at": "2026-10-14T11:45:34Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-14T11:45:34Z",
+          "completed_at": "2026-10-14T11:45:34Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/115828448435",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000010085,
+      "runner_name": "GitHub Actions 1000010085",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115828448442,
+      "run_id": 38548049951,
+      "workflow_name": "Source-led opportunity V3 protected gate root",
+      "head_branch": "codex/research-publication-tail-release-oct14",
+      "run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/38548049951",
+      "run_attempt": 2,
+      "node_id": "CR_kwDORbtmH88AAAAa9-ncug",
+      "head_sha": "dd59817f750684b093965f539dd4de466be13077",
+      "url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/jobs/115828448442",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38548049951/job/115828448442",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-14T11:29:57Z",
+      "started_at": "2026-10-14T11:30:00Z",
+      "completed_at": "2026-10-14T11:32:18Z",
+      "name": "model-runner-code-gate",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-14T11:30:02Z",
+          "completed_at": "2026-10-14T11:30:05Z"
+        },
+        {
+          "name": "Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-14T11:30:05Z",
+          "completed_at": "2026-10-14T11:30:09Z"
+        },
+        {
+          "name": "Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-14T11:30:09Z",
+          "completed_at": "2026-10-14T11:30:19Z"
+        },
+        {
+          "name": "Execute pinned protected model-runner track and emit envelope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-14T11:30:19Z",
+          "completed_at": "2026-10-14T11:32:08Z"
+        },
+        {
+          "name": "Publish immutable model-runner envelope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-14T11:32:08Z",
+          "completed_at": "2026-10-14T11:32:11Z"
+        },
+        {
+          "name": "Post Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-14T11:32:11Z",
+          "completed_at": "2026-10-14T11:32:11Z"
+        },
+        {
+          "name": "Post Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-14T11:32:11Z",
+          "completed_at": "2026-10-14T11:32:11Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-14T11:32:11Z",
+          "completed_at": "2026-10-14T11:32:11Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/115828448442",
+      "labels": [
+        "self-hosted",
+        "macOS",
+        "ARM64"
+      ],
+      "runner_id": 21,
+      "runner_name": "stockinsider-mac-arm64-kaerchen",
+      "runner_group_id": 1,
+      "runner_group_name": "Default"
+    },
+    {
+      "id": 115834597893,
+      "run_id": 38548049951,
+      "workflow_name": "Source-led opportunity V3 protected gate root",
+      "head_branch": "codex/research-publication-tail-release-oct14",
+      "run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/38548049951",
+      "run_attempt": 2,
+      "node_id": "CR_kwDORbtmH88AAAAa-EeyBQ",
+      "head_sha": "dd59817f750684b093965f539dd4de466be13077",
+      "url": "https://api.github.com/repos/Kaichen9527/stockinsider/actions/jobs/115834597893",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38548049951/job/115834597893",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-14T11:45:37Z",
+      "started_at": "2026-10-14T11:45:40Z",
+      "completed_at": "2026-10-14T11:45:58Z",
+      "name": "stockinsider-v3-gate-root",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-14T11:45:40Z",
+          "completed_at": "2026-10-14T11:45:41Z"
+        },
+        {
+          "name": "Reject incomplete or failed Code Gate prerequisites",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-14T11:45:41Z",
+          "completed_at": "2026-10-14T11:45:42Z"
+        },
+        {
+          "name": "Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-14T11:45:42Z",
+          "completed_at": "2026-10-14T11:45:45Z"
+        },
+        {
+          "name": "Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-14T11:45:45Z",
+          "completed_at": "2026-10-14T11:45:51Z"
+        },
+        {
+          "name": "Retrieve all five required immutable external envelopes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-14T11:45:51Z",
+          "completed_at": "2026-10-14T11:45:52Z"
+        },
+        {
+          "name": "Assemble protected authoritative Code Gate aggregate",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-14T11:45:52Z",
+          "completed_at": "2026-10-14T11:45:53Z"
+        },
+        {
+          "name": "Publish immutable authoritative Code Gate aggregate",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-14T11:45:53Z",
+          "completed_at": "2026-10-14T11:45:55Z"
+        },
+        {
+          "name": "Post Retrieve bootstrap and prepare detached subject",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-14T11:45:55Z",
+          "completed_at": "2026-10-14T11:45:55Z"
+        },
+        {
+          "name": "Post Checkout only the protected pull-request base",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-14T11:45:55Z",
+          "completed_at": "2026-10-14T11:45:55Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-14T11:45:55Z",
+          "completed_at": "2026-10-14T11:45:55Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/115834597893",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000010086,
+      "runner_name": "GitHub Actions 1000010086",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}
