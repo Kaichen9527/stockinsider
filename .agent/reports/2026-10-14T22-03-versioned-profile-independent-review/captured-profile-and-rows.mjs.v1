@@ -1,0 +1,36 @@
+import fs from 'node:fs';
+import { gunzipSync } from 'node:zlib';
+import assert from 'node:assert/strict';
+import { prerequisiteDescriptor,stateDescriptor,digest,canonical } from '/tmp/stockinsider-discovery-release-root-review-oct14/scripts/opportunity-v3/research-versioned-prerequisite-profile.mjs';
+import { parseBindingCore,bindingCanonical } from '/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-versioned-input-binding.ts';
+import { completeHash,validateCompleteSchema } from '/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-v3-material-canonical.ts';
+const root='/tmp/stockinsider-versioned-profile-root-review-oct14/maker/';
+const read=p=>JSON.parse(fs.readFileSync(root+p,'utf8'));
+const captured=JSON.parse(gunzipSync(fs.readFileSync(root+'capture-artifacts/captured-state.json.gz'))),profile=prerequisiteDescriptor();
+assert.deepEqual(stateDescriptor(captured),profile.predecessor);
+assert.deepEqual(read('native-profile-artifacts/native-predecessor.json'),profile.predecessor);
+assert.deepEqual(read('native-profile-artifacts/native-successor.json'),profile.successor);
+for(const k of ['roles','memberships','namespaceHash','schemaOwner']) assert.deepEqual(profile.predecessor[k],profile.successor[k]);
+const added=profile.successor.schema.acl.filter(a=>!profile.predecessor.schema.acl.some(b=>canonical(a)===canonical(b)));
+assert.deepEqual(added,[['pg_database_owner','research_input_preparation_owner_v2','USAGE',false],['pg_database_owner','research_source_fence_owner_v2','USAGE',false]]);
+assert.equal(profile.successor.schema.acl.length-profile.predecessor.schema.acl.length,2);
+for(const entry of profile.predecessor.schema.acl) assert.ok(profile.successor.schema.acl.some(b=>canonical(entry)===canonical(b)));
+const effectiveChanges=[];
+for(let i=0;i<profile.predecessor.schema.effective.length;i++)if(canonical(profile.predecessor.schema.effective[i])!==canonical(profile.successor.schema.effective[i]))effectiveChanges.push([profile.predecessor.schema.effective[i],profile.successor.schema.effective[i]]);
+const changed=structuredClone(captured.catalog);changed.schemas[changed.schemas.findIndex(x=>x.name==='public')]=profile.successor.schema;assert.equal(digest(changed),profile.successor.catalogHash);
+const rows=[];
+for(const symbol of ['2409','2383']) {
+ const saved=read('native-witness-artifacts/'+symbol+'-first-seal.json'),replay=read('native-witness-artifacts/'+symbol+'-replay.json'),conflict=read('native-witness-artifacts/'+symbol+'-same-prep-conflict.json'),payload=saved.canonical_payload;
+ assert.equal(saved.status,'sealed');assert.equal(saved.input_hash,completeHash(payload));assert.equal(saved.request_hash,completeHash(saved.canonical_request));
+ const binding=parseBindingCore(bindingCanonical(saved.binding.core));assert.deepEqual(saved.binding,binding);
+ const material=symbol==='2409'?{...payload.financial.candidate,financialMaterial:payload.financial.material}:{schemaVersion:'research-complete-financial-material-v2',symbol,artifactReadKnownAt:payload.clocks.artifactReadKnownAt,sourceClosureHash:binding.core.sourceExecutionHash,artifactInventoryHash:binding.core.inventoryHash,financialMaterial:payload.financial.material};
+ validateCompleteSchema(material,binding.registration.schemaTemplate,payload.clocks.artifactReadKnownAt);
+ assert.ok(Object.values(payload.capabilities).every(x=>x===false));assert.equal(payload.evidenceStatus,'incomplete');
+ assert.deepEqual(replay.auditBefore,replay.auditAfter);assert.deepEqual(conflict.auditBefore,conflict.auditAfter);assert.deepEqual(replay.auditBefore,conflict.auditBefore);assert.equal(Object.keys(replay.auditBefore).length,9);
+ assert.equal(replay.opensBefore,replay.opensAfter);assert.equal(replay.opensBefore-replay.opensInitial,symbol==='2409'?9:6);assert.equal(replay.closed,symbol==='2409'?9:6);assert.equal(replay.missingRootReplaySucceeded,true);assert.equal(conflict.rejected,true);
+ for(const [name,state] of Object.entries(replay.auditBefore))assert.equal(state.count,name==='research_model_completions_v1'?0:1);
+ assert.equal(read('native-witness-artifacts/'+symbol+'-rpc-error.json').message,'complete_replay_conflict');
+ rows.push({symbol,wire:payload.schemaVersion,inputHash:saved.input_hash,requestHash:saved.request_hash,financialSchemaValidated:true,allCapabilitiesFalse:true,opens:symbol==='2409'?9:6,closes:replay.closed,replayExtraOpens:0,nineTableCountsHashesStable:true});
+}
+fs.writeFileSync('/tmp/stockinsider-versioned-profile-root-review-oct14/root-captured-state-verification.json',JSON.stringify({exactPredecessor:true,exactSuccessor:true,addedSchemaAcl:added,effectiveChanges,onlyPublicSchemaChangedInCatalogHash:true,rows,rootRanNative:false,rootRanFsCalculation:false,formalProductionApproval:false},null,2)+'\n');
+console.log('Captured profile and two real stored rows verified; no PG/native replay was rerun');

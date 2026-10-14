@@ -1,0 +1,24 @@
+{
+  "subject": "36ea8f0c0f7e5c3f9d52499c97882be60acbf538",
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "/tmp/stockinsider-versioned-controller-root-review-oct14/executor-selection-contract.test.mjs"
+  ],
+  "nodeVersion": "v22.14.0",
+  "tests": 8,
+  "pass": 8,
+  "fail": 0,
+  "skip": 0,
+  "todo": 0,
+  "input": "minimal synthetic RPC response; not a legal PG preparation",
+  "scope": "fresh calculator fingerprint mismatch and absent read-only selection only",
+  "actualPgOrFsCalculation": false,
+  "approvedWholeClosure": false,
+  "stdoutSHA256": "68fe01a35b5ff5003da13c898a0f580ec630c4558f6fc39ddf2c99997ae9eb18",
+  "testSourceSHA256": "91af56dd3fa9813a194902ab14c53023dcfb3e2993f777ae061e1ce18f914c29"
+}

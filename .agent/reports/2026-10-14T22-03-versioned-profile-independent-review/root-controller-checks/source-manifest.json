@@ -1,0 +1,47 @@
+{
+  "subject": "36ea8f0c0f7e5c3f9d52499c97882be60acbf538",
+  "files": [
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "bytes": 22325,
+      "sha256": "f089f44375f80da89be49215cad35626998bcb5775166efc23e93af224ec284f",
+      "blob": "855cd31a01d16809c5b7b9ce0fbfc135d4aa930d"
+    },
+    {
+      "path": "web/src/lib/research-versioned-complete-input.ts",
+      "bytes": 8561,
+      "sha256": "6c748235f5aebd3bdfa254de400e752e42bf15aae53c840b8ec09b543a29e906",
+      "blob": "a7c035844cfaf44834b755e1250fc3cae1d7a6d5"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-binding.ts",
+      "bytes": 4004,
+      "sha256": "1ec1bee664b793295b41de982818e767446b85e801efb164324217510d0fd940",
+      "blob": "093bd0ac201a4da0b1a5c7372f84b7570497840a"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-request.ts",
+      "bytes": 1476,
+      "sha256": "cce94267308c7b3d3e1c20ad6214265c147fdcc7603defc186cd85b9e31b42b3",
+      "blob": "08ee73c8a66af3bf4796787b5d23907b21d8bc27"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "bytes": 4634,
+      "sha256": "a6d3f20e0b7749d9cfde09940d4959a4efe59456e2cd974a65c5a498a764d6b5",
+      "blob": "c913092626c117c9dfcf3b1c88fa3cc587ddbc17"
+    },
+    {
+      "path": "scripts/research-versioned-input-protocol.test.mjs",
+      "bytes": 7376,
+      "sha256": "25b305b857261ee18388e1963f9ec2b4222e766ddc30ef2ee7246b8ed2586cae",
+      "blob": "bfe932add9f3fd63671602634d77f5278c6b1a70"
+    },
+    {
+      "path": "docs/operations/2026-10-14/versioned-input-protocol/ADR-addendum.md",
+      "bytes": 3343,
+      "sha256": "19024a835fa4099902078793425cde8b55de349e1bbf9e719e3657f41b834820",
+      "blob": "25464ab12931076bfea64461ee889da6aa9425ba"
+    }
+  ]
+}

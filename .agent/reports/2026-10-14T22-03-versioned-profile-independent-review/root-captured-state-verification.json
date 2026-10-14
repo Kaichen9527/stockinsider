@@ -1,0 +1,74 @@
+{
+  "exactPredecessor": true,
+  "exactSuccessor": true,
+  "addedSchemaAcl": [
+    [
+      "pg_database_owner",
+      "research_input_preparation_owner_v2",
+      "USAGE",
+      false
+    ],
+    [
+      "pg_database_owner",
+      "research_source_fence_owner_v2",
+      "USAGE",
+      false
+    ]
+  ],
+  "effectiveChanges": [
+    [
+      [
+        "research_input_preparation_owner_v2",
+        false,
+        false
+      ],
+      [
+        "research_input_preparation_owner_v2",
+        true,
+        false
+      ]
+    ],
+    [
+      [
+        "research_source_fence_owner_v2",
+        false,
+        false
+      ],
+      [
+        "research_source_fence_owner_v2",
+        true,
+        false
+      ]
+    ]
+  ],
+  "onlyPublicSchemaChangedInCatalogHash": true,
+  "rows": [
+    {
+      "symbol": "2409",
+      "wire": "research-article-input-v3",
+      "inputHash": "630a3729b95e4d23a2e69588cf7dff340005c24e2e84c54504d745672d54afac",
+      "requestHash": "1d6ed4eab06edb5c28da1350a83d1c4339820e6a4d5187fe80f7a4d7bedf5a6e",
+      "financialSchemaValidated": true,
+      "allCapabilitiesFalse": true,
+      "opens": 9,
+      "closes": 9,
+      "replayExtraOpens": 0,
+      "nineTableCountsHashesStable": true
+    },
+    {
+      "symbol": "2383",
+      "wire": "research-article-input-v2",
+      "inputHash": "5d1f782d3ad946c43180df5d8188c9304278b801fe3d3ed496322948d7238cc3",
+      "requestHash": "e015bcacb7040db22381817500e6a4d00a0d3799fb2babaeb29108e9a0513478",
+      "financialSchemaValidated": true,
+      "allCapabilitiesFalse": true,
+      "opens": 6,
+      "closes": 6,
+      "replayExtraOpens": 0,
+      "nineTableCountsHashesStable": true
+    }
+  ],
+  "rootRanNative": false,
+  "rootRanFsCalculation": false,
+  "formalProductionApproval": false
+}

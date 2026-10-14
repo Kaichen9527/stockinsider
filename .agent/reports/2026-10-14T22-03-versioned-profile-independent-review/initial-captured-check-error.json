@@ -1,0 +1,8 @@
+{
+  "error": "TypeError reading schema.effective.length",
+  "cause": "Root harness guessed field effective instead of actual effectiveAcl",
+  "nodeProbeCompleted": false,
+  "enclosingShellExit": 0,
+  "whyShellExitZero": "last cat command; original Node exit was not separately captured",
+  "productChanged": false
+}

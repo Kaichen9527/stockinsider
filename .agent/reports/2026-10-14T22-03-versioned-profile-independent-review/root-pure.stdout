@@ -1,0 +1,100 @@
+TAP version 13
+# Subtest: finite exact predecessor and successor accepted
+ok 1 - finite exact predecessor and successor accepted
+  ---
+  duration_ms: 0.653875
+  ...
+# Subtest: partial drift fails closed
+ok 2 - partial drift fails closed
+  ---
+  duration_ms: 0.563042
+  ...
+# Subtest: unknown drift fails closed
+ok 3 - unknown drift fails closed
+  ---
+  duration_ms: 0.24575
+  ...
+# Subtest: duplicate drift fails closed
+ok 4 - duplicate drift fails closed
+  ---
+  duration_ms: 0.144792
+  ...
+# Subtest: wrongGrantor drift fails closed
+ok 5 - wrongGrantor drift fails closed
+  ---
+  duration_ms: 0.251333
+  ...
+# Subtest: grantable drift fails closed
+ok 6 - grantable drift fails closed
+  ---
+  duration_ms: 0.179792
+  ...
+# Subtest: create drift fails closed
+ok 7 - create drift fails closed
+  ---
+  duration_ms: 0.337583
+  ...
+# Subtest: membership drift fails closed
+ok 8 - membership drift fails closed
+  ---
+  duration_ms: 0.204583
+  ...
+# Subtest: inherit drift fails closed
+ok 9 - inherit drift fails closed
+  ---
+  duration_ms: 0.607584
+  ...
+# Subtest: login drift fails closed
+ok 10 - login drift fails closed
+  ---
+  duration_ms: 0.350583
+  ...
+# Subtest: super drift fails closed
+ok 11 - super drift fails closed
+  ---
+  duration_ms: 0.15875
+  ...
+# Subtest: config drift fails closed
+ok 12 - config drift fails closed
+  ---
+  duration_ms: 0.108542
+  ...
+# Subtest: password drift fails closed
+ok 13 - password drift fails closed
+  ---
+  duration_ms: 0.100667
+  ...
+# Subtest: validUntil drift fails closed
+ok 14 - validUntil drift fails closed
+  ---
+  duration_ms: 0.096625
+  ...
+# Subtest: namespace drift fails closed
+ok 15 - namespace drift fails closed
+  ---
+  duration_ms: 0.099167
+  ...
+# Subtest: catalog drift fails closed
+ok 16 - catalog drift fails closed
+  ---
+  duration_ms: 0.094083
+  ...
+# Subtest: owner drift fails closed
+ok 17 - owner drift fails closed
+  ---
+  duration_ms: 0.095083
+  ...
+# Subtest: busy is rejected before BEGIN and closes owned client
+ok 18 - busy is rejected before BEGIN and closes owned client
+  ---
+  duration_ms: 0.301875
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 38.111459

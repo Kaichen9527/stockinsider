@@ -1,0 +1,11 @@
+{
+  "delivery": "bc1507fac64a1062aaca100c0e0000092c0ade45",
+  "source": "a1a0233c4b189acf97314b8b60e85e3102bb5981",
+  "receiptSHA256": "5ae99e71bd9157cf71ca0ae0610a95e238a1f9dedcacc8d701826f99fa451dfe",
+  "rawVerified": 114,
+  "sourceVerified": 151,
+  "compressedRawVerified": 1,
+  "rootNativeRun": false,
+  "rootBuildRun": false,
+  "formalApproval": false
+}

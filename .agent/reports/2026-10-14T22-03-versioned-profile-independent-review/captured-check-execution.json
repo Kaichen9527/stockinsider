@@ -1,0 +1,14 @@
+{
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "/tmp/stockinsider-versioned-profile-root-review-oct14/captured-profile-and-rows.mjs"
+  ],
+  "exit": 0,
+  "seconds": 0.32338786125183105,
+  "source": "a1a0233c4b189acf97314b8b60e85e3102bb5981",
+  "rootActualPgFs": false,
+  "scope": "real retained state and row JSON checked, not native rerun"
+}

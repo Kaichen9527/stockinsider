@@ -1,0 +1,25 @@
+{
+  "subject": "36ea8f0c0f7e5c3f9d52499c97882be60acbf538",
+  "startUTC": "2026-10-14T13:49:19.746857+00:00",
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--max-old-space-size=8192",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-versioned-input-protocol.test.mjs"
+  ],
+  "exit": 0,
+  "elapsedSeconds": 0.7279889583587646,
+  "spaceBefore": {
+    "/private/tmp/stockinsider-discovery-release-root-review-oct14": 11888312320,
+    "/tmp": 11888312320
+  },
+  "rootPureOnly": true,
+  "rootNativeBuildBrowser": false,
+  "resourceNote": "macOS time -l maximum RSS retained; not exhaustive simultaneous process-tree peak"
+}
