@@ -4,6 +4,7 @@ on:
     paths:
       - '.github/workflows/research-publication-tail-quality.yml'
       - 'scripts/opportunity-v3/**'
+      - 'scripts/runtime/**'
       - 'migrations/**'
       - 'deployment/vps/bootstrap-stockinsider-postgres.sql'
       - 'package.json'
