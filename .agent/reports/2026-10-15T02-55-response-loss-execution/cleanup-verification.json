@@ -1,0 +1,191 @@
+{
+  "at": "2026-10-14T18:58:45.534249+00:00",
+  "method": "all sampled native session and PG process IDs checked via proc; removed cluster includes owned relay socket directory; private per-case final logs confirm shutdown",
+  "processes": [
+    {
+      "pid": 594846,
+      "state": "absent"
+    },
+    {
+      "pid": 594852,
+      "state": "absent"
+    },
+    {
+      "pid": 594865,
+      "state": "absent"
+    },
+    {
+      "pid": 594874,
+      "state": "absent"
+    },
+    {
+      "pid": 594875,
+      "state": "absent"
+    },
+    {
+      "pid": 594878,
+      "state": "absent"
+    },
+    {
+      "pid": 594881,
+      "state": "Z"
+    },
+    {
+      "pid": 594884,
+      "state": "absent"
+    },
+    {
+      "pid": 594885,
+      "state": "absent"
+    },
+    {
+      "pid": 594887,
+      "state": "absent"
+    },
+    {
+      "pid": 594888,
+      "state": "absent"
+    },
+    {
+      "pid": 594889,
+      "state": "absent"
+    },
+    {
+      "pid": 594890,
+      "state": "absent"
+    },
+    {
+      "pid": 594891,
+      "state": "absent"
+    },
+    {
+      "pid": 594892,
+      "state": "absent"
+    },
+    {
+      "pid": 594894,
+      "state": "absent"
+    },
+    {
+      "pid": 594895,
+      "state": "absent"
+    },
+    {
+      "pid": 594896,
+      "state": "absent"
+    },
+    {
+      "pid": 594897,
+      "state": "absent"
+    },
+    {
+      "pid": 594898,
+      "state": "absent"
+    },
+    {
+      "pid": 594902,
+      "state": "absent"
+    },
+    {
+      "pid": 594911,
+      "state": "absent"
+    },
+    {
+      "pid": 594912,
+      "state": "absent"
+    },
+    {
+      "pid": 594915,
+      "state": "absent"
+    },
+    {
+      "pid": 594918,
+      "state": "Z"
+    },
+    {
+      "pid": 594919,
+      "state": "absent"
+    },
+    {
+      "pid": 594920,
+      "state": "absent"
+    },
+    {
+      "pid": 594922,
+      "state": "absent"
+    },
+    {
+      "pid": 594923,
+      "state": "absent"
+    },
+    {
+      "pid": 594924,
+      "state": "absent"
+    },
+    {
+      "pid": 594925,
+      "state": "absent"
+    },
+    {
+      "pid": 594926,
+      "state": "absent"
+    },
+    {
+      "pid": 594927,
+      "state": "absent"
+    },
+    {
+      "pid": 594929,
+      "state": "absent"
+    },
+    {
+      "pid": 594930,
+      "state": "absent"
+    },
+    {
+      "pid": 594931,
+      "state": "absent"
+    },
+    {
+      "pid": 594932,
+      "state": "absent"
+    },
+    {
+      "pid": 594942,
+      "state": "absent"
+    }
+  ],
+  "activeCount": 0,
+  "zombies": 2,
+  "clusters": [
+    {
+      "symbol": "2409",
+      "clusterPath": "/tmp/vp3profile-aBGT4F",
+      "clusterAbsent": true,
+      "relayDirectoryAbsent": true,
+      "beforeLogPresent": true,
+      "afterLogShutdownConfirmed": true,
+      "stage": "business complete",
+      "pendingQueries": 0
+    },
+    {
+      "symbol": "2383",
+      "clusterPath": "/tmp/vp3profile-nqYscN",
+      "clusterAbsent": true,
+      "relayDirectoryAbsent": true,
+      "beforeLogPresent": true,
+      "afterLogShutdownConfirmed": true,
+      "stage": "business complete",
+      "pendingQueries": 0
+    }
+  ],
+  "freeBytes": {
+    "/workspace": 8603807744,
+    "/tmp": 15370518528
+  },
+  "noCacheDeleted": true,
+  "limits": {
+    "floorBytes": 8589934592,
+    "rssLimitBytes": 8589934592
+  }
+}

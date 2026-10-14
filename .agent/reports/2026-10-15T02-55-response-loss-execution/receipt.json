@@ -1,0 +1,81 @@
+{
+  "type": "maker-local-native-execution-not-independent-approval",
+  "startedAt": "2026-10-14T18:55:45Z",
+  "sealedAt": "2026-10-14T18:59:52.435892+00:00",
+  "deadline": "2026-10-14T19:15:45Z",
+  "branch": "codex/research-versioned-response-loss-execution-oct15",
+  "executedSubject": "b09a49eaccd82ba14c00f1a04a84d7683638f727",
+  "executedTree": "77c5de9bdf294631a2b58038e7661784fe94bc1a",
+  "executedRuntimeCode": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+  "handoffCommit": "741b511052dfc65018ce6b81f86ed9552ed12db0",
+  "handoffTree": "2fc8acd91513cf554cbd3cc0e250b4070cc58258",
+  "sourceChanged": false,
+  "sourceCount": 263,
+  "rawCount": 81,
+  "rawBytes": 4170673,
+  "native": {
+    "selectedEntry": "scripts/opportunity-v3/research-versioned-response-loss-native.test.mjs",
+    "executions": 1,
+    "children": 2,
+    "parent": 1,
+    "pass": 3,
+    "fail": 0,
+    "cancelled": 0,
+    "skip": 0,
+    "todo": 0,
+    "exit": 0,
+    "seconds": 18.35194492340088
+  },
+  "subjects": {
+    "AUO": "2409 currentv3",
+    "EMC": "2383 compatiblev2"
+  },
+  "publicEvidence": "Two cases / eight snapshots each / nine tables each; full private raw retained locally. Public counts/hash/charge/FD/held-protocol metadata only.",
+  "limits": {
+    "minimumFreeBytes": {
+      "/workspace": 8601907200,
+      "/tmp": 15288119296
+    },
+    "peakSessionAndPgRssBytes": 522870784,
+    "sampleSeconds": 0.2,
+    "guardFloorBytes": 8589934592,
+    "rssCeilingBytes": 8589934592
+  },
+  "cleanup": {
+    "activeOwnedProcesses": 0,
+    "sampledPidCount": 38,
+    "terminatedZombieCount": 2,
+    "clustersAbsent": 2,
+    "relayDirectoriesAbsent": 2,
+    "pendingQueries": 0,
+    "serverLogsShutdown": true
+  },
+  "historicalREDPreserved": [
+    "7ece source R1 / original exact-function normalization RED",
+    "original source-only high-bit CommandComplete parser RED"
+  ],
+  "newNativeFailures": [],
+  "otherSuitesNotSelected": [
+    "old77 native",
+    "withdrawal/ABA",
+    "crosswire6",
+    "byte2",
+    "financial28"
+  ],
+  "productionAuthorized": false,
+  "independentNativeApproval": false,
+  "pending": [
+    "old77 transport loss",
+    "whole S-C-B-Q-R-A and four callers",
+    "Q-R/cash citations/formal article publication",
+    "other lease/lock-wait scenarios",
+    "formal active-production writer and peer transport"
+  ],
+  "fileHashes": {
+    "execution-resources.json": "a74902c126ab83da005e94b28ec6c8d36e77a050c36026c74a041af9383eb14d",
+    "cleanup-verification.json": "8014e25a3c0f953a5ab8b3ba45f1b915e4e6087e404db5afc560d5a04785ecc5",
+    "public-safe-witness.json": "c3996b4af05d782dc7907b4a0c5ca35fc8ad84b32510ea892af643fa5072831d",
+    "raw-inventory.json": "07576ea808528f9cd3b658f460b8b6bbf1d0ffd9c1201f7847767a228b592d53",
+    "source-inventory.json": "5c111b996cccf9ae067ab3a46d4d4614ed4e54c6e2ba678f34b8ff78dc2ebd08"
+  }
+}

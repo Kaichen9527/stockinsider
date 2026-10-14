@@ -1,0 +1,413 @@
+{
+  "privateLocalRoot": "/tmp/response-loss-exec-o15",
+  "scope": "All raw stays Cloud local; hashes only. Not independently inspected by Root.",
+  "count": 81,
+  "bytes": 4170673,
+  "files": [
+    {
+      "path": "binaries.json",
+      "bytes": 2429,
+      "sha256": "886c81f407c93b1690bd4e86a3edcace9a81376af663f50dfd6e45a5cc77a4f7"
+    },
+    {
+      "path": "cleanup-verification.json",
+      "bytes": 3248,
+      "sha256": "8014e25a3c0f953a5ab8b3ba45f1b915e4e6087e404db5afc560d5a04785ecc5"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 673,
+      "sha256": "4e1e1b4ef9217c5080175c500afb8b55270fb0f6699068fa0ad04da340cf0773"
+    },
+    {
+      "path": "derive-witness.mjs",
+      "bytes": 6225,
+      "sha256": "5c8db1ac1bd3484f37be9f5302ba212e332baf8030b376e5810b030157f01053"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-01-prepared.json",
+      "bytes": 5373,
+      "sha256": "86b4f224d9386f458ff021c5c46c6ad0baf058bf074196e89d9291c4069c51f2"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-02-before-seal-send.json",
+      "bytes": 5375,
+      "sha256": "53688cea469f0e180c473640bc89b7a6db5131ba18be05e7018bb40d82e8d8a4"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-03-committed-response-held.json",
+      "bytes": 146894,
+      "sha256": "9b04e76f9931347ca8014aa14143b8be5ab90ba239a3cb8fb5e9e43b75c41711"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-04-after-actual-client-rejection.json",
+      "bytes": 146894,
+      "sha256": "9b04e76f9931347ca8014aa14143b8be5ab90ba239a3cb8fb5e9e43b75c41711"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-05-read-reconcile-after.json",
+      "bytes": 146894,
+      "sha256": "9b04e76f9931347ca8014aa14143b8be5ab90ba239a3cb8fb5e9e43b75c41711"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-05-read-reconcile-before.json",
+      "bytes": 146894,
+      "sha256": "9b04e76f9931347ca8014aa14143b8be5ab90ba239a3cb8fb5e9e43b75c41711"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-06-seal-replay-after.json",
+      "bytes": 146894,
+      "sha256": "9b04e76f9931347ca8014aa14143b8be5ab90ba239a3cb8fb5e9e43b75c41711"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-06-seal-replay-before.json",
+      "bytes": 146894,
+      "sha256": "9b04e76f9931347ca8014aa14143b8be5ab90ba239a3cb8fb5e9e43b75c41711"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-actual-pg-query-rejection.json",
+      "bytes": 54,
+      "sha256": "9f67c54eb8c22143c0c1ce9c847bd56b00eca553ed1ce2e0c8ecf36790932e4e"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-actual-transport-loss.json",
+      "bytes": 690,
+      "sha256": "4992d28bd833a01d4fe962b330499227bfd6f792bd159dc1447924a32aedfe19"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-caller-uncertain.json",
+      "bytes": 112,
+      "sha256": "7d6e1c7268d2e6e26ace933aa5228b990d029d9a9cd33cfc0b3417943923f6ad"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-claim.json",
+      "bytes": 1342,
+      "sha256": "19043ebfffeba88ff41d93ba1a8ba0777760adcf493647fa94d3a6171f663dd4"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-cleanup.json",
+      "bytes": 93,
+      "sha256": "8bc19c14d07ca9d5d3db87609e538aa2547409e5c889d8c80b06ff70c901c2d2"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-connections.json",
+      "bytes": 73,
+      "sha256": "25c559fb5cf571a6252ba9c0e110edcf742fb84bb066e5714398fe6590e734b7"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "f2a6ccf6911c4490a69fe948c697d5570aace5cd146da88e102083011a0381ce"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-held-backend-response-private.json",
+      "bytes": 332223,
+      "sha256": "f38dd28e24d8be8b8a28fa3e24ba689c2000567cb7269f171d7be02464e1116f"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-loss-client-error.json",
+      "bytes": 54,
+      "sha256": "9f67c54eb8c22143c0c1ce9c847bd56b00eca553ed1ce2e0c8ecf36790932e4e"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-loss-connections.json",
+      "bytes": 150,
+      "sha256": "ce811cfe9529ed1150538578d70f2e8b998ee4bf46d5fa6957d20d3c3ae92afc"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-loss-rpc-order.json",
+      "bytes": 996,
+      "sha256": "0209c625e5c7efe328d1011d68428e8b302a720a963842cf141de4d083e17ebf"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-loss-transport-cleanup.json",
+      "bytes": 49,
+      "sha256": "158be07651f05d758db4b741d0cbdfbd99333921b40b333eba082aad35627075"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-observer-commit-confirmed.json",
+      "bytes": 355,
+      "sha256": "4d5f9823c1c75398702bf4338c403f1641a68c4b954de95fa369efd680e59376"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-postgres-before-cleanup.log",
+      "bytes": 466,
+      "sha256": "bc30c42a8415f44654501b66c869ea2767d1b43b025c240c70e6704420fc673d"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-postgres.log",
+      "bytes": 617,
+      "sha256": "93580f0e11fd1bf4ea516b5286d1e6a55c9c57d20ac03f31b049f52e4b7985b6"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-preparation.json",
+      "bytes": 2948,
+      "sha256": "73dc618ff43a4d3a6341cd5a6607dee9997a852486c0b958f2baa3b0ad64df7a"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-priority.json",
+      "bytes": 142,
+      "sha256": "7d4849bdd6036575173172bda6f283e8b52dabec08508574ebc66c886e363d00"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-reconcile-connection.json",
+      "bytes": 46,
+      "sha256": "bdd1ca218bfe4374ebaefea4c1aa2ade5902d9adfa061165ca02375aca3f0524"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-reconcile-rpc-order.json",
+      "bytes": 245,
+      "sha256": "d5270edc817acff9bb1843cdd76d25935f7191fee87d7bc1ca217d6ecbf46901"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-response-loss-result.json",
+      "bytes": 430,
+      "sha256": "2b1223f5be6b109c81a91dfecbc23fc9bdaf83f1bbf1b4a159752beb8b07bb2c"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-roster-admission.json",
+      "bytes": 448,
+      "sha256": "04ddd43d06a5ff8894314317e41e8fe52ab1b2063b2ab6b25e729cd277f707a7"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-rpc-fd-order.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "1de743d3ed3778a24b515f8409d0f6cfc2edef696ecfe28fa3c241c0163d1c17"
+    },
+    {
+      "path": "native-artifacts/2383-response-loss-2383-transport-cleanup.json",
+      "bytes": 38,
+      "sha256": "439aac7d8624d56a40667244e1ace92593dfc87293b5032649437661362328a7"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-01-prepared.json",
+      "bytes": 5376,
+      "sha256": "f42312b66683f461f46a97bb4d70c6ea23fd27d8404b917e53d68b9c4bd56028"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-02-before-seal-send.json",
+      "bytes": 5376,
+      "sha256": "3bb119476fdfd68b11c0dfd9599b403e44f3f44f18644a92a1e3713120988975"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-03-committed-response-held.json",
+      "bytes": 347898,
+      "sha256": "07f01d23ddf27bc80f66cf82887292afee5431d7349339b1da68b214dbaa9941"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-04-after-actual-client-rejection.json",
+      "bytes": 347898,
+      "sha256": "07f01d23ddf27bc80f66cf82887292afee5431d7349339b1da68b214dbaa9941"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-05-read-reconcile-after.json",
+      "bytes": 347898,
+      "sha256": "07f01d23ddf27bc80f66cf82887292afee5431d7349339b1da68b214dbaa9941"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-05-read-reconcile-before.json",
+      "bytes": 347898,
+      "sha256": "07f01d23ddf27bc80f66cf82887292afee5431d7349339b1da68b214dbaa9941"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-06-seal-replay-after.json",
+      "bytes": 347898,
+      "sha256": "07f01d23ddf27bc80f66cf82887292afee5431d7349339b1da68b214dbaa9941"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-06-seal-replay-before.json",
+      "bytes": 347898,
+      "sha256": "07f01d23ddf27bc80f66cf82887292afee5431d7349339b1da68b214dbaa9941"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-actual-pg-query-rejection.json",
+      "bytes": 54,
+      "sha256": "9f67c54eb8c22143c0c1ce9c847bd56b00eca553ed1ce2e0c8ecf36790932e4e"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-actual-transport-loss.json",
+      "bytes": 690,
+      "sha256": "c844e2eb06a6e5e684dd753b831e23bcd6a21d1b731cf63097e225316b87727e"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-caller-uncertain.json",
+      "bytes": 112,
+      "sha256": "7d6e1c7268d2e6e26ace933aa5228b990d029d9a9cd33cfc0b3417943923f6ad"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-claim.json",
+      "bytes": 1345,
+      "sha256": "37745313b6c04e9b29274bc3be5f4360146e569e428142776ec6874319346359"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-cleanup.json",
+      "bytes": 93,
+      "sha256": "818c5c7d2e54af21ace4c43960140dcabdf6d4aa1b37b53d7954bb344782848b"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-connections.json",
+      "bytes": 73,
+      "sha256": "eea3a5bf5ea95987e4b1de1d850bb14d7c5a6fe03d9a3f5fcc8ba8e6e7a82815"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-held-backend-response-private.json",
+      "bytes": 624127,
+      "sha256": "a8bfc5983f88932f22034b0ae167cd64426b7d87b9467d68ba0fe0b74d897ad3"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-loss-client-error.json",
+      "bytes": 54,
+      "sha256": "9f67c54eb8c22143c0c1ce9c847bd56b00eca553ed1ce2e0c8ecf36790932e4e"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-loss-connections.json",
+      "bytes": 150,
+      "sha256": "38d284779628f6e3ea555c1ac8e9d73b1b7369be46b690a0935d7a8e39971a17"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-loss-rpc-order.json",
+      "bytes": 992,
+      "sha256": "af6c4d09d0de0c7d656cd9f577dc63b7ea626291a1b5a1c381b9fcc33b552038"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-loss-transport-cleanup.json",
+      "bytes": 49,
+      "sha256": "158be07651f05d758db4b741d0cbdfbd99333921b40b333eba082aad35627075"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-observer-commit-confirmed.json",
+      "bytes": 355,
+      "sha256": "2c8bb17fc96d0c2764f8be06a5bc86e5a8da3b212f2e854dd57f8b37bbe7d44c"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-postgres-before-cleanup.log",
+      "bytes": 466,
+      "sha256": "61f7dbae668e7f964a0768106971fc68092056e21cb711a4fc7739d35833a077"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-postgres.log",
+      "bytes": 617,
+      "sha256": "7d6af8e0044e4ee80a654169704731b59bf9961c16e86b2af03d82fa264fbf0c"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-preparation.json",
+      "bytes": 2951,
+      "sha256": "243ff6c93373694e5333463816e894f44b230f623d13fe89a29eb7950b81e85c"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-priority.json",
+      "bytes": 142,
+      "sha256": "c05e6ce2f14547a6cde765b2975605bb3ed03c09d76afd94576742d64b0b0f83"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-reconcile-connection.json",
+      "bytes": 46,
+      "sha256": "8e36fd7b56fa27881e28a4130df768c0d90ec80ecd725a6e2cfe6dbe91414402"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-reconcile-rpc-order.json",
+      "bytes": 241,
+      "sha256": "202e37f277eb6a431dfca4036b832d93d56c757eac796c958cb8b6e948a021f7"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-response-loss-result.json",
+      "bytes": 430,
+      "sha256": "7a68626c7a49123876781cf4f0965faed0c57f8972bc7dfebb94248fbb7917df"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-roster-admission.json",
+      "bytes": 448,
+      "sha256": "3ef11cc2517fd71f516baa3f2c1a0a205d0adba64368426c25780ca83250f04f"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-rpc-fd-order.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "569698b58fd2b3ad37bc8048d13fa2be773a78722826ba6c240e76c7a2243a94"
+    },
+    {
+      "path": "native-artifacts/2409-response-loss-2409-transport-cleanup.json",
+      "bytes": 38,
+      "sha256": "439aac7d8624d56a40667244e1ace92593dfc87293b5032649437661362328a7"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 795,
+      "sha256": "6ae14b240bbc9f2706a25a32f3dbac2c46b248f5669df1ad4ba363a1bd903729"
+    },
+    {
+      "path": "native.samples.jsonl",
+      "bytes": 59717,
+      "sha256": "db8c2fe71bb7754a3e8f0d18aea6108daf5f4e5858ad287c8412417663fc2a93"
+    },
+    {
+      "path": "native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native.stdout",
+      "bytes": 1239,
+      "sha256": "d68e8d8485493bef47894a20831982af5647689830534d1903b2545f87e5ac03"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 57137,
+      "sha256": "c3996b4af05d782dc7907b4a0c5ca35fc8ad84b32510ea892af643fa5072831d"
+    },
+    {
+      "path": "run.py",
+      "bytes": 3337,
+      "sha256": "f5761873dd6f51a1b78df97a89e3ffbf85ae1fcd0def46d34d3c4b7c32948139"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 65760,
+      "sha256": "5c111b996cccf9ae067ab3a46d4d4614ed4e54c6e2ba678f34b8ff78dc2ebd08"
+    },
+    {
+      "path": "witness-derive.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "witness-derive.stdout",
+      "bytes": 89,
+      "sha256": "32a2d22f1b4cac751e02ced52442243c380a4351b1ee49115ae144a2e0cfb900"
+    }
+  ]
+}
