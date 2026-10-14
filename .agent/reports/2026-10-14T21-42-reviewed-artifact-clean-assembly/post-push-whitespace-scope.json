@@ -1,0 +1,17 @@
+{
+  "artifactCodeDiffCheck": {
+    "base": "5189547f76bf24c002b8e8b11669081ba67ad2c6",
+    "head": "df18448dfd26627cd26e0156db0a8ea66e2b886a",
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "progressRawEvidenceCheck": {
+    "base": "ce65f0ce8f8b513453d2ed2e21ddcf32df0bb8eb",
+    "head": "81e2bcbdef3b967cafb8129569ebbb6f872cce55",
+    "exit": 2,
+    "stdout": ".agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/static/step-11.sh:11: new blank line at EOF.\n.agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/static/step-12.sh:73: new blank line at EOF.\n.agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/static/step-13.sh:5: new blank line at EOF.\n.agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/static/step-2.sh:3: new blank line at EOF.\n.agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/static/step-3.sh:44: new blank line at EOF.\n.agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/static/step-5.sh:8: new blank line at EOF.\n.agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/static/step-6.sh:22: new blank line at EOF.\n.agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/static/step-7.sh:3: new blank line at EOF.\n.agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/static/step-8.sh:7: new blank line at EOF.\n.agent/reports/2026-10-14T21-42-reviewed-artifact-clean-assembly/static/step-9.sh:4: new blank line at EOF.\n",
+    "stderr": ""
+  },
+  "explanation": "Generated raw shell snapshots include one extra EOF newline. Preserve these exact already-hashed bytes. The progress commit command did not stop after this diagnostic; do not claim its diff-check PASS. Product workflow/handoff fullrange check independently exit0. Original receipt remains unchanged; this is later diagnostic metadata."
+}
