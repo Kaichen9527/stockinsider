@@ -1,0 +1,132 @@
+{
+  "subject": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+  "node": "v22.14.0",
+  "counts": {
+    "boundaryAssertions": 241,
+    "numericComparisons": 612,
+    "locatorComparisons": 95
+  },
+  "results": [
+    {
+      "symbol": "2409",
+      "carrierBytes": 931023,
+      "carrierSha256": "823b80038e13779f4155327b3cd7d36b1dc5a833490da1bf692d33845c239590",
+      "resultBytes": 181848,
+      "projectionBytes": 133621,
+      "maxObjectDepth": 9,
+      "maxQuarterDelta": 1.8189894035458565e-12,
+      "cashHash": "b59bd42321ac7e9af6c3fcd1eba86fa359f2537d467a45e8fbef244e442c434d",
+      "reportedFacts": 60,
+      "monthlyFacts": 3,
+      "originalCutoff": "2026-10-08T10:20:00Z",
+      "artifactAsOf": "2026-10-14T02:34:47.456437+00:00",
+      "readAt": "2026-10-14T08:52:22.970Z"
+    },
+    {
+      "symbol": "2383",
+      "carrierBytes": 353803,
+      "carrierSha256": "5fff5dd7e33ae7da30d8b72890f13414866b7820f54685af38b5cdd95d2b5564",
+      "resultBytes": 110392,
+      "projectionBytes": 82471,
+      "maxObjectDepth": 8,
+      "maxQuarterDelta": 0,
+      "cashHash": "a1965a0f56556c4c4b50f89f7f96ef263b6fd7b6aec529c919cce3b8bfa585d7",
+      "reportedFacts": 29,
+      "monthlyFacts": 3,
+      "originalCutoff": "2026-10-08T12:12:00Z",
+      "artifactAsOf": "2026-10-14T02:34:47.456437+00:00",
+      "readAt": "2026-10-14T08:52:22.970Z"
+    }
+  ],
+  "wipes": [
+    {
+      "symbol": "2409",
+      "deadlineCheckpoints": 115,
+      "successOwned": 10,
+      "failedCallBuffersVerifiedZero": 996
+    },
+    {
+      "symbol": "2383",
+      "deadlineCheckpoints": 86,
+      "successOwned": 8,
+      "failedCallBuffersVerifiedZero": 589
+    }
+  ],
+  "originalSourceFiles": [
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 113823,
+      "sha256": "6426ba0caaac2a446593a632ebce50f93e7851f4fdb4025ff427c2f011961209"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-market/dataset.json",
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/model-results.json",
+      "bytes": 71848,
+      "sha256": "30028ccf9e48d7cda79f55a8b6ffd5141bad513e277894c8e360479e606b6786"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+      "bytes": 33734,
+      "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+      "bytes": 110526,
+      "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+      "bytes": 10693,
+      "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+      "bytes": 3630,
+      "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+      "bytes": 3671,
+      "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
+    }
+  ]
+}

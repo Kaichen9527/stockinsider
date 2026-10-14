@@ -1,0 +1,29 @@
+--- 15d4project
++++ e8deproject
+@@ -1,6 +1,6 @@
+ function project(symbol: '2409'|'2383', files: Map<string,{pin:FinancialFilePin;value:unknown}>, now: string) {
+-  const pins = inventory.companies[symbol], modelFile = pins[0].path, model = row(files.get(modelFile)?.value);
+-  ensure(model.symbol === symbol && model.unit === 'TWD_million; EPS TWD/share' && model.asOf === (symbol==='2409'?'2026-10-08T10:20:00Z':'2026-10-08T12:12:00Z'));
++  const pins = historicalCashPins.companies[symbol].files, modelFile = pins[0].path, model = row(files.get(modelFile)?.value);
++  ensure(model.symbol === symbol && model.unit === 'TWD_million; EPS TWD/share' && model.originalModelAsOf === (symbol==='2409'?'2026-10-08T10:20:00Z':'2026-10-08T12:12:00Z') && typeof model.asOf === 'string' && financialInstant(model.asOf) <= financialInstant(now));
+   const manifest = pins.slice(1).map(p=>({file:p.path,bytes:p.bytes,sha256:p.sha256}));
+   ensure(hash(model.inputManifest) === hash(manifest));
+   const {canonicalHash,inputManifest,...originalMaterial} = model; void inputManifest;
+@@ -92,13 +92,13 @@
+     });
+     return {id:scenario.id,quarters};
+   });
+-  const projected={schemaVersion:'business-scenarios-v2',calculatorId:symbol==='2409'?'auo_four_segment_v1':'emc_ccl_v1',symbol,unit:'TWD_million',originalModelCutoff:model.asOf,researchCutoff:now,latestReportedQuarter:'2026Q2',
+-    observations:manifest.map(p=>{const artifact=row(files.get(p.file)?.value);const floor=artifact.recordedAt??artifact.observedAt??artifact.completedAt??artifact.latestRelayRecordAt??artifact.dataCutoffObservation??(Array.isArray(artifact.sourceLedger)?artifact.sourceLedger.map(x=>row(x).observedAt).filter(x=>typeof x==='string').sort((a,b)=>financialInstant(a as string)<financialInstant(b as string)?-1:1).at(-1):undefined);ensure(typeof floor==='string'&&financialInstant(floor)<=financialInstant(now));return {sourceArtifactHash:p.sha256,observationHash:hash({p,originalAvailabilityFloor:floor}),observedAt:floor,admittedAt:now,publication:{precision:'unknown',value:null}};}),scenarios};
++  const projected={schemaVersion:'business-scenarios-v2',calculatorId:symbol==='2409'?'auo_four_segment_v1':'emc_ccl_v1',symbol,unit:'TWD_million',originalModelCutoff:model.originalModelAsOf,researchCutoff:now,latestReportedQuarter:'2026Q2',
++    observations:manifest.map(p=>{const artifact=row(files.get(p.file)?.value);const floor=(p.file===historicalCashPins.packetPath?artifact.extractionAvailableAt:undefined)??artifact.recordedAt??artifact.observedAt??artifact.completedAt??artifact.latestRelayRecordAt??artifact.dataCutoffObservation??(Array.isArray(artifact.sourceLedger)?artifact.sourceLedger.map(x=>row(x).observedAt).filter(x=>typeof x==='string').sort((a,b)=>financialInstant(a as string)<financialInstant(b as string)?-1:1).at(-1):undefined);ensure(typeof floor==='string'&&financialInstant(floor)<=financialInstant(now));return {sourceArtifactHash:p.sha256,observationHash:hash({p,originalAvailabilityFloor:floor}),observedAt:floor,admittedAt:now,publication:{precision:'unknown',value:null}};}),scenarios};
+   const projection={projected,reportedFacts,monthlyFacts,monthlyBridge,selectionOmissions:['selling/admin/R&D expense detail (group total retained)','H1 reported EPS detail (Q2 basic/diluted and share basis retained)'],assumptionProvenance:{file:modelFile,fileSha256:pins[0].sha256,jsonPointers:['/scenarios/0/assumptions','/scenarios/1/assumptions','/scenarios/2/assumptions'],status:'manual_research_assumptions_not_reported_forecasts'},
+     allocationDiscrepancies:symbol==='2409'?financial.data.segmentComparability:null,
+     originalModelCanonicalHash:canonicalHash,rawModel:{sha256:pins[0].sha256,bytes:pins[0].bytes},sourceManifest:manifest,sourceManifestHash:hash(manifest),
+-    clocks:{originalModelCutoff:model.asOf,financialRecordedAt:financial.data.recordedAt,shareNotesRecordedAt:notes.data.recordedAt,currentLocalReadKnownAt:now,databaseFinancialAdmissionAt:null},
++    clocks:{originalModelCutoff:model.originalModelAsOf,inputArtifactAsOf:model.asOf,financialRecordedAt:financial.data.recordedAt,shareNotesRecordedAt:notes.data.recordedAt,currentLocalReadKnownAt:now,databaseFinancialAdmissionAt:null},
+     gaps:['reported_2026_ytd_plus_forecast_bridge_incomplete','no_normalized_earnings_verification','capacity_yield_asp_orders_not_quantifiable','no_complete_2025_segment_recast','no_verified_future_share_count'],
+     observationsClockMeaning:'observedAt retains original artifact availability floor; admittedAt is current local in-memory acceptance only, not DB admission; monthly facts retain original source precision/clocks separately'};
+-  assertFinancialJsonBytes(projection,FINANCIAL_READ_LIMITS.projection);return projection;
++  assertFinancialJsonBytes(projection,historicalCashPins.limits.projection);return projection;
+ }
