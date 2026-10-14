@@ -1,0 +1,7 @@
+{
+  "base": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+  "startedAt": "2026-10-14T15:37:51Z",
+  "deadline": "2026-10-14T15:49:51Z",
+  "helperSha256": "92848b6cce2828f2f4a10ddeb855508aee3414f31c8f1d48cf6866d40d03a490",
+  "originalReadError": "initial rg candidate SQL before switching from artifact review branch: file absent, exit2; no execution/product failure"
+}

@@ -1,0 +1,62 @@
+{
+  "excerpts": [
+    {
+      "path": "migrations/20261009_research_input_preparations_v2.sql",
+      "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e",
+      "lines": [
+        35,
+        40
+      ],
+      "text": "CREATE FUNCTION public.research_input_preparation_bytes_v2(p_request jsonb,p_payload jsonb,p_new_seal jsonb) RETURNS integer\n LANGUAGE sql IMMUTABLE STRICT SET search_path=pg_catalog,public AS $$\n SELECT octet_length(convert_to(public.research_observed_canonical_json_v1(p_request),'UTF8'))\n  +octet_length(convert_to(public.research_observed_canonical_json_v1(p_payload),'UTF8'))\n  +CASE WHEN p_new_seal='null'::jsonb THEN 0 ELSE octet_length(convert_to(public.research_observed_canonical_json_v1(p_new_seal),'UTF8')) END\n $$;"
+    },
+    {
+      "path": "migrations/20261009_research_input_preparations_v2.sql",
+      "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e",
+      "lines": [
+        105,
+        128
+      ],
+      "text": " IF jsonb_array_length(docs)<>jsonb_array_length(p_request->'sourceDocumentIds') THEN RAISE EXCEPTION 'input_preparation_source_missing'; END IF;\n IF jsonb_array_length(docs)>0 THEN\n  -- Exact existing-seal lookup under the shared source fence; full receipt is charged only when new.\n  SELECT jsonb_agg(jsonb_build_object('id',d.id::text,'rowHash',encode(sha256(convert_to(to_jsonb(d)::text,'UTF8')),'hex'),\n   'root',public.research_source_root_v2(to_jsonb(d)),'publishedAt',to_jsonb(d)->'published_at',\n   'observedAt',to_jsonb(d)->'collected_at','rights',d.metadata->>'rights_boundary') ORDER BY d.id) INTO seal_manifest\n   FROM public.source_raw_documents d WHERE p_request->'sourceDocumentIds' @> jsonb_build_array(d.id::text);\n  seal_hash:=encode(sha256(convert_to(jsonb_build_object('documents',seal_manifest,'cutoff',n)::text,'UTF8')),'hex');\n  new_seal:=NOT EXISTS(SELECT FROM public.research_source_seals_v2 WHERE request_hash=seal_hash);\n  seal:=public.seal_research_sources_v2(docs,n);\n  IF seal->>'request_hash' IS DISTINCT FROM seal_hash THEN RAISE EXCEPTION 'input_preparation_seal_projection_changed'; END IF;\n END IF;\n -- Freeze DB-derived manifests; full original rows remain behind the private source seal.\n -- No supplied model output, financial facts, calculator or role identity is accepted here.\n material:=jsonb_build_object('schemaVersion','research-input-preparation-v2','researchCompanyId',j.research_company_id,'symbol',j.symbol,\n  'scope',j.research_scope,'snapshotHash',snap.snapshot_hash,'mappingDigest',snap.mapping_digest,'stockId',j.stock_id,\n  'priorityRunId',pri.run_id,'priorityInputHash',pri.input_hash,'discoveryCutoff',pri.as_of,'originalModelCutoff',NULL,'researchCutoff',n,\n  'originalJob',jsonb_build_object('jobId',j.job_id,'attempt',j.attempts,'owner',j.lease_owner,'leaseExpiresAt',j.lease_expires_at),\n  'originalReservation',jsonb_build_object('reservationId',r.reservation_id,'startedAt',r.started_at,'leaseExpiresAt',r.lease_expires_at),\n  'sourceManifest',coalesce(seal->'documents','[]'),'sourceSelectionComplete',false,'financial',NULL,'calculator',NULL,\n  'status','draft_incomplete','gaps',jsonb_build_array('financial_input_revision_missing','trusted_calculator_not_bound','original_model_not_selected','trusted_execution_authority_unavailable')||CASE WHEN jsonb_array_length(docs)=0 THEN jsonb_build_array('sources_not_selected') ELSE '[]'::jsonb END,\n  'modelDispatched',false,'publishableResearch',false,'researchQualified',false,'strategyApproved',false,'entryEligible',false);\n charged_bytes:=public.research_input_preparation_bytes_v2(p_request,material,CASE WHEN new_seal THEN seal ELSE 'null'::jsonb END);\n IF used_bytes+charged_bytes>524288 THEN RAISE EXCEPTION 'input_preparation_byte_bound'; END IF;"
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "sha256": "f089f44375f80da89be49215cad35626998bcb5775166efc23e93af224ec284f",
+      "lines": [
+        138,
+        155
+      ],
+      "text": " 'preparation',jsonb_build_object('id',parent->'preparation_id','inputHash',parent->'input_hash'),\n 'researchIdentity',jsonb_build_object('researchCompanyId',p->'researchCompanyId','symbol',p->'symbol','scope',p->'scope','snapshotHash',p->'snapshotHash','mappingDigest',p->'mappingDigest','stockId',p->'stockId'),\n 'priority',jsonb_build_object('runId',p->'priorityRunId','inputHash',p->'priorityInputHash','discoveryCutoff',p->'discoveryCutoff'),\n 'originalJob',p->'originalJob','originalReservation',p->'originalReservation','sources',jsonb_build_object('sealId',parent->'source_seal_id','manifest',p->'sourceManifest','coverage','incomplete'),\n 'financial',jsonb_build_object('artifactInventory',m->'inventory','material',f)||CASE WHEN c->>'wireVersion'='research-article-input-v3' THEN jsonb_build_object('candidate',p_calculation-'financialMaterial','protocol',c||jsonb_build_object('bindingCapsuleIdentity',b->>'bindingCapsuleIdentity')) ELSE '{}'::jsonb END,\n 'hashes',jsonb_build_object('preparationInputHash',parent->'input_hash','artifactInventoryHash',public.research_complete_hash_v2(m->'inventory'),'modelHistoricalCanonicalHash',m->'historicalHash',\n 'sourceManifestHash',public.research_complete_hash_v2(projection->'sourceManifest'),'projectionHash',public.research_complete_hash_v2(projection),'scenarioInputHash',public.research_complete_hash_v2(projection->'projected'->'scenarios'),'resultHash',public.research_complete_hash_v2(calc),'sourceClosureHash',c->'sourceExecutionHash'),\n 'clocks',jsonb_build_object('originalModelCutoff',m->'modelCutoff','originalPreparationAdmittedAt',parent->'admitted_at','artifactReadKnownAt',p_calculation->'artifactReadKnownAt','financialAdmittedAt',n,'researchCutoff',n),\n 'gaps',gaps,'capabilities',jsonb_build_object('financialVerified',false,'dispatchReady',false,'modelDispatched',false,'publishableResearch',false,'researchQualified',false,'strategyApproved',false,'entryEligible',false,'historicalPITEligible',false));\n charge:=octet_length(convert_to(public.research_complete_canonical_v2(p_request),'UTF8'))+octet_length(convert_to(public.research_complete_canonical_v2(material),'UTF8'));\n SELECT count(*),coalesce(sum(logical_bytes),0) INTO used_count,used_bytes FROM (\n SELECT logical_bytes FROM public.research_input_preparations_v2 WHERE job_id=(parent->>'job_id')::uuid AND attempt=(parent->>'attempt')::int AND reservation_id=(parent->>'reservation_id')::uuid\n UNION ALL SELECT logical_bytes FROM public.research_article_input_revisions_v2 WHERE job_id=(parent->>'job_id')::uuid AND attempt=(parent->>'attempt')::int AND reservation_id=(parent->>'reservation_id')::uuid) history;\n IF used_count>=4 THEN RAISE EXCEPTION 'complete_count_bound';END IF;IF used_bytes+charge>524288 THEN RAISE EXCEPTION 'complete_byte_bound';END IF;\n IF clock_timestamp()>=least((p->'originalJob'->>'leaseExpiresAt')::timestamptz,(p->'originalReservation'->>'leaseExpiresAt')::timestamptz) THEN RAISE EXCEPTION 'complete_lease_lost';END IF;\n rh:=public.research_complete_hash_v2(p_request);ih:=public.research_complete_hash_v2(material);\n INSERT INTO public.research_article_input_revisions_v2(preparation_id,job_id,attempt,reservation_id,research_company_id,research_scope,snapshot_hash,request_hash,canonical_request,input_hash,canonical_payload,logical_bytes,admitted_at,research_cutoff,source_seal_id)\n VALUES((parent->>'preparation_id')::uuid,(parent->>'job_id')::uuid,(parent->>'attempt')::int,(parent->>'reservation_id')::uuid,(p->>'researchCompanyId')::uuid,'research_observed_v1',p->>'snapshotHash',rh,p_request,ih,material,charge,n,n,(parent->>'source_seal_id')::uuid) RETURNING * INTO saved;"
+    },
+    {
+      "path": "migrations/20261009_research_publication_source_fence_v2.sql",
+      "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621",
+      "lines": [
+        107,
+        116
+      ],
+      "text": "  IF NULLIF(doc->'metadata'->>'parent_source_url','') IS NOT NULL\n   AND doc->'metadata'->>'parent_source_url' IS DISTINCT FROM COALESCE(NULLIF(doc->'metadata'->>'canonical_url',''),split_part(doc->>'document_url','#si-revision-',1)) THEN RAISE EXCEPTION 'source_seal_unsupported_parent_lineage'; END IF;\n  IF octet_length(doc::text)>4194304 THEN RAISE EXCEPTION 'source_seal_document_bound'; END IF;\n  row_hash:=encode(sha256(convert_to(doc::text,'UTF8')),'hex'); root:=public.research_source_root_v2(doc);\n  IF row_hash<>item->>'rowHash' THEN RAISE EXCEPTION 'source_seal_hash_changed'; END IF;\n  IF root IS NULL OR root='' OR octet_length(root)>4096 OR (doc->>'collected_at')::timestamptz IS NULL\n   OR NOT isfinite((doc->>'collected_at')::timestamptz) OR (doc->>'collected_at')::timestamptz>p_cutoff\n   OR (doc->>'published_at')::timestamptz>p_cutoff THEN RAISE EXCEPTION 'source_seal_clock'; END IF;\n  IF COALESCE(doc->'metadata'->>'rights_boundary','') NOT IN ('public_citation','bounded_summary_only')\n   OR NULLIF(doc->'metadata'->>'retracted_at','') IS NOT NULL OR doc->'metadata'->>'claim_status'='denied' THEN RAISE EXCEPTION 'source_seal_rights_or_withdrawn'; END IF;"
+    }
+  ],
+  "rootOccurrences": "(30+29)*(two preparation copies + one sealed material copy)=177",
+  "predictions": [
+    {
+      "symbol": "2409",
+      "baselineActual": 462917,
+      "extraAsciiBytes": 400,
+      "prediction": 533717
+    },
+    {
+      "symbol": "2383",
+      "baselineActual": 304278,
+      "extraAsciiBytes": 1300,
+      "prediction": 534378
+    }
+  ],
+  "actualRejectedWouldCharge": null,
+  "newCasesExecuted": 0,
+  "notes": [
+    "dynamic clocks/metadata/new-seal identity require future measurement",
+    "source root under4096 is not author-packet <=800 compatibility",
+    "all source mutations remain original lease/trigger paths"
+  ]
+}

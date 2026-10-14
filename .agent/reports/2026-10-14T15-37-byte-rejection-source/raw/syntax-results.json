@@ -1,0 +1,18 @@
+[
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-byte-rejection-native.test.mjs"
+    ],
+    "exit": 0
+  }
+]

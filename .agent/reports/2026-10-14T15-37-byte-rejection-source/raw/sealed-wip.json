@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-14T15:40:35.878826+00:00",
+  "files": [
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+      "bytes": 16647,
+      "sha256": "022b505ee1272c96e76001e03ce87eb250c979144838250920f9b8c1349255e4"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-byte-rejection-native.test.mjs",
+      "bytes": 9339,
+      "sha256": "5a679ee5c4aa756c789705738258d84f9a5ca6552c8f6c3a88418afb5b39022c"
+    }
+  ],
+  "executionAllowed": "syntax-only; no module imports/native/test"
+}

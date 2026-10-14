@@ -1,0 +1,36 @@
+[
+  {
+    "path": "/tmp/cross-wire-exec-o14/native-initial-artifacts/2383-max30-v3-measure-mixed-byte-measurement.json",
+    "sha256": "e02fdde1094dcde73de946ac10e7efeab80e3eb96fe80ceec77126e2f9651aec",
+    "beforeCharge": {
+      "count": 3,
+      "bytes": 194990
+    },
+    "actualSecondCharge": 109288,
+    "afterCharge": {
+      "count": 4,
+      "bytes": 304278
+    },
+    "pending": {
+      "status": "PENDING",
+      "reason": "this legal bounded input remains within original byte cap; no reachable over-cap input proven"
+    }
+  },
+  {
+    "path": "/tmp/cross-wire-exec-o14/native-initial-artifacts/2409-max30-compatible-measure-mixed-byte-measurement.json",
+    "sha256": "39e313064f76d6e699a7ddcdef93071e8dcbe56414ae68855b2e0d64431f629a",
+    "beforeCharge": {
+      "count": 3,
+      "bytes": 220208
+    },
+    "actualSecondCharge": 242709,
+    "afterCharge": {
+      "count": 4,
+      "bytes": 462917
+    },
+    "pending": {
+      "status": "PENDING",
+      "reason": "this legal bounded input remains within original byte cap; no reachable over-cap input proven"
+    }
+  }
+]
