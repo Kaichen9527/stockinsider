@@ -1,0 +1,11 @@
+# Prerequisites 2–5 source-derived fragment matrix
+
+This test-only slice starts at 5aad27050b43d62ebe3929a9b9c2ee22c60e7fda. It changes no runtime, guard, SQL, baseline, installed catalog, workflow, financial plan or authority. The fixed fixture inventories manually checked original line intervals and hashes for all top-level statements in the four sealed prerequisite sources. Inline columns, constraints and implicit table row types remain in the exact table-creation fragment. Execution uses the existing atomic scanner.
+
+The native entry restores the genuine captured VPS schema, seeds an explicitly synthetic financial fact through the real RPC, and executes the actual main financial50 engineering helper to COMMIT. This establishes the supported captured post50 baseline; synthetic local bootstrap and injected operator execution are not formal peer/operator/role approval.
+
+For an independent original fragment, execute only its exact source bytes, require the real readonly guard to reject, then rollback and compare complete namespace/catalog/financial/facts/observations. For a fragment requiring a new parent table or generated column, execute only the exact dependency creation closure. If that control already rejects, the target's isolated causal effect is not applicable on this predecessor; the target is not executed and is not counted as independently covered. No whole prerequisite prefix, synthetic substitute, additional grant or altered expectation is used. At least one available independent fragment per prerequisite is additionally committed in a genuine post50 database clone and refused by the actual atomic helper with zero tail bodies executed.
+
+Every selected fragment receives its own covered / not-causally-isolatable / pending disposition in the raw matrix. Other original statement kinds are explicitly source-proof-only, not silently included in native coverage. Full earlier COMMIT/socket/native24 and financial28 suites are not rerun.
+
+Results, exact test subject, resources and unexecuted items are recorded in `.agent/reports/2026-10-14T13-38-publication-tail-fragments/`. Existing runtime/type/lint/build identity may be reused only by exact byte comparison; it is not a new build. No production connection, installation, author/reviewer execution, approval or deployment is provided.
