@@ -79,7 +79,7 @@ type OwnedFiles = Awaited<ReturnType<typeof acquireWithOwnedSession>>['files'];
  * Realm-local callbacks must not start untracked background work or escape raw buffers. */
 export async function runFinancialIoSession<T>(root: string, pins: readonly FinancialIoPin[], deadline: FinancialIoDeadline,
   assertion: () => Promise<string>, project: (files: OwnedFiles) => T | Promise<T>, io: FinancialIoDependencies = nativeIo): Promise<T> {
-  checkFinancialIoInventory(root, pins, FINANCIAL_IO_LIMITS.legacyFiles);
+  checkFinancialIoInventory(root, pins, 9);
   const owner = new FinancialIoOwner();
   const tracked = <V>(work: () => V | Promise<V>) => deadline.wait(owner.start(async () => { deadline.check(); return await work(); }));
   const witness = (value: unknown) => { if (typeof value !== 'string' || !/^[a-f0-9]{64}$/u.test(value)) throw new Error('financial_preparation_witness_invalid'); return value; };
