@@ -1,0 +1,218 @@
+{
+  "schema": "unsigned-model-agent-code-review-v1",
+  "subject": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+  "tree": "299fe148e134d599c99addd29c690920cce8a881",
+  "base": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+  "scope": "seven-file newscenario-cash integration and its dependencies; separate reader excluded",
+  "verdict": "SCOPED_CODE_PASS",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "start": "2026-10-14T08:48:35Z",
+  "completed": "2026-10-14T08:56:20.933895+00:00",
+  "node": "v22.14.0",
+  "ts": "5.9.3",
+  "suite": {
+    "command": [
+      "node",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/research-historical-cash-core.test.mjs",
+      "scripts/research-historical-cash-projection.test.mjs",
+      "scripts/research-scenario-cash-material.test.mjs"
+    ],
+    "pass": 38,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "exit": 0
+  },
+  "moduleTypes": {
+    "command": "node web/node_modules/typescript/bin/tsc --noEmit --strict --target ES2017 --module ESNext --moduleResolution Bundler --allowImportingTsExtensions --skipLibCheck --types node --typeRoots ./web/node_modules/@types web/src/lib/research-scenario-cash-material.ts",
+    "exit": 0
+  },
+  "independent": {
+    "command": "node --experimental-strip-types /tmp/scenario-review-o14/probe.mjs",
+    "exit": 0,
+    "counts": {
+      "boundaryAssertions": 241,
+      "numericComparisons": 612,
+      "locatorComparisons": 95
+    },
+    "results": [
+      {
+        "symbol": "2409",
+        "carrierBytes": 931023,
+        "carrierSha256": "823b80038e13779f4155327b3cd7d36b1dc5a833490da1bf692d33845c239590",
+        "resultBytes": 181848,
+        "projectionBytes": 133621,
+        "maxObjectDepth": 9,
+        "maxQuarterDelta": 1.8189894035458565e-12,
+        "cashHash": "b59bd42321ac7e9af6c3fcd1eba86fa359f2537d467a45e8fbef244e442c434d",
+        "reportedFacts": 60,
+        "monthlyFacts": 3,
+        "originalCutoff": "2026-10-08T10:20:00Z",
+        "artifactAsOf": "2026-10-14T02:34:47.456437+00:00",
+        "readAt": "2026-10-14T08:52:22.970Z"
+      },
+      {
+        "symbol": "2383",
+        "carrierBytes": 353803,
+        "carrierSha256": "5fff5dd7e33ae7da30d8b72890f13414866b7820f54685af38b5cdd95d2b5564",
+        "resultBytes": 110392,
+        "projectionBytes": 82471,
+        "maxObjectDepth": 8,
+        "maxQuarterDelta": 0,
+        "cashHash": "a1965a0f56556c4c4b50f89f7f96ef263b6fd7b6aec529c919cce3b8bfa585d7",
+        "reportedFacts": 29,
+        "monthlyFacts": 3,
+        "originalCutoff": "2026-10-08T12:12:00Z",
+        "artifactAsOf": "2026-10-14T02:34:47.456437+00:00",
+        "readAt": "2026-10-14T08:52:22.970Z"
+      }
+    ],
+    "wipes": [
+      {
+        "symbol": "2409",
+        "deadlineCheckpoints": 115,
+        "successOwned": 10,
+        "failedCallBuffersVerifiedZero": 996
+      },
+      {
+        "symbol": "2383",
+        "deadlineCheckpoints": 86,
+        "successOwned": 8,
+        "failedCallBuffersVerifiedZero": 589
+      }
+    ],
+    "fixtureGitByteEqualityFiles": 15
+  },
+  "retainedReviewerRed": "probe-r1 used source +00:00 clock in API requiring Z; exactinstant normalized in probe only, rawexit1 retained",
+  "makerHistoricalRed": "2ec898dc staleFINANCIAL_READ_LIMITS reference reported in exacthandoff; not rerun or reclassified",
+  "sourceUnchanged": true,
+  "formalApproval": false,
+  "fullV3Accepted": false,
+  "fullAppBuildOrLintRun": false,
+  "readerBuildReused": false,
+  "resource": {
+    "freeInitialWorkspace": 8618450944,
+    "freeFinal": {
+      "/workspace": 8618323968,
+      "/tmp": 15455019008
+    },
+    "peakRssMeasured": false,
+    "scope": "singlelightNodecommands; noheavybuild/PG/services"
+  },
+  "pending": [
+    "fullnewreader/sourceclosure/v3schema",
+    "HTTP-PG/livelease/freshness/quota/fences",
+    "oldsealedv2replay/currentmapping/allcallers",
+    "author-review-publication",
+    "wholeappquality/independentrelease/protected"
+  ],
+  "raw": [
+    {
+      "file": "equality.json",
+      "bytes": 1555,
+      "sha256": "65662bdd0998054cab46f30baa0b70b5260255e567923d2abd315c07bb4accfb"
+    },
+    {
+      "file": "probe-r1.mjs",
+      "bytes": 9066,
+      "sha256": "5107226a39c74f24ed60396da25e3831a1e869f42aab0b9e3eeae07791c41690"
+    },
+    {
+      "file": "probe.mjs",
+      "bytes": 9090,
+      "sha256": "70c9dbcca3c71f2e455e9254d6a89c1ef5ec4d1666c0945cace731638ec410d5"
+    },
+    {
+      "file": "project-extraction.diff",
+      "bytes": 4854,
+      "sha256": "26dcf10ef54e1d6da31b95c37baf3b7876342577124cec07ab8635c7e36975e8"
+    },
+    {
+      "file": "raw/independent-r1.exit",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "file": "raw/independent-r1.stderr",
+      "bytes": 1202,
+      "sha256": "f54fb731d2420f2d9f69b790c26a63b0097e43b026b2610c0bae215cdb77b105"
+    },
+    {
+      "file": "raw/independent-r1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/independent.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "raw/independent.stderr",
+      "bytes": 556,
+      "sha256": "5386e57d005b9d24a11597d783b812f04199316b0b29748dcb48a284592795d4"
+    },
+    {
+      "file": "raw/independent.stdout",
+      "bytes": 4680,
+      "sha256": "c226576a4d47b37d96f0d7ee2f2ce643d1c02f573224b32e104b0b7202be2a98"
+    },
+    {
+      "file": "raw/module-types.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "raw/module-types.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/module-types.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/suite.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "raw/suite.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "raw/suite.stdout",
+      "bytes": 10512,
+      "sha256": "e639bf0cd2e756e8e504d37c6edc26984798a4aca75ea6dd0a05cbc7adbb2199"
+    },
+    {
+      "file": "review.md",
+      "bytes": 6560,
+      "sha256": "8d2903420d31b8dc08afd14763ebb10193d0cc68240301047f07921012113dde"
+    },
+    {
+      "file": "source-manifest.json",
+      "bytes": 2949,
+      "sha256": "d1eb5470b9d78d5765e3bcd3eaabde26afc29a6b5bf958339acb238ddd42f4d7"
+    },
+    {
+      "file": "task.txt",
+      "bytes": 2947,
+      "sha256": "095d0bab79be0b093b3bec09dfc1ef3191dd25105d8c00e2855b99f3ed1e5209"
+    },
+    {
+      "file": "task.txt.gz",
+      "bytes": 1881,
+      "sha256": "407e53f418d753d789fb5f6fec74726aee759273084f483a06f47b65e5e2fdcd"
+    }
+  ]
+}

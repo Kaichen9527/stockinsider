@@ -1,0 +1,38 @@
+[
+  {
+    "file": "web/src/lib/research-historical-cash-pins.ts",
+    "bytes": 7034,
+    "sha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5",
+    "byteIdenticalTo06ae": true
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-projection.ts",
+    "bytes": 11131,
+    "sha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719",
+    "byteIdenticalTo06ae": true
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "bytes": 11245,
+    "sha256": "157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790",
+    "byteIdenticalTo06ae": true
+  },
+  {
+    "file": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+    "bytes": 202500,
+    "sha256": "afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f",
+    "byteIdenticalTo06ae": true
+  },
+  {
+    "file": "package-lock.json",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "byteIdenticalTo06ae": true
+  },
+  {
+    "file": "web/package-lock.json",
+    "bytes": 274088,
+    "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+    "byteIdenticalTo06ae": true
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-cash-single-owner-reader.test.mjs",
+    "scripts/research-historical-cash-core.test.mjs",
+    "scripts/research-historical-cash-projection.test.mjs"
+  ],
+  "cwd": "/tmp/si-pubtail-o14",
+  "start": "2026-10-14T08:31:31.445340+00:00",
+  "end": "2026-10-14T08:31:35.633564+00:00",
+  "exitCode": 0,
+  "processGroupPeakRssBytes": 213721088,
+  "rssSampling": "sum /proc PGID RSS every100ms; may miss transient peaks; resource child maxRSS included separately",
+  "samples": 33,
+  "childMaxRssKiB": 188376,
+  "initialFreeBytes": {
+    "/workspace": 8618795008,
+    "/tmp": 15456948224
+  },
+  "minFreeBytes": {
+    "/workspace": 8617684992,
+    "/tmp": 15456931840
+  }
+}

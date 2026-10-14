@@ -1,0 +1,9 @@
+{
+  "completedReviewTurn": "01a139ab-3823-71cc-8c39-36523cc13ccf",
+  "completedCursor": "57859559-a812-4f98-bcdc-46a2a9f908f6:28",
+  "currentTurn": "01a139ca-a442-7209-b4e5-1f9dacf0dbc4",
+  "cursor": "57859559-a812-4f98-bcdc-46a2a9f908f6:29",
+  "status": "inProgress",
+  "task": "20min versioned complete-input contract and real canonical/PG size proof; owned reports/probes only",
+  "branch": "codex/research-versioned-complete-input-contract-oct14"
+}

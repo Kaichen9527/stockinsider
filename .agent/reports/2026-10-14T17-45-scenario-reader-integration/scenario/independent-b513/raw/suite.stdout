@@ -1,0 +1,215 @@
+TAP version 13
+# (node:550623) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:550623) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-historical-cash-core.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# Subtest: 2409 retained two-period cash and capital independently match Python Decimal
+ok 1 - 2409 retained two-period cash and capital independently match Python Decimal
+  ---
+  duration_ms: 2.00841
+  ...
+# Subtest: 2383 retained two-period cash and capital independently match Python Decimal
+ok 2 - 2383 retained two-period cash and capital independently match Python Decimal
+  ---
+  duration_ms: 1.042813
+  ...
+# Subtest: fixed company, period, unit, grain and exact operand inventory reject substituted scope
+ok 3 - fixed company, period, unit, grain and exact operand inventory reject substituted scope
+  ---
+  duration_ms: 1.250097
+  ...
+# Subtest: every fixed operand refuses fractional, unsafe or nonfinite numeric values
+ok 4 - every fixed operand refuses fractional, unsafe or nonfinite numeric values
+  ---
+  duration_ms: 26.30134
+  ...
+# Subtest: all actual AUO noncash and working-capital components are reconciled, not only totals
+ok 5 - all actual AUO noncash and working-capital components are reconciled, not only totals
+  ---
+  duration_ms: 2.045336
+  ...
+# Subtest: EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+ok 6 - EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+  ---
+  duration_ms: 0.671404
+  ...
+# Subtest: all applicable cash and group-profit bridges reject inconsistent reported operands
+ok 7 - all applicable cash and group-profit bridges reject inconsistent reported operands
+  ---
+  duration_ms: 2.19316
+  ...
+# Subtest: cash acquisition and debt repayment signs reject rather than flipping expenses
+ok 8 - cash acquisition and debt repayment signs reject rather than flipping expenses
+  ---
+  duration_ms: 0.677492
+  ...
+# Subtest: disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+ok 9 - disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+  ---
+  duration_ms: 1.014672
+  ...
+# Subtest: signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+ok 10 - signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+  ---
+  duration_ms: 0.422117
+  ...
+# Subtest: June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+ok 11 - June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+  ---
+  duration_ms: 0.931526
+  ...
+# Subtest: safe-integer sums cannot silently overflow even when each operand is safe
+ok 12 - safe-integer sums cannot silently overflow even when each operand is safe
+  ---
+  duration_ms: 0.236157
+  ...
+# Subtest: accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+ok 13 - accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+  ---
+  duration_ms: 0.315576
+  ...
+# Subtest: result is deeply frozen; calculation does not mutate caller operands
+ok 14 - result is deeply frozen; calculation does not mutate caller operands
+  ---
+  duration_ms: 0.363919
+  ...
+# (node:550634) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:550634) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-historical-cash-pins.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# Subtest: 2409 all exact source bytes project and recompute original cash without financial authority
+ok 15 - 2409 all exact source bytes project and recompute original cash without financial authority
+  ---
+  duration_ms: 18.910537
+  ...
+# Subtest: 2409 any exact inventory file mutation, length, omission, order or extra fails closed
+ok 16 - 2409 any exact inventory file mutation, length, omission, order or extra fails closed
+  ---
+  duration_ms: 152.898962
+  ...
+# Subtest: 2409 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+ok 17 - 2409 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+  ---
+  duration_ms: 41.845998
+  ...
+# Subtest: 2409 deadline exceptions at every successful checkpoint cannot return partial success
+ok 18 - 2409 deadline exceptions at every successful checkpoint cannot return partial success
+  ---
+  duration_ms: 676.600583
+  ...
+# Subtest: 2383 all exact source bytes project and recompute original cash without financial authority
+ok 19 - 2383 all exact source bytes project and recompute original cash without financial authority
+  ---
+  duration_ms: 7.087685
+  ...
+# Subtest: 2383 any exact inventory file mutation, length, omission, order or extra fails closed
+ok 20 - 2383 any exact inventory file mutation, length, omission, order or extra fails closed
+  ---
+  duration_ms: 42.721839
+  ...
+# Subtest: 2383 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+ok 21 - 2383 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+  ---
+  duration_ms: 16.087587
+  ...
+# Subtest: 2383 deadline exceptions at every successful checkpoint cannot return partial success
+ok 22 - 2383 deadline exceptions at every successful checkpoint cannot return partial success
+  ---
+  duration_ms: 200.29849
+  ...
+# Subtest: unknown or substituted profiles/companies reject before injected material access
+ok 23 - unknown or substituted profiles/companies reject before injected material access
+  ---
+  duration_ms: 2.138717
+  ...
+# Subtest: byte-only native views ignore caller metadata and reject wrong backing stores and proxies
+ok 24 - byte-only native views ignore caller metadata and reject wrong backing stores and proxies
+  ---
+  duration_ms: 55.417227
+  ...
+# Subtest: each projected row carries exact two-period packet/model locators and private source-line hashes
+ok 25 - each projected row carries exact two-period packet/model locators and private source-line hashes
+  ---
+  duration_ms: 18.138903
+  ...
+# Subtest: all legacy Maps reject without iteration, getters or own-key reflection, including R1/R2 shapes
+ok 26 - all legacy Maps reject without iteration, getters or own-key reflection, including R1/R2 shapes
+  ---
+  duration_ms: 24.170634
+  ...
+# Subtest: whole carrier length and SHA reject all serialized drift before JSON parsing
+ok 27 - whole carrier length and SHA reject all serialized drift before JSON parsing
+  ---
+  duration_ms: 44.038807
+  ...
+# Subtest: owned carrier snapshot survives caller mutation after copying and preserves old projection hashes
+ok 28 - owned carrier snapshot survives caller mutation after copying and preserves old projection hashes
+  ---
+  duration_ms: 42.284489
+  ...
+# Subtest: all allocated carrier/decode buffers are wiped on success and every cooperative deadline failure
+ok 29 - all allocated carrier/decode buffers are wiped on success and every cooperative deadline failure
+  ---
+  duration_ms: 1480.530067
+  ...
+# (node:550645) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:550645) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-scenario-cash-material.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# Subtest: 2409 actual full scenario calculations match all retained model quarter values and cash
+ok 30 - 2409 actual full scenario calculations match all retained model quarter values and cash
+  ---
+  duration_ms: 46.51993
+  ...
+# Subtest: 2409 source bytes cannot be substituted even with coherent edited numbers
+ok 31 - 2409 source bytes cannot be substituted even with coherent edited numbers
+  ---
+  duration_ms: 56.309379
+  ...
+# Subtest: 2409 each cooperative deadline exception rejects and preserves caller bytes
+ok 32 - 2409 each cooperative deadline exception rejects and preserves caller bytes
+  ---
+  duration_ms: 809.806252
+  ...
+# Subtest: 2383 actual full scenario calculations match all retained model quarter values and cash
+ok 33 - 2383 actual full scenario calculations match all retained model quarter values and cash
+  ---
+  duration_ms: 15.303289
+  ...
+# Subtest: 2383 source bytes cannot be substituted even with coherent edited numbers
+ok 34 - 2383 source bytes cannot be substituted even with coherent edited numbers
+  ---
+  duration_ms: 20.580972
+  ...
+# Subtest: 2383 each cooperative deadline exception rejects and preserves caller bytes
+ok 35 - 2383 each cooperative deadline exception rejects and preserves caller bytes
+  ---
+  duration_ms: 258.633966
+  ...
+# Subtest: invalid profile/company/clock reject before material access
+ok 36 - invalid profile/company/clock reject before material access
+  ---
+  duration_ms: 20.863459
+  ...
+# Subtest: all old Maps and hostile views fail or remain unread metadata under fixed byte-only domain
+ok 37 - all old Maps and hostile views fail or remain unread metadata under fixed byte-only domain
+  ---
+  duration_ms: 46.54704
+  ...
+# Subtest: outer carrier and decoded buffers are actually wiped on success and all deadline failures
+ok 38 - outer carrier and decoded buffers are actually wiped on success and all deadline failures
+  ---
+  duration_ms: 2560.836229
+  ...
+1..38
+# tests 38
+# suites 0
+# pass 38
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7044.336997

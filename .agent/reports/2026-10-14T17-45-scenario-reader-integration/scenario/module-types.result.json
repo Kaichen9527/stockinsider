@@ -1,0 +1,13 @@
+{
+  "source": "b8a6e0a7557034793159a6e3c8f7e5ca8f1d95a8",
+  "exit": 0,
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "/Users/kaerchen/.cache/stockinsider-workspaces/research-agents-oct04/web/node_modules/typescript/lib/tsc.js",
+    "--project",
+    "/tmp/stockinsider-scenario-cash-material-evidence-oct14/module-tsconfig.json"
+  ],
+  "at": "2026-10-14T08:44:28.908919+00:00"
+}

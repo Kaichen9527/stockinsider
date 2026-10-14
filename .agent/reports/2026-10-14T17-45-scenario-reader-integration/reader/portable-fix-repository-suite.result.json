@@ -1,0 +1,17 @@
+{
+  "source": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+  "exit": 0,
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-cash-single-owner-reader.test.mjs",
+    "scripts/research-historical-cash-core.test.mjs",
+    "scripts/research-historical-cash-projection.test.mjs"
+  ],
+  "at": "2026-10-14T08:55:17.869367+00:00",
+  "runtimeChanges": false
+}

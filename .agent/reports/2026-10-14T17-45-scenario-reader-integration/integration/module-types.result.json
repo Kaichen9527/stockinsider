@@ -1,0 +1,13 @@
+{
+  "source": "86a0d6ca0f1bb2f55988c92e160fd0e5de437764",
+  "exit": 0,
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "/Users/kaerchen/.cache/stockinsider-workspaces/research-agents-oct04/web/node_modules/typescript/lib/tsc.js",
+    "--project",
+    "/tmp/stockinsider-scenario-reader-integration-evidence-oct14/module-tsconfig.json"
+  ],
+  "at": "2026-10-14T09:01:36.322918+00:00"
+}

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "target": "ES2017",
+    "lib": [
+      "esnext"
+    ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "/Users/kaerchen/.cache/stockinsider-workspaces/research-agents-oct04/web/node_modules/@types"
+    ],
+    "skipLibCheck": true
+  },
+  "files": [
+    "/private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-scenario-cash-material.ts",
+    "/private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-cash-financial-reader.ts"
+  ]
+}

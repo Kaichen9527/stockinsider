@@ -1,0 +1,4 @@
+Transcribed original exec output for read-only lineage lookup (no rerun):
+Commands: git diff 9daf8248355568c45bb0bda3ade224be1b84b9f0 HEAD -- scripts/research-cash-single-owner-reader.test.mjs; git diff 6313d9e455eb4d5c17a76c94300c4fa676f6ddc9 9daf8248355568c45bb0bda3ade224be1b84b9f0 --stat
+Exit128. Each command: fatal: bad object 9daf8248355568c45bb0bda3ade224be1b84b9f0
+Resolution: git fetch origin exact9daf succeeded; comparisons performed after fetch, source unchanged. Pre-fetch manifest kept and not used as final identity proof.

@@ -1,0 +1,39 @@
+diff --git a/docs/operations/2026-10-14/cash-single-owner-reader-handoff.md b/docs/operations/2026-10-14/cash-single-owner-reader-handoff.md
+index b84afdc1..07eef68e 100644
+--- a/docs/operations/2026-10-14/cash-single-owner-reader-handoff.md
++++ b/docs/operations/2026-10-14/cash-single-owner-reader-handoff.md
+@@ -12,8 +12,10 @@ Namespace checks include filesystem root, all ancestors, and regular/nlink=1 lea
+ 
+ `new-reader-execution-closure.json` pins ten necessary source/package/lock files and Node22.14.0. This is NEW sorted metadata closure, not historical77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41. Original15d4 reader logic source was inspected; no old closure metadata/mapping/schema/SQL or original15d4 artifact was changed. New base web lock Next16.3.4 is distinct from historical research lock.
+ 
+-Engineering tests expand the original private15-source fixture to an owned0700 /workspace tree, use actual native FD read/stat/close and deliberate boundary injection. Synthetic deferred I/O modifies true handles, not stats; recovery failures run in isolated child realms and do not reset owner. Exact projection hashes and source clocks are retained. These tests do not attest raw PDF extraction, source publication, financial verification, investment admission, model execution or genuine publication.
++Engineering tests expand the original private15-source fixture to an owned0700 tree beneath the canonical trusted OS home directory, use actual native FD read/stat/close and deliberate boundary injection. Synthetic deferred I/O modifies true handles, not stats; recovery failures run in isolated child realms and do not reset owner. Exact projection hashes and source clocks are retained. These tests do not attest raw PDF extraction, source publication, financial verification, investment admission, model execution or genuine publication.
+ 
+ Pending before live v3: full scenario+cash finite schema/material/depth/serialized charge; finite version dispatch/current mapping across route and author callers; original sealedv2 request/hash/clock/replay/no-charge behavior; genuine job/reservation/preparation/live lease; atomic SQL/HTTP-PG tests; full author/reviewer/publication binding; cross-process supervised drain/cutover and no overlapping legacy private-slot executable. No fresh-v2 disablement or replacement is authorized by this leaf.
+ 
+ Run: Node22.14 `--experimental-strip-types --test --test-concurrency=1 scripts/research-cash-single-owner-reader.test.mjs scripts/research-historical-cash-core.test.mjs scripts/research-historical-cash-projection.test.mjs`, then exact-lock typecheck/lint/normal build. Results/RED source identities are in the separate evidence receipt. Maker execution is not independent CODE or release approval.
++
++Independent Root review of6313 found one test-portabilityP2: `/workspace/.cash-owner-fixture-` is absent on Mac and ordinary hosted runners, so the exact repository command failed0PASS1FAIL before case registration. The originalRED is retained. A fixture-only independent probe with canonical home and anchored imports executed19 actualFD cases successfully on unchanged6313runtime, not a passing rerun of that original repository suite. Root then repaired only testsetup/handoff: canonical trusted OS home, exclusive own prefix0700 and cleanup on setup failure. The `/tmp` unsafe-parent rejection and all source/IO guards/expectedcases remain. Original runtime/ten-file new closure hash02eda614… andwebtree remain unchanged; originalmakerbuild may be attributed only by byte equality, not called a newbuild. Repair requires actual repository48 execution and independent closure review, currently pending.
+diff --git a/scripts/research-cash-single-owner-reader.test.mjs b/scripts/research-cash-single-owner-reader.test.mjs
+index e373b487..98d0b47a 100644
+--- a/scripts/research-cash-single-owner-reader.test.mjs
++++ b/scripts/research-cash-single-owner-reader.test.mjs
+@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import fsp from 'node:fs/promises';
+ import path from 'node:path';
++import os from 'node:os';
+ import { execFileSync } from 'node:child_process';
+ import { gunzipSync } from 'node:zlib';
+ import { createHash } from 'node:crypto';
+@@ -14,8 +15,8 @@ const gzip=fs.readFileSync(new URL('./fixtures/research-historical-cash/pinned-s
+ assert.equal(createHash('sha256').update(gzip).digest('hex'),'afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f');
+ const fixture=JSON.parse(gunzipSync(gzip,{maxOutputLength:2000000}));
+ const originals=new Map(fixture.files.map(f=>[f.pin.path,Buffer.from(f.rawBase64,'base64')]));
+-const root=fs.mkdtempSync('/workspace/.cash-owner-fixture-');fs.chmodSync(root,0o700);
+-for(const [name,raw]of originals){fs.mkdirSync(path.dirname(path.join(root,name)),{recursive:true,mode:0o700});fs.writeFileSync(path.join(root,name),raw,{mode:0o600});}
++const root=fs.mkdtempSync(path.join(fs.realpathSync(os.homedir()),'.stockinsider-cash-owner-fixture-'));fs.chmodSync(root,0o700);
++try{for(const [name,raw]of originals){fs.mkdirSync(path.dirname(path.join(root,name)),{recursive:true,mode:0o700});fs.writeFileSync(path.join(root,name),raw,{mode:0o600});}}catch(error){fs.rmSync(root,{recursive:true,force:true});throw error;}
+ const io={lstat:fsp.lstat,open:fsp.open};const reader=create(root),profile=pins.profile;
+ const sha=v=>createHash('sha256').update(v).digest('hex');
+ const legacyPin=pins.companies['2383'].files[0];

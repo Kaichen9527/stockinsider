@@ -1,0 +1,275 @@
+TAP version 13
+# (node:83872) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83872) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/src/lib/research-historical-cash-pins.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/package.json.
+# Subtest: 2409 actual secure FS complete profile, exact output and unchanged original bytes
+ok 1 - 2409 actual secure FS complete profile, exact output and unchanged original bytes
+  ---
+  duration_ms: 19.059625
+  ...
+# Subtest: 2409 each file content, length, omission, symlink, nlink and replacement reject
+ok 2 - 2409 each file content, length, omission, symlink, nlink and replacement reject
+  ---
+  duration_ms: 80.986209
+  ...
+# Subtest: 2383 actual secure FS complete profile, exact output and unchanged original bytes
+ok 3 - 2383 actual secure FS complete profile, exact output and unchanged original bytes
+  ---
+  duration_ms: 6.735125
+  ...
+# Subtest: 2383 each file content, length, omission, symlink, nlink and replacement reject
+ok 4 - 2383 each file content, length, omission, symlink, nlink and replacement reject
+  ---
+  duration_ms: 39.028791
+  ...
+# Subtest: legacy <=8 compatible parsed facade rejects9 before any IO; unknown/crossissuer cannot select paths
+ok 5 - legacy <=8 compatible parsed facade rejects9 before any IO; unknown/crossissuer cannot select paths
+  ---
+  duration_ms: 3.904667
+  ...
+# Subtest: world writable ancestor genuinely rejected, no /tmp exception
+ok 6 - world writable ancestor genuinely rejected, no /tmp exception
+  ---
+  duration_ms: 0.316
+  ...
+# Subtest: FIFO leaf and replacement FIFO bounded by NONBLOCK; no unconfirmed success
+ok 7 - FIFO leaf and replacement FIFO bounded by NONBLOCK; no unconfirmed success
+  ---
+  duration_ms: 4.036167
+  ...
+# Subtest: parent rename and ninth-file namespace substitution rejects all-profile success
+ok 8 - parent rename and ninth-file namespace substitution rejects all-profile success
+  ---
+  duration_ms: 2.982833
+  ...
+# Subtest: legacy8 -> v3 and v3 -> legacy8 share opaque owner while real FD retained
+ok 9 - legacy8 -> v3 and v3 -> legacy8 share opaque owner while real FD retained
+  ---
+  duration_ms: 10.577292
+  ...
+# Subtest: query module imports cannot establish a second slot; new owner generation remains shared
+ok 10 - query module imports cannot establish a second slot; new owner generation remains shared
+  ---
+  duration_ms: 2.427667
+  ...
+# Subtest: late actual open remains owned then close-once confirmed before both facades reenter
+ok 11 - late actual open remains owned then close-once confirmed before both facades reenter
+  ---
+  duration_ms: 42.908958
+  ...
+# Subtest: late read can write after return: retain raw ownership, wipe on settlement, close-once then restore
+ok 12 - late read can write after return: retain raw ownership, wipe on settlement, close-once then restore
+  ---
+  duration_ms: 44.45225
+  ...
+# (node:83885) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83885) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/src/lib/research-cash-financial-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/package.json.
+# Subtest: normal read stalled close never success, deadline bounded and late close releases all facades
+ok 13 - normal read stalled close never success, deadline bounded and late close releases all facades
+  ---
+  duration_ms: 38.547916
+  ...
+# Subtest: primary hash error plus real-FD close rejection preserves primary and recovery fence (isolated process)
+ok 14 - primary hash error plus real-FD close rejection preserves primary and recovery fence (isolated process)
+  ---
+  duration_ms: 72.89975
+  ...
+# Subtest: all real raw buffers wipe and every actual FD is closed before successful return
+ok 15 - all real raw buffers wipe and every actual FD is closed before successful return
+  ---
+  duration_ms: 18.352041
+  ...
+# Subtest: perfile/aggregate/duplicate bounds and malformed UTF8 fail without a second budget
+ok 16 - perfile/aggregate/duplicate bounds and malformed UTF8 fail without a second budget
+  ---
+  duration_ms: 0.694625
+  ...
+# Subtest: finite NEW source closure is exact and distinctly different from immutable historical77b1
+ok 17 - finite NEW source closure is exact and distinctly different from immutable historical77b1
+  ---
+  duration_ms: 0.551167
+  ...
+# (node:83886) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83886) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/src/lib/research-cash-financial-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/package.json.
+# Subtest: hash failure wipes every raw buffer and confirmed cleanup allows either facade
+ok 18 - hash failure wipes every raw buffer and confirmed cleanup allows either facade
+  ---
+  duration_ms: 9.771375
+  ...
+# Subtest: late open plus close failure is observed once, retains shared fence and primary deadline (child)
+ok 19 - late open plus close failure is observed once, retains shared fence and primary deadline (child)
+  ---
+  duration_ms: 97.877959
+  ...
+# (node:83887) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83887) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/src/lib/research-historical-cash-core.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/package.json.
+# Subtest: 2409 retained two-period cash and capital independently match Python Decimal
+ok 20 - 2409 retained two-period cash and capital independently match Python Decimal
+  ---
+  duration_ms: 0.909209
+  ...
+# Subtest: 2383 retained two-period cash and capital independently match Python Decimal
+ok 21 - 2383 retained two-period cash and capital independently match Python Decimal
+  ---
+  duration_ms: 0.39875
+  ...
+# Subtest: fixed company, period, unit, grain and exact operand inventory reject substituted scope
+ok 22 - fixed company, period, unit, grain and exact operand inventory reject substituted scope
+  ---
+  duration_ms: 0.5315
+  ...
+# Subtest: every fixed operand refuses fractional, unsafe or nonfinite numeric values
+ok 23 - every fixed operand refuses fractional, unsafe or nonfinite numeric values
+  ---
+  duration_ms: 12.672958
+  ...
+# Subtest: all actual AUO noncash and working-capital components are reconciled, not only totals
+ok 24 - all actual AUO noncash and working-capital components are reconciled, not only totals
+  ---
+  duration_ms: 0.989458
+  ...
+# Subtest: EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+ok 25 - EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+  ---
+  duration_ms: 0.329666
+  ...
+# Subtest: all applicable cash and group-profit bridges reject inconsistent reported operands
+ok 26 - all applicable cash and group-profit bridges reject inconsistent reported operands
+  ---
+  duration_ms: 1.197209
+  ...
+# Subtest: cash acquisition and debt repayment signs reject rather than flipping expenses
+ok 27 - cash acquisition and debt repayment signs reject rather than flipping expenses
+  ---
+  duration_ms: 0.348958
+  ...
+# Subtest: disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+ok 28 - disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+  ---
+  duration_ms: 0.524875
+  ...
+# Subtest: signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+ok 29 - signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+  ---
+  duration_ms: 0.258667
+  ...
+# Subtest: June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+ok 30 - June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+  ---
+  duration_ms: 0.346333
+  ...
+# Subtest: safe-integer sums cannot silently overflow even when each operand is safe
+ok 31 - safe-integer sums cannot silently overflow even when each operand is safe
+  ---
+  duration_ms: 0.073375
+  ...
+# Subtest: accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+ok 32 - accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+  ---
+  duration_ms: 0.126166
+  ...
+# Subtest: result is deeply frozen; calculation does not mutate caller operands
+ok 33 - result is deeply frozen; calculation does not mutate caller operands
+  ---
+  duration_ms: 0.150417
+  ...
+# (node:83888) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83888) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/src/lib/research-historical-cash-projection.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/package.json.
+# Subtest: 2409 all exact source bytes project and recompute original cash without financial authority
+ok 34 - 2409 all exact source bytes project and recompute original cash without financial authority
+  ---
+  duration_ms: 8.235625
+  ...
+# Subtest: 2409 any exact inventory file mutation, length, omission, order or extra fails closed
+ok 35 - 2409 any exact inventory file mutation, length, omission, order or extra fails closed
+  ---
+  duration_ms: 67.015666
+  ...
+# Subtest: 2409 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+ok 36 - 2409 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+  ---
+  duration_ms: 19.058709
+  ...
+# Subtest: 2409 deadline exceptions at every successful checkpoint cannot return partial success
+ok 37 - 2409 deadline exceptions at every successful checkpoint cannot return partial success
+  ---
+  duration_ms: 300.996042
+  ...
+# Subtest: 2383 all exact source bytes project and recompute original cash without financial authority
+ok 38 - 2383 all exact source bytes project and recompute original cash without financial authority
+  ---
+  duration_ms: 2.495459
+  ...
+# Subtest: 2383 any exact inventory file mutation, length, omission, order or extra fails closed
+ok 39 - 2383 any exact inventory file mutation, length, omission, order or extra fails closed
+  ---
+  duration_ms: 19.708459
+  ...
+# Subtest: 2383 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+ok 40 - 2383 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+  ---
+  duration_ms: 8.346375
+  ...
+# Subtest: 2383 deadline exceptions at every successful checkpoint cannot return partial success
+ok 41 - 2383 deadline exceptions at every successful checkpoint cannot return partial success
+  ---
+  duration_ms: 92.017334
+  ...
+# Subtest: unknown or substituted profiles/companies reject before injected material access
+ok 42 - unknown or substituted profiles/companies reject before injected material access
+  ---
+  duration_ms: 1.10925
+  ...
+# Subtest: byte-only native views ignore caller metadata and reject wrong backing stores and proxies
+ok 43 - byte-only native views ignore caller metadata and reject wrong backing stores and proxies
+  ---
+  duration_ms: 26.107208
+  ...
+# Subtest: each projected row carries exact two-period packet/model locators and private source-line hashes
+ok 44 - each projected row carries exact two-period packet/model locators and private source-line hashes
+  ---
+  duration_ms: 7.288917
+  ...
+# Subtest: all legacy Maps reject without iteration, getters or own-key reflection, including R1/R2 shapes
+ok 45 - all legacy Maps reject without iteration, getters or own-key reflection, including R1/R2 shapes
+  ---
+  duration_ms: 9.207167
+  ...
+# Subtest: whole carrier length and SHA reject all serialized drift before JSON parsing
+ok 46 - whole carrier length and SHA reject all serialized drift before JSON parsing
+  ---
+  duration_ms: 44.987459
+  ...
+# Subtest: owned carrier snapshot survives caller mutation after copying and preserves old projection hashes
+ok 47 - owned carrier snapshot survives caller mutation after copying and preserves old projection hashes
+  ---
+  duration_ms: 20.923667
+  ...
+# Subtest: all allocated carrier/decode buffers are wiped on success and every cooperative deadline failure
+ok 48 - all allocated carrier/decode buffers are wiped on success and every cooperative deadline failure
+  ---
+  duration_ms: 825.575708
+  ...
+1..48
+# tests 48
+# suites 0
+# pass 48
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2171.945875

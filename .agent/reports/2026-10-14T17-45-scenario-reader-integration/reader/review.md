@@ -1,0 +1,9 @@
+# Independent reader review and separately authored portability repair
+
+Exactmaker6313d9e4/delivery195de5d2 independently read by Root across6changed files andallruntime transitivepins. No newruntimeP0/P1/P2 found. One actualP2 blocks testacceptance: testline17 hardcodes/workspace. Exactrepository command onRootNode22.14 failed0PASS1FAIL before any19case ran. Originalstdout/stderr/source identity retained. This is a newfixturepath failure, not the historical repairednativeENOENT.
+
+Unchanged6313runtime then ran through fixture-only independent portableharness: canonical secure ownhomedir, absoluteoriginalmodule/fixtureanchors;19actualFDcases PASS. Originalrepo0/1 is not relabeled. RealFD lateopen/read/close/pendingfence/autorelease/primaryclosefailure/Bufferwipe/namespace/all9/7/ninthreplacement/FIFO/nlink/querycopy observed. Originalsame10s/512KiB/1MiB/160000/262144/newrealmowner assumptions remain. Trustedservercompositiondependencies andsameprocessglobalregistry are assumptions, not sandbox againstsameprocessarbitrarytampering/crossprocesssupervision.
+
+Root authored9daf test+harnessdocumentationonly repair (2files), canonicalOShome/exclusiveown0700prefix andsetupfailurecleanup. Actualoriginal48combinedrepoPASS;runtime/descriptor/webtree unchanged. Root cannotindependentlyapprovethisownrepair: independentclosure pending. OriginalCloudNext16.3.4 buildfy-ZIEP82MsdLWPwMF9gV/1798files canonly bebyte-equivalentforrepair, not Rootnewbuild. Full62caseFS→scenariointegration is differentRootsubject andneeds newquality/review.
+
+Root verified55maker raw hashes,16sourceentries/13unique hashes and6providedGitblobs, phaseexit/resource windows, linkedcompiledmanifestmetadata1798 andcleanuprecord. No Rootcompiledartifactfilebytes/appbuild rerun. OriginalmakerREDs remain. Candidate02edclosure distinctfrom77b1, noformalversion/schema/HTTPPG/oldsealedreplay/cutover/sourcefinancialauthority/role/publication acceptance.

@@ -1,0 +1,120 @@
+TAP version 13
+# (node:82989) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82989) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/src/lib/research-financial-io-owner.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/package.json.
+# Subtest: 2409 actual secure FS complete profile, exact output and unchanged original bytes
+ok 1 - 2409 actual secure FS complete profile, exact output and unchanged original bytes
+  ---
+  duration_ms: 19.376333
+  ...
+# Subtest: 2409 each file content, length, omission, symlink, nlink and replacement reject
+ok 2 - 2409 each file content, length, omission, symlink, nlink and replacement reject
+  ---
+  duration_ms: 79.559042
+  ...
+# Subtest: 2383 actual secure FS complete profile, exact output and unchanged original bytes
+ok 3 - 2383 actual secure FS complete profile, exact output and unchanged original bytes
+  ---
+  duration_ms: 7.35675
+  ...
+# Subtest: 2383 each file content, length, omission, symlink, nlink and replacement reject
+ok 4 - 2383 each file content, length, omission, symlink, nlink and replacement reject
+  ---
+  duration_ms: 39.765708
+  ...
+# Subtest: legacy <=8 compatible parsed facade rejects9 before any IO; unknown/crossissuer cannot select paths
+ok 5 - legacy <=8 compatible parsed facade rejects9 before any IO; unknown/crossissuer cannot select paths
+  ---
+  duration_ms: 3.980625
+  ...
+# Subtest: world writable ancestor genuinely rejected, no /tmp exception
+ok 6 - world writable ancestor genuinely rejected, no /tmp exception
+  ---
+  duration_ms: 0.334542
+  ...
+# Subtest: FIFO leaf and replacement FIFO bounded by NONBLOCK; no unconfirmed success
+ok 7 - FIFO leaf and replacement FIFO bounded by NONBLOCK; no unconfirmed success
+  ---
+  duration_ms: 6.447875
+  ...
+# Subtest: parent rename and ninth-file namespace substitution rejects all-profile success
+ok 8 - parent rename and ninth-file namespace substitution rejects all-profile success
+  ---
+  duration_ms: 2.916708
+  ...
+# Subtest: legacy8 -> v3 and v3 -> legacy8 share opaque owner while real FD retained
+ok 9 - legacy8 -> v3 and v3 -> legacy8 share opaque owner while real FD retained
+  ---
+  duration_ms: 10.299709
+  ...
+# Subtest: query module imports cannot establish a second slot; new owner generation remains shared
+ok 10 - query module imports cannot establish a second slot; new owner generation remains shared
+  ---
+  duration_ms: 2.42975
+  ...
+# Subtest: late actual open remains owned then close-once confirmed before both facades reenter
+ok 11 - late actual open remains owned then close-once confirmed before both facades reenter
+  ---
+  duration_ms: 43.95525
+  ...
+# Subtest: late read can write after return: retain raw ownership, wipe on settlement, close-once then restore
+ok 12 - late read can write after return: retain raw ownership, wipe on settlement, close-once then restore
+  ---
+  duration_ms: 44.563375
+  ...
+# (node:83026) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83026) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/src/lib/research-cash-financial-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/package.json.
+# Subtest: normal read stalled close never success, deadline bounded and late close releases all facades
+ok 13 - normal read stalled close never success, deadline bounded and late close releases all facades
+  ---
+  duration_ms: 38.568375
+  ...
+# Subtest: primary hash error plus real-FD close rejection preserves primary and recovery fence (isolated process)
+ok 14 - primary hash error plus real-FD close rejection preserves primary and recovery fence (isolated process)
+  ---
+  duration_ms: 76.788208
+  ...
+# Subtest: all real raw buffers wipe and every actual FD is closed before successful return
+ok 15 - all real raw buffers wipe and every actual FD is closed before successful return
+  ---
+  duration_ms: 18.5435
+  ...
+# Subtest: perfile/aggregate/duplicate bounds and malformed UTF8 fail without a second budget
+ok 16 - perfile/aggregate/duplicate bounds and malformed UTF8 fail without a second budget
+  ---
+  duration_ms: 0.958916
+  ...
+# Subtest: finite NEW source closure is exact and distinctly different from immutable historical77b1
+ok 17 - finite NEW source closure is exact and distinctly different from immutable historical77b1
+  ---
+  duration_ms: 1.16375
+  ...
+# (node:83027) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83027) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/src/lib/research-cash-financial-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-snapshot-root-review-oct14/web/package.json.
+# Subtest: hash failure wipes every raw buffer and confirmed cleanup allows either facade
+ok 18 - hash failure wipes every raw buffer and confirmed cleanup allows either facade
+  ---
+  duration_ms: 10.221959
+  ...
+# Subtest: late open plus close failure is observed once, retains shared fence and primary deadline (child)
+ok 19 - late open plus close failure is observed once, retains shared fence and primary deadline (child)
+  ---
+  duration_ms: 98.250958
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 585.614166

@@ -1,0 +1,60 @@
+TAP version 13
+# (node:78852) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:78852) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-scenario-cash-material.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-release-root-review-oct14/web/package.json.
+# Subtest: 2409 actual full scenario calculations match all retained model quarter values and cash
+ok 1 - 2409 actual full scenario calculations match all retained model quarter values and cash
+  ---
+  duration_ms: 19.589584
+  ...
+# Subtest: 2409 source bytes cannot be substituted even with coherent edited numbers
+ok 2 - 2409 source bytes cannot be substituted even with coherent edited numbers
+  ---
+  duration_ms: 26.467917
+  ...
+# Subtest: 2409 each cooperative deadline exception rejects and preserves caller bytes
+ok 3 - 2409 each cooperative deadline exception rejects and preserves caller bytes
+  ---
+  duration_ms: 353.502041
+  ...
+# Subtest: 2383 actual full scenario calculations match all retained model quarter values and cash
+ok 4 - 2383 actual full scenario calculations match all retained model quarter values and cash
+  ---
+  duration_ms: 6.564083
+  ...
+# Subtest: 2383 source bytes cannot be substituted even with coherent edited numbers
+ok 5 - 2383 source bytes cannot be substituted even with coherent edited numbers
+  ---
+  duration_ms: 9.845958
+  ...
+# Subtest: 2383 each cooperative deadline exception rejects and preserves caller bytes
+ok 6 - 2383 each cooperative deadline exception rejects and preserves caller bytes
+  ---
+  duration_ms: 114.225
+  ...
+# Subtest: invalid profile/company/clock reject before material access
+ok 7 - invalid profile/company/clock reject before material access
+  ---
+  duration_ms: 9.64125
+  ...
+# Subtest: all old Maps and hostile views fail or remain unread metadata under fixed byte-only domain
+ok 8 - all old Maps and hostile views fail or remain unread metadata under fixed byte-only domain
+  ---
+  duration_ms: 21.62025
+  ...
+# Subtest: outer carrier and decoded buffers are actually wiped on success and all deadline failures
+ok 9 - outer carrier and decoded buffers are actually wiped on success and all deadline failures
+  ---
+  duration_ms: 1411.248084
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2047.550625

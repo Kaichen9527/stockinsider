@@ -1,0 +1,7 @@
+{
+  "sourceManifestInitialError": "KeyError: blob",
+  "cause": "first6changedsource entries haveblob; additional10closureentries havefile/bytes/SHA only",
+  "correctedVerification": "all16exactGithashes/6providedblobs;13uniquefiles; no inventedmissingblobvalue",
+  "otherPathError": "Rootfirstguessed b513 scenario-cash-independent-review filename; actual gitdiff-tree path scenario-cash-code-review used",
+  "productChanges": false
+}

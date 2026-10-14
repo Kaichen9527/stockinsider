@@ -1,0 +1,13 @@
+接續已授權StockInsider三階段原goal。先compact確認你上一turn01a139ab已completed/cursor28 idle；Root已核c2c0535f真receipt29raw/20source/14closure/60origin comparisons，62+6FD/type/lint/normalbuild均有效且scoped，禁止重跑已完成reader/scenario/native/build。你是原owner/engine作者，不自簽其獨立批准。
+
+單件20分鐘、唯一owned新branch codex/research-versioned-complete-input-contract-oct14，base exact 1ff6d59a0bd4e37c69a251a2ea2b144a66ebb479。這輪做「完整v3版本/舊sealed replay/fresh-v2相容/同配額實際接線契約」的有證設計與最小真PG canonical尺寸proof；不是再造平行pure框架，也不改runtime/SQL/authority/roles/HBA/locks/workflows/mapping/舊schema或批准。
+
+先讀 exact15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb 原research-complete-input/canonical/schema-bundles/execution mapping、deep job/reservation admission、三preparation/complete-input migrations，四actual callers route/authorassignment/packet/result及其下游author-review-publication。別猜JSON job欄位。交付精確file:function:SQL-signature依賴矩陣，原source closure77b1各bytes/inventory老8與目前新9/7不混。參考Root proposal /tmp若你沒有該檔則本prompt已足：當前14file f285只leaf候選，未批准且非完整HTTPPG closure；新wholeclosure必須包含實際schema/controllers/alltransitivedeps/locks，解決mapping/descriptor自引用，不偷排除未釘source。
+
+保留舊sealedv2 request/row/hash/clocks/原source+lease拒絕，合法重放無FS/重算/收費/renew；不能為方便把fresh-v2悄改replay-only。推薦需分析「新精確相容執行identity+原8份artifact固定root」與「原77immutable execution realm」的實際可行性：目前legacy facade在projection前已close，不能組合後calc冒同lifecycle；若相容fresh走新sharedengine，必須同opaqueowner保FD/raw/namespace直到fulloldmaterial計算+cleanup，且不能稱原77執行、不能替換原model88790/54602bytes為新model。只有明示有限server registry tuples，不任意callerpaths/hash/code、不是latest-by-symbol。是否有另一真正可行更小方案提出證據和決策點，不擅啟用或停用舊fresh。
+
+用已實際產出的1ff fullmaterial（actualFS fixture是真本機synthetic，非formal）+原tagged canonical/有限schema驗證器，提出完整v3有限schema的最小diff及storage/request版本dispatch。釘3x6/scenario+historical cash tuple/basis/clocks/falseflags/nullforecast等全部actualshape；不放寬160000projection/262144material/depth12/4slot524288/120s。量化實際JSON/PGjsonb/tagged canonical與prior preparation/max原合法source manifest的charge邊界；如能在原PG17 captured schema+originalDDL本機只讀或rollback proof檢查原共享UNION ALL同時preparations+revisions跨version則做真proof，不能加role/grant或改期待。嚴格區分proposal/actualPG，做不到逐項pending，無需新appbuild。不要用簡化syntheticpayload量化冒完整material/DB已通過；不要自行把RFC clock/taggedhash換plainhash。
+
+交付可直接下一slice實作的有限版本表/精確RPC最小改動/all4caller選擇點/相容replay分支/同quota與source→global locks/race tests/順序，以及每個尚未決策或真阻擋。不需要Root用泛規格再重新找程式。只自有ADR/probes/exact-source摘錄/handoff/evidence；先sealedprobe/原RED，code/evidence分開push（若只有report可單獨evidence），不PR/exactref/ready/merge/rerun。不自簽formalreview。
+
+8GiBfree/RSS8GiB/singleheavy/Node22.14exactlocks；不npm更新/Chromium403重試，不VPS/remoteDB/HTTP/crawl/343/PTT/正式策略/研究排程/部署/cachecleanup。20分鐘未完明列pending即交付，Root只progress/report不改ownedsource。

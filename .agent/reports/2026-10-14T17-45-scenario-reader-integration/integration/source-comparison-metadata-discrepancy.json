@@ -1,0 +1,200 @@
+[
+  {
+    "file": "docs/operations/2026-10-14/cash-single-owner-reader-handoff.md",
+    "comparison": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "7279b3b03aabf8b2a14228d5b660cdd0d62bcd10a51825816257a019973c61c1",
+    "comparisonSha256": null
+  },
+  {
+    "file": "docs/operations/2026-10-14/scenario-cash-material-handoff.md",
+    "comparison": "6313d9e455eb4d5c17a76c94300c4fa676f6ddc9",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "5129ac3390539e01324538939b70dd2957d6636adc88886f0bed52c2835b78c6",
+    "comparisonSha256": null
+  },
+  {
+    "file": "docs/operations/2026-10-14/scenario-cash-material-handoff.md",
+    "comparison": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "5129ac3390539e01324538939b70dd2957d6636adc88886f0bed52c2835b78c6",
+    "comparisonSha256": null
+  },
+  {
+    "file": "docs/operations/2026-10-14/scenario-cash-reader-integration-handoff.md",
+    "comparison": "6313d9e455eb4d5c17a76c94300c4fa676f6ddc9",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "2e11e525eb6be5629e34f255868e31f049641d7d66238219a6535c403f39e297",
+    "comparisonSha256": null
+  },
+  {
+    "file": "docs/operations/2026-10-14/scenario-cash-reader-integration-handoff.md",
+    "comparison": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "2e11e525eb6be5629e34f255868e31f049641d7d66238219a6535c403f39e297",
+    "comparisonSha256": null
+  },
+  {
+    "file": "docs/operations/2026-10-14/scenario-cash-reader-integration-handoff.md",
+    "comparison": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "2e11e525eb6be5629e34f255868e31f049641d7d66238219a6535c403f39e297",
+    "comparisonSha256": null
+  },
+  {
+    "file": "scripts/fixtures/research-historical-cash/new-reader-execution-closure.json",
+    "comparison": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "7d5fa6c87bb7ed5726488aeb190acfa68ddd4939661118d397ee4b0c24dc741e",
+    "comparisonSha256": null
+  },
+  {
+    "file": "scripts/research-cash-single-owner-reader.test.mjs",
+    "comparison": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "85164586239a826fe4fcae9b7a95df285b635c7d9dbccd0e887d11e82c7dd47c",
+    "comparisonSha256": null
+  },
+  {
+    "file": "scripts/research-scenario-cash-material.test.mjs",
+    "comparison": "6313d9e455eb4d5c17a76c94300c4fa676f6ddc9",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "bf29047e6f2031ebe0e873bebf77d21f99d782e74fb0ee612ccf5cba969dc73a",
+    "comparisonSha256": null
+  },
+  {
+    "file": "scripts/research-scenario-cash-material.test.mjs",
+    "comparison": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "bf29047e6f2031ebe0e873bebf77d21f99d782e74fb0ee612ccf5cba969dc73a",
+    "comparisonSha256": null
+  },
+  {
+    "file": "scripts/research-scenario-cash-reader.test.mjs",
+    "comparison": "6313d9e455eb4d5c17a76c94300c4fa676f6ddc9",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "df9a69c1ae4a49d3daa41b30f46fb17b6adfec070967006c367b89feef6c9252",
+    "comparisonSha256": null
+  },
+  {
+    "file": "scripts/research-scenario-cash-reader.test.mjs",
+    "comparison": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "df9a69c1ae4a49d3daa41b30f46fb17b6adfec070967006c367b89feef6c9252",
+    "comparisonSha256": null
+  },
+  {
+    "file": "scripts/research-scenario-cash-reader.test.mjs",
+    "comparison": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "df9a69c1ae4a49d3daa41b30f46fb17b6adfec070967006c367b89feef6c9252",
+    "comparisonSha256": null
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "comparison": "6313d9e455eb4d5c17a76c94300c4fa676f6ddc9",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+    "comparisonSha256": null
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "comparison": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+    "comparisonSha256": null
+  },
+  {
+    "file": "web/src/lib/research-cash-financial-reader.ts",
+    "comparison": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "5eeff3f3f6f191e3f83544f830cc5fc3200521f25307e766bd8c34441c693e7a",
+    "comparisonSha256": null
+  },
+  {
+    "file": "web/src/lib/research-financial-clock.ts",
+    "comparison": "6313d9e455eb4d5c17a76c94300c4fa676f6ddc9",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+    "comparisonSha256": null
+  },
+  {
+    "file": "web/src/lib/research-financial-clock.ts",
+    "comparison": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+    "comparisonSha256": null
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "comparison": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "c073220258c4a42bdffe784dbeced224230f7af2ef89be731e121b2a5cf41989",
+    "comparisonSha256": null
+  },
+  {
+    "file": "web/src/lib/research-financial-io-owner.ts",
+    "comparison": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "19620af839492ac4232ccf6bdbfcd47b8429263ba3bfdcf90fdb7601dd13a4fe",
+    "comparisonSha256": null
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "comparison": "6313d9e455eb4d5c17a76c94300c4fa676f6ddc9",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b",
+    "comparisonSha256": null
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "comparison": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "recorded": null,
+    "actual": false,
+    "returncode": 128,
+    "sourceSha256": "20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b",
+    "comparisonSha256": null
+  }
+]

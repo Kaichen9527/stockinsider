@@ -1,0 +1,8 @@
+{
+  "error": "Root initial verification compared absent origin null to False and raised AssertionError",
+  "productFailure": false,
+  "sourceMetadataDiscrepancy": false,
+  "repair": "preserve ternary None when git show returns nonzero; all60 origin comparisons then PASS",
+  "initialDetailFile": "source-comparison-metadata-discrepancy.json",
+  "detailNameWasPremature": true
+}

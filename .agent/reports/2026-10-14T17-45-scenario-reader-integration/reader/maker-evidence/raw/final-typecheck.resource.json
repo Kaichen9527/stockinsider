@@ -1,0 +1,25 @@
+{
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "typecheck"
+  ],
+  "cwd": "/tmp/si-pubtail-o14",
+  "start": "2026-10-14T08:32:17.081304+00:00",
+  "end": "2026-10-14T08:32:19.996640+00:00",
+  "exitCode": 0,
+  "processGroupPeakRssBytes": 534536192,
+  "rssSampling": "sum /proc PGID RSS every100ms; may miss transient peaks; resource child maxRSS included separately",
+  "samples": 22,
+  "childMaxRssKiB": 485880,
+  "initialFreeBytes": {
+    "/workspace": 8618708992,
+    "/tmp": 15456923648
+  },
+  "minFreeBytes": {
+    "/workspace": 8618708992,
+    "/tmp": 15456919552
+  }
+}

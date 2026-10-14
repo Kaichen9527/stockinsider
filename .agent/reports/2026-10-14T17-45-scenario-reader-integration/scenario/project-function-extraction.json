@@ -1,0 +1,10 @@
+{
+  "origin": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "originalProjectSha256": "10b9a2055a49ed8bf011d372fe01b9bf8dd74acbb9338a5941bbede8b06af4ed",
+  "changes": [
+    "new exact9/7 pins",
+    "originalModelAsOf preserves Oct8 while actualartifactAsOf Oct14 distinct",
+    "only packet adds extractionAvailableAt availability floor",
+    "same existing scenario/fact/basis/ratio logic"
+  ]
+}

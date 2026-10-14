@@ -1,0 +1,14 @@
+[
+  {
+    "path": "web/src/lib/research-business-calculator.ts",
+    "origin": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 14206,
+    "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb"
+  },
+  {
+    "path": "web/src/lib/research-financial-clock.ts",
+    "origin": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 807,
+    "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f"
+  }
+]

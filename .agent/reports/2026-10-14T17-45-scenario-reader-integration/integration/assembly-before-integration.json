@@ -1,0 +1,110 @@
+[
+  {
+    "path": ".github/workflows/research-historical-cash-quality.yml",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 1687,
+    "sha256": "fdca16206e6d25bfd1ffcfd2ff6dfb70cb16343f67ee8d12948aa5caf25b74cd"
+  },
+  {
+    "path": ".github/workflows/source-led-opportunity-v3.yml",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 6641,
+    "sha256": "5de437491cef97d300ee1f027446672e155df01f96d7b72c03e9caa61d24b553"
+  },
+  {
+    "path": "docs/operations/2026-10-14/historical-cash-projection-handoff.md",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 8728,
+    "sha256": "6fbc2874299f19bf5f7aedfbcc1178c96954279104fcc76fbc055e202c8fa187"
+  },
+  {
+    "path": "docs/operations/2026-10-14/scenario-cash-material-handoff.md",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 3987,
+    "sha256": "5129ac3390539e01324538939b70dd2957d6636adc88886f0bed52c2835b78c6"
+  },
+  {
+    "path": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 202500,
+    "sha256": "afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f"
+  },
+  {
+    "path": "scripts/research-historical-cash-projection.test.mjs",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 13006,
+    "sha256": "cb090b563166ccf6ed8d4f6a57bbe9b434d45351a08c8dd16572896eb3dd41d6"
+  },
+  {
+    "path": "scripts/research-scenario-cash-material.test.mjs",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 7733,
+    "sha256": "bf29047e6f2031ebe0e873bebf77d21f99d782e74fb0ee612ccf5cba969dc73a"
+  },
+  {
+    "path": "web/src/lib/research-business-calculator.ts",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 14206,
+    "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb"
+  },
+  {
+    "path": "web/src/lib/research-financial-clock.ts",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 807,
+    "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f"
+  },
+  {
+    "path": "web/src/lib/research-historical-cash-pins.ts",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 7034,
+    "sha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5"
+  },
+  {
+    "path": "web/src/lib/research-historical-cash-projection.ts",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 11131,
+    "sha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719"
+  },
+  {
+    "path": "web/src/lib/research-scenario-cash-material.ts",
+    "source": "e8de7d76c852d86d6383f52f10c7aad74b9fa1f3",
+    "bytes": 19506,
+    "sha256": "20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b"
+  },
+  {
+    "path": "docs/operations/2026-10-14/cash-single-owner-reader-handoff.md",
+    "source": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "bytes": 5298,
+    "sha256": "7279b3b03aabf8b2a14228d5b660cdd0d62bcd10a51825816257a019973c61c1"
+  },
+  {
+    "path": "scripts/fixtures/research-historical-cash/new-reader-execution-closure.json",
+    "source": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "bytes": 2069,
+    "sha256": "d37c5517c3a425d1ccb05db42df5042ed94bf09fd8d44ea35b2db7a0eec05479"
+  },
+  {
+    "path": "scripts/research-cash-single-owner-reader.test.mjs",
+    "source": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "bytes": 17278,
+    "sha256": "85164586239a826fe4fcae9b7a95df285b635c7d9dbccd0e887d11e82c7dd47c"
+  },
+  {
+    "path": "web/src/lib/research-cash-financial-reader.ts",
+    "source": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "bytes": 3901,
+    "sha256": "4e7c773a5fbda99252d3c675b41025a791c00c7cebb2139e1a230759ff9e078c"
+  },
+  {
+    "path": "web/src/lib/research-financial-io-engine.ts",
+    "source": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "bytes": 5657,
+    "sha256": "c073220258c4a42bdffe784dbeced224230f7af2ef89be731e121b2a5cf41989"
+  },
+  {
+    "path": "web/src/lib/research-financial-io-owner.ts",
+    "source": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+    "bytes": 4972,
+    "sha256": "19620af839492ac4232ccf6bdbfcd47b8429263ba3bfdcf90fdb7601dd13a4fe"
+  }
+]

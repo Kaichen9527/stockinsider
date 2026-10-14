@@ -1,0 +1,16 @@
+{
+  "verifiedAt": "2026-10-14T09:41:27.342106+00:00",
+  "subject": "1ff6d59a0bd4e37c69a251a2ea2b144a66ebb479",
+  "evidence": "c2c0535f78aa082fb7e1113711b0c63a936b2d1a",
+  "receiptSha256": "6bf63431571738d6b3ee52b8ce5bc417bd5cffc358ea59e7598efef15487bbfe",
+  "rawAndReportsVerified": 29,
+  "changedSourceVerified": 20,
+  "closureFilesVerified": 14,
+  "originComparisonsVerified": 60,
+  "buildManifestEntriesVerified": 1798,
+  "compiledFilesIndividuallyReadByRoot": false,
+  "scope": "Root integration delta, portable fixture repair, descriptor and ordinary workflow; not independent reapproval of reviewer-authored6313 owner/engine",
+  "verdict": "scoped_CODE_PASS",
+  "formalReleaseApproved": false,
+  "closureRowsSortedCompactHashRecomputed": "f28549ba9d63ff909e3470a144793d5ca4940491822f38684a65f126d4d54624"
+}

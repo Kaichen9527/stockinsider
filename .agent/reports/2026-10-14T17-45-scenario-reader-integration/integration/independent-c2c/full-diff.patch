@@ -1,0 +1,1608 @@
+diff --git a/.github/workflows/research-historical-cash-quality.yml b/.github/workflows/research-historical-cash-quality.yml
+index 2285fffc..eb065053 100644
+--- a/.github/workflows/research-historical-cash-quality.yml
++++ b/.github/workflows/research-historical-cash-quality.yml
+@@ -4,7 +4,19 @@ on:
+     paths:
+       - '.github/workflows/research-historical-cash-quality.yml'
+       - 'web/src/lib/research-historical-cash-core.ts'
++      - 'web/src/lib/research-historical-cash-pins.ts'
++      - 'web/src/lib/research-historical-cash-projection.ts'
++      - 'web/src/lib/research-scenario-cash-material.ts'
++      - 'web/src/lib/research-business-calculator.ts'
++      - 'web/src/lib/research-financial-clock.ts'
++      - 'scripts/research-scenario-cash-material.test.mjs'
++      - 'web/src/lib/research-cash-financial-reader.ts'
++      - 'web/src/lib/research-financial-io-owner.ts'
++      - 'web/src/lib/research-financial-io-engine.ts'
++      - 'scripts/research-cash-single-owner-reader.test.mjs'
++      - 'scripts/research-scenario-cash-reader.test.mjs'
+       - 'scripts/research-historical-cash-core.test.mjs'
++      - 'scripts/research-historical-cash-projection.test.mjs'
+       - 'scripts/fixtures/research-historical-cash/**'
+       - '.nvmrc'
+       - 'package.json'
+@@ -29,4 +41,4 @@ jobs:
+       - name: Verify actual runtime and dependency-free arithmetic contracts
+         run: |
+           test "$(node --version)" = v22.14.0
+-          node --experimental-strip-types --test --test-concurrency=1 scripts/research-historical-cash-core.test.mjs
++          node --experimental-strip-types --test --test-concurrency=1 scripts/research-historical-cash-core.test.mjs scripts/research-historical-cash-projection.test.mjs scripts/research-scenario-cash-material.test.mjs scripts/research-cash-single-owner-reader.test.mjs scripts/research-scenario-cash-reader.test.mjs
+diff --git a/.github/workflows/source-led-opportunity-v3.yml b/.github/workflows/source-led-opportunity-v3.yml
+index c1155632..29511b59 100644
+--- a/.github/workflows/source-led-opportunity-v3.yml
++++ b/.github/workflows/source-led-opportunity-v3.yml
+@@ -18,6 +18,7 @@ on:
+       - 'scripts/runtime_doctor.js'
+       - 'scripts/run-node22.js'
+       - 'scripts/research-historical-cash-core.test.mjs'
++      - 'scripts/research-historical-cash-projection.test.mjs'
+       - 'scripts/fixtures/research-historical-cash/**'
+       - '.github/workflows/research-historical-cash-quality.yml'
+       - 'web/src/app/api/internal/financial-fact-v3/**'
+@@ -43,6 +44,17 @@ on:
+       - 'web/src/app/components/RadarTabs.tsx'
+       - 'web/src/lib/types.ts'
+       - 'web/src/lib/research-historical-cash-core.ts'
++      - 'web/src/lib/research-historical-cash-pins.ts'
++      - 'web/src/lib/research-historical-cash-projection.ts'
++      - 'web/src/lib/research-scenario-cash-material.ts'
++      - 'web/src/lib/research-business-calculator.ts'
++      - 'web/src/lib/research-financial-clock.ts'
++      - 'scripts/research-scenario-cash-material.test.mjs'
++      - 'web/src/lib/research-cash-financial-reader.ts'
++      - 'web/src/lib/research-financial-io-owner.ts'
++      - 'web/src/lib/research-financial-io-engine.ts'
++      - 'scripts/research-cash-single-owner-reader.test.mjs'
++      - 'scripts/research-scenario-cash-reader.test.mjs'
+       - 'web/src/lib/candidate-*.ts'
+       - 'web/src/lib/discovery-*.ts'
+       - 'web/src/lib/live-discovery-*.ts'
+diff --git a/docs/operations/2026-10-14/cash-single-owner-reader-handoff.md b/docs/operations/2026-10-14/cash-single-owner-reader-handoff.md
+new file mode 100644
+index 00000000..07eef68e
+--- /dev/null
++++ b/docs/operations/2026-10-14/cash-single-owner-reader-handoff.md
+@@ -0,0 +1,21 @@
++# NEW candidate single-owner financial I/O
++
++Base 06ae6924a7d6a90d60d3161a154fdb5104aab3f1. No live route, production connection, schema, RPC, mapping, role or publication integration.
++
++The new realm singleton is registered under a nonconfigurable Symbol.for slot. Duplicate query/module/bundled copies share its slot; unknown generation rejects rather than replacing it. This is one Node realm/process resource fence, not a cross-process coordinator or DB/model lease. Only the trusted composition root supplies root/pins/I/O dependencies. All NEW legacy and cash facades acquire this same owner at actual I/O. Archived legacy private-Set reader is not deployed or activated alongside this candidate.
++
++`createCandidateFinancialReaders` supplies (1) legacy-compatible parsed records for <=8 pinned files, under NEW execution identity, and (2) strictly fixed 9/7 historical-cash profiles. One owner holds all descriptors, raw sentinel buffers, and internal exact carrier through read/projection/namespace validation and confirmed cleanup. Legacy pins are copied/frozen before I/O. Raw buffers remain private; no arbitrary Map encoder is exported by the facade. Shared monotonic deadline is ten seconds including callbacks, reads, validation, projector and confirmed close. Trusted test dependencies are injected at composition; no caller request controls paths or I/O.
++
++Owner registers pending operations before open. Late handles close once; reads retain late-wipe responsibility. Pending/unconfirmed cleanup rejects both facades. Confirmed late cleanup automatically releases; close rejection retains recoveryRequired and the original primary error, even if underlying FD actually closed. No API resets/reclaims that fence. Controlled process recovery/cutover remains required for unresolved cleanup failures. It does not claim AbortSignal cancels kernel I/O, timer guarantees a hard CPU deadline, or that immutable JS base64/JSON strings can be wiped.
++
++Namespace checks include filesystem root, all ancestors, and regular/nlink=1 leaves with exact dev/ino/size/mtimeNs/ctimeNs before/after FD open, read, projection and cleanup. Group/other-writable or symlink ancestors reject; /tmp is not exempt. Original O_NOFOLLOW/NONBLOCK defenses retained. Filesystem race cannot be represented as permanent namespace custody; projection flags remain unchanged/false. Raw per-file524288 plus sentinel, aggregate1048576, projection160000 and material262144 remain. Cash fixed raw9/7 and exact carrier931023/353803 are individually pinned.
++
++`new-reader-execution-closure.json` pins ten necessary source/package/lock files and Node22.14.0. This is NEW sorted metadata closure, not historical77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41. Original15d4 reader logic source was inspected; no old closure metadata/mapping/schema/SQL or original15d4 artifact was changed. New base web lock Next16.3.4 is distinct from historical research lock.
++
++Engineering tests expand the original private15-source fixture to an owned0700 tree beneath the canonical trusted OS home directory, use actual native FD read/stat/close and deliberate boundary injection. Synthetic deferred I/O modifies true handles, not stats; recovery failures run in isolated child realms and do not reset owner. Exact projection hashes and source clocks are retained. These tests do not attest raw PDF extraction, source publication, financial verification, investment admission, model execution or genuine publication.
++
++Pending before live v3: full scenario+cash finite schema/material/depth/serialized charge; finite version dispatch/current mapping across route and author callers; original sealedv2 request/hash/clock/replay/no-charge behavior; genuine job/reservation/preparation/live lease; atomic SQL/HTTP-PG tests; full author/reviewer/publication binding; cross-process supervised drain/cutover and no overlapping legacy private-slot executable. No fresh-v2 disablement or replacement is authorized by this leaf.
++
++Run: Node22.14 `--experimental-strip-types --test --test-concurrency=1 scripts/research-cash-single-owner-reader.test.mjs scripts/research-historical-cash-core.test.mjs scripts/research-historical-cash-projection.test.mjs`, then exact-lock typecheck/lint/normal build. Results/RED source identities are in the separate evidence receipt. Maker execution is not independent CODE or release approval.
++
++Independent Root review of6313 found one test-portabilityP2: `/workspace/.cash-owner-fixture-` is absent on Mac and ordinary hosted runners, so the exact repository command failed0PASS1FAIL before case registration. The originalRED is retained. A fixture-only independent probe with canonical home and anchored imports executed19 actualFD cases successfully on unchanged6313runtime, not a passing rerun of that original repository suite. Root then repaired only testsetup/handoff: canonical trusted OS home, exclusive own prefix0700 and cleanup on setup failure. The `/tmp` unsafe-parent rejection and all source/IO guards/expectedcases remain. Original runtime/ten-file new closure hash02eda614… andwebtree remain unchanged; originalmakerbuild may be attributed only by byte equality, not called a newbuild. Repair requires actual repository48 execution and independent closure review, currently pending.
+diff --git a/docs/operations/2026-10-14/historical-cash-projection-handoff.md b/docs/operations/2026-10-14/historical-cash-projection-handoff.md
+new file mode 100644
+index 00000000..a811697c
+--- /dev/null
++++ b/docs/operations/2026-10-14/historical-cash-projection-handoff.md
+@@ -0,0 +1,31 @@
++# Fixed historical-cash source-byte projection candidate
++
++## Current private carrier revision — independent code review pending
++
++The original Map representation is superseded after two independent P2 findings. R1 size-before-iterator was repaired; R2 still allowed an unbounded Reflect.ownKeys traversal for a legal9/7-entry Map with10000 properties. Original R1/R2 reviews and RED stay at fbf454d4f7e89fd8415160c5e5f8cd1eb14b6ab0 and prior source branches. Independent design review a4c95096fc321360c7d56815738e59fcaa7ef0b5 recommends the following narrower unpublished internal interface; it is not code or formal approval.
++
++BREAKING internal API: input is now one native Uint8Array or Buffer view containing exact canonical UTF8 bytes. Every former Map rejects before iteration or own-key reflection. Arbitrary JS view metadata is outside this byte-only domain and is never read, enumerated or serialized. The only metadata accepted is inside the authenticated serialized representation. No production Map encoder or compatibility normalizer is exported. Shared/resizable/detached stores, wrong typed-array kinds and proxies are refused through intrinsic accessors; ordinary fixed ArrayBuffer-backed Uint8Array and Buffer views are supported.
++
++Wire shape: `{schemaVersion:"historical-cash-private-byte-material-v1",financialProfile:"oct14_historical_cash_v1",symbol,files:[{path,rawBase64},...]}`. Object keys are recursively sorted, arrays retain exact order, UTF8 has no trailing newline. AUO carrier931023 bytes/SHA823b80038e13779f4155327b3cd7d36b1dc5a833490da1bf692d33845c239590; EMC353803/SHA5fff5dd7e33ae7da30d8b72890f13414866b7820f54685af38b5cdd95d2b5564. Static issuer length and1MiB carrier cap are checked before allocation. A private native copy is hashed before decode/JSON.parse. Unknown or duplicate serialized keys, alternate spacing/base64/path order and issuer substitution fail exact length/SHA; there is no parse-then-normalize fallback. Original raw9/7 lengths/hashes/manifests/semantics/core and perfile512KiB/rawaggregate1MiB/output160000 caps remain unchanged. Carrier cap is distinct from decoded raw aggregate, not a total memory limit or HTTP allowance.
++
++The same supplied cooperative deadline is checked around copy/hash/UTF8/parse/each decode/rawcheck and output; no new budget, timer preemption or hard10s wall-clock guarantee is claimed. Carrier and each sole raw decode buffer are registered before subsequent checks and wiped in finally on success/error/deadline; caller-owned input is untouched. JS immutable strings cannot be reliably wiped; this is not complete secret erasure or filesystem custody. Output projection hashes remain the original b59bd423…2c434d /a1965a0f…a585d7 and every authority/admission flag remains false.
++
++Sealed525a1e6d first run14PASS1FAIL was a cleanup witness error: monkeypatch instrumentation also recorded Node's module-loader allocations, so82 buffers were compared to10 runtime buffers. cdf3b4d8 excludes only allocations before runtime observation; actual15PASS0fail/skip/todo. A first module-only compiler invocation lacked external @types lookup and failedTS2688; its raw output is retained, with explicit module tsconfig used for corrected verification. Later golden-output assertions and this handoff require a new actual run before attribution. No Mac app build/nativePG/protected retry/PR/merge/deploy or full v3 integration is represented by these pure checks.
++
++## Historical implementation and evidence
++
++Stacked source baseb7796da8 (PR379 ready/open with a failed new protected model gate; not a merged or formally installed dependency). This candidate adds the exact Oct14 profile, private byte projection and finite regression fixture. It is a necessary leaf of the agreed v3 input integration, not that complete integration or an alternative publication path.
++
++All9 AUO files/697558bytes or7 EMC files/264753bytes are copied to owned memory and checked against immutable path/order/length/SHA256 pins before parsing. The complete30651byte cash packet is independently included. The canonical model, complete top/nested manifest and every52/33 source fact's values/label/page/sourceLine/pointer are reconciled to the pinned packet. It then calls the existing fixed cash core from packet operands and checks the original model's retained derived bridges. The source-line hash and both exact pointers are retained; source lines, absolute retained-PDF paths and other-issuer facts are omitted from output. The7 AUO capital numeric fields retain June30 basis and unknown treasury-share count; the remaining date/null locators are explicitly typed.
++
++Historical initial implementation: the injected Map contained actual bytes, not a boolean assertion that a file was checked. Native typed-array copies prevent subsequent caller mutation; originals are not wiped or modified, and owned raw copies are wiped in finally. A supplied shared deadline is checked throughout, without creating/resetting a new budget. Count/perfile524288/aggregate1048576/projection160000 limits remain finite. Immutable9/7 selection is separate from the legacy reader's8-file contract; no legacy module or cap changes.
++
++This function does not open files, verify path/descriptor custody, enforce the single process reader slot or create a preparation. `inventoryBytesVerified:true` means injected bytes actually matched every fixed pin. `filesystemCustodyVerified:false`, `rawPdfBytesRead:false`, `sourcePublicationVerified:false` and all financial/dispatch/publication/investment/strategy flags remain false. Core sourceVerification remains not_performed. Packet/relay custody and source availability are attributed from retained bytes, not a fresh PDF read or network observation. Actual single-owner9/7 filesystem reader, complete scenario-plus-cash projector/schema/mapping, v2 replay, shared quota/deadline/fences and genuine author/reviewer/publisher execution still need implementation and acceptance.
++
++The deterministic gzip test fixture stores15 unique exact source files (packet shared between companies) from15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb. Compressed202500bytes/SHA afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f; expanded1245186bytes. These private committed test bytes include original source lines/local-path metadata because redaction would break their raw hashes. They are not served, uploaded as public research, logged or used as production credentials. The fixture contains no raw PDFs or principal assignments. Its bounded loader checks compressed hash and2MB decompression bound; no historical Git availability or execution dependency is needed by CI.
++
++Pre-run WIPca2d10b7 was sealed before actual execution. Root11 new tests passed0fail/skip/todo on that source, including every file byte/length/omission/order, packet/model/clock/manifest mutation, all successful deadline checkpoints and native Map/typed-array brands. The parent's94 supplemental independent core checks are a separate historical execution. Strict module-only TypeScript5.9.3/ES2017 also passed with Node types and skipLibCheck; no app-wide type/lint/build or native PG was run on Mac. Later edits only wire the ordinary workflows and document the candidate; the first11 suite is not relabeled as a later execution. Existing core/pins/runtime/test byte identities must be checked before attributing equivalent results.
++
++The arithmetic ordinary workflow adds this11-case suite and finite paths; the existing product ordinary adds three exact source/test paths. Jobs/permissions/action pins/protected/oracle/SQL/authority/financial installer/default48/49/50 and all legacy input/reader/calculator bytes stay unchanged. No PR, exact approval, ready, protected rerun, merge or deployment has occurred for this candidate. Independent code/source review and genuine new-subject full exact-lock quality remain pending.
++
++Independent review of9b8247a7 found oneP2: the native Map was fully expanded before its9/7 cardinality check, so a rejected10000-entry input still made10001 iterator calls with one deadline check. Original11 green and115 cleanup probes remain historical; the review is REQUEST_CHANGES. Root added a regression on sealedcf94e266 with unchanged original runtime: actual11PASS1FAIL. Repair9bf87128 checks the intrinsic nativeMapsize before own-key inspection or iterator materialization, preserving all byte/manifest/clock/semantic checks and caps. Its actual12-case suite and strict module-onlyTS5.9.3 both passed. The new case proves zero iterator opens/advances for oversized and undersized maps of both companies. Corrected independent review and full exact-lock app quality remain pending; the original finding/RED is retained separately.
+diff --git a/docs/operations/2026-10-14/scenario-cash-material-handoff.md b/docs/operations/2026-10-14/scenario-cash-material-handoff.md
+new file mode 100644
+index 00000000..64df6517
+--- /dev/null
++++ b/docs/operations/2026-10-14/scenario-cash-material-handoff.md
+@@ -0,0 +1,13 @@
++# Complete scenario and historical-cash material candidate
++
++Source is stacked on reviewed06ae carrier; parent arithmetic PR379 is now merged as1f152fdf. This is a new candidate projection under a new execution identity. It neither claims legacy77b1 execution nor changes old mapping/schema/SQL/replay. It does not open files or activate HTTP/preparation/model/publication. The separately owned Cloud reader is not merged or imported here.
++
++The same fixed private byte carrier yields all original reported facts/monthly anchors/scenario assumptions, the original business calculator and historical cash. Original186-line research-business-calculator.ts and financial-clock.ts are copied byte-identically from15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb. The original project function is extracted from that subject's financial-supplement; only exactnewpins, originalModelAsOf versus new artifactasOf, the packet's extractionAvailableAt floor, distinct inputArtifactAsOf clock and unchanged160000 pin are adapted. No original assumptions or numerical expectations are weakened. Output includes full three-by-six quarters and historical cash; future cash/target calibration/financial qualification remain absent or false.
++
++The trusted server supplies raw-acquisition readAt; it is never a request field. Finite UTC<=6fractiondigits, no future instant and not before the new extraction are enforced. Original Oct8 model assumptions/market clock remain originalModelCutoff; actual current input artifactasOf is Oct14 and cash packet availability is not backdated. Original income/monthly source clocks and date-only publication precision remain distinct. Observed material is not historicalPIT or a live source/rights approval.
++
++The outer function copies/hash-verifies the bounded native carrier before parsing, owns raw decode buffers, invokes the unchanged pinned cash guard on the owned snapshot, constructs the complete scenario projection and calls the original calculator. It never rereads a file or opens another reader/deadline. Copying/decoding in memory is finite;1MiB raw acquisition cap is not a totalmemory cap. The same supplied cooperative deadline is used throughout; no timer/kernel interruption is claimed. All outer carrier/raw buffers are wiped on success/error/deadline, originals untouched; immutable strings cannot be reliably wiped. No arbitraryMap encoder is exported. All authority/admission flags remain false.
++
++Sealed initial2ec898dc ran3PASS6FAIL because the extracted projector retained a stale FINANCIAL_READ_LIMITS reference. Repairb8a6e0a7 changes only that name to the same reviewed historicalCashPins.limits.projection160000. Actual9/9 new suite and strict module-only TypeScript5.9.3 PASS onb8. OriginalRED remains at its exact subject. Each positive compares306 retained model quarter values across all3scenarios/6quarters/17fields, with the same existing1e-6 tolerance; this is612 numerical assertions, not612 tests. Cash hashes remain the exact prior outputs. Every material file drift/order/crossissuer, clock/proxy/accessor/deadline and actual ownedbuffer cleanup are tested. Later ordinarypaths/combinedcommand and this handoff require their own actualfinalrun; old9 results are not relabeled.
++
++Ordinary arithmetic gains these new modules/test paths and one serial test parameter; source-led product gains onlyfour exactpath filters. No protected/oracle/actions/permissions/locks/SQL/roles/authority/expectations change. Mac fullappbuild/lint/nativePG is not run here; exact-lock fullquality and independentcode/integration review remain pending. Finalapp assembly must include the actually reviewed new reader, a finite sourceClosure over all transitive runtime/modules/lock, exactv3schema/versionedprepare-read-seal/oldsealedreplay/crossversion4slot524288 and120sfreshness, all authorpacket/result/handoff/reviewer/publisher consumers, real role/source/DB approval and deployment. This candidate is not completev3 or a parallel formalpublication path.
+diff --git a/docs/operations/2026-10-14/scenario-cash-reader-integration-handoff.md b/docs/operations/2026-10-14/scenario-cash-reader-integration-handoff.md
+new file mode 100644
+index 00000000..6a602240
+--- /dev/null
++++ b/docs/operations/2026-10-14/scenario-cash-reader-integration-handoff.md
+@@ -0,0 +1,13 @@
++# Single-acquisition full scenario and cash candidate
++
++Base approvedmain1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4. Exact18-file assembly from e8de scenario/carrier and9daf portable reader; original cash/reader source lineage retained in external receipts. Root refactors the fixed internal reader path once, adding scenarioCash. Both historicalCash and scenarioCash use the same fixed9/7 pins, allFD/parents, owner, exactcarrier and deadline. The new full entry does NOT call the cash facade then read again. Server readAt is created inside this trustedacquisition path, not from ingress. Fullprojection/calculation run while originalFD/raw/namespace remain owned, then finalvalidate/confirmedcleanup/deadline precede return. Legacy<=8 andcash API shapes remain.
++
++ActualRoot sealed86a0d6ca command62PASS/zeroFAIL/SKIP/TODO=reader19/core14/pinnedcash15/scenariomaterial9/newactualFSintegration5, notsum ofhistoricaloverlaps. Newpositives actuallyread9/7 files, compare fullmaterial to exactcarrierprojection at the sameactualserverclock, verify9/7FDclosed/all9or7raw+carrierbufferszero, allfalseflags and nofuturecash. Crosslegacy↔fullscenario holdsoneactualowner, expired/pendingdeadline blocksallfacades untilrealsettlement andconfirmedreentry. Unknownprofile/company rejectsbeforeIO. Strictmodule-onlyTS5.9.3 passed. Independentcodeclosure/fulltypes-lint-normalbuild stillpending; original6313build cannotcoverchangedfacade/webtree.
++
++Newcandidate source metadata closure f28549ba9d63ff909e3470a144793d5ca4940491822f38684a65f126d4d54624 pins14exactsource/lock/runtime inputs including .nvmrc andnewscenario/calculator/clock. It is not approvedmapping orlegacy77b1. Previousreader-only02ed descriptor is historical, not used asnewexecutionproof. Runtimeowner/engine/pins/core/rawfixture unchanged; onlyfacadeimports/privatefixed helper/fullentry, finite descriptor, ordinarydiagnostic paths/command andnewtests/docs integrate newmaterial. Protected/oracle/SQL/roles/authority/HBA/root-web locks remain unchanged.
++
++Scenario e8de independently reviewed by Cloud atb5131dcd0P0P1P2 with38actualtests,241boundary/612numeric/95locator assertions and15Gitbytes; those areoverlappingcounts, notextraunique62cases. Original186-linecalculator/clock bytes match15d4. OriginalOct8model/market/assumption clocks aredistinct fromOct14 inputartifact/extraction andactualcurrentread. HistoricalH1 cash, groupNCI/ownersprofit, Juneissuedshares andQ2 futureweightedEPS basis remain separate; no targetcalibration/PIT/admission is inferred. Inner business-calculation-result-v2 is retainedmathformat, not aclaim tolegacy77b1 preparation/execution.
++
++Rootreader review6313 foundoneP2 testportability (/workspace absent): originalRootrepo0PASS1FAIL retained; a portable independentharness19PASS ranunchangedruntime. Root9daf repairedonlysecurefixture/testdocumentation, original48repoPASS/runtime+descriptor+websame; independentclosure ofthisRootpatch remainspending. This integrationcontains thatrepair, no /tmp unsafeancestor exemption. Maker6313normalbuild/48raw andRoot38/62 executions have distinct exactsubjects. AlloriginalREDs andharness errors kept inexternalprogress, not addedasrawhistory toreleasecandidate.
++
++Stillpending: finitev3 complete schema/material+taggedDBhash mapping; immutablev2sealedreplay/request/row/hash/clocks/no-file/no-recompute/no-charge withlivefences; explicitfreshv2admission/drain/cutover; newrealjob/reservation/preparation, crossversion4slot524288 and120sfreshness; actualHTTP-PG; everyauthorpacket/result/handoff/reviewer/publicationconsumer; fullindependentrelease/ordinary/protected/productionpeer/capacity/deploy. Candidate local sortedJSON hashes are not substituted for originaltaggedSQL canonical hashes. No HTTP/DB/source/role/publication state was created oractivated bythisengineeringpath.
+diff --git a/scripts/fixtures/research-historical-cash/new-reader-execution-closure.json b/scripts/fixtures/research-historical-cash/new-reader-execution-closure.json
+new file mode 100644
+index 00000000..42154271
+--- /dev/null
++++ b/scripts/fixtures/research-historical-cash/new-reader-execution-closure.json
+@@ -0,0 +1,82 @@
++{
++  "schemaVersion": "scenario-cash-reader-candidate-closure-v1",
++  "encoding": "sorted_compact_utf8_json_metadata_v1",
++  "historicalLegacyClosure": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
++  "sourceClosureHash": "f28549ba9d63ff909e3470a144793d5ca4940491822f38684a65f126d4d54624",
++  "enabledForLiveV2": false,
++  "nodeVersion": "22.14.0",
++  "files": [
++    {
++      "file": ".nvmrc",
++      "bytes": 8,
++      "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87"
++    },
++    {
++      "file": "package-lock.json",
++      "bytes": 31809,
++      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38"
++    },
++    {
++      "file": "package.json",
++      "bytes": 24733,
++      "sha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc"
++    },
++    {
++      "file": "web/package-lock.json",
++      "bytes": 274088,
++      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
++    },
++    {
++      "file": "web/package.json",
++      "bytes": 1943,
++      "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e"
++    },
++    {
++      "file": "web/src/lib/research-business-calculator.ts",
++      "bytes": 14206,
++      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb"
++    },
++    {
++      "file": "web/src/lib/research-cash-financial-reader.ts",
++      "bytes": 4943,
++      "sha256": "5eeff3f3f6f191e3f83544f830cc5fc3200521f25307e766bd8c34441c693e7a"
++    },
++    {
++      "file": "web/src/lib/research-financial-clock.ts",
++      "bytes": 807,
++      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f"
++    },
++    {
++      "file": "web/src/lib/research-financial-io-engine.ts",
++      "bytes": 5657,
++      "sha256": "c073220258c4a42bdffe784dbeced224230f7af2ef89be731e121b2a5cf41989"
++    },
++    {
++      "file": "web/src/lib/research-financial-io-owner.ts",
++      "bytes": 4972,
++      "sha256": "19620af839492ac4232ccf6bdbfcd47b8429263ba3bfdcf90fdb7601dd13a4fe"
++    },
++    {
++      "file": "web/src/lib/research-historical-cash-core.ts",
++      "bytes": 11245,
++      "sha256": "157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790"
++    },
++    {
++      "file": "web/src/lib/research-historical-cash-pins.ts",
++      "bytes": 7034,
++      "sha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5"
++    },
++    {
++      "file": "web/src/lib/research-historical-cash-projection.ts",
++      "bytes": 11131,
++      "sha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719"
++    },
++    {
++      "file": "web/src/lib/research-scenario-cash-material.ts",
++      "bytes": 19506,
++      "sha256": "20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b"
++    }
++  ],
++  "previousReaderOnlyCandidateClosure": "02eda6145cc32dee8f7f2299fb9d0d940974d00c07d3ee4126d70dd594ee63fa",
++  "sourceClosureApproved": false
++}
+diff --git a/scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz b/scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz
+new file mode 100644
+index 00000000..00d9e804
+Binary files /dev/null and b/scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz differ
+diff --git a/scripts/research-cash-single-owner-reader.test.mjs b/scripts/research-cash-single-owner-reader.test.mjs
+new file mode 100644
+index 00000000..98d0b47a
+--- /dev/null
++++ b/scripts/research-cash-single-owner-reader.test.mjs
+@@ -0,0 +1,143 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import fsp from 'node:fs/promises';
++import path from 'node:path';
++import os from 'node:os';
++import { execFileSync } from 'node:child_process';
++import { gunzipSync } from 'node:zlib';
++import { createHash } from 'node:crypto';
++import { performance } from 'node:perf_hooks';
++import { historicalCashPins as pins } from '../web/src/lib/research-historical-cash-pins.ts';
++import { createCandidateFinancialReaders as create } from '../web/src/lib/research-cash-financial-reader.ts';
++import { FinancialIoDeadline as Deadline, financialIoStatus as status } from '../web/src/lib/research-financial-io-owner.ts';
++const gzip=fs.readFileSync(new URL('./fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz',import.meta.url));
++assert.equal(createHash('sha256').update(gzip).digest('hex'),'afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f');
++const fixture=JSON.parse(gunzipSync(gzip,{maxOutputLength:2000000}));
++const originals=new Map(fixture.files.map(f=>[f.pin.path,Buffer.from(f.rawBase64,'base64')]));
++const root=fs.mkdtempSync(path.join(fs.realpathSync(os.homedir()),'.stockinsider-cash-owner-fixture-'));fs.chmodSync(root,0o700);
++try{for(const [name,raw]of originals){fs.mkdirSync(path.dirname(path.join(root,name)),{recursive:true,mode:0o700});fs.writeFileSync(path.join(root,name),raw,{mode:0o600});}}catch(error){fs.rmSync(root,{recursive:true,force:true});throw error;}
++const io={lstat:fsp.lstat,open:fsp.open};const reader=create(root),profile=pins.profile;
++const sha=v=>createHash('sha256').update(v).digest('hex');
++const legacyPin=pins.companies['2383'].files[0];
++const legacy=()=>reader.legacy([legacyPin]);
++const cash=s=>reader.historicalCash(profile,s);
++const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return{promise,resolve,reject};};
++const short=()=>{const d=new Deadline();Object.defineProperty(d,'end',{value:performance.now()+30});return d;};
++async function settle(){const end=performance.now()+2000;while(!status().cleanupComplete&&performance.now()<end)await new Promise(r=>setTimeout(r,5));assert.equal(status().cleanupComplete,true,JSON.stringify(status()));}
++const restore=name=>fs.writeFileSync(path.join(root,name),originals.get(name),{mode:0o600});
++const cleanStatus=()=>assert.deepEqual(status(),{cleanupComplete:true,recoveryRequired:false,pendingOperations:0,unconfirmedHandles:0,ownedBuffers:0,cleanupFailed:false,kernelIoCancellationConfirmed:false});
++const hashes=['b59bd42321ac7e9af6c3fcd1eba86fa359f2537d467a45e8fbef244e442c434d','a1965a0f56556c4c4b50f89f7f96ef263b6fd7b6aec529c919cce3b8bfa585d7'];
++test.after(()=>fs.rmSync(root,{recursive:true,force:true}));
++for(const[symbol,expected]of [['2409',hashes[0]],['2383',hashes[1]]]){
++ test(`${symbol} actual secure FS complete profile, exact output and unchanged original bytes`,async()=>{
++  const result=await cash(symbol);assert.equal(result.projection.projectionSha256,expected);assert.equal(Buffer.byteLength(JSON.stringify(result.projection)),symbol==='2409'?52077:32598);
++  assert.equal(result.readerReceipt.files,symbol==='2409'?9:7);assert.equal(result.readerReceipt.cleanupComplete,true);
++  assert.equal(result.projection.filesystemCustodyVerified,false);assert.equal(result.projection.sourcePublicationVerified,false);assert.equal(result.projection.entryEligible,false);assert.equal(result.projection.forecastCash,null);
++  for(const p of pins.companies[symbol].files)assert.equal(sha(fs.readFileSync(path.join(root,p.path))),p.sha256);cleanStatus();
++ });
++ test(`${symbol} each file content, length, omission, symlink, nlink and replacement reject`,async()=>{
++  for(const p of pins.companies[symbol].files){const name=path.join(root,p.path);const original=originals.get(p.path);
++   const drift=Buffer.from(original);drift[0]^=1;fs.writeFileSync(name,drift);await assert.rejects(cash(symbol),/financial_file_hash_or_length/);restore(p.path);
++   fs.appendFileSync(name,' ');await assert.rejects(cash(symbol),/financial_file_invalid/);restore(p.path);
++   fs.unlinkSync(name);await assert.rejects(cash(symbol),/ENOENT/);restore(p.path);
++   const target=path.join(root,'retained-source.json');fs.writeFileSync(target,original,{mode:0o600});fs.unlinkSync(name);fs.symlinkSync(target,name);await assert.rejects(cash(symbol),/financial_file_invalid/);fs.unlinkSync(name);restore(p.path);fs.unlinkSync(target);
++   const link=path.join(root,'link.json');fs.linkSync(name,link);await assert.rejects(cash(symbol),/financial_file_invalid/);fs.unlinkSync(link);
++   const r=create(root,{...io,checkpoint(label){if(label==='before_open:'+p.path){fs.unlinkSync(name);restore(p.path);}}});await assert.rejects(r.historicalCash(profile,symbol),/financial_file_replaced/);cleanStatus();
++  }
++ });
++}
++test('legacy <=8 compatible parsed facade rejects9 before any IO; unknown/crossissuer cannot select paths',async()=>{
++ const r=await reader.legacy(pins.companies['2383'].files);assert.equal(r.records.size,7);assert.equal(r.records.get(legacyPin.path).value.symbol,'2383');
++ let calls=0;const denied=create(root,{lstat(){calls++;throw Error('io');},open(){calls++;throw Error('io');}});
++ await assert.rejects(denied.legacy(pins.companies['2409'].files),/inventory_invalid/);
++ for(const[p,s]of [['unknown','2409'],[profile,'9999'],[profile,{symbol:'2409'}]])await assert.rejects(denied.historicalCash(p,s),/profile_invalid/);assert.equal(calls,0);cleanStatus();
++});
++test('world writable ancestor genuinely rejected, no /tmp exception',async()=>{
++ const r=create('/tmp/'+path.basename(root));await assert.rejects(r.legacy([legacyPin]),/parent_invalid/);cleanStatus();
++});
++test('FIFO leaf and replacement FIFO bounded by NONBLOCK; no unconfirmed success',async()=>{
++ const name=path.join(root,legacyPin.path);fs.unlinkSync(name);execFileSync('mkfifo',[name]);await assert.rejects(legacy(),/file_invalid/);fs.unlinkSync(name);restore(legacyPin.path);
++ const r=create(root,{...io,checkpoint(label){if(label==='before_open:'+legacyPin.path){fs.unlinkSync(name);execFileSync('mkfifo',[name]);}}});
++ await assert.rejects(r.legacy([legacyPin]),/file_invalid/);fs.unlinkSync(name);restore(legacyPin.path);cleanStatus();
++});
++test('parent rename and ninth-file namespace substitution rejects all-profile success',async()=>{
++ const dirname=path.dirname(path.join(root,legacyPin.path));const moved=dirname+'-moved';
++ const r=create(root,{...io,checkpoint(label){if(label==='after_read:'+legacyPin.path){fs.renameSync(dirname,moved);fs.mkdirSync(dirname,{mode:0o700});}}});
++ await assert.rejects(r.legacy([legacyPin]),/parent_replaced|ENOENT/);fs.rmdirSync(dirname);fs.renameSync(moved,dirname);
++ const nine=pins.companies['2409'].files;const first=nine[0].path,last=nine.at(-1).path;
++ const r9=create(root,{...io,checkpoint(label){if(label==='after_read:'+last){const name=path.join(root,first);fs.unlinkSync(name);restore(first);}}});await assert.rejects(r9.historicalCash(profile,'2409'),/parent_replaced|file_replaced/);cleanStatus();
++});
++test('legacy8 -> v3 and v3 -> legacy8 share opaque owner while real FD retained',async()=>{
++ for(const direction of ['legacy','cash']){
++  const held=deferred(),arrived=deferred();let once=false;
++  const r=create(root,{...io,checkpoint(label){if(!once&&label.startsWith('after_read:')){once=true;arrived.resolve();return held.promise;}}});
++  const running=direction==='legacy'?r.legacy([legacyPin]):r.historicalCash(profile,'2409');await arrived.promise;
++  await assert.rejects(direction==='legacy'?cash('2383'):legacy(),/cleanup_or_read_in_progress/);
++  assert.ok(status().unconfirmedHandles>=1);held.resolve();await running;cleanStatus();
++ }
++});
++test('query module imports cannot establish a second slot; new owner generation remains shared',async()=>{
++ const again=await import('../web/src/lib/research-financial-io-owner.ts?duplicate-module');
++ const held=deferred(),arrived=deferred();const r=create(root,{...io,checkpoint(){arrived.resolve();return held.promise;}});
++ const running=r.legacy([legacyPin]);await arrived.promise;
++ assert.throws(()=>new again.FinancialIoOwner(),/cleanup_or_read_in_progress/);assert.equal(again.financialIoStatus().cleanupComplete,false);
++ held.resolve();await running;cleanStatus();
++});
++test('late actual open remains owned then close-once confirmed before both facades reenter',async()=>{
++ const gate=deferred(),arrived=deferred();let closeCalls=0;
++ const r=create(root,{...io,async open(...args){const handle=await fsp.open(...args);const close=handle.close.bind(handle);handle.close=async()=>{closeCalls++;return close();};arrived.resolve();await gate.promise;return handle;}});
++ const d=short(),running=r.legacy([legacyPin],d);await arrived.promise;let failure;
++ try{await running;assert.fail('success');}catch(e){failure=e;assert.match(e.message,/deadline/);assert.equal(e.financialCleanup.recoveryRequired,true);}
++ await assert.rejects(cash('2383'),/cleanup_or_read_in_progress/);assert.equal(closeCalls,0);
++ gate.resolve();await settle();assert.equal(closeCalls,1);assert.equal(failure.financialCleanup.kernelIoCancellationConfirmed,false);await cash('2383');await legacy();cleanStatus();
++});
++test('late read can write after return: retain raw ownership, wipe on settlement, close-once then restore',async()=>{
++ const gate=deferred(),arrived=deferred();let raw,handle,closeCalls=0;
++ const r=create(root,{...io,async open(...args){handle=await fsp.open(...args);const read=handle.read.bind(handle),close=handle.close.bind(handle);let once=true;
++  handle.read=async(...a)=>{if(once){once=false;raw=a[0];arrived.resolve();await gate.promise;}return read(...a);};
++  handle.close=async()=>{closeCalls++;await gate.promise;return close();};return handle;}});
++ const d=short(),running=r.legacy([legacyPin],d);await arrived.promise;await assert.rejects(running,e=>e.message==='financial_deadline'&&e.financialCleanup.recoveryRequired);
++ assert.ok(raw.every(x=>x===0));await assert.rejects(cash('2383'),/cleanup_or_read_in_progress/);gate.resolve();await settle();assert.ok(raw.every(x=>x===0));assert.equal(closeCalls,1);await cash('2383');cleanStatus();
++});
++test('normal read stalled close never success, deadline bounded and late close releases all facades',async()=>{
++ const gate=deferred(),arrived=deferred();let closeCalls=0;
++ const r=create(root,{...io,async open(...args){const handle=await fsp.open(...args),close=handle.close.bind(handle);handle.close=async()=>{closeCalls++;arrived.resolve();await gate.promise;return close();};return handle;}});
++ const d=short(),running=r.legacy([legacyPin],d);await arrived.promise;await assert.rejects(running,e=>e.message==='financial_deadline'&&e.financialCleanup.recoveryRequired);
++ await assert.rejects(legacy(),/cleanup_or_read_in_progress/);gate.resolve();await settle();assert.equal(closeCalls,1);await legacy();cleanStatus();
++});
++test('primary hash error plus real-FD close rejection preserves primary and recovery fence (isolated process)',()=>{
++ const script=`import{open,lstat}from'node:fs/promises';import{createCandidateFinancialReaders as create}from${JSON.stringify(new URL('../web/src/lib/research-cash-financial-reader.ts',import.meta.url).href)};import{financialIoStatus}from${JSON.stringify(new URL('../web/src/lib/research-financial-io-owner.ts',import.meta.url).href)};let fd;const io={lstat,async open(...args){fd=await open(...args);const close=fd.close.bind(fd);fd.close=async()=>{await close();throw Error('synthetic_unconfirmed_close');};return fd;}};const pins=${JSON.stringify([{...legacyPin,sha256:'0'.repeat(64)}])};try{await create(${JSON.stringify(root)},io).legacy(pins);throw Error('unexpected_success');}catch(e){if(e.message!=='financial_file_hash_or_length'||!e.financialCleanup.cleanupFailed||!financialIoStatus().recoveryRequired)throw e;}try{await create(${JSON.stringify(root)}).legacy(pins);throw Error('unexpected_reentry');}catch(e){if(e.message!=='financial_cleanup_or_read_in_progress')throw e;}console.log('primary_preserved_real_fd_closed_fence_retained');`;
++ const output=execFileSync(process.execPath,['--experimental-strip-types','--input-type=module','-e',script],{encoding:'utf8',timeout:5000});assert.match(output,/primary_preserved_real_fd_closed_fence_retained/);cleanStatus();
++});
++test('all real raw buffers wipe and every actual FD is closed before successful return',async()=>{
++ for(const symbol of ['2409','2383']){
++  const handles=[],raws=new Set();let closes=0;
++  const r=create(root,{...io,async open(...args){const h=await fsp.open(...args);handles.push(h);const read=h.read.bind(h),close=h.close.bind(h);
++   h.read=(...a)=>{raws.add(a[0]);return read(...a);};h.close=async()=>{closes++;return close();};return h;}});
++  const result=await r.historicalCash(profile,symbol);assert.equal(result.readerReceipt.cleanupComplete,true);assert.equal(handles.length,symbol==='2409'?9:7);assert.equal(closes,handles.length);
++  for(const h of handles)await assert.rejects(h.stat(),e=>e.code==='EBADF');for(const raw of raws)assert.ok(raw.every(x=>x===0));cleanStatus();
++ }
++});
++test('perfile/aggregate/duplicate bounds and malformed UTF8 fail without a second budget',async()=>{
++ let calls=0;const denied=create(root,{lstat(){calls++;throw Error('io');},open(){calls++;throw Error('io');}});
++ await assert.rejects(denied.legacy([{...legacyPin,bytes:524289}]),/pin_invalid/);
++ await assert.rejects(denied.legacy([{...legacyPin,bytes:524288},{...legacyPin,path:'docs/research/b.json',bytes:524288},{...legacyPin,path:'docs/research/c.json',bytes:1}]),/read_bound/);
++ await assert.rejects(denied.legacy([legacyPin,legacyPin]),/pin_invalid/);assert.equal(calls,0);
++ const name='docs/research/invalid-utf8.json',file=path.join(root,name),raw=Buffer.from([0xff]);fs.writeFileSync(file,raw,{mode:0o600});
++ try{await assert.rejects(reader.legacy([{path:name,bytes:1,sha256:sha(raw)}]),/encoded data was not valid/);}finally{fs.unlinkSync(file);}cleanStatus();
++});
++test('finite NEW source closure is exact and distinctly different from immutable historical77b1',()=>{
++ const descriptor=JSON.parse(fs.readFileSync(new URL('./fixtures/research-historical-cash/new-reader-execution-closure.json',import.meta.url)));
++ const rows=descriptor.files.map(p=>{const bytes=fs.readFileSync(new URL('../'+p.file,import.meta.url));assert.equal(bytes.length,p.bytes);assert.equal(sha(bytes),p.sha256);return p;});
++ const canonical=v=>Array.isArray(v)?'['+v.map(canonical).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical(v[k])).join(',')+'}':JSON.stringify(v);
++ assert.equal(sha(canonical(rows)),descriptor.sourceClosureHash);assert.notEqual(descriptor.sourceClosureHash,descriptor.historicalLegacyClosure);assert.equal(descriptor.enabledForLiveV2,false);assert.equal(process.versions.node,descriptor.nodeVersion);
++});
++test('hash failure wipes every raw buffer and confirmed cleanup allows either facade',async()=>{
++ const raws=new Set();const r=create(root,{...io,async open(...a){const h=await fsp.open(...a),read=h.read.bind(h);h.read=(...args)=>{raws.add(args[0]);return read(...args);};return h;}});
++ await assert.rejects(r.legacy([{...legacyPin,sha256:'0'.repeat(64)}]),/hash_or_length/);for(const raw of raws)assert.ok(raw.every(x=>x===0));cleanStatus();await cash('2409');await legacy();
++});
++test('late open plus close failure is observed once, retains shared fence and primary deadline (child)',()=>{
++ const script=`import{open,lstat}from'node:fs/promises';import{performance}from'node:perf_hooks';import{createCandidateFinancialReaders as create}from${JSON.stringify(new URL('../web/src/lib/research-cash-financial-reader.ts',import.meta.url).href)};import{FinancialIoDeadline,financialIoStatus}from${JSON.stringify(new URL('../web/src/lib/research-financial-io-owner.ts',import.meta.url).href)};let release,arrived;const gate=new Promise(r=>release=r),arrival=new Promise(r=>arrived=r);let closes=0;const io={lstat,async open(...a){const h=await open(...a),close=h.close.bind(h);h.close=async()=>{closes++;await close();throw Error('unconfirmed_late_close');};arrived();await gate;return h;}};const d=new FinancialIoDeadline();Object.defineProperty(d,'end',{value:performance.now()+30});const attempt=create(${JSON.stringify(root)},io).legacy(${JSON.stringify([legacyPin])},d);attempt.catch(()=>{});await arrival;let primary;try{await attempt;throw Error('success');}catch(e){primary=e;if(e.message!=='financial_deadline'||!e.financialCleanup.recoveryRequired)throw e;}release();for(let n=0;n<100&&!financialIoStatus().cleanupFailed;n++)await new Promise(r=>setTimeout(r,5));if(closes!==1||!financialIoStatus().cleanupFailed||!financialIoStatus().recoveryRequired||primary.message!=='financial_deadline')throw Error('bad_late_cleanup');try{await create(${JSON.stringify(root)}).historicalCash('oct14_historical_cash_v1','2383');throw Error('unexpected_reentry');}catch(e){if(e.message!=='financial_cleanup_or_read_in_progress')throw e;}console.log('late_actual_fd_close_rejected_observed_primary_deadline_preserved');`;
++ assert.match(execFileSync(process.execPath,['--experimental-strip-types','--input-type=module','-e',script],{encoding:'utf8',timeout:5000}),/late_actual_fd_close_rejected_observed_primary_deadline_preserved/);cleanStatus();
++});
+diff --git a/scripts/research-historical-cash-projection.test.mjs b/scripts/research-historical-cash-projection.test.mjs
+new file mode 100644
+index 00000000..44325183
+--- /dev/null
++++ b/scripts/research-historical-cash-projection.test.mjs
+@@ -0,0 +1,124 @@
++import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {gunzipSync}from 'node:zlib';import{createHash}from 'node:crypto';
++import{projectPinnedHistoricalCash}from '../web/src/lib/research-historical-cash-projection.ts';
++import{historicalCashPins}from '../web/src/lib/research-historical-cash-pins.ts';
++import{calculateHistoricalCash}from '../web/src/lib/research-historical-cash-core.ts';
++const fixtureBytes=fs.readFileSync(new URL('./fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz',import.meta.url));
++assert.equal(createHash('sha256').update(fixtureBytes).digest('hex'),'afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f');
++const fixture=JSON.parse(gunzipSync(fixtureBytes,{maxOutputLength:2000000}));assert.equal(fixture.schema,'private-historical-cash-source-bytes-v1');assert.equal(fixture.sourceCommit,historicalCashPins.sourceCommit);assert.equal(fixture.files.length,15);
++const vectors=JSON.parse(fs.readFileSync(new URL('./fixtures/research-historical-cash/operands-and-decimal-vectors.json',import.meta.url),'utf8'));
++const bytes=new Map(fixture.files.map(x=>[x.pin.path,Buffer.from(x.rawBase64,'base64')]));
++const input=symbol=>new Map(historicalCashPins.companies[symbol].files.map(p=>[p.path,Buffer.from(bytes.get(p.path))]));
++// Fixture-only encoder; no production arbitrary-object/Map compatibility path.
++function canonical(value){if(Array.isArray(value))return `[${value.map(canonical).join(',')}]`;if(value&&typeof value==='object')return `{${Object.keys(value).sort().map(k=>`${JSON.stringify(k)}:${canonical(value[k])}`).join(',')}}`;return JSON.stringify(value);}
++const material=(symbol,files=input(symbol))=>Buffer.from(canonical({schemaVersion:'historical-cash-private-byte-material-v1',financialProfile:historicalCashPins.profile,symbol,files:[...files].map(([path,raw])=>({path,rawBase64:raw.toString('base64')}))}));
++const project=(symbol,carrier,deadline={check(){}})=>projectPinnedHistoricalCash(historicalCashPins.profile,symbol,carrier,deadline);
++const call=(symbol,files=input(symbol),deadline={check(){}})=>project(symbol,material(symbol,files),deadline);
++for(const symbol of ['2409','2383']){
++ test(`${symbol} all exact source bytes project and recompute original cash without financial authority`,()=>{
++  const files=input(symbol),before=[...files].map(([k,v])=>[k,v.toString('base64')]),result=call(symbol,files);
++  assert.deepEqual(result.calculation,calculateHistoricalCash(vectors.cases.find(v=>v.input.symbol===symbol).input));
++  assert.deepEqual([...files].map(([k,v])=>[k,v.toString('base64')]),before);
++  assert.equal(result.sourceManifest.length,symbol==='2409'?9:7);assert.equal(result.references.length,symbol==='2409'?52:33);
++  assert.equal(result.calculation.workload.cashNumericCells,symbol==='2409'?104:66);assert.equal(result.capitalReferences.length,symbol==='2409'?9:0);
++  for(const flag of ['financialVerified','dispatchReady','modelDispatched','publishableResearch','researchQualified','historicalPITEligible','strategyApproved','entryEligible','published','valuationApproved','technicalAdmission','sourcePublicationVerified','rawPdfBytesRead','filesystemCustodyVerified'])assert.equal(result[flag],false,flag);
++  assert.equal(result.projectionSha256,symbol==='2409'?'b59bd42321ac7e9af6c3fcd1eba86fa359f2537d467a45e8fbef244e442c434d':'a1965a0f56556c4c4b50f89f7f96ef263b6fd7b6aec529c919cce3b8bfa585d7');
++  assert.equal(result.inventoryBytesVerified,true);assert.equal(result.forecastCash,null);assert.equal(result.noFutureCash,true);
++  const json=JSON.stringify(result);assert.ok(Buffer.byteLength(json)<160000);assert.ok(!json.includes('/Users/')&&!json.includes('sourceLine":')&&!json.includes('retainedPdfLocalPath'));
++  assert.ok(Object.isFrozen(result)&&Object.isFrozen(result.references)&&Object.isFrozen(result.references[0].values));
++ });
++ test(`${symbol} any exact inventory file mutation, length, omission, order or extra fails closed`,()=>{
++  for(const p of historicalCashPins.companies[symbol].files){
++   const x=input(symbol);x.get(p.path)[0]^=1;assert.throws(()=>call(symbol,x),/projection_invalid/);
++   const y=input(symbol);y.set(p.path,Buffer.concat([y.get(p.path),Buffer.from(' ')]));assert.throws(()=>call(symbol,y),/projection_invalid/);
++   const z=input(symbol);z.delete(p.path);assert.throws(()=>call(symbol,z),/projection_invalid/);
++  }
++  assert.throws(()=>call(symbol,new Map([...input(symbol)].reverse())),/projection_invalid/);
++  const extra=input(symbol);extra.set('docs/research/unknown.json',Buffer.from('{}'));assert.throws(()=>call(symbol,extra),/projection_invalid/);
++ });
++ test(`${symbol} packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic`,()=>{
++  const packetPath=historicalCashPins.packetPath;
++  for(const change of [p=>p.issuers[1].facts.receivables.values[0]++,p=>p.issuers[0].facts.pretax.label='wrong',p=>p.extractionAvailableAt='2026-10-08T00:00:00Z',p=>p.auoJune30Capital.issuedSharesThousands++]){
++   const files=input(symbol),packet=JSON.parse(files.get(packetPath));change(packet);files.set(packetPath,Buffer.from(JSON.stringify(packet)));assert.throws(()=>call(symbol,files),/projection_invalid/);
++  }
++  for(const change of [m=>m.inputManifest.pop(),m=>m.historicalCashFlow.sourceInputManifest.reverse(),m=>m.historicalCashFlow.sourceFacts.receivables.values[0]++,m=>m.historicalCashFlow.noFutureCash=false]){
++   const files=input(symbol),key=historicalCashPins.companies[symbol].files[0].path,m=JSON.parse(files.get(key));change(m);files.set(key,Buffer.from(JSON.stringify(m)));assert.throws(()=>call(symbol,files),/projection_invalid/);
++  }
++ });
++ test(`${symbol} deadline exceptions at every successful checkpoint cannot return partial success`,()=>{
++  let checks=0;call(symbol,input(symbol),{check(){checks++;}});
++  for(let at=1;at<=checks;at++){
++   let n=0;const files=input(symbol),before=files.get(historicalCashPins.packetPath).toString('base64');
++   assert.throws(()=>call(symbol,files,{check(){if(++n===at)throw Error('shared_deadline_expired');}}),/shared_deadline_expired/);
++   assert.equal(files.get(historicalCashPins.packetPath).toString('base64'),before);
++  }
++ });
++}
++test('unknown or substituted profiles/companies reject before injected material access',()=>{
++ const material=new Proxy({}, {get(){throw Error('material_accessed');}});
++ for(const [profile,symbol]of [['unknown','2409'],['oct14_historical_cash_v1','5347'],[null,'2383']])assert.throws(()=>projectPinnedHistoricalCash(profile,symbol,material,{check(){}}),/projection_invalid/);
++ assert.throws(()=>call('2409',input('2383')),/projection_invalid/);
++});
++test('byte-only native views ignore caller metadata and reject wrong backing stores and proxies',()=>{
++ for(const symbol of ['2409','2383']){
++  let reads=0;const original=material(symbol);
++  for(const carrier of [Buffer.from(original),new Uint8Array(original)]){
++   for(const k of ['byteLength','buffer','length','constructor','slice','set','toJSON',Symbol.iterator,...Array.from({length:10000},(_,i)=>`meta_${i}`)])Object.defineProperty(carrier,k,{get(){reads++;throw Error('caller_getter');}});
++   assert.doesNotThrow(()=>project(symbol,carrier));assert.equal(reads,0);
++  }
++  for(const view of [new DataView(original.buffer),new Uint8ClampedArray(original),new Uint16Array(2),new Proxy(original,{get(){reads++;throw Error('proxy_get');},getPrototypeOf(){reads++;throw Error('proxy_prototype');},ownKeys(){reads++;throw Error('proxy_keys');}}),new Uint8Array(new SharedArrayBuffer(original.length)),new Uint8Array(new ArrayBuffer(original.length,{maxByteLength:original.length+1}))])assert.throws(()=>project(symbol,view));
++  const detached=new Uint8Array(original);structuredClone(detached.buffer,{transfer:[detached.buffer]});assert.throws(()=>project(symbol,detached));assert.equal(reads,0);
++ }
++ assert.ok(Object.isFrozen(historicalCashPins)&&Object.isFrozen(historicalCashPins.companies['2409'].files));
++});
++test('each projected row carries exact two-period packet/model locators and private source-line hashes',()=>{
++ for(const symbol of ['2409','2383']){
++  const result=call(symbol),packet=JSON.parse(bytes.get(historicalCashPins.packetPath)),issuer=packet.issuers.find(i=>i.stock===symbol);
++  for(const ref of result.references){assert.deepEqual(ref.values,issuer.facts[ref.metric].values);assert.equal(ref.sourceLineSha256,createHash('sha256').update(issuer.facts[ref.metric].sourceLine).digest('hex'));assert.equal(ref.unit,'TWD_thousands');assert.equal(ref.periodKind,'half_year_cumulative');assert.match(ref.packetLocator.jsonPointer,new RegExp(`/facts/${ref.metric}/values$`));}
++ }
++});
++test('all legacy Maps reject without iteration, getters or own-key reflection, including R1/R2 shapes',()=>{
++ for(const symbol of ['2409','2383'])for(const shape of ['exact','ownProperties','10000entries','empty']){
++  const files=shape==='10000entries'?new Map(Array.from({length:10000},(_,i)=>[`unknown_${i}`,new Uint8Array(0)])):shape==='empty'?new Map():input(symbol);
++  let touched=0;if(shape==='ownProperties')for(let i=0;i<10000;i++)Object.defineProperty(files,`unknown_${i}`,{get(){touched++;throw Error('map_getter');}});
++  const entries=Map.prototype.entries,ownKeys=Reflect.ownKeys;
++  try{Map.prototype.entries=function(){if(this===files){touched++;throw Error('map_iterator');}return entries.call(this);};Reflect.ownKeys=function(v){if(v===files){touched++;throw Error('map_ownKeys');}return ownKeys(v);};
++   assert.throws(()=>project(symbol,files),/projection_invalid/);assert.equal(touched,0);
++  }finally{Map.prototype.entries=entries;Reflect.ownKeys=ownKeys;}
++ }
++});
++test('whole carrier length and SHA reject all serialized drift before JSON parsing',()=>{
++ for(const symbol of ['2409','2383']){
++  const exact=material(symbol),json=exact.toString('utf8'),object=JSON.parse(json);
++  assert.equal(exact.length,historicalCashPins.companies[symbol].carrier.bytes);assert.equal(createHash('sha256').update(exact).digest('hex'),historicalCashPins.companies[symbol].carrier.sha256);
++  const unknown={...object,unknown:true},reorder={...object,files:[...object.files].reverse()},badBase64=structuredClone(object);badBase64.files[0].rawBase64='!'+badBase64.files[0].rawBase64.slice(1);
++  const variants=[Buffer.alloc(0),Buffer.concat([exact,Buffer.from(' ')]),Buffer.alloc(1048577),Buffer.from(json.replace('schemaVersion','schemaversion')),Buffer.from(json.replace('"symbol":"'+symbol+'"','"symbol":"'+symbol+'","symbol":"'+symbol+'"')),Buffer.from(canonical(unknown)),Buffer.from(canonical(reorder)),Buffer.from(canonical(badBase64)),material(symbol==='2409'?'2383':'2409')];
++  const parse=JSON.parse;let parses=0;try{JSON.parse=()=>{parses++;throw Error('parse_before_authentication');};for(const variant of variants)assert.throws(()=>project(symbol,variant),/projection_invalid/);assert.equal(parses,0);}finally{JSON.parse=parse;}
++ }
++});
++test('owned carrier snapshot survives caller mutation after copying and preserves old projection hashes',()=>{
++ for(const symbol of ['2409','2383']){
++  const expected=call(symbol),carrier=material(symbol);let checks=0;
++  const actual=project(symbol,carrier,{check(){if(++checks===2)carrier.fill(0);}});
++  assert.deepEqual(actual,expected);assert.ok(carrier.every(v=>v===0));
++ }
++});
++test('all allocated carrier/decode buffers are wiped on success and every cooperative deadline failure',async()=>{
++ const allocated=[],from=Buffer.from,set=Uint8Array.prototype.set;
++ let observed;
++ try{
++  Buffer.from=function(value,encoding,...rest){const result=from.call(Buffer,value,encoding,...rest);if(encoding==='base64')allocated.push(result);return result;};
++  Uint8Array.prototype.set=function(...args){allocated.push(this);return set.apply(this,args);};
++  observed=await import('../web/src/lib/research-historical-cash-projection.ts?cleanup-witness');
++ }finally{Buffer.from=from;Uint8Array.prototype.set=set;}
++ allocated.length=0; // Exclude Node module-loader allocations before runtime observation.
++ for(const symbol of ['2409','2383']){
++  const carrier=material(symbol),before=Buffer.from(carrier);let total=0;
++  observed.projectPinnedHistoricalCash(historicalCashPins.profile,symbol,carrier,{check(){total++;}});
++  assert.equal(allocated.length,historicalCashPins.companies[symbol].files.length+1);for(const a of allocated)assert.ok(a.every(v=>v===0));allocated.length=0;
++  for(let at=1;at<=total;at++){
++   let n=0;assert.throws(()=>observed.projectPinnedHistoricalCash(historicalCashPins.profile,symbol,carrier,{check(){if(++n===at)throw Error('shared_deadline_expired');}}),/shared_deadline_expired/);
++   for(const a of allocated)assert.ok(a.every(v=>v===0));allocated.length=0;assert.deepEqual(carrier,before);
++  }
++  const drift=Buffer.from(carrier);drift[0]^=1;assert.throws(()=>observed.projectPinnedHistoricalCash(historicalCashPins.profile,symbol,drift,{check(){}}),/projection_invalid/);assert.equal(allocated.length,1);assert.ok(allocated[0].every(v=>v===0));allocated.length=0;
++ }
++});
+diff --git a/scripts/research-scenario-cash-material.test.mjs b/scripts/research-scenario-cash-material.test.mjs
+new file mode 100644
+index 00000000..4dcd4577
+--- /dev/null
++++ b/scripts/research-scenario-cash-material.test.mjs
+@@ -0,0 +1,59 @@
++import test from'node:test';import assert from'node:assert/strict';import fs from'node:fs';import{gunzipSync}from'node:zlib';import{createHash}from'node:crypto';
++import{projectScenarioCashMaterial as project}from'../web/src/lib/research-scenario-cash-material.ts';
++import{historicalCashPins as pins}from'../web/src/lib/research-historical-cash-pins.ts';
++const packed=fs.readFileSync(new URL('./fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz',import.meta.url));
++assert.equal(createHash('sha256').update(packed).digest('hex'),'afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f');
++const fixture=JSON.parse(gunzipSync(packed,{maxOutputLength:2000000})),raw=new Map(fixture.files.map(f=>[f.pin.path,Buffer.from(f.rawBase64,'base64')]));
++function canonical(v){if(Array.isArray(v))return`[${v.map(canonical).join(',')}]`;if(v&&typeof v==='object')return`{${Object.keys(v).sort().map(k=>`${JSON.stringify(k)}:${canonical(v[k])}`).join(',')}}`;return JSON.stringify(v);}
++const material=(symbol,change=()=>{})=>{const o={schemaVersion:'historical-cash-private-byte-material-v1',financialProfile:pins.profile,symbol,files:pins.companies[symbol].files.map(p=>({path:p.path,rawBase64:raw.get(p.path).toString('base64')}))};change(o);return Buffer.from(canonical(o));};
++const clock=()=>new Date().toISOString(),call=(s,bytes=material(s),now=clock(),deadline={check(){}})=>project(pins.profile,s,bytes,now,deadline);
++const metrics=['revenue','grossProfit','operatingExpenses','operatingProfit','nonOperating','pretaxProfit','taxExpense','netProfit','nonControllingNetProfit','ownersNetProfit','ordinaryWeightedSharesMillionAssumed','potentialWeightedSharesMillionAssumed','potentialIncludedMillion','antiDilutiveExcludedMillion','dilutedSharesMillionAssumed','basicEpsConditional','dilutedEpsConditional'];
++for(const symbol of ['2409','2383']){
++ test(`${symbol} actual full scenario calculations match all retained model quarter values and cash`,()=>{
++  const now=clock(),bytes=material(symbol),before=Buffer.from(bytes),r=call(symbol,bytes,now),model=JSON.parse(raw.get(pins.companies[symbol].files[0].path));
++  assert.deepEqual(bytes,before);assert.equal(r.projection.clocks.originalModelCutoff,model.originalModelAsOf);assert.equal(r.projection.clocks.inputArtifactAsOf,model.asOf);assert.equal(r.projection.clocks.currentLocalReadKnownAt,now);assert.equal(r.artifactReadKnownAt,now);
++  assert.equal(r.projection.projected.originalModelCutoff,model.originalModelAsOf);assert.equal(r.calculation.originalModelCutoff,model.originalModelAsOf);assert.equal(r.projection.projected.observations.length,pins.companies[symbol].files.length-1);
++  assert.equal(r.projection.historicalCash.projectionSha256,symbol==='2409'?'b59bd42321ac7e9af6c3fcd1eba86fa359f2537d467a45e8fbef244e442c434d':'a1965a0f56556c4c4b50f89f7f96ef263b6fd7b6aec529c919cce3b8bfa585d7');
++  let comparisons=0;for(let s=0;s<3;s++)for(let q=0;q<6;q++){
++   const actual=r.calculation.scenarios[s].quarters[q],expected=model.scenarios[s].quarters[q];assert.equal(actual.period,expected.period);
++   for(const key of metrics){assert.ok(Math.abs(actual[key]-expected[key])<1e-6,`${symbol}/${s}/${q}/${key}: ${actual[key]} vs ${expected[key]}`);comparisons++;}
++  }assert.equal(comparisons,306);
++  assert.equal(r.calculation.scenarios[0].calendarActualPlusForecast.status,'incomplete');
++  assert.ok(r.projection.reportedFacts.length+r.projection.monthlyFacts.length+1<=64);assert.ok(Buffer.byteLength(JSON.stringify(r.projection))<=160000);assert.ok(Buffer.byteLength(JSON.stringify(r))<=262144);
++  for(const key of ['sourceClosureApproved','legacyV2ExecutionClaimed','filesystemCustodyVerified','sourcePublicationVerified','financialVerified','dispatchReady','modelDispatched','publishableResearch','researchQualified','historicalPITEligible','strategyApproved','entryEligible','published','valuationApproved','technicalAdmission'])assert.equal(r[key],false,key);
++  assert.equal(r.forecastCash,null);assert.equal(r.noFutureCash,true);assert.ok(!JSON.stringify(r).includes('/Users/')&&!JSON.stringify(r).includes('retainedPdfLocalPath'));
++  assert.ok(Object.isFrozen(r)&&Object.isFrozen(r.projection)&&Object.isFrozen(r.calculation.scenarios[0].quarters));
++ });
++ test(`${symbol} source bytes cannot be substituted even with coherent edited numbers`,()=>{
++  for(const file of pins.companies[symbol].files){const bad=material(symbol,o=>{const item=o.files.find(x=>x.path===file.path),b=Buffer.from(item.rawBase64,'base64');b[0]^=1;item.rawBase64=b.toString('base64');});assert.throws(()=>call(symbol,bad),/material_invalid/);}
++  assert.throws(()=>call(symbol,material(symbol,o=>o.files.reverse())),/material_invalid/);assert.throws(()=>call(symbol,material(symbol==='2409'?'2383':'2409')),/material_invalid/);
++ });
++ test(`${symbol} each cooperative deadline exception rejects and preserves caller bytes`,()=>{
++  const bytes=material(symbol),before=Buffer.from(bytes),now=clock();let count=0;call(symbol,bytes,now,{check(){count++;}});
++  for(let at=1;at<=count;at++){let n=0;assert.throws(()=>call(symbol,bytes,now,{check(){if(++n===at)throw Error('shared_deadline_expired');}}),/shared_deadline_expired/);assert.deepEqual(bytes,before);}
++ });
++}
++test('invalid profile/company/clock reject before material access',()=>{
++ const bytes=new Proxy({},{get(){throw Error('material_getter');},ownKeys(){throw Error('material_ownKeys');}}),d={check(){}};
++ for(const [profile,symbol,now]of [['unknown','2409',clock()],[pins.profile,'5347',clock()],[pins.profile,'2409','2099-01-01T00:00:00Z'],[pins.profile,'2409','2026-10-14T08:30:00.000000001Z'],[pins.profile,'2409',{}]])assert.throws(()=>project(profile,symbol,bytes,now,d),/material_invalid/);
++ for(const symbol of ['2409','2383'])assert.throws(()=>call(symbol,material(symbol),'2026-10-13T00:00:00Z'),/material_invalid/);
++});
++test('all old Maps and hostile views fail or remain unread metadata under fixed byte-only domain',()=>{
++ for(const symbol of ['2409','2383']){
++  assert.throws(()=>call(symbol,new Map()),/material_invalid/);
++  const bytes=material(symbol);let reads=0;for(let i=0;i<10000;i++)Object.defineProperty(bytes,`extra_${i}`,{get(){reads++;throw Error('metadata_getter');}});
++  for(const key of ['length','byteLength','buffer',Symbol.iterator])Object.defineProperty(bytes,key,{get(){reads++;throw Error('view_getter');}});
++  assert.doesNotThrow(()=>call(symbol,bytes));assert.equal(reads,0);
++ }
++});
++test('outer carrier and decoded buffers are actually wiped on success and all deadline failures',async()=>{
++ const allocations=[],set=Uint8Array.prototype.set,from=Buffer.from;let observed;
++ try{Uint8Array.prototype.set=function(...args){allocations.push(this);return set.apply(this,args);};Buffer.from=function(value,encoding,...rest){const v=from.call(Buffer,value,encoding,...rest);if(encoding==='base64')allocations.push(v);return v;};observed=await import('../web/src/lib/research-scenario-cash-material.ts?cleanup-witness');}
++ finally{Uint8Array.prototype.set=set;Buffer.from=from;}
++ allocations.length=0;
++ for(const symbol of ['2409','2383']){
++  const bytes=material(symbol),before=Buffer.from(bytes),now=clock();let count=0;
++  observed.projectScenarioCashMaterial(pins.profile,symbol,bytes,now,{check(){count++;}});assert.equal(allocations.length,pins.companies[symbol].files.length+1);for(const b of allocations)assert.ok(b.every(v=>v===0));allocations.length=0;
++  for(let at=1;at<=count;at++){let n=0;assert.throws(()=>observed.projectScenarioCashMaterial(pins.profile,symbol,bytes,now,{check(){if(++n===at)throw Error('shared_deadline_expired');}}),/shared_deadline_expired/);for(const b of allocations)assert.ok(b.every(v=>v===0));allocations.length=0;assert.deepEqual(bytes,before);}
++ }
++});
+diff --git a/scripts/research-scenario-cash-reader.test.mjs b/scripts/research-scenario-cash-reader.test.mjs
+new file mode 100644
+index 00000000..65ad0cb6
+--- /dev/null
++++ b/scripts/research-scenario-cash-reader.test.mjs
+@@ -0,0 +1,43 @@
++import test from'node:test';import assert from'node:assert/strict';import fs from'node:fs';import fsp from'node:fs/promises';import path from'node:path';import os from'node:os';import{gunzipSync}from'node:zlib';import{createHash}from'node:crypto';import{performance}from'node:perf_hooks';
++import{createCandidateFinancialReaders as create}from'../web/src/lib/research-cash-financial-reader.ts';
++import{FinancialIoDeadline as Deadline,FinancialIoOwner,financialIoStatus as status}from'../web/src/lib/research-financial-io-owner.ts';
++import{historicalCashPins as pins}from'../web/src/lib/research-historical-cash-pins.ts';
++import{projectScenarioCashMaterial as project}from'../web/src/lib/research-scenario-cash-material.ts';
++const gzip=fs.readFileSync(new URL('./fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz',import.meta.url));assert.equal(createHash('sha256').update(gzip).digest('hex'),'afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f');
++const raw=new Map(JSON.parse(gunzipSync(gzip,{maxOutputLength:2000000})).files.map(f=>[f.pin.path,Buffer.from(f.rawBase64,'base64')]));
++const root=fs.mkdtempSync(path.join(fs.realpathSync(os.homedir()),'.stockinsider-scenario-reader-'));fs.chmodSync(root,0o700);
++try{for(const[name,b]of raw){fs.mkdirSync(path.dirname(path.join(root,name)),{recursive:true,mode:0o700});fs.writeFileSync(path.join(root,name),b,{mode:0o600});}}catch(e){fs.rmSync(root,{recursive:true,force:true});throw e;}
++test.after(()=>fs.rmSync(root,{recursive:true,force:true}));
++const io={lstat:fsp.lstat,open:fsp.open},profile=pins.profile,reader=create(root),legacyPin=pins.companies['2383'].files[0];
++function sorted(v){if(Array.isArray(v))return`[${v.map(sorted).join(',')}]`;if(v&&typeof v==='object')return`{${Object.keys(v).sort().map(k=>`${JSON.stringify(k)}:${sorted(v[k])}`).join(',')}}`;return JSON.stringify(v);}
++const carrier=s=>Buffer.from(sorted({schemaVersion:'historical-cash-private-byte-material-v1',financialProfile:profile,symbol:s,files:pins.companies[s].files.map(p=>({path:p.path,rawBase64:raw.get(p.path).toString('base64')}))}));
++const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return{promise,resolve};};
++async function settled(){const end=performance.now()+2000;while(!status().cleanupComplete&&performance.now()<end)await new Promise(r=>setTimeout(r,5));assert.equal(status().cleanupComplete,true);}
++for(const symbol of ['2409','2383'])test(`${symbol} actual single acquisition returns full scenario plus cash only after FD/buffer cleanup`,async()=>{
++ const handles=[],buffers=[],nativeBuffer=FinancialIoOwner.prototype.buffer;let closes=0;
++ const r=create(root,{...io,async open(...a){const h=await fsp.open(...a),close=h.close.bind(h);handles.push(h);h.close=async()=>{closes++;return close();};return h;}});
++ let result;try{FinancialIoOwner.prototype.buffer=function(n){const b=nativeBuffer.call(this,n);buffers.push(b);return b;};result=await r.scenarioCash(profile,symbol);}finally{FinancialIoOwner.prototype.buffer=nativeBuffer;}
++ assert.deepEqual(result.material,project(profile,symbol,carrier(symbol),result.material.artifactReadKnownAt,{check(){}}));
++ assert.equal(handles.length,pins.companies[symbol].files.length);assert.equal(closes,handles.length);assert.equal(buffers.length,handles.length+1);for(const h of handles)await assert.rejects(h.stat(),e=>e.code==='EBADF');for(const b of buffers)assert.ok(b.every(v=>v===0));
++ assert.equal(result.readerReceipt.cleanupComplete,true);assert.equal(result.readerReceipt.kernelIoCancellationConfirmed,false);assert.equal(status().cleanupComplete,true);assert.equal(result.material.sourceClosureApproved,false);assert.equal(result.material.financialVerified,false);assert.equal(result.material.forecastCash,null);
++ assert.equal(result.material.projection.historicalCash.sourceManifest.length,pins.companies[symbol].files.length);assert.equal(result.material.calculation.scenarios.length,3);assert.equal(result.material.calculation.scenarios[0].quarters.length,6);
++});
++test('full scenario profile cannot nominate IO paths, hashes, clocks or a different issuer',async()=>{
++ let calls=0;const r=create(root,{lstat(){calls++;throw Error('unexpected_io');},open(){calls++;throw Error('unexpected_io');}});
++ for(const[p,s]of [['unknown','2409'],[profile,'5347'],[profile,{symbol:'2409'}]])await assert.rejects(r.scenarioCash(p,s),/profile_invalid/);
++ const d=new Deadline();Object.defineProperty(d,'end',{value:performance.now()-1});await assert.rejects(r.scenarioCash(profile,'2409',d),/financial_deadline/);assert.equal(calls,0);assert.equal(status().cleanupComplete,true);
++});
++test('legacy and full scenario facade block each other at the same actual FD owner',async()=>{
++ for(const kind of ['legacy','scenario']){
++  const held=deferred(),arrived=deferred();let once=false;const r=create(root,{...io,checkpoint(){if(!once){once=true;arrived.resolve();return held.promise;}}});
++  const running=kind==='legacy'?r.legacy([legacyPin]):r.scenarioCash(profile,'2409');
++  try{await arrived.promise;await assert.rejects(kind==='legacy'?reader.scenarioCash(profile,'2383'):reader.legacy([legacyPin]),/cleanup_or_read_in_progress/);assert.equal(status().cleanupComplete,false);}finally{held.resolve();await running;}
++  assert.equal(status().cleanupComplete,true);
++ }
++});
++test('full scenario shared deadline failure retains the pending acquisition until real settlement',async()=>{
++ const held=deferred(),arrived=deferred();let once=false;const r=create(root,{...io,checkpoint(label){if(!once&&label.startsWith('after_read:')){once=true;arrived.resolve();return held.promise;}}});
++ const d=new Deadline();Object.defineProperty(d,'end',{value:performance.now()+30});const running=r.scenarioCash(profile,'2409',d);running.catch(()=>{});
++ try{await arrived.promise;await assert.rejects(running,e=>e.message==='financial_deadline'&&e.financialCleanup.recoveryRequired);await assert.rejects(reader.legacy([legacyPin]),/cleanup_or_read_in_progress/);await assert.rejects(reader.historicalCash(profile,'2383'),/cleanup_or_read_in_progress/);}finally{held.resolve();await settled();}
++ const next=await reader.scenarioCash(profile,'2409');assert.equal(next.readerReceipt.cleanupComplete,true);assert.equal(status().cleanupComplete,true);
++});
+diff --git a/web/src/lib/research-business-calculator.ts b/web/src/lib/research-business-calculator.ts
+new file mode 100644
+index 00000000..81f4cb09
+--- /dev/null
++++ b/web/src/lib/research-business-calculator.ts
+@@ -0,0 +1,186 @@
++import { createHash } from 'node:crypto';
++import { financialInstant as sourceControllerInstant } from './research-financial-clock.ts';
++
++/** Pure, fixed dispatch. Input observations remain unsealed until the publication
++ * transaction resolves their immutable DB revisions. This is no identity,
++ * source-rights, model execution or publication authority. No request code runs. */
++export type BusinessCalculatorId = 'auo_four_segment_v1' | 'emc_ccl_v1';
++type Row = Record<string, unknown>;
++type Shares = { openingOrdinaryMillion: number; issuedOrdinaryMillion: number; fractionOutstanding: number; potentialAwardsMillion: number };
++type Common = { period: string; shares: Shares; taxRate: number; taxFloor: number; nci: number };
++type Segment = { key: string; revenue: number; grossMargin: number; operatingMargin: number };
++type AuoQuarter = Common & { segments: Segment[]; interestIncome: number; financeCosts: number; otherIncome: number; equityMethodProfit: number; fxAndOtherRecurring: number };
++type EmcQuarter = Common & { revenue: number; grossMargin: number; opexRatio: number; bankInterest: number; financeCost: number; fx: number; otherGainsExFx: number };
++const AUO_KEYS = ['display', 'mobility', 'vertical', 'other'];
++const COMMON_KEYS = ['period', 'shares', 'taxRate', 'taxFloor', 'nci'];
++const AUO_FIELDS = ['segments', 'interestIncome', 'financeCosts', 'otherIncome', 'equityMethodProfit', 'fxAndOtherRecurring'];
++const EMC_FIELDS = ['revenue', 'grossMargin', 'opexRatio', 'bankInterest', 'financeCost', 'fx', 'otherGainsExFx'];
++const PROFIT_FIELDS = ['revenue', 'grossProfit', 'operatingExpenses', 'operatingProfit', 'nonOperating', 'pretaxProfit', 'taxExpense', 'netProfit', 'nonControllingNetProfit', 'ownersNetProfit'] as const;
++function ensure(ok: unknown): asserts ok { if (!ok) throw new Error('research_business_calculator_invalid'); }
++function exact(value: unknown, keys: readonly string[]): Row {
++  ensure(value && typeof value === 'object' && !Array.isArray(value));
++  const row = value as Row;
++  ensure(Object.getPrototypeOf(row) === Object.prototype || Object.getPrototypeOf(row) === null);
++  ensure(Object.keys(row).sort().join(',') === [...keys].sort().join(','));
++  return row;
++}
++function finite(value: unknown, min = -1e12, max = 1e12): asserts value is number {
++  ensure(typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max);
++}
++function text(value: unknown, max = 200): asserts value is string { ensure(typeof value === 'string' && value.length > 0 && value.length <= max); }
++function hash(value: unknown) { text(value, 64); ensure(/^[0-9a-f]{64}$/u.test(value)); }
++function json(value: unknown, depth = 0): void {
++  ensure(depth <= 12);
++  if (value === null || typeof value === 'boolean' || typeof value === 'string') return;
++  if (typeof value === 'number') { finite(value); return; }
++  ensure(value && typeof value === 'object');
++  ensure(Array.isArray(value) || Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null);
++  ensure(Reflect.ownKeys(value).every(key => typeof key === 'string'));
++  for (const key of Object.keys(value)) {
++    ensure(!/^(?:__proto__|constructor|prototype)$/u.test(key));
++    const descriptor = Object.getOwnPropertyDescriptor(value, key);
++    ensure(descriptor && 'value' in descriptor);
++    json(descriptor.value, depth + 1);
++  }
++}
++function canonical(value: unknown): string {
++  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
++  if (value && typeof value === 'object') return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical((value as Row)[key])}`).join(',')}}`;
++  return JSON.stringify(value);
++}
++function digest(value: unknown) { return createHash('sha256').update(canonical(value)).digest('hex'); }
++function sum(values: number[]) { return values.reduce((a, b) => a + b, 0); }
++function periodIndex(value: unknown): number {
++  text(value, 6); ensure(/^20\d{2}Q[1-4]$/u.test(value));
++  return Number(value.slice(0, 4)) * 4 + Number(value.at(-1)) - 1;
++}
++function shareInput(value: unknown): Shares {
++  const s = exact(value, ['openingOrdinaryMillion', 'issuedOrdinaryMillion', 'fractionOutstanding', 'potentialAwardsMillion']);
++  finite(s.openingOrdinaryMillion, 0.000001, 1e6); finite(s.issuedOrdinaryMillion, 0, 1e6);
++  finite(s.fractionOutstanding, 0, 1); finite(s.potentialAwardsMillion, 0, 1e6);
++  return s as Shares;
++}
++function eps(owners: number, ordinary: number, potential: number) {
++  const included = owners > 0 ? potential : 0;
++  return { ordinaryWeightedSharesMillionAssumed: ordinary, potentialWeightedSharesMillionAssumed: potential,
++    potentialIncludedMillion: included, antiDilutiveExcludedMillion: potential - included,
++    dilutedSharesMillionAssumed: ordinary + included, basicEpsConditional: owners / ordinary,
++    dilutedEpsConditional: owners / (ordinary + included),
++    shareBasis: 'weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions' };
++}
++function common(q: Row): Common {
++  periodIndex(q.period); finite(q.taxRate, 0, 1); finite(q.taxFloor, 0); finite(q.nci);
++  return { period: q.period as string, taxRate: q.taxRate, taxFloor: q.taxFloor, nci: q.nci, shares: shareInput(q.shares) };
++}
++function quarterInput(value: unknown, id: BusinessCalculatorId): AuoQuarter | EmcQuarter {
++  const q = exact(value, [...COMMON_KEYS, ...(id === 'auo_four_segment_v1' ? AUO_FIELDS : EMC_FIELDS)]);
++  const c = common(q);
++  if (id === 'auo_four_segment_v1') {
++    ensure(Array.isArray(q.segments) && q.segments.length === 4);
++    const segments = q.segments.map((value, i) => {
++      const s = exact(value, ['key', 'revenue', 'grossMargin', 'operatingMargin']);
++      ensure(s.key === AUO_KEYS[i]); finite(s.revenue, 0); finite(s.grossMargin, -1, 1); finite(s.operatingMargin, -1, 1);
++      ensure(s.operatingMargin <= s.grossMargin);
++      return s as Segment;
++    });
++    for (const key of AUO_FIELDS.slice(1)) finite(q[key]);
++    ensure((q.financeCosts as number) <= 0);
++    return { ...q, ...c, segments } as AuoQuarter;
++  }
++  for (const key of EMC_FIELDS) finite(q[key]);
++  finite(q.revenue, 0); finite(q.grossMargin, 0, 1); finite(q.opexRatio, 0, 1); ensure((q.financeCost as number) <= 0);
++  return { ...q, ...c } as EmcQuarter;
++}
++function auo(q: AuoQuarter) {
++  const segments = q.segments.map(s => ({ ...s, grossProfit: s.revenue * s.grossMargin,
++    operatingExpenses: s.revenue * (s.grossMargin - s.operatingMargin), operatingProfit: s.revenue * s.operatingMargin,
++    status: 'research_allocation_not_disclosed_segment_gross_margin' }));
++  return { segments, revenue: sum(segments.map(s => s.revenue)), grossProfit: sum(segments.map(s => s.grossProfit)),
++    operatingExpenses: sum(segments.map(s => s.operatingExpenses)),
++    nonOperating: q.interestIncome + q.financeCosts + q.otherIncome + q.equityMethodProfit + q.fxAndOtherRecurring,
++    nonOperatingBreakdown: { interestIncome: q.interestIncome, financeCosts: q.financeCosts, otherIncome: q.otherIncome, equityMethodProfit: q.equityMethodProfit, fxAndOtherRecurring: q.fxAndOtherRecurring } };
++}
++function emc(q: EmcQuarter) {
++  return { segments: null, revenue: q.revenue, grossProfit: q.revenue * q.grossMargin,
++    operatingExpenses: q.revenue * q.opexRatio,
++    nonOperating: q.bankInterest + q.financeCost + q.fx + q.otherGainsExFx,
++    nonOperatingBreakdown: { bankInterest: q.bankInterest, financeCost: q.financeCost, fx: q.fx, otherGainsExFx: q.otherGainsExFx } };
++}
++function calculate(q: AuoQuarter | EmcQuarter, id: BusinessCalculatorId) {
++  const b = id === 'auo_four_segment_v1' ? auo(q as AuoQuarter) : emc(q as EmcQuarter);
++  const operatingProfit = b.grossProfit - b.operatingExpenses, pretaxProfit = operatingProfit + b.nonOperating;
++  const taxExpense = Math.max(Math.max(pretaxProfit, 0) * q.taxRate, q.taxFloor), netProfit = pretaxProfit - taxExpense;
++  const ownersNetProfit = netProfit - q.nci;
++  const ordinary = q.shares.openingOrdinaryMillion + q.shares.issuedOrdinaryMillion * q.shares.fractionOutstanding;
++  return { period: q.period, ...b, operatingProfit, pretaxProfit, taxExpense, netProfit, nonControllingNetProfit: q.nci,
++    ownersNetProfit, ...eps(ownersNetProfit, ordinary, q.shares.potentialAwardsMillion),
++    estimatesOnly: true, newCommercialRevenue: { status: 'not_quantifiable', value: null }, targetPrice: null };
++}
++type QuarterResult = ReturnType<typeof calculate>;
++function aggregate(rows: QuarterResult[]) {
++  const profits = Object.fromEntries(PROFIT_FIELDS.map(key => [key, sum(rows.map(r => r[key]))])) as Record<typeof PROFIT_FIELDS[number], number>;
++  return { ...profits, ...eps(profits.ownersNetProfit,
++    sum(rows.map(r => r.ordinaryWeightedSharesMillionAssumed)) / rows.length,
++    sum(rows.map(r => r.potentialWeightedSharesMillionAssumed)) / rows.length),
++    periods: rows.map(r => r.period), periodShareWeight: 'equal-quarter weighting sensitivity, not reported annual IAS33 shares' };
++}
++export function businessCalculatorExecutionHash(): string {
++  // Bind the executed financial core, including dependencies, without reading
++  // request paths, dynamically importing a module or executing report scripts.
++  return digest({ version: 'business-calculator-core-v2.2', profitFields: PROFIT_FIELDS, auoKeys: AUO_KEYS, commonKeys: COMMON_KEYS, auoFields: AUO_FIELDS, emcFields: EMC_FIELDS, functions: [sourceControllerInstant, ensure, exact, finite, text, hash, json, canonical, digest, sum, periodIndex, shareInput, common, quarterInput, eps, auo, emc, calculate, aggregate, recalculateResearchBusinessScenarios].map(fn => fn.toString()) });
++}
++export function recalculateResearchBusinessScenarios(value: unknown, now = new Date().toISOString()) {
++  json(value); ensure(Buffer.byteLength(JSON.stringify(value), 'utf8') <= 160_000);
++  const input = exact(value, ['schemaVersion', 'calculatorId', 'symbol', 'unit', 'originalModelCutoff', 'researchCutoff', 'latestReportedQuarter', 'observations', 'scenarios']);
++  ensure(input.schemaVersion === 'business-scenarios-v2' && input.unit === 'TWD_million');
++  ensure(input.calculatorId === 'auo_four_segment_v1' || input.calculatorId === 'emc_ccl_v1');
++  const id = input.calculatorId as BusinessCalculatorId;
++  ensure(input.symbol === (id === 'auo_four_segment_v1' ? '2409' : '2383'));
++  const cutoff = sourceControllerInstant(input.researchCutoff);
++  ensure(sourceControllerInstant(input.originalModelCutoff) <= cutoff && cutoff <= sourceControllerInstant(now));
++  const last = periodIndex(input.latestReportedQuarter);
++  const year = Math.floor(last / 4), quarter = last % 4;
++  // Require that a claimed reported quarter has ended. Future forecast periods
++  // remain estimates; this check does not assert source-report authenticity.
++  ensure(BigInt(Date.UTC(year, (quarter + 1) * 3, 1)) * BigInt(1_000_000) <= cutoff);
++  ensure(Array.isArray(input.observations) && input.observations.length > 0 && input.observations.length <= 64);
++  const observations = input.observations.map(value => {
++    const o = exact(value, ['sourceArtifactHash', 'observationHash', 'observedAt', 'admittedAt', 'publication']);
++    hash(o.sourceArtifactHash); hash(o.observationHash);
++    const observed = sourceControllerInstant(o.observedAt), admitted = sourceControllerInstant(o.admittedAt);
++    ensure(observed <= admitted && admitted <= cutoff);
++    const p = exact(o.publication, ['precision', 'value']);
++    if (p.precision === 'unknown') ensure(p.value === null);
++    else if (p.precision === 'instant') ensure(sourceControllerInstant(p.value) <= observed);
++    else {
++      ensure(p.precision === 'date'); text(p.value, 10); ensure(/^\d{4}-\d{2}-\d{2}$/u.test(p.value));
++      const ms = Date.parse(`${p.value}T00:00:00Z`); ensure(Number.isFinite(ms) && new Date(ms).toISOString().slice(0, 10) === p.value);
++      // Date-only sources have no invented UTC instant. Reject a date later
++      // than the observer's Taiwan civil date, retaining its original precision.
++      ensure(p.value <= new Date(Number(observed / BigInt(1_000_000)) + 8 * 3600_000).toISOString().slice(0, 10));
++    }
++    return o;
++  });
++  ensure(new Set(observations.map(o => o.observationHash)).size === observations.length);
++  ensure(Array.isArray(input.scenarios) && input.scenarios.length === 3);
++  const scenarios = input.scenarios.map((value, index) => {
++    const s = exact(value, ['id', 'quarters']); ensure(s.id === ['bear', 'base', 'bull'][index]);
++    ensure(Array.isArray(s.quarters) && s.quarters.length === 6);
++    const quarters = s.quarters.map((value, i) => {
++      const q = quarterInput(value, id); ensure(periodIndex(q.period) === last + i + 1); return calculate(q, id);
++    });
++    for (const q of quarters) for (const key of PROFIT_FIELDS) finite(q[key], -1e15, 1e15);
++    const fullYears = [...new Set(quarters.map(q => q.period.slice(0, 4)))].flatMap(year => {
++      const rows = quarters.filter(q => q.period.startsWith(year)); return rows.length === 4 ? [{ year, ...aggregate(rows) }] : [];
++    });
++    return { id: s.id as string, quarters, nextFourUnreported: aggregate(quarters.slice(0, 4)), fullForecastYears: fullYears,
++      partialYears: [...new Set(quarters.map(q => q.period.slice(0, 4)))].filter(year => !fullYears.some(row => row.year === year)),
++      calendarActualPlusForecast: { status: 'incomplete', reason: 'reported YTD bridge must be sealed separately; never add rounded EPS' } };
++  });
++  const result = { schemaVersion: 'business-calculation-result-v2', calculatorId: id, symbol: input.symbol, unit: input.unit,
++    originalModelCutoff: input.originalModelCutoff, researchCutoff: input.researchCutoff,
++    inputHash: digest(input), executionCodeHash: businessCalculatorExecutionHash(), observations, scenarios,
++    calculationAuthority: 'unsealed_calculation_only', publishableResearch: false, researchQualified: false, strategyApproved: false, entryEligible: false,
++    limitations: ['source revisions, rights and financial authenticity require atomic DB sealing', 'no trusted author/reviewer execution proof', 'no calibrated multiple, target, physical capacity, yield, ASP or order assumption'] };
++  return { ...result, resultHash: digest(result) };
++}
+diff --git a/web/src/lib/research-cash-financial-reader.ts b/web/src/lib/research-cash-financial-reader.ts
+new file mode 100644
+index 00000000..b1c4fa4d
+--- /dev/null
++++ b/web/src/lib/research-cash-financial-reader.ts
+@@ -0,0 +1,53 @@
++import { createHash } from 'node:crypto';
++import { historicalCashPins } from './research-historical-cash-pins.ts';
++import { projectPinnedHistoricalCash } from './research-historical-cash-projection.ts';
++import { projectScenarioCashMaterial } from './research-scenario-cash-material.ts';
++import { FinancialIoDeadline, FINANCIAL_IO_LIMITS } from './research-financial-io-owner.ts';
++import { acquireFinancialIo, checkFinancialIoInventory, type FinancialIoPin, type FinancialIoDependencies } from './research-financial-io-engine.ts';
++
++/** Trusted NEW-closure composition root; no route, caller paths or live v2 change.
++ * All copies/imports share the realm ownership registry at acquisition. */
++export function createCandidateFinancialReaders(root: string, io?: FinancialIoDependencies) {
++  const fixed = async (kind: 'historicalCash' | 'scenarioCash', profile: unknown, symbol: unknown, deadline: FinancialIoDeadline) => {
++      if (profile !== historicalCashPins.profile || (symbol !== '2409' && symbol !== '2383')) throw new Error('financial_profile_invalid');
++      const selected = historicalCashPins.companies[symbol];
++      checkFinancialIoInventory(root, selected.files, selected.files.length);
++      const session = await acquireFinancialIo(root, selected.files, deadline, io);
++      try {
++        // Internal fixed literal encoder. No caller Map/object is normalized.
++        const chunks = ['{"files":['];
++        for (let i = 0; i < session.files.length; i++) {
++          deadline.check(); const f = session.files[i];
++          chunks.push((i ? ',' : '') + '{"path":' + JSON.stringify(f.pin.path) + ',"rawBase64":' + JSON.stringify(f.raw.subarray(0, f.pin.bytes).toString('base64')) + '}');
++        }
++        chunks.push('],"financialProfile":' + JSON.stringify(historicalCashPins.profile) + ',"schemaVersion":"historical-cash-private-byte-material-v1","symbol":' + JSON.stringify(symbol) + '}');
++        deadline.check(); const text = chunks.join('');
++        if (Buffer.byteLength(text, 'utf8') !== selected.carrier.bytes) throw new Error('financial_carrier_invalid');
++        const carrier = session.owner.buffer(selected.carrier.bytes); carrier.write(text, 'utf8');
++        deadline.check(); if (createHash('sha256').update(carrier).digest('hex') !== selected.carrier.sha256) throw new Error('financial_carrier_invalid');
++        await session.validate();
++        const readAt = new Date().toISOString();
++        const result = kind === 'historicalCash'
++          ? { projection: projectPinnedHistoricalCash(profile, symbol, carrier, deadline) }
++          : { material: projectScenarioCashMaterial(profile, symbol, carrier, readAt, deadline) };
++        await session.validate(); await session.owner.cleanup(deadline); deadline.check();
++        return { ...result, readerReceipt: { execution: 'new-financial-io-v1', files: selected.files.length, rawBytes: selected.aggregateBytes,
++          carrierBytes: selected.carrier.bytes, carrierSha256: selected.carrier.sha256, cleanupComplete: true, kernelIoCancellationConfirmed: false } };
++      } catch (error) { await session.owner.cleanup(deadline, error); throw error; }
++  };
++  return Object.freeze({
++    async legacy(pins: readonly FinancialIoPin[], deadline: FinancialIoDeadline = new FinancialIoDeadline()) {
++      checkFinancialIoInventory(root, pins, FINANCIAL_IO_LIMITS.legacyFiles);
++      const fixedPins = pins.map(p => Object.freeze({ path: p.path, bytes: p.bytes, sha256: p.sha256 }));
++      const session = await acquireFinancialIo(root, fixedPins, deadline, io);
++      try {
++        const records = new Map<string, { pin: FinancialIoPin; value: unknown }>();
++        for (const file of session.files) { deadline.check(); records.set(file.pin.path, { pin: file.pin, value: JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(file.raw.subarray(0, file.pin.bytes))) }); }
++        await session.validate(); await session.owner.cleanup(deadline); deadline.check();
++        return { records, readerReceipt: { execution: 'new-financial-io-v1', files: pins.length, cleanupComplete: true, kernelIoCancellationConfirmed: false } };
++      } catch (error) { await session.owner.cleanup(deadline, error); throw error; }
++    },
++    async historicalCash(profile: unknown, symbol: unknown, deadline: FinancialIoDeadline = new FinancialIoDeadline()) { const result = await fixed('historicalCash', profile, symbol, deadline); if (!('projection' in result) || !result.projection) throw new Error('financial_projection_invalid'); return { projection: result.projection, readerReceipt: result.readerReceipt }; },
++    async scenarioCash(profile: unknown, symbol: unknown, deadline: FinancialIoDeadline = new FinancialIoDeadline()) { const result = await fixed('scenarioCash', profile, symbol, deadline); if (!('material' in result) || !result.material) throw new Error('financial_material_invalid'); return { material: result.material, readerReceipt: result.readerReceipt }; },
++  });
++}
+diff --git a/web/src/lib/research-financial-clock.ts b/web/src/lib/research-financial-clock.ts
+new file mode 100644
+index 00000000..bf630173
+--- /dev/null
++++ b/web/src/lib/research-financial-clock.ts
+@@ -0,0 +1,10 @@
++/** Full nanosecond instant, finite calendar; no historical/PIT inference. */
++export function financialInstant(value: unknown): bigint {
++  if (typeof value !== 'string') throw new Error('financial_clock_invalid');
++  const p = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,9}))?(Z|([+-])(\d{2}):(\d{2}))$/u.exec(value);
++  if (!p) throw new Error('financial_clock_invalid');
++  const ms = Date.parse(`${p[1]}Z`), hours = Number(p[5] || 0), minutes = Number(p[6] || 0);
++  if (!Number.isFinite(ms) || new Date(ms).toISOString().slice(0,19) !== p[1] || hours > 23 || minutes > 59) throw new Error('financial_clock_invalid');
++  const offset = (p[4] === '-' ? -1 : 1) * (hours * 60 + minutes);
++  return BigInt(ms) * BigInt(1000000) + BigInt((p[2] || '').padEnd(9,'0')) - BigInt(offset) * BigInt(60000000000);
++}
+diff --git a/web/src/lib/research-financial-io-engine.ts b/web/src/lib/research-financial-io-engine.ts
+new file mode 100644
+index 00000000..48198d7a
+--- /dev/null
++++ b/web/src/lib/research-financial-io-engine.ts
+@@ -0,0 +1,71 @@
++import { constants, type BigIntStats } from 'node:fs';
++import { lstat, open, type FileHandle } from 'node:fs/promises';
++import path from 'node:path';
++import { createHash } from 'node:crypto';
++import { FINANCIAL_IO_LIMITS, FinancialIoOwner, type FinancialIoDeadline } from './research-financial-io-owner.ts';
++export type FinancialIoPin = Readonly<{ path: string; bytes: number; sha256: string }>;
++/** Trusted composition dependencies only. Never supplied by an HTTP/model body. */
++export type FinancialIoDependencies = { lstat: typeof lstat; open: typeof open; checkpoint?: (name: string) => void | Promise<void> };
++const nativeIo: FinancialIoDependencies = { lstat, open };
++function same(a: BigIntStats, b: BigIntStats) { return a.dev === b.dev && a.ino === b.ino && a.size === b.size && a.mtimeNs === b.mtimeNs && a.ctimeNs === b.ctimeNs; }
++function regular(s: BigIntStats, bytes: number) { if (!s.isFile() || s.size !== BigInt(bytes) || s.nlink !== BigInt(1)) throw new Error('financial_file_invalid'); }
++function directory(s: BigIntStats) { if (!s.isDirectory() || s.isSymbolicLink() || (s.mode & BigInt(0o022)) !== BigInt(0)) throw new Error('financial_parent_invalid'); }
++export function checkFinancialIoInventory(root: string, pins: readonly FinancialIoPin[], maxFiles: number) {
++  if (!path.isAbsolute(root) || root === '/' || root !== path.resolve(root) || pins.length < 1 || pins.length > maxFiles) throw new Error('financial_inventory_invalid');
++  let total = 0; const names = new Set<string>();
++  for (const p of pins) {
++    if (!p || Object.keys(p).sort().join(',') !== 'bytes,path,sha256' || !/^docs\/research\/[a-zA-Z0-9_./-]+\.json$/u.test(p.path)
++      || p.path.split('/').some(s => s === '.' || s === '..' || s === '') || !Number.isInteger(p.bytes) || p.bytes < 1
++      || p.bytes > FINANCIAL_IO_LIMITS.perFile || !/^[a-f0-9]{64}$/u.test(p.sha256) || names.has(p.path)) throw new Error('financial_pin_invalid');
++    names.add(p.path); total += p.bytes;
++  }
++  if (total > FINANCIAL_IO_LIMITS.aggregate) throw new Error('financial_read_bound');
++}
++/** Private engine session: all raw/FDs stay in ONE owner until confirmed cleanup.
++ * Engine is not an accepted caller-path or arbitrary carrier encoding API. */
++export async function acquireFinancialIo(root: string, pins: readonly FinancialIoPin[], deadline: FinancialIoDeadline, io: FinancialIoDependencies = nativeIo) {
++  checkFinancialIoInventory(root, pins, 9);
++  const owner = new FinancialIoOwner();
++  const parents = new Map<string, BigIntStats>();
++  const files: Array<{ handle: FileHandle; filename: string; before: BigIntStats; pin: FinancialIoPin; raw: Buffer }> = [];
++  const checkpoint = async (name: string) => { if (io.checkpoint) await deadline.wait(owner.start(async () => { deadline.check(); await io.checkpoint!(name); })); };
++  try {
++    deadline.check();
++    for (const pin of pins) {
++      const filename = path.join(root, pin.path); let current = path.parse(filename).root;
++      // Includes filesystem root itself, then every ancestor of the leaf.
++      for (const segment of ['', ...filename.slice(current.length).split(path.sep).slice(0, -1)]) {
++        if (segment) current = path.join(current, segment);
++        const stat = await deadline.wait(owner.start(() => io.lstat(current, { bigint: true }))); directory(stat);
++        const prior = parents.get(current); if (prior && !same(prior, stat)) throw new Error('financial_parent_replaced'); parents.set(current, stat);
++      }
++      const leaf = await deadline.wait(owner.start(() => io.lstat(filename, { bigint: true }))); regular(leaf, pin.bytes);
++      await checkpoint('before_open:' + pin.path);
++      const pending = owner.start(async () => { deadline.check(); return owner.opened(await io.open(filename, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK)); });
++      const handle = await deadline.wait(pending);
++      const before = await deadline.wait(owner.start(() => handle.stat({ bigint: true }))); regular(before, pin.bytes); if (!same(before, leaf)) throw new Error('financial_file_replaced');
++      const raw = owner.buffer(pin.bytes + 1), entry = { handle, filename, before, pin, raw }; files.push(entry);
++      let offset = 0;
++      while (offset < raw.length) {
++        const result = await deadline.wait(owner.start(() => handle.read(raw, offset, raw.length - offset, offset).finally(() => owner.wipeAfterRead(raw))));
++        if (!result.bytesRead) break; offset += result.bytesRead;
++      }
++      if (offset !== pin.bytes || createHash('sha256').update(raw.subarray(0, offset)).digest('hex') !== pin.sha256) throw new Error('financial_file_hash_or_length');
++      // Fatal UTF8 validation before any facade interprets raw JSON.
++      new TextDecoder('utf-8', { fatal: true }).decode(raw.subarray(0, offset));
++      await checkpoint('after_read:' + pin.path);
++    }
++    const validate = async () => {
++      deadline.check();
++      for (const [name, before] of parents) {
++        const after = await deadline.wait(owner.start(() => io.lstat(name, { bigint: true }))); directory(after); if (!same(before, after)) throw new Error('financial_parent_replaced');
++      }
++      for (const f of files) {
++        const fd = await deadline.wait(owner.start(() => f.handle.stat({ bigint: true }))), named = await deadline.wait(owner.start(() => io.lstat(f.filename, { bigint: true })));
++        regular(fd, f.pin.bytes); regular(named, f.pin.bytes); if (!same(f.before, fd) || !same(fd, named)) throw new Error('financial_file_replaced');
++      }
++    };
++    await validate();
++    return { files, validate, owner };
++  } catch (error) { await owner.cleanup(deadline, error); throw error; }
++}
+diff --git a/web/src/lib/research-financial-io-owner.ts b/web/src/lib/research-financial-io-owner.ts
+new file mode 100644
+index 00000000..84f90688
+--- /dev/null
++++ b/web/src/lib/research-financial-io-owner.ts
+@@ -0,0 +1,80 @@
++import { performance } from 'node:perf_hooks';
++import type { FileHandle } from 'node:fs/promises';
++
++/** NEW candidate execution closure; not legacy 77b1 or a DB/model lease. */
++export const FINANCIAL_IO_LIMITS = Object.freeze({ legacyFiles: 8, perFile: 524288, aggregate: 1048576, projection: 160000, material: 262144, deadlineMs: 10000 });
++export class FinancialIoDeadline {
++  readonly end = performance.now() + FINANCIAL_IO_LIMITS.deadlineMs;
++  readonly controller = new AbortController();
++  check() { if (this.controller.signal.aborted || performance.now() >= this.end) { this.controller.abort(); throw new Error('financial_deadline'); } }
++  async wait<T>(work: PromiseLike<T>): Promise<T> {
++    this.check(); let timer: ReturnType<typeof setTimeout> | undefined;
++    try {
++      const value = await Promise.race([Promise.resolve(work), new Promise<never>((_, reject) => {
++        timer = setTimeout(() => { this.controller.abort(); reject(new Error('financial_deadline')); }, Math.max(1, this.end - performance.now()));
++      })]);
++      this.check(); return value;
++    } finally { clearTimeout(timer); }
++  }
++}
++// Nonconfigurable realm registry: query-imported/bundled copies cannot create a
++// second slot. Different engine generations fail closed rather than overwrite.
++// Separate processes/realms require a later cutover/supervisor; not live enabled.
++const key = Symbol.for('stockinsider.new-financial-io-owner.v1');
++const identity = 'oct14-new-financial-io-owner-v1';
++type Slot = { identity: string; owner: FinancialIoOwner | null };
++const globalRecord = globalThis as unknown as Record<symbol, Slot>;
++let slot = globalRecord[key];
++if (!slot) { slot = Object.seal({ identity, owner: null }); Object.defineProperty(globalThis, key, { value: slot, writable: false, configurable: false }); }
++if (slot.identity !== identity) throw new Error('financial_owner_generation_conflict');
++export function financialIoStatus() { return slot.owner?.status() ?? { cleanupComplete: true, recoveryRequired: false, pendingOperations: 0, unconfirmedHandles: 0, ownedBuffers: 0, cleanupFailed: false, kernelIoCancellationConfirmed: false }; }
++export class FinancialIoOwner {
++  private pending = new Set<Promise<unknown>>();
++  private handles = new Map<FileHandle, { closed: boolean; closing?: Promise<void> }>();
++  private buffers = new Set<Buffer>();
++  private cleaning = false;
++  private cleanupFailed = false;
++  constructor() { if (slot.owner) throw new Error('financial_cleanup_or_read_in_progress'); slot.owner = this; }
++  track<T>(work: Promise<T>): Promise<T> {
++    this.pending.add(work);
++    work.then(() => { this.pending.delete(work); this.release(); }, () => { this.pending.delete(work); this.release(); });
++    return work;
++  }
++  start<T>(work: () => Promise<T>): Promise<T> { return this.track(Promise.resolve().then(work)); }
++  buffer(bytes: number) { const raw = Buffer.alloc(bytes); this.buffers.add(raw); return raw; }
++  wipeAfterRead(raw: Buffer) { if (this.cleaning) raw.fill(0); }
++  opened(handle: FileHandle) { this.handles.set(handle, { closed: false }); if (this.cleaning) this.closeHandle(handle); return handle; }
++  private closeHandle(handle: FileHandle) {
++    const state = this.handles.get(handle)!;
++    if (!state.closing) {
++      state.closing = Promise.resolve().then(() => handle.close()).then(() => { state.closed = true; }, error => { this.cleanupFailed = true; throw error; });
++      this.track(state.closing); // Both rejection and late settlement always observed.
++    }
++    return state.closing;
++  }
++  private release() {
++    if (this.cleaning && !this.cleanupFailed && !this.pending.size && [...this.handles.values()].every(s => s.closed)) {
++      for (const raw of this.buffers) raw.fill(0); this.buffers.clear();
++      if (slot.owner === this) slot.owner = null;
++    }
++  }
++  status() {
++    return { cleanupComplete: slot.owner !== this, recoveryRequired: slot.owner === this, pendingOperations: this.pending.size,
++      unconfirmedHandles: [...this.handles.values()].filter(s => !s.closed).length, ownedBuffers: this.buffers.size,
++      cleanupFailed: this.cleanupFailed, kernelIoCancellationConfirmed: false };
++  }
++  async cleanup(deadline: FinancialIoDeadline, ...failure: [] | [unknown]) {
++    this.cleaning = true;
++    for (const raw of this.buffers) raw.fill(0);
++    for (const h of this.handles.keys()) this.closeHandle(h);
++    const work = (async () => { while (this.pending.size) await Promise.allSettled([...this.pending]); this.release(); if (!this.status().cleanupComplete) throw new Error('financial_cleanup_failed'); })();
++    work.catch(() => {});
++    try { await deadline.wait(work); }
++    catch (cleanupError) {
++      const primary = failure.length ? failure[0] : cleanupError;
++      const error = primary instanceof Error ? primary : new Error('financial_primary_failure', { cause: primary });
++      Object.assign(error, { financialCleanup: this.status() }); throw error;
++    }
++    if (failure.length) throw failure[0];
++  }
++}
+diff --git a/web/src/lib/research-historical-cash-pins.ts b/web/src/lib/research-historical-cash-pins.ts
+new file mode 100644
+index 00000000..5a9f2aee
+--- /dev/null
++++ b/web/src/lib/research-historical-cash-pins.ts
+@@ -0,0 +1,200 @@
++/* Exact candidate-source inventory; private bytes only, no source authority. */
++function freeze<T>(value:T):T { if(value && typeof value === "object") { Object.values(value).forEach(freeze); Object.freeze(value); } return value; }
++export const historicalCashPins = freeze({
++  "profile": "oct14_historical_cash_v1",
++  "sourceCommit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
++  "packetPath": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
++  "limits": {
++    "carrier": 1048576,
++    "perFile": 524288,
++    "aggregate": 1048576,
++    "projection": 160000
++  },
++  "companies": {
++    "2409": {
++      "carrier": { "bytes": 931023, "sha256": "823b80038e13779f4155327b3cd7d36b1dc5a833490da1bf692d33845c239590" },
++      "files": [
++        {
++          "path": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
++          "bytes": 113823,
++          "sha256": "6426ba0caaac2a446593a632ebce50f93e7851f4fdb4025ff427c2f011961209"
++        },
++        {
++          "path": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
++          "bytes": 19837,
++          "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf"
++        },
++        {
++          "path": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
++          "bytes": 40271,
++          "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb"
++        },
++        {
++          "path": "docs/research/2026-10-08-auo/dataset.json",
++          "bytes": 86638,
++          "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
++        },
++        {
++          "path": "docs/research/2026-10-08-auo-market/dataset.json",
++          "bytes": 393280,
++          "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
++        },
++        {
++          "path": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
++          "bytes": 2910,
++          "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189"
++        },
++        {
++          "path": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
++          "bytes": 3549,
++          "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6"
++        },
++        {
++          "path": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
++          "bytes": 6599,
++          "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
++        },
++        {
++          "path": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
++          "bytes": 30651,
++          "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
++        }
++      ],
++      "modelCanonicalHash": "cf7419b2204419dc1aca590bc355df36bb19600c5beaf2905c6819f5a040b57d",
++      "metrics": [
++        "pretax",
++        "depreciation",
++        "amortization",
++        "fvGain",
++        "interestExpenseAdjustment",
++        "interestIncomeAdjustment",
++        "dividendIncomeAdjustment",
++        "shareCompensation",
++        "equityMethodAdjustment",
++        "ppeDisposalGainAdjustment",
++        "rouDisposalLoss",
++        "heldForSaleGainAdjustment",
++        "investmentGainAdjustment",
++        "impairment",
++        "unrealizedFx",
++        "otherAdjustment",
++        "receivables",
++        "relatedReceivables",
++        "inventory",
++        "contractCosts",
++        "otherOperatingAssets",
++        "contractLiabilities",
++        "payables",
++        "relatedPayables",
++        "provisions",
++        "otherOperatingLiabilities",
++        "generatedCash",
++        "interestReceived",
++        "dividendReceived",
++        "interestPaid",
++        "taxPaid",
++        "operatingCash",
++        "ppeCash",
++        "intangibleCash",
++        "ppeDisposalCash",
++        "heldForSaleDisposalCash",
++        "subsidiaryDisposalCash",
++        "investingCash",
++        "shortBorrowings",
++        "shortRepayments",
++        "longBorrowings",
++        "longRepayments",
++        "leasePrincipal",
++        "financingCash",
++        "fxCash",
++        "cashChange",
++        "openingCash",
++        "closingCash",
++        "revenue",
++        "netProfit",
++        "ownersNetProfit",
++        "nonControllingNetProfit"
++      ],
++      "issuerIndex": 0,
++      "aggregateBytes": 697558
++    },
++    "2383": {
++      "carrier": { "bytes": 353803, "sha256": "5fff5dd7e33ae7da30d8b72890f13414866b7820f54685af38b5cdd95d2b5564" },
++      "files": [
++        {
++          "path": "docs/research/2026-10-08-emc-company-model/model-results.json",
++          "bytes": 71848,
++          "sha256": "30028ccf9e48d7cda79f55a8b6ffd5141bad513e277894c8e360479e606b6786"
++        },
++        {
++          "path": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
++          "bytes": 33734,
++          "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
++        },
++        {
++          "path": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
++          "bytes": 110526,
++          "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
++        },
++        {
++          "path": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
++          "bytes": 10693,
++          "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
++        },
++        {
++          "path": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
++          "bytes": 3630,
++          "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
++        },
++        {
++          "path": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
++          "bytes": 3671,
++          "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
++        },
++        {
++          "path": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
++          "bytes": 30651,
++          "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
++        }
++      ],
++      "modelCanonicalHash": "d10858110edee1dd2760791e00c8b0eea3dc4a80b6d643db70b62216541dc879",
++      "metrics": [
++        "pretax",
++        "nonCashAdjustments",
++        "operatingAssetChange",
++        "operatingLiabilityChange",
++        "workingCapital",
++        "adjustmentsTotal",
++        "receivables",
++        "notesReceivable",
++        "inventory",
++        "payables",
++        "generatedCash",
++        "interestReceived",
++        "interestPaid",
++        "taxPaid",
++        "operatingCash",
++        "ppeCash",
++        "intangibleCash",
++        "rouCash",
++        "ppeDisposalCash",
++        "investingCash",
++        "shortBorrowingsNet",
++        "longBorrowings",
++        "longRepayments",
++        "leasePrincipal",
++        "financingCash",
++        "fxCash",
++        "cashChange",
++        "openingCash",
++        "closingCash",
++        "revenue",
++        "netProfit",
++        "ownersNetProfit",
++        "nonControllingNetProfit"
++      ],
++      "issuerIndex": 1,
++      "aggregateBytes": 264753
++    }
++  }
++} as const);
+diff --git a/web/src/lib/research-historical-cash-projection.ts b/web/src/lib/research-historical-cash-projection.ts
+new file mode 100644
+index 00000000..af9928e8
+--- /dev/null
++++ b/web/src/lib/research-historical-cash-projection.ts
+@@ -0,0 +1,146 @@
++import { createHash } from 'node:crypto';
++import { calculateHistoricalCash } from './research-historical-cash-core.ts';
++import { historicalCashPins } from './research-historical-cash-pins.ts';
++
++type Row = Record<string, unknown>;
++type Deadline = { check(): void };
++const sha = (value: Uint8Array | string) => createHash('sha256').update(value).digest('hex');
++function canonical(value: unknown): string {
++  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
++  if (value && typeof value === 'object') return `{${Object.keys(value).sort().map(k => `${JSON.stringify(k)}:${canonical((value as Row)[k])}`).join(',')}}`;
++  return JSON.stringify(value);
++}
++function ensure(value: unknown): asserts value { if (!value) throw new Error('historical_cash_projection_invalid'); }
++function row(value: unknown): Row { ensure(value !== null && typeof value === 'object' && !Array.isArray(value)); return value as Row; }
++function freeze<T>(value: T): T {
++  if (value && typeof value === 'object') { Object.values(value).forEach(freeze); Object.freeze(value); }
++  return value;
++}
++// Capture realm intrinsics; caller view metadata, methods and proxies are never read.
++const isView = ArrayBuffer.isView;
++const typedArrayPrototype = Object.getPrototypeOf(Uint8Array.prototype);
++const nativeByteLength = Object.getOwnPropertyDescriptor(typedArrayPrototype, 'byteLength')!.get!;
++const nativeKind = Object.getOwnPropertyDescriptor(typedArrayPrototype, Symbol.toStringTag)!.get!;
++const nativeBuffer = Object.getOwnPropertyDescriptor(typedArrayPrototype, 'buffer')!.get!;
++const arrayBufferLength = Object.getOwnPropertyDescriptor(ArrayBuffer.prototype, 'byteLength')!.get!;
++const arrayBufferResizable = Object.getOwnPropertyDescriptor(ArrayBuffer.prototype, 'resizable')?.get;
++const nativeSet = Uint8Array.prototype.set;
++const nativeFill = Uint8Array.prototype.fill;
++const decodeBase64 = Buffer.from;
++function copyCarrier(value: unknown, expected: number): Uint8Array {
++  ensure(isView(value) && nativeKind.call(value) === 'Uint8Array');
++  const backing = nativeBuffer.call(value);
++  // This intrinsic throws for SharedArrayBuffer; no caller property access.
++  arrayBufferLength.call(backing);
++  ensure(!arrayBufferResizable?.call(backing));
++  ensure(expected <= historicalCashPins.limits.carrier && nativeByteLength.call(value) === expected);
++  const owned = new Uint8Array(expected);
++  try { nativeSet.call(owned, value as Uint8Array); return owned; }
++  catch (error) { nativeFill.call(owned, 0); throw error; }
++}
++const capitalKeys = ['instant', 'ownersEquityTwdThousands', 'nonControllingEquityTwdThousands', 'groupEquityTwdThousands',
++  'paidCapitalTwdThousands', 'parTwd', 'issuedSharesThousands', 'treasuryCarryingAmountTwdThousands', 'treasurySharesThousands'] as const;
++const derivedKeys = ['nonCashAdjustments', 'workingCapitalCashEffect', 'cfo', 'groupNetProfit', 'cfoLessPpeCashOutlay',
++  'cfoLessPpeAndIntangibleCashOutlay', 'netBorrowingCash', 'cashChange', 'closingCash'] as const;
++
++/** BREAKING unpublished internal API: one exact canonical UTF8 Uint8Array or
++ * Buffer carrier. Maps and JS metadata are outside this byte-only input domain.
++ * This is not a filesystem reader, prepared input or source/publication authority. */
++export function projectPinnedHistoricalCash(profile: unknown, symbol: unknown, material: unknown, deadline: Deadline) {
++  ensure(profile === historicalCashPins.profile && (symbol === '2409' || symbol === '2383'));
++  deadline.check();
++  const selected = historicalCashPins.companies[symbol];
++  const owned = new Map<string, Uint8Array>();
++  let carrier: Uint8Array | null = null;
++  try {
++    carrier = copyCarrier(material, selected.carrier.bytes);
++    deadline.check();
++    ensure(sha(carrier) === selected.carrier.sha256);
++    deadline.check();
++    const serialized = new TextDecoder('utf-8', { fatal: true }).decode(carrier);
++    deadline.check();
++    const envelope = row(JSON.parse(serialized));
++    deadline.check();
++    ensure(envelope.schemaVersion === 'historical-cash-private-byte-material-v1'
++      && envelope.financialProfile === profile && envelope.symbol === symbol
++      && Array.isArray(envelope.files) && envelope.files.length === selected.files.length);
++    let total = 0;
++    for (let i = 0; i < selected.files.length; i++) {
++      deadline.check(); const pin = selected.files[i], entry = row(envelope.files[i]);
++      ensure(entry.path === pin.path && typeof entry.rawBase64 === 'string'
++        && pin.bytes <= historicalCashPins.limits.perFile);
++      const raw = decodeBase64(entry.rawBase64, 'base64');
++      owned.set(pin.path, raw); // Register the only decode buffer before any failing check.
++      deadline.check();
++      total += raw.byteLength;
++      ensure(raw.byteLength === pin.bytes && total <= historicalCashPins.limits.aggregate && sha(raw) === pin.sha256);
++    }
++    ensure(total === selected.aggregateBytes);
++    const parse = (name: string) => { deadline.check(); return row(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(owned.get(name)!))); };
++    const model = parse(selected.files[0].path), packet = parse(historicalCashPins.packetPath);
++    const { canonicalHash, inputManifest, ...modelBody } = model;
++    ensure(model.symbol === symbol && canonicalHash === selected.modelCanonicalHash && sha(canonical(modelBody)) === canonicalHash);
++    const manifest = selected.files.slice(1).map(p => ({ file: p.path, bytes: p.bytes, sha256: p.sha256 }));
++    const cash = row(model.historicalCashFlow);
++    ensure(canonical(inputManifest) === canonical(manifest) && canonical(cash.sourceInputManifest) === canonical(manifest));
++    ensure(packet.schemaVersion === 1 && packet.status === 'research_addendum_not_published'
++      && cash.schemaVersion === 'historical-group-cash-bridge-v1' && cash.symbol === symbol
++      && cash.sourcePacketSha256 === selected.files.at(-1)!.sha256 && cash.extractionAvailableAt === packet.extractionAvailableAt
++      && model.asOf === packet.extractionAvailableAt && cash.noFutureCash === true && cash.forecastCash === null
++      && cash.valuationApproved === false && cash.technicalAdmission === false);
++    const policy = row(packet.policy);
++    ensure(policy.newExtractionBackdated === false && policy.valuationApproved === false && policy.published === false && policy.investmentAdmission === false);
++    ensure(Array.isArray(packet.issuers) && packet.issuers.length === 2);
++    const issuer = row(packet.issuers[selected.issuerIndex]), facts = row(issuer.facts), modelFacts = row(cash.sourceFacts);
++    ensure(issuer.stock === symbol && issuer.consolidated === true && issuer.unit === 'TWD_thousands'
++      && issuer.grain === 'six-month cumulative flow, not standalone Q2');
++    ensure(canonical(Object.keys(facts)) === canonical(selected.metrics) && canonical(Object.keys(modelFacts)) === canonical(selected.metrics));
++    const source = row(issuer.source);
++    ensure(canonical(cash.originalSource) === canonical(source));
++    const operands: Record<string, unknown> = {};
++    const references = selected.metrics.map(metric => {
++      deadline.check(); const fact = row(facts[metric]), modelFact = row(modelFacts[metric]);
++      const pointer = `/issuers/${selected.issuerIndex}/facts/${metric}/values`;
++      ensure(canonical(fact.values) === canonical(modelFact.values) && fact.label === modelFact.label
++        && fact.pdfPage === modelFact.pdfPage && fact.sourceLine === modelFact.sourceLine && modelFact.sourceJsonPointer === pointer);
++      ensure(typeof fact.sourceLine === 'string' && typeof fact.label === 'string' && Number.isInteger(fact.pdfPage));
++      operands[metric] = fact.values;
++      return { metric, label: fact.label, periodKind: 'half_year_cumulative', unit: 'TWD_thousands', values: fact.values,
++        packetLocator: { file: historicalCashPins.packetPath, fileSha256: cash.sourcePacketSha256, jsonPointer: pointer },
++        modelLocator: { file: selected.files[0].path, fileSha256: selected.files[0].sha256, jsonPointer: `/historicalCashFlow/sourceFacts/${metric}/values` },
++        sourceLineSha256: sha(fact.sourceLine), pdfPage: fact.pdfPage, rawPdfSha256: source.sha256 };
++    });
++    const packetCapital = symbol === '2409' ? row(packet.auoJune30Capital) : null;
++    const capital = packetCapital ? Object.fromEntries(capitalKeys.map(key => [key, packetCapital[key]])) : null;
++    if (packetCapital) for (const key of capitalKeys) ensure(canonical(row(cash.historicalCapital)[key]) === canonical(packetCapital[key]));
++    else ensure(cash.historicalCapital === null);
++    deadline.check();
++    const calculation = calculateHistoricalCash({ schemaVersion: 'historical-cash-operands-v1', symbol, unit: issuer.unit,
++      consolidated: issuer.consolidated, grain: 'half_year_cumulative', periods: issuer.periods, facts: operands, capital });
++    ensure(Array.isArray(cash.rows) && cash.rows.length === 2);
++    calculation.rows.forEach((r, i) => {
++      const prior = row((cash.rows as unknown[])[i]); ensure(r.period === prior.period);
++      for (const key of derivedKeys) ensure(r.calculated[key] === prior[key]);
++      ensure(Math.abs(r.ratio.value! - Number(prior.cfoDividedByGroupNetProfit)) <= 1e-9);
++      ensure(r.calculated.rouCashAcquisitionSeparate === prior.rouCashAcquisitionSeparate);
++    });
++    const projection = { schemaVersion: 'historical-cash-pinned-projection-v1', financialProfile: historicalCashPins.profile,
++      symbol, status: 'unsealed_private_candidate', sourceCommit: historicalCashPins.sourceCommit,
++      sourceManifest: selected.files.map(p => ({ ...p })), inventorySha256: sha(canonical(selected.files)),
++      modelCanonicalHash: canonicalHash, originalModelCutoff: model.originalModelAsOf,
++      extractionAvailableAt: packet.extractionAvailableAt, rawSourceObservedAt: source.observedAt,
++      rawPdfSha256: source.sha256, sourcePublicationVerified: false, rawPdfBytesRead: false,
++      inventoryBytesVerified: true, filesystemCustodyVerified: false, references, calculation,
++      capitalReferences: packetCapital ? capitalKeys.map(key => ({ field: key, jsonPointer: `/auoJune30Capital/${key}`,
++        packetSha256: cash.sourcePacketSha256, instant: '2026-06-30',
++        unit: key === 'parTwd' ? 'TWD' : key.includes('Shares') ? 'thousand_shares' : key === 'instant' ? 'date' : 'TWD_thousands' })) : [],
++      financialVerified: false, dispatchReady: false, modelDispatched: false, publishableResearch: false,
++      researchQualified: false, historicalPITEligible: false, strategyApproved: false, entryEligible: false, published: false,
++      valuationApproved: false, technicalAdmission: false, noFutureCash: true, forecastCash: null };
++    deadline.check(); const json = JSON.stringify(projection);
++    ensure(Buffer.byteLength(json, 'utf8') <= historicalCashPins.limits.projection);
++    const result = { ...projection, projectionSha256: sha(canonical(projection)) };
++    ensure(Buffer.byteLength(JSON.stringify(result), 'utf8') <= historicalCashPins.limits.projection);
++    deadline.check(); return freeze(result);
++  } finally { for (const raw of owned.values()) nativeFill.call(raw, 0); if (carrier) nativeFill.call(carrier, 0); }
++}
+diff --git a/web/src/lib/research-scenario-cash-material.ts b/web/src/lib/research-scenario-cash-material.ts
+new file mode 100644
+index 00000000..dee2ff1f
+--- /dev/null
++++ b/web/src/lib/research-scenario-cash-material.ts
+@@ -0,0 +1,167 @@
++import { createHash } from 'node:crypto';
++import { historicalCashPins } from './research-historical-cash-pins.ts';
++import { projectPinnedHistoricalCash } from './research-historical-cash-projection.ts';
++import { financialInstant } from './research-financial-clock.ts';
++import { recalculateResearchBusinessScenarios } from './research-business-calculator.ts';
++type Row = Record<string, unknown>;
++type FinancialFilePin = { path: string; bytes: number; sha256: string };
++type Deadline = { check(): void };
++const PERIODS = ['2026Q3','2026Q4','2027Q1','2027Q2','2027Q3','2027Q4'];
++const SEGMENTS = ['display','mobility','vertical','other'];
++function ensure(ok: unknown): asserts ok { if (!ok) throw new Error('research_scenario_cash_material_invalid'); }
++function row(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }
++function list(value: unknown, limit = 64): unknown[] { ensure(Array.isArray(value) && value.length <= limit); return value; }
++function number(value: unknown): number { ensure(typeof value === 'number' && Number.isFinite(value)); return value; }
++function canonical(value: unknown): string {
++ if(Array.isArray(value))return `[${value.map(canonical).join(',')}]`;
++ if(value && typeof value==='object')return `{${Object.keys(value).sort().map(k=>`${JSON.stringify(k)}:${canonical((value as Row)[k])}`).join(',')}}`;
++ return JSON.stringify(value);
++}
++function hash(value: unknown) { return createHash('sha256').update(canonical(value)).digest('hex'); }
++function assertFinancialJsonBytes(value: unknown, bytes: number) { const text=JSON.stringify(value);ensure(Buffer.byteLength(text,'utf8')<=bytes);return text; }
++function freeze<T>(value:T):T {if(value && typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;}
++const isView=ArrayBuffer.isView,typed=Object.getPrototypeOf(Uint8Array.prototype);
++const kind=Object.getOwnPropertyDescriptor(typed,Symbol.toStringTag)!.get!,length=Object.getOwnPropertyDescriptor(typed,'byteLength')!.get!,backing=Object.getOwnPropertyDescriptor(typed,'buffer')!.get!;
++const backingLength=Object.getOwnPropertyDescriptor(ArrayBuffer.prototype,'byteLength')!.get!,resizable=Object.getOwnPropertyDescriptor(ArrayBuffer.prototype,'resizable')?.get;
++const nativeSet=Uint8Array.prototype.set,nativeFill=Uint8Array.prototype.fill,decodeBase64=Buffer.from;
++function copyMaterial(value:unknown,expected:number):Uint8Array {
++ ensure(isView(value)&&kind.call(value)==='Uint8Array');const store=backing.call(value);backingLength.call(store);ensure(!resizable?.call(store));
++ ensure(expected<=historicalCashPins.limits.carrier&&length.call(value)===expected);const owned=new Uint8Array(expected);
++ try{nativeSet.call(owned,value as Uint8Array);return owned;}catch(error){nativeFill.call(owned,0);throw error;}
++}
++function project(symbol: '2409'|'2383', files: Map<string,{pin:FinancialFilePin;value:unknown}>, now: string) {
++  const pins = historicalCashPins.companies[symbol].files, modelFile = pins[0].path, model = row(files.get(modelFile)?.value);
++  ensure(model.symbol === symbol && model.unit === 'TWD_million; EPS TWD/share' && model.originalModelAsOf === (symbol==='2409'?'2026-10-08T10:20:00Z':'2026-10-08T12:12:00Z') && typeof model.asOf === 'string' && financialInstant(model.asOf) <= financialInstant(now));
++  const manifest = pins.slice(1).map(p=>({file:p.path,bytes:p.bytes,sha256:p.sha256}));
++  ensure(hash(model.inputManifest) === hash(manifest));
++  const {canonicalHash,inputManifest,...originalMaterial} = model; void inputManifest;
++  ensure(canonicalHash === hash(originalMaterial));
++  const get = (ending: string) => { const selected = pins.filter(p=>p.path.endsWith(ending)); ensure(selected.length===1); return {file:selected[0],data:row(files.get(selected[0].path)?.value)}; };
++  const financial = get('/financial-relay.json'), notes = symbol==='2383'?get('/financial-notes-relay.json'):financial;
++  ensure(financial.data.symbol === symbol && financial.data.amountUnit === 'TWD_thousands');
++  ensure(typeof financial.data.recordedAt === 'string' && financialInstant(financial.data.recordedAt)<=financialInstant(model.asOf));
++  ensure(typeof notes.data.recordedAt === 'string' && financialInstant(notes.data.recordedAt)<=financialInstant(model.asOf));
++  const reports = list(financial.data.reports,16).map(row), report = reports.find(r=>list(r.columnPeriods,4).includes('2026Q2'));
++  ensure(report); const reportedFacts: Row[]=[];
++  const fact = (value: unknown, metric:string, period:string, unit:string, pointer:string, input:{file:FinancialFilePin;data:Row}, page:unknown, column:unknown, source:unknown) => {
++    number(value); const s = source && typeof source === 'object'?row(source):{};
++    reportedFacts.push({metric,period,periodKind:period.includes('H')?'half_year_cumulative':'quarter',unit,value,status:'reported_attributed_relay',
++      signConvention:'printed_signed_value',locator:{file:input.file.path,fileSha256:input.file.sha256,jsonPointer:pointer,pdfPage:page??null,column:column??null},
++      source:{url:s.url??null,rawSha256:s.sha256??null,rawObservedAt:s.observedAt??null,attemptedAt:s.attemptedAt??null,extractionRecordedAt:input.data.recordedAt??null},
++      locallyReadAt:now,databaseFinancialAdmissionAt:null,verificationAttribution:'root public-reader relay with unsigned scoped data review; VM verifies Git bytes only'});
++  };
++  const reportIndex=reports.indexOf(report), periods=list(report.columnPeriods,4), columns=row(report.columns);
++  for(const period of ['2026Q2','2026H1']){
++    const col=periods.indexOf(period);ensure(col>=0);
++    for(const [metric,values]of Object.entries(columns)){
++      // The bounded projection keeps the group operating-expense total; its
++      // three disclosed components remain in the pinned relay, not this view.
++      if (period==='2026H1' && metric.includes('Eps')) continue;
++      if (['sellingExpenses','administrativeExpenses','researchDevelopmentExpenses'].includes(metric)) continue;
++      const valuesArray=list(values,4);ensure(valuesArray.length===periods.length);
++      fact(valuesArray[col],metric,period,metric.includes('Eps')?'TWD_per_share':'TWD_thousands',`/reports/${reportIndex}/columns/${metric}/${col}`,financial,report.pdfPage,period,report.source);
++    }
++  }
++  let ordinary: number, q3: number;
++  const monthlyFacts: Row[] = []; let monthlyBridge: Row;
++  let q2Segments: number[]=[];
++  if(symbol==='2409'){
++    const eps=row(financial.data.epsNotes);ordinary=number(list(eps.basicWeightedSharesThousands,4)[0])/1000;
++    for(const key of ['basicWeightedSharesThousands','dilutedWeightedSharesThousands'])fact(list(eps[key],4)[0],key,'2026Q2','thousand_shares',`/epsNotes/${key}/0`,financial,eps.pdfPage,'2026Q2',report.source);
++    const segments=list(financial.data.segments,3).map(row);ensure(segments.length===3);
++    for(let i=0;i<segments.length;i++){
++      const s=segments[i];ensure(['2026Q2','2026H1','2026Q1'].includes(String(s.period)));
++      for(const metric of ['revenue','operatingProfit']){
++        const values=list(s[metric],4);ensure(values.length===4);
++        for(let j=0;j<4;j++)fact(values[j],SEGMENTS[j]+':'+metric,String(s.period),'TWD_thousands',`/segments/${i}/${metric}/${j}`,financial,s.pdfPage,SEGMENTS[j],reports.find(r=>r.label===s.sourceLabel)?.source);
++      }
++      if(s.period==='2026Q2')q2Segments=list(s.revenue,4).map(x=>number(x)/1000);
++    }
++    ensure(q2Segments.length===4);
++    const monthly=get('2026-10-08-auo/dataset.json');const selected=list(monthly.data.monthlyConsolidatedRevenue,24).map(row).filter(r=>['2026-07','2026-08','2026-09'].includes(String(r.period)));
++    ensure(selected.length===3&&new Set(selected.map(r=>r.period)).size===3&&selected.every(r=>r.unit==='TWD_million'&&r.consolidated===true));
++    const rows=list(monthly.data.monthlyConsolidatedRevenue,24);
++    for(const m of selected){
++      ensure(typeof m.observedAt==='string' && financialInstant(m.observedAt)<=financialInstant(model.asOf));
++      monthlyFacts.push({metric:'monthlyConsolidatedRevenue',period:m.period,periodKind:'month',unit:m.unit,value:number(m.reportedRevenue),status:'reported_attributed_relay',signConvention:'positive_revenue',
++        locator:{file:monthly.file.path,fileSha256:monthly.file.sha256,jsonPointer:`/monthlyConsolidatedRevenue/${rows.indexOf(m)}/reportedRevenue`},
++        source:{url:m.sourceUrl,rawObservedAt:m.observedAt,extractionRecordedAt:null,publication:{precision:'unknown',value:null}},roundingInterval:m.roundingInterval,locallyReadAt:now});
++    }
++    q3=selected.reduce((n,r)=>n+number(r.reportedRevenue),0);
++    const intervals=selected.map(m=>row(m.roundingInterval));
++    monthlyBridge={metric:'q3MonthlyRevenueAnchor',period:'2026Q3',periodKind:'quarter_monthly_sum',unit:'TWD_million',value:q3,status:'derived_not_reported_q3_income_statement',
++      formula:'sum(reported July, August, September TWD million)',conversionDivisor:1,operands:monthlyFacts.map(m=>m.locator),namedOperands:monthlyFacts.map(m=>({name:`reportedMonthlyRevenue:${m.period}`,value:m.value,unit:m.unit,locator:m.locator,source:m.source})),
++      roundingInterval:{lower:intervals.reduce((n,x)=>n+number(Number(x.lower)),0),upper:intervals.reduce((n,x)=>n+number(Number(x.upper)),0),lowerInclusive:true,upperInclusive:false},
++      reconciliation:'monthly printed rounding retained; no Q3 financial statement reconciliation or EPS inferred'};
++  }else{
++    const eps=row(notes.data.earningsPerShareNotes);ordinary=number(list(eps.basicWeightedShares,4)[0])/1000;
++    for(const metric of ['basicWeightedShares','dilutedWeightedShares','basicOwnersProfit','dilutedOwnersProfit','convertibleAfterTaxNumeratorAdjustment'])fact(list(eps[metric],4)[0],metric,'2026Q2',metric.includes('Shares')?'thousand_shares':'TWD_thousands',`/earningsPerShareNotes/${metric}/0`,notes,notes.data.earningsPerShareNotes && row(notes.data.earningsPerShareNotes).pdfPages,'2026Q2',notes.data.source);
++    const monthly=row(financial.data.monthlyRevenue);ensure(monthly.unit==='TWD');const selected=list(monthly.rows,24).map(row).filter(r=>['2026-07','2026-08','2026-09'].includes(String(r.month)));
++    ensure(selected.length===3&&new Set(selected.map(r=>r.month)).size===3);
++    const rows=list(monthly.rows,24),source=row(monthly.source);
++    ensure(typeof source.observedAt==='string' && financialInstant(source.observedAt)<=financialInstant(financial.data.recordedAt));
++    for(const m of selected)monthlyFacts.push({metric:'monthlyConsolidatedRevenue',period:m.month,periodKind:'month',unit:'TWD',value:number(m.revenueTwd),status:'reported_attributed_relay',signConvention:'positive_revenue',
++      locator:{file:financial.file.path,fileSha256:financial.file.sha256,jsonPointer:`/monthlyRevenue/rows/${rows.indexOf(m)}/revenueTwd`},
++      source:{url:source.url,rawSha256:source.sha256,attemptedAt:source.attemptedAt,rawObservedAt:source.observedAt,extractionRecordedAt:financial.data.recordedAt,
++        publication:{precision:'date_without_verified_zone',value:monthly.documentProducedDate??source.documentProducedDate??null}},roundingInterval:null,locallyReadAt:now});
++    q3=selected.reduce((n,r)=>n+number(r.revenueTwd),0)/1e6;
++    monthlyBridge={metric:'q3MonthlyRevenueAnchor',period:'2026Q3',periodKind:'quarter_monthly_sum',unit:'TWD_million',value:q3,status:'derived_not_reported_q3_income_statement',
++      formula:'sum(reported July, August, September TWD) / 1000000',conversionDivisor:1000000,operands:monthlyFacts.map(m=>m.locator),namedOperands:monthlyFacts.map(m=>({name:`reportedMonthlyRevenue:${m.period}`,value:m.value,unit:m.unit,locator:m.locator,source:m.source})),roundingInterval:null,
++      reconciliation:'preliminary monthly totals differ from quarterly reported revenue; unresolved differences retained, no forced adjustment or EPS inferred',historicalReconciliation:monthly.reconciliation};
++  }
++  ensure(reportedFacts.length+monthlyFacts.length+1<=64);
++  const scenarios=list(model.scenarios,3).map((s,i)=>{
++    const scenario=row(s),a=row(scenario.assumptions);ensure(scenario.id===['bear','base','bull'][i]);
++    const growth=list(a.growth,5);ensure(growth.length===5);
++    let previous = symbol==='2409'?q2Segments.map((n,j)=>n*number(list(a.q3Weights,4)[j])):[q3];
++    if(symbol==='2409'){const scale=q3/previous.reduce((n,x)=>n+x,0);previous=previous.map(n=>n*scale);}
++    const quarters=PERIODS.map((period,index)=>{
++      if(index)previous=previous.map((n,j)=>n*(1+number(symbol==='2409'?list(growth[index-1],4)[j]:growth[index-1])));
++      const common={period,shares:{openingOrdinaryMillion:ordinary,issuedOrdinaryMillion:0,fractionOutstanding:0,potentialAwardsMillion:period.startsWith('2027')?ordinary*number(a[symbol==='2409'?'potentialSharesRatio':'potentialRatio']):0},taxRate:number(a.taxRate),taxFloor:symbol==='2409'?number(a.taxFloor):0,nci:number(a.nci)};
++      return symbol==='2409'?{...common,segments:SEGMENTS.map((key,j)=>({key,revenue:previous[j],grossMargin:number(list(a.grossMargins,4)[j])+index*number(a.quarterMarginStep),operatingMargin:number(list(a.opMargins,4)[j])+index*number(a.quarterMarginStep)})),interestIncome:number(a.interestIncome),financeCosts:number(a.financeCosts),otherIncome:number(a.otherIncome),equityMethodProfit:number(a.equityMethodProfit),fxAndOtherRecurring:number(a.fxAndOtherRecurring)}
++        :{...common,revenue:previous[0],grossMargin:number(a.grossMargin)+index*number(a.marginStep),opexRatio:number(a.opexRatio),bankInterest:number(a.bankInterest),financeCost:number(a.financeCost),fx:number(a.fx),otherGainsExFx:number(a.otherGainsExFx)};
++    });
++    return {id:scenario.id,quarters};
++  });
++  const projected={schemaVersion:'business-scenarios-v2',calculatorId:symbol==='2409'?'auo_four_segment_v1':'emc_ccl_v1',symbol,unit:'TWD_million',originalModelCutoff:model.originalModelAsOf,researchCutoff:now,latestReportedQuarter:'2026Q2',
++    observations:manifest.map(p=>{const artifact=row(files.get(p.file)?.value);const floor=(p.file===historicalCashPins.packetPath?artifact.extractionAvailableAt:undefined)??artifact.recordedAt??artifact.observedAt??artifact.completedAt??artifact.latestRelayRecordAt??artifact.dataCutoffObservation??(Array.isArray(artifact.sourceLedger)?artifact.sourceLedger.map(x=>row(x).observedAt).filter(x=>typeof x==='string').sort((a,b)=>financialInstant(a as string)<financialInstant(b as string)?-1:1).at(-1):undefined);ensure(typeof floor==='string'&&financialInstant(floor)<=financialInstant(now));return {sourceArtifactHash:p.sha256,observationHash:hash({p,originalAvailabilityFloor:floor}),observedAt:floor,admittedAt:now,publication:{precision:'unknown',value:null}};}),scenarios};
++  const projection={projected,reportedFacts,monthlyFacts,monthlyBridge,selectionOmissions:['selling/admin/R&D expense detail (group total retained)','H1 reported EPS detail (Q2 basic/diluted and share basis retained)'],assumptionProvenance:{file:modelFile,fileSha256:pins[0].sha256,jsonPointers:['/scenarios/0/assumptions','/scenarios/1/assumptions','/scenarios/2/assumptions'],status:'manual_research_assumptions_not_reported_forecasts'},
++    allocationDiscrepancies:symbol==='2409'?financial.data.segmentComparability:null,
++    originalModelCanonicalHash:canonicalHash,rawModel:{sha256:pins[0].sha256,bytes:pins[0].bytes},sourceManifest:manifest,sourceManifestHash:hash(manifest),
++    clocks:{originalModelCutoff:model.originalModelAsOf,inputArtifactAsOf:model.asOf,financialRecordedAt:financial.data.recordedAt,shareNotesRecordedAt:notes.data.recordedAt,currentLocalReadKnownAt:now,databaseFinancialAdmissionAt:null},
++    gaps:['reported_2026_ytd_plus_forecast_bridge_incomplete','no_normalized_earnings_verification','capacity_yield_asp_orders_not_quantifiable','no_complete_2025_segment_recast','no_verified_future_share_count'],
++    observationsClockMeaning:'observedAt retains original artifact availability floor; admittedAt is current local in-memory acceptance only, not DB admission; monthly facts retain original source precision/clocks separately'};
++  assertFinancialJsonBytes(projection,historicalCashPins.limits.projection);return projection;
++}
++/** Full scenario+cash candidate from the same exact private carrier. No I/O,
++ * preparation, quota, source rights, role, mapping approval or publication.
++ * readAt is a trusted server completion clock, never an ingress field. */
++export function projectScenarioCashMaterial(profile:unknown,symbol:unknown,material:unknown,readAt:unknown,deadline:Deadline) {
++ ensure(profile===historicalCashPins.profile&&(symbol==='2409'||symbol==='2383'));
++ ensure(typeof readAt==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$/u.test(readAt));
++ ensure(financialInstant(readAt)<=BigInt(Date.now())*BigInt(1000000));deadline.check();
++ const selected=historicalCashPins.companies[symbol],records=new Map<string,{pin:FinancialFilePin;value:unknown}>(),buffers:Uint8Array[]=[];
++ let owned:Uint8Array|null=null;
++ try{
++  owned=copyMaterial(material,selected.carrier.bytes);deadline.check();ensure(createHash('sha256').update(owned).digest('hex')===selected.carrier.sha256);deadline.check();
++  const envelope=row(JSON.parse(new TextDecoder('utf8',{fatal:true}).decode(owned)));deadline.check();
++  ensure(envelope.schemaVersion==='historical-cash-private-byte-material-v1'&&envelope.financialProfile===profile&&envelope.symbol===symbol);
++  const entries=list(envelope.files,9);ensure(entries.length===selected.files.length);let total=0;
++  for(let i=0;i<selected.files.length;i++){
++   deadline.check();const pin=selected.files[i],entry=row(entries[i]);ensure(entry.path===pin.path&&typeof entry.rawBase64==='string'&&pin.bytes<=historicalCashPins.limits.perFile);
++   const raw=decodeBase64(entry.rawBase64,'base64');buffers.push(raw);deadline.check();total+=raw.length;
++   ensure(raw.length===pin.bytes&&total<=historicalCashPins.limits.aggregate&&createHash('sha256').update(raw).digest('hex')===pin.sha256);
++   records.set(pin.path,{pin,value:JSON.parse(new TextDecoder('utf8',{fatal:true}).decode(raw))});deadline.check();
++  }
++  ensure(total===selected.aggregateBytes);
++  const cash=projectPinnedHistoricalCash(profile,symbol,owned,deadline);deadline.check();ensure(financialInstant(cash.extractionAvailableAt)<=financialInstant(readAt));
++  const projection={...project(symbol,records,readAt),historicalCash:cash};deadline.check();
++  assertFinancialJsonBytes(projection,historicalCashPins.limits.projection);
++  const calculation=recalculateResearchBusinessScenarios(projection.projected,readAt);deadline.check();
++  const result={schemaVersion:'research-scenario-cash-material-candidate-v3',financialProfile:profile,symbol,status:'unsealed_calculation_only',artifactReadKnownAt:readAt,
++   projection,calculation,projectionHash:hash(projection),scenarioInputHash:hash(projection.projected.scenarios),resultHash:hash(calculation),
++   sourceCommit:historicalCashPins.sourceCommit,sourceClosureApproved:false,legacyV2ExecutionClaimed:false,
++   filesystemCustodyVerified:false,sourcePublicationVerified:false,financialVerified:false,dispatchReady:false,modelDispatched:false,publishableResearch:false,researchQualified:false,historicalPITEligible:false,strategyApproved:false,entryEligible:false,published:false,valuationApproved:false,technicalAdmission:false,noFutureCash:true,forecastCash:null};
++  assertFinancialJsonBytes(result,262144);deadline.check();return freeze(result);
++ }finally{for(const raw of buffers)nativeFill.call(raw,0);if(owned)nativeFill.call(owned,0);}
++}

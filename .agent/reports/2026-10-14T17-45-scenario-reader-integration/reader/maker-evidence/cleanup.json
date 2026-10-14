@@ -1,0 +1,13 @@
+{
+  "ownedFixturePathsRemaining": [],
+  "ownProcessCleanup": "all run.py/Node test/build processes exited; no service/PG started",
+  "unknownOrSharedDeletion": false,
+  "buildRetained": "/tmp/si-pubtail-o14/web/.next",
+  "buildId": "fy-ZIEP82MsdLWPwMF9gV",
+  "rawRetained": "/tmp/si-pubtail-o14/.agent/reports/2026-10-14T08-21-cash-single-owner-reader",
+  "measuredAt": "2026-10-14T08:35:47.924676+00:00",
+  "freeBytes": {
+    "/workspace": 8618692608,
+    "/tmp": 15454625792
+  }
+}

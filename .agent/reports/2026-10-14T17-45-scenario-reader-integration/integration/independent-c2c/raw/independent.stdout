@@ -1,0 +1,74 @@
+{
+  "cases": 6,
+  "rows": [
+    {
+      "case": "all FDs held through three post-read namespace passes",
+      "symbol": "2409",
+      "handles": 9,
+      "rootChecks": 3,
+      "closed": 9,
+      "zeroBuffers": 10,
+      "materialBytes": 181848,
+      "knownAt": "2026-10-14T09:12:14.976Z"
+    },
+    {
+      "case": "after-projection namespace drift rejects no partial result",
+      "symbol": "2409",
+      "validations": 3,
+      "cleanup": {
+        "cleanupComplete": true,
+        "recoveryRequired": false,
+        "pendingOperations": 0,
+        "unconfirmedHandles": 0,
+        "ownedBuffers": 0,
+        "cleanupFailed": false,
+        "kernelIoCancellationConfirmed": false
+      }
+    },
+    {
+      "case": "scenario close stall bounds failure blocks three facades until actual settlement",
+      "symbol": "2409",
+      "closed": 9,
+      "restored": true
+    },
+    {
+      "case": "all FDs held through three post-read namespace passes",
+      "symbol": "2383",
+      "handles": 7,
+      "rootChecks": 3,
+      "closed": 7,
+      "zeroBuffers": 8,
+      "materialBytes": 110392,
+      "knownAt": "2026-10-14T09:12:25.190Z"
+    },
+    {
+      "case": "after-projection namespace drift rejects no partial result",
+      "symbol": "2383",
+      "validations": 3,
+      "cleanup": {
+        "cleanupComplete": true,
+        "recoveryRequired": false,
+        "pendingOperations": 0,
+        "unconfirmedHandles": 0,
+        "ownedBuffers": 0,
+        "cleanupFailed": false,
+        "kernelIoCancellationConfirmed": false
+      }
+    },
+    {
+      "case": "scenario close stall bounds failure blocks three facades until actual settlement",
+      "symbol": "2383",
+      "closed": 7,
+      "restored": true
+    }
+  ],
+  "finalStatus": {
+    "cleanupComplete": true,
+    "recoveryRequired": false,
+    "pendingOperations": 0,
+    "unconfirmedHandles": 0,
+    "ownedBuffers": 0,
+    "cleanupFailed": false,
+    "kernelIoCancellationConfirmed": false
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "runtimeSource": "6313d9e455eb4d5c17a76c94300c4fa676f6ddc9",
+  "repositoryTestsModified": false,
+  "harnessChanges": [
+    "secure own home fixture prefix",
+    "absolute original module/fixture anchors"
+  ],
+  "originalTestSha256": "21f4df478354c7eb40dd249931f1606ea96009decc7892c8ff9754dc65fc6e38",
+  "probeSha256": "2f587060b4eb51538c03ef67d1321f04f1d5f75a6c120c18f64f03384d1e4ab9",
+  "exit": 0,
+  "at": "2026-10-14T08:52:58.526011+00:00"
+}

@@ -1,0 +1,14 @@
+{
+  "source": "2ec898dcb2bcce69d17eee968da58659ce9299b1",
+  "exit": 1,
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-scenario-cash-material.test.mjs"
+  ],
+  "at": "2026-10-14T08:42:25.927078+00:00"
+}

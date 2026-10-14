@@ -1,0 +1,16 @@
+(node:550668) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:550668) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-scenario-cash-material.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+file:///tmp/si-pubtail-o14/web/src/lib/research-scenario-cash-material.ts:11
+function ensure(ok         )             { if (!ok) throw new Error('research_scenario_cash_material_invalid'); }
+                                                          ^
+
+Error: research_scenario_cash_material_invalid
+    at ensure (file:///tmp/si-pubtail-o14/web/src/lib/research-scenario-cash-material.ts:11:59)
+    at projectScenarioCashMaterial (file:///tmp/si-pubtail-o14/web/src/lib/research-scenario-cash-material.ts:141:2)
+    at run (file:///tmp/scenario-review-o14/probe.mjs:17:54)
+    at file:///tmp/scenario-review-o14/probe.mjs:41:56
+
+Node.js v22.14.0

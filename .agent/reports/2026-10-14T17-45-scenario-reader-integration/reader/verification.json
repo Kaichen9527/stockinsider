@@ -1,0 +1,19 @@
+{
+  "makerCode": "6313d9e455eb4d5c17a76c94300c4fa676f6ddc9",
+  "makerDelivery": "195de5d2fcead7adff4c1c32c3243a0337213e22",
+  "rawVerified": 55,
+  "sourceEntriesVerified": 16,
+  "sourceUniqueFiles": 13,
+  "providedBlobsVerified": 6,
+  "makerTests": "48=19reader+14core+15projection; trueCloudexecution only",
+  "makerFullQuality": "type/lint/buildNext16.3.4 PASS per exactreceipt/raw; 1798 manifestlinked, Root did not reread compiledfilebytes",
+  "buildId": "fy-ZIEP82MsdLWPwMF9gV",
+  "originalRootRepositorySuite": "0PASS1FAIL file setupENOENT /workspace",
+  "independentRootPortableHarness": "19PASS0FAIL actualruntime6313; harness-only root/importanchors changed",
+  "rootRepair": "9daf8248355568c45bb0bda3ade224be1b84b9f0",
+  "repairRuntimeDescriptorAndWebTreeUnchanged": true,
+  "actualRepairedRootRepositorySuite": "48PASS zeroFAIL/SKIP/TODO",
+  "independentClosureReview": "pendingCloudRootIntegrationTask27",
+  "runtimeSourceReviewNewP0P1P2": 0,
+  "acceptanceP2": "hardcodedCloudfixtureRoot; originalREQUEST_CHANGES retained"
+}

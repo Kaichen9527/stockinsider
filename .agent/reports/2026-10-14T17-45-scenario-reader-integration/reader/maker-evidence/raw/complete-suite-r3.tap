@@ -1,0 +1,260 @@
+TAP version 13
+# (node:549091) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:549091) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-historical-cash-pins.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# Subtest: 2409 actual secure FS complete profile, exact output and unchanged original bytes
+ok 1 - 2409 actual secure FS complete profile, exact output and unchanged original bytes
+  ---
+  duration_ms: 46.887278
+  ...
+# Subtest: 2409 each file content, length, omission, symlink, nlink and replacement reject
+ok 2 - 2409 each file content, length, omission, symlink, nlink and replacement reject
+  ---
+  duration_ms: 199.563056
+  ...
+# Subtest: 2383 actual secure FS complete profile, exact output and unchanged original bytes
+ok 3 - 2383 actual secure FS complete profile, exact output and unchanged original bytes
+  ---
+  duration_ms: 16.571152
+  ...
+# Subtest: 2383 each file content, length, omission, symlink, nlink and replacement reject
+ok 4 - 2383 each file content, length, omission, symlink, nlink and replacement reject
+  ---
+  duration_ms: 97.59991
+  ...
+# Subtest: legacy <=8 compatible parsed facade rejects9 before any IO; unknown/crossissuer cannot select paths
+ok 5 - legacy <=8 compatible parsed facade rejects9 before any IO; unknown/crossissuer cannot select paths
+  ---
+  duration_ms: 6.40688
+  ...
+# Subtest: world writable ancestor genuinely rejected, no /tmp exception
+ok 6 - world writable ancestor genuinely rejected, no /tmp exception
+  ---
+  duration_ms: 0.658694
+  ...
+# Subtest: FIFO leaf and replacement FIFO bounded by NONBLOCK; no unconfirmed success
+ok 7 - FIFO leaf and replacement FIFO bounded by NONBLOCK; no unconfirmed success
+  ---
+  duration_ms: 8.790267
+  ...
+# Subtest: parent rename and ninth-file namespace substitution rejects all-profile success
+ok 8 - parent rename and ninth-file namespace substitution rejects all-profile success
+  ---
+  duration_ms: 9.850257
+  ...
+# Subtest: legacy8 -> v3 and v3 -> legacy8 share opaque owner while real FD retained
+ok 9 - legacy8 -> v3 and v3 -> legacy8 share opaque owner while real FD retained
+  ---
+  duration_ms: 23.648543
+  ...
+# Subtest: query module imports cannot establish a second slot; new owner generation remains shared
+ok 10 - query module imports cannot establish a second slot; new owner generation remains shared
+  ---
+  duration_ms: 5.326109
+  ...
+# Subtest: late actual open remains owned then close-once confirmed before both facades reenter
+ok 11 - late actual open remains owned then close-once confirmed before both facades reenter
+  ---
+  duration_ms: 48.84952
+  ...
+# Subtest: late read can write after return: retain raw ownership, wipe on settlement, close-once then restore
+ok 12 - late read can write after return: retain raw ownership, wipe on settlement, close-once then restore
+  ---
+  duration_ms: 46.939898
+  ...
+# (node:549104) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:549104) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-cash-financial-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# Subtest: normal read stalled close never success, deadline bounded and late close releases all facades
+ok 13 - normal read stalled close never success, deadline bounded and late close releases all facades
+  ---
+  duration_ms: 37.304956
+  ...
+# Subtest: primary hash error plus real-FD close rejection preserves primary and recovery fence (isolated process)
+ok 14 - primary hash error plus real-FD close rejection preserves primary and recovery fence (isolated process)
+  ---
+  duration_ms: 108.89998
+  ...
+# Subtest: all real raw buffers wipe and every actual FD is closed before successful return
+ok 15 - all real raw buffers wipe and every actual FD is closed before successful return
+  ---
+  duration_ms: 40.916526
+  ...
+# Subtest: perfile/aggregate/duplicate bounds and malformed UTF8 fail without a second budget
+ok 16 - perfile/aggregate/duplicate bounds and malformed UTF8 fail without a second budget
+  ---
+  duration_ms: 1.342756
+  ...
+# Subtest: finite NEW source closure is exact and distinctly different from immutable historical77b1
+ok 17 - finite NEW source closure is exact and distinctly different from immutable historical77b1
+  ---
+  duration_ms: 1.270107
+  ...
+# (node:549115) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:549115) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-historical-cash-core.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# Subtest: 2409 retained two-period cash and capital independently match Python Decimal
+ok 18 - 2409 retained two-period cash and capital independently match Python Decimal
+  ---
+  duration_ms: 2.301714
+  ...
+# Subtest: 2383 retained two-period cash and capital independently match Python Decimal
+ok 19 - 2383 retained two-period cash and capital independently match Python Decimal
+  ---
+  duration_ms: 0.982743
+  ...
+# Subtest: fixed company, period, unit, grain and exact operand inventory reject substituted scope
+ok 20 - fixed company, period, unit, grain and exact operand inventory reject substituted scope
+  ---
+  duration_ms: 1.103295
+  ...
+# Subtest: every fixed operand refuses fractional, unsafe or nonfinite numeric values
+ok 21 - every fixed operand refuses fractional, unsafe or nonfinite numeric values
+  ---
+  duration_ms: 25.990058
+  ...
+# Subtest: all actual AUO noncash and working-capital components are reconciled, not only totals
+ok 22 - all actual AUO noncash and working-capital components are reconciled, not only totals
+  ---
+  duration_ms: 2.343377
+  ...
+# Subtest: EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+ok 23 - EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+  ---
+  duration_ms: 0.716882
+  ...
+# Subtest: all applicable cash and group-profit bridges reject inconsistent reported operands
+ok 24 - all applicable cash and group-profit bridges reject inconsistent reported operands
+  ---
+  duration_ms: 2.062603
+  ...
+# Subtest: cash acquisition and debt repayment signs reject rather than flipping expenses
+ok 25 - cash acquisition and debt repayment signs reject rather than flipping expenses
+  ---
+  duration_ms: 0.632164
+  ...
+# Subtest: disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+ok 26 - disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+  ---
+  duration_ms: 1.178368
+  ...
+# Subtest: signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+ok 27 - signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+  ---
+  duration_ms: 0.460896
+  ...
+# Subtest: June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+ok 28 - June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+  ---
+  duration_ms: 1.024656
+  ...
+# Subtest: safe-integer sums cannot silently overflow even when each operand is safe
+ok 29 - safe-integer sums cannot silently overflow even when each operand is safe
+  ---
+  duration_ms: 0.207233
+  ...
+# Subtest: accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+ok 30 - accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+  ---
+  duration_ms: 0.415587
+  ...
+# Subtest: result is deeply frozen; calculation does not mutate caller operands
+ok 31 - result is deeply frozen; calculation does not mutate caller operands
+  ---
+  duration_ms: 0.583791
+  ...
+# (node:549126) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:549126) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-historical-cash-pins.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# Subtest: 2409 all exact source bytes project and recompute original cash without financial authority
+ok 32 - 2409 all exact source bytes project and recompute original cash without financial authority
+  ---
+  duration_ms: 20.298547
+  ...
+# Subtest: 2409 any exact inventory file mutation, length, omission, order or extra fails closed
+ok 33 - 2409 any exact inventory file mutation, length, omission, order or extra fails closed
+  ---
+  duration_ms: 148.955142
+  ...
+# Subtest: 2409 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+ok 34 - 2409 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+  ---
+  duration_ms: 40.076959
+  ...
+# Subtest: 2409 deadline exceptions at every successful checkpoint cannot return partial success
+ok 35 - 2409 deadline exceptions at every successful checkpoint cannot return partial success
+  ---
+  duration_ms: 688.658751
+  ...
+# Subtest: 2383 all exact source bytes project and recompute original cash without financial authority
+ok 36 - 2383 all exact source bytes project and recompute original cash without financial authority
+  ---
+  duration_ms: 6.607793
+  ...
+# Subtest: 2383 any exact inventory file mutation, length, omission, order or extra fails closed
+ok 37 - 2383 any exact inventory file mutation, length, omission, order or extra fails closed
+  ---
+  duration_ms: 53.372697
+  ...
+# Subtest: 2383 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+ok 38 - 2383 packet numeric, label, source clock, cross-manifest and model changes cannot be repaired by consistent arithmetic
+  ---
+  duration_ms: 18.582137
+  ...
+# Subtest: 2383 deadline exceptions at every successful checkpoint cannot return partial success
+ok 39 - 2383 deadline exceptions at every successful checkpoint cannot return partial success
+  ---
+  duration_ms: 215.230193
+  ...
+# Subtest: unknown or substituted profiles/companies reject before injected material access
+ok 40 - unknown or substituted profiles/companies reject before injected material access
+  ---
+  duration_ms: 2.144056
+  ...
+# Subtest: byte-only native views ignore caller metadata and reject wrong backing stores and proxies
+ok 41 - byte-only native views ignore caller metadata and reject wrong backing stores and proxies
+  ---
+  duration_ms: 56.164951
+  ...
+# Subtest: each projected row carries exact two-period packet/model locators and private source-line hashes
+ok 42 - each projected row carries exact two-period packet/model locators and private source-line hashes
+  ---
+  duration_ms: 18.235824
+  ...
+# Subtest: all legacy Maps reject without iteration, getters or own-key reflection, including R1/R2 shapes
+ok 43 - all legacy Maps reject without iteration, getters or own-key reflection, including R1/R2 shapes
+  ---
+  duration_ms: 23.997881
+  ...
+# Subtest: whole carrier length and SHA reject all serialized drift before JSON parsing
+ok 44 - whole carrier length and SHA reject all serialized drift before JSON parsing
+  ---
+  duration_ms: 51.283703
+  ...
+# Subtest: owned carrier snapshot survives caller mutation after copying and preserves old projection hashes
+ok 45 - owned carrier snapshot survives caller mutation after copying and preserves old projection hashes
+  ---
+  duration_ms: 43.126101
+  ...
+# Subtest: all allocated carrier/decode buffers are wiped on success and every cooperative deadline failure
+ok 46 - all allocated carrier/decode buffers are wiped on success and every cooperative deadline failure
+  ---
+  duration_ms: 1507.991401
+  ...
+1..46
+# tests 46
+# suites 0
+# pass 46
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3983.995948
