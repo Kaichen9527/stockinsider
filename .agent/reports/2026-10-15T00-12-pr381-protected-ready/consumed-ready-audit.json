@@ -1,0 +1,23 @@
+{
+  "pr": 381,
+  "source": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+  "base": "5189547f76bf24c002b8e8b11669081ba67ad2c6",
+  "freshEvidence": "c83f103c3ddd1e582b4544c168bc46a2a80c056c",
+  "protectedRunId": 38590829287,
+  "protectedAttempt": 2,
+  "ordinaryRunId": 38590834521,
+  "command": [
+    "gh",
+    "pr",
+    "ready",
+    "381",
+    "--repo",
+    "Kaichen9527/stockinsider"
+  ],
+  "at": "2026-10-14T16:08:18.157864+00:00",
+  "exit": 0,
+  "stdout": "",
+  "stderr": "\u2713 Pull request Kaichen9527/stockinsider#381 is marked as \"ready for review\"\n",
+  "manualCIrerun": false,
+  "mergeAttempted": false
+}

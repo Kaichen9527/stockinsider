@@ -1,0 +1,9 @@
+{
+  "conclusion": "",
+  "createdAt": "2026-10-14T16:08:20Z",
+  "databaseId": 38595486518,
+  "event": "pull_request_target",
+  "headSha": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+  "status": "in_progress",
+  "workflowName": "Source-led opportunity V3 protected gate root"
+}

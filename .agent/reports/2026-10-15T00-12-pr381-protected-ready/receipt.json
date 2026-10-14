@@ -1,0 +1,74 @@
+{
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 3622,
+      "sha256": "68cc9adb4fd5e1e9cadebdb2458f579b1b64b0d285ac652f5ad20d42a0226b41"
+    },
+    {
+      "path": "after-head-runs.json",
+      "bytes": 743,
+      "sha256": "3c4f68c86f7089a17522641bd838bfbdeaf5aea6fc462f90f1a65661f1c469b5"
+    },
+    {
+      "path": "after-pr.json",
+      "bytes": 179,
+      "sha256": "4cf7d614be4ee12ceb2569d0b35d6dcf81eb25e4a5118c2399f2d2c2f93a3a09"
+    },
+    {
+      "path": "after-rules.json",
+      "bytes": 1685,
+      "sha256": "a1d3a322a4d2389b4205e57829a11e81fa340622ddbaeb3ee07e697389ae872d"
+    },
+    {
+      "path": "attempt2-logs.zip",
+      "bytes": 303106,
+      "sha256": "de0775a01559de5cb2dfe1f9fcd21efa595a5d39dd6137909cd678cccc6dc78f"
+    },
+    {
+      "path": "before-head-runs.json",
+      "bytes": 328,
+      "sha256": "20f43d03de96b54b59681cd33ec91f57dc0d671f093a7808ed8b027c83e97b11"
+    },
+    {
+      "path": "before-pr.json",
+      "bytes": 302,
+      "sha256": "01af4d1b9a42c57ea1558c5303a79e7aac20b16a1d7e9d9a932c6f09e722c609"
+    },
+    {
+      "path": "before-rules.json",
+      "bytes": 1685,
+      "sha256": "a1d3a322a4d2389b4205e57829a11e81fa340622ddbaeb3ee07e697389ae872d"
+    },
+    {
+      "path": "completed-attempt2-run.json",
+      "bytes": 18489,
+      "sha256": "9487f5c667e7e8ac2bdd70720caca7c9495a2faae9c27c34358d7ba58f2341cf"
+    },
+    {
+      "path": "consumed-ready-audit.json",
+      "bytes": 614,
+      "sha256": "6865529af55fd945d3a28e349f32cc33b7ff337ec65f8e0c779f0cd62f47fbb2"
+    },
+    {
+      "path": "consumed-ready-guard.py",
+      "bytes": 4334,
+      "sha256": "81ea15581a6026c572b8de64bb0964a28d29844f4292afd4a53b66e1357d0367"
+    },
+    {
+      "path": "log-verification.json",
+      "bytes": 177,
+      "sha256": "69a4098ca132b61eeedaaba10f81453599280e99ccbf21eb07300b187631000b"
+    },
+    {
+      "path": "new-protected-current.json",
+      "bytes": 10100,
+      "sha256": "a4d8cfce79d0750e374de57ccc5747d55a83f209538168b82c36672487789b55"
+    },
+    {
+      "path": "ready-triggered-run.json",
+      "bytes": 276,
+      "sha256": "642a4f5d192ab6bfc3c9e151845add6beaf32265c7fb834c48f1da0d7fd238b7"
+    }
+  ]
+}
