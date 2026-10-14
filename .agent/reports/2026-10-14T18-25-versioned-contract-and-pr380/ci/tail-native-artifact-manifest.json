@@ -1,0 +1,170 @@
+{
+  "archiveSha256": "fee0502760a0627361898f3bc4cd87c61771b032ab1517113ba3bd94892a7dc9",
+  "files": [
+    {
+      "file": "entry-native/actual-helper-commit.json",
+      "bytes": 2499,
+      "sha256": "cd1fb66e3e1639ee6b004256d16cd76b42d63ad4ececb517338de8625fd64d42"
+    },
+    {
+      "file": "entry-native/cleanup.json",
+      "bytes": 150,
+      "sha256": "bf2b1e5ebe51f985f05e58a8351af1cf7a407da0069b702ba39614c35296a2ee"
+    },
+    {
+      "file": "entry-native/committed-partial-proof.json",
+      "bytes": 55,
+      "sha256": "e304b5d406e910fe44179674951282893759f1a07e50034b46347d55143dfa1d"
+    },
+    {
+      "file": "entry-native/committed-prefix-helper-rejection.json",
+      "bytes": 4888,
+      "sha256": "31ea69e116de8e9f596887ecc39ffc24469d6d1780dbac44bf84a6d53ba0682d"
+    },
+    {
+      "file": "entry-native/disconnect-inside-compact.json",
+      "bytes": 1943,
+      "sha256": "9ca9487110f6f8e62667be1160ad27849c89575a1ebd16f311b7bf0382121361"
+    },
+    {
+      "file": "entry-native/financial50-baseline.json",
+      "bytes": 3229697,
+      "sha256": "78fb66ef6f1608d94073c2d44ff6d2ffccb28e93f56625234aa83c5c2b6255d8"
+    },
+    {
+      "file": "entry-native/financial50-result.json",
+      "bytes": 10804,
+      "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+    },
+    {
+      "file": "entry-native/forced-helper-rollback.json",
+      "bytes": 66,
+      "sha256": "97eea7c6ea483a848024f259ae3a54fd6771ca104d0d31b6552db29355eff19f"
+    },
+    {
+      "file": "entry-native/forced-inside-compact.json",
+      "bytes": 1814,
+      "sha256": "df881a95a9e4ddf367050b22857be51f0c0f202c509e42b6d76455cfcd3f0c1a"
+    },
+    {
+      "file": "entry-native/guarded-baseline-compact.json",
+      "bytes": 1814,
+      "sha256": "5ed1186b8c7e229c46ea136f1b87bd75e2b2ce63f920852dc61c66348d67d4a7"
+    },
+    {
+      "file": "entry-native/helper-busy-before-begin.json",
+      "bytes": 261,
+      "sha256": "beaa03e3b57bfc88a409c2198b83506f49351c3a9f74c0bf5bb9359532a8a706"
+    },
+    {
+      "file": "entry-native/installed-second-helper-rejection.json",
+      "bytes": 1077,
+      "sha256": "8dbd64e8748e8e16af8c9775b8c990d1ce7c545136dfefe703d3b9e4e406540c"
+    },
+    {
+      "file": "entry-native/pending.json",
+      "bytes": 218,
+      "sha256": "6d9221826c51239f54b5b92b2d11f57e17ae6b53f21c8e6840a76ecf88fad163"
+    },
+    {
+      "file": "entry-native/postgres.log",
+      "bytes": 725,
+      "sha256": "10e994eb444afe5a6d0325915406a4508b3735bf4a7256109fa99b82c481fadc"
+    },
+    {
+      "file": "entry-native/restore-input.json",
+      "bytes": 633,
+      "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+    },
+    {
+      "file": "entry-native/seed.json",
+      "bytes": 1123,
+      "sha256": "6600e76c9ae37353bd7afcf09a44d742072ce037fd52b6b86c369ccd542aa2f1"
+    },
+    {
+      "file": "entry-native/socket-client-error.json",
+      "bytes": 73,
+      "sha256": "e735d65154bae7470235b23e0695485db8fc937de98c197b5b926c4177bd1223"
+    },
+    {
+      "file": "entry-native/socket-disconnect-rollback.json",
+      "bytes": 115,
+      "sha256": "30b832464f80928d5a732e1c9d2d30593667dc6412fbb5c0e02728276507362f"
+    },
+    {
+      "file": "entry-native.stdout",
+      "bytes": 4678,
+      "sha256": "67a44586577107faf2182be1a9398ee638205af0b7d44b3acab5df678d8ab279"
+    },
+    {
+      "file": "fragments-native/cleanup.json",
+      "bytes": 150,
+      "sha256": "e57aab2b02914194ca1be547d39a928d28d0eacd3ce591fd83c8a2749889d658"
+    },
+    {
+      "file": "fragments-native/coverage-summary.json",
+      "bytes": 166494,
+      "sha256": "d0b9a32ea342ed12700ed170913f134ed2fd38819a454dc5f76628682e33b94f"
+    },
+    {
+      "file": "fragments-native/financial50-input-baseline-summary.json",
+      "bytes": 1650,
+      "sha256": "e9836f71f46c0c28f27ac26244e95d00f1e98837a88c1d7ed22e0a7e8ef0e98c"
+    },
+    {
+      "file": "fragments-native/financial50-result.json",
+      "bytes": 10804,
+      "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+    },
+    {
+      "file": "fragments-native/helper-p2-L147.json",
+      "bytes": 5132,
+      "sha256": "1a2ed5882bee7cd3892d28270a4ce6baa7c5962a5cfc01345ae5c4424bf722c9"
+    },
+    {
+      "file": "fragments-native/helper-p3-L271.json",
+      "bytes": 5132,
+      "sha256": "aa8e6dcdbfaa7bfbef445bca1987f5ddb1f91fd51fd62c75ea6d7158b3fca2d0"
+    },
+    {
+      "file": "fragments-native/matrix.json",
+      "bytes": 131344,
+      "sha256": "1bef5cad9cbb60b4581abea7428c0f680eef158697bee4cf0955c081a535d8b7"
+    },
+    {
+      "file": "fragments-native/pending.json",
+      "bytes": 208,
+      "sha256": "8256fee4b9de3ca2798d043f110c19b12cce3e0c99fd6766a5c8bc27fbd469d9"
+    },
+    {
+      "file": "fragments-native/post50-baseline-compact.json",
+      "bytes": 1810,
+      "sha256": "73285d2d3e680b8e07ec057f28ec0d4830fc0b3540adac1356465c0102a086c1"
+    },
+    {
+      "file": "fragments-native/postgres.log",
+      "bytes": 1385,
+      "sha256": "7645c960480e63f585144e69d35941670fff32c884747ea7e01c71762cfb6b58"
+    },
+    {
+      "file": "fragments-native/restore-input.json",
+      "bytes": 633,
+      "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+    },
+    {
+      "file": "fragments-native/seed.json",
+      "bytes": 1123,
+      "sha256": "0a3ca8a88d847896e9eaf5ce277e5941460bb3e660a46eb797cba801bcde849a"
+    },
+    {
+      "file": "fragments-native.stdout",
+      "bytes": 8711,
+      "sha256": "0bba6534a3467cf8602c0eb30c3465c4c879606b545646faad8f4ac0d51f20bf"
+    },
+    {
+      "file": "pure.stdout",
+      "bytes": 2738,
+      "sha256": "9f326240ed257b2909f319c31e4098b148b89f20be13dead8ee41b1f169793af"
+    }
+  ]
+}

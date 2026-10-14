@@ -1,0 +1,20 @@
+{
+  "verifiedAt": "2026-10-14T10:03:17.101722+00:00",
+  "evidence": "e393045ba27971881c219b62b6949e24abf9d311",
+  "receipt": "c6ad8498c284eb5d9c0ce0b942a789a47f8ac6ec292236afa338e9932c9b5cf9",
+  "receiptFilesVerified": 38,
+  "sourceEntriesVerified": {
+    "source-manifest.json": 63,
+    "current-source-manifest.json": 16
+  },
+  "rootDidRunPGOrBuild": false,
+  "scope": "design/probe; not production schema/RPC/replay/quota acceptance",
+  "formalApproved": false,
+  "decompressedArtifactEntriesVerified": 22,
+  "legacyClosureFilesVerified": 22,
+  "legacyArchiveAvailabilityRowsVerified": 14,
+  "originalSQLFunctionBytesVerified": true,
+  "actualSavedMaterialHashesVerified": 2,
+  "PGvsJSHashesMatchWitnesses": true,
+  "nativePGReexecutionByRoot": false
+}

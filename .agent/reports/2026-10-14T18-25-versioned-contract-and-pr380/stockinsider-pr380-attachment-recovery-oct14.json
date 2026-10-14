@@ -1,0 +1,38 @@
+{
+  "reason": "attach380 returned identitycount exceeds100",
+  "oldAttachment": {
+    "id": "01a0d378-7d0c-7652-be67-3324db5d9e7e",
+    "attachmentType": "pull_request",
+    "identityKey": "[\"github.com\",\"kaichen9527\",\"stockinsider\",279]",
+    "payload": {
+      "url": "https://github.com/Kaichen9527/stockinsider/pull/279",
+      "root": null,
+      "headBranch": null
+    },
+    "createdAt": 1790254284
+  },
+  "githubStateSnapshot": {
+    "baseRefName": "main",
+    "baseRefOid": "5186543fce7dd7a89ca5f6f2907162b7a0412c12",
+    "headRefName": "codex/tw-entry-plan-v1",
+    "headRefOid": "e85437c2d02081108af3fbf035743976eb659336",
+    "mergeCommit": {
+      "oid": "0f1a1a0d2dad10e29c92931e043adef305b19a07"
+    },
+    "mergedAt": "2026-09-24T14:21:02Z",
+    "number": 279,
+    "state": "MERGED",
+    "title": "台股進出場研究 PR1：不可變版本計畫、K 線與支撐壓力整合",
+    "url": "https://github.com/Kaichen9527/stockinsider/pull/279"
+  },
+  "action": "unlink old MERGED279 UI attachment only, then attach380; no GitHub content/state/code/history change",
+  "initialAttach": {
+    "content": [
+      {
+        "type": "text",
+        "text": "thread attachment identity count exceeds 100"
+      }
+    ],
+    "isError": true
+  }
+}

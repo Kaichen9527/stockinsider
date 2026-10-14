@@ -1,0 +1,1805 @@
+﻿2026-10-14T10:13:31.4960924Z Current runner version: '2.337.0'
+2026-10-14T10:13:31.4981909Z ##[group]Runner Image Provisioner
+2026-10-14T10:13:31.4982754Z Hosted Compute Agent
+2026-10-14T10:13:31.4983284Z Version: 20261002.596
+2026-10-14T10:13:31.4983960Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-14T10:13:31.4984611Z Build Date: 2026-10-02T22:28:27Z
+2026-10-14T10:13:31.4985247Z Worker ID: {bd1e104b-c4e1-4c88-85a6-3de4b53e876f}
+2026-10-14T10:13:31.4985892Z Region: northcentralus
+2026-10-14T10:13:31.4986421Z Cloud: Azure
+2026-10-14T10:13:31.4986994Z ##[endgroup]
+2026-10-14T10:13:31.4988192Z ##[group]Operating System
+2026-10-14T10:13:31.4988832Z Ubuntu
+2026-10-14T10:13:31.4989326Z 24.04.5
+2026-10-14T10:13:31.4989836Z LTS
+2026-10-14T10:13:31.4990358Z ##[endgroup]
+2026-10-14T10:13:31.4990868Z ##[group]Runner Image
+2026-10-14T10:13:31.4991402Z Image: ubuntu-24.04
+2026-10-14T10:13:31.4992104Z Version: 20261004.327.1
+2026-10-14T10:13:31.4993202Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-14T10:13:31.4994534Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-14T10:13:31.4995348Z ##[endgroup]
+2026-10-14T10:13:31.4996402Z ##[group]GITHUB_TOKEN Permissions
+2026-10-14T10:13:31.4998156Z Contents: read
+2026-10-14T10:13:31.4998789Z Metadata: read
+2026-10-14T10:13:31.4999310Z ##[endgroup]
+2026-10-14T10:13:31.5001126Z Secret source: Actions
+2026-10-14T10:13:31.5002224Z Cache mode: write
+2026-10-14T10:13:31.5003131Z Prepare workflow directory
+2026-10-14T10:13:31.5282064Z Prepare all required actions
+2026-10-14T10:13:31.5335857Z Getting action download info
+2026-10-14T10:13:31.7362719Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-14T10:13:31.8192753Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-14T10:13:31.9387695Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-14T10:13:32.2257627Z Complete job name: research-publication-tail-quality
+2026-10-14T10:13:32.2989240Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-14T10:13:32.2990581Z with:
+2026-10-14T10:13:32.2991245Z   persist-credentials: false
+2026-10-14T10:13:32.2992238Z   repository: Kaichen9527/stockinsider
+2026-10-14T10:13:32.2998853Z   token: ***
+2026-10-14T10:13:32.2999492Z   ssh-strict: true
+2026-10-14T10:13:32.3000151Z   ssh-user: git
+2026-10-14T10:13:32.3000786Z   clean: true
+2026-10-14T10:13:32.3001466Z   sparse-checkout-cone-mode: true
+2026-10-14T10:13:32.3002364Z   fetch-depth: 1
+2026-10-14T10:13:32.3003019Z   fetch-tags: false
+2026-10-14T10:13:32.3003699Z   show-progress: true
+2026-10-14T10:13:32.3004390Z   lfs: false
+2026-10-14T10:13:32.3005101Z   submodules: false
+2026-10-14T10:13:32.3005820Z   set-safe-directory: true
+2026-10-14T10:13:32.3006638Z   allow-unsafe-pr-checkout: false
+2026-10-14T10:13:32.3007614Z ##[endgroup]
+2026-10-14T10:13:32.3816022Z Syncing repository: Kaichen9527/stockinsider
+2026-10-14T10:13:32.3818393Z ##[group]Getting Git version info
+2026-10-14T10:13:32.3819591Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T10:13:32.3821312Z [command]/usr/bin/git version
+2026-10-14T10:13:32.3862141Z git version 2.55.0
+2026-10-14T10:13:32.3880843Z ##[endgroup]
+2026-10-14T10:13:32.3892775Z Temporarily overriding HOME='/home/runner/work/_temp/aea3f9c5-f79a-44bc-a2c1-4ce459cabc8f' before making global git config changes
+2026-10-14T10:13:32.3896090Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T10:13:32.3905009Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T10:13:32.3948284Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T10:13:32.3956249Z ##[group]Initializing the repository
+2026-10-14T10:13:32.3960214Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+2026-10-14T10:13:32.4031547Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-14T10:13:32.4033686Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-14T10:13:32.4035168Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-14T10:13:32.4036545Z hint: call:
+2026-10-14T10:13:32.4037163Z hint:
+2026-10-14T10:13:32.4037940Z hint: 	git config --global init.defaultBranch <name>
+2026-10-14T10:13:32.4038880Z hint:
+2026-10-14T10:13:32.4039755Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-14T10:13:32.4041179Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-14T10:13:32.4043038Z hint:
+2026-10-14T10:13:32.4043964Z hint: 	git branch -m <name>
+2026-10-14T10:13:32.4045043Z hint:
+2026-10-14T10:13:32.4046316Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-14T10:13:32.4048172Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+2026-10-14T10:13:32.4054011Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+2026-10-14T10:13:32.4094126Z ##[endgroup]
+2026-10-14T10:13:32.4095301Z ##[group]Disabling automatic garbage collection
+2026-10-14T10:13:32.4096918Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-14T10:13:32.4125168Z ##[endgroup]
+2026-10-14T10:13:32.4126314Z ##[group]Setting up auth
+2026-10-14T10:13:32.4130419Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T10:13:32.4158524Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T10:13:32.4453326Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T10:13:32.4486625Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T10:13:32.4677059Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T10:13:32.4711926Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T10:13:32.4905890Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-14T10:13:32.4940059Z ##[endgroup]
+2026-10-14T10:13:32.4941227Z ##[group]Fetching the repository
+2026-10-14T10:13:32.4947993Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +487e69732cf7dee82d83ce5f762b9464f090b081:refs/remotes/pull/380/merge
+2026-10-14T10:13:33.4665892Z From https://github.com/Kaichen9527/stockinsider
+2026-10-14T10:13:33.4668015Z  * [new ref]         487e69732cf7dee82d83ce5f762b9464f090b081 -> pull/380/merge
+2026-10-14T10:13:33.4670783Z ##[endgroup]
+2026-10-14T10:13:33.4671868Z ##[group]Determining the checkout info
+2026-10-14T10:13:33.4673029Z ##[endgroup]
+2026-10-14T10:13:33.4678875Z [command]/usr/bin/git sparse-checkout disable
+2026-10-14T10:13:33.4723200Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-14T10:13:33.4784438Z ##[group]Checking out the ref
+2026-10-14T10:13:33.4787397Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/380/merge
+2026-10-14T10:13:33.6140336Z Note: switching to 'refs/remotes/pull/380/merge'.
+2026-10-14T10:13:33.6141080Z 
+2026-10-14T10:13:33.6141982Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-14T10:13:33.6142697Z changes and commit them, and you can discard any commits you make in this
+2026-10-14T10:13:33.6143411Z state without impacting any branches by switching back to a branch.
+2026-10-14T10:13:33.6144307Z 
+2026-10-14T10:13:33.6144655Z If you want to create a new branch to retain commits you create, you may
+2026-10-14T10:13:33.6145326Z do so (now or later) by using -c with the switch command. Example:
+2026-10-14T10:13:33.6145730Z 
+2026-10-14T10:13:33.6145999Z   git switch -c <new-branch-name>
+2026-10-14T10:13:33.6146344Z 
+2026-10-14T10:13:33.6146608Z Or undo this operation with:
+2026-10-14T10:13:33.6146946Z 
+2026-10-14T10:13:33.6206484Z   git switch -
+2026-10-14T10:13:33.6206851Z 
+2026-10-14T10:13:33.6207250Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-14T10:13:33.6207842Z 
+2026-10-14T10:13:33.6208486Z HEAD is now at 487e697 Merge dd59817f750684b093965f539dd4de466be13077 into 1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4
+2026-10-14T10:13:33.6211132Z ##[endgroup]
+2026-10-14T10:13:33.6212435Z [command]/usr/bin/git log -1 --format=%H
+2026-10-14T10:13:33.6222144Z 487e69732cf7dee82d83ce5f762b9464f090b081
+2026-10-14T10:13:33.6223727Z ##[group]Removing auth
+2026-10-14T10:13:33.6226869Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T10:13:33.6255232Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T10:13:33.6444185Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T10:13:33.6466705Z http.https://github.com/.extraheader
+2026-10-14T10:13:33.6472449Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-14T10:13:33.6502176Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T10:13:33.6687400Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T10:13:33.6714350Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T10:13:33.6899060Z ##[endgroup]
+2026-10-14T10:13:33.7195940Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-14T10:13:33.7196412Z with:
+2026-10-14T10:13:33.7196717Z   node-version: 22.14.0
+2026-10-14T10:13:33.7197049Z   always-auth: false
+2026-10-14T10:13:33.7197371Z   check-latest: false
+2026-10-14T10:13:33.7199534Z   token: ***
+2026-10-14T10:13:33.7199831Z ##[endgroup]
+2026-10-14T10:13:33.8270351Z Attempting to download 22.14.0...
+2026-10-14T10:13:33.8352937Z (node:2189) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T10:13:33.8353761Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T10:13:34.5514454Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+2026-10-14T10:13:34.9179023Z Extracting ...
+2026-10-14T10:13:34.9271833Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/59c6b672-be99-427c-b686-be963bad62d8 -f /home/runner/work/_temp/cdb4532a-00c2-475c-8125-d24b285f74d7
+2026-10-14T10:13:35.9393622Z Adding to the cache ...
+2026-10-14T10:13:41.6234104Z ##[group]Environment details
+2026-10-14T10:13:41.8021757Z node: v22.14.0
+2026-10-14T10:13:41.8022119Z npm: 10.9.2
+2026-10-14T10:13:41.8022380Z yarn: 1.22.22
+2026-10-14T10:13:41.8024047Z ##[endgroup]
+2026-10-14T10:13:41.8498148Z ##[group]Run set -euo pipefail
+2026-10-14T10:13:41.8498471Z [36;1mset -euo pipefail[0m
+2026-10-14T10:13:41.8498701Z [36;1mkey="$RUNNER_TEMP/pgdg.asc"[0m
+2026-10-14T10:13:41.8499239Z [36;1mcurl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc -o "$key"[0m
+2026-10-14T10:13:41.8499892Z [36;1mfingerprint=$(gpg --batch --show-keys --with-colons "$key" | awk -F: '$1=="fpr" {print $10; exit}')[0m
+2026-10-14T10:13:41.8500556Z [36;1mtest "$fingerprint" = B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8[0m
+2026-10-14T10:13:41.8500943Z [36;1msudo install -d -m 0755 /usr/share/postgresql-common/pgdg[0m
+2026-10-14T10:13:41.8501350Z [36;1msudo install -m 0644 "$key" /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc[0m
+2026-10-14T10:13:41.8502545Z [36;1mprintf '%s\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null[0m
+2026-10-14T10:13:41.8503331Z [36;1msudo apt-get update[0m
+2026-10-14T10:13:41.8503671Z [36;1msudo apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17[0m
+2026-10-14T10:13:41.8504030Z [36;1mbin=/usr/lib/postgresql/17/bin[0m
+2026-10-14T10:13:41.8504332Z [36;1mfor tool in pg_config initdb pg_ctl psql; do test -x "$bin/$tool"; done[0m
+2026-10-14T10:13:41.8504695Z [36;1m"$bin/pg_config" --version | grep -E '^PostgreSQL 17\.'[0m
+2026-10-14T10:13:41.8504959Z [36;1mecho "$bin" >> "$GITHUB_PATH"[0m
+2026-10-14T10:13:41.8505188Z [36;1mecho "USER=$(id -un)" >> "$GITHUB_ENV"[0m
+2026-10-14T10:13:41.9115035Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T10:13:41.9115411Z ##[endgroup]
+2026-10-14T10:13:42.4161126Z gpg: directory '/home/runner/.gnupg' created
+2026-10-14T10:13:42.4199331Z gpg: keybox '/home/runner/.gnupg/pubring.kbx' created
+2026-10-14T10:13:42.4449409Z gpg: /home/runner/.gnupg/trustdb.gpg: trustdb created
+2026-10-14T10:13:42.5325712Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-14T10:13:42.5541137Z Get:6 https://apt.postgresql.org/pub/repos/apt noble-pgdg InRelease [189 kB]
+2026-10-14T10:13:42.5692713Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-14T10:13:42.5696886Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-14T10:13:42.5710684Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-14T10:13:42.5919121Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-14T10:13:42.6093464Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-14T10:13:42.6751772Z Get:8 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 Packages [900 kB]
+2026-10-14T10:13:42.7127517Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [576 kB]
+2026-10-14T10:13:42.7228347Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [640 B]
+2026-10-14T10:13:42.7248903Z Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
+2026-10-14T10:13:42.7273799Z Get:12 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [518 kB]
+2026-10-14T10:13:42.7589380Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
+2026-10-14T10:13:42.7666525Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
+2026-10-14T10:13:42.7713071Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1702 kB]
+2026-10-14T10:13:42.7772977Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+2026-10-14T10:13:42.7802012Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1805 kB]
+2026-10-14T10:13:42.7936539Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [411 kB]
+2026-10-14T10:13:42.7968859Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [50.7 kB]
+2026-10-14T10:13:42.7978468Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.0 kB]
+2026-10-14T10:13:42.8116664Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [748 B]
+2026-10-14T10:13:42.8536697Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1145 kB]
+2026-10-14T10:13:42.9042595Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+2026-10-14T10:13:42.9083077Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1221 kB]
+2026-10-14T10:13:42.9128197Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+2026-10-14T10:13:42.9151893Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
+2026-10-14T10:13:42.9231086Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
+2026-10-14T10:13:42.9257369Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [45.4 kB]
+2026-10-14T10:13:42.9270364Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.1 kB]
+2026-10-14T10:13:49.1614159Z Fetched 13.6 MB in 1s (11.2 MB/s)
+2026-10-14T10:13:49.8337360Z Reading package lists...
+2026-10-14T10:13:49.8601388Z Reading package lists...
+2026-10-14T10:13:50.0256476Z Building dependency tree...
+2026-10-14T10:13:50.0262598Z Reading state information...
+2026-10-14T10:13:50.1515947Z Suggested packages:
+2026-10-14T10:13:50.1516211Z   postgresql-doc-17
+2026-10-14T10:13:50.1666547Z The following NEW packages will be installed:
+2026-10-14T10:13:50.1666882Z   postgresql-17 postgresql-client-17
+2026-10-14T10:13:50.3102101Z 0 upgraded, 2 newly installed, 0 to remove and 35 not upgraded.
+2026-10-14T10:13:50.3102637Z Need to get 19.0 MB of archives.
+2026-10-14T10:13:50.3103135Z After this operation, 69.4 MB of additional disk space will be used.
+2026-10-14T10:13:50.3104078Z Get:1 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 postgresql-client-17 amd64 17.11-1.pgdg24.04+2 [2053 kB]
+2026-10-14T10:13:50.3333269Z Get:2 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 postgresql-17 amd64 17.11-1.pgdg24.04+2 [16.9 MB]
+2026-10-14T10:13:50.5958573Z Preconfiguring packages ...
+2026-10-14T10:13:50.6506926Z Fetched 19.0 MB in 0s (76.9 MB/s)
+2026-10-14T10:13:50.6679560Z Selecting previously unselected package postgresql-client-17.
+2026-10-14T10:13:50.6873120Z (Reading database ... 
+2026-10-14T10:13:50.6873482Z (Reading database ... 5%
+2026-10-14T10:13:50.6874011Z (Reading database ... 10%
+2026-10-14T10:13:50.6874338Z (Reading database ... 15%
+2026-10-14T10:13:50.6874644Z (Reading database ... 20%
+2026-10-14T10:13:50.6874939Z (Reading database ... 25%
+2026-10-14T10:13:50.6875271Z (Reading database ... 30%
+2026-10-14T10:13:50.6875585Z (Reading database ... 35%
+2026-10-14T10:13:50.6875875Z (Reading database ... 40%
+2026-10-14T10:13:50.6876191Z (Reading database ... 45%
+2026-10-14T10:13:50.6876483Z (Reading database ... 50%
+2026-10-14T10:13:50.6909892Z (Reading database ... 55%
+2026-10-14T10:13:50.8156110Z (Reading database ... 60%
+2026-10-14T10:13:51.0066887Z (Reading database ... 65%
+2026-10-14T10:13:51.2127272Z (Reading database ... 70%
+2026-10-14T10:13:51.3741012Z (Reading database ... 75%
+2026-10-14T10:13:51.5574231Z (Reading database ... 80%
+2026-10-14T10:13:51.7179301Z (Reading database ... 85%
+2026-10-14T10:13:51.8658179Z (Reading database ... 90%
+2026-10-14T10:13:51.9742739Z (Reading database ... 95%
+2026-10-14T10:13:51.9743042Z (Reading database ... 100%
+2026-10-14T10:13:51.9743389Z (Reading database ... 203191 files and directories currently installed.)
+2026-10-14T10:13:51.9781789Z Preparing to unpack .../postgresql-client-17_17.11-1.pgdg24.04+2_amd64.deb ...
+2026-10-14T10:13:52.0064403Z Unpacking postgresql-client-17 (17.11-1.pgdg24.04+2) ...
+2026-10-14T10:13:52.1804703Z Selecting previously unselected package postgresql-17.
+2026-10-14T10:13:52.1915490Z Preparing to unpack .../postgresql-17_17.11-1.pgdg24.04+2_amd64.deb ...
+2026-10-14T10:13:52.2001223Z Unpacking postgresql-17 (17.11-1.pgdg24.04+2) ...
+2026-10-14T10:13:53.1064724Z Setting up postgresql-client-17 (17.11-1.pgdg24.04+2) ...
+2026-10-14T10:13:53.4284553Z update-alternatives: using /usr/share/postgresql/17/man/man1/psql.1.gz to provide /usr/share/man/man1/psql.1.gz (psql.1.gz) in auto mode
+2026-10-14T10:13:53.4543188Z Setting up postgresql-17 (17.11-1.pgdg24.04+2) ...
+2026-10-14T10:13:54.1449347Z Processing triggers for postgresql-common (293.pgdg24.04+1) ...
+2026-10-14T10:13:54.2225172Z Building PostgreSQL dictionaries from installed myspell/hunspell packages...
+2026-10-14T10:13:54.2228033Z   en_us
+2026-10-14T10:13:54.2724428Z Removing obsolete dictionary files:
+2026-10-14T10:13:54.8046549Z 
+2026-10-14T10:13:54.8047149Z Running kernel seems to be up-to-date.
+2026-10-14T10:13:54.8047369Z 
+2026-10-14T10:13:54.8047493Z No services need to be restarted.
+2026-10-14T10:13:54.8047644Z 
+2026-10-14T10:13:54.8047760Z No containers need to be restarted.
+2026-10-14T10:13:54.8047906Z 
+2026-10-14T10:13:54.8048046Z No user sessions are running outdated binaries.
+2026-10-14T10:13:54.8048209Z 
+2026-10-14T10:13:54.8048430Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-14T10:13:55.5695486Z PostgreSQL 17.11 (Ubuntu 17.11-1.pgdg24.04+2)
+2026-10-14T10:13:55.5750019Z ##[group]Run npm ci --ignore-scripts
+2026-10-14T10:13:55.5750284Z [36;1mnpm ci --ignore-scripts[0m
+2026-10-14T10:13:55.5750516Z [36;1mnpm --prefix web ci --ignore-scripts[0m
+2026-10-14T10:13:55.5806688Z shell: /usr/bin/bash -e {0}
+2026-10-14T10:13:55.5806892Z env:
+2026-10-14T10:13:55.5807053Z   USER: runner
+2026-10-14T10:13:55.5807221Z ##[endgroup]
+2026-10-14T10:13:56.5847038Z 
+2026-10-14T10:13:56.5847586Z added 39 packages, and audited 40 packages in 960ms
+2026-10-14T10:13:56.5847835Z 
+2026-10-14T10:13:56.5847975Z 7 packages are looking for funding
+2026-10-14T10:13:56.5848221Z   run `npm fund` for details
+2026-10-14T10:13:56.5858307Z 
+2026-10-14T10:13:56.5858546Z 1 high severity vulnerability
+2026-10-14T10:13:56.5858760Z 
+2026-10-14T10:13:56.5858898Z To address all issues, run:
+2026-10-14T10:13:56.5859185Z   npm audit fix
+2026-10-14T10:13:56.5859344Z 
+2026-10-14T10:13:56.5859473Z Run `npm audit` for details.
+2026-10-14T10:13:57.6691077Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-10-14T10:14:09.8659271Z 
+2026-10-14T10:14:09.8659887Z added 432 packages, and audited 433 packages in 13s
+2026-10-14T10:14:09.8660224Z 
+2026-10-14T10:14:09.8660414Z 169 packages are looking for funding
+2026-10-14T10:14:09.8660763Z   run `npm fund` for details
+2026-10-14T10:14:09.9634636Z 
+2026-10-14T10:14:09.9635248Z 11 vulnerabilities (10 high, 1 critical)
+2026-10-14T10:14:09.9635548Z 
+2026-10-14T10:14:09.9635808Z To address issues that do not require attention, run:
+2026-10-14T10:14:09.9636200Z   npm audit fix
+2026-10-14T10:14:09.9636349Z 
+2026-10-14T10:14:09.9636618Z To address all issues (including breaking changes), run:
+2026-10-14T10:14:09.9637017Z   npm audit fix --force
+2026-10-14T10:14:09.9637191Z 
+2026-10-14T10:14:09.9637327Z Run `npm audit` for details.
+2026-10-14T10:14:10.0006128Z ##[group]Run set -euo pipefail
+2026-10-14T10:14:10.0006707Z [36;1mset -euo pipefail[0m
+2026-10-14T10:14:10.0006961Z [36;1mevidence="$RUNNER_TEMP/publication-tail-quality"[0m
+2026-10-14T10:14:10.0007241Z [36;1mmkdir -m 0700 "$evidence"[0m
+2026-10-14T10:14:10.0007511Z [36;1mecho "RESEARCH_TAIL_CI_EVIDENCE=$evidence" >> "$GITHUB_ENV"[0m
+2026-10-14T10:14:10.0070349Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T10:14:10.0070625Z env:
+2026-10-14T10:14:10.0070785Z   USER: runner
+2026-10-14T10:14:10.0070950Z ##[endgroup]
+2026-10-14T10:14:10.0178283Z ##[group]Run set -euo pipefail
+2026-10-14T10:14:10.0178518Z [36;1mset -euo pipefail[0m
+2026-10-14T10:14:10.0178732Z [36;1mnode --test --test-concurrency=1 \[0m
+2026-10-14T10:14:10.0179090Z [36;1m  scripts/opportunity-v3/research-publication-tail-extraction.test.mjs \[0m
+2026-10-14T10:14:10.0179539Z [36;1m  scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs \[0m
+2026-10-14T10:14:10.0179906Z [36;1m  2>&1 | tee "$RESEARCH_TAIL_CI_EVIDENCE/pure.stdout"[0m
+2026-10-14T10:14:10.0229346Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T10:14:10.0229610Z env:
+2026-10-14T10:14:10.0229768Z   USER: runner
+2026-10-14T10:14:10.0230028Z   RESEARCH_TAIL_CI_EVIDENCE: /home/runner/work/_temp/publication-tail-quality
+2026-10-14T10:14:10.0230328Z ##[endgroup]
+2026-10-14T10:14:10.0588664Z TAP version 13
+2026-10-14T10:14:10.1523943Z # Subtest: baseline is genuinely separate finite post50 descriptor, no production authority
+2026-10-14T10:14:10.1526962Z ok 1 - baseline is genuinely separate finite post50 descriptor, no production authority
+2026-10-14T10:14:10.1527991Z   ---
+2026-10-14T10:14:10.1528622Z   duration_ms: 0.889137
+2026-10-14T10:14:10.1529193Z   ...
+2026-10-14T10:14:10.1529832Z # Subtest: missing rejected before any query and client closed
+2026-10-14T10:14:10.1530611Z ok 2 - missing rejected before any query and client closed
+2026-10-14T10:14:10.1531250Z   ---
+2026-10-14T10:14:10.1531829Z   duration_ms: 2.33759
+2026-10-14T10:14:10.1532330Z   ...
+2026-10-14T10:14:10.1560217Z # Subtest: duplicate rejected before any query and client closed
+2026-10-14T10:14:10.1561026Z ok 3 - duplicate rejected before any query and client closed
+2026-10-14T10:14:10.1561763Z   ---
+2026-10-14T10:14:10.1562198Z   duration_ms: 1.824661
+2026-10-14T10:14:10.1562669Z   ...
+2026-10-14T10:14:10.1563612Z # Subtest: wronghash rejected before any query and client closed
+2026-10-14T10:14:10.1564424Z ok 4 - wronghash rejected before any query and client closed
+2026-10-14T10:14:10.1564992Z   ---
+2026-10-14T10:14:10.1565290Z   duration_ms: 0.950667
+2026-10-14T10:14:10.1565588Z   ...
+2026-10-14T10:14:10.1565974Z # Subtest: reordered rejected before any query and client closed
+2026-10-14T10:14:10.1566653Z ok 5 - reordered rejected before any query and client closed
+2026-10-14T10:14:10.1567150Z   ---
+2026-10-14T10:14:10.1567580Z   duration_ms: 1.449084
+2026-10-14T10:14:10.1568038Z   ...
+2026-10-14T10:14:10.1568657Z # Subtest: unknown rejected before any query and client closed
+2026-10-14T10:14:10.1569429Z ok 6 - unknown rejected before any query and client closed
+2026-10-14T10:14:10.1569978Z   ---
+2026-10-14T10:14:10.1570372Z   duration_ms: 1.36455
+2026-10-14T10:14:10.1570781Z   ...
+2026-10-14T10:14:10.1571297Z # Subtest: busy rejected before BEGIN with no mutation
+2026-10-14T10:14:10.1572095Z ok 7 - busy rejected before BEGIN with no mutation
+2026-10-14T10:14:10.1572579Z   ---
+2026-10-14T10:14:10.1572876Z   duration_ms: 29.452416
+2026-10-14T10:14:10.1573182Z   ...
+2026-10-14T10:14:10.1573640Z # Subtest: namespace unreadable or different never becomes predecessor success
+2026-10-14T10:14:10.1574230Z ok 8 - namespace unreadable or different never becomes predecessor success
+2026-10-14T10:14:10.1574652Z   ---
+2026-10-14T10:14:10.1574946Z   duration_ms: 5.790491
+2026-10-14T10:14:10.1575249Z   ...
+2026-10-14T10:14:10.1575711Z # Subtest: caller accessors are read once into owned buffers before asynchronous queries
+2026-10-14T10:14:10.1576330Z ok 9 - caller accessors are read once into owned buffers before asynchronous queries
+2026-10-14T10:14:10.1576766Z   ---
+2026-10-14T10:14:10.1577054Z   duration_ms: 11.538149
+2026-10-14T10:14:10.1577359Z   ...
+2026-10-14T10:14:10.2092037Z # Subtest: fixed26 exact original SQL excludes existing financial49 and has no apply authority
+2026-10-14T10:14:10.2093660Z ok 10 - fixed26 exact original SQL excludes existing financial49 and has no apply authority
+2026-10-14T10:14:10.2094510Z   ---
+2026-10-14T10:14:10.2095048Z   duration_ms: 0.710041
+2026-10-14T10:14:10.2095926Z   ...
+2026-10-14T10:14:10.2096507Z # Subtest: tail missing failclosed
+2026-10-14T10:14:10.2097118Z ok 11 - tail missing failclosed
+2026-10-14T10:14:10.2098016Z   ---
+2026-10-14T10:14:10.2098446Z   duration_ms: 0.924638
+2026-10-14T10:14:10.2098900Z   ...
+2026-10-14T10:14:10.2100667Z # Subtest: tail duplicate failclosed
+2026-10-14T10:14:10.2101739Z ok 12 - tail duplicate failclosed
+2026-10-14T10:14:10.2102397Z   ---
+2026-10-14T10:14:10.2102822Z   duration_ms: 0.837269
+2026-10-14T10:14:10.2103531Z   ...
+2026-10-14T10:14:10.2104041Z # Subtest: tail reordered failclosed
+2026-10-14T10:14:10.2106259Z ok 13 - tail reordered failclosed
+2026-10-14T10:14:10.2106808Z   ---
+2026-10-14T10:14:10.2107199Z   duration_ms: 0.769138
+2026-10-14T10:14:10.2107789Z   ...
+2026-10-14T10:14:10.2108342Z # Subtest: tail unknown failclosed
+2026-10-14T10:14:10.2108933Z ok 14 - tail unknown failclosed
+2026-10-14T10:14:10.2109415Z   ---
+2026-10-14T10:14:10.2109847Z   duration_ms: 1.125356
+2026-10-14T10:14:10.2110278Z   ...
+2026-10-14T10:14:10.2110779Z # Subtest: tail wronghash failclosed
+2026-10-14T10:14:10.2113367Z ok 15 - tail wronghash failclosed
+2026-10-14T10:14:10.2114096Z   ---
+2026-10-14T10:14:10.2114324Z   duration_ms: 0.566969
+2026-10-14T10:14:10.2114702Z   ...
+2026-10-14T10:14:10.2115244Z # Subtest: tail wrongbytes failclosed
+2026-10-14T10:14:10.2116122Z ok 16 - tail wrongbytes failclosed
+2026-10-14T10:14:10.2116548Z   ---
+2026-10-14T10:14:10.2116709Z   duration_ms: 0.704432
+2026-10-14T10:14:10.2116909Z   ...
+2026-10-14T10:14:10.2117998Z # Subtest: fixed descriptor entries cannot be changed through the exported object
+2026-10-14T10:14:10.2118792Z ok 17 - fixed descriptor entries cannot be changed through the exported object
+2026-10-14T10:14:10.2119898Z   ---
+2026-10-14T10:14:10.2120148Z   duration_ms: 1.884069
+2026-10-14T10:14:10.2120528Z   ...
+2026-10-14T10:14:10.2187547Z 1..17
+2026-10-14T10:14:10.2188011Z # tests 17
+2026-10-14T10:14:10.2188462Z # suites 0
+2026-10-14T10:14:10.2188915Z # pass 17
+2026-10-14T10:14:10.2189386Z # fail 0
+2026-10-14T10:14:10.2189803Z # cancelled 0
+2026-10-14T10:14:10.2190231Z # skipped 0
+2026-10-14T10:14:10.2190647Z # todo 0
+2026-10-14T10:14:10.2191099Z # duration_ms 168.887802
+2026-10-14T10:14:10.2267322Z ##[group]Run set -euo pipefail
+2026-10-14T10:14:10.2267708Z [36;1mset -euo pipefail[0m
+2026-10-14T10:14:10.2268172Z [36;1mexport RESEARCH_TAIL_ARTIFACTS="$RESEARCH_TAIL_CI_EVIDENCE/entry-native"[0m
+2026-10-14T10:14:10.2268701Z [36;1mnode --test --test-concurrency=1 \[0m
+2026-10-14T10:14:10.2269297Z [36;1m  scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs \[0m
+2026-10-14T10:14:10.2269961Z [36;1m  2>&1 | tee "$RESEARCH_TAIL_CI_EVIDENCE/entry-native.stdout"[0m
+2026-10-14T10:14:10.2348145Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T10:14:10.2348574Z env:
+2026-10-14T10:14:10.2348814Z   USER: runner
+2026-10-14T10:14:10.2349234Z   RESEARCH_TAIL_CI_EVIDENCE: /home/runner/work/_temp/publication-tail-quality
+2026-10-14T10:14:10.2349727Z ##[endgroup]
+2026-10-14T10:14:10.2734124Z TAP version 13
+2026-10-14T10:14:13.2859986Z # Subtest: actual guarded26 helper on genuine captured post-main50 predecessor
+2026-10-14T10:14:13.2882781Z     # Subtest: main actual financial50 and original operator helper first COMMIT
+2026-10-14T10:14:13.2884112Z     ok 1 - main actual financial50 and original operator helper first COMMIT
+2026-10-14T10:14:13.2884771Z       ---
+2026-10-14T10:14:13.2885195Z       duration_ms: 648.990279
+2026-10-14T10:14:13.2885641Z       ...
+2026-10-14T10:14:14.1618151Z     # Subtest: fresh finite readonly guard succeeds without writes
+2026-10-14T10:14:14.1619204Z     ok 2 - fresh finite readonly guard succeeds without writes
+2026-10-14T10:14:14.1619487Z       ---
+2026-10-14T10:14:14.1619668Z       duration_ms: 558.094824
+2026-10-14T10:14:14.1619891Z       ...
+2026-10-14T10:14:14.3789751Z     # Subtest: first1 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.3791743Z     ok 3 - first1 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.3792239Z       ---
+2026-10-14T10:14:14.3792510Z       duration_ms: 217.24286
+2026-10-14T10:14:14.3792776Z       ...
+2026-10-14T10:14:14.6160467Z     # Subtest: first2 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.6177837Z     ok 4 - first2 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.6178183Z       ---
+2026-10-14T10:14:14.6178364Z       duration_ms: 236.767701
+2026-10-14T10:14:14.6178559Z       ...
+2026-10-14T10:14:14.8618963Z     # Subtest: first3 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.8620365Z     ok 5 - first3 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.8620944Z       ---
+2026-10-14T10:14:14.8621147Z       duration_ms: 245.491112
+2026-10-14T10:14:14.8621358Z       ...
+2026-10-14T10:14:15.1088808Z     # Subtest: first4 prerequisite prefix rejected before tail
+2026-10-14T10:14:15.1099019Z     ok 6 - first4 prerequisite prefix rejected before tail
+2026-10-14T10:14:15.1099442Z       ---
+2026-10-14T10:14:15.1099690Z       duration_ms: 246.994451
+2026-10-14T10:14:15.1099890Z       ...
+2026-10-14T10:14:15.3546838Z     # Subtest: first5 prerequisite prefix rejected before tail
+2026-10-14T10:14:15.3547440Z     ok 7 - first5 prerequisite prefix rejected before tail
+2026-10-14T10:14:15.3547817Z       ---
+2026-10-14T10:14:15.3548096Z       duration_ms: 245.937262
+2026-10-14T10:14:15.3548369Z       ...
+2026-10-14T10:14:15.9005982Z     # Subtest: column-only original v6 partial rejected with outer rollback
+2026-10-14T10:14:15.9006716Z     ok 8 - column-only original v6 partial rejected with outer rollback
+2026-10-14T10:14:15.9007026Z       ---
+2026-10-14T10:14:15.9007201Z       duration_ms: 542.367609
+2026-10-14T10:14:15.9007533Z       ...
+2026-10-14T10:14:16.1092927Z     # Subtest: index-only counterfactual on real table rejected with outer rollback
+2026-10-14T10:14:16.1093463Z     ok 9 - index-only counterfactual on real table rejected with outer rollback
+2026-10-14T10:14:16.1093774Z       ---
+2026-10-14T10:14:16.1093948Z       duration_ms: 205.957183
+2026-10-14T10:14:16.1094151Z       ...
+2026-10-14T10:14:16.3186367Z     # Subtest: function-only exact original v6 partial rejected with outer rollback
+2026-10-14T10:14:16.3193152Z     ok 10 - function-only exact original v6 partial rejected with outer rollback
+2026-10-14T10:14:16.3193562Z       ---
+2026-10-14T10:14:16.3193745Z       duration_ms: 211.09297
+2026-10-14T10:14:16.3193938Z       ...
+2026-10-14T10:14:16.5234375Z     # Subtest: body drift rejected with outer rollback
+2026-10-14T10:14:16.5234931Z     ok 11 - body drift rejected with outer rollback
+2026-10-14T10:14:16.5235181Z       ---
+2026-10-14T10:14:16.5235364Z       duration_ms: 205.024222
+2026-10-14T10:14:16.5235569Z       ...
+2026-10-14T10:14:16.7310008Z     # Subtest: owner drift rejected with outer rollback
+2026-10-14T10:14:16.7310981Z     ok 12 - owner drift rejected with outer rollback
+2026-10-14T10:14:16.7311351Z       ---
+2026-10-14T10:14:16.7311754Z       duration_ms: 207.624598
+2026-10-14T10:14:16.7312045Z       ...
+2026-10-14T10:14:16.9370717Z     # Subtest: config drift rejected with outer rollback
+2026-10-14T10:14:16.9371962Z     ok 13 - config drift rejected with outer rollback
+2026-10-14T10:14:16.9372379Z       ---
+2026-10-14T10:14:16.9372573Z       duration_ms: 205.959166
+2026-10-14T10:14:16.9372779Z       ...
+2026-10-14T10:14:17.1445343Z     # Subtest: routine ACL drift rejected with outer rollback
+2026-10-14T10:14:17.1447585Z     ok 14 - routine ACL drift rejected with outer rollback
+2026-10-14T10:14:17.1448016Z       ---
+2026-10-14T10:14:17.1448254Z       duration_ms: 207.341729
+2026-10-14T10:14:17.1448555Z       ...
+2026-10-14T10:14:17.6845904Z     # Subtest: column ACL drift rejected with outer rollback
+2026-10-14T10:14:17.6846698Z     ok 15 - column ACL drift rejected with outer rollback
+2026-10-14T10:14:17.6846973Z       ---
+2026-10-14T10:14:17.6847152Z       duration_ms: 539.839626
+2026-10-14T10:14:17.6847355Z       ...
+2026-10-14T10:14:17.8936137Z     # Subtest: SECDEF drift rejected with outer rollback
+2026-10-14T10:14:17.8939812Z     ok 16 - SECDEF drift rejected with outer rollback
+2026-10-14T10:14:17.8940235Z       ---
+2026-10-14T10:14:17.8940529Z       duration_ms: 208.988973
+2026-10-14T10:14:17.8941001Z       ...
+2026-10-14T10:14:18.0990944Z     # Subtest: overload unknown profile rejected with outer rollback
+2026-10-14T10:14:18.0991878Z     ok 17 - overload unknown profile rejected with outer rollback
+2026-10-14T10:14:18.0992294Z       ---
+2026-10-14T10:14:18.0992590Z       duration_ms: 205.401362
+2026-10-14T10:14:18.0993189Z       ...
+2026-10-14T10:14:19.0576615Z     # Subtest: committed first v6 partial rejected by actual helper before tail mutation
+2026-10-14T10:14:19.0577446Z     ok 18 - committed first v6 partial rejected by actual helper before tail mutation
+2026-10-14T10:14:19.0577923Z       ---
+2026-10-14T10:14:19.0578270Z       duration_ms: 639.522055
+2026-10-14T10:14:19.0578639Z       ...
+2026-10-14T10:14:19.7950614Z     # Subtest: actual helper busy refuses before BEGIN and zero mutation
+2026-10-14T10:14:19.7951551Z     ok 19 - actual helper busy refuses before BEGIN and zero mutation
+2026-10-14T10:14:19.7952112Z       ---
+2026-10-14T10:14:19.7952358Z       duration_ms: 163.019906
+2026-10-14T10:14:19.7952674Z       ...
+2026-10-14T10:14:20.6422998Z     # Subtest: actual helper forced error after real26 DDL rolls back everything
+2026-10-14T10:14:20.6423826Z     ok 20 - actual helper forced error after real26 DDL rolls back everything
+2026-10-14T10:14:20.6424342Z       ---
+2026-10-14T10:14:20.6424684Z       duration_ms: 847.125855
+2026-10-14T10:14:20.6425017Z       ...
+2026-10-14T10:14:21.4726204Z     # Subtest: actual writer socket loss during26 before COMMIT has backendgone and fullrollback
+2026-10-14T10:14:21.4727073Z     ok 21 - actual writer socket loss during26 before COMMIT has backendgone and fullrollback
+2026-10-14T10:14:21.4727595Z       ---
+2026-10-14T10:14:21.4727838Z       duration_ms: 830.14148
+2026-10-14T10:14:21.4728115Z       ...
+2026-10-14T10:14:22.5638451Z     # Subtest: actual helper26 COMMIT original full catalog/financial/nonemptyrows and independent observer
+2026-10-14T10:14:22.5639609Z     ok 22 - actual helper26 COMMIT original full catalog/financial/nonemptyrows and independent observer
+2026-10-14T10:14:22.5640042Z       ---
+2026-10-14T10:14:22.5640260Z       duration_ms: 1091.300071
+2026-10-14T10:14:22.5640480Z       ...
+2026-10-14T10:14:23.1308344Z     # Subtest: installed second actual helper refuses without replay
+2026-10-14T10:14:23.1309239Z     ok 23 - installed second actual helper refuses without replay
+2026-10-14T10:14:23.1309793Z       ---
+2026-10-14T10:14:23.1310128Z       duration_ms: 567.034225
+2026-10-14T10:14:23.1310513Z       ...
+2026-10-14T10:14:23.4476944Z     1..23
+2026-10-14T10:14:23.4477889Z ok 1 - actual guarded26 helper on genuine captured post-main50 predecessor
+2026-10-14T10:14:23.4478467Z   ---
+2026-10-14T10:14:23.4478849Z   duration_ms: 13114.90907
+2026-10-14T10:14:23.4479291Z   ...
+2026-10-14T10:14:23.4728675Z 1..1
+2026-10-14T10:14:23.4728942Z # tests 24
+2026-10-14T10:14:23.4729188Z # suites 0
+2026-10-14T10:14:23.4742723Z # pass 24
+2026-10-14T10:14:23.4742970Z # fail 0
+2026-10-14T10:14:23.4743224Z # cancelled 0
+2026-10-14T10:14:23.4743538Z # skipped 0
+2026-10-14T10:14:23.4743791Z # todo 0
+2026-10-14T10:14:23.4744079Z # duration_ms 13207.667658
+2026-10-14T10:14:23.4792782Z ##[group]Run set -euo pipefail
+2026-10-14T10:14:23.4793043Z [36;1mset -euo pipefail[0m
+2026-10-14T10:14:23.4793354Z [36;1mexport RESEARCH_TAIL_ARTIFACTS="$RESEARCH_TAIL_CI_EVIDENCE/fragments-native"[0m
+2026-10-14T10:14:23.4793724Z [36;1mnode --test --test-concurrency=1 \[0m
+2026-10-14T10:14:23.4794101Z [36;1m  scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs \[0m
+2026-10-14T10:14:23.4794523Z [36;1m  2>&1 | tee "$RESEARCH_TAIL_CI_EVIDENCE/fragments-native.stdout"[0m
+2026-10-14T10:14:23.4851232Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T10:14:23.4851505Z env:
+2026-10-14T10:14:23.4851831Z   USER: runner
+2026-10-14T10:14:23.4852108Z   RESEARCH_TAIL_CI_EVIDENCE: /home/runner/work/_temp/publication-tail-quality
+2026-10-14T10:14:23.4852409Z ##[endgroup]
+2026-10-14T10:14:23.5221397Z TAP version 13
+2026-10-14T10:14:25.6555616Z # Subtest: source-derived prerequisites2..5 isolated fragments and dependency-only controls
+2026-10-14T10:14:25.6556704Z     # Subtest: main actual financial50 and original operator helper first COMMIT
+2026-10-14T10:14:25.6559740Z     ok 1 - main actual financial50 and original operator helper first COMMIT
+2026-10-14T10:14:25.6560511Z       ---
+2026-10-14T10:14:25.6560878Z       duration_ms: 558.289141
+2026-10-14T10:14:25.6561185Z       ...
+2026-10-14T10:14:26.5583073Z     # Subtest: p2-L3: independent-original-DDL
+2026-10-14T10:14:26.5583675Z     ok 2 - p2-L3: independent-original-DDL
+2026-10-14T10:14:26.5584203Z       ---
+2026-10-14T10:14:26.5584447Z       duration_ms: 354.273434
+2026-10-14T10:14:26.5584843Z       ...
+2026-10-14T10:14:26.9120545Z     # Subtest: p2-L16: dependency-only-control-required
+2026-10-14T10:14:26.9121758Z     ok 3 - p2-L16: dependency-only-control-required
+2026-10-14T10:14:26.9123345Z       ---
+2026-10-14T10:14:26.9123580Z       duration_ms: 353.933737
+2026-10-14T10:14:26.9123813Z       ...
+2026-10-14T10:14:27.2672953Z     # Subtest: p2-L22: independent-original-DDL
+2026-10-14T10:14:27.2673906Z     ok 4 - p2-L22: independent-original-DDL
+2026-10-14T10:14:27.2674492Z       ---
+2026-10-14T10:14:27.2674789Z       duration_ms: 354.470856
+2026-10-14T10:14:27.2675080Z       ...
+2026-10-14T10:14:27.6239456Z     # Subtest: p2-L36: dependency-only-control-required
+2026-10-14T10:14:27.6240079Z     ok 5 - p2-L36: dependency-only-control-required
+2026-10-14T10:14:27.6240485Z       ---
+2026-10-14T10:14:27.6240728Z       duration_ms: 356.999044
+2026-10-14T10:14:27.6241009Z       ...
+2026-10-14T10:14:27.9768940Z     # Subtest: p2-L42: independent-original-DDL
+2026-10-14T10:14:27.9769642Z     ok 6 - p2-L42: independent-original-DDL
+2026-10-14T10:14:27.9770326Z       ---
+2026-10-14T10:14:27.9770653Z       duration_ms: 352.576702
+2026-10-14T10:14:27.9771010Z       ...
+2026-10-14T10:14:28.3313162Z     # Subtest: p2-L58: dependency-only-control-required
+2026-10-14T10:14:28.3313810Z     ok 7 - p2-L58: dependency-only-control-required
+2026-10-14T10:14:28.3314308Z       ---
+2026-10-14T10:14:28.3314524Z       duration_ms: 354.10145
+2026-10-14T10:14:28.3314724Z       ...
+2026-10-14T10:14:28.6876136Z     # Subtest: p2-L60: dependency-only-control-required
+2026-10-14T10:14:28.6876860Z     ok 8 - p2-L60: dependency-only-control-required
+2026-10-14T10:14:28.6877530Z       ---
+2026-10-14T10:14:28.6877796Z       duration_ms: 356.185295
+2026-10-14T10:14:28.6878094Z       ...
+2026-10-14T10:14:29.0427129Z     # Subtest: p2-L63: dependency-only-control-required
+2026-10-14T10:14:29.0428195Z     ok 9 - p2-L63: dependency-only-control-required
+2026-10-14T10:14:29.0428780Z       ---
+2026-10-14T10:14:29.0429234Z       duration_ms: 354.729454
+2026-10-14T10:14:29.0429726Z       ...
+2026-10-14T10:14:29.4064034Z     # Subtest: p2-L77: dependency-only-control-required
+2026-10-14T10:14:29.4065298Z     ok 10 - p2-L77: dependency-only-control-required
+2026-10-14T10:14:29.4065708Z       ---
+2026-10-14T10:14:29.4065978Z       duration_ms: 363.460721
+2026-10-14T10:14:29.4066262Z       ...
+2026-10-14T10:14:29.7585241Z     # Subtest: p2-L98: dependency-only-control-required
+2026-10-14T10:14:29.7585791Z     ok 11 - p2-L98: dependency-only-control-required
+2026-10-14T10:14:29.7586203Z       ---
+2026-10-14T10:14:29.7586459Z       duration_ms: 352.162684
+2026-10-14T10:14:29.7586741Z       ...
+2026-10-14T10:14:30.1142028Z     # Subtest: p2-L147: independent-original-DDL
+2026-10-14T10:14:30.1142922Z     ok 12 - p2-L147: independent-original-DDL
+2026-10-14T10:14:30.1143435Z       ---
+2026-10-14T10:14:30.1143817Z       duration_ms: 355.547273
+2026-10-14T10:14:30.1144108Z       ...
+2026-10-14T10:14:30.4708811Z     # Subtest: p2-L196: independent-original-DDL
+2026-10-14T10:14:30.4709676Z     ok 13 - p2-L196: independent-original-DDL
+2026-10-14T10:14:30.4710036Z       ---
+2026-10-14T10:14:30.4710288Z       duration_ms: 356.586924
+2026-10-14T10:14:30.4710537Z       ...
+2026-10-14T10:14:30.8213127Z     # Subtest: p2-L207: dependency-only-control-required
+2026-10-14T10:14:30.8232438Z     ok 14 - p2-L207: dependency-only-control-required
+2026-10-14T10:14:30.8232985Z       ---
+2026-10-14T10:14:30.8233306Z       duration_ms: 348.390178
+2026-10-14T10:14:30.8233670Z       ...
+2026-10-14T10:14:31.1767911Z     # Subtest: p2-L213: independent-original-DDL
+2026-10-14T10:14:31.1769273Z     ok 15 - p2-L213: independent-original-DDL
+2026-10-14T10:14:31.1773172Z       ---
+2026-10-14T10:14:31.1773683Z       duration_ms: 355.597766
+2026-10-14T10:14:31.1774173Z       ...
+2026-10-14T10:14:31.5293038Z     # Subtest: p2-L219: dependency-only-control-required
+2026-10-14T10:14:31.5299034Z     ok 16 - p2-L219: dependency-only-control-required
+2026-10-14T10:14:31.5300295Z       ---
+2026-10-14T10:14:31.5300812Z       duration_ms: 354.159009
+2026-10-14T10:14:31.5301238Z       ...
+2026-10-14T10:14:31.8856271Z     # Subtest: p2-L245: dependency-only-control-required
+2026-10-14T10:14:31.8857293Z     ok 17 - p2-L245: dependency-only-control-required
+2026-10-14T10:14:31.8858128Z       ---
+2026-10-14T10:14:31.8858407Z       duration_ms: 356.141321
+2026-10-14T10:14:31.8858760Z       ...
+2026-10-14T10:14:32.2476052Z     # Subtest: p2-L281: dependency-only-control-required
+2026-10-14T10:14:32.2509315Z     ok 18 - p2-L281: dependency-only-control-required
+2026-10-14T10:14:32.2511199Z       ---
+2026-10-14T10:14:32.2520899Z       duration_ms: 359.533657
+2026-10-14T10:14:32.2521400Z       ...
+2026-10-14T10:14:32.6070471Z     # Subtest: p2-L294: dependency-only-control-required
+2026-10-14T10:14:32.6071110Z     ok 19 - p2-L294: dependency-only-control-required
+2026-10-14T10:14:32.6071834Z       ---
+2026-10-14T10:14:32.6072094Z       duration_ms: 361.778986
+2026-10-14T10:14:32.9573382Z       ...
+2026-10-14T10:14:32.9573804Z     # Subtest: p2-L334: independent-original-DDL
+2026-10-14T10:14:32.9574579Z     ok 20 - p2-L334: independent-original-DDL
+2026-10-14T10:14:32.9574949Z       ---
+2026-10-14T10:14:32.9575209Z       duration_ms: 349.99272
+2026-10-14T10:14:32.9575489Z       ...
+2026-10-14T10:14:33.3123424Z     # Subtest: p2-L346: dependency-only-control-required
+2026-10-14T10:14:33.3124125Z     ok 21 - p2-L346: dependency-only-control-required
+2026-10-14T10:14:33.3125339Z       ---
+2026-10-14T10:14:33.3125599Z       duration_ms: 354.920029
+2026-10-14T10:14:33.3125882Z       ...
+2026-10-14T10:14:33.6645548Z     # Subtest: p2-L347: dependency-only-control-required
+2026-10-14T10:14:33.6646217Z     ok 22 - p2-L347: dependency-only-control-required
+2026-10-14T10:14:33.6646593Z       ---
+2026-10-14T10:14:33.6646848Z       duration_ms: 351.992488
+2026-10-14T10:14:33.6647131Z       ...
+2026-10-14T10:14:34.0139661Z     # Subtest: p2-L374: independent-original-DDL
+2026-10-14T10:14:34.0140609Z     ok 23 - p2-L374: independent-original-DDL
+2026-10-14T10:14:34.0141087Z       ---
+2026-10-14T10:14:34.0141267Z       duration_ms: 349.438848
+2026-10-14T10:14:34.0141469Z       ...
+2026-10-14T10:14:34.3655167Z     # Subtest: p2-L385: dependency-only-control-required
+2026-10-14T10:14:34.3656824Z     ok 24 - p2-L385: dependency-only-control-required
+2026-10-14T10:14:34.3657203Z       ---
+2026-10-14T10:14:34.3657993Z       duration_ms: 351.439581
+2026-10-14T10:14:34.3658320Z       ...
+2026-10-14T10:14:34.7173863Z     # Subtest: p2-L386: dependency-only-control-required
+2026-10-14T10:14:34.7176193Z     ok 25 - p2-L386: dependency-only-control-required
+2026-10-14T10:14:34.7176651Z       ---
+2026-10-14T10:14:34.7176927Z       duration_ms: 351.799542
+2026-10-14T10:14:34.7177228Z       ...
+2026-10-14T10:14:35.0652246Z     # Subtest: p2-L387: dependency-only-control-required
+2026-10-14T10:14:35.0653558Z     ok 26 - p2-L387: dependency-only-control-required
+2026-10-14T10:14:35.0653876Z       ---
+2026-10-14T10:14:35.0654066Z       duration_ms: 347.667122
+2026-10-14T10:14:35.0654262Z       ...
+2026-10-14T10:14:35.4182052Z     # Subtest: p2-L416: independent-original-DDL
+2026-10-14T10:14:35.4182826Z     ok 27 - p2-L416: independent-original-DDL
+2026-10-14T10:14:35.4183181Z       ---
+2026-10-14T10:14:35.4183425Z       duration_ms: 352.787586
+2026-10-14T10:14:35.4183697Z       ...
+2026-10-14T10:14:35.7650594Z     # Subtest: p2-L456: independent-original-DDL
+2026-10-14T10:14:35.7651331Z     ok 28 - p2-L456: independent-original-DDL
+2026-10-14T10:14:35.7651958Z       ---
+2026-10-14T10:14:35.7652279Z       duration_ms: 346.773703
+2026-10-14T10:14:35.7652654Z       ...
+2026-10-14T10:14:36.1190316Z     # Subtest: p2-L472: dependency-only-control-required
+2026-10-14T10:14:36.1191786Z     ok 29 - p2-L472: dependency-only-control-required
+2026-10-14T10:14:36.1192158Z       ---
+2026-10-14T10:14:36.1192421Z       duration_ms: 353.788336
+2026-10-14T10:14:36.1192730Z       ...
+2026-10-14T10:14:36.4669308Z     # Subtest: p2-L477: independent-original-DDL
+2026-10-14T10:14:36.4669864Z     ok 30 - p2-L477: independent-original-DDL
+2026-10-14T10:14:36.4670224Z       ---
+2026-10-14T10:14:36.4670474Z       duration_ms: 347.695999
+2026-10-14T10:14:36.4670754Z       ...
+2026-10-14T10:14:36.8161414Z     # Subtest: p3-L3: dependency-only-control-required
+2026-10-14T10:14:36.8162143Z     ok 31 - p3-L3: dependency-only-control-required
+2026-10-14T10:14:36.8162519Z       ---
+2026-10-14T10:14:36.8162816Z       duration_ms: 349.157886
+2026-10-14T10:14:36.8163100Z       ...
+2026-10-14T10:14:37.1733683Z     # Subtest: p3-L22: dependency-only-control-required
+2026-10-14T10:14:37.1734834Z     ok 32 - p3-L22: dependency-only-control-required
+2026-10-14T10:14:37.1735208Z       ---
+2026-10-14T10:14:37.1735448Z       duration_ms: 357.117355
+2026-10-14T10:14:37.1735747Z       ...
+2026-10-14T10:14:37.5954265Z     # Subtest: p3-L29: dependency-only-control-required
+2026-10-14T10:14:37.5954952Z     ok 33 - p3-L29: dependency-only-control-required
+2026-10-14T10:14:37.5955300Z       ---
+2026-10-14T10:14:37.5955880Z       duration_ms: 421.914692
+2026-10-14T10:14:37.5956188Z       ...
+2026-10-14T10:14:37.9508537Z     # Subtest: p3-L32: dependency-only-control-required
+2026-10-14T10:14:37.9509127Z     ok 34 - p3-L32: dependency-only-control-required
+2026-10-14T10:14:37.9509708Z       ---
+2026-10-14T10:14:38.3044147Z       duration_ms: 355.208557
+2026-10-14T10:14:38.3044505Z       ...
+2026-10-14T10:14:38.3044931Z     # Subtest: p3-L37: dependency-only-control-required
+2026-10-14T10:14:38.3045420Z     ok 35 - p3-L37: dependency-only-control-required
+2026-10-14T10:14:38.3045787Z       ---
+2026-10-14T10:14:38.3046066Z       duration_ms: 353.522665
+2026-10-14T10:14:38.3046341Z       ...
+2026-10-14T10:14:38.6600184Z     # Subtest: p3-L54: dependency-only-control-required
+2026-10-14T10:14:38.6601517Z     ok 36 - p3-L54: dependency-only-control-required
+2026-10-14T10:14:38.6602053Z       ---
+2026-10-14T10:14:38.6602302Z       duration_ms: 355.532101
+2026-10-14T10:14:38.6602587Z       ...
+2026-10-14T10:14:39.3482686Z     # Subtest: p3-L97: independent-original-DDL
+2026-10-14T10:14:39.3483515Z     ok 37 - p3-L97: independent-original-DDL
+2026-10-14T10:14:39.3483765Z       ---
+2026-10-14T10:14:39.3483937Z       duration_ms: 686.100067
+2026-10-14T10:14:39.3484124Z       ...
+2026-10-14T10:14:39.6951993Z     # Subtest: p3-L99: independent-original-DDL
+2026-10-14T10:14:39.6953996Z     ok 38 - p3-L99: independent-original-DDL
+2026-10-14T10:14:39.6954972Z       ---
+2026-10-14T10:14:39.6955223Z       duration_ms: 348.73114
+2026-10-14T10:14:40.3635747Z       ...
+2026-10-14T10:14:40.3636589Z     # Subtest: p3-L100: dependency-only-control-required
+2026-10-14T10:14:40.3637622Z     ok 39 - p3-L100: dependency-only-control-required
+2026-10-14T10:14:40.3637999Z       ---
+2026-10-14T10:14:40.3638197Z       duration_ms: 668.29201
+2026-10-14T10:14:40.3638391Z       ...
+2026-10-14T10:14:40.7202731Z     # Subtest: p3-L105: dependency-only-control-required
+2026-10-14T10:14:40.7203511Z     ok 40 - p3-L105: dependency-only-control-required
+2026-10-14T10:14:40.7204554Z       ---
+2026-10-14T10:14:40.7205106Z       duration_ms: 356.587584
+2026-10-14T10:14:40.7205434Z       ...
+2026-10-14T10:14:41.0805000Z     # Subtest: p3-L109: dependency-only-control-required
+2026-10-14T10:14:41.0806235Z     ok 41 - p3-L109: dependency-only-control-required
+2026-10-14T10:14:41.0806603Z       ---
+2026-10-14T10:14:41.0806861Z       duration_ms: 360.066391
+2026-10-14T10:14:41.0807193Z       ...
+2026-10-14T10:14:41.4381439Z     # Subtest: p3-L122: dependency-only-control-required
+2026-10-14T10:14:41.4382825Z     ok 42 - p3-L122: dependency-only-control-required
+2026-10-14T10:14:41.4383496Z       ---
+2026-10-14T10:14:41.4383739Z       duration_ms: 357.200464
+2026-10-14T10:14:41.4384016Z       ...
+2026-10-14T10:14:41.7890647Z     # Subtest: p3-L165: dependency-only-control-required
+2026-10-14T10:14:41.7892344Z     ok 43 - p3-L165: dependency-only-control-required
+2026-10-14T10:14:41.7892659Z       ---
+2026-10-14T10:14:41.7892835Z       duration_ms: 351.072544
+2026-10-14T10:14:41.7893029Z       ...
+2026-10-14T10:14:42.1429139Z     # Subtest: p3-L210: dependency-only-control-required
+2026-10-14T10:14:42.1429741Z     ok 44 - p3-L210: dependency-only-control-required
+2026-10-14T10:14:42.1430252Z       ---
+2026-10-14T10:14:42.1452066Z       duration_ms: 353.803336
+2026-10-14T10:14:42.1462230Z       ...
+2026-10-14T10:14:42.5032405Z     # Subtest: p3-L271: independent-original-DDL
+2026-10-14T10:14:42.5033036Z     ok 45 - p3-L271: independent-original-DDL
+2026-10-14T10:14:42.5033431Z       ---
+2026-10-14T10:14:42.5033764Z       duration_ms: 360.218656
+2026-10-14T10:14:42.5034119Z       ...
+2026-10-14T10:14:42.8647920Z     # Subtest: p3-L280: dependency-only-control-required
+2026-10-14T10:14:42.8648486Z     ok 46 - p3-L280: dependency-only-control-required
+2026-10-14T10:14:42.8648878Z       ---
+2026-10-14T10:14:42.8649139Z       duration_ms: 361.009397
+2026-10-14T10:14:42.8649429Z       ...
+2026-10-14T10:14:43.3190669Z     # Subtest: p3-L326: dependency-only-control-required
+2026-10-14T10:14:43.3202793Z     ok 47 - p3-L326: dependency-only-control-required
+2026-10-14T10:14:43.3203352Z       ---
+2026-10-14T10:14:43.3203861Z       duration_ms: 454.01146
+2026-10-14T10:14:43.3204458Z       ...
+2026-10-14T10:14:43.6778528Z     # Subtest: p4-L5: dependency-only-control-required
+2026-10-14T10:14:43.6780964Z     ok 48 - p4-L5: dependency-only-control-required
+2026-10-14T10:14:43.6781345Z       ---
+2026-10-14T10:14:43.6781755Z       duration_ms: 358.938146
+2026-10-14T10:14:43.6782009Z       ...
+2026-10-14T10:14:44.0267389Z     # Subtest: p4-L30: dependency-only-control-required
+2026-10-14T10:14:44.0267987Z     ok 49 - p4-L30: dependency-only-control-required
+2026-10-14T10:14:44.0268317Z       ---
+2026-10-14T10:14:44.0268512Z       duration_ms: 348.902532
+2026-10-14T10:14:44.0268757Z       ...
+2026-10-14T10:14:44.3792156Z     # Subtest: p5-L4: dependency-only-control-required
+2026-10-14T10:14:44.3794012Z     ok 50 - p5-L4: dependency-only-control-required
+2026-10-14T10:14:44.3794412Z       ---
+2026-10-14T10:14:44.3794667Z       duration_ms: 352.4176
+2026-10-14T10:14:44.3794951Z       ...
+2026-10-14T10:14:44.7341444Z     # Subtest: p5-L22: dependency-only-control-required
+2026-10-14T10:14:44.7342143Z     ok 51 - p5-L22: dependency-only-control-required
+2026-10-14T10:14:44.7342523Z       ---
+2026-10-14T10:14:44.7342768Z       duration_ms: 353.102764
+2026-10-14T10:14:44.7343046Z       ...
+2026-10-14T10:14:46.1491833Z     # Subtest: p2-L147: actual helper refuses committed isolated fragment
+2026-10-14T10:14:46.1492682Z     ok 52 - p2-L147: actual helper refuses committed isolated fragment
+2026-10-14T10:14:46.1493179Z       ---
+2026-10-14T10:14:46.1493494Z       duration_ms: 1409.528772
+2026-10-14T10:14:46.1493833Z       ...
+2026-10-14T10:14:47.3625470Z     # Subtest: p3-L271: actual helper refuses committed isolated fragment
+2026-10-14T10:14:47.3626328Z     ok 53 - p3-L271: actual helper refuses committed isolated fragment
+2026-10-14T10:14:47.3627502Z       ---
+2026-10-14T10:14:47.3627769Z       duration_ms: 846.592308
+2026-10-14T10:14:47.3628074Z       ...
+2026-10-14T10:14:47.3628309Z     1..53
+2026-10-14T10:14:47.3628892Z ok 1 - source-derived prerequisites2..5 isolated fragments and dependency-only controls
+2026-10-14T10:14:47.3629444Z   ---
+2026-10-14T10:14:47.3629707Z   duration_ms: 23784.684197
+2026-10-14T10:14:47.3629996Z   ...
+2026-10-14T10:14:47.3844569Z 1..1
+2026-10-14T10:14:47.3845092Z # tests 54
+2026-10-14T10:14:47.3845507Z # suites 0
+2026-10-14T10:14:47.3845944Z # pass 54
+2026-10-14T10:14:47.3846216Z # fail 0
+2026-10-14T10:14:47.3846462Z # cancelled 0
+2026-10-14T10:14:47.3846738Z # skipped 0
+2026-10-14T10:14:47.3847313Z # todo 0
+2026-10-14T10:14:47.3847591Z # duration_ms 23871.719119
+2026-10-14T10:14:47.3956613Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-14T10:14:47.3956931Z with:
+2026-10-14T10:14:47.3957127Z   name: publication-tail-quality-38548050159-1
+2026-10-14T10:14:47.3957408Z   path: /home/runner/work/_temp/publication-tail-quality
+2026-10-14T10:14:47.3957662Z   if-no-files-found: warn
+2026-10-14T10:14:47.3957849Z   retention-days: 14
+2026-10-14T10:14:47.3958029Z   compression-level: 6
+2026-10-14T10:14:47.3958215Z   overwrite: false
+2026-10-14T10:14:47.3958395Z   include-hidden-files: false
+2026-10-14T10:14:47.3958585Z env:
+2026-10-14T10:14:47.3958737Z   USER: runner
+2026-10-14T10:14:47.3958996Z   RESEARCH_TAIL_CI_EVIDENCE: /home/runner/work/_temp/publication-tail-quality
+2026-10-14T10:14:47.3959291Z ##[endgroup]
+2026-10-14T10:14:47.5272084Z (node:4336) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T10:14:47.5273198Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T10:14:47.5353729Z With the provided path, there will be 33 files uploaded
+2026-10-14T10:14:47.5372238Z Artifact name is valid!
+2026-10-14T10:14:47.5372688Z Root directory input is valid!
+2026-10-14T10:14:47.7828707Z Beginning upload of artifact content to blob storage
+2026-10-14T10:14:47.8563337Z (node:4336) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-14T10:14:48.0760410Z Uploaded bytes 320938
+2026-10-14T10:14:48.1108728Z Finished uploading artifact content to blob storage!
+2026-10-14T10:14:48.1109599Z SHA256 digest of uploaded artifact zip is fee0502760a0627361898f3bc4cd87c61771b032ab1517113ba3bd94892a7dc9
+2026-10-14T10:14:48.1110651Z Finalizing artifact upload
+2026-10-14T10:14:48.3455601Z Artifact publication-tail-quality-38548050159-1.zip successfully finalized. Artifact ID 11885427199
+2026-10-14T10:14:48.3456700Z Artifact publication-tail-quality-38548050159-1 has been successfully uploaded! Final size is 320938 bytes. Artifact ID is 11885427199
+2026-10-14T10:14:48.3461132Z Artifact download URL: https://github.com/Kaichen9527/stockinsider/actions/runs/38548050159/artifacts/11885427199
+2026-10-14T10:14:48.3688328Z Post job cleanup.
+2026-10-14T10:14:48.4649232Z (node:4348) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T10:14:48.4649902Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T10:14:48.4819352Z Post job cleanup.
+2026-10-14T10:14:48.5567238Z [command]/usr/bin/git version
+2026-10-14T10:14:48.5609194Z git version 2.55.0
+2026-10-14T10:14:48.5643999Z Temporarily overriding HOME='/home/runner/work/_temp/55ab1ba1-208c-45bb-92b5-7949b1216860' before making global git config changes
+2026-10-14T10:14:48.5645278Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T10:14:48.5648121Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T10:14:48.5689544Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T10:14:48.5724213Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T10:14:48.5978241Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T10:14:48.6016466Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T10:14:48.6285031Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T10:14:48.6322091Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T10:14:48.6653192Z Cleaning up orphan processes
+2026-10-14T10:14:48.6912735Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+2026-10-14T10:13:28.9880000Z Requested labels: ubuntu-24.04
+2026-10-14T10:13:28.9880000Z Job defined at: Kaichen9527/stockinsider/.github/workflows/research-publication-tail-quality.yml@refs/pull/380/merge
+2026-10-14T10:13:28.9880000Z Waiting for a runner to pick up this job...
+2026-10-14T10:13:29.0430000Z Job is about to start running on the hosted runner: GitHub Actions 1000010075
+2026-10-14T10:13:29.0430000Z Job is waiting for a hosted runner to come online.
+2026-10-14T10:13:28.9800000Z Evaluating research-publication-tail-quality.if
+2026-10-14T10:13:28.9800000Z Evaluating: success()
+2026-10-14T10:13:28.9800000Z Result: true
+﻿2026-10-14T10:13:31.4960378Z Current runner version: '2.337.0'
+2026-10-14T10:13:31.4981888Z ##[group]Runner Image Provisioner
+2026-10-14T10:13:31.4982748Z Hosted Compute Agent
+2026-10-14T10:13:31.4983282Z Version: 20261002.596
+2026-10-14T10:13:31.4983955Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-14T10:13:31.4984609Z Build Date: 2026-10-02T22:28:27Z
+2026-10-14T10:13:31.4985245Z Worker ID: {bd1e104b-c4e1-4c88-85a6-3de4b53e876f}
+2026-10-14T10:13:31.4985890Z Region: northcentralus
+2026-10-14T10:13:31.4986418Z Cloud: Azure
+2026-10-14T10:13:31.4986989Z ##[endgroup]
+2026-10-14T10:13:31.4988185Z ##[group]Operating System
+2026-10-14T10:13:31.4988829Z Ubuntu
+2026-10-14T10:13:31.4989324Z 24.04.5
+2026-10-14T10:13:31.4989834Z LTS
+2026-10-14T10:13:31.4990354Z ##[endgroup]
+2026-10-14T10:13:31.4990866Z ##[group]Runner Image
+2026-10-14T10:13:31.4991399Z Image: ubuntu-24.04
+2026-10-14T10:13:31.4992101Z Version: 20261004.327.1
+2026-10-14T10:13:31.4993025Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-14T10:13:31.4994529Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-14T10:13:31.4995346Z ##[endgroup]
+2026-10-14T10:13:31.4996396Z ##[group]GITHUB_TOKEN Permissions
+2026-10-14T10:13:31.4998142Z Contents: read
+2026-10-14T10:13:31.4998784Z Metadata: read
+2026-10-14T10:13:31.4999308Z ##[endgroup]
+2026-10-14T10:13:31.5001029Z Secret source: Actions
+2026-10-14T10:13:31.5002219Z Cache mode: write
+2026-10-14T10:13:31.5003127Z Prepare workflow directory
+2026-10-14T10:13:31.5282039Z Prepare all required actions
+2026-10-14T10:13:31.5335831Z Getting action download info
+2026-10-14T10:13:31.7362684Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-14T10:13:31.8192725Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-14T10:13:31.9387656Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-14T10:13:32.2257595Z Complete job name: research-publication-tail-quality
+
+﻿2026-10-14T10:13:32.2989203Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-14T10:13:32.2990574Z with:
+2026-10-14T10:13:32.2991238Z   persist-credentials: false
+2026-10-14T10:13:32.2992231Z   repository: Kaichen9527/stockinsider
+2026-10-14T10:13:32.2998849Z   token: ***
+2026-10-14T10:13:32.2999486Z   ssh-strict: true
+2026-10-14T10:13:32.3000146Z   ssh-user: git
+2026-10-14T10:13:32.3000782Z   clean: true
+2026-10-14T10:13:32.3001461Z   sparse-checkout-cone-mode: true
+2026-10-14T10:13:32.3002358Z   fetch-depth: 1
+2026-10-14T10:13:32.3003015Z   fetch-tags: false
+2026-10-14T10:13:32.3003695Z   show-progress: true
+2026-10-14T10:13:32.3004382Z   lfs: false
+2026-10-14T10:13:32.3005095Z   submodules: false
+2026-10-14T10:13:32.3005814Z   set-safe-directory: true
+2026-10-14T10:13:32.3006634Z   allow-unsafe-pr-checkout: false
+2026-10-14T10:13:32.3007607Z ##[endgroup]
+2026-10-14T10:13:32.3815958Z Syncing repository: Kaichen9527/stockinsider
+2026-10-14T10:13:32.3818273Z ##[group]Getting Git version info
+2026-10-14T10:13:32.3819585Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T10:13:32.3821305Z [command]/usr/bin/git version
+2026-10-14T10:13:32.3862101Z git version 2.55.0
+2026-10-14T10:13:32.3880818Z ##[endgroup]
+2026-10-14T10:13:32.3892740Z Temporarily overriding HOME='/home/runner/work/_temp/aea3f9c5-f79a-44bc-a2c1-4ce459cabc8f' before making global git config changes
+2026-10-14T10:13:32.3896068Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T10:13:32.3904970Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T10:13:32.3948253Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T10:13:32.3956224Z ##[group]Initializing the repository
+2026-10-14T10:13:32.3960187Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+2026-10-14T10:13:32.4031467Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-14T10:13:32.4033674Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-14T10:13:32.4035161Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-14T10:13:32.4036536Z hint: call:
+2026-10-14T10:13:32.4037157Z hint:
+2026-10-14T10:13:32.4037934Z hint: 	git config --global init.defaultBranch <name>
+2026-10-14T10:13:32.4038875Z hint:
+2026-10-14T10:13:32.4039750Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-14T10:13:32.4041174Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-14T10:13:32.4043022Z hint:
+2026-10-14T10:13:32.4043951Z hint: 	git branch -m <name>
+2026-10-14T10:13:32.4045032Z hint:
+2026-10-14T10:13:32.4046303Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-14T10:13:32.4048163Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+2026-10-14T10:13:32.4053969Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+2026-10-14T10:13:32.4094100Z ##[endgroup]
+2026-10-14T10:13:32.4095294Z ##[group]Disabling automatic garbage collection
+2026-10-14T10:13:32.4096908Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-14T10:13:32.4125148Z ##[endgroup]
+2026-10-14T10:13:32.4126306Z ##[group]Setting up auth
+2026-10-14T10:13:32.4130393Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T10:13:32.4158493Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T10:13:32.4453246Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T10:13:32.4486232Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T10:13:32.4676990Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T10:13:32.4711894Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T10:13:32.4905832Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-14T10:13:32.4940035Z ##[endgroup]
+2026-10-14T10:13:32.4941220Z ##[group]Fetching the repository
+2026-10-14T10:13:32.4947978Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +487e69732cf7dee82d83ce5f762b9464f090b081:refs/remotes/pull/380/merge
+2026-10-14T10:13:33.4665778Z From https://github.com/Kaichen9527/stockinsider
+2026-10-14T10:13:33.4667995Z  * [new ref]         487e69732cf7dee82d83ce5f762b9464f090b081 -> pull/380/merge
+2026-10-14T10:13:33.4670767Z ##[endgroup]
+2026-10-14T10:13:33.4671824Z ##[group]Determining the checkout info
+2026-10-14T10:13:33.4673012Z ##[endgroup]
+2026-10-14T10:13:33.4678854Z [command]/usr/bin/git sparse-checkout disable
+2026-10-14T10:13:33.4723173Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-14T10:13:33.4784406Z ##[group]Checking out the ref
+2026-10-14T10:13:33.4787388Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/380/merge
+2026-10-14T10:13:33.6140228Z Note: switching to 'refs/remotes/pull/380/merge'.
+2026-10-14T10:13:33.6141072Z 
+2026-10-14T10:13:33.6141972Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-14T10:13:33.6142690Z changes and commit them, and you can discard any commits you make in this
+2026-10-14T10:13:33.6143389Z state without impacting any branches by switching back to a branch.
+2026-10-14T10:13:33.6144288Z 
+2026-10-14T10:13:33.6144649Z If you want to create a new branch to retain commits you create, you may
+2026-10-14T10:13:33.6145303Z do so (now or later) by using -c with the switch command. Example:
+2026-10-14T10:13:33.6145726Z 
+2026-10-14T10:13:33.6145994Z   git switch -c <new-branch-name>
+2026-10-14T10:13:33.6146339Z 
+2026-10-14T10:13:33.6146603Z Or undo this operation with:
+2026-10-14T10:13:33.6146943Z 
+2026-10-14T10:13:33.6206452Z   git switch -
+2026-10-14T10:13:33.6206847Z 
+2026-10-14T10:13:33.6207244Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-14T10:13:33.6207836Z 
+2026-10-14T10:13:33.6208466Z HEAD is now at 487e697 Merge dd59817f750684b093965f539dd4de466be13077 into 1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4
+2026-10-14T10:13:33.6211117Z ##[endgroup]
+2026-10-14T10:13:33.6212425Z [command]/usr/bin/git log -1 --format=%H
+2026-10-14T10:13:33.6222116Z 487e69732cf7dee82d83ce5f762b9464f090b081
+2026-10-14T10:13:33.6223722Z ##[group]Removing auth
+2026-10-14T10:13:33.6226852Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T10:13:33.6255192Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T10:13:33.6444144Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T10:13:33.6466678Z http.https://github.com/.extraheader
+2026-10-14T10:13:33.6472433Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-14T10:13:33.6502148Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T10:13:33.6687359Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T10:13:33.6714327Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T10:13:33.6899030Z ##[endgroup]
+
+﻿2026-10-14T10:13:33.7195922Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-14T10:13:33.7196408Z with:
+2026-10-14T10:13:33.7196714Z   node-version: 22.14.0
+2026-10-14T10:13:33.7197046Z   always-auth: false
+2026-10-14T10:13:33.7197368Z   check-latest: false
+2026-10-14T10:13:33.7199531Z   token: ***
+2026-10-14T10:13:33.7199829Z ##[endgroup]
+2026-10-14T10:13:33.8270290Z Attempting to download 22.14.0...
+2026-10-14T10:13:33.8352903Z (node:2189) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T10:13:33.8353753Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T10:13:34.5514409Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+2026-10-14T10:13:34.9178971Z Extracting ...
+2026-10-14T10:13:34.9271705Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/59c6b672-be99-427c-b686-be963bad62d8 -f /home/runner/work/_temp/cdb4532a-00c2-475c-8125-d24b285f74d7
+2026-10-14T10:13:35.9393570Z Adding to the cache ...
+2026-10-14T10:13:41.6234044Z ##[group]Environment details
+2026-10-14T10:13:41.8021544Z node: v22.14.0
+2026-10-14T10:13:41.8022113Z npm: 10.9.2
+2026-10-14T10:13:41.8022359Z yarn: 1.22.22
+2026-10-14T10:13:41.8024032Z ##[endgroup]
+
+﻿2026-10-14T10:13:41.8498130Z ##[group]Run set -euo pipefail
+2026-10-14T10:13:41.8498468Z [36;1mset -euo pipefail[0m
+2026-10-14T10:13:41.8498697Z [36;1mkey="$RUNNER_TEMP/pgdg.asc"[0m
+2026-10-14T10:13:41.8499233Z [36;1mcurl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc -o "$key"[0m
+2026-10-14T10:13:41.8499888Z [36;1mfingerprint=$(gpg --batch --show-keys --with-colons "$key" | awk -F: '$1=="fpr" {print $10; exit}')[0m
+2026-10-14T10:13:41.8500535Z [36;1mtest "$fingerprint" = B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8[0m
+2026-10-14T10:13:41.8500939Z [36;1msudo install -d -m 0755 /usr/share/postgresql-common/pgdg[0m
+2026-10-14T10:13:41.8501347Z [36;1msudo install -m 0644 "$key" /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc[0m
+2026-10-14T10:13:41.8502503Z [36;1mprintf '%s\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null[0m
+2026-10-14T10:13:41.8503328Z [36;1msudo apt-get update[0m
+2026-10-14T10:13:41.8503668Z [36;1msudo apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17[0m
+2026-10-14T10:13:41.8504028Z [36;1mbin=/usr/lib/postgresql/17/bin[0m
+2026-10-14T10:13:41.8504329Z [36;1mfor tool in pg_config initdb pg_ctl psql; do test -x "$bin/$tool"; done[0m
+2026-10-14T10:13:41.8504688Z [36;1m"$bin/pg_config" --version | grep -E '^PostgreSQL 17\.'[0m
+2026-10-14T10:13:41.8504957Z [36;1mecho "$bin" >> "$GITHUB_PATH"[0m
+2026-10-14T10:13:41.8505185Z [36;1mecho "USER=$(id -un)" >> "$GITHUB_ENV"[0m
+2026-10-14T10:13:41.9115003Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T10:13:41.9115407Z ##[endgroup]
+2026-10-14T10:13:42.4161087Z gpg: directory '/home/runner/.gnupg' created
+2026-10-14T10:13:42.4199314Z gpg: keybox '/home/runner/.gnupg/pubring.kbx' created
+2026-10-14T10:13:42.4449344Z gpg: /home/runner/.gnupg/trustdb.gpg: trustdb created
+2026-10-14T10:13:42.5325657Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-14T10:13:42.5541084Z Get:6 https://apt.postgresql.org/pub/repos/apt noble-pgdg InRelease [189 kB]
+2026-10-14T10:13:42.5692670Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-14T10:13:42.5696869Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-14T10:13:42.5710669Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-14T10:13:42.5919092Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-14T10:13:42.6093434Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-14T10:13:42.6751707Z Get:8 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 Packages [900 kB]
+2026-10-14T10:13:42.7127485Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [576 kB]
+2026-10-14T10:13:42.7228266Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [640 B]
+2026-10-14T10:13:42.7248888Z Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
+2026-10-14T10:13:42.7273785Z Get:12 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [518 kB]
+2026-10-14T10:13:42.7589348Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
+2026-10-14T10:13:42.7666499Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
+2026-10-14T10:13:42.7713052Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1702 kB]
+2026-10-14T10:13:42.7772958Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+2026-10-14T10:13:42.7801997Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1805 kB]
+2026-10-14T10:13:42.7936167Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [411 kB]
+2026-10-14T10:13:42.7968844Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [50.7 kB]
+2026-10-14T10:13:42.7978457Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.0 kB]
+2026-10-14T10:13:42.8116650Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [748 B]
+2026-10-14T10:13:42.8536661Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1145 kB]
+2026-10-14T10:13:42.9042572Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+2026-10-14T10:13:42.9083059Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1221 kB]
+2026-10-14T10:13:42.9128181Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+2026-10-14T10:13:42.9151831Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
+2026-10-14T10:13:42.9231063Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
+2026-10-14T10:13:42.9257358Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [45.4 kB]
+2026-10-14T10:13:42.9270356Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.1 kB]
+2026-10-14T10:13:49.1614111Z Fetched 13.6 MB in 1s (11.2 MB/s)
+2026-10-14T10:13:49.8337312Z Reading package lists...
+2026-10-14T10:13:49.8601346Z Reading package lists...
+2026-10-14T10:13:50.0256446Z Building dependency tree...
+2026-10-14T10:13:50.0262586Z Reading state information...
+2026-10-14T10:13:50.1515906Z Suggested packages:
+2026-10-14T10:13:50.1516209Z   postgresql-doc-17
+2026-10-14T10:13:50.1666522Z The following NEW packages will be installed:
+2026-10-14T10:13:50.1666879Z   postgresql-17 postgresql-client-17
+2026-10-14T10:13:50.3102064Z 0 upgraded, 2 newly installed, 0 to remove and 35 not upgraded.
+2026-10-14T10:13:50.3102596Z Need to get 19.0 MB of archives.
+2026-10-14T10:13:50.3103131Z After this operation, 69.4 MB of additional disk space will be used.
+2026-10-14T10:13:50.3104074Z Get:1 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 postgresql-client-17 amd64 17.11-1.pgdg24.04+2 [2053 kB]
+2026-10-14T10:13:50.3333246Z Get:2 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 postgresql-17 amd64 17.11-1.pgdg24.04+2 [16.9 MB]
+2026-10-14T10:13:50.5958524Z Preconfiguring packages ...
+2026-10-14T10:13:50.6506885Z Fetched 19.0 MB in 0s (76.9 MB/s)
+2026-10-14T10:13:50.6679527Z Selecting previously unselected package postgresql-client-17.
+2026-10-14T10:13:50.6873107Z (Reading database ... 
+2026-10-14T10:13:50.6873479Z (Reading database ... 5%
+2026-10-14T10:13:50.6874008Z (Reading database ... 10%
+2026-10-14T10:13:50.6874336Z (Reading database ... 15%
+2026-10-14T10:13:50.6874642Z (Reading database ... 20%
+2026-10-14T10:13:50.6874937Z (Reading database ... 25%
+2026-10-14T10:13:50.6875237Z (Reading database ... 30%
+2026-10-14T10:13:50.6875576Z (Reading database ... 35%
+2026-10-14T10:13:50.6875873Z (Reading database ... 40%
+2026-10-14T10:13:50.6876190Z (Reading database ... 45%
+2026-10-14T10:13:50.6876482Z (Reading database ... 50%
+2026-10-14T10:13:50.6909875Z (Reading database ... 55%
+2026-10-14T10:13:50.8156065Z (Reading database ... 60%
+2026-10-14T10:13:51.0066860Z (Reading database ... 65%
+2026-10-14T10:13:51.2127221Z (Reading database ... 70%
+2026-10-14T10:13:51.3740967Z (Reading database ... 75%
+2026-10-14T10:13:51.5574197Z (Reading database ... 80%
+2026-10-14T10:13:51.7179257Z (Reading database ... 85%
+2026-10-14T10:13:51.8658134Z (Reading database ... 90%
+2026-10-14T10:13:51.9742699Z (Reading database ... 95%
+2026-10-14T10:13:51.9743039Z (Reading database ... 100%
+2026-10-14T10:13:51.9743385Z (Reading database ... 203191 files and directories currently installed.)
+2026-10-14T10:13:51.9781779Z Preparing to unpack .../postgresql-client-17_17.11-1.pgdg24.04+2_amd64.deb ...
+2026-10-14T10:13:52.0064144Z Unpacking postgresql-client-17 (17.11-1.pgdg24.04+2) ...
+2026-10-14T10:13:52.1804662Z Selecting previously unselected package postgresql-17.
+2026-10-14T10:13:52.1915473Z Preparing to unpack .../postgresql-17_17.11-1.pgdg24.04+2_amd64.deb ...
+2026-10-14T10:13:52.2001213Z Unpacking postgresql-17 (17.11-1.pgdg24.04+2) ...
+2026-10-14T10:13:53.1064683Z Setting up postgresql-client-17 (17.11-1.pgdg24.04+2) ...
+2026-10-14T10:13:53.4284508Z update-alternatives: using /usr/share/postgresql/17/man/man1/psql.1.gz to provide /usr/share/man/man1/psql.1.gz (psql.1.gz) in auto mode
+2026-10-14T10:13:53.4543167Z Setting up postgresql-17 (17.11-1.pgdg24.04+2) ...
+2026-10-14T10:13:54.1449305Z Processing triggers for postgresql-common (293.pgdg24.04+1) ...
+2026-10-14T10:13:54.2225131Z Building PostgreSQL dictionaries from installed myspell/hunspell packages...
+2026-10-14T10:13:54.2228029Z   en_us
+2026-10-14T10:13:54.2724400Z Removing obsolete dictionary files:
+2026-10-14T10:13:54.8046498Z 
+2026-10-14T10:13:54.8047099Z Running kernel seems to be up-to-date.
+2026-10-14T10:13:54.8047366Z 
+2026-10-14T10:13:54.8047491Z No services need to be restarted.
+2026-10-14T10:13:54.8047642Z 
+2026-10-14T10:13:54.8047758Z No containers need to be restarted.
+2026-10-14T10:13:54.8047905Z 
+2026-10-14T10:13:54.8048044Z No user sessions are running outdated binaries.
+2026-10-14T10:13:54.8048207Z 
+2026-10-14T10:13:54.8048428Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-14T10:13:55.5695441Z PostgreSQL 17.11 (Ubuntu 17.11-1.pgdg24.04+2)
+
+﻿2026-10-14T10:13:55.5750013Z ##[group]Run npm ci --ignore-scripts
+2026-10-14T10:13:55.5750281Z [36;1mnpm ci --ignore-scripts[0m
+2026-10-14T10:13:55.5750513Z [36;1mnpm --prefix web ci --ignore-scripts[0m
+2026-10-14T10:13:55.5806676Z shell: /usr/bin/bash -e {0}
+2026-10-14T10:13:55.5806890Z env:
+2026-10-14T10:13:55.5807050Z   USER: runner
+2026-10-14T10:13:55.5807220Z ##[endgroup]
+2026-10-14T10:13:56.5846991Z 
+2026-10-14T10:13:56.5847582Z added 39 packages, and audited 40 packages in 960ms
+2026-10-14T10:13:56.5847834Z 
+2026-10-14T10:13:56.5847973Z 7 packages are looking for funding
+2026-10-14T10:13:56.5848220Z   run `npm fund` for details
+2026-10-14T10:13:56.5858290Z 
+2026-10-14T10:13:56.5858538Z 1 high severity vulnerability
+2026-10-14T10:13:56.5858749Z 
+2026-10-14T10:13:56.5858895Z To address all issues, run:
+2026-10-14T10:13:56.5859182Z   npm audit fix
+2026-10-14T10:13:56.5859341Z 
+2026-10-14T10:13:56.5859470Z Run `npm audit` for details.
+2026-10-14T10:13:57.6690912Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-10-14T10:14:09.8659221Z 
+2026-10-14T10:14:09.8659881Z added 432 packages, and audited 433 packages in 13s
+2026-10-14T10:14:09.8660221Z 
+2026-10-14T10:14:09.8660410Z 169 packages are looking for funding
+2026-10-14T10:14:09.8660760Z   run `npm fund` for details
+2026-10-14T10:14:09.9634582Z 
+2026-10-14T10:14:09.9635242Z 11 vulnerabilities (10 high, 1 critical)
+2026-10-14T10:14:09.9635545Z 
+2026-10-14T10:14:09.9635803Z To address issues that do not require attention, run:
+2026-10-14T10:14:09.9636196Z   npm audit fix
+2026-10-14T10:14:09.9636346Z 
+2026-10-14T10:14:09.9636614Z To address all issues (including breaking changes), run:
+2026-10-14T10:14:09.9637013Z   npm audit fix --force
+2026-10-14T10:14:09.9637189Z 
+2026-10-14T10:14:09.9637323Z Run `npm audit` for details.
+
+﻿2026-10-14T10:14:10.0006120Z ##[group]Run set -euo pipefail
+2026-10-14T10:14:10.0006704Z [36;1mset -euo pipefail[0m
+2026-10-14T10:14:10.0006959Z [36;1mevidence="$RUNNER_TEMP/publication-tail-quality"[0m
+2026-10-14T10:14:10.0007239Z [36;1mmkdir -m 0700 "$evidence"[0m
+2026-10-14T10:14:10.0007509Z [36;1mecho "RESEARCH_TAIL_CI_EVIDENCE=$evidence" >> "$GITHUB_ENV"[0m
+2026-10-14T10:14:10.0070333Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T10:14:10.0070622Z env:
+2026-10-14T10:14:10.0070783Z   USER: runner
+2026-10-14T10:14:10.0070948Z ##[endgroup]
+
+﻿2026-10-14T10:14:10.0178276Z ##[group]Run set -euo pipefail
+2026-10-14T10:14:10.0178516Z [36;1mset -euo pipefail[0m
+2026-10-14T10:14:10.0178730Z [36;1mnode --test --test-concurrency=1 \[0m
+2026-10-14T10:14:10.0179088Z [36;1m  scripts/opportunity-v3/research-publication-tail-extraction.test.mjs \[0m
+2026-10-14T10:14:10.0179537Z [36;1m  scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs \[0m
+2026-10-14T10:14:10.0179905Z [36;1m  2>&1 | tee "$RESEARCH_TAIL_CI_EVIDENCE/pure.stdout"[0m
+2026-10-14T10:14:10.0229340Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T10:14:10.0229608Z env:
+2026-10-14T10:14:10.0229766Z   USER: runner
+2026-10-14T10:14:10.0230026Z   RESEARCH_TAIL_CI_EVIDENCE: /home/runner/work/_temp/publication-tail-quality
+2026-10-14T10:14:10.0230327Z ##[endgroup]
+2026-10-14T10:14:10.0588632Z TAP version 13
+2026-10-14T10:14:10.1523893Z # Subtest: baseline is genuinely separate finite post50 descriptor, no production authority
+2026-10-14T10:14:10.1526809Z ok 1 - baseline is genuinely separate finite post50 descriptor, no production authority
+2026-10-14T10:14:10.1527984Z   ---
+2026-10-14T10:14:10.1528617Z   duration_ms: 0.889137
+2026-10-14T10:14:10.1529189Z   ...
+2026-10-14T10:14:10.1529827Z # Subtest: missing rejected before any query and client closed
+2026-10-14T10:14:10.1530606Z ok 2 - missing rejected before any query and client closed
+2026-10-14T10:14:10.1531246Z   ---
+2026-10-14T10:14:10.1531825Z   duration_ms: 2.33759
+2026-10-14T10:14:10.1532326Z   ...
+2026-10-14T10:14:10.1560206Z # Subtest: duplicate rejected before any query and client closed
+2026-10-14T10:14:10.1561022Z ok 3 - duplicate rejected before any query and client closed
+2026-10-14T10:14:10.1561759Z   ---
+2026-10-14T10:14:10.1562195Z   duration_ms: 1.824661
+2026-10-14T10:14:10.1562665Z   ...
+2026-10-14T10:14:10.1563606Z # Subtest: wronghash rejected before any query and client closed
+2026-10-14T10:14:10.1564420Z ok 4 - wronghash rejected before any query and client closed
+2026-10-14T10:14:10.1564976Z   ---
+2026-10-14T10:14:10.1565288Z   duration_ms: 0.950667
+2026-10-14T10:14:10.1565586Z   ...
+2026-10-14T10:14:10.1565972Z # Subtest: reordered rejected before any query and client closed
+2026-10-14T10:14:10.1566649Z ok 5 - reordered rejected before any query and client closed
+2026-10-14T10:14:10.1567146Z   ---
+2026-10-14T10:14:10.1567576Z   duration_ms: 1.449084
+2026-10-14T10:14:10.1568035Z   ...
+2026-10-14T10:14:10.1568653Z # Subtest: unknown rejected before any query and client closed
+2026-10-14T10:14:10.1569423Z ok 6 - unknown rejected before any query and client closed
+2026-10-14T10:14:10.1569974Z   ---
+2026-10-14T10:14:10.1570370Z   duration_ms: 1.36455
+2026-10-14T10:14:10.1570779Z   ...
+2026-10-14T10:14:10.1571293Z # Subtest: busy rejected before BEGIN with no mutation
+2026-10-14T10:14:10.1572091Z ok 7 - busy rejected before BEGIN with no mutation
+2026-10-14T10:14:10.1572577Z   ---
+2026-10-14T10:14:10.1572874Z   duration_ms: 29.452416
+2026-10-14T10:14:10.1573181Z   ...
+2026-10-14T10:14:10.1573630Z # Subtest: namespace unreadable or different never becomes predecessor success
+2026-10-14T10:14:10.1574228Z ok 8 - namespace unreadable or different never becomes predecessor success
+2026-10-14T10:14:10.1574650Z   ---
+2026-10-14T10:14:10.1574945Z   duration_ms: 5.790491
+2026-10-14T10:14:10.1575248Z   ...
+2026-10-14T10:14:10.1575708Z # Subtest: caller accessors are read once into owned buffers before asynchronous queries
+2026-10-14T10:14:10.1576327Z ok 9 - caller accessors are read once into owned buffers before asynchronous queries
+2026-10-14T10:14:10.1576765Z   ---
+2026-10-14T10:14:10.1577052Z   duration_ms: 11.538149
+2026-10-14T10:14:10.1577352Z   ...
+2026-10-14T10:14:10.2091993Z # Subtest: fixed26 exact original SQL excludes existing financial49 and has no apply authority
+2026-10-14T10:14:10.2093650Z ok 10 - fixed26 exact original SQL excludes existing financial49 and has no apply authority
+2026-10-14T10:14:10.2094504Z   ---
+2026-10-14T10:14:10.2095043Z   duration_ms: 0.710041
+2026-10-14T10:14:10.2095509Z   ...
+2026-10-14T10:14:10.2096501Z # Subtest: tail missing failclosed
+2026-10-14T10:14:10.2097114Z ok 11 - tail missing failclosed
+2026-10-14T10:14:10.2098011Z   ---
+2026-10-14T10:14:10.2098442Z   duration_ms: 0.924638
+2026-10-14T10:14:10.2098897Z   ...
+2026-10-14T10:14:10.2100659Z # Subtest: tail duplicate failclosed
+2026-10-14T10:14:10.2101732Z ok 12 - tail duplicate failclosed
+2026-10-14T10:14:10.2102392Z   ---
+2026-10-14T10:14:10.2102818Z   duration_ms: 0.837269
+2026-10-14T10:14:10.2103526Z   ...
+2026-10-14T10:14:10.2104037Z # Subtest: tail reordered failclosed
+2026-10-14T10:14:10.2106253Z ok 13 - tail reordered failclosed
+2026-10-14T10:14:10.2106804Z   ---
+2026-10-14T10:14:10.2107196Z   duration_ms: 0.769138
+2026-10-14T10:14:10.2107784Z   ...
+2026-10-14T10:14:10.2108338Z # Subtest: tail unknown failclosed
+2026-10-14T10:14:10.2108929Z ok 14 - tail unknown failclosed
+2026-10-14T10:14:10.2109412Z   ---
+2026-10-14T10:14:10.2109843Z   duration_ms: 1.125356
+2026-10-14T10:14:10.2110275Z   ...
+2026-10-14T10:14:10.2110764Z # Subtest: tail wronghash failclosed
+2026-10-14T10:14:10.2113362Z ok 15 - tail wronghash failclosed
+2026-10-14T10:14:10.2114093Z   ---
+2026-10-14T10:14:10.2114322Z   duration_ms: 0.566969
+2026-10-14T10:14:10.2114699Z   ...
+2026-10-14T10:14:10.2115240Z # Subtest: tail wrongbytes failclosed
+2026-10-14T10:14:10.2116120Z ok 16 - tail wrongbytes failclosed
+2026-10-14T10:14:10.2116545Z   ---
+2026-10-14T10:14:10.2116707Z   duration_ms: 0.704432
+2026-10-14T10:14:10.2116908Z   ...
+2026-10-14T10:14:10.2117994Z # Subtest: fixed descriptor entries cannot be changed through the exported object
+2026-10-14T10:14:10.2118790Z ok 17 - fixed descriptor entries cannot be changed through the exported object
+2026-10-14T10:14:10.2119893Z   ---
+2026-10-14T10:14:10.2120145Z   duration_ms: 1.884069
+2026-10-14T10:14:10.2120525Z   ...
+2026-10-14T10:14:10.2187531Z 1..17
+2026-10-14T10:14:10.2188007Z # tests 17
+2026-10-14T10:14:10.2188458Z # suites 0
+2026-10-14T10:14:10.2188911Z # pass 17
+2026-10-14T10:14:10.2189366Z # fail 0
+2026-10-14T10:14:10.2189800Z # cancelled 0
+2026-10-14T10:14:10.2190227Z # skipped 0
+2026-10-14T10:14:10.2190643Z # todo 0
+2026-10-14T10:14:10.2191095Z # duration_ms 168.887802
+
+﻿2026-10-14T10:14:10.2267312Z ##[group]Run set -euo pipefail
+2026-10-14T10:14:10.2267705Z [36;1mset -euo pipefail[0m
+2026-10-14T10:14:10.2268168Z [36;1mexport RESEARCH_TAIL_ARTIFACTS="$RESEARCH_TAIL_CI_EVIDENCE/entry-native"[0m
+2026-10-14T10:14:10.2268697Z [36;1mnode --test --test-concurrency=1 \[0m
+2026-10-14T10:14:10.2269293Z [36;1m  scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs \[0m
+2026-10-14T10:14:10.2269957Z [36;1m  2>&1 | tee "$RESEARCH_TAIL_CI_EVIDENCE/entry-native.stdout"[0m
+2026-10-14T10:14:10.2348134Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T10:14:10.2348570Z env:
+2026-10-14T10:14:10.2348811Z   USER: runner
+2026-10-14T10:14:10.2349231Z   RESEARCH_TAIL_CI_EVIDENCE: /home/runner/work/_temp/publication-tail-quality
+2026-10-14T10:14:10.2349724Z ##[endgroup]
+2026-10-14T10:14:10.2734101Z TAP version 13
+2026-10-14T10:14:13.2859941Z # Subtest: actual guarded26 helper on genuine captured post-main50 predecessor
+2026-10-14T10:14:13.2882670Z     # Subtest: main actual financial50 and original operator helper first COMMIT
+2026-10-14T10:14:13.2884108Z     ok 1 - main actual financial50 and original operator helper first COMMIT
+2026-10-14T10:14:13.2884767Z       ---
+2026-10-14T10:14:13.2885192Z       duration_ms: 648.990279
+2026-10-14T10:14:13.2885639Z       ...
+2026-10-14T10:14:14.1618104Z     # Subtest: fresh finite readonly guard succeeds without writes
+2026-10-14T10:14:14.1619197Z     ok 2 - fresh finite readonly guard succeeds without writes
+2026-10-14T10:14:14.1619484Z       ---
+2026-10-14T10:14:14.1619665Z       duration_ms: 558.094824
+2026-10-14T10:14:14.1619889Z       ...
+2026-10-14T10:14:14.3789702Z     # Subtest: first1 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.3791731Z     ok 3 - first1 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.3792235Z       ---
+2026-10-14T10:14:14.3792505Z       duration_ms: 217.24286
+2026-10-14T10:14:14.3792773Z       ...
+2026-10-14T10:14:14.6160379Z     # Subtest: first2 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.6177827Z     ok 4 - first2 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.6178180Z       ---
+2026-10-14T10:14:14.6178362Z       duration_ms: 236.767701
+2026-10-14T10:14:14.6178558Z       ...
+2026-10-14T10:14:14.8618918Z     # Subtest: first3 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.8620360Z     ok 5 - first3 prerequisite prefix rejected before tail
+2026-10-14T10:14:14.8620933Z       ---
+2026-10-14T10:14:14.8621144Z       duration_ms: 245.491112
+2026-10-14T10:14:14.8621355Z       ...
+2026-10-14T10:14:15.1088769Z     # Subtest: first4 prerequisite prefix rejected before tail
+2026-10-14T10:14:15.1099005Z     ok 6 - first4 prerequisite prefix rejected before tail
+2026-10-14T10:14:15.1099439Z       ---
+2026-10-14T10:14:15.1099688Z       duration_ms: 246.994451
+2026-10-14T10:14:15.1099888Z       ...
+2026-10-14T10:14:15.3546789Z     # Subtest: first5 prerequisite prefix rejected before tail
+2026-10-14T10:14:15.3547397Z     ok 7 - first5 prerequisite prefix rejected before tail
+2026-10-14T10:14:15.3547814Z       ---
+2026-10-14T10:14:15.3548093Z       duration_ms: 245.937262
+2026-10-14T10:14:15.3548366Z       ...
+2026-10-14T10:14:15.9005936Z     # Subtest: column-only original v6 partial rejected with outer rollback
+2026-10-14T10:14:15.9006713Z     ok 8 - column-only original v6 partial rejected with outer rollback
+2026-10-14T10:14:15.9007023Z       ---
+2026-10-14T10:14:15.9007199Z       duration_ms: 542.367609
+2026-10-14T10:14:15.9007530Z       ...
+2026-10-14T10:14:16.1092884Z     # Subtest: index-only counterfactual on real table rejected with outer rollback
+2026-10-14T10:14:16.1093460Z     ok 9 - index-only counterfactual on real table rejected with outer rollback
+2026-10-14T10:14:16.1093771Z       ---
+2026-10-14T10:14:16.1093946Z       duration_ms: 205.957183
+2026-10-14T10:14:16.1094149Z       ...
+2026-10-14T10:14:16.3186321Z     # Subtest: function-only exact original v6 partial rejected with outer rollback
+2026-10-14T10:14:16.3192732Z     ok 10 - function-only exact original v6 partial rejected with outer rollback
+2026-10-14T10:14:16.3193559Z       ---
+2026-10-14T10:14:16.3193743Z       duration_ms: 211.09297
+2026-10-14T10:14:16.3193937Z       ...
+2026-10-14T10:14:16.5234328Z     # Subtest: body drift rejected with outer rollback
+2026-10-14T10:14:16.5234928Z     ok 11 - body drift rejected with outer rollback
+2026-10-14T10:14:16.5235179Z       ---
+2026-10-14T10:14:16.5235362Z       duration_ms: 205.024222
+2026-10-14T10:14:16.5235567Z       ...
+2026-10-14T10:14:16.7309964Z     # Subtest: owner drift rejected with outer rollback
+2026-10-14T10:14:16.7310977Z     ok 12 - owner drift rejected with outer rollback
+2026-10-14T10:14:16.7311348Z       ---
+2026-10-14T10:14:16.7311751Z       duration_ms: 207.624598
+2026-10-14T10:14:16.7312042Z       ...
+2026-10-14T10:14:16.9370678Z     # Subtest: config drift rejected with outer rollback
+2026-10-14T10:14:16.9371958Z     ok 13 - config drift rejected with outer rollback
+2026-10-14T10:14:16.9372333Z       ---
+2026-10-14T10:14:16.9372571Z       duration_ms: 205.959166
+2026-10-14T10:14:16.9372777Z       ...
+2026-10-14T10:14:17.1445303Z     # Subtest: routine ACL drift rejected with outer rollback
+2026-10-14T10:14:17.1447578Z     ok 14 - routine ACL drift rejected with outer rollback
+2026-10-14T10:14:17.1448012Z       ---
+2026-10-14T10:14:17.1448252Z       duration_ms: 207.341729
+2026-10-14T10:14:17.1448553Z       ...
+2026-10-14T10:14:17.6845859Z     # Subtest: column ACL drift rejected with outer rollback
+2026-10-14T10:14:17.6846693Z     ok 15 - column ACL drift rejected with outer rollback
+2026-10-14T10:14:17.6846970Z       ---
+2026-10-14T10:14:17.6847150Z       duration_ms: 539.839626
+2026-10-14T10:14:17.6847353Z       ...
+2026-10-14T10:14:17.8936095Z     # Subtest: SECDEF drift rejected with outer rollback
+2026-10-14T10:14:17.8939800Z     ok 16 - SECDEF drift rejected with outer rollback
+2026-10-14T10:14:17.8940232Z       ---
+2026-10-14T10:14:17.8940526Z       duration_ms: 208.988973
+2026-10-14T10:14:17.8940970Z       ...
+2026-10-14T10:14:18.0990901Z     # Subtest: overload unknown profile rejected with outer rollback
+2026-10-14T10:14:18.0991873Z     ok 17 - overload unknown profile rejected with outer rollback
+2026-10-14T10:14:18.0992291Z       ---
+2026-10-14T10:14:18.0992587Z       duration_ms: 205.401362
+2026-10-14T10:14:18.0993185Z       ...
+2026-10-14T10:14:19.0576575Z     # Subtest: committed first v6 partial rejected by actual helper before tail mutation
+2026-10-14T10:14:19.0577441Z     ok 18 - committed first v6 partial rejected by actual helper before tail mutation
+2026-10-14T10:14:19.0577920Z       ---
+2026-10-14T10:14:19.0578267Z       duration_ms: 639.522055
+2026-10-14T10:14:19.0578637Z       ...
+2026-10-14T10:14:19.7950568Z     # Subtest: actual helper busy refuses before BEGIN and zero mutation
+2026-10-14T10:14:19.7951534Z     ok 19 - actual helper busy refuses before BEGIN and zero mutation
+2026-10-14T10:14:19.7952108Z       ---
+2026-10-14T10:14:19.7952355Z       duration_ms: 163.019906
+2026-10-14T10:14:19.7952633Z       ...
+2026-10-14T10:14:20.6422950Z     # Subtest: actual helper forced error after real26 DDL rolls back everything
+2026-10-14T10:14:20.6423822Z     ok 20 - actual helper forced error after real26 DDL rolls back everything
+2026-10-14T10:14:20.6424338Z       ---
+2026-10-14T10:14:20.6424680Z       duration_ms: 847.125855
+2026-10-14T10:14:20.6425014Z       ...
+2026-10-14T10:14:21.4726156Z     # Subtest: actual writer socket loss during26 before COMMIT has backendgone and fullrollback
+2026-10-14T10:14:21.4727067Z     ok 21 - actual writer socket loss during26 before COMMIT has backendgone and fullrollback
+2026-10-14T10:14:21.4727592Z       ---
+2026-10-14T10:14:21.4727835Z       duration_ms: 830.14148
+2026-10-14T10:14:21.4728113Z       ...
+2026-10-14T10:14:22.5638402Z     # Subtest: actual helper26 COMMIT original full catalog/financial/nonemptyrows and independent observer
+2026-10-14T10:14:22.5639349Z     ok 22 - actual helper26 COMMIT original full catalog/financial/nonemptyrows and independent observer
+2026-10-14T10:14:22.5640039Z       ---
+2026-10-14T10:14:22.5640251Z       duration_ms: 1091.300071
+2026-10-14T10:14:22.5640478Z       ...
+2026-10-14T10:14:23.1308280Z     # Subtest: installed second actual helper refuses without replay
+2026-10-14T10:14:23.1309224Z     ok 23 - installed second actual helper refuses without replay
+2026-10-14T10:14:23.1309790Z       ---
+2026-10-14T10:14:23.1310125Z       duration_ms: 567.034225
+2026-10-14T10:14:23.1310510Z       ...
+2026-10-14T10:14:23.4476903Z     1..23
+2026-10-14T10:14:23.4477882Z ok 1 - actual guarded26 helper on genuine captured post-main50 predecessor
+2026-10-14T10:14:23.4478464Z   ---
+2026-10-14T10:14:23.4478845Z   duration_ms: 13114.90907
+2026-10-14T10:14:23.4479288Z   ...
+2026-10-14T10:14:23.4728645Z 1..1
+2026-10-14T10:14:23.4728938Z # tests 24
+2026-10-14T10:14:23.4729174Z # suites 0
+2026-10-14T10:14:23.4742718Z # pass 24
+2026-10-14T10:14:23.4742967Z # fail 0
+2026-10-14T10:14:23.4743220Z # cancelled 0
+2026-10-14T10:14:23.4743499Z # skipped 0
+2026-10-14T10:14:23.4743788Z # todo 0
+2026-10-14T10:14:23.4744075Z # duration_ms 13207.667658
+
+﻿2026-10-14T10:14:23.4792775Z ##[group]Run set -euo pipefail
+2026-10-14T10:14:23.4793041Z [36;1mset -euo pipefail[0m
+2026-10-14T10:14:23.4793352Z [36;1mexport RESEARCH_TAIL_ARTIFACTS="$RESEARCH_TAIL_CI_EVIDENCE/fragments-native"[0m
+2026-10-14T10:14:23.4793721Z [36;1mnode --test --test-concurrency=1 \[0m
+2026-10-14T10:14:23.4794092Z [36;1m  scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs \[0m
+2026-10-14T10:14:23.4794521Z [36;1m  2>&1 | tee "$RESEARCH_TAIL_CI_EVIDENCE/fragments-native.stdout"[0m
+2026-10-14T10:14:23.4851223Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T10:14:23.4851502Z env:
+2026-10-14T10:14:23.4851829Z   USER: runner
+2026-10-14T10:14:23.4852105Z   RESEARCH_TAIL_CI_EVIDENCE: /home/runner/work/_temp/publication-tail-quality
+2026-10-14T10:14:23.4852407Z ##[endgroup]
+2026-10-14T10:14:23.5221365Z TAP version 13
+2026-10-14T10:14:25.6555570Z # Subtest: source-derived prerequisites2..5 isolated fragments and dependency-only controls
+2026-10-14T10:14:25.6556596Z     # Subtest: main actual financial50 and original operator helper first COMMIT
+2026-10-14T10:14:25.6559735Z     ok 1 - main actual financial50 and original operator helper first COMMIT
+2026-10-14T10:14:25.6560507Z       ---
+2026-10-14T10:14:25.6560876Z       duration_ms: 558.289141
+2026-10-14T10:14:25.6561183Z       ...
+2026-10-14T10:14:26.5583014Z     # Subtest: p2-L3: independent-original-DDL
+2026-10-14T10:14:26.5583671Z     ok 2 - p2-L3: independent-original-DDL
+2026-10-14T10:14:26.5584199Z       ---
+2026-10-14T10:14:26.5584443Z       duration_ms: 354.273434
+2026-10-14T10:14:26.5584840Z       ...
+2026-10-14T10:14:26.9120505Z     # Subtest: p2-L16: dependency-only-control-required
+2026-10-14T10:14:26.9121752Z     ok 3 - p2-L16: dependency-only-control-required
+2026-10-14T10:14:26.9123340Z       ---
+2026-10-14T10:14:26.9123577Z       duration_ms: 353.933737
+2026-10-14T10:14:26.9123812Z       ...
+2026-10-14T10:14:27.2672909Z     # Subtest: p2-L22: independent-original-DDL
+2026-10-14T10:14:27.2673855Z     ok 4 - p2-L22: independent-original-DDL
+2026-10-14T10:14:27.2674480Z       ---
+2026-10-14T10:14:27.2674786Z       duration_ms: 354.470856
+2026-10-14T10:14:27.2675078Z       ...
+2026-10-14T10:14:27.6239416Z     # Subtest: p2-L36: dependency-only-control-required
+2026-10-14T10:14:27.6240075Z     ok 5 - p2-L36: dependency-only-control-required
+2026-10-14T10:14:27.6240482Z       ---
+2026-10-14T10:14:27.6240725Z       duration_ms: 356.999044
+2026-10-14T10:14:27.6241006Z       ...
+2026-10-14T10:14:27.9768899Z     # Subtest: p2-L42: independent-original-DDL
+2026-10-14T10:14:27.9769638Z     ok 6 - p2-L42: independent-original-DDL
+2026-10-14T10:14:27.9770323Z       ---
+2026-10-14T10:14:27.9770648Z       duration_ms: 352.576702
+2026-10-14T10:14:27.9771008Z       ...
+2026-10-14T10:14:28.3313120Z     # Subtest: p2-L58: dependency-only-control-required
+2026-10-14T10:14:28.3313807Z     ok 7 - p2-L58: dependency-only-control-required
+2026-10-14T10:14:28.3314305Z       ---
+2026-10-14T10:14:28.3314488Z       duration_ms: 354.10145
+2026-10-14T10:14:28.3314722Z       ...
+2026-10-14T10:14:28.6876086Z     # Subtest: p2-L60: dependency-only-control-required
+2026-10-14T10:14:28.6876856Z     ok 8 - p2-L60: dependency-only-control-required
+2026-10-14T10:14:28.6877516Z       ---
+2026-10-14T10:14:28.6877792Z       duration_ms: 356.185295
+2026-10-14T10:14:28.6878091Z       ...
+2026-10-14T10:14:29.0427087Z     # Subtest: p2-L63: dependency-only-control-required
+2026-10-14T10:14:29.0428189Z     ok 9 - p2-L63: dependency-only-control-required
+2026-10-14T10:14:29.0428775Z       ---
+2026-10-14T10:14:29.0429230Z       duration_ms: 354.729454
+2026-10-14T10:14:29.0429724Z       ...
+2026-10-14T10:14:29.4063989Z     # Subtest: p2-L77: dependency-only-control-required
+2026-10-14T10:14:29.4065290Z     ok 10 - p2-L77: dependency-only-control-required
+2026-10-14T10:14:29.4065704Z       ---
+2026-10-14T10:14:29.4065974Z       duration_ms: 363.460721
+2026-10-14T10:14:29.4066259Z       ...
+2026-10-14T10:14:29.7584846Z     # Subtest: p2-L98: dependency-only-control-required
+2026-10-14T10:14:29.7585787Z     ok 11 - p2-L98: dependency-only-control-required
+2026-10-14T10:14:29.7586200Z       ---
+2026-10-14T10:14:29.7586457Z       duration_ms: 352.162684
+2026-10-14T10:14:29.7586738Z       ...
+2026-10-14T10:14:30.1141982Z     # Subtest: p2-L147: independent-original-DDL
+2026-10-14T10:14:30.1142917Z     ok 12 - p2-L147: independent-original-DDL
+2026-10-14T10:14:30.1143431Z       ---
+2026-10-14T10:14:30.1143808Z       duration_ms: 355.547273
+2026-10-14T10:14:30.1144105Z       ...
+2026-10-14T10:14:30.4708764Z     # Subtest: p2-L196: independent-original-DDL
+2026-10-14T10:14:30.4709668Z     ok 13 - p2-L196: independent-original-DDL
+2026-10-14T10:14:30.4710033Z       ---
+2026-10-14T10:14:30.4710283Z       duration_ms: 356.586924
+2026-10-14T10:14:30.4710535Z       ...
+2026-10-14T10:14:30.8213083Z     # Subtest: p2-L207: dependency-only-control-required
+2026-10-14T10:14:30.8232426Z     ok 14 - p2-L207: dependency-only-control-required
+2026-10-14T10:14:30.8232946Z       ---
+2026-10-14T10:14:30.8233303Z       duration_ms: 348.390178
+2026-10-14T10:14:30.8233668Z       ...
+2026-10-14T10:14:31.1767865Z     # Subtest: p2-L213: independent-original-DDL
+2026-10-14T10:14:31.1769268Z     ok 15 - p2-L213: independent-original-DDL
+2026-10-14T10:14:31.1773162Z       ---
+2026-10-14T10:14:31.1773680Z       duration_ms: 355.597766
+2026-10-14T10:14:31.1774171Z       ...
+2026-10-14T10:14:31.5292994Z     # Subtest: p2-L219: dependency-only-control-required
+2026-10-14T10:14:31.5298976Z     ok 16 - p2-L219: dependency-only-control-required
+2026-10-14T10:14:31.5300291Z       ---
+2026-10-14T10:14:31.5300808Z       duration_ms: 354.159009
+2026-10-14T10:14:31.5301236Z       ...
+2026-10-14T10:14:31.8856163Z     # Subtest: p2-L245: dependency-only-control-required
+2026-10-14T10:14:31.8857286Z     ok 17 - p2-L245: dependency-only-control-required
+2026-10-14T10:14:31.8858123Z       ---
+2026-10-14T10:14:31.8858405Z       duration_ms: 356.141321
+2026-10-14T10:14:31.8858758Z       ...
+2026-10-14T10:14:32.2475972Z     # Subtest: p2-L281: dependency-only-control-required
+2026-10-14T10:14:32.2509308Z     ok 18 - p2-L281: dependency-only-control-required
+2026-10-14T10:14:32.2511194Z       ---
+2026-10-14T10:14:32.2520890Z       duration_ms: 359.533657
+2026-10-14T10:14:32.2521397Z       ...
+2026-10-14T10:14:32.6070422Z     # Subtest: p2-L294: dependency-only-control-required
+2026-10-14T10:14:32.6071104Z     ok 19 - p2-L294: dependency-only-control-required
+2026-10-14T10:14:32.6071829Z       ---
+2026-10-14T10:14:32.6072090Z       duration_ms: 361.778986
+2026-10-14T10:14:32.9573334Z       ...
+2026-10-14T10:14:32.9573799Z     # Subtest: p2-L334: independent-original-DDL
+2026-10-14T10:14:32.9574571Z     ok 20 - p2-L334: independent-original-DDL
+2026-10-14T10:14:32.9574946Z       ---
+2026-10-14T10:14:32.9575205Z       duration_ms: 349.99272
+2026-10-14T10:14:32.9575487Z       ...
+2026-10-14T10:14:33.3123382Z     # Subtest: p2-L346: dependency-only-control-required
+2026-10-14T10:14:33.3124077Z     ok 21 - p2-L346: dependency-only-control-required
+2026-10-14T10:14:33.3125331Z       ---
+2026-10-14T10:14:33.3125595Z       duration_ms: 354.920029
+2026-10-14T10:14:33.3125880Z       ...
+2026-10-14T10:14:33.6645508Z     # Subtest: p2-L347: dependency-only-control-required
+2026-10-14T10:14:33.6646212Z     ok 22 - p2-L347: dependency-only-control-required
+2026-10-14T10:14:33.6646590Z       ---
+2026-10-14T10:14:33.6646845Z       duration_ms: 351.992488
+2026-10-14T10:14:33.6647128Z       ...
+2026-10-14T10:14:34.0139624Z     # Subtest: p2-L374: independent-original-DDL
+2026-10-14T10:14:34.0140606Z     ok 23 - p2-L374: independent-original-DDL
+2026-10-14T10:14:34.0141085Z       ---
+2026-10-14T10:14:34.0141264Z       duration_ms: 349.438848
+2026-10-14T10:14:34.0141467Z       ...
+2026-10-14T10:14:34.3655121Z     # Subtest: p2-L385: dependency-only-control-required
+2026-10-14T10:14:34.3656818Z     ok 24 - p2-L385: dependency-only-control-required
+2026-10-14T10:14:34.3657199Z       ---
+2026-10-14T10:14:34.3657455Z       duration_ms: 351.439581
+2026-10-14T10:14:34.3658316Z       ...
+2026-10-14T10:14:34.7173821Z     # Subtest: p2-L386: dependency-only-control-required
+2026-10-14T10:14:34.7176185Z     ok 25 - p2-L386: dependency-only-control-required
+2026-10-14T10:14:34.7176647Z       ---
+2026-10-14T10:14:34.7176925Z       duration_ms: 351.799542
+2026-10-14T10:14:34.7177225Z       ...
+2026-10-14T10:14:35.0652216Z     # Subtest: p2-L387: dependency-only-control-required
+2026-10-14T10:14:35.0653554Z     ok 26 - p2-L387: dependency-only-control-required
+2026-10-14T10:14:35.0653874Z       ---
+2026-10-14T10:14:35.0654064Z       duration_ms: 347.667122
+2026-10-14T10:14:35.0654260Z       ...
+2026-10-14T10:14:35.4182010Z     # Subtest: p2-L416: independent-original-DDL
+2026-10-14T10:14:35.4182819Z     ok 27 - p2-L416: independent-original-DDL
+2026-10-14T10:14:35.4183178Z       ---
+2026-10-14T10:14:35.4183421Z       duration_ms: 352.787586
+2026-10-14T10:14:35.4183695Z       ...
+2026-10-14T10:14:35.7650514Z     # Subtest: p2-L456: independent-original-DDL
+2026-10-14T10:14:35.7651328Z     ok 28 - p2-L456: independent-original-DDL
+2026-10-14T10:14:35.7651955Z       ---
+2026-10-14T10:14:35.7652277Z       duration_ms: 346.773703
+2026-10-14T10:14:35.7652651Z       ...
+2026-10-14T10:14:36.1190272Z     # Subtest: p2-L472: dependency-only-control-required
+2026-10-14T10:14:36.1191779Z     ok 29 - p2-L472: dependency-only-control-required
+2026-10-14T10:14:36.1192154Z       ---
+2026-10-14T10:14:36.1192418Z       duration_ms: 353.788336
+2026-10-14T10:14:36.1192727Z       ...
+2026-10-14T10:14:36.4669266Z     # Subtest: p2-L477: independent-original-DDL
+2026-10-14T10:14:36.4669861Z     ok 30 - p2-L477: independent-original-DDL
+2026-10-14T10:14:36.4670219Z       ---
+2026-10-14T10:14:36.4670471Z       duration_ms: 347.695999
+2026-10-14T10:14:36.4670751Z       ...
+2026-10-14T10:14:36.8161370Z     # Subtest: p3-L3: dependency-only-control-required
+2026-10-14T10:14:36.8162139Z     ok 31 - p3-L3: dependency-only-control-required
+2026-10-14T10:14:36.8162505Z       ---
+2026-10-14T10:14:36.8162774Z       duration_ms: 349.157886
+2026-10-14T10:14:36.8163097Z       ...
+2026-10-14T10:14:37.1733640Z     # Subtest: p3-L22: dependency-only-control-required
+2026-10-14T10:14:37.1734830Z     ok 32 - p3-L22: dependency-only-control-required
+2026-10-14T10:14:37.1735205Z       ---
+2026-10-14T10:14:37.1735445Z       duration_ms: 357.117355
+2026-10-14T10:14:37.1735745Z       ...
+2026-10-14T10:14:37.5954232Z     # Subtest: p3-L29: dependency-only-control-required
+2026-10-14T10:14:37.5954948Z     ok 33 - p3-L29: dependency-only-control-required
+2026-10-14T10:14:37.5955297Z       ---
+2026-10-14T10:14:37.5955876Z       duration_ms: 421.914692
+2026-10-14T10:14:37.5956186Z       ...
+2026-10-14T10:14:37.9508497Z     # Subtest: p3-L32: dependency-only-control-required
+2026-10-14T10:14:37.9509124Z     ok 34 - p3-L32: dependency-only-control-required
+2026-10-14T10:14:37.9509705Z       ---
+2026-10-14T10:14:38.3044102Z       duration_ms: 355.208557
+2026-10-14T10:14:38.3044501Z       ...
+2026-10-14T10:14:38.3044876Z     # Subtest: p3-L37: dependency-only-control-required
+2026-10-14T10:14:38.3045417Z     ok 35 - p3-L37: dependency-only-control-required
+2026-10-14T10:14:38.3045784Z       ---
+2026-10-14T10:14:38.3046063Z       duration_ms: 353.522665
+2026-10-14T10:14:38.3046338Z       ...
+2026-10-14T10:14:38.6600142Z     # Subtest: p3-L54: dependency-only-control-required
+2026-10-14T10:14:38.6601511Z     ok 36 - p3-L54: dependency-only-control-required
+2026-10-14T10:14:38.6602048Z       ---
+2026-10-14T10:14:38.6602299Z       duration_ms: 355.532101
+2026-10-14T10:14:38.6602584Z       ...
+2026-10-14T10:14:39.3482644Z     # Subtest: p3-L97: independent-original-DDL
+2026-10-14T10:14:39.3483509Z     ok 37 - p3-L97: independent-original-DDL
+2026-10-14T10:14:39.3483763Z       ---
+2026-10-14T10:14:39.3483935Z       duration_ms: 686.100067
+2026-10-14T10:14:39.3484122Z       ...
+2026-10-14T10:14:39.6951946Z     # Subtest: p3-L99: independent-original-DDL
+2026-10-14T10:14:39.6953732Z     ok 38 - p3-L99: independent-original-DDL
+2026-10-14T10:14:39.6954969Z       ---
+2026-10-14T10:14:39.6955220Z       duration_ms: 348.73114
+2026-10-14T10:14:40.3635705Z       ...
+2026-10-14T10:14:40.3636583Z     # Subtest: p3-L100: dependency-only-control-required
+2026-10-14T10:14:40.3637614Z     ok 39 - p3-L100: dependency-only-control-required
+2026-10-14T10:14:40.3637996Z       ---
+2026-10-14T10:14:40.3638195Z       duration_ms: 668.29201
+2026-10-14T10:14:40.3638390Z       ...
+2026-10-14T10:14:40.7202689Z     # Subtest: p3-L105: dependency-only-control-required
+2026-10-14T10:14:40.7203507Z     ok 40 - p3-L105: dependency-only-control-required
+2026-10-14T10:14:40.7204550Z       ---
+2026-10-14T10:14:40.7205092Z       duration_ms: 356.587584
+2026-10-14T10:14:40.7205431Z       ...
+2026-10-14T10:14:41.0804949Z     # Subtest: p3-L109: dependency-only-control-required
+2026-10-14T10:14:41.0806230Z     ok 41 - p3-L109: dependency-only-control-required
+2026-10-14T10:14:41.0806599Z       ---
+2026-10-14T10:14:41.0806856Z       duration_ms: 360.066391
+2026-10-14T10:14:41.0807151Z       ...
+2026-10-14T10:14:41.4381397Z     # Subtest: p3-L122: dependency-only-control-required
+2026-10-14T10:14:41.4382818Z     ok 42 - p3-L122: dependency-only-control-required
+2026-10-14T10:14:41.4383480Z       ---
+2026-10-14T10:14:41.4383735Z       duration_ms: 357.200464
+2026-10-14T10:14:41.4384014Z       ...
+2026-10-14T10:14:41.7890603Z     # Subtest: p3-L165: dependency-only-control-required
+2026-10-14T10:14:41.7892335Z     ok 43 - p3-L165: dependency-only-control-required
+2026-10-14T10:14:41.7892656Z       ---
+2026-10-14T10:14:41.7892832Z       duration_ms: 351.072544
+2026-10-14T10:14:41.7893026Z       ...
+2026-10-14T10:14:42.1429096Z     # Subtest: p3-L210: dependency-only-control-required
+2026-10-14T10:14:42.1429737Z     ok 44 - p3-L210: dependency-only-control-required
+2026-10-14T10:14:42.1430249Z       ---
+2026-10-14T10:14:42.1452054Z       duration_ms: 353.803336
+2026-10-14T10:14:42.1462226Z       ...
+2026-10-14T10:14:42.5032323Z     # Subtest: p3-L271: independent-original-DDL
+2026-10-14T10:14:42.5033033Z     ok 45 - p3-L271: independent-original-DDL
+2026-10-14T10:14:42.5033426Z       ---
+2026-10-14T10:14:42.5033761Z       duration_ms: 360.218656
+2026-10-14T10:14:42.5034117Z       ...
+2026-10-14T10:14:42.8647876Z     # Subtest: p3-L280: dependency-only-control-required
+2026-10-14T10:14:42.8648482Z     ok 46 - p3-L280: dependency-only-control-required
+2026-10-14T10:14:42.8648874Z       ---
+2026-10-14T10:14:42.8649136Z       duration_ms: 361.009397
+2026-10-14T10:14:42.8649425Z       ...
+2026-10-14T10:14:43.3190625Z     # Subtest: p3-L326: dependency-only-control-required
+2026-10-14T10:14:43.3202779Z     ok 47 - p3-L326: dependency-only-control-required
+2026-10-14T10:14:43.3203348Z       ---
+2026-10-14T10:14:43.3203858Z       duration_ms: 454.01146
+2026-10-14T10:14:43.3204455Z       ...
+2026-10-14T10:14:43.6778482Z     # Subtest: p4-L5: dependency-only-control-required
+2026-10-14T10:14:43.6780960Z     ok 48 - p4-L5: dependency-only-control-required
+2026-10-14T10:14:43.6781299Z       ---
+2026-10-14T10:14:43.6781752Z       duration_ms: 358.938146
+2026-10-14T10:14:43.6782006Z       ...
+2026-10-14T10:14:44.0267346Z     # Subtest: p4-L30: dependency-only-control-required
+2026-10-14T10:14:44.0267984Z     ok 49 - p4-L30: dependency-only-control-required
+2026-10-14T10:14:44.0268315Z       ---
+2026-10-14T10:14:44.0268510Z       duration_ms: 348.902532
+2026-10-14T10:14:44.0268755Z       ...
+2026-10-14T10:14:44.3792109Z     # Subtest: p5-L4: dependency-only-control-required
+2026-10-14T10:14:44.3794001Z     ok 50 - p5-L4: dependency-only-control-required
+2026-10-14T10:14:44.3794409Z       ---
+2026-10-14T10:14:44.3794664Z       duration_ms: 352.4176
+2026-10-14T10:14:44.3794948Z       ...
+2026-10-14T10:14:44.7341399Z     # Subtest: p5-L22: dependency-only-control-required
+2026-10-14T10:14:44.7342139Z     ok 51 - p5-L22: dependency-only-control-required
+2026-10-14T10:14:44.7342519Z       ---
+2026-10-14T10:14:44.7342765Z       duration_ms: 353.102764
+2026-10-14T10:14:44.7343044Z       ...
+2026-10-14T10:14:46.1491387Z     # Subtest: p2-L147: actual helper refuses committed isolated fragment
+2026-10-14T10:14:46.1492677Z     ok 52 - p2-L147: actual helper refuses committed isolated fragment
+2026-10-14T10:14:46.1493176Z       ---
+2026-10-14T10:14:46.1493491Z       duration_ms: 1409.528772
+2026-10-14T10:14:46.1493831Z       ...
+2026-10-14T10:14:47.3625425Z     # Subtest: p3-L271: actual helper refuses committed isolated fragment
+2026-10-14T10:14:47.3626322Z     ok 53 - p3-L271: actual helper refuses committed isolated fragment
+2026-10-14T10:14:47.3627497Z       ---
+2026-10-14T10:14:47.3627764Z       duration_ms: 846.592308
+2026-10-14T10:14:47.3628071Z       ...
+2026-10-14T10:14:47.3628306Z     1..53
+2026-10-14T10:14:47.3628885Z ok 1 - source-derived prerequisites2..5 isolated fragments and dependency-only controls
+2026-10-14T10:14:47.3629439Z   ---
+2026-10-14T10:14:47.3629704Z   duration_ms: 23784.684197
+2026-10-14T10:14:47.3629993Z   ...
+2026-10-14T10:14:47.3844552Z 1..1
+2026-10-14T10:14:47.3845050Z # tests 54
+2026-10-14T10:14:47.3845504Z # suites 0
+2026-10-14T10:14:47.3845930Z # pass 54
+2026-10-14T10:14:47.3846211Z # fail 0
+2026-10-14T10:14:47.3846458Z # cancelled 0
+2026-10-14T10:14:47.3846734Z # skipped 0
+2026-10-14T10:14:47.3847308Z # todo 0
+2026-10-14T10:14:47.3847587Z # duration_ms 23871.719119
+
+﻿2026-10-14T10:14:47.3956606Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-14T10:14:47.3956929Z with:
+2026-10-14T10:14:47.3957125Z   name: publication-tail-quality-38548050159-1
+2026-10-14T10:14:47.3957406Z   path: /home/runner/work/_temp/publication-tail-quality
+2026-10-14T10:14:47.3957660Z   if-no-files-found: warn
+2026-10-14T10:14:47.3957847Z   retention-days: 14
+2026-10-14T10:14:47.3958028Z   compression-level: 6
+2026-10-14T10:14:47.3958214Z   overwrite: false
+2026-10-14T10:14:47.3958393Z   include-hidden-files: false
+2026-10-14T10:14:47.3958583Z env:
+2026-10-14T10:14:47.3958735Z   USER: runner
+2026-10-14T10:14:47.3958994Z   RESEARCH_TAIL_CI_EVIDENCE: /home/runner/work/_temp/publication-tail-quality
+2026-10-14T10:14:47.3959289Z ##[endgroup]
+2026-10-14T10:14:47.5272037Z (node:4336) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T10:14:47.5273133Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T10:14:47.5353700Z With the provided path, there will be 33 files uploaded
+2026-10-14T10:14:47.5372227Z Artifact name is valid!
+2026-10-14T10:14:47.5372684Z Root directory input is valid!
+2026-10-14T10:14:47.7828678Z Beginning upload of artifact content to blob storage
+2026-10-14T10:14:47.8563293Z (node:4336) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-14T10:14:48.0760381Z Uploaded bytes 320938
+2026-10-14T10:14:48.1108690Z Finished uploading artifact content to blob storage!
+2026-10-14T10:14:48.1109595Z SHA256 digest of uploaded artifact zip is fee0502760a0627361898f3bc4cd87c61771b032ab1517113ba3bd94892a7dc9
+2026-10-14T10:14:48.1110648Z Finalizing artifact upload
+2026-10-14T10:14:48.3455557Z Artifact publication-tail-quality-38548050159-1.zip successfully finalized. Artifact ID 11885427199
+2026-10-14T10:14:48.3456684Z Artifact publication-tail-quality-38548050159-1 has been successfully uploaded! Final size is 320938 bytes. Artifact ID is 11885427199
+2026-10-14T10:14:48.3461127Z Artifact download URL: https://github.com/Kaichen9527/stockinsider/actions/runs/38548050159/artifacts/11885427199
+
+﻿2026-10-14T10:14:48.3688319Z Post job cleanup.
+2026-10-14T10:14:48.4649198Z (node:4348) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T10:14:48.4649898Z (Use `node --trace-deprecation ...` to show where the warning was created)
+
+﻿2026-10-14T10:14:48.4819344Z Post job cleanup.
+2026-10-14T10:14:48.5567197Z [command]/usr/bin/git version
+2026-10-14T10:14:48.5609179Z git version 2.55.0
+2026-10-14T10:14:48.5643987Z Temporarily overriding HOME='/home/runner/work/_temp/55ab1ba1-208c-45bb-92b5-7949b1216860' before making global git config changes
+2026-10-14T10:14:48.5645272Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T10:14:48.5648111Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T10:14:48.5689530Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T10:14:48.5724198Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T10:14:48.5978208Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T10:14:48.6016365Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T10:14:48.6284991Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T10:14:48.6322070Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+
+﻿2026-10-14T10:14:48.6653182Z Cleaning up orphan processes
+2026-10-14T10:14:48.6912715Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

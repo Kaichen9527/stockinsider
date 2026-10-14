@@ -1,0 +1,61 @@
+{
+  "head": "dd59817f750684b093965f539dd4de466be13077",
+  "checkoutMerge": "487e69732cf7dee82d83ce5f762b9464f090b081",
+  "tree": "6a9a08af70fb94b50ed2b5eee6aaf3686f648b99",
+  "ordinaryTailRun": 38548050159,
+  "ordinaryFinancialRun": 38548049985,
+  "actualJobLogCounts": {
+    "tail": [
+      17,
+      24,
+      54
+    ],
+    "financial": [
+      38,
+      28,
+      1,
+      4
+    ]
+  },
+  "PG17_11": true,
+  "artifactFiles": 33,
+  "artifactBytes": 3599947,
+  "artifactSHA": "fee0502760a0627361898f3bc4cd87c61771b032ab1517113ba3bd94892a7dc9",
+  "helperProof": {
+    "actualHelperCommitConfirmed": true,
+    "entry-native/forced-helper-rollback.json": {
+      "realDDLReached": true,
+      "observerBaselineUnchanged": true
+    },
+    "entry-native/socket-disconnect-rollback.json": {
+      "backendPid": 4272,
+      "backendGone": true,
+      "realTailDDLReached": true,
+      "observerBaselineUnchanged": true
+    },
+    "entry-native/helper-busy-before-begin.json": {
+      "calls": [
+        {
+          "kind": "SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration",
+          "sha256": "191f6c3587eb99bc57bf2f477e9343049fc1cd185df32d6a19fb3ec458bf20a5"
+        }
+      ],
+      "beforeBegin": true,
+      "zeroMutation": true
+    }
+  },
+  "allPendingEmpty": true,
+  "ownedPgCleanupConfirmed": true,
+  "formalPeerOrProductionInstallation": false,
+  "rootNativeExecution": false,
+  "independentFullExactReviewPending": true,
+  "freshFragmentCoverage": {
+    "targets": 50,
+    "statusCounts": {
+      "covered-independent-original-fragment": 14,
+      "not-causally-isolatable": 36
+    },
+    "sourceProofAncillary": 66,
+    "actualHelperControls": 2
+  }
+}

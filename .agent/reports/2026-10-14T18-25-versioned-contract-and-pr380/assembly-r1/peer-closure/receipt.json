@@ -1,0 +1,58 @@
+{
+  "subject": "dd59817f750684b093965f539dd4de466be13077",
+  "tree": "6a9a08af70fb94b50ed2b5eee6aaf3686f648b99",
+  "start": "2026-10-14T10:10:57Z",
+  "deadline": "2026-10-14T10:13:57Z",
+  "sealed": "2026-10-14T10:11:51.630718+00:00",
+  "verdict": "scoped Root assembly/workflow delta CODE CLOSURE PASS",
+  "P0": 0,
+  "P1": 0,
+  "P2": 0,
+  "dependencyPositive": 6,
+  "retainedOldNegative": 6,
+  "probeExit": 0,
+  "noNativeBuildSuiteRerun": true,
+  "noServiceStarted": true,
+  "freeBytes": {
+    "/workspace": 8616800256,
+    "/tmp": 15442309120
+  },
+  "rssPeakMeasured": false,
+  "raw": [
+    {
+      "file": "probe-before.sha256",
+      "bytes": 105,
+      "sha256": "a9b23b181b019ff366f423bc6cfb7d22d8bbf66ff400d79d393755cc13722f7c"
+    },
+    {
+      "file": "probe.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "probe.py",
+      "bytes": 2138,
+      "sha256": "83b55897a74ee2e3beffa3f3e4d0ed4264863c9c0e1bf9ebc32ada66d2d23176"
+    },
+    {
+      "file": "probe.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "probe.stdout",
+      "bytes": 1892,
+      "sha256": "6d8c9cc7d53fe51fdbe0af53326d62d009ec6e50ece9387245db11906866520d"
+    },
+    {
+      "file": "report.md",
+      "bytes": 1896,
+      "sha256": "00be14867725c5c6e81b9c5bb67edeab0154e8e990a130b76548570729f1abfd"
+    },
+    {
+      "file": "result.json",
+      "bytes": 1892,
+      "sha256": "6d8c9cc7d53fe51fdbe0af53326d62d009ec6e50ece9387245db11906866520d"
+    }
+  ]
+}

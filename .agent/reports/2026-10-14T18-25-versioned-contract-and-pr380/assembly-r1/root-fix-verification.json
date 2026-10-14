@@ -1,0 +1,46 @@
+{
+  "subject": "dd59817f750684b093965f539dd4de466be13077",
+  "oldSubject": "47fe9fe39600f2012940865be16743a441c18111",
+  "originalVerdict": "REQUEST_CHANGES",
+  "peerRawVerified": 42,
+  "peerSourceVerified": 44,
+  "changedFiles": [
+    ".github/workflows/research-publication-tail-quality.yml",
+    "docs/operations/2026-10-14/publication-tail-release-handoff.md"
+  ],
+  "sourceBytesUnchangedExceptWorkflowAndHandoff": true,
+  "sixKnownActualLoadsCoverage": [
+    {
+      "file": "scripts/runtime/auth-source-worker-installation.js",
+      "beforeSelected": false,
+      "afterSelected": true
+    },
+    {
+      "file": "scripts/runtime/codec.js",
+      "beforeSelected": false,
+      "afterSelected": true
+    },
+    {
+      "file": "scripts/runtime/credential-resolver.js",
+      "beforeSelected": false,
+      "afterSelected": true
+    },
+    {
+      "file": "scripts/runtime/reviewed-runtime-release.js",
+      "beforeSelected": false,
+      "afterSelected": true
+    },
+    {
+      "file": "scripts/runtime/runtime-health.js",
+      "beforeSelected": false,
+      "afterSelected": true
+    },
+    {
+      "file": "scripts/runtime/tracked-runtime-bundle.js",
+      "beforeSelected": false,
+      "afterSelected": true
+    }
+  ],
+  "rootNewNativeOrBuild": false,
+  "independentClosurePending": true
+}

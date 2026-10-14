@@ -1,0 +1,202 @@
+[
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs",
+    "import": "./research-publication-tail-extraction.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-extraction.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs",
+    "import": "./research-publication-tail-entry-guard.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-entry-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs",
+    "import": "./atomic-migration-chain.mjs",
+    "target": "scripts/opportunity-v3/atomic-migration-chain.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs",
+    "import": "./research-publication-catalog.mjs",
+    "target": "scripts/opportunity-v3/research-publication-catalog.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs",
+    "import": "./financial-history-install-guard.mjs",
+    "target": "scripts/opportunity-v3/financial-history-install-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-guard.mjs",
+    "import": "./research-publication-tail-entry-namespace.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-entry-namespace.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-guard.mjs",
+    "import": "./research-publication-catalog.mjs",
+    "target": "scripts/opportunity-v3/research-publication-catalog.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-guard.mjs",
+    "import": "./research-publication-tail-extraction.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-extraction.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs",
+    "import": "./research-publication-tail-atomic-client.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs",
+    "import": "./research-publication-tail-extraction.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-extraction.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-guard.test.mjs",
+    "import": "./research-publication-tail-entry-guard.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-entry-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./apply-reviewed-migrations.mjs",
+    "target": "scripts/opportunity-v3/apply-reviewed-migrations.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./atomic-migration-chain.mjs",
+    "target": "scripts/opportunity-v3/atomic-migration-chain.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./financial-history-install-guard.mjs",
+    "target": "scripts/opportunity-v3/financial-history-install-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./financial-existing-schema-profile.mjs",
+    "target": "scripts/opportunity-v3/financial-existing-schema-profile.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./financial-vps-operator-action.mjs",
+    "target": "scripts/opportunity-v3/financial-vps-operator-action.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./financial-vps-operator-binding.mjs",
+    "target": "scripts/opportunity-v3/financial-vps-operator-binding.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./financial-history-catalog.mjs",
+    "target": "scripts/opportunity-v3/financial-history-catalog.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./research-publication-tail-extraction.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-extraction.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./research-publication-install-guard.mjs",
+    "target": "scripts/opportunity-v3/research-publication-install-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./research-publication-catalog.mjs",
+    "target": "scripts/opportunity-v3/research-publication-catalog.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./research-publication-tail-entry-guard.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-entry-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./research-publication-tail-atomic-client.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-entry-native.test.mjs",
+    "import": "./research-publication-tail-entry-namespace.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-entry-namespace.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-extraction.mjs",
+    "import": "./financial-history-install-guard.mjs",
+    "target": "scripts/opportunity-v3/financial-history-install-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-extraction.test.mjs",
+    "import": "./research-publication-tail-extraction.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-extraction.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-extraction.test.mjs",
+    "import": "./financial-history-install-guard.mjs",
+    "target": "scripts/opportunity-v3/financial-history-install-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./apply-reviewed-migrations.mjs",
+    "target": "scripts/opportunity-v3/apply-reviewed-migrations.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./atomic-migration-chain.mjs",
+    "target": "scripts/opportunity-v3/atomic-migration-chain.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./financial-history-install-guard.mjs",
+    "target": "scripts/opportunity-v3/financial-history-install-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./financial-existing-schema-profile.mjs",
+    "target": "scripts/opportunity-v3/financial-existing-schema-profile.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./financial-vps-operator-action.mjs",
+    "target": "scripts/opportunity-v3/financial-vps-operator-action.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./financial-vps-operator-binding.mjs",
+    "target": "scripts/opportunity-v3/financial-vps-operator-binding.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./financial-history-catalog.mjs",
+    "target": "scripts/opportunity-v3/financial-history-catalog.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./research-publication-tail-extraction.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-extraction.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./research-publication-install-guard.mjs",
+    "target": "scripts/opportunity-v3/research-publication-install-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./research-publication-catalog.mjs",
+    "target": "scripts/opportunity-v3/research-publication-catalog.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./research-publication-tail-entry-guard.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-entry-guard.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./research-publication-tail-atomic-client.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-atomic-client.mjs"
+  },
+  {
+    "file": "scripts/opportunity-v3/research-publication-tail-fragments-native.test.mjs",
+    "import": "./research-publication-tail-entry-namespace.mjs",
+    "target": "scripts/opportunity-v3/research-publication-tail-entry-namespace.mjs"
+  }
+]

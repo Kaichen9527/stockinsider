@@ -1,0 +1,58 @@
+{
+  "parser": "PyYAML BaseLoader (preserves on key)",
+  "event": [
+    "pull_request"
+  ],
+  "permissions": {
+    "contents": "read"
+  },
+  "jobCount": 1,
+  "timeout": "30",
+  "steps": [
+    {
+      "name": "Checkout candidate without persisted credentials",
+      "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "if": null
+    },
+    {
+      "name": "Set up pinned Node 22",
+      "uses": "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "if": null
+    },
+    {
+      "name": "Install PostgreSQL 17 using the existing official signing identity",
+      "uses": null,
+      "if": null
+    },
+    {
+      "name": "Install locked dependencies without lifecycle scripts",
+      "uses": null,
+      "if": null
+    },
+    {
+      "name": "Prepare private fresh evidence paths",
+      "uses": null,
+      "if": null
+    },
+    {
+      "name": "Verify finite extraction and entry guards",
+      "uses": null,
+      "if": null
+    },
+    {
+      "name": "Verify captured-schema guarded tail transaction",
+      "uses": null,
+      "if": null
+    },
+    {
+      "name": "Verify prerequisite fragment causal matrix",
+      "uses": null,
+      "if": null
+    },
+    {
+      "name": "Retain exact local engineering evidence",
+      "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+      "if": "always()"
+    }
+  ]
+}

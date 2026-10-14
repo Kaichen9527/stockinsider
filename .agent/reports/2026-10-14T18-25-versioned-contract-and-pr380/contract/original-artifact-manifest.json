@@ -1,0 +1,156 @@
+[
+  {
+    "file": "canonical-original-functions.sql",
+    "bytes": 3027,
+    "sha256": "ceb2c2cb10c2e1a52d70fc01850ce506b72a93fb12627046599cfc80549e9cc1",
+    "savedAs": "canonical-original-functions.sql",
+    "compression": "none"
+  },
+  {
+    "file": "exact-contract-excerpts.json",
+    "bytes": 36003,
+    "sha256": "c0fba79de8c2f454e90e85cc9d17bd61e1cd0a7868324c9bc6529d6c7d28f11e",
+    "savedAs": "exact-contract-excerpts.json",
+    "compression": "none"
+  },
+  {
+    "file": "executed-measurement.sql",
+    "bytes": 4629726,
+    "sha256": "acbec3cd9a480b708cb9be22a9f98c2734bcf5c15df7975fb9e04ec588dd023a",
+    "savedAs": "executed-measurement.sql.gz",
+    "compression": "gzip"
+  },
+  {
+    "file": "final-resource.json",
+    "bytes": 35059,
+    "sha256": "fdadac347452c6ca366f8adf497167f913ca4bcf1776c93f9dae206dea5d027b",
+    "savedAs": "final-resource.json",
+    "compression": "none"
+  },
+  {
+    "file": "finite-shape-2383.json",
+    "bytes": 149683,
+    "sha256": "eee1a34fb758cae8f58db8a20882a008bd9eb45436b320ea558b602b145ec99b",
+    "savedAs": "finite-shape-2383.json.gz",
+    "compression": "gzip"
+  },
+  {
+    "file": "finite-shape-2409.json",
+    "bytes": 251381,
+    "sha256": "8797453e7a688abb5115cf3d170520b7eb64b2dae0212f8e346cd21158627f4b",
+    "savedAs": "finite-shape-2409.json.gz",
+    "compression": "gzip"
+  },
+  {
+    "file": "legacy-artifact-availability.json",
+    "bytes": 6297,
+    "sha256": "315087afcd5f789056d3cab43cd5c0bd9c248b62f6aadd879fcdeb4913c06d4f",
+    "savedAs": "legacy-artifact-availability.json",
+    "compression": "none"
+  },
+  {
+    "file": "legacy-closure-verified.json",
+    "bytes": 3970,
+    "sha256": "b4cec63f76a480f63596eca0ac4ca15a8df9c52018ef937dbc5848752d3bc17e",
+    "savedAs": "legacy-closure-verified.json",
+    "compression": "none"
+  },
+  {
+    "file": "material-2383.json",
+    "bytes": 110392,
+    "sha256": "58a5bff799cc2b7553cae8f62f789a1efa6424ddbf2d56ccedcd654fbf54b22f",
+    "savedAs": "material-2383.json.gz",
+    "compression": "gzip"
+  },
+  {
+    "file": "material-2409.json",
+    "bytes": 181848,
+    "sha256": "61c8709cf6641b27d8e2c3b808766281b6b7d5d66847b6fbf031973c0e0c0315",
+    "savedAs": "material-2409.json.gz",
+    "compression": "gzip"
+  },
+  {
+    "file": "material-measurements.json",
+    "bytes": 1551,
+    "sha256": "05e2c411a98adf05f059bc8770c939a394bfaa75f4780dc220f2347215a76a9e",
+    "savedAs": "material-measurements.json",
+    "compression": "none"
+  },
+  {
+    "file": "material-proof.mjs",
+    "bytes": 2735,
+    "sha256": "13c94bed05331424b5952a9d0b1969498a5701f352a4ec3adbd1c69ff9496838",
+    "savedAs": "material-proof.mjs",
+    "compression": "none"
+  },
+  {
+    "file": "pg-cleanup.json",
+    "bytes": 130,
+    "sha256": "9f998dd094b1afef3addb7f5adb8df8582ed4267914f9b056e793ebe3f473b33",
+    "savedAs": "pg-cleanup.json",
+    "compression": "none"
+  },
+  {
+    "file": "pg-measurements.json",
+    "bytes": 1298,
+    "sha256": "29ce39e8d9a4af726da75ad27956a4ce9653f31b137c74899b8169576bfafc30",
+    "savedAs": "pg-measurements.json",
+    "compression": "none"
+  },
+  {
+    "file": "pg-proof.py",
+    "bytes": 4983,
+    "sha256": "ef8fd14b0997e209621205017353f655aa803cba9683b212f53170b5cc72c151",
+    "savedAs": "pg-proof.py",
+    "compression": "none"
+  },
+  {
+    "file": "probe-input-seal.json",
+    "bytes": 395,
+    "sha256": "4f653307225bda0a84a6f1d89814d8ba1f8d4304c9532ef8c59c67c065cdfc0f",
+    "savedAs": "probe-input-seal.json",
+    "compression": "none"
+  },
+  {
+    "file": "report.md",
+    "bytes": 22907,
+    "sha256": "23186513b91a3a086f8295f412a731b8bd5204e9d7ac66ad236f3d298526d782",
+    "savedAs": "report.md",
+    "compression": "none"
+  },
+  {
+    "file": "source-manifest-sizing-fixture.json",
+    "bytes": 129631,
+    "sha256": "797a6ea35f87d741f104a94460ed40b49902f0c337a384645bae607912bceb50",
+    "savedAs": "source-manifest-sizing-fixture.json.gz",
+    "compression": "gzip"
+  },
+  {
+    "file": "source-manifest.json",
+    "bytes": 15355,
+    "sha256": "b20200fb01e433e9accb68e71ea4b2e54201257166cb29b411fff6dd653ba2ae",
+    "savedAs": "source-manifest.json",
+    "compression": "none"
+  },
+  {
+    "file": "sql-signatures.json",
+    "bytes": 19219,
+    "sha256": "a8ce3be66055ae7e734b7cf5e425cf5248d0c09faf52674f327a775b733ef113",
+    "savedAs": "sql-signatures.json",
+    "compression": "none"
+  },
+  {
+    "file": "task.txt",
+    "bytes": 2815,
+    "sha256": "1e5d308f16907b80def626abb4ce0d2d30b72df2313cb342a1ccf358a652de9c",
+    "savedAs": "task.txt",
+    "compression": "none"
+  },
+  {
+    "file": "task.txt.gz",
+    "bytes": 1651,
+    "sha256": "2c25ebc1493fccb7861671f7bc73d518ba2d881e00bc95687eb29cc54a6f66c9",
+    "savedAs": "task.txt.gz",
+    "compression": "none"
+  }
+]

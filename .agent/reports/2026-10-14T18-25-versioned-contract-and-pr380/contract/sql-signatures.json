@@ -1,0 +1,512 @@
+[
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 98,
+    "function": "public.fence_candidate_thesis_append_v1",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 147,
+    "function": "public.research_source_heads_page_v1",
+    "arguments": "p_cutoff timestamptz, p_offset integer, p_limit integer"
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 213,
+    "function": "public.research_model_lease_fits_day_v1",
+    "arguments": "p_started timestamptz"
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 219,
+    "function": "public.reserve_research_model_v1",
+    "arguments": "p_role text,p_owner text,p_work_key text"
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 245,
+    "function": "public.finish_research_model_v1",
+    "arguments": "p_reservation uuid,p_owner text,p_outcome text,p_result_hash text"
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 294,
+    "function": "public.capture_research_first_discoveries_v1",
+    "arguments": "p_run_id uuid"
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 347,
+    "function": "public.fence_research_strategy_record_v1",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 387,
+    "function": "public.fence_research_paper_book_append_v1",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 416,
+    "function": "public.research_evidence_heads_v1",
+    "arguments": "p_ids uuid[],p_cutoff timestamptz"
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 456,
+    "function": "public.research_thesis_heads_page_v1",
+    "arguments": "p_cutoff timestamptz,p_offset integer,p_limit integer"
+  },
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "line": 477,
+    "function": "public.research_execution_policy_matches_v1",
+    "arguments": "p_expected jsonb"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 37,
+    "function": "public.handoff_research_deep_model_v1",
+    "arguments": "p_job_id UUID,p_owner TEXT,p_attempt INTEGER,p_article_hash TEXT"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 54,
+    "function": "public.record_budgeted_deep_review_v1",
+    "arguments": "p_job_id UUID,p_attempt INTEGER,p_reservation_id UUID,p_review JSONB"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 122,
+    "function": "public.enqueue_research_deep_jobs_v1",
+    "arguments": "p_run_id UUID"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 165,
+    "function": "public.claim_research_deep_job_v1",
+    "arguments": "p_owner TEXT"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 210,
+    "function": "public.claim_candidate_deep_outbox_v1",
+    "arguments": "p_deep_job_id UUID, p_deep_owner TEXT, p_deep_attempt INTEGER, p_revision_id UUID, p_input_hash TEXT, p_outbox_owner TEXT"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 271,
+    "function": "public.finish_research_deep_job_v1",
+    "arguments": "p_job_id UUID, p_owner TEXT, p_success BOOLEAN, p_receipt_id UUID, p_reason TEXT"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 280,
+    "function": "public.finish_research_deep_job_v2",
+    "arguments": "p_job_id UUID, p_owner TEXT, p_attempt INTEGER, p_success BOOLEAN, p_receipt_id UUID, p_reason TEXT"
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "line": 326,
+    "function": "public.record_candidate_deep_submission_v1",
+    "arguments": "p_deep_job_id UUID, p_deep_owner TEXT, p_deep_attempt INTEGER, p_deep_review_id UUID, p_article_hash TEXT, p_job_id UUID, p_owner TEXT, p_bundle_id UUID, p_revision_id UUID, p_input_hash TEXT, p_submission_hash TEXT, p_content JSONB, p_claims JSONB, p_source_references JSONB, p_claim_fact_map JSONB, p_validation_status TEXT, p_rejection_reasons JSONB"
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "line": 43,
+    "function": "public.reject_research_observed_mutation_v1",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "line": 58,
+    "function": "public.research_observed_canonical_json_v1",
+    "arguments": "value jsonb"
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "line": 71,
+    "function": "public.research_observed_instant_v1",
+    "arguments": "value text"
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "line": 78,
+    "function": "public.admit_research_observed_roster_v1",
+    "arguments": "p_snapshot_hash text,p_canonical_packet text"
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "line": 34,
+    "function": "public.research_author_assignment_context_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text"
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "line": 88,
+    "function": "public.read_research_author_assignment_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text"
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "line": 112,
+    "function": "public.assign_research_author_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text"
+  },
+  {
+    "file": "migrations/20261009_research_author_handoffs_v2.sql",
+    "line": 7,
+    "function": "public.read_research_author_handoff_context_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result_id uuid,p_result_hash text"
+  },
+  {
+    "file": "migrations/20261009_research_author_handoffs_v2.sql",
+    "line": 92,
+    "function": "public.commit_research_author_handoff_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result_id uuid,p_result_hash text"
+  },
+  {
+    "file": "migrations/20261009_research_author_packet_v2.sql",
+    "line": 3,
+    "function": "public.read_research_author_packet_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text"
+  },
+  {
+    "file": "migrations/20261009_research_author_results_v2.sql",
+    "line": 19,
+    "function": "public.read_research_author_result_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text"
+  },
+  {
+    "file": "migrations/20261009_research_author_results_v2.sql",
+    "line": 32,
+    "function": "public.receive_research_author_result_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 17,
+    "function": "public.research_complete_canonical_v2",
+    "arguments": "v jsonb,d integer DEFAULT 0"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 28,
+    "function": "public.research_complete_hash_v2",
+    "arguments": "v jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 29,
+    "function": "public.research_complete_schema_check_v2",
+    "arguments": "v jsonb,s jsonb,known timestamptz,d integer DEFAULT 0"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 49,
+    "function": "public.research_complete_mapping_v2",
+    "arguments": "symbol text"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 50,
+    "function": "public.research_complete_parent_v2",
+    "arguments": "p_request jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 69,
+    "function": "public.read_research_article_input_revision_v2",
+    "arguments": "p_request jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 79,
+    "function": "public.seal_research_article_input_revision_v2",
+    "arguments": "p_request jsonb,p_calculation jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "line": 120,
+    "function": "public.prepare_research_input_v2",
+    "arguments": "p_request jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparation_assert_v2.sql",
+    "line": 5,
+    "function": "public.assert_research_input_preparation_v2",
+    "arguments": "p_request jsonb,p_preparation_id uuid,p_input_hash text"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 35,
+    "function": "public.research_input_preparation_bytes_v2",
+    "arguments": "p_request jsonb,p_payload jsonb,p_new_seal jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "line": 45,
+    "function": "public.prepare_research_input_v2",
+    "arguments": "p_request jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 34,
+    "function": "public.fence_research_publication_lineage_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "line": 93,
+    "function": "public.fence_research_publication_truncate_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 34,
+    "function": "public.research_source_root_v2",
+    "arguments": "p jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 42,
+    "function": "public.research_source_fence_write_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 60,
+    "function": "public.research_source_fence_record_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 88,
+    "function": "public.seal_research_sources_v2",
+    "arguments": "p_documents jsonb,p_cutoff timestamptz"
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 138,
+    "function": "public.assert_research_source_seal_v2",
+    "arguments": "p_seal uuid"
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "line": 155,
+    "function": "public.reject_research_source_receipt_mutation_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "line": 29,
+    "function": "public.read_research_reviewer_context_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "line": 65,
+    "function": "public.assign_research_reviewer_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "line": 98,
+    "function": "public.read_research_reviewer_sources_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_results_v2.sql",
+    "line": 33,
+    "function": "public.fence_research_execution_invocation_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_results_v2.sql",
+    "line": 49,
+    "function": "public.read_research_reviewer_result_context_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_results_v2.sql",
+    "line": 98,
+    "function": "public.assert_research_editorial_review_v2",
+    "arguments": "packet jsonb,review jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_results_v2.sql",
+    "line": 150,
+    "function": "public.receive_research_reviewer_result_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text,p_result jsonb"
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_results_v2.sql",
+    "line": 228,
+    "function": "public.read_research_reviewer_result_sources_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 49,
+    "function": "public.research_publication_content_v2",
+    "arguments": "author_payload jsonb"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 64,
+    "function": "public.ensure_research_publication_bundle_v2",
+    "arguments": "p_revision uuid,p_hash text"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 87,
+    "function": "public.fence_research_dossier_insert_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 141,
+    "function": "public.fence_research_dossier_truncate_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 163,
+    "function": "public.fence_research_publication_lineage_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 236,
+    "function": "public.research_publication_source_state_v2",
+    "arguments": "p_seal uuid"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 245,
+    "function": "public.read_completed_research_publication_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text, p_author_result_id uuid,p_author_result_hash text,p_reviewer_result_id uuid,p_reviewer_result_hash text"
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "line": 360,
+    "function": "public.publish_research_article_v2",
+    "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text, p_author_result_id uuid,p_author_result_hash text,p_reviewer_result_id uuid,p_reviewer_result_hash text,p_content_hash text"
+  },
+  {
+    "file": "migrations/20261010_research_publication_view_v2.sql",
+    "line": 7,
+    "function": "public.read_research_company_publication_v2",
+    "arguments": "p_company uuid"
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 43,
+    "function": "public.reserve_research_model_v1",
+    "arguments": "p_role text,p_owner text,p_work_key text"
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 73,
+    "function": "public.validate_research_deep_scope_v1",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 102,
+    "function": "public.charge_research_deep_admission_v1",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 113,
+    "function": "public.reconcile_research_deep_admissions_v1",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 127,
+    "function": "public.enqueue_research_deep_jobs_v1",
+    "arguments": "p_run_id uuid"
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 162,
+    "function": "public.store_observed_research_priority_v1",
+    "arguments": "p_snapshot_hash text,p_as_of timestamptz,p_input_hash text,p_attempts jsonb,p_rows jsonb,p_queue jsonb,p_scope_receipt jsonb"
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 210,
+    "function": "public.reap_expired_research_deep_jobs_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 222,
+    "function": "public.claim_research_deep_job_v1",
+    "arguments": "p_owner TEXT"
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "line": 259,
+    "function": "public.claim_research_observed_job_v2",
+    "arguments": "p_owner text,p_snapshot_hash text"
+  },
+  {
+    "file": "migrations/20261011_research_complete_mapping_precision_v2.sql",
+    "line": 31,
+    "function": "public.research_complete_mapping_v2",
+    "arguments": "symbol text"
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 11,
+    "function": "public.read_research_observed_claim_v2",
+    "arguments": "p_owner text,p_snapshot_hash text,p_job_id uuid DEFAULT NULL,p_attempt integer DEFAULT NULL"
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 34,
+    "function": "public.claim_research_observed_job_v2",
+    "arguments": "p_owner text,p_snapshot_hash text"
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 53,
+    "function": "public.handoff_research_deep_model_v1",
+    "arguments": "p_job_id UUID,p_owner TEXT,p_attempt INTEGER,p_article_hash TEXT"
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 69,
+    "function": "public.fence_observed_model_completion_v2",
+    "arguments": ""
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 78,
+    "function": "public.record_budgeted_deep_review_v1",
+    "arguments": "p_job_id UUID,p_attempt INTEGER,p_reservation_id UUID,p_review JSONB"
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 119,
+    "function": "public.claim_candidate_deep_outbox_v1",
+    "arguments": "p_deep_job_id UUID, p_deep_owner TEXT, p_deep_attempt INTEGER, p_revision_id UUID, p_input_hash TEXT, p_outbox_owner TEXT"
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 178,
+    "function": "public.finish_research_deep_job_v2",
+    "arguments": "p_job_id UUID, p_owner TEXT, p_attempt INTEGER, p_success BOOLEAN, p_receipt_id UUID, p_reason TEXT"
+  },
+  {
+    "file": "migrations/20261008_research_observed_claim_v2.sql",
+    "line": 221,
+    "function": "public.record_candidate_deep_submission_v1",
+    "arguments": "p_deep_job_id UUID, p_deep_owner TEXT, p_deep_attempt INTEGER, p_deep_review_id UUID, p_article_hash TEXT, p_job_id UUID, p_owner TEXT, p_bundle_id UUID, p_revision_id UUID, p_input_hash TEXT, p_submission_hash TEXT, p_content JSONB, p_claims JSONB, p_source_references JSONB, p_claim_fact_map JSONB, p_validation_status TEXT, p_rejection_reasons JSONB"
+  }
+]

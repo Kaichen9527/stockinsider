@@ -1,0 +1,61 @@
+{
+  "old": "47fe9fe39600f2012940865be16743a441c18111",
+  "subject": "dd59817f750684b093965f539dd4de466be13077",
+  "tree": "6a9a08af70fb94b50ed2b5eee6aaf3686f648b99",
+  "changed": [
+    ".github/workflows/research-publication-tail-quality.yml",
+    "docs/operations/2026-10-14/publication-tail-release-handoff.md"
+  ],
+  "onlyWorkflowChangeIsOneAddedPath": true,
+  "copiedFilesUnchanged": 41,
+  "dependencies": [
+    {
+      "path": "scripts/runtime/auth-source-worker-installation.js",
+      "oldSelected": false,
+      "newSelected": true
+    },
+    {
+      "path": "scripts/runtime/codec.js",
+      "oldSelected": false,
+      "newSelected": true
+    },
+    {
+      "path": "scripts/runtime/credential-resolver.js",
+      "oldSelected": false,
+      "newSelected": true
+    },
+    {
+      "path": "scripts/runtime/reviewed-runtime-release.js",
+      "oldSelected": false,
+      "newSelected": true
+    },
+    {
+      "path": "scripts/runtime/runtime-health.js",
+      "oldSelected": false,
+      "newSelected": true
+    },
+    {
+      "path": "scripts/runtime/tracked-runtime-bundle.js",
+      "oldSelected": false,
+      "newSelected": true
+    }
+  ],
+  "priorEvidence": "b37fd62a0441dd55135ab863256ea434e70805a6",
+  "priorNegativeSha256": "62c192c580fd0345c48701d4e685e6751267b7d193babde76c42dba40a42946a",
+  "files": [
+    {
+      "file": ".github/workflows/research-publication-tail-quality.yml",
+      "bytes": 4341,
+      "sha256": "e092eb80ddf3c6df8664ae19ae5c4a2b9d6721285100dd51369ea24d43bfb717",
+      "blob": "0b5cdb0e3617819cef88d44c1a25897113f1156e"
+    },
+    {
+      "file": "docs/operations/2026-10-14/publication-tail-release-handoff.md",
+      "bytes": 4889,
+      "sha256": "76533214523ef1e6b32fdc82c18eefc572c61bca1d9fddeca6ee725232f96452",
+      "blob": "fda9d048f3e9132b3c7142e8d6b5c61ab3e649c6"
+    }
+  ],
+  "sourceMutated": false,
+  "testsNativeBuildRerun": false
+}

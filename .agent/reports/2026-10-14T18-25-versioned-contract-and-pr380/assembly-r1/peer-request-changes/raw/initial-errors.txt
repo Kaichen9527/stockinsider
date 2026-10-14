@@ -1,0 +1,3 @@
+Initial sandbox fetch: fatal unable to access GitHub; Failed to connect to proxy port8080. Exactsubject absent until authorized managed fetch succeeded.
+Initial guessed docs/operations/2026-10-14/research-publication-tail-release-handoff.md: ENOENT; actual path publication-tail-release-handoff.md read from diff.
+Both errors are review harness/environment observations, not candidate test failures.

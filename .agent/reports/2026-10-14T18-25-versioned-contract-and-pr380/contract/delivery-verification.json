@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-14T09:57:49.090259+00:00",
+  "pushedEvidenceCommit": "c187a1d786ec8b5e94fb51dda3008c7cadc53d6f",
+  "pushedEvidenceTree": "96c67f1b3092c1daa9b550f84f425cbb583510bb",
+  "sourceUnchanged": true,
+  "evidenceOnlyChangedFiles": 39,
+  "receiptSha256": "c6ad8498c284eb5d9c0ce0b942a789a47f8ac6ec292236afa338e9932c9b5cf9",
+  "receiptEntriesVerified": 38,
+  "diffCheckExit": 2,
+  "diffCheckExplanation": "Original saved task has trailing blank line; retained exact task bytes, not normalized to hide original output. No runtime diff.",
+  "allOwnPgStopped": true,
+  "freeBytes": {
+    "/workspace": 8617119744,
+    "/tmp": 15443406848
+  },
+  "noBuildRerun": true,
+  "noFormalApproval": true
+}

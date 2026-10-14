@@ -1,0 +1,15 @@
+{
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "files": [
+    {
+      "file": "web/src/lib/research-complete-canonical.ts",
+      "sha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "bytes": 4343
+    },
+    {
+      "file": "web/src/lib/research-financial-clock.ts",
+      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+      "bytes": 807
+    }
+  ]
+}

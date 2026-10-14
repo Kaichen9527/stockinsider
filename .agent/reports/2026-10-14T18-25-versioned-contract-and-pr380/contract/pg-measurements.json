@@ -1,0 +1,59 @@
+[
+  {
+    "symbol": "2409",
+    "pgVersion": "17.11 (Debian 17.11-0+deb13u1)",
+    "taggedHash": "e73b7901492b4396277e8f16ceb8ce7dca3e2a8ceb0bce93c1318d670c65e8ec",
+    "taggedBytes": 225392,
+    "jsonbTextBytes": 190897,
+    "pgPhysicalValueBytes": 204668,
+    "projectionJsonbTextBytes": 139964
+  },
+  {
+    "symbol": "2409",
+    "negative": "financialVerified",
+    "rejected": true
+  },
+  {
+    "symbol": "2409",
+    "negative": "extra",
+    "rejected": true
+  },
+  {
+    "symbol": "2409",
+    "negative": "forecastCash",
+    "rejected": true
+  },
+  {
+    "symbol": "2383",
+    "pgVersion": "17.11 (Debian 17.11-0+deb13u1)",
+    "taggedHash": "35f566c0538bf5263fac4ed9b3e2f352e3a1973e90e6f0896d0970ce5b951820",
+    "taggedBytes": 135107,
+    "jsonbTextBytes": 115598,
+    "pgPhysicalValueBytes": 124052,
+    "projectionJsonbTextBytes": 86167
+  },
+  {
+    "symbol": "2383",
+    "negative": "financialVerified",
+    "rejected": true
+  },
+  {
+    "symbol": "2383",
+    "negative": "extra",
+    "rejected": true
+  },
+  {
+    "symbol": "2383",
+    "negative": "forecastCash",
+    "rejected": true
+  },
+  {
+    "count": 30,
+    "scope": "synthetic 30 source manifest only; root length4096 each",
+    "taggedBytes": 131107,
+    "jsonbTextBytes": 129990
+  },
+  {
+    "cleanupFunctionAbsent": true
+  }
+]

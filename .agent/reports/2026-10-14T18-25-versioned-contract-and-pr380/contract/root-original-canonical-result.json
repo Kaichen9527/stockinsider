@@ -1,0 +1,22 @@
+{
+  "originalSource": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "node": "v22.14.0",
+  "results": [
+    {
+      "symbol": "2409",
+      "taggedHash": "e73b7901492b4396277e8f16ceb8ce7dca3e2a8ceb0bce93c1318d670c65e8ec",
+      "taggedBytes": 225392,
+      "finiteMeasurementWitnessAccepted": true,
+      "productionSchemaApproved": false
+    },
+    {
+      "symbol": "2383",
+      "taggedHash": "35f566c0538bf5263fac4ed9b3e2f352e3a1973e90e6f0896d0970ce5b951820",
+      "taggedBytes": 135107,
+      "finiteMeasurementWitnessAccepted": true,
+      "productionSchemaApproved": false
+    }
+  ],
+  "pgRerun": false,
+  "protocolAcceptance": false
+}

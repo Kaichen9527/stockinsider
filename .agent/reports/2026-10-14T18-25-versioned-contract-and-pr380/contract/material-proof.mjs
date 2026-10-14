@@ -1,0 +1,13 @@
+import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import {gunzipSync}from'node:zlib';import {createHash}from'node:crypto';
+import {createCandidateFinancialReaders}from'/tmp/si-pubtail-o14/web/src/lib/research-cash-financial-reader.ts';import {historicalCashPins as pins}from'/tmp/si-pubtail-o14/web/src/lib/research-historical-cash-pins.ts';
+import {completeCanonical,completeHash,validateCompleteSchema}from'/tmp/versioned-contract-o14/source/web/src/lib/research-complete-canonical.ts';
+const out='/tmp/versioned-contract-o14',root=fs.mkdtempSync(path.join(fs.realpathSync(os.homedir()),'.versioned-input-measure-'));fs.chmodSync(root,0o700);const fixture=JSON.parse(gunzipSync(fs.readFileSync('/tmp/si-pubtail-o14/scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz'),{maxOutputLength:2000000}));
+function schema(v,clock){if(v===clock)return{type:'string',format:'date-time'};if(Array.isArray(v))return{type:'array',prefixItems:v.map(x=>schema(x,clock))};if(v&&typeof v==='object')return{type:'object',properties:Object.fromEntries(Object.entries(v).map(([k,x])=>[k,schema(x,clock)]))};return{const:v};}
+function depth(v){return v&&typeof v==='object'?Math.max(0,...Object.values(v).map(depth))+1:0;}
+const results=[];
+try{for(const f of fixture.files){const p=path.join(root,f.pin.path);fs.mkdirSync(path.dirname(p),{recursive:true,mode:0o700});fs.writeFileSync(p,Buffer.from(f.rawBase64,'base64'),{mode:0o600});}
+ for(const symbol of ['2409','2383']){const r=await createCandidateFinancialReaders(root).scenarioCash(pins.profile,symbol),m=r.material,sc=schema(m,m.artifactReadKnownAt);validateCompleteSchema(m,sc,m.artifactReadKnownAt);let rejected=false;try{validateCompleteSchema(m,JSON.parse(fs.readFileSync(out+'/source/web/src/lib/research-complete-'+symbol+'.schema.json')),m.artifactReadKnownAt);}catch{rejected=true;}if(!rejected)throw Error('old_schema_unexpectedly_accepts');
+ const raw=JSON.stringify(m),canonical=completeCanonical(m);fs.writeFileSync(out+'/material-'+symbol+'.json',raw);fs.writeFileSync(out+'/finite-shape-'+symbol+'.json',JSON.stringify(sc));
+ results.push({symbol,rawBytes:Buffer.byteLength(raw),projectionBytes:Buffer.byteLength(JSON.stringify(m.projection)),taggedBytes:Buffer.byteLength(canonical),taggedHash:completeHash(m),rawHash:createHash('sha256').update(raw).digest('hex'),depth:depth(m),clock:m.artifactReadKnownAt,readerReceipt:r.readerReceipt,oldV2SchemaRejected:rejected,finiteMeasurementSchemaAccepted:true,shapeSchemaIsProposalNotApproved:true});}
+ console.log(JSON.stringify(results,null,2));fs.writeFileSync(out+'/material-measurements.json',JSON.stringify(results,null,2));
+}finally{fs.rmSync(root,{recursive:true,force:true});}

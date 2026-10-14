@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-14T10:13:25.160562+00:00",
+  "head": "dd59817f750684b093965f539dd4de466be13077",
+  "base": "1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4",
+  "command": [
+    "gh",
+    "pr",
+    "create",
+    "--repo",
+    "Kaichen9527/stockinsider",
+    "--draft",
+    "--base",
+    "main",
+    "--head",
+    "codex/research-publication-tail-release-oct14",
+    "--title",
+    "research: assemble guarded publication26 with captured PostgreSQL acceptance",
+    "--body-file",
+    "/tmp/stockinsider-pr380-body-oct14.md"
+  ],
+  "exit": 0,
+  "stdout": "https://github.com/Kaichen9527/stockinsider/pull/380\n",
+  "stderr": ""
+}

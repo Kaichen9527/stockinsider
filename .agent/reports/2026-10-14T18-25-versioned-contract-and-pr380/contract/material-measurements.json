@@ -1,0 +1,46 @@
+[
+  {
+    "symbol": "2409",
+    "rawBytes": 181848,
+    "projectionBytes": 133621,
+    "taggedBytes": 225392,
+    "taggedHash": "e73b7901492b4396277e8f16ceb8ce7dca3e2a8ceb0bce93c1318d670c65e8ec",
+    "rawHash": "61c8709cf6641b27d8e2c3b808766281b6b7d5d66847b6fbf031973c0e0c0315",
+    "depth": 9,
+    "clock": "2026-10-14T09:45:26.313Z",
+    "readerReceipt": {
+      "execution": "new-financial-io-v1",
+      "files": 9,
+      "rawBytes": 697558,
+      "carrierBytes": 931023,
+      "carrierSha256": "823b80038e13779f4155327b3cd7d36b1dc5a833490da1bf692d33845c239590",
+      "cleanupComplete": true,
+      "kernelIoCancellationConfirmed": false
+    },
+    "oldV2SchemaRejected": true,
+    "finiteMeasurementSchemaAccepted": true,
+    "shapeSchemaIsProposalNotApproved": true
+  },
+  {
+    "symbol": "2383",
+    "rawBytes": 110392,
+    "projectionBytes": 82471,
+    "taggedBytes": 135107,
+    "taggedHash": "35f566c0538bf5263fac4ed9b3e2f352e3a1973e90e6f0896d0970ce5b951820",
+    "rawHash": "58a5bff799cc2b7553cae8f62f789a1efa6424ddbf2d56ccedcd654fbf54b22f",
+    "depth": 8,
+    "clock": "2026-10-14T09:45:26.394Z",
+    "readerReceipt": {
+      "execution": "new-financial-io-v1",
+      "files": 7,
+      "rawBytes": 264753,
+      "carrierBytes": 353803,
+      "carrierSha256": "5fff5dd7e33ae7da30d8b72890f13414866b7820f54685af38b5cdd95d2b5564",
+      "cleanupComplete": true,
+      "kernelIoCancellationConfirmed": false
+    },
+    "oldV2SchemaRejected": true,
+    "finiteMeasurementSchemaAccepted": true,
+    "shapeSchemaIsProposalNotApproved": true
+  }
+]

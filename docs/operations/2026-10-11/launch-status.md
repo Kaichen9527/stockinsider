@@ -1,6 +1,27 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
 
+## 2026-10-14 18:25台灣時間：完整v3契約/真PG尺寸已核；PR380草稿與新tail/金融ordinary全綠，product仍跑/initialprotected缺refRED保留
+
+Remote main1f/progressd44與工作樹/Cloudcompact先核。原PR370..379全部terminal，不再checks/watch/ready/rerun/merge/helper。上一turn及本turn均實質progress，Goal原三階段active，不把工程/native/merge當formal來源文章/部署/排程完成。
+
+Contracte393045ba27971881c219b62b6949e24abf9d311/receiptc6ad8498c284eb5d9c0ce0b942a789a47f8ac6ec292236afa338e9932c9b5cf9已Root核38raw、63original+16current各exactsource、22解壓artifact/22legacyclosure77b1、14oldarchive全部Git75d可復原；原模型88790/54602非新模型。真freshlocalPG17.11 onlycanonical/schema BEGIN/ROLLBACK，actualfullmaterials225392/135107tagged、190897/115598PGtext、139964/86167projection、depth9/8；6negative拒絕/oldv2schema拒新材。Root原canonical重算2hash/size吻合，未重跑PG/build。Measurement witness非finalschema，未驗combinedquota/maxlegal30source/原兩ledger跨version競態，不能放大4slot524288/120s/160000/262144/depth12。Root候選方向ten-keyrequest+finite tuple、新compatold8/6 session+將來drain/cutover/oldsealed replay保留/noFS-nocharge，不冒77b1/偷禁freshv2；整HTTPPG/allcallers/cashcitations/author-review-publication仍待。
+
+Publicationrelease原47fe peerb37/receipt0458504a真REQUEST_CHANGES P2=1：六actualrequirecache scripts/runtime未在新workflowpaths。Root核42raw/44source，原2146base檔/41copies/240retained121unique同；sandbox2file-levelsummary不算17。Rootdd59817f750684b093965f539dd4de466be13077只加scripts/runtime/**一line+handoff，peer17a9561e/receipt9143274b真R1scopedclosure0P0P1P2，Root核7raw/完整workflowSHA。它非原runtime自審/全formalexact；原REQUEST_CHANGES/negative永保留。
+
+已建且attach草稿PR380 https://github.com/Kaichen9527/stockinsider/pull/380 ，head dd59817f/baseapprovedmain1f。UI100limit首次attach失敗；保存oldest已MERGED279 exactpointer/state/head/base/title/mergecommit後只unlink其UI，再附380成功，最後100/has380/GitHub279歷史未改。Rules20177392active/bypass[]只讀真核，未ready/merge/rerun/改policy。
+
+新tailordinary38548050159真SUCCESS/PG17.11/完整單job17pure+24entrynative+54fragment各0fail/skip/todo；本次GHA新執行，不沿舊equivalence也不加總overlap。下載artifact11885427199/archiveSHAfee0502760a0627361898f3bc4cd87c61771b032ab1517113ba3bd94892a7dc9，33files3599947bytes全CRC/memberSHA核。真helper26COMMIT/installedcatalog+financial、realDDL forcedrollback/socketdisconnectbackendgone rollback/busy beforeBEGIN/pending[]/cleanup。Freshmatrix14independent/36dependency-only/66sourceproof與2helpercontrol分開，formalpeer/productionInstalledfalse。
+
+新financialordinary38548049985真SUCCESS，單完整job38pure/28captured/1HBA/4financial各0fail/skip/todo。Nativecheckoutmerge487e69732cf7dee82d83ce5f762b9464f090b081/parents1f+dd/tree6a9a08af70fb94b50ed2b5eee6aaf3686f648b99真同head。Root未新native/build。Product38548049946/job115798904807仍inProgress，不能沿舊155/PCR31或未完browser稱本headPASS。先讀此原handle終態，綠ordinary不重跑。
+
+Initialprotected38548049951真bootstrapPASS/req-arch-exactFAIL/modelproductskip/aggregateFAIL，rawlog真缺refs/heads/evidence/source-led-opportunity-v3-exact-review-dd59817f750684b093965f539dd4de466be13077。保留RED，不rerun同input/猜舊error/假簽。Fullfresh exact/per-file作者獨立review/PCR/attestation/directchildref/normalprotected仍待，未發ref/ready/merge。
+
+Cloudcontract/review皆terminal後cursor38真idle，只接一件30min newcompat session；turn01a139e9-c0cc-719d-81c1-e438603e1951/cursor57859559-a812-4f98-bcdc-46a2a9f908f6:39 inProgress，branchcodex/research-compatible-input-session-oct14/base1ff。Owned private sharedengine session/fixedold8or6原project/fixture/actualFDtests/newleafclosure/handoff/evidence；Rootlocal同branch只1ff乾淨、ownership轉Cloud，Root只PR380/report，不重疊。pre/body/post真pending同owner、unknowncontext/profile/namespace/latecleanup拒絕、正常quality與資源據實，SQL/schema/RPC/route/mapping/roles/policy不動。先同handlecompact終態勿重派。
+
+Report.agent/reports/2026-10-14T18-25-versioned-contract-and-pr380/，Rootreceiptcad279a045051e6c813a225dca4f7c33d884c7c9a301a3daadbb72e3648c72ab。無VPS/remoteDB/roleACL/capacity/HTTP/crawl343/PTT/策略/正式排程/部署/cache；正式169/NOLOGIN-1/原capacitydeficit3902640128/待答reserve不變，不同必敗heavy/重問/擅付費。原8b包只讀workflowmetadata非新artifact/無重建/冒含1f。
+
+
 ## 2026-10-14 17:55台灣時間：publication26已組裝最小release候選並真17pure；完整v3契約同handle活動中
 
 Remote main1f152fdf43add6bc7f97a00d7e36a7e8cfc105d4/progress74fae77b與工作樹/Cloudcompact真核。上一goalturn是實質progress，本turn也有新branch/code/真測試，不縮原三階段。PR370..379全terminal，不再checks/watch/ready/rerun/merge/helper，正式169/容量reserve/NOLOGIN-1仍最後真值。本輪無VPS/remoteDB/roleACL/HTTP/crawl343/PTT/策略/正式排程/部署/cache。
