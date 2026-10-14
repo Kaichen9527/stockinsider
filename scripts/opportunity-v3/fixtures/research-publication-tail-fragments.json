@@ -1907,13 +1907,13 @@
       "sql": "DROP INDEX IF EXISTS public.uq_candidate_dossier_input_revision_v4;\n",
       "tableCreated": null,
       "functionCreated": null,
-      "selected": false,
+      "selected": true,
       "declaredColumns": [],
       "implicitRowType": null,
       "header": "DROP INDEX IF EXISTS public.uq_candidate_dossier_input_revision_v4;",
       "newTableDependencies": [],
       "newColumnDependency": null,
-      "coverageIntent": "source-proof-ancillary-statement-not-executed"
+      "coverageIntent": "independent-original-DDL"
     },
     {
       "id": "p3-L100",
