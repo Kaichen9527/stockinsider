@@ -35,8 +35,10 @@ const derivedKeys = ['nonCashAdjustments', 'workingCapitalCashEffect', 'cfo', 'g
 export function projectPinnedHistoricalCash(profile: unknown, symbol: unknown, files: unknown, deadline: Deadline) {
   ensure(profile === historicalCashPins.profile && (symbol === '2409' || symbol === '2383'));
   deadline.check();
-  ensure(files instanceof Map && Object.getPrototypeOf(files) === Map.prototype && Reflect.ownKeys(files).length === 0);
+  ensure(files instanceof Map && Object.getPrototypeOf(files) === Map.prototype);
   const selected = historicalCashPins.companies[symbol];
+  ensure(Object.getOwnPropertyDescriptor(Map.prototype, 'size')!.get!.call(files) === selected.files.length);
+  ensure(Reflect.ownKeys(files).length === 0);
   const entries = [...Map.prototype.entries.call(files)] as Array<[unknown, unknown]>;
   ensure(entries.length === selected.files.length);
   const owned = new Map<string, Uint8Array>();
