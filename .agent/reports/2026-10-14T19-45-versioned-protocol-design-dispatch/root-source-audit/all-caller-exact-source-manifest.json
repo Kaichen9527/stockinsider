@@ -1,0 +1,32 @@
+[
+  {
+    "path": "web/src/app/api/internal/research-deep-job/route.ts",
+    "bytes": 12557,
+    "sha256": "d70ceae33eb8613da1b891a0790ff21a2a90bd67fedc73a7d7d9074668cba42a",
+    "blob": "083b5c06b2d4c81ebba2b4a823b1de112cd58e9b"
+  },
+  {
+    "path": "web/src/lib/research-author-assignment.ts",
+    "bytes": 7161,
+    "sha256": "f3398447a07df929652e07ea3044bf8334e3e922f3344ad5802d39ea54b7d051",
+    "blob": "5dec5203555d1352f7f67cf64eb6585f3b389a3c"
+  },
+  {
+    "path": "web/src/lib/research-author-packet.ts",
+    "bytes": 11061,
+    "sha256": "50cabf662e17609f75a8bbddbe9d711b540dfa70a170ee67febabd563e1647a5",
+    "blob": "01f1813d4ae703d5ddec3ca14df1570a4e74dcbd"
+  },
+  {
+    "path": "web/src/lib/research-author-result.ts",
+    "bytes": 8436,
+    "sha256": "71b47dfe6a666498829e2bd6665e5688ca18de73e8e0938870e645983e5060e7",
+    "blob": "9002b4acae907f13dde377cc9b8c861c6b5dd986"
+  },
+  {
+    "path": "web/src/lib/research-financial-supplement.ts",
+    "bytes": 19142,
+    "sha256": "2f8d8150a3071109d3db2dee9c1df7dadcd97322357c21e8a45fd469df22372d",
+    "blob": "db88fc9330b14f7f3489668886949b2cc3dc6777"
+  }
+]

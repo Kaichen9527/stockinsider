@@ -1,0 +1,13 @@
+{
+  "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+  "hostId": "durable",
+  "turnId": "01a13a36-7d98-7462-9c24-0994ae96dc4c",
+  "cursor": "57859559-a812-4f98-bcdc-46a2a9f908f6:43",
+  "latestTurn": "inProgress",
+  "branch": "codex/research-versioned-protocol-design-oct14",
+  "base": "72f639801d4000f375bea879de5139f6b1232580",
+  "scope": "15min light exact protocol SQL/wholeclosure design only",
+  "heavyForbidden": true,
+  "runtimeSqlMutationForbidden": true,
+  "noRedispatch": true
+}

@@ -1,0 +1,97 @@
+[
+  {
+    "file": "cloud-task.txt",
+    "bytes": 4290,
+    "sha256": "78804a94cfd8e08da27e35b376cc2cdc29d84537514588c65e4b09ddf86f6c67"
+  },
+  {
+    "file": "dispatch.json",
+    "bytes": 492,
+    "sha256": "4e516152f9654baf667373e0abd2c04c30a97def2a87b9bb5ac5866adc47c71e"
+  },
+  {
+    "file": "report.md",
+    "bytes": 2360,
+    "sha256": "7a29c5b73c8799e277710732311c1e1b76a351ec67b10e8a519cf2977439c61a"
+  },
+  {
+    "file": "root-source-audit/20261009_research_complete_input_v2.sql",
+    "bytes": 446691,
+    "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c"
+  },
+  {
+    "file": "root-source-audit/20261009_research_input_preparation_assert_v2.sql",
+    "bytes": 2086,
+    "sha256": "c63a923be36e5f7ba06001a6d8be57287d80f5e6524dc866bad93b80666a9cbc"
+  },
+  {
+    "file": "root-source-audit/20261009_research_input_preparations_v2.sql",
+    "bytes": 14713,
+    "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e"
+  },
+  {
+    "file": "root-source-audit/all-caller-exact-source-manifest.json",
+    "bytes": 1121,
+    "sha256": "603e93de13e3407b5d24bfee88ae59f770965635dd6aff44e3c802d4dcfc161e"
+  },
+  {
+    "file": "root-source-audit/pr380-attempt2-jobs.json",
+    "bytes": 14424,
+    "sha256": "d28c14fdfb9263b5e75169154c40bf3179b76f917eaa7fb0da4b337b88867e42"
+  },
+  {
+    "file": "root-source-audit/pr380-attempt2-run.json",
+    "bytes": 13299,
+    "sha256": "a1a2a3bb980d4dcb775e06d2f71954b89107b6c0c69f62a1b704f1b57022fcfe"
+  },
+  {
+    "file": "root-source-audit/research-complete-input.ts",
+    "bytes": 10526,
+    "sha256": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d"
+  },
+  {
+    "file": "root-source-audit/research-deep-author-assignment.ts.lookup-error",
+    "bytes": 122,
+    "sha256": "5a98688feb140880e0d3f4abd6a3c91b9842138e5d4d047734e5519462fc6a6e"
+  },
+  {
+    "file": "root-source-audit/research-deep-author-input.ts",
+    "bytes": 22617,
+    "sha256": "4e4dd8e2f792071cf974631d08ffa852ad87b2c5e9edd11a3ccee71b27eeaf94"
+  },
+  {
+    "file": "root-source-audit/research-deep-author-result.ts.lookup-error",
+    "bytes": 118,
+    "sha256": "a19e3d79532df2fc7909859f8fc76ab767e9079b49e3018f3a6cfc5fcef61308"
+  },
+  {
+    "file": "root-source-audit/root-inspection-errors.json",
+    "bytes": 378,
+    "sha256": "052f0df7314ec5ef6a8072dbeb92698844516620aa22f9ac0c44f770d18c2e2f"
+  },
+  {
+    "file": "root-source-audit/web__src__app__api__internal__research-deep-job__route.ts",
+    "bytes": 12557,
+    "sha256": "d70ceae33eb8613da1b891a0790ff21a2a90bd67fedc73a7d7d9074668cba42a"
+  },
+  {
+    "file": "root-source-audit/web__src__lib__research-author-assignment.ts",
+    "bytes": 7161,
+    "sha256": "f3398447a07df929652e07ea3044bf8334e3e922f3344ad5802d39ea54b7d051"
+  },
+  {
+    "file": "root-source-audit/web__src__lib__research-author-packet.ts",
+    "bytes": 11061,
+    "sha256": "50cabf662e17609f75a8bbddbe9d711b540dfa70a170ee67febabd563e1647a5"
+  },
+  {
+    "file": "root-source-audit/web__src__lib__research-author-result.ts",
+    "bytes": 8436,
+    "sha256": "71b47dfe6a666498829e2bd6665e5688ca18de73e8e0938870e645983e5060e7"
+  },
+  {
+    "file": "root-source-audit/web__src__lib__research-financial-supplement.ts",
+    "bytes": 19142,
+    "sha256": "2f8d8150a3071109d3db2dee9c1df7dadcd97322357c21e8a45fd469df22372d"
+  }
+]

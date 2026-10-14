@@ -1,0 +1,8 @@
+{
+  "readonlyLookupErrors": [
+    "initial guessed research-deep-author-assignment/input/result file names; actual research-author-assignment/packet/result verified by Git grep",
+    "wrong Cloud thread ID suffix f7372109a908f6 returned missing; immediately correct known f7372109a093 shows actual turn active43"
+  ],
+  "productMutation": false,
+  "cloudTurnRestarted": false
+}
