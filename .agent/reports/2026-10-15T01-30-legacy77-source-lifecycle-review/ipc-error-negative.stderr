@@ -1,0 +1,17 @@
+node:internal/modules/run_main:122
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: must never claim child termination from error event while child remains alive
+
+true !== false
+
+    at file:///private/tmp/stockinsider-legacy77-source-root-review-oct15/ipc-error-contract-negative.mjs:18:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual'
+}
+
+Node.js v22.14.0

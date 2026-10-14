@@ -1,0 +1,8 @@
+{
+  "scope": "Root read-only guessed fixture path lookup; not product/native execution",
+  "subject": "305074af",
+  "path": "scripts/fixtures/research-versioned-prerequisite/original75d-artifacts.json.gz",
+  "exit": 128,
+  "error": "path does not exist",
+  "resolvedActualPath": "scripts/fixtures/research-compatible-financial/pinned-original-source.json.gz"
+}

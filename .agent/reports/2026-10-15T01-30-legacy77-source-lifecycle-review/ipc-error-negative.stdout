@@ -1,0 +1,1 @@
+{"scope":"isolated mock-child lifecycle contract; not native/application/PG","caught":"isolated_ipc_transport_error_while_child_alive","childAlive":true,"exitEvents":0,"closeEvents":0,"killCalls":0,"receiptConfirmedChildExit":true}
