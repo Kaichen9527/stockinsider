@@ -1,0 +1,11 @@
+{
+  "source": "a87432e939b389f64aad3baffb176fee3954c346",
+  "evidence": "dbfde8efc8ff16130d4cefbdbdcacc4d2f03ee8c",
+  "verifiedActualGitSourceInputs": 18,
+  "verifiedPublishedRawFiles": 37,
+  "verifiedPublishedRawBytes": 80647,
+  "makerIsolatedGroups": 35,
+  "rootLinuxSupervisorExecution": false,
+  "productionExecution": false,
+  "scopedReviewPending": true
+}

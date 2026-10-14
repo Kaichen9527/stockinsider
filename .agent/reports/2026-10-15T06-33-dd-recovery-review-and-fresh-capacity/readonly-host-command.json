@@ -1,0 +1,17 @@
+{
+  "completedAt": "2026-10-14T22:26:26.677778+00:00",
+  "args": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "python3 -"
+  ],
+  "exit": 0,
+  "readOnly": true,
+  "secretContentsPrinted": false,
+  "heavyAdmission": false,
+  "deployment": false
+}

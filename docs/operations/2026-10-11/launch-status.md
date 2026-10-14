@@ -1,5 +1,23 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-15 06:33台灣時間：DD recovery候選Root source review閉合；VPS原三鎖容量真READY，operator code仍須正常PR後才能用
+
+候選a87432e939b389f64aad3baffb176fee3954c346/evidencedbfde8efc8ff16130d4cefbdbdcacc4d2f03ee8c/receipt4e796e40a0410fbd4eb9948900be6f51950c942cc744f8fe9ca64dbf678376ca真終態，Cloud前turn01a13c22 completed/threadidle/cursor303427c2-9b66-4f3d-abd3-26255a0a19ef:12。Root核18actualGitinputs/37publishedraw80647bytes、讀全5檔/35makerLinuxisolatedprobes/原RED及所有scope，親跑20portable profile正負groups與bash-n PASS，含同bytes換inode/path仍拒絕；未跑Linuxsupervisor/正式helper/PG/native/build，不把20+35加總或冒RootLinux驗證。Scoped independent source integration零新P0P1P2；原33d031f7 REQUEST_CHANGES與所有RED永久保留。Intermediate support source只有hash非完整bytes，其歷史run不冒稱final同源。
+
+R1候選改明確HUP/INT/TERM非零/nonreentrant、spawn/PID ownership窗口defer、actualchild+detached/adopteddescendants自然settle；只有naturalexit0/完整receipt匹配且無liveowned才准反向activation。Nonzero/forced/missing/inspectionfailure或unknown系統/API outcome均uncertain/manual reconciliation，不假結束或併發reverse；SIGKILL/powerloss不承諾shell救援。R2有限canonical predecessor exact已知nonsecret writerenv/dropin bytes/meta/dir、exactunit來源hash與有限effectiveproperties，未知/額外/缺漏拒絕、原helper後重驗，不任意備份secret。R3 cleanup任一fail非零、healthyactivation與cleanupuncertain分別呈現，fullsuccess在cleanup確認後。原35是maker實跑Linux隔離dummyprocess，非formalproduction/systemd/API/reverse驗收。
+
+Root逐byte再核原capacity/writerSQL/atomicpointer/stream-tar-verifier段、8固定identity/path/hash及support/profile新pin，原DD包/SQL/app/authority/roles/grants/budgets保持。新執行的operator-support不是已批准DD app的一部分：依repo非trivialcode branchPR規則，不能因放docs或是手動程序繞過正常PR/必要真檢查；本候選不直接production執行，正式peer/金融50/publication26仍另pending。
+
+22:26:26.642340Z Root唯讀SSH觀察current169、memory2890502144>原2684354560；只讀已知兩nonsecret配置/兩unit boundedhash/meta與有限systemctl properties，沒有正文secret/值輸出、沒有PG/HTTP/修改，knownconfig hashes對canonical old literal/dropin，兩unit來源hash及effectiveproperties相符。這不是新DBwriter確認或formalpeer；完整正式freshprofile仍需操作前核實，未知映射不猜。
+
+因memory真實變更，22:27:23Z原3OS鎖/原scriptSHA d9f67e3dd234680c7f48573fb85191b485b1d3269f4bf70ed67b340bbfdf64d3一次fresh DD binary准入真exit0/allowedtrue/reasons[]：diskavailable26148474880、projected22256160768>=原15GiB16106127360；memory3956592640、projected2882850816>=原1.5GiB1610612736，原peak1GiB/WAL1/tmp0.5/deploy128MiB/growth2全部不降。原18:34memoryFAIL及19:10低值永久歷史、不改綠；原因未知，Root無刪檔/prune/擴容/付費/停App。這是當時capacityREADY，不能當未來准入或部署成功；未stage/cutover/deploy/正式SQL/role操作。DBwriter/lease仍18:36readonly169/0最後值，正式操作前須fresh核。容量不再沿舊memoryFAIL當目前唯一block。
+
+Cloud前turn真idle後只一件20min最小release組裝/ordinaryCI，newbranch codex/dd-binary-operator-release-oct15/baseapprovedmain8c58。新turn01a13c8a-d521-7734-97ac-65f80448ff84/cursor303427c2-9b66-4f3d-abd3-26255a0a19ef:13 latestTurninProgress（thread短暫idle不是完成），先同handlecompactwait，不重派。Owned exactcopy5final候選檔、最小獨立handoff/receiptindex、唯一新contentsread/no secrets/deploy dd-binary-operator-quality.yml，沿原approved pinnedcheckout、官方hosted Linux/Python/stdlibrary/bash單job循序35isolated+syntax/hard環境驗證、不skip或放寬。不能exec/source正式procedure/helper、無PG/app/socket/SSH/HTTP/VPS/native/build/npm/CIrerun/PR/exactref/readymerge/deploy/cache。原35已綠不重跑，assembly等效需證bytes；新PR ordinaryGHA之後真fresh執行。Root後續review才draftPR/attach/freshreview/normalprotected，不自簽maker批准；不改原protected/product/oracle/trust/roles/pins，不帶raw歷史，不重建DD包/碰370..381終態helper。Root只報告不重疊source。
+
+Fullgoalactive，正式來源/完整候選/兩formal文章/四caller/Q-R/cashcitations/wholeclosure/合格技術觀察/策略與正式研究排程/peer-install-deploy仍待。Report.agent/reports/2026-10-15T06-33-dd-recovery-review-and-fresh-capacity/。
+
+Root receipt 2cf4e94916d888dc2ce0fec8effc734a31a079006a4942ad92f5d750fada6681。
+
 ## 2026-10-15 04:38台灣時間：DD operator獨立review真REQUEST_CHANGES，Root核21source/44raw後只派三根因候選修補
 
 Cloud獨立review turn01a13be7真completed/threadidle/cursor303427c2-9b66-4f3d-abd3-26255a0a19ef:10。Report a04d6a7f42c349edab562fe6135036f34fbdf004/evidence89b6e463baf380d4d2ccffae8bc278f1d06aa1ad/receipt626ffbd636502ad38cf78d0c084d7acec83f02733558a61f356e66a9c05e1a41，受審Root草稿33d031f7，不是app/正式部署批准。Root逐byte核21actualGitinputs/44publishedraw131603bytes及exactreport；真REQUEST_CHANGES P0=0/P1=1/P2=2，不以bash-n代批准。

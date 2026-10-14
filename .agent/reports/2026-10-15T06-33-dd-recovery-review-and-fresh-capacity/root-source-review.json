@@ -1,0 +1,57 @@
+{
+  "source": "a87432e939b389f64aad3baffb176fee3954c346",
+  "evidence": "dbfde8efc8ff16130d4cefbdbdcacc4d2f03ee8c",
+  "scope": "independent candidate source integration and finite profile; not production/systemd/API or Linux supervisor re-execution",
+  "scopedFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "originalFindingsSourceAddressed": [
+    "R1 explicit catchable interruption and confirmed settlement or failclosed uncertainty",
+    "R2 finite canonical predecessor reject and revalidation",
+    "R3 cleanup failure nonzero/fullsuccess only aftercleanup"
+  ],
+  "rootPortableGroups": 20,
+  "rootBashSyntaxExit": 0,
+  "makerLinuxIsolatedGroups": 35,
+  "rootLinuxSupervisorExecuted": false,
+  "unchangedBlocksAndPins": [
+    {
+      "block": "capacity() {",
+      "sha256": "96427c1aee2c260640a5a44f900e13c30510a8c775c43a8685297e625e4037f6",
+      "exactSame": true
+    },
+    {
+      "block": "writer() {",
+      "sha256": "3ae5545b0cc188ea764935fb6a1afff5a35af1e358c8f32a7be2bb3ac2cfe270",
+      "exactSame": true
+    },
+    {
+      "block": "set_pointer() {",
+      "sha256": "c81900197e2f8771a666d1c6b51d796b412f80041b2c5d6d56b1ece920d4ecda",
+      "exactSame": true
+    },
+    {
+      "block": "/usr/bin/python3 -c 'import",
+      "sha256": "34f1175435cf49910c95968c34847efa095d4327fbfe48bbae7bc0e4e7773695",
+      "exactSame": true
+    },
+    {
+      "hashPin": "operator-support.py",
+      "sha256": "f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af",
+      "exactSame": true
+    },
+    {
+      "hashPin": "unit-profile.json",
+      "sha256": "4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72",
+      "exactSame": true
+    }
+  ],
+  "hostKnownNonsecretHashesMatch": true,
+  "hostEffectiveUnitsObserved": "same declared finite properties; formal fresh profile still required",
+  "hostProfileAt": "2026-10-14T22:26:26.642340+00:00",
+  "deployment": false,
+  "fullGoalComplete": false,
+  "releasePolicy": "nontrivial executable operator candidate requires branch PR and necessary normal checks before production use; app DD approval alone does not attest these new support files"
+}

@@ -1,0 +1,10 @@
+{
+  "completedAt": "2026-10-14T22:27:23.782848+00:00",
+  "exit": 0,
+  "scriptSha256": "d9f67e3dd234680c7f48573fb85191b485b1d3269f4bf70ed67b340bbfdf64d3",
+  "reason": "new readonly memory2890502144 above unchanged2684354560",
+  "threeOriginalLocks": true,
+  "unchangedBudgets": true,
+  "deployment": false,
+  "databaseMutation": false
+}
