@@ -1,0 +1,362 @@
+{
+  "sourceRecords": 71,
+  "verified": [
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/app/api/internal/research-deep-job/route.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-complete-input.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-author-assignment.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-author-packet.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-author-result.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-author-handoff.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-reviewer-assignment.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-reviewer-result.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-atomic-publication.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-business-article.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-financial-supplement.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-deep-author-input.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-deep-claim-context.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-v3-finite-material.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-cash-financial-reader.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-compatible-financial-reader.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/internal-auth.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/supabase-server.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-financial-file-reader.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-complete-schema-bundles.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-complete-mapping.json",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-financial-inventory.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-complete-canonical.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-execution-binding.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-financial-clock.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-business-calculator.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/public-source-url.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-editorial-review.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-deep-article.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/candidate-dossier-contract.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-agent-qualification.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-source-association.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-v3-material-schemas/2409-raw.json",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-v3-material-schemas/2383-raw.json",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-v3-material-schemas/2409-normalized.json",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-v3-material-schemas/2383-normalized.json",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-v3-material-canonical.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-historical-cash-pins.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-historical-cash-projection.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-scenario-cash-material.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-financial-io-owner.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-financial-io-engine.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-compatible-financial-inventory.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-compatible-financial-projection.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/data-plane-runtime.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-source-clock.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-source-roots.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/src/lib/research-historical-cash-core.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-source-registry.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-agent-priority.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": ".nvmrc",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "package.json",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "package-lock.json",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/package.json",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/package-lock.json",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/tsconfig.json",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/next.config.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "web/scripts/sync-official-authority.mjs",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/package-lock.json",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/candidate-dossier-contract.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/public-source-url.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-business-calculator.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-complete-2383.schema.json",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-complete-2409.schema.json",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-discovery-evidence.ts",
+      "verified": true
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "file": "web/src/lib/research-financial-clock.ts",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "scripts/runtime/codec.js",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "scripts/runtime/official-market-authority-v314.js",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "scripts/runtime/official-calendar-v314.js",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "scripts/runtime/official-mops-v314.js",
+      "verified": true
+    },
+    {
+      "subject": "72f639801d4000f375bea879de5139f6b1232580",
+      "file": "scripts/runtime/official-twse-valuation.js",
+      "verified": true
+    }
+  ],
+  "selectionNote": "SQL enumeration includes 18 original contract files plus 27 descriptor string references, including the explicitly excluded already-installed financial tail. Actual fixed installation selection is separately 50+26=76, not 77.",
+  "scope": "Static Git bytes only; no PG/build/test execution; regex graph is not dynamic/compiled closure proof."
+}

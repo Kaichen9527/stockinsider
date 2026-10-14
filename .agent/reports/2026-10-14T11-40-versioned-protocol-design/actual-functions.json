@@ -1,0 +1,1367 @@
+[
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "line": 11,
+    "declaration": "export async function POST(request: Request) {"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 12,
+    "declaration": "export function parseCompleteRequest(value:unknown):CompleteRequest {"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 19,
+    "declaration": "export async function readCompleteBody(request:Request,deadline:FinancialDeadline):Promise<Row>{"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 25,
+    "declaration": "export async function completeMaterial(db:Pick<SupabaseClient,'rpc'>,request:CompleteRequest,preparation:Row,deadline:FinancialDeadline,root=path.resolve(process.cwd(),'..')) {"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 39,
+    "declaration": "function object(value:unknown):Row {ensure(value&&typeof value==='object'&&!Array.isArray(value));return value as Row;}"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 40,
+    "declaration": "function equal(a:unknown,b:unknown){ensure(completeHash(a)===completeHash(b));}"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 43,
+    "declaration": "export function validateCompleteResponse(request:CompleteRequest,response:Row):void {"
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "line": 66,
+    "declaration": "export async function runCompleteInput(db:Pick<SupabaseClient,'rpc'>,request:CompleteRequest,seal:boolean,deadline:FinancialDeadline,root?:string):Promise<Row>{"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 17,
+    "declaration": "function ensure(value: unknown): asserts value { if (!value) throw new Error('research_author_assignment_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 18,
+    "declaration": "function object(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 19,
+    "declaration": "function parseRequest(value: Row): AuthorRequest {"
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 29,
+    "declaration": "export async function runResearchAuthorAssignment("
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "line": 61,
+    "declaration": "export async function handleResearchAuthorAssignment(request: Request): Promise<Response> {"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 13,
+    "declaration": "function ensure(value: unknown): asserts value { if (!value) throw new Error('research_author_packet_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 14,
+    "declaration": "function object(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 15,
+    "declaration": "function exact(value: unknown, keys: string[]): Row {"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 18,
+    "declaration": "function bounded(value: unknown, max: number): asserts value is string {"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 26,
+    "declaration": "export function assertResearchAuthorPacketWindow(packet: Row, deadline: FinancialDeadline) {"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 34,
+    "declaration": "export function projectResearchAuthorPacket(request: AuthorPacketRequest, revision: Row, assignment: Row,"
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "line": 126,
+    "declaration": "export async function runResearchAuthorPacket(db: Pick<SupabaseClient, 'rpc'>, request: AuthorPacketRequest,"
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "line": 14,
+    "declaration": "function ensure(value: unknown): asserts value { if (!value) throw new Error('research_author_result_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "line": 15,
+    "declaration": "function object(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "line": 18,
+    "declaration": "export async function readResearchAuthorResultBody(request: Request, deadline: FinancialDeadline, action: string): Promise<ResultRequest> {"
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "line": 36,
+    "declaration": "export async function runResearchAuthorResult(db: Pick<SupabaseClient, 'rpc'>, request: ResultRequest,"
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "line": 87,
+    "declaration": "export async function handleResearchAuthorResult(request: Request): Promise<Response> {"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 16,
+    "declaration": "function ensure(value: unknown): asserts value { if (!value) throw new Error('research_author_handoff_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 17,
+    "declaration": "function object(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 18,
+    "declaration": "function exact(value: unknown, keys: string[]): Row { const v = object(value); ensure(Object.keys(v).sort().join(',') === keys.sort().join(',')); return v; }"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 19,
+    "declaration": "export async function readResearchAuthorHandoffBody(request: Request, deadline: FinancialDeadline): Promise<AuthorHandoffRequest> {"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 34,
+    "declaration": "function windowCheck(assignment: Row, deadline: FinancialDeadline) {"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 38,
+    "declaration": "function validateReceipt(value: unknown, assignment: Row, result: Row) {"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 48,
+    "declaration": "export async function runResearchAuthorHandoff(db: Pick<SupabaseClient, 'rpc'>, request: AuthorHandoffRequest,"
+  },
+  {
+    "file": "web/src/lib/research-author-handoff.ts",
+    "line": 88,
+    "declaration": "export async function handleResearchAuthorHandoff(request: Request): Promise<Response> {"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 14,
+    "declaration": "function ensure(value: unknown): asserts value { if (!value) throw new Error('research_reviewer_assignment_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 15,
+    "declaration": "function object(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 16,
+    "declaration": "function exact(value: unknown, keys: string[]): Row { const row = object(value); ensure(Object.keys(row).sort().join(',') === keys.sort().join(',')); return row; }"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 17,
+    "declaration": "export async function readResearchReviewerBody(request: Request, deadline: FinancialDeadline): Promise<ReviewerAssignmentRequest> {"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 32,
+    "declaration": "function checkWindow(a: Row, deadline: FinancialDeadline) {"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 37,
+    "declaration": "export function validateResearchReviewerContext(request: ReviewerAssignmentRequest, context: Row, authorPrincipal: string, reviewerPrincipal: string, deadline: FinancialDeadline) {"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 74,
+    "declaration": "export function projectResearchReviewerPacket(request: ReviewerAssignmentRequest, bound: ReturnType<typeof validateResearchReviewerContext>,"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 93,
+    "declaration": "export async function runResearchReviewerAssignment(db: Pick<SupabaseClient, 'rpc'>, request: ReviewerAssignmentRequest,"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-assignment.ts",
+    "line": 120,
+    "declaration": "export async function handleResearchReviewerAssignment(request: Request): Promise<Response> {"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 12,
+    "declaration": "function ensure(value: unknown): asserts value { if (!value) throw new Error('research_reviewer_result_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 13,
+    "declaration": "function object(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 14,
+    "declaration": "function exact(value: unknown, keys: string[]) { const r = object(value); ensure(Object.keys(r).sort().join(',') === keys.sort().join(',')); return r; }"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 15,
+    "declaration": "function windowCheck(a: Row, deadline: FinancialDeadline) {"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 19,
+    "declaration": "export async function readResearchReviewerResultBody(request: Request, deadline: FinancialDeadline): Promise<ReviewResultRequest> {"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 36,
+    "declaration": "function envelopeFor(request: ReviewResultRequest, context: Row, packet: Row, principal: string, http: Request, review: unknown, observation: unknown, receivedAt: string) {"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 56,
+    "declaration": "export async function runResearchReviewerResult(db: Pick<SupabaseClient, 'rpc'>, request: ReviewResultRequest,"
+  },
+  {
+    "file": "web/src/lib/research-reviewer-result.ts",
+    "line": 96,
+    "declaration": "export async function handleResearchReviewerResult(request: Request) {"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 15,
+    "declaration": "function ensure(value: unknown): asserts value { if (!value) throw new Error('research_publication_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 16,
+    "declaration": "function object(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 17,
+    "declaration": "function exact(value: unknown, keys: string[]): Row { const row = object(value); ensure(Object.keys(row).sort().join(',') === keys.sort().join(',')); return row; }"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 19,
+    "declaration": "export async function readResearchPublicationBody(request: Request, deadline: FinancialDeadline): Promise<ResearchPublicationRequest> {"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 37,
+    "declaration": "export function researchPublicationContent(authorPayload: unknown) {"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 44,
+    "declaration": "export function validateResearchPublicationContext(request: ResearchPublicationRequest, context: Row, rawSources: Row,"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 86,
+    "declaration": "function validateReceipt(value: unknown, request: ResearchPublicationRequest) {"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 94,
+    "declaration": "export async function runResearchPublication(db: Pick<SupabaseClient,'rpc'>, request: ResearchPublicationRequest,"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "line": 111,
+    "declaration": "export async function handleResearchPublication(request: Request) {"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 36,
+    "declaration": "function ensure(value: unknown): asserts value { if (!value) throw new Error('research_business_article_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 37,
+    "declaration": "function object(value: unknown): Row {"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 41,
+    "declaration": "function exact(value: unknown, keys: string[]): Row {"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 44,
+    "declaration": "function list(value: unknown, min: number, max: number): unknown[] { ensure(Array.isArray(value) && value.length >= min && value.length <= max); return value; }"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 45,
+    "declaration": "function text(value: unknown, min = 1, max = 2000): asserts value is string {"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 50,
+    "declaration": "function finite(value: unknown, min: number, max: number): asserts value is number {"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 60,
+    "declaration": "function numericNodes(value: unknown, prefix = '', out = new Map<string, NumericNode>(), depth = 0,"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 78,
+    "declaration": "function sourceTime(source: ArticleSourceV2, cutoff: bigint) {"
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "line": 100,
+    "declaration": "export function validateBusinessResearchArticle(context: {"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 14,
+    "declaration": "function ensure(ok: unknown): asserts ok { if (!ok) throw new Error('research_financial_supplement_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 15,
+    "declaration": "function row(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 16,
+    "declaration": "function list(value: unknown, limit = 64): unknown[] { ensure(Array.isArray(value) && value.length <= limit); return value; }"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 17,
+    "declaration": "function number(value: unknown): number { ensure(typeof value === 'number' && Number.isFinite(value)); return value; }"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 18,
+    "declaration": "function canonical(value: unknown): string {"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 23,
+    "declaration": "function hash(value: unknown) { return createHash('sha256').update(canonical(value)).digest('hex'); }"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 24,
+    "declaration": "export function assertFinancialJsonBytes(value: unknown, bytes: number) { const text = JSON.stringify(value); ensure(Buffer.byteLength(text,'utf8') <= bytes); return text; }"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 25,
+    "declaration": "export function parseFinancialSupplementRequest(value: unknown): FinancialSupplementRequest {"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 32,
+    "declaration": "function project(symbol: '2409'|'2383', files: Map<string,{pin:FinancialFilePin;value:unknown}>, now: string) {"
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "line": 136,
+    "declaration": "export async function loadResearchFinancialSupplement(db:Pick<SupabaseClient,'rpc'>,input:FinancialSupplementRequest,"
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "line": 14,
+    "declaration": "function ensure(ok: unknown): asserts ok { if (!ok) throw new Error('research_deep_input_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "line": 15,
+    "declaration": "function row(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "line": 16,
+    "declaration": "function safeText(value: unknown, max: number): value is string {"
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "line": 21,
+    "declaration": "function publicUrl(value: unknown): value is string {"
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "line": 24,
+    "declaration": "export function parseAuthorInputRequest(value: unknown): AuthorInputRequest {"
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "line": 43,
+    "declaration": "export async function loadResearchDeepAuthorInput(db: Pick<SupabaseClient, 'from' | 'rpc'>,"
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "line": 203,
+    "declaration": "export function validateResearchDeepAuthorInput(value: unknown,"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 25,
+    "declaration": "function ensure(value: unknown): asserts value {"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 28,
+    "declaration": "function record(value: unknown): Row {"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 32,
+    "declaration": "function exact(value: unknown, keys: string[]): Row {"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 37,
+    "declaration": "function string(value: unknown): string { ensure(typeof value === 'string'); return value; }"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 41,
+    "declaration": "export function researchDeepInstant(value: unknown): bigint {"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 53,
+    "declaration": "function taipeiDay(value: bigint): string {"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 56,
+    "declaration": "function expectedIdentity(expected: Expected) {"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 68,
+    "declaration": "export function validateResearchDeepClaimContext(value: unknown, expected: Expected): ResearchDeepClaimContext {"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 110,
+    "declaration": "function rows(result: { data: unknown; error: unknown }): Row[] {"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 114,
+    "declaration": "function one(result: { data: unknown; error: unknown }): Row {"
+  },
+  {
+    "file": "web/src/lib/research-deep-claim-context.ts",
+    "line": 119,
+    "declaration": "export async function loadResearchDeepClaimContext(db: Pick<SupabaseClient, 'from'> & Partial<Pick<SupabaseClient,'rpc'>>,"
+  },
+  {
+    "file": "web/src/lib/research-v3-finite-material.ts",
+    "line": 15,
+    "declaration": "function canonical(v: unknown): string { if(Array.isArray(v))return `[${v.map(canonical).join(',')}]`;if(v&&typeof v==='object')return `{${Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical((v as Row)[k])).join(',')}}`;return JSON.stringify(v); }"
+  },
+  {
+    "file": "web/src/lib/research-v3-finite-material.ts",
+    "line": 17,
+    "declaration": "function row(v: unknown): Row { ensure(v&&typeof v==='object'&&!Array.isArray(v));return v as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-v3-finite-material.ts",
+    "line": 18,
+    "declaration": "function context(profile:unknown,symbol:unknown,readAt:unknown,deadline:Deadline): asserts symbol is '2409'|'2383' {"
+  },
+  {
+    "file": "web/src/lib/research-v3-finite-material.ts",
+    "line": 23,
+    "declaration": "function parse(text:unknown,deadline:Deadline):Row {"
+  },
+  {
+    "file": "web/src/lib/research-v3-finite-material.ts",
+    "line": 28,
+    "declaration": "function normalizedCalculation(value:unknown) {const c={...row(value)};for(const key of ['inputHash','resultHash','executionCodeHash'])delete c[key];return c;}"
+  },
+  {
+    "file": "web/src/lib/research-v3-finite-material.ts",
+    "line": 29,
+    "declaration": "function validateProjection(projection:Row,readAt:string,deadline:Deadline){"
+  },
+  {
+    "file": "web/src/lib/research-v3-finite-material.ts",
+    "line": 35,
+    "declaration": "export function normalizeScenarioCashMaterial(profile:unknown,symbol:unknown,text:unknown,readAt:string,deadline:Deadline) {"
+  },
+  {
+    "file": "web/src/lib/research-v3-finite-material.ts",
+    "line": 48,
+    "declaration": "export function validateNormalizedScenarioCashMaterial(profile:unknown,symbol:unknown,text:unknown,readAt:string,deadline:Deadline) {"
+  },
+  {
+    "file": "web/src/lib/research-cash-financial-reader.ts",
+    "line": 9,
+    "declaration": "function encodeFixedCarrier(files: Array<{pin: FinancialIoPin;raw:Buffer}>, symbol:'2409'|'2383', deadline:FinancialIoDeadline, allocate:(bytes:number)=>Buffer) {"
+  },
+  {
+    "file": "web/src/lib/research-cash-financial-reader.ts",
+    "line": 27,
+    "declaration": "export function createCandidateFinancialReaders(root: string, io?: FinancialIoDependencies) {"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-reader.ts",
+    "line": 10,
+    "declaration": "export function createCompatibleFinancialReader(root: string, assertPreparation: () => Promise<string>, io?: FinancialIoDependencies) {"
+  },
+  {
+    "file": "web/src/lib/internal-auth.ts",
+    "line": 7,
+    "declaration": "function secureTokenEquals(actual: string, expected: string): boolean {"
+  },
+  {
+    "file": "web/src/lib/internal-auth.ts",
+    "line": 13,
+    "declaration": "export function requireInternalAuth(req: Request): InternalAuthResult {"
+  },
+  {
+    "file": "web/src/lib/internal-auth.ts",
+    "line": 32,
+    "declaration": "export function requireExactInternalBearer(request: Request): boolean {"
+  },
+  {
+    "file": "web/src/lib/supabase-server.ts",
+    "line": 3,
+    "declaration": "export function getSupabaseServerClient() {"
+  },
+  {
+    "file": "web/src/lib/research-financial-file-reader.ts",
+    "line": 92,
+    "declaration": "function same(a: BigIntStats, b: BigIntStats) {"
+  },
+  {
+    "file": "web/src/lib/research-financial-file-reader.ts",
+    "line": 95,
+    "declaration": "function regular(s: BigIntStats, expected: number) {"
+  },
+  {
+    "file": "web/src/lib/research-financial-file-reader.ts",
+    "line": 98,
+    "declaration": "function directory(s: BigIntStats) {"
+  },
+  {
+    "file": "web/src/lib/research-financial-file-reader.ts",
+    "line": 103,
+    "declaration": "function validPin(p: FinancialFilePin) {"
+  },
+  {
+    "file": "web/src/lib/research-financial-file-reader.ts",
+    "line": 109,
+    "declaration": "export async function readPinnedFinancialFiles(root: string, pins: readonly FinancialFilePin[], deadline: FinancialDeadline,"
+  },
+  {
+    "file": "web/src/lib/research-financial-file-reader.ts",
+    "line": 164,
+    "declaration": "export function financialReaderExecutionIdentity() {"
+  },
+  {
+    "file": "web/src/lib/research-complete-canonical.ts",
+    "line": 4,
+    "declaration": "export function completeEnsure(ok: unknown): asserts ok { if (!ok) throw new Error('research_complete_input_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-complete-canonical.ts",
+    "line": 5,
+    "declaration": "function scalar(s: string) { completeEnsure(!/\\u0000|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?<![\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]/u.test(s)); return s; }"
+  },
+  {
+    "file": "web/src/lib/research-complete-canonical.ts",
+    "line": 6,
+    "declaration": "function decimal(n: number) {"
+  },
+  {
+    "file": "web/src/lib/research-complete-canonical.ts",
+    "line": 11,
+    "declaration": "export function completeCanonical(value: unknown, depth=0): string {"
+  },
+  {
+    "file": "web/src/lib/research-complete-canonical.ts",
+    "line": 24,
+    "declaration": "export function validateCompleteSchema(value:unknown,schema:Row,clock:string,depth=0,trail=\"\"):void {"
+  },
+  {
+    "file": "web/src/lib/research-complete-canonical.ts",
+    "line": 40,
+    "declaration": "export function parseCompleteJson(text:string):unknown {"
+  },
+  {
+    "file": "web/src/lib/research-execution-binding.ts",
+    "line": 12,
+    "declaration": "function configuredCredentials(): Credentials {"
+  },
+  {
+    "file": "web/src/lib/research-execution-binding.ts",
+    "line": 20,
+    "declaration": "export function resolveConfiguredResearchControllerPrincipals("
+  },
+  {
+    "file": "web/src/lib/research-execution-binding.ts",
+    "line": 34,
+    "declaration": "export function resolveResearchControllerIdentity("
+  },
+  {
+    "file": "web/src/lib/research-execution-binding.ts",
+    "line": 113,
+    "declaration": "function text(value: unknown, max = 200): value is string {"
+  },
+  {
+    "file": "web/src/lib/research-execution-binding.ts",
+    "line": 119,
+    "declaration": "function instant(value: unknown): bigint | null {"
+  },
+  {
+    "file": "web/src/lib/research-execution-binding.ts",
+    "line": 138,
+    "declaration": "export function validateResearchExecutionObservation("
+  },
+  {
+    "file": "web/src/lib/research-execution-binding.ts",
+    "line": 153,
+    "declaration": "export function validateSavedResearchExecutionObservation("
+  },
+  {
+    "file": "web/src/lib/research-execution-binding.ts",
+    "line": 167,
+    "declaration": "function validateObservationBinding("
+  },
+  {
+    "file": "web/src/lib/research-financial-clock.ts",
+    "line": 2,
+    "declaration": "export function financialInstant(value: unknown): bigint {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 19,
+    "declaration": "function ensure(ok: unknown): asserts ok { if (!ok) throw new Error('research_business_calculator_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 20,
+    "declaration": "function exact(value: unknown, keys: readonly string[]): Row {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 27,
+    "declaration": "function finite(value: unknown, min = -1e12, max = 1e12): asserts value is number {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 30,
+    "declaration": "function text(value: unknown, max = 200): asserts value is string { ensure(typeof value === 'string' && value.length > 0 && value.length <= max); }"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 31,
+    "declaration": "function hash(value: unknown) { text(value, 64); ensure(/^[0-9a-f]{64}$/u.test(value)); }"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 32,
+    "declaration": "function json(value: unknown, depth = 0): void {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 46,
+    "declaration": "function canonical(value: unknown): string {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 51,
+    "declaration": "function digest(value: unknown) { return createHash('sha256').update(canonical(value)).digest('hex'); }"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 52,
+    "declaration": "function sum(values: number[]) { return values.reduce((a, b) => a + b, 0); }"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 53,
+    "declaration": "function periodIndex(value: unknown): number {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 57,
+    "declaration": "function shareInput(value: unknown): Shares {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 63,
+    "declaration": "function eps(owners: number, ordinary: number, potential: number) {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 71,
+    "declaration": "function common(q: Row): Common {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 75,
+    "declaration": "function quarterInput(value: unknown, id: BusinessCalculatorId): AuoQuarter | EmcQuarter {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 94,
+    "declaration": "function auo(q: AuoQuarter) {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 103,
+    "declaration": "function emc(q: EmcQuarter) {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 109,
+    "declaration": "function calculate(q: AuoQuarter | EmcQuarter, id: BusinessCalculatorId) {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 120,
+    "declaration": "function aggregate(rows: QuarterResult[]) {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 127,
+    "declaration": "export function businessCalculatorExecutionHash(): string {"
+  },
+  {
+    "file": "web/src/lib/research-business-calculator.ts",
+    "line": 132,
+    "declaration": "export function recalculateResearchBusinessScenarios(value: unknown, now = new Date().toISOString()) {"
+  },
+  {
+    "file": "web/src/lib/public-source-url.ts",
+    "line": 3,
+    "declaration": "function privateIpv4(hostname: string) {"
+  },
+  {
+    "file": "web/src/lib/public-source-url.ts",
+    "line": 14,
+    "declaration": "function privateHostname(hostname: string) {"
+  },
+  {
+    "file": "web/src/lib/public-source-url.ts",
+    "line": 28,
+    "declaration": "export function sanitizePublicSourceUrl(value: unknown): string | null {"
+  },
+  {
+    "file": "web/src/lib/research-editorial-review.ts",
+    "line": 6,
+    "declaration": "function ensure(value: unknown): asserts value { if (!value) throw new Error('research_editorial_review_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-editorial-review.ts",
+    "line": 7,
+    "declaration": "function exact(value: unknown, keys: string[]): Row {"
+  },
+  {
+    "file": "web/src/lib/research-editorial-review.ts",
+    "line": 11,
+    "declaration": "function text(value: unknown, min: number, max: number) {"
+  },
+  {
+    "file": "web/src/lib/research-editorial-review.ts",
+    "line": 16,
+    "declaration": "function ids(value: unknown, allowed: Set<string>) {"
+  },
+  {
+    "file": "web/src/lib/research-editorial-review.ts",
+    "line": 21,
+    "declaration": "export function validateResearchEditorialReview(packet: Row, candidate: unknown, now: string) {"
+  },
+  {
+    "file": "web/src/lib/research-deep-article.ts",
+    "line": 115,
+    "declaration": "function checkSourceIds(ids: string[], documents: Map<string, EvidenceDocument>, article: DeepResearchArticle,"
+  },
+  {
+    "file": "web/src/lib/research-deep-article.ts",
+    "line": 132,
+    "declaration": "export function deepArticleSourceIds(article: DeepResearchArticle): string[] {"
+  },
+  {
+    "file": "web/src/lib/research-deep-article.ts",
+    "line": 143,
+    "declaration": "function calculatedScenario(row: DeepResearchScenario): CalculatedDeepScenario {"
+  },
+  {
+    "file": "web/src/lib/research-deep-article.ts",
+    "line": 208,
+    "declaration": "export function validateDeepResearchArticle(input: {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 13,
+    "declaration": "function stable(value: unknown): unknown {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 19,
+    "declaration": "export function candidateDossierInputHash(detail: Row, facts: Row[]) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 36,
+    "declaration": "export function candidateDossierBundleId(inputHash: string) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 42,
+    "declaration": "export function encodeCandidateDossierCursor(cursor: CandidateDossierCursor) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 48,
+    "declaration": "export function decodeCandidateDossierCursor(value: unknown): CandidateDossierCursor | null {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 61,
+    "declaration": "export function candidateFactLocator(fact: Row) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 70,
+    "declaration": "export function isPaidInvestAnchorsReference(value: unknown) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 74,
+    "declaration": "function publicHttpUrl(value: unknown) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 78,
+    "declaration": "function stringIds(value: unknown) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 90,
+    "declaration": "export function sanitizeRevisionScopedDossierEvidence(detail: Row, facts: Row[]) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 152,
+    "declaration": "export function withoutPaidInvestAnchorsSourceLinks(detail: Row) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 162,
+    "declaration": "export function numberedCandidateSources(detail: Row, facts: Row[]) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 185,
+    "declaration": "export function compareCandidateDossierPageRows(left: Row, right: Row) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 190,
+    "declaration": "export function candidateDossierReceiptMatchesRequest(receipt: unknown, expected: CandidateDossierReceiptExpectation) {"
+  },
+  {
+    "file": "web/src/lib/candidate-dossier-contract.ts",
+    "line": 204,
+    "declaration": "export function factReferenceNumbers(facts: Row[], sources: ReturnType<typeof numberedCandidateSources>) {"
+  },
+  {
+    "file": "web/src/lib/research-agent-qualification.ts",
+    "line": 48,
+    "declaration": "function canonical(value: unknown): string {"
+  },
+  {
+    "file": "web/src/lib/research-agent-qualification.ts",
+    "line": 54,
+    "declaration": "export function researchCanonicalHash(value: unknown) {"
+  },
+  {
+    "file": "web/src/lib/research-agent-qualification.ts",
+    "line": 59,
+    "declaration": "export function issueThesisQualification(input: ReviewInput): ThesisQualification {"
+  },
+  {
+    "file": "web/src/lib/research-agent-qualification.ts",
+    "line": 83,
+    "declaration": "export function researchEntryQualification(thesis: ThesisQualification, now: string) {"
+  },
+  {
+    "file": "web/src/lib/research-agent-qualification.ts",
+    "line": 94,
+    "declaration": "export function invalidateThesis(input: {"
+  },
+  {
+    "file": "web/src/lib/research-agent-qualification.ts",
+    "line": 107,
+    "declaration": "export function renewThesisReview(input: {"
+  },
+  {
+    "file": "web/src/lib/research-agent-qualification.ts",
+    "line": 145,
+    "declaration": "export function createTechnicalDecisionSnapshot(input: {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 37,
+    "declaration": "function row(value: unknown): value is Row { return value !== null && typeof value === 'object' && !Array.isArray(value); }"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 38,
+    "declaration": "function text(value: unknown, max: number) {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 43,
+    "declaration": "function cleanUrl(value: unknown): value is string {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 47,
+    "declaration": "export function parseIndustryAssociations(assessments: Array<{ symbol: string; associations?: unknown }>, cutoff: string): AssociationRequests {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 82,
+    "declaration": "function metadata(document: Row): Row | null { return row(document.metadata) ? document.metadata : null; }"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 83,
+    "declaration": "function canonical(document: Row): string | null {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 88,
+    "declaration": "function revision(document: Row): string | null {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 92,
+    "declaration": "function identity(document: Row) {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 98,
+    "declaration": "function sqlIdentity(document: Row) {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 102,
+    "declaration": "function sqlCanonical(document: Row) {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 105,
+    "declaration": "function versionSignature(document: Row) {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 116,
+    "declaration": "export function documentInvariantProof(document: Row, cutoff: string): { proof: AssociationDocumentProof | null; gap: string | null } {"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 156,
+    "declaration": "function documentProof(document: Row, head: Row | undefined, cutoff: string,"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 167,
+    "declaration": "export async function loadIndustryAssociations(db: Pick<SupabaseClient, 'from' | 'rpc'>, requests: AssociationRequests,"
+  },
+  {
+    "file": "web/src/lib/research-source-association.ts",
+    "line": 180,
+    "declaration": "  async function read(query: PromiseLike<{ data: unknown; error: unknown }>, maximum: number): Promise<Row[]> {"
+  },
+  {
+    "file": "web/src/lib/research-v3-material-canonical.ts",
+    "line": 4,
+    "declaration": "export function completeEnsure(ok: unknown): asserts ok { if (!ok) throw new Error('research_complete_input_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-v3-material-canonical.ts",
+    "line": 5,
+    "declaration": "function scalar(s: string) { completeEnsure(!/\\u0000|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?<![\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]/u.test(s)); return s; }"
+  },
+  {
+    "file": "web/src/lib/research-v3-material-canonical.ts",
+    "line": 6,
+    "declaration": "function decimal(n: number) {"
+  },
+  {
+    "file": "web/src/lib/research-v3-material-canonical.ts",
+    "line": 11,
+    "declaration": "export function completeCanonical(value: unknown, depth=0): string {"
+  },
+  {
+    "file": "web/src/lib/research-v3-material-canonical.ts",
+    "line": 24,
+    "declaration": "export function validateCompleteSchema(value:unknown,schema:Row,clock:string,depth=0,trail=\"\"):void {"
+  },
+  {
+    "file": "web/src/lib/research-v3-material-canonical.ts",
+    "line": 40,
+    "declaration": "export function parseCompleteJson(text:string):unknown {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-pins.ts",
+    "line": 2,
+    "declaration": "function freeze<T>(value:T):T { if(value && typeof value === \"object\") { Object.values(value).forEach(freeze); Object.freeze(value); } return value; }"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-projection.ts",
+    "line": 8,
+    "declaration": "function canonical(value: unknown): string {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-projection.ts",
+    "line": 13,
+    "declaration": "function ensure(value: unknown): asserts value { if (!value) throw new Error('historical_cash_projection_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-projection.ts",
+    "line": 14,
+    "declaration": "function row(value: unknown): Row { ensure(value !== null && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-projection.ts",
+    "line": 15,
+    "declaration": "function freeze<T>(value: T): T {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-projection.ts",
+    "line": 30,
+    "declaration": "function copyCarrier(value: unknown, expected: number): Uint8Array {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-projection.ts",
+    "line": 49,
+    "declaration": "export function projectPinnedHistoricalCash(profile: unknown, symbol: unknown, material: unknown, deadline: Deadline) {"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 11,
+    "declaration": "function ensure(ok: unknown): asserts ok { if (!ok) throw new Error('research_scenario_cash_material_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 12,
+    "declaration": "function row(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 13,
+    "declaration": "function list(value: unknown, limit = 64): unknown[] { ensure(Array.isArray(value) && value.length <= limit); return value; }"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 14,
+    "declaration": "function number(value: unknown): number { ensure(typeof value === 'number' && Number.isFinite(value)); return value; }"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 15,
+    "declaration": "function canonical(value: unknown): string {"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 20,
+    "declaration": "function hash(value: unknown) { return createHash('sha256').update(canonical(value)).digest('hex'); }"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 21,
+    "declaration": "function assertFinancialJsonBytes(value: unknown, bytes: number) { const text=JSON.stringify(value);ensure(Buffer.byteLength(text,'utf8')<=bytes);return text; }"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 22,
+    "declaration": "function freeze<T>(value:T):T {if(value && typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;}"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 27,
+    "declaration": "function copyMaterial(value:unknown,expected:number):Uint8Array {"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 32,
+    "declaration": "function project(symbol: '2409'|'2383', files: Map<string,{pin:FinancialFilePin;value:unknown}>, now: string) {"
+  },
+  {
+    "file": "web/src/lib/research-scenario-cash-material.ts",
+    "line": 139,
+    "declaration": "export function projectScenarioCashMaterial(profile:unknown,symbol:unknown,material:unknown,readAt:unknown,deadline:Deadline) {"
+  },
+  {
+    "file": "web/src/lib/research-financial-io-owner.ts",
+    "line": 30,
+    "declaration": "export function financialIoStatus() { return slot.owner?.status() ?? { cleanupComplete: true, recoveryRequired: false, pendingOperations: 0, unconfirmedHandles: 0, ownedBuffers: 0, cleanupFailed: false, kernelIoCancellationConfirmed: false }; }"
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "line": 10,
+    "declaration": "function same(a: BigIntStats, b: BigIntStats) { return a.dev === b.dev && a.ino === b.ino && a.size === b.size && a.mtimeNs === b.mtimeNs && a.ctimeNs === b.ctimeNs; }"
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "line": 11,
+    "declaration": "function regular(s: BigIntStats, bytes: number) { if (!s.isFile() || s.size !== BigInt(bytes) || s.nlink !== BigInt(1)) throw new Error('financial_file_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "line": 12,
+    "declaration": "function directory(s: BigIntStats) { if (!s.isDirectory() || s.isSymbolicLink() || (s.mode & BigInt(0o022)) !== BigInt(0)) throw new Error('financial_parent_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "line": 13,
+    "declaration": "export function checkFinancialIoInventory(root: string, pins: readonly FinancialIoPin[], maxFiles: number) {"
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "line": 26,
+    "declaration": "async function acquireWithOwnedSession(root: string, pins: readonly FinancialIoPin[], deadline: FinancialIoDeadline, owner: FinancialIoOwner, io: FinancialIoDependencies) {"
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "line": 72,
+    "declaration": "export async function acquireFinancialIo(root: string, pins: readonly FinancialIoPin[], deadline: FinancialIoDeadline, io: FinancialIoDependencies = nativeIo) {"
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "line": 80,
+    "declaration": "export async function runFinancialIoSession<T>(root: string, pins: readonly FinancialIoPin[], deadline: FinancialIoDeadline,"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-inventory.ts",
+    "line": 86,
+    "declaration": "function freeze<T>(v: T): T { if (v && typeof v === 'object') { for (const x of Object.values(v)) freeze(x); Object.freeze(v); } return v; }"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "line": 9,
+    "declaration": "function ensure(ok: unknown): asserts ok { if (!ok) throw new Error('research_financial_supplement_invalid'); }"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "line": 10,
+    "declaration": "function row(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "line": 11,
+    "declaration": "function list(value: unknown, limit = 64): unknown[] { ensure(Array.isArray(value) && value.length <= limit); return value; }"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "line": 12,
+    "declaration": "function number(value: unknown): number { ensure(typeof value === 'number' && Number.isFinite(value)); return value; }"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "line": 13,
+    "declaration": "function canonical(value: unknown): string {"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "line": 18,
+    "declaration": "function hash(value: unknown) { return createHash('sha256').update(canonical(value)).digest('hex'); }"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "line": 19,
+    "declaration": "export function assertFinancialJsonBytes(value: unknown, bytes: number) { const text = JSON.stringify(value); ensure(Buffer.byteLength(text,'utf8') <= bytes); return text; }"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "line": 20,
+    "declaration": "export function projectCompatibleFinancial(symbol: '2409'|'2383', files: Map<string,{pin:FinancialFilePin;value:unknown}>, now: string) {"
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "line": 20,
+    "declaration": "function visibleAscii(value: string, minimum: number, maximum: number) {"
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "line": 24,
+    "declaration": "function systemdCredentialReader(environment: RuntimeEnvironment): ReadCredential {"
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "line": 35,
+    "declaration": "function parseContaboUrl(value: string) {"
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "line": 53,
+    "declaration": "function isControlledProjectionTest("
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "line": 76,
+    "declaration": "export function resolveStockInsiderDataPlaneConfiguration("
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "line": 127,
+    "declaration": "export function getStockInsiderDataPlaneClient(): SupabaseClient {"
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "line": 138,
+    "declaration": "export function stockInsiderDataPlaneMode() {"
+  },
+  {
+    "file": "web/src/lib/data-plane-runtime.ts",
+    "line": 142,
+    "declaration": "export function resetStockInsiderDataPlaneClientForTests() { cached = null; cachedMode = null; }"
+  },
+  {
+    "file": "web/src/lib/research-source-clock.ts",
+    "line": 5,
+    "declaration": "export function sourceEvidenceInstant(value: unknown): bigint {"
+  },
+  {
+    "file": "web/src/lib/research-source-clock.ts",
+    "line": 10,
+    "declaration": "export function sourceEvidenceClockValid(value: unknown): value is string {"
+  },
+  {
+    "file": "web/src/lib/research-source-clock.ts",
+    "line": 13,
+    "declaration": "export function canonicalSourceEvidenceClock(value: string): string {"
+  },
+  {
+    "file": "web/src/lib/research-source-roots.ts",
+    "line": 8,
+    "declaration": "export function hasDirectCompanyMentionScope(row: Row): boolean {"
+  },
+  {
+    "file": "web/src/lib/research-source-roots.ts",
+    "line": 14,
+    "declaration": "export function researchRootKind(platform: string, host: string, metadata: Row, approvedIssuerHosts: string[] = []): ResearchSourceRoot['kind'] {"
+  },
+  {
+    "file": "web/src/lib/research-source-roots.ts",
+    "line": 28,
+    "declaration": "export function researchRootFromDocument(row: Row, asOf: string, approvedIssuerHosts: string[] = []): ResearchSourceRoot | null {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "line": 36,
+    "declaration": "function ensure(value: unknown): asserts value {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "line": 39,
+    "declaration": "function exact(value: unknown, keys: readonly string[]): Row {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "line": 50,
+    "declaration": "function integer(value: unknown): number {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "line": 54,
+    "declaration": "function tuple(value: unknown): [number, number] {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "line": 61,
+    "declaration": "function sum(values: number[]): number {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "line": 66,
+    "declaration": "function equal(a: number, b: number) { ensure(a === b); }"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "line": 67,
+    "declaration": "function freeze<T>(value: T): T {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "line": 73,
+    "declaration": "function validate(value: unknown): Operands {"
+  },
+  {
+    "file": "web/src/lib/research-historical-cash-core.ts",
+    "line": 104,
+    "declaration": "export function calculateHistoricalCash(value: unknown) {"
+  },
+  {
+    "file": "web/src/lib/research-source-registry.ts",
+    "line": 12,
+    "declaration": "export function normalizeResearchPlatform(value: string): string {"
+  },
+  {
+    "file": "web/src/lib/research-source-registry.ts",
+    "line": 16,
+    "declaration": "export function validateResearchTimedExcerpts(value: unknown): value is ResearchTimedExcerpt[] {"
+  },
+  {
+    "file": "web/src/lib/research-agent-priority.ts",
+    "line": 59,
+    "declaration": "function scoreCandidate(candidate: ResearchPriorityCandidate, asOf: string): ResearchPriorityRow {"
+  },
+  {
+    "file": "web/src/lib/research-agent-priority.ts",
+    "line": 125,
+    "declaration": "export function selectResearchPriority(input: {"
+  },
+  {
+    "file": "web/scripts/sync-official-authority.mjs",
+    "line": 16,
+    "declaration": "async function regularFile(filename) {"
+  },
+  {
+    "file": "web/scripts/sync-official-authority.mjs",
+    "line": 24,
+    "declaration": "function validateDependencies(bytes, name) {"
+  },
+  {
+    "file": "web/scripts/sync-official-authority.mjs",
+    "line": 38,
+    "declaration": "async function ensureOutputDirectory(repositoryRoot, checkOnly) {"
+  },
+  {
+    "file": "web/scripts/sync-official-authority.mjs",
+    "line": 53,
+    "declaration": "export async function syncOfficialAuthority({ repositoryRoot = defaultRoot, checkOnly = false } = {}) {"
+  }
+]

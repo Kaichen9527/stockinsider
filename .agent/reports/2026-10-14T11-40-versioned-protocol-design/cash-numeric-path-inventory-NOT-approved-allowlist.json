@@ -1,0 +1,2567 @@
+[
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/sourceManifest/0/bytes",
+    "value": 113823
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/sourceManifest/1/bytes",
+    "value": 19837
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/sourceManifest/2/bytes",
+    "value": 40271
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/sourceManifest/3/bytes",
+    "value": 86638
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/sourceManifest/4/bytes",
+    "value": 393280
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/sourceManifest/5/bytes",
+    "value": 2910
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/sourceManifest/6/bytes",
+    "value": 3549
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/sourceManifest/7/bytes",
+    "value": 6599
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/sourceManifest/8/bytes",
+    "value": 30651
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/0/values/0",
+    "value": 2249593
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/0/values/1",
+    "value": 6620130
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/0/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/1/values/0",
+    "value": 13078942
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/1/values/1",
+    "value": 13877319
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/1/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/2/values/0",
+    "value": 1458846
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/2/values/1",
+    "value": 1175136
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/2/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/3/values/0",
+    "value": -52196
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/3/values/1",
+    "value": -98304
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/3/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/4/values/0",
+    "value": 1302614
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/4/values/1",
+    "value": 1522339
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/4/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/5/values/0",
+    "value": -493554
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/5/values/1",
+    "value": -628250
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/5/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/6/values/0",
+    "value": 0
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/6/values/1",
+    "value": -204
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/6/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/7/values/0",
+    "value": 17580
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/7/values/1",
+    "value": 0
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/7/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/8/values/0",
+    "value": -431357
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/8/values/1",
+    "value": 193973
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/8/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/9/values/0",
+    "value": -71052
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/9/values/1",
+    "value": -2376910
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/9/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/10/values/0",
+    "value": 718
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/10/values/1",
+    "value": 0
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/10/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/11/values/0",
+    "value": -1991238
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/11/values/1",
+    "value": 6236
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/11/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/12/values/0",
+    "value": -113145
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/12/values/1",
+    "value": -2164382
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/12/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/13/values/0",
+    "value": 6309
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/13/values/1",
+    "value": 418950
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/13/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/14/values/0",
+    "value": -357173
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/14/values/1",
+    "value": -1307963
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/14/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/15/values/0",
+    "value": -60750
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/15/values/1",
+    "value": -1001
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/15/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/16/values/0",
+    "value": -1355982
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/16/values/1",
+    "value": -1297769
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/16/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/17/values/0",
+    "value": 63642
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/17/values/1",
+    "value": 90981
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/17/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/18/values/0",
+    "value": -4642777
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/18/values/1",
+    "value": 761018
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/18/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/19/values/0",
+    "value": -1201494
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/19/values/1",
+    "value": -1432280
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/19/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/20/values/0",
+    "value": -139221
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/20/values/1",
+    "value": -1012344
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/20/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/21/values/0",
+    "value": 270657
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/21/values/1",
+    "value": -1136533
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/21/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/22/values/0",
+    "value": 2555934
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/22/values/1",
+    "value": -597381
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/22/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/23/values/0",
+    "value": 217903
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/23/values/1",
+    "value": -873924
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/23/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/24/values/0",
+    "value": 80058
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/24/values/1",
+    "value": -141052
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/24/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/25/values/0",
+    "value": -2462775
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/25/values/1",
+    "value": -4659070
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/25/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/26/values/0",
+    "value": 7930082
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/26/values/1",
+    "value": 6938715
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/26/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/27/values/0",
+    "value": 460072
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/27/values/1",
+    "value": 671627
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/27/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/28/values/0",
+    "value": 462268
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/28/values/1",
+    "value": 215718
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/28/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/29/values/0",
+    "value": -1324703
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/29/values/1",
+    "value": -1564397
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/29/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/30/values/0",
+    "value": -650305
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/30/values/1",
+    "value": -1143565
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/30/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/31/values/0",
+    "value": 6877414
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/31/values/1",
+    "value": 5118098
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/31/pdfPage",
+    "value": 8
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/32/values/0",
+    "value": -5550174
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/32/values/1",
+    "value": -10810694
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/32/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/33/values/0",
+    "value": -192628
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/33/values/1",
+    "value": 0
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/33/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/34/values/0",
+    "value": 715200
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/34/values/1",
+    "value": 918024
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/34/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/35/values/0",
+    "value": 2284775
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/35/values/1",
+    "value": 1317
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/35/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/36/values/0",
+    "value": 948835
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/36/values/1",
+    "value": 2128
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/36/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/37/values/0",
+    "value": -2059522
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/37/values/1",
+    "value": -7561587
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/37/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/38/values/0",
+    "value": 15106352
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/38/values/1",
+    "value": 8959519
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/38/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/39/values/0",
+    "value": -12645528
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/39/values/1",
+    "value": -8095644
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/39/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/40/values/0",
+    "value": 23864824
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/40/values/1",
+    "value": 23582292
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/40/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/41/values/0",
+    "value": -34383886
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/41/values/1",
+    "value": -30393900
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/41/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/42/values/0",
+    "value": -402683
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/42/values/1",
+    "value": -389829
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/42/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/43/values/0",
+    "value": -8758567
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/43/values/1",
+    "value": -8231290
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/43/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/44/values/0",
+    "value": 2115789
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/44/values/1",
+    "value": -3420869
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/44/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/45/values/0",
+    "value": -1824886
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/45/values/1",
+    "value": -14095648
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/45/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/46/values/0",
+    "value": 55616637
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/46/values/1",
+    "value": 68446514
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/46/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/47/values/0",
+    "value": 53791751
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/47/values/1",
+    "value": 54350866
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/47/pdfPage",
+    "value": 9
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/48/values/0",
+    "value": 139922549
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/48/values/1",
+    "value": 141338620
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/48/pdfPage",
+    "value": 6
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/49/values/0",
+    "value": 1080601
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/49/values/1",
+    "value": 5163501
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/49/pdfPage",
+    "value": 6
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/50/values/0",
+    "value": 199555
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/50/values/1",
+    "value": 5241612
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/50/pdfPage",
+    "value": 6
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/51/values/0",
+    "value": 881046
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/51/values/1",
+    "value": -78111
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/references/51/pdfPage",
+    "value": 6
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/pretax",
+    "value": 2249593
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/depreciation",
+    "value": 13078942
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/amortization",
+    "value": 1458846
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/fvGain",
+    "value": -52196
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/interestExpenseAdjustment",
+    "value": 1302614
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/interestIncomeAdjustment",
+    "value": -493554
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/dividendIncomeAdjustment",
+    "value": 0
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/shareCompensation",
+    "value": 17580
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/equityMethodAdjustment",
+    "value": -431357
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/ppeDisposalGainAdjustment",
+    "value": -71052
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/rouDisposalLoss",
+    "value": 718
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/heldForSaleGainAdjustment",
+    "value": -1991238
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/investmentGainAdjustment",
+    "value": -113145
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/impairment",
+    "value": 6309
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/unrealizedFx",
+    "value": -357173
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/otherAdjustment",
+    "value": -60750
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/receivables",
+    "value": -1355982
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/relatedReceivables",
+    "value": 63642
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/inventory",
+    "value": -4642777
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/contractCosts",
+    "value": -1201494
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/otherOperatingAssets",
+    "value": -139221
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/contractLiabilities",
+    "value": 270657
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/payables",
+    "value": 2555934
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/relatedPayables",
+    "value": 217903
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/provisions",
+    "value": 80058
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/otherOperatingLiabilities",
+    "value": -2462775
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/generatedCash",
+    "value": 7930082
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/interestReceived",
+    "value": 460072
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/dividendReceived",
+    "value": 462268
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/interestPaid",
+    "value": -1324703
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/taxPaid",
+    "value": -650305
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/operatingCash",
+    "value": 6877414
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/ppeCash",
+    "value": -5550174
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/intangibleCash",
+    "value": -192628
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/ppeDisposalCash",
+    "value": 715200
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/heldForSaleDisposalCash",
+    "value": 2284775
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/subsidiaryDisposalCash",
+    "value": 948835
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/investingCash",
+    "value": -2059522
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/shortBorrowings",
+    "value": 15106352
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/shortRepayments",
+    "value": -12645528
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/longBorrowings",
+    "value": 23864824
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/longRepayments",
+    "value": -34383886
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/leasePrincipal",
+    "value": -402683
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/financingCash",
+    "value": -8758567
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/fxCash",
+    "value": 2115789
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/cashChange",
+    "value": -1824886
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/openingCash",
+    "value": 55616637
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/closingCash",
+    "value": 53791751
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/revenue",
+    "value": 139922549
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/netProfit",
+    "value": 1080601
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/ownersNetProfit",
+    "value": 199555
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/operands/nonControllingNetProfit",
+    "value": 881046
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/nonCashAdjustments",
+    "value": 12294544
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/workingCapitalCashEffect",
+    "value": -6614055
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/generatedCash",
+    "value": 7930082
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/cfo",
+    "value": 6877414
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/groupNetProfit",
+    "value": 1080601
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/cfoLessPpeCashOutlay",
+    "value": 1327240
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/cfoLessPpeAndIntangibleCashOutlay",
+    "value": 1134612
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/afterLeasePrincipalSensitivity",
+    "value": 731929
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/netBorrowingCash",
+    "value": -8058238
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/cashChange",
+    "value": -1824886
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/calculated/closingCash",
+    "value": 53791751
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/ratio/numerator",
+    "value": 6877414
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/ratio/denominator",
+    "value": 1080601
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/0/ratio/value",
+    "value": 6.364434236133411
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/pretax",
+    "value": 6620130
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/depreciation",
+    "value": 13877319
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/amortization",
+    "value": 1175136
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/fvGain",
+    "value": -98304
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/interestExpenseAdjustment",
+    "value": 1522339
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/interestIncomeAdjustment",
+    "value": -628250
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/dividendIncomeAdjustment",
+    "value": -204
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/shareCompensation",
+    "value": 0
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/equityMethodAdjustment",
+    "value": 193973
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/ppeDisposalGainAdjustment",
+    "value": -2376910
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/rouDisposalLoss",
+    "value": 0
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/heldForSaleGainAdjustment",
+    "value": 6236
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/investmentGainAdjustment",
+    "value": -2164382
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/impairment",
+    "value": 418950
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/unrealizedFx",
+    "value": -1307963
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/otherAdjustment",
+    "value": -1001
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/receivables",
+    "value": -1297769
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/relatedReceivables",
+    "value": 90981
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/inventory",
+    "value": 761018
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/contractCosts",
+    "value": -1432280
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/otherOperatingAssets",
+    "value": -1012344
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/contractLiabilities",
+    "value": -1136533
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/payables",
+    "value": -597381
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/relatedPayables",
+    "value": -873924
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/provisions",
+    "value": -141052
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/otherOperatingLiabilities",
+    "value": -4659070
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/generatedCash",
+    "value": 6938715
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/interestReceived",
+    "value": 671627
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/dividendReceived",
+    "value": 215718
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/interestPaid",
+    "value": -1564397
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/taxPaid",
+    "value": -1143565
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/operatingCash",
+    "value": 5118098
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/ppeCash",
+    "value": -10810694
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/intangibleCash",
+    "value": 0
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/ppeDisposalCash",
+    "value": 918024
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/heldForSaleDisposalCash",
+    "value": 1317
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/subsidiaryDisposalCash",
+    "value": 2128
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/investingCash",
+    "value": -7561587
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/shortBorrowings",
+    "value": 8959519
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/shortRepayments",
+    "value": -8095644
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/longBorrowings",
+    "value": 23582292
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/longRepayments",
+    "value": -30393900
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/leasePrincipal",
+    "value": -389829
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/financingCash",
+    "value": -8231290
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/fxCash",
+    "value": -3420869
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/cashChange",
+    "value": -14095648
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/openingCash",
+    "value": 68446514
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/closingCash",
+    "value": 54350866
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/revenue",
+    "value": 141338620
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/netProfit",
+    "value": 5163501
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/ownersNetProfit",
+    "value": 5241612
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/operands/nonControllingNetProfit",
+    "value": -78111
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/nonCashAdjustments",
+    "value": 10616939
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/workingCapitalCashEffect",
+    "value": -10298354
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/generatedCash",
+    "value": 6938715
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/cfo",
+    "value": 5118098
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/groupNetProfit",
+    "value": 5163501
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/cfoLessPpeCashOutlay",
+    "value": -5692596
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/cfoLessPpeAndIntangibleCashOutlay",
+    "value": -5692596
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/afterLeasePrincipalSensitivity",
+    "value": -6082425
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/netBorrowingCash",
+    "value": -5947733
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/cashChange",
+    "value": -14095648
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/calculated/closingCash",
+    "value": 54350866
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/ratio/numerator",
+    "value": 5118098
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/ratio/denominator",
+    "value": 5163501
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/rows/1/ratio/value",
+    "value": 0.9912069349846161
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/historicalCapital/ownersEquityTwdThousands",
+    "value": 154397339
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/historicalCapital/nonControllingEquityTwdThousands",
+    "value": 12504849
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/historicalCapital/groupEquityTwdThousands",
+    "value": 166902188
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/historicalCapital/paidCapitalTwdThousands",
+    "value": 75470990
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/historicalCapital/parTwd",
+    "value": 10
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/historicalCapital/issuedSharesThousands",
+    "value": 7547099
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/historicalCapital/treasuryCarryingAmountTwdThousands",
+    "value": 0
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/historicalCapital/ownersEquityPerIssuedCommonShare",
+    "value": 20.457839363177825
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/workload/originalCashRows",
+    "value": 52
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/workload/cashNumericCells",
+    "value": 104
+  },
+  {
+    "symbol": "2409",
+    "path": "/historicalCash/calculation/workload/capitalNumericInputs",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/sourceManifest/0/bytes",
+    "value": 71848
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/sourceManifest/1/bytes",
+    "value": 33734
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/sourceManifest/2/bytes",
+    "value": 110526
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/sourceManifest/3/bytes",
+    "value": 10693
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/sourceManifest/4/bytes",
+    "value": 3630
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/sourceManifest/5/bytes",
+    "value": 3671
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/sourceManifest/6/bytes",
+    "value": 30651
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/0/values/0",
+    "value": 19979409
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/0/values/1",
+    "value": 9134498
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/0/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/1/values/0",
+    "value": 1376499
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/1/values/1",
+    "value": 1001260
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/1/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/2/values/0",
+    "value": -34420062
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/2/values/1",
+    "value": -9135717
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/2/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/3/values/0",
+    "value": 20118332
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/3/values/1",
+    "value": 3874283
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/3/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/4/values/0",
+    "value": -14301730
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/4/values/1",
+    "value": -5261434
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/4/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/5/values/0",
+    "value": -12925231
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/5/values/1",
+    "value": -4260174
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/5/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/6/values/0",
+    "value": -27421398
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/6/values/1",
+    "value": -7058369
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/6/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/7/values/0",
+    "value": -25500
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/7/values/1",
+    "value": -12068
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/7/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/8/values/0",
+    "value": -6259256
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/8/values/1",
+    "value": -2285872
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/8/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/9/values/0",
+    "value": 14729114
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/9/values/1",
+    "value": 2371503
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/9/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/10/values/0",
+    "value": 7054178
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/10/values/1",
+    "value": 4874324
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/10/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/11/values/0",
+    "value": 130500
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/11/values/1",
+    "value": 113979
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/11/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/12/values/0",
+    "value": -288004
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/12/values/1",
+    "value": -202626
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/12/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/13/values/0",
+    "value": -1851849
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/13/values/1",
+    "value": -1458319
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/13/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/14/values/0",
+    "value": 5044825
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/14/values/1",
+    "value": 3327358
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/14/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/15/values/0",
+    "value": -10679228
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/15/values/1",
+    "value": -4997182
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/15/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/16/values/0",
+    "value": -27514
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/16/values/1",
+    "value": -18064
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/16/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/17/values/0",
+    "value": -151181
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/17/values/1",
+    "value": 0
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/17/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/18/values/0",
+    "value": 289
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/18/values/1",
+    "value": 122
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/18/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/19/values/0",
+    "value": -10851462
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/19/values/1",
+    "value": -5024255
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/19/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/20/values/0",
+    "value": 3869119
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/20/values/1",
+    "value": 1733564
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/20/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/21/values/0",
+    "value": 5832435
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/21/values/1",
+    "value": 5422384
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/21/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/22/values/0",
+    "value": -2046642
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/22/values/1",
+    "value": -1609119
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/22/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/23/values/0",
+    "value": -26673
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/23/values/1",
+    "value": -20529
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/23/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/24/values/0",
+    "value": 7632127
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/24/values/1",
+    "value": 5543713
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/24/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/25/values/0",
+    "value": 734456
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/25/values/1",
+    "value": -1214883
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/25/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/26/values/0",
+    "value": 2559946
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/26/values/1",
+    "value": 2631933
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/26/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/27/values/0",
+    "value": 20007816
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/27/values/1",
+    "value": 14988308
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/27/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/28/values/0",
+    "value": 22567762
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/28/values/1",
+    "value": 17620241
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/28/pdfPage",
+    "value": 7
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/29/values/0",
+    "value": 80342455
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/29/values/1",
+    "value": 44187758
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/29/pdfPage",
+    "value": 5
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/30/values/0",
+    "value": 15210423
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/30/values/1",
+    "value": 6944760
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/30/pdfPage",
+    "value": 5
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/31/values/0",
+    "value": 15213191
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/31/values/1",
+    "value": 6946779
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/31/pdfPage",
+    "value": 5
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/32/values/0",
+    "value": -2768
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/32/values/1",
+    "value": -2019
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/references/32/pdfPage",
+    "value": 5
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/pretax",
+    "value": 19979409
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/nonCashAdjustments",
+    "value": 1376499
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/operatingAssetChange",
+    "value": -34420062
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/operatingLiabilityChange",
+    "value": 20118332
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/workingCapital",
+    "value": -14301730
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/adjustmentsTotal",
+    "value": -12925231
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/receivables",
+    "value": -27421398
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/notesReceivable",
+    "value": -25500
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/inventory",
+    "value": -6259256
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/payables",
+    "value": 14729114
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/generatedCash",
+    "value": 7054178
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/interestReceived",
+    "value": 130500
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/interestPaid",
+    "value": -288004
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/taxPaid",
+    "value": -1851849
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/operatingCash",
+    "value": 5044825
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/ppeCash",
+    "value": -10679228
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/intangibleCash",
+    "value": -27514
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/rouCash",
+    "value": -151181
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/ppeDisposalCash",
+    "value": 289
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/investingCash",
+    "value": -10851462
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/shortBorrowingsNet",
+    "value": 3869119
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/longBorrowings",
+    "value": 5832435
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/longRepayments",
+    "value": -2046642
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/leasePrincipal",
+    "value": -26673
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/financingCash",
+    "value": 7632127
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/fxCash",
+    "value": 734456
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/cashChange",
+    "value": 2559946
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/openingCash",
+    "value": 20007816
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/closingCash",
+    "value": 22567762
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/revenue",
+    "value": 80342455
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/netProfit",
+    "value": 15210423
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/ownersNetProfit",
+    "value": 15213191
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/operands/nonControllingNetProfit",
+    "value": -2768
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/nonCashAdjustments",
+    "value": 1376499
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/workingCapitalCashEffect",
+    "value": -14301730
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/generatedCash",
+    "value": 7054178
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/cfo",
+    "value": 5044825
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/groupNetProfit",
+    "value": 15210423
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/cfoLessPpeCashOutlay",
+    "value": -5634403
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/cfoLessPpeAndIntangibleCashOutlay",
+    "value": -5661917
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/afterLeasePrincipalSensitivity",
+    "value": -5688590
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/rouCashAcquisitionSeparate",
+    "value": -151181
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/netBorrowingCash",
+    "value": 7654912
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/cashChange",
+    "value": 2559946
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/calculated/closingCash",
+    "value": 22567762
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/ratio/numerator",
+    "value": 5044825
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/ratio/denominator",
+    "value": 15210423
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/0/ratio/value",
+    "value": 0.3316689483257632
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/pretax",
+    "value": 9134498
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/nonCashAdjustments",
+    "value": 1001260
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/operatingAssetChange",
+    "value": -9135717
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/operatingLiabilityChange",
+    "value": 3874283
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/workingCapital",
+    "value": -5261434
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/adjustmentsTotal",
+    "value": -4260174
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/receivables",
+    "value": -7058369
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/notesReceivable",
+    "value": -12068
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/inventory",
+    "value": -2285872
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/payables",
+    "value": 2371503
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/generatedCash",
+    "value": 4874324
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/interestReceived",
+    "value": 113979
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/interestPaid",
+    "value": -202626
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/taxPaid",
+    "value": -1458319
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/operatingCash",
+    "value": 3327358
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/ppeCash",
+    "value": -4997182
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/intangibleCash",
+    "value": -18064
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/rouCash",
+    "value": 0
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/ppeDisposalCash",
+    "value": 122
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/investingCash",
+    "value": -5024255
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/shortBorrowingsNet",
+    "value": 1733564
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/longBorrowings",
+    "value": 5422384
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/longRepayments",
+    "value": -1609119
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/leasePrincipal",
+    "value": -20529
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/financingCash",
+    "value": 5543713
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/fxCash",
+    "value": -1214883
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/cashChange",
+    "value": 2631933
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/openingCash",
+    "value": 14988308
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/closingCash",
+    "value": 17620241
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/revenue",
+    "value": 44187758
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/netProfit",
+    "value": 6944760
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/ownersNetProfit",
+    "value": 6946779
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/operands/nonControllingNetProfit",
+    "value": -2019
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/nonCashAdjustments",
+    "value": 1001260
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/workingCapitalCashEffect",
+    "value": -5261434
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/generatedCash",
+    "value": 4874324
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/cfo",
+    "value": 3327358
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/groupNetProfit",
+    "value": 6944760
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/cfoLessPpeCashOutlay",
+    "value": -1669824
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/cfoLessPpeAndIntangibleCashOutlay",
+    "value": -1687888
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/afterLeasePrincipalSensitivity",
+    "value": -1708417
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/rouCashAcquisitionSeparate",
+    "value": 0
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/netBorrowingCash",
+    "value": 5546829
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/cashChange",
+    "value": 2631933
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/calculated/closingCash",
+    "value": 17620241
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/ratio/numerator",
+    "value": 3327358
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/ratio/denominator",
+    "value": 6944760
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/rows/1/ratio/value",
+    "value": 0.47911778088803647
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/workload/originalCashRows",
+    "value": 33
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/workload/cashNumericCells",
+    "value": 66
+  },
+  {
+    "symbol": "2383",
+    "path": "/historicalCash/calculation/workload/capitalNumericInputs",
+    "value": 0
+  }
+]

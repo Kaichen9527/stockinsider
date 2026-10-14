@@ -1,0 +1,106 @@
+[
+  {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+    "blob": "627d6f6b248e679927494a33494c1bec477a5257",
+    "bytes": 322909,
+    "sha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": true,
+      "main1f": true,
+      "taildd598": true
+    }
+  },
+  {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "scripts/research-author-assignment-http.test.mjs",
+    "blob": "86f61d112608a33a7ddc6dc182920b09a1db70df",
+    "bytes": 11822,
+    "sha256": "857741b19185166bb3ad2c1c002df58664b8ea99119af7650552bbddd32ea61d",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "scripts/research-complete-input-boundary-postgres.test.mjs",
+    "blob": "e904c44f6a7210c0c909e71272a4cd5f56d0bbdb",
+    "bytes": 21149,
+    "sha256": "78e3284f2d23b1dacc498faf1c0cc2bc8e7edade17974db2dcf58aed7020de60",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "scripts/research-complete-input-http.test.mjs",
+    "blob": "94e94691a00651257f5357bc7c376ada9fb66846",
+    "bytes": 9041,
+    "sha256": "682f3208bce34aa809f67b6b7c948beebd6535e01c380093240efa37f3d0513c",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "scripts/research-complete-input-postgres.test.mjs",
+    "blob": "fd91637304322a6146bd13ffde0b940d079bd038",
+    "bytes": 18177,
+    "sha256": "163e44731013cf61f116362d2ffbc9fbac7fe1bdd4a17909195a956f6333724b",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "scripts/research-complete-input.test.mjs",
+    "blob": "08c7c0c9dd49239e2e7c1772f45bbb5401dff91e",
+    "bytes": 5896,
+    "sha256": "d1703def58a62c7d748b0bb08481cc2cc3d2a8fb82db0844f39e930b7bfce023",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "scripts/research-input-preparation-postgres.test.mjs",
+    "blob": "6071471b6156b32af9e36ffa51fb9e40bca25410",
+    "bytes": 19863,
+    "sha256": "53c6fa08fc2c6566a9be108c72304c6309c2514db26f8820536d78df2c62b481",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  },
+  {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "file": "scripts/research-observed-priority-native.test.mjs",
+    "blob": "eb45327aadad61865d6da9448a5279225463aa3b",
+    "bytes": 38102,
+    "sha256": "fafdeebe66ffe5719382410dfaf52a41bfc22d68ed07c183de0271edbca59d2e",
+    "present": {
+      "legacy15d4": true,
+      "candidate72f": false,
+      "main1f": false,
+      "taildd598": false
+    }
+  }
+]

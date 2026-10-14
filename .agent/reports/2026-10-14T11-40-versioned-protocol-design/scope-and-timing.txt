@@ -1,0 +1,2 @@
+Authorized latest task: 15-minute versioned protocol design from exact72f. Started 2026-10-14T11:40:22Z, deadline 11:55:22Z. Only new ADR/source index and evidence. No runtime/SQL/roles/workflows changed. No PG/build/npm/heavy tests. Prior ce64 14-case proof referenced, not rerun. Environment/setup skills used; no setup configuration changes needed.
+Initial free /workspace 8615571456 /tmp 15436185600; at 11:51:54Z 8609804288 / 15435821056. No owned services started; no cleanup/deletion. RSS not continuously sampled for this lightweight static task; no peak claim.

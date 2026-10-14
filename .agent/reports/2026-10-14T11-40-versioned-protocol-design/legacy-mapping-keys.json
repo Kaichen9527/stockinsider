@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "str",
+  "sourceClosureEncoding": "str",
+  "sourceClosureHash": "str",
+  "sourceClosure": "list",
+  "companies": "dict"
+}
