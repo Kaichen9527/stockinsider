@@ -14,3 +14,33 @@ export async function readPrerequisiteState(client){
 export function stateDescriptor(state){
  return {schema:state.catalog.schemas.find(x=>x.name==='public'),roles:state.details.roles.map(({oid,...r})=>r),memberships:state.details.memberships,namespaceHash:digest(state.namespace),catalogHash:digest(state.catalog),schemaOwner:state.details.schemaOwner};
 }
+const descriptorUrl=new URL('./research-versioned-prerequisite-profile.json',import.meta.url);
+export function prerequisiteDescriptor(){const b=fs.readFileSync(descriptorUrl);if(createHash('sha256').update(b).digest('hex')!=='3d6cf36330519a9382f2cce8fa1a6cc9484843a594d0df312ecc2ab60a0436db')throw Error('versioned_prerequisite_descriptor_bytes_changed');return JSON.parse(b.toString('utf8'));}
+export function assertPrerequisiteDescriptor(actual){
+ const expected=prerequisiteDescriptor();
+ if(canonical(actual)===canonical(expected.predecessor))return 'predecessor';
+ if(canonical(actual)===canonical(expected.successor))return 'successor';
+ throw Error('versioned_prerequisite_profile_mismatch');
+}
+export const PREREQUISITE_LOCK="SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked";
+export const PREREQUISITE_GRANT='GRANT USAGE ON SCHEMA public TO research_input_preparation_owner_v2,research_source_fence_owner_v2';
+/** LOCAL engineering only. Caller injects a fresh, exclusive client, outside any transaction. No CLI/connection/authority. */
+export async function applyVersionedPrerequisiteEngineering(client){
+ let locked=false,open=false,primary;
+ try{
+  if((await client.query(PREREQUISITE_LOCK)).rows?.[0]?.locked!==true)throw Error('versioned_prerequisite_busy');locked=true;
+  await client.query('BEGIN ISOLATION LEVEL READ COMMITTED');open=true;
+  await client.query("SET LOCAL statement_timeout='30s';SET LOCAL lock_timeout='2s'");
+  const before=await readPrerequisiteState(client),kind=assertPrerequisiteDescriptor(stateDescriptor(before));
+  if(kind==='predecessor')await client.query(PREREQUISITE_GRANT);
+  const after=await readPrerequisiteState(client);
+  if(assertPrerequisiteDescriptor(stateDescriptor(after))!=='successor')throw Error('versioned_prerequisite_postcondition');
+  if(canonical(before.details)!==canonical(after.details))throw Error('versioned_prerequisite_identity_changed');
+  await client.query('COMMIT');open=false;
+  return Object.freeze({status:kind==='successor'?'exact_noop':'committed',engineeringOnly:true,productionAuthorized:false,profileHash:digest(prerequisiteDescriptor()),before:digest(stateDescriptor(before)),after:digest(stateDescriptor(after))});
+ }catch(e){primary=e;throw e;}finally{
+  if(open)try{await client.query('ROLLBACK');}catch{if(primary)primary.cleanupIncomplete=true;}
+  if(locked)try{await client.query("SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");}catch{if(primary)primary.cleanupIncomplete=true;}
+  try{await client.end();}catch(e){if(primary)primary.cleanupIncomplete=true;else throw e;}
+ }
+}
