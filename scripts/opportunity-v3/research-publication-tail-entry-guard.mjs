@@ -2,7 +2,7 @@ import fs from 'node:fs';import {createHash}from 'node:crypto';
 import {readTailNamespace}from './research-publication-tail-entry-namespace.mjs';
 import {readResearchPublicationCatalog,fingerprintResearchPublicationCatalog}from './research-publication-catalog.mjs';
 import {TAIL_ORDERED_SHA256}from './research-publication-tail-extraction.mjs';
-export const POST50_BASELINE_SHA256='1c238655d5e1696c6775fba212c2b6b12633c1fe059d385117e62c9657c86a30';
+export const POST50_BASELINE_SHA256='63677c0b92f9778f316dd5e7f68a8dd93f9d78fe2c013d7272417c1806ee33e4';
 export const canonicalTailMetadata=v=>JSON.stringify(v,(_k,x)=>x&&!Array.isArray(x)&&typeof x==='object'?Object.fromEntries(Object.entries(x).sort(([a],[b])=>a.localeCompare(b,'en'))):x);
 export const tailMetadataSha=v=>createHash('sha256').update(canonicalTailMetadata(v)).digest('hex');
 const bytes=fs.readFileSync(new URL('./research-publication-tail-post50-baseline.json',import.meta.url));

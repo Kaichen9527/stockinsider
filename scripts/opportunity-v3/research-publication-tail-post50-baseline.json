@@ -3,9 +3,9 @@
   "sourceBase": "fd1feab958d0038590f51ce9c618aea0d2e7d748",
   "sourceFinancialMain": "69b9734c5766b2e196e8133d63df1f1148959046",
   "capturedSchemaSha256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
-  "captureInputSha256": "826314b469d853d575ada33ccd1a7b462207834fa4616742db5f0752a0568863",
+  "captureInputSha256": "39043cff83c64f570738e3bb50eef89b8e61aeefdd2b5dd5ef573490e8761717",
   "tailOrderedSha256": "edc46d48235d1542426c2ba729e24265d1722d757070a8ed5f97061ec843798e",
-  "namespaceSha256": "28e656578696855416ffc98245ff26ace03bcfd333fe70160672bb4b2506d5e3",
+  "namespaceSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
   "scope": {
     "tables": [
       "agent_findings",
