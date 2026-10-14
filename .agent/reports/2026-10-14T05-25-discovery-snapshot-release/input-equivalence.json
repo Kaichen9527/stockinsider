@@ -1,0 +1,124 @@
+{
+  "frozen": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+  "dependencyFiles": [
+    {
+      "path": "web/src/lib/discovery-frozen-snapshot-reader.ts",
+      "bytes": 12373,
+      "sha256": "62c29ca5ceb240ddd5ea848e149948f2e3174511ff3ccb02b1dda1fda486d037",
+      "frozenBlob": "0b1c1f47591cfefea0821f4cd2607f948ec6b070"
+    },
+    {
+      "path": "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+      "bytes": 6895,
+      "sha256": "c58e91392e35a02e9d9056870c091797785a770c2262b3125080674672820a28",
+      "frozenBlob": "e6d5676b78ea9cbb1cb288702b624844845bd1f0"
+    },
+    {
+      "path": "web/src/lib/discovery-frozen-snapshot-fixture.test-helper.ts",
+      "bytes": 4236,
+      "sha256": "b859618c294e9b646c35a95c694a35836697338c0c6ef9c72b3fe0848dd4ea0b",
+      "frozenBlob": "ac15271a00c3c66bd2273f4adb5ca44bff1e0e9d"
+    },
+    {
+      "path": "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs",
+      "bytes": 12596,
+      "sha256": "d04c717db57677d58ad8f8c0a62a63164ac5605e8693d1aba21b488cf2a81f18",
+      "frozenBlob": "6faa47af440786f998735fe43154973ec814caee"
+    },
+    {
+      "path": "docs/operations/2026-10-14/discovery-frozen-snapshot-reader-handoff.md",
+      "bytes": 4467,
+      "sha256": "22b3b927a98807694adf672af105ff0cdbed6428877aa686af8393a3c2a92738",
+      "frozenBlob": "6f3e2b0bbb63dc82aaa80b549cf034c6c1444680"
+    },
+    {
+      "path": "web/src/lib/discovery-revision-publisher-reader.ts",
+      "bytes": 21736,
+      "sha256": "8905a18155cd7092891a4890eda1a2796dce58780399b92b2f596d9cdfb5234b",
+      "frozenBlob": "012f703645ddb3d9b581d146b5311bfbc043352b"
+    },
+    {
+      "path": "web/src/lib/discovery-revision-publisher-reader.test.ts",
+      "bytes": 16150,
+      "sha256": "14645f2c8e750505394a29b29f19132d35573e6388323e5a6085b5be372c01b4",
+      "frozenBlob": "f7995623e5295ce7d53156fe350a0e28aab707ff"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/canonical.ts",
+      "bytes": 2199,
+      "sha256": "477a34da818b8ef0618e5a61ebb173a368cd9018e2fa4a8aa2c895d9c52f0e24",
+      "frozenBlob": "430174979e522a35585d8f44d7cba798f995d32d"
+    },
+    {
+      "path": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+      "bytes": 322909,
+      "sha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+      "frozenBlob": "627d6f6b248e679927494a33494c1bec477a5257"
+    },
+    {
+      "path": "scripts/opportunity-v3/fixtures/publication-install-README.md",
+      "bytes": 3034,
+      "sha256": "51cb32fb8fe8e40a7fd0d27c4605156140732a03c708bcefc675217659ee37c7",
+      "frozenBlob": "fbe2dc230d1ca6cad9ce11f726a8d1c06f1f3966"
+    },
+    {
+      "path": "deployment/vps/bootstrap-stockinsider-postgres.sql",
+      "bytes": 1979,
+      "sha256": "6d08fbb7545b4a76aa740927a6519cd8eda1e90d6003d920b4ec3c08d5f4768a",
+      "frozenBlob": "c58d12585d312701d47b5789d0572f8453424697"
+    },
+    {
+      "path": "package.json",
+      "bytes": 24733,
+      "sha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc",
+      "frozenBlob": "f25f4bebad793fb7eabc03e2320e4472553a0fb9"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "frozenBlob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+    },
+    {
+      "path": "web/package.json",
+      "bytes": 1943,
+      "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+      "frozenBlob": "446f308a2990f45dcd3dca14030068f878fae490"
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274088,
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+      "frozenBlob": "a41fd447e28f3b36829b689828c345e042619a38"
+    },
+    {
+      "path": ".nvmrc",
+      "bytes": 8,
+      "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+      "frozenBlob": "7d41c735d7127c4a2530ebe846b14ffbf38b8031"
+    }
+  ],
+  "missingImports": [],
+  "nativeRerun": false,
+  "typeLintBuildRerun": false,
+  "reason": "all copied code/native/helper, original reader/canonical, captured schema/bootstrap and locks byte-identical; whole web tree also asserted after sealing",
+  "wholeWebTree": "b44f239410c03a32720c2155b72c3b7f96b05782",
+  "sameFrozenWebTree": true,
+  "noOtherRuntimeSqlSourceDiffAgainstFrozen": true,
+  "reusedNative": {
+    "subject": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+    "pass": 10,
+    "fail": 0,
+    "skip": 0,
+    "rerun": false
+  },
+  "reusedTypeLintNormalBuild": {
+    "subject": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+    "normalBuildId": "qMFmQWaQTx8UniDlXk7nv",
+    "serverFiles": 1796,
+    "serverManifestGitReference": "bd77cb44940995cbae023f80099e648b77ef8bec:.agent/reports/2026-10-14T04-26-discovery-frozen-snapshot/deadline-successor/compiled-server-manifest.json",
+    "serverManifestSha256": "7d981ff7db0a37cf9cabf8fa2a272ea5c700e1a5d53e7df5975f40e5aac77bcb",
+    "actualCurrentArtifactAllFilesVerified": true,
+    "rerun": false
+  }
+}

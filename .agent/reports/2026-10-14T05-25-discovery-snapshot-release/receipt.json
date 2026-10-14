@@ -1,0 +1,106 @@
+{
+  "schema": "discovery-snapshot-release-assembly-v1",
+  "source": {
+    "head": "3b7e45ee7f73fa438c2d9d4083b870ef76183d56",
+    "tree": "ed64cfa251834e757b136e0922bda1dff04d1747",
+    "webTree": "b44f239410c03a32720c2155b72c3b7f96b05782",
+    "base": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+    "branch": "codex/discovery-snapshot-release-oct14",
+    "frozenRuntime": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+    "exactCopiedSourceBlobs": 5,
+    "codeFilesTotal": 10,
+    "sourceManifest": "source-manifest.json",
+    "noHistoricalBranchMergeOrRawWipCopied": true
+  },
+  "window": {
+    "startUtc": "2026-10-13T21:25:09Z",
+    "deadlineUtc": "2026-10-13T21:45:09Z",
+    "startTaipei": "2026-10-14T05:25:09+08:00",
+    "sealedUtc": "2026-10-13T21:30:13Z",
+    "manualEngineeringNotRoleBudget": true
+  },
+  "pure": {
+    "command": [
+      "node",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+      "web/src/lib/discovery-revision-publisher-reader.test.ts"
+    ],
+    "start_utc": "2026-10-13T21:27:22Z",
+    "seconds": 20.800605058670044,
+    "exit": 0,
+    "peak_sampled_process_tree_rss_bytes": 131399680,
+    "min_free_bytes": 8935710720,
+    "subject": "3b7e45ee7f73fa438c2d9d4083b870ef76183d56",
+    "counts": {
+      "tests": 76,
+      "pass": 76,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "newAdapter": 16,
+    "unchangedReader": 60,
+    "stdout": "pure.stdout",
+    "stderr": "pure.stderr"
+  },
+  "equivalence": {
+    "manifest": "input-equivalence.json",
+    "dependencies": 16,
+    "wholeWebTreeEqual": true,
+    "native10TypesLintNormalBuildNotRerun": true,
+    "priorExactSubject": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+    "priorEvidence": "bd77cb44940995cbae023f80099e648b77ef8bec",
+    "priorReceiptSha256": "53b3563697e5fe018a1a70c5d1a0b7eac1eed269b48286522c050490f9b818b0",
+    "normalBuildId": "qMFmQWaQTx8UniDlXk7nv",
+    "serverFiles": 1796,
+    "actualExistingArtifactEveryFileVerified": true,
+    "notANewAssemblyNativeBuildOrGhaPass": true
+  },
+  "ci": {
+    "newWorkflow": ".github/workflows/discovery-snapshot-quality.yml",
+    "oneOrdinaryReadOnlyJob": true,
+    "configuredPure": 76,
+    "configuredCapturedNative": 10,
+    "exactMergedFinancialCommonSetup": true,
+    "Node": "22.14.0",
+    "PG": "17.x hard verified",
+    "officialSignedPgdgKey": "B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8",
+    "checkoutCredentialsPersisted": false,
+    "rootWebLockedIgnoreScriptsInstall": true,
+    "candidateWorkflowOnlyOneAdditionalTestArgument": true,
+    "originalSuiteCanonicalFinancialProtectedWorkflowUnchanged": true,
+    "actualNewPrGha": "pending, no PR or CI rerun here",
+    "audit": "workflow-audit.json"
+  },
+  "capabilities": {
+    "live_population_verified": false,
+    "investment_admission": false,
+    "independent_news_root": null,
+    "cross_platform_creator": null,
+    "productionRunPublisherEmptyStillUnsupported": true
+  },
+  "resources": {
+    "method": "250ms sampled process-tree RSS/workspace free, not cgroup measurement",
+    "peakSampledRssBytes": 131399680,
+    "minSampledWorkspaceFreeBytes": 8935710720,
+    "reserveBytes": 8589934592,
+    "cleanup": "cleanup.json"
+  },
+  "pending": [
+    "root independent assembly/ordinary workflow review",
+    "normal fresh GHA on future new PR, including other naturally triggered jobs",
+    "formal production client/authority/frozen run prerequisites remain unresolved"
+  ],
+  "notPerformed": [
+    "native/types/lint/build rerun",
+    "PR creation",
+    "exact approval/ref/self signature",
+    "ready/merge/deploy/CI rerun",
+    "VPS/remoteDB/HTTP/crawl/343/PTT/strategy/schedule/model",
+    "authority/schema/roles/SQL/financial/defaultplans/pins/policy/API/UI/lock edits",
+    "cache removal/Chromium403 retry"
+  ]
+}

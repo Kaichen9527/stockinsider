@@ -1,0 +1,57 @@
+[
+  {
+    "path": "cleanup.json",
+    "bytes": 167,
+    "sha256": "0677707adc9395dcabe7d10e1607d194f94a458623a9ea5f21da48de63e6f5f7"
+  },
+  {
+    "path": "input-equivalence.json",
+    "bytes": 5015,
+    "sha256": "7a0c61e5b74ac5b8da8c39fd4f98c6dff4c3ad6dfb03eb8cb81f238e94e9f98d"
+  },
+  {
+    "path": "pure.meta.json",
+    "bytes": 401,
+    "sha256": "64f54334ab257224ffaee0b64fad7a1e1fcbfaf55428abfa72600a692b219d21"
+  },
+  {
+    "path": "pure.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "pure.stdout",
+    "bytes": 15474,
+    "sha256": "efff7a72bf726a9512c4c93014e2837ad67234033f8cc6cbae35026897d30c72"
+  },
+  {
+    "path": "receipt.json",
+    "bytes": 3852,
+    "sha256": "1d8dbada59e24a4f96cd241c1147f1c67251f9945be512495f8b05b6c59692cf"
+  },
+  {
+    "path": "source-manifest.json",
+    "bytes": 2413,
+    "sha256": "331d3e8f912439dde469e63f2be2634d47a5a001beadc74d2b551ce1c558b389"
+  },
+  {
+    "path": "tool-versions.meta.json",
+    "bytes": 245,
+    "sha256": "0a3b90e44963df484b61c5a11c6babe514d571c765b846f7682a73766dfeca1d"
+  },
+  {
+    "path": "tool-versions.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "tool-versions.stdout",
+    "bytes": 493,
+    "sha256": "60e581ae5f3cd148902b1a5b694832393232bcb614d83fab9cdf82904340a6eb"
+  },
+  {
+    "path": "workflow-audit.json",
+    "bytes": 1160,
+    "sha256": "1b9488407559aacca70d6a38dee4b2c3a2265058e590c856f82a0419e074d7ca"
+  }
+]

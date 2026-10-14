@@ -1,0 +1,62 @@
+[
+  {
+    "path": ".github/workflows/candidate-discovery-quality.yml",
+    "bytes": 1566,
+    "sha256": "6f11ded048a4c1dec15362de9d67b417216ab598fa8a1d6f2b3b02b4110da41b",
+    "blob": "a3e260174ffa5b51ca04e8299ba01e53d5e6073b"
+  },
+  {
+    "path": ".github/workflows/discovery-snapshot-quality.yml",
+    "bytes": 3645,
+    "sha256": "d8409c6406eb5490582eb21d013763f6ef19f5e779f7c03fea9f01dc5023d1d1",
+    "blob": "e18724b677852a02ff0a9fd744c44f2401f7a7be"
+  },
+  {
+    "path": "docs/operations/2026-10-14/discovery-frozen-snapshot-reader-handoff.md",
+    "bytes": 4467,
+    "sha256": "22b3b927a98807694adf672af105ff0cdbed6428877aa686af8393a3c2a92738",
+    "blob": "6f3e2b0bbb63dc82aaa80b549cf034c6c1444680"
+  },
+  {
+    "path": "docs/operations/2026-10-14/discovery-snapshot-release-handoff.md",
+    "bytes": 2671,
+    "sha256": "20556014952e3bd201b08d3a113723b7570d4695b0c577122026d15287ed3e4d",
+    "blob": "746617e995425440eff678aaedd376653e73bc8a"
+  },
+  {
+    "path": "docs/operations/2026-10-14/discovery-snapshot-release-receipt-index.json",
+    "bytes": 975,
+    "sha256": "a91ffa06f720c95a301c525455fd591306c2a303d9314a7a18333ab6a8147fd5",
+    "blob": "0317d8fb68a0d89b8d78179d9d6867fa8029b25c"
+  },
+  {
+    "path": "docs/operations/2026-10-14/discovery-snapshot-release-source-index.json",
+    "bytes": 1355,
+    "sha256": "15a94495b4731688a4eaa09633ec4acdf5d42ef24731c40f509b7a2653cdb3c9",
+    "blob": "b9350acc625b9108c0f690fd64788c9b4c607927"
+  },
+  {
+    "path": "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs",
+    "bytes": 12596,
+    "sha256": "d04c717db57677d58ad8f8c0a62a63164ac5605e8693d1aba21b488cf2a81f18",
+    "blob": "6faa47af440786f998735fe43154973ec814caee"
+  },
+  {
+    "path": "web/src/lib/discovery-frozen-snapshot-fixture.test-helper.ts",
+    "bytes": 4236,
+    "sha256": "b859618c294e9b646c35a95c694a35836697338c0c6ef9c72b3fe0848dd4ea0b",
+    "blob": "ac15271a00c3c66bd2273f4adb5ca44bff1e0e9d"
+  },
+  {
+    "path": "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+    "bytes": 6895,
+    "sha256": "c58e91392e35a02e9d9056870c091797785a770c2262b3125080674672820a28",
+    "blob": "e6d5676b78ea9cbb1cb288702b624844845bd1f0"
+  },
+  {
+    "path": "web/src/lib/discovery-frozen-snapshot-reader.ts",
+    "bytes": 12373,
+    "sha256": "62c29ca5ceb240ddd5ea848e149948f2e3174511ff3ccb02b1dda1fda486d037",
+    "blob": "0b1c1f47591cfefea0821f4cd2607f948ec6b070"
+  }
+]
