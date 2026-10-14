@@ -1,0 +1,14 @@
+{
+  "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "path": "web/src/lib/research-author-assignment.ts",
+  "bytes": 7161,
+  "sha256": "f3398447a07df929652e07ea3044bf8334e3e922f3344ad5802d39ea54b7d051",
+  "blob": "5dec5203555d1352f7f67cf64eb6585f3b389a3c",
+  "recordedAt": "2026-10-14T08:13:10.098407+00:00",
+  "priorReportCommit": "92c4d8a03f6e5fe8a763937efd996091a385447f",
+  "priorReceiptSHA256": "da4ee78e458e75f26111e38b604e8024d5c3ffe5c0736e714eef1ed13a59e380",
+  "command": "git grep -n runCompleteInput 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb -- web/src",
+  "exit": 0,
+  "rawSHA256": "68a6e91476c2ee5d980a09114771a06e3315e13e04888ab4aa91a487f2bd85ee",
+  "sourceModified": false
+}
