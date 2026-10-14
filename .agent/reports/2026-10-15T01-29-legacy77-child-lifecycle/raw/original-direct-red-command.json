@@ -1,0 +1,9 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--test-name-pattern=^error while child alive",
+    "scripts/opportunity-v3/research-legacy77-child-lifecycle.test.mjs"
+  ],
+  "exit": 1,
+  "at": "2026-10-14T17:31:47.282769+00:00"
+}

@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-14T17:31:12.057708+00:00",
+  "files": [
+    {
+      "path": "scripts/opportunity-v3/research-legacy77-realm-fixture.mjs",
+      "bytes": 5021,
+      "sha256": "ea7f86ad00baddda9684b2ccd139ff61373e6ab142c1d5337d7fe282e4a1b2fe",
+      "blob": "c562a98ca7adf2b07f51b68ee1712f638f4675fe"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-legacy77-child-lifecycle.test.mjs",
+      "bytes": 6159,
+      "sha256": "6471c3df3cacf92a98ef17d599faa980407b4a43636de4443295496087f6d302",
+      "blob": "463f0af61bfc7bb8550570e9e579bb66f85f2a35"
+    }
+  ]
+}

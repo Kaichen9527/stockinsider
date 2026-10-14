@@ -1,0 +1,96 @@
+{
+  "task": "legacy77 child lifecycle source-only correction with hermetic probes",
+  "start": "2026-10-14T17:29:42Z",
+  "deadline": "2026-10-14T17:44:42Z",
+  "sealedAt": "2026-10-14T17:35:11.685868+00:00",
+  "base": "6a136516934a3fe8442a47b55c8f450b897102a5",
+  "codeCommit": "c7d6665068774c346e28303adeb06634abf5d556",
+  "codeTree": "d34718dce0f04d40f6eedaba0013469ab72d0292",
+  "branch": "codex/research-legacy77-child-lifecycle-oct15",
+  "originalHelperSha256": "ea7f86ad00baddda9684b2ccd139ff61373e6ab142c1d5337d7fe282e4a1b2fe",
+  "finalHelperSha256": "553d7ccb06a1f05c173829f99e29b00fc6f4d2239538f7742a6a98e6d2a06c51",
+  "executed": [
+    {
+      "run": "original-red",
+      "pass": 0,
+      "fail": 1,
+      "scope": "Initial probe syntax failure, not product finding"
+    },
+    {
+      "run": "original-behavior-red",
+      "pass": 0,
+      "fail": 1,
+      "scope": "Outer --test file failure without inner diagnostic; root cause not asserted"
+    },
+    {
+      "run": "original-direct-red",
+      "pass": 0,
+      "fail": 1,
+      "scope": "Original helper returns on error before exit/close; assertion error is not child termination"
+    },
+    {
+      "run": "fixed-lifecycle",
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0,
+      "scope": "First fixed helper hermetic lifecycle set"
+    },
+    {
+      "run": "final-3",
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0,
+      "scope": "Same five cases with added watchdog retention assertion; overlaps prior5, not10distinct"
+    }
+  ],
+  "syntaxChecks": {
+    "count": 2,
+    "exit0": 2
+  },
+  "applicationImports": 0,
+  "native": {
+    "2409": "NOT_RUN",
+    "2383": "NOT_RUN",
+    "parent": "NOT_RUN"
+  },
+  "sourceInventory": {
+    "files": 257,
+    "unchangedInherited": 254
+  },
+  "rawInventory": {
+    "files": 27,
+    "bytes": 62168
+  },
+  "resources": {
+    "initialFreeBytes": {
+      "/workspace": 8604790784,
+      "/tmp": 15383793664
+    },
+    "finalFreeBytes": {
+      "/workspace": 8604733440,
+      "/tmp": 15383515136
+    },
+    "floorBytes": 8589934592,
+    "peakRssLimitBytes": 8589934592,
+    "peakRssBytes": null,
+    "peakRssMeasured": false,
+    "ownedOsChildrenOrServicesStarted": 0,
+    "mockChildrenOnly": true,
+    "remainingActiveNodePg": [],
+    "note": "Short syntax/hermetic Node processes exited; no PG, app, build or real child producer run. RSS peak not sampled."
+  },
+  "pending": [
+    "independent source review of lifecycle delta",
+    "real OS child spawn/termination and stdout drain observations",
+    "genuine original77 firstseal and current no-IO replay for both issuers",
+    "actual PG RPC settlement and cluster cleanup native evidence",
+    "formal historical Next compiled identity/whole closure/cutover"
+  ],
+  "originalProducer10sDeadlineUnchanged": true,
+  "containmentWatchdogMs": 30000,
+  "productSqlAuthorityCapsuleDriverUnchanged": true,
+  "approval": false,
+  "makerSelfIndependentReview": false
+}

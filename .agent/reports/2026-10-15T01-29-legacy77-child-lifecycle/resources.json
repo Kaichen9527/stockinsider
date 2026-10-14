@@ -1,0 +1,18 @@
+{
+  "initialFreeBytes": {
+    "/workspace": 8604790784,
+    "/tmp": 15383793664
+  },
+  "finalFreeBytes": {
+    "/workspace": 8604733440,
+    "/tmp": 15383515136
+  },
+  "floorBytes": 8589934592,
+  "peakRssLimitBytes": 8589934592,
+  "peakRssBytes": null,
+  "peakRssMeasured": false,
+  "ownedOsChildrenOrServicesStarted": 0,
+  "mockChildrenOnly": true,
+  "remainingActiveNodePg": [],
+  "note": "Short syntax/hermetic Node processes exited; no PG, app, build or real child producer run. RSS peak not sampled."
+}
