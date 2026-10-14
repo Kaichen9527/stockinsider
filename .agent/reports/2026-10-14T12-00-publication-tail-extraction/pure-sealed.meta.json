@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "scripts/opportunity-v3/research-publication-tail-extraction.test.mjs"
+  ],
+  "start_utc": "2026-10-14T04:14:20Z",
+  "seconds": 0.2731180191040039,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 23613440,
+  "min_free_bytes": 8630980608
+}

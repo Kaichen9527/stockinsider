@@ -1,0 +1,12 @@
+{
+  "buildSource": "79d213630acc7d257c2ca883c0ce20cf9b000f66",
+  "finalSource": "bf639920951f1c80f63f2d5e309e953e1a459bad",
+  "webTree": "c550748ca0a3320396ce5b0210750114fdecf848",
+  "webTreeByteIdenticalToBuildAndMain": true,
+  "laterFollowup": "Only3 new standalone extraction/native Node scripts changed. Pure/native rerun on final source; type/lint/build not relabeled as a second build.",
+  "buildId": "hDRVIUw39F_-BVuycn6zS",
+  "compiler": "normal Next16.3.4 Turbopack exact main lock",
+  "serverFiles": 1798,
+  "manifestSha256": "53718b28f0bd66a0c659f329b5bd3393f4a0d19b50f772d24375b25a164133c9",
+  "dotenvInventoryOnly": []
+}

@@ -1,0 +1,33 @@
+{
+  "facts": [
+    {
+      "unit": "TWD",
+      "value": 100,
+      "fact_id": "f713d111-45e3-4c59-a292-edd3c0c01cf2",
+      "fact_key": "net_asset_value",
+      "provider": "twse",
+      "stock_id": "71300000-0000-4000-8000-000000000083",
+      "period_end": "2025-01-01",
+      "source_ref": "twse-openapi:synthetic-atomic-rollback",
+      "unit_valid": null,
+      "recorded_at": "2026-10-14T04:13:36.323474+00:00",
+      "collected_at": "2025-01-02T01:00:00+00:00",
+      "period_start": null,
+      "schema_valid": null,
+      "duration_kind": "instant",
+      "estimate_kind": "reported",
+      "authority_tier": "official_filing",
+      "estimate_horizon": "reported_period",
+      "source_timestamp": "2025-01-02T00:00:00+00:00",
+      "consistency_valid": null,
+      "upstream_provider": null,
+      "validation_status": "pending",
+      "filing_published_at": "2025-01-02T00:00:00+00:00",
+      "point_in_time_valid": null,
+      "filing_restatement_id": null,
+      "validation_recorded_at": null
+    }
+  ],
+  "syntheticFinancialRpcPrincipal": true,
+  "formalResearchAuthorReviewerPublisherIdsCreated": false
+}

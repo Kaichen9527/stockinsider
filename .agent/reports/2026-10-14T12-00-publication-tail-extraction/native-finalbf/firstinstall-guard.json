@@ -1,0 +1,8 @@
+{
+  "tables": false,
+  "functions": false,
+  "roles": false,
+  "columns": false,
+  "triggers": false,
+  "isolation_successor": false
+}

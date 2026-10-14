@@ -1,0 +1,6 @@
+{
+  "ownedClusterStopped": true,
+  "clusterPath": "/tmp/si-tail-pg-PbEV9r",
+  "removedRebuildableOwnedPgData": true,
+  "rawEvidencePreserved": true
+}

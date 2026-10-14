@@ -1,0 +1,9 @@
+2026-10-14 04:17:34.158 UTC [535785] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-14 04:17:34.158 UTC [535785] LOG:  listening on Unix socket "/tmp/si-tail-pg-EpLVct/.s.PGSQL.57755"
+2026-10-14 04:17:34.161 UTC [535788] LOG:  database system was shut down at 2026-10-14 04:17:34 UTC
+2026-10-14 04:17:34.163 UTC [535785] LOG:  database system is ready to accept connections
+2026-10-14 04:17:36.057 UTC [535799] ERROR:  intentional_tail_forced_failure
+2026-10-14 04:17:36.057 UTC [535799] CONTEXT:  PL/pgSQL function inline_code_block line 1 at RAISE
+2026-10-14 04:17:36.057 UTC [535799] STATEMENT:  DO $$ BEGIN RAISE EXCEPTION 'intentional_tail_forced_failure'; END $$;
+2026-10-14 04:17:38.081 UTC [535785] LOG:  received immediate shutdown request
+2026-10-14 04:17:38.084 UTC [535785] LOG:  database system is shut down

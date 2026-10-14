@@ -1,0 +1,4 @@
+{
+  "serverRollback": true,
+  "independentSecondConnection": true
+}

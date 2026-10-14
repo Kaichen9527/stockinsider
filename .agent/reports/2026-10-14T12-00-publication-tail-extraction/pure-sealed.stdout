@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: fixed26 exact original SQL excludes existing financial49 and has no apply authority
+ok 1 - fixed26 exact original SQL excludes existing financial49 and has no apply authority
+  ---
+  duration_ms: 0.701979
+  ...
+# Subtest: tail missing failclosed
+ok 2 - tail missing failclosed
+  ---
+  duration_ms: 0.889072
+  ...
+# Subtest: tail duplicate failclosed
+ok 3 - tail duplicate failclosed
+  ---
+  duration_ms: 0.65594
+  ...
+# Subtest: tail reordered failclosed
+ok 4 - tail reordered failclosed
+  ---
+  duration_ms: 0.900139
+  ...
+# Subtest: tail unknown failclosed
+ok 5 - tail unknown failclosed
+  ---
+  duration_ms: 0.546525
+  ...
+# Subtest: tail wronghash failclosed
+ok 6 - tail wronghash failclosed
+  ---
+  duration_ms: 1.398722
+  ...
+# Subtest: tail wrongbytes failclosed
+ok 7 - tail wrongbytes failclosed
+  ---
+  duration_ms: 0.461887
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 65.725499

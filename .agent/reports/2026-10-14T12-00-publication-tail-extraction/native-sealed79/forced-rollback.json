@@ -1,0 +1,5 @@
+{
+  "firstTail": "migrations/20260929_candidate_dossier_outbox_v6.sql",
+  "exactFullSnapshotUnchanged": true,
+  "independentSecondConnection": true
+}

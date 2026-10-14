@@ -1,0 +1,51 @@
+TAP version 13
+# Subtest: capturedschema financial50 COMMIT then exact26 publication tail engineering transaction
+    # Subtest: main actual financial50 and original operator helper first COMMIT
+    ok 1 - main actual financial50 and original operator helper first COMMIT
+      ---
+      duration_ms: 625.693428
+      ...
+    # Subtest: forced failure after genuine tail DDL/role creation rolls back catalog ACL facts and roles
+    ok 2 - forced failure after genuine tail DDL/role creation rolls back catalog ACL facts and roles
+      ---
+      duration_ms: 364.109211
+      ...
+    # Subtest: exact26 first install plus unchanged installed fullcatalog and financial postconditions
+    ok 3 - exact26 first install plus unchanged installed fullcatalog and financial postconditions
+      ---
+      duration_ms: 516.329677
+      ...
+    # Subtest: installed firstinstall guard rejects without writes
+    ok 4 - installed firstinstall guard rejects without writes
+      ---
+      duration_ms: 188.992266
+      ...
+    # Subtest: partial profile guard rejects without writes
+    ok 5 - partial profile guard rejects without writes
+      ---
+      duration_ms: 211.574661
+      ...
+    # Subtest: disconnect server rollback preserves installed catalog and facts
+    ok 6 - disconnect server rollback preserves installed catalog and facts
+      ---
+      duration_ms: 207.798997
+      ...
+    # Subtest: competing shared lock denied
+    ok 7 - competing shared lock denied
+      ---
+      duration_ms: 177.814796
+      ...
+    1..7
+ok 1 - capturedschema financial50 COMMIT then exact26 publication tail engineering transaction
+  ---
+  duration_ms: 4331.278296
+  ...
+1..1
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4446.632307

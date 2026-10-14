@@ -1,0 +1,13 @@
+{
+  "stage": "unchanged installed fullcatalog",
+  "pending": [
+    "26tail first COMMIT and installed catalog",
+    "installed firstinstall rejection",
+    "partial rejection",
+    "disconnect rollback",
+    "competing lock"
+  ],
+  "tailOrderedSha256": "edc46d48235d1542426c2ba729e24265d1722d757070a8ed5f97061ec843798e",
+  "formalPeerOrAttestationVerified": false,
+  "productionInstalled": false
+}

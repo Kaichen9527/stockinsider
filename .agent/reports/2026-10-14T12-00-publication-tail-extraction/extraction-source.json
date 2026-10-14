@@ -1,0 +1,267 @@
+{
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "pending": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "original27": [
+    "migrations/20260929_candidate_dossier_outbox_v6.sql",
+    "migrations/20260929_research_agent_state_v1.sql",
+    "migrations/20260929_research_deep_jobs_v1.sql",
+    "migrations/20261004_research_technical_identity_v2.sql",
+    "migrations/20261004_research_cloud_receipts_v1.sql",
+    "migrations/20261005_financial_history_admission_v1.sql",
+    "migrations/20261008_insider_snapshots_v1.sql",
+    "migrations/20261008_research_observed_roster_v1.sql",
+    "migrations/20261008_research_observed_priority_v1.sql",
+    "migrations/20261008_research_observed_claim_v2.sql",
+    "migrations/20261009_research_publication_source_fence_v2.sql",
+    "migrations/20261009_research_input_preparations_v2.sql",
+    "migrations/20261009_research_input_preparation_assert_v2.sql",
+    "migrations/20261009_research_complete_input_v2.sql",
+    "migrations/20261009_research_author_assignments_v2.sql",
+    "migrations/20261009_research_author_packet_v2.sql",
+    "migrations/20261009_research_author_results_v2.sql",
+    "migrations/20261009_research_author_handoffs_v2.sql",
+    "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "migrations/20261009_research_reviewer_results_v2.sql",
+    "migrations/20261009_research_publication_lineage_v2.sql",
+    "migrations/20261010_research_atomic_publication_v2.sql",
+    "migrations/20261010_research_publication_view_v2.sql",
+    "migrations/20261011_research_admission_isolation_v1.sql",
+    "migrations/20261011_research_insider_isolation_v1.sql",
+    "migrations/20261011_research_complete_mapping_precision_v2.sql",
+    "migrations/20261011_research_thesis_isolation_v1.sql"
+  ],
+  "excludedFinancialAlreadyMain": true,
+  "tailOrderedHash": "edc46d48235d1542426c2ba729e24265d1722d757070a8ed5f97061ec843798e",
+  "tail26": [
+    {
+      "relativePath": "migrations/20260929_candidate_dossier_outbox_v6.sql",
+      "bytes": 7567,
+      "sha256": "7dd49c2b056821761f1ee0098125ee14727b155894091e980c59f61a9eb061fb",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20260929_research_agent_state_v1.sql",
+      "bytes": 35269,
+      "sha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20260929_research_deep_jobs_v1.sql",
+      "bytes": 26662,
+      "sha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261004_research_technical_identity_v2.sql",
+      "bytes": 2479,
+      "sha256": "fd029de904e24b6dae16f51a73383acd5fafccd174871799697a87e34400939e",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261004_research_cloud_receipts_v1.sql",
+      "bytes": 4010,
+      "sha256": "243c41bd5ac59af453c9460749bc92021aab086947d3a0b389bb431d5675acee",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261008_insider_snapshots_v1.sql",
+      "bytes": 27221,
+      "sha256": "b79886f1da20c646fb0fd96d9e01e1c90c904f41e1acc977bd0d6ea7548c323d",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261008_research_observed_roster_v1.sql",
+      "bytes": 29314,
+      "sha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261008_research_observed_priority_v1.sql",
+      "bytes": 28579,
+      "sha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261008_research_observed_claim_v2.sql",
+      "bytes": 26148,
+      "sha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_publication_source_fence_v2.sql",
+      "bytes": 12454,
+      "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_input_preparations_v2.sql",
+      "bytes": 14713,
+      "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_input_preparation_assert_v2.sql",
+      "bytes": 2086,
+      "sha256": "c63a923be36e5f7ba06001a6d8be57287d80f5e6524dc866bad93b80666a9cbc",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_complete_input_v2.sql",
+      "bytes": 446691,
+      "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_author_assignments_v2.sql",
+      "bytes": 10433,
+      "sha256": "91629781ad52191ae4ef096d2f56af020066973556988713305bc7c10a80b99c",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_author_packet_v2.sql",
+      "bytes": 6376,
+      "sha256": "1a84dddb85afefe6de4458d781117f9bb50ff43db6fd1986a1c43e1608ed9528",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_author_results_v2.sql",
+      "bytes": 10099,
+      "sha256": "894cd214aa60678c2c4475abbf194ea59e4a7a23677b296eda61b52fab6ce3e5",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_author_handoffs_v2.sql",
+      "bytes": 9579,
+      "sha256": "96f79786802317175dc662f1c0476e8ad9afcaf675f85b1ad1909d2bcd65a757",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_reviewer_assignments_v2.sql",
+      "bytes": 14900,
+      "sha256": "43c0a0525c38c73cf5277c23031bae2acb88ace1b5db25cd440c01932f14bc86",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_reviewer_results_v2.sql",
+      "bytes": 28946,
+      "sha256": "af72171444c6c67a754f33099da704e78bb2d2bb7454ef356c4c8753ea26f934",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261009_research_publication_lineage_v2.sql",
+      "bytes": 9652,
+      "sha256": "37a885ac77ef1c97196c197d6804300fd18843eebb31629da19f9d10f6d6449d",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261010_research_atomic_publication_v2.sql",
+      "bytes": 43051,
+      "sha256": "ed2334dc46cf73fd33f61bd00d1034b50924d5e2213474372da5b121c4f3128a",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261010_research_publication_view_v2.sql",
+      "bytes": 3783,
+      "sha256": "82a158eb59e74181fe5546c255d6afa4c51184d2639cfb52a900b22eef88dd75",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261011_research_admission_isolation_v1.sql",
+      "bytes": 26345,
+      "sha256": "1ff8bc16e445db198747471fe126ec27e142b729779eb72a7bf3452072d9a581",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261011_research_insider_isolation_v1.sql",
+      "bytes": 13285,
+      "sha256": "29e6c343ec3846db4193f42718adea6a069af943642fced77650c749ecbfe1ce",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261011_research_complete_mapping_precision_v2.sql",
+      "bytes": 421736,
+      "sha256": "51179015df4257c68f96c52974710abaf969254fd00949bd289a0ea550ec33bf",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    },
+    {
+      "relativePath": "migrations/20261011_research_thesis_isolation_v1.sql",
+      "bytes": 4546,
+      "sha256": "01aeb449de913b424b6711d0689b05979bca15164891a728f1c3c1bf6f051718",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "pendingComparison": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "byteIdenticalToPending": true
+    }
+  ],
+  "closure": [
+    {
+      "path": "scripts/opportunity-v3/research-publication-catalog.mjs",
+      "sha256": "49e3348b60d995994d864437eba8d2a38390fb09d59e2c82fe5f60c2954887f1",
+      "byteIdentical": true
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-install-profile.json",
+      "sha256": "7570e6522e68845f90164ba580d55dac9748ac1eb6f6f38301377835387438af",
+      "byteIdentical": true
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-install-guard.mjs",
+      "sha256": "e21a75cde841eecb0befc43c6e46c68762538df71e9395380d6184a213f3bd45",
+      "byteIdentical": true
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-install-inventory.json",
+      "sha256": "fcbe48f624ea62bcbcafaf04b6c7d7386fbecfb2b2992d7c7d4e30cae3a8de92",
+      "byteIdentical": true
+    }
+  ]
+}

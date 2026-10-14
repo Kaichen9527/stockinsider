@@ -1,0 +1,602 @@
+[
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/build-identity.json",
+    "bytes": 634,
+    "sha256": "ea7a83d1378641047b7602f86d7dcc9c366236d3196d9a8864c9aba8b5dc8772"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/catalog-data-proof.json",
+    "bytes": 732,
+    "sha256": "acf885777b102637f1be16b87fdbdd65e8ddb9ab8bb9eb03ad289d2a382f4bb2"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/cleanup.json",
+    "bytes": 270,
+    "sha256": "aa9526663a8857069d6b43b0ac4b009a207544c5faeb480ed5d6306673790023"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/compiled-server-manifest.json",
+    "bytes": 333583,
+    "sha256": "53718b28f0bd66a0c659f329b5bd3393f4a0d19b50f772d24375b25a164133c9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/extraction-source.json",
+    "bytes": 12251,
+    "sha256": "0e5bf57638877ae60ffaa1d6b421287269f1b21619c719d9e20428a43ce01f00"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/final-preseal-wip.json",
+    "bytes": 6745,
+    "sha256": "119da69f2668c35929ce7880f60920f3015e7bfe7326c0945afb8a17b1f389f0"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/lint.meta.json",
+    "bytes": 252,
+    "sha256": "c3cb68bf3f8d3e1edad8a0fc8ee8a8e3ff3d9f6ece5bb209ae07965277c413d9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/lint.stderr",
+    "bytes": 138,
+    "sha256": "43919f745e4a9e3b8b8e2bfa6b44040e1e34905f65e07c81370c80739295d84d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/lint.stdout",
+    "bytes": 4426,
+    "sha256": "f35ce3c852e9c501133c403f7a9a209ef94b087b9722ea86005eafdf7afa8a2a"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-corrected.meta.json",
+    "bytes": 349,
+    "sha256": "2c91e6df912ffcc60b063258cd52258a64f8a7bc20cc418b3e603b21471e0b81"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-corrected.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-corrected.stdout",
+    "bytes": 2440,
+    "sha256": "876990e77779d4874059ca10a61499d74515f97f6b234e8b09129a6d5222f5ff"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-final.meta.json",
+    "bytes": 349,
+    "sha256": "261f8fd2825f3a4fe56754d852e9db7bf47945bfdadc9b651adda3f3a51905e7"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-final.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-final.stdout",
+    "bytes": 1766,
+    "sha256": "a22abb3be13c70bc71c31dc01d0aedd4b94954c44ae137acdea3ce6edcfe9c03"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/cleanup.json",
+    "bytes": 150,
+    "sha256": "07de5e351d40ffd2ad0e90795bbc953e2ddc6626f0c4e9879df02d19148e71c9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/disconnect-rollback.json",
+    "bytes": 68,
+    "sha256": "c062667cef8a70233da03ec483a94e05afc02f6edaf121567dfca8a48ddf1f23"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/expected-installed-fingerprints.json",
+    "bytes": 79222,
+    "sha256": "2ed5d192e3dbbc18a26887b10f76515092d9a45b5a76ffdd4f0c4ad3acca4e75"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/financial50-baseline.json",
+    "bytes": 3229697,
+    "sha256": "e1db020422a9eed3218f55c58d3ce6ac85b94319a54582bffa7f9ae71352bd6f"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/financial50-result.json",
+    "bytes": 10804,
+    "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/firstinstall-guard.json",
+    "bytes": 135,
+    "sha256": "9aacacc9fff48ff774b5340b86dd422d044f5abce9be06d72b268692bf2d9385"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/forced-rollback.json",
+    "bytes": 150,
+    "sha256": "9a03130429da2a1074e5b336e968ba86e574555b01bd466dfdf2e742b874177c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/forced-tail-inside.json",
+    "bytes": 3240789,
+    "sha256": "45f97f1eca9934f090e5b60a0ac12444ae2f0c9fb37df3f547ef11066243fddd"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/original21guard-first-prefix-residue.json",
+    "bytes": 380,
+    "sha256": "d02cedf17abfe93ced3cb8a210c533a11a55bc8d74ee1f6004c7dbafcce926fd"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/pending.json",
+    "bytes": 239,
+    "sha256": "6ba466602696de97ac874fee1691841b2576e64d4448a3bfc6bb8297f0b125e8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/postgres.log",
+    "bytes": 913,
+    "sha256": "ff26100d6b0c21fa175604af25d6ab43dc4e2de8736121f26dd2b69c093ba13c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/restore-input.json",
+    "bytes": 633,
+    "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/same-writer-installed-catalog.json",
+    "bytes": 2604419,
+    "sha256": "d344d8a0aea835a29b7290bfbc39ce33fdd04c3474cb6e44aaab4d3f47538ca8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/same-writer-installed-fingerprints.json",
+    "bytes": 79222,
+    "sha256": "2ed5d192e3dbbc18a26887b10f76515092d9a45b5a76ffdd4f0c4ad3acca4e75"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/second-connection-installed.json",
+    "bytes": 5083796,
+    "sha256": "ae065e02d4b5708a273a7591856d5d3055949ac7a6381c9c8a05f3b4d99cd00a"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/seed.json",
+    "bytes": 1123,
+    "sha256": "c1d6938ca68f4011d8c89606ae31a3254eb3781bbb54ae64aee71694bdfb87f0"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/tail-financial-postconditions.json",
+    "bytes": 12714,
+    "sha256": "0d1233aa087191993d25f44a29202c8101cd600d43d912e057bba205c06f30d8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-finalbf/tail-trace.json",
+    "bytes": 5787,
+    "sha256": "44477719b8c381260c590ed629b3ab67065d319a72c46bbcc69961d1f436902e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/cleanup.json",
+    "bytes": 150,
+    "sha256": "d8545826c1a2c21dceaa9d0dbe640d4486efe1e57b925091d3245a8fccd5bedc"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/disconnect-rollback.json",
+    "bytes": 68,
+    "sha256": "c062667cef8a70233da03ec483a94e05afc02f6edaf121567dfca8a48ddf1f23"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/expected-installed-fingerprints.json",
+    "bytes": 79222,
+    "sha256": "2ed5d192e3dbbc18a26887b10f76515092d9a45b5a76ffdd4f0c4ad3acca4e75"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/financial50-baseline.json",
+    "bytes": 3229697,
+    "sha256": "3d7dcffc503c7da5c9e11f24a51bfc845522e9d4b0b0bd661e53a6e6bc5732df"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/financial50-result.json",
+    "bytes": 10804,
+    "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/firstinstall-guard.json",
+    "bytes": 135,
+    "sha256": "9aacacc9fff48ff774b5340b86dd422d044f5abce9be06d72b268692bf2d9385"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/forced-rollback.json",
+    "bytes": 150,
+    "sha256": "9a03130429da2a1074e5b336e968ba86e574555b01bd466dfdf2e742b874177c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/forced-tail-inside.json",
+    "bytes": 3240789,
+    "sha256": "dd5b80226c174790b60307f7232792dd89cd8734e72cf8b732bbdfa0a5f5a25b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/pending.json",
+    "bytes": 233,
+    "sha256": "eb3389606b02825b21e833c7f673e22925c6e8fc6b55836cd966750838d7263c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/postgres.log",
+    "bytes": 913,
+    "sha256": "158c73191e6c3de9f1522452a2e02b3a2fced1d0d6d7b00fed211953705344d0"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/restore-input.json",
+    "bytes": 633,
+    "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/same-writer-installed-catalog.json",
+    "bytes": 2604419,
+    "sha256": "d344d8a0aea835a29b7290bfbc39ce33fdd04c3474cb6e44aaab4d3f47538ca8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/same-writer-installed-fingerprints.json",
+    "bytes": 79222,
+    "sha256": "2ed5d192e3dbbc18a26887b10f76515092d9a45b5a76ffdd4f0c4ad3acca4e75"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/second-connection-installed.json",
+    "bytes": 5083796,
+    "sha256": "8cf1d8154a04cf064c2ddc115935318e6a20e76182ba4d77a4cd1bfcd698233f"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/seed.json",
+    "bytes": 1123,
+    "sha256": "7e3d6187df458c0e655fc218ebc7e2a65e1c05bf3684ffd663ee9daca1a6fa1d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/tail-financial-postconditions.json",
+    "bytes": 12714,
+    "sha256": "0d1233aa087191993d25f44a29202c8101cd600d43d912e057bba205c06f30d8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected/tail-trace.json",
+    "bytes": 5787,
+    "sha256": "52ed4ca74a56387e84d3bfdcb5f8e719a392d1587d8e4a8458d1fd6975d8a478"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected.meta.json",
+    "bytes": 349,
+    "sha256": "7066e2a7b44252b9f307ab4d5ab15bbbaf44b98cd5c5fa4bb2a1a1617cf2ba3e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-observer-corrected.stdout",
+    "bytes": 1766,
+    "sha256": "4543068bd1927c1dfa7ea04be7ac54c94ee1e8eb12dbc622cd2f9b7f8b5ecd27"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/cleanup.json",
+    "bytes": 150,
+    "sha256": "ab9b68c454511836044cefd06d27b0534252a46f06259f9bda2a3e0cc2e66210"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/expected-installed-fingerprints.json",
+    "bytes": 79222,
+    "sha256": "2ed5d192e3dbbc18a26887b10f76515092d9a45b5a76ffdd4f0c4ad3acca4e75"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/financial50-baseline.json",
+    "bytes": 3229695,
+    "sha256": "5cb04c5a6a93a58b2ad351b8ece09cb4c4afbf3553885bea75394ae0dd8be19d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/financial50-result.json",
+    "bytes": 10804,
+    "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/first-error.json",
+    "bytes": 229,
+    "sha256": "4865b40086ccfdf5ba7db18ffbe2eb5d4409cf1615047576062a71757abef8ff"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/firstinstall-guard.json",
+    "bytes": 135,
+    "sha256": "9aacacc9fff48ff774b5340b86dd422d044f5abce9be06d72b268692bf2d9385"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/forced-rollback.json",
+    "bytes": 150,
+    "sha256": "9a03130429da2a1074e5b336e968ba86e574555b01bd466dfdf2e742b874177c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/forced-tail-inside.json",
+    "bytes": 3240787,
+    "sha256": "411133e789eafd90de5e6f7e62ed4fe329de426419fe71942f0f38af88c50c87"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/installation-red-rollback.json",
+    "bytes": 253,
+    "sha256": "ed537cc4fd5cb221671ac00ecdef854be650d70735ba403c421d68824b48fc14"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/pending.json",
+    "bytes": 398,
+    "sha256": "1bbaaf4ee7e1efc360cdf6f855f4e05a03ebba441c3b45d29347f3057baa14cb"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/postgres.log",
+    "bytes": 9101,
+    "sha256": "3af242e5a8ff825836ebc8e00977f0b26761ac8a04c43ba45f45ac1696785513"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/restore-input.json",
+    "bytes": 633,
+    "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/same-writer-error-snapshot.json",
+    "bytes": 5083794,
+    "sha256": "d138ac5a8cbf76d3820fd6522e4a87d0bbc0b1a3741f2816ca3349e2e27189be"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/same-writer-installed-catalog.json",
+    "bytes": 2604419,
+    "sha256": "d344d8a0aea835a29b7290bfbc39ce33fdd04c3474cb6e44aaab4d3f47538ca8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/same-writer-installed-fingerprints.json",
+    "bytes": 79222,
+    "sha256": "2ed5d192e3dbbc18a26887b10f76515092d9a45b5a76ffdd4f0c4ad3acca4e75"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/seed.json",
+    "bytes": 1122,
+    "sha256": "09e001b5d36105d58665dd8f7f3fc940cfdc221fd030964f825edfad5a8b9d63"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/tail-financial-postconditions.json",
+    "bytes": 12714,
+    "sha256": "0d1233aa087191993d25f44a29202c8101cd600d43d912e057bba205c06f30d8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-red-observer/tail-trace.json",
+    "bytes": 5787,
+    "sha256": "73dbcb2ad2e50021b128553fbfadc76fdd0023502e69339c9343ed2680e9317d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed.meta.json",
+    "bytes": 350,
+    "sha256": "ab12f8ac92d7728ec6c16b45ec657e98d8cdd2d70b2a5c1df7e14f467ab29468"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed.stdout",
+    "bytes": 1766,
+    "sha256": "fb1ec0ea528b85d9357ee81738d4d6d13fb8176c7845cbed02c517747a0da795"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/cleanup.json",
+    "bytes": 150,
+    "sha256": "704bb9653b00638fe0e727298fe1000fc0a704656970b1e06f21fe2795567add"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/disconnect-rollback.json",
+    "bytes": 68,
+    "sha256": "c062667cef8a70233da03ec483a94e05afc02f6edaf121567dfca8a48ddf1f23"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/expected-installed-fingerprints.json",
+    "bytes": 79222,
+    "sha256": "2ed5d192e3dbbc18a26887b10f76515092d9a45b5a76ffdd4f0c4ad3acca4e75"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/financial50-baseline.json",
+    "bytes": 3229697,
+    "sha256": "c151fb233ee2fda6def4a6adac35bee686e9eeeebc95ec683c8dfc116645a2cd"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/financial50-result.json",
+    "bytes": 10804,
+    "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/firstinstall-guard.json",
+    "bytes": 135,
+    "sha256": "9aacacc9fff48ff774b5340b86dd422d044f5abce9be06d72b268692bf2d9385"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/forced-rollback.json",
+    "bytes": 150,
+    "sha256": "9a03130429da2a1074e5b336e968ba86e574555b01bd466dfdf2e742b874177c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/forced-tail-inside.json",
+    "bytes": 3240789,
+    "sha256": "eced3522d44bd487c2c0b048523542f729e09e89128cb89c747dfae151398e31"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/original21guard-first-prefix-residue.json",
+    "bytes": 380,
+    "sha256": "d02cedf17abfe93ced3cb8a210c533a11a55bc8d74ee1f6004c7dbafcce926fd"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/pending.json",
+    "bytes": 233,
+    "sha256": "eb3389606b02825b21e833c7f673e22925c6e8fc6b55836cd966750838d7263c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/postgres.log",
+    "bytes": 913,
+    "sha256": "db3d13dccfbf5cd6e37aa48cff992df6b494331d2983eb855527d8e62272c58f"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/restore-input.json",
+    "bytes": 633,
+    "sha256": "59af9523b5cc783bd36eb07853cd1b6bc69dec88c0b95b8cd77cec142cb6795b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/same-writer-installed-catalog.json",
+    "bytes": 2604419,
+    "sha256": "d344d8a0aea835a29b7290bfbc39ce33fdd04c3474cb6e44aaab4d3f47538ca8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/same-writer-installed-fingerprints.json",
+    "bytes": 79222,
+    "sha256": "2ed5d192e3dbbc18a26887b10f76515092d9a45b5a76ffdd4f0c4ad3acca4e75"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/second-connection-installed.json",
+    "bytes": 5083796,
+    "sha256": "89e49f2d164e7995a1623a015a1afbbd43c48f376d1af7883f2513b31d584bf8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/seed.json",
+    "bytes": 1123,
+    "sha256": "daa8cf7083cede42519adb69d73ae9c319590e5dd9cd96a04571f16942d58663"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/tail-financial-postconditions.json",
+    "bytes": 12714,
+    "sha256": "0d1233aa087191993d25f44a29202c8101cd600d43d912e057bba205c06f30d8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native-sealed79/tail-trace.json",
+    "bytes": 5787,
+    "sha256": "a1ad43747e31c26959f0cfb4fee08313b3d360b00d9d62844177aeac47f7f8d9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native.meta.json",
+    "bytes": 349,
+    "sha256": "932bd73eb03a683a99e3677fd567f061d205dff1b022464129e592c411d97a97"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/native.stdout",
+    "bytes": 1494,
+    "sha256": "c8d5a6eb9d8beb15466ab203db4dd2d985366d65b9990f08888514dd6934f379"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/normal-build.meta.json",
+    "bytes": 253,
+    "sha256": "666cf51fc395e0f17ebf95e6475107fbc42092d1ae1600a874aa118fe26a380d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/normal-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/normal-build.stdout",
+    "bytes": 5556,
+    "sha256": "d1dd846d7c66a581b3962a2c4c1eb716ea09a7e189cf28c3849a714c695628bf"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/observer-timing-correction.json",
+    "bytes": 728,
+    "sha256": "d826cfa6ac642ef2cf480d976d40047c948a6bf192fd67b850d951fa58e70a0f"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pre-corrected-native-wip.json",
+    "bytes": 6546,
+    "sha256": "c8b8629b54b7989ac66b9d056ea13a8045c2c7ef260c06391fc50853fade6828"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pre-run-wip.json",
+    "bytes": 7560,
+    "sha256": "bfe99962ed647252b4bddcb5558a91f4060096107b38759bac244105f521b2cc"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure-corrected.meta.json",
+    "bytes": 325,
+    "sha256": "d92fc1f88f2646dc7c23bacdc40b9953938b7d3df4d7c399769fc7c66996026c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure-corrected.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure-corrected.stdout",
+    "bytes": 968,
+    "sha256": "e40b55815e91c1d790bcc122df30df7cf97492d3fc5c7026c9dc9996b345f08e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure-final.meta.json",
+    "bytes": 326,
+    "sha256": "c228d4fd8dbd5bf26d6e821cca59683a5066c0ee3a67d490e0ef33fcfc20d4cb"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure-final.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure-final.stdout",
+    "bytes": 1165,
+    "sha256": "70be22287ccaa458f9b42f693688631fa1ac804be786f8a58c5e15644db959df"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure-sealed.meta.json",
+    "bytes": 325,
+    "sha256": "c160800334c95eecb97c9aff41a4b564da62f5891b4d8a03e7f1a41f2b28219b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure-sealed.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure-sealed.stdout",
+    "bytes": 969,
+    "sha256": "a4e6a0534b1e16b46a87512886c17d3c681e33db9eba2ae1b5a5411b890b1ab5"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure.meta.json",
+    "bytes": 325,
+    "sha256": "49bbfea9fc0005922185f08c27d9a4080380ef946a5be901b5adb796dfa6dd89"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/pure.stdout",
+    "bytes": 1639,
+    "sha256": "16dc8e348c3a445952efc39760c13564c618529bab5607f1664f176308de070c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/source-manifest.json",
+    "bytes": 31023,
+    "sha256": "c53ced89c4d713df17413500c1abaa9c15c6a6c3ec2fd17a7d40771e1c3c93e8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/tail-final-byte-comparison.json",
+    "bytes": 10070,
+    "sha256": "622877e1073b4e46ca3e1e733b4e0fef34899634b4590c3337749129c9b5cf4c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/tools-dependencies.json",
+    "bytes": 396,
+    "sha256": "9b76a1030fb4612a940728273040af5f645fbe4119d768b3a8f464c647b30cb4"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/typecheck.meta.json",
+    "bytes": 257,
+    "sha256": "ee7334039d7b34447eea8ec72c73ed68b826af2156e357594e4f0f3bb3df993d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/typecheck.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/typecheck.stdout",
+    "bytes": 188,
+    "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T12-00-publication-tail-extraction/unchanged-main-inputs.json",
+    "bytes": 15009,
+    "sha256": "c40d4b7d877598914b7c99e28dcd7feb3d42ab19632cfff461531f49f3eb1f42"
+  }
+]

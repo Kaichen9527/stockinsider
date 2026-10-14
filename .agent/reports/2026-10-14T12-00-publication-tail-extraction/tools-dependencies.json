@@ -1,0 +1,12 @@
+{
+  "Node": "22.14.0",
+  "PG": "17.11",
+  "pg": "8.18.0",
+  "Next": "16.3.4",
+  "USER": "agent",
+  "nonoptionalLockedMismatch": [],
+  "rootLockSHA256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "webLockSHA256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+  "existingDependenciesReusedNoInstall": true,
+  "proxyCaInheritedNoSecretsRead": true
+}

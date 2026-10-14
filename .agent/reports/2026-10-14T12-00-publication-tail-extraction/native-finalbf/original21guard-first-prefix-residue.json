@@ -1,0 +1,13 @@
+{
+  "scope": "Diagnostic only: original21guard was designed after5 prerequisites, not full26 entry",
+  "firstTail": "migrations/20260929_candidate_dossier_outbox_v6.sql",
+  "disposition": "allowed_by_original21guard",
+  "state": {
+    "tables": false,
+    "functions": false,
+    "roles": false,
+    "columns": false,
+    "triggers": false,
+    "isolation_successor": false
+  }
+}

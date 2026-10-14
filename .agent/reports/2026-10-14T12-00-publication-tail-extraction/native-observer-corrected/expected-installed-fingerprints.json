@@ -1,0 +1,1946 @@
+{
+  "roles": [
+    {
+      "name": "anon",
+      "sha256": "d6bea6de08fb3c0cac6118ef64bf59c086a3a349e33cf22717542d57017c61a3"
+    },
+    {
+      "name": "authenticated",
+      "sha256": "51b2b4a0bf57a4920374a8c5106beddbb0d74e50650d1658551bcacb27219b56"
+    },
+    {
+      "name": "authenticator",
+      "sha256": "138970b2e934878263781fce16fbc9bd7391ba9ce2a02e0f4fd4afa0e8a84e32"
+    },
+    {
+      "name": "legacy_correctness_rpc_owner",
+      "sha256": "6446ff2744e4a3513b6d080dc46a96b5e7f4625d9532140982f4f68b56185da1"
+    },
+    {
+      "name": "opportunity_v3_rpc_owner",
+      "sha256": "230bb807298ad6d83fde6e96ddafed8cf4c86efe9b36706fedbfb15306f3d472"
+    },
+    {
+      "name": "postgres",
+      "sha256": "8ddd1912a09d8f00f3c3c831369a6e5965324f83dd99debd5743fa3a6e1b7d86"
+    },
+    {
+      "name": "research_input_preparation_owner_v2",
+      "sha256": "ed2cfb9465906c85f2c69db53c8ca86ba745df4c8c2f0725d7e7a4c7e630fdd2"
+    },
+    {
+      "name": "research_observed_rpc_owner",
+      "sha256": "717fe4a9cc0c1f83de19e7c8bdc0cfaa7d3bf8fabdd781b1255701c5b00aa494"
+    },
+    {
+      "name": "research_source_fence_owner_v2",
+      "sha256": "174c49b441effca4a5f19675e821f4157dc921d5e8bd9d97696b5f865be81bda"
+    },
+    {
+      "name": "service_role",
+      "sha256": "8a84410bc787b681f6ec3a99132d061a34e9f63d0f5bd67a3f971cba4c528a47"
+    },
+    {
+      "name": "stockinsider",
+      "sha256": "51879c361b6fe6ab622b908a5c24a891e9d6fa7e836d4a237010e5da31727c1b"
+    },
+    {
+      "name": "stockinsider_runtime_v319",
+      "sha256": "85afb3cd14a8d4b7cf943f15cada3069b5e41af6dce531bf8088b3b87f8f36c0"
+    }
+  ],
+  "types": [
+    {
+      "name": "alias_source_v3",
+      "sha256": "333033864bd6bbcce33e95344c51287f69e621b9ca8e0ba34a2b53dba8f979b8"
+    },
+    {
+      "name": "analysis_evaluation_input_v3_11",
+      "sha256": "6d04376faee3a576806afbdc74a21d3e007d6e08f159cfca8791d6deb3f7e5f1"
+    },
+    {
+      "name": "analysis_revision_input_v3_11",
+      "sha256": "9c35791293d2a17733329753a245a2e5822de2ff42d9bcca4f50d78767518f0b"
+    },
+    {
+      "name": "assistive_artifact_kind_v3",
+      "sha256": "6bc7b6caf932acb47edd29839556ba454926abe2fc35d47496279e4bdb4fcb82"
+    },
+    {
+      "name": "assistive_artifact_registration_input_v3",
+      "sha256": "959f2947ac40636f864647dd0d810628f3c02c3ee6fae72fdc65f69de129c992"
+    },
+    {
+      "name": "assistive_artifact_status_v3",
+      "sha256": "c150b8e8d215080f5a465c4e7658f24661899ab9cb64b7f795407c0e56d14e7e"
+    },
+    {
+      "name": "authority_status_v3",
+      "sha256": "b47ce0d6cb6f02f6ee8ca794a6614511e7dd0a723a942a36bb3114e0a4b0c600"
+    },
+    {
+      "name": "authority_stream_family_v3",
+      "sha256": "c56c66fefbb6af84cdb8a80aec91e215b113a2e8c4a8a54b1710ddcf42d506a6"
+    },
+    {
+      "name": "candidate_discovery_input_v3_11",
+      "sha256": "001a008da29b0d5362b552efb34edbc6f479f5300ce1fe5d37e64d939794b047"
+    },
+    {
+      "name": "canonical_sector_key_v3",
+      "sha256": "ed7e816ff5a08d34087974d23251080f2b4256858f21492bcb5c9f7c9170fc0c"
+    },
+    {
+      "name": "corporate_action_event_input_v3",
+      "sha256": "dae4aebbedfa6467e24ad74f3caec1083edb1eae4c48c686526e1ef7dd888026"
+    },
+    {
+      "name": "corporate_action_feed_evidence_input_v3",
+      "sha256": "1c7b3144fcfb5d9d3c10d0190f4d8bbbb62883db24d043c1eb86723363d7c674"
+    },
+    {
+      "name": "corporate_action_kind_v3",
+      "sha256": "b7e68cfe58a6c6ebb1ad01d7c4bd9f5acddaf33c2dfd6ecfbdbc67d3134b8611"
+    },
+    {
+      "name": "corporate_action_snapshot_input_v3",
+      "sha256": "b86c14221e6a077d1235a5ebe4e1fe03545cb450732f2d07d18ebeffc495f8ee"
+    },
+    {
+      "name": "exchange_reported_pe_input_v3",
+      "sha256": "e169fa90cc2e2ee2ae9cbc6e595eddf49fd5110df9ec3284d90a44949521fa04"
+    },
+    {
+      "name": "financial_acquisition_terminal_reason_v4",
+      "sha256": "12825dd61f947e4f306754f4bdf6c8e4ee703288f7c4e8334b3e78ea0ddba245"
+    },
+    {
+      "name": "financial_authority_tier_v3",
+      "sha256": "c828415f7bc0936d708f312ac0389ea385a023e3c697cae8af1270109c8b2fed"
+    },
+    {
+      "name": "financial_duration_kind_v3",
+      "sha256": "b84fc534ef6e49b6f1695180a6bf9591a48061e93aa2d1f9bfa2ec322f281e66"
+    },
+    {
+      "name": "financial_estimate_horizon_v3",
+      "sha256": "08e0f0b7b02b0294ffea3d571a7b1f6cb5af179f75bf1db0f7598380f6466953"
+    },
+    {
+      "name": "financial_estimate_kind_v3",
+      "sha256": "af2e6a0c64ed29160cc778eea367a13db33450b2ac711e2369190ec866ad45dc"
+    },
+    {
+      "name": "financial_fact_input_v3",
+      "sha256": "b4880baa06ccc6e66bd0c3a3fa8c312ba3ae9d05c95fe6f6e5bac489cdd933b7"
+    },
+    {
+      "name": "financial_fact_key_v3",
+      "sha256": "19f8aff28b97e8af3a75c3798afd918031a8efb3e1e3465fb0f46e9e4b36e822"
+    },
+    {
+      "name": "financial_provider_v3",
+      "sha256": "75150f0263ae3bd6e7b05ff76dcfaa5d023609c5880df4e5a1862202bb4a38b7"
+    },
+    {
+      "name": "financial_unit_v3",
+      "sha256": "d37aa3188f477d13281735b616c2776913b68d150d93cc807b3a080ab2f80e7a"
+    },
+    {
+      "name": "instrument_authority_input_v3",
+      "sha256": "22084cc1195d3e6b98f1fc5392212612066ea5d6278c4122ad5f424b3ccd3187"
+    },
+    {
+      "name": "instrument_type_v3",
+      "sha256": "ae377844b0a31b15458c74c907bd886a9c659ad2f85c63d7e914178b88eacc2e"
+    },
+    {
+      "name": "internal_principal_role_v3",
+      "sha256": "bf7391868c04ff15d9b8e998d80dcfd4eb57f931f776552dc74219704266f09e"
+    },
+    {
+      "name": "legacy_discovery_authority_page_v3_11",
+      "sha256": "f3c136649f19e5944ef1f20fee06a86e6ad2726ca6b5fa29de0209c7d5e4f6f8"
+    },
+    {
+      "name": "legacy_frozen_revision_read_v3_11",
+      "sha256": "5f192423f34a94ffa09d914a87fd3cfbcdb0db9f83a06e0ed1f8f05f82317aed"
+    },
+    {
+      "name": "legacy_producer_claim_v3_11",
+      "sha256": "24736c5468c821b4336018bf559a1a07088a202476183928c8bcde646ad0bb74"
+    },
+    {
+      "name": "legacy_producer_lease_v3_11",
+      "sha256": "9568e4c64906bb12031bc21c585e29b9b1117dfe73e6c85a152f36476669e884"
+    },
+    {
+      "name": "legacy_radar_projection_input_v3_11",
+      "sha256": "d0470ce29f4ebb8a5796076a51ea5cecfe80cbe00eedeacf1beea1115da34e71"
+    },
+    {
+      "name": "legacy_scheduled_occurrence_v3_11",
+      "sha256": "da29036e3f93c2e077a7f66e6f80bdfdf56dd67535b028177b0acc67d101b330"
+    },
+    {
+      "name": "link_audit_assignment_disposition_v3",
+      "sha256": "f5d6730c59f4fbda2ed2fc70de7c1cf3f0a78406577f7dc9e41c4163564f8709"
+    },
+    {
+      "name": "link_audit_label_role_v3",
+      "sha256": "2724eaf4811ecd7fd3c2ad95097ddd1f31609efc1978e9302eb93753cb295860"
+    },
+    {
+      "name": "listing_status_v3",
+      "sha256": "0bf6420e464534843aa0eceb178ae96c515331ce41a37b1be548eb9472d015f4"
+    },
+    {
+      "name": "manual_alias_authority_input_v3",
+      "sha256": "8382c850f58546b05ae964ec4defc5070e377e0fdda97779154a3a2f61b4bf77"
+    },
+    {
+      "name": "market_fact_key_v3",
+      "sha256": "dedfba11ff6dd512b4488d5f0ead0967e3fef6089a2863f8912e6f0aab4d2208"
+    },
+    {
+      "name": "market_observation_input_v3",
+      "sha256": "6450304c8d72bac320ff71d65547c4e7cccc82c3f4086ab55b54f0e13618e121"
+    },
+    {
+      "name": "market_provider_v3",
+      "sha256": "b77e87126883a12c481a1eab531a7b103c985ea332971cfe8419d6fdb6bad42d"
+    },
+    {
+      "name": "market_scope_key_v3",
+      "sha256": "43718c873a825a52471713c4d3493f235a82664c6af7990b7f7babbd43ad790e"
+    },
+    {
+      "name": "market_unit_v3",
+      "sha256": "27e3799e1478099323e71a98977fed1c97c180bc104c846a0aff843d2bcb4a15"
+    },
+    {
+      "name": "official_roster_provider_v3",
+      "sha256": "8ce7a21ae26a335d61a933577ad0d1bd3ca4db9f87dd4a8d11ee6960cb73c7af"
+    },
+    {
+      "name": "opportunity_analysis_evaluation_disposition_v3_11",
+      "sha256": "830db32527942a53b27b4854143566cabb21192104e4c309a82a74770a731893"
+    },
+    {
+      "name": "opportunity_begin_disposition_v3",
+      "sha256": "7a1f70116ac5755cdc53a4a76282fe76c02c6d67387b313ef097e5e3846b0003"
+    },
+    {
+      "name": "opportunity_candidate_discovery_disposition_v3_11",
+      "sha256": "f734e8180305086c74949d90fc1eabc49808745d9acc751900441cce7e1b8351"
+    },
+    {
+      "name": "opportunity_candidate_discovery_reason_v3_11",
+      "sha256": "f60d0c10955ccd3ecced8a20e14af4eae77c36947c3825480c4518caa543ed68"
+    },
+    {
+      "name": "opportunity_candidate_origin_v3",
+      "sha256": "6cae7923236c5a2a4c81a03b1cbc79f67e9d65cb882903ffe49b0da33b08e0f9"
+    },
+    {
+      "name": "opportunity_candidate_research_disposition_v3_11",
+      "sha256": "1f90576fdeb29fa2876675c31330cdc343b0ac680694362fbfe5040332c320e5"
+    },
+    {
+      "name": "opportunity_candidate_research_reason_v3_11",
+      "sha256": "2050908ee74108d4bd8e621080891627f6e4bbca390e4b7f70ed8b6b81acca3a"
+    },
+    {
+      "name": "opportunity_candidate_seed_membership_v3_11",
+      "sha256": "e7a541a6ea513e82602e1123c607f332fe038d01a1877a038e70546f4feaa853"
+    },
+    {
+      "name": "opportunity_claim_evidence_stance_v3",
+      "sha256": "cc40b508cd7a1867983bad077eeb4d7e853cf99ef309b10b076d2e1529d69859"
+    },
+    {
+      "name": "opportunity_claim_outcome_v3",
+      "sha256": "2bf95730ba39ff5e29da2308610a3204970d1675c6ffaff022e48814777c1989"
+    },
+    {
+      "name": "opportunity_deep_status_v3",
+      "sha256": "3cd9f88f324824af3d436cbd421c72337e7f513e74ce5269a17d61a9759050ca"
+    },
+    {
+      "name": "opportunity_document_outcome_v3",
+      "sha256": "fae51acdc1052d8f5c778e57a4af4e1b767f831130b78a580974923dcf30a093"
+    },
+    {
+      "name": "opportunity_engine_warning_v3",
+      "sha256": "9d4e5d75bd1f167868ed93f40537ea7e19fa3904d235e1be143ecb7876d41156"
+    },
+    {
+      "name": "opportunity_evidence_verification_tier_v3",
+      "sha256": "64842209aec34487f5c67434986fe0be48f36e11d21e9d18a8717db822d3e74b"
+    },
+    {
+      "name": "opportunity_failure_code_v3",
+      "sha256": "c263f6f5d81d283dbe98ce06d9433688e95ff8d3b56a24421ddfe65457de765d"
+    },
+    {
+      "name": "opportunity_horizon_v3",
+      "sha256": "9833b65a145fb8c879a696c1939283f35cf54e686ae531e1f719f8209125feef"
+    },
+    {
+      "name": "opportunity_job_counts_v3",
+      "sha256": "d4c6d62ad84c304503ef3002e38a32ec2c69d5dc82fa3b67c577123f5261d23f"
+    },
+    {
+      "name": "opportunity_job_output_kind_v3",
+      "sha256": "920009e3f5c39ca708375f68a9cd30b6dcc118a01c26251083bb1c4f51c69bd0"
+    },
+    {
+      "name": "opportunity_job_payload_kind_v3",
+      "sha256": "f0102219c969db6ec2c1357601d321aae6d24f840c77671d7cb60c50cd534e53"
+    },
+    {
+      "name": "opportunity_job_stage_v3",
+      "sha256": "e9bdb490c346ca532a4db800754a40b51263678c2e514d6e97a0a3f684fe5e32"
+    },
+    {
+      "name": "opportunity_job_status_v3",
+      "sha256": "42fb529ed1ca26b8bbc60d69d7268cda39372cd6e2274fc24802bd92d4297cdc"
+    },
+    {
+      "name": "opportunity_legacy_authority_page_kind_v3_11",
+      "sha256": "79e9fbce7fb7fe2c54e6e0458b6f64983cda31e745a3ec6a5698a8432100d3ae"
+    },
+    {
+      "name": "opportunity_legacy_producer_failure_code_v3_11",
+      "sha256": "7a99a54b2c109aec9a58a1387b3c14742b42ba8ddaaa4cbe6bdaec32a2a177e3"
+    },
+    {
+      "name": "opportunity_legacy_producer_job_kind_v3_11",
+      "sha256": "73c462c24aef66bc700c41b45fcd34917cc72f1ec51275a4dcdd430713e5a002"
+    },
+    {
+      "name": "opportunity_legacy_producer_job_status_v3_11",
+      "sha256": "f5949df848861d1e5cfd599c87bdfcad98dc78f801e1a5da0ec51d9fbd22a488"
+    },
+    {
+      "name": "opportunity_legacy_producer_stage_v3_11",
+      "sha256": "8e01121bee6ac611ce8d57862f876bd44bc44edabfae304eb8defb536f28915a"
+    },
+    {
+      "name": "opportunity_link_mode_v3",
+      "sha256": "b73268a9ddfddfb7d0b2b16386e9d866aaa9f467ad41754dc95128d5cd09927e"
+    },
+    {
+      "name": "opportunity_link_outcome_family_v3",
+      "sha256": "fdee61a4e2ec848424104097ba05985575721b1a978d7f7fc39dc9da7e068917"
+    },
+    {
+      "name": "opportunity_manifest_failure_code_v3",
+      "sha256": "a78abbc6eded9c8a9cee9a7d5a1c47af81c8852466823561e2e230a2ee9a72ad"
+    },
+    {
+      "name": "opportunity_manifest_kind_v3",
+      "sha256": "f38dcf50de41ee0d0ced05a56436bcc484bb9bb17471188f314cb6ecdca2894f"
+    },
+    {
+      "name": "opportunity_manifest_page_status_v3",
+      "sha256": "2021a0000075592baad96b20992dccec299e629cdb0e8fddf25d04631f9759d1"
+    },
+    {
+      "name": "opportunity_manifest_row_input_v3",
+      "sha256": "1834736d4c9d035749f0a165bc9fb3bbe35d828b8f640e7d5bd07721c6241182"
+    },
+    {
+      "name": "opportunity_manifest_section_key_v3",
+      "sha256": "cd2f826dcaf4b1ee4d42bd2243f5a38d152e9b689cdb9343dd5f17db3e3f5bec"
+    },
+    {
+      "name": "opportunity_manifest_status_v3",
+      "sha256": "df90b284e7421bd6b2706c9d4724983bb5ee976c6d0a2986dbb45ae529302918"
+    },
+    {
+      "name": "opportunity_mention_outcome_v3",
+      "sha256": "ab8b8497fdaa8c186c5996babd866a6adf2b4ec6d3b8580fdce5f8714443b6db"
+    },
+    {
+      "name": "opportunity_mention_reason_v3",
+      "sha256": "fe9d890d779dfe88ffa40e14fb8dec8dc447cb729548c35008665df2ebbe3c91"
+    },
+    {
+      "name": "opportunity_mode_v3",
+      "sha256": "42dceb572ae5d9bedc923885d6abb2acd90577c18efef2b1be2fa2399cb99a68"
+    },
+    {
+      "name": "opportunity_mover_audit_status_v3",
+      "sha256": "0e681648c0ffe79454c4303be9ba4b0980157085788ce8c252d5f36f9ff6434c"
+    },
+    {
+      "name": "opportunity_outcome_maturity_v3",
+      "sha256": "bca7980ab4a068887b6fad54077235cd6e8cd813996f9cf696d64929db03298e"
+    },
+    {
+      "name": "opportunity_research_maturity_v3_11",
+      "sha256": "fc65751f2e29678ac9c9bd91fa29e8d4cfa02a74cfb86ff4c52c3a3cda7eb4e4"
+    },
+    {
+      "name": "opportunity_rpc_audit_disposition_v3",
+      "sha256": "046f85d5dd2612ae2a7344629bdf9d23bda05fcafb3d61021704ca28c5d274e0"
+    },
+    {
+      "name": "opportunity_rpc_function_name_v3",
+      "sha256": "42d9d89aad33469b074e62c1bc2de232a812c8cd51d1a929ff2ef6407dcc145f"
+    },
+    {
+      "name": "opportunity_rpc_subject_kind_v3",
+      "sha256": "a1e5ffbd2123aa4eaa505cae0e868f7778084e5e449dc7fe1e481976846b205d"
+    },
+    {
+      "name": "opportunity_run_input_role_v3",
+      "sha256": "106b73e99bf8141361e1ffc9312b74bfec406dbd158c390149ae4f40118b9b7c"
+    },
+    {
+      "name": "opportunity_run_purpose_v3",
+      "sha256": "3da2321993c0b60a089dd0af36cb264578c9aef5a4bfd7aa32c35c064a3b2909"
+    },
+    {
+      "name": "opportunity_run_status_v3",
+      "sha256": "d8cde1f0fdf157b37c86a0530f0f2c3bd0790aebf084ab93da8c322916e6597a"
+    },
+    {
+      "name": "opportunity_seal_disposition_v3",
+      "sha256": "54bee3308ac5b3ae224a2ef3fa69fce8f7f18766a6802a04636b4993343a21d1"
+    },
+    {
+      "name": "opportunity_shallow_status_v3",
+      "sha256": "1166a5e9d89c6aef7ae6009fe46a10896eb800a0311030104dda6e462e9dc1e6"
+    },
+    {
+      "name": "opportunity_source_connector_status_v3",
+      "sha256": "6c51ea4e993927fabffdea5bf324a375106625bbdc90ea5b2668fc4982bf4105"
+    },
+    {
+      "name": "opportunity_staging_status_v3",
+      "sha256": "60ebd171c3d0008678a2f43e372fe78df510516eec8585ff45a223161806becb"
+    },
+    {
+      "name": "opportunity_worker_read_kind_v3",
+      "sha256": "2f9325e731ed9b897b38d2ffa8d2c29a43133e52cc13612d9a94d8f5859a34dd"
+    },
+    {
+      "name": "peer_relationship_authority_input_v3",
+      "sha256": "f73b6a445d3e121a68822778f7fa7aa1a1217db79555ab317fa78a96045ca78c"
+    },
+    {
+      "name": "peer_reviewer_authority_input_v3",
+      "sha256": "c37069468a8460b5a5cd44f721640fd781611a566f1b61d77461897f442e21d7"
+    },
+    {
+      "name": "price_authority_input_v3",
+      "sha256": "01467767d4aa00ad8f52eb82ef62d55b719a00eed6ee0f1b7f888f6f33e40e95"
+    },
+    {
+      "name": "price_authority_kind_v3",
+      "sha256": "e36ed384b1eac0a58db28921768de44ab241dae61120f6c89649c4926f76f927"
+    },
+    {
+      "name": "price_observation_input_v3",
+      "sha256": "621b3408b5437f81c723af0bcda7956faf587fff37ee12201e27e457aadede8c"
+    },
+    {
+      "name": "price_provider_v3",
+      "sha256": "02a62bce49db315e2d2627268f347ec399f29cb73fe17705b58b59f32f424f94"
+    },
+    {
+      "name": "publisher_authority_input_v3",
+      "sha256": "43d490a9e1443648b121b2726064f719cb430ac55b1fadcac053176a21b4c7d3"
+    },
+    {
+      "name": "sector_assignment_input_v3",
+      "sha256": "7ab64da298293bdaeb1a801dd1309a5bca30bb624d87c50ae6645633b65791f4"
+    },
+    {
+      "name": "source_acquisition_status_v3",
+      "sha256": "296f69f3fb03e508b1285b72bc932255b74902fa1f1440a31b8718726ac4f708"
+    },
+    {
+      "name": "source_class_v3",
+      "sha256": "1645a705cfd241c8ca43f47388bed15a1b5981a72b60ec0a0b1870b70146683c"
+    },
+    {
+      "name": "source_document_revision_input_v3",
+      "sha256": "b17d6e78013cf2a15d91e2d5583db8a06f8db8e336926165a95ecbf2403bc172"
+    },
+    {
+      "name": "source_identity_authority_input_v3",
+      "sha256": "f0a62c7793aadd264a5080b36d5db6aff0116c9f3c4398a5edca3e26aa28049b"
+    },
+    {
+      "name": "source_key_v3",
+      "sha256": "79080fdcad0b74873808eca365d7535b82d04f85e1d6f08774d18f725842dca2"
+    },
+    {
+      "name": "stock_exchange_v3",
+      "sha256": "83e7729e53eaf68b64106447bf0bd7e299ffe5539a07e760dd88fee69dbaa572"
+    },
+    {
+      "name": "stock_flow_fact_key_v3",
+      "sha256": "97bf11efa22f6334ac40d366da6e31b3f234550fa7cba1e28aa9d639665e8454"
+    },
+    {
+      "name": "stock_flow_observation_input_v3",
+      "sha256": "b1a27ea26017f0bcd37912ba4c3fe83ff31cf77cc41ef2c747ca3a35454a76e6"
+    },
+    {
+      "name": "stock_flow_provider_v3",
+      "sha256": "7efa7e7ad16659a3dab949d3ab7f90d6fc00e5cd6431f33962b3e7ad84d140de"
+    },
+    {
+      "name": "stock_flow_unit_v3",
+      "sha256": "d32758df6f1570244089ff19d0bf70f51294a4d57a7c3d65f5eae6e5074d842c"
+    },
+    {
+      "name": "trading_session_input_v3",
+      "sha256": "b524863255768822fc22fb0964864fad57f04df9251d6e31924c8ab97ae060d0"
+    },
+    {
+      "name": "trading_session_status_v3",
+      "sha256": "4a553bcc527a0583d8594a8864133c253481d24c6861fa70ee3b9449d5bbf4f9"
+    },
+    {
+      "name": "tw_market_v3",
+      "sha256": "767aab34fc61aaf33eb82f08f506ae9acefc00ff614f2049269993fdf3ee6083"
+    },
+    {
+      "name": "valuation_verification_decision_v3",
+      "sha256": "0cb0933f9a2227432a247de569bf4bc9e960f61e5ecabe29f18b04921406203b"
+    },
+    {
+      "name": "valuation_verification_input_v3",
+      "sha256": "c57e5c71d5db24c4f0c9d4615e7736db1f73f62ab1ec17673787d9c5970c4409"
+    }
+  ],
+  "tables": [
+    {
+      "name": "candidate_daily_stage_snapshots",
+      "sha256": "f79b3c340ef75dc05076021e88ec4cc78d4482eb55d557939a892c67aa5a13aa"
+    },
+    {
+      "name": "candidate_deep_article_reviews_v1",
+      "sha256": "ddfb05e786e55f967a4bf2f70429dbe157350644f4b60b8ad5120efe2ec765f8"
+    },
+    {
+      "name": "candidate_detail_snapshots",
+      "sha256": "15c5cf14f7faf6cc6231eb560fdd1f698f3d34fcdd1efbc4996b6eb5e3ea899c"
+    },
+    {
+      "name": "candidate_dossier_bundles",
+      "sha256": "4d070970ce7e7e7583153d73ba8fcbc2988927a589461e08071031a7c7bb4ad0"
+    },
+    {
+      "name": "candidate_dossier_outbox_v5",
+      "sha256": "5f3f8e36c3c906e6cb4c511e2693a540e6cbc328bec6368ca5b9a1d324086c26"
+    },
+    {
+      "name": "candidate_dossier_submission_receipts",
+      "sha256": "007aed5bafc4d5635b70969a9a94dede3e4d2925746e06937b81f0e43fd0a9e4"
+    },
+    {
+      "name": "candidate_financial_acquisition_cursors_v4",
+      "sha256": "c8ffec3ee71db1f75642ef42068bfd61b00bce51c1ec418c08012e407ac32c32"
+    },
+    {
+      "name": "candidate_financial_acquisition_jobs_v4",
+      "sha256": "85820e98d2a72e54acf737c2511013059616f52389d2b536aca17df46587249b"
+    },
+    {
+      "name": "candidate_financial_document_receipts_v6",
+      "sha256": "a8325c094dad9903a85760791ac4a38ef872f7b23b5fb35d1641a8442ec80c3d"
+    },
+    {
+      "name": "candidate_financial_fact_provenance_v4",
+      "sha256": "f7254cf8e1e5ba584346254978a87824ae2fd1a2fab64c10e17f44f703c40f3b"
+    },
+    {
+      "name": "candidate_issuer_document_domains_v6",
+      "sha256": "c43f1cd30d8e3213181cb0fe1f746fd6ceb28f578c8f4852b36b9f9143cc42b1"
+    },
+    {
+      "name": "candidate_research_dossiers",
+      "sha256": "f756136701ca5763ed517151c5c7cea2d3a34d4561ec3dce205f85d5fdaa6b93"
+    },
+    {
+      "name": "candidate_source_mentions",
+      "sha256": "6e2b0e8d9113ff70c99e6392da82d8b19529b69571c5a3cb3c78b6c853bbf549"
+    },
+    {
+      "name": "candidate_technical_decisions_v1",
+      "sha256": "c1ebd0ac3969766082f8801edc71f820ec38fc4adfeaf5f670d8ed32278cf824"
+    },
+    {
+      "name": "candidate_thesis_qualifications_v1",
+      "sha256": "48b4a6a618ec6c0b18ecab872fca58c59fee03669ab036572c529e32fcfa0764"
+    },
+    {
+      "name": "fundamental_snapshots",
+      "sha256": "9b1f0e20ea2666617e24353f42012871d9ba2889914ca1918a1dc8cffba05cb7"
+    },
+    {
+      "name": "insider_acquisition_runs_v1",
+      "sha256": "834ad78f33b77ead172d6beecfe19ebd49c1f097da9239feaf8b859a88a99009"
+    },
+    {
+      "name": "insider_acquisitions_v1",
+      "sha256": "5c72a06a84526a5bccc2f677a8384adde1c2f86ff944d385abb54cb3ea4df686"
+    },
+    {
+      "name": "insider_run_members_v1",
+      "sha256": "3e92e46ffaa4017fb49f9cf67655647179fca6e8a9b66fc2a2c1e3f4400aced9"
+    },
+    {
+      "name": "insider_snapshot_progress_v1",
+      "sha256": "887de923dc7b94a3255434b4136036f43573dd461a4ac0cc1e32743b4a3f094c"
+    },
+    {
+      "name": "insider_snapshots_v1",
+      "sha256": "55932990ce95874f7d0b8ff6a9933c2dc1d9d06cd37ed178d5fa7376f492c1c3"
+    },
+    {
+      "name": "internal_principal_nonces_v3",
+      "sha256": "9d608b85b5f7b71249a587a3e6ea13f82d4deb033c62be122ce6b59a1aa20bb3"
+    },
+    {
+      "name": "internal_principal_role_bindings_v3",
+      "sha256": "57ad313c729f8af0835130547ca0d8392e236cdc0b498c8d5457054a5abc9ba9"
+    },
+    {
+      "name": "legacy_analysis_evaluations_v3_11",
+      "sha256": "d17e5108c80958be415780f176e6b664897143b29b17fb356512c3c7b04456b9"
+    },
+    {
+      "name": "legacy_analysis_revisions_v3_11",
+      "sha256": "8ec1cedf628728898928aaf98b4bd8eace5da789b4323cf159f752c975fc639f"
+    },
+    {
+      "name": "legacy_candidate_discovery_ledger_v3_11",
+      "sha256": "7f0e9912f94e32484866e46b74dd9927bf49d74f3563c7f21ec85f7220668513"
+    },
+    {
+      "name": "legacy_frozen_source_revisions_v3_11",
+      "sha256": "97167cba4f479e05245d09f67b694f7321cdbd88932d3d86177f753418437007"
+    },
+    {
+      "name": "legacy_producer_authority_pages_v3_11",
+      "sha256": "6f43d577182f7ce5a3d08afa7a87d481e943ef0f9f155018dfd0c22fc9733101"
+    },
+    {
+      "name": "legacy_producer_job_payloads_v3_11",
+      "sha256": "26fcf50c34189baf19b7fba182713f542e45e38f17eb3c6249c7e7866b55207d"
+    },
+    {
+      "name": "legacy_producer_job_results_v3_11",
+      "sha256": "416ea8d505ddd7f36ab3b6f126e6977d89424202c27fbb1661e2fbe67b480c7b"
+    },
+    {
+      "name": "legacy_producer_jobs_v3_11",
+      "sha256": "880af45891eda0fe8df6073fb7441a225a7cdf7eb523bcfc1e99c91bce45ab9c"
+    },
+    {
+      "name": "legacy_producer_runs_v3_11",
+      "sha256": "07f1c59a031c3eeb82bf5fae637dbc248681462c08b2982e8657ae2a4094ada7"
+    },
+    {
+      "name": "legacy_radar_projections_v3_11",
+      "sha256": "6d3d53e3da4eab85c252242ce42ecb585da2e3b86e26084e71605c20a82212c2"
+    },
+    {
+      "name": "legacy_runtime_health_observations_v3_11",
+      "sha256": "cda375aaf45fe091f78399d51b8a22d5fdf92addefa2e8be2230e95a39776e9d"
+    },
+    {
+      "name": "market_snapshots",
+      "sha256": "cffbc0c3f1bc737da942338743b544d3f429590754b2716e02c43187ceaed14f"
+    },
+    {
+      "name": "official_multiple_history",
+      "sha256": "54f719cf4195096163d2de692f97711c4323f6fe190e4c0e0d742d0a3315693e"
+    },
+    {
+      "name": "official_price_history",
+      "sha256": "aac3694adb5cde8a7f25a35b057dd2d34aafa21d32f55317ccbe0befcf4ed36d"
+    },
+    {
+      "name": "opportunity_assistive_artifact_registrations_v3",
+      "sha256": "e39112158a04705b7ede766df4c7daafe7c4013ada1d44c211d8735855aebe77"
+    },
+    {
+      "name": "opportunity_authority_stream_registry_v3",
+      "sha256": "029832196a9254640cc01077caa9c7f89b3f294e365ba7cec22a650e147278db"
+    },
+    {
+      "name": "opportunity_candidate_snapshots",
+      "sha256": "eba3081e1b7a9d668cf0126e99952b9a6727262e66d08cd3ba40fc6da69ecdba"
+    },
+    {
+      "name": "opportunity_corporate_action_events_v3",
+      "sha256": "498818eb4a8aebb8f83287c245cdcca73e4bf29f852c22655f9418742c8858ca"
+    },
+    {
+      "name": "opportunity_corporate_action_feed_evidence_v3",
+      "sha256": "87cd890b57bdc5569e12b85f4b6c9262cdacf2c8173852384d3bd7920bf82842"
+    },
+    {
+      "name": "opportunity_corporate_action_snapshots_v3",
+      "sha256": "ad8538c72e3ac3941d2b337d8cbd45ff6695cfc93ab18c26d18d58bd77a23b80"
+    },
+    {
+      "name": "opportunity_deep_candidate_results_v3",
+      "sha256": "3620d2628a93f00e9a9525c7b556f58bd8dfc533d7b258474c6accb1f22d17c1"
+    },
+    {
+      "name": "opportunity_detail_projections_v3",
+      "sha256": "85e67c41d5050cddfe2e4c51066c908aa9d7dfaf7d45523d8968c6e06dfc7092"
+    },
+    {
+      "name": "opportunity_evaluation_results_v3",
+      "sha256": "434d9b67a897b9f15b92f63e3d30330ff3018c072790208a10c4300437e729e6"
+    },
+    {
+      "name": "opportunity_exchange_reported_pe_v3",
+      "sha256": "fa412f3e5e875ba7ee3375aacf5e0ce8fff2ceb2cd4f3bc451bf7b7737b00879"
+    },
+    {
+      "name": "opportunity_financial_fact_series_registry_v3",
+      "sha256": "ef4f3105c8a60be9e2b4682f0a3468aeefcc881d18fb65c53e24c7582bc4032a"
+    },
+    {
+      "name": "opportunity_financial_facts_v3",
+      "sha256": "df9769ed14646549cfc166363e6528ebb0f23c0ebfdee043e8e8c6a57614b632"
+    },
+    {
+      "name": "opportunity_financial_observations_v1",
+      "sha256": "103cd025aa3d030479a9dcd3630db0ce4a04adff569506a94c53c440ade9603b"
+    },
+    {
+      "name": "opportunity_job_payloads_v3",
+      "sha256": "16be96fccf133e9b9384719a963ebb27bf1cee34bb913c373f4c578597d3e676"
+    },
+    {
+      "name": "opportunity_job_results_v3",
+      "sha256": "f3576c0a8870c8f71b9f44b8db5ae90284040cb7b70535a12fc3c05723b930ad"
+    },
+    {
+      "name": "opportunity_job_staging_v3",
+      "sha256": "cb0de8875eae13e37590ec2eb6273436ca0840dad4ace9d0ba15bb203733d668"
+    },
+    {
+      "name": "opportunity_link_audit_labels",
+      "sha256": "589a0d5be66337e38afaf835b632aa14420a025386f77e3624c2daac92da4b87"
+    },
+    {
+      "name": "opportunity_link_audit_samples",
+      "sha256": "02139b042a17339d9820c07c8b43d7599412aa2c30d87b4f6fc66d4de7c64efd"
+    },
+    {
+      "name": "opportunity_manifest_pages_v3",
+      "sha256": "085b242fe848f97501836db12dad717166bf8f0cc1cfd3e756af960fbe12fb15"
+    },
+    {
+      "name": "opportunity_manifest_rows_v3",
+      "sha256": "f9d7681a123221c7644bcb42f36b31a0f39bc65258e98ee62b9d7b9ba8a1dcbd"
+    },
+    {
+      "name": "opportunity_manifests_v3",
+      "sha256": "864aad183e0229f2f40da7a389d6e7575e7e20669d0c57fd14d67359ae2641e0"
+    },
+    {
+      "name": "opportunity_market_context_snapshots",
+      "sha256": "8062e0361064a55935433a85ad07969654bdba741d1edc15362a05246a011e4a"
+    },
+    {
+      "name": "opportunity_market_observations_v3",
+      "sha256": "c5d7c9f1a9405b83b1f72e7074ba06deba6f10ba7dd159e858f09017c15b74d7"
+    },
+    {
+      "name": "opportunity_mover_audit_symbols_v3",
+      "sha256": "e82d65392bf7755cdbe5a85ab53ebca2f92b615f2035f4dc54d65946f6fe0ee9"
+    },
+    {
+      "name": "opportunity_mover_audits_v3",
+      "sha256": "571a94071dd47e22c015ffe3fecfc61e21ba5e6339800d357c39a6e79753338a"
+    },
+    {
+      "name": "opportunity_outcomes",
+      "sha256": "da174e91c0ce28ceb012f8666c41c8a08943dec3318ad5b5ca31a93579847a0e"
+    },
+    {
+      "name": "opportunity_portfolio_allocations_v3",
+      "sha256": "0961ff8a5462c3dfc9d37c62bdc5a941139aa09a2402adf2abefe9c4fe01e688"
+    },
+    {
+      "name": "opportunity_price_observations_v3",
+      "sha256": "eae4f888608b58e2bcea2de96670ad033be989877855b0f10a61a9a24078cf58"
+    },
+    {
+      "name": "opportunity_public_projections_v3",
+      "sha256": "d26ef5b0c75f6dcdd774f755913e9ba9f55750652916a04033ee26026cf61cc9"
+    },
+    {
+      "name": "opportunity_rpc_audit_v3",
+      "sha256": "5d303c557cc49eb9474f9bd6c52fe0fa7f49f33f58224cc8ac56b652bb81596f"
+    },
+    {
+      "name": "opportunity_run_inputs",
+      "sha256": "6f190946216243b856a7066f8f55b01c98db84b8996c6fcccc75a73d36657a13"
+    },
+    {
+      "name": "opportunity_run_jobs_v3",
+      "sha256": "b58a7df945ccab35c0682447bac7743f7a026800befde3c5c5c26985f2ecf01f"
+    },
+    {
+      "name": "opportunity_run_manifest_inputs",
+      "sha256": "bc3d3c3093392e78f1c8925dfc2b5298c28515824a0e94b743eb1b49c827f843"
+    },
+    {
+      "name": "opportunity_run_warning_facts_v3",
+      "sha256": "c55bfb9b36dc5c963421e1a6db4c9aea132c82c638f17a08b23bc82f07844bfe"
+    },
+    {
+      "name": "opportunity_runs",
+      "sha256": "b5badf7318d6cba448c8501152cfe8fe41308be02912372f392f5507fbeb9c16"
+    },
+    {
+      "name": "opportunity_score_snapshots",
+      "sha256": "c57384230ec830c9bf78c1155108a380310c9528e404b3f7dff1dcb7f3ce5e7f"
+    },
+    {
+      "name": "opportunity_sector_cycle_snapshots",
+      "sha256": "db4cc0c538a116665a9e56d69055649fc74fc6b7e1321e50ed7706f14bf17457"
+    },
+    {
+      "name": "opportunity_shallow_candidate_results_v3",
+      "sha256": "73041b9321aeee61be550874bc461dd69b0b3838ff06f826eb979946b8104805"
+    },
+    {
+      "name": "opportunity_source_claims",
+      "sha256": "93b9ae385e3a6588bb59d989daa806aac9df0e93df5a1728c2f2f7c59db58075"
+    },
+    {
+      "name": "opportunity_source_connector_accounting",
+      "sha256": "ad1e4a4af942d46338f0f382b98ae08d7095b63e8a7b18db87fea492910699c1"
+    },
+    {
+      "name": "opportunity_source_document_outcomes",
+      "sha256": "91ce8d2dc803918b84a96f4e42b04ccb2de3e140aae063ce12f0775e214d9d03"
+    },
+    {
+      "name": "opportunity_source_mentions",
+      "sha256": "1763287ba4825ad48bfc19c6ddb37c732dd23e6dd4afd73365b6a5f4a408cad6"
+    },
+    {
+      "name": "opportunity_stock_flow_observations_v3",
+      "sha256": "35163650b61162849de58ac342a2657861deedb46325439d20c287b609f9e339"
+    },
+    {
+      "name": "publisher_verification_authorities_v3",
+      "sha256": "92e4a5f81e92d617a3c5285d28c854b5a4f6468c8b2abb9d282ce8952e2a0a09"
+    },
+    {
+      "name": "research_article_input_revisions_v2",
+      "sha256": "cf93a0a0200886d1cbcd5975c50376a9e8b9b2a406dc23cca9c55a3e05087e2a"
+    },
+    {
+      "name": "research_author_assignments_v2",
+      "sha256": "ede1254f4fed1de5429e4279283452db36c007fd9ed9d9350630502a7569b77a"
+    },
+    {
+      "name": "research_author_results_v2",
+      "sha256": "47fa470323b518c4d34b1adf97bf415f747f1c0d03e9a77736caa8b0c0e75df4"
+    },
+    {
+      "name": "research_cloud_acceptances_v1",
+      "sha256": "b33b22be024df77ccb53396aaa5cd489fd828bb11513efdbbc0b95c8f3339df3"
+    },
+    {
+      "name": "research_deep_admission_charges_v1",
+      "sha256": "aeb661c0c61bfb6ad176aa6a99b5b0e611c1a7b5524578571d426dd6dbe0fa7b"
+    },
+    {
+      "name": "research_deep_admission_clocks_v1",
+      "sha256": "c7f98412b76243a4792cde3d12456e8a5528ebcd4541ecbebf3e314b90013be9"
+    },
+    {
+      "name": "research_deep_admission_cutover_v1",
+      "sha256": "33c0c13e0093fcb6a2b0fb7ef38577f9d689131a58d255bc55a0b55c592a113f"
+    },
+    {
+      "name": "research_deep_job_attempts_v1",
+      "sha256": "bfc757e5198d0f40a167cb9818741faec09beb5f1c839694088093d74239f3f2"
+    },
+    {
+      "name": "research_deep_jobs_v1",
+      "sha256": "b7a6dd32b481bd62dec8877cb2ba2602053bd41783484616ee15a735304548cb"
+    },
+    {
+      "name": "research_deep_run_admissions_v1",
+      "sha256": "b7de3632c06091cc09573e74c4c4448cf24933d79b0d2f61f9fcb4fa42188d1d"
+    },
+    {
+      "name": "research_execution_invocations_v2",
+      "sha256": "4344ef04b3ea34325fb0830a0b4c743b935f6fd75c4b54f6df8524dcbf4639d2"
+    },
+    {
+      "name": "research_first_discoveries_v1",
+      "sha256": "6d90c7033d0f3aebf3d67ba7eaa54269904840e778d3faa4bf0b3af362c58531"
+    },
+    {
+      "name": "research_input_preparations_v2",
+      "sha256": "5d6abb05db39d0fd7fd557b82f3aab9e7ae78302f860eb4893c5498f029c100c"
+    },
+    {
+      "name": "research_model_completions_v1",
+      "sha256": "57f0415723a3c553009cfcbbed76428f711e9c3f9f26eb70ab004fd9bee21e80"
+    },
+    {
+      "name": "research_model_reservations_v1",
+      "sha256": "bea552b5aa24251866b2934ba1ee77da85302c35d0a36e6921167859e977aab4"
+    },
+    {
+      "name": "research_observed_companies_v1",
+      "sha256": "ef49569748ae10ac9a163e8db6966539e064416d440194341b350f86ecc6b039"
+    },
+    {
+      "name": "research_observed_discovery_lineage_v1",
+      "sha256": "3be75f24e7a44b7ecf71d5a77d0a6d3ca9b50af36c7e04721a4025e4e1f95156"
+    },
+    {
+      "name": "research_observed_first_discoveries_v1",
+      "sha256": "fd108454620c7720910602efc2da327401f60a4c50501f45b4ed7fb176c9d789"
+    },
+    {
+      "name": "research_observed_priority_store_receipts_v1",
+      "sha256": "71cbee456736045e5548f3febc71a8a9ce53a7959fda65f0c17b6dd69e35c003"
+    },
+    {
+      "name": "research_observed_roster_members_v1",
+      "sha256": "c54ad189825562c36c558eb2ee2f86cbe462b192b772a82aa427d6c1810f165c"
+    },
+    {
+      "name": "research_observed_roster_snapshots_v1",
+      "sha256": "1bf0c246a9cf03cf57d954e041b14e0e6263217bc48519676229d0f709b4ab14"
+    },
+    {
+      "name": "research_paper_book_revisions_v1",
+      "sha256": "bcf08d7cb84adf3e45a17f3bb3ea93b5fff53d1f2e3b168eb1303580a17fa9af"
+    },
+    {
+      "name": "research_priority_runs_v1",
+      "sha256": "3fa26eb5fce54cfd8e4ba33d44400cce39859780b17deaee590f2a8106562316"
+    },
+    {
+      "name": "research_reviewer_assignments_v2",
+      "sha256": "fbebb9d5ba95f2c70479cc8b9d455b15ff2ed4440f4109d8a85e98738c8e716e"
+    },
+    {
+      "name": "research_reviewer_results_v2",
+      "sha256": "f3fe4509f91ea4495c7bf3092493dd7acb8fe501d8dd4ab482e37b27b2b24aed"
+    },
+    {
+      "name": "research_source_fence_events_v2",
+      "sha256": "c45675049ab5a3984707e3512dd80db863e5df58775be4ff307904910b71cb3f"
+    },
+    {
+      "name": "research_source_seal_invalidations_v2",
+      "sha256": "41710403badf10e7b3844c1277922f21bacd0892655dbdd12913f5c799645fdf"
+    },
+    {
+      "name": "research_source_seals_v2",
+      "sha256": "31abc1b7f7199e17c8576c431c8e0bc887459c394257218f9603053cb9851ad3"
+    },
+    {
+      "name": "research_strategy_records_v1",
+      "sha256": "04a89a29223c5cd78779ba1fa72889b4bf3e3f5c4cd24132e53e03d382e2743a"
+    },
+    {
+      "name": "revenue_signals",
+      "sha256": "40c8fde9482249f67a48031abd924644366d9c49ae14ca05e880f4d081f9bb53"
+    },
+    {
+      "name": "source_document_revisions_v3",
+      "sha256": "25fc415edc11d42ee062feb7257b42d2bb1683a83e1ee9970db692f84b1adc4b"
+    },
+    {
+      "name": "source_entities",
+      "sha256": "9fdd8b30e33aca9fe9c950938bcf4f023058d513aac2bcf6fcd663c0eaf3d8b1"
+    },
+    {
+      "name": "source_identity_authorities_v3",
+      "sha256": "da1fdd859d2f17942ac40b35725097a04cce20f9fc174ea4b1a99428f201deff"
+    },
+    {
+      "name": "source_publication_verifications_v3",
+      "sha256": "34c10edd0bddc48c3e75efba73c398333fe70784bed735088b6db60a2cc0f500"
+    },
+    {
+      "name": "source_raw_documents",
+      "sha256": "1491f7d50aa0ea4e128d79556391da4380366b2a742fc21795267dfd77733f22"
+    },
+    {
+      "name": "source_revision_family_registry_v3",
+      "sha256": "f150609fe78a2ea3d0d1175e73e5568747dbdb504774c4a5a45f76a056bd11a2"
+    },
+    {
+      "name": "stock_aliases_v3",
+      "sha256": "b7dbd4b12450b80ae4e59b9c3e6d388b00e2268eb3434c3753629e93d6f11d38"
+    },
+    {
+      "name": "stock_instruments_v3",
+      "sha256": "0b190e924b927c6f04ebe909471c7b8dfad053e759e838235edd3f4bb5b96a46"
+    },
+    {
+      "name": "stock_peer_relationship_reviewers_v3",
+      "sha256": "74a1c5c134de7a3bca8b0431d01dd0fb48294120e11da36c8bf3d743ce175c59"
+    },
+    {
+      "name": "stock_peer_relationships_v3",
+      "sha256": "e3b2b4f216e5e84c90a86e810c9a6295c82cbb77fe4626739607489b4ce4175b"
+    },
+    {
+      "name": "stock_sector_assignments_v3",
+      "sha256": "6514bb13c2069f01c172c06c25db722319fe643392dcf318ada02e2c01827efe"
+    },
+    {
+      "name": "stock_signals",
+      "sha256": "f1418a486a3011bcda79ef77527d83e33e4ebd9dee9196982d1f9741239925bb"
+    },
+    {
+      "name": "stocks",
+      "sha256": "af3bebafdfe9ffbe6f73d78faddc8658d273b3b754ea556f368d9b64d855b719"
+    },
+    {
+      "name": "taiwan_data_canonical_results_v5",
+      "sha256": "13d3d896333de53c242bab6c8b476fdf3488310c403e0a05e0f4fe13d74eef54"
+    },
+    {
+      "name": "taiwan_data_publication_metadata_v5",
+      "sha256": "eb2223a1255fb31089404109df0b4fd67275d371c5324b29ff3f959f539dec6d"
+    },
+    {
+      "name": "taiwan_data_refresh_queue_v5",
+      "sha256": "c42a9ebaa3a369fabd2e7546276116fb4463b90fd957ded373c65c9dbfbd1822"
+    },
+    {
+      "name": "tw_trading_sessions_v3",
+      "sha256": "30f0f79ba8ba42633ecf6935f075eb3ded08adcbcfb862c9d370c620024cca7d"
+    },
+    {
+      "name": "valuation_verifications_v3",
+      "sha256": "470deaf98764b5a186f509efc73822c2d904798c8417a7349429d124e0c74d90"
+    }
+  ],
+  "schemas": [
+    {
+      "name": "auth",
+      "sha256": "a8ccd77dc45a99497baaac1df0001b3ba87544ae65cb50711fb0f50ccbcbb809"
+    },
+    {
+      "name": "extensions",
+      "sha256": "a6945a656c05dac4bb1e2b2957ff468972c290d523c4e761a38be25863addd04"
+    },
+    {
+      "name": "public",
+      "sha256": "5cfed2b6a5513ab672334e8ae873c601f27e983c32f420736a5f422b9f09fabe"
+    }
+  ],
+  "functions": [
+    {
+      "name": "accept_research_cloud_result_v1",
+      "signature": "accept_research_cloud_result_v1(uuid,text,text,text,text,text,text)",
+      "sha256": "eecc08dc26beae6646c2dd4bc63440f63b9effc3b15870ad75fa9392cf51f3aa"
+    },
+    {
+      "name": "acquire_legacy_producer_lease_v3_11",
+      "signature": "acquire_legacy_producer_lease_v3_11(text,text,text,bytea,text,uuid,integer)",
+      "sha256": "c51e4052fa2bc7f80bf63a5e8e7d6d0b1dee3aff06ee9d2da9b1707b041893cd"
+    },
+    {
+      "name": "admit_insider_snapshot_v1",
+      "signature": "admit_insider_snapshot_v1(uuid,integer,uuid,text,text,integer,timestamp with time zone,timestamp with time zone,text,text)",
+      "sha256": "b1ecef32358da76af9bec1f5bae9143912912ebd354623d3290d01298721a0e7"
+    },
+    {
+      "name": "admit_research_observed_roster_v1",
+      "signature": "admit_research_observed_roster_v1(text,text)",
+      "sha256": "e99b656fc6fbf5bd7e84a296c5ac52593992bfc682fe1270403831f8c532a32a"
+    },
+    {
+      "name": "append_assistive_artifact_registration_v3",
+      "signature": "append_assistive_artifact_registration_v3(assistive_artifact_registration_input_v3,uuid)",
+      "sha256": "ebfd88167c5dbabd740228ebba0c6534287a5d917b889897fecca9d85f05e2fd"
+    },
+    {
+      "name": "append_financial_fact_pre_history_v1",
+      "signature": "append_financial_fact_pre_history_v1(financial_fact_input_v3,uuid)",
+      "sha256": "3929377863d4ed6e132403c651a8f30bae6de11bb89da372ddd87ef77a9c84b8"
+    },
+    {
+      "name": "append_financial_fact_pre_v3_16_16",
+      "signature": "append_financial_fact_pre_v3_16_16(financial_fact_input_v3,uuid)",
+      "sha256": "fb3d44bb1ebb45e6d275e8a34aed65c4f72490e6be74469d721d089dfde5e224"
+    },
+    {
+      "name": "append_financial_fact_v3",
+      "signature": "append_financial_fact_v3(financial_fact_input_v3,uuid)",
+      "sha256": "fe80d4ebd26c699c4124fd74c19e571da5377eaf3b456daafc2115fa64aef669"
+    },
+    {
+      "name": "append_instrument_roster_authority_v3",
+      "signature": "append_instrument_roster_authority_v3(instrument_authority_input_v3,uuid)",
+      "sha256": "17aaf75bc878bea8b067c9f430b863644d83eeb72272e572a6785ce392da96b1"
+    },
+    {
+      "name": "append_legacy_analysis_evaluation_v3_11",
+      "signature": "append_legacy_analysis_evaluation_v3_11(analysis_evaluation_input_v3_11,uuid,uuid)",
+      "sha256": "54ee0d21665d3ddca8405b93c75d7471d326cdf4564b210e0050fa0770c7c5fa"
+    },
+    {
+      "name": "append_legacy_analysis_revision_v3_11",
+      "signature": "append_legacy_analysis_revision_v3_11(analysis_revision_input_v3_11,uuid,uuid)",
+      "sha256": "eda1237e46bf35a7e7337c583e16be3c79cebf91e205c1002067e6e0747abe5b"
+    },
+    {
+      "name": "append_legacy_candidate_discovery_v3_11",
+      "signature": "append_legacy_candidate_discovery_v3_11(candidate_discovery_input_v3_11,uuid,uuid)",
+      "sha256": "2cdfb53f590e0675680c2d1a02edbb8bca235ece386494e0536a3eac66f1f6fd"
+    },
+    {
+      "name": "append_legacy_radar_projection_v3_11",
+      "signature": "append_legacy_radar_projection_v3_11(legacy_radar_projection_input_v3_11,uuid,uuid)",
+      "sha256": "a732a9b5325bd0654a86b19162009772b91726c2ce1338edd049f05a8095b1b2"
+    },
+    {
+      "name": "append_manual_stock_alias_authority_v3",
+      "signature": "append_manual_stock_alias_authority_v3(manual_alias_authority_input_v3,uuid)",
+      "sha256": "dcbb3f8d6de43a58adaa1279093364bf4f887ba99a52e5c7e1cd0a561ccb22a7"
+    },
+    {
+      "name": "append_market_observation_v3",
+      "signature": "append_market_observation_v3(market_observation_input_v3,uuid)",
+      "sha256": "c545d477a0f5a8a8b321320c943d95b54af076d0f0feee3fe681107cc3d0603b"
+    },
+    {
+      "name": "append_opportunity_manifest_page_v3",
+      "signature": "append_opportunity_manifest_page_v3(uuid,text,uuid,opportunity_manifest_section_key_v3,integer,bigint,bytea,jsonb,text,opportunity_manifest_row_input_v3[])",
+      "sha256": "cafd14aa96864c90e4e9dffc9612075e8b5277ddd54beac2b9e7a57eee90a8ea"
+    },
+    {
+      "name": "append_peer_relationship_authority_v3",
+      "signature": "append_peer_relationship_authority_v3(peer_relationship_authority_input_v3,uuid)",
+      "sha256": "38837bd6b811170770688d43a0bf44e9f6cade768d72f39d04a34bdc02bd8316"
+    },
+    {
+      "name": "append_peer_reviewer_authority_v3",
+      "signature": "append_peer_reviewer_authority_v3(peer_reviewer_authority_input_v3,uuid)",
+      "sha256": "fa2ea9524190e17a359408946881140f06d7768f52ad465842670676d6f4b787"
+    },
+    {
+      "name": "append_price_authority_v3",
+      "signature": "append_price_authority_v3(price_authority_input_v3,uuid)",
+      "sha256": "fce4b0367b657003fd8c3eb89e432b4061cb42515794eddd95d0c96d5671dafe"
+    },
+    {
+      "name": "append_publisher_verification_authority_v3",
+      "signature": "append_publisher_verification_authority_v3(publisher_authority_input_v3,uuid)",
+      "sha256": "e1f6e12965345b1558c3916c6a08479ed3b1971ab81b15fba2eeb5f13db0b23b"
+    },
+    {
+      "name": "append_source_document_revision_v3",
+      "signature": "append_source_document_revision_v3(source_document_revision_input_v3,uuid)",
+      "sha256": "268c8342cad0be92eaeddcc9c73801baf13035078dc4bac12b0fb9781fedf8a8"
+    },
+    {
+      "name": "append_source_identity_authority_v3",
+      "signature": "append_source_identity_authority_v3(source_identity_authority_input_v3,uuid)",
+      "sha256": "7aa0e3a8975ec8ee64de8188341b08e57a78b4adb707d3b55847a9beac7c22ec"
+    },
+    {
+      "name": "append_stock_flow_observation_v3",
+      "signature": "append_stock_flow_observation_v3(stock_flow_observation_input_v3,uuid)",
+      "sha256": "20ac55b44bdec8b6050837f910a666393f11105e9412050f43cb8975068f6535"
+    },
+    {
+      "name": "append_stock_sector_assignment_v3",
+      "signature": "append_stock_sector_assignment_v3(sector_assignment_input_v3,uuid)",
+      "sha256": "3aa6a114f16b3670f7f769f757434e112fe30eb87c9f90ac2fdc3f7fb3a97ce6"
+    },
+    {
+      "name": "append_trading_session_v3",
+      "signature": "append_trading_session_v3(trading_session_input_v3,uuid)",
+      "sha256": "b5de7c8b7f48872c933d6e8353e4e33475c5e146e68055341ee3c7b18c297f7b"
+    },
+    {
+      "name": "append_valuation_verification_v3",
+      "signature": "append_valuation_verification_v3(valuation_verification_input_v3,uuid)",
+      "sha256": "e3a4dd4dd8180a436286c2bf422d2700437f1236af9f876f1280d84ca28b08a8"
+    },
+    {
+      "name": "assert_research_editorial_review_v2",
+      "signature": "assert_research_editorial_review_v2(jsonb,jsonb)",
+      "sha256": "e87b1c2a679a472642c85ad92845677af44b6ae3a88061c395f7f196f2106ea1"
+    },
+    {
+      "name": "assert_research_input_preparation_v2",
+      "signature": "assert_research_input_preparation_v2(jsonb,uuid,text)",
+      "sha256": "1a5ac98d58b000fb17d1ed3d4f49b0f72e90739bc8602e735c4379640d5ab948"
+    },
+    {
+      "name": "assert_research_source_seal_v2",
+      "signature": "assert_research_source_seal_v2(uuid)",
+      "sha256": "a9e70f9480871ac4819da67cddc6c37178e19376fa6e6621abf0a835d87cf99a"
+    },
+    {
+      "name": "assign_research_author_v2",
+      "signature": "assign_research_author_v2(jsonb,uuid,text,text)",
+      "sha256": "5ff4ec1d8525acbb57b5d82c20920e36ac1d60e7206e3359cb97a67bc94034be"
+    },
+    {
+      "name": "assign_research_reviewer_v2",
+      "signature": "assign_research_reviewer_v2(jsonb,uuid,text,text,text,uuid,text)",
+      "sha256": "af82e407fd1a67139aa3f37bae2a9006c0d0383ddffe8b80cf4af70656585c00"
+    },
+    {
+      "name": "begin_opportunity_run_v3",
+      "signature": "begin_opportunity_run_v3(opportunity_mode_v3,opportunity_run_purpose_v3,timestamp with time zone,text,uuid)",
+      "sha256": "b58648655627f8f030a3f5007e5d6cf61651258f580aede6fc0b01991eb62bd7"
+    },
+    {
+      "name": "capture_research_first_discoveries_v1",
+      "signature": "capture_research_first_discoveries_v1(uuid)",
+      "sha256": "bea941a7a7ea098945627b4e62c16a0889962aab674cb6d48f115ddfe30cd385"
+    },
+    {
+      "name": "charge_research_deep_admission_v1",
+      "signature": "charge_research_deep_admission_v1()",
+      "sha256": "5c9767f5b722d3a82ade2399cbc6c12d3d84088d5117af0ced50e252e6c1bec6"
+    },
+    {
+      "name": "claim_candidate_deep_outbox_v1",
+      "signature": "claim_candidate_deep_outbox_v1(uuid,text,integer,uuid,text,text)",
+      "sha256": "7c9598f51021c7d913c255ddcc9684e589073b236f96f115edbcdc12efb01bfd"
+    },
+    {
+      "name": "claim_candidate_dossier_outbox_v5",
+      "signature": "claim_candidate_dossier_outbox_v5(text,integer)",
+      "sha256": "b0e6b13daf06cc76390ec0bf833caf933f26fecb4084622a7a586d9ffd5390d7"
+    },
+    {
+      "name": "claim_legacy_producer_job_authoritative_v3_13",
+      "signature": "claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)",
+      "sha256": "67e7bdcc3aeb8f81ddc0f98f51456f5bb5c1e674e636db5252145972b4d1ad77"
+    },
+    {
+      "name": "claim_legacy_producer_job_authoritative_v3_15",
+      "signature": "claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer)",
+      "sha256": "c21d2acdac7e0d0158d69885e05acc6c4e9fcc12e5510243b806db50aa98b271"
+    },
+    {
+      "name": "claim_legacy_producer_job_authoritative_v3_16_15",
+      "signature": "claim_legacy_producer_job_authoritative_v3_16_15(uuid,uuid,uuid,integer)",
+      "sha256": "2d4f6fd75ad792db57eebc70ab190fd35e05816e62e860dbe5c097be903ad4df"
+    },
+    {
+      "name": "claim_legacy_producer_job_authoritative_v3_16_18",
+      "signature": "claim_legacy_producer_job_authoritative_v3_16_18(uuid,uuid,uuid,integer)",
+      "sha256": "5e273028358e43ee1bc407303cd1dbbb3dc3fb31214819701ebf55e1da97664f"
+    },
+    {
+      "name": "claim_legacy_producer_job_candidate_authority_base_v3_19_10",
+      "signature": "claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)",
+      "sha256": "3b48a89b0a4ef49b9de8391eb2d9801951a907cadee0a4579d6bfea712d7b026"
+    },
+    {
+      "name": "claim_legacy_producer_job_candidate_retention_base_v3_18",
+      "signature": "claim_legacy_producer_job_candidate_retention_base_v3_18(uuid,uuid,uuid,integer)",
+      "sha256": "c2555bda5187eba6b0a9c44e1101030e9b5684617ba14693bfa9c14120b9bfcf"
+    },
+    {
+      "name": "claim_legacy_producer_job_evaluation_clock_base_v3_16_20",
+      "signature": "claim_legacy_producer_job_evaluation_clock_base_v3_16_20(uuid,uuid,uuid,integer)",
+      "sha256": "816c5062ad18d4d644441f4b8b220e0921fc082aa1f02bd23c3362c8e024eb28"
+    },
+    {
+      "name": "claim_legacy_producer_job_pre_handoff_v3_19_16",
+      "signature": "claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)",
+      "sha256": "6f8c5b7ff31a1d935ed28825ce53717d8cb2192367179c32fc4c4219c98ebcd5"
+    },
+    {
+      "name": "claim_legacy_producer_job_pre_kol_authority_v3_20",
+      "signature": "claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer)",
+      "sha256": "bdd3b67f66664dc12d3d548e26a220a203935e76dc01f2ed090306e00a0c8eb0"
+    },
+    {
+      "name": "claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1",
+      "signature": "claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)",
+      "sha256": "dd2f8b91d217e260efca14bf95c70eaec8ad674aae0d4927b9dafc1c4cb17b5e"
+    },
+    {
+      "name": "claim_legacy_producer_job_provider_acquisition_base_v3_16_21",
+      "signature": "claim_legacy_producer_job_provider_acquisition_base_v3_16_21(uuid,uuid,uuid,integer)",
+      "sha256": "ea3e8b22e58c33b7bf8791e98e5c3f146038ad8f5b7e5108fe207ed6ae407d87"
+    },
+    {
+      "name": "claim_opportunity_job_v3",
+      "signature": "claim_opportunity_job_v3(uuid,uuid)",
+      "sha256": "807723e7d9dcbb6d4a888a81ac1216666929dfc32bc7c6b85138c6ab5e409b54"
+    },
+    {
+      "name": "claim_research_deep_job_v1",
+      "signature": "claim_research_deep_job_v1(text)",
+      "sha256": "923937cb6353058f7c71afc5ecd736b51cfe2df0e484f4496883b9bb5e724441"
+    },
+    {
+      "name": "claim_research_observed_job_v2",
+      "signature": "claim_research_observed_job_v2(text,text)",
+      "sha256": "dde4f16be9695c3042025b0b77389f86baaed1e056fd55e8fcdb075f8158886d"
+    },
+    {
+      "name": "commit_insider_snapshot_page_v1",
+      "signature": "commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer)",
+      "sha256": "bb0789dc265f73e6dc2c3256fe498e424c8b8dcee3fa3400a10de0f7b8e0872d"
+    },
+    {
+      "name": "commit_research_author_handoff_v2",
+      "signature": "commit_research_author_handoff_v2(jsonb,uuid,text,text,uuid,text)",
+      "sha256": "62bf9dc41be634b0bbe230a9e5ff91c6eaeb99cd9a61075ac6257a3a00b6cdd4"
+    },
+    {
+      "name": "complete_candidate_financial_document_receipt_parser_v7",
+      "signature": "complete_candidate_financial_document_receipt_parser_v7(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,timestamp with time zone)",
+      "sha256": "8e8bdb95a461fba4924628e0c1aa133c95dada03ebb8690667ad1fe5aabd1db8"
+    },
+    {
+      "name": "complete_legacy_producer_job_authoritative_v3_13",
+      "signature": "complete_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,bytea,jsonb,text)",
+      "sha256": "89bdb947aa597e3d9d3863a9a03b547e1e654852acb6dc400de2130e89a74158"
+    },
+    {
+      "name": "complete_legacy_producer_job_authoritative_v3_19",
+      "signature": "complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)",
+      "sha256": "a51e0c3101abf640f7cbee63e3d332e219b430fb4ec3543ba20f5032e3e8c0f9"
+    },
+    {
+      "name": "complete_opportunity_job_v3",
+      "signature": "complete_opportunity_job_v3(uuid,text,text,opportunity_job_counts_v3)",
+      "sha256": "e5d8d008f6617647df46c595630d4e384e18011e83519aa53c96ef88f24a9063"
+    },
+    {
+      "name": "complete_opportunity_manifest_v3",
+      "signature": "complete_opportunity_manifest_v3(uuid,text,uuid,bigint,bytea,jsonb,text)",
+      "sha256": "719ce5a78a1210f20a3ae6e761ad0cd4ed6e90876228a27007bb783c0a9175b5"
+    },
+    {
+      "name": "consume_internal_nonce_v3",
+      "signature": "consume_internal_nonce_v3(uuid,internal_principal_role_v3,text,timestamp with time zone)",
+      "sha256": "326132419012552670380ed4e38236c5208f5b006d41509b1777314818f13ba4"
+    },
+    {
+      "name": "create_opportunity_manifest_v3",
+      "signature": "create_opportunity_manifest_v3(uuid,text,uuid,opportunity_manifest_kind_v3,text,timestamp with time zone,bytea,jsonb)",
+      "sha256": "66676ea83d0324624fcce9784591ec8531a4d8aa4e24a30089b0c3ebaf07d2fe"
+    },
+    {
+      "name": "derive_manifest_page_descriptor_v3_internal",
+      "signature": "derive_manifest_page_descriptor_v3_internal(uuid,opportunity_manifest_section_key_v3,integer,bigint)",
+      "sha256": "31e1184a82bd998870047b31ff58a62b84fd6f5c6c8c1a56d15a504ab4a86fe3"
+    },
+    {
+      "name": "enforce_opportunity_candidate_anchor_v3",
+      "signature": "enforce_opportunity_candidate_anchor_v3()",
+      "sha256": "e2ec550a7fe6456aa80d6a9380a93ccf9da9ea03e8fdaa4a5e41c8efb4520716"
+    },
+    {
+      "name": "enforce_opportunity_detail_evidence_v3",
+      "signature": "enforce_opportunity_detail_evidence_v3()",
+      "sha256": "45d622d569cd94b6bc55d438c42d8c98e8ed62365fbc59dcdbf3420463a5f227"
+    },
+    {
+      "name": "enqueue_next_opportunity_job_v3_internal",
+      "signature": "enqueue_next_opportunity_job_v3_internal(uuid,uuid)",
+      "sha256": "a4cd40a922843e949921b481625517ace1bac6e8135e1244d44eb8aac40b777b"
+    },
+    {
+      "name": "enqueue_research_deep_jobs_v1",
+      "signature": "enqueue_research_deep_jobs_v1(uuid)",
+      "sha256": "cd08bb3dadb50e41932a06d776ecc8e3764f78380f31a9a03af1fc6708e488d1"
+    },
+    {
+      "name": "enqueue_taiwan_data_refresh_v5",
+      "signature": "enqueue_taiwan_data_refresh_v5(text,text,text,text,text,date,timestamp with time zone)",
+      "sha256": "aef2f4380dc70846136e0e40b6329b89f0488e8c4c50f92535273b7c6113cf13"
+    },
+    {
+      "name": "ensure_research_publication_bundle_v2",
+      "signature": "ensure_research_publication_bundle_v2(uuid,text)",
+      "sha256": "eaf9289b0ad6a97937fc7a0dedb6da6f22912e83c3633ed18a63f7f2978e16cb"
+    },
+    {
+      "name": "fail_legacy_producer_job_v3_11",
+      "signature": "fail_legacy_producer_job_v3_11(uuid,uuid,uuid,opportunity_legacy_producer_failure_code_v3_11)",
+      "sha256": "ab946a2cd3f1e78a45dc1af3d8ee8fdac4f00239eb9a6e4ecacb15eacabcf766"
+    },
+    {
+      "name": "fail_opportunity_job_v3",
+      "signature": "fail_opportunity_job_v3(uuid,text,opportunity_failure_code_v3)",
+      "sha256": "b93a82ac0c13ab08e06e5d42ddb633036a8d4cd62e04be34c732c50da0376a40"
+    },
+    {
+      "name": "fail_opportunity_manifest_v3",
+      "signature": "fail_opportunity_manifest_v3(uuid,text,uuid,opportunity_manifest_failure_code_v3)",
+      "sha256": "9d275b48db3e9ab9679694ee5a63c15e147bc25bf0ae14f9c9a81681bc51952c"
+    },
+    {
+      "name": "fence_candidate_thesis_append_v1",
+      "signature": "fence_candidate_thesis_append_v1()",
+      "sha256": "956eadba26c57ae17d684c9d7b44689a9fbda286bf9c3e2d353f7ef847144580"
+    },
+    {
+      "name": "fence_observed_model_completion_v2",
+      "signature": "fence_observed_model_completion_v2()",
+      "sha256": "ee9964e26ae922a6ed658156e9afeb015f3249b083b17774e5175fb39f65f604"
+    },
+    {
+      "name": "fence_observed_priority_insert_v1",
+      "signature": "fence_observed_priority_insert_v1()",
+      "sha256": "28da38beb162dde302e2a40fbf5280dc7652ad913005bdd26bb4fe888d637798"
+    },
+    {
+      "name": "fence_research_dossier_insert_v2",
+      "signature": "fence_research_dossier_insert_v2()",
+      "sha256": "40a19091fde1d5370b0f512b5d277fb28601771eaf0a9dfb06982db0a0115b59"
+    },
+    {
+      "name": "fence_research_dossier_truncate_v2",
+      "signature": "fence_research_dossier_truncate_v2()",
+      "sha256": "65876de9b1256713562c56d4cb93127358be8093feb8fa7d3959ba7b558d50c4"
+    },
+    {
+      "name": "fence_research_execution_invocation_v2",
+      "signature": "fence_research_execution_invocation_v2()",
+      "sha256": "9a9800d23a462b2ccccfd517d406124cf8653280258605ea40ac871e9fea64a3"
+    },
+    {
+      "name": "fence_research_paper_book_append_v1",
+      "signature": "fence_research_paper_book_append_v1()",
+      "sha256": "938ea2a3ce68fcd013db0817ace8aee34a77e0645f6e175bc6577e208a717fb5"
+    },
+    {
+      "name": "fence_research_publication_lineage_v2",
+      "signature": "fence_research_publication_lineage_v2()",
+      "sha256": "901ed32a12b4e65ae8d06c8ab715bd165028aed556d80fef575b5936adea79f6"
+    },
+    {
+      "name": "fence_research_publication_truncate_v2",
+      "signature": "fence_research_publication_truncate_v2()",
+      "sha256": "58b1800be9b1d553e1d06da432c9659a5b852ae4635e190ee7200b6f37ea5e4c"
+    },
+    {
+      "name": "fence_research_strategy_record_v1",
+      "signature": "fence_research_strategy_record_v1()",
+      "sha256": "ff25f30002e9abf28701b47278fe8eb999b6a21a7e8ea3a52f8723743d43ce0b"
+    },
+    {
+      "name": "finalize_opportunity_run_v3",
+      "signature": "finalize_opportunity_run_v3(uuid,text)",
+      "sha256": "c9e33096ed5c7b97e271e65ec41cf2528481846a6ca30f9d0b9f4818e6e0c7f9"
+    },
+    {
+      "name": "finish_research_deep_job_v1",
+      "signature": "finish_research_deep_job_v1(uuid,text,boolean,uuid,text)",
+      "sha256": "093fcbf9dff71088a03c1bfbba82b420094a50138de340743bd4ae940dec9def"
+    },
+    {
+      "name": "finish_research_deep_job_v2",
+      "signature": "finish_research_deep_job_v2(uuid,text,integer,boolean,uuid,text)",
+      "sha256": "14e6276a4d7ded6292aaac4123a1fc9741dd05c2f903a45051cf60ceafa5569d"
+    },
+    {
+      "name": "finish_research_model_v1",
+      "signature": "finish_research_model_v1(uuid,text,text,text)",
+      "sha256": "582fb91b25667db9806de362b02ee879114693de3a9c2a90d556b5f460ca9861"
+    },
+    {
+      "name": "get_link_audit_assignment_v3",
+      "signature": "get_link_audit_assignment_v3(uuid,text,internal_principal_role_v3,uuid,text,timestamp with time zone)",
+      "sha256": "124f9656952dc37248582a514e5cc42cc784f823d70bec46e5bdb8b71ddbe440"
+    },
+    {
+      "name": "handoff_research_deep_model_v1",
+      "signature": "handoff_research_deep_model_v1(uuid,text,integer,text)",
+      "sha256": "342c671f5b5c68804e91105f5491ee4f668c114df04c7fa0a7141cd4bb7ca848"
+    },
+    {
+      "name": "heartbeat_candidate_dossier_outbox_v6",
+      "signature": "heartbeat_candidate_dossier_outbox_v6(uuid,text)",
+      "sha256": "b92c3529d8e8e9d65205eef750acae315c96f6c58d1ff2e6f99a6812e7a3e5c8"
+    },
+    {
+      "name": "heartbeat_legacy_producer_job_v3_11",
+      "signature": "heartbeat_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)",
+      "sha256": "431add453451e924276fa17b240d7d6b9638548ed414ceecf89fc1c853cd3413"
+    },
+    {
+      "name": "heartbeat_opportunity_job_v3",
+      "signature": "heartbeat_opportunity_job_v3(uuid,text)",
+      "sha256": "3cb0831155977989f9683aae97ba845d77e800e439ebec0f2fffd537bf9a2777"
+    },
+    {
+      "name": "insider_dataset_v1",
+      "signature": "insider_dataset_v1(integer)",
+      "sha256": "bed85d2b2db9c326c155318d8a773accd5f475c5a832c0d0bb00acb334ad3d37"
+    },
+    {
+      "name": "insider_expected_document_v1",
+      "signature": "insider_expected_document_v1(uuid,integer,jsonb)",
+      "sha256": "55779201ecc995ea03f25104443e8ed171f935ab13dff01f8a8ccab4af220d1a"
+    },
+    {
+      "name": "insider_resolve_binding_v1",
+      "signature": "insider_resolve_binding_v1()",
+      "sha256": "584ae5c28b717e8ebe8cc5b54a5ca526a08dfe48a9a2220b95e597b34b13a629"
+    },
+    {
+      "name": "insider_row_v1",
+      "signature": "insider_row_v1(jsonb,integer)",
+      "sha256": "d1175301534b9bde7d3bf950c51deff073869b93e33a7a644edf6c9933caeeaa"
+    },
+    {
+      "name": "insider_snapshot_assert_v1",
+      "signature": "insider_snapshot_assert_v1(uuid)",
+      "sha256": "fd58c37e5d55c7888e23bb56958fdde6fd78dd4cb26a536d90bbfb3ed5ad0e5f"
+    },
+    {
+      "name": "insider_snapshot_immutable_v1",
+      "signature": "insider_snapshot_immutable_v1()",
+      "sha256": "e342c14dfae24f139efc7abab3fc2dcf73f678e8c0ac80f0f4478bd1807dc904"
+    },
+    {
+      "name": "insider_snapshot_projection_bound_v1",
+      "signature": "insider_snapshot_projection_bound_v1(uuid)",
+      "sha256": "331fc03fd4c5bb2753aff9713994e42eebddad97f0e0f284ad4d66ed769a5060"
+    },
+    {
+      "name": "insider_snapshot_run_v1",
+      "signature": "insider_snapshot_run_v1(uuid)",
+      "sha256": "fa20109f34735ccd61635cf3cce57f1bceec3f0cc1f421f3cb217bdbce4b1276"
+    },
+    {
+      "name": "insider_trim_v1",
+      "signature": "insider_trim_v1(text)",
+      "sha256": "2a594d6f68f6bacaa05e3a3278db65f464d31b02f80d54f6bff7dde996c446c3"
+    },
+    {
+      "name": "internal_principal_role_is_exact_v3_internal",
+      "signature": "internal_principal_role_is_exact_v3_internal(uuid,internal_principal_role_v3,timestamp with time zone)",
+      "sha256": "58afc75d9542e034c7652d7175d4cddcf91558a1ae48d2daecc660db93382415"
+    },
+    {
+      "name": "legacy_correctness_immutable_v3_11",
+      "signature": "legacy_correctness_immutable_v3_11()",
+      "sha256": "6aac341886068433799ff0af889745b38357043d75f056eb35ce4889b96a0ae5"
+    },
+    {
+      "name": "legacy_valid_decision_envelope_strict_v3_13",
+      "signature": "legacy_valid_decision_envelope_strict_v3_13(jsonb)",
+      "sha256": "7ab5c70bb254d6ffc27526ae9aa232105f199bb7961e2ce083d73d8be806e835"
+    },
+    {
+      "name": "opportunity_adjusted_price_evidence_v3_internal",
+      "signature": "opportunity_adjusted_price_evidence_v3_internal(uuid,date,timestamp with time zone)",
+      "sha256": "65b1cf05ffc59ea034f08857731a6d8111c9d5fb625295da58c3b53fea5ed870"
+    },
+    {
+      "name": "opportunity_authority_selected_stream_count_v3_internal",
+      "signature": "opportunity_authority_selected_stream_count_v3_internal(authority_stream_family_v3,timestamp with time zone)",
+      "sha256": "01f05c09f4a2fdb6d3a4ada67a031f44abf4a297a5d5bb2d3c5e5b9c9eacaa91"
+    },
+    {
+      "name": "opportunity_candidate_plan_v3_internal",
+      "signature": "opportunity_candidate_plan_v3_internal(uuid,text)",
+      "sha256": "8d55b1640521e1bdcdfe9ab807f0ee6c82d958e6f14e8508182495a798cd0b12"
+    },
+    {
+      "name": "opportunity_global_observation_v3_internal",
+      "signature": "opportunity_global_observation_v3_internal(market_fact_key_v3,market_scope_key_v3,text,timestamp with time zone)",
+      "sha256": "df67baf1731e273ee303cb77d6994317d6217daf244aaaf83a1aba090022c273"
+    },
+    {
+      "name": "opportunity_levenshtein_v3_internal",
+      "signature": "opportunity_levenshtein_v3_internal(text,text)",
+      "sha256": "d62662aec5d6a4b343e1f6dbf903a6026ffcb15e986599022530402680029467"
+    },
+    {
+      "name": "opportunity_manifest_native_rows_v3_internal",
+      "signature": "opportunity_manifest_native_rows_v3_internal(uuid,uuid,opportunity_manifest_kind_v3,opportunity_manifest_section_key_v3,integer,integer)",
+      "sha256": "055742e3c072a791c62966e6ed7c52bd548415812fe163b8e6fc24ab213ddb8f"
+    },
+    {
+      "name": "opportunity_market_zscore_v3_internal",
+      "signature": "opportunity_market_zscore_v3_internal(market_fact_key_v3,market_scope_key_v3,market_provider_v3,text,date,double precision,timestamp with time zone)",
+      "sha256": "b604ad85b11ecede9328a3993b9d90098d6cc8a39b6af59fd237a2c2b7d2a0e8"
+    },
+    {
+      "name": "opportunity_peer_authority_header_counts_v3_internal",
+      "signature": "opportunity_peer_authority_header_counts_v3_internal(uuid,timestamp with time zone)",
+      "sha256": "a7e3136a05c55638b05857f0616d11e92ce0134b6f36c08e2ab52e9874173927"
+    },
+    {
+      "name": "opportunity_raise_pt409_v3_internal",
+      "signature": "opportunity_raise_pt409_v3_internal(text)",
+      "sha256": "64333fe47da7ee0d2e61993b304c8a9e9cf26f02478974d139a577891b441be1"
+    },
+    {
+      "name": "prepare_opportunity_financial_fact_series_v3",
+      "signature": "prepare_opportunity_financial_fact_series_v3()",
+      "sha256": "a2522a824f039d0d358875ef868d949a359d24bc2493fc6eb0330c5b822b6c2a"
+    },
+    {
+      "name": "prepare_research_input_v2",
+      "signature": "prepare_research_input_v2(jsonb)",
+      "sha256": "e0ac74348d6ade114e6ad385bdf8f7569979cfe32ca2eb7208157822fa9bed9c"
+    },
+    {
+      "name": "publish_research_article_v2",
+      "signature": "publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text)",
+      "sha256": "109e139313f87997e81d30de7b4dcf2aa941db0c362e8a1f36acb6accdf35599"
+    },
+    {
+      "name": "purge_internal_nonces_v3",
+      "signature": "purge_internal_nonces_v3(timestamp with time zone,uuid)",
+      "sha256": "f28b8fdc21660634592fc021889c4b4936d64a771ad00bba3d78c9c1e1117634"
+    },
+    {
+      "name": "read_completed_research_publication_v2",
+      "signature": "read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text)",
+      "sha256": "70291b261c6108cf842cdbaf59ed231cceb76619510b307f0ecb2bda6dff9789"
+    },
+    {
+      "name": "read_financial_history_page_v1",
+      "signature": "read_financial_history_page_v1(uuid,financial_fact_key_v3,financial_duration_kind_v3,financial_estimate_kind_v3,financial_estimate_horizon_v3,date,date,timestamp with time zone,uuid,integer,uuid)",
+      "sha256": "00fc642562689abdfa388179e1a34541b67d2c3fd0af68dc7b79b7634901fa3d"
+    },
+    {
+      "name": "read_insider_snapshot_page_v1",
+      "signature": "read_insider_snapshot_page_v1(uuid,integer,uuid)",
+      "sha256": "601050b0316a1ccfbb3f1eb1085dc077762e99583be4665386f601765eca03e2"
+    },
+    {
+      "name": "read_legacy_candidate_fact_plane_authoritative_v3_12",
+      "signature": "read_legacy_candidate_fact_plane_authoritative_v3_12(timestamp with time zone,jsonb)",
+      "sha256": "8a076f7d94835421a00ec0985941bdb6cf4e1fe9d28f609d21626375db2c1d31"
+    },
+    {
+      "name": "read_legacy_candidate_fact_plane_authoritative_v3_13",
+      "signature": "read_legacy_candidate_fact_plane_authoritative_v3_13(timestamp with time zone,jsonb)",
+      "sha256": "2f3db040d8b6120a7dce12912fb66be79060b57349820ae5677f21dad535a17d"
+    },
+    {
+      "name": "read_legacy_candidate_fact_plane_decision_integrity_v3_13",
+      "signature": "read_legacy_candidate_fact_plane_decision_integrity_v3_13(timestamp with time zone,jsonb)",
+      "sha256": "c43c9183582cb0038b04247261517f9d82b6c5ba5768cf06864fc8e34201147f"
+    },
+    {
+      "name": "read_legacy_candidate_fact_plane_v3_16_11_internal",
+      "signature": "read_legacy_candidate_fact_plane_v3_16_11_internal(timestamp with time zone,jsonb)",
+      "sha256": "b299c7300d9ca5679637e3c48a5dd0c3df7b8f2519e2e7ad7fda4f373334a887"
+    },
+    {
+      "name": "read_legacy_discovery_authority_v3_11",
+      "signature": "read_legacy_discovery_authority_v3_11(uuid,text,text)",
+      "sha256": "8c946dcef9b349ee3a87f055b86dcbbb514aa0ab39944b1a9eaf57fd073d0311"
+    },
+    {
+      "name": "read_legacy_frozen_revision_v3_11",
+      "signature": "read_legacy_frozen_revision_v3_11(uuid,uuid,text,uuid,text)",
+      "sha256": "bc6922ad4cba186e93e31eefb29a9465fda0109499784cec73ba293168a2a7e7"
+    },
+    {
+      "name": "read_research_article_input_revision_v2",
+      "signature": "read_research_article_input_revision_v2(jsonb)",
+      "sha256": "f0cbfea061e7fb2521fd25c3f8529942829dcf64f19e615d0f3a23b4fa2aa009"
+    },
+    {
+      "name": "read_research_author_assignment_v2",
+      "signature": "read_research_author_assignment_v2(jsonb,uuid,text,text)",
+      "sha256": "101970cab57a6c8a17471f08f9aae3a841163c120634a13af3f37492c0fddb23"
+    },
+    {
+      "name": "read_research_author_handoff_context_v2",
+      "signature": "read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text)",
+      "sha256": "c2f562b3e6ba3607e6d414264b6e37eb3e6b9c5a31475cc4508cc47a423136fb"
+    },
+    {
+      "name": "read_research_author_packet_v2",
+      "signature": "read_research_author_packet_v2(jsonb,uuid,text,text)",
+      "sha256": "c65332ac8cbc3661bb1ab873d1645540d969f7040fc81b8675ca3f1fd6714ddc"
+    },
+    {
+      "name": "read_research_author_result_v2",
+      "signature": "read_research_author_result_v2(jsonb,uuid,text,text)",
+      "sha256": "2bb33e184e82c1e2749f896bcdd43e29b066951705909ecb2ea3e7fc79caa374"
+    },
+    {
+      "name": "read_research_company_publication_v2",
+      "signature": "read_research_company_publication_v2(uuid)",
+      "sha256": "4bbbb936b5c5bba36cfc45169b3d9775de0cfb69f04fe7c99312e561ca9a42aa"
+    },
+    {
+      "name": "read_research_observed_claim_v2",
+      "signature": "read_research_observed_claim_v2(text,text,uuid,integer)",
+      "sha256": "d689601d00e016e67a9981c26cf2c086b67e82ec40adc581345a19cdf6c4d826"
+    },
+    {
+      "name": "read_research_observed_roster_v1",
+      "signature": "read_research_observed_roster_v1(text,timestamp with time zone,integer,integer)",
+      "sha256": "526993776e249b9c34ef4d0d52706aa067b3d0d6cb9a72ae0354de8af8afda4e"
+    },
+    {
+      "name": "read_research_reviewer_context_v2",
+      "signature": "read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text)",
+      "sha256": "6ba49ae7b4f3a649880ad935c919066923530c83c65046a24898f268144bd4ec"
+    },
+    {
+      "name": "read_research_reviewer_result_context_v2",
+      "signature": "read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text)",
+      "sha256": "93a7999f594fa83a73b57e35c7a8592c11247e3e008c008b940b07f3145d348d"
+    },
+    {
+      "name": "read_research_reviewer_result_sources_v2",
+      "signature": "read_research_reviewer_result_sources_v2(jsonb,uuid,text,text,text,uuid,text)",
+      "sha256": "e27b5222994b98ebe6cfb2de23cf9aa5026ec9f3714ea12eda3c8c0620470f21"
+    },
+    {
+      "name": "read_research_reviewer_sources_v2",
+      "signature": "read_research_reviewer_sources_v2(jsonb,uuid,text,text,text,uuid,text)",
+      "sha256": "6411b0738f8f21d1051dc8b3754bb181cc78d6141d3505981d10efb1df563253"
+    },
+    {
+      "name": "reap_expired_research_deep_jobs_v2",
+      "signature": "reap_expired_research_deep_jobs_v2()",
+      "sha256": "93b87776f084d386475e88d816b13213bddbc60d946c08d86eeece494882cdb9"
+    },
+    {
+      "name": "reap_legacy_producer_jobs_v3_11",
+      "signature": "reap_legacy_producer_jobs_v3_11(integer)",
+      "sha256": "5a610b8751db00616a1a0814f010415671d896823e441432332a1b2eb0adf0ba"
+    },
+    {
+      "name": "reap_opportunity_jobs_v3",
+      "signature": "reap_opportunity_jobs_v3(uuid)",
+      "sha256": "0231fd026efd790c728c2e9ffa1aab902b1923765a467527cb0b0b1639bf7d5b"
+    },
+    {
+      "name": "receive_research_author_result_v2",
+      "signature": "receive_research_author_result_v2(jsonb,uuid,text,text,jsonb)",
+      "sha256": "775da4d4bfd4d02ac2b246dddb3e2f98d1a0b2e8e8c123ba454008c89c59b822"
+    },
+    {
+      "name": "receive_research_reviewer_result_v2",
+      "signature": "receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb)",
+      "sha256": "a066dadea19379153079f4788753b92ed7c3a4dc65e383b77b95ea8f46a158b7"
+    },
+    {
+      "name": "reconcile_research_deep_admissions_v1",
+      "signature": "reconcile_research_deep_admissions_v1()",
+      "sha256": "b2176525cb2dcec98e65a04ce8dd5d48210625d1a614ca7ce69c7622c3dbf91e"
+    },
+    {
+      "name": "record_budgeted_deep_review_v1",
+      "signature": "record_budgeted_deep_review_v1(uuid,integer,uuid,jsonb)",
+      "sha256": "363b486a3daea07709f5633fc392d9b0a3d49397ac65108cc71dba7b9f6a1fe0"
+    },
+    {
+      "name": "record_candidate_deep_submission_v1",
+      "signature": "record_candidate_deep_submission_v1(uuid,text,integer,uuid,text,uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+      "sha256": "690c7b3dbb837a7c476869bec776763106d1af7c0a3ec26782240a1651c91e0a"
+    },
+    {
+      "name": "record_candidate_dossier_submission_v4",
+      "signature": "record_candidate_dossier_submission_v4(uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+      "sha256": "5fb3fb63db033f82fe23a3b1fc8825cc0a785217c0bb77e6f9dfd313b78dc62a"
+    },
+    {
+      "name": "record_candidate_dossier_submission_v6",
+      "signature": "record_candidate_dossier_submission_v6(uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+      "sha256": "b8b6ac590730bb6dd6dc7869c7e85e68b3c3f5086a459bf0a6bbd60616ac6265"
+    },
+    {
+      "name": "reject_candidate_dossier_revision_mutation_v4",
+      "signature": "reject_candidate_dossier_revision_mutation_v4()",
+      "sha256": "1829687eb931fd9b111386fbc4baf6184d02201d8bfe8f2dff9cd89a99f94914"
+    },
+    {
+      "name": "reject_research_observed_mutation_v1",
+      "signature": "reject_research_observed_mutation_v1()",
+      "sha256": "835991435faa22ef160cf498a9915b76921382cd93b02ab33213f9805471e521"
+    },
+    {
+      "name": "reject_research_source_receipt_mutation_v2",
+      "signature": "reject_research_source_receipt_mutation_v2()",
+      "sha256": "1c5444f142e8f379ffc38da76877802d76d23556bc7a12133905bd177d4ef598"
+    },
+    {
+      "name": "release_candidate_dossier_outbox_v6",
+      "signature": "release_candidate_dossier_outbox_v6(uuid,text,boolean,text)",
+      "sha256": "a485c78d9897dfd66f19871926974363389193bc20da0e0725dd72b0a13acc33"
+    },
+    {
+      "name": "research_author_assignment_context_v2",
+      "signature": "research_author_assignment_context_v2(jsonb,uuid,text,text)",
+      "sha256": "30791f8cab3f6809af24e3159ad839ba03b5893623660cc73e0b4001bda4c877"
+    },
+    {
+      "name": "research_complete_canonical_v2",
+      "signature": "research_complete_canonical_v2(jsonb,integer)",
+      "sha256": "55225d0d047c771bf74f26b87d260300c58ab1e71d6bf65aa2d7715b0ce6e065"
+    },
+    {
+      "name": "research_complete_hash_v2",
+      "signature": "research_complete_hash_v2(jsonb)",
+      "sha256": "b186de6d61aa7a0f42eb7b716bc50515c068a3ec68ceee8c0cafb910ada87df4"
+    },
+    {
+      "name": "research_complete_mapping_v2",
+      "signature": "research_complete_mapping_v2(text)",
+      "sha256": "2d2fa1c5845393394abce4ffff1c1cc08e5068d5b6016a71cd55b1e8e7772200"
+    },
+    {
+      "name": "research_complete_parent_v2",
+      "signature": "research_complete_parent_v2(jsonb)",
+      "sha256": "d16cfd9e820c05fdc27feb374e4689baad1f1f28a52fb669b9850417d896f99e"
+    },
+    {
+      "name": "research_complete_schema_check_v2",
+      "signature": "research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer)",
+      "sha256": "e7a10362d6d0fdbc3222556b5f464fb31fae9bb53310d24f0c418a73138adcd8"
+    },
+    {
+      "name": "research_evidence_heads_v1",
+      "signature": "research_evidence_heads_v1(uuid[],timestamp with time zone)",
+      "sha256": "fb92b9a8126af1858f2f78f1402d428afde7783d7ff629baf9103bf1e66b9bb6"
+    },
+    {
+      "name": "research_execution_policy_matches_v1",
+      "signature": "research_execution_policy_matches_v1(jsonb)",
+      "sha256": "042c6e8fdc083d5ead36bf426a767d51ef837271d81b5c654ab90ce7012c5b19"
+    },
+    {
+      "name": "research_input_preparation_bytes_v2",
+      "signature": "research_input_preparation_bytes_v2(jsonb,jsonb,jsonb)",
+      "sha256": "934896333e95123b660edc3806331f7210f26acf4060948e9f11b5cc0c6b44ee"
+    },
+    {
+      "name": "research_model_lease_fits_day_v1",
+      "signature": "research_model_lease_fits_day_v1(timestamp with time zone)",
+      "sha256": "28c882da98512201ecc357fc17bc2032d93a230f148483779b8203633377ad3f"
+    },
+    {
+      "name": "research_observed_canonical_json_v1",
+      "signature": "research_observed_canonical_json_v1(jsonb)",
+      "sha256": "e7232c829c566808567eb5259a3d68e1e7dbc8eb1667799143370d2fa4dc33d2"
+    },
+    {
+      "name": "research_observed_instant_v1",
+      "signature": "research_observed_instant_v1(text)",
+      "sha256": "edb8f90120299b6a3862d71a72ecfcb5f3cc2ea2a2989a067dc178272fcc2fe3"
+    },
+    {
+      "name": "research_publication_content_v2",
+      "signature": "research_publication_content_v2(jsonb)",
+      "sha256": "18352842373254fb3d4dea92a5b4d7db83ba62818add74d8f6e534ebfb3e32cd"
+    },
+    {
+      "name": "research_publication_source_state_v2",
+      "signature": "research_publication_source_state_v2(uuid)",
+      "sha256": "7f9da42febbe34688463ff2fd8f672ef0207b9259b516883a4e7e9abed129290"
+    },
+    {
+      "name": "research_source_fence_record_v2",
+      "signature": "research_source_fence_record_v2()",
+      "sha256": "8af248b3be121915b2e4fdca5192cf9d54eac187261fdb35fa801787d7a5146b"
+    },
+    {
+      "name": "research_source_fence_write_v2",
+      "signature": "research_source_fence_write_v2()",
+      "sha256": "5b999b54bea03552af33895a09a424e31a63af06d20e1c793e9c1f2140c882a4"
+    },
+    {
+      "name": "research_source_heads_page_v1",
+      "signature": "research_source_heads_page_v1(timestamp with time zone,integer,integer)",
+      "sha256": "84cf7c782c832b4f9381d1e0dc036816a6cb815ee554ee7c12a2c973812499a7"
+    },
+    {
+      "name": "research_source_root_v2",
+      "signature": "research_source_root_v2(jsonb)",
+      "sha256": "c4e6f98298283cfc299e36f38e27087c683c5f4f946a9ff52bb1f02eda133063"
+    },
+    {
+      "name": "research_thesis_heads_page_v1",
+      "signature": "research_thesis_heads_page_v1(timestamp with time zone,integer,integer)",
+      "sha256": "a4c770a17f33dfc51b1f0c5ee952a15725cd88b655f7988b8df329c34d704cfa"
+    },
+    {
+      "name": "reserve_research_model_v1",
+      "signature": "reserve_research_model_v1(text,text,text)",
+      "sha256": "994ebd6020efbfd282e3cde6a256c1eda028fa90f98a6b0dc771d1e5246f3ab8"
+    },
+    {
+      "name": "seal_opportunity_run_inputs_v3",
+      "signature": "seal_opportunity_run_inputs_v3(uuid,text)",
+      "sha256": "f7362f1fe6157f29f62a85936efe20d4ba63296c74a381caed5b2487c17bc269"
+    },
+    {
+      "name": "seal_research_article_input_revision_v2",
+      "signature": "seal_research_article_input_revision_v2(jsonb,jsonb)",
+      "sha256": "cdb3e20303f9709cde8ec144fb87b54e09d3040ef395ae373a4b0fd2c2366d03"
+    },
+    {
+      "name": "seal_research_sources_v2",
+      "signature": "seal_research_sources_v2(jsonb,timestamp with time zone)",
+      "sha256": "1cd7ad045ece8d2786ddee4023eb7c63dc529aec58677dcc2f163b5e419cf5f5"
+    },
+    {
+      "name": "select_opportunity_public_projection_v3",
+      "signature": "select_opportunity_public_projection_v3(timestamp with time zone)",
+      "sha256": "bba2ebd5dc11f513846b1a2771a93fc5324e93d5a271e58c30f7f24f7fcfce7e"
+    },
+    {
+      "name": "stage_opportunity_job_output_v3",
+      "signature": "stage_opportunity_job_output_v3(uuid,text,opportunity_job_output_kind_v3,bytea,jsonb,text,opportunity_job_counts_v3)",
+      "sha256": "815b0ec61b8fc682c6ff38c5d40ca71785c58532a1fc18ef211e7a0bf1c39aad"
+    },
+    {
+      "name": "store_observed_research_priority_v1",
+      "signature": "store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+      "sha256": "16c09b908778b00bc2984d6b857689a18c7a6c6f74d15c59e59171735d3ea5c4"
+    },
+    {
+      "name": "submit_link_audit_label_v3",
+      "signature": "submit_link_audit_label_v3(uuid,text,internal_principal_role_v3,link_audit_label_role_v3,text,boolean,uuid,text,timestamp with time zone)",
+      "sha256": "fb33803b722a2e58440a0c736303d4b54a526bbca4d0af122ff16777859017fd"
+    },
+    {
+      "name": "validate_opportunity_manifest_lifecycle_v3",
+      "signature": "validate_opportunity_manifest_lifecycle_v3()",
+      "sha256": "3df77928f3a03a088b045f9a3e44acac6ea3126b5a63f7de578f11196d7088e2"
+    },
+    {
+      "name": "validate_opportunity_manifest_page_rows_v3",
+      "signature": "validate_opportunity_manifest_page_rows_v3()",
+      "sha256": "97b790500594e8d8365129e10ebb37e2cb66bd5d34ad61c9aeede200d4b30da7"
+    },
+    {
+      "name": "validate_research_deep_scope_v1",
+      "signature": "validate_research_deep_scope_v1()",
+      "sha256": "77673041c5c8b5fb87fb3d40e2b7cbb82504841eb85b30d28c5100d96ee860fb"
+    }
+  ]
+}
