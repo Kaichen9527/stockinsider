@@ -1,0 +1,93 @@
+{
+  "at": "2026-10-14T20:38:48.368817+00:00",
+  "scope": "Root verification of independent operator review and bounded fix dispatch",
+  "files": [
+    {
+      "path": "cleanup_failure_after_success.probe.sh",
+      "bytes": 1492,
+      "sha256": "ccc815b25578439c0bb622bc012e22a5d9f40d1c41310f4a9414b358669599db"
+    },
+    {
+      "path": "config-restore-result.json",
+      "bytes": 558,
+      "sha256": "12e275fa1f14c75f120332588f8f90fb859acb59a19321c78a9c45df82e2db37"
+    },
+    {
+      "path": "hermetic-results.json",
+      "bytes": 749,
+      "sha256": "0e69e8427139856780bd5d201f228f74edcd38f407fc4226f6e00abb6705c187"
+    },
+    {
+      "path": "independent-review.md",
+      "bytes": 10318,
+      "sha256": "443ac04add00c3b665bbc2d050a4814c8f985c5e3b197c120f6d824b09774aaf"
+    },
+    {
+      "path": "initial-root-inventory-prefix-error.json",
+      "bytes": 237,
+      "sha256": "5898f7353c2e6fc4ccb82d09c3aea7440e6f59e1e9c2835167788e1c94795e4a"
+    },
+    {
+      "path": "normal_failure_control.probe.sh",
+      "bytes": 1492,
+      "sha256": "76d38c1214ac062fda3308f703a0c42907a33f9bdb5423cdb15cf24e58c86aff"
+    },
+    {
+      "path": "probe-extraction-initial-error.json",
+      "bytes": 299,
+      "sha256": "c547fe728f715554c3ff436965f007f66c3c71ed493f8d057afe9101544ff3c0"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 7443,
+      "sha256": "fc8b8551ecdc9327098f1fc983a0d44d2b87945760fc74a20d770c988459c760"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 3217,
+      "sha256": "626ffbd636502ad38cf78d0c084d7acec83f02733558a61f356e66a9c05e1a41"
+    },
+    {
+      "path": "root-review-status.md",
+      "bytes": 3654,
+      "sha256": "ecb625046663e59eb24ab5c6ecbed64ccabec243210b03574d079a36de74df56"
+    },
+    {
+      "path": "root-verification.json",
+      "bytes": 1543,
+      "sha256": "7558e755efffd69472a4a8d36986c087e3e4e276c06df1bfdbcceb5ab05ebeb2"
+    },
+    {
+      "path": "source-inventory.json",
+      "bytes": 7784,
+      "sha256": "d44c8fc16957392e40b2bd0e870dbcf7651b72bb9ebb4ec29997038809181609"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 777,
+      "sha256": "82ef987d196cf24994147277f27f439cbd9388423a8593c8e737dbba556698a6"
+    },
+    {
+      "path": "syntax.json",
+      "bytes": 134,
+      "sha256": "e89eeb2545455fbf5ea6daeac0cc32c3a6535425c864a88727cb5ec7fc0d8e07"
+    },
+    {
+      "path": "term_after_current_changed.probe.sh",
+      "bytes": 1500,
+      "sha256": "9872d4a96a587f05d1add8ac530b51821af06e447c1034ced33b836211e92202"
+    }
+  ],
+  "sourceInputsVerified": 21,
+  "publishedRawVerified": {
+    "files": 44,
+    "bytes": 131603
+  },
+  "rootDisposition": "accept R1 P1/R2 P2/R3 P2 for repair; original REQUEST_CHANGES remains",
+  "cloudTurn": "01a13c22-b8a0-771f-a6e9-a31fecc676b3",
+  "cloudCursor": "303427c2-9b66-4f3d-abd3-26255a0a19ef:11",
+  "cloudLatestTurn": "inProgress",
+  "productionExecuted": false,
+  "deploymentApproved": false,
+  "fullGoalComplete": false
+}

@@ -1,0 +1,35 @@
+{
+  "independentReviewSubject": "bf72316a6f8e0d251351ed50acb441d87186352a",
+  "draftSha256": "33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973",
+  "evidence": "89b6e463baf380d4d2ccffae8bc278f1d06aa1ad",
+  "receiptSha256": "626ffbd636502ad38cf78d0c084d7acec83f02733558a61f356e66a9c05e1a41",
+  "verifiedActualSourceInputs": 21,
+  "verifiedPublishedRawFiles": 44,
+  "verifiedPublishedRawBytes": 131603,
+  "rootDisposition": "accept demonstrated R1/P1,R2/P2,R3/P2 for repair; no deployment approval",
+  "findings": [
+    {
+      "id": "R1",
+      "priority": "P1",
+      "lines": "89-92,110,160-162",
+      "summary": "Catchable termination while changed=true can leave recovery branch unexecuted because EXIT sees prior success",
+      "probe": "term_after_current_changed: signal15, no restore mock invoked; ordinary exit42 control does restore"
+    },
+    {
+      "id": "R2",
+      "priority": "P2",
+      "lines": "94-104,162; old/DD activate-writer-release.sh20-29",
+      "summary": "Reinvoking old activation rewrites rather than restores accepted original env/drop-in bytes",
+      "probe": "Synthetic admitted predecessor extra nonsecret settings lost by exact three-line write block"
+    },
+    {
+      "id": "R3",
+      "priority": "P2",
+      "lines": "106-108,173-174",
+      "summary": "Staging cleanup failure leaves overall success exit0",
+      "probe": "exact finish with rmdir failure returns0 and cleanup-failed diagnostic"
+    }
+  ],
+  "rootNativeOrProductionExecuted": false,
+  "originalREDPreserved": true
+}

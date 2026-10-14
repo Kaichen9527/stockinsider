@@ -1,0 +1,8 @@
+{
+  "exit": 0,
+  "beforeWriter": "STOCKINSIDER_WRITER_RELEASE_ID=169aad1b6cfa747f78ae3464b614f43c0749d806\nKEEP_TEST_SETTING=1\n",
+  "afterWriter": "STOCKINSIDER_WRITER_RELEASE_ID=169aad1b6cfa747f78ae3464b614f43c0749d806\n",
+  "beforeDrop": "[Service]\nEnvironmentFile=/synthetic/prior\nRestartSec=11\n",
+  "afterDrop": "[Service]\nEnvironmentFile=/tmp/dd-operator-review-o15/synthetic-writer.env\n",
+  "scope": "exact three-line old helper write block only, install mock, synthetic local files; script preflight does not exclude extra nonsecret settings"
+}

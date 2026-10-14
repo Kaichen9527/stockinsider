@@ -1,0 +1,8 @@
+{
+  "exit": 1,
+  "nestedGitShowExit": 128,
+  "mistake": "prepended raw/ to inventory paths already starting raw/",
+  "mutation": false,
+  "productFailure": false,
+  "correctedBy": "use exact inventory relative paths under report root"
+}

@@ -1,0 +1,13 @@
+## 2026-10-15 04:38台灣時間：DD operator獨立review真REQUEST_CHANGES，Root核21source/44raw後只派三根因候選修補
+
+Cloud獨立review turn01a13be7真completed/threadidle/cursor303427c2-9b66-4f3d-abd3-26255a0a19ef:10。Report a04d6a7f42c349edab562fe6135036f34fbdf004/evidence89b6e463baf380d4d2ccffae8bc278f1d06aa1ad/receipt626ffbd636502ad38cf78d0c084d7acec83f02733558a61f356e66a9c05e1a41，受審Root草稿33d031f7，不是app/正式部署批准。Root逐byte核21actualGitinputs/44publishedraw131603bytes及exactreport；真REQUEST_CHANGES P0=0/P1=1/P2=2，不以bash-n代批准。
+
+R1/P1：EXIT僅看最後status，TERM於changed=true後可略過復原，獨立exactfinish隔離probe真signal15/no restore；ordinaryexit42 control有restore。R2/P2：old/DD helper同SHA0719de56只重寫writerenv/dropin，未排除的原非secret額外setting會消失，不證原bytes/state恢復。R3/P2：cleanup rmdir失敗仍exit0、success先於cleanup。原7isolatedprobes/1syntax及初probe extraction RED保持；Root未exec/source部署script、未新native/PG/VPS。Root第一次inventory多加raw/造成readonlyGit128已封存；改依inventory精確相對路徑完成核對，不當productFAIL。
+
+沿既有人類修復授權，前turn真idle後只一件30min候選fix codex/dd-binary-operator-recovery-fix-oct15/baseapprovedmain8c58。新turn01a13c22-b8a0-771f-a6e9-a31fecc676b3/cursor303427c2-9b66-4f3d-abd3-26255a0a19ef:11 latestTurninProgress，thread短暫idle不是完成，下一先同handlecompactwait，勿重派。Owned僅docs/operations/2026-10-15/dd-binary-operator-candidate/新手動procedure/必要最小supervisor、isolatedprobes/handoff/新evidence，非永久runtime框架，不繞repo PR/normalprotected；舊draft/review/RED不可改，maker不得自簽獨立批准。
+
+R1需HUP/INT/TERM非零、nonreentrant finish、切換前arm；任何in-flight owned activation與descendants真settle後才可反向mutation，不能kill後立刻rollback或timeout假結束；unconfirmed就nonzero/uncertain/manual reconciliation而不併發反向activate，SIGKILL/powerloss邊界明示。R2 Root選finite canonical predecessor reject：只知非secret writer-release.env原literal及20-writer-release.conf exactbytes/owner/group/mode/regular-nosymlink/dir/effectiveunit身份，unknown/extra/absence mutation前拒絕、不備份讀取任意secret；oldhelper後真重驗原profile+unit/current/唯一writer/health才稱復原。真VPS是否符合仍freshpreflight pending，不猜。R3 cleanup失敗nonzero，healthyactivation與cleanupuncertain分別報告，不為cleanuponly自動回滾；complete在確認cleanup後才輸出。
+
+只seal exactsource/WIP及isolatedbuiltins/mock/dummyprocess/語法檢查，禁止exec/source真部署script/main169-deploy.sh、production絕對路徑/PG/app/socket/SSH/HTTP/VPS/native/build/npm/browser/CI/PR/exactref/readymerge/deploy/secret/cache；不改approvedhelper/SQL/roles/grants/authority/pins/workflows/caps/原3locks及全部budgets/DD hashes，不重建DD包、不碰PR370..381終態helper。無production修改或formalapproval。最新capacity仍原18:34diskREADY/memoryFAIL，19:10memory2294386688<2684354560差389967872，未重測必敗heavy/降預算/停App/刪cache/付費，current-writer仍18:36readonly169/lease0最後值。本輪無新VPS量測。
+
+Response-loss local3PASS/Root263source與公開witness收斂保持、不重跑。Fullgoalactive，正式來源/兩文章/四caller/Q-R/cashcitations/wholeclosure/合格技術觀察/策略與正式研究排程及peer/install/deploy仍未完成。報告.agent/reports/2026-10-15T04-38-dd-operator-review-and-recovery-fix/。
