@@ -1,0 +1,132 @@
+{
+  "files": [
+    {
+      "path": "raw/captured-schema-excerpts.txt",
+      "bytes": 6621,
+      "sha256": "f04402bab808b68cc64a0200059a6d17399c60973c40a300366d5aa42f877e3a"
+    },
+    {
+      "path": "raw/command-0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/command-0.stdout",
+      "bytes": 9,
+      "sha256": "7703fd79909af9b17df6395137bee2b07c3f3b27b6e96e18c909f433cce84f19"
+    },
+    {
+      "path": "raw/command-1.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/command-1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/command-2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/command-2.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/command-3.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/command-3.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/commands.json",
+      "bytes": 1288,
+      "sha256": "74add6c98764566cf2dc60ea84f7d46a42e7eccc8cecdeb400c08456a7b70888"
+    },
+    {
+      "path": "raw/excerpt-20261009_research_complete_input_v2.sql.txt",
+      "bytes": 6502,
+      "sha256": "880e1d75b924ea95cc57a9df132c8da074cd001123b43ce7e8c9029d2390f92c"
+    },
+    {
+      "path": "raw/excerpt-20261009_research_input_preparation_assert_v2.sql.txt",
+      "bytes": 2181,
+      "sha256": "db7d7ca702cd63d216596230d4aa04e0d6713ce7d1527e9fe4332cd85b57c406"
+    },
+    {
+      "path": "raw/excerpt-20261009_research_publication_source_fence_v2.sql.txt",
+      "bytes": 4446,
+      "sha256": "37d72c422584bfe3a3158b86943b8948b44faebcb84e3030cbbcd7754aa98d00"
+    },
+    {
+      "path": "raw/excerpt-20261014_research_versioned_input_candidate_v3.sql.txt",
+      "bytes": 6182,
+      "sha256": "e4769154476959308fc658d2719e9c817b0dcfe6155d46d4083b55147a411c9f"
+    },
+    {
+      "path": "raw/excerpt-research-versioned-complete-input.ts.txt",
+      "bytes": 2874,
+      "sha256": "388293ca7159e856af8b467f03232af319430879227f5c332d141ed7e493874b"
+    },
+    {
+      "path": "raw/excerpt-research-versioned-legal-fixture-helper.mjs.txt",
+      "bytes": 8906,
+      "sha256": "a4e1fb43791949481d2003c4e1f1e9a40936f9d9bea8e411ad7151a7d9dda43c"
+    },
+    {
+      "path": "raw/final-syntax-command.json",
+      "bytes": 618,
+      "sha256": "5bf7cb631470d0cec7a20a8c644325df9dc293987624fa1839309102a6bdd465"
+    },
+    {
+      "path": "raw/final-syntax.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/final-syntax.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/final-wip-source-inventory.json",
+      "bytes": 64953,
+      "sha256": "4a431dceaad1650f763fb83936000d8a2218336ec031c574211b82c5e52809d9"
+    },
+    {
+      "path": "raw/initial-syntax-subject.test.mjs.txt",
+      "bytes": 15322,
+      "sha256": "e5762ff490c5825e277dbb95dcb83013c097a39cb6860e0114045668923010e2"
+    },
+    {
+      "path": "raw/resources.json",
+      "bytes": 482,
+      "sha256": "046d99e24723250f4ce857c30de6795802851926f558455b7778447a2819692e"
+    },
+    {
+      "path": "raw/sealed-wip.json",
+      "bytes": 936,
+      "sha256": "1a24adbac9df5e815308c756949420cf83b7b52ac1e8df8d7020886029cd280d"
+    },
+    {
+      "path": "raw/source.diff",
+      "bytes": 2993,
+      "sha256": "54dc297cedf93de540d5e94975f659aa6ed21d34f11cd21e492e92d9115838d0"
+    },
+    {
+      "path": "raw/static-source-index.json",
+      "bytes": 2869,
+      "sha256": "e89fa999d49e1c83b873b95f7345af14713e8c26e56709b6437bc95f5dc8d526"
+    }
+  ],
+  "count": 25,
+  "bytes": 127182,
+  "privateNativeRawGenerated": false
+}

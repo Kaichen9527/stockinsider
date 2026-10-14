@@ -1,0 +1,118 @@
+[
+  {
+    "path": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621",
+    "blob": "299513a305099968756fccd617da268f352047b1",
+    "ranges": [
+      [
+        40,
+        83
+      ],
+      [
+        136,
+        149
+      ]
+    ],
+    "excerpt": "excerpt-20261009_research_publication_source_fence_v2.sql.txt"
+  },
+  {
+    "path": "migrations/20261009_research_input_preparation_assert_v2.sql",
+    "sha256": "c63a923be36e5f7ba06001a6d8be57287d80f5e6524dc866bad93b80666a9cbc",
+    "blob": "fb7e49f28a56cb5eb085c9d6ba8ad6c19bc5d8d9",
+    "ranges": [
+      [
+        1,
+        28
+      ]
+    ],
+    "excerpt": "excerpt-20261009_research_input_preparation_assert_v2.sql.txt"
+  },
+  {
+    "path": "migrations/20261009_research_complete_input_v2.sql",
+    "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c",
+    "blob": "3d22fdb3c56c91ff64b6baec4cdbad5d686e9592",
+    "ranges": [
+      [
+        58,
+        83
+      ],
+      [
+        151,
+        175
+      ]
+    ],
+    "excerpt": "excerpt-20261009_research_complete_input_v2.sql.txt"
+  },
+  {
+    "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+    "sha256": "f089f44375f80da89be49215cad35626998bcb5775166efc23e93af224ec284f",
+    "blob": "855cd31a01d16809c5b7b9ce0fbfc135d4aa930d",
+    "ranges": [
+      [
+        54,
+        78
+      ],
+      [
+        97,
+        122
+      ]
+    ],
+    "excerpt": "excerpt-20261014_research_versioned_input_candidate_v3.sql.txt"
+  },
+  {
+    "path": "web/src/lib/research-versioned-complete-input.ts",
+    "sha256": "6c748235f5aebd3bdfa254de400e752e42bf15aae53c840b8ec09b543a29e906",
+    "blob": "a7c035844cfaf44834b755e1250fc3cae1d7a6d5",
+    "ranges": [
+      [
+        44,
+        65
+      ]
+    ],
+    "excerpt": "excerpt-research-versioned-complete-input.ts.txt"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+    "sha256": "9491391998cae6201e7bb055261dd4a4b1f1d9f5ff3bc55973db83643039269f",
+    "blob": "d696aa38be88f097067126e4ce820199af6776ae",
+    "ranges": [
+      [
+        34,
+        64
+      ]
+    ],
+    "excerpt": "excerpt-research-versioned-legal-fixture-helper.mjs.txt"
+  },
+  {
+    "path": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+    "gzipSha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "expandedSha256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+    "ranges": [
+      [
+        2758,
+        2790
+      ],
+      [
+        11089,
+        11111
+      ],
+      [
+        22801,
+        22820
+      ],
+      [
+        33597,
+        33622
+      ],
+      [
+        40070,
+        40082
+      ],
+      [
+        47825,
+        47836
+      ]
+    ],
+    "excerpt": "captured-schema-excerpts.txt"
+  }
+]

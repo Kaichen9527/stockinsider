@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-14T17:57:52.125785+00:00",
+  "filesystem": [
+    {
+      "path": "/workspace",
+      "availableBytes": 8604499968
+    },
+    {
+      "path": "/tmp",
+      "availableBytes": 15378907136
+    }
+  ],
+  "maxChildRssKiB": 23116,
+  "measurement": "wait4 resource high-water for sequential syntax/static children; not native/service RSS",
+  "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+  "startedServices": [],
+  "removedPaths": []
+}

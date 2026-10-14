@@ -1,0 +1,127 @@
+2758: CREATE FUNCTION public.acquire_production_write_lease(p_lease_key text, p_owner_id uuid, p_ttl_seconds integer) RETURNS boolean
+2759:     LANGUAGE plpgsql SECURITY DEFINER
+2760:     SET search_path TO 'public', 'pg_temp'
+2761:     AS $$
+2762: DECLARE
+2763:   acquired_owner UUID;
+2764: BEGIN
+2765:   IF p_ttl_seconds < 60 OR p_ttl_seconds > 10800 THEN
+2766:     RAISE EXCEPTION 'invalid_lease_ttl';
+2767:   END IF;
+2768:   INSERT INTO public.production_write_leases (lease_key, owner_id, acquired_at, expires_at)
+2769:   VALUES (p_lease_key, p_owner_id, NOW(), NOW() + make_interval(secs => p_ttl_seconds))
+2770:   ON CONFLICT (lease_key) DO UPDATE
+2771:   SET owner_id = EXCLUDED.owner_id, acquired_at = EXCLUDED.acquired_at, expires_at = EXCLUDED.expires_at
+2772:   WHERE public.production_write_leases.expires_at <= NOW()
+2773:      OR public.production_write_leases.owner_id = EXCLUDED.owner_id
+2774:   RETURNING owner_id INTO acquired_owner;
+2775:   RETURN acquired_owner = p_owner_id;
+2776: END;
+2777: $$;
+2778: 
+2779: 
+2780: ALTER FUNCTION public.acquire_production_write_lease(p_lease_key text, p_owner_id uuid, p_ttl_seconds integer) OWNER TO postgres;
+2781: 
+2782: --
+2783: -- Name: activate_stockinsider_backend_release_v1(text, jsonb); Type: FUNCTION; Schema: public; Owner: postgres
+2784: --
+2785: 
+2786: CREATE FUNCTION public.activate_stockinsider_backend_release_v1(p_release_id text, p_metadata jsonb DEFAULT '{}'::jsonb) RETURNS boolean
+2787:     LANGUAGE plpgsql SECURITY DEFINER
+2788:     SET search_path TO 'public', 'pg_temp'
+2789:     AS $_$
+2790: DECLARE headers jsonb; claims jsonb; supplied_backend uuid; supplied_principal uuid;
+11089: CREATE FUNCTION public.enforce_production_writer_fence() RETURNS trigger
+11090:     LANGUAGE plpgsql SECURITY DEFINER
+11091:     SET search_path TO 'public', 'pg_temp'
+11092:     AS $$
+11093: DECLARE required_release text; supplied_release text; headers jsonb;
+11094: BEGIN
+11095:   SELECT release_id INTO required_release FROM public.production_writer_releases
+11096:     WHERE active ORDER BY activated_at DESC LIMIT 1;
+11097:   IF required_release IS NULL THEN RETURN NEW; END IF;
+11098:   BEGIN headers:=COALESCE(NULLIF(current_setting('request.headers',true),''),'{}')::jsonb;
+11099:   EXCEPTION WHEN OTHERS THEN headers:='{}'::jsonb; END;
+11100:   supplied_release:=headers->>'x-stockinsider-writer-release';
+11101:   IF supplied_release IS DISTINCT FROM required_release THEN
+11102:     RAISE EXCEPTION USING ERRCODE='42501',MESSAGE='production_writer_release_rejected';
+11103:   END IF;
+11104:   IF NOT EXISTS(SELECT 1 FROM public.production_write_leases WHERE lease_key='production-data-plane'
+11105:       AND expires_at>clock_timestamp()) THEN
+11106:     RAISE EXCEPTION USING ERRCODE='55000',MESSAGE='production_writer_lease_required';
+11107:   END IF;
+11108:   PERFORM public.assert_stockinsider_backend_request_v1(true);
+11109:   RETURN NEW;
+11110: END
+11111: $$;
+22801: CREATE FUNCTION public.release_production_write_lease(p_lease_key text, p_owner_id uuid) RETURNS boolean
+22802:     LANGUAGE sql SECURITY DEFINER
+22803:     SET search_path TO 'public', 'pg_temp'
+22804:     AS $$
+22805:   WITH deleted AS (
+22806:     DELETE FROM public.production_write_leases
+22807:     WHERE lease_key = p_lease_key AND owner_id = p_owner_id
+22808:     RETURNING 1
+22809:   )
+22810:   SELECT EXISTS (SELECT 1 FROM deleted);
+22811: $$;
+22812: 
+22813: 
+22814: ALTER FUNCTION public.release_production_write_lease(p_lease_key text, p_owner_id uuid) OWNER TO postgres;
+22815: 
+22816: --
+22817: -- Name: replace_provider_credential_cas_v1(text, bigint, uuid, text, text, text, text, text, timestamp with time zone, text); Type: FUNCTION; Schema: public; Owner: postgres
+22818: --
+22819: 
+22820: CREATE FUNCTION public.replace_provider_credential_cas_v1(p_provider text, p_expected_generation bigint, p_credential_id uuid, p_key_version text, p_iv text, p_tag text, p_ciphertext text, p_token_sha256 text, p_expires_at timestamp with time zone, p_owner_user_id_hash text DEFAULT NULL::text) RETURNS TABLE(generation bigint)
+33597: CREATE TABLE public.source_raw_documents (
+33598:     id uuid DEFAULT gen_random_uuid() NOT NULL,
+33599:     source_entity_id uuid,
+33600:     platform character varying(40) NOT NULL,
+33601:     external_id character varying(255),
+33602:     document_url text NOT NULL,
+33603:     title text NOT NULL,
+33604:     summary text,
+33605:     content_text text,
+33606:     published_at timestamp with time zone,
+33607:     collected_at timestamp with time zone DEFAULT now() NOT NULL,
+33608:     symbols jsonb DEFAULT '[]'::jsonb NOT NULL,
+33609:     sentiment_label character varying(20),
+33610:     confidence numeric,
+33611:     metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+33612:     content_semantics text DEFAULT 'editorial_discussion'::text NOT NULL,
+33613:     publisher_key text,
+33614:     publisher_name text,
+33615:     canonical_content_hash text,
+33616:     stance_semantics text,
+33617:     CONSTRAINT source_raw_documents_content_semantics_check CHECK ((content_semantics = ANY (ARRAY['editorial_discussion'::text, 'bulk_institutional_ranking'::text, 'official_chip_evidence'::text, 'metadata_only'::text]))),
+33618:     CONSTRAINT source_raw_documents_stance_semantics_check CHECK ((stance_semantics = ANY (ARRAY['endorsement'::text, 'negative'::text, 'neutral'::text])))
+33619: );
+33620: 
+33621: 
+33622: ALTER TABLE public.source_raw_documents OWNER TO postgres;
+40070: CREATE TRIGGER trg_retention_legacy_processing_outcome_refs_guard_v2 BEFORE DELETE OR UPDATE ON public.retention_legacy_processing_outcome_refs_v2 FOR EACH ROW EXECUTE FUNCTION public.reject_retention_archive_direct_mutation_v1();
+40071: 
+40072: 
+40073: --
+40074: -- Name: source_raw_documents trg_source_raw_documents_writer_fence; Type: TRIGGER; Schema: public; Owner: postgres
+40075: --
+40076: 
+40077: CREATE TRIGGER trg_source_raw_documents_writer_fence BEFORE INSERT OR UPDATE ON public.source_raw_documents FOR EACH ROW EXECUTE FUNCTION public.enforce_production_writer_fence();
+40078: 
+40079: 
+40080: --
+40081: -- Name: stockinsider_legacy_compaction_receipts_v1 trg_stockinsider_compaction_receipt_immutable_v1; Type: TRIGGER; Schema: public; Owner: postgres
+40082: --
+47825: 
+47826: 
+47827: --
+47828: -- Name: TABLE source_raw_documents; Type: ACL; Schema: public; Owner: postgres
+47829: --
+47830: 
+47831: GRANT ALL ON TABLE public.source_raw_documents TO anon;
+47832: GRANT ALL ON TABLE public.source_raw_documents TO authenticated;
+47833: GRANT ALL ON TABLE public.source_raw_documents TO service_role;
+47834: 
+47835: 
+47836: --

@@ -1,0 +1,22 @@
+44:  return Object.freeze({
+45:   async runCompleteInput(db:VersionedInputRpc,input:unknown,seal:boolean,deadline=new FinancialIoDeadline()):Promise<Row>{
+46:    const request=parseCompleteRequest(input);ensure(Buffer.byteLength(JSON.stringify(request))<=8192);
+47:    // Request tuple validation before any DB call. Parent symbol is checked independently below.
+48:    if(request.expectedCalculatorExecutionHash!==historical)ensure(bindings.some(b=>b.bindingCapsuleIdentity===request.expectedCalculatorExecutionHash&&b.core.inventoryHash===request.expectedArtifactManifestHash));
+49:    const rpc=async(name:string,args:Row)=>{deadline.check();const work=Promise.resolve().then(()=>{deadline.check();return db.rpc(name,args);});work.catch(()=>{});const result=await deadline.wait(work);ensure(!result.error);return row(result.data);};
+50:    const before=await rpc('read_research_article_input_candidate_v3',{p_request:request});
+51:    if(request.expectedCalculatorExecutionHash===historical){validateHistoricalCompleteResponse(request,before);if(before.status==='absent'&&seal)throw Error('original_fresh_v2_requires_retained_execution_realm');return before;}
+52:    const b=validate(request,before);deadline.check();if(before.status==='sealed'||!seal)return before;
+53:    ensure(b.core.compiledFingerprintIdentity===executor);const contextHash=String(before.contextHash);
+54:    // Unraced RPC promise is tracked by runFinancialIoSession until real settlement.
+55:    const assertion=async()=>{deadline.check();const result=await db.rpc('assert_research_input_candidate_v3',{p_request:request,p_context_hash:contextHash});ensure(!result.error);const c=row(result.data);ensure(c.contextHash===contextHash);ensure(bindingCanonical(c.binding)===bindingCanonical(b));return contextHash;};
+56:    let material:Row;
+57:    if(b.core.wireVersion==='research-article-input-v2'){
+58:     const result=await createCompatibleFinancialReader(roots[b.core.artifactRootId],assertion).read(b.core.financialProfile,b.core.symbol,deadline);
+59:     material={schemaVersion:'research-complete-financial-material-v2',symbol:b.core.symbol,artifactReadKnownAt:result.artifactReadKnownAt,sourceClosureHash:b.core.sourceExecutionHash,artifactInventoryHash:b.core.inventoryHash,financialMaterial:result.financialMaterial};
+60:    } else {material=(await createCandidateFinancialReaders(roots[b.core.artifactRootId]).completeScenarioCash(b.core.financialProfile,b.core.symbol,assertion,deadline)).material;}
+61:    validateCompleteSchema(material,b.registration.schemaTemplate as Row,String(material.artifactReadKnownAt));deadline.check();
+62:    const saved=await rpc('seal_research_article_input_candidate_v3',{p_request:request,p_calculation:material,p_context_hash:contextHash});validate(request,saved);ensure(saved.status==='sealed');deadline.check();return saved;
+63:   },
+64:  });
+65: }

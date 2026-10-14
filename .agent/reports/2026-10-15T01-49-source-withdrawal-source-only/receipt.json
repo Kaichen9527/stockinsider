@@ -1,0 +1,89 @@
+{
+  "kind": "maker-source-only-not-independent-review",
+  "code": "870436576d89d1a7f34cddb10f197787978d42f3",
+  "tree": "e2fb03d113faf68ecb8b05c3355a23ae1950c3e0",
+  "base": "b3432984263ad59866af6fb077a45b802c087dbf",
+  "branch": "codex/research-versioned-source-withdrawal-races-oct15",
+  "startedAt": "2026-10-14T17:49:31Z",
+  "deadline": "2026-10-14T18:09:31Z",
+  "sealedAt": "2026-10-14T17:59:49.118838+00:00",
+  "executed": {
+    "nodeVersion": "v22.14.0",
+    "syntaxChecks": {
+      "distinctFiles": 2,
+      "invocations": 3,
+      "exit0": 3,
+      "failures": 0
+    },
+    "gitDiffCheck": {
+      "exit": 0
+    },
+    "nativeTests": 0,
+    "applicationImports": 0,
+    "postgresStarts": 0
+  },
+  "plannedParent": "NOT_RUN",
+  "plannedChildren": [
+    {
+      "name": "v3-pre-post-withdraw",
+      "status": "NOT_RUN",
+      "expectedCode": "P0001",
+      "expectedMessage": "source_seal_invalidated_or_missing"
+    },
+    {
+      "name": "compat-post-seal-withdraw",
+      "status": "NOT_RUN",
+      "expectedCode": "P0001",
+      "expectedMessage": "source_seal_invalidated_or_missing"
+    },
+    {
+      "name": "old77-exact-row-aba",
+      "status": "NOT_RUN",
+      "expectedCode": "P0001",
+      "expectedMessage": "source_seal_invalidated_or_missing"
+    }
+  ],
+  "sourceInventoryCount": 259,
+  "inheritedUnchanged": 256,
+  "inheritedChangedOnly": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+  "rawInventoryCount": 25,
+  "rawBytes": 127182,
+  "resources": {
+    "reserveBytes": 8589934592,
+    "initialObservedWorkspaceFree": 8604508160,
+    "finalFree": {
+      "/workspace": 8604442624,
+      "/tmp": 15378522112
+    },
+    "sequentialSyntaxChildrenMaxRssKiB": 23116,
+    "method": "OS free bytes and child wait4 high-water; source/static/syntax only, no service RSS claim"
+  },
+  "cleanup": {
+    "ownedServicesStarted": [],
+    "ownedServicesToStop": [],
+    "deletedPaths": [],
+    "allExistingEvidencePreserved": true
+  },
+  "originalRed": {
+    "newNativeRed": null,
+    "reason": "native not authorized or executed; static missing-path lookups were not test failures",
+    "retainedHistoricalRefs": [
+      "305074af2547316078e930de8ad81a910860c8c0",
+      "c7d6665068774c346e28303adeb06634abf5d556",
+      "9d68b4d62b1af0fcbe221ed2e5689534e0b9da42",
+      "b3432984263ad59866af6fb077a45b802c087dbf",
+      "c462a51ceea1b69026b38ec40b105eb971d24116"
+    ]
+  },
+  "pending": [
+    "separate Root source review and native heavy release",
+    "all three actual PostgreSQL race executions and exact source invalidation errors",
+    "actual service-role mutation permission and production-writer-fence conditions in isolated fixture",
+    "actual per-barrier deadline feasibility and FD/child/query/cluster cleanup",
+    "exact full-row ABA restoration and durable invalidations",
+    "public-safe native witness after later execution; private payload stays local",
+    "other lease/ABA/quota/lockwait/response-loss matrices outside these cases",
+    "four caller/whole closure/article/publication/formal authority and production readiness"
+  ],
+  "formalApproval": false
+}

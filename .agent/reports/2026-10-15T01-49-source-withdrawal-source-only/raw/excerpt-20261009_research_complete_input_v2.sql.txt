@@ -1,0 +1,51 @@
+58:  IF EXISTS(SELECT FROM jsonb_each(p_request) WHERE key IN ('jobId','reservationId','preparationId') AND (jsonb_typeof(value)<>'string' OR value#>>'{}' !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$'))
+59:  OR EXISTS(SELECT FROM jsonb_each(p_request) WHERE key IN ('snapshotHash','preparationHash','expectedArtifactManifestHash','expectedCalculatorExecutionHash') AND (jsonb_typeof(value)<>'string' OR value#>>'{}' !~ '^[a-f0-9]{64}$')) THEN RAISE EXCEPTION 'complete_request_shape';END IF;
+60:  PERFORM pg_advisory_xact_lock(610091002::bigint);PERFORM pg_advisory_xact_lock(2409,6002);
+61:  SELECT * INTO old FROM public.research_input_preparations_v2 WHERE preparation_id=(p_request->>'preparationId')::uuid;
+62:  IF old.preparation_id IS NULL OR old.input_hash IS DISTINCT FROM p_request->>'preparationHash'
+63:  OR (old.request-'sourceDocumentIds'-'bundleId') IS DISTINCT FROM (p_request-'preparationId'-'preparationHash'-'expectedArtifactManifestHash'-'expectedCalculatorExecutionHash') THEN RAISE EXCEPTION 'complete_parent_binding';END IF;
+64:  m:=public.research_complete_mapping_v2(old.payload->>'symbol');
+65:  IF m IS NULL OR m->>'inventoryHash' IS DISTINCT FROM p_request->>'expectedArtifactManifestHash' OR m->>'sourceClosureHash' IS DISTINCT FROM p_request->>'expectedCalculatorExecutionHash' THEN RAISE EXCEPTION 'complete_mapping_unavailable';END IF;
+66:  replay:=public.assert_research_input_preparation_v2(old.request,old.preparation_id,old.input_hash);
+67:  RETURN replay;
+68: END $$;
+69: CREATE FUNCTION public.read_research_article_input_revision_v2(p_request jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+70: DECLARE parent jsonb; saved public.research_article_input_revisions_v2;
+71: BEGIN
+72:  parent:=public.research_complete_parent_v2(p_request);
+73:  SELECT * INTO saved FROM public.research_article_input_revisions_v2 WHERE preparation_id=(p_request->>'preparationId')::uuid;
+74:  IF NOT FOUND THEN RETURN jsonb_build_object('status','absent','preparation',parent,'dispatchReady',false);END IF;
+75:  IF saved.canonical_request IS DISTINCT FROM p_request OR saved.request_hash IS DISTINCT FROM public.research_complete_hash_v2(p_request) THEN RAISE EXCEPTION 'complete_replay_conflict';END IF;
+76:  IF clock_timestamp()>=least((parent->'payload'->'originalJob'->>'leaseExpiresAt')::timestamptz,(parent->'payload'->'originalReservation'->>'leaseExpiresAt')::timestamptz) THEN RAISE EXCEPTION 'complete_lease_lost';END IF;
+77:  RETURN to_jsonb(saved)||jsonb_build_object('status','sealed','replay',true,'dispatchReady',false);
+78: END $$;
+79: CREATE FUNCTION public.seal_research_article_input_revision_v2(p_request jsonb,p_calculation jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+80: DECLARE parent jsonb; existing jsonb; m jsonb; p jsonb; f jsonb; projection jsonb; calc jsonb; material jsonb; known timestamptz; n timestamptz; rh text; ih text; charge integer; used_count bigint;used_bytes bigint;saved public.research_article_input_revisions_v2;gaps jsonb;
+81: BEGIN
+82:  existing:=public.read_research_article_input_revision_v2(p_request);IF existing->>'status'='sealed' THEN RETURN existing;END IF;
+83:  parent:=existing->'preparation';p:=parent->'payload';m:=public.research_complete_mapping_v2(p->>'symbol');
+151:   OR r.role IS DISTINCT FROM 'company_research' OR r.owner IS DISTINCT FROM j.lease_owner
+152:   OR r.work_key IS DISTINCT FROM 'deep:'||j.job_id||':'||j.attempts
+153:   OR r.started_at IS NULL OR NOT isfinite(r.started_at) OR r.started_at>n
+154:   OR r.lease_expires_at IS NULL OR NOT isfinite(r.lease_expires_at) OR r.lease_expires_at<=n
+155:   OR r.lease_expires_at>r.started_at+interval '30 minutes'
+156:   OR NOT EXISTS(SELECT FROM public.research_deep_job_attempts_v1 a WHERE a.job_id=j.job_id AND a.attempt=j.attempts AND a.owner=j.lease_owner AND a.lease_expires_at=j.lease_expires_at AND a.claimed_at<=n)
+157:   OR EXISTS(SELECT FROM public.research_model_completions_v1 c WHERE c.reservation_id=r.reservation_id)
+158:  THEN RAISE EXCEPTION 'input_preparation_original_lease_lost'; END IF;
+159:  SELECT * INTO pri FROM public.research_priority_runs_v1 WHERE run_id=j.priority_run_id;
+160:  SELECT * INTO snap FROM public.research_observed_roster_snapshots_v1 WHERE snapshot_hash=j.observed_snapshot_hash;
+161:  IF pri.run_id IS NULL OR pri.research_scope IS DISTINCT FROM j.research_scope OR pri.observed_snapshot_hash IS DISTINCT FROM j.observed_snapshot_hash
+162:   OR pri.as_of IS NULL OR NOT isfinite(pri.as_of) OR pri.as_of>n OR snap.snapshot_hash IS NULL OR snap.received_at IS NULL OR NOT isfinite(snap.received_at) OR snap.latest_observed_at IS NULL OR NOT isfinite(snap.latest_observed_at) OR snap.received_at>pri.as_of OR snap.latest_observed_at>pri.as_of
+163:   OR NOT EXISTS(SELECT FROM public.research_observed_priority_store_receipts_v1 s WHERE s.run_id=pri.run_id AND s.stored_run_hash=encode(sha256(convert_to(to_jsonb(pri)::text,'UTF8')),'hex'))
+164:   OR NOT EXISTS(SELECT FROM public.research_observed_roster_members_v1 m JOIN public.research_observed_companies_v1 c USING(research_company_id) WHERE m.snapshot_hash=snap.snapshot_hash AND m.research_company_id=j.research_company_id AND m.symbol=j.symbol AND c.symbol=j.symbol)
+165:  THEN RAISE EXCEPTION 'input_preparation_lineage'; END IF;
+166:  rh:=encode(sha256(convert_to(public.research_observed_canonical_json_v1(p_request),'UTF8')),'hex');
+167:  SELECT * INTO old FROM public.research_input_preparations_v2 WHERE job_id=j.job_id AND attempt=j.attempts AND reservation_id=r.reservation_id AND request_hash=rh;
+168:  IF FOUND THEN
+169:   IF old.request IS DISTINCT FROM p_request THEN RAISE EXCEPTION 'input_preparation_replay_mismatch'; END IF;
+170:   IF old.source_seal_id IS NOT NULL THEN PERFORM public.assert_research_source_seal_v2(old.source_seal_id); END IF;
+171:   IF clock_timestamp()>=least(j.lease_expires_at,r.lease_expires_at) THEN RAISE EXCEPTION 'input_preparation_original_lease_lost'; END IF;
+172:   RETURN to_jsonb(old)||jsonb_build_object('replay',true,'dispatchReady',false);
+173:  END IF;
+174:  -- Original-unit history is permanent: expiry, invalidation and takeover never refund it.
+175:  SELECT count(*),coalesce(sum(logical_bytes),0) INTO used_count,used_bytes FROM (SELECT logical_bytes FROM public.research_input_preparations_v2 WHERE job_id=j.job_id AND attempt=j.attempts AND reservation_id=r.reservation_id

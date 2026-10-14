@@ -1,0 +1,49 @@
+[
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--version"
+    ],
+    "startedAt": "2026-10-14T17:57:52.061192+00:00",
+    "elapsedSeconds": 0.008095299010165036,
+    "exit": 0,
+    "stdout": "command-0.stdout",
+    "stderr": "command-0.stderr"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs"
+    ],
+    "startedAt": "2026-10-14T17:57:52.069290+00:00",
+    "elapsedSeconds": 0.022697879001498222,
+    "exit": 0,
+    "stdout": "command-1.stdout",
+    "stderr": "command-1.stderr"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-source-withdrawal-native.test.mjs"
+    ],
+    "startedAt": "2026-10-14T17:57:52.091992+00:00",
+    "elapsedSeconds": 0.026348019018769264,
+    "exit": 0,
+    "stdout": "command-2.stdout",
+    "stderr": "command-2.stderr"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "startedAt": "2026-10-14T17:57:52.118343+00:00",
+    "elapsedSeconds": 0.007227699039503932,
+    "exit": 0,
+    "stdout": "command-3.stdout",
+    "stderr": "command-3.stderr"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--check",
+    "scripts/opportunity-v3/research-versioned-source-withdrawal-native.test.mjs"
+  ],
+  "exit": 0,
+  "stdout": "final-syntax.stdout",
+  "stderr": "final-syntax.stderr",
+  "subject": "870436576d89d1a7f34cddb10f197787978d42f3",
+  "subjectTree": "e2fb03d113faf68ecb8b05c3355a23ae1950c3e0",
+  "timing": "exit observed directly in exec output; no independent elapsed-time capture for this last invocation",
+  "reason": "new error snapshot capture added after initial syntax checks; sealed WIP inventory precedes this invocation"
+}

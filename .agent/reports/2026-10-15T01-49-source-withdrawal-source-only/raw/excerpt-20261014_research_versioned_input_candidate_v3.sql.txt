@@ -1,0 +1,51 @@
+54: CREATE FUNCTION public.research_complete_parent_candidate_v3(p_request jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+55: DECLARE old public.research_input_preparations_v2; m jsonb; replay jsonb;
+56: BEGIN
+57:  IF current_setting('transaction_isolation')<>'read committed' THEN RAISE EXCEPTION 'complete_read_committed_required'; END IF;
+58:  IF p_request IS NULL OR jsonb_typeof(p_request)<>'object' OR octet_length(p_request::text)>8192 OR
+59:  (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(p_request) key) IS DISTINCT FROM ARRAY['attempt','expectedArtifactManifestHash','expectedCalculatorExecutionHash','jobId','owner','preparationHash','preparationId','reservationId','scope','snapshotHash']
+60:  OR p_request->>'scope' IS DISTINCT FROM 'research_observed_v1' OR jsonb_typeof(p_request->'owner') IS DISTINCT FROM 'string' OR p_request->>'owner' !~ '^[A-Za-z0-9:_-]{3,120}$'
+61:  OR jsonb_typeof(p_request->'attempt') IS DISTINCT FROM 'number' OR p_request->>'attempt' !~ '^[1-3]$' THEN RAISE EXCEPTION 'complete_request_shape';END IF;
+62:  IF EXISTS(SELECT FROM jsonb_each(p_request) WHERE key IN ('jobId','reservationId','preparationId') AND (jsonb_typeof(value)<>'string' OR value#>>'{}' !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$'))
+63:  OR EXISTS(SELECT FROM jsonb_each(p_request) WHERE key IN ('snapshotHash','preparationHash','expectedArtifactManifestHash','expectedCalculatorExecutionHash') AND (jsonb_typeof(value)<>'string' OR value#>>'{}' !~ '^[a-f0-9]{64}$')) THEN RAISE EXCEPTION 'complete_request_shape';END IF;
+64:  PERFORM pg_advisory_xact_lock(610091002::bigint);PERFORM pg_advisory_xact_lock(2409,6002);
+65:  SELECT * INTO old FROM public.research_input_preparations_v2 WHERE preparation_id=(p_request->>'preparationId')::uuid;
+66:  IF old.preparation_id IS NULL OR old.input_hash IS DISTINCT FROM p_request->>'preparationHash'
+67:  OR (old.request-'sourceDocumentIds'-'bundleId') IS DISTINCT FROM (p_request-'preparationId'-'preparationHash'-'expectedArtifactManifestHash'-'expectedCalculatorExecutionHash') THEN RAISE EXCEPTION 'complete_parent_binding';END IF;
+68:  m:=public.research_input_binding_candidate_v3(old.payload->>'symbol',p_request->>'expectedArtifactManifestHash',p_request->>'expectedCalculatorExecutionHash',false);
+69:  replay:=public.assert_research_input_preparation_v2(old.request,old.preparation_id,old.input_hash);
+70:  RETURN jsonb_build_object('preparation',replay,'binding',m,'contextHash',public.research_complete_hash_v2(jsonb_build_object('request',p_request,'preparationHash',old.input_hash,'sourceSeal',old.source_seal_id,'binding',m->>'bindingCapsuleIdentity')));
+71: END $$;
+72: CREATE FUNCTION public.read_research_article_input_candidate_v3(p_request jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+73: DECLARE ctx jsonb; parent jsonb; saved public.research_article_input_revisions_v2; b jsonb; c jsonb; payload jsonb; material jsonb;
+74: BEGIN
+75:  -- Historical exact selector is delegated unchanged, including original live fences.
+76:  IF p_request->>'expectedCalculatorExecutionHash'='77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41' THEN RETURN public.read_research_article_input_revision_v2(p_request);END IF;
+77:  ctx:=public.research_complete_parent_candidate_v3(p_request);parent:=ctx->'preparation';b:=ctx->'binding';c:=b->'core';
+78:  SELECT * INTO saved FROM public.research_article_input_revisions_v2 WHERE preparation_id=(p_request->>'preparationId')::uuid;
+97: CREATE FUNCTION public.assert_research_input_candidate_v3(p_request jsonb,p_context_hash text) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+98: DECLARE ctx jsonb;
+99: BEGIN
+100:  ctx:=public.research_complete_parent_candidate_v3(p_request);
+101:  PERFORM public.research_input_binding_candidate_v3(ctx->'preparation'->'payload'->>'symbol',p_request->>'expectedArtifactManifestHash',p_request->>'expectedCalculatorExecutionHash',true);
+102:  IF ctx->>'contextHash' IS DISTINCT FROM p_context_hash THEN RAISE EXCEPTION 'versioned_context_changed';END IF;
+103:  RETURN ctx;
+104: END $$;
+105: CREATE FUNCTION public.prepare_research_input_candidate_v3(p_request jsonb,p_inventory_hash text,p_binding_hash text) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+106: DECLARE symbol text; binding jsonb; result jsonb;
+107: BEGIN
+108:  IF current_setting('transaction_isolation')<>'read committed' THEN RAISE EXCEPTION 'complete_read_committed_required';END IF;
+109:  PERFORM pg_advisory_xact_lock(610091002::bigint);PERFORM pg_advisory_xact_lock(2409,6002);
+110:  SELECT j.symbol INTO symbol FROM public.research_deep_jobs_v1 j WHERE j.job_id=(p_request->>'jobId')::uuid;
+111:  binding:=public.research_input_binding_candidate_v3(symbol,p_inventory_hash,p_binding_hash,true);
+112:  -- Original function owns all request/role/lease/source validation and charging.
+113:  result:=public.prepare_research_input_v2(p_request);
+114:  RETURN result;
+115: END $$;
+116: CREATE FUNCTION public.seal_research_article_input_candidate_v3(p_request jsonb,p_calculation jsonb,p_context_hash text) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+117: DECLARE ctx jsonb; b jsonb; c jsonb; parent jsonb; existing jsonb; m jsonb; p jsonb; f jsonb; projection jsonb; calc jsonb; material jsonb; known timestamptz; n timestamptz; rh text; ih text; charge integer; used_count bigint;used_bytes bigint;saved public.research_article_input_revisions_v2;gaps jsonb;
+118: BEGIN
+119:  existing:=public.read_research_article_input_candidate_v3(p_request);IF existing->>'status'='sealed' THEN RETURN existing;END IF;
+120:  ctx:=public.assert_research_input_candidate_v3(p_request,p_context_hash);parent:=ctx->'preparation';p:=parent->'payload';b:=ctx->'binding';c:=b->'core';m:=b->'registration';
+121:  IF p_calculation IS NULL OR octet_length(p_calculation::text)>262144 THEN RAISE EXCEPTION 'complete_calculation_bound';END IF;
+122:  known:=(p_calculation->>'artifactReadKnownAt')::timestamptz;

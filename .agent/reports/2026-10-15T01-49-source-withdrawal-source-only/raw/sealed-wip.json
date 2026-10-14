@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-14T17:57:38.046134+00:00",
+  "base": "b3432984263ad59866af6fb077a45b802c087dbf",
+  "files": [
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+      "bytes": 17174,
+      "sha256": "9491391998cae6201e7bb055261dd4a4b1f1d9f5ff3bc55973db83643039269f",
+      "blob": "d696aa38be88f097067126e4ce820199af6776ae"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-source-withdrawal-native.test.mjs",
+      "bytes": 15322,
+      "sha256": "e5762ff490c5825e277dbb95dcb83013c097a39cb6860e0114045668923010e2",
+      "blob": "f16fab87a393cb08b1e25d32c37d139a7f2ac12b"
+    },
+    {
+      "path": "docs/operations/2026-10-15/source-withdrawal-races-source-only-handoff.md",
+      "bytes": 7740,
+      "sha256": "a5b2484eb2e08a279ec60018b8b4c5c14e913914fef9ec2a19be4f47c7ba1a51",
+      "blob": "42edb770055de3327c7d8caa3e5d49d6c886e707"
+    }
+  ],
+  "native": "NOT_RUN"
+}
