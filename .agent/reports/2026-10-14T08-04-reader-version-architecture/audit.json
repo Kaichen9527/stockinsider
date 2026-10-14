@@ -1,0 +1,495 @@
+{
+  "recordedAt": "2026-10-14T08:06:30.802570+00:00",
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "cashSource": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+  "closureHashExpected": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+  "closureHashComputed": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+  "closureCount": 22,
+  "closure": [
+    {
+      "file": "web/package-lock.json",
+      "bytes": 274090,
+      "sha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+      "actualBytes": 274090,
+      "actualSHA": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/candidate-dossier-contract.ts",
+      "bytes": 11851,
+      "sha256": "33920f44ffa719802476da3171baf5d8806c81877f6ae9eedfd64ecea8427887",
+      "actualBytes": 11851,
+      "actualSHA": "33920f44ffa719802476da3171baf5d8806c81877f6ae9eedfd64ecea8427887",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/public-source-url.ts",
+      "bytes": 1821,
+      "sha256": "f1f4a47c2984a59be316b94586796171adda680e64910c981b5cede88260dcea",
+      "actualBytes": 1821,
+      "actualSHA": "f1f4a47c2984a59be316b94586796171adda680e64910c981b5cede88260dcea",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-agent-priority.ts",
+      "bytes": 8382,
+      "sha256": "2f6e9be35bca12d3042ad668fef75447936b1427dffdd69ae621cc9540081318",
+      "actualBytes": 8382,
+      "actualSHA": "2f6e9be35bca12d3042ad668fef75447936b1427dffdd69ae621cc9540081318",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-agent-qualification.ts",
+      "bytes": 8864,
+      "sha256": "690de1fb4265366c0431da990fbe2519057562600727de6f44340060c9d34da0",
+      "actualBytes": 8864,
+      "actualSHA": "690de1fb4265366c0431da990fbe2519057562600727de6f44340060c9d34da0",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-business-calculator.ts",
+      "bytes": 14206,
+      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+      "actualBytes": 14206,
+      "actualSHA": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-complete-2383.schema.json",
+      "bytes": 151681,
+      "sha256": "e0bc5f27a4263d151395fd2fa35a69e868b2d94836b7e26173be545300d6d043",
+      "actualBytes": 151681,
+      "actualSHA": "e0bc5f27a4263d151395fd2fa35a69e868b2d94836b7e26173be545300d6d043",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-complete-2409.schema.json",
+      "bytes": 264752,
+      "sha256": "efedd65c7afcf9031cd34fe6a12d4f70c78dcc1d80cadbddfa87f11b23e57932",
+      "actualBytes": 264752,
+      "actualSHA": "efedd65c7afcf9031cd34fe6a12d4f70c78dcc1d80cadbddfa87f11b23e57932",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-complete-canonical.ts",
+      "bytes": 4343,
+      "sha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "actualBytes": 4343,
+      "actualSHA": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-complete-input.ts",
+      "bytes": 10526,
+      "sha256": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d",
+      "actualBytes": 10526,
+      "actualSHA": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-complete-schema-bundles.ts",
+      "bytes": 463467,
+      "sha256": "ca5bc876d5820c3f910a4847c84f504a952896f7affe5d9e88a9f224df3b0d98",
+      "actualBytes": 463467,
+      "actualSHA": "ca5bc876d5820c3f910a4847c84f504a952896f7affe5d9e88a9f224df3b0d98",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-deep-author-input.ts",
+      "bytes": 22617,
+      "sha256": "4e4dd8e2f792071cf974631d08ffa852ad87b2c5e9edd11a3ccee71b27eeaf94",
+      "actualBytes": 22617,
+      "actualSHA": "4e4dd8e2f792071cf974631d08ffa852ad87b2c5e9edd11a3ccee71b27eeaf94",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-deep-claim-context.ts",
+      "bytes": 12714,
+      "sha256": "c6016ca331d77cff78b05c26642ebbb8ce040a285293eebdca9fecf20f3b680c",
+      "actualBytes": 12714,
+      "actualSHA": "c6016ca331d77cff78b05c26642ebbb8ce040a285293eebdca9fecf20f3b680c",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-discovery-evidence.ts",
+      "bytes": 6788,
+      "sha256": "832e279429951e548bc12e8a0dd578a9c38c4e7ffa18e3e2e2bc649941517896",
+      "actualBytes": 6788,
+      "actualSHA": "832e279429951e548bc12e8a0dd578a9c38c4e7ffa18e3e2e2bc649941517896",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-financial-clock.ts",
+      "bytes": 807,
+      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+      "actualBytes": 807,
+      "actualSHA": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-financial-file-reader.ts",
+      "bytes": 10211,
+      "sha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+      "actualBytes": 10211,
+      "actualSHA": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-financial-inventory.ts",
+      "bytes": 3294,
+      "sha256": "f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5",
+      "actualBytes": 3294,
+      "actualSHA": "f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-financial-supplement.ts",
+      "bytes": 19142,
+      "sha256": "2f8d8150a3071109d3db2dee9c1df7dadcd97322357c21e8a45fd469df22372d",
+      "actualBytes": 19142,
+      "actualSHA": "2f8d8150a3071109d3db2dee9c1df7dadcd97322357c21e8a45fd469df22372d",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-source-association.ts",
+      "bytes": 22950,
+      "sha256": "59d5b00d7b2126eca5dc125093346770d3ae43179a5180d281afb16207667cc7",
+      "actualBytes": 22950,
+      "actualSHA": "59d5b00d7b2126eca5dc125093346770d3ae43179a5180d281afb16207667cc7",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-source-clock.ts",
+      "bytes": 1023,
+      "sha256": "219b6367df8c9da6ff9184028c646ba344c0554255adb2a85f6ba89ab2f7b933",
+      "actualBytes": 1023,
+      "actualSHA": "219b6367df8c9da6ff9184028c646ba344c0554255adb2a85f6ba89ab2f7b933",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-source-registry.ts",
+      "bytes": 1585,
+      "sha256": "64cf50ad4f4dc65310fcef6916f9f2c5be48830fa8fd3b7e700446bce9965e61",
+      "actualBytes": 1585,
+      "actualSHA": "64cf50ad4f4dc65310fcef6916f9f2c5be48830fa8fd3b7e700446bce9965e61",
+      "matches": true
+    },
+    {
+      "file": "web/src/lib/research-source-roots.ts",
+      "bytes": 3552,
+      "sha256": "aa3471022cb87235f3cdb84c7e674d0af799b858735774025b6eebb3a3e6110f",
+      "actualBytes": 3552,
+      "actualSHA": "aa3471022cb87235f3cdb84c7e674d0af799b858735774025b6eebb3a3e6110f",
+      "matches": true
+    }
+  ],
+  "inventory": [
+    {
+      "symbol": "2409",
+      "file": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 88790,
+      "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965",
+      "actualBytes": 113823,
+      "actualSHA": "6426ba0caaac2a446593a632ebce50f93e7851f4fdb4025ff427c2f011961209",
+      "matches": false
+    },
+    {
+      "symbol": "2409",
+      "file": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf",
+      "actualBytes": 19837,
+      "actualSHA": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf",
+      "matches": true
+    },
+    {
+      "symbol": "2409",
+      "file": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb",
+      "actualBytes": 40271,
+      "actualSHA": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb",
+      "matches": true
+    },
+    {
+      "symbol": "2409",
+      "file": "docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+      "actualBytes": 86638,
+      "actualSHA": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+      "matches": true
+    },
+    {
+      "symbol": "2409",
+      "file": "docs/research/2026-10-08-auo-market/dataset.json",
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582",
+      "actualBytes": 393280,
+      "actualSHA": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582",
+      "matches": true
+    },
+    {
+      "symbol": "2409",
+      "file": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189",
+      "actualBytes": 2910,
+      "actualSHA": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189",
+      "matches": true
+    },
+    {
+      "symbol": "2409",
+      "file": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6",
+      "actualBytes": 3549,
+      "actualSHA": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6",
+      "matches": true
+    },
+    {
+      "symbol": "2409",
+      "file": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103",
+      "actualBytes": 6599,
+      "actualSHA": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103",
+      "matches": true
+    },
+    {
+      "symbol": "2383",
+      "file": "docs/research/2026-10-08-emc-company-model/model-results.json",
+      "bytes": 54602,
+      "sha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c",
+      "actualBytes": 71848,
+      "actualSHA": "30028ccf9e48d7cda79f55a8b6ffd5141bad513e277894c8e360479e606b6786",
+      "matches": false
+    },
+    {
+      "symbol": "2383",
+      "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+      "bytes": 33734,
+      "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+      "actualBytes": 33734,
+      "actualSHA": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+      "matches": true
+    },
+    {
+      "symbol": "2383",
+      "file": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+      "bytes": 110526,
+      "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5",
+      "actualBytes": 110526,
+      "actualSHA": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5",
+      "matches": true
+    },
+    {
+      "symbol": "2383",
+      "file": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+      "bytes": 10693,
+      "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5",
+      "actualBytes": 10693,
+      "actualSHA": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5",
+      "matches": true
+    },
+    {
+      "symbol": "2383",
+      "file": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+      "bytes": 3630,
+      "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275",
+      "actualBytes": 3630,
+      "actualSHA": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275",
+      "matches": true
+    },
+    {
+      "symbol": "2383",
+      "file": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+      "bytes": 3671,
+      "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d",
+      "actualBytes": 3671,
+      "actualSHA": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d",
+      "matches": true
+    }
+  ],
+  "modulePresence": {
+    "b7796da8a92b99284b133a7a622e490a23bad11b": {
+      "web/src/lib/research-financial-file-reader.ts": false,
+      "web/src/lib/research-financial-supplement.ts": false,
+      "web/src/lib/research-complete-input.ts": false,
+      "web/src/lib/research-complete-mapping.json": false
+    },
+    "69b9734c5766b2e196e8133d63df1f1148959046": {
+      "web/src/lib/research-financial-file-reader.ts": false,
+      "web/src/lib/research-financial-supplement.ts": false,
+      "web/src/lib/research-complete-input.ts": false,
+      "web/src/lib/research-complete-mapping.json": false
+    }
+  },
+  "readSources": [
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-financial-file-reader.ts",
+      "bytes": 10211,
+      "sha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+      "blob": "356aba3e06fd1e3961143c14b0886e813987a510"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-financial-supplement.ts",
+      "bytes": 19142,
+      "sha256": "2f8d8150a3071109d3db2dee9c1df7dadcd97322357c21e8a45fd469df22372d",
+      "blob": "db88fc9330b14f7f3489668886949b2cc3dc6777"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-complete-input.ts",
+      "bytes": 10526,
+      "sha256": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d",
+      "blob": "f315e8ad3af3428893ae6eedd45421f4086a8cd2"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-complete-mapping.json",
+      "bytes": 7953,
+      "sha256": "ba44549b7efdc14a0c61523dadd950321fd7f85e72b30059415a555629baf704",
+      "blob": "98284f2ff243d1efb2f094eab5961a7b04649f89"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-complete-canonical.ts",
+      "bytes": 4343,
+      "sha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "blob": "59895e540b67258eea998ee7a2e2ab9eb4b8cf6f"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-financial-inventory.ts",
+      "bytes": 3294,
+      "sha256": "f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5",
+      "blob": "959089196afc0e678e02b6ca7fb6face0012df0d"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/app/api/internal/research-deep-job/route.ts",
+      "bytes": 12557,
+      "sha256": "d70ceae33eb8613da1b891a0790ff21a2a90bd67fedc73a7d7d9074668cba42a",
+      "blob": "083b5c06b2d4c81ebba2b4a823b1de112cd58e9b"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "scripts/research-complete-input.test.mjs",
+      "bytes": 5896,
+      "sha256": "d1703def58a62c7d748b0bb08481cc2cc3d2a8fb82db0844f39e930b7bfce023",
+      "blob": "08c7c0c9dd49239e2e7c1772f45bbb5401dff91e"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "scripts/research-financial-cleanup.test.mjs",
+      "bytes": 7479,
+      "sha256": "9cb54a434ed50a6092f9428c5cf5683e4a75e62133294816f28a5bfacd0d5286",
+      "blob": "357f36ea13f8a7c4306ba8b8bb0620339c95a3c5"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "scripts/research-financial-supplement.test.mjs",
+      "bytes": 11071,
+      "sha256": "cd53e971c7dae13fee1f3a99112b2c21f129e405b4cce16f8d0e73a07297e668",
+      "blob": "dc91f3d0f254b1da7ac1285fb541bb638680e2c6"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "migrations/20261009_research_complete_input_v2.sql",
+      "bytes": 446691,
+      "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c",
+      "blob": "3d22fdb3c56c91ff64b6baec4cdbad5d686e9592"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "migrations/20261011_research_complete_mapping_precision_v2.sql",
+      "bytes": 421736,
+      "sha256": "51179015df4257c68f96c52974710abaf969254fd00949bd289a0ea550ec33bf",
+      "blob": "36606dbdd6a14a6ae178b1c60acdde72f2f89299"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "migrations/20261009_research_input_preparation_assert_v2.sql",
+      "bytes": 2086,
+      "sha256": "c63a923be36e5f7ba06001a6d8be57287d80f5e6524dc866bad93b80666a9cbc",
+      "blob": "fb7e49f28a56cb5eb085c9d6ba8ad6c19bc5d8d9"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "migrations/20261009_research_author_assignments_v2.sql",
+      "bytes": 10433,
+      "sha256": "91629781ad52191ae4ef096d2f56af020066973556988713305bc7c10a80b99c",
+      "blob": "3c49283c402012d7ad2bc1788988dd4218bfe8e4"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "migrations/20261009_research_author_packet_v2.sql",
+      "bytes": 6376,
+      "sha256": "1a84dddb85afefe6de4458d781117f9bb50ff43db6fd1986a1c43e1608ed9528",
+      "blob": "d72e8f639b4dbef8d6942dadef721ec7b813d950"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "migrations/20261009_research_author_results_v2.sql",
+      "bytes": 10099,
+      "sha256": "894cd214aa60678c2c4475abbf194ea59e4a7a23677b296eda61b52fab6ce3e5",
+      "blob": "2af92766efd915c4868cbe8fa33c37b32bb30931"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-author-packet.ts",
+      "bytes": 11061,
+      "sha256": "50cabf662e17609f75a8bbddbe9d711b540dfa70a170ee67febabd563e1647a5",
+      "blob": "01f1813d4ae703d5ddec3ca14df1570a4e74dcbd"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-author-result.ts",
+      "bytes": 8436,
+      "sha256": "71b47dfe6a666498829e2bd6665e5688ca18de73e8e0938870e645983e5060e7",
+      "blob": "9002b4acae907f13dde377cc9b8c861c6b5dd986"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-author-handoff.ts",
+      "bytes": 8997,
+      "sha256": "6a6f0593cc3ddec00bad46e89e56dc78fa1e9aff045f638040f93783bcaaabce",
+      "blob": "1559412f343e453a02ea7c9e3241421abf29add7"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-reviewer-assignment.ts",
+      "bytes": 12885,
+      "sha256": "afa530253f7b6086bdaf600d58ad571e828512f9e4ef0a11b952c085b81a31ba",
+      "blob": "87fdc1cb4cd1dfe601826ff824870c9d4048689b"
+    },
+    {
+      "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-reviewer-result.ts",
+      "bytes": 11291,
+      "sha256": "96befdc6902834b7b7c62559cea6ac7b40bc0b4ddbcaca829c1f7eff0c1a8abd",
+      "blob": "f971183846e85e74757f1800d6ad2fffc732f0ee"
+    },
+    {
+      "subject": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+      "path": "web/src/lib/research-historical-cash-pins.ts",
+      "bytes": 7034,
+      "sha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5"
+    },
+    {
+      "subject": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+      "path": "web/src/lib/research-historical-cash-projection.ts",
+      "bytes": 11131,
+      "sha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719"
+    },
+    {
+      "subject": "06ae6924a7d6a90d60d3161a154fdb5104aab3f1",
+      "path": "docs/operations/2026-10-14/historical-cash-projection-handoff.md",
+      "bytes": 8728,
+      "sha256": "6fbc2874299f19bf5f7aedfbcc1178c96954279104fcc76fbc055e202c8fa187"
+    }
+  ]
+}
