@@ -1,0 +1,60 @@
+{
+  "merge": "3e1be377de3f6cac58f6de1626e8df994b9df146",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2157,
+      "sha256": "c17bde408e30dc4b8579494c595fb0b387e80a8a89dd41191824c7458c0f0d80"
+    },
+    {
+      "path": "exact-ref.txt",
+      "bytes": 141,
+      "sha256": "61aca420885cb78dd42311b1905c009ff30cfe773d629a69eea84533f6dc9968"
+    },
+    {
+      "path": "normal-merge-audit.json",
+      "bytes": 1214,
+      "sha256": "224520024556073b68d8912c5c44d85575ae05d6f74f86e532316dd97b25e294"
+    },
+    {
+      "path": "normal-merge-guard.py",
+      "bytes": 5034,
+      "sha256": "a7f31a4c8d75d6b52d3764703ad2a576724821c3a117d4e04d03f8c795c8203b"
+    },
+    {
+      "path": "ordinary-terminal.json",
+      "bytes": 619,
+      "sha256": "184600e8a3c11dd15c01152cd3fe9318c9a47db9b471ea8ae8621d28a616e104"
+    },
+    {
+      "path": "pr-after-merge.json",
+      "bytes": 345,
+      "sha256": "005d586be37fc95a0650370ecafafbcdb9ffd439c6172bc3c594f69e43086678"
+    },
+    {
+      "path": "pr-before-merge.json",
+      "bytes": 8840,
+      "sha256": "273231cd03b9fb4705b375719b7db63edcc643bb8cfb11776a85b69cbc66941f"
+    },
+    {
+      "path": "ready-event-protected.json",
+      "bytes": 12584,
+      "sha256": "de5b3a9f7bb3c5eb15bdef0a47581c4fd19908b02e72e54589ecb4cd5bcf8d79"
+    },
+    {
+      "path": "ready-event-protected.log",
+      "bytes": 1235887,
+      "sha256": "bc9b44771fd210cd7cae06592a3227b0f6e76c9de89eb454acbcbc1959259618"
+    },
+    {
+      "path": "rules-after-merge.json",
+      "bytes": 1224,
+      "sha256": "b016eaa2fe9f0f291e6baf5664b6c955bb8ebfce8ef16b1fefd6332e41e84d88"
+    },
+    {
+      "path": "rules-before-merge.json",
+      "bytes": 1224,
+      "sha256": "b016eaa2fe9f0f291e6baf5664b6c955bb8ebfce8ef16b1fefd6332e41e84d88"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "normal-merge-once-v1",
+  "pr": 377,
+  "subject": "e9c56d7cacb17f0ce5a5ea202cff09c7c49df610",
+  "base": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+  "evidence": "596a81c42947c01af90204e6dd72fd5b113e619a",
+  "protected_run": 38489616462,
+  "seven_actual_success": true,
+  "ordinary_actual_success": true,
+  "rules_active": true,
+  "bypass_actors": [],
+  "command": [
+    "gh",
+    "pr",
+    "merge",
+    "377",
+    "--merge",
+    "--match-head-commit",
+    "e9c56d7cacb17f0ce5a5ea202cff09c7c49df610",
+    "--repo",
+    "Kaichen9527/stockinsider"
+  ],
+  "requested_at": "2026-10-14T01:25:38.899834+00:00",
+  "status": "MERGED",
+  "admin_or_auto_or_direct_push": false,
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "merge_commit": "3e1be377de3f6cac58f6de1626e8df994b9df146",
+  "merged_at": "2026-10-14T01:25:41Z",
+  "remote_main": "3e1be377de3f6cac58f6de1626e8df994b9df146",
+  "parents": [
+    "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+    "e9c56d7cacb17f0ce5a5ea202cff09c7c49df610"
+  ],
+  "tree": "2176d218cfae07801c5d8bb59fdf98b269ee6c2c",
+  "web_tree": "b44f239410c03a32720c2155b72c3b7f96b05782",
+  "rules_before_after_identical": true,
+  "production_migration_or_deploy_executed": false
+}

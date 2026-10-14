@@ -1,0 +1,221 @@
+{
+  "baseRefOid": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+  "headRefOid": "e9c56d7cacb17f0ce5a5ea202cff09c7c49df610",
+  "isDraft": false,
+  "mergeStateStatus": "CLEAN",
+  "mergeable": "MERGEABLE",
+  "number": 377,
+  "state": "OPEN",
+  "statusCheckRollup": [
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T22:22:40Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285994/job/115570987302",
+      "name": "Candidate discovery admission and UI diagnostics",
+      "startedAt": "2026-10-13T22:21:55Z",
+      "status": "COMPLETED",
+      "workflowName": "Candidate discovery quality diagnostics"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T22:22:58Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477286173/job/115570987851",
+      "name": "discovery-snapshot-quality",
+      "startedAt": "2026-10-13T22:21:55Z",
+      "status": "COMPLETED",
+      "workflowName": "Coherent discovery snapshot quality diagnostics"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T22:22:46Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477286023/job/115570987476",
+      "name": "financial-installation-quality",
+      "startedAt": "2026-10-13T22:21:55Z",
+      "status": "COMPLETED",
+      "workflowName": "Financial installation quality diagnostics"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T22:27:37Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285982/job/115570987074",
+      "name": "product-runtime",
+      "startedAt": "2026-10-13T22:21:55Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T22:22:03Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285989/job/115593423032",
+      "name": "stockinsider-v3-gate-bootstrap",
+      "startedAt": "2026-10-13T22:21:55Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-14T00:20:46Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38489616462/job/115611458491",
+      "name": "stockinsider-v3-gate-bootstrap",
+      "startedAt": "2026-10-14T00:20:36Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T22:21:53Z",
+      "conclusion": "SKIPPED",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285982/job/115570988645",
+      "name": "evaluation-governance",
+      "startedAt": "2026-10-13T22:21:54Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T23:25:03Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285989/job/115593375441",
+      "name": "requirements",
+      "startedAt": "2026-10-13T23:24:48Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-14T00:21:08Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38489616462/job/115611521359",
+      "name": "requirements",
+      "startedAt": "2026-10-14T00:20:48Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T22:21:53Z",
+      "conclusion": "SKIPPED",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285982/job/115570989087",
+      "name": "model-runner",
+      "startedAt": "2026-10-13T22:21:54Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T23:25:07Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285989/job/115593375704",
+      "name": "architecture",
+      "startedAt": "2026-10-13T23:24:48Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-14T00:21:06Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38489616462/job/115611521377",
+      "name": "architecture",
+      "startedAt": "2026-10-14T00:20:48Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T22:27:41Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285982/job/115573167854",
+      "name": "stockinsider-v3-diagnostic-product-runtime",
+      "startedAt": "2026-10-13T22:27:39Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T23:25:02Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285989/job/115593375952",
+      "name": "exact-review",
+      "startedAt": "2026-10-13T23:24:48Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-14T00:21:06Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38489616462/job/115611521341",
+      "name": "exact-review",
+      "startedAt": "2026-10-14T00:20:48Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T23:37:50Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285989/job/115593466876",
+      "name": "product-runtime-code-gate",
+      "startedAt": "2026-10-13T23:25:04Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-14T00:36:27Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38489616462/job/115611630834",
+      "name": "product-runtime-code-gate",
+      "startedAt": "2026-10-14T00:21:09Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T23:27:28Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285989/job/115593466989",
+      "name": "model-runner-code-gate",
+      "startedAt": "2026-10-13T23:25:05Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-14T00:23:31Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38489616462/job/115611630894",
+      "name": "model-runner-code-gate",
+      "startedAt": "2026-10-14T00:21:09Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-13T23:38:12Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38477285989/job/115597716680",
+      "name": "stockinsider-v3-gate-root",
+      "startedAt": "2026-10-13T23:37:52Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-14T00:36:45Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38489616462/job/115616319463",
+      "name": "stockinsider-v3-gate-root",
+      "startedAt": "2026-10-14T00:36:29Z",
+      "status": "COMPLETED",
+      "workflowName": "Source-led opportunity V3 protected gate root"
+    }
+  ]
+}

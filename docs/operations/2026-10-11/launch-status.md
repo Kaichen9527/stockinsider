@@ -1,5 +1,16 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 09:25台灣時間：來源PR377正常protected全通過，已標準合併
+
+Ready事件新protected38489616462已00:36:45Z終態SUCCESS，bootstrap/requirements/architecture/exact/model/product/aggregate全7真SUCCESS。Root保存完整log/7jobJSON，核四ordinarySUCCESS/fresh596a/sourcee9c/baseaa111/rules20177392active/bypass[]，01:25:41Z只一次標準gh pr merge --merge --match-head-commit完成，無admin/bypass/auto/directmainpush，完整保護JSON前後相同。
+
+Remote main現3e1be377de3f6cac58f6de1626e8df994b9df146，真parentsaa111a54c7108f043eebc1a5b0682391fc88aef9＋e9c56d7cacb17f0ce5a5ea202cff09c7c49df610；fulltree2176d218cfae07801c5d8bb59fdf98b269ee6c2c/webb44f239410c03a32720c2155b72c3b7f96b05782與已審source完全相同，fetch exactSHA核對不採舊origin/main。Audit/tmp/stockinsider-pr377-normal-merge-audit-oct14.json存在成功，PR377加入終態禁止checks/watch/ready/rerun/merge/helper；375/376舊helper亦不可碰，原RED不改成功。
+
+這是同snapshot PG來源讀取候選與ordinary診斷程式真正合併，尚無production client接線或frozenrun/publisher/root/creator前置，live/investmentflags仍false；不是liveTop20/文章/343usable0/策略/正式研究排程完成。Root沒有正式DB/role/SQL/ACL/capacity/部署/HTTP/crawl/PTT/cache操作，正式最後已核169/NOLOGIN-1/原容量reserve與待答不變。金融376已merge仍未正式安裝，不能把兩次merge當部署。
+
+Freshdirectchild596a精確attests sourcee9c，不冒稱直接attest merge3e1be377；正式安裝須明示exactapprovedsource或取得真相符evidence，不只換metadata。Staged8bcd仍舊target，不含新main/金融/來源candidate，不重建舊包冒新。Cloudcursor26仍idle不重派本件；下一有界工程優先既有資料/來源/真文章/策略實質補完或必要approved-release前置，勿無限重做pure框架。新證據`.agent/reports/2026-10-14T09-25-pr377-normal-merge/`。
+
+
 ## 2026-10-14 08:20台灣時間：PR377原protected七項真通過，ready正常事件新驗收中
 
 Remote mainaa111/progressa048/乾淨工作樹、Cloudcursor26idle先核，未重派。Protected38477285989 attempt2已23:38:12Z終態SUCCESS，bootstrap/requirements/architecture/exact/model/product/aggregate全7真SUCCESS，Root保存完整attempt2 log與7job JSON；原attempt1missingrefFAIL及單次failed-rerun audit保持，未重跑綠run。
