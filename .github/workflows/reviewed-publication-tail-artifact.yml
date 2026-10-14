@@ -24,6 +24,7 @@ jobs:
       REVIEWED_TREE: 6a9a08af70fb94b50ed2b5eee6aaf3686f648b99
       REVIEWED_WEB_TREE: c516655efaac8260b1bcf5938f8f4d65ab61ad44
       NEXT_TELEMETRY_DISABLED: '1'
+      PLAYWRIGHT_BROWSERS_PATH: '0'
     steps:
       - name: Retrieve the actual builder subject for fresh canonical tests
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -34,10 +35,31 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22.14.0'
+      - name: Provision original isolated PostgreSQL fixtures before canonical tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          key="$RUNNER_TEMP/pgdg.asc"
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc -o "$key"
+          fingerprint=$(gpg --batch --show-keys --with-colons "$key" | awk -F: '$1=="fpr" {print $10; exit}')
+          test "$fingerprint" = B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+          sudo install -d -m 0755 /usr/share/postgresql-common/pgdg
+          sudo install -m 0644 "$key" /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc
+          printf '%s\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17
+          bin=/usr/lib/postgresql/17/bin
+          for tool in pg_config initdb pg_ctl psql; do test -x "$bin/$tool"; done
+          "$bin/pg_config" --version | grep -E '^PostgreSQL 17\.'
+          echo "$bin" >> "$GITHUB_PATH"
+          echo "USER=$(id -un)" >> "$GITHUB_ENV"
       - name: Install the actual builder's exact locked dependencies
         run: |
           npm ci
           npm --prefix web ci
+      - name: Provision the builder's locked browser before its canonical consumers
+        working-directory: web
+        run: ./node_modules/.bin/playwright install --with-deps chromium
       - name: Run fresh canonical correctness on the actual builder subject
         shell: bash
         run: |
@@ -58,12 +80,24 @@ jobs:
           const start = log.indexOf('TAP version 13\n');
           assert.ok(start >= 0);
           const tap = log.slice(start);
+          assert.equal([...tap.matchAll(/^TAP version 13$/gmu)].length, 1);
+          assert.doesNotMatch(tap, /^\s*(?:not ok\b|Bail out!)/mu);
+          const plans = [...tap.matchAll(/^1\.\.(\d+)$/gmu)];
+          assert.equal(plans.length, 1);
+          assert.equal(plans[0][1], '155');
+          const resultLines = [...tap.matchAll(/^(?:not )?ok\b.*$/gmu)].map(m => m[0]);
+          assert.equal(resultLines.length, 155);
+          for (const [index, line] of resultLines.entries()) {
+            const result = /^ok (\d+) - (.+)$/u.exec(line);
+            assert.ok(result);
+            assert.equal(result[1], String(index + 1));
+            assert.doesNotMatch(result[2], /\s+#\s*(?:SKIP|TODO)\b/iu);
+          }
           for (const [name, expected] of Object.entries({ tests: 155, pass: 155, fail: 0, cancelled: 0, skipped: 0, todo: 0 })) {
             const rows = [...tap.matchAll(new RegExp('^# ' + name + ' (\\d+)$', 'gmu'))];
             assert.equal(rows.length, 1);
             assert.equal(Number(rows[0][1]), expected);
           }
-          assert.match(tap, /^1\.\.155$/mu);
           const pcr = [...tap.matchAll(/^ok \d+ - acceptance (PCR-\d{3})$/gmu)].map(m => m[1]);
           assert.deepEqual(pcr, Array.from({ length: 31 }, (_, i) => 'PCR-' + String(i + 1).padStart(3, '0')));
           const git = ref => execFileSync('git', ['rev-parse', ref], { encoding: 'utf8' }).trim();
