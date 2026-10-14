@@ -1,0 +1,133 @@
+TAP version 13
+# (node:560929) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:560929) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-compatible-financial-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# (node:560929) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/scripts/fixtures/research-compatible-financial/legacy-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/package.json.
+# Subtest: 2409 fixed old whole-session schema/numeric/clock and FD/raw lifetime
+ok 1 - 2409 fixed old whole-session schema/numeric/clock and FD/raw lifetime
+  ---
+  duration_ms: 88.040053
+  ...
+# Subtest: 2409 new cash model is never substituted for original model
+ok 2 - 2409 new cash model is never substituted for original model
+  ---
+  duration_ms: 3.81664
+  ...
+# Subtest: 2383 fixed old whole-session schema/numeric/clock and FD/raw lifetime
+ok 3 - 2383 fixed old whole-session schema/numeric/clock and FD/raw lifetime
+  ---
+  duration_ms: 35.752721
+  ...
+# Subtest: 2383 new cash model is never substituted for original model
+ok 4 - 2383 new cash model is never substituted for original model
+  ---
+  duration_ms: 4.142012
+  ...
+# Subtest: unknown profile/symbol rejects before assertion and IO; fixed inventory is immutable
+ok 5 - unknown profile/symbol rejects before assertion and IO; fixed inventory is immutable
+  ---
+  duration_ms: 0.433835
+  ...
+# Subtest: pre reject context refuses and confirms cleanup
+ok 6 - pre reject context refuses and confirms cleanup
+  ---
+  duration_ms: 0.388507
+  ...
+# Subtest: pre malformed context refuses and confirms cleanup
+ok 7 - pre malformed context refuses and confirms cleanup
+  ---
+  duration_ms: 0.292812
+  ...
+# Subtest: post reject context refuses and confirms cleanup
+ok 8 - post reject context refuses and confirms cleanup
+  ---
+  duration_ms: 19.72147
+  ...
+# Subtest: post malformed context refuses and confirms cleanup
+ok 9 - post malformed context refuses and confirms cleanup
+  ---
+  duration_ms: 13.140583
+  ...
+# Subtest: post changed context refuses and confirms cleanup
+ok 10 - post changed context refuses and confirms cleanup
+  ---
+  duration_ms: 23.069023
+  ...
+# Subtest: compat held post assertion excludes legacy/cash/scenario; then real success
+ok 11 - compat held post assertion excludes legacy/cash/scenario; then real success
+  ---
+  duration_ms: 79.026344
+  ...
+# Subtest: legacy acquisition excludes compatible session
+ok 12 - legacy acquisition excludes compatible session
+  ---
+  duration_ms: 22.573014
+  ...
+# Subtest: historicalCash acquisition excludes compatible session
+ok 13 - historicalCash acquisition excludes compatible session
+  ---
+  duration_ms: 29.189055
+  ...
+# Subtest: scenarioCash acquisition excludes compatible session
+ok 14 - scenarioCash acquisition excludes compatible session
+  ---
+  duration_ms: 31.642148
+  ...
+# Subtest: pre assertion deadline retains shared owner until real settlement; no late opens
+ok 15 - pre assertion deadline retains shared owner until real settlement; no late opens
+  ---
+  duration_ms: 316.95886
+  ...
+# Subtest: post assertion deadline retains shared owner until real settlement; no late opens
+ok 16 - post assertion deadline retains shared owner until real settlement; no late opens
+  ---
+  duration_ms: 316.991016
+  ...
+# Subtest: post assertion namespace replacement refuses after real computation and wipes raw
+ok 17 - post assertion namespace replacement refuses after real computation and wipes raw
+  ---
+  duration_ms: 15.195755
+  ...
+# Subtest: compatible close pending forbids success and all facades until confirmed close
+ok 18 - compatible close pending forbids success and all facades until confirmed close
+  ---
+  duration_ms: 321.131452
+  ...
+# Subtest: compatible late actual open retains ownership and late buffer wipes
+ok 19 - compatible late actual open retains ownership and late buffer wipes
+  ---
+  duration_ms: 318.726272
+  ...
+# Subtest: compatible late actual read retains ownership and late buffer wipes
+ok 20 - compatible late actual read retains ownership and late buffer wipes
+  ---
+  duration_ms: 317.377053
+  ...
+# (node:560940) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:560940) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-compatible-financial-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# Subtest: post assertion late rejection is observed; original timeout remains and owner recovers
+ok 21 - post assertion late rejection is observed; original timeout remains and owner recovers
+  ---
+  duration_ms: 318.708449
+  ...
+# Subtest: compatible primary assertion error survives unconfirmed real-FD close failure (child)
+ok 22 - compatible primary assertion error survives unconfirmed real-FD close failure (child)
+  ---
+  duration_ms: 139.321022
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2608.811619

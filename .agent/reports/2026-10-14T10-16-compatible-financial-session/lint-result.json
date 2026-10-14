@@ -1,0 +1,26 @@
+{
+  "stage": "lint",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "lint"
+  ],
+  "cwd": "/tmp/si-pubtail-o14",
+  "startedAt": "2026-10-14T10:23:33.387978+00:00",
+  "durationSeconds": 21.73239254951477,
+  "exit": 0,
+  "boundStop": null,
+  "peakSampledProcessTreeRssBytes": 1642807296,
+  "sampleIntervalSeconds": 0.25,
+  "samples": 78,
+  "minFreeBytes": {
+    "/workspace": 8616755200,
+    "/tmp": 15443263488
+  },
+  "beforeFreeBytes": {
+    "/workspace": 8616755200,
+    "/tmp": 15443271680
+  }
+}
