@@ -1,0 +1,8 @@
+{
+  "probeSha": "ef8fd14b0997e209621205017353f655aa803cba9683b212f53170b5cc72c151",
+  "originalFunctionSha": "ceb2c2cb10c2e1a52d70fc01850ce506b72a93fb12627046599cfc80549e9cc1",
+  "sqlSha": "acbec3cd9a480b708cb9be22a9f98c2734bcf5c15df7975fb9e04ec588dd023a",
+  "pgbin": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+  "osUser": "agent",
+  "syntheticLocalOnly": true
+}

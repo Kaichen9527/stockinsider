@@ -1,0 +1,1135 @@
+[
+  {
+    "file": "migrations/20260929_research_agent_state_v1.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 98,
+        "text": "CREATE OR REPLACE FUNCTION public.fence_candidate_thesis_append_v1()"
+      },
+      {
+        "line": 102,
+        "text": "BEGIN"
+      },
+      {
+        "line": 147,
+        "text": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1("
+      },
+      {
+        "line": 151,
+        "text": "BEGIN"
+      },
+      {
+        "line": 213,
+        "text": "CREATE OR REPLACE FUNCTION public.research_model_lease_fits_day_v1(p_started timestamptz)"
+      },
+      {
+        "line": 219,
+        "text": "CREATE OR REPLACE FUNCTION public.reserve_research_model_v1(p_role text,p_owner text,p_work_key text)"
+      },
+      {
+        "line": 223,
+        "text": "BEGIN"
+      },
+      {
+        "line": 245,
+        "text": "CREATE OR REPLACE FUNCTION public.finish_research_model_v1(p_reservation uuid,p_owner text,p_outcome text,p_result_hash text)"
+      },
+      {
+        "line": 248,
+        "text": "BEGIN"
+      },
+      {
+        "line": 294,
+        "text": "CREATE OR REPLACE FUNCTION public.capture_research_first_discoveries_v1(p_run_id uuid)"
+      },
+      {
+        "line": 298,
+        "text": "BEGIN"
+      },
+      {
+        "line": 347,
+        "text": "CREATE OR REPLACE FUNCTION public.fence_research_strategy_record_v1()"
+      },
+      {
+        "line": 350,
+        "text": "BEGIN"
+      },
+      {
+        "line": 387,
+        "text": "CREATE OR REPLACE FUNCTION public.fence_research_paper_book_append_v1()"
+      },
+      {
+        "line": 390,
+        "text": "BEGIN"
+      },
+      {
+        "line": 416,
+        "text": "CREATE OR REPLACE FUNCTION public.research_evidence_heads_v1(p_ids uuid[],p_cutoff timestamptz)"
+      },
+      {
+        "line": 418,
+        "text": "BEGIN"
+      },
+      {
+        "line": 456,
+        "text": "CREATE OR REPLACE FUNCTION public.research_thesis_heads_page_v1("
+      },
+      {
+        "line": 459,
+        "text": "BEGIN"
+      },
+      {
+        "line": 477,
+        "text": "CREATE OR REPLACE FUNCTION public.research_execution_policy_matches_v1(p_expected jsonb)"
+      },
+      {
+        "line": 481,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20260929_research_deep_jobs_v1.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 37,
+        "text": "CREATE OR REPLACE FUNCTION public.handoff_research_deep_model_v1("
+      },
+      {
+        "line": 42,
+        "text": "BEGIN"
+      },
+      {
+        "line": 54,
+        "text": "CREATE OR REPLACE FUNCTION public.record_budgeted_deep_review_v1("
+      },
+      {
+        "line": 59,
+        "text": "BEGIN"
+      },
+      {
+        "line": 122,
+        "text": "CREATE OR REPLACE FUNCTION public.enqueue_research_deep_jobs_v1(p_run_id UUID)"
+      },
+      {
+        "line": 134,
+        "text": "BEGIN"
+      },
+      {
+        "line": 165,
+        "text": "CREATE OR REPLACE FUNCTION public.claim_research_deep_job_v1(p_owner TEXT)"
+      },
+      {
+        "line": 170,
+        "text": "BEGIN"
+      },
+      {
+        "line": 210,
+        "text": "CREATE OR REPLACE FUNCTION public.claim_candidate_deep_outbox_v1("
+      },
+      {
+        "line": 221,
+        "text": "BEGIN"
+      },
+      {
+        "line": 271,
+        "text": "CREATE OR REPLACE FUNCTION public.finish_research_deep_job_v1("
+      },
+      {
+        "line": 276,
+        "text": "BEGIN"
+      },
+      {
+        "line": 280,
+        "text": "CREATE OR REPLACE FUNCTION public.finish_research_deep_job_v2("
+      },
+      {
+        "line": 288,
+        "text": "BEGIN"
+      },
+      {
+        "line": 326,
+        "text": "CREATE OR REPLACE FUNCTION public.record_candidate_deep_submission_v1("
+      },
+      {
+        "line": 342,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261008_research_observed_roster_v1.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 3,
+        "text": "DO $do$ BEGIN"
+      },
+      {
+        "line": 43,
+        "text": "CREATE FUNCTION public.reject_research_observed_mutation_v1() RETURNS trigger"
+      },
+      {
+        "line": 44,
+        "text": " LANGUAGE plpgsql SET search_path=pg_catalog AS $$ BEGIN RAISE EXCEPTION 'research_observed_immutable'; END $$;"
+      },
+      {
+        "line": 45,
+        "text": "CREATE TRIGGER immutable_observed_company BEFORE UPDATE OR DELETE ON public.research_observed_companies_v1 FOR EACH ROW EXECUTE FUNCTION public.reject_research_observed_mutation_v1();"
+      },
+      {
+        "line": 46,
+        "text": "CREATE TRIGGER immutable_observed_snapshot BEFORE UPDATE OR DELETE ON public.research_observed_roster_snapshots_v1 FOR EACH ROW EXECUTE FUNCTION public.reject_research_observed_mutation_v1();"
+      },
+      {
+        "line": 47,
+        "text": "CREATE TRIGGER immutable_observed_member BEFORE UPDATE OR DELETE ON public.research_observed_roster_members_v1 FOR EACH ROW EXECUTE FUNCTION public.reject_research_observed_mutation_v1();"
+      },
+      {
+        "line": 58,
+        "text": "CREATE FUNCTION public.research_observed_canonical_json_v1(value jsonb) RETURNS text"
+      },
+      {
+        "line": 61,
+        "text": "BEGIN"
+      },
+      {
+        "line": 71,
+        "text": "CREATE FUNCTION public.research_observed_instant_v1(value text) RETURNS timestamptz LANGUAGE plpgsql IMMUTABLE SET search_path=pg_catalog AS $$"
+      },
+      {
+        "line": 73,
+        "text": "BEGIN"
+      },
+      {
+        "line": 78,
+        "text": "CREATE FUNCTION public.admit_research_observed_roster_v1(p_snapshot_hash text,p_canonical_packet text)"
+      },
+      {
+        "line": 85,
+        "text": "BEGIN"
+      },
+      {
+        "line": 95,
+        "text": "   OR (jsonb_typeof(value)='string' AND (length(value#>>'{}')>4096 OR value#>>'{}' ~* '(Bearer[[:space:]]+[^[:space:]]{12,}|-----BEGIN .*PRIVATE KEY-----|eyJ[A-Za-z0-9_-]{12,}\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+|(password|api[_-]?key|access[_-]?token|cookie)[[:space:]]*[:=][[:space:]]*[^[:space:]]+)'))"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_author_assignments_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 34,
+        "text": "CREATE FUNCTION public.research_author_assignment_context_v2("
+      },
+      {
+        "line": 39,
+        "text": "BEGIN"
+      },
+      {
+        "line": 44,
+        "text": " revision:=public.read_research_article_input_revision_v2(p_request);"
+      },
+      {
+        "line": 51,
+        "text": "  OR payload->>'schemaVersion' IS DISTINCT FROM 'research-article-input-v2'"
+      },
+      {
+        "line": 88,
+        "text": "CREATE FUNCTION public.read_research_author_assignment_v2("
+      },
+      {
+        "line": 92,
+        "text": "BEGIN"
+      },
+      {
+        "line": 112,
+        "text": "CREATE FUNCTION public.assign_research_author_v2("
+      },
+      {
+        "line": 117,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_author_handoffs_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 7,
+        "text": "CREATE FUNCTION public.read_research_author_handoff_context_v2("
+      },
+      {
+        "line": 13,
+        "text": "BEGIN"
+      },
+      {
+        "line": 92,
+        "text": "CREATE FUNCTION public.commit_research_author_handoff_v2("
+      },
+      {
+        "line": 96,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_author_packet_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 3,
+        "text": "CREATE FUNCTION public.read_research_author_packet_v2("
+      },
+      {
+        "line": 9,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_author_results_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 19,
+        "text": "CREATE FUNCTION public.read_research_author_result_v2(p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text)"
+      },
+      {
+        "line": 22,
+        "text": "BEGIN"
+      },
+      {
+        "line": 32,
+        "text": "CREATE FUNCTION public.receive_research_author_result_v2(p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result jsonb)"
+      },
+      {
+        "line": 36,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_complete_input_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 16,
+        "text": "CREATE TRIGGER immutable_research_article_input_v2 BEFORE UPDATE OR DELETE OR TRUNCATE ON public.research_article_input_revisions_v2 FOR EACH STATEMENT EXECUTE FUNCTION public.reject_research_source_receipt_mutation_v2();"
+      },
+      {
+        "line": 17,
+        "text": "CREATE FUNCTION public.research_complete_canonical_v2(v jsonb,d integer DEFAULT 0) RETURNS text LANGUAGE plpgsql IMMUTABLE STRICT SET search_path=pg_catalog,public AS $$"
+      },
+      {
+        "line": 19,
+        "text": "BEGIN"
+      },
+      {
+        "line": 28,
+        "text": "CREATE FUNCTION public.research_complete_hash_v2(v jsonb) RETURNS text LANGUAGE sql IMMUTABLE STRICT SET search_path=pg_catalog,public AS $$ SELECT encode(sha256(convert_to(public.research_complete_canonical_v2(v),'UTF8')),'hex') $$;"
+      },
+      {
+        "line": 29,
+        "text": "CREATE FUNCTION public.research_complete_schema_check_v2(v jsonb,s jsonb,known timestamptz,d integer DEFAULT 0) RETURNS void LANGUAGE plpgsql IMMUTABLE SET search_path=pg_catalog,public AS $$"
+      },
+      {
+        "line": 31,
+        "text": "BEGIN"
+      },
+      {
+        "line": 50,
+        "text": "CREATE FUNCTION public.research_complete_parent_v2(p_request jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$"
+      },
+      {
+        "line": 52,
+        "text": "BEGIN"
+      },
+      {
+        "line": 69,
+        "text": "CREATE FUNCTION public.read_research_article_input_revision_v2(p_request jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$"
+      },
+      {
+        "line": 71,
+        "text": "BEGIN"
+      },
+      {
+        "line": 79,
+        "text": "CREATE FUNCTION public.seal_research_article_input_revision_v2(p_request jsonb,p_calculation jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$"
+      },
+      {
+        "line": 81,
+        "text": "BEGIN"
+      },
+      {
+        "line": 82,
+        "text": " existing:=public.read_research_article_input_revision_v2(p_request);IF existing->>'status'='sealed' THEN RETURN existing;END IF;"
+      },
+      {
+        "line": 92,
+        "text": " IF NOT isfinite(known) OR known>n OR known<(m->>'modelCutoff')::timestamptz OR (parent->>'admitted_at')::timestamptz>n OR (parent->>'admitted_at')::timestamptz<n-interval '120 seconds' THEN RAISE EXCEPTION 'complete_freshness';END IF;"
+      },
+      {
+        "line": 96,
+        "text": " material:=jsonb_build_object('schemaVersion','research-article-input-v2','assemblyStatus','complete','evidenceStatus','incomplete','producerAttribution','internal_controller_asserted',"
+      },
+      {
+        "line": 109,
+        "text": " UNION ALL SELECT logical_bytes FROM public.research_article_input_revisions_v2 WHERE job_id=(parent->>'job_id')::uuid AND attempt=(parent->>'attempt')::int AND reservation_id=(parent->>'reservation_id')::uuid) history;"
+      },
+      {
+        "line": 110,
+        "text": " IF used_count>=4 THEN RAISE EXCEPTION 'complete_count_bound';END IF;IF used_bytes+charge>524288 THEN RAISE EXCEPTION 'complete_byte_bound';END IF;"
+      },
+      {
+        "line": 117,
+        "text": "DO $$ BEGIN"
+      },
+      {
+        "line": 120,
+        "text": "CREATE OR REPLACE FUNCTION public.prepare_research_input_v2(p_request jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$"
+      },
+      {
+        "line": 126,
+        "text": "BEGIN"
+      },
+      {
+        "line": 176,
+        "text": "  UNION ALL SELECT logical_bytes FROM public.research_article_input_revisions_v2 WHERE job_id=j.job_id AND attempt=j.attempts AND reservation_id=r.reservation_id) history;"
+      },
+      {
+        "line": 177,
+        "text": " IF used_count>=4 THEN RAISE EXCEPTION 'input_preparation_count_bound'; END IF;"
+      },
+      {
+        "line": 202,
+        "text": " IF used_bytes+charged_bytes>524288 THEN RAISE EXCEPTION 'input_preparation_byte_bound'; END IF;"
+      },
+      {
+        "line": 218,
+        "text": "ALTER FUNCTION public.read_research_article_input_revision_v2(jsonb) OWNER TO research_input_preparation_owner_v2;"
+      },
+      {
+        "line": 219,
+        "text": "REVOKE ALL ON FUNCTION public.read_research_article_input_revision_v2(jsonb) FROM PUBLIC,anon,authenticated,service_role;"
+      },
+      {
+        "line": 220,
+        "text": "ALTER FUNCTION public.seal_research_article_input_revision_v2(jsonb,jsonb) OWNER TO research_input_preparation_owner_v2;"
+      },
+      {
+        "line": 221,
+        "text": "REVOKE ALL ON FUNCTION public.seal_research_article_input_revision_v2(jsonb,jsonb) FROM PUBLIC,anon,authenticated,service_role;"
+      },
+      {
+        "line": 222,
+        "text": "GRANT EXECUTE ON FUNCTION public.read_research_article_input_revision_v2(jsonb) TO service_role;"
+      },
+      {
+        "line": 223,
+        "text": "GRANT EXECUTE ON FUNCTION public.seal_research_article_input_revision_v2(jsonb,jsonb) TO service_role;"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_input_preparation_assert_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 5,
+        "text": "CREATE FUNCTION public.assert_research_input_preparation_v2(p_request jsonb,p_preparation_id uuid,p_input_hash text) RETURNS jsonb"
+      },
+      {
+        "line": 8,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_input_preparations_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 18,
+        "text": "CREATE TRIGGER immutable_research_input_preparation_v2 BEFORE UPDATE OR DELETE OR TRUNCATE ON public.research_input_preparations_v2 FOR EACH STATEMENT EXECUTE FUNCTION public.reject_research_source_receipt_mutation_v2();"
+      },
+      {
+        "line": 20,
+        "text": "DO $$ DECLARE name text; BEGIN"
+      },
+      {
+        "line": 35,
+        "text": "CREATE FUNCTION public.research_input_preparation_bytes_v2(p_request jsonb,p_payload jsonb,p_new_seal jsonb) RETURNS integer"
+      },
+      {
+        "line": 45,
+        "text": "CREATE FUNCTION public.prepare_research_input_v2(p_request jsonb) RETURNS jsonb"
+      },
+      {
+        "line": 52,
+        "text": "BEGIN"
+      },
+      {
+        "line": 103,
+        "text": " IF used_count>=4 THEN RAISE EXCEPTION 'input_preparation_count_bound'; END IF;"
+      },
+      {
+        "line": 128,
+        "text": " IF used_bytes+charged_bytes>524288 THEN RAISE EXCEPTION 'input_preparation_byte_bound'; END IF;"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_publication_lineage_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 34,
+        "text": "CREATE FUNCTION public.fence_research_publication_lineage_v2() RETURNS trigger"
+      },
+      {
+        "line": 37,
+        "text": "BEGIN"
+      },
+      {
+        "line": 93,
+        "text": "CREATE FUNCTION public.fence_research_publication_truncate_v2() RETURNS trigger"
+      },
+      {
+        "line": 95,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "lines": [
+      {
+        "line": 4,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 5,
+        "text": "DO $$ BEGIN"
+      },
+      {
+        "line": 34,
+        "text": "CREATE FUNCTION public.research_source_root_v2(p jsonb) RETURNS text"
+      },
+      {
+        "line": 42,
+        "text": "CREATE FUNCTION public.research_source_fence_write_v2() RETURNS trigger"
+      },
+      {
+        "line": 44,
+        "text": "BEGIN"
+      },
+      {
+        "line": 60,
+        "text": "CREATE FUNCTION public.research_source_fence_record_v2() RETURNS trigger"
+      },
+      {
+        "line": 63,
+        "text": "BEGIN"
+      },
+      {
+        "line": 88,
+        "text": "CREATE FUNCTION public.seal_research_sources_v2(p_documents jsonb,p_cutoff timestamptz)"
+      },
+      {
+        "line": 91,
+        "text": "BEGIN"
+      },
+      {
+        "line": 138,
+        "text": "CREATE FUNCTION public.assert_research_source_seal_v2(p_seal uuid) RETURNS jsonb"
+      },
+      {
+        "line": 141,
+        "text": "BEGIN"
+      },
+      {
+        "line": 155,
+        "text": "CREATE FUNCTION public.reject_research_source_receipt_mutation_v2() RETURNS trigger LANGUAGE plpgsql AS $$"
+      },
+      {
+        "line": 156,
+        "text": " BEGIN RAISE EXCEPTION 'immutable_source_receipt'; END $$;"
+      },
+      {
+        "line": 158,
+        "text": "CREATE TRIGGER research_source_events_immutable_v2 BEFORE UPDATE OR DELETE ON public.research_source_fence_events_v2 FOR EACH ROW EXECUTE FUNCTION public.reject_research_source_receipt_mutation_v2();"
+      },
+      {
+        "line": 159,
+        "text": "CREATE TRIGGER research_source_seals_immutable_v2 BEFORE UPDATE OR DELETE ON public.research_source_seals_v2 FOR EACH ROW EXECUTE FUNCTION public.reject_research_source_receipt_mutation_v2();"
+      },
+      {
+        "line": 160,
+        "text": "CREATE TRIGGER research_source_invalidations_immutable_v2 BEFORE UPDATE OR DELETE ON public.research_source_seal_invalidations_v2 FOR EACH ROW EXECUTE FUNCTION public.reject_research_source_receipt_mutation_v2();"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 29,
+        "text": "CREATE FUNCTION public.read_research_reviewer_context_v2("
+      },
+      {
+        "line": 33,
+        "text": "BEGIN"
+      },
+      {
+        "line": 65,
+        "text": "CREATE FUNCTION public.assign_research_reviewer_v2("
+      },
+      {
+        "line": 69,
+        "text": "BEGIN"
+      },
+      {
+        "line": 98,
+        "text": "CREATE FUNCTION public.read_research_reviewer_sources_v2(p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text) RETURNS jsonb"
+      },
+      {
+        "line": 103,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261009_research_reviewer_results_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 33,
+        "text": "CREATE FUNCTION public.fence_research_execution_invocation_v2() RETURNS trigger"
+      },
+      {
+        "line": 35,
+        "text": "BEGIN"
+      },
+      {
+        "line": 46,
+        "text": "CREATE TRIGGER research_author_invocation_v2 BEFORE INSERT ON public.research_author_results_v2 FOR EACH ROW EXECUTE FUNCTION public.fence_research_execution_invocation_v2();"
+      },
+      {
+        "line": 47,
+        "text": "CREATE TRIGGER research_reviewer_invocation_v2 BEFORE INSERT ON public.research_reviewer_results_v2 FOR EACH ROW EXECUTE FUNCTION public.fence_research_execution_invocation_v2();"
+      },
+      {
+        "line": 49,
+        "text": "CREATE FUNCTION public.read_research_reviewer_result_context_v2(p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text)"
+      },
+      {
+        "line": 53,
+        "text": "BEGIN"
+      },
+      {
+        "line": 98,
+        "text": "CREATE FUNCTION public.assert_research_editorial_review_v2(packet jsonb,review jsonb) RETURNS void"
+      },
+      {
+        "line": 105,
+        "text": "BEGIN"
+      },
+      {
+        "line": 150,
+        "text": "CREATE FUNCTION public.receive_research_reviewer_result_v2(p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text,p_result jsonb)"
+      },
+      {
+        "line": 154,
+        "text": "BEGIN"
+      },
+      {
+        "line": 228,
+        "text": "CREATE FUNCTION public.read_research_reviewer_result_sources_v2(p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text) RETURNS jsonb"
+      },
+      {
+        "line": 233,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 49,
+        "text": "CREATE FUNCTION public.research_publication_content_v2(author_payload jsonb) RETURNS jsonb"
+      },
+      {
+        "line": 64,
+        "text": "CREATE FUNCTION public.ensure_research_publication_bundle_v2(p_revision uuid,p_hash text) RETURNS uuid"
+      },
+      {
+        "line": 67,
+        "text": "BEGIN"
+      },
+      {
+        "line": 87,
+        "text": "CREATE FUNCTION public.fence_research_dossier_insert_v2() RETURNS trigger"
+      },
+      {
+        "line": 91,
+        "text": "BEGIN"
+      },
+      {
+        "line": 139,
+        "text": "CREATE TRIGGER research_dossier_insert_v2 BEFORE INSERT ON public.candidate_research_dossiers FOR EACH ROW EXECUTE FUNCTION public.fence_research_dossier_insert_v2();"
+      },
+      {
+        "line": 140,
+        "text": "CREATE TRIGGER research_receipt_insert_v2 BEFORE INSERT ON public.candidate_dossier_submission_receipts FOR EACH ROW EXECUTE FUNCTION public.fence_research_dossier_insert_v2();"
+      },
+      {
+        "line": 141,
+        "text": "CREATE FUNCTION public.fence_research_dossier_truncate_v2() RETURNS trigger"
+      },
+      {
+        "line": 143,
+        "text": "BEGIN"
+      },
+      {
+        "line": 151,
+        "text": "CREATE TRIGGER research_dossier_truncate_v2 BEFORE TRUNCATE ON public.candidate_research_dossiers FOR EACH STATEMENT EXECUTE FUNCTION public.fence_research_dossier_truncate_v2();"
+      },
+      {
+        "line": 152,
+        "text": "CREATE TRIGGER research_receipt_truncate_v2 BEFORE TRUNCATE ON public.candidate_dossier_submission_receipts FOR EACH STATEMENT EXECUTE FUNCTION public.fence_research_dossier_truncate_v2();"
+      },
+      {
+        "line": 163,
+        "text": "CREATE OR REPLACE FUNCTION public.fence_research_publication_lineage_v2() RETURNS trigger"
+      },
+      {
+        "line": 166,
+        "text": "BEGIN"
+      },
+      {
+        "line": 236,
+        "text": "CREATE FUNCTION public.research_publication_source_state_v2(p_seal uuid) RETURNS text"
+      },
+      {
+        "line": 245,
+        "text": "CREATE FUNCTION public.read_completed_research_publication_v2("
+      },
+      {
+        "line": 254,
+        "text": "BEGIN"
+      },
+      {
+        "line": 360,
+        "text": "CREATE FUNCTION public.publish_research_article_v2("
+      },
+      {
+        "line": 368,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261010_research_publication_view_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 7,
+        "text": "CREATE FUNCTION public.read_research_company_publication_v2(p_company uuid)"
+      },
+      {
+        "line": 13,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261011_research_admission_isolation_v1.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 8,
+        "text": "BEGIN"
+      },
+      {
+        "line": 43,
+        "text": "CREATE OR REPLACE FUNCTION public.reserve_research_model_v1(p_role text,p_owner text,p_work_key text)"
+      },
+      {
+        "line": 47,
+        "text": "BEGIN"
+      },
+      {
+        "line": 73,
+        "text": "CREATE OR REPLACE FUNCTION public.validate_research_deep_scope_v1() RETURNS trigger LANGUAGE plpgsql SET search_path=public,pg_temp AS $$"
+      },
+      {
+        "line": 75,
+        "text": "BEGIN"
+      },
+      {
+        "line": 102,
+        "text": "CREATE OR REPLACE FUNCTION public.charge_research_deep_admission_v1() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$"
+      },
+      {
+        "line": 103,
+        "text": "BEGIN"
+      },
+      {
+        "line": 113,
+        "text": "CREATE OR REPLACE FUNCTION public.reconcile_research_deep_admissions_v1() RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$"
+      },
+      {
+        "line": 115,
+        "text": "BEGIN"
+      },
+      {
+        "line": 127,
+        "text": "CREATE OR REPLACE FUNCTION public.enqueue_research_deep_jobs_v1(p_run_id uuid) RETURNS integer LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$"
+      },
+      {
+        "line": 129,
+        "text": "BEGIN"
+      },
+      {
+        "line": 162,
+        "text": "CREATE OR REPLACE FUNCTION public.store_observed_research_priority_v1(p_snapshot_hash text,p_as_of timestamptz,p_input_hash text,p_attempts jsonb,p_rows jsonb,p_queue jsonb,p_scope_receipt jsonb)"
+      },
+      {
+        "line": 165,
+        "text": "BEGIN"
+      },
+      {
+        "line": 210,
+        "text": "CREATE OR REPLACE FUNCTION public.reap_expired_research_deep_jobs_v2() RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$"
+      },
+      {
+        "line": 212,
+        "text": "BEGIN"
+      },
+      {
+        "line": 222,
+        "text": "CREATE OR REPLACE FUNCTION public.claim_research_deep_job_v1(p_owner TEXT)"
+      },
+      {
+        "line": 227,
+        "text": "BEGIN"
+      },
+      {
+        "line": 259,
+        "text": "CREATE OR REPLACE FUNCTION public.claim_research_observed_job_v2(p_owner text,p_snapshot_hash text)"
+      },
+      {
+        "line": 262,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "migrations/20261011_research_complete_mapping_precision_v2.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 5,
+        "text": "BEGIN"
+      }
+    ]
+  },
+  {
+    "file": "observed-claim.sql",
+    "lines": [
+      {
+        "line": 1,
+        "text": "BEGIN;"
+      },
+      {
+        "line": 11,
+        "text": "CREATE FUNCTION public.read_research_observed_claim_v2(p_owner text,p_snapshot_hash text,p_job_id uuid DEFAULT NULL,p_attempt integer DEFAULT NULL)"
+      },
+      {
+        "line": 14,
+        "text": "BEGIN"
+      },
+      {
+        "line": 34,
+        "text": "CREATE FUNCTION public.claim_research_observed_job_v2(p_owner text,p_snapshot_hash text)"
+      },
+      {
+        "line": 37,
+        "text": "BEGIN"
+      },
+      {
+        "line": 53,
+        "text": "CREATE OR REPLACE FUNCTION public.handoff_research_deep_model_v1("
+      },
+      {
+        "line": 58,
+        "text": "BEGIN"
+      },
+      {
+        "line": 69,
+        "text": "CREATE FUNCTION public.fence_observed_model_completion_v2() RETURNS trigger LANGUAGE plpgsql SET search_path=public,pg_temp AS $$"
+      },
+      {
+        "line": 70,
+        "text": "BEGIN"
+      },
+      {
+        "line": 73,
+        "text": "CREATE TRIGGER observed_model_completion_scope_v2 BEFORE INSERT ON public.research_model_completions_v1 FOR EACH ROW EXECUTE FUNCTION public.fence_observed_model_completion_v2();"
+      },
+      {
+        "line": 78,
+        "text": "CREATE OR REPLACE FUNCTION public.record_budgeted_deep_review_v1("
+      },
+      {
+        "line": 83,
+        "text": "BEGIN"
+      },
+      {
+        "line": 119,
+        "text": "CREATE OR REPLACE FUNCTION public.claim_candidate_deep_outbox_v1("
+      },
+      {
+        "line": 130,
+        "text": "BEGIN"
+      },
+      {
+        "line": 178,
+        "text": "CREATE OR REPLACE FUNCTION public.finish_research_deep_job_v2("
+      },
+      {
+        "line": 186,
+        "text": "BEGIN"
+      },
+      {
+        "line": 221,
+        "text": "CREATE OR REPLACE FUNCTION public.record_candidate_deep_submission_v1("
+      },
+      {
+        "line": 237,
+        "text": "BEGIN"
+      },
+      {
+        "line": 328,
+        "text": "DO $$DECLARE routine record;BEGIN FOR routine IN SELECT p.proname,pg_get_function_identity_arguments(p.oid)args FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public'AND p.proname=ANY(ARRAY['record_budgeted_deep_review_v1','claim_candidate_deep_outbox_v1','finish_research_deep_job_v2','record_candidate_deep_submission_v1'])LOOP EXECUTE format('REVOKE ALL ON FUNCTION public.%I(%s) FROM PUBLIC,anon,authenticated',routine.proname,routine.args);EXECUTE format('GRANT EXECUTE ON FUNCTION public.%I(%s) TO service_role',routine.proname,routine.args);END LOOP;END $$;"
+      }
+    ]
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "lines": [
+      {
+        "line": 22,
+        "text": "    const {readCompleteBody,parseCompleteRequest,runCompleteInput}=await import('@/lib/research-complete-input');"
+      },
+      {
+        "line": 26,
+        "text": "    try {const revision=await runCompleteInput(getSupabaseServerClient(),input,action==='sealResearchInput',deadline);deadline.check();return NextResponse.json({ok:true,revision,dispatchReady:false});}"
+      }
+    ]
+  },
+  {
+    "file": "web/src/lib/research-author-assignment.ts",
+    "lines": [
+      {
+        "line": 5,
+        "text": "import { readCompleteBody, parseCompleteRequest, runCompleteInput, type CompleteRequest } from './research-complete-input.ts';"
+      },
+      {
+        "line": 33,
+        "text": "  const revision = await runCompleteInput(db, request.input, false, deadline);"
+      }
+    ]
+  },
+  {
+    "file": "web/src/lib/research-author-packet.ts",
+    "lines": [
+      {
+        "line": 3,
+        "text": "import { runCompleteInput, validateCompleteResponse, type CompleteRequest } from './research-complete-input.ts';"
+      },
+      {
+        "line": 21,
+        "text": "    && !/\\bBearer\\s+\\S+|-----BEGIN .*PRIVATE KEY-----|\\b(?:password|api[_-]?key|access[_-]?token|cookie)\\s*[:=]/iu.test(value));"
+      },
+      {
+        "line": 130,
+        "text": "  const revision = await runCompleteInput(db, request.input, false, deadline);"
+      }
+    ]
+  },
+  {
+    "file": "web/src/lib/research-author-result.ts",
+    "lines": [
+      {
+        "line": 5,
+        "text": "import { parseCompleteRequest, runCompleteInput } from './research-complete-input.ts';"
+      },
+      {
+        "line": 39,
+        "text": "  const revision = await runCompleteInput(db, request.input, false, deadline);"
+      }
+    ]
+  },
+  {
+    "file": "web/src/lib/research-business-article.ts",
+    "lines": [
+      {
+        "line": 48,
+        "text": "    && !/\\bBearer\\s+\\S+|-----BEGIN .*PRIVATE KEY-----|\\b(?:password|api[_-]?key|access[_-]?token|cookie)\\s*[:=]/iu.test(value));"
+      },
+      {
+        "line": 140,
+        "text": "  for (const key of ['reportedFacts', 'monthlyFacts']) list(projection[key], 0, 64).forEach((value, index) => {"
+      }
+    ]
+  },
+  {
+    "file": "web/src/lib/research-complete-input.ts",
+    "lines": [
+      {
+        "line": 55,
+        "text": "  ensure(p.schemaVersion==='research-article-input-v2'&&p.assemblyStatus==='complete'&&p.evidenceStatus==='incomplete'&&p.producerAttribution==='internal_controller_asserted'&&prep.id===request.preparationId&&prep.inputHash===request.preparationHash&&hashes.preparationInputHash===request.preparationHash"
+      },
+      {
+        "line": 66,
+        "text": "export async function runCompleteInput(db:Pick<SupabaseClient,'rpc'>,request:CompleteRequest,seal:boolean,deadline:FinancialDeadline,root?:string):Promise<Row>{"
+      },
+      {
+        "line": 69,
+        "text": " const before=await rpc('read_research_article_input_revision_v2',{p_request:request});phase='read_validate';"
+      },
+      {
+        "line": 72,
+        "text": " phase='seal_rpc';const saved=await rpc('seal_research_article_input_revision_v2',{p_request:request,p_calculation:material});"
+      }
+    ]
+  },
+  {
+    "file": "web/src/lib/research-deep-author-input.ts",
+    "lines": [
+      {
+        "line": 19,
+        "text": "    && !/\\bBearer\\s+\\S+|-----BEGIN .*PRIVATE KEY-----|\\b(?:password|api[_-]?key|access[_-]?token|cookie)\\s*[:=]|\\beyJ[A-Za-z0-9_-]{12,}\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+/iu.test(value);"
+      }
+    ]
+  },
+  {
+    "file": "web/src/lib/research-deep-draft.ts",
+    "lines": [
+      {
+        "line": 17,
+        "text": "    && !/\\bBearer\\s+\\S+|-----BEGIN .*PRIVATE KEY-----|\\b(?:password|api[_-]?key|access[_-]?token|cookie)\\s*[:=]|\\beyJ[A-Za-z0-9_-]{12,}\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+/iu.test(value));"
+      }
+    ]
+  },
+  {
+    "file": "web/src/lib/research-financial-supplement.ts",
+    "lines": [
+      {
+        "line": 45,
+        "text": "  ensure(report); const reportedFacts: Row[]=[];"
+      },
+      {
+        "line": 48,
+        "text": "    reportedFacts.push({metric,period,periodKind:period.includes('H')?'half_year_cumulative':'quarter',unit,value,status:'reported_attributed_relay',"
+      },
+      {
+        "line": 66,
+        "text": "  const monthlyFacts: Row[] = []; let monthlyBridge: Row;"
+      },
+      {
+        "line": 86,
+        "text": "      monthlyFacts.push({metric:'monthlyConsolidatedRevenue',period:m.period,periodKind:'month',unit:m.unit,value:number(m.reportedRevenue),status:'reported_attributed_relay',signConvention:'positive_revenue',"
+      },
+      {
+        "line": 93,
+        "text": "      formula:'sum(reported July, August, September TWD million)',conversionDivisor:1,operands:monthlyFacts.map(m=>m.locator),namedOperands:monthlyFacts.map(m=>({name:`reportedMonthlyRevenue:${m.period}`,value:m.value,unit:m.unit,locator:m.locator,source:m.source})),"
+      },
+      {
+        "line": 103,
+        "text": "    for(const m of selected)monthlyFacts.push({metric:'monthlyConsolidatedRevenue',period:m.month,periodKind:'month',unit:'TWD',value:number(m.revenueTwd),status:'reported_attributed_relay',signConvention:'positive_revenue',"
+      },
+      {
+        "line": 109,
+        "text": "      formula:'sum(reported July, August, September TWD) / 1000000',conversionDivisor:1000000,operands:monthlyFacts.map(m=>m.locator),namedOperands:monthlyFacts.map(m=>({name:`reportedMonthlyRevenue:${m.period}`,value:m.value,unit:m.unit,locator:m.locator,source:m.source})),roundingInterval:null,"
+      },
+      {
+        "line": 112,
+        "text": "  ensure(reportedFacts.length+monthlyFacts.length+1<=64);"
+      },
+      {
+        "line": 128,
+        "text": "  const projection={projected,reportedFacts,monthlyFacts,monthlyBridge,selectionOmissions:['selling/admin/R&D expense detail (group total retained)','H1 reported EPS detail (Q2 basic/diluted and share basis retained)'],assumptionProvenance:{file:modelFile,fileSha256:pins[0].sha256,jsonPointers:['/scenarios/0/assumptions','/scenarios/1/assumptions','/scenarios/2/assumptions'],status:'manual_research_assumptions_not_reported_forecasts'},"
+      }
+    ]
+  },
+  {
+    "file": "web/src/lib/research-publication-view.ts",
+    "lines": [
+      {
+        "line": 35,
+        "text": "    && !/\\bBearer\\s+\\S+|-----BEGIN .*PRIVATE KEY-----|\\b(?:password|api[_-]?key|access[_-]?token|cookie)\\s*[:=]/iu.test(value));"
+      }
+    ]
+  }
+]
