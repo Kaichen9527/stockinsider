@@ -21,6 +21,7 @@ for(const symbol of ['2409','2383']){
   assert.equal(result.sourceManifest.length,symbol==='2409'?9:7);assert.equal(result.references.length,symbol==='2409'?52:33);
   assert.equal(result.calculation.workload.cashNumericCells,symbol==='2409'?104:66);assert.equal(result.capitalReferences.length,symbol==='2409'?9:0);
   for(const flag of ['financialVerified','dispatchReady','modelDispatched','publishableResearch','researchQualified','historicalPITEligible','strategyApproved','entryEligible','published','valuationApproved','technicalAdmission','sourcePublicationVerified','rawPdfBytesRead','filesystemCustodyVerified'])assert.equal(result[flag],false,flag);
+  assert.equal(result.projectionSha256,symbol==='2409'?'b59bd42321ac7e9af6c3fcd1eba86fa359f2537d467a45e8fbef244e442c434d':'a1965a0f56556c4c4b50f89f7f96ef263b6fd7b6aec529c919cce3b8bfa585d7');
   assert.equal(result.inventoryBytesVerified,true);assert.equal(result.forecastCash,null);assert.equal(result.noFutureCash,true);
   const json=JSON.stringify(result);assert.ok(Buffer.byteLength(json)<160000);assert.ok(!json.includes('/Users/')&&!json.includes('sourceLine":')&&!json.includes('retainedPdfLocalPath'));
   assert.ok(Object.isFrozen(result)&&Object.isFrozen(result.references)&&Object.isFrozen(result.references[0].values));
