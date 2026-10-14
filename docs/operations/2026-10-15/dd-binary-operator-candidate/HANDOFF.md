@@ -1,0 +1,47 @@
+# Unexecuted DD manual operator recovery candidate
+
+Base approved main `8c58e297e92422c1c3f52856a36bff12b1868100`. Origin is Root draft in progress `bf72316a6f8e0d251351ed50acb441d87186352a`, SHA256 `33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973`. Original review `a04d6a7f42c349edab562fe6135036f34fbdf004` / evidence `89b6e463baf380d4d2ccffae8bc278f1d06aa1ad` remains REQUEST_CHANGES with R1/P1,R2/P2,R3/P2. This delivery is a maker candidate for Root's independent review, not self-approved closure or deployment permission. Nothing here was staged or executed on a VPS.
+
+Only this directory is new. No app/SQL/activation helper/authority/roles/grants/workflow/pins/limits were changed. This is a fixed manual procedure plus its finite support and isolated probes, not a general deployment CLI or new permanent service. `deploy.sh` accepts no arguments; activation support only selects the two fixed old169/DD release IDs and fixed helper path, and only private forward/reverse receipts beneath its owned `/run/stockinsider-dd-binary.*` leaf. Flags do not provide approval.
+
+## R1 candidate repair
+
+HUP/INT/TERM now record129/130/143 and enter non-reentrant finish. Signal delivery across background spawn/PID assignment is deferred until ownership is registered. During finish, subsequent signals only update interruption state; they cannot start another rollback. Recovery is armed before pointer replacement.
+
+The hash-pinned support launches the approved activation helper in a new session, waits for the actual leader and descendants, and records a private result only after that wait. Linux per-process child-subreaper scope includes detached/adopted descendants, not just process-group members. It restores its prior subreaper setting and reaps adopted dead children. PID-generation checks constrain containment signals. No caller-selected executable is available through the production-facing finite CLI; dummy argv injection exists only in the private imported engine used by probes.
+
+Signals request a nonzero result but allow the original synchronous activation to settle naturally. A1900-second **outer containment bound** caps the helper; it does not change original API/startup/stream timeouts or resource budgets. Forced termination, inspection failure, missing receipt, signal-killed child or nonzero activation exit cannot authorize any reverse pointer/env/writer mutation. Receipts and uncertain state are retained for manual reconciliation. This is deliberately conservative: process death does not prove an asynchronous systemd/API action stopped, so even a naturally failed activation is not treated as a confirmed reverse-safe transaction. Only natural child exit0, no live owned descendants, matching supervisor identity and a valid result permit automatic reverse after a later failure/interruption.
+
+SIGKILL, host power loss, lost supervisor and unrelated service-manager work are not solved by traps. The support result explicitly sets `externalSystemdJobsVerified:false`. On an unconfirmed outcome, do not launch a competing activation or claim restored; independent operator reconciliation remains necessary. A normal synchronous helper exit0 uses the existing helper's actual guarded API response, but no such response was exercised in this task.
+
+## R2 finite predecessor profile
+
+No arbitrary production env is read or backed up. The only env content reader is the known nonsecret `/etc/stockinsider/writer-release.env`, bounded to the exact canonical `STOCKINSIDER_WRITER_RELEASE_ID=<old-or-new>\n`. The known drop-in must be exactly `[Service]\nEnvironmentFile=/etc/stockinsider/writer-release.env\n`. Both must be regular, single-link, no symlink, stable across open/read/name verification, with fixed uid/gid/mode. Extra settings, absence, altered mode/group/owner or unknown file type fail before mutation.
+
+The finite owner/mode source is the exact169 installer and unchanged169/DD activation helper: `/etc/stockinsider` root:stockinsider0750; writer env root:stockinsider0640; web drop-in/root systemd source files root:root0644; relevant systemd directories root:root0755. `/etc` and `/etc/systemd` are also required root:root0755. These are **supported-profile requirements**, not a claim about today's VPS. Unknown legitimate host profiles are rejected for separate review rather than repaired by this candidate.
+
+`unit-profile.json` pins exact169/DD web and worker unit bytes. Effective `Id/LoadState/FragmentPath/DropInPaths/NeedDaemonReload/User/Group/WorkingDirectory` must match one exact finite mapping; no unknown drop-ins or stale loaded unit are accepted. Only those nonsecret systemctl properties are requested. No `Environment` values, secret files or credential contents are queried. Profile checks run before staging/mutation, again before pointer switch, after activation, and after reverse activation. Reverse recovery also checks old current, unique old writer, both service states/core health and previous-pointer state. Same accepted canonical predecessor implies the approved helper's canonical rewrite can be verified; arbitrary additional settings are never silently discarded under this profile.
+
+Candidate source staging itself must be root-owned/non-group-or-other-writable through its ancestors, with regular single-link script/support/profile files. Support/profile SHA literals are verified before invoking support; Python support uses isolated `-I` mode. No such staging or root check was executed here.
+
+## R3 truthful completion
+
+Cleanup checks every finite owned file removal and directory removal. Cleanup-only failure after a healthy activation returns74 with `activation_complete=true; owned_cleanup_unconfirmed`; it does not roll back that healthy activation. Original failure status is retained when recovery or cleanup also fails, with separate diagnostics. Unconfirmed activation/recovery retains private receipts rather than deleting the evidence. Full success is printed only after confirmed cleanup. No generic recursive deletion, cache cleanup or deletion of the old release is added.
+
+## Preserved contracts
+
+Byte comparisons preserve the original capacity function, writer read-only SQL function, atomic pointer function, complete stream/tar/full-verifier/manifest/activation-hash block, plus the eight fixed identity/hash/path literals. The original three locks, repeated capacity/current/empty-data-plane-lease checks, 1GiB peak memory +1.5GiB reserve, WAL1GiB/tmp0.5GiB/deploy128MiB/growth2GiB and15GiB disk floor remain. No package was fetched, rebuilt, repacked or altered. DD/c2b authority remains separate from this candidate.
+
+## Actual isolated validation
+
+Final exact candidate: **35 isolated probe groups PASS**, plus `bash -n` exit0. These include finite exact/extra/missing/symlink/hardlink/owner/group/mode rejection; effective unit/drop-in/source drift; leader/descendant/detached-child settlement; actual dummy process interruption; TERM after pointer arm and during activation; double TERM and whole process-group TERM; signal between spawn/PID assignment; ordinary post-activation failure; forced/inspection-failed settlement refusing reverse; rm/rmdir failures and full completion after cleanup. Dummy child logs demonstrate forward completion precedes reverse start. The procedure entrypoint and approved activation scripts were never sourced or executed; tests extract only the state-machine functions, mock every production-facing primitive, and replace the support CLI with a dummy driver importing the actual settlement engine.
+
+Earlier18/33/34-group intermediate runs overlap and are not added to35. Initial candidate probe failed because the retained interruption flag made reverse `activate_owned` return before waiting during finish. Its original WIP hashes, deploy bytes and raw failure remain; the repair limits normal propagation to the non-finishing path, so reverse always settles. One WIP metadata file had a literal backslash-n suffix; the original and separately decoded readable copy remain. A read-only tool transport disconnect is recorded separately, not a product test failure. No expectations were weakened.
+
+No PG/native/app build/npm/browser/HTTP/SSH/CI/deploy operation occurred. Resources were measured locally; no active owned dummy processes remained. Python bytecode cache generated by imports is ignored locally and was not deleted or committed. No shared/cache/history/evidence data was removed. Test scratch files only were automatically cleaned by TemporaryDirectory.
+
+## Remaining review / execution boundary
+
+Root must independently review this exact candidate, its finite profile assumptions, supervisor/subreaper compatibility and conservative nonzero-activation handling. Actual canonical VPS files/effective units, API/systemd settlement, successful reverse activation, fresh three-lock capacity/writer admission and real binary custody are **NOT_RUN/pending**. The latest inherited memory observation remains2294386688<2684354560 (short389967872); no new host observation or reserve change occurred. Do not run this candidate merely because isolated probes pass.
+
+Whole application S-C-B-Q-R-A/four callers, sources, two formal articles, cash citations, technical/strategy and research scheduling remain outside this work. This candidate does not replace normal PR/protected review requirements for runtime changes, create an attestation or authorize production operations.
