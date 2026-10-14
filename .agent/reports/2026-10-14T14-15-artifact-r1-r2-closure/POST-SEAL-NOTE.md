@@ -1,0 +1,3 @@
+# Post-seal evidence check
+
+The evidence commit check reported trailing whitespace inside raw/delta.patch (context-only blank lines represented by a single space in the verbatim Git patch). The raw patch remains unchanged to preserve bytes. This is an evidence-container whitespace diagnostic, not a product workflow finding. The exact df→e902 product `git diff --check` returned exit 0 with stdout/stderr ''. All72 files in the sealed receipt were independently rehashed after commit and match. Original receipt SHA remains b56fa1e0c4e20e26c8f5a85edd9e39513f1db7de04ae25f2dcfa2cc393b21c27. This post-seal note is additional and not retroactively listed in that receipt.
