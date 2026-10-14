@@ -1,0 +1,89 @@
+{
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 3231,
+      "sha256": "3043027069e92a14641c385886a2020c2473c18cd041ce5dc6b7691c03e25ad2"
+    },
+    {
+      "path": "native-cleanup-independent.json",
+      "bytes": 1802,
+      "sha256": "e614b75081b93d15ad4fe2a4d938c0d18d15ad40e6229519d256da58e4c03b8e"
+    },
+    {
+      "path": "native-environment.json",
+      "bytes": 440,
+      "sha256": "73acb3aff01b366fa70e5110a2c6e1109b7967aed5c93a9d9884237f59e9d94f"
+    },
+    {
+      "path": "native-local-raw-manifest.json",
+      "bytes": 18222,
+      "sha256": "6ec844a0f99cf20fa07973d5a4f4cdd4cfbdbf7da8abdfdd3f1809c177697d63"
+    },
+    {
+      "path": "native-native-initial.result.json",
+      "bytes": 605,
+      "sha256": "3b362b40a099a2b0c5d9bce429e0110e818529d793c670e3728087879f4daa95"
+    },
+    {
+      "path": "native-receipt.json",
+      "bytes": 5598,
+      "sha256": "fceed1a6eba857595f40d73282b67f2ba0eab747744ff64e0a6bc5a7ac8b136f"
+    },
+    {
+      "path": "native-root-verification.json",
+      "bytes": 677,
+      "sha256": "56557e196d14bdcd2537e93c3187ff2c3c6e92252aab57c4b5cb92d6781a3652"
+    },
+    {
+      "path": "native-source-manifest.json",
+      "bytes": 58606,
+      "sha256": "071c6fefae7fceadd19cff51257a615ea6e13c307b7a0af11add73b859830323"
+    },
+    {
+      "path": "next-peer-task.txt",
+      "bytes": 2577,
+      "sha256": "913ab4f4b723d7080ed73535b69de47c245a48f43746929f40f50be68087adad"
+    },
+    {
+      "path": "reuse-check-reuse.py",
+      "bytes": 3555,
+      "sha256": "7d1f6539f60d7dfe3c652b4c81e5e1dfcca8d0a49e61684bfc17baed2cddc4d9"
+    },
+    {
+      "path": "reuse-exact-inline-verifier.py",
+      "bytes": 6364,
+      "sha256": "7ac9f720f3da716bcfcf91124ef336256823c91ab0644c6b52d44568e4c96146"
+    },
+    {
+      "path": "reuse-original-full-verifier.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reuse-original-full-verifier.stdout",
+      "bytes": 328,
+      "sha256": "114ad522f9fbedf63fb77a464dcc0c03738405361afb0ec4ccdc27c1183fe952"
+    },
+    {
+      "path": "reuse-root-validation.json",
+      "bytes": 1259,
+      "sha256": "fcadde067970b477756b63597774cf34e44e9b904962aad45f82c8e9ac1b3aea"
+    },
+    {
+      "path": "reuse-upstream-run.json",
+      "bytes": 13200,
+      "sha256": "471d8abe9683d340c7b40d6baa3e76163aeec1a3c3eca17b57cbdff7c560ea76"
+    },
+    {
+      "path": "reviewed-publication-artifact-handoff.md",
+      "bytes": 6318,
+      "sha256": "5aa236fc464940434c256d1e8d68349697a46dde4df5afb3bfd6d40df71172ed"
+    },
+    {
+      "path": "reviewed-publication-tail-artifact.yml",
+      "bytes": 23507,
+      "sha256": "f0e0b82561082d106de19703e8448ed3b9f0b97328148b530211df85e6359cc9"
+    }
+  ]
+}

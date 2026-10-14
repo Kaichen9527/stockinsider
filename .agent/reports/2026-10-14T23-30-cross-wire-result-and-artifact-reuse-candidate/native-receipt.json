@@ -1,0 +1,186 @@
+{
+  "schema": "versioned-cross-wire-native-execution-receipt-v1",
+  "executedCode": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+  "executedTree": "9c7b01095144e428d2839af446d75e0c3c7c0f59",
+  "handoffCommit": "f01e5c2de6917083211d25a8ee7149c16c347e0a",
+  "sourceChange": "none; only new execution handoff",
+  "startedAt": "2026-10-14T15:19:53Z",
+  "deadline": "2026-10-14T15:39:53Z",
+  "sealedAt": "2026-10-14T15:23:59.253814+00:00",
+  "native": {
+    "runs": 1,
+    "childCases": 6,
+    "parentCases": 1,
+    "tapTests": 7,
+    "pass": 7,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "cases": [
+    {
+      "case": "2409-auo-compatible",
+      "status": "PASS",
+      "serverLogBeforeCleanup": "2409-auo-compatible-postgres-before-cleanup.log",
+      "serverLogAfterCleanup": "2409-auo-compatible-postgres.log",
+      "expected": 8,
+      "opens": 8,
+      "closed": 8,
+      "replayNoIo": true,
+      "conflictNoIo": true
+    },
+    {
+      "case": "2383-emc-v3",
+      "status": "PASS",
+      "serverLogBeforeCleanup": "2383-emc-v3-postgres-before-cleanup.log",
+      "serverLogAfterCleanup": "2383-emc-v3-postgres.log",
+      "expected": 7,
+      "opens": 7,
+      "closed": 7,
+      "replayNoIo": true,
+      "conflictNoIo": true
+    },
+    {
+      "case": "2409-mixed-v2-then-v3",
+      "status": "PASS",
+      "serverLogBeforeCleanup": "2409-mixed-v2-then-v3-postgres-before-cleanup.log",
+      "serverLogAfterCleanup": "2409-mixed-v2-then-v3-postgres.log",
+      "used": {
+        "count": 4,
+        "bytes": 404008
+      },
+      "countRejection": true
+    },
+    {
+      "case": "2383-mixed-v3-then-v2",
+      "status": "PASS",
+      "serverLogBeforeCleanup": "2383-mixed-v3-then-v2-postgres-before-cleanup.log",
+      "serverLogAfterCleanup": "2383-mixed-v3-then-v2-postgres.log",
+      "used": {
+        "count": 4,
+        "bytes": 246078
+      },
+      "countRejection": true
+    },
+    {
+      "case": "2409-max30-compatible-measure",
+      "status": "PASS",
+      "serverLogBeforeCleanup": "2409-max30-compatible-measure-postgres-before-cleanup.log",
+      "serverLogAfterCleanup": "2409-max30-compatible-measure-postgres.log",
+      "measurement": {
+        "beforeCharge": {
+          "count": 3,
+          "bytes": 220208
+        },
+        "wouldCharge": 242709,
+        "afterCharge": {
+          "count": 4,
+          "bytes": 462917
+        },
+        "actualSecondSeal": true,
+        "byteRejection": {
+          "status": "PENDING",
+          "reason": "this legal bounded input remains within original byte cap; no reachable over-cap input proven"
+        },
+        "formalApproval": false
+      }
+    },
+    {
+      "case": "2383-max30-v3-measure",
+      "status": "PASS",
+      "serverLogBeforeCleanup": "2383-max30-v3-measure-postgres-before-cleanup.log",
+      "serverLogAfterCleanup": "2383-max30-v3-measure-postgres.log",
+      "measurement": {
+        "beforeCharge": {
+          "count": 3,
+          "bytes": 194990
+        },
+        "wouldCharge": 109288,
+        "afterCharge": {
+          "count": 4,
+          "bytes": 304278
+        },
+        "actualSecondSeal": true,
+        "byteRejection": {
+          "status": "PENDING",
+          "reason": "this legal bounded input remains within original byte cap; no reachable over-cap input proven"
+        },
+        "formalApproval": false
+      }
+    }
+  ],
+  "rawPrivacy": {
+    "localOnly": true,
+    "location": "/tmp/cross-wire-exec-o14",
+    "publicRawUploaded": false
+  },
+  "rawCount": 93,
+  "rawBytes": 5805306,
+  "sourceCount": 248,
+  "resource": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "--import",
+      "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/opportunity-v3/research-versioned-cross-wire-native.test.mjs"
+    ],
+    "start": "2026-10-14T15:21:02.819224+00:00",
+    "cwd": "/tmp/si-pubtail-o14",
+    "sampleSeconds": 0.25,
+    "peakProcessTreeRss": 533512192,
+    "minFree": {
+      "/workspace": 8604012544,
+      "/tmp": 15307337728
+    },
+    "user": "agent",
+    "exit": 0,
+    "seconds": 53.60787773132324
+  },
+  "otherCommands": {
+    "build": "NOT_RUN",
+    "types": "NOT_RUN",
+    "lint": "NOT_RUN",
+    "oldNativeEntry": "NOT_RUN",
+    "npm": "NOT_RUN"
+  },
+  "pending": [
+    "legal reachable byte-bound rejection, because measured totals remain below 524288",
+    "freshness/ABA/response-loss/old77/current-four-callers/whole-S-C-B-Q-R-A",
+    "independent review and formal production authorization"
+  ],
+  "formalApproval": false,
+  "makerSelfReview": false,
+  "newRED": false,
+  "history": "Original cf897/2d347/737 RED and 772 prior green preserved; no reinterpretation",
+  "files": [
+    {
+      "path": "cleanup-independent.json",
+      "bytes": 1802,
+      "sha256": "e614b75081b93d15ad4fe2a4d938c0d18d15ad40e6229519d256da58e4c03b8e"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 440,
+      "sha256": "73acb3aff01b366fa70e5110a2c6e1109b7967aed5c93a9d9884237f59e9d94f"
+    },
+    {
+      "path": "local-raw-manifest.json",
+      "bytes": 18222,
+      "sha256": "6ec844a0f99cf20fa07973d5a4f4cdd4cfbdbf7da8abdfdd3f1809c177697d63"
+    },
+    {
+      "path": "native-initial.result.json",
+      "bytes": 605,
+      "sha256": "3b362b40a099a2b0c5d9bce429e0110e818529d793c670e3728087879f4daa95"
+    },
+    {
+      "path": "source-manifest.json",
+      "bytes": 58606,
+      "sha256": "071c6fefae7fceadd19cff51257a615ea6e13c307b7a0af11add73b859830323"
+    }
+  ]
+}

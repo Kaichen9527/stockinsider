@@ -1,0 +1,24 @@
+{
+  "executedCode": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+  "evidence": "e8dba9c2a5bb44fc9a571a68d9b0fcc6ba453d29",
+  "receiptSha256": "fceed1a6eba857595f40d73282b67f2ba0eab747744ff64e0a6bc5a7ac8b136f",
+  "committedReportFilesVerified": 5,
+  "exactSourceBlobIdentitiesVerified": 248,
+  "rawLocalOnlyInventoryCount": 93,
+  "rootRawBytesVerified": false,
+  "rootNativeRun": false,
+  "makerReportedNative": {
+    "runs": 1,
+    "childCases": 6,
+    "parentCases": 1,
+    "tapTests": 7,
+    "pass": 7,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "chargeArithmeticVerified": true,
+  "byteRejectionStillPending": true,
+  "formalApproval": false
+}
