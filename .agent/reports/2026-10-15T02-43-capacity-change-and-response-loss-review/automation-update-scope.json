@@ -1,0 +1,10 @@
+{
+  "priorPromptSha256": "8def78a94030f6717b33441211054bf08e5737a0be7395151d13abba9b759c0f",
+  "newPromptSha256": "be68e96d40949c80855dfb0b3257b371f5ac55677f2de2b988788ecf6addce7f",
+  "changes": [
+    "latest activity header",
+    "capacity paragraph corrected for actual diskReady and memoryFail"
+  ],
+  "articleAndDataGoalScopePreserved": true,
+  "oldPromptPreserved": "previous-automation-prompt.txt"
+}

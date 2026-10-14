@@ -1,0 +1,20 @@
+{
+  "officialUpdateApplied": true,
+  "status": "ACTIVE",
+  "promptMatchesReadback": true,
+  "newPromptSha256": "be68e96d40949c80855dfb0b3257b371f5ac55677f2de2b988788ecf6addce7f",
+  "articleAndDataSegmentsByteEqual": true,
+  "originalReviewReceiptUnmodified": "c6f36a76c24835ddee470ee8aa4affa1c8b6e415cbaa3c87f2a12f81b7f3a113",
+  "files": [
+    {
+      "path": "previous-automation-prompt.txt",
+      "bytes": 16633,
+      "sha256": "8def78a94030f6717b33441211054bf08e5737a0be7395151d13abba9b759c0f"
+    },
+    {
+      "path": "automation-update-scope.json",
+      "bytes": 406,
+      "sha256": "8eb24b1aeafbf1115c309ea9db6746b39f7496bc48d3d96034f1225b5a7b77ad"
+    }
+  ]
+}
