@@ -1,0 +1,21 @@
+{
+  "kind": "intrinsic mechanism experiment, not runtime regression",
+  "results": [
+    {
+      "kind": "Uint8Array",
+      "unknownProperties": 10000,
+      "propertyReads": 0,
+      "copyMatched": true
+    },
+    {
+      "kind": "Buffer",
+      "unknownProperties": 10000,
+      "propertyReads": 0,
+      "copyMatched": true
+    }
+  ],
+  "proxyView": false,
+  "mapView": false,
+  "propertyReads": 0,
+  "maxRSSKiB": 31056
+}
