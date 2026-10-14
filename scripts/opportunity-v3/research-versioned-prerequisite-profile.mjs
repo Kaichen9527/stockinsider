@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {readResearchPublicationCatalog} from './research-publication-catalog.mjs';
+import {readTailNamespace} from './research-publication-tail-entry-namespace.mjs';
+export const TARGETS=Object.freeze(['research_input_preparation_owner_v2','research_source_fence_owner_v2']);
+export const canonical=v=>JSON.stringify(v,(_k,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.fromEntries(Object.keys(x).sort().map(k=>[k,x[k]])):x);
+export const digest=v=>createHash('sha256').update(canonical(v)).digest('hex');
+export async function readPrerequisiteState(client){
+ const scope=(await client.query(`SELECT jsonb_build_object('tables',(SELECT jsonb_agg(relname ORDER BY relname) FROM pg_class WHERE relnamespace='public'::regnamespace),'functions',(SELECT jsonb_agg(DISTINCT proname ORDER BY proname) FROM pg_proc WHERE pronamespace='public'::regnamespace),'types',(SELECT jsonb_agg(typname ORDER BY typname) FROM pg_type WHERE typnamespace='public'::regnamespace),'roles',(SELECT jsonb_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_')) s`)).rows[0].s;
+ const namespace=await readTailNamespace(client),catalog=await readResearchPublicationCatalog(client,scope);
+ const details=(await client.query(`SELECT jsonb_build_object('schemaOid','public'::regnamespace::oid,'schemaOwner',(SELECT pg_get_userbyid(nspowner) FROM pg_namespace WHERE oid='public'::regnamespace),'roles',(SELECT jsonb_agg(jsonb_build_object('oid',r.oid,'name',r.rolname,'login',r.rolcanlogin,'inherit',r.rolinherit,'super',r.rolsuper,'createRole',r.rolcreaterole,'createDb',r.rolcreatedb,'replication',r.rolreplication,'bypassRls',r.rolbypassrls,'limit',r.rolconnlimit,'config',r.rolconfig,'validUntil',r.rolvaliduntil::text,'passwordNull',a.rolpassword IS NULL) ORDER BY r.rolname) FROM pg_roles r JOIN pg_authid a USING(oid) WHERE r.rolname=ANY($1::text[])),'memberships',(SELECT coalesce(jsonb_agg(jsonb_build_array(pg_get_userbyid(m.roleid),pg_get_userbyid(m.member),pg_get_userbyid(m.grantor),m.admin_option,m.inherit_option,m.set_option) ORDER BY m.roleid,m.member),'[]') FROM pg_auth_members m WHERE m.roleid IN (SELECT oid FROM pg_roles WHERE rolname=ANY($1::text[])) OR m.member IN (SELECT oid FROM pg_roles WHERE rolname=ANY($1::text[]))),'objects',(SELECT jsonb_agg(jsonb_build_array(class,oid,name) ORDER BY class,name) FROM (SELECT 'relation' class,c.oid,n.nspname||'.'||c.relname name FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('public','auth','extensions') UNION ALL SELECT 'function',p.oid,p.oid::regprocedure::text FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname IN ('public','auth','extensions') UNION ALL SELECT 'type',t.oid,n.nspname||'.'||t.typname FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace WHERE n.nspname IN ('public','auth','extensions')) o)) d`,[TARGETS])).rows[0].d;
+ return {scope,namespace,catalog,details};
+}
+export function stateDescriptor(state){
+ return {schema:state.catalog.schemas.find(x=>x.name==='public'),roles:state.details.roles.map(({oid,...r})=>r),memberships:state.details.memberships,namespaceHash:digest(state.namespace),catalogHash:digest(state.catalog),schemaOwner:state.details.schemaOwner};
+}
