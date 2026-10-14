@@ -1,0 +1,16 @@
+{
+  "makerWitnessOnly": true,
+  "liveOwnedProcesses": 0,
+  "ownedClustersAbsentStopped": 2,
+  "observedZombieProcesses": 2,
+  "rootRawLogsRead": false,
+  "resourceBoundsConsistency": true,
+  "nativeTapReported": {
+    "tests": 3,
+    "pass": 3,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  }
+}

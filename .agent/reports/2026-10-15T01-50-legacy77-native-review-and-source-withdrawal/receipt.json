@@ -1,0 +1,72 @@
+{
+  "subject": "9d68b4d62b1af0fcbe221ed2e5689534e0b9da42",
+  "evidence": "b3432984263ad59866af6fb077a45b802c087dbf",
+  "sourceEntriesVerified": 257,
+  "publishedFilesRead": 6,
+  "privateRawBytesVerified": false,
+  "rootNativeExecuted": false,
+  "publicWitnessConsistency": "PASS",
+  "formalApproval": false,
+  "files": [
+    {
+      "path": "cleanup-consistency.json",
+      "bytes": 318,
+      "sha256": "fcc729daa8e94a0cb2ba31e6749711c712b018d61bd8129c30c66f5cc69a8161"
+    },
+    {
+      "path": "maker-HANDOFF.md",
+      "bytes": 3999,
+      "sha256": "708388c46e9708d88618feede22f6a5602e209bb61cfbe362789c798c00e8e3e"
+    },
+    {
+      "path": "maker-command-and-resources.json",
+      "bytes": 3377,
+      "sha256": "b1e19941e6588e25b8f338ef83319bc5d79ecebe44bc20c65e9ec022cee4eb6c"
+    },
+    {
+      "path": "maker-private-raw-inventory.json",
+      "bytes": 14425,
+      "sha256": "62dcc033008969814e38d6ca1541b0d610b2c542886c379dfe62c49e1f99570a"
+    },
+    {
+      "path": "maker-public-safe-witness.json",
+      "bytes": 61333,
+      "sha256": "618fd5cc17c0a31d0fa63f994c939aa5b84eae348cbc65fe3db281ee50fb6586"
+    },
+    {
+      "path": "maker-receipt.json",
+      "bytes": 2631,
+      "sha256": "73f036773a40a1d3918d7ca6725c294e1f92bea58480ce01309e5c38866e6d05"
+    },
+    {
+      "path": "maker-source-inventory.json",
+      "bytes": 64070,
+      "sha256": "81f3bc857d3799044354d8ec5b94f7fb2d8812cee0fac0056735d46fed1a789b"
+    },
+    {
+      "path": "review.md",
+      "bytes": 3447,
+      "sha256": "f15a036b63f6635c7f8a75289732b96effa7a111c7a2bb191c9c5e165b4974a1"
+    },
+    {
+      "path": "root-source-witness-verification.json",
+      "bytes": 7628,
+      "sha256": "de6d13251fabe631967e7959149adee4f21fb0c58bb2a42c5e969ed195ea6da8"
+    },
+    {
+      "path": "verify-source-witness.py",
+      "bytes": 4327,
+      "sha256": "79e4c3904e76ee3be4a789704d0f890af6b6859a192116ee20e56af25ee5f822"
+    },
+    {
+      "path": "verify.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verify.stdout",
+      "bytes": 7628,
+      "sha256": "de6d13251fabe631967e7959149adee4f21fb0c58bb2a42c5e969ed195ea6da8"
+    }
+  ]
+}

@@ -1,0 +1,309 @@
+{
+  "sourceEntriesVerified": 257,
+  "publishedFilesRead": 6,
+  "privateRawInventoryOnly": {
+    "files": 68,
+    "bytes": 4227511
+  },
+  "privateRawBytesVerifiedByRoot": false,
+  "rootNativeExecuted": false,
+  "cases": [
+    {
+      "symbol": "2409",
+      "stages": 10,
+      "tablesPerStage": 9,
+      "pairsVerified": 4,
+      "sealedCharge": {
+        "count": 2,
+        "bytes": 168978
+      },
+      "thirdSlotCharge": {
+        "count": 3,
+        "bytes": 171583
+      },
+      "actualOriginalFdCount": 8
+    },
+    {
+      "symbol": "2383",
+      "stages": 10,
+      "tablesPerStage": 9,
+      "pairsVerified": 4,
+      "sealedCharge": {
+        "count": 2,
+        "bytes": 101693
+      },
+      "thirdSlotCharge": {
+        "count": 3,
+        "bytes": 104299
+      },
+      "actualOriginalFdCount": 6
+    }
+  ],
+  "cleanup": {
+    "at": "2026-10-14T17:41:16.021001+00:00",
+    "processes": [
+      {
+        "pid": 588287,
+        "observedCommDuringRun": "node",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588293,
+        "observedCommDuringRun": "node",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588306,
+        "observedCommDuringRun": "initdb",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588313,
+        "observedCommDuringRun": "sh",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588314,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588315,
+        "observedCommDuringRun": "sh",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588316,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588322,
+        "observedCommDuringRun": "postgres",
+        "postState": "Z",
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588323,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588324,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588326,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588327,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588328,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588329,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588330,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588331,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588333,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588334,
+        "observedCommDuringRun": "writer-backend",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588335,
+        "observedCommDuringRun": "observer-backend",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588336,
+        "observedCommDuringRun": "original77-child",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588350,
+        "observedCommDuringRun": "initdb",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588359,
+        "observedCommDuringRun": "sh",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588360,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588363,
+        "observedCommDuringRun": "pg_ctl",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588366,
+        "observedCommDuringRun": "postgres",
+        "postState": "Z",
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588367,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588368,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588370,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588371,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588372,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588373,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588374,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588375,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588377,
+        "observedCommDuringRun": "postgres",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588378,
+        "observedCommDuringRun": "writer-backend",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588379,
+        "observedCommDuringRun": "observer-backend",
+        "postState": null,
+        "absentOrZombie": true
+      },
+      {
+        "pid": 588380,
+        "observedCommDuringRun": "original77-child",
+        "postState": null,
+        "absentOrZombie": true
+      }
+    ],
+    "clusters": [
+      {
+        "symbol": "2409",
+        "clusterPath": "/tmp/vp3profile-YBI2Pt",
+        "clusterPathAbsent": true,
+        "cleanupReportedStopped": true,
+        "logs": {
+          "postgres-before-cleanup.log": {
+            "bytes": 776,
+            "sha256": "0ada08a7a574baf9118f0e0e05e2cf9176ca5a6416bc3ea19c8789a592a5325a"
+          },
+          "postgres.log": {
+            "bytes": 927,
+            "sha256": "8e35acdad24a2ffd55ef49967932b633eca0d2f72e70f329918751a3336ddb7c"
+          }
+        },
+        "stage": "business complete"
+      },
+      {
+        "symbol": "2383",
+        "clusterPath": "/tmp/vp3profile-gWLdlN",
+        "clusterPathAbsent": true,
+        "cleanupReportedStopped": true,
+        "logs": {
+          "postgres-before-cleanup.log": {
+            "bytes": 776,
+            "sha256": "80ff040dd3bde30068f961ae388e57b6dbd1ea82c5f3cd73111ad46cad83b2d5"
+          },
+          "postgres.log": {
+            "bytes": 927,
+            "sha256": "6f0016c1382331f0fe3ba4021b52a1a461a77492e5c2f2dabfe8ed20adc6b887"
+          }
+        },
+        "stage": "business complete"
+      }
+    ],
+    "method": "OS /proc observations after runner completion plus absence of exact owned cluster paths; absent/zombie distinguishes no running backend from reaped PID",
+    "liveOwnedProcesses": 0
+  },
+  "makerDerivedWitnessConsistency": "PASS",
+  "formalApproval": false
+}

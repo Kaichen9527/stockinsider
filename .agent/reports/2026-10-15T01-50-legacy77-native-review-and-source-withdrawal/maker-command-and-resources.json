@@ -1,0 +1,105 @@
+{
+  "execution": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--import",
+      "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/opportunity-v3/research-versioned-legacy77-native.test.mjs"
+    ],
+    "start": "2026-10-14T17:39:58.177642+00:00",
+    "cwd": "/tmp/si-pubtail-o14",
+    "sampleSeconds": 0.2,
+    "peakSessionAndPgRssBytes": 592424960,
+    "minimumFreeBytes": {
+      "/workspace": 8601239552,
+      "/tmp": 15293288448
+    },
+    "user": "agent",
+    "artifactPath": "/tmp/legacy77-exec-o15/native-artifacts",
+    "deadline": "2026-10-14T17:58:00Z",
+    "sessionPid": 588287,
+    "exit": 0,
+    "seconds": 17.575939178466797,
+    "end": "2026-10-14T17:40:15.753576+00:00"
+  },
+  "binaries": [
+    {
+      "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+      "bytes": 120177224,
+      "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1"
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/postgres",
+      "bytes": 10189096,
+      "sha256": "6468a969338215cb3912cf9c0b894bdbbd37b9a709926db078e9a5bf8bdc3e16"
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_config",
+      "bytes": 55616,
+      "sha256": "8fc0425c51a3d1772ea60aa5d88c26e5903f46e5ee37b0652cefe9ffea377427"
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb",
+      "bytes": 196520,
+      "sha256": "a0363354125bc00f25075bb47fc32a2838fa7668c008326227f5bc04d628ca1d"
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+      "bytes": 80568,
+      "sha256": "c8a0fa6df90600186575e3f3c47a352bafac73547416cf67675b41991b5b5d74"
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+      "bytes": 822816,
+      "sha256": "3c94c29652ea7ff8803ab1ca35e48c38a39c8a94a8c8eeadbb1d87c68494506c"
+    }
+  ],
+  "versions": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--version"
+      ],
+      "stdout": "v22.14.0\n",
+      "stderr": "",
+      "exit": 0
+    },
+    {
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_config",
+        "--bindir"
+      ],
+      "stdout": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin\n",
+      "stderr": "",
+      "exit": 0
+    },
+    {
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/postgres",
+        "--version"
+      ],
+      "stdout": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": "",
+      "exit": 0
+    },
+    {
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+        "--version"
+      ],
+      "stdout": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": "",
+      "exit": 0
+    }
+  ],
+  "activeHeavyAtAdmission": [],
+  "sourceChanged": false,
+  "proxyCA": "inherited unchanged; credentials not inspected or exported",
+  "finalFreeBytes": {
+    "/workspace": 8604577792,
+    "/tmp": 15378960384
+  }
+}

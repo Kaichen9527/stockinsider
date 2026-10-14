@@ -1,0 +1,76 @@
+{
+  "task": "original77 producer firstseal/current versioned no-IO replay local native",
+  "start": "2026-10-14T17:38:00Z",
+  "deadline": "2026-10-14T17:58:00Z",
+  "sealedAt": "2026-10-14T17:43:17.160754+00:00",
+  "branch": "codex/research-legacy77-native-execution-oct15",
+  "executedHead": "9d68b4d62b1af0fcbe221ed2e5689534e0b9da42",
+  "executedTree": "d3ac69c75ea30fea0d79fad13345c207a8bcdfb1",
+  "runtimeCode": "c7d6665068774c346e28303adeb06634abf5d556",
+  "sourceChanged": false,
+  "syntaxOrOldGreenSuitesRerun": false,
+  "native": {
+    "children": 2,
+    "parent": 1,
+    "tap": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "2409": "PASS",
+    "2383": "PASS"
+  },
+  "historicalProducerSource": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "historicalSourceClosure": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+  "historicalCompiledNextVerified": false,
+  "stageSnapshotsEach": 10,
+  "readOnlyObserver": true,
+  "confirmedChildExitCloseAndPendingRpcZeroBoth": true,
+  "ownedClustersStoppedAndRemoved": 2,
+  "liveOwnedProcessesAfter": 0,
+  "resource": {
+    "peakSampledSessionAndPgRssBytes": 592424960,
+    "sampleSeconds": 0.2,
+    "minimumFreeBytes": {
+      "/workspace": 8601239552,
+      "/tmp": 15293288448
+    },
+    "boundStop": null,
+    "runnerSeconds": 17.575939178466797
+  },
+  "rawInventory": {
+    "files": 68,
+    "bytes": 4227511,
+    "path": "private-raw-inventory.json",
+    "privateLocalRoot": "/tmp/legacy77-exec-o15",
+    "rootPrivateRawReviewClaimed": false
+  },
+  "sourceInventory": {
+    "files": 257,
+    "unchanged": true
+  },
+  "witness": {
+    "path": "public-safe-witness.json",
+    "sha256": "618fd5cc17c0a31d0fa63f994c939aa5b84eae348cbc65fe3db281ee50fb6586",
+    "makerDerived": true,
+    "independentReview": false
+  },
+  "initialPreflightRed": {
+    "scope": "read-only process inventory parser, before native",
+    "cause": "whitespace in /proc/stat comm falsely parsed as non-zombie state",
+    "correctedBy": "read state after final closing parenthesis; true active inventory empty",
+    "originalNativeStarted": false,
+    "rawPath": "preflight-parser-red.json"
+  },
+  "productionAuthorized": false,
+  "formalRoleOrPublicationApproval": false,
+  "pending": [
+    "formal compiled Next/whole S-C-B-Q-R-A identity and activation",
+    "four caller wiring/cutover/versioned production support",
+    "source/lease revocation, ABA, response-loss and broader quota races",
+    "prior byte-rejection rejected wouldcharge/total remains null; long-root publication compatibility pending"
+  ]
+}
