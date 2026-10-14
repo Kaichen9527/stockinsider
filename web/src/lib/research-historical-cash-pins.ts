@@ -5,12 +5,14 @@ export const historicalCashPins = freeze({
   "sourceCommit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
   "packetPath": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
   "limits": {
+    "carrier": 1048576,
     "perFile": 524288,
     "aggregate": 1048576,
     "projection": 160000
   },
   "companies": {
     "2409": {
+      "carrier": { "bytes": 931023, "sha256": "823b80038e13779f4155327b3cd7d36b1dc5a833490da1bf692d33845c239590" },
       "files": [
         {
           "path": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
@@ -117,6 +119,7 @@ export const historicalCashPins = freeze({
       "aggregateBytes": 697558
     },
     "2383": {
+      "carrier": { "bytes": 353803, "sha256": "5fff5dd7e33ae7da30d8b72890f13414866b7820f54685af38b5cdd95d2b5564" },
       "files": [
         {
           "path": "docs/research/2026-10-08-emc-company-model/model-results.json",

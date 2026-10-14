@@ -16,39 +16,64 @@ function freeze<T>(value: T): T {
   if (value && typeof value === 'object') { Object.values(value).forEach(freeze); Object.freeze(value); }
   return value;
 }
-// Native typed-array copy owns the verified bytes. Caller buffers and getters
-// cannot change a later parse; no filesystem custody or I/O cancellation claim.
-function copy(value: unknown, expected: number): Uint8Array {
-  ensure(ArrayBuffer.isView(value) && (Object.getPrototypeOf(value) === Uint8Array.prototype || Object.getPrototypeOf(value) === Buffer.prototype));
-  const proto = Object.getPrototypeOf(Uint8Array.prototype);
-  ensure(Object.getOwnPropertyDescriptor(proto, 'byteLength')!.get!.call(value) === expected);
-  const owned = new Uint8Array(expected); Uint8Array.prototype.set.call(owned, value as Uint8Array); return owned;
+// Capture realm intrinsics; caller view metadata, methods and proxies are never read.
+const isView = ArrayBuffer.isView;
+const typedArrayPrototype = Object.getPrototypeOf(Uint8Array.prototype);
+const nativeByteLength = Object.getOwnPropertyDescriptor(typedArrayPrototype, 'byteLength')!.get!;
+const nativeKind = Object.getOwnPropertyDescriptor(typedArrayPrototype, Symbol.toStringTag)!.get!;
+const nativeBuffer = Object.getOwnPropertyDescriptor(typedArrayPrototype, 'buffer')!.get!;
+const arrayBufferLength = Object.getOwnPropertyDescriptor(ArrayBuffer.prototype, 'byteLength')!.get!;
+const arrayBufferResizable = Object.getOwnPropertyDescriptor(ArrayBuffer.prototype, 'resizable')?.get;
+const nativeSet = Uint8Array.prototype.set;
+const nativeFill = Uint8Array.prototype.fill;
+const decodeBase64 = Buffer.from;
+function copyCarrier(value: unknown, expected: number): Uint8Array {
+  ensure(isView(value) && nativeKind.call(value) === 'Uint8Array');
+  const backing = nativeBuffer.call(value);
+  // This intrinsic throws for SharedArrayBuffer; no caller property access.
+  arrayBufferLength.call(backing);
+  ensure(!arrayBufferResizable?.call(backing));
+  ensure(expected <= historicalCashPins.limits.carrier && nativeByteLength.call(value) === expected);
+  const owned = new Uint8Array(expected);
+  try { nativeSet.call(owned, value as Uint8Array); return owned; }
+  catch (error) { nativeFill.call(owned, 0); throw error; }
 }
 const capitalKeys = ['instant', 'ownersEquityTwdThousands', 'nonControllingEquityTwdThousands', 'groupEquityTwdThousands',
   'paidCapitalTwdThousands', 'parTwd', 'issuedSharesThousands', 'treasuryCarryingAmountTwdThousands', 'treasurySharesThousands'] as const;
 const derivedKeys = ['nonCashAdjustments', 'workingCapitalCashEffect', 'cfo', 'groupNetProfit', 'cfoLessPpeCashOutlay',
   'cfoLessPpeAndIntangibleCashOutlay', 'netBorrowingCash', 'cashChange', 'closingCash'] as const;
 
-/** Private injected bytes from the future single-owner reader. Fixed 9/7
- * complete inventories are verified here; this is not a reader, prepared input,
- * filesystem attestation, source admission or a v3 publication integration. */
-export function projectPinnedHistoricalCash(profile: unknown, symbol: unknown, files: unknown, deadline: Deadline) {
+/** BREAKING unpublished internal API: one exact canonical UTF8 Uint8Array or
+ * Buffer carrier. Maps and JS metadata are outside this byte-only input domain.
+ * This is not a filesystem reader, prepared input or source/publication authority. */
+export function projectPinnedHistoricalCash(profile: unknown, symbol: unknown, material: unknown, deadline: Deadline) {
   ensure(profile === historicalCashPins.profile && (symbol === '2409' || symbol === '2383'));
   deadline.check();
-  ensure(files instanceof Map && Object.getPrototypeOf(files) === Map.prototype);
   const selected = historicalCashPins.companies[symbol];
-  ensure(Object.getOwnPropertyDescriptor(Map.prototype, 'size')!.get!.call(files) === selected.files.length);
-  ensure(Reflect.ownKeys(files).length === 0);
-  const entries = [...Map.prototype.entries.call(files)] as Array<[unknown, unknown]>;
-  ensure(entries.length === selected.files.length);
   const owned = new Map<string, Uint8Array>();
+  let carrier: Uint8Array | null = null;
   try {
+    carrier = copyCarrier(material, selected.carrier.bytes);
+    deadline.check();
+    ensure(sha(carrier) === selected.carrier.sha256);
+    deadline.check();
+    const serialized = new TextDecoder('utf-8', { fatal: true }).decode(carrier);
+    deadline.check();
+    const envelope = row(JSON.parse(serialized));
+    deadline.check();
+    ensure(envelope.schemaVersion === 'historical-cash-private-byte-material-v1'
+      && envelope.financialProfile === profile && envelope.symbol === symbol
+      && Array.isArray(envelope.files) && envelope.files.length === selected.files.length);
     let total = 0;
     for (let i = 0; i < selected.files.length; i++) {
-      deadline.check(); const pin = selected.files[i];
-      ensure(entries[i][0] === pin.path && pin.bytes <= historicalCashPins.limits.perFile);
-      const raw = copy(entries[i][1], pin.bytes); owned.set(pin.path, raw);
-      total += raw.byteLength; ensure(total <= historicalCashPins.limits.aggregate && sha(raw) === pin.sha256);
+      deadline.check(); const pin = selected.files[i], entry = row(envelope.files[i]);
+      ensure(entry.path === pin.path && typeof entry.rawBase64 === 'string'
+        && pin.bytes <= historicalCashPins.limits.perFile);
+      const raw = decodeBase64(entry.rawBase64, 'base64');
+      owned.set(pin.path, raw); // Register the only decode buffer before any failing check.
+      deadline.check();
+      total += raw.byteLength;
+      ensure(raw.byteLength === pin.bytes && total <= historicalCashPins.limits.aggregate && sha(raw) === pin.sha256);
     }
     ensure(total === selected.aggregateBytes);
     const parse = (name: string) => { deadline.check(); return row(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(owned.get(name)!))); };
@@ -117,5 +142,5 @@ export function projectPinnedHistoricalCash(profile: unknown, symbol: unknown, f
     const result = { ...projection, projectionSha256: sha(canonical(projection)) };
     ensure(Buffer.byteLength(JSON.stringify(result), 'utf8') <= historicalCashPins.limits.projection);
     deadline.check(); return freeze(result);
-  } finally { for (const raw of owned.values()) raw.fill(0); }
+  } finally { for (const raw of owned.values()) nativeFill.call(raw, 0); if (carrier) nativeFill.call(carrier, 0); }
 }
