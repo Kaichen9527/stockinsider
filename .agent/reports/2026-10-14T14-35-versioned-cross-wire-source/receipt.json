@@ -1,0 +1,191 @@
+{
+  "schema": "versioned-cross-wire-native-source-only-v1",
+  "codeCommit": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+  "codeTree": "9c7b01095144e428d2839af446d75e0c3c7c0f59",
+  "base": "a1a0233c4b189acf97314b8b60e85e3102bb5981",
+  "historicalDelivery": "bc1507fac64a1062aaca100c0e0000092c0ade45",
+  "startedAt": "2026-10-14T14:35:15Z",
+  "deadline": "2026-10-14T14:50:15Z",
+  "completedAt": "2026-10-14T14:45:20.656241+00:00",
+  "execution": {
+    "node": "22.14.0",
+    "finalSyntaxChecks": 3,
+    "syntaxPass": 3,
+    "syntaxFail": 0,
+    "testCommandsExecuted": 0,
+    "nativeCasesExecuted": 0,
+    "pureCasesExecuted": 0,
+    "status": "NOT_RUN native; syntax only",
+    "build": "NOT_RUN",
+    "types": "NOT_RUN",
+    "lint": "NOT_RUN"
+  },
+  "caseInventory": [
+    {
+      "case": "AUO compatible firstseal/replay/conflict",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "EMC v3 firstseal/replay/conflict",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "AUO mixed slots v2-to-v3",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "EMC mixed slots v3-to-v2",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "AUO max30/mixed bytes measurement",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "EMC max30/mixed bytes measurement",
+      "status": "NOT_RUN"
+    }
+  ],
+  "remaining": [
+    "all new native cases and old extracted fixture runtime validation",
+    "reachable >524288 legal mixed-wire input/exact rejected would-charge",
+    "maximal legally charged manifest beyond short source fixtures",
+    "freshness ABA response-loss old77 four-callers whole-S-C-B-Q-R-A formal approval"
+  ],
+  "cleanup": {
+    "ownedPgStarted": 0,
+    "servicesStarted": 0,
+    "browserStarted": 0,
+    "cacheDeleted": false,
+    "rawPreserved": true
+  },
+  "resource": {
+    "startedAt": "2026-10-14T14:35:15Z",
+    "deadline": "2026-10-14T14:50:15Z",
+    "sampleAt": "2026-10-14T14:44:01.194165+00:00",
+    "sourceCommit": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+    "tree": "9c7b01095144e428d2839af446d75e0c3c7c0f59",
+    "freeBytes": {
+      "/workspace": 8605986816,
+      "/tmp": 15398707200
+    },
+    "unchangedProtectedPaths": [
+      "web",
+      "migrations",
+      "package.json",
+      "package-lock.json",
+      ".nvmrc",
+      ".github",
+      "scripts/opportunity-v3/research-versioned-prerequisite-profile.mjs",
+      "scripts/opportunity-v3/research-versioned-prerequisite-profile.json"
+    ],
+    "nativeExecuted": false,
+    "testsExecuted": false,
+    "importsExecuted": false,
+    "parseOnly": true
+  },
+  "rawCount": 19,
+  "rawBytes": 4760,
+  "raw": [
+    {
+      "path": "raw/admission-final.json",
+      "bytes": 711,
+      "sha256": "e9f518a607185b34d9a921ac8f06ddc3a2ccb5b3ef3cd85145fe8f923c171cab"
+    },
+    {
+      "path": "raw/final-research-versioned-cross-wire-native.test.mjs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/final-research-versioned-cross-wire-native.test.mjs.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/final-research-versioned-legal-fixture-helper.mjs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/final-research-versioned-legal-fixture-helper.mjs.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/final-research-versioned-legal-fixture-native.test.mjs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/final-research-versioned-legal-fixture-native.test.mjs.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/final-syntax-results.json",
+      "bytes": 1353,
+      "sha256": "18ef8b2375a3727c33705056e6cf25f00963bb6a60b9941f4a304315c3dca8ed"
+    },
+    {
+      "path": "raw/research-versioned-cross-wire-native.test.mjs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/research-versioned-cross-wire-native.test.mjs.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/research-versioned-legal-fixture-helper.mjs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/research-versioned-legal-fixture-helper.mjs.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/research-versioned-legal-fixture-native.test.mjs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/research-versioned-legal-fixture-native.test.mjs.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/sealed-delivery-wip.sha256",
+      "bytes": 406,
+      "sha256": "569c937a88a40a4b31835f2a4e58d01f143ec4cedb1200fdf9a40f4f9b29c94f"
+    },
+    {
+      "path": "raw/sealed-final-wip.sha256",
+      "bytes": 406,
+      "sha256": "5fa3bde9fd49474b66292975939999bad2ffc1dba775e7703c9bf92e977d3c85"
+    },
+    {
+      "path": "raw/sealed-wip.sha256",
+      "bytes": 406,
+      "sha256": "bd438e0a0ec2cbbca854b66983046eb939895e886c5d15ce82eb68a745c244f5"
+    },
+    {
+      "path": "raw/source-comparison.json",
+      "bytes": 376,
+      "sha256": "57cbaabe1475b1cedff7f1f4bd7ff3ba4c81a5e1d524795021430c35fc22b576"
+    },
+    {
+      "path": "raw/syntax-results.json",
+      "bytes": 1102,
+      "sha256": "70a33d4894057d2b5b5f7f4eb4516b65781d8003264fc694c62cd12c7b8e704d"
+    }
+  ],
+  "sourceCount": 21,
+  "sourceManifestSha256": "1532e7af9a13a84c06d610228f71bbaec6275b3f3be6fa8d943e675d14d137d0",
+  "handoffSha256": "19ff8d3d36172ee224f04f227ac8c7cafb679feee078e0155a64ec93ddfe6cbb",
+  "authorityChanged": false,
+  "makerSelfApproval": false
+}

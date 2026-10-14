@@ -1,0 +1,9 @@
+{
+  "base": "a1a0233c4b189acf97314b8b60e85e3102bb5981",
+  "oldBusinessAssertionsPreservedModuloStageSetter": true,
+  "originalBusinessBodySha256": "355a944a4ff88ab70fd9a410a606a8bd7e2f5e2cdb75ec2935b783356cb8cccc",
+  "newMatrixDoesNotImportOriginalEntry": true,
+  "privateHelperHasNoNodeTestRegistration": true,
+  "protectedChangedPaths": [],
+  "newNativeStatus": "NOT_RUN"
+}

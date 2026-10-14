@@ -1,0 +1,41 @@
+[
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs"
+    ],
+    "startedAt": "2026-10-14T14:44:01.092961+00:00",
+    "sourceCommit": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+    "exit": 0,
+    "bytes": 15909,
+    "sha256": "92848b6cce2828f2f4a10ddeb855508aee3414f31c8f1d48cf6866d40d03a490",
+    "maxChildRssKiB": 23116
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-cross-wire-native.test.mjs"
+    ],
+    "startedAt": "2026-10-14T14:44:01.141603+00:00",
+    "sourceCommit": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+    "exit": 0,
+    "bytes": 12355,
+    "sha256": "a7fd88533072f78c325f3672464f9f4a5f896b065600db9d3503ef5faaac6555",
+    "maxChildRssKiB": 23116
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-versioned-legal-fixture-native.test.mjs"
+    ],
+    "startedAt": "2026-10-14T14:44:01.164999+00:00",
+    "sourceCommit": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+    "exit": 0,
+    "bytes": 3019,
+    "sha256": "fe162c6229f532b6a746daf7500c11cd029c2e552bfb6bfb08801ed24d5a5313",
+    "maxChildRssKiB": 23116
+  }
+]

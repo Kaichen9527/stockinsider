@@ -1,0 +1,145 @@
+[
+  {
+    "path": "scripts/opportunity-v3/research-versioned-cross-wire-native.test.mjs",
+    "blob": "19a66d873cb092bb0f4cfa383bfe10ddb8b83c77",
+    "bytes": 12355,
+    "sha256": "a7fd88533072f78c325f3672464f9f4a5f896b065600db9d3503ef5faaac6555"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+    "blob": "395f9a472b67bccfb3409194c7914c017a8f348d",
+    "bytes": 15909,
+    "sha256": "92848b6cce2828f2f4a10ddeb855508aee3414f31c8f1d48cf6866d40d03a490"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-legal-fixture-native.test.mjs",
+    "blob": "c83d00bcefe9161afec36270d26d6f2a8d2a2305",
+    "bytes": 3019,
+    "sha256": "fe162c6229f532b6a746daf7500c11cd029c2e552bfb6bfb08801ed24d5a5313"
+  },
+  {
+    "path": "docs/operations/2026-10-14/versioned-cross-wire-native/HANDOFF.md",
+    "blob": "dda1c6288244dcf9e9b6fa0e1ade79b19f6425f6",
+    "bytes": 6708,
+    "sha256": "19ff8d3d36172ee224f04f227ac8c7cafb679feee078e0155a64ec93ddfe6cbb"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+    "blob": "ac75fcbb88229afaecc3f55142a06ad7812524e3",
+    "bytes": 763,
+    "sha256": "b7e0124ab08b7293cf787b086b373af249a2ab6346d8151e74a38c4b49706cc5",
+    "sameAsBase": true
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-prerequisite-profile.mjs",
+    "blob": "1fe388bdcf22cc46b1f4eb09548ebc65aa3cb0de",
+    "bytes": 5935,
+    "sha256": "2e6c2196dcc780d9f2f6a56a6a9c5d851c23b12d3834bb22e52bae6b62c5830b",
+    "sameAsBase": true
+  },
+  {
+    "path": "scripts/opportunity-v3/research-versioned-prerequisite-profile.json",
+    "blob": "b3e76e70d466d4540f729fa2cfe07e12131043d1",
+    "bytes": 8281,
+    "sha256": "3d6cf36330519a9382f2cce8fa1a6cc9484843a594d0df312ecc2ab60a0436db",
+    "sameAsBase": true
+  },
+  {
+    "path": "scripts/fixtures/research-versioned-prerequisite/observed-roster-original2e.json.gz",
+    "blob": "ae7da56a7b931e3fe69399baffaeb81e76528605",
+    "bytes": 162230,
+    "sha256": "aa8937c1004946662881a7d164ba52853d928c47e92d3b7993def9652e727881",
+    "sameAsBase": true
+  },
+  {
+    "path": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+    "blob": "627d6f6b248e679927494a33494c1bec477a5257",
+    "bytes": 322909,
+    "sha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "sameAsBase": true
+  },
+  {
+    "path": "deployment/vps/bootstrap-stockinsider-postgres.sql",
+    "blob": "c58d12585d312701d47b5789d0572f8453424697",
+    "bytes": 1979,
+    "sha256": "6d08fbb7545b4a76aa740927a6519cd8eda1e90d6003d920b4ec3c08d5f4768a",
+    "sameAsBase": true
+  },
+  {
+    "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+    "blob": "855cd31a01d16809c5b7b9ce0fbfc135d4aa930d",
+    "bytes": 22325,
+    "sha256": "f089f44375f80da89be49215cad35626998bcb5775166efc23e93af224ec284f",
+    "sameAsBase": true
+  },
+  {
+    "path": "migrations/20261009_research_complete_input_v2.sql",
+    "blob": "3d22fdb3c56c91ff64b6baec4cdbad5d686e9592",
+    "bytes": 446691,
+    "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c",
+    "sameAsBase": true
+  },
+  {
+    "path": "migrations/20261009_research_input_preparations_v2.sql",
+    "blob": "2440f63c869ba9bace2f2c74986edcf1b512b3b5",
+    "bytes": 14713,
+    "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e",
+    "sameAsBase": true
+  },
+  {
+    "path": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "blob": "299513a305099968756fccd617da268f352047b1",
+    "bytes": 12454,
+    "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621",
+    "sameAsBase": true
+  },
+  {
+    "path": "web/src/lib/research-versioned-complete-input.ts",
+    "blob": "a7c035844cfaf44834b755e1250fc3cae1d7a6d5",
+    "bytes": 8561,
+    "sha256": "6c748235f5aebd3bdfa254de400e752e42bf15aae53c840b8ec09b543a29e906",
+    "sameAsBase": true
+  },
+  {
+    "path": "web/src/lib/research-versioned-input-binding.ts",
+    "blob": "093bd0ac201a4da0b1a5c7372f84b7570497840a",
+    "bytes": 4004,
+    "sha256": "1ec1bee664b793295b41de982818e767446b85e801efb164324217510d0fd940",
+    "sameAsBase": true
+  },
+  {
+    "path": "web/src/lib/research-versioned-input-request.ts",
+    "blob": "08ee73c8a66af3bf4796787b5d23907b21d8bc27",
+    "bytes": 1476,
+    "sha256": "cce94267308c7b3d3e1c20ad6214265c147fdcc7603defc186cd85b9e31b42b3",
+    "sameAsBase": true
+  },
+  {
+    "path": "web/src/lib/research-versioned-input-legacy-response.ts",
+    "blob": "c913092626c117c9dfcf3b1c88fa3cc587ddbc17",
+    "bytes": 4634,
+    "sha256": "a6d3f20e0b7749d9cfde09940d4959a4efe59456e2cd974a65c5a498a764d6b5",
+    "sameAsBase": true
+  },
+  {
+    "path": "package-lock.json",
+    "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "sameAsBase": true
+  },
+  {
+    "path": "web/package-lock.json",
+    "blob": "a41fd447e28f3b36829b689828c345e042619a38",
+    "bytes": 274088,
+    "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+    "sameAsBase": true
+  },
+  {
+    "path": ".nvmrc",
+    "blob": "7d41c735d7127c4a2530ebe846b14ffbf38b8031",
+    "bytes": 8,
+    "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+    "sameAsBase": true
+  }
+]

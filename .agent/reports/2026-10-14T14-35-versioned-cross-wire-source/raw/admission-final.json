@@ -1,0 +1,25 @@
+{
+  "startedAt": "2026-10-14T14:35:15Z",
+  "deadline": "2026-10-14T14:50:15Z",
+  "sampleAt": "2026-10-14T14:44:01.194165+00:00",
+  "sourceCommit": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+  "tree": "9c7b01095144e428d2839af446d75e0c3c7c0f59",
+  "freeBytes": {
+    "/workspace": 8605986816,
+    "/tmp": 15398707200
+  },
+  "unchangedProtectedPaths": [
+    "web",
+    "migrations",
+    "package.json",
+    "package-lock.json",
+    ".nvmrc",
+    ".github",
+    "scripts/opportunity-v3/research-versioned-prerequisite-profile.mjs",
+    "scripts/opportunity-v3/research-versioned-prerequisite-profile.json"
+  ],
+  "nativeExecuted": false,
+  "testsExecuted": false,
+  "importsExecuted": false,
+  "parseOnly": true
+}
