@@ -1,0 +1,44 @@
+name: Financial document write lease quality diagnostics
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/financial-document-write-lease-quality.yml'
+      - 'scripts/candidate-financial-document-write-lease-route.test.mjs'
+      - 'web/src/app/api/internal/candidate-financial-documents/**'
+      - 'web/src/lib/production-write-lease.ts'
+      - 'web/src/lib/candidate-financial-artifact.ts'
+      - 'web/src/lib/candidate-financial-document-worker.ts'
+      - 'web/src/lib/candidate-financial-documents.ts'
+      - 'web/src/lib/internal-auth.ts'
+      - 'web/src/lib/taiwan-data-runtime.ts'
+      - 'web/src/lib/opportunity-v3/internal.ts'
+      - '.nvmrc'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'web/package.json'
+      - 'web/package-lock.json'
+
+permissions:
+  contents: read
+
+jobs:
+  financial-document-write-lease-quality:
+    name: Financial document owned write lease route contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Set up pinned Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Install exact locked test dependencies without lifecycle scripts
+        run: npm --prefix web ci --ignore-scripts
+      - name: Execute actual upload and worker routes with synthetic boundaries
+        run: >-
+          node --test --test-concurrency=1
+          scripts/candidate-financial-document-write-lease-route.test.mjs
