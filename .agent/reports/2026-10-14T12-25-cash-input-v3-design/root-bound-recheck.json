@@ -1,0 +1,114 @@
+{
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "verifiedSourceFiles": [
+    {
+      "file": "openspec/changes/research-first-publication-v2/spec.md",
+      "sha256": "ebdd79ccf1e9dd8e2edb95b3937f337b06ca15406a1eb811e53e9c3751d4f5e9",
+      "bytes": 18306
+    },
+    {
+      "file": "openspec/changes/research-first-publication-v2/financial-adapter-slice.md",
+      "sha256": "c5a7a3e53eee0f2c41223fef6ee76cd6364904431c05d5e586085887598eaf6c",
+      "bytes": 12421
+    },
+    {
+      "file": "openspec/changes/research-first-publication-v2/financial-adapter-files.json",
+      "sha256": "fc299201a7e49dee91416e3105bb3996a13514bc459476443967a7beeec5bd4d",
+      "bytes": 3091
+    },
+    {
+      "file": "openspec/changes/research-complete-input-v2/spec.md",
+      "sha256": "e0e63848f3a544653e597204d9077a8034827b093eee60990b3f9146339c5e78",
+      "bytes": 22355
+    },
+    {
+      "file": "openspec/changes/research-complete-input-v2/schema-freeze.md",
+      "sha256": "db6add136e9a7e4a23b3df794746e2e7b9d60a9240690739dfd302676e012f59",
+      "bytes": 12365
+    },
+    {
+      "file": "web/src/lib/research-financial-inventory.ts",
+      "sha256": "f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5",
+      "bytes": 3294
+    },
+    {
+      "file": "web/src/lib/research-financial-supplement.ts",
+      "sha256": "2f8d8150a3071109d3db2dee9c1df7dadcd97322357c21e8a45fd469df22372d",
+      "bytes": 19142
+    },
+    {
+      "file": "web/src/lib/research-financial-file-reader.ts",
+      "sha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+      "bytes": 10211
+    },
+    {
+      "file": "web/src/lib/research-complete-input.ts",
+      "sha256": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d",
+      "bytes": 10526
+    },
+    {
+      "file": "web/src/lib/research-complete-mapping.json",
+      "sha256": "ba44549b7efdc14a0c61523dadd950321fd7f85e72b30059415a555629baf704",
+      "bytes": 7953
+    },
+    {
+      "file": "web/src/lib/research-complete-canonical.ts",
+      "sha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "bytes": 4343
+    },
+    {
+      "file": "web/src/lib/research-complete-schema-bundles.ts",
+      "sha256": "ca5bc876d5820c3f910a4847c84f504a952896f7affe5d9e88a9f224df3b0d98",
+      "bytes": 463467
+    },
+    {
+      "file": "web/src/lib/research-complete-2409.schema.json",
+      "sha256": "efedd65c7afcf9031cd34fe6a12d4f70c78dcc1d80cadbddfa87f11b23e57932",
+      "bytes": 264752
+    },
+    {
+      "file": "web/src/lib/research-complete-2383.schema.json",
+      "sha256": "e0bc5f27a4263d151395fd2fa35a69e868b2d94836b7e26173be545300d6d043",
+      "bytes": 151681
+    },
+    {
+      "file": "web/src/lib/research-business-article.ts",
+      "sha256": "e589fd67c08831d650b80cbd091113508c428d2b1a217be31150b682ce37b7cc",
+      "bytes": 18454
+    },
+    {
+      "file": "web/src/lib/research-business-calculator.ts",
+      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+      "bytes": 14206
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+      "sha256": "0d380225957bce4498b052ec6f5a4458d62b5366f01a845ec6f99077772d49b8",
+      "bytes": 30851
+    }
+  ],
+  "bounds": [
+    {
+      "symbol": "2409",
+      "legacyMaxFiles": 8,
+      "currentInventoryFiles": 8,
+      "successorPlusPacketFiles": 9,
+      "successorPlusPacketBytes": 697558,
+      "cashRows": 52,
+      "cashNumericCells": 104,
+      "packetHashMatchesModel": true
+    },
+    {
+      "symbol": "2383",
+      "legacyMaxFiles": 8,
+      "currentInventoryFiles": 6,
+      "successorPlusPacketFiles": 7,
+      "successorPlusPacketBytes": 264753,
+      "cashRows": 33,
+      "cashNumericCells": 66,
+      "packetHashMatchesModel": true
+    }
+  ],
+  "nativeExecuted": false,
+  "codeChanged": false
+}

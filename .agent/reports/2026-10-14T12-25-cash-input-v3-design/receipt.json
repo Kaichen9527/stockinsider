@@ -1,0 +1,41 @@
+{
+  "schema": "root-cash-input-v3-design-review-v1",
+  "recordedAt": "2026-10-14T04:25:06.415727+00:00",
+  "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "proposalTurn": "01a1389c-b07d-72c3-ac75-200c06688864",
+  "proposalCursor": "1db0d1ce-2ca7-401c-86d5-dbc402e8f541:10",
+  "proposalStatus": "completed/idle",
+  "verifiedNamedSourceFiles": 17,
+  "workloadAmendment": "Root engineering decision permits finite new9/7 inventories and52x2/33x2 cash cells; legacy caps preserved",
+  "implementationApproval": false,
+  "protectedApproval": false,
+  "formalPublicationApproval": false,
+  "runtimeChanged": false,
+  "files": [
+    {
+      "file": "independent-proposal-thread.json",
+      "bytes": 23623,
+      "sha256": "8096eae849b056c455a1b3307c15a46417ba43480225d7605d84d3266867a610"
+    },
+    {
+      "file": "independent-proposal.md",
+      "bytes": 28469,
+      "sha256": "bc048cab430b594e975de501f8a7788225b9d89310eb7bcc9ea300c9e8cfe462"
+    },
+    {
+      "file": "interrupted-first-design-review.json",
+      "bytes": 561,
+      "sha256": "d82973ed94cf92d207a18edd6a76ec925a9eccfd95118d828faaa35c1ccb8320"
+    },
+    {
+      "file": "root-bound-recheck.json",
+      "bytes": 3853,
+      "sha256": "042efc761a03e685ccc06235d2f149698ebc42ce6efe19585bd92023e766089b"
+    },
+    {
+      "file": "root-review.md",
+      "bytes": 3016,
+      "sha256": "5811bc225141a86a7d3fec6d0ffd0b90fac923b9ddd27ef7df4ad088fe9fa9d8"
+    }
+  ]
+}

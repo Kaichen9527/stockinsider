@@ -1,5 +1,19 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 12:25台灣時間：完整cash input v3有限修訂已有具體提案與Root工程決策
+
+Readonly設計審查第一次turn01a13896雖terminal，實際只回官方補件169/同5件pending狀態，沒有設計交付；Root保留未完成，不當PASS。該turn有contextCompaction紀錄，scope轉換原因未定，不推論workspace故障。確認idle後只一次15min續作，turn01a1389c-b07d-72c3-ac75-200c06688864於04:18:48Z真completed/cursor1db0d1ce-2ca7-401c-86d5-dbc402e8f541:10 idle；實際交付/tmp/stockinsider-formal-input-successor-contract-review-oct14.md，proposalSHA bc048cab430b594e975de501f8a7788225b9d89310eb7bcc9ea300c9e8cfe462，明示PROPOSAL/未實作/未批准。
+
+Reviewer實測完整packet方案AUO9files/697558bytes、EMC7files/264753bytes；原selected income/monthly/bridge AUO已64，現金52×2/33×2數值與AUO固定capital7另是新增工作。Root逐一親核17個namedsource SHA/Git15d4 bytes、9/7總量與52/33shape，並靜態核原SQL prepare/seal的UNION ALL已遍算既有revision表全版本、沒有payloadversion filter；這只是原pool意圖證據，不等未實作v3競態驗收。Proposal另量化projection/material有headroom，但完整tagged DB envelope/quota/PG jsonb尺寸仍未驗；不得以compactJS illustration冒稱全PASS。
+
+Root工程決策只允許明列新v3 workload修訂：AUO固定9/EMC固定7全inventory＋完整packet讀取、cash固定52×2/33×2與capitaltuple；legacy reader8與原income/monthly/bridge≤64保持，不generic9file/任意profile/第二reader-owner/deadline/新增quota。所有每file512KiB/aggregate1MiB/projection160000/material262144/depth12/10s、原4slots/524288taggedbytes與role/job/source-rights/lock-order不放寬。保留舊v2 request/row/hash/clocks/mapping/schema replay，舊sourceClosure77b1cc06不得冒稱新build執行證據；新v3須真新preparation/job/reservation與exactclosure。這是Root工程範圍決策，不是人類簽章、已實作code/SQL、protected批准或formalpublication資格；新exactschema/tuples/serializedbounds與downstream author/review/article/publication版本仍須實作、獨立review和真native/protected。
+
+完整proposal八組未執行acceptance保持：reader與all drift/cleanup、cash逐operand/subtotal/unit/period/歸母NCI/股數、old/new replay/crossversion、auth HTTP/PG canonicalbytes、sharedquota/races、10sdeadline/uncertaincommit與真正下游article/ref/version/fence。不得只做純core或storage綠就停在另一個結果。Root receipt3acf9bfd7db98818b499acb169b85c992872f7734e67c32d72ad8d85b8027539，.agent/reports/2026-10-14T12-25-cash-input-v3-design/；沒有任何runtime/SQL/schema/guard/expectation/pin變更。
+
+Cloud26-tail原turn01a13890/cursor57859559-a812-4f98-bcdc-46a2a9f908f6:9仍真inProgress，尚未派下一件。最新maker commentary報封存版native8/8含26-tail COMMIT/原完整installedcatalog/financialpostconditions/nonemptyfacts/rollback/disconnect/lock；Root尚未拿finalreceipt/核exactsubjects/TAP，不稱RootnativePASS。Maker另真報原21項guard對只套第一prereq residue回全false，缺口已保留且未改舊guard/期待：它不能作完整26-tail正式入口guard。先收真終態/封存收據，若成立再獨立review最小26-tail entry/predecessor guard，不能跳過或整76bundle上線。一次Rootcompact誤填thread suffix導致unknownhost訊息，改正原01a106b8-a883-7185-9962-f7372109a093立即確認同turn仍active；不是Cloudterminal/host故障，不重啟。
+
+Root另只讀既有8bcd package manifest：entryapp/server.js/2585files（含目錄archive總3100members）、檔案清單無pg或Node executable。僅說該舊standalone包不是operator工具鏈，未重驗/重建/部署它，不推論正式VPS全host無依賴；新approved operator runtime與exactsource/git/evidence仍須另外準備與驗收。正式169/容量不足/NOLOGIN-1/五件facts0維持最後證據，沒有Root VPS/API/DB/SQL/roleACL/HTTP/來源/crawl/研究排程/部署/cache操作。PR370..378全terminal不碰，goal active保持原三階段，heartbeat不當正式研究排程驗收。
+
 ## 2026-10-14 12:07台灣時間：正式文章input新缺口真重現，研究tail與版本化input契約各有單件活動工作
 
 Remote main69b9734c/progress79f58392/工作樹乾淨與兩chat trueidle先核；上一goal turn為實質progress（378正常merge與兩篇獨立內容審查完成），本輪未縮scope。PR370..378全部terminal禁止checks/watch/ready/rerun/merge/helper，沒有再跑378或375/376/377。
