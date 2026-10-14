@@ -1,0 +1,9 @@
+{
+  "scope": "Root read-only lookup, not product or PG failure",
+  "guessedPath": "migrations/20260909_production_writer_fence.sql",
+  "exit": 128,
+  "error": "path does not exist at9d68b4d6",
+  "resolvedActualPath": "migrations/20260831_candidate_shadow_performance.sql",
+  "releaseLeaseReturns": "BOOLEAN",
+  "noCodeChange": true
+}

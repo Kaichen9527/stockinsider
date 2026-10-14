@@ -1,0 +1,28 @@
+{
+  "subject": "870436576d89d1a7f34cddb10f197787978d42f3",
+  "evidence": "eeb874de40508d69f07f3740dba2af990b6bf653",
+  "sourceEntries": {
+    "files": 259,
+    "bytes": 9352922
+  },
+  "raw": {
+    "files": 25,
+    "bytes": 127182
+  },
+  "reviewScope": "3path test-only source delta; not native or formal approval",
+  "P0": 0,
+  "P1": 0,
+  "P2": 0,
+  "nativeExecuted": false,
+  "applicationImports": false,
+  "reviewedError": "P0001 source_seal_invalidated_or_missing",
+  "actualExpectedErrorDerivedFromSql": true,
+  "newCases": 3,
+  "caseExecution": "NOT_RUN",
+  "unchangedProductSqlRolesGrantsAuthority": true,
+  "changedPaths": [
+    "docs/operations/2026-10-15/source-withdrawal-races-source-only-handoff.md",
+    "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+    "scripts/opportunity-v3/research-versioned-source-withdrawal-native.test.mjs"
+  ]
+}

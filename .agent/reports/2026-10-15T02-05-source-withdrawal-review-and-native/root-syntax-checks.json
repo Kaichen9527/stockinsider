@@ -1,0 +1,17 @@
+{
+  "binary": "/usr/local/bin/node",
+  "architecture": "arm64",
+  "version": "v22.14.0",
+  "mode": "--check only; no application import or test execution",
+  "results": [
+    {
+      "path": "research-versioned-source-withdrawal-native.test.mjs",
+      "exit": 0
+    },
+    {
+      "path": "research-versioned-legal-fixture-helper.mjs",
+      "exit": 0
+    }
+  ],
+  "nativeExecuted": false
+}
