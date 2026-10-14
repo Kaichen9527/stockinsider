@@ -24,8 +24,27 @@ export function extractHistorical77Realm(secure){
 export async function produceHistorical77(x,material,request){
  const trace=[],queries=new Set();let result,reportedFailure,transportError;const stdout=[],stderr=[];
  const child=fork(fileURLToPath(new URL('./research-legacy77-child-driver.mjs',import.meta.url)),[],{execPath:process.execPath,execArgv:['--import',fileURLToPath(new URL('./research-versioned-prerequisite-fs-witness.mjs',import.meta.url)),'--experimental-strip-types'],silent:true,serialization:'json'});
- child.stdout.on('data',b=>stdout.push(b));child.stderr.on('data',b=>stderr.push(b));
- const exit=new Promise(resolve=>{child.once('exit',(code,signal)=>resolve({code,signal}));child.once('error',error=>{transportError=error;resolve({code:null,signal:null});});});
+ child.stdout?.on('data',b=>stdout.push(b));child.stderr?.on('data',b=>stderr.push(b));
+ let spawned=Number.isInteger(child.pid),exitEvent,closeEvent;
+ const terminationAttempts=[];
+ const terminateOwnedChild=()=>{
+  if(!spawned||exitEvent||closeEvent)return;
+  try{terminationAttempts.push({signal:'SIGKILL',accepted:child.kill('SIGKILL')});}
+  catch(error){terminationAttempts.push({signal:'SIGKILL',error:error.message});}
+ };
+ const onTransportError=error=>{transportError??=error;terminateOwnedChild();};
+ // An error is not termination. Node emits close after exit, or after a failed spawn,
+ // and only then have the child's stdio streams closed. Keep the watchdog until that event.
+ const closed=new Promise(resolve=>{
+  child.once('spawn',()=>{spawned=true;});
+  child.once('exit',(code,signal)=>{exitEvent={code,signal};});
+  child.on('error',onTransportError);
+  child.once('close',(code,signal)=>{closeEvent={code,signal};resolve({code,signal,exitEvent:exitEvent??null});});
+ });
+ const send=message=>{
+  if(!child.connected)return;
+  try{child.send(message,error=>{if(error)onTransportError(error);});}catch(error){onTransportError(error);}
+ };
  child.on('message',message=>{
   if(message.kind==='success'){result=message;return;}if(message.kind==='failure'){reportedFailure=message;return;}if(message.kind!=='rpc')return;
   const work=(async()=>{
@@ -33,16 +52,16 @@ export async function produceHistorical77(x,material,request){
    try{assert.ok(signatures[message.name]);assert.deepEqual(Object.keys(message.args).sort(),signatures[message.name].slice().sort());
     trace.push({ordinal:trace.length,name:message.name,fd:message.fd,writerPid:(await x.c.query('SELECT pg_backend_pid() pid')).rows[0].pid});
     const data=(await x.c.query(`SELECT public.${message.name}(${signatures[message.name].map((_,i)=>'$'+(i+1)).join(',')}) v`,signatures[message.name].map(k=>message.args[k]))).rows[0].v;
-    if(child.connected)child.send({kind:'rpc-result',id:message.id,data});
-   }catch(error){x.save('old-rpc-error.json',{name:message.name,code:error.code,message:error.message,where:error.where});if(child.connected)child.send({kind:'rpc-result',id:message.id,error:{code:error.code,message:error.message}});}
-  })();queries.add(work);void work.finally(()=>queries.delete(work));
+    send({kind:'rpc-result',id:message.id,data});
+   }catch(error){x.save('old-rpc-error.json',{name:message.name,code:error.code,message:error.message,where:error.where});send({kind:'rpc-result',id:message.id,error:{code:error.code,message:error.message}});}
+  })();queries.add(work);void work.then(()=>queries.delete(work),error=>{queries.delete(work);onTransportError(error);});
  });
  // Harness watchdog is not an extension to the original in-module 10s deadline.
- const watchdog=setTimeout(()=>{transportError=new Error('historical_child_watchdog');child.kill('SIGKILL');},30000);
- child.send({kind:'start',realm:material.realm,root:x.roots['original75d-fixed8or6'],symbol:x.symbol,request});
- const terminal=await exit;clearTimeout(watchdog);await Promise.allSettled([...queries]);
- x.save('old-realm-child.json',{terminal,result,reportedFailure,trace,stdout:Buffer.concat(stdout).toString(),stderr:Buffer.concat(stderr).toString(),pid:child.pid,confirmedChildExit:true,transportError:transportError?.message});
- if(transportError)throw transportError;assert.equal(terminal.code,0,reportedFailure?.error?.message);assert.ok(result);assert.equal(reportedFailure,undefined);
+ const watchdog=setTimeout(()=>{transportError??=new Error('historical_child_watchdog');terminateOwnedChild();},30000);
+ send({kind:'start',realm:material.realm,root:x.roots['original75d-fixed8or6'],symbol:x.symbol,request});
+ const terminal=await closed;clearTimeout(watchdog);await Promise.allSettled([...queries]);
+ x.save('old-realm-child.json',{terminal,result,reportedFailure,trace,stdout:Buffer.concat(stdout).toString(),stderr:Buffer.concat(stderr).toString(),pid:child.pid,spawnFailed:!spawned&&Boolean(transportError),confirmedChildExit:Boolean(exitEvent),confirmedChildClose:Boolean(closeEvent),pendingRpcAtSave:queries.size,terminationAttempts,transportError:transportError?.message});
+ if(transportError)throw transportError;assert.ok(exitEvent&&closeEvent,'child terminal cleanup unconfirmed');assert.equal(exitEvent.code,0);assert.equal(queries.size,0);assert.equal(terminal.code,0,reportedFailure?.error?.message);assert.ok(result);assert.equal(reportedFailure,undefined);
  const n=x.symbol==='2409'?8:6,checks=trace.filter(v=>v.name==='assert_research_input_preparation_v2'),seal=trace.filter(v=>v.name==='seal_research_article_input_revision_v2');
  assert.equal(checks.length,2);assert.deepEqual(checks[0].fd,{opens:0,closes:0});assert.deepEqual(checks[1].fd,{opens:n,closes:0});assert.equal(seal.length,1);assert.deepEqual(seal[0].fd,{opens:n,closes:n});
  return result;
