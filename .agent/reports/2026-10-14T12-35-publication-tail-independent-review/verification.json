@@ -1,0 +1,42 @@
+{
+  "source": "bf639920951f1c80f63f2d5e309e953e1a459bad",
+  "evidence": "fd1feab958d0038590f51ce9c618aea0d2e7d748",
+  "base": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "rawVerified": 120,
+  "sourceVerified": 115,
+  "exactTailFiles": 26,
+  "originalSQLComparison": [
+    "15d4ef54",
+    "2e078dfd"
+  ],
+  "unchangedCoreFiles": [
+    "scripts/opportunity-v3/migration-plan.mjs",
+    "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "scripts/opportunity-v3/atomic-migration-chain.mjs",
+    "scripts/opportunity-v3/financial-history-install-guard.mjs",
+    "scripts/opportunity-v3/financial-history-catalog.expected.json",
+    "scripts/opportunity-v3/financial-existing-schema-profile.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-action.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-binding.mjs",
+    "scripts/opportunity-v3/vps-migration-peer.mjs",
+    "migrations/20261005_financial_history_admission_v1.sql",
+    "migrations/20261005_release_function_ownership_bridge_v1.sql",
+    "package-lock.json",
+    "web/package-lock.json"
+  ],
+  "webTreeUnchanged": true,
+  "originalPublicationProfileBytesUnchanged": true,
+  "rootPureExit": 0,
+  "rootNativeBuildExecuted": false,
+  "verifiedAt": "2026-10-14T04:31:34.133901+00:00",
+  "actualInstalledFingerprintsExactlyEqualSealedExpected": true,
+  "actualTailTraceSteps": 26,
+  "actualTailWriterCount": 1,
+  "catalogScopeCounts": {
+    "roles": 12,
+    "types": 117,
+    "tables": 129,
+    "schemas": 3,
+    "functions": 178
+  }
+}

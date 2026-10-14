@@ -1,5 +1,19 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 12:43台灣時間：26-tail候選真驗收收據已核，下一件只補完整入口guard與atomic helper
+
+Cloud原turn01a13890已truecompleted/cursor57859559-a812-4f98-bcdc-46a2a9f908f6:10 idle，sourcebf639920951f1c80f63f2d5e309e953e1a459bad/evidencefd1feab958d0038590f51ce9c618aea0d2e7d748/branchcodex/research-publication-tail-extraction-oct14/baseapprovedmain69。Root親核120raw/115source/26SQL對exact15d4及pendingPR3642e078dfd全byte相同，13個main核心檔與wholewebtree不變、publication profile原JSON不變；親跑8pure全PASS零fail/skip/todo。Scoped extraction/probe source零新P0P1P2，不是完整productionentry批准。
+
+Maker finalbf真PG17.11 native8PASS含7child+1parent，不與歷史28/37加總；Root沒有親跑native/build。實際mainfinancial profile50 selected、49 SQL executed（原superseded1保持）、operatoraction另計；後接26tail COMMIT，samewriter26trace/一backend真完整installedfingerprint等於原sealed期待：12roles/117types/129tables/3schemas/178functions。第二connection後見相同1fact/1observation，forced第一tail真DDL後錯誤全rollback，installed/laterpartialguard與sharedPGlock也有真證據。Normaltype/lint/build subject79d21363/Next16.3.4/BUILD_IDhDRVIUw39F_-BVuycn6zS/1798files，後只3 standaloneNode scripts變更，finalbf實際pure/native已重跑；webtreec550與main/79完全同，不稱final另build。
+
+Root額外限定兩項範圍：舊disconnect是已安裝表真COMMENT後graceful client.end＋comment/catalog/data回復，未證26SQL執行中斷；舊競爭鎖只證PG sharedlock互斥，不證尚不存在productionhelper beforeBEGIN路徑。原21guard在第一prereq v6 residue全false的真缺口仍open；舊partial只drop laterpublication table，不能宣稱涵蓋5prereq及partial-onlyobjects。Originalstartup typo/observer57014/metadataindex RED保持；observer是preCOMMIT catalog reader被DDL鎖住，原sameWriter:true錯標保持並另timing correction，改觀測時點而非SQL/期待/timeout。Receipt c03d4ac6972c5fe09d625259688040cb5b657cf9f42b0bb5ca0ee170d797ead3；Rootreceipt cf101ebf4f5ff75800662cfdc6a616ce31ac4969d2b2374fc34f97e55a1e8f68，.agent/reports/2026-10-14T12-35-publication-tail-independent-review/。
+
+Root再compact核Cloud trueidle後，只派30min newbranchcodex/research-publication-tail-entry-guard-oct14/basefd1fea/codebf；turn01a138b7-e59a-75be-99eb-583bbd81fce1/cursor57859559-a812-4f98-bcdc-46a2a9f908f6:11真inProgress。Owned新readonly完整26predecessor/residueguard、新finite after-financial50 baseline、client-injected engineering atomic tailhelper/pure/native/handoff/evidence。原26SQL/orderededc46d48/descriptor9410e8f3/21guard/installedcatalog/default48/49/50/plan/apply/operator/peer/HBA/authority/pins/workflows/web不改。錯selection before任何DBquery；共享sessiontrylock beforeBEGIN、BEGIN READCOMMITTED、guard在任何tailDDL/DML前、原完整catalog/financialpostconditions真過才COMMIT，失敗ROLLBACK/end；無productionconnection/CLI/API/假approvalref或新bootstrap/grant。Native要驗actualhelper/first5prefix+partial-only與body-owner-config-ACL drift拒絕/第一prereq已commit殘留實際helper拒絕/完整26COMMIT與nonemptydata/installed再apply拒絕/真DDL後forcedfailure/26執行中真正socketdisconnect/backendgone及全rollback/另一helper持鎖busy beforeBEGIN。未驗逐項pending，不以COMMENT/總count代完整範圍。
+
+前輪Cloud minfree8630943744距8GiB僅約39MiB，要求先實測與singleheavy；只清核對無引用自有可重建輸出，raw/唯一evidence/unknown/shared/Docker不刪、不降floor。必要typeslintnormalbuild主題/webtree歸因據實，Mac不build/Chromium403不重試。Root只report/review、不重疊ownedsource；先等真handle終態，不因timeout/短暫idle重派。現金v3設計另外已交並有Root有限工程workload決策（12:25），本件不修改其runtime/schema，formal整鏈仍未實作。
+
+Main69/PR370..378全terminal/正式169/NOLOGIN-1/容量不足/五件facts0與待答維持，無本輪productionDB/roleACL/SQL/API/HTTP/crawl/PTT/343/策略/正式研究排程/部署/cache操作。目標保持原三階段且active，未以local8native或chat內容PASS代正式來源Top20、兩篇role-bound publication或部署驗收。工程heartbeat保留，舊排程prompt完整另存.agent/reports/2026-10-14T12-28-continuation-prompt/，後續整理只取代過期活動描述，不覆寫本進度歷史或原RED。
+
 ## 2026-10-14 12:25台灣時間：完整cash input v3有限修訂已有具體提案與Root工程決策
 
 Readonly設計審查第一次turn01a13896雖terminal，實際只回官方補件169/同5件pending狀態，沒有設計交付；Root保留未完成，不當PASS。該turn有contextCompaction紀錄，scope轉換原因未定，不推論workspace故障。確認idle後只一次15min續作，turn01a1389c-b07d-72c3-ac75-200c06688864於04:18:48Z真completed/cursor1db0d1ce-2ca7-401c-86d5-dbc402e8f541:10 idle；實際交付/tmp/stockinsider-formal-input-successor-contract-review-oct14.md，proposalSHA bc048cab430b594e975de501f8a7788225b9d89310eb7bcc9ea300c9e8cfe462，明示PROPOSAL/未實作/未批准。

@@ -1,0 +1,50 @@
+TAP version 13
+# Subtest: fixed26 exact original SQL excludes existing financial49 and has no apply authority
+ok 1 - fixed26 exact original SQL excludes existing financial49 and has no apply authority
+  ---
+  duration_ms: 0.522666
+  ...
+# Subtest: tail missing failclosed
+ok 2 - tail missing failclosed
+  ---
+  duration_ms: 0.408834
+  ...
+# Subtest: tail duplicate failclosed
+ok 3 - tail duplicate failclosed
+  ---
+  duration_ms: 0.189417
+  ...
+# Subtest: tail reordered failclosed
+ok 4 - tail reordered failclosed
+  ---
+  duration_ms: 0.1515
+  ...
+# Subtest: tail unknown failclosed
+ok 5 - tail unknown failclosed
+  ---
+  duration_ms: 0.152917
+  ...
+# Subtest: tail wronghash failclosed
+ok 6 - tail wronghash failclosed
+  ---
+  duration_ms: 0.171458
+  ...
+# Subtest: tail wrongbytes failclosed
+ok 7 - tail wrongbytes failclosed
+  ---
+  duration_ms: 0.088542
+  ...
+# Subtest: fixed descriptor entries cannot be changed through the exported object
+ok 8 - fixed descriptor entries cannot be changed through the exported object
+  ---
+  duration_ms: 1.13075
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 56.806666

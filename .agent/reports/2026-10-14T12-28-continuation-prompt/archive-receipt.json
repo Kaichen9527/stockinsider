@@ -1,0 +1,11 @@
+{
+  "recordedAt": "2026-10-14T04:28:03.247906+00:00",
+  "automationId": "stockinsider",
+  "reason": "Consolidate current work and invariant instructions while preserving full superseded prompt as immutable evidence. No historical launch-status or raw receipt overwritten.",
+  "previousPromptBytes": 38652,
+  "previousPromptSHA256": "6d0f55e5d79441d22ac3399fd3a2daa90addd07cd765611b5dabaed9a1a7e726",
+  "name": "StockInsider \u5de5\u7a0b\u88dc\u5b8c\u63a5\u7e8c",
+  "status": "ACTIVE",
+  "rrule": "RRULE:FREQ=HOURLY;INTERVAL=1",
+  "targetThreadId": "01a0b7b4-8534-7741-9de6-177edf929f58"
+}

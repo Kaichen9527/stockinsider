@@ -1,0 +1,108 @@
+{
+  "schema": "root-publication-tail-independent-review-v1",
+  "recordedAt": "2026-10-14T04:38:08.843611+00:00",
+  "source": "bf639920951f1c80f63f2d5e309e953e1a459bad",
+  "evidence": "fd1feab958d0038590f51ce9c618aea0d2e7d748",
+  "base": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "rawVerified": 120,
+  "sourceVerified": 115,
+  "tailFilesByteVerified": 26,
+  "rootPure": {
+    "pass": 8,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "rootNativeBuildExecuted": false,
+  "scopedExtractionFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "productionEntryApproved": false,
+  "full26GuardGapOpen": true,
+  "actual26MigrationDisconnectProven": false,
+  "makerNative": "8pass/7children+1parent; actual local commits, not formal peer/production",
+  "files": [
+    {
+      "file": "maker-build-identity.json",
+      "bytes": 634,
+      "sha256": "ea7a83d1378641047b7602f86d7dcc9c366236d3196d9a8864c9aba8b5dc8772"
+    },
+    {
+      "file": "maker-catalog-data-proof.json",
+      "bytes": 732,
+      "sha256": "acf885777b102637f1be16b87fdbdd65e8ddb9ab8bb9eb03ad289d2a382f4bb2"
+    },
+    {
+      "file": "maker-native-final.meta.json",
+      "bytes": 349,
+      "sha256": "261f8fd2825f3a4fe56754d852e9db7bf47945bfdadc9b651adda3f3a51905e7"
+    },
+    {
+      "file": "maker-observer-timing-correction.json",
+      "bytes": 728,
+      "sha256": "d826cfa6ac642ef2cf480d976d40047c948a6bf192fd67b850d951fa58e70a0f"
+    },
+    {
+      "file": "maker-receipt.json",
+      "bytes": 38098,
+      "sha256": "c03d4ac6972c5fe09d625259688040cb5b657cf9f42b0bb5ca0ee170d797ead3"
+    },
+    {
+      "file": "maker-source-manifest.json",
+      "bytes": 31023,
+      "sha256": "c53ced89c4d713df17413500c1abaa9c15c6a6c3ec2fd17a7d40771e1c3c93e8"
+    },
+    {
+      "file": "native-disconnect-rollback.json",
+      "bytes": 68,
+      "sha256": "c062667cef8a70233da03ec483a94e05afc02f6edaf121567dfca8a48ddf1f23"
+    },
+    {
+      "file": "native-expected-installed-fingerprints.json",
+      "bytes": 79222,
+      "sha256": "2ed5d192e3dbbc18a26887b10f76515092d9a45b5a76ffdd4f0c4ad3acca4e75"
+    },
+    {
+      "file": "native-forced-rollback.json",
+      "bytes": 150,
+      "sha256": "9a03130429da2a1074e5b336e968ba86e574555b01bd466dfdf2e742b874177c"
+    },
+    {
+      "file": "native-original21guard-first-prefix-residue.json",
+      "bytes": 380,
+      "sha256": "d02cedf17abfe93ced3cb8a210c533a11a55bc8d74ee1f6004c7dbafcce926fd"
+    },
+    {
+      "file": "native-same-writer-installed-fingerprints.json",
+      "bytes": 79222,
+      "sha256": "2ed5d192e3dbbc18a26887b10f76515092d9a45b5a76ffdd4f0c4ad3acca4e75"
+    },
+    {
+      "file": "native-tail-trace.json",
+      "bytes": 5787,
+      "sha256": "44477719b8c381260c590ed629b3ab67065d319a72c46bbcc69961d1f436902e"
+    },
+    {
+      "file": "review.md",
+      "bytes": 4438,
+      "sha256": "57c18d762e59efb193a88e60ebcdb756af6bcee1e0a76fb76c3fa420af41458d"
+    },
+    {
+      "file": "root-pure.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "root-pure.stdout",
+      "bytes": 1163,
+      "sha256": "4c12cdb25fbc234d2503aea219c5d3887611078b8b5361fa58db623fc838c613"
+    },
+    {
+      "file": "verification.json",
+      "bytes": 1511,
+      "sha256": "d2e86817e51bfacf31ae0630f2e5a01d27af45c64776a78bfc7602173ea8978c"
+    }
+  ]
+}

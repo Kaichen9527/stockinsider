@@ -1,0 +1,26 @@
+{
+  "actualInstalledEqualsOriginalSealedCatalog": true,
+  "scopeCounts": {
+    "roles": 12,
+    "types": 117,
+    "tables": 129,
+    "schemas": 3,
+    "functions": 178
+  },
+  "nonemptyFacts": 1,
+  "nonemptyObservations": 1,
+  "sameExactFinancialRowsOnIndependentConnectionAfterCommit": true,
+  "firstPrefixResidueDiagnostic": {
+    "scope": "Diagnostic only: original21guard was designed after5 prerequisites, not full26 entry",
+    "firstTail": "migrations/20260929_candidate_dossier_outbox_v6.sql",
+    "disposition": "allowed_by_original21guard",
+    "state": {
+      "tables": false,
+      "functions": false,
+      "roles": false,
+      "columns": false,
+      "triggers": false,
+      "isolation_successor": false
+    }
+  }
+}

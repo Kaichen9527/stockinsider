@@ -1,0 +1,6 @@
+{
+  "at": "2026-10-14T04:09:17.778538+00:00",
+  "original": "native-corrected 2PASS2FAIL; all26 SQL/unchanged installed catalog/financial postconditions passed before observer catalog SELECT57014",
+  "cause": "Original stack points to snapshot(observer), not writer catalog. DDL locks make pre-COMMIT catalog read block. Original first-error sameWriter:true field was a test-labelled catch scope and is inaccurate for the later observer failure; original JSON remains untouched.",
+  "correction": "Keep observer financial facts/observations before COMMIT; compare complete installed catalog after COMMIT. No SQL/catalog expectation/permissions or timeout change. Add direct comment restoration assertion to disconnect proof."
+}
