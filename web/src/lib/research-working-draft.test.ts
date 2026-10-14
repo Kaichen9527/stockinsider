@@ -29,9 +29,9 @@ test('published/qualification/strategy/target mutations are never accepted as wo
     assert.throws(()=>parseWorkingDraft('2383',md,{...meta,[String(key)]:value}));
 });
 test('nanosecond cutoff after authored clock rejects, original clocks stay exact',()=>{
-  const next=sourceControllerInstant(meta.authoredAndCheckedAt)+1n;
-  const second=new Date(Number(next/1_000_000_000n)*1000).toISOString().slice(0,19);
-  const nextNanosecond=second+'.'+(next%1_000_000_000n).toString().padStart(9,'0')+'Z';
+  const next=sourceControllerInstant(meta.authoredAndCheckedAt)+BigInt(1);
+  const second=new Date(Number(next/BigInt(1_000_000_000))*1000).toISOString().slice(0,19);
+  const nextNanosecond=second+'.'+(next%BigInt(1_000_000_000)).toString().padStart(9,'0')+'Z';
   assert.throws(()=>parseWorkingDraft('2383',md,{...meta,cutoffAt:nextNanosecond}));
   const d=parseWorkingDraft('2383',md,meta); assert.equal(d.evidenceCutoffAt,meta.cutoffAt);
 });
