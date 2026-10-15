@@ -1,0 +1,645 @@
+{
+  "localRoot": "/tmp/v3-author-article-o15",
+  "files": [
+    {
+      "path": "author-article-build.py",
+      "bytes": 9598,
+      "sha256": "1e4e0e48b5b24b628f2256717674ab15149fe7d3b190ea13ffc369265a82f9ab",
+      "published": false
+    },
+    {
+      "path": "composition-build.py",
+      "bytes": 10737,
+      "sha256": "8c935edacb74d79f69d4a7b627d305a6a09ebd03605439a076b674bce21ff3ae",
+      "published": false
+    },
+    {
+      "path": "corrected-depth-article-drafts-15d4.json.gz",
+      "bytes": 29794,
+      "sha256": "6a4f1dd4291e82115e0036f3fdfd826f0da7e0044ebfd42f5f50c720b85b900e",
+      "published": false
+    },
+    {
+      "path": "corrected-depth-research-execution-binding.ts",
+      "bytes": 12198,
+      "sha256": "9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8",
+      "published": false
+    },
+    {
+      "path": "corrected-depth-research-v3-article-citations.ts",
+      "bytes": 18403,
+      "sha256": "6d3d3b929a9f398904c8b141c55b5cc19784cd2bee0df37bb23cbeac4578519e",
+      "published": false
+    },
+    {
+      "path": "corrected-depth-research-v3-author-article-fixture.mjs",
+      "bytes": 12924,
+      "sha256": "f4adb6bcadb13e7c33a590186f75c45de1c9186e4d6936c4c6647b480fc7f853",
+      "published": false
+    },
+    {
+      "path": "corrected-depth-research-v3-author-article.test.mjs",
+      "bytes": 9085,
+      "sha256": "a9813a354c6bc66274637704ac539d4e712e6f8e602c3149571c6e390f717a80",
+      "published": false
+    },
+    {
+      "path": "corrected-depth-research-v3-author-result.ts",
+      "bytes": 19550,
+      "sha256": "c56bcdcd5331563447141cb44bc0ec6c6aa31025acf6ed016d50637752f2b475",
+      "published": false
+    },
+    {
+      "path": "corrected-depth-research-v3-business-article.ts",
+      "bytes": 22375,
+      "sha256": "cffcf4d0aa4e0f7677ac2bfd353199791989b8caf453a1ae3c14d65b853f4791",
+      "published": false
+    },
+    {
+      "path": "corrected-depth-source.json",
+      "bytes": 1602,
+      "sha256": "5bac76372a834033caf00cf4287ddd460d4a9065dbe9970e2bdccdafba3975a2",
+      "published": false
+    },
+    {
+      "path": "corrected-depth.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "published": false
+    },
+    {
+      "path": "corrected-depth.stderr",
+      "bytes": 553,
+      "sha256": "f3ad0b309bddcf266f7cebdf34d7d5e3be05cc504d15e8dfb9e45874a60ab8e0",
+      "published": false
+    },
+    {
+      "path": "corrected-depth.stdout",
+      "bytes": 2238,
+      "sha256": "0116be0c020e59f31bf6561f528613fda4e0f5f3547586bbd7a3eecb55a120ff",
+      "published": false
+    },
+    {
+      "path": "depth-probe.mjs",
+      "bytes": 491,
+      "sha256": "db6500579733f19b8fc68534f611cfae5feee88ed8f13cf40860fad2efd57380",
+      "published": false
+    },
+    {
+      "path": "depth-probe.stderr",
+      "bytes": 554,
+      "sha256": "4df90aa47f6c5f8c580f0350e2338ea41caf442ba9a06041e84cc07513b0dfcc",
+      "published": false
+    },
+    {
+      "path": "depth-probe.stdout",
+      "bytes": 76,
+      "sha256": "5a2397e7bb5c3530b3a27fbafb46ebe420c4efd7920f0cb2b43f1aa55df2b69c",
+      "published": false
+    },
+    {
+      "path": "diagnostic.exit",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "published": false
+    },
+    {
+      "path": "diagnostic.stderr",
+      "bytes": 553,
+      "sha256": "26be2420b686107814d5040f968b87897b5478db5444195cb70c49f70cc21fdf",
+      "published": false
+    },
+    {
+      "path": "diagnostic.stdout",
+      "bytes": 4121,
+      "sha256": "42a7f16f5e4ca095a8b12b8dff1953055b2ea3c41ae689975b45928dee725471",
+      "published": false
+    },
+    {
+      "path": "final-candidate-article-drafts-15d4.json.gz",
+      "bytes": 29794,
+      "sha256": "6a4f1dd4291e82115e0036f3fdfd826f0da7e0044ebfd42f5f50c720b85b900e",
+      "published": false
+    },
+    {
+      "path": "final-candidate-research-execution-binding.ts",
+      "bytes": 12198,
+      "sha256": "9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8",
+      "published": false
+    },
+    {
+      "path": "final-candidate-research-v3-article-citations.ts",
+      "bytes": 18403,
+      "sha256": "6d3d3b929a9f398904c8b141c55b5cc19784cd2bee0df37bb23cbeac4578519e",
+      "published": false
+    },
+    {
+      "path": "final-candidate-research-v3-author-article-fixture.mjs",
+      "bytes": 12924,
+      "sha256": "f4adb6bcadb13e7c33a590186f75c45de1c9186e4d6936c4c6647b480fc7f853",
+      "published": false
+    },
+    {
+      "path": "final-candidate-research-v3-author-article.test.mjs",
+      "bytes": 10984,
+      "sha256": "e65230e1ae08e948f0a4b863283ef8be581961f4f795cfff78f6a931dcb0ca51",
+      "published": false
+    },
+    {
+      "path": "final-candidate-research-v3-author-result.ts",
+      "bytes": 19550,
+      "sha256": "c56bcdcd5331563447141cb44bc0ec6c6aa31025acf6ed016d50637752f2b475",
+      "published": false
+    },
+    {
+      "path": "final-candidate-research-v3-business-article.ts",
+      "bytes": 22375,
+      "sha256": "91c715f1dfbdee22b4c86b9ad493bacc49b03c23250e9554107eb13b421293ba",
+      "published": false
+    },
+    {
+      "path": "final-candidate-source.json",
+      "bytes": 1603,
+      "sha256": "b941c5e3675a474ed6c17f5e111dc41176d79467aa5a312c7d16b2960bca79f0",
+      "published": false
+    },
+    {
+      "path": "final-check-results.json",
+      "bytes": 1399,
+      "sha256": "b4ec856bccdf19de3921cc7ece4c3d30c46ae781ffd13178bf69da99e1f6d47a",
+      "published": false
+    },
+    {
+      "path": "final-source-inventory.json",
+      "bytes": 30649,
+      "sha256": "f15ddf238d6fe7ea5b2c4382f839cc5db2c0a68bca9e6d96ff6fc35eb1ef61df",
+      "published": false
+    },
+    {
+      "path": "first-tests-article-drafts-15d4.json.gz",
+      "bytes": 29794,
+      "sha256": "6a4f1dd4291e82115e0036f3fdfd826f0da7e0044ebfd42f5f50c720b85b900e",
+      "published": false
+    },
+    {
+      "path": "first-tests-research-execution-binding.ts",
+      "bytes": 12198,
+      "sha256": "9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8",
+      "published": false
+    },
+    {
+      "path": "first-tests-research-v3-article-citations.ts",
+      "bytes": 18403,
+      "sha256": "6d3d3b929a9f398904c8b141c55b5cc19784cd2bee0df37bb23cbeac4578519e",
+      "published": false
+    },
+    {
+      "path": "first-tests-research-v3-author-article-fixture.mjs",
+      "bytes": 12924,
+      "sha256": "f4adb6bcadb13e7c33a590186f75c45de1c9186e4d6936c4c6647b480fc7f853",
+      "published": false
+    },
+    {
+      "path": "first-tests-research-v3-author-article.test.mjs",
+      "bytes": 9085,
+      "sha256": "a9813a354c6bc66274637704ac539d4e712e6f8e602c3149571c6e390f717a80",
+      "published": false
+    },
+    {
+      "path": "first-tests-research-v3-author-result.ts",
+      "bytes": 19280,
+      "sha256": "2adfec28b6b319557258484710f4d96708cc94837d498e0f82ba6dc82e979e17",
+      "published": false
+    },
+    {
+      "path": "first-tests-research-v3-business-article.ts",
+      "bytes": 22375,
+      "sha256": "cffcf4d0aa4e0f7677ac2bfd353199791989b8caf453a1ae3c14d65b853f4791",
+      "published": false
+    },
+    {
+      "path": "first-tests-source.json",
+      "bytes": 1602,
+      "sha256": "839bbbd43522cbfbdf5d0c1a1fd2c24167e423b985e292d2d93e26e126e7a7bf",
+      "published": false
+    },
+    {
+      "path": "first-tests.exit",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "published": false
+    },
+    {
+      "path": "first-tests.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "first-tests.stdout",
+      "bytes": 462,
+      "sha256": "4d58e670ea1ee572ba41b87ccb641507a72aef91c4c349033363fb49eeb7cc23",
+      "published": false
+    },
+    {
+      "path": "historical-source-index.json",
+      "bytes": 2250,
+      "sha256": "4be274b5095270d86eaa8670fa5cab19c95e2f8d074dc094fa5975b2de1a29ec",
+      "published": false
+    },
+    {
+      "path": "initial-article-drafts-15d4.json.gz",
+      "bytes": 29794,
+      "sha256": "6a4f1dd4291e82115e0036f3fdfd826f0da7e0044ebfd42f5f50c720b85b900e",
+      "published": false
+    },
+    {
+      "path": "initial-research-execution-binding.ts",
+      "bytes": 12198,
+      "sha256": "9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8",
+      "published": false
+    },
+    {
+      "path": "initial-research-v3-article-citations.ts",
+      "bytes": 17720,
+      "sha256": "bc1a59e45e269e89edce4696ecf4cfc03ee7dc0004e842ae6633a459242529e6",
+      "published": false
+    },
+    {
+      "path": "initial-research-v3-author-article-fixture.mjs",
+      "bytes": 5317,
+      "sha256": "5c4ab080f73110974419fd2e67f49eef8e75e6d2217960cc2b89bed8c6dffcfd",
+      "published": false
+    },
+    {
+      "path": "initial-research-v3-author-result.ts",
+      "bytes": 19241,
+      "sha256": "4fb29b21e18a0ca239ad8f5e572c1e87b8848841e5c9102c49573d75aef18ef6",
+      "published": false
+    },
+    {
+      "path": "initial-research-v3-business-article.ts",
+      "bytes": 22375,
+      "sha256": "cffcf4d0aa4e0f7677ac2bfd353199791989b8caf453a1ae3c14d65b853f4791",
+      "published": false
+    },
+    {
+      "path": "initial-source.json",
+      "bytes": 1377,
+      "sha256": "c98dd52b5a9e67330549cb60272b7d76b23c807c14c4d5388bdb1e34c2f3c5e3",
+      "published": false
+    },
+    {
+      "path": "initial-types.exit",
+      "bytes": 2,
+      "sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+      "published": false
+    },
+    {
+      "path": "initial-types.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "initial-types.stdout",
+      "bytes": 204,
+      "sha256": "0a973c801118d016b817ec36d745d79704ad02965e07d0f195c61e6cfdbe95af",
+      "published": false
+    },
+    {
+      "path": "integration-and-citation-regression.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "integration-and-citation-regression.stdout",
+      "bytes": 8938,
+      "sha256": "e8b815b6802abb3b487ae417f554c5c7f1669ce858312ec65eb13b3975072a7f",
+      "published": false
+    },
+    {
+      "path": "make-evidence.py",
+      "bytes": 8394,
+      "sha256": "9a5ea50497ef326877b95e51ca142793c4bc2a6880e4e75d161b5d27e6ffadef",
+      "published": false
+    },
+    {
+      "path": "research-author-assignment.ts",
+      "bytes": 7161,
+      "sha256": "f3398447a07df929652e07ea3044bf8334e3e922f3344ad5802d39ea54b7d051",
+      "published": false
+    },
+    {
+      "path": "research-author-packet.ts",
+      "bytes": 11061,
+      "sha256": "50cabf662e17609f75a8bbddbe9d711b540dfa70a170ee67febabd563e1647a5",
+      "published": false
+    },
+    {
+      "path": "research-author-result.ts",
+      "bytes": 8436,
+      "sha256": "71b47dfe6a666498829e2bd6665e5688ca18de73e8e0938870e645983e5060e7",
+      "published": false
+    },
+    {
+      "path": "research-business-article.ts",
+      "bytes": 18454,
+      "sha256": "e589fd67c08831d650b80cbd091113508c428d2b1a217be31150b682ce37b7cc",
+      "published": false
+    },
+    {
+      "path": "research-execution-binding.ts",
+      "bytes": 12198,
+      "sha256": "9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8",
+      "published": false
+    },
+    {
+      "path": "research-reviewer-assignment.ts",
+      "bytes": 12885,
+      "sha256": "afa530253f7b6086bdaf600d58ad571e828512f9e4ef0a11b952c085b81a31ba",
+      "published": false
+    },
+    {
+      "path": "research-reviewer-result.ts",
+      "bytes": 11291,
+      "sha256": "96befdc6902834b7b7c62559cea6ac7b40bc0b4ddbcaca829c1f7eff0c1a8abd",
+      "published": false
+    },
+    {
+      "path": "response-depth-probe.stderr",
+      "bytes": 554,
+      "sha256": "886f5c30ad13a2425363749cdea0567084aff1d0c20e4317ba6b6dc84eafa3b5",
+      "published": false
+    },
+    {
+      "path": "response-depth-probe.stdout",
+      "bytes": 4677,
+      "sha256": "88f937e011a05e7efa0de7e7ce80f8e9b7b6bcd4080237a407d37a7590f11da2",
+      "published": false
+    },
+    {
+      "path": "route.ts",
+      "bytes": 12557,
+      "sha256": "d70ceae33eb8613da1b891a0790ff21a2a90bd67fedc73a7d7d9074668cba42a",
+      "published": false
+    },
+    {
+      "path": "run-checks.py",
+      "bytes": 2173,
+      "sha256": "75a75110ec488d7b60a38e0872af620a30785ae30fd71cd4d6d609f0ddaaa643",
+      "published": false
+    },
+    {
+      "path": "run-sealed-checks.py",
+      "bytes": 2188,
+      "sha256": "5884a1bf621c6f3eeda97974210a4c4fc3cb1028e72e3b2a692217d64631ffc3",
+      "published": false
+    },
+    {
+      "path": "seal.py",
+      "bytes": 829,
+      "sha256": "7c83894fff3241d70e680047e38fd5d0ee67266b513c47a4e05dd13f2889905c",
+      "published": false
+    },
+    {
+      "path": "sealed-check-results.json",
+      "bytes": 1413,
+      "sha256": "972b5de1aa39883e12b50ef22c2e4d077c63482c73f70044361e2da8465786db",
+      "published": false
+    },
+    {
+      "path": "sealed-integration-and-citation-regression.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "sealed-integration-and-citation-regression.stdout",
+      "bytes": 9138,
+      "sha256": "fbce62d0f2e533f2269ca85665164f7dd2415e28c6aad19dd0b0190240951d69",
+      "published": false
+    },
+    {
+      "path": "sealed-source-article-drafts-15d4.json.gz",
+      "bytes": 29794,
+      "sha256": "6a4f1dd4291e82115e0036f3fdfd826f0da7e0044ebfd42f5f50c720b85b900e",
+      "published": false
+    },
+    {
+      "path": "sealed-source-research-execution-binding.ts",
+      "bytes": 12198,
+      "sha256": "9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8",
+      "published": false
+    },
+    {
+      "path": "sealed-source-research-v3-article-citations.ts",
+      "bytes": 18442,
+      "sha256": "34500a25604a6ad3938bc8a9becb578df9c5a97249adda5bfdd3af3969a92da2",
+      "published": false
+    },
+    {
+      "path": "sealed-source-research-v3-author-article-fixture.mjs",
+      "bytes": 12924,
+      "sha256": "f4adb6bcadb13e7c33a590186f75c45de1c9186e4d6936c4c6647b480fc7f853",
+      "published": false
+    },
+    {
+      "path": "sealed-source-research-v3-author-article.test.mjs",
+      "bytes": 11767,
+      "sha256": "d8a2cd320ef0a06ce647fe07265722c1c72dee1d9e9b54c4aadd97f635065577",
+      "published": false
+    },
+    {
+      "path": "sealed-source-research-v3-author-result.ts",
+      "bytes": 19569,
+      "sha256": "690ab12d6754f2b4aee27221b3ea2c724ba5818fa8c62ec3bdf3fab530013dac",
+      "published": false
+    },
+    {
+      "path": "sealed-source-research-v3-business-article.ts",
+      "bytes": 22375,
+      "sha256": "91c715f1dfbdee22b4c86b9ad493bacc49b03c23250e9554107eb13b421293ba",
+      "published": false
+    },
+    {
+      "path": "sealed-source-source.json",
+      "bytes": 1603,
+      "sha256": "f37e08ff3d13abe2eeb95ad8c4131e7b0e05f9b6a1724c5063e6bc695250b97d",
+      "published": false
+    },
+    {
+      "path": "sealed-strict-module-types.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "sealed-strict-module-types.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "sql-index.py",
+      "bytes": 2152,
+      "sha256": "4c3b4d4a25ca41ac7f8801a529fea6763d1d49b44078a8af943c7a533e941944",
+      "published": false
+    },
+    {
+      "path": "strict-module-types.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "strict-module-types.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "tools.json",
+      "bytes": 278,
+      "sha256": "228eca701106534f335bd2c8d34ea406f5305a0457563c663aed589617b01626",
+      "published": false
+    },
+    {
+      "path": "types-2-article-drafts-15d4.json.gz",
+      "bytes": 29794,
+      "sha256": "6a4f1dd4291e82115e0036f3fdfd826f0da7e0044ebfd42f5f50c720b85b900e",
+      "published": false
+    },
+    {
+      "path": "types-2-research-execution-binding.ts",
+      "bytes": 12198,
+      "sha256": "9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8",
+      "published": false
+    },
+    {
+      "path": "types-2-research-v3-article-citations.ts",
+      "bytes": 18403,
+      "sha256": "6d3d3b929a9f398904c8b141c55b5cc19784cd2bee0df37bb23cbeac4578519e",
+      "published": false
+    },
+    {
+      "path": "types-2-research-v3-author-article-fixture.mjs",
+      "bytes": 5317,
+      "sha256": "5c4ab080f73110974419fd2e67f49eef8e75e6d2217960cc2b89bed8c6dffcfd",
+      "published": false
+    },
+    {
+      "path": "types-2-research-v3-author-result.ts",
+      "bytes": 19241,
+      "sha256": "4fb29b21e18a0ca239ad8f5e572c1e87b8848841e5c9102c49573d75aef18ef6",
+      "published": false
+    },
+    {
+      "path": "types-2-research-v3-business-article.ts",
+      "bytes": 22375,
+      "sha256": "cffcf4d0aa4e0f7677ac2bfd353199791989b8caf453a1ae3c14d65b853f4791",
+      "published": false
+    },
+    {
+      "path": "types-2-source.json",
+      "bytes": 1377,
+      "sha256": "def65c3b2555a43df216af93b9462a893d659ad4f483e28f519351ddbb80627d",
+      "published": false
+    },
+    {
+      "path": "types-2.exit",
+      "bytes": 2,
+      "sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+      "published": false
+    },
+    {
+      "path": "types-2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "types-2.stdout",
+      "bytes": 3270,
+      "sha256": "8e7c563f782138d4fad384647c512197cd9ab969a8cf9519e6c8a78cce496ff1",
+      "published": false
+    },
+    {
+      "path": "types-3-article-drafts-15d4.json.gz",
+      "bytes": 29794,
+      "sha256": "6a4f1dd4291e82115e0036f3fdfd826f0da7e0044ebfd42f5f50c720b85b900e",
+      "published": false
+    },
+    {
+      "path": "types-3-research-execution-binding.ts",
+      "bytes": 12198,
+      "sha256": "9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8",
+      "published": false
+    },
+    {
+      "path": "types-3-research-v3-article-citations.ts",
+      "bytes": 18403,
+      "sha256": "6d3d3b929a9f398904c8b141c55b5cc19784cd2bee0df37bb23cbeac4578519e",
+      "published": false
+    },
+    {
+      "path": "types-3-research-v3-author-article-fixture.mjs",
+      "bytes": 12924,
+      "sha256": "f4adb6bcadb13e7c33a590186f75c45de1c9186e4d6936c4c6647b480fc7f853",
+      "published": false
+    },
+    {
+      "path": "types-3-research-v3-author-article.test.mjs",
+      "bytes": 9085,
+      "sha256": "a9813a354c6bc66274637704ac539d4e712e6f8e602c3149571c6e390f717a80",
+      "published": false
+    },
+    {
+      "path": "types-3-research-v3-author-result.ts",
+      "bytes": 19280,
+      "sha256": "2adfec28b6b319557258484710f4d96708cc94837d498e0f82ba6dc82e979e17",
+      "published": false
+    },
+    {
+      "path": "types-3-research-v3-business-article.ts",
+      "bytes": 22375,
+      "sha256": "cffcf4d0aa4e0f7677ac2bfd353199791989b8caf453a1ae3c14d65b853f4791",
+      "published": false
+    },
+    {
+      "path": "types-3-source.json",
+      "bytes": 1602,
+      "sha256": "839bbbd43522cbfbdf5d0c1a1fd2c24167e423b985e292d2d93e26e126e7a7bf",
+      "published": false
+    },
+    {
+      "path": "types-3.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "published": false
+    },
+    {
+      "path": "types-3.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "types-3.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": false
+    },
+    {
+      "path": "unchanged-and-origin-proof.json",
+      "bytes": 1203,
+      "sha256": "ba589f198557224851e8729dc40f5ea8725ac869b604b7a920c87d7dbac485fe",
+      "published": false
+    }
+  ],
+  "count": 106,
+  "bytes": 1053630,
+  "publishedRawCount": 0,
+  "contentsPolicy": "Hash inventory only. No local raw, WIP, historical source body or binary evidence content is included."
+}

@@ -1,0 +1,95 @@
+{
+  "subject": "5609fe1ddbc3d4432de77a3c88ec596d1c28c736",
+  "tree": "63a2e484882454194a999327d76396cbb02358f3",
+  "finalChecks": [
+    {
+      "label": "sealed-integration-and-citation-regression",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-v3-author-article.test.mjs",
+        "scripts/research-v3-article-citations.test.mjs"
+      ],
+      "startedAt": "2026-10-15T14:07:11.579188+00:00",
+      "peakSessionRssBytes": 252932096,
+      "freeMinimum": {
+        "/workspace": 8594739200,
+        "/tmp": 15362392064
+      },
+      "exit": 0,
+      "endedAt": "2026-10-15T14:07:25.323857+00:00"
+    },
+    {
+      "label": "sealed-strict-module-types",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--strict",
+        "--skipLibCheck",
+        "--target",
+        "ES2022",
+        "--module",
+        "ESNext",
+        "--moduleResolution",
+        "Bundler",
+        "--allowImportingTsExtensions",
+        "--resolveJsonModule",
+        "--esModuleInterop",
+        "--types",
+        "node",
+        "--typeRoots",
+        "web/node_modules/@types",
+        "web/src/lib/research-v3-author-result.ts"
+      ],
+      "startedAt": "2026-10-15T14:07:25.324176+00:00",
+      "peakSessionRssBytes": 265375744,
+      "freeMinimum": {
+        "/workspace": 8594739200,
+        "/tmp": 15362383872
+      },
+      "exit": 0,
+      "endedAt": "2026-10-15T14:07:27.370617+00:00"
+    }
+  ],
+  "counts": {
+    "newIntegration": 13,
+    "existingCitationRegression": 20,
+    "finalPass": 33,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "historicalRunsNotAdded": true,
+  "firstRed": [
+    {
+      "name": "initial-types",
+      "error": "TS1128 incomplete first seam transformation",
+      "exit": 2
+    },
+    {
+      "name": "types-2",
+      "error": "typed Row spread inference errors",
+      "exit": 2
+    },
+    {
+      "name": "first-tests",
+      "pass": 0,
+      "fail": 1,
+      "meaning": "sandbox file-level runner failure without diagnostics"
+    },
+    {
+      "name": "diagnostic",
+      "pass": 8,
+      "fail": 2,
+      "error": "private binding/schema transport mistakenly sent through stored-data depth12 codec"
+    }
+  ],
+  "closure": "exact full validated response comparison using bindingCanonical; stored data/tagged hash/depth12 unchanged",
+  "nativeRuns": 0,
+  "buildRuns": 0,
+  "fullApplicationTypecheck": false,
+  "independentApproval": false
+}
