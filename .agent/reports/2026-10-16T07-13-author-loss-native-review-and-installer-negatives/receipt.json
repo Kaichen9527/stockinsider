@@ -1,0 +1,28 @@
+{
+  "kind": "Root exact source/public native witness review; not Root actual native/private raw decode/formal approval",
+  "harness": "88fd900c5f5d5c8eac9327ece8c687e4839b620f",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "evidence": "db1356ca321f1eee4a62f9b9a456069443e5db1f",
+  "files": [
+    {
+      "path": ".agent/reports/2026-10-16T07-13-author-loss-native-review-and-installer-negatives/review.json",
+      "bytes": 1503,
+      "sha256": "77da192e14c824bf440e81662ff42e90133a74e7f764ff752d30b3f98e71163a"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-13-author-loss-native-review-and-installer-negatives/dispatch.txt",
+      "bytes": 6355,
+      "sha256": "15a41ac8637d9845fa618754eb5812c628c4d957205372a6ccabb5f8713e453a"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-13-author-loss-native-review-and-installer-negatives/cloud-snapshot.json",
+      "bytes": 677,
+      "sha256": "eb133b12c60a69673aae74b16d0b6e23cf3c10e588c6380336bd029a9f5bb157"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-13-author-loss-native-review-and-installer-negatives/launch-note.txt",
+      "bytes": 4577,
+      "sha256": "09c3fa268e5e0aff2610ed9d94ea9741a13ff2f32fcde10c8ffda3152a29d882"
+    }
+  ]
+}

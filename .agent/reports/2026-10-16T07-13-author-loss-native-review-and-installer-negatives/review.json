@@ -1,0 +1,66 @@
+{
+  "actualGitInputs": 291,
+  "inputBytes": 9787305,
+  "publishedFilesIncludingReceipt": 11,
+  "publishedBytesIncludingReceipt": 280795,
+  "privateRawInventoryOnly": {
+    "count": 131,
+    "bytes": 162400617,
+    "fullContentsObtained": false
+  },
+  "rootRanNative": false,
+  "rootDecodedPrivateHeldProtocol": false,
+  "scopedHarnessAndPublicWitnessIntegration": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "cases": [
+    {
+      "symbol": "2409",
+      "heldBytes": 182354,
+      "inputCharge": {
+        "count": 2,
+        "bytes": 234998
+      },
+      "resultBytes": 205189,
+      "receiveCalls": 1,
+      "readRecoveries": 2,
+      "stages": 11,
+      "fullSourceFenceStages": 8
+    },
+    {
+      "symbol": "2383",
+      "heldBytes": 122389,
+      "inputCharge": {
+        "count": 2,
+        "bytes": 144353
+      },
+      "resultBytes": 135389,
+      "receiveCalls": 1,
+      "readRecoveries": 2,
+      "stages": 11,
+      "fullSourceFenceStages": 8
+    }
+  ],
+  "zombies": [
+    {
+      "pid": 664850,
+      "comm": "postgres",
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    },
+    {
+      "pid": 664894,
+      "comm": "postgres",
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    }
+  ],
+  "localAvailable": 2933018624,
+  "pending": "legacy/compat/installer negatives/author negatives/HTTP four callers/reviewer/Q-R/reviewpack/atomicpublication/whole closure/semantic formal articles/full sources and original goal"
+}

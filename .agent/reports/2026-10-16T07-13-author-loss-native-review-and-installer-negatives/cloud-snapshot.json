@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"timedOut\":true,\"wake\":null,\"polls\":[{\"schemaVersion\":1,\"cursor\":\"a486da2e-ee39-4cdc-99ec-d2927690772c:10\",\"revision\":10,\"changed\":true,\"thread\":{\"id\":\"01a106b8-a883-7185-9962-f7372109a093\",\"hostId\":\"durable\",\"status\":{\"type\":\"active\",\"activeFlags\":[]}},\"latestTurn\":{\"id\":\"01a141d7-4995-706e-87fd-0656a58c1099\",\"status\":\"inProgress\",\"error\":null,\"startedAt\":1792105991,\"completedAt\":null,\"durationMs\":null},\"latestAssistantMessageId\":null,\"latestAssistantMessage\":null,\"latestToolMarkerId\":null,\"latestToolMarker\":null}]}"
+    }
+  ],
+  "isError": false
+}
