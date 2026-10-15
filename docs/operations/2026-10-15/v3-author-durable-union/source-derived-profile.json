@@ -52,7 +52,7 @@
       "sha": "2d821365f7ce9ac22e7c2992c64baf916ded4ece58fc44e413d71f3dcd702b4d",
       "line": 19,
       "name": "read_research_author_result_v2",
-      "successorBodySha256": "e5889572355ba71c77f0d12c5af867cf65e88d00161d781bbd5051e43f674233",
+      "successorBodySha256": "d3ca7e0e39022052866e7837bd5232198bf6cd8f40992d0c69cc54558e20cfd9",
       "changed": true
     },
     {
@@ -61,7 +61,7 @@
       "sha": "7cd8d5a20f2f4d2420790b4a46c28c1d9ece5920177c0a02807fdf3f45d9d297",
       "line": 32,
       "name": "receive_research_author_result_v2",
-      "successorBodySha256": "97f361883edc0d8cf61e696775c7cdb377272979c61e2604c3ec881497576c41",
+      "successorBodySha256": "3889869f27b2761b166621ee1d4ce13ae3948488bca2c5a65783a6448008b52d",
       "changed": true
     }
   ],
