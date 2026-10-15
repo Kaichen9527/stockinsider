@@ -1,0 +1,158 @@
+{
+  "localOnlyRoot": "/tmp/author-installer-negatives-source-o16",
+  "count": 30,
+  "bytes": 182242,
+  "files": [
+    {
+      "path": "checks-1-source.mjs",
+      "bytes": 8608,
+      "sha256": "d7fc1d7c05e92c11d69f22f9c686d7ff9e57e17850597624cedc2ae140c7238f"
+    },
+    {
+      "path": "checks-1.exit",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "checks-1.stderr",
+      "bytes": 508,
+      "sha256": "608aa23bf517b5ca7fe5eb0caa45a2c9947a5ad9a551a7affa01bbee38e2dae3"
+    },
+    {
+      "path": "checks-1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks-2-source.mjs",
+      "bytes": 8627,
+      "sha256": "b3f433bc253dc5935bb67fc889e47248a004abf8b133920fa67bc50f5d565aca"
+    },
+    {
+      "path": "checks-2.exit",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "checks-2.stderr",
+      "bytes": 593,
+      "sha256": "8bf3aa4de22603eee645f367a3b950f9a70b3e902f6d14d081d0d6c316ec1806"
+    },
+    {
+      "path": "checks-2.stdout",
+      "bytes": 652,
+      "sha256": "5d0d75085fa2cb78dca93ed77d5e333075c7c04db92292572debdddc36737f8c"
+    },
+    {
+      "path": "checks-3.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "checks-3.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks-3.stdout",
+      "bytes": 868,
+      "sha256": "24e40e3eaa0291ab1035353746e97f497b4244c2a075f3c7aad25eb4284fcb12"
+    },
+    {
+      "path": "checks.mjs",
+      "bytes": 8708,
+      "sha256": "5af980ad4d9267e3a759c19e89a6ef96e317b726d51e1c1e6b314c26380f1c1a"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 1497,
+      "sha256": "edc8e21c38f3eec7454cb8eb35e699549883a85ac67b29e5bb6614ed83513b27"
+    },
+    {
+      "path": "final-sealed-before-checks.json",
+      "bytes": 238,
+      "sha256": "7812939a30691dc2547ff3691098584b807d7714f9bdbf27641e644ddba08216"
+    },
+    {
+      "path": "final-sealed-before-checks.mjs",
+      "bytes": 16404,
+      "sha256": "cb700b76aedad901139ccf8eb3c7f475327bde38a8a5d8f1d7aef898a993f6be"
+    },
+    {
+      "path": "final-syntax.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "final-syntax.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "final-syntax.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "git-delivery.json",
+      "bytes": 1486,
+      "sha256": "d4894d9e5b498e0bffe6ada660db668b8f621acef4a97f8dbd1f92c3925da7fb"
+    },
+    {
+      "path": "initial-wip.json",
+      "bytes": 181,
+      "sha256": "43e61133fe9e455c8ecd7f79f5512b54b510b3939c0fb8d7a638779e01dd5af6"
+    },
+    {
+      "path": "initial-wip.mjs",
+      "bytes": 14533,
+      "sha256": "6921a495189aa56d8c4e07cbba6eaf9007a50855cae94925c46d92a33c9720ce"
+    },
+    {
+      "path": "package-evidence.py",
+      "bytes": 6947,
+      "sha256": "1e67f9f5ac62d7b0582aecb8ad4ea576d3ec72b206fea6affc49577bf1c30680"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 717,
+      "sha256": "49fc1d7a7f06cbafc9961c819365560beef625d832b564b2be57a65a5d0628b5"
+    },
+    {
+      "path": "sealed-before-checks.json",
+      "bytes": 466,
+      "sha256": "7c13112d4a4807828a31b56c56071dca8200a5bbfc630636cdc32ba44379268b"
+    },
+    {
+      "path": "sealed-before-checks.mjs",
+      "bytes": 16193,
+      "sha256": "badbfe124b080e1b257020a8c7491a8a220be7832fbe7be675e515e79f06a086"
+    },
+    {
+      "path": "syntax.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "syntax.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "syntax.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "unchanged-inputs.json",
+      "bytes": 80539,
+      "sha256": "d3dda68411e4a5a6d6f6f139c0f96cb7ad3764a527613e41f8df0b61e1c73715"
+    },
+    {
+      "path": "write.py",
+      "bytes": 14467,
+      "sha256": "da14d5a4bedf77f6533d103b2c5e92fd2e0990bdf3d8ac6b2ff02681a23806e1"
+    }
+  ],
+  "privacy": "source-only WIP/probes/RED, no PG/catalog/business raw generated; historical private native evidence remains untouched"
+}

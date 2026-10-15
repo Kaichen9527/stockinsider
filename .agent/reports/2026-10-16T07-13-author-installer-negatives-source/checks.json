@@ -1,0 +1,33 @@
+{
+  "sourceCommit": "a1b8ce77e48a7e26f45a2a587206b5ff5d132fea",
+  "syntaxExit": 0,
+  "builtinsOnlyGroups": {
+    "pass": 14,
+    "fail": 0,
+    "native": false
+  },
+  "preservedInitialProbeRED": [
+    {
+      "version": 1,
+      "exit": 1,
+      "stdoutSHA": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA": "608aa23bf517b5ca7fe5eb0caa45a2c9947a5ad9a551a7affa01bbee38e2dae3",
+      "probeSourceSHA": "d7fc1d7c05e92c11d69f22f9c686d7ff9e57e17850597624cedc2ae140c7238f"
+    },
+    {
+      "version": 2,
+      "exit": 1,
+      "stdoutSHA": "5d0d75085fa2cb78dca93ed77d5e333075c7c04db92292572debdddc36737f8c",
+      "stderrSHA": "8bf3aa4de22603eee645f367a3b950f9a70b3e902f6d14d081d0d6c316ec1806",
+      "probeSourceSHA": "b3f433bc253dc5935bb67fc889e47248a004abf8b133920fa67bc50f5d565aca"
+    }
+  ],
+  "native": {
+    "executedChildren": 0,
+    "busy": "NOT_RUN",
+    "drift": "NOT_RUN",
+    "forcedRollback": "NOT_RUN",
+    "parent": "NOT_RUN"
+  },
+  "independentReview": false
+}

@@ -1,0 +1,26 @@
+{
+  "time": "2026-10-15T23:23:59.902306+00:00",
+  "startFree": {
+    "/workspace": 8593317888,
+    "/tmp": 14824800256
+  },
+  "finalFree": {
+    "/workspace": 8593252352,
+    "/tmp": 14824304640
+  },
+  "floor": 8589934592,
+  "node": {
+    "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+    "version": "v22.14.0",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1"
+  },
+  "probeMaxRssKiB": 35968,
+  "nativeRSS": null,
+  "pgNotStarted": true,
+  "singleLightNodeOnly": true,
+  "environmentConfigurationChanged": false,
+  "toolingReadOnly": {
+    "path": "node_modules/pg/lib/client.js",
+    "sha256": "6d9d05583d598740fd0f71a5c6c6adaf52e109070f743662e28749e15fcefc76"
+  }
+}

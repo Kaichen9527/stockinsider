@@ -1,0 +1,33 @@
+{
+  "destination": "https://github.com/Kaichen9527/stockinsider.git",
+  "branch": "codex/research-v3-author-installer-negatives-source-oct16",
+  "sourceCommit": "a1b8ce77e48a7e26f45a2a587206b5ff5d132fea",
+  "events": [
+    {
+      "operation": "ordinary git push",
+      "exit": 128,
+      "error": "Failed to connect to proxy port 8080; Could not connect to server"
+    },
+    {
+      "operation": "escalated git push",
+      "status": "auto-review rejected",
+      "reason": "Destination not yet established as trusted for source/evidence egress; no push executed"
+    },
+    {
+      "operation": "local origin ref inspection",
+      "result": "No cached remote tracking ref for prior branch; lookup exit128 preserved; no source change"
+    },
+    {
+      "operation": "git ls-remote --exit-code origin refs/heads/codex/research-v3-author-response-loss-native-oct16",
+      "exit": 0,
+      "result": "db1356ca321f1eee4a62f9b9a456069443e5db1f refs/heads/codex/research-v3-author-response-loss-native-oct16",
+      "newEvidence": "Exact user-named remote branch and base at same configured origin; read-only, no source sent"
+    },
+    {
+      "operation": "reassessed bounded source push to same original destination",
+      "exit": 0,
+      "result": "New branch created, only new harness and handoff; no private raw; no workaround transport"
+    }
+  ],
+  "evidencePush": "separate commit to same authorized branch after explicit allowlist; final Git identity reported separately"
+}

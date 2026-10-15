@@ -1,0 +1,64 @@
+{
+  "sourceCommit": "a1b8ce77e48a7e26f45a2a587206b5ff5d132fea",
+  "tree": "a5e17e339acf0a42fe2a7994f450f1688b306415",
+  "scope": "SOURCE_ONLY maker harness, no independent approval",
+  "files": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 1558,
+      "sha256": "db801868b63b6a7746a54d1942e4818501563c62b0f184d12fbcc938b85c4a35"
+    },
+    {
+      "path": "checks.json",
+      "bytes": 1012,
+      "sha256": "51195690c0c67b8f7fe571a08900004c67d6732dac2b6ac960442ca289453853"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 1497,
+      "sha256": "edc8e21c38f3eec7454cb8eb35e699549883a85ac67b29e5bb6614ed83513b27"
+    },
+    {
+      "path": "git-delivery.json",
+      "bytes": 1486,
+      "sha256": "d4894d9e5b498e0bffe6ada660db668b8f621acef4a97f8dbd1f92c3925da7fb"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 4770,
+      "sha256": "147b165d3b588351e14d2f429fca6d587b3ce214b08030d71f999dd60fbc29ee"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 717,
+      "sha256": "49fc1d7a7f06cbafc9961c819365560beef625d832b564b2be57a65a5d0628b5"
+    },
+    {
+      "path": "source-checks.mjs",
+      "bytes": 8708,
+      "sha256": "5af980ad4d9267e3a759c19e89a6ef96e317b726d51e1c1e6b314c26380f1c1a"
+    },
+    {
+      "path": "source-checks.stdout",
+      "bytes": 868,
+      "sha256": "24e40e3eaa0291ab1035353746e97f497b4244c2a075f3c7aad25eb4284fcb12"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 73331,
+      "sha256": "d584b33ce212580d177834ccd688e227b2fac314f34cb84af3efc92e002b8467"
+    },
+    {
+      "path": "unchanged-inputs.json",
+      "bytes": 80539,
+      "sha256": "d3dda68411e4a5a6d6f6f139c0f96cb7ad3764a527613e41f8df0b61e1c73715"
+    }
+  ],
+  "actualChecks": {
+    "syntax": 1,
+    "builtinsGroups": 14,
+    "native": 0
+  },
+  "nativeStatus": "3 children + parent NOT_RUN",
+  "priorRootReceipt": "432631871138faf3c83a6937c29a02da12e1f76478539c06e302fb2d9a584e9f"
+}

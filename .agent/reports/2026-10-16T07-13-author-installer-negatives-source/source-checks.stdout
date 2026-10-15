@@ -1,0 +1,15 @@
+PASS exact full SQL and middle byte reconstruction
+PASS all altered envelopes/content rejected
+PASS one exact synthetic config delta accepted
+PASS unchanged config cannot masquerade as drift
+PASS wrong/extra config drift rejected
+PASS body/owner/ACL/OID/default/role/row unknown drift rejected
+PASS four exact SQL successor body vectors available
+PASS exact four successor body deltas accepted
+PASS missing replacement/changed fifth function rejected
+PASS successor metadata and default ACL are never ignored
+PASS error waits for actual ReadyForQuery E event
+PASS wrong error/ready/success reject
+PASS connection close is not transaction-ready success
+PASS fixed three cases/no old test imports/no business invocation
+{"scope":"builtins-only exact-source extraction; no PG/socket/app/native import","groups":14,"pass":14,"fail":0,"native":"NOT_RUN","rssMaxKiB":35968}

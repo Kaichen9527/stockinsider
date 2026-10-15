@@ -1,0 +1,43 @@
+{
+  "workingDirectory": "/tmp/si-pubtail-o14",
+  "executed": [
+    {
+      "command": "/workspace/.tools/node22/node_modules/node/bin/node --check scripts/opportunity-v3/research-v3-author-installer-negative-native.test.mjs",
+      "stdout": "final-syntax.stdout",
+      "stderr": "final-syntax.stderr",
+      "exit": 0
+    },
+    {
+      "command": "/workspace/.tools/node22/node_modules/node/bin/node /tmp/author-installer-negatives-source-o16/checks.mjs",
+      "runs": [
+        {
+          "version": 1,
+          "exit": 1,
+          "meaning": "extractor stopped at an internal declaration; no groups executed"
+        },
+        {
+          "version": 2,
+          "exit": 1,
+          "meaning": "13 groups passed, final source-scanner false positive on safe witness label"
+        },
+        {
+          "version": 3,
+          "exit": 0,
+          "meaning": "14 groups PASS; corrected source scanner; no native/app/fixture imports"
+        }
+      ]
+    }
+  ],
+  "notExecuted": [
+    "PG",
+    "native entry",
+    "prior green suites",
+    "app imports",
+    "build",
+    "npm",
+    "HTTP",
+    "CI",
+    "deployment"
+  ],
+  "plannedNativeOnly": "RESEARCH_PREREQUISITE_PROFILE_ARTIFACTS=/tmp/author-installer-neg-o16 /workspace/.tools/node22/node_modules/node/bin/node --import ./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/research-v3-author-installer-negative-native.test.mjs"
+}
