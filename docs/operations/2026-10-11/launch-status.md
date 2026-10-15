@@ -1,5 +1,13 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-15 23:04台灣時間：Cloud durable author union真交付，remote68bc已核；下一Root精確source/SQL獨立審查，未派native
+
+同handle turn01a13ff7-13e1-72c1-b5f7-a92d9e25f305於15:01:11Z真completed/threadidle/cursor58df5d1d-e6e3-4df1-bae9-36cf61f53912:8；remote codex/research-v3-author-durable-union-oct15真head68bc9c83e1c41796a1a700f7bf197eae2dd42b9f。Maker交付source79fd6e001ec77f58618d784948f9097e785b8f31/receipt a272b099d2152e4a1319889a6313a63c098e154f36fbd7b280bab9046109666c，宣告四既有函數additive union/assign+durable receive+read recovery、32sourcechecks與strict TS PASS、131Gitinputs/79private raw/9safe receipts。這些內容尚待Root fetch逐byte核與全diff/SQL獨立審查；不能把maker32當Root/native/protected/正式批准，不能重跑已完5609/74912或直接派未審新SQL的native。
+
+下一優先同branch exactsource/evidence/rawscope/predecessor+postcondition/owner-security-ACL不變/v2原arm與全部source/principal/lease/reservation/hash/clocks/response-loss guards審查，必要focused Root checks後才單一actual isolated PG/guardedHTTP author lifecycle/replay/ACL/rollback/negative。未改SQL到production；active四caller/semantic兩article/reviewer/Q-R/reviewpack/atomicpublication/wholeclosure仍待。Root本輪DD binary-only部署與基本桌手機驗收已真成功（下段完整收據），current/writerdd598/lease0為14:51最後query；該one-shot deploy已消耗禁重跑。Main93e44475/PR370..382終態保持、heartbeat ACTIVE/fullgoal active，不把app部署當兩formal文章發布。
+
+Root report .agent/reports/2026-10-15T23-04-durable-author-delivery-pending-root-review/，receipt 27f9d02987de6a7c8aa382d7a48c50ffcd44244c62235b10c57c56e84ba54763。
+
 ## 2026-10-15 22:58台灣時間：approved DD原包已真部署/current與唯一writer切到dd598，桌手機基本驗收PASS；兩formal研究鏈仍未發布
 
 Root先核main93e44475/progressc48b3bd8/乾淨工作樹與同Cloud source-only turn01a13ff7/cursor58df5d1d-e6e3-4df1-bae9-36cf61f53912:7真inProgress；repo GHA active run列表[]，沒有重派Cloud、重跑PR370..382終態或新heavy native/build。Merged operator93e444的三執行檔逐byte等已審source1e1ded2b：deploy SHAe7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f/support f0fcfb7b/profile4bcbf42a。應用仍immutable approved dd59817f750684b093965f539dd4de466be13077/directc2b146adb6d03814f2bd9a7af72baf003bb48812，不冒operator merge或5609文章source就是app批准。

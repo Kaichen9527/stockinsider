@@ -1,0 +1,16 @@
+{
+  "files": [
+    {
+      "path": "cloud-compact.json",
+      "bytes": 759,
+      "sha256": "14226af90c03dadf4a39a0b8989633db372806d423a5f7317bfbc85b8ed832f8"
+    },
+    {
+      "path": "launch-note.md",
+      "bytes": 1586,
+      "sha256": "af0a8f7dcc61f9590e2976157b322d9fea6dd62a3a3fe377497c413b62b9d095"
+    }
+  ],
+  "sourceBytesIndependentlyVerified": false,
+  "nativeDispatched": false
+}
