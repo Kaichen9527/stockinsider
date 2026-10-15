@@ -1,0 +1,64 @@
+{
+  "actualGitInputs": 289,
+  "inputBytes": 9752392,
+  "publishedFilesIncludingReceipt": 11,
+  "publishedBytesIncludingReceipt": 183588,
+  "privateRawInventoryOnly": {
+    "count": 75,
+    "bytes": 150040280,
+    "fullContentsObtained": false
+  },
+  "rootRanNative": false,
+  "rootReviewScope": "exact Git inputs and public witness consistency against executed harness; not independent native or formal author approval",
+  "scopedIntegrationFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "cases": [
+    {
+      "symbol": "2409",
+      "FDdelta": 9,
+      "inputCharge": {
+        "count": 2,
+        "bytes": 234998
+      },
+      "authorResultBytes": 205189,
+      "sixStagesPublicHashClocksChargesMatch": true
+    },
+    {
+      "symbol": "2383",
+      "FDdelta": 7,
+      "inputCharge": {
+        "count": 2,
+        "bytes": 144349
+      },
+      "authorResultBytes": 135389,
+      "sixStagesPublicHashClocksChargesMatch": true
+    }
+  ],
+  "zombies": [
+    {
+      "pid": 657795,
+      "comm": "postgres",
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    },
+    {
+      "pid": 657838,
+      "comm": "postgres",
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    }
+  ],
+  "localAvailable": 3150929920,
+  "pending": [
+    "legacy/negative/author response loss",
+    "HTTP/four callers/reviewer/Q-R/reviewpack/atomicpublication/whole closure",
+    "semantic/formal two articles and full original goal"
+  ]
+}

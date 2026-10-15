@@ -1,0 +1,29 @@
+{
+  "kind": "Root exact Git/public witness integration review; not Root actual native/formal approval",
+  "executionBase": "1df8d8ca200b6dfab65190016412ce14eac6e330",
+  "harness": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "evidence": "9dc497ff98350f507411cb4cd5e87cc616b11dca",
+  "files": [
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-native-review-and-loss-source/review.json",
+      "bytes": 1489,
+      "sha256": "bc207b49629c96c28dff88587c2b6e780e21e0aaf8b349c679e9309ee1d24d04"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-native-review-and-loss-source/dispatch.txt",
+      "bytes": 5800,
+      "sha256": "d75076ab91122f84d0afc17e3097d79cfff8cd16bcafc7b89bd131c99a04aa7e"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-native-review-and-loss-source/cloud-snapshot.json",
+      "bytes": 675,
+      "sha256": "c6665e6f60def6ccca8ceb68c3215bad301ea63411a7dece3e175bbf837dc5cf"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-native-review-and-loss-source/launch-note.txt",
+      "bytes": 4630,
+      "sha256": "501b9e65b564ceba8381d5b19ffb8dd5b3425b8ef3bb84b80e38c2183c22f629"
+    }
+  ]
+}
