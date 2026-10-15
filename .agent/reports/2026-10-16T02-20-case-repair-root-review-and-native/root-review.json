@@ -1,0 +1,34 @@
+{
+  "recordedAt": "2026-10-15T18:18:57.795717+00:00",
+  "source": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "evidence": "e3e433a18c4d67ca99ce61c89b4a568355b4f187",
+  "receiptSHA256": "71e8f7c71ddf30426dbad89245ac0f90a4dbc4d1abff6c322c1d983a23333ec3",
+  "actualGitInputs": 289,
+  "actualGitBytes": 9748681,
+  "publishedFiles": 10,
+  "publishedBytes": 103402,
+  "privateRawFiles": 13,
+  "privateRawBytes": 236941,
+  "privateRawContentsObtained": false,
+  "exactThreeParenthesesAndFourHashFieldsOnly": true,
+  "originalReceiveV2ArmByteEqual": true,
+  "other287InputsByteEqual": true,
+  "changedBodyHashes": [
+    {
+      "name": "read_research_author_result_v2",
+      "old": "e5889572355ba71c77f0d12c5af867cf65e88d00161d781bbd5051e43f674233",
+      "new": "d3ca7e0e39022052866e7837bd5232198bf6cd8f40992d0c69cc54558e20cfd9"
+    },
+    {
+      "name": "receive_research_author_result_v2",
+      "old": "97f361883edc0d8cf61e696775c7cdb377272979c61e2604c3ec881497576c41",
+      "new": "3889869f27b2761b166621ee1d4ce13ae3948488bca2c5a65783a6448008b52d"
+    }
+  ],
+  "sqlSHA256": "18b0e4814410601ab8b254f274a7fe085230b922656038cc1f8fe2539c056f76",
+  "profileSHA256": "19526e0199a406857de4c9869afd3cb243f74603ee960f06bc5e812c5d291243",
+  "review": "scoped grammar repair zero new P0/P1/P2; actual SQL/native pending",
+  "RootRuntimeTests": false,
+  "localAvailableBytes": 2954743808,
+  "goal": "active"
+}

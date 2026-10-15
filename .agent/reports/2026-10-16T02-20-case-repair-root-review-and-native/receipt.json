@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-10-15T18:20:45.055974+00:00",
+  "source": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "evidence": "e3e433a18c4d67ca99ce61c89b4a568355b4f187",
+  "reviewScope": "three CASE expressions and required two successor body pins only; native pending",
+  "ownedTurn": "01a140ca-b783-75a8-917c-1aacb047acfa",
+  "goal": "active",
+  "formalPublication": false,
+  "files": [
+    {
+      "path": "ROOT-REVIEW.md",
+      "bytes": 3446,
+      "sha256": "12a1039b4dff7be8221fe4a25d16f205c37c069db342ce5ecaf20545f7ef68b5"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 650,
+      "sha256": "628eec0daa6dd8098f1a503e17480e0d173f32b115a25d85f4058467209eb179"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 4034,
+      "sha256": "dfcef95c176001d65d453a998dad25ac4ad756aa13a0b91fec0602c3c4593f51"
+    },
+    {
+      "path": "root-review.json",
+      "bytes": 1400,
+      "sha256": "231c94d5b2e2f4497ad48a68684be9c9352a9805002acf7442eb919e9380b46c"
+    }
+  ]
+}
