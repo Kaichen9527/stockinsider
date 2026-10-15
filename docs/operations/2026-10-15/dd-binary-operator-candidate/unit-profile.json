@@ -1,0 +1,20 @@
+{
+  "schema": "dd-operator-fixed-unit-profile-candidate-v1",
+  "units": [
+    {
+      "name": "stockinsider-web-standalone.service",
+      "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb",
+      "bytes": 1312,
+      "origin": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service"
+    },
+    {
+      "name": "stockinsider-internal-worker.service",
+      "sha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e",
+      "bytes": 1374,
+      "origin": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "path": "deployment/vps/systemd/stockinsider-internal-worker.service"
+    }
+  ],
+  "approved": false
+}
