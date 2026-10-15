@@ -24,6 +24,7 @@ export async function withLegalVersionedFixture(symbol,options,run){
   stage='actual26';c=await connect();await applyPublicationTailToEngineeringClient(c,loadPublicationTail(root));clients.delete(c);save('prerequisites.json',{actual50:true,actual26:true,capturedSha:sha(captured),syntheticBootstrapRoles:true,formalPeer:false});
   c=await connect();stage='candidate migration';await c.query(fs.readFileSync(path.join(root,'migrations/20261014_research_versioned_input_candidate_v3.sql'),'utf8'));
   await close(c);c=await connect();stage='explicit local prerequisite';save('profile.json',await applyVersionedPrerequisiteEngineering(c));clients.delete(c);c=await connect();
+  if(options.afterPrerequisite!==undefined){assert.equal(typeof options.afterPrerequisite,'function');stage='owned native prerequisite inspection';await options.afterPrerequisite({client:c,connect,close,save,setStage:value=>{stage=value;}});}
   stage='binding engineering registration';
   const sourceFiles=['web/src/lib/research-versioned-complete-input.ts','web/src/lib/research-versioned-input-binding.ts','web/src/lib/research-versioned-input-request.ts','web/src/lib/research-versioned-input-legacy-response.ts'];
   const input=sourceFiles.map(p=>({path:p,sha256:sha(fs.readFileSync(path.join(root,p)))})),hs=sha(bindingCanonical(input)),hc=sha(bindingCanonical({executor:'actual-native-node-engineering',node:process.version,nodeSha:sha(fs.readFileSync(process.execPath)),input}));const texts=[];
