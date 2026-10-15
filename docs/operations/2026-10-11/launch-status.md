@@ -1,3 +1,9 @@
+## 2026-10-16 03:18台灣時間：同owned Cloud唯讀觀測短暫host-change錯誤已同handle恢復，工作仍活動未重派
+
+一次compactwait回Task host changed during passive read；Root沒有重啟或重派，立刻同thread01a106b8-a883-7185-9962-f7372109a093/hostdurable再查，cursor真reset為a486da2e-ee39-4cdc-99ec-d2927690772c:1，latestturn仍同01a140fc-138d-7387-89a5-f4e1466109d5/inProgress，threadactive。後同newcursor bounded45s wait無變，不能把觀測錯誤/timeout/cursorreset當完成或失敗。Owner仍10min source-only author synthetic metadata fixture，未交付新source；下一先此samehandle，不重派或重跑完成native。Fullgoal/heartbeat ACTIVE，正式兩文章仍pending。
+
+只保存此read-only觀測；未新VPS/DB/HTTP/CI/PR/部署/原source修改。原03:15實質native審查/installer component與整run0PASS2FAIL範圍如下保留。Report .agent/reports/2026-10-16T03-18-cloud-passive-read-cursor-reset/，receipt 419d2228895a1561e37698978b3ec22c84f7bad0ca7973e39907bc5f17fa7e42。
+
 ## 2026-10-16 03:15台灣時間：c08 union真COMMIT/四bodymetadata驗證通過，overall native仍0PASS2FAIL於author source fixture；Root核289source後唯一Cloud補test-only metadata
 
 Root先核remote main93e44475/progress5e37fa64/乾淨工作樹，Cloud turn01a140ca於18:25:18Z真completed/threadidle/cursor58df5d1d-e6e3-4df1-bae9-36cf61f53912:22。Executionbasee3e/productc08/harness0a0不改，evidence07b913182a77e9507a608e457df36b17b02562fc/receipt484ca8371414020d14ca808f54234a44a3bf862d7dce79fca175c76ade96b3cb已push。Root逐byte核289actualGitinputs/9748681bytes與9publishedreceiptfiles/123021bytes，40private raw73640234bytes只核inventorycount/sum/hashformat，未取contents，不冒Root40raw verified或Root實跑native。

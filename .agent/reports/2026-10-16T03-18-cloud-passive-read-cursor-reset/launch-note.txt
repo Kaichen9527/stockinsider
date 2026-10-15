@@ -1,0 +1,6 @@
+## 2026-10-16 03:18台灣時間：同owned Cloud唯讀觀測短暫host-change錯誤已同handle恢復，工作仍活動未重派
+
+一次compactwait回Task host changed during passive read；Root沒有重啟或重派，立刻同thread01a106b8-a883-7185-9962-f7372109a093/hostdurable再查，cursor真reset為a486da2e-ee39-4cdc-99ec-d2927690772c:1，latestturn仍同01a140fc-138d-7387-89a5-f4e1466109d5/inProgress，threadactive。後同newcursor bounded45s wait無變，不能把觀測錯誤/timeout/cursorreset當完成或失敗。Owner仍10min source-only author synthetic metadata fixture，未交付新source；下一先此samehandle，不重派或重跑完成native。Fullgoal/heartbeat ACTIVE，正式兩文章仍pending。
+
+只保存此read-only觀測；未新VPS/DB/HTTP/CI/PR/部署/原source修改。原03:15實質native審查/installer component與整run0PASS2FAIL範圍如下保留。Report .agent/reports/2026-10-16T03-18-cloud-passive-read-cursor-reset/，receipt 419d2228895a1561e37698978b3ec22c84f7bad0ca7973e39907bc5f17fa7e42。
+

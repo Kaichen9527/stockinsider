@@ -1,0 +1,11 @@
+{
+  "recordedAt": "2026-10-15T19:18:27.213884+00:00",
+  "scope": "read-only same owned Cloud handle recovery; no new work dispatched",
+  "files": [
+    {
+      "path": "observations.json",
+      "bytes": 1139,
+      "sha256": "0f171e10ecb1b073b89cf99debad3d1cfe67010bab6174ac6f42f78ea8a81d24"
+    }
+  ]
+}
