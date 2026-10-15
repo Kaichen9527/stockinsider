@@ -1,3 +1,19 @@
+## 2026-10-16 07:39台灣時間：installer三負例source Root精確審查閉合，唯一Cloud開始actual native
+
+先核remote main93e44475/progress279418b2與乾淨source/progress樹；前goalturn分類verified wait。同Cloud source-only turn01a141d7於23:24:50Z真completed/threadidle/lasttoolcompleted/cursor696e4b51-cb6f-4b4d-a68f-76849579caa4:2。Source a1b8ce77e48a7e26f45a2a587206b5ff5d132fea/evidence ea878a1e35e038baa7b2241028380686fa7802b6/receipt367f6274897838e80e7e7bd83152bccc07a0eea20c59a4dd879853e5a9ba64b7真push。Root逐byte核293actualGitinputs9812469bytes、11publishedreceiptfiles176417bytes；30private raw182242bytes只核inventorycount/sum/hashformat，未取得全部contents，不冒Root30raw verified。
+
+Root讀完整146line新增entry/handoff/14groupprobe，delta只newentry+handoff，原291inputs/產品c08/SQL/profile/helper/relay/已綠harness不變。MetadataQuery逐byte等6e0；自己的memory checker只剝SQL exact BEGIN;newline/COMMIT;newline得到middle64004bytes/SHA7337ee90fd2fc99aa4bd449dc820dd06709e79b23f4e73cb265153878a3757f1，重建全SQL byteexact/SHA18b0e481保持。Scoped sourceintegration零新P0/P1/P2，非actualPG/Rootnative批准。新source用實際ErrorResponse query與ReadyForQuery E兩事件settle，不將queryreject當transactionstate；不同ROobserver RR全snapshot、writer真T/E/I與完整13tables/metadata/definitions/原6body皆必驗。Busy實際sessionholder/grantedlock；drift只有限application_name proconfig且完整state差異重建；forcedrollback私有transactionenvelope執行原middle/4body/postconditions後22012→ROLLBACK，不冒原script COMMIT。
+
+Maker14builtinsgroups+syntax只source checks；native3children+parent全NOT_RUN。初extractor工具RED、13groups後scannerRED與final14分開保留，不改產品追綠或加總counts。原sourcepush proxyFAIL/auto-review暫拒與後續同origin exact已授權branch唯讀證據使safe boundedpush獲重新評估成功的歷史均保留；Root未重做push例外或改transport。Root source memory核對session13929已真exit0才接依賴；進程名大小寫rg未匹配exit1只tooling observation，候選進程查明非本件後未操作/取消/停其他App，不當產品FAIL或capacity因果。Rootfreshavailable7254908928仍<原8589934592，無RootNode/app/PG/native/build/heavy/cleanup/刪cache資料/降floor，容量變化原因未知。
+
+前turn真終態及Root review後只派唯一25min actual isolated PG17.11/Node22.14，branch codex/research-v3-author-installer-negatives-native-oct16/baseea878，exactharness a1b8/SHAcb700b76aedad901139ccf8eb3c7f475327bde38a8a5d8f1d7aef898a993f6be，產品exactc08。Newturn01a141ef-0ab9-76e1-b834-1bbde9b05e73/cursor696e4b51-cb6f-4b4d-a68f-76849579caa4:3真inProgress/threadactive；先同handlecompactwait、不重派活動。Owned僅execution/evidence，一次mandatoryFSpreload serialnewentry/3case+parent預期4test，不是2issuer3。所有source/helper/profile/expected/hash/ACL/roles/locks/guards凍結，fresh自己workspace/tmp8GiB及singleheavy/RSS准入，任一RED保存後停止依賴鏈，不偷修或重跑追綠。原fixture defaultprotocol_only必要neutralsetup不算businessfirstseal/author成功。尚無本installer native結果，舊author兩套各3PASS不移作本case綠。
+
+Legacy77/compatiblev2 author差異/principal-lease-invocation-caps-rights負例、actual四caller/不同reviewer/Q-R/reviewpack/atomicpublication/wholeS-C-B-Q-R-A/逐claimsemantic/formal兩文章仍待。完整來源Top20/合格技術觀察/策略/正式研究排程/fixedpeer-install未完成。DD部署與桌手機基本驗收及消耗one-shot終態不碰，禁重deploy/stream/activate/main169-deploy.sh；current/writerdd598/lease0仍14:51最後真query。Main93/PR370..382終態不碰，本輪無VPS/productionDB/role/ACL/HTTP/資料batch/CI/PR/研究排程操作。Fullgoal active/heartbeat ACTIVE，原RED不覆寫、不縮成工程完成。
+
+Root report .agent/reports/2026-10-16T07-39-installer-source-review-and-native/。
+
+Root receipt18666c7f76226f28a76184efd4e4f79727575567280437d30bb015895d4f739e；staged diff-check結果由實際命令另記，歷史RED不覆寫。
+
 ## 2026-10-16 07:22台灣時間：installer source同handle唯讀觀測恢復，工作仍活動未重派
 
 本輪先核remote main93e44475/progress5e3b800e與乾淨source/progress樹；前goalturn分類verified wait。一次compactwait回Task host changed during passive read，立即同thread01a106b8-a883-7185-9962-f7372109a093/hostdurable重查，cursor reset為696e4b51-cb6f-4b4d-a68f-76849579caa4:1；latestturn仍01a141d7-4995-706e-87fd-0656a58c1099/inProgress，threadactive。再同newcursor bounded45s wait確認不變。觀測錯誤/timeout/cursorreset不是完成或工作失敗，沒有重啟或重派。Owned仍30min installer三負例SOURCE-ONLY，無新source交付/native結果。下一先同newhandlecursor，不重跑已綠author native。

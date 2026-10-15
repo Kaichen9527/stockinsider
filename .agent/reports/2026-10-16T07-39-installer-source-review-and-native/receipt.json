@@ -1,0 +1,28 @@
+{
+  "kind": "Root exact Git/source/public receipt integration review; not actual native/formal approval",
+  "source": "a1b8ce77e48a7e26f45a2a587206b5ff5d132fea",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "evidence": "ea878a1e35e038baa7b2241028380686fa7802b6",
+  "files": [
+    {
+      "path": ".agent/reports/2026-10-16T07-39-installer-source-review-and-native/review.json",
+      "bytes": 966,
+      "sha256": "b63bf11c76ae5e3cfd21653dcbdab2dba8494238fefd42ee0a60a4c46ea3378a"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-39-installer-source-review-and-native/dispatch.txt",
+      "bytes": 4995,
+      "sha256": "cd42e6c7b4ef6d8c7ed55fce4316d6d0ce6c6392d2b0c707c292c5bc0a59fc05"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-39-installer-source-review-and-native/cloud-snapshot.json",
+      "bytes": 675,
+      "sha256": "808a363af7da3f656cd25d92b2e038ceac12fedb9425f91ca6fab931e363c7d9"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-39-installer-source-review-and-native/launch-note.txt",
+      "bytes": 4025,
+      "sha256": "e251d0d07d71fdd57438a996fad5e8f9b8cbf9e2695ee5fb93867457d95f4ef1"
+    }
+  ]
+}

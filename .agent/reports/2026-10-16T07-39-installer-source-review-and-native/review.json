@@ -1,0 +1,30 @@
+{
+  "source": "a1b8ce77e48a7e26f45a2a587206b5ff5d132fea",
+  "evidence": "ea878a1e35e038baa7b2241028380686fa7802b6",
+  "actualGitInputs": 293,
+  "inputBytes": 9812469,
+  "originalInputsUnchanged": 291,
+  "publishedFilesIncludingReceipt": 11,
+  "publishedBytesIncludingReceipt": 176417,
+  "privateRawInventoryOnly": {
+    "count": 30,
+    "bytes": 182242,
+    "fullContentsObtained": false
+  },
+  "newHarnessSha256": "cb700b76aedad901139ccf8eb3c7f475327bde38a8a5d8f1d7aef898a993f6be",
+  "metadataQueryByteExact": true,
+  "derivedTransactionMiddle": {
+    "bytes": 64004,
+    "sha256": "7337ee90fd2fc99aa4bd449dc820dd06709e79b23f4e73cb265153878a3757f1",
+    "fullReconstruction": true,
+    "originalFullSQLSha256": "18b0e4814410601ab8b254f274a7fe085230b922656038cc1f8fe2539c056f76"
+  },
+  "sourceIntegrationFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "rootRuntimeOrNative": false,
+  "native": "3 children+parent NOT_RUN",
+  "localAvailable": 7254908928
+}
