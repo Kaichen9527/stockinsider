@@ -1,0 +1,32 @@
+{
+  "recordedAt": "2026-10-15T19:15:17.767940+00:00",
+  "productSubject": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "evidence": "07b913182a77e9507a608e457df36b17b02562fc",
+  "overallNativePassed": false,
+  "fixtureReview": "REQUEST_CHANGES",
+  "ownedTurn": "01a140fc-138d-7387-89a5-f4e1466109d5",
+  "goal": "active",
+  "formalPublication": false,
+  "files": [
+    {
+      "path": "ROOT-REVIEW.md",
+      "bytes": 4397,
+      "sha256": "6932c777871f0df6a38c5db4e7cd008fdc472db669a35ae87618a2e76a7d81a1"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 656,
+      "sha256": "22d9e87210e4c9694554992d539de297da3cb283c71c7cc767093bf09e4f1922"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 4488,
+      "sha256": "87e99e369e616fab4383eb0459c5779808b824d724491912c86e57d124ea3588"
+    },
+    {
+      "path": "root-review.json",
+      "bytes": 1201,
+      "sha256": "114e4f75d4cd3721603ae1fce8d9df2ba4c3b4e14712e961fff82cd673655fe6"
+    }
+  ]
+}

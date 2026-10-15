@@ -1,0 +1,17 @@
+## 2026-10-16 03:15台灣時間：c08 union真COMMIT/四bodymetadata驗證通過，overall native仍0PASS2FAIL於author source fixture；Root核289source後唯一Cloud補test-only metadata
+
+Root先核remote main93e44475/progress5e37fa64/乾淨工作樹，Cloud turn01a140ca於18:25:18Z真completed/threadidle/cursor58df5d1d-e6e3-4df1-bae9-36cf61f53912:22。Executionbasee3e/productc08/harness0a0不改，evidence07b913182a77e9507a608e457df36b17b02562fc/receipt484ca8371414020d14ca808f54234a44a3bf862d7dce79fca175c76ade96b3cb已push。Root逐byte核289actualGitinputs/9748681bytes與9publishedreceiptfiles/123021bytes，40private raw73640234bytes只核inventorycount/sum/hashformat，未取contents，不冒Root40raw verified或Root實跑native。
+
+單次18:20:40–18:20:59Z PG17.11/Node22.14整體真0PASS2FAIL（AUOchild+parent）零cancel/skip/todo，EMC/authorreceive未執行。Run內確已達到：原完整pristine/JS-DBcodec/cb22/4afc與6原body匹配；exactc08 union真正COMMIT、獨立READONLY observer確認、exact4body變到source-derived值且其他OID/owner/security/searchpath/ACL/grantor/default/catalog/namespace/roles保持，installed-firstonlyrepeat真拒絕且ROLLBACK不改installedstate。這是失敗run中component證據，不充額外PASS、整native綠或正式金融SQL安裝。
+
+AUO原合法roster/priority/enqueue/claim/reservation/prepare/firstseal真執行，9sourceFD opened9/closed9；prepared count1/2582bytes→firstseal count2/234995bytes（revision232413）。Authenticated privateRequest→actualservice-role assign已有durable assignment1，但後續packet真P0001 research_author_packet_source_rights_or_scope，composition沒有成功、result0。Root ownchecker核公開3snapshots×9table count/hash、fullledger hash與獨立audit hash一致、firstseal→failure全原prep/revision row-request-input-clocks/charge/FD不改；只有authorassignment出現。沒有成功receive/read/replay或正式author/HTTP執行可稱。
+
+Root讀exacthelper:38與原packetguards，fixture已有rights_boundary public_citation/subject_scope company_mentions，但缺visibility/claim_status觸發原guard；catalyst/risk亦缺，下一contentguard尚未到不當另一FAIL。這些是source literal推導，不冒已保存完整source_raw row逐欄現查。Root REQUEST_CHANGES P0=0/P1=0/P2=1僅test-only fixture不足，產品原拒絕正確，不改guard/rights/caps或捏造publisher/role權利。
+
+前turn真終態後只派一件10min SOURCE-ONLY codex/research-v3-author-source-fixture-oct16/base07b，newturn01a140fc-138d-7387-89a5-f4e1466109d5/cursor58df5d1d-e6e3-4df1-bae9-36cf61f53912:23真inProgress（短暫threadidle不等完成）。Owned僅helper有限sourceProfile protocol_only(default)/author_packet opt-in，以及本authorharness選用和bounded既有ROobserver欄位check；固定四項syntheticmetadata必在最初INSERT及任何seal前具備，原default字節行為保持、unknown mutation前拒絕。不得改sealedsource/productSQL/TS/profile/hash/ACL/角色/guard、不得PG/native或自接native；交付Root exactreview才newfixtureinputnative。不重派活動，先同handlecompactwait。
+
+本run sampledRSS843800576、workspace最低8592031744/tmp15057043456均過原8GiB，3backends652339/652340/652341 absent、ownedcluster/socketremoved/shutdownlogged，postmaster652327 PID1 RSS0 zombie保留；ownedsecure roots只有原finally刪除、沒有獨立後pathname記錄，不能稱完整rootabsence獨立證明。Root最新localavailable2425028608<8589934592，未heavy/native/build/cleanup/刪cache資料/停別App/降floor，原因未知；Cloud需fresh自己floor。原DD部署/桌手機基本驗收與消耗one-shot終態保持，不再deploy/stream/activation/main169-deploy.sh，current/writerdd598/lease0仍14:51最後真query；Main93e44475/PR370..382終態不碰，本輪無VPS/productionDB/role/ACL/HTTP/資料batch/CI/PR/研究排程操作。
+
+Fullgoal active/heartbeat ACTIVE；兩formal研究仍未發布，author最小鏈/legacy77compat/rollback/busy/drift/ACL/rights/真response-loss、actual四caller/reviewer/Q-R/reviewpack/atomicpublication/wholeclosure與逐claim semantic兩文章、完整來源Top20/技術觀察/策略/正式研究排程/fixedpeer-install都仍待。原nativeRED不覆寫、不加總，正常修補安靜。
+
+Root report .agent/reports/2026-10-16T03-15-installer-commit-author-fixture-red/。

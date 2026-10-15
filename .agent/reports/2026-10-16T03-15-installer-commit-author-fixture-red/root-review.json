@@ -1,0 +1,36 @@
+{
+  "recordedAt": "2026-10-15T19:12:32.581510+00:00",
+  "executionBase": "e3e433a18c4d67ca99ce61c89b4a568355b4f187",
+  "productSubject": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "harnessSubject": "0a0ea4ccc618df2d86ceb4de4bc7eff537ff3f77",
+  "evidence": "07b913182a77e9507a608e457df36b17b02562fc",
+  "receiptSHA256": "484ca8371414020d14ca808f54234a44a3bf862d7dce79fca175c76ade96b3cb",
+  "actualGitInputs": 289,
+  "actualGitBytes": 9748681,
+  "publishedFiles": 9,
+  "publishedBytes": 123021,
+  "privateRawFiles": 40,
+  "privateRawBytes": 73640234,
+  "privateRawContentsObtained": false,
+  "native": {
+    "pass": 0,
+    "fail": 2,
+    "EMC": "NOT_RUN",
+    "authorReceive": "NOT_RUN"
+  },
+  "installerCommitPublicWitnessConsistent": true,
+  "exactFourBodySixObservedHashBindings": true,
+  "threeSnapshotsNineTablesLedgerChargeFdClocksConsistent": true,
+  "assignmentCount": 1,
+  "resultCount": 0,
+  "sourceDerivedFixtureMissing": [
+    "visibility",
+    "claim_status",
+    "catalyst",
+    "risk"
+  ],
+  "fixtureReview": "REQUEST_CHANGES; P0=0 P1=0 P2=1 test-only fixture incompleteness, product guard retained",
+  "RootNativeRun": false,
+  "localAvailableBytes": 2425028608,
+  "goal": "active"
+}
