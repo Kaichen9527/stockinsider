@@ -1,0 +1,48 @@
+{
+  "code": "42601",
+  "message": "syntax error at end of input",
+  "where": "PL/pgSQL function inline_code_block line 261 at EXECUTE",
+  "sourceExecuteLine": 268,
+  "failedReplacement": "read_research_author_result_v2(jsonb,uuid,text,text)",
+  "replacementSha256": "795c67216728a28b1f77b044740a1df108091016257fdd4c1d17f2d4a088d2c4",
+  "serverQueryEqualsExactSource": true,
+  "serverErrorCharacter": 26960,
+  "characterMapsToSourceLine": 281,
+  "sourceExcerpt": [
+    {
+      "line": 278,
+      "text": " IF p_request->>'expectedCalculatorExecutionHash'<>'77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41' THEN"
+    },
+    {
+      "line": 279,
+      "text": "  revision:=public.research_author_assignment_context_v2(p_request,p_revision_id,p_input_hash,p_principal);"
+    },
+    {
+      "line": 280,
+      "text": "  IF saved.payload->>'schemaVersion' IS DISTINCT FROM CASE revision->'canonical_payload'->>'schemaVersion'"
+    },
+    {
+      "line": 281,
+      "text": "    WHEN 'research-article-input-v3' THEN 'research-author-result-v3-candidate'"
+    },
+    {
+      "line": 282,
+      "text": "    WHEN 'research-article-input-v2' THEN 'research-author-result-v2' END"
+    },
+    {
+      "line": 283,
+      "text": "   THEN RAISE EXCEPTION 'research_author_result_stored_version';END IF;"
+    },
+    {
+      "line": 284,
+      "text": " END IF;"
+    },
+    {
+      "line": 285,
+      "text": " IF saved.payload->>'schemaVersion'='research-author-result-v3-candidate' THEN"
+    }
+  ],
+  "interpretation": "Server reaches the third EXECUTE after predecessor checks; the logged character points to the first THEN of the unparenthesized CASE in the IF comparison. CASE/IF delimiter ambiguity is source-based diagnosis, not independently confirmed by a modified PG query. No repair or rerun was performed.",
+  "prior42883NotRepeated": true,
+  "firstTwoReplacementExecution": "Control-flow evidence only; no in-transaction changed-body snapshot was captured before this error."
+}

@@ -1,0 +1,153 @@
+{
+  "localPrivateRoot": "/tmp/author-durable-repaired-o16",
+  "count": 29,
+  "bytes": 72892822,
+  "files": [
+    {
+      "path": "binaries.json",
+      "bytes": 1629,
+      "sha256": "22a35294a8b4b814c5b1b49f1f0873750ee95be6e850e1686a35a856d9d1996f"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 2120,
+      "sha256": "48d5143e67c768932f5b6d3bd902a737c64ab165796b1519b4787e73e96c6e34"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 672,
+      "sha256": "647a70158d7e7e059db78df6704a6ee3deb9b9452139f3d41b78282d1845ee85"
+    },
+    {
+      "path": "diagnosis.json",
+      "bytes": 1994,
+      "sha256": "6eafb8b8a0754e1ef343073ce95dbf0aa7388ea082a0b6f5e14c558d9f485927"
+    },
+    {
+      "path": "failing-replacement-source.sql",
+      "bytes": 2140,
+      "sha256": "a09a22c1a84475f7b7ed94fdd5466c545f964a95bc38fd9373b73b2688eb4ad8"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-cleanup.json",
+      "bytes": 123,
+      "sha256": "37bfea5d60fedec53993d47a3f58c7193ad3a99640fe70a48927b0f3f4f65c47"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-cluster-absent.json",
+      "bytes": 97,
+      "sha256": "4f4d01e6c45517fd2aa00720327cf87768e6b910c65a1f1daece440b699894da"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-failure.json",
+      "bytes": 199,
+      "sha256": "1f5e2709e144aea2b1c2f2b414d6acffa18abdd4f460e79d06b9074339028549"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-before-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-codecs.json",
+      "bytes": 581,
+      "sha256": "5cd8f502264ce1d8b19b824ec7b58c7611e53d6bebcde21b695c2f1f35e25415"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-connections.json",
+      "bytes": 73,
+      "sha256": "4590130522d4ec70e3fe68516326025c192aed48bfc2b7b0851d0c6dde71eedb"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-original-error.json",
+      "bytes": 220,
+      "sha256": "1e57b45ef57134c01ab6bc9d4f3f33323b7dc726d658672066964a00d32f71be"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-rejected-after-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-rejected-witness.json",
+      "bytes": 937,
+      "sha256": "534f763dc22bb2e139163d7f9eef12ea963692af9ad8bb6e6756479ab236205b"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-postgres-before-cleanup.log",
+      "bytes": 67555,
+      "sha256": "2fc681677aaa9ad802d58d69bc723ba1e7d9671716b52df5d0655ddd6f014faf"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-postgres.log",
+      "bytes": 67706,
+      "sha256": "b778300983d41c6407bab1aa85aee888384800230f6837514f9027e1789166d7"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-rpc-fd-order.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 794,
+      "sha256": "1aef163072b4a8b0560d3aeb4620804100cd52fc4a3362f0216de1f1b8ca6409"
+    },
+    {
+      "path": "native.samples.jsonl",
+      "bytes": 43457,
+      "sha256": "88efbd4905a9b4e044645b310b537eefd27ae0fd9ead8d0efe37506b09bfea49"
+    },
+    {
+      "path": "native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native.stdout",
+      "bytes": 3619,
+      "sha256": "40bf9949554ea8f32e62f601eaf2daf5c84338b4b650ebaebe57513e618cfa14"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 11511,
+      "sha256": "e27eb0212eb0363b0343e138268afc0048e98cbdb2d7e0d895b49a4a199bb599"
+    },
+    {
+      "path": "run.py",
+      "bytes": 3336,
+      "sha256": "71253d7397a1b0261b5fdebbcf6d9468f04e4979a073ffd3fea2a58f7dc02fec"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 83252,
+      "sha256": "4e6d0114619bea86037eb754868182a3abc628f5952ada2f926b3e251c4c3581"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 444,
+      "sha256": "d39257ccd21a7a90093058ff1130727ff0ed05e7bd838ef4437a76387dd1c64f"
+    }
+  ],
+  "privateBytesNotPublished": true
+}

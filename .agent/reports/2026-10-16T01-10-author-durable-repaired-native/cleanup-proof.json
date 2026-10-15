@@ -1,0 +1,126 @@
+{
+  "processes": [
+    {
+      "pid": 648902,
+      "comm": "node",
+      "absent": true
+    },
+    {
+      "pid": 648908,
+      "comm": "node",
+      "absent": true
+    },
+    {
+      "pid": 648921,
+      "comm": "initdb",
+      "absent": true
+    },
+    {
+      "pid": 648928,
+      "comm": "sh",
+      "absent": true
+    },
+    {
+      "pid": 648929,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648930,
+      "comm": "sh",
+      "absent": true
+    },
+    {
+      "pid": 648931,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648937,
+      "comm": "postgres",
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    },
+    {
+      "pid": 648938,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648939,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648941,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648942,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648943,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648944,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648945,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648946,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648948,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648949,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648950,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 648951,
+      "comm": "pg_ctl",
+      "absent": true
+    }
+  ],
+  "connections": {
+    "writer": {
+      "pid": 648949,
+      "absent": true
+    },
+    "observer": {
+      "pid": 648950,
+      "absent": true
+    }
+  },
+  "ownedCluster": "/tmp/vp3profile-YwiLUw",
+  "clusterRemoved": true,
+  "serverShutdownLogged": true,
+  "helperCleanup": {
+    "stopped": true,
+    "removed": "/tmp/vp3profile-YwiLUw",
+    "stage": "author union: original 619-line SQL first apply"
+  },
+  "businessRootsCreated": false
+}

@@ -1,0 +1,383 @@
+{
+  "kind": "maker-derived engineering witness; not independent approval",
+  "productSubject": "c38fb00986925b4b50719b3389a2a94a5ee3a4c0",
+  "harnessSubject": "0a0ea4ccc618df2d86ceb4de4bc7eff537ff3f77",
+  "executionCheckout": "1493cfbeec0ee6f26096b21aec8db1fbc4f47055",
+  "nativeInvocations": 1,
+  "counts": {
+    "tests": 2,
+    "child": 1,
+    "parent": 1,
+    "pass": 0,
+    "fail": 2,
+    "skip": 0,
+    "todo": 0,
+    "cancelled": 0
+  },
+  "AUO": "installer first apply rejected; lifecycle NOT_RUN",
+  "EMC": "NOT_RUN fail-fast",
+  "installer": {
+    "sqlSha256": "9e38550d28849cbbcc178f5237f5a985d921b47560a5be3b164186d5e002ed9b",
+    "code": "42601",
+    "message": "syntax error at end of input",
+    "namespaceUnchanged": true,
+    "catalogUnchanged": true,
+    "objectOidsRolesAndMetadataUnchanged": true,
+    "defaultsUnchanged": true,
+    "codecs": {
+      "namespace": {
+        "jsSha256": "cb22ccfeb504b6fd82cc1af0d954fe220427d562120dd6089fc9accb9bffd29f",
+        "dbSha256": "cb22ccfeb504b6fd82cc1af0d954fe220427d562120dd6089fc9accb9bffd29f",
+        "jsBytes": 2730480,
+        "dbBytes": 2730480,
+        "equal": true,
+        "firstDifferentCodeUnit": -1
+      },
+      "catalog": {
+        "jsSha256": "4afc6fe90ae3d65acbc3858003695fc9b3c9c4122ef129f92ae174f0ea6bf9e4",
+        "dbSha256": "4afc6fe90ae3d65acbc3858003695fc9b3c9c4122ef129f92ae174f0ea6bf9e4",
+        "jsBytes": 7823725,
+        "dbBytes": 7823725,
+        "equal": true,
+        "firstDifferentCodeUnit": -1
+      }
+    },
+    "actualCommit": false
+  },
+  "sixOriginalBodies": [
+    {
+      "name": "research_author_assignment_context_v2",
+      "signature": "research_author_assignment_context_v2(jsonb,uuid,text,text)",
+      "oid": "25350",
+      "bodySha256": "4d95cd7f2e7b019f7afc7faece96faa5b45182a28732e6d5d3eb54b7a3b813e5",
+      "matchesOriginalSource": true,
+      "identity": {
+        "oid": "25350",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "research_author_assignment_context_v2",
+        "prorows": 0,
+        "pronargs": 4,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "name": "read_research_author_assignment_v2",
+      "signature": "read_research_author_assignment_v2(jsonb,uuid,text,text)",
+      "oid": "25351",
+      "bodySha256": "35132922db329e7e51e0284646ed1a730535b26ab38bec014328c19bf4adf2b8",
+      "matchesOriginalSource": true,
+      "identity": {
+        "oid": "25351",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "service_role=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "read_research_author_assignment_v2",
+        "prorows": 0,
+        "pronargs": 4,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "name": "assign_research_author_v2",
+      "signature": "assign_research_author_v2(jsonb,uuid,text,text)",
+      "oid": "25352",
+      "bodySha256": "35d895837c8faf5d75364af82fcafc247d7535fb49ed0b2d05c162724ddbe38b",
+      "matchesOriginalSource": true,
+      "identity": {
+        "oid": "25352",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "service_role=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "assign_research_author_v2",
+        "prorows": 0,
+        "pronargs": 4,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "name": "read_research_author_packet_v2",
+      "signature": "read_research_author_packet_v2(jsonb,uuid,text,text)",
+      "oid": "25353",
+      "bodySha256": "aab28c28adb8ff5fb725acc1a53d44058a04ff66d456a92310b21dc3ed4751fc",
+      "matchesOriginalSource": true,
+      "identity": {
+        "oid": "25353",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "service_role=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "read_research_author_packet_v2",
+        "prorows": 0,
+        "pronargs": 4,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "name": "read_research_author_result_v2",
+      "signature": "read_research_author_result_v2(jsonb,uuid,text,text)",
+      "oid": "25380",
+      "bodySha256": "2d821365f7ce9ac22e7c2992c64baf916ded4ece58fc44e413d71f3dcd702b4d",
+      "matchesOriginalSource": true,
+      "identity": {
+        "oid": "25380",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "service_role=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "read_research_author_result_v2",
+        "prorows": 0,
+        "pronargs": 4,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      }
+    },
+    {
+      "name": "receive_research_author_result_v2",
+      "signature": "receive_research_author_result_v2(jsonb,uuid,text,text,jsonb)",
+      "oid": "25381",
+      "bodySha256": "7cd8d5a20f2f4d2420790b4a46c28c1d9ece5920177c0a02807fdf3f45d9d297",
+      "matchesOriginalSource": true,
+      "identity": {
+        "oid": "25381",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "service_role=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "receive_research_author_result_v2",
+        "prorows": 0,
+        "pronargs": 5,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal",
+          "p_result"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25",
+          "3802"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      }
+    }
+  ],
+  "fullBeforeAfterObjectsEqual": true,
+  "fullStateBeforeSha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671",
+  "fullStateAfterSha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671",
+  "inputRpcTrace": [],
+  "businessSnapshotCount": 0,
+  "formalApproval": false,
+  "pending": [
+    "union first COMMIT and four changed body postconditions",
+    "installed first-only rejection",
+    "AUO/EMC v3 author lifecycle / no-root READ replay",
+    "original77/compatible-v2 difference acceptance",
+    "busy/drift/forced rollback/principal/lease/invocation/hash/caps/revocation",
+    "actual author response-loss",
+    "four callers/reviewer/Q-R/reviewpack/atomic publication/whole closure/semantic and formal articles"
+  ]
+}
