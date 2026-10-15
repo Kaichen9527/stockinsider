@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-15T13:16:27.412523+00:00",
+  "checks": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+        "92870dc20828fd74f86f2681281a92bff2d9c2e3"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--stat",
+        "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+        "92870dc20828fd74f86f2681281a92bff2d9c2e3"
+      ],
+      "exit": 0,
+      "stdout": " .../research-v3-cash-citation-contract/HANDOFF.md  |  43 ++++++\n scripts/research-v3-article-citations.test.mjs     | 119 +++++++++++++++\n web/src/lib/research-v3-article-citations.ts       | 162 +++++++++++++++++++++\n 3 files changed, 324 insertions(+)\n",
+      "stderr": ""
+    }
+  ],
+  "freeBytes": {
+    "/workspace": 8595185664,
+    "/tmp": 15369527296
+  },
+  "servicesStarted": [],
+  "noOwnedBackgroundProcessesLeft": true,
+  "noCacheOrUniqueDataDeleted": true,
+  "cleanupScope": "Pure subprocesses all exited and were waited; no PG/socket/server/financial file acquisition started by this task. Test fixture read only from existing bounded gzip."
+}

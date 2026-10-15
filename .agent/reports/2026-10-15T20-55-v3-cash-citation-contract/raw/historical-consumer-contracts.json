@@ -1,0 +1,112 @@
+[
+  {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "path": "web/src/lib/research-business-article.ts",
+    "blob": "0d8f30b39c4eb855329b417be8b932da9cabc1f0",
+    "bytes": 18454,
+    "sha256": "e589fd67c08831d650b80cbd091113508c428d2b1a217be31150b682ce37b7cc",
+    "excerpts": [
+      {
+        "line": 23,
+        "text": "  symbol: string; researchCompanyId: string; inputRevisionId: string; inputHash: string;"
+      },
+      {
+        "line": 60,
+        "text": "function numericNodes(value: unknown, prefix = '', out = new Map<string, NumericNode>(), depth = 0,"
+      },
+      {
+        "line": 73,
+        "text": "    for (const [key, node] of Object.entries(value)) numericNodes(node,"
+      },
+      {
+        "line": 78,
+        "text": "function sourceTime(source: ArticleSourceV2, cutoff: bigint) {"
+      },
+      {
+        "line": 100,
+        "text": "export function validateBusinessResearchArticle(context: {"
+      },
+      {
+        "line": 110,
+        "text": "  const { inputHash: _input, resultHash: _result, executionCodeHash: _code, ...material } = calculated;"
+      },
+      {
+        "line": 113,
+        "text": "  const a = exact(value, ['schemaVersion', 'businessModel', 'symbol', 'researchCompanyId', 'inputRevisionId', 'inputHash',"
+      },
+      {
+        "line": 117,
+        "text": "    && a.inputRevisionId === context.revision.revision_id && a.inputHash === context.revision.input_hash);"
+      },
+      {
+        "line": 134,
+        "text": "    sourceTime(source, cutoff); sources.set(source.id, source);"
+      },
+      {
+        "line": 140,
+        "text": "  for (const key of ['reportedFacts', 'monthlyFacts']) list(projection[key], 0, 64).forEach((value, index) => {"
+      },
+      {
+        "line": 145,
+        "text": "  const nodes = { reported_observation: facts, calculation: numericNodes(material), assumption: numericNodes(projection.projected) };"
+      },
+      {
+        "line": 155,
+        "text": "  const reference = (value: unknown) => {"
+      }
+    ]
+  },
+  {
+    "subject": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "path": "web/src/lib/research-author-result.ts",
+    "blob": "9002b4acae907f13dde377cc9b8c861c6b5dd986",
+    "bytes": 8436,
+    "sha256": "71b47dfe6a666498829e2bd6665e5688ca18de73e8e0938870e645983e5060e7",
+    "excerpts": [
+      {
+        "line": 5,
+        "text": "import { parseCompleteRequest, runCompleteInput } from './research-complete-input.ts';"
+      },
+      {
+        "line": 9,
+        "text": "import { validateBusinessResearchArticle, type ArticleSourceV2 } from './research-business-article.ts';"
+      },
+      {
+        "line": 26,
+        "text": "    const keys = ['action', 'input', 'inputRevisionId', 'inputHash', ...(action === 'receiveAuthorResult' ? ['article', 'observation'] : [])];"
+      },
+      {
+        "line": 28,
+        "text": "      && typeof body.inputRevisionId === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/u.test(body.inputRevisionId)"
+      },
+      {
+        "line": 29,
+        "text": "      && typeof body.inputHash === 'string' && /^[a-f0-9]{64}$/u.test(body.inputHash));"
+      },
+      {
+        "line": 39,
+        "text": "  const revision = await runCompleteInput(db, request.input, false, deadline);"
+      },
+      {
+        "line": 46,
+        "text": "    const validated = validateBusinessResearchArticle({ request: request.input, revision,"
+      },
+      {
+        "line": 51,
+        "text": "      reservationId: request.input.reservationId, inputRevisionId: request.inputRevisionId, inputHash: request.inputHash,"
+      },
+      {
+        "line": 66,
+        "text": "      inputRevisionId: request.inputRevisionId, inputHash: request.inputHash,"
+      },
+      {
+        "line": 70,
+        "text": "  const args = { p_request: request.input, p_revision_id: request.inputRevisionId, p_input_hash: request.inputHash, p_principal: principal,"
+      },
+      {
+        "line": 79,
+        "text": "    const payload = object(row.payload); ensure(payload.assignmentId === packet.assignmentId && payload.inputRevisionId === request.inputRevisionId && payload.inputHash === request.inputHash);"
+      }
+    ]
+  }
+]

@@ -1,0 +1,108 @@
+{
+  "kind": "maker-source-only-v3-cash-citation-consumer-contract",
+  "code": "92870dc20828fd74f86f2681281a92bff2d9c2e3",
+  "tree": "b6d8d15e5757acc84eab725c11531e5c91cfa033",
+  "base": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+  "runtimeCompared": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+  "branch": "codex/research-v3-cash-citation-contract-oct15",
+  "startedAtUtc": "2026-10-15T12:55:08Z",
+  "sealedAtUtc": "2026-10-15T13:16:27.414950+00:00",
+  "deadlineUtc": "2026-10-15T13:25:08Z",
+  "changes": {
+    "newModule": "web/src/lib/research-v3-article-citations.ts",
+    "newTests": "scripts/research-v3-article-citations.test.mjs",
+    "handoff": "docs/operations/2026-10-15/research-v3-cash-citation-contract/HANDOFF.md",
+    "existingFilesChanged": 0,
+    "exportSeamNeeded": false
+  },
+  "actualChecks": {
+    "sealedNodeTests": {
+      "tests": 20,
+      "pass": 20,
+      "fail": 0,
+      "cancelled": 0,
+      "skip": 0,
+      "todo": 0
+    },
+    "strictModuleTypes": {
+      "exit": 0,
+      "compiler": "5.9.3",
+      "notAppTypecheck": true
+    },
+    "nodeSyntax": {
+      "exit": 0
+    },
+    "cashReferenceCells": {
+      "2409": 104,
+      "2383": 66
+    },
+    "scenarioValueComparisons": {
+      "2409": 306,
+      "2383": 306,
+      "notTestCount": true
+    },
+    "citationNodeCounts": {
+      "2409": 442,
+      "2383": 398
+    },
+    "fixtureUniqueFiles": 15,
+    "syntheticRpcOnly": true,
+    "oldTestsImportedOrRun": false
+  },
+  "retainedRed": {
+    "initialRunnerFileLevel": {
+      "pass": 0,
+      "fail": 1
+    },
+    "directDiagnostic": {
+      "pass": 17,
+      "fail": 1,
+      "cause": "new test mistyped decimal; fixed to original154397339/7547099; no numeric source/tolerance change"
+    }
+  },
+  "sourceInventoryCount": 33,
+  "staticTransitiveLeafFiles": 25,
+  "historicalContractFiles": 2,
+  "rawCount": 35,
+  "rawBytes": 87304,
+  "resources": {
+    "floorBytes": 8589934592,
+    "limitRssBytes": 8589934592,
+    "peakSampledProcessTreeRssBytes": 259383296,
+    "minimumSampledFreeBytes": {
+      "/workspace": 8595202048,
+      "/tmp": 15369605120
+    },
+    "finalFreeBytes": {
+      "/workspace": 8595185664,
+      "/tmp": 15369527296
+    },
+    "sequential": true,
+    "noCleanupDeletion": true
+  },
+  "pending": [
+    "Root independent code/semantic review",
+    "active four caller version dispatch and author/result integration",
+    "closed v3 article/review-pack/publication citation union and Q/R",
+    "annual/next-four and assumption citation namespaces beyond the306quarter-result slice if required by actual article",
+    "whole application source/compiled/binding/schema/release closure; no77b1 or Next-C claim",
+    "live DB fences/roles/source rights/lease and native contract proof for this consumer",
+    "author/reviewer execution/principal/formal article publication",
+    "ordinary CI registration of new tests (not authorized this turn)"
+  ],
+  "notExecuted": [
+    "PG",
+    "socket",
+    "HTTP",
+    "SSH",
+    "VPS",
+    "native suites",
+    "npm/install",
+    "app build",
+    "CI/PR/approvalref",
+    "merge/deploy",
+    "cache cleanup"
+  ],
+  "formalApproval": false,
+  "productionDispatchEnabled": false
+}

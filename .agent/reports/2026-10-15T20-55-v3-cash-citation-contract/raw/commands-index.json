@@ -1,0 +1,9 @@
+{
+  "original": "initial.tap/initial.stderr/initial.exit and initial-source-seal.json (sandbox runner file-level0/1)",
+  "diagnostic": "direct-diagnostic.stdout/stderr/exit, same initial source17/1",
+  "corrected": "corrected.tap/stderr/exit and corrected-source-seal.json,20/0",
+  "strictInitial": "initial-types.stdout/stderr/exit",
+  "strictIntermediate": "final-types-command.json/stdout/stderr",
+  "sealed": "sealed-commands.json pins every final command to code92870dc20828fd74f86f2681281a92bff2d9c2e3",
+  "noCountsAddedAcrossRuns": true
+}
