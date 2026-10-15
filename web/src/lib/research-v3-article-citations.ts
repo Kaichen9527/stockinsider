@@ -55,13 +55,12 @@ export function createV3CashCitationConsumer(config: { bindingTexts: readonly st
   ensure(bindings.length > 0 && bindings.length <= 2 && bindings.every(b => b.core.wireVersion === WIRE));
   const controller = createVersionedCompleteInputController({ bindingTexts: texts, executorFingerprint: config.executorFingerprint,
     roots: { 'original75d-fixed8or6': '/__citation_read_only_no_fs__', 'historical15d4-fixed9or7': '/__citation_read_only_no_fs__' } });
-  return Object.freeze({
-    async read(db: VersionedInputRpc, requestText: unknown, inputRevisionId: string, inputHash: string) {
+  async function acquire(db: VersionedInputRpc, requestText: unknown, inputRevisionId: string, inputHash: string, deadline: FinancialIoDeadline) {
+      deadline.check();
       ensure(typeof inputRevisionId === 'string' && UUID.test(inputRevisionId) && typeof inputHash === 'string' && HASH.test(inputHash));
       const request = parseCompleteRequest(textJson(requestText, 8192));
       const selected = bindings.filter(b => b.bindingCapsuleIdentity === request.expectedCalculatorExecutionHash && b.core.inventoryHash === request.expectedArtifactManifestHash);
       ensure(selected.length === 1); const binding = selected[0], symbol: Symbol = binding.core.symbol;
-      const deadline = new FinancialIoDeadline();
       // Real controller READ path; no claim/preparation/assert/seal or financial I/O.
       const response = await controller.runCompleteInput(db, request, false, deadline);
       ensure(response.status === 'sealed' && response.revision_id === inputRevisionId && response.input_hash === inputHash);
@@ -146,7 +145,7 @@ export function createV3CashCitationConsumer(config: { bindingTexts: readonly st
         qualification: { ...row(material.provenance) }, originalCapabilities: { ...row(payload.capabilities) } });
       const frozen = freeze(nodes), index = new Map(frozen.map(n => [n.pointer, n]));
       deadline.check();
-      return Object.freeze({ context, nodes: frozen,
+      const citations = Object.freeze({ context, nodes: frozen,
         validateCitation(citationText: unknown): CashCitationNode {
           // Bounded primitive JSON; never walk arbitrary caller objects/getters/Map.
           const citation = textJson(citationText, 4096);
@@ -157,6 +156,17 @@ export function createV3CashCitationConsumer(config: { bindingTexts: readonly st
           for (const key of ['kind','value','unit','period','periodKind','classification','scenarioId'] as const) ensure(citation[key] === node[key]);
           return node;
         } });
-    }
+      deadline.check();
+      // Private server composition snapshot from this verified READ, never a caller row.
+      const revision=freeze(JSON.parse(JSON.stringify(response)) as Row);deadline.check();
+      return Object.freeze({citations,revision});
+  }
+  return Object.freeze({
+    async read(db:VersionedInputRpc,requestText:unknown,inputRevisionId:string,inputHash:string,deadline=new FinancialIoDeadline()) {
+      return (await acquire(db,requestText,inputRevisionId,inputHash,deadline)).citations;
+    },
+    readForArticle(db:VersionedInputRpc,requestText:unknown,inputRevisionId:string,inputHash:string,deadline:FinancialIoDeadline) {
+      return acquire(db,requestText,inputRevisionId,inputHash,deadline);
+    },
   });
 }

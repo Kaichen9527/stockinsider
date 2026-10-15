@@ -1,0 +1,585 @@
+{
+  "subjectBase": "4e9733ab39febfa91609e8fe6469a69c0c8f1b4e",
+  "meaning": "Exact source dollar-quoted body hashes, NOT freshly observed pg_proc identities. Later migrations can replace bodies or extend ACL; full predecessor profile must use installed lineage before any future mutation. No SQL applied.",
+  "files": [
+    {
+      "path": "migrations/20261009_research_author_assignments_v2.sql",
+      "bytes": 10433,
+      "sha256": "91629781ad52191ae4ef096d2f56af020066973556988713305bc7c10a80b99c",
+      "blob": "3c49283c402012d7ad2bc1788988dd4218bfe8e4",
+      "functions": [
+        {
+          "name": "research_author_assignment_context_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text",
+          "line": 34,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 3679,
+          "sourceBodySha256": "4d95cd7f2e7b019f7afc7faece96faa5b45182a28732e6d5d3eb54b7a3b813e5",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 139,
+              "statement": "REVOKE ALL ON FUNCTION public.research_author_assignment_context_v2(jsonb,uuid,text,text) FROM PUBLIC,anon,authenticated,service_role;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "read_research_author_assignment_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text",
+          "line": 88,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 1554,
+          "sourceBodySha256": "35132922db329e7e51e0284646ed1a730535b26ab38bec014328c19bf4adf2b8",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 140,
+              "statement": "REVOKE ALL ON FUNCTION public.read_research_author_assignment_v2(jsonb,uuid,text,text) FROM PUBLIC,anon,authenticated,service_role;"
+            },
+            {
+              "line": 142,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_research_author_assignment_v2(jsonb,uuid,text,text) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "assign_research_author_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text",
+          "line": 112,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 1459,
+          "sourceBodySha256": "35d895837c8faf5d75364af82fcafc247d7535fb49ed0b2d05c162724ddbe38b",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 141,
+              "statement": "REVOKE ALL ON FUNCTION public.assign_research_author_v2(jsonb,uuid,text,text) FROM PUBLIC,anon,authenticated,service_role;"
+            },
+            {
+              "line": 143,
+              "statement": "GRANT EXECUTE ON FUNCTION public.assign_research_author_v2(jsonb,uuid,text,text) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        }
+      ]
+    },
+    {
+      "path": "migrations/20261009_research_author_packet_v2.sql",
+      "bytes": 6376,
+      "sha256": "1a84dddb85afefe6de4458d781117f9bb50ff43db6fd1986a1c43e1608ed9528",
+      "blob": "d72e8f639b4dbef8d6942dadef721ec7b813d950",
+      "functions": [
+        {
+          "name": "read_research_author_packet_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text",
+          "line": 3,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 5710,
+          "sourceBodySha256": "aab28c28adb8ff5fb725acc1a53d44058a04ff66d456a92310b21dc3ed4751fc",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 77,
+              "statement": "REVOKE ALL ON FUNCTION public.read_research_author_packet_v2(jsonb,uuid,text,text) FROM PUBLIC,anon,authenticated,service_role;"
+            },
+            {
+              "line": 78,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_research_author_packet_v2(jsonb,uuid,text,text) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        }
+      ]
+    },
+    {
+      "path": "migrations/20261009_research_author_results_v2.sql",
+      "bytes": 10099,
+      "sha256": "894cd214aa60678c2c4475abbf194ea59e4a7a23677b296eda61b52fab6ce3e5",
+      "blob": "2af92766efd915c4868cbe8fa33c37b32bb30931",
+      "functions": [
+        {
+          "name": "read_research_author_result_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text",
+          "line": 19,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 625,
+          "sourceBodySha256": "2d821365f7ce9ac22e7c2992c64baf916ded4ece58fc44e413d71f3dcd702b4d",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 115,
+              "statement": "REVOKE ALL ON FUNCTION public.read_research_author_result_v2(jsonb,uuid,text,text),public.receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 116,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_research_author_result_v2(jsonb,uuid,text,text),public.receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "receive_research_author_result_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result jsonb",
+          "line": 32,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 7322,
+          "sourceBodySha256": "7cd8d5a20f2f4d2420790b4a46c28c1d9ece5920177c0a02807fdf3f45d9d297",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 115,
+              "statement": "REVOKE ALL ON FUNCTION public.read_research_author_result_v2(jsonb,uuid,text,text),public.receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 116,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_research_author_result_v2(jsonb,uuid,text,text),public.receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        }
+      ]
+    },
+    {
+      "path": "migrations/20261009_research_author_handoffs_v2.sql",
+      "bytes": 9579,
+      "sha256": "96f79786802317175dc662f1c0476e8ad9afcaf675f85b1ad1909d2bcd65a757",
+      "blob": "61152a4efe608c830ed06bbeede68d16f6bb21cb",
+      "functions": [
+        {
+          "name": "read_research_author_handoff_context_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result_id uuid,p_result_hash text",
+          "line": 7,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 6975,
+          "sourceBodySha256": "ffb26f1274ab222166c0f7cfac2355cfacce2fcdb9ec5288e5ea089fc176ae1d",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 89,
+              "statement": "REVOKE ALL ON FUNCTION public.read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 90,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) TO service_role,research_observed_rpc_owner;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "commit_research_author_handoff_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result_id uuid,p_result_hash text",
+          "line": 92,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 982,
+          "sourceBodySha256": "ef7bfac8d0a74c2ce6dbd2a533ae15cce0d5d7ac0851d6ef8af5d5eaace3262a",
+          "sourceDeclaredOwner": "research_observed_rpc_owner",
+          "aclStatements": [
+            {
+              "line": 112,
+              "statement": "REVOKE ALL ON FUNCTION public.commit_research_author_handoff_v2(jsonb,uuid,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 113,
+              "statement": "GRANT EXECUTE ON FUNCTION public.commit_research_author_handoff_v2(jsonb,uuid,text,text,uuid,text) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        }
+      ]
+    },
+    {
+      "path": "migrations/20261009_research_reviewer_assignments_v2.sql",
+      "bytes": 14900,
+      "sha256": "43c0a0525c38c73cf5277c23031bae2acb88ace1b5db25cd440c01932f14bc86",
+      "blob": "d9c07b4f7c2d2293b1d6ec9a57f32fa7ab1fd261",
+      "functions": [
+        {
+          "name": "read_research_reviewer_context_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text",
+          "line": 29,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 2768,
+          "sourceBodySha256": "fa2286ffb66a36ba8ee194dd953396403abc49f18cccddf968cf2627123b04d4",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 62,
+              "statement": "REVOKE ALL ON FUNCTION public.read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 63,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) TO service_role,research_observed_rpc_owner;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "assign_research_reviewer_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text",
+          "line": 65,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 2093,
+          "sourceBodySha256": "82408d7930d278e202961ede6f69af4041eb617fcfdf28f57737e5f35a00b828",
+          "sourceDeclaredOwner": "research_observed_rpc_owner",
+          "aclStatements": [
+            {
+              "line": 93,
+              "statement": "REVOKE ALL ON FUNCTION public.assign_research_reviewer_v2(jsonb,uuid,text,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 94,
+              "statement": "GRANT EXECUTE ON FUNCTION public.assign_research_reviewer_v2(jsonb,uuid,text,text,text,uuid,text) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "read_research_reviewer_sources_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text",
+          "line": 98,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 5658,
+          "sourceBodySha256": "99befff3243be4d1b6e3cf27ee4668ea282e489562089b49bf7ac52b27810a05",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 170,
+              "statement": "REVOKE ALL ON FUNCTION public.read_research_reviewer_sources_v2(jsonb,uuid,text,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 171,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_research_reviewer_sources_v2(jsonb,uuid,text,text,text,uuid,text) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        }
+      ]
+    },
+    {
+      "path": "migrations/20261009_research_reviewer_results_v2.sql",
+      "bytes": 28946,
+      "sha256": "af72171444c6c67a754f33099da704e78bb2d2bb7454ef356c4c8753ea26f934",
+      "blob": "8f8b57a80cff679d26fbfebaba17b095c24080d6",
+      "functions": [
+        {
+          "name": "fence_research_execution_invocation_v2",
+          "arguments": "",
+          "line": 33,
+          "sourceAttributes": "RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 570,
+          "sourceBodySha256": "cba614bb5a0e4d51c149e90136c871cdd91befabc12df3e74675b3b9ed6e0c73",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 45,
+              "statement": "REVOKE ALL ON FUNCTION public.fence_research_execution_invocation_v2() FROM PUBLIC,anon,authenticated,service_role;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "read_research_reviewer_result_context_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text",
+          "line": 49,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 4214,
+          "sourceBodySha256": "7689bd1a4b7f78f9d94bed2814ff130eb986bc70bbef48cce3e9f186f08cce5b",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 95,
+              "statement": "REVOKE ALL ON FUNCTION public.read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 96,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) TO service_role,research_observed_rpc_owner;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "assert_research_editorial_review_v2",
+          "arguments": "packet jsonb,review jsonb",
+          "line": 98,
+          "sourceAttributes": "RETURNS void LANGUAGE plpgsql SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 4634,
+          "sourceBodySha256": "85443213186836065125e2fd7193fd8956ef70f20fb4b0f69ae41b46898ef492",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 147,
+              "statement": "REVOKE ALL ON FUNCTION public.assert_research_editorial_review_v2(jsonb,jsonb) FROM PUBLIC,anon,authenticated,service_role;"
+            },
+            {
+              "line": 148,
+              "statement": "GRANT EXECUTE ON FUNCTION public.assert_research_editorial_review_v2(jsonb,jsonb) TO research_observed_rpc_owner;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "receive_research_reviewer_result_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text,p_result jsonb",
+          "line": 150,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 7926,
+          "sourceBodySha256": "bf4366dd42828e570c0ba6d091c968845721fd5678251ab61b8451f4b1606087",
+          "sourceDeclaredOwner": "research_observed_rpc_owner",
+          "aclStatements": [
+            {
+              "line": 225,
+              "statement": "REVOKE ALL ON FUNCTION public.receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 226,
+              "statement": "GRANT EXECUTE ON FUNCTION public.receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "read_research_reviewer_result_sources_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text",
+          "line": 228,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 5672,
+          "sourceBodySha256": "18cb4c3e6fad6645a98979aea92d8bec635ff89cc0daac940dc56e0e83c69a5f",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 300,
+              "statement": "REVOKE ALL ON FUNCTION public.read_research_reviewer_result_sources_v2(jsonb,uuid,text,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 301,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_research_reviewer_result_sources_v2(jsonb,uuid,text,text,text,uuid,text) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        }
+      ]
+    },
+    {
+      "path": "migrations/20261009_research_publication_lineage_v2.sql",
+      "bytes": 9652,
+      "sha256": "37a885ac77ef1c97196c197d6804300fd18843eebb31629da19f9d10f6d6449d",
+      "blob": "984e16b7a65770a5e1cbb2a2e5b4f88a3ba678f6",
+      "functions": [
+        {
+          "name": "fence_research_publication_lineage_v2",
+          "arguments": "",
+          "line": 34,
+          "sourceAttributes": "RETURNS trigger LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 3516,
+          "sourceBodySha256": "d6d4fd1803fe6ed503a5de88e12add41ee582f41d0e36e5142c829a6aee95221",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 85,
+              "statement": "REVOKE ALL ON FUNCTION public.fence_research_publication_lineage_v2() FROM PUBLIC,anon,authenticated,service_role;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "fence_research_publication_truncate_v2",
+          "arguments": "",
+          "line": 93,
+          "sourceAttributes": "RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 516,
+          "sourceBodySha256": "90ca733c8a08c47f220042f262ed1ec4807f5b9d935174ad940c40ea716a9336",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 103,
+              "statement": "REVOKE ALL ON FUNCTION public.fence_research_publication_truncate_v2() FROM PUBLIC,anon,authenticated,service_role;"
+            }
+          ],
+          "catalogObservation": false
+        }
+      ]
+    },
+    {
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "bytes": 43051,
+      "sha256": "ed2334dc46cf73fd33f61bd00d1034b50924d5e2213474372da5b121c4f3128a",
+      "blob": "78fbd14fde4aeb5493297a08781a5d538e77c9fa",
+      "functions": [
+        {
+          "name": "research_publication_content_v2",
+          "arguments": "author_payload jsonb",
+          "line": 49,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE sql IMMUTABLE STRICT SET search_path=pg_catalog",
+          "sourceBodyBytes": 679,
+          "sourceBodySha256": "6c765ad245a36d80a03ced0ee1170f2b373738a104fc2ac9b7cf8fb455562598",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 61,
+              "statement": "REVOKE ALL ON FUNCTION public.research_publication_content_v2(jsonb) FROM PUBLIC,anon,authenticated,service_role;"
+            },
+            {
+              "line": 62,
+              "statement": "GRANT EXECUTE ON FUNCTION public.research_publication_content_v2(jsonb) TO research_observed_rpc_owner;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "ensure_research_publication_bundle_v2",
+          "arguments": "p_revision uuid,p_hash text",
+          "line": 64,
+          "sourceAttributes": "RETURNS uuid LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 1425,
+          "sourceBodySha256": "f48461ded08b77f5e9d6bf3928bdc60c959f0e1a8976ce6700810324a8e6be11",
+          "sourceDeclaredOwner": "research_input_preparation_owner_v2",
+          "aclStatements": [
+            {
+              "line": 82,
+              "statement": "REVOKE ALL ON FUNCTION public.ensure_research_publication_bundle_v2(uuid,text) FROM PUBLIC,anon,authenticated,service_role;"
+            },
+            {
+              "line": 83,
+              "statement": "GRANT EXECUTE ON FUNCTION public.ensure_research_publication_bundle_v2(uuid,text) TO research_observed_rpc_owner;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "fence_research_dossier_insert_v2",
+          "arguments": "",
+          "line": 87,
+          "sourceAttributes": "RETURNS trigger LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 3804,
+          "sourceBodySha256": "fb6259e38e96eba6a87e6468941a1d5e77d94dc02b31809d8f38fb4b81889b32",
+          "sourceDeclaredOwner": "research_observed_rpc_owner",
+          "aclStatements": [
+            {
+              "line": 138,
+              "statement": "REVOKE ALL ON FUNCTION public.fence_research_dossier_insert_v2() FROM PUBLIC,anon,authenticated,service_role;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "fence_research_dossier_truncate_v2",
+          "arguments": "",
+          "line": 141,
+          "sourceAttributes": "RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 548,
+          "sourceBodySha256": "282e0a0f44ae575550a37a95ec665cf298eb909397485610b28408fc3ca42183",
+          "sourceDeclaredOwner": "research_observed_rpc_owner",
+          "aclStatements": [
+            {
+              "line": 150,
+              "statement": "REVOKE ALL ON FUNCTION public.fence_research_dossier_truncate_v2() FROM PUBLIC,anon,authenticated,service_role;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "fence_research_publication_lineage_v2",
+          "arguments": "",
+          "line": 163,
+          "sourceAttributes": "RETURNS trigger LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 5629,
+          "sourceBodySha256": "7e92f389ab509d251de7d0522ad3c97347df1bab452b120ba3befe520fc44fb2",
+          "sourceDeclaredOwner": null,
+          "aclStatements": [],
+          "catalogObservation": false
+        },
+        {
+          "name": "research_publication_source_state_v2",
+          "arguments": "p_seal uuid",
+          "line": 236,
+          "sourceAttributes": "RETURNS text LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 144,
+          "sourceBodySha256": "ef512b72d6d910ab2bf662fafd88eeff92b3cda0bb149e95fc4c85cb03092157",
+          "sourceDeclaredOwner": "research_source_fence_owner_v2",
+          "aclStatements": [
+            {
+              "line": 242,
+              "statement": "REVOKE ALL ON FUNCTION public.research_publication_source_state_v2(uuid) FROM PUBLIC,anon,authenticated,service_role;"
+            },
+            {
+              "line": 243,
+              "statement": "GRANT EXECUTE ON FUNCTION public.research_publication_source_state_v2(uuid) TO research_observed_rpc_owner;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "read_completed_research_publication_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text, p_author_result_id uuid,p_author_result_hash text,p_reviewer_result_id uuid,p_reviewer_result_hash text",
+          "line": 245,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 11304,
+          "sourceBodySha256": "1f7c0574771d64c756d71c8905a8c91648681c06352cecc7602a4357b2346ea8",
+          "sourceDeclaredOwner": "research_observed_rpc_owner",
+          "aclStatements": [
+            {
+              "line": 357,
+              "statement": "REVOKE ALL ON FUNCTION public.read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 358,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        },
+        {
+          "name": "publish_research_article_v2",
+          "arguments": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text, p_author_result_id uuid,p_author_result_hash text,p_reviewer_result_id uuid,p_reviewer_result_hash text,p_content_hash text",
+          "line": 360,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 7485,
+          "sourceBodySha256": "8ec9d3452346b993bb2f34733f466ea51f699771fefe84b240d610514fd51171",
+          "sourceDeclaredOwner": "research_observed_rpc_owner",
+          "aclStatements": [
+            {
+              "line": 439,
+              "statement": "REVOKE ALL ON FUNCTION public.publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 440,
+              "statement": "GRANT EXECUTE ON FUNCTION public.publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        }
+      ]
+    },
+    {
+      "path": "migrations/20261010_research_publication_view_v2.sql",
+      "bytes": 3783,
+      "sha256": "82a158eb59e74181fe5546c255d6afa4c51184d2639cfb52a900b22eef88dd75",
+      "blob": "a197b07bc8a5c359164eb32defcdb34503d011ab",
+      "functions": [
+        {
+          "name": "read_research_company_publication_v2",
+          "arguments": "p_company uuid",
+          "line": 7,
+          "sourceAttributes": "RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+          "sourceBodyBytes": 3008,
+          "sourceBodySha256": "52d06b24f7d5c23b371720f69ee8483f3359760ff8df90eab04e1d58058126ae",
+          "sourceDeclaredOwner": "research_observed_rpc_owner",
+          "aclStatements": [
+            {
+              "line": 47,
+              "statement": "REVOKE ALL ON FUNCTION public.read_research_company_publication_v2(uuid) FROM PUBLIC,anon,authenticated;"
+            },
+            {
+              "line": 48,
+              "statement": "GRANT EXECUTE ON FUNCTION public.read_research_company_publication_v2(uuid) TO service_role;"
+            }
+          ],
+          "catalogObservation": false
+        }
+      ]
+    }
+  ]
+}
