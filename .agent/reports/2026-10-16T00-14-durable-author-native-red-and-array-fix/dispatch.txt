@@ -1,0 +1,13 @@
+接續剛真completed的turn01a14026，Root已核remote d8de9cf11e33f7e15013f9b53de4cf863c7d4412、receipt f0350019b92b305bb41b4f6a99562716207f3429454b6859c4139e6a22c90e7a，全289actualGitinputs/9748723bytes與10publishedfiles/147718bytes、原131產品逐byte保持。Root讀完整new native harness/fixture與公開witness；真正native0PASS2FAIL只AUO child+parent，EMC及author lifecycle/legacy/response-loss NOT_RUN。原RED永久保存，不重跑unchanged79fd。DB與JS canonical兩個原hash真相同，沒有hash mismatch；SQL第68行 ANY((SELECT array_agg(name))) 被解析成subquery ANY，導致name=name[]。其他7site是同源風險，不冒另外7次失敗。Root scoped review REQUEST_CHANGES/P2=1（真正安裝拒絕），不回寫先前source-only review為PASS或假native批准。Rollback完整metadata/OID/default/namespace/catalog相同、2backends absent/clusterremoved/shutdown、一個RSS0 zombie證據保持。
+
+只派一件10min SOURCE-ONLY minimal fix：
+branch codex/research-v3-author-union-array-fix-oct16，base d8de9cf11e33f7e15013f9b53de4cf863c7d4412。
+Ownership僅 migrations/20261015_research_author_durable_union_candidate_v3.sql 的8個已知 catalog-name selection expressions（lines68/81/90/98/553/566/575/583），必要最小handoff/sourceonlycheck/evidence。你不是唯一codebase工作者，不回退他人或改舊RED。請明確改成 scalar-array ANY(ARRAY(SELECT scalar_name ... ORDER BY scalar_name))，四種各前後2處：
+c.relname=ANY(ARRAY(SELECT relname FROM pg_class WHERE relnamespace='public'::regnamespace ORDER BY relname))
+p.proname=ANY(ARRAY(SELECT DISTINCT proname FROM pg_proc WHERE pronamespace='public'::regnamespace ORDER BY proname))
+r.rolname=ANY(ARRAY(SELECT rolname FROM pg_roles WHERE rolname !~ '^pg_' ORDER BY rolname))
+t.typname=ANY(ARRAY(SELECT typname FROM pg_type WHERE typnamespace='public'::regnamespace ORDER BY typname))
+只修SQL grammar ambiguity；選取同一個完整有限name集合，空set仍不匹配。Catalog原query排序/欄位/範圍/全部前expectedhash/cb22/4afc/四bodyhash/6原body/完整後condition/guard/30s2s/鎖/default/所有metadata完全不改，不用IN萬用fallback/放寬hash/跳過catalog。產品caller/validator/SQL49/50/26/roles/ACL/profile/grants/authority/pins/quotas不改，原nativeharness0a0及其callback exact不動。原三檔native是未執行lifecycle的WIP，不假稱成功。
+
+先fresh自己的workspace/tmp8GiB floor、單workload/RSS預算。只必要source checks（既有static SQL6case與exact8expression diff/body/hash集合不變核），不重跑maker32/舊green契約/native/PG/socket/app/HTTP/SSH/VPS/build/npm/install/CI/PR/ref/readymerge/deploy/cache。本件禁止任何PG，包括grammar scratch；Root交付後獨立核exactdiff再另授權freshnative。所有source/initialWIP/RED/private raw與safehashreceipt分commit封存。不能刪cache/資料/停別App/降低floor追綠。若floor不夠，保留exactWIP、回報真量測，不擅自cleanup或放寬。
+交付source/evidence/exactreceipt與原8line差異。Maker不能自簽Root批准；後續仍須actualinstaller/兩issuerauthor lifecycle/legacy/response-loss/負例/四caller/reviewer/Q-R/atomicpub/兩篇semantic/formalpublication。DD deployedone-shot已消耗不再碰，Fullgoalactive/heartbeatACTIVE，正常repair安靜。

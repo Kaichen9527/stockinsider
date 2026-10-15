@@ -1,0 +1,32 @@
+{
+  "recordedAt": "2026-10-15T16:14:19.300245+00:00",
+  "reviewDecision": "REQUEST_CHANGES",
+  "subject": "0a0ea4ccc618df2d86ceb4de4bc7eff537ff3f77",
+  "productSubject": "79fd6e001ec77f58618d784948f9097e785b8f31",
+  "evidence": "d8de9cf11e33f7e15013f9b53de4cf863c7d4412",
+  "ownedTurn": "01a14055-2c3b-70b1-8bfd-cfba71188fa4",
+  "formalPublication": false,
+  "goal": "active",
+  "files": [
+    {
+      "path": "ROOT-REVIEW.md",
+      "bytes": 3651,
+      "sha256": "e8ffac3641bdc741191c2888d0d7d3c6a19b8ea4ed9a9486bdf891e9b1ae28fa"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 678,
+      "sha256": "6f595ecf500c80b98c9429bb16ea15194aacecc2f92ecff4530501e10620b754"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 3348,
+      "sha256": "13d3d027c328f7feab7af071384e314e1e38695f8ad3145ac2b13eb71e43c705"
+    },
+    {
+      "path": "root-review.json",
+      "bytes": 1307,
+      "sha256": "ddc6551fe96c8d4b98c40897b48449e735d2f175b40af846524cf889348ecd24"
+    }
+  ]
+}
