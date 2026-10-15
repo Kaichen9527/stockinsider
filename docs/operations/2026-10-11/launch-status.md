@@ -1,5 +1,25 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-15 17:00台灣時間：PR382 exact source 已真檢查並正常 ready；自然新 protected run 活動，未 merge/deploy
+
+Cloud assembly turn01a13c8a 已 completed/thread idle/cursor303427c2-9b66-4f3d-abd3-26255a0a19ef:14，沒有重派。Delivery0b7451f62d56a9c68496fe582d513d9d057096b8/receipt629026259c174a1a5a5838783e689cab0d916e3154e0b300e2fe91f362b1dc9c 保留 assembly evidence；Root核20actualGitinputs/24publishedraw110574bytes、5candidate檔逐byte等a874。Root只推 code-only 1e1ded2b99255d9905942627d76abadeb58eeb68 到 codex/dd-binary-operator-reviewed-release-oct15，8 added files、2192 base entries不變，treefe30bedc11f231899418f845e57875c76c62c70c/webc516不變。PR382 https://github.com/Kaichen9527/stockinsider/pull/382 已附本chat。最初100attachment限制真FAIL保存；核最舊PR281 MERGED並保存exactpointer/state/head/base/title後僅unlink其UIattachment，再attach382成功，GitHub/歷史/證據未改，勿重試上限。
+
+Fresh ordinary38655806183/job116165162652 Ubuntu24.04/Python3.12.3 真35isolatedgroups/0FAIL/10dummy shell records與syntax全PASS；checkoutmerge65baaf628ae72b252e7525f90bc533020107ffbf fulltree等1e1。只isolated Linux工程，不冒production/systemd/API/nativePG，不與maker35/Root20加總；terminal ordinary不rerun。
+
+同新head一次 unchanged reviewed-publication-tail-artifact workflow_dispatch38655851651/job116165313733 真SUCCESS，非381舊run重跑/非DD重建。Actual current canonical155/PCR31全PASS零fail/cancel/skip/todo，actual TAP SHA d9579d311fb3b118c080d429c9e515029865ceca40cf6ac05c4a9acd96391054。Artifact11936452402 ZIP28349438bytes/SHA9654dbc0330c7b844a3b2f8b2444106200586bf39d3054a9d10d539ee5dd98f4 對API digest、25members/24SHA核實，immutable DD原tar398e7176不變。Boot500/404/static/exit為credential-free包驗證，非production健康。
+
+Root完整8file range requirements/architecture/code integration零P0P1P2。Genuine fresh sole directchild bf8e5af7bf2549191649fb025adde64c4806adb0 精確attests1e1，已push refs/heads/evidence/source-led-opportunity-v3-exact-review-1e1ded2b99255d9905942627d76abadeb58eeb68；只新增review/PCR/attestation三檔。ReviewSHA8ec01f7d417ddab88d5d360654f4899a840e22749a95e3dd934ac702586af84e/PCRrecordc057e7e829a324c4662d80fb10b1abd38ca2982798ccfaec3ffce43c2af0c642/graphc8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a。Root genuine resolver-only PASS、無PG import/connection，不冒formalpeer或金融plan PASS。Optional PG-import readonly-plan probe卡本機既有postgres-array/index.js fs.ReadFileUtf8/read，已核owned PID67889後一次TERM並確認absent；無result/未測Node exit，wrapper cat exit0不可當plan PASS，取消/unproven永久保存，不重跑blocked dependency。
+
+Initialprotected38655806213 attempt1缺freshref FAIL/aggregateFAIL/modelproductSKIPPED原JSON/log保留。核freshbf8/source1e1/base8c58/rules20177392active/bypass[]及新ordinary真SUCCESS後00:40:46Z只一次 failed-rerun，audit /tmp/stockinsider-pr382-protected-fresh-ref-rerun-oct15.json 真exit0已消耗禁止再跑。Attempt2於00:51:51Z真終態SUCCESS，bootstrap/requirements/architecture/exact/model/product/aggregate全7真SUCCESS、完整log/JSON已封存。Root再次核remote main8c58、exacthead/base/freshref/ordinary兩runSUCCESS、所有headrun terminal、rules不變後08:59:12Z只一次正常 gh pr ready382；audit /tmp/stockinsider-pr382-ready-oct15.json 真exit0已消耗禁止再ready，PR現非draft/open，完整rules前後JSON相同。
+
+Ready自然08:59:16Z觸發新protected38709607205，同head1e1/base8c58。最新只讀真in_progress，bootstrap/architectureSUCCESS、requirements/exact活動，model/product/aggregate未完；下一只跟進這個新run，不manualrerun舊綠、不重派heavy、不再ready。新run全7真SUCCESS且ordinary/freshref/currentheadbase/rules不變才標準 merge commit --match-head-commit1e1，禁admin/bypass/auto/directmain。舊七綠不可代新七綠。PR370..381終態永不再checks/watch/rerun/ready/merge/helper。PR382未merge/deploy，無production DB/role/ACL/HTTP/資料batch/VPS/cache操作。
+
+Root inventory shape、猜錯writer路徑、ZIP basename誤取upstream舊builder、SHA ./prefix、初Node缺strip-types、optional PG-import取消、postcompaction missing session與錯workflow路徑等原RED保留；ZIP誤取在PCR生成/審查發布前已發現並用exact root ZIP names核回current1e1，不用舊TAP冒新。原33d031f7 REQUEST_CHANGES和修補歷史全保留。
+
+容量最後真准入仍2026-10-14T22:27:23Z原3OS鎖READY/disk26148474880/projected22256160768/memory3956592640/projected2882850816，budgets全不降；不是未來准入或部署成功，舊memoryFAIL仍歷史。Current169最後22:26readonly、DBwriter169/lease0仍18:36最後真query；正式操作前fresh核，待operator正常PR merge後才可使用，immutable approved DD source/dd59817f與directc2b/包不重建不改標main、不執行main169-deploy.sh。金融50/publication26/fixedpeer、完整來源候選/真Top20/兩formal文章/四caller/Q-R/cashcitations/wholeclosure/技術觀察/策略與正式研究排程仍pending，Fullgoal active，工程heartbeat不可當正式研究排程驗收。
+
+Root report .agent/reports/2026-10-15T17-00-pr382-exact-review-and-ready/，receipt 5e5e9e725b05a759a73cb0dd2a5fa15a0abdc7fec8384e30ac1ba1bbb091a930。
+
 ## 2026-10-15 06:33台灣時間：DD recovery候選Root source review閉合；VPS原三鎖容量真READY，operator code仍須正常PR後才能用
 
 候選a87432e939b389f64aad3baffb176fee3954c346/evidencedbfde8efc8ff16130d4cefbdbdcacc4d2f03ee8c/receipt4e796e40a0410fbd4eb9948900be6f51950c942cc744f8fe9ca64dbf678376ca真終態，Cloud前turn01a13c22 completed/threadidle/cursor303427c2-9b66-4f3d-abd3-26255a0a19ef:12。Root核18actualGitinputs/37publishedraw80647bytes、讀全5檔/35makerLinuxisolatedprobes/原RED及所有scope，親跑20portable profile正負groups與bash-n PASS，含同bytes換inode/path仍拒絕；未跑Linuxsupervisor/正式helper/PG/native/build，不把20+35加總或冒RootLinux驗證。Scoped independent source integration零新P0P1P2；原33d031f7 REQUEST_CHANGES與所有RED永久保留。Intermediate support source只有hash非完整bytes，其歷史run不冒稱final同源。
