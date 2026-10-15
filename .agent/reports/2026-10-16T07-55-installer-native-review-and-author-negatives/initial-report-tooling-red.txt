@@ -1,0 +1,1 @@
+Root report packaging Python exit1 before any statements ran: SyntaxError: bytes can only contain ASCII literal characters. The script contained a Chinese literal prefixed with b. No receipt or launch-status write occurred in that attempt. Repaired by explicitly UTF-8 encoding the suffix. This is report tooling history, not a product/native failure.

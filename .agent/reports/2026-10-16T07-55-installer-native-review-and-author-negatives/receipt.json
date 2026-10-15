@@ -1,0 +1,31 @@
+{
+  "files": [
+    {
+      "path": "review.json",
+      "bytes": 1667,
+      "sha256": "a845f9c069912eeccd0cfc14180856d1e9061efc8418c314194d4f0514d0fa47"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 6127,
+      "sha256": "afd98e6dd4ee8c2e8671758c8c53bc639c71399a680e288f63cb25cc63c25d55"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 675,
+      "sha256": "5366859760cc35497d8dc7090a407a057f34324c736b417021272a82211f9747"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 4465,
+      "sha256": "890c249bf3d3399708178b07f15f6a38a926d971f876a8210b1021b687018abe"
+    },
+    {
+      "path": "initial-report-tooling-red.txt",
+      "bytes": 352,
+      "sha256": "7150a3a036da03b11595c1734c1efccca3891206bf444649c6243f85fe21c592"
+    }
+  ],
+  "scope": "Root exact Git and published witness review; not private raw/native/formal publication approval",
+  "fullGoal": "active"
+}

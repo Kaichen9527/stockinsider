@@ -1,0 +1,58 @@
+{
+  "time": "2026-10-15T23:53:29.789419+00:00",
+  "evidence": "95bbc1af1f3673d25ccdce8fdf8b237c46a241ea",
+  "harness": "a1b8ce77e48a7e26f45a2a587206b5ff5d132fea",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "inputsVerified": 293,
+  "inputBytes": 9812469,
+  "publishedReceiptFilesVerified": 11,
+  "publishedReceiptBytes": 252897,
+  "privateRawInventoryOnly": {
+    "count": 114,
+    "bytes": 391807097,
+    "contentsReviewed": false
+  },
+  "cases": [
+    {
+      "kind": "busy",
+      "stages": 3,
+      "tableCount": 13,
+      "allInstallerTablesEmpty": true,
+      "deltaLeafCount": 0,
+      "originalScriptCommit": false
+    },
+    {
+      "kind": "drift",
+      "stages": 4,
+      "tableCount": 13,
+      "allInstallerTablesEmpty": true,
+      "deltaLeafCount": 5,
+      "originalScriptCommit": false
+    },
+    {
+      "kind": "forced-rollback",
+      "stages": 5,
+      "tableCount": 13,
+      "allInstallerTablesEmpty": true,
+      "deltaLeafCount": 16,
+      "originalScriptCommit": false
+    }
+  ],
+  "scopedHarnessPublicWitnessFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "rootNativeExecuted": false,
+  "fullIndependentNativeApproval": false,
+  "formalPublicationApproval": false,
+  "localAvailableBytes": 5926948864,
+  "limitations": [
+    "Full private rows/catalog/protocol not received or recomputed by Root",
+    "All13 installer callback tables empty; not nonempty business-row preservation",
+    "Derived forced rollback envelope is not original full script COMMIT",
+    "Whole secure-tree finally independent absence record pending",
+    "Three PID1 RSS0 zombies remain",
+    "Full goal and heartbeat remain active"
+  ]
+}
