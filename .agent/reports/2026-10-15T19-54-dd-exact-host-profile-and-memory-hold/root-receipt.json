@@ -1,0 +1,73 @@
+{
+  "at": "2026-10-15T11:55:54.809334+00:00",
+  "source": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "classification": "progress: exact canonical host profile and fresh readonly writer proved; memory observation holds heavy admission",
+  "profileExit": 0,
+  "readonlyWriterExit": 0,
+  "ownedStageCleanup": true,
+  "currentWriter": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "leaseRows": 0,
+  "memoryAvailableBytes": 2440826880,
+  "requiredMemoryBytes": 2684354560,
+  "shortBytes": 243527680,
+  "heavyCapacityRun": false,
+  "deployment": false,
+  "formalPeerAcceptance": false,
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 3454,
+      "sha256": "a3cc72e887da0a624373d5e8546b135a203eab67ca6b0fc65a36aac82615ca92"
+    },
+    {
+      "path": "initial-readonly-host-command.json",
+      "bytes": 207,
+      "sha256": "c89027c74369eff39f09d808b386ce3b0f33d4928e6bb38033fe890f25d4a2b5"
+    },
+    {
+      "path": "initial-readonly-host.py",
+      "bytes": 741,
+      "sha256": "178aff2f674f1d1b26476de4f460775e641e09e89bd7b0acba2e46bc8a2583e3"
+    },
+    {
+      "path": "initial-readonly-host.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "initial-readonly-host.stdout",
+      "bytes": 316,
+      "sha256": "8a42ec2c36e2cd7f25c5cca0c559f17ca22a3edf82c2f6d5fc2829b2a47df95f"
+    },
+    {
+      "path": "light-locked-profile-writer-command.json",
+      "bytes": 583,
+      "sha256": "5ce73af4b55c3253334f8732795d92c076c6d3dbf1cc435bb31b470d11d19c61"
+    },
+    {
+      "path": "light-locked-profile-writer.py",
+      "bytes": 19861,
+      "sha256": "b302ec2dc90416ba9528fe82837c7951f3e0de1da62564a97d1a5475cdc6e999"
+    },
+    {
+      "path": "light-locked-profile-writer.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "light-locked-profile-writer.stdout",
+      "bytes": 1955,
+      "sha256": "7d0751a2a8a89f82d447d98aab73d0427152facf97361394ebd24828f76d880c"
+    },
+    {
+      "path": "operator-support.py",
+      "bytes": 11395,
+      "sha256": "f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af"
+    },
+    {
+      "path": "unit-profile.json",
+      "bytes": 714,
+      "sha256": "4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72"
+    }
+  ]
+}

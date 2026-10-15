@@ -1,0 +1,15 @@
+{
+  "args": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "/bin/bash -c 'set -euo pipefail; umask 077; exec 8>/run/lock/vps-heavy-operation.lock; exec 9>/run/lock/stockinsider-production-write.lock; exec 7>/run/lock/stockinsider-production-health.lock; flock -n 8; flock -n 9; flock -n 7; /usr/bin/python3 -I -'"
+  ],
+  "exit": 0,
+  "at": "2026-10-15T11:54:32.225955+00:00",
+  "source": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "sourceBytesHash": "b302ec2dc90416ba9528fe82837c7951f3e0de1da62564a97d1a5475cdc6e999"
+}

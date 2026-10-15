@@ -1,0 +1,11 @@
+PROFILE_STDOUT={"dropIn": {"gid": 0, "mode": 420, "sha256": "d8884c9a1b7e9e108be7f618a9c13a6dce8e810e046302f6c4491c8cace0f015", "uid": 0}, "units": {"stockinsider-internal-worker.service": {"effective": {"DropInPaths": "", "FragmentPath": "/etc/systemd/system/stockinsider-internal-worker.service", "Group": "stockinsider", "Id": "stockinsider-internal-worker.service", "LoadState": "loaded", "NeedDaemonReload": "no", "User": "stockinsider", "WorkingDirectory": "/opt/stockinsider/current/app"}, "sourceSha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e"}, "stockinsider-web-standalone.service": {"effective": {"DropInPaths": "/etc/systemd/system/stockinsider-web-standalone.service.d/20-writer-release.conf", "FragmentPath": "/etc/systemd/system/stockinsider-web-standalone.service", "Group": "stockinsider", "Id": "stockinsider-web-standalone.service", "LoadState": "loaded", "NeedDaemonReload": "no", "User": "stockinsider", "WorkingDirectory": "/opt/stockinsider/current/app"}, "sourceSha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"}}, "writer": {"gid": 987, "mode": 416, "sha256": "44c8ecd459867205e14f7e81116d4934c2ea88417794a493bf031ba6aa03dfb9", "uid": 0}}
+PROFILE_EXIT=0
+WRITER_STDOUT=BEGIN
+SET
+SET
+DO
+{"observedAt" : "2026-10-15T13:54:32.193752+02:00", "serverVersionNum" : "170011", "activeWriterCount" : 1, "releaseId" : "169aad1b6cfa747f78ae3464b614f43c0749d806", "dataPlaneLeaseRows" : 0}
+ROLLBACK
+WRITER_EXIT=0
+PREFLIGHT={"at": "2026-10-15T11:54:32.200595+00:00", "current": "/opt/stockinsider-standalone/releases/169aad1b6cfa747f78ae3464b614f43c0749d806", "memoryAvailableBytes": 2440826880, "requiredBytes": 2684354560, "memoryEnough": false, "originalThreeLocksHeld": true, "exactMergedProfilePassed": true, "writerReadOnlyPassed": true, "heavyCapacityRun": false, "activationExecuted": false, "deploy": false, "temporaryStagingOnly": true}
+OWNED_PROFILE_STAGE_CLEANUP_CONFIRMED=True

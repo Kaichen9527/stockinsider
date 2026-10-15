@@ -1,0 +1,13 @@
+{
+  "args": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "/usr/bin/python3 -I -"
+  ],
+  "exit": 0,
+  "at": "2026-10-15T11:52:58.560145+00:00"
+}

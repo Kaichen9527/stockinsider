@@ -1,0 +1,1 @@
+{"observedAt": "2026-10-15T11:52:58.534214+00:00", "current": "/opt/stockinsider-standalone/releases/169aad1b6cfa747f78ae3464b614f43c0749d806", "previous": null, "newTargetExists": false, "memoryAvailableBytes": 2441908224, "requiredMemoryBytes": 2684354560, "python": "3.12.3", "kernel": "Linux", "readOnly": true}
