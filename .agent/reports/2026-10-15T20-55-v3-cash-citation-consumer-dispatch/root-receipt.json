@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-15T12:57:04.753653+00:00",
+  "classification": "verified wait after genuine unique source-only dispatch and exact source dependency reconciliation",
+  "sourceIdentities": 14,
+  "runtimeEvidenceEqualInputs": 10,
+  "turn": "01a13fa1-3b48-777f-8399-b6d8ac1652c7",
+  "cursor": "303427c2-9b66-4f3d-abd3-26255a0a19ef:15",
+  "makerResultReceived": false,
+  "formalApproval": false,
+  "productionExecuted": false,
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 3442,
+      "sha256": "433752d071a89763cd8dcd0698405d0e36239433dd4febbf904e20ef32635e4b"
+    },
+    {
+      "path": "cloud-compact.json",
+      "bytes": 619,
+      "sha256": "4d8760fa0a811b461451d5c1ad54fc30609dbd96a4fe62d55b2685885d189f38"
+    },
+    {
+      "path": "dispatch-prompt.txt",
+      "bytes": 5017,
+      "sha256": "93f5f809e51604b03c70e4da62976e96d088c5e6123caf4e9f1c74f5cb3c1532"
+    },
+    {
+      "path": "source-inventory.json",
+      "bytes": 4145,
+      "sha256": "020f4007e6a736297711fd72bafcd707598f489987354aa98ad4e05fd472e03c"
+    }
+  ]
+}

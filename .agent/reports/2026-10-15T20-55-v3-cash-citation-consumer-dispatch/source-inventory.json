@@ -1,0 +1,110 @@
+[
+  {
+    "commit": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+    "path": "web/src/lib/research-historical-cash-core.ts",
+    "blob": "37aa911d5289faabf9a604d0768fe821a43b6487",
+    "bytes": 11245,
+    "sha256": "157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790",
+    "sameOnEvidence": true
+  },
+  {
+    "commit": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+    "path": "web/src/lib/research-historical-cash-pins.ts",
+    "blob": "5a9f2aeedfcbf5a57cbec25cffe3f5fc34ade92e",
+    "bytes": 7034,
+    "sha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5",
+    "sameOnEvidence": true
+  },
+  {
+    "commit": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+    "path": "web/src/lib/research-historical-cash-projection.ts",
+    "blob": "af9928e8dcfc945c53f53d26fe9d6645729d251e",
+    "bytes": 11131,
+    "sha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719",
+    "sameOnEvidence": true
+  },
+  {
+    "commit": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+    "path": "web/src/lib/research-scenario-cash-material.ts",
+    "blob": "dee2ff1f19830269cb8055a5de1a4395d2d1f4a5",
+    "bytes": 19506,
+    "sha256": "20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b",
+    "sameOnEvidence": true
+  },
+  {
+    "commit": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+    "path": "web/src/lib/research-v3-finite-material.ts",
+    "blob": "54396ac5d8954b138603a6eae45d1ff5a4243177",
+    "bytes": 5263,
+    "sha256": "0fc6a6121a963f22b125a4a6f5c506dde06f791204970ef0a3d33c5442671985",
+    "sameOnEvidence": true
+  },
+  {
+    "commit": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+    "path": "web/src/lib/research-versioned-complete-input.ts",
+    "blob": "a7c035844cfaf44834b755e1250fc3cae1d7a6d5",
+    "bytes": 8561,
+    "sha256": "6c748235f5aebd3bdfa254de400e752e42bf15aae53c840b8ec09b543a29e906",
+    "sameOnEvidence": true
+  },
+  {
+    "commit": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+    "path": "web/src/lib/research-versioned-input-binding.ts",
+    "blob": "093bd0ac201a4da0b1a5c7372f84b7570497840a",
+    "bytes": 4004,
+    "sha256": "1ec1bee664b793295b41de982818e767446b85e801efb164324217510d0fd940",
+    "sameOnEvidence": true
+  },
+  {
+    "commit": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+    "path": "web/src/lib/research-versioned-input-legacy-response.ts",
+    "blob": "c913092626c117c9dfcf3b1c88fa3cc587ddbc17",
+    "bytes": 4634,
+    "sha256": "a6d3f20e0b7749d9cfde09940d4959a4efe59456e2cd974a65c5a498a764d6b5",
+    "sameOnEvidence": true
+  },
+  {
+    "commit": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+    "path": "web/src/lib/research-versioned-input-request.ts",
+    "blob": "08ee73c8a66af3bf4796787b5d23907b21d8bc27",
+    "bytes": 1476,
+    "sha256": "cce94267308c7b3d3e1c20ad6214265c147fdcc7603defc186cd85b9e31b42b3",
+    "sameOnEvidence": true
+  },
+  {
+    "commit": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+    "path": "web/src/lib/research-cash-financial-reader.ts",
+    "blob": "e9cbb8743b7bd3936859c230e1f9591035e150f6",
+    "bytes": 6792,
+    "sha256": "fd3f5531bfa876c0b887367546f07bc7acbdef98d3c59d01478b04ffc5e2108c",
+    "sameOnEvidence": true
+  },
+  {
+    "commit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "path": "web/src/lib/research-business-article.ts",
+    "bytes": 18454,
+    "sha256": "e589fd67c08831d650b80cbd091113508c428d2b1a217be31150b682ce37b7cc",
+    "historicalOnly": true
+  },
+  {
+    "commit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "path": "web/src/lib/research-author-result.ts",
+    "bytes": 8436,
+    "sha256": "71b47dfe6a666498829e2bd6665e5688ca18de73e8e0938870e645983e5060e7",
+    "historicalOnly": true
+  },
+  {
+    "commit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "path": "web/src/lib/research-author-assignment.ts",
+    "bytes": 7161,
+    "sha256": "f3398447a07df929652e07ea3044bf8334e3e922f3344ad5802d39ea54b7d051",
+    "historicalOnly": true
+  },
+  {
+    "commit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "path": "web/src/lib/research-author-packet.ts",
+    "bytes": 11061,
+    "sha256": "50cabf662e17609f75a8bbddbe9d711b540dfa70a170ee67febabd563e1647a5",
+    "historicalOnly": true
+  }
+]
