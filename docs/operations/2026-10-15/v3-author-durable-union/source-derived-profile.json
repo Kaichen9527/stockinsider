@@ -1,0 +1,77 @@
+{
+  "status": "SOURCE_DERIVED_NOT_NATIVE",
+  "catalogSource": "scripts/opportunity-v3/research-versioned-prerequisite-profile.json",
+  "catalogSourceSha256": "3d6cf36330519a9382f2cce8fa1a6cc9484843a594d0df312ecc2ab60a0436db",
+  "catalogQuerySource": "scripts/opportunity-v3/research-publication-catalog.mjs",
+  "catalogQuerySourceSha256": "49e3348b60d995994d864437eba8d2a38390fb09d59e2c82fe5f60c2954887f1",
+  "namespaceQuerySource": "scripts/opportunity-v3/research-publication-tail-entry-namespace.mjs",
+  "namespaceQuerySourceSha256": "3cf423e94083d42af57d6d9bccfb9b6ae8b0cba98b8be7ce24357811e6024b6b",
+  "predecessorNamespaceHash": "cb22ccfeb504b6fd82cc1af0d954fe220427d562120dd6089fc9accb9bffd29f",
+  "predecessorCatalogHash": "4afc6fe90ae3d65acbc3858003695fc9b3c9c4122ef129f92ae174f0ea6bf9e4",
+  "scope": "all existing public catalog / public-auth-extensions namespace / all roles; exact original LOCAL profile; no grants",
+  "functions": [
+    {
+      "file": "migrations/20261009_research_author_assignments_v2.sql",
+      "args": "\n p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text\n",
+      "sha": "4d95cd7f2e7b019f7afc7faece96faa5b45182a28732e6d5d3eb54b7a3b813e5",
+      "line": 34,
+      "name": "research_author_assignment_context_v2",
+      "successorBodySha256": "904b91599eab5f33d15c1c73bea2ba94f57ee53da769ec67b65b96eba2a85346",
+      "changed": true
+    },
+    {
+      "file": "migrations/20261009_research_author_assignments_v2.sql",
+      "args": "\n p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text\n",
+      "sha": "35132922db329e7e51e0284646ed1a730535b26ab38bec014328c19bf4adf2b8",
+      "line": 88,
+      "name": "read_research_author_assignment_v2",
+      "successorBodySha256": "35132922db329e7e51e0284646ed1a730535b26ab38bec014328c19bf4adf2b8",
+      "changed": false
+    },
+    {
+      "file": "migrations/20261009_research_author_assignments_v2.sql",
+      "args": "\n p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text\n",
+      "sha": "35d895837c8faf5d75364af82fcafc247d7535fb49ed0b2d05c162724ddbe38b",
+      "line": 112,
+      "name": "assign_research_author_v2",
+      "successorBodySha256": "35d895837c8faf5d75364af82fcafc247d7535fb49ed0b2d05c162724ddbe38b",
+      "changed": false
+    },
+    {
+      "file": "migrations/20261009_research_author_packet_v2.sql",
+      "args": "\n p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text\n",
+      "sha": "aab28c28adb8ff5fb725acc1a53d44058a04ff66d456a92310b21dc3ed4751fc",
+      "line": 3,
+      "name": "read_research_author_packet_v2",
+      "successorBodySha256": "8f6edc9b34836a22b4a56f14772a75600d0fb915dbc8076ba42cd1cbc9eb2a7f",
+      "changed": true
+    },
+    {
+      "file": "migrations/20261009_research_author_results_v2.sql",
+      "args": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text",
+      "sha": "2d821365f7ce9ac22e7c2992c64baf916ded4ece58fc44e413d71f3dcd702b4d",
+      "line": 19,
+      "name": "read_research_author_result_v2",
+      "successorBodySha256": "e5889572355ba71c77f0d12c5af867cf65e88d00161d781bbd5051e43f674233",
+      "changed": true
+    },
+    {
+      "file": "migrations/20261009_research_author_results_v2.sql",
+      "args": "p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result jsonb",
+      "sha": "7cd8d5a20f2f4d2420790b4a46c28c1d9ece5920177c0a02807fdf3f45d9d297",
+      "line": 32,
+      "name": "receive_research_author_result_v2",
+      "successorBodySha256": "97f361883edc0d8cf61e696775c7cdb377272979c61e2604c3ec881497576c41",
+      "changed": true
+    }
+  ],
+  "actualOids": null,
+  "nativeVerified": false,
+  "productionAuthorized": false,
+  "pending": [
+    "PG17 observed-canonical-vs-JS catalog codec equivalence",
+    "actual migration first apply/forced rollback/drift/busy",
+    "actual original v2 and new v3 durable lifecycle",
+    "source-derived no owner default-ACL premise"
+  ]
+}

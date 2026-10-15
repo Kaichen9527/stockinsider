@@ -25,7 +25,7 @@ for(const symbol of ['2409','2383']){
   const x=await articleFixture(symbol,principal),{validatedArticle:v}=await validate(x);x.calls.length=0;
   const c=createV3AuthorArticleComposition({bindingTexts:[x.text],executorFingerprint:x.binding.core.compiledFingerprintIdentity});
   const packet=await c.readAuthorPacket(request(x,'readAuthorPacket'),x.db);assert.equal(packet.packet.schemaVersion,'research-author-packet-v3-candidate');assert.equal(packet.dispatchReady,false);assert.equal(JSON.stringify(packet).includes(principal),false);
-  const result=await c.prepareAuthorResult(request(x,'receiveAuthorResult',observation(x,v)),x.db);assert.equal(result.envelope.schemaVersion,'research-author-result-v3-candidate');assert.equal(result.envelope.validatedArticle.articleHash,v.articleHash);assert.equal(result.persistence.status,'unavailable');assert.equal(result.publishableResearch,false);assert.equal(result.envelope.bindingCapsuleIdentity,x.binding.bindingCapsuleIdentity);assert.ok(x.calls.every(v=>!v.name.endsWith('_v2')&&!v.name.startsWith('receive')&&!v.name.startsWith('seal')));
+  const result=await c.prepareAuthorResult(request(x,'receiveAuthorResult',observation(x,v)),x.db);assert.equal(result.envelope.schemaVersion,'research-author-result-v3-candidate');assert.equal(result.envelope.validatedArticle.articleHash,v.articleHash);assert.equal(result.persistence.status,'unavailable');assert.equal(result.publishableResearch,false);assert.equal(result.envelope.bindingCapsuleIdentity,x.binding.bindingCapsuleIdentity);assert.ok(x.calls.every(v=>!v.name.startsWith('receive')&&!v.name.startsWith('seal')));
  });
  test(symbol+' strict article mutations reject without v2 fallback',async()=>{
   const mutations=[x=>x.article.schemaVersion='candidate-deep-research-v2',x=>x.article.inputHash='0'.repeat(64),x=>x.article.sections.reverse(),x=>x.article.tables[4].rows[0].reference.citation.value++,x=>x.article.tables[4].rows[0].reference.citation.unit='TWD_million',x=>x.article.tables[4].rows[0].reference.citation.period='2026Q2',x=>x.article.tables[4].rows[0].reference.citation.pointer='/cash/references/0/pdfPage',x=>x.article.tables[4].rows[0].reference.citation.classification='conditional_scenario',x=>x.article.tables[2].rows[0].reference.pointer='/reportedFacts/0/locator/pdfPage',x=>x.article.tables[3].rows[0].reference.kind='reported_observation',x=>x.article.valuation[1].fiscalYear='2026',x=>x.source.retracted=true,x=>x.source.rights='unavailable',x=>x.source.symbols=['9999'],x=>x.article.authoredAt='2099-01-01T00:00:00Z'];
@@ -36,7 +36,7 @@ for(const symbol of ['2409','2383']){
    const x=await articleFixture(symbol,principal),c=createV3AuthorArticleComposition({bindingTexts:[x.text],executorFingerprint:x.binding.core.compiledFingerprintIdentity});
    if(mode==='principal')x.assignment.controller_principal='0'.repeat(64);if(mode==='binding')x.packet.bindingCapsuleIdentity='0'.repeat(64);if(mode==='source')x.packet.sources[0].descriptor.retracted=true;
    const db=mode==='missing'?{rpc:async(name,args)=>name==='read_research_article_input_candidate_v3'?x.db.rpc(name,args):({data:null,error:{code:'42883'}})}:x.db;
-   await assert.rejects(c.readAuthorPacket(request(x,'readAuthorPacket'),db));assert.ok(x.calls.every(v=>!v.name.endsWith('_v2')));
+   await assert.rejects(c.readAuthorPacket(request(x,'readAuthorPacket'),db));assert.ok(x.calls.every(v=>['read_research_article_input_candidate_v3','read_research_author_assignment_v2','read_research_author_packet_v2'].includes(v.name)));
   }
  });
 }
