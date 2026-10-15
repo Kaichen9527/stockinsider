@@ -1,0 +1,579 @@
+{
+  "localOnlyRoot": "/tmp/author-installer-neg-native-o16",
+  "count": 114,
+  "bytes": 391807097,
+  "files": [
+    {
+      "path": "binaries.json",
+      "bytes": 1629,
+      "sha256": "22a35294a8b4b814c5b1b49f1f0873750ee95be6e850e1686a35a856d9d1996f"
+    },
+    {
+      "path": "cleanup-and-source.py",
+      "bytes": 3913,
+      "sha256": "c64cd0cfc81464d8e563a228f09304855e21bf64469ab091493ee4badaec4cae"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 9586,
+      "sha256": "646119691fafa064a4fbc235362285b034565a04f9ab4f985f0a30e35b623cc6"
+    },
+    {
+      "path": "cleanup-source.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "cleanup-source.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cleanup-source.stdout",
+      "bytes": 521,
+      "sha256": "ff24155b7258fb564f4660501e38236a7d30b5d3c07d50f2345f31a3a70d6876"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 687,
+      "sha256": "f5489b52c29eda43c5ad38f56ff25def3169be14bcf53148192838032cdc21ff"
+    },
+    {
+      "path": "initial-processes.json",
+      "bytes": 120690,
+      "sha256": "ee16e350f4096b81ae48487b3bb0e4eecb2da73e97820e5aefe56e44d73891f6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-00-pristine-private.json",
+      "bytes": 26784800,
+      "sha256": "2fd7f4795d231a36c364b2c0fb49f2da8fd7868ee6ac581e2fae1b4dabd5fcc6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-03-observer-after-rollback-private.json",
+      "bytes": 26784800,
+      "sha256": "2fd7f4795d231a36c364b2c0fb49f2da8fd7868ee6ac581e2fae1b4dabd5fcc6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-04-writer-after-rollback-private.json",
+      "bytes": 26784800,
+      "sha256": "2fd7f4795d231a36c364b2c0fb49f2da8fd7868ee6ac581e2fae1b4dabd5fcc6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-busy-held.json",
+      "bytes": 394,
+      "sha256": "312a800c8fa1802a0d40c589f385833e0cb7526a1bb27ba8c3033ab6aebcbc7a"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-claim.json",
+      "bytes": 1345,
+      "sha256": "89ac6cd842b18266f0db94bc7b7cc20b9f9b306c22e47eb71b2206d834c11b1c"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-cleanup.json",
+      "bytes": 93,
+      "sha256": "b4aa7b0abadf1f567a8a2f3338527275ef502bc4301b52b629fc916d3c2c5c1b"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-cluster-absent.json",
+      "bytes": 67,
+      "sha256": "1373fb5d4f6e39e27f2c2c1b7dddf3e4d09654b90cf6709be8ea2829ba1dedf1"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-codecs.json",
+      "bytes": 417,
+      "sha256": "fdb9d2a8dc660a2898ef5096889b641bb778d6ac1f0028a0a365b0a3b52272bc"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-connections.json",
+      "bytes": 73,
+      "sha256": "fc01c6ae220fee4054a2863989c3d2e1d282147da57f6606954eb1680f94465e"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-expected-error-private.json",
+      "bytes": 122,
+      "sha256": "6177d8e6820713ca4afc69d9c8517ecc2610675e0c501cbf418156e5333d8909"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-holder-release.json",
+      "bytes": 95,
+      "sha256": "3b1f4a35a872598b224c9fc146c537b4931d6c1fe3a38a8d8e9495d373f00c57"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-input-identity.json",
+      "bytes": 399,
+      "sha256": "7af4f28da81c9bb9deaea609937bd7043db1caae855e38772db0ef268e276017"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-installer-backends-after-close.json",
+      "bytes": 62,
+      "sha256": "a27f42807c5656347b6cd37e54b1a3404b442d1efe330599cccd2da60279add0"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-installer-cleanup.json",
+      "bytes": 295,
+      "sha256": "c6fcc3b267672197a8490cc445b48aa18ae03f90e047e6bdfba0a843c1f0d828"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-negative-witness.json",
+      "bytes": 9870,
+      "sha256": "7717df9baa274674e02ee518e27bcc9b15526abec042c1dcb26e1e278358266b"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-neutral-setup-private.json",
+      "bytes": 4793,
+      "sha256": "68cfffc6de244d4156133a37ff25acfa60dee797dfe6e687d17887378619150c"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-neutral-setup-witness.json",
+      "bytes": 1584,
+      "sha256": "8b8653aa8322e7e8207dd14ee8a06a9b6ddd82fb120d6e1625eb93242f3e70b4"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-postgres-before-cleanup.log",
+      "bytes": 65399,
+      "sha256": "9d38f7acc7c10c47396a10fafdfe9b51ec4e72c7b5aff72735dc7c82ecdce5e1"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-postgres.log",
+      "bytes": 65550,
+      "sha256": "01fe6d92c1ec8e792223bbbb33cb7a33bb916f50053e66c6b094fa300ee2f061"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-preparation.json",
+      "bytes": 2951,
+      "sha256": "c32b2bd3b5c4308debb60ee7538c0a6d7b9ffc5e74db39c056e7ba6efd28624b"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-priority.json",
+      "bytes": 142,
+      "sha256": "577cfed151b7665591403416363f0c3631b3c8e911fd56264bcdd8cea641144e"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-roster-admission.json",
+      "bytes": 448,
+      "sha256": "9e8344046bfdb0deba188538f6bc06781e59cdb0dec0f598ce146cf5aaa6256d"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-rpc-fd-order.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "569698b58fd2b3ad37bc8048d13fa2be773a78722826ba6c240e76c7a2243a94"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-busy-transaction-status.json",
+      "bytes": 230,
+      "sha256": "f5d796dcdaab1e028303b0abeade1b5776ca232e9a0d37d0cdd76c6b1899afe6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-00-pristine-private.json",
+      "bytes": 26784800,
+      "sha256": "2fd7f4795d231a36c364b2c0fb49f2da8fd7868ee6ac581e2fae1b4dabd5fcc6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-01-drift-private.json",
+      "bytes": 26785056,
+      "sha256": "ae55a57588f98485ab7a16cde35dddbcc7871254ba5d9e4861cd5d3dc0cb2609"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-03-observer-after-rollback-private.json",
+      "bytes": 26785056,
+      "sha256": "ae55a57588f98485ab7a16cde35dddbcc7871254ba5d9e4861cd5d3dc0cb2609"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-04-writer-after-rollback-private.json",
+      "bytes": 26785056,
+      "sha256": "ae55a57588f98485ab7a16cde35dddbcc7871254ba5d9e4861cd5d3dc0cb2609"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-claim.json",
+      "bytes": 1341,
+      "sha256": "b936be180d8e6801d16caa756e26ca18171ed91c26c980a7ff5cacb6115e9e88"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-cleanup.json",
+      "bytes": 93,
+      "sha256": "87ba79cf27d31f044ee0149358f87efcbaeee05eb404a640a52ff191b2ccac68"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-cluster-absent.json",
+      "bytes": 67,
+      "sha256": "1373fb5d4f6e39e27f2c2c1b7dddf3e4d09654b90cf6709be8ea2829ba1dedf1"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-codecs.json",
+      "bytes": 417,
+      "sha256": "fdb9d2a8dc660a2898ef5096889b641bb778d6ac1f0028a0a365b0a3b52272bc"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-connections.json",
+      "bytes": 73,
+      "sha256": "cd834eba250ffd1e7d65a019db99c4a49f813fac21d0c60105cf02b669c33108"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-expected-error-private.json",
+      "bytes": 140,
+      "sha256": "76c725769bdd55cc588b31e3449605547d3727e7fb8e7c5c986615144d57c754"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-input-identity.json",
+      "bytes": 399,
+      "sha256": "7af4f28da81c9bb9deaea609937bd7043db1caae855e38772db0ef268e276017"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-installer-backends-after-close.json",
+      "bytes": 50,
+      "sha256": "42f4455eeedc774b1249eec17b1c81250affe91091bead9cf60e4561e3bb74d6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-installer-cleanup.json",
+      "bytes": 304,
+      "sha256": "4513f2ce1b6cca7ba4d351e2ab6acfa8db65157876c711dcfd7d2eaddf81c483"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-negative-witness.json",
+      "bytes": 9875,
+      "sha256": "f57034a2ea4a3feff133c1bf199fa91a729869c1879d3d713c6ef77be9dd3829"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-neutral-setup-private.json",
+      "bytes": 4789,
+      "sha256": "0ac7931422ae45254c3aed5f114fae0a52c1e3ec3a632f969326cce815fbf9d4"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-neutral-setup-witness.json",
+      "bytes": 1584,
+      "sha256": "6e93aa74f6bac5099553c79bb73047f3d7617e440f3677973d951ed2412f8129"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-postgres-before-cleanup.log",
+      "bytes": 65417,
+      "sha256": "434ef2a41bc5df77fe6a01d5b40d9eb6b22a7598a0c012f3e58db902f1094161"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-postgres.log",
+      "bytes": 65568,
+      "sha256": "64c082d33b1dd3d7915ef6deb732e2d117122b428fafed68fc77c5713fbcc901"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-preparation.json",
+      "bytes": 2947,
+      "sha256": "a3901246aabedfe044cfe4abb6d4d1bb5c8748b89a9195728b9ae4cb2830fa0d"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-priority.json",
+      "bytes": 142,
+      "sha256": "68cf97f3d950b72a402259656534bd665ecb5968512ec1cf85a962c1acc1c8d4"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-roster-admission.json",
+      "bytes": 448,
+      "sha256": "e9992a114b2b3903d963cb997e2de309521a4a1cf671c5ac84944b4fb533cc90"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-rpc-fd-order.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "569698b58fd2b3ad37bc8048d13fa2be773a78722826ba6c240e76c7a2243a94"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-drift-transaction-status.json",
+      "bytes": 239,
+      "sha256": "5bd938c896268064e2f1f1f975a70244a154e41b4e42c90032c3b8ee161cd86a"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-00-pristine-private.json",
+      "bytes": 26784800,
+      "sha256": "2fd7f4795d231a36c364b2c0fb49f2da8fd7868ee6ac581e2fae1b4dabd5fcc6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-01-writer-successor-private.json",
+      "bytes": 26817756,
+      "sha256": "76848fba511a3daee8467fed9ae6daec31332978bc7b0f0bcda0794b8e25eb30"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-02-observer-before-rollback-private.json",
+      "bytes": 26784800,
+      "sha256": "2fd7f4795d231a36c364b2c0fb49f2da8fd7868ee6ac581e2fae1b4dabd5fcc6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-03-observer-after-rollback-private.json",
+      "bytes": 26784800,
+      "sha256": "2fd7f4795d231a36c364b2c0fb49f2da8fd7868ee6ac581e2fae1b4dabd5fcc6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-04-writer-after-rollback-private.json",
+      "bytes": 26784800,
+      "sha256": "2fd7f4795d231a36c364b2c0fb49f2da8fd7868ee6ac581e2fae1b4dabd5fcc6"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-claim.json",
+      "bytes": 1345,
+      "sha256": "bd9e2d696ef6a75ce9e221b11195a1d8142c465cf25de055cf94999ac14331c3"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-cleanup.json",
+      "bytes": 93,
+      "sha256": "15b8d720448c587b1bb214d4e215bc8f5f59c29bf134b986874a99a709d8e760"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-cluster-absent.json",
+      "bytes": 67,
+      "sha256": "1373fb5d4f6e39e27f2c2c1b7dddf3e4d09654b90cf6709be8ea2829ba1dedf1"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-codecs.json",
+      "bytes": 417,
+      "sha256": "fdb9d2a8dc660a2898ef5096889b641bb778d6ac1f0028a0a365b0a3b52272bc"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-connections.json",
+      "bytes": 73,
+      "sha256": "93370cb558ceb10e9ba1a446701e6b0e0285ab0b9c874bf6f0448879390bc4cc"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-expected-error-private.json",
+      "bytes": 55,
+      "sha256": "e368d129d2ac9d808b596b49d47ea75f509db1c4fe9ebd03c47947ae03e46915"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-input-identity.json",
+      "bytes": 398,
+      "sha256": "f6fe281b8f30f067748c29909ee0220de1b15bffd2e20a175e6b032ff465554b"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-installer-backends-after-close.json",
+      "bytes": 50,
+      "sha256": "054b272fcc7c1f262ac39567ebbc2281ada30e63bca06ef858ca8cb1d42af1b4"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-installer-cleanup.json",
+      "bytes": 493,
+      "sha256": "5e13cee5c0ea0f7c49d00dd1489fee50fdeed0af98b1b842b69152bac9315d75"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-negative-witness.json",
+      "bytes": 10056,
+      "sha256": "6dc6ddf6c34eae93d10ca2cedcd5421361bbd25ff04c5104ab68685ca7dfeb71"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-neutral-setup-private.json",
+      "bytes": 4793,
+      "sha256": "0f005657aa66a366d19677b77b69622b659482fd8dfb39625d5eb37869178a57"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-neutral-setup-witness.json",
+      "bytes": 1584,
+      "sha256": "67318f5277ceb266b633e1616b9083407204055ad39b4f181ca366c176098bf3"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-postgres-before-cleanup.log",
+      "bytes": 671,
+      "sha256": "111a6c0d63c7cbe545f433a7bcdfc63716aa04877fa9bd45b05a58fd1fba486c"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-postgres.log",
+      "bytes": 822,
+      "sha256": "4e786aecb4a4dae7d21e9d308279a649d75706f8b0917be218d8a38986949929"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-preparation.json",
+      "bytes": 2951,
+      "sha256": "f0d61b46678310417c608eabd997b6ba52100bac63d331ed9c51b100fecff76f"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-priority.json",
+      "bytes": 142,
+      "sha256": "f9294f1172aadee7161499336743f32b21ce51d9bb268f2240fdcebdf6750be9"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-roster-admission.json",
+      "bytes": 448,
+      "sha256": "af626f59969542e1d9cca07d6ec42a21a5e47dbc2374901551b307d72b98ef74"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-rpc-fd-order.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "569698b58fd2b3ad37bc8048d13fa2be773a78722826ba6c240e76c7a2243a94"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-transaction-status.json",
+      "bytes": 428,
+      "sha256": "20012a59ef25e713dcfc44a3a05ec5cc645772a2e5a9dad851657044198562e9"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-writer-intrans.json",
+      "bytes": 143,
+      "sha256": "61b68b62ed48c1868575c62b5cdec80eba9249bf6f28c0c07cc789d93ba573fd"
+    },
+    {
+      "path": "native-artifacts/2409-author-installer-forced-rollback-writer-successor-witness.json",
+      "bytes": 2970,
+      "sha256": "cdae387c40480d09dc3ca495ac7e054ef618f772f3921bfc277197dec3cca11e"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 809,
+      "sha256": "cbf0e1fb9790259789e5ab56d23376f48515299df3c1134637ebfd2d4bf31597"
+    },
+    {
+      "path": "native.samples.jsonl",
+      "bytes": 163758,
+      "sha256": "86563d60ced6f0ab1d9701a2aa1d7591ab82b628eb745ef5138f13751cf9e4b4"
+    },
+    {
+      "path": "native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native.stdout",
+      "bytes": 1159,
+      "sha256": "e8b251196af95b05ff71dd16138fa6c8ac6c6fc834c678bc7fb4cdfefea8ef8a"
+    },
+    {
+      "path": "package-evidence.py",
+      "bytes": 5405,
+      "sha256": "ca3b4a491add6d05420228cb7b4fb88865235d6947da112921b1cd3438fa29bd"
+    },
+    {
+      "path": "post-source-check.json",
+      "bytes": 80388,
+      "sha256": "09e89058643e2d0ce027fdf3354599fd1f3a508b83099656a9b44376dfb2b2fd"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 58754,
+      "sha256": "9ad00386e9dd62419ae8957a7b3ab1dd5f9f5dfb65bc79cf1d33afb641bc16d4"
+    },
+    {
+      "path": "run.py",
+      "bytes": 3351,
+      "sha256": "ef7dcbad6cce707441c5fdd6760a8e8611eb7e825690197a96397c43dd6e88cd"
+    },
+    {
+      "path": "runner-seal.json",
+      "bytes": 222,
+      "sha256": "171bab5590c87eebec0abe2859157a607a66e9e7cb8e9aed4cbf9efd23e878cf"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 73360,
+      "sha256": "2be1d1a1999df141dd875d64b030e955eadff991dd24c6d8be71a25017c85a2e"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 396,
+      "sha256": "8ac22ac2919145a94576af79bab2ab77352dc3b01bc5efa99ab4aa0694a575fb"
+    },
+    {
+      "path": "summarize.mjs",
+      "bytes": 6391,
+      "sha256": "be3e35eb8d36aeb8ad920e87a9e64384981b4699c440f7bb853eeca2d34b66e5"
+    },
+    {
+      "path": "summary.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "summary.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "summary.stdout",
+      "bytes": 513,
+      "sha256": "8ef23549dbb96335071e8e12c9c04045bcf3c33e2ba2b1bc50579e0f928090c5"
+    }
+  ],
+  "contentsIndependentlyReviewedByRoot": false,
+  "privateRawPublished": false
+}

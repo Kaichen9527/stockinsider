@@ -1,0 +1,529 @@
+{
+  "time": "2026-10-15T23:43:52.792488+00:00",
+  "cases": [
+    {
+      "kind": "busy",
+      "clusterPath": "/tmp/vp3profile-5bF5Yy",
+      "clusterAbsent": true,
+      "socketDirectoryAbsent": true,
+      "cleanupStage": "business complete",
+      "stoppedReported": true,
+      "shutdownLogObserved": true,
+      "serverLogBefore": {
+        "bytes": 65399,
+        "sha256": "9d38f7acc7c10c47396a10fafdfe9b51ec4e72c7b5aff72735dc7c82ecdce5e1"
+      },
+      "serverLogAfter": {
+        "bytes": 65550,
+        "sha256": "01fe6d92c1ec8e792223bbbb33cb7a33bb916f50053e66c6b094fa300ee2f061"
+      },
+      "callbackIds": {
+        "writer": 668022,
+        "observer": 668023,
+        "holder": 668024
+      },
+      "fixtureConnections": {
+        "writer": 668022,
+        "observer": 668025,
+        "observerReadOnly": true
+      },
+      "installerClientCleanup": {
+        "cleanupErrors": [],
+        "lockStillUnconfirmed": false,
+        "statuses": [
+          "I",
+          "E",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I"
+        ]
+      },
+      "callbackBackendAbsence": {
+        "pids": [
+          668023,
+          668024
+        ],
+        "remaining": []
+      },
+      "secureTreeFinallyAbsenceRecorded": false
+    },
+    {
+      "kind": "drift",
+      "clusterPath": "/tmp/vp3profile-KxSWqU",
+      "clusterAbsent": true,
+      "socketDirectoryAbsent": true,
+      "cleanupStage": "business complete",
+      "stoppedReported": true,
+      "shutdownLogObserved": true,
+      "serverLogBefore": {
+        "bytes": 65417,
+        "sha256": "434ef2a41bc5df77fe6a01d5b40d9eb6b22a7598a0c012f3e58db902f1094161"
+      },
+      "serverLogAfter": {
+        "bytes": 65568,
+        "sha256": "64c082d33b1dd3d7915ef6deb732e2d117122b428fafed68fc77c5713fbcc901"
+      },
+      "callbackIds": {
+        "writer": 668067,
+        "observer": 668068
+      },
+      "fixtureConnections": {
+        "writer": 668067,
+        "observer": 668077,
+        "observerReadOnly": true
+      },
+      "installerClientCleanup": {
+        "cleanupErrors": [],
+        "lockStillUnconfirmed": false,
+        "statuses": [
+          "I",
+          "I",
+          "E",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I"
+        ]
+      },
+      "callbackBackendAbsence": {
+        "pids": [
+          668068
+        ],
+        "remaining": []
+      },
+      "secureTreeFinallyAbsenceRecorded": false
+    },
+    {
+      "kind": "forced-rollback",
+      "clusterPath": "/tmp/vp3profile-SreSYs",
+      "clusterAbsent": true,
+      "socketDirectoryAbsent": true,
+      "cleanupStage": "business complete",
+      "stoppedReported": true,
+      "shutdownLogObserved": true,
+      "serverLogBefore": {
+        "bytes": 671,
+        "sha256": "111a6c0d63c7cbe545f433a7bcdfc63716aa04877fa9bd45b05a58fd1fba486c"
+      },
+      "serverLogAfter": {
+        "bytes": 822,
+        "sha256": "4e786aecb4a4dae7d21e9d308279a649d75706f8b0917be218d8a38986949929"
+      },
+      "callbackIds": {
+        "writer": 668109,
+        "observer": 668110
+      },
+      "fixtureConnections": {
+        "writer": 668109,
+        "observer": 668119,
+        "observerReadOnly": true
+      },
+      "installerClientCleanup": {
+        "cleanupErrors": [],
+        "lockStillUnconfirmed": false,
+        "statuses": [
+          "I",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "T",
+          "E",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I",
+          "I"
+        ]
+      },
+      "callbackBackendAbsence": {
+        "pids": [
+          668110
+        ],
+        "remaining": []
+      },
+      "secureTreeFinallyAbsenceRecorded": false
+    }
+  ],
+  "explicitBackendPids": [
+    {
+      "pid": 668022,
+      "exists": false
+    },
+    {
+      "pid": 668023,
+      "exists": false
+    },
+    {
+      "pid": 668024,
+      "exists": false
+    },
+    {
+      "pid": 668025,
+      "exists": false
+    },
+    {
+      "pid": 668067,
+      "exists": false
+    },
+    {
+      "pid": 668068,
+      "exists": false
+    },
+    {
+      "pid": 668077,
+      "exists": false
+    },
+    {
+      "pid": 668109,
+      "exists": false
+    },
+    {
+      "pid": 668110,
+      "exists": false
+    },
+    {
+      "pid": 668119,
+      "exists": false
+    }
+  ],
+  "explicitBackendAbsentCount": 10,
+  "sampledProcessesAfter": [
+    {
+      "pid": 667975,
+      "exists": false
+    },
+    {
+      "pid": 667981,
+      "exists": false
+    },
+    {
+      "pid": 667994,
+      "exists": false
+    },
+    {
+      "pid": 668003,
+      "exists": false
+    },
+    {
+      "pid": 668004,
+      "exists": false
+    },
+    {
+      "pid": 668007,
+      "exists": false
+    },
+    {
+      "pid": 668010,
+      "exists": true,
+      "comm": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 668010,
+      "rssBytes": 0
+    },
+    {
+      "pid": 668011,
+      "exists": false
+    },
+    {
+      "pid": 668012,
+      "exists": false
+    },
+    {
+      "pid": 668014,
+      "exists": false
+    },
+    {
+      "pid": 668015,
+      "exists": false
+    },
+    {
+      "pid": 668016,
+      "exists": false
+    },
+    {
+      "pid": 668017,
+      "exists": false
+    },
+    {
+      "pid": 668018,
+      "exists": false
+    },
+    {
+      "pid": 668019,
+      "exists": false
+    },
+    {
+      "pid": 668021,
+      "exists": false
+    },
+    {
+      "pid": 668022,
+      "exists": false
+    },
+    {
+      "pid": 668023,
+      "exists": false
+    },
+    {
+      "pid": 668024,
+      "exists": false
+    },
+    {
+      "pid": 668029,
+      "exists": false
+    },
+    {
+      "pid": 668038,
+      "exists": false
+    },
+    {
+      "pid": 668039,
+      "exists": false
+    },
+    {
+      "pid": 668045,
+      "exists": true,
+      "comm": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 668045,
+      "rssBytes": 0
+    },
+    {
+      "pid": 668046,
+      "exists": false
+    },
+    {
+      "pid": 668047,
+      "exists": false
+    },
+    {
+      "pid": 668049,
+      "exists": false
+    },
+    {
+      "pid": 668050,
+      "exists": false
+    },
+    {
+      "pid": 668051,
+      "exists": false
+    },
+    {
+      "pid": 668052,
+      "exists": false
+    },
+    {
+      "pid": 668053,
+      "exists": false
+    },
+    {
+      "pid": 668054,
+      "exists": false
+    },
+    {
+      "pid": 668056,
+      "exists": false
+    },
+    {
+      "pid": 668067,
+      "exists": false
+    },
+    {
+      "pid": 668068,
+      "exists": false
+    },
+    {
+      "pid": 668078,
+      "exists": false
+    },
+    {
+      "pid": 668081,
+      "exists": false
+    },
+    {
+      "pid": 668088,
+      "exists": false
+    },
+    {
+      "pid": 668089,
+      "exists": false
+    },
+    {
+      "pid": 668090,
+      "exists": false
+    },
+    {
+      "pid": 668091,
+      "exists": false
+    },
+    {
+      "pid": 668097,
+      "exists": true,
+      "comm": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 668097,
+      "rssBytes": 0
+    },
+    {
+      "pid": 668098,
+      "exists": false
+    },
+    {
+      "pid": 668099,
+      "exists": false
+    },
+    {
+      "pid": 668101,
+      "exists": false
+    },
+    {
+      "pid": 668102,
+      "exists": false
+    },
+    {
+      "pid": 668103,
+      "exists": false
+    },
+    {
+      "pid": 668104,
+      "exists": false
+    },
+    {
+      "pid": 668105,
+      "exists": false
+    },
+    {
+      "pid": 668106,
+      "exists": false
+    },
+    {
+      "pid": 668108,
+      "exists": false
+    },
+    {
+      "pid": 668109,
+      "exists": false
+    },
+    {
+      "pid": 668110,
+      "exists": false
+    }
+  ],
+  "remainingZombieProcesses": [
+    {
+      "pid": 668010,
+      "exists": true,
+      "comm": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 668010,
+      "rssBytes": 0
+    },
+    {
+      "pid": 668045,
+      "exists": true,
+      "comm": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 668045,
+      "rssBytes": 0
+    },
+    {
+      "pid": 668097,
+      "exists": true,
+      "comm": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 668097,
+      "rssBytes": 0
+    }
+  ],
+  "sampledOwnedProcessesAbsent": 49,
+  "sampledOwnedProcessesTotal": 52,
+  "allOwnedPidsAbsent": false,
+  "sampledPeakNotInstantaneous": true,
+  "sampleCount": 202,
+  "finalFree": {
+    "/workspace": 8593125376,
+    "/tmp": 14432186368
+  },
+  "pending": [
+    "Independent secure-tree finally absence not recorded by frozen fixture; no claim of that proof",
+    "OS zombies retained; not absent and no cleanup of unrelated processes"
+  ]
+}

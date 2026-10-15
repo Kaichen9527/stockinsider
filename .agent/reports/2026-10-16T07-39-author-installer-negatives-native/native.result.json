@@ -1,0 +1,26 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--import",
+    "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-v3-author-installer-negative-native.test.mjs"
+  ],
+  "start": "2026-10-15T23:40:49.797607+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.2,
+  "peakSessionAndPgRssBytes": 958652416,
+  "minimumFreeBytes": {
+    "/workspace": 8591224832,
+    "/tmp": 14344937472
+  },
+  "user": "agent",
+  "artifactPath": "/tmp/author-installer-neg-native-o16/native-artifacts",
+  "deadline": "2026-10-16T00:04:14Z",
+  "sessionPid": 667975,
+  "exit": 0,
+  "seconds": 47.30573320388794,
+  "end": "2026-10-15T23:41:37.103338+00:00"
+}

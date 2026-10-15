@@ -1,0 +1,77 @@
+{
+  "handoffCommit": "80abf1c903267d8c562814c2684e4407cae561ff",
+  "tree": "46eea50b331a74faf3cbe5c8a4f406406f96ed67",
+  "executionBase": "ea878a1e35e038baa7b2241028380686fa7802b6",
+  "harnessSubject": "a1b8ce77e48a7e26f45a2a587206b5ff5d132fea",
+  "productSubject": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "counts": {
+    "children": 3,
+    "parent": 1,
+    "pass": 4,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "inputCount": 293,
+  "inputBytes": 9812469,
+  "privateRawCount": 114,
+  "privateRawBytes": 391807097,
+  "files": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 2681,
+      "sha256": "e7435d84341f7eb9339f9c3a4568b0359148d2b32822d57d13cd05cfac162f11"
+    },
+    {
+      "path": "binaries.json",
+      "bytes": 1629,
+      "sha256": "22a35294a8b4b814c5b1b49f1f0873750ee95be6e850e1686a35a856d9d1996f"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 9586,
+      "sha256": "646119691fafa064a4fbc235362285b034565a04f9ab4f985f0a30e35b623cc6"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 687,
+      "sha256": "f5489b52c29eda43c5ad38f56ff25def3169be14bcf53148192838032cdc21ff"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 809,
+      "sha256": "cbf0e1fb9790259789e5ab56d23376f48515299df3c1134637ebfd2d4bf31597"
+    },
+    {
+      "path": "post-source-check.json",
+      "bytes": 80388,
+      "sha256": "09e89058643e2d0ce027fdf3354599fd1f3a508b83099656a9b44376dfb2b2fd"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 58754,
+      "sha256": "9ad00386e9dd62419ae8957a7b3ab1dd5f9f5dfb65bc79cf1d33afb641bc16d4"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 22342,
+      "sha256": "8a516df74f80d0fb6679c12e2f79a582767b6f52d1443e846ede4b123c6b2ed4"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 73360,
+      "sha256": "2be1d1a1999df141dd875d64b030e955eadff991dd24c6d8be71a25017c85a2e"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 396,
+      "sha256": "8ac22ac2919145a94576af79bab2ab77352dc3b01bc5efa99ab4aa0694a575fb"
+    }
+  ],
+  "sourceChanged": false,
+  "independentApproval": false,
+  "productionAuthorized": false,
+  "allOwnedPidsAbsent": false,
+  "secureTreeFinallyAbsenceIndependentRecord": false
+}
