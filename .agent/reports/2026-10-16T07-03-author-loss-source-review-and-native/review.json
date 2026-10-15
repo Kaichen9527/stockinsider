@@ -1,0 +1,25 @@
+{
+  "source": "88fd900c5f5d5c8eac9327ece8c687e4839b620f",
+  "evidence": "3924db3e4b47db0a23267f2bd507a72af2959d25",
+  "actualGitInputs": 291,
+  "inputBytes": 9787305,
+  "originalInputsUnchanged": 289,
+  "publishedFilesIncludingReceipt": 11,
+  "publishedBytesIncludingReceipt": 133003,
+  "exactCopiedFragmentsVerified": 5,
+  "privateRawInventoryOnly": {
+    "count": 21,
+    "bytes": 192721,
+    "fullContentsObtained": false
+  },
+  "newHarnessSha256": "8a0a0b54e28fc82317b4e2e0d099473557b49d3ad8effd191c70012247c456f2",
+  "scopedSourceIntegrationFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "rootNativeOrRuntime": false,
+  "nativeChildrenAndParent": "NOT_RUN",
+  "localAvailable": 3108069376,
+  "reviewScope": "Full new harness/control-flow/unchanged transport reviewed; static source and exact bytes only, not runtime/PG/formal approval"
+}

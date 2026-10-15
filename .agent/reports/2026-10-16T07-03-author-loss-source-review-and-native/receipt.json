@@ -1,0 +1,28 @@
+{
+  "kind": "Root exact source/public evidence review; not Root runtime/native/formal approval",
+  "source": "88fd900c5f5d5c8eac9327ece8c687e4839b620f",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "evidence": "3924db3e4b47db0a23267f2bd507a72af2959d25",
+  "files": [
+    {
+      "path": ".agent/reports/2026-10-16T07-03-author-loss-source-review-and-native/review.json",
+      "bytes": 854,
+      "sha256": "5ed19b3dd2d3cf1a6076d0f1516936c10eb37e71892cf3665e4005eea499b126"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-03-author-loss-source-review-and-native/dispatch.txt",
+      "bytes": 4429,
+      "sha256": "5fd5273020b7fc13d12b6c6d4694346e10a6c111de3cb8c21e31a6004ce268f5"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-03-author-loss-source-review-and-native/cloud-snapshot.json",
+      "bytes": 675,
+      "sha256": "665be28c30ada44e06847a30c208309ed78bfa80d0b50f1fd96c06a978b99b2b"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-03-author-loss-source-review-and-native/launch-note.txt",
+      "bytes": 3778,
+      "sha256": "b2b1108942c64903a35c045955b293707e8ea2c18488bddb2ea287a4bbd2b074"
+    }
+  ]
+}
