@@ -1,0 +1,391 @@
+{
+  "companies": [
+    {
+      "symbol": "2409",
+      "connections": {
+        "installer-connections.json": {
+          "writer": 664862,
+          "observer": 664863,
+          "observerReadOnly": "on"
+        },
+        "connections.json": {
+          "writer": 664862,
+          "observer": 664864,
+          "observerReadOnly": true
+        },
+        "loss-connections.json": {
+          "proxyWriter": {
+            "pid": 664865,
+            "role": "service_role"
+          },
+          "observer": 664864,
+          "fixtureWriter": 664862,
+          "observerReadOnly": true
+        },
+        "author-recovery-connection.json": {
+          "pid": 664874,
+          "role": "service_role"
+        }
+      },
+      "backends": [
+        {
+          "pid": 664862,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 664863,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 664864,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 664865,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 664874,
+          "comm": "postgres backend",
+          "absent": true
+        }
+      ],
+      "clusterRemoved": true,
+      "relayDirectoryAbsent": true,
+      "socketDirectoryRemoved": true,
+      "serverShutdownLogged": true,
+      "helperCleanup": {
+        "stopped": true,
+        "removed": "/tmp/vp3profile-sHq8v3",
+        "stage": "business complete"
+      },
+      "transportCleanup": {
+        "registered": 1,
+        "errors": []
+      },
+      "querySettlement": {
+        "pendingQueries": 0,
+        "relayClosed": true
+      },
+      "financialRoots": [
+        {
+          "kind": "original75d-fixed8or6",
+          "pathSha256": "741f642e8b371669e47d44d7d96ca6e6d4c15e021a96deee1e8c89eed9347219",
+          "absentNow": true,
+          "harnessAbsentBeforeRecovery": true
+        },
+        {
+          "kind": "historical15d4-fixed9or7",
+          "pathSha256": "1b0b4314c556a8840c43399b48023643a19dcc1cf7207492ee5bc91a272faf9e",
+          "absentNow": true,
+          "harnessAbsentBeforeRecovery": true
+        }
+      ],
+      "secureTreePostRunCheck": {
+        "basis": "unique parent of two private recorded root paths; frozen harness asserted parent===x.secure",
+        "parentPathSha256": "30a20daf82cdba039b7b96135e45d7d0156a0166806418441929f55a8f24f819",
+        "absentNow": true,
+        "harnessFinallyIndependentRecord": false
+      }
+    },
+    {
+      "symbol": "2383",
+      "connections": {
+        "installer-connections.json": {
+          "writer": 664906,
+          "observer": 664907,
+          "observerReadOnly": "on"
+        },
+        "connections.json": {
+          "writer": 664906,
+          "observer": 664915,
+          "observerReadOnly": true
+        },
+        "loss-connections.json": {
+          "proxyWriter": {
+            "pid": 664916,
+            "role": "service_role"
+          },
+          "observer": 664915,
+          "fixtureWriter": 664906,
+          "observerReadOnly": true
+        },
+        "author-recovery-connection.json": {
+          "pid": 664926,
+          "role": "service_role"
+        }
+      },
+      "backends": [
+        {
+          "pid": 664906,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 664907,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 664915,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 664916,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 664926,
+          "comm": "postgres backend",
+          "absent": true
+        }
+      ],
+      "clusterRemoved": true,
+      "relayDirectoryAbsent": true,
+      "socketDirectoryRemoved": true,
+      "serverShutdownLogged": true,
+      "helperCleanup": {
+        "stopped": true,
+        "removed": "/tmp/vp3profile-1fBpjG",
+        "stage": "business complete"
+      },
+      "transportCleanup": {
+        "registered": 1,
+        "errors": []
+      },
+      "querySettlement": {
+        "pendingQueries": 0,
+        "relayClosed": true
+      },
+      "financialRoots": [
+        {
+          "kind": "original75d-fixed8or6",
+          "pathSha256": "1dbbe8e60cd150c18954aadc6cc5f2f2833c4517753a7bc850a4716784d1d318",
+          "absentNow": true,
+          "harnessAbsentBeforeRecovery": true
+        },
+        {
+          "kind": "historical15d4-fixed9or7",
+          "pathSha256": "bb22f8940cd74a1b64b2fc5b7dd8f9f102cc59f2ccf7c0d3a684bbe8827b2663",
+          "absentNow": true,
+          "harnessAbsentBeforeRecovery": true
+        }
+      ],
+      "secureTreePostRunCheck": {
+        "basis": "unique parent of two private recorded root paths; frozen harness asserted parent===x.secure",
+        "parentPathSha256": "70ff9848052a07fd9d7c4b7b140b1c80c690fc78dcf3fc572d4ce99bd544c980",
+        "absentNow": true,
+        "harnessFinallyIndependentRecord": false
+      }
+    }
+  ],
+  "sampledProcesses": [
+    {
+      "pid": 664815,
+      "comm": "node",
+      "absent": true
+    },
+    {
+      "pid": 664821,
+      "comm": "node",
+      "absent": true
+    },
+    {
+      "pid": 664834,
+      "comm": "initdb",
+      "absent": true
+    },
+    {
+      "pid": 664843,
+      "comm": "sh",
+      "absent": true
+    },
+    {
+      "pid": 664844,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664847,
+      "comm": "pg_ctl",
+      "absent": true
+    },
+    {
+      "pid": 664850,
+      "comm": "postgres",
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    },
+    {
+      "pid": 664851,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664852,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664854,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664855,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664856,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664857,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664858,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664859,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664861,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664862,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664863,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664864,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664865,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664874,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664878,
+      "comm": "initdb",
+      "absent": true
+    },
+    {
+      "pid": 664887,
+      "comm": "sh",
+      "absent": true
+    },
+    {
+      "pid": 664888,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664894,
+      "comm": "postgres",
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    },
+    {
+      "pid": 664895,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664896,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664898,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664899,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664900,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664901,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664902,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664903,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664905,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664906,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664907,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664915,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664916,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 664926,
+      "comm": "postgres",
+      "absent": true
+    }
+  ]
+}

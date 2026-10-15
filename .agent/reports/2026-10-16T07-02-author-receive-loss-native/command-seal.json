@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--import",
+    "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-v3-author-response-loss-native.test.mjs"
+  ],
+  "start": "2026-10-15T23:03:51.660511+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.2,
+  "peakSessionAndPgRssBytes": 0,
+  "minimumFreeBytes": {
+    "/workspace": 8593440768,
+    "/tmp": 14987714560
+  },
+  "user": "agent",
+  "artifactPath": "/tmp/author-receive-loss-o16/native-artifacts",
+  "deadline": "2026-10-15T23:27:35Z"
+}

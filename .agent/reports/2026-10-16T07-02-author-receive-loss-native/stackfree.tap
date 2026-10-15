@@ -1,0 +1,17 @@
+TAP version 13
+# Subtest: new durable author receive transport loss: two v3 issuers only
+    # Subtest: 2409 committed author receive response loss then explicit READ recovery
+    ok 1 - 2409 committed author receive response loss then explicit READ recovery
+    # Subtest: 2383 committed author receive response loss then explicit READ recovery
+    ok 2 - 2383 committed author receive response loss then explicit READ recovery
+    1..2
+ok 1 - new durable author receive transport loss: two v3 issuers only
+1..1
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 45281.848821

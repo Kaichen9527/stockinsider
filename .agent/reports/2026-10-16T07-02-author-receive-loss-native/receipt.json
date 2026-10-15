@@ -1,0 +1,71 @@
+{
+  "kind": "maker-local-native-receipt-not-independent-approval",
+  "sealedAt": "2026-10-15T23:08:15.391490+00:00",
+  "executionBase": "3924db3e4b47db0a23267f2bd507a72af2959d25",
+  "productSubject": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "harnessSubject": "88fd900c5f5d5c8eac9327ece8c687e4839b620f",
+  "sourceChanged": false,
+  "actualNativeInvocations": 1,
+  "counts": {
+    "tests": 3,
+    "pass": 3,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "rawCount": 131,
+  "rawBytes": 162400617,
+  "publishedFiles": [
+    {
+      "path": ".agent/reports/2026-10-16T07-02-author-receive-loss-native/HANDOFF.md",
+      "bytes": 7247,
+      "sha256": "faebc0d421e7cd8e47947dcc2f3b41700ae5d58e2aa037c68d965e9aaf7f051c"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-02-author-receive-loss-native/binaries.json",
+      "bytes": 1629,
+      "sha256": "22a35294a8b4b814c5b1b49f1f0873750ee95be6e850e1686a35a856d9d1996f"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-02-author-receive-loss-native/cleanup-proof.json",
+      "bytes": 8429,
+      "sha256": "23b4b52a5d3e0e021cff3f2c402346837eda0e89f1976b4fc21e8d68faf16717"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-02-author-receive-loss-native/command-seal.json",
+      "bytes": 674,
+      "sha256": "a73e7aa825b29ce8102de680a33a99b50d212eaeb005e4141dc43ec398fc669d"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-02-author-receive-loss-native/native.result.json",
+      "bytes": 795,
+      "sha256": "aa97195af5dcb4cf21c57fbb3b076ae35ff2c37b233db6c7c5f6e1462289c7b6"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-02-author-receive-loss-native/post-source-check.json",
+      "bytes": 66,
+      "sha256": "69903fcc1a67fb32562e32fb23190351fb2061978ef954b2eb5515fee78fcda3"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-02-author-receive-loss-native/public-safe-witness.json",
+      "bytes": 160026,
+      "sha256": "a21a7814e8c421990eb52c14f20bd02280e3dd3da23a381301a2ef26370e1e1b"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-02-author-receive-loss-native/raw-inventory.json",
+      "bytes": 25866,
+      "sha256": "37b13cd9fb17ea654e90cbf9c3a22caee24e6461f38dae896db94c40729efc28"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-02-author-receive-loss-native/source-seal.json",
+      "bytes": 72787,
+      "sha256": "ebaa0dad48dd73e36bbf569bf2a0ff5686a6ad9c4074e8fea0d95c645af61831"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-02-author-receive-loss-native/stackfree.tap",
+      "bytes": 614,
+      "sha256": "e3f14d801fee4c3fb9e897554555accca948b6fb13a35f964f12738f23a52b1f"
+    }
+  ]
+}

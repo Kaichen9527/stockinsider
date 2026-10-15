@@ -1,0 +1,663 @@
+{
+  "privateRoot": "/tmp/author-receive-loss-o16",
+  "count": 131,
+  "bytes": 162400617,
+  "files": [
+    {
+      "path": "binaries.json",
+      "bytes": 1629,
+      "sha256": "22a35294a8b4b814c5b1b49f1f0873750ee95be6e850e1686a35a856d9d1996f"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 8429,
+      "sha256": "23b4b52a5d3e0e021cff3f2c402346837eda0e89f1976b4fc21e8d68faf16717"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 674,
+      "sha256": "a73e7aa825b29ce8102de680a33a99b50d212eaeb005e4141dc43ec398fc669d"
+    },
+    {
+      "path": "initial-processes.json",
+      "bytes": 97566,
+      "sha256": "8ad774a3cb84e86d0851a0b431528c4d485929ac3df6526f793ce28d5b737a7a"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-01-prepared.json",
+      "bytes": 5009,
+      "sha256": "29d4f7ff86cee882e08655a0f483fbd58e2a0a23c690776e1ad6abfb75d1467f"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-02-firstseal-observed.json",
+      "bytes": 207269,
+      "sha256": "87be8c694a045d0ad8c8372fcb1a3a868972d2fd9c157d6402a2e4f22d3fec1d"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-03-assigned.json",
+      "bytes": 209009,
+      "sha256": "abb5d81c4b71b234db2f7cb7b8a05cbc97a767eeb0206f54ee1de3c6701e3ee2"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-04-before-receive-author.json",
+      "bytes": 209009,
+      "sha256": "abb5d81c4b71b234db2f7cb7b8a05cbc97a767eeb0206f54ee1de3c6701e3ee2"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-04-before-receive.json",
+      "bytes": 210211,
+      "sha256": "742f63030154240929074da60b64d0dda892f23dcc4fda31e759b00be0b8a27f"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-05-before-receive-send-author.json",
+      "bytes": 209009,
+      "sha256": "abb5d81c4b71b234db2f7cb7b8a05cbc97a767eeb0206f54ee1de3c6701e3ee2"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-05-before-receive-send.json",
+      "bytes": 210211,
+      "sha256": "742f63030154240929074da60b64d0dda892f23dcc4fda31e759b00be0b8a27f"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-06-committed-response-held-author.json",
+      "bytes": 384759,
+      "sha256": "386f8dac555aec7dc9b9eb2e5b836ab60dbeba93128ef5780b64b0af748370e0"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-06-committed-response-held.json",
+      "bytes": 385961,
+      "sha256": "e26123ac23a957867eba71d3d8f9b8f6badd5e4de742869a91a59936835232ff"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-07-after-client-rejection-author.json",
+      "bytes": 384759,
+      "sha256": "386f8dac555aec7dc9b9eb2e5b836ab60dbeba93128ef5780b64b0af748370e0"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-07-after-client-rejection.json",
+      "bytes": 385961,
+      "sha256": "e26123ac23a957867eba71d3d8f9b8f6badd5e4de742869a91a59936835232ff"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-08-first-explicit-read-after-author.json",
+      "bytes": 384759,
+      "sha256": "386f8dac555aec7dc9b9eb2e5b836ab60dbeba93128ef5780b64b0af748370e0"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-08-first-explicit-read-after.json",
+      "bytes": 385961,
+      "sha256": "e26123ac23a957867eba71d3d8f9b8f6badd5e4de742869a91a59936835232ff"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-08-first-explicit-read-before-author.json",
+      "bytes": 384759,
+      "sha256": "386f8dac555aec7dc9b9eb2e5b836ab60dbeba93128ef5780b64b0af748370e0"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-08-first-explicit-read-before.json",
+      "bytes": 385961,
+      "sha256": "e26123ac23a957867eba71d3d8f9b8f6badd5e4de742869a91a59936835232ff"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-09-second-explicit-read-after-author.json",
+      "bytes": 384759,
+      "sha256": "386f8dac555aec7dc9b9eb2e5b836ab60dbeba93128ef5780b64b0af748370e0"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-09-second-explicit-read-after.json",
+      "bytes": 385961,
+      "sha256": "e26123ac23a957867eba71d3d8f9b8f6badd5e4de742869a91a59936835232ff"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-09-second-explicit-read-before-author.json",
+      "bytes": 384759,
+      "sha256": "386f8dac555aec7dc9b9eb2e5b836ab60dbeba93128ef5780b64b0af748370e0"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-09-second-explicit-read-before.json",
+      "bytes": 385961,
+      "sha256": "e26123ac23a957867eba71d3d8f9b8f6badd5e4de742869a91a59936835232ff"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-actual-author-pg-query-rejection.json",
+      "bytes": 54,
+      "sha256": "9f67c54eb8c22143c0c1ce9c847bd56b00eca553ed1ce2e0c8ecf36790932e4e"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-actual-author-transport-loss.json",
+      "bytes": 798,
+      "sha256": "637293ed539968909af6886538843ce6d49499c58ccc8fccfbc8b65e6cca806e"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-author-caller-uncertain.json",
+      "bytes": 115,
+      "sha256": "a86a605a87d55ac7bbec3a11fe37211b53cb657d6f0b9d2d10e68b3514daf2e2"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-author-loss-order.json",
+      "bytes": 2559,
+      "sha256": "8aee3fdb3f63d7aeed2a31b6d74414b26cb20094df62c0b47aba9c1fcdd38c4f"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-author-recovery-connection.json",
+      "bytes": 46,
+      "sha256": "b233efe66d9a94049804fcef8d377830b2137bebcf1b2c77f71147d8266d45e9"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-author-recovery-rpc-order.json",
+      "bytes": 2191,
+      "sha256": "01541b394a88a7ea900ae52a0f770e1ba86e103b3f1036ffe49d27448d210e85"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-author-response-loss-result.json",
+      "bytes": 1067,
+      "sha256": "757440217738f9c41131217e81f423507c827e9a2219be474e266c7cc2499437"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-author-rpc-order.json",
+      "bytes": 1281,
+      "sha256": "e44df2cb31b2c4e8cf09b8b4d797bc65ea59b5f88ecef9a0506de681f5ccd726"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-author-source-profile-safe.json",
+      "bytes": 740,
+      "sha256": "54e303ecfb867bdd5bab9fcd39af8359e364611ab86230db3cb6a651e698f78e"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-claim.json",
+      "bytes": 1344,
+      "sha256": "36e97e5d10bc084b144bdffbe33ea61c39fcd88306e6b1f2ec2d2252ea35ac14"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-cleanup.json",
+      "bytes": 93,
+      "sha256": "eecb4f285a7de397eaf8a345455d2a3881ede7014fd933a75332910743b2726c"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-cluster-absent.json",
+      "bytes": 67,
+      "sha256": "1373fb5d4f6e39e27f2c2c1b7dddf3e4d09654b90cf6709be8ea2829ba1dedf1"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-connections.json",
+      "bytes": 73,
+      "sha256": "af15cbd28cb8654b1cdb01b184efdba3ac7a6684dfd4113b8ddb11d5906a66a8"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "f2a6ccf6911c4490a69fe948c697d5570aace5cd146da88e102083011a0381ce"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-held-backend-response-private.json",
+      "bytes": 163819,
+      "sha256": "2f2bd70c7ab075fd4ffd77a2adb50f71598990aaef24769a61715cbbb1df57d2"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-installer-before-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-installer-codecs.json",
+      "bytes": 581,
+      "sha256": "5cd8f502264ce1d8b19b824ec7b58c7611e53d6bebcde21b695c2f1f35e25415"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-installer-commit-witness.json",
+      "bytes": 1691,
+      "sha256": "7ccf9837fdc446377319acca98853a9fa50efdad1dff7660369defbf95333012"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-installer-connections.json",
+      "bytes": 73,
+      "sha256": "9a95d9d699a0f5581aa77c5e49e159d015faf928cab76dc87086b66a792a6017"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-installer-repeat-rejected.json",
+      "bytes": 73,
+      "sha256": "89759e3b22273d12f20afad805a799420b0f72b5349ccb1eecc47d6ba4ca6dd4"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-loss-client-error.json",
+      "bytes": 54,
+      "sha256": "9f67c54eb8c22143c0c1ce9c847bd56b00eca553ed1ce2e0c8ecf36790932e4e"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-loss-connections.json",
+      "bytes": 150,
+      "sha256": "a30c33ed26d815b2297d8a8d9df900e08def39934b17ec9064186fd0e2c439c1"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-loss-transport-cleanup.json",
+      "bytes": 49,
+      "sha256": "158be07651f05d758db4b741d0cbdfbd99333921b40b333eba082aad35627075"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-observer-author-commit-confirmed.json",
+      "bytes": 447,
+      "sha256": "15a9adf4ec44f3966949e11523d4394c3344b408b9aed09d02523a418829ffd9"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-postgres-before-cleanup.log",
+      "bytes": 65334,
+      "sha256": "468c6355b1d6fdd719199cec58ab99a430fd4f092f334769bcc4a1995d5ffde3"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-postgres.log",
+      "bytes": 65485,
+      "sha256": "698ac7033f71e22a55a58c2da65a866b3cddef4e238dba841d7f138e15f289db"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-preparation.json",
+      "bytes": 2950,
+      "sha256": "c31053bc477d9e95d5ec6facfffeca93c8f14cce8c1bd5a1bd4b72c257e97835"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-priority.json",
+      "bytes": 142,
+      "sha256": "946425235b66fddbea578e3ebca551f0583f396d1c5772c19379a7ffb1e0e256"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-removed-owned-financial-roots-private.json",
+      "bytes": 362,
+      "sha256": "ab37c9d167ffa925f4b1e314652ec1adde931f2e0428b44499f0686221332e09"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-roster-admission.json",
+      "bytes": 448,
+      "sha256": "3c64d9efc91c9580faa9832a3b42b384bde3867ec6e6dd1461e297048bcd0b86"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-rpc-fd-order.json",
+      "bytes": 1273,
+      "sha256": "b4a28ea47b6b4ed3d222baed004e65f885133d59004614e10dc3f0ffb2c9a6da"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "1de743d3ed3778a24b515f8409d0f6cfc2edef696ecfe28fa3c241c0163d1c17"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-submitted-author-envelope-private.json",
+      "bytes": 155264,
+      "sha256": "3ab96c3f265b15e5fe46836db404670c7551c8f8e4fb1f27d17a9eceeef1c69f"
+    },
+    {
+      "path": "native-artifacts/2383-author-loss-2383-transport-cleanup.json",
+      "bytes": 38,
+      "sha256": "439aac7d8624d56a40667244e1ace92593dfc87293b5032649437661362328a7"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-01-prepared.json",
+      "bytes": 5010,
+      "sha256": "835bd4d59a2fe966c120fdec55233a5e29fd162236ad7e4b308b584a393f2f78"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-02-firstseal-observed.json",
+      "bytes": 347532,
+      "sha256": "6976a9dd17312a9ecc94da61d20698943cf209bffa48f3db665c792a89df928f"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-03-assigned.json",
+      "bytes": 349272,
+      "sha256": "bd9d05f75a2a75a110f757579fe894b9a9a1fcbeda11903b9d888fc567426423"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-04-before-receive-author.json",
+      "bytes": 349272,
+      "sha256": "bd9d05f75a2a75a110f757579fe894b9a9a1fcbeda11903b9d888fc567426423"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-04-before-receive.json",
+      "bytes": 350474,
+      "sha256": "50dbb493a93ee99108bc9dd78a5cd8230bb830d3af7fec82ac2d958ea4513268"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-05-before-receive-send-author.json",
+      "bytes": 349272,
+      "sha256": "bd9d05f75a2a75a110f757579fe894b9a9a1fcbeda11903b9d888fc567426423"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-05-before-receive-send.json",
+      "bytes": 350474,
+      "sha256": "50dbb493a93ee99108bc9dd78a5cd8230bb830d3af7fec82ac2d958ea4513268"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-06-committed-response-held-author.json",
+      "bytes": 628767,
+      "sha256": "f07a2e34a91692eceba5367b8a63d2b2612553922771a38217b506a8109bd850"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-06-committed-response-held.json",
+      "bytes": 629969,
+      "sha256": "355bfbcacbfb6c1ac04a70a11a3dd32a33410aecca63b3087a33aa426b49ff67"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-07-after-client-rejection-author.json",
+      "bytes": 628767,
+      "sha256": "f07a2e34a91692eceba5367b8a63d2b2612553922771a38217b506a8109bd850"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-07-after-client-rejection.json",
+      "bytes": 629969,
+      "sha256": "355bfbcacbfb6c1ac04a70a11a3dd32a33410aecca63b3087a33aa426b49ff67"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-08-first-explicit-read-after-author.json",
+      "bytes": 628767,
+      "sha256": "f07a2e34a91692eceba5367b8a63d2b2612553922771a38217b506a8109bd850"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-08-first-explicit-read-after.json",
+      "bytes": 629969,
+      "sha256": "355bfbcacbfb6c1ac04a70a11a3dd32a33410aecca63b3087a33aa426b49ff67"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-08-first-explicit-read-before-author.json",
+      "bytes": 628767,
+      "sha256": "f07a2e34a91692eceba5367b8a63d2b2612553922771a38217b506a8109bd850"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-08-first-explicit-read-before.json",
+      "bytes": 629969,
+      "sha256": "355bfbcacbfb6c1ac04a70a11a3dd32a33410aecca63b3087a33aa426b49ff67"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-09-second-explicit-read-after-author.json",
+      "bytes": 628767,
+      "sha256": "f07a2e34a91692eceba5367b8a63d2b2612553922771a38217b506a8109bd850"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-09-second-explicit-read-after.json",
+      "bytes": 629969,
+      "sha256": "355bfbcacbfb6c1ac04a70a11a3dd32a33410aecca63b3087a33aa426b49ff67"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-09-second-explicit-read-before-author.json",
+      "bytes": 628767,
+      "sha256": "f07a2e34a91692eceba5367b8a63d2b2612553922771a38217b506a8109bd850"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-09-second-explicit-read-before.json",
+      "bytes": 629969,
+      "sha256": "355bfbcacbfb6c1ac04a70a11a3dd32a33410aecca63b3087a33aa426b49ff67"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-actual-author-pg-query-rejection.json",
+      "bytes": 54,
+      "sha256": "9f67c54eb8c22143c0c1ce9c847bd56b00eca553ed1ce2e0c8ecf36790932e4e"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-actual-author-transport-loss.json",
+      "bytes": 798,
+      "sha256": "5576271b950f786eade9907a9a72e356c42c06ab282014cc7ede5dd9bc8e2efd"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-author-caller-uncertain.json",
+      "bytes": 115,
+      "sha256": "a86a605a87d55ac7bbec3a11fe37211b53cb657d6f0b9d2d10e68b3514daf2e2"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-author-loss-order.json",
+      "bytes": 2525,
+      "sha256": "97be9b392e7d8578f43d294a21e896df018c76dd9cb0e31f9d0bbea5a47ba609"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-author-recovery-connection.json",
+      "bytes": 46,
+      "sha256": "61bcad7d82032d11be42f1fa06fafdee2d2a8ee0cfafc2e9f62296d95f8312f1"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-author-recovery-rpc-order.json",
+      "bytes": 2151,
+      "sha256": "7d1d6644fc91a0234b9f5fc83d8ddd46917681159e7337d85bd97268e73a73b2"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-author-response-loss-result.json",
+      "bytes": 1067,
+      "sha256": "a2bf52f29e9ab6601128fa126bb82cfa66fda98988205c41909dca15104fd418"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-author-rpc-order.json",
+      "bytes": 1259,
+      "sha256": "a793e5e3404774e5bf637ee9ce2164b4058e2e21b527232c3f4d6917c846d100"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-author-source-profile-safe.json",
+      "bytes": 740,
+      "sha256": "b71a3b7edd68ecdfba3eef021c4dbcf9c7f95db8d1fc83f44d65a44dea6dcd5c"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-claim.json",
+      "bytes": 1345,
+      "sha256": "3023c228f225d918e81f44f436d4c14e88d00ab7333fc14b8db941ded09a179f"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-cleanup.json",
+      "bytes": 93,
+      "sha256": "f05f29f24148ca2413878a45284e23d71ee4c904625d64d0a3708ee459d83d15"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-cluster-absent.json",
+      "bytes": 67,
+      "sha256": "1373fb5d4f6e39e27f2c2c1b7dddf3e4d09654b90cf6709be8ea2829ba1dedf1"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-connections.json",
+      "bytes": 73,
+      "sha256": "d87da938f94d4804663f01ab73718f75c2e9d9e593e29a13ab21fa6e8cdf3d6a"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-held-backend-response-private.json",
+      "bytes": 243771,
+      "sha256": "2f17e6217a4dc019059362fe0203a263dd6fd2190e4bd83a351bbdcac7fac955"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-installer-before-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-installer-codecs.json",
+      "bytes": 581,
+      "sha256": "5cd8f502264ce1d8b19b824ec7b58c7611e53d6bebcde21b695c2f1f35e25415"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-installer-commit-witness.json",
+      "bytes": 1691,
+      "sha256": "b7e439b93f09930e154571d6174ad133bae85d0496e5c7e75dcdcaa6f218e802"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-installer-connections.json",
+      "bytes": 73,
+      "sha256": "725552a6b7b0093bdae0546dee6aa372e869ad85de555536c49d19bcdce933c2"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-installer-repeat-rejected.json",
+      "bytes": 73,
+      "sha256": "89759e3b22273d12f20afad805a799420b0f72b5349ccb1eecc47d6ba4ca6dd4"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-loss-client-error.json",
+      "bytes": 54,
+      "sha256": "9f67c54eb8c22143c0c1ce9c847bd56b00eca553ed1ce2e0c8ecf36790932e4e"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-loss-connections.json",
+      "bytes": 150,
+      "sha256": "14c0a83169576971da7cb6557395e7152fa4f1b126a910b08622c78ff204ba78"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-loss-transport-cleanup.json",
+      "bytes": 49,
+      "sha256": "158be07651f05d758db4b741d0cbdfbd99333921b40b333eba082aad35627075"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-observer-author-commit-confirmed.json",
+      "bytes": 447,
+      "sha256": "8759295477b43ccf48e9c95d1954efd3359de39f550691fae9d0cc6a5144ca13"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-postgres-before-cleanup.log",
+      "bytes": 65334,
+      "sha256": "264dce3f72c3a5287eafa5acc2db54942c996fa19c6fcc1e379201862284747d"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-postgres.log",
+      "bytes": 65485,
+      "sha256": "ef9a4e10fd1427d1b2d7edcd8102ec2a91887866deb6528f7d1f76cc5d0dff0d"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-preparation.json",
+      "bytes": 2951,
+      "sha256": "0566dd0fc3c54c89cd923dcb91cb4f2f3c1b91cad663c2ac2c7cc300b6557d87"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-priority.json",
+      "bytes": 142,
+      "sha256": "9a877266c5d8b9cce31c93d76d92d9f43f435650f2f3b7d020ab1a535d5fef81"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-removed-owned-financial-roots-private.json",
+      "bytes": 362,
+      "sha256": "4abd8289e8a835c808ab0b29a9e2b0a2e71f222d3a103bb219831f4e83a415fb"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-roster-admission.json",
+      "bytes": 448,
+      "sha256": "c91238c6afe578cb69e9aa0f0dadf336efa3dbbf4e5964bd3b2c23d6784933c1"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-rpc-fd-order.json",
+      "bytes": 1260,
+      "sha256": "7cefb5f771cd7aab8c5b0fb24ff4022291683104a860e28ea2a823f13786f03e"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "569698b58fd2b3ad37bc8048d13fa2be773a78722826ba6c240e76c7a2243a94"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-submitted-author-envelope-private.json",
+      "bytes": 245177,
+      "sha256": "dff937931aa76e47baaf58cbbe501c3e6d0ab46c7b69f59ecdcda71ebc405f39"
+    },
+    {
+      "path": "native-artifacts/2409-author-loss-2409-transport-cleanup.json",
+      "bytes": 38,
+      "sha256": "439aac7d8624d56a40667244e1ace92593dfc87293b5032649437661362328a7"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 795,
+      "sha256": "aa97195af5dcb4cf21c57fbb3b076ae35ff2c37b233db6c7c5f6e1462289c7b6"
+    },
+    {
+      "path": "native.samples.jsonl",
+      "bytes": 161405,
+      "sha256": "d5505e8606fe56cb97a054311b009f04e64f408993d008a2031316f8075af04e"
+    },
+    {
+      "path": "native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native.stdout",
+      "bytes": 1318,
+      "sha256": "1960aad9bf1c33dce0528ee38b23c5395918a9d2fc72c28b2009e1c03a847921"
+    },
+    {
+      "path": "post-source-check.json",
+      "bytes": 66,
+      "sha256": "69903fcc1a67fb32562e32fb23190351fb2061978ef954b2eb5515fee78fcda3"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 160026,
+      "sha256": "a21a7814e8c421990eb52c14f20bd02280e3dd3da23a381301a2ef26370e1e1b"
+    },
+    {
+      "path": "root-absence-private.json",
+      "bytes": 945,
+      "sha256": "9bcd762edf1e560fad4c1a9463056f4521179cc5359aac543461b8e087fd1273"
+    },
+    {
+      "path": "run.py",
+      "bytes": 3338,
+      "sha256": "0b263292a82a4e8a67e00429f3e0b02af6b3428965c597abb8e6355c6459e788"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 72787,
+      "sha256": "ebaa0dad48dd73e36bbf569bf2a0ff5686a6ad9c4074e8fea0d95c645af61831"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 614,
+      "sha256": "e3f14d801fee4c3fb9e897554555accca948b6fb13a35f964f12738f23a52b1f"
+    },
+    {
+      "path": "summarize.mjs",
+      "bytes": 8814,
+      "sha256": "59763ffec85dfbb8943293fc06c15fd347b293adf015935a8a9f8ce92f799de6"
+    }
+  ],
+  "scope": "maker hashed local bytes; not a claim Root fetched private contents"
+}
