@@ -1,0 +1,13 @@
+{
+  "source": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "lineCount": 619,
+  "parenthesisPairsAdded": 3,
+  "successorHashFieldsChanged": 4,
+  "exactReverseBothFiles": true,
+  "arrayFixExpressionsPreserved": 8,
+  "originalPredecessorAndOtherProfileFieldsUnchanged": true,
+  "oldReceiveV2Arm": "existing static case passed byte-equality",
+  "unchangedInputFiles": 287,
+  "changedInputFiles": 2,
+  "nativeRun": false
+}

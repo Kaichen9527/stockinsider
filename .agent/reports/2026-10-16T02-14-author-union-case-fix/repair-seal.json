@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-15T18:14:52.060223+00:00",
+  "base": "14a225fbb2328b2cbfd044201dd47ecc343087a9",
+  "freeBytes": {
+    "/workspace": 8594075648,
+    "/tmp": 15213260800
+  },
+  "expressions": [
+    "CASE revision->'canonical_payload'->>'schemaVersion'\n    WHEN 'research-article-input-v3' THEN 'research-author-result-v3-candidate'\n    WHEN 'research-article-input-v2' THEN 'research-author-result-v2' END",
+    "CASE WHEN article->>'symbol'='2383' THEN to_jsonb('no_retained_EMC_capital_tuple'::text) ELSE 'null'::jsonb END",
+    "CASE WHEN article->>'symbol'='2409' THEN '[\"/cash/derived/rouCashAcquisitionSeparate/0\",\"/cash/derived/rouCashAcquisitionSeparate/1\"]'::jsonb ELSE '[]'::jsonb END"
+  ],
+  "bodyHashes": [
+    {
+      "name": "read_research_author_result_v2",
+      "old": "e5889572355ba71c77f0d12c5af867cf65e88d00161d781bbd5051e43f674233",
+      "new": "d3ca7e0e39022052866e7837bd5232198bf6cd8f40992d0c69cc54558e20cfd9"
+    },
+    {
+      "name": "receive_research_author_result_v2",
+      "old": "97f361883edc0d8cf61e696775c7cdb377272979c61e2604c3ec881497576c41",
+      "new": "3889869f27b2761b166621ee1d4ce13ae3948488bca2c5a65783a6448008b52d"
+    }
+  ],
+  "originalSqlSha256": "9e38550d28849cbbcc178f5237f5a985d921b47560a5be3b164186d5e002ed9b",
+  "newSqlSha256": "18b0e4814410601ab8b254f274a7fe085230b922656038cc1f8fe2539c056f76",
+  "originalProfileSha256": "9b124f012ea468cc653dbe60cc4dba75e386d1b3607e9e46127f2297e17df7c0",
+  "newProfileSha256": "19526e0199a406857de4c9869afd3cb243f74603ee960f06bc5e812c5d291243",
+  "exactInverseRestoresBothOriginalFiles": true
+}

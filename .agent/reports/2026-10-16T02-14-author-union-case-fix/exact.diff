@@ -1,0 +1,62 @@
+diff --git a/docs/operations/2026-10-15/v3-author-durable-union/source-derived-profile.json b/docs/operations/2026-10-15/v3-author-durable-union/source-derived-profile.json
+index e54838a1..f06b50ab 100644
+--- a/docs/operations/2026-10-15/v3-author-durable-union/source-derived-profile.json
++++ b/docs/operations/2026-10-15/v3-author-durable-union/source-derived-profile.json
+@@ -52,7 +52,7 @@
+       "sha": "2d821365f7ce9ac22e7c2992c64baf916ded4ece58fc44e413d71f3dcd702b4d",
+       "line": 19,
+       "name": "read_research_author_result_v2",
+-      "successorBodySha256": "e5889572355ba71c77f0d12c5af867cf65e88d00161d781bbd5051e43f674233",
++      "successorBodySha256": "d3ca7e0e39022052866e7837bd5232198bf6cd8f40992d0c69cc54558e20cfd9",
+       "changed": true
+     },
+     {
+@@ -61,7 +61,7 @@
+       "sha": "7cd8d5a20f2f4d2420790b4a46c28c1d9ece5920177c0a02807fdf3f45d9d297",
+       "line": 32,
+       "name": "receive_research_author_result_v2",
+-      "successorBodySha256": "97f361883edc0d8cf61e696775c7cdb377272979c61e2604c3ec881497576c41",
++      "successorBodySha256": "3889869f27b2761b166621ee1d4ce13ae3948488bca2c5a65783a6448008b52d",
+       "changed": true
+     }
+   ],
+diff --git a/migrations/20261015_research_author_durable_union_candidate_v3.sql b/migrations/20261015_research_author_durable_union_candidate_v3.sql
+index 0dfa5bbc..de55f479 100644
+--- a/migrations/20261015_research_author_durable_union_candidate_v3.sql
++++ b/migrations/20261015_research_author_durable_union_candidate_v3.sql
+@@ -277,9 +277,9 @@ BEGIN
+  THEN RAISE EXCEPTION 'research_author_result_expired'; END IF;
+  IF p_request->>'expectedCalculatorExecutionHash'<>'77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41' THEN
+   revision:=public.research_author_assignment_context_v2(p_request,p_revision_id,p_input_hash,p_principal);
+-  IF saved.payload->>'schemaVersion' IS DISTINCT FROM CASE revision->'canonical_payload'->>'schemaVersion'
++  IF saved.payload->>'schemaVersion' IS DISTINCT FROM (CASE revision->'canonical_payload'->>'schemaVersion'
+     WHEN 'research-article-input-v3' THEN 'research-author-result-v3-candidate'
+-    WHEN 'research-article-input-v2' THEN 'research-author-result-v2' END
++    WHEN 'research-article-input-v2' THEN 'research-author-result-v2' END)
+    THEN RAISE EXCEPTION 'research_author_result_stored_version';END IF;
+  END IF;
+  IF saved.payload->>'schemaVersion'='research-author-result-v3-candidate' THEN
+@@ -392,8 +392,8 @@ BEGIN
+  OR v->'citationContext'->'noFutureCash' IS DISTINCT FROM 'true'::jsonb
+  OR v->'citationContext'->'forecastCash' IS DISTINCT FROM 'null'::jsonb
+  OR v->'citationContext'->'capitalAvailable' IS DISTINCT FROM to_jsonb(article->>'symbol'='2409')
+- OR v->'citationContext'->'capitalUnavailableReason' IS DISTINCT FROM CASE WHEN article->>'symbol'='2383' THEN to_jsonb('no_retained_EMC_capital_tuple'::text) ELSE 'null'::jsonb END
+- OR v->'citationContext'->'unavailableAmounts' IS DISTINCT FROM CASE WHEN article->>'symbol'='2409' THEN '["/cash/derived/rouCashAcquisitionSeparate/0","/cash/derived/rouCashAcquisitionSeparate/1"]'::jsonb ELSE '[]'::jsonb END
++ OR v->'citationContext'->'capitalUnavailableReason' IS DISTINCT FROM (CASE WHEN article->>'symbol'='2383' THEN to_jsonb('no_retained_EMC_capital_tuple'::text) ELSE 'null'::jsonb END)
++ OR v->'citationContext'->'unavailableAmounts' IS DISTINCT FROM (CASE WHEN article->>'symbol'='2409' THEN '["/cash/derived/rouCashAcquisitionSeparate/0","/cash/derived/rouCashAcquisitionSeparate/1"]'::jsonb ELSE '[]'::jsonb END)
+  OR (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(v->'citationContext') key) IS DISTINCT FROM
+  ARRAY['artifactReadKnownAt','authorReviewerVerified','bindingCapsuleIdentity','capitalAvailable','capitalUnavailableReason','compiledFingerprintIdentity','dispatchReady','extractionAvailableAt','financialProfile','forecastCash','formalRightsVerified','inputHash','inputRevisionId','noFutureCash','originalCapabilities','originalModelCutoff','publishableResearch','qualification','requestHash','schemaVersion','sourceClosureApproved','sourceExecutionHash','symbol','technicalAdmission','unavailableAmounts','valuationApproved','wireVersion']
+  THEN RAISE EXCEPTION 'research_author_result_v3_material'; END IF;
+@@ -603,10 +603,10 @@ SELECT jsonb_build_object(
+  IF encode(sha256(convert_to(source,'UTF8')),'hex') IS DISTINCT FROM '8f6edc9b34836a22b4a56f14772a75600d0fb915dbc8076ba42cd1cbc9eb2a7f' THEN RAISE EXCEPTION 'author_union_post_body:read_research_author_packet_v2';END IF;
+  SELECT jsonb_set(namespace_before,'{routines}',jsonb_agg(CASE WHEN x->>'schema'='public' AND x->>'signature'='read_research_author_packet_v2(jsonb,uuid,text,text)' THEN jsonb_set(x,'{body}',to_jsonb(source)) ELSE x END ORDER BY ord)) INTO namespace_before FROM jsonb_array_elements(namespace_before->'routines') WITH ORDINALITY e(x,ord);
+  SELECT prosrc INTO source FROM pg_proc WHERE oid=to_regprocedure('public.read_research_author_result_v2(jsonb,uuid,text,text)');
+- IF encode(sha256(convert_to(source,'UTF8')),'hex') IS DISTINCT FROM 'e5889572355ba71c77f0d12c5af867cf65e88d00161d781bbd5051e43f674233' THEN RAISE EXCEPTION 'author_union_post_body:read_research_author_result_v2';END IF;
++ IF encode(sha256(convert_to(source,'UTF8')),'hex') IS DISTINCT FROM 'd3ca7e0e39022052866e7837bd5232198bf6cd8f40992d0c69cc54558e20cfd9' THEN RAISE EXCEPTION 'author_union_post_body:read_research_author_result_v2';END IF;
+  SELECT jsonb_set(namespace_before,'{routines}',jsonb_agg(CASE WHEN x->>'schema'='public' AND x->>'signature'='read_research_author_result_v2(jsonb,uuid,text,text)' THEN jsonb_set(x,'{body}',to_jsonb(source)) ELSE x END ORDER BY ord)) INTO namespace_before FROM jsonb_array_elements(namespace_before->'routines') WITH ORDINALITY e(x,ord);
+  SELECT prosrc INTO source FROM pg_proc WHERE oid=to_regprocedure('public.receive_research_author_result_v2(jsonb,uuid,text,text,jsonb)');
+- IF encode(sha256(convert_to(source,'UTF8')),'hex') IS DISTINCT FROM '97f361883edc0d8cf61e696775c7cdb377272979c61e2604c3ec881497576c41' THEN RAISE EXCEPTION 'author_union_post_body:receive_research_author_result_v2';END IF;
++ IF encode(sha256(convert_to(source,'UTF8')),'hex') IS DISTINCT FROM '3889869f27b2761b166621ee1d4ce13ae3948488bca2c5a65783a6448008b52d' THEN RAISE EXCEPTION 'author_union_post_body:receive_research_author_result_v2';END IF;
+  SELECT jsonb_set(namespace_before,'{routines}',jsonb_agg(CASE WHEN x->>'schema'='public' AND x->>'signature'='receive_research_author_result_v2(jsonb,uuid,text,text,jsonb)' THEN jsonb_set(x,'{body}',to_jsonb(source)) ELSE x END ORDER BY ord)) INTO namespace_before FROM jsonb_array_elements(namespace_before->'routines') WITH ORDINALITY e(x,ord);
+ SELECT jsonb_build_object(
+  'relations',(SELECT jsonb_agg(jsonb_build_object('schema',n.nspname,'name',c.relname,'kind',c.relkind,'owner',pg_get_userbyid(c.relowner),'acl',c.relacl,'definition',CASE WHEN c.relkind IN ('v','m') THEN pg_get_viewdef(c.oid,true) ELSE NULL END) ORDER BY n.nspname,c.relname) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('public','auth','extensions')),

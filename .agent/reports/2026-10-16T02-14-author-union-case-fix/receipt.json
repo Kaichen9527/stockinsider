@@ -1,0 +1,64 @@
+{
+  "source": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "tree": "055dad063e32f2fda73547bd2b78151159a2c4fa",
+  "base": "14a225fbb2328b2cbfd044201dd47ecc343087a9",
+  "sqlSha256": "18b0e4814410601ab8b254f274a7fe085230b922656038cc1f8fe2539c056f76",
+  "profileSha256": "19526e0199a406857de4c9869afd3cb243f74603ee960f06bc5e812c5d291243",
+  "sourceOnly": true,
+  "nativeRun": false,
+  "pass": 6,
+  "fail": 0,
+  "skip": 0,
+  "todo": 0,
+  "sourceInputs": 289,
+  "rawCount": 13,
+  "rawBytes": 236941,
+  "files": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 3103,
+      "sha256": "37c18651e016ec021892227a70304c5b31734eac301c41e5e4871e8542588213"
+    },
+    {
+      "path": "exact.diff",
+      "bytes": 7143,
+      "sha256": "12dec1b1eaaf7ce28899aa3881f8a6dde3180f8a3f4a7f7c540807f31fb42f72"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 2042,
+      "sha256": "b13832f9cfcb421795a75b5ee4b8905f3f8a36bf345a50a8b5fde2d77c4f302c"
+    },
+    {
+      "path": "repair-seal.json",
+      "bytes": 1589,
+      "sha256": "f5740f73591f89bed83eba9d571a2391be094c23d06bbb1d6e3f1fdd09764d80"
+    },
+    {
+      "path": "source-checks.json",
+      "bytes": 419,
+      "sha256": "a87d40a19af0f57489583d6ca47ded7a1d812fc3f66a9270079d3c49e8886c8c"
+    },
+    {
+      "path": "source-inventory.json",
+      "bytes": 85301,
+      "sha256": "911e92968e2441a6b337a56e4162c061479373688b7d6ed3bdea42f9151201b1"
+    },
+    {
+      "path": "static-result.json",
+      "bytes": 428,
+      "sha256": "1144ae00f46804179baa561864e5b564998f790223e45633a8bd5365e28a5ca3"
+    },
+    {
+      "path": "static.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "static.stdout",
+      "bytes": 1484,
+      "sha256": "e1fef0966223430e017bb3bf89e1f3677fb52d1feb1ca8e73e529d76d575b4ab"
+    }
+  ],
+  "independentApproval": false
+}
