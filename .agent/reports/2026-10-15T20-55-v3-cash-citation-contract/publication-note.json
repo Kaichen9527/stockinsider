@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-15T13:17:36.186275+00:00",
+  "priorDelivery": "d0fff2152e6b60e89878f16fe41b0765e2b6160a",
+  "sourceCodeUnchanged": "92870dc20828fd74f86f2681281a92bff2d9c2e3",
+  "receiptSha256": "4dc7780b60d19ad1668fd677695785e6f521c8cfb73c8b88c008e686bd9694cf",
+  "evidenceDiffCheck": {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+      "d0fff2152e6b60e89878f16fe41b0765e2b6160a"
+    ],
+    "exit": 2,
+    "stdout": ".agent/reports/2026-10-15T20-55-v3-cash-citation-contract/raw/direct-diagnostic.stdout:31: trailing whitespace.\n+    \n.agent/reports/2026-10-15T20-55-v3-cash-citation-contract/raw/direct-diagnostic.stdout:35: trailing whitespace.\n+    \n",
+    "stderr": ""
+  },
+  "interpretation": "Two trailing-whitespace lines are original Node assertion diagnostic output, retained byte-for-byte. Code-only diff check passed. This evidence-only diff check is not relabeled PASS and raw output was not reformatted.",
+  "rawInventoryReverified": 35,
+  "freeBytes": {
+    "/workspace": 8595050496,
+    "/tmp": 15369347072
+  },
+  "noOwnedServices": true
+}
