@@ -1,0 +1,16 @@
+2026-10-15T14:51:24Z
+BEGIN
+SET
+SET
+DO
+{"observedAt" : "2026-10-15T16:51:25.030218+02:00", "activeWriterCount" : 1, "activeRelease" : "dd59817f750684b093965f539dd4de466be13077", "leaseRows" : 0, "unexpiredLeaseRows" : 0}
+ROLLBACK
+{"dropIn": {"gid": 0, "mode": 420, "sha256": "d8884c9a1b7e9e108be7f618a9c13a6dce8e810e046302f6c4491c8cace0f015", "uid": 0}, "units": {"stockinsider-internal-worker.service": {"effective": {"DropInPaths": "", "FragmentPath": "/etc/systemd/system/stockinsider-internal-worker.service", "Group": "stockinsider", "Id": "stockinsider-internal-worker.service", "LoadState": "loaded", "NeedDaemonReload": "no", "User": "stockinsider", "WorkingDirectory": "/opt/stockinsider/current/app"}, "sourceSha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e"}, "stockinsider-web-standalone.service": {"effective": {"DropInPaths": "/etc/systemd/system/stockinsider-web-standalone.service.d/20-writer-release.conf", "FragmentPath": "/etc/systemd/system/stockinsider-web-standalone.service", "Group": "stockinsider", "Id": "stockinsider-web-standalone.service", "LoadState": "loaded", "NeedDaemonReload": "no", "User": "stockinsider", "WorkingDirectory": "/opt/stockinsider/current/app"}, "sourceSha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"}}, "writer": {"gid": 987, "mode": 416, "sha256": "0becaade488d554d99b937d3ed95320134afbd03c2f0f7b476f7e9f76c0fad09", "uid": 0}}
+active
+active
+active
+active
+active
+public_home_status=200
+worker_radar_status=200
+{"ownedActivationProcesses": [{"pid": 2565922, "present": false}, {"pid": 2565923, "present": false}], "operatorWorkDirectoryAbsent": true}

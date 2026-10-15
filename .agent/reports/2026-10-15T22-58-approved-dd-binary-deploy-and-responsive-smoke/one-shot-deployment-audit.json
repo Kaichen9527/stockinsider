@@ -1,0 +1,13 @@
+{
+  "operation": "approved immutable DD binary-only deployment",
+  "status": "success",
+  "consumed": true,
+  "mustNotRerun": true,
+  "applicationSubject": "dd59817f750684b093965f539dd4de466be13077",
+  "operatorMergeSubject": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "actualSshExitCode": 0,
+  "endedAt": "2026-10-15T14:47:55.919570+00:00",
+  "executionReceiptSha256": "e791042c190ee773a62bb6249cc73f2fff25f38d49170d9af963287d30b1d004",
+  "main169DeployExecuted": false,
+  "financialOrPublicationMigrationExecuted": false
+}

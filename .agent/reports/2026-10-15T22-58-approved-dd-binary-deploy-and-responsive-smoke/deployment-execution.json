@@ -1,0 +1,21 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "python3 -I -c 'import pathlib,hashlib,os,stat; p=pathlib.Path('\"'\"'/run/stockinsider-dd-reviewed-75ao9foq'\"'\"'); checks={'\"'\"'deploy.sh'\"'\"': '\"'\"'e7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f'\"'\"', '\"'\"'operator-support.py'\"'\"': '\"'\"'f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af'\"'\"', '\"'\"'unit-profile.json'\"'\"': '\"'\"'4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72'\"'\"'}; assert os.geteuid()==0; assert all(hashlib.sha256((p/n).read_bytes()).hexdigest()==h and (p/n).lstat().st_uid==0 and (p/n).lstat().st_nlink==1 and stat.S_ISREG((p/n).lstat().st_mode) and not ((p/n).lstat().st_mode & 0o022) for n,h in checks.items()); os.execv('\"'\"'/usr/bin/bash'\"'\"',['\"'\"'bash'\"'\"',str(p/'\"'\"'deploy.sh'\"'\"')])'"
+  ],
+  "startedAt": "2026-10-15T14:47:33.988365+00:00",
+  "endedAt": "2026-10-15T14:47:55.919570+00:00",
+  "actualSshExitCode": 0,
+  "archiveFdStable": true,
+  "operatorMergeSubject": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "operatorReviewedSource": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "applicationSubject": "dd59817f750684b093965f539dd4de466be13077",
+  "archiveSha256": "398e71768ea0e7a5935282432c0edfcb2f47c953712b715562def95c3745add4",
+  "rebuild": false,
+  "main169DeployExecuted": false
+}

@@ -1,5 +1,23 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-15 22:58台灣時間：approved DD原包已真部署/current與唯一writer切到dd598，桌手機基本驗收PASS；兩formal研究鏈仍未發布
+
+Root先核main93e44475/progressc48b3bd8/乾淨工作樹與同Cloud source-only turn01a13ff7/cursor58df5d1d-e6e3-4df1-bae9-36cf61f53912:7真inProgress；repo GHA active run列表[]，沒有重派Cloud、重跑PR370..382終態或新heavy native/build。Merged operator93e444的三執行檔逐byte等已審source1e1ded2b：deploy SHAe7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f/support f0fcfb7b/profile4bcbf42a。應用仍immutable approved dd59817f750684b093965f539dd4de466be13077/directc2b146adb6d03814f2bd9a7af72baf003bb48812，不冒operator merge或5609文章source就是app批准。
+
+Root重新完整rehash原tar27574426bytes/SHA398e71768ea0e7a5935282432c0edfcb2f47c953712b715562def95c3745add4，3101members/2587regular/79955758bytes與manifest344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a/source+packager+releaseDD全部匹配；未重建/改標main。三operator檔root0600/singlelink、owned/run leaf0700暫存，傳送後hash/meta真核；原deploy只一次14:47:33.988365Z–14:47:55.919570Z真SSH exit0。此成功部署已消耗，禁止再次執行此deploy/stream/activation或用舊169 predicate重試；後續唯讀驗收或新scope另處理。
+
+同原三OS鎖持有整個程序，14:47:35.701Z/14:47:47.090Z兩次真capacity allowedtrue/reasons[]，disk30972903424→30883033088/projected27080589312→26990718976，memory4098727936→3292000256/projected3024986112→2218258432，全過原15GiBdisk及1.5GiBremaining/1GiBpeak，全部原budgets不降。Fresh old169 READONLY unique writer/empty data-plane lease及有限canonicalprofile、old fullverifier PASS後，精確stream/archivehash/安全tar/fullnewverifier/包身份/原0719 activationhelper身份PASS；cutover前再同鎖writer/profile/capacity核實。沒有執行main169-deploy.sh、金融50/pub26/role/ACL/rawSQL mutation。
+
+Actual atomic current→dd598，唯一一次原guarded writer-release-activate成功；回應backendIdentityRotatedtrue/deploymentLeaseReleasedfalse原樣保留。Owned supervisor2565922/child2565923自然exit0、無forced/signals/liveownedgroup，真settlement matching，沒有reverse。externalSystemdJobsVerifiedfalse保持、不冒完整外部job證明。新finite profile/unit/dropin保持、writer literal新SHA0becaade，core services+web/worker HTTP成功，previous→169，df available30883004416。原finish在確認ownedwork cleanup後真輸出approved_dd_binary_current_writer_core_health_and_cleanup_verified；原helper warmup曾一筆curl(7)，後續原retry真成功/child0與兩finalHTTP200，stderr永留不擦掉或當持續故障。
+
+14:51:25.030218Z原三鎖內新READONLY PG5s/2s/ROLLBACK真uniqueWriter1/currentdd598/leaseRows0/unexpired0，正確web-standalone/internal-worker/postgrest/PostgreSQL/financial-parser.socket五units active，兩loopback200。這是fresh writer/lease/core proof，不是fixed金融peer/HBA/runtimeLOGIN6或金融SQL安裝。原temporary work absent、兩owned activationPID absent；只核hash/meta並移除Root自有三operator檔及leaf成功，未刪任何app/history/cache/其他App資料。
+
+公開http://5.104.83.211/及/stock/2409、/stock/2383真200，browse桌1280x900與手機390x844共六viewport看過實際PNG與DOM/console。首頁完整舊快照載入完成、search enabled，六viewport documentWidth=viewport無水平溢出、無Applicationerror/consoleerror。這只是已批准DD基本UI/HTTP健康驗收，頁面仍明示舊版唯讀/研究准入待接線、兩股估值coverage0與初步研究，沒有把UI271命中或頁20當完整母體/Top20/兩formal文章。第一次不同cwd daemon取到about:blank的原PNG/stdout保留且排除PASS，之後explicitgoto真核，不拿空白圖驗收；zsh未匹配glob toolingRED亦保留。Browser只關Root自有tab2、不動其他tab/服務。
+
+Cloud durable author finite SQL union同turn01a13ff7-13e1-72c1-b5f7-a92d9e25f305/cursor:7仍活動，先同handlecompactwait、不重派。正式金融50/pub26/fixedpeer、actual四caller/逐項semanticcitation/author與不同reviewer/atomicpublication/wholeS-C-B-Q-R-A仍待。批准DD binary deployment不代表新5609/durable文章code已上production。官方五件與AUO/CNA/calendar後續先核existingrun/receipt再原guardedretry/import，不blind activation/重領/重送PTT或全量343pipeline。完整來源Top20/兩formal獨立文章/合格技術觀察/策略與正式研究排程仍未完成；Fullgoal active、heartbeat ACTIVE，不因本次deploy停用。
+
+Root report .agent/reports/2026-10-15T22-58-approved-dd-binary-deploy-and-responsive-smoke/，receipt ed3782167b999a83261ab66a40c66616963c0204e84cc4832f82ba31544237bb。
+
 ## 2026-10-15 22:41台灣時間：記憶體真實達標後原三鎖DD capacity再獲真READY；Cloud durable author source工作仍活動，未部署
 
 Root先核remote main93e44475/progressff37d8c2與乾淨工作樹，Cloud同handle turn01a13ff7-13e1-72c1-b5f7-a92d9e25f305/cursor58df5d1d-e6e3-4df1-bae9-36cf61f53912:7仍真inProgress，未重派或重疊source。前goalturn是特定live handle verified wait，本輪一件輕量正式host capacity證據更新；沒有重跑已完成native/33契約/PR370..382終態helper。

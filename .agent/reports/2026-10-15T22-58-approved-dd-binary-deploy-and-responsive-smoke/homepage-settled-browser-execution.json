@@ -1,0 +1,36 @@
+{
+  "actions": [
+    [
+      "wait",
+      "--networkidle"
+    ],
+    [
+      "js",
+      "JSON.stringify({url:location.href,title:document.title,h1:document.querySelector(\"h1\")?.textContent,searchDisabled:document.querySelector(\"input[type=search]\")?.disabled,viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,stillLoading:document.body.innerText.includes(\"\u6b63\u5728\u8f09\u5165\u5b8c\u6574\u5feb\u7167\"),formalAdmissionPending:document.body.innerText.includes(\"\u7814\u7a76\u51c6\u5165\uff08\u5f85\u63a5\u7dda\uff09\"),legacyReadOnly:document.body.innerText.includes(\"\u820a\u7248\u552f\u8b80\")})"
+    ],
+    [
+      "screenshot",
+      "--viewport",
+      "/tmp/stockinsider-dd-binary-live-oct15-1445/homepage-desktop-settled.png"
+    ],
+    [
+      "viewport",
+      "390x844"
+    ],
+    [
+      "js",
+      "JSON.stringify({url:location.href,title:document.title,h1:document.querySelector(\"h1\")?.textContent,searchDisabled:document.querySelector(\"input[type=search]\")?.disabled,viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,stillLoading:document.body.innerText.includes(\"\u6b63\u5728\u8f09\u5165\u5b8c\u6574\u5feb\u7167\"),formalAdmissionPending:document.body.innerText.includes(\"\u7814\u7a76\u51c6\u5165\uff08\u5f85\u63a5\u7dda\uff09\"),legacyReadOnly:document.body.innerText.includes(\"\u820a\u7248\u552f\u8b80\")})"
+    ],
+    [
+      "screenshot",
+      "--viewport",
+      "/tmp/stockinsider-dd-binary-live-oct15-1445/homepage-mobile.png"
+    ],
+    [
+      "console",
+      "--errors"
+    ]
+  ],
+  "actualExitCode": 0,
+  "observedAt": "2026-10-15T14:53:32.826227+00:00"
+}

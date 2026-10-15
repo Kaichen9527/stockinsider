@@ -1,0 +1,82 @@
+{
+  "actions": [
+    [
+      "goto",
+      "http://5.104.83.211/stock/2409"
+    ],
+    [
+      "viewport",
+      "1280x900"
+    ],
+    [
+      "wait",
+      "--networkidle"
+    ],
+    [
+      "js",
+      "JSON.stringify({url:location.href,title:document.title,h1:document.querySelector(\"h1\")?.textContent,viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,bodyTextLength:document.body.innerText.length,applicationError:document.body.innerText.includes(\"Application error\"),bodyExcerpt:document.body.innerText.slice(0,750)})"
+    ],
+    [
+      "screenshot",
+      "--viewport",
+      "/tmp/stockinsider-dd-binary-live-oct15-1445/2409-desktop.png"
+    ],
+    [
+      "viewport",
+      "390x844"
+    ],
+    [
+      "js",
+      "JSON.stringify({url:location.href,title:document.title,h1:document.querySelector(\"h1\")?.textContent,viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,bodyTextLength:document.body.innerText.length,applicationError:document.body.innerText.includes(\"Application error\"),bodyExcerpt:document.body.innerText.slice(0,750)})"
+    ],
+    [
+      "screenshot",
+      "--viewport",
+      "/tmp/stockinsider-dd-binary-live-oct15-1445/2409-mobile.png"
+    ],
+    [
+      "console",
+      "--errors"
+    ],
+    [
+      "goto",
+      "http://5.104.83.211/stock/2383"
+    ],
+    [
+      "viewport",
+      "1280x900"
+    ],
+    [
+      "wait",
+      "--networkidle"
+    ],
+    [
+      "js",
+      "JSON.stringify({url:location.href,title:document.title,h1:document.querySelector(\"h1\")?.textContent,viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,bodyTextLength:document.body.innerText.length,applicationError:document.body.innerText.includes(\"Application error\"),bodyExcerpt:document.body.innerText.slice(0,750)})"
+    ],
+    [
+      "screenshot",
+      "--viewport",
+      "/tmp/stockinsider-dd-binary-live-oct15-1445/2383-desktop.png"
+    ],
+    [
+      "viewport",
+      "390x844"
+    ],
+    [
+      "js",
+      "JSON.stringify({url:location.href,title:document.title,h1:document.querySelector(\"h1\")?.textContent,viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,bodyTextLength:document.body.innerText.length,applicationError:document.body.innerText.includes(\"Application error\"),bodyExcerpt:document.body.innerText.slice(0,750)})"
+    ],
+    [
+      "screenshot",
+      "--viewport",
+      "/tmp/stockinsider-dd-binary-live-oct15-1445/2383-mobile.png"
+    ],
+    [
+      "console",
+      "--errors"
+    ]
+  ],
+  "actualExitCode": 0,
+  "observedAt": "2026-10-15T14:54:14.288751+00:00"
+}

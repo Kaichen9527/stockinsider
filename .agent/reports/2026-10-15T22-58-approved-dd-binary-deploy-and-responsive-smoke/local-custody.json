@@ -1,0 +1,32 @@
+{
+  "operatorMergeSubject": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "operatorReviewedSource": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "exactOperatorBytesEqual": true,
+  "operatorFiles": [
+    {
+      "name": "deploy.sh",
+      "bytes": 12425,
+      "sha256": "e7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f"
+    },
+    {
+      "name": "operator-support.py",
+      "bytes": 11395,
+      "sha256": "f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af"
+    },
+    {
+      "name": "unit-profile.json",
+      "bytes": 714,
+      "sha256": "4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72"
+    }
+  ],
+  "applicationSubject": "dd59817f750684b093965f539dd4de466be13077",
+  "directReview": "c2b146adb6d03814f2bd9a7af72baf003bb48812",
+  "archivePath": "/tmp/stockinsider-pr381-hosted-artifact-oct14/export/stockinsider-linux.tar.gz",
+  "archiveBytes": 27574426,
+  "archiveSha256": "398e71768ea0e7a5935282432c0edfcb2f47c953712b715562def95c3745add4",
+  "members": 3101,
+  "regularMembers": 2587,
+  "regularBytes": 79955758,
+  "noRebuild": true,
+  "noRelabelToMain": true
+}

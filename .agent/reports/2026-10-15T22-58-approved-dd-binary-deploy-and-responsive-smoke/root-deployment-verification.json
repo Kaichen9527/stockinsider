@@ -1,0 +1,195 @@
+{
+  "applicationSource": "dd59817f750684b093965f539dd4de466be13077",
+  "operatorMergeSubject": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "deployed": true,
+  "coreHealth": true,
+  "capacityPassesInSameLockedOperation": [
+    {
+      "schema": "stockinsider-host-resource-check-v1",
+      "availableBytes": 30972903424,
+      "availableMemoryBytes": 4098727936,
+      "swapFreeBytes": 499945472,
+      "observedAt": "2026-10-15T14:47:35.701Z",
+      "allowed": true,
+      "disposition": "ready",
+      "reasons": [],
+      "disk": {
+        "disposition": "ready",
+        "allowed": true,
+        "reasons": [],
+        "additionalPeakBytes": 3892314112,
+        "projectedAvailableBytes": 27080589312,
+        "minimumReserveBytes": 16106127360
+      },
+      "peakMemoryBytes": 1073741824,
+      "projectedAvailableMemoryBytes": 3024986112,
+      "minimumAvailableMemoryBytes": 1610612736
+    },
+    {
+      "schema": "stockinsider-host-resource-check-v1",
+      "availableBytes": 30883033088,
+      "availableMemoryBytes": 3292000256,
+      "swapFreeBytes": 499945472,
+      "observedAt": "2026-10-15T14:47:47.090Z",
+      "allowed": true,
+      "disposition": "ready",
+      "reasons": [],
+      "disk": {
+        "disposition": "ready",
+        "allowed": true,
+        "reasons": [],
+        "additionalPeakBytes": 3892314112,
+        "projectedAvailableBytes": 26990718976,
+        "minimumReserveBytes": 16106127360
+      },
+      "peakMemoryBytes": 1073741824,
+      "projectedAvailableMemoryBytes": 2218258432,
+      "minimumAvailableMemoryBytes": 1610612736
+    }
+  ],
+  "fullVerifier": [
+    {
+      "releaseVerified": true,
+      "releaseId": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "packagerCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "manifestSha256": "2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a",
+      "bytes": 79290260,
+      "entrypoint": "app/server.js"
+    },
+    {
+      "releaseVerified": true,
+      "releaseId": "dd59817f750684b093965f539dd4de466be13077",
+      "sourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+      "packagerCommit": "dd59817f750684b093965f539dd4de466be13077",
+      "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+      "bytes": 79354761,
+      "entrypoint": "app/server.js"
+    }
+  ],
+  "activationResponse": {
+    "ok": true,
+    "releaseId": "dd59817f750684b093965f539dd4de466be13077",
+    "writerKind": "vps",
+    "previousReleaseId": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "deploymentLeaseReleased": false,
+    "backendIdentityRotated": true
+  },
+  "ownedSettlement": {
+    "childExit": 0,
+    "childPid": 2565923,
+    "descendantSubreaperUsed": true,
+    "error": null,
+    "externalSystemdJobsVerified": false,
+    "forced": false,
+    "release": "dd59817f750684b093965f539dd4de466be13077",
+    "remainingGroupMembers": [],
+    "schema": "dd-owned-activation-settlement-candidate-v1",
+    "settledForRollback": true,
+    "signals": [],
+    "supervisorPid": 2565922
+  },
+  "freshPostDeploymentWriter": {
+    "observedAt": "2026-10-15T16:51:25.030218+02:00",
+    "activeWriterCount": 1,
+    "activeRelease": "dd59817f750684b093965f539dd4de466be13077",
+    "leaseRows": 0,
+    "unexpiredLeaseRows": 0
+  },
+  "ownedCleanup": {
+    "ownedActivationProcesses": [
+      {
+        "pid": 2565922,
+        "present": false
+      },
+      {
+        "pid": 2565923,
+        "present": false
+      }
+    ],
+    "operatorWorkDirectoryAbsent": true
+  },
+  "browserMetrics": [
+    {
+      "url": "http://5.104.83.211/",
+      "title": "StockInsider",
+      "h1": "今天有哪些股票值得繼續研究？",
+      "searchDisabled": false,
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "stillLoading": false,
+      "formalAdmissionPending": true,
+      "legacyReadOnly": true
+    },
+    {
+      "url": "http://5.104.83.211/",
+      "title": "StockInsider",
+      "h1": "今天有哪些股票值得繼續研究？",
+      "searchDisabled": false,
+      "viewport": 390,
+      "documentWidth": 390,
+      "stillLoading": false,
+      "formalAdmissionPending": true,
+      "legacyReadOnly": true
+    },
+    {
+      "url": "http://5.104.83.211/stock/2409",
+      "title": "StockInsider",
+      "h1": "友達 2409",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyTextLength": 3714,
+      "applicationError": false,
+      "bodyExcerpt": "← 回到研究雷達\n來源命中\n2026/10/14 研究快照\n初步研究版（終版資料尚未完整）\n\nREVISION-BOUND RESEARCH\n\n友達 2409\n\n友達（2409，optoelectronics）目前位於「found」。最近來源共 27 次有效命中，來自 16 個發布者、2 個平台；來源熱度只用於發現，不直接等同買進判斷。 Research 22.5、資料信心 76.4；這兩個分數代表研究證據與模型支持度，不是上漲機率。\n\n官方事實版研究；缺資料處保留為待補\n\n資料截止時間\n2026/10/14\n資料可用時間\n2026/10/14\n本估值方法資料完整度\n0%（0/40 欄位期別）\n\nDECISION SUMMARY\n\n來源命中，研究仍在補齊\n\n這是依同一研究 revision 彙整的估值、技術與證據狀態，不是上漲機率，也不是即時行情或個人化投資建議。\n\n研究狀態\n事實研究版\n兩日確認\n尚未完成或不適用\n估值資料覆蓋\n0%\n個人曝險\n未評估\n\n先看估值\n\n價格、獲利與情境\n個股研究階段\n現價\nNT$36.25\nTTM EPS\n資料待補\nTTM PE\n125.8\n未來 BVPS\n資料待補\n目前 PB\n1.5\n合理 PB／Base\n資料待補\nBase 空間\n資料待補\n報酬風險比\n資料待補\nBear\n待補\nBase\n待補\nBull\n待補\n\n下行風險 資料待補 · 估值方法 未來 12 個月 BVPS × 歷史 P/B · 估值終點 日期待補 · 歷史倍數覆蓋 60/60 個月。缺少必要橋接時，不建立正式目標價。\n\n研究分數與覆蓋\n發現\n85.0\n研究\n22.5\n行動\n66.5\n資料信心\n76.4\n\n估值必要欄位覆蓋 0/40 個欄位期別\n\n進場與退出條件\n\n進場：等待研"
+    },
+    {
+      "url": "http://5.104.83.211/stock/2409",
+      "title": "StockInsider",
+      "h1": "友達 2409",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyTextLength": 3714,
+      "applicationError": false,
+      "bodyExcerpt": "← 回到研究雷達\n來源命中\n2026/10/14 研究快照\n初步研究版（終版資料尚未完整）\n\nREVISION-BOUND RESEARCH\n\n友達 2409\n\n友達（2409，optoelectronics）目前位於「found」。最近來源共 27 次有效命中，來自 16 個發布者、2 個平台；來源熱度只用於發現，不直接等同買進判斷。 Research 22.5、資料信心 76.4；這兩個分數代表研究證據與模型支持度，不是上漲機率。\n\n官方事實版研究；缺資料處保留為待補\n\n資料截止時間\n2026/10/14\n資料可用時間\n2026/10/14\n本估值方法資料完整度\n0%（0/40 欄位期別）\n\nDECISION SUMMARY\n\n來源命中，研究仍在補齊\n\n這是依同一研究 revision 彙整的估值、技術與證據狀態，不是上漲機率，也不是即時行情或個人化投資建議。\n\n研究狀態\n事實研究版\n兩日確認\n尚未完成或不適用\n估值資料覆蓋\n0%\n個人曝險\n未評估\n\n先看估值\n\n價格、獲利與情境\n個股研究階段\n現價\nNT$36.25\nTTM EPS\n資料待補\nTTM PE\n125.8\n未來 BVPS\n資料待補\n目前 PB\n1.5\n合理 PB／Base\n資料待補\nBase 空間\n資料待補\n報酬風險比\n資料待補\nBear\n待補\nBase\n待補\nBull\n待補\n\n下行風險 資料待補 · 估值方法 未來 12 個月 BVPS × 歷史 P/B · 估值終點 日期待補 · 歷史倍數覆蓋 60/60 個月。缺少必要橋接時，不建立正式目標價。\n\n研究分數與覆蓋\n發現\n85.0\n研究\n22.5\n行動\n66.5\n資料信心\n76.4\n\n估值必要欄位覆蓋 0/40 個欄位期別\n\n進場與退出條件\n\n進場：等待研"
+    },
+    {
+      "url": "http://5.104.83.211/stock/2383",
+      "title": "StockInsider",
+      "h1": "台光電 2383",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyTextLength": 3974,
+      "applicationError": false,
+      "bodyExcerpt": "← 回到研究雷達\n來源命中\n2026/10/14 研究快照\n初步研究版（終版資料尚未完整）\n\nREVISION-BOUND RESEARCH\n\n台光電 2383\n\n台光電（2383，electronic_components）目前位於「found」。最近來源共 3 次有效命中，來自 1 個發布者、1 個平台；來源熱度只用於發現，不直接等同買進判斷。 Research 18.8、資料信心 70.1；這兩個分數代表研究證據與模型支持度，不是上漲機率。\n\n官方事實版研究；缺資料處保留為待補\n\n資料截止時間\n2026/10/14\n資料可用時間\n2026/10/14\n本估值方法資料完整度\n0%（0/48 欄位期別）\n\nDECISION SUMMARY\n\n來源命中，研究仍在補齊\n\n這是依同一研究 revision 彙整的估值、技術與證據狀態，不是上漲機率，也不是即時行情或個人化投資建議。\n\n研究狀態\n事實研究版\n兩日確認\n尚未完成或不適用\n估值資料覆蓋\n0%\n個人曝險\n未評估\n\n先看估值\n\n價格、獲利與情境\n個股研究階段\n現價\nNT$5520.00\nTTM EPS\n資料待補\nTTM PE\n83.9\nNTM EPS\n資料待補\n目前 forward PE\n資料待補\n合理倍數／Base\n資料待補\nBase 空間\n資料待補\n報酬風險比\n資料待補\nBear\n待補\nBase\n待補\nBull\n待補\n\n下行風險 資料待補 · 估值方法 ttm_multiple_reference · 估值終點 日期待補 · 歷史倍數覆蓋 4/60 個月。缺少必要橋接時，不建立正式目標價。\n\n研究分數與覆蓋\n發現\n47.3\n研究\n18.8\n行動\n70.3\n資料信心\n70.1\n\n估值必要欄位覆蓋 0/48 個欄位期別\n\n進"
+    },
+    {
+      "url": "http://5.104.83.211/stock/2383",
+      "title": "StockInsider",
+      "h1": "台光電 2383",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyTextLength": 3974,
+      "applicationError": false,
+      "bodyExcerpt": "← 回到研究雷達\n來源命中\n2026/10/14 研究快照\n初步研究版（終版資料尚未完整）\n\nREVISION-BOUND RESEARCH\n\n台光電 2383\n\n台光電（2383，electronic_components）目前位於「found」。最近來源共 3 次有效命中，來自 1 個發布者、1 個平台；來源熱度只用於發現，不直接等同買進判斷。 Research 18.8、資料信心 70.1；這兩個分數代表研究證據與模型支持度，不是上漲機率。\n\n官方事實版研究；缺資料處保留為待補\n\n資料截止時間\n2026/10/14\n資料可用時間\n2026/10/14\n本估值方法資料完整度\n0%（0/48 欄位期別）\n\nDECISION SUMMARY\n\n來源命中，研究仍在補齊\n\n這是依同一研究 revision 彙整的估值、技術與證據狀態，不是上漲機率，也不是即時行情或個人化投資建議。\n\n研究狀態\n事實研究版\n兩日確認\n尚未完成或不適用\n估值資料覆蓋\n0%\n個人曝險\n未評估\n\n先看估值\n\n價格、獲利與情境\n個股研究階段\n現價\nNT$5520.00\nTTM EPS\n資料待補\nTTM PE\n83.9\nNTM EPS\n資料待補\n目前 forward PE\n資料待補\n合理倍數／Base\n資料待補\nBase 空間\n資料待補\n報酬風險比\n資料待補\nBear\n待補\nBase\n待補\nBull\n待補\n\n下行風險 資料待補 · 估值方法 ttm_multiple_reference · 估值終點 日期待補 · 歷史倍數覆蓋 4/60 個月。缺少必要橋接時，不建立正式目標價。\n\n研究分數與覆蓋\n發現\n47.3\n研究\n18.8\n行動\n70.3\n資料信心\n70.1\n\n估值必要欄位覆蓋 0/48 個欄位期別\n\n進"
+    }
+  ],
+  "basicDesktopMobileSmoke": "PASS",
+  "formalResearchPublished": false,
+  "financial50OrPublication26Installed": false,
+  "fixedFinancialPeerVerified": false,
+  "rootNoRebuild": true,
+  "rootNoMain169Deploy": true,
+  "remaining": [
+    "source admission/complete candidate qualification/Top20",
+    "two formal independent publications",
+    "semantic citation mapping/four actual callers/Q-R/whole closure",
+    "qualified technical observation",
+    "strategy/formal research schedule",
+    "fixed peer/financial and publication schema install"
+  ],
+  "retainedDiagnostics": [
+    "one helper warmup curl(7) before natural child success; final loopback 200",
+    "first browser capture about:blank from different cwd daemon; preserved and excluded from PASS",
+    "zsh unmatched glob query; corrected with explicit known source file"
+  ]
+}

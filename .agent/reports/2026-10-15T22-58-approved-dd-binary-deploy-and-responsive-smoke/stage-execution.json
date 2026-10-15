@@ -1,0 +1,14 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "python3 -I -c 'import base64, hashlib, json, os, pathlib, stat, sys, tempfile\nassert os.geteuid() == 0\ndata = json.loads(sys.stdin.buffer.read(65537))\nassert set(data) == {'\"'\"'files'\"'\"'}\nassert {x['\"'\"'name'\"'\"'] for x in data['\"'\"'files'\"'\"']} == {'\"'\"'deploy.sh'\"'\"', '\"'\"'operator-support.py'\"'\"', '\"'\"'unit-profile.json'\"'\"'}\nassert len(data['\"'\"'files'\"'\"']) == 3\nfor directory in [pathlib.Path('\"'\"'/run'\"'\"'), pathlib.Path('\"'\"'/'\"'\"')]:\n    s = directory.lstat()\n    assert stat.S_ISDIR(s.st_mode) and s.st_uid == 0 and not s.st_mode & 0o022\nleaf = pathlib.Path(tempfile.mkdtemp(prefix='\"'\"'stockinsider-dd-reviewed-'\"'\"', dir='\"'\"'/run'\"'\"'))\nos.chmod(leaf, 0o700)\nrecords = []\nfor item in data['\"'\"'files'\"'\"']:\n    assert set(item) == {'\"'\"'name'\"'\"', '\"'\"'base64'\"'\"', '\"'\"'bytes'\"'\"', '\"'\"'sha256'\"'\"'}\n    raw = base64.b64decode(item['\"'\"'base64'\"'\"'], validate=True)\n    assert len(raw) == item['\"'\"'bytes'\"'\"'] and hashlib.sha256(raw).hexdigest() == item['\"'\"'sha256'\"'\"']\n    p = leaf / item['\"'\"'name'\"'\"']\n    fd = os.open(p, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)\n    with os.fdopen(fd, '\"'\"'wb'\"'\"') as stream:\n        stream.write(raw)\n        stream.flush()\n        os.fsync(stream.fileno())\n    s = p.lstat()\n    assert stat.S_ISREG(s.st_mode) and s.st_uid == 0 and s.st_nlink == 1 and stat.S_IMODE(s.st_mode) == 0o600\n    assert hashlib.sha256(p.read_bytes()).hexdigest() == item['\"'\"'sha256'\"'\"']\n    records.append({'\"'\"'name'\"'\"': item['\"'\"'name'\"'\"'], '\"'\"'bytes'\"'\"': len(raw), '\"'\"'sha256'\"'\"': item['\"'\"'sha256'\"'\"'], '\"'\"'uid'\"'\"': s.st_uid, '\"'\"'mode'\"'\"': stat.S_IMODE(s.st_mode), '\"'\"'nlink'\"'\"': s.st_nlink})\nprint(json.dumps({'\"'\"'ownedLeaf'\"'\"': str(leaf), '\"'\"'files'\"'\"': records, '\"'\"'applicationArchiveStaged'\"'\"': False}))\n'"
+  ],
+  "startedAt": "2026-10-15T14:46:23.315777+00:00",
+  "endedAt": "2026-10-15T14:46:24.833916+00:00",
+  "actualExitCode": 0
+}

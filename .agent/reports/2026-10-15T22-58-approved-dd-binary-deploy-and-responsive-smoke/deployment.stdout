@@ -1,0 +1,36 @@
+/run/stockinsider-dd-reviewed-75ao9foq/operator-support.py: OK
+/run/stockinsider-dd-reviewed-75ao9foq/unit-profile.json: OK
+{"schema":"stockinsider-host-resource-check-v1","availableBytes":30972903424,"availableMemoryBytes":4098727936,"swapFreeBytes":499945472,"observedAt":"2026-10-15T14:47:35.701Z","allowed":true,"disposition":"ready","reasons":[],"disk":{"disposition":"ready","allowed":true,"reasons":[],"additionalPeakBytes":3892314112,"projectedAvailableBytes":27080589312,"minimumReserveBytes":16106127360},"peakMemoryBytes":1073741824,"projectedAvailableMemoryBytes":3024986112,"minimumAvailableMemoryBytes":1610612736}
+BEGIN
+SET
+SET
+DO
+{"releaseId" : "169aad1b6cfa747f78ae3464b614f43c0749d806", "writerKind" : "vps", "active" : true}
+ROLLBACK
+{"releaseVerified":true,"releaseId":"169aad1b6cfa747f78ae3464b614f43c0749d806","sourceCommit":"169aad1b6cfa747f78ae3464b614f43c0749d806","packagerCommit":"169aad1b6cfa747f78ae3464b614f43c0749d806","manifestSha256":"2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a","bytes":79290260,"entrypoint":"app/server.js"}
+{"dropIn": {"gid": 0, "mode": 420, "sha256": "d8884c9a1b7e9e108be7f618a9c13a6dce8e810e046302f6c4491c8cace0f015", "uid": 0}, "units": {"stockinsider-internal-worker.service": {"effective": {"DropInPaths": "", "FragmentPath": "/etc/systemd/system/stockinsider-internal-worker.service", "Group": "stockinsider", "Id": "stockinsider-internal-worker.service", "LoadState": "loaded", "NeedDaemonReload": "no", "User": "stockinsider", "WorkingDirectory": "/opt/stockinsider/current/app"}, "sourceSha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e"}, "stockinsider-web-standalone.service": {"effective": {"DropInPaths": "/etc/systemd/system/stockinsider-web-standalone.service.d/20-writer-release.conf", "FragmentPath": "/etc/systemd/system/stockinsider-web-standalone.service", "Group": "stockinsider", "Id": "stockinsider-web-standalone.service", "LoadState": "loaded", "NeedDaemonReload": "no", "User": "stockinsider", "WorkingDirectory": "/opt/stockinsider/current/app"}, "sourceSha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"}}, "writer": {"gid": 987, "mode": 416, "sha256": "44c8ecd459867205e14f7e81116d4934c2ea88417794a493bf031ba6aa03dfb9", "uid": 0}}
+artifact_stream_exact_bytes=27574426
+/run/stockinsider-dd-binary.IMKtOI/artifact.tar.gz: OK
+approved_archive_structure_verified
+{"releaseVerified":true,"releaseId":"dd59817f750684b093965f539dd4de466be13077","sourceCommit":"dd59817f750684b093965f539dd4de466be13077","packagerCommit":"dd59817f750684b093965f539dd4de466be13077","manifestSha256":"344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a","bytes":79354761,"entrypoint":"app/server.js"}
+/opt/stockinsider-standalone/releases/dd59817f750684b093965f539dd4de466be13077/deployment/vps/activate-writer-release.sh: OK
+{"schema":"stockinsider-host-resource-check-v1","availableBytes":30883033088,"availableMemoryBytes":3292000256,"swapFreeBytes":499945472,"observedAt":"2026-10-15T14:47:47.090Z","allowed":true,"disposition":"ready","reasons":[],"disk":{"disposition":"ready","allowed":true,"reasons":[],"additionalPeakBytes":3892314112,"projectedAvailableBytes":26990718976,"minimumReserveBytes":16106127360},"peakMemoryBytes":1073741824,"projectedAvailableMemoryBytes":2218258432,"minimumAvailableMemoryBytes":1610612736}
+BEGIN
+SET
+SET
+DO
+{"releaseId" : "169aad1b6cfa747f78ae3464b614f43c0749d806", "writerKind" : "vps", "active" : true}
+ROLLBACK
+{"dropIn": {"gid": 0, "mode": 420, "sha256": "d8884c9a1b7e9e108be7f618a9c13a6dce8e810e046302f6c4491c8cace0f015", "uid": 0}, "units": {"stockinsider-internal-worker.service": {"effective": {"DropInPaths": "", "FragmentPath": "/etc/systemd/system/stockinsider-internal-worker.service", "Group": "stockinsider", "Id": "stockinsider-internal-worker.service", "LoadState": "loaded", "NeedDaemonReload": "no", "User": "stockinsider", "WorkingDirectory": "/opt/stockinsider/current/app"}, "sourceSha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e"}, "stockinsider-web-standalone.service": {"effective": {"DropInPaths": "/etc/systemd/system/stockinsider-web-standalone.service.d/20-writer-release.conf", "FragmentPath": "/etc/systemd/system/stockinsider-web-standalone.service", "Group": "stockinsider", "Id": "stockinsider-web-standalone.service", "LoadState": "loaded", "NeedDaemonReload": "no", "User": "stockinsider", "WorkingDirectory": "/opt/stockinsider/current/app"}, "sourceSha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"}}, "writer": {"gid": 987, "mode": 416, "sha256": "44c8ecd459867205e14f7e81116d4934c2ea88417794a493bf031ba6aa03dfb9", "uid": 0}}
+{"ok":true,"releaseId":"dd59817f750684b093965f539dd4de466be13077","writerKind":"vps","previousReleaseId":"169aad1b6cfa747f78ae3464b614f43c0749d806","deploymentLeaseReleased":false,"backendIdentityRotated":true}
+{"childExit": 0, "childPid": 2565923, "descendantSubreaperUsed": true, "error": null, "externalSystemdJobsVerified": false, "forced": false, "release": "dd59817f750684b093965f539dd4de466be13077", "remainingGroupMembers": [], "schema": "dd-owned-activation-settlement-candidate-v1", "settledForRollback": true, "signals": [], "supervisorPid": 2565922}
+{"dropIn": {"gid": 0, "mode": 420, "sha256": "d8884c9a1b7e9e108be7f618a9c13a6dce8e810e046302f6c4491c8cace0f015", "uid": 0}, "units": {"stockinsider-internal-worker.service": {"effective": {"DropInPaths": "", "FragmentPath": "/etc/systemd/system/stockinsider-internal-worker.service", "Group": "stockinsider", "Id": "stockinsider-internal-worker.service", "LoadState": "loaded", "NeedDaemonReload": "no", "User": "stockinsider", "WorkingDirectory": "/opt/stockinsider/current/app"}, "sourceSha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e"}, "stockinsider-web-standalone.service": {"effective": {"DropInPaths": "/etc/systemd/system/stockinsider-web-standalone.service.d/20-writer-release.conf", "FragmentPath": "/etc/systemd/system/stockinsider-web-standalone.service", "Group": "stockinsider", "Id": "stockinsider-web-standalone.service", "LoadState": "loaded", "NeedDaemonReload": "no", "User": "stockinsider", "WorkingDirectory": "/opt/stockinsider/current/app"}, "sourceSha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"}}, "writer": {"gid": 987, "mode": 416, "sha256": "0becaade488d554d99b937d3ed95320134afbd03c2f0f7b476f7e9f76c0fad09", "uid": 0}}
+BEGIN
+SET
+SET
+DO
+{"releaseId" : "dd59817f750684b093965f539dd4de466be13077", "writerKind" : "vps", "active" : true}
+ROLLBACK
+   1B-blocks       Avail
+154894188544 30883004416
+approved_dd_binary_current_writer_core_health_and_cleanup_verified

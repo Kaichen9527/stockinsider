@@ -1,0 +1,33 @@
+{
+  "actions": [
+    [
+      "goto",
+      "http://5.104.83.211/"
+    ],
+    [
+      "viewport",
+      "1280x900"
+    ],
+    [
+      "snapshot",
+      "-c"
+    ],
+    [
+      "text"
+    ],
+    [
+      "console",
+      "--errors"
+    ],
+    [
+      "network"
+    ],
+    [
+      "screenshot",
+      "--viewport",
+      "/tmp/stockinsider-dd-binary-live-oct15-1445/homepage-desktop-verified.png"
+    ]
+  ],
+  "actualExitCode": 0,
+  "observedAt": "2026-10-15T14:52:31.669105+00:00"
+}

@@ -1,0 +1,15 @@
+[wait] Network idle
+
+[js] {"url":"http://5.104.83.211/","title":"StockInsider","h1":"今天有哪些股票值得繼續研究？","searchDisabled":false,"viewport":1280,"documentWidth":1280,"stillLoading":false,"formalAdmissionPending":true,"legacyReadOnly":true}
+
+[screenshot] Screenshot saved (viewport): /tmp/stockinsider-dd-binary-live-oct15-1445/homepage-desktop-settled.png
+
+[viewport] Viewport set to 390x844
+
+[js] {"url":"http://5.104.83.211/","title":"StockInsider","h1":"今天有哪些股票值得繼續研究？","searchDisabled":false,"viewport":390,"documentWidth":390,"stillLoading":false,"formalAdmissionPending":true,"legacyReadOnly":true}
+
+[screenshot] Screenshot saved (viewport): /tmp/stockinsider-dd-binary-live-oct15-1445/homepage-mobile.png
+
+[console] --- BEGIN UNTRUSTED EXTERNAL CONTENT (source: http://5.104.83.211/) ---
+(no console errors)
+--- END UNTRUSTED EXTERNAL CONTENT ---

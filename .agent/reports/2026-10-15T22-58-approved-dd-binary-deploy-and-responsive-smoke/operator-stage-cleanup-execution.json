@@ -1,0 +1,13 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "python3 -I -c 'import pathlib,json,hashlib,os,stat; p=pathlib.Path('\"'\"'/run/stockinsider-dd-reviewed-75ao9foq'\"'\"'); checks={'\"'\"'deploy.sh'\"'\"': '\"'\"'e7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f'\"'\"', '\"'\"'operator-support.py'\"'\"': '\"'\"'f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af'\"'\"', '\"'\"'unit-profile.json'\"'\"': '\"'\"'4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72'\"'\"'}; assert p.parent==pathlib.Path(\"/run\") and p.name.startswith(\"stockinsider-dd-reviewed-\"); assert set(x.name for x in p.iterdir())==set(checks); assert all(hashlib.sha256((p/n).read_bytes()).hexdigest()==h and stat.S_ISREG((p/n).lstat().st_mode) and (p/n).lstat().st_uid==0 and (p/n).lstat().st_nlink==1 for n,h in checks.items()); [(p/n).unlink() for n in checks]; p.rmdir(); print(json.dumps({\"ownedLeaf\":str(p),\"removedFiles\":sorted(checks),\"leafAbsent\":not p.exists(),\"applicationFilesRemoved\":False}))'"
+  ],
+  "actualExitCode": 0,
+  "observedAt": "2026-10-15T14:52:33.941165+00:00"
+}

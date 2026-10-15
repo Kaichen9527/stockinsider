@@ -1,0 +1,30 @@
+{
+  "ownedLeaf": "/run/stockinsider-dd-reviewed-75ao9foq",
+  "files": [
+    {
+      "name": "deploy.sh",
+      "bytes": 12425,
+      "sha256": "e7596f7f0461671d1067b3ab2bb110e8ad238ee368f880b7f0e2b316314e0a0f",
+      "uid": 0,
+      "mode": 384,
+      "nlink": 1
+    },
+    {
+      "name": "operator-support.py",
+      "bytes": 11395,
+      "sha256": "f0fcfb7b6286bf01e0ce40d0a02d960e171c3459947b2d771d976685a6dee4af",
+      "uid": 0,
+      "mode": 384,
+      "nlink": 1
+    },
+    {
+      "name": "unit-profile.json",
+      "bytes": 714,
+      "sha256": "4bcbf42abefa3cba29114d49c7601a0186ca0df25cf1c51ba72d87a2dfa12b72",
+      "uid": 0,
+      "mode": 384,
+      "nlink": 1
+    }
+  ],
+  "applicationArchiveStaged": false
+}
