@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: only four exact existing function bodies replaced; no grants/roles/tables/new API
+ok 1 - only four exact existing function bodies replaced; no grants/roles/tables/new API
+  ---
+  duration_ms: 1.842211
+  ...
+# Subtest: all source predecessor hashes and final original declarations pinned
+ok 2 - all source predecessor hashes and final original declarations pinned
+  ---
+  duration_ms: 0.676981
+  ...
+# Subtest: finite complete prior catalog and namespace, locks before any replacement, body-only postconditions
+ok 3 - finite complete prior catalog and namespace, locks before any replacement, body-only postconditions
+  ---
+  duration_ms: 0.202996
+  ...
+# Subtest: old receive v2 arm remains byte-exact and candidate branch never retries old READ on error
+ok 4 - old receive v2 arm remains byte-exact and candidate branch never retries old READ on error
+  ---
+  duration_ms: 0.303839
+  ...
+# Subtest: closed v3 union binds material/context/observation/flags and preserves original durable uniqueness
+ok 5 - closed v3 union binds material/context/observation/flags and preserves original durable uniqueness
+  ---
+  duration_ms: 0.342046
+  ...
+# Subtest: original atomic scanner preserves complete DO and strips only outer transaction
+ok 6 - original atomic scanner preserves complete DO and strips only outer transaction
+  ---
+  duration_ms: 2.376938
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12.756455

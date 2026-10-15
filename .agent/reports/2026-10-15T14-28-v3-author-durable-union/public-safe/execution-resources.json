@@ -1,0 +1,98 @@
+{
+  "subject": "79fd6e001ec77f58618d784948f9097e785b8f31",
+  "checks": [
+    {
+      "label": "sealed-durable",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-author-durable.test.mjs"
+      ],
+      "startedAt": "2026-10-15T14:53:19.738147+00:00",
+      "peakSessionRssBytes": 253255680,
+      "freeMinimum": {
+        "/workspace": 8594522112,
+        "/tmp": 15360200704
+      },
+      "exit": 0,
+      "endedAt": "2026-10-15T14:53:32.417799+00:00"
+    },
+    {
+      "label": "sealed-article-regression",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-author-article.test.mjs"
+      ],
+      "startedAt": "2026-10-15T14:53:32.418604+00:00",
+      "peakSessionRssBytes": 217636864,
+      "freeMinimum": {
+        "/workspace": 8594522112,
+        "/tmp": 15360188416
+      },
+      "exit": 0,
+      "endedAt": "2026-10-15T14:53:43.888671+00:00"
+    },
+    {
+      "label": "sealed-sql-static",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/research-v3-author-union-sql.test.mjs"
+      ],
+      "startedAt": "2026-10-15T14:53:43.888969+00:00",
+      "peakSessionRssBytes": 26411008,
+      "freeMinimum": {
+        "/workspace": 8594522112,
+        "/tmp": 15360188416
+      },
+      "exit": 0,
+      "endedAt": "2026-10-15T14:53:44.020305+00:00"
+    },
+    {
+      "label": "sealed-module-types",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--strict",
+        "--skipLibCheck",
+        "--target",
+        "ES2022",
+        "--module",
+        "ESNext",
+        "--moduleResolution",
+        "Bundler",
+        "--allowImportingTsExtensions",
+        "--resolveJsonModule",
+        "--esModuleInterop",
+        "--types",
+        "node",
+        "--typeRoots",
+        "web/node_modules/@types",
+        "web/src/lib/research-v3-author-result.ts"
+      ],
+      "startedAt": "2026-10-15T14:53:44.020939+00:00",
+      "peakSessionRssBytes": 265035776,
+      "freeMinimum": {
+        "/workspace": 8594522112,
+        "/tmp": 15360184320
+      },
+      "exit": 0,
+      "endedAt": "2026-10-15T14:53:46.099519+00:00"
+    }
+  ],
+  "terminal": {
+    "checkedAt": "2026-10-15T14:56:21.254759+00:00",
+    "node": "v22.14.0",
+    "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "freeBytes": {
+      "/workspace": 8594522112,
+      "/tmp": 15360131072
+    },
+    "trackedClean": true,
+    "newServicesStarted": false,
+    "nativeExecuted": false
+  },
+  "newServicesStarted": false,
+  "nativeExecuted": false
+}

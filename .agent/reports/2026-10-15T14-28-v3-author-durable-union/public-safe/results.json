@@ -1,0 +1,67 @@
+{
+  "subject": "79fd6e001ec77f58618d784948f9097e785b8f31",
+  "tree": "3f6b4bbff0ba42a6fe1936aba5679dc969e05f00",
+  "suites": [
+    {
+      "label": "sealed-durable",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0
+    },
+    {
+      "label": "sealed-article-regression",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0
+    },
+    {
+      "label": "sealed-sql-static",
+      "tests": 6,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0
+    }
+  ],
+  "total": {
+    "pass": 32,
+    "newDurable": 13,
+    "newStaticSql": 6,
+    "articleRegression": 13,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "strictModuleTypes": "PASS",
+  "native": "NOT_RUN",
+  "build": "NOT_RUN",
+  "sqlSyntaxExecution": "NOT_RUN",
+  "sourceOnlyExternalRpc": "synthetic; no COMMIT, authority or socket proof",
+  "historicalResultsNotAdded": true,
+  "originalResults": [
+    {
+      "subject": "wip1",
+      "result": "two sandbox file-level passes only; not 25 individual cases; module types exit0"
+    },
+    {
+      "subject": "wip2",
+      "result": "direct durable12PASS and article13PASS; SQL static5PASS1FAIL: checker matched grant word in comment, not SQL mutation"
+    },
+    {
+      "subject": "wip3",
+      "result": "direct durable13PASS, SQL static6PASS; overlap not added"
+    }
+  ],
+  "pending": [
+    "independent source review",
+    "actual PG17 namespace/catalog canonical codec and migration pre/post/ACL/OID/default/unknown/busy/rollback proof",
+    "actual v2/compat-v2 preservation and v3 assignment/receive/replay/read/response-loss/source revoke protocol",
+    "all four active callers/HTTP route; source methods are private/unactivated",
+    "reviewer/Q-R/reviewpack/atomic publication/full S-C-B-Q-R-A",
+    "real claim-level prose mapping/independent review/principals/rights/reservations/deploy"
+  ]
+}

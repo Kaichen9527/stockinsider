@@ -1,0 +1,75 @@
+TAP version 13
+# Subtest: 2409 actual guarded caller assign/receive/read exact durable receipt, no protocol writes
+ok 1 - 2409 actual guarded caller assign/receive/read exact durable receipt, no protocol writes
+  ---
+  duration_ms: 1709.977829
+  ...
+# Subtest: 2409 receipt metadata and relational content drift reject even rehashed forged payload
+ok 2 - 2409 receipt metadata and relational content drift reject even rehashed forged payload
+  ---
+  duration_ms: 3572.565028
+  ...
+# Subtest: 2409 unchanged transport error; explicit read recovery never retries receive
+ok 3 - 2409 unchanged transport error; explicit read recovery never retries receive
+  ---
+  duration_ms: 736.091661
+  ...
+# Subtest: 2409 old unupgraded packet arm fails before receive, no nonexistent RPC fallback
+ok 4 - 2409 old unupgraded packet arm fails before receive, no nonexistent RPC fallback
+  ---
+  duration_ms: 361.869578
+  ...
+# Subtest: 2409 post-receive source revocation blocks receipt success, next read remains denied
+ok 5 - 2409 post-receive source revocation blocks receipt success, next read remains denied
+  ---
+  duration_ms: 532.761168
+  ...
+# Subtest: 2383 actual guarded caller assign/receive/read exact durable receipt, no protocol writes
+ok 6 - 2383 actual guarded caller assign/receive/read exact durable receipt, no protocol writes
+  ---
+  duration_ms: 814.121114
+  ...
+# Subtest: 2383 receipt metadata and relational content drift reject even rehashed forged payload
+ok 7 - 2383 receipt metadata and relational content drift reject even rehashed forged payload
+  ---
+  duration_ms: 2082.188302
+  ...
+# Subtest: 2383 unchanged transport error; explicit read recovery never retries receive
+ok 8 - 2383 unchanged transport error; explicit read recovery never retries receive
+  ---
+  duration_ms: 405.699415
+  ...
+# Subtest: 2383 old unupgraded packet arm fails before receive, no nonexistent RPC fallback
+ok 9 - 2383 old unupgraded packet arm fails before receive, no nonexistent RPC fallback
+  ---
+  duration_ms: 199.262208
+  ...
+# Subtest: 2383 post-receive source revocation blocks receipt success, next read remains denied
+ok 10 - 2383 post-receive source revocation blocks receipt success, next read remains denied
+  ---
+  duration_ms: 292.70463
+  ...
+# Subtest: auth-first/read cap/expired shared deadline prevent DB and assignment mutation
+ok 11 - auth-first/read cap/expired shared deadline prevent DB and assignment mutation
+  ---
+  duration_ms: 298.995105
+  ...
+# Subtest: null read is absence; null receive cannot become a successful durable result
+ok 12 - null read is absence; null receive cannot become a successful durable result
+  ---
+  duration_ms: 339.6238
+  ...
+# Subtest: shared deadline loss after receive has no optimistic success or automatic retry
+ok 13 - shared deadline loss after receive has no optimistic success or automatic retry
+  ---
+  duration_ms: 725.066012
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12091.242916

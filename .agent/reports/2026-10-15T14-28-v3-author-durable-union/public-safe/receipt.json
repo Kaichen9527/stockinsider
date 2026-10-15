@@ -1,0 +1,29 @@
+{
+  "subject": "79fd6e001ec77f58618d784948f9097e785b8f31",
+  "tree": "3f6b4bbff0ba42a6fe1936aba5679dc969e05f00",
+  "sourceFiles": 131,
+  "literalStaticModules": 30,
+  "changedPaths": 8,
+  "missingSourceInputs": [],
+  "rawCount": 79,
+  "rawBytes": 841652,
+  "publishedRawContents": false,
+  "pass": 32,
+  "fail": 0,
+  "skip": 0,
+  "todo": 0,
+  "strictModuleTypes": "PASS",
+  "native": "NOT_RUN",
+  "sqlExecution": "NOT_RUN",
+  "independentApproval": false,
+  "files": {
+    "HANDOFF.md": "d6c13adf2d0f6c7f99e302db7d2e2f791d275e49705f577e7853f27ab4b5f740",
+    "execution-resources.json": "768f876ed1f93319a6118486f32ea34d8427906acd8d8835352cfc22325423f5",
+    "raw-inventory.json": "2a559d5a6a7c6f1dfe06b17fcdc5106e0f5368f80300470eba0d91c2bde3a100",
+    "results.json": "6aef3ae075ec1974b063394996ee6dbba204f0d1954ce97ab1da44c8fa240f8a",
+    "sealed-article-regression.tap": "a405140c071c0077aaf0e9dab9a474242d5c501895443f8d48c77acb39b04efa",
+    "sealed-durable.tap": "2fc4d246d2a0cd9c0d9fe93042055396635683eab7962dd22dbf1fe0b377d2e4",
+    "sealed-sql-static.tap": "1b9c607b6c74b246fdd5344ec2bb0d9270fb1892f46f00e481c1d47ac96ec85b",
+    "source-inventory.json": "238c04f40f85828241834213ecbed291afcb1abcda65b1d666e5eba4eadda785"
+  }
+}
