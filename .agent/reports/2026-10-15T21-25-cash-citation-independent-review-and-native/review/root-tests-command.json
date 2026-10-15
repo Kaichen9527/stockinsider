@@ -1,0 +1,4 @@
+{
+  "command": "arch -arm64 /usr/local/bin/node --experimental-strip-types --test --test-concurrency=1 scripts/research-v3-article-citations.test.mjs",
+  "exit": 0
+}

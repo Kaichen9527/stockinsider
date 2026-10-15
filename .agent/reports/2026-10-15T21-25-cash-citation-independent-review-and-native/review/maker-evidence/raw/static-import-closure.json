@@ -1,0 +1,330 @@
+{
+  "leafOnlyNotWholeExecutionClosure": true,
+  "entry": "web/src/lib/research-v3-article-citations.ts",
+  "fileCount": 25,
+  "files": [
+    "web/src/lib/research-business-calculator.ts",
+    "web/src/lib/research-cash-financial-reader.ts",
+    "web/src/lib/research-compatible-financial-inventory.ts",
+    "web/src/lib/research-compatible-financial-projection.ts",
+    "web/src/lib/research-compatible-financial-reader.ts",
+    "web/src/lib/research-complete-mapping.json",
+    "web/src/lib/research-complete-schema-bundles.ts",
+    "web/src/lib/research-financial-clock.ts",
+    "web/src/lib/research-financial-io-engine.ts",
+    "web/src/lib/research-financial-io-owner.ts",
+    "web/src/lib/research-historical-cash-core.ts",
+    "web/src/lib/research-historical-cash-pins.ts",
+    "web/src/lib/research-historical-cash-projection.ts",
+    "web/src/lib/research-scenario-cash-material.ts",
+    "web/src/lib/research-v3-article-citations.ts",
+    "web/src/lib/research-v3-finite-material.ts",
+    "web/src/lib/research-v3-material-canonical.ts",
+    "web/src/lib/research-v3-material-schemas/2383-normalized.json",
+    "web/src/lib/research-v3-material-schemas/2383-raw.json",
+    "web/src/lib/research-v3-material-schemas/2409-normalized.json",
+    "web/src/lib/research-v3-material-schemas/2409-raw.json",
+    "web/src/lib/research-versioned-complete-input.ts",
+    "web/src/lib/research-versioned-input-binding.ts",
+    "web/src/lib/research-versioned-input-legacy-response.ts",
+    "web/src/lib/research-versioned-input-request.ts"
+  ],
+  "edges": [
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-v3-finite-material.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-historical-cash-core.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-financial-io-owner.ts",
+      "builtinOrExternal": "node:perf_hooks"
+    },
+    {
+      "from": "web/src/lib/research-financial-io-owner.ts",
+      "builtinOrExternal": "node:fs/promises"
+    },
+    {
+      "from": "web/src/lib/research-business-calculator.ts",
+      "builtinOrExternal": "node:crypto"
+    },
+    {
+      "from": "web/src/lib/research-business-calculator.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "builtinOrExternal": "node:crypto"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-material-schemas/2409-raw.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-material-schemas/2383-raw.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-material-schemas/2409-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-material-schemas/2383-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-material-canonical.ts",
+      "builtinOrExternal": "node:crypto"
+    },
+    {
+      "from": "web/src/lib/research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-request.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "builtinOrExternal": "node:crypto"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-compatible-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-complete-schema-bundles.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-complete-mapping.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-v3-material-schemas/2409-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-v3-material-schemas/2383-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-compatible-financial-reader.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-cash-financial-reader.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-input-legacy-response.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "to": "web/src/lib/research-complete-schema-bundles.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "to": "web/src/lib/research-complete-mapping.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "to": "web/src/lib/research-v3-finite-material.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "builtinOrExternal": "node:crypto"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "to": "web/src/lib/research-historical-cash-projection.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "to": "web/src/lib/research-scenario-cash-material.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "to": "web/src/lib/research-financial-io-engine.ts"
+    },
+    {
+      "from": "web/src/lib/research-financial-io-engine.ts",
+      "builtinOrExternal": "node:fs"
+    },
+    {
+      "from": "web/src/lib/research-financial-io-engine.ts",
+      "builtinOrExternal": "node:fs/promises"
+    },
+    {
+      "from": "web/src/lib/research-financial-io-engine.ts",
+      "builtinOrExternal": "node:path"
+    },
+    {
+      "from": "web/src/lib/research-financial-io-engine.ts",
+      "builtinOrExternal": "node:crypto"
+    },
+    {
+      "from": "web/src/lib/research-financial-io-engine.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "builtinOrExternal": "node:crypto"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "to": "web/src/lib/research-historical-cash-projection.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-historical-cash-projection.ts",
+      "builtinOrExternal": "node:crypto"
+    },
+    {
+      "from": "web/src/lib/research-historical-cash-projection.ts",
+      "to": "web/src/lib/research-historical-cash-core.ts"
+    },
+    {
+      "from": "web/src/lib/research-historical-cash-projection.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "to": "web/src/lib/research-compatible-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "to": "web/src/lib/research-compatible-financial-projection.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "to": "web/src/lib/research-financial-io-engine.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "builtinOrExternal": "node:crypto"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "to": "web/src/lib/research-compatible-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "to": "web/src/lib/research-financial-io-engine.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    }
+  ]
+}

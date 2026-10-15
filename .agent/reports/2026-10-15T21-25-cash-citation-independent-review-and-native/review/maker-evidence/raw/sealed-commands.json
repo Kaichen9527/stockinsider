@@ -1,0 +1,71 @@
+[
+  {
+    "label": "sealed-tests",
+    "source": "92870dc20828fd74f86f2681281a92bff2d9c2e3",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/research-v3-article-citations.test.mjs"
+    ],
+    "exit": 0,
+    "durationSeconds": 2.4709532919805497,
+    "peakSampledProcessTreeRssBytes": 223301632,
+    "minimumFreeBytes": {
+      "/workspace": 8595202048,
+      "/tmp": 15369609216
+    },
+    "limit": null
+  },
+  {
+    "label": "sealed-types",
+    "source": "92870dc20828fd74f86f2681281a92bff2d9c2e3",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "web/node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--strict",
+      "--skipLibCheck",
+      "--target",
+      "ES2022",
+      "--module",
+      "ESNext",
+      "--moduleResolution",
+      "Bundler",
+      "--allowImportingTsExtensions",
+      "--resolveJsonModule",
+      "--esModuleInterop",
+      "--types",
+      "node",
+      "--typeRoots",
+      "web/node_modules/@types",
+      "web/src/lib/research-v3-article-citations.ts"
+    ],
+    "exit": 0,
+    "durationSeconds": 1.9583810669137165,
+    "peakSampledProcessTreeRssBytes": 259383296,
+    "minimumFreeBytes": {
+      "/workspace": 8595202048,
+      "/tmp": 15369605120
+    },
+    "limit": null
+  },
+  {
+    "label": "sealed-syntax",
+    "source": "92870dc20828fd74f86f2681281a92bff2d9c2e3",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/research-v3-article-citations.test.mjs"
+    ],
+    "exit": 0,
+    "durationSeconds": 0.11631725693587214,
+    "peakSampledProcessTreeRssBytes": 0,
+    "minimumFreeBytes": {
+      "/workspace": 8595202048,
+      "/tmp": 15369605120
+    },
+    "limit": null
+  }
+]

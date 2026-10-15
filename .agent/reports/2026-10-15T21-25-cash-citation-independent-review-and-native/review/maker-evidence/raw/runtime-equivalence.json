@@ -1,0 +1,57 @@
+{
+  "base": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+  "runtime": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+  "beforeAssemblyTrees": {
+    "web": {
+      "base": "f598362714c3d3eecfe110c10d2cb7520c065afc",
+      "runtime": "f598362714c3d3eecfe110c10d2cb7520c065afc"
+    },
+    "scripts": {
+      "base": "c9d65fe99299b3139f2808e9a849dd06c93da6db",
+      "runtime": "c9d65fe99299b3139f2808e9a849dd06c93da6db"
+    },
+    "migrations": {
+      "base": "f4b1807943c7d793dcf366942f3ee1103ffb905e",
+      "runtime": "f4b1807943c7d793dcf366942f3ee1103ffb905e"
+    },
+    "deployment": {
+      "base": "d5b853bd90083e8df7b6c1e0d239846c935ebc59",
+      "runtime": "d5b853bd90083e8df7b6c1e0d239846c935ebc59"
+    },
+    "package.json": {
+      "base": "f25f4bebad793fb7eabc03e2320e4472553a0fb9",
+      "runtime": "f25f4bebad793fb7eabc03e2320e4472553a0fb9"
+    },
+    "package-lock.json": {
+      "base": "576ca62506b95d23da7088c47ecf9c6173c9355c",
+      "runtime": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+    },
+    "web/package.json": {
+      "base": "446f308a2990f45dcd3dca14030068f878fae490",
+      "runtime": "446f308a2990f45dcd3dca14030068f878fae490"
+    },
+    "web/package-lock.json": {
+      "base": "a41fd447e28f3b36829b689828c345e042619a38",
+      "runtime": "a41fd447e28f3b36829b689828c345e042619a38"
+    },
+    ".nvmrc": {
+      "base": "7d41c735d7127c4a2530ebe846b14ffbf38b8031",
+      "runtime": "7d41c735d7127c4a2530ebe846b14ffbf38b8031"
+    },
+    ".github/workflows": {
+      "base": "f440971d65cb21880c4e33624930ad7b09479b00",
+      "runtime": "f440971d65cb21880c4e33624930ad7b09479b00"
+    },
+    ".loop-engineering": {
+      "base": "e1890d4faa387a988f22d9c4318ababd6afd7e61",
+      "runtime": "e1890d4faa387a988f22d9c4318ababd6afd7e61"
+    }
+  },
+  "newCode": "92870dc20828fd74f86f2681281a92bff2d9c2e3",
+  "onlyChanges": [
+    "A\tdocs/operations/2026-10-15/research-v3-cash-citation-contract/HANDOFF.md",
+    "A\tscripts/research-v3-article-citations.test.mjs",
+    "A\tweb/src/lib/research-v3-article-citations.ts"
+  ],
+  "existingRuntimeUnchanged": true
+}

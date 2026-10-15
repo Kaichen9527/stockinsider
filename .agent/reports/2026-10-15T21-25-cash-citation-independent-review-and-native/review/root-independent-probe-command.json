@@ -1,0 +1,5 @@
+{
+  "exit": 0,
+  "source": "92870dc20828fd74f86f2681281a92bff2d9c2e3",
+  "description": "new independent assertions with maker fixture construction reused; does not import maker test entries"
+}

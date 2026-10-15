@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-15T13:05:58.380607+00:00",
+  "reason": "Correct independently sourced capital expectation to exact154397339/7547099; make derived issued shares and unavailable ROU explicitly non-reported; preserve source locator metadata. No existing source changed.",
+  "files": [
+    {
+      "path": "web/src/lib/research-v3-article-citations.ts",
+      "bytes": 17695,
+      "sha256": "806be5260764ee4ff1c295304a3f26c22e4b09a7451d3d2039d9d35d4e34e45f",
+      "blob": "d5d3e68f5e694143759fc6e1887a47897746881c"
+    },
+    {
+      "path": "scripts/research-v3-article-citations.test.mjs",
+      "bytes": 18353,
+      "sha256": "08ffd0ffb239ef59c880efab56d2038b31b5ecd87e779cc8102cafc6aff9a454",
+      "blob": "d0fbc2d37c0e2125f015ffab4d975037e2e7f13c"
+    }
+  ]
+}

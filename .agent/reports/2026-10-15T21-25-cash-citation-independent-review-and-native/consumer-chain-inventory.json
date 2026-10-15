@@ -1,0 +1,421 @@
+[
+  {
+    "path": "web/src/app/api/internal/research-deep-job/route.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 12557,
+    "sha256": "d70ceae33eb8613da1b891a0790ff21a2a90bd67fedc73a7d7d9074668cba42a",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "next/server",
+      "@/lib/internal-auth",
+      "@/lib/supabase-server",
+      "@/lib/research-deep-claim-context",
+      "@/lib/research-deep-author-input"
+    ],
+    "rpcNames": [
+      "claim_candidate_deep_outbox_v1",
+      "claim_context_unconfirmed",
+      "claim_identity_unconfirmed",
+      "claim_research_deep_job_v1",
+      "claim_research_observed_job_v2",
+      "claim_unconfirmed",
+      "prepare_research_input_v2"
+    ],
+    "versionLines": [
+      {
+        "line": 22,
+        "text": "    const {readCompleteBody,parseCompleteRequest,runCompleteInput}=await import('@/lib/research-complete-input');"
+      },
+      {
+        "line": 26,
+        "text": "    try {const revision=await runCompleteInput(getSupabaseServerClient(),input,action==='sealResearchInput',deadline);deadline.check();return NextResponse.json({ok:true,revision,dispatchReady:false});}"
+      },
+      {
+        "line": 117,
+        "text": "        if(!context || context.schemaVersion!=='research-deep-claim-context-v2') throw new Error('claim_context_unconfirmed');"
+      }
+    ]
+  },
+  {
+    "path": "web/src/lib/research-author-assignment.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 7161,
+    "sha256": "f3398447a07df929652e07ea3044bf8334e3e922f3344ad5802d39ea54b7d051",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "@supabase/supabase-js",
+      "./internal-auth.ts",
+      "./research-execution-binding.ts",
+      "./supabase-server.ts",
+      "./research-complete-input.ts",
+      "./research-complete-canonical.ts",
+      "./research-financial-file-reader.ts"
+    ],
+    "rpcNames": [
+      "assign_research_author_v2",
+      "read_research_author_assignment_v2"
+    ],
+    "versionLines": [
+      {
+        "line": 5,
+        "text": "import { readCompleteBody, parseCompleteRequest, runCompleteInput, type CompleteRequest } from './research-complete-input.ts';"
+      },
+      {
+        "line": 33,
+        "text": "  const revision = await runCompleteInput(db, request.input, false, deadline);"
+      }
+    ]
+  },
+  {
+    "path": "web/src/lib/research-author-packet.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 11061,
+    "sha256": "50cabf662e17609f75a8bbddbe9d711b540dfa70a170ee67febabd563e1647a5",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "@supabase/supabase-js",
+      "./research-author-assignment.ts",
+      "./research-complete-input.ts",
+      "./research-financial-file-reader.ts",
+      "./research-financial-clock.ts",
+      "./research-complete-canonical.ts",
+      "./research-business-calculator.ts",
+      "./public-source-url.ts",
+      "./research-business-article.ts"
+    ],
+    "rpcNames": [
+      "read_research_author_packet_v2"
+    ],
+    "versionLines": [
+      {
+        "line": 3,
+        "text": "import { runCompleteInput, validateCompleteResponse, type CompleteRequest } from './research-complete-input.ts';"
+      },
+      {
+        "line": 36,
+        "text": "  deadline.check(); validateCompleteResponse(request.input, revision);"
+      },
+      {
+        "line": 107,
+        "text": "    schemaVersion: 'research-author-packet-v2', assignmentId: assignment.assignment_id,"
+      },
+      {
+        "line": 130,
+        "text": "  const revision = await runCompleteInput(db, request.input, false, deadline);"
+      }
+    ]
+  },
+  {
+    "path": "web/src/lib/research-author-result.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 8436,
+    "sha256": "71b47dfe6a666498829e2bd6665e5688ca18de73e8e0938870e645983e5060e7",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "@supabase/supabase-js",
+      "./internal-auth.ts",
+      "./research-execution-binding.ts",
+      "./supabase-server.ts",
+      "./research-complete-input.ts",
+      "./research-complete-canonical.ts",
+      "./research-financial-file-reader.ts",
+      "./research-author-packet.ts",
+      "./research-business-article.ts",
+      "./research-financial-clock.ts"
+    ],
+    "rpcNames": [
+      "read_research_author_result_v2",
+      "receive_research_author_result_v2"
+    ],
+    "versionLines": [
+      {
+        "line": 5,
+        "text": "import { parseCompleteRequest, runCompleteInput } from './research-complete-input.ts';"
+      },
+      {
+        "line": 9,
+        "text": "import { validateBusinessResearchArticle, type ArticleSourceV2 } from './research-business-article.ts';"
+      },
+      {
+        "line": 39,
+        "text": "  const revision = await runCompleteInput(db, request.input, false, deadline);"
+      },
+      {
+        "line": 46,
+        "text": "    const validated = validateBusinessResearchArticle({ request: request.input, revision,"
+      },
+      {
+        "line": 65,
+        "text": "    envelope = { schemaVersion: 'research-author-result-v2', assignmentId: packet.assignmentId,"
+      }
+    ]
+  },
+  {
+    "path": "web/src/lib/research-business-article.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 18454,
+    "sha256": "e589fd67c08831d650b80cbd091113508c428d2b1a217be31150b682ce37b7cc",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "./research-complete-canonical.ts",
+      "./research-complete-input.ts",
+      "./research-business-calculator.ts",
+      "./research-financial-clock.ts",
+      "./research-deep-article.ts",
+      "./public-source-url.ts"
+    ],
+    "rpcNames": [],
+    "versionLines": [
+      {
+        "line": 2,
+        "text": "import { validateCompleteResponse, type CompleteRequest } from './research-complete-input.ts';"
+      },
+      {
+        "line": 22,
+        "text": "  schemaVersion: typeof BUSINESS_ARTICLE_SCHEMA; businessModel: 'business_scenarios_v2';"
+      },
+      {
+        "line": 100,
+        "text": "export function validateBusinessResearchArticle(context: {"
+      },
+      {
+        "line": 106,
+        "text": "  validateCompleteResponse(context.request, context.revision); ensure(context.revision.status === 'sealed');"
+      },
+      {
+        "line": 113,
+        "text": "  const a = exact(value, ['schemaVersion', 'businessModel', 'symbol', 'researchCompanyId', 'inputRevisionId', 'inputHash',"
+      },
+      {
+        "line": 115,
+        "text": "  ensure(a.schemaVersion === BUSINESS_ARTICLE_SCHEMA && a.businessModel === 'business_scenarios_v2'"
+      },
+      {
+        "line": 225,
+        "text": "  const result = { schemaVersion: 'validated-business-article-v2', validatorVersion: 'business-article-contract-v2.1',"
+      }
+    ]
+  },
+  {
+    "path": "web/src/lib/research-complete-input.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 10526,
+    "sha256": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "node:path",
+      "@supabase/supabase-js",
+      "./research-complete-schema-bundles.ts",
+      "./research-complete-mapping.json",
+      "./research-financial-inventory.ts",
+      "./research-financial-supplement.ts",
+      "./research-financial-file-reader.ts",
+      "./research-complete-canonical.ts"
+    ],
+    "rpcNames": [
+      "read_research_article_input_revision_v2",
+      "read_rpc",
+      "read_validate",
+      "seal_research_article_input_revision_v2",
+      "seal_rpc",
+      "seal_validate"
+    ],
+    "versionLines": [
+      {
+        "line": 34,
+        "text": " const material={schemaVersion:'research-complete-financial-material-v2',symbol,artifactReadKnownAt:(projection.clocks as Row).currentLocalReadKnownAt,sourceClosureHash:mapping.sourceClosureHash,artifactInventoryHash:com"
+      },
+      {
+        "line": 43,
+        "text": "export function validateCompleteResponse(request:CompleteRequest,response:Row):void {"
+      },
+      {
+        "line": 55,
+        "text": "  ensure(p.schemaVersion==='research-article-input-v2'&&p.assemblyStatus==='complete'&&p.evidenceStatus==='incomplete'&&p.producerAttribution==='internal_controller_asserted'&&prep.id===request.preparationId&&prep.inputH"
+      },
+      {
+        "line": 61,
+        "text": "  const material={schemaVersion:'research-complete-financial-material-v2',symbol,artifactReadKnownAt:clocks.artifactReadKnownAt,sourceClosureHash:hashes.sourceClosureHash,artifactInventoryHash:hashes.artifactInventoryHas"
+      },
+      {
+        "line": 66,
+        "text": "export async function runCompleteInput(db:Pick<SupabaseClient,'rpc'>,request:CompleteRequest,seal:boolean,deadline:FinancialDeadline,root?:string):Promise<Row>{"
+      },
+      {
+        "line": 70,
+        "text": " validateCompleteResponse(request,before);deadline.check();if(before.status!=='absent'||!seal)return before;"
+      },
+      {
+        "line": 73,
+        "text": " phase='seal_validate';validateCompleteResponse(request,saved);ensure(saved.status==='sealed');deadline.check();return saved;"
+      }
+    ]
+  },
+  {
+    "path": "web/src/lib/research-execution-binding.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 12198,
+    "sha256": "9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "node:crypto"
+    ],
+    "rpcNames": [],
+    "versionLines": []
+  },
+  {
+    "path": "web/src/lib/research-publication-view-server.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 1019,
+    "sha256": "921f3623b7e45300085ef8fb8f6992a338c5b6da693130131e85769ee4d9e6a4",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "./supabase-server.ts",
+      "./research-financial-file-reader.ts",
+      "./research-publication-view.ts"
+    ],
+    "rpcNames": [
+      "read_research_company_publication_v2"
+    ],
+    "versionLines": []
+  },
+  {
+    "path": "web/src/lib/research-publication-view.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 14099,
+    "sha256": "9ff1bc9cfe104f1847dfd0899d45a45e6cab3db3720d71e92103a1cae4b0c6c3",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "./research-business-article.ts",
+      "./research-complete-canonical.ts",
+      "./research-financial-clock.ts",
+      "./research-deep-article.ts",
+      "./public-source-url.ts"
+    ],
+    "rpcNames": [],
+    "versionLines": [
+      {
+        "line": 20,
+        "text": "  schemaVersion: 'research-company-publication-view-v2'; researchCompanyId: string; symbol: string;"
+      },
+      {
+        "line": 59,
+        "text": "  const root = exact(value,['schemaVersion','researchCompanyId','symbol','publishedAt','publication']);"
+      },
+      {
+        "line": 60,
+        "text": "  ensure(root.schemaVersion === 'research-company-publication-v2' && root.researchCompanyId === companyId && root.symbol === symbol);"
+      },
+      {
+        "line": 62,
+        "text": "  const p = exact(root.publication,['schemaVersion','receipt','content','sourceReferences','researchState','researchQualified','strategyApproved','entryEligible','idempotentReplay']);"
+      },
+      {
+        "line": 63,
+        "text": "  ensure(p.schemaVersion === 'research-publication-receipt-v2' && ['published','withdrawn'].includes(String(p.researchState))"
+      },
+      {
+        "line": 71,
+        "text": "  const c = exact(p.content,['schemaVersion','deepResearch']); ensure(c.schemaVersion === 'research-publication-v2');"
+      },
+      {
+        "line": 72,
+        "text": "  const d = exact(c.deepResearch,['schemaVersion','articleHash','article','tables','valuations','originalModelCutoff','researchCutoff','limitations','researchQualified','strategyApproved','entryEligible']);"
+      },
+      {
+        "line": 73,
+        "text": "  ensure(d.schemaVersion === 'research-published-v2' && typeof d.articleHash === 'string' && HASH.test(d.articleHash)"
+      },
+      {
+        "line": 75,
+        "text": "  const a = exact(d.article,['schemaVersion','businessModel','symbol','researchCompanyId','inputRevisionId','inputHash','authoredAt','evidenceCutoffAt','summary','sections','catalysts','valuation','tables','companyBackgr"
+      },
+      {
+        "line": 76,
+        "text": "  ensure(a.schemaVersion === 'candidate-deep-research-v2' && a.businessModel === 'business_scenarios_v2' && a.symbol === symbol"
+      },
+      {
+        "line": 152,
+        "text": "  return {schemaVersion:'research-company-publication-view-v2',researchCompanyId:companyId,symbol,publishedAt:root.publishedAt as string,"
+      }
+    ]
+  },
+  {
+    "path": "web/src/lib/research-reviewer-assignment.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 12885,
+    "sha256": "afa530253f7b6086bdaf600d58ad571e828512f9e4ef0a11b952c085b81a31ba",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "@supabase/supabase-js",
+      "./research-execution-binding.ts",
+      "./supabase-server.ts",
+      "./research-complete-input.ts",
+      "./research-complete-canonical.ts",
+      "./research-financial-file-reader.ts",
+      "./research-financial-clock.ts",
+      "./research-business-article.ts",
+      "./research-author-packet.ts"
+    ],
+    "rpcNames": [
+      "assign_research_reviewer_v2",
+      "read_research_reviewer_context_v2",
+      "read_research_reviewer_sources_v2"
+    ],
+    "versionLines": [
+      {
+        "line": 4,
+        "text": "import { parseCompleteRequest, validateCompleteResponse, type CompleteRequest } from './research-complete-input.ts';"
+      },
+      {
+        "line": 8,
+        "text": "import { validateBusinessResearchArticle, type ArticleSourceV2 } from './research-business-article.ts';"
+      },
+      {
+        "line": 47,
+        "text": "  validateCompleteResponse(request.input, revision); ensure(revision.status === 'sealed' && revision.revision_id === request.inputRevisionId && revision.input_hash === request.inputHash);"
+      },
+      {
+        "line": 49,
+        "text": "  ensure(payload.schemaVersion === 'research-author-result-v2' && payload.assignmentId === a.assignment_id"
+      },
+      {
+        "line": 51,
+        "text": "  const validated = validateBusinessResearchArticle({ request: request.input, revision, sources: saved.sources as ArticleSourceV2[], now: new Date().toISOString() }, payload.rawArticle);"
+      },
+      {
+        "line": 82,
+        "text": "  let packet: Row = { schemaVersion: 'research-reviewer-packet-v2', reviewerAssignmentId: reviewer.assignment_id,"
+      }
+    ]
+  },
+  {
+    "path": "web/src/lib/research-reviewer-result.ts",
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "bytes": 11291,
+    "sha256": "96befdc6902834b7b7c62559cea6ac7b40bc0b4ddbcaca829c1f7eff0c1a8abd",
+    "existsOnProtocolBase": false,
+    "imports": [
+      "@supabase/supabase-js",
+      "./research-execution-binding.ts",
+      "./supabase-server.ts",
+      "./research-complete-input.ts",
+      "./research-complete-canonical.ts",
+      "./research-financial-file-reader.ts",
+      "./research-financial-clock.ts",
+      "./research-reviewer-assignment.ts",
+      "./research-editorial-review.ts"
+    ],
+    "rpcNames": [
+      "read_research_reviewer_result_context_v2",
+      "read_research_reviewer_result_sources_v2",
+      "receive_research_reviewer_result_v2"
+    ],
+    "versionLines": [
+      {
+        "line": 51,
+        "text": "  const envelope = { schemaVersion: 'research-reviewer-result-v2', assignmentId: ra.assignment_id,"
+      }
+    ]
+  }
+]

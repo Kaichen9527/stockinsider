@@ -1,0 +1,119 @@
+TAP version 13
+# Subtest: 2409 actual pinned successor -> real controller READ only -> immutable exact revision citations
+ok 1 - 2409 actual pinned successor -> real controller READ only -> immutable exact revision citations
+  ---
+  duration_ms: 95.113807
+  ...
+# Subtest: 2409 all 104 cash cells resolve independently to BOTH exact original source pointers
+ok 2 - 2409 all 104 cash cells resolve independently to BOTH exact original source pointers
+  ---
+  duration_ms: 74.137773
+  ...
+# Subtest: 2409 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+ok 3 - 2409 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+  ---
+  duration_ms: 65.96332
+  ...
+# Subtest: 2409 306 conditional scenario values retain periods/units and original model locators, never reported cash
+ok 4 - 2409 306 conditional scenario values retain periods/units and original model locators, never reported cash
+  ---
+  duration_ms: 73.483811
+  ...
+# Subtest: 2409 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+not ok 5 - 2409 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+  ---
+  duration_ms: 69.702288
+  location: '/tmp/si-pubtail-o14/scripts/research-v3-article-citations.test.mjs:70:2'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 20.457839363177825
+    - 20.4578393631596
+                   ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 20.4578393631596
+  actual: 20.457839363177825
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/si-pubtail-o14/scripts/research-v3-article-citations.test.mjs:73:125)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 2409 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+ok 6 - 2409 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+  ---
+  duration_ms: 66.036861
+  ...
+# Subtest: 2409 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+ok 7 - 2409 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+  ---
+  duration_ms: 348.511676
+  ...
+# Subtest: 2383 actual pinned successor -> real controller READ only -> immutable exact revision citations
+ok 8 - 2383 actual pinned successor -> real controller READ only -> immutable exact revision citations
+  ---
+  duration_ms: 72.583296
+  ...
+# Subtest: 2383 all 66 cash cells resolve independently to BOTH exact original source pointers
+ok 9 - 2383 all 66 cash cells resolve independently to BOTH exact original source pointers
+  ---
+  duration_ms: 42.688511
+  ...
+# Subtest: 2383 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+ok 10 - 2383 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+  ---
+  duration_ms: 41.743535
+  ...
+# Subtest: 2383 306 conditional scenario values retain periods/units and original model locators, never reported cash
+ok 11 - 2383 306 conditional scenario values retain periods/units and original model locators, never reported cash
+  ---
+  duration_ms: 37.819406
+  ...
+# Subtest: 2383 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+ok 12 - 2383 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+  ---
+  duration_ms: 37.197763
+  ...
+# Subtest: 2383 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+ok 13 - 2383 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+  ---
+  duration_ms: 38.248599
+  ...
+# Subtest: 2383 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+ok 14 - 2383 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+  ---
+  duration_ms: 213.512719
+  ...
+# Subtest: primitive citation ingress rejects duplicate keys, oversized/unknown objects without getters
+ok 15 - primitive citation ingress rejects duplicate keys, oversized/unknown objects without getters
+  ---
+  duration_ms: 76.486894
+  ...
+# Subtest: old77/v2, forged validated flags and request-selected paths cannot bypass actual READ composition
+ok 16 - old77/v2, forged validated flags and request-selected paths cannot bypass actual READ composition
+  ---
+  duration_ms: 1.426073
+  ...
+# Subtest: actual READ revocation/error/absent is never turned into a citation set or seal
+ok 17 - actual READ revocation/error/absent is never turned into a citation set or seal
+  ---
+  duration_ms: 0.785395
+  ...
+# Subtest: zero group denominator remains unavailable in existing fixed calculator; cannot inject replacement pinned cash
+ok 18 - zero group denominator remains unavailable in existing fixed calculator; cannot inject replacement pinned cash
+  ---
+  duration_ms: 21.121429
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 17
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1399.660968

@@ -1,0 +1,18 @@
+{
+  "base": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+  "at": "2026-10-15T13:02:31.921703+00:00",
+  "files": [
+    {
+      "path": "web/src/lib/research-v3-article-citations.ts",
+      "bytes": 16239,
+      "sha256": "a0c2d476fb7113cd75571508467cd557f5f9f3a99b336e33c713c74a94a73b49",
+      "blob": "f573762b9b2ada26ddc2282c51766352bd672251"
+    },
+    {
+      "path": "scripts/research-v3-article-citations.test.mjs",
+      "bytes": 16139,
+      "sha256": "6f0b72653857bc0f75e2b847f8ce73b193ac3a60cf868943523cc461f32c8f20",
+      "blob": "13c0b8ea58429a0ac163fbfe2c2f90e5819add3e"
+    }
+  ]
+}

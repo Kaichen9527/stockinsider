@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-15T13:25:09.499119+00:00",
+  "source": "92870dc20828fd74f86f2681281a92bff2d9c2e3",
+  "evidence": "f75edee46f9c453e5a09306faf00cef2bd67cb82",
+  "sourceReview": "scoped3file addition and unchanged runtime transitive imports",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "rawVerified": 35,
+  "rawBytes": 87304,
+  "actualGitSourceIdentities": 33,
+  "rootTests": {
+    "pass": 20,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "rootIndependentProbeGroups": 8,
+  "fixtureConstructionReusedForOwnAssertions": true,
+  "countsNotAddedToMakerOrHistorical": true,
+  "formalApproval": false,
+  "nativeBuildExecutedByRoot": false,
+  "next": "one actual isolated native consumer proof; then actual article/four caller/Q-R/publication integration; do not stop at pure PASS"
+}

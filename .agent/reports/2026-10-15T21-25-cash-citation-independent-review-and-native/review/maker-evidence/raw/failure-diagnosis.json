@@ -1,0 +1,33 @@
+{
+  "initialRunner": {
+    "command": [
+      "node22.14",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/research-v3-article-citations.test.mjs"
+    ],
+    "pass": 0,
+    "fail": 1,
+    "scope": "file-level runner result; no child stderr surfaced in sandbox",
+    "attribution": "No claim of product failure from the missing diagnostic; original log retained."
+  },
+  "directDiagnostic": {
+    "command": [
+      "node22.14",
+      "--experimental-strip-types",
+      "scripts/research-v3-article-citations.test.mjs"
+    ],
+    "pass": 17,
+    "fail": 1,
+    "reason": "Maker typed inaccurate decimal20.4578393631596 for AUO per-share equity; original packet operands154397339/7547099 imply20.457839363177825. Corrected test to exact original operands; no source numbers/tolerance/old tests changed."
+  },
+  "corrected": {
+    "pass": 20,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "followupSemanticChanges": "classify issued shares as derived paid-capital/par; do not admit unavailable AUO ROU amount; retain label/page/hash locator metadata; add count and locator/period drift assertions"
+  },
+  "noHistoricalFailuresOverwritten": true
+}

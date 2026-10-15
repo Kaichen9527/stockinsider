@@ -1,0 +1,10 @@
+{
+  "source": "92870dc20828fd74f86f2681281a92bff2d9c2e3",
+  "evidence": "f75edee46f9c453e5a09306faf00cef2bd67cb82",
+  "receiptSha256": "4dc7780b60d19ad1668fd677695785e6f521c8cfb73c8b88c008e686bd9694cf",
+  "actualGitSourceIdentitiesVerified": 33,
+  "rawFiles": 35,
+  "rawBytes": 87304,
+  "sourceDeliveryBytesEqual": true,
+  "rootNativeBuildRun": false
+}

@@ -1,0 +1,214 @@
+[
+  {
+    "path": "migrations/20261009_research_author_assignments_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 10433,
+    "sha256": "91629781ad52191ae4ef096d2f56af020066973556988713305bc7c10a80b99c",
+    "matches": [
+      {
+        "line": 44,
+        "text": "revision:=public.read_research_article_input_revision_v2(p_request);"
+      },
+      {
+        "line": 51,
+        "text": "OR payload->>'schemaVersion' IS DISTINCT FROM 'research-article-input-v2'"
+      }
+    ]
+  },
+  {
+    "path": "migrations/20261009_research_author_handoffs_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 9579,
+    "sha256": "96f79786802317175dc662f1c0476e8ad9afcaf675f85b1ad1909d2bcd65a757",
+    "matches": []
+  },
+  {
+    "path": "migrations/20261009_research_author_packet_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 6376,
+    "sha256": "1a84dddb85afefe6de4458d781117f9bb50ff43db6fd1986a1c43e1608ed9528",
+    "matches": []
+  },
+  {
+    "path": "migrations/20261009_research_author_results_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 10099,
+    "sha256": "894cd214aa60678c2c4475abbf194ea59e4a7a23677b296eda61b52fab6ce3e5",
+    "matches": [
+      {
+        "line": 43,
+        "text": "IS DISTINCT FROM ARRAY['assignmentId','inputHash','inputRevisionId','observation','rawArticle','schemaVersion','validatedArticle']"
+      },
+      {
+        "line": 44,
+        "text": "OR p_result->>'schemaVersion' IS DISTINCT FROM 'research-author-result-v2'"
+      },
+      {
+        "line": 56,
+        "text": "'publishableResearch','researchCutoff','researchQualified','schemaVersion','sourceClosureHash','sources','strategyApproved','tables','validationStatus','validatorVersion','valuations']"
+      },
+      {
+        "line": 81,
+        "text": "OR v->>'schemaVersion' IS DISTINCT FROM 'validated-business-article-v2'"
+      }
+    ]
+  },
+  {
+    "path": "migrations/20261009_research_complete_input_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 446691,
+    "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c",
+    "matches": [
+      {
+        "line": 49,
+        "text": "CREATE FUNCTION public.research_complete_mapping_v2(symbol text) RETURNS jsonb LANGUAGE sql IMMUTABLE SET search_path=pg_catalog AS $$ SELECT CASE symbol WHEN '2409' THEN '{\"inventory\":[{\"file\":\"docs/research/2026-10-08-"
+      },
+      {
+        "line": 69,
+        "text": "CREATE FUNCTION public.read_research_article_input_revision_v2(p_request jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$"
+      },
+      {
+        "line": 82,
+        "text": "existing:=public.read_research_article_input_revision_v2(p_request);IF existing->>'status'='sealed' THEN RETURN existing;END IF;"
+      },
+      {
+        "line": 96,
+        "text": "material:=jsonb_build_object('schemaVersion','research-article-input-v2','assemblyStatus','complete','evidenceStatus','incomplete','producerAttribution','internal_controller_asserted',"
+      },
+      {
+        "line": 193,
+        "text": "material:=jsonb_build_object('schemaVersion','research-input-preparation-v2','researchCompanyId',j.research_company_id,'symbol',j.symbol,"
+      },
+      {
+        "line": 218,
+        "text": "ALTER FUNCTION public.read_research_article_input_revision_v2(jsonb) OWNER TO research_input_preparation_owner_v2;"
+      },
+      {
+        "line": 219,
+        "text": "REVOKE ALL ON FUNCTION public.read_research_article_input_revision_v2(jsonb) FROM PUBLIC,anon,authenticated,service_role;"
+      },
+      {
+        "line": 222,
+        "text": "GRANT EXECUTE ON FUNCTION public.read_research_article_input_revision_v2(jsonb) TO service_role;"
+      }
+    ]
+  },
+  {
+    "path": "migrations/20261009_research_publication_lineage_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 9652,
+    "sha256": "37a885ac77ef1c97196c197d6804300fd18843eebb31629da19f9d10f6d6449d",
+    "matches": [
+      {
+        "line": 64,
+        "text": "THEN RAISE EXCEPTION 'research_publication_input_binding';END IF;"
+      },
+      {
+        "line": 67,
+        "text": "OR NEW.payload IS DISTINCT FROM jsonb_build_object('schemaVersion','research-bundle-lineage-v2',"
+      }
+    ]
+  },
+  {
+    "path": "migrations/20261009_research_publication_source_fence_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 12454,
+    "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621",
+    "matches": []
+  },
+  {
+    "path": "migrations/20261009_research_reviewer_assignments_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 14900,
+    "sha256": "43c0a0525c38c73cf5277c23031bae2acb88ace1b5db25cd440c01932f14bc86",
+    "matches": []
+  },
+  {
+    "path": "migrations/20261009_research_reviewer_results_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 28946,
+    "sha256": "af72171444c6c67a754f33099da704e78bb2d2bb7454ef356c4c8753ea26f934",
+    "matches": [
+      {
+        "line": 107,
+        "text": "IS DISTINCT FROM ARRAY['articleHash','checks','decision','findings','reviewPackHash','reviewedAt','schemaVersion','strongestCounterEvidence']"
+      },
+      {
+        "line": 158,
+        "text": "IS DISTINCT FROM ARRAY['assignmentId','authorResultHash','authorResultId','inputHash','inputRevisionId','observation','packet','packetHash','rawReview','schemaVersion','validatedReview']"
+      },
+      {
+        "line": 159,
+        "text": "OR p_result->>'schemaVersion' IS DISTINCT FROM 'research-reviewer-result-v2'"
+      },
+      {
+        "line": 177,
+        "text": "OR review->>'schemaVersion' IS DISTINCT FROM 'research-editorial-review-v2' OR review->>'articleHash' IS DISTINCT FROM packet->>'articleHash'"
+      },
+      {
+        "line": 179,
+        "text": "OR octet_length(convert_to(public.research_complete_canonical_v2(review),'UTF8'))>65536 OR v->>'schemaVersion' IS DISTINCT FROM 'validated-editorial-review-v2'"
+      }
+    ]
+  },
+  {
+    "path": "migrations/20261010_research_publication_view_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 3783,
+    "sha256": "82a158eb59e74181fe5546c255d6afa4c51184d2639cfb52a900b22eef88dd75",
+    "matches": [
+      {
+        "line": 43,
+        "text": "RETURN jsonb_build_object('schemaVersion','research-company-publication-v2',"
+      }
+    ]
+  },
+  {
+    "path": "migrations/20261011_research_complete_mapping_precision_v2.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 421736,
+    "sha256": "51179015df4257c68f96c52974710abaf969254fd00949bd289a0ea550ec33bf",
+    "matches": [
+      {
+        "line": 31,
+        "text": "CREATE OR REPLACE FUNCTION public.research_complete_mapping_v2(symbol text) RETURNS jsonb LANGUAGE sql IMMUTABLE SET search_path=pg_catalog AS $$ SELECT CASE symbol WHEN '2409' THEN '{\"inventory\":[{\"file\":\"docs/research/"
+      }
+    ]
+  },
+  {
+    "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+    "source": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+    "bytes": 22325,
+    "sha256": "f089f44375f80da89be49215cad35626998bcb5775166efc23e93af224ec284f",
+    "matches": [
+      {
+        "line": 9,
+        "text": "SELECT prosrc,prosecdef,proconfig,pg_get_userbyid(proowner) AS owner INTO p FROM pg_proc WHERE oid=to_regprocedure('public.read_research_article_input_revision_v2(jsonb)');"
+      },
+      {
+        "line": 44,
+        "text": "OR NOT ((c->>'wireVersion'='research-article-input-v2' AND c->>'financialProfile'='oct08_compatible_financial_candidate_v1' AND c->>'artifactRootId'='original75d-fixed8or6')"
+      },
+      {
+        "line": 76,
+        "text": "IF p_request->>'expectedCalculatorExecutionHash'='77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41' THEN RETURN public.read_research_article_input_revision_v2(p_request);END IF;"
+      },
+      {
+        "line": 85,
+        "text": "IF payload->>'schemaVersion' IS DISTINCT FROM c->>'wireVersion' OR payload->'hashes'->>'sourceClosureHash' IS DISTINCT FROM c->>'sourceExecutionHash'"
+      },
+      {
+        "line": 91,
+        "text": "material:=jsonb_build_object('schemaVersion','research-complete-financial-material-v2','symbol',c->'symbol','artifactReadKnownAt',payload->'clocks'->'artifactReadKnownAt','sourceClosureHash',c->'sourceExecutionHash','art"
+      },
+      {
+        "line": 124,
+        "text": "IF c->>'wireVersion'='research-article-input-v2' THEN"
+      },
+      {
+        "line": 137,
+        "text": "material:=jsonb_build_object('schemaVersion',c->>'wireVersion','assemblyStatus','complete','evidenceStatus','incomplete','producerAttribution','internal_controller_asserted',"
+      }
+    ]
+  }
+]

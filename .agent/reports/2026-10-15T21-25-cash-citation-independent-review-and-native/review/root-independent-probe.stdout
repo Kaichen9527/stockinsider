@@ -1,0 +1,1 @@
+{"rootIndependentGroups":8,"pass":8,"fail":0,"notNative":true,"fixturePrefixReused":true,"checks":"separate opening-closing kind, duplicate pointer, swapped trusted tuple rejects, all source chains/freeze, ratio unit rejection"}
