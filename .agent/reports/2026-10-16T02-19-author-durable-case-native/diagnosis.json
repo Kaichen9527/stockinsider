@@ -1,0 +1,36 @@
+{
+  "actualError": {
+    "name": "read_research_author_packet_v2",
+    "code": "P0001",
+    "message": "research_author_packet_source_rights_or_scope",
+    "where": "PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 37 at RAISE"
+  },
+  "candidateGuardLines": [
+    220,
+    221,
+    222,
+    223,
+    224,
+    225,
+    226,
+    227,
+    228,
+    229,
+    230
+  ],
+  "originalGuardSource": "migrations/20261009_research_author_packet_v2.sql:31-41",
+  "fixtureSource": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs:38",
+  "sourceDerivedAbsentMetadataKeys": [
+    "visibility",
+    "claim_status",
+    "catalyst",
+    "risk"
+  ],
+  "alreadyCorrectRightsBoundary": "public_citation",
+  "interpretation": "The exact executed fixture metadata literal omits visibility and claim_status required by the actually failing guard; catalyst/risk would be required by the next content guard. Missing keys are source-derived from the fixed INSERT path, not a separately saved full source_raw_documents row. No fixture/SQL/source change or extra query was performed.",
+  "notAnotherExecutedError": [
+    "research_author_packet_content_bound"
+  ],
+  "minimalNextDecision": "Root may review a bounded test-only complete synthetic source metadata fixture before initial seal. Do not change product guards, public_citation rights, or mutate an already sealed source to chase green.",
+  "compositionOutcome": "assign RPC returned and durable assignment is visible, but composition failed while reading packet; no composition success/result receipt"
+}

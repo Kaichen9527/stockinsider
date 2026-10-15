@@ -1,0 +1,59 @@
+{
+  "executionBase": "e3e433a18c4d67ca99ce61c89b4a568355b4f187",
+  "productSubject": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "harnessSubject": "0a0ea4ccc618df2d86ceb4de4bc7eff537ff3f77",
+  "sourceChanged": false,
+  "nativeInvocations": 1,
+  "exit": 1,
+  "pass": 0,
+  "fail": 2,
+  "skip": 0,
+  "todo": 0,
+  "rawCount": 40,
+  "rawBytes": 73640234,
+  "sourceInputCount": 289,
+  "published": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 5714,
+      "sha256": "4e466467b89bf4ea3be35bd2114550caefac32f2d5721ee8f7bc8667ffa8e63d"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 2155,
+      "sha256": "f6744722c3fddb1a952088953b8eb94046802e2d2a5f7c68344a6f548d434fb1"
+    },
+    {
+      "path": "diagnosis.json",
+      "bytes": 1579,
+      "sha256": "514ab9a746016438b344420d9fd588ef7fbd8651d068bc9258a24b9906cb3a26"
+    },
+    {
+      "path": "execution-resources.json",
+      "bytes": 2592,
+      "sha256": "4818bed82df6971b7a773a53798601bb2d268b89e835c77d2bc83644fa8d20f9"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 15784,
+      "sha256": "012a266e925642d7ece65250b4e0ea8c0d3f17b46cc6f1a2bfef7d2d83377ee8"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 7512,
+      "sha256": "28004c9c7ee93bd1db44365a26679aec0254ac2ec34d96cbfc3a35ae3f9005f4"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 85565,
+      "sha256": "8c3ae71d4dc0b1f4e04a8937c5d040c4c688078d8e2420dadee7de88a393ec0c"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 444,
+      "sha256": "d8399d737a3112a88af39dfdca175ac127f2acdb647919ce5f51c80825590a89"
+    }
+  ],
+  "formalApproval": false,
+  "independentReview": false
+}

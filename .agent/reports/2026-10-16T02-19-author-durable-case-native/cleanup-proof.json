@@ -1,0 +1,121 @@
+{
+  "connections": {
+    "installer-connections.json": {
+      "writer": 652339,
+      "observer": 652340,
+      "observerReadOnly": "on"
+    },
+    "connections.json": {
+      "writer": 652339,
+      "observer": 652341,
+      "observerReadOnly": true
+    }
+  },
+  "backends": [
+    {
+      "pid": 652339,
+      "absent": true
+    },
+    {
+      "pid": 652340,
+      "absent": true
+    },
+    {
+      "pid": 652341,
+      "absent": true
+    }
+  ],
+  "processes": [
+    {
+      "pid": 652292,
+      "comm": "node",
+      "absent": true
+    },
+    {
+      "pid": 652298,
+      "comm": "node",
+      "absent": true
+    },
+    {
+      "pid": 652311,
+      "comm": "initdb",
+      "absent": true
+    },
+    {
+      "pid": 652327,
+      "comm": "postgres",
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    },
+    {
+      "pid": 652328,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652329,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652331,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652332,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652333,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652334,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652335,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652336,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652338,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652339,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652340,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 652341,
+      "comm": "postgres",
+      "absent": true
+    }
+  ],
+  "clusterRemoved": true,
+  "serverShutdownLogged": true,
+  "helperCleanup": {
+    "stopped": true,
+    "removed": "/tmp/vp3profile-5xFwr7",
+    "stage": "author lifecycle: actual authenticated assign and packet"
+  },
+  "rootsCleanup": "helper finally removed its owned secure tree; no independent post-removal root path record was saved"
+}
