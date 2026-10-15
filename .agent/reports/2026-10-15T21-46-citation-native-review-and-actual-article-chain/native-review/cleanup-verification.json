@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-15T13:34:45.492147+00:00",
+  "postmasters": [
+    {
+      "pid": 636675,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0,
+      "liveService": false,
+      "pidAbsent": false
+    },
+    {
+      "pid": 636709,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0,
+      "liveService": false,
+      "pidAbsent": false
+    }
+  ],
+  "allRecordedWriterObserverMutatorBackendsAbsent": true,
+  "bothOwnedClusterDirectoriesAbsent": true,
+  "bothServerLogsConfirmShutdown": true,
+  "postmasterPidFullyAbsent": false,
+  "limitation": "PID1 has not reaped zombie postmasters; no live PG or memory-resident service remains. Do not claim all PID entries absent."
+}

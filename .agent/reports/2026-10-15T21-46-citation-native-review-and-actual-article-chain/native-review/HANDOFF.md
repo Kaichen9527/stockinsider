@@ -1,0 +1,20 @@
+# Native v3 citation-consumer delivery
+
+Executed source `74912cc23d3efde535c660e8a8277f2e910bcfd0`, tree `d059a5a0029745577d12d0dcde706644c95a8fad`. Consumer `92870dc20828fd74f86f2681281a92bff2d9c2e3` and protocol `d33d6328763ee2591a41d849ff4bfadf75c2ff2e` remain unchanged. Only the new native entry and its source-seal handoff were added. All 270 recorded source files were rehashed after execution, with exact Git blobs checked. No helper correction or rerun was needed.
+
+Single native run: 2026-10-15 21:32:23–21:32:43 Asia/Taipei, Node22.14.0 / PG17.11. **3 PASS = 2 children + parent**, zero fail/cancel/skip/todo. Historical pure/native counts are not added. The only preliminary tool-discovery issue was a missing default pg_config path; the original successful installed binary context was reused before native execution.
+
+| Case | Prefix first seal | Consumer nodes / reported cash / scenario | Stored mixed charge | Following READs |
+|---|---|---|---|---|
+| AUO2409 v3 | 9 opened/closed files; 1 committed seal | 442 / 104 / 306 | 2 slots, 234998 bytes | 2 successful consumer READs; 2 wrong revision/hash READ rejections; 1 exact seal-replay READ; 1 withdrawn-source READ rejection |
+| EMC2383 v3 | 7 opened/closed files; 1 committed seal | 398 / 66 / 306 | 2 slots, 144355 bytes | Same distinct READ stages |
+
+Both RO observers confirmed complete original stored request/input hashes and rows after COMMIT. Each missing-root consumer READ and existing seal replay preserved all nine-table counts/hashes, ledger rows, charges, clocks, sources and fences with zero new financial opens. Four citation mutations (unit, period, metadata pointer, unknown field) rejected per issuer without DB mutation. Each independently committed source withdrawal changed only selected metadata rights, one source event and one dependent seal invalidation; other eight tables, existing sealed rows and charges remained unchanged. Fresh consumer READ rejected exact `P0001 source_seal_invalidated_or_missing`. Cached citation sets do not automatically revoke and are not live leases.
+
+Private request/payload/owner/source URL/row/protocol details remain only in `/tmp/v3-citation-native-o15`; raw hash inventory and public-safe maker-derived witness are committed. Root has not obtained these private bytes. Seven saved full state snapshots per company are independently re-compared by the receipt generator; the failure error is an additional saved observation, not an eighth state snapshot. No synthetic RPC response is used by this entry.
+
+Resource sampling every0.2s recorded peak session+PG RSS535506944 bytes, minimum /workspace8593068032 and /tmp15278657536 bytes, both above8589934592. No cache or shared data deleted. Both local clusters stopped, logs record shutdown, directories/socket paths were removed, and all six writer/observer/mutator backends are absent. The two postmaster processes remain PID1-owned **zero-RSS zombies** (636675,636709), so full PID disappearance is explicitly pending; there are no live owned PostgreSQL services. Queries used by the new harness are directly awaited; no pending-query numeric counter is claimed. Helper cleanup swallows client-end errors, so the stronger recorded checks are backend absence, completed pg_ctl stop, shutdown logs and removed cluster paths.
+
+This is synthetic local engineering over the captured schema, original50+26/candidate36 and explicit existing two-owner USAGE profile. Captured production-release inactivity is not formal active-writer/peer verification. Partial four-source Hs / actual native Node Hc are not whole Next execution approval; all qualification flags remain false. No formal source, author or publication claim follows.
+
+Remaining: actual versioned article validator, four active callers, Q/R, review-pack/publication union, complete S-C-B-Q-R-A, source rights/author/reviewer/reservation/atomic publication and formal peer/capacity/deployment. No product source, SQL, ACL, authority, limits, existing tests or workflows changed; no PR or approval ref created. Prior RED remains in prior exact evidence branches; this native run has no new failure.

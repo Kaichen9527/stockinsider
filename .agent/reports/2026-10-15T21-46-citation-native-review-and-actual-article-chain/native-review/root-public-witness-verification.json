@@ -1,0 +1,62 @@
+{
+  "source": "74912cc23d3efde535c660e8a8277f2e910bcfd0",
+  "evidence": "4e9733ab39febfa91609e8fe6469a69c0c8f1b4e",
+  "receiptSha256": "555f824674055570cf50eb8d66099b254fbaccc6b57cddd7b88b7644615c398a",
+  "actualGitSourceIdentitiesVerified": 270,
+  "publishedReceiptFilesVerified": 7,
+  "privateRawCountAndHashInventoryOnly": 71,
+  "privateRawBytesNotObtained": 5198575,
+  "rootNativeExecuted": false,
+  "countsAsRecorded": {
+    "children": 2,
+    "parent": 1,
+    "tests": 3,
+    "pass": 3,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "caseChecks": [
+    {
+      "symbol": "2409",
+      "stages": 7,
+      "tablesEach": 9,
+      "newFinancialOpens": 9,
+      "newFinancialCloses": 9,
+      "charge": {
+        "count": 2,
+        "bytes": 234998
+      },
+      "nodes": 442,
+      "reported": 104,
+      "scenario": 306,
+      "readOnlyCalls": 6,
+      "error": {
+        "code": "P0001",
+        "message": "source_seal_invalidated_or_missing"
+      }
+    },
+    {
+      "symbol": "2383",
+      "stages": 7,
+      "tablesEach": 9,
+      "newFinancialOpens": 7,
+      "newFinancialCloses": 7,
+      "charge": {
+        "count": 2,
+        "bytes": 144355
+      },
+      "nodes": 398,
+      "reported": 66,
+      "scenario": 306,
+      "readOnlyCalls": 6,
+      "error": {
+        "code": "P0001",
+        "message": "source_seal_invalidated_or_missing"
+      }
+    }
+  ],
+  "publicWitnessCheck": "PASS",
+  "cleanup": "6 backends absent; 2 postmaster zero-RSS PID1 zombies remain; no live owned service recorded",
+  "review": "scoped new125line harness and public witness integration 0newP0P1P2; not independent full native/production approval"
+}

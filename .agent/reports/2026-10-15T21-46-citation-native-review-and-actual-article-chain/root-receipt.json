@@ -1,0 +1,84 @@
+{
+  "at": "2026-10-15T13:48:04.358638+00:00",
+  "classification": "progress: actual PG native receipt review closed; unique actual article-chain source integration confirmed live",
+  "source": "74912cc23d3efde535c660e8a8277f2e910bcfd0",
+  "evidence": "4e9733ab39febfa91609e8fe6469a69c0c8f1b4e",
+  "rootNativeExecuted": false,
+  "privateRawBytesObtained": false,
+  "actualArticleIntegrationTurn": "01a13fd0-13a7-7043-85da-6ad014c6aa04",
+  "cursor": "58df5d1d-e6e3-4df1-bae9-36cf61f53912:3",
+  "status": "inProgress observed",
+  "formalPublication": false,
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 4913,
+      "sha256": "96db2b6f144a725f31f16b849075c61331ec147d8ce080e6f12cc0644e73d946"
+    },
+    {
+      "path": "article-integration-dispatch.txt",
+      "bytes": 7246,
+      "sha256": "bbbc60df1eb2723f045ace24f667db1bab8a6773d8cf83c6339118cc27ce33dc"
+    },
+    {
+      "path": "cloud-compact.json",
+      "bytes": 637,
+      "sha256": "dcb9c48289fac35582cfbc5e0d818b0639c30952c8fe2ad251d8686f656700ad"
+    },
+    {
+      "path": "native-review/HANDOFF.md",
+      "bytes": 4136,
+      "sha256": "5f4dfa5f1f62cc34be98d80b5a75539d98f896c403d9f7bbca5a0c1c82511725"
+    },
+    {
+      "path": "native-review/cleanup-verification.json",
+      "bytes": 684,
+      "sha256": "f6394010396e7eefd2f1ef6c84606bdbb351ba260c7a61f14932f34168fb59bf"
+    },
+    {
+      "path": "native-review/execution-resources.json",
+      "bytes": 4292,
+      "sha256": "0fc3433b9c96b50bc9c6692cfa6d3c861714f7da9f8a8f89251b4976e209cf0c"
+    },
+    {
+      "path": "native-review/public-safe-witness.json",
+      "bytes": 48852,
+      "sha256": "50bf98c12f31c6dda163590fa973c0a063f64c43112c7be0c8211d4f352c2ac4"
+    },
+    {
+      "path": "native-review/raw-inventory.json",
+      "bytes": 13610,
+      "sha256": "9ed03233090105254e910c8b956a27e60c0454c14bfa94f108a0adfb05d00d52"
+    },
+    {
+      "path": "native-review/receipt.json",
+      "bytes": 1651,
+      "sha256": "555f824674055570cf50eb8d66099b254fbaccc6b57cddd7b88b7644615c398a"
+    },
+    {
+      "path": "native-review/root-public-witness-verification.json",
+      "bytes": 1655,
+      "sha256": "ac0890d809a945ab91b4a78cc39733850955cd7ece8a3c649c67e4bfac205966"
+    },
+    {
+      "path": "native-review/source/docs/operations/2026-10-15/v3-cash-citation-native-handoff.md",
+      "bytes": 2013,
+      "sha256": "71fe39c93deabda40923a8f5674743ce3a99ccbc6b621fc37c20866c4862d313"
+    },
+    {
+      "path": "native-review/source/scripts/opportunity-v3/research-v3-cash-citation-native.test.mjs",
+      "bytes": 17253,
+      "sha256": "b8afea967d460dd941043c592ad2747b92597d02cb207964ac4355b9e57b325f"
+    },
+    {
+      "path": "native-review/source-inventory.json",
+      "bytes": 67395,
+      "sha256": "457590d4f439842024cd96df896dc961449d012c8b2ca1bd7a560aecf0f48493"
+    },
+    {
+      "path": "next-formal-chain-requirements.md",
+      "bytes": 7322,
+      "sha256": "14b3f20f947aedc0dd804d2a9f81300c044780d5c641e4ef7e90d5f2cb559782"
+    }
+  ]
+}
