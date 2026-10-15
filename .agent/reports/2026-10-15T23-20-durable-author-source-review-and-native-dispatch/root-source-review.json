@@ -1,0 +1,25 @@
+{
+  "subject": "79fd6e001ec77f58618d784948f9097e785b8f31",
+  "evidence": "68bc9c83e1c41796a1a700f7bf197eae2dd42b9f",
+  "actualGitInputs": 131,
+  "actualSourceBytes": 5532273,
+  "publishedFiles": 9,
+  "publishedBytes": 83497,
+  "sixPredecessorFourSuccessorBodyHashes": true,
+  "originalReceiveV2ArmByteExact": true,
+  "scopedSourceFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "scope": "full eight-file source integration review; actual SQL/catalog/native pending; no Root runtime tests",
+  "makerTests": "32 source checks only; not Root/native approval",
+  "privateRawCount": 79,
+  "privateRawBytes": 841652,
+  "privateRawContentsObtained": false,
+  "partialExtractionENOSPCPreserved": true,
+  "localAvailableBytes": 3165892608,
+  "localHeavyAdmitted": false,
+  "cleanupAttempted": false
+}
+

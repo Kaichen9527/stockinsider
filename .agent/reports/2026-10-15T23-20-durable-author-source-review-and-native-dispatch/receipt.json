@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-10-15T15:22:09.584199+00:00",
+  "subject": "79fd6e001ec77f58618d784948f9097e785b8f31",
+  "evidence": "68bc9c83e1c41796a1a700f7bf197eae2dd42b9f",
+  "cloudTurn": "01a14026-3f5e-766e-80d4-d9445e05a894",
+  "status": "SOURCE_REVIEW_COMPLETE_NATIVE_IN_PROGRESS",
+  "formalPublication": false,
+  "goal": "active",
+  "files": [
+    {
+      "path": "ROOT-REVIEW.md",
+      "bytes": 4023,
+      "sha256": "1ecd2e0329c2c6474a84f4b5e7a08987aa2d42860c76837a229c6596daee129a"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 676,
+      "sha256": "7741f8fd3382af323cc6f9325075d0a8530853003827ebe5915d3d5b528967a5"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 4736,
+      "sha256": "fb0760369420db4c6c069a1fea3d5a3ed9133c65c3a915530c1595ef6a169212"
+    },
+    {
+      "path": "root-source-review.json",
+      "bytes": 803,
+      "sha256": "dd1ceb27f9cba215445ea6d54090a3b1b94021294adfb01f838e5e6dff623743"
+    }
+  ]
+}
