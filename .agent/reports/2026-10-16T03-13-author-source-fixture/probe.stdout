@@ -1,0 +1,1 @@
+{"kind":"builtins-only static source extraction; NOT DB/native","checks":16,"pass":16,"fail":0,"skip":0,"defaultMetadataLiteralByteExact":true,"unknownRejectBeforePerCaseInitdb":true}

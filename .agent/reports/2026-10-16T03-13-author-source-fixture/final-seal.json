@@ -1,0 +1,14 @@
+[
+  {
+    "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+    "sha256": "09b209f52f4b33e32dfda0d15c035f3986b701a23ab1e9ab9188ca836ef7deaa",
+    "bytes": 19687,
+    "blob": "09315c1e90eec3edde31e68a97bd93fd3cb4ed35"
+  },
+  {
+    "path": "scripts/opportunity-v3/research-v3-author-durable-native.test.mjs",
+    "sha256": "53dbe116c4ca81a946fd122ec4710023a9374ae47a75b2d204d5e902feee3a10",
+    "bytes": 16202,
+    "blob": "6373e28c8932d17314fb0e051e44bff1064585af"
+  }
+]

@@ -1,0 +1,82 @@
+{
+  "privateRoot": "/tmp/author-source-fixture-o16",
+  "count": 15,
+  "bytes": 83242,
+  "files": [
+    {
+      "name": "exact-source.diff",
+      "bytes": 10034,
+      "sha256": "98350ec7e7f712392d005e4938d3159cf823ed8912641855e2d8b1ec6fa4401d"
+    },
+    {
+      "name": "final-checks.json",
+      "bytes": 696,
+      "sha256": "2a1789439bc71939426db7e1aaed6f84ae633fdc2ba1d768f1708444583c8c58"
+    },
+    {
+      "name": "final-seal.json",
+      "bytes": 498,
+      "sha256": "35883dfddd5f64ab0c361b63738b1db325dcdd6c801709800d46b887ea445568"
+    },
+    {
+      "name": "initial-seal.json",
+      "bytes": 602,
+      "sha256": "9440a476e9c0a3481baf3f3fcdfe5d313939c7e8d4b6174fce20ce4db6e2bc6d"
+    },
+    {
+      "name": "probe.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe.stdout",
+      "bytes": 184,
+      "sha256": "6685afc7297514b6c7bb4a4d43aa43940f940b6c5a4da2484a6182f4447edc15"
+    },
+    {
+      "name": "research-v3-author-durable-native.test.mjs.original",
+      "bytes": 12951,
+      "sha256": "4a1d8b7c9a6efd1cac730faf986fea3299cf1b54e3edfdeb4bbf1e31e8f1320e"
+    },
+    {
+      "name": "research-v3-author-durable-native.test.mjs.sealed",
+      "bytes": 16185,
+      "sha256": "87d8c82d55742f13d9349170b8f04e04a68f6729214eecefd76127f93ef76b42"
+    },
+    {
+      "name": "research-v3-author-durable-native.test.mjs.syntax.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "research-v3-author-durable-native.test.mjs.syntax.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "research-versioned-legal-fixture-helper.mjs.original",
+      "bytes": 19227,
+      "sha256": "8d78ed506bec2dc9e6f5a1cc8258f921c47f246fe5c55a73341e940c7e5f8d3e"
+    },
+    {
+      "name": "research-versioned-legal-fixture-helper.mjs.sealed",
+      "bytes": 19687,
+      "sha256": "09b209f52f4b33e32dfda0d15c035f3986b701a23ab1e9ab9188ca836ef7deaa"
+    },
+    {
+      "name": "research-versioned-legal-fixture-helper.mjs.syntax.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "research-versioned-legal-fixture-helper.mjs.syntax.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "source-probe.mjs",
+      "bytes": 3178,
+      "sha256": "a8742f3cd33329ea8a54cb08686bc454cbaa8a457938820e0543e9c09d2dcedf"
+    }
+  ]
+}

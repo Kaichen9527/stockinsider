@@ -1,0 +1,35 @@
+{
+  "time": "2026-10-15T19:18:16.684258+00:00",
+  "syntax": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/opportunity-v3/research-v3-author-durable-native.test.mjs"
+      ],
+      "exit": 0
+    }
+  ],
+  "diffCheck": 0,
+  "inverseDiffReconstructedBothBaseFiles": true,
+  "native": "NOT_RUN",
+  "dbMetadataCheck": "NOT_RUN",
+  "freshFree": {
+    "/workspace": 8593833984,
+    "/tmp": 15138902016
+  },
+  "publicationInitialRed": {
+    "command": "git add explicit safe allowlist (without -f)",
+    "exit": 1,
+    "reason": ".agent is gitignored; no commit or push ran",
+    "resolution": "force-add only the same nine explicit safe files; never the directory"
+  }
+}

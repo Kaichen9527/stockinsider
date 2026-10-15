@@ -1,0 +1,53 @@
+{
+  "kind": "maker-source-only-receipt-not-independent-approval",
+  "subject": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+  "productSubject": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "time": "2026-10-15T19:19:11.679926+00:00",
+  "native": "NOT_RUN",
+  "checks": {
+    "staticSourceGroupsPass": 16,
+    "syntaxExitZero": 2
+  },
+  "publishedFiles": [
+    {
+      "path": ".agent/reports/2026-10-16T03-13-author-source-fixture/HANDOFF.md",
+      "bytes": 3657,
+      "sha256": "41f9e8e017f7a04e0757422f14ef2ec5fd9858efa0c1c6d7859d55f30261820f"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T03-13-author-source-fixture/exact-source.diff",
+      "bytes": 10034,
+      "sha256": "98350ec7e7f712392d005e4938d3159cf823ed8912641855e2d8b1ec6fa4401d"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T03-13-author-source-fixture/final-checks.json",
+      "bytes": 959,
+      "sha256": "a698f590d01da92f40fffd74f872de3c6decfd425f63374ed7a026fab2ac8677"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T03-13-author-source-fixture/final-seal.json",
+      "bytes": 498,
+      "sha256": "35883dfddd5f64ab0c361b63738b1db325dcdd6c801709800d46b887ea445568"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T03-13-author-source-fixture/probe.stdout",
+      "bytes": 184,
+      "sha256": "6685afc7297514b6c7bb4a4d43aa43940f940b6c5a4da2484a6182f4447edc15"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T03-13-author-source-fixture/raw-inventory.json",
+      "bytes": 2649,
+      "sha256": "dd944113719d584cecbc6b691021919f634ad368f1b12a93e115340ae314a885"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T03-13-author-source-fixture/source-inventory.json",
+      "bytes": 85278,
+      "sha256": "526e9f7e99d0695a30e0118986ca1d385fe8eae16969c449902793d947dd2924"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T03-13-author-source-fixture/source-probe.mjs",
+      "bytes": 3178,
+      "sha256": "a8742f3cd33329ea8a54cb08686bc454cbaa8a457938820e0543e9c09d2dcedf"
+    }
+  ]
+}
