@@ -8,6 +8,7 @@ const {Client}=createRequire(import.meta.url)('pg'),root=path.resolve(import.met
 const load=p=>{const bytes=fs.readFileSync(path.join(root,p));return{relativePath:p,bytes,sha256:sha(bytes)}};const migrations=selectFinancialHistoryChain(MIGRATIONS.map(load),load(FINANCIAL_TAIL),true),plan={migrations,chainSha256:orderedHash(migrations),financialExistingSchemaProfile:makeFinancialExistingSchemaProfile(migrations,load(OWNERSHIP_PRELUDE)),operatorPrerequisite:financialOperatorActionIdentity()};
 export async function withLegalVersionedFixture(symbol,options,run){
  assert.ok(['2409','2383'].includes(symbol));assert.ok(['research-article-input-v2','research-article-input-v3'].includes(options.wireVersion));assert.equal(typeof run,'function');assert.match(options.label,/^[a-z0-9-]{1,64}$/);assert.ok(Number.isInteger(options.sourceCount??1)&&(options.sourceCount??1)>=1&&(options.sourceCount??1)<=30);
+ const sourceProfile=options.sourceProfile===undefined?'protocol_only':options.sourceProfile;assert.ok(['protocol_only','author_packet'].includes(sourceProfile),'unknown sourceProfile');
  const preparationMode=options.preparationMode??'candidate';assert.ok(['candidate','original-v2'].includes(preparationMode));
  const locatorExtensionBytes=options.locatorExtensionBytes===undefined?0:options.locatorExtensionBytes;assert.ok([0,400,1300].includes(locatorExtensionBytes),'finite synthetic locator extension');if(locatorExtensionBytes!==0)assert.equal(options.sourceCount,30);
  assert.ok(globalThis[Symbol.for('stockinsider.local.prerequisite.fs-witness')],'preload witness before application ESM');
@@ -36,6 +37,7 @@ export async function withLegalVersionedFixture(symbol,options,run){
   await c.query('SET ROLE service_role');const admitted=(await c.query('SELECT admit_research_observed_roster_v1($1,$2) v',[roster.snapshotHash,roster.canonicalPacket])).rows[0].v;save('roster-admission.json',admitted);
   stage='retained synthetic source under original lease and source triggers';const leaseOwner=randomUUID();assert.equal((await c.query("SELECT acquire_production_write_lease('production-data-plane',$1,3600) ok",[leaseOwner])).rows[0].ok,true);
   const sourceId=randomUUID(),url='https://example.invalid/synthetic-prerequisite-'+symbol+'x'.repeat(locatorExtensionBytes),observed=new Date(Date.now()-120000).toISOString(),metadata={canonical_url:url,parent_source_url:url,rights_boundary:'public_citation',subject_scope:'company_mentions',content_form:'article_body',first_observed_at:observed,read_status:'synthetic_local_fixture',synthetic:true};
+  if(sourceProfile==='author_packet')Object.assign(metadata,{visibility:'public',claim_status:'rumor',catalyst:'Synthetic local engineering fixture: unconfirmed discussion only.',risk:'Synthetic local engineering fixture: no verified orders, rights or author approval.'});
   const sourceIds=[sourceId],locatorEvidence=[];
   try{for(let index=0;index<(options.sourceCount??1);index++){
    const id=index===0?sourceId:randomUUID();if(index>0)sourceIds.push(id);
