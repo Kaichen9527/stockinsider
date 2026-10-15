@@ -1,0 +1,92 @@
+{
+  "at": "2026-10-15T10:53:59.708041+00:00",
+  "action": "gh pr merge 382 --merge --match-head-commit 1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "head": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "base": "8c58e297e92422c1c3f52856a36bff12b1868100",
+  "tree": "fe30bedc11f231899418f845e57875c76c62c70c",
+  "evidence": "bf8e5af7bf2549191649fb025adde64c4806adb0",
+  "readyProtectedRun": 38709607205,
+  "sevenJobs": "genuine SUCCESS",
+  "rulesBefore": {
+    "id": 20177392,
+    "name": "stockinsider-v3-gate-root",
+    "target": "branch",
+    "source_type": "Repository",
+    "source": "Kaichen9527/stockinsider",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "exclude": [],
+        "include": [
+          "~DEFAULT_BRANCH"
+        ]
+      }
+    },
+    "rules": [
+      {
+        "type": "deletion"
+      },
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 0,
+          "dismiss_stale_reviews_on_push": false,
+          "required_reviewers": [],
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": false,
+          "require_extra_approval_for_unattributed_changes": true,
+          "allowed_merge_methods": [
+            "merge",
+            "squash",
+            "rebase"
+          ]
+        }
+      },
+      {
+        "type": "required_status_checks",
+        "parameters": {
+          "strict_required_status_checks_policy": false,
+          "do_not_enforce_on_create": false,
+          "required_status_checks": [
+            {
+              "context": "stockinsider-v3-gate-root",
+              "integration_id": 15368
+            }
+          ]
+        }
+      }
+    ],
+    "node_id": "RRS_lACqUmVwb3NpdG9yec5Fu2YfzgEz4fA",
+    "created_at": "2026-08-01T17:15:31.389+08:00",
+    "updated_at": "2026-10-12T08:07:59.507+08:00",
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/Kaichen9527/stockinsider/rulesets/20177392"
+      },
+      "html": {
+        "href": "https://github.com/Kaichen9527/stockinsider/rules/20177392"
+      }
+    }
+  },
+  "noAdminBypassAutoDirectMain": true,
+  "requested": true,
+  "exit": 0,
+  "stdout": "",
+  "stderr": "",
+  "merged": true,
+  "mergeCommit": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "mergedAt": "2026-10-15T10:54:02Z",
+  "parents": [
+    "8c58e297e92422c1c3f52856a36bff12b1868100",
+    "1e1ded2b99255d9905942627d76abadeb58eeb68"
+  ],
+  "treeEqualApprovedSource": true,
+  "rulesUnchanged": true,
+  "productionDeploy": false
+}

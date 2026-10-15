@@ -1,0 +1,84 @@
+{
+  "at": "2026-10-15T10:55:07.261140+00:00",
+  "classification": "progress: exact protected normal merge, not deployment/full-goal completion",
+  "source": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "directEvidence": "bf8e5af7bf2549191649fb025adde64c4806adb0",
+  "main": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "protectedRun": 38709607205,
+  "jobs": 7,
+  "allGenuineSuccess": true,
+  "rulesUnchanged": true,
+  "deploy": false,
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 3117,
+      "sha256": "cdb6dbbf21947c3a748796652b54608ae4467f8432f705b40c30c67aad1973f1"
+    },
+    {
+      "path": "canonical-terminal.json",
+      "bytes": 4092,
+      "sha256": "f9bee92600f4b93bcf89646e335cb4da7542a275069f0cdad9e4043d44a1e728"
+    },
+    {
+      "path": "head-check-runs-before-merge.json",
+      "bytes": 57493,
+      "sha256": "5ed3756be2d2b7e9eee4ac90ce99ef1c208d96bf920372393e4c0af99302b704"
+    },
+    {
+      "path": "head-runs-before-merge.json",
+      "bytes": 609,
+      "sha256": "7b4bab6c71d6988808a9fcc4462e53a294bb0548631370584c43f6439bcf2683"
+    },
+    {
+      "path": "merge-commit.json",
+      "bytes": 2749,
+      "sha256": "0e7e0641926e00f3165d78c75f347c4e850a231ac8c77d2f9fc7bd599197f0c5"
+    },
+    {
+      "path": "normal-merge-audit.json",
+      "bytes": 2699,
+      "sha256": "df6ec8787a5e5f4a883b4be8a579629a2305c91fede682a0a3bd14f30e7256e5"
+    },
+    {
+      "path": "ordinary35-terminal.json",
+      "bytes": 1668,
+      "sha256": "2a88e8de8b7c2ffdde51f78683de92c118db2dbb8a43b522a57b023025e35793"
+    },
+    {
+      "path": "pr-after-merge.json",
+      "bytes": 307,
+      "sha256": "1512cfc981579352ca24d673e05a9e561f0b2613d6abad4d82741da90a93b873"
+    },
+    {
+      "path": "pr-before-merge.json",
+      "bytes": 233,
+      "sha256": "c7125f3f34edf406d5759247e4c6e90eeeae938418310b4ff4d9c65b61492bb5"
+    },
+    {
+      "path": "ready-protected-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ready-protected-success.json",
+      "bytes": 12649,
+      "sha256": "0f665078aae606760287f384d8a3701bccf5d6339e11cd3a3d2043baa7f39ce0"
+    },
+    {
+      "path": "ready-protected-success.log",
+      "bytes": 1231563,
+      "sha256": "1c7a788a247eb2f9a0fc2306e27c1a0f9e21515b9ed3190538df9e029029de50"
+    },
+    {
+      "path": "rules-after-merge.json",
+      "bytes": 1224,
+      "sha256": "b016eaa2fe9f0f291e6baf5664b6c955bb8ebfce8ef16b1fefd6332e41e84d88"
+    },
+    {
+      "path": "rules-before-merge.json",
+      "bytes": 1224,
+      "sha256": "b016eaa2fe9f0f291e6baf5664b6c955bb8ebfce8ef16b1fefd6332e41e84d88"
+    }
+  ]
+}
