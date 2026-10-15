@@ -1,0 +1,11 @@
+{
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "/tmp/stockinsider-v3-author-article-root-review-oct15/root-independent-probes.mjs"
+  ],
+  "actualExitCode": 0,
+  "observedAt": "2026-10-15T14:24:34.409882+00:00"
+}

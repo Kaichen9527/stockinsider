@@ -1,5 +1,22 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-15 22:29台灣時間：actual article/author-result source交付經Root精確審查；33契約PASS與完整兩原稿文字核實，唯一Cloud續作durable author finite SQL union
+
+前turn01a13fd0真completed，thread稍後真idle/cursor58df5d1d-e6e3-4df1-bae9-36cf61f53912:6，沒有重派活動。Source5609fe1ddbc3d4432de77a3c88ec596d1c28c736/evidenced15f24aa4c6589e0a9d298df71c27f2a705d4a0e/receiptcda79deaf04d30a80a9918afddcb9d9b9f578b8f78f10279ab99eb19b90633ad真push。Root逐byte核53actualGitinputs/8published69046bytes、原9SQL/27source dollar-body hash及完整新增validator/authorcomposition/citationdiff/exactcopyexecutionbinding；106private raw1053630bytes只核inventorycount/sum/hashformat，未取bytes。Scoped未啟用source slice integration零新P0P1P2，不冒formal/native/wholeclosure批准。
+
+Root用exact Node22.14親跑新13+因consumer shareddeadline改動必要20回歸=33PASS/0fail/cancel/skip/todo；另自有8groups PASS，兩公司全文重拼與Root獨立baseline SHA相同、4+5原table文字保留，snapshot隔離/metadata不能充fact/conflictingauth在DB前拒絕/packetRPC後原deadline仍拒絕。8groups不與33或maker33加總。Maker strict module TS PASS只核公開收據，不是Root全app type/build。新source已改consumer，原74912 native3PASS只屬舊exactsource，不能移作5609 native批准。
+
+已實作明確v3 article validator、原10s共享期限的author packet READ/result preparation；仍未persist、missing candidateRPC failclosed/no v2fallback。兩draft fixture全文/appendix/9table只證文字保存；所有段落synthetic inference/單一引用映射不是actual claim-by-claim內容審查、沒有新正式作者執行/角色reservation/獨立reviewer/發布收據。原parse/type/filelevel/8PASS2FAIL depth12比較RED保持；改用bindingCanonical核完整validated transport，原stored taggedcodec/depth12不放寬。自動審查拒絕整evidence目錄force-add/push後，Cloud只發布8明確publicsafe摘要/hash/TAP；106raw/WIP留本機，原拒絕保留，不重試原整目錄。Root首次尚在fetch session時查tree失敗及zsh未匹配glob只屬tooling RED，已保存後以同fetch真終態和quoted rg修核，不當產品FAIL。
+
+未停在pure綠。前turn真終態後只派唯一不同40min SOURCE-ONLY codex/research-v3-author-durable-union-oct15/based15f24aa，newturn01a13ff7-13e1-72c1-b5f7-a92d9e25f305/cursor58df5d1d-e6e3-4df1-bae9-36cf61f53912:7真inProgress，先同handlecompactwait、不重派。Owned additive candidate author finite version union與actual durable receive/read caller，若有界不足優先完整storage+receive/read切片，其餘四caller/route據實WIP。Root source-only工程決策採既有signature/owner/security/search_path/ACL/role/table不變的有限body arm，禁新publicRPC/function/table/GRANT/REVOKE/ALTEROWNER或任意schema OR；原v2 arm/row/request/hash/clocks/replay/拒絕保持。不是把v3送未改舊v2或失敗後fallback：新reviewed union明確辨識server-owned retained binding，已知candidate拒絕不能回舊arm；未知failclosed。原9source index不是installed pg_catalog，須完整tail實際順序推導有限predecessor，後續真native核及正式安裝另待。必要權限/constraint若不符只能封存缺口，不能偷偷改profile/grant。
+
+本新件仍source-only，不execute SQL/PG/socket/PostgREST/app/HTTPnetwork/SSH/VPS/native/build/npm/install/CI/PR/ref/readymerge/deploy/cache。需source-onlycaller checks和精確pre/postcondition設計、既有唯一assignment/invocation/immutable receipt/response-loss recovery/rights與原source-global lock及全部budgets不增；新candidate未安裝/wholebinding未完成必failclosed。Root之後另review再一次actual isolated PG/guardedHTTP author儲存與legacy/revocation/response-loss/ACL proof，再接reviewer/Q-R/reviewpack/atomicpublication與wholeS-C-B-Q-R-A，不能止於source contract。
+
+Main93e44475及PR370..382終態保持；無本輪VPS/DB/role/ACL/資料batch/HTTP/正式研究排程/部署。Current/writer169/lease0與memory2440826880<2684354560差243527680仍11:54最後觀測，無新完整capacityPASS/FAIL；approved DD包不重建改標，main169-deploy.sh不可執行。Fullgoal active/heartbeat ACTIVE；完整來源Top20、兩formal獨立文章、全部caller/semantic支持/wholeclosure、合格技術觀察/策略/正式研究排程/fixedpeer/install/deploy/桌手機驗收仍未完成。
+
+Root report .agent/reports/2026-10-15T22-29-author-article-source-review-and-durable-union/，rootreceipt f7067de6609f86168ee2e98add05c4c068bb7144e66973abad156d1547f643ae。
+
+
 ## 2026-10-15 21:46台灣時間：兩公司 actual PG citation consumer 真3PASS、Root270source/公開witness核實；已接續實際article/author-result鏈source整合
 
 Native source74912cc23d3efde535c660e8a8277f2e910bcfd0/evidence4e9733ab39febfa91609e8fe6469a69c0c8f1b4e/receipt555f824674055570cf50eb8d66099b254fbaccc6b57cddd7b88b7644615c398a 真push/turn01a13fbc completed/threadidle。單次PG17.11/Node22.14，13:32:23.112133Z–13:32:43.007942Z/19.895812s，兩child+parent3PASS零fail/skip/todo；只加new125line harness與handoff，consumer92870/protocol d33/產品SQL unchanged，沒重跑舊green/native/build。Root讀全newharness、逐byte核270actualGitinputs與7publishedreceiptfiles/receipt，ownchecker兩case7state snapshots×9tables/完整ledgerhash/charge/FD/READtrace/withdrawevent-invalidation/cleanup相符；scoped harness/publicwitness integration零新P0P1P2，不冒Root親跑native或完整獨立native批准。

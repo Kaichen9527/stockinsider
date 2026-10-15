@@ -1,0 +1,185 @@
+TAP version 13
+# (node:5629) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5629) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-v3-article-citations.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-release-root-review-oct14/web/package.json.
+# Subtest: 2409 actual pinned successor -> real controller READ only -> immutable exact revision citations
+ok 1 - 2409 actual pinned successor -> real controller READ only -> immutable exact revision citations
+  ---
+  duration_ms: 188.814792
+  ...
+# Subtest: 2409 all 104 cash cells resolve independently to BOTH exact original source pointers
+ok 2 - 2409 all 104 cash cells resolve independently to BOTH exact original source pointers
+  ---
+  duration_ms: 128.792958
+  ...
+# Subtest: 2409 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+ok 3 - 2409 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+  ---
+  duration_ms: 156.834417
+  ...
+# Subtest: 2409 306 conditional scenario values retain periods/units and original model locators, never reported cash
+ok 4 - 2409 306 conditional scenario values retain periods/units and original model locators, never reported cash
+  ---
+  duration_ms: 95.347125
+  ...
+# Subtest: 2409 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+ok 5 - 2409 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+  ---
+  duration_ms: 98.211834
+  ...
+# Subtest: 2409 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+ok 6 - 2409 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+  ---
+  duration_ms: 122.748084
+  ...
+# Subtest: 2409 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+ok 7 - 2409 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+  ---
+  duration_ms: 902.362584
+  ...
+# Subtest: 2383 actual pinned successor -> real controller READ only -> immutable exact revision citations
+ok 8 - 2383 actual pinned successor -> real controller READ only -> immutable exact revision citations
+  ---
+  duration_ms: 153.13825
+  ...
+# Subtest: 2383 all 66 cash cells resolve independently to BOTH exact original source pointers
+ok 9 - 2383 all 66 cash cells resolve independently to BOTH exact original source pointers
+  ---
+  duration_ms: 53.402666
+  ...
+# Subtest: 2383 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+ok 10 - 2383 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+  ---
+  duration_ms: 63.732458
+  ...
+# Subtest: 2383 306 conditional scenario values retain periods/units and original model locators, never reported cash
+ok 11 - 2383 306 conditional scenario values retain periods/units and original model locators, never reported cash
+  ---
+  duration_ms: 53.282167
+  ...
+# Subtest: 2383 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+ok 12 - 2383 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+  ---
+  duration_ms: 104.439916
+  ...
+# Subtest: 2383 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+ok 13 - 2383 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+  ---
+  duration_ms: 72.011042
+  ...
+# Subtest: 2383 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+ok 14 - 2383 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+  ---
+  duration_ms: 429.205375
+  ...
+# Subtest: primitive citation ingress rejects duplicate keys, oversized/unknown objects without getters
+ok 15 - primitive citation ingress rejects duplicate keys, oversized/unknown objects without getters
+  ---
+  duration_ms: 147.913792
+  ...
+# Subtest: old77/v2, forged validated flags and request-selected paths cannot bypass actual READ composition
+ok 16 - old77/v2, forged validated flags and request-selected paths cannot bypass actual READ composition
+  ---
+  duration_ms: 0.73325
+  ...
+# Subtest: actual READ revocation/error/absent is never turned into a citation set or seal
+ok 17 - actual READ revocation/error/absent is never turned into a citation set or seal
+  ---
+  duration_ms: 0.566334
+  ...
+# Subtest: zero group denominator remains unavailable in existing fixed calculator; cannot inject replacement pinned cash
+ok 18 - zero group denominator remains unavailable in existing fixed calculator; cannot inject replacement pinned cash
+  ---
+  duration_ms: 54.998958
+  ...
+# Subtest: unavailable AUO ROU/EMC capital and metadata cannot become reported amounts; locators remain metadata
+ok 19 - unavailable AUO ROU/EMC capital and metadata cannot become reported amounts; locators remain metadata
+  ---
+  duration_ms: 327.206458
+  ...
+# Subtest: validated set detaches from subsequent RPC object mutation; no external object validation shortcut
+ok 20 - validated set detaches from subsequent RPC object mutation; no external object validation shortcut
+  ---
+  duration_ms: 160.203458
+  ...
+# (node:5662) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5662) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-v3-business-article.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-release-root-review-oct14/web/package.json.
+# Subtest: 2409 full original draft text and v3 cash/scenario namespaces -> actual validator
+ok 21 - 2409 full original draft text and v3 cash/scenario namespaces -> actual validator
+  ---
+  duration_ms: 738.205917
+  ...
+# Subtest: 2409 authenticated actual packet/result composition remains nonpersisting candidate
+ok 22 - 2409 authenticated actual packet/result composition remains nonpersisting candidate
+  ---
+  duration_ms: 1395.918667
+  ...
+# Subtest: 2409 strict article mutations reject without v2 fallback
+ok 23 - 2409 strict article mutations reject without v2 fallback
+  ---
+  duration_ms: 6600.616209
+  ...
+# Subtest: 2409 missing candidate SQL, wrong principal/packet context and stale source fail closed
+ok 24 - 2409 missing candidate SQL, wrong principal/packet context and stale source fail closed
+  ---
+  duration_ms: 1569.51875
+  ...
+# Subtest: 2383 full original draft text and v3 cash/scenario namespaces -> actual validator
+ok 25 - 2383 full original draft text and v3 cash/scenario namespaces -> actual validator
+  ---
+  duration_ms: 236.410917
+  ...
+# Subtest: 2383 authenticated actual packet/result composition remains nonpersisting candidate
+ok 26 - 2383 authenticated actual packet/result composition remains nonpersisting candidate
+  ---
+  duration_ms: 553.822333
+  ...
+# Subtest: 2383 strict article mutations reject without v2 fallback
+ok 27 - 2383 strict article mutations reject without v2 fallback
+  ---
+  duration_ms: 3468.937
+  ...
+# Subtest: 2383 missing candidate SQL, wrong principal/packet context and stale source fail closed
+ok 28 - 2383 missing candidate SQL, wrong principal/packet context and stale source fail closed
+  ---
+  duration_ms: 1138.387625
+  ...
+# Subtest: auth first, primitive bounds, duplicate JSON and shared expired deadline
+ok 29 - auth first, primitive bounds, duplicate JSON and shared expired deadline
+  ---
+  duration_ms: 341.860958
+  ...
+# Subtest: author observation wrong output/identity clock rejected and deadline never reset
+ok 30 - author observation wrong output/identity clock rejected and deadline never reset
+  ---
+  duration_ms: 1348.968
+  ...
+# Subtest: bounded receive/read wire and unknown request keys reject before any RPC
+ok 31 - bounded receive/read wire and unknown request keys reject before any RPC
+  ---
+  duration_ms: 475.241917
+  ...
+# Subtest: old77/v2 and binding/hash/source metadata cannot be selected through v3 request fields
+ok 32 - old77/v2 and binding/hash/source metadata cannot be selected through v3 request fields
+  ---
+  duration_ms: 493.747959
+  ...
+# Subtest: packet snapshot cannot authorize later article READ after source revocation
+ok 33 - packet snapshot cannot authorize later article READ after source revocation
+  ---
+  duration_ms: 557.604583
+  ...
+1..33
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 24770.771667

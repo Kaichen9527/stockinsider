@@ -1,0 +1,28 @@
+{
+  "subject": "5609fe1ddbc3d4432de77a3c88ec596d1c28c736",
+  "tree": "63a2e484882454194a999327d76396cbb02358f3",
+  "sourceFiles": 53,
+  "literalStaticClosure": 33,
+  "privateRawCount": 106,
+  "privateRawBytes": 1053630,
+  "publishedRawContents": false,
+  "pass": 33,
+  "newTests": 13,
+  "citationRegression": 20,
+  "fail": 0,
+  "skip": 0,
+  "todo": 0,
+  "strictModuleTypes": "PASS",
+  "native": "NOT_RUN",
+  "build": "NOT_RUN",
+  "independentApproval": false,
+  "files": {
+    "HANDOFF.md": "49603e96bb9d0a1012e6c58dd833fc91fbf75d56276988477b28a305fb48fdd1",
+    "execution-resources.json": "972b5de1aa39883e12b50ef22c2e4d077c63482c73f70044361e2da8465786db",
+    "final-tests.tap": "fbce62d0f2e533f2269ca85665164f7dd2415e28c6aad19dd0b0190240951d69",
+    "publication-scope.json": "72e32808c3077cf6423eaa7c23712dbca70de7e689e69de6f6dc50653ddca874",
+    "raw-inventory.json": "210721affb0050facc8007d5860c1291cbeee76ceb442ea7b0cbd44ac4eb504d",
+    "results.json": "a7d4074364ca33967c299e55ce33c330e8a9566d0879baf5df346349154d641a",
+    "source-inventory.json": "f15ddf238d6fe7ea5b2c4382f839cc5db2c0a68bca9e6d96ff6fc35eb1ef61df"
+  }
+}

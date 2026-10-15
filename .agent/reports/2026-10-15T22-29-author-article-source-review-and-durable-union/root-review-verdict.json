@@ -1,0 +1,47 @@
+{
+  "source": "5609fe1ddbc3d4432de77a3c88ec596d1c28c736",
+  "evidence": "d15f24aa4c6589e0a9d298df71c27f2a705d4a0e",
+  "scope": "unactivated article/packet-read/nonpersisting result preparation source slice",
+  "P0": 0,
+  "P1": 0,
+  "P2": 0,
+  "rootTests": {
+    "newIntegration": 13,
+    "necessaryChangedConsumerRegression": 20,
+    "actualTotal": 33,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "todo": 0
+  },
+  "rootIndependentProbeGroups": 8,
+  "rootNativeExecuted": false,
+  "buildExecuted": false,
+  "formalApproval": false,
+  "completeFormalArticleChain": false,
+  "completeOriginalMarkdownAndNineTableTextPreserved": true,
+  "semanticClaimCoverage": "not proven: synthetic inference/reference mapping",
+  "openRequirements": [
+    "four actual callers",
+    "guarded finite SQL union and durable receive/read",
+    "real author and independent reviewer execution/reservations",
+    "semantic paragraph and table citation mapping",
+    "Q/R/reviewpack/publication union",
+    "whole S-C-B-Q-R-A",
+    "protected release and formal peer/install/deploy/rendered acceptance"
+  ],
+  "rootToolingRed": [
+    {
+      "command": "git tree query before asynchronous fetch completion",
+      "exitCode": 1,
+      "diagnostic": "fatal: not a tree object",
+      "recovery": "same fetch session completed normally; exact objects then verified"
+    },
+    {
+      "command": "zsh unquoted migration wildcard query",
+      "diagnostic": "no matches found: migrations/20261015*",
+      "recovery": "used rg with quoted -g patterns; no product or filesystem mutation"
+    }
+  ],
+  "downstreamDecision": "source-only additive replacement of existing signatures with finite v3 arm; original v2 arm and all owners/security/search_path/ACL/roles/tables unchanged; no new public RPC or privilege; still independently reviewed and native-tested before any formal installation"
+}

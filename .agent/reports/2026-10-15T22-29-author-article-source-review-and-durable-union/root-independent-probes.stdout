@@ -1,0 +1,37 @@
+{
+  "subject": "5609fe1ddbc3d4432de77a3c88ec596d1c28c736",
+  "groups": 8,
+  "checks": [
+    {
+      "name": "2409 complete original Markdown reconstructed against independent baseline",
+      "tables": 4,
+      "sha256": "accb32669966843b008a345bfe732a13d41af3b008fcbfe2f716d6d580c8cda2"
+    },
+    {
+      "name": "2409 detached article/source snapshot"
+    },
+    {
+      "name": "2409 provenance and period metadata cannot become numeric table facts"
+    },
+    {
+      "name": "2383 complete original Markdown reconstructed against independent baseline",
+      "tables": 5,
+      "sha256": "65a5c805e45487dfa6daa91d5c8d7f5d5aae4a10ed7f6aa250cb6b11710b3064"
+    },
+    {
+      "name": "2383 detached article/source snapshot"
+    },
+    {
+      "name": "2383 provenance and period metadata cannot become numeric table facts"
+    },
+    {
+      "name": "conflicting auth header rejects before DB work"
+    },
+    {
+      "name": "same deadline remains authoritative after packet RPC; no reset"
+    }
+  ],
+  "externalRpc": "synthetic",
+  "native": false,
+  "formalPublication": false
+}

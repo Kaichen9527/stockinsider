@@ -1,0 +1,20 @@
+{
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-v3-author-article.test.mjs",
+    "scripts/research-v3-article-citations.test.mjs"
+  ],
+  "cwd": "/tmp/stockinsider-discovery-release-root-review-oct14",
+  "subject": "5609fe1ddbc3d4432de77a3c88ec596d1c28c736",
+  "startedAt": "2026-10-15T14:22:11.950741+00:00",
+  "endedAt": "2026-10-15T14:22:37.459288+00:00",
+  "exitCode": 0,
+  "freeBytes": 10701508608,
+  "native": false,
+  "build": false
+}

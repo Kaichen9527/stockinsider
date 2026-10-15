@@ -1,0 +1,28 @@
+{
+  "sourceCommit": "5609fe1ddbc3d4432de77a3c88ec596d1c28c736",
+  "publicationDestination": "same existing origin repository and explicitly authorized new codex branch",
+  "evidenceRawContentsPublished": false,
+  "testFixtureProvenance": [
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/article.md",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "blob": "2095c675e31848810368e0a69aa7a74360a5e60e",
+      "bytes": 23832,
+      "sha256": "accb32669966843b008a345bfe732a13d41af3b008fcbfe2f716d6d580c8cda2"
+    },
+    {
+      "path": "docs/research/2026-10-08-emc-company-model/article.md",
+      "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "blob": "50d0f673c0051e1bd5d15eeddcf448bdea23f33c",
+      "bytes": 23472,
+      "sha256": "65a5c805e45487dfa6daa91d5c8d7f5d5aae4a10ed7f6aa250cb6b11710b3064"
+    }
+  ],
+  "fixturePurpose": "The user explicitly requested real pinned drafts for new source-only integration tests. The gzip code fixture contains only two exact article.md files already stored in this same repository at15d4; no private DB rows, principal, token or new external input.",
+  "autoReviewRejectionPreserved": {
+    "operation": "force-add entire evidence directory and push",
+    "reason": "possible publication of files marked published:false, private draft material/build inputs",
+    "status": "original action not retried; narrowed evidence to explicit allowlist, hash-only raw inventory; all denied evidence raw stays local"
+  },
+  "originalDraftReceiptSha256": "1343a1a1be2470745c206dc88c9fe60ce57128ecd2e3b8c8ead4e12a19d9c0f0"
+}
