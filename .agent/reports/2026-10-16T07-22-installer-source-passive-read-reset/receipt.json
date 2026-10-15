@@ -1,0 +1,15 @@
+{
+  "kind": "readonly same-handle cursor reset and verified live wait; not native result",
+  "files": [
+    {
+      "path": ".agent/reports/2026-10-16T07-22-installer-source-passive-read-reset/observations.json",
+      "bytes": 3034,
+      "sha256": "3e1b91af0396a109bbfbb1c106b26842c9771c8bb00d9f7f818403d7a28929a7"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T07-22-installer-source-passive-read-reset/launch-note.txt",
+      "bytes": 1116,
+      "sha256": "ebe84082c002389a029d1f702c622ee2a141195c71773994de5dbf0759332b63"
+    }
+  ]
+}

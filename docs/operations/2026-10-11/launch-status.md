@@ -1,3 +1,11 @@
+## 2026-10-16 07:22台灣時間：installer source同handle唯讀觀測恢復，工作仍活動未重派
+
+本輪先核remote main93e44475/progress5e3b800e與乾淨source/progress樹；前goalturn分類verified wait。一次compactwait回Task host changed during passive read，立即同thread01a106b8-a883-7185-9962-f7372109a093/hostdurable重查，cursor reset為696e4b51-cb6f-4b4d-a68f-76849579caa4:1；latestturn仍01a141d7-4995-706e-87fd-0656a58c1099/inProgress，threadactive。再同newcursor bounded45s wait確認不變。觀測錯誤/timeout/cursorreset不是完成或工作失敗，沒有重啟或重派。Owned仍30min installer三負例SOURCE-ONLY，無新source交付/native結果。下一先同newhandlecursor，不重跑已綠author native。
+
+只保存實際readonly觀測，沒有新產品修改/VPS/DB/HTTP/CI/PR/部署/資料cleanup。原07:13實質native review/原RED與所有未完項保持；Fullgoal active/heartbeat ACTIVE，正式兩篇研究、來源Top20/技術觀察/策略/正式研究排程未完成。Root report .agent/reports/2026-10-16T07-22-installer-source-passive-read-reset/。
+
+Root receipt99fa5077c31e5c3ef0cf98b11aad985b23cc15c70b4f725667f1d51a5bbb7c8f；staged diff-check另由實際命令記錄，歷史RED不覆寫。
+
 ## 2026-10-16 07:13台灣時間：兩issuer author真回應遺失native3PASS、Root精確公開證據審查；唯一Cloud補installer三負例source-only
 
 前goalturn分類verified wait，同handle真inProgress未重派。本輪先核remote main93e44475/progressc8f20465/乾淨source及progress樹；原turn01a141cd於23:09:12Z真completed/lasttoolcompleted，thread最初短暫active後同handle真idle/cursor9，非觀測timeout冒完成。Evidence db1356ca321f1eee4a62f9b9a456069443e5db1f/receipt432631871138faf3c83a6937c29a02da12e1f76478539c06e302fb2d9a584e9f真push，executionbase3924/harness88fd/productc08均凍結。Root逐byte核291Gitinputs9787305bytes、11publishedreceiptfiles280795bytes；131private raw162400617bytes只核inventorycount/sum/hashformat，未取得全部contents或decodeprivateheldstream，不能冒Root131raw verified/Root親跑native。

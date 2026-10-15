@@ -1,0 +1,29 @@
+{
+  "error": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"timedOut\":false,\"wake\":null,\"polls\":[],\"errors\":[{\"threadId\":\"01a106b8-a883-7185-9962-f7372109a093\",\"hostId\":\"durable\",\"message\":\"Task host changed during passive read\"}]}"
+      }
+    ],
+    "isError": false
+  },
+  "recovered": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"timedOut\":true,\"wake\":null,\"polls\":[{\"schemaVersion\":1,\"cursor\":\"696e4b51-cb6f-4b4d-a68f-76849579caa4:1\",\"revision\":1,\"changed\":true,\"cursorReset\":true,\"thread\":{\"id\":\"01a106b8-a883-7185-9962-f7372109a093\",\"hostId\":\"durable\",\"status\":{\"type\":\"active\",\"activeFlags\":[]}},\"latestTurn\":{\"id\":\"01a141d7-4995-706e-87fd-0656a58c1099\",\"status\":\"inProgress\",\"error\":null,\"startedAt\":1792105991,\"completedAt\":null,\"durationMs\":null},\"latestAssistantMessageId\":\"msg_00a2feb47c9bf438016ad15e0acac487d092ec5b6727106072\",\"latestAssistantMessage\":{\"id\":\"msg_00a2feb47c9bf438016ad15e0acac487d092ec5b6727106072\",\"turnId\":\"01a141d7-4995-706e-87fd-0656a58c1099\",\"phase\":\"commentary\",\"text\":\"我會先核對 fresh 容量與凍結來源，只新增三個 installer negative cases 的 source。busy、drift、forced rollback 都會保留原 guard 與完整比較；本輪不啟動 PG 或 native。\"},\"latestToolMarkerId\":\"exec-48137cc1-3838-4f47-8a9d-9693a2b9b393\",\"latestToolMarker\":{\"id\":\"exec-48137cc1-3838-4f47-8a9d-9693a2b9b393\",\"turnId\":\"01a141d7-4995-706e-87fd-0656a58c1099\",\"type\":\"commandExecution\",\"name\":\"commandExecution\",\"status\":\"completed\"}}]}"
+      }
+    ],
+    "isError": false
+  },
+  "boundedWait": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"timedOut\":true,\"wake\":null,\"polls\":[{\"schemaVersion\":1,\"cursor\":\"696e4b51-cb6f-4b4d-a68f-76849579caa4:1\",\"revision\":1,\"changed\":false,\"thread\":{\"id\":\"01a106b8-a883-7185-9962-f7372109a093\",\"hostId\":\"durable\",\"status\":{\"type\":\"active\",\"activeFlags\":[]}},\"latestTurn\":{\"id\":\"01a141d7-4995-706e-87fd-0656a58c1099\",\"status\":\"inProgress\",\"error\":null,\"startedAt\":1792105991,\"completedAt\":null,\"durationMs\":null},\"latestAssistantMessageId\":\"msg_00a2feb47c9bf438016ad15e0acac487d092ec5b6727106072\",\"latestAssistantMessage\":{\"id\":\"msg_00a2feb47c9bf438016ad15e0acac487d092ec5b6727106072\",\"turnId\":\"01a141d7-4995-706e-87fd-0656a58c1099\",\"phase\":\"commentary\",\"text\":\"我會先核對 fresh 容量與凍結來源，只新增三個 installer negative cases 的 source。busy、drift、forced rollback 都會保留原 guard 與完整比較；本輪不啟動 PG 或 native。\"},\"latestToolMarkerId\":\"exec-48137cc1-3838-4f47-8a9d-9693a2b9b393\",\"latestToolMarker\":{\"id\":\"exec-48137cc1-3838-4f47-8a9d-9693a2b9b393\",\"turnId\":\"01a141d7-4995-706e-87fd-0656a58c1099\",\"type\":\"commandExecution\",\"name\":\"commandExecution\",\"status\":\"completed\"}}]}"
+      }
+    ],
+    "isError": false
+  }
+}
