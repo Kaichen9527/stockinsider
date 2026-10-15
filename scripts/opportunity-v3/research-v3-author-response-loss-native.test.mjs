@@ -1,0 +1,187 @@
+// SOURCE ONLY until separately authorized: two new author receive-loss children + parent.
+// Fixed installer/source-profile/snapshot copied byte-exact from 6e0; no old entry import.
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import{createHash,randomUUID}from'node:crypto';
+import{withLegalVersionedFixture}from'./research-versioned-legal-fixture-helper.mjs';
+import{readPrerequisiteState,stateDescriptor,canonical,digest,prerequisiteDescriptor}from'./research-versioned-prerequisite-profile.mjs';
+import{nativeArticle}from'./research-v3-author-native-article-fixture.mjs';
+import{createV3AuthorArticleComposition}from'../../web/src/lib/research-v3-author-result.ts';
+import{createV3CashCitationConsumer}from'../../web/src/lib/research-v3-article-citations.ts';
+import{createV3BusinessArticleValidator}from'../../web/src/lib/research-v3-business-article.ts';
+import{resolveConfiguredResearchControllerPrincipals}from'../../web/src/lib/research-execution-binding.ts';
+import{completeHash,completeCanonical}from'../../web/src/lib/research-v3-material-canonical.ts';
+import{financialInstant}from'../../web/src/lib/research-financial-clock.ts';
+const hash=b=>createHash('sha256').update(b).digest('hex'),sqlPath='migrations/20261015_research_author_durable_union_candidate_v3.sql',sql=fs.readFileSync(sqlPath,'utf8');
+const profile=JSON.parse(fs.readFileSync('docs/operations/2026-10-15/v3-author-durable-union/source-derived-profile.json'));
+process.env.INTERNAL_API_KEY='synthetic-local-author-durable-native';process.env.RESEARCH_REVIEW_KEY='synthetic-local-independent-reviewer';
+const identity=resolveConfiguredResearchControllerPrincipals();assert.equal(identity.ok,true);
+const metadataQuery=`SELECT jsonb_build_object('functions',(SELECT jsonb_agg(jsonb_build_object('identity',to_jsonb(p)-'prosrc','bodySha256',encode(sha256(convert_to(prosrc,'UTF8')),'hex'),'signature',p.oid::regprocedure::text) ORDER BY p.oid) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname IN ('public','auth','extensions')),'defaults',(SELECT coalesce(jsonb_agg(to_jsonb(d) ORDER BY d.oid),'[]') FROM pg_default_acl d)) value`;
+async function installer({client:c,connect,close,save,setStage}){
+ const observer=await connect();await observer.query('SET default_transaction_read_only=on');
+ const ids={writer:(await c.query('SELECT pg_backend_pid() pid')).rows[0].pid,observer:(await observer.query('SELECT pg_backend_pid() pid')).rows[0].pid,observerReadOnly:(await observer.query('SHOW transaction_read_only')).rows[0].transaction_read_only};assert.notEqual(ids.writer,ids.observer);assert.equal(ids.observerReadOnly,'on');save('installer-connections.json',ids);
+ try{
+  setStage('author union: actual pristine LOCAL predecessor and codec');
+  const before=await readPrerequisiteState(observer),meta=(await observer.query(metadataQuery)).rows[0].value;
+  save('installer-before-private.json',{state:before,metadata:meta});assert.deepEqual(stateDescriptor(before),prerequisiteDescriptor().successor);
+  const codecs={};for(const key of ['namespace','catalog']){
+   const js=canonical(before[key]),db=(await observer.query('SELECT research_observed_canonical_json_v1($1::jsonb) text',[JSON.stringify(before[key])])).rows[0].text;
+   let first=-1;for(let i=0;i<Math.max(js.length,db.length);i++)if(js[i]!==db[i]){first=i;break;}
+   codecs[key]={jsSha256:hash(js),dbSha256:hash(db),jsBytes:Buffer.byteLength(js),dbBytes:Buffer.byteLength(db),equal:js===db,firstDifferentCodeUnit:first};save('codec-'+key+'-private.json',{js,db});
+  }save('installer-codecs.json',codecs);
+  setStage('author union: original 619-line SQL first apply');
+  try{await c.query(sql);}catch(error){
+   save('installer-original-error.json',{code:error.code,message:error.message,where:error.where,position:error.position,sqlSha256:hash(sql)});
+   await c.query('ROLLBACK');const after=await readPrerequisiteState(observer),afterMeta=(await observer.query(metadataQuery)).rows[0].value;
+   save('installer-rejected-after-private.json',{state:after,metadata:afterMeta});assert.deepEqual(after,before);assert.deepEqual(afterMeta,meta);
+   save('installer-rejected-witness.json',{sqlSha256:hash(sql),code:error.code,message:error.message,namespaceUnchanged:true,catalogUnchanged:true,objectOidsRolesAndMetadataUnchanged:true,defaultsUnchanged:true,codecs,actualCommit:false});throw error;
+  }
+  const after=await readPrerequisiteState(observer),afterMeta=(await observer.query(metadataQuery)).rows[0].value;save('installer-committed-after-private.json',{state:after,metadata:afterMeta});
+  assert.ok(Object.values(codecs).every(v=>v.equal),'DB canonical must equal original JS codec');assert.deepEqual(after.details,before.details);assert.deepEqual(afterMeta.defaults,meta.defaults);
+  const changed=[];for(let i=0;i<meta.functions.length;i++){const a=meta.functions[i],b=afterMeta.functions[i];assert.deepEqual(b.identity,a.identity);assert.equal(b.signature,a.signature);if(a.bodySha256!==b.bodySha256)changed.push(b);}
+  assert.equal(changed.length,4);for(const f of profile.functions){const actual=afterMeta.functions.find(v=>v.signature.startsWith(f.name+'('));assert.ok(actual);assert.equal(actual.bodySha256,f.successorBodySha256);}
+  const strip=s=>({...s,catalog:{...s.catalog,functions:[]},namespace:{...s.namespace,routines:[]}});assert.deepEqual(strip(after),strip(before));
+  save('installer-commit-witness.json',{connections:ids,sqlSha256:hash(sql),codecs,changed:changed.map(v=>({signature:v.signature,bodySha256:v.bodySha256,oid:v.identity.oid})),metadataUnchanged:true,commitObserved:true});
+  setStage('author union: installed first-only rejection');let code;try{await c.query(sql);assert.fail('installed migration accepted');}catch(error){code={code:error.code,message:error.message};assert.equal(error.code,'P0001');assert.equal(error.message,'author_union_predecessor_namespace');}finally{await c.query('ROLLBACK');}
+  assert.deepEqual(await readPrerequisiteState(observer),after);save('installer-repeat-rejected.json',code);
+ }finally{await close(observer);}
+}
+async function snapshot(x,label){
+ const audit=await x.auditState(),ledger=await x.ledger(x.audit),author={};
+ for(const table of ['research_author_assignments_v2','research_author_results_v2'])author[table]=(await x.audit.query(`SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY to_jsonb(t)::text),'[]') rows FROM public.${table} t`)).rows[0].rows;
+ const charge=(await x.audit.query('SELECT count(*)::int count,coalesce(sum(logical_bytes),0)::int bytes FROM (SELECT logical_bytes FROM research_input_preparations_v2 UNION ALL SELECT logical_bytes FROM research_article_input_revisions_v2) q')).rows[0];
+ const v={audit,ledger,ledgerHash:hash(canonical(ledger)),author,charge,fd:{...x.witness}};x.save(label+'.json',v);return v;
+}
+async function assertInitialAuthorSourceProfile(x){
+ assert.ok(x.sourceIds.length>=1&&x.sourceIds.length<=30);assert.equal(new Set(x.sourceIds).size,x.sourceIds.length);
+ const observer=(await x.audit.query("SELECT pg_backend_pid() pid,current_setting('transaction_read_only') read_only")).rows[0],writer=(await x.c.query('SELECT pg_backend_pid() pid')).rows[0].pid;
+ assert.notEqual(observer.pid,writer);assert.equal(observer.read_only,'on');
+ const rows=(await x.audit.query(`SELECT id,left(title,513) title,octet_length(title) title_bytes,
+ left(summary,4097) summary,octet_length(summary) summary_bytes,
+ CASE WHEN jsonb_typeof(symbols)='array' AND octet_length(symbols::text)<=401 THEN symbols ELSE NULL END symbols,
+ left(metadata->>'rights_boundary',100) rights_boundary,left(metadata->>'subject_scope',100) subject_scope,
+ left(metadata->>'content_form',100) content_form,left(metadata->>'read_status',100) read_status,(metadata->'synthetic'='true'::jsonb) synthetic,
+ left(metadata->>'visibility',100) visibility,left(metadata->>'claim_status',100) claim_status,
+ left(metadata->>'catalyst',2049) catalyst,octet_length(metadata->>'catalyst') catalyst_bytes,
+ left(metadata->>'risk',2049) risk,octet_length(metadata->>'risk') risk_bytes,
+ encode(sha256(convert_to(to_jsonb(s)::text,'UTF8')),'hex') row_hash
+ FROM public.source_raw_documents s WHERE id=ANY($1::uuid[]) ORDER BY id LIMIT 31`,[x.sourceIds])).rows;
+ assert.equal(rows.length,x.sourceIds.length);const manifest=x.prep.payload.sourceManifest;assert.equal(manifest.length,rows.length);
+ const witness=[];for(const row of rows){
+  assert.ok(x.sourceIds.includes(row.id));assert.equal(row.title,'Synthetic local '+x.symbol);assert.equal(row.summary,'Local engineering fixture mentions '+x.symbol);assert.deepEqual(row.symbols,[x.symbol]);
+  for(const [key,value]of Object.entries({rights_boundary:'public_citation',subject_scope:'company_mentions',content_form:'article_body',read_status:'synthetic_local_fixture',synthetic:true,visibility:'public',claim_status:'rumor',catalyst:'Synthetic local engineering fixture: unconfirmed discussion only.',risk:'Synthetic local engineering fixture: no verified orders, rights or author approval.'}))assert.equal(row[key],value,key);
+  for(const [key,max]of [['title',512],['summary',4096],['catalyst',2048],['risk',2048]]){assert.equal(Buffer.byteLength(row[key]),row[key+'_bytes']);assert.ok(row[key+'_bytes']>=1&&row[key+'_bytes']<=max);}
+  assert.equal(manifest.find(v=>v.id===row.id)?.rowHash,row.row_hash);
+  witness.push({ordinal:witness.length,symbol:x.symbol,rowHash:row.row_hash,manifestRowHashMatched:true,rightsBoundary:row.rights_boundary,subjectScope:row.subject_scope,visibility:row.visibility,claimStatus:row.claim_status,synthetic:row.synthetic,titleBytes:row.title_bytes,summaryBytes:row.summary_bytes,catalystBytes:row.catalyst_bytes,riskBytes:row.risk_bytes,exactFixedSyntheticFields:true});
+ }
+ x.save('author-source-profile-safe.json',{profile:'author_packet',observerPid:observer.pid,writerPid:writer,observerReadOnly:true,stage:'after neutral preparation / before firstseal',rows:witness,formalRightsVerified:false,formalAuthorVerified:false});
+}
+
+// The loss callback observes the existing result ledger, never fabricates rows.
+function assertCommittedAuthorRow(row,submitted,assignment){
+ assert.deepEqual(Object.keys(row).sort(),['assignment_id','invocation_id','logical_bytes','payload','received_at','result_hash','result_id']);
+ assert.equal(row.assignment_id,assignment.assignment_id);assert.equal(row.invocation_id,submitted.observation.invocationId);assert.deepEqual(row.payload,submitted);
+ assert.equal(row.result_hash,completeHash(submitted));assert.equal(row.logical_bytes,Buffer.byteLength(completeCanonical(submitted)));
+ assert.ok(Number.isInteger(row.logical_bytes)&&row.logical_bytes>0&&row.logical_bytes<=1048576);assert.match(row.result_id,/^[a-f0-9-]{36}$/);
+ const received=financialInstant(row.received_at);assert.ok(received>=financialInstant(assignment.assigned_at)&&received>=financialInstant(submitted.observation.controllerObservedEndAt));
+ assert.ok(received<financialInstant(assignment.original_job_deadline)&&received<financialInstant(assignment.reservation_expires_at)&&received<=financialInstant(new Date().toISOString()));
+}
+function assertRecoveredAuthorRow(response,stored,submitted){
+ assert.deepEqual(Object.keys(response).sort(),['controllerReportOnly','dispatchReady','modelDispatched','publishableResearch','result']);
+ assert.equal(response.controllerReportOnly,true);for(const key of ['dispatchReady','modelDispatched','publishableResearch'])assert.equal(response[key],false);
+ // invocation_id is a known persisted private column deliberately omitted by the original RPC; validate before stripping it.
+ assert.equal(stored.invocation_id,submitted.observation.invocationId);const {invocation_id,...expected}=stored;assert.ok(invocation_id);assert.deepEqual(response.result,expected);
+}
+async function lossSnapshot(x,label){
+ const value=await snapshot(x,label+'-author');
+ const fences=(await x.audit.query("SELECT jsonb_build_object('events',(SELECT coalesce(jsonb_agg(to_jsonb(e)ORDER BY event_id),'[]')FROM research_source_fence_events_v2 e),'invalidations',(SELECT coalesce(jsonb_agg(to_jsonb(i)ORDER BY seal_id,event_id),'[]')FROM research_source_seal_invalidations_v2 i),'seals',(SELECT coalesce(jsonb_agg(to_jsonb(s)ORDER BY seal_id),'[]')FROM research_source_seals_v2 s)) v")).rows[0].v;
+ assert.equal(Object.keys(value.audit).length,9);const result={...value,fences,fencesHash:hash(canonical(fences))};x.save(label+'.json',result);return result;
+}
+function unchangedInputAndAssignment(before,after){
+ for(const key of ['audit','ledger','ledgerHash','charge','fd','fences','fencesHash'])assert.deepEqual(after[key],before[key],key);
+ assert.deepEqual(after.author.research_author_assignments_v2,before.author.research_author_assignments_v2);
+}
+async function authorResponseLossCase(x){
+ await assertInitialAuthorSourceProfile(x);
+ x.setStage('author lifecycle: genuine v3 input firstseal');const prepared=await snapshot(x,'01-prepared');const first=await x.controller.runCompleteInput(x.rpc,x.req,true);assert.equal(first.replay,false);const sealed=await snapshot(x,'02-firstseal-observed');assert.equal(sealed.charge.count,2);const revision=sealed.ledger.revisions[0];assert.equal(first.revision_id,revision.revision_id);
+ const names=['assign_research_author_v2','read_research_author_assignment_v2','read_research_author_packet_v2','receive_research_author_result_v2','read_research_author_result_v2'],trace=[];
+ const db={rpc:async(name,args)=>{trace.push({name,fd:{...x.witness}});x.save('author-rpc-order.json',trace);if(!names.includes(name))return x.rpc.rpc(name,args);const keys=['p_request','p_revision_id','p_input_hash','p_principal',...(name==='receive_research_author_result_v2'?['p_result']:[])];assert.equal((await x.c.query('SELECT current_user role')).rows[0].role,'service_role');try{return{data:(await x.c.query(`SELECT public.${name}(${keys.map((_,i)=>'$'+(i+1)).join(',')}) value`,keys.map(k=>args[k]))).rows[0].value,error:null};}catch(e){x.save('author-rpc-error.json',{name,code:e.code,message:e.message,where:e.where});throw e;}}};
+ const config={bindingTexts:x.texts.filter(t=>JSON.parse(t).wireVersion==='research-article-input-v3'),executorFingerprint:x.hc},composition=createV3AuthorArticleComposition(config);let article,observation;
+ const request=action=>new Request('https://fixture.invalid/private-native-composition-not-http-route',{method:'POST',headers:{authorization:'Bearer '+process.env.INTERNAL_API_KEY,'content-type':'application/json','x-research-author-result-action':action},body:JSON.stringify({action,input:x.req,inputRevisionId:revision.revision_id,inputHash:revision.input_hash,...(action==='receiveAuthorResult'?{article,observation}:{})})});
+ x.setStage('author lifecycle: actual authenticated assign and packet');const assigned=await composition.assignAuthor(request('assignAuthor'),db),packet=await composition.readAuthorPacket(request('readAuthorPacket'),db);const a=await snapshot(x,'03-assigned');assert.equal(a.author.research_author_assignments_v2.length,1);assert.equal(a.author.research_author_results_v2.length,0);assert.deepEqual(a.ledger,sealed.ledger);assert.deepEqual(a.fd,sealed.fd);
+ const set=await createV3CashCitationConsumer(config).read(db,JSON.stringify(x.req),revision.revision_id,revision.input_hash),original=nativeArticle(x.symbol,revision,set);article=original.article;
+ const validated=await createV3BusinessArticleValidator(config).validate(db,JSON.stringify(x.req),revision.revision_id,revision.input_hash,JSON.stringify(article),packet.packet.sources.map(s=>s.descriptor));
+ observation={version:'research_execution_observation_v2',assignmentId:assigned.assignment.assignment_id,jobId:x.req.jobId,attempt:x.req.attempt,reservationId:x.req.reservationId,inputRevisionId:revision.revision_id,inputHash:revision.input_hash,articleHash:validated.validatedArticle.articleHash,reviewPackHash:null,outputHash:completeHash(article),verificationLevel:'trusted_controller_observation',providerSurface:'codex_cross_chat',hostId:null,threadId:randomUUID(),turnId:null,invocationId:'synthetic-local-'+randomUUID(),dispatchObservationHash:hash('synthetic-dispatch'),completionObservationHash:hash('synthetic-completion'),controllerObservedStartAt:article.authoredAt,controllerObservedEndAt:new Date().toISOString(),modelIdentity:null};
+ x.setStage('author receive-loss: dedicated real Unix relay client');
+ const lab=await x.createResponseLossLab(),observer=(await x.audit.query('SELECT pg_backend_pid() pid')).rows[0].pid,fixtureWriter=(await x.c.query('SELECT pg_backend_pid() pid')).rows[0].pid;
+ assert.equal(new Set([lab.identity.pid,observer,fixtureWriter]).size,3);assert.equal(lab.identity.role,'service_role');assert.equal((await x.audit.query('SHOW transaction_read_only')).rows[0].transaction_read_only,'on');
+ x.save('loss-connections.json',{proxyWriter:lab.identity,observer,fixtureWriter,observerReadOnly:true});
+ const beforeReceive=await lossSnapshot(x,'04-before-receive');assert.equal(beforeReceive.charge.count,2);assert.equal(beforeReceive.author.research_author_results_v2.length,0);
+ assert.deepEqual(beforeReceive.author.research_author_assignments_v2,[assigned.assignment]);assert.deepEqual(beforeReceive.fd,sealed.fd);
+ const signatures={read_research_article_input_candidate_v3:['p_request'],read_research_author_assignment_v2:['p_request','p_revision_id','p_input_hash','p_principal'],read_research_author_packet_v2:['p_request','p_revision_id','p_input_hash','p_principal'],receive_research_author_result_v2:['p_request','p_revision_id','p_input_hash','p_principal','p_result'],read_research_author_result_v2:['p_request','p_revision_id','p_input_hash','p_principal']};
+ const events=[];const event=(stage,extra={})=>{events.push({ordinal:events.length,stage,fd:{...x.witness},...extra});x.save('author-loss-order.json',events);};
+ let armed=false,submitted,stored,committed,receivePromise,actualQueryError,compositionError,actualQuerySettled=false,receiveCalls=0,compositionReturned=false;
+ const lossDb={rpc:async(name,args)=>{
+  assert.ok(Object.hasOwn(signatures,name),'finite author-loss RPC');assert.deepEqual(args.p_request,x.req);assert.equal(lab.pendingCount(),0,'earlier RPC must actually settle');
+  if(name!=='read_research_article_input_candidate_v3'){assert.equal(args.p_revision_id,revision.revision_id);assert.equal(args.p_input_hash,revision.input_hash);assert.equal(args.p_principal,assigned.assignment.controller_principal);}
+  event('rpc-call',{name});
+  if(name==='receive_research_author_result_v2'){
+   assert.equal(++receiveCalls,1);assert.equal(armed,false);assert.deepEqual({...x.witness},sealed.fd);
+   submitted=JSON.parse(JSON.stringify(args.p_result));assert.equal(submitted.assignmentId,assigned.assignment.assignment_id);assert.equal(submitted.inputRevisionId,revision.revision_id);assert.equal(submitted.inputHash,revision.input_hash);assert.deepEqual(submitted.rawArticle,article);assert.deepEqual(submitted.observation,observation);
+   x.save('submitted-author-envelope-private.json',submitted);
+   const beforeSend=await lossSnapshot(x,'05-before-receive-send');assert.deepEqual(beforeSend,beforeReceive);
+   lab.arm(async()=>{
+    // Only invoked by the unchanged relay after one SELECT 1/DataRow/no Error/ReadyI, with zero forwarded response bytes.
+    event('held-protocol-success-observer-start');x.setStage('author receive-loss: independent observer verifies committed exact result');
+    const rows=(await x.audit.query('SELECT to_jsonb(r) row FROM public.research_author_results_v2 r WHERE assignment_id=$1',[assigned.assignment.assignment_id])).rows;
+    assert.equal(rows.length,1);stored=rows[0].row;assertCommittedAuthorRow(stored,submitted,assigned.assignment);
+    committed=await lossSnapshot(x,'06-committed-response-held');unchangedInputAndAssignment(beforeReceive,committed);
+    assert.deepEqual(committed.author.research_author_results_v2,[stored]);assert.equal(committed.charge.count,2);
+    x.save('observer-author-commit-confirmed.json',{writerPid:lab.identity.pid,observerPid:observer,assignmentHash:hash(canonical(assigned.assignment)),authorRowHash:hash(canonical(stored)),resultHash:stored.result_hash,resultBytes:stored.logical_bytes,receivedAt:stored.received_at,inputCharge:committed.charge});
+    event('observer-commit-confirmed-before-drop');
+   });armed=true;event('armed-before-real-receive-query');
+  }
+  const work=lab.query(`SELECT public.${name}(${signatures[name].map((_,i)=>'$'+(i+1)).join(',')}) v`,signatures[name].map(k=>args[k]));
+  if(name==='receive_research_author_result_v2')receivePromise=work;
+  let response;try{response=await work;}catch(error){
+   if(name==='receive_research_author_result_v2'){actualQueryError=error;actualQuerySettled=true;x.save('actual-author-pg-query-rejection.json',{code:error.code,message:error.message});event('actual-receive-promise-rejected');}throw error;
+  }
+  if(name==='receive_research_author_result_v2'){actualQuerySettled=true;assert.fail('held receive response must never reach caller');}
+  event('rpc-settled-success',{name});return{data:response.rows[0].v,error:null};
+ }};
+ x.setStage('author receive-loss: actual composition receive and uncertain caller');
+ try{await composition.receiveAuthorResult(request('receiveAuthorResult'),lossDb);compositionReturned=true;}catch(error){compositionError=error;x.save('author-caller-uncertain.json',{code:error.code,message:error.message,outcome:'uncertain until explicit read reconciliation'});event('composition-rejected');}
+ assert.ok(armed&&receivePromise,'must reach actual receive RPC');
+ let loss;try{loss=await lab.loss;}finally{await Promise.allSettled([receivePromise]);}
+ assert.equal(compositionReturned,false);assert.ok(actualQueryError&&actualQuerySettled);assert.equal(compositionError,actualQueryError,'must propagate the actual PG error, not a deadline facade');assert.equal(lab.pendingCount(),0);
+ assert.equal(loss.forwardedAfterArm,0);assert.equal(loss.protocol.commandCount,1);assert.equal(loss.protocol.dataRowCount,1);assert.equal(loss.protocol.ready,'I');assert.equal(loss.protocol.errorResponse,false);
+ assert.ok(loss.observerCommitConfirmed&&loss.actualTransportDrop&&loss.clientSocketClosed&&loss.upstreamSocketClosed);assert.ok(committed&&stored);assert.equal(receiveCalls,1);
+ event('both-sockets-closed-query-settled');x.save('actual-author-transport-loss.json',{...loss,actualPgPromiseRejected:true,sameErrorIdentity:true,pendingQueries:0,receiveCalls});
+ assert.deepEqual(await lossSnapshot(x,'07-after-client-rejection'),committed);
+ assert.deepEqual(Object.keys(x.roots).sort(),['historical15d4-fixed9or7','original75d-fixed8or6']);
+ const roots=[];for(const [kind,root]of Object.entries(x.roots)){assert.equal(path.dirname(root),x.secure);assert.equal(fs.existsSync(root),true);fs.rmSync(root,{recursive:true});assert.equal(fs.existsSync(root),false);roots.push({kind,path:root,absent:true});}
+ x.save('removed-owned-financial-roots-private.json',{roots,secureTreeFinallyAbsence:'not independently recorded here'});
+ x.setStage('author receive-loss: new service-role connection READ-only recovery');
+ // Existing fixture factory is used as a tracked service-role connector only; no mutation is issued through it.
+ const recovery=await x.createSourceMutator(),recoveryIdentity=(await recovery.query('SELECT pg_backend_pid() pid,current_user role')).rows[0];
+ assert.equal(recoveryIdentity.role,'service_role');assert.equal(new Set([recoveryIdentity.pid,lab.identity.pid,observer,fixtureWriter]).size,4);x.save('author-recovery-connection.json',recoveryIdentity);
+ const recoveryTrace=[],readNames=['read_research_article_input_candidate_v3','read_research_author_assignment_v2','read_research_author_packet_v2','read_research_author_result_v2'];
+ const readDb={rpc:async(name,args)=>{
+  assert.ok(readNames.includes(name),'recovery is READ only: no receive/assign/claim/prepare/seal/renew');assert.deepEqual(args.p_request,x.req);
+  if(name!=='read_research_article_input_candidate_v3'){assert.equal(args.p_revision_id,revision.revision_id);assert.equal(args.p_input_hash,revision.input_hash);assert.equal(args.p_principal,assigned.assignment.controller_principal);}
+  recoveryTrace.push({ordinal:recoveryTrace.length,name,before:{...x.witness}});x.save('author-recovery-rpc-order.json',recoveryTrace);
+  const value=(await recovery.query(`SELECT public.${name}(${signatures[name].map((_,i)=>'$'+(i+1)).join(',')}) v`,signatures[name].map(k=>args[k]))).rows[0].v;
+  recoveryTrace.at(-1).settled=true;recoveryTrace.at(-1).after={...x.witness};x.save('author-recovery-rpc-order.json',recoveryTrace);return{data:value,error:null};
+ }};
+ for(const [index,label]of ['08-first-explicit-read','09-second-explicit-read'].entries()){
+  const before=await lossSnapshot(x,label+'-before');assert.deepEqual(before,committed);
+  const recovered=await composition.readAuthorResult(request('readAuthorResult'),readDb);assertRecoveredAuthorRow(recovered,stored,submitted);
+  const after=await lossSnapshot(x,label+'-after');assert.deepEqual(after,committed);event('explicit-read-reconciled',{index});
+ }
+ assert.equal(recoveryTrace.filter(v=>v.name==='read_research_author_result_v2').length,2);assert.ok(recoveryTrace.every(v=>v.settled));assert.equal(receiveCalls,1);assert.equal(lab.pendingCount(),0);
+ x.save('author-response-loss-result.json',{symbol:x.symbol,callerInitiallyUncertain:true,actualPgPromiseRejected:true,sameErrorIdentity:true,receiveCalls,explicitReadRecoveries:2,zeroForwardedReceiveBytes:true,independentCommitConfirmed:true,exactFullSnapshotUnchangedAfterCommit:true,inputCharge:committed.charge,authorRowHash:hash(canonical(stored)),resultHash:stored.result_hash,resultBytes:stored.logical_bytes,receivedAt:stored.received_at,sourceFdDelta:{opens:sealed.fd.opens-prepared.fd.opens,closes:sealed.fd.closes-prepared.fd.closes},ownedFinancialRootAbsence:roots.map(({kind,absent})=>({kind,absent})),originalDraftSha:original.draftSha,pendingQueries:0,formalAuthorApproval:false,actualHttpRoute:false,wholeExecutionClosureApproved:false});
+}
+await test('new durable author receive transport loss: two v3 issuers only',async t=>{
+ for(const symbol of ['2409','2383']){let failure;await t.test(symbol+' committed author receive response loss then explicit READ recovery',async()=>{
+  const label='author-loss-'+symbol;try{await withLegalVersionedFixture(symbol,{label,wireVersion:'research-article-input-v3',sourceProfile:'author_packet',afterPrerequisite:installer},async x=>{try{await authorResponseLossCase(x);}catch(error){try{await lossSnapshot(x,'failure-before-cleanup');}catch(snapshotError){x.save('failure-snapshot-error.json',{message:snapshotError.message});}throw error;}});}catch(error){failure=error;throw error;}
+  finally{const base=process.env.RESEARCH_PREREQUISITE_PROFILE_ARTIFACTS,p=path.join(base,symbol+'-'+label+'-cleanup.json');if(fs.existsSync(p)){const cleanup=JSON.parse(fs.readFileSync(p));assert.equal(fs.existsSync(cleanup.removed),false);fs.writeFileSync(path.join(base,symbol+'-'+label+'-cluster-absent.json'),JSON.stringify({clusterRemoved:true,stopped:cleanup.stopped,stage:cleanup.stage})+'\n');}}
+ });if(failure)throw failure;}
+});
