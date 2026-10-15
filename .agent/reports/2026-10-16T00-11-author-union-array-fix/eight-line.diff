@@ -1,0 +1,76 @@
+diff --git a/migrations/20261015_research_author_durable_union_candidate_v3.sql b/migrations/20261015_research_author_durable_union_candidate_v3.sql
+index a6fa5869..0dfa5bbc 100644
+--- a/migrations/20261015_research_author_durable_union_candidate_v3.sql
++++ b/migrations/20261015_research_author_durable_union_candidate_v3.sql
+@@ -65,7 +65,7 @@ BEGIN
+         FROM unnest((SELECT array_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_')) r CROSS JOIN unnest(ARRAY['DELETE','TRUNCATE','TRIGGER']) priv
+         WHERE EXISTS(SELECT FROM pg_roles WHERE rolname=r)),'[]'::jsonb)
+     ) ORDER BY c.relname) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+-      WHERE n.nspname='public' AND c.relname=ANY((SELECT array_agg(relname ORDER BY relname) FROM pg_class WHERE relnamespace='public'::regnamespace))),'[]'::jsonb),
++      WHERE n.nspname='public' AND c.relname=ANY(ARRAY(SELECT relname FROM pg_class WHERE relnamespace='public'::regnamespace ORDER BY relname))),'[]'::jsonb),
+     'functions',COALESCE((SELECT jsonb_agg(jsonb_build_object('name',p.proname,
+       'signature',p.oid::regprocedure::text,'definition',pg_get_functiondef(p.oid),
+       'owner',pg_get_userbyid(p.proowner),'securityDefiner',p.prosecdef,
+@@ -78,7 +78,7 @@ BEGIN
+       'effectiveAcl',COALESCE((SELECT jsonb_agg(jsonb_build_array(r,has_function_privilege(r,p.oid,'EXECUTE')) ORDER BY r)
+         FROM unnest((SELECT array_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_')) r WHERE EXISTS(SELECT FROM pg_roles WHERE rolname=r)),'[]'::jsonb)
+       ) ORDER BY p.oid::regprocedure::text) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+-      WHERE n.nspname='public' AND p.proname=ANY((SELECT array_agg(DISTINCT proname ORDER BY proname) FROM pg_proc WHERE pronamespace='public'::regnamespace)) AND p.prokind='f'),'[]'::jsonb),
++      WHERE n.nspname='public' AND p.proname=ANY(ARRAY(SELECT DISTINCT proname FROM pg_proc WHERE pronamespace='public'::regnamespace ORDER BY proname)) AND p.prokind='f'),'[]'::jsonb),
+     'roles',COALESCE((SELECT jsonb_agg(jsonb_build_object('name',r.rolname,'login',r.rolcanlogin,
+       'inherit',r.rolinherit,'super',r.rolsuper,'createRole',r.rolcreaterole,
+       'createDb',r.rolcreatedb,'replication',r.rolreplication,'bypassRls',r.rolbypassrls,
+@@ -87,7 +87,7 @@ BEGIN
+         pg_get_userbyid(m.member),pg_get_userbyid(m.grantor),m.admin_option,m.inherit_option,m.set_option)
+         ORDER BY m.roleid::regrole::text,m.member::regrole::text,m.grantor::regrole::text)
+         FROM pg_auth_members m WHERE m.roleid=r.oid OR m.member=r.oid),'[]'::jsonb)) ORDER BY r.rolname)
+-      FROM pg_roles r WHERE r.rolname=ANY((SELECT array_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_'))),'[]'::jsonb),
++      FROM pg_roles r WHERE r.rolname=ANY(ARRAY(SELECT rolname FROM pg_roles WHERE rolname !~ '^pg_' ORDER BY rolname))),'[]'::jsonb),
+     'types',COALESCE((SELECT jsonb_agg(jsonb_build_object('name',t.typname,'kind',t.typtype,
+       'owner',pg_get_userbyid(t.typowner),'base',format_type(t.typbasetype,t.typtypmod),
+       'notNull',t.typnotnull,'default',t.typdefault,
+@@ -95,7 +95,7 @@ BEGIN
+       'attributes',COALESCE((SELECT jsonb_agg(jsonb_build_object('name',a.attname,'type',format_type(a.atttypid,a.atttypmod),'collation',a.attcollation::regcollation::text) ORDER BY a.attnum) FROM pg_attribute a WHERE a.attrelid=t.typrelid AND a.attnum>0 AND NOT a.attisdropped),'[]'::jsonb),
+       'labels',COALESCE((SELECT jsonb_agg(e.enumlabel ORDER BY e.enumsortorder) FROM pg_enum e WHERE e.enumtypid=t.oid),'[]'::jsonb),
+       'constraints',COALESCE((SELECT jsonb_agg(jsonb_build_array(c.conname,c.convalidated,pg_get_constraintdef(c.oid,true)) ORDER BY c.conname) FROM pg_constraint c WHERE c.contypid=t.oid),'[]'::jsonb)) ORDER BY t.typname)
+-      FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace WHERE n.nspname='public' AND t.typname=ANY((SELECT array_agg(typname ORDER BY typname) FROM pg_type WHERE typnamespace='public'::regnamespace)) AND (t.typtype IN ('e','d') OR (t.typtype='c' AND EXISTS(SELECT FROM pg_class c WHERE c.oid=t.typrelid AND c.relkind='c')))),'[]'::jsonb),
++      FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace WHERE n.nspname='public' AND t.typname=ANY(ARRAY(SELECT typname FROM pg_type WHERE typnamespace='public'::regnamespace ORDER BY typname)) AND (t.typtype IN ('e','d') OR (t.typtype='c' AND EXISTS(SELECT FROM pg_class c WHERE c.oid=t.typrelid AND c.relkind='c')))),'[]'::jsonb),
+     'schemas',COALESCE((SELECT jsonb_agg(jsonb_build_object('name',n.nspname,
+       'owner',pg_get_userbyid(n.nspowner),'acl',COALESCE((SELECT jsonb_agg(jsonb_build_array(pg_get_userbyid(x.grantor),CASE WHEN x.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(x.grantee) END,x.privilege_type,x.is_grantable) ORDER BY x.grantor::regrole::text,x.grantee::regrole::text,x.privilege_type) FROM aclexplode(COALESCE(n.nspacl,acldefault('n',n.nspowner))) x),'[]'::jsonb),'effectiveAcl',(SELECT jsonb_agg(jsonb_build_array(r,
+         has_schema_privilege(r,n.oid,'USAGE'),has_schema_privilege(r,n.oid,'CREATE')) ORDER BY r)
+@@ -550,7 +550,7 @@ SELECT jsonb_build_object(
+         FROM unnest((SELECT array_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_')) r CROSS JOIN unnest(ARRAY['DELETE','TRUNCATE','TRIGGER']) priv
+         WHERE EXISTS(SELECT FROM pg_roles WHERE rolname=r)),'[]'::jsonb)
+     ) ORDER BY c.relname) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+-      WHERE n.nspname='public' AND c.relname=ANY((SELECT array_agg(relname ORDER BY relname) FROM pg_class WHERE relnamespace='public'::regnamespace))),'[]'::jsonb),
++      WHERE n.nspname='public' AND c.relname=ANY(ARRAY(SELECT relname FROM pg_class WHERE relnamespace='public'::regnamespace ORDER BY relname))),'[]'::jsonb),
+     'functions',COALESCE((SELECT jsonb_agg(jsonb_build_object('name',p.proname,
+       'signature',p.oid::regprocedure::text,'definition',pg_get_functiondef(p.oid),
+       'owner',pg_get_userbyid(p.proowner),'securityDefiner',p.prosecdef,
+@@ -563,7 +563,7 @@ SELECT jsonb_build_object(
+       'effectiveAcl',COALESCE((SELECT jsonb_agg(jsonb_build_array(r,has_function_privilege(r,p.oid,'EXECUTE')) ORDER BY r)
+         FROM unnest((SELECT array_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_')) r WHERE EXISTS(SELECT FROM pg_roles WHERE rolname=r)),'[]'::jsonb)
+       ) ORDER BY p.oid::regprocedure::text) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+-      WHERE n.nspname='public' AND p.proname=ANY((SELECT array_agg(DISTINCT proname ORDER BY proname) FROM pg_proc WHERE pronamespace='public'::regnamespace)) AND p.prokind='f'),'[]'::jsonb),
++      WHERE n.nspname='public' AND p.proname=ANY(ARRAY(SELECT DISTINCT proname FROM pg_proc WHERE pronamespace='public'::regnamespace ORDER BY proname)) AND p.prokind='f'),'[]'::jsonb),
+     'roles',COALESCE((SELECT jsonb_agg(jsonb_build_object('name',r.rolname,'login',r.rolcanlogin,
+       'inherit',r.rolinherit,'super',r.rolsuper,'createRole',r.rolcreaterole,
+       'createDb',r.rolcreatedb,'replication',r.rolreplication,'bypassRls',r.rolbypassrls,
+@@ -572,7 +572,7 @@ SELECT jsonb_build_object(
+         pg_get_userbyid(m.member),pg_get_userbyid(m.grantor),m.admin_option,m.inherit_option,m.set_option)
+         ORDER BY m.roleid::regrole::text,m.member::regrole::text,m.grantor::regrole::text)
+         FROM pg_auth_members m WHERE m.roleid=r.oid OR m.member=r.oid),'[]'::jsonb)) ORDER BY r.rolname)
+-      FROM pg_roles r WHERE r.rolname=ANY((SELECT array_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_'))),'[]'::jsonb),
++      FROM pg_roles r WHERE r.rolname=ANY(ARRAY(SELECT rolname FROM pg_roles WHERE rolname !~ '^pg_' ORDER BY rolname))),'[]'::jsonb),
+     'types',COALESCE((SELECT jsonb_agg(jsonb_build_object('name',t.typname,'kind',t.typtype,
+       'owner',pg_get_userbyid(t.typowner),'base',format_type(t.typbasetype,t.typtypmod),
+       'notNull',t.typnotnull,'default',t.typdefault,
+@@ -580,7 +580,7 @@ SELECT jsonb_build_object(
+       'attributes',COALESCE((SELECT jsonb_agg(jsonb_build_object('name',a.attname,'type',format_type(a.atttypid,a.atttypmod),'collation',a.attcollation::regcollation::text) ORDER BY a.attnum) FROM pg_attribute a WHERE a.attrelid=t.typrelid AND a.attnum>0 AND NOT a.attisdropped),'[]'::jsonb),
+       'labels',COALESCE((SELECT jsonb_agg(e.enumlabel ORDER BY e.enumsortorder) FROM pg_enum e WHERE e.enumtypid=t.oid),'[]'::jsonb),
+       'constraints',COALESCE((SELECT jsonb_agg(jsonb_build_array(c.conname,c.convalidated,pg_get_constraintdef(c.oid,true)) ORDER BY c.conname) FROM pg_constraint c WHERE c.contypid=t.oid),'[]'::jsonb)) ORDER BY t.typname)
+-      FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace WHERE n.nspname='public' AND t.typname=ANY((SELECT array_agg(typname ORDER BY typname) FROM pg_type WHERE typnamespace='public'::regnamespace)) AND (t.typtype IN ('e','d') OR (t.typtype='c' AND EXISTS(SELECT FROM pg_class c WHERE c.oid=t.typrelid AND c.relkind='c')))),'[]'::jsonb),
++      FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace WHERE n.nspname='public' AND t.typname=ANY(ARRAY(SELECT typname FROM pg_type WHERE typnamespace='public'::regnamespace ORDER BY typname)) AND (t.typtype IN ('e','d') OR (t.typtype='c' AND EXISTS(SELECT FROM pg_class c WHERE c.oid=t.typrelid AND c.relkind='c')))),'[]'::jsonb),
+     'schemas',COALESCE((SELECT jsonb_agg(jsonb_build_object('name',n.nspname,
+       'owner',pg_get_userbyid(n.nspowner),'acl',COALESCE((SELECT jsonb_agg(jsonb_build_array(pg_get_userbyid(x.grantor),CASE WHEN x.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(x.grantee) END,x.privilege_type,x.is_grantable) ORDER BY x.grantor::regrole::text,x.grantee::regrole::text,x.privilege_type) FROM aclexplode(COALESCE(n.nspacl,acldefault('n',n.nspowner))) x),'[]'::jsonb),'effectiveAcl',(SELECT jsonb_agg(jsonb_build_array(r,
+         has_schema_privilege(r,n.oid,'USAGE'),has_schema_privilege(r,n.oid,'CREATE')) ORDER BY r)

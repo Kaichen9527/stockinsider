@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--test",
+    "scripts/research-v3-author-union-sql.test.mjs"
+  ],
+  "subject": "c38fb00986925b4b50719b3389a2a94a5ee3a4c0",
+  "start": "2026-10-15T16:13:08.426605+00:00",
+  "peakSessionRssBytes": 57147392,
+  "minimumFreeBytes": {
+    "/workspace": 8594276352,
+    "/tmp": 15286530048
+  },
+  "exit": 0,
+  "end": "2026-10-15T16:13:08.576359+00:00"
+}

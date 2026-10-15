@@ -1,0 +1,67 @@
+{
+  "localRoot": "/tmp/author-union-array-fix-o16",
+  "count": 12,
+  "bytes": 228510,
+  "files": [
+    {
+      "path": "check.py",
+      "bytes": 2059,
+      "sha256": "b830e3036c5b05ae68984543ef46ff4323521b3e463cbcef943c69607c43d186"
+    },
+    {
+      "path": "eight-line.diff",
+      "bytes": 10065,
+      "sha256": "5886c71a4a62411d6168f7d53e938015502f82501e8054f216f5605c24a7285d"
+    },
+    {
+      "path": "initial-seal.json",
+      "bytes": 428,
+      "sha256": "bd20c7e16e8705f82e4f2070665f5f259b6e9fab5a4e2876290d59c1c441b4df"
+    },
+    {
+      "path": "original.sql",
+      "bytes": 64061,
+      "sha256": "d7ebb13af043d28d189a2337b5544850ccd5d2407ed53b4f3475693a514988ae"
+    },
+    {
+      "path": "replacements.json",
+      "bytes": 1013,
+      "sha256": "2fcc51897e79812e6ba0032f689e4daacbcd4c90dffd6736d826e2617700223e"
+    },
+    {
+      "path": "run.py",
+      "bytes": 1563,
+      "sha256": "deaa94ee968770dc8eecfbf159d5fe2d336d4478738bbeebfb70b061103092d5"
+    },
+    {
+      "path": "sealed-repair.sql",
+      "bytes": 64013,
+      "sha256": "9e38550d28849cbbcc178f5237f5a985d921b47560a5be3b164186d5e002ed9b"
+    },
+    {
+      "path": "source-checks.json",
+      "bytes": 463,
+      "sha256": "87063b52172a1e8d6e139dbd5844b2be60b1631b8b010cec8019dca9d1305612"
+    },
+    {
+      "path": "source-inventory.json",
+      "bytes": 82934,
+      "sha256": "2ad6e8862f9fa0e128ea6f1ba4accb471f51677c521848e716d605a0b0a207c9"
+    },
+    {
+      "path": "static-result.json",
+      "bytes": 428,
+      "sha256": "3254114eaebd2fd806d3290699ee00363695c7fa1f2e1d96ad337e5a6046ceb6"
+    },
+    {
+      "path": "static.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "static.stdout",
+      "bytes": 1483,
+      "sha256": "6c2da2e9cb4b894359c3829e9302dfb3b96ed7abf71da8310712023261c4e8be"
+    }
+  ]
+}

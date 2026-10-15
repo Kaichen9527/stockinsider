@@ -1,0 +1,21 @@
+{
+  "eightChangedLines": [
+    68,
+    81,
+    90,
+    98,
+    553,
+    566,
+    575,
+    583
+  ],
+  "allOtherBytesIdenticalByReverseReplacement": true,
+  "lineCount": 619,
+  "literal64hexSequenceUnchanged": true,
+  "fourReplacementDefinitionsByteIdentical": true,
+  "sixOriginalBodyPinsAndAllExpectedHashesUnchanged": true,
+  "priorNativeHarnessCallbackAndFixtureUnchanged": true,
+  "unchangedPriorInputs": 288,
+  "changedPriorInputs": 1,
+  "nativeRun": false
+}
