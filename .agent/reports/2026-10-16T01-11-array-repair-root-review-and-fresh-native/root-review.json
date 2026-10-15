@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-10-15T17:09:05.498411+00:00",
+  "source": "c38fb00986925b4b50719b3389a2a94a5ee3a4c0",
+  "evidence": "1493cfbeec0ee6f26096b21aec8db1fbc4f47055",
+  "actualGitInputs": 289,
+  "actualGitBytes": 9748675,
+  "publishedFiles": 9,
+  "publishedBytes": 101633,
+  "privateRawFiles": 12,
+  "privateRawBytes": 228510,
+  "privateRawContentsObtained": false,
+  "exactlyEightAuthorizedExpressionChanges": true,
+  "allOtherSqlBytesUnchanged": true,
+  "fourFunctionDefinitionsByteEqual": true,
+  "allHashLiteralsEqual": true,
+  "other288InputsByteEqual": true,
+  "lineCount": 619,
+  "sqlSHA256": "9e38550d28849cbbcc178f5237f5a985d921b47560a5be3b164186d5e002ed9b",
+  "review": "scoped expression repair zero new P0/P1/P2; original RED retained; native pending",
+  "RootRuntimeTests": false,
+  "localAvailableBytes": 3339071488,
+  "goal": "active"
+}

@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-10-15T17:11:09.978067+00:00",
+  "source": "c38fb00986925b4b50719b3389a2a94a5ee3a4c0",
+  "evidence": "1493cfbeec0ee6f26096b21aec8db1fbc4f47055",
+  "reviewScope": "exact eight-expression repair; no native approval",
+  "ownedTurn": "01a1408a-c345-7688-a9b8-ebbbe418270a",
+  "formalPublication": false,
+  "goal": "active",
+  "files": [
+    {
+      "path": "ROOT-REVIEW.md",
+      "bytes": 3740,
+      "sha256": "2db19a646561c079031d1dd21be638dc8a41f7afc25ca44103292c94ed018aa8"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 677,
+      "sha256": "a1a77b5307e4722a0e5b4c06ab2b1974247653994bb68722ab27915906ac0d12"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 4119,
+      "sha256": "f0f9c7e732d58925076e67faeeeb0f05c3eff849fbc54cdc0b862c13475e8588"
+    },
+    {
+      "path": "root-review.json",
+      "bytes": 853,
+      "sha256": "cbb8f9b59389262d280844a6698d49db63b3ae424f8240c2c533ce976c24b507"
+    }
+  ]
+}
