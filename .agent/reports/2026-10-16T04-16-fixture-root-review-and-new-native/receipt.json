@@ -1,0 +1,28 @@
+{
+  "kind": "Root exact Git/public receipt and scoped test-fixture source review; not Root native/formal approval",
+  "source": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "evidence": "1df8d8ca200b6dfab65190016412ce14eac6e330",
+  "files": [
+    {
+      "path": ".agent/reports/2026-10-16T04-16-fixture-root-review-and-new-native/review.json",
+      "bytes": 726,
+      "sha256": "b8187358f693475202341efce4754f0cb31e7afdd386830d65d39a82e840d238"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-fixture-root-review-and-new-native/dispatch.txt",
+      "bytes": 4470,
+      "sha256": "6b7e34a555b012ca85a7d972f2c4dc38ec012d98bf554cea176e56f084772047"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-fixture-root-review-and-new-native/cloud-snapshot.json",
+      "bytes": 675,
+      "sha256": "cd3c6029295dd4667887b3c59703f4c25bc3b536b93a6f2a5b4e622fc24b9b44"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-fixture-root-review-and-new-native/launch-note.txt",
+      "bytes": 3532,
+      "sha256": "d404e8ee9971b1ac88e6dc484d0072e1d507178b3619dac1707168ed827a1ce6"
+    }
+  ]
+}

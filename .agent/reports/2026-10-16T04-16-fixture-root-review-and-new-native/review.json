@@ -1,0 +1,26 @@
+{
+  "actualGitInputs": 289,
+  "inputBytes": 9752392,
+  "unchangedInputs": 287,
+  "changed": [
+    "scripts/opportunity-v3/research-v3-author-durable-native.test.mjs",
+    "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs"
+  ],
+  "publicFilesIncludingReceipt": 9,
+  "publicBytesIncludingReceipt": 108434,
+  "privateInventoryOnly": {
+    "count": 15,
+    "bytes": 83242,
+    "allContentsObtained": false
+  },
+  "twoFileInverseReconstruction": true,
+  "productUnchanged": true,
+  "localAvailable": 2440544256,
+  "rootNativeOrRuntime": false,
+  "scopedSourceReview": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "pending": "Actual DB metadata witness, native lifecycle and all formal publication acceptance"
+}
