@@ -1,0 +1,38 @@
+{
+  "type": "maker-native-engineering-not-independent-review",
+  "branch": "codex/research-v3-cash-citation-native-oct15",
+  "subject": "74912cc23d3efde535c660e8a8277f2e910bcfd0",
+  "tree": "d059a5a0029745577d12d0dcde706644c95a8fad",
+  "base": "f75edee46f9c453e5a09306faf00cef2bd67cb82",
+  "consumerRuntime": "92870dc20828fd74f86f2681281a92bff2d9c2e3",
+  "protocolRuntime": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+  "nativeRuns": 1,
+  "counts": {
+    "childPass": 2,
+    "parentPass": 1,
+    "totalPass": 3,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "sourceInventoryCount": 270,
+  "rawCount": 71,
+  "rawBytes": 5198575,
+  "newNativeRed": false,
+  "historicalRedPreserved": true,
+  "pending": [
+    "postmaster PID1 zombie reaping; no live server remains",
+    "actual versioned article validator and four active callers",
+    "Q/R, review-pack/publication union and whole S-C-B-Q-R-A",
+    "formal source rights, author/reviewer/reservation and atomic publication",
+    "formal peer/active production writer and VPS capacity/deployment"
+  ],
+  "files": {
+    "HANDOFF.md": "5f4dfa5f1f62cc34be98d80b5a75539d98f896c403d9f7bbca5a0c1c82511725",
+    "cleanup-verification.json": "f6394010396e7eefd2f1ef6c84606bdbb351ba260c7a61f14932f34168fb59bf",
+    "execution-resources.json": "0fc3433b9c96b50bc9c6692cfa6d3c861714f7da9f8a8f89251b4976e209cf0c",
+    "public-safe-witness.json": "50bf98c12f31c6dda163590fa973c0a063f64c43112c7be0c8211d4f352c2ac4",
+    "raw-inventory.json": "9ed03233090105254e910c8b956a27e60c0454c14bfa94f108a0adfb05d00d52",
+    "source-inventory.json": "457590d4f439842024cd96df896dc961449d012c8b2ca1bd7a560aecf0f48493"
+  }
+}
