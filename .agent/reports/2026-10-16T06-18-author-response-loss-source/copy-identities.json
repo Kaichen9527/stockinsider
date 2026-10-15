@@ -1,0 +1,50 @@
+[
+  {
+    "name": "installer",
+    "originPath": "scripts/opportunity-v3/research-v3-author-durable-native.test.mjs",
+    "originSubject": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+    "originStartLine": 16,
+    "newStartLine": 18,
+    "bytes": 3921,
+    "sha256": "9676e0ae3cf65cd9f4a2ec0048908cb9ebf2bf5748927343c3d8a1383c88312a",
+    "byteExact": true
+  },
+  {
+    "name": "snapshot",
+    "originPath": "scripts/opportunity-v3/research-v3-author-durable-native.test.mjs",
+    "originSubject": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+    "originStartLine": 45,
+    "newStartLine": 47,
+    "bytes": 729,
+    "sha256": "91028e77bbf74886a65dd780126c224c13a168a7f8f5fced7d9ba83c1f89dd62",
+    "byteExact": true
+  },
+  {
+    "name": "initialSourceProfile",
+    "originPath": "scripts/opportunity-v3/research-v3-author-durable-native.test.mjs",
+    "originSubject": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+    "originStartLine": 51,
+    "newStartLine": 53,
+    "bytes": 3177,
+    "sha256": "88d182f9b814e54b76314796b30ffa9b58a90df144da14e412cf744d78135b37",
+    "byteExact": true
+  },
+  {
+    "name": "legalPrefixThroughSyntheticObservation",
+    "originPath": "scripts/opportunity-v3/research-v3-author-durable-native.test.mjs",
+    "originSubject": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+    "originStartLine": 76,
+    "newStartLine": 103,
+    "bytes": 3519,
+    "sha256": "525f7cd27217fcf3611af8a26e825c6d4bc63c0663fd5525bf9885a357c91727",
+    "byteExact": true
+  },
+  {
+    "name": "installerMetadataQuery",
+    "originPath": "scripts/opportunity-v3/research-v3-author-durable-native.test.mjs",
+    "originSubject": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+    "bytes": 458,
+    "sha256": "8685f97173dbcd3b2c85f2117a66bac46e86efc51cab746f318d20630d3a57b2",
+    "byteExact": true
+  }
+]

@@ -1,0 +1,64 @@
+{
+  "kind": "maker-source-only-not-independent-approval",
+  "sourceSubject": "88fd900c5f5d5c8eac9327ece8c687e4839b620f",
+  "sourceTree": "d7f2ce82c6ae97c3879245b7c41f307104c7908a",
+  "frozenProduct": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "native": "NOT_RUN",
+  "newNativeChildren": 2,
+  "newNativeParent": 1,
+  "sourceCount": 291,
+  "rawCount": 21,
+  "rawBytes": 192721,
+  "publishedFiles": [
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-response-loss-source/HANDOFF.md",
+      "bytes": 1034,
+      "sha256": "1ae4026e9349c45a06752c7657a6afb6588e05b9895b05c4173613451a1425aa"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-response-loss-source/contract-probe.mjs",
+      "bytes": 5346,
+      "sha256": "8e05638ae55aab90d2f63c3a6e4583c71257b8d2af9a02dd926f8e6a3e4b0e4f"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-response-loss-source/copy-identities.json",
+      "bytes": 1803,
+      "sha256": "8a445f37f963f4d01d276eac6128cf4eece0cbbafe62274948ef8f6c8cd217c9"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-response-loss-source/planned-native-command.json",
+      "bytes": 931,
+      "sha256": "7505fa4ea9f273122b64f66aa55e01721b01527de5a33a015c45c22c6ece5cbe"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-response-loss-source/probe.stderr",
+      "bytes": 184,
+      "sha256": "f068dc726f221e179d02b936140be32ca997637c4609e5d5f62b0f64ca2fbf43"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-response-loss-source/probe.stdout",
+      "bytes": 250,
+      "sha256": "1e225607214ecdb9a454ddc42db70c7fef496407d1191ed37808d249b18652b3"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-response-loss-source/raw-inventory.json",
+      "bytes": 3364,
+      "sha256": "44efa45469e69782f4d16d47bc383ab2cd18dc3f1d9b2ba295275283114f970c"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-response-loss-source/source-inventory.json",
+      "bytes": 79987,
+      "sha256": "0878e1f917a577e2d6f2c51f699f9abd1b4b52efae3773a8ee73e4a86e05d69a"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-response-loss-source/source-only-checks.json",
+      "bytes": 1818,
+      "sha256": "c56e32a4250ea8f7ecc1f4675e688f7a5a7c592d3db8ee86eb72dbb6bb46c450"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T06-18-author-response-loss-source/source.diff",
+      "bytes": 35759,
+      "sha256": "e8c4d8c8f684349364e29b8e1c8a2dec33d0a38987d8ad1c41d0741d4c51156d"
+    }
+  ]
+}

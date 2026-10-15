@@ -1,0 +1,30 @@
+{
+  "status": "NOT_RUN; separate Root heavy authorization required",
+  "cwd": "/tmp/si-pubtail-o14",
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--import",
+    "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-v3-author-response-loss-native.test.mjs"
+  ],
+  "freshAbsentArtifactLeaf": "/tmp/author-receive-loss-o16/native-artifacts",
+  "envName": "RESEARCH_PREREQUISITE_PROFILE_ARTIFACTS",
+  "expectedNode": "22.14.0",
+  "expectedPG": "17.11",
+  "unchangedTransportBounds": {
+    "heldBytes": 4194304,
+    "backendFrames": 4096,
+    "containmentMs": 5000
+  },
+  "singleHeavy": true,
+  "freeByteFloorEachWorkspaceTmp": 8589934592,
+  "rssBound": 8589934592,
+  "nativeChildren": {
+    "2409": "NOT_RUN",
+    "2383": "NOT_RUN"
+  },
+  "nativeParent": "NOT_RUN"
+}

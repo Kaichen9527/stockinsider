@@ -1,0 +1,50 @@
+{
+  "time": "2026-10-15T22:26:15.900212+00:00",
+  "sourceSubject": "88fd900c5f5d5c8eac9327ece8c687e4839b620f",
+  "newEntrySha256": "8a0a0b54e28fc82317b4e2e0d099473557b49d3ad8effd191c70012247c456f2",
+  "syntax": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-v3-author-response-loss-native.test.mjs"
+    ],
+    "exit": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "isolatedContract": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "/tmp/author-response-loss-source-o16/contract-probe.mjs"
+    ],
+    "exit": 0,
+    "groupsPass": 28,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "staticSourceAssertions": 8,
+    "scope": "synthetic contract rows; original codec/clock exact source extraction via builtin TS-strip+VM; no app/fixture/native import"
+  },
+  "diffCheckExit": 0,
+  "initialResource": {
+    "workspaceFree": 8593604608,
+    "tmpFree": 14988300288
+  },
+  "finalFree": {
+    "/workspace": 8593534976,
+    "/tmp": 14987915264
+  },
+  "RSS": "Only bounded light Node syntax/extraction/hash work; no sampled process-tree peak claim",
+  "node": {
+    "version": "22.14.0",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1"
+  },
+  "native": {
+    "2409": "NOT_RUN",
+    "2383": "NOT_RUN",
+    "parent": "NOT_RUN"
+  },
+  "PGSocketNetworkBuildCI": "NOT_RUN",
+  "originalEvidence": "preserved; no new native RED or success exists",
+  "probeLabelCorrection": "initial seven-groups label corrected to eight source assertions, initial source/output retained; final28 groups/8 assertions, no counts added across reruns"
+}
