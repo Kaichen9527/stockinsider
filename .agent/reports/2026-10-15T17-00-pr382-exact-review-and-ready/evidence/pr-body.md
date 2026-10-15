@@ -1,0 +1,9 @@
+This adds a fixed operator procedure for deploying the already approved DD Linux package from the current169 release. It preserves the original capacity reserves and three locks, rejects unsupported predecessor configuration, waits for owned activation processes to settle before any reversal, and reports incomplete cleanup as failure.
+
+The PR contains eight code/documentation files. The five candidate files are exact copies of a87432e9; historical raw evidence stays on its original branches. The new read-only ordinary workflow runs syntax validation and 35 isolated Linux probe groups, including interruption, descendant settlement, configuration drift, and cleanup failures. It never executes the deployment entrypoint or accesses production.
+
+Validation: maker Linux35 PASS at the exact copied candidate; Root independently verified 20 source identities, 24 published assembly evidence files, five exact copies, unchanged application/web/SQL trees, 20 portable profile contracts and Bash syntax. Fresh PR-subject ordinary CI and normal protected gates are pending. Root's scoped source/assembly review has no new P0/P1/P2 findings; this is not a production execution approval.
+
+The application package remains exact approved dd59817f/c2b146ad. This PR does not rebuild or relabel it, install financial/publication migrations, or complete source qualification, formal research articles, or research scheduling. A future operation still requires fresh locked capacity, current/writer/lease and supported host-profile checks, artifact custody verification, and desktop/mobile acceptance. Uncertain activation outcomes, SIGKILL and power loss require manual reconciliation.
+
+Evidence: candidate dbfde8ef (receipt 4e796e40), independent original review89b6e463 (original REQUEST_CHANGES retained), assembly0b7451f6 (receipt62902625), and Root progress ffbca53d. No production changes have occurred.

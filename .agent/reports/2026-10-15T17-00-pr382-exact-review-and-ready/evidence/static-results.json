@@ -1,0 +1,195 @@
+{
+  "groups": 47,
+  "results": [
+    {
+      "name": "exact copy docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+      "status": "PASS"
+    },
+    {
+      "name": "exact copy docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+      "status": "PASS"
+    },
+    {
+      "name": "exact copy docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+      "status": "PASS"
+    },
+    {
+      "name": "exact copy docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+      "status": "PASS"
+    },
+    {
+      "name": "exact copy docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json",
+      "status": "PASS"
+    },
+    {
+      "name": "read-only permissions",
+      "status": "PASS"
+    },
+    {
+      "name": "ordinary event scope",
+      "status": "PASS"
+    },
+    {
+      "name": "single ubuntu job",
+      "status": "PASS"
+    },
+    {
+      "name": "approved exact action pins",
+      "status": "PASS"
+    },
+    {
+      "name": "checkout no persisted credentials",
+      "status": "PASS"
+    },
+    {
+      "name": "push path docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+      "status": "PASS"
+    },
+    {
+      "name": "push path docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+      "status": "PASS"
+    },
+    {
+      "name": "push path docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+      "status": "PASS"
+    },
+    {
+      "name": "push path docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+      "status": "PASS"
+    },
+    {
+      "name": "push path docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json",
+      "status": "PASS"
+    },
+    {
+      "name": "push path docs/operations/2026-10-15/dd-binary-operator-release/HANDOFF.md",
+      "status": "PASS"
+    },
+    {
+      "name": "push path docs/operations/2026-10-15/dd-binary-operator-release/receipt-index.json",
+      "status": "PASS"
+    },
+    {
+      "name": "push path .github/workflows/dd-binary-operator-quality.yml",
+      "status": "PASS"
+    },
+    {
+      "name": "push path deployment/vps/activate-writer-release.sh",
+      "status": "PASS"
+    },
+    {
+      "name": "push path deployment/vps/systemd/stockinsider-web-standalone.service",
+      "status": "PASS"
+    },
+    {
+      "name": "push path deployment/vps/systemd/stockinsider-internal-worker.service",
+      "status": "PASS"
+    },
+    {
+      "name": "push path scripts/contabo-host-resource-check.mjs",
+      "status": "PASS"
+    },
+    {
+      "name": "push path scripts/contabo-capacity-guard.mjs",
+      "status": "PASS"
+    },
+    {
+      "name": "push path scripts/verify-standalone-release.mjs",
+      "status": "PASS"
+    },
+    {
+      "name": "push unrelated path excluded",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path docs/operations/2026-10-15/dd-binary-operator-candidate/HANDOFF.md",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path docs/operations/2026-10-15/dd-binary-operator-candidate/deploy.sh",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path docs/operations/2026-10-15/dd-binary-operator-candidate/isolated-probes.py",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path docs/operations/2026-10-15/dd-binary-operator-candidate/unit-profile.json",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path docs/operations/2026-10-15/dd-binary-operator-release/HANDOFF.md",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path docs/operations/2026-10-15/dd-binary-operator-release/receipt-index.json",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path .github/workflows/dd-binary-operator-quality.yml",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path deployment/vps/activate-writer-release.sh",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path deployment/vps/systemd/stockinsider-web-standalone.service",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path deployment/vps/systemd/stockinsider-internal-worker.service",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path scripts/contabo-host-resource-check.mjs",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path scripts/contabo-capacity-guard.mjs",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request path scripts/verify-standalone-release.mjs",
+      "status": "PASS"
+    },
+    {
+      "name": "pull_request unrelated path excluded",
+      "status": "PASS"
+    },
+    {
+      "name": "shell syntax 1",
+      "status": "PASS"
+    },
+    {
+      "name": "shell syntax 2",
+      "status": "PASS"
+    },
+    {
+      "name": "two inline Python modules parse",
+      "status": "PASS"
+    },
+    {
+      "name": "two copied Python modules parse only",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate bash parse only",
+      "status": "PASS"
+    },
+    {
+      "name": "parser 1 retained positive + 11 negative controls",
+      "status": "PASS"
+    },
+    {
+      "name": "no tracked base modification",
+      "status": "PASS"
+    }
+  ],
+  "parserControls": 12,
+  "originalLinux35RunThisTask": false
+}

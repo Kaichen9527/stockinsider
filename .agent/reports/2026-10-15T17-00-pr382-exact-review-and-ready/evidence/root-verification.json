@@ -1,0 +1,16 @@
+{
+  "source": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "deliveryEvidence": "0b7451f62d56a9c68496fe582d513d9d057096b8",
+  "actualSourceIdentitiesVerified": 20,
+  "publishedRawVerified": {
+    "files": 24,
+    "bytes": 110574
+  },
+  "candidateExactCopyFiles": 5,
+  "codeOnlyChangedFiles": 8,
+  "codeOnlyPRSubjectChosen": true,
+  "evidenceRemainsOnOriginalBranch": true,
+  "webUnchanged": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "rootNativeBuildExecuted": false,
+  "reviewVerdict": "scoped assembly/workflow0newP0P1P2; full exact release attestation still pending genuine checks"
+}

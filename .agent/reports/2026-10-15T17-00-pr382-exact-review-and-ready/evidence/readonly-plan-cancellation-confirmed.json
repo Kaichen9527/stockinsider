@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-15T00:40:00.223399+00:00",
+  "pid": 67889,
+  "verifiedOwnedCommand": "/usr/local/bin/node --experimental-strip-types /tmp/stockinsider-dd-operator-release-root-review-oct15/readonly-plan-probe.mjs",
+  "observed": "alive, zeroCPU, sample fs.ReadFileUtf8/read; lsof exact postgres-array/index.js under user node_modules",
+  "decision": "cancel optional PG-import plan probe; retain as cancelled/unproven, do not rerun blocked dependency or claim plan PASS",
+  "runtimeResolverOnly": "genuine PASS independently completed, no PG import",
+  "sourceOrProductionMutation": false,
+  "signal": "TERM",
+  "confirmedExit": false,
+  "confirmedAbsent": true,
+  "nodeExitCodeMeasured": false,
+  "planResultExists": false,
+  "wrapperSessionExit": 0,
+  "wrapperLastCommand": "cat stdout/stderr; not Node exit"
+}

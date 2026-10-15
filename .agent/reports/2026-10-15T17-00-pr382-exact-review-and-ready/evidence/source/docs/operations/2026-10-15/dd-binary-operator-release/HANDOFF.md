@@ -1,0 +1,21 @@
+# DD operator candidate: release assembly, not execution
+
+Base: `8c58e297e92422c1c3f52856a36bff12b1868100`. The five sibling `dd-binary-operator-candidate/` files are byte-for-byte copies of maker code `a87432e939b389f64aad3baffb176fee3954c346`. `receipt-index.json` pins every origin blob/SHA/size and the retained historical evidence. No historical branch was merged and no old raw/WIP was copied into this release.
+
+The original candidate HANDOFF is immutable historical context, including its then-current memory failure. Later Root-reported admission observations do not rewrite it and do not authorize execution. Neither the fixed DD artifact nor any application/SQL/role/authority/lock/profile expectation changes here.
+
+## New ordinary CI
+
+`dd-binary-operator-quality.yml` runs on relevant pull requests and `codex/**` pushes with contents:read, credential-free pinned checkout, Ubuntu24.04 and one sequential job. It checks an unprivileged CPython>=3.12 Linux/proc/subreaper environment, assertions enabled and 8GiB disk reserve; unsupported environments fail. It runs bash syntax parsing, then the exact original 35-group stdlib isolated probe program, then validates its complete JSON stream: 10 dummy-shell ordering records and one summary with 35 unique PASS groups. Failure exits are preserved by pipefail; no group is skipped. No npm, database, browser, network service, deployment entrypoint or real activation helper is executed by this job.
+
+The probe's executable dependency closure is Python stdlib, Linux /proc/prctl, /bin/bash, and sibling `isolated-probes.py`, `operator-support.py` and inertly extracted `deploy.sh` text. `unit-profile.json` and the original handoff are included in source identity/path coverage. The complete candidate subtree and this release handoff/index subtree are watched. Deployment unit/helper and resource-check/verifier source paths are also watched as operator-contract dependencies, but the job does not execute them or prove a live host matches their pinned historic versions.
+
+The approved checkout/upload-artifact pins are unchanged copies of the existing publication-tail quality workflow. Full environment/source identities, syntax log, stdout JSON stream, stderr and checked summary are retained in an ordinary GitHub Actions artifact (14 days). These scratch/dummy diagnostics contain no production secrets. Ordinary repository artifact visibility applies; this is not a private production evidence channel. Upload failure or a missing summary cannot establish a green diagnostic result.
+
+## Current validation and required future evidence
+
+Local assembly validation is limited to five exact copies, unchanged base application/web/SQL/locks/authority and existing workflows, YAML/shell/inline-Python syntax, path coverage, and isolated summary-parser positive/negative controls. The original maker Linux35 PASS is inherited only through exact-byte equivalence, not a new execution on this release. No new app build, PG/native operation or Linux35 run was performed locally.
+
+Root must obtain a fresh ordinary35 run on the eventual PR subject. Existing `source-led-opportunity-external-gate.yml` is unchanged and has unfiltered pull_request_target opened/reopened/synchronize/ready_for_review events: its normal protected requirements/architecture/product/model/exact-review/aggregate results remain mandatory according to repository policy. This new ordinary workflow is not an attestation or substitute gate. Existing `source-led-opportunity-v3.yml` pull_request path filters do not match this docs/new-workflow-only delta, so this assembly does not claim a fresh ordinary canonical155/PCR31/type/lint/build run. No protected or ordinary existing workflow was changed to manufacture coverage or approval. Root owns independent review, draft PR and subsequent normal checks; this task creates none.
+
+Actual host preflight, immutable artifact custody, systemd/API behavior, partial activation/reverse recovery and deployment remain pending separate authorization and fresh evidence. SIGKILL/power loss/manual reconciliation limitations remain. Financial50/publication26 installation, whole closure, source acquisition, the two formal articles and technical/strategy scheduling are not completed by this assembly. Maker has not issued an independent review or protected approval.

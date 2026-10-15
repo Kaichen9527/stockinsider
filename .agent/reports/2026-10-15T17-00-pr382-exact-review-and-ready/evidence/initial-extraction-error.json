@@ -1,0 +1,6 @@
+{
+  "cause": "basename selection extracted upstream root-name duplicates after current files; detected runId38580440366 before any PCR/review publication",
+  "correctedBy": "allow exact root ZIP member names only; retain original misextracted files",
+  "productFailure": false,
+  "approvalPublished": false
+}

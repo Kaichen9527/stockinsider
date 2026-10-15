@@ -1,0 +1,17 @@
+{
+  "sourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+  "nodeVersion": "22.14.0",
+  "productionEntrypoint": "app/server.js",
+  "credentialEnvironment": "absent",
+  "unconfiguredAuthStatus": 500,
+  "fixtureUnavailableStatus": 404,
+  "assetPath": "app/.next/static/chunks/0cz1d0mv5g_q7.js",
+  "assetSha256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683",
+  "databaseOrApiMutationPerformed": false,
+  "productionReadinessProven": false,
+  "privatePeerOrLiveDataProven": false,
+  "confirmedProcessExit": {
+    "code": 143,
+    "signal": null
+  }
+}

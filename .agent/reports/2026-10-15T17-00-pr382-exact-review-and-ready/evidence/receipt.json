@@ -1,0 +1,65 @@
+{
+  "kind": "maker-release-assembly-and-ordinary-ci-wiring-not-independent-approval",
+  "code": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "tree": "fe30bedc11f231899418f845e57875c76c62c70c",
+  "base": "8c58e297e92422c1c3f52856a36bff12b1868100",
+  "branch": "codex/dd-binary-operator-release-oct15",
+  "startedAt": "2026-10-14T22:31:41Z",
+  "sealedAt": "2026-10-14T22:38:00.204315+00:00",
+  "deadline": "2026-10-14T22:51:41Z",
+  "copyCount": 5,
+  "changedFileCount": 8,
+  "sourceInventoryCount": 20,
+  "rawCount": 24,
+  "rawBytes": 110574,
+  "checks": {
+    "staticGroups": 47,
+    "staticFail": 0,
+    "parserControlsIncluded": 12,
+    "parserPositiveHistoricalStdout": 1,
+    "parserNegative": 11,
+    "newLinux35Run": false,
+    "bashSyntax": true,
+    "inlinePythonAstBlocks": 2,
+    "copiedPythonAstOnly": 2,
+    "yamlParsed": "PyYAML6.0.3 BaseLoader",
+    "codeDiffCheck": 0
+  },
+  "historicalEvidence": {
+    "code": "a87432e939b389f64aad3baffb176fee3954c346",
+    "evidence": "dbfde8efc8ff16130d4cefbdbdcacc4d2f03ee8c",
+    "receipt": "4e796e40a0410fbd4eb9948900be6f51950c942cc744f8fe9ca64dbf678376ca",
+    "groups": 35,
+    "equivalentInputsOnly": true
+  },
+  "resources": {
+    "at": "2026-10-14T22:37:19.073888+00:00",
+    "freeBytes": {
+      "/workspace": 8595484672,
+      "/tmp": 15374159872
+    },
+    "initialFreeBytes": {
+      "/workspace": 8595533824,
+      "/tmp": 15374163968
+    },
+    "floorBytes": 8589934592,
+    "rssLimitBytes": 8589934592,
+    "measurement": "Light-only command/process snapshots; no continuous aggregate peak RSS claim. Initial largest codex RSS36704KiB. No owned services or dummy processes started.",
+    "heavyRuns": 0,
+    "cleanup": "No data/cache deleted; no owned PG/server/activation processes started."
+  },
+  "pending": [
+    "fresh ordinary35 GHA result on pushed/PR subject",
+    "Root independent review/draft PR",
+    "normal protected requirements/architecture/product/model/exact-review/aggregate",
+    "fresh actual host admission/custody/systemd/API/reverse settlement before separately authorized operation",
+    "wholeclosure/sources/two formal articles/technical strategy scheduling"
+  ],
+  "prohibitedActionsExecuted": false,
+  "formalApproval": false,
+  "evidencePackagingCorrection": {
+    "previousReceiptSha256": "22fa85e885f274ec504d2efca22424c28de396626b53203e8ada3c1058b7dbe5",
+    "previousEvidenceCommit": "06036041",
+    "reason": "Exclude parser scratch input containing historical dummy stdout records from final evidence tree; local scratch remains, parser control results/source are retained. No candidate/workflow/check result changed."
+  }
+}

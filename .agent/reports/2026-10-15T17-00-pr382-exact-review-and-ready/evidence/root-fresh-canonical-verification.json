@@ -1,0 +1,10 @@
+{
+  "builder": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "runId": "38655851651",
+  "canonicalSectionSha256": "d9579d311fb3b118c080d429c9e515029865ceca40cf6ac05c4a9acd96391054",
+  "canonical": 155,
+  "pcr": 31,
+  "newPackageRebuilt": false,
+  "exactRootZipMembersOnly": true,
+  "currentSHArowsVerified": 24
+}

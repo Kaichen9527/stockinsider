@@ -1,0 +1,6 @@
+{
+  "error": "KeyError exact ZIP names have no leading ./ while SHA list uses ./",
+  "mutation": false,
+  "fixedBy": "strip only one literal ./ after rejecting absolute and parent traversal; verify exact member bytes",
+  "productFailure": false
+}

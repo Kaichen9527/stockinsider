@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-15T00:40:46.988104+00:00",
+  "action": "one normal gh run rerun --failed after genuinely new exact evidence ref",
+  "run": 38655806213,
+  "fromAttempt": 1,
+  "head": "1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "base": "8c58e297e92422c1c3f52856a36bff12b1868100",
+  "directEvidence": "bf8e5af7bf2549191649fb025adde64c4806adb0",
+  "ref": "refs/heads/evidence/source-led-opportunity-v3-exact-review-1e1ded2b99255d9905942627d76abadeb58eeb68",
+  "rules": {
+    "enforcement": "active",
+    "bypass": []
+  },
+  "oldREDRetained": true,
+  "rerunRequested": true,
+  "noAdminOrBypass": true,
+  "exit": 0,
+  "stdout": "",
+  "stderr": ""
+}

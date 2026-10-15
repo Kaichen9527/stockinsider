@@ -1,0 +1,7 @@
+{
+  "error": "TypeError list indices must be integers or slices not str",
+  "cause": "assumed source inventory object; actual exact inventory is list",
+  "readOnly": true,
+  "sourceMutation": false,
+  "productFailure": false
+}

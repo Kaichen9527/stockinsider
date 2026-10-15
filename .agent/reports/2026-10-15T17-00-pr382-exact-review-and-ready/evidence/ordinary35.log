@@ -1,0 +1,388 @@
+isolated-operator-quality	Set up job	﻿2026-10-14T23:43:24.7176711Z Current runner version: '2.337.0'
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7198349Z ##[group]Runner Image Provisioner
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7199205Z Hosted Compute Agent
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7199824Z Version: 20261002.596
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7200419Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7201149Z Build Date: 2026-10-02T22:28:27Z
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7201869Z Worker ID: {90eded99-f7b1-44a8-84dc-f963bde01545}
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7202581Z Region: westcentralus
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7203160Z Cloud: Azure
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7203680Z ##[endgroup]
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7204981Z ##[group]Operating System
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7205588Z Ubuntu
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7206094Z 24.04.5
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7206606Z LTS
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7207098Z ##[endgroup]
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7207846Z ##[group]Runner Image
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7208491Z Image: ubuntu-24.04
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7209072Z Version: 20261004.327.1
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7210094Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7211667Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7212630Z ##[endgroup]
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7213635Z ##[group]GITHUB_TOKEN Permissions
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7215566Z Contents: read
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7216139Z Metadata: read
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7216691Z ##[endgroup]
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7218758Z Secret source: Actions
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7219688Z Cache mode: write
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7220354Z Prepare workflow directory
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7519465Z Prepare all required actions
+isolated-operator-quality	Set up job	2026-10-14T23:43:24.7566905Z Getting action download info
+isolated-operator-quality	Set up job	2026-10-14T23:43:25.0522440Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+isolated-operator-quality	Set up job	2026-10-14T23:43:25.1577868Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+isolated-operator-quality	Set up job	2026-10-14T23:43:25.4068290Z Complete job name: isolated-operator-quality
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	﻿2026-10-14T23:43:25.4730867Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4731935Z with:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4732445Z   persist-credentials: false
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4733086Z   repository: Kaichen9527/stockinsider
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4737107Z   token: ***
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4737736Z   ssh-strict: true
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4738300Z   ssh-user: git
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4738787Z   clean: true
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4739330Z   sparse-checkout-cone-mode: true
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4739928Z   fetch-depth: 1
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4740444Z   fetch-tags: false
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4740976Z   show-progress: true
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4741505Z   lfs: false
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4741983Z   submodules: false
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4742510Z   set-safe-directory: true
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4743078Z   allow-unsafe-pr-checkout: false
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.4744138Z ##[endgroup]
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5753224Z Syncing repository: Kaichen9527/stockinsider
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5755936Z ##[group]Getting Git version info
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5757276Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5759323Z [command]/usr/bin/git version
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5788008Z git version 2.55.0
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5806323Z ##[endgroup]
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5817395Z Temporarily overriding HOME='/home/runner/work/_temp/8b15fefe-04f6-45fb-9af6-40e5b4d396a2' before making global git config changes
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5819928Z Adding repository directory to the temporary git global config as a safe directory
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5822156Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5875003Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5881626Z ##[group]Initializing the repository
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5885558Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5968235Z hint: Using 'master' as the name for the initial branch. This default branch name
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5979744Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5981262Z hint: to use in all of your new repositories, which will suppress this warning,
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5982396Z hint: call:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5983017Z hint:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5983587Z hint: 	git config --global init.defaultBranch <name>
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5984343Z hint:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5985669Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5987063Z hint: 'development'. The just-created branch can be renamed via this command:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5988325Z hint:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5989020Z hint: 	git branch -m <name>
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5989770Z hint:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5990773Z hint: Disable this message with "git config set advice.defaultBranchName false"
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5992292Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.5994896Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6233157Z ##[endgroup]
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6234138Z ##[group]Disabling automatic garbage collection
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6238077Z [command]/usr/bin/git config --local gc.auto 0
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6282023Z ##[endgroup]
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6282885Z ##[group]Setting up auth
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6290904Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6321106Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6631111Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6660224Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6838409Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.6869674Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.7060197Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.7102791Z ##[endgroup]
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.7104149Z ##[group]Fetching the repository
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:25.7113667Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +65baaf628ae72b252e7525f90bc533020107ffbf:refs/remotes/pull/382/merge
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.1720336Z From https://github.com/Kaichen9527/stockinsider
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.1722281Z  * [new ref]         65baaf628ae72b252e7525f90bc533020107ffbf -> pull/382/merge
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.1725937Z ##[endgroup]
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.1727459Z ##[group]Determining the checkout info
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.1729377Z ##[endgroup]
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.1734875Z [command]/usr/bin/git sparse-checkout disable
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.1785638Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.1819551Z ##[group]Checking out the ref
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.1821716Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/382/merge
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3213096Z Note: switching to 'refs/remotes/pull/382/merge'.
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3214308Z 
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3215238Z You are in 'detached HEAD' state. You can look around, make experimental
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3217529Z changes and commit them, and you can discard any commits you make in this
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3219833Z state without impacting any branches by switching back to a branch.
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3221231Z 
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3222237Z If you want to create a new branch to retain commits you create, you may
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3224511Z do so (now or later) by using -c with the switch command. Example:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3225772Z 
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3226273Z   git switch -c <new-branch-name>
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3227047Z 
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3227566Z Or undo this operation with:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3228347Z 
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3228781Z   git switch -
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3229332Z 
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3230338Z Turn off this advice by setting config variable advice.detachedHead to false
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3232028Z 
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3233534Z HEAD is now at 65baaf6 Merge 1e1ded2b99255d9905942627d76abadeb58eeb68 into 8c58e297e92422c1c3f52856a36bff12b1868100
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3238439Z ##[endgroup]
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3260449Z [command]/usr/bin/git log -1 --format=%H
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3281618Z 65baaf628ae72b252e7525f90bc533020107ffbf
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3290747Z ##[group]Removing auth
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3294859Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3323926Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3505102Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3527389Z http.https://github.com/.extraheader
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3534368Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3568443Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3742528Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3767321Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+isolated-operator-quality	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:27.3944599Z ##[endgroup]
+isolated-operator-quality	Check supported unprivileged Linux environment	﻿2026-10-14T23:43:27.4191120Z ##[group]Run set -euo pipefail
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4192721Z ^[[36;1mset -euo pipefail^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4194120Z ^[[36;1mumask 077^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4195814Z ^[[36;1mevidence="$(mktemp -d "$RUNNER_TEMP/dd-operator-quality.XXXXXX")"^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4198321Z ^[[36;1mecho "DD_OPERATOR_EVIDENCE=$evidence" >> "$GITHUB_ENV"^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4200381Z ^[[36;1mpython3 -I -B - <<'PY' | tee "$evidence/environment.json"^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4202443Z ^[[36;1mimport ctypes, json, os, pathlib, platform, shutil, sys^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4205143Z ^[[36;1massert sys.implementation.name == 'cpython' and sys.version_info >= (3, 12), 'unsupported_python'^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4208163Z ^[[36;1massert platform.system() == 'Linux' and os.name == 'posix', 'linux_required'^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4210571Z ^[[36;1massert os.geteuid() != 0, 'unprivileged_probes_required'^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4213158Z ^[[36;1massert sys.flags.optimize == 0 and not os.environ.get('PYTHONOPTIMIZE'), 'assertions_required'^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4216628Z ^[[36;1massert pathlib.Path('/proc/self/stat').is_file() and pathlib.Path('/bin/bash').is_file(), 'proc_bash_required'^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4219403Z ^[[36;1mlibc = ctypes.CDLL(None, use_errno=True)^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4220954Z ^[[36;1msubreaper = ctypes.c_int()^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4223088Z ^[[36;1massert libc.prctl(37, ctypes.byref(subreaper), 0, 0, 0) == 0, 'linux_subreaper_required'^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4225660Z ^[[36;1mfree = {p: shutil.disk_usage(p).free for p in (os.getcwd(), '/tmp')}^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4228073Z ^[[36;1massert all(n >= 8 * 1024**3 for n in free.values()), 'disk_reserve_required'^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4231640Z ^[[36;1mprint(json.dumps({'python': sys.version, 'platform': platform.platform(), 'proc': True, 'uid': os.geteuid(), 'freeBytes': free, 'subreaperSupported': True}))^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4234611Z ^[[36;1mPY^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4235999Z ^[[36;1mgit rev-parse HEAD HEAD^{tree} > "$evidence/source.txt"^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4239562Z ^[[36;1msha256sum docs/operations/2026-10-15/dd-binary-operator-candidate/* .github/workflows/dd-binary-operator-quality.yml > "$evidence/inputs.sha256"^[[0m
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4426277Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.4428493Z ##[endgroup]
+isolated-operator-quality	Check supported unprivileged Linux environment	2026-10-14T23:43:27.5165690Z {"python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]", "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39", "proc": true, "uid": 1001, "freeBytes": {"/home/runner/work/stockinsider/stockinsider": 91342417920, "/tmp": 91342417920}, "subreaperSupported": true}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	﻿2026-10-14T23:43:27.5404897Z ##[group]Run set -euo pipefail
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5406291Z ^[[36;1mset -euo pipefail^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5408232Z ^[[36;1mcandidate=docs/operations/2026-10-15/dd-binary-operator-candidate^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5410868Z ^[[36;1m# Parse only: never execute/source the deployment entrypoint or real activation helper.^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5413426Z ^[[36;1mbash -n "$candidate/deploy.sh" 2>&1 | tee "$DD_OPERATOR_EVIDENCE/bash-n.log"^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5415571Z ^[[36;1mpython3 -I -B -u "$candidate/isolated-probes.py" \^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5417862Z ^[[36;1m  2> >(tee "$DD_OPERATOR_EVIDENCE/probes.stderr.log" >&2) \^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5419803Z ^[[36;1m  | tee "$DD_OPERATOR_EVIDENCE/probes.stdout.json-stream"^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5423111Z ^[[36;1mpython3 -I -B - "$DD_OPERATOR_EVIDENCE/probes.stdout.json-stream" <<'PY' | tee "$DD_OPERATOR_EVIDENCE/summary.json"^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5425574Z ^[[36;1mimport json, pathlib, sys^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5427727Z ^[[36;1mtext = pathlib.Path(sys.argv[1]).read_text()^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5429651Z ^[[36;1mdecoder = json.JSONDecoder()^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5432082Z ^[[36;1mrecords = []^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5433278Z ^[[36;1mwhile text.strip():^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5434674Z ^[[36;1m    value, end = decoder.raw_decode(text.lstrip())^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5436285Z ^[[36;1m    records.append(value)^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5437766Z ^[[36;1m    text = text.lstrip()[end:]^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5439817Z ^[[36;1massert records and all(isinstance(row, dict) for row in records), 'json_records_required'^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5442600Z ^[[36;1massert all(set(row) == {'shellProbe'} for row in records[:-1]), 'unexpected_intermediate_record'^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5444709Z ^[[36;1msummary = records[-1]^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5446662Z ^[[36;1massert set(summary) == {'scope', 'count', 'results', 'formalApproval'}, 'closed_summary_required'^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5450293Z ^[[36;1massert summary['scope'] == 'isolated candidate components only; no production procedure or approved activation executed'^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5453628Z ^[[36;1massert summary['formalApproval'] is False and summary['count'] == 35, 'exact_scope_count_required'^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5455788Z ^[[36;1mrows = summary['results']^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5457536Z ^[[36;1massert isinstance(rows, list) and len(rows) == 35, 'all_groups_required'^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5461272Z ^[[36;1massert all(set(row) == {'name', 'status'} and isinstance(row['name'], str) and row['name'] and row['status'] == 'PASS' for row in rows), 'all_groups_must_pass'^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5464532Z ^[[36;1massert len({row['name'] for row in rows}) == 35, 'unique_groups_required'^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5466721Z ^[[36;1massert len(records[:-1]) == 10, 'all_dummy_shell_ordering_records_required'^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5469443Z ^[[36;1mprint(json.dumps({'groups': 35, 'passed': 35, 'failed': 0, 'dummyShellRecords': 10, 'formalApproval': False}))^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5471627Z ^[[36;1mPY^[[0m
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5511336Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5512872Z env:
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5514246Z   DD_OPERATOR_EVIDENCE: /home/runner/work/_temp/dd-operator-quality.8vmi82
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:27.5515967Z ##[endgroup]
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:28.8676199Z {"shellProbe": {"name": "term-pointer", "exit": 143, "stdout": "POINTER_current_/inert/old\nMOCK_WRITER\ncanonical_previous_current_writer_units_and_health_restored\n", "stderr": "", "events": "REVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:29.5542393Z {"shellProbe": {"name": "term-activation-1", "exit": 143, "stdout": "POINTER_current_/inert/old\nMOCK_WRITER\ncanonical_previous_current_writer_units_and_health_restored\n", "stderr": "", "events": "FORWARD_CHILD_START\nFORWARD_CHILD_END\nREVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:30.2377567Z {"shellProbe": {"name": "term-activation-2", "exit": 143, "stdout": "POINTER_current_/inert/old\nMOCK_WRITER\ncanonical_previous_current_writer_units_and_health_restored\n", "stderr": "", "events": "FORWARD_CHILD_START\nFORWARD_CHILD_END\nREVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:30.9216291Z {"shellProbe": {"name": "group-term", "exit": 143, "stdout": "POINTER_current_/inert/old\nMOCK_WRITER\ncanonical_previous_current_writer_units_and_health_restored\n", "stderr": "", "events": "FORWARD_CHILD_START\nFORWARD_CHILD_END\nREVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:31.6044484Z {"shellProbe": {"name": "ordinary", "exit": 42, "stdout": "POINTER_current_/inert/old\nMOCK_WRITER\ncanonical_previous_current_writer_units_and_health_restored\n", "stderr": "", "events": "FORWARD_CHILD_START\nFORWARD_CHILD_END\nREVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:31.9756474Z {"shellProbe": {"name": "uncertain", "exit": 125, "stdout": "", "stderr": "Traceback (most recent call last):\n  File \"/tmp/dd-operator-hermetic-i8_bfx48/dummy-driver.py\", line 6, in <module>\n    r=json.loads(pathlib.Path(a[1]).read_text());m.confirm_settled(r,int(a[2]));raise SystemExit(0)\n                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/stockinsider/stockinsider/docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py\", line 159, in confirm_settled\n    assert result['settledForRollback'] and not result['forced'] and result['error'] is None\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\nactivation_settlement_uncertain:manual_reconciliation_required\nTraceback (most recent call last):\n  File \"/tmp/dd-operator-hermetic-i8_bfx48/dummy-driver.py\", line 6, in <module>\n    r=json.loads(pathlib.Path(a[1]).read_text());m.confirm_settled(r,int(a[2]));raise SystemExit(0)\n                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/stockinsider/stockinsider/docs/operations/2026-10-15/dd-binary-operator-candidate/operator-support.py\", line 159, in confirm_settled\n    assert result['settledForRollback'] and not result['forced'] and result['error'] is None\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\nactivation_settlement_uncertain:manual_reconciliation_required\nrecovery_required:uncertain_state; owned_receipts_retained=/tmp/dd-operator-hermetic-i8_bfx48/uncertain/work\n", "events": "FORWARD_CHILD_START\n"}}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:31.9811636Z {"shellProbe": {"name": "cleanup", "exit": 74, "stdout": "", "stderr": "activation_complete=true; owned_cleanup_unconfirmed\n", "events": ""}}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:31.9877935Z {"shellProbe": {"name": "success", "exit": 0, "stdout": "approved_dd_binary_current_writer_core_health_and_cleanup_verified\n", "stderr": "", "events": ""}}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6724263Z {"shellProbe": {"name": "spawn-window", "exit": 143, "stdout": "POINTER_current_/inert/old\nMOCK_WRITER\ncanonical_previous_current_writer_units_and_health_restored\n", "stderr": "", "events": "FORWARD_CHILD_START\nFORWARD_CHILD_END\nREVERSE_CHILD_START\nREVERSE_CHILD_END\n"}}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6768688Z {"shellProbe": {"name": "rm-fail", "exit": 74, "stdout": "", "stderr": "activation_complete=true; owned_cleanup_unconfirmed\n", "events": ""}}
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6776639Z {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6778159Z   "scope": "isolated candidate components only; no production procedure or approved activation executed",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6779982Z   "count": 35,
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6780524Z   "results": [
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6781022Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6781608Z       "name": "finite exact nonsecret bytes",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6782149Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6782591Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6782940Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6783319Z       "name": "extra setting rejects",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6783760Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6784150Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6784474Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6784833Z       "name": "unknown mode rejects",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6785331Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6785712Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6786278Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6786673Z       "name": "unknown owner rejects",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6787087Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6787559Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6788242Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6788608Z       "name": "unknown group rejects",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6789091Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6789442Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6790353Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6790749Z       "name": "missing profile rejects",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6791235Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6791663Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6792006Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6792376Z       "name": "symlink rejects",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6792812Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6793164Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6793568Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6793936Z       "name": "hardlink rejects",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6794449Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6794830Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6795150Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6795738Z       "name": "exact effective unit stockinsider-web-standalone.service",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6796408Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6796868Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6797314Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6798082Z       "name": "effective drift stockinsider-web-standalone.service DropInPaths",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6798765Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6799196Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6799666Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6800320Z       "name": "effective drift stockinsider-web-standalone.service FragmentPath",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6801108Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6801661Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6802075Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6802647Z       "name": "effective drift stockinsider-web-standalone.service NeedDaemonReload",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6803620Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6804155Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6804583Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6805138Z       "name": "effective drift stockinsider-web-standalone.service User",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6805815Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6806274Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6806618Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6807186Z       "name": "exact effective unit stockinsider-internal-worker.service",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6808152Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6808560Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6808951Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6809523Z       "name": "effective drift stockinsider-internal-worker.service DropInPaths",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6810254Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6810782Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6811195Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6811790Z       "name": "effective drift stockinsider-internal-worker.service FragmentPath",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6812484Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6812964Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6813426Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6814108Z       "name": "effective drift stockinsider-internal-worker.service NeedDaemonReload",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6815224Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6815743Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6816160Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6816739Z       "name": "effective drift stockinsider-internal-worker.service User",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6817384Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6817942Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6818319Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6818799Z       "name": "extra effective setting rejects",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6819401Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6819985Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6820314Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6820896Z       "name": "supervisor double signal waits for natural child completion",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6821564Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6821977Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6822320Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6822810Z       "name": "nonzero activation is uncertain even after process settlement",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6823489Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6823914Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6824264Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6824698Z       "name": "wait for descendant after leader exit",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6825228Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6825910Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6826245Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6826693Z       "name": "detached adopted descendant must settle too",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6827274Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6827810Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6828196Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6828622Z       "name": "forced containment never authorizes reverse",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6829170Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6829586Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6830060Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6830802Z       "name": "inspection failure uncertain, owned child contained",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6831400Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6831767Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6832147Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6832583Z       "name": "TERM after pointer arms confirmed reverse",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6833135Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6833636Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6834075Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6834601Z       "name": "TERM during real dummy activation waits before reverse",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6835232Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6835711Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6836076Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6836501Z       "name": "double TERM does not reenter recovery",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6837066Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6837461Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6838022Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6838802Z       "name": "process-group TERM reaches shell and supervisor without reverse overlap",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6839596Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6840003Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6840384Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6840977Z       "name": "ordinary failure preserves original status after confirmed recovery",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6841696Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6842097Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6842540Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6843064Z       "name": "unconfirmed activation prevents all reverse mutation",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6843707Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6844149Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6844499Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6845153Z       "name": "healthy activation cleanup-only failure is nonzero without rollback",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6845907Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6846385Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6846800Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6847230Z       "name": "full success emitted only after cleanup",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6848020Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6848481Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6848858Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6849367Z       "name": "TERM between spawn and PID assignment retains ownership",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6850001Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6850393Z     },
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6850756Z     {
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6851258Z       "name": "rm failure also prevents full completion",
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6851808Z       "status": "PASS"
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6852220Z     }
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6852570Z   ],
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6852963Z   "formalApproval": false
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.6853407Z }
+isolated-operator-quality	Syntax and 35 isolated candidate probes in sequence	2026-10-14T23:43:32.7084016Z {"groups": 35, "passed": 35, "failed": 0, "dummyShellRecords": 10, "formalApproval": false}
+isolated-operator-quality	Retain isolated diagnostic logs	﻿2026-10-14T23:43:32.7226735Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7227244Z with:
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7227552Z   name: dd-operator-quality-38655806183-1
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7228170Z   path: /home/runner/work/_temp/dd-operator-quality.8vmi82
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7228681Z   if-no-files-found: error
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7229004Z   retention-days: 14
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7229346Z   compression-level: 6
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7229647Z   overwrite: false
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7229967Z   include-hidden-files: false
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7230323Z env:
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7230706Z   DD_OPERATOR_EVIDENCE: /home/runner/work/_temp/dd-operator-quality.8vmi82
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.7231179Z ##[endgroup]
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.8802182Z (node:2562) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.8803022Z (Use `node --trace-deprecation ...` to show where the warning was created)
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.8960327Z With the provided path, there will be 7 files uploaded
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.8961619Z Artifact name is valid!
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:32.8962222Z Root directory input is valid!
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:33.2171343Z Beginning upload of artifact content to blob storage
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:33.2415605Z (node:2562) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:33.4449764Z Uploaded bytes 3079
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:33.5012322Z Finished uploading artifact content to blob storage!
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:33.5013575Z SHA256 digest of uploaded artifact zip is 27e714b8f47d5929f03e01ae8683ac1daa355d4ee5315de84586699456be697a
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:33.5014539Z Finalizing artifact upload
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:33.7713737Z Artifact dd-operator-quality-38655806183-1.zip successfully finalized. Artifact ID 11937340214
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:33.7715136Z Artifact dd-operator-quality-38655806183-1 has been successfully uploaded! Final size is 3079 bytes. Artifact ID is 11937340214
+isolated-operator-quality	Retain isolated diagnostic logs	2026-10-14T23:43:33.7721058Z Artifact download URL: https://github.com/Kaichen9527/stockinsider/actions/runs/38655806183/artifacts/11937340214
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	﻿2026-10-14T23:43:33.7925746Z Post job cleanup.
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.8727247Z [command]/usr/bin/git version
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.8766943Z git version 2.55.0
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.8806529Z Temporarily overriding HOME='/home/runner/work/_temp/cc4dccae-b861-431c-ba3c-753baaa24b7e' before making global git config changes
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.8808151Z Adding repository directory to the temporary git global config as a safe directory
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.8812832Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.8848529Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.8879726Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.9087391Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.9115879Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.9317029Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+isolated-operator-quality	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-14T23:43:33.9355632Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+isolated-operator-quality	Complete job	﻿2026-10-14T23:43:33.9733770Z Cleaning up orphan processes
+isolated-operator-quality	Complete job	2026-10-14T23:43:34.0009768Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

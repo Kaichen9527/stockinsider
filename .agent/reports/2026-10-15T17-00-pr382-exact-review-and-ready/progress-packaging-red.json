@@ -1,0 +1,6 @@
+{
+  "at": "2026-10-15T09:01:28.676316+00:00",
+  "initialGitAdd": ".agent ignored; launch status committed separately3d3e7b18; report bytes preserved untracked",
+  "correction": "explicit git add -f only owned report directory; append-only evidence commit, no amend or rewrite",
+  "productFailure": false
+}
