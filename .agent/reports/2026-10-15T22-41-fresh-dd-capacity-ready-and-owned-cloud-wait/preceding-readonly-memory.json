@@ -1,0 +1,8 @@
+{
+  "observedAt": "2026-10-15T14:39:37.022368+00:00",
+  "memAvailableBytes": 2731991040,
+  "originalRequiredBytes": 2684354560,
+  "differenceBytes": 47636480,
+  "fullCapacityGuardRun": false,
+  "readonly": true
+}

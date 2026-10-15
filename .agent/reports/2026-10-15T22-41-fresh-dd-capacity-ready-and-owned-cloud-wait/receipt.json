@@ -1,0 +1,41 @@
+{
+  "files": [
+    {
+      "path": "cloud-compact.json",
+      "bytes": 676,
+      "sha256": "010ced950745bb4c2b1e4b9fa2f084b6d1984ebde2ce9be17b19651813954ab1"
+    },
+    {
+      "path": "exact-locked-capacity-preflight.sh",
+      "bytes": 1418,
+      "sha256": "d9f67e3dd234680c7f48573fb85191b485b1d3269f4bf70ed67b340bbfdf64d3"
+    },
+    {
+      "path": "execution.json",
+      "bytes": 476,
+      "sha256": "a8d0f293f5386db7b42ed47085b70554d0afad9b63fb50af8e547a353a843c70"
+    },
+    {
+      "path": "launch-note.md",
+      "bytes": 2420,
+      "sha256": "1f2513aa31ff91961b023cb3d2a47a729799bafe0a895bc8b1ca5fdc7dcfd15c"
+    },
+    {
+      "path": "preceding-readonly-memory.json",
+      "bytes": 213,
+      "sha256": "64108d4f5a41faa3a09c2362d771685701d0d17c62770f2873915829b756ae6c"
+    },
+    {
+      "path": "stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "stdout",
+      "bytes": 526,
+      "sha256": "e8c0b8d5bd7af6482c66620cff8e6f895e62fd2939fbce71ca9b00c637c991d6"
+    }
+  ],
+  "deploymentExecuted": false,
+  "productionDatabaseOperations": false
+}

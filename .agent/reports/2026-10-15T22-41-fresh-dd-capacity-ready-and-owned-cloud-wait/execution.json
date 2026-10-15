@@ -1,0 +1,18 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "bash",
+    "-s"
+  ],
+  "stdinSha256": "d9f67e3dd234680c7f48573fb85191b485b1d3269f4bf70ed67b340bbfdf64d3",
+  "startedAt": "2026-10-15T14:40:35.702546+00:00",
+  "endedAt": "2026-10-15T14:40:37.949427+00:00",
+  "actualExitCode": 0,
+  "scope": "original unchanged three-lock capacity admission only; no deployment",
+  "precedingActualMemoryChange": true
+}
