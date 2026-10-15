@@ -1,0 +1,42 @@
+{
+  "observedCode": "42883",
+  "observedMessage": "operator does not exist: name = name[]",
+  "stage": "first catalog SELECT after successful namespace guard",
+  "firstSourceLine": 68,
+  "samePatternSites": [
+    {
+      "line": 68,
+      "source": "WHERE n.nspname='public' AND c.relname=ANY((SELECT array_agg(relname ORDER BY relname) FROM pg_class WHERE relnamespace='public'::regnamespace))),'[]'::jsonb),"
+    },
+    {
+      "line": 81,
+      "source": "WHERE n.nspname='public' AND p.proname=ANY((SELECT array_agg(DISTINCT proname ORDER BY proname) FROM pg_proc WHERE pronamespace='public'::regnamespace)) AND p.prokind='f'),'[]'::jsonb),"
+    },
+    {
+      "line": 90,
+      "source": "FROM pg_roles r WHERE r.rolname=ANY((SELECT array_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_'))),'[]'::jsonb),"
+    },
+    {
+      "line": 98,
+      "source": "FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace WHERE n.nspname='public' AND t.typname=ANY((SELECT array_agg(typname ORDER BY typname) FROM pg_type WHERE typnamespace='public'::regnamespace)) AND (t.typtype IN ('e','d') OR (t.typtype='c' AND EXISTS(SELECT FROM pg_class c WHERE c.oid=t.typrelid AND c.relkind='c')))),'[]'::jsonb),"
+    },
+    {
+      "line": 553,
+      "source": "WHERE n.nspname='public' AND c.relname=ANY((SELECT array_agg(relname ORDER BY relname) FROM pg_class WHERE relnamespace='public'::regnamespace))),'[]'::jsonb),"
+    },
+    {
+      "line": 566,
+      "source": "WHERE n.nspname='public' AND p.proname=ANY((SELECT array_agg(DISTINCT proname ORDER BY proname) FROM pg_proc WHERE pronamespace='public'::regnamespace)) AND p.prokind='f'),'[]'::jsonb),"
+    },
+    {
+      "line": 575,
+      "source": "FROM pg_roles r WHERE r.rolname=ANY((SELECT array_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_'))),'[]'::jsonb),"
+    },
+    {
+      "line": 583,
+      "source": "FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace WHERE n.nspname='public' AND t.typname=ANY((SELECT array_agg(typname ORDER BY typname) FROM pg_type WHERE typnamespace='public'::regnamespace)) AND (t.typtype IN ('e','d') OR (t.typtype='c' AND EXISTS(SELECT FROM pg_class c WHERE c.oid=t.typrelid AND c.relkind='c')))),'[]'::jsonb),"
+    }
+  ],
+  "sourceAnalysis": "ANY(subquery) returns one name[] column and attempts name = name[]; this is not scalar-array ANY. Only first full catalog statement was actually attempted; later sites are source-derived risks, not separately executed failures.",
+  "nextMinimalDecision": "Root review a finite SQL expression repair preserving exact catalog scope/order/expected hashes, then authorize new native input. No product edits made in this task."
+}

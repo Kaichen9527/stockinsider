@@ -1,0 +1,183 @@
+{
+  "localOnlyRoot": "/tmp/v3-author-native-o15",
+  "privateDataNotPublished": true,
+  "files": [
+    {
+      "path": "binaries.json",
+      "bytes": 1629,
+      "sha256": "22a35294a8b4b814c5b1b49f1f0873750ee95be6e850e1686a35a856d9d1996f"
+    },
+    {
+      "path": "catalog-source-excerpt.txt",
+      "bytes": 9596,
+      "sha256": "972105fa24a4c3f4e8acdb404b44a5821c0b520b285e09ba3ab32b43ac9f2a9c"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 2886,
+      "sha256": "2f317886443ff27adcc17e2ca7221ada211568a1e6e064f4a0a41ca214753bd6"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 665,
+      "sha256": "a12bf40c7e623d52412a04e0bbe12184bd5ce3d16a5a75a6e1e1fee07ba98c14"
+    },
+    {
+      "path": "diagnosis.json",
+      "bytes": 2701,
+      "sha256": "236400e50afae753a2a153bb50747f31870a3641d1a1559a863b45712fb99094"
+    },
+    {
+      "path": "initial-source-seal.json",
+      "bytes": 734,
+      "sha256": "e8f173eb4805dffa41b399c14530e33d6ca5b6d0c57af6d33b8d1a68c5a5d4fc"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-cleanup.json",
+      "bytes": 123,
+      "sha256": "c27540185309c64c5eac52a6a94b80f6464d978e5a4985a97446d4b08e5d3b36"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-cluster-absent.json",
+      "bytes": 97,
+      "sha256": "4f4d01e6c45517fd2aa00720327cf87768e6b910c65a1f1daece440b699894da"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-failure.json",
+      "bytes": 214,
+      "sha256": "72d0d7d88cea0078a2eab0ef02161ec5df4d248c910cb3d6ef1a4efc53ef0762"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-before-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-codecs.json",
+      "bytes": 581,
+      "sha256": "5cd8f502264ce1d8b19b824ec7b58c7611e53d6bebcde21b695c2f1f35e25415"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-connections.json",
+      "bytes": 73,
+      "sha256": "10eda0a9f8a0b1592b139959a0a1ba84b8ffab68a016ed9c2445b3fc6bc1e2f2"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-original-error.json",
+      "bytes": 235,
+      "sha256": "964316402a05f673ecb4dc6cad9ac77b643166c543098b3a9318650fd84ec273"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-rejected-after-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-rejected-witness.json",
+      "bytes": 947,
+      "sha256": "e495cbbefd6cf4bf409d86f99519e573c42212ffac44be00bd6d603dde94e462"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-postgres-before-cleanup.log",
+      "bytes": 74268,
+      "sha256": "62d374f293ea75eae48ed7a73c85b6ca238f99df10a13e4888f8b946cddef18b"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-postgres.log",
+      "bytes": 74419,
+      "sha256": "dcc3d7b9e4e1285a07bdd18fa2a363e2d0c289794b7cbcdd7e588972ae06cf34"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-rpc-fd-order.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 788,
+      "sha256": "3ac8d94a3a401cba64f6bf2d16ab29546668dd8585bb90d6fe6d4c7dae2b8d27"
+    },
+    {
+      "path": "native.samples.jsonl",
+      "bytes": 33962,
+      "sha256": "2aaaf8ffc7d59b1a67bfa99b43c862c207619e9f477c54895450ba7155ad68c4"
+    },
+    {
+      "path": "native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native.stdout",
+      "bytes": 3637,
+      "sha256": "88aa67c4f504732397262e0fd331ea7723661a3a0301233e67900e3f48c867f1"
+    },
+    {
+      "path": "product-unchanged.json",
+      "bytes": 27077,
+      "sha256": "6c17ba265e0ffc9aee65c55608a439ed041e97d2c40ba50d3d7a4d12bcec8fe1"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 25495,
+      "sha256": "994b3f532c2a90daa7304fdb67278a9817b819e5e280d1edb1414e05eea052ac"
+    },
+    {
+      "path": "research-v3-author-durable-native.test.mjs.initial",
+      "bytes": 12951,
+      "sha256": "4a1d8b7c9a6efd1cac730faf986fea3299cf1b54e3edfdeb4bbf1e31e8f1320e"
+    },
+    {
+      "path": "research-v3-author-native-article-fixture.mjs.initial",
+      "bytes": 4780,
+      "sha256": "682fd20f6478e3cb136e1fccef5bcf588657a9b8672747b7feecf71c2ffd8c97"
+    },
+    {
+      "path": "research-versioned-legal-fixture-helper.mjs.initial",
+      "bytes": 19227,
+      "sha256": "8d78ed506bec2dc9e6f5a1cc8258f921c47f246fe5c55a73341e940c7e5f8d3e"
+    },
+    {
+      "path": "run.py",
+      "bytes": 3329,
+      "sha256": "ab5f9ca6007748548d2a9c35379786f209043a112b852d3c1b6d88bc31da3b91"
+    },
+    {
+      "path": "source-inventory.json",
+      "bytes": 72254,
+      "sha256": "cc04f92529cd63860fcff8488c4e22827347c208a548863f5cc52a2a1a890aed"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 444,
+      "sha256": "f1968d4bfe822db7a5c36c2dec400a6c0eb0e3bdba13c3c10313dc5f492a3caa"
+    },
+    {
+      "path": "syntax.json",
+      "bytes": 976,
+      "sha256": "f93b4b7ab54e421d6eb7c972e8fc37bcd83740efa7b3afaaa76c43d1fb1c03b2"
+    }
+  ],
+  "count": 35,
+  "bytes": 72974451
+}

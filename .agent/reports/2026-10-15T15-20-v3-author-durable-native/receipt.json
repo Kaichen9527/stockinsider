@@ -1,0 +1,64 @@
+{
+  "schema": "bounded-native-receipt-v1",
+  "executedSubject": "0a0ea4ccc618df2d86ceb4de4bc7eff537ff3f77",
+  "productSubject": "79fd6e001ec77f58618d784948f9097e785b8f31",
+  "base": "68bc9c83e1c41796a1a700f7bf197eae2dd42b9f",
+  "nativeInvocations": 1,
+  "nativeExit": 1,
+  "pass": 0,
+  "fail": 2,
+  "skip": 0,
+  "todo": 0,
+  "rawCount": 35,
+  "rawBytes": 72974451,
+  "sourceInputs": 289,
+  "published": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 5047,
+      "sha256": "903fb50b42bcd2ab44849aebcf5451f20533b24342b8b7f03c35b3229a572850"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 2886,
+      "sha256": "2f317886443ff27adcc17e2ca7221ada211568a1e6e064f4a0a41ca214753bd6"
+    },
+    {
+      "path": "diagnosis.json",
+      "bytes": 2701,
+      "sha256": "236400e50afae753a2a153bb50747f31870a3641d1a1559a863b45712fb99094"
+    },
+    {
+      "path": "execution-resources.json",
+      "bytes": 3646,
+      "sha256": "49dc727cf44cd57d6f4f5d03a9d70784d8c080e2cedb1ea13439cc91bc3d2b45"
+    },
+    {
+      "path": "product-unchanged.json",
+      "bytes": 27077,
+      "sha256": "6c17ba265e0ffc9aee65c55608a439ed041e97d2c40ba50d3d7a4d12bcec8fe1"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 25495,
+      "sha256": "994b3f532c2a90daa7304fdb67278a9817b819e5e280d1edb1414e05eea052ac"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 6320,
+      "sha256": "bebbe3d5ce2a6de6deabb0b7ac5919011e153eaf8c1ca5cb91ad6fd3eb0181e6"
+    },
+    {
+      "path": "source-inventory.json",
+      "bytes": 72254,
+      "sha256": "cc04f92529cd63860fcff8488c4e22827347c208a548863f5cc52a2a1a890aed"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 444,
+      "sha256": "f1968d4bfe822db7a5c36c2dec400a6c0eb0e3bdba13c3c10313dc5f492a3caa"
+    }
+  ],
+  "formalApproval": false,
+  "independentReview": false
+}

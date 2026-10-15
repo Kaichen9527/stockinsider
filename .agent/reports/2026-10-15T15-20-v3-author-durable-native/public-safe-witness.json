@@ -1,0 +1,992 @@
+{
+  "kind": "maker-derived local engineering witness, not independent review",
+  "executedSubject": "0a0ea4ccc618df2d86ceb4de4bc7eff537ff3f77",
+  "productSubject": "79fd6e001ec77f58618d784948f9097e785b8f31",
+  "counts": {
+    "tests": 2,
+    "pass": 0,
+    "fail": 2,
+    "childrenExecuted": 1,
+    "parentExecuted": 1,
+    "skipped": 0,
+    "todo": 0
+  },
+  "issuer2409": "installer attempted; business not reached",
+  "issuer2383": "NOT_RUN fail-fast",
+  "originalSixFunctions": [
+    {
+      "name": "research_author_assignment_context_v2",
+      "signature": "research_author_assignment_context_v2(jsonb,uuid,text,text)",
+      "oid": "25350",
+      "bodySha256": "4d95cd7f2e7b019f7afc7faece96faa5b45182a28732e6d5d3eb54b7a3b813e5",
+      "matchesOriginalSourceBody": true,
+      "identity": {
+        "oid": "25350",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "research_author_assignment_context_v2",
+        "prorows": 0,
+        "pronargs": 4,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      },
+      "catalog": {
+        "acl": [
+          [
+            "research_input_preparation_owner_v2",
+            "research_input_preparation_owner_v2",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "research_author_assignment_context_v2",
+        "owner": "research_input_preparation_owner_v2",
+        "config": [
+          "search_path=pg_catalog, public"
+        ],
+        "strict": false,
+        "parallel": "u",
+        "volatile": "v",
+        "leakproof": false,
+        "signature": "research_author_assignment_context_v2(jsonb,uuid,text,text)",
+        "effectiveAcl": [
+          [
+            "anon",
+            false
+          ],
+          [
+            "authenticated",
+            false
+          ],
+          [
+            "authenticator",
+            false
+          ],
+          [
+            "dashboard_user",
+            false
+          ],
+          [
+            "legacy_correctness_rpc_owner",
+            false
+          ],
+          [
+            "opportunity_v3_rpc_owner",
+            false
+          ],
+          [
+            "pgbouncer",
+            false
+          ],
+          [
+            "postgres",
+            true
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            true
+          ],
+          [
+            "research_observed_rpc_owner",
+            false
+          ],
+          [
+            "research_source_fence_owner_v2",
+            false
+          ],
+          [
+            "service_role",
+            false
+          ],
+          [
+            "stockinsider",
+            false
+          ],
+          [
+            "stockinsider_runtime_v319",
+            false
+          ],
+          [
+            "supabase_admin",
+            false
+          ],
+          [
+            "supabase_auth_admin",
+            false
+          ],
+          [
+            "supabase_realtime_admin",
+            false
+          ],
+          [
+            "supabase_storage_admin",
+            false
+          ]
+        ],
+        "securityDefiner": true,
+        "definitionSha256": "785ee97a8cc4cff19b5f07a0ade150de2785ea1aed57971cd2874d4a0a0f0897"
+      }
+    },
+    {
+      "name": "read_research_author_assignment_v2",
+      "signature": "read_research_author_assignment_v2(jsonb,uuid,text,text)",
+      "oid": "25351",
+      "bodySha256": "35132922db329e7e51e0284646ed1a730535b26ab38bec014328c19bf4adf2b8",
+      "matchesOriginalSourceBody": true,
+      "identity": {
+        "oid": "25351",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "service_role=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "read_research_author_assignment_v2",
+        "prorows": 0,
+        "pronargs": 4,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      },
+      "catalog": {
+        "acl": [
+          [
+            "research_input_preparation_owner_v2",
+            "research_input_preparation_owner_v2",
+            "EXECUTE",
+            false
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            "service_role",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "read_research_author_assignment_v2",
+        "owner": "research_input_preparation_owner_v2",
+        "config": [
+          "search_path=pg_catalog, public"
+        ],
+        "strict": false,
+        "parallel": "u",
+        "volatile": "v",
+        "leakproof": false,
+        "signature": "read_research_author_assignment_v2(jsonb,uuid,text,text)",
+        "effectiveAcl": [
+          [
+            "anon",
+            false
+          ],
+          [
+            "authenticated",
+            false
+          ],
+          [
+            "authenticator",
+            false
+          ],
+          [
+            "dashboard_user",
+            false
+          ],
+          [
+            "legacy_correctness_rpc_owner",
+            false
+          ],
+          [
+            "opportunity_v3_rpc_owner",
+            false
+          ],
+          [
+            "pgbouncer",
+            false
+          ],
+          [
+            "postgres",
+            true
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            true
+          ],
+          [
+            "research_observed_rpc_owner",
+            false
+          ],
+          [
+            "research_source_fence_owner_v2",
+            false
+          ],
+          [
+            "service_role",
+            true
+          ],
+          [
+            "stockinsider",
+            false
+          ],
+          [
+            "stockinsider_runtime_v319",
+            false
+          ],
+          [
+            "supabase_admin",
+            false
+          ],
+          [
+            "supabase_auth_admin",
+            false
+          ],
+          [
+            "supabase_realtime_admin",
+            false
+          ],
+          [
+            "supabase_storage_admin",
+            false
+          ]
+        ],
+        "securityDefiner": true,
+        "definitionSha256": "c6d1db82add4ebd419a902a0b3325590834dd859802cf4814426db60a9228e5c"
+      }
+    },
+    {
+      "name": "assign_research_author_v2",
+      "signature": "assign_research_author_v2(jsonb,uuid,text,text)",
+      "oid": "25352",
+      "bodySha256": "35d895837c8faf5d75364af82fcafc247d7535fb49ed0b2d05c162724ddbe38b",
+      "matchesOriginalSourceBody": true,
+      "identity": {
+        "oid": "25352",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "service_role=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "assign_research_author_v2",
+        "prorows": 0,
+        "pronargs": 4,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      },
+      "catalog": {
+        "acl": [
+          [
+            "research_input_preparation_owner_v2",
+            "research_input_preparation_owner_v2",
+            "EXECUTE",
+            false
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            "service_role",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "assign_research_author_v2",
+        "owner": "research_input_preparation_owner_v2",
+        "config": [
+          "search_path=pg_catalog, public"
+        ],
+        "strict": false,
+        "parallel": "u",
+        "volatile": "v",
+        "leakproof": false,
+        "signature": "assign_research_author_v2(jsonb,uuid,text,text)",
+        "effectiveAcl": [
+          [
+            "anon",
+            false
+          ],
+          [
+            "authenticated",
+            false
+          ],
+          [
+            "authenticator",
+            false
+          ],
+          [
+            "dashboard_user",
+            false
+          ],
+          [
+            "legacy_correctness_rpc_owner",
+            false
+          ],
+          [
+            "opportunity_v3_rpc_owner",
+            false
+          ],
+          [
+            "pgbouncer",
+            false
+          ],
+          [
+            "postgres",
+            true
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            true
+          ],
+          [
+            "research_observed_rpc_owner",
+            false
+          ],
+          [
+            "research_source_fence_owner_v2",
+            false
+          ],
+          [
+            "service_role",
+            true
+          ],
+          [
+            "stockinsider",
+            false
+          ],
+          [
+            "stockinsider_runtime_v319",
+            false
+          ],
+          [
+            "supabase_admin",
+            false
+          ],
+          [
+            "supabase_auth_admin",
+            false
+          ],
+          [
+            "supabase_realtime_admin",
+            false
+          ],
+          [
+            "supabase_storage_admin",
+            false
+          ]
+        ],
+        "securityDefiner": true,
+        "definitionSha256": "4f227ff350d81b577738109fc3be9832cc272a4d49f84047cb66b95c6a7c1ed7"
+      }
+    },
+    {
+      "name": "read_research_author_packet_v2",
+      "signature": "read_research_author_packet_v2(jsonb,uuid,text,text)",
+      "oid": "25353",
+      "bodySha256": "aab28c28adb8ff5fb725acc1a53d44058a04ff66d456a92310b21dc3ed4751fc",
+      "matchesOriginalSourceBody": true,
+      "identity": {
+        "oid": "25353",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "service_role=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "read_research_author_packet_v2",
+        "prorows": 0,
+        "pronargs": 4,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      },
+      "catalog": {
+        "acl": [
+          [
+            "research_input_preparation_owner_v2",
+            "research_input_preparation_owner_v2",
+            "EXECUTE",
+            false
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            "service_role",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "read_research_author_packet_v2",
+        "owner": "research_input_preparation_owner_v2",
+        "config": [
+          "search_path=pg_catalog, public"
+        ],
+        "strict": false,
+        "parallel": "u",
+        "volatile": "v",
+        "leakproof": false,
+        "signature": "read_research_author_packet_v2(jsonb,uuid,text,text)",
+        "effectiveAcl": [
+          [
+            "anon",
+            false
+          ],
+          [
+            "authenticated",
+            false
+          ],
+          [
+            "authenticator",
+            false
+          ],
+          [
+            "dashboard_user",
+            false
+          ],
+          [
+            "legacy_correctness_rpc_owner",
+            false
+          ],
+          [
+            "opportunity_v3_rpc_owner",
+            false
+          ],
+          [
+            "pgbouncer",
+            false
+          ],
+          [
+            "postgres",
+            true
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            true
+          ],
+          [
+            "research_observed_rpc_owner",
+            false
+          ],
+          [
+            "research_source_fence_owner_v2",
+            false
+          ],
+          [
+            "service_role",
+            true
+          ],
+          [
+            "stockinsider",
+            false
+          ],
+          [
+            "stockinsider_runtime_v319",
+            false
+          ],
+          [
+            "supabase_admin",
+            false
+          ],
+          [
+            "supabase_auth_admin",
+            false
+          ],
+          [
+            "supabase_realtime_admin",
+            false
+          ],
+          [
+            "supabase_storage_admin",
+            false
+          ]
+        ],
+        "securityDefiner": true,
+        "definitionSha256": "9da7c8ce41a918cb192041a0bb62e22c1e62605ba7958c9958c8a3dc7d10ebc8"
+      }
+    },
+    {
+      "name": "read_research_author_result_v2",
+      "signature": "read_research_author_result_v2(jsonb,uuid,text,text)",
+      "oid": "25380",
+      "bodySha256": "2d821365f7ce9ac22e7c2992c64baf916ded4ece58fc44e413d71f3dcd702b4d",
+      "matchesOriginalSourceBody": true,
+      "identity": {
+        "oid": "25380",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "service_role=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "read_research_author_result_v2",
+        "prorows": 0,
+        "pronargs": 4,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      },
+      "catalog": {
+        "acl": [
+          [
+            "research_input_preparation_owner_v2",
+            "research_input_preparation_owner_v2",
+            "EXECUTE",
+            false
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            "service_role",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "read_research_author_result_v2",
+        "owner": "research_input_preparation_owner_v2",
+        "config": [
+          "search_path=pg_catalog, public"
+        ],
+        "strict": false,
+        "parallel": "u",
+        "volatile": "v",
+        "leakproof": false,
+        "signature": "read_research_author_result_v2(jsonb,uuid,text,text)",
+        "effectiveAcl": [
+          [
+            "anon",
+            false
+          ],
+          [
+            "authenticated",
+            false
+          ],
+          [
+            "authenticator",
+            false
+          ],
+          [
+            "dashboard_user",
+            false
+          ],
+          [
+            "legacy_correctness_rpc_owner",
+            false
+          ],
+          [
+            "opportunity_v3_rpc_owner",
+            false
+          ],
+          [
+            "pgbouncer",
+            false
+          ],
+          [
+            "postgres",
+            true
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            true
+          ],
+          [
+            "research_observed_rpc_owner",
+            false
+          ],
+          [
+            "research_source_fence_owner_v2",
+            false
+          ],
+          [
+            "service_role",
+            true
+          ],
+          [
+            "stockinsider",
+            false
+          ],
+          [
+            "stockinsider_runtime_v319",
+            false
+          ],
+          [
+            "supabase_admin",
+            false
+          ],
+          [
+            "supabase_auth_admin",
+            false
+          ],
+          [
+            "supabase_realtime_admin",
+            false
+          ],
+          [
+            "supabase_storage_admin",
+            false
+          ]
+        ],
+        "securityDefiner": true,
+        "definitionSha256": "dc3c11aa31c1af0e0903b14e13fdad74c1fc661ae49e7606d5b66e22a7a42480"
+      }
+    },
+    {
+      "name": "receive_research_author_result_v2",
+      "signature": "receive_research_author_result_v2(jsonb,uuid,text,text,jsonb)",
+      "oid": "25381",
+      "bodySha256": "7cd8d5a20f2f4d2420790b4a46c28c1d9ece5920177c0a02807fdf3f45d9d297",
+      "matchesOriginalSourceBody": true,
+      "identity": {
+        "oid": "25381",
+        "proacl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "service_role=X/research_input_preparation_owner_v2"
+        ],
+        "probin": null,
+        "procost": 100,
+        "prokind": "f",
+        "prolang": "13888",
+        "proname": "receive_research_author_result_v2",
+        "prorows": 0,
+        "pronargs": 5,
+        "proowner": "25200",
+        "proconfig": [
+          "search_path=pg_catalog, public"
+        ],
+        "proretset": false,
+        "prosecdef": true,
+        "prorettype": "3802",
+        "prosqlbody": null,
+        "prosupport": "-",
+        "proargmodes": null,
+        "proargnames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_principal",
+          "p_result"
+        ],
+        "proargtypes": [
+          "3802",
+          "2950",
+          "25",
+          "25",
+          "3802"
+        ],
+        "proisstrict": false,
+        "proparallel": "u",
+        "protrftypes": null,
+        "provariadic": "0",
+        "provolatile": "v",
+        "proleakproof": false,
+        "pronamespace": "16443",
+        "proallargtypes": null,
+        "proargdefaults": null,
+        "pronargdefaults": 0
+      },
+      "catalog": {
+        "acl": [
+          [
+            "research_input_preparation_owner_v2",
+            "research_input_preparation_owner_v2",
+            "EXECUTE",
+            false
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            "service_role",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "receive_research_author_result_v2",
+        "owner": "research_input_preparation_owner_v2",
+        "config": [
+          "search_path=pg_catalog, public"
+        ],
+        "strict": false,
+        "parallel": "u",
+        "volatile": "v",
+        "leakproof": false,
+        "signature": "receive_research_author_result_v2(jsonb,uuid,text,text,jsonb)",
+        "effectiveAcl": [
+          [
+            "anon",
+            false
+          ],
+          [
+            "authenticated",
+            false
+          ],
+          [
+            "authenticator",
+            false
+          ],
+          [
+            "dashboard_user",
+            false
+          ],
+          [
+            "legacy_correctness_rpc_owner",
+            false
+          ],
+          [
+            "opportunity_v3_rpc_owner",
+            false
+          ],
+          [
+            "pgbouncer",
+            false
+          ],
+          [
+            "postgres",
+            true
+          ],
+          [
+            "research_input_preparation_owner_v2",
+            true
+          ],
+          [
+            "research_observed_rpc_owner",
+            false
+          ],
+          [
+            "research_source_fence_owner_v2",
+            false
+          ],
+          [
+            "service_role",
+            true
+          ],
+          [
+            "stockinsider",
+            false
+          ],
+          [
+            "stockinsider_runtime_v319",
+            false
+          ],
+          [
+            "supabase_admin",
+            false
+          ],
+          [
+            "supabase_auth_admin",
+            false
+          ],
+          [
+            "supabase_realtime_admin",
+            false
+          ],
+          [
+            "supabase_storage_admin",
+            false
+          ]
+        ],
+        "securityDefiner": true,
+        "definitionSha256": "8ecd87041e229ab66e3829a6ee1824dea911206976ab2fe0c486e7466986ca7b"
+      }
+    }
+  ],
+  "stateBeforeEqualsAfterRollback": true,
+  "namespaceBeforeHash": "cb22ccfeb504b6fd82cc1af0d954fe220427d562120dd6089fc9accb9bffd29f",
+  "catalogBeforeHash": "4afc6fe90ae3d65acbc3858003695fc9b3c9c4122ef129f92ae174f0ea6bf9e4",
+  "objectIdentityDetailsHash": "267b53f4e167da15f61be6eb9517a19549a47b67cf5bdbf0f232efd44e3a9b1f",
+  "allPgProcMetadataAndDefaultsHash": "f7e66ca5861e2b72a630ebdbef85ce544c3bcbd73f2f2dfce38e9afd7905c2b2",
+  "inputRpcTraceEmpty": true,
+  "firstUnionCommit": false,
+  "noBusinessRowSnapshotClaim": true,
+  "installerResult": {
+    "sqlSha256": "d7ebb13af043d28d189a2337b5544850ccd5d2407ed53b4f3475693a514988ae",
+    "code": "42883",
+    "message": "operator does not exist: name = name[]",
+    "namespaceUnchanged": true,
+    "catalogUnchanged": true,
+    "objectOidsRolesAndMetadataUnchanged": true,
+    "defaultsUnchanged": true,
+    "codecs": {
+      "namespace": {
+        "jsSha256": "cb22ccfeb504b6fd82cc1af0d954fe220427d562120dd6089fc9accb9bffd29f",
+        "dbSha256": "cb22ccfeb504b6fd82cc1af0d954fe220427d562120dd6089fc9accb9bffd29f",
+        "jsBytes": 2730480,
+        "dbBytes": 2730480,
+        "equal": true,
+        "firstDifferentCodeUnit": -1
+      },
+      "catalog": {
+        "jsSha256": "4afc6fe90ae3d65acbc3858003695fc9b3c9c4122ef129f92ae174f0ea6bf9e4",
+        "dbSha256": "4afc6fe90ae3d65acbc3858003695fc9b3c9c4122ef129f92ae174f0ea6bf9e4",
+        "jsBytes": 7823725,
+        "dbBytes": 7823725,
+        "equal": true,
+        "firstDifferentCodeUnit": -1
+      }
+    },
+    "actualCommit": false
+  },
+  "pending": [
+    "first union COMMIT and four-body-only postconditions",
+    "installed-repeat refusal",
+    "busy / drift / forced-error rollback negatives",
+    "both issuer author assign/packet/receive/read/replay",
+    "original77 and compatible-v2 author delta acceptance",
+    "principal/lease/invocation/cap/hash/source negatives",
+    "author response-loss transport recovery",
+    "actual four callers/HTTP/Q-R/reviewer/atomic publication/whole closure"
+  ],
+  "businessLifecycleReached": false,
+  "authorRowsCreatedObserved": null,
+  "businessRowSnapshots": "NOT_RUN: setup stopped before binding registration / roster / preparation; do not claim row-count proof"
+}

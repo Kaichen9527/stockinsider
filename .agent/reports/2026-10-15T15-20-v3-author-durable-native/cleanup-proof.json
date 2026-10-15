@@ -1,0 +1,146 @@
+{
+  "sampledProcesses": [
+    {
+      "pid": 643551,
+      "comm": "node",
+      "lastSampleRssBytes": 27291648,
+      "absent": true
+    },
+    {
+      "pid": 643557,
+      "comm": "node",
+      "lastSampleRssBytes": 340639744,
+      "absent": true
+    },
+    {
+      "pid": 643570,
+      "comm": "initdb",
+      "lastSampleRssBytes": 6467584,
+      "absent": true
+    },
+    {
+      "pid": 643577,
+      "comm": "sh",
+      "lastSampleRssBytes": 778240,
+      "absent": true
+    },
+    {
+      "pid": 643578,
+      "comm": "postgres",
+      "lastSampleRssBytes": 26349568,
+      "absent": true
+    },
+    {
+      "pid": 643579,
+      "comm": "sh",
+      "lastSampleRssBytes": 786432,
+      "absent": true
+    },
+    {
+      "pid": 643580,
+      "comm": "postgres",
+      "lastSampleRssBytes": 45002752,
+      "absent": true
+    },
+    {
+      "pid": 643586,
+      "comm": "postgres",
+      "lastSampleRssBytes": 23957504,
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    },
+    {
+      "pid": 643587,
+      "comm": "postgres",
+      "lastSampleRssBytes": 4714496,
+      "absent": true
+    },
+    {
+      "pid": 643588,
+      "comm": "postgres",
+      "lastSampleRssBytes": 5218304,
+      "absent": true
+    },
+    {
+      "pid": 643590,
+      "comm": "postgres",
+      "lastSampleRssBytes": 9043968,
+      "absent": true
+    },
+    {
+      "pid": 643591,
+      "comm": "postgres",
+      "lastSampleRssBytes": 7331840,
+      "absent": true
+    },
+    {
+      "pid": 643592,
+      "comm": "postgres",
+      "lastSampleRssBytes": 6803456,
+      "absent": true
+    },
+    {
+      "pid": 643593,
+      "comm": "postgres",
+      "lastSampleRssBytes": 80928768,
+      "absent": true
+    },
+    {
+      "pid": 643594,
+      "comm": "postgres",
+      "lastSampleRssBytes": 64024576,
+      "absent": true
+    },
+    {
+      "pid": 643595,
+      "comm": "postgres",
+      "lastSampleRssBytes": 85725184,
+      "absent": true
+    },
+    {
+      "pid": 643597,
+      "comm": "postgres",
+      "lastSampleRssBytes": 141037568,
+      "absent": true
+    },
+    {
+      "pid": 643598,
+      "comm": "postgres",
+      "lastSampleRssBytes": 59645952,
+      "absent": true
+    },
+    {
+      "pid": 643599,
+      "comm": "postgres",
+      "lastSampleRssBytes": 149659648,
+      "absent": true
+    },
+    {
+      "pid": 643600,
+      "comm": "pg_ctl",
+      "lastSampleRssBytes": 1007616,
+      "absent": true
+    }
+  ],
+  "connections": {
+    "writer": {
+      "pid": 643598,
+      "absent": true
+    },
+    "observer": {
+      "pid": 643599,
+      "absent": true
+    }
+  },
+  "cluster": "/tmp/vp3profile-U5U7Ud",
+  "clusterAbsent": true,
+  "serverShutdownLogged": true,
+  "helperCleanup": {
+    "stopped": true,
+    "removed": "/tmp/vp3profile-U5U7Ud",
+    "stage": "author union: original 619-line SQL first apply"
+  },
+  "unexecutedBusinessHasNoSourceRoots": true
+}
