@@ -1,0 +1,39 @@
+{
+  "files": [
+    {
+      "path": "build-baseline.py",
+      "bytes": 4909,
+      "sha256": "2a7174fde0764f2776015ea6fcfe6bb9731ab9a6dd06bf53bfa084baf4c8ec37"
+    },
+    {
+      "path": "coverage-baseline.json",
+      "bytes": 99836,
+      "sha256": "2863964de813f929a19872fcf7ecb9fb191cd07eee896035e1372129ad5f419a"
+    },
+    {
+      "path": "execution-and-scope.json",
+      "bytes": 1332,
+      "sha256": "8aa907d2e4da27514fee11e9e26c0122c14816ab4995f51b56d11fd8bb388802"
+    },
+    {
+      "path": "source/2383/article.md",
+      "bytes": 23472,
+      "sha256": "65a5c805e45487dfa6daa91d5c8d7f5d5aae4a10ed7f6aa250cb6b11710b3064"
+    },
+    {
+      "path": "source/2383/draft-metadata.json",
+      "bytes": 2109,
+      "sha256": "31a69490a34087491bbd8a459244919a5016388bb81da3324421d08a0ac59194"
+    },
+    {
+      "path": "source/2409/article.md",
+      "bytes": 23832,
+      "sha256": "accb32669966843b008a345bfe732a13d41af3b008fcbfe2f716d6d580c8cda2"
+    },
+    {
+      "path": "source/2409/draft-metadata.json",
+      "bytes": 2632,
+      "sha256": "17f302aa3826a1d270df151daacc3f3bee5a61104ce004e1f657d26cf1214c49"
+    }
+  ]
+}
