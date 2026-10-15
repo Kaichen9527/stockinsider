@@ -1,0 +1,13 @@
+接續turn01a1408a真completed/threadidle後，僅一件10min SOURCE-ONLY新根因最小修補。Branch codex/research-v3-author-union-case-fix-oct16，base14a225fbb2328b2cbfd044201dd47ecc343087a9，產品前subjectc38。原native新RED 42601/0PASS2FAIL與receipt1e8254c30d14fe879b68148c8fcc834dd61f743fa132bf47138a5b0fb496148a/14a全保留；無newfirstCOMMIT或兩issuer/lifecycle可稱，前42883已越過不改原RED為PASS。
+
+Root已讀exact619SQL中read_research_author_result_v2第三replacement與公開diagnosis：IF predicate內 IS DISTINCT FROM CASE ... WHEN ... THEN ... END 的第一THEN為server定位source281。根因候選是PL/pgSQL IF讀predicate至THEN的界線遇未括號CASE；不是metadata/hash不符。Source同形receive arm lines395/396兩個CASE也是同源風險，並未native執行，不冒另外兩FAIL。這次只將這三個SQL CASE expressions各包一對括號，保留完整CASE內容、WHEN/ELSE/null語意與全部outer IF comparisons：
+1. line280開始 ... IS DISTINCT FROM (CASE revision... ，line282結尾 ... END)
+2. line395 ... IS DISTINCT FROM (CASE WHEN ... END)
+3. line396 ... IS DISTINCT FROM (CASE WHEN ... END)
+不要改namespace/catalog SELECT裡合法CASE，不抽helper/新fallback/刪分支/放寬nullable條件追綠。
+
+Ownership僅candidate migration上述3CASE以及因read-result/receive兩個body bytes真正改變而必要的兩個successor prosrcSHA：SQL內post-body hash literals與 docs/operations/2026-10-15/v3-author-durable-union/source-derived-profile.json 的對應successorBodySha256（四欄位）。原六predecessorbodyhash/cb22/4afc/其餘兩successorbodyhash/前原profile/query/完整後condition/OID/owner/security/searchpath/ACL/default/鎖/timeout/limits/原v2arm全部保持。原8array expression修補不可回退；caller/harness/helper/fixture/原49/50/26/roles/grants/authority/pins/workflows不改。你不是唯一codebase工作者，不回退別人改動。Root交付後會獨立重建這3pair parentheses和兩bodyhash，再另授權changed-inputnative；本件不得PG（連grammar scratch都不要）或native/harness修補。
+
+Fresh自身workspace/tmp8GiBfloor/singleworkload/RSSbudgets；只必要6staticSQLcase、exact字元差異/完整body與原v2arm/hash invariants檢查，不重跑32/33/已green套件，不build/npm/install/app/HTTP/SSH/VPS/CI/PR/ref/readymerge/deploy/cache/刪資料/停別App/降floor。新source/evidence分commit、WIP/rawinventory/safeTAP+handoff/receipt保存；未實測grammar只稱sourcecandidate，不以6static代native。若未知進一步問題封存pending，不順手修改產品或expectedprofile。原14a rollback完整metadata/OID/default/catalog/namespace保持、2backendsabsent/clusterremoved/shutdown與RSS0zombie範圍照實，原29private raw未Root取contents不能冒verified。
+
+此rootcause修補未實測PG，maker不得自簽Root批准。後續author/legacy/ACL/response-loss/四caller/Q-R/reviewer/atomicpublication/兩formal文章semantic仍待。DD部署one-shot已消耗/currentdd598，禁止main169-deploy.sh/重deploy；Fullgoalactive/heartbeatACTIVE。交付exactsource/evidence/receipt後先等待Root精確review，不自行接native。正常進度安靜。

@@ -1,0 +1,33 @@
+{
+  "recordedAt": "2026-10-15T18:14:49.943015+00:00",
+  "executionCheckout": "1493cfbeec0ee6f26096b21aec8db1fbc4f47055",
+  "productSubject": "c38fb00986925b4b50719b3389a2a94a5ee3a4c0",
+  "harnessSubject": "0a0ea4ccc618df2d86ceb4de4bc7eff537ff3f77",
+  "evidence": "14a225fbb2328b2cbfd044201dd47ecc343087a9",
+  "receiptSHA256": "1e8254c30d14fe879b68148c8fcc834dd61f743fa132bf47138a5b0fb496148a",
+  "actualGitInputs": 289,
+  "actualGitBytes": 9748675,
+  "publishedFiles": 9,
+  "publishedBytes": 113217,
+  "privateRawFiles": 29,
+  "privateRawBytes": 72892822,
+  "privateRawContentsObtained": false,
+  "native": {
+    "pass": 0,
+    "fail": 2,
+    "EMC": "NOT_RUN",
+    "authorLifecycle": "NOT_RUN",
+    "businessSnapshots": "NOT_RUN"
+  },
+  "publicWitnessConsistency": true,
+  "scope": "Root source/public-witness integration, no Root native/private raw verification",
+  "sourceDiagnosis": "42601 third replacement; source281 CASE THEN in unparenthesized IF expression; parentheses repair remains unexecuted candidate",
+  "reviewDecision": "REQUEST_CHANGES",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1
+  },
+  "localAvailableBytes": 2987810816,
+  "goal": "active"
+}
