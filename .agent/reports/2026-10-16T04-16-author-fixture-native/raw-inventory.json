@@ -1,0 +1,383 @@
+{
+  "privateRoot": "/tmp/author-fixture-native-o16",
+  "count": 75,
+  "bytes": 150040280,
+  "files": [
+    {
+      "path": "binaries.json",
+      "bytes": 1629,
+      "sha256": "22a35294a8b4b814c5b1b49f1f0873750ee95be6e850e1686a35a856d9d1996f"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 5588,
+      "sha256": "20fafe5d9c5e2b9cd8712dd687876ca9d7e089fb05bc11cd51fccfcb75526010"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 670,
+      "sha256": "face3d890734d22b823b2a35ecaa5f11a5f45c2d0bb753727d3ca399d4b9ec7d"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-01-prepared.json",
+      "bytes": 5007,
+      "sha256": "2b5c714b6b6d49d0f3636a618b4178892e4616a47c7c9483d513a5101bf3e102"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-02-firstseal-observed.json",
+      "bytes": 207265,
+      "sha256": "92fe1e8ebf9ff65cb0ca58d6326be245e4c8dfb77e079cf0a02b61af96577e90"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-03-assigned.json",
+      "bytes": 209002,
+      "sha256": "02031703d0f8aa4af1a7340a30a6a9b62356049938c930cc68f276667c2ef81c"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-04-result-observed.json",
+      "bytes": 384752,
+      "sha256": "1edb04277f5e192bd4123c89e76523c472a6f3a79751d333f9ad943be397f177"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-05-exact-receive-replay.json",
+      "bytes": 384752,
+      "sha256": "1edb04277f5e192bd4123c89e76523c472a6f3a79751d333f9ad943be397f177"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-06-no-roots-read-recovery.json",
+      "bytes": 384752,
+      "sha256": "1edb04277f5e192bd4123c89e76523c472a6f3a79751d333f9ad943be397f177"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-author-result-witness.json",
+      "bytes": 1902,
+      "sha256": "2b54c8993ce0f7d04da894beccf6417b06c13e481468e987d0944d06436bf5cb"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-author-rpc-order.json",
+      "bytes": 3266,
+      "sha256": "bc82e1ab22856a6110cac83388a6101f2b88bcdc578c464c38b14198254db193"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-author-source-profile-safe.json",
+      "bytes": 740,
+      "sha256": "0faa671745de64496b84ec90a9ecb2c6448a5a58129fc384fe31bb0e8584acfa"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-claim.json",
+      "bytes": 1342,
+      "sha256": "3a2d1237f43fdd085f5d89e4beb2bad8899aaa38a61478a2bc60a8540c4d0945"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-cleanup.json",
+      "bytes": 93,
+      "sha256": "e4df29dc93384b697accdd14596d1f4822d23b4008ac24281e70118cca5c2fb2"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-cluster-absent.json",
+      "bytes": 67,
+      "sha256": "1373fb5d4f6e39e27f2c2c1b7dddf3e4d09654b90cf6709be8ea2829ba1dedf1"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-connections.json",
+      "bytes": 73,
+      "sha256": "5b67aaa37dac5eed61c7a4e9f8f8e7505eaa2e2cd33f2ea65db22feef01afec8"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "f2a6ccf6911c4490a69fe948c697d5570aace5cd146da88e102083011a0381ce"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-installer-before-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-installer-codecs.json",
+      "bytes": 581,
+      "sha256": "5cd8f502264ce1d8b19b824ec7b58c7611e53d6bebcde21b695c2f1f35e25415"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-installer-commit-witness.json",
+      "bytes": 1691,
+      "sha256": "3d62012b2771cebace8f8e6fa511c21ec327863fcd2a78d90309dae5b6ee7b74"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-installer-connections.json",
+      "bytes": 73,
+      "sha256": "c4ea082dbe501cd1ca5152e67edfaddd07659963bb44151259cf0bc3928e717f"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-installer-repeat-rejected.json",
+      "bytes": 73,
+      "sha256": "89759e3b22273d12f20afad805a799420b0f72b5349ccb1eecc47d6ba4ca6dd4"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-postgres-before-cleanup.log",
+      "bytes": 65334,
+      "sha256": "b2dcba590cec3eba5ae162fde1e99fab322626a1942b6e958b017adf1fa3386d"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-postgres.log",
+      "bytes": 65485,
+      "sha256": "56e6b7fd7a6559a63bf6b7f98b123da3320a4c7d6f98334ffd65efcca7c21c9b"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-preparation.json",
+      "bytes": 2948,
+      "sha256": "2ad36db480a2c12d19388f1a984c3c4b1d6120e5327c17bbe94cd06524587134"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-priority.json",
+      "bytes": 142,
+      "sha256": "264cab899b3ef77f3bbcda84d50cfba22e8995cd28dd718d46fca74affaf4229"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-roster-admission.json",
+      "bytes": 448,
+      "sha256": "865bdda77c80b4fd76757f4d3c7307c7c43d10f0aa71b119eea60173275c62e5"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-rpc-fd-order.json",
+      "bytes": 2424,
+      "sha256": "bbb6c14228b51cdb7ec4b00ba2515fddb5e1d7878cece8fae92b5978a74c36f5"
+    },
+    {
+      "path": "native-artifacts/2383-author-durable-2383-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "1de743d3ed3778a24b515f8409d0f6cfc2edef696ecfe28fa3c241c0163d1c17"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-01-prepared.json",
+      "bytes": 5010,
+      "sha256": "58dcd0662ae91b75c60d62d78da7d61559b7e2e24c18e2a6227b5bc2cef80d9d"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-02-firstseal-observed.json",
+      "bytes": 347532,
+      "sha256": "3d17c260e5e74cf8b325d71e78a38113487738df18a9e759a64b0de293456e38"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-03-assigned.json",
+      "bytes": 349272,
+      "sha256": "f5a1412addfe2dba6b23a7ff478055a9e285bee40fb74bc7abcded8f3efa35db"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-04-result-observed.json",
+      "bytes": 628767,
+      "sha256": "6e8fcd9ea7aa178d454de737ddb66eb1cf2a8aaff801c7f70a5e06e29953a79c"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-05-exact-receive-replay.json",
+      "bytes": 628767,
+      "sha256": "6e8fcd9ea7aa178d454de737ddb66eb1cf2a8aaff801c7f70a5e06e29953a79c"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-06-no-roots-read-recovery.json",
+      "bytes": 628767,
+      "sha256": "6e8fcd9ea7aa178d454de737ddb66eb1cf2a8aaff801c7f70a5e06e29953a79c"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-author-result-witness.json",
+      "bytes": 1902,
+      "sha256": "8383bdbbd2c0a5bf87cab56676ca70fec4a31dacfcaf8fcda960196f5d6d7ea1"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-author-rpc-order.json",
+      "bytes": 3210,
+      "sha256": "8a8ea3fe14738d438a616f9aaf472cb5453bcc9c3d73eeee57059e0408d49a0e"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-author-source-profile-safe.json",
+      "bytes": 740,
+      "sha256": "1b8aca7ad187f398f7d6d68801e5f2799f0dca0b1a620b0e24968e9f15d9944c"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-claim.json",
+      "bytes": 1345,
+      "sha256": "48c3d650823d5cf627804c7ca8da99d1890698a735adb2ea8fa55c07b4f9b684"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-cleanup.json",
+      "bytes": 93,
+      "sha256": "15d78c5182a4a5621867d052890e92504b9bc9e71fabae43069e245ab9c6015a"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-cluster-absent.json",
+      "bytes": 67,
+      "sha256": "1373fb5d4f6e39e27f2c2c1b7dddf3e4d09654b90cf6709be8ea2829ba1dedf1"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-connections.json",
+      "bytes": 73,
+      "sha256": "c25ca4c5bfcbc80511764bb2085184cf6bd8946e18c8cd3f3f286717c67925f4"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-before-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-codecs.json",
+      "bytes": 581,
+      "sha256": "5cd8f502264ce1d8b19b824ec7b58c7611e53d6bebcde21b695c2f1f35e25415"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-commit-witness.json",
+      "bytes": 1691,
+      "sha256": "61cda49d0a82a1172d6ded28a3871e9d0abbefcbf83fc21db5a8196ec42f7654"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-connections.json",
+      "bytes": 73,
+      "sha256": "736720adda7bb91e8e565d0ab55b7ab4d0fd3352217d84ff3e6320a1367fcceb"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-installer-repeat-rejected.json",
+      "bytes": 73,
+      "sha256": "89759e3b22273d12f20afad805a799420b0f72b5349ccb1eecc47d6ba4ca6dd4"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-postgres-before-cleanup.log",
+      "bytes": 65334,
+      "sha256": "c766d85759c4ededf33587282be672094e268bc2fe77abe22e539f70aa78fe23"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-postgres.log",
+      "bytes": 65485,
+      "sha256": "2a849ffeee57fb15ccaaaa11a049b2ceaca94273d53154d0e39489518b3d91f7"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-preparation.json",
+      "bytes": 2951,
+      "sha256": "b6aae92652800af63761aa8cc2446b1d30b39aa3a75f4d5c1947623355ada7b7"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-priority.json",
+      "bytes": 142,
+      "sha256": "8a100491b0abd778db8e3e1cdcf29156b39913b94842c2fac8da9b8e310074b4"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-roster-admission.json",
+      "bytes": 448,
+      "sha256": "ca225b326699b0bd1681fe847c04647e539f7a9e4086158d01a4d8cca6769d9f"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-rpc-fd-order.json",
+      "bytes": 2395,
+      "sha256": "eace0aee7ba742b53f4f9adeb211ee22d0b9f098c1e32ac485fca0926c00fc62"
+    },
+    {
+      "path": "native-artifacts/2409-author-durable-2409-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "569698b58fd2b3ad37bc8048d13fa2be773a78722826ba6c240e76c7a2243a94"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 792,
+      "sha256": "5db83b8a01076cb0a41e1a68d60fb0768bc3353d7ede003a0d07b916d6733a7c"
+    },
+    {
+      "path": "native.samples.jsonl",
+      "bytes": 176579,
+      "sha256": "6837cbfecc01a8b251381209de4c2b194a7c7ab63820439009883e0e7571f791"
+    },
+    {
+      "path": "native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native.stdout",
+      "bytes": 1298,
+      "sha256": "b8b25e4a3ec7cad87fdfdbb1904171fbabff72eb439264a4df0beadf814b5378"
+    },
+    {
+      "path": "post-source-check.json",
+      "bytes": 66,
+      "sha256": "477981fc7dd760c5c344b32207686a8a1bc0ce81b7df6723abc02ffde918666e"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 78664,
+      "sha256": "b74dab7ccad2b30b184a4205efbf938e428c6af25be2dacc701d0c582120f13c"
+    },
+    {
+      "path": "run.py",
+      "bytes": 3334,
+      "sha256": "abaea69d03a4b963d48328eb5860c4017d03bbc8c2330a568f3e435e6bcc3722"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 72269,
+      "sha256": "fab236476e8308c5a248234af730c76feff20adc47175230a37f017df2248df5"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 590,
+      "sha256": "6b769bd91481c8584a2c98d18a81eee3ead1b277fd25de2ccbefaaeabdc45d66"
+    },
+    {
+      "path": "summarize.mjs",
+      "bytes": 4509,
+      "sha256": "e4cd582cfaf6601d67c59e2f61df07da1b5d9bfdc7f5f3046481ee11e41934f1"
+    }
+  ],
+  "scope": "maker hashed local bytes; no claim Root fetched private contents"
+}

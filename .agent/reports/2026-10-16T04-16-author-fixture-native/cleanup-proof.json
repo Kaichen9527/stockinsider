@@ -1,0 +1,286 @@
+{
+  "companies": [
+    {
+      "symbol": "2409",
+      "connections": {
+        "installer-connections.json": {
+          "writer": 657807,
+          "observer": 657808,
+          "observerReadOnly": "on"
+        },
+        "connections.json": {
+          "writer": 657807,
+          "observer": 657809,
+          "observerReadOnly": true
+        }
+      },
+      "backends": [
+        {
+          "pid": 657807,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 657808,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 657809,
+          "comm": "postgres backend",
+          "absent": true
+        }
+      ],
+      "clusterRemoved": true,
+      "socketDirectoryRemoved": true,
+      "serverShutdownLogged": true,
+      "helperCleanup": {
+        "stopped": true,
+        "removed": "/tmp/vp3profile-FrV5Uu",
+        "stage": "business complete"
+      },
+      "secureRootAbsence": "NOT_INDEPENDENTLY_RECORDED; helper finally removes owned secure tree",
+      "queriesSettled": "test callbacks completed; clients end then pg_ctl immediate shutdown; no independent pending-query counter recorded"
+    },
+    {
+      "symbol": "2383",
+      "connections": {
+        "installer-connections.json": {
+          "writer": 657850,
+          "observer": 657851,
+          "observerReadOnly": "on"
+        },
+        "connections.json": {
+          "writer": 657850,
+          "observer": 657862,
+          "observerReadOnly": true
+        }
+      },
+      "backends": [
+        {
+          "pid": 657850,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 657851,
+          "comm": "postgres backend",
+          "absent": true
+        },
+        {
+          "pid": 657862,
+          "comm": "postgres backend",
+          "absent": true
+        }
+      ],
+      "clusterRemoved": true,
+      "socketDirectoryRemoved": true,
+      "serverShutdownLogged": true,
+      "helperCleanup": {
+        "stopped": true,
+        "removed": "/tmp/vp3profile-kmbZ4y",
+        "stage": "business complete"
+      },
+      "secureRootAbsence": "NOT_INDEPENDENTLY_RECORDED; helper finally removes owned secure tree",
+      "queriesSettled": "test callbacks completed; clients end then pg_ctl immediate shutdown; no independent pending-query counter recorded"
+    }
+  ],
+  "sampledProcesses": [
+    {
+      "pid": 657760,
+      "comm": "node",
+      "absent": true
+    },
+    {
+      "pid": 657766,
+      "comm": "node",
+      "absent": true
+    },
+    {
+      "pid": 657779,
+      "comm": "initdb",
+      "absent": true
+    },
+    {
+      "pid": 657788,
+      "comm": "sh",
+      "absent": true
+    },
+    {
+      "pid": 657789,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657792,
+      "comm": "pg_ctl",
+      "absent": true
+    },
+    {
+      "pid": 657795,
+      "comm": "postgres",
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    },
+    {
+      "pid": 657796,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657797,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657799,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657800,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657801,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657802,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657803,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657804,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657806,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657807,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657808,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657809,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657819,
+      "comm": "pg_ctl",
+      "absent": true
+    },
+    {
+      "pid": 657822,
+      "comm": "initdb",
+      "absent": true
+    },
+    {
+      "pid": 657829,
+      "comm": "sh",
+      "absent": true
+    },
+    {
+      "pid": 657830,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657831,
+      "comm": "sh",
+      "absent": true
+    },
+    {
+      "pid": 657832,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657838,
+      "comm": "postgres",
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0
+    },
+    {
+      "pid": 657839,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657840,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657842,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657843,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657844,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657845,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657846,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657847,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657849,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657850,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657851,
+      "comm": "postgres",
+      "absent": true
+    },
+    {
+      "pid": 657862,
+      "comm": "postgres",
+      "absent": true
+    }
+  ]
+}

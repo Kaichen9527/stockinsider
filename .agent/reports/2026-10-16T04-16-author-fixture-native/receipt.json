@@ -1,0 +1,71 @@
+{
+  "kind": "maker-local-native-receipt-not-independent-approval",
+  "sealedAt": "2026-10-15T20:21:08.301585+00:00",
+  "executionBase": "1df8d8ca200b6dfab65190016412ce14eac6e330",
+  "productSubject": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "harnessSubject": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+  "sourceChanged": false,
+  "actualNativeInvocations": 1,
+  "counts": {
+    "tests": 3,
+    "pass": 3,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "rawCount": 75,
+  "rawBytes": 150040280,
+  "publishedFiles": [
+    {
+      "path": ".agent/reports/2026-10-16T04-16-author-fixture-native/HANDOFF.md",
+      "bytes": 6198,
+      "sha256": "04da9a3ad59632db53579edfcfaf80694d009f3bad476848bc2a6c247889da49"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-author-fixture-native/binaries.json",
+      "bytes": 1629,
+      "sha256": "22a35294a8b4b814c5b1b49f1f0873750ee95be6e850e1686a35a856d9d1996f"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-author-fixture-native/cleanup-proof.json",
+      "bytes": 5588,
+      "sha256": "20fafe5d9c5e2b9cd8712dd687876ca9d7e089fb05bc11cd51fccfcb75526010"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-author-fixture-native/command-seal.json",
+      "bytes": 670,
+      "sha256": "face3d890734d22b823b2a35ecaa5f11a5f45c2d0bb753727d3ca399d4b9ec7d"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-author-fixture-native/native.result.json",
+      "bytes": 792,
+      "sha256": "5db83b8a01076cb0a41e1a68d60fb0768bc3353d7ede003a0d07b916d6733a7c"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-author-fixture-native/post-source-check.json",
+      "bytes": 66,
+      "sha256": "477981fc7dd760c5c344b32207686a8a1bc0ce81b7df6723abc02ffde918666e"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-author-fixture-native/public-safe-witness.json",
+      "bytes": 78664,
+      "sha256": "b74dab7ccad2b30b184a4205efbf938e428c6af25be2dacc701d0c582120f13c"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-author-fixture-native/raw-inventory.json",
+      "bytes": 14512,
+      "sha256": "694c6e1dca6ed6c6f9970ab4d28cda9cabccf85b545d7ac1f1dbb698e5163532"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-author-fixture-native/source-seal.json",
+      "bytes": 72269,
+      "sha256": "fab236476e8308c5a248234af730c76feff20adc47175230a37f017df2248df5"
+    },
+    {
+      "path": ".agent/reports/2026-10-16T04-16-author-fixture-native/stackfree.tap",
+      "bytes": 590,
+      "sha256": "6b769bd91481c8584a2c98d18a81eee3ead1b277fd25de2ccbefaaeabdc45d66"
+    }
+  ]
+}
