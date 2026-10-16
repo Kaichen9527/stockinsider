@@ -1,0 +1,27 @@
+{
+  "source": "scripts/opportunity-v3/research-v3-author-durable-native.test.mjs",
+  "sourceCommit": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+  "fragments": {
+    "installer": {
+      "bytes": 3921,
+      "sha256": "9676e0ae3cf65cd9f4a2ec0048908cb9ebf2bf5748927343c3d8a1383c88312a",
+      "exact": true
+    },
+    "snapshot": {
+      "bytes": 729,
+      "sha256": "91028e77bbf74886a65dd780126c224c13a168a7f8f5fced7d9ba83c1f89dd62",
+      "exact": true
+    },
+    "sourceProfile": {
+      "bytes": 3177,
+      "sha256": "88d182f9b814e54b76314796b30ffa9b58a90df144da14e412cf744d78135b37",
+      "exact": true
+    },
+    "authorPrefix": {
+      "bytes": 4193,
+      "sha256": "cb7537986ef7a0e78acbee148e7ad63ff9a67eefc5d84800608bfa8da3ffe4dd",
+      "exact": true,
+      "tail": "new return instead of old receive replay/recovery; declaration unchanged"
+    }
+  }
+}

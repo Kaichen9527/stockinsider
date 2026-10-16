@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "--import",
+    "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/research-v3-completed-handoff-reviewer-native.test.mjs"
+  ],
+  "start": "2026-10-16T08:45:37.165097+00:00",
+  "cwd": "/tmp/si-pubtail-o14",
+  "sampleSeconds": 0.2,
+  "peakSessionAndPgRssBytes": 0,
+  "minimumFreeBytes": {
+    "/workspace": 8591937536,
+    "/tmp": 14268874752
+  },
+  "user": "agent",
+  "artifactPath": "/tmp/hr-native-o16",
+  "deadline": "2026-10-16T09:16:10Z"
+}

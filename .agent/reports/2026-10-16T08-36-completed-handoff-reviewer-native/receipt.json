@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "bounded-native-maker-receipt-v1",
+  "utc": "2026-10-16T08:54:51.947734+00:00",
+  "base": "8b00416572b97e44832a792384dc60ad47d3e991",
+  "harnessSource": "014d6468add162fa54c34680c07f10e2dab789c3",
+  "harnessTree": "9d2e2f4c5b6a4037bb44cf138b7bb89a339ed00c",
+  "tsProduct": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+  "authorSql": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "fenceSql": "259264b8ed17df0ffb38b19efd0e05bfbaaf3a98",
+  "handoff": {
+    "commit": "52b8bdeb84f8f98bfed98b5c6700e68da60b468a",
+    "path": "docs/operations/2026-10-16/completed-handoff-reviewer-native/EXECUTION.md",
+    "bytes": 5955,
+    "sha256": "adc93ed575dd4f97be534bf1a38d45e8b0e6b93f2bb0675bf30619390dbe0af8",
+    "blob": "9a1ce7f54b5e28ad3c6e969d87111e48472bb6f8"
+  },
+  "executedInputCount": 317,
+  "executedInputBytes": 10319157,
+  "original314Unchanged": true,
+  "allExecutedInputsUnchanged": true,
+  "actualTests": {
+    "tests": 3,
+    "suites": 0,
+    "pass": 3,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "nativeRunCount": 1,
+  "makerDerivedNotIndependentApproval": true,
+  "rawCount": 205,
+  "rawBytes": 310150803,
+  "publishedFilesExcludingReceipt": [
+    {
+      "path": "DELIVERY.md",
+      "bytes": 2826,
+      "sha256": "bc2843bdac7682a6cbc4168f45e80745eb99ba53c8c9cb082fc1cd967d6e1004"
+    },
+    {
+      "path": "actual-binding-identity.json",
+      "bytes": 2619,
+      "sha256": "595e3f4a27240d291ed5115406679f37b98b286a087a1647dfa485881c1dd534"
+    },
+    {
+      "path": "binaries.json",
+      "bytes": 1705,
+      "sha256": "51caf8904d5ae416d30d3aa73c60cbbe5a56378ce02cc2482423f75b1cd3936a"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 7682,
+      "sha256": "29b47f8e34746c2f70cada650fed04ba4e5d673f994f576f72feeecf9e49c44e"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 653,
+      "sha256": "4c928c53cc210b65be0e641dbedceb84632971fba384f1395bd96899deaa9d83"
+    },
+    {
+      "path": "exact-fragments.json",
+      "bytes": 866,
+      "sha256": "e3ff40e144826d05921da82159e51b78a51e08b388aed4c1faf0c6701fb53f65"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 775,
+      "sha256": "a23c75c6bc27b432e2d47620a98aa3576a958f9c39444c92cd76b75a63558f7c"
+    },
+    {
+      "path": "post-source-check.json",
+      "bytes": 87226,
+      "sha256": "e930c0acbedace4dff75276fc2e91ab00772496bb9b4a0854de30408c27cc4dc"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 131796,
+      "sha256": "d005c963f84494b3ff6b064c760f03e808ed11e03bd216bab7b1f31ad565eb2c"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 44998,
+      "sha256": "9be46440c5c122523aea3666aa8e52df3a2ab9f37e2382a1c350c424f3205360"
+    },
+    {
+      "path": "source-checks.json",
+      "bytes": 619,
+      "sha256": "87d00cfb18dc5d442535de80731acd6f1f390c7f37ef1a0986011178b339185b"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 90118,
+      "sha256": "bb702b628ccc760513550d774dd6c4ed9a83ed4c596098a1273e1f9f48ea0b5f"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 788,
+      "sha256": "2b8bbf95888af80aa34d9f3186b74dd1fb4641df771b17b0179dc71c0f246fab"
+    }
+  ],
+  "publishedBytesExcludingReceipt": 372671,
+  "cleanup": {
+    "backendAbsentCount": 10,
+    "clustersRemoved": 2,
+    "secureRootFinallyAndPostrunAbsence": true,
+    "remainingZombies": [
+      {
+        "pid": 693889,
+        "exists": true,
+        "name": "postgres",
+        "state": "Z",
+        "ppid": 1,
+        "session": 693889,
+        "rssBytes": 0
+      },
+      {
+        "pid": 693948,
+        "exists": true,
+        "name": "postgres",
+        "state": "Z",
+        "ppid": 1,
+        "session": 693948,
+        "rssBytes": 0
+      }
+    ]
+  },
+  "pending": [
+    "legacy77/compatible differential acceptance",
+    "source withdrawal and other ACL/rights/lease/caps negative acceptance",
+    "fence busy/drift/forcedrollback",
+    "real handoff and reviewer-assignment transport response loss",
+    "actual four callers/HTTP and independent reviewer execution",
+    "reviewer-result/Q-R/reviewpack/atomicpublication/whole S-C-B-Q-R-A/formal claim semantics/two formal articles"
+  ]
+}

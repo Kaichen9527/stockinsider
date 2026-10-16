@@ -1,0 +1,383 @@
+{
+  "utc": "2026-10-16T08:50:22.919054+00:00",
+  "cases": [
+    {
+      "symbol": "2409",
+      "clusterPathHash": "5d9f1e9736bddcbc043d10a762cfb77c8bbc02392b9ba779d941c399994b6801",
+      "clusterAbsent": true,
+      "socketDirectoryAbsent": true,
+      "shutdownLogObserved": true,
+      "cleanupStage": "business complete",
+      "stoppedReported": true,
+      "secureRootFinallyAbsenceRecorded": true,
+      "secureRootAfterRunAbsent": true,
+      "secureRootPathHash": "be8cfc30fc31636f0f2767ada7e639c3673dbade89e1149474aa0698787a60f3",
+      "financialRoots": [
+        {
+          "pathHash": "922b59a86131e88b4e662cdfe9880932de8135e78625b7ecd36ed77c168459b8",
+          "finallyAbsent": true,
+          "afterRunAbsent": true
+        },
+        {
+          "pathHash": "d7687d2595f7c8d60112d2a8da3921e20ea40d4bdb905288a47861bacf045408",
+          "finallyAbsent": true,
+          "afterRunAbsent": true
+        }
+      ],
+      "serverLogBefore": {
+        "bytes": 107902,
+        "sha256": "8026b5437637bae9ca3c2647a05988839507b222bc32ff18a904e0e25dd2ab19"
+      },
+      "serverLogAfter": {
+        "bytes": 108053,
+        "sha256": "1cae29fff56db48e98fe6e472f7c597e1495b0183208e3ae9c988887ed3fd655"
+      },
+      "c08Connections": {
+        "writer": 693901,
+        "observer": 693902,
+        "observerReadOnly": "on"
+      },
+      "fenceConnections": {
+        "writer": 693901,
+        "observer": 693915
+      },
+      "businessConnections": {
+        "operator": 693927,
+        "writer": 693901,
+        "observer": 693928,
+        "observerReadOnly": "on"
+      },
+      "preCleanupBackends": {
+        "pids": [
+          693927,
+          693901,
+          693928
+        ],
+        "active": [
+          {
+            "pid": 693901,
+            "state": "idle"
+          },
+          {
+            "pid": 693927,
+            "state": "idle"
+          }
+        ]
+      }
+    },
+    {
+      "symbol": "2383",
+      "clusterPathHash": "fd8dcd7fa72e41471c17962c472920ce4233e169b6b80f649281b8501789b134",
+      "clusterAbsent": true,
+      "socketDirectoryAbsent": true,
+      "shutdownLogObserved": true,
+      "cleanupStage": "business complete",
+      "stoppedReported": true,
+      "secureRootFinallyAbsenceRecorded": true,
+      "secureRootAfterRunAbsent": true,
+      "secureRootPathHash": "2fa455f21950c7c16c43a63dc76cac194d2cd28377311a31cb9a1254608b4685",
+      "financialRoots": [
+        {
+          "pathHash": "5f37d9054aacc9b081e600886604c57e75b699002c2a8c6210b7744db7f98a82",
+          "finallyAbsent": true,
+          "afterRunAbsent": true
+        },
+        {
+          "pathHash": "c589e37fc22da247ca857b83488a73df858a5d36d1cce4bd6a7a81ad80c50029",
+          "finallyAbsent": true,
+          "afterRunAbsent": true
+        }
+      ],
+      "serverLogBefore": {
+        "bytes": 107902,
+        "sha256": "d49c688826876a1b3ae6b9578a224abf67ea10491fa22008d79a23fb1bb84fcf"
+      },
+      "serverLogAfter": {
+        "bytes": 108053,
+        "sha256": "62bb642be342b439b1c0e5bbb448ccf6fae3134d687673db18e2d485dcfedd86"
+      },
+      "c08Connections": {
+        "writer": 693960,
+        "observer": 693961,
+        "observerReadOnly": "on"
+      },
+      "fenceConnections": {
+        "writer": 693960,
+        "observer": 693972
+      },
+      "businessConnections": {
+        "operator": 693983,
+        "writer": 693960,
+        "observer": 693984,
+        "observerReadOnly": "on"
+      },
+      "preCleanupBackends": {
+        "pids": [
+          693983,
+          693960,
+          693984
+        ],
+        "active": [
+          {
+            "pid": 693960,
+            "state": "idle"
+          },
+          {
+            "pid": 693983,
+            "state": "idle"
+          }
+        ]
+      }
+    }
+  ],
+  "explicitBackends": [
+    {
+      "pid": 693901,
+      "exists": false
+    },
+    {
+      "pid": 693902,
+      "exists": false
+    },
+    {
+      "pid": 693915,
+      "exists": false
+    },
+    {
+      "pid": 693927,
+      "exists": false
+    },
+    {
+      "pid": 693928,
+      "exists": false
+    },
+    {
+      "pid": 693960,
+      "exists": false
+    },
+    {
+      "pid": 693961,
+      "exists": false
+    },
+    {
+      "pid": 693972,
+      "exists": false
+    },
+    {
+      "pid": 693983,
+      "exists": false
+    },
+    {
+      "pid": 693984,
+      "exists": false
+    }
+  ],
+  "backendAbsentCount": 10,
+  "sampledProcessesAfter": [
+    {
+      "pid": 693854,
+      "exists": false
+    },
+    {
+      "pid": 693860,
+      "exists": false
+    },
+    {
+      "pid": 693873,
+      "exists": false
+    },
+    {
+      "pid": 693882,
+      "exists": false
+    },
+    {
+      "pid": 693883,
+      "exists": false
+    },
+    {
+      "pid": 693889,
+      "exists": true,
+      "name": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 693889,
+      "rssBytes": 0
+    },
+    {
+      "pid": 693890,
+      "exists": false
+    },
+    {
+      "pid": 693891,
+      "exists": false
+    },
+    {
+      "pid": 693893,
+      "exists": false
+    },
+    {
+      "pid": 693894,
+      "exists": false
+    },
+    {
+      "pid": 693895,
+      "exists": false
+    },
+    {
+      "pid": 693896,
+      "exists": false
+    },
+    {
+      "pid": 693897,
+      "exists": false
+    },
+    {
+      "pid": 693898,
+      "exists": false
+    },
+    {
+      "pid": 693900,
+      "exists": false
+    },
+    {
+      "pid": 693901,
+      "exists": false
+    },
+    {
+      "pid": 693902,
+      "exists": false
+    },
+    {
+      "pid": 693915,
+      "exists": false
+    },
+    {
+      "pid": 693927,
+      "exists": false
+    },
+    {
+      "pid": 693928,
+      "exists": false
+    },
+    {
+      "pid": 693932,
+      "exists": false
+    },
+    {
+      "pid": 693939,
+      "exists": false
+    },
+    {
+      "pid": 693940,
+      "exists": false
+    },
+    {
+      "pid": 693941,
+      "exists": false
+    },
+    {
+      "pid": 693942,
+      "exists": false
+    },
+    {
+      "pid": 693948,
+      "exists": true,
+      "name": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 693948,
+      "rssBytes": 0
+    },
+    {
+      "pid": 693949,
+      "exists": false
+    },
+    {
+      "pid": 693950,
+      "exists": false
+    },
+    {
+      "pid": 693952,
+      "exists": false
+    },
+    {
+      "pid": 693953,
+      "exists": false
+    },
+    {
+      "pid": 693954,
+      "exists": false
+    },
+    {
+      "pid": 693955,
+      "exists": false
+    },
+    {
+      "pid": 693956,
+      "exists": false
+    },
+    {
+      "pid": 693957,
+      "exists": false
+    },
+    {
+      "pid": 693959,
+      "exists": false
+    },
+    {
+      "pid": 693960,
+      "exists": false
+    },
+    {
+      "pid": 693961,
+      "exists": false
+    },
+    {
+      "pid": 693972,
+      "exists": false
+    },
+    {
+      "pid": 693983,
+      "exists": false
+    },
+    {
+      "pid": 693984,
+      "exists": false
+    }
+  ],
+  "remainingZombieProcesses": [
+    {
+      "pid": 693889,
+      "exists": true,
+      "name": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 693889,
+      "rssBytes": 0
+    },
+    {
+      "pid": 693948,
+      "exists": true,
+      "name": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 693948,
+      "rssBytes": 0
+    }
+  ],
+  "allSampledPidsAbsent": false,
+  "sampledOwnedProcessesAbsent": 38,
+  "sampledOwnedProcessesTotal": 40,
+  "sampleCount": 324,
+  "sampledPeakNotInstantaneous": true,
+  "finalFree": {
+    "/workspace": 8591921152,
+    "/tmp": 13958606848
+  },
+  "below5GBTriggered": false,
+  "noCleanupOfUnrelatedData": true,
+  "pending": [
+    "RSS0 PID1 zombies retained and not called absent",
+    "Only sampled process-tree/PG RSS, not an instantaneous all-host peak"
+  ]
+}

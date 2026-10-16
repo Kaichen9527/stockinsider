@@ -1,0 +1,23 @@
+[
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-v3-completed-reviewer-native-helper.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "scripts/opportunity-v3/research-v3-completed-handoff-reviewer-native.test.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "static": "314 inherited exact; new entry has fullSQL/one body/full metadata/14 rows/distinct PID/ReadyI/finite tombstone/failfast/no old test import",
+    "exit": 0,
+    "native": false
+  }
+]

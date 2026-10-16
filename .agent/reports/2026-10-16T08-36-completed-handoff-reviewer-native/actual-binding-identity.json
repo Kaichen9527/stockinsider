@@ -1,0 +1,58 @@
+{
+  "inputs": [
+    {
+      "path": "web/src/lib/research-versioned-complete-input.ts",
+      "sha256": "51265c9e936900877f557cf7011b60a61a0974eb5f3e9bdc7142a86aee039b92"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-binding.ts",
+      "sha256": "1ec1bee664b793295b41de982818e767446b85e801efb164324217510d0fd940"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-request.ts",
+      "sha256": "cce94267308c7b3d3e1c20ad6214265c147fdcc7603defc186cd85b9e31b42b3"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "sha256": "a6d3f20e0b7749d9cfde09940d4959a4efe59456e2cd974a65c5a498a764d6b5"
+    }
+  ],
+  "hs": "e0fb383b61ec82dd2df0f948d6f2b9ec07e7a0651ad24c5a9829df5a3166254c",
+  "hc": "d47210580b9234ff8bcf61e56512e75ee5cd80b00b29e1c90d842b401325b5c6",
+  "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+  "bindings": [
+    {
+      "symbol": "2409",
+      "hb": "d1533f02330f390ebdacd7ea977f9641021a338e41af466eddd956f1e86183bf",
+      "core": {
+        "artifactRootId": "historical15d4-fixed9or7",
+        "compiledFingerprintIdentity": "d47210580b9234ff8bcf61e56512e75ee5cd80b00b29e1c90d842b401325b5c6",
+        "financialProfile": "oct14_historical_cash_v1",
+        "inventoryHash": "5654433e54284f952092d54d271eb0104c85c2100ae609aa1d4ffe61acd31a0a",
+        "schemaTemplateIdentity": "4d4a6e39e239a7d15fc1b6d57351eb38ec60a0193217ca611c5fcd4468916a1e",
+        "sourceExecutionHash": "e0fb383b61ec82dd2df0f948d6f2b9ec07e7a0651ad24c5a9829df5a3166254c",
+        "symbol": "2409",
+        "validationContract": "research-versioned-input-candidate-v3",
+        "wireVersion": "research-article-input-v3"
+      }
+    },
+    {
+      "symbol": "2383",
+      "hb": "ca7d814adf74e1640edb0966a5ffda200f4707533e8d20ed401c97923b8a6172",
+      "core": {
+        "artifactRootId": "historical15d4-fixed9or7",
+        "compiledFingerprintIdentity": "d47210580b9234ff8bcf61e56512e75ee5cd80b00b29e1c90d842b401325b5c6",
+        "financialProfile": "oct14_historical_cash_v1",
+        "inventoryHash": "5f9c5114f7cd239f840d5c47dd9cb47dfcada5791b954aa99eafafcac89f456d",
+        "schemaTemplateIdentity": "47023a6f757896abf5dd814ed2ea42a10bb754594ab609b3656b160f52eb25e9",
+        "sourceExecutionHash": "e0fb383b61ec82dd2df0f948d6f2b9ec07e7a0651ad24c5a9829df5a3166254c",
+        "symbol": "2383",
+        "validationContract": "research-versioned-input-candidate-v3",
+        "wireVersion": "research-article-input-v3"
+      }
+    }
+  ],
+  "partialFourSourceIdentity": true,
+  "notNext": true,
+  "wholeClosureApproved": false
+}
