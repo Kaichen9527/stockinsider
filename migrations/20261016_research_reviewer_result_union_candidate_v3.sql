@@ -230,6 +230,30 @@ END $$;$replacement$;
 DECLARE context jsonb;ra jsonb;o jsonb;v jsonb;review jsonb;packet jsonb;h jsonb;old jsonb;
  saved public.research_reviewer_results_v2;bytes integer;n timestamptz;started timestamptz;ended timestamptz;reviewed timestamptz;
 BEGIN
+ -- Server-owned dispatch fence precedes every envelope-selected arm.
+ context:=public.read_research_reviewer_result_context_v2(p_request,p_revision_id,p_input_hash,p_author_principal,p_reviewer_principal,p_result_id,p_result_hash);
+ h:=context->'authorContext';
+ IF jsonb_typeof(h) IS DISTINCT FROM 'object'
+  OR jsonb_typeof(h->'revision'->'canonical_payload') IS DISTINCT FROM 'object'
+ THEN RAISE EXCEPTION 'research_reviewer_result_dispatch_context';END IF;
+ IF h->'revision'->'canonical_payload'->>'schemaVersion'='research-article-input-v3' THEN
+  IF (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(h) key) IS DISTINCT FROM ARRAY['assignment','binding','completion','result','revision']
+   OR jsonb_typeof(h->'binding') IS DISTINCT FROM 'object' OR jsonb_typeof(h->'binding'->'core') IS DISTINCT FROM 'object'
+   OR h->'binding'->'core'->>'wireVersion' IS DISTINCT FROM 'research-article-input-v3'
+   OR h->'binding'->'core'->>'financialProfile' IS DISTINCT FROM 'oct14_historical_cash_v1'
+   OR h->'binding'->>'bindingCapsuleIdentity' IS NULL OR h->'binding'->>'bindingCapsuleIdentity' !~ '^[a-f0-9]{64}$'
+   OR h->'binding'->>'bindingCapsuleIdentity' IS DISTINCT FROM p_request->>'expectedCalculatorExecutionHash'
+   OR h->'revision'->'canonical_payload'->'financial'->'protocol'->>'bindingCapsuleIdentity' IS DISTINCT FROM h->'binding'->>'bindingCapsuleIdentity'
+   OR h->'revision'->'canonical_payload'->'financial'->'protocol'->>'wireVersion' IS DISTINCT FROM h->'binding'->'core'->>'wireVersion'
+   OR p_result->>'schemaVersion' IS DISTINCT FROM 'research-reviewer-result-v3-candidate'
+  THEN RAISE EXCEPTION 'research_reviewer_result_dispatch_v3';END IF;
+ ELSIF h->'revision'->'canonical_payload'->>'schemaVersion'='research-article-input-v2' THEN
+  IF (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(h) key) IS DISTINCT FROM ARRAY['assignment','completion','result','revision']
+   OR p_result->>'schemaVersion' IS DISTINCT FROM 'research-reviewer-result-v2'
+  THEN RAISE EXCEPTION 'research_reviewer_result_dispatch_v2';END IF;
+ ELSE RAISE EXCEPTION 'research_reviewer_result_dispatch_version';
+ END IF;
+ -- End server-owned dispatch fence. Existing bounded context reads remain unchanged.
  -- Finite v3 arm; failures propagate, unknown versions retain the original rejection.
  IF p_result->>'schemaVersion'='research-reviewer-result-v3-candidate' THEN
 
@@ -452,7 +476,7 @@ END $$;$replacement$;
  IF encode(sha256(convert_to(source,'UTF8')),'hex') IS DISTINCT FROM '086a4b3af6b31a7277ee0b097ad83f94d720622022363092d524e255e57e0a50' THEN RAISE EXCEPTION 'reviewer_union_successor_body';END IF;
  SELECT jsonb_set(namespace_before,'{routines}',jsonb_agg(CASE WHEN x->>'schema'='public' AND x->>'signature'='assert_research_editorial_review_v2(jsonb,jsonb)' THEN jsonb_set(x,'{body}',to_jsonb(source)) ELSE x END ORDER BY ord)) INTO namespace_before FROM jsonb_array_elements(namespace_before->'routines') WITH ORDINALITY e(x,ord);
  SELECT prosrc INTO source FROM pg_proc WHERE oid=to_regprocedure('public.receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb)');
- IF encode(sha256(convert_to(source,'UTF8')),'hex') IS DISTINCT FROM 'e591df256b4699aa2642a58a42c445251a829fc28e63e77234122ef61e02d8f7' THEN RAISE EXCEPTION 'reviewer_union_successor_body';END IF;
+ IF encode(sha256(convert_to(source,'UTF8')),'hex') IS DISTINCT FROM '8505d96f288d7e222fa85779f7c400f44c7a54dcca0c8bfc4e33e6cc73d72302' THEN RAISE EXCEPTION 'reviewer_union_successor_body';END IF;
  SELECT jsonb_set(namespace_before,'{routines}',jsonb_agg(CASE WHEN x->>'schema'='public' AND x->>'signature'='receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb)' THEN jsonb_set(x,'{body}',to_jsonb(source)) ELSE x END ORDER BY ord)) INTO namespace_before FROM jsonb_array_elements(namespace_before->'routines') WITH ORDINALITY e(x,ord);
  SELECT jsonb_build_object(
  'relations',(SELECT jsonb_agg(jsonb_build_object('schema',n.nspname,'name',c.relname,'kind',c.relkind,'owner',pg_get_userbyid(c.relowner),'acl',c.relacl,'definition',CASE WHEN c.relkind IN ('v','m') THEN pg_get_viewdef(c.oid,true) ELSE NULL END) ORDER BY n.nspname,c.relname) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('public','auth','extensions')),
