@@ -1,0 +1,73 @@
+{
+  "bytes": 71247,
+  "count": 13,
+  "files": [
+    {
+      "bytes": 878,
+      "name": "commands.json",
+      "sha256": "18ef88e2a40434441a194eaf2ee93d6ac1127d72e50e1006fc8eefdecf4f4dd6"
+    },
+    {
+      "bytes": 31720,
+      "name": "initial-harness.py",
+      "sha256": "38868306ced98b888726428a929a0b9e9083bc7e738c3572a3aa5edf610e1d3e"
+    },
+    {
+      "bytes": 379,
+      "name": "initial-seal.json",
+      "sha256": "f5fafafb52ba082e475b323e2c2a7ecfb1ad9800185ffcae9b44acf04f5f7edc"
+    },
+    {
+      "bytes": 1247,
+      "name": "insert.txt",
+      "sha256": "ae6d2a99db8b4ccc907173d3d1130ed69a7f0c8b58adaa10b145aa8d18c4f234"
+    },
+    {
+      "bytes": 2,
+      "name": "new-contract.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "bytes": 0,
+      "name": "new-contract.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 594,
+      "name": "new-contract.stdout",
+      "sha256": "70300d3d6dff9de0209bd4a3c28866af217dc9a16fb3ea6ff78f12a129f8365a"
+    },
+    {
+      "bytes": 2,
+      "name": "original-contract-red.exit",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "bytes": 786,
+      "name": "original-contract-red.stderr",
+      "sha256": "257613fdd5c978c289da80b8581e04ad7bd0a9ac3054c486fcf20e4029e76285"
+    },
+    {
+      "bytes": 0,
+      "name": "original-contract-red.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 721,
+      "name": "parity-syntax.json",
+      "sha256": "f9189c4238f9164e7c638c4cb3a88611123760133744f303da416bc2b0f685c8"
+    },
+    {
+      "bytes": 32967,
+      "name": "sealed-harness.py",
+      "sha256": "d4f84e7faab84f694108c4481599629abf68851a6623dcbc31ffadb91d7e9724"
+    },
+    {
+      "bytes": 1951,
+      "name": "source.diff",
+      "sha256": "ea860075f34e7e41722e64a45fa5ab677e34c220c892df886964dd2d17d927fa"
+    }
+  ],
+  "localRoot": "/tmp/parser-lifecycle-receipt-fix-o17",
+  "scope": "maker local source/WIP/check output, no native/raw protocol"
+}

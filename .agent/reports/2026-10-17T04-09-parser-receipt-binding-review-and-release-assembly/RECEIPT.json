@@ -1,0 +1,74 @@
+{
+  "schema": "stockinsider-root-public-evidence-receipt-v1",
+  "source": "bac16865eb6abac4e726a2459ca48dc1f73d55c7",
+  "evidence": "22b155500d7b319611495a166effe84f9d657b1c",
+  "scope": "R1 source binding review closed; memory-only contract, native NOT_RUN; release assembly active",
+  "files": [
+    {
+      "path": "root-check.py",
+      "bytes": 6107,
+      "sha256": "0d0c0f4c9db91e4856a428464d29e49502e4d22dc4de98b6e3947f849a51d56d"
+    },
+    {
+      "path": "root-check.json",
+      "bytes": 4338,
+      "sha256": "005c6ca584e99a79dd89f147de94d6b0a63e1b476d88a4fe8e8b0aa61aeec854"
+    },
+    {
+      "path": "cloud-fix-terminal.json",
+      "bytes": 1876,
+      "sha256": "43c99a993b0ca90a9f6a5d1a4fbab0ae87df4b909742c8b528683829be023ee1"
+    },
+    {
+      "path": "assembly-dispatch.txt",
+      "bytes": 3475,
+      "sha256": "2651cc55e43d2f1550b6ccea72eb4bb48ab9cc3bf0f26642031797047c2b4ff5"
+    },
+    {
+      "path": "assembly-dispatch-result.json",
+      "bytes": 111,
+      "sha256": "724fee24c2062e6606cedefc8af13edbe9b71f2d07ac98d03639aaf42486975b"
+    },
+    {
+      "path": "assembly-cloud-snapshot.json",
+      "bytes": 637,
+      "sha256": "3369395a046d185097e2329b8026b86d2f4a5bb4889b19f750e8f90c94f956df"
+    },
+    {
+      "path": "maker-commands.json",
+      "bytes": 878,
+      "sha256": "18ef88e2a40434441a194eaf2ee93d6ac1127d72e50e1006fc8eefdecf4f4dd6"
+    },
+    {
+      "path": "maker-focused-checks.json",
+      "bytes": 1664,
+      "sha256": "f8ebbee758f5b53bb8007a600c07f130612ed92ec29bf265dc33b377b63b1661"
+    },
+    {
+      "path": "maker-publication-resources.json",
+      "bytes": 433,
+      "sha256": "d7fbd0967c2d2ced2c991db4e48f249cb0bc1d42977b50de18005547bf5c04f2"
+    },
+    {
+      "path": "maker-raw-inventory.json",
+      "bytes": 2164,
+      "sha256": "dc3ca38a0d4f8a28aaa0a4dc40ea3458a6535daff708f78662818f7fae634f3b"
+    },
+    {
+      "path": "maker-source-seal.json",
+      "bytes": 3150,
+      "sha256": "fe2f1d41d241ec7ae50a939a46fdffb2bff8eb4c9db9ef010592d33a37ee6aee"
+    },
+    {
+      "path": "maker-receipt.json",
+      "bytes": 1468,
+      "sha256": "e21c0a93432f733dc4c0c2277e6ce4789a4fa518474440d2fcb0d105a592ea87"
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 4210,
+      "sha256": "7fb44ccb8aa17d4b2e02c001006af20dd6ae69db5c51f8b21d54708b6718e280"
+    }
+  ],
+  "totalBytes": 30511
+}

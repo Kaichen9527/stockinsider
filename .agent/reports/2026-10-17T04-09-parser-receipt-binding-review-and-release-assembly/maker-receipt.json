@@ -1,0 +1,48 @@
+{
+  "base": "831127a05a99c83b7c3e6f9e5615ccded58a1bb5",
+  "files": [
+    {
+      "bytes": 878,
+      "name": "commands.json",
+      "sha256": "18ef88e2a40434441a194eaf2ee93d6ac1127d72e50e1006fc8eefdecf4f4dd6"
+    },
+    {
+      "bytes": 1664,
+      "name": "focused-checks.json",
+      "sha256": "f8ebbee758f5b53bb8007a600c07f130612ed92ec29bf265dc33b377b63b1661"
+    },
+    {
+      "bytes": 433,
+      "name": "publication-resources.json",
+      "sha256": "d7fbd0967c2d2ced2c991db4e48f249cb0bc1d42977b50de18005547bf5c04f2"
+    },
+    {
+      "bytes": 2164,
+      "name": "raw-inventory.json",
+      "sha256": "dc3ca38a0d4f8a28aaa0a4dc40ea3458a6535daff708f78662818f7fae634f3b"
+    },
+    {
+      "bytes": 3150,
+      "name": "source-seal.json",
+      "sha256": "fe2f1d41d241ec7ae50a939a46fdffb2bff8eb4c9db9ef010592d33a37ee6aee"
+    }
+  ],
+  "harnessBytes": 32967,
+  "harnessSha256": "d4f84e7faab84f694108c4481599629abf68851a6623dcbc31ffadb91d7e9724",
+  "historicalREDPreserved": true,
+  "native": "NOT_RUN",
+  "paritySyntaxChecks": 6,
+  "pending": [
+    "Root exact independent review",
+    "normal PR/protected checks",
+    "actual hosted systemd lifecycle",
+    "production missing socket recovery",
+    "full formal research/publication closure"
+  ],
+  "rawBytes": 71247,
+  "rawCount": 13,
+  "reboot": "NOT_RUN",
+  "scope": "SOURCE-ONLY maker receipt, not independent approval",
+  "source": "bac16865eb6abac4e726a2459ca48dc1f73d55c7",
+  "sourceContractGroups": 10
+}

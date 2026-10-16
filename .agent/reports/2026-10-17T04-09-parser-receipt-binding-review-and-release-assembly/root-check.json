@@ -1,0 +1,121 @@
+{
+  "source": "bac16865eb6abac4e726a2459ca48dc1f73d55c7",
+  "evidence": "22b155500d7b319611495a166effe84f9d657b1c",
+  "sourceInputs": [
+    {
+      "bytes": 32967,
+      "gitIdentity": "100644 blob a5e78920796321d2b696fcbe67b9192cbeada7e0",
+      "path": "scripts/parser-runtime-directory-lifecycle.py",
+      "sha256": "d4f84e7faab84f694108c4481599629abf68851a6623dcbc31ffadb91d7e9724"
+    },
+    {
+      "bytes": 1870,
+      "gitIdentity": "100644 blob 8868d1e6b6f469df828ce63aca9b286d343c45dc",
+      "path": ".github/workflows/parser-runtime-lifecycle-quality.yml",
+      "sha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c"
+    },
+    {
+      "bytes": 1341,
+      "gitIdentity": "100644 blob c534ab49eb8934300e5c2c93fb65e76955e573da",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "sha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5"
+    },
+    {
+      "bytes": 7975,
+      "gitIdentity": "100644 blob e0e06c5a432957153cb52895b9541fa890410895",
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/HANDOFF.md",
+      "sha256": "fc7b82f7ae325a101882034326c7b21f4d6d051fbfa8ac57fdb3fca2653d2ecc"
+    },
+    {
+      "bytes": 2803,
+      "gitIdentity": "100644 blob fed88064bd3a8d77e2e6a2ac1d3d382efde2b716",
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/R1-RECEIPT-BINDING.md",
+      "sha256": "c8d1f9c42840f4199853428bdd042e6c09a916b14d8cf85631096cfe045fa099"
+    },
+    {
+      "bytes": 5655,
+      "gitIdentity": "100644 blob 2f354aff4ea5efb2ea4dc4c5c3602f12b3559b87",
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/receipt-binding-source-checks.py",
+      "sha256": "323624495acaee88b1f51f6b12ff3c23aaec279e70f98bc285d4a2b02678b5a1"
+    },
+    {
+      "bytes": 6685,
+      "gitIdentity": "100644 blob ba622842bbd621b2c58eaccbcbd244035bd36b2c",
+      "path": "AGENTS.md",
+      "sha256": "0e4af0349489576004271dfdca3736df6e83cc74b1ed4fda30d765d68c4f0dc5"
+    },
+    {
+      "bytes": 288,
+      "gitIdentity": "100644 blob 949ec986070218064d9d357f419f2dc396e4c596",
+      "path": "AGENTS.loop-engineering.md",
+      "sha256": "abe955039ea82b46b5a19b2642b3b1b58282bde37bb06c9722bfdc8a4757965b"
+    },
+    {
+      "bytes": 513,
+      "gitIdentity": "100644 blob 47b44374694ed87d81e9780439422a3091ba8a3f",
+      "path": "docs/engineering/LOOP_ENGINEERING.md",
+      "sha256": "c03bbf09972f7cb5b7faf7571837a1002b426a41925ff6e209b9bd03efb34a76"
+    },
+    {
+      "bytes": 437,
+      "gitIdentity": "100644 blob 13cd30990e4ebe0572a9c2f36efa22a2feb9b7f8",
+      "path": ".loop-engineering/policy.yaml",
+      "sha256": "864340b85ede15640e966b0bc1367f9fc5c688afe18e895a47258a898ee4abd4"
+    }
+  ],
+  "actualSourceCount": 10,
+  "actualSourceBytes": 60534,
+  "publishedFiles": 6,
+  "publishedBytes": 9757,
+  "privateInventoryOnlyCount": 13,
+  "privateInventoryOnlyBytes": 71247,
+  "privateContentsObtained": false,
+  "inheritedIdentitiesUnchanged": 2217,
+  "newSourcePaths": [
+    "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/R1-RECEIPT-BINDING.md",
+    "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/receipt-binding-source-checks.py"
+  ],
+  "exactInverseInsertionBytes": 1247,
+  "insertionSha256": "ae6d2a99db8b4ccc907173d3d1130ed69a7f0c8b58adaa10b145aa8d18c4f234",
+  "rootContractProbes": [
+    {
+      "mode": "PASS",
+      "returnCode": 0,
+      "status": "PASS",
+      "scope": "memory-only orchestration, not native/lifecycle"
+    },
+    {
+      "mode": "FAIL",
+      "returnCode": 1,
+      "status": "FAIL",
+      "scope": "memory-only orchestration, not native/lifecycle"
+    },
+    {
+      "mode": "NOT_READY",
+      "returnCode": 1,
+      "status": "NOT_READY",
+      "scope": "memory-only orchestration, not native/lifecycle"
+    },
+    {
+      "mode": "CLEANUP_UNKNOWN",
+      "returnCode": 1,
+      "status": "FAIL",
+      "scope": "memory-only orchestration, not native/lifecycle"
+    },
+    {
+      "mode": "PIN_MISMATCH",
+      "returnCode": 1,
+      "status": "FAIL",
+      "scope": "memory-only orchestration, not native/lifecycle"
+    }
+  ],
+  "oneByteDriftRejects": 3,
+  "rangeDiffCheck": "PASS",
+  "R1SourceContractClosed": true,
+  "native": "NOT_RUN",
+  "scopedFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  }
+}

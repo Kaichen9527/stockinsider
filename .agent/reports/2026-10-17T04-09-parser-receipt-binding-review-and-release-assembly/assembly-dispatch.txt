@@ -1,0 +1,16 @@
+Root已精確review bac16865eb6abac4e726a2459ca48dc1f73d55c7/evidence22b155500d7b319611495a166effe84f9d657b1c/receipt e21c0a93432f733dc4c0c2277e6ce4789a4fa518474440d2fcb0d105a592ea87；同turn01a14619真completed/idle/cursor287e3e4a:3。Root核10Gitinputs60534bytes/6published9757bytes，逆向刪1247byte insertion整harness等原38868306，其餘2217inherited identities不變；Root memory-only exact main自己的5狀態/三byte-drift probes真PASS，R1 source contract閉合、scoped0新P0/P1/P2。原REQUEST_CHANGES/RED保持，全部native/systemd/fullbuild/protected/production NOT_RUN。不要重跑已完maker10/6/原19或Root probes。
+
+唯一下一件10min SOURCE-ONLY最小正常發版組裝。新branch codex/parser-runtime-lifecycle-reviewed-release-oct17，base exact remote main93e44475cbb0c27beb26e4dcb68e382096a4e212；先freshremote/自己的原8GiB每FS/RSS<8GiB/singleworkload准入，同已有small Git context/必要sparse不要materialize整repo或改原research checkout。你不是唯一工作者，Root只progress/report，不覆寫他人WIP/歷史。沒有其他owned successor。
+
+只exact-copy下面6檔自bac168（不是merge歷史branch）：
+deployment/vps/systemd/stockinsider-web-standalone.service (1341/7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5)
+scripts/parser-runtime-directory-lifecycle.py (32967/d4f84e7faab84f694108c4481599629abf68851a6623dcbc31ffadb91d7e9724)
+.github/workflows/parser-runtime-lifecycle-quality.yml (1870/133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c)
+docs/operations/2026-10-17/parser-runtime-directory-lifecycle/HANDOFF.md
+docs/operations/2026-10-17/parser-runtime-directory-lifecycle/R1-RECEIPT-BINDING.md
+docs/operations/2026-10-17/parser-runtime-directory-lifecycle/receipt-binding-source-checks.py
+加唯一短docs/operations/2026-10-17/parser-runtime-lifecycle-release/HANDOFF.md，明列exactsource/6fileparity/targetnormalPR+actualhosted/所有NOT_RUN。其他2199main entries全mode/type/blob identity不變，只原unit那一行變（mainfa55→7a948），不能改profile/其他unit/app/web/SQL/roles/ACL/guards/budgets/authority/原workflow/pins/VERSION/CHANGELOG或新增framework。不要把歷史兩輪private/raw/evidence整包帶PR；歷史已在來源branch/progress保留，以exactpointer指回。
+
+只必要獨立byte parity/AST syntax/diffcheck/Gitlineage，勿重跑已綠contract groups或做另一readiness工程。不要native/systemctl/socket/listener/app/npm/build/PG/SSH/VPS/HTTP/secret/正式資料/CI dispatch/checks/watch/rerun/PR/refattest/readymerge/deploy/DD helpers。正常sourcebranchpush若自然觸發existingCI據實不冒本native已跑，不另watch或領件。現newworkflow PR-only，Root收到後只核exactcopy及正常draftPR，即讓真正hosted lifecycle/requiredchecks執行；不用再建立別的source框架來推遲此關。Fullappbuild/normalprotected/canonicalprofilecompat/正式quiescentparser恢復+READ exactreceipt/guardedretry等仍需真完成後才能merge/install，這份組裝不自簽批准。
+
+Source與explicitpublicsafe證據分commit/正常push，交付source/head/receipt及7filehash/treeparity；localraw/WIP/RED inventory保留，未執行的truechecks全部NOT_RUN，不fakecounts。交付後停止等待Root；fullgoal ACTIVE/2formal研究/Top20/合格技術/策略/正式研究排程/wholeclosure/fixedpeer全部原pending，c5b6ccf0不重upload/盲retry，DDone-shot/PR370..382終態不碰。

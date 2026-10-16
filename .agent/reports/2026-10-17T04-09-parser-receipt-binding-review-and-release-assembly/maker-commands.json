@@ -1,0 +1,30 @@
+{
+  "commands": [
+    {
+      "command": "python3 receipt-binding-source-checks.py initial-harness.py",
+      "error": "KeyError: evidenceInventory",
+      "exit": 1,
+      "scope": "memory-only original-main RED"
+    },
+    {
+      "command": "python3 receipt-binding-source-checks.py",
+      "exit": 0,
+      "groups": 10,
+      "scope": "memory-only new-main source contracts"
+    },
+    {
+      "checks": 6,
+      "command": "Python AST/compile two files, inverse byte parity and unit/workflow pin checks",
+      "exit": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0
+    },
+    {
+      "command": "git show HEAD:docs/operations/2026-10-17/parser-runtime-directory-lifecycle/evidence/source-inventory.json",
+      "result": "fatal path does not exist; read-only inventory filename tooling error; surrounding shell exit0"
+    }
+  ],
+  "noNative": true
+}
