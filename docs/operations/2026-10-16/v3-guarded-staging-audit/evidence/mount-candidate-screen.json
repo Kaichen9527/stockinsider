@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-16T11:11:38.811325+00:00",
+  "directoryMountMetadataOnly": [
+    {
+      "mountpoint": "/",
+      "fsType": "overlay",
+      "options": "rw,relatime",
+      "mode": "0o755",
+      "dev": 27,
+      "actorWritableExecutable": false
+    },
+    {
+      "mountpoint": "/dev",
+      "fsType": "tmpfs",
+      "options": "rw,nosuid",
+      "mode": "0o755",
+      "dev": 31,
+      "actorWritableExecutable": false
+    },
+    {
+      "mountpoint": "/dev/shm",
+      "fsType": "tmpfs",
+      "options": "rw,relatime",
+      "mode": "0o1777",
+      "dev": 26,
+      "actorWritableExecutable": true
+    },
+    {
+      "mountpoint": "/tmp",
+      "fsType": "tmpfs",
+      "options": "rw,relatime",
+      "mode": "0o1777",
+      "dev": 34,
+      "actorWritableExecutable": true
+    }
+  ],
+  "excludedPseudoOrSensitiveMountsCount": 6,
+  "noContentsScanned": true
+}
