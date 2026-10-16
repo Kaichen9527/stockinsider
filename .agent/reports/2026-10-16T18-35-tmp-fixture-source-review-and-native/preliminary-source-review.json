@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-16T10:32:06.838770+00:00",
+  "source": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "base": "4776c3c35d84fa893f23a5cf3331a118021fed9d",
+  "reviewScope": "exact two-file source diff and whole329 inherited unchanged; maker final delivery/receipt/sourcechecks pending",
+  "original331InputsUnchanged": 329,
+  "onlyChangedOldInputs": [
+    "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+    "scripts/opportunity-v3/research-v3-reviewer-result-native.test.mjs"
+  ],
+  "helperBytes": 19982,
+  "helperSha256": "6b94a38bce03b628695c26fc21f6dcf2dac5620350cd03e1e24158acc4ac99c1",
+  "entryBytes": 21134,
+  "entrySha256": "e9d6b859f7c93efef681de4ca5e754b979f216363ef8fdfee9f903ed87b66c20",
+  "defaultExactReconstruction": true,
+  "newClosedSelectorBeforePerCaseIO": true,
+  "unchangedFsWitnessPredicateMatchesTmpPrefix": true,
+  "sourceFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "makerFocusedChecksVerified": false,
+  "native": "NOT_RUN",
+  "freshCapacityAdmission": "NOT_RUN"
+}

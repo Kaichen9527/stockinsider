@@ -1,0 +1,40 @@
+{
+  "scope": "Root exact tmp fixture source integration review and one fresh-admission new-input native execution dispatch; no native/formal approval",
+  "source": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "evidence": "513e25de37916c48346982c2964a1808aee535c1",
+  "makerReceipt": "8f81c361f0fb64e017a347e8f207de002e87ae51e9fc81d3998b72112bbd21bd",
+  "sourceReview": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "native": "NOT_RUN",
+  "files": [
+    {
+      "path": "dispatch-snapshot.json",
+      "bytes": 650,
+      "sha256": "d76412644209deec20e26d2e77409d037a7c072524d766c185c80ce30135a849"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 6090,
+      "sha256": "9e75191272e2a8817532c95d24713a51db0e48d7d2c18b5a2257f654196e7d66"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 5750,
+      "sha256": "d9fa37f1698dd197543c8191588968c60d928ac7c4eed83be0bd7f5c8de98b62"
+    },
+    {
+      "path": "preliminary-source-review.json",
+      "bytes": 1027,
+      "sha256": "248e24c4ae691cdea2a561d69d510247f2d7063c3f2b56d4c5dcf3a3a7014f39"
+    },
+    {
+      "path": "root-check.json",
+      "bytes": 1502,
+      "sha256": "264e7807d1fe7953848271d764aad1c41d4ad0f07e6c960e24744eb7cfe5cda3"
+    }
+  ],
+  "fullGoalComplete": false
+}
