@@ -1,0 +1,51 @@
+{
+  "contract": {
+    "fail": 0,
+    "groups": [
+      "exact serialized bytes and input seal",
+      "single byte drift rejected: events.json",
+      "single byte drift rejected: fixture-units.json",
+      "single byte drift rejected: source-pins.json",
+      "FAIL binds actual existing evidence",
+      "NOT_READY binds actual existing evidence",
+      "missing seal explicit; no invented evidence",
+      "pin mismatch demotes otherwise successful run",
+      "cleanup guard preserved",
+      "closed allowlist; no self reference or unknown file"
+    ],
+    "pass": 10,
+    "scope": "memory-only source contract; no native execution"
+  },
+  "originalContractRED": {
+    "error": "KeyError: evidenceInventory",
+    "exit": 1,
+    "nativeFailure": false,
+    "subjectSha256": "38868306ced98b888726428a929a0b9e9083bc7e738c3572a3aa5edf610e1d3e"
+  },
+  "paritySyntax": {
+    "at": "2026-10-16T19:07:10.109559+00:00",
+    "checkerMaxRssBytes": 15335424,
+    "checks": [
+      "inverse exact harness byte parity",
+      "deployment/vps/systemd/stockinsider-web-standalone.service frozen bytes",
+      ".github/workflows/parser-runtime-lifecycle-quality.yml frozen bytes",
+      "AST/compile no execution: parser-runtime-directory-lifecycle.py",
+      "AST/compile no execution: receipt-binding-source-checks.py",
+      "original extracted main RED retained; new contract exit0"
+    ],
+    "native": "NOT_RUN",
+    "pass": 6,
+    "resources": {
+      "/tmp": {
+        "dev": 34,
+        "freeBytes": 13605437440
+      },
+      "/workspace": {
+        "dev": 27,
+        "freeBytes": 8590397440
+      }
+    },
+    "scope": "source-only"
+  },
+  "prior19Rerun": false
+}
