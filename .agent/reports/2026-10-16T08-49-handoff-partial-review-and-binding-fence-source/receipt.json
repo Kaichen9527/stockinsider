@@ -1,0 +1,26 @@
+{
+  "files": [
+    {
+      "path": "review.json",
+      "bytes": 1560,
+      "sha256": "1397d72d7e6c7c00b8f42d9ed9daf16898a7b8badda85b30610a0cb481a01ab8"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 7140,
+      "sha256": "4d8e65a1eaeafc6575875e98847bc4b4c5b3243b4e129e8fec0a2497ff7695b6"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 656,
+      "sha256": "556ac52541318c96901b5e7df69b5860fcf954488f29fb1e1e791a0251d3d48a"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 5187,
+      "sha256": "14cdc22dac2f152885df4a46a31691c389c4dadc5456056ad47a71d337b4eb68"
+    }
+  ],
+  "scope": "Root exact partial source review; P2 completed binding fence gap, no native/formal publication approval",
+  "fullGoal": "active"
+}

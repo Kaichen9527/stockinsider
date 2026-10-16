@@ -1,0 +1,42 @@
+{
+  "time": "2026-10-16T00:46:19.337189+00:00",
+  "source": "be6f97bbd7c6560a50a6daa8face1c2e7a84d50c",
+  "evidence": "2042725b3b72f1f0a4ba7df525163b26121e876d",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "inputsVerified": 302,
+  "inputBytes": 9947227,
+  "originalInputsUnchanged": 295,
+  "publishedReceiptFilesVerified": 10,
+  "publishedReceiptBytes": 106265,
+  "privateRawInventoryOnly": {
+    "count": 39,
+    "bytes": 135304,
+    "contentsReviewed": false
+  },
+  "lineage": {
+    "runtimeTestFiles": 47,
+    "staticLiteralEdges": 112,
+    "sourceDerivedDollarBodiesVerified": 18,
+    "historicalReferenceBlobsVerified": 3,
+    "wholeClosureApproved": false
+  },
+  "makerSourceContracts": 16,
+  "rootRuntimeExecuted": false,
+  "native": "NOT_RUN",
+  "reviewStatus": "REQUEST_CHANGES_FOR_FULL_HANDOFF_REVIEWER_ACCEPTANCE",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1
+  },
+  "requiredGap": "Completed handoff context must enforce live retained candidate binding read-revocation fence; reviewer success and completed recovery currently deliberately blocked",
+  "fullGoal": "active",
+  "localAvailableBytes": 3689439232,
+  "limitations": [
+    "First handoff source contract partial only; no Root runtime/native approval",
+    "Existing v2 SQL not asserted broken; new v3 completed-path requirement missing",
+    "Original0PASS1FAIL and6PASS7FAIL/13PASS/final16PASS distinct preserved",
+    "Private raw and actual DB catalog not received/observed by Root",
+    "No permission to fake reviewer packet/recovery from cached bytes"
+  ]
+}
