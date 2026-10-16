@@ -1,0 +1,29 @@
+{
+  "scope": "Root read-only filesystem/29 exact fixture source audit and minimal closed tmp staging source-only decision/dispatch; no new native admission",
+  "evidence": "4776c3c35d84fa893f23a5cf3331a118021fed9d",
+  "makerReceipt": "63fc83cdae182f5d04ee7f30f38d6fba00f3b2004674a53866fac8231b43406b",
+  "currentHomeStaging": "NOT_READY",
+  "files": [
+    {
+      "path": "dispatch-snapshot.json",
+      "bytes": 650,
+      "sha256": "e9ddf76937c2a70faa705819c38106fdfe499cb78e52b827baafc9de1e1a9ab9"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 4441,
+      "sha256": "9a207880b6042c265e0f9b8a113fd5a61d71c3f4866eb8569c70754f72fcf645"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 4932,
+      "sha256": "1ea87b6e263ae28673a70c3dac2cc0c403a266e5748e62ad5935e31b793198c0"
+    },
+    {
+      "path": "root-check.json",
+      "bytes": 1140,
+      "sha256": "43a98f3fcb8c107443c5b39f420e7614208162b536f73b61ee7855ec2e03af8b"
+    }
+  ],
+  "fullGoalComplete": false
+}

@@ -1,3 +1,7 @@
+## 2026-10-16 18:24 更新：測試 fixture 暫存位置候選
+
+Cloud home/workspace/Gitcommon同dev27，原29固定檔案1790390bytes已超過8GiB floor以上餘裕。原native中斷永久保留；不降floor、不刪raw/cache/其他App。只授權新source-only closed owned_tmp opt-in暫存至dev34 literal /tmp，原home預設/產品/素材/guards保持，Root精確review與fresh准入另待。唯一owner為Cloud turn01a1443d/branch codex/research-v3-fixture-tmp-staging-source-oct16；先重查samehandle，不以本索引當活動或准入證明。細節與新Root收據見18:24 report，正式發布/完整goal與全部舊未完不變。
+
 # StockInsider：關鍵決策與對話整理索引
 
 快照：2026-10-16 17:15台灣時間。這是恢復工作的短索引，並非完成聲明。每次恢復先核remote main、progress最新[launch-status](../2026-10-11/launch-status.md)、工作樹與同Cloud handle。新證據優先，不因本文件舊活動狀態重派。

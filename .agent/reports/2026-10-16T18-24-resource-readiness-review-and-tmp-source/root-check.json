@@ -1,0 +1,28 @@
+{
+  "utc": "2026-10-16T10:22:19.883677+00:00",
+  "evidence": "4776c3c35d84fa893f23a5cf3331a118021fed9d",
+  "makerReceipt": "63fc83cdae182f5d04ee7f30f38d6fba00f3b2004674a53866fac8231b43406b",
+  "publishedFilesIncludingReceipt": 10,
+  "publishedBytes": 38551,
+  "original331InputsUnchanged": true,
+  "fixedFilesRootIndependentlyRecomputed": 29,
+  "fixedLogicalBytes": 1790390,
+  "workspaceAvailableAtMakerObservation": 8591060992,
+  "workspaceAfterOnlyKnownFileContent": 8589270602,
+  "deficitBelowOriginal8GiB": 663990,
+  "workspaceHomeGitCommonSameDev": 27,
+  "tmpWorktreeSameDev": 34,
+  "tmpAvailableAtMakerObservation": 13783437312,
+  "verdictForCurrentHomeStaging": "NOT_READY",
+  "noNativeExecuted": true,
+  "noPrivatePriorRawContentsAcquired": true,
+  "reference1916928NotUpperBound": true,
+  "readinessSourceOnlyFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "nextEngineeringDecision": "Closed test-only opt-in staging on existing /tmp filesystem, preserve default/home bytes and all product guards, new source review then fresh capacity/native separate",
+  "rootAvailableBytes": 19747135488,
+  "fullGoalComplete": false
+}
