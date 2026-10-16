@@ -1,0 +1,26 @@
+{
+  "createdAt": "2026-10-16T16:06:16.257021+00:00",
+  "originalScriptSha256": "424c6b3148c1028b70567ff18935f322dd306ca23c64f0d69337e8581965fdf0",
+  "newScriptSha256": "fdcd866bfec5846df419d9a5bc66adeda8446aa15e15fa203a73fd763603803f",
+  "changesOnlyAttemptArtifactNames": {
+    "upload-budget.json": "upload-oct17-1605-budget.json",
+    "upload-preflight": "upload-oct17-1605-preflight",
+    "upload-db-preflight.stdout": "upload-oct17-1605-db-preflight.stdout",
+    "upload-db-preflight.stderr": "upload-oct17-1605-db-preflight.stderr",
+    "upload-immediate-preflight": "upload-oct17-1605-immediate-preflight",
+    "upload-response.json": "upload-oct17-1605-response.json",
+    "guarded-upload.json": "guarded-upload-oct17-1605.json"
+  },
+  "reverseReconstructionExact": true,
+  "syntaxExit": 0,
+  "preliminaryMemoryObservation": {
+    "at": "2026-10-16T16:00:43.245986+00:00",
+    "availableMemoryBytes": 4029870080,
+    "requiredMemoryBytes": 2684354560,
+    "scope": "readonly preliminary only; no full capacity admission"
+  },
+  "originalHoldRetained": true,
+  "budgetAndAllGuardsUnchanged": true,
+  "priorUploadAttempts": 0,
+  "priorOutcomeUncertain": false
+}

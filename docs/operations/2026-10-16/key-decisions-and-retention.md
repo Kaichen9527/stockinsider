@@ -1,3 +1,7 @@
+## 2026-10-17 00:17 更新：2327新receipt已入庫但socket路徑缺失，未取得facts
+
+原budgets/3OS鎖兩次fullguard PASS後單次POST202，receipt c5b6ccf0-25d5-4fa3-b257-4f0b194c0090／SHA8900870e；公告日null/MIME detected與wire分開。Root worker前置memoryHOLD、HTTP0，另一未知actor已把新receipt處理成socket_unavailable partial／facts0，原五jobqueued／6舊partial不變。16:10:27.793504Z writerDD唯一1/lease0。16:13 parser active-listener但host與knownworker root pathnameabsent，shared RuntimeDirectory lifecycle僅假說；未restart/permission/code修補或retry。新Root report00:14／receiptdb6cc933詳載真證據，先READ exactreceipt及根因/owner/安全修補邊界，不能重upload或unchangedpartial盲retry。Cloudcursor33仍completed-idle，無活動owner。Fullscope未完/heartbeatACTIVE；get_goal真paused與文字ACTIVE分開保存，未修改status。原RED、DD消耗/PR終態/正式未完皆保持。
+
 ## 2026-10-16 22:59 更新：custody無相同副本；2327新官方bytes已保留但未入庫
 
 Cloud01a1447d/cursor33真completed-idle，無活動owner。Root核334inputs/7public receipts及621比較，0samebytecopy，safe刪單仍空，不清理/重跑tmp。2327官方正文1528880bytes/SHA8900870e已Root核XHTML/company-period，sourcewireMIME缺失保留，detecteduploadtype另明列、公告日未知；原3鎖fullcapacity11:48因memory不足HOLD、upload0/worker0，未造facts。DBwriterDD/lease0最新11:37:13.369113Z。Root19:54report/receipt19e3a33d保存精確pointer；raw留兩端knownownedpath，不public全文。所有原RED/正式未完/已耗DD與PR終態不變；先重查remote+samehandle，不能沿索引舊活動重派。

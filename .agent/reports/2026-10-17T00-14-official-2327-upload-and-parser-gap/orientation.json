@@ -1,0 +1,29 @@
+{
+  "main": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "progress": "26d686c0e894efdb30021e639124bb2005f11841",
+  "cloud": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "hostId": "durable",
+    "status": {
+      "type": "idle"
+    },
+    "cursor": "3f58cf3b-49b3-4414-877e-42d89130b651:33",
+    "latestTurn": {
+      "id": "01a1447d-3be0-7753-a7ea-570342e101dc",
+      "status": "completed",
+      "error": null,
+      "startedAt": 1792150421,
+      "completedAt": 1792150794,
+      "durationMs": 373471
+    },
+    "changed": false
+  },
+  "goalApiObserved": {
+    "status": "paused",
+    "updatedAt": "2026-10-16T13:52:51Z",
+    "requestedFullScopeStillIncomplete": true,
+    "statusMutationPerformed": false
+  },
+  "rootOrientationFreeBytes": 9357656064,
+  "classification": "progress"
+}

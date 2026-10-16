@@ -1,0 +1,14 @@
+[
+  {
+    "name": "claim_candidate_financial_document_receipts_v6",
+    "path": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+    "blobSha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+    "bodySha256": "830fffbb0cacbebd329d79d0a48ff39c5bb8d8637c4f1b1e4848001c47bb55f5"
+  },
+  {
+    "name": "reconcile_pending_financial_document_jobs_v9",
+    "path": "migrations/20260911_03_financial_document_job_links.sql",
+    "blobSha256": "bbb766fcba98671bd31541874ffaf0419e82b437044ae773c6c876fb8b006701",
+    "bodySha256": "1eb9cfa2beb10de0b07ed0759c5d0b5f925b55dd715017f2551b406a1086f7cd"
+  }
+]

@@ -1,0 +1,19 @@
+# 國巨官方新文件：guarded upload 已建立真收據；解析 socket 路徑缺失
+
+2026-10-17 00:14 台灣時間。前件已保存 custody 審查；本件只推進已保留的國巨2327／2026Q2官方新bytes。先核remote main93e44475、progress26d686c0與乾淨tracked source/progress樹，同Cloud01a1447d／cursor33仍completed-idle，沒有新dispatch、重疊owner、native或CI。完整三階段目標及所有正式未完保持。get_goal本次實際回paused／updated2026-10-16T13:52:51Z，與heartbeat文字ACTIVE不同，據實保存；未改goal狀態或冒complete／blocked。Heartbeat維持ACTIVE。
+
+16:00:43.245986Z初步唯讀memory4029870080已真改變，才準備新attempt。舊upload script424c6b31與11:48HOLD完全保留；新scriptfdcd866b只換七個attempt artifact名稱，逆向替換後逐byte還原舊script，budget／三OS鎖／manifest34448958／原capacity兩script哈希／fixed postgres READONLY5s2s／job-hashreceipt／stableFD／nullable公告日／auth與單次POST皆保持。bash-n真PASS，非正式批准或runtime替代。
+
+16:06:24.468831–16:06:27.118934Z SSH actualexit0。原三鎖內16:06:26.296／.601Z兩次原完整capacity guard真exit0／allowedtrue：memory2698797056／2699472896，扣1GiB後1625055232／1625731072仍≥1.5GiB；diskprojected26880015312／26880007120≥15GiB。原WAL1GiB／tmp0.5GiB／deploy128MiB／growth2GiB／全部budgets不降。DB前置真通過current/DD唯一writer、empty lease及原job；同SHA receipt[]才送一次。正文1528880bytes／SHA8900870e593b1342d0901d38c137cdbb62f48d662fb6ecedebe3431e28df9e9e重新stableFD核實，無新下載、無正文公開。
+
+唯一guarded內部POST真HTTP202／oktrue／idempotentReplayfalse，建立receipt c5b6ccf0-25d5-4fa3-b257-4f0b194c0090。正式metadata為2327／2026-06-30／exact FileDownLoad URL／application/xhtml+xml／publishedAt null。Detected MIME仍與原缺MIME token的wire header分開；未造公告日／validated manifest／facts。Upload成功只代表不可變收據，非usable facts或job terminal。內部key只在VPS Python記憶體讀取使用，未輸出、寫入報告、修改env或作命令參數。
+
+Root另準備唯一limit1 worker候選fd5ebb88，前置須installed claim／reconcile body與source hash相符、parser queue恰為新receipt、due validation0、global reconciliation限原五job，兩次同原capacity guard才可POST。16:09:33.989Z第一原guard真exit1：memory2483359744<2684354560、projected1409617920<1.5GiB；diskready。Root workerAttempts0、uploadAttempts0、outcomeUncertainfalse，DB queue/source checks與secret段都尚未執行，沒有worker POST或自動重試。Outer collector0只保存HOLD，不冒worker成功；不得重跑已存在budgetfile的one-shot候選。
+
+16:10原三鎖內fixed postgres／READONLY5s2s／ROLLBACK真SSH0，writerDD唯一1／lease0最新16:10:27.793504Z；原五job全queued。6份九月舊partial receipt與其facts0未改，新增第7份只有本國巨新receipt。新receipt已被本Root未發出的實際處理於16:10:12.201Z寫成parser complete／receipt partial，missingRequirements=[candidate_financial_local_parser_socket_unavailable]、rejectionReasons=[]、parserEvidence1／locator0／factLink0／actual provenancefacts0／validation receipts0／validation attempts0，joblink1。處理actor及觸發來源未取得，不冒Root worker執行、正式排程驗收或假稱仍queued未解析。下一必先READ此exact receipt，不能重upload或unchanged retry partial。
+
+採investigate技能的先取證再修補方法，唯讀核已知parser unit／path／有限journal。16:11與16:13 socket/service都active-running且ss有原pathname listener inode8262，然而host及已知internal-worker PID3834578的root namespace中該pathname皆absent；不能把active當可連線。Parser socket unit SHA c01a4972與批准DD Git逐byte hash相同；web unit fa55cd9e及RuntimeDirectory=stockinsider／RuntimeDirectoryPreserve=no，parser socket共用/run/stockinsider。這支持共同runtime目錄生命週期導致pathname遺失的假說，但未證實哪個actor／哪次unlink或因果時間；限定16:06–16:14 journal無entries並不證沒有更早錯誤。沒有connect probe、restart、stop、chmod、新mount、改unit／app／guard／caps或重跑解析；目前只閉合路徑缺失這個實際缺口，修補及驗證仍待。
+
+本機orientation free9357656064>8GiB／5GiB；未刪cache／sessions／raw／舊輸出、compact、停App或resize，容量原因未知，未觸發廣泛低容量盤點。工具RED：一次猜錯worker route的Git128、一次nested heredoc導致zsh解析exit1（任何新檔案或遠端操作前）保存簡記；正確route為candidate-financial-documents/worker，修正delimiter後才封存候選。未用這些工具錯誤冒產品FAIL。
+
+原tmp native0PASS2FAIL、home resourcehold、custody safeDeletionCandidates空、所有歷史RED與各自scope綠保持。本輪無產品code／SQL／role／ACL／PR／merge／deploy／research schedule變更。已耗DD deploy與terminalPR370..382不碰。兩formal研究／逐claimsemantic／R1 reviewer native與legacy-rights-caps-ACL／真loss／actual四caller-routes／Q-R／reviewpack／publication union／atomicpublication／wholeS-C-B-Q-R-A／完整來源Top20／合格技術觀察／策略／正式研究排程／fixed peer install皆仍待。下一以新receipt及socket真缺口為依據，先核fresh writer-lease、實際parser ownership與安全修補邊界；原budget真准入後才能單一guarded處理，不能靠改日期、facts、guard或重送追綠。

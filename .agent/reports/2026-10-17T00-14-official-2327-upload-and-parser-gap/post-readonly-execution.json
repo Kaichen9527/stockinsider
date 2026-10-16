@@ -1,0 +1,17 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "bash",
+    "-s"
+  ],
+  "start": "2026-10-16T16:10:26.696239+00:00",
+  "end": "2026-10-16T16:10:29.627289+00:00",
+  "actualExit": 0,
+  "scriptSha256": "e9cff7d1269499d4b8ec1469e68ed4a075263ba7d5b35400b97a628c490b69d1",
+  "scope": "Original three locks, fixed postgres READ ONLY 5s/2s ROLLBACK; original five plus new exact receipt/facts/validation audit"
+}

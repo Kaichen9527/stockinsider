@@ -1,3 +1,19 @@
+## 2026-10-17 00:17台灣時間：國巨新官方bytes單次guarded入庫；真partial指向socket pathname缺失，Root worker容量HOLD而未發出
+
+先核remote main93e44475/progress26d686c0與乾淨tracked source/progress樹，同Cloud01a1447d/cursor33仍completed-idle，無新owner/dispatch/native。16:00:43Z preliminarymemory4029870080真變後，另新attempt fdcd866b，只改七artifactnames；逆向逐byte等原424c6b31，原11:48HOLD與one-shot budget保持不重跑。
+
+16:06:24–27Z原3OS鎖內兩次approved原guard27f042bd+8b33b9f/manifest34448958真exit0/allowedtrue；memory2698797056/2699472896扣1GiB後1625055232/1625731072>=1.5GiB，diskprojected26880015312/26880007120>=15GiB，全原budgets不降。Fixedpostgres READONLY5s2s/ROLLBACK核DD唯一writer/lease0、原2327job及exactSHAreceipt[]，stableFD重新核1528880bytes/SHA8900870e。唯一原guardedPOST真202/oktrue/idempotentfalse，新receipt c5b6ccf0-25d5-4fa3-b257-4f0b194c0090；MIME為detected application/xhtml+xml，wire缺MIME仍另保、publishedAt null，無新download/造facts/公告日。
+
+Root新limit1 worker候選fd5ebb88要求installedbodypins/唯新receiptqueue/無duevalidation/只原五reconcile，但16:09:33.989Z第一原capacity真HOLD，memory2483359744<2684354560/projected1409617920<1.5GiB。Root workerAttempts0/outcomeUncertainfalse、未到DB/secret/POST。此candidate budget已存在禁重跑；collector0非worker成功。
+
+16:10原3鎖內READONLY5s2s/ROLLBACK真exit0，writerDD唯一1/lease0最新16:10:27.793504Z；原五jobqueued、6份九月partial receipt全metadata/facts0不變。新第7份卻已於16:10:12.201Z真parsercomplete/receiptpartial，missing candidate_financial_local_parser_socket_unavailable、rejections[]、evidence1/locator0/factLink0/actualprovenancefacts0/validationreceipts0/attempts0/joblink1。處理actor/trigger未知，不能冒Root worker、正式排程驗收或仍queued未解析；先READ exactreceipt，勿重upload/盲retry unchangedpartial。
+
+採investigate先取證，16:11/16:13 boundedreadonly：parser socket/service active-running、ss listener inode8262仍在，但host與當時knownworkerPID3834578/root中exact /run/stockinsider/candidate-financial-parser.sock皆absent。Socketunit c01a4972與DD Git hash同；webunit fa55cd9e/RuntimeDirectory=stockinsider/Preserve=no與socket共用parent，是lifecycle unlink假說，未證哪個actor/哪次unlink或因果時點。有限16:06–16:14journal無entries非更早沒錯。無connect/restart/stop/chmod/改unit/app/guards或解析retry。新真缺口與原nativeRED保持分開，下一需先核安全修補/ownership/freshwriterlease及原capacity，不拿active當可連線。
+
+Root report .agent/reports/2026-10-17T00-14-official-2327-upload-and-parser-gap/；receipt db6cc9335b31cd0f54f7d633f7b01b4aa00802e09a768b8f966e1a3e43ca1304 bound27explicitpublicsafefiles64706bytes。Rootchecker真exit0核2capacity/202/新receipt0facts/6舊receipt不變/socket-Githash；raw正文仍兩端原knownpath私有保留，無cleanup/secret輸出。工具RED猜錯workerrouteGit128/nestedheredoczsh解析exit1在新檔或遠端操作前留簡記，修正後才封候選。Rootfree9.36→9.47GB>8GiB/5GiB，未刪cache/session/compact/停App/resize；<5GB廣盤點未觸發。
+
+Fullscope仍未完成，heartbeat ACTIVE保留；get_goal實際回paused/updated13:52:51Z，與排程文字ACTIVE不同，據實保存未改goalstatus/冒complete或blocked。R1 reviewer native/legacy-rights-capsACL/真loss/actual四caller-routes/Q-R/reviewpack/pubunion/atomicpublication/wholeS-C-B-Q-R-A/逐claimsemantic/兩formal文章/完整來源Top20/合格技術觀察/策略/正式研究排程/fixedpeerinstall全原pending；safeDeletionCandidates空、原tmp0PASS2FAIL/homehold不變。DD已耗one-shot/terminalPR370..382不碰，無本輪appcode/SQL/roleACL/PR/merge/deploy或研究排程變更。
+
 ## 2026-10-16 22:59台灣時間：中斷後保存已完成custody Root審查與國巨官方新bytes；容量guard真HOLD、upload0，Cloud已真終態無活動owner
 
 恢復時先核remote main93e44475/progressfe79e7ea及乾淨tracked source/progress樹；前turn實際Root checker已於11:54:13Z exit0，report尚未commit時被interrupt，未捏有活動工作或重跑取得。SameCloud turn01a1447d-3be0-7753-a7ea-570342e101dc於11:39:54Z completed/lasttoolcompleted/threadidle/cursor3f58cf3b-49b3-4414-877e-42d89130b651:33保持；source/reportf1d60b83a97b21326291decfa81a38ec73b96f68/evidenceb9d81aa44bb07cabdd03c7b24b89a7abc2c32acd/receiptf620730058b5ba412ae67ca85091dd021b88166530c2f72ce97f1bf9c583b301。沒有後續dispatch/CI/native/cleanup或新owner。

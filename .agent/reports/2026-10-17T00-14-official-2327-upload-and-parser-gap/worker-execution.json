@@ -1,0 +1,16 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "bash",
+    "-s"
+  ],
+  "start": "2026-10-16T16:09:31.878438+00:00",
+  "end": "2026-10-16T16:09:34.040899+00:00",
+  "actualExit": 0,
+  "scriptSha256": "fd5ebb88b34b0832564816da6aaafb0e9f75b14e83c32db990e981e4f2df11b9"
+}
