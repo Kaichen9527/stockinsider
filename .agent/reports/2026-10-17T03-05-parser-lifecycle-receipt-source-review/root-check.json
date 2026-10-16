@@ -1,0 +1,79 @@
+{
+  "source": "76bcc2629a7417b224d47229d7d5b4973631b053",
+  "evidence": "831127a05a99c83b7c3e6f9e5615ccded58a1bb5",
+  "base": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+  "sourceInputs": [
+    {
+      "revision": "76bcc2629a7417b224d47229d7d5b4973631b053",
+      "path": "scripts/parser-runtime-directory-lifecycle.py",
+      "bytes": 31720,
+      "sha256": "38868306ced98b888726428a929a0b9e9083bc7e738c3572a3aa5edf610e1d3e",
+      "blob": "281bf732111f7fd8572c6b8ba4f00b0effc65e7d"
+    },
+    {
+      "revision": "76bcc2629a7417b224d47229d7d5b4973631b053",
+      "path": ".github/workflows/parser-runtime-lifecycle-quality.yml",
+      "bytes": 1870,
+      "sha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c",
+      "blob": "8868d1e6b6f469df828ce63aca9b286d343c45dc"
+    },
+    {
+      "revision": "76bcc2629a7417b224d47229d7d5b4973631b053",
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/HANDOFF.md",
+      "bytes": 7975,
+      "sha256": "fc7b82f7ae325a101882034326c7b21f4d6d051fbfa8ac57fdb3fca2653d2ecc",
+      "blob": "e0e06c5a432957153cb52895b9541fa890410895"
+    },
+    {
+      "revision": "76bcc2629a7417b224d47229d7d5b4973631b053",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "bytes": 1341,
+      "sha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5",
+      "blob": "c534ab49eb8934300e5c2c93fb65e76955e573da"
+    },
+    {
+      "revision": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "bytes": 1312,
+      "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"
+    },
+    {
+      "revision": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+      "path": "deployment/vps/systemd/stockinsider-financial-parser.socket",
+      "bytes": 428,
+      "sha256": "c01a4972aebc8616cd6fcc04cde6d9d38ef9173fc3590de9964d38872670a6a7"
+    },
+    {
+      "revision": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+      "path": "deployment/vps/systemd/stockinsider-financial-parser.service",
+      "bytes": 1044,
+      "sha256": "41bbd5a9bac6d9579077cdea5b184ed0f7c30d186d4246a6b64c4b0c1a95f02e"
+    },
+    {
+      "revision": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+      "path": "scripts/candidate_financial_parser_socket.py",
+      "bytes": 5062,
+      "sha256": "b88897da16bb1aa9ad755d5f1d41afc033c05120c4762be810d5a1c15fea713b"
+    }
+  ],
+  "sourceInputCount": 8,
+  "sourceInputBytes": 50752,
+  "publishedFilesIncludingReceipt": 11,
+  "publishedBytesIncludingReceipt": 17443,
+  "inheritedEntriesUnchanged": 2204,
+  "newSourceEntries": 3,
+  "newEvidenceEntries": 11,
+  "privateInventoryOnlyCount": 24,
+  "privateInventoryOnlyBytes": 105829,
+  "privateContentsObtained": false,
+  "makerSourceGroups": 19,
+  "makerNative": "NOT_RUN",
+  "rootBindingProbe": "FAIL/R1/source-contract-only",
+  "rangeDiffCheck": "PASS",
+  "scopedReview": "REQUEST_CHANGES",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1
+  }
+}

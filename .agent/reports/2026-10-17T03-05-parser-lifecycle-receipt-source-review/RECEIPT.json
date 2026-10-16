@@ -1,0 +1,109 @@
+{
+  "schema": "stockinsider-root-public-evidence-receipt-v1",
+  "source": "76bcc2629a7417b224d47229d7d5b4973631b053",
+  "evidence": "831127a05a99c83b7c3e6f9e5615ccded58a1bb5",
+  "scope": "exact source review/request changes/runtime-receipt contract only; native NOT_RUN; one active source-only fix",
+  "files": [
+    {
+      "path": "root-check.py",
+      "bytes": 6406,
+      "sha256": "613a8498a0645c59c6cac6e0118c4dcfbce57ab1dd38afd88b8fc778cbd462a4"
+    },
+    {
+      "path": "root-check.json",
+      "bytes": 3023,
+      "sha256": "da5adde6b2dfbcded46dba4ffe8d210cba82281807e1c1373dd0f92c841b37b1"
+    },
+    {
+      "path": "runtime-receipt-binding-probe.json",
+      "bytes": 816,
+      "sha256": "494689c80064d71af3d412e58692d2381fd44c7ae8e3b834e7bded62a8d569db"
+    },
+    {
+      "path": "cloud-terminal-source.json",
+      "bytes": 2010,
+      "sha256": "0ffa4f6dd82a569e4414a78ae40ef94d1e9ed6004e4c59b472d81a79eebcd7ff"
+    },
+    {
+      "path": "fix-dispatch.txt",
+      "bytes": 3379,
+      "sha256": "5de977777df2fd1d52346d5dc5b55f5af0d34c8f3a9790096c7a45221954d317"
+    },
+    {
+      "path": "fix-dispatch-result.json",
+      "bytes": 111,
+      "sha256": "724fee24c2062e6606cedefc8af13edbe9b71f2d07ac98d03639aaf42486975b"
+    },
+    {
+      "path": "passive-read-error.json",
+      "bytes": 249,
+      "sha256": "75220f694511cc3c9a9afb309fe903cbbfd38f33c2507e6e08ac6714675995e8"
+    },
+    {
+      "path": "fix-cloud-snapshot.json",
+      "bytes": 637,
+      "sha256": "d633e8be8b5bab562e84f64cf09e64632020146543fe59d098f251f32ea4ffce"
+    },
+    {
+      "path": "maker-SOURCE-CHECKS.py.txt",
+      "bytes": 5991,
+      "sha256": "f21392651a4d1be2b6b0788d7e803882dc183f0c3f58e93bdde5ef63acac4190"
+    },
+    {
+      "path": "maker-action-pin-proof.json",
+      "bytes": 404,
+      "sha256": "f8bf4581d16c637afbaf965002664d5579b7a8f95795d836d71749f5e4349567"
+    },
+    {
+      "path": "maker-admission.json",
+      "bytes": 248,
+      "sha256": "cd7103361ebbe1630997ac63daea21a4ea94f1febea01255afcabfdd67a44b5b"
+    },
+    {
+      "path": "maker-command-result.json",
+      "bytes": 253,
+      "sha256": "605236cebef52b90a6041665bb1b707d10f0d08e79e5241fbcffb629041318af"
+    },
+    {
+      "path": "maker-diff-check.json",
+      "bytes": 48,
+      "sha256": "732883d74fff105b6916110dd67928d04765fdfa4fce96791f3d3be410b4440f"
+    },
+    {
+      "path": "maker-raw-inventory.json",
+      "bytes": 3974,
+      "sha256": "05899b7df04d526c58496d96302eff87d78248c5f19f72095111c70af25ec151"
+    },
+    {
+      "path": "maker-source-checks-result.json",
+      "bytes": 1448,
+      "sha256": "531147e63946e1d9f5e1afd94437ba264008dcf3647f1b87150d937640dc69fc"
+    },
+    {
+      "path": "maker-source-seal.json",
+      "bytes": 1809,
+      "sha256": "d4dfb6d766b7af26f955b47bd3c6a1fdd7724e34ca56af0b3743b911fe73e2a6"
+    },
+    {
+      "path": "maker-sparse-tool-red-initial.json",
+      "bytes": 271,
+      "sha256": "676d5d4a526df614f8e044c3d7ae4701609eda9553d85581f28c379f7ef6c3bd"
+    },
+    {
+      "path": "maker-sparse-tool-red.json",
+      "bytes": 471,
+      "sha256": "d44b4cd2dec806aa34c7d9aba3c1530897971fd0c3671ea75b7a337d6f17eedb"
+    },
+    {
+      "path": "maker-receipt.json",
+      "bytes": 2526,
+      "sha256": "b9138032ccb0cdc149fb77e019f0cb1acff4b41a533f02aa8dd783f9daf7bbad"
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 3956,
+      "sha256": "5a543e4ff4a36d9af62b09d3c3b4d7872bb600f6df71bf13f0308e8b97f5fe9d"
+    }
+  ],
+  "totalBytes": 38030
+}

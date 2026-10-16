@@ -1,0 +1,7 @@
+{
+  "command": "git sparse-checkout add --no-cone ...",
+  "error": "unknown option no-cone",
+  "exit": 129,
+  "correction": "existing checkout is already non-cone; add patterns without unsupported flag",
+  "scope": "Git metadata tooling only, no native/product result"
+}

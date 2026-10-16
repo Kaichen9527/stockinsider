@@ -1,0 +1,11 @@
+{
+  "atUtc": "2026-10-16T18:07:03.559142+00:00",
+  "base": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+  "floor": 8589934592,
+  "freeBytes": {
+    "/workspace": 8590401536,
+    "/tmp": 13605998592
+  },
+  "sourceOnly": true,
+  "native": "NOT_RUN"
+}

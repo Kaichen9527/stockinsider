@@ -1,0 +1,13 @@
+{
+  "atUtc": "2026-10-16T18:18:47.511020+00:00",
+  "command": [
+    "python3",
+    "/tmp/parser-lifecycle-source-o17/source-checks.py"
+  ],
+  "exit": 0,
+  "native": "NOT_RUN",
+  "freeBytes": {
+    "/workspace": 8590401536,
+    "/tmp": 13605785600
+  }
+}

@@ -1,3 +1,15 @@
+## 2026-10-17 03:06台灣時間：lifecycle來源Root精確審查REQUEST_CHANGES；唯一補runtime receipt binding，尚未native/CI
+
+先核remote main93e44475/progress5d175574及乾淨tracked樹，同Cloud前turn01a145e3於18:22:21Z真completed/threadidle/lasttoolcompleted/cursor37。Remote831127a0真核、fetch同session28206真exit0後取Git：source76bcc2629a7417b224d47229d7d5b4973631b053/evidence831127a05a99c83b7c3e6f9e5615ccded58a1bb5/receiptb9138032ccb0cdc149fb77e019f0cb1acff4b41a533f02aa8dd783f9daf7bbad。
+
+Root actualchecker exit0核8Gitinputs50752bytes/11published17443bytes；2204base entries mode/type/blob identities保持（非重讀全部contents），只new31720byte harness38868306/1870byte PR-onlyworkflow133883a2/HANDOFF及evidence。Frozenunit7a948b27/原profile/所有產品不變。24private105829只inventorycount/sum/hashformat未取contents。Maker19 AST/pure/YAML/bash/static PASS只source；4lifecycle/native/reboot全NOT_RUN，Root未重跑19/舊green，range diffcheck PASS。
+
+Scoped REQUEST_CHANGES P0=0/P1=0/P2=1：R1 future runtime receipt只serialized result，沒有exact harness/workflow/unit pins或三份source-pins/fixture-units/events的byte-hash binding，分離source-pins不等receipt已綁。Root摘frozen main配memory-only adapters確認其PASS分支仍unbound；是source contract FAIL，不是真systemd/native或production FAIL，不把mockcases冒真PASS。完整source與原RED/19scope保留。
+
+前turn真終態與Root review後只派唯一10min SOURCE-ONLY codex/parser-runtime-lifecycle-receipt-binding-fix-oct17/base831127a0，owned最小finalserialization/input+3explicit evidence byte-hash binding/focusedsourcechecks/HANDOFF/evidence；原workflow/unit/cases/admission/cleanup/postrun/guards/budgets凍結，不native/CI/PR/production或自接execution。Newturn01a14619-922f-7727-82d3-99a61d1c780e真inProgress/threadactive。Passive read先host-change錯誤，立即samehandle恢復cursor287e3e4a-38e7-4f63-9627-9f86b75f4348:1；未重送/重派，reset/timeout非完成。尚無fix交付。
+
+Root report .agent/reports/2026-10-17T03-05-parser-lifecycle-receipt-source-review/；receipt30d21290db9dba83cc8e41518317e2f891c2e1e393fe89e90501c89cdcbd9e2d bound20explicitpublicsafe files38030bytes，原收據不覆寫。本輪無VPS/DB/HTTP/secret/服務/資料/CI/PR/deploy變更；parser尚未恢復，最新真OS17:05/DB16:10仍舊觀測，c5b6ccf0不重upload/盲retry。Rootfree15989608448>8GiB/5GiB、原因未知，未刪cache/sessions/compact/停App/resize，safeDeletionCandidates空。Fullscope/Heartbeat ACTIVE、Goal狀態未改，兩formal文章/Top20/合格技術/策略/正式研究排程/wholeclosure/fixedpeer全部原pending與RED保持，DD已耗/terminalPR370..382不碰。下一先同handle newcursor1（以同handle最新為準），不重派活動fix。
+
 ## 2026-10-17 02:07台灣時間：唯一 Linux systemd lifecycle regression來源工程活動；未執行native/CI或正式修復
 
 先核remote main93e44475/progress3dc00c49/parser-source1f5f3fca與乾淨tracked樹；ls-remote同session44084真exit0。同Cloud前turn01a145ad/cursor35真completed-idle後，才派唯一20min SOURCE-ONLY codex/parser-runtime-directory-lifecycle-source-oct17/base1f5f3fca。Newturn01a145e3-5ffd-7431-be19-3ab10ec386f1/startedAt1792173892，bounded45s同handlecursor3f58cf3b-49b3-4414-877e-42d89130b651:36真inProgress/threadactive。Timeout不是完成，沒有新source交付或native/CI結果，活動owned不可重派。

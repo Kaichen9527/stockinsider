@@ -1,0 +1,29 @@
+{
+  "scope": "isolated frozen main orchestration with memory-only adapters; no lifecycle/native evidence",
+  "contract": "future runtime receipt binds exact harness/workflow/unit and evidence file bytes/hash",
+  "result": "FAIL",
+  "runtimeReceiptKeys": [
+    "cases",
+    "cleanup",
+    "minimumFreeBytes",
+    "nativeAssertionsOnlyInRun",
+    "postrun",
+    "reboot",
+    "resourceViolation",
+    "sampleIntervalSeconds",
+    "sampledOwnedPeakRssBytes",
+    "scope",
+    "status"
+  ],
+  "separateSourcePinsKeys": [
+    "adaptations",
+    "harnessSha256",
+    "originalUnitSha256",
+    "selectedSemantics",
+    "unitBytes",
+    "unitSha256",
+    "workflowSha256"
+  ],
+  "native": "NOT_RUN",
+  "finding": "R1 receipt lacks input/evidence binding even when frozen main selects PASS in an isolated contract adapter"
+}
