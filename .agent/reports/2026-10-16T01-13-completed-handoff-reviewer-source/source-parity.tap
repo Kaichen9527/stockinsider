@@ -1,0 +1,25 @@
+# scope: parity-final; stack/body-free TAP projection, complete raw stdout retained locally
+TAP version 13
+# Subtest: complete retained select/validator statements are byte-exact extraction
+ok 1 - complete retained select/validator statements are byte-exact extraction
+# Subtest: original active controller run/legacy/fresh semantics remain byte-exact
+ok 2 - original active controller run/legacy/fresh semantics remain byte-exact
+# Subtest: cash arithmetic, 442/398 node construction and citation rejection body byte-exact
+ok 3 - cash arithmetic, 442/398 node construction and citation rejection body byte-exact
+# Subtest: article pure validator and active validate body remain byte-exact
+ok 4 - article pure validator and active validate body remain byte-exact
+# Subtest: author-result full file unchanged except one pure function export keyword
+ok 5 - author-result full file unchanged except one pure function export keyword
+# Subtest: all 310 inherited inputs preserved except exact seven authorized TS/test paths
+ok 6 - all 310 inherited inputs preserved except exact seven authorized TS/test paths
+# Subtest: frozen candidate fence and author union SQL/profile exact hashes
+ok 7 - frozen candidate fence and author union SQL/profile exact hashes
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 37.829451

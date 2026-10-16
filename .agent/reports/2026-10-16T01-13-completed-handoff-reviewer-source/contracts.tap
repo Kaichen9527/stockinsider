@@ -1,0 +1,63 @@
+# scope: contracts04; stack/body-free TAP projection, complete raw stdout retained locally
+TAP version 13
+# Subtest: 2409 genuine v3 recomputation then first handoff existing6RPC; full draft preserved
+ok 1 - 2409 genuine v3 recomputation then first handoff existing6RPC; full draft preserved
+# Subtest: 2409 immutable result/input/row/clock/unknown fields rejected before mutation
+ok 2 - 2409 immutable result/input/row/clock/unknown fields rejected before mutation
+# Subtest: 2409 rehashed arithmetic/cash/observation forgery does not pass
+ok 3 - 2409 rehashed arithmetic/cash/observation forgery does not pass
+# Subtest: 2409 completed READ/exact replay and distinct reviewer assignment/packet; full article retained
+ok 4 - 2409 completed READ/exact replay and distinct reviewer assignment/packet; full article retained
+# Subtest: 2409 handoff transport uncertain, explicit READ recovers without another mutation or active READ
+ok 5 - 2409 handoff transport uncertain, explicit READ recovers without another mutation or active READ
+# Subtest: 2409 assignment transport uncertain, explicit READ/packet recover without reassign
+ok 6 - 2409 assignment transport uncertain, explicit READ/packet recover without reassign
+# Subtest: 2409 old four-key context / binding core, schema, registration, executor drift refuse before mutation
+ok 7 - 2409 old four-key context / binding core, schema, registration, executor drift refuse before mutation
+# Subtest: 2409 completed current binding revocation and final source withdrawal propagate without fallback/packet
+ok 8 - 2409 completed current binding revocation and final source withdrawal propagate without fallback/packet
+# Subtest: 2383 genuine v3 recomputation then first handoff existing6RPC; full draft preserved
+ok 9 - 2383 genuine v3 recomputation then first handoff existing6RPC; full draft preserved
+# Subtest: 2383 immutable result/input/row/clock/unknown fields rejected before mutation
+ok 10 - 2383 immutable result/input/row/clock/unknown fields rejected before mutation
+# Subtest: 2383 rehashed arithmetic/cash/observation forgery does not pass
+ok 11 - 2383 rehashed arithmetic/cash/observation forgery does not pass
+# Subtest: 2383 completed READ/exact replay and distinct reviewer assignment/packet; full article retained
+ok 12 - 2383 completed READ/exact replay and distinct reviewer assignment/packet; full article retained
+# Subtest: 2383 handoff transport uncertain, explicit READ recovers without another mutation or active READ
+ok 13 - 2383 handoff transport uncertain, explicit READ recovers without another mutation or active READ
+# Subtest: 2383 assignment transport uncertain, explicit READ/packet recover without reassign
+ok 14 - 2383 assignment transport uncertain, explicit READ/packet recover without reassign
+# Subtest: 2383 old four-key context / binding core, schema, registration, executor drift refuse before mutation
+ok 15 - 2383 old four-key context / binding core, schema, registration, executor drift refuse before mutation
+# Subtest: 2383 completed current binding revocation and final source withdrawal propagate without fallback/packet
+ok 16 - 2383 completed current binding revocation and final source withdrawal propagate without fallback/packet
+# Subtest: auth-first, distinct configured identity, closed body and binding before RPC
+ok 17 - auth-first, distinct configured identity, closed body and binding before RPC
+# Subtest: shared deadline and bounded body fail before commit; late commit response not optimistic success
+ok 18 - shared deadline and bounded body fail before commit; late commit response not optimistic success
+# Subtest: source proof: historical gap unchanged; candidate adds binding without service-role resolver grant
+ok 19 - source proof: historical gap unchanged; candidate adds binding without service-role resolver grant
+# Subtest: 30-minute reservation fence uses original nanosecond unit, not a relaxed duration
+ok 20 - 30-minute reservation fence uses original nanosecond unit, not a relaxed duration
+# Subtest: post-commit final context drift prevents optimistic success without retry
+ok 21 - post-commit final context drift prevents optimistic success without retry
+# Subtest: reviewer context transport loss preserves exact error, never assigns/retries or changes budget
+ok 22 - reviewer context transport loss preserves exact error, never assigns/retries or changes budget
+# Subtest: reviewer wrong identity/row/window/unknown persisted key and source-rights reject
+ok 23 - reviewer wrong identity/row/window/unknown persisted key and source-rights reject
+# Subtest: reviewer final deadline/changed-context cannot return a packet or retry mutation
+ok 24 - reviewer final deadline/changed-context cannot return a packet or retry mutation
+# Subtest: reused transport objects cannot mutate the captured context between fenced reads
+ok 25 - reused transport objects cannot mutate the captured context between fenced reads
+# Subtest: stored pure revalidation has exact active READ output and original arithmetic/cash rejection
+ok 26 - stored pure revalidation has exact active READ output and original arithmetic/cash rejection
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 40406.922986

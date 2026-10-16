@@ -1,0 +1,22 @@
+{
+  "scope": "actual tools observed after checks; no install or compiled-app fingerprint",
+  "observedUtc": "2026-10-16T01:33:52.688645+00:00",
+  "nodeVersion": "v22.14.0",
+  "node": {
+    "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+    "bytes": 120177224,
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "mtimeNs": 1791114242011865798
+  },
+  "typescriptVersion": "5.9.3",
+  "typescript": {
+    "path": "web/node_modules/typescript/lib/_tsc.js",
+    "bytes": 6213092,
+    "sha256": "e8f349eabd48486bdb2bf9dc1a00c89d58297270c54b745838879e2859194419",
+    "mtimeNs": 1791732523058180143
+  },
+  "osUser": "agent",
+  "platform": "Linux 6.18.44 x86_64",
+  "pgStarted": false,
+  "nodeInstalled": false
+}

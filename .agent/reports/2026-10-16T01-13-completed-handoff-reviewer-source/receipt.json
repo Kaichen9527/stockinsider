@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "maker-source-only-receipt-v1",
+  "source": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+  "tree": "9fa5a65d2490205ce5f9bdb317e48af3bcf366d0",
+  "base": "87b197eddf452d6144f906b54b184f1af9f4adc9",
+  "branch": "codex/research-v3-completed-handoff-reviewer-source-oct16",
+  "formalApproval": false,
+  "independentReview": false,
+  "nativeExecuted": false,
+  "sqlApplied": false,
+  "wholeClosureApproved": false,
+  "sourceInputCount": 314,
+  "sourceInputBytes": 10280563,
+  "publishedCountExcludingReceipt": 11,
+  "publishedBytesExcludingReceipt": 214893,
+  "rawCount": 90,
+  "rawBytes": 1095138,
+  "checks": {
+    "integration": 26,
+    "citationRegression": 20,
+    "staticParity": 7,
+    "strictModuleTypesExit": 0
+  },
+  "publishedFiles": [
+    {
+      "path": "DELIVERY.md",
+      "bytes": 1479,
+      "sha256": "ff3f2ad2d341e8de168373778edb4a954f37816f44c8b028e162ba22001f1b13"
+    },
+    {
+      "path": "checks.json",
+      "bytes": 9339,
+      "sha256": "c442111ce4ec778f32741fc79adf8e3752d13d0722a98668358795f874fa2230"
+    },
+    {
+      "path": "citation-regression.tap",
+      "bytes": 4609,
+      "sha256": "ad4b195b5c6e6503fb25afe0173288963a5c78027b3bae7dca4b786707d066f0"
+    },
+    {
+      "path": "contracts.tap",
+      "bytes": 5254,
+      "sha256": "4e38e0762e7f8fee3b26f52344a3e8c1037617899a02f9172deb211d50a2cb48"
+    },
+    {
+      "path": "packet-metrics.json",
+      "bytes": 944,
+      "sha256": "9fd0ede9f351498a04199b4d1caca5777d9dbdebd6e008b14282dff75cc03c73"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 15429,
+      "sha256": "f4ef0e415d3a5ac9ea8b8b40aea53a0808245e757e44219c03a23a4cc1893a76"
+    },
+    {
+      "path": "red-summary.json",
+      "bytes": 1521,
+      "sha256": "8a2a68dd7c1c5d1f4df6d38e57e56e19caaf2b5ee7ca53d05f7754ff84621890"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 84154,
+      "sha256": "cb3ff2b90585b02493d5cda06a6dae6c05f62e25796289447015dd2a3c31b04c"
+    },
+    {
+      "path": "source-parity.tap",
+      "bytes": 1356,
+      "sha256": "2395725bc5571df70925cddf764c5f7f11c2e9c2efc103f10ccf22103797d742"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 90053,
+      "sha256": "3e86d247b0881f321ed26c239022fa38be12666107f1466d3d612622eebbd277"
+    },
+    {
+      "path": "tooling.json",
+      "bytes": 755,
+      "sha256": "d2fa0c522eedff23b68b80dc76be495b7f18a8f9949e2f80008f942d247959b5"
+    }
+  ]
+}

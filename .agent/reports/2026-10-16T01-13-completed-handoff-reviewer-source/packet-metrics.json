@@ -1,0 +1,32 @@
+{
+  "scope": "synthetic RPC source contracts; no native rows/charges/FD proof",
+  "source": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+  "metrics": [
+    {
+      "scope": "synthetic source contract, not native",
+      "symbol": "2409",
+      "packetBytes": 280168,
+      "envelopeBytes": 281495,
+      "articleBytes": 31537,
+      "packetHash": "323a3cb0c248479a41a5c63c8f1a5b7ad72a0226b7fdf58e42fbd66c5472afd9",
+      "sections": 7,
+      "tables": 5,
+      "sourceCount": 1,
+      "modelCalls": 0,
+      "completedActiveInputReads": 0
+    },
+    {
+      "scope": "synthetic source contract, not native",
+      "symbol": "2383",
+      "packetBytes": 172666,
+      "envelopeBytes": 173993,
+      "articleBytes": 30386,
+      "packetHash": "e7057c518dcbcb5c02e6212cb1d52b73ba64097424371a20aa6417a55912f39f",
+      "sections": 7,
+      "tables": 5,
+      "sourceCount": 1,
+      "modelCalls": 0,
+      "completedActiveInputReads": 0
+    }
+  ]
+}

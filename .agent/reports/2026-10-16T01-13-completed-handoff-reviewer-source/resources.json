@@ -1,0 +1,2958 @@
+{
+  "floorBytes": 8589934592,
+  "rssLimitBytes": 8589934592,
+  "singleCheckProcessSequential": true,
+  "sampledNotInstantaneousPeak": true,
+  "sampledPeakProcessTreeRssBytes": 268701696,
+  "minFreeBytes": {
+    "/workspace": 8592240640,
+    "/tmp": 14269509632
+  },
+  "checks": {
+    "contracts01": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-handoff-reviewer.test.mjs"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:20:09.407209+00:00",
+      "exit": 0,
+      "finished": "2026-10-16T01:20:47.991355+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:20:09.407209+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270562304
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:20:09.436413+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270562304
+          },
+          "sampledProcessTreeRssBytes": 24096768
+        },
+        {
+          "utc": "2026-10-16T01:20:09.969749+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 115224576
+        },
+        {
+          "utc": "2026-10-16T01:20:10.494350+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 160112640
+        },
+        {
+          "utc": "2026-10-16T01:20:11.021572+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 156774400
+        },
+        {
+          "utc": "2026-10-16T01:20:11.545908+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 163454976
+        },
+        {
+          "utc": "2026-10-16T01:20:12.069813+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 171159552
+        },
+        {
+          "utc": "2026-10-16T01:20:12.597255+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 188289024
+        },
+        {
+          "utc": "2026-10-16T01:20:13.124822+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 203116544
+        },
+        {
+          "utc": "2026-10-16T01:20:13.659976+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 184332288
+        },
+        {
+          "utc": "2026-10-16T01:20:14.195517+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 195579904
+        },
+        {
+          "utc": "2026-10-16T01:20:14.722731+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 205283328
+        },
+        {
+          "utc": "2026-10-16T01:20:15.251824+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 214544384
+        },
+        {
+          "utc": "2026-10-16T01:20:15.805948+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 222146560
+        },
+        {
+          "utc": "2026-10-16T01:20:16.336808+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 189210624
+        },
+        {
+          "utc": "2026-10-16T01:20:16.863020+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 189911040
+        },
+        {
+          "utc": "2026-10-16T01:20:17.387641+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 199729152
+        },
+        {
+          "utc": "2026-10-16T01:20:17.912516+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 217374720
+        },
+        {
+          "utc": "2026-10-16T01:20:18.446285+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 222068736
+        },
+        {
+          "utc": "2026-10-16T01:20:18.974157+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 182071296
+        },
+        {
+          "utc": "2026-10-16T01:20:19.504407+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 187555840
+        },
+        {
+          "utc": "2026-10-16T01:20:20.030882+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 194273280
+        },
+        {
+          "utc": "2026-10-16T01:20:20.556867+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 210038784
+        },
+        {
+          "utc": "2026-10-16T01:20:21.097448+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 207958016
+        },
+        {
+          "utc": "2026-10-16T01:20:21.628972+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 190697472
+        },
+        {
+          "utc": "2026-10-16T01:20:22.160739+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 208207872
+        },
+        {
+          "utc": "2026-10-16T01:20:22.693126+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 219172864
+        },
+        {
+          "utc": "2026-10-16T01:20:23.220367+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 216899584
+        },
+        {
+          "utc": "2026-10-16T01:20:23.751315+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 203034624
+        },
+        {
+          "utc": "2026-10-16T01:20:24.275782+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 201261056
+        },
+        {
+          "utc": "2026-10-16T01:20:24.800412+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 208064512
+        },
+        {
+          "utc": "2026-10-16T01:20:25.326506+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 218505216
+        },
+        {
+          "utc": "2026-10-16T01:20:25.850634+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 198230016
+        },
+        {
+          "utc": "2026-10-16T01:20:26.374626+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 190816256
+        },
+        {
+          "utc": "2026-10-16T01:20:26.903370+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 198049792
+        },
+        {
+          "utc": "2026-10-16T01:20:27.427490+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 212484096
+        },
+        {
+          "utc": "2026-10-16T01:20:27.953093+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 212701184
+        },
+        {
+          "utc": "2026-10-16T01:20:28.486716+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 190513152
+        },
+        {
+          "utc": "2026-10-16T01:20:29.013357+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 193212416
+        },
+        {
+          "utc": "2026-10-16T01:20:29.541056+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 199479296
+        },
+        {
+          "utc": "2026-10-16T01:20:30.064515+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 208674816
+        },
+        {
+          "utc": "2026-10-16T01:20:30.592960+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 191127552
+        },
+        {
+          "utc": "2026-10-16T01:20:31.117342+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 194707456
+        },
+        {
+          "utc": "2026-10-16T01:20:31.642574+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 199045120
+        },
+        {
+          "utc": "2026-10-16T01:20:32.166713+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 200056832
+        },
+        {
+          "utc": "2026-10-16T01:20:32.694590+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 203743232
+        },
+        {
+          "utc": "2026-10-16T01:20:33.236526+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 185077760
+        },
+        {
+          "utc": "2026-10-16T01:20:33.763688+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 190783488
+        },
+        {
+          "utc": "2026-10-16T01:20:34.290348+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 194359296
+        },
+        {
+          "utc": "2026-10-16T01:20:34.817042+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 198889472
+        },
+        {
+          "utc": "2026-10-16T01:20:35.343294+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 201351168
+        },
+        {
+          "utc": "2026-10-16T01:20:35.867793+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 190087168
+        },
+        {
+          "utc": "2026-10-16T01:20:36.393226+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 189722624
+        },
+        {
+          "utc": "2026-10-16T01:20:36.919665+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 183484416
+        },
+        {
+          "utc": "2026-10-16T01:20:37.444696+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 186789888
+        },
+        {
+          "utc": "2026-10-16T01:20:37.969735+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 190345216
+        },
+        {
+          "utc": "2026-10-16T01:20:38.493112+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 192696320
+        },
+        {
+          "utc": "2026-10-16T01:20:39.024237+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 202899456
+        },
+        {
+          "utc": "2026-10-16T01:20:39.549071+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 204349440
+        },
+        {
+          "utc": "2026-10-16T01:20:40.075649+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 208146432
+        },
+        {
+          "utc": "2026-10-16T01:20:40.611130+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 186802176
+        },
+        {
+          "utc": "2026-10-16T01:20:41.146213+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 195362816
+        },
+        {
+          "utc": "2026-10-16T01:20:41.670729+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 200126464
+        },
+        {
+          "utc": "2026-10-16T01:20:42.206954+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 187887616
+        },
+        {
+          "utc": "2026-10-16T01:20:42.731456+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 192962560
+        },
+        {
+          "utc": "2026-10-16T01:20:43.257584+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 204451840
+        },
+        {
+          "utc": "2026-10-16T01:20:43.782628+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 203919360
+        },
+        {
+          "utc": "2026-10-16T01:20:44.307759+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 211283968
+        },
+        {
+          "utc": "2026-10-16T01:20:44.843293+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 189038592
+        },
+        {
+          "utc": "2026-10-16T01:20:45.369352+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 200249344
+        },
+        {
+          "utc": "2026-10-16T01:20:45.895425+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 193052672
+        },
+        {
+          "utc": "2026-10-16T01:20:46.434736+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 197005312
+        },
+        {
+          "utc": "2026-10-16T01:20:46.962135+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 207425536
+        },
+        {
+          "utc": "2026-10-16T01:20:47.491046+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270558208
+          },
+          "sampledProcessTreeRssBytes": 209989632
+        }
+      ],
+      "sampledPeakRssBytes": 222146560
+    },
+    "types01": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--strict",
+        "--target",
+        "es2022",
+        "--module",
+        "esnext",
+        "--moduleResolution",
+        "bundler",
+        "--allowImportingTsExtensions",
+        "--resolveJsonModule",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "--lib",
+        "es2023,dom,dom.iterable",
+        "--types",
+        "node",
+        "--typeRoots",
+        "web/node_modules/@types",
+        "web/src/lib/research-v3-author-handoff.ts",
+        "web/src/lib/research-v3-reviewer-assignment.ts"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:20:54.287567+00:00",
+      "exit": 2,
+      "finished": "2026-10-16T01:20:56.979951+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:20:54.287567+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270533632
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:20:54.314370+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270533632
+          },
+          "sampledProcessTreeRssBytes": 24936448
+        },
+        {
+          "utc": "2026-10-16T01:20:54.858134+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270533632
+          },
+          "sampledProcessTreeRssBytes": 149262336
+        },
+        {
+          "utc": "2026-10-16T01:20:55.388551+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270533632
+          },
+          "sampledProcessTreeRssBytes": 224858112
+        },
+        {
+          "utc": "2026-10-16T01:20:55.933484+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270533632
+          },
+          "sampledProcessTreeRssBytes": 250605568
+        },
+        {
+          "utc": "2026-10-16T01:20:56.479630+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270533632
+          },
+          "sampledProcessTreeRssBytes": 268701696
+        }
+      ],
+      "sampledPeakRssBytes": 268701696
+    },
+    "types02": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--strict",
+        "--target",
+        "es2022",
+        "--module",
+        "esnext",
+        "--moduleResolution",
+        "bundler",
+        "--allowImportingTsExtensions",
+        "--resolveJsonModule",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "--lib",
+        "es2023,dom,dom.iterable",
+        "--types",
+        "node",
+        "--typeRoots",
+        "web/node_modules/@types",
+        "web/src/lib/research-v3-author-handoff.ts",
+        "web/src/lib/research-v3-reviewer-assignment.ts"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:21:45.512350+00:00",
+      "exit": 0,
+      "finished": "2026-10-16T01:21:48.182221+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:21:45.512350+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270525440
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:21:45.537229+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270525440
+          },
+          "sampledProcessTreeRssBytes": 25657344
+        },
+        {
+          "utc": "2026-10-16T01:21:46.062822+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270525440
+          },
+          "sampledProcessTreeRssBytes": 150949888
+        },
+        {
+          "utc": "2026-10-16T01:21:46.600038+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270525440
+          },
+          "sampledProcessTreeRssBytes": 230350848
+        },
+        {
+          "utc": "2026-10-16T01:21:47.151299+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270525440
+          },
+          "sampledProcessTreeRssBytes": 254169088
+        },
+        {
+          "utc": "2026-10-16T01:21:47.681902+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270525440
+          },
+          "sampledProcessTreeRssBytes": 0
+        }
+      ],
+      "sampledPeakRssBytes": 254169088
+    },
+    "contracts02": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-handoff-reviewer.test.mjs"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:22:47.784707+00:00",
+      "exit": 0,
+      "finished": "2026-10-16T01:23:29.554158+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:22:47.784707+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270324736
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:22:47.810661+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270324736
+          },
+          "sampledProcessTreeRssBytes": 25059328
+        },
+        {
+          "utc": "2026-10-16T01:22:48.335841+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 127332352
+        },
+        {
+          "utc": "2026-10-16T01:22:48.861089+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 150372352
+        },
+        {
+          "utc": "2026-10-16T01:22:49.385778+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 153837568
+        },
+        {
+          "utc": "2026-10-16T01:22:49.911291+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 174915584
+        },
+        {
+          "utc": "2026-10-16T01:22:50.435716+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 189202432
+        },
+        {
+          "utc": "2026-10-16T01:22:50.961328+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 210669568
+        },
+        {
+          "utc": "2026-10-16T01:22:51.485904+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 220966912
+        },
+        {
+          "utc": "2026-10-16T01:22:52.011935+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 198819840
+        },
+        {
+          "utc": "2026-10-16T01:22:52.547183+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 205275136
+        },
+        {
+          "utc": "2026-10-16T01:22:53.083083+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 213602304
+        },
+        {
+          "utc": "2026-10-16T01:22:53.618376+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 217866240
+        },
+        {
+          "utc": "2026-10-16T01:22:54.153264+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 222617600
+        },
+        {
+          "utc": "2026-10-16T01:22:54.677177+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 189988864
+        },
+        {
+          "utc": "2026-10-16T01:22:55.200992+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 198750208
+        },
+        {
+          "utc": "2026-10-16T01:22:55.728204+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 204230656
+        },
+        {
+          "utc": "2026-10-16T01:22:56.252882+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 209117184
+        },
+        {
+          "utc": "2026-10-16T01:22:56.778151+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 216440832
+        },
+        {
+          "utc": "2026-10-16T01:22:57.314997+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 235417600
+        },
+        {
+          "utc": "2026-10-16T01:22:57.840758+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 189964288
+        },
+        {
+          "utc": "2026-10-16T01:22:58.364741+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 200859648
+        },
+        {
+          "utc": "2026-10-16T01:22:58.900934+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 207384576
+        },
+        {
+          "utc": "2026-10-16T01:22:59.426183+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 218456064
+        },
+        {
+          "utc": "2026-10-16T01:22:59.950589+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 188723200
+        },
+        {
+          "utc": "2026-10-16T01:23:00.486824+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 202129408
+        },
+        {
+          "utc": "2026-10-16T01:23:01.017451+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 220110848
+        },
+        {
+          "utc": "2026-10-16T01:23:01.544505+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 207872000
+        },
+        {
+          "utc": "2026-10-16T01:23:02.069354+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 206815232
+        },
+        {
+          "utc": "2026-10-16T01:23:02.598878+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 214360064
+        },
+        {
+          "utc": "2026-10-16T01:23:03.124803+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 223698944
+        },
+        {
+          "utc": "2026-10-16T01:23:03.659132+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 207306752
+        },
+        {
+          "utc": "2026-10-16T01:23:04.192967+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 206266368
+        },
+        {
+          "utc": "2026-10-16T01:23:04.717647+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 214093824
+        },
+        {
+          "utc": "2026-10-16T01:23:05.244390+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 221847552
+        },
+        {
+          "utc": "2026-10-16T01:23:05.774817+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 198254592
+        },
+        {
+          "utc": "2026-10-16T01:23:06.303445+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 200544256
+        },
+        {
+          "utc": "2026-10-16T01:23:06.838773+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 203395072
+        },
+        {
+          "utc": "2026-10-16T01:23:07.362857+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 213262336
+        },
+        {
+          "utc": "2026-10-16T01:23:07.888113+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 216375296
+        },
+        {
+          "utc": "2026-10-16T01:23:08.421773+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 190861312
+        },
+        {
+          "utc": "2026-10-16T01:23:08.947248+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 204156928
+        },
+        {
+          "utc": "2026-10-16T01:23:09.473796+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 222892032
+        },
+        {
+          "utc": "2026-10-16T01:23:10.003258+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 196239360
+        },
+        {
+          "utc": "2026-10-16T01:23:10.529271+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 199557120
+        },
+        {
+          "utc": "2026-10-16T01:23:11.064730+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 200740864
+        },
+        {
+          "utc": "2026-10-16T01:23:11.592473+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 202080256
+        },
+        {
+          "utc": "2026-10-16T01:23:12.119695+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 189906944
+        },
+        {
+          "utc": "2026-10-16T01:23:12.647920+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 195084288
+        },
+        {
+          "utc": "2026-10-16T01:23:13.172779+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 199389184
+        },
+        {
+          "utc": "2026-10-16T01:23:13.697801+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 206938112
+        },
+        {
+          "utc": "2026-10-16T01:23:14.222274+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 213819392
+        },
+        {
+          "utc": "2026-10-16T01:23:14.747220+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 212418560
+        },
+        {
+          "utc": "2026-10-16T01:23:15.283188+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 190984192
+        },
+        {
+          "utc": "2026-10-16T01:23:15.807635+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 197480448
+        },
+        {
+          "utc": "2026-10-16T01:23:16.332646+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 202424320
+        },
+        {
+          "utc": "2026-10-16T01:23:16.859449+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 208220160
+        },
+        {
+          "utc": "2026-10-16T01:23:17.394017+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 199786496
+        },
+        {
+          "utc": "2026-10-16T01:23:17.917465+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 208568320
+        },
+        {
+          "utc": "2026-10-16T01:23:18.444483+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 212299776
+        },
+        {
+          "utc": "2026-10-16T01:23:18.969722+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 220696576
+        },
+        {
+          "utc": "2026-10-16T01:23:19.496608+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 224854016
+        },
+        {
+          "utc": "2026-10-16T01:23:20.021349+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 201605120
+        },
+        {
+          "utc": "2026-10-16T01:23:20.550360+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 200933376
+        },
+        {
+          "utc": "2026-10-16T01:23:21.107149+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 207106048
+        },
+        {
+          "utc": "2026-10-16T01:23:21.643318+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 213209088
+        },
+        {
+          "utc": "2026-10-16T01:23:22.180956+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 192454656
+        },
+        {
+          "utc": "2026-10-16T01:23:22.716793+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 200892416
+        },
+        {
+          "utc": "2026-10-16T01:23:23.245193+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 202731520
+        },
+        {
+          "utc": "2026-10-16T01:23:23.770027+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 215175168
+        },
+        {
+          "utc": "2026-10-16T01:23:24.295887+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 215494656
+        },
+        {
+          "utc": "2026-10-16T01:23:24.831440+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 199557120
+        },
+        {
+          "utc": "2026-10-16T01:23:25.358414+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 209473536
+        },
+        {
+          "utc": "2026-10-16T01:23:25.884836+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 217247744
+        },
+        {
+          "utc": "2026-10-16T01:23:26.413888+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 198303744
+        },
+        {
+          "utc": "2026-10-16T01:23:26.944137+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 222306304
+        },
+        {
+          "utc": "2026-10-16T01:23:27.472273+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 228454400
+        },
+        {
+          "utc": "2026-10-16T01:23:27.999472+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 234033152
+        },
+        {
+          "utc": "2026-10-16T01:23:28.525512+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270320640
+          },
+          "sampledProcessTreeRssBytes": 192335872
+        },
+        {
+          "utc": "2026-10-16T01:23:29.053656+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270312448
+          },
+          "sampledProcessTreeRssBytes": 0
+        }
+      ],
+      "sampledPeakRssBytes": 235417600
+    },
+    "parity01": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "docs/operations/2026-10-16/v3-completed-handoff-reviewer/source-parity-checks.mjs"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:24:23.704646+00:00",
+      "exit": 1,
+      "finished": "2026-10-16T01:24:24.229792+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:24:23.704646+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270136320
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:24:23.729472+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270136320
+          },
+          "sampledProcessTreeRssBytes": 23781376
+        }
+      ],
+      "sampledPeakRssBytes": 23781376
+    },
+    "parity02": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "docs/operations/2026-10-16/v3-completed-handoff-reviewer/source-parity-checks.mjs"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:25:09.435647+00:00",
+      "exit": 0,
+      "finished": "2026-10-16T01:25:09.973367+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:25:09.435647+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270115840
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:25:09.473042+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14270115840
+          },
+          "sampledProcessTreeRssBytes": 25161728
+        }
+      ],
+      "sampledPeakRssBytes": 25161728
+    },
+    "contracts-final": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-handoff-reviewer.test.mjs"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:25:25.974493+00:00",
+      "exit": 0,
+      "finished": "2026-10-16T01:26:07.266866+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:25:25.974493+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269886464
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:25:26.002717+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269886464
+          },
+          "sampledProcessTreeRssBytes": 23646208
+        },
+        {
+          "utc": "2026-10-16T01:25:26.535919+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 117833728
+        },
+        {
+          "utc": "2026-10-16T01:25:27.062977+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 149004288
+        },
+        {
+          "utc": "2026-10-16T01:25:27.591435+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 175628288
+        },
+        {
+          "utc": "2026-10-16T01:25:28.129257+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 168644608
+        },
+        {
+          "utc": "2026-10-16T01:25:28.667343+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 170303488
+        },
+        {
+          "utc": "2026-10-16T01:25:29.203163+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 177065984
+        },
+        {
+          "utc": "2026-10-16T01:25:29.730926+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 190685184
+        },
+        {
+          "utc": "2026-10-16T01:25:30.257361+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 212774912
+        },
+        {
+          "utc": "2026-10-16T01:25:30.791301+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 192823296
+        },
+        {
+          "utc": "2026-10-16T01:25:31.315311+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 204115968
+        },
+        {
+          "utc": "2026-10-16T01:25:31.842888+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 217530368
+        },
+        {
+          "utc": "2026-10-16T01:25:32.370364+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 222777344
+        },
+        {
+          "utc": "2026-10-16T01:25:32.900283+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 226414592
+        },
+        {
+          "utc": "2026-10-16T01:25:33.435009+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 229691392
+        },
+        {
+          "utc": "2026-10-16T01:25:33.959355+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 194592768
+        },
+        {
+          "utc": "2026-10-16T01:25:34.484145+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 203190272
+        },
+        {
+          "utc": "2026-10-16T01:25:35.009089+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 195043328
+        },
+        {
+          "utc": "2026-10-16T01:25:35.533218+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 202735616
+        },
+        {
+          "utc": "2026-10-16T01:25:36.056832+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 208134144
+        },
+        {
+          "utc": "2026-10-16T01:25:36.582441+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 212135936
+        },
+        {
+          "utc": "2026-10-16T01:25:37.107120+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 202207232
+        },
+        {
+          "utc": "2026-10-16T01:25:37.642980+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 207892480
+        },
+        {
+          "utc": "2026-10-16T01:25:38.169626+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 214155264
+        },
+        {
+          "utc": "2026-10-16T01:25:38.704852+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 221085696
+        },
+        {
+          "utc": "2026-10-16T01:25:39.241810+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 233656320
+        },
+        {
+          "utc": "2026-10-16T01:25:39.770177+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269882368
+          },
+          "sampledProcessTreeRssBytes": 210722816
+        },
+        {
+          "utc": "2026-10-16T01:25:40.310128+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 223178752
+        },
+        {
+          "utc": "2026-10-16T01:25:40.837415+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 228265984
+        },
+        {
+          "utc": "2026-10-16T01:25:41.362896+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 245743616
+        },
+        {
+          "utc": "2026-10-16T01:25:41.894255+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 217608192
+        },
+        {
+          "utc": "2026-10-16T01:25:42.421455+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 227811328
+        },
+        {
+          "utc": "2026-10-16T01:25:42.947846+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 229859328
+        },
+        {
+          "utc": "2026-10-16T01:25:43.478084+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 236654592
+        },
+        {
+          "utc": "2026-10-16T01:25:44.005953+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 205369344
+        },
+        {
+          "utc": "2026-10-16T01:25:44.540636+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 211828736
+        },
+        {
+          "utc": "2026-10-16T01:25:45.067148+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 222953472
+        },
+        {
+          "utc": "2026-10-16T01:25:45.595697+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 232480768
+        },
+        {
+          "utc": "2026-10-16T01:25:46.125627+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 234999808
+        },
+        {
+          "utc": "2026-10-16T01:25:46.654599+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 205127680
+        },
+        {
+          "utc": "2026-10-16T01:25:47.191240+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 210124800
+        },
+        {
+          "utc": "2026-10-16T01:25:47.722352+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 223408128
+        },
+        {
+          "utc": "2026-10-16T01:25:48.251079+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 240017408
+        },
+        {
+          "utc": "2026-10-16T01:25:48.784957+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 203993088
+        },
+        {
+          "utc": "2026-10-16T01:25:49.316805+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 213626880
+        },
+        {
+          "utc": "2026-10-16T01:25:49.845809+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 216788992
+        },
+        {
+          "utc": "2026-10-16T01:25:50.373613+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 220864512
+        },
+        {
+          "utc": "2026-10-16T01:25:50.899255+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 220590080
+        },
+        {
+          "utc": "2026-10-16T01:25:51.434550+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 227852288
+        },
+        {
+          "utc": "2026-10-16T01:25:51.969539+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 204730368
+        },
+        {
+          "utc": "2026-10-16T01:25:52.504153+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 204111872
+        },
+        {
+          "utc": "2026-10-16T01:25:53.032658+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 210112512
+        },
+        {
+          "utc": "2026-10-16T01:25:53.558626+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 216453120
+        },
+        {
+          "utc": "2026-10-16T01:25:54.086006+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 224522240
+        },
+        {
+          "utc": "2026-10-16T01:25:54.610143+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 205987840
+        },
+        {
+          "utc": "2026-10-16T01:25:55.137315+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 207495168
+        },
+        {
+          "utc": "2026-10-16T01:25:55.662295+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 227627008
+        },
+        {
+          "utc": "2026-10-16T01:25:56.196693+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 230195200
+        },
+        {
+          "utc": "2026-10-16T01:25:56.737376+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 209629184
+        },
+        {
+          "utc": "2026-10-16T01:25:57.264338+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 211210240
+        },
+        {
+          "utc": "2026-10-16T01:25:57.789831+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 216100864
+        },
+        {
+          "utc": "2026-10-16T01:25:58.315142+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 220639232
+        },
+        {
+          "utc": "2026-10-16T01:25:58.842198+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 207380480
+        },
+        {
+          "utc": "2026-10-16T01:25:59.367491+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 208773120
+        },
+        {
+          "utc": "2026-10-16T01:25:59.893947+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 219017216
+        },
+        {
+          "utc": "2026-10-16T01:26:00.419289+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 231321600
+        },
+        {
+          "utc": "2026-10-16T01:26:00.951572+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 197271552
+        },
+        {
+          "utc": "2026-10-16T01:26:01.489789+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 203116544
+        },
+        {
+          "utc": "2026-10-16T01:26:02.015661+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 209678336
+        },
+        {
+          "utc": "2026-10-16T01:26:02.544080+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 216264704
+        },
+        {
+          "utc": "2026-10-16T01:26:03.071522+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 203644928
+        },
+        {
+          "utc": "2026-10-16T01:26:03.598679+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 215130112
+        },
+        {
+          "utc": "2026-10-16T01:26:04.126958+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 224079872
+        },
+        {
+          "utc": "2026-10-16T01:26:04.654132+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 243200000
+        },
+        {
+          "utc": "2026-10-16T01:26:05.178517+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 212582400
+        },
+        {
+          "utc": "2026-10-16T01:26:05.704575+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 218255360
+        },
+        {
+          "utc": "2026-10-16T01:26:06.242567+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 225513472
+        },
+        {
+          "utc": "2026-10-16T01:26:06.766590+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269878272
+          },
+          "sampledProcessTreeRssBytes": 195964928
+        }
+      ],
+      "sampledPeakRssBytes": 245743616
+    },
+    "contracts04": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-handoff-reviewer.test.mjs"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:27:19.134646+00:00",
+      "exit": 0,
+      "finished": "2026-10-16T01:28:00.349862+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:27:19.134646+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269624320
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:27:19.159901+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269624320
+          },
+          "sampledProcessTreeRssBytes": 24055808
+        },
+        {
+          "utc": "2026-10-16T01:27:19.696292+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 100712448
+        },
+        {
+          "utc": "2026-10-16T01:27:20.222322+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 142999552
+        },
+        {
+          "utc": "2026-10-16T01:27:20.756141+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 149340160
+        },
+        {
+          "utc": "2026-10-16T01:27:21.282187+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 155025408
+        },
+        {
+          "utc": "2026-10-16T01:27:21.809856+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 163258368
+        },
+        {
+          "utc": "2026-10-16T01:27:22.342048+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 170438656
+        },
+        {
+          "utc": "2026-10-16T01:27:22.868444+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 182071296
+        },
+        {
+          "utc": "2026-10-16T01:27:23.396686+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 172183552
+        },
+        {
+          "utc": "2026-10-16T01:27:23.924954+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 184094720
+        },
+        {
+          "utc": "2026-10-16T01:27:24.449812+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 193122304
+        },
+        {
+          "utc": "2026-10-16T01:27:24.985641+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 203112448
+        },
+        {
+          "utc": "2026-10-16T01:27:25.522132+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 211755008
+        },
+        {
+          "utc": "2026-10-16T01:27:26.053687+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 222048256
+        },
+        {
+          "utc": "2026-10-16T01:27:26.598120+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 180871168
+        },
+        {
+          "utc": "2026-10-16T01:27:27.124777+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 190480384
+        },
+        {
+          "utc": "2026-10-16T01:27:27.651928+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 193073152
+        },
+        {
+          "utc": "2026-10-16T01:27:28.182022+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 213168128
+        },
+        {
+          "utc": "2026-10-16T01:27:28.709493+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 205901824
+        },
+        {
+          "utc": "2026-10-16T01:27:29.234343+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 176545792
+        },
+        {
+          "utc": "2026-10-16T01:27:29.760924+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 188874752
+        },
+        {
+          "utc": "2026-10-16T01:27:30.287575+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 199651328
+        },
+        {
+          "utc": "2026-10-16T01:27:30.813233+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 203218944
+        },
+        {
+          "utc": "2026-10-16T01:27:31.350667+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 176812032
+        },
+        {
+          "utc": "2026-10-16T01:27:31.875870+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 183181312
+        },
+        {
+          "utc": "2026-10-16T01:27:32.404986+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 192999424
+        },
+        {
+          "utc": "2026-10-16T01:27:32.934219+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269620224
+          },
+          "sampledProcessTreeRssBytes": 186249216
+        },
+        {
+          "utc": "2026-10-16T01:27:33.458412+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 205742080
+        },
+        {
+          "utc": "2026-10-16T01:27:33.983666+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 206938112
+        },
+        {
+          "utc": "2026-10-16T01:27:34.510242+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 224026624
+        },
+        {
+          "utc": "2026-10-16T01:27:35.034095+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 189530112
+        },
+        {
+          "utc": "2026-10-16T01:27:35.560705+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269583360
+          },
+          "sampledProcessTreeRssBytes": 203284480
+        },
+        {
+          "utc": "2026-10-16T01:27:36.091614+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 216375296
+        },
+        {
+          "utc": "2026-10-16T01:27:36.620659+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 173637632
+        },
+        {
+          "utc": "2026-10-16T01:27:37.157252+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 183402496
+        },
+        {
+          "utc": "2026-10-16T01:27:37.683578+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 191430656
+        },
+        {
+          "utc": "2026-10-16T01:27:38.208003+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 200904704
+        },
+        {
+          "utc": "2026-10-16T01:27:38.734264+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 212672512
+        },
+        {
+          "utc": "2026-10-16T01:27:39.258946+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 179273728
+        },
+        {
+          "utc": "2026-10-16T01:27:39.793776+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 190476288
+        },
+        {
+          "utc": "2026-10-16T01:27:40.325210+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 204914688
+        },
+        {
+          "utc": "2026-10-16T01:27:40.860009+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 191832064
+        },
+        {
+          "utc": "2026-10-16T01:27:41.384172+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 202846208
+        },
+        {
+          "utc": "2026-10-16T01:27:41.917377+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 203165696
+        },
+        {
+          "utc": "2026-10-16T01:27:42.442855+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 207486976
+        },
+        {
+          "utc": "2026-10-16T01:27:42.971880+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 216326144
+        },
+        {
+          "utc": "2026-10-16T01:27:43.501950+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 228704256
+        },
+        {
+          "utc": "2026-10-16T01:27:44.027596+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 192540672
+        },
+        {
+          "utc": "2026-10-16T01:27:44.562063+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 193945600
+        },
+        {
+          "utc": "2026-10-16T01:27:45.093517+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 203804672
+        },
+        {
+          "utc": "2026-10-16T01:27:45.618525+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 203665408
+        },
+        {
+          "utc": "2026-10-16T01:27:46.143509+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 209752064
+        },
+        {
+          "utc": "2026-10-16T01:27:46.667711+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 197939200
+        },
+        {
+          "utc": "2026-10-16T01:27:47.193084+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 202981376
+        },
+        {
+          "utc": "2026-10-16T01:27:47.717657+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 203677696
+        },
+        {
+          "utc": "2026-10-16T01:27:48.246322+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 215236608
+        },
+        {
+          "utc": "2026-10-16T01:27:48.782842+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 226779136
+        },
+        {
+          "utc": "2026-10-16T01:27:49.312264+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 200359936
+        },
+        {
+          "utc": "2026-10-16T01:27:49.842891+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 202149888
+        },
+        {
+          "utc": "2026-10-16T01:27:50.369587+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 209956864
+        },
+        {
+          "utc": "2026-10-16T01:27:50.896762+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 213864448
+        },
+        {
+          "utc": "2026-10-16T01:27:51.423937+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 193388544
+        },
+        {
+          "utc": "2026-10-16T01:27:51.958672+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 201150464
+        },
+        {
+          "utc": "2026-10-16T01:27:52.486854+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 203104256
+        },
+        {
+          "utc": "2026-10-16T01:27:53.010957+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 215019520
+        },
+        {
+          "utc": "2026-10-16T01:27:53.534761+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 196468736
+        },
+        {
+          "utc": "2026-10-16T01:27:54.058758+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 200609792
+        },
+        {
+          "utc": "2026-10-16T01:27:54.585532+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 209162240
+        },
+        {
+          "utc": "2026-10-16T01:27:55.110525+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 212238336
+        },
+        {
+          "utc": "2026-10-16T01:27:55.637555+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 219693056
+        },
+        {
+          "utc": "2026-10-16T01:27:56.162590+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 206340096
+        },
+        {
+          "utc": "2026-10-16T01:27:56.697689+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 220250112
+        },
+        {
+          "utc": "2026-10-16T01:27:57.221436+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 233934848
+        },
+        {
+          "utc": "2026-10-16T01:27:57.745990+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 203067392
+        },
+        {
+          "utc": "2026-10-16T01:27:58.274430+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 216129536
+        },
+        {
+          "utc": "2026-10-16T01:27:58.798037+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 223191040
+        },
+        {
+          "utc": "2026-10-16T01:27:59.324456+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 234942464
+        },
+        {
+          "utc": "2026-10-16T01:27:59.849578+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269616128
+          },
+          "sampledProcessTreeRssBytes": 197455872
+        }
+      ],
+      "sampledPeakRssBytes": 234942464
+    },
+    "citation-regression": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-article-citations.test.mjs"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:28:15.029598+00:00",
+      "exit": 0,
+      "finished": "2026-10-16T01:28:18.192624+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:28:15.029598+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269595648
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:28:15.055472+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269595648
+          },
+          "sampledProcessTreeRssBytes": 22106112
+        },
+        {
+          "utc": "2026-10-16T01:28:15.588589+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269591552
+          },
+          "sampledProcessTreeRssBytes": 119201792
+        },
+        {
+          "utc": "2026-10-16T01:28:16.112857+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269591552
+          },
+          "sampledProcessTreeRssBytes": 144723968
+        },
+        {
+          "utc": "2026-10-16T01:28:16.640783+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269591552
+          },
+          "sampledProcessTreeRssBytes": 155938816
+        },
+        {
+          "utc": "2026-10-16T01:28:17.168326+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269591552
+          },
+          "sampledProcessTreeRssBytes": 153530368
+        },
+        {
+          "utc": "2026-10-16T01:28:17.692309+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269587456
+          },
+          "sampledProcessTreeRssBytes": 0
+        }
+      ],
+      "sampledPeakRssBytes": 155938816
+    },
+    "types-final": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--strict",
+        "--target",
+        "es2022",
+        "--module",
+        "esnext",
+        "--moduleResolution",
+        "bundler",
+        "--allowImportingTsExtensions",
+        "--resolveJsonModule",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "--lib",
+        "es2023,dom,dom.iterable",
+        "--types",
+        "node",
+        "--typeRoots",
+        "web/node_modules/@types",
+        "web/src/lib/research-v3-author-handoff.ts",
+        "web/src/lib/research-v3-reviewer-assignment.ts"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:29:03.640994+00:00",
+      "exit": 0,
+      "finished": "2026-10-16T01:29:05.775519+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:29:03.640994+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269513728
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:29:03.665257+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269513728
+          },
+          "sampledProcessTreeRssBytes": 23646208
+        },
+        {
+          "utc": "2026-10-16T01:29:04.201047+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269513728
+          },
+          "sampledProcessTreeRssBytes": 169160704
+        },
+        {
+          "utc": "2026-10-16T01:29:04.742148+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269513728
+          },
+          "sampledProcessTreeRssBytes": 236937216
+        },
+        {
+          "utc": "2026-10-16T01:29:05.275106+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269513728
+          },
+          "sampledProcessTreeRssBytes": 258514944
+        }
+      ],
+      "sampledPeakRssBytes": 258514944
+    },
+    "parity-final": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "docs/operations/2026-10-16/v3-completed-handoff-reviewer/source-parity-checks.mjs"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "started": "2026-10-16T01:30:15.518490+00:00",
+      "exit": 0,
+      "finished": "2026-10-16T01:30:16.042644+00:00",
+      "samples": [
+        {
+          "utc": "2026-10-16T01:30:15.518490+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269509632
+          },
+          "sampledProcessTreeRssBytes": 0
+        },
+        {
+          "utc": "2026-10-16T01:30:15.542338+00:00",
+          "free": {
+            "/workspace": 8592240640,
+            "/tmp": 14269509632
+          },
+          "sampledProcessTreeRssBytes": 23461888
+        }
+      ],
+      "sampledPeakRssBytes": 23461888
+    }
+  },
+  "noCleanupOrCapacityRelaxation": true
+}

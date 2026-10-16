@@ -1,0 +1,51 @@
+# scope: citation-regression; stack/body-free TAP projection, complete raw stdout retained locally
+TAP version 13
+# Subtest: 2409 actual pinned successor -> real controller READ only -> immutable exact revision citations
+ok 1 - 2409 actual pinned successor -> real controller READ only -> immutable exact revision citations
+# Subtest: 2409 all 104 cash cells resolve independently to BOTH exact original source pointers
+ok 2 - 2409 all 104 cash cells resolve independently to BOTH exact original source pointers
+# Subtest: 2409 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+ok 3 - 2409 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+# Subtest: 2409 306 conditional scenario values retain periods/units and original model locators, never reported cash
+ok 4 - 2409 306 conditional scenario values retain periods/units and original model locators, never reported cash
+# Subtest: 2409 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+ok 5 - 2409 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+# Subtest: 2409 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+ok 6 - 2409 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+# Subtest: 2409 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+ok 7 - 2409 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+# Subtest: 2383 actual pinned successor -> real controller READ only -> immutable exact revision citations
+ok 8 - 2383 actual pinned successor -> real controller READ only -> immutable exact revision citations
+# Subtest: 2383 all 66 cash cells resolve independently to BOTH exact original source pointers
+ok 9 - 2383 all 66 cash cells resolve independently to BOTH exact original source pointers
+# Subtest: 2383 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+ok 10 - 2383 independent expected cash bridge, group denominator, signed outlay and disposal/lease separation
+# Subtest: 2383 306 conditional scenario values retain periods/units and original model locators, never reported cash
+ok 11 - 2383 306 conditional scenario values retain periods/units and original model locators, never reported cash
+# Subtest: 2383 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+ok 12 - 2383 capital is finite instant June issued basis; unavailable EMC cannot acquire AUO capital
+# Subtest: 2383 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+ok 13 - 2383 unknown pointer, metadata/page/hash/date and namespace/type/unit/classification/crosswire mutations reject
+# Subtest: 2383 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+ok 14 - 2383 unknown/missing sealed binding, wrong lineage/revision/hash and forged arithmetic reject before citation success
+# Subtest: primitive citation ingress rejects duplicate keys, oversized/unknown objects without getters
+ok 15 - primitive citation ingress rejects duplicate keys, oversized/unknown objects without getters
+# Subtest: old77/v2, forged validated flags and request-selected paths cannot bypass actual READ composition
+ok 16 - old77/v2, forged validated flags and request-selected paths cannot bypass actual READ composition
+# Subtest: actual READ revocation/error/absent is never turned into a citation set or seal
+ok 17 - actual READ revocation/error/absent is never turned into a citation set or seal
+# Subtest: zero group denominator remains unavailable in existing fixed calculator; cannot inject replacement pinned cash
+ok 18 - zero group denominator remains unavailable in existing fixed calculator; cannot inject replacement pinned cash
+# Subtest: unavailable AUO ROU/EMC capital and metadata cannot become reported amounts; locators remain metadata
+ok 19 - unavailable AUO ROU/EMC capital and metadata cannot become reported amounts; locators remain metadata
+# Subtest: validated set detaches from subsequent RPC object mutation; no external object validation shortcut
+ok 20 - validated set detaches from subsequent RPC object mutation; no external object validation shortcut
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2006.233962

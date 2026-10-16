@@ -1,0 +1,460 @@
+{
+  "localRoot": "/tmp/v3-completed-handoff-reviewer-source-o16",
+  "scope": "maker local source/WIP/command/test/type/static evidence; not independently reviewed raw contents",
+  "inventoryCutoffUtc": "2026-10-16T01:33:52.792235+00:00",
+  "postInventoryDeliveryGitLogsExcluded": true,
+  "count": 90,
+  "bytes": 1095138,
+  "files": [
+    {
+      "path": "citation-regression.json",
+      "bytes": 1716,
+      "sha256": "266b2fd768133206fd9bf4bf9ec89b401cc12fd93d4491aa1779722759954010"
+    },
+    {
+      "path": "citation-regression.stderr",
+      "bytes": 557,
+      "sha256": "35fe884ab94446714380fa64fe801f2563175ea0fecee8a72195d80b466aa223"
+    },
+    {
+      "path": "citation-regression.stdout",
+      "bytes": 5253,
+      "sha256": "a3cf4d7ac68393ed6e44a49861a12f4c2f7c6e27372cef2bc11c6a233e3f7729"
+    },
+    {
+      "path": "contracts-final.json",
+      "bytes": 15763,
+      "sha256": "a4dad88de96265ef5a864091267832a838ff3094347e5ee5a46eab59f9dfbdcc"
+    },
+    {
+      "path": "contracts-final.stderr",
+      "bytes": 550,
+      "sha256": "f0bef5f15acec641306140bafc22077e851a7c743bb1449ebc3e4c71e29efc47"
+    },
+    {
+      "path": "contracts-final.stdout",
+      "bytes": 6790,
+      "sha256": "2af20cd057343ef29f6e00999e888fbeb1a322fd5b2e1e649063dce68a853a2c"
+    },
+    {
+      "path": "contracts01.json",
+      "bytes": 14788,
+      "sha256": "d3b9e11f6bd54e918ceeb7ae025ce922b07a3586f6bebbe738a1b44cc739a2e5"
+    },
+    {
+      "path": "contracts01.stderr",
+      "bytes": 550,
+      "sha256": "757f172e2e072352a1a77a94c331003a118552688e206a62d1592f2112678e38"
+    },
+    {
+      "path": "contracts01.stdout",
+      "bytes": 5696,
+      "sha256": "412d1623ac069acdba8a843802cd7f186565d666a8224a23a4582dfeef0a407f"
+    },
+    {
+      "path": "contracts02.json",
+      "bytes": 15950,
+      "sha256": "b971d1fa9568f2bf97389083aabb771ae0c28b4ff786cb6c8946a0da6a4281e6"
+    },
+    {
+      "path": "contracts02.stderr",
+      "bytes": 550,
+      "sha256": "5deeb05981323becb9d99f17cc2d36885ca2a2562fe15b7474ad20ace52b08f2"
+    },
+    {
+      "path": "contracts02.stdout",
+      "bytes": 6159,
+      "sha256": "c93ce9b8668e5c7ba72c744b0651d5015242725592242717fd21a28040f1ac04"
+    },
+    {
+      "path": "contracts04.json",
+      "bytes": 15763,
+      "sha256": "5ebcc86d0fa2046af864fa323f0e2e2fae0504fcc6e7901540adde699998a9d5"
+    },
+    {
+      "path": "contracts04.stderr",
+      "bytes": 553,
+      "sha256": "77aa61a1a64a54dcdc8a0e97443a6df5bf49f4cdd5d96118f2b9992d59e63b5a"
+    },
+    {
+      "path": "contracts04.stdout",
+      "bytes": 6791,
+      "sha256": "6a42178ed6d2adad3da7d2e95e29da2c6128d75768c3ec3b3f59832562150c2b"
+    },
+    {
+      "path": "edit-handoff.py",
+      "bytes": 4887,
+      "sha256": "e1388977ffb8e927ab80b3e6b8c2cd8eaec9b57ea31fb2b80c4c6b8c5fa50837"
+    },
+    {
+      "path": "edit-seams.py",
+      "bytes": 4079,
+      "sha256": "b464f4825f96ce15242e9d7b625f4475ee1790c76a82ddf7dd63ba2f623e1a85"
+    },
+    {
+      "path": "edit-tests.py",
+      "bytes": 10355,
+      "sha256": "884db1ec8acf8bb1318b665f72b7637c778eb7008a0a168fb15d47ea530e2932"
+    },
+    {
+      "path": "final-runtime-inputs-before-tests.json",
+      "bytes": 77915,
+      "sha256": "d1906e6d7713717068f4da239fa505129472964d6aa6afeeb82bc5c587b3358f"
+    },
+    {
+      "path": "focused-tests.original.mjs",
+      "bytes": 14231,
+      "sha256": "e501f4ec7599451b8822b09d940fa25166fdb0d8ebf59e850a35c7d292e87d7d"
+    },
+    {
+      "path": "git-transport.json",
+      "bytes": 416,
+      "sha256": "6e6f5e732a7286696be16f7beaaffa0eafab06695e5f81790005fded33534517"
+    },
+    {
+      "path": "make-lineage.py",
+      "bytes": 3084,
+      "sha256": "740672cee8f43affd21f772579f90480a4581dd9fedcaec6df41f90583e4cbec"
+    },
+    {
+      "path": "make-parity-pins.py",
+      "bytes": 3810,
+      "sha256": "0dcf98265d35f16cc2de3901b9090306a9001f07ac7a587d42519854a624f253"
+    },
+    {
+      "path": "parity-final.json",
+      "bytes": 749,
+      "sha256": "a094a53acdafc19db40a41d1dd3eb6822c35ee59fba1e0e6edb206606221cb58"
+    },
+    {
+      "path": "parity-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "parity-final.stdout",
+      "bytes": 1515,
+      "sha256": "b9baa22b374fd85ed8d3cd36ca1e5b7603c8b349ce9735866eba474fb81fef3f"
+    },
+    {
+      "path": "parity01.json",
+      "bytes": 749,
+      "sha256": "3a2f2fe4814b663860897110bf7b835ba7b05b29d0e1d95adea4ed68f723ecd4"
+    },
+    {
+      "path": "parity01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "parity01.stdout",
+      "bytes": 6061,
+      "sha256": "06b36a2bed56dfb68895894d93596caa54326d83d91188ee13f7cdd59d52e016"
+    },
+    {
+      "path": "parity02.json",
+      "bytes": 749,
+      "sha256": "d1a5ae96cab33501f37a662f60379a8bfcf146248aa0860ec1146f8b0a702fd1"
+    },
+    {
+      "path": "parity02.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "parity02.stdout",
+      "bytes": 1517,
+      "sha256": "9866349d1098e9ae28abb40e6f1251c41ff755ef3a30b0115364779a3ca77c6a"
+    },
+    {
+      "path": "publish-evidence.py",
+      "bytes": 9560,
+      "sha256": "17df15aa05edfa5857bd8e7a7adf4373bd9b1820bcfce944defa7c088d0bdbd0"
+    },
+    {
+      "path": "research-v3-article-citations.ts.original",
+      "bytes": 18442,
+      "sha256": "34500a25604a6ad3938bc8a9becb578df9c5a97249adda5bfdd3af3969a92da2"
+    },
+    {
+      "path": "research-v3-author-handoff.ts.original",
+      "bytes": 14038,
+      "sha256": "e555c5bed063d950f8bec2ee7deaabf12150734912611729df6885c23647c0f4"
+    },
+    {
+      "path": "research-v3-author-result.ts.original",
+      "bytes": 25288,
+      "sha256": "870fd387f7430d624aa8060ff011b8a1ee8bb26aad5d7d09ba72be349a315953"
+    },
+    {
+      "path": "research-v3-business-article.ts.original",
+      "bytes": 22375,
+      "sha256": "91c715f1dfbdee22b4c86b9ad493bacc49b03c23250e9554107eb13b421293ba"
+    },
+    {
+      "path": "research-v3-reviewer-assignment.ts.original",
+      "bytes": 4114,
+      "sha256": "4e799447f9f2040ef5354301b73ae1be6db3cbbbad7974923fbe90cf8662978b"
+    },
+    {
+      "path": "research-versioned-complete-input.ts.original",
+      "bytes": 8561,
+      "sha256": "6c748235f5aebd3bdfa254de400e752e42bf15aae53c840b8ec09b543a29e906"
+    },
+    {
+      "path": "run-check.py",
+      "bytes": 1508,
+      "sha256": "6a5e61f9f3825aeb221223f1152e67d633a46942f71086f9177fbb45be09a859"
+    },
+    {
+      "path": "sealed-final-inputs.json",
+      "bytes": 78175,
+      "sha256": "1ec01c14464afb027732fa654a7257d2b8950c8f2064d21daae22a2c3ca3476d"
+    },
+    {
+      "path": "task-scope.json",
+      "bytes": 716,
+      "sha256": "0c25a00c5a3742844a41efb6ad240415e9ff9a253c00fc239d1ea5ff49b89694"
+    },
+    {
+      "path": "types-final.json",
+      "bytes": 1756,
+      "sha256": "3da39e376f1747759593354bd36aa72a6a74edf571e18d0ccae8e1a1251e2a7d"
+    },
+    {
+      "path": "types-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "types-final.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "types01.json",
+      "bytes": 1951,
+      "sha256": "7c099fddfc614e9254bebece14c48b44e9e26879e758633aabf1a63e5b36a717"
+    },
+    {
+      "path": "types01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "types01.stdout",
+      "bytes": 467,
+      "sha256": "0ad3b6e5baca513e512dcec9d28c7a72899ec5b3cbff80ce24ae00385e558210"
+    },
+    {
+      "path": "types02.json",
+      "bytes": 1943,
+      "sha256": "c55183db8bbb05f2989d18f53e51d06f6b71c6c5882269f614d426e0b7a31954"
+    },
+    {
+      "path": "types02.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "types02.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "wip-final/scripts/research-v3-handoff-reviewer.test.mjs",
+      "bytes": 23609,
+      "sha256": "6e1fc1d45e92c1a548a63f3f1251d83acd7ce06c08bf4f2fb2a43b9ed89ff6a2"
+    },
+    {
+      "path": "wip-final/web/src/lib/research-v3-article-citations.ts",
+      "bytes": 19094,
+      "sha256": "b3cc19471a33b8afa3f7d286715cce2802c51a749ce25eb712ec8ed18e28ec84"
+    },
+    {
+      "path": "wip-final/web/src/lib/research-v3-author-handoff.ts",
+      "bytes": 14648,
+      "sha256": "d485a13c4a2ad6ce938b3b3fe17299ec7bac7b7d96faed8fe0535a7afb7aec2e"
+    },
+    {
+      "path": "wip-final/web/src/lib/research-v3-author-result.ts",
+      "bytes": 25295,
+      "sha256": "93e02180bc65c77d86e3e4f25fe6c004fa558edbe614455f229078ebee0c4062"
+    },
+    {
+      "path": "wip-final/web/src/lib/research-v3-business-article.ts",
+      "bytes": 23472,
+      "sha256": "261399430fc97c8320b351f707058111c123ae8f69dcb2f172f22c5886e290dc"
+    },
+    {
+      "path": "wip-final/web/src/lib/research-v3-reviewer-assignment.ts",
+      "bytes": 8287,
+      "sha256": "2c6d7bba39522cfe13aa5d6dd584f5213c708a24c6e19bf142f90f04a6094b00"
+    },
+    {
+      "path": "wip-final/web/src/lib/research-versioned-complete-input.ts",
+      "bytes": 8865,
+      "sha256": "51265c9e936900877f557cf7011b60a61a0974eb5f3e9bdc7142a86aee039b92"
+    },
+    {
+      "path": "wip01/scripts/research-v3-handoff-reviewer.test.mjs",
+      "bytes": 21441,
+      "sha256": "fc3142b6148eada55378edfea1a4ccab7654a47379e056ef46ec4e92c0feb13b"
+    },
+    {
+      "path": "wip01/web/src/lib/research-v3-article-citations.ts",
+      "bytes": 19094,
+      "sha256": "b3cc19471a33b8afa3f7d286715cce2802c51a749ce25eb712ec8ed18e28ec84"
+    },
+    {
+      "path": "wip01/web/src/lib/research-v3-author-handoff.ts",
+      "bytes": 14561,
+      "sha256": "353f9455d0f1effb6abfd0f0efcabb4ad5130c29112babba703c7cdf04fb51ec"
+    },
+    {
+      "path": "wip01/web/src/lib/research-v3-author-result.ts",
+      "bytes": 25295,
+      "sha256": "93e02180bc65c77d86e3e4f25fe6c004fa558edbe614455f229078ebee0c4062"
+    },
+    {
+      "path": "wip01/web/src/lib/research-v3-business-article.ts",
+      "bytes": 23472,
+      "sha256": "261399430fc97c8320b351f707058111c123ae8f69dcb2f172f22c5886e290dc"
+    },
+    {
+      "path": "wip01/web/src/lib/research-v3-reviewer-assignment.ts",
+      "bytes": 8022,
+      "sha256": "f77691d96c94067102fd581ba6fa6eac380aba7e2761a7d89c8ccff5edc2788c"
+    },
+    {
+      "path": "wip01/web/src/lib/research-versioned-complete-input.ts",
+      "bytes": 8865,
+      "sha256": "51265c9e936900877f557cf7011b60a61a0974eb5f3e9bdc7142a86aee039b92"
+    },
+    {
+      "path": "wip01.json",
+      "bytes": 1190,
+      "sha256": "29d5c7d1483cfe14feaf642ed2f667c7c47042173b1db2f9c39ad67035332a3a"
+    },
+    {
+      "path": "wip02/scripts/research-v3-handoff-reviewer.test.mjs",
+      "bytes": 22956,
+      "sha256": "800b27b9ba33fdcc15393d9e0f9fa7aeacd7fb55e7149824d3708fe61c6c8d99"
+    },
+    {
+      "path": "wip02/web/src/lib/research-v3-article-citations.ts",
+      "bytes": 19094,
+      "sha256": "b3cc19471a33b8afa3f7d286715cce2802c51a749ce25eb712ec8ed18e28ec84"
+    },
+    {
+      "path": "wip02/web/src/lib/research-v3-author-handoff.ts",
+      "bytes": 14648,
+      "sha256": "d485a13c4a2ad6ce938b3b3fe17299ec7bac7b7d96faed8fe0535a7afb7aec2e"
+    },
+    {
+      "path": "wip02/web/src/lib/research-v3-author-result.ts",
+      "bytes": 25295,
+      "sha256": "93e02180bc65c77d86e3e4f25fe6c004fa558edbe614455f229078ebee0c4062"
+    },
+    {
+      "path": "wip02/web/src/lib/research-v3-business-article.ts",
+      "bytes": 23472,
+      "sha256": "261399430fc97c8320b351f707058111c123ae8f69dcb2f172f22c5886e290dc"
+    },
+    {
+      "path": "wip02/web/src/lib/research-v3-reviewer-assignment.ts",
+      "bytes": 8121,
+      "sha256": "c0fe2c1b563b553df9dba353950389c1698b1e7c8b570c065d839be3733837ec"
+    },
+    {
+      "path": "wip02/web/src/lib/research-versioned-complete-input.ts",
+      "bytes": 8865,
+      "sha256": "51265c9e936900877f557cf7011b60a61a0974eb5f3e9bdc7142a86aee039b92"
+    },
+    {
+      "path": "wip02-inputs.json",
+      "bytes": 59388,
+      "sha256": "0c58d8226f41052433f1416f99f31eb45982ad598ec7916a319e4d9ecb56ea5b"
+    },
+    {
+      "path": "wip03/docs/operations/2026-10-16/v3-completed-handoff-reviewer/source-parity-checks.mjs",
+      "bytes": 3526,
+      "sha256": "17901f2ed9fb943dac9ca1ed60960da2be587192814e6daf021c4c89e61c7522"
+    },
+    {
+      "path": "wip03/scripts/research-v3-handoff-reviewer.test.mjs",
+      "bytes": 23609,
+      "sha256": "6e1fc1d45e92c1a548a63f3f1251d83acd7ce06c08bf4f2fb2a43b9ed89ff6a2"
+    },
+    {
+      "path": "wip03/web/src/lib/research-v3-article-citations.ts",
+      "bytes": 19094,
+      "sha256": "b3cc19471a33b8afa3f7d286715cce2802c51a749ce25eb712ec8ed18e28ec84"
+    },
+    {
+      "path": "wip03/web/src/lib/research-v3-author-handoff.ts",
+      "bytes": 14648,
+      "sha256": "d485a13c4a2ad6ce938b3b3fe17299ec7bac7b7d96faed8fe0535a7afb7aec2e"
+    },
+    {
+      "path": "wip03/web/src/lib/research-v3-author-result.ts",
+      "bytes": 25295,
+      "sha256": "93e02180bc65c77d86e3e4f25fe6c004fa558edbe614455f229078ebee0c4062"
+    },
+    {
+      "path": "wip03/web/src/lib/research-v3-business-article.ts",
+      "bytes": 23472,
+      "sha256": "261399430fc97c8320b351f707058111c123ae8f69dcb2f172f22c5886e290dc"
+    },
+    {
+      "path": "wip03/web/src/lib/research-v3-reviewer-assignment.ts",
+      "bytes": 8287,
+      "sha256": "2c6d7bba39522cfe13aa5d6dd584f5213c708a24c6e19bf142f90f04a6094b00"
+    },
+    {
+      "path": "wip03/web/src/lib/research-versioned-complete-input.ts",
+      "bytes": 8865,
+      "sha256": "51265c9e936900877f557cf7011b60a61a0974eb5f3e9bdc7142a86aee039b92"
+    },
+    {
+      "path": "wip03.json",
+      "bytes": 1396,
+      "sha256": "cb947f7e00b61dbd7989594d72d0cfe268b1d9bc36452a7f18297dd6c11ba877"
+    },
+    {
+      "path": "wip04/scripts/research-v3-handoff-reviewer.test.mjs",
+      "bytes": 23734,
+      "sha256": "29cbe95a140a24a08f80be1cd38ec3b53e2991efd60d1802c2b42ad36cd23a4b"
+    },
+    {
+      "path": "wip04/web/src/lib/research-v3-article-citations.ts",
+      "bytes": 19094,
+      "sha256": "b3cc19471a33b8afa3f7d286715cce2802c51a749ce25eb712ec8ed18e28ec84"
+    },
+    {
+      "path": "wip04/web/src/lib/research-v3-author-handoff.ts",
+      "bytes": 14648,
+      "sha256": "d485a13c4a2ad6ce938b3b3fe17299ec7bac7b7d96faed8fe0535a7afb7aec2e"
+    },
+    {
+      "path": "wip04/web/src/lib/research-v3-author-result.ts",
+      "bytes": 25295,
+      "sha256": "93e02180bc65c77d86e3e4f25fe6c004fa558edbe614455f229078ebee0c4062"
+    },
+    {
+      "path": "wip04/web/src/lib/research-v3-business-article.ts",
+      "bytes": 23472,
+      "sha256": "261399430fc97c8320b351f707058111c123ae8f69dcb2f172f22c5886e290dc"
+    },
+    {
+      "path": "wip04/web/src/lib/research-v3-reviewer-assignment.ts",
+      "bytes": 8349,
+      "sha256": "6c90b72a8018fde41e0d03eed03fa6b17ae309b1f8ff43b656eb0ec9bd3e1b73"
+    },
+    {
+      "path": "wip04/web/src/lib/research-versioned-complete-input.ts",
+      "bytes": 8865,
+      "sha256": "51265c9e936900877f557cf7011b60a61a0974eb5f3e9bdc7142a86aee039b92"
+    }
+  ]
+}

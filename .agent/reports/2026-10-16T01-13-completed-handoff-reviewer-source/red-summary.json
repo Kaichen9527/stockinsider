@@ -1,0 +1,33 @@
+{
+  "retainedAppendOnly": true,
+  "newReds": [
+    {
+      "label": "types01",
+      "exit": 2,
+      "errors": [
+        "web/src/lib/research-v3-reviewer-assignment.ts(24,181): error TS2339: Property 'authorPrincipalId' does not exist on type 'Failure | { ok: true; authorPrincipalId: string; reviewerPrincipalId: string; }'.",
+        "  Property 'authorPrincipalId' does not exist on type 'Failure'.",
+        "web/src/lib/research-v3-reviewer-assignment.ts(28,495): error TS2339: Property 'principalId' does not exist on type 'Failure | Identity'.",
+        "  Property 'principalId' does not exist on type 'Failure'."
+      ],
+      "resolution": "Capture already authenticated primitive author/reviewer principal strings before nested check closure; no guard/parameter relaxation."
+    },
+    {
+      "label": "parity01",
+      "counts": {
+        "pass": 2,
+        "fail": 5
+      },
+      "error": "spawnSync git EPERM",
+      "resolution": "Read exact original Git fragments with existing tool, seal fixed fragment hashes; Node parity check uses pinned hashes without child execution. Original comparison semantics unchanged."
+    },
+    {
+      "label": "git-read-sandbox",
+      "exit": 128,
+      "error": "Could not connect to configured proxy port 8080",
+      "resolution": "Same authorized origin/refs read through approved escalated execution; no transport/configuration change. Read succeeded, exact base87b and new branch absent."
+    }
+  ],
+  "historicalRedsUntouched": true,
+  "nativeRun": false
+}

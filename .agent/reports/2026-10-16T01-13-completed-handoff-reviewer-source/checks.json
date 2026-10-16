@@ -1,0 +1,288 @@
+{
+  "source": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+  "scope": "pure source contracts/static parity/module-only types; no native/PG/build",
+  "finalLabels": [
+    "contracts04",
+    "citation-regression",
+    "types-final",
+    "parity-final"
+  ],
+  "countsNotSummedAcrossRuns": true,
+  "runs": [
+    {
+      "label": "contracts01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-handoff-reviewer.test.mjs"
+      ],
+      "exit": 0,
+      "started": "2026-10-16T01:20:09.407209+00:00",
+      "finished": "2026-10-16T01:20:47.991355+00:00",
+      "counts": {
+        "tests": 24,
+        "pass": 24,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "412d1623ac069acdba8a843802cd7f186565d666a8224a23a4582dfeef0a407f",
+      "stderrSha256": "757f172e2e072352a1a77a94c331003a118552688e206a62d1592f2112678e38",
+      "sampledPeakRssBytes": 222146560
+    },
+    {
+      "label": "types01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--strict",
+        "--target",
+        "es2022",
+        "--module",
+        "esnext",
+        "--moduleResolution",
+        "bundler",
+        "--allowImportingTsExtensions",
+        "--resolveJsonModule",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "--lib",
+        "es2023,dom,dom.iterable",
+        "--types",
+        "node",
+        "--typeRoots",
+        "web/node_modules/@types",
+        "web/src/lib/research-v3-author-handoff.ts",
+        "web/src/lib/research-v3-reviewer-assignment.ts"
+      ],
+      "exit": 2,
+      "started": "2026-10-16T01:20:54.287567+00:00",
+      "finished": "2026-10-16T01:20:56.979951+00:00",
+      "counts": {},
+      "stdoutSha256": "0ad3b6e5baca513e512dcec9d28c7a72899ec5b3cbff80ce24ae00385e558210",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sampledPeakRssBytes": 268701696
+    },
+    {
+      "label": "types02",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--strict",
+        "--target",
+        "es2022",
+        "--module",
+        "esnext",
+        "--moduleResolution",
+        "bundler",
+        "--allowImportingTsExtensions",
+        "--resolveJsonModule",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "--lib",
+        "es2023,dom,dom.iterable",
+        "--types",
+        "node",
+        "--typeRoots",
+        "web/node_modules/@types",
+        "web/src/lib/research-v3-author-handoff.ts",
+        "web/src/lib/research-v3-reviewer-assignment.ts"
+      ],
+      "exit": 0,
+      "started": "2026-10-16T01:21:45.512350+00:00",
+      "finished": "2026-10-16T01:21:48.182221+00:00",
+      "counts": {},
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sampledPeakRssBytes": 254169088
+    },
+    {
+      "label": "contracts02",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-handoff-reviewer.test.mjs"
+      ],
+      "exit": 0,
+      "started": "2026-10-16T01:22:47.784707+00:00",
+      "finished": "2026-10-16T01:23:29.554158+00:00",
+      "counts": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "c93ce9b8668e5c7ba72c744b0651d5015242725592242717fd21a28040f1ac04",
+      "stderrSha256": "5deeb05981323becb9d99f17cc2d36885ca2a2562fe15b7474ad20ace52b08f2",
+      "sampledPeakRssBytes": 235417600
+    },
+    {
+      "label": "parity01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "docs/operations/2026-10-16/v3-completed-handoff-reviewer/source-parity-checks.mjs"
+      ],
+      "exit": 1,
+      "started": "2026-10-16T01:24:23.704646+00:00",
+      "finished": "2026-10-16T01:24:24.229792+00:00",
+      "counts": {
+        "tests": 7,
+        "pass": 2,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "06b36a2bed56dfb68895894d93596caa54326d83d91188ee13f7cdd59d52e016",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sampledPeakRssBytes": 23781376
+    },
+    {
+      "label": "parity02",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "docs/operations/2026-10-16/v3-completed-handoff-reviewer/source-parity-checks.mjs"
+      ],
+      "exit": 0,
+      "started": "2026-10-16T01:25:09.435647+00:00",
+      "finished": "2026-10-16T01:25:09.973367+00:00",
+      "counts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "9866349d1098e9ae28abb40e6f1251c41ff755ef3a30b0115364779a3ca77c6a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sampledPeakRssBytes": 25161728
+    },
+    {
+      "label": "contracts-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-handoff-reviewer.test.mjs"
+      ],
+      "exit": 0,
+      "started": "2026-10-16T01:25:25.974493+00:00",
+      "finished": "2026-10-16T01:26:07.266866+00:00",
+      "counts": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "2af20cd057343ef29f6e00999e888fbeb1a322fd5b2e1e649063dce68a853a2c",
+      "stderrSha256": "f0bef5f15acec641306140bafc22077e851a7c743bb1449ebc3e4c71e29efc47",
+      "sampledPeakRssBytes": 245743616
+    },
+    {
+      "label": "contracts04",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-handoff-reviewer.test.mjs"
+      ],
+      "exit": 0,
+      "started": "2026-10-16T01:27:19.134646+00:00",
+      "finished": "2026-10-16T01:28:00.349862+00:00",
+      "counts": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "6a42178ed6d2adad3da7d2e95e29da2c6128d75768c3ec3b3f59832562150c2b",
+      "stderrSha256": "77aa61a1a64a54dcdc8a0e97443a6df5bf49f4cdd5d96118f2b9992d59e63b5a",
+      "sampledPeakRssBytes": 234942464
+    },
+    {
+      "label": "citation-regression",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/research-v3-article-citations.test.mjs"
+      ],
+      "exit": 0,
+      "started": "2026-10-16T01:28:15.029598+00:00",
+      "finished": "2026-10-16T01:28:18.192624+00:00",
+      "counts": {
+        "tests": 20,
+        "pass": 20,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "a3cf4d7ac68393ed6e44a49861a12f4c2f7c6e27372cef2bc11c6a233e3f7729",
+      "stderrSha256": "35fe884ab94446714380fa64fe801f2563175ea0fecee8a72195d80b466aa223",
+      "sampledPeakRssBytes": 155938816
+    },
+    {
+      "label": "types-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--strict",
+        "--target",
+        "es2022",
+        "--module",
+        "esnext",
+        "--moduleResolution",
+        "bundler",
+        "--allowImportingTsExtensions",
+        "--resolveJsonModule",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "--lib",
+        "es2023,dom,dom.iterable",
+        "--types",
+        "node",
+        "--typeRoots",
+        "web/node_modules/@types",
+        "web/src/lib/research-v3-author-handoff.ts",
+        "web/src/lib/research-v3-reviewer-assignment.ts"
+      ],
+      "exit": 0,
+      "started": "2026-10-16T01:29:03.640994+00:00",
+      "finished": "2026-10-16T01:29:05.775519+00:00",
+      "counts": {},
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sampledPeakRssBytes": 258514944
+    },
+    {
+      "label": "parity-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "docs/operations/2026-10-16/v3-completed-handoff-reviewer/source-parity-checks.mjs"
+      ],
+      "exit": 0,
+      "started": "2026-10-16T01:30:15.518490+00:00",
+      "finished": "2026-10-16T01:30:16.042644+00:00",
+      "counts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "b9baa22b374fd85ed8d3cd36ca1e5b7603c8b349ce9735866eba474fb81fef3f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sampledPeakRssBytes": 23461888
+    }
+  ]
+}
