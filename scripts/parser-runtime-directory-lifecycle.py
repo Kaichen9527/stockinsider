@@ -629,6 +629,28 @@ def main(output):
             result['status'] = 'PASS'
         write_json(lab.output / 'fixture-units.json', lab.units)
         write_json(lab.output / 'events.json', lab.events)
+        result.update(harnessSha256=lab.script_hash, workflowSha256=lab.workflow_hash,
+                      unitSha256=FROZEN, inputSeal='source-pins.json')
+        inventory = []
+        binding_errors = []
+        for name in ('events.json', 'fixture-units.json', 'source-pins.json'):
+            try:
+                raw = (lab.output / name).read_bytes()
+                inventory.append({'name': name, 'bytes': len(raw), 'sha256': digest(raw)})
+                if name == 'source-pins.json':
+                    pins = json.loads(raw)
+                    if any(pins.get(key) != result[key] for key in
+                           ('harnessSha256', 'workflowSha256', 'unitSha256')):
+                        raise ValueError('source_pin_receipt_mismatch')
+            except Exception as e:
+                if not inventory or inventory[-1]['name'] != name:
+                    inventory.append({'name': name, 'bytes': None, 'sha256': None})
+                binding_errors.append({'name': name, 'error': type(e).__name__})
+        result['evidenceInventory'] = inventory
+        if binding_errors:
+            result['evidenceBindingErrors'] = binding_errors
+            if result['status'] == 'PASS':
+                result['status'] = 'FAIL'
         write_json(lab.output / 'receipt.json', result)
     print(json.dumps({'status': result['status'], 'completedCases': len(lab.cases), 'cleanupConfirmed': cleanup['confirmed']}))
     return 0 if result['status'] == 'PASS' else 1
