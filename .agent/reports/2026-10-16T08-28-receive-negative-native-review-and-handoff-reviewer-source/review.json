@@ -1,0 +1,61 @@
+{
+  "time": "2026-10-16T00:25:42.535505+00:00",
+  "evidence": "4a4efea6fcb83c059e867dd6a920850ed5a887c4",
+  "harness": "4242ff201c64aa5dd331695952cfc41086457392",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "inputsVerified": 295,
+  "inputBytes": 9847148,
+  "publishedReceiptFilesVerified": 11,
+  "publishedReceiptBytes": 358058,
+  "privateRawInventoryOnly": {
+    "count": 115,
+    "bytes": 158970026,
+    "contentsReviewed": false
+  },
+  "cases": [
+    {
+      "symbol": "2409",
+      "full13TableStages": 7,
+      "prefixStages": 3,
+      "inputCharge": {
+        "count": 2,
+        "bytes": 234998
+      },
+      "newFDs": 9,
+      "diagnosticCanonicalBytes": 205189,
+      "overflowCanonicalBytes": 1253766,
+      "results": 0,
+      "directReceiveRejections": 3
+    },
+    {
+      "symbol": "2383",
+      "full13TableStages": 7,
+      "prefixStages": 3,
+      "inputCharge": {
+        "count": 2,
+        "bytes": 144355
+      },
+      "newFDs": 7,
+      "diagnosticCanonicalBytes": 135389,
+      "overflowCanonicalBytes": 1183966,
+      "results": 0,
+      "directReceiveRejections": 3
+    }
+  ],
+  "scopedHarnessPublicWitnessFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "rootNativeExecuted": false,
+  "fullIndependentNativeApproval": false,
+  "formalPublicationApproval": false,
+  "localAvailableBytes": 4395892736,
+  "limitations": [
+    "Full private bytes not received; public summaries checked, not privately recomputed by Root",
+    "Wrong DB principal not HTTP auth; empty invocation not uniqueness; envelope1MiB not article/all caps",
+    "Two PID1 RSS0 zombies remain; securetree finally independent pathname proof pending",
+    "Synthetic observation/draft mapping not formal author or semantic acceptance",
+    "Full goal/heartbeat remain active"
+  ]
+}

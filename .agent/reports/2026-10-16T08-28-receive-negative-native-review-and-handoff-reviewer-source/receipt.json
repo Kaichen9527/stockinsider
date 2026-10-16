@@ -1,0 +1,26 @@
+{
+  "files": [
+    {
+      "path": "review.json",
+      "bytes": 1799,
+      "sha256": "1d51a94b82ef87a33b8e84e1fd68f3e9918b07ef1df27f71c0d99287bb3d6391"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 7722,
+      "sha256": "70759181effbcfe731f32b4eea90b5ace1f559a42a9e8f48efaa33d936bd8f91"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 650,
+      "sha256": "90cc5bb9397b227fb6a730304d4dff70c554dc70fb7313f13a31f06a0f73a51f"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 5187,
+      "sha256": "ab00c84ea2e28758b89094a97ec04b68a047c972d48d12fecc6a8b0242710e95"
+    }
+  ],
+  "scope": "Root exact source and public native witness review; no Root private raw/native/formal publication approval",
+  "fullGoal": "active"
+}
