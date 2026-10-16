@@ -1,0 +1,17 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "bash",
+    "-s"
+  ],
+  "startedAt": "2026-10-16T10:00:26.462655+00:00",
+  "endedAt": "2026-10-16T10:00:31.021738+00:00",
+  "actualExitCode": 0,
+  "scriptSha256": "a55d963cdd4ecd74ab056d7f51e2b416f6a01c77b0c0a8b5017d6ea472a4c251",
+  "scope": "readonly five original financial jobs + receipt/fact counts; not import/native/deploy/capacity admission"
+}

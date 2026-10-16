@@ -1,0 +1,17 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "bash",
+    "-s"
+  ],
+  "startedAt": "2026-10-16T10:01:30.862962+00:00",
+  "endedAt": "2026-10-16T10:01:32.601939+00:00",
+  "actualExitCode": 0,
+  "scriptSha256": "847a5680091a00cf2f9c465b05dce3b4b3343cfcef33349e9b011c1edea54d70",
+  "scope": "second readonly snapshot existing six receipt diagnostics and retry audit count, no retry/import"
+}

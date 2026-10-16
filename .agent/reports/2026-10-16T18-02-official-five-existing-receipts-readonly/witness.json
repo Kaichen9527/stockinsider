@@ -1,0 +1,95 @@
+{
+  "verifiedAt": "2026-10-16T10:02:41.462214+00:00",
+  "scope": "two actual readonly snapshots; no upload/worker/retry/HTTP/activation/role/schema operation",
+  "approvedReleaseReference": "dd59817f750684b093965f539dd4de466be13077",
+  "sourcePins": [
+    {
+      "path": "web/src/app/api/internal/candidate-financial-documents/route.ts",
+      "bytes": 6663,
+      "sha256": "a062959a925cd2fe0a58a6d4d58eb0420d326829397b0bfa8cc220759e5847c0"
+    },
+    {
+      "path": "web/src/app/api/internal/candidate-financial-documents/pending/route.ts",
+      "bytes": 3392,
+      "sha256": "8b9022c201ffa233f4d0252b790b92fcf6127a44507a148e03837749da2c4a13"
+    },
+    {
+      "path": "web/src/app/api/internal/candidate-financial-documents/[receiptId]/route.ts",
+      "bytes": 1558,
+      "sha256": "73d3e63ce8fa9d77b6cea50669a862a7d47e99f700b701f925eda966d0370961"
+    },
+    {
+      "path": "web/src/lib/candidate-financial-document-worker.ts",
+      "bytes": 16149,
+      "sha256": "9023e856ee809f8161d024e56b2f29811a6d495d5229eff860cd149d4a3d8e24"
+    },
+    {
+      "path": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+      "bytes": 28028,
+      "sha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21"
+    },
+    {
+      "path": "migrations/20260909_official_financial_validation_receipts.sql",
+      "bytes": 14359,
+      "sha256": "8fa6a6208c7cb32faafd92b247dc8403d48751481a2f02f746aa95986c001c89"
+    },
+    {
+      "path": "migrations/20260911_03_financial_document_job_links.sql",
+      "bytes": 19729,
+      "sha256": "bbb766fcba98671bd31541874ffaf0419e82b437044ae773c6c876fb8b006701"
+    }
+  ],
+  "originalJobCount": 5,
+  "originalSymbols": [
+    "1735",
+    "1786",
+    "2324",
+    "2327",
+    "2385"
+  ],
+  "allJobsQueued": true,
+  "existingReceiptCount": 6,
+  "historicalReceiptDates": "2026-09-09/10; not new October uploads",
+  "allExistingReceiptsPartialParserComplete": true,
+  "actualProvenanceFactCount": 0,
+  "actualValidationReceiptCount": 0,
+  "retryAuditCountsAllZero": true,
+  "notSameAsPreviousOctoberAttemptZeroNewReceipts": true,
+  "diagnosticGroups": {
+    "validated_pdf_manifest_or_structured_xbrl_missing": [
+      "1735 PDF",
+      "1786",
+      "2324"
+    ],
+    "arelle_validation_errors": [
+      "1735 HTML"
+    ],
+    "local_parser_failed": [
+      "2327",
+      "2385"
+    ]
+  },
+  "latestWriterObservation": {
+    "databaseObservedAt": "2026-10-16T12:01:32.589368+02:00",
+    "serverVersionNum": "170011",
+    "activeWriterCount": 1,
+    "activeRelease": "dd59817f750684b093965f539dd4de466be13077",
+    "dataPlaneLeaseRows": 0
+  },
+  "latestHostObservation": {
+    "observedAt": "2026-10-16T10:01:32.485687+00:00",
+    "currentRelease": "dd59817f750684b093965f539dd4de466be13077",
+    "filesystemAvailableBytes": 30811283456,
+    "memAvailableBytes": 4316041216,
+    "scope": "readonly observation, not full heavy capacity admission"
+  },
+  "capacityAdmission": "NOT_RUN; host free/memory are observations only",
+  "newFactsAddedByThisAudit": 0,
+  "next": "Inspect retained official structured artifacts and exact parser validation before original guarded upload/retry; no blind replay of unchanged partial PDF/HTML",
+  "toolingRed": [
+    "Initial unquoted optional official glob caused zsh no matches, no remote action; corrected quoted Git pathspec.",
+    "Broad historical Git grep hit giant archived JSON line; output truncated, not used as full evidence. Bounded automation memory and current exact blobs used instead."
+  ],
+  "rootLocalAvailableBytes": 6777229312,
+  "fullGoalComplete": false
+}

@@ -1,0 +1,19 @@
+## 2026-10-16 18:02台灣時間：正式原五補件run／receipt唯讀查清；6份九月partial舊receipt、實際facts0，原唯一Cloud native仍活動
+
+前goalturn分類verified wait。本輪先核remote main93e44475/progress78d7c3e4與乾淨source/progress樹，同Cloud turn01a1441c-3f31-7621-8589-c661870acbe8/cursor3f58cf3b-49b3-4414-877e-42d89130b651:16真inProgress/threadactive，原45min reviewer-result native owned不重派/不重疊，尚無新remote交付或native結果。另一原官方文件補件chat01a137fc/hostlocal同handle真notLoaded/latest01a13911 completed（不是新活動），未送訊息或重新領件。
+
+Root讀既有stockinsider-2 memory精確原五jobIDs（1735/1786/2324/2327/2385，皆2026-06-30）與approved DD exact7sourceblobs，pending GET source只是SELECT不claim。採careful技能，沒有任何destructive命令/權限例外。Initial未quote optional official glob zshno-match及historicalgrep giantJSON輸出截斷僅tooling觀測保留簡記，後以quotedGitpathspec/有界memory與exactblobs取證，不把截斷原thread當完整review或產品FAIL。
+
+10:00:26–10:00:31Z與10:01:30–10:01:32Z兩次真readonlySSH，各原heavy-operation/production-write/production-health三OS鎖；current exactDD、fixed LinuxOSpostgres/env-i/noPGenv/實際stockinsider庫與datadir/唯一activeVPSwriterDD/empty data-planelease assertions真PASS，BEGIN READ ONLY/5sstatement/2slock/ROLLBACK，SSHactualexit0。原五jobID/symbol/period/endpoint/官方FilingURL全5精確guards PASS。這是輕量真資料審核，不是heavy准入、正式金融peer/HBA/runtimeLOGIN6復原或SQLinstall/資料write。沒有讀secret/內部key，沒有HTTP/POST/worker/retry/activation/重新下載或部署。
+
+實際五job仍queued，但已有6份同stock-period舊receipt（原joblinks數2/1/1/1/1、originalacquisitionIDs一致）：1735兩份PDF+HTML，其他各PDF。全部2026-09-09/10 accepted、receiptStatuspartial/parserStatuscomplete；不是10月失敗upload新建或本次新增。每份actualprovenance-linkedfinancialfacts=0、actualvalidationreceipts=0，added/duplicate counters亦0；每份retryauditcount0/rejectionReasons[]。這補充並區分舊「10月本批新增receipt0/facts0」歷史，不能改稱database全無receipt或當parsercomplete=usable/terminal。五job未達terminal，未造成新facts。
+
+診斷真READ：1735PDF/1786/2324為validated_pdf_manifest_required+structured_xbrl_or_validated_pdf_manifest_required+no_verified_financial_facts_extracted；1735HTML為arelle_validation_errors+no_verified_financial_facts_extracted；2327/2385為candidate_financial_local_parser_failed。Parserlocator各48/200/70/105/0/0不充verifiedfacts。這是九月stored診斷，不冒目前parser重跑已失敗/金融128唯一根因或oldbytes現在必過。下一官方資料步驟應核保留的精確官方structured bytes/issuer-period-MIME-hash與parservalidation，再走原guardedupload/retry/worker/receipt-facts-terminal，不blind重送這六份unchangedpartial PDF/HTML、不改guard/造manifest/拿foreignlease；本輪只讀不扣retry額度。
+
+最新writer實測10:01:32.589368Z（raw12:01:32+02:00同瞬間）PG170011/activewriter1/DDdd598/leaseRows0；更新先前14:51最後query的時效，舊證據不改。Hostfilesystemavailable30811283456/MemAvailable4316041216只是10:01觀測，不跑fullcapacityguard/不沿作未來准入。正式DD已部署one-shot與PR370..382終態不碰，不執行原consumeddeploy/stream/activate/main169-deploy.sh，沒有新正式金融50/pub26/role/ACL/schema或服務變更。
+
+Root ownchecker核兩snapshot原五IDs/6receipt IDs與全部狀態/count/診斷一致，safe witness SHA dfc9904647aa99258cbf1620fbb61008118340ce4dc88d8642bb7ac18e3d3579。本機freshavailable6777229312<原8589934592、>5GiB5368709120，未Rootheavy/Nodeapp/PGnative/build/cleanup/刪cache資料/停別App/降floor；<5GBsession/舊產物整理盤點未觸發，不冒compact回收。只保此改變下一資料行動的keyreceipt，未變Cloudpoll不另複製整prompt/raw。
+
+Fullgoal/heartbeat ACTIVE；真正官方structured輸入/來源Top20/兩formal文章及獨立逐claimsemantic/actual四caller/routes/Q-R/reviewpack/pubunion/atomicpublication/wholeS-C-B-Q-R-A/合格技術觀察/策略/正式研究排程/fixedpeer-install仍pending。下一先同Cloudhandlecursor16取原native真終態，不因timeout/暫idle重啟；無新nativePASS或正式研究批准。
+
+Root report .agent/reports/2026-10-16T18-02-official-five-existing-receipts-readonly/。

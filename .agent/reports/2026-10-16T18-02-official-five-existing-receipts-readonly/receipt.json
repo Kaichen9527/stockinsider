@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "scope": "two actual read-only original five financial job and existing receipt snapshots; no mutations or formal/native approval",
+  "approvedRelease": "dd59817f750684b093965f539dd4de466be13077",
+  "files": [
+    {
+      "path": "diagnostics-execution.json",
+      "bytes": 466,
+      "sha256": "0cf6550d93368b8e07e43e81ea3a5c3dae8a9d0a2180e34a6899d5e9b476dea0"
+    },
+    {
+      "path": "diagnostics-readonly.sh",
+      "bytes": 3789,
+      "sha256": "847a5680091a00cf2f9c465b05dce3b4b3343cfcef33349e9b011c1edea54d70"
+    },
+    {
+      "path": "diagnostics.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "diagnostics.stdout",
+      "bytes": 3471,
+      "sha256": "2e926e96e46c309bf293aeb7f742b65411dee6603f138ea5585be2e31147394d"
+    },
+    {
+      "path": "execution.json",
+      "bytes": 474,
+      "sha256": "cc902d35a8d067b0dadb6db565eea903cf9df608398099aee265d4d33ef447fe"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 4553,
+      "sha256": "22e0516ce1de7182d297f830d2fa93c020495efda09e2ebd1a99a0578769d59e"
+    },
+    {
+      "path": "readonly.sh",
+      "bytes": 4619,
+      "sha256": "a55d963cdd4ecd74ab056d7f51e2b416f6a01c77b0c0a8b5017d6ea472a4c251"
+    },
+    {
+      "path": "stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "stdout",
+      "bytes": 4887,
+      "sha256": "eade253668c71201c722e56d1d2cf3c2e4322d10b66acd87c2bc1fc67c6c447f"
+    },
+    {
+      "path": "witness.json",
+      "bytes": 3576,
+      "sha256": "dfc9904647aa99258cbf1620fbb61008118340ce4dc88d8642bb7ac18e3d3579"
+    }
+  ],
+  "fullGoalComplete": false
+}
