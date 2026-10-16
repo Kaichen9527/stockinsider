@@ -1,0 +1,60 @@
+{
+  "base": "6503307df3507504a0b696cb5fe881d8a7e6ec06",
+  "source": "1349525f192c1ff78ff7bba409eee0e891ba4a5b",
+  "tree": "9a2c69fc15f1064c6c8fd7e9f83542aff2d61c2c",
+  "files": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 1339,
+      "sha256": "176661ee82edc38ba217de5c492faf5e2d858fff494e268574dbdc8ed2d78191"
+    },
+    {
+      "path": "affected-static.tap",
+      "bytes": 2086,
+      "sha256": "318b2b5edc2039b071f7f1896ea560c2617b8b3a3159c6dea762ec199170d056"
+    },
+    {
+      "path": "checks-resources.json",
+      "bytes": 3985,
+      "sha256": "6f7bca3d8b8a2cb206a6208ca3ba5d4b8a8c12dcf4734b3f9fb86feeff5a0036"
+    },
+    {
+      "path": "derivation-witness.json",
+      "bytes": 536,
+      "sha256": "f3f22dec14ef902920501b2b576e19372c04a8dcd0311de387e5711541d332c8"
+    },
+    {
+      "path": "focused.tap",
+      "bytes": 1205,
+      "sha256": "6c59583239765db44690c572fa12661e7983377eb692a222ab63d4293c134934"
+    },
+    {
+      "path": "patch-witness.json",
+      "bytes": 885,
+      "sha256": "e404b627cc4915cadd81a779429ac05fdedc5e11facbcd482a536b5ccfcc9350"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 5336,
+      "sha256": "ca0714c14d09bc6050a78b2c72bcb68ebe5bfd8512bb922ef41aeea49f4a2886"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 93689,
+      "sha256": "6a89a2e702b7c316d6c4bc09b89134ba5a91cbdfd780d18a5e65ead8128bfb06"
+    }
+  ],
+  "publishedCountIncludingReceipt": 9,
+  "sourceInputs": 328,
+  "sourceBytes": 10460237,
+  "privateRawCount": 27,
+  "privateRawBytes": 216135,
+  "checks": {
+    "focused": 5,
+    "affectedStatic": 9,
+    "TS": "NOT_RERUN",
+    "PGNative": "NOT_RUN"
+  },
+  "scope": "maker source repair, no independent/native/formal approval",
+  "at": "2026-10-16T09:41:46.970638+00:00"
+}

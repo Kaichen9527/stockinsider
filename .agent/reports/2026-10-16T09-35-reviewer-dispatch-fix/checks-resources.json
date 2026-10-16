@@ -1,0 +1,157 @@
+{
+  "scope": "source/pure extracted predicates only, not PG grammar/COMMIT/permissions",
+  "finalFocused": {
+    "pass": 5,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "affectedExistingStatic": {
+    "pass": 9,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "priorTS15": "NOT_RERUN; all TS unchanged",
+  "initialRED": {
+    "exit": 1,
+    "reason": "spawnSync git EPERM before tests; original full stderr and initial script retained",
+    "native": false
+  },
+  "runs": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/research-v3-reviewer-dispatch-source-checks.mjs",
+        "/tmp/reviewer-dispatch-fix-o16/initial.sql",
+        "/tmp/reviewer-dispatch-fix-o16/initial-profile.json"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "start": 1792143612.9130507,
+      "floor": 8589934592,
+      "freeBefore": {
+        "/workspace": 8591495168,
+        "/tmp": 13957025792
+      },
+      "samples": [
+        {
+          "time": 1792143612.9610038,
+          "rss": 28647424,
+          "free": {
+            "/workspace": 8591495168,
+            "/tmp": 13957025792
+          }
+        }
+      ],
+      "exit": 0,
+      "end": 1792143613.061284,
+      "sampledPeakRSS": 28647424,
+      "sampledFreeFloor": {
+        "/workspace": 8591495168,
+        "/tmp": 13957025792
+      },
+      "instantPeakClaimed": false
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/research-v3-reviewer-union-source-checks.mjs"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "start": 1792143515.4327333,
+      "floor": 8589934592,
+      "freeBefore": {
+        "/workspace": 8591495168,
+        "/tmp": 13957054464
+      },
+      "samples": [
+        {
+          "time": 1792143515.4797316,
+          "rss": 29044736,
+          "free": {
+            "/workspace": 8591495168,
+            "/tmp": 13957054464
+          }
+        }
+      ],
+      "exit": 0,
+      "end": 1792143515.5800142,
+      "sampledPeakRSS": 29044736,
+      "sampledFreeFloor": {
+        "/workspace": 8591495168,
+        "/tmp": 13957054464
+      },
+      "instantPeakClaimed": false
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "/tmp/reviewer-dispatch-fix-o16/derive-check.mjs"
+      ],
+      "cwd": "/tmp/si-pubtail-o14",
+      "start": 1792143577.2896829,
+      "floor": 8589934592,
+      "freeBefore": {
+        "/workspace": 8591495168,
+        "/tmp": 13957042176
+      },
+      "samples": [
+        {
+          "time": 1792143577.3258038,
+          "rss": 29331456,
+          "free": {
+            "/workspace": 8591495168,
+            "/tmp": 13957042176
+          }
+        },
+        {
+          "time": 1792143577.4620724,
+          "rss": 127373312,
+          "free": {
+            "/workspace": 8591495168,
+            "/tmp": 13957042176
+          }
+        },
+        {
+          "time": 1792143577.6062865,
+          "rss": 177065984,
+          "free": {
+            "/workspace": 8591495168,
+            "/tmp": 13957042176
+          }
+        },
+        {
+          "time": 1792143577.7411177,
+          "rss": 0,
+          "free": {
+            "/workspace": 8591495168,
+            "/tmp": 13957038080
+          }
+        }
+      ],
+      "exit": 0,
+      "end": 1792143577.8413517,
+      "sampledPeakRSS": 177065984,
+      "sampledFreeFloor": {
+        "/workspace": 8591495168,
+        "/tmp": 13957038080
+      },
+      "instantPeakClaimed": false
+    }
+  ],
+  "node": {
+    "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "version": "v22.14.0"
+  },
+  "freshInitial": {
+    "time": "2026-10-16T09:35:30Z",
+    "workspaceFree": 8591503360,
+    "tmpFree": 13957271552,
+    "floor": 8589934592
+  },
+  "below5GBInventoryTriggered": false,
+  "cleanup": "None",
+  "native": "NOT_RUN",
+  "independentApproval": false
+}
