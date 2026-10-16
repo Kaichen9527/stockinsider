@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-16T09:46:09.432335+00:00",
+  "source": "1349525f192c1ff78ff7bba409eee0e891ba4a5b",
+  "evidence": "490a20fb316892eb0cbb43bb6b995997e2e449ef",
+  "verifiedGitInputs": 328,
+  "gitBytes": 10460237,
+  "prior326Unchanged": 324,
+  "changedPriorPaths": [
+    "docs/operations/2026-10-16/v3-reviewer-result-union/source-derived-profile.json",
+    "migrations/20261016_research_reviewer_result_union_candidate_v3.sql"
+  ],
+  "publishedFilesIncludingReceipt": 9,
+  "publishedBytes": 110831,
+  "privateRawInventoryOnly": {
+    "count": 27,
+    "bytes": 216135
+  },
+  "preambleBytes": 2227,
+  "preambleSha256": "3d78015c19819d9fafb9f8e864486a2ae4b515f090659132077a2e4b6974c1d7",
+  "newReceiveBytes": 23702,
+  "newReceiveSha256": "8505d96f288d7e222fa85779f7c400f44c7a54dcca0c8bfc4e33e6cc73d72302",
+  "sqlSha256": "8e8929f6353fbd814c4b8d8d34499dc90ef7dffea839fc5d8873455df5a07001",
+  "originalReceiveAndEntireSQLReconstructed": true,
+  "editorialAndAllTSUnchanged": true,
+  "profileOnlyFourNecessaryFieldsChanged": true,
+  "R1SourceControlFlow": "closed by server current context gate before either arm",
+  "sourceReview": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "nativeMixedVersionAcceptance": "NOT_RUN",
+  "privateSnapshotContentsAcquired": false,
+  "privateSuccessorNamespaceRootRecomputed": false,
+  "rootNodePGNativeBuild": false,
+  "rootAvailableBytes": 6915796992,
+  "fullGoalComplete": false
+}

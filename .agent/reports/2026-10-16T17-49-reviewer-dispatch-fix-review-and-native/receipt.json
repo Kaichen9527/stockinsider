@@ -1,0 +1,38 @@
+{
+  "scope": "Root independent exact source repair review and bounded new native dispatch; not native/formal approval",
+  "source": "1349525f192c1ff78ff7bba409eee0e891ba4a5b",
+  "evidence": "490a20fb316892eb0cbb43bb6b995997e2e449ef",
+  "sourceReview": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "native": "NOT_RUN",
+  "files": [
+    {
+      "path": "check.py",
+      "bytes": 6145,
+      "sha256": "0d17b4a7ce9739c5d8f65c8d6af9f20c82597fe2b65b3e0a71be684472d61e1c"
+    },
+    {
+      "path": "dispatch-snapshot.json",
+      "bytes": 650,
+      "sha256": "62d09a0948606594a845a0fc66e2c94554bf80c9fa607f9b888cecef1268be04"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 6139,
+      "sha256": "2bfa175a90c85ab0c9eaaf0391224bbddaa8747227eaa5e6021763eedf66ab84"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 5444,
+      "sha256": "228fe06e3e00a7bd74e71df06b32ed988a52a294ea0013bac557ace928c1b6a3"
+    },
+    {
+      "path": "root-check.json",
+      "bytes": 1413,
+      "sha256": "d0751c138b980ec533e6447b397c54c3c06cbdff62a2025b0942127feccbc970"
+    }
+  ]
+}
