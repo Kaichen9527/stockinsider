@@ -1,3 +1,19 @@
+## 2026-10-16 17:16台灣時間：精簡關鍵決策／對話整理索引已建立，唯一reviewer-result source仍活動
+
+前goalturn分類verified wait。本輪先核remote main93e44475/progress02f52326與乾淨source/progress樹。同Cloud turn01a143f3-7520-72aa-99bb-2b1d7fa35447/cursor3f58cf3b-49b3-4414-877e-42d89130b651:6真inProgress/threadactive，maker僅commentary表示新result/purepacket/editorial首次moduleTS通過、正在補兩既有SQLbodyunion/installer；尚無exactsource交付/native/正式批准，未重派或重疊owned。
+
+配合人類「保留關鍵決策、不必每個都儲存」要求，本輪只新增6779bytes docs/operations/2026-10-16/key-decisions-and-retention.md，SHA befe8dff44b58ee14582ada39cbeca481131bb59128f1765aca701e2cc393409。保留完整goal/唯一owner/下一關、已部署DD與耗盡one-shot/terminalPR、4重要Root收據（逐byte核GitreceiptSHA）、finite版本與原guards/RED、正式未完清單。例行未變poll不再複製整prompt/raw到Git；舊封存證據不刪改。索引是指標，不代原收據或歷史完整證據。
+
+已讀OpenAI Docs技能並實際取得官方developer-commands三section：compact摘要上下文；archive保留逐字稿且CLI當前turn會先停止；delete永久逐字稿及spawneddescendants。沒有把CLI保證冒桌面同指令，沒有把compact/archive當已回收磁碟。初best-practices fetch404與缺parent首寫FileNotFoundError僅tooling歷史，原樣簡記收據；改用真正成功官方頁與專用date目錄，不當產品FAIL。
+
+最新約7.0GB仍>5GiB，<5GB唯讀session/舊產物占用盤點未觸發；未compact/archive/delete、未刪session/檔案/cache或停別App，沒有可刪清單或預估回收量造證。低容量時需真盤點引用/活動/唯一raw/可重建性，保留本Root/活動Cloud/parent-descendant及原RED/研究資料，回收量用前後filesystembytes驗證。
+
+Fullgoal/heartbeat ACTIVE；此索引不是正式研究、來源Top20/技術觀察/策略/研究排程或發布驗收。唯一Cloud source照原範圍，下一先同handle取交付。Root未heavy/build/native/VPS/DB/role/ACL/HTTP/CI/PR/部署/正式研究排程操作，DDone-shot與PR370..382終態保持，current/writerdd598/lease0仍14:51最後真query。
+
+Root report .agent/reports/2026-10-16T17-16-key-decisions-retention/。
+
+Root receipt0cd00d778c049dee8e59e3b6a4faf4da0ef3cc1b1b62d267464176b229c305c8；staged diff-check由實際命令另記。
+
 ## 2026-10-16 17:03台灣時間：兩issuer completed handoff/reviewer packet真native3PASS，Root精確公開證據審查；唯一Cloud接續reviewer-result/editorial finiteunion source-only
 
 前goalturn分類verified wait。本輪先核remote main93e44475/progress8746f228與乾淨source/progress樹。同Cloud01a143da初compact仍活動但remote出52b8handoff；先同handle/不重派，待同handle真completed於08:56:44Z/lasttoolcompleted/threadidle/cursor3f58cf3b-49b3-4414-877e-42d89130b651:4。Harness014d6468add162fa54c34680c07f10e2dab789c3/executionhandoff52b8bdeb84f8f98bfed98b5c6700e68da60b468a/evidence6d68136a19ba9c45a62909cb2ea4313fd6161b21/receiptbad2f9664dc182a91d02cb6aa4ac65319744a66ffb01e524c1e3abcd50cb9333真push。Frozen TS222d/c08/fence2592不變；fetch同session真exit0後取Git。Root一次read_thread輸出formatter誤對object.output.slice TypeError發生於fetch前，修用JSON.stringify後同handle恢復，僅toolingRED、不當nativeFAIL。

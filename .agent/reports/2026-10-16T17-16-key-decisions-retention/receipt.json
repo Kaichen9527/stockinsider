@@ -1,0 +1,48 @@
+{
+  "scope": "human key-decision/receipt index and official CLI retention guidance; no session deletion or disk reclamation",
+  "observedUtc": "2026-10-16T09:17:27.435422+00:00",
+  "artifact": {
+    "path": "docs/operations/2026-10-16/key-decisions-and-retention.md",
+    "bytes": 6779,
+    "sha256": "befe8dff44b58ee14582ada39cbeca481131bb59128f1765aca701e2cc393409"
+  },
+  "verifiedGitReceiptPointers": [
+    {
+      "receipt": ".agent/reports/2026-10-15T22-58-approved-dd-binary-deploy-and-responsive-smoke/receipt.json",
+      "sha256": "ed3782167b999a83261ab66a40c66616963c0204e84cc4832f82ba31544237bb"
+    },
+    {
+      "receipt": ".agent/reports/2026-10-16T16-36-completed-handoff-reviewer-source-review-and-native/receipt.json",
+      "sha256": "1625a38938c7addff3867e0da539068a4b81b0ae2472cfa90a373c760fad61c7"
+    },
+    {
+      "receipt": ".agent/reports/2026-10-16T17-03-completed-reviewer-native-review-and-result-union/receipt.json",
+      "sha256": "180531d18ba3bb2cc98b83885d3ab2b245a4597630ea4e9d4a5f97116d0f9811"
+    },
+    {
+      "receipt": ".agent/reports/2026-10-16T16-47-reviewer-result-publication-boundary-map/receipt.json",
+      "sha256": "904e8c2fcfd4381f4b1bcc3a131ba8df1c017059c6485eab0fc6e6d5440afa7b"
+    }
+  ],
+  "officialDocs": [
+    "https://learn.chatgpt.com/docs/developer-commands#keep-transcripts-lean-with-compact",
+    "https://learn.chatgpt.com/docs/developer-commands#archive-the-current-session-with-archive",
+    "https://learn.chatgpt.com/docs/developer-commands#delete-the-current-session-with-delete"
+  ],
+  "primarySourceFetched": true,
+  "diskAvailableBytes": 7009517568,
+  "below5GiB": false,
+  "sessionOccupancyScanTriggered": false,
+  "filesDeleted": 0,
+  "chatsArchived": 0,
+  "chatsDeleted": 0,
+  "compactionExecuted": false,
+  "spaceReclaimedClaimed": false,
+  "toolingHistory": [
+    "Official search first returned broad changelog; refined exact query. best-practices markdown fetch404; actual developer-commands archive/delete/compact sections fetched successfully.",
+    "Initial index write missing parent FileNotFoundError before file creation; dedicated date directory created, final6779byte index written. No product failure."
+  ],
+  "ownedCloudTurn": "01a143f3-7520-72aa-99bb-2b1d7fa35447",
+  "cursor": "3f58cf3b-49b3-4414-877e-42d89130b651:6",
+  "goalComplete": false
+}
