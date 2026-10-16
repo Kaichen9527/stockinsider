@@ -1,0 +1,42 @@
+{
+  "scope": "single light Node source contracts; sampled process RSS, not instantaneous peak",
+  "measurement": {
+    "at": "2026-10-16T00:35:40.029072+00:00",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "scripts/research-v3-handoff-reviewer.test.mjs"
+    ],
+    "files": [
+      {
+        "path": "web/src/lib/research-v3-author-handoff.ts",
+        "bytes": 14038,
+        "sha256": "e555c5bed063d950f8bec2ee7deaabf12150734912611729df6885c23647c0f4"
+      },
+      {
+        "path": "web/src/lib/research-v3-reviewer-assignment.ts",
+        "bytes": 4114,
+        "sha256": "4e799447f9f2040ef5354301b73ae1be6db3cbbbad7974923fbe90cf8662978b"
+      },
+      {
+        "path": "scripts/research-v3-handoff-reviewer.test.mjs",
+        "bytes": 14231,
+        "sha256": "e501f4ec7599451b8822b09d940fa25166fdb0d8ebf59e850a35c7d292e87d7d"
+      }
+    ],
+    "minimumFree": {
+      "/workspace": 8592596992,
+      "/tmp": 14271483904
+    },
+    "sampledMaxRssBytes": 214315008,
+    "intervalSeconds": 0.2,
+    "exit": 0,
+    "end": "2026-10-16T00:35:58.667143+00:00"
+  },
+  "finalFree": {
+    "/workspace": 8592498688,
+    "/tmp": 14271246336
+  },
+  "floor": 8589934592,
+  "noCleanup": true
+}

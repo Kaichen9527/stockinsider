@@ -1,0 +1,14 @@
+{
+  "node": {
+    "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "version": "v22.14.0"
+  },
+  "typescript": {
+    "path": "web/node_modules/typescript/lib/_tsc.js",
+    "sha256": "e8f349eabd48486bdb2bf9dc1a00c89d58297270c54b745838879e2859194419",
+    "version": "5.9.3"
+  },
+  "configurationChanged": false,
+  "installPerformed": false
+}

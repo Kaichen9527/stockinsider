@@ -1,0 +1,78 @@
+{
+  "scope": "source-only synthetic RPC contracts; no PG/native/HTTP/appbuild",
+  "source": "be6f97bbd7c6560a50a6daa8face1c2e7a84d50c",
+  "final": {
+    "tests": 16,
+    "pass": 16,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "scripts/research-v3-handoff-reviewer.test.mjs"
+    ],
+    "exit": 0,
+    "runtimeInputsMatchFinalSeal": true
+  },
+  "types": {
+    "compilerVersion": "5.9.3",
+    "exit": 0,
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "web/node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--strict",
+      "--target",
+      "es2022",
+      "--module",
+      "esnext",
+      "--moduleResolution",
+      "bundler",
+      "--allowImportingTsExtensions",
+      "--resolveJsonModule",
+      "--esModuleInterop",
+      "--skipLibCheck",
+      "--lib",
+      "es2023,dom,dom.iterable",
+      "--types",
+      "node",
+      "--typeRoots",
+      "web/node_modules/@types",
+      "web/src/lib/research-v3-author-handoff.ts",
+      "web/src/lib/research-v3-reviewer-assignment.ts"
+    ]
+  },
+  "historicalRunsNotSummed": [
+    {
+      "phase": "initial child runner",
+      "pass": 0,
+      "fail": 1,
+      "exit": 1
+    },
+    {
+      "phase": "same initial code direct runner diagnostic",
+      "pass": 6,
+      "fail": 7,
+      "exit": 1
+    },
+    {
+      "phase": "repaired ns duration source",
+      "pass": 13,
+      "fail": 0,
+      "exit": 0
+    }
+  ],
+  "generatorInitialRed": "UTF8 decoding gzip leaf; fixed evidence generator hashes binary leaves without interpreting them. Original retained.",
+  "notRun": [
+    "PG/native",
+    "reviewer assignment success",
+    "reviewer packet success",
+    "completed handoff recovery success",
+    "reviewer assign response loss",
+    "whole app type/lint/build",
+    "formal role execution",
+    "production/deploy/CI"
+  ]
+}

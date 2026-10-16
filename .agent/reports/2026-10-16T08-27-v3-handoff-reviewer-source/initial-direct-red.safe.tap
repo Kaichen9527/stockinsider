@@ -1,0 +1,36 @@
+TAP version 13
+# Subtest: 2409 genuine v3 recomputation then first handoff existing6RPC; full draft preserved
+not ok 1 - 2409 genuine v3 recomputation then first handoff existing6RPC; full draft preserved
+# Subtest: 2409 immutable result/input/row/clock/unknown fields rejected before mutation
+ok 2 - 2409 immutable result/input/row/clock/unknown fields rejected before mutation
+# Subtest: 2409 rehashed arithmetic/cash/observation forgery does not pass
+ok 3 - 2409 rehashed arithmetic/cash/observation forgery does not pass
+# Subtest: 2409 completion replay and reviewer calls fail closed at actual missing binding fence
+not ok 4 - 2409 completion replay and reviewer calls fail closed at actual missing binding fence
+# Subtest: 2409 handoff transport failure propagates exact error; READ does not retry or active-read completed
+not ok 5 - 2409 handoff transport failure propagates exact error; READ does not retry or active-read completed
+# Subtest: 2383 genuine v3 recomputation then first handoff existing6RPC; full draft preserved
+not ok 6 - 2383 genuine v3 recomputation then first handoff existing6RPC; full draft preserved
+# Subtest: 2383 immutable result/input/row/clock/unknown fields rejected before mutation
+ok 7 - 2383 immutable result/input/row/clock/unknown fields rejected before mutation
+# Subtest: 2383 rehashed arithmetic/cash/observation forgery does not pass
+ok 8 - 2383 rehashed arithmetic/cash/observation forgery does not pass
+# Subtest: 2383 completion replay and reviewer calls fail closed at actual missing binding fence
+not ok 9 - 2383 completion replay and reviewer calls fail closed at actual missing binding fence
+# Subtest: 2383 handoff transport failure propagates exact error; READ does not retry or active-read completed
+not ok 10 - 2383 handoff transport failure propagates exact error; READ does not retry or active-read completed
+# Subtest: auth-first, distinct configured identity, closed body and binding before RPC
+ok 11 - auth-first, distinct configured identity, closed body and binding before RPC
+# Subtest: shared deadline and bounded body fail before commit; late commit response not optimistic success
+not ok 12 - shared deadline and bounded body fail before commit; late commit response not optimistic success
+# Subtest: source proof: completion arm bypasses binding resolver and service role cannot call it
+ok 13 - source proof: completion arm bypasses binding resolver and service role cannot call it
+1..13
+# tests 13
+# suites 0
+# pass 6
+# fail 7
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 15863.851044

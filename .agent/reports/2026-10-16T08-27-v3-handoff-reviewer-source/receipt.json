@@ -1,0 +1,65 @@
+{
+  "source": "be6f97bbd7c6560a50a6daa8face1c2e7a84d50c",
+  "tree": "4bcaa58837ef4b4bf526224a13efa2100e1393a4",
+  "base": "4a4efea6fcb83c059e867dd6a920850ed5a887c4",
+  "kind": "maker-source-contract-evidence-not-independent-approval",
+  "time": "2026-10-16T00:41:55.237542+00:00",
+  "rawInventoryOnly": true,
+  "publishedFiles": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 2433,
+      "sha256": "dd2d12d7a3b86e45a5fedf1c6a9bc771235dfa14eca741e5ba35e9e53e786aa6"
+    },
+    {
+      "path": "checks.json",
+      "bytes": 1972,
+      "sha256": "ef2496fbb59e62e73b104ae9960da951f590b4446e8cf8e9427a9697cc518118"
+    },
+    {
+      "path": "final.safe.tap",
+      "bytes": 3091,
+      "sha256": "af2e014d5e432a388983cae9075f45fb21e4ac47d1c0cd19ba1e9c1d69453627"
+    },
+    {
+      "path": "initial-direct-red.safe.tap",
+      "bytes": 2559,
+      "sha256": "78f18f1043174ba970636f75478b55799a7b238a1b4388a8e3c5439591aaba0f"
+    },
+    {
+      "path": "initial-runner-red.safe.tap",
+      "bytes": 235,
+      "sha256": "606d937b48f8d69118650ab5dbb3e8e87f463f70bff60cee4fa7ac6c10d1524a"
+    },
+    {
+      "path": "private-raw-inventory.json",
+      "bytes": 6130,
+      "sha256": "72ca853bbd6636f2f90ac496db849d730d773f184c0ac0b959e9f30d4c13e06b"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 1264,
+      "sha256": "a048dbc4951c2c528879c002c8f18353628e204092c55d291d753f8d5ed57f5a"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 86169,
+      "sha256": "042ff6efb7991ed7ab2f0678332caa73d5e19ffde616e3def798c345cc72392b"
+    },
+    {
+      "path": "tooling.json",
+      "bytes": 440,
+      "sha256": "ed0a5682bc260c4390992018382378721a59979c07375949485650afcc75521c"
+    }
+  ],
+  "publishedCountExcludingReceipt": 9,
+  "originalInputsUnchanged": 295,
+  "actualGitInputs": 302,
+  "checks": {
+    "sourceContractsPass": 16,
+    "sourceContractsFail": 0,
+    "moduleTypesExit": 0,
+    "native": "NOT_RUN"
+  },
+  "completedReviewerPacket": false
+}
