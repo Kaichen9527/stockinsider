@@ -1,0 +1,59 @@
+{
+  "base": "05cc5cf2bb0fc4ddf0d0276ae176be0b09bd79d4",
+  "reportSourceCommit": "f1d60b83a97b21326291decfa81a38ec73b96f68",
+  "reportSha256": "24b6fe1137bc3e4b6614131ad6a7aad0940b9d41dd5e7e655113d464e0af07b0",
+  "executedAuditScriptSha256": "aacdd91e7e4360f25c78c0efe46fb2814db889c5ea62b3b13cc9c7fdb4d72f4c",
+  "runtimeSource": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "frozenInputs": 334,
+  "frozenBytes": 10516436,
+  "allFrozenInputsUnchanged": true,
+  "referenceCommit": "dc9509066226af655872ceebe7e41c60d0104327",
+  "referenceSha256": "2dfb0f78f3a6b63fc7f11d5ceaaa60335b98a184ee94cfb4ae8f81464ee245cd",
+  "classificationCounts": {
+    "EXACT_MATCH": 0,
+    "MISMATCH": 364,
+    "NO_REFERENCE": 257,
+    "CHANGED": 0,
+    "ERROR": 0
+  },
+  "safeDeletionCandidates": [],
+  "nativeExecuted": false,
+  "cleanupExecuted": false,
+  "makerIndependentApproval": false,
+  "publishedFilesExcludingReceipt": 6,
+  "publishedBytesExcludingReceipt": 277777,
+  "localRawCount": 8,
+  "localRawBytes": 1791369,
+  "files": [
+    {
+      "path": "admission.json",
+      "bytes": 440,
+      "sha256": "72a12d66a2663094fd5a8d159d69aab98db6426d214d5a8e7042d8711b90b502"
+    },
+    {
+      "path": "comparison-index.json",
+      "bytes": 266956,
+      "sha256": "e543433c5d3cb3d412cadc99a3bfc5c2e55e1480193d01b19ed2f08f67e6d58b"
+    },
+    {
+      "path": "custody-summary.json",
+      "bytes": 7944,
+      "sha256": "9753db22e020026aaecd0c80276f8b7d21988c2f66a573bff33e41790716b101"
+    },
+    {
+      "path": "publication-capacity.json",
+      "bytes": 439,
+      "sha256": "7705713856caf8ad29bcbfe2464dbe574d5e6170216db421a8c2610857e750ac"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 1605,
+      "sha256": "da38549ff57da353e15cbbe874be0ec27b627e49fd9fc2ba4a232bd3d2943bbc"
+    },
+    {
+      "path": "source-proof.json",
+      "bytes": 393,
+      "sha256": "118f44b210824714c6d137bf13ccfd483ff6e5d5166a8acda30bd1d4fe268a1e"
+    }
+  ]
+}

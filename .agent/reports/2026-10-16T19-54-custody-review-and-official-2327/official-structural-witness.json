@@ -1,0 +1,58 @@
+{
+  "at": "2026-10-16T11:40:27.130762+00:00",
+  "sha256": "8900870e593b1342d0901d38c137cdbb62f48d662fb6ecedebe3431e28df9e9e",
+  "bytes": 1528880,
+  "utf8Strict": true,
+  "xmlWellFormed": true,
+  "externalEntityOrDoctype": false,
+  "rootTag": "{http://www.w3.org/1999/xhtml}html",
+  "inlineHeaderCount": 1,
+  "inlineNumericCount": 3051,
+  "issuerPeriodContexts": 99,
+  "contextIdsSha256": "a6b9662bcbef4373f0c41495fb8b46e73dda94fd8a56c4a0eaec94a56ced8cb2",
+  "identityLabels": [
+    {
+      "concept": "tifrs-notes:CompanyID",
+      "value": "2327",
+      "contextRef": "From20260101To20260630"
+    },
+    {
+      "concept": "tifrs-notes:CompanyChineseName",
+      "value": "國巨股份有限公司",
+      "contextRef": "From20260101To20260630"
+    },
+    {
+      "concept": "tifrs-notes:CompanyEnglishName",
+      "value": "Yageo Corporation",
+      "contextRef": "From20260101To20260630"
+    },
+    {
+      "concept": "tifrs-notes:Year",
+      "value": "2026",
+      "contextRef": "From20260101To20260630"
+    },
+    {
+      "concept": "tifrs-notes:ReportType",
+      "value": "Financial report (general)",
+      "contextRef": "From20260101To20260630"
+    },
+    {
+      "concept": "tifrs-notes:ReportCategory",
+      "value": "Consolidated report",
+      "contextRef": "From20260101To20260630"
+    }
+  ],
+  "listingMatchedRows": [
+    "115Q2 合併"
+  ],
+  "actualResponseContentType": "; charset=iso-8859-1",
+  "wireMimeMissing": true,
+  "detectedFormat": "XML XHTML with inlineXBRL",
+  "declaredEncoding": [
+    "UTF-8"
+  ],
+  "accountingTaxonomyValidation": "NOT_RUN",
+  "publishedAt": "NOT_YET_VERIFIED",
+  "readyForUpload": false,
+  "factsAdded": 0
+}

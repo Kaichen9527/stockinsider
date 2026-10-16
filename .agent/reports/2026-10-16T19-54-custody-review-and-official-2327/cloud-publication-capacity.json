@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-16T11:38:25.098156+00:00",
+  "freeBytes": {
+    "/workspace": 8590516224,
+    "/tmp": 13606817792
+  },
+  "floor": 8589934592,
+  "existingIndexBytes": 388284,
+  "estimatedCompressedNewEvidenceBlobs": 45599,
+  "additionalTreeReceiptRefAndBlockAllowance": 98304,
+  "estimatedPeakAdditionalBytes": 532187,
+  "projectedFree": 8589984037,
+  "unknownConcurrentWrites": true,
+  "notNativeAdmission": true,
+  "noCleanup": true
+}

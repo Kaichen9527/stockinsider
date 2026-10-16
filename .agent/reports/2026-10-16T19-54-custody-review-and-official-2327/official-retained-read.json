@@ -1,0 +1,21 @@
+{
+  "files": [
+    {
+      "name": "listing.html",
+      "bytes": 35922,
+      "sha256": "700608592c5b2620191533d82e24116d05c6e9a4cc95bd5abab1883a71f6a3d6",
+      "stableLstatFstat": true
+    },
+    {
+      "name": "2327.xhtml",
+      "bytes": 1528880,
+      "sha256": "8900870e593b1342d0901d38c137cdbb62f48d662fb6ecedebe3431e28df9e9e",
+      "stableLstatFstat": true
+    }
+  ],
+  "scope": "exact owned retained bytes; no new official network request/data write/cleanup",
+  "start": "2026-10-16T11:40:00.907578+00:00",
+  "end": "2026-10-16T11:40:03.074650+00:00",
+  "actualExit": 0,
+  "scriptSha256": "f55a4703dc0a720799c8c1818d8f0b91cf522501591d317c23c04e7c63421f59"
+}

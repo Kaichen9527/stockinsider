@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-16T11:38:25.094358+00:00",
+  "root": "/tmp/generated-custody-o16",
+  "scope": "hash-only local audit inventory; Root has not read private per-file metadata",
+  "count": 8,
+  "bytes": 1791369,
+  "files": [
+    {
+      "path": "admission.json",
+      "bytes": 440,
+      "sha256": "72a12d66a2663094fd5a8d159d69aab98db6426d214d5a8e7042d8711b90b502"
+    },
+    {
+      "path": "approved-dd-output-hash-reference.json",
+      "bytes": 457608,
+      "sha256": "2dfb0f78f3a6b63fc7f11d5ceaaa60335b98a184ee94cfb4ae8f81464ee245cd"
+    },
+    {
+      "path": "comparison-index.json",
+      "bytes": 266956,
+      "sha256": "e543433c5d3cb3d412cadc99a3bfc5c2e55e1480193d01b19ed2f08f67e6d58b"
+    },
+    {
+      "path": "custody-summary.json",
+      "bytes": 7944,
+      "sha256": "9753db22e020026aaecd0c80276f8b7d21988c2f66a573bff33e41790716b101"
+    },
+    {
+      "path": "custody.py",
+      "bytes": 7792,
+      "sha256": "aacdd91e7e4360f25c78c0efe46fb2814db889c5ea62b3b13cc9c7fdb4d72f4c"
+    },
+    {
+      "path": "package-evidence.py",
+      "bytes": 3427,
+      "sha256": "a504c5f90fcfc68196262d598b39951f05167f14f3fc415fa3a4cddb99cdcad7"
+    },
+    {
+      "path": "per-file-custody-private.json",
+      "bytes": 1046809,
+      "sha256": "c4a4ff492a93010ada612b8619542b4c564af3fc898826e54bffdda3f17674d9"
+    },
+    {
+      "path": "source-proof.json",
+      "bytes": 393,
+      "sha256": "118f44b210824714c6d137bf13ccfd483ff6e5d5166a8acda30bd1d4fe268a1e"
+    }
+  ],
+  "excluded": [
+    "reference.git object store (not traversed)",
+    "inventory itself",
+    "later publication log"
+  ]
+}

@@ -1,0 +1,283 @@
+{
+  "start": "2026-10-16T11:36:07.574886+00:00",
+  "end": "2026-10-16T11:36:07.784699+00:00",
+  "actorUid": 1000,
+  "scope": "actual execution-context read-only; current Cloud bytes compared to Root hash-only retained-DD reference",
+  "referenceCommit": "dc9509066226af655872ceebe7e41c60d0104327",
+  "referenceSha256": "2dfb0f78f3a6b63fc7f11d5ceaaa60335b98a184ee94cfb4ae8f81464ee245cd",
+  "referenceProvenance": {
+    "schemaVersion": 1,
+    "subject": "dd59817f750684b093965f539dd4de466be13077",
+    "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+    "wrapperBytes": 600997,
+    "wrapperSha256": "127d7d9427c0122c547021b9a9a01e4b1d3ce960087a0cef1796e1b88e0ae943",
+    "rootReadActualRetainedFiles": 2586,
+    "rootReadActualRetainedBytes": 79354761,
+    "selectedCount": 1371,
+    "selectedBytes": 14966550,
+    "scope": "Actual retained extracted DD files rehashed against exact originally approved manifest; tar not located or re-read this turn. Comparison reference only, no Cloud parity or deletion authorization."
+  },
+  "priorCloudHashInventorySha256": "7365da3e1163c6ae73ec8fd1e2dbf1c8edd9b0e25d8e3f8cb35dbf1d48bc718a",
+  "entryCount": 939,
+  "directories": 318,
+  "regularFileRows": 621,
+  "readBytes": 9602854,
+  "readBudgetBytes": 20971520,
+  "categories": {
+    "EXACT_MATCH": {
+      "count": 0,
+      "logicalBytes": 0,
+      "allocatedBytes": 0
+    },
+    "MISMATCH": {
+      "count": 364,
+      "logicalBytes": 2557308,
+      "allocatedBytes": 3649536
+    },
+    "NO_REFERENCE": {
+      "count": 257,
+      "logicalBytes": 7045546,
+      "allocatedBytes": 7843840
+    },
+    "CHANGED": {
+      "count": 0,
+      "logicalBytes": 0,
+      "allocatedBytes": 0
+    },
+    "ERROR": {
+      "count": 0,
+      "logicalBytes": 0,
+      "allocatedBytes": 0
+    }
+  },
+  "exactMatchMeaning": "same relative path/size/SHA; mode equality reported separately, no Cloud package provenance or rebuildability claim",
+  "all621PriorAuditBytesEqual": true,
+  "allOpenedFdsClosed": true,
+  "modeEqualReferenceCount": 0,
+  "rootMetadata": [
+    {
+      "path": "web/.next/server",
+      "metadata": {
+        "dev": 27,
+        "inode": 525104,
+        "mode": 448,
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 4,
+        "bytes": 4096,
+        "mtimeNs": 1791176120337915458,
+        "ctimeNs": 1791176120337915458,
+        "allocatedBytes": 4096
+      },
+      "ancestors": [
+        {
+          "path": "/",
+          "metadata": {
+            "dev": 27,
+            "inode": 262145,
+            "mode": 493,
+            "uid": 0,
+            "gid": 0,
+            "nlink": 1,
+            "bytes": 4096,
+            "mtimeNs": 1791114720210158835,
+            "ctimeNs": 1791114735767208628,
+            "allocatedBytes": 4096
+          }
+        },
+        {
+          "path": "/workspace",
+          "metadata": {
+            "dev": 27,
+            "inode": 9223372036854775855,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "nlink": 1,
+            "bytes": 12288,
+            "mtimeNs": 1792150486547485788,
+            "ctimeNs": 1792150486547485788,
+            "allocatedBytes": 16384
+          }
+        },
+        {
+          "path": "/workspace/stockinsider",
+          "metadata": {
+            "dev": 27,
+            "inode": 9223372036855894540,
+            "mode": 448,
+            "uid": 1000,
+            "gid": 1000,
+            "nlink": 1,
+            "bytes": 4096,
+            "mtimeNs": 1791161961612103432,
+            "ctimeNs": 1791161961612103432,
+            "allocatedBytes": 8192
+          }
+        },
+        {
+          "path": "/workspace/stockinsider/web",
+          "metadata": {
+            "dev": 27,
+            "inode": 9223372036855960391,
+            "mode": 448,
+            "uid": 1000,
+            "gid": 1000,
+            "nlink": 1,
+            "bytes": 4096,
+            "mtimeNs": 1791158960042237266,
+            "ctimeNs": 1791159524125729693,
+            "allocatedBytes": 8192
+          }
+        },
+        {
+          "path": "/workspace/stockinsider/web/.next",
+          "metadata": {
+            "dev": 27,
+            "inode": 9223372036855967886,
+            "mode": 448,
+            "uid": 1000,
+            "gid": 1000,
+            "nlink": 1,
+            "bytes": 4096,
+            "mtimeNs": 1791176125126046330,
+            "ctimeNs": 1791176125126046330,
+            "allocatedBytes": 8192
+          }
+        }
+      ]
+    },
+    {
+      "path": "web/.next/static",
+      "metadata": {
+        "dev": 27,
+        "inode": 527389,
+        "mode": 448,
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 5,
+        "bytes": 4096,
+        "mtimeNs": 1791176120345915677,
+        "ctimeNs": 1791176120345915677,
+        "allocatedBytes": 4096
+      },
+      "ancestors": [
+        {
+          "path": "/",
+          "metadata": {
+            "dev": 27,
+            "inode": 262145,
+            "mode": 493,
+            "uid": 0,
+            "gid": 0,
+            "nlink": 1,
+            "bytes": 4096,
+            "mtimeNs": 1791114720210158835,
+            "ctimeNs": 1791114735767208628,
+            "allocatedBytes": 4096
+          }
+        },
+        {
+          "path": "/workspace",
+          "metadata": {
+            "dev": 27,
+            "inode": 9223372036854775855,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "nlink": 1,
+            "bytes": 12288,
+            "mtimeNs": 1792150486547485788,
+            "ctimeNs": 1792150486547485788,
+            "allocatedBytes": 16384
+          }
+        },
+        {
+          "path": "/workspace/stockinsider",
+          "metadata": {
+            "dev": 27,
+            "inode": 9223372036855894540,
+            "mode": 448,
+            "uid": 1000,
+            "gid": 1000,
+            "nlink": 1,
+            "bytes": 4096,
+            "mtimeNs": 1791161961612103432,
+            "ctimeNs": 1791161961612103432,
+            "allocatedBytes": 8192
+          }
+        },
+        {
+          "path": "/workspace/stockinsider/web",
+          "metadata": {
+            "dev": 27,
+            "inode": 9223372036855960391,
+            "mode": 448,
+            "uid": 1000,
+            "gid": 1000,
+            "nlink": 1,
+            "bytes": 4096,
+            "mtimeNs": 1791158960042237266,
+            "ctimeNs": 1791159524125729693,
+            "allocatedBytes": 8192
+          }
+        },
+        {
+          "path": "/workspace/stockinsider/web/.next",
+          "metadata": {
+            "dev": 27,
+            "inode": 9223372036855967886,
+            "mode": 448,
+            "uid": 1000,
+            "gid": 1000,
+            "nlink": 1,
+            "bytes": 4096,
+            "mtimeNs": 1791176125126046330,
+            "ctimeNs": 1791176125126046330,
+            "allocatedBytes": 8192
+          }
+        }
+      ]
+    }
+  ],
+  "gitTrackedCount": 0,
+  "buildIdentityMarkers": [
+    {
+      "path": "web/.next/BUILD_ID",
+      "absent": true
+    },
+    {
+      "path": "web/.next/build-manifest.json",
+      "bytes": 511,
+      "sha256": "c8a5cdfb43cd027fd88226b3dce13128a32b4c6c78859e11c7c6e8be51ae4e9d",
+      "stable": true
+    }
+  ],
+  "processReferences": {
+    "sameUidProcessCount": 1612,
+    "fdReadlinkCount": 28,
+    "errorsOrRaces": 3217,
+    "matches": [],
+    "unreferencedProven": false
+  },
+  "capacity": {
+    "floor": 8589934592,
+    "before": {
+      "/workspace": 8590565376,
+      "/tmp": 13608497152
+    },
+    "after": {
+      "/workspace": 8590565376,
+      "/tmp": 13608497152
+    },
+    "maxRssBytesAuditProcess": 45858816,
+    "notWholeEnvironmentRss": true
+  },
+  "perFileInventorySha256": "c4a4ff492a93010ada612b8619542b4c564af3fc898826e54bffdda3f17674d9",
+  "safeDeletionCandidates": [],
+  "cleanupAuthorizedOrExecuted": false,
+  "nativeReady": false,
+  "unreferenced": "UNKNOWN",
+  "exactRebuildability": "UNKNOWN",
+  "noContentPublished": true
+}

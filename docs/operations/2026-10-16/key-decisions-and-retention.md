@@ -1,3 +1,7 @@
+## 2026-10-16 22:59 更新：custody無相同副本；2327新官方bytes已保留但未入庫
+
+Cloud01a1447d/cursor33真completed-idle，無活動owner。Root核334inputs/7public receipts及621比較，0samebytecopy，safe刪單仍空，不清理/重跑tmp。2327官方正文1528880bytes/SHA8900870e已Root核XHTML/company-period，sourcewireMIME缺失保留，detecteduploadtype另明列、公告日未知；原3鎖fullcapacity11:48因memory不足HOLD、upload0/worker0，未造facts。DBwriterDD/lease0最新11:37:13.369113Z。Root19:54report/receipt19e3a33d保存精確pointer；raw留兩端knownownedpath，不public全文。所有原RED/正式未完/已耗DD與PR終態不變；先重查remote+samehandle，不能沿索引舊活動重派。
+
 ## 2026-10-16 19:35 更新：合法staging尚不足；封存副本唯讀比對
 
 05cc audit經Root核334inputs/7publicfiles；NONE_NOT_READY/safelist空，原tmp祖先guard拒絕不放寬。12.8MB只是occupancy。Root真重hash原DD extracted2586files/79354761bytes、原manifest34448958，發布1371file hashreference於dc950906，非Cloudparity/新tar驗證/cleanup授權。唯一Cloud01a1447d/cursor32只READ-ONLY621output custody比較，不刪/不native；活動以samehandle最新為準。正式原batch/tmp/stockinsider-official-docs.qAIVaj在11:14原3鎖內真absent，僅此精確路徑；未download/upload/worker，DBwriterlease仍10:01query。Root19:32report/receipt728be593及最新launch保存全部界線；fullgoal/heartbeat仍ACTIVE，原正式未完/DD消耗/PR終態不變。

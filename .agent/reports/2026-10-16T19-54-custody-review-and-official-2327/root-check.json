@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-16T11:54:13.174945+00:00",
+  "sourceInputsVerified": 334,
+  "sourceBytesVerified": 10516436,
+  "publishedReceiptFilesVerifiedIncludingReceipt": 7,
+  "publishedBytesVerifiedIncludingReceipt": 279722,
+  "publishedComparisonRowsRecomputed": 621,
+  "categories": {
+    "EXACT_MATCH": {
+      "count": 0,
+      "logicalBytes": 0,
+      "allocatedBytes": 0
+    },
+    "MISMATCH": {
+      "count": 364,
+      "logicalBytes": 2557308,
+      "allocatedBytes": 3649536
+    },
+    "NO_REFERENCE": {
+      "count": 257,
+      "logicalBytes": 7045546,
+      "allocatedBytes": 7843840
+    },
+    "CHANGED": {
+      "count": 0,
+      "logicalBytes": 0,
+      "allocatedBytes": 0
+    },
+    "ERROR": {
+      "count": 0,
+      "logicalBytes": 0,
+      "allocatedBytes": 0
+    }
+  },
+  "privateInventoryOnly": {
+    "count": 8,
+    "bytes": 1791369,
+    "contentsObtained": false
+  },
+  "cloudActualGeneratedFileBytesObtainedByRoot": false,
+  "safeDeletionCandidates": [],
+  "originalOfficialFileRootActualBytesVerified": 1528880,
+  "originalOfficialFileSha256": "8900870e593b1342d0901d38c137cdbb62f48d662fb6ecedebe3431e28df9e9e",
+  "structuralCheckOnlyNotAccountingValidation": true,
+  "mimeCaptureStopPreserved": true,
+  "detectedUploadMimeDecision": "application/xhtml+xml from actual XML XHTML namespace/inlineXBRL; upstream missing MIME retained separately, no change to bytes/guards",
+  "announcementDate": null,
+  "uploadOrWorkerAttempts": 0,
+  "fullCapacityAllowed": false,
+  "fullCapacityMemoryAvailable": 2233806848,
+  "fullCapacityMemoryRequired": 2684354560,
+  "databaseIdentityLastQuery": "2026-10-16T11:37:13.369113Z",
+  "rootFreeBytes": 16665923584,
+  "rootRecipientPublicOnlySha256": "62e73abdb066168785d10a646c9145a8e75789a07527399ecbe58bbee7d60d59",
+  "newCredentialsCreated": false,
+  "privateKeyModifiedOrPrinted": false,
+  "newNativeExecuted": false,
+  "goalActive": true
+}
