@@ -1,0 +1,702 @@
+{
+  "roots": {
+    "execution": "/tmp/author-receive-neg-native-o16",
+    "native-artifacts": "/tmp/author-receive-neg-o16"
+  },
+  "count": 115,
+  "bytes": 158970026,
+  "files": [
+    {
+      "scope": "execution",
+      "path": "binaries.json",
+      "bytes": 1705,
+      "sha256": "144884933d0124fda8d894cded4e9b7208892f97278d3309d0bb4faf81cc4e6a"
+    },
+    {
+      "scope": "execution",
+      "path": "cleanup-and-source.py",
+      "bytes": 3948,
+      "sha256": "d270909e04f5df9d2b36cf289fd3d992567f916ff357465acf37f5bab91aca25"
+    },
+    {
+      "scope": "execution",
+      "path": "cleanup-proof.json",
+      "bytes": 5776,
+      "sha256": "65c143f46a6cde018f8bc7e1793e155a1dbc5c378e16ee667a20ba832dcc8a92"
+    },
+    {
+      "scope": "execution",
+      "path": "cleanup-source.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "scope": "execution",
+      "path": "cleanup-source.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "scope": "execution",
+      "path": "cleanup-source.stdout",
+      "bytes": 408,
+      "sha256": "4c875ceb2d70d3fdfc9d0d9d56acc03f81eb7b0bce29a60ac00f97078b074e90"
+    },
+    {
+      "scope": "execution",
+      "path": "command-seal.json",
+      "bytes": 659,
+      "sha256": "7444ba9d1e054f736d68f5f04535dc3c3d00c6e1d3332e86a0b71daba4f968fa"
+    },
+    {
+      "scope": "execution",
+      "path": "initial-processes.json",
+      "bytes": 85302,
+      "sha256": "8f3afcfed0961efca85125ef2e99e1d4a7452da2cf2faf5df5dc41396feca46f"
+    },
+    {
+      "scope": "execution",
+      "path": "native.result.json",
+      "bytes": 782,
+      "sha256": "244bcc2c5d72f8f2481ee3fc083dc022c612e50abbbb3e3731ec60a5de4f3943"
+    },
+    {
+      "scope": "execution",
+      "path": "native.samples.jsonl",
+      "bytes": 156326,
+      "sha256": "27560c3494aa4a40622e8be2d73123acf6e2ede5442becdc58203d06d3900623"
+    },
+    {
+      "scope": "execution",
+      "path": "native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "scope": "execution",
+      "path": "native.stdout",
+      "bytes": 1227,
+      "sha256": "d75fc7f597e2b11cb8cbd4d981857c7afc3bfd29d1dfc5034d7283b9783ae3eb"
+    },
+    {
+      "scope": "execution",
+      "path": "package-evidence.py",
+      "bytes": 5307,
+      "sha256": "9a638512721eb2a22d25345c2d1267b962b381bf2c91b5f86875956c93b82f62"
+    },
+    {
+      "scope": "execution",
+      "path": "post-source-check.json",
+      "bytes": 80971,
+      "sha256": "2f04108fb019e9d62edd3fd4a362efd29649964fdede960341f3860f458e0791"
+    },
+    {
+      "scope": "execution",
+      "path": "preflight.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "scope": "execution",
+      "path": "preflight.py",
+      "bytes": 2680,
+      "sha256": "70843cb6cbcaf09c55762e4ab55d06a3ce37a33f30b25e29fc20b63ebd9a14c3"
+    },
+    {
+      "scope": "execution",
+      "path": "preflight.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "scope": "execution",
+      "path": "preflight.stdout",
+      "bytes": 157,
+      "sha256": "9b82b41788170ba2edcf87eeac25234fbca44e9aaed1dad3969061daa80e65ef"
+    },
+    {
+      "scope": "execution",
+      "path": "public-safe-witness.json",
+      "bytes": 153487,
+      "sha256": "30578d4e2e7fb759c3bc99cf0b68cf3f9c7e951741a706411f48329b8dff1412"
+    },
+    {
+      "scope": "execution",
+      "path": "run.py",
+      "bytes": 3349,
+      "sha256": "70bd1815dd81f3a654e70da72630b9d6c8f74f4f4cb2766e509d32423fbb3878"
+    },
+    {
+      "scope": "execution",
+      "path": "runner-seal.json",
+      "bytes": 331,
+      "sha256": "d4bd877b0871c08e508db0f2f686aec5af6403f8c96cbb59f4942e501e19fbf7"
+    },
+    {
+      "scope": "execution",
+      "path": "source-seal.json",
+      "bytes": 83746,
+      "sha256": "3df9f1ba414d76074375e13b68ff86d7fad953f51f26d8d66a5a4b5bf2216dba"
+    },
+    {
+      "scope": "execution",
+      "path": "stackfree.tap",
+      "bytes": 667,
+      "sha256": "27deeab87b9aa94830741eb03d2fa66bab7995d594a0aec006408af89a187697"
+    },
+    {
+      "scope": "execution",
+      "path": "summarize.mjs",
+      "bytes": 6969,
+      "sha256": "9835bc905dac8b511324b028059c11263a4b19ab54d7a95f6fdd195ee5392b7f"
+    },
+    {
+      "scope": "execution",
+      "path": "summary.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "scope": "execution",
+      "path": "summary.stderr",
+      "bytes": 184,
+      "sha256": "863c07040a0225dc89b9d0567f9f792a7a134f2b1c46fc8c0b73a4d82545a298"
+    },
+    {
+      "scope": "execution",
+      "path": "summary.stdout",
+      "bytes": 371,
+      "sha256": "b804ce0a682180b69ab269c1bd829706299adbe0d6a6ab6c3a4cd2046910f9ff"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-01-prepared.json",
+      "bytes": 5010,
+      "sha256": "f8dba4d9c8087c1aa63e658b19ce0a7b0cfdc7aaffe9e8293cad9fb6806df740"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-02-firstseal-observed.json",
+      "bytes": 207271,
+      "sha256": "079cded738f22b246f3952b777c6fd02c495a03207ba39fbded9fcc21196d252"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-03-assigned.json",
+      "bytes": 209011,
+      "sha256": "596915f8a6e90630e4c226b9c0c7adb53611e6453da1c284c8dcf0b4a67f7d25"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-04-diagnostic-baseline-private.json",
+      "bytes": 419725,
+      "sha256": "cdcea75c2e5f62454187dca0754850e62c26f28e0e52810f869c4fd33106d993"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-after-invocation-private.json",
+      "bytes": 419725,
+      "sha256": "cdcea75c2e5f62454187dca0754850e62c26f28e0e52810f869c4fd33106d993"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-after-principal-private.json",
+      "bytes": 419725,
+      "sha256": "cdcea75c2e5f62454187dca0754850e62c26f28e0e52810f869c4fd33106d993"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-after-receive-bound-private.json",
+      "bytes": 419725,
+      "sha256": "cdcea75c2e5f62454187dca0754850e62c26f28e0e52810f869c4fd33106d993"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-author-rpc-order.json",
+      "bytes": 1749,
+      "sha256": "0a35fc979f85164a2bef64fe1cbbbdeafca073133d3104659db62e57dddd0b91"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-author-source-profile-safe.json",
+      "bytes": 740,
+      "sha256": "4508304f6db995f7a1559cdeb092d5d8c480e65d752fb437ede745066747796f"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-before-invocation-private.json",
+      "bytes": 419725,
+      "sha256": "cdcea75c2e5f62454187dca0754850e62c26f28e0e52810f869c4fd33106d993"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-before-principal-private.json",
+      "bytes": 419725,
+      "sha256": "cdcea75c2e5f62454187dca0754850e62c26f28e0e52810f869c4fd33106d993"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-before-receive-bound-private.json",
+      "bytes": 419725,
+      "sha256": "cdcea75c2e5f62454187dca0754850e62c26f28e0e52810f869c4fd33106d993"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-claim.json",
+      "bytes": 1345,
+      "sha256": "7acfc5950a5c4ac47be3e030c77762ca9b93a24ff3864d647edba815b410e35a"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-cleanup.json",
+      "bytes": 93,
+      "sha256": "650b294c75fe8d99004b8b80035edc7c83dc1ef1fbbb12cc54ac849ef1c6ef76"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-cluster-absent.json",
+      "bytes": 67,
+      "sha256": "1373fb5d4f6e39e27f2c2c1b7dddf3e4d09654b90cf6709be8ea2829ba1dedf1"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-connections.json",
+      "bytes": 73,
+      "sha256": "8d1c856dc0806e70d20c8a612e954f547f909d5585af205cce87f33854816599"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "f2a6ccf6911c4490a69fe948c697d5570aace5cd146da88e102083011a0381ce"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-installer-before-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-installer-codecs.json",
+      "bytes": 581,
+      "sha256": "5cd8f502264ce1d8b19b824ec7b58c7611e53d6bebcde21b695c2f1f35e25415"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-installer-commit-witness.json",
+      "bytes": 1691,
+      "sha256": "e2a8cab5c1d9775386e46299f141d977ed7532799d8e5d0155131b82f8a6dc67"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-installer-connections.json",
+      "bytes": 73,
+      "sha256": "ebbf1403dd59577722dea57d49f1be880e11a1bd25a661aef9cddcb423ae8513"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-installer-repeat-rejected.json",
+      "bytes": 73,
+      "sha256": "89759e3b22273d12f20afad805a799420b0f72b5349ccb1eecc47d6ba4ca6dd4"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-mutant-invocation-private.json",
+      "bytes": 161164,
+      "sha256": "8f8b830e6e62a9351c5f411ed7ba76c43b21914bdfa487b6c3685d28be54fb86"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-mutant-principal-private.json",
+      "bytes": 161207,
+      "sha256": "9dd778a8817935b10b754a10878f5ba72f249f8bca325efa36eed86d8a7db3a8"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-mutant-receive-bound-private.json",
+      "bytes": 1209804,
+      "sha256": "b9e346e6447883d6a36353da856809e762a04de2efb6c4329f526670d6f0c430"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-negative-connections.json",
+      "bytes": 165,
+      "sha256": "c9f8e5dab877c9dda46d2dcbde9620ee2cb1178cda0aa3dd9fbe2356ed21988e"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-postgres-before-cleanup.log",
+      "bytes": 66554,
+      "sha256": "a6c29133d9a0e93e5b96076cb7a37fffca6273387c8bc9e691d0849bcdfdc519"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-postgres.log",
+      "bytes": 66705,
+      "sha256": "3863a3a061abb366f152ce2f4958de7439691e9cf676234a219c493754c032f7"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-preparation.json",
+      "bytes": 2951,
+      "sha256": "94fb52a1df6c4591a5720b5e6fc6a0c15a928bcf2d7882c2ea4804cbe3c243dd"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-prepared-diagnostic-envelope-private.json",
+      "bytes": 160785,
+      "sha256": "84b0c58cc8ec62b11c831a54c5cf8374063c8262bafec4b8d882e9da24f746b1"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-priority.json",
+      "bytes": 142,
+      "sha256": "0668ebd6825327b29b8ff5e7fc106b9c1c23bf2289d9bf66592ed206f108d653"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-receive-invocation-settlement-private.json",
+      "bytes": 263,
+      "sha256": "5901e5f934cae9188a5f585c0ceaa59592760904b52d9f8ef6ebf9b290e84df1"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-receive-negative-progress-witness.json",
+      "bytes": 28567,
+      "sha256": "12baca3888e09dff80a89ebaf9c7e32100f7d8c9ea18fd089172bcf05db42fe2"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-receive-negative-witness.json",
+      "bytes": 33553,
+      "sha256": "e4f8fdb65fae623c61ac57b45ebe170e1db866438e9d871dbbc5f90f349ccf47"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-receive-principal-settlement-private.json",
+      "bytes": 372,
+      "sha256": "9674c6570a6d7c26ddf58619420f26c3ddadcbd43a1503254658107b3188017f"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-receive-receive-bound-settlement-private.json",
+      "bytes": 261,
+      "sha256": "6e9e06b80cf2f66309592fa50417ec8dec666cf13d39a3ba39ad868c6fe34493"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-roster-admission.json",
+      "bytes": 448,
+      "sha256": "522ffac423c3540f81c2716db26125644d3e964984532a7dd2976e5a73782787"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-rpc-fd-order.json",
+      "bytes": 1560,
+      "sha256": "7e7946517d242b1c5a63b79bb87c790cc20ae03b1ec0e698d44f8e38bc43750f"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2383-author-receive-negative-2383-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "1de743d3ed3778a24b515f8409d0f6cfc2edef696ecfe28fa3c241c0163d1c17"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-01-prepared.json",
+      "bytes": 5010,
+      "sha256": "a969d0afadf18a96d723b8b480cf381cc366b0519ab2ea5676eeb66584139205"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-02-firstseal-observed.json",
+      "bytes": 347532,
+      "sha256": "b1831c1131cf3660ba5eb2b45015034546bb190ea10036ce7653c2868ad112b2"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-03-assigned.json",
+      "bytes": 349272,
+      "sha256": "9d774dc1e12e0cbcca633aa8cce4f52f40b109c2f672f290f43b78aa606ddfce"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-04-diagnostic-baseline-private.json",
+      "bytes": 700249,
+      "sha256": "d8508acd5d0f69fe828c9e4c6840f32520375e3adfc60a172748a325830a04f7"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-after-invocation-private.json",
+      "bytes": 700249,
+      "sha256": "d8508acd5d0f69fe828c9e4c6840f32520375e3adfc60a172748a325830a04f7"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-after-principal-private.json",
+      "bytes": 700249,
+      "sha256": "d8508acd5d0f69fe828c9e4c6840f32520375e3adfc60a172748a325830a04f7"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-after-receive-bound-private.json",
+      "bytes": 700249,
+      "sha256": "d8508acd5d0f69fe828c9e4c6840f32520375e3adfc60a172748a325830a04f7"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-author-rpc-order.json",
+      "bytes": 1719,
+      "sha256": "d4aad0739e435f60f434b502a8fb01af419e2554f71c42d037c5fae41e886953"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-author-source-profile-safe.json",
+      "bytes": 740,
+      "sha256": "e85d65117e964b6f0ecb524fb5ba1a6c7c7c9381d51503d23e1e716f3bc2000d"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-before-invocation-private.json",
+      "bytes": 700249,
+      "sha256": "d8508acd5d0f69fe828c9e4c6840f32520375e3adfc60a172748a325830a04f7"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-before-principal-private.json",
+      "bytes": 700249,
+      "sha256": "d8508acd5d0f69fe828c9e4c6840f32520375e3adfc60a172748a325830a04f7"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-before-receive-bound-private.json",
+      "bytes": 700249,
+      "sha256": "d8508acd5d0f69fe828c9e4c6840f32520375e3adfc60a172748a325830a04f7"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-claim.json",
+      "bytes": 1344,
+      "sha256": "3ce9be45e7083dd208fdb1abad923bff7bb92f9928956f310e7a7a64ccda7194"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-cleanup.json",
+      "bytes": 93,
+      "sha256": "6ba525af6bee28005319ccb10a9b3d5e6cdcc8aaf79ef7e6266dbf967ebe32c0"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-cluster-absent.json",
+      "bytes": 67,
+      "sha256": "1373fb5d4f6e39e27f2c2c1b7dddf3e4d09654b90cf6709be8ea2829ba1dedf1"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-connections.json",
+      "bytes": 73,
+      "sha256": "c175a81612b2500a7974f044098890a762212b14f59b7908de0bad99e943008b"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "807d8eb652243f605b092031940ca4a5b805e21797f33d2d1566c5eb69bc48a2"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-installer-before-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-installer-codecs.json",
+      "bytes": 581,
+      "sha256": "5cd8f502264ce1d8b19b824ec7b58c7611e53d6bebcde21b695c2f1f35e25415"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-installer-commit-witness.json",
+      "bytes": 1691,
+      "sha256": "588d909de5e41d1762802e4f6f58c745bebc8895c3bae5f80be01cc7b04c0dad"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-installer-connections.json",
+      "bytes": 73,
+      "sha256": "e5bb89d9f6e620fdfd40f6b93567f898e7c1daa466c5d3f95511a2b72e931745"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-installer-repeat-rejected.json",
+      "bytes": 73,
+      "sha256": "89759e3b22273d12f20afad805a799420b0f72b5349ccb1eecc47d6ba4ca6dd4"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-mutant-invocation-private.json",
+      "bytes": 254535,
+      "sha256": "4f9208e26ac11c71c7e2ec162b3a12cb7cbdde32425f4a8b664945f472318062"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-mutant-principal-private.json",
+      "bytes": 254578,
+      "sha256": "d0959334eaaa0462e6f0def6790cd803ed561f8358e987a7c02e66051541feed"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-mutant-receive-bound-private.json",
+      "bytes": 1303175,
+      "sha256": "e4729da6c33875d05d2f7ea335b1a6057071a5838dfb86c661c2ed996c30f5fd"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-negative-connections.json",
+      "bytes": 165,
+      "sha256": "daa9cb26bb888b4e455899e44d908a739fa3c493746d8166cbb54b324f2f1a6f"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-postgres-before-cleanup.log",
+      "bytes": 66554,
+      "sha256": "609e196aa1c428e198b4652190aadbfda95a6537e22c0d2610052c47c4d083d0"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-postgres.log",
+      "bytes": 66705,
+      "sha256": "c9366d0d395f611b0a1b72e9994320a1347085828e4af3e66d21e476fc0b6e60"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-preparation.json",
+      "bytes": 2951,
+      "sha256": "564559b4d861076e01d472d40ff2f910ec73f31da14efa566b6293ba1c258e9f"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-prepared-diagnostic-envelope-private.json",
+      "bytes": 254156,
+      "sha256": "406dac7803464199fe42c6cd9062eefd27a3cfc50ad934b44b8040d91bb6e321"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-priority.json",
+      "bytes": 142,
+      "sha256": "804f7df73b89d3dbbdd684a71fc111493b9eb24ac2056a5b648efa850d6a0d4e"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-receive-invocation-settlement-private.json",
+      "bytes": 263,
+      "sha256": "5901e5f934cae9188a5f585c0ceaa59592760904b52d9f8ef6ebf9b290e84df1"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-receive-negative-progress-witness.json",
+      "bytes": 28555,
+      "sha256": "ba51b175ec559b30e4f4797fd3c3acd98c50c4ac32b865e392457ee767dcbb76"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-receive-negative-witness.json",
+      "bytes": 33539,
+      "sha256": "dc786fe07be925656f7a4a2830c1cf5aec3f8f9a40cb0596983c8f00dcc709e4"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-receive-principal-settlement-private.json",
+      "bytes": 372,
+      "sha256": "9674c6570a6d7c26ddf58619420f26c3ddadcbd43a1503254658107b3188017f"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-receive-receive-bound-settlement-private.json",
+      "bytes": 261,
+      "sha256": "6e9e06b80cf2f66309592fa50417ec8dec666cf13d39a3ba39ad868c6fe34493"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-roster-admission.json",
+      "bytes": 448,
+      "sha256": "f41f887fa6d797f20686f582559c9b670be8da1c83819fcd9a421a60ed3056e5"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-rpc-fd-order.json",
+      "bytes": 1543,
+      "sha256": "3067ce9161ba7a7b22589c33650a647fff2fc612bd8015b700b7e03092788d6f"
+    },
+    {
+      "scope": "native-artifacts",
+      "path": "2409-author-receive-negative-2409-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "569698b58fd2b3ad37bc8048d13fa2be773a78722826ba6c240e76c7a2243a94"
+    }
+  ],
+  "privateRawContentsPublished": false,
+  "makerDerived": true
+}

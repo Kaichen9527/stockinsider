@@ -1,0 +1,295 @@
+{
+  "time": "2026-10-16T00:13:54.580638+00:00",
+  "cases": [
+    {
+      "symbol": "2409",
+      "clusterPath": "/tmp/vp3profile-86cPtS",
+      "clusterAbsent": true,
+      "socketDirectoryAbsent": true,
+      "cleanupStage": "business complete",
+      "stoppedReported": true,
+      "shutdownLogObserved": true,
+      "serverLogBefore": {
+        "bytes": 66554,
+        "sha256": "609e196aa1c428e198b4652190aadbfda95a6537e22c0d2610052c47c4d083d0"
+      },
+      "serverLogAfter": {
+        "bytes": 66705,
+        "sha256": "c9366d0d395f611b0a1b72e9994320a1347085828e4af3e66d21e476fc0b6e60"
+      },
+      "installerConnections": {
+        "writer": 670975,
+        "observer": 670976,
+        "observerReadOnly": "on"
+      },
+      "fixtureConnections": {
+        "writer": 670975,
+        "observer": 670985,
+        "observerReadOnly": true
+      },
+      "negativeConnections": {
+        "writer": {
+          "pid": 670975,
+          "role": "service_role",
+          "isolation": "read committed"
+        },
+        "observer": {
+          "pid": 670985,
+          "read_only": "on"
+        }
+      },
+      "secureTreeFinallyAbsenceRecorded": false,
+      "successfulReceive": false,
+      "expectedQuerySettlements": 3
+    },
+    {
+      "symbol": "2383",
+      "clusterPath": "/tmp/vp3profile-j7WCSf",
+      "clusterAbsent": true,
+      "socketDirectoryAbsent": true,
+      "cleanupStage": "business complete",
+      "stoppedReported": true,
+      "shutdownLogObserved": true,
+      "serverLogBefore": {
+        "bytes": 66554,
+        "sha256": "a6c29133d9a0e93e5b96076cb7a37fffca6273387c8bc9e691d0849bcdfdc519"
+      },
+      "serverLogAfter": {
+        "bytes": 66705,
+        "sha256": "3863a3a061abb366f152ce2f4958de7439691e9cf676234a219c493754c032f7"
+      },
+      "installerConnections": {
+        "writer": 671188,
+        "observer": 671189,
+        "observerReadOnly": "on"
+      },
+      "fixtureConnections": {
+        "writer": 671188,
+        "observer": 671197,
+        "observerReadOnly": true
+      },
+      "negativeConnections": {
+        "writer": {
+          "pid": 671188,
+          "role": "service_role",
+          "isolation": "read committed"
+        },
+        "observer": {
+          "pid": 671197,
+          "read_only": "on"
+        }
+      },
+      "secureTreeFinallyAbsenceRecorded": false,
+      "successfulReceive": false,
+      "expectedQuerySettlements": 3
+    }
+  ],
+  "explicitBackendPids": [
+    {
+      "pid": 670975,
+      "exists": false
+    },
+    {
+      "pid": 670976,
+      "exists": false
+    },
+    {
+      "pid": 670985,
+      "exists": false
+    },
+    {
+      "pid": 671188,
+      "exists": false
+    },
+    {
+      "pid": 671189,
+      "exists": false
+    },
+    {
+      "pid": 671197,
+      "exists": false
+    }
+  ],
+  "explicitBackendAbsentCount": 6,
+  "sampledProcessesAfter": [
+    {
+      "pid": 670928,
+      "exists": false
+    },
+    {
+      "pid": 670934,
+      "exists": false
+    },
+    {
+      "pid": 670947,
+      "exists": false
+    },
+    {
+      "pid": 670956,
+      "exists": false
+    },
+    {
+      "pid": 670957,
+      "exists": false
+    },
+    {
+      "pid": 670963,
+      "exists": true,
+      "comm": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 670963,
+      "rssBytes": 0
+    },
+    {
+      "pid": 670964,
+      "exists": false
+    },
+    {
+      "pid": 670965,
+      "exists": false
+    },
+    {
+      "pid": 670967,
+      "exists": false
+    },
+    {
+      "pid": 670968,
+      "exists": false
+    },
+    {
+      "pid": 670969,
+      "exists": false
+    },
+    {
+      "pid": 670970,
+      "exists": false
+    },
+    {
+      "pid": 670971,
+      "exists": false
+    },
+    {
+      "pid": 670972,
+      "exists": false
+    },
+    {
+      "pid": 670974,
+      "exists": false
+    },
+    {
+      "pid": 670975,
+      "exists": false
+    },
+    {
+      "pid": 670976,
+      "exists": false
+    },
+    {
+      "pid": 670985,
+      "exists": false
+    },
+    {
+      "pid": 671032,
+      "exists": false
+    },
+    {
+      "pid": 671041,
+      "exists": false
+    },
+    {
+      "pid": 671042,
+      "exists": false
+    },
+    {
+      "pid": 671048,
+      "exists": true,
+      "comm": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 671048,
+      "rssBytes": 0
+    },
+    {
+      "pid": 671049,
+      "exists": false
+    },
+    {
+      "pid": 671050,
+      "exists": false
+    },
+    {
+      "pid": 671052,
+      "exists": false
+    },
+    {
+      "pid": 671053,
+      "exists": false
+    },
+    {
+      "pid": 671054,
+      "exists": false
+    },
+    {
+      "pid": 671055,
+      "exists": false
+    },
+    {
+      "pid": 671056,
+      "exists": false
+    },
+    {
+      "pid": 671107,
+      "exists": false
+    },
+    {
+      "pid": 671154,
+      "exists": false
+    },
+    {
+      "pid": 671188,
+      "exists": false
+    },
+    {
+      "pid": 671189,
+      "exists": false
+    },
+    {
+      "pid": 671197,
+      "exists": false
+    }
+  ],
+  "remainingZombieProcesses": [
+    {
+      "pid": 670963,
+      "exists": true,
+      "comm": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 670963,
+      "rssBytes": 0
+    },
+    {
+      "pid": 671048,
+      "exists": true,
+      "comm": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "session": 671048,
+      "rssBytes": 0
+    }
+  ],
+  "sampledOwnedProcessesAbsent": 32,
+  "sampledOwnedProcessesTotal": 34,
+  "allOwnedPidsAbsent": false,
+  "sampledPeakNotInstantaneous": true,
+  "sampleCount": 191,
+  "finalFree": {
+    "/workspace": 8592764928,
+    "/tmp": 14272163840
+  },
+  "pending": [
+    "Independent secure-tree finally absence not recorded by frozen fixture; no claim of that proof",
+    "OS zombies retained; not absent and no cleanup of unrelated processes"
+  ]
+}

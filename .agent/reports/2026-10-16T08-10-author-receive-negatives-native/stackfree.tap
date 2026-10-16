@@ -1,0 +1,26 @@
+TAP version 13
+# Subtest: new author receive negatives: two v3 issuers only
+    # Subtest: 2409 direct receive principal/invocation/envelope bound
+    ok 1 - 2409 direct receive principal/invocation/envelope bound
+      ---
+      duration_ms: 24267.780121
+      ...
+    # Subtest: 2383 direct receive principal/invocation/envelope bound
+    ok 2 - 2383 direct receive principal/invocation/envelope bound
+      ---
+      duration_ms: 20596.053437
+      ...
+    1..2
+ok 1 - new author receive negatives: two v3 issuers only
+  ---
+  duration_ms: 44865.54354
+  ...
+1..1
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 45155.413321

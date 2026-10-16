@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "bounded-native-maker-receipt-v1",
+  "at": "2026-10-16T00:15:45.527763+00:00",
+  "base": "48a9c62eb840ee464fe22b3897ccfe7ba3c4f932",
+  "harnessSource": "4242ff201c64aa5dd331695952cfc41086457392",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "handoff": {
+    "path": "docs/operations/2026-10-16/v3-author-receive-negatives-native/HANDOFF.md",
+    "bytes": 7132,
+    "sha256": "32d7152a3414ab3ca5c105bb0c615c6bde45c0398bf485fb49802dbbae13f734",
+    "blob": "759e15e753d50caf688a8fdca786be3eb39ee760",
+    "commit": "00ce49e22a159f0aa8e3a3d80d9910afcb34f30c"
+  },
+  "executedInputs": 295,
+  "executedInputBytes": 9847148,
+  "allFrozenInputsUnchanged": true,
+  "actualTests": {
+    "tests": 3,
+    "suites": 0,
+    "pass": 3,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "onlyOneNativeRun": true,
+  "independentApproval": false,
+  "privateRawCount": 115,
+  "privateRawBytes": 158970026,
+  "publishedFilesExcludingReceipt": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 1991,
+      "sha256": "21560853c08ca7cd7b9f207ef09d2076e570f92a513642b28420976b28191cc8"
+    },
+    {
+      "path": "binaries.json",
+      "bytes": 1705,
+      "sha256": "144884933d0124fda8d894cded4e9b7208892f97278d3309d0bb4faf81cc4e6a"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 5776,
+      "sha256": "65c143f46a6cde018f8bc7e1793e155a1dbc5c378e16ee667a20ba832dcc8a92"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 659,
+      "sha256": "7444ba9d1e054f736d68f5f04535dc3c3d00c6e1d3332e86a0b71daba4f968fa"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 782,
+      "sha256": "244bcc2c5d72f8f2481ee3fc083dc022c612e50abbbb3e3731ec60a5de4f3943"
+    },
+    {
+      "path": "post-source-check.json",
+      "bytes": 80971,
+      "sha256": "2f04108fb019e9d62edd3fd4a362efd29649964fdede960341f3860f458e0791"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 153487,
+      "sha256": "30578d4e2e7fb759c3bc99cf0b68cf3f9c7e951741a706411f48329b8dff1412"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 25374,
+      "sha256": "d45d663837cd58b74ca38234d05fc45b0000a6e039321c0e03b464577e5219f5"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 83746,
+      "sha256": "3df9f1ba414d76074375e13b68ff86d7fad953f51f26d8d66a5a4b5bf2216dba"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 667,
+      "sha256": "27deeab87b9aa94830741eb03d2fa66bab7995d594a0aec006408af89a187697"
+    }
+  ],
+  "publishedBytesExcludingReceipt": 355158,
+  "remaining": [
+    "legacy77/compatible author differences",
+    "lease/reservation/rights/revocation/other caps/ACL/invocation uniqueness",
+    "actual four callers/reviewer/Q-R/reviewpack/atomic publication/wholeclosure/semantic formal articles",
+    "Independent secure-tree finally absence record",
+    "Two PID1 RSS0 zombies remain"
+  ]
+}
