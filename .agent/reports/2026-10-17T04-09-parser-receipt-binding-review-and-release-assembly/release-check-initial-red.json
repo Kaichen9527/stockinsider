@@ -1,0 +1,7 @@
+{
+  "exitCode": 1,
+  "error": "AssertionError at first lineage assertion",
+  "scope": "Root checker incorrectly assumed combined assembly source direct parent main; actual main->six-file f79220f->handoff388fd4->evidence099f",
+  "sourceUnchanged": true,
+  "native": "NOT_RUN"
+}

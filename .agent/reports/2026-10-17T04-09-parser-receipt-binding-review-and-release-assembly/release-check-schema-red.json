@@ -1,0 +1,6 @@
+{
+  "exitCode": 1,
+  "error": "KeyError files",
+  "scope": "Root checker assumed maker receipt files instead of actual evidence key; source and original receipts unchanged",
+  "native": "NOT_RUN"
+}

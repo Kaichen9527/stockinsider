@@ -1,0 +1,55 @@
+{
+  "ASTCompileFiles": 2,
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "contractGroupsRun": 0,
+  "copiedFrom": "bac16865eb6abac4e726a2459ca48dc1f73d55c7",
+  "evidence": [
+    {
+      "bytes": 3237,
+      "name": "assembly-checks.json",
+      "sha256": "02d6820a4b7a062119eb07bf79af9408ae4b73fb190c08f25a2bb8f995af2c18"
+    },
+    {
+      "bytes": 377,
+      "name": "publication-resources.json",
+      "sha256": "4a93122067a9ba480b9f2811fb0f4ae0b67f8afb95c637038cb0423fa01948c7"
+    },
+    {
+      "bytes": 790,
+      "name": "raw-inventory.json",
+      "sha256": "e82c4ee8e8410ab0455267e4d81f739590dea2fef39f5854258997bfe2ad5448"
+    },
+    {
+      "bytes": 2913,
+      "name": "source-seal.json",
+      "sha256": "6e23a67050c1f10a60681720388a785b016e7a60bb29f9b442623c0e6928aff9"
+    },
+    {
+      "bytes": 689,
+      "name": "tool-events.json",
+      "sha256": "5d797e7891972b18baf5f43f711274d7985d1e2800cb8747d21eba3bfd7d167d"
+    }
+  ],
+  "fullBuild": "NOT_RUN",
+  "inheritedUnchanged": 2199,
+  "native": "NOT_RUN",
+  "pending": [
+    "Root exact review",
+    "normal draft PR and actual hosted lifecycle",
+    "normal required/protected checks and full app build",
+    "canonical profile compatibility",
+    "production quiescent parser recovery and exact receipt/guarded retry acceptance",
+    "formal research/publication whole closure"
+  ],
+  "production": "NOT_RUN",
+  "protectedChecks": "NOT_RUN",
+  "rawBytes": 7801,
+  "rawCount": 4,
+  "scope": "source-only release assembly, maker evidence not independent approval",
+  "sixExactCopies": true,
+  "source": "388fd4f802ce06689a8f8401d0c4b17806c503f7",
+  "sourceBytes": 54967,
+  "sourceFiles": 7,
+  "sourceTree": "522331bc18bdbf30b65957f690670243c1b87ed3",
+  "unitOneLineOnly": true
+}

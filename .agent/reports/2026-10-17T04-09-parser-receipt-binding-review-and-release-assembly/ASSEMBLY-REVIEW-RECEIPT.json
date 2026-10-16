@@ -1,0 +1,80 @@
+{
+  "schema": "stockinsider-root-public-evidence-receipt-v1",
+  "priorRootReceipt": "9cf5324b7c5644518ceb66c29d03449523241b0131a58f22c94b4405225faf06",
+  "source": "388fd4f802ce06689a8f8401d0c4b17806c503f7",
+  "evidence": "099f4dbcfd165ce6406bf0624e3ae299a2319cd9",
+  "scope": "terminal assembly exact-copy source review, native/fullbuild/protected/PR NOT_RUN",
+  "files": [
+    {
+      "path": "release-check.py",
+      "bytes": 3239,
+      "sha256": "72efa7f294b485bbcb87dc9c58cf40938d1097f8664e2324b7e9ff1615c958e1"
+    },
+    {
+      "path": "release-check-corrected.py",
+      "bytes": 3407,
+      "sha256": "b20d350e307652bb03c3644bc281baad7b4f93c7a9b561fd84af92514fb259df"
+    },
+    {
+      "path": "release-check-final.py",
+      "bytes": 3410,
+      "sha256": "32a50ed872b24827374e142d361aef08685822881d2e0ab380439fd47e69d9b8"
+    },
+    {
+      "path": "release-check-initial-red.json",
+      "bytes": 277,
+      "sha256": "c416901015f5edf6397f11cbd589101deac918647dd443d9ae6b814c1e070e29"
+    },
+    {
+      "path": "release-check-schema-red.json",
+      "bytes": 198,
+      "sha256": "9e7008936b250bfd8e5771c2b7e1c49ee32f5b36ca88035b48db024b47b568d4"
+    },
+    {
+      "path": "release-check.json",
+      "bytes": 2703,
+      "sha256": "d681bb427f5018e824b81f1f67428337626c9a8689a81609046d813c9e28347b"
+    },
+    {
+      "path": "assembly-terminal.json",
+      "bytes": 1877,
+      "sha256": "46b909acfc7594e3a9627b4d568a6f0eeda6f1e346dedfaf1330ca39dfaf7068"
+    },
+    {
+      "path": "assembly-maker-receipt.json",
+      "bytes": 1756,
+      "sha256": "2e4555424e94c05314c7ffa2e0ecc4d023b42347337121d1fc8b503846b79d7f"
+    },
+    {
+      "path": "assembly-maker-assembly-checks.json",
+      "bytes": 3237,
+      "sha256": "02d6820a4b7a062119eb07bf79af9408ae4b73fb190c08f25a2bb8f995af2c18"
+    },
+    {
+      "path": "assembly-maker-publication-resources.json",
+      "bytes": 377,
+      "sha256": "4a93122067a9ba480b9f2811fb0f4ae0b67f8afb95c637038cb0423fa01948c7"
+    },
+    {
+      "path": "assembly-maker-raw-inventory.json",
+      "bytes": 790,
+      "sha256": "e82c4ee8e8410ab0455267e4d81f739590dea2fef39f5854258997bfe2ad5448"
+    },
+    {
+      "path": "assembly-maker-source-seal.json",
+      "bytes": 2913,
+      "sha256": "6e23a67050c1f10a60681720388a785b016e7a60bb29f9b442623c0e6928aff9"
+    },
+    {
+      "path": "assembly-maker-tool-events.json",
+      "bytes": 689,
+      "sha256": "5d797e7891972b18baf5f43f711274d7985d1e2800cb8747d21eba3bfd7d167d"
+    },
+    {
+      "path": "ASSEMBLY-REVIEW.md",
+      "bytes": 2341,
+      "sha256": "387c09f67d6b9928a8ce013b4d0dadf29f3562a707c29b9b3c153ded5e9050d7"
+    }
+  ],
+  "totalBytes": 27214
+}

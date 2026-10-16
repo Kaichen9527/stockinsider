@@ -1,0 +1,75 @@
+{
+  "ASTCompileFiles": 2,
+  "at": "2026-10-16T20:08:44.069674+00:00",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "checkerMaxRssBytes": 15466496,
+  "checks": [
+    "exact-copy deployment/vps/systemd/stockinsider-web-standalone.service",
+    "exact-copy scripts/parser-runtime-directory-lifecycle.py",
+    "exact-copy .github/workflows/parser-runtime-lifecycle-quality.yml",
+    "exact-copy docs/operations/2026-10-17/parser-runtime-directory-lifecycle/HANDOFF.md",
+    "exact-copy docs/operations/2026-10-17/parser-runtime-directory-lifecycle/R1-RECEIPT-BINDING.md",
+    "exact-copy docs/operations/2026-10-17/parser-runtime-directory-lifecycle/receipt-binding-source-checks.py",
+    "unit reverse parity to main",
+    "AST/compile only scripts/parser-runtime-directory-lifecycle.py",
+    "AST/compile only docs/operations/2026-10-17/parser-runtime-directory-lifecycle/receipt-binding-source-checks.py"
+  ],
+  "contractGroupsRun": 0,
+  "copiedFrom": "bac16865eb6abac4e726a2459ca48dc1f73d55c7",
+  "files": [
+    {
+      "bytes": 1341,
+      "gitIdentity": "100644 blob c534ab49eb8934300e5c2c93fb65e76955e573da",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "sha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5"
+    },
+    {
+      "bytes": 32967,
+      "gitIdentity": "100644 blob a5e78920796321d2b696fcbe67b9192cbeada7e0",
+      "path": "scripts/parser-runtime-directory-lifecycle.py",
+      "sha256": "d4f84e7faab84f694108c4481599629abf68851a6623dcbc31ffadb91d7e9724"
+    },
+    {
+      "bytes": 1870,
+      "gitIdentity": "100644 blob 8868d1e6b6f469df828ce63aca9b286d343c45dc",
+      "path": ".github/workflows/parser-runtime-lifecycle-quality.yml",
+      "sha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c"
+    },
+    {
+      "bytes": 7975,
+      "gitIdentity": "100644 blob e0e06c5a432957153cb52895b9541fa890410895",
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/HANDOFF.md",
+      "sha256": "fc7b82f7ae325a101882034326c7b21f4d6d051fbfa8ac57fdb3fca2653d2ecc"
+    },
+    {
+      "bytes": 2803,
+      "gitIdentity": "100644 blob fed88064bd3a8d77e2e6a2ac1d3d382efde2b716",
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/R1-RECEIPT-BINDING.md",
+      "sha256": "c8d1f9c42840f4199853428bdd042e6c09a916b14d8cf85631096cfe045fa099"
+    },
+    {
+      "bytes": 5655,
+      "gitIdentity": "100644 blob 2f354aff4ea5efb2ea4dc4c5c3602f12b3559b87",
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/receipt-binding-source-checks.py",
+      "sha256": "323624495acaee88b1f51f6b12ff3c23aaec279e70f98bc285d4a2b02678b5a1"
+    },
+    {
+      "bytes": 2356,
+      "gitIdentity": "100644 blob d37783485067f704231bfe43bc2aba0d20023f69",
+      "path": "docs/operations/2026-10-17/parser-runtime-lifecycle-release/HANDOFF.md",
+      "sha256": "2b4e14fe9ff50db9165364747ed99c50e1d1e760491582adb768777e74fba222"
+    }
+  ],
+  "native": "NOT_RUN",
+  "resources": {
+    "/tmp": {
+      "dev": 34,
+      "freeBytes": 13605367808
+    },
+    "/workspace": {
+      "dev": 27,
+      "freeBytes": 8590397440
+    }
+  },
+  "scope": "source assembly only, no contract/native execution"
+}

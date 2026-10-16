@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-16T20:09:19.940028+00:00",
+  "cleanup": false,
+  "estimatedGitPublicationAllowanceBytes": 1048576,
+  "facts": {
+    "/tmp": {
+      "dev": 34,
+      "freeBytes": 13605281792
+    },
+    "/workspace": {
+      "dev": 27,
+      "freeBytes": 8590397440
+    }
+  },
+  "floor": 8589934592,
+  "gitCommonDev": 34,
+  "nativeAdmission": "NOT_RUN",
+  "under5GB": false
+}
