@@ -1,0 +1,17 @@
+{
+  "observedAt": "2026-10-16T18:06:42.552990+00:00",
+  "main": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "progressAtOrientation": "3dc00c49ad8ce107899c5ca0064156c64bd965c2",
+  "unitCandidateBranchHead": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+  "remoteReadSession": 44084,
+  "remoteReadActualExit": 0,
+  "trackedSourceStatus": "clean",
+  "trackedProgressStatus": "clean",
+  "cloudPriorTurn": "01a145ad-e656-7065-b7a9-10288771961d",
+  "cloudPriorStatus": "completed/idle",
+  "cloudPriorCursor": "3f58cf3b-49b3-4414-877e-42d89130b651:35",
+  "rootFreeAtOrientation": 16201269248,
+  "cleanupPerformed": false,
+  "newNativeResult": null,
+  "productionReadOrMutationThisTurn": false
+}

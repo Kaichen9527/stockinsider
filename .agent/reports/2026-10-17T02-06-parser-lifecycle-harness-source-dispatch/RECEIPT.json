@@ -1,0 +1,33 @@
+{
+  "schema": "stockinsider-root-public-evidence-receipt-v1",
+  "scope": "source-only successor dispatch; active owned turn, no delivery/native/production claim",
+  "sourceBase": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+  "files": [
+    {
+      "path": "dispatch.txt",
+      "bytes": 5855,
+      "sha256": "fdb40293154c0b0e1dcfbcaea949985581720de6419e9277d9d7f51b33770deb"
+    },
+    {
+      "path": "dispatch-result.json",
+      "bytes": 111,
+      "sha256": "724fee24c2062e6606cedefc8af13edbe9b71f2d07ac98d03639aaf42486975b"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 639,
+      "sha256": "a0c7ad15afa364c27c0d8c1c0848a262be7236d247e46ef4a2713baf1215cf47"
+    },
+    {
+      "path": "orientation.json",
+      "bytes": 688,
+      "sha256": "461a266993b5cd8d63cadcb661b89df600feab6047f136d7e6a9650b4b2fbe01"
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 2449,
+      "sha256": "d08a3793aca8a74f998dd801ccb963b10ae002b5d36f4ed12ef3a2900447e165"
+    }
+  ],
+  "totalBytes": 9742
+}

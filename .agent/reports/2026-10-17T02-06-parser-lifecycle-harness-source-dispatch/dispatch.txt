@@ -1,0 +1,24 @@
+接續同一 StockInsider chat，這是唯一一件 20 分鐘有界 SOURCE-ONLY 工程。前 turn 01a145ad 真 completed/idle，Root 已獨立核 b301/1f5 的一行 source，現在沒有其他 owned successor；不要重跑已完 unit source 工作或任何舊 native。
+
+建立 branch codex/parser-runtime-directory-lifecycle-source-oct17，base 精確 1f5f3fcacbf16c988e3717b233711c91da0284a0（source b301feedb1d5a06721c41e57acefcc26515f6c6c/directparent main93e44475）。先確認 actual Git/source 與自己的 fresh resources；原 research checkout/WIP 不改。你不是唯一工作者，Root 只寫 progress/evidence，勿覆寫他人或歷史。
+
+目標：交付一個可審查、之後在真正 GitHub hosted Linux/systemd 上執行的最小 lifecycle regression harness，以及一個 ordinary PR quality workflow 的來源候選。本件僅來源與安全靜態檢查，不在目前 PID1=tail 的 Cloud 執行 systemd/lifecycle/socket/native，也不 mock 成 native PASS。凍結 deployment/vps/systemd/stockinsider-web-standalone.service 新 1341 bytes/SHA256 7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5，所有既有產品/其他 unit/parser/app/SQL/roles/ACL/guard/budget/authority/profile/pins/既有 workflows 不改。原 fa55 canonical operator profile與已耗 DD deploy 都不能改期待或重用。
+
+Ownership 限一個新 Python stdlib（必要短 bash 可內含）harness、一個新 .github/workflows/parser-runtime-lifecycle-quality.yml、必要 focused source checks與小 HANDOFF/evidence。避免新永久 framework。workflow 只 normal pull_request paths（不新 push trigger、不 workflow_run、不 pull_request_target），contents:read、persist-credentials:false、單 job 循序、ubuntu-24.04、短硬 timeout、無 secrets/PG/app/npm/deploy。沿 main93 原 pinned checkout 11d5960a326750d5838078e36cf38b85af677262 和 upload-artifact ea165f8d65b6e75b540449e92b4886f43607fa02；artifact 明確有限公開安全檔，不整個 /run/tmp/env/log。新 workflow 不觸發 CI 至 Root source review 後另 normal PR；本件不要 PR/manual CI/dispatch/checks/watch/rerun/merge/deploy。正常 branch push 若自然觸發既有 CI，據實記錄而不當本 lifecycle 已執行或自行領下一工作。
+
+Harness 未來執行必實際 Linux PID1 systemd、supported Python/systemd、system bus與無互動 sudo 能力、真實資源/單 workload 准入；缺任一項非零 NOT_READY，不能 skip 綠。原 workspace/tmp 各 8GiB floor 和 RSS<8GiB 保持，不拿 Cloud 舊free或 VPS memory 作 hosted runner 准入。使用 sudo 只操作本次唯一 owned runtime paths/fixture units，不改 host policy、不 stop/restart 任何既有服務。不要安裝/升降 systemd/runtime。明列 hosted systemd actual version，v255 production 語意相容需真證，不把 Cloud257 source availability代 native。
+
+測試須有真正獨立 AF_UNIX listener（獨立 unit/process/FD）、獨立 web lifecycle fixture，從 frozen exact unit 明確取 RuntimeDirectory/Mode/Preserve/Restart/UMask 的相關語意。Fixture 的 unique /run leaf 和 harmless ExecStart 是隔離適配，必公開 source hash/parity/明列差異，不得稱執行/verify 整個 production unit 或裝 productionpaths stub。不可碰 /run/stockinsider、/opt/stockinsider、真正 parser/Web units。
+
+需要未來 native case：
+(1) 原 default no explicit stop：真正 systemd stop 移除共享 runtime parent/path，獨立 listener PID/FD仍存但 pathname/connectivity 真失敗；這是預期 baseline RED，保存原錯誤與前後證據，不能假寫 FAIL/PASS。
+(2) frozen yes explicit stop再start：獨立 listener PID、socket inode/path、owner/group/mode 及 bounded nonce roundtrip/connectivity保持。
+(3) yes manual restart保持上述證據。
+(4) yes Restart=on-failure automatic restart保持上述證據。只讓 owned fixture 以受控 mechanism 自己失敗，或 exact unit MainPID/starttime/cgroup 身份核實後有限操作；不得 signal foreign/shared PID。要實際 observed automatic restart/新 web PID/相同 listener，不用 sleep/命令exit0代驗收。
+每 case 有 bounded deadlines/full actual records，unknown/failure保持非零與原 RED。不以依賴 status active/ss LISTEN當 connect成功。reboot未實跑一律 NOT_RUN，不能重啟 runner。測試僅驗證共享 runtime lifecycle，不追認 installed historical unlink actor/完整歷史因果。
+
+Cleanup 僅本次 unique owned units/PIDs/paths，先核 owner/source pins；不 rm -rf 廣 prefix、不查 secrets/env、不全盤掃或 prune/cache。有限 finally + 獨立 postrun 真 unit inactive/absence、listener/web PID settlement、path absence；任一步unknown/nonzero就如實 cleanup uncertain，不能輸出 fullsuccess。收據須綁 exact harness/workflow/unit SHA、未來實際 assertion/evidence格式；本 source-only不捏 native結果。
+
+本件只必要 Python AST/compile（避免落 pycache）、bash syntax/來源 contract檢查，可提取 isolated mocks驗 source控制邊界但清楚是 source scope。不得 systemctl mutation/socket connect/listener/PG/Nodeapp/fullbuild/native/SSH/VPS/HTTP/資料write/install/cleanup舊資料/新 credential。web build/protected/canonical profile compat/正式quiescent parser恢復/READ exact c5b6ccf0 receipt/guarded retry-worker-facts-terminal 都另待，不能本件自接。
+
+保留 initial RED/WIP/每 actual tool exit/exact source；來源與 evidence 分 commits，正常 push 此 bounded branch，交付 exact source/evidence commits、有限 public-safe receipt + private raw inventory/count/bytes/SHA、清楚 NOT_RUN/native scope，然後停止。Root review後才下一真執行。Fullgoal/heartbeat ACTIVE；兩正式文章/Top20/技術觀察/策略/正式研究排程仍pending，PR370..382/DD one-shot終態不碰。

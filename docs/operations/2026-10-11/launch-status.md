@@ -1,3 +1,13 @@
+## 2026-10-17 02:07台灣時間：唯一 Linux systemd lifecycle regression來源工程活動；未執行native/CI或正式修復
+
+先核remote main93e44475/progress3dc00c49/parser-source1f5f3fca與乾淨tracked樹；ls-remote同session44084真exit0。同Cloud前turn01a145ad/cursor35真completed-idle後，才派唯一20min SOURCE-ONLY codex/parser-runtime-directory-lifecycle-source-oct17/base1f5f3fca。Newturn01a145e3-5ffd-7431-be19-3ab10ec386f1/startedAt1792173892，bounded45s同handlecursor3f58cf3b-49b3-4414-877e-42d89130b651:36真inProgress/threadactive。Timeout不是完成，沒有新source交付或native/CI結果，活動owned不可重派。
+
+Owned僅最小stdlib harness/normal PR-only hosted Linux workflow與source evidence，凍結已審unit7a948b27/原profile/所有產品guards-budgets。未來真systemd+獨立listener要保存default-no stop pathname/connect RED、yes explicit stop/start/manual及automatic restart的PID/inode/owner-mode/nonce-connect證據；unique隔離fixture適配明列，不冒整productionunit或歷史unlink因果。Cloud PID1tail，本件只source/syntax，不systemd/socket/native/CI/PR/production，Root exactreview後才下關；原workflow/policy不改、無新pushtrigger/secret。Root讀main原ordinaryworkflow確認既有official checkout/artifact pins，沒重跑其35probes。
+
+本輪無VPS/DB/HTTP/secret/服務或資料變更，parser缺口仍待，最新真OS17:05/DB16:10保持；17:10exit75非freshDB，c5b6ccf0 partial不可重upload/盲retry。Rootfree16201269248>8GiB/5GiB，容量原因未知，未刪cache/sessions/compact/停App/resize，safeDeletionCandidates空。Fullscope/Heartbeat ACTIVE；Goal狀態未改、兩formal文章/Top20/技術觀察/策略/正式研究排程/wholeclosure/fixedpeer與全部原pending及RED保持；DD已耗與terminalPR370..382不碰。
+
+Root report .agent/reports/2026-10-17T02-06-parser-lifecycle-harness-source-dispatch/，receipt f6de149edf5204320860d7d0e7a81cccfa8bee979b672143b3626a6f53284636 bound5explicitpublicsafe files9742bytes；Root receipt rehash真PASS。下一先samehandle turn01a145e3/cursor36（以同handle最新為準），不自接production恢復或盲receipt retry。
+
 ## 2026-10-17 01:18台灣時間：持續parser pathname缺失與精確4installedsource核實；一行runtime-preserve候選真交付，Root source審查閉合但尚未恢復正式解析
 
 本輪先核remote main93e44475/progress059baa12、乾淨source/progress樹與Cloud舊01a1447d/cursor33真completed-idle。17:05:09.967104Z原3OS鎖readonly SSH actualexit0/currentDD；host與fresh internal-worker PID3834578/root的exact /run/stockinsider/candidate-financial-parser.sock仍absent，parser socket/service active-running且ss listener inode8262仍在。Root逐byte Git hash核4installed來源：webunit1312/fa55cd9e（main93）、parser socket428/c01a4972、service1044/41bbd5a9、socketserver5062/b88897da（approvedDD）。Known parserPID3833660/directchildren[]僅時點，非未來quiescence；誰/何次unlink完整因果仍未知。17:05 preliminarymemory2532749312<2684354560，未重測必敗fullcapacity或connect/restart/stop/chmod/改unit。
