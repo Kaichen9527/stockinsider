@@ -1,0 +1,20 @@
+[
+  "REPORT.md",
+  "readonly.sh",
+  "execution.json",
+  "stdout",
+  "stderr",
+  "root-proof.json",
+  "dispatch.txt",
+  "receipt-readonly.sh",
+  "receipt-readonly-execution.json",
+  "receipt-readonly.stdout",
+  "receipt-readonly.stderr",
+  "lock-metadata.stdout",
+  "lock-metadata.stderr",
+  "lock-metadata-execution.json",
+  "owner.json",
+  "receipt.json",
+  "receipt.sha256",
+  "public-allowlist.json"
+]

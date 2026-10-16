@@ -1,3 +1,23 @@
+## 2026-10-17 01:18台灣時間：持續parser pathname缺失與精確4installedsource核實；一行runtime-preserve候選真交付，Root source審查閉合但尚未恢復正式解析
+
+本輪先核remote main93e44475/progress059baa12、乾淨source/progress樹與Cloud舊01a1447d/cursor33真completed-idle。17:05:09.967104Z原3OS鎖readonly SSH actualexit0/currentDD；host與fresh internal-worker PID3834578/root的exact /run/stockinsider/candidate-financial-parser.sock仍absent，parser socket/service active-running且ss listener inode8262仍在。Root逐byte Git hash核4installed來源：webunit1312/fa55cd9e（main93）、parser socket428/c01a4972、service1044/41bbd5a9、socketserver5062/b88897da（approvedDD）。Known parserPID3833660/directchildren[]僅時點，非未來quiescence；誰/何次unlink完整因果仍未知。17:05 preliminarymemory2532749312<2684354560，未重測必敗fullcapacity或connect/restart/stop/chmod/改unit。
+
+官方systemd v255 primary docs核default no於service stop移除runtime目錄，restart僅restart、yes亦保留explicit stop但reboot清/run。Root有限source決策只在web原RuntimeDirectory/Mode旁加RuntimeDirectoryPreserve=yes，避免共用parser pathname隨web explicit stop消失；不是自動重建現在missing socket或完整因果修好。Freedesktop403後官方GitHub primary成功，原toolRED留簡記；未把source推論當installed事件反例。
+
+前turn真終態後唯一15min SOURCE-ONLY codex/parser-runtime-directory-preserve-source-oct17/base93e44475，newturn01a145ad-e656-7065-b7a9-10288771961d起17:06:27Z。曾samehandle active/無tool marker/timeout仍不重派；後17:12:59Z真completed/lasttoolcompleted/threadidle/cursor3f58cf3b-49b3-4414-877e-42d89130b651:35。Remote head1f5f3fcacbf16c988e3717b233711c91da0284a0真核，fetch同sessionexit0後取Git。Source b301feedb1d5a06721c41e57acefcc26515f6c6c/directparent93，evidence1f5/directparentb301，makerreceipt bfc7f7c3409ee1579ff48d73058783c781503632b9395c3d894bcf2db7025146。
+
+Root ownchecker真exit0，核5actualGitinputs9187bytes、4publishedreceiptfiles13603bytes、全HANDOFF/CHECKS/唯一unitdiff。新1341bytes/SHA7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5，只第37行新增29bytes；獨立從base插入重建，刪唯一new line整bytes等old1312/fa55。2200base tree中其他2199 mode/type/blob identities相同，新增4docs，非Root逐byte重讀2199blobs。Canonicalprofile/其他unit/parser/app/web/SQL/roles/ACL/guards/budgets/authority/pins全保持。12private raw7845只inventorycount/sum/hashformat，未取contents或冒12rawverified。Scoped unactivated source integration0新P0/P1/P2，range diffcheckPASS，非native/fullbuild/protected/正式批准。
+
+Maker systemd-analyze257.13/PID1 tail/productionpathsabsent；verify/lifecycle/build/native/deploy NOT_RUN，沒有stub/改path/假測試綠。獨立small sparsecheckout/Gitcommon在/tmp/dev34，原research checkout未改；workspace8590401536/tmp13606801408與publication tmp13606076416只當時source准入。Git stage proxy/lazy-fetch128 RED保存後同origin必要metadata/正常context成功，不改transport/產品追綠。現在無活動Cloudowner，未派第二工程。
+
+17:10:28Z fresh原五jobs/新2327receipt readonly在原OS鎖actualexit75、stdout/stderr空，未到DB/current內容；隨後17:10:49.716744Z known3lock metadata僅production-write由flockPID808814持有，不cmdline/env/signal/unlock/bypass/retry，不冒現在仍持有或actor身份。故最新真DBwriterDD唯一1/lease0仍16:10:27.793504Z，新receipt partial/socket_unavailable/facts0亦仍16:10觀測；本輪無新upload/worker/receipt/facts。c5b6ccf0不可重upload或盲retry unchangedpartial。
+
+Root report .agent/reports/2026-10-17T01-12-parser-runtime-directory-source-candidate/。初dispatchreceipt43dd85cdd22b7aba48a055658db4f1c325128d3a53a295096603ac4dda4de191 bound15files28199bytes永久保留；最新Rootreview addendum receipt ad9026f6d74de0292cea55113029ef2b11ffdb3af387c364f707dafa4718304a bound8files26078bytes，SOURCE-REVIEW.md/terminal cursor35優先於初01:12活動快照。Rootfree20657545216>8GiB/5GiB，容量變化未知；未刪cache/sessions/compact/停App/resize，低容量廣掃未觸發。
+
+下一唯一有界方向為凍結b301 unit的真正isolated Linux systemd lifecycle regression/normal CI來源候選：default-stop RED、yes explicit-stop/start與manual/automaticrestart的獨立listener pathname/connectivity/owner-mode-source證據；目前Cloud非systemd不能mock代native，GitHub hosted Linux可作候選環境但尚未建harness/workflow/dispatchCI。先source exactreview才正常PR/真檢查；fullappbuild/protected/canonical-profile兼容/正式quiescent原parserunit恢復、READ exactreceipt與guardedretry-worker-facts-terminal仍全部待。不能直接執行本source、改舊fa55期待或用已耗DDdeploy當修復。
+
+Fullscope/Heartbeat ACTIVE續辦，Goal狀態未修改，上一APIpaused觀測與文字ACTIVE差異保留，未冒complete/blocked。兩formal文章/逐claimsemantic/完整來源Top20/合格技術觀察/策略/正式研究排程/R1 reviewer native與legacy-rights-capsACL/真loss/actual四caller-routes/Q-R/reviewpack/pubunion/atomicpublication/wholeS-C-B-Q-R-A/fixedpeerinstall全原pending；原tmp0PASS2FAIL/homehold/safeDeletionCandidates空保持。DD已耗one-shot/terminalPR370..382不碰。本輪只readonly與一行source候選/Root審查；無production unit/data/roleACL/SQL/CI/PR/merge/deploy/研究排程改動。持續parser pathname缺口本輪通知一次，其後未變/正常修補/等待保持安靜。
+
 ## 2026-10-17 00:17台灣時間：國巨新官方bytes單次guarded入庫；真partial指向socket pathname缺失，Root worker容量HOLD而未發出
 
 先核remote main93e44475/progress26d686c0與乾淨tracked source/progress樹，同Cloud01a1447d/cursor33仍completed-idle，無新owner/dispatch/native。16:00:43Z preliminarymemory4029870080真變後，另新attempt fdcd866b，只改七artifactnames；逆向逐byte等原424c6b31，原11:48HOLD與one-shot budget保持不重跑。

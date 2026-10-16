@@ -1,0 +1,30 @@
+{
+  "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+  "hostId": "durable",
+  "threadStatus": {
+    "type": "idle"
+  },
+  "cursor": "3f58cf3b-49b3-4414-877e-42d89130b651:35",
+  "latestTurn": {
+    "id": "01a145ad-e656-7065-b7a9-10288771961d",
+    "status": "completed",
+    "error": null,
+    "startedAt": 1792170387,
+    "completedAt": 1792170779,
+    "durationMs": 391878
+  },
+  "latestToolMarker": {
+    "id": "exec-97ff5321-ef89-46f2-ab84-ac21b517c407",
+    "turnId": "01a145ad-e656-7065-b7a9-10288771961d",
+    "type": "commandExecution",
+    "name": "commandExecution",
+    "status": "completed"
+  },
+  "source": "b301feedb1d5a06721c41e57acefcc26515f6c6c",
+  "evidence": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+  "makerReceipt": "bfc7f7c3409ee1579ff48d73058783c781503632b9395c3d894bcf2db7025146",
+  "remoteHeadVerified": true,
+  "fetchSessionActualExit": 0,
+  "rootReviewCompleted": true,
+  "newOwnerDispatched": false
+}

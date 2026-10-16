@@ -1,0 +1,17 @@
+{
+  "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+  "hostId": "durable",
+  "turnId": "01a145ad-e656-7065-b7a9-10288771961d",
+  "cursor": "3f58cf3b-49b3-4414-877e-42d89130b651:34",
+  "status": "inProgress",
+  "threadStatus": "active",
+  "startedAt": "2026-10-16T17:06:27Z",
+  "sourceDeliveryObtained": false,
+  "productOwnership": [
+    "deployment/vps/systemd/stockinsider-web-standalone.service: one new line RuntimeDirectoryPreserve=yes"
+  ],
+  "expectedBranch": "codex/parser-runtime-directory-preserve-source-oct17",
+  "exactBase": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "newRuntimeApproved": false,
+  "budgetMinutes": 15
+}

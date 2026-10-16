@@ -1,3 +1,7 @@
+## 2026-10-17 01:18 更新：runtime-preserve一行source經Root審查，實際socket仍失聯
+
+17:05原3鎖重核host/currentworker root pathnameabsent但active listener仍在；4installed來源等approvedGit、memory2532749312<原准入，無runtime修補。唯一Cloud source turn01a145ad於17:12:59Z真completed-idle/cursor35，sourceb301feed/evidence1f5f3fca/receiptbfc7f7c3。Root核5inputs9187/4public13603、新unit1341/SHA7a948b27，刪唯一RuntimeDirectoryPreserve=yes整bytes還原fa55；其他2199Git tree identities/原canonicalprofile不變。Source integration0新findings，systemd verify/lifecycle/fullbuild/protected/production皆NOT_RUN或pending，現在無活動owner。下一只準備真正isolated Linux systemd regression/CI source候選，未建harness/workflow/dispatch；不可mock代native或直接live改unit。17:10freshDB在原lock回75未讀，lockmetadataPID808814僅當時；最新writerlease/partialfacts仍16:10。新Rootreview addendumad9026f6／原dispatch43dd85cd及01:12report保留；原RED/DD消耗/PR終態/完整goal未完不變。持續parser缺口已通知一次，未變/等待不再重複通知。
+
 ## 2026-10-17 00:17 更新：2327新receipt已入庫但socket路徑缺失，未取得facts
 
 原budgets/3OS鎖兩次fullguard PASS後單次POST202，receipt c5b6ccf0-25d5-4fa3-b257-4f0b194c0090／SHA8900870e；公告日null/MIME detected與wire分開。Root worker前置memoryHOLD、HTTP0，另一未知actor已把新receipt處理成socket_unavailable partial／facts0，原五jobqueued／6舊partial不變。16:10:27.793504Z writerDD唯一1/lease0。16:13 parser active-listener但host與knownworker root pathnameabsent，shared RuntimeDirectory lifecycle僅假說；未restart/permission/code修補或retry。新Root report00:14／receiptdb6cc933詳載真證據，先READ exactreceipt及根因/owner/安全修補邊界，不能重upload或unchangedpartial盲retry。Cloudcursor33仍completed-idle，無活動owner。Fullscope未完/heartbeatACTIVE；get_goal真paused與文字ACTIVE分開保存，未修改status。原RED、DD消耗/PR終態/正式未完皆保持。

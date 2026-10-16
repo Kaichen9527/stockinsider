@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-16T17:08:54.159348+00:00",
+  "scope": "Root readonly OS/known-source parity and bounded source candidate decision; no runtime remediation or admission",
+  "exactGitSourceMatchesActualInstalledHashes": [
+    {
+      "ref": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "bytes": 1312,
+      "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"
+    },
+    {
+      "ref": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "deployment/vps/systemd/stockinsider-financial-parser.socket",
+      "bytes": 428,
+      "sha256": "c01a4972aebc8616cd6fcc04cde6d9d38ef9173fc3590de9964d38872670a6a7"
+    },
+    {
+      "ref": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "deployment/vps/systemd/stockinsider-financial-parser.service",
+      "bytes": 1044,
+      "sha256": "41bbd5a9bac6d9579077cdea5b184ed0f7c30d186d4246a6b64c4b0c1a95f02e"
+    },
+    {
+      "ref": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "scripts/candidate_financial_parser_socket.py",
+      "bytes": 5062,
+      "sha256": "b88897da16bb1aa9ad755d5f1d41afc033c05120c4762be810d5a1c15fea713b"
+    }
+  ],
+  "hostSocketAbsent": true,
+  "currentWorkerPid": 3834578,
+  "workerNamespaceSocketAbsent": true,
+  "listenerExists": true,
+  "processingActorOrUnlinkActorKnown": false,
+  "knownParserDirectChildrenAtSnapshot": [],
+  "memPreliminaryBytes": 2532749312,
+  "requiredMemoryBytes": 2684354560,
+  "fullCapacityExecuted": false,
+  "rootFreeOrientationBytes": 20657545216,
+  "rootDeletionOrCompactPerformed": false,
+  "proposalOnly": "one-line RuntimeDirectoryPreserve=yes in web unit; Root source/native/protected/production approval pending",
+  "officialSystemdDocUrl": "https://raw.githubusercontent.com/systemd/systemd/v255/man/systemd.exec.xml",
+  "docBasis": "Default no removes runtime directory on stop; yes retains through explicit stop, restart is narrower; reboot still clears /run. This is documented semantics, not an observed historical unlink actor."
+}

@@ -1,0 +1,87 @@
+{
+  "at": "2026-10-16T17:15:55.190981+00:00",
+  "source": "b301feedb1d5a06721c41e57acefcc26515f6c6c",
+  "evidence": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "rootActualGitSourceInputs": [
+    {
+      "ref": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "bytes": 1312,
+      "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"
+    },
+    {
+      "ref": "b301feedb1d5a06721c41e57acefcc26515f6c6c",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "bytes": 1341,
+      "sha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5"
+    },
+    {
+      "ref": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "path": "deployment/vps/systemd/stockinsider-financial-parser.socket",
+      "bytes": 428,
+      "sha256": "c01a4972aebc8616cd6fcc04cde6d9d38ef9173fc3590de9964d38872670a6a7"
+    },
+    {
+      "ref": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "path": "deployment/vps/systemd/stockinsider-financial-parser.service",
+      "bytes": 1044,
+      "sha256": "41bbd5a9bac6d9579077cdea5b184ed0f7c30d186d4246a6b64c4b0c1a95f02e"
+    },
+    {
+      "ref": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "path": "scripts/candidate_financial_parser_socket.py",
+      "bytes": 5062,
+      "sha256": "b88897da16bb1aa9ad755d5f1d41afc033c05120c4762be810d5a1c15fea713b"
+    }
+  ],
+  "rootActualGitSourceCount": 5,
+  "rootActualGitSourceBytes": 9187,
+  "publishedReceiptFilesVerified": [
+    {
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-preserve/HANDOFF.md",
+      "bytes": 4921,
+      "sha256": "07dc45e2b74af723b5b4b215a995747f9024213a47d8dc981ff2cf7ce85f0df5"
+    },
+    {
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-preserve/CHECKS.json",
+      "bytes": 5467,
+      "sha256": "757e17b329c9e9026d2db67f61f2ff18c1ac4f7e92d49656f5a0544a8f37be86"
+    },
+    {
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-preserve/RAW-INVENTORY.json",
+      "bytes": 2096,
+      "sha256": "972b60395ffbd16481d3ea244320094adbd47df6722d9a9f0561e577588502d8"
+    },
+    {
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-preserve/RECEIPT.json",
+      "bytes": 1119,
+      "sha256": "bfc7f7c3409ee1579ff48d73058783c781503632b9395c3d894bcf2db7025146"
+    }
+  ],
+  "publishedReceiptFileCount": 4,
+  "publishedReceiptBytes": 13603,
+  "privateRawInventoryOnly": {
+    "count": 12,
+    "bytes": 7845,
+    "contentsObtained": false
+  },
+  "exactReverseByteParity": true,
+  "allOtherBaseGitTreeEntriesIdentical": 2199,
+  "baseGitTreeEntries": 2200,
+  "extraDocumentationPaths": 4,
+  "scope": "unactivated one-line source integration review; not systemd/native/production/formal publication approval",
+  "sourceIntegrationFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "systemdVerify": "NOT_RUN",
+  "systemdLifecycle": "NOT_RUN",
+  "fullApplicationBuild": "NOT_RUN",
+  "productionUnitModified": false,
+  "currentMissingSocketRestored": false,
+  "canonicalProfileUnchangedByGitTree": true,
+  "normalProtectedChecksPending": true,
+  "fullGoalStillIncomplete": true
+}

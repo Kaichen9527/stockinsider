@@ -1,0 +1,69 @@
+{
+  "scope": "owned local source/check artifacts only; no credentials or production observations",
+  "root": "/tmp/parser-preserve-audit-o17",
+  "count": 12,
+  "bytes": 7845,
+  "files": [
+    {
+      "path": "admission.json",
+      "bytes": 531,
+      "sha256": "a72b71dcc159d0c76240047eeae5666dd82a0a17da97520b1ff54ba2aefaa143"
+    },
+    {
+      "path": "candidate.service",
+      "bytes": 1341,
+      "sha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5"
+    },
+    {
+      "path": "diff-check.json",
+      "bytes": 105,
+      "sha256": "38b71f0b86a836c22d8cd8fed21c465835ee2aa033c985959e7463eddd9dbb88"
+    },
+    {
+      "path": "git-stage-initial-red.json",
+      "bytes": 543,
+      "sha256": "76482fc5a4ff35e7eb72d8f2471c84269b8bd21c21c628ee4334097a1b0f2440"
+    },
+    {
+      "path": "initial-seal.json",
+      "bytes": 461,
+      "sha256": "3f2b3c53ad372a0ddc0fe2b1a4966873fe796d4f55b16ad6abbe6ab95f13c6e5"
+    },
+    {
+      "path": "offline-tool-scope.json",
+      "bytes": 824,
+      "sha256": "13ebbad1172e5dd76bf91ed61de8e0542771f4368e5e8e5044a0fd16b1526d40"
+    },
+    {
+      "path": "original.service",
+      "bytes": 1312,
+      "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"
+    },
+    {
+      "path": "parity.json",
+      "bytes": 889,
+      "sha256": "e60b66bd32561792d57e05bbd49c642cabe09015462af3b1ccd2cb0372b38697"
+    },
+    {
+      "path": "systemd-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "systemd-version.stdout",
+      "bytes": 348,
+      "sha256": "8a25c9a782ed24936452bc49aa444ed6b08c780e4fe495052071700ddc6c5449"
+    },
+    {
+      "path": "unchanged-pins.json",
+      "bytes": 1023,
+      "sha256": "0382beefed1ec4909f47b45f2daaa2b188ca632949739127850efd2c5c3920c9"
+    },
+    {
+      "path": "unit.diff",
+      "bytes": 468,
+      "sha256": "26f2ea41211e558057bd35d34a6511c62397cefa19f4ea67a0bd8685bb47c5b1"
+    }
+  ],
+  "excludes": "later publication log; temporary checkout Git objects not scanned"
+}

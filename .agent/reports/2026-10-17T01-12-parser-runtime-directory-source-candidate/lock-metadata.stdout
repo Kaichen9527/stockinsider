@@ -1,0 +1,1 @@
+{"at": "2026-10-16T17:10:49.716744+00:00", "knownLocks": [{"command": "flock", "pid": 808814, "type": "FLOCK", "mode": "WRITE", "path": "/run/lock/stockinsider-production-write.lock"}], "scope": "metadata only; no cmdline/env/signals/unlock/retry"}

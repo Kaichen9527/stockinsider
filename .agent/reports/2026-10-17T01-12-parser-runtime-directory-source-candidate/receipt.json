@@ -1,0 +1,83 @@
+{
+  "schema": "stockinsider-root-public-evidence-receipt-v1",
+  "progressBase": "059baa1238240d409b9c517373260e4458526617",
+  "scope": "readonly persistent socket pathname proof and unique source-only dispatch; no implementation/native/formal approval",
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 5321,
+      "sha256": "c8b9dbb5f1fbed4fbdead775cbf0896e3682f24d1daf787ffa241db3622bc550"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 4902,
+      "sha256": "96aa01724426903b7b92c32e3581f0834c72c4063ab44fb94b1c739c39de7300"
+    },
+    {
+      "path": "execution.json",
+      "bytes": 343,
+      "sha256": "39cdee10a592eab8b6e3420c4a94745a0ebf2f7e52f55ce33823cb3175e86ab5"
+    },
+    {
+      "path": "lock-metadata-execution.json",
+      "bytes": 96,
+      "sha256": "2f9bbfd752ac0c90e70d521cffb11fa98bb1fc5dc290e4cabc929bbe681b8742"
+    },
+    {
+      "path": "lock-metadata.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "lock-metadata.stdout",
+      "bytes": 249,
+      "sha256": "fbcc782b4ed735fec12e412d4b224b339a14b187d7ac96895d0ad490acb2dae3"
+    },
+    {
+      "path": "owner.json",
+      "bytes": 641,
+      "sha256": "c711fa5c565e6bb9d276b534491fabee89983f9f88e07195560dc9608bd53ce6"
+    },
+    {
+      "path": "readonly.sh",
+      "bytes": 4116,
+      "sha256": "495f2ce7b7da96c0afb3a60b0d65adf9de16b606060c03c22ca3d548044188e1"
+    },
+    {
+      "path": "receipt-readonly-execution.json",
+      "bytes": 344,
+      "sha256": "fb1bfa1d5826e8033d0f35081f7556b2922cf2108f94d408515eed4f5b7d10ad"
+    },
+    {
+      "path": "receipt-readonly.sh",
+      "bytes": 6331,
+      "sha256": "e9cff7d1269499d4b8ec1469e68ed4a075263ba7d5b35400b97a628c490b69d1"
+    },
+    {
+      "path": "receipt-readonly.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "receipt-readonly.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "root-proof.json",
+      "bytes": 2074,
+      "sha256": "20ae2aa224623d26ec760fc0a013283541971a63598f83c7b67cbf1b108241f7"
+    },
+    {
+      "path": "stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "stdout",
+      "bytes": 3782,
+      "sha256": "b0bafd8ba70877a929f4671fb58b48eed61767693d22f10dcabe3f2f2ca4b3b0"
+    }
+  ],
+  "totalBytes": 28199
+}

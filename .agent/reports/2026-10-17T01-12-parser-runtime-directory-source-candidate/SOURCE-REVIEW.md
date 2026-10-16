@@ -1,0 +1,15 @@
+# 01:16 Root exact source review：一行候選閉合；runtime仍待驗證
+
+此補記優先於同目錄01:12初始活動快照，原report/owner/receipt43dd85cd全部保留。Cloud同turn01a145ad-e656-7065-b7a9-10288771961d於2026-10-16T17:12:59Z真completed，threadidle/lasttoolcompleted，cursor35；未因timeout/沒有tool marker重派。Remote branch codex/parser-runtime-directory-preserve-source-oct17 head1f5f3fcacbf16c988e3717b233711c91da0284a0核實，fetch同session真exit0後才讀交付。
+
+Maker source b301feedb1d5a06721c41e57acefcc26515f6c6c為main93e44475的direct child，evidence1f5f為source的direct child，maker receipt bfc7f7c3409ee1579ff48d73058783c781503632b9395c3d894bcf2db7025146。Root逐byte/hash核5actualGit source inputs9187bytes、4publishedreceiptfiles13603bytes，讀完整38line HANDOFF／134line CHECKS／inventory／receipt與unitdiff。12private raw7845bytes只inventory count/sum/hashformat，未取得contents，不冒12rawverified或Root親跑maker source/runtime。
+
+Root獨立用base原unit插一行重建new1341bytes/SHA7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5，刪唯一29byte RuntimeDirectoryPreserve=yes換行後整bytes精確還原old1312/fa55cd9e。插入位置第37行，原User/Group/Mode/ExecStart/ReadWritePaths/security/restart/budgets等不變。FullGit tree2200 base entries中其他2199個mode/type/blob identity相同，新增只有4個文檔；這是Git object identity對比，不冒Root重新讀完2199blob內容。Canonical operator profile、全部其他unit/parser/app/web/SQL/roles/ACL/guards/authority/pins保持。
+
+Root source-review-check.py真exit0及range diff-check PASS，scoped unactivated source integration零新P0/P1/P2。這是真正不同作者的有限source審查，非systemd/native/fullbuild/protected/正式發布批准；source／evidence無造新的測試PASS counts。
+
+Maker local systemd-analyze257.13、PID1 tail、正式ExecStart/WorkingDirectory樹缺失；verify/lifecycle/appbuild/native/deploy皆NOT_RUN，沒有stub/改path/假green。Source-only sparse checkout/Gitcommon在/tmp/dev34，原research334inputs未動；workspace admission8590401536、tmp13606801408，publication tmp13606076416只屬當時source准入。Git staging proxy/lazy-fetch128 RED保留，後同origin必要metadata與正常actual context staging，產品未改或transport替換；本Root沒有重做其失敗命令。
+
+目前無活動Cloudowner，未派第二工程。下一有界步驟是為這個凍結one-line candidate準備真正isolated Linux systemd regression／正常CI證據，並明示fixture-property驗證與實際完整unit／production／reboot未驗範圍。Cloud PID1非systemd，不能靠mock、改timeout/guards或跳過實際案例追綠；可準備credential-free GitHub hosted Linux的單一小harness/workflow候選，另Root source review後才正常PR/真執行。這只是下一關方向，尚未建立workflow/harness、dispatchCI或授予production執行。Required appbuild/正常protected、canonical-profile兼容、quiescent原parser units恢復、exactreceipt guarded retry-worker-facts-terminal皆仍待。
+
+失聯socket尚未恢復；17:05實際host/currentworker root pathnameabsent、active listener仍在與memory低於原需量為最新OS證據。17:10原鎖拒絕75未到DB，不能沿16:10的facts0/lease0冒fresh查詢；foreign lock metadata不作持續持有或actor身份推論。原2327 immutable receipt不重upload，舊partial/RED/研究資料保留。完整三階段/兩formal研究/來源Top20/合格技術觀察/策略/正式研究排程/wholeclosure/fixedpeer全未完，Heartbeat ACTIVE、Goal未修改，不標complete/blocked。已耗DD與terminalPR不碰。

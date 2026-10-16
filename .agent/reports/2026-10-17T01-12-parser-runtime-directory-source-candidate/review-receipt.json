@@ -1,0 +1,50 @@
+{
+  "schema": "stockinsider-root-public-evidence-receipt-v1",
+  "priorDispatchReceipt": "43dd85cdd22b7aba48a055658db4f1c325128d3a53a295096603ac4dda4de191",
+  "source": "b301feedb1d5a06721c41e57acefcc26515f6c6c",
+  "evidence": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+  "scope": "completed exact source review addendum; original dispatch/RED preserved; native/protected/production pending",
+  "files": [
+    {
+      "path": "SOURCE-REVIEW.md",
+      "bytes": 3717,
+      "sha256": "517a3c8b2734e78d846ce8d1e507d4651e11bffc9cf295b9b34edcdc43d3c8bc"
+    },
+    {
+      "path": "maker-CHECKS.json",
+      "bytes": 5467,
+      "sha256": "757e17b329c9e9026d2db67f61f2ff18c1ac4f7e92d49656f5a0544a8f37be86"
+    },
+    {
+      "path": "maker-HANDOFF.md",
+      "bytes": 4921,
+      "sha256": "07dc45e2b74af723b5b4b215a995747f9024213a47d8dc981ff2cf7ce85f0df5"
+    },
+    {
+      "path": "maker-RAW-INVENTORY.json",
+      "bytes": 2096,
+      "sha256": "972b60395ffbd16481d3ea244320094adbd47df6722d9a9f0561e577588502d8"
+    },
+    {
+      "path": "maker-RECEIPT.json",
+      "bytes": 1119,
+      "sha256": "bfc7f7c3409ee1579ff48d73058783c781503632b9395c3d894bcf2db7025146"
+    },
+    {
+      "path": "source-review-check.py",
+      "bytes": 4583,
+      "sha256": "1d7eabe19222428a144199e2e8eb035adc8ed431e425a4afa30bad9fcfae740f"
+    },
+    {
+      "path": "source-review.json",
+      "bytes": 3241,
+      "sha256": "cdc158566f57444cfdd739f029b7a9281b264ddf47f0c5aeac50c1dcb46b129b"
+    },
+    {
+      "path": "terminal-delivery.json",
+      "bytes": 934,
+      "sha256": "01c5624434a735e66e1c099bafe9a2d0f7a884e78014df25081230ca902ec80f"
+    }
+  ],
+  "totalBytes": 26078
+}
