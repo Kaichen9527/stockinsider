@@ -1,0 +1,14 @@
+{
+  "id": "R1",
+  "priority": "P2",
+  "path": "migrations/20261016_research_reviewer_result_union_candidate_v3.sql",
+  "line": 234,
+  "title": "Server-owned retained wire version must fence dispatch before v2 arm",
+  "sourceFacts": [
+    "Outer IF selects new branch only from p_result.schemaVersion; current result context is acquired only inside selected arms.",
+    "For a retained v3 author/input context and caller-declared result-v2, source control flow reaches preserved v2 statements starting at source377.",
+    "The preserved v2 body checks result/review v2 and older nested packet fields, but has no retained input/binding wire-version guard."
+  ],
+  "claimScope": "Reachable legacy arm violates finite server-owned version selection; NOT an executed SQL acceptance or persisted-row counterexample.",
+  "requiredFix": "Acquire current existing result context before dispatch or use equally strong current server-owned fence; v3 binding/input must require v3 result, v2 input must require v2 result, unknown/mismatch rejects before old arm. Preserve original legacy declaration/statements bytes, all guards/limits/roles/ACL; update only necessary receive body/successor hash/profile source-derived namespace and focused source checks. Actual mixed-version native rejection still required."
+}

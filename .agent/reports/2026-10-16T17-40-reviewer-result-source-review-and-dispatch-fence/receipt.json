@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "scope": "Root source review and authorized bounded source-only correction dispatch; not runtime/native/formal approval",
+  "source": "4eedb532f318b6f7892256da3a81468995e069df",
+  "evidence": "6503307df3507504a0b696cb5fe881d8a7e6ec06",
+  "outcome": "REQUEST_CHANGES",
+  "P0": 0,
+  "P1": 0,
+  "P2": 1,
+  "files": [
+    {
+      "path": "check-initial-newline-red.py",
+      "bytes": 8859,
+      "sha256": "4faf2a50f1a6d716f2884f9f6cfc2ca8c40e287244142a7f9b3f925ed7f80508"
+    },
+    {
+      "path": "check.py",
+      "bytes": 8940,
+      "sha256": "2ac043d57c9f71a385f93124621aff96d7b200cc1c044bfd5efe4419bdeb9220"
+    },
+    {
+      "path": "dispatch-snapshot.json",
+      "bytes": 650,
+      "sha256": "52f00d77b8d0c264e257e77d7bd57abe5abef53bf9f79af62537edf488eae34f"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 5439,
+      "sha256": "dd673ad3e9de7737a97e5818806d6bbce9de5a1153415b39963c4145e25b4ced"
+    },
+    {
+      "path": "finding.json",
+      "bytes": 1302,
+      "sha256": "166b584efb52659d57b8dba0195d952bcd5d703a63db1f24a175ac3612835073"
+    },
+    {
+      "path": "latest-compact.json",
+      "bytes": 677,
+      "sha256": "254db618b4f8d46c6d564e479f03087fbcbfa4b0e76a1bfb4435bba477b2c84b"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 4710,
+      "sha256": "f2d43849d84431afabe21a83ce48ae1e4ec21287b1b0c40a5f844ed4eeea4b62"
+    },
+    {
+      "path": "root-review.json",
+      "bytes": 3203,
+      "sha256": "f0581949c059dc17053fc04399aa2af77d66f99a5fab0ad755fc08ad34ab3d89"
+    }
+  ]
+}

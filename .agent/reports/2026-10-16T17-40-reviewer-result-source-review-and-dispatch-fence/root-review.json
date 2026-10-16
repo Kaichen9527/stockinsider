@@ -1,0 +1,66 @@
+{
+  "utc": "2026-10-16T09:33:40.772628+00:00",
+  "source": "4eedb532f318b6f7892256da3a81468995e069df",
+  "evidence": "6503307df3507504a0b696cb5fe881d8a7e6ec06",
+  "sourceInputsVerified": 326,
+  "sourceInputBytes": 10445953,
+  "originalInputsUnchanged": 317,
+  "publishedIncludingReceipt": 11,
+  "publishedBytesIncludingReceipt": 186387,
+  "privateRawScope": "41/362277 bytes inventory only; no private contents or original24739380byte snapshot acquired",
+  "receiptSha256": "d83cee23d7de46ef784e49238e306ee92b476a7ab28a8f2a8ff41ccb36c60188",
+  "bodyResults": [
+    {
+      "signature": "assert_research_editorial_review_v2(jsonb,jsonb)",
+      "originalBodyBytes": 4634,
+      "newBodyBytes": 10648,
+      "originalBodyHash": "85443213186836065125e2fd7193fd8956ef70f20fb4b0f69ae41b46898ef492",
+      "newBodyHash": "086a4b3af6b31a7277ee0b097ad83f94d720622022363092d524e255e57e0a50",
+      "originalDeclarationAndStatementsBytePreserved": true
+    },
+    {
+      "signature": "receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb)",
+      "originalBodyBytes": 7926,
+      "newBodyBytes": 21475,
+      "originalBodyHash": "bf4366dd42828e570c0ba6d091c968845721fd5678251ab61b8451f4b1606087",
+      "newBodyHash": "e591df256b4699aa2642a58a42c445251a829fc28e63e77234122ef61e02d8f7",
+      "originalDeclarationAndStatementsBytePreserved": true
+    }
+  ],
+  "makerChecksOnly": {
+    "contracts": 15,
+    "static": 9,
+    "strictModuleTS": true,
+    "native": "NOT_RUN"
+  },
+  "makerSampledPeakRss": 269086720,
+  "makerMinFree": {
+    "/workspace": 8591724544,
+    "/tmp": 13957570560
+  },
+  "rootAvailableBytes": 6968090624,
+  "rootNodeNativeBuildExecuted": false,
+  "reviewOutcome": "REQUEST_CHANGES",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1
+  },
+  "finding": {
+    "id": "R1",
+    "priority": "P2",
+    "path": "migrations/20261016_research_reviewer_result_union_candidate_v3.sql",
+    "line": 234,
+    "title": "Server-owned retained wire version must fence dispatch before v2 arm",
+    "sourceFacts": [
+      "Outer IF selects new branch only from p_result.schemaVersion; current result context is acquired only inside selected arms.",
+      "For a retained v3 author/input context and caller-declared result-v2, source control flow reaches preserved v2 statements starting at source377.",
+      "The preserved v2 body checks result/review v2 and older nested packet fields, but has no retained input/binding wire-version guard."
+    ],
+    "claimScope": "Reachable legacy arm violates finite server-owned version selection; NOT an executed SQL acceptance or persisted-row counterexample.",
+    "requiredFix": "Acquire current existing result context before dispatch or use equally strong current server-owned fence; v3 binding/input must require v3 result, v2 input must require v2 result, unknown/mismatch rejects before old arm. Preserve original legacy declaration/statements bytes, all guards/limits/roles/ACL; update only necessary receive body/successor hash/profile source-derived namespace and focused source checks. Actual mixed-version native rejection still required."
+  },
+  "PGNative": "NOT_RUN",
+  "formalApproval": false,
+  "fullGoalComplete": false
+}
