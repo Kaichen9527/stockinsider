@@ -1,0 +1,76 @@
+{
+  "actualHostedReference": {
+    "attempt": 1,
+    "fourCaseComponents": "PASS reported; not overall native PASS",
+    "job": "117198128785",
+    "run": "38967686339",
+    "source": "Root delegation, not independently downloaded in this task",
+    "status": "FAILURE"
+  },
+  "originalProbeRED": {
+    "exit": 1,
+    "failure": "AssertionError: inactive/dead contract invokes reset-failed",
+    "scope": "memory-only original branch; not actual hosted/native"
+  },
+  "paritySyntax": {
+    "ASTCompileFiles": 2,
+    "at": "2026-10-16T22:08:16.284194+00:00",
+    "checks": [
+      "whole harness inverse byte parity",
+      "frozen exact deployment/vps/systemd/stockinsider-web-standalone.service",
+      "frozen exact .github/workflows/parser-runtime-lifecycle-quality.yml",
+      "AST/compile only parser-runtime-directory-lifecycle.py",
+      "AST/compile only cleanup-source-checks.py"
+    ],
+    "maxCheckerRssBytes": 15335424,
+    "native": "NOT_RUN",
+    "resources": {
+      "/tmp": {
+        "dev": 34,
+        "freeBytes": 13605113856
+      },
+      "/workspace": {
+        "dev": 27,
+        "freeBytes": 8590397440
+      }
+    },
+    "sourceAssertions": 5,
+    "sourceProbeGroups": 28
+  },
+  "priorChecksRerun": false,
+  "sourceProbe": {
+    "fail": 0,
+    "groups": [
+      "inactive/dead/PID0 skips reset-failed",
+      "failed reset then independent show verifies inactive/dead/PID0",
+      "reset nonzero propagates unchanged",
+      "initial rejects LoadState='not-found'",
+      "initial rejects LoadState='unknown'",
+      "initial rejects ActiveState='active'",
+      "initial rejects ActiveState='unknown'",
+      "initial rejects SubState='exited'",
+      "initial rejects MainPID='1'",
+      "initial rejects MainPID='garbage'",
+      "initial rejects MainPID=''",
+      "initial rejects MainPID=None",
+      "initial rejects MainPID=0",
+      "initial missing LoadState rejected",
+      "initial missing ActiveState rejected",
+      "initial missing SubState rejected",
+      "initial missing MainPID rejected",
+      "unknown failed substate rejected",
+      "postreset drift rejected LoadState='not-found'",
+      "postreset drift rejected ActiveState='failed'",
+      "postreset drift rejected SubState='exited'",
+      "postreset drift rejected MainPID='1'",
+      "postreset drift rejected MainPID='bad'",
+      "postreset missing LoadState rejected",
+      "postreset missing ActiveState rejected",
+      "postreset missing SubState rejected",
+      "postreset missing MainPID rejected",
+      "postreset show failure propagates unchanged"
+    ],
+    "pass": 28,
+    "scope": "memory-only extracted source branch; NOT systemd/native"
+  }
+}

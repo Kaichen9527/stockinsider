@@ -1,0 +1,52 @@
+{
+  "added": [
+    "docs/operations/2026-10-17/parser-runtime-lifecycle-release/CLEANUP-FIX.md",
+    "docs/operations/2026-10-17/parser-runtime-lifecycle-release/cleanup-source-checks.py"
+  ],
+  "base": "388fd4f802ce06689a8f8401d0c4b17806c503f7",
+  "bytes": 44177,
+  "changedInherited": [
+    "scripts/parser-runtime-directory-lifecycle.py"
+  ],
+  "count": 5,
+  "files": [
+    {
+      "bytes": 33504,
+      "gitIdentity": "100644 blob 686ab2e132c073a25fc7c67a6eec3c35a4fd3844",
+      "path": "scripts/parser-runtime-directory-lifecycle.py",
+      "sha256": "c4fb16bf02b0d65c234de84923a77713883c02f73fcb560b542b5d72adea8ba6"
+    },
+    {
+      "bytes": 1341,
+      "gitIdentity": "100644 blob c534ab49eb8934300e5c2c93fb65e76955e573da",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "sha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5"
+    },
+    {
+      "bytes": 1870,
+      "gitIdentity": "100644 blob 8868d1e6b6f469df828ce63aca9b286d343c45dc",
+      "path": ".github/workflows/parser-runtime-lifecycle-quality.yml",
+      "sha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c"
+    },
+    {
+      "bytes": 2562,
+      "gitIdentity": "100644 blob 7e9aaafa2ef702795011916155f17bab4ddcf164",
+      "path": "docs/operations/2026-10-17/parser-runtime-lifecycle-release/CLEANUP-FIX.md",
+      "sha256": "032b9f790d07d610f72fd2222e0ebfb58944f5120b9f0eaadcd97a94861d5771"
+    },
+    {
+      "bytes": 4900,
+      "gitIdentity": "100644 blob 6b6690ad7f3fb3e092ff6e45123de49be4d97ddc",
+      "path": "docs/operations/2026-10-17/parser-runtime-lifecycle-release/cleanup-source-checks.py",
+      "sha256": "9226a934302c0e259beb4ee075efb4ca31be033385b1c0ecb8076207ed8f08a0"
+    }
+  ],
+  "inheritedUnchanged": 2205,
+  "inverseParity": true,
+  "newFragmentSha256": "fe16f8a6a2c4bb44496f06b583f05085443169517c1399738b20c8a7d3aa6903",
+  "newHarnessSha256": "c4fb16bf02b0d65c234de84923a77713883c02f73fcb560b542b5d72adea8ba6",
+  "originalFragmentSha256": "c5971340a5c381794dc8008ef7092d7188808845760e1c8bf428987e790a2aae",
+  "originalHarnessSha256": "d4f84e7faab84f694108c4481599629abf68851a6623dcbc31ffadb91d7e9724",
+  "source": "939d6438d157114c6ef33b9d99362156c36624f1",
+  "tree": "b01d582a9c0fdc0ec681001ecb7d6a95524b640c"
+}

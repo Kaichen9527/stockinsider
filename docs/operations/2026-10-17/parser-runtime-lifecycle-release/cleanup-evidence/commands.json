@@ -1,0 +1,28 @@
+{
+  "commands": [
+    {
+      "command": "git switch -c codex/parser-runtime-lifecycle-cleanup-fix-oct17 388fd4f802ce06689a8f8401d0c4b17806c503f7",
+      "exit": 0
+    },
+    {
+      "command": "python3 cleanup-source-checks.py original-harness.py",
+      "exit": 1,
+      "scope": "retained source-contract RED"
+    },
+    {
+      "command": "python3 cleanup-source-checks.py",
+      "exit": 0,
+      "groups": 28,
+      "scope": "memory-only"
+    },
+    {
+      "command": "Python AST/compile 2 files; inverse whole-harness parity; frozen unit/workflow hashes",
+      "exit": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0
+    }
+  ],
+  "native": "NOT_RUN"
+}
