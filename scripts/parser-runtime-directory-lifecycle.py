@@ -509,9 +509,17 @@ class Lab:
                 self.verify_unit(name)
                 self.ctl('stop', name)
                 state = self.show(name)
-                if state['ActiveState'] not in ['inactive', 'failed'] or int(state['MainPID']) != 0:
+                if (state.get('LoadState') != 'loaded'
+                        or (state.get('ActiveState'), state.get('SubState')) not in
+                        [('inactive', 'dead'), ('failed', 'failed')]
+                        or state.get('MainPID') != '0'):
                     raise RuntimeError('unit_not_settled')
-                self.ctl('reset-failed', name)
+                if state['ActiveState'] == 'failed':
+                    self.ctl('reset-failed', name)
+                    state = self.show(name)
+                    if (state.get('LoadState') != 'loaded' or state.get('ActiveState') != 'inactive'
+                            or state.get('SubState') != 'dead' or state.get('MainPID') != '0'):
+                        raise RuntimeError('unit_not_settled_after_reset')
                 observations.append({'unit': name, 'state': state})
             except Exception as e:
                 errors.append(str(e))
