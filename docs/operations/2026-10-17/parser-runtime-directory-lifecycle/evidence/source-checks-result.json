@@ -1,0 +1,33 @@
+{
+  "atUtc": "2026-10-16T18:18:47.496198+00:00",
+  "scope": "source structure, three isolated pure functions, YAML parse and shell syntax only; no imported harness/no lifecycle/socket/systemd execution",
+  "checks": [
+    "Python AST and compile without execution/pycache",
+    "frozen1341-byte unit exact",
+    "actual semantic extractor finite values",
+    "source-pin reject preserve-no",
+    "source-pin reject duplicate",
+    "source-pin reject empty",
+    "fixture quoting accepts normal exact owned path",
+    "fixture argument injection characters reject",
+    "only PR trigger and finite paths",
+    "readonly single hosted job",
+    "pinned checkout without persisted credentials",
+    "pinned always upload explicit four public files",
+    "bash syntax only step 1",
+    "bash syntax only step 2",
+    "baseline default directive omitted and real ENOENT/connect",
+    "automatic self-exit with actual restart/PID observation",
+    "cleanup pins before mutations and final absence required",
+    "admission and time/resource bounds explicit",
+    "no broad rm/signal production or production exec adaptation"
+  ],
+  "passedGroups": 19,
+  "failedGroups": 0,
+  "native": "NOT_RUN",
+  "harnessBytes": 31720,
+  "harnessSha256": "38868306ced98b888726428a929a0b9e9083bc7e738c3572a3aa5edf610e1d3e",
+  "workflowBytes": 1870,
+  "workflowSha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c",
+  "yamlParserVersion": "6.0.3"
+}

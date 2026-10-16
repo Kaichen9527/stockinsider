@@ -1,0 +1,11 @@
+{
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "path": ".github/workflows/reviewed-publication-tail-artifact.yml",
+  "bytes": 23507,
+  "sha256": "f0e0b82561082d106de19703e8448ed3b9f0b97328148b530211df85e6359cc9",
+  "pins": [
+    "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+    "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02"
+  ],
+  "allPinsPresent": true
+}

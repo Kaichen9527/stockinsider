@@ -1,0 +1,42 @@
+import ast, hashlib, json, pathlib, re, subprocess, sys, yaml, datetime
+R=pathlib.Path('/tmp/parser-runtime-preserve-o17');W=pathlib.Path('/tmp/parser-lifecycle-source-o17');P=R/'scripts/parser-runtime-directory-lifecycle.py';F=R/'.github/workflows/parser-runtime-lifecycle-quality.yml';U=R/'deployment/vps/systemd/stockinsider-web-standalone.service'
+b=P.read_bytes();tree=ast.parse(b,filename=str(P));compile(tree,str(P),'exec');checks=[]
+def ok(name, condition):
+ if not condition:raise AssertionError(name)
+ checks.append(name)
+ok('Python AST and compile without execution/pycache',True)
+ok('frozen1341-byte unit exact',len(U.read_bytes())==1341 and hashlib.sha256(U.read_bytes()).hexdigest()=='7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5')
+selected=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name in ['digest','semantics','quoted']]
+ns={'hashlib':hashlib,'re':re,'UNIT':U,'FROZEN':'7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5','ORIGINAL':'fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb'}
+exec(compile(ast.Module(body=selected,type_ignores=[]),'<three isolated pure source functions>','exec'),ns)
+ok('actual semantic extractor finite values',ns['semantics']()=={'RuntimeDirectory':'stockinsider','RuntimeDirectoryMode':'0750','RuntimeDirectoryPreserve':'yes','Restart':'on-failure','RestartSec':'5','UMask':'0077'})
+class BytesOnly:
+ def __init__(self,data):self.data=data
+ def read_bytes(self):return self.data
+for label,mutant in [('preserve-no',U.read_bytes().replace(b'Preserve=yes',b'Preserve=no')),('duplicate',U.read_bytes()+b'RuntimeDirectoryPreserve=yes\n'),('empty',b'')]:
+ ns['UNIT']=BytesOnly(mutant)
+ try:ns['semantics']()
+ except ValueError:ok('source-pin reject '+label,True)
+ else:raise AssertionError(label)
+ns['UNIT']=U
+ok('fixture quoting accepts normal exact owned path',ns['quoted']('/run/si-rt-0123456789abcdef0123456789abcdef-preserved')=='/run/si-rt-0123456789abcdef0123456789abcdef-preserved')
+for x in ['a b','a\nb','$(id)','a;id','%n','a"b']:
+ try:ns['quoted'](x)
+ except ValueError:continue
+ else:raise AssertionError('unsafe quoting accepted')
+ok('fixture argument injection characters reject',True)
+y=yaml.load(F.read_text(),Loader=yaml.BaseLoader)
+ok('only PR trigger and finite paths',set(y['on'])=={'pull_request'} and set(y['on']['pull_request']['paths'])=={'deployment/vps/systemd/stockinsider-web-standalone.service','scripts/parser-runtime-directory-lifecycle.py','.github/workflows/parser-runtime-lifecycle-quality.yml','docs/operations/2026-10-17/parser-runtime-directory-lifecycle/**'})
+ok('readonly single hosted job',y['permissions']=={'contents':'read'} and len(y['jobs'])==1 and y['jobs']['lifecycle']['runs-on']=='ubuntu-24.04' and y['jobs']['lifecycle']['timeout-minutes']=='6')
+steps=y['jobs']['lifecycle']['steps'];ok('pinned checkout without persisted credentials',steps[0]['uses']=='actions/checkout@11d5960a326750d5838078e36cf38b85af677262' and steps[0]['with']['persist-credentials']=='false')
+upload=steps[-1];paths=upload['with']['path'].splitlines();ok('pinned always upload explicit four public files',upload['uses']=='actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' and upload['if']=='always()' and len(paths)==4 and all('/parser-runtime-lifecycle-evidence/' in p and '*' not in p for p in paths) and {p.rsplit('/',1)[-1] for p in paths}=={'source-pins.json','fixture-units.json','events.json','receipt.json'})
+for i,step in enumerate(steps):
+ if 'run' in step:
+  shell=W/f'workflow-step-{i}.sh';shell.write_text(step['run']);p=subprocess.run(['bash','-n',str(shell)],capture_output=True,text=True);(W/f'bash-{i}.json').write_text(json.dumps({'exit':p.returncode,'stdout':p.stdout,'stderr':p.stderr},indent=2)+'\n');ok('bash syntax only step '+str(i),p.returncode==0)
+s=b.decode();lab=next(n for n in tree.body if isinstance(n,ast.ClassDef) and n.name=='Lab');methods={n.name:ast.get_source_segment(s,n) for n in lab.body if isinstance(n,ast.FunctionDef)}
+ok('baseline default directive omitted and real ENOENT/connect',"if preserve:" in methods['install_pair'] and "e.errno != errno.ENOENT" in methods['baseline'] and "c.connect" in methods['baseline'] and "self.socket_state(leaf, ready, False)" in methods['baseline'])
+ok('automatic self-exit with actual restart/PID observation',"'fail-once'" in methods['candidate'] and "int(state['NRestarts']) > restarts" in methods['candidate'] and "pid != old" in methods['candidate'] and "os._exit(23)" in s)
+ok('cleanup pins before mutations and final absence required',methods['cleanup'].index('self.verify_unit(name)')<methods['cleanup'].index("self.ctl('stop', name)") and "'confirmed': not errors and absent" in methods['cleanup'] and "'not-found'" in methods['cleanup'] and "cleanup['confirmed']" in s)
+ok('admission and time/resource bounds explicit',"Path('/proc/1/comm')" in methods['admission'] and "systemd255_required" in methods['admission'] and "FLOOR = 8589934592" in s and "time.monotonic() + 45" in methods['cleanup'] and "time.monotonic() + 180" in methods['__init__'] and "self.resources()" in methods['check'])
+ok('no broad rm/signal production or production exec adaptation',"'-rf'" not in s and "os.killpg(p.pid" in methods['run'] and "os.kill(" not in s and "'/run/stockinsider'" not in s and "'sudo', '-n', 'rm', '--', item['dest']" in methods['cleanup'])
+summary={'atUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':'source structure, three isolated pure functions, YAML parse and shell syntax only; no imported harness/no lifecycle/socket/systemd execution','checks':checks,'passedGroups':len(checks),'failedGroups':0,'native':'NOT_RUN','harnessBytes':len(b),'harnessSha256':hashlib.sha256(b).hexdigest(),'workflowBytes':len(F.read_bytes()),'workflowSha256':hashlib.sha256(F.read_bytes()).hexdigest(),'yamlParserVersion':yaml.__version__};(W/'source-checks-result.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary))

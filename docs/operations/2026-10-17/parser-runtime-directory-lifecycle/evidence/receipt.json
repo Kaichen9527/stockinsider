@@ -1,0 +1,77 @@
+{
+  "base": "1f5f3fcacbf16c988e3717b233711c91da0284a0",
+  "sourceCommit": "76bcc2629a7417b224d47229d7d5b4973631b053",
+  "harnessSha256": "38868306ced98b888726428a929a0b9e9083bc7e738c3572a3aa5edf610e1d3e",
+  "workflowSha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c",
+  "unitSha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5",
+  "allInheritedSourceUnchanged": true,
+  "sourceCheckGroups": 19,
+  "sourceCheckFailures": 0,
+  "checksScope": "AST/isolated pure functions/YAML/bash syntax and static controls; no native execution",
+  "native": "NOT_RUN",
+  "plannedNativeCases": 4,
+  "reboot": "NOT_RUN",
+  "localRawCount": 24,
+  "localRawBytes": 105829,
+  "publicationFreeBytes": {
+    "/workspace": 8590401536,
+    "/tmp": 13605646336
+  },
+  "newGitStoreOnTmp": true,
+  "gitWriteBudgetBytes": 1048576,
+  "publishedFilesExcludingReceipt": 10,
+  "publishedBytesExcludingReceipt": 14917,
+  "makerIndependentApproval": false,
+  "files": [
+    {
+      "path": "SOURCE-CHECKS.py.txt",
+      "bytes": 5991,
+      "sha256": "f21392651a4d1be2b6b0788d7e803882dc183f0c3f58e93bdde5ef63acac4190"
+    },
+    {
+      "path": "action-pin-proof.json",
+      "bytes": 404,
+      "sha256": "f8bf4581d16c637afbaf965002664d5579b7a8f95795d836d71749f5e4349567"
+    },
+    {
+      "path": "admission.json",
+      "bytes": 248,
+      "sha256": "cd7103361ebbe1630997ac63daea21a4ea94f1febea01255afcabfdd67a44b5b"
+    },
+    {
+      "path": "command-result.json",
+      "bytes": 253,
+      "sha256": "605236cebef52b90a6041665bb1b707d10f0d08e79e5241fbcffb629041318af"
+    },
+    {
+      "path": "diff-check.json",
+      "bytes": 48,
+      "sha256": "732883d74fff105b6916110dd67928d04765fdfa4fce96791f3d3be410b4440f"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 3974,
+      "sha256": "05899b7df04d526c58496d96302eff87d78248c5f19f72095111c70af25ec151"
+    },
+    {
+      "path": "source-checks-result.json",
+      "bytes": 1448,
+      "sha256": "531147e63946e1d9f5e1afd94437ba264008dcf3647f1b87150d937640dc69fc"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 1809,
+      "sha256": "d4dfb6d766b7af26f955b47bd3c6a1fdd7724e34ca56af0b3743b911fe73e2a6"
+    },
+    {
+      "path": "sparse-tool-red-initial.json",
+      "bytes": 271,
+      "sha256": "676d5d4a526df614f8e044c3d7ae4701609eda9553d85581f28c379f7ef6c3bd"
+    },
+    {
+      "path": "sparse-tool-red.json",
+      "bytes": 471,
+      "sha256": "d44b4cd2dec806aa34c7d9aba3c1530897971fd0c3671ea75b7a337d6f17eedb"
+    }
+  ]
+}
