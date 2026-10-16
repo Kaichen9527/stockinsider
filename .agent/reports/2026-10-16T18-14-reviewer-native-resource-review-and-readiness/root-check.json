@@ -1,0 +1,63 @@
+{
+  "utc": "2026-10-16T10:14:30.787891+00:00",
+  "source": "a085294da7db0e93ade3c3e9c1f556b736164287",
+  "evidence": "b6ca7fb5d4057d748162da9e3e1b98a89a56443b",
+  "verifiedGitInputs": 331,
+  "gitInputBytes": 10493941,
+  "inherited328Unchanged": true,
+  "publishedFilesIncludingReceipt": 15,
+  "publishedBytes": 239883,
+  "privateRawInventoryOnly": {
+    "count": 74,
+    "bytes": 172577373
+  },
+  "scope": "Root exact source and public installer/resource/cleanup evidence consistency review; no private raw snapshots acquired or Root native",
+  "sourceIntegration": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "overall": "RESOURCE_HOLD_INTERRUPTED",
+  "completeTapTests": 0,
+  "installerComponent": "AUO full new union COMMIT and repeat rejection only, not business lifecycle/native PASS",
+  "postNamespace": "dfdbe8dc48bb78e4857300104e2d988131aabf5204c4a47994e67bd625284aca",
+  "postCatalog": "0d8e754a86bc93438f4f7722964befa6af0518ae30b0237d8561e8da7f9b6535",
+  "businessLifecycleAndR1ActualSQL": "NOT_RUN",
+  "resource": {
+    "floor": 8589934592,
+    "initial": 8591278080,
+    "initialMargin": 1343488,
+    "minimum": 8589361152,
+    "deficit": 573440,
+    "observedWorkspaceDecline": 1916928,
+    "fixturePinnedBytes": 1790390,
+    "sameRestoredFreeIsInsufficientEvidenceForRetry": true,
+    "notAFutureWorkspaceConsumptionUpperBound": true
+  },
+  "cleanup": {
+    "external": true,
+    "fixtureFinally": false,
+    "backendShutdown": true,
+    "queryPromiseSettlement": "NOT_OBSERVED",
+    "fivePathsAbsentMakerWitness": true,
+    "zombies": [
+      {
+        "pid": 702395,
+        "state": "Z",
+        "ppid": 1,
+        "rss": 0
+      },
+      {
+        "pid": 702424,
+        "state": "Z",
+        "ppid": 1,
+        "rss": 0
+      }
+    ]
+  },
+  "rootPrivateContentsVerified": false,
+  "rootNodePGNativeBuild": false,
+  "rootAvailableBytes": 12581773312,
+  "wholeExecutionClosureApproved": false,
+  "fullGoalComplete": false
+}

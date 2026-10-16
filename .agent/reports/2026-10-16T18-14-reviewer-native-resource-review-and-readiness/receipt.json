@@ -1,0 +1,45 @@
+{
+  "scope": "Root exact new harness and public interrupted native evidence review; read-only capacity audit dispatch; not whole/native/formal approval",
+  "source": "a085294da7db0e93ade3c3e9c1f556b736164287",
+  "evidence": "b6ca7fb5d4057d748162da9e3e1b98a89a56443b",
+  "makerReceipt": "adb4961c31b6e956caf4197dc615bcebbe2cd3440b9dff9cfa503c317e9e2e73",
+  "nativeOutcome": "RESOURCE_HOLD_INTERRUPTED",
+  "sourcePublicIntegration": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "files": [
+    {
+      "path": "check-initial-identity-codec-red.py",
+      "bytes": 8779,
+      "sha256": "bdd1ff61577ee9b52335adb83b4190d55d9e9a8dcece562f2c494740d6039de1"
+    },
+    {
+      "path": "check.py",
+      "bytes": 9052,
+      "sha256": "fd41f034af64662b5990f7019d6f9d37c983676104a09c9584c40b7bbcc4c7d6"
+    },
+    {
+      "path": "dispatch-snapshot.json",
+      "bytes": 650,
+      "sha256": "32fd74058d9020eb6a58c90bfd2499202d21b1b0022a6e48dd8c2403b7dfeab5"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 4034,
+      "sha256": "099a9175674f1c35d5d103c339812f72d7ae732df86979049997cce8f1a62950"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 5968,
+      "sha256": "d9a1db9354db6ac8ba57e80510f6aceac3da0820e1ebe05414ee5c3b50a5e62a"
+    },
+    {
+      "path": "root-check.json",
+      "bytes": 1943,
+      "sha256": "e563a3bc86245069a57dbed1893ad41821cf4ddd11ea0bc28eaa611a44da74b7"
+    }
+  ],
+  "fullGoalComplete": false
+}
