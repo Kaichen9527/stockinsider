@@ -1,0 +1,42 @@
+{
+  "time": "2026-10-16T00:08:52.740662+00:00",
+  "source": "4242ff201c64aa5dd331695952cfc41086457392",
+  "evidence": "48a9c62eb840ee464fe22b3897ccfe7ba3c4f932",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "inputsVerified": 295,
+  "inputBytes": 9847148,
+  "inheritedInputsUnchanged": 293,
+  "publishedReceiptFilesVerified": 12,
+  "publishedReceiptBytes": 193283,
+  "privateRawInventoryOnly": {
+    "count": 16,
+    "bytes": 146755,
+    "contentsReviewed": false
+  },
+  "exactCopiedFragments": [
+    "metadataQuery",
+    "installer",
+    "prefix snapshot",
+    "author_packet source profile",
+    "legal prefix minus one receive-forbid assertion"
+  ],
+  "scopedSourceIntegrationFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "makerSourceGroups": 18,
+  "makerSyntaxExit": 0,
+  "rootRuntimeOrNativeExecuted": false,
+  "native": "NOT_RUN",
+  "localAvailableBytes": 5486710784,
+  "limitations": [
+    "Private historical vectors sizing is maker source scope, not Root vector-content/native verification",
+    "Wrong DB principal does not prove HTTP auth",
+    "Empty invocation does not prove uniqueness",
+    "Receive envelope1MiB does not prove article262144/all caps",
+    "Synthetic observation/prose not formal author or semantic approval",
+    "Original cleanup finally securetree independent record pending",
+    "Full goal remains active"
+  ]
+}

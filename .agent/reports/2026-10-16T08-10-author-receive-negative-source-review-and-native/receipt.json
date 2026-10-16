@@ -1,0 +1,26 @@
+{
+  "files": [
+    {
+      "path": "review.json",
+      "bytes": 1374,
+      "sha256": "09ef4e1f403d654d271df5d74eafa7a1e3343412a5badfdc74ee8a9e4d3986c0"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 5487,
+      "sha256": "0657a073c7eb63e6c5f18361b8e034fd2aedd325e36bd0361f768f7519e84390"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 656,
+      "sha256": "6a2792bc14bc58b624be703159898d736b0953f2d79c4872217a5ef00cd4d41e"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 4167,
+      "sha256": "4c7246aaf71ec3d47464fb8bb2ecffa5f692e73c5a11f1c9a25e61390aedd3ec"
+    }
+  ],
+  "scope": "Root exact source integration review and uniquely dispatched native; no actual native result or formal publication approval",
+  "fullGoal": "active"
+}
