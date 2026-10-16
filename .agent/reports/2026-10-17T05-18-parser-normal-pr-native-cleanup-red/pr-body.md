@@ -1,0 +1,3 @@
+A web service stop can remove its shared runtime directory while the independent financial parser listener remains alive, leaving the parser socket pathname unavailable. Preserve the web runtime directory on explicit stop and add a PR-only Ubuntu systemd regression covering the default-stop failure, preserved explicit stop/start, manual restart, and automatic restart.
+
+The seven-file source subject is 388fd4f802ce06689a8f8401d0c4b17806c503f7. Root reviewed the exact copied sources, receipt byte/hash binding, and release assembly; source parity, syntax and range checks passed. Genuine hosted lifecycle execution, full application build, and protected checks remain pending. This draft does not install the unit or restore the production socket.

@@ -1,0 +1,17 @@
+## 2026-10-17 05:18台灣時間：PR383 正常draft與真hosted lifecycle首次執行；四case component通過但cleanup/postrun真FAIL，尚未merge/install
+
+先核remote main93e44475/progressc35d21e4及乾淨tracked樹，sameCloud turn01a14653/cursor287e3e4a-38e7-4f63-9627-9f86b75f4348:6真completed/threadidle/lasttoolcompleted。只正常push code-only388fd4f802ce06689a8f8401d0c4b17806c503f7至codex/parser-runtime-lifecycle-normal-pr-oct17，非整merge099f evidence。正常draft PR383 https://github.com/Kaichen9527/stockinsider/pull/383 已建立/附chat，head388/base93。已核attachment100上限，保存最舊PR282 MERGED/title/head/base exactpointer後只unlink其UIattachment，GitHub/歷史未改，未重試上限。沒有新Clouddispatch/活動owner。
+
+真正Ubuntu24 hosted run38967686339/job117198128785/attempt1於21:12:02–21:12:20Z FAILURE；checkout與AST成功，actual systemd執行exit1，四檔failure artifact成功上傳。Artifact12075221971/ZIP8923bytes/SHA e70a6249cdb387b23124fa3e9b29612d04390b37f731c49892c2f59fbf9887dd 對API digest與唯一四member真核。Root逐byte取得4published99688bytes並重算receipt三explicit evidence hashes、harness d4f84e7f/workflow133883a2/unit7a948b27與Git精確相符；receipt SHA f91e222825a01a6fe6075ca0eca67a1f6ab797cf6e50d486081f0fb3c5fb4ce2。Root沒有親跑systemd或重跑此run，公開native證據非Cloud mock。
+
+真4case各component PASS：default explicit stop directory/path消失且connect ENOENT，而獨立listener PID2240/FD15395存續；yes stop/start/manual/automatic restart listenerPID2325/FD13761/pathinode1538/directory1535/uid-gid1001/mode0700與nonce connect保持，webPID2322→2343→2351→2435，automatic NRestarts1。只隔離fixture語意，不冒完整productionunit或歷史unlinkactor因果。整體仍FAIL，不能稱native綠或4PASS整體驗收。
+
+真cleanup4錯誤均來源:514對已stop且show loaded/inactive/dead/MainPID0的4ownedunit無條件reset-failed，systemd255實際回exit1/Unit not loaded。原run只允許exit0，故errors非空跳過:529後runtime/unit檔刪除與daemon-reload；runtimeAndUnitPathsAbsentfalse、postrun_unit_not_absent_inactive。四原PID均settled的觀測不等檔案已移除/全部cleanup成功，hostedrunner後續銷毀也未驗證不代清理。本失敗不是product Preserve語意失敗或production故障。Scoped Root REQUEST_CHANGES P0=0/P1=0/P2=1 test cleanup前置決策不足，原source-only審查與nativeRED永久保持。
+
+下一唯一有限source修補候選：保留stop/身份/MainPID0/原全部刪除與獨立postrun/receipt/guards/budgets；僅已觀測inactive/dead時不呼叫不必要reset-failed，實際failed才嚴格reset且新state再次證inactive/MainPID0，unknown/權限/非零仍拒絕，不能通吃exit1、匹配stderr假清完或刪cleanup斷言。先精確source review再新head正常push自然新hosted，不rerun unchanged失敗run，不再造source框架。此候選尚未實作，無活動Cloudowner。
+
+同PR正常新ordinary38967686254 product-runtime仍in_progress（本次觀測），diagnostics38967686275真SUCCESS但未下載全log/不冒Root重核35。初protected38967686102/bootstrap SUCCESS，requirements/exact/architecture因缺fresh exact-review388 ref真FAIL，model/product SKIPPED/aggregateFAIL；921297bytes完整log原樣base64保存。不能用舊ref/偽簽章/降policy或初綠代新head真檢查；目前本nativeRED未閉合，不發fresh approval/ready/rerun/merge。Rules20177392 active/bypass[]。Fullbuild/canonicalprofile兼容/正式quiescent原parserunit恢復與READ exactreceipt→原guardedretry/facts/terminal皆pending。
+
+Rootfree15052996608>8GiB/5GiB，變化未知，未刪cache/raw/WIP/RED/sessions/compact/停App/resize，safeDeletionCandidates空。本輪僅Gitbranch/正常draftPR與真hosted CI/證據；無VPS/DB/HTTP/secret/服務/資料/roleACL/SQL/deploy變更。正式parser缺口/最新真OS17:05與DB16:10/c5b6ccf0 partialfacts0保持，不重upload/盲retry，DD one-shot已耗/terminalPR370..382不碰。Fullgoal/Heartbeat ACTIVE，Goal狀態未改；兩formal文章/完整來源Top20/合格技術/策略/正式研究排程/wholeclosure/fixedpeer全部原pending與RED保留。正常修補安靜。
+
+Root report .agent/reports/2026-10-17T05-18-parser-normal-pr-native-cleanup-red/；本輪採既讀gstack ship normal branch/draftPR與review/test門檻，依人類凍結七檔不新增VERSION/CHANGELOG或未授權框架。此處05:18為artifact label；實際觀測時間見各GitHub欄位與receipt observedAtUtc。

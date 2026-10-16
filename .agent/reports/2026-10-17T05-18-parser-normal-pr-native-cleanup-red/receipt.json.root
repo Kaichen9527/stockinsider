@@ -1,0 +1,107 @@
+{
+  "observedAtUtc": "2026-10-16T21:14:57.280487+00:00",
+  "scope": "normal draft PR and first hosted native evidence/root byte audit; overall FAIL retained",
+  "source": "388fd4f802ce06689a8f8401d0c4b17806c503f7",
+  "files": [
+    {
+      "name": "REVIEW.md",
+      "bytes": 4574,
+      "sha256": "70ae4e27a3f2d22b455385ec079ad74ebb72398472a83b2f9bbb4cb418edbf98"
+    },
+    {
+      "name": "events.json",
+      "bytes": 81739,
+      "sha256": "685d595528b5ddc8a2831695b0a9cbbae7dbb56e6e2cfcfd8f886829a7dfdcef"
+    },
+    {
+      "name": "fixture-units.json",
+      "bytes": 3055,
+      "sha256": "c693f1f312d2aa9e0f87e754f14563934d036f934b21cdfd340570ae4cbd013e"
+    },
+    {
+      "name": "lifecycle-artifact.zip",
+      "bytes": 8923,
+      "sha256": "e70a6249cdb387b23124fa3e9b29612d04390b37f731c49892c2f59fbf9887dd"
+    },
+    {
+      "name": "lifecycle-artifacts.json",
+      "bytes": 786,
+      "sha256": "56f735c427b084fba23a704ae68f4e6b915b0b526057f7833ea10c790bbb69d5"
+    },
+    {
+      "name": "lifecycle-jobs.json",
+      "bytes": 2260,
+      "sha256": "b459ee83e891f0bfe3d5b23d681f79baa417607243dc4b5b56476e21e227da34"
+    },
+    {
+      "name": "lifecycle-run.json",
+      "bytes": 13154,
+      "sha256": "2c8195b09d96e63f9a6182277941a5c2688bb00d3d6b99710693c6a60df2a60b"
+    },
+    {
+      "name": "lifecycle.log.base64",
+      "bytes": 37100,
+      "sha256": "f1848b96075646cfd9aeabc2ab96f361b4404fdfd153ba3612b0d5b7fba0ceff"
+    },
+    {
+      "name": "ordinary-run-latest.json",
+      "bytes": 13139,
+      "sha256": "b12cd9d9023bea034920763730af70504c6e571e0713a0306139d2d433c9b301"
+    },
+    {
+      "name": "pr-body.md",
+      "bytes": 751,
+      "sha256": "b23e9b55d6759d052f6b353f6640d1049d90278a5f26f7da33563d43c452eac1"
+    },
+    {
+      "name": "pr-latest.json",
+      "bytes": 4169,
+      "sha256": "000f95c1c6e33888c0af1ab738cd74caba5d3927cf6347491c96cd5fdff7e3eb"
+    },
+    {
+      "name": "pr.json",
+      "bytes": 2314,
+      "sha256": "e7e2314500bc0d9b01a50667ba59c0b4b7fe954acb528db7c377375d09e9e43f"
+    },
+    {
+      "name": "protected-jobs.json",
+      "bytes": 14032,
+      "sha256": "2848be430ba243d7d4e669d71e8e31c69599bb6002f6a5d1b2e9d6b1e2120a77"
+    },
+    {
+      "name": "protected.log.base64",
+      "bytes": 1240680,
+      "sha256": "9f5657a0650f235a08e87c9d1349c687a23cb03cb12a494ce0b7c6c9d532d00e"
+    },
+    {
+      "name": "receipt.json",
+      "bytes": 13989,
+      "sha256": "f91e222825a01a6fe6075ca0eca67a1f6ab797cf6e50d486081f0fb3c5fb4ce2"
+    },
+    {
+      "name": "retained-pr282-pointer.json",
+      "bytes": 412,
+      "sha256": "5d9416ba559924b66680b9cc4178595b1b1d2a75a64fb1e7ac58b325885f7f0b"
+    },
+    {
+      "name": "root-native-audit.json",
+      "bytes": 731,
+      "sha256": "450cac9cc567ad24cb54987fa0f2b3b66a12279da2b390ee91060486cb191dd7"
+    },
+    {
+      "name": "rules.json",
+      "bytes": 1224,
+      "sha256": "b016eaa2fe9f0f291e6baf5664b6c955bb8ebfce8ef16b1fefd6332e41e84d88"
+    },
+    {
+      "name": "runs.json",
+      "bytes": 52660,
+      "sha256": "f0bed2a4f9d37175c5009aaabeed961b6a024f03b86f69ae98804107e993f54e"
+    },
+    {
+      "name": "source-pins.json",
+      "bytes": 905,
+      "sha256": "7e11ac180c36e2308bf954668616038f0c50fd5e3e8d224fe6eba4e43b573566"
+    }
+  ]
+}

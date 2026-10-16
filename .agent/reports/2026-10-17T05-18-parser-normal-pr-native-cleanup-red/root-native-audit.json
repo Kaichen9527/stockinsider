@@ -1,0 +1,24 @@
+{
+  "source": "388fd4f802ce06689a8f8401d0c4b17806c503f7",
+  "run": 38967686339,
+  "job": 117198128785,
+  "artifact": 12075221971,
+  "artifactBytes": 8923,
+  "artifactSha256": "e70a6249cdb387b23124fa3e9b29612d04390b37f731c49892c2f59fbf9887dd",
+  "receiptSha256": "f91e222825a01a6fe6075ca0eca67a1f6ab797cf6e50d486081f0fb3c5fb4ce2",
+  "byteBindingVerified": true,
+  "completedCaseComponents": 4,
+  "overall": "FAIL",
+  "cleanup": "FAIL",
+  "postrun": "FAIL",
+  "failureSite": "unconditional reset-failed on already inactive/dead MainPID=0 owned units",
+  "sourceReview": "REQUEST_CHANGES",
+  "newFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1
+  },
+  "rootNativeRerun": false,
+  "productionChanged": false,
+  "reboot": "NOT_RUN"
+}

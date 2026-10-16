@@ -1,0 +1,2292 @@
+[
+  {
+    "kind": "filesystems",
+    "monotonic": 25.156663534,
+    "ordinal": 0,
+    "paths": [
+      {
+        "device": 66305,
+        "path": "/home/runner/work/stockinsider/stockinsider",
+        "realpath": "/home/runner/work/stockinsider/stockinsider"
+      },
+      {
+        "device": 66305,
+        "path": "/tmp",
+        "realpath": "/tmp"
+      }
+    ]
+  },
+  {
+    "args": [
+      "systemd-analyze",
+      "--version"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.197605833,
+    "ordinal": 1,
+    "stderr": "",
+    "stdout": "systemd 255 (255.4-1ubuntu8.17)\n+PAM +AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP +LIBFDISK +PCRE2 -PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD -BPF_FRAMEWORK -XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "true"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.213839859,
+    "ordinal": 2,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "--property=Version",
+      "--value"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.231620969,
+    "ordinal": 3,
+    "stderr": "",
+    "stdout": "255.4-1ubuntu8.17\n"
+  },
+  {
+    "busVersion": "255.4-1ubuntu8.17\n",
+    "gid": 1001,
+    "kind": "admission",
+    "monotonic": 25.23656159,
+    "ordinal": 4,
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "systemd": "systemd 255 (255.4-1ubuntu8.17)\n+PAM +AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP +LIBFDISK +PCRE2 -PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD -BPF_FRAMEWORK -XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified\n",
+    "uid": 1001
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "install",
+      "-o",
+      "root",
+      "-g",
+      "root",
+      "-m",
+      "0644",
+      "/home/runner/work/_temp/parser-runtime-lifecycle-evidence/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service",
+      "/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.253104257,
+    "ordinal": 5,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "install",
+      "-o",
+      "root",
+      "-g",
+      "root",
+      "-m",
+      "0644",
+      "/home/runner/work/_temp/parser-runtime-lifecycle-evidence/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service",
+      "/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.269388408,
+    "ordinal": 6,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "daemon-reload"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.460115931,
+    "ordinal": 7,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "start",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.49256274,
+    "ordinal": 8,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "start",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.534426707,
+    "ordinal": 9,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "kind": "observed",
+    "label": "listener_ready",
+    "monotonic": 25.656300848,
+    "ordinal": 10,
+    "value": true
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.674838961,
+    "ordinal": 11,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=2237\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.69887702,
+    "ordinal": 12,
+    "stderr": "",
+    "stdout": "Restart=no\nMainPID=2240\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0755\nRuntimeDirectory=\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.718961146,
+    "ordinal": 13,
+    "stderr": "",
+    "stdout": "Restart=no\nMainPID=2240\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0755\nRuntimeDirectory=\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.738973684,
+    "ordinal": 14,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=2237\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\n"
+  },
+  {
+    "fdTarget": "socket:[15395]",
+    "kind": "nonce_roundtrip",
+    "listenerPid": 2240,
+    "monotonic": 25.745088702,
+    "ordinal": 15,
+    "pathInode": 1486,
+    "requestBytes": 64,
+    "requestNonce": "da3136f9ed7a491da4a8518a442fbe6e44ed399af13e4c6a8c18d6fdd2d4739b",
+    "responseBytes": 68,
+    "responseSha256": "e8660d68c31f3e883a05dc4826138f98372dffd7503d0b8058be58215ddc7cf9"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "stop",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.763231583,
+    "ordinal": 16,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.786885529,
+    "ordinal": 17,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\n"
+  },
+  {
+    "before": {
+      "directoryInode": 1482,
+      "fdTarget": "socket:[15395]",
+      "gid": 1001,
+      "listenerPid": 2240,
+      "listenerStartTicks": 2551,
+      "mode": 448,
+      "pathInode": 1486,
+      "roundtrip": true,
+      "uid": 1001
+    },
+    "case": "default-no-explicit-stop",
+    "expectedBaselineRed": {
+      "errno": 2,
+      "error": "[Errno 2] No such file or directory"
+    },
+    "kind": "case",
+    "listenerAfter": {
+      "fdTarget": "socket:[15395]",
+      "listenerPid": 2240,
+      "listenerStartTicks": 2551
+    },
+    "monotonic": 25.79808628,
+    "ordinal": 18,
+    "pathAbsent": true,
+    "status": "PASS"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "install",
+      "-o",
+      "root",
+      "-g",
+      "root",
+      "-m",
+      "0644",
+      "/home/runner/work/_temp/parser-runtime-lifecycle-evidence/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.810277924,
+    "ordinal": 19,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "install",
+      "-o",
+      "root",
+      "-g",
+      "root",
+      "-m",
+      "0644",
+      "/home/runner/work/_temp/parser-runtime-lifecycle-evidence/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service",
+      "/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 25.828086946,
+    "ordinal": 20,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "daemon-reload"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.038037456,
+    "ordinal": 21,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "start",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.066282429,
+    "ordinal": 22,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "start",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.10004025,
+    "ordinal": 23,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "kind": "observed",
+    "label": "listener_ready",
+    "monotonic": 26.239732716,
+    "ordinal": 24,
+    "value": true
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.257840425,
+    "ordinal": 25,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=2322\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.280791248,
+    "ordinal": 26,
+    "stderr": "",
+    "stdout": "Restart=no\nMainPID=2325\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0755\nRuntimeDirectory=\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.301107961,
+    "ordinal": 27,
+    "stderr": "",
+    "stdout": "Restart=no\nMainPID=2325\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0755\nRuntimeDirectory=\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.321730122,
+    "ordinal": 28,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=2322\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "fdTarget": "socket:[13761]",
+    "kind": "nonce_roundtrip",
+    "listenerPid": 2325,
+    "monotonic": 26.328123386,
+    "ordinal": 29,
+    "pathInode": 1538,
+    "requestBytes": 64,
+    "requestNonce": "b18c52e28ddb47538fe2504d67bfb4de94aa339187c24f8faba92d510a2c7483",
+    "responseBytes": 68,
+    "responseSha256": "563c661e6a0a0652d1c5fc8c0574f85b24b3e7e589192833e71617dc03f8722d"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.349045544,
+    "ordinal": 30,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=2322\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "stop",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.373261661,
+    "ordinal": 31,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.396631291,
+    "ordinal": 32,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "fdTarget": "socket:[13761]",
+    "kind": "nonce_roundtrip",
+    "listenerPid": 2325,
+    "monotonic": 26.402695022,
+    "ordinal": 33,
+    "pathInode": 1538,
+    "requestBytes": 64,
+    "requestNonce": "7dafb63550b7440e9d08c0513b34c79743c07954765a481e9998dda5e1f6f24d",
+    "responseBytes": 68,
+    "responseSha256": "10213d62db5fce8963ba69fc6352cebdcfce23d2e8f991fe07ee671014a38c2e"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "start",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.435410895,
+    "ordinal": 34,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.475690201,
+    "ordinal": 35,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=2343\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "fdTarget": "socket:[13761]",
+    "kind": "nonce_roundtrip",
+    "listenerPid": 2325,
+    "monotonic": 26.481931528,
+    "ordinal": 36,
+    "pathInode": 1538,
+    "requestBytes": 64,
+    "requestNonce": "91f1c1d86b1744088c71ebd13e1dc053a7835afc6a2e4d0bb38899e4495d935c",
+    "responseBytes": 68,
+    "responseSha256": "99e0c34854ba6bd728b08b7b3adb7dc42fdf2069b48f56f50c81287d8b267cd4"
+  },
+  {
+    "afterStart": {
+      "directoryInode": 1535,
+      "fdTarget": "socket:[13761]",
+      "gid": 1001,
+      "listenerPid": 2325,
+      "listenerStartTicks": 2609,
+      "mode": 448,
+      "pathInode": 1538,
+      "roundtrip": true,
+      "uid": 1001
+    },
+    "case": "yes-explicit-stop-start",
+    "kind": "case",
+    "monotonic": 26.48764144,
+    "newWebPid": 2343,
+    "oldWebPid": 2322,
+    "ordinal": 37,
+    "status": "PASS",
+    "stopped": {
+      "directoryInode": 1535,
+      "fdTarget": "socket:[13761]",
+      "gid": 1001,
+      "listenerPid": 2325,
+      "listenerStartTicks": 2609,
+      "mode": 448,
+      "pathInode": 1538,
+      "roundtrip": true,
+      "uid": 1001
+    }
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.507751834,
+    "ordinal": 38,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=2343\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "restart",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.538765991,
+    "ordinal": 39,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.565444146,
+    "ordinal": 40,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=2351\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "fdTarget": "socket:[13761]",
+    "kind": "nonce_roundtrip",
+    "listenerPid": 2325,
+    "monotonic": 26.582213953,
+    "ordinal": 41,
+    "pathInode": 1538,
+    "requestBytes": 64,
+    "requestNonce": "e89045283f294e38ac1ba4095e6f043cfbbdbdcdd16d428788dab7e70ab94e26",
+    "responseBytes": 68,
+    "responseSha256": "50a2b455c77324ffca0c31e54cb578806d1db95ecfb1e7566e4ed0b6f7562f2b"
+  },
+  {
+    "after": {
+      "directoryInode": 1535,
+      "fdTarget": "socket:[13761]",
+      "gid": 1001,
+      "listenerPid": 2325,
+      "listenerStartTicks": 2609,
+      "mode": 448,
+      "pathInode": 1538,
+      "roundtrip": true,
+      "uid": 1001
+    },
+    "case": "yes-manual-restart",
+    "kind": "case",
+    "monotonic": 26.589172132,
+    "newWebPid": 2351,
+    "oldWebPid": 2343,
+    "ordinal": 42,
+    "status": "PASS"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.613213382,
+    "ordinal": 43,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=2351\nNRestarts=0\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "fdTarget": "socket:[13761]",
+    "kind": "nonce_roundtrip",
+    "listenerPid": 2325,
+    "monotonic": 26.621109704,
+    "ordinal": 44,
+    "pathInode": 1538,
+    "requestBytes": 64,
+    "requestNonce": "8d3ac7ef54734ecbb1ff3bf4dd4d9bfa5e47fa2d24404716ad7e9f1c789d134f",
+    "responseBytes": 68,
+    "responseSha256": "814869319507e4470480d3621050078115893cde4596238817f447cccfb33e69"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.652314962,
+    "ordinal": 45,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.786954734,
+    "ordinal": 46,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 26.933624759,
+    "ordinal": 47,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 27.060898267,
+    "ordinal": 48,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 27.188474787,
+    "ordinal": 49,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 27.316344316,
+    "ordinal": 50,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 27.444490409,
+    "ordinal": 51,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 27.588985059,
+    "ordinal": 52,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 27.716178137,
+    "ordinal": 53,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 27.842925558,
+    "ordinal": 54,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 27.969972045,
+    "ordinal": 55,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 28.097345742,
+    "ordinal": 56,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 28.24120249,
+    "ordinal": 57,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 28.368795565,
+    "ordinal": 58,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 28.496075001,
+    "ordinal": 59,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 28.623262891,
+    "ordinal": 60,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 28.755959812,
+    "ordinal": 61,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 28.927194423,
+    "ordinal": 62,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 29.053554994,
+    "ordinal": 63,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 29.180578809,
+    "ordinal": 64,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 29.307834902,
+    "ordinal": 65,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 29.435273526,
+    "ordinal": 66,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 29.578521149,
+    "ordinal": 67,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 29.704875982,
+    "ordinal": 68,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 29.830868364,
+    "ordinal": 69,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 29.957444729,
+    "ordinal": 70,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 30.084682273,
+    "ordinal": 71,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 30.229741908,
+    "ordinal": 72,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 30.356465532,
+    "ordinal": 73,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 30.483494384,
+    "ordinal": 74,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 30.614260126,
+    "ordinal": 75,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 30.741392261,
+    "ordinal": 76,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 30.890304271,
+    "ordinal": 77,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.016879784,
+    "ordinal": 78,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.14369816,
+    "ordinal": 79,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.272694355,
+    "ordinal": 80,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.422354621,
+    "ordinal": 81,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.583971637,
+    "ordinal": 82,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=activating\nSubState=auto-restart\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.725963181,
+    "ordinal": 83,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=2435\nNRestarts=1\nControlGroup=/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "kind": "observed",
+    "label": "actual_automatic_restart",
+    "monotonic": 31.732079872,
+    "ordinal": 84,
+    "value": {
+      "ControlGroup": "/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "NRestarts": 1,
+      "pid": 2435
+    }
+  },
+  {
+    "fdTarget": "socket:[13761]",
+    "kind": "nonce_roundtrip",
+    "listenerPid": 2325,
+    "monotonic": 31.732316846,
+    "ordinal": 85,
+    "pathInode": 1538,
+    "requestBytes": 64,
+    "requestNonce": "a7f777c627644c388e40d363280dccb27e747d4f77bc48098fe5027ccbba3497",
+    "responseBytes": 68,
+    "responseSha256": "660c403392639ef47afee692f85ac3d70cf22a86ff17623bcac3c5634508536b"
+  },
+  {
+    "after": {
+      "directoryInode": 1535,
+      "fdTarget": "socket:[13761]",
+      "gid": 1001,
+      "listenerPid": 2325,
+      "listenerStartTicks": 2609,
+      "mode": 448,
+      "pathInode": 1538,
+      "roundtrip": true,
+      "uid": 1001
+    },
+    "case": "yes-automatic-restart",
+    "kind": "case",
+    "monotonic": 31.74485307,
+    "oldWebPid": 2351,
+    "ordinal": 86,
+    "restartObservation": {
+      "ControlGroup": "/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "NRestarts": 1,
+      "pid": 2435
+    },
+    "status": "PASS"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "stop",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.758444352,
+    "ordinal": 87,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.769725969,
+    "ordinal": 88,
+    "stderr": "",
+    "stdout": "Restart=no\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0755\nRuntimeDirectory=\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "reset-failed",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service"
+    ],
+    "exit": 1,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.776879811,
+    "ordinal": 89,
+    "stderr": "Failed to reset failed state of unit si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service: Unit si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-listener.service not loaded.\n",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "stop",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.788647936,
+    "ordinal": 90,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.799614892,
+    "ordinal": 91,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=yes\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "reset-failed",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service"
+    ],
+    "exit": 1,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.807032258,
+    "ordinal": 92,
+    "stderr": "Failed to reset failed state of unit si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service: Unit si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service not loaded.\n",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "stop",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.818810458,
+    "ordinal": 93,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.829490485,
+    "ordinal": 94,
+    "stderr": "",
+    "stdout": "Restart=no\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0755\nRuntimeDirectory=\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "reset-failed",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service"
+    ],
+    "exit": 1,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.836588063,
+    "ordinal": 95,
+    "stderr": "Failed to reset failed state of unit si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service: Unit si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-listener.service not loaded.\n",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "stop",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.84624563,
+    "ordinal": 96,
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.856741463,
+    "ordinal": 97,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\n"
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "reset-failed",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service"
+    ],
+    "exit": 1,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.863644209,
+    "ordinal": 98,
+    "stderr": "Failed to reset failed state of unit si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service: Unit si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service not loaded.\n",
+    "stdout": ""
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863699722,
+    "ordinal": 99,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863714023,
+    "ordinal": 100,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863723668,
+    "ordinal": 101,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863731329,
+    "ordinal": 102,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863739421,
+    "ordinal": 103,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863747323,
+    "ordinal": 104,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863755065,
+    "ordinal": 105,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863762676,
+    "ordinal": 106,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863771249,
+    "ordinal": 107,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.86377866,
+    "ordinal": 108,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863786592,
+    "ordinal": 109,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863793943,
+    "ordinal": 110,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863801164,
+    "ordinal": 111,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863809636,
+    "ordinal": 112,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863817288,
+    "ordinal": 113,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.86382532,
+    "ordinal": 114,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863832871,
+    "ordinal": 115,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863840142,
+    "ordinal": 116,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863847253,
+    "ordinal": 117,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863855014,
+    "ordinal": 118,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863862165,
+    "ordinal": 119,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863869616,
+    "ordinal": 120,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863877197,
+    "ordinal": 121,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863884138,
+    "ordinal": 122,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863891108,
+    "ordinal": 123,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.86389933,
+    "ordinal": 124,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863906571,
+    "ordinal": 125,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863913872,
+    "ordinal": 126,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863921884,
+    "ordinal": 127,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863929265,
+    "ordinal": 128,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863936666,
+    "ordinal": 129,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863944408,
+    "ordinal": 130,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863951819,
+    "ordinal": 131,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.86395913,
+    "ordinal": 132,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863968634,
+    "ordinal": 133,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863975955,
+    "ordinal": 134,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863982795,
+    "ordinal": 135,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863989686,
+    "ordinal": 136,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.863997247,
+    "ordinal": 137,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864018659,
+    "ordinal": 138,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864030186,
+    "ordinal": 139,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.86403952,
+    "ordinal": 140,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864047102,
+    "ordinal": 141,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864053932,
+    "ordinal": 142,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864061173,
+    "ordinal": 143,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864068353,
+    "ordinal": 144,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864075674,
+    "ordinal": 145,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864082705,
+    "ordinal": 146,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864089585,
+    "ordinal": 147,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864098679,
+    "ordinal": 148,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864106771,
+    "ordinal": 149,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864113972,
+    "ordinal": 150,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864120782,
+    "ordinal": 151,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864129184,
+    "ordinal": 152,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864136365,
+    "ordinal": 153,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864143225,
+    "ordinal": 154,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864149965,
+    "ordinal": 155,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864157136,
+    "ordinal": 156,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864163776,
+    "ordinal": 157,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864170827,
+    "ordinal": 158,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864177497,
+    "ordinal": 159,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864184467,
+    "ordinal": 160,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864191427,
+    "ordinal": 161,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864199229,
+    "ordinal": 162,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864207862,
+    "ordinal": 163,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864215483,
+    "ordinal": 164,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864224587,
+    "ordinal": 165,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864231848,
+    "ordinal": 166,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864238888,
+    "ordinal": 167,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864245899,
+    "ordinal": 168,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.86425312,
+    "ordinal": 169,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864262464,
+    "ordinal": 170,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864270416,
+    "ordinal": 171,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864278137,
+    "ordinal": 172,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864284977,
+    "ordinal": 173,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864291808,
+    "ordinal": 174,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864298367,
+    "ordinal": 175,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864305688,
+    "ordinal": 176,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864312338,
+    "ordinal": 177,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864318848,
+    "ordinal": 178,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.86432691,
+    "ordinal": 179,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.86433372,
+    "ordinal": 180,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864340551,
+    "ordinal": 181,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.86434722,
+    "ordinal": 182,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864354151,
+    "ordinal": 183,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864361141,
+    "ordinal": 184,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864367791,
+    "ordinal": 185,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864374471,
+    "ordinal": 186,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864380961,
+    "ordinal": 187,
+    "value": true
+  },
+  {
+    "kind": "observed",
+    "label": "owned_pid_gone",
+    "monotonic": 31.864388212,
+    "ordinal": 188,
+    "value": true
+  },
+  {
+    "args": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "show",
+      "si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service",
+      "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ControlGroup,FragmentPath,RuntimeDirectory,RuntimeDirectoryMode,RuntimeDirectoryPreserve,Restart,UMask"
+    ],
+    "exit": 0,
+    "interruption": null,
+    "kind": "command",
+    "monotonic": 31.880928035,
+    "ordinal": 189,
+    "stderr": "",
+    "stdout": "Restart=on-failure\nMainPID=0\nNRestarts=0\nControlGroup=\nUMask=0077\nRuntimeDirectoryPreserve=no\nRuntimeDirectoryMode=0750\nRuntimeDirectory=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default\nId=si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/run/systemd/system/si-rt-157a20dc27a441bdb9cb89b7b1d51472-default-web.service\n"
+  }
+]

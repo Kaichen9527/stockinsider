@@ -1,0 +1,9 @@
+{
+  "number": 282,
+  "url": "https://github.com/Kaichen9527/stockinsider/pull/282",
+  "state": "MERGED",
+  "title": "Fix standalone packaging and symlinked release verification",
+  "headRefOid": "110a7197afadfca6fd4f570c68a9c216d11aa9b4",
+  "baseRefOid": "0f1a1a0d2dad10e29c92931e043adef305b19a07",
+  "action": "remove UI attachment only to fit verified 100 attachment limit; GitHub PR and evidence unchanged"
+}

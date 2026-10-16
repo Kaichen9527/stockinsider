@@ -1,0 +1,595 @@
+{
+  "cases": [
+    {
+      "before": {
+        "directoryInode": 1482,
+        "fdTarget": "socket:[15395]",
+        "gid": 1001,
+        "listenerPid": 2240,
+        "listenerStartTicks": 2551,
+        "mode": 448,
+        "pathInode": 1486,
+        "roundtrip": true,
+        "uid": 1001
+      },
+      "case": "default-no-explicit-stop",
+      "expectedBaselineRed": {
+        "errno": 2,
+        "error": "[Errno 2] No such file or directory"
+      },
+      "listenerAfter": {
+        "fdTarget": "socket:[15395]",
+        "listenerPid": 2240,
+        "listenerStartTicks": 2551
+      },
+      "pathAbsent": true,
+      "status": "PASS"
+    },
+    {
+      "afterStart": {
+        "directoryInode": 1535,
+        "fdTarget": "socket:[13761]",
+        "gid": 1001,
+        "listenerPid": 2325,
+        "listenerStartTicks": 2609,
+        "mode": 448,
+        "pathInode": 1538,
+        "roundtrip": true,
+        "uid": 1001
+      },
+      "case": "yes-explicit-stop-start",
+      "newWebPid": 2343,
+      "oldWebPid": 2322,
+      "status": "PASS",
+      "stopped": {
+        "directoryInode": 1535,
+        "fdTarget": "socket:[13761]",
+        "gid": 1001,
+        "listenerPid": 2325,
+        "listenerStartTicks": 2609,
+        "mode": 448,
+        "pathInode": 1538,
+        "roundtrip": true,
+        "uid": 1001
+      }
+    },
+    {
+      "after": {
+        "directoryInode": 1535,
+        "fdTarget": "socket:[13761]",
+        "gid": 1001,
+        "listenerPid": 2325,
+        "listenerStartTicks": 2609,
+        "mode": 448,
+        "pathInode": 1538,
+        "roundtrip": true,
+        "uid": 1001
+      },
+      "case": "yes-manual-restart",
+      "newWebPid": 2351,
+      "oldWebPid": 2343,
+      "status": "PASS"
+    },
+    {
+      "after": {
+        "directoryInode": 1535,
+        "fdTarget": "socket:[13761]",
+        "gid": 1001,
+        "listenerPid": 2325,
+        "listenerStartTicks": 2609,
+        "mode": 448,
+        "pathInode": 1538,
+        "roundtrip": true,
+        "uid": 1001
+      },
+      "case": "yes-automatic-restart",
+      "oldWebPid": 2351,
+      "restartObservation": {
+        "ControlGroup": "/system.slice/si-rt-157a20dc27a441bdb9cb89b7b1d51472-preserved-web.service",
+        "NRestarts": 1,
+        "pid": 2435
+      },
+      "status": "PASS"
+    }
+  ],
+  "cleanup": {
+    "confirmed": false,
+    "errors": [
+      "command_failed:sudo",
+      "command_failed:sudo",
+      "command_failed:sudo",
+      "command_failed:sudo"
+    ],
+    "observations": [
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2516,
+        "pid": 2166
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2520,
+        "pid": 2167
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2522,
+        "pid": 2169
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2524,
+        "pid": 2172
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2526,
+        "pid": 2174
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2527,
+        "pid": 2176
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2547,
+        "pid": 2235
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2550,
+        "pid": 2238
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2566,
+        "pid": 2241
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2548,
+        "pid": 2237
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2568,
+        "pid": 2243
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2551,
+        "pid": 2240
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2571,
+        "pid": 2245
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2573,
+        "pid": 2247
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2575,
+        "pid": 2249
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2577,
+        "pid": 2252
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2580,
+        "pid": 2254
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2582,
+        "pid": 2257
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2583,
+        "pid": 2259
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2604,
+        "pid": 2320
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2608,
+        "pid": 2323
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2624,
+        "pid": 2326
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2605,
+        "pid": 2322
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2626,
+        "pid": 2328
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2609,
+        "pid": 2325
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2629,
+        "pid": 2330
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2631,
+        "pid": 2332
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2633,
+        "pid": 2334
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2636,
+        "pid": 2336
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2638,
+        "pid": 2339
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2640,
+        "pid": 2341
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2646,
+        "pid": 2344
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2641,
+        "pid": 2343
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2649,
+        "pid": 2346
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2651,
+        "pid": 2348
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2655,
+        "pid": 2352
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2653,
+        "pid": 2351
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2660,
+        "pid": 2354
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2663,
+        "pid": 2357
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2677,
+        "pid": 2359
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2692,
+        "pid": 2361
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2705,
+        "pid": 2363
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2717,
+        "pid": 2365
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2730,
+        "pid": 2367
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2743,
+        "pid": 2369
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2757,
+        "pid": 2371
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2770,
+        "pid": 2373
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2783,
+        "pid": 2375
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2796,
+        "pid": 2377
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2808,
+        "pid": 2379
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2823,
+        "pid": 2381
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2835,
+        "pid": 2383
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2848,
+        "pid": 2385
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2861,
+        "pid": 2387
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2874,
+        "pid": 2389
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2891,
+        "pid": 2391
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2904,
+        "pid": 2393
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2917,
+        "pid": 2395
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2929,
+        "pid": 2397
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2942,
+        "pid": 2399
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2956,
+        "pid": 2401
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2969,
+        "pid": 2403
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2982,
+        "pid": 2405
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 2994,
+        "pid": 2407
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3007,
+        "pid": 2409
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3022,
+        "pid": 2411
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3034,
+        "pid": 2413
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3047,
+        "pid": 2415
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3060,
+        "pid": 2417
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3073,
+        "pid": 2419
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3088,
+        "pid": 2421
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3100,
+        "pid": 2423
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3113,
+        "pid": 2425
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3126,
+        "pid": 2427
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3140,
+        "pid": 2429
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3155,
+        "pid": 2431
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3170,
+        "pid": 2433
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3171,
+        "pid": 2435
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3174,
+        "pid": 2436
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3175,
+        "pid": 2439
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3176,
+        "pid": 2441
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3177,
+        "pid": 2443
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3178,
+        "pid": 2446
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3179,
+        "pid": 2448
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3180,
+        "pid": 2450
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3181,
+        "pid": 2453
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3182,
+        "pid": 2455
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3183,
+        "pid": 2457
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3184,
+        "pid": 2459
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3185,
+        "pid": 2461
+      }
+    ],
+    "retainedCoordinationLock": "/home/runner/work/_temp/parser-runtime-lifecycle.lock",
+    "retainedEvidenceDirectory": "/home/runner/work/_temp/parser-runtime-lifecycle-evidence",
+    "runtimeAndUnitPathsAbsent": false
+  },
+  "evidenceInventory": [
+    {
+      "bytes": 81739,
+      "name": "events.json",
+      "sha256": "685d595528b5ddc8a2831695b0a9cbbae7dbb56e6e2cfcfd8f886829a7dfdcef"
+    },
+    {
+      "bytes": 3055,
+      "name": "fixture-units.json",
+      "sha256": "c693f1f312d2aa9e0f87e754f14563934d036f934b21cdfd340570ae4cbd013e"
+    },
+    {
+      "bytes": 905,
+      "name": "source-pins.json",
+      "sha256": "7e11ac180c36e2308bf954668616038f0c50fd5e3e8d224fe6eba4e43b573566"
+    }
+  ],
+  "harnessSha256": "d4f84e7faab84f694108c4481599629abf68851a6623dcbc31ffadb91d7e9724",
+  "inputSeal": "source-pins.json",
+  "minimumFreeBytes": {
+    "/home/runner/work/stockinsider/stockinsider": 92072292352,
+    "/tmp": 92072292352
+  },
+  "nativeAssertionsOnlyInRun": true,
+  "postrun": {
+    "confirmed": false,
+    "error": "postrun_unit_not_absent_inactive"
+  },
+  "reboot": "NOT_RUN",
+  "resourceViolation": null,
+  "sampleIntervalSeconds": 0.1,
+  "sampledOwnedPeakRssBytes": 81088512,
+  "scope": "isolated shared runtime lifecycle only, not production unit execution/history causality",
+  "status": "FAIL",
+  "unitSha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5",
+  "workflowSha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c"
+}
