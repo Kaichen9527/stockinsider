@@ -1,3 +1,7 @@
+## 2026-10-16 19:35 更新：合法staging尚不足；封存副本唯讀比對
+
+05cc audit經Root核334inputs/7publicfiles；NONE_NOT_READY/safelist空，原tmp祖先guard拒絕不放寬。12.8MB只是occupancy。Root真重hash原DD extracted2586files/79354761bytes、原manifest34448958，發布1371file hashreference於dc950906，非Cloudparity/新tar驗證/cleanup授權。唯一Cloud01a1447d/cursor32只READ-ONLY621output custody比較，不刪/不native；活動以samehandle最新為準。正式原batch/tmp/stockinsider-official-docs.qAIVaj在11:14原3鎖內真absent，僅此精確路徑；未download/upload/worker，DBwriterlease仍10:01query。Root19:32report/receipt728be593及最新launch保存全部界線；fullgoal/heartbeat仍ACTIVE，原正式未完/DD消耗/PR終態不變。
+
 ## 2026-10-16 19:10 修正：owned_tmp 不符合原 ancestor guard
 
 新input真native0PASS2FAIL：/tmp1777帶022writebits，原I/O會從 / 檢查全鏈，leaf0700無法補足。Root先前只核leaf及capacity的判斷不足，fixture判REQUEST_CHANGES/P2=1，產品guard正確且不得放寬；原source8mock綠/18:24候選/原resourcehold都留歷史，不代native。334source未改，R1與reviewer鏈NOT_RUN。下一唯一Cloud01a14466只read-only合法父目錄/capacity/本project自有non-cache可重建輸出候選審查，不刪、不mount/chmod、不重跑tmp。19:10 Root收據與原始native951571c8見最新launch/report；先samehandle重新核狀態。完整goal/正式未完與已消耗DD/terminalPR不變。
