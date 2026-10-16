@@ -1,0 +1,303 @@
+{
+  "status": "SOURCE_DERIVED_FROM_SEALED_HISTORICAL_LOCAL_SNAPSHOTS_NOT_FRESH_NATIVE",
+  "base": "2042725b3b72f1f0a4ba7df525163b26121e876d",
+  "predecessorProduct": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "historicalExecutionCheckout": "1df8d8ca200b6dfab65190016412ce14eac6e330",
+  "historicalHarness": "6e0c19e16301db4fbbb2eebc37c227a23ab1c727",
+  "historicalReceipt": "efaff655bd68bdfa0201af454b6fc01cb5fc8fd7ce2c9fc653a5c93585ba459d",
+  "rawInventoryPath": ".agent/reports/2026-10-16T04-16-author-fixture-native/raw-inventory.json",
+  "rawInventorySha256": "694c6e1dca6ed6c6f9970ab4d28cda9cabccf85b545d7ac1f1dbb698e5163532",
+  "snapshots": [
+    {
+      "path": "/tmp/author-fixture-native-o16/native-artifacts/2409-author-durable-2409-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    },
+    {
+      "path": "/tmp/author-fixture-native-o16/native-artifacts/2383-author-durable-2383-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    }
+  ],
+  "historicalPreInstallCodecCheck": {
+    "snapshot": "/tmp/author-fixture-native-o16/native-artifacts/2409-author-durable-2409-installer-before-private.json",
+    "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671",
+    "namespaceHash": "cb22ccfeb504b6fd82cc1af0d954fe220427d562120dd6089fc9accb9bffd29f",
+    "catalogHash": "4afc6fe90ae3d65acbc3858003695fc9b3c9c4122ef129f92ae174f0ea6bf9e4"
+  },
+  "codec": "research_observed_canonical_json_v1 / original prerequisite canonical sorted-key JSON; historical pre-install equality checked; no DB call this task",
+  "predecessorNamespaceHash": "d5d40be3a570685e109953393c629d7b972b40d4910bb3d6002d28ceba81300d",
+  "predecessorCatalogHash": "2db3c24e2ed40099f437f82290ab2049e0859080cfeae92bdd24592918725087",
+  "predecessorDefaultsNamed": [
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "kind": "S",
+      "acl": [
+        "postgres=rwU/postgres",
+        "anon=rwU/postgres",
+        "authenticated=rwU/postgres",
+        "service_role=rwU/postgres"
+      ]
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "kind": "f",
+      "acl": [
+        "postgres=X/postgres",
+        "anon=X/postgres",
+        "authenticated=X/postgres",
+        "service_role=X/postgres"
+      ]
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "kind": "r",
+      "acl": [
+        "postgres=arwdDxtm/postgres",
+        "anon=arwdDxtm/postgres",
+        "authenticated=arwdDxtm/postgres",
+        "service_role=arwdDxtm/postgres"
+      ]
+    },
+    {
+      "owner": "supabase_admin",
+      "schema": "extensions",
+      "kind": "S",
+      "acl": [
+        "postgres=r*w*U*/supabase_admin"
+      ]
+    },
+    {
+      "owner": "supabase_admin",
+      "schema": "extensions",
+      "kind": "f",
+      "acl": [
+        "postgres=X*/supabase_admin"
+      ]
+    },
+    {
+      "owner": "supabase_admin",
+      "schema": "extensions",
+      "kind": "r",
+      "acl": [
+        "postgres=a*r*w*d*D*x*t*m*/supabase_admin"
+      ]
+    },
+    {
+      "owner": "supabase_admin",
+      "schema": "public",
+      "kind": "S",
+      "acl": [
+        "postgres=rwU/supabase_admin",
+        "anon=rwU/supabase_admin",
+        "authenticated=rwU/supabase_admin",
+        "service_role=rwU/supabase_admin"
+      ]
+    },
+    {
+      "owner": "supabase_admin",
+      "schema": "public",
+      "kind": "f",
+      "acl": [
+        "postgres=X/supabase_admin",
+        "anon=X/supabase_admin",
+        "authenticated=X/supabase_admin",
+        "service_role=X/supabase_admin"
+      ]
+    },
+    {
+      "owner": "supabase_admin",
+      "schema": "public",
+      "kind": "r",
+      "acl": [
+        "postgres=arwdDxtm/supabase_admin",
+        "anon=arwdDxtm/supabase_admin",
+        "authenticated=arwdDxtm/supabase_admin",
+        "service_role=arwdDxtm/supabase_admin"
+      ]
+    },
+    {
+      "owner": "supabase_auth_admin",
+      "schema": "auth",
+      "kind": "S",
+      "acl": [
+        "postgres=rwU/supabase_auth_admin",
+        "dashboard_user=rwU/supabase_auth_admin"
+      ]
+    },
+    {
+      "owner": "supabase_auth_admin",
+      "schema": "auth",
+      "kind": "f",
+      "acl": [
+        "postgres=X/supabase_auth_admin",
+        "dashboard_user=X/supabase_auth_admin"
+      ]
+    },
+    {
+      "owner": "supabase_auth_admin",
+      "schema": "auth",
+      "kind": "r",
+      "acl": [
+        "postgres=arwdDxtm/supabase_auth_admin",
+        "dashboard_user=arwdDxtm/supabase_auth_admin"
+      ]
+    }
+  ],
+  "successorNamespaceHash": "718f62f93fd1340e71b70eed24f856f030256c040e0efdd5734d98265fbbdf61",
+  "successorCatalogRule": "Full equality except target definitionSha256; actual post prosrc pinned and every pg_proc field except prosrc identical, all other definitions exact. No ignored catalog entries.",
+  "function": {
+    "signature": "read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text)",
+    "owner": "research_input_preparation_owner_v2",
+    "securityDefiner": true,
+    "config": [
+      "search_path=pg_catalog, public"
+    ],
+    "predecessorBodyBytes": 6975,
+    "predecessorBodySha256": "ffb26f1274ab222166c0f7cfac2355cfacce2fcdb9ec5288e5ea089fc176ae1d",
+    "successorBodyBytes": 9492,
+    "successorBodySha256": "f507de78318a126e180f96fa7905fccfb6c1ee428688fb9e93b0f607c8d7e958",
+    "originalFunctionMetadata": {
+      "acl": [
+        [
+          "research_input_preparation_owner_v2",
+          "research_input_preparation_owner_v2",
+          "EXECUTE",
+          false
+        ],
+        [
+          "research_input_preparation_owner_v2",
+          "research_observed_rpc_owner",
+          "EXECUTE",
+          false
+        ],
+        [
+          "research_input_preparation_owner_v2",
+          "service_role",
+          "EXECUTE",
+          false
+        ]
+      ],
+      "name": "read_research_author_handoff_context_v2",
+      "owner": "research_input_preparation_owner_v2",
+      "config": [
+        "search_path=pg_catalog, public"
+      ],
+      "strict": false,
+      "parallel": "u",
+      "volatile": "v",
+      "leakproof": false,
+      "signature": "read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text)",
+      "effectiveAcl": [
+        [
+          "anon",
+          false
+        ],
+        [
+          "authenticated",
+          false
+        ],
+        [
+          "authenticator",
+          false
+        ],
+        [
+          "dashboard_user",
+          false
+        ],
+        [
+          "legacy_correctness_rpc_owner",
+          false
+        ],
+        [
+          "opportunity_v3_rpc_owner",
+          false
+        ],
+        [
+          "pgbouncer",
+          false
+        ],
+        [
+          "postgres",
+          true
+        ],
+        [
+          "research_input_preparation_owner_v2",
+          true
+        ],
+        [
+          "research_observed_rpc_owner",
+          true
+        ],
+        [
+          "research_source_fence_owner_v2",
+          false
+        ],
+        [
+          "service_role",
+          true
+        ],
+        [
+          "stockinsider",
+          false
+        ],
+        [
+          "stockinsider_runtime_v319",
+          false
+        ],
+        [
+          "supabase_admin",
+          false
+        ],
+        [
+          "supabase_auth_admin",
+          false
+        ],
+        [
+          "supabase_realtime_admin",
+          false
+        ],
+        [
+          "supabase_storage_admin",
+          false
+        ]
+      ],
+      "securityDefiner": true,
+      "definitionSha256": "2283068c3229962608390526cda7a207ae7ed8f99e6d6f875c840c8b4f00c81b"
+    }
+  },
+  "sourceSQL": {
+    "path": "migrations/20261016_research_author_handoff_binding_fence_candidate_v3.sql",
+    "bytes": 39960,
+    "sha256": "fff12bbd98489c334d07a42083e86f5cac0a04d6ff33eb1b72286eafec0dc31d"
+  },
+  "exactQueries": {
+    "c08": {
+      "path": "migrations/20261015_research_author_durable_union_candidate_v3.sql",
+      "sha256": "18b0e4814410601ab8b254f274a7fe085230b922656038cc1f8fe2539c056f76"
+    },
+    "namespace": {
+      "bytes": 2076,
+      "sha256": "d5ceb29841f1de81dd33e0eb4aef6b97117aacfb7aa5e65f52dcc51cce766f35"
+    },
+    "catalog": {
+      "bytes": 8585,
+      "sha256": "5f663339a56bca6383431564dd5fe2b90800686584970f871c054e81c0f5d184"
+    },
+    "candidate36MaterialCheck": {
+      "originalSha256": "85e6f42e3be63c13190b7c56f1f642121c22ea3ae705408ab8e17955f266a338",
+      "adaptedSha256": "020436fb025af00a4138612987f17a2407290f5b8c3b9c3612f0d0af5df6a98c",
+      "adaptations": [
+        "saved.input_hash -> v.input_hash",
+        "c -> binding_core (references only)"
+      ]
+    }
+  },
+  "actualOidsPinned": false,
+  "sqlApplied": false,
+  "nativeVerified": false,
+  "productionAuthorized": false
+}
