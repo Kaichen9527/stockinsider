@@ -1,0 +1,24 @@
+{
+  "source": "939d6438d157114c6ef33b9d99362156c36624f1",
+  "evidence": "5babc666fc87c125230a53d1a1ceeae6e8b42686",
+  "makerReceiptSha256": "2529a7008a4f703d6d9d195a25e02286093ada553b9cf5d707494cbe0f6935de",
+  "gitInputs": 5,
+  "gitInputBytes": 44177,
+  "publishedFiles": 7,
+  "publishedBytes": 11416,
+  "inheritedIdentityOnlyUnchanged": 2205,
+  "inverseWholeHarnessByteParity": true,
+  "rootMemoryDecisionGroups": 5,
+  "ASTCompileFiles": 2,
+  "rawInventoryOnly": {
+    "count": 14,
+    "bytes": 72439
+  },
+  "scopedSourceFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "native": "NOT_RUN",
+  "oldNativeFailurePreserved": true
+}

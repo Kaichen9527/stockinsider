@@ -1,0 +1,23 @@
+{
+  "source": "939d6438d157114c6ef33b9d99362156c36624f1",
+  "run": 38974150160,
+  "job": 117219423410,
+  "artifact": 12078216034,
+  "archiveBytes": 9398,
+  "archiveSha256": "2c8b0c4a5c2b875bca985bd95c5e9508ce204b43ffcb93a9ebf42970762ca9d0",
+  "receiptSha256": "4cb246ffdb48d21a63fa1fabb1d4e21b083707fd712847adb37552d063adee31",
+  "publishedFiles": 4,
+  "publishedBytes": 114172,
+  "allThreeEvidenceByteHashesBound": true,
+  "exactInputPinsBound": true,
+  "overall": "PASS",
+  "rootNativeRerun": false,
+  "productionChanged": false,
+  "fullGoalComplete": false,
+  "ownedPostrunPidObservations": 94,
+  "allPostrunOriginalPidIdentitiesGone": true,
+  "postrunFourUnitPathsAndTwoRuntimePathsAbsent": true,
+  "resetFailedCommandCount": 0,
+  "allowedNotFoundShowExit1Count": 0,
+  "commandEvents": 87
+}

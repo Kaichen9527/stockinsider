@@ -1,0 +1,78 @@
+{
+  "bytes": 72439,
+  "count": 14,
+  "files": [
+    {
+      "bytes": 668,
+      "name": "checks.json",
+      "sha256": "7f5192d9cf77b6cc24f4febd665692a0b628361cfab8bec5160a3873f6d6f291"
+    },
+    {
+      "bytes": 681,
+      "name": "commands.json",
+      "sha256": "18dc5c9e11220242a81c3cc62e74cf8c1fb9c482bfd7c96ba4d0c8649f4c4f7e"
+    },
+    {
+      "bytes": 2,
+      "name": "final-probe.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "bytes": 0,
+      "name": "final-probe.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1352,
+      "name": "final-probe.stdout",
+      "sha256": "17f02093e632faea92ff14fc2f20bd1406b9493d132172aa2665331147e05b8a"
+    },
+    {
+      "bytes": 1443,
+      "name": "harness.diff",
+      "sha256": "af682515ce7bddd4f94e334d1c819fd8ece35139f0057c544fcea0542f9b87db"
+    },
+    {
+      "bytes": 338,
+      "name": "initial-seal.json",
+      "sha256": "7e10ca4b575c5f44df4a853a5e21ae001cdd6a59fd9445c48929ed5915023caa"
+    },
+    {
+      "bytes": 744,
+      "name": "new-fragment.txt",
+      "sha256": "fe16f8a6a2c4bb44496f06b583f05085443169517c1399738b20c8a7d3aa6903"
+    },
+    {
+      "bytes": 207,
+      "name": "old-fragment.txt",
+      "sha256": "c5971340a5c381794dc8008ef7092d7188808845760e1c8bf428987e790a2aae"
+    },
+    {
+      "bytes": 32967,
+      "name": "original-harness.py",
+      "sha256": "d4f84e7faab84f694108c4481599629abf68851a6623dcbc31ffadb91d7e9724"
+    },
+    {
+      "bytes": 2,
+      "name": "original-probe.exit",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "bytes": 531,
+      "name": "original-probe.stderr",
+      "sha256": "539998c50694cc65055e36416cdc9fb7f73b99772d1ed4eafba5e19daff4dcab"
+    },
+    {
+      "bytes": 0,
+      "name": "original-probe.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 33504,
+      "name": "sealed-harness.py",
+      "sha256": "c4fb16bf02b0d65c234de84923a77713883c02f73fcb560b542b5d72adea8ba6"
+    }
+  ],
+  "localRoot": "/tmp/parser-lifecycle-cleanup-fix-o17",
+  "scope": "local WIP/source/extracted probes only; no hosted artifact or runtime contents"
+}

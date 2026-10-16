@@ -1,0 +1,5 @@
+A web service stop can remove its shared runtime directory while the independent financial parser listener remains alive, leaving the parser socket pathname unavailable. Preserve the web runtime directory on explicit stop and add a PR-only Ubuntu systemd regression covering the default-stop failure, preserved explicit stop/start, manual restart, and automatic restart. Cleanup resets failed units only after observing their failed state and verifies their resulting inactive state.
+
+Validation on exact source 939d6438d157114c6ef33b9d99362156c36624f1: hosted run 38974150160 passed all four lifecycle cases, cleanup, and independent postrun checks. Root verified the downloaded artifact digest, exact harness/workflow/unit pins, and three evidence byte hashes. The first run on 388fd4 failed cleanup and remains retained. Source parity, focused state contracts, and syntax checks passed.
+
+Protected checks and the new head application build remain pending. This draft does not install the unit, restore the production socket, establish historical unlink causality, or approve formal research publication.

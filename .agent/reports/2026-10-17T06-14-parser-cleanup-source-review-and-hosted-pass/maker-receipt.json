@@ -1,0 +1,53 @@
+{
+  "ASTCompileFiles": 2,
+  "PR383Updated": false,
+  "base": "388fd4f802ce06689a8f8401d0c4b17806c503f7",
+  "evidenceInventory": [
+    {
+      "bytes": 681,
+      "name": "commands.json",
+      "sha256": "18dc5c9e11220242a81c3cc62e74cf8c1fb9c482bfd7c96ba4d0c8649f4c4f7e"
+    },
+    {
+      "bytes": 2669,
+      "name": "focused-checks.json",
+      "sha256": "cbce33bd0bfe4fded49afb4b2a14395df18c8bdf1c88f1764c7a5a2c85b96fc3"
+    },
+    {
+      "bytes": 1443,
+      "name": "harness.diff",
+      "sha256": "af682515ce7bddd4f94e334d1c819fd8ece35139f0057c544fcea0542f9b87db"
+    },
+    {
+      "bytes": 379,
+      "name": "publication-resources.json",
+      "sha256": "f21b09f5381499d277468ecb1548f04e38c5fa88d4166c5868ad27f9e97e9b7d"
+    },
+    {
+      "bytes": 2310,
+      "name": "raw-inventory.json",
+      "sha256": "c13ccf0c997f54db8f4587ac8996e06c2139bcf05824a47e5d329ca4d7df45dd"
+    },
+    {
+      "bytes": 2291,
+      "name": "source-seal.json",
+      "sha256": "154aaae3df58d65ddb7457dfa8b58699aa21d6d8a292ff95e3f63979faf947e8"
+    }
+  ],
+  "inverseParity": true,
+  "native": "NOT_RUN",
+  "originalHostedFailurePreserved": true,
+  "pending": [
+    "Root exact source review",
+    "normal PR383 head update by Root",
+    "new actual hosted cleanup/lifecycle acceptance",
+    "production parser recovery and formal research/publication full goal"
+  ],
+  "rawBytes": 72439,
+  "rawCount": 14,
+  "scope": "source-only maker evidence, no independent/native approval",
+  "source": "939d6438d157114c6ef33b9d99362156c36624f1",
+  "sourceProbeGroups": 28,
+  "sourceTree": "b01d582a9c0fdc0ec681001ecb7d6a95524b640c",
+  "unitWorkflowFrozen": true
+}

@@ -1,0 +1,1 @@
+Root public event audit initially indexed args[3] for every command while counting reset-failed. Commands include shorter non-systemctl argument arrays, causing IndexError (exit1) after earlier assertions. No harness/native/product execution or change. Corrected predicate first requires exact sudo -n systemctl prefix and sufficient argument count; original tool error retained.

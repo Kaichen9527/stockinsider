@@ -1,0 +1,73 @@
+product-runtime	Verify candidate revision and historical date contracts	2026-10-16T21:12:44.3330152Z # tests 9
+product-runtime	Verify candidate revision and historical date contracts	2026-10-16T21:12:44.3330860Z # pass 9
+product-runtime	Verify candidate revision and historical date contracts	2026-10-16T21:12:44.3331287Z # fail 0
+product-runtime	Verify candidate revision and historical date contracts	2026-10-16T21:12:44.3331596Z # cancelled 0
+product-runtime	Verify candidate revision and historical date contracts	2026-10-16T21:12:44.3331916Z # skipped 0
+product-runtime	Verify candidate revision and historical date contracts	2026-10-16T21:12:44.3332217Z # todo 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:12:55.6602034Z > npm run typecheck:source-led-opportunity-v3 && npm run lint:source-led-opportunity-v3 && npm run test:candidate-shadow-performance && npm run build:source-led-opportunity-v3 && npm run test:source-led-opportunity-v3 && npm run test:source-led-opportunity-v3:product-correctness && npm run test:source-led-opportunity-v3:migration && npm run test:legacy-v1-v2-regression && npm --prefix web run test:e2e:v3-correctness && npm run test:source-led-opportunity-v3:performance
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:12:55.7238289Z > node scripts/run-node22.js web/node_modules/typescript/bin/tsc -p web/tsconfig.json --noEmit --pretty false
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:25.4756553Z # tests 43
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:25.4756790Z # pass 43
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:25.4756910Z # fail 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:25.4757019Z # cancelled 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:25.4757165Z # skipped 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:25.4757275Z # todo 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:51.5745000Z # tests 236
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:51.5745210Z # pass 236
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:51.5745311Z # fail 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:51.5745415Z # cancelled 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:51.5745528Z # skipped 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:51.5745631Z # todo 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:53.7325812Z # tests 44
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:53.7326119Z # pass 44
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:53.7326276Z # fail 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:53.7326450Z # cancelled 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:53.7326636Z # skipped 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:53.7326808Z # todo 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.7203349Z # tests 96
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.7203752Z # pass 96
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.7204415Z # fail 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.7204603Z # cancelled 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.7204801Z # skipped 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.7204987Z # todo 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.9070606Z # tests 3
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.9070943Z # pass 3
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.9071201Z # fail 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.9071368Z # cancelled 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.9071550Z # skipped 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.9071714Z # todo 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.9788189Z > build:source-led-opportunity-v3
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:13:59.9788564Z > npm --prefix web run build
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:14:00.0826822Z > next build
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:14:00.4071462Z   Creating an optimized production build ...
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:14:13.5052780Z ✓ Compiled successfully in 12.6s
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:14:31.9734983Z # tests 67
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:14:31.9735193Z # pass 67
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:14:31.9735294Z # fail 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:14:31.9735399Z # cancelled 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:14:31.9735509Z # skipped 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:14:31.9735612Z # todo 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:16:32.5018658Z # tests 155
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:16:32.5018990Z # pass 155
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:16:32.5019148Z # fail 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:16:32.5019314Z # cancelled 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:16:32.5019497Z # skipped 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:16:32.5019602Z # todo 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.0615599Z # tests 82
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.0615933Z # pass 82
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.0616099Z # fail 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.0616266Z # cancelled 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.0616450Z # skipped 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.0616621Z # todo 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.2529600Z # tests 2
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.2530527Z # pass 2
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.2530839Z # fail 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.2531322Z # cancelled 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.2531759Z # skipped 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:35.2532063Z # todo 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:52.8376147Z # tests 5
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:52.8376515Z # pass 5
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:52.8376670Z # fail 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:52.8376835Z # cancelled 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:52.8377019Z # skipped 0
+product-runtime	Run diagnostic product/runtime suite (not authoritative Code Gate evidence)	2026-10-16T21:17:52.8377225Z # todo 0
