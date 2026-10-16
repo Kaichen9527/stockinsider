@@ -1,0 +1,26 @@
+{
+  "files": [
+    {
+      "path": "review.json",
+      "bytes": 1593,
+      "sha256": "dd1663cb38b2984fda5db5a60519edc71e4fe763069c31b9701c7f0c81331926"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 8042,
+      "sha256": "cfa4d8706e1ed1ea4f2dc0f88e3da3f017ac27e622dade73bce04202f1ae0bb0"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 656,
+      "sha256": "fab3514c1530bb2e2fc3526f4cc551767e2e810f45bf899648f8af77ce516f93"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 5407,
+      "sha256": "a1ffc0eb96569cd41c7c65a0345e0761c0464db36e4d52e270692d549d160652"
+    }
+  ],
+  "scope": "Root exact uninstalled candidate source review; no private snapshot/native/formal publication approval",
+  "fullGoal": "active"
+}

@@ -1,0 +1,43 @@
+{
+  "time": "2026-10-16T01:10:21.515666+00:00",
+  "source": "259264b8ed17df0ffb38b19efd0e05bfbaaf3a98",
+  "evidence": "87b197eddf452d6144f906b54b184f1af9f4adc9",
+  "productPredecessor": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "inputsVerified": 310,
+  "inputBytes": 10190820,
+  "originalInputsUnchanged": 302,
+  "publishedReceiptFilesVerified": 10,
+  "publishedReceiptBytes": 105114,
+  "privateRawInventoryOnly": {
+    "count": 20,
+    "bytes": 123805,
+    "contentsReviewed": false
+  },
+  "historicalSnapshotReferenceOnly": {
+    "count": 2,
+    "bytesEach": 24736245,
+    "contentsObtainedByRoot": false
+  },
+  "originalBodyReconstructedBytes": 6975,
+  "successorBodyBytes": 9492,
+  "sourceSQLBytes": 39960,
+  "catalogNamespaceCopiesExact": true,
+  "materialCheckCopiedWithTwoIdentifiersOnly": true,
+  "all12DefaultAclRowsIndependentlyDerivedFromCapturedGitDDL": true,
+  "scopedUninstalledCandidateSourceFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "actualGrammarPermissionNative": "NOT_RUN",
+  "rootRuntimeExecuted": false,
+  "fullHandoffReviewerAcceptance": "PENDING_SQL_NATIVE_AND_TS_INTEGRATION",
+  "localAvailableBytes": 1188601856,
+  "fullGoal": "active",
+  "limitations": [
+    "Historical namespace/catalog/profile derived by maker from private snapshots, not independently recomputed from those contents by Root",
+    "Actual installation/OID/ACL/default/grammar/rollback/revocation/legacy proof pending",
+    "be6 completed/reviewer TS remains failclosed until separately reviewed source integration",
+    "No formal role/publication/wholeclosure approval"
+  ]
+}
