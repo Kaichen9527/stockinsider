@@ -1,0 +1,50 @@
+TAP version 13
+# Subtest: exact reverse reconstruction of original helper and single opted-in entry
+ok 1 - exact reverse reconstruction of original helper and single opted-in entry
+  ---
+  duration_ms: 1.402768
+  ...
+# Subtest: finite guard precedes per-case pg_config, cluster and financial fixture IO
+ok 2 - finite guard precedes per-case pg_config, cluster and financial fixture IO
+  ---
+  duration_ms: 0.159431
+  ...
+# Subtest: default undefined retains original home call arguments, prefix, modes and layout
+ok 3 - default undefined retains original home call arguments, prefix, modes and layout
+  ---
+  duration_ms: 2.577169
+  ...
+# Subtest: explicit original_home is exactly the default
+ok 4 - explicit original_home is exactly the default
+  ---
+  duration_ms: 2.405641
+  ...
+# Subtest: owned_tmp only resolves literal /tmp, same unique prefix and0700 secure/old/new layout
+ok 5 - owned_tmp only resolves literal /tmp, same unique prefix and0700 secure/old/new layout
+  ---
+  duration_ms: 0.743772
+  ...
+# Subtest: null unknown arbitrary paths and nonstring selectors reject before every mocked IO
+ok 6 - null unknown arbitrary paths and nonstring selectors reject before every mocked IO
+  ---
+  duration_ms: 8.805259
+  ...
+# Subtest: 29 exact fixed bytes/pins and literal materialization modes unchanged without writing files
+ok 7 - 29 exact fixed bytes/pins and literal materialization modes unchanged without writing files
+  ---
+  duration_ms: 14.839617
+  ...
+# Subtest: unchanged witness predicate captures both physical paths; literal tmp ignores environment selectors
+ok 8 - unchanged witness predicate captures both physical paths; literal tmp ignores environment selectors
+  ---
+  duration_ms: 1.704422
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 41.497861

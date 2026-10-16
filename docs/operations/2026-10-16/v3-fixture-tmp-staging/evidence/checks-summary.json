@@ -1,0 +1,31 @@
+{
+  "source": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "scope": "source-extracted builtin-only mock and static/syntax; no native/helper import/app/PG/materialization",
+  "finalFocusedTests": {
+    "pass": 8,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "syntaxExit0": 3,
+  "wrapperFileLevelResult": 1,
+  "wrapperNotCountedAsEight": true,
+  "directAndFinalEightRunsOverlap": true,
+  "newRed": false,
+  "parity": {
+    "reverseByteExactToA085": true,
+    "guardOccurrences": 1,
+    "parentExpressionOccurrences": 1,
+    "entryOptionOccurrences": 1,
+    "other329Unchanged": true
+  },
+  "node": {
+    "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "version": "v22.14.0",
+    "versionIdentity": "exact binary SHA verified against prior pinned22.14 binary"
+  },
+  "nativeExecuted": false,
+  "resourceAdmissionForNative": false
+}

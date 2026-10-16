@@ -1,0 +1,52 @@
+{
+  "at": "2026-10-16T10:24:44.738808+00:00",
+  "sourceChecksOnly": true,
+  "nativeReady": false,
+  "filesystems": [
+    {
+      "path": "/workspace",
+      "realpath": "/workspace",
+      "st_dev": 27,
+      "blockSize": 4096,
+      "fragmentSize": 4096,
+      "f_bavail": 2097409,
+      "availableBytes": 8590987264
+    },
+    {
+      "path": "/tmp",
+      "realpath": "/tmp",
+      "st_dev": 34,
+      "blockSize": 4096,
+      "fragmentSize": 4096,
+      "f_bavail": 3365052,
+      "availableBytes": 13783252992
+    },
+    {
+      "path": "/tmp/si-pubtail-o14",
+      "realpath": "/tmp/si-pubtail-o14",
+      "st_dev": 34,
+      "blockSize": 4096,
+      "fragmentSize": 4096,
+      "f_bavail": 3365052,
+      "availableBytes": 13783252992
+    },
+    {
+      "path": "/home/agent",
+      "realpath": "/home/agent",
+      "st_dev": 27,
+      "blockSize": 4096,
+      "fragmentSize": 4096,
+      "f_bavail": 2097409,
+      "availableBytes": 8590987264
+    },
+    {
+      "path": "/workspace/stockinsider/.git",
+      "realpath": "/workspace/stockinsider/.git",
+      "st_dev": 27,
+      "blockSize": 4096,
+      "fragmentSize": 4096,
+      "f_bavail": 2097409,
+      "availableBytes": 8590987264
+    }
+  ]
+}

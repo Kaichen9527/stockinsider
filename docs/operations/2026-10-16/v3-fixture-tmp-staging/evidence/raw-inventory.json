@@ -1,0 +1,193 @@
+{
+  "scope": "source-only local WIP/check receipts; historical private raw never copied or deleted",
+  "cutoff": "2026-10-16T10:30:01.542528+00:00",
+  "count": 35,
+  "bytes": 286665,
+  "files": [
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/checks-summary.json",
+      "bytes": 960,
+      "sha256": "83fd151ed9149eae76531fd6ebcf1bfbf15084dd317f85a61b3ea1e589b6a314"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/checks-syntax.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/checks-syntax.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/checks-syntax.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/checks.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/checks.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/checks.stdout",
+      "bytes": 283,
+      "sha256": "a82fc22dbe5625eea862ca38d278daf81907b83587d7b4dd800bff7aae6abddc"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/direct-checks.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/direct-checks.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/direct-checks.stdout",
+      "bytes": 1825,
+      "sha256": "0ce686d87cb525009777ac6ba53fdb3f419c291e2f8e56d77f959a9c2c09bbce"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/entry-syntax.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/entry-syntax.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/entry-syntax.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/final-checks-resources.json",
+      "bytes": 1627,
+      "sha256": "b6a04abba5c6032065ff7c57e92c47b67e965713fa3634fc8b8f712e2128d493"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/final-checks.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/final-checks.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/final-checks.stdout",
+      "bytes": 1827,
+      "sha256": "60afb45e3197c4d9ec6e50a2f4efa37da92d75a77a8f7cb88666c90953371827"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/fresh-admission.json",
+      "bytes": 1208,
+      "sha256": "af4e36e42985f5966025c5862897df244f5e646d5ede8d4695b106947d209b2c"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/helper-syntax.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/helper-syntax.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/helper-syntax.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/initial-research-v3-reviewer-result-native.test.mjs",
+      "bytes": 21098,
+      "sha256": "a075d91ff8d9474922ac85eeff0234c5212c3c671cf3cf88af37b97687380414"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/initial-research-versioned-legal-fixture-helper.mjs",
+      "bytes": 19687,
+      "sha256": "09b209f52f4b33e32dfda0d15c035f3986b701a23ab1e9ab9188ca836ef7deaa"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/lineage.json",
+      "bytes": 1174,
+      "sha256": "ffc2d46ae046abe1ecc812225266b45cdf0bb2cb50e804b9fd7c5ef81314439c"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/parity-check.json",
+      "bytes": 93487,
+      "sha256": "b635f58e9f0de7ad8c50bbda5d07f9d383457322055e0c47377c26d12c78b1bc"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/remote-before.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/remote-before.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/remote-before.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/sealed-wip-research-v3-fixture-staging-source-checks.mjs",
+      "bytes": 6508,
+      "sha256": "fbd2f63a75118e2cf2373e363bdb7bb6ada64e669101767511a593322eb20212"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/sealed-wip-research-v3-reviewer-result-native.test.mjs",
+      "bytes": 21134,
+      "sha256": "e9d6b859f7c93efef681de4ca5e754b979f216363ef8fdfee9f903ed87b66c20"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/sealed-wip-research-versioned-legal-fixture-helper.mjs",
+      "bytes": 19982,
+      "sha256": "6b94a38bce03b628695c26fc21f6dcf2dac5620350cd03e1e24158acc4ac99c1"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/source-push.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/source-push.stderr",
+      "bytes": 394,
+      "sha256": "45fa2ae9d99ec4625a119fc293f855961f84a2001919f8ba9e6c2466df8f723d"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/source-push.stdout",
+      "bytes": 137,
+      "sha256": "f9be246a9405f058dea722da1ed49237f238a4768b6231f4e752f906e16fb449"
+    },
+    {
+      "path": "/tmp/fixture-tmp-staging-source-o16/source-seal.json",
+      "bytes": 95318,
+      "sha256": "97bbfdc42cd74fbd8ab57ed23ca790ecdc6d07da28e4d93aa7d921bc8459d9d7"
+    }
+  ],
+  "priorRedReferences": [
+    {
+      "path": "docs/operations/2026-10-16/v3-reviewer-result-native/evidence/evidence-check-first-red.json",
+      "sha256": "c71d55463710e847061b1fe65054b1fa6e6e7307f9e23596b2abd4b7d106e969"
+    },
+    {
+      "path": "docs/operations/2026-10-16/v3-reviewer-result-native/evidence/evidence-inventory-second-red.json",
+      "sha256": "1471eb7fd4471023b900843cb63f017d06c767580820383f01eff011f85912e9"
+    }
+  ]
+}

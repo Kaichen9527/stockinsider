@@ -1,0 +1,19 @@
+{
+  "onlyNewValidationLine": "const financialStagingProfile=options.financialStagingProfile===undefined?'original_home':options.financialStagingProfile;assert.ok(['original_home','owned_tmp'].includes(financialStagingProfile),'unknown financialStagingProfile');",
+  "onlyParentExpression": "financialStagingProfile==='owned_tmp'?fs.realpathSync('/tmp'):fs.realpathSync(os.homedir())",
+  "onlyEntryOption": "financialStagingProfile:'owned_tmp'",
+  "reverseByteExactToA085": true,
+  "guardScope": "per-call before pg_config/initdb/cluster/financial staging; original module-level loading/artifact-directory initialization unchanged",
+  "defaultBehavior": "same home realpath/mkdtemp prefix/mode/relative old-new roots",
+  "fixedFiles": 29,
+  "fixedFileBytes": 1790390,
+  "sourceIOGuardsAndCleanupUnchanged": true,
+  "absolutePhysicalPathChanges": true,
+  "nextNativeMustMeasureBytesHashesClocksNoHistoricalSubstitution": true,
+  "productFourInputHashesHsHcUnchanged": true,
+  "helperEntryIdentitiesChanged": true,
+  "wholeClosureApproval": false,
+  "RAMBackedTmpfsExtraCostsUnknown": true,
+  "gitCommonStillWorkspaceDev27": true,
+  "noWorkspaceZeroWritesOrReadyClaim": true
+}

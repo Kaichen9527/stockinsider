@@ -1,0 +1,58 @@
+{
+  "records": [
+    {
+      "name": "final-checks",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/research-v3-fixture-staging-source-checks.mjs"
+      ],
+      "at": "2026-10-16T10:27:04.376897+00:00",
+      "exit": 0,
+      "cumulativeChildPeakRssBytes": 42549248
+    },
+    {
+      "name": "helper-syntax",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs"
+      ],
+      "at": "2026-10-16T10:27:04.462287+00:00",
+      "exit": 0,
+      "cumulativeChildPeakRssBytes": 42549248
+    },
+    {
+      "name": "entry-syntax",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/opportunity-v3/research-v3-reviewer-result-native.test.mjs"
+      ],
+      "at": "2026-10-16T10:27:04.486263+00:00",
+      "exit": 0,
+      "cumulativeChildPeakRssBytes": 42549248
+    },
+    {
+      "name": "checks-syntax",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/research-v3-fixture-staging-source-checks.mjs"
+      ],
+      "at": "2026-10-16T10:27:04.511022+00:00",
+      "exit": 0,
+      "cumulativeChildPeakRssBytes": 42549248
+    }
+  ],
+  "freeBefore": {
+    "/workspace": 8590987264,
+    "/tmp": 13783126016
+  },
+  "freeAfter": {
+    "/workspace": 8590987264,
+    "/tmp": 13783105536
+  },
+  "noPGOrMaterialization": true,
+  "initialTestWrapperFileCountNotEight": true,
+  "directAndMeasuredRunsOverlapNotAdditive": true
+}
