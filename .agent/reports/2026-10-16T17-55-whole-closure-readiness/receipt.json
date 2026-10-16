@@ -1,0 +1,15 @@
+{
+  "scope": "Root source-only readiness map; not runtime, whole closure or publication approval",
+  "source": "1349525f192c1ff78ff7bba409eee0e891ba4a5b",
+  "files": [
+    {
+      "path": "readiness.json",
+      "bytes": 9618,
+      "sha256": "8753fdb01a955d72f7bf285331d11056072aa7c25a4464dabfc6530e12242a22"
+    }
+  ],
+  "pinsMatched": 23,
+  "callerCoverageInReaderIndex": 0,
+  "newNativeStatus": "inProgress same turn01a1441c/cursor16",
+  "fullGoalComplete": false
+}

@@ -1,0 +1,236 @@
+{
+  "utc": "2026-10-16T09:52:43.295904+00:00",
+  "source": "1349525f192c1ff78ff7bba409eee0e891ba4a5b",
+  "scope": "Read-only current source readiness map; no runtime or whole closure proof",
+  "readerIndex": {
+    "path": "scripts/fixtures/research-historical-cash/new-reader-execution-closure.json",
+    "bytes": 4935,
+    "sha256": "f24f3627ed8141c7d1bbded9619884dd12282e2264d03ade6b6a3c4f424b3457",
+    "schemaVersion": "finite-v3-compatible-scenario-cash-reader-candidate-closure-v1",
+    "sourceClosureApproved": false,
+    "wholeExecutionClosureBound": false,
+    "enabledForLiveV2": false
+  },
+  "readerPinnedFiles": [
+    {
+      "path": ".nvmrc",
+      "actualBytes": 8,
+      "actualSha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+      "pinnedBytes": 8,
+      "pinnedSha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+      "match": true
+    },
+    {
+      "path": "package-lock.json",
+      "actualBytes": 31809,
+      "actualSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "pinnedBytes": 31809,
+      "pinnedSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "match": true
+    },
+    {
+      "path": "package.json",
+      "actualBytes": 24733,
+      "actualSha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc",
+      "pinnedBytes": 24733,
+      "pinnedSha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc",
+      "match": true
+    },
+    {
+      "path": "web/package-lock.json",
+      "actualBytes": 274088,
+      "actualSha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+      "pinnedBytes": 274088,
+      "pinnedSha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+      "match": true
+    },
+    {
+      "path": "web/package.json",
+      "actualBytes": 1943,
+      "actualSha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+      "pinnedBytes": 1943,
+      "pinnedSha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-business-calculator.ts",
+      "actualBytes": 14206,
+      "actualSha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+      "pinnedBytes": 14206,
+      "pinnedSha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-cash-financial-reader.ts",
+      "actualBytes": 6792,
+      "actualSha256": "fd3f5531bfa876c0b887367546f07bc7acbdef98d3c59d01478b04ffc5e2108c",
+      "pinnedBytes": 6792,
+      "pinnedSha256": "fd3f5531bfa876c0b887367546f07bc7acbdef98d3c59d01478b04ffc5e2108c",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-compatible-financial-inventory.ts",
+      "actualBytes": 3601,
+      "actualSha256": "263643e3d8af3464ddc7b70f2bff91f604d131be1ca773918040b3ce54ff1c8d",
+      "pinnedBytes": 3601,
+      "pinnedSha256": "263643e3d8af3464ddc7b70f2bff91f604d131be1ca773918040b3ce54ff1c8d",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-compatible-financial-projection.ts",
+      "actualBytes": 14703,
+      "actualSha256": "d5fb31908d84753fbf83afed80093661167f77efe8ea980b4d1170e42971a4a8",
+      "pinnedBytes": 14703,
+      "pinnedSha256": "d5fb31908d84753fbf83afed80093661167f77efe8ea980b4d1170e42971a4a8",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-compatible-financial-reader.ts",
+      "actualBytes": 3000,
+      "actualSha256": "6ad78b1197cb925646ca8de40b6a8412631c532a1b2cb4a0669ac6a28c7428a0",
+      "pinnedBytes": 3000,
+      "pinnedSha256": "6ad78b1197cb925646ca8de40b6a8412631c532a1b2cb4a0669ac6a28c7428a0",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-financial-clock.ts",
+      "actualBytes": 807,
+      "actualSha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+      "pinnedBytes": 807,
+      "pinnedSha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-financial-io-engine.ts",
+      "actualBytes": 7556,
+      "actualSha256": "2344e936b108dcde99ca0742c0aac135b377ecebe3a97f0bce253c6be74406df",
+      "pinnedBytes": 7556,
+      "pinnedSha256": "2344e936b108dcde99ca0742c0aac135b377ecebe3a97f0bce253c6be74406df",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-financial-io-owner.ts",
+      "actualBytes": 4972,
+      "actualSha256": "19620af839492ac4232ccf6bdbfcd47b8429263ba3bfdcf90fdb7601dd13a4fe",
+      "pinnedBytes": 4972,
+      "pinnedSha256": "19620af839492ac4232ccf6bdbfcd47b8429263ba3bfdcf90fdb7601dd13a4fe",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-core.ts",
+      "actualBytes": 11245,
+      "actualSha256": "157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790",
+      "pinnedBytes": 11245,
+      "pinnedSha256": "157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-pins.ts",
+      "actualBytes": 7034,
+      "actualSha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5",
+      "pinnedBytes": 7034,
+      "pinnedSha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-projection.ts",
+      "actualBytes": 11131,
+      "actualSha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719",
+      "pinnedBytes": 11131,
+      "pinnedSha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-scenario-cash-material.ts",
+      "actualBytes": 19506,
+      "actualSha256": "20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b",
+      "pinnedBytes": 19506,
+      "pinnedSha256": "20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-v3-finite-material.ts",
+      "actualBytes": 5263,
+      "actualSha256": "0fc6a6121a963f22b125a4a6f5c506dde06f791204970ef0a3d33c5442671985",
+      "pinnedBytes": 5263,
+      "pinnedSha256": "0fc6a6121a963f22b125a4a6f5c506dde06f791204970ef0a3d33c5442671985",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-v3-material-canonical.ts",
+      "actualBytes": 4343,
+      "actualSha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "pinnedBytes": 4343,
+      "pinnedSha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-v3-material-schemas/2383-normalized.json",
+      "actualBytes": 149439,
+      "actualSha256": "953260a5ac54eead4c6365507f410d08fd5aed8a9b40e635c24dbc142a76f706",
+      "pinnedBytes": 149439,
+      "pinnedSha256": "953260a5ac54eead4c6365507f410d08fd5aed8a9b40e635c24dbc142a76f706",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-v3-material-schemas/2383-raw.json",
+      "actualBytes": 149492,
+      "actualSha256": "f5cdc777e2ae819355693d8b142ccddf1c21751722e2bf5646c0f9416f7c9aa9",
+      "pinnedBytes": 149492,
+      "pinnedSha256": "f5cdc777e2ae819355693d8b142ccddf1c21751722e2bf5646c0f9416f7c9aa9",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-v3-material-schemas/2409-normalized.json",
+      "actualBytes": 251137,
+      "actualSha256": "0553fbb9049626662d58a799a3671cd1b68159e4e7782889d2a6980a4c7335ef",
+      "pinnedBytes": 251137,
+      "pinnedSha256": "0553fbb9049626662d58a799a3671cd1b68159e4e7782889d2a6980a4c7335ef",
+      "match": true
+    },
+    {
+      "path": "web/src/lib/research-v3-material-schemas/2409-raw.json",
+      "actualBytes": 251190,
+      "actualSha256": "31c1ce3bfbc494856975ca63f736f6cb4da6fb4936f6e8e68f1ee297d300eaea",
+      "pinnedBytes": 251190,
+      "pinnedSha256": "31c1ce3bfbc494856975ca63f736f6cb4da6fb4936f6e8e68f1ee297d300eaea",
+      "match": true
+    }
+  ],
+  "allPinnedFilesMatch": true,
+  "fourCallerSourceCoverage": [
+    {
+      "path": "web/src/lib/research-v3-author-result.ts",
+      "bytes": 25295,
+      "sha256": "93e02180bc65c77d86e3e4f25fe6c004fa558edbe614455f229078ebee0c4062",
+      "includedInReaderClosureIndex": false,
+      "appLiteralImportSearchExit": 1,
+      "appLiteralMatches": []
+    },
+    {
+      "path": "web/src/lib/research-v3-author-handoff.ts",
+      "bytes": 14648,
+      "sha256": "d485a13c4a2ad6ce938b3b3fe17299ec7bac7b7d96faed8fe0535a7afb7aec2e",
+      "includedInReaderClosureIndex": false,
+      "appLiteralImportSearchExit": 1,
+      "appLiteralMatches": []
+    },
+    {
+      "path": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "bytes": 8349,
+      "sha256": "6c90b72a8018fde41e0d03eed03fa6b17ae309b1f8ff43b656eb0ec9bd3e1b73",
+      "includedInReaderClosureIndex": false,
+      "appLiteralImportSearchExit": 1,
+      "appLiteralMatches": []
+    },
+    {
+      "path": "web/src/lib/research-v3-reviewer-result.ts",
+      "bytes": 10189,
+      "sha256": "6910f3e9eb26eba7c47721183a2282469025f2f0348b4e57a9af8b01c162b877",
+      "includedInReaderClosureIndex": false,
+      "appLiteralImportSearchExit": 1,
+      "appLiteralMatches": []
+    }
+  ],
+  "limit": "Literal app import search only; no assertion about dynamic imports/runtime behavior. Existing candidate index explicitly not a whole S-C-B-Q-R-A execution manifest. No closure hash recomputation or approval."
+}
