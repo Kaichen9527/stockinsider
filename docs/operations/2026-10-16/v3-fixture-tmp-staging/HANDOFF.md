@@ -1,0 +1,20 @@
+# Finite financial staging selector — source-only candidate
+
+Base4776c3c35d84fa893f23a5cf3331a118021fed9d. Original executed harness/helper identity remains a085294da7db0e93ade3c3e9c1f556b736164287; its interrupted run and all historical RED/PASS evidence are unchanged. This is new test-fixture source, not a new native result.
+
+Only two inherited files change:
+
+- research-versioned-legal-fixture-helper.mjs: one first per-invocation enum-validation line, plus the single secure-parent expression. Undefined and explicit original_home retain fs.realpathSync(os.homedir()); owned_tmp resolves literal fs.realpathSync('/tmp'). Null/unknown/path/nonstring values reject before per-case pg_config/initdb/cluster/financial fixture I/O. Existing module-level imports/artifact-directory initialization are untouched; tests never import this helper or native entry.
+- research-v3-reviewer-result-native.test.mjs: one financialStagingProfile:'owned_tmp' opt-in in its existing fixture call. Other callers do not opt in and retain home behavior.
+
+Reverse removal of exactly the enum line/parent ternary and entry option reconstructs both a085 whole files byte-for-byte. Other329 original inputs unchanged, including all product TS/SQL/profile, original FS preload, two installer/author helpers, relay, source/global locks, deadlines, resource monitor, floors, roles, ACL and expectations. New source checks and this handoff are additional owned files.
+
+No environment override, arbitrary caller root, new owner, quota or second deadline. Prefix .versioned-prerequisite- stays exact, mkdtemp remains unique, secure/old/new directories remain0700, all fixed files0600. Original29 unique file paths/hash/content total1790390bytes remains exact. The unchanged witness substring '/.versioned-prerequisite-' matches both home and tmp paths. No files were materialized to test this claim: checks use extracted source with bounded mock fs/path/os and readonly pinned gzip decoding.
+
+Final focused builtin-only source checks:8PASS/0FAIL/cancel/skip/todo; three syntax checks exit0. Initial node --test invocation exposed only one file-level result and is not counted as eight groups. Direct eight-group run and resource-measured final eight-group run overlap, not16tests. Child peak RSS42549248bytes; no PG/native/app import, socket, build or install. The exact command/stdout/exit resources and initial wrapper output are retained separately.
+
+Fresh10:24 source-check admission exceeded8589934592 on both filesystems. /home/agent, /workspace and Git common directory are dev27; literal /tmp and worktree are dev34 (tmpfs). Intended relocation puts financial staging's1.79MB content plus directories on RAM-backed tmpfs alongside PG/WAL/log/raw snapshots. This is not proof that all writes are bounded or workspace writes become zero: Git metadata/objects remain dev27; platform/runtime/concurrent changes are unknown. Original8GiB floor must remain throughout a future run and sampled RSS remains8GiB. No READY/native authorization or recovered capacity is claimed; no cleanup occurred.
+
+Physical secure/root paths change. Any absolute-path-dependent transport/material/charges/hashes must be freshly measured in the next separately authorized native; do not normalize paths or reuse old bytecounts/OIDs. Fixed relative pins, financial facts and original product limits are unchanged. Four product-input hashes and their partial fixture Hs/Hc do not change; helper/entry Git identities do. This is not whole Next S-C-B-Q-R-A or production root authority/configuration approval. Actual frozen I/O guard acceptance of the new physical location remains NOT_RUN.
+
+PG/native/installer/R1 service_role negatives/reviewer durable lifecycle/rights/revocation/legacy/response loss remain NOT_RUN for this changed input. Source/evidence separate commits, explicit safe allowlist, normal branch push, no force. Stop for Root exact review and separate fresh-capacity/execution authorization. Full goal/heartbeat ACTIVE; formal articles/Q-R/publication/whole closure and terminal deployment/PR subjects untouched.
