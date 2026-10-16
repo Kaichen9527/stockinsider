@@ -1,0 +1,55 @@
+TAP version 13
+# Subtest: only two existing replacements; original v2 declarations and statements byte-identical
+ok 1 - only two existing replacements; original v2 declarations and statements byte-identical
+  ---
+  duration_ms: 1.438771
+  ...
+# Subtest: actual installed predecessor pins and complete original query texts retained twice
+ok 2 - actual installed predecessor pins and complete original query texts retained twice
+  ---
+  duration_ms: 0.341235
+  ...
+# Subtest: no new authority/table/constraint and complete nonbody/default/OID guards
+ok 3 - no new authority/table/constraint and complete nonbody/default/OID guards
+  ---
+  duration_ms: 0.412893
+  ...
+# Subtest: original lock order, budgets and transaction envelope remain
+ok 4 - original lock order, budgets and transaction envelope remain
+  ---
+  duration_ms: 0.155425
+  ...
+# Subtest: closed 46-field full packet and 15-field result finite union, current source RPC
+ok 5 - closed 46-field full packet and 15-field result finite union, current source RPC
+  ---
+  duration_ms: 0.230548
+  ...
+# Subtest: original atomic result-completion and immutable exact replay tail copied in both arms
+ok 6 - original atomic result-completion and immutable exact replay tail copied in both arms
+  ---
+  duration_ms: 0.167583
+  ...
+# Subtest: text/decision/category/source constraints retained with v3 flat sources and control/secret guard
+ok 7 - text/decision/category/source constraints retained with v3 flat sources and control/secret guard
+  ---
+  duration_ms: 0.33761
+  ...
+# Subtest: exact copied packet and pure assignment validation fragments; no changed inherited seam
+ok 8 - exact copied packet and pure assignment validation fragments; no changed inherited seam
+  ---
+  duration_ms: 0.904565
+  ...
+# Subtest: completed result caller never selects active reader/assignment or automatic retries
+ok 9 - completed result caller never selects active reader/assignment or automatic retries
+  ---
+  duration_ms: 0.316558
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12.629952

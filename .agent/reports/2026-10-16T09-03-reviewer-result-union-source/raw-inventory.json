@@ -1,0 +1,261 @@
+{
+  "root": "/tmp/reviewer-result-union-source-o16",
+  "count": 41,
+  "bytes": 362277,
+  "files": [
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/assert_research_editorial_review_v2.newbody",
+      "bytes": 10648,
+      "sha256": "086a4b3af6b31a7277ee0b097ad83f94d720622022363092d524e255e57e0a50",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/contracts-final.json",
+      "bytes": 32513,
+      "sha256": "d218a6b2b9b6033ce9ff4e8f72b425496232d6acb3de3c5662f3b55faeed228d",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/contracts-final.stderr",
+      "bytes": 550,
+      "sha256": "9015fc8ced457a01a975072e78920da29706fe61f623be70ad4755e35217eab9",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/contracts-final.stdout",
+      "bytes": 3750,
+      "sha256": "40353989befc79f33d0616f4e15c1c57b0648b8fa6a56c1797ad08fee19809ca",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/derive-profile.mjs",
+      "bytes": 2536,
+      "sha256": "cc522862a0b95ffe1a7b98b8e41ad6b73a3477fe5641b9b035f37057b7eb05a5",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/fragment-lineage.json",
+      "bytes": 734,
+      "sha256": "7f28668dfee239a38b13102acab2f9bb293a2949f2c76722a0816a5195f101e5",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/frozen-final.json",
+      "bytes": 20574,
+      "sha256": "0412f7ec6d8c6fab9b5b1e937ce29ec4f49858e63c257a240f01819300406b65",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/generate-sql.py",
+      "bytes": 13360,
+      "sha256": "cb18fbb4f4dbd217cee44c22dec74865791772d202cbd058a06128fb496ba440",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/generator-initial-red.txt",
+      "bytes": 186,
+      "sha256": "ab3f882bfff2a2e80dcd6ce9f60fcb869c45c6865c8abfa9d4843240855a8efa",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/generator-initial.py",
+      "bytes": 13252,
+      "sha256": "333cb00fdb692739f3e96a894f5e19261ed963ec7e829056ef17145f55ce6d40",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/initial.json",
+      "bytes": 89974,
+      "sha256": "203c70391b6baa9afbc1d463e4ce0489dcac8dc2b1298e9b5a52dc685eb73501",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/make-test.py",
+      "bytes": 9726,
+      "sha256": "e0e5a78d7a01f4c975cd85149788b4e86c9adb7c100da4de9b36e86f4aa3cf36",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/packet-map-check.py",
+      "bytes": 2269,
+      "sha256": "ed6f59cf2b19c78b6db1d91511e590d3538789506abc1820422e526ed9d06b1a",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/packet-map-check01.json",
+      "bytes": 457,
+      "sha256": "662ba61b64dadd7ef198484e44b6a26143abf75329f0fa6fe4175effc63d95f0",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/packet-map-check01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/pre-final-check-source.json",
+      "bytes": 1261,
+      "sha256": "843349fead51d4c5a401e5c29f939785c877a8055c8f52aa903625d823e667bd",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/profile-check.json",
+      "bytes": 832,
+      "sha256": "7179eee4ef6e4542f144d86aa70e8c8001bba8031997c875e3ec86c7f1118965",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/receive_research_reviewer_result_v2.newbody",
+      "bytes": 21475,
+      "sha256": "e591df256b4699aa2642a58a42c445251a829fc28e63e77234122ef61e02d8f7",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/run-record.py",
+      "bytes": 1678,
+      "sha256": "28f4f3adba16460604d410b7132d16dd0d12ee3eb440a1dbebb872e3b51647ec",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/seal.py",
+      "bytes": 8170,
+      "sha256": "3645474fc7ac288c0460922683e112ec6e8e12326d3c4f962ff3dcbbc1386ab4",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/source-push-actual.stderr",
+      "bytes": 400,
+      "sha256": "0e4307c4603404186ef277670a190c1d4a5b303a4bebe2f664de1b96c29a79fa",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/source-push-actual.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/source-push.stderr",
+      "bytes": 153,
+      "sha256": "2f8e7cfdced5a3986ce8d5e78d8704d8eb1bdf678d3df38a158d33f094eac197",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/source-push.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/static01.json",
+      "bytes": 664,
+      "sha256": "2f6f633b8a8dc5dbbf26c3bb71864b2aa3b80eac70e45c804cdcd190924bca4e",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/static01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/static01.stdout",
+      "bytes": 2085,
+      "sha256": "9c02bec980e504480e73d924bb2ad9e07a115b59d0b3d84003b7fdfafafc0040",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/tests01.tap",
+      "bytes": 269,
+      "sha256": "88cae0ac73d07369aab33b10ea0c10104ea6b5a07840990f08398efdcd9a0111",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/tests02-direct.tap",
+      "bytes": 3764,
+      "sha256": "275f81762f6143dec8a4fde30cc9449fe3886dec33158562835db2aeb5357394",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/types-final.json",
+      "bytes": 3413,
+      "sha256": "b28a34867dd75854077e0078a64ed448ace5e613fd4b6aeba9671953e348d233",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/types-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/types-final.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/types01.json",
+      "bytes": 596,
+      "sha256": "d3b70e9b5d0bfb4030c640424a5f697101d5ff89489ed86442aa376db394d4ad",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/types01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/types01.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/wip01-research-v3-editorial-review.ts",
+      "bytes": 4487,
+      "sha256": "45ab0e4afb6d43ed9990b7ec1b97d53d347b31af6cd716714b93d3ab4b737158",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/wip01-research-v3-reviewer-result-projection.ts",
+      "bytes": 5793,
+      "sha256": "9fa57440396361bf9160d4cb805dae0583c234d11260fdf8fcc393fec5d9f55f",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/wip01-research-v3-reviewer-result.ts",
+      "bytes": 10189,
+      "sha256": "6910f3e9eb26eba7c47721183a2282469025f2f0348b4e57a9af8b01c162b877",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/wip01-test.mjs",
+      "bytes": 16157,
+      "sha256": "d1b7d6c9906a217d5024b267cbdb1fdbc7e3eca22413a63b8071c5b6b7731300",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/wip01-union.sql",
+      "bytes": 64205,
+      "sha256": "99f87235a8324f167cea1c8ac9453da26ff0d5b6d1279aef7d090e18ca48127b",
+      "publicContents": false
+    },
+    {
+      "path": "/tmp/reviewer-result-union-source-o16/wip02-test-13pass.mjs",
+      "bytes": 16157,
+      "sha256": "d1b7d6c9906a217d5024b267cbdb1fdbc7e3eca22413a63b8071c5b6b7731300",
+      "publicContents": false
+    }
+  ],
+  "historicalSnapshotReference": {
+    "path": "/tmp/hr-native-o16/2409-completed-reviewer-2409-fence-committed-after-private.json",
+    "bytes": 24739380,
+    "sha256": "a92a353a1f9d246017f094aa48fb495b9212d97d5104b882cd28a3bceea85b6d",
+    "rootVerifiedPrivateContents": false
+  },
+  "rootHasPrivateContents": false,
+  "appendOnly": true
+}

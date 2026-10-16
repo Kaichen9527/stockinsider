@@ -1,0 +1,75 @@
+{
+  "source": "4eedb532f318b6f7892256da3a81468995e069df",
+  "base": "6d68136a19ba9c45a62909cb2ea4313fd6161b21",
+  "tree": "80d402412da1a72f6243eb2595d0241d9af8993f",
+  "scope": "unactivated source-only candidate; maker delivery, not independent/native/formal approval",
+  "files": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 1541,
+      "sha256": "951b122d26266bac168c152f06345b0e05615096cf45dc763a9e0a0a2d472686"
+    },
+    {
+      "path": "checks.json",
+      "bytes": 1266,
+      "sha256": "fc37a9291fec41106267abf2dddafd0a84f20d0ed017bae0ab2a46f1f0261a69"
+    },
+    {
+      "path": "contracts-final.tap",
+      "bytes": 3750,
+      "sha256": "40353989befc79f33d0616f4e15c1c57b0648b8fa6a56c1797ad08fee19809ca"
+    },
+    {
+      "path": "dependency-lineage.json",
+      "bytes": 26441,
+      "sha256": "736e901aecf5c300253976120d831bd18b6fe1ccd2bc5553f2e34154fda6d4b1"
+    },
+    {
+      "path": "packet-field-parity.json",
+      "bytes": 457,
+      "sha256": "662ba61b64dadd7ef198484e44b6a26143abf75329f0fa6fe4175effc63d95f0"
+    },
+    {
+      "path": "profile-derivation-witness.json",
+      "bytes": 832,
+      "sha256": "7179eee4ef6e4542f144d86aa70e8c8001bba8031997c875e3ec86c7f1118965"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 9629,
+      "sha256": "b1305fef2aff3d12a510e97963d20a8366843e2f07aae2620c5b8caeee591fdb"
+    },
+    {
+      "path": "source-checks.tap",
+      "bytes": 2085,
+      "sha256": "9c02bec980e504480e73d924bb2ad9e07a115b59d0b3d84003b7fdfafafc0040"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 93429,
+      "sha256": "3b5cdf9171dc157453473468d4b2841e2f4e2d100ff4d6cf8534ae02a152f860"
+    },
+    {
+      "path": "toolchain-resources.json",
+      "bytes": 44530,
+      "sha256": "3461d4296243ae597a411f81787ab574d99701cbc3048a588127cd8e830cac12"
+    }
+  ],
+  "publishedFileCountIncludingReceipt": 11,
+  "privateRawCount": 41,
+  "sourceInputCount": 326,
+  "sourceInputBytes": 10445953,
+  "pending": [
+    "PG grammar/install/role permissions/COMMIT/rollback/repeat",
+    "actual reviewer lifecycle and global invocation uniqueness",
+    "legacy77/compat/revocation/lease/caps/ACL and true response loss",
+    "Q-R/reviewpack/atomicpublication/four callers/wholeclosure/semantic/formal articles"
+  ],
+  "checks": {
+    "contracts": 15,
+    "static": 9,
+    "strictModuleTS": true,
+    "native": "NOT_RUN"
+  },
+  "at": "2026-10-16T09:26:13.892092+00:00"
+}

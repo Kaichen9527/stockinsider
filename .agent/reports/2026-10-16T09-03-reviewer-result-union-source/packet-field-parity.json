@@ -1,0 +1,16 @@
+[
+  {
+    "symbol": "2409",
+    "actualHistoricalPacketBytes": 280402,
+    "fields": 46,
+    "allFieldValuesMatch": true,
+    "scope": "source-expression projection vs retained previous native packet; not new SQL execution"
+  },
+  {
+    "symbol": "2383",
+    "actualHistoricalPacketBytes": 172898,
+    "fields": 46,
+    "allFieldValuesMatch": true,
+    "scope": "source-expression projection vs retained previous native packet; not new SQL execution"
+  }
+]

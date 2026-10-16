@@ -1,0 +1,684 @@
+{
+  "source": "4eedb532f318b6f7892256da3a81468995e069df",
+  "staticModuleCount": 33,
+  "literalEdgeCount": 132,
+  "edges": [
+    {
+      "from": "web/src/lib/research-v3-reviewer-result.ts",
+      "specifier": "./research-execution-binding.ts",
+      "to": "web/src/lib/research-execution-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result.ts",
+      "specifier": "./research-v3-author-handoff.ts",
+      "to": "web/src/lib/research-v3-author-handoff.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result.ts",
+      "specifier": "./research-v3-reviewer-result-projection.ts",
+      "to": "web/src/lib/research-v3-reviewer-result-projection.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result.ts",
+      "specifier": "./research-v3-editorial-review.ts",
+      "to": "web/src/lib/research-v3-editorial-review.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-compatible-financial-reader.ts",
+      "to": "web/src/lib/research-compatible-financial-reader.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-cash-financial-reader.ts",
+      "to": "web/src/lib/research-cash-financial-reader.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-versioned-input-legacy-response.ts",
+      "to": "web/src/lib/research-versioned-input-legacy-response.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "specifier": "./research-complete-schema-bundles.ts",
+      "to": "web/src/lib/research-complete-schema-bundles.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "specifier": "./research-complete-mapping.json",
+      "to": "web/src/lib/research-complete-mapping.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-request.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-material-canonical.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-compatible-financial-inventory.ts",
+      "to": "web/src/lib/research-compatible-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-complete-schema-bundles.ts",
+      "to": "web/src/lib/research-complete-schema-bundles.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-complete-mapping.json",
+      "to": "web/src/lib/research-complete-mapping.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-v3-material-schemas/2409-normalized.json",
+      "to": "web/src/lib/research-v3-material-schemas/2409-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-v3-material-schemas/2383-normalized.json",
+      "to": "web/src/lib/research-v3-material-schemas/2383-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-finite-material.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-historical-cash-projection.ts",
+      "to": "web/src/lib/research-historical-cash-projection.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-scenario-cash-material.ts",
+      "to": "web/src/lib/research-scenario-cash-material.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-financial-io-engine.ts",
+      "to": "web/src/lib/research-financial-io-engine.ts"
+    },
+    {
+      "from": "web/src/lib/research-financial-io-engine.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "specifier": "./research-historical-cash-projection.ts",
+      "to": "web/src/lib/research-historical-cash-projection.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-business-calculator.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-historical-cash-projection.ts",
+      "specifier": "./research-historical-cash-core.ts",
+      "to": "web/src/lib/research-historical-cash-core.ts"
+    },
+    {
+      "from": "web/src/lib/research-historical-cash-projection.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-v3-material-schemas/2409-raw.json",
+      "to": "web/src/lib/research-v3-material-schemas/2409-raw.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-v3-material-schemas/2383-raw.json",
+      "to": "web/src/lib/research-v3-material-schemas/2383-raw.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-v3-material-schemas/2409-normalized.json",
+      "to": "web/src/lib/research-v3-material-schemas/2409-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-v3-material-schemas/2383-normalized.json",
+      "to": "web/src/lib/research-v3-material-schemas/2383-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "specifier": "./research-compatible-financial-inventory.ts",
+      "to": "web/src/lib/research-compatible-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "specifier": "./research-compatible-financial-projection.ts",
+      "to": "web/src/lib/research-compatible-financial-projection.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "specifier": "./research-financial-io-engine.ts",
+      "to": "web/src/lib/research-financial-io-engine.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "specifier": "./research-compatible-financial-inventory.ts",
+      "to": "web/src/lib/research-compatible-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "specifier": "./research-financial-io-engine.ts",
+      "to": "web/src/lib/research-financial-io-engine.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-editorial-review.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-editorial-review.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result-projection.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result-projection.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result-projection.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result-projection.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result-projection.ts",
+      "specifier": "./research-v3-author-result.ts",
+      "to": "web/src/lib/research-v3-author-result.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-result-projection.ts",
+      "specifier": "./research-v3-author-handoff.ts",
+      "to": "web/src/lib/research-v3-author-handoff.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./internal-auth.ts",
+      "to": "web/src/lib/internal-auth.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-execution-binding.ts",
+      "to": "web/src/lib/research-execution-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-v3-business-article.ts",
+      "to": "web/src/lib/research-v3-business-article.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-v3-article-citations.ts",
+      "to": "web/src/lib/research-v3-article-citations.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./public-source-url.ts",
+      "to": "web/src/lib/public-source-url.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-finite-material.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-historical-cash-core.ts",
+      "to": "web/src/lib/research-historical-cash-core.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./internal-auth.ts",
+      "to": "web/src/lib/internal-auth.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-execution-binding.ts",
+      "to": "web/src/lib/research-execution-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./public-source-url.ts",
+      "to": "web/src/lib/public-source-url.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-v3-business-article.ts",
+      "to": "web/src/lib/research-v3-business-article.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-v3-article-citations.ts",
+      "to": "web/src/lib/research-v3-article-citations.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "scripts/research-v3-reviewer-result.test.mjs",
+      "specifier": "./research-v3-author-article-fixture.mjs",
+      "to": "scripts/research-v3-author-article-fixture.mjs"
+    },
+    {
+      "from": "scripts/research-v3-reviewer-result.test.mjs",
+      "specifier": "../web/src/lib/research-v3-author-result.ts",
+      "to": "web/src/lib/research-v3-author-result.ts"
+    },
+    {
+      "from": "scripts/research-v3-reviewer-result.test.mjs",
+      "specifier": "../web/src/lib/research-v3-business-article.ts",
+      "to": "web/src/lib/research-v3-business-article.ts"
+    },
+    {
+      "from": "scripts/research-v3-reviewer-result.test.mjs",
+      "specifier": "../web/src/lib/research-v3-author-handoff.ts",
+      "to": "web/src/lib/research-v3-author-handoff.ts"
+    },
+    {
+      "from": "scripts/research-v3-reviewer-result.test.mjs",
+      "specifier": "../web/src/lib/research-v3-reviewer-assignment.ts",
+      "to": "web/src/lib/research-v3-reviewer-assignment.ts"
+    },
+    {
+      "from": "scripts/research-v3-reviewer-result.test.mjs",
+      "specifier": "../web/src/lib/research-execution-binding.ts",
+      "to": "web/src/lib/research-execution-binding.ts"
+    },
+    {
+      "from": "scripts/research-v3-reviewer-result.test.mjs",
+      "specifier": "../web/src/lib/research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "scripts/research-v3-reviewer-result.test.mjs",
+      "specifier": "../web/src/lib/research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "scripts/research-v3-reviewer-result.test.mjs",
+      "specifier": "../web/src/lib/research-v3-reviewer-result.ts",
+      "to": "web/src/lib/research-v3-reviewer-result.ts"
+    },
+    {
+      "from": "scripts/research-v3-reviewer-result.test.mjs",
+      "specifier": "../web/src/lib/research-v3-editorial-review.ts",
+      "to": "web/src/lib/research-v3-editorial-review.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-execution-binding.ts",
+      "to": "web/src/lib/research-execution-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-v3-author-result.ts",
+      "to": "web/src/lib/research-v3-author-result.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-v3-author-handoff.ts",
+      "to": "web/src/lib/research-v3-author-handoff.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-v3-article-citations.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-scenario-cash-material.ts",
+      "to": "web/src/lib/research-scenario-cash-material.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-finite-material.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-historical-cash-core.ts",
+      "to": "web/src/lib/research-historical-cash-core.ts"
+    }
+  ],
+  "external": [
+    "node:assert/strict",
+    "node:crypto",
+    "node:fs",
+    "node:fs/promises",
+    "node:path",
+    "node:perf_hooks",
+    "node:test",
+    "node:zlib"
+  ],
+  "dynamicFixtureInputs": "Fixed historical gzip/markdown/schema inputs remain in inherited317; no new runtime FS or dynamic executor.",
+  "historicalEditorialReference": {
+    "ref": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+    "path": "web/src/lib/research-editorial-review.ts",
+    "blob": "d4f7a2b9cd7b9c5eace4ccde5d86875a849e441d",
+    "sha256": "3e04cc1f90c58a8d5514308538b051e1f34481290d1ac6882e59bfbd2ab7a5f2"
+  }
+}

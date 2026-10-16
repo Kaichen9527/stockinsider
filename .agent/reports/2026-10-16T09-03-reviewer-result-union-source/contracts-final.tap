@@ -1,0 +1,87 @@
+SAFE_METRIC {"symbol":"2409","packetBytes":337734,"resultBytes":344983,"sections":7,"tables":5,"scope":"synthetic RPC source contract, not PG"}
+SAFE_METRIC {"symbol":"2383","packetBytes":205549,"resultBytes":212798,"sections":7,"tables":5,"scope":"synthetic RPC source contract, not PG"}
+TAP version 13
+# Subtest: 2409 actual pinned full article packet parity; synthetic durable receive READ replay
+ok 1 - 2409 actual pinned full article packet parity; synthetic durable receive READ replay
+  ---
+  duration_ms: 2622.452619
+  ...
+# Subtest: 2409 uncertain transport preserves identity; explicit READ no second receive
+ok 2 - 2409 uncertain transport preserves identity; explicit READ no second receive
+  ---
+  duration_ms: 1936.281892
+  ...
+# Subtest: 2409 stored closed row/hash/clock and full author arithmetic reject
+ok 3 - 2409 stored closed row/hash/clock and full author arithmetic reject
+  ---
+  duration_ms: 2767.386604
+  ...
+# Subtest: 2409 review closed categories/decision/source/paragraph/secret/Unicode/cap guard
+ok 4 - 2409 review closed categories/decision/source/paragraph/secret/Unicode/cap guard
+  ---
+  duration_ms: 1517.628336
+  ...
+# Subtest: 2409 same author thread/invocation and window/crosswire refused before receive
+ok 5 - 2409 same author thread/invocation and window/crosswire refused before receive
+  ---
+  duration_ms: 2483.170903
+  ...
+# Subtest: 2409 current source/binding error and late deadline do not return saved result or retry
+ok 6 - 2409 current source/binding error and late deadline do not return saved result or retry
+  ---
+  duration_ms: 2135.613397
+  ...
+# Subtest: 2383 actual pinned full article packet parity; synthetic durable receive READ replay
+ok 7 - 2383 actual pinned full article packet parity; synthetic durable receive READ replay
+  ---
+  duration_ms: 1566.804336
+  ...
+# Subtest: 2383 uncertain transport preserves identity; explicit READ no second receive
+ok 8 - 2383 uncertain transport preserves identity; explicit READ no second receive
+  ---
+  duration_ms: 1183.317626
+  ...
+# Subtest: 2383 stored closed row/hash/clock and full author arithmetic reject
+ok 9 - 2383 stored closed row/hash/clock and full author arithmetic reject
+  ---
+  duration_ms: 1630.085101
+  ...
+# Subtest: 2383 review closed categories/decision/source/paragraph/secret/Unicode/cap guard
+ok 10 - 2383 review closed categories/decision/source/paragraph/secret/Unicode/cap guard
+  ---
+  duration_ms: 883.407277
+  ...
+# Subtest: 2383 same author thread/invocation and window/crosswire refused before receive
+ok 11 - 2383 same author thread/invocation and window/crosswire refused before receive
+  ---
+  duration_ms: 1435.889012
+  ...
+# Subtest: 2383 current source/binding error and late deadline do not return saved result or retry
+ok 12 - 2383 current source/binding error and late deadline do not return saved result or retry
+  ---
+  duration_ms: 1270.374337
+  ...
+# Subtest: reviewer configured auth-first, distinct principals, closed 8192 read body
+ok 13 - reviewer configured auth-first, distinct principals, closed 8192 read body
+  ---
+  duration_ms: 1340.896981
+  ...
+# Subtest: rehashed stored review corruption cannot replace exact validated result; READ keeps full immutable context
+ok 14 - rehashed stored review corruption cannot replace exact validated result; READ keeps full immutable context
+  ---
+  duration_ms: 3074.084996
+  ...
+# Subtest: final source read error preserves same error and durable uncertainty; receive/body/depth caps remain
+ok 15 - final source read error preserves same error and durable uncertainty; receive/body/depth caps remain
+  ---
+  duration_ms: 1160.943274
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 27025.042823

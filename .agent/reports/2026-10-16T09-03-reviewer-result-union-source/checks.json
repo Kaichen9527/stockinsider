@@ -1,0 +1,43 @@
+{
+  "source": "4eedb532f318b6f7892256da3a81468995e069df",
+  "contracts": {
+    "pass": 15,
+    "fail": 0,
+    "cancelled": 0,
+    "skip": 0,
+    "todo": 0,
+    "command": "Node22.14 --experimental-strip-types scripts/research-v3-reviewer-result.test.mjs",
+    "syntheticRpc": true,
+    "native": false
+  },
+  "staticSourceChecks": {
+    "pass": 9,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "strictModuleTS": {
+    "exit": 0,
+    "version": "5.9.3",
+    "fullAppBuild": false
+  },
+  "retainedPacketComparison": {
+    "issuers": 2,
+    "fieldsEach": 46,
+    "allValuesMatch": true,
+    "scope": "source-expression map vs historical retained native packet, not new SQL"
+  },
+  "priorRunsNotAdded": {
+    "sandboxNodeTestFileLevel": 1,
+    "firstDirectContracts": 13,
+    "initialTypecheck": 0
+  },
+  "rawErrorHistory": [
+    "initial generator expected CREATE OR REPLACE; original source is CREATE FUNCTION; extractor exit1 retained",
+    "optional tooling.json read absent; read command exit1, not product failure",
+    "read-only guessed helper filename rg error retained in command history, no product edit",
+    "first node --test emitted only file-level PASS; not counted as named contracts"
+  ],
+  "nativePG": "NOT_RUN",
+  "independentApproval": false
+}
