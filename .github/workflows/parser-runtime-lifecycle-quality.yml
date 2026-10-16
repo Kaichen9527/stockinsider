@@ -1,0 +1,45 @@
+name: Parser runtime lifecycle quality
+on:
+  pull_request:
+    paths:
+      - 'deployment/vps/systemd/stockinsider-web-standalone.service'
+      - 'scripts/parser-runtime-directory-lifecycle.py'
+      - '.github/workflows/parser-runtime-lifecycle-quality.yml'
+      - 'docs/operations/2026-10-17/parser-runtime-directory-lifecycle/**'
+permissions:
+  contents: read
+concurrency:
+  group: parser-runtime-lifecycle-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  lifecycle:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Parse the exact harness without executing it
+        run: |
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          p = Path('scripts/parser-runtime-directory-lifecycle.py')
+          compile(ast.parse(p.read_text(), filename=str(p)), str(p), 'exec')
+          PY
+      - name: Actual isolated systemd lifecycle
+        run: >-
+          python3 scripts/parser-runtime-directory-lifecycle.py --run
+          --output "$RUNNER_TEMP/parser-runtime-lifecycle-evidence"
+      - name: Preserve bounded public evidence including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: parser-runtime-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            ${{ runner.temp }}/parser-runtime-lifecycle-evidence/source-pins.json
+            ${{ runner.temp }}/parser-runtime-lifecycle-evidence/fixture-units.json
+            ${{ runner.temp }}/parser-runtime-lifecycle-evidence/events.json
+            ${{ runner.temp }}/parser-runtime-lifecycle-evidence/receipt.json
