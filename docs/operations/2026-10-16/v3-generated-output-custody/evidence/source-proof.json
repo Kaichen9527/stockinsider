@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-16T11:36:40.190953+00:00",
+  "base": "05cc5cf2bb0fc4ddf0d0276ae176be0b09bd79d4",
+  "runtimeSource": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "count": 334,
+  "bytes": 10516436,
+  "allBytesAndGitBlobsExact": true,
+  "sourceSealSha256": "86506e10fec04e6fd2372d9e9f961a4fbd8ce1d916311d8122ed12056c84e3ff",
+  "literalReferences": [],
+  "absenceNotUnreferencedProof": true
+}

@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-16T11:34:17.418870+00:00",
+  "floor": 8589934592,
+  "freeBytes": {
+    "/workspace": 8590557184,
+    "/tmp": 13609369600
+  },
+  "referenceLookupInitial": {
+    "exit": 128,
+    "error": "exact requested commit not present in current object store"
+  },
+  "fetchPlan": "new owned temporary bare Git store on /tmp; shallow filtered exact commit; no movement or alteration of project Git common",
+  "sourceUnchanged": true
+}
