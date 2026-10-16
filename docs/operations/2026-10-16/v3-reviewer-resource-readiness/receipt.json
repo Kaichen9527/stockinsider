@@ -1,0 +1,60 @@
+{
+  "base": "b6ca7fb5d4057d748162da9e3e1b98a89a56443b",
+  "originalExecutedSource": "a085294da7db0e93ade3c3e9c1f556b736164287",
+  "observedAt": "2026-10-16T10:16:02.669121+00:00",
+  "verdict": "NOT_READY",
+  "newNativeExecuted": false,
+  "original331Unchanged": true,
+  "readonlySourceOsAudit": true,
+  "publishedFilesExcludingReceipt": 9,
+  "publishedBytesExcludingReceipt": 36705,
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 4888,
+      "sha256": "783d131d2fb38431a49935ce942a7b88bc50b8de34ae7c06cdacd9673c93a1bc"
+    },
+    {
+      "path": "filesystem-facts.json",
+      "bytes": 2645,
+      "sha256": "5213dd536fb402ceb4a88679ed08dc85047b5e277b3e50a8e428bb258376e49c"
+    },
+    {
+      "path": "capacity-worksheet.json",
+      "bytes": 11569,
+      "sha256": "e124d44b78c0d6a8ea71714115d655372f1fdc5088f8a24153edcfd6f859ad07"
+    },
+    {
+      "path": "prior-stop-and-owned-state.json",
+      "bytes": 3745,
+      "sha256": "9e2ec63b86f6f246df25d39dd52c55d7cf536f586c4ed991ae0d3c7349dd996d"
+    },
+    {
+      "path": "source-and-reference-seal.json",
+      "bytes": 3636,
+      "sha256": "f530c63d2fac3d8b2be4dd9d839b67fb2b11bc59ea8ba8c0fdb48cd0a1d3b23f"
+    },
+    {
+      "path": "audit.py",
+      "bytes": 9710,
+      "sha256": "da029f696be031c9433dedce74d1b909bb3a5f535d3839fac05495fc0054497b"
+    },
+    {
+      "path": "audit.stdout",
+      "bytes": 510,
+      "sha256": "4db2ea9158232955f649f8e333da2c9f691d66c5ced3738effa4dee849a0451b"
+    },
+    {
+      "path": "audit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "audit.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    }
+  ],
+  "independentApproval": false,
+  "noDeletionNoMaterializationNoCleanup": true
+}

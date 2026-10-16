@@ -1,0 +1,288 @@
+{
+  "executedSource": "a085294da7db0e93ade3c3e9c1f556b736164287",
+  "verdict": "NOT_READY",
+  "nativeAuthorization": false,
+  "logicalFileBytes": 1790390,
+  "uniqueFiles": 29,
+  "fixedDirectoryCount": 20,
+  "fixedDirectories": [
+    ".",
+    "new",
+    "new/docs",
+    "new/docs/research",
+    "new/docs/research/2026-10-08-auo",
+    "new/docs/research/2026-10-08-auo-four-segment-model",
+    "new/docs/research/2026-10-08-auo-full-financial",
+    "new/docs/research/2026-10-08-auo-market",
+    "new/docs/research/2026-10-08-emc-company-model",
+    "new/docs/research/2026-10-08-emc-official-evidence",
+    "new/docs/research/2026-10-14-cashflow-capital-addendum",
+    "old",
+    "old/docs",
+    "old/docs/research",
+    "old/docs/research/2026-10-08-auo",
+    "old/docs/research/2026-10-08-auo-four-segment-model",
+    "old/docs/research/2026-10-08-auo-full-financial",
+    "old/docs/research/2026-10-08-auo-market",
+    "old/docs/research/2026-10-08-emc-company-model",
+    "old/docs/research/2026-10-08-emc-official-evidence"
+  ],
+  "files": [
+    {
+      "path": "old/docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 88790,
+      "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965",
+      "roundedTo4096ReferenceBytes": 90112
+    },
+    {
+      "path": "old/docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf",
+      "roundedTo4096ReferenceBytes": 20480
+    },
+    {
+      "path": "old/docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb",
+      "roundedTo4096ReferenceBytes": 40960
+    },
+    {
+      "path": "old/docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+      "roundedTo4096ReferenceBytes": 90112
+    },
+    {
+      "path": "old/docs/research/2026-10-08-auo-market/dataset.json",
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582",
+      "roundedTo4096ReferenceBytes": 397312
+    },
+    {
+      "path": "old/docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189",
+      "roundedTo4096ReferenceBytes": 4096
+    },
+    {
+      "path": "old/docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6",
+      "roundedTo4096ReferenceBytes": 4096
+    },
+    {
+      "path": "old/docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103",
+      "roundedTo4096ReferenceBytes": 8192
+    },
+    {
+      "path": "old/docs/research/2026-10-08-emc-company-model/model-results.json",
+      "bytes": 54602,
+      "sha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c",
+      "roundedTo4096ReferenceBytes": 57344
+    },
+    {
+      "path": "old/docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+      "bytes": 33734,
+      "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+      "roundedTo4096ReferenceBytes": 36864
+    },
+    {
+      "path": "old/docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+      "bytes": 110526,
+      "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5",
+      "roundedTo4096ReferenceBytes": 110592
+    },
+    {
+      "path": "old/docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+      "bytes": 10693,
+      "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5",
+      "roundedTo4096ReferenceBytes": 12288
+    },
+    {
+      "path": "old/docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+      "bytes": 3630,
+      "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275",
+      "roundedTo4096ReferenceBytes": 4096
+    },
+    {
+      "path": "old/docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+      "bytes": 3671,
+      "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d",
+      "roundedTo4096ReferenceBytes": 4096
+    },
+    {
+      "path": "new/docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 113823,
+      "sha256": "6426ba0caaac2a446593a632ebce50f93e7851f4fdb4025ff427c2f011961209",
+      "roundedTo4096ReferenceBytes": 114688
+    },
+    {
+      "path": "new/docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf",
+      "roundedTo4096ReferenceBytes": 20480
+    },
+    {
+      "path": "new/docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb",
+      "roundedTo4096ReferenceBytes": 40960
+    },
+    {
+      "path": "new/docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+      "roundedTo4096ReferenceBytes": 90112
+    },
+    {
+      "path": "new/docs/research/2026-10-08-auo-market/dataset.json",
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582",
+      "roundedTo4096ReferenceBytes": 397312
+    },
+    {
+      "path": "new/docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189",
+      "roundedTo4096ReferenceBytes": 4096
+    },
+    {
+      "path": "new/docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6",
+      "roundedTo4096ReferenceBytes": 4096
+    },
+    {
+      "path": "new/docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103",
+      "roundedTo4096ReferenceBytes": 8192
+    },
+    {
+      "path": "new/docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3",
+      "roundedTo4096ReferenceBytes": 32768
+    },
+    {
+      "path": "new/docs/research/2026-10-08-emc-company-model/model-results.json",
+      "bytes": 71848,
+      "sha256": "30028ccf9e48d7cda79f55a8b6ffd5141bad513e277894c8e360479e606b6786",
+      "roundedTo4096ReferenceBytes": 73728
+    },
+    {
+      "path": "new/docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+      "bytes": 33734,
+      "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+      "roundedTo4096ReferenceBytes": 36864
+    },
+    {
+      "path": "new/docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+      "bytes": 110526,
+      "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5",
+      "roundedTo4096ReferenceBytes": 110592
+    },
+    {
+      "path": "new/docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+      "bytes": 10693,
+      "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5",
+      "roundedTo4096ReferenceBytes": 12288
+    },
+    {
+      "path": "new/docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+      "bytes": 3630,
+      "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275",
+      "roundedTo4096ReferenceBytes": 4096
+    },
+    {
+      "path": "new/docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+      "bytes": 3671,
+      "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d",
+      "roundedTo4096ReferenceBytes": 4096
+    }
+  ],
+  "fixtureInputs": [
+    {
+      "path": "scripts/fixtures/research-compatible-financial/pinned-original-source.json.gz",
+      "entries": 14,
+      "decodedJsonBytes": 1148077
+    },
+    {
+      "path": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+      "entries": 15,
+      "decodedJsonBytes": 1245186
+    }
+  ],
+  "referenceAllocationModel": {
+    "fileBlockRoundedBytes": 1835008,
+    "directoryAssumption": "4096 bytes per new directory; reference model only, not measured st_blocks or an upper bound",
+    "directoryReferenceBytes": 81920,
+    "combinedReferenceBytes": 1916928,
+    "priorObservedDecline": 1916928,
+    "modelEqualsPriorDecline": true,
+    "causalityProven": false
+  },
+  "workspaceCapacity": {
+    "freshAvailable": 8591060992,
+    "minusLogicalFiles": 8589270602,
+    "logicalOnlyDeficitBelowFloor": 663990,
+    "minusFileBlockReference": 8589225984,
+    "minusDirectoryAndFileReference": 8589144064,
+    "referenceDeficitBelowFloor": 790528,
+    "floorPlusKnownReference": 8591851520,
+    "knownReferenceNotSufficientAdmission": true
+  },
+  "tmpCapacity": {
+    "freshAvailable": 13783437312,
+    "priorRunStartAvailable": 13956571136,
+    "priorObservedMinimum": 13677768704,
+    "futureCompleteLifecycleRawUpperBound": null,
+    "reason": "Previous run stopped before business; full two-company snapshots/PG WAL/log/private outputs not bounded by prior incomplete observation"
+  },
+  "writeLocations": [
+    {
+      "component": "29 fixed financial files +20 directories",
+      "parent": "/home/agent",
+      "st_dev": 27,
+      "knownLogicalBytes": 1790390,
+      "unknown": "actual future allocation/copy-up/inodes and concurrent filesystem changes"
+    },
+    {
+      "component": "Git objects/index/ref/log from source and safe evidence branch commits",
+      "parent": "/workspace/stockinsider/.git",
+      "st_dev": 27,
+      "knownFutureUpperBound": null,
+      "note": "worktree on tmp does not move Git common objects off workspace"
+    },
+    {
+      "component": "new source/handoff/evidence worktree files",
+      "parent": "/tmp/si-pubtail-o14",
+      "st_dev": 34,
+      "knownFutureUpperBound": null
+    },
+    {
+      "component": "PG data/WAL/socket/server log; runner stdout/stderr/samples; private full snapshots; safe summary intermediates",
+      "parent": "/tmp",
+      "st_dev": 34,
+      "knownFutureUpperBound": null
+    },
+    {
+      "component": "Node binary and installed modules",
+      "parent": "/workspace",
+      "st_dev": 27,
+      "mode": "read by frozen command; explicit stdout/stderr redirected to /tmp",
+      "unknown": "No assertion that unspecified runtime/platform writes or other actors are zero"
+    }
+  ],
+  "unknowns": [
+    "Reference filesystem block size is not proof of allocated st_blocks for removed files",
+    "Directory4096 model coincides with observed decline but no exclusive filesystem change trace proves causality",
+    "Full two-issuer PG/raw output growth and other actors are not upper-bounded",
+    "No safe reexecution merely because current available exceeds floor"
+  ],
+  "safeReclaimCandidates": [],
+  "reclaimCandidateReason": "No owned nonreferenced rebuildable output proven; private raw/WIP/RED/history/source/stock data never candidates here",
+  "noMaterializationNoDeletionNoPGNoNodeExecution": true
+}

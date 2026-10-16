@@ -1,0 +1,162 @@
+{
+  "priorRun": {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--import",
+      "./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/opportunity-v3/research-v3-reviewer-result-native.test.mjs"
+    ],
+    "start": "2026-10-16T09:55:38.633365+00:00",
+    "cwd": "/tmp/si-pubtail-o14",
+    "sampleSeconds": 0.2,
+    "peakSessionAndPgRssBytes": 996675584,
+    "minimumFreeBytes": {
+      "/workspace": 8589361152,
+      "/tmp": 13677768704
+    },
+    "user": "agent",
+    "artifactPath": "/tmp/rr-native-o16",
+    "deadline": "2026-10-16T10:32:52Z",
+    "sessionPid": 702389,
+    "boundStop": {
+      "rss": 533884928,
+      "free": {
+        "/workspace": 8589361152,
+        "/tmp": 13702041600
+      },
+      "time": 1792144576.3038168
+    },
+    "exit": 1,
+    "seconds": 37.87074661254883,
+    "end": "2026-10-16T09:56:16.504108+00:00"
+  },
+  "sampleCount": 161,
+  "firstBreachIndexZeroBased": 160,
+  "firstBreach": {
+    "at": "2026-10-16T09:56:16.303707+00:00",
+    "rssBytes": 533884928,
+    "freeBytes": {
+      "/workspace": 8589361152,
+      "/tmp": 13702041600
+    },
+    "processes": [
+      {
+        "pid": 702389,
+        "session": 702389,
+        "comm": "node",
+        "rss": 27287552
+      },
+      {
+        "pid": 702395,
+        "session": 702389,
+        "comm": "node",
+        "rss": 276140032
+      },
+      {
+        "pid": 702424,
+        "session": 702424,
+        "comm": "postgres",
+        "rss": 23822336
+      },
+      {
+        "pid": 702425,
+        "session": 702425,
+        "comm": "postgres",
+        "rss": 4546560
+      },
+      {
+        "pid": 702426,
+        "session": 702426,
+        "comm": "postgres",
+        "rss": 6107136
+      },
+      {
+        "pid": 702428,
+        "session": 702428,
+        "comm": "postgres",
+        "rss": 8757248
+      },
+      {
+        "pid": 702429,
+        "session": 702429,
+        "comm": "postgres",
+        "rss": 7417856
+      },
+      {
+        "pid": 702430,
+        "session": 702430,
+        "comm": "postgres",
+        "rss": 6754304
+      },
+      {
+        "pid": 702445,
+        "session": 702445,
+        "comm": "postgres",
+        "rss": 159797248
+      },
+      {
+        "pid": 702457,
+        "session": 702457,
+        "comm": "postgres",
+        "rss": 13254656
+      }
+    ]
+  },
+  "initialMargin1343488": 1343488,
+  "observedDecline1916928": 1916928,
+  "deficit573440": 573440,
+  "cleanupReturnedToOriginalAvailable": 8591278080,
+  "cleanupWasNotCapacityIncrease": true,
+  "currentOwnedProcesses": [
+    {
+      "pid": 702395,
+      "name": "node",
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0,
+      "absent": false
+    },
+    {
+      "pid": 702424,
+      "name": "postgres",
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0,
+      "absent": false
+    }
+  ],
+  "currentOwnedPaths": [
+    {
+      "path": "/tmp/vp3profile-Kz5pUg",
+      "absent": true,
+      "method": "lstat ENOENT"
+    },
+    {
+      "path": "/tmp/vp3profile-Kz5pUg/.s.PGSQL.58495",
+      "absent": true,
+      "method": "lstat ENOENT"
+    },
+    {
+      "path": "/home/agent/.versioned-prerequisite-RUhjNE",
+      "absent": true,
+      "method": "lstat ENOENT"
+    },
+    {
+      "path": "/home/agent/.versioned-prerequisite-RUhjNE/old",
+      "absent": true,
+      "method": "lstat ENOENT"
+    },
+    {
+      "path": "/home/agent/.versioned-prerequisite-RUhjNE/new",
+      "absent": true,
+      "method": "lstat ENOENT"
+    }
+  ],
+  "newRuntimeResults": false,
+  "below5GBReadonlyInventoryTriggered": false,
+  "projectOtherAppScanPerformed": false,
+  "currentAuditPeakRssBytes": 17559552
+}

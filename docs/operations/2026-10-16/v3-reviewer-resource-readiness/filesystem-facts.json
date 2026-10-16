@@ -1,0 +1,102 @@
+{
+  "observedAt": "2026-10-16T10:16:02.669121+00:00",
+  "requiredAvailableBytes": 8589934592,
+  "filesystems": [
+    {
+      "requested": "/workspace",
+      "realpath": "/workspace",
+      "st_dev": 27,
+      "st_blksize": 4096,
+      "filesystem": {
+        "mountpoint": "/workspace",
+        "filesystemType": "overlay",
+        "majorMinor": "0:27"
+      },
+      "f_bsize": 4096,
+      "f_frsize": 4096,
+      "f_blocks": 8244676,
+      "f_bfree": 2520953,
+      "f_bavail": 2097427,
+      "freeBytes": 10325823488,
+      "availableBytes": 8591060992,
+      "marginOverOriginalFloor": 1126400
+    },
+    {
+      "requested": "/tmp",
+      "realpath": "/tmp",
+      "st_dev": 34,
+      "st_blksize": 4096,
+      "filesystem": {
+        "mountpoint": "/tmp",
+        "filesystemType": "tmpfs",
+        "majorMinor": "0:34"
+      },
+      "f_bsize": 4096,
+      "f_frsize": 4096,
+      "f_blocks": 4363255,
+      "f_bfree": 3365097,
+      "f_bavail": 3365097,
+      "freeBytes": 13783437312,
+      "availableBytes": 13783437312,
+      "marginOverOriginalFloor": 5193502720
+    },
+    {
+      "requested": "/tmp/si-pubtail-o14",
+      "realpath": "/tmp/si-pubtail-o14",
+      "st_dev": 34,
+      "st_blksize": 4096,
+      "filesystem": {
+        "mountpoint": "/tmp",
+        "filesystemType": "tmpfs",
+        "majorMinor": "0:34"
+      },
+      "f_bsize": 4096,
+      "f_frsize": 4096,
+      "f_blocks": 4363255,
+      "f_bfree": 3365097,
+      "f_bavail": 3365097,
+      "freeBytes": 13783437312,
+      "availableBytes": 13783437312,
+      "marginOverOriginalFloor": 5193502720
+    },
+    {
+      "requested": "/home/agent",
+      "realpath": "/home/agent",
+      "st_dev": 27,
+      "st_blksize": 4096,
+      "filesystem": {
+        "mountpoint": "/",
+        "filesystemType": "overlay",
+        "majorMinor": "0:27"
+      },
+      "f_bsize": 4096,
+      "f_frsize": 4096,
+      "f_blocks": 8244676,
+      "f_bfree": 2520953,
+      "f_bavail": 2097427,
+      "freeBytes": 10325823488,
+      "availableBytes": 8591060992,
+      "marginOverOriginalFloor": 1126400
+    },
+    {
+      "requested": "/workspace/stockinsider/.git",
+      "realpath": "/workspace/stockinsider/.git",
+      "st_dev": 27,
+      "st_blksize": 4096,
+      "filesystem": {
+        "mountpoint": "/workspace",
+        "filesystemType": "overlay",
+        "majorMinor": "0:27"
+      },
+      "f_bsize": 4096,
+      "f_frsize": 4096,
+      "f_blocks": 8244676,
+      "f_bfree": 2520953,
+      "f_bavail": 2097427,
+      "freeBytes": 10325823488,
+      "availableBytes": 8591060992,
+      "marginOverOriginalFloor": 1126400
+    }
+  ],
+  "noEnvironmentValuesRead": true
+}
