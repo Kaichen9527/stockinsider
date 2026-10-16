@@ -1,0 +1,50 @@
+{
+  "base": "a511bcdd1ba6803b62a23f215fd4b8c662888f94",
+  "runtimeSource": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "reportCommit": "221dae9fcdf15d265867dadb9764a5fb3680d263",
+  "reportSha256": "cbc0cc6de980e47537b5e87494e1695f0bdcb43dd10f21a46cce99d8b6ef5ee7",
+  "sourceCount": 334,
+  "sourceBytes": 10516436,
+  "allSourceUnchanged": true,
+  "selection": "NONE_NOT_READY",
+  "nativeExecuted": false,
+  "cleanupExecuted": false,
+  "safeDeletionCandidates": [],
+  "makerIndependentApproval": false,
+  "publishedFilesExcludingReceipt": 6,
+  "publishedBytesExcludingReceipt": 23900,
+  "localRawCount": 8,
+  "localRawBytes": 380194,
+  "files": [
+    {
+      "path": "actual-os-audit.json",
+      "bytes": 16597,
+      "sha256": "668390c14dcb0d7af9c2756bf13a6d78e1b662a0d2daa7e1d42bc281e26e18fd"
+    },
+    {
+      "path": "mount-candidate-screen.json",
+      "bytes": 868,
+      "sha256": "6c673a2fd0c4fb86e5468ca4062f589bbcdc94315807381c0b707c3ef0bcb61b"
+    },
+    {
+      "path": "publication-capacity.json",
+      "bytes": 307,
+      "sha256": "3276276216c19e4af42d21039d95529a106e47daf7401361c6c3952a3a6969b1"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 1536,
+      "sha256": "a0e34fcb60db97cd12d6e98bc723d111ecbd5685b60403afcb4ad2d0aa8bb354"
+    },
+    {
+      "path": "sandbox-context.json",
+      "bytes": 846,
+      "sha256": "1100a685f13eeec7c24e61f701db9cefeca4c2cd736644747a05ca18fbd2223b"
+    },
+    {
+      "path": "source-proof.json",
+      "bytes": 3746,
+      "sha256": "20ac83210bf32961dfea4f034f0964d0ad26801b4e0d5a69e4ea662d8e250d3a"
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "at": "2026-10-16T11:11:13.049114+00:00",
+  "base": "a511bcdd1ba6803b62a23f215fd4b8c662888f94",
+  "source": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "sourceCount": 334,
+  "sourceBytes": 10516436,
+  "all334BytesAndGitBlobsUnchanged": true,
+  "sourceSealPath": "docs/operations/2026-10-16/v3-reviewer-result-tmp-native/evidence/source-seal.json",
+  "sourceSealSha256": "86506e10fec04e6fd2372d9e9f961a4fbd8ce1d916311d8122ed12056c84e3ff",
+  "sourcePathLiteralReferences": [],
+  "referenceScope": "334 exact inputs only; literal matches do not establish live use and absence is not proof of non-reference",
+  "generatedRegularHashCount": 621,
+  "generatedRegularBytes": 9602854,
+  "generatedHashInventorySha256": "7365da3e1163c6ae73ec8fd1e2dbf1c8edd9b0e25d8e3f8cb35dbf1d48bc718a",
+  "generatedAncestorMetadata": [
+    {
+      "target": "web/.next/server",
+      "ancestors": [
+        {
+          "path": "/",
+          "mode": "0o755",
+          "symlink": false,
+          "uid": 65534,
+          "dev": 27
+        },
+        {
+          "path": "/workspace",
+          "mode": "0o755",
+          "symlink": false,
+          "uid": 1000,
+          "dev": 27
+        },
+        {
+          "path": "/workspace/stockinsider",
+          "mode": "0o700",
+          "symlink": false,
+          "uid": 1000,
+          "dev": 27
+        },
+        {
+          "path": "/workspace/stockinsider/web",
+          "mode": "0o700",
+          "symlink": false,
+          "uid": 1000,
+          "dev": 27
+        },
+        {
+          "path": "/workspace/stockinsider/web/.next",
+          "mode": "0o700",
+          "symlink": false,
+          "uid": 1000,
+          "dev": 27
+        },
+        {
+          "path": "/workspace/stockinsider/web/.next/server",
+          "mode": "0o700",
+          "symlink": false,
+          "uid": 1000,
+          "dev": 27
+        }
+      ]
+    },
+    {
+      "target": "web/.next/static",
+      "ancestors": [
+        {
+          "path": "/",
+          "mode": "0o755",
+          "symlink": false,
+          "uid": 65534,
+          "dev": 27
+        },
+        {
+          "path": "/workspace",
+          "mode": "0o755",
+          "symlink": false,
+          "uid": 1000,
+          "dev": 27
+        },
+        {
+          "path": "/workspace/stockinsider",
+          "mode": "0o700",
+          "symlink": false,
+          "uid": 1000,
+          "dev": 27
+        },
+        {
+          "path": "/workspace/stockinsider/web",
+          "mode": "0o700",
+          "symlink": false,
+          "uid": 1000,
+          "dev": 27
+        },
+        {
+          "path": "/workspace/stockinsider/web/.next",
+          "mode": "0o700",
+          "symlink": false,
+          "uid": 1000,
+          "dev": 27
+        },
+        {
+          "path": "/workspace/stockinsider/web/.next/static",
+          "mode": "0o700",
+          "symlink": false,
+          "uid": 1000,
+          "dev": 27
+        }
+      ]
+    }
+  ],
+  "identityMarkers": [
+    {
+      "path": "web/.next/BUILD_ID",
+      "absent": true
+    },
+    {
+      "path": "web/.next/build-manifest.json",
+      "bytes": 511,
+      "sha256": "c8a5cdfb43cd027fd88226b3dce13128a32b4c6c78859e11c7c6e8be51ae4e9d",
+      "claim": "identity only, not rebuild or package parity proof"
+    },
+    {
+      "path": "web/package.json",
+      "bytes": 2137,
+      "sha256": "bd2b13381a5e9e5bdafe83a2a2803b753edd8fbf27f125710d191fa2d46a600b",
+      "claim": "identity only, not rebuild or package parity proof"
+    }
+  ],
+  "exactApprovedPackageParity": "UNKNOWN; no package downloaded/read or rebuilt",
+  "sameByteRetainedCopy": "UNKNOWN; no broad scan",
+  "rebuildability": "UNKNOWN; build recipe alone does not establish exact reproducibility",
+  "safeDeletionCandidates": []
+}

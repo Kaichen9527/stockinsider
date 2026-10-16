@@ -1,0 +1,88 @@
+{
+  "at": "2026-10-16T11:32:41.091898+00:00",
+  "scope": "Root report/public exact hash references and actual bounded official read observation; no native/custody parity/cleanup/formal approval",
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 2683,
+      "sha256": "7638e2719f23e22a0a1c4e17447b699200b8be2ce9d4c6eb93cdd0fcbfe33238"
+    },
+    {
+      "path": "approved-dd-output-hash-reference.json",
+      "bytes": 457608,
+      "sha256": "2dfb0f78f3a6b63fc7f11d5ceaaa60335b98a184ee94cfb4ae8f81464ee245cd"
+    },
+    {
+      "path": "cloud-HANDOFF.md",
+      "bytes": 5409,
+      "sha256": "cbc0cc6de980e47537b5e87494e1695f0bdcb43dd10f21a46cce99d8b6ef5ee7"
+    },
+    {
+      "path": "cloud-actual-os-audit.json",
+      "bytes": 16597,
+      "sha256": "668390c14dcb0d7af9c2756bf13a6d78e1b662a0d2daa7e1d42bc281e26e18fd"
+    },
+    {
+      "path": "cloud-mount-candidate-screen.json",
+      "bytes": 868,
+      "sha256": "6c673a2fd0c4fb86e5468ca4062f589bbcdc94315807381c0b707c3ef0bcb61b"
+    },
+    {
+      "path": "cloud-publication-capacity.json",
+      "bytes": 307,
+      "sha256": "3276276216c19e4af42d21039d95529a106e47daf7401361c6c3952a3a6969b1"
+    },
+    {
+      "path": "cloud-raw-inventory.json",
+      "bytes": 1536,
+      "sha256": "a0e34fcb60db97cd12d6e98bc723d111ecbd5685b60403afcb4ad2d0aa8bb354"
+    },
+    {
+      "path": "cloud-receipt.json",
+      "bytes": 1587,
+      "sha256": "23b54d9d3a1c44c7c61bbfc0590e74607f12f1f60ac305cb9834efa8275c628c"
+    },
+    {
+      "path": "cloud-sandbox-context.json",
+      "bytes": 846,
+      "sha256": "1100a685f13eeec7c24e61f701db9cefeca4c2cd736644747a05ca18fbd2223b"
+    },
+    {
+      "path": "cloud-source-proof.json",
+      "bytes": 3746,
+      "sha256": "20ac83210bf32961dfea4f034f0964d0ad26801b4e0d5a69e4ea662d8e250d3a"
+    },
+    {
+      "path": "official-execution.json",
+      "bytes": 654,
+      "sha256": "17460ed55919d4bcc6d5d6a57f27f14f62abc13367b932c3260dd45b822600fb"
+    },
+    {
+      "path": "official-readonly.sh",
+      "bytes": 2737,
+      "sha256": "0a9d9914e9ef4c89831548606f8a44f0fc21e123d62e38c0901d15c24bf1fd89"
+    },
+    {
+      "path": "official-stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "official-stdout",
+      "bytes": 355,
+      "sha256": "44ce2d120d2327e9b81f0c5bd0340f256cb8ee74d6bf95a3a0209a47d35f3125"
+    },
+    {
+      "path": "root-check.json",
+      "bytes": 1050,
+      "sha256": "7353079f2766b394c9d7ddf7e191bfaf905d8a14b24a73cebcd8fe4704a46f87"
+    },
+    {
+      "path": "root-check.py",
+      "bytes": 6299,
+      "sha256": "94462671db7684f5d5533436a1b6ce7cf7785d6cc9af5665cbc2cc4e77aef36d"
+    }
+  ],
+  "count": 16,
+  "bytes": 502282
+}

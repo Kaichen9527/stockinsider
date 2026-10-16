@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-16T11:13:22.426647+00:00",
+  "freeBytes": {
+    "/workspace": 8590618624,
+    "/tmp": 13609422848
+  },
+  "floor": 8589934592,
+  "indexBytes": 386919,
+  "newObjectAllowance": 131072,
+  "afterIndexAndAllowance": 8590100633,
+  "noDeletionOrReserveFile": true,
+  "notNativeAdmission": true
+}

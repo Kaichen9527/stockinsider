@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-16T11:13:22.426457+00:00",
+  "root": "/tmp/guarded-staging-audit-o16",
+  "scope": "maker local evidence; hash-only inventory, not Root contents verified",
+  "count": 8,
+  "bytes": 380194,
+  "files": [
+    {
+      "path": "actual-os-audit.json",
+      "bytes": 16597,
+      "sha256": "668390c14dcb0d7af9c2756bf13a6d78e1b662a0d2daa7e1d42bc281e26e18fd"
+    },
+    {
+      "path": "audit.py",
+      "bytes": 6840,
+      "sha256": "e7b0322d6df928353213c4b23d515642ba7e4d1c0b23d84642809f721a7adadc"
+    },
+    {
+      "path": "generated-hashes-private.json",
+      "bytes": 121137,
+      "sha256": "7365da3e1163c6ae73ec8fd1e2dbf1c8edd9b0e25d8e3f8cb35dbf1d48bc718a"
+    },
+    {
+      "path": "generated-metadata-private.json",
+      "bytes": 226640,
+      "sha256": "90c3d4394b0af637a4f50d753674b00141b6fc3019fd76d1ef650fdf58ff4cba"
+    },
+    {
+      "path": "mount-candidate-screen.json",
+      "bytes": 868,
+      "sha256": "6c673a2fd0c4fb86e5468ca4062f589bbcdc94315807381c0b707c3ef0bcb61b"
+    },
+    {
+      "path": "sandbox-context.json",
+      "bytes": 846,
+      "sha256": "1100a685f13eeec7c24e61f701db9cefeca4c2cd736644747a05ca18fbd2223b"
+    },
+    {
+      "path": "source-proof.json",
+      "bytes": 3746,
+      "sha256": "20ac83210bf32961dfea4f034f0964d0ad26801b4e0d5a69e4ea662d8e250d3a"
+    },
+    {
+      "path": "source-proof.py",
+      "bytes": 3520,
+      "sha256": "edf05f7c381635e2ac6e928781de4fa0c16d5b107ab9b84847cea6996744582e"
+    }
+  ],
+  "excluded": "inventory itself; later Git publication log"
+}

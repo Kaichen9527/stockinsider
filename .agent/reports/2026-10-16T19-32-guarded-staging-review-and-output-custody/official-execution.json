@@ -1,0 +1,24 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "root@5.104.83.211",
+    "bash",
+    "-s"
+  ],
+  "start": "2026-10-16T11:14:29.377493+00:00",
+  "end": "2026-10-16T11:14:30.351524+00:00",
+  "actualExit": 0,
+  "scriptSha256": "0a9d9914e9ef4c89831548606f8a44f0fc21e123d62e38c0901d15c24bf1fd89",
+  "freshKnownLockListEmptyBeforeOriginalThreeFlocks": true,
+  "sourcePathReference": {
+    "thread": "01a137fc-e83b-7bc0-bc54-8fca40edc2a3",
+    "turn": "01a137fc-eae8-78d2-854b-f6df7c8c0c21",
+    "commandId": "exec-790e32cf-951f-46d7-a8ea-49fb4f3a9516"
+  },
+  "readOnly": true,
+  "dataWriteOrDownload": false
+}

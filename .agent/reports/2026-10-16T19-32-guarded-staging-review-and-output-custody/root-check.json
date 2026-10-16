@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-16T11:32:00.906782+00:00",
+  "commit": "05cc5cf2bb0fc4ddf0d0276ae176be0b09bd79d4",
+  "sourceInputsVerified": 334,
+  "sourceBytesVerified": 10516436,
+  "publishedReceiptFilesVerifiedIncludingReceipt": 7,
+  "publishedBytesVerifiedIncludingReceipt": 25487,
+  "handoffBytesVerified": 5409,
+  "privateInventoryOnly": {
+    "count": 8,
+    "bytes": 380194,
+    "contentsObtained": false
+  },
+  "scope": "Root actual Git-byte and bounded public-audit arithmetic consistency; not native, private OS contents, output custody parity, reclaim proof or formal approval.",
+  "selectedStaging": "NONE_NOT_READY",
+  "safeDeletionCandidates": [],
+  "packageRetainedActualFilesRehashed": 2586,
+  "packageRetainedActualBytesRehashed": 79354761,
+  "packageManifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+  "cloudOutputParity": "NOT_CHECKED",
+  "officialKnownDirectoryOnlyAbsent": true,
+  "newDbWriterLeaseQuery": false,
+  "rootFilesystemAvailable": 16815828992,
+  "cleanupExecuted": false,
+  "goalActive": true
+}

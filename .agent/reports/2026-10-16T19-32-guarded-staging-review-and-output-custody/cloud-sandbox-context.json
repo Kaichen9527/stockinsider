@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-16T11:12:41.904832+00:00",
+  "scope": "tool sandbox metadata; NOT native execution-context admission",
+  "paths": [
+    {
+      "path": "/home/agent",
+      "uid": 1000,
+      "gid": 1000,
+      "dev": 27,
+      "mode": "0o700",
+      "actorWritable": false,
+      "freeBytes": 8590647296
+    },
+    {
+      "path": "/tmp",
+      "uid": 65534,
+      "gid": 65534,
+      "dev": 34,
+      "mode": "0o1777",
+      "actorWritable": true,
+      "freeBytes": 13609439232
+    },
+    {
+      "path": "/dev",
+      "uid": 1000,
+      "gid": 1000,
+      "dev": 37,
+      "mode": "0o755",
+      "actorWritable": true,
+      "freeBytes": 17871892480
+    },
+    {
+      "path": "/dev/shm",
+      "uid": 1000,
+      "gid": 1000,
+      "dev": 37,
+      "mode": "0o755",
+      "actorWritable": true,
+      "freeBytes": 17871892480
+    }
+  ]
+}
