@@ -1,0 +1,7 @@
+{
+  "nodeVersion": "v22.14.0",
+  "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+  "nodePath": "/workspace/.tools/node22/node_modules/node/bin/node",
+  "noPGProcess": true,
+  "noNpmInstall": true
+}

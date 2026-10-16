@@ -1,0 +1,9 @@
+# Handoff binding fence — uninstalled source candidate
+
+Source `259264b8ed17df0ffb38b19efd0e05bfbaaf3a98` / tree `46823bdfa1fb6786edc5ab5119cc2c987fd3a9a8` / base `2042725b3b72f1f0a4ba7df525163b26121e876d`. Only four new files: one candidate migration and profile/checks/handoff. All302 inherited inputs byte-identical, including c08, be6 TS, old SQL, role/ACL/pins/budgets.
+
+One existing handoff-context body replacement; original6975bytes preserved/reversible, original six arguments and metadata unchanged. Both first/completed paths re-resolve candidate read binding under source/global locks; old77 finite v2 keeps four keys, compatible-v2 keeps four keys, v3 adds actual binding as fifth key. Existing caller TS remains failclosed and needs later reviewed adaptation. No SQL executed or grants added.
+
+Focused final15 static checks PASS0fail/cancel/skip/todo; earlier14 are not added. Node22.14 exactsource; OS maxRSS293048320bytes. Historical two c08 committed snapshots/codec/default ACL derivation were read and rehashed locally; this is NOT fresh PG or installed-profile approval. Full snapshots remain private and are only hash referenced. Source-derived profile records exact paths/lineage/hashes and actualOidPinned=false. All original RED history remains unchanged.
+
+Pending: PG grammar/installer/predecessor/ACL/body/identity/default/catalog/rollback/busy/drift/installed rejection; old77/compatible/v3 first and completed replay, live read revocation/nonresurrection/source withdrawal/reviewer inheritance; actual5key TS consumer/reviewer assignment/packet, fourcallers/Q-R/reviewer-result/atomicpublication/wholeclosure/semantic/formal articles and fullgoal. No native/build/PG/socket/app/HTTP/SSH/VPS/npm/CI/PR/ref/merge/deploy/cache or next-task action. Maker does not independently approve. Stop for Root exact review.

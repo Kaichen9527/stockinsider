@@ -1,0 +1,121 @@
+{
+  "root": "/tmp/v3-handoff-binding-fence-source-o16",
+  "count": 20,
+  "bytes": 123805,
+  "rootContentsIndependentlyReviewed": false,
+  "files": [
+    {
+      "path": "checks-initial14.mjs",
+      "bytes": 12089,
+      "sha256": "5a6fa13cdeb41aa933313a13292418bc26f89468b296f8bff533592609ea4930"
+    },
+    {
+      "path": "checks.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "checks.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks.stdout",
+      "bytes": 3235,
+      "sha256": "c1d9c1ae1b4399d41654a02b118115c38b29051181d3cf8d6928a9a2ac75a60f"
+    },
+    {
+      "path": "evidence.py",
+      "bytes": 7796,
+      "sha256": "635fef7e5b2818fa549d7fb40056d2e3e44063def5b14f4bbd48692134653419"
+    },
+    {
+      "path": "fence-fragment.sql.txt",
+      "bytes": 2340,
+      "sha256": "0f31743698a218f7a3ee0315628e8e0e55117e371d6f3ca775818a6113c2667e"
+    },
+    {
+      "path": "final-checks.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "final-checks.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "final-checks.stdout",
+      "bytes": 3564,
+      "sha256": "394396c8b9a8771d467feeec39ad5a3e5dc9699d09a7d7ed9ab2cb061f0a79c9"
+    },
+    {
+      "path": "final-precheck-source-seal.json",
+      "bytes": 890,
+      "sha256": "9c41b86814f40a301da4a35dc498d1c3519215b066cb79598d8e37e00decbdc8"
+    },
+    {
+      "path": "generate.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "generate.py",
+      "bytes": 15306,
+      "sha256": "55517e015bd482afdd7ccfb5375cbd10d67d739fdc0b80b02a2535efaa6d0c0f"
+    },
+    {
+      "path": "generate.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "generate.stdout",
+      "bytes": 473,
+      "sha256": "2fc868131209e5fc94ad3e845006d5c0c4e17545dace2fc7f8ebac626d935089"
+    },
+    {
+      "path": "initial-source-seal.json",
+      "bytes": 695,
+      "sha256": "dc1d9cfac9f94e7133479266a8ab9db599fcba1369bebe3902439c92879dff5b"
+    },
+    {
+      "path": "new-body.sql.txt",
+      "bytes": 9492,
+      "sha256": "f507de78318a126e180f96fa7905fccfb6c1ee428688fb9e93b0f607c8d7e958"
+    },
+    {
+      "path": "original-body.sql.txt",
+      "bytes": 6975,
+      "sha256": "ffb26f1274ab222166c0f7cfac2355cfacce2fcdb9ec5288e5ea089fc176ae1d"
+    },
+    {
+      "path": "sealed-20261016_research_author_handoff_binding_fence_candidate_v3.sql",
+      "bytes": 39960,
+      "sha256": "fff12bbd98489c334d07a42083e86f5cac0a04d6ff33eb1b72286eafec0dc31d"
+    },
+    {
+      "path": "sealed-source-checks.mjs",
+      "bytes": 12089,
+      "sha256": "5a6fa13cdeb41aa933313a13292418bc26f89468b296f8bff533592609ea4930"
+    },
+    {
+      "path": "sealed-source-derived-profile.json",
+      "bytes": 8895,
+      "sha256": "e9fa906028db3629cd594ae0f02b66760342ee3b8e1eac3d7e96f9e8320c02be"
+    }
+  ],
+  "referencedHistoricalPrivateSnapshots": [
+    {
+      "path": "/tmp/author-fixture-native-o16/native-artifacts/2409-author-durable-2409-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    },
+    {
+      "path": "/tmp/author-fixture-native-o16/native-artifacts/2383-author-durable-2383-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    }
+  ],
+  "historicalFullPrivateSnapshotsPublished": false
+}

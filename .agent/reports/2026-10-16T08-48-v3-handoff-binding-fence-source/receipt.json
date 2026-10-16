@@ -1,0 +1,64 @@
+{
+  "source": "259264b8ed17df0ffb38b19efd0e05bfbaaf3a98",
+  "tree": "46823bdfa1fb6786edc5ab5119cc2c987fd3a9a8",
+  "base": "2042725b3b72f1f0a4ba7df525163b26121e876d",
+  "time": "2026-10-16T00:59:17.905946+00:00",
+  "kind": "maker-source-only-candidate-not-independent-approval",
+  "files": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 1841,
+      "sha256": "d82d1fed84f4a951bf7af0ad20d1f91658671f5b96222b7cad2f7d2c72b92849"
+    },
+    {
+      "path": "checks.json",
+      "bytes": 890,
+      "sha256": "8b3868c9f1d7a8d896bc2567c42979252d82ea03eec02d473b07bac89e5208ec"
+    },
+    {
+      "path": "final15.safe.tap",
+      "bytes": 3020,
+      "sha256": "e0c42f841b183816d99791db28bfecd1c250b4b393744e39650447b1ec04d49e"
+    },
+    {
+      "path": "initial14.safe.tap",
+      "bytes": 2732,
+      "sha256": "a38673887f4d8ef3ed31b4458dde7e3409eb702d562572b00746365b37a1ea7b"
+    },
+    {
+      "path": "private-raw-inventory.json",
+      "bytes": 3856,
+      "sha256": "012d2b9a38bd8e6ac9be1de75d33ffbfa3a479b9837bd92b92b479200e09f3f7"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 600,
+      "sha256": "eabdf3a6473dd4a932bf29d33cdeff546050e0bc2a95c990779dbf8225d21549"
+    },
+    {
+      "path": "source-derived-witness.json",
+      "bytes": 1586,
+      "sha256": "089751ac5f6002d679973f69dad43b6f471ec7208955cfbc7745e0913220269c"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 88494,
+      "sha256": "38cab6dd005cab0405d27bb5bdde2a71c3ec20794c3286a1005b0e149260f830"
+    },
+    {
+      "path": "tooling.json",
+      "bytes": 232,
+      "sha256": "7aa427d7100199c6f42a8ec03ce66e4c098fb8c871aaee3c98d2563541781bf5"
+    }
+  ],
+  "publishedFilesExcludingReceipt": 9,
+  "actualGitInputs": 310,
+  "originalInputsUnchanged": 302,
+  "nativeExecuted": false,
+  "tests": {
+    "pass": 15,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  }
+}

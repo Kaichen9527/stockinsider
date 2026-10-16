@@ -1,0 +1,24 @@
+{
+  "start": "2026-10-16T00:48:52Z",
+  "initialFree": {
+    "/workspace": 8592408576,
+    "/tmp": 14271229952
+  },
+  "observedBeforeFinalSourceCommit": {
+    "/workspace": 8592400384,
+    "/tmp": 14271000576
+  },
+  "finalFree": {
+    "/workspace": 8592338944,
+    "/tmp": 14270885888
+  },
+  "floor": 8589934592,
+  "resourceUsage": {
+    "maxRSSBytes": 293048320,
+    "node": "v22.14.0",
+    "pgExecuted": false
+  },
+  "scope": "OS process maxRSS for final focused Node check; no continuous system/global RSS measurement claimed",
+  "cleanupPerformed": false,
+  "installOrEnvironmentChanges": false
+}

@@ -1,0 +1,24 @@
+{
+  "source": "259264b8ed17df0ffb38b19efd0e05bfbaaf3a98",
+  "scope": "static/source/lexical checks only, no PG grammar validation or SQL execution",
+  "command": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "docs/operations/2026-10-16/v3-handoff-binding-fence/source-checks.mjs"
+  ],
+  "exit": 0,
+  "tests": 15,
+  "pass": 15,
+  "fail": 0,
+  "cancelled": 0,
+  "skipped": 0,
+  "todo": 0,
+  "initial14PassNotSummed": true,
+  "executedSourcesMatchCommittedBytes": true,
+  "legacyBodyReconstruction": "original exact6975bytes recovered by reversing only declaration/fence/return extension",
+  "historicalSnapshotChecks": "two historical c08 committed snapshots rehash; original JS codec and original cb22/4afc preinstall witness match; NOT fresh DB",
+  "native": "NOT_RUN",
+  "build": "NOT_RUN",
+  "TS": "unchanged/not rerun",
+  "PGGrammar": "NOT_RUN",
+  "approval": false
+}

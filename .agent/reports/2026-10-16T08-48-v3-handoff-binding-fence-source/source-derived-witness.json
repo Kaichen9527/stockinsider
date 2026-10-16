@@ -1,0 +1,38 @@
+{
+  "scope": "historical snapshot/source recomputation, not fresh native",
+  "originalBody": {
+    "bytes": 6975,
+    "sha256": "ffb26f1274ab222166c0f7cfac2355cfacce2fcdb9ec5288e5ea089fc176ae1d"
+  },
+  "successorBody": {
+    "bytes": 9492,
+    "sha256": "f507de78318a126e180f96fa7905fccfb6c1ee428688fb9e93b0f607c8d7e958"
+  },
+  "sql": {
+    "path": "migrations/20261016_research_author_handoff_binding_fence_candidate_v3.sql",
+    "bytes": 39960,
+    "sha256": "fff12bbd98489c334d07a42083e86f5cac0a04d6ff33eb1b72286eafec0dc31d"
+  },
+  "predecessorNamespaceHash": "d5d40be3a570685e109953393c629d7b972b40d4910bb3d6002d28ceba81300d",
+  "predecessorCatalogHash": "2db3c24e2ed40099f437f82290ab2049e0859080cfeae92bdd24592918725087",
+  "successorNamespaceHash": "718f62f93fd1340e71b70eed24f856f030256c040e0efdd5734d98265fbbdf61",
+  "sourceSnapshots": [
+    {
+      "path": "/tmp/author-fixture-native-o16/native-artifacts/2409-author-durable-2409-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    },
+    {
+      "path": "/tmp/author-fixture-native-o16/native-artifacts/2383-author-durable-2383-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    }
+  ],
+  "defaultAclRows": 12,
+  "modifiedFunctionBodies": 1,
+  "unchangedOriginalInputs": 302,
+  "newRolesGrantsTablesFunctions": 0,
+  "TSFailClosedUnchanged": true,
+  "installedOidsObservedThisTask": false,
+  "productionAuthorized": false
+}
