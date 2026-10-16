@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-10-16T10:42:55.705220+00:00",
+  "error": "financial_parent_invalid",
+  "stage": "author lifecycle: genuine v3 input firstseal",
+  "source": "web/src/lib/research-financial-io-engine.ts",
+  "directoryGuardLine": 12,
+  "ancestorTraversalLines": [
+    33,
+    37
+  ],
+  "sourceSha256": "2344e936b108dcde99ca0742c0aac135b377ecebe3a97f0bce253c6be74406df",
+  "actualPathMetadata": [
+    {
+      "path": "/",
+      "mode": "0o755",
+      "device": 27,
+      "inode": 262145,
+      "uid": 65534,
+      "gid": 65534,
+      "writeMask022": 0
+    },
+    {
+      "path": "/tmp",
+      "mode": "0o1777",
+      "device": 34,
+      "inode": 1,
+      "uid": 65534,
+      "gid": 65534,
+      "writeMask022": 18
+    }
+  ],
+  "conclusion": "literal /tmp ancestor mode1777 has forbidden022 write bits; original guard visits it before secure leaf and any FD open. Sticky bit has no exception. Source-trace plus actual OS metadata diagnosis; no added I/O probe or rerun.",
+  "productOrFixtureChanged": false,
+  "nextAction": "Root decision required; no repair or further execution authorized in this task."
+}

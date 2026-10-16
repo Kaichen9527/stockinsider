@@ -1,0 +1,108 @@
+{
+  "base": "513e25de37916c48346982c2964a1808aee535c1",
+  "executedSource": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "handoffCommit": "de89e15b372eeccf1b136260ef6a024b1f86c86d",
+  "runtimeSourceCount": 334,
+  "runtimeSourceBytes": 10516436,
+  "entrySha256": "e9d6b859f7c93efef681de4ca5e754b979f216363ef8fdfee9f903ed87b66c20",
+  "helperSha256": "6b94a38bce03b628695c26fc21f6dcf2dac5620350cd03e1e24158acc4ac99c1",
+  "financialStagingProfile": "owned_tmp",
+  "sourceExecutionHash": "e0fb383b61ec82dd2df0f948d6f2b9ec07e7a0651ad24c5a9829df5a3166254c",
+  "compiledFingerprintIdentity": "d47210580b9234ff8bcf61e56512e75ee5cd80b00b29e1c90d842b401325b5c6",
+  "identityScope": "four product inputs + actual native Node binary; not reviewer whole Next closure",
+  "wholeClosureApproved": false,
+  "makerIndependentApproval": false,
+  "runs": 1,
+  "nativeTerminal": "FAIL",
+  "noSourceFixOrRetry": true,
+  "priorResourceHoldSource": "a085294da7db0e93ade3c3e9c1f556b736164287",
+  "priorResourceHoldEvidence": "b6ca7fb5d4057d748162da9e3e1b98a89a56443b",
+  "priorRedUnchanged": true,
+  "publishedFilesExcludingReceipt": 16,
+  "publishedBytesExcludingReceipt": 139548,
+  "localRawCount": 63,
+  "localRawBytes": 172365639,
+  "rawInventorySha256": "4efa0bf18b6abad49835345c1ab4b53d7ca4ea49620a96cfef8fc21dcb4894ac",
+  "files": [
+    {
+      "path": "DELIVERY.md",
+      "bytes": 1228,
+      "sha256": "251cab1ff0ec7631c030bd02a1f4809af78ddb9576c8ceb418225e7d9916cbfa"
+    },
+    {
+      "path": "binaries.json",
+      "bytes": 1705,
+      "sha256": "606e8e4e7d3aa4002c38562ddc88c9fe8405c35cf32d66bf6b1e6c23e7974aca"
+    },
+    {
+      "path": "capacity-plan.json",
+      "bytes": 3248,
+      "sha256": "8774143753181a8c731d3b2de4b70c5774d7d5e972e906ff8ad1f129f1e5828e"
+    },
+    {
+      "path": "cleanup-proof.json",
+      "bytes": 3428,
+      "sha256": "e5d86bc3ec0c25d3edef56445629fce6d0d3ab6a0c206947d7e4c64cc86d84d8"
+    },
+    {
+      "path": "command-seal.json",
+      "bytes": 646,
+      "sha256": "320123ba2aa75e17e7ca1cfecb6db6ec244d4413a2f7cb1a170ab8f86fcbbc48"
+    },
+    {
+      "path": "diagnosis.json",
+      "bytes": 1111,
+      "sha256": "e3dcf9eef8af77c44896456cbbdb5ef68503e7760dfe306f34e3131524d2028e"
+    },
+    {
+      "path": "execution-identity.json",
+      "bytes": 1075,
+      "sha256": "7d1d6c502e6f2a22f13acf2724fc22ae705c62f512c56b6b54eca8c7151fccff"
+    },
+    {
+      "path": "installer-components.json",
+      "bytes": 9020,
+      "sha256": "47955fd6323743107c68cf8dccbbb71cebc1138c0830eb66de5a9b8d248a581f"
+    },
+    {
+      "path": "native.result.json",
+      "bytes": 768,
+      "sha256": "37ff08a8ab17b2dbf98d7416affbf0a03e2e2f7d4e544bac52ab43f84083333d"
+    },
+    {
+      "path": "public-safe-witness.json",
+      "bytes": 8111,
+      "sha256": "2a35bb486381ffb786642fbca0f76a532f94b068014e13a6225d1863720fd892"
+    },
+    {
+      "path": "publication-preflight.json",
+      "bytes": 386,
+      "sha256": "7369ef9343ed9441fce85d40b91c581a151033b8d37fd5d3a65ff47e00b52b36"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 11686,
+      "sha256": "4efa0bf18b6abad49835345c1ab4b53d7ca4ea49620a96cfef8fc21dcb4894ac"
+    },
+    {
+      "path": "runner-seal.json",
+      "bytes": 390,
+      "sha256": "0c94f9067f18ebcd2a16af345d1f6069e4e8d006b05ca866df29f9ccc9f3e422"
+    },
+    {
+      "path": "source-postcheck.json",
+      "bytes": 246,
+      "sha256": "f80c461663821e098c7c3c1218be65cfecb5f3940ed3079bc41f7fb707f9956e"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 95522,
+      "sha256": "86506e10fec04e6fd2372d9e9f961a4fbd8ce1d916311d8122ed12056c84e3ff"
+    },
+    {
+      "path": "stackfree.tap",
+      "bytes": 978,
+      "sha256": "2be6ed5a4ffa7c7690efb24ff79291323213363be39077d7460dd24e397c41d1"
+    }
+  ]
+}

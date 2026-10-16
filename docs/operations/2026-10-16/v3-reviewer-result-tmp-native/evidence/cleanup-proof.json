@@ -1,0 +1,177 @@
+{
+  "observedAt": "2026-10-16T10:42:55.704805+00:00",
+  "fixtureFinally": {
+    "stopped": true,
+    "clusterAbsent": true,
+    "socketAbsent": true,
+    "secureRootObserved": true,
+    "secureRootAbsent": true,
+    "financialRoots": [
+      {
+        "path": "/tmp/.versioned-prerequisite-sWOM3i/old",
+        "absent": true
+      },
+      {
+        "path": "/tmp/.versioned-prerequisite-sWOM3i/new",
+        "absent": true
+      }
+    ],
+    "backendPids": [
+      705758,
+      705746,
+      705769
+    ],
+    "stage": "author lifecycle: genuine v3 input firstseal"
+  },
+  "independentPostRunLstat": [
+    {
+      "path": "/tmp/vp3profile-sxtnYM",
+      "absent": true
+    },
+    {
+      "path": "/tmp/vp3profile-sxtnYM/.s.PGSQL.58205",
+      "absent": true
+    },
+    {
+      "path": "/tmp/.versioned-prerequisite-sWOM3i",
+      "absent": true
+    },
+    {
+      "path": "/tmp/.versioned-prerequisite-sWOM3i/old",
+      "absent": true
+    },
+    {
+      "path": "/tmp/.versioned-prerequisite-sWOM3i/new",
+      "absent": true
+    }
+  ],
+  "sampledOwnedProcessStates": [
+    {
+      "pid": 705699,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705705,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705718,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705727,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705728,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705734,
+      "absent": false,
+      "state": "Z",
+      "ppid": 1,
+      "rssBytes": 0,
+      "backend": false
+    },
+    {
+      "pid": 705735,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705736,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705738,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705739,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705740,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705741,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705742,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705743,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705745,
+      "absent": true,
+      "backend": false
+    },
+    {
+      "pid": 705746,
+      "absent": true,
+      "backend": true
+    },
+    {
+      "pid": 705747,
+      "absent": true,
+      "backend": true
+    },
+    {
+      "pid": 705757,
+      "absent": true,
+      "backend": true
+    },
+    {
+      "pid": 705758,
+      "absent": true,
+      "backend": true
+    },
+    {
+      "pid": 705759,
+      "absent": true,
+      "backend": true
+    },
+    {
+      "pid": 705769,
+      "absent": true,
+      "backend": true
+    },
+    {
+      "pid": 705770,
+      "absent": true,
+      "backend": false
+    }
+  ],
+  "allSixBackendPidsAbsent": true,
+  "serverLog": {
+    "beforeSha256": "b0db9e7da248543d19a097ba5b9ac384a883625c499fd9200eff7f5bcc8537aa",
+    "afterSha256": "06ea49ac21c1bde68b1eda06252442f9a84ce5e3caf85f60283b6e98f2e1b0fb",
+    "afterStartsWithBefore": true,
+    "shutdownCompletePresent": true
+  },
+  "recoveryActions": [],
+  "normalFinallyRan": true,
+  "relayCreated": false,
+  "reviewerMutationQuerySettlement": "NOT_RUN",
+  "inputRpcDetailedReadyState": "NOT_OBSERVED; no fabricated ReadyI",
+  "sampleCount": 164,
+  "allProcessAbsenceClaimed": false
+}

@@ -1,0 +1,331 @@
+{
+  "at": "2026-10-16T10:44:49.482153+00:00",
+  "scope": "hash-only inventory; raw contents remain Cloud local, not Root contents verified",
+  "roots": {
+    "native": "/tmp/rr-tmp-native-o16",
+    "work": "/tmp/reviewer-result-tmp-native-work-o16"
+  },
+  "count": 63,
+  "bytes": 172365639,
+  "files": [
+    {
+      "path": "native/2409-reviewer-result-2409-01-before-author-prefix-private.json",
+      "bytes": 12299,
+      "sha256": "f7e5b65e1ccac1d030f1b471bbeef7d0e360b68932713c27ccfd8aa6a9d4dc11"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-01-prepared.json",
+      "bytes": 5008,
+      "sha256": "81dd8bd58385f848bc60b3cd96a9cd15a6884aced4d63b27ad738c65989fd0dc"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-author-source-profile-safe.json",
+      "bytes": 740,
+      "sha256": "c605003dcce4c91cbe2ec0045d053c2ba67bcd37c75533e0cece451bdc5378b8"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-claim.json",
+      "bytes": 1345,
+      "sha256": "abb277edc54f951f4afc104e06988d3688ef66e10bdd28f67eced2fdccbc4307"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-cleanup.json",
+      "bytes": 120,
+      "sha256": "68914b58e730e20c9644e4bde416deec74d5355ada55035827ccff75bf44aa57"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-codec-catalog-private.json",
+      "bytes": 17292163,
+      "sha256": "5368d4e90e6e56a27fa11512f948560fb16aab5cf99f5040069f8172bf154657"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-codec-namespace-private.json",
+      "bytes": 5868145,
+      "sha256": "a97133826135267669d669ddfbfd77a98cc0e1ddd1fc42ac1f0f34eff7369e27"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-connections.json",
+      "bytes": 73,
+      "sha256": "c2c9dc86ecc68331e122f15b11276ed989011219d248893f5f5aaf7c122d424f"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-engineering-bindings.json",
+      "bytes": 1474,
+      "sha256": "d402e82bb96e49197afb6dd1e4d0114b6b53940f584561d1dfcf100719af9f7e"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-failure-before-cleanup-private.json",
+      "bytes": 12299,
+      "sha256": "f7e5b65e1ccac1d030f1b471bbeef7d0e360b68932713c27ccfd8aa6a9d4dc11"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-failure.json",
+      "bytes": 103,
+      "sha256": "6be7c5c83f3838cd61968fd202bd017ceacfbae2b81da84ff4a6a67da313c419"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-fence-before-private.json",
+      "bytes": 24736985,
+      "sha256": "d1580a9f30b7b4815020f66ae9bee19ae3944a928b018685d45b47d850bfe0b0"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-fence-commit-witness.json",
+      "bytes": 3522,
+      "sha256": "4dc0f2530069b90f07a0459509433871d3c60da368f8ebbde95f6d1919f00663"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-fence-committed-after-private.json",
+      "bytes": 24739465,
+      "sha256": "adfe85fb8bd5b1ff6c67fc70f45b1a4be9478940fe4a324ab2400b6fa5222a47"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-fence-repeat-witness.json",
+      "bytes": 101,
+      "sha256": "47a48433aa276a8a91940fbf0e92d9315528fe4c2d3c2179cded96ba67d7473e"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-finally-absence-private.json",
+      "bytes": 349,
+      "sha256": "ead138c20296a742a4ae3fc7f7533808207b9daf7a550a23982d9c0bb4fcda60"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-first-runtime-error-private.json",
+      "bytes": 1251,
+      "sha256": "f753329e1d68b7dd33c20ec5a6c22cab0b567cf42d6b298169914cf15602c435"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-installer-before-private.json",
+      "bytes": 24719767,
+      "sha256": "8f31ceaa7077eaafa46c16d9d46f3d9e624dd05df1a307428da5e3d51fffe671"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-installer-codecs.json",
+      "bytes": 581,
+      "sha256": "5cd8f502264ce1d8b19b824ec7b58c7611e53d6bebcde21b695c2f1f35e25415"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-installer-commit-witness.json",
+      "bytes": 1691,
+      "sha256": "c652726c56a54e98c485e5131b174b7938ed395433aa843ccfa60b9305444553"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-installer-committed-after-private.json",
+      "bytes": 24736245,
+      "sha256": "851834543da15a8d7d446dbd5034a4ccd69d14f7f0af40a025a82447e614aabb"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-installer-connections.json",
+      "bytes": 73,
+      "sha256": "576387644ac225d475c495460a4fe09fa6c1965891e1d0311aa412fb07900b63"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-installer-repeat-rejected.json",
+      "bytes": 73,
+      "sha256": "89759e3b22273d12f20afad805a799420b0f72b5349ccb1eecc47d6ba4ca6dd4"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-postgres-before-cleanup.log",
+      "bytes": 173350,
+      "sha256": "b0db9e7da248543d19a097ba5b9ac384a883625c499fd9200eff7f5bcc8537aa"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-postgres.log",
+      "bytes": 173501,
+      "sha256": "06ea49ac21c1bde68b1eda06252442f9a84ce5e3caf85f60283b6e98f2e1b0fb"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-preparation.json",
+      "bytes": 2949,
+      "sha256": "8f64a21cadf19faf1123089e1a39366abfc23dd89ba31238faa422a7afdd952f"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-prerequisites.json",
+      "bytes": 186,
+      "sha256": "e9f95b4d7d62837ea4359bc274972b352069df5c7aec6a9724433b4cdb4ef89e"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-priority.json",
+      "bytes": 142,
+      "sha256": "27e9bc85367748d93e69727a4f8a65a76023e6851a1eca12f7a07925db45c6a7"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-profile.json",
+      "bytes": 332,
+      "sha256": "8e0598ff21c82a936a2f312fb7cc2889cd52e324f0b2882ca4dbd4e8b9699fad"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-reviewer-result-connections.json",
+      "bytes": 95,
+      "sha256": "0690fe62ddc4b4dde49f0fda6e325afba7bcc76c10b150126238859d29807812"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-reviewer-result-progress-witness.json",
+      "bytes": 3193,
+      "sha256": "4eafc3454cbb4bf4c76a52e3188cb77a1b9cf5d1b1f4f5bca1e99303ff64c6e0"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-roster-admission.json",
+      "bytes": 448,
+      "sha256": "7f670dc65db3d6718d94912c4aea95502cbb176bdc1981b61568af8850e2c1a2"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-rpc-fd-order.json",
+      "bytes": 279,
+      "sha256": "c8293521fd18f2e650c538e87a60485697c5e478af95f1f24594ab3bdb4c41ae"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-source-locator-shape.json",
+      "bytes": 369,
+      "sha256": "569698b58fd2b3ad37bc8048d13fa2be773a78722826ba6c240e76c7a2243a94"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-union-before-private.json",
+      "bytes": 24739548,
+      "sha256": "ead47c800e0b6b205886522c68e02c94f8c4e8323ba67f57f53994f558d5f9ad"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-union-commit-witness.json",
+      "bytes": 1355,
+      "sha256": "47286356e38f2b38a2977159cdfde56cb9446a2d8761fd8d7a03f2851a0156a2"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-union-committed-after-private.json",
+      "bytes": 24761496,
+      "sha256": "6248719929c3d604e099d22885e84611c9ef0e80689f993e0083efc0d5fc1518"
+    },
+    {
+      "path": "native/2409-reviewer-result-2409-union-repeat-witness.json",
+      "bytes": 100,
+      "sha256": "0c59640a56adf6be972e26a03d0de6c6fad156558d671ee1df3a84fbd3ddfad2"
+    },
+    {
+      "path": "work/binaries.json",
+      "bytes": 1705,
+      "sha256": "606e8e4e7d3aa4002c38562ddc88c9fe8405c35cf32d66bf6b1e6c23e7974aca"
+    },
+    {
+      "path": "work/capacity-plan.json",
+      "bytes": 3248,
+      "sha256": "8774143753181a8c731d3b2de4b70c5774d7d5e972e906ff8ad1f129f1e5828e"
+    },
+    {
+      "path": "work/cleanup-proof.json",
+      "bytes": 3428,
+      "sha256": "e5d86bc3ec0c25d3edef56445629fce6d0d3ab6a0c206947d7e4c64cc86d84d8"
+    },
+    {
+      "path": "work/command-seal.json",
+      "bytes": 646,
+      "sha256": "320123ba2aa75e17e7ca1cfecb6db6ec244d4413a2f7cb1a170ab8f86fcbbc48"
+    },
+    {
+      "path": "work/diagnosis.json",
+      "bytes": 1111,
+      "sha256": "e3dcf9eef8af77c44896456cbbdb5ef68503e7760dfe306f34e3131524d2028e"
+    },
+    {
+      "path": "work/execution-identity.json",
+      "bytes": 1075,
+      "sha256": "7d1d6c502e6f2a22f13acf2724fc22ae705c62f512c56b6b54eca8c7151fccff"
+    },
+    {
+      "path": "work/initial-processes.json",
+      "bytes": 85792,
+      "sha256": "cb797388c6e1ed8e46b9907dc283afdcc6976fa63130a307c9d4d55ee2a6dbf3"
+    },
+    {
+      "path": "work/installer-components.json",
+      "bytes": 9020,
+      "sha256": "47955fd6323743107c68cf8dccbbb71cebc1138c0830eb66de5a9b8d248a581f"
+    },
+    {
+      "path": "work/native.result.json",
+      "bytes": 768,
+      "sha256": "37ff08a8ab17b2dbf98d7416affbf0a03e2e2f7d4e544bac52ab43f84083333d"
+    },
+    {
+      "path": "work/native.samples.jsonl",
+      "bytes": 140789,
+      "sha256": "c56a18cab44602f8a8bbec8f7e52d06729c960ebd80b43763dee5fd6201fe1b9"
+    },
+    {
+      "path": "work/native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "work/native.stdout",
+      "bytes": 3802,
+      "sha256": "dbf9b13ce5899c9c5e5565d85abbcec79bb7156fa3ff6140b5061a0883013aed"
+    },
+    {
+      "path": "work/package-safe.py",
+      "bytes": 4643,
+      "sha256": "7401648008ff26f394a7329f2aa6250c6a439f1e85455cbbb79fba531ffe78e9"
+    },
+    {
+      "path": "work/preflight.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "work/preflight.py",
+      "bytes": 1876,
+      "sha256": "5522beb849f4ab405ac05038e4eb92025c43f98c489946b75bd326f82e0e49ae"
+    },
+    {
+      "path": "work/preflight.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "work/preflight.stdout",
+      "bytes": 124,
+      "sha256": "0f5db31dc8389f547f6f36d4728514cf7a8531b8158d6fac4ca1587c6c94501f"
+    },
+    {
+      "path": "work/public-safe-witness.json",
+      "bytes": 8111,
+      "sha256": "2a35bb486381ffb786642fbca0f76a532f94b068014e13a6225d1863720fd892"
+    },
+    {
+      "path": "work/publication-preflight.json",
+      "bytes": 386,
+      "sha256": "7369ef9343ed9441fce85d40b91c581a151033b8d37fd5d3a65ff47e00b52b36"
+    },
+    {
+      "path": "work/run.py",
+      "bytes": 3342,
+      "sha256": "7bae4329dba99b88938f4045d0003852cb354161f1342a538a9df15a4eaf2784"
+    },
+    {
+      "path": "work/runner-seal.json",
+      "bytes": 390,
+      "sha256": "0c94f9067f18ebcd2a16af345d1f6069e4e8d006b05ca866df29f9ccc9f3e422"
+    },
+    {
+      "path": "work/seal-evidence.py",
+      "bytes": 7420,
+      "sha256": "bf8d961aa6409ada0f9b78b86fdf73c60cd6b073fd2cffa4b5d24e5951439307"
+    },
+    {
+      "path": "work/source-postcheck.json",
+      "bytes": 246,
+      "sha256": "f80c461663821e098c7c3c1218be65cfecb5f3940ed3079bc41f7fb707f9956e"
+    },
+    {
+      "path": "work/source-seal.json",
+      "bytes": 95522,
+      "sha256": "86506e10fec04e6fd2372d9e9f961a4fbd8ce1d916311d8122ed12056c84e3ff"
+    },
+    {
+      "path": "work/stackfree.tap",
+      "bytes": 978,
+      "sha256": "2be6ed5a4ffa7c7690efb24ff79291323213363be39077d7460dd24e397c41d1"
+    }
+  ],
+  "excluded": [
+    "raw-inventory.json (self-reference)",
+    "later publication-result / Git stdout logs (created after cutoff)"
+  ]
+}

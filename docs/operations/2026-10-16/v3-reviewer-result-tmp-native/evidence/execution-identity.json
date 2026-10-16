@@ -1,0 +1,21 @@
+{
+  "base": "513e25de37916c48346982c2964a1808aee535c1",
+  "executedSource": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "handoffCommit": "de89e15b372eeccf1b136260ef6a024b1f86c86d",
+  "runtimeSourceCount": 334,
+  "runtimeSourceBytes": 10516436,
+  "entrySha256": "e9d6b859f7c93efef681de4ca5e754b979f216363ef8fdfee9f903ed87b66c20",
+  "helperSha256": "6b94a38bce03b628695c26fc21f6dcf2dac5620350cd03e1e24158acc4ac99c1",
+  "financialStagingProfile": "owned_tmp",
+  "sourceExecutionHash": "e0fb383b61ec82dd2df0f948d6f2b9ec07e7a0651ad24c5a9829df5a3166254c",
+  "compiledFingerprintIdentity": "d47210580b9234ff8bcf61e56512e75ee5cd80b00b29e1c90d842b401325b5c6",
+  "identityScope": "four product inputs + actual native Node binary; not reviewer whole Next closure",
+  "wholeClosureApproved": false,
+  "makerIndependentApproval": false,
+  "runs": 1,
+  "nativeTerminal": "FAIL",
+  "noSourceFixOrRetry": true,
+  "priorResourceHoldSource": "a085294da7db0e93ade3c3e9c1f556b736164287",
+  "priorResourceHoldEvidence": "b6ca7fb5d4057d748162da9e3e1b98a89a56443b",
+  "priorRedUnchanged": true
+}

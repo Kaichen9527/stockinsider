@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-16T10:44:00.678046+00:00",
+  "freeBytes": {
+    "/workspace": 8590815232,
+    "/tmp": 13610049536
+  },
+  "floor": 8589934592,
+  "existingIndexBytes": 383949,
+  "indexReplacementPlusBoundedObjectAllowance": 646093,
+  "objectAllowanceBytes": 262144,
+  "unknownConcurrentWrites": true,
+  "runtimeFinishedBeforeGitWrites": true,
+  "cleanupOrReserveManipulation": false
+}

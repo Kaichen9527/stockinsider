@@ -1,0 +1,11 @@
+{
+  "previousRunner": "/tmp/reviewer-result-native-work-o16/run.py",
+  "previousSha256": "cc02e6325447912b0b63307ccd82a1dbf2f3e0c240f30eb8e5950a042a56239e",
+  "currentSha256": "7bae4329dba99b88938f4045d0003852cb354161f1342a538a9df15a4eaf2784",
+  "onlyChanges": [
+    "owned work/output path",
+    "new absent artifact leaf",
+    "task deadline"
+  ],
+  "allMonitoringLogicByteExact": true
+}

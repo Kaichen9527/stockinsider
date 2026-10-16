@@ -1,0 +1,103 @@
+{
+  "at": "2026-10-16T10:36:50.101274+00:00",
+  "facts": [
+    {
+      "path": "/workspace",
+      "realpath": "/workspace",
+      "st_dev": 27,
+      "blockSize": 4096,
+      "fragmentSize": 4096,
+      "f_bavail": 2097367,
+      "availableBytes": 8590815232,
+      "margin": 880640
+    },
+    {
+      "path": "/tmp",
+      "realpath": "/tmp",
+      "st_dev": 34,
+      "blockSize": 4096,
+      "fragmentSize": 4096,
+      "f_bavail": 3364863,
+      "availableBytes": 13782478848,
+      "margin": 5192544256
+    },
+    {
+      "path": "/tmp/si-pubtail-o14",
+      "realpath": "/tmp/si-pubtail-o14",
+      "st_dev": 34,
+      "blockSize": 4096,
+      "fragmentSize": 4096,
+      "f_bavail": 3364863,
+      "availableBytes": 13782478848,
+      "margin": 5192544256
+    },
+    {
+      "path": "/home/agent",
+      "realpath": "/home/agent",
+      "st_dev": 27,
+      "blockSize": 4096,
+      "fragmentSize": 4096,
+      "f_bavail": 2097367,
+      "availableBytes": 8590815232,
+      "margin": 880640
+    },
+    {
+      "path": "/workspace/stockinsider/.git",
+      "realpath": "/workspace/stockinsider/.git",
+      "st_dev": 27,
+      "blockSize": 4096,
+      "fragmentSize": 4096,
+      "f_bavail": 2097367,
+      "availableBytes": 8590815232,
+      "margin": 880640
+    }
+  ],
+  "floor": 8589934592,
+  "nativeAttemptEligibleForThisTask": true,
+  "notGuaranteedFullRunCapacity": true,
+  "financialFixedBytes": 1790390,
+  "financialFileDirectoryReference": 1916928,
+  "financialTarget": "/tmp/.versioned-prerequisite-<unique>",
+  "targetDev": 34,
+  "sameDevAsWorkspace": false,
+  "knownPriorInstallerSnapshotFiles": [
+    {
+      "path": "/tmp/rr-native-o16/2409-reviewer-result-2409-union-committed-after-private.json",
+      "bytes": 24761496
+    },
+    {
+      "path": "/tmp/rr-native-o16/2409-reviewer-result-2409-union-before-private.json",
+      "bytes": 24739548
+    },
+    {
+      "path": "/tmp/rr-native-o16/2409-reviewer-result-2409-fence-committed-after-private.json",
+      "bytes": 24739465
+    },
+    {
+      "path": "/tmp/rr-native-o16/2409-reviewer-result-2409-fence-before-private.json",
+      "bytes": 24736985
+    },
+    {
+      "path": "/tmp/rr-native-o16/2409-reviewer-result-2409-installer-committed-after-private.json",
+      "bytes": 24736245
+    },
+    {
+      "path": "/tmp/rr-native-o16/2409-reviewer-result-2409-installer-before-private.json",
+      "bytes": 24719767
+    }
+  ],
+  "observedOneIssuerCatalogRawBytes": 148433506,
+  "twoIssuerSameShapeCatalogReferenceBytes": 296867012,
+  "additionalTmpPlanningAllowanceBytes": 1073741824,
+  "planningAllowanceNotUpperBound": true,
+  "tmpAfterReferenceAndAllowance": 12409953084,
+  "unknowns": [
+    "PG/WAL/log allocations and future16table/business/RPC snapshots",
+    "tmpfs RAM consumption is distinct from sampled process RSS",
+    "platform/runtime/concurrent workspace writes; workspace writes are not asserted zero"
+  ],
+  "workspaceDuringRun": "No Git commit/push/new source/evidence publication; frozen sources and tools read only. Monitor unchanged floor throughout.",
+  "memoryScope": "single workload and unchanged process-tree/owned-PG RSS8GiB guard; tmpfs not counted as process RSS",
+  "below5GBInventoryTriggered": false,
+  "noCleanupOrReserveFiles": true
+}
