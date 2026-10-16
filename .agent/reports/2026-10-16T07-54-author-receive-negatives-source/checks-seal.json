@@ -1,0 +1,15 @@
+{
+  "time": "2026-10-15T23:59:11.223139+00:00",
+  "files": [
+    {
+      "path": "scripts/opportunity-v3/research-v3-author-receive-negative-native.test.mjs",
+      "bytes": 25482,
+      "sha256": "b3a14d35136c697df1406999650b1fc50aafc63e3c3f2683214f6afa0fae5102"
+    },
+    {
+      "path": "/tmp/author-receive-neg-source-o16/checks.mjs",
+      "bytes": 10260,
+      "sha256": "77d40412832dce949c306f45c8a7f4d7234e56f4d853c6b4fe04c6618392b054"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+PASS 2409 exact private retained vector / unchanged input / three finite mutants
+PASS 2409 principal-only change leaves envelope/hash identical
+PASS 2409 invocation-only restore full equality / validated article unchanged
+PASS 2409 bounded raw companyBackground append / original tagged depth and exact bytes
+PASS 2409 bad identity / empty or unknown shape refuses before mutant generation
+PASS 2383 exact private retained vector / unchanged input / three finite mutants
+PASS 2383 principal-only change leaves envelope/hash identical
+PASS 2383 invocation-only restore full equality / validated article unchanged
+PASS 2383 bounded raw companyBackground append / original tagged depth and exact bytes
+PASS 2383 bad identity / empty or unknown shape refuses before mutant generation
+PASS original depth12 codec still rejects nested container extension
+PASS unknown persisted row columns change full snapshot hash
+PASS real error promise alone cannot complete; requires ReadyI
+PASS ReadyI alone cannot complete before actual query rejection settles
+PASS wrong error code/message/ReadyE/unknown ready/success never accepted
+PASS connection error/end do not pretend implicit transaction confirmation
+PASS actual SQL branch ordering and exact guard messages are unchanged
+PASS entry uses actual prepare / direct finite SQL / full13 row comparisons and serial two cases
+{"groups":18,"pass":18,"fail":0,"actualNativeCases":"NOT_RUN","imports":"builtins only; text-extracted pure functions","maxRssKiB":127768}

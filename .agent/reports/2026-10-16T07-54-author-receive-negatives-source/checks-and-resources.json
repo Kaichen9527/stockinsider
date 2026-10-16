@@ -1,0 +1,44 @@
+{
+  "source": "4242ff201c64aa5dd331695952cfc41086457392",
+  "harnessSha256": "b3a14d35136c697df1406999650b1fc50aafc63e3c3f2683214f6afa0fae5102",
+  "syntaxExit": 0,
+  "isolatedCheckExit": 0,
+  "groups": 18,
+  "pass": 18,
+  "fail": 0,
+  "skip": 0,
+  "todo": 0,
+  "actualNative": {
+    "2409": "NOT_RUN",
+    "2383": "NOT_RUN",
+    "parent": "NOT_RUN",
+    "expectedFutureCount": 3
+  },
+  "resources": {
+    "at": "2026-10-16T00:05:17.953248+00:00",
+    "floorBytes": 8589934592,
+    "initialObserved": {
+      "at": "2026-10-15T23:54:56Z",
+      "workspaceAvailable": 8592977920,
+      "tmpAvailable": 14431870976
+    },
+    "finalObserved": {
+      "/workspace": 8592904192,
+      "/tmp": 14431449088
+    },
+    "node": {
+      "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+      "version": "v22.14.0",
+      "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1"
+    },
+    "isolatedCheckProcessMaxRssKiB": 127768,
+    "rssLimitBytes": 8589934592,
+    "singleWorkload": true,
+    "nativeStarted": false,
+    "pgStarted": false,
+    "cleanupOrCacheDeletionPerformed": false,
+    "systemInstantaneousPeakClaimed": false
+  },
+  "newProductOrNativeRed": false,
+  "toolLookupError": "One skill resource lookup used a mistyped URI and was corrected; not a product/test failure."
+}

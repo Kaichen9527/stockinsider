@@ -1,0 +1,33 @@
+{
+  "scope": "Executed source-only commands and planned native command kept separate",
+  "executed": [
+    {
+      "command": "/workspace/.tools/node22/node_modules/node/bin/node --check scripts/opportunity-v3/research-v3-author-receive-negative-native.test.mjs",
+      "exit": 0,
+      "stdout": "syntax.stdout (empty, private inventory)",
+      "stderr": "syntax.stderr (empty, private inventory)"
+    },
+    {
+      "command": "/workspace/.tools/node22/node_modules/node/bin/node /tmp/author-receive-neg-source-o16/checks.mjs",
+      "exit": 0,
+      "stdout": "checks.stdout",
+      "stderr": "checks.stderr"
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0
+    },
+    {
+      "command": "git ls-remote --exit-code origin refs/heads/codex/research-v3-author-installer-negatives-native-oct16",
+      "exit": 0,
+      "exactObservedHead": "95bbc1af1f3673d25ccdce8fdf8b237c46a241ea"
+    },
+    {
+      "command": "git push -u origin HEAD:refs/heads/codex/research-v3-author-receive-negatives-source-oct16",
+      "exit": 0,
+      "sourceCommit": "4242ff201c64aa5dd331695952cfc41086457392"
+    }
+  ],
+  "plannedNotExecuted": "RESEARCH_PREREQUISITE_PROFILE_ARTIFACTS=/tmp/author-receive-neg-o16 /workspace/.tools/node22/node_modules/node/bin/node --import ./scripts/opportunity-v3/research-versioned-prerequisite-fs-witness.mjs --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/research-v3-author-receive-negative-native.test.mjs",
+  "noPGSocketAppImportBuildInstallCI": true
+}

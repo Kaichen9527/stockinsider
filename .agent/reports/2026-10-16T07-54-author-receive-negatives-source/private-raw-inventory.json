@@ -1,0 +1,145 @@
+{
+  "root": "/tmp/author-receive-neg-source-o16",
+  "scope": "maker-local raw hashes only; no assertion Root obtained contents",
+  "count": 16,
+  "bytes": 146755,
+  "files": [
+    {
+      "path": "checks-seal.json",
+      "bytes": 457,
+      "sha256": "966fac604bcc3013e7fe7e826623266ac4815db69878396aff950f80c9255f66"
+    },
+    {
+      "path": "checks.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "checks.mjs",
+      "bytes": 10260,
+      "sha256": "77d40412832dce949c306f45c8a7f4d7234e56f4d853c6b4fe04c6618392b054"
+    },
+    {
+      "path": "checks.stderr",
+      "bytes": 184,
+      "sha256": "d212c59622edffbdd8399f04adc04745a9dc5d3ad4ec95f5ec3118c24cfccbcf"
+    },
+    {
+      "path": "checks.stdout",
+      "bytes": 1501,
+      "sha256": "a31d465ab0494d86de75e7fdaaa6805afe8ed1c860dffea94d6a1ce9abd0a626"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 1522,
+      "sha256": "82ee3ba48fcc56874b1219b9ace194fc6c7b97f4197dcc33086df34661ea47de"
+    },
+    {
+      "path": "final-resources.json",
+      "bytes": 714,
+      "sha256": "de45350a3a518b9822f124430acc5f7a88515b9b64a315c54a2adcf52d85a9b8"
+    },
+    {
+      "path": "initial-seal.json",
+      "bytes": 177,
+      "sha256": "6aa7ef8bf875e450604ba6b4ec82a75bcf3669faf4f5911e1b72c610283c83b8"
+    },
+    {
+      "path": "initial-wip.mjs",
+      "bytes": 25482,
+      "sha256": "b3a14d35136c697df1406999650b1fc50aafc63e3c3f2683214f6afa0fae5102"
+    },
+    {
+      "path": "seal-evidence.py",
+      "bytes": 7563,
+      "sha256": "45547ae11ddac24680488eff68c9b251ec32dcb8cdf942c3cbf0d94d1a23ef26"
+    },
+    {
+      "path": "source-proof.json",
+      "bytes": 83242,
+      "sha256": "3360aeeb0c84354d8751a97d07029806e9a9748ecdf7e5982537e40c07fd8e2d"
+    },
+    {
+      "path": "syntax.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "syntax.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "syntax.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "vector-measurements.json",
+      "bytes": 2360,
+      "sha256": "bca1653b8d3d0bcaacf0e186c6689d5f7e6351b7192d4305d70af8abefb44273"
+    },
+    {
+      "path": "write.py",
+      "bytes": 13289,
+      "sha256": "00b0e7cd19ffdbc7b4ff1d8896a3958938b5a42ccb81a1fb4f260c57d808a1eb"
+    }
+  ],
+  "priorReadOnlyProbeInputReferences": [
+    {
+      "symbol": "2409",
+      "privateInputPath": "/tmp/author-receive-loss-o16/native-artifacts/2409-author-loss-2409-submitted-author-envelope-private.json",
+      "privateInputSha256": "dff937931aa76e47baaf58cbbe501c3e6d0ab46c7b69f59ecdcda71ebc405f39",
+      "inputJsonBytes": 245177,
+      "originalTaggedBytes": 205189,
+      "mutants": [
+        {
+          "kind": "principal",
+          "taggedBytes": 205189,
+          "hash": "44d1ac6a7ac288be06ca45374d2443d194f62d3481f9e6e769d5f57907f89acb",
+          "delta": "/rpc/p_principal"
+        },
+        {
+          "kind": "invocation",
+          "taggedBytes": 205137,
+          "hash": "7a0932a575e8b754f07671c00e213534f121e3931e63070d39faf9eb0f41ccd9",
+          "delta": "/observation/invocationId"
+        },
+        {
+          "kind": "receive-bound",
+          "taggedBytes": 1253766,
+          "hash": "a8c7a6850739c730d6915d5748e3ba72347107b918f3ce6ad9220cd4a77c3cae",
+          "delta": "/rawArticle/companyBackground"
+        }
+      ]
+    },
+    {
+      "symbol": "2383",
+      "privateInputPath": "/tmp/author-receive-loss-o16/native-artifacts/2383-author-loss-2383-submitted-author-envelope-private.json",
+      "privateInputSha256": "3ab96c3f265b15e5fe46836db404670c7551c8f8e4fb1f27d17a9eceeef1c69f",
+      "inputJsonBytes": 155264,
+      "originalTaggedBytes": 135389,
+      "mutants": [
+        {
+          "kind": "principal",
+          "taggedBytes": 135389,
+          "hash": "d45e235c886f338898fff8e4bcda873dadc095be80ac8e1090eb1f4befb146d2",
+          "delta": "/rpc/p_principal"
+        },
+        {
+          "kind": "invocation",
+          "taggedBytes": 135337,
+          "hash": "f3817a1a73869c726f9fcd254a0f37d70b524e73719b337b0aa44aeb1ec88ceb",
+          "delta": "/observation/invocationId"
+        },
+        {
+          "kind": "receive-bound",
+          "taggedBytes": 1183966,
+          "hash": "a51975a62a8e2d344f34e4fbe4242a75ab11107e947de05fdc2a901254e11554",
+          "delta": "/rawArticle/companyBackground"
+        }
+      ]
+    }
+  ],
+  "priorPrivatePayloadsPublished": false
+}

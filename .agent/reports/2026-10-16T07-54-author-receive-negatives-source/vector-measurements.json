@@ -1,0 +1,61 @@
+{
+  "scope": "read-only historical private envelopes; pure mutation sizing, NOT fresh PG/native/author execution",
+  "measurements": [
+    {
+      "symbol": "2409",
+      "privateInputPath": "/tmp/author-receive-loss-o16/native-artifacts/2409-author-loss-2409-submitted-author-envelope-private.json",
+      "privateInputSha256": "dff937931aa76e47baaf58cbbe501c3e6d0ab46c7b69f59ecdcda71ebc405f39",
+      "inputJsonBytes": 245177,
+      "originalTaggedBytes": 205189,
+      "mutants": [
+        {
+          "kind": "principal",
+          "taggedBytes": 205189,
+          "hash": "44d1ac6a7ac288be06ca45374d2443d194f62d3481f9e6e769d5f57907f89acb",
+          "delta": "/rpc/p_principal"
+        },
+        {
+          "kind": "invocation",
+          "taggedBytes": 205137,
+          "hash": "7a0932a575e8b754f07671c00e213534f121e3931e63070d39faf9eb0f41ccd9",
+          "delta": "/observation/invocationId"
+        },
+        {
+          "kind": "receive-bound",
+          "taggedBytes": 1253766,
+          "hash": "a8c7a6850739c730d6915d5748e3ba72347107b918f3ce6ad9220cd4a77c3cae",
+          "delta": "/rawArticle/companyBackground"
+        }
+      ]
+    },
+    {
+      "symbol": "2383",
+      "privateInputPath": "/tmp/author-receive-loss-o16/native-artifacts/2383-author-loss-2383-submitted-author-envelope-private.json",
+      "privateInputSha256": "3ab96c3f265b15e5fe46836db404670c7551c8f8e4fb1f27d17a9eceeef1c69f",
+      "inputJsonBytes": 155264,
+      "originalTaggedBytes": 135389,
+      "mutants": [
+        {
+          "kind": "principal",
+          "taggedBytes": 135389,
+          "hash": "d45e235c886f338898fff8e4bcda873dadc095be80ac8e1090eb1f4befb146d2",
+          "delta": "/rpc/p_principal"
+        },
+        {
+          "kind": "invocation",
+          "taggedBytes": 135337,
+          "hash": "f3817a1a73869c726f9fcd254a0f37d70b524e73719b337b0aa44aeb1ec88ceb",
+          "delta": "/observation/invocationId"
+        },
+        {
+          "kind": "receive-bound",
+          "taggedBytes": 1183966,
+          "hash": "a51975a62a8e2d344f34e4fbe4242a75ab11107e947de05fdc2a901254e11554",
+          "delta": "/rawArticle/companyBackground"
+        }
+      ]
+    }
+  ],
+  "canonicalSourceSha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+  "harnessSha256": "b3a14d35136c697df1406999650b1fc50aafc63e3c3f2683214f6afa0fae5102"
+}

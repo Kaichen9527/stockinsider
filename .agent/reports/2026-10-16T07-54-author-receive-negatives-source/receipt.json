@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "source-only-maker-receipt-v1",
+  "at": "2026-10-16T00:05:17.953248+00:00",
+  "sourceCommit": "4242ff201c64aa5dd331695952cfc41086457392",
+  "sourceTree": "23d547fbad1adae8b1099223aa7507f2e0a8a166",
+  "base": "95bbc1af1f3673d25ccdce8fdf8b237c46a241ea",
+  "product": "c08b1591f27522748c2f2a8b1ebadc128f857d77",
+  "actualRepoInputs": 295,
+  "inheritedInputs": 293,
+  "inheritedBytes": 9812469,
+  "allInheritedUnchanged": true,
+  "native": "NOT_RUN",
+  "isolatedGroups": 18,
+  "syntaxExit": 0,
+  "independentApproval": false,
+  "privateRawCount": 16,
+  "privateRawBytes": 146755,
+  "publishedFilesExcludingReceipt": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 1566,
+      "sha256": "acfd5d36fdb0e433b2235d72c65987a08f0cdaaa66d5846aca8eabc0a4228ac3"
+    },
+    {
+      "path": "checks-and-resources.json",
+      "bytes": 1314,
+      "sha256": "b3985f5fca4246eaa7c5233fb088191e4534664f94442047a97a4f5052ad0c1c"
+    },
+    {
+      "path": "checks-seal.json",
+      "bytes": 457,
+      "sha256": "966fac604bcc3013e7fe7e826623266ac4815db69878396aff950f80c9255f66"
+    },
+    {
+      "path": "checks.mjs",
+      "bytes": 10260,
+      "sha256": "77d40412832dce949c306f45c8a7f4d7234e56f4d853c6b4fe04c6618392b054"
+    },
+    {
+      "path": "checks.stderr",
+      "bytes": 184,
+      "sha256": "d212c59622edffbdd8399f04adc04745a9dc5d3ad4ec95f5ec3118c24cfccbcf"
+    },
+    {
+      "path": "checks.stdout",
+      "bytes": 1501,
+      "sha256": "a31d465ab0494d86de75e7fdaaa6805afe8ed1c860dffea94d6a1ce9abd0a626"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 1522,
+      "sha256": "82ee3ba48fcc56874b1219b9ace194fc6c7b97f4197dcc33086df34661ea47de"
+    },
+    {
+      "path": "private-raw-inventory.json",
+      "bytes": 4684,
+      "sha256": "404cc49973fe61f41d2a2bd594c6a6a5398f6e74bbe077177031674ebb013155"
+    },
+    {
+      "path": "source-proof.json",
+      "bytes": 83242,
+      "sha256": "3360aeeb0c84354d8751a97d07029806e9a9748ecdf7e5982537e40c07fd8e2d"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 83840,
+      "sha256": "3fd721de52d1918e82417e1113d39c0ba56b0030201e124065cb8db73762dd1e"
+    },
+    {
+      "path": "vector-measurements.json",
+      "bytes": 2360,
+      "sha256": "bca1653b8d3d0bcaacf0e186c6689d5f7e6351b7192d4305d70af8abefb44273"
+    }
+  ],
+  "publishedBytesExcludingReceipt": 190930
+}
