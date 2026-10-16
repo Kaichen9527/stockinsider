@@ -1,0 +1,38 @@
+{
+  "base": "87b197eddf452d6144f906b54b184f1af9f4adc9",
+  "scope": "Source extraction pins, not execution identity/approval",
+  "files": [
+    {
+      "path": "web/src/lib/research-versioned-complete-input.ts",
+      "bytes": 8561,
+      "sha256": "6c748235f5aebd3bdfa254de400e752e42bf15aae53c840b8ec09b543a29e906",
+      "blob": "a7c035844cfaf44834b755e1250fc3cae1d7a6d5"
+    },
+    {
+      "path": "web/src/lib/research-v3-article-citations.ts",
+      "bytes": 18442,
+      "sha256": "34500a25604a6ad3938bc8a9becb578df9c5a97249adda5bfdd3af3969a92da2",
+      "blob": "96508c90c731ba62978a54525a25372433115202"
+    },
+    {
+      "path": "web/src/lib/research-v3-business-article.ts",
+      "bytes": 22375,
+      "sha256": "91c715f1dfbdee22b4c86b9ad493bacc49b03c23250e9554107eb13b421293ba",
+      "blob": "ff430bd5535f1d8047fa3160654eaa6a9ec972d6"
+    },
+    {
+      "path": "web/src/lib/research-v3-author-result.ts",
+      "bytes": 25288,
+      "sha256": "870fd387f7430d624aa8060ff011b8a1ee8bb26aad5d7d09ba72be349a315953",
+      "blob": "82f61ddffaa91f0a515482dd05913e27e5a8fcb9"
+    }
+  ],
+  "pins": {
+    "responseValidator": "f21867e3041ed573d28c88753e5a8122488fd68143897133ab9e1e1f994343ed",
+    "activeController": "6cdb1d9d27e42a2558a7ce08ebe12c391095f8595c59d7f43761c776166644ba",
+    "citationCore": "ece51d2b02056d642a62a94a81ed3af9301c5cdc1d8553e7361db24847b490f6",
+    "articleCore": "f3f3c19d5eea27dd8471f54b4e101a27b19af17d5f4ec85ce7f0e69e0e63cc73",
+    "activeArticle": "e6b3fb4cab071625e5ec2c606b3d3c4d97d07514d9a28d2888673221a8d4aa07",
+    "authorResultOriginal": "870fd387f7430d624aa8060ff011b8a1ee8bb26aad5d7d09ba72be349a315953"
+  }
+}

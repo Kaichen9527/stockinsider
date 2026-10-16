@@ -1,7 +1,5 @@
-/** Private, unactivated v3 first-handoff composition. Existing SQL is unchanged.
- * Completed v3 recovery is deliberately blocked: the old completion arm has no
- * candidate binding read-revocation fence. See source-derived handoff ADR.
- * No credentials, principal selectors, roots or approval flags come from body. */
+/** Private unactivated v3 composition. Requires the candidate five-key current
+ * handoff-context RPC; no legacy fallback, active READ after completion or retry. */
 import {requireExactInternalBearer} from './internal-auth.ts';
 import {resolveResearchControllerIdentity,validateSavedResearchExecutionObservation} from './research-execution-binding.ts';
 import {parseBindingCore,bindingCanonical} from './research-versioned-input-binding.ts';
@@ -38,14 +36,15 @@ export async function handoffRpc(db:VersionedInputRpc,name:string,args:Row,deadl
 export function selectV3HandoffBinding(config:V3HandoffConfig){
  handoffEnsure(typeof config.executorFingerprint==='string'&&HASH.test(config.executorFingerprint));
  const bindings=[...config.bindingTexts].map(parseBindingCore);handoffEnsure(bindings.length>0&&bindings.length<=2&&new Set(bindings.map(b=>b.bindingCapsuleIdentity)).size===bindings.length&&bindings.every(b=>b.core.wireVersion==='research-article-input-v3'));
- return (request:CompleteRequest)=>{const found=bindings.filter(b=>b.bindingCapsuleIdentity===request.expectedCalculatorExecutionHash&&b.core.inventoryHash===request.expectedArtifactManifestHash);handoffEnsure(found.length===1);return found[0];};
+ return (request:CompleteRequest)=>{const found=bindings.filter(b=>b.bindingCapsuleIdentity===request.expectedCalculatorExecutionHash&&b.core.inventoryHash===request.expectedArtifactManifestHash);handoffEnsure(found.length===1&&found[0].core.compiledFingerprintIdentity===config.executorFingerprint);return found[0];};
 }
 function receipt(v:unknown,a:Row,result:Row){const c=handoffExact(v,['reservation_id','owner','outcome','result_hash','finished_at']);const saved=handoffRow(handoffRow(result.payload).validatedArticle),finished=financialInstant(c.finished_at);handoffEnsure(c.reservation_id===a.reservation_id&&c.owner===a.work_owner&&c.outcome==='completed'&&c.result_hash===saved.articleHash&&finished>=financialInstant(result.received_at)&&finished<=financialInstant(new Date().toISOString())&&finished<financialInstant(a.original_job_deadline)&&finished<financialInstant(a.reservation_expires_at));return c;}
-/** Structural stored context check only. Does not establish binding revocation,
- * live source rights or permission to bypass the missing completed-arm fence. */
+/** Closed stored shape only. The composition additionally revalidates every
+ * value and fresh binding from the current fenced RPC, then rereads that RPC. */
 export function checkV3StoredHandoff(request:V3HandoffRequest,value:unknown,principal:string,deadline:FinancialIoDeadline){
- handoffEnsure(Buffer.byteLength(JSON.stringify(value))<=1048576); // fail closed within the existing 1MiB private envelope cap
- const h=handoffExact(value,['assignment','result','revision','completion']),a=handoffExact(h.assignment,assignmentKeys),r=handoffExact(h.result,['result_id','assignment_id','result_hash','logical_bytes','received_at','payload']),v=handoffExact(h.revision,revisionKeys);
+ const encoded=JSON.stringify(value);handoffEnsure(Buffer.byteLength(encoded)<=1048576); // existing private envelope cap
+ // Detach the current RPC snapshot before any later RPC can reuse its object.
+ const h=handoffExact(JSON.parse(encoded),['assignment','result','revision','completion','binding']),a=handoffExact(h.assignment,assignmentKeys),r=handoffExact(h.result,['result_id','assignment_id','result_hash','logical_bytes','received_at','payload']),v=handoffExact(h.revision,revisionKeys);
  handoffEnsure(typeof a.assignment_id==='string'&&UUID.test(a.assignment_id)&&a.controller_principal===principal&&a.work_owner===request.input.owner&&a.job_id===request.input.jobId&&a.attempt===request.input.attempt&&a.reservation_id===request.input.reservationId&&a.input_revision_id===request.inputRevisionId&&a.input_hash===request.inputHash&&a.snapshot_hash===request.input.snapshotHash&&a.research_company_id===v.research_company_id);eq(a.canonical_request,request.input);
  handoffEnsure(v.status==='sealed'&&v.dispatchReady===false&&v.revision_id===request.inputRevisionId&&v.input_hash===request.inputHash&&v.request_hash===completeHash(request.input)&&v.input_hash===completeHash(v.canonical_payload)&&v.job_id===a.job_id&&v.attempt===a.attempt&&v.reservation_id===a.reservation_id&&v.preparation_id===request.input.preparationId&&v.snapshot_hash===a.snapshot_hash&&v.research_scope===request.input.scope);eq(v.canonical_request,request.input);
  const p=handoffRow(v.canonical_payload),job=handoffRow(p.originalJob),reservation=handoffRow(p.originalReservation),clocks=handoffRow(p.clocks);handoffEnsure(p.schemaVersion==='research-article-input-v3'&&a.original_job_deadline===job.leaseExpiresAt&&a.reservation_started_at===reservation.startedAt&&a.reservation_expires_at===reservation.leaseExpiresAt&&v.source_seal_id===handoffRow(p.sources).sealId&&v.admitted_at===v.research_cutoff&&v.research_cutoff===clocks.researchCutoff);
@@ -56,28 +55,36 @@ export function checkV3StoredHandoff(request:V3HandoffRequest,value:unknown,prin
  const received=financialInstant(r.received_at),o=handoffRow(e.observation);handoffEnsure(received>=financialInstant(a.assigned_at)&&received>=financialInstant(o.controllerObservedEndAt)&&received<=financialInstant(new Date().toISOString())&&received<financialInstant(a.original_job_deadline)&&received<financialInstant(a.reservation_expires_at));handoffWindow(a,deadline);
  const completion=h.completion===null?null:receipt(h.completion,a,r);return {h,a,r,v,e,completion};
 }
-export function createV3AuthorHandoffComposition(config:V3HandoffConfig){
+/** Pure complete revalidator shared by the two server compositions. It does not
+ * perform DB admission; callers supply ONLY their freshly fenced RPC context. */
+export function createV3StoredHandoffRevalidator(config:V3HandoffConfig){
  const captured={bindingTexts:[...config.bindingTexts],executorFingerprint:config.executorFingerprint},select=selectV3HandoffBinding(captured),validator=createV3BusinessArticleValidator(captured);
+ return (request:V3HandoffRequest,value:unknown,principal:string,deadline:FinancialIoDeadline)=>{
+  const context=checkV3StoredHandoff(request,value,principal,deadline),binding=select(request.input);eq(context.h.binding,binding);
+  const saved=handoffRow(context.e.validatedArticle),article=handoffRow(context.e.rawArticle);
+  const checked=validator.revalidateStored(JSON.stringify(request.input),request.inputRevisionId,request.inputHash,{...context.v,binding},JSON.stringify(article),saved.sources as ArticleSourceV2[],deadline);
+  eq(checked.validatedArticle,saved);
+  const expected={assignmentId:String(context.a.assignment_id),jobId:request.input.jobId,attempt:request.input.attempt,reservationId:request.input.reservationId,inputRevisionId:request.inputRevisionId,inputHash:request.inputHash,articleHash:String(saved.articleHash),reviewPackHash:null,outputHash:completeHash(article),role:'author' as const,principalId:principal,workOwner:request.input.owner,originalLeaseOwner:request.input.owner,reservationRole:'company_research' as const,assignedAt:String(context.a.assigned_at),reservationStartedAt:String(context.a.reservation_started_at),reservationExpiresAt:String(context.a.reservation_expires_at),originalJobDeadline:String(context.a.original_job_deadline),receivedAt:String(context.r.received_at),articleAuthoredAt:null,author:null,usedInvocationIds:[]};
+  const observation=validateSavedResearchExecutionObservation(expected,context.e.observation);handoffEnsure(observation.ok);const authored=financialInstant(article.authoredAt);handoffEnsure(financialInstant(observation.observation.controllerObservedStartAt)<=authored&&authored<=financialInstant(observation.observation.controllerObservedEndAt));
+  deadline.check();return {...context,binding,checked};
+ };
+}
+export function createV3AuthorHandoffComposition(config:V3HandoffConfig){
+ const captured={bindingTexts:[...config.bindingTexts],executorFingerprint:config.executorFingerprint},select=selectV3HandoffBinding(captured),validate=createV3StoredHandoffRevalidator(captured);
  async function run(http:Request,db:VersionedInputRpc,action:'handoffAuthorResult'|'readAuthorHandoff',deadline:FinancialIoDeadline){
-  handoffEnsure(requireExactInternalBearer(http));const identity=resolveResearchControllerIdentity(http,'author');handoffEnsure(identity.ok);deadline.check();const request=await readV3HandoffBody(http,action,'x-research-author-handoff-action',deadline),binding=select(request.input);
+  handoffEnsure(requireExactInternalBearer(http));const identity=resolveResearchControllerIdentity(http,'author');handoffEnsure(identity.ok);deadline.check();const request=await readV3HandoffBody(http,action,'x-research-author-handoff-action',deadline);select(request.input);
   const args={p_request:request.input,p_revision_id:request.inputRevisionId,p_input_hash:request.inputHash,p_principal:identity.principalId,p_result_id:request.resultId,p_result_hash:request.resultHash};
   const read=()=>handoffRpc(db,'read_research_author_handoff_context_v2',args,deadline);
-  const context=checkV3StoredHandoff(request,await read(),identity.principalId,deadline);
-  // Never call active input/result READ after completion, nor pretend configured
-  // retained bytes prove the live append-only DB revocation state.
-  if(context.completion!==null)throw Error('research_v3_completed_binding_fence_unavailable');
-  const saved=handoffRow(context.e.validatedArticle),article=handoffRow(context.e.rawArticle);
-  const checked=await validator.validate(db,JSON.stringify(request.input),request.inputRevisionId,request.inputHash,JSON.stringify(article),saved.sources as ArticleSourceV2[],deadline);
-  const {binding:dbBinding,replay:_replay,...stored}=checked.revision;void _replay;eq(dbBinding,binding);eq(stored,context.v);eq(checked.validatedArticle,saved);
-  const expected={assignmentId:String(context.a.assignment_id),jobId:request.input.jobId,attempt:request.input.attempt,reservationId:request.input.reservationId,inputRevisionId:request.inputRevisionId,inputHash:request.inputHash,articleHash:String(saved.articleHash),reviewPackHash:null,outputHash:completeHash(article),role:'author' as const,principalId:identity.principalId,workOwner:request.input.owner,originalLeaseOwner:request.input.owner,reservationRole:'company_research' as const,assignedAt:String(context.a.assigned_at),reservationStartedAt:String(context.a.reservation_started_at),reservationExpiresAt:String(context.a.reservation_expires_at),originalJobDeadline:String(context.a.original_job_deadline),receivedAt:String(context.r.received_at),articleAuthoredAt:null,author:null,usedInvocationIds:[]};
-  const observation=validateSavedResearchExecutionObservation(expected,context.e.observation);handoffEnsure(observation.ok);const authored=financialInstant(article.authoredAt);handoffEnsure(financialInstant(observation.observation.controllerObservedStartAt)<=authored&&authored<=financialInstant(observation.observation.controllerObservedEndAt));
+  const context=validate(request,await read(),identity.principalId,deadline);
   eq(await read(),context.h);handoffWindow(context.a,deadline);
-  let completion:Row|null=null;
+  let completion=context.completion;
   if(action==='handoffAuthorResult'){
+   // A transport error leaves outcome uncertain. Never retry; explicit READ uses
+   // current stored context and pure revalidation, with no active input READ.
    completion=receipt(await handoffRpc(db,'commit_research_author_handoff_v2',args,deadline),context.a,context.r);
-   const after=checkV3StoredHandoff(request,await read(),identity.principalId,deadline);eq({...after.h,completion:null},context.h);eq(after.completion,completion);
+   const after=checkV3StoredHandoff(request,await read(),identity.principalId,deadline);eq({...after.h,completion:null},{...context.h,completion:null});eq(after.completion,completion);
   }
-  const output={schemaVersion:'research-author-handoff-v3-candidate',receipt:completion,authorReservationCompleted:completion!==null,controllerReportOnly:true,modelDispatched:false,reviewerDispatched:false,publishableResearch:false,researchQualified:false,strategyApproved:false,entryEligible:false,historicalPITEligible:false,financialVerified:false,wireDispatchEnabled:false,sourceClosureApproved:false,completedRecoveryAvailable:false};
+  const output={schemaVersion:'research-author-handoff-v3-candidate',receipt:completion,authorReservationCompleted:completion!==null,replayed:action==='handoffAuthorResult'&&context.completion!==null,controllerReportOnly:true,modelDispatched:false,reviewerDispatched:false,publishableResearch:false,researchQualified:false,strategyApproved:false,entryEligible:false,historicalPITEligible:false,financialVerified:false,wireDispatchEnabled:false,sourceClosureApproved:false,completedRecoveryAvailable:true};
   const snapshot=JSON.parse(JSON.stringify(output));handoffEnsure(Buffer.byteLength(JSON.stringify(snapshot))<=1048576);handoffWindow(context.a,deadline);return snapshot;
  }
  return Object.freeze({handoffAuthorResult:(http:Request,db:VersionedInputRpc,deadline=new FinancialIoDeadline())=>run(http,db,'handoffAuthorResult',deadline),readAuthorHandoff:(http:Request,db:VersionedInputRpc,deadline=new FinancialIoDeadline())=>run(http,db,'readAuthorHandoff',deadline)});

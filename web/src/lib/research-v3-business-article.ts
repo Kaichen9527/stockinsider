@@ -253,7 +253,17 @@ function validateArticle(context: {
  * author/body input. No write, claim, seal, publish or legacy fallback. */
 export function createV3BusinessArticleValidator(config: {bindingTexts:readonly string[];executorFingerprint:string}) {
   const consumer=createV3CashCitationConsumer(config);
-  return Object.freeze({async validate(db:VersionedInputRpc,requestText:unknown,inputRevisionId:string,inputHash:string,articleText:unknown,sources:ArticleSourceV2[],deadline=new FinancialIoDeadline()) {
+  return Object.freeze({
+    /** Complete pure revalidation for a current five-key handoff RPC context.
+     * Does not acquire or assert authority; callers must recheck that RPC fence. */
+    revalidateStored(requestText:unknown,inputRevisionId:string,inputHash:string,revision:Row,articleText:unknown,sources:ArticleSourceV2[],deadline:FinancialIoDeadline) {
+      deadline.check();ensure(typeof articleText==='string'&&articleText.length<=262144&&Buffer.byteLength(articleText,'utf8')<=262144);
+      ensure(typeof requestText==='string'&&requestText.length<=8192&&Buffer.byteLength(requestText,'utf8')<=8192);
+      const article=parseCompleteJson(articleText),request=parseCompleteRequest(parseCompleteJson(requestText));
+      const acquired=consumer.revalidateStoredForArticle(requestText,inputRevisionId,inputHash,revision,deadline);
+      const validatedArticle=validateArticle({request,revision:acquired.revision,sources,now:new Date().toISOString(),citations:acquired.citations,deadline},article);
+      deadline.check();return {validatedArticle,revision:acquired.revision,citations:acquired.citations};
+    },async validate(db:VersionedInputRpc,requestText:unknown,inputRevisionId:string,inputHash:string,articleText:unknown,sources:ArticleSourceV2[],deadline=new FinancialIoDeadline()) {
     deadline.check();ensure(typeof articleText==='string'&&articleText.length<=262144&&Buffer.byteLength(articleText,'utf8')<=262144);
     ensure(typeof requestText==='string'&&requestText.length<=8192&&Buffer.byteLength(requestText,'utf8')<=8192);
     const article=parseCompleteJson(articleText),request=parseCompleteRequest(parseCompleteJson(requestText));

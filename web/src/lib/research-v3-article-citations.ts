@@ -1,6 +1,6 @@
 /** Candidate server-composition consumer. READ only; not an article, rights or
  * publication validator. No HTTP/body may construct the trusted binding/RPC dependencies. */
-import { createVersionedCompleteInputController, type VersionedInputRpc } from './research-versioned-complete-input.ts';
+import { createVersionedCompleteInputController, createRetainedCandidateResponseValidator, type VersionedInputRpc } from './research-versioned-complete-input.ts';
 import { parseBindingCore, bindingCanonical } from './research-versioned-input-binding.ts';
 import { parseCompleteRequest } from './research-versioned-input-request.ts';
 import { completeHash, parseCompleteJson } from './research-v3-material-canonical.ts';
@@ -60,9 +60,16 @@ export function createV3CashCitationConsumer(config: { bindingTexts: readonly st
       ensure(typeof inputRevisionId === 'string' && UUID.test(inputRevisionId) && typeof inputHash === 'string' && HASH.test(inputHash));
       const request = parseCompleteRequest(textJson(requestText, 8192));
       const selected = bindings.filter(b => b.bindingCapsuleIdentity === request.expectedCalculatorExecutionHash && b.core.inventoryHash === request.expectedArtifactManifestHash);
-      ensure(selected.length === 1); const binding = selected[0], symbol: Symbol = binding.core.symbol;
+      ensure(selected.length === 1);
       // Real controller READ path; no claim/preparation/assert/seal or financial I/O.
       const response = await controller.runCompleteInput(db, request, false, deadline);
+      return revalidate(requestText,inputRevisionId,inputHash,response,deadline);
+  }
+  const validateResponse=createRetainedCandidateResponseValidator(bindings);
+  function revalidate(requestText:unknown,inputRevisionId:string,inputHash:string,response:Row,deadline:FinancialIoDeadline) {
+      deadline.check();ensure(UUID.test(inputRevisionId)&&HASH.test(inputHash));
+      const request=parseCompleteRequest(textJson(requestText,8192));
+      const binding=validateResponse(request,response),symbol:Symbol=binding.core.symbol;
       ensure(response.status === 'sealed' && response.revision_id === inputRevisionId && response.input_hash === inputHash);
       const payload = row(response.canonical_payload), financial = row(payload.financial), clocks = row(payload.clocks);
       ensure(payload.schemaVersion === WIRE);
@@ -162,6 +169,8 @@ export function createV3CashCitationConsumer(config: { bindingTexts: readonly st
       return Object.freeze({citations,revision});
   }
   return Object.freeze({
+    /** Pure server seam: no authority/lease claim; only current fenced-context callers may use it. */
+    revalidateStoredForArticle:revalidate,
     async read(db:VersionedInputRpc,requestText:unknown,inputRevisionId:string,inputHash:string,deadline=new FinancialIoDeadline()) {
       return (await acquire(db,requestText,inputRevisionId,inputHash,deadline)).citations;
     },

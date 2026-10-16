@@ -36,7 +36,7 @@ function assertResearchAuthorPacketWindow(packet: Row, deadline: FinancialIoDead
 
 /** Private controller projection, never an author-supplied context. Live SQL
  * fences must be checked again at result receipt/publication. No dispatch here. */
-function projectResearchAuthorPacket(request: AuthorPacketRequest, revision: Row, assignment: Row,
+export function projectResearchAuthorPacket(request: AuthorPacketRequest, revision: Row, assignment: Row,
   response: unknown, deadline: FinancialIoDeadline, now = () => new Date().toISOString()) {
   deadline.check(); // revision was obtained by the private consumer READ in this invocation
   ensure(revision.status === 'sealed' && revision.revision_id === request.inputRevisionId && revision.input_hash === request.inputHash);

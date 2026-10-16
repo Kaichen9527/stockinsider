@@ -13,11 +13,8 @@ type RpcResult={data:unknown;error:unknown};
 export type VersionedInputRpc={rpc(name:string,args:Row):Promise<RpcResult>};
 const row=(v:unknown):Row=>{ensure(v&&typeof v==='object'&&!Array.isArray(v));return v as Row;};
 const equal=(a:unknown,b:unknown)=>ensure(completeHash(a)===completeHash(b));
-export function createVersionedCompleteInputController(config:{bindingTexts:readonly string[];executorFingerprint:string;roots:{'original75d-fixed8or6':string;'historical15d4-fixed9or7':string}}) {
- ensure(Array.isArray(config.bindingTexts)&&config.bindingTexts.length<=4&&/^[a-f0-9]{64}$/u.test(config.executorFingerprint));
- const bindings=config.bindingTexts.map(parseBindingCore);ensure(new Set(bindings.map(b=>b.bindingCapsuleIdentity)).size===bindings.length);
- // Capture trusted primitive selectors, not mutable caller configuration.
- const executor=config.executorFingerprint,roots=Object.freeze({...config.roots});
+/** Pure retained-response validation only. Authority comes from the calling current fenced RPC. */
+export function createRetainedCandidateResponseValidator(bindings:readonly ReturnType<typeof parseBindingCore>[]) {
  const select=(request:CompleteRequest,symbol:unknown)=>{const matches=bindings.filter(b=>b.core.symbol===symbol&&b.core.inventoryHash===request.expectedArtifactManifestHash&&b.bindingCapsuleIdentity===request.expectedCalculatorExecutionHash);ensure(matches.length===1);return matches[0];};
  function validate(request:CompleteRequest,response:Row) {
   ensure(response.dispatchReady===false&&(response.status==='absent'||response.status==='sealed'));
@@ -41,6 +38,14 @@ export function createVersionedCompleteInputController(config:{bindingTexts:read
   else material={schemaVersion:'research-complete-financial-material-v2',symbol:b.core.symbol,artifactReadKnownAt:clocks.artifactReadKnownAt,sourceClosureHash:b.core.sourceExecutionHash,artifactInventoryHash:b.core.inventoryHash,financialMaterial:m};
   validateCompleteSchema(material,b.registration.schemaTemplate as Row,String(clocks.artifactReadKnownAt));return b;
  }
+ return validate;
+}
+export function createVersionedCompleteInputController(config:{bindingTexts:readonly string[];executorFingerprint:string;roots:{'original75d-fixed8or6':string;'historical15d4-fixed9or7':string}}) {
+ ensure(Array.isArray(config.bindingTexts)&&config.bindingTexts.length<=4&&/^[a-f0-9]{64}$/u.test(config.executorFingerprint));
+ const bindings=config.bindingTexts.map(parseBindingCore);ensure(new Set(bindings.map(b=>b.bindingCapsuleIdentity)).size===bindings.length);
+ // Capture trusted primitive selectors, not mutable caller configuration.
+ const executor=config.executorFingerprint,roots=Object.freeze({...config.roots});
+ const validate=createRetainedCandidateResponseValidator(bindings);
  return Object.freeze({
   async runCompleteInput(db:VersionedInputRpc,input:unknown,seal:boolean,deadline=new FinancialIoDeadline()):Promise<Row>{
    const request=parseCompleteRequest(input);ensure(Buffer.byteLength(JSON.stringify(request))<=8192);
