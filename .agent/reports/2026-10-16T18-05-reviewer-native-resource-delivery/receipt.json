@@ -1,0 +1,19 @@
+{
+  "scope": "Same handle terminal and remote delivery pointer; Root exact source/runtime evidence review pending",
+  "remoteHead": "b6ca7fb5d4057d748162da9e3e1b98a89a56443b",
+  "sourceMakerDeclared": "a085294da7db0e93ade3c3e9c1f556b736164287",
+  "makerReceipt": "adb4961c31b6e956caf4197dc615bcebbe2cd3440b9dff9cfa503c317e9e2e73",
+  "rootVerifiedNative": false,
+  "files": [
+    {
+      "path": "launch-note.txt",
+      "bytes": 2606,
+      "sha256": "68eb832de4f4a6603207ec52e0e955b31631f57f71993ad12d8e9064beade921"
+    },
+    {
+      "path": "terminal-compact.json",
+      "bytes": 761,
+      "sha256": "33e419f4f0c8486e0808e4026f00061410e27d4031fbb7133af56acccb03bc68"
+    }
+  ]
+}
