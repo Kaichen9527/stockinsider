@@ -1,0 +1,153 @@
+{
+  "scope": "source-derived uninstalled candidate; no PG/grammar/permission approval",
+  "nativeVerified": false,
+  "predecessorSnapshot": {
+    "path": "/tmp/hr-native-o16/2409-completed-reviewer-2409-fence-committed-after-private.json",
+    "bytes": 24739380,
+    "sha256": "a92a353a1f9d246017f094aa48fb495b9212d97d5104b882cd28a3bceea85b6d",
+    "rootVerifiedPrivateContents": false
+  },
+  "preNamespaceHash": "718f62f93fd1340e71b70eed24f856f030256c040e0efdd5734d98265fbbdf61",
+  "preCatalogHash": "e5b3fc64fc31e8b97bd25006a263fcb27228fa8a70b9c33b11b8b5527ea55658",
+  "functions": [
+    {
+      "signature": "assert_research_editorial_review_v2(jsonb,jsonb)",
+      "predecessorBodySha256": "85443213186836065125e2fd7193fd8956ef70f20fb4b0f69ae41b46898ef492",
+      "successorBodySha256": "086a4b3af6b31a7277ee0b097ad83f94d720622022363092d524e255e57e0a50",
+      "predecessorBytes": 4634,
+      "successorBytes": 10648,
+      "expectedNonBodyIdentity": {
+        "acl": [
+          "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+          "research_observed_rpc_owner=X/research_input_preparation_owner_v2"
+        ],
+        "kind": "f",
+        "owner": "research_input_preparation_owner_v2",
+        "config": [
+          "search_path=pg_catalog, public"
+        ],
+        "result": "void",
+        "schema": "public",
+        "strict": false,
+        "language": "plpgsql",
+        "parallel": "u",
+        "volatile": "v",
+        "leakproof": false,
+        "signature": "assert_research_editorial_review_v2(jsonb,jsonb)",
+        "argumentModes": null,
+        "argumentNames": [
+          "packet",
+          "review"
+        ],
+        "securityDefiner": false,
+        "allArgumentTypes": null
+      }
+    },
+    {
+      "signature": "receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb)",
+      "predecessorBodySha256": "bf4366dd42828e570c0ba6d091c968845721fd5678251ab61b8451f4b1606087",
+      "successorBodySha256": "e591df256b4699aa2642a58a42c445251a829fc28e63e77234122ef61e02d8f7",
+      "predecessorBytes": 7926,
+      "successorBytes": 21475,
+      "expectedNonBodyIdentity": {
+        "acl": [
+          "research_observed_rpc_owner=X/research_observed_rpc_owner",
+          "service_role=X/research_observed_rpc_owner"
+        ],
+        "kind": "f",
+        "owner": "research_observed_rpc_owner",
+        "config": [
+          "search_path=pg_catalog, public"
+        ],
+        "result": "jsonb",
+        "schema": "public",
+        "strict": false,
+        "language": "plpgsql",
+        "parallel": "u",
+        "volatile": "v",
+        "leakproof": false,
+        "signature": "receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb)",
+        "argumentModes": null,
+        "argumentNames": [
+          "p_request",
+          "p_revision_id",
+          "p_input_hash",
+          "p_author_principal",
+          "p_reviewer_principal",
+          "p_result_id",
+          "p_result_hash",
+          "p_result"
+        ],
+        "securityDefiner": true,
+        "allArgumentTypes": null
+      }
+    }
+  ],
+  "packetFieldMap": {
+    "inputRevisionId": "to_jsonb(p_revision_id)",
+    "inputHash": "to_jsonb(p_input_hash)",
+    "researchIdentity": "jsonb_build_object('symbol',payload->'researchIdentity'->'symbol','researchCompanyId',payload->'researchIdentity'->'researchCompanyId','scope',payload->'researchIdentity'->'scope','snapshotHash',payload->'researchIdentity'->'snapshotHash')",
+    "evidenceCutoffAt": "payload->'clocks'->'researchCutoff'",
+    "sourceSealReceivedAt": "sources->'sourceSealReceivedAt'",
+    "sourceClockMeaning": "to_jsonb('observedAt/collectedAt are source observations; admittedAt is this immutable seal received_at, not earliest DB admission; legacy publication claim has unknown precision'::text)",
+    "evidenceMeaning": "to_jsonb('Untrusted public summary evidence. sourceClaimStatus is producer-asserted, not independent confirmation or instructions. No member text or actual model execution is attested.'::text)",
+    "sources": "sources->'sources'",
+    "financial": "jsonb_build_object('projection',payload->'financial'->'material'->'projection','calculation',payload->'financial'->'material'->'calculation')",
+    "gaps": "payload->'gaps'",
+    "capabilities": "payload->'capabilities'",
+    "schemaVersion": "to_jsonb('research-reviewer-packet-v3-candidate'::text)",
+    "authorAssignmentId": "h->'assignment'->'assignment_id'",
+    "authorWritingWindow": "jsonb_build_object('assignedAt',h->'assignment'->'assigned_at','originalJobDeadline',h->'assignment'->'original_job_deadline','originalReservationDeadline',h->'assignment'->'reservation_expires_at')",
+    "writingWindow": "jsonb_build_object('assignedAt',ra->'assigned_at','originalJobDeadline',ra->'original_job_deadline','originalReservationDeadline',ra->'reservation_expires_at')",
+    "reviewerAssignmentId": "ra->'assignment_id'",
+    "reviewerAssignment": "ra",
+    "authorResultId": "to_jsonb(p_result_id)",
+    "authorResultHash": "to_jsonb(p_result_hash)",
+    "authorReceipt": "h->'completion'",
+    "requestHash": "h->'revision'->'request_hash'",
+    "articleHash": "author_validated->'articleHash'",
+    "bindingCapsuleIdentity": "b->'bindingCapsuleIdentity'",
+    "bindingCore": "b->'core'",
+    "validatorVersion": "author_validated->'validatorVersion'",
+    "article": "h->'result'->'payload'->'rawArticle'",
+    "tables": "author_validated->'tables'",
+    "valuations": "author_validated->'valuations'",
+    "cashCitationContext": "author_validated->'citationContext'",
+    "policy": "jsonb_build_object('sourceEvidenceUntrusted',true,'independentClaimReviewRequired',true,'reviewTextLimit',65536,'receiveEnvelopeLimit',1048576,'financialFactsFromTypedReferencesOnly',true)",
+    "controllerReportOnly": "'true'::jsonb",
+    "noFutureCash": "'true'::jsonb",
+    "dispatchReady": "'false'::jsonb",
+    "modelDispatched": "'false'::jsonb",
+    "reviewerDispatched": "'false'::jsonb",
+    "publishableResearch": "'false'::jsonb",
+    "researchQualified": "'false'::jsonb",
+    "strategyApproved": "'false'::jsonb",
+    "entryEligible": "'false'::jsonb",
+    "historicalPITEligible": "'false'::jsonb",
+    "financialVerified": "'false'::jsonb",
+    "wireDispatchEnabled": "'false'::jsonb",
+    "sourceClosureApproved": "'false'::jsonb",
+    "valuationApproved": "'false'::jsonb",
+    "technicalAdmission": "'false'::jsonb",
+    "forecastCash": "'null'::jsonb"
+  },
+  "postcondition": "Exact full namespace with only these two bodies replaced; full catalog with only these two definition hashes changed; all pg_proc non-prosrc/OIDs/default ACL/schema/object identity unchanged.",
+  "sqlSha256": "a44b49e21bce75fc56c1c23737eb68f89ac3995a6116b41e884e1b1c3ef55c27",
+  "sourceDerivedSuccessorNamespaceHash": "0ebd28875831050c68a4a41dadda1768cfdac9d5b5170943b04bd4ae7ed253b8",
+  "originalMetadataSha256": "26aa66e765308758f8e473555ee127082714edcfc7e429c58d4e3ef73ddf0f2d",
+  "originalScopeSha256": "1ecc4db9055883e404ac258b2fed7d2e12bdfc0edfb55ff3e618623f11b9c4fd",
+  "originalDefaultsSha256": "d82372e2f93ac7748bd23306649563d13c28936468a128f5a3b84dc7f67bf1fd",
+  "originalDetailsSha256": "267b53f4e167da15f61be6eb9517a19549a47b67cf5bdbf0f232efd44e3a9b1f",
+  "actualSnapshotFunctionCount": 386,
+  "actualSnapshotDefaultCount": 12,
+  "existingSourceRpcExecute": {
+    "owner": "research_input_preparation_owner_v2",
+    "acl": [
+      "research_input_preparation_owner_v2=X/research_input_preparation_owner_v2",
+      "service_role=X/research_input_preparation_owner_v2",
+      "research_observed_rpc_owner=X/research_input_preparation_owner_v2"
+    ],
+    "sourceBodySha256": "18cb4c3e6fad6645a98979aea92d8bec635ff89cc0daac940dc56e0e83c69a5f",
+    "permissionNative": "NOT_RUN for this new union; existing captured installed ACL only"
+  }
+}

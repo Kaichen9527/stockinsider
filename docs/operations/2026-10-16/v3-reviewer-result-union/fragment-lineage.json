@@ -1,0 +1,25 @@
+{
+  "packetSource": "222d922b7616d5ab55b7e3261982983841d9f9f9:web/src/lib/research-v3-reviewer-assignment.ts",
+  "exactCheck": {
+    "bytes": 1471,
+    "sha256": "ce198c5de0db0149dce54ccc432fdf8a6c4d030a1e3392ef83d71dd4f70c6b75"
+  },
+  "exactPacket": {
+    "bytes": 2291,
+    "sha256": "117dccf77d01fd8d303d22f635533b99a61e35c8ee9f3168efb16dc3669fec3d"
+  },
+  "editorialOrigin": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:web/src/lib/research-editorial-review.ts",
+  "editorialOriginalSha256": "3e04cc1f90c58a8d5514308538b051e1f34481290d1ac6882e59bfbd2ab7a5f2",
+  "adaptations": [
+    "canonical module path",
+    "explicit v3 versions",
+    "flat packet.sources",
+    "calculator hash and finite provenance in validated review"
+  ],
+  "syntheticFixturePrefix": {
+    "source": "222d922b7616d5ab55b7e3261982983841d9f9f9:scripts/research-v3-handoff-reviewer.test.mjs",
+    "bytes": 6755,
+    "sha256": "5022845564a144c7180d1ae1bc1a45b3c04b794474dae6e08c00a98812ac388f",
+    "oldTestRegistrationsImported": false
+  }
+}
