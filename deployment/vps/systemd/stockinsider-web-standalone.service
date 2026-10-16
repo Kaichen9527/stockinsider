@@ -34,6 +34,7 @@ LockPersonality=true
 RestrictSUIDSGID=true
 RuntimeDirectory=stockinsider
 RuntimeDirectoryMode=0750
+RuntimeDirectoryPreserve=yes
 UMask=0077
 
 [Install]
