@@ -1,0 +1,26 @@
+{
+  "original328Unchanged": true,
+  "exactFragments": [
+    {
+      "source": "scripts/opportunity-v3/research-v3-completed-handoff-reviewer-native.test.mjs",
+      "marker": "async function installFence",
+      "bytes": 5129,
+      "sha256": "6de171bbdd00ffc179afc8b8b4f0bdec58388788b618b01f2fe1ac9321434dfc",
+      "exact": true
+    },
+    {
+      "source": "scripts/opportunity-v3/research-v3-completed-handoff-reviewer-native.test.mjs",
+      "marker": "const safeSnapshot",
+      "bytes": 921,
+      "sha256": "c72568dd5a2be6aa7c7f0bc04bd1aab14a00681868bd9db7f954a9139a9a923d",
+      "exact": true
+    }
+  ],
+  "adaptations": [
+    "New helper TABLES adds reviewer result and invocation tables (16 vs14); snapshot count changes16. No old test entry imported.",
+    "Frozen completed-reviewer helper installer/authorPrefix imported directly.",
+    "New union installer independent full2body reconstruction.",
+    "R1 receives actual prepared envelope then only schemaVersion clones before original actual receive."
+  ],
+  "syntaxOnlyNoPGYet": true
+}

@@ -1,0 +1,136 @@
+{
+  "shutdownLogConfirmed": true,
+  "pgCtlExit": 0,
+  "fixtureFinallyExecuted": false,
+  "externalOwnedCleanupExecuted": true,
+  "paths": [
+    {
+      "pathSha256": "e78166becfeb1872dee8aa4af397d739a741ddc7ce8faa3e529f01fdc741756d",
+      "lstat": "ENOENT"
+    },
+    {
+      "pathSha256": "c5fdc2cab3ba9beaf1ea96b32ea5b089fe680b8b058ed4eca11b030fb3260e3c",
+      "lstat": "ENOENT"
+    },
+    {
+      "pathSha256": "29595be54bae0aa9bd929870334445c04b697870b0501512a0ef4d6559659fce",
+      "lstat": "ENOENT"
+    },
+    {
+      "pathSha256": "cabc1a982696ecd29a5aa63ded9ef3b5030465dacbfbf775a936f9afaf2e5189",
+      "lstat": "ENOENT"
+    },
+    {
+      "pathSha256": "cbcec27a8bef85ccad87bd9c16da968d75286c183f50393dd2a4e6ada9900d6e",
+      "lstat": "ENOENT"
+    }
+  ],
+  "existingFinancialFiles": 29,
+  "expectedFinancialFiles": 29,
+  "existingFinancialBytes": 1790390,
+  "allExistingPinnedBytesExact": true,
+  "processes": [
+    {
+      "pid": 702389,
+      "absent": true
+    },
+    {
+      "pid": 702395,
+      "state": "Z",
+      "ppid": 1,
+      "rss": 0
+    },
+    {
+      "pid": 702408,
+      "absent": true
+    },
+    {
+      "pid": 702417,
+      "absent": true
+    },
+    {
+      "pid": 702418,
+      "absent": true
+    },
+    {
+      "pid": 702424,
+      "state": "Z",
+      "ppid": 1,
+      "rss": 0
+    },
+    {
+      "pid": 702425,
+      "absent": true
+    },
+    {
+      "pid": 702426,
+      "absent": true
+    },
+    {
+      "pid": 702428,
+      "absent": true
+    },
+    {
+      "pid": 702429,
+      "absent": true
+    },
+    {
+      "pid": 702430,
+      "absent": true
+    },
+    {
+      "pid": 702431,
+      "absent": true
+    },
+    {
+      "pid": 702432,
+      "absent": true
+    },
+    {
+      "pid": 702433,
+      "absent": true
+    },
+    {
+      "pid": 702435,
+      "absent": true
+    },
+    {
+      "pid": 702445,
+      "absent": true
+    },
+    {
+      "pid": 702446,
+      "absent": true
+    },
+    {
+      "pid": 702447,
+      "absent": true
+    },
+    {
+      "pid": 702457,
+      "absent": true
+    },
+    {
+      "pid": 702458,
+      "absent": true
+    }
+  ],
+  "actualPendingQueryPromiseSettlement": "NOT_OBSERVED: session terminated",
+  "osProcessesAndBackendsSettled": true,
+  "freeAfter": {
+    "/workspace": 8591278080,
+    "/tmp": 13784276992
+  },
+  "serverLogs": [
+    {
+      "path": "interrupted-postgres-before-cleanup.log",
+      "bytes": 173350,
+      "sha256": "c10eab2b5229e9c3ac5bb6419254451b39fca8dacf2fe2c897f3b0c206bcc387"
+    },
+    {
+      "path": "interrupted-postgres-after-cleanup.log",
+      "bytes": 173501,
+      "sha256": "433e31d5da814db1e4f1643b7ea4396b6d93b300c49cc5aec88156e1a931863b"
+    }
+  ]
+}

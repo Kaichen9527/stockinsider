@@ -1,0 +1,49 @@
+{
+  "binaries": [
+    {
+      "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+      "bytes": 120177224,
+      "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+      "stdout": "v22.14.0\n",
+      "stderr": "",
+      "exit": 0
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/postgres",
+      "bytes": 10189096,
+      "sha256": "6468a969338215cb3912cf9c0b894bdbbd37b9a709926db078e9a5bf8bdc3e16",
+      "stdout": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": "",
+      "exit": 0
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_config",
+      "bytes": 55616,
+      "sha256": "8fc0425c51a3d1772ea60aa5d88c26e5903f46e5ee37b0652cefe9ffea377427",
+      "stdout": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin\n",
+      "stderr": "",
+      "exit": 0
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb",
+      "bytes": 196520,
+      "sha256": "a0363354125bc00f25075bb47fc32a2838fa7668c008326227f5bc04d628ca1d",
+      "stdout": "initdb (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": "",
+      "exit": 0
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+      "bytes": 80568,
+      "sha256": "c8a0fa6df90600186575e3f3c47a352bafac73547416cf67675b41991b5b5d74",
+      "stdout": "pg_ctl (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": "",
+      "exit": 0
+    }
+  ],
+  "user": "agent",
+  "freshFree": {
+    "/workspace": 8591278080,
+    "/tmp": 13956571136
+  }
+}
