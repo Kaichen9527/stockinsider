@@ -1,0 +1,6 @@
+{
+  "scope": "second evidence-only inventory checker",
+  "error": "AssertionError at line12",
+  "cause": "package.stdout was captured at0bytes while package.py itself was running, then completed to237bytes; no native raw changed",
+  "nativeRerun": false
+}

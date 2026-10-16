@@ -3,19 +3,19 @@
   "base": "490a20fb316892eb0cbb43bb6b995997e2e449ef",
   "sourceTree": "f70565764af8a4dcbf5befcc309b6ae265c06096",
   "execution": "one actual native invocation; interrupted resource hold; no rerun",
-  "publishedFileCountExcludingReceipt": 12,
-  "publishedBytesExcludingReceipt": 234055,
+  "publishedFileCountExcludingReceipt": 14,
+  "publishedBytesExcludingReceipt": 236864,
   "sourceInputCount": 331,
   "sourceInputBytes": 10493941,
-  "rawFileCount": 71,
-  "rawBytes": 172576181,
+  "rawFileCount": 74,
+  "rawBytes": 172577373,
   "privateContentsRootVerified": false,
   "independentApproval": false,
   "files": [
     {
       "path": "DELIVERY.md",
-      "bytes": 4688,
-      "sha256": "4de282314906c5e397c92dd8fafde24ec8f357c1942fbbf4f31eb3361be861c5"
+      "bytes": 5393,
+      "sha256": "356caee54db667ddd520c688abde2ae7d6c94d4c4ef09c6d4ba5dbe035a80be6"
     },
     {
       "path": "actual-binding-identity.json",
@@ -36,6 +36,16 @@
       "path": "command-seal.json",
       "bytes": 642,
       "sha256": "71fc9d769acb54b58924eb39327cc98fb5ce325ed6c6cb714b035ff08bea5973"
+    },
+    {
+      "path": "evidence-check-first-red.json",
+      "bytes": 697,
+      "sha256": "c71d55463710e847061b1fe65054b1fa6e6e7307f9e23596b2abd4b7d106e969"
+    },
+    {
+      "path": "evidence-inventory-second-red.json",
+      "bytes": 256,
+      "sha256": "1471eb7fd4471023b900843cb63f017d06c767580820383f01eff011f85912e9"
     },
     {
       "path": "incomplete-native.tap",
@@ -59,8 +69,8 @@
     },
     {
       "path": "raw-inventory.json",
-      "bytes": 14061,
-      "sha256": "2d5606ff9b84e9b9c1651a35a17280e570ced2c84bd4b4e62c2f27d01623210c"
+      "bytes": 15212,
+      "sha256": "0c20638f933dfcec1df7557be0bccbc0422909074edad3ba11df794057f8ae85"
     },
     {
       "path": "source-checks.json",
@@ -72,5 +82,8 @@
       "bytes": 94323,
       "sha256": "85eee97153ea5ffb1a22d97c6faafced849e9e9c76fccfef63eaa5a855f50217"
     }
-  ]
+  ],
+  "supersedesEvidenceOnlyReceipt": "def7cd5b42596daedf2e2dde02e615e858c160f6326f7e6f6fcd14169acf02f4",
+  "priorEvidenceCommit": "bac852bf",
+  "correction": "29 expected unique pinned paths, all29 exact; preserve two evidence-checker REDs and settled packaging-output version; no source/runtime change"
 }
