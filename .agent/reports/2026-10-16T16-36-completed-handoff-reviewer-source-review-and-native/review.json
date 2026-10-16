@@ -1,0 +1,61 @@
+{
+  "observedUtc": "2026-10-16T08:33:51.834254+00:00",
+  "source": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+  "evidence": "8b00416572b97e44832a792384dc60ad47d3e991",
+  "receiptSha256": "f7303c7cd8a302d38d68346b68f7d5dbe3b6ae8d7b8782062af85ba7e6d8a4a0",
+  "actualGitInputsVerified": 314,
+  "actualGitInputBytes": 10280563,
+  "publishedIncludingReceiptCount": 12,
+  "publishedIncludingReceiptBytes": 217316,
+  "unchangedInherited": 303,
+  "allowedChangedInherited": [
+    "scripts/research-v3-handoff-reviewer.test.mjs",
+    "web/src/lib/research-v3-article-citations.ts",
+    "web/src/lib/research-v3-author-handoff.ts",
+    "web/src/lib/research-v3-author-result.ts",
+    "web/src/lib/research-v3-business-article.ts",
+    "web/src/lib/research-v3-reviewer-assignment.ts",
+    "web/src/lib/research-versioned-complete-input.ts"
+  ],
+  "independentBaseFinalByteParity": {
+    "fullResponseValidator": true,
+    "activeController": true,
+    "fullCitationArithmeticBody": true,
+    "articleCore": true,
+    "activeArticle": true,
+    "authorFullFileExportOnly": true
+  },
+  "privateRawScope": "inventory count/sum/hash-format only; contents NOT obtained",
+  "privateRawCount": 90,
+  "privateRawBytes": 1095138,
+  "makerChecksOnly": {
+    "integration": 26,
+    "citationRegression": 20,
+    "staticParity": 7,
+    "strictModuleTypesExit": 0
+  },
+  "makerResources": {
+    "sampledPeakProcessTreeRssBytes": 268701696,
+    "minFreeBytes": {
+      "/workspace": 8592240640,
+      "/tmp": 14269509632
+    },
+    "sampledNotInstantaneousPeak": true
+  },
+  "rootAvailableBytes": 7219867648,
+  "rootRuntimeNativeBuildExecuted": false,
+  "nativeSqlApplied": false,
+  "formalApproval": false,
+  "fullGoalComplete": false,
+  "reviewScope": "unactivated source integration only",
+  "scopedFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "originalFullAcceptanceP2": "pending actual SQL/native/revocation/legacy/ACL",
+  "rootBuildReason": "fresh available below original8GiB; no Node/native/build run",
+  "rootDiskBelow5GB": false,
+  "goal": "human-updated objective continues; not complete",
+  "runtimeApproval": false
+}

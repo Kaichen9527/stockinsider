@@ -1,0 +1,47 @@
+{
+  "scope": "Root source review and next unique native dispatch; not native/formal approval",
+  "source": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+  "evidence": "8b00416572b97e44832a792384dc60ad47d3e991",
+  "files": [
+    {
+      "path": "check-initial-extractor-red.py",
+      "bytes": 6679,
+      "sha256": "23347d766fe9b8f0c69e1762fb9e3616399e8f383276b79ec1d13ce47d576bd2"
+    },
+    {
+      "path": "check.py",
+      "bytes": 6690,
+      "sha256": "b1a65bdae47a1f875b146f0a4c407701c15f2d46d5d626122daf8e1a404266ec"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 675,
+      "sha256": "22b592a188b07998aa1c9c41537e485aa5469b1466ce6264b7e5be6074a57832"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 7275,
+      "sha256": "93ab6d0d2d755c4443eeea38ed8f6fa92ab7f69c9307e1d470eb9d867c9acd1c"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 5735,
+      "sha256": "233a97f35f1415539ef6fcde95c1fdfd6cf8e208f90a270340f8a0b0a6329d2a"
+    },
+    {
+      "path": "review.json",
+      "bytes": 2120,
+      "sha256": "5787a283ba099a41418912cf0ee5a1ca644aac9728f0215b91183623701fa28d"
+    },
+    {
+      "path": "root-check.json",
+      "bytes": 1715,
+      "sha256": "bcf3a4352e8f853013f548c143f63eb967f0011451db45ca85a586b7021193a4"
+    },
+    {
+      "path": "tooling-red.txt",
+      "bytes": 395,
+      "sha256": "7ccb2e6d158141cb2dcda84d74b3de27579b67038fcc5c24c0cbaae0e6a9cae6"
+    }
+  ]
+}
