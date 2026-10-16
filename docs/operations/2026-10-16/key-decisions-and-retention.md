@@ -1,3 +1,7 @@
+## 2026-10-16 19:10 修正：owned_tmp 不符合原 ancestor guard
+
+新input真native0PASS2FAIL：/tmp1777帶022writebits，原I/O會從 / 檢查全鏈，leaf0700無法補足。Root先前只核leaf及capacity的判斷不足，fixture判REQUEST_CHANGES/P2=1，產品guard正確且不得放寬；原source8mock綠/18:24候選/原resourcehold都留歷史，不代native。334source未改，R1與reviewer鏈NOT_RUN。下一唯一Cloud01a14466只read-only合法父目錄/capacity/本project自有non-cache可重建輸出候選審查，不刪、不mount/chmod、不重跑tmp。19:10 Root收據與原始native951571c8見最新launch/report；先samehandle重新核狀態。完整goal/正式未完與已消耗DD/terminalPR不變。
+
 ## 2026-10-16 18:24 更新：測試 fixture 暫存位置候選
 
 Cloud home/workspace/Gitcommon同dev27，原29固定檔案1790390bytes已超過8GiB floor以上餘裕。原native中斷永久保留；不降floor、不刪raw/cache/其他App。只授權新source-only closed owned_tmp opt-in暫存至dev34 literal /tmp，原home預設/產品/素材/guards保持，Root精確review與fresh准入另待。唯一owner為Cloud turn01a1443d/branch codex/research-v3-fixture-tmp-staging-source-oct16；先重查samehandle，不以本索引當活動或准入證明。細節與新Root收據見18:24 report，正式發布/完整goal與全部舊未完不變。

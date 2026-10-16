@@ -1,0 +1,53 @@
+{
+  "scope": "Root exact failed owned_tmp fixture source/public witness review, P2 fixture ancestor incompatibility, read-only alternatives audit dispatch; not native/formal approval",
+  "executedSource": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "evidence": "a511bcdd1ba6803b62a23f215fd4b8c662888f94",
+  "makerReceipt": "951571c8a26013218a61657cad862019ee1e21b868d40ecc37d37e809a4b5d01",
+  "outcome": "REQUEST_CHANGES",
+  "P0": 0,
+  "P1": 0,
+  "P2": 1,
+  "files": [
+    {
+      "path": "artifact-attempt-execution.json",
+      "bytes": 563,
+      "sha256": "8739153888d3f14e8a0fc92fca7ee7f1dc8640d5d9650492f33945f6526b88c5"
+    },
+    {
+      "path": "artifact-attempt-readonly.sh",
+      "bytes": 2478,
+      "sha256": "04ecd92f3378790ee8de09c4b6fd6bec356c567fbbabcc548cae1b880c848d2f"
+    },
+    {
+      "path": "artifact-attempt-stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifact-attempt-stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dispatch-snapshot.json",
+      "bytes": 650,
+      "sha256": "d829d2c979356e8bdba95ef091804d714cebaef849d34af275f25fcb51a4feb7"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 4114,
+      "sha256": "c3de76f101521b7a9d65e3cf05e012b40da5bfb1ae9b5669359b657303b42d13"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 6314,
+      "sha256": "371f79d10ba7bffeeb1503356b90824b46d5921435df643f576c915d2db3542b"
+    },
+    {
+      "path": "root-check.json",
+      "bytes": 2063,
+      "sha256": "d125762b93c60482050f3f353d445ddc56e434bd89aff527bf3ae9357e0fd1ee"
+    }
+  ],
+  "fullGoalComplete": false
+}

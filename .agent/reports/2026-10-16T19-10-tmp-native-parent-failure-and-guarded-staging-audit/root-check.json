@@ -1,0 +1,67 @@
+{
+  "utc": "2026-10-16T11:06:58.917705+00:00",
+  "source": "1b44d34594bd3dd4bfa6d4e5655e8d7f60959ce7",
+  "handoff": "de89e15b372eeccf1b136260ef6a024b1f86c86d",
+  "evidence": "a511bcdd1ba6803b62a23f215fd4b8c662888f94",
+  "makerReceipt": "951571c8a26013218a61657cad862019ee1e21b868d40ecc37d37e809a4b5d01",
+  "verifiedGitInputs": 334,
+  "gitBytes": 10516436,
+  "publishedFilesIncludingReceipt": 17,
+  "publishedBytes": 143316,
+  "privateRawInventoryOnly": {
+    "count": 63,
+    "bytes": 172365639
+  },
+  "nativeOutcome": "0PASS2FAIL AUO child+parent; EMC NOT_RUN",
+  "beforeFailureWhole16TableAndLedgerEqual": true,
+  "savedCharge": {
+    "count": 1,
+    "bytes": 2582
+  },
+  "fd": {
+    "opens": 0,
+    "closes": 0
+  },
+  "diagnosis": "/tmp 1777 actual forbidden022bits=18; original engine checks every ancestor before any financial FD open",
+  "rootReview": "REQUEST_CHANGES",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1
+  },
+  "findingScope": "Root-selected test fixture parent incompatible with existing guard; product rejection correct; do not relax guard/chmod shared ancestors or rerun unchanged input",
+  "priorStaticSourceReviewRetained": true,
+  "privateContentsRootVerified": false,
+  "formalOrWholeClosureApproved": false,
+  "businessReviewerR1": "NOT_RUN",
+  "fullGoalComplete": false,
+  "makerNativeResources": {
+    "seconds": 39.17857480049133,
+    "minimumFreeBytes": {
+      "/workspace": 8590831616,
+      "/tmp": 13503692800
+    },
+    "sampledPeakRssBytes": 931356672,
+    "sampleSeconds": 0.2,
+    "resourceHoldTriggered": false
+  },
+  "makerCleanupPublicWitness": {
+    "normalFinally": true,
+    "independentFivePathsAbsent": true,
+    "sixBackendsAbsent": true,
+    "sampledProcesses": 22,
+    "zombies": [
+      {
+        "pid": 705734,
+        "absent": false,
+        "state": "Z",
+        "ppid": 1,
+        "rssBytes": 0,
+        "backend": false
+      }
+    ],
+    "inputRpcDetailedReadyState": "NOT_OBSERVED; no fabricated ReadyI",
+    "reviewerMutation": "NOT_RUN",
+    "privateServerLogContentsRootVerified": false
+  }
+}
