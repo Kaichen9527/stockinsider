@@ -1,0 +1,134 @@
+{
+  "scope": "source-only candidate; no runtime/systemd acceptance",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "sourceCommit": "b301feedb1d5a06721c41e57acefcc26515f6c6c",
+  "treeChanges": [
+    "M\tdeployment/vps/systemd/stockinsider-web-standalone.service",
+    "A\tdocs/operations/2026-10-17/parser-runtime-directory-preserve/HANDOFF.md"
+  ],
+  "allOtherTrackedTreeEntriesUnchanged": true,
+  "parity": {
+    "atUtc": "2026-10-16T17:08:44.516351+00:00",
+    "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+    "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+    "oldBytes": 1312,
+    "oldSha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb",
+    "newBytes": 1341,
+    "newSha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5",
+    "newBlob": "c534ab49eb8934300e5c2c93fb65e76955e573da",
+    "addedLines": 1,
+    "deletedLines": 0,
+    "reverseByteParity": true,
+    "onlyProductPathChanged": true,
+    "changeLine": 37,
+    "checksScope": "source/hash/diff checks only; no systemd lifecycle or synthetic test count",
+    "systemdVerify": "NOT_RUN",
+    "native": "NOT_RUN",
+    "deployment": "NOT_RUN",
+    "makerIndependentApproval": false,
+    "auditProcessMaxRssBytes": 10485760,
+    "freeBytes": {
+      "/workspace": 8590401536,
+      "/tmp": 13606199296
+    }
+  },
+  "unchangedParserPins": [
+    {
+      "path": "deployment/vps/systemd/stockinsider-financial-parser.socket",
+      "blob": "e8e0d240260c058f52da2a2e9b80413abf3ed8a7",
+      "bytes": 428,
+      "sha256": "c01a4972aebc8616cd6fcc04cde6d9d38ef9173fc3590de9964d38872670a6a7",
+      "expectedPinMatches": true,
+      "scope": "exact base Git bytes only, not installed VPS observation"
+    },
+    {
+      "path": "deployment/vps/systemd/stockinsider-financial-parser.service",
+      "blob": "51fa21fcd7d824c4ac454ee6331223d3712506cf",
+      "bytes": 1044,
+      "sha256": "41bbd5a9bac6d9579077cdea5b184ed0f7c30d186d4246a6b64c4b0c1a95f02e",
+      "expectedPinMatches": true,
+      "scope": "exact base Git bytes only, not installed VPS observation"
+    },
+    {
+      "path": "scripts/candidate_financial_parser_socket.py",
+      "blob": "3e2783f832093e0d724950b38003ad0894748c39",
+      "bytes": 5062,
+      "sha256": "b88897da16bb1aa9ad755d5f1d41afc033c05120c4762be810d5a1c15fea713b",
+      "expectedPinMatches": true,
+      "scope": "exact base Git bytes only, not installed VPS observation"
+    }
+  ],
+  "offlineTool": {
+    "versionExit": 0,
+    "versionStdout": "systemd 257 (257.13-1~deb13u1)\n+PAM +AUDIT +SELINUX +APPARMOR +IMA +IPE +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP +LIBCRYPTSETUP_PLUGINS +LIBFDISK +PCRE2 +PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD +BPF_FRAMEWORK +BTF -XKBCOMMON -UTMP +SYSVINIT +LIBARCHIVE\n",
+    "pid1Comm": "tail",
+    "localDeploymentPaths": {
+      "/opt/stockinsider/current/app": false,
+      "/opt/stockinsider/current/app/server.js": false,
+      "/opt/stockinsider/current/scripts/verify-standalone-release.mjs": false
+    },
+    "verify": "NOT_RUN",
+    "reason": "actual production WorkingDirectory and ExecStart script tree absent; PID1 is not systemd; do not stub/normalize paths or dependencies",
+    "lifecycle": "NOT_RUN"
+  },
+  "admission": {
+    "atUtc": "2026-10-16T17:07:24.737381+00:00",
+    "floor": 8589934592,
+    "filesystems": [
+      {
+        "path": "/workspace",
+        "device": 27,
+        "freeBytes": 8590401536
+      },
+      {
+        "path": "/tmp",
+        "device": 34,
+        "freeBytes": 13606801408
+      }
+    ],
+    "remoteMain": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+    "checkoutPlan": "separate minimal sparse checkout on /tmp with its own Git common; no move/change of original Git common or research checkout",
+    "gitWritesAreNotZero": true,
+    "noCleanup": true
+  },
+  "diffCheck": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "preservedToolingRed": {
+    "atUtc": "2026-10-16T17:10:45.750136+00:00",
+    "commandScope": "git add followed by git commit in sparse checkout",
+    "exit": 128,
+    "stderr": "Failed to connect to proxy port 8080; could not fetch 189750da447de23ff2128799f752ae1f9ed10586 from promisor remote",
+    "classification": "sandbox Git lazy-fetch network context; no product/runtime failure",
+    "productBytesChangedByRecovery": false,
+    "nextStep": "same-origin required metadata retrieval and normal staging in authorized actual Git context, no transport configuration change"
+  },
+  "publicationCapacity": {
+    "atUtc": "2026-10-16T17:11:38.545023+00:00",
+    "floor": 8589934592,
+    "freeBytes": {
+      "/workspace": 8590401536,
+      "/tmp": 13606076416
+    },
+    "gitCommon": "/tmp/parser-runtime-preserve-o17/.git",
+    "gitCommonDevice": 34,
+    "boundedNewReportBytesLimit": 16384,
+    "gitMetadataWriteAllowanceBytes": 262144,
+    "noClaimOfZeroGitWrites": true
+  },
+  "pending": [
+    "Root independent review and normal protected checks",
+    "isolated systemd v255 default-stop RED/candidate explicit-stop-start/manual-automatic-restart/path-connectivity-owner-mode/reboot proof",
+    "separately reviewed quiescent restoration of existing missing pathname",
+    "capacity-approved original guarded retry/worker/fact/terminal validation"
+  ],
+  "nativeTestsRun": 0,
+  "makerIndependentApproval": false
+}
