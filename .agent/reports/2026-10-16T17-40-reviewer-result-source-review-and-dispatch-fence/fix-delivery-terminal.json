@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"timedOut\":false,\"wake\":{\"reason\":\"turnCompleted\",\"turnId\":\"01a14410-e6ec-708b-8939-0ec23b1e7d79\",\"threadId\":\"01a106b8-a883-7185-9962-f7372109a093\",\"hostId\":\"durable\"},\"polls\":[{\"schemaVersion\":1,\"cursor\":\"3f58cf3b-49b3-4414-877e-42d89130b651:13\",\"revision\":13,\"changed\":true,\"thread\":{\"id\":\"01a106b8-a883-7185-9962-f7372109a093\",\"hostId\":\"durable\",\"status\":{\"type\":\"idle\"}},\"latestTurn\":{\"id\":\"01a14410-e6ec-708b-8939-0ec23b1e7d79\",\"status\":\"completed\",\"error\":null,\"startedAt\":1792143321,\"completedAt\":1792143783,\"durationMs\":462395},\"latestAssistantMessageId\":\"msg_00a2feb47c9bf438016ad1f1a04b6c87d0a7e623583921eab9\",\"latestAssistantMessage\":{\"id\":\"msg_00a2feb47c9bf438016ad1f1a04b6c87d0a7e623583921eab9\",\"turnId\":\"01a14410-e6ec-708b-8939-0ec23b1e7d79\",\"phase\":\"final_answer\",\"text\":\"已完成 SOURCE-ONLY R1 修補並核對 remote，工作樹乾淨。 Source：1349525f192c1ff78ff7bba409eee0e891ba4a5b Evidence：490a20fb316892eb0cbb43bb6b995997e2e449ef Receipt：448dcc1a846e40781897b37db18a338888c83a8fcc3d229d1da50fc20db03271 現在先讀 server current-context，再限制 wire／binding／Hb 與 envelope 版本配對；原兩個 arm、assert body、全部 TS 保持不變。 Focused 5 PASS、受影響 static 9 PASS；未重跑 TS15。封存 328 source inputs、27 local raw、9 公開收據；原 R1 與 checker EPERM RED 保留。 PG/native 全部 NOT_RUN，跨版本 direct receive 拒絕仍待真驗收。已停止等待 Root review，未自簽批准。\"},\"latestToolMarkerId\":\"exec-4f0174d9-4149-4c4f-a314-aa90eb1e8bb5\",\"latestToolMarker\":{\"id\":\"exec-4f0174d9-4149-4c4f-a314-aa90eb1e8bb5\",\"turnId\":\"01a14410-e6ec-708b-8939-0ec23b1e7d79\",\"type\":\"commandExecution\",\"name\":\"commandExecution\",\"status\":\"completed\"}}]}"
+    }
+  ],
+  "isError": false
+}

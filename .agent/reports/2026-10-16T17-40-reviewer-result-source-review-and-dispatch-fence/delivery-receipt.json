@@ -1,0 +1,15 @@
+{
+  "scope": "same-handle completed delivery only; pending Root exact fix review",
+  "terminalSnapshot": {
+    "path": "fix-delivery-terminal.json",
+    "bytes": 1937,
+    "sha256": "a9f64035578b6f893018766c757265a0d05f7a28c0739537746b12d03d08e5f1"
+  },
+  "originalRootReceipt": "2834d35bdeba26223a4fde100715908c9032aa6ef1498451769b11cb079a8d28",
+  "remoteFixEvidence": "490a20fb316892eb0cbb43bb6b995997e2e449ef",
+  "sourceMakerDeclared": "1349525f192c1ff78ff7bba409eee0e891ba4a5b",
+  "makerReceipt": "448dcc1a846e40781897b37db18a338888c83a8fcc3d229d1da50fc20db03271",
+  "rootFixSourceVerified": false,
+  "native": "NOT_RUN",
+  "toolingRed": "Automation readback first expected camelCase targetThreadId; actual TOML target_thread_id. Prompt/status/rrule had matched before KeyError. Correct mapping used next; no automation target mutation."
+}
