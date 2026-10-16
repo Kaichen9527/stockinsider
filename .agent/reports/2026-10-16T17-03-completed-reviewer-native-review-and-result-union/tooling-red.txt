@@ -1,0 +1,1 @@
+Root read_thread formatter i.output?.slice TypeError: output was an object; read-only result already stored, fetch had not begun. Corrected JSON.stringify formatter, then waited fetch terminal. No native/product failure or redispatch.

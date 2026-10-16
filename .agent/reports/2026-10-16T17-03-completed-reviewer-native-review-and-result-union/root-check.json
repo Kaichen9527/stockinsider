@@ -1,0 +1,77 @@
+{
+  "utc": "2026-10-16T09:00:04.364297+00:00",
+  "harnessSource": "014d6468add162fa54c34680c07f10e2dab789c3",
+  "evidence": "6d68136a19ba9c45a62909cb2ea4313fd6161b21",
+  "sourceInputCount": 317,
+  "sourceInputBytes": 10319157,
+  "originalInputsUnchanged": 314,
+  "publishedCountIncludingReceipt": 14,
+  "publishedBytesIncludingReceipt": 376869,
+  "receiptSha256": "bad2f9664dc182a91d02cb6aa4ac65319744a66ffb01e524c1e3abcd50cb9333",
+  "privateRawScope": "205 raw/310150803 bytes inventory count/sum/hash format only; no private contents acquired",
+  "rootRuntimeNativeBuildExecuted": false,
+  "scopedSourceAndPublicWitnessFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "nativeMakerCount": {
+    "tests": 3,
+    "suites": 0,
+    "pass": 3,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "cases": [
+    {
+      "symbol": "2409",
+      "stages": 14,
+      "tablesPerStage": 14,
+      "newFinancialFD": 9,
+      "inputCharge": {
+        "count": 2,
+        "bytes": 234995
+      },
+      "durableResultBytes": 205189,
+      "packetEnvelopeBytes": 281761,
+      "rpcCount": 25,
+      "readTombstoneRefusals": 4,
+      "originalDraftSha": "accb32669966843b008a345bfe732a13d41af3b008fcbfe2f716d6d580c8cda2"
+    },
+    {
+      "symbol": "2383",
+      "stages": 14,
+      "tablesPerStage": 14,
+      "newFinancialFD": 7,
+      "inputCharge": {
+        "count": 2,
+        "bytes": 144354
+      },
+      "durableResultBytes": 135388,
+      "packetEnvelopeBytes": 174257,
+      "rpcCount": 25,
+      "readTombstoneRefusals": 4,
+      "originalDraftSha": "65a5c805e45487dfa6daa91d5c8d7f5d5aae4a10ed7f6aa250cb6b11710b3064"
+    }
+  ],
+  "makerSampledRssPeak": 936706048,
+  "makerMinimumFree": {
+    "/workspace": 8590020608,
+    "/tmp": 13876314112
+  },
+  "minimumWorkspaceMargin": 86016,
+  "actualHsFromGit": "e0fb383b61ec82dd2df0f948d6f2b9ec07e7a0651ad24c5a9829df5a3166254c",
+  "hcFromPublishedBinaryHashNotRootBinaryAcquisition": "d47210580b9234ff8bcf61e56512e75ee5cd80b00b29e1c90d842b401325b5c6",
+  "rootAvailableBytes": 7073214464,
+  "pending": [
+    "legacy77/compatible differential acceptance",
+    "source withdrawal and other ACL/rights/lease/caps negative acceptance",
+    "fence busy/drift/forcedrollback",
+    "real handoff and reviewer-assignment transport response loss",
+    "actual four callers/HTTP and independent reviewer execution",
+    "reviewer-result/Q-R/reviewpack/atomicpublication/whole S-C-B-Q-R-A/formal claim semantics/two formal articles"
+  ],
+  "fullGoalComplete": false
+}

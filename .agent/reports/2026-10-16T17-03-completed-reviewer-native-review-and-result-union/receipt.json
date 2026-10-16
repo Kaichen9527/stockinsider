@@ -1,0 +1,35 @@
+{
+  "scope": "Root exact source/public native witness review and unique next source dispatch; not Root native/private full bytes/formal approval",
+  "files": [
+    {
+      "path": "check.py",
+      "bytes": 11628,
+      "sha256": "88ef4c4f73d6017113830a73c6d1e6f5a8b4ddb711807ea84e51f8967e254c94"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 675,
+      "sha256": "31758503013385d765726494d065aed56c682be20d00065e7e618e4393b28f47"
+    },
+    {
+      "path": "dispatch.txt",
+      "bytes": 9320,
+      "sha256": "af46e415540f4a945560ac179e126fe18498dfe4c378195a8dc3892df0ee09e9"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 7061,
+      "sha256": "f87f29330224ae2db00a8e8e1fa2623e3f27c1c49efbeea76f327a1996fc13f7"
+    },
+    {
+      "path": "root-check.json",
+      "bytes": 2528,
+      "sha256": "16eb7c05443b437b8a69fd95e0ce5a2118d0519103a8edb1c4d00f3ac555e723"
+    },
+    {
+      "path": "tooling-red.txt",
+      "bytes": 235,
+      "sha256": "363650c1c6812c460ce23a8e272c170c58cb7572664431ea96115932ddd82569"
+    }
+  ]
+}
