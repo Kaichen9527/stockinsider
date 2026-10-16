@@ -1,0 +1,47 @@
+[
+  {
+    "path": ".github/workflows/parser-runtime-lifecycle-quality.yml",
+    "bytes": 1870,
+    "sha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+    "bytes": 1341,
+    "sha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5"
+  },
+  {
+    "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/HANDOFF.md",
+    "bytes": 7975,
+    "sha256": "fc7b82f7ae325a101882034326c7b21f4d6d051fbfa8ac57fdb3fca2653d2ecc"
+  },
+  {
+    "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/R1-RECEIPT-BINDING.md",
+    "bytes": 2803,
+    "sha256": "c8d1f9c42840f4199853428bdd042e6c09a916b14d8cf85631096cfe045fa099"
+  },
+  {
+    "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/receipt-binding-source-checks.py",
+    "bytes": 5655,
+    "sha256": "323624495acaee88b1f51f6b12ff3c23aaec279e70f98bc285d4a2b02678b5a1"
+  },
+  {
+    "path": "docs/operations/2026-10-17/parser-runtime-lifecycle-release/CLEANUP-FIX.md",
+    "bytes": 2562,
+    "sha256": "032b9f790d07d610f72fd2222e0ebfb58944f5120b9f0eaadcd97a94861d5771"
+  },
+  {
+    "path": "docs/operations/2026-10-17/parser-runtime-lifecycle-release/HANDOFF.md",
+    "bytes": 2356,
+    "sha256": "2b4e14fe9ff50db9165364747ed99c50e1d1e760491582adb768777e74fba222"
+  },
+  {
+    "path": "docs/operations/2026-10-17/parser-runtime-lifecycle-release/cleanup-source-checks.py",
+    "bytes": 4900,
+    "sha256": "9226a934302c0e259beb4ee075efb4ca31be033385b1c0ecb8076207ed8f08a0"
+  },
+  {
+    "path": "scripts/parser-runtime-directory-lifecycle.py",
+    "bytes": 33504,
+    "sha256": "c4fb16bf02b0d65c234de84923a77713883c02f73fcb560b542b5d72adea8ba6"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "source": "939d6438d157114c6ef33b9d99362156c36624f1",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "tree": "b01d582a9c0fdc0ec681001ecb7d6a95524b640c",
+  "directChild": "f2dfeaf6443cac55a70755d293536f82e6f8f941",
+  "reviewSha256": "19f1e574f4a45f1ee2dd5669b7e36aa5c4fb470a7aaf84f366b81f981598c509",
+  "attestationSha256": "297d95c4e6062261acf3d83dcd33629821e3cea123cf3c9774d6e254cac9a61f",
+  "PCRrecordSha256": "7b2c43b0b3c6dffe39df58423a51bcab2957f498080811dbda0e7b24dc021077",
+  "PCRfileSha256": "ad4d1be25803c8e31077b371498ab482602e60ccb824a3bff4af7527f987fbdd",
+  "activeGraphSha256": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+  "canonicalSectionSha256": "3ea70ec27ebe756326eb4946ffea79741381982bd3e53d2232cdb73a647d9bf3",
+  "reviewedAt": "2026-10-16T23:15:13Z",
+  "evidenceOnlyPaths": [
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json"
+  ],
+  "published": true,
+  "productionInstallApproved": false,
+  "remoteRef": "refs/heads/evidence/source-led-opportunity-v3-exact-review-939d6438d157114c6ef33b9d99362156c36624f1"
+}

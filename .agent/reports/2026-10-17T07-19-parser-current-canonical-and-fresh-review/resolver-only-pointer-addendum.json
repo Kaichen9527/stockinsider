@@ -1,0 +1,9 @@
+{
+  "evidence": "f2dfeaf6443cac55a70755d293536f82e6f8f941",
+  "reviewAttestationSha256": "297d95c4e6062261acf3d83dcd33629821e3cea123cf3c9774d6e254cac9a61f",
+  "networkAttempts": 0,
+  "pgImported": false,
+  "productionApproved": false,
+  "independentlyVerifiedSourceCommit": "939d6438d157114c6ef33b9d99362156c36624f1",
+  "independentlyVerifiedSourceTree": "b01d582a9c0fdc0ec681001ecb7d6a95524b640c"
+}

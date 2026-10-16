@@ -1,0 +1,11 @@
+{
+  "head": "939d6438d157114c6ef33b9d99362156c36624f1",
+  "ref": "codex/parser-runtime-lifecycle-normal-pr-oct17",
+  "workflow": "reviewed-publication-tail-artifact.yml",
+  "purpose": "fresh source-bound canonical/PCR evidence on current subject; original DD archive reuse only, no deployment",
+  "startedAt": "2026-10-16T23:07:48.764977+00:00",
+  "exit": 0,
+  "stdout": "https://github.com/Kaichen9527/stockinsider/actions/runs/38979735493\n",
+  "stderr": "",
+  "completedAt": "2026-10-16T23:07:50.765478+00:00"
+}

@@ -1,0 +1,1 @@
+First staged diff check actual exit1: full-range.diff:62: trailing whitespace; raw context line is one space. Raw bytes kept unchanged locally; published equivalent base64. No product source edit.

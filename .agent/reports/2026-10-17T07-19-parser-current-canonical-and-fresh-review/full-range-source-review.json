@@ -1,0 +1,24 @@
+{
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "source": "939d6438d157114c6ef33b9d99362156c36624f1",
+  "tree": "b01d582a9c0fdc0ec681001ecb7d6a95524b640c",
+  "webTree": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "fullRangeFiles": 9,
+  "actualReadBytes": 62966,
+  "unchangedInheritedModeTypeBlobIdentities": 2199,
+  "productionUnitOnlyNewLine": true,
+  "fullRangeRequirements": "PASS",
+  "fullRangeArchitecture": "PASS",
+  "fullRangeCodeIntegration": "PASS",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "reviewer": "Root model-agent, unsigned independent integration review of Cloud-authored source",
+  "historicalREDRetained": true,
+  "humanSignature": false,
+  "productionInstallApproved": false,
+  "formalResearchPublicationApproved": false,
+  "canonicalCurrentEvidence": "PENDING"
+}

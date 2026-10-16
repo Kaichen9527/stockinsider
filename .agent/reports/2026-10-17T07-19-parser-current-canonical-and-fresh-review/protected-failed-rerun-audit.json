@@ -1,0 +1,19 @@
+{
+  "startedAtUtc": "2026-10-16T23:18:31.439245+00:00",
+  "completedAtUtc": "2026-10-16T23:18:33.537114+00:00",
+  "args": [
+    "gh",
+    "run",
+    "rerun",
+    "38974147381",
+    "--repo",
+    "Kaichen9527/stockinsider",
+    "--failed"
+  ],
+  "head": "939d6438d157114c6ef33b9d99362156c36624f1",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "attestationCommit": "f2dfeaf6443cac55a70755d293536f82e6f8f941",
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": ""
+}
