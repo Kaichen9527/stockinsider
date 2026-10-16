@@ -1,3 +1,19 @@
+## 2026-10-16 16:47台灣時間：Root核實reviewer-result與publication下游版本邊界；原唯一native工作仍活動
+
+前goalturn分類verified wait；本輪先核remote main93e44475/progressb515db7e與乾淨source/progress樹、freshavailable7108497408bytes（仍<原8GiB、>5GiB）。同Cloud turn01a143da-8910-76c6-97f8-02c3078c13a4/cursor3f58cf3b-49b3-4414-877e-42d89130b651:3真inProgress/threadactive；一次read_thread同handle也核同turn活動及原三個completed唯讀/branch/helper讀取tool，不因compact未變/timeout重啟。原40min新SQL+handoff/reviewer native owned範圍保持，尚無新native結果或remote交付，不重派/不重疊harness/產品。
+
+Root只做下一未完正式鏈之有界read-only source boundary map，讀current222d source與historical15d4參照，核14actualGitblobs/249881bytes及24source-dollarbody hash/宣告owner/精確行號literal edges；source宣告不是installed pg_proc/OID/catalog/ACL，不冒新runtime反例或批准。Map SHA fe210300b43630ec801c51308509cd81c4b1bfbe2936a143da1b0c1622262ab7，33293bytes；未copy/merge歷史branch或改產品。
+
+已核current source只有v3reviewer assignment/packet，尚無v3reviewer-result composition/editorial module。既有receive_research_reviewer_result_v2硬限result-v2/raweditorial-v2/validatededitorial-v2；assert editorial SQL與歷史TS讀packet.research.sources，而新v3packet將sources平置root；既有receive另比packet.calculatorExecutionHash，新packet未帶此root欄，但validated v3article有actualcalculated.executionCodeHash。這些是尚未實作的下游版本邊界，不把現packet sourcecontract當reviewerresult可用，也不是本輪實際PG拒絕/P2或當前ownednative故障。下一需coherent v3editorial/reviewer-result receive/READrecovery及最小必要finite SQL union，不能只換schema字串/補布林/移舊審查收據。
+
+Reviewer-result context/source READ沒有literal v2schema hardgate，仍原authorhandoff/role-reservation-completion/invocation/immutable guards；是否需改body應由實際有限整合證明，不預先全部替換。原8editorialcategories/accepted-concerns一致性/65536review/1MiB result/shareddeadline/distinctthread-invocation/principal/唯一invocation與result+completion同transaction須保留，contract accepted不能代獨立逐claimsemantic批准。
+
+Publicationcontent明列v2/published-v2 discriminator，但來源顯示完整rawarticle/tables/valuations確實保留，不能捏「cash rows已被丟棄」。Publicationwriter依賴reviewerresult/editorial與原atomiclineage；後續須明確v3version/content/view/wholebinding。Completed publication READ有獨立歷史immutable路徑，不再呼叫activeauthorcontext，原source invalidation以published/withdrawn狀態回應；沒有candidate resolver。Resolver私有prep-owner而completedreader為observed-owner、無現成EXECUTE grant。這裡先列未決語意：published history與candidate input read-revocation應如何分工，不能宣稱原v2歷史reader壞、偷偷加grant/變owner或把expiredactivelease當歷史READ門檻。未批准任何此future設計或SQL修改。
+
+Root report .agent/reports/2026-10-16T16-47-reviewer-result-publication-boundary-map/。唯一Cloud40min工作先收真終態與exact交付，RED修補優先，未另派下游。Fullgoal/heartbeat ACTIVE；reviewerresult/Q-R/reviewpack/atomicpublication/wholeS-C-B-Q-R-A/四caller/逐claimsemantic/formal兩文章/完整來源Top20/合格技術觀察/策略/正式研究排程/fixedpeer-install仍pending。DD已部署one-shot/PR370..382終態不碰，未新VPS/DB/role/ACL/HTTP/CI/PR/deploy/正式研究排程操作，current/writerdd598/lease0仍14:51最後真query。未Rootheavy/build/native/cleanup/刪資料/停別App/降floor；未觸發<5GB整理盤點，不冒compact已回收磁碟。
+
+Root receipt904e8c2fcfd4381f4b1bcc3a131ba8df1c017059c6485eab0fc6e6d5440afa7b；staged diff-check由實際命令另記，歷史RED不覆寫。
+
 ## 2026-10-16 16:36台灣時間：completed handoff/reviewer packet source Root精確審查閉合；唯一Cloud接續實際SQL與業務native
 
 本輪先核remote main93e44475/progressf720bad0與乾淨source/progress樹。先恢復舊functions cell465回not found（觀測工具歷史，非Cloud失敗），立即同Cloud handle核前turn01a14245於01:36:41Z真completed/lasttoolcompleted/threadidle；cursor reset為3f58cf3b-49b3-4414-877e-42d89130b651:1，同handle再次確認終態，沒有因舊wait失效或reset重派活動。Source222d922b7616d5ab55b7e3261982983841d9f9f9/evidence8b00416572b97e44832a792384dc60ad47d3e991/receiptf7303c7cd8a302d38d68346b68f7d5dbe3b6ae8d7b8782062af85ba7e6d8a4a0真push，fetch同session真exit0後才讀Git。

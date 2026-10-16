@@ -1,0 +1,25 @@
+{
+  "scope": "Root read-only downstream version-boundary map, not implementation/runtime/approval",
+  "files": [
+    {
+      "path": "boundary-map.json",
+      "bytes": 33293,
+      "sha256": "fe210300b43630ec801c51308509cd81c4b1bfbe2936a143da1b0c1622262ab7"
+    },
+    {
+      "path": "cloud-snapshot.json",
+      "bytes": 661,
+      "sha256": "95fcfe7bdbdb7584af7821a9fe04b45da8648d4e847c2f6b6657f689b0170bb2"
+    },
+    {
+      "path": "launch-note.txt",
+      "bytes": 3848,
+      "sha256": "0a0666161804fa472f9b835e5a8d0482420d3fa3c313439a1966ad60f1278743"
+    },
+    {
+      "path": "map.py",
+      "bytes": 7964,
+      "sha256": "680a0c3f733b746417c2150df92c433b5ab7b6a1f6b0e87f7fe57e0c5e36ff11"
+    }
+  ]
+}

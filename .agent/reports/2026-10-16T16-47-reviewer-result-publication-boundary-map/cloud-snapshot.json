@@ -1,0 +1,29 @@
+{
+  "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+  "hostId": "durable",
+  "threadStatus": {
+    "type": "active",
+    "activeFlags": []
+  },
+  "turnId": "01a143da-8910-76c6-97f8-02c3078c13a4",
+  "turnStatus": "inProgress",
+  "startedAt": 1792139758,
+  "completedAt": null,
+  "toolMarkers": [
+    {
+      "id": "exec-5c460d35-cbcb-4444-9f35-c0a84cca7332",
+      "status": "completed",
+      "exitCode": 0
+    },
+    {
+      "id": "exec-da8a5853-5946-4205-b008-84a16f5e057d",
+      "status": "completed",
+      "exitCode": 0
+    },
+    {
+      "id": "exec-f19bd1d1-d9bb-4cf6-8f4d-5964bbc3dc9d",
+      "status": "completed",
+      "exitCode": 0
+    }
+  ]
+}

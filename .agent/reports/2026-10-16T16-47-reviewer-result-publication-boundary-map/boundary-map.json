@@ -1,0 +1,753 @@
+{
+  "observedUtc": "2026-10-16T08:46:14.919909+00:00",
+  "scope": "read-only source boundary map for next unfinished publication-chain work; not implementation, runtime counterexample or approval",
+  "currentSource": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+  "historicalReference": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "inventory": [
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "migrations/20261009_research_reviewer_results_v2.sql",
+      "bytes": 28946,
+      "sha256": "af72171444c6c67a754f33099da704e78bb2d2bb7454ef356c4c8753ea26f934",
+      "gitBlob": "8f8b57a80cff679d26fbfebaba17b095c24080d6"
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "migrations/20261009_research_publication_lineage_v2.sql",
+      "bytes": 9652,
+      "sha256": "37a885ac77ef1c97196c197d6804300fd18843eebb31629da19f9d10f6d6449d",
+      "gitBlob": "984e16b7a65770a5e1cbb2a2e5b4f88a3ba678f6"
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "bytes": 43051,
+      "sha256": "ed2334dc46cf73fd33f61bd00d1034b50924d5e2213474372da5b121c4f3128a",
+      "gitBlob": "78fbd14fde4aeb5493297a08781a5d538e77c9fa"
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "migrations/20261010_research_publication_view_v2.sql",
+      "bytes": 3783,
+      "sha256": "82a158eb59e74181fe5546c255d6afa4c51184d2639cfb52a900b22eef88dd75",
+      "gitBlob": "a197b07bc8a5c359164eb32defcdb34503d011ab"
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "bytes": 22325,
+      "sha256": "f089f44375f80da89be49215cad35626998bcb5775166efc23e93af224ec284f",
+      "gitBlob": "855cd31a01d16809c5b7b9ce0fbfc135d4aa930d"
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "migrations/20261016_research_author_handoff_binding_fence_candidate_v3.sql",
+      "bytes": 39960,
+      "sha256": "fff12bbd98489c334d07a42083e86f5cac0a04d6ff33eb1b72286eafec0dc31d",
+      "gitBlob": "6de8d1d8d9bef09e3a44a7bb9cc46da7dd7bcf8e"
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "bytes": 8349,
+      "sha256": "6c90b72a8018fde41e0d03eed03fa6b17ae309b1f8ff43b656eb0ec9bd3e1b73",
+      "gitBlob": "705af513472df58b35e3d0a7d04c446f93971285"
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "web/src/lib/research-v3-business-article.ts",
+      "bytes": 23472,
+      "sha256": "261399430fc97c8320b351f707058111c123ae8f69dcb2f172f22c5886e290dc",
+      "gitBlob": "8380cd9f9aa2f6ea630d07dea0107561c8a62707"
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "web/src/lib/research-v3-author-handoff.ts",
+      "bytes": 14648,
+      "sha256": "d485a13c4a2ad6ce938b3b3fe17299ec7bac7b7d96faed8fe0535a7afb7aec2e",
+      "gitBlob": "55c903dc5ea08f5a0e7e75d8d548c9dc01a573d5"
+    },
+    {
+      "ref": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-editorial-review.ts",
+      "bytes": 4124,
+      "sha256": "3e04cc1f90c58a8d5514308538b051e1f34481290d1ac6882e59bfbd2ab7a5f2",
+      "gitBlob": "d4f7a2b9cd7b9c5eace4ccde5d86875a849e441d"
+    },
+    {
+      "ref": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-reviewer-result.ts",
+      "bytes": 11291,
+      "sha256": "96befdc6902834b7b7c62559cea6ac7b40bc0b4ddbcaca829c1f7eff0c1a8abd",
+      "gitBlob": "f971183846e85e74757f1800d6ad2fffc732f0ee"
+    },
+    {
+      "ref": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-reviewer-assignment.ts",
+      "bytes": 12885,
+      "sha256": "afa530253f7b6086bdaf600d58ad571e828512f9e4ef0a11b952c085b81a31ba",
+      "gitBlob": "87fdc1cb4cd1dfe601826ff824870c9d4048689b"
+    },
+    {
+      "ref": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-atomic-publication.ts",
+      "bytes": 13296,
+      "sha256": "b981bde6e86ec3a52b2c47cf287493851c58af8fa28f3f577b3069839db577f0",
+      "gitBlob": "09e89ed901a2d468b4a649a1f5212dabddcbb358"
+    },
+    {
+      "ref": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-publication-view.ts",
+      "bytes": 14099,
+      "sha256": "9ff1bc9cfe104f1847dfd0899d45a45e6cab3db3720d71e92103a1cae4b0c6c3",
+      "gitBlob": "3e8cc5ae55f0a0166e55f4b56ff5f91a97ba7474"
+    }
+  ],
+  "sourceFunctions": [
+    {
+      "path": "migrations/20261009_research_reviewer_results_v2.sql",
+      "name": "fence_research_execution_invocation_v2",
+      "sourceLine": 33,
+      "sourceDollarBodyBytes": 570,
+      "sourceDollarBodySha256": "cba614bb5a0e4d51c149e90136c871cdd91befabc12df3e74675b3b9ed6e0c73",
+      "declaredOwner": "not found in local tail",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261009_research_reviewer_results_v2.sql",
+      "name": "read_research_reviewer_result_context_v2",
+      "sourceLine": 49,
+      "sourceDollarBodyBytes": 4214,
+      "sourceDollarBodySha256": "7689bd1a4b7f78f9d94bed2814ff130eb986bc70bbef48cce3e9f186f08cce5b",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261009_research_reviewer_results_v2.sql",
+      "name": "assert_research_editorial_review_v2",
+      "sourceLine": 98,
+      "sourceDollarBodyBytes": 4634,
+      "sourceDollarBodySha256": "85443213186836065125e2fd7193fd8956ef70f20fb4b0f69ae41b46898ef492",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261009_research_reviewer_results_v2.sql",
+      "name": "receive_research_reviewer_result_v2",
+      "sourceLine": 150,
+      "sourceDollarBodyBytes": 7926,
+      "sourceDollarBodySha256": "bf4366dd42828e570c0ba6d091c968845721fd5678251ab61b8451f4b1606087",
+      "declaredOwner": "research_observed_rpc_owner",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261009_research_reviewer_results_v2.sql",
+      "name": "read_research_reviewer_result_sources_v2",
+      "sourceLine": 228,
+      "sourceDollarBodyBytes": 5672,
+      "sourceDollarBodySha256": "18cb4c3e6fad6645a98979aea92d8bec635ff89cc0daac940dc56e0e83c69a5f",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261009_research_publication_lineage_v2.sql",
+      "name": "fence_research_publication_lineage_v2",
+      "sourceLine": 34,
+      "sourceDollarBodyBytes": 3516,
+      "sourceDollarBodySha256": "d6d4fd1803fe6ed503a5de88e12add41ee582f41d0e36e5142c829a6aee95221",
+      "declaredOwner": "not found in local tail",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261009_research_publication_lineage_v2.sql",
+      "name": "fence_research_publication_truncate_v2",
+      "sourceLine": 93,
+      "sourceDollarBodyBytes": 516,
+      "sourceDollarBodySha256": "90ca733c8a08c47f220042f262ed1ec4807f5b9d935174ad940c40ea716a9336",
+      "declaredOwner": "not found in local tail",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "name": "research_publication_content_v2",
+      "sourceLine": 49,
+      "sourceDollarBodyBytes": 679,
+      "sourceDollarBodySha256": "6c765ad245a36d80a03ced0ee1170f2b373738a104fc2ac9b7cf8fb455562598",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "name": "ensure_research_publication_bundle_v2",
+      "sourceLine": 64,
+      "sourceDollarBodyBytes": 1425,
+      "sourceDollarBodySha256": "f48461ded08b77f5e9d6bf3928bdc60c959f0e1a8976ce6700810324a8e6be11",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "name": "fence_research_dossier_insert_v2",
+      "sourceLine": 87,
+      "sourceDollarBodyBytes": 3804,
+      "sourceDollarBodySha256": "fb6259e38e96eba6a87e6468941a1d5e77d94dc02b31809d8f38fb4b81889b32",
+      "declaredOwner": "not found in local tail",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "name": "fence_research_dossier_truncate_v2",
+      "sourceLine": 141,
+      "sourceDollarBodyBytes": 548,
+      "sourceDollarBodySha256": "282e0a0f44ae575550a37a95ec665cf298eb909397485610b28408fc3ca42183",
+      "declaredOwner": "not found in local tail",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "name": "fence_research_publication_lineage_v2",
+      "sourceLine": 163,
+      "sourceDollarBodyBytes": 5629,
+      "sourceDollarBodySha256": "7e92f389ab509d251de7d0522ad3c97347df1bab452b120ba3befe520fc44fb2",
+      "declaredOwner": "not found in local tail",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "name": "research_publication_source_state_v2",
+      "sourceLine": 236,
+      "sourceDollarBodyBytes": 144,
+      "sourceDollarBodySha256": "ef512b72d6d910ab2bf662fafd88eeff92b3cda0bb149e95fc4c85cb03092157",
+      "declaredOwner": "research_source_fence_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "name": "read_completed_research_publication_v2",
+      "sourceLine": 245,
+      "sourceDollarBodyBytes": 11304,
+      "sourceDollarBodySha256": "1f7c0574771d64c756d71c8905a8c91648681c06352cecc7602a4357b2346ea8",
+      "declaredOwner": "research_observed_rpc_owner",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "name": "publish_research_article_v2",
+      "sourceLine": 360,
+      "sourceDollarBodyBytes": 7485,
+      "sourceDollarBodySha256": "8ec9d3452346b993bb2f34733f466ea51f699771fefe84b240d610514fd51171",
+      "declaredOwner": "research_observed_rpc_owner",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261010_research_publication_view_v2.sql",
+      "name": "read_research_company_publication_v2",
+      "sourceLine": 7,
+      "sourceDollarBodyBytes": 3008,
+      "sourceDollarBodySha256": "52d06b24f7d5c23b371720f69ee8483f3359760ff8df90eab04e1d58058126ae",
+      "declaredOwner": "research_observed_rpc_owner",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "research_input_binding_immutable_candidate_v3",
+      "sourceLine": 26,
+      "sourceDollarBodyBytes": 58,
+      "sourceDollarBodySha256": "1595060f9b0450a7ef2d835951fd9e6062e5521359339166e6b3fbc4ef41d938",
+      "declaredOwner": "not found in local tail",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "research_input_binding_candidate_v3",
+      "sourceLine": 34,
+      "sourceDollarBodyBytes": 2146,
+      "sourceDollarBodySha256": "433f0d2da00ea4e73f7a742c31c1705d07685ef1b19c9f65cece5e5205fc95f7",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "research_complete_parent_candidate_v3",
+      "sourceLine": 54,
+      "sourceDollarBodyBytes": 2491,
+      "sourceDollarBodySha256": "a70d367dd9e814c8a0c81aacbd23290250166a93f10abec00b7cbb45d75b8cc0",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "read_research_article_input_candidate_v3",
+      "sourceLine": 72,
+      "sourceDollarBodyBytes": 2655,
+      "sourceDollarBodySha256": "c265bfe3abae74271b66e5dd1766e3b8536e10a055f97b472e7179dfe2e84a57",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "assert_research_input_candidate_v3",
+      "sourceLine": 97,
+      "sourceDollarBodyBytes": 408,
+      "sourceDollarBodySha256": "d06f2bb96a969276434852693cb48cbd596337d237719f2a866d88a3ad1eff4c",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "prepare_research_input_candidate_v3",
+      "sourceLine": 105,
+      "sourceDollarBodyBytes": 640,
+      "sourceDollarBodySha256": "6a2fc23d9e8fa1c4f4959300fd91860c5d5ba5319be0b64009e0aedf42eb8809",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "seal_research_article_input_candidate_v3",
+      "sourceLine": 116,
+      "sourceDollarBodyBytes": 6708,
+      "sourceDollarBodySha256": "f87e8e2b9232000c8819cd1d503705914a9a7414332f4ac2e43311681b657042",
+      "declaredOwner": "research_input_preparation_owner_v2",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    },
+    {
+      "path": "migrations/20261016_research_author_handoff_binding_fence_candidate_v3.sql",
+      "name": "read_research_author_handoff_context_v2",
+      "sourceLine": 120,
+      "sourceDollarBodyBytes": 9492,
+      "sourceDollarBodySha256": "f507de78318a126e180f96fa7905fccfb6c1ee428688fb9e93b0f607c8d7e958",
+      "declaredOwner": "not found in local tail",
+      "metadataScope": "source declarations only, not installed pg_proc/OID/catalog/ACL"
+    }
+  ],
+  "literalEdges": [
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "migrations/20261009_research_reviewer_results_v2.sql",
+      "edges": [
+        {
+          "needle": "'research-reviewer-result-v2'",
+          "hits": [
+            {
+              "line": 159,
+              "text": "  OR p_result->>'schemaVersion' IS DISTINCT FROM 'research-reviewer-result-v2'"
+            }
+          ]
+        },
+        {
+          "needle": "packet->'research'->'sources'",
+          "hits": [
+            {
+              "line": 115,
+              "text": " allowed_sources:=(SELECT coalesce(jsonb_agg(s->'descriptor'->>'id'),'[]') FROM jsonb_array_elements(packet->'research'->'sources') s);"
+            }
+          ]
+        },
+        {
+          "needle": "packet->>'calculatorExecutionHash'",
+          "hits": [
+            {
+              "line": 176,
+              "text": "  OR packet->>'calculatorExecutionHash' IS DISTINCT FROM h->'result'->'payload'->'validatedArticle'->>'calculatorExecutionHash'"
+            }
+          ]
+        },
+        {
+          "needle": "'research-editorial-review-v2'",
+          "hits": [
+            {
+              "line": 177,
+              "text": "  OR review->>'schemaVersion' IS DISTINCT FROM 'research-editorial-review-v2' OR review->>'articleHash' IS DISTINCT FROM packet->>'articleHash'"
+            }
+          ]
+        },
+        {
+          "needle": "'validated-editorial-review-v2'",
+          "hits": [
+            {
+              "line": 179,
+              "text": "  OR octet_length(convert_to(public.research_complete_canonical_v2(review),'UTF8'))>65536 OR v->>'schemaVersion' IS DISTINCT FROM 'validated-editorial-review-v2'"
+            }
+          ]
+        },
+        {
+          "needle": "1048576",
+          "hits": [
+            {
+              "line": 23,
+              "text": " logical_bytes integer NOT NULL CHECK(logical_bytes BETWEEN 1 AND 1048576),"
+            },
+            {
+              "line": 164,
+              "text": " IF bytes>1048576 THEN RAISE EXCEPTION 'research_reviewer_result_bound'; END IF;"
+            },
+            {
+              "line": 294,
+              "text": " IF octet_length(result::text)>1048576 THEN RAISE EXCEPTION 'research_reviewer_sources_bound'; END IF;"
+            }
+          ]
+        },
+        {
+          "needle": "65536",
+          "hits": [
+            {
+              "line": 179,
+              "text": "  OR octet_length(convert_to(public.research_complete_canonical_v2(review),'UTF8'))>65536 OR v->>'schemaVersion' IS DISTINCT FROM 'validated-editorial-review-v2'"
+            }
+          ]
+        },
+        {
+          "needle": "INSERT INTO public.research_execution_invocations_v2",
+          "hits": [
+            {
+              "line": 16,
+              "text": "INSERT INTO public.research_execution_invocations_v2 SELECT invocation_id,'author',result_id,result_hash FROM public.research_author_results_v2;"
+            },
+            {
+              "line": 40,
+              "text": " INSERT INTO public.research_execution_invocations_v2 VALUES(NEW.invocation_id,"
+            }
+          ]
+        },
+        {
+          "needle": "INSERT INTO public.research_model_completions_v1",
+          "hits": [
+            {
+              "line": 219,
+              "text": " INSERT INTO public.research_model_completions_v1(reservation_id,owner,outcome,result_hash)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ref": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-editorial-review.ts",
+      "edges": [
+        {
+          "needle": "packet.research",
+          "hits": [
+            {
+              "line": 29,
+              "text": "  const sourceIds = new Set(((packet.research as Row).sources as Row[]).map(s => String((s.descriptor as Row).id)));"
+            }
+          ]
+        },
+        {
+          "needle": "research-editorial-review-v2",
+          "hits": [
+            {
+              "line": 24,
+              "text": "  ensure(review.schemaVersion === 'research-editorial-review-v2' && review.articleHash === packet.articleHash"
+            }
+          ]
+        },
+        {
+          "needle": "65536",
+          "hits": [
+            {
+              "line": 22,
+              "text": "  ensure(Buffer.byteLength(completeCanonical(candidate), 'utf8') <= 65536);"
+            }
+          ]
+        },
+        {
+          "needle": "EDITORIAL_CHECKS",
+          "hits": [
+            {
+              "line": 4,
+              "text": "export const EDITORIAL_CHECKS = ['source_support', 'rumor_staging', 'financial_recalculation', 'periods_and_dilution',"
+            },
+            {
+              "line": 30,
+              "text": "  ensure(Array.isArray(review.checks) && review.checks.length === EDITORIAL_CHECKS.length);"
+            },
+            {
+              "line": 34,
+              "text": "    ensure(EDITORIAL_CHECKS.includes(c.category as typeof EDITORIAL_CHECKS[number]) && !seen.has(c.category)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "edges": [
+        {
+          "needle": "research-reviewer-packet-v3-candidate",
+          "hits": [
+            {
+              "line": 52,
+              "text": "   packet={...researchFields,schemaVersion:'research-reviewer-packet-v3-candidate',authorAssignmentId,authorWritingWindow,"
+            }
+          ]
+        },
+        {
+          "needle": "...researchFields",
+          "hits": [
+            {
+              "line": 51,
+              "text": "   const {schemaVersion:_authorPacketSchema,assignmentId:authorAssignmentId,writingWindow:authorWritingWindow,...researchFields}=research;void _authorPacketSchema;"
+            },
+            {
+              "line": 52,
+              "text": "   packet={...researchFields,schemaVersion:'research-reviewer-packet-v3-candidate',authorAssignmentId,authorWritingWindow,"
+            }
+          ]
+        },
+        {
+          "needle": "cashCitationContext:",
+          "hits": [
+            {
+              "line": 58,
+              "text": "    cashCitationContext:author.checked.citations.context,"
+            }
+          ]
+        },
+        {
+          "needle": "read_research_reviewer_sources_v2",
+          "hits": [
+            {
+              "line": 43,
+              "text": "   const source=exact(await handoffRpc(db,'read_research_reviewer_sources_v2',args,deadline),['sourceSealReceivedAt','sources']);"
+            }
+          ]
+        },
+        {
+          "needle": "equal(await read(),current.context)",
+          "hits": [
+            {
+              "line": 67,
+              "text": "  equal(await read(),current.context);handoffWindow(current.author.a,deadline);if(current.assignment!==null)handoffWindow(current.assignment,deadline);"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "web/src/lib/research-v3-business-article.ts",
+      "edges": [
+        {
+          "needle": "calculatorExecutionHash: calculated.executionCodeHash",
+          "hits": [
+            {
+              "line": 240,
+              "text": "    calculatorExecutionHash: calculated.executionCodeHash, sourceClosureHash: object(payload.hashes).sourceClosureHash,"
+            }
+          ]
+        },
+        {
+          "needle": "validated-business-article-v3-candidate",
+          "hits": [
+            {
+              "line": 238,
+              "text": "  const result = { schemaVersion: 'validated-business-article-v3-candidate', validatorVersion: 'business-article-cash-contract-v3.1',"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "migrations/20261010_research_atomic_publication_v2.sql",
+      "edges": [
+        {
+          "needle": "'research-publication-v2'",
+          "hits": [
+            {
+              "line": 51,
+              "text": " SELECT jsonb_build_object('schemaVersion','research-publication-v2','deepResearch',"
+            },
+            {
+              "line": 320,
+              "text": " sh:=public.research_complete_hash_v2(jsonb_build_object('domain','research-publication-v2','requestHash',rh,"
+            },
+            {
+              "line": 416,
+              "text": " sh:=public.research_complete_hash_v2(jsonb_build_object('domain','research-publication-v2','requestHash',rh,"
+            }
+          ]
+        },
+        {
+          "needle": "'research-published-v2'",
+          "hits": [
+            {
+              "line": 52,
+              "text": "  jsonb_build_object('schemaVersion','research-published-v2','articleHash',author_payload->'validatedArticle'->'articleHash',"
+            }
+          ]
+        },
+        {
+          "needle": "Historical replay is checked before any live claim/source assertion.",
+          "hits": [
+            {
+              "line": 369,
+              "text": " -- Historical replay is checked before any live claim/source assertion."
+            }
+          ]
+        },
+        {
+          "needle": "public.read_research_reviewer_result_context_v2",
+          "hits": [
+            {
+              "line": 377,
+              "text": " ctx:=public.read_research_reviewer_result_context_v2(p_request,p_revision_id,p_input_hash,p_author_principal,p_reviewer_principal,p_author_result_id,p_author_result_hash);"
+            }
+          ]
+        },
+        {
+          "needle": "public.assert_research_editorial_review_v2",
+          "hits": [
+            {
+              "line": 161,
+              "text": "GRANT EXECUTE ON FUNCTION public.assert_research_source_seal_v2(uuid),public.research_complete_hash_v2(jsonb),public.research_complete_canonical_v2(jsonb,integer),public.assert_research_editorial_review_v2(jsonb,jsonb)"
+            },
+            {
+              "line": 391,
+              "text": " PERFORM public.assert_research_editorial_review_v2(rr.payload->'packet',rr.payload->'rawReview');"
+            }
+          ]
+        },
+        {
+          "needle": "research_publication_source_state_v2",
+          "hits": [
+            {
+              "line": 236,
+              "text": "CREATE FUNCTION public.research_publication_source_state_v2(p_seal uuid) RETURNS text"
+            },
+            {
+              "line": 241,
+              "text": "ALTER FUNCTION public.research_publication_source_state_v2(uuid) OWNER TO research_source_fence_owner_v2;"
+            },
+            {
+              "line": 242,
+              "text": "REVOKE ALL ON FUNCTION public.research_publication_source_state_v2(uuid) FROM PUBLIC,anon,authenticated,service_role;"
+            },
+            {
+              "line": 243,
+              "text": "GRANT EXECUTE ON FUNCTION public.research_publication_source_state_v2(uuid) TO research_observed_rpc_owner;"
+            },
+            {
+              "line": 353,
+              "text": "  'content',d.content,'sourceReferences',d.source_references,'researchState',public.research_publication_source_state_v2(i.source_seal_id),"
+            }
+          ]
+        },
+        {
+          "needle": "OWNER TO research_observed_rpc_owner",
+          "hits": [
+            {
+              "line": 137,
+              "text": "ALTER FUNCTION public.fence_research_dossier_insert_v2() OWNER TO research_observed_rpc_owner;"
+            },
+            {
+              "line": 149,
+              "text": "ALTER FUNCTION public.fence_research_dossier_truncate_v2() OWNER TO research_observed_rpc_owner;"
+            },
+            {
+              "line": 356,
+              "text": "ALTER FUNCTION public.read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text) OWNER TO research_observed_rpc_owner;"
+            },
+            {
+              "line": 438,
+              "text": "ALTER FUNCTION public.publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) OWNER TO research_observed_rpc_owner;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ref": "222d922b7616d5ab55b7e3261982983841d9f9f9",
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "edges": [
+        {
+          "needle": "REVOKE ALL ON FUNCTION public.research_input_binding_candidate_v3",
+          "hits": [
+            {
+              "line": 161,
+              "text": "REVOKE ALL ON FUNCTION public.research_input_binding_candidate_v3(text,text,text,boolean) FROM PUBLIC,anon,authenticated,service_role;"
+            }
+          ]
+        },
+        {
+          "needle": "OWNER TO research_input_preparation_owner_v2",
+          "hits": [
+            {
+              "line": 29,
+              "text": "ALTER TABLE public.research_input_bindings_candidate_v3 OWNER TO research_input_preparation_owner_v2;"
+            },
+            {
+              "line": 30,
+              "text": "ALTER TABLE public.research_input_binding_revocations_candidate_v3 OWNER TO research_input_preparation_owner_v2;"
+            },
+            {
+              "line": 158,
+              "text": "ALTER FUNCTION public.research_input_binding_immutable_candidate_v3() OWNER TO research_input_preparation_owner_v2;"
+            },
+            {
+              "line": 160,
+              "text": "ALTER FUNCTION public.research_input_binding_candidate_v3(text,text,text,boolean) OWNER TO research_input_preparation_owner_v2;"
+            },
+            {
+              "line": 162,
+              "text": "ALTER FUNCTION public.research_complete_parent_candidate_v3(jsonb) OWNER TO research_input_preparation_owner_v2;"
+            },
+            {
+              "line": 164,
+              "text": "ALTER FUNCTION public.read_research_article_input_candidate_v3(jsonb) OWNER TO research_input_preparation_owner_v2;"
+            },
+            {
+              "line": 166,
+              "text": "ALTER FUNCTION public.assert_research_input_candidate_v3(jsonb,text) OWNER TO research_input_preparation_owner_v2;"
+            },
+            {
+              "line": 168,
+              "text": "ALTER FUNCTION public.prepare_research_input_candidate_v3(jsonb,text,text) OWNER TO research_input_preparation_owner_v2;"
+            },
+            {
+              "line": 170,
+              "text": "ALTER FUNCTION public.seal_research_article_input_candidate_v3(jsonb,jsonb,text) OWNER TO research_input_preparation_owner_v2;"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "confirmedSourceBoundaries": [
+    {
+      "id": "reviewer-result-unimplemented",
+      "finding": "Current source has v3 reviewer assignment/packet but no v3 reviewer-result composition or editorial module. Historical v2 modules are references only; do not whole-merge historical branch."
+    },
+    {
+      "id": "result-and-editorial-version",
+      "finding": "Existing receive body hard-gates result-v2/raw-review-v2/validated-review-v2. Editorial SQL and historical TS read packet.research.sources; new v3 packet flattens sources at root. Current v3 packet omits root calculatorExecutionHash, while saved validated v3 article supplies it and existing receive checks equality. No v3 reviewer-result success is therefore established by new packet source contracts."
+    },
+    {
+      "id": "context-and-sources-may-reuse",
+      "finding": "Existing reviewer-result context/source READ signatures retain original author handoff binding, reviewer reservation/completion, invocation and immutable result fences; no literal v2 schema hard gate found there. Preserve unless actual finite integration demonstrates a required body change; do not preemptively replace all functions."
+    },
+    {
+      "id": "publication-version",
+      "finding": "Existing content emits publication-v2/published-v2 and carries full raw article/tables/valuations. Whether a finite v3 content discriminator is required must be explicit; do not assume it drops cash rows (source shows article/tables retained). Existing writer checks completed reviewer result/editorial/atomic lineage."
+    },
+    {
+      "id": "historical-publication-read-policy",
+      "finding": "Completed publication READ bypasses active author/reviewer context and returns source-state published/withdrawn from original seal invalidations. It has no candidate binding resolver call. Resolver is private prep-owner, reader observed-owner. Any future candidate-read revocation semantics for immutable published history must be chosen explicitly; do not label original historical v2 reader broken or add resolver grant/active lease after completion."
+    }
+  ],
+  "nextRequiredWork": [
+    "First collect same owned native turn01a143da exact terminal/delivery and Root review; runtime RED fixes take precedence over downstream work. No concurrent dispatch from this map.",
+    "After current owned acceptance, implement coherent actual v3 editorial/reviewer-result receive/READ recovery through existing 7/8parameter signatures plus minimal necessary finite SQL body union, preserving old v2 byte arm/roles/ACL/invocation uniqueness/atomic completion/caps/deadline; exact source review then native. A contract-accepted review is not independent semantic approval.",
+    "Then explicit review-pack/Q-R/publication content and atomic publication/current-source view version integration, all four guarded actual callers/routes and whole S-C-B-Q-R-A; real distinct author/reviewer execution and claim support/publication receipts required.",
+    "Full candidates/Top20, formal two-company research, technical observation, strategy/formal schedules and fixed peer install remain unfinished."
+  ],
+  "runtimeExecuted": false,
+  "productEdited": false,
+  "nativeWorkOverlapped": false,
+  "rootAvailableBytes": 7108497408,
+  "diskBelow5GiB": false,
+  "goalComplete": false
+}
