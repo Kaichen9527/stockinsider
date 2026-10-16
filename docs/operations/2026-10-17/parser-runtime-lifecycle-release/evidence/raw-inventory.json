@@ -1,0 +1,28 @@
+{
+  "bytes": 7801,
+  "count": 4,
+  "files": [
+    {
+      "bytes": 2698,
+      "name": "assembly-checks.json",
+      "sha256": "e2c787422a1e6b18c70164f0f7450502343be1c7d925aa7992d47f038f3dd958"
+    },
+    {
+      "bytes": 2913,
+      "name": "git-parity.json",
+      "sha256": "6e23a67050c1f10a60681720388a785b016e7a60bb29f9b442623c0e6928aff9"
+    },
+    {
+      "bytes": 1501,
+      "name": "initial-copy-seal.json",
+      "sha256": "c7d612fb5130a4f6b8e3996baebfbf7e95b4d6fd36aed105f1512944fa8e3a3f"
+    },
+    {
+      "bytes": 689,
+      "name": "tool-events.json",
+      "sha256": "5d797e7891972b18baf5f43f711274d7985d1e2800cb8747d21eba3bfd7d167d"
+    }
+  ],
+  "root": "/tmp/parser-lifecycle-release-o17",
+  "scope": "local source assembly records; no private runtime/native contents"
+}

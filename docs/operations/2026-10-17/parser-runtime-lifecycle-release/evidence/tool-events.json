@@ -1,0 +1,24 @@
+{
+  "CI": "NOT_INSPECTED",
+  "assemblyCheck": {
+    "ASTCompileFiles": 2,
+    "byteParityFiles": 6,
+    "contractGroupsRun": 0,
+    "exit": 0,
+    "unitReverseParity": true
+  },
+  "correction": "git add --sparse exact authorized HANDOFF; committed separately, no amend",
+  "diffCheckExit": 0,
+  "initialGitAdd": {
+    "innerExit": "NOT_CAPTURED",
+    "message": "release HANDOFF outside sparse-checkout; six copied paths staged, handoff not staged",
+    "surroundingShellExit": 0
+  },
+  "initialSourceCommit": "f79220f",
+  "native": "NOT_RUN",
+  "remoteMainRead": {
+    "exit": 0,
+    "head": "93e44475cbb0c27beb26e4dcb68e382096a4e212"
+  },
+  "scope": "source-only actual tool outcomes"
+}
