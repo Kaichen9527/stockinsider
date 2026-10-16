@@ -1,0 +1,1283 @@
+{
+  "scope": "source-derived dependency lineage, NOT whole execution closure/installed catalog/approval",
+  "base": "4a4efea6fcb83c059e867dd6a920850ed5a887c4",
+  "historicalReferenceCommit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+  "originalInputCount": 295,
+  "originalInputBytes": 9847148,
+  "allOriginalInputsUnchanged": true,
+  "ownManifestExcludedToAvoidSelfHashCycle": true,
+  "runtimeAndTestInputs": [
+    {
+      "path": ".nvmrc",
+      "bytes": 8,
+      "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+      "blob": "7d41c735d7127c4a2530ebe846b14ffbf38b8031"
+    },
+    {
+      "path": "migrations/20261009_research_author_handoffs_v2.sql",
+      "bytes": 9579,
+      "sha256": "96f79786802317175dc662f1c0476e8ad9afcaf675f85b1ad1909d2bcd65a757",
+      "blob": "61152a4efe608c830ed06bbeede68d16f6bb21cb"
+    },
+    {
+      "path": "migrations/20261009_research_input_preparations_v2.sql",
+      "bytes": 14713,
+      "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e",
+      "blob": "2440f63c869ba9bace2f2c74986edcf1b512b3b5"
+    },
+    {
+      "path": "migrations/20261009_research_reviewer_assignments_v2.sql",
+      "bytes": 14900,
+      "sha256": "43c0a0525c38c73cf5277c23031bae2acb88ace1b5db25cd440c01932f14bc86",
+      "blob": "d9c07b4f7c2d2293b1d6ec9a57f32fa7ab1fd261"
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "bytes": 22325,
+      "sha256": "f089f44375f80da89be49215cad35626998bcb5775166efc23e93af224ec284f",
+      "blob": "855cd31a01d16809c5b7b9ce0fbfc135d4aa930d"
+    },
+    {
+      "path": "migrations/20261015_research_author_durable_union_candidate_v3.sql",
+      "bytes": 64019,
+      "sha256": "18b0e4814410601ab8b254f274a7fe085230b922656038cc1f8fe2539c056f76",
+      "blob": "de55f479d6b142edda2a74fe7989b83fa1b8a6f5"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+    },
+    {
+      "path": "package.json",
+      "bytes": 24733,
+      "sha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc",
+      "blob": "f25f4bebad793fb7eabc03e2320e4472553a0fb9"
+    },
+    {
+      "path": "scripts/fixtures/research-historical-cash/article-drafts-15d4.json.gz",
+      "bytes": 29794,
+      "sha256": "6a4f1dd4291e82115e0036f3fdfd826f0da7e0044ebfd42f5f50c720b85b900e",
+      "blob": "42f2135cedb41feb9c54fe9c411e50c598381f9f"
+    },
+    {
+      "path": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+      "bytes": 202500,
+      "sha256": "afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f",
+      "blob": "00d9e80495ddb25048925ecb00a758356494bb94"
+    },
+    {
+      "path": "scripts/research-v3-author-article-fixture.mjs",
+      "bytes": 12904,
+      "sha256": "4bba1b2ab431553448d9d1174b11bfda515fddef88a4505a7f6108c0f44a9084",
+      "blob": "f12d9167b37cbf4ff64e1ac2a09717b074249c17"
+    },
+    {
+      "path": "scripts/research-v3-handoff-reviewer.test.mjs",
+      "bytes": 14231,
+      "sha256": "e501f4ec7599451b8822b09d940fa25166fdb0d8ebf59e850a35c7d292e87d7d",
+      "blob": "c270ba787e767d6f5ea468475c603814cd47c5ee"
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274088,
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+      "blob": "a41fd447e28f3b36829b689828c345e042619a38"
+    },
+    {
+      "path": "web/package.json",
+      "bytes": 1943,
+      "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+      "blob": "446f308a2990f45dcd3dca14030068f878fae490"
+    },
+    {
+      "path": "web/src/lib/internal-auth.ts",
+      "bytes": 1774,
+      "sha256": "71174062e76c7f346a2aeb4fcdc820c36b95eba53feebccc26f10f8177cb8d63",
+      "blob": "0fd74428dd60f0b434babf5d55d19f70bc0534de"
+    },
+    {
+      "path": "web/src/lib/public-source-url.ts",
+      "bytes": 1821,
+      "sha256": "f1f4a47c2984a59be316b94586796171adda680e64910c981b5cede88260dcea",
+      "blob": "6c58c75d99928ab95107a21690e3cb108c539a53"
+    },
+    {
+      "path": "web/src/lib/research-business-calculator.ts",
+      "bytes": 14206,
+      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+      "blob": "81f4cb09ae2849fdf2dbde497f6675736c995f90"
+    },
+    {
+      "path": "web/src/lib/research-cash-financial-reader.ts",
+      "bytes": 6792,
+      "sha256": "fd3f5531bfa876c0b887367546f07bc7acbdef98d3c59d01478b04ffc5e2108c",
+      "blob": "e9cbb8743b7bd3936859c230e1f9591035e150f6"
+    },
+    {
+      "path": "web/src/lib/research-compatible-financial-inventory.ts",
+      "bytes": 3601,
+      "sha256": "263643e3d8af3464ddc7b70f2bff91f604d131be1ca773918040b3ce54ff1c8d",
+      "blob": "b9aafdc681ac9cea4deb49e4bb2198a182d652dd"
+    },
+    {
+      "path": "web/src/lib/research-compatible-financial-projection.ts",
+      "bytes": 14703,
+      "sha256": "d5fb31908d84753fbf83afed80093661167f77efe8ea980b4d1170e42971a4a8",
+      "blob": "6b3d9ca859cccfa8c36437217267134941719add"
+    },
+    {
+      "path": "web/src/lib/research-compatible-financial-reader.ts",
+      "bytes": 3000,
+      "sha256": "6ad78b1197cb925646ca8de40b6a8412631c532a1b2cb4a0669ac6a28c7428a0",
+      "blob": "20adbad0265c5ce341d29564028d6efa3b7ade58"
+    },
+    {
+      "path": "web/src/lib/research-complete-mapping.json",
+      "bytes": 7953,
+      "sha256": "ba44549b7efdc14a0c61523dadd950321fd7f85e72b30059415a555629baf704",
+      "blob": "98284f2ff243d1efb2f094eab5961a7b04649f89"
+    },
+    {
+      "path": "web/src/lib/research-complete-schema-bundles.ts",
+      "bytes": 463467,
+      "sha256": "ca5bc876d5820c3f910a4847c84f504a952896f7affe5d9e88a9f224df3b0d98",
+      "blob": "086c3ffa84bba3187e870c8e35692fe740f5ed33"
+    },
+    {
+      "path": "web/src/lib/research-execution-binding.ts",
+      "bytes": 12198,
+      "sha256": "9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8",
+      "blob": "26d098ada66049054200df995320ceec98b5e69e"
+    },
+    {
+      "path": "web/src/lib/research-financial-clock.ts",
+      "bytes": 807,
+      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+      "blob": "bf6301733d6c5150093e94a870e7c6f54f1d8042"
+    },
+    {
+      "path": "web/src/lib/research-financial-io-engine.ts",
+      "bytes": 7556,
+      "sha256": "2344e936b108dcde99ca0742c0aac135b377ecebe3a97f0bce253c6be74406df",
+      "blob": "7fdf6c24947b0c72c0bc45a8a43c1269cd543576"
+    },
+    {
+      "path": "web/src/lib/research-financial-io-owner.ts",
+      "bytes": 4972,
+      "sha256": "19620af839492ac4232ccf6bdbfcd47b8429263ba3bfdcf90fdb7601dd13a4fe",
+      "blob": "84f9068837a2bb06fe7f06ec88d447784899103a"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-core.ts",
+      "bytes": 11245,
+      "sha256": "157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790",
+      "blob": "37aa911d5289faabf9a604d0768fe821a43b6487"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-pins.ts",
+      "bytes": 7034,
+      "sha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5",
+      "blob": "5a9f2aeedfcbf5a57cbec25cffe3f5fc34ade92e"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-projection.ts",
+      "bytes": 11131,
+      "sha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719",
+      "blob": "af9928e8dcfc945c53f53d26fe9d6645729d251e"
+    },
+    {
+      "path": "web/src/lib/research-scenario-cash-material.ts",
+      "bytes": 19506,
+      "sha256": "20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b",
+      "blob": "dee2ff1f19830269cb8055a5de1a4395d2d1f4a5"
+    },
+    {
+      "path": "web/src/lib/research-v3-article-citations.ts",
+      "bytes": 18442,
+      "sha256": "34500a25604a6ad3938bc8a9becb578df9c5a97249adda5bfdd3af3969a92da2",
+      "blob": "96508c90c731ba62978a54525a25372433115202"
+    },
+    {
+      "path": "web/src/lib/research-v3-author-handoff.ts",
+      "bytes": 14038,
+      "sha256": "e555c5bed063d950f8bec2ee7deaabf12150734912611729df6885c23647c0f4",
+      "blob": "5fa02f2dfc2a6b7784a2fedb0574786c7c105c21"
+    },
+    {
+      "path": "web/src/lib/research-v3-author-result.ts",
+      "bytes": 25288,
+      "sha256": "870fd387f7430d624aa8060ff011b8a1ee8bb26aad5d7d09ba72be349a315953",
+      "blob": "82f61ddffaa91f0a515482dd05913e27e5a8fcb9"
+    },
+    {
+      "path": "web/src/lib/research-v3-business-article.ts",
+      "bytes": 22375,
+      "sha256": "91c715f1dfbdee22b4c86b9ad493bacc49b03c23250e9554107eb13b421293ba",
+      "blob": "ff430bd5535f1d8047fa3160654eaa6a9ec972d6"
+    },
+    {
+      "path": "web/src/lib/research-v3-finite-material.ts",
+      "bytes": 5263,
+      "sha256": "0fc6a6121a963f22b125a4a6f5c506dde06f791204970ef0a3d33c5442671985",
+      "blob": "54396ac5d8954b138603a6eae45d1ff5a4243177"
+    },
+    {
+      "path": "web/src/lib/research-v3-material-canonical.ts",
+      "bytes": 4343,
+      "sha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "blob": "59895e540b67258eea998ee7a2e2ab9eb4b8cf6f"
+    },
+    {
+      "path": "web/src/lib/research-v3-material-schemas/2383-normalized.json",
+      "bytes": 149439,
+      "sha256": "953260a5ac54eead4c6365507f410d08fd5aed8a9b40e635c24dbc142a76f706",
+      "blob": "dfa1194a0f2e87568ca48ddf2e88917a9830c279"
+    },
+    {
+      "path": "web/src/lib/research-v3-material-schemas/2383-raw.json",
+      "bytes": 149492,
+      "sha256": "f5cdc777e2ae819355693d8b142ccddf1c21751722e2bf5646c0f9416f7c9aa9",
+      "blob": "fe5fc1dd0d4d5602bd7687ff9e4c2ab5497ec7d8"
+    },
+    {
+      "path": "web/src/lib/research-v3-material-schemas/2409-normalized.json",
+      "bytes": 251137,
+      "sha256": "0553fbb9049626662d58a799a3671cd1b68159e4e7782889d2a6980a4c7335ef",
+      "blob": "9b394ffd6618acee6f722cf79f6cd73bfd1e584b"
+    },
+    {
+      "path": "web/src/lib/research-v3-material-schemas/2409-raw.json",
+      "bytes": 251190,
+      "sha256": "31c1ce3bfbc494856975ca63f736f6cb4da6fb4936f6e8e68f1ee297d300eaea",
+      "blob": "6c32d1e19d717d25780f1bb02b9f64ee1da637b8"
+    },
+    {
+      "path": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "bytes": 4114,
+      "sha256": "4e799447f9f2040ef5354301b73ae1be6db3cbbbad7974923fbe90cf8662978b",
+      "blob": "cd7ea32a8321918b680d2bf993fd7d9cb3ec4831"
+    },
+    {
+      "path": "web/src/lib/research-versioned-complete-input.ts",
+      "bytes": 8561,
+      "sha256": "6c748235f5aebd3bdfa254de400e752e42bf15aae53c840b8ec09b543a29e906",
+      "blob": "a7c035844cfaf44834b755e1250fc3cae1d7a6d5"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-binding.ts",
+      "bytes": 4004,
+      "sha256": "1ec1bee664b793295b41de982818e767446b85e801efb164324217510d0fd940",
+      "blob": "093bd0ac201a4da0b1a5c7372f84b7570497840a"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "bytes": 4634,
+      "sha256": "a6d3f20e0b7749d9cfde09940d4959a4efe59456e2cd974a65c5a498a764d6b5",
+      "blob": "c913092626c117c9dfcf3b1c88fa3cc587ddbc17"
+    },
+    {
+      "path": "web/src/lib/research-versioned-input-request.ts",
+      "bytes": 1476,
+      "sha256": "cce94267308c7b3d3e1c20ad6214265c147fdcc7603defc186cd85b9e31b42b3",
+      "blob": "08ee73c8a66af3bf4796787b5d23907b21d8bc27"
+    },
+    {
+      "path": "web/tsconfig.json",
+      "bytes": 710,
+      "sha256": "f399e24188640b031f844ec7c0285e65450e697b2daa5790e1cb801818fcc955",
+      "blob": "2e1433a9d842c16e6cbc9b49d74a7f7012419487"
+    }
+  ],
+  "staticAndLiteralUrlEdges": [
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "./fixtures/research-historical-cash/article-drafts-15d4.json.gz",
+      "to": "scripts/fixtures/research-historical-cash/article-drafts-15d4.json.gz",
+      "kind": "literalURL"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "./fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+      "to": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+      "kind": "literalURL"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-historical-cash-core.ts",
+      "to": "web/src/lib/research-historical-cash-core.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-scenario-cash-material.ts",
+      "to": "web/src/lib/research-scenario-cash-material.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-v3-article-citations.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-v3-article-citations.ts",
+      "to": "web/src/lib/research-v3-article-citations.ts",
+      "kind": "literalURL"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-finite-material.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "scripts/research-v3-author-article-fixture.mjs",
+      "specifier": "../web/src/lib/research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "scripts/research-v3-handoff-reviewer.test.mjs",
+      "specifier": "./research-v3-author-article-fixture.mjs",
+      "to": "scripts/research-v3-author-article-fixture.mjs"
+    },
+    {
+      "from": "scripts/research-v3-handoff-reviewer.test.mjs",
+      "specifier": "../web/src/lib/research-execution-binding.ts",
+      "to": "web/src/lib/research-execution-binding.ts"
+    },
+    {
+      "from": "scripts/research-v3-handoff-reviewer.test.mjs",
+      "specifier": "../web/src/lib/research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "scripts/research-v3-handoff-reviewer.test.mjs",
+      "specifier": "../web/src/lib/research-v3-author-handoff.ts",
+      "to": "web/src/lib/research-v3-author-handoff.ts"
+    },
+    {
+      "from": "scripts/research-v3-handoff-reviewer.test.mjs",
+      "specifier": "../web/src/lib/research-v3-author-result.ts",
+      "to": "web/src/lib/research-v3-author-result.ts"
+    },
+    {
+      "from": "scripts/research-v3-handoff-reviewer.test.mjs",
+      "specifier": "../web/src/lib/research-v3-business-article.ts",
+      "to": "web/src/lib/research-v3-business-article.ts"
+    },
+    {
+      "from": "scripts/research-v3-handoff-reviewer.test.mjs",
+      "specifier": "../web/src/lib/research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "scripts/research-v3-handoff-reviewer.test.mjs",
+      "specifier": "../web/src/lib/research-v3-reviewer-assignment.ts",
+      "to": "web/src/lib/research-v3-reviewer-assignment.ts"
+    },
+    {
+      "from": "web/src/lib/research-business-calculator.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-financial-io-engine.ts",
+      "to": "web/src/lib/research-financial-io-engine.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-historical-cash-projection.ts",
+      "to": "web/src/lib/research-historical-cash-projection.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-scenario-cash-material.ts",
+      "to": "web/src/lib/research-scenario-cash-material.ts"
+    },
+    {
+      "from": "web/src/lib/research-cash-financial-reader.ts",
+      "specifier": "./research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-finite-material.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "specifier": "./research-compatible-financial-inventory.ts",
+      "to": "web/src/lib/research-compatible-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "specifier": "./research-financial-io-engine.ts",
+      "to": "web/src/lib/research-financial-io-engine.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-projection.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "specifier": "./research-compatible-financial-inventory.ts",
+      "to": "web/src/lib/research-compatible-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "specifier": "./research-compatible-financial-projection.ts",
+      "to": "web/src/lib/research-compatible-financial-projection.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "specifier": "./research-financial-io-engine.ts",
+      "to": "web/src/lib/research-financial-io-engine.ts"
+    },
+    {
+      "from": "web/src/lib/research-compatible-financial-reader.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-financial-io-engine.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-historical-cash-projection.ts",
+      "specifier": "./research-historical-cash-core.ts",
+      "to": "web/src/lib/research-historical-cash-core.ts"
+    },
+    {
+      "from": "web/src/lib/research-historical-cash-projection.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-scenario-cash-material.ts",
+      "specifier": "./research-historical-cash-projection.ts",
+      "to": "web/src/lib/research-historical-cash-projection.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-historical-cash-core.ts",
+      "to": "web/src/lib/research-historical-cash-core.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-v3-finite-material.ts",
+      "to": "web/src/lib/research-v3-finite-material.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-article-citations.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./internal-auth.ts",
+      "to": "web/src/lib/internal-auth.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-execution-binding.ts",
+      "to": "web/src/lib/research-execution-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-v3-business-article.ts",
+      "to": "web/src/lib/research-v3-business-article.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-handoff.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./internal-auth.ts",
+      "to": "web/src/lib/internal-auth.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./public-source-url.ts",
+      "to": "web/src/lib/public-source-url.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-execution-binding.ts",
+      "to": "web/src/lib/research-execution-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-v3-article-citations.ts",
+      "to": "web/src/lib/research-v3-article-citations.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-v3-business-article.ts",
+      "to": "web/src/lib/research-v3-business-article.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-author-result.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./public-source-url.ts",
+      "to": "web/src/lib/public-source-url.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-v3-article-citations.ts",
+      "to": "web/src/lib/research-v3-article-citations.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-business-article.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-business-calculator.ts",
+      "to": "web/src/lib/research-business-calculator.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-v3-material-schemas/2383-normalized.json",
+      "to": "web/src/lib/research-v3-material-schemas/2383-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-v3-material-schemas/2383-raw.json",
+      "to": "web/src/lib/research-v3-material-schemas/2383-raw.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-v3-material-schemas/2409-normalized.json",
+      "to": "web/src/lib/research-v3-material-schemas/2409-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-finite-material.ts",
+      "specifier": "./research-v3-material-schemas/2409-raw.json",
+      "to": "web/src/lib/research-v3-material-schemas/2409-raw.json"
+    },
+    {
+      "from": "web/src/lib/research-v3-material-canonical.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-execution-binding.ts",
+      "to": "web/src/lib/research-execution-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-financial-clock.ts",
+      "to": "web/src/lib/research-financial-clock.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-v3-author-handoff.ts",
+      "to": "web/src/lib/research-v3-author-handoff.ts"
+    },
+    {
+      "from": "web/src/lib/research-v3-reviewer-assignment.ts",
+      "specifier": "./research-versioned-complete-input.ts",
+      "to": "web/src/lib/research-versioned-complete-input.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-cash-financial-reader.ts",
+      "to": "web/src/lib/research-cash-financial-reader.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-compatible-financial-reader.ts",
+      "to": "web/src/lib/research-compatible-financial-reader.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-financial-io-owner.ts",
+      "to": "web/src/lib/research-financial-io-owner.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-versioned-input-binding.ts",
+      "to": "web/src/lib/research-versioned-input-binding.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-versioned-input-legacy-response.ts",
+      "to": "web/src/lib/research-versioned-input-legacy-response.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-complete-input.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-compatible-financial-inventory.ts",
+      "to": "web/src/lib/research-compatible-financial-inventory.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-complete-mapping.json",
+      "to": "web/src/lib/research-complete-mapping.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-complete-schema-bundles.ts",
+      "to": "web/src/lib/research-complete-schema-bundles.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-historical-cash-pins.ts",
+      "to": "web/src/lib/research-historical-cash-pins.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-v3-material-schemas/2383-normalized.json",
+      "to": "web/src/lib/research-v3-material-schemas/2383-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-binding.ts",
+      "specifier": "./research-v3-material-schemas/2409-normalized.json",
+      "to": "web/src/lib/research-v3-material-schemas/2409-normalized.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "specifier": "./research-complete-mapping.json",
+      "to": "web/src/lib/research-complete-mapping.json"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "specifier": "./research-complete-schema-bundles.ts",
+      "to": "web/src/lib/research-complete-schema-bundles.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-legacy-response.ts",
+      "specifier": "./research-versioned-input-request.ts",
+      "to": "web/src/lib/research-versioned-input-request.ts"
+    },
+    {
+      "from": "web/src/lib/research-versioned-input-request.ts",
+      "specifier": "./research-v3-material-canonical.ts",
+      "to": "web/src/lib/research-v3-material-canonical.ts"
+    }
+  ],
+  "externalModules": [
+    "node:assert/strict",
+    "node:crypto",
+    "node:fs",
+    "node:fs/promises",
+    "node:path",
+    "node:perf_hooks",
+    "node:test",
+    "node:zlib"
+  ],
+  "unresolvedStaticImports": [],
+  "dynamicEdgesLimit": "Computed filesystem paths and DB RPC names require server composition; original 295-input inventory additionally pins fixed fixture/source dependencies. No dynamic caller code/schema/root selector is added. Node and compiler dependencies are existing lock-bound tooling, not a compiled fingerprint.",
+  "sourceDerivedFunctions": [
+    {
+      "path": "migrations/20261009_research_author_handoffs_v2.sql",
+      "name": "read_research_author_handoff_context_v2",
+      "definitionLine": 7,
+      "bodyStartLine": 9,
+      "bodyEndLine": 87,
+      "declaration": "CREATE FUNCTION public.read_research_author_handoff_context_v2(\n p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result_id uuid,p_result_hash text\n) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 6975,
+      "sourceBodySha256": "ffb26f1274ab222166c0f7cfac2355cfacce2fcdb9ec5288e5ea089fc176ae1d",
+      "metadataStatements": [
+        {
+          "line": 88,
+          "text": "ALTER FUNCTION public.read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 89,
+          "text": "REVOKE ALL ON FUNCTION public.read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+        },
+        {
+          "line": 90,
+          "text": "GRANT EXECUTE ON FUNCTION public.read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) TO service_role,research_observed_rpc_owner;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261009_research_author_handoffs_v2.sql",
+      "name": "commit_research_author_handoff_v2",
+      "definitionLine": 92,
+      "bodyStartLine": 94,
+      "bodyEndLine": 110,
+      "declaration": "CREATE FUNCTION public.commit_research_author_handoff_v2(\n p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result_id uuid,p_result_hash text\n) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 982,
+      "sourceBodySha256": "ef7bfac8d0a74c2ce6dbd2a533ae15cce0d5d7ac0851d6ef8af5d5eaace3262a",
+      "metadataStatements": [
+        {
+          "line": 111,
+          "text": "ALTER FUNCTION public.commit_research_author_handoff_v2(jsonb,uuid,text,text,uuid,text) OWNER TO research_observed_rpc_owner;"
+        },
+        {
+          "line": 112,
+          "text": "REVOKE ALL ON FUNCTION public.commit_research_author_handoff_v2(jsonb,uuid,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+        },
+        {
+          "line": 113,
+          "text": "GRANT EXECUTE ON FUNCTION public.commit_research_author_handoff_v2(jsonb,uuid,text,text,uuid,text) TO service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261009_research_reviewer_assignments_v2.sql",
+      "name": "read_research_reviewer_context_v2",
+      "definitionLine": 29,
+      "bodyStartLine": 31,
+      "bodyEndLine": 60,
+      "declaration": "CREATE FUNCTION public.read_research_reviewer_context_v2(\n p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text\n) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 2768,
+      "sourceBodySha256": "fa2286ffb66a36ba8ee194dd953396403abc49f18cccddf968cf2627123b04d4",
+      "metadataStatements": [
+        {
+          "line": 61,
+          "text": "ALTER FUNCTION public.read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 62,
+          "text": "REVOKE ALL ON FUNCTION public.read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+        },
+        {
+          "line": 63,
+          "text": "GRANT EXECUTE ON FUNCTION public.read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) TO service_role,research_observed_rpc_owner;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261009_research_reviewer_assignments_v2.sql",
+      "name": "assign_research_reviewer_v2",
+      "definitionLine": 65,
+      "bodyStartLine": 67,
+      "bodyEndLine": 91,
+      "declaration": "CREATE FUNCTION public.assign_research_reviewer_v2(\n p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text\n) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 2093,
+      "sourceBodySha256": "82408d7930d278e202961ede6f69af4041eb617fcfdf28f57737e5f35a00b828",
+      "metadataStatements": [
+        {
+          "line": 92,
+          "text": "ALTER FUNCTION public.assign_research_reviewer_v2(jsonb,uuid,text,text,text,uuid,text) OWNER TO research_observed_rpc_owner;"
+        },
+        {
+          "line": 93,
+          "text": "REVOKE ALL ON FUNCTION public.assign_research_reviewer_v2(jsonb,uuid,text,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+        },
+        {
+          "line": 94,
+          "text": "GRANT EXECUTE ON FUNCTION public.assign_research_reviewer_v2(jsonb,uuid,text,text,text,uuid,text) TO service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261009_research_reviewer_assignments_v2.sql",
+      "name": "read_research_reviewer_sources_v2",
+      "definitionLine": 98,
+      "bodyStartLine": 99,
+      "bodyEndLine": 168,
+      "declaration": "CREATE FUNCTION public.read_research_reviewer_sources_v2(p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text) RETURNS jsonb\n LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 5658,
+      "sourceBodySha256": "99befff3243be4d1b6e3cf27ee4668ea282e489562089b49bf7ac52b27810a05",
+      "metadataStatements": [
+        {
+          "line": 169,
+          "text": "ALTER FUNCTION public.read_research_reviewer_sources_v2(jsonb,uuid,text,text,text,uuid,text) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 170,
+          "text": "REVOKE ALL ON FUNCTION public.read_research_reviewer_sources_v2(jsonb,uuid,text,text,text,uuid,text) FROM PUBLIC,anon,authenticated;"
+        },
+        {
+          "line": 171,
+          "text": "GRANT EXECUTE ON FUNCTION public.read_research_reviewer_sources_v2(jsonb,uuid,text,text,text,uuid,text) TO service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "research_input_binding_immutable_candidate_v3",
+      "definitionLine": 26,
+      "bodyStartLine": 26,
+      "bodyEndLine": 26,
+      "declaration": "CREATE FUNCTION public.research_input_binding_immutable_candidate_v3() RETURNS trigger LANGUAGE plpgsql SET search_path=pg_catalog",
+      "sourceBodyBytes": 58,
+      "sourceBodySha256": "1595060f9b0450a7ef2d835951fd9e6062e5521359339166e6b3fbc4ef41d938",
+      "metadataStatements": [
+        {
+          "line": 158,
+          "text": "ALTER FUNCTION public.research_input_binding_immutable_candidate_v3() OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 159,
+          "text": "REVOKE ALL ON FUNCTION public.research_input_binding_immutable_candidate_v3() FROM PUBLIC,anon,authenticated,service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "research_input_binding_candidate_v3",
+      "definitionLine": 34,
+      "bodyStartLine": 35,
+      "bodyEndLine": 53,
+      "declaration": "CREATE FUNCTION public.research_input_binding_candidate_v3(p_symbol text,p_inventory text,p_hb text,p_fresh boolean) RETURNS jsonb\nLANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 2146,
+      "sourceBodySha256": "433f0d2da00ea4e73f7a742c31c1705d07685ef1b19c9f65cece5e5205fc95f7",
+      "metadataStatements": [
+        {
+          "line": 160,
+          "text": "ALTER FUNCTION public.research_input_binding_candidate_v3(text,text,text,boolean) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 161,
+          "text": "REVOKE ALL ON FUNCTION public.research_input_binding_candidate_v3(text,text,text,boolean) FROM PUBLIC,anon,authenticated,service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "research_complete_parent_candidate_v3",
+      "definitionLine": 54,
+      "bodyStartLine": 54,
+      "bodyEndLine": 71,
+      "declaration": "CREATE FUNCTION public.research_complete_parent_candidate_v3(p_request jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 2491,
+      "sourceBodySha256": "a70d367dd9e814c8a0c81aacbd23290250166a93f10abec00b7cbb45d75b8cc0",
+      "metadataStatements": [
+        {
+          "line": 162,
+          "text": "ALTER FUNCTION public.research_complete_parent_candidate_v3(jsonb) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 163,
+          "text": "REVOKE ALL ON FUNCTION public.research_complete_parent_candidate_v3(jsonb) FROM PUBLIC,anon,authenticated,service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "read_research_article_input_candidate_v3",
+      "definitionLine": 72,
+      "bodyStartLine": 72,
+      "bodyEndLine": 96,
+      "declaration": "CREATE FUNCTION public.read_research_article_input_candidate_v3(p_request jsonb) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 2655,
+      "sourceBodySha256": "c265bfe3abae74271b66e5dd1766e3b8536e10a055f97b472e7179dfe2e84a57",
+      "metadataStatements": [
+        {
+          "line": 164,
+          "text": "ALTER FUNCTION public.read_research_article_input_candidate_v3(jsonb) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 165,
+          "text": "REVOKE ALL ON FUNCTION public.read_research_article_input_candidate_v3(jsonb) FROM PUBLIC,anon,authenticated,service_role;"
+        },
+        {
+          "line": 172,
+          "text": "GRANT EXECUTE ON FUNCTION public.read_research_article_input_candidate_v3(jsonb) TO service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "assert_research_input_candidate_v3",
+      "definitionLine": 97,
+      "bodyStartLine": 97,
+      "bodyEndLine": 104,
+      "declaration": "CREATE FUNCTION public.assert_research_input_candidate_v3(p_request jsonb,p_context_hash text) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 408,
+      "sourceBodySha256": "d06f2bb96a969276434852693cb48cbd596337d237719f2a866d88a3ad1eff4c",
+      "metadataStatements": [
+        {
+          "line": 166,
+          "text": "ALTER FUNCTION public.assert_research_input_candidate_v3(jsonb,text) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 167,
+          "text": "REVOKE ALL ON FUNCTION public.assert_research_input_candidate_v3(jsonb,text) FROM PUBLIC,anon,authenticated,service_role;"
+        },
+        {
+          "line": 173,
+          "text": "GRANT EXECUTE ON FUNCTION public.assert_research_input_candidate_v3(jsonb,text) TO service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "prepare_research_input_candidate_v3",
+      "definitionLine": 105,
+      "bodyStartLine": 105,
+      "bodyEndLine": 115,
+      "declaration": "CREATE FUNCTION public.prepare_research_input_candidate_v3(p_request jsonb,p_inventory_hash text,p_binding_hash text) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 640,
+      "sourceBodySha256": "6a2fc23d9e8fa1c4f4959300fd91860c5d5ba5319be0b64009e0aedf42eb8809",
+      "metadataStatements": [
+        {
+          "line": 168,
+          "text": "ALTER FUNCTION public.prepare_research_input_candidate_v3(jsonb,text,text) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 169,
+          "text": "REVOKE ALL ON FUNCTION public.prepare_research_input_candidate_v3(jsonb,text,text) FROM PUBLIC,anon,authenticated,service_role;"
+        },
+        {
+          "line": 174,
+          "text": "GRANT EXECUTE ON FUNCTION public.prepare_research_input_candidate_v3(jsonb,text,text) TO service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "name": "seal_research_article_input_candidate_v3",
+      "definitionLine": 116,
+      "bodyStartLine": 116,
+      "bodyEndLine": 157,
+      "declaration": "CREATE FUNCTION public.seal_research_article_input_candidate_v3(p_request jsonb,p_calculation jsonb,p_context_hash text) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 6708,
+      "sourceBodySha256": "f87e8e2b9232000c8819cd1d503705914a9a7414332f4ac2e43311681b657042",
+      "metadataStatements": [
+        {
+          "line": 170,
+          "text": "ALTER FUNCTION public.seal_research_article_input_candidate_v3(jsonb,jsonb,text) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 171,
+          "text": "REVOKE ALL ON FUNCTION public.seal_research_article_input_candidate_v3(jsonb,jsonb,text) FROM PUBLIC,anon,authenticated,service_role;"
+        },
+        {
+          "line": 175,
+          "text": "GRANT EXECUTE ON FUNCTION public.seal_research_article_input_candidate_v3(jsonb,jsonb,text) TO service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261015_research_author_durable_union_candidate_v3.sql",
+      "name": "research_author_assignment_context_v2",
+      "definitionLine": 128,
+      "bodyStartLine": 130,
+      "bodyEndLine": 191,
+      "declaration": "CREATE OR REPLACE FUNCTION public.research_author_assignment_context_v2(\n p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text\n) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 4582,
+      "sourceBodySha256": "904b91599eab5f33d15c1c73bea2ba94f57ee53da769ec67b65b96eba2a85346",
+      "metadataStatements": [],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261015_research_author_durable_union_candidate_v3.sql",
+      "name": "read_research_author_packet_v2",
+      "definitionLine": 192,
+      "bodyStartLine": 194,
+      "bodyEndLine": 267,
+      "declaration": "CREATE OR REPLACE FUNCTION public.read_research_author_packet_v2(\n p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text\n) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 5935,
+      "sourceBodySha256": "8f6edc9b34836a22b4a56f14772a75600d0fb915dbc8076ba42cd1cbc9eb2a7f",
+      "metadataStatements": [],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261015_research_author_durable_union_candidate_v3.sql",
+      "name": "read_research_author_result_v2",
+      "definitionLine": 268,
+      "bodyStartLine": 269,
+      "bodyEndLine": 294,
+      "declaration": "CREATE OR REPLACE FUNCTION public.read_research_author_result_v2(p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text)\n RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 1914,
+      "sourceBodySha256": "d3ca7e0e39022052866e7837bd5232198bf6cd8f40992d0c69cc54558e20cfd9",
+      "metadataStatements": [],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261015_research_author_durable_union_candidate_v3.sql",
+      "name": "receive_research_author_result_v2",
+      "definitionLine": 295,
+      "bodyStartLine": 296,
+      "bodyEndLine": 506,
+      "declaration": "CREATE OR REPLACE FUNCTION public.receive_research_author_result_v2(p_request jsonb,p_revision_id uuid,p_input_hash text,p_principal text,p_result jsonb)\n RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 21204,
+      "sourceBodySha256": "3889869f27b2761b166621ee1d4ce13ae3948488bca2c5a65783a6448008b52d",
+      "metadataStatements": [],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261009_research_input_preparations_v2.sql",
+      "name": "research_input_preparation_bytes_v2",
+      "definitionLine": 35,
+      "bodyStartLine": 36,
+      "bodyEndLine": 40,
+      "declaration": "CREATE FUNCTION public.research_input_preparation_bytes_v2(p_request jsonb,p_payload jsonb,p_new_seal jsonb) RETURNS integer\n LANGUAGE sql IMMUTABLE STRICT SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 329,
+      "sourceBodySha256": "b60540ccb1462f4780c7fc9d109edc80a21a6bb8db49b21fe78c70a5f292ffcf",
+      "metadataStatements": [
+        {
+          "line": 41,
+          "text": "ALTER FUNCTION public.research_input_preparation_bytes_v2(jsonb,jsonb,jsonb) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 42,
+          "text": "REVOKE ALL ON FUNCTION public.research_input_preparation_bytes_v2(jsonb,jsonb,jsonb) FROM PUBLIC,anon,authenticated,service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    },
+    {
+      "path": "migrations/20261009_research_input_preparations_v2.sql",
+      "name": "prepare_research_input_v2",
+      "definitionLine": 45,
+      "bodyStartLine": 46,
+      "bodyEndLine": 133,
+      "declaration": "CREATE FUNCTION public.prepare_research_input_v2(p_request jsonb) RETURNS jsonb\n LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public",
+      "sourceBodyBytes": 9856,
+      "sourceBodySha256": "4836fbda90ab63490d24d425394244b85c8313d9b581dc738653be611940defb",
+      "metadataStatements": [
+        {
+          "line": 134,
+          "text": "ALTER FUNCTION public.prepare_research_input_v2(jsonb) OWNER TO research_input_preparation_owner_v2;"
+        },
+        {
+          "line": 135,
+          "text": "REVOKE ALL ON FUNCTION public.prepare_research_input_v2(jsonb) FROM PUBLIC,anon,authenticated;"
+        },
+        {
+          "line": 136,
+          "text": "GRANT EXECUTE ON FUNCTION public.prepare_research_input_v2(jsonb) TO service_role;"
+        }
+      ],
+      "installedCatalogObserved": false
+    }
+  ],
+  "historicalReferences": [
+    {
+      "sourceCommit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-author-handoff.ts",
+      "bytes": 8997,
+      "sha256": "6a6f0593cc3ddec00bad46e89e56dc78fa1e9aff045f638040f93783bcaaabce",
+      "blob": "1559412f343e453a02ea7c9e3241421abf29add7",
+      "usage": "read-only historical reference; not imported or copied"
+    },
+    {
+      "sourceCommit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-reviewer-assignment.ts",
+      "bytes": 12885,
+      "sha256": "afa530253f7b6086bdaf600d58ad571e828512f9e4ef0a11b952c085b81a31ba",
+      "blob": "87fdc1cb4cd1dfe601826ff824870c9d4048689b",
+      "usage": "read-only historical reference; not imported or copied"
+    },
+    {
+      "sourceCommit": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb",
+      "path": "web/src/lib/research-editorial-review.ts",
+      "bytes": 4124,
+      "sha256": "3e04cc1f90c58a8d5514308538b051e1f34481290d1ac6882e59bfbd2ab7a5f2",
+      "blob": "d4f7a2b9cd7b9c5eace4ccde5d86875a849e441d",
+      "usage": "read-only historical reference; not imported or copied"
+    }
+  ],
+  "sqlApplied": false,
+  "sourceClosureApproved": false,
+  "wholeExecutionClosureBound": false
+}
