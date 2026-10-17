@@ -1,6 +1,6 @@
 # Current normal-PR delivery boundary
 
-This dated addendum supersedes the original assembly's next-step status below. It records actual results on implementation commit `939d6438d157114c6ef33b9d99362156c36624f1`, not results on the new commit containing this documentation update. Observed at 2026-10-17T00:12Z; authoritative job timestamps remain in their receipts.
+This dated addendum supersedes the original assembly's next-step status below. It records actual results on implementation commit `939d6438d157114c6ef33b9d99362156c36624f1`, not results on the new commit containing this documentation update. Prepared during the 2026-10-17 continuation; authoritative observation/job timestamps remain in their receipts.
 
 PR383 remains OPEN/DRAFT against main `93e44475cbb0c27beb26e4dcb68e382096a4e212`. The original seven-file assembly acquired the separately reviewed cleanup fix and its two documentation/check files, giving nine changed source files against main. The systemd unit, lifecycle workflow, receipt binding and cleanup guards remain as reviewed; this addendum changes only this HANDOFF.
 
