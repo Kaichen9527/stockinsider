@@ -1,0 +1,48 @@
+{
+  "observedAtUtc": "2026-10-17T01:35:32.601663+00:00",
+  "scope": "Exact32 attempt2 terminal FAILURE; product SUCCESS, model FAILURE, aggregate FAILURE. No rerun/ready/merge; fullgoal incomplete. Prior receipts and original RED retained.",
+  "files": [
+    {
+      "path": ".agent/reports/2026-10-17T09-19-parser32-fresh-gates/protected-attempt2-terminal.json",
+      "bytes": 13306,
+      "sha256": "caa661cf72385ef6bb2fe6f7b67faee104bf33ef06f55b64265fad3be3a95429"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T09-19-parser32-fresh-gates/protected-attempt2-terminal-jobs.json",
+      "bytes": 17203,
+      "sha256": "7e608bd85dfdb050a3f1131cc4d9275292bbd73e7819165663ab2187edff709a"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T09-19-parser32-fresh-gates/protected-attempt2-full-log-receipt.json",
+      "bytes": 344,
+      "sha256": "c00eb62738861c5699d0ee2f28a2e2c53783198928fd17a9649324ebdbb5cca8"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T09-19-parser32-fresh-gates/protected-attempt2-terminal-selected.json",
+      "bytes": 2556,
+      "sha256": "0e3499097f0beeaf3d00a4fe1b0ca94bb17e21304cb220ceb71a9dc851bd58a3"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T09-19-parser32-fresh-gates/automation-readback-and-last-gates.json",
+      "bytes": 1356,
+      "sha256": "1f2c6f6241b9ef85c76a94dcb495268da4e847e78a8faa088ab3ce7190cb7a24"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T09-19-parser32-fresh-gates/protected-attempt2-full.log.base64",
+      "bytes": 1745641,
+      "sha256": "f6537afa321eaed3dcfa3303b71d2affe54ffcb3d579c7052f0ad96726dd73c8"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T09-19-parser32-fresh-gates/PROTECTED-TERMINAL-ADDENDUM.md",
+      "bytes": 2975,
+      "sha256": "699a2561ca3ac3d20b30e80d10f0d68f4d2d2fcd27e34ff7dd33e1d8dab0151f"
+    },
+    {
+      "path": "docs/operations/2026-10-11/launch-status.md",
+      "bytes": 514336,
+      "sha256": "06568babf6682b4adfd51b8ba6c451a5ae0f975b010bd787f4be6043dc60d924"
+    }
+  ],
+  "fileCount": 8,
+  "totalBytes": 2297717
+}

@@ -1,0 +1,54 @@
+{
+  "observedAtUtc": "2026-10-17T01:34:30.459733+00:00",
+  "automationPromptSha256": "b22d89286377d40b964964325091c7839d4b74b5196bf8d61d4da4ca891ca769",
+  "automationPromptBytes": 267471,
+  "status": "ACTIVE",
+  "targetThreadId": "01a0b7b4-8534-7741-9de6-177edf929f58",
+  "rrule": "RRULE:FREQ=HOURLY;INTERVAL=1",
+  "protectedRunStatus": "completed",
+  "protectedRunConclusion": "failure",
+  "jobs": [
+    {
+      "name": "architecture",
+      "status": "completed",
+      "conclusion": "success",
+      "id": 117272053122
+    },
+    {
+      "name": "exact-review",
+      "status": "completed",
+      "conclusion": "success",
+      "id": 117272053221
+    },
+    {
+      "name": "requirements",
+      "status": "completed",
+      "conclusion": "success",
+      "id": 117272053306
+    },
+    {
+      "name": "stockinsider-v3-gate-bootstrap",
+      "status": "completed",
+      "conclusion": "success",
+      "id": 117272054151
+    },
+    {
+      "name": "model-runner-code-gate",
+      "status": "completed",
+      "conclusion": "failure",
+      "id": 117272119048
+    },
+    {
+      "name": "product-runtime-code-gate",
+      "status": "completed",
+      "conclusion": "success",
+      "id": 117272119065
+    },
+    {
+      "name": "stockinsider-v3-gate-root",
+      "status": "completed",
+      "conclusion": "failure",
+      "id": 117274378090
+    }
+  ]
+}

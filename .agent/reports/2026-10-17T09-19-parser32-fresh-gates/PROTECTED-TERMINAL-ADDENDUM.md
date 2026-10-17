@@ -1,0 +1,11 @@
+## 2026-10-17 09:35台灣時間終態補記（優先）：same32 protected attempt2真FAIL終態，product真SUCCESS，model仍hostpin版本漂移；不再rerun/ready/merge
+
+01:34:30Z同run38985234489 attempt2真completed/FAILURE。Product-runtime-code-gate117272119065於01:33:56Z真正SUCCESS；aggregate117274378090於01:34:02Z FAILURE，實際MODEL_RUNNER_RESULT=failure拒絕。Requirements/architecture/exact-review SUCCESS，bootstrap保留00:11原attempt1 SUCCESS，model117272119048 FAILURE。不是七PASS、不是全部產品失敗；上一active sibling快照只屬先前觀測，不覆寫。
+
+完整attempt2 log1309228bytes/SHAd89039de93b921b5034e9dc37a220f9191ac6a92424dbd305109356097529348已取得並base64保真，七jobJSON/真終態保存。Product log實際先checkout base93、再detached source32；未額外下載/重核所有product artifact，不冒Root親跑全套或新155。Current32 ordinary/fullbuild、native與一次fresh canonical155/PCR31 PASS、新1166完整prepublish及正式exact-review PASS保持各自scope。Model真111tests/108PASS/3FAIL及67978byte完整log、installedChatGPT Codex inode/size/hash/version不同而git/Node pin相符的readonly證據見同report；初Root fullmode formatter誤判及stale snapshot包裝RED保持。
+
+Current32 failed-rerun audit/tmp/stockinsider-pr383-32-protected-fresh-ref-rerun-oct17.json已exit0消耗，38985234489 attempt2永不再rerun；PR383仍OPEN/DRAFT/source32/base93，未ready/merge/install，無活動Cloudowner。Main93/source32/immutable新1166及舊939-f2d不改寫。下一唯一有界方向是先唯讀核既有hosttoolchain/pin政策與原exactruntime custody，形成可審相容性/有限遷移候選；不能新handoff/空head追綠、靜默換expectedversion/pin/authority/policy、skip tests、App降級替換重裝或操作別App。尚未批准/實作新candidate，不冒需要人類操作。
+
+Root report .agent/reports/2026-10-17T09-19-parser32-fresh-gates/，本輪前currentreceipt d828a8586b8e18354aa124e3d8ea0f954c3b8e3891affc97d4bfd54b519ccfa6/43files2300794bytes永久保持。前progress eb66c81c9681fd891bd7b0ad296b3739a0c7ea4a已正常push核實clean tracked，後terminalreceipt/push另依actual工具。本次automation readback ACTIVE/hourly/same target01a0b7b4與promptSHA b22d89286377d40b964964325091c7839d4b74b5196bf8d61d4da4ca891ca769相符；此為更新terminal之前版本，下次savedprompt須本終態置頂。
+
+無本輪VPS/DB/HTTP/secret/服務/資料/roleACL/SQL/deploy/正式研究排程變更，latest parser OS17:05/DB16:10/c5b6ccf0 partial/socketunavailable/facts0仍舊觀測，不重upload/盲retry/沿舊capacity。ConsumedDD及terminalPR370..382不碰。Fullgoal/Heartbeat ACTIVE，Goal未改；兩formal文章/逐claimsemantic/完整來源Top20/合格技術/策略/正式研究排程/wholeS-C-B-Q-R-A/fixedpeer與全部原pending/RED保持，正常修補安靜。09:35為artifactlabel，actualobservedAtUtc/GitHub timestamps為準。

@@ -1,0 +1,18 @@
+{
+  "observedAtUtc": "2026-10-17T01:34:47.441954+00:00",
+  "args": [
+    "gh",
+    "run",
+    "view",
+    "38985234489",
+    "--repo",
+    "Kaichen9527/stockinsider",
+    "--attempt",
+    "2",
+    "--log"
+  ],
+  "exitCode": 0,
+  "bytes": 1309228,
+  "sha256": "d89039de93b921b5034e9dc37a220f9191ac6a92424dbd305109356097529348",
+  "stderr": ""
+}

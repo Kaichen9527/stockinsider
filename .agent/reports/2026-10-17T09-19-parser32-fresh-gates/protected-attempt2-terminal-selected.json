@@ -1,0 +1,21 @@
+{
+  "lines": [
+    "stockinsider-v3-gate-bootstrap\tUNKNOWN STEP\t2026-10-17T00:11:58.4423152Z # tests 18",
+    "stockinsider-v3-gate-bootstrap\tUNKNOWN STEP\t2026-10-17T00:11:58.4423528Z # pass 18",
+    "stockinsider-v3-gate-bootstrap\tUNKNOWN STEP\t2026-10-17T00:11:58.4423894Z # fail 0",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3315110Z not ok 12 - host pin fixture has an exact hash-bound format",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3316480Z   error: 'routing or host preflight blocked'",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3316710Z   code: 'ROUTING_BLOCKED'",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3334960Z not ok 16 - actual pinned Codex version accepts prepared private host siblings without credentials",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3336720Z   error: |-",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3337330Z     + 'codex-cli 0.163.0-alpha.10.2'",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3337510Z     - 'codex-cli 0.162.0-alpha.17.2'",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3338420Z   expected: 'codex-cli 0.162.0-alpha.17.2'",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3338670Z   actual: 'codex-cli 0.163.0-alpha.10.2'",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3341250Z not ok 17 - disabled doctor accepts only the exact successor and rejects historical selectors",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3342970Z   error: |-",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3457930Z # tests 111",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3458130Z # pass 108",
+    "model-runner-code-gate\tExecute pinned protected model-runner track and emit envelope\t2026-10-17T01:24:29.3458230Z # fail 3"
+  ]
+}
