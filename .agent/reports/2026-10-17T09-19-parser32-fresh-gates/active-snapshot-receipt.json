@@ -1,0 +1,53 @@
+{
+  "observedAtUtc": "2026-10-17T01:19:08.825046+00:00",
+  "files": [
+    {
+      "path": "ACTIVE-SNAPSHOT.md",
+      "bytes": 2259,
+      "sha256": "05e18fb3bf7b296b38d8a0ad25918e5b6c6663c3f61e981d7b8f5b4fe07fe82e"
+    },
+    {
+      "path": "canonical-dispatch-audit.json",
+      "bytes": 447,
+      "sha256": "67a7ac7a55ec48a7a3c0b8e8f428e0adb2d090071d346f1c869dbaf2de53d242"
+    },
+    {
+      "path": "canonical-live-first.json",
+      "bytes": 14703,
+      "sha256": "c719253dede974d2b8a2db268dd1adb25fa629941e00a33deca3aa9c312f1f74"
+    },
+    {
+      "path": "canonical-observation-before-publication.json",
+      "bytes": 22321,
+      "sha256": "b51445a3c3d5052933b3a981e0271d213d6071b4d842d1a3c3aaf89837ea781d"
+    },
+    {
+      "path": "ordinary-checkout.json",
+      "bytes": 2854,
+      "sha256": "970edd7ec0fb0c5b947890444321f633b234aa58d60399e5ccf4e66126c3d701"
+    },
+    {
+      "path": "ordinary-selected-lines.json",
+      "bytes": 918,
+      "sha256": "26de0d016420d27b450c30f56178e3addb7e3378fb6bb03f3c96a6fbe5096100"
+    },
+    {
+      "path": "ordinary.log.base64",
+      "bytes": 1167333,
+      "sha256": "d1354bcaab6d86b62b9af3713cddf92dfeaf6738eebd1599f0e00bbabc16a0ae"
+    },
+    {
+      "path": "orientation.json",
+      "bytes": 67003,
+      "sha256": "bc598fec614e057a9d9dbc0417fe3fbca452b56dc5de237dacdb5a57b4b4d611"
+    },
+    {
+      "path": "root-full-range-review.json",
+      "bytes": 3350,
+      "sha256": "2182180170f18db4e8bd9485832c47ac129404546af1bdc6ed79fb4167748004"
+    }
+  ],
+  "activeCanonicalRun": 38989933942,
+  "canonicalComplete": false,
+  "source": "32ab771736fc18535ccd08113836c850aabb2bd0"
+}

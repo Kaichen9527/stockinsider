@@ -1,0 +1,17 @@
+{
+  "args": [
+    "gh",
+    "workflow",
+    "run",
+    "reviewed-publication-tail-artifact.yml",
+    "--repo",
+    "Kaichen9527/stockinsider",
+    "--ref",
+    "codex/parser-runtime-lifecycle-normal-pr-oct17"
+  ],
+  "subject": "32ab771736fc18535ccd08113836c850aabb2bd0",
+  "completedAtUtc": "2026-10-17T01:13:30.060370+00:00",
+  "exitCode": 0,
+  "stdout": "https://github.com/Kaichen9527/stockinsider/actions/runs/38989933942\n",
+  "stderr": ""
+}

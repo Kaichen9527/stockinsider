@@ -1,0 +1,22 @@
+[
+  {
+    "line": 105,
+    "text": "product-runtime\tRun actions/checkout@v4\t2026-10-17T00:11:56.0516176Z ##[group]Checking out the ref"
+  },
+  {
+    "line": 124,
+    "text": "product-runtime\tRun actions/checkout@v4\t2026-10-17T00:11:56.2238984Z HEAD is now at da2220e Merge 32ab771736fc18535ccd08113836c850aabb2bd0 into 93e44475cbb0c27beb26e4dcb68e382096a4e212"
+  },
+  {
+    "line": 126,
+    "text": "product-runtime\tRun actions/checkout@v4\t2026-10-17T00:11:56.2288225Z [command]/usr/bin/git log -1 --format=%H"
+  },
+  {
+    "line": 3251,
+    "text": "product-runtime\tRun diagnostic product/runtime suite (not authoritative Code Gate evidence)\t2026-10-17T00:14:15.3403920Z > npm --prefix web run build"
+  },
+  {
+    "line": 3272,
+    "text": "product-runtime\tRun diagnostic product/runtime suite (not authoritative Code Gate evidence)\t2026-10-17T00:14:34.1568337Z \u2713 Compiled successfully in 17.7s"
+  }
+]

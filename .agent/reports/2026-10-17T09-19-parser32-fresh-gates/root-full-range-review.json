@@ -1,0 +1,71 @@
+{
+  "observedAtUtc": "2026-10-17T01:14:05.376777+00:00",
+  "source": "32ab771736fc18535ccd08113836c850aabb2bd0",
+  "tree": "561c4d8c34df35883cd780c47b6afbdd579a9cda",
+  "ordinaryCheckout": "da2220ed1add72fbf8263efef2e4ce3a8322195e",
+  "ordinaryCheckoutTreeEqual": true,
+  "fullRange": "93e44475cbb0c27beb26e4dcb68e382096a4e212..32ab771736fc18535ccd08113836c850aabb2bd0",
+  "sourceFiles": [
+    {
+      "path": ".github/workflows/parser-runtime-lifecycle-quality.yml",
+      "identity": "100644 blob 8868d1e6b6f469df828ce63aca9b286d343c45dc",
+      "bytes": 1870,
+      "sha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c"
+    },
+    {
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "identity": "100644 blob c534ab49eb8934300e5c2c93fb65e76955e573da",
+      "bytes": 1341,
+      "sha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5"
+    },
+    {
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/HANDOFF.md",
+      "identity": "100644 blob e0e06c5a432957153cb52895b9541fa890410895",
+      "bytes": 7975,
+      "sha256": "fc7b82f7ae325a101882034326c7b21f4d6d051fbfa8ac57fdb3fca2653d2ecc"
+    },
+    {
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/R1-RECEIPT-BINDING.md",
+      "identity": "100644 blob fed88064bd3a8d77e2e6a2ac1d3d382efde2b716",
+      "bytes": 2803,
+      "sha256": "c8d1f9c42840f4199853428bdd042e6c09a916b14d8cf85631096cfe045fa099"
+    },
+    {
+      "path": "docs/operations/2026-10-17/parser-runtime-directory-lifecycle/receipt-binding-source-checks.py",
+      "identity": "100644 blob 2f354aff4ea5efb2ea4dc4c5c3602f12b3559b87",
+      "bytes": 5655,
+      "sha256": "323624495acaee88b1f51f6b12ff3c23aaec279e70f98bc285d4a2b02678b5a1"
+    },
+    {
+      "path": "docs/operations/2026-10-17/parser-runtime-lifecycle-release/CLEANUP-FIX.md",
+      "identity": "100644 blob 7e9aaafa2ef702795011916155f17bab4ddcf164",
+      "bytes": 2562,
+      "sha256": "032b9f790d07d610f72fd2222e0ebfb58944f5120b9f0eaadcd97a94861d5771"
+    },
+    {
+      "path": "docs/operations/2026-10-17/parser-runtime-lifecycle-release/HANDOFF.md",
+      "identity": "100644 blob bace822c9e013c944d5a47b3e05c9e04d7b00252",
+      "bytes": 6268,
+      "sha256": "109004c13329e5a64dfffcda0a6e2080a379ba6b1395820341b9525ff0557c34"
+    },
+    {
+      "path": "docs/operations/2026-10-17/parser-runtime-lifecycle-release/cleanup-source-checks.py",
+      "identity": "100644 blob 6b6690ad7f3fb3e092ff6e45123de49be4d97ddc",
+      "bytes": 4900,
+      "sha256": "9226a934302c0e259beb4ee075efb4ca31be033385b1c0ecb8076207ed8f08a0"
+    },
+    {
+      "path": "scripts/parser-runtime-directory-lifecycle.py",
+      "identity": "100644 blob 686ab2e132c073a25fc7c67a6eec3c35a4fd3844",
+      "bytes": 33504,
+      "sha256": "c4fb16bf02b0d65c234de84923a77713883c02f73fcb560b542b5d72adea8ba6"
+    }
+  ],
+  "sourceBytes": 66878,
+  "baseUnchangedIdentities": 2199,
+  "otherEntriesComparedTo939": 2207,
+  "sourceDiffCheck": "PASS",
+  "newProductSourceEditsComparedTo939": false,
+  "currentCanonical": "PENDING",
+  "sourceReviewScope": "Cloud-authored product source previously fully reviewed; exact byte inheritance rechecked, Root-authored HANDOFF status addendum disclosed, all nine current blobs obtained; no human/formal research approval."
+}

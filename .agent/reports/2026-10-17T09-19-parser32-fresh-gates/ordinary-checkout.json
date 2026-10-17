@@ -1,0 +1,40 @@
+{
+  "sha": "da2220ed1add72fbf8263efef2e4ce3a8322195e",
+  "node_id": "C_kwDORbtmH9oAKGRhMjIyMGVkMWFkZDcyZmJmODI2M2VmZWYyZTRjZTNhODMyMjE5NWU",
+  "url": "https://api.github.com/repos/Kaichen9527/stockinsider/git/commits/da2220ed1add72fbf8263efef2e4ce3a8322195e",
+  "html_url": "https://github.com/Kaichen9527/stockinsider/commit/da2220ed1add72fbf8263efef2e4ce3a8322195e",
+  "author": {
+    "name": "Kaichen9527",
+    "email": "b98606021@gmail.com",
+    "date": "2026-10-17T00:11:49Z"
+  },
+  "committer": {
+    "name": "GitHub",
+    "email": "noreply@github.com",
+    "date": "2026-10-17T00:11:49Z"
+  },
+  "tree": {
+    "sha": "561c4d8c34df35883cd780c47b6afbdd579a9cda",
+    "url": "https://api.github.com/repos/Kaichen9527/stockinsider/git/trees/561c4d8c34df35883cd780c47b6afbdd579a9cda"
+  },
+  "message": "Merge 32ab771736fc18535ccd08113836c850aabb2bd0 into 93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "parents": [
+    {
+      "sha": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "url": "https://api.github.com/repos/Kaichen9527/stockinsider/git/commits/93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/commit/93e44475cbb0c27beb26e4dcb68e382096a4e212"
+    },
+    {
+      "sha": "32ab771736fc18535ccd08113836c850aabb2bd0",
+      "url": "https://api.github.com/repos/Kaichen9527/stockinsider/git/commits/32ab771736fc18535ccd08113836c850aabb2bd0",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/commit/32ab771736fc18535ccd08113836c850aabb2bd0"
+    }
+  ],
+  "verification": {
+    "verified": true,
+    "reason": "valid",
+    "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq0r1FCRC1aQ7uu5UhlAAAkLUQAJWXUEqHFZHvc+Qh0xYt4LEU\nEiFEB8lRbRQTPdelr3H/LgT/RR7G37O8PmLude/EPhkUCVy6ShTEfrP16KeAlNvg\ngV6fRmXlUqyu4AL4H6wSOFsSAYNdwr8wgJ3ge8c0pLUQFPe8opsd8mOot/hFncM3\nmsHmlcI1d8vPEOZgunyFceyC15fP+lY7c9erkOQ0uXx7BMaCD9nri9+LtbYV3cYf\naYtxfivemuyoir6hlbA1d4sT2hmRKyXkB02VnSd52Tclr3NhQXEM6xuc1Sk3TU9s\ntE7BdF1o05rRa88Ia/DaN2KlerVH1o9Wtjo/EvYIK29XcP+pW0FqTnOTPIeMyWx2\nT2iyqiz39OGdVlog6OzG0RhVj8+fZSUyPjJvt6OdQgAtqUYhyAvCSwBmneX1TMDR\nZs42L65lI3z8+yV5Jnmw+ISkB1waLoxJXx9QJO7dPlz7d0fkiJbtsllRRw62/kKO\n8PvAHwuRE2Knz6ira5MtZ2n6tCrfVa/gkMAIauvre4jbD2PBp2i31AgHZmkocNBl\nNc1BUEwGTAAX4BvsgiYDX8tdHHK8KgSa0Js7tVHjNP8rqLPE3WvHhVM+1kBsSSpQ\nP/9Sn6iLg6dIYxl4LTr8vB/eVr4IbejbmXrNrxsaGNgVclbtJLqKSNv3uoAQaqR/\n4GcdyEk2uiPYhKSDAt0V\n=37/b\n-----END PGP SIGNATURE-----\n",
+    "payload": "tree 561c4d8c34df35883cd780c47b6afbdd579a9cda\nparent 93e44475cbb0c27beb26e4dcb68e382096a4e212\nparent 32ab771736fc18535ccd08113836c850aabb2bd0\nauthor Kaichen9527 <b98606021@gmail.com> 1792195909 +0000\ncommitter GitHub <noreply@github.com> 1792195909 +0000\n\nMerge 32ab771736fc18535ccd08113836c850aabb2bd0 into 93e44475cbb0c27beb26e4dcb68e382096a4e212\n",
+    "verified_at": "2026-10-17T00:11:50Z"
+  }
+}
