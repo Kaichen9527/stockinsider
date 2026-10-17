@@ -1,0 +1,84 @@
+{
+  "observedAtUtc": "2026-10-17T02:18:40.900116+00:00",
+  "remoteRefs": "32ab771736fc18535ccd08113836c850aabb2bd0\trefs/heads/codex/parser-runtime-lifecycle-normal-pr-oct17\n3747f07deb2121c45d56268d475a0b513939e93b\trefs/heads/codex/research-release-review-evidence-oct11\n1166b53d1d18c8840ece0aa567d5ddbbba52ee44\trefs/heads/evidence/source-led-opportunity-v3-exact-review-32ab771736fc18535ccd08113836c850aabb2bd0\nf2dfeaf6443cac55a70755d293536f82e6f8f941\trefs/heads/evidence/source-led-opportunity-v3-exact-review-939d6438d157114c6ef33b9d99362156c36624f1\n93e44475cbb0c27beb26e4dcb68e382096a4e212\trefs/heads/main\n",
+  "progressHead": "3747f07deb2121c45d56268d475a0b513939e93b",
+  "progressTrackedStatus": "",
+  "sourceTrackedStatus": "",
+  "originalWorkspaceTrackedStatusReadOnly": " M .agent/reports/latest-release-gate.json\n M .agent/reports/latest-release-gate.md\n M .agent/scripts/opsx-test.js\n M .gitignore\n M node_modules/.package-lock.json\n D web/public/file.svg\n D web/public/globe.svg\n D web/public/next.svg\n D web/public/vercel.svg\n D web/public/window.svg\n",
+  "PR": {
+    "number": 383,
+    "state": "open",
+    "draft": true,
+    "head": "32ab771736fc18535ccd08113836c850aabb2bd0",
+    "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212"
+  },
+  "rules": {
+    "id": 20177392,
+    "name": "stockinsider-v3-gate-root",
+    "target": "branch",
+    "source_type": "Repository",
+    "source": "Kaichen9527/stockinsider",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "exclude": [],
+        "include": [
+          "~DEFAULT_BRANCH"
+        ]
+      }
+    },
+    "rules": [
+      {
+        "type": "deletion"
+      },
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 0,
+          "dismiss_stale_reviews_on_push": false,
+          "required_reviewers": [],
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": false,
+          "require_extra_approval_for_unattributed_changes": true,
+          "allowed_merge_methods": [
+            "merge",
+            "squash",
+            "rebase"
+          ]
+        }
+      },
+      {
+        "type": "required_status_checks",
+        "parameters": {
+          "strict_required_status_checks_policy": false,
+          "do_not_enforce_on_create": false,
+          "required_status_checks": [
+            {
+              "context": "stockinsider-v3-gate-root",
+              "integration_id": 15368
+            }
+          ]
+        }
+      }
+    ],
+    "node_id": "RRS_lACqUmVwb3NpdG9yec5Fu2YfzgEz4fA",
+    "created_at": "2026-08-01T17:15:31.389+08:00",
+    "updated_at": "2026-10-12T08:07:59.507+08:00",
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/Kaichen9527/stockinsider/rulesets/20177392"
+      },
+      "html": {
+        "href": "https://github.com/Kaichen9527/stockinsider/rules/20177392"
+      }
+    }
+  },
+  "rootFreeBytes": 22096650240,
+  "mutations": "No App/runtime/governance/production changes; only public audit files and progress report."
+}

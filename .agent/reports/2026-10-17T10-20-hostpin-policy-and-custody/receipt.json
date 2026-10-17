@@ -1,0 +1,68 @@
+{
+  "observedAtUtc": "2026-10-17T02:19:40.142924+00:00",
+  "scope": "Readonly exact-source authority/custody/signature audit; inactive procedure candidate, no new trusted fixture or approval. Original RED retained.",
+  "files": [
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/INACTIVE-COMPATIBILITY-CANDIDATE.md",
+      "bytes": 7124,
+      "sha256": "7cada89fe0a32b5911ef62299948e77b1f5378e7cd8025678ca7099417bb46c7"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/REPORT.md",
+      "bytes": 5711,
+      "sha256": "bf91eb170af131005f4931d6380f7022331336343280bd694f57170946707d00"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/base-model-listing.txt",
+      "bytes": 2683,
+      "sha256": "b008e69ff6334b570752d10a23a19e81e8f30f25d4e82b01af39032672dddc70"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/fresh-orientation.json",
+      "bytes": 3242,
+      "sha256": "0fafc940446aa56ea6bb0cf8798db85291030e791762b99c41fcb60aa87dc978"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/original-worker-authority-control.json",
+      "bytes": 1231,
+      "sha256": "009bf1c75df12c74e51cbb5f3d312bd7d25135822494a73466fcb09c01af8695"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/original-worker-authority-control.mjs",
+      "bytes": 3829,
+      "sha256": "da0567e967adf661f2a632006bbaccc7214e9706b23e76280026c2364cffcff1"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/public-signature-observation.json",
+      "bytes": 4742,
+      "sha256": "6ff767fd661d5814233567aae65d002aa47412c82e04034bfbe95aeb91a2a364"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/readonly-custody-and-policy.json",
+      "bytes": 4165,
+      "sha256": "ef6161aefb61b708056b7d788f7c9ba6a79d17789d017095fba015c77cabca9f"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/same-cloud-compact.json",
+      "bytes": 720,
+      "sha256": "cb04162dd0c35ac8b25314c859b881fff02d8e8d596a1742aa1065376e4f935c"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/source-input-inventory.json",
+      "bytes": 3142,
+      "sha256": "0029edebe37d773324bbc171e2b7b6c2b00a3c0d35765d56354642334a9ce302"
+    },
+    {
+      "path": ".agent/reports/2026-10-17T10-20-hostpin-policy-and-custody/source-model-listing.txt",
+      "bytes": 2683,
+      "sha256": "b008e69ff6334b570752d10a23a19e81e8f30f25d4e82b01af39032672dddc70"
+    },
+    {
+      "path": "docs/operations/2026-10-11/launch-status.md",
+      "bytes": 520048,
+      "sha256": "df15c66125c78dbfaaa845c53569a7b5873d4ec0478fddb020bed01d0c2267df"
+    }
+  ],
+  "fileCount": 12,
+  "totalBytes": 559320
+}

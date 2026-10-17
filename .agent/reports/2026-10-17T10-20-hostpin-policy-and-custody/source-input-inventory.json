@@ -1,0 +1,80 @@
+{
+  "observedAtUtc": "2026-10-17T02:17:24.747339+00:00",
+  "source": "32ab771736fc18535ccd08113836c850aabb2bd0",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "files": [
+    {
+      "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs",
+      "bytes": 79523,
+      "sha256": "70cfdad3d4777db4341cb17a31c6899ba6104522d3d1ddcd652237be8751ec47"
+    },
+    {
+      "path": "scripts/opportunity-v3/protected-code-gate-aggregate.mjs",
+      "bytes": 1318,
+      "sha256": "d6ec0565aaf27824e3c0ddd4a78634a830c43d76d8a4c8daf2c8a0f960fd9c8b"
+    },
+    {
+      "path": "scripts/model-runner-v3/hostPreflight.js",
+      "bytes": 14172,
+      "sha256": "eee4d113a673f127fbb482760545937ce405fba52f2bea6ebb387f5c13709315"
+    },
+    {
+      "path": "scripts/model-runner-v3/runner.js",
+      "bytes": 5991,
+      "sha256": "a8336382b03bb3d4008f8c65439d3e4f5880b31f072a5e122b30b286e85d41ff"
+    },
+    {
+      "path": "scripts/model-runner-v3/model-runner-v3.test.js",
+      "bytes": 54543,
+      "sha256": "139bc43b1b5424845435281348f025bcc90cb457d3c5c50e7cb72946f4535551"
+    },
+    {
+      "path": "scripts/model-runner-v3/codexAdapter.js",
+      "bytes": 2885,
+      "sha256": "de37af11d8df27d071cef5d6beae039ab95c9335fa66c9f5f6f8b9c97be929c2"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/host-pin-compatibility-amendment.md",
+      "bytes": 2867,
+      "sha256": "0a2c1b841627e8eb9878280eb137e04e7216f9d1278be96553d5b4336eabcb03"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-contract.md",
+      "bytes": 70581,
+      "sha256": "8b2e75725626c5d1f5da97ec7434c0cb3bdb8c2deaf94e0b64d57eedc80c98d5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json",
+      "bytes": 2252,
+      "sha256": "b19d8dbfd1649c355f675974f7354c6a7403080a0e91f9b1020bfd185588b816"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/acceptance-tests.json",
+      "bytes": 267537,
+      "sha256": "6750ac0f5ec9fea577aa4eb34616cc07d4ddcbd76f8866e95ef882f16f5c4a03"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/active-artifact-catalog-v3.json",
+      "bytes": 6759,
+      "sha256": "d0bed2c2d3db38d28145c903bdb0f9215f73266fbecf55826e25ee402dff5b64"
+    },
+    {
+      "path": ".github/protected-model-oracle-reuse-v1.json",
+      "bytes": 539,
+      "sha256": "da7116c13cfdf4e7ae0f84dec88f21187a95df295835b06e809e48d55b6858d0"
+    },
+    {
+      "path": "docs/engineering/runner-trust-migration-20261012/governance.md",
+      "bytes": 2770,
+      "sha256": "48b8a95276c764391d0448e0e1501946de3946dd2ea4cc3c5386f604b4492c27"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/README.md",
+      "bytes": 9082,
+      "sha256": "b876b3bc230f5d05ec021de19c8b6eb0cc2c1c5dd937c6d9641e9eb004d864a2"
+    }
+  ],
+  "fileCount": 14,
+  "totalBytes": 520819,
+  "scope": "Exact Git blobs actually read for source-bound policy/compatibility audit; no product or governance approval."
+}

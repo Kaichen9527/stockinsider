@@ -1,0 +1,98 @@
+{
+  "observedAtUtc": "2026-10-17T02:16:06.261327+00:00",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "source": "32ab771736fc18535ccd08113836c850aabb2bd0",
+  "listings": {
+    "base": {
+      "rawSha256": "b008e69ff6334b570752d10a23a19e81e8f30f25d4e82b01af39032672dddc70",
+      "rawBytes": 2683,
+      "originalWorkerTrimmedSha256": "080db93a9b98e75b4b2bcb14e4097e25cb745f449d2c6c3c0b022dc204afd027",
+      "trimmedBytes": 2682,
+      "rows": 28,
+      "commit": "93e44475cbb0c27beb26e4dcb68e382096a4e212"
+    },
+    "source": {
+      "rawSha256": "b008e69ff6334b570752d10a23a19e81e8f30f25d4e82b01af39032672dddc70",
+      "rawBytes": 2683,
+      "originalWorkerTrimmedSha256": "080db93a9b98e75b4b2bcb14e4097e25cb745f449d2c6c3c0b022dc204afd027",
+      "trimmedBytes": 2682,
+      "rows": 28,
+      "commit": "32ab771736fc18535ccd08113836c850aabb2bd0"
+    }
+  },
+  "expectedCodex": {
+    "name": "codex",
+    "path": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+    "realpath": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+    "sha256": "0d5ac7aae20c4eda6242428d5e218c55ba96d8763fda2a271088ff37104b9d28",
+    "signing": {
+      "cdHashFullSha256": "9968cf1ea4020a7730965d776bd02cdc2ce4544dd28cc7c5bda7e7fdc2fb90be",
+      "designatedRequirement": "identifier codex and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"2DC432GLL2\"",
+      "identifier": "codex",
+      "teamIdentifier": "2DC432GLL2"
+    },
+    "stat": {
+      "device": "16777231",
+      "gid": 20,
+      "inode": "211775622",
+      "mode": "100755",
+      "size": "246046384",
+      "uid": 501
+    },
+    "version": "codex-cli 0.162.0-alpha.17.2"
+  },
+  "actualCodex": {
+    "path": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+    "realpath": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+    "stat": {
+      "device": "16777231",
+      "inode": "220215341",
+      "size": "249954368",
+      "uid": 501,
+      "gid": 20,
+      "mode": "100755"
+    },
+    "sha256": "1afb28c01d7d49e892bd75f11076b10f1451e34e0ee308a95e5ab7f69f9c84fe",
+    "stableFdAndPath": true
+  },
+  "knownApplicationsTopLevel": [
+    {
+      "path": "/Applications/ChatGPT.app",
+      "stat": {
+        "device": "16777231",
+        "inode": "220215298",
+        "size": "96",
+        "uid": 501,
+        "gid": 80,
+        "mode": "040755"
+      },
+      "symlink": false
+    }
+  ],
+  "custodyScope": "Only current exact target, source/historical declared paths and ChatGPT/Codex name matches in /Applications top level. No recursive cache/session/other-App/archive scan. No alternate exact approved installation established; absence elsewhere UNKNOWN. Same-byte copy cannot satisfy original exact path/inode/bundle identity.",
+  "reuseRecord": {
+    "artifactDigest": "sha256:74649ff1ceadad9ae84d8bbe2fa26a5c5b189b3d1209fb8ece9f97f0674a1bd4",
+    "artifactId": 9280965835,
+    "artifactName": "opportunity-gate-result-model-runner-code-gate-4e1a658d0f97a32010ba0ae1e9a9eac29b617a05",
+    "completedAt": "2026-08-17T08:06:42Z",
+    "expiresAt": "2026-11-15T08:04:30Z",
+    "jobId": 95323346210,
+    "requiredRunnerLabels": [
+      "ARM64",
+      "macOS",
+      "self-hosted"
+    ],
+    "rootJobId": 95325982359,
+    "schema": "stockinsider-protected-model-oracle-reuse-v1",
+    "subjectCommitSha": "4e1a658d0f97a32010ba0ae1e9a9eac29b617a05",
+    "workflowRunId": 32008630940
+  },
+  "reuseRecordSha256": "da7116c13cfdf4e7ae0f84dec88f21187a95df295835b06e809e48d55b6858d0",
+  "reuseExpiredAtObservation": false,
+  "modelInvoked": false,
+  "versionExecuted": false,
+  "credentialsRead": false,
+  "AppModified": false,
+  "rootFreeBytes": 22131572736,
+  "originalRootAuditError": "Initial raw ls-tree SHA included final LF; original worker git() uses trim(). Initial assertion failed before binary scan/assessment; raw listing bytes retained and corrected worker-codec SHA recorded separately."
+}

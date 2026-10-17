@@ -1,0 +1,77 @@
+{
+  "observedAtUtc": "2026-10-17T02:16:32.981419+00:00",
+  "scope": "Public signature observation only; exact selected executable/bundle lstat stable. No version/model/auth/provider invocation, no Gatekeeper/cache/activation or App modification. No current pin candidate generated.",
+  "checks": [
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Executable=/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex\nIdentifier=codex\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20500 size=1937841 flags=0x10000(runtime) hashes=60547+7 location=embedded\nVersionPlatform=1\nVersionMin=720896\nVersionSDK=984320\nHash type=sha256 size=32\nCandidateCDHash sha256=dffd792d4af02d7143fd94055cf9e3701bca746c\nCandidateCDHashFull sha256=dffd792d4af02d7143fd94055cf9e3701bca746ca46154c85f6f91fa07e6099e\nHash choices=sha256\nCMSDigest=dffd792d4af02d7143fd94055cf9e3701bca746ca46154c85f6f91fa07e6099e\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=237223936\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=dffd792d4af02d7143fd94055cf9e3701bca746c\nSignature size=9048\nAuthority=Developer ID Application: OpenAI OpCo, LLC (2DC432GLL2)\nAuthority=Developer ID Certification Authority\nAuthority=Apple Root CA\nTimestamp=Oct 16, 2026 at 2:18:39\u202fAM\nNotarization Ticket=stapled\nInfo.plist entries=6\nTeamIdentifier=2DC432GLL2\nRuntime Version=15.5.0\nSealed Resources version=2 rules=13 files=1\nInternal requirements count=1 size=168\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+      ],
+      "exitCode": 0,
+      "stdout": "designated => identifier codex and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"2DC432GLL2\"\n",
+      "stderr": "Executable=/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Applications/ChatGPT.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Executable=/Applications/ChatGPT.app/Contents/MacOS/ChatGPT\nIdentifier=com.openai.codex\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20500 size=764 flags=0x10000(runtime) hashes=13+7 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1703936\nHash type=sha256 size=32\nCandidateCDHash sha256=771656aa94bb20b0c94dd9939b11a3ed0de7c111\nCandidateCDHashFull sha256=771656aa94bb20b0c94dd9939b11a3ed0de7c1118ff7964970f13fa78ae04631\nHash choices=sha256\nCMSDigest=771656aa94bb20b0c94dd9939b11a3ed0de7c1118ff7964970f13fa78ae04631\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=16384\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=771656aa94bb20b0c94dd9939b11a3ed0de7c111\nSignature size=9047\nAuthority=Developer ID Application: OpenAI OpCo, LLC (2DC432GLL2)\nAuthority=Developer ID Certification Authority\nAuthority=Apple Root CA\nTimestamp=Oct 16, 2026 at 5:54:10\u202fAM\nNotarization Ticket=stapled\nInfo.plist entries=63\nTeamIdentifier=2DC432GLL2\nRuntime Version=26.0.0\nSealed Resources version=2 rules=13 files=3626\nInternal requirements count=1 size=176\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Applications/ChatGPT.app"
+      ],
+      "exitCode": 0,
+      "stdout": "designated => identifier \"com.openai.codex\" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"2DC432GLL2\"\n",
+      "stderr": "Executable=/Applications/ChatGPT.app/Contents/MacOS/ChatGPT\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Applications/ChatGPT.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "GatekeeperAssessment": "NOT_RUN",
+  "modelInvoked": false,
+  "credentialsRead": false
+}
