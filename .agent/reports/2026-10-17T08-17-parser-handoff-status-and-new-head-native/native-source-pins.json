@@ -1,0 +1,23 @@
+{
+  "adaptations": [
+    "unique /run leaf and fixture unit names",
+    "harmless Python ExecStart",
+    "numeric current runner User/Group",
+    "listener independent unit without RuntimeDirectory",
+    "baseline omits Preserve directive",
+    "production dependencies/credentials/sandbox/paths not executed"
+  ],
+  "harnessSha256": "c4fb16bf02b0d65c234de84923a77713883c02f73fcb560b542b5d72adea8ba6",
+  "originalUnitSha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb",
+  "selectedSemantics": {
+    "Restart": "on-failure",
+    "RestartSec": "5",
+    "RuntimeDirectory": "stockinsider",
+    "RuntimeDirectoryMode": "0750",
+    "RuntimeDirectoryPreserve": "yes",
+    "UMask": "0077"
+  },
+  "unitBytes": 1341,
+  "unitSha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5",
+  "workflowSha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c"
+}

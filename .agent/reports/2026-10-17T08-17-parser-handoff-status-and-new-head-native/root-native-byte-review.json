@@ -1,0 +1,43 @@
+{
+  "observedAtUtc": "2026-10-17T00:13:44.338984+00:00",
+  "source": "32ab771736fc18535ccd08113836c850aabb2bd0",
+  "receiptSha256": "0a5e8892a44906190d6e11946afb57fb370c01d3e38de25ac0566133e603c554",
+  "publicFiles": 4,
+  "publicBytes": 120469,
+  "allSourcePinsAndThreeExplicitEvidenceByteHashesVerified": true,
+  "fourCasesCleanupPostrun": "PASS",
+  "defaultListener": {
+    "fdTarget": "socket:[14942]",
+    "listenerPid": 2237,
+    "listenerStartTicks": 3940
+  },
+  "yesStableIdentity": {
+    "directoryInode": 1532,
+    "fdTarget": "socket:[17006]",
+    "gid": 1001,
+    "listenerPid": 2320,
+    "listenerStartTicks": 4009,
+    "mode": 448,
+    "pathInode": 1536,
+    "roundtrip": true,
+    "uid": 1001
+  },
+  "webPids": [
+    2317,
+    2338,
+    2346,
+    2432
+  ],
+  "NRestarts": 1,
+  "ownedOriginalPidIdentitiesGone": 99,
+  "commandEvents": 92,
+  "resetFailedCommands": 0,
+  "sampledOwnedPeakRssBytes": 81170432,
+  "minimumFreeBytes": {
+    "/home/runner/work/stockinsider/stockinsider": 92072235008,
+    "/tmp": 92072235008
+  },
+  "RootExecutedNative": false,
+  "productionChanged": false,
+  "reboot": "NOT_RUN"
+}

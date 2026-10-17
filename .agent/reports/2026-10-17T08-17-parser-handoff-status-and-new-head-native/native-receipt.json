@@ -1,0 +1,1290 @@
+{
+  "cases": [
+    {
+      "before": {
+        "directoryInode": 1480,
+        "fdTarget": "socket:[14942]",
+        "gid": 1001,
+        "listenerPid": 2237,
+        "listenerStartTicks": 3940,
+        "mode": 448,
+        "pathInode": 1484,
+        "roundtrip": true,
+        "uid": 1001
+      },
+      "case": "default-no-explicit-stop",
+      "expectedBaselineRed": {
+        "errno": 2,
+        "error": "[Errno 2] No such file or directory"
+      },
+      "listenerAfter": {
+        "fdTarget": "socket:[14942]",
+        "listenerPid": 2237,
+        "listenerStartTicks": 3940
+      },
+      "pathAbsent": true,
+      "status": "PASS"
+    },
+    {
+      "afterStart": {
+        "directoryInode": 1532,
+        "fdTarget": "socket:[17006]",
+        "gid": 1001,
+        "listenerPid": 2320,
+        "listenerStartTicks": 4009,
+        "mode": 448,
+        "pathInode": 1536,
+        "roundtrip": true,
+        "uid": 1001
+      },
+      "case": "yes-explicit-stop-start",
+      "newWebPid": 2338,
+      "oldWebPid": 2317,
+      "status": "PASS",
+      "stopped": {
+        "directoryInode": 1532,
+        "fdTarget": "socket:[17006]",
+        "gid": 1001,
+        "listenerPid": 2320,
+        "listenerStartTicks": 4009,
+        "mode": 448,
+        "pathInode": 1536,
+        "roundtrip": true,
+        "uid": 1001
+      }
+    },
+    {
+      "after": {
+        "directoryInode": 1532,
+        "fdTarget": "socket:[17006]",
+        "gid": 1001,
+        "listenerPid": 2320,
+        "listenerStartTicks": 4009,
+        "mode": 448,
+        "pathInode": 1536,
+        "roundtrip": true,
+        "uid": 1001
+      },
+      "case": "yes-manual-restart",
+      "newWebPid": 2346,
+      "oldWebPid": 2338,
+      "status": "PASS"
+    },
+    {
+      "after": {
+        "directoryInode": 1532,
+        "fdTarget": "socket:[17006]",
+        "gid": 1001,
+        "listenerPid": 2320,
+        "listenerStartTicks": 4009,
+        "mode": 448,
+        "pathInode": 1536,
+        "roundtrip": true,
+        "uid": 1001
+      },
+      "case": "yes-automatic-restart",
+      "oldWebPid": 2346,
+      "restartObservation": {
+        "ControlGroup": "/system.slice/si-rt-62751160550f487597b261a90fa1d92f-preserved-web.service",
+        "NRestarts": 1,
+        "pid": 2432
+      },
+      "status": "PASS"
+    }
+  ],
+  "cleanup": {
+    "confirmed": true,
+    "errors": [],
+    "observations": [
+      {
+        "state": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "/run/systemd/system/si-rt-62751160550f487597b261a90fa1d92f-preserved-listener.service",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-preserved-listener.service",
+          "LoadState": "loaded",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "no",
+          "RuntimeDirectory": "",
+          "RuntimeDirectoryMode": "0755",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0077"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-preserved-listener.service"
+      },
+      {
+        "state": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "/run/systemd/system/si-rt-62751160550f487597b261a90fa1d92f-preserved-web.service",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-preserved-web.service",
+          "LoadState": "loaded",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "on-failure",
+          "RuntimeDirectory": "si-rt-62751160550f487597b261a90fa1d92f-preserved",
+          "RuntimeDirectoryMode": "0750",
+          "RuntimeDirectoryPreserve": "yes",
+          "SubState": "dead",
+          "UMask": "0077"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-preserved-web.service"
+      },
+      {
+        "state": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "/run/systemd/system/si-rt-62751160550f487597b261a90fa1d92f-default-listener.service",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-default-listener.service",
+          "LoadState": "loaded",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "no",
+          "RuntimeDirectory": "",
+          "RuntimeDirectoryMode": "0755",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0077"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-default-listener.service"
+      },
+      {
+        "state": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "/run/systemd/system/si-rt-62751160550f487597b261a90fa1d92f-default-web.service",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-default-web.service",
+          "LoadState": "loaded",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "on-failure",
+          "RuntimeDirectory": "si-rt-62751160550f487597b261a90fa1d92f-default",
+          "RuntimeDirectoryMode": "0750",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0077"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-default-web.service"
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3897,
+        "pid": 2164
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3899,
+        "pid": 2165
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3901,
+        "pid": 2167
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3905,
+        "pid": 2170
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3907,
+        "pid": 2172
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3909,
+        "pid": 2174
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3933,
+        "pid": 2232
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3939,
+        "pid": 2235
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3954,
+        "pid": 2238
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3934,
+        "pid": 2234
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3957,
+        "pid": 2240
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3940,
+        "pid": 2237
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3962,
+        "pid": 2242
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3965,
+        "pid": 2244
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3968,
+        "pid": 2246
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3971,
+        "pid": 2249
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3975,
+        "pid": 2251
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3978,
+        "pid": 2253
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 3980,
+        "pid": 2255
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4004,
+        "pid": 2315
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4008,
+        "pid": 2318
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4024,
+        "pid": 2321
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4005,
+        "pid": 2317
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4027,
+        "pid": 2323
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4009,
+        "pid": 2320
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4030,
+        "pid": 2325
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4033,
+        "pid": 2327
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4036,
+        "pid": 2329
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4039,
+        "pid": 2331
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4042,
+        "pid": 2334
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4045,
+        "pid": 2336
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4048,
+        "pid": 2339
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4046,
+        "pid": 2338
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4055,
+        "pid": 2341
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4057,
+        "pid": 2343
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4061,
+        "pid": 2347
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4058,
+        "pid": 2346
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4067,
+        "pid": 2349
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4071,
+        "pid": 2351
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4084,
+        "pid": 2354
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4097,
+        "pid": 2356
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4112,
+        "pid": 2358
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4125,
+        "pid": 2361
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4139,
+        "pid": 2366
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4152,
+        "pid": 2368
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4166,
+        "pid": 2370
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4179,
+        "pid": 2372
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4193,
+        "pid": 2374
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4206,
+        "pid": 2376
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4219,
+        "pid": 2378
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4233,
+        "pid": 2380
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4246,
+        "pid": 2382
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4260,
+        "pid": 2384
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4273,
+        "pid": 2386
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4289,
+        "pid": 2388
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4302,
+        "pid": 2390
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4316,
+        "pid": 2392
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4329,
+        "pid": 2394
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4345,
+        "pid": 2396
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4359,
+        "pid": 2398
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4372,
+        "pid": 2400
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4386,
+        "pid": 2402
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4401,
+        "pid": 2404
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4414,
+        "pid": 2406
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4428,
+        "pid": 2408
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4441,
+        "pid": 2410
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4456,
+        "pid": 2412
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4469,
+        "pid": 2414
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4483,
+        "pid": 2416
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4496,
+        "pid": 2418
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4510,
+        "pid": 2420
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4524,
+        "pid": 2422
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4537,
+        "pid": 2424
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4551,
+        "pid": 2426
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4564,
+        "pid": 2428
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4578,
+        "pid": 2430
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4579,
+        "pid": 2432
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4581,
+        "pid": 2433
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4583,
+        "pid": 2436
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4584,
+        "pid": 2438
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4586,
+        "pid": 2441
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4587,
+        "pid": 2443
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4588,
+        "pid": 2446
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4590,
+        "pid": 2448
+      },
+      {
+        "originalIdentityGone": true,
+        "originalStartTicks": 4591,
+        "pid": 2450
+      },
+      {
+        "postRemovalState": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-default-web.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "no",
+          "RuntimeDirectory": "",
+          "RuntimeDirectoryMode": "0755",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0022"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-default-web.service"
+      },
+      {
+        "postRemovalState": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-default-listener.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "no",
+          "RuntimeDirectory": "",
+          "RuntimeDirectoryMode": "0755",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0022"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-default-listener.service"
+      },
+      {
+        "postRemovalState": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-preserved-web.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "no",
+          "RuntimeDirectory": "",
+          "RuntimeDirectoryMode": "0755",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0022"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-preserved-web.service"
+      },
+      {
+        "postRemovalState": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-preserved-listener.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "no",
+          "RuntimeDirectory": "",
+          "RuntimeDirectoryMode": "0755",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0022"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-preserved-listener.service"
+      }
+    ],
+    "retainedCoordinationLock": "/home/runner/work/_temp/parser-runtime-lifecycle.lock",
+    "retainedEvidenceDirectory": "/home/runner/work/_temp/parser-runtime-lifecycle-evidence",
+    "runtimeAndUnitPathsAbsent": true
+  },
+  "evidenceInventory": [
+    {
+      "bytes": 85276,
+      "name": "events.json",
+      "sha256": "8ba310fe39d2e12125892aeba62481407e718f29a1cbecbd37749de2c5b67f18"
+    },
+    {
+      "bytes": 3055,
+      "name": "fixture-units.json",
+      "sha256": "622d8d5dc1da651e6d912d079667db5928ea88e3c7b3569ffb453fe61176a1ec"
+    },
+    {
+      "bytes": 905,
+      "name": "source-pins.json",
+      "sha256": "6e2be7207ebf7e24e100e024491ad391f0d141d454572d324acfcda43f5abd55"
+    }
+  ],
+  "harnessSha256": "c4fb16bf02b0d65c234de84923a77713883c02f73fcb560b542b5d72adea8ba6",
+  "inputSeal": "source-pins.json",
+  "minimumFreeBytes": {
+    "/home/runner/work/stockinsider/stockinsider": 92072235008,
+    "/tmp": 92072235008
+  },
+  "nativeAssertionsOnlyInRun": true,
+  "postrun": {
+    "confirmed": true,
+    "mutations": 0,
+    "observations": [
+      {
+        "state": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-default-web.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "no",
+          "RuntimeDirectory": "",
+          "RuntimeDirectoryMode": "0755",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0022"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-default-web.service",
+        "unitPathAbsent": true
+      },
+      {
+        "state": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-default-listener.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "no",
+          "RuntimeDirectory": "",
+          "RuntimeDirectoryMode": "0755",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0022"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-default-listener.service",
+        "unitPathAbsent": true
+      },
+      {
+        "state": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-preserved-web.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "no",
+          "RuntimeDirectory": "",
+          "RuntimeDirectoryMode": "0755",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0022"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-preserved-web.service",
+        "unitPathAbsent": true
+      },
+      {
+        "state": {
+          "ActiveState": "inactive",
+          "ControlGroup": "",
+          "FragmentPath": "",
+          "Id": "si-rt-62751160550f487597b261a90fa1d92f-preserved-listener.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Restart": "no",
+          "RuntimeDirectory": "",
+          "RuntimeDirectoryMode": "0755",
+          "RuntimeDirectoryPreserve": "no",
+          "SubState": "dead",
+          "UMask": "0022"
+        },
+        "unit": "si-rt-62751160550f487597b261a90fa1d92f-preserved-listener.service",
+        "unitPathAbsent": true
+      },
+      {
+        "absent": true,
+        "runtimePath": "/run/si-rt-62751160550f487597b261a90fa1d92f-default"
+      },
+      {
+        "absent": true,
+        "runtimePath": "/run/si-rt-62751160550f487597b261a90fa1d92f-preserved"
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2164
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2165
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2167
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2170
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2172
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2174
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2232
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2235
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2238
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2234
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2240
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2237
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2242
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2244
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2246
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2249
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2251
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2253
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2255
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2315
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2318
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2321
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2317
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2323
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2320
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2325
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2327
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2329
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2331
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2334
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2336
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2339
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2338
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2341
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2343
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2347
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2346
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2349
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2351
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2354
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2356
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2358
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2361
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2366
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2368
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2370
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2372
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2374
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2376
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2378
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2380
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2382
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2384
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2386
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2388
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2390
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2392
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2394
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2396
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2398
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2400
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2402
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2404
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2406
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2408
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2410
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2412
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2414
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2416
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2418
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2420
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2422
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2424
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2426
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2428
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2430
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2432
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2433
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2436
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2438
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2441
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2443
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2446
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2448
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2450
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2452
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2454
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2456
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2458
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2460
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2462
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2520
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2522
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2524
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2526
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2528
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2530
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2532
+      },
+      {
+        "current": null,
+        "originalIdentityGone": true,
+        "pid": 2534
+      }
+    ]
+  },
+  "reboot": "NOT_RUN",
+  "resourceViolation": null,
+  "sampleIntervalSeconds": 0.1,
+  "sampledOwnedPeakRssBytes": 81170432,
+  "scope": "isolated shared runtime lifecycle only, not production unit execution/history causality",
+  "status": "PASS",
+  "unitSha256": "7a948b2732c02595fe5100bb10206e99c58401c4f8921a7230fa66da373397a5",
+  "workflowSha256": "133883a2f229b87408b19070f1adec07c1386640a201a7d668820e4a4437402c"
+}

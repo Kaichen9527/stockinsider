@@ -1,0 +1,25 @@
+{
+  "observedAtUtc": "2026-10-17T00:11:21.153962+00:00",
+  "source": "32ab771736fc18535ccd08113836c850aabb2bd0",
+  "parent": "ebe313c41c8ac51eaf1ccc2c86e97598b6ae818f",
+  "tree": "561c4d8c34df35883cd780c47b6afbdd579a9cda",
+  "changedPaths": [
+    "docs/operations/2026-10-17/parser-runtime-lifecycle-release/HANDOFF.md"
+  ],
+  "priorBytes": 2356,
+  "newBytes": 6268,
+  "newSha256": "109004c13329e5a64dfffcda0a6e2080a379ba6b1395820341b9525ff0557c34",
+  "originalAssemblyBytesPreserved": true,
+  "otherEntryIdentitiesUnchanged": 2207,
+  "allOtherContentsReread": false,
+  "sourceDiffCheck": "PASS",
+  "sourceCodeFindings": {
+    "p0": 0,
+    "p1": 0,
+    "p2": 0
+  },
+  "newSubjectTests": "NOT_RUN",
+  "published": false,
+  "initialLocalTimestampWIP": "ebe313c41c8ac51eaf1ccc2c86e97598b6ae818f",
+  "initialWIPRetained": true
+}

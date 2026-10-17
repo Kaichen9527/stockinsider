@@ -1,0 +1,26 @@
+{
+  "si-rt-62751160550f487597b261a90fa1d92f-default-listener.service": {
+    "dest": "/run/systemd/system/si-rt-62751160550f487597b261a90fa1d92f-default-listener.service",
+    "installed": true,
+    "sha256": "5592a62936d4f5eaaff61b1492821a85695451c78d90ad60c8ea304ccbcba7f9",
+    "text": "[Unit]\nDescription=Owned parser runtime lifecycle fixture\n[Service]\nType=simple\nUser=1001\nGroup=1001\nUMask=0077\nTimeoutStopSec=5\nKillMode=control-group\nExecStart=/usr/bin/python3 /home/runner/work/stockinsider/stockinsider/scripts/parser-runtime-directory-lifecycle.py --listener /run/si-rt-62751160550f487597b261a90fa1d92f-default/parser.sock --ready /home/runner/work/_temp/parser-runtime-lifecycle-evidence/default-listener-ready.json\nRestart=no\n"
+  },
+  "si-rt-62751160550f487597b261a90fa1d92f-default-web.service": {
+    "dest": "/run/systemd/system/si-rt-62751160550f487597b261a90fa1d92f-default-web.service",
+    "installed": true,
+    "sha256": "185f417734efc2040688fd63096ebb738a10358c3462330372ff93b0701f2159",
+    "text": "[Unit]\nDescription=Owned parser runtime lifecycle fixture\n[Service]\nType=simple\nUser=1001\nGroup=1001\nUMask=0077\nTimeoutStopSec=5\nKillMode=control-group\nExecStart=/usr/bin/python3 /home/runner/work/stockinsider/stockinsider/scripts/parser-runtime-directory-lifecycle.py --web /run/si-rt-62751160550f487597b261a90fa1d92f-default\nRuntimeDirectory=si-rt-62751160550f487597b261a90fa1d92f-default\nRuntimeDirectoryMode=0750\nRestart=on-failure\nRestartSec=5\n"
+  },
+  "si-rt-62751160550f487597b261a90fa1d92f-preserved-listener.service": {
+    "dest": "/run/systemd/system/si-rt-62751160550f487597b261a90fa1d92f-preserved-listener.service",
+    "installed": true,
+    "sha256": "f8d958f1a5df52d21244277c7d8a6e80a0881376ab681845949407615ab3640b",
+    "text": "[Unit]\nDescription=Owned parser runtime lifecycle fixture\n[Service]\nType=simple\nUser=1001\nGroup=1001\nUMask=0077\nTimeoutStopSec=5\nKillMode=control-group\nExecStart=/usr/bin/python3 /home/runner/work/stockinsider/stockinsider/scripts/parser-runtime-directory-lifecycle.py --listener /run/si-rt-62751160550f487597b261a90fa1d92f-preserved/parser.sock --ready /home/runner/work/_temp/parser-runtime-lifecycle-evidence/preserved-listener-ready.json\nRestart=no\n"
+  },
+  "si-rt-62751160550f487597b261a90fa1d92f-preserved-web.service": {
+    "dest": "/run/systemd/system/si-rt-62751160550f487597b261a90fa1d92f-preserved-web.service",
+    "installed": true,
+    "sha256": "113758b823115e048cc76607c86a2db9cb27f7e6d7c04fbfe7b2cd0e5681d0fe",
+    "text": "[Unit]\nDescription=Owned parser runtime lifecycle fixture\n[Service]\nType=simple\nUser=1001\nGroup=1001\nUMask=0077\nTimeoutStopSec=5\nKillMode=control-group\nExecStart=/usr/bin/python3 /home/runner/work/stockinsider/stockinsider/scripts/parser-runtime-directory-lifecycle.py --web /run/si-rt-62751160550f487597b261a90fa1d92f-preserved\nRuntimeDirectory=si-rt-62751160550f487597b261a90fa1d92f-preserved\nRuntimeDirectoryMode=0750\nRestart=on-failure\nRestartSec=5\nRuntimeDirectoryPreserve=yes\n"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "schema": "stockinsider-root-public-safe-receipt-v1",
+  "observedAtUtc": "2026-10-17T00:17:45.597165+00:00",
+  "source": "32ab771736fc18535ccd08113836c850aabb2bd0",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "files": [
+    {
+      "path": "HANDOFF-final.md",
+      "bytes": 6268,
+      "sha256": "109004c13329e5a64dfffcda0a6e2080a379ba6b1395820341b9525ff0557c34"
+    },
+    {
+      "path": "REVIEW.md",
+      "bytes": 6411,
+      "sha256": "0ef78cfd1a544e8233693163ca84ed87243223d6debbcdc1b6a566ef03a762ff"
+    },
+    {
+      "path": "first-head-runs.json",
+      "bytes": 65136,
+      "sha256": "3d79376d9ec31c36fa51a61d67404e7e4fe974aac6055883be1cb701d62a7fae"
+    },
+    {
+      "path": "handoff-final.diff.base64",
+      "bytes": 5889,
+      "sha256": "87ef3ab8d589cd081b65170ac62d53d23b2217986dfe36fceb4351d3f6fe7ed8"
+    },
+    {
+      "path": "handoff.diff.base64",
+      "bytes": 5857,
+      "sha256": "a4f9ff03f5c41603a944af9a4263a428e6c07fdbeff2ddcd729c22bb16f2ee74"
+    },
+    {
+      "path": "head-runs-second.json",
+      "bytes": 64959,
+      "sha256": "dbed4613096a6438257fd4bdacfac65862a8c4fa730c5dd40cb94b0004dd8886"
+    },
+    {
+      "path": "native-events.json",
+      "bytes": 85276,
+      "sha256": "8ba310fe39d2e12125892aeba62481407e718f29a1cbecbd37749de2c5b67f18"
+    },
+    {
+      "path": "native-fixture-units.json",
+      "bytes": 3055,
+      "sha256": "622d8d5dc1da651e6d912d079667db5928ea88e3c7b3569ffb453fe61176a1ec"
+    },
+    {
+      "path": "native-receipt.json",
+      "bytes": 31233,
+      "sha256": "0a5e8892a44906190d6e11946afb57fb370c01d3e38de25ac0566133e603c554"
+    },
+    {
+      "path": "native-source-pins.json",
+      "bytes": 905,
+      "sha256": "6e2be7207ebf7e24e100e024491ad391f0d141d454572d324acfcda43f5abd55"
+    },
+    {
+      "path": "new-native-api.json",
+      "bytes": 19714,
+      "sha256": "e785ef0f4c363d884f984d22bafa60860866f1bf806edfa85a3236acd67929e3"
+    },
+    {
+      "path": "new-native.zip",
+      "bytes": 9772,
+      "sha256": "b51476c75cff4ce392156b18ed8ee09c42f8e9bfcf46d443c0be0693c30acd5a"
+    },
+    {
+      "path": "old-review-grammar-control-after-ref-fetch.json",
+      "bytes": 619,
+      "sha256": "10fa4f7f0d897dcb6aa1f92340fcc85c063c5f79dbc9fd21abe56651313091ed"
+    },
+    {
+      "path": "old-review-grammar-control.json",
+      "bytes": 1027,
+      "sha256": "e442024cbc02777ec740e0354a5a2f4dd44e75b8f9d0edcdd67f623fc832d2ce"
+    },
+    {
+      "path": "ordinary-latest.json",
+      "bytes": 22743,
+      "sha256": "09ab9041052cf74a0b64ac30655768248c2fa77df059c5c1da0d1a0a1ced0370"
+    },
+    {
+      "path": "ordinary-observation-fourth.json",
+      "bytes": 15263,
+      "sha256": "1e6b7a84a98b8d6f5554a599170538399e1ea3af283d6b9fb67f26933b588c9a"
+    },
+    {
+      "path": "ordinary-observation-third.json",
+      "bytes": 15263,
+      "sha256": "0c9a0cf3edc41f74408da5c9d7bc8e15fe7757ecce4c4651a0e0cc7a6f6e5cc5"
+    },
+    {
+      "path": "prepublish-review-grammar.mjs",
+      "bytes": 2897,
+      "sha256": "3cfad1a7fc85149fbb00ca31011133affd1cea167db370aeb1ce8c8b824cb7af"
+    },
+    {
+      "path": "protected-initial-new-head-review.json",
+      "bytes": 22498,
+      "sha256": "087244581a1f832293ad5c4c95be57b5bd8cc0e386dcbb931e272cc9b7f5d744"
+    },
+    {
+      "path": "protected-initial-new-head.log.base64",
+      "bytes": 1231221,
+      "sha256": "d6bef489e195a6a056881b31ad6bcf2f589c82e9e698fc9f534d2a1db44e5fc6"
+    },
+    {
+      "path": "root-native-byte-review.json",
+      "bytes": 1122,
+      "sha256": "9429615f55311854124d354228b6e69b73de1afa94b9974348b174fd3f6ca304"
+    },
+    {
+      "path": "source-final-review.json",
+      "bytes": 825,
+      "sha256": "9d6d957d30203869660ba45a95a0db7064f4c482662ee2aa682443461605dfa3"
+    },
+    {
+      "path": "source-push-audit.json",
+      "bytes": 532,
+      "sha256": "09fee34b295efe15d560505e190ab36e14c5cdf225da0a49684d5e5549b4fdbe"
+    },
+    {
+      "path": "source-review.json",
+      "bytes": 721,
+      "sha256": "d895069247c614b8e36a7c87ac8d5c628b578d70e53b070699ed0e06c0b34d10"
+    },
+    {
+      "path": "tooling-red-and-scope.txt",
+      "bytes": 1168,
+      "sha256": "d127b146446f5524e3e3ca5795b8a18d2867199ea54671dc0e325393bced6a3f"
+    }
+  ],
+  "fileCount": 25,
+  "totalBytes": 1620374,
+  "oldReviewRefUnchanged": true,
+  "currentCanonical": "NOT_RUN",
+  "currentOrdinary": "IN_PROGRESS",
+  "protectedInitial": "FAILURE",
+  "newReview": "NOT_CREATED",
+  "ready": false,
+  "merged": false,
+  "productionChanged": false,
+  "fullGoalComplete": false
+}
