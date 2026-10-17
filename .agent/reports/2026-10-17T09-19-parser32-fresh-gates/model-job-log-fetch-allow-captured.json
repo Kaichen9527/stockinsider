@@ -1,0 +1,11 @@
+{
+  "args": [
+    "gh",
+    "api",
+    "repos/Kaichen9527/stockinsider/actions/jobs/117272119048/logs",
+    "--allow-escape-sequences"
+  ],
+  "exitCode": 0,
+  "stderr": "",
+  "stdoutCapturedOnlyNoTerminalRender": true
+}

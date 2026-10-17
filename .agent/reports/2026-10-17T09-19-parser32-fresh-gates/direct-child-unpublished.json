@@ -1,0 +1,18 @@
+{
+  "source": "32ab771736fc18535ccd08113836c850aabb2bd0",
+  "tree": "561c4d8c34df35883cd780c47b6afbdd579a9cda",
+  "directChild": "1166b53d1d18c8840ece0aa567d5ddbbba52ee44",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "reviewSha256": "8556b19e4fcd45e4a5a96e7b6746fe592423d9b449bc1c2d3f49c748ea5bf47d",
+  "attestationSha256": "0e73b7d6b33c9fb59a99cf76abdeebda86ff78c445ff8c076d5b587db9ee14b5",
+  "PCRrecordSha256": "65f9dd4a348762e4c8b6cf8d9facf544132da4db14a8cbfb89451c287390f45d",
+  "PCRfileSha256": "b076d198fc806023b220105221c3b52b40d21a8506c77d5b213bec28d6e06a9a",
+  "reviewedAt": "2026-10-17T01:21:53Z",
+  "evidenceOnlyPaths": [
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json"
+  ],
+  "published": false,
+  "productionApproved": false
+}

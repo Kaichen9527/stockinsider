@@ -1,0 +1,42 @@
+[
+  {
+    "line": 206,
+    "text": "2026-10-17T01:24:29.3299060Z protected external gate worker failed: sandboxed /usr/local/bin/node scripts/run-node22.js --test scripts/model-runner-v3/model-runner-v3.test.js failed:"
+  },
+  {
+    "line": 265,
+    "text": "2026-10-17T01:24:29.3315110Z not ok 12 - host pin fixture has an exact hash-bound format"
+  },
+  {
+    "line": 270,
+    "text": "2026-10-17T01:24:29.3316480Z   error: 'routing or host preflight blocked'"
+  },
+  {
+    "line": 300,
+    "text": "2026-10-17T01:24:29.3335260Z not ok 16 - actual pinned Codex version accepts prepared private host siblings without credentials"
+  },
+  {
+    "line": 305,
+    "text": "2026-10-17T01:24:29.3336720Z   error: |-"
+  },
+  {
+    "line": 314,
+    "text": "2026-10-17T01:24:29.3338080Z   name: 'AssertionError'"
+  },
+  {
+    "line": 324,
+    "text": "2026-10-17T01:24:29.3341260Z not ok 17 - disabled doctor accepts only the exact successor and rejects historical selectors"
+  },
+  {
+    "line": 329,
+    "text": "2026-10-17T01:24:29.3342970Z   error: |-"
+  },
+  {
+    "line": 335,
+    "text": "2026-10-17T01:24:29.3343760Z   name: 'AssertionError'"
+  },
+  {
+    "line": 833,
+    "text": "2026-10-17T01:24:29.3465510Z ##[error]Process completed with exit code 1."
+  }
+]

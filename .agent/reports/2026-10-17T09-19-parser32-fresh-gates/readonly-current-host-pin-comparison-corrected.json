@@ -1,0 +1,123 @@
+{
+  "observedAtUtc": "2026-10-17T01:29:07.089090+00:00",
+  "fixtureVersion": "model-runner-host-pins-v3.25",
+  "fixtureSha256": "b19d8dbfd1649c355f675974f7354c6a7403080a0e91f9b1020bfd185588b816",
+  "executables": [
+    {
+      "name": "codex",
+      "path": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "expectedRealpath": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "actualRealpath": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "expectedStat": {
+        "device": "16777231",
+        "gid": 20,
+        "inode": "211775622",
+        "mode": "100755",
+        "size": "246046384",
+        "uid": 501
+      },
+      "actualStat": {
+        "device": "16777231",
+        "inode": "220215341",
+        "size": "249954368",
+        "uid": 501,
+        "gid": 20,
+        "mode": "100755"
+      },
+      "statDifferences": [
+        "inode",
+        "size"
+      ],
+      "expectedSha256": "0d5ac7aae20c4eda6242428d5e218c55ba96d8763fda2a271088ff37104b9d28",
+      "actualSha256": "1afb28c01d7d49e892bd75f11076b10f1451e34e0ee308a95e5ab7f69f9c84fe",
+      "expectedVersion": "codex-cli 0.162.0-alpha.17.2",
+      "RootVersionExecution": "NOT_RUN",
+      "stableFdAndPath": true
+    },
+    {
+      "name": "git",
+      "path": "/usr/bin/git",
+      "expectedRealpath": "/usr/bin/git",
+      "actualRealpath": "/usr/bin/git",
+      "expectedStat": {
+        "device": "16777231",
+        "gid": 0,
+        "inode": "1152921500312571562",
+        "mode": "100755",
+        "size": "118640",
+        "uid": 0
+      },
+      "actualStat": {
+        "device": "16777231",
+        "inode": "1152921500312571562",
+        "size": "118640",
+        "uid": 0,
+        "gid": 0,
+        "mode": "100755"
+      },
+      "statDifferences": [],
+      "expectedSha256": "b8763cf250e607a778bb4603cecb5b90338814d0a3dfcba0d57b1de242f610e9",
+      "actualSha256": "b8763cf250e607a778bb4603cecb5b90338814d0a3dfcba0d57b1de242f610e9",
+      "expectedVersion": "git version 2.50.1 (Apple Git-155)",
+      "RootVersionExecution": "NOT_RUN",
+      "stableFdAndPath": true
+    },
+    {
+      "name": "node",
+      "path": "/usr/local/bin/node",
+      "expectedRealpath": "/usr/local/bin/node",
+      "actualRealpath": "/usr/local/bin/node",
+      "expectedStat": {
+        "device": "16777231",
+        "gid": 0,
+        "inode": "1802834",
+        "mode": "100755",
+        "size": "220243216",
+        "uid": 0
+      },
+      "actualStat": {
+        "device": "16777231",
+        "inode": "1802834",
+        "size": "220243216",
+        "uid": 0,
+        "gid": 0,
+        "mode": "100755"
+      },
+      "statDifferences": [],
+      "expectedSha256": "c583851fc85e4618b2374cda13399d59d373ad7cebfc4b55160820b88dcce67b",
+      "actualSha256": "c583851fc85e4618b2374cda13399d59d373ad7cebfc4b55160820b88dcce67b",
+      "expectedVersion": "v22.14.0",
+      "RootVersionExecution": "NOT_RUN",
+      "stableFdAndPath": true
+    }
+  ],
+  "bundle": {
+    "path": "/Applications/ChatGPT.app",
+    "expectedStat": {
+      "device": "16777231",
+      "gid": 80,
+      "inode": "211775579",
+      "mode": "040755",
+      "size": "96",
+      "uid": 501
+    },
+    "actualStat": {
+      "device": "16777231",
+      "inode": "220215298",
+      "size": "96",
+      "uid": 501,
+      "gid": 80,
+      "mode": "040755"
+    },
+    "statDifferences": [
+      "inode"
+    ]
+  },
+  "RootExecutedCodexOrVersion": false,
+  "pinsChanged": false,
+  "AppChangedByRoot": false,
+  "sourceChanged": false,
+  "authOrCredentialRead": false,
+  "causeScope": "Current host metadata/content differs from retained pins; CI separately observed actual Codex version mismatch. No update actor or cause inferred; no new pin approved.",
+  "modeEncodingCorrection": "Match original hostPreflight modeString full st_mode incl file kind; initial Root permission-only formatting falsely flagged mode on git/node/bundle. Original initial comparison retained. No host chmod or product source edit."
+}

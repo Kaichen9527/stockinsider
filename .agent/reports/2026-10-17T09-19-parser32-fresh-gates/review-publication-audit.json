@@ -1,0 +1,14 @@
+{
+  "args": [
+    "git",
+    "push",
+    "origin",
+    "1166b53d1d18c8840ece0aa567d5ddbbba52ee44:refs/heads/evidence/source-led-opportunity-v3-exact-review-32ab771736fc18535ccd08113836c850aabb2bd0"
+  ],
+  "completedAtUtc": "2026-10-17T01:22:52.882593+00:00",
+  "remoteRefAbsent": true,
+  "refs": "32ab771736fc18535ccd08113836c850aabb2bd0\trefs/heads/codex/parser-runtime-lifecycle-normal-pr-oct17\nf2dfeaf6443cac55a70755d293536f82e6f8f941\trefs/heads/evidence/source-led-opportunity-v3-exact-review-939d6438d157114c6ef33b9d99362156c36624f1\n93e44475cbb0c27beb26e4dcb68e382096a4e212\trefs/heads/main\n",
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "remote: \nremote: Create a pull request for 'evidence/source-led-opportunity-v3-exact-review-32ab771736fc18535ccd08113836c850aabb2bd0' on GitHub by visiting:        \nremote:      https://github.com/Kaichen9527/stockinsider/pull/new/evidence/source-led-opportunity-v3-exact-review-32ab771736fc18535ccd08113836c850aabb2bd0        \nremote: \nTo github.com:Kaichen9527/stockinsider.git\n * [new branch]        1166b53d1d18c8840ece0aa567d5ddbbba52ee44 -> evidence/source-led-opportunity-v3-exact-review-32ab771736fc18535ccd08113836c850aabb2bd0\n"
+}

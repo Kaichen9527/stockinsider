@@ -1,0 +1,9 @@
+{
+  "args": [
+    "gh",
+    "api",
+    "repos/Kaichen9527/stockinsider/actions/jobs/117272119048/logs"
+  ],
+  "exitCode": 1,
+  "stderr": "the response contains terminal escape sequences; pass --allow-escape-sequences to output it anyway\n"
+}

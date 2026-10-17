@@ -1,0 +1,18 @@
+{
+  "artifactId": 11904225538,
+  "upstreamRunId": 38580440366,
+  "zipSha256": "c3006c864a95d8cebb022d32d848baccec7ba99cfe95b9a1a6f446e7e002caed",
+  "tarSha256": "398e71768ea0e7a5935282432c0edfcb2f47c953712b715562def95c3745add4",
+  "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+  "sourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+  "directChildEvidence": "c2b146adb6d03814f2bd9a7af72baf003bb48812",
+  "upstreamBuilderSubject": "c3995978bf9bb5dff5913fc709d9d30f674e55f2",
+  "currentBuilderSubject": "32ab771736fc18535ccd08113836c850aabb2bd0",
+  "currentRunId": "38989933942",
+  "upstreamTestsAttributedToCurrentBuilder": false,
+  "applicationRebuilt": false,
+  "safeTarMembers": 3101,
+  "fullOriginalVerifierReceipt": "reuse-full-verification.json",
+  "productionReadinessProven": false,
+  "deploymentPerformed": false
+}

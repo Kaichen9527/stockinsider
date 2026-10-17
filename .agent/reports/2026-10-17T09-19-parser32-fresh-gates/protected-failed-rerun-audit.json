@@ -1,0 +1,18 @@
+{
+  "args": [
+    "gh",
+    "run",
+    "rerun",
+    "38985234489",
+    "--repo",
+    "Kaichen9527/stockinsider",
+    "--failed"
+  ],
+  "source": "32ab771736fc18535ccd08113836c850aabb2bd0",
+  "evidence": "1166b53d1d18c8840ece0aa567d5ddbbba52ee44",
+  "startedAtUtc": "2026-10-17T01:23:18.543139+00:00",
+  "completedAtUtc": "2026-10-17T01:23:19.927216+00:00",
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": ""
+}
