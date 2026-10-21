@@ -1,0 +1,44 @@
+{
+  "observedAtUtc": "2026-10-21T23:43:13.870715+00:00",
+  "environmentId": "ccarenv_b64_Y2NhcmVudl84NzYxZDNhYjY0MDQ4MTkxYjYxNDFmMzAwN2FjNzQ3Yw",
+  "environmentDisplayName": "StockInsider Codex VM (user supplied name; platform returned ID only)",
+  "provider": "cloud",
+  "startupPolicyVersion": 1,
+  "startupPolicySha256": "e1589d6b2ac0d196c1fa791aa3214989e85ac7fe5bb28a74d7f12ca14c45a305",
+  "tcpAllowedDomains": [],
+  "tcpAllowedIPRanges": [],
+  "vpnConfigured": false,
+  "vpnClientInstalled": false,
+  "preexistingForwardBindingObserved": false,
+  "forwardObservationLimit": "No platform forward management/read API exposed, no VPN/forward variable names present; no universal absence claim",
+  "requestedGrant": {
+    "host": "5.104.83.211",
+    "port": 22
+  },
+  "remoteConnectionAttempted": false,
+  "credential": {
+    "existingMemoryAgentOnly": true,
+    "fingerprint": "SHA256:okaAaYWT1dHe4K1VaZkQige6fGObt4t5lpWa8K7sBpY",
+    "expiresAtUtc": "2026-10-22T00:08:18Z",
+    "renewed": false
+  },
+  "toolsChecked": [
+    "cloud_environment_environment_status",
+    "cloud_environment_environment_diagnostics",
+    "cloud_environment_read_environment_diagnostic",
+    "cloud_environment_onboarding_read_environment_config_draft",
+    "cloud_environment_onboarding_update_environment_config_draft"
+  ],
+  "writeSchema": "config.network.allowed_domains accepts hostnames/IPs, expressly no port/path; tool saves HTTP environment draft only; no TCP rule, raw forwarding or publish method exposed",
+  "httpDraftAddedDomains": [
+    "www.twse.com.tw",
+    "www.ptt.cc",
+    "cdn.playwright.dev",
+    "api.github.com"
+  ],
+  "httpDraftRequiresPublish": true,
+  "currentRuntimeHTTPAddedDomainsPresent": false,
+  "tcpStatus": "NOT_AUTHORIZED",
+  "uiVerifiedSteps": "Environment settings can review/save/publish draft (tool contract); TCP UI field/location not observable and not invented",
+  "ownerRequirement": "Owner/platform admin must configure an exact raw TCP route for5.104.83.211:22 through a supported environment control if available; otherwise platform support is required. HTTP-domain draft cannot grant it. Return trusted Console public host key/receipt separately. No all-network rule, new VPN, custom proxy/tunnel, port substitution or policy-file edit."
+}
