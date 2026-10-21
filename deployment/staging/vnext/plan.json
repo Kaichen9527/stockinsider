@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "stockinsider-vnext-isolated-staging-v1",
+  "namespace": "stockinsider-vnext-oct22-staging",
+  "sshAlias": null,
+  "expectedHostName": null,
+  "expectedHostKeySha256": null,
+  "identityMode": "ssh-agent",
+  "service": "stockinsider-vnext-oct22-staging.service",
+  "database": "stockinsider_vnext_oct22_staging",
+  "schema": "public",
+  "queueNamespace": "stockinsider-vnext-oct22-staging",
+  "storage": "/srv/stockinsider-vnext-oct22-staging",
+  "writerRelease": null,
+  "runtimeIdentity": "stockinsider-vnext-oct22-staging",
+  "ports": {
+    "web": 34222,
+    "rest": 34223,
+    "database": 34224
+  },
+  "listenAddress": "127.0.0.1",
+  "fixtureOnly": true,
+  "scheduledJobsEnabled": false,
+  "resourceBudgetBytes": {
+    "diskFloor": 16106127360,
+    "diskWarning": 21474836480,
+    "memoryReserve": 1610612736,
+    "memoryPeak": 1073741824,
+    "wal": 1073741824,
+    "temporary": 536870912,
+    "deployment": 134217728,
+    "growth": 2147483648
+  },
+  "applicationNetworkNamespace": {
+    "required": true,
+    "applicationLoopbackRestPort": 3302,
+    "hostExposedRestPort": 34223,
+    "productionNetworkNamespaceReuse": false
+  }
+}
