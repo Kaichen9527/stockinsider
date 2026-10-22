@@ -31,7 +31,7 @@ function fixture(mode='empty_financial'){
  function load(name:string):Record<string,unknown>{
   if(!allowed.has(name))throw Error(`unexpected_failure_source:${name}`);const prior=cache.get(name);if(prior)return prior;
   const filename=new URL(name,import.meta.url);const compiled=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:name}).outputText;
-  const module={exports:{}};cache.set(name,module.exports);
+  const controllerModule={exports:{}};cache.set(name,controllerModule.exports);
   const require=(dependency:string):unknown=>{
    if(['node:crypto','node:async_hooks'].includes(dependency))return requireNative(dependency);
    if(dependency==='../supabase-server')return {getSupabaseServerClient:()=>client};
@@ -45,7 +45,7 @@ function fixture(mode='empty_financial'){
    if(dependency.startsWith('./'))return load(dependency.slice(2));
    throw Error(`unexpected_failure_dependency:${dependency}`);
   };
-  vm.compileFunction(compiled,['exports','require','module'],{filename:filename.pathname})(module.exports,require,module);return module.exports;
+  vm.compileFunction(compiled,['exports','require','module'],{filename:filename.pathname})(controllerModule.exports,require,controllerModule);return controllerModule.exports;
  }
  return {store:load('store.ts') as unknown as typeof import('./store.ts'),identity,body,calls};
 }
