@@ -8,10 +8,10 @@ ROOT=Path(__file__).resolve().parents[1]
 NODE=Path('/workspace/.tools/node22/node_modules/node/bin/node')
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--snapshots',required=True);parser.add_argument('--output',required=True);parser.add_argument('--suite',choices=['ui','revision','worker','rights'],default='ui');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--snapshots',required=True);parser.add_argument('--output',required=True);parser.add_argument('--suite',choices=['ui','revision','worker','rights','current'],default='ui');args=parser.parse_args()
     output=Path(args.output);snapshots=Path(args.snapshots)
     if not output.is_absolute() or output.exists() or not snapshots.is_absolute():raise SystemExit('fresh_absolute_owned_output_and_snapshot_required')
-    for name in (['home.json','detail.json','home-before.json','detail-before.json'] if args.suite in ['revision','rights'] else ['home.json','detail.json']):
+    for name in (['home.json','detail.json','home-before.json','detail-before.json'] if args.suite in ['revision','rights','current'] else ['home.json','detail.json']):
         p=snapshots/name
         if p.is_symlink() or not p.is_file() or p.stat().st_size>1048576:raise SystemExit('bounded_regular_snapshots_required')
     for p in ['/workspace','/tmp']:
@@ -33,7 +33,7 @@ def main():
     children=[];logs=[];report={'scope':'VM real Chromium / synthetic read-only transport of actual isolated DB snapshots, not real-source or Contabo acceptance',
         'startedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'appSourceSha256':hashlib.sha256((ROOT/'web/src/app/components/vnext/Home.tsx').read_bytes()).hexdigest(),
         'browserVersion':subprocess.run(['/usr/bin/chromium','--version'],capture_output=True,text=True,check=True).stdout.strip(),
-        'launcherSha256':hashlib.sha256(Path('/usr/bin/chromium').read_bytes()).hexdigest(),'suite':args.suite,'snapshotHashes':{name:hashlib.sha256((snapshots/name).read_bytes()).hexdigest() for name in (['home.json','detail.json','home-before.json','detail-before.json'] if args.suite in ['revision','rights'] else ['home.json','detail.json'])}}
+        'launcherSha256':hashlib.sha256(Path('/usr/bin/chromium').read_bytes()).hexdigest(),'suite':args.suite,'snapshotHashes':{name:hashlib.sha256((snapshots/name).read_bytes()).hexdigest() for name in (['home.json','detail.json','home-before.json','detail-before.json'] if args.suite in ['revision','rights','current'] else ['home.json','detail.json'])}}
     def start(name,cmd,cwd):
         log=(output/(name+'.log')).open('wb');logs.append(log);p=subprocess.Popen(cmd,cwd=cwd,env=env,stdout=log,stderr=subprocess.STDOUT);children.append((name,p));return p
     def ready(url,proc,timeout=60):
@@ -53,7 +53,7 @@ def main():
         ready(req,bridge)
         app=start('next',[str(NODE),'node_modules/next/dist/bin/next','start','--hostname','127.0.0.1','--port','34230'],ROOT/'web')
         ready('http://127.0.0.1:34230/',app)
-        command=[str(NODE),'node_modules/@playwright/test/cli.js','test',({'revision':'vnext-revision.spec.ts','worker':'vnext-worker.spec.ts','rights':'vnext-rights.spec.ts'}.get(args.suite,'vnext.spec.ts')),'--config','playwright.vnext.config.ts','--output',str(output/'screenshots-traces')]
+        command=[str(NODE),'node_modules/@playwright/test/cli.js','test',({'revision':'vnext-revision.spec.ts','worker':'vnext-worker.spec.ts','rights':'vnext-rights.spec.ts','current':'vnext-current.spec.ts'}.get(args.suite,'vnext.spec.ts')),'--config','playwright.vnext.config.ts','--output',str(output/'screenshots-traces')]
         log=(output/'test.log').open('wb');logs.append(log)
         completed=subprocess.run(command,cwd=ROOT/'web',env=env,stdout=log,stderr=subprocess.STDOUT,timeout=900);code=completed.returncode
         report.update(testCommand=command,exit=code)
