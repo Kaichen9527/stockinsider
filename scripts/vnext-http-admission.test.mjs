@@ -67,7 +67,7 @@ await test('actual internal HTTP entrypoints share real durable4/20 authority', 
     await admin.query('INSERT INTO public.vnext_sessions_v1(session_date,close_at,completed) VALUES($1,clock_timestamp()-interval\'2 days\',true) ON CONFLICT DO NOTHING', [priorSession]);
 
           await admin.query("INSERT INTO public.vnext_members_v1(symbol,state,input_hash,evidence,admitted_session) SELECT (6000+n)::text,'waiting',repeat('a',64),'{\"syntheticPriorDayFixture\":true}'::jsonb,$1 FROM generate_series(1,16)n", [priorSession]);
-    assert.equal((await admin.query('SELECT identity_fence_enabled FROM public.stockinsider_data_plane_settings_v1 WHERE singleton')).rows[0].identity_fence_enabled,false);
+    const identitySettings=(await admin.query('SELECT * FROM public.stockinsider_data_plane_settings_v1')).rows;assert.deepEqual(identitySettings,[]);assert.equal((await admin.query('SELECT coalesce((SELECT identity_fence_enabled FROM public.stockinsider_data_plane_settings_v1 WHERE singleton),false) AS effective_identity_fence')).rows[0].effective_identity_fence,false);save('backend-identity-profile',{observedRows:identitySettings,effectiveFence:false,scope:'original captured-schema empty settings; original function COALESCE(false), no settings mutation or formal HBA acceptance'});
     await admin.query("INSERT INTO public.production_writer_releases(release_id,writer_kind,active,activated_at) VALUES($1,'vps',true,clock_timestamp())",[releaseId]);
 
     await new Promise(resolve => bridge.listen(34233, '127.0.0.1', resolve));
