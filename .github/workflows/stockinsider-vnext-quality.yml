@@ -54,7 +54,10 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/boundaries.test.ts | tee /tmp/stockinsider-vnext-ci/boundaries.tap
           node --experimental-strip-types web/src/lib/vnext/worker.test.ts | tee /tmp/stockinsider-vnext-ci/worker-source.tap
           node --experimental-strip-types web/src/lib/vnext/analysis-sources.test.ts | tee /tmp/stockinsider-vnext-ci/analysis-source.tap
-          node --experimental-strip-types web/src/lib/vnext/thesis.test.ts web/src/lib/vnext/cached-admission.test.ts web/src/lib/vnext/source-withdrawal.test.ts web/src/lib/vnext/artifact-financial-summary.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-source.tap
+          node --experimental-strip-types web/src/lib/vnext/thesis.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-source.tap
+          node --experimental-strip-types web/src/lib/vnext/cached-admission.test.ts | tee /tmp/stockinsider-vnext-ci/cached-source.tap
+          node --experimental-strip-types web/src/lib/vnext/source-withdrawal.test.ts | tee /tmp/stockinsider-vnext-ci/withdrawal-source.tap
+          node --experimental-strip-types web/src/lib/vnext/artifact-financial-summary.test.ts | tee /tmp/stockinsider-vnext-ci/financial-summary-source.tap
           node scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
           npm --prefix web run typecheck
           npm --prefix web run lint
