@@ -67,3 +67,22 @@ test('loading remains an explicit two-block state and preserves source links', a
   await expect(page.getByTestId('vnext-detail')).toBeVisible();
   await expect(page.locator('a[href="https://synthetic-local.invalid/eps"]')).toHaveCount(1);
 });
+
+test('automatic worker is auth-first, author-only and accepts no client provider or principal', async ({ request }) => {
+  const jobId = '00000000-0000-4000-8000-000000000001';
+  const url = '/api/internal/vnext-research';
+  for (const action of ['automatic', 'recover']) {
+    expect((await request.post(url, { data: { action, jobId } })).status()).toBe(401);
+    const wrongRole = await request.post(url, { headers: { authorization: `Bearer ${process.env.VNEXT_E2E_OPERATOR_KEY}` }, data: { action, jobId } });
+    expect(wrongRole.status()).toBe(409); expect((await wrongRole.json()).error).toBe('vnext_author_required');
+    const headers = { authorization: `Bearer ${process.env.STOCKINSIDER_VNEXT_AUTHOR_KEY}` };
+    const selector = await request.post(url, { headers, data: { action, jobId, principal: 'client-selected', model: 'client-model', provider: 'https://synthetic.invalid' } });
+    expect(selector.status()).toBe(409); expect((await selector.json()).error).toBe('vnext_worker_job_id_only');
+    // This isolated server deliberately has no provider credential/binding.
+    // Exact entry admission is tested; no live model execution is claimed.
+    const missingBinding = await request.post(url, { headers, data: { action, jobId } });
+    expect(missingBinding.status()).toBe(409); expect((await missingBinding.json()).error).toBe('vnext_provider_credential_missing');
+  }
+  const trace = await request.get(bridge + '/__fixture/control', { headers: controlHeaders });
+  expect((await trace.json()).trace).toEqual([]);
+});
