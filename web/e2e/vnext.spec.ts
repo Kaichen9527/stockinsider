@@ -42,6 +42,8 @@ test('every internal trigger rejects unauthorized callers and empty authorized s
   const routes = ['pipeline-run', 'pipeline-research-run', 'stock-research-refresh', 'candidate-research-run', 'research-report-build', 'deep-dive-build', 'candidate-dossier-bundle', 'candidate-dossier-outbox', 'candidate-dossier-submission', 'candidate-financial-documents', 'candidate-financial-documents/worker', 'candidate-financial-documents/retry', 'candidate-financial-queue-drain', 'thesis-refresh', 'recommendation-run', 'report-build'];
   for (const route of routes) {
     const bad = await request.post('/api/internal/' + route, { data: { symbols: [] } }); expect(bad.status(), route).toBe(401);
+    const missing = await request.post('/api/internal/' + route, { headers: { authorization: `Bearer ${process.env.VNEXT_E2E_OPERATOR_KEY}` }, data: {} });
+    expect(missing.status(), route).toBe(409); expect((await missing.json()).error, route).toBe('vnext_explicit_scope_required');
     const empty = await request.post('/api/internal/' + route, { headers: { authorization: `Bearer ${process.env.VNEXT_E2E_OPERATOR_KEY}` }, data: { symbols: [] } });
     expect(empty.status(), route).toBe(200); expect((await empty.json()).result).toMatchObject({ reason: 'empty_scope', expensiveCalls: 0 });
   }

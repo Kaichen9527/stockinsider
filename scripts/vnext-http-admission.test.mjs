@@ -57,7 +57,7 @@ await test('actual internal HTTP entrypoints share real durable4/20 authority', 
     await admin.query('INSERT INTO public.vnext_principals_v1(principal,role,enabled) VALUES($1,\'operator\',true),($2,\'author\',true)', [operator, author]);
     await admin.query('INSERT INTO public.vnext_sessions_v1(session_date,close_at,completed) VALUES($1,clock_timestamp()-interval\'1 day\',true) ON CONFLICT DO NOTHING', [session]);
     await admin.query('INSERT INTO public.vnext_sessions_v1(session_date,close_at,completed) VALUES($1,clock_timestamp()-interval\'2 days\',true) ON CONFLICT DO NOTHING', [priorSession]);
-    await admin.query("INSERT INTO public.vnext_members_v1(symbol,state,input_hash,evidence,admitted_session) SELECT (6000+n)::text,'waiting',repeat('a',64),'{\"syntheticPriorDayFixture\":true}'::jsonb,$1 FROM generate_series(1,16)n", [priorSession]);
+
     await new Promise(resolve => bridge.listen(34233, '127.0.0.1', resolve));
     const env = { ...process.env, NODE_TEST_CONTEXT: 'child-v8', LEGACY_RADAR_CORRECTNESS_PROJECTION: 'enabled', STOCKINSIDER_VNEXT_ENABLED: 'true', SUPABASE_URL: 'http://127.0.0.1:34233', SUPABASE_SERVICE_ROLE_KEY: key,
       INTERNAL_API_KEY: operatorKey, STOCKINSIDER_VNEXT_OPERATOR_PRINCIPAL: operator, STOCKINSIDER_VNEXT_AUTHOR_KEY: authorKey, STOCKINSIDER_VNEXT_AUTHOR_PRINCIPAL: author,
@@ -72,10 +72,13 @@ await test('actual internal HTTP entrypoints share real durable4/20 authority', 
     await t.test('authfirst and missing-vs-empty scopes cause zero actual RPCs', async () => {
       assert.equal((await post('pipeline-run', { symbols: [] })).status, 401);
       assert.equal((await post('vnext-research', { action: 'enqueue' }, operatorKey)).status, 409);
+      for(const route of ['pipeline-run','pipeline-research-run','stock-research-refresh','research-report-build','deep-dive-build','candidate-dossier-bundle','candidate-research-run','report-build','thesis-refresh']) {const missing=await post(route,{},operatorKey);assert.equal(missing.status,409);assert.equal(missing.body.error,'vnext_explicit_scope_required');}
       assert.equal((await post('pipeline-run', { symbols: [], symbol: '2330' }, operatorKey)).body.result.expensiveCalls, 0);
       assert.equal(trace.length, 0);
+      const screening=await post('vnext-research',{action:'screen'},operatorKey);assert.equal(screening.status,200);assert.deepEqual(screening.body.result.jobs,[]);assert.equal(trace.length,1);assert.equal(trace[0].action,'screen-context');
     });
     await t.test('parallel different aliases plus exact duplicate deliveries reserve only4 slots', async () => {
+          await admin.query("INSERT INTO public.vnext_members_v1(symbol,state,input_hash,evidence,admitted_session) SELECT (6000+n)::text,'waiting',repeat('a',64),'{\"syntheticPriorDayFixture\":true}'::jsonb,$1 FROM generate_series(1,16)n", [priorSession]);
       const routes = ['pipeline-run', 'stock-research-refresh', 'research-report-build', 'deep-dive-build', 'candidate-dossier-bundle', 'candidate-research-run', 'report-build', 'thesis-refresh'];
       const work = routes.map((route, i) => { const symbol = String(3000 + i); return { route, body: { symbols: [symbol], requestKey: 'actual-http-' + i, inputs: { [symbol]: input(symbol) } } }; });
       const receipts = await Promise.all(work.flatMap(w => [post(w.route, w.body, operatorKey), post(w.route, w.body, operatorKey)]));

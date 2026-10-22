@@ -5,6 +5,10 @@ on:
       - '.github/workflows/stockinsider-vnext-quality.yml'
       - 'web/**'
       - 'scripts/vnext-*'
+      - 'scripts/opportunity-v3/**'
+      - 'scripts/assert_canonical_vercel_project.mjs'
+      - 'deployment/vps/bootstrap-stockinsider-postgres.sql'
+      - '.nvmrc'
       - 'scripts/candidate-financial-document-write-lease-route.test.mjs'
       - 'migrations/20261022_*'
       - 'openspec/changes/stockinsider-vnext-20/**'
@@ -27,6 +31,16 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22.14.0'
+      - name: Workspace and temporary filesystem admission
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              free=s.f_bavail*s.f_frsize
+              print(p,free)
+              if free<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
       - name: Install unchanged locked dependencies
         run: |
           npm ci --ignore-scripts
@@ -36,9 +50,9 @@ jobs:
         run: |
           mkdir -m 700 /tmp/stockinsider-vnext-ci
           node --experimental-strip-types web/src/lib/vnext/vnext.test.ts | tee /tmp/stockinsider-vnext-ci/pure.tap
-          node --experimental-strip-types --test web/src/lib/vnext/discovery.test.ts | tee /tmp/stockinsider-vnext-ci/discovery.tap
+          node --experimental-strip-types web/src/lib/vnext/discovery.test.ts | tee /tmp/stockinsider-vnext-ci/discovery.tap
           node --experimental-strip-types web/src/lib/vnext/boundaries.test.ts | tee /tmp/stockinsider-vnext-ci/boundaries.tap
-          node --test scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
+          node scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
           npm --prefix web run typecheck
           npm --prefix web run lint
       - name: Full ordinary build
@@ -57,6 +71,24 @@ jobs:
           test "$ready" = 1
           VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/admission node --experimental-strip-types scripts/vnext-admission-postgres.test.mjs | tee /tmp/stockinsider-vnext-ci/admission.tap
           VNEXT_BUSINESS_DATABASE=vnext_business_01 VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/business node --experimental-strip-types scripts/vnext-business-postgres.test.mjs | tee /tmp/stockinsider-vnext-ci/business.tap
+      - name: Genuine captured-prefix legacy coexistence and concurrent mode fence
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-legacy-full-04
+          VNEXT_LEGACY_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/legacy-full-pg-socket-04
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/legacy
+        run: |
+          mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
+          mkdir -m 700 "$VNEXT_LEGACY_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_LEGACY_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_legacy -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_LEGACY_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -U postgres -d vnext_legacy; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          node --experimental-strip-types scripts/vnext-legacy-fence-postgres.test.mjs | tee /tmp/stockinsider-vnext-ci/legacy.tap
       - name: Upload finite synthetic TAP only (no raw rows, env or browser traces)
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

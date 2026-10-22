@@ -18,8 +18,8 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       : entrypoint === 'candidate-dossier-outbox' && body.jobId ? 'claim'
       : entrypoint === 'candidate-dossier-submission' && body.artifact ? 'author'
       : entrypoint === 'candidate-dossier-bundle' && body.jobId ? 'bundle' : 'enqueue';
-    const automaticScreen = action === 'screen' || action === 'enqueue' && !('symbols' in body) && !('symbol' in body)
-      && ['pipeline-run', 'pipeline-research-run'].includes(entrypoint);
+    const automaticScreen = action === 'screen';
+    if (automaticScreen && identity.role !== 'operator') throw new Error('vnext_operator_required');
     const result = automaticScreen ? await (await import('./discovery.ts')).scanCachedCandidates(identity)
       : action === 'enqueue' ? await enqueue(identity, body, entrypoint)
       : action === 'author' ? await submitAuthor(identity, body)
