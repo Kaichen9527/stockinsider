@@ -6,7 +6,8 @@ DO $patch$ DECLARE original text; definition text; target oid:='public.vnext_val
  SELECT prosrc,to_jsonb(p)-'prosrc' INTO original,before_metadata FROM pg_proc p WHERE oid=target;
  IF encode(sha256(convert_to(original,'UTF8')),'hex')<>'0c23f9932c3062d7e62f2e114655b29d38ae16af595e34873f85e86924127149' OR before_metadata->>'proowner' IS DISTINCT FROM ('stockinsider_vnext_owner'::regrole::oid)::text THEN RAISE EXCEPTION 'vnext_financial_summary_predecessor'; END IF;
  definition:=replace(pg_get_functiondef(target),original,$replacement$
-DECLARE c jsonb; e jsonb; i text; operand text; num jsonb; formula jsonb; result numeric; v_amount numeric; n integer; op text; unit_name text; units text[]; section jsonb;summary_known_day date; summary_claim jsonb; summary_range text[]; summary_start integer; summary_end integer; summary_current integer; summary_supported boolean;
+DECLARE c jsonb; e jsonb; i text; operand text; num jsonb; formula jsonb; result numeric; v_amount numeric; n integer; op text; unit_name text; units text[]; section jsonb;
+summary_known_day date; summary_claim jsonb; summary_range text[]; summary_start integer; summary_end integer; summary_current integer; summary_supported boolean;
 BEGIN
  SELECT (max((value->>'availableAt')::timestamptz) AT TIME ZONE 'Asia/Taipei')::date INTO summary_known_day FROM jsonb_array_elements(evidence);
  IF summary_known_day IS NULL OR coalesce(a->>'quoteDate','') !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' OR coalesce(a->>'valuationDate','') !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
@@ -74,6 +75,6 @@ BEGIN
 END $replacement$);
  EXECUTE definition;
  SELECT to_jsonb(p)-'prosrc' INTO after_metadata FROM pg_proc p WHERE oid=target;
- IF after_metadata IS DISTINCT FROM before_metadata OR (SELECT encode(sha256(convert_to(prosrc,'UTF8')),'hex') FROM pg_proc WHERE oid=target)<>'ad2d5f44f256f7fb601e8e896e6259b532688ac0b829a858e53cd88bd6a8c078' THEN RAISE EXCEPTION 'vnext_financial_summary_postcondition'; END IF;
+ IF after_metadata IS DISTINCT FROM before_metadata OR (SELECT encode(sha256(convert_to(prosrc,'UTF8')),'hex') FROM pg_proc WHERE oid=target)<>'b177e0010a25b9ff27ef25f59a81c44cce47f0b297ea0061d478afbce424b1b8' THEN RAISE EXCEPTION 'vnext_financial_summary_postcondition'; END IF;
 END $patch$;
 COMMIT;
