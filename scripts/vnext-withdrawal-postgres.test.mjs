@@ -14,13 +14,10 @@ await test('per-content append-only withdrawal fences retained research and resi
  const current=()=>rpc('vnext_read_v1',['2409']);
  const catalog=async()=>{const p=(await x.observer.query("SELECT oid,to_jsonb(p) AS row FROM pg_proc p WHERE pronamespace='public'::regnamespace ORDER BY oid")).rows;const tables=(await x.observer.query("SELECT to_jsonb(c) AS row FROM pg_class c WHERE relnamespace='public'::regnamespace ORDER BY oid")).rows;const roles=(await x.observer.query("SELECT to_jsonb(r) AS row FROM pg_roles r WHERE rolname!~'^pg_' ORDER BY rolname")).rows;return {functions:p,tables,roles};};
  try{
-  await step('actual retained prefix matches its full original313table snapshot and exact3body installer commits',async()=>{
-   baseline=await x.snapshot();assert.deepEqual(baseline,JSON.parse(fs.readFileSync('/tmp/stockinsider-vnext-oct22-private/thesis-native-01/final-state.json')));assert.equal(baseline.vnext_publications_v1.count,3);assert.equal(baseline.production_write_leases.count,0);
-   const before=await catalog();const sql=fs.readFileSync('migrations/20261022_vnext_source_withdrawals_v1.sql');await x.writer.query(sql.toString());const after=await catalog();let changed=0;
-   for(const p of before.functions){const next=after.functions.find(n=>n.oid===p.oid);assert.ok(next);const a={...p.row},b={...next.row};if(a.prosrc!==b.prosrc){changed++;assert.ok(['vnext_source_evidence_current_v1','vnext_analysis_command_v1','vnext_market_events_current_v1'].includes(a.proname));delete a.prosrc;delete b.prosrc;}assert.deepEqual(b,a);}
-   assert.equal(changed,3);assert.deepEqual(before.roles,after.roles);for(const c of before.tables)assert.ok(after.tables.some(n=>JSON.stringify(n)===JSON.stringify(c)));assert.equal(after.functions.length-before.functions.length,2);
-   x.save('catalog',{before,after,oldBodyChanges:changed,sqlSha256:hash(sql)});
-   const installed=await x.snapshot();for(const key of Object.keys(baseline))assert.deepEqual(installed[key],baseline[key]);assert.equal(installed.vnext_source_withdrawals_v1.count,0);
+  await step('actual resumed installerCOMMIT state remains exact and all three successor catalog pins match',async()=>{
+   baseline=await x.snapshot();assert.deepEqual(baseline,JSON.parse(fs.readFileSync('/tmp/stockinsider-vnext-oct22-private/withdrawal-native-01/final-state.json')));assert.equal(baseline.vnext_publications_v1.count,3);assert.equal(baseline.production_write_leases.count,0);assert.equal(baseline.vnext_source_withdrawals_v1.count,0);
+   const actual=await catalog();const first=JSON.parse(fs.readFileSync('/tmp/stockinsider-vnext-oct22-private/withdrawal-native-01/catalog.json'));assert.deepEqual(actual,first.after);
+   x.save('catalog',{actual,installerSource:first.sqlSha256,priorInstallerRun:'withdrawal-native-01 actual firstCOMMIT/3body delta, overallFAIL before business due principal assumption; not re-run or relabelled'});
    const sources=(await x.observer.query("SELECT * FROM public.vnext_extractions_v1 WHERE state='completed' ORDER BY content_hash")).rows;assert.equal(sources.length,1);contentHash=sources[0].content_hash;assert.equal((await current()).history[0].sourceRights.current,true);
    request={contentHash,reason:'rights_revoked',citation:'https://www.twse.com.tw/synthetic-withdrawal-receipt'};
   });

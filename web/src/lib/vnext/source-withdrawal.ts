@@ -5,6 +5,7 @@ type Row=Record<string,unknown>;
 type Operation='commit'|'read';
 const reasons=['source_withdrawn','rights_revoked','source_retracted'];
 const hashPattern=/^[a-f0-9]{64}$/u;
+const principalValid=(value:unknown)=>typeof value==='string' && value.length>0 && Buffer.byteLength(value)<=256 && value.trim()===value;
 function keys(row:Row,expected:string[]){return Object.keys(row).sort().join('|')===[...expected].sort().join('|');}
 function canonical(value:unknown):string{
  if(value && typeof value==='object' && !Array.isArray(value))return '{'+Object.entries(value).sort(([a],[b])=>a<b?-1:a>b?1:0).map(([key,item])=>JSON.stringify(key)+':'+canonical(item)).join(',')+'}';
@@ -21,7 +22,7 @@ export function validateWithdrawalReceipt(value:unknown,request:Row,operation:Op
  const row=value as Row;if(operation==='read' && keys(row,['absent']) && row.absent===true)return Object.freeze({absent:true});
  if(!keys(row,['payload','hash','logicalBytes']) || !row.payload || typeof row.payload!=='object' || Array.isArray(row.payload))throw Error('vnext_withdrawal_receipt');
  const payload=row.payload as Row;
- if(!keys(payload,['schemaVersion','withdrawalId','contentHash','reason','citation','principal','createdAt','sourceReceiptHash']) || payload.schemaVersion!=='stockinsider-vnext-source-withdrawal-v1' || !/^[a-f0-9-]{36}$/u.test(String(payload.withdrawalId)) || payload.contentHash!==request.contentHash || !reasons.includes(String(payload.reason)) || !hashPattern.test(String(payload.principal)) || !hashPattern.test(String(payload.sourceReceiptHash)) || typeof payload.citation!=='string' || !Number.isFinite(Date.parse(String(payload.createdAt))))throw Error('vnext_withdrawal_receipt_binding');
+ if(!keys(payload,['schemaVersion','withdrawalId','contentHash','reason','citation','principal','createdAt','sourceReceiptHash']) || payload.schemaVersion!=='stockinsider-vnext-source-withdrawal-v1' || !/^[a-f0-9-]{36}$/u.test(String(payload.withdrawalId)) || payload.contentHash!==request.contentHash || !reasons.includes(String(payload.reason)) || !principalValid(payload.principal) || !hashPattern.test(String(payload.sourceReceiptHash)) || typeof payload.citation!=='string' || !Number.isFinite(Date.parse(String(payload.createdAt))))throw Error('vnext_withdrawal_receipt_binding');
  withdrawalRequest('commit',{contentHash:payload.contentHash,reason:payload.reason,citation:payload.citation});
  if(operation==='commit' && (payload.principal!==principal || payload.reason!==request.reason || payload.citation!==request.citation))throw Error('vnext_withdrawal_receipt_binding');
  const bytes=Buffer.from(canonical(payload));
@@ -32,7 +33,7 @@ export function validateWithdrawalReceipt(value:unknown,request:Row,operation:Op
  * A transport error is propagated unchanged. Only an explicit READ reconciles it;
  * no automatic resend, model call, clock refresh or source policy re-enable occurs. */
 export async function sourceWithdrawalOperation(identity:VnextIdentity,operation:Operation,body:Row,dependencies:{rpc:(principal:string,operation:Operation,request:Row)=>Promise<unknown>;writer:<T>(work:()=>Promise<T>)=>Promise<T>}){
- if(identity.role!=='operator' || !hashPattern.test(identity.principal))throw Error('vnext_operator_required');
+ if(identity.role!=='operator' || !principalValid(identity.principal))throw Error('vnext_operator_required');
  const request=withdrawalRequest(operation,body);
  const work=async()=>validateWithdrawalReceipt(await dependencies.rpc(identity.principal,operation,request),request,operation,identity.principal);
  return operation==='commit'?dependencies.writer(work):work();
