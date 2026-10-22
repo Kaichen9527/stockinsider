@@ -14,17 +14,12 @@ await test('per-content append-only withdrawal fences retained research and resi
  const current=()=>rpc('vnext_read_v1',['2409']);
  const catalog=async()=>{const p=(await x.observer.query("SELECT oid,to_jsonb(p) AS row FROM pg_proc p WHERE pronamespace='public'::regnamespace ORDER BY oid")).rows;const tables=(await x.observer.query("SELECT to_jsonb(c) AS row FROM pg_class c WHERE relnamespace='public'::regnamespace ORDER BY oid")).rows;const roles=(await x.observer.query("SELECT to_jsonb(r) AS row FROM pg_roles r WHERE rolname!~'^pg_' ORDER BY rolname")).rows;return {functions:p,tables,roles};};
  try{
-  await step('actual resumed installerCOMMIT state remains exact and all three successor catalog pins match',async()=>{
-   baseline=await x.snapshot();assert.deepEqual(baseline,JSON.parse(fs.readFileSync('/tmp/stockinsider-vnext-oct22-private/withdrawal-native-01/final-state.json')));assert.equal(baseline.vnext_publications_v1.count,3);assert.equal(baseline.production_write_leases.count,0);assert.equal(baseline.vnext_source_withdrawals_v1.count,0);
+  await step('exact retained committed withdrawal recovers by explicit READ without mutation',async()=>{
+   baseline=await x.snapshot();assert.deepEqual(baseline,JSON.parse(fs.readFileSync('/tmp/stockinsider-vnext-oct22-private/withdrawal-native-02/final-state.json')));assert.equal(baseline.vnext_publications_v1.count,3);assert.equal(baseline.production_write_leases.count,0);assert.equal(baseline.vnext_source_withdrawals_v1.count,1);
    const actual=await catalog();const first=JSON.parse(fs.readFileSync('/tmp/stockinsider-vnext-oct22-private/withdrawal-native-01/catalog.json'));assert.deepEqual(actual,first.after);
-   x.save('catalog',{actual,installerSource:first.sqlSha256,priorInstallerRun:'withdrawal-native-01 actual firstCOMMIT/3body delta, overallFAIL before business due principal assumption; not re-run or relabelled'});
-   const sources=(await x.observer.query("SELECT * FROM public.vnext_extractions_v1 WHERE state='completed' ORDER BY content_hash")).rows;assert.equal(sources.length,1);contentHash=sources[0].content_hash;assert.equal((await current()).history[0].sourceRights.current,true);
-   request={contentHash,reason:'rights_revoked',citation:'https://www.twse.com.tw/synthetic-withdrawal-receipt'};
-  });
-  await step('operator actual service-role commit creates exactly one immutable observer-visible event',async()=>{
-   const before=await x.snapshot();receipt=await sourceWithdrawalOperation(roles.operator,'commit',request,deps);validateWithdrawalReceipt(receipt,request,'commit',roles.operator.principal);
-   const seen=(await x.observer.query('SELECT * FROM public.vnext_source_withdrawals_v1 WHERE content_hash=$1',[contentHash])).rows;assert.equal(seen.length,1);assert.deepEqual(seen[0].payload,receipt.payload);assert.equal(seen[0].event_hash,receipt.hash);assert.equal(seen[0].logical_bytes,receipt.logicalBytes);
-   const after=await x.snapshot();for(const key of Object.keys(before))if(key!=='vnext_source_withdrawals_v1')assert.deepEqual(after[key],before[key]);assert.equal(after.vnext_source_withdrawals_v1.count,1);x.save('withdrawal',{receipt,before,after,observerPid:x.observer.processID,syntheticCitationNotAcquired:true,writerAdapter:'inactive captured engineering profile; actual role and trigger, no production writer qualification'});
+   contentHash=baseline.vnext_source_withdrawals_v1.rows[0].content_hash;request={contentHash,reason:'rights_revoked',citation:'https://www.twse.com.tw/synthetic-withdrawal-receipt'};
+   receipt=await sourceWithdrawalOperation(roles.operator,'read',{contentHash},deps);validateWithdrawalReceipt(receipt,request,'commit',roles.operator.principal);assert.deepEqual(receipt,JSON.parse(fs.readFileSync('/tmp/stockinsider-vnext-oct22-private/withdrawal-native-02/withdrawal.json')).receipt);assert.deepEqual(await x.snapshot(),baseline);
+   x.save('recovery',{receipt,catalog:actual,firstInstaller:'native01 component actualCOMMIT',firstEvent:'native02 component actualCOMMIT; overallFAIL wrong operator inspect (existing worker role guard correctly refused); no original run relabelled'});
   });
   await step('current article/source/clue/provider/market checks refuse withdrawn hash with no new calls or mutations',async()=>{
    const before=await x.snapshot();const pub=await current();assert.equal(pub.history[0].sourceRights.current,false);assert.deepEqual(pub.history[0].content,baseline.vnext_publications_v1.rows.find(p=>p.symbol==='2409').content);
@@ -32,7 +27,7 @@ await test('per-content append-only withdrawal fences retained research and resi
    const original=(await x.observer.query('SELECT original FROM public.vnext_extractions_v1 WHERE content_hash=$1',[contentHash])).rows[0].original;
    const repeat=await source('source-reserve',{item:{contentHash,source:original.source,scope:original.scope,original}});assert.equal(repeat.parse,false);assert.equal(repeat.deferred,'source_content_withdrawn');
    const job=before.vnext_jobs_v1.rows.find(j=>j.symbol==='2409');await x.rpc(roles.reviewer.principal,'publish',{jobId:job.job_id,inputHash:job.input_hash,executionId:job.reviewer_execution},false,/vnext_research_original_rights_no_longer_current/u);
-   assert.equal((await x.rpc(roles.operator.principal,'inspect',{jobId:job.job_id},true)).state,'published_historical');
+   assert.equal((await x.rpc(roles.author.principal,'inspect',{jobId:job.job_id},true)).state,'published_historical');
    // Private market predicate is invoked as its existing owner, not newly exposed to service_role.
    await x.writer.query('SET ROLE stockinsider_vnext_owner');const market=(await x.writer.query('SELECT public.vnext_market_events_current_v1($1::jsonb) AS current',[JSON.stringify({input:JSON.stringify({events:[{content_hash:contentHash,original}]})})])).rows[0];await x.writer.query('RESET ROLE');assert.equal(market.current,false);
    assert.deepEqual(await x.snapshot(),before);x.save('current-read',{article:pub,market,wholeStateUnchanged:true});
