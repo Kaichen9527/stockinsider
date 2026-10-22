@@ -20,6 +20,7 @@ function loadActualVnextGate(enabled = false) {
   const enabledBoundary = () => { enabledBoundaryCalls++; throw new Error('enabled_vnext_cannot_use_default_off_fixture'); };
   const dependencies = {
     './policy.ts': policy,
+    './cached-admission.ts': { cachedAdmissionBody: enabledBoundary, currentReceiptBody: enabledBoundary },
     'next/server': { NextResponse: { json: enabledBoundary } },
     './store.ts': new Proxy({}, { get: () => enabledBoundary }),
     './auth.ts': { vnextIdentity: enabledBoundary },
