@@ -5,7 +5,7 @@ export type MarketInput = { risk: Risk; confidence: 'complete' | 'limited' | 'in
   overseas: Array<{ name: string; value: number | null; sourceAt: string | null; provenance: string | null }>;
   reasons?: string[]; risks?: string[]; conditions?: string[];
   background?: { status: 'observed' | 'gap'; sessions: number; from: string | null; to: string | null; taiexReturn: number | null; tpexReturn: number | null };
-  aiInterpretation?: { status: 'unavailable'; reason: string } };
+  aiInterpretation?: { status: 'unavailable' | 'completed'; reason: string; model?: string; modelVersion?: string; inputHash?: string; outputHash?: string; invocationId?: string; mechanisms?: Array<{eventHash:string;mechanism:string;counterevidence:string}>; gaps?: string[] } };
 export function marketJudgment(input: MarketInput, sessions: Session[], now: string, overlay?: { risk: Risk; evidenceIds: string[]; modelVersion: string; inputHash: string; outputHash: string }) {
   const latest = latestCompletedSession(sessions, now);
   const gaps = [...input.gaps];

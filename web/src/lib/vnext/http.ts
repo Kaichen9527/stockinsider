@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { vnextEnabled } from './policy.ts';
+import { vnextEnabled,explicitScope } from './policy.ts';
 import { cacheContent, command, enqueue, executeResearch, publishMarket, publishResearch, submitAuthor, submitReview, swap } from './store.ts';
 import { vnextIdentity } from './auth.ts';
 import { boundedRequestBody } from './request.ts';
@@ -25,9 +25,23 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       const result = action === 'automatic' ? await worker.runAutomaticResearch(body.jobId) : await worker.recoverAutomaticResearch(body.jobId);
       return NextResponse.json({ ok: true, policyVersion: 'stockinsider-vnext-20-v1', result });
     }
+    if (['source-extract','operator-claim','market-interpret','market-recover'].includes(action)) {
+      if(identity.role!=='operator') throw new Error('vnext_operator_required');
+      const allowed=action==='operator-claim'?['action','claim']:action==='market-recover'?['action','invocationId']:['action'];
+      if(Object.keys(body).some((key)=>!allowed.includes(key)))throw new Error('vnext_analysis_closed_body');
+      let result:Row;
+      if(action==='source-extract')result=await(await import('./source-worker.ts')).runPermittedSourceWorker(identity);
+      else if(action==='operator-claim')result=await(await import('./source-worker.ts')).recordOperatorClaim(identity,body);
+      else {if(action==='market-recover' && (typeof body.invocationId!=='string' || !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu.test(body.invocationId)))throw new Error('vnext_market_invocation_id_required');result=await(await import('./market-ai-worker.ts')).runMarketInterpretation(identity,action==='market-recover'?String(body.invocationId):undefined);}
+      return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});
+    }
+    const role= ['enqueue','screen','swap','market','content','retry','expire'].includes(action)?'operator':['author','bundle','claim','fail','execute'].includes(action)?'author':['review','publish','review-claim','review-sources'].includes(action)?'reviewer':null;
+    if(role && identity.role!==role)throw new Error(`vnext_${role}_required`);
+    if(!role)throw new Error('vnext_action_unsupported');
+    if(action==='enqueue')explicitScope(body.symbols ?? (body.symbol ? [body.symbol] : undefined));
     const automaticScreen = action === 'screen';
     if (automaticScreen && identity.role !== 'operator') throw new Error('vnext_operator_required');
-    const result = automaticScreen ? await (await import('./discovery.ts')).scanCachedCandidates(identity)
+    const executeAction = async () => automaticScreen ? await (await import('./discovery.ts')).scanCachedCandidates(identity)
       : action === 'enqueue' ? await enqueue(identity, body, entrypoint)
       : action === 'author' ? await submitAuthor(identity, body)
       : action === 'review' ? await submitReview(identity, body)
@@ -39,6 +53,7 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       : action === 'content' ? await cacheContent(identity, body)
       : ['claim', 'fail', 'retry', 'review-claim', 'review-sources', 'review', 'publish', 'expire'].includes(action) ? await command(identity, action, body)
       : (() => { throw new Error('vnext_action_unsupported'); })();
+    const result = action==='execute' ? await executeAction() : await(await import('./analysis-runtime.ts')).analysisWriter(executeAction);
     return NextResponse.json({ ok: true, policyVersion: 'stockinsider-vnext-20-v1', result });
   } catch (error) {
     return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : 'vnext_authority_unavailable' }, { status: 409 });

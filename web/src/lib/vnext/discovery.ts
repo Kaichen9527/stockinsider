@@ -12,7 +12,9 @@ const number = (value: unknown) => typeof value === 'number' && Number.isFinite(
 export async function scanCachedCandidates(identity: VnextIdentity, transport?: { client: ReturnType<typeof getSupabaseServerClient>; command: typeof command; enqueue: typeof enqueue; now: string }) {
   const send = transport?.command || command; const admit = transport?.enqueue || enqueue;
   const context = await send(identity, 'screen-context', {}); const cutoff = transport?.now || new Date().toISOString();
-  const clues = screenRoundRobin((Array.isArray(context.clues) ? context.clues : []) as Clue[], cutoff);
+  const sourceCommand = transport ? null : (await import('./analysis-runtime.ts')).analysisCommand;
+  const sourceContext:Row = sourceCommand ? await sourceCommand(identity,'source-clues',{}) : {};
+  const clues = screenRoundRobin([...(Array.isArray(context.clues) ? context.clues : []), ...(Array.isArray(sourceContext.clues) ? sourceContext.clues : [])] as Clue[], cutoff);
   const active = (Array.isArray(context.active) ? context.active : []) as Row[];
   const symbols = [...new Set([...clues.map((c) => c.symbol), ...active.map((r) => String(r.symbol))])].sort();
   if (!symbols.length) return { jobs: [], scope: { screened: 0, admitted: 0, deferred: 0 }, gaps: ['allowed_source_cache_empty_or_identity_unresolved'] }; const client = transport?.client || getSupabaseServerClient();
@@ -63,6 +65,8 @@ export async function scanCachedCandidates(identity: VnextIdentity, transport?: 
     frozen.push({ symbol, input, points: score.confirmedPoints, weight: score.availableWeight, eventAt: matching.map((c) => c.eventAt).sort().at(-1) || '' });
   }
   frozen.sort((a, b) => b.points - a.points || b.weight - a.weight || b.eventAt.localeCompare(a.eventAt) || a.symbol.localeCompare(b.symbol));
+  const sourceEvidence:Row={};if(sourceCommand)for(let offset=0;offset<symbols.length;offset+=20)Object.assign(sourceEvidence,await sourceCommand(identity,'source-projection',{symbols:symbols.slice(offset,offset+20)}));
+  for(const row of frozen) row.input.evidence = (sourceEvidence[row.symbol] as Row|undefined)?.evidence || [];
   const observations: RotationObservation[] = frozen.map((row) => {
     const normalized = normalizedInput(row.symbol, row.input); const member = active.find((r) => r.symbol === row.symbol);
     const instrument = master.get(row.symbol);

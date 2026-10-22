@@ -146,7 +146,9 @@ export async function publishMarket(identity: VnextIdentity, body: Row) {
   if (Object.keys(body).some((key) => !['action', 'requestKey'].includes(key))) throw new Error('vnext_market_is_server_derived');
   const { cachedMarketSnapshot } = await import('./market-producer.ts');
   const raw = await cachedMarketSnapshot();
-  const market = { ...raw, snapshotHash: inputHash(raw) };
+  const { evaluatedAt: _readClock, ...frozen } = raw;
+  void _readClock;
+  const market = { ...frozen, snapshotHash: inputHash(frozen) };
   return command(identity, 'market', { market });
 }
 export async function publishResearch(identity: VnextIdentity, body: Row) {
