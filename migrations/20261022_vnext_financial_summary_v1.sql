@@ -2,6 +2,11 @@
 BEGIN ISOLATION LEVEL READ COMMITTED;
 SET LOCAL statement_timeout='30s'; SET LOCAL lock_timeout='2s';
 SELECT pg_advisory_xact_lock(64221022);
+DO $version$ BEGIN
+ IF (SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid='public.vnext_provider_bindings_v1'::regclass AND conname='vnext_provider_bindings_v1_prompt_version_check') IS DISTINCT FROM 'CHECK ((prompt_version = ''vnext-research-worker-v1''::text))' THEN RAISE EXCEPTION 'vnext_summary_prompt_predecessor'; END IF;
+ ALTER TABLE public.vnext_provider_bindings_v1 DROP CONSTRAINT vnext_provider_bindings_v1_prompt_version_check;
+ ALTER TABLE public.vnext_provider_bindings_v1 ADD CONSTRAINT vnext_provider_bindings_v1_prompt_version_check CHECK(prompt_version IN('vnext-research-worker-v1','vnext-research-worker-v2'));
+END $version$;
 DO $patch$ DECLARE original text; definition text; target oid:='public.vnext_validate_claims_v1(jsonb,jsonb)'::regprocedure; before_metadata jsonb; after_metadata jsonb; BEGIN
  SELECT prosrc,to_jsonb(p)-'prosrc' INTO original,before_metadata FROM pg_proc p WHERE oid=target;
  IF encode(sha256(convert_to(original,'UTF8')),'hex')<>'0c23f9932c3062d7e62f2e114655b29d38ae16af595e34873f85e86924127149' OR before_metadata->>'proowner' IS DISTINCT FROM ('stockinsider_vnext_owner'::regrole::oid)::text THEN RAISE EXCEPTION 'vnext_financial_summary_predecessor'; END IF;
