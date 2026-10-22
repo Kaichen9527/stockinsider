@@ -1,0 +1,29 @@
+{
+  "withdrawal-native-01": [
+    "not ok 1 - per-content append-only withdrawal fences retained research and resists policy ABA",
+    "# tests 3",
+    "# pass 1",
+    "# fail 2",
+    "# cancelled 0",
+    "# skipped 0",
+    "# todo 0"
+  ],
+  "withdrawal-native-02": [
+    "not ok 1 - per-content append-only withdrawal fences retained research and resists policy ABA",
+    "# tests 4",
+    "# pass 2",
+    "# fail 2",
+    "# cancelled 0",
+    "# skipped 0",
+    "# todo 0"
+  ],
+  "withdrawal-native-03": [
+    "ok 1 - per-content append-only withdrawal fences retained research and resists policy ABA",
+    "# tests 4",
+    "# pass 4",
+    "# fail 0",
+    "# cancelled 0",
+    "# skipped 0",
+    "# todo 0"
+  ]
+}

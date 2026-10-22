@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "stockinsider-vnext-withdrawal-receipt-v1",
+  "finalRecoverySource": "4fe627c",
+  "files": [
+    {
+      "path": "commands.json",
+      "bytes": 4732,
+      "sha256": "864fe3b68d86c1010db74b371cfa72a182071ba3e1eb44380f0d0a9668a3dfcd"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 153253,
+      "sha256": "37d1be20b3cce8d5a4b69d4d21c68f13c087813fd02cff9d4afe0759a42be2fa"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 1123,
+      "sha256": "754bf2b3bc1be1f9436dea0cc5fad5b78dd5d0e8f61ffd5f1fc3c0a0695e9b99"
+    },
+    {
+      "path": "source.json",
+      "bytes": 2092,
+      "sha256": "b300d258d717654611c11230dddb2594a50ddce31c8f962a8b8b8eadfd165c91"
+    },
+    {
+      "path": "tables.json",
+      "bytes": 42936,
+      "sha256": "2e34bfe29fa06bbe9647bba0a444b15b52fe7f30b65b0e039030df26639a265f"
+    },
+    {
+      "path": "tap.json",
+      "bytes": 713,
+      "sha256": "fc37d02f8c8d2ec1dcc29e83659fedeb06e11f0db5c1c0886b2b0a8227407482"
+    },
+    {
+      "path": "witness.json",
+      "bytes": 3478,
+      "sha256": "afd17715f526a328eff68305952d07a729cf4ff1a6136db5bdaff72e4f09332b"
+    }
+  ],
+  "allOriginalRedRunsRetained": true,
+  "noHistoricalPassReassignment": true
+}

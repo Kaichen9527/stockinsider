@@ -1,0 +1,47 @@
+{
+  "withdrawal-source-direct-01": {
+    "sampleCount": 1,
+    "minimumFreeBytes": {
+      "/workspace": 10372231168,
+      "/tmp": 17661726720
+    },
+    "sampledSessionPeakRssBytes": 5373952,
+    "resourceViolation": null
+  },
+  "withdrawal-native-01": {
+    "sampleCount": 7,
+    "minimumFreeBytes": {
+      "/workspace": 10372038656,
+      "/tmp": 17654296576
+    },
+    "sampledSessionPeakRssBytes": 138870784,
+    "resourceViolation": null
+  },
+  "withdrawal-source-direct-02": {
+    "sampleCount": 1,
+    "minimumFreeBytes": {
+      "/workspace": 10372235264,
+      "/tmp": 17653071872
+    },
+    "sampledSessionPeakRssBytes": 5111808,
+    "resourceViolation": null
+  },
+  "withdrawal-native-02": {
+    "sampleCount": 4,
+    "minimumFreeBytes": {
+      "/workspace": 10372157440,
+      "/tmp": 17646850048
+    },
+    "sampledSessionPeakRssBytes": 146571264,
+    "resourceViolation": null
+  },
+  "withdrawal-native-03": {
+    "sampleCount": 3,
+    "minimumFreeBytes": {
+      "/workspace": 10372132864,
+      "/tmp": 17641902080
+    },
+    "sampledSessionPeakRssBytes": 162074624,
+    "resourceViolation": null
+  }
+}

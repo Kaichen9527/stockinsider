@@ -1,0 +1,153 @@
+{
+  "status": "PARTIAL_ACCEPTANCE_CONTINUING_VM_CODE",
+  "updatedAt": "2026-10-22T02:31:13.687687+00:00",
+  "publishedMilestoneHead": "4fe627c",
+  "productMilestones": {
+    "thesis": "4871d2fe733027a6619fe820314d53e1ffa36e74",
+    "withdrawal": "f7ea340"
+  },
+  "receiptFiles": [
+    "thesis-evidence/receipt.json",
+    "withdrawal-evidence/receipt.json"
+  ],
+  "historicalMatricesPreserved": "evidence/summary.json belongs to6410; not current source",
+  "acceptance": [
+    {
+      "id": "VN01",
+      "status": "TESTED_VM_BOUNDARIES_CONTINUING",
+      "runs": "thesis-active-http-02; thesis-browser-ui-01",
+      "limits": "16 auth/missing/[] routes plus genuineHTTP aliases/lease; new trusted-cache adapter slice still WIP; never infer every producer from purehelper"
+    },
+    {
+      "id": "VN02",
+      "status": "PARTIAL",
+      "runs": "native-legacy-final; thesis-active-http-02",
+      "limits": "14 actual legacyRPC fences and8aliases sameledger; new cachedauthority/calendar path needs same-head PG/HTTP"
+    },
+    {
+      "id": "VN03",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": "thesis-active-http-02",
+      "limits": "real4started/20active incl16synthetic prior-date incumbents and zero leakedleases; not5 actual operating days"
+    },
+    {
+      "id": "VN04",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": "worker-native-02; thesis-native-01",
+      "limits": "real durableprovider journal/uniqueIDs/uncertainnoresend; observed settled429 hasonechargedretry; provider outcomes synthetic"
+    },
+    {
+      "id": "VN05",
+      "status": "PARTIAL_PRODUCER_PARITY_WIP",
+      "runs": "analysis-native-01; thesis-source-direct-02",
+      "limits": "200/50union/rootdedup/null policy tested; actual MA20/60 relativebenchmark andmonthly3cache parity now being implemented, not yet accepted"
+    },
+    {
+      "id": "VN06",
+      "status": "PARTIAL_TIME_ACCEPTANCE_PENDING",
+      "runs": "native-rotation-01; final-discovery-direct",
+      "limits": "waiting incumbent selector and currentpremarket refusals real; actual consecutive2postclose-session positive atomicexchange NOT_RUN, clocks/guards unchanged"
+    },
+    {
+      "id": "VN07",
+      "status": "PARTIAL",
+      "runs": "thesis-native-01; thesis-source-direct-02",
+      "limits": "allactiveaudits/deepscores/actualcorrectedfactdrift and immutablehistory; fulltarget/catalyst semantics actualsources unverified"
+    },
+    {
+      "id": "VN08",
+      "status": "PARTIAL_PRODUCER_PARITY_WIP",
+      "runs": "thesis-source-direct-02",
+      "limits": "puredata cases pass; original real adjusted-price/forwardcalendar authority integration in new VM slice, no legacy pin change"
+    },
+    {
+      "id": "VN09",
+      "status": "TESTED_VM_SYNTHETIC_SOURCE",
+      "runs": "analysis-native-01; withdrawal-native-03",
+      "limits": "actual rights-aware extraction200/50union currentprojections/cache; permanent per-contentappend-onlytombstone/ABA tested after two preservedREDs; no actual paid/channel collection"
+    },
+    {
+      "id": "VN10",
+      "status": "TESTED_VM_SYNTHETIC_AI",
+      "runs": "analysis-native-01",
+      "limits": "realPG frozenmarketworker oneproviderinvocation/reuse/currentrights; provider/events synthetic; foreignrealproducer missing is disclosedgap"
+    },
+    {
+      "id": "VN11",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": "worker-native-02; worker-revision-browser; thesis-native-01",
+      "limits": "actualproviderjournal->newrevision->page fixtures, newfactvalue drift versus unchanged acquisition; realnews/model execution notproven"
+    },
+    {
+      "id": "VN12",
+      "status": "TESTED_VM_SYNTHETIC_SEMANTICS_EXTERNAL",
+      "runs": "worker-native-02; thesis-native-01",
+      "limits": "automaticfixedprovider distinctrole/execution originals+perclaimchecks implemented; checkercontract isnotactual independent semantic/modelapproval; numerical EPSsummarytightening WIP"
+    },
+    {
+      "id": "VN13",
+      "status": "PARTIAL",
+      "runs": "native-business-sealed; thesis-native-01; withdrawal-native-03",
+      "limits": "actualearlyexit/latepublication/currentrightsguards and immutablehistory; positive real qualifiedfinancial/price publication & allraces pending"
+    },
+    {
+      "id": "VN14",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": "thesis-browser-rights-01; withdrawal-native-03",
+      "limits": "sameexactrevision/fullarticle/history sourceRightsfalse; nolegacy/draftfallback; formalneweligibledata unverified"
+    },
+    {
+      "id": "VN15",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": "thesis-browser-ui-01; thesis-browser-rights-01",
+      "limits": "12authlayout +2rightsdesktop/mobile separate, actual installedChromium151; pinneddownload403 historical, no livecontent/staging claim"
+    },
+    {
+      "id": "VN16",
+      "status": "PASS_AT_THESIS_SOURCE_NEW_SLICE_PENDING",
+      "runs": "thesis-source-type-01; thesis-lint-01; thesis-build-01",
+      "limits": "Node22.14 fullwebpack/lint/types pass product4871; laternewsource requires same-headrecheck, not automaticallycovered"
+    },
+    {
+      "id": "VN17",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": "thesis-native-01; thesis-active-http-02; withdrawal-native-03",
+      "limits": "actual isolatedPG17.11 currentledger/queries/rollback/canonical/pending/cleanup; clear syntheticprovider/prep/identity; noformalHBA"
+    },
+    {
+      "id": "VN18",
+      "status": "BLOCKED_EXTERNAL",
+      "runs": "",
+      "limits": "no Contaboisolatedservice/DB/schema/queue/storage runtime; oldSSHexpired, noTCPgrant/trustednewidentity; do not block VMcode"
+    },
+    {
+      "id": "VN19",
+      "status": "PARTIAL_ACTUAL_CANARY_SOURCE_GAPS",
+      "runs": "source-canaries.json",
+      "limits": "actualTWSE200statOK; PTT403; index != financialfacts/contentrights; no formalforeign/privateaccess, no invented data"
+    },
+    {
+      "id": "VN20",
+      "status": "DRAFT_PR_PROTECTED_PENDING",
+      "runs": "PR384",
+      "limits": "normalbranch/PRattached exactreceipts; protectedrequirements/architecture/exact-review/rootFAIL lastobserved3847bootstrapstep; no pin/guardpatch/no merge/deploy"
+    }
+  ],
+  "VMCodeWip": [
+    "trusted cached admission/serverderivedcalendar sync",
+    "actual adjustedprice/MArelative/monthlyproducer parity",
+    "finite financialsummaryclaim binding"
+  ],
+  "externalOnly": [
+    "actual source/provider credentials/rights and independentsemanticexecution",
+    "Contabo exactTCP/trust/newapprovedidentity/isolatedappresources",
+    "real consecutivepostclose-day operationalacceptance"
+  ],
+  "notAuthorized": [
+    "merge",
+    "productiondeploy/migration",
+    "resume3pausedschedules",
+    "consumedrunretry",
+    "cleanup"
+  ]
+}
