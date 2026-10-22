@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import {projectFinancialEvidenceSources,resolveFinancialEvidenceSources,financialProviderSourceUrl} from './financial-evidence-sources.ts';
 import {reviewedValuation} from './reviewed-valuation.ts';
 import {REQUIRED_SECTIONS,type Artifact,type Evidence,type Review} from './research.ts';
@@ -36,6 +38,56 @@ test('actual resolver performs only bounded existing-cache reads, exact as-of fi
  const {fact,rows}=sourceFixture(true);const trace:string[]=[];const tables:Record<string,Row[]>={candidate_financial_fact_provenance_v4:rows.provenance,candidate_financial_document_fact_links_v8:rows.links,candidate_financial_acquisition_jobs_v4:rows.jobs,candidate_financial_document_receipts_v6:rows.receipts,candidate_issuer_ir_document_queue_v4:rows.documents};
  const client={from(table:string){trace.push(table);const filters:Array<(row:Row)=>boolean>=[];const query={select:()=>query,in:(key:string,ids:string[])=>{filters.push(row=>ids.includes(String(row[key])));return query;},lte:(key:string,value:string)=>{filters.push(row=>Date.parse(String(row[key]))<=Date.parse(value));return query;},order:()=>query,limit:async(count:number)=>{assert.equal(count,1001);return {data:tables[table].filter(row=>filters.every(filter=>filter(row))),error:null};}};return query;}} as unknown as Parameters<typeof resolveFinancialEvidenceSources>[0];
  const empty=await resolveFinancialEvidenceSources(client,[],cutoff);assert.equal(empty.evidence.length,0);assert.deepEqual(trace,[]);const result=await resolveFinancialEvidenceSources(client,[fact],cutoff);assert.equal(result.evidence.length,1);assert.deepEqual(trace,['candidate_financial_fact_provenance_v4','candidate_financial_document_fact_links_v8','candidate_financial_document_receipts_v6','candidate_issuer_ir_document_queue_v4']);
+});
+function issuerFixture(){
+ const fixture=sourceFixture(true);const {fact,rows}=fixture;const url='https://www.nanya.com/synthetic/original.xbrl';
+ Object.assign(fact,{period_start:'2026-04-01',filing_published_at:clock,filing_restatement_id:null,upstream_provider:null,validation_recorded_at:clock});
+ for(const row of [...rows.provenance,...rows.receipts])row.source_url=url;rows.documents[0].document_url=url;
+ Object.assign(rows.receipts[0],{parser_evidence_id:'parser',financial_validation_status:'validated'});(rows.provenance[0].locator as Row).response_url=url;
+ return {...fixture,url,rows:{...rows,issuerDomains:[{stock_id:fact.stock_id,host:'www.nanya.com',approved_at:clock}],parserEvidence:[{evidence_id:'parser',receipt_id:'receipt',document_sha256:sha,manifest_sha256:'c'.repeat(64),recorded_at:later}]}};
+}
+test('approved issuer IR joins an existing exact stock-host approval and immutable original fact/parser receipt without relabelling its URL',()=>{
+ const {fact,rows,url}=issuerFixture();const result=projectFinancialEvidenceSources([fact],rows,cutoff);assert.equal(result.evidence.length,1);assert.equal(result.evidence[0].source,url);assert.equal(result.evidence[0].contentHash,inputHash(fact));
+ assert.equal(result.receipts[0].sourceKind,'approved_issuer_ir');assert.deepEqual(result.receipts[0].originalFact,fact);assert.deepEqual(result.receipts[0].issuerApproval,{stockId:fact.stock_id,host:'www.nanya.com',approvedAt:clock});
+ const receipt={...result.receipts[0]};delete receipt.receiptHash;assert.equal(result.receipts[0].receiptHash,inputHash(receipt));assert.equal(financialProviderSourceUrl(url),null);
+});
+test('IR current approval, cross-issuer, root, document hash, parser manifest and as-of mismatches all defer',()=>{
+ const original=issuerFixture();const mutations:Array<(copy:ReturnType<typeof issuerFixture>)=>void>=[
+  x=>x.rows.issuerDomains=[],x=>x.rows.issuerDomains[0].stock_id='other',x=>x.rows.issuerDomains[0].host='nanya.com',x=>x.rows.issuerDomains[0].approved_at='2027-01-01',x=>x.rows.issuerDomains.push({...x.rows.issuerDomains[0]}),
+  x=>x.rows.documents[0].stock_id='other',x=>x.rows.receipts[0].document_sha256='d'.repeat(64),x=>x.rows.receipts[0].financial_validation_status='rejected',x=>x.rows.receipts[0].parser_evidence_id='other',
+  x=>x.rows.parserEvidence[0].manifest_sha256='d'.repeat(64),x=>x.rows.parserEvidence[0].document_sha256='d'.repeat(64),x=>x.rows.parserEvidence[0].recorded_at='2027-01-01',x=>x.rows.parserEvidence[0].receipt_id='other',
+  x=>x.fact.provider='finmind',x=>x.fact.authority_tier='official_primary',x=>x.fact.filing_published_at='2027-01-01',
+ ];for(const mutate of mutations){const copy=structuredClone(original);mutate(copy);assert.equal(projectFinancialEvidenceSources([copy.fact],copy.rows,cutoff).evidence.length,0);}
+ for(const url of ['https://evil.www.nanya.com/original','https://www.nanya.com.evil.org/original','https://user:pass@www.nanya.com/original','https://www.nanya.com:444/original','https://www.nanya.com/original#fragment']){const copy=structuredClone(original);for(const row of [...copy.rows.provenance,...copy.rows.receipts])row.source_url=url;copy.rows.documents[0].document_url=url;(copy.rows.provenance[0].locator as Row).response_url=url;assert.equal(projectFinancialEvidenceSources([copy.fact],copy.rows,cutoff).evidence.length,0);}
+});
+test('IR original fact codec uses existing inputHash domain and rejects unsupported values or unknown record keys without rounding',()=>{
+ const {fact,rows}=issuerFixture();for(const value of [1e-7,1e21,Infinity,NaN])assert.equal(projectFinancialEvidenceSources([{...fact,value}],rows,cutoff).evidence.length,0);
+ assert.equal(projectFinancialEvidenceSources([{...fact,unknown_authority:true}],rows,cutoff).evidence.length,0);const missing={...fact};delete missing.period_start;assert.equal(projectFinancialEvidenceSources([missing],rows,cutoff).evidence.length,0);
+ assert.equal(projectFinancialEvidenceSources([{...fact,value:0.000001}],rows,cutoff).evidence[0].value,0.000001);
+});
+const sourceText=(path:string)=>readFileSync(new URL(`../../../../${path}`,import.meta.url),'utf8');
+const sourceDigest=(value:string)=>createHash('sha256').update(value).digest('hex');
+test('IR candidate preserves exact non-IR provider statements and frozen evidence-only model projection',()=>{
+ const source=sourceText('migrations/20261022_vnext_issuer_ir_sources_v1.sql');const old=sourceText('migrations/20261022_vnext_terminal_failure_slots_v1.sql').split('$replacement$')[1];
+ const profile=JSON.parse(sourceText('scripts/opportunity-v3/vnext-issuer-ir-source-profile-v1.json'));let changed=old;const changes:Array<{before:string;after:string}>=[];
+ for(const key of ['url','replay']){const before=source.split(`$old_${key}$`)[1],after=source.split(`$new_${key}$`)[1];assert.equal(changed.split(before).length,2);changed=changed.replace(before,after);changes.push({before,after});}
+ assert.equal(sourceDigest(old),profile.predecessors[0].prosrcSha256);assert.equal(sourceDigest(changed),profile.predecessors[0].postProsrcSha256);assert.ok(source.includes(profile.predecessors[0].postProsrcSha256));
+ for(const change of changes.reverse())changed=changed.replace(change.after,change.before);assert.equal(changed,old);
+ const projection="'evidence',jsonb_build_object('cutoff',member.evidence->'cutoff','evidence',member.evidence->'evidence')";assert.ok(old.includes(projection));assert.ok(changed.includes(projection));assert.ok(!old.includes("'originalFact',"));
+ assert.equal(sourceDigest(source.split('$current_body$')[1]),profile.predecessors[1].postProsrcSha256);assert.equal(profile.nativeVerified,false);assert.equal(profile.catalogOids,null);
+});
+test('IR source candidate limits existing authority delta to exact three column reads/policies and two execute edges',()=>{
+ const source=sourceText('migrations/20261022_vnext_issuer_ir_sources_v1.sql');const profile=JSON.parse(sourceText('scripts/opportunity-v3/vnext-issuer-ir-source-profile-v1.json'));const grants=source.match(/^GRANT .+;$/gmu)||[];assert.equal(grants.length,5);
+ for(const [table,columns]of Object.entries(profile.columnSelect) as Array<[string,string[]]>){assert.ok(grants.includes(`GRANT SELECT(${columns.join(',')}) ON ${table} TO opportunity_v3_rpc_owner;`));assert.ok(source.includes(`CREATE POLICY vnext_ir_source_read_v1 ON ${table} FOR SELECT TO opportunity_v3_rpc_owner USING(true);`));}
+ assert.equal((source.match(/^CREATE POLICY /gmu)||[]).length,3);assert.deepEqual(source.match(/^ALTER FUNCTION .+OWNER TO .+;$/gmu),['ALTER FUNCTION public.vnext_issuer_financial_evidence_current_v1(jsonb,jsonb,text) OWNER TO opportunity_v3_rpc_owner;']);
+ assert.ok(source.includes('FROM PUBLIC,anon,authenticated,service_role;'));assert.ok(!/^GRANT .+ TO (service_role|anon|authenticated|PUBLIC);$/mu.test(source));assert.ok(source.includes("'vnext_ir_table_authority_changed'"));assert.ok(source.includes("'vnext_ir_unrelated_column_acl_changed'"));assert.ok(source.includes("'vnext_ir_roles_changed'"));
+});
+test('one private IR checker binds current source through author/reviewer/qualification/publish/current public reads',()=>{
+ const source=sourceText('migrations/20261022_vnext_issuer_ir_sources_v1.sql');const current=source.split('$current_body$')[1];const thesis=sourceText('migrations/20261022_vnext_thesis_audit_v1.sql');
+ for(const text of ["descriptor->'originalFact' IS DISTINCT FROM to_jsonb(original)",'d.stock_id=v_stock_id','d.approved_at<=cutoff','receipt.financial_validation_status=\'validated\'','parser.manifest_sha256=descriptor->>\'manifestSha256\'','document.acquisition_status=\'fetched\'','public.candidate_financial_fact_has_structural_proof_as_of_v10(original.fact_id,original.recorded_at,receipt.document_sha256,cutoff)'])assert.ok(source.includes(text),text);
+ assert.ok(current.includes('public.vnext_issuer_financial_evidence_current_v1(source_item,input,p_symbol)'));assert.ok(current.includes('public.vnext_provider_json_codec_v1'));assert.ok(current.includes('public.vnext_catalog_canonical_v1'));assert.ok(current.includes('ELSE NOT public.vnext_source_evidence_current_v1(source_item,p_symbol)'));
+ for(const command of ['author','review','qualification-context','record-qualification','publish'])assert.ok(thesis.includes(`'${command}'`));assert.ok(thesis.includes('public.vnext_input_sources_current_v1(source_input,publication.symbol)'));assert.ok(thesis.includes('BEFORE INSERT OR UPDATE ON public.vnext_publications_v1'));
+ assert.equal((source.match(/pg_advisory_xact_lock\(64221022\)/gu)||[]).length,1);assert.ok(source.includes("SET LOCAL statement_timeout='30s'; SET LOCAL lock_timeout='2s';"));
 });
 function valuationFixture(){
  const evidence:Evidence[]=[{id:'book',key:'book_value_per_share',kind:'fact',sourceTier:'official',value:20,unit:'TWD_per_share',period:'2026-06-30',source:'https://mops.twse.com.tw/synthetic',eventAt:clock,availableAt:clock,contentHash:inputHash('synthetic-book')},...[4,7,9].map((value,index):Evidence=>({id:`assumption-${index}`,key:'scenario_pb_multiple',kind:'assumption',sourceTier:'public',value,unit:'multiple',period:'2026-06-30',source:'https://example.org/synthetic-only-original-assumption',eventAt:clock,availableAt:clock,contentHash:inputHash({syntheticAssumption:index,value})})),{id:'quote',key:'current_price',kind:'fact',sourceTier:'official',value:100,unit:'TWD',period:'2026-10-21',source:'https://www.twse.com.tw/synthetic',eventAt:clock,availableAt:clock,contentHash:inputHash('synthetic-quote')}];
