@@ -1,3 +1,4 @@
+import { verifyAdmittedResearch } from './vnext/runtime.ts';
 import { createHash } from 'node:crypto';
 import { spawn as spawnChild } from 'node:child_process';
 import net from 'node:net';
@@ -204,6 +205,7 @@ export async function runCandidateFinancialLocalParser(input: {
   expectedEntity?: string;
   expectedPeriodEnd?: string;
 }): Promise<CandidateFinancialLocalParserResult> {
+  await verifyAdmittedResearch(input.expectedEntity);
   if (input.bytes.byteLength < 1 || input.bytes.byteLength > MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES
     || !/^[0-9a-f]{64}$/u.test(input.documentSha256)
     || createHash('sha256').update(input.bytes).digest('hex') !== input.documentSha256) throw new Error('candidate_financial_local_parser_input_invalid');

@@ -1,0 +1,10 @@
+{
+  "requirementsGate": "USER_APPROVED_PLAN_PERSISTED",
+  "designGate": "IN_REVIEW",
+  "changeGate": "USER_APPROVED_VERSIONED_REPLACEMENT",
+  "releaseGate": "PENDING_EXECUTION",
+  "autoMerge": false,
+  "autoDeploy": false,
+  "sourceOfTruth": "openspec/changes/stockinsider-vnext-20",
+  "acceptanceInventory": "VN01..VN20"
+}

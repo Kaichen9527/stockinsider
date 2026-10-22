@@ -1,3 +1,4 @@
+import { rejectLegacyResearchInVnext } from './vnext/runtime.ts';
 import { randomUUID } from 'crypto';
 import { normalizeRelatedStockSymbols, normalizeSourceDocumentSymbols } from './stock-symbol';
 import { loadActiveCandidateSourceErrors, loadCandidateStageCards, runCandidateResearchCycle } from './candidate-research';
@@ -16617,6 +16618,7 @@ export async function runStockResearchRefresh(options: {
   dryRun?: boolean;
   connectors?: string[];
 }): Promise<StockResearchRefreshResult> {
+  rejectLegacyResearchInVnext();
   const normalizedSymbol = String(options.symbol || '').toUpperCase();
   if (!normalizedSymbol) {
     throw new Error('symbol is required');
@@ -21100,6 +21102,7 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
 }
 
 export async function runReportBuild(options?: { dryRun?: boolean }): Promise<AgentWorkflowResult> {
+  rejectLegacyResearchInVnext();
   const dryRun = Boolean(options?.dryRun);
   const asOfDate = asIsoDate(nowIso());
   const startedRoles = ['Research Editor Agent'];
@@ -21351,6 +21354,7 @@ export async function runReportBuild(options?: { dryRun?: boolean }): Promise<Ag
 }
 
 export async function runDeepDiveBuild(options?: { dryRun?: boolean; symbol?: string }): Promise<AgentWorkflowResult> {
+  rejectLegacyResearchInVnext();
   const dryRun = Boolean(options?.dryRun);
   const symbol = options?.symbol?.toUpperCase();
   const startedRoles = ['Research Editor Agent', 'Technical Timing Agent'];
@@ -21402,6 +21406,7 @@ type RecommendationStepStatus = {
 };
 
 export async function runRecommendationBatch(options?: { dryRun?: boolean; timeoutMs?: number }) {
+  rejectLegacyResearchInVnext();
   const dryRun = Boolean(options?.dryRun);
   const timeoutMs = options?.timeoutMs || Number(process.env.RECOMMENDATION_BATCH_TIMEOUT_MS || (dryRun ? 90_000 : 18_000));
   const startedAt = Date.now();
@@ -21843,6 +21848,7 @@ export async function runRevenueIngestion(options?: { dryRun?: boolean }) {
 }
 
 export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestion?: boolean; mode?: 'core' | 'full'; researchSession?: string; researchCutoffAt?: string; historicalResearchOnly?: boolean }) {
+  rejectLegacyResearchInVnext();
   const dryRun = Boolean(options?.dryRun);
   const skipIngestion = Boolean(options?.skipIngestion);
   const mode = options?.mode || (dryRun ? 'full' : 'core');
@@ -22132,6 +22138,7 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
 }
 
 export async function runPipelineResearchFlow(options?: { dryRun?: boolean }) {
+  rejectLegacyResearchInVnext();
   const dryRun = Boolean(options?.dryRun);
   const startedAt = Date.now();
   const researchV2 = await import('./research-v2');

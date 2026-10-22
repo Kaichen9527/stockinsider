@@ -1,8 +1,11 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { getLatestIngestionState, runRecommendationBatch } from '@/lib/domain';
 import { requireInternalAuth } from '@/lib/internal-auth';
 
 export async function POST(req: Request) {
+  const vnext = await vnextRoute(req, 'recommendation-run');
+  if (vnext) return vnext;
   const auth = requireInternalAuth(req);
   if (!auth.ok) {
     return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });

@@ -1,3 +1,4 @@
+import { verifyAdmittedResearch } from './vnext/runtime.ts';
 import { createHash } from 'crypto';
 import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
@@ -331,6 +332,7 @@ export function candidateFinancialPeriodPredatesListing(
 }
 
 export async function fetchCandidateMopsFiling(candidate: CandidateOfficialFinancial, year: number, quarter: number) {
+  await verifyAdmittedResearch(candidate.symbol);
   const sourceUrl = candidateMopsDownloadUrl(candidate.symbol,year,quarter);
   const periodEnd = `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`;
   let lastError: unknown = null;
@@ -472,6 +474,7 @@ export async function fetchTpexOfficialPayload(sourceUrl: string, dependencies: 
   boundedFetchImpl?: typeof fetch;
   sleep?: (milliseconds: number) => Promise<void>;
 } = {}) {
+  await verifyAdmittedResearch();
   const fetchImpl = dependencies.fetchImpl ?? fetch;
   // Keep injected fetch tests hermetic. Production gets the same fixed-host,
   // credential-free curl TLS transport used by the market-data plane when
@@ -695,6 +698,8 @@ export async function refreshCandidateOfficialFinancials(
   cutoff: string,
   options: CandidateOfficialFinancialRefreshOptions = {},
 ) {
+  if (candidates.length === 0) return { candidateCount: 0, claimedJobs: 0, fetchedFilings: 0, parsedFacts: 0, writtenFacts: 0, documentReceipts: [], symbolsWithFacts: [], attemptedSymbols: [], notApplicablePeriods: [], finMindFallbackFilings: 0, anonymousFinMindFallbackFilings: 0, mopsSecurityBlocks: 0, failures: [] };
+  for (const candidate of candidates) await verifyAdmittedResearch(candidate.symbol);
   const runnerPrincipal = fixedRunnerPrincipal();
   if (!runnerPrincipal) throw new Error('candidate_financial_runner_principal_missing');
   const collectedAt = new Date().toISOString();

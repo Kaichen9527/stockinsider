@@ -8,6 +8,8 @@ import { loadPublishedRadarProjection } from '@/lib/radar-projection-read';
 import { loadLatestRadarPublicSnapshot, radarPublicSnapshotsEnabled } from '@/lib/radar-public-snapshot';
 import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
 import { isHealthySourceTerminal } from '@/lib/source-terminal-policy';
+import { vnextEnabled } from '@/lib/vnext/policy';
+import VnextHome from './components/vnext/Home';
 
 export const dynamic = 'force-dynamic';
 
@@ -125,6 +127,7 @@ function wholeSecondUtcOrNow(value: string | null | undefined) {
 }
 
 export default async function Home() {
+  if (vnextEnabled()) return <VnextHome />;
   const publicSnapshot = await loadLatestRadarPublicSnapshot('home');
   const publishedRadar = publicSnapshot ? null : await loadPublishedRadarProjection('home');
   const legacyRadar = (publicSnapshot?.payload ?? publishedRadar ?? await getDailyRadarData()) as Awaited<ReturnType<typeof getDailyRadarData>>;

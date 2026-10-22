@@ -1,3 +1,4 @@
+import { verifyAdmittedResearch } from './vnext/runtime.ts';
 import { readFinMindVaultToken } from './finmind-vault.ts';
 
 type TwStockModule = {
@@ -479,6 +480,7 @@ function parseTwseTwt93uRow(symbol: string, payload: Record<string, unknown>, so
 }
 
 export async function fetchTwseOfficialSblShortSales(symbol: string) {
+  await verifyAdmittedResearch(symbol);
   const dates = buildRecentDates(8);
   for (const date of dates) {
     const compactDate = compactTwseDate(date);
@@ -548,6 +550,7 @@ async function getTwStockClient() {
 }
 
 export async function fetchTwStockQuote(symbol: string) {
+  await verifyAdmittedResearch(symbol);
   const client = await getTwStockClient();
   if (!client) return null;
   try {
@@ -579,6 +582,7 @@ export async function fetchTwStockQuote(symbol: string) {
 }
 
 export async function fetchTwStockValues(symbol: string) {
+  await verifyAdmittedResearch(symbol);
   const symbols = new Set([symbol]);
   const dates = buildRecentDates(8);
   for (const date of dates) {
@@ -745,6 +749,7 @@ export async function fetchTwMarketValuationHistory(
   exchangeBySymbol?: Map<string, 'TWSE' | 'TPEx'>,
   existingHistory?: Map<string, TwValuationHistoryPoint[]>,
 ) {
+  for (const symbol of symbols) await verifyAdmittedResearch(symbol);
   const requestedSymbols = new Set(symbols.filter((symbol) => /^\d{4}$/u.test(symbol)));
   const latestSessionByMonth = new Map<string, string>();
   for (const session of [...tradingSessions].sort()) latestSessionByMonth.set(session.slice(0, 7), session);
@@ -905,6 +910,7 @@ export function twStockHistoryMonthUrl(job: {
 export async function fetchTwStockHistoryMonth(job: {
   symbol: string; exchange: 'TWSE' | 'TPEx'; dataset: 'price' | 'multiple'; month: string; lastSession: string | null;
 }) {
+  await verifyAdmittedResearch(job.symbol);
   const sourceUrl = twStockHistoryMonthUrl(job);
   const result = await fetchOfficialJsonOutcome<Record<string, unknown>>(sourceUrl, 8_000);
   const empty = { bars: [] as TwMarketDailyBar[], multiples: [] as TwValuationHistoryPoint[], sourceUrl, httpStatus: result.httpStatus };
@@ -937,6 +943,7 @@ export async function fetchTwStockDailyBars(
   officialSessions: string[] | null = null,
   exchange: 'TWSE' | 'TPEx' | null = null,
 ) {
+  await verifyAdmittedResearch(symbol);
   const rows: TwMarketDailyBar[] = [];
   if (exchange !== 'TPEx' && officialSessions && officialSessions.length > 0) {
     // Fetch newest sessions first.  The all-market endpoint occasionally times
@@ -1150,6 +1157,7 @@ export function parseTpexMarketTradingSessions(payload: unknown): string[] {
 }
 
 export async function fetchTwStockInstitutional(symbol: string) {
+  await verifyAdmittedResearch(symbol);
   const client = await getTwStockClient();
   const dates = buildRecentDates(6);
   if (client) for (const date of dates) {
@@ -1231,6 +1239,7 @@ export function parseTwseInfoHubRevenue(payload: TwseInfoHubFinancialPayload, sy
 }
 
 export async function fetchTwStockRevenue(symbol: string, monthsBack = 4) {
+  await verifyAdmittedResearch(symbol);
   const client = await getTwStockClient();
   if (client) for (let i = 0; i < monthsBack; i += 1) {
     const { year, month } = startOfMonthShift(i + 1);
@@ -1275,6 +1284,7 @@ export async function fetchTwStockRevenue(symbol: string, monthsBack = 4) {
 }
 
 export async function fetchTwStockEpsTtm(symbol: string, quartersBack = 4) {
+  await verifyAdmittedResearch(symbol);
   const client = await getTwStockClient();
   if (!client) return null;
   const parts: Array<{ year: number; quarter: number }> = [];
@@ -1324,6 +1334,7 @@ export async function fetchTwStockEpsTtm(symbol: string, quartersBack = 4) {
 }
 
 export async function fetchTwStockMarginTrades(symbol: string) {
+  await verifyAdmittedResearch(symbol);
   const client = await getTwStockClient();
   if (!client) return null;
   const dates = buildRecentDates(6);
@@ -1362,6 +1373,7 @@ export async function fetchTwStockMarginTrades(symbol: string) {
 }
 
 export async function fetchTwStockShortSales(symbol: string) {
+  await verifyAdmittedResearch(symbol);
   const client = await getTwStockClient();
   const officialSbl = await fetchTwseOfficialSblShortSales(symbol).catch(() => null);
   if (!client) return officialSbl;

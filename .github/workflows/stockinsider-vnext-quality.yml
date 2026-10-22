@@ -1,0 +1,67 @@
+name: StockInsider vNext isolated quality
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/stockinsider-vnext-quality.yml'
+      - 'web/**'
+      - 'scripts/vnext-*'
+      - 'scripts/candidate-financial-document-write-lease-route.test.mjs'
+      - 'migrations/20261022_*'
+      - 'openspec/changes/stockinsider-vnext-20/**'
+      - 'specs/research-admission/**'
+      - 'package.json'
+      - 'package-lock.json'
+permissions:
+  contents: read
+jobs:
+  vnext-quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Install unchanged locked dependencies
+        run: |
+          npm ci --ignore-scripts
+          npm --prefix web ci --ignore-scripts
+          node web/scripts/sync-official-authority.mjs
+      - name: Actual source contracts, types and lint
+        run: |
+          mkdir -m 700 /tmp/stockinsider-vnext-ci
+          node --experimental-strip-types web/src/lib/vnext/vnext.test.ts | tee /tmp/stockinsider-vnext-ci/pure.tap
+          node --experimental-strip-types --test web/src/lib/vnext/discovery.test.ts | tee /tmp/stockinsider-vnext-ci/discovery.tap
+          node --experimental-strip-types web/src/lib/vnext/boundaries.test.ts | tee /tmp/stockinsider-vnext-ci/boundaries.tap
+          node --test scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
+          npm --prefix web run typecheck
+          npm --prefix web run lint
+      - name: Full ordinary build
+        run: npm --prefix web run build
+      - name: Isolated PostgreSQL real concurrency and synthetic publication lifecycle
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-ci
+        run: |
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -U postgres -d vnext; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/admission node --experimental-strip-types scripts/vnext-admission-postgres.test.mjs | tee /tmp/stockinsider-vnext-ci/admission.tap
+          VNEXT_BUSINESS_DATABASE=vnext_business_01 VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/business node --experimental-strip-types scripts/vnext-business-postgres.test.mjs | tee /tmp/stockinsider-vnext-ci/business.tap
+      - name: Upload finite synthetic TAP only (no raw rows, env or browser traces)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: stockinsider-vnext-source-and-synthetic-db-tap
+          path: /tmp/stockinsider-vnext-ci/*.tap
+          if-no-files-found: warn
+          retention-days: 7

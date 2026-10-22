@@ -1,0 +1,7 @@
+# StockInsider vNext: market judgment and at most twenty active research symbols
+
+Authority: user-approved plan transferred from chat `01a14a18-d937-7f71-897d-a98f09a3db85`, plan turn `01a14cc8-04be-7691-a427-4f2ba5c4a59f`, executed exclusively on Codex VM from 2026-10-22 Asia/Taipei. Fresh remote main is `93e44475cbb0c27beb26e4dcb68e382096a4e212`. New isolated checkout/branch: `/workspace/stockinsider-vnext-oct22`, `codex/stockinsider-vnext-oct22`.
+
+Deliver code, tests, isolated staging acceptance where available, documentation and a normal PR. Do not merge, deploy production, apply production migrations, resume the three paused Codex schedules, delete existing data/artifacts/checkouts, or rerun consumed deployment/review operations. Current approved plan supersedes the old all-screened-deep-research requirement, 15+5 admission projection and weekly-five policy for the opt-in versioned vNext path only. Preserve legacy behavior when the new feature is disabled and all still-applicable provenance/auth/writer/RLS/publication safeguards.
+
+The homepage has two main areas: a shared market decision (recent entry conditions, three-month background) and up to twenty active research candidates (including work in progress). Wide low-cost discovery is separate from budgeted deep research. Neither scoring nor synthetic test success establishes investment performance, formal author/reviewer execution or production readiness.

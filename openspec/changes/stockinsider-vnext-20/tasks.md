@@ -1,0 +1,13 @@
+# Tasks
+- [x] Fresh Codex Linux VM and remote main verified; independent checkout/branch created.
+- [x] Approved requirements/design/acceptance and predecessor changes persisted.
+- [ ] Versioned data contracts, deterministic scoring/session/rotation/source policies.
+- [ ] Atomic durable active-slot/day-attempt/idempotency authority and isolated integration proof.
+- [ ] Early explicit scope and complete trigger/queue/outbox guard integration.
+- [ ] Shared market snapshot/freshness/risk and allowed bounded source extraction.
+- [ ] Research/reviewer/publish revalidation and admitted-only coverage.
+- [ ] Two-block homepage/detail/history and truthful states.
+- [ ] Focused/meaningful regressions, types/lint/fullwebbuild, desktop/mobile E2E.
+- [ ] Real-source/staging isolation checks where injected access exists; exact external gaps recorded.
+- [ ] Independent code review, zero blocker/high, acceptance-to-test evidence mapping.
+- [ ] Exactsource/evidence commits, normal PR, handoff; no production change.

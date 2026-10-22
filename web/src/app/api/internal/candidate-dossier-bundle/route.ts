@@ -1,3 +1,4 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { getSupabaseServerClient } from '@/lib/supabase-server';
@@ -100,5 +101,13 @@ async function handle(request: Request, body: Row) {
   });
 }
 
-export async function POST(request: Request) { return handle(request, await request.json().catch(() => ({})) as Row); }
-export async function GET(request: Request) { return handle(request, {}); }
+export async function POST(request: Request) {
+  const vnext = await vnextRoute(request, 'candidate-dossier-bundle');
+  if (vnext) return vnext;
+  return handle(request, await request.json().catch(() => ({})) as Row);
+}
+export async function GET(request: Request) {
+  const vnext = await vnextRoute(request, 'candidate-dossier-bundle');
+  if (vnext) return vnext;
+  return handle(request, {});
+}

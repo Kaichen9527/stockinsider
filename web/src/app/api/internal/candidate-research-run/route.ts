@@ -1,3 +1,4 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { runCandidateResearchCanary } from '@/lib/domain';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
@@ -17,6 +18,8 @@ function parseBody(value: unknown) {
 }
 
 export async function POST(request: Request) {
+  const vnext = await vnextRoute(request, 'candidate-research-run');
+  if (vnext) return vnext;
   if (!requireExactInternalBearer(request)) {
     return NextResponse.json({ ok: false, error: 'unauthorized_internal_writer' }, { status: 401 });
   }

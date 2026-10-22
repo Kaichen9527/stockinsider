@@ -3,6 +3,34 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
 import ts from '../web/node_modules/typescript/lib/typescript.js';
+import { createRequire } from 'node:module';
+
+const nativeRequire = createRequire(import.meta.url);
+// Execute the actual feature gate and policy in an isolated, explicitly
+// default-off fixture. Enabled authority behavior belongs to vNext's own cases;
+// this adapter must not silently substitute a legacy path for enabled mode.
+function loadActualVnextGate(enabled = false) {
+  const compile = relative => ts.transpileModule(fs.readFileSync(new URL(relative, import.meta.url), 'utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+  }).outputText;
+  const policy = {};
+  vm.runInNewContext(compile('../web/src/lib/vnext/policy.ts'), { exports: policy, require: nativeRequire,
+    process: { env: enabled ? { STOCKINSIDER_VNEXT_ENABLED: 'true' } : {} } });
+  let enabledBoundaryCalls = 0;
+  const enabledBoundary = () => { enabledBoundaryCalls++; throw new Error('enabled_vnext_cannot_use_default_off_fixture'); };
+  const dependencies = {
+    './policy.ts': policy,
+    'next/server': { NextResponse: { json: enabledBoundary } },
+    './store.ts': new Proxy({}, { get: () => enabledBoundary }),
+    './auth.ts': { vnextIdentity: enabledBoundary },
+    './request.ts': { boundedRequestBody: enabledBoundary },
+  };
+  const gate = {};
+  vm.runInNewContext(compile('../web/src/lib/vnext/http.ts'), { exports: gate,
+    require: name => { assert.ok(name in dependencies, `unexpected vnext gate dependency ${name}`); return dependencies[name]; } });
+  return { gate, enabledBoundaryCalls: () => enabledBoundaryCalls };
+}
+const defaultOffVnext = loadActualVnextGate();
 
 // Real route execution with synthetic document/database/lease boundaries.
 // No live request, credential, document, artifact or database is used.
@@ -29,6 +57,7 @@ async function run(options = {}) {
     },
   };
   const adapters = {
+    '@/lib/vnext/http': defaultOffVnext.gate,
     'next/server': { NextResponse: { json: (body, init) => ({ body, status: init?.status ?? 200 }) } },
     '@/lib/internal-auth': { requireExactInternalBearer() { calls.push('auth'); return !options.unauthorized; } },
     '@/lib/taiwan-data-runtime': { async requireActiveVpsWriter() {
@@ -71,6 +100,14 @@ function released(state) {
   assert.equal(state.calls.filter(c => c.startsWith('release:')).length, 1);
   assert.equal(state.calls.at(-1), `release:${OWNER}`); assert.equal(state.held, null);
 }
+
+test('FDL-00 actual vNext gate defaults off without touching authority and cannot mask enabled mode', async () => {
+  assert.equal(await defaultOffVnext.gate.vnextRoute({}, 'financial-lease-regression'), null);
+  assert.equal(defaultOffVnext.enabledBoundaryCalls(), 0);
+  const enabled = loadActualVnextGate(true);
+  await assert.rejects(enabled.gate.vnextRoute({}, 'financial-lease-regression'), /enabled_vnext_cannot_use_default_off_fixture/u);
+  assert.equal(enabled.enabledBoundaryCalls(), 1);
+});
 
 test('FDL-01 exact auth and active writer precede any lease/artifact operation', async () => {
   for (const worker of [false, true]) {

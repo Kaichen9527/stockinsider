@@ -1,3 +1,4 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { sendOpsAlert } from '@/lib/alerts';
 import { runPipelineResearchFlow } from '@/lib/domain';
@@ -5,10 +6,14 @@ import { requireInternalAuth } from '@/lib/internal-auth';
 import { acquireProductionWriteLease, releaseProductionWriteLease } from '@/lib/production-write-lease';
 
 export async function GET(req: Request) {
+  const vnext = await vnextRoute(req, 'pipeline-research-run');
+  if (vnext) return vnext;
   return POST(req);
 }
 
 export async function POST(req: Request) {
+  const vnext = await vnextRoute(req, 'pipeline-research-run');
+  if (vnext) return vnext;
   const auth = requireInternalAuth(req);
   if (!auth.ok) {
     return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });

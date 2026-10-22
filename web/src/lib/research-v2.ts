@@ -1,3 +1,4 @@
+import { rejectLegacyResearchInVnext } from './vnext/runtime.ts';
 import fs from 'fs/promises';
 import path from 'path';
 import { createHash, randomUUID } from 'crypto';
@@ -4644,6 +4645,7 @@ function verificationLabelForTier(tier: 'signal_candidate' | 'partially_verified
 }
 
 export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: string[]; topN?: number }) {
+  rejectLegacyResearchInVnext();
   const dryRun = Boolean(options?.dryRun);
   const startedAt = Date.now();
   const supabase = getSupabaseServerClient();
@@ -5164,6 +5166,7 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
 }
 
 export async function runResearchReportBuild(options?: { dryRun?: boolean; symbols?: string[]; topN?: number }) {
+  rejectLegacyResearchInVnext();
   const dryRun = Boolean(options?.dryRun);
   const startedAt = Date.now();
   const today = asDate();

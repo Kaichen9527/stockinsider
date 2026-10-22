@@ -1,9 +1,12 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { requireActiveVpsWriter } from '@/lib/taiwan-data-runtime';
 import { fixedRunnerPrincipal } from '@/lib/opportunity-v3/internal';
 
 export async function POST(request: Request) {
+  const vnext = await vnextRoute(request, 'candidate-financial-documents/retry');
+  if (vnext) return vnext;
   if (!requireExactInternalBearer(request)) return NextResponse.json({ok:false,error:'exact_internal_bearer_required'},{status:401});
   const writer=await requireActiveVpsWriter();
   if (!writer.ok) return NextResponse.json({ok:false,error:writer.error},{status:409});

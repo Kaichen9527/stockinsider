@@ -1,3 +1,4 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import {
   candidateFinancialDocumentObjectKey,
@@ -27,6 +28,8 @@ async function requireWriter(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const vnext = await vnextRoute(request, 'candidate-financial-documents');
+  if (vnext) return vnext;
   const identity = await requireWriter(request);
   if ('response' in identity) return identity.response;
   const contentLength = request.headers.get('content-length');
@@ -95,6 +98,8 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
+  const vnext = await vnextRoute(request, 'candidate-financial-documents');
+  if (vnext) return vnext;
   const identity = await requireWriter(request);
   if ('response' in identity) return identity.response;
   const receiptId = new URL(request.url).searchParams.get('receiptId') || '';
