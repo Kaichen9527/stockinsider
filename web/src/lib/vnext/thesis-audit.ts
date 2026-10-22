@@ -1,6 +1,7 @@
 import { deepFactors,type DeepInputs } from './factors.ts';
 import { validateClaim,type Artifact,type Evidence,type Review } from './research.ts';
 import { inputHash } from './policy.ts';
+import {reviewedValuation} from './reviewed-valuation.ts';
 type Row=Record<string,unknown>;
 export type AuditQuote={close:number|null;session:string|null;source:string;adjusted:boolean;volume:number|null;ma20:number|null;ma60:number|null;volumeRatio:number|null;institutionalFlow:number|null;provenance?:string[]};
 export type ThesisAuditInput={symbol:string;inputHash:string;revisionId:string|null;publishedInputHash:string|null;artifact:Artifact|null;review:Review|null;original:Evidence[];current:Evidence[];newContent:Evidence[];quote:AuditQuote;cutoff:string;session?:string;previousAudit?:{materialEvidence?:Row}|null;market:{risk:string;snapshotHash:string|null};previousMarketHash:string|null;tradingValid:boolean|null};
@@ -28,9 +29,8 @@ export function auditPublishedThesis(input:ThesisAuditInput){
  const cash=latest('operating_cashflow')[0];const income=latest('quarterly_net_income')[0];
  const semantic=(key:string)=>{const claim=input.artifact?.claims.find((c)=>c.id===`check:${key}` && c.numeric && [0,1].includes(c.numeric.value));return claim && supported(claim.id) && !validateClaim(claim,aliases).length?observe(claim.numeric!.value===1,claim.evidenceIds):observe(null,[]);};
  const quote=input.quote;const quoteProvenance=quote.adjusted && quote.source?[quote.source,...(quote.provenance||[])]:[];
- const scenario=(key:string)=>{const claim=input.artifact?.claims.find((c)=>c.numeric?.key===key && supported(c.id) && !validateClaim(c,aliases).length);return claim?.numeric?.value??null;};
- const method=input.artifact?.claims.find((c)=>/^valuation:(forward_pe|forward_pb|normalized_pe|ev_ebitda|dcf)$/u.test(c.id) && supported(c.id) && !validateClaim(c,aliases).length)?.id.split(':')[1]||'unknown';
- const deep:DeepInputs={cutoff:input.cutoff,valuation:{current:quote.adjusted?quote.close:null,bear:scenario('valuation_bear'),base:scenario('valuation_base'),bull:scenario('valuation_bull'),method,quoteAt:quote.session||'',valuationAt:input.artifact?.valuationDate||'',provenance:quoteProvenance},
+ const valuation=reviewedValuation({artifact:input.artifact,review:input.review,original:input.original,current:aliases,quote,cutoff:input.cutoff});
+ const deep:DeepInputs={cutoff:input.cutoff,valuation:valuation.valuation,
   profitabilityChecklist:{checks:[{key:'margin_stable',...observe(margins.length>=2?margins[0].value>=margins[1].value:null,margins.slice(0,2).flatMap((e)=>e.provenance),margins.slice(0,2))},{key:'cashflow_conversion',...observe(cash && income && cash.period===income.period && cash.unit===income.unit && numeric(cash)!==null && numeric(income)!==null?numeric(cash)!>0 && numeric(income)!>0 && numeric(cash)!>=numeric(income)!*0.8:null,[cash?.id,income?.id].filter((id):id is string=>Boolean(id)),{cash:cash||null,income:income||null,minimumConversion:0.8})},{key:'competitive_advantage',...semantic('competitive_advantage')},{key:'concentration_disclosed',...observe(numeric(latest('customer_concentration')[0])!==null?true:null,latest('customer_concentration').slice(0,1).map((e)=>e.id))}]},
   technicalChipsChecklist:{checks:[{key:'trend_valid',...observe(quote.adjusted && quote.close!==null && quote.ma20!==null && quote.ma60!==null?quote.close>=quote.ma20 && quote.close>=quote.ma60:null,quoteProvenance)},{key:'volume_confirmed',...observe(quote.volumeRatio===null?null:quote.volumeRatio>=1,quoteProvenance)},{key:'institutional_confirmed',...observe(quote.institutionalFlow===null?null:quote.institutionalFlow>=0,quoteProvenance)},{key:'adjustment_verified',...observe(quote.adjusted?true:null,quoteProvenance)}]},
   catalystChecklist:{checks:['dated','verified','mechanism_documented','falsifier_defined'].map((key)=>({key,...semantic(`catalyst_${key}`)}))},

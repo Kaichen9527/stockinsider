@@ -121,13 +121,14 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       const facts = (official.data || []) as Row[];
       const verified = facts.filter((f) => f.validation_status === 'validated' && f.schema_valid === true && f.unit_valid === true
         && f.point_in_time_valid === true && f.consistency_valid === true && ['official_primary', 'official_filing'].includes(String(f.authority_tier)));
-      const evidence = verified.map((fact): Evidence => ({ id: String(fact.fact_id), key: String(fact.fact_key), value: fact.value,
-        unit: String(fact.unit), period: String(fact.period_end), source: String(fact.source_ref), sourceTier: 'official', kind: 'fact',
-        eventAt: String(fact.source_timestamp), availableAt: String(fact.recorded_at), contentHash: inputHash(fact) }));
+      const {resolveFinancialEvidenceSources}=await import('./financial-evidence-sources.ts');
+      const financialSources=await resolveFinancialEvidenceSources(writer.supabase,verified,frozenAt);
+      const evidence=financialSources.evidence;
       const {currentPriceEvidence}=await import('./cached-price-factors.ts');evidence.push(...currentPriceEvidence(historical));
       const original = activeReceipt.evidence as Row;
-      const frozen = { ...original, cutoff: frozenAt, admissionHash: original.hash,priceAuthority:historical,
-        gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
+      const frozen = { ...original, cutoff: frozenAt, admissionHash: original.hash,priceAuthority:historical,financialSourceReceipts:financialSources.receipts,
+        financialSourceDeferrals:{count:financialSources.deferredCount,digest:financialSources.deferredDigest,details:financialSources.deferredDetails,detailsTruncated:financialSources.deferredDetailsTruncated},
+        gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...financialSources.gaps,...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
         evidence: [...(Array.isArray(original.evidence) ? original.evidence as Evidence[] : []).filter((e) => !evidence.some((f) => f.id === e.id)), ...evidence] };
       const preparedHash = inputHash(frozen);
       await command(identity, 'prepare', { jobId: context.jobId, executionId: context.executionId, inputHash: preparedHash, evidence: frozen });
