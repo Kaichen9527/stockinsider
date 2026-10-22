@@ -1,3 +1,4 @@
+import { artifactFinancialSummary } from './artifact-financial-summary.ts';
 import { inputHash } from './policy.ts';
 export const REQUIRED_SECTIONS = ['conclusion', 'productsRevenue', 'competitionDemand', 'profitBridge', 'cashflows', 'valuation', 'catalysts', 'falsifiers', 'technical', 'history'] as const;
 export type Evidence = { id: string; key?: string; value: unknown; unit?: string; period?: string; contentHash: string;
@@ -25,6 +26,7 @@ export function validateArtifact(value: unknown, evidence: Evidence[], expectedH
   if (a && a.outputHash !== inputHash({ ...a, outputHash: undefined })) reasons.push('artifact_output_hash_mismatch');
   if (!claims.length || claimIds.size !== claims.length) reasons.push('important_claims_missing_or_duplicate');
   for (const claim of claims) reasons.push(...validateClaim(claim, evidence));
+  if(a) reasons.push(...artifactFinancialSummary(a,evidence));
   return { valid: reasons.length === 0, reasons };
 }
 export function validateClaim(claim: Claim, evidence: Evidence[]) {
