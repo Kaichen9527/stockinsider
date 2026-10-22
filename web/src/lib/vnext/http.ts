@@ -18,6 +18,13 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       : entrypoint === 'candidate-dossier-outbox' && body.jobId ? 'claim'
       : entrypoint === 'candidate-dossier-submission' && body.artifact ? 'author'
       : entrypoint === 'candidate-dossier-bundle' && body.jobId ? 'bundle' : 'enqueue';
+    if (action === 'automatic' || action === 'recover') {
+      if (identity.role !== 'author') throw new Error('vnext_author_required');
+      if (Object.keys(body).some((key) => !['action', 'jobId'].includes(key)) || typeof body.jobId !== 'string') throw new Error('vnext_worker_job_id_only');
+      const worker = await import('./automatic-worker.ts');
+      const result = action === 'automatic' ? await worker.runAutomaticResearch(body.jobId) : await worker.recoverAutomaticResearch(body.jobId);
+      return NextResponse.json({ ok: true, policyVersion: 'stockinsider-vnext-20-v1', result });
+    }
     const automaticScreen = action === 'screen';
     if (automaticScreen && identity.role !== 'operator') throw new Error('vnext_operator_required');
     const result = automaticScreen ? await (await import('./discovery.ts')).scanCachedCandidates(identity)
