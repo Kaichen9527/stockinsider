@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 export const POLICY = Object.freeze({ version: 'stockinsider-vnext-20-v1', activeSlots: 20, attemptsPerSession: 4,
   retryLimit: 1, dailyContent: 200, sourceContent: 50, replacementMargin: 5, confirmationSessions: 2,
   replaces: ['candidate-queue-20', 'research-weekly-5', 'candidate-projection-15-plus-5'] });
+export const INITIAL_SCORE_VERSION='vnext-initial-cached-v2';
 export const INITIAL_WEIGHTS = { recency: 20, sourceVolume: 25, priceVolume: 25, chips: 15, operationsCatalyst: 15 } as const;
 export const DEEP_WEIGHTS = { valuation: 30, profitability: 25, technicalChips: 20, catalysts: 15, marketLiquidity: 10 } as const;
 export function vnextEnabled() { return process.env.STOCKINSIDER_VNEXT_ENABLED === 'true'; }
@@ -52,7 +53,7 @@ export function researchMaterialHash(value: Record<string, unknown>) {
     return { symbol: clue.symbol, source: clue.source, root: clue.root, authorRoot: clue.authorRoot, eventAt: clue.eventAt,
       contentHash: clue.contentHash, catalystUntil: clue.catalystUntil, rightsAttested: clue.rightsAttested, operatorClaim: clue.operatorClaim };
   }) : [];
-  return inputHash({ policyVersion: POLICY.version, clues, evidence: value.evidence,
+  return inputHash({ policyVersion: POLICY.version,initialDerivationVersion:INITIAL_SCORE_VERSION, clues, evidence: value.evidence,
     screening: screening ? { ...screening, cutoff: undefined, clues: undefined } : null, deep: value.auditMaterial?null:value.deep && typeof value.deep==='object'?{...value.deep as Record<string,unknown>,cutoff:undefined}:null,auditMaterial:value.auditMaterial,
     marketSnapshotHash: value.marketSnapshotHash, tradingValid: value.tradingValid, contraindication: value.contraindication, overheated: value.overheated });
 }

@@ -2,7 +2,7 @@ import { deepFactors,type DeepInputs } from './factors.ts';
 import { validateClaim,type Artifact,type Evidence,type Review } from './research.ts';
 import { inputHash } from './policy.ts';
 type Row=Record<string,unknown>;
-export type AuditQuote={close:number|null;session:string|null;source:string;adjusted:boolean;volume:number|null;ma20:number|null;ma60:number|null;volumeRatio:number|null;institutionalFlow:number|null};
+export type AuditQuote={close:number|null;session:string|null;source:string;adjusted:boolean;volume:number|null;ma20:number|null;ma60:number|null;volumeRatio:number|null;institutionalFlow:number|null;provenance?:string[]};
 export type ThesisAuditInput={symbol:string;inputHash:string;revisionId:string|null;publishedInputHash:string|null;artifact:Artifact|null;review:Review|null;original:Evidence[];current:Evidence[];newContent:Evidence[];quote:AuditQuote;cutoff:string;session?:string;previousAudit?:{materialEvidence?:Row}|null;market:{risk:string;snapshotHash:string|null};previousMarketHash:string|null;tradingValid:boolean|null};
 const numeric=(fact:Evidence|undefined)=>typeof fact?.value==='number' && Number.isFinite(fact.value)?fact.value:null;
 const triple=(e:Evidence)=>`${e.key}\u0000${e.unit}\u0000${e.period}`;
@@ -10,14 +10,14 @@ const triple=(e:Evidence)=>`${e.key}\u0000${e.unit}\u0000${e.period}`;
 export function auditPublishedThesis(input:ThesisAuditInput){
  const originalIds=new Set(input.original.map((e)=>e.id));const fresh=input.newContent.filter((e)=>!originalIds.has(e.id));
  const supported=(id:string)=>input.review?.approved===true && input.review.claimChecks.some((check)=>check.claimId===id && check.verdict==='supported');
- const counterpart=(old:Evidence)=>input.current.find((e)=>e.id===old.id) || (old.kind==='fact' && old.sourceTier==='official'?input.current.filter((e)=>e.kind==='fact' && e.sourceTier==='official' && triple(e)===triple(old)).sort((a,b)=>b.availableAt.localeCompare(a.availableAt)||a.id.localeCompare(b.id))[0]:undefined);
+ const counterpart=(old:Evidence)=>input.current.find((e)=>e.id===old.id) || (old.kind==='fact' && old.sourceTier==='official'?input.current.filter((e)=>e.key!=='current_price' && e.kind==='fact' && e.sourceTier==='official' && triple(e)===triple(old)).sort((a,b)=>b.availableAt.localeCompare(a.availableAt)||a.id.localeCompare(b.id))[0]:undefined);
  const aliases=input.original.flatMap((old)=>{const current=counterpart(old);return current?[{...current,id:old.id}]:[];});
  const checks=(input.artifact?.claims||[]).map((claim)=>{
   const originals=claim.evidenceIds.map((id)=>input.original.find((e)=>e.id===id));
   const missing=claim.evidenceIds.filter((_,i)=>!originals[i] || !counterpart(originals[i]!));
   const changed=originals.flatMap((old)=>{const current=old && counterpart(old);return old && current && (inputHash(old.value)!==inputHash(current.value) || old.unit!==current.unit || old.period!==current.period)?[{originalId:old.id,currentId:current.id}]:[];});
   const validation=validateClaim(claim,aliases);
-  const superseded=Boolean(claim.numeric && input.current.some((e)=>e.kind==='fact' && e.sourceTier==='official' && e.key===claim.numeric!.key && e.unit===claim.numeric!.unit && String(e.period||'')>claim.numeric!.period));
+  const superseded=Boolean(claim.numeric && claim.numeric.key!=='current_price' && input.current.some((e)=>e.kind==='fact' && e.sourceTier==='official' && e.key===claim.numeric!.key && e.unit===claim.numeric!.unit && String(e.period||'')>claim.numeric!.period));
   // A validated replacement is drift even if another original is temporarily unavailable.
   return {claimId:claim.id,status:changed.length || superseded?'drift':!supported(claim.id) || missing.length?'gap':validation.length?'drift':fresh.length?'new_related_evidence':'supported_original',missing,changed,superseded,validation,newOriginalEvidenceIds:fresh.map((e)=>e.id)};
  });
@@ -27,7 +27,7 @@ export function auditPublishedThesis(input:ThesisAuditInput){
  const margins=latest('quarterly_revenue').filter((e,i,a)=>a.findIndex((x)=>x.period===e.period)===i).flatMap((revenue)=>{const profit=latest('quarterly_gross_profit').find((e)=>e.period===revenue.period && e.unit===revenue.unit);return numeric(revenue)!>0 && numeric(profit)!==null && profit?[{period:revenue.period,value:numeric(profit)!/numeric(revenue)!,provenance:[profit.id,revenue.id],raw:{operation:'divide',grossProfit:{id:profit.id,value:profit.value,unit:profit.unit,period:profit.period},revenue:{id:revenue.id,value:revenue.value,unit:revenue.unit,period:revenue.period}}}]:[];});
  const cash=latest('operating_cashflow')[0];const income=latest('quarterly_net_income')[0];
  const semantic=(key:string)=>{const claim=input.artifact?.claims.find((c)=>c.id===`check:${key}` && c.numeric && [0,1].includes(c.numeric.value));return claim && supported(claim.id) && !validateClaim(claim,aliases).length?observe(claim.numeric!.value===1,claim.evidenceIds):observe(null,[]);};
- const quote=input.quote;const quoteProvenance=quote.adjusted && quote.source?[quote.source]:[];
+ const quote=input.quote;const quoteProvenance=quote.adjusted && quote.source?[quote.source,...(quote.provenance||[])]:[];
  const scenario=(key:string)=>{const claim=input.artifact?.claims.find((c)=>c.numeric?.key===key && supported(c.id) && !validateClaim(c,aliases).length);return claim?.numeric?.value??null;};
  const method=input.artifact?.claims.find((c)=>/^valuation:(forward_pe|forward_pb|normalized_pe|ev_ebitda|dcf)$/u.test(c.id) && supported(c.id) && !validateClaim(c,aliases).length)?.id.split(':')[1]||'unknown';
  const deep:DeepInputs={cutoff:input.cutoff,valuation:{current:quote.adjusted?quote.close:null,bear:scenario('valuation_bear'),base:scenario('valuation_base'),bull:scenario('valuation_bull'),method,quoteAt:quote.session||'',valuationAt:input.artifact?.valuationDate||'',provenance:quoteProvenance},

@@ -29,15 +29,17 @@ export function independentClues(clues: Clue[]) {
 }
 /** One shared, deterministic batch. Source health is independent of observed volume. */
 export function screenRoundRobin(clues: Clue[], cutoff: string, alreadyParsed: ReadonlySet<string> = new Set()) {
-  const groups = new Map<string, Clue[]>(); const seen = new Set(alreadyParsed);
-  for (const clue of clues.filter((c) => eligibleClue(c, cutoff)).sort((a, b) => a.eventAt.localeCompare(b.eventAt) || a.contentHash.localeCompare(b.contentHash))) {
-    if (!eligibleClue(clue, cutoff) || seen.has(clue.contentHash)) continue;
-    seen.add(clue.contentHash); const list = groups.get(clue.source) || []; list.push(clue); groups.set(clue.source, list);
+  const contents=new Map<string,{source:string;clues:Clue[]}>();
+  for(const clue of clues.filter((c)=>eligibleClue(c,cutoff)).sort((a,b)=>a.eventAt.localeCompare(b.eventAt)||a.contentHash.localeCompare(b.contentHash)||a.symbol.localeCompare(b.symbol))){
+    if(alreadyParsed.has(clue.contentHash))continue;
+    const item=contents.get(clue.contentHash)||{source:clue.source,clues:[]};
+    if(item.source!==clue.source || item.clues.some((old)=>old.symbol===clue.symbol) || item.clues.length>=12)continue;
+    item.clues.push(clue);contents.set(clue.contentHash,item);
   }
-  const sources = [...groups.keys()].sort(); const result: Clue[] = [];
-  for (let round = 0; round < POLICY.sourceContent && result.length < POLICY.dailyContent; round++) for (const source of sources) {
-    const clue = groups.get(source)?.[round]; if (!clue || result.length >= POLICY.dailyContent) continue;
-    result.push(clue);
+  const groups=new Map<string,Clue[][]>();for(const item of contents.values()){const list=groups.get(item.source)||[];list.push(item.clues);groups.set(item.source,list);}
+  const result:Clue[]=[];let selectedContents=0;
+  for(let round=0;round<POLICY.sourceContent && selectedContents<POLICY.dailyContent;round++)for(const source of [...groups.keys()].sort()){
+    const content=groups.get(source)?.[round];if(content && selectedContents<POLICY.dailyContent){result.push(...content);selectedContents++;}
   }
   return result;
 }

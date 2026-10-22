@@ -1,6 +1,7 @@
+import {cachedAdmissionBody,currentReceiptBody} from './cached-admission.ts';
 import { NextResponse } from 'next/server';
-import { vnextEnabled,explicitScope } from './policy.ts';
-import { cacheContent, command, enqueue, executeResearch, publishMarket, publishResearch, submitAuthor, submitReview, swap } from './store.ts';
+import { vnextEnabled } from './policy.ts';
+import { cacheContent, command, executeResearch, publishMarket, publishResearch, submitAuthor, submitReview, swap } from './store.ts';
 import { vnextIdentity } from './auth.ts';
 import { boundedRequestBody } from './request.ts';
 type Row = Record<string, unknown>;
@@ -25,6 +26,13 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       const result = action === 'automatic' ? await worker.runAutomaticResearch(body.jobId) : await worker.recoverAutomaticResearch(body.jobId);
       return NextResponse.json({ ok: true, policyVersion: 'stockinsider-vnext-20-v1', result });
     }
+    if(action==='source-withdraw' || action==='source-withdraw-read'){
+      if(identity.role!=='operator')throw new Error('vnext_operator_required');
+      const {action:_action,...payload}=body;void _action;
+      const withdrawal=await import('./source-withdrawal.ts');
+      const result=action==='source-withdraw'?await withdrawal.commitSourceWithdrawal(identity,payload):await withdrawal.readSourceWithdrawal(identity,payload);
+      return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});
+    }
     if (['source-extract','operator-claim','market-interpret','market-recover'].includes(action)) {
       if(identity.role!=='operator') throw new Error('vnext_operator_required');
       const allowed=action==='operator-claim'?['action','claim']:action==='market-recover'?['action','invocationId']:['action'];
@@ -46,11 +54,12 @@ export async function vnextRoute(request: Request, entrypoint: string) {
     const role= ['enqueue','screen','swap','market','content','retry','expire'].includes(action)?'operator':['author','bundle','claim','fail','execute'].includes(action)?'author':['review','publish','review-claim','review-sources'].includes(action)?'reviewer':null;
     if(role && identity.role!==role)throw new Error(`vnext_${role}_required`);
     if(!role)throw new Error('vnext_action_unsupported');
-    if(action==='enqueue')explicitScope(body.symbols ?? (body.symbol ? [body.symbol] : undefined));
+    if(action==='enqueue')cachedAdmissionBody(body);
+    if(action==='content' && currentReceiptBody(body).length===0)return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result:{receipts:[],reason:'empty_scope',expensiveCalls:0}});
     const automaticScreen = action === 'screen';
     if (automaticScreen && identity.role !== 'operator') throw new Error('vnext_operator_required');
     const executeAction = async () => automaticScreen ? await (await import('./discovery.ts')).scanCachedCandidates(identity)
-      : action === 'enqueue' ? await enqueue(identity, body, entrypoint)
+      : action === 'enqueue' ? await(await import('./cached-admission.ts')).enqueueCachedScope(identity,body)
       : action === 'author' ? await submitAuthor(identity, body)
       : action === 'review' ? await submitReview(identity, body)
       : action === 'publish' ? await publishResearch(identity, body)
@@ -61,7 +70,7 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       : action === 'content' ? await cacheContent(identity, body)
       : ['claim', 'fail', 'retry', 'review-claim', 'review-sources', 'review', 'publish', 'expire'].includes(action) ? await command(identity, action, body)
       : (() => { throw new Error('vnext_action_unsupported'); })();
-    const result = action==='execute' ? await executeAction() : await(await import('./analysis-runtime.ts')).analysisWriter(executeAction);
+    const result = action==='execute' ? await executeAction() : await(await import('./analysis-runtime.ts')).analysisWriter(async()=>{if(identity.role==='operator' && ['swap','retry','expire'].includes(action))await(await import('./calendar-sync.ts')).synchronizeCachedCalendar(identity);return executeAction();});
     return NextResponse.json({ ok: true, policyVersion: 'stockinsider-vnext-20-v1', result });
   } catch (error) {
     return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : 'vnext_authority_unavailable' }, { status: 409 });

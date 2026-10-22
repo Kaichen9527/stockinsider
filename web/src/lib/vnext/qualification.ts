@@ -3,7 +3,7 @@ import type { VnextIdentity } from './auth.ts';
 import type { Evidence } from './research.ts';
 import { getSupabaseServerClient } from '../supabase-server';
 import { financialCoverageSummary } from '../candidate-financial-coverage.ts';
-import { loadTwEntryPlanAuthority } from '../tw-entry-plan-authority.ts';
+import { acquireTwEntryForwardCalendar,loadTwEntryPlanAuthority } from '../tw-entry-plan-authority.ts';
 import { inputHash } from './policy.ts';
 type Row = Record<string, unknown>;
 /** Server-internal only. No HTTP action accepts a qualification or proof body. */
@@ -11,6 +11,10 @@ export async function qualifyPublication(identity: VnextIdentity, jobId: unknown
   const context = await command(identity, 'qualification-context', { jobId });
   if (context.alreadyPublished === true) return context;
   try {
+  // This reviewed, admitted job already owns its original execution/global slot.
+  // Acquire the original forward-calendar receipt before fixing this cutoff.
+  const forwardCalendar=await acquireTwEntryForwardCalendar();
+  if(!forwardCalendar)throw new Error('vnext_qualification_forward_calendar_unavailable');
   const client = getSupabaseServerClient(); const now = new Date().toISOString();
   const frozen = context.evidence as Row; const symbol = String(context.symbol);
   const cutoff = String(frozen.cutoff || '');
@@ -33,7 +37,7 @@ export async function qualifyPublication(identity: VnextIdentity, jobId: unknown
   const exchange = String(instrument.data.exchange).toUpperCase();
   if (!['TWSE', 'TPEX'].includes(exchange)) throw new Error('vnext_qualification_exchange_missing');
   const prices = await loadTwEntryPlanAuthority(client, { stockId: String(stock.data.id), symbol, exchange: exchange as 'TWSE' | 'TPEX',
-    signalSession: String(sessionRead.data.session_id), cutoff: now });
+    signalSession: String(sessionRead.data.session_id), cutoff: now,forwardCalendar });
   const proof = { schemaVersion: 'stockinsider-vnext-authority-proof-v1', inputHash: context.inputHash, stockId: stock.data.id,
     financialCoverage: coverage, factIds: matched.map((f) => String(f.fact_id)).sort(), officialSession: sessionRead.data.session_id,
     priceBasis: prices.priceBasis, sourceDatasetRevision: prices.sourceDatasetRevision, priceGaps: prices.missingData,

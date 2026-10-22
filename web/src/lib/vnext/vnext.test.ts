@@ -98,7 +98,9 @@ test('VN08 actual raw screening cannot convert unadjusted or missing observation
   const scored = initialFactors(raw);
   assert.equal(scored.factors.priceVolume.value, null);
   assert.equal(scored.factors.sourceVolume.components?.volume.value, null);
-  assert.equal(scored.availableWeight, 62.5);
+  assert.equal(scored.factors.operationsCatalyst.components?.operations.value,null);
+  assert.notEqual(scored.factors.operationsCatalyst.components?.catalyst.value,null);
+  assert.equal(scored.availableWeight, 55);
 });
 
 test('VN11 canonical input clocks do not rewrite material content', () => {
@@ -112,13 +114,14 @@ test('VN11 canonical input clocks do not rewrite material content', () => {
 test('VN12 facts, formulas, units, original evidence hashes and every claim require independent review', () => {
   const evidence: Evidence[] = [{ id: 'eps', key: 'annual_eps', kind: 'fact', sourceTier: 'official', contentHash: inputHash('original eps'), value: 10, unit: 'TWD/share', period: '2026', source: 'https://mops.twse.com.tw/', eventAt: now, availableAt: now }, { id: 'multiple', key: 'pe', kind: 'assumption', sourceTier: 'public', contentHash: inputHash('assumption'), value: 15, unit: 'multiple', period: '2026', source: 'https://example.org/', eventAt: now, availableAt: now }];
   const claim = { id: 'target', text: 'Scenario target derived from EPS and disclosed multiple.', kind: 'derived' as const, evidenceIds: ['eps', 'multiple'], numeric: { value: 150, unit: 'TWD/share', period: '2026', key: 'target', formula: { operation: 'multiply' as const, evidenceIds: ['eps', 'multiple'] } } };
+  const annual = { id: 'annual-eps', text: 'Original annual EPS is 10 TWD/share.', kind: 'fact' as const, evidenceIds: ['eps'], numeric: { value: 10, unit: 'TWD/share', period: '2026', key: 'annual_eps' } };
   assert.deepEqual(validateClaim(claim, evidence), []);
   assert.match(validateClaim({ ...claim, numeric: { ...claim.numeric, value: 200 } }, evidence).join(','), /result_mismatch/);
   assert.match(validateClaim({ ...claim, kind: 'fact' }, evidence).join(','), /authority|kind|mismatch/);
-  const a = { schemaVersion: 'stockinsider-vnext-research-v1', model: 'synthetic-test-model', modelVersion: 'fixture-1', inputHash: inputHash('input'), outputHash: '', sections: Object.fromEntries(REQUIRED_SECTIONS.map((key) => [key, { text: 'Synthetic evidence-backed test description.', evidenceIds: ['eps'], claimIds: ['target'] }])), claims: [claim], quoteDate: '2026-10-21', valuationDate: '2026-10-21', annualEps: 10, nextFourQuarterEps: null, gaps: ['next_four_quarter_eps_missing'] } as Artifact;
+  const a = { schemaVersion: 'stockinsider-vnext-research-v1', model: 'synthetic-test-model', modelVersion: 'fixture-1', inputHash: inputHash('input'), outputHash: '', sections: Object.fromEntries(REQUIRED_SECTIONS.map((key) => [key, { text: 'Synthetic evidence-backed test description.', evidenceIds: ['eps'], claimIds: ['target'] }])), claims: [claim, annual], quoteDate: '2026-10-21', valuationDate: '2026-10-21', annualEps: 10, nextFourQuarterEps: null, gaps: ['next_four_quarter_eps_missing', 'quote_authority_missing'] } as Artifact;
   a.outputHash = inputHash({ ...a, outputHash: undefined });
   assert.equal(validateArtifact(a, evidence, a.inputHash).valid, true);
-  const review: Review = { approved: true, authorOutputHash: a.outputHash, modelVersion: 'synthetic-review-1', findings: [], factsChecked: true, valuationChecked: true, claimsChecked: true, claimChecks: [{ claimId: 'target', verdict: 'supported', reason: 'Recomputed 10*15 and checked original source identities.', sources: evidence.map((e) => ({ id: e.id, contentHash: e.contentHash })) }] };
+  const review: Review = { approved: true, authorOutputHash: a.outputHash, modelVersion: 'synthetic-review-1', findings: [], factsChecked: true, valuationChecked: true, claimsChecked: true, claimChecks: [{ claimId: 'target', verdict: 'supported', reason: 'Recomputed 10*15 and checked original source identities.', sources: evidence.map((e) => ({ id: e.id, contentHash: e.contentHash })) }, { claimId: 'annual-eps', verdict: 'supported', reason: 'Checked annual EPS value, unit and period against the original EPS source.', sources: [{ id: 'eps', contentHash: evidence[0].contentHash }] }] };
   assert.deepEqual(validateReview(review, a, evidence), []);
   assert.match(validateReview({ ...review, claimChecks: [] }, a, evidence).join(','), /unchecked/);
   assert.match(validateReview({ ...review, authorOutputHash: inputHash('other') }, a, evidence).join(','), /binding/);

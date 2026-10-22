@@ -5,7 +5,6 @@ import { validateArtifact, validateReview, type Artifact, type Review, type Evid
 import type { VnextIdentity } from './auth.ts';
 import { runAdmittedResearch } from './runtime.ts';
 import { initialFactors, deepFactors, type ScreeningInputs, type DeepInputs } from './factors.ts';
-import { screenRoundRobin } from './screening.ts';
 type Row = Record<string, unknown>;
 export type TrustedThesisAdmission = { materialHash:string; materialEvidence:Row; deepInputs:DeepInputs; revisionId:string|null; inputHash:string; materialChanged:boolean };
 export function normalizedInput(symbol: string, value: Row, audit?:TrustedThesisAdmission) {
@@ -24,7 +23,7 @@ export function normalizedInput(symbol: string, value: Row, audit?:TrustedThesis
   const frozen = { cutoff, clues: allowed, evidence, screening, deep: deepInput || null, auditMaterial:audit?{materialHash:audit.materialHash,materialEvidence:audit.materialEvidence,revisionId:audit.revisionId,auditedInputHash:audit.inputHash}:null, marketSnapshotHash: value.marketSnapshotHash || null, tradingValid: value.tradingValid === true, contraindication: value.contraindication === true, overheated: value.overheated === true, reasons: Array.isArray(value.reasons) ? value.reasons : [], gaps: Array.isArray(value.gaps) ? value.gaps : [], initialScore: initial, deepScore: deep, factors: initial.factors };
   const mandatoryFinancialKeys = ['annual_eps', 'operating_cashflow', 'revenue', 'shares'];
   const financialReady = mandatoryFinancialKeys.every((key) => evidence.some((e) => e.kind === 'fact' && e.key === key && typeof e.value === 'number' && Number.isFinite(e.value) && e.sourceTier === 'official'));
-  return { ...frozen, hash: researchMaterialHash(frozen), eligible: allowed.length > 0 && value.tradingValid === true && value.contraindication !== true,
+  return { ...frozen, derivationVersion:initial.derivationVersion,hash: researchMaterialHash(frozen), eligible: allowed.length > 0 && value.tradingValid === true && value.contraindication !== true,
     roots: [...new Set(allowed.map((clue) => clue.root))], eventAt: allowed.map((clue) => clue.eventAt).sort().at(-1) || null,
     catalystUntil: allowed.map((clue) => clue.catalystUntil).filter(Boolean).sort().at(-1) || null,
     financialReady, priceEvidence: screening.corporateActionAdjusted && initial.factors.priceVolume.value !== null,
@@ -46,7 +45,7 @@ export async function enqueue(identity: VnextIdentity, body: Row, entrypoint: st
     const value = raw?.[symbol]; if (!value) throw new Error('vnext_frozen_input_required');
     inputs[symbol] = normalizedInput(symbol, value, audits?.[symbol]);
   }
-  return command(identity, 'enqueue', { symbols, inputs, requestKey: body.requestKey, entrypoint });
+  return (await import('./cached-admission.ts')).cachedAdmissionCommand(identity,'enqueue',{symbols,inputs,requestKey:body.requestKey,entrypoint});
 }
 export async function submitAuthor(identity: VnextIdentity, body: Row) {
   // Original evidence is returned by an authenticated author claim; it is read
@@ -91,6 +90,7 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
   if (!lease) throw new Error('production_write_cycle_already_running');
   let receipt: Row | undefined;
   try {
+    const calendar=await(await import('./calendar-sync.ts')).synchronizeExecutionCalendar();
     receipt = await command(identity, 'claim', { jobId: body.jobId });
     if (receipt.execute !== true) return receipt;
     const activeReceipt = receipt;
@@ -112,6 +112,9 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       const parsing = await processCandidateFinancialDocumentReceipts(5, { stockId: String(stocks.data.id), symbol: context.symbol });
       const validation = await validatePendingOfficialFinancials([String(stocks.data.id)]);
       if (acquisition.failures.length || parsing.reconciliationErrors.length || parsing.results.some((r) => r.error || r.status !== 'accepted') || validation.status !== 'success') throw new Error('vnext_financial_preparation_incomplete');
+      const {loadTwEntryHistoricalPriceAuthority}=await import('../tw-entry-plan-authority.ts');
+      const historical=await loadTwEntryHistoricalPriceAuthority(writer.supabase,{stockId:String(stocks.data.id),symbol:context.symbol,exchange:String(instrument.data.exchange).toUpperCase() as 'TWSE'|'TPEX',signalSession:String(calendar.latestCompleted||''),cutoff:new Date().toISOString()});
+      const currentPrice=historical.priceBasis?.status==='verified'?historical.bars.at(-1):undefined;
       const frozenAt = new Date().toISOString();
       const official = await writer.supabase.rpc('read_financial_facts_for_stocks_as_of', { p_cutoff: frozenAt, p_stock_ids: [stocks.data.id] }).limit(10000);
       if (official.error) throw new Error('vnext_preparation_verified_facts_unavailable');
@@ -121,8 +124,10 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       const evidence = verified.map((fact): Evidence => ({ id: String(fact.fact_id), key: String(fact.fact_key), value: fact.value,
         unit: String(fact.unit), period: String(fact.period_end), source: String(fact.source_ref), sourceTier: 'official', kind: 'fact',
         eventAt: String(fact.source_timestamp), availableAt: String(fact.recorded_at), contentHash: inputHash(fact) }));
+      const {currentPriceEvidence}=await import('./cached-price-factors.ts');evidence.push(...currentPriceEvidence(historical));
       const original = activeReceipt.evidence as Row;
-      const frozen = { ...original, cutoff: frozenAt, admissionHash: original.hash,
+      const frozen = { ...original, cutoff: frozenAt, admissionHash: original.hash,priceAuthority:historical,
+        gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
         evidence: [...(Array.isArray(original.evidence) ? original.evidence as Evidence[] : []).filter((e) => !evidence.some((f) => f.id === e.id)), ...evidence] };
       const preparedHash = inputHash(frozen);
       await command(identity, 'prepare', { jobId: context.jobId, executionId: context.executionId, inputHash: preparedHash, evidence: frozen });
@@ -146,6 +151,7 @@ export async function swap(identity: VnextIdentity, body: Row) {
 export async function publishMarket(identity: VnextIdentity, body: Row) {
   if (identity.role !== 'operator') throw new Error('vnext_operator_required');
   if (Object.keys(body).some((key) => !['action', 'requestKey'].includes(key))) throw new Error('vnext_market_is_server_derived');
+  await(await import('./calendar-sync.ts')).synchronizeCachedCalendar(identity);
   const { cachedMarketSnapshot } = await import('./market-producer.ts');
   const raw = await cachedMarketSnapshot();
   const { evaluatedAt: _readClock, ...frozen } = raw;
@@ -160,10 +166,9 @@ export async function publishResearch(identity: VnextIdentity, body: Row) {
   return command(identity, 'publish', body);
 }
 export async function cacheContent(identity: VnextIdentity, body: Row) {
-  const cutoff = String(body.cutoff || '');
-  if (!Number.isFinite(Date.parse(cutoff)) || Date.parse(cutoff) > Date.now()) throw new Error('vnext_content_cutoff_invalid');
-  const items = screenRoundRobin(Array.isArray(body.items) ? body.items as Clue[] : [], cutoff);
-  return command(identity, 'content', { items });
+  const {currentReceiptBody,cachedAdmissionCommand}=await import('./cached-admission.ts');
+  const receiptIds=currentReceiptBody(body);if(!receiptIds.length)return {receipts:[],reason:'empty_scope',expensiveCalls:0};
+  return cachedAdmissionCommand(identity,'content-receipts',{receiptIds});
 }
 export async function readPublished(symbol?: string) {
   const result = await getSupabaseServerClient().rpc('vnext_read_v1', { p_symbol: symbol || null });

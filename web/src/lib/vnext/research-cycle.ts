@@ -3,7 +3,7 @@ import {analysisWriter} from './analysis-runtime.ts';
 /** Explicit isolated-scheduler entry. No schedule is enabled by this module. */
 export async function runPostcloseResearchCycle(identity:VnextIdentity){
  if(identity.role!=='operator')throw new Error('vnext_operator_required');
- const {command}=await import('./store.ts');const context=await analysisWriter(()=>command(identity,'screen-context',{}));
+ const {command}=await import('./store.ts');const context=await analysisWriter(async()=>{await(await import('./calendar-sync.ts')).synchronizeCachedCalendar(identity);return command(identity,'screen-context',{});});
  if(context.completed!==true || context.postclose!==true)return {status:'deferred',reason:'completed_postclose_session_required',scheduleEnabled:false};
  const sources=await(await import('./source-worker.ts')).runPermittedSourceWorker(identity);
  const market=await(await import('./market-ai-worker.ts')).runMarketInterpretation(identity);
