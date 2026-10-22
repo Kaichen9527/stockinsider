@@ -7,7 +7,7 @@ import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
-import { createHash, randomBytes } from 'node:crypto';
+import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 const { Client } = createRequire(import.meta.url)('pg');
@@ -21,7 +21,7 @@ const connect = async () => { const c = new Client({ host: path.join(socketParen
 const key = randomBytes(32).toString('hex'), operatorKey = randomBytes(32).toString('hex'), authorKey = randomBytes(32).toString('hex');
 const operator = 'synthetic-http-operator', author = 'synthetic-http-author';
 const trace = []; let pending = 0; const releaseId='a'.repeat(40);
-const functions={vnext_analysis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_analysis_command_v1($1,$2,$3::jsonb) AS result'},vnext_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_command_v1($1,$2,$3::jsonb) AS result'},vnext_read_v1:{keys:['p_symbol'],sql:'SELECT public.vnext_read_v1($1) AS result'},acquire_production_write_lease:{keys:['p_lease_key','p_owner_id','p_ttl_seconds'],sql:'SELECT public.acquire_production_write_lease($1,$2::uuid,$3::integer) AS result'},release_production_write_lease:{keys:['p_lease_key','p_owner_id'],sql:'SELECT public.release_production_write_lease($1,$2::uuid) AS result'}};
+const functions={vnext_thesis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_thesis_command_v1($1,$2,$3::jsonb) AS result'},vnext_analysis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_analysis_command_v1($1,$2,$3::jsonb) AS result'},vnext_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_command_v1($1,$2,$3::jsonb) AS result'},vnext_read_v1:{keys:['p_symbol'],sql:'SELECT public.vnext_read_v1($1) AS result'},acquire_production_write_lease:{keys:['p_lease_key','p_owner_id','p_ttl_seconds'],sql:'SELECT public.acquire_production_write_lease($1,$2::uuid,$3::integer) AS result'},release_production_write_lease:{keys:['p_lease_key','p_owner_id'],sql:'SELECT public.release_production_write_lease($1,$2::uuid) AS result'}};
 const bridge = http.createServer(async (req, res) => {
   const chunks = []; let length = 0;
   for await (const chunk of req) { length += chunk.length; if (length > 1048576) { res.writeHead(413).end(); return; } chunks.push(chunk); }
@@ -59,6 +59,7 @@ const input = symbol => ({ cutoff: now, tradingValid: true, clues: [{ symbol, so
 await test('actual internal HTTP entrypoints share real durable4/20 authority', { timeout: 180000 }, async t => {
   let app; let admin; let appLog;
   const results = [];
+  const step=async(name,work)=>{let failed=false;await t.test(name,async()=>{try{await work();}catch(error){failed=true;throw error;}});if(failed)throw Error('dependent_http_stage_failed');};
   try {
     admin = await connect();
     assert.equal(Number((await admin.query('SELECT count(*) FROM public.vnext_jobs_v1')).rows[0].count), 0, 'fresh coexistence business ledger required');
@@ -66,7 +67,6 @@ await test('actual internal HTTP entrypoints share real durable4/20 authority', 
     await admin.query('INSERT INTO public.vnext_sessions_v1(session_date,close_at,completed) VALUES($1,clock_timestamp()-interval\'1 day\',true) ON CONFLICT DO NOTHING', [session]);
     await admin.query('INSERT INTO public.vnext_sessions_v1(session_date,close_at,completed) VALUES($1,clock_timestamp()-interval\'2 days\',true) ON CONFLICT DO NOTHING', [priorSession]);
 
-          await admin.query("INSERT INTO public.vnext_members_v1(symbol,state,input_hash,evidence,admitted_session) SELECT (6000+n)::text,'waiting',repeat('a',64),'{\"syntheticPriorDayFixture\":true}'::jsonb,$1 FROM generate_series(1,16)n", [priorSession]);
     const identitySettings=(await admin.query('SELECT * FROM public.stockinsider_data_plane_settings_v1')).rows;assert.deepEqual(identitySettings,[]);assert.equal((await admin.query('SELECT coalesce((SELECT identity_fence_enabled FROM public.stockinsider_data_plane_settings_v1 WHERE singleton),false) AS effective_identity_fence')).rows[0].effective_identity_fence,false);save('backend-identity-profile',{observedRows:identitySettings,effectiveFence:false,scope:'original captured-schema empty settings; original function COALESCE(false), no settings mutation or formal HBA acceptance'});
     await admin.query("INSERT INTO public.production_writer_releases(release_id,writer_kind,active,activated_at) VALUES($1,'vps',true,clock_timestamp())",[releaseId]);
 
@@ -82,7 +82,7 @@ await test('actual internal HTTP entrypoints share real durable4/20 authority', 
     const until = Date.now() + 30000; let ready = false;
     while (Date.now() < until) { if (app.exitCode !== null) throw Error('owned_next_exited'); try { const r = await post('vnext-research', { symbols: [] }); if (r.status === 401) { ready = true; break; } } catch {} await new Promise(r => setTimeout(r, 100)); }
     assert.equal(ready, true);
-    await t.test('authfirst and missing-vs-empty scopes cause zero actual RPCs', async () => {
+    await step('authfirst and missing-vs-empty scopes cause zero actual RPCs', async () => {
       assert.equal((await post('pipeline-run', { symbols: [] })).status, 401);
       assert.equal((await post('vnext-research', { action: 'enqueue' }, operatorKey)).status, 409);
       for(const route of ['pipeline-run','pipeline-research-run','stock-research-refresh','research-report-build','deep-dive-build','candidate-dossier-bundle','candidate-research-run','report-build','thesis-refresh']) {const missing=await post(route,{},operatorKey);assert.equal(missing.status,409);assert.equal(missing.body.error,'vnext_explicit_scope_required');}
@@ -90,7 +90,15 @@ await test('actual internal HTTP entrypoints share real durable4/20 authority', 
       assert.equal(trace.length, 0);
       const screening=await post('vnext-research',{action:'screen'},operatorKey);assert.equal(screening.status,200);assert.deepEqual(screening.body.result.jobs,[]);assert.ok(trace.some(t=>t.action==='screen-context'));assert.ok(trace.some(t=>t.rpc==='acquire_production_write_lease'));assert.ok(trace.some(t=>t.rpc==='release_production_write_lease'));assert.equal(Number((await admin.query('SELECT count(*) FROM public.production_write_leases')).rows[0].count),0);
     });
-    await t.test('parallel different aliases plus exact duplicate deliveries reserve only4 slots', async () => {
+    await step('parallel different aliases plus exact duplicate deliveries reserve only4 slots', async () => {
+      // Synthetic prior-session fixture rows, seeded under the actual existing
+      // writer fence/lease. This is setup, never a production/HBA approval.
+      const fixtureOwner=randomUUID();await admin.query('BEGIN');try{
+        await admin.query("SELECT set_config('request.headers',$1,true)",[JSON.stringify({'x-stockinsider-writer-release':releaseId})]);
+        assert.equal((await admin.query("SELECT public.acquire_production_write_lease('production-data-plane',$1::uuid,300) AS acquired",[fixtureOwner])).rows[0].acquired,true);
+          await admin.query("INSERT INTO public.vnext_members_v1(symbol,state,input_hash,evidence,admitted_session) SELECT (6000+n)::text,'waiting',repeat('a',64),'{\"syntheticPriorDayFixture\":true}'::jsonb,$1 FROM generate_series(1,16)n", [priorSession]);
+        assert.equal((await admin.query("SELECT public.release_production_write_lease('production-data-plane',$1::uuid) AS released",[fixtureOwner])).rows[0].released,true);await admin.query('COMMIT');
+      }catch(error){await admin.query('ROLLBACK');throw error;}
       const routes = ['pipeline-run', 'stock-research-refresh', 'research-report-build', 'deep-dive-build', 'candidate-dossier-bundle', 'candidate-research-run', 'report-build', 'thesis-refresh'];
       const work = routes.map((route, i) => { const symbol = String(3000 + i); return { route, body: { symbols: [symbol], requestKey: 'actual-http-' + i, inputs: { [symbol]: input(symbol) } } }; });
       const receipts = await Promise.all(work.flatMap(w => [post(w.route, w.body, operatorKey), post(w.route, w.body, operatorKey)]));

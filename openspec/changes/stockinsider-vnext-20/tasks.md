@@ -9,8 +9,10 @@
 - [x] Default-off two-block published UI/detail/history and truthful waiting/empty/error/loading states; desktop/mobile checks.
 - [x] VM types/lint/full webpack build, relevant regressions, PostgreSQL and real Chromium tests; exact scopes in evidence.
 - [x] Normal draft PR384 created, attached; explicit safe receipts and unverified inventory published separately from source.
-- [ ] Implement author/provider worker, independent reviewer worker, durable external invocation journal and uncertain-response recovery.
-- [ ] Implement permitted original-content extraction worker, frozen market AI result integration, semantic weekly audit and deep-score evidence population.
+- [x] Implement configured author/provider and distinct reviewer worker, durable external invocation journal and explicit uncertain-response recovery; synthetic contract/native evidence at product9843675 and testsb1cdca8, not actual model/semantic approval.
+- [x] Implement bounded permitted-content extraction and frozen market AI result integration; source008cc3b, source11/realPG6 PASS. Active HTTP screen-context42702 is a separate retained failure, not whole-slice acceptance.
+- [ ] Complete and newly verify weekly substantive thesis/deep-score orchestration, once-charged settled-failure dispatcher, stock-article source-rights closure and screen SQL repair; active VM work, not external credential blockers.
+- [ ] Complete approved initial-score MA20/MA60/relative-market and three-month operations factors using actual cache inputs; missing values stay null.
 - [ ] Complete trusted calendar/foreign/FX/margin/operations/comparable-volume/catalyst/target/contra producers and rights-qualified real source ingestion.
 - [ ] Actual two-session postclose atomic swap, remaining race/legacy/ACL/lease/revocation matrices; never change real clock/guard to simulate acceptance.
 - [ ] Contabo application/database/schema/queue/storage isolation and formal-source/model/semantic research acceptance.
@@ -18,6 +20,7 @@
 - [ ] Protected requirements/architecture/exact-review/code gates and independent code/security review remain unclosed.
 - [ ] Release Gate; no merge/deploy/production migration/schedule resumption authorized.
 
-The full VN01–VN20 status matrix, command records, TAP and scope limits are in
-`docs/operations/2026-10-22/vnext/evidence/summary.json`. Checked tasks establish
-only the stated VM engineering slice, not full plan completion.
+The current milestone index is `docs/operations/2026-10-22/vnext/STATUS.md`.
+The earlier VN01–VN20 matrix in `evidence/summary.json` is source6410 history;
+worker/analysis receipts are separate and do not overwrite it. Checked tasks
+establish only their stated VM engineering slice, not full plan completion.
