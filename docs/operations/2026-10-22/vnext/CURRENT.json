@@ -47,7 +47,7 @@
       "id": "VN07",
       "status": "PARTIAL_SEMANTIC_PRODUCERS_PENDING",
       "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01",
-      "limits": "Currentfinancialcorrection/substantiveinput/materialhash/deepscore/retainedhistory/rights tested inVM. Structured realcatalystcancel/contra/target semanticproducer stillunwired; no pretendverifiedfalse→true."
+      "limits": "Currentfinancialcorrection/substantiveinput/materialhash/deepscore/retainedhistory/rights tested inVM. Structured realcatalystcancel/contra/target semanticproducer stillunwired; no pretendverifiedfalse\u2192true."
     },
     {
       "id": "VN08",
@@ -71,7 +71,7 @@
       "id": "VN11",
       "status": "TESTED_VM_SYNTHETIC_REVISION",
       "runs": "worker-native-02; worker-browser-revision-02; thesis-native-01",
-      "limits": "Actualjournal→revision/snapshot→pagefixture; substantivefacts differ fromfetchclock. No realnewsevent/model semanticproof."
+      "limits": "Actualjournal\u2192revision/snapshot\u2192pagefixture; substantivefacts differ fromfetchclock. No realnewsevent/model semanticproof."
     },
     {
       "id": "VN12",
@@ -141,5 +141,8 @@
     "Financialpreparation uncertainty reconciliation beyond explicitheld/manualREAD"
   ],
   "remainingTimeAcceptance": "2actualconsecutivecompletedpostclose sessions; no guard/clock bypass",
-  "ReleaseGate": "PENDING"
+  "ReleaseGate": "PENDING",
+  "testAdapterSource": "76aca1522fa1b3292a85f9f387f01bee7fd43e23",
+  "latestCI": "e1bb126 ordinary vnext-quality+financial-route failures; default-off adaptermissingstaticimport reproduced and corrected9PASS inVM; protected bootstrap/detachedsource failure persists; freshCI pending",
+  "ciReceiptSha256": "794150159d1e3c7fa05dbe84bfc66f81d57573ee39494793ba5e1d77e1d3089e"
 }

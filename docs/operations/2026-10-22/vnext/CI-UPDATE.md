@@ -1,0 +1,9 @@
+# New-head CI failure and bounded correction
+
+Runtime e1bb126; test-only correction76aca1522fa1b3292a85f9f387f01bee7fd43e23. [Bound receipt](ci-update-evidence/receipt.json) SHA256794150159d1e3c7fa05dbe84bfc66f81d57573ee39494793ba5e1d77e1d3089e. The earlier current-evidence receipt remains unchanged.
+
+At product e1bb126, ordinary `vnext-quality` run39716717224/job119620454773 failed at **Actual source contracts, types and lint**; the financial lease workflow job119620454480 failed at **Execute actual upload and worker routes with synthetic boundaries**. VM execution of the latter exact command reproduced `unexpected vnext gate dependency ./cached-admission.ts` before any test case. The finite default-off VM adapter had not listed the new static import. The correction adds only the two explicit functions to the existing throwing dependency map; unknown dependencies still fail and enabled paths still cannot use the default-off fixture.
+
+`current-lease-regression-01` exit1 is preserved; corrected `current-lease-regression-02`9PASS/0FAIL and current policy regression19PASS/0FAIL. No production source, expectation, pin, limit or lint rule was changed. Job log downloads were denied403 at signed artifact storage; full CI logs are NOT_OBTAINED. The concrete adapter failure is proven locally, while unseen CI assertions are not guessed. Native stages in that failed job were not reached.
+
+Protected run39716715330 requirements/architecture/exact-review/root also failed. The requirements failed step is **Retrieve bootstrap and prepare detached subject**, before its envelope. No protected gate was waived or rewritten. Multiple inherited quality jobs succeeded; this is not all-CI green. Normal new-source CI after76aca15 is pending and is separate from the failed run; no unchanged run was rerun.

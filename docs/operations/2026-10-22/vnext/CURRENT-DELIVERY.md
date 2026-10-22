@@ -39,6 +39,10 @@ Linux6.18.55/Debian13, UID1000, Node22.14.0, TS5.9.3, PG17.11 pinned image. Each
 
 Final actual DB state:20active (18explicit synthetic prior-day fixture members),4started,2publications **qualified=false**,8provider invocations,2terminal jobs/exited members,1withdrawal event,0writer leases. Prior-day fixture rows only prove global count handling, not two official sessions or a successful atomic swap. PG09 clients/old backends settled, exact container stopped exit0/shutdown log confirmed, prior host PID absent and socket absent. Containers/data/private trees are retained, not removed. Older PID1 RSS0 zombies are not called absent or killed. Browser/app processes settled. No Mac, production writer, data, merge/deploy, schedule resumption, cleanup, or consumed operation was touched.
 
+## Latest CI addendum
+
+[CI-UPDATE.md](CI-UPDATE.md) records actual e1bb126 ordinary-quality and financial-route test-adapter failures plus protected bootstrap-preparation failure. Test-only correction76aca15 passes9cases inVM, and current policy19cases pass. New CI is pending; no all-green CI claim. The runtime sources used by the successful build/HTTP/browser receipts are unchanged.
+
 ## Not complete / owner actions
 
 [VN01–VN20](CURRENT.json) lists precise partial scopes. Still VM implementation work: immutable connector window/exhaustion/completeness manifests for comparable7/21 volume; structured source-bound catalyst/contra/cancel/target producer; explicit numeric forecast/valuation assumption input production; finite approved issuer-IR receipt mapping; further unknown financial preparation reconciliation. Existing ledger success and stored-document counts cannot truthfully prove exhaustive28-day zero/outage history. [Gap analysis](VM-GAPS.md) names the source contracts; these are not all external permission blockers.
