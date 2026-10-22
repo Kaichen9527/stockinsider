@@ -54,6 +54,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/boundaries.test.ts | tee /tmp/stockinsider-vnext-ci/boundaries.tap
           node --experimental-strip-types web/src/lib/vnext/worker.test.ts | tee /tmp/stockinsider-vnext-ci/worker-source.tap
           node --experimental-strip-types web/src/lib/vnext/analysis-sources.test.ts | tee /tmp/stockinsider-vnext-ci/analysis-source.tap
+          node --experimental-strip-types web/src/lib/vnext/thesis.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-source.tap
           node scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
           npm --prefix web run typecheck
           npm --prefix web run lint
@@ -71,8 +72,12 @@ jobs:
             sleep 1
           done
           test "$ready" = 1
-          VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/admission node --experimental-strip-types scripts/vnext-admission-postgres.test.mjs | tee /tmp/stockinsider-vnext-ci/admission.tap
-          VNEXT_BUSINESS_DATABASE=vnext_business_01 VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/business node --experimental-strip-types scripts/vnext-business-postgres.test.mjs | tee /tmp/stockinsider-vnext-ci/business.tap
+          if VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/admission node --experimental-strip-types scripts/vnext-admission-postgres.test.mjs > /tmp/stockinsider-vnext-ci/admission.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/admission.tap.private.log /tmp/stockinsider-vnext-ci/admission.tap
+          test "$test_status" = 0
+          if VNEXT_BUSINESS_DATABASE=vnext_business_01 VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/business node --experimental-strip-types scripts/vnext-business-postgres.test.mjs > /tmp/stockinsider-vnext-ci/business.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/business.tap.private.log /tmp/stockinsider-vnext-ci/business.tap
+          test "$test_status" = 0
       - name: Genuine captured-prefix legacy coexistence and concurrent mode fence
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-legacy-full-04
@@ -90,7 +95,9 @@ jobs:
             sleep 1
           done
           test "$ready" = 1
-          node --experimental-strip-types scripts/vnext-legacy-fence-postgres.test.mjs | tee /tmp/stockinsider-vnext-ci/legacy.tap
+          if node --experimental-strip-types scripts/vnext-legacy-fence-postgres.test.mjs > /tmp/stockinsider-vnext-ci/legacy.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/legacy.tap.private.log /tmp/stockinsider-vnext-ci/legacy.tap
+          test "$test_status" = 0
       - name: Actual durable worker journal with explicitly synthetic provider
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-01
@@ -113,7 +120,9 @@ jobs:
             sleep 1
           done
           test "$ready" = 1
-          node --experimental-strip-types scripts/vnext-worker-postgres.test.mjs | tee /tmp/stockinsider-vnext-ci/worker.tap
+          if node --experimental-strip-types scripts/vnext-worker-postgres.test.mjs > /tmp/stockinsider-vnext-ci/worker.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/worker.tap.private.log /tmp/stockinsider-vnext-ci/worker.tap
+          test "$test_status" = 0
       - name: Real permitted-source budgets and frozen market journal (synthetic originals/model)
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-02
@@ -136,7 +145,34 @@ jobs:
             sleep 1
           done
           test "$ready" = 1
-          node --experimental-strip-types scripts/vnext-analysis-postgres.test.mjs | tee /tmp/stockinsider-vnext-ci/analysis.tap
+          if node --experimental-strip-types scripts/vnext-analysis-postgres.test.mjs > /tmp/stockinsider-vnext-ci/analysis.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/analysis.tap.private.log /tmp/stockinsider-vnext-ci/analysis.tap
+          test "$test_status" = 0
+      - name: Actual all-active thesis, revoked source rights and charged retry (synthetic provider)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-03
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-03
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/thesis
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if node --experimental-strip-types scripts/vnext-thesis-postgres.test.mjs > /tmp/stockinsider-vnext-ci/thesis.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/thesis.tap.private.log /tmp/stockinsider-vnext-ci/thesis.tap
+          test "$test_status" = 0
       - name: Upload finite synthetic TAP only (no raw rows, env or browser traces)
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
