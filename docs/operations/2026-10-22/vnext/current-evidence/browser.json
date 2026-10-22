@@ -1,0 +1,100 @@
+{
+  "current-browser-summary-01": {
+    "scope": "VM real Chromium / synthetic read-only transport of actual isolated DB snapshots, not real-source or Contabo acceptance",
+    "startedAt": "2026-10-22T03:22:22.420727+00:00",
+    "appSourceSha256": "1cfa99554b91845e421ffa4d6a0d7d286b0089c84b95f204431c92bc1285f925",
+    "browserVersion": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)",
+    "launcherSha256": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779",
+    "suite": "current",
+    "snapshotHashes": {
+      "home.json": "9c198bd023bc98c21bc8a7ef223c98303780443c580a014189141b1d1ae52920",
+      "detail.json": "9bbd534822b77a6e7df7a92cdc295f27d8c848dc8af26ce59156e89e311cbab0",
+      "home-before.json": "3e5083fbc183e6cb2f8cb67e387c686fcec21d22ec7a56e148879119d1d1d315",
+      "detail-before.json": "ed07ae89dac26c1f4288cda74cdafc1138a7370a7b2d181a617858ecf9c3e1a6"
+    },
+    "testCommand": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "vnext-current.spec.ts",
+      "--config",
+      "playwright.vnext.config.ts",
+      "--output",
+      "/tmp/stockinsider-vnext-oct22-private/current-browser-summary-01/screenshots-traces"
+    ],
+    "exit": 0,
+    "cleanup": [
+      {
+        "name": "next",
+        "pid": 292121,
+        "exit": 143,
+        "directProcessSettled": true,
+        "procPathAbsent": true
+      },
+      {
+        "name": "bridge",
+        "pid": 292110,
+        "exit": 0,
+        "directProcessSettled": true,
+        "procPathAbsent": true
+      }
+    ],
+    "endedAt": "2026-10-22T03:22:36.057099+00:00",
+    "stats": {
+      "startTime": "2026-10-22T03:22:25.230Z",
+      "duration": 10725.68,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "current-browser-ui-01": {
+    "scope": "VM real Chromium / synthetic read-only transport of actual isolated DB snapshots, not real-source or Contabo acceptance",
+    "startedAt": "2026-10-22T03:22:48.897330+00:00",
+    "appSourceSha256": "1cfa99554b91845e421ffa4d6a0d7d286b0089c84b95f204431c92bc1285f925",
+    "browserVersion": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)",
+    "launcherSha256": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779",
+    "suite": "ui",
+    "snapshotHashes": {
+      "home.json": "9352b1a3e8ca0aebc13b904067eadd0cc86306332157a1244016d6063559678f",
+      "detail.json": "2428b139f5986a3a96b7b4b53c82d88aef88c12187b946740f9a98fb19a947fe"
+    },
+    "testCommand": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "vnext.spec.ts",
+      "--config",
+      "playwright.vnext.config.ts",
+      "--output",
+      "/tmp/stockinsider-vnext-oct22-private/current-browser-ui-01/screenshots-traces"
+    ],
+    "exit": 0,
+    "cleanup": [
+      {
+        "name": "next",
+        "pid": 292466,
+        "exit": 143,
+        "directProcessSettled": true,
+        "procPathAbsent": true
+      },
+      {
+        "name": "bridge",
+        "pid": 292455,
+        "exit": 0,
+        "directProcessSettled": true,
+        "procPathAbsent": true
+      }
+    ],
+    "endedAt": "2026-10-22T03:23:12.013689+00:00",
+    "stats": {
+      "startTime": "2026-10-22T03:22:51.511Z",
+      "duration": 20389.269,
+      "expected": 12,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "preparation-authority-source-direct-01": {
+    "sampleCount": 1,
+    "minimumFreeBytes": {
+      "/workspace": 9449275392,
+      "/tmp": 17544192000
+    },
+    "sampledSessionPeakRssBytes": 5242880,
+    "resourceViolation": null
+  },
+  "preparation-authority-source-type-01": {
+    "sampleCount": 16,
+    "minimumFreeBytes": {
+      "/workspace": 9449275392,
+      "/tmp": 17544183808
+    },
+    "sampledSessionPeakRssBytes": 736489472,
+    "resourceViolation": null
+  },
+  "preparation-authority-source-type-02": {
+    "sampleCount": 8,
+    "minimumFreeBytes": {
+      "/workspace": 9449275392,
+      "/tmp": 17544175616
+    },
+    "sampledSessionPeakRssBytes": 521269248,
+    "resourceViolation": null
+  },
+  "preparation-authority-thesis-01": {
+    "sampleCount": 3,
+    "minimumFreeBytes": {
+      "/workspace": 9449275392,
+      "/tmp": 17544167424
+    },
+    "sampledSessionPeakRssBytes": 157257728,
+    "resourceViolation": null
+  },
+  "preparation-authority-worker-01": {
+    "sampleCount": 1,
+    "minimumFreeBytes": {
+      "/workspace": 9449275392,
+      "/tmp": 17544163328
+    },
+    "sampledSessionPeakRssBytes": 5636096,
+    "resourceViolation": null
+  },
+  "preparation-authority-pure-01": {
+    "sampleCount": 1,
+    "minimumFreeBytes": {
+      "/workspace": 9449275392,
+      "/tmp": 17544138752
+    },
+    "sampledSessionPeakRssBytes": 2752512,
+    "resourceViolation": null
+  },
+  "research-terminal-source-direct-01": {
+    "sampleCount": 4,
+    "minimumFreeBytes": {
+      "/workspace": 9446723584,
+      "/tmp": 17544003584
+    },
+    "sampledSessionPeakRssBytes": 205393920,
+    "resourceViolation": null
+  },
+  "research-terminal-source-direct-02": {
+    "sampleCount": 4,
+    "minimumFreeBytes": {
+      "/workspace": 9446678528,
+      "/tmp": 17543991296
+    },
+    "sampledSessionPeakRssBytes": 195678208,
+    "resourceViolation": null
+  },
+  "research-terminal-source-type-01": {
+    "sampleCount": 17,
+    "minimumFreeBytes": {
+      "/workspace": 9446649856,
+      "/tmp": 17536811008
+    },
+    "sampledSessionPeakRssBytes": 732303360,
+    "resourceViolation": null
+  },
+  "research-terminal-discovery-01": {
+    "sampleCount": 2,
+    "minimumFreeBytes": {
+      "/workspace": 9446649856,
+      "/tmp": 17536802816
+    },
+    "sampledSessionPeakRssBytes": 114405376,
+    "resourceViolation": null
+  },
+  "research-terminal-worker-01": {
+    "sampleCount": 1,
+    "minimumFreeBytes": {
+      "/workspace": 9446649856,
+      "/tmp": 17536798720
+    },
+    "sampledSessionPeakRssBytes": 6029312,
+    "resourceViolation": null
+  },
+  "research-terminal-thesis-01": {
+    "sampleCount": 3,
+    "minimumFreeBytes": {
+      "/workspace": 9446649856,
+      "/tmp": 17536786432
+    },
+    "sampledSessionPeakRssBytes": 120291328,
+    "resourceViolation": null
+  },
+  "terminal-slots-native-01": {
+    "sampleCount": 6,
+    "minimumFreeBytes": {
+      "/workspace": 9446649856,
+      "/tmp": 17538785280
+    },
+    "sampledSessionPeakRssBytes": 146956288,
+    "resourceViolation": null
+  },
+  "terminal-slots-read-01": {
+    "sampleCount": 3,
+    "minimumFreeBytes": {
+      "/workspace": 9446604800,
+      "/tmp": 17534832640
+    },
+    "sampledSessionPeakRssBytes": 102121472,
+    "resourceViolation": null
+  },
+  "final-current-type-01": {
+    "sampleCount": 9,
+    "minimumFreeBytes": {
+      "/workspace": 9446518784,
+      "/tmp": 17534824448
+    },
+    "sampledSessionPeakRssBytes": 562475008,
+    "resourceViolation": null
+  },
+  "final-current-lint-01": {
+    "sampleCount": 61,
+    "minimumFreeBytes": {
+      "/workspace": 9446502400,
+      "/tmp": 17534812160
+    },
+    "sampledSessionPeakRssBytes": 1118404608,
+    "resourceViolation": null
+  },
+  "final-current-build-01": {
+    "sampleCount": 115,
+    "minimumFreeBytes": {
+      "/workspace": 9375752192,
+      "/tmp": 17534697472
+    },
+    "sampledSessionPeakRssBytes": 1188610048,
+    "resourceViolation": null
+  },
+  "final-terminal-test-01": {
+    "sampleCount": 5,
+    "minimumFreeBytes": {
+      "/workspace": 9444130816,
+      "/tmp": 17534722048
+    },
+    "sampledSessionPeakRssBytes": 210636800,
+    "resourceViolation": null
+  },
+  "final-current-lint-02": {
+    "sampleCount": 65,
+    "minimumFreeBytes": {
+      "/workspace": 9444130816,
+      "/tmp": 17534713856
+    },
+    "sampledSessionPeakRssBytes": 1820512256,
+    "resourceViolation": null
+  },
+  "public-valuation-read-direct-01": {
+    "sampleCount": 3,
+    "minimumFreeBytes": {
+      "/workspace": 9444052992,
+      "/tmp": 17534484480
+    },
+    "sampledSessionPeakRssBytes": 148213760,
+    "resourceViolation": null
+  },
+  "public-valuation-read-type-01": {
+    "sampleCount": 16,
+    "minimumFreeBytes": {
+      "/workspace": 9444052992,
+      "/tmp": 17534480384
+    },
+    "sampledSessionPeakRssBytes": 694673408,
+    "resourceViolation": null
+  },
+  "final-qualified-lint-01": {
+    "sampleCount": 75,
+    "minimumFreeBytes": {
+      "/workspace": 9443983360,
+      "/tmp": 17534504960
+    },
+    "sampledSessionPeakRssBytes": 1783013376,
+    "resourceViolation": null
+  },
+  "final-qualified-build-01": {
+    "sampleCount": 101,
+    "minimumFreeBytes": {
+      "/workspace": 9443983360,
+      "/tmp": 17534447616
+    },
+    "sampledSessionPeakRssBytes": 1002229760,
+    "resourceViolation": null
+  },
+  "cached-active-http-01": {
+    "sampleCount": 4,
+    "minimumFreeBytes": {
+      "/workspace": 9444147200,
+      "/tmp": 17534603264
+    },
+    "sampledSessionPeakRssBytes": 236322816,
+    "resourceViolation": null
+  },
+  "cached-active-http-recovery-01": {
+    "sampleCount": 3,
+    "minimumFreeBytes": {
+      "/workspace": 9444671488,
+      "/tmp": 17534447616
+    },
+    "sampledSessionPeakRssBytes": 188461056,
+    "resourceViolation": null
+  },
+  "current-browser-summary-01": {
+    "sampleCount": 27,
+    "minimumFreeBytes": {
+      "/workspace": 9444671488,
+      "/tmp": 17305853952
+    },
+    "sampledSessionPeakRssBytes": 1702158336,
+    "resourceViolation": null
+  },
+  "current-browser-ui-01": {
+    "sampleCount": 46,
+    "minimumFreeBytes": {
+      "/workspace": 9444671488,
+      "/tmp": 17413169152
+    },
+    "sampledSessionPeakRssBytes": 1469952000,
+    "resourceViolation": null
+  },
+  "final-owned-lab-read-01": {
+    "sampleCount": 2,
+    "minimumFreeBytes": {
+      "/workspace": 9444671488,
+      "/tmp": 17520881664
+    },
+    "sampledSessionPeakRssBytes": 46497792,
+    "resourceViolation": null
+  }
+}
