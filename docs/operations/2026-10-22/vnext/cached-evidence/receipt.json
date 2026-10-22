@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "stockinsider-vnext-cached-source-native-receipt-v1",
+  "product": "eb558ce+feb758b",
+  "nativeContinuation": "2d30a94",
+  "files": [
+    {
+      "path": "ci-prior-published-head.json",
+      "bytes": 8633,
+      "sha256": "127ced776dcf3a867a06b88812a6697e303258b8e64135b2f05dc29f51dbbca8"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 8249,
+      "sha256": "9a411e74b31022375dfd7afd8516daba899ce4bc4b600f53168c13e8df868d97"
+    },
+    {
+      "path": "native-witness.json",
+      "bytes": 5945,
+      "sha256": "fc671fcef1a215983b4f26453b852c8a9673409f573cb2aec7542799878d0b6b"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 164555,
+      "sha256": "97cce182d23e540eb6ee89cb67d61c3f5953875bb653d9745ccce70524670a92"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 2303,
+      "sha256": "19deaeeb8793bce8234acd70e33fa40d552d182753ef52ae2bafe10c66f2f01e"
+    },
+    {
+      "path": "source.json",
+      "bytes": 2326,
+      "sha256": "780643665b82e75dc38eff4ca195b2ca56cfa444eef30bbd9576ce96e1efddf0"
+    },
+    {
+      "path": "table-summaries.json",
+      "bytes": 43071,
+      "sha256": "5dd7ff3f9c7bfb933eeaa3d480406a4297fb1ec740b2dc75a5a132221795ac60"
+    },
+    {
+      "path": "tap.json",
+      "bytes": 2053,
+      "sha256": "5a2cdc460144bccef5e69f5968cb6f5e716aedd809c43d7cc76519ac728d5212"
+    }
+  ],
+  "allRedsPreserved": true,
+  "currentVMWorkContinues": "actualfinancialsourceURL/valuationqualification adapter and same-headfullbuild/HTTP/browser pending"
+}

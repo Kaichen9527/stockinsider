@@ -1,0 +1,210 @@
+{
+  "initial": {
+    "label": "cached-native-01",
+    "pass": 2,
+    "fail": 2,
+    "overall": "FAIL",
+    "components": "genuine full prefix and all newSQL COMMIT; actual today futureclose row\u2192privatecompletedfalse; finitecalendarACL; sourceclues/forgedroot/emptyrefusals. Then private test sentPGarray insteadJSON,22P02; original preserved"
+  },
+  "continuation": {
+    "label": "cached-native-02",
+    "pass": 5,
+    "fail": 0,
+    "scope": "exact retained state; correct JSON privateannual999 rejection; currentreceipt-only source; parallel8same-request delivery4reservedjobs/no models; twoauthor/reviewer realserviceSQL lifecycles with explicitEPSclaim+missingquotegap and immutable replay"
+  },
+  "calendarACL": {
+    "policy": [
+      {
+        "polname": "vnext_calendar_read_v2",
+        "polcmd": "r",
+        "polroles": "{25638}",
+        "predicate": "(((market = 'TWSE'::tw_market_v3) AND (provider = 'twse'::official_roster_provider_v3)) OR ((market = 'TPEX'::tw_market_v3) AND (provider = 'tpex'::official_roster_provider_v3)))"
+      }
+    ],
+    "columns": [
+      {
+        "attname": "session_authority_id",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      },
+      {
+        "attname": "session_id",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      },
+      {
+        "attname": "market",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      },
+      {
+        "attname": "open_at",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      },
+      {
+        "attname": "close_at",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      },
+      {
+        "attname": "status",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      },
+      {
+        "attname": "provider",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      },
+      {
+        "attname": "source_timestamp",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      },
+      {
+        "attname": "collected_at",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      },
+      {
+        "attname": "source_ref",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      },
+      {
+        "attname": "recorded_at",
+        "attacl": "{stockinsider_vnext_owner=r/opportunity_v3_rpc_owner}"
+      }
+    ],
+    "scope": "exact new read-only feature dependency, not an unchanged old ACL claim"
+  },
+  "calendar": {
+    "result": {
+      "source": "actual_cached_twse_tpex_calendar",
+      "sessions": 1,
+      "sourceHash": "8be38aec85624c5d177ab45dc52cffb18e1344bcc89c517c5713038e43c6cc70",
+      "sourceCutoff": "2026-10-22T02:42:53.56312+00:00",
+      "latestCompleted": null
+    },
+    "sessionRows": [
+      {
+        "session_date": "2026-10-22T00:00:00.000Z",
+        "close_at": "2026-10-22T05:30:00.000Z",
+        "completed": false
+      }
+    ],
+    "fixture": "actualoriginaltypedrows/directDB, syntheticpublicationmetadata; no systemclock or originalguard modification"
+  },
+  "queryEvents": [
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "sync-calendar",
+      "pid": 114,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_analysis_command_v1",
+      "action": "source-projection",
+      "pid": 115,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_analysis_command_v1",
+      "action": "source-clues",
+      "pid": 116,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "enqueue",
+      "pid": 117,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "enqueue",
+      "pid": 118,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "enqueue",
+      "pid": 121,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "enqueue",
+      "pid": 126,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "enqueue",
+      "pid": 122,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "enqueue",
+      "pid": 119,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "enqueue",
+      "pid": 123,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "enqueue",
+      "pid": 125,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "enqueue",
+      "pid": 124,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_cached_admission_v1",
+      "action": "enqueue",
+      "pid": 120,
+      "ready": "I",
+      "status": "fulfilled",
+      "committed": true
+    }
+  ],
+  "providerCalls": 4,
+  "synthesicProviderAndPreparation": true,
+  "qualifiedPublications": 0,
+  "realHistorical240PostgRESTProjection": "NOT_RUN (original actualfunction body reused in focused synthetic source contracts; no realpriceacquisition claimed)",
+  "cleanup": {
+    "trackedClientsSettled": true,
+    "priorBackendPids": [
+      112,
+      113
+    ],
+    "priorBackendsAbsent": true,
+    "clusterRetained": true,
+    "externalStopRequired": true
+  },
+  "container09RetainedForNewHTTP": true
+}
