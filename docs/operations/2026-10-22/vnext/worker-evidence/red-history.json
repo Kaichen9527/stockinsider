@@ -1,0 +1,49 @@
+{
+  "native01": {
+    "sourceCommit": "984367556a83297b6763bd816830478aa1403395",
+    "overall": {
+      "pass": 3,
+      "fail": 2,
+      "laterStages": "NOT_RUN"
+    },
+    "componentPass": [
+      "genuineprefix/workerinstall",
+      "2409worker",
+      "2383worker"
+    ],
+    "cause": "new test expected later provider trigger refusal but unchanged original set_mode refuses active jobs first",
+    "actualCode": "P0001",
+    "actualMessage": "vnext_mode_execution_in_progress",
+    "onlyTestExpectationChanged": true,
+    "addedSeparateTriggerAssertion": true,
+    "originalSqlChanged": false,
+    "originalTestSha256": "6a7cc97ddbd08d1124f32fa5084c29aadf354899894df2bd61946b23f1092dcb"
+  },
+  "build01": {
+    "exit": 1,
+    "sourceChanged": false,
+    "error": "Could not parse TypeScript --showConfig output",
+    "diagnosis": "default sandbox Node spawnSync reports EPERM/empty captured child output; direct Python->same tsc returned valid26KB JSON. Same bounded Node child succeeds under authorized elevated VM execution. No Next/TS/config/guard/dependency changes.",
+    "elevatedProbe": {
+      "status": 0,
+      "stdout": "bounded-child-probe",
+      "stderr": "",
+      "error": null
+    }
+  },
+  "browserRevision01": {
+    "exit": 1,
+    "testsDiscovered": 0,
+    "error": "No tests found",
+    "fix": "add only the new named file to existing finite Playwright testMatch; expectations unchanged"
+  },
+  "fileWrapperRuns": {
+    "labels": [
+      "worker-source-01",
+      "worker-source-02"
+    ],
+    "observedTestsEach": 1,
+    "notUsedAs6Or8CaseCounts": true
+  },
+  "originalErrorsRetained": true
+}

@@ -1,0 +1,11 @@
+TAP version 13
+# Subtest: actual service-role public READ preserves the retained worker revisions and all ledger rows
+ok 1 - actual service-role public READ preserves the retained worker revisions and all ledger rows
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0

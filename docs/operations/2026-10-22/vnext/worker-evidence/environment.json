@@ -1,0 +1,19 @@
+{
+  "observedAt": "2026-10-22T01:15:35.024675+00:00",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "node": {
+    "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+    "version": "v22.14.0",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1"
+  },
+  "browser": {
+    "path": "/usr/lib/chromium/chromium",
+    "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)",
+    "sha256": "d387400aaf740ccb75e5e996a34aa0940e6e97683a4eabd6ae34c1eed6804723"
+  },
+  "freeBytes": {
+    "/workspace": 16301178880,
+    "/tmp": 17773957120
+  },
+  "sampledResourceScope": "individual command receipts; cgroup PG separately capped1GiB, no instantaneous process-tree peak claim"
+}

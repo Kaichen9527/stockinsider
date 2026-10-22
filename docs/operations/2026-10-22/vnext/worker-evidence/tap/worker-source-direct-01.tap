@@ -1,0 +1,25 @@
+TAP version 13
+# Subtest: automatic two-issuer synthetic worker calls author/reviewer, original evidence, durable receipts, no replay resampling
+ok 1 - automatic two-issuer synthetic worker calls author/reviewer, original evidence, durable receipts, no replay resampling
+# Subtest: unknown provider outcome is held and repeated worker/recovery never generates another output
+ok 2 - unknown provider outcome is held and repeated worker/recovery never generates another output
+# Subtest: committed settlement response loss needs explicit read before receipt, never another provider call
+ok 3 - committed settlement response loss needs explicit read before receipt, never another provider call
+# Subtest: committed author receipt loss resolves by actual job read with no author re-invocation
+ok 4 - committed author receipt loss resolves by actual job read with no author re-invocation
+# Subtest: strict output codec rejects exponent domain and unknown/repeated reviewer claims
+ok 5 - strict output codec rejects exponent domain and unknown/repeated reviewer claims
+# Subtest: fixed-origin provider performs one actual fetch transport call and never retries uncertain POST
+ok 6 - fixed-origin provider performs one actual fetch transport call and never retries uncertain POST
+# Subtest: explicit known-response lookup recovers immutable output without a second POST
+ok 7 - explicit known-response lookup recovers immutable output without a second POST
+# Subtest: actual expired execution fixture may settle a known response but cannot publish or extend its deadline
+ok 8 - actual expired execution fixture may settle a known response but cannot publish or extend its deadline
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
