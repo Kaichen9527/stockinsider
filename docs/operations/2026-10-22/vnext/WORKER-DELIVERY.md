@@ -1,3 +1,5 @@
+> Historical milestone only. For current implementation, exact runtime source and remaining VM work see [STATUS.md](STATUS.md) and [CURRENT-DELIVERY.md](CURRENT-DELIVERY.md). Original results below retain their source scopes.
+
 # Durable worker milestone — partial acceptance
 
 Source/test head `b1cdca8e752edab4cfbef99b76a657ed7785621a`; worker product `984367556a83297b6763bd816830478aa1403395`, test correction `be66937d7081d35baedeec47e20a49a9af0160c8`. The base [delivery](DELIVERY.md) and its receipt remain an immutable earlier milestone, not the current feature-completion claim. PR384 remains draft.

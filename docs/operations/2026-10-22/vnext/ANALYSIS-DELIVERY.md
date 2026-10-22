@@ -1,3 +1,5 @@
+> Historical milestone only. For current implementation, exact runtime source and remaining VM work see [STATUS.md](STATUS.md) and [CURRENT-DELIVERY.md](CURRENT-DELIVERY.md). Original results below retain their source scopes.
+
 # Permitted extraction and frozen market checkpoint — partial acceptance
 
 PR384 remains draft. Product `008cc3bc3393610c8c510fd7c24ee5cee907da72`; test/build subject `3a64af06a5a6bd04a47a39843afd2cf3a395f5b1`; read-only HTTP fixture-observation correction `2d6296e4471f759d570dd0089a7f5ab37226d4e6`. Existing base and worker receipts remain unchanged. [New receipt](analysis-evidence/receipt.json) SHA256 `fd74f64cec4b953a74b3eb75afd0dfe8eedeb97a3d8f201de9ccc946591b7417`.

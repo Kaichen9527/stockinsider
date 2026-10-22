@@ -11,8 +11,8 @@
 - [x] Normal draft PR384 created, attached; explicit safe receipts and unverified inventory published separately from source.
 - [x] Implement configured author/provider and distinct reviewer worker, durable external invocation journal and explicit uncertain-response recovery; synthetic contract/native evidence at product9843675 and testsb1cdca8, not actual model/semantic approval.
 - [x] Implement bounded permitted-content extraction and frozen market AI result integration; source008cc3b, source11/realPG6 PASS. Active HTTP screen-context42702 is a separate retained failure, not whole-slice acceptance.
-- [ ] Complete and newly verify weekly substantive thesis/deep-score orchestration, once-charged settled-failure dispatcher, stock-article source-rights closure and screen SQL repair; active VM work, not external credential blockers.
-- [ ] Complete approved initial-score MA20/MA60/relative-market and three-month operations factors using actual cache inputs; missing values stay null.
+- [x] Weekly substantive thesis/deep-score orchestration, once-charged settled-failure dispatcher, permanent stock-article source-rights closure and screen SQL repair implemented; exact VM subsets and preserved new terminal-test RED are listed in CURRENT-DELIVERY.md. No full acceptance inferred.
+- [x] Original adjusted-price MA20/MA60/relative-market and three-month operations cache adapters implemented and focused-tested; actual full240-price qualification positive remains unverified, missing values stay null.
 - [ ] Complete trusted calendar/foreign/FX/margin/operations/comparable-volume/catalyst/target/contra producers and rights-qualified real source ingestion.
 - [ ] Actual two-session postclose atomic swap, remaining race/legacy/ACL/lease/revocation matrices; never change real clock/guard to simulate acceptance.
 - [ ] Contabo application/database/schema/queue/storage isolation and formal-source/model/semantic research acceptance.

@@ -1,3 +1,5 @@
+> Historical milestone only. For current implementation, exact runtime source and remaining VM work see [STATUS.md](STATUS.md) and [CURRENT-DELIVERY.md](CURRENT-DELIVERY.md). Original results below retain their source scopes.
+
 # vNext VM delivery — partial acceptance, disabled by default
 
 Product source: `cee65ca8dd8b3ec12bc53b434d17b5913d15592f`; frozen source/test head: `6410c9a`, independent branch `codex/stockinsider-vnext-oct22`, remote main/base `93e44475cbb0c27beb26e4dcb68e382096a4e212` (rechecked during delivery). All work ran on the existing Linux Codex VM. GPT-6.1 Sol authored the product implementation through the selected implementation executor; the coordinating executor handled integration, environment, evidence and review. This is not an attestation that the coordinator itself changed model.

@@ -1,3 +1,5 @@
+> Historical milestone only. For current implementation, exact runtime source and remaining VM work see [STATUS.md](STATUS.md) and [CURRENT-DELIVERY.md](CURRENT-DELIVERY.md). Original results below retain their source scopes.
+
 # Thesis, retry and current stock-source checkpoint
 
 Product source: `4871d2fe733027a6619fe820314d53e1ffa36e74`. Native/build test source: `01174f7ba6f78a9bdc2582a34ab528eee77c91b8`. Active HTTP assertion source: `6c1472cbf58f521b77964bf86b28fd6c8cc7678b`.
