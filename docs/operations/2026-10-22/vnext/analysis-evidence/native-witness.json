@@ -1,0 +1,4235 @@
+{
+  "analysis": {
+    "tests": 6,
+    "pass": 6,
+    "fail": 0,
+    "sourceMigration": {
+      "path": "migrations/20261022_vnext_analysis_sources_v1.sql",
+      "bytes": 37608,
+      "sha256": "38ebaa113cc2bde07ad3215196bfa898ca0874bd6a1306a142efd740244ffc20"
+    },
+    "acls": {
+      "direct_source_write": false,
+      "change_model": false,
+      "anon_model": false
+    },
+    "budgets": {
+      "total": 200,
+      "bySource": [
+        {
+          "source": "investanchors",
+          "count": 50
+        },
+        {
+          "source": "official",
+          "count": 50
+        },
+        {
+          "source": "ptt",
+          "count": 50
+        },
+        {
+          "source": "telegram",
+          "count": 50
+        }
+      ],
+      "ledgerScope": "new extraction union with legacy content command, actual service_role rejection; no live source fetching"
+    },
+    "realServiceRoleQueryEvents": [
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 75,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 76,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 77,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 78,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 79,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-projection",
+        "pid": 80,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_market_analysis_v1",
+        "action": "binding",
+        "pid": 82,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_market_analysis_v1",
+        "action": "reserve",
+        "pid": 83,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_market_analysis_v1",
+        "action": "settle",
+        "pid": 84,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_market_analysis_v1",
+        "action": "publication",
+        "pid": 85,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_market_analysis_v1",
+        "action": "binding",
+        "pid": 87,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_market_analysis_v1",
+        "action": "reserve",
+        "pid": 88,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_market_analysis_v1",
+        "action": "publication",
+        "pid": 89,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-projection",
+        "pid": 90,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_market_analysis_v1",
+        "action": "publication",
+        "pid": 91,
+        "ready": "I",
+        "status": "rejected",
+        "code": "P0001",
+        "message": "vnext_market_original_rights_no_longer_current"
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 92,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 93,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 94,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 95,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 96,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 97,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 98,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 99,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 100,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 101,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 102,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 103,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 104,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 105,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 106,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 107,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 108,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 109,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 110,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 111,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 112,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 113,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 114,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 115,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 116,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 117,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 118,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 119,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 120,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 121,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 122,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 123,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 124,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 125,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 126,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 127,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 128,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 129,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 130,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 131,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 132,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 133,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 134,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 135,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 136,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 137,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 138,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 139,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 140,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 141,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 142,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 143,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 144,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 145,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 146,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 147,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 148,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 149,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 150,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 151,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 152,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 153,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 154,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 155,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 156,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 157,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 158,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 159,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 160,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 161,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 162,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 163,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 164,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 165,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 166,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 167,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 168,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 169,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 170,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 171,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 172,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 173,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 174,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 175,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 176,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 177,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 178,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 179,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 180,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 181,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 182,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 183,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 184,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 185,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 186,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 187,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 188,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 189,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 190,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 191,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 192,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 193,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 194,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 195,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 196,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 197,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 198,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 199,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 200,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 201,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 202,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 203,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 204,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 205,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 206,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 207,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 208,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 209,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 210,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 211,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 212,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 213,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 214,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 215,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 216,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 217,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 218,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 219,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 220,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 221,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 222,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 223,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 224,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 225,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 226,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 227,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 228,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 229,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 230,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 231,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 232,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 233,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 234,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 235,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 236,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 237,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 238,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 239,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 240,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 241,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 242,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 243,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 244,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 245,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 246,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 247,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 248,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 249,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 250,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 251,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 252,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 253,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 254,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 255,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 256,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 257,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 258,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 259,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 260,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 261,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 262,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 263,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 264,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 265,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 266,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 267,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 268,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 269,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 270,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 271,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 272,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 273,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 274,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 275,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 276,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 277,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 278,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 279,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 280,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 281,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 282,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 283,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 284,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 285,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 286,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 287,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 288,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 289,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 290,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 291,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 292,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 293,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 294,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 295,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 296,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 297,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 298,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 299,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 300,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 301,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 302,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 303,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 304,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 305,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 306,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 307,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 308,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 309,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 310,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 311,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 312,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 313,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 314,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 315,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 316,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 317,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 318,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 319,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 320,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 321,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 322,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 323,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 324,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 325,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 326,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 327,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 328,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 329,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 330,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 331,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 332,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 333,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 334,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 335,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 336,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 337,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 338,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 339,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 340,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 341,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 342,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 343,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 344,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 345,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 346,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 347,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 348,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 349,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 350,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 351,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 352,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 353,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 354,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 355,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 356,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 357,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 358,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 359,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 360,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 361,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 362,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 363,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 364,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 365,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 366,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 367,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 368,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 369,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 370,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 371,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 372,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 373,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 374,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 375,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 376,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 377,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 378,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 379,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 380,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 381,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 382,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 383,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 384,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 385,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 386,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 387,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 388,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 389,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 390,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 391,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 392,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 393,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 394,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 395,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 396,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 397,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 398,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 399,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 400,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 401,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 402,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 403,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 404,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 405,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 406,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 407,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 408,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 409,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 410,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 411,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 412,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 413,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 414,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 415,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 416,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 417,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 418,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 419,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 420,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 421,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 422,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 423,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 424,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 425,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 426,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 427,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 428,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 429,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 430,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 431,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 432,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 433,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 434,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 435,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 436,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 437,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 438,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 439,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 440,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 441,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 442,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 443,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 444,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 445,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 446,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 447,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 448,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 449,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 450,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 451,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 452,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 453,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 454,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 455,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 456,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 457,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 458,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 459,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 460,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 461,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 462,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 463,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 464,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 465,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 466,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 467,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 468,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 469,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 470,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 471,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 472,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 473,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 474,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 475,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 476,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 477,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 478,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 479,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 480,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 481,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 482,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 483,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 484,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 485,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 486,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-complete",
+        "pid": 487,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      },
+      {
+        "name": "vnext_analysis_command_v1",
+        "action": "source-reserve",
+        "pid": 488,
+        "ready": "I",
+        "status": "fulfilled",
+        "committed": true
+      }
+    ],
+    "syntheticProviderCalls": 1,
+    "realAcquisition": false,
+    "formalSemanticApproval": false,
+    "cleanup": {
+      "trackedClientsSettled": true,
+      "priorBackendPids": [
+        71,
+        74
+      ],
+      "priorBackendsAbsent": true,
+      "clusterRetained": true,
+      "externalStopRequired": true
+    }
+  },
+  "activeHttp": {
+    "tests": 3,
+    "pass": 1,
+    "fail": 2,
+    "wholeRunSuccess": false,
+    "error": {
+      "code": "42702",
+      "message": "column reference \"claim\" is ambiguous",
+      "action": "screen-context",
+      "source": "original 844 migration line119; PLpgSQL claim variable collision; additive fix pending"
+    },
+    "component": [
+      {
+        "aliases": [
+          "pipeline-run",
+          "stock-research-refresh",
+          "research-report-build",
+          "deep-dive-build",
+          "candidate-dossier-bundle",
+          "candidate-research-run",
+          "report-build",
+          "thesis-refresh"
+        ],
+        "duplicateEnqueues": 32,
+        "duplicateClaims": 16,
+        "distinctJobs": 4,
+        "active": 20,
+        "attempts": 4
+      }
+    ],
+    "trace": [
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "e30ae54a652bc543a1e4b35de2ac99ed54646131dcee784d8ade4ba31c725057",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "action": "screen-context",
+        "code": "42702",
+        "message": "column reference \"claim\" is ambiguous",
+        "rollbackSettled": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "be8658a3cdaddb1b93f09be6ebbc0e6fcf06420f0f33d45531bd5c09c4628502",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "b329159b86246f60ff8ad17709f1f72c6b72ec0e69b8f995b268aab51cbdcf8e",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "48e7e1e51e99b93592757b8cb3ce9d5fe9a1a5b04c4482dc3557c938d3ee6f38",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "371eb1fe2a410aefbc357d6f8bdc8781ab08dbaa35b3248ca8d11d3298710e5c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "d894e7b32ddae8facb5f06a908114afdaf550553e10587e05ab131cedb55188c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "103ce25247f8071816a72413eb8d2546d58c21f6432b61455de9b8e7aebd397f",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "d9e2a4278175933bbe09b6a1157239357ab394c19ae804345f53d2aa9d9b0d7f",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "4c6249bb29c9634eb3cb88f3a24556032c3009a4ba1dc12a09a8da2eb27d1654",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "5fdececadedac97ed060b4ab8dc1a5f937c0a98a2956a3295e700ff2b2ff4be4",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "f19ab5950523def5edebc9601d8cba273f1f86273a15c606ef9524fea76fbde0",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "b39ab52de9d466e861df932a3dadcf75216b9d7c90c3312636f53f89d001891f",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "066a75e17db7e521b2e988c72609cab090e33e57aad88e0cafe94fc3a818ab2c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "39d8d82c5868c785618623952511a2a0f0ac5f5c0de4ca6f8d3a540e0b5ca9b7",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "610b13cbe2599a4f973bbab8e495e58d236270cdf2df3aad6823ea4ef2637522",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "d6daf973500af83e28342ba3c6f08f309906126e85971c892807fbe616c7236b",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "213b7205ff305ac229d068da7594be3c6a3cea710279a317d08c2cb9131904b7",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "0abeb8b63e6de44da420fc3bf6e87dea1b2e1925dcfa94b159ebfd3afaf0c6b4",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "ef7cc12dd2065f765ceed8151d2a97cdba961df9848ee472b15d73733f403553",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "379dfc5453edb4f76e10512facafddf17573a0edad67ded58666850558303aba",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "e4356caf2f0593b2f49be30b2f56b1f345ed5e7a6e7b9d3dedd2956500cf2913",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "ef7cc12dd2065f765ceed8151d2a97cdba961df9848ee472b15d73733f403553",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "bf3c12553542cbe9172d917bfb2daf80730d7575cdba08f692de43af353062d7",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "e99a324cd726c4382801e8737769354e7d6b295e0370f7dfbaba3ac6e8db506b",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "ef7cc12dd2065f765ceed8151d2a97cdba961df9848ee472b15d73733f403553",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "034ddbed587c2632195deea1cea049d058a5253edcd5b5314c5ea9ab85de56de",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "5f50c0de6746e6f9b266a82e210f6448c43ab1b44f3e252cfa770f092e6348e6",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "eaeca0ced80310fc004536e80787f289010a3e137ff92d4375ddca1f60c7d1b7",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "1feabc1bf854ed84147134ef0ddc0f79af738b20f900fe942ad99e6227dccf49",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "a034fd08d4688ff5878117d008799ea800578225d9b0da90db3d9a73ab871fe8",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "eaeca0ced80310fc004536e80787f289010a3e137ff92d4375ddca1f60c7d1b7",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "788be56f066f4bc0271cdb470a37a3173228287b6a5a55bb08c2aeacc4222034",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "d62c078e213a1bcad0b18192c2a98041bb3cded73d99a3a6957cc11816dbc741",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "9e7fad7d29341a782e76b8e4f018e0798f886bbd5b10dc62ac898807f0001a0b",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "8aee18ab8f1721a0fc5413c927b2a055a9e2c1d58e6353df5784b3ce04d6bd13",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "288e5edcedfaab639294b9134662981607a456079dc4c09233de469a1923ad51",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "9e7fad7d29341a782e76b8e4f018e0798f886bbd5b10dc62ac898807f0001a0b",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "5c2fda93ef278dac4708e19bc9ddf470146d3443d9c91e5e38d68a284afe3347",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "acf2bc7c00f353aa86a282ffc44e57eb9ef99e4dbcbbe0401bb988871e1c7970",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "ada87ed6d769fbd0d6cae24036c46cae8630baaed4b0aa632a343f09ecdfe485",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "2580f6a1551ea24531fa1e4756af7851788d845f93aee9c0580ccdebe937ed72",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "1ebed78c289d92ce5b020191aaec444139836aaef39577b52741548f763af83c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "ada87ed6d769fbd0d6cae24036c46cae8630baaed4b0aa632a343f09ecdfe485",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "7def0d9f5e983b89c9a92d05df510f741765e04efa2eb856d6409e915d302ba4",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "0df253e520a4b3f0a03eaec6a1c781736d6d652f4a34a0944de51d189bb24564",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "1fc78a70faba9cc3d46abea62c90f9f3b51d248c0af3d523934469e63bd25b69",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "1f2d196ebab05d454554796641c81d7debafbc4ed4dd539ef0071dd1b48699b8",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "b207ea751470e8a24f3ecfaecfee7434eaaa2a676c5c1cbd1b407d3d5365fc42",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "1fc78a70faba9cc3d46abea62c90f9f3b51d248c0af3d523934469e63bd25b69",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "874deb28ea78ae1c0064e1797cab3341af3bf452ad9189ee0194dde259326ced",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "b13e4fbb926ecbfdd7d886692847ad799e108be1542b5b5f0a6fce0f61a86b0c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "8bef1f63a33607d0b750596db364b017d9babb8f71fde7baf145fa21a8239ce9",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "0fe5589262568b1cd51c75c399432bdf082ba0ecb8df5b1aacd1802d42fe510b",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "4d4250f4cfd8a5c58eccccb50b78c79d7c3014647b27c9707f7093070aed9995",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "8bef1f63a33607d0b750596db364b017d9babb8f71fde7baf145fa21a8239ce9",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "24da41641f8d28415b1e76a79558efdb514f804d7e060dd5e8535adf56ebe6ac",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "d15540d7080851cc23ec4595a47c157e3fa93eefdde33ab99d53028eda3f41ea",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "09c17adb00d1c7d7dbd79d284dd648cdf034535d2c08ba65cef3917b4a84526c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "9c60b28821a7f0bb9a482a9dd88ab128d951d968e815b6032f5a8bdb4975f7b7",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "590735dcc0bb043342f41347dd47d37c4d9d250ea91cace85211ddb5dfc58cb0",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "09c17adb00d1c7d7dbd79d284dd648cdf034535d2c08ba65cef3917b4a84526c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "2f868809a3437fe357e77972d5c363572f0e54c9d855d75246edc01b908edbe6",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "d4090e242df4adcf9b9610be2391db8588c9692ef3c08b7c233e7d0f50cbb247",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "0aa7941e8177537fe419632237c1463dfcccde6c59a5500c75177e7e5d90c5d0",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "d51005be38865eada64f8d9466fcb77c9febd5dbdffaba1ff94b8989f5d08a6d",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "4739b65a02f504e004b4b3e20a9ceae689169e2723558a7478b4d0b7a68a2381",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "enqueue",
+        "requestHash": "0aa7941e8177537fe419632237c1463dfcccde6c59a5500c75177e7e5d90c5d0",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "b57c5948fa0af175e5bfc390f4ed4d878fd88c04ff256f26ed2d058f72efee18",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "5e2384fd56faa5a676c56c2af019d312f59bf2a65c1813e55fc642190703d699",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "66f74048af89b392929ff280061ecaf1538a477776023c8d4fde0063f2fddf3c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "1b7d9758eb60f7194e48194888e8c10570fe9b28b5995e15d3b6896d365ac5ad",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "67e5c8771838d8c0b779c403e7fa766076bc428a1593510ea533c37f66f4e5b1",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "bf8636ed193e0dcc86c862ed3035a02386d4f7e3dac7eca915fd3bbeec78ade1",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "b3c53ce415eb1a92a19382b1b983ab79bba606de451165de505c1b4a64057a9e",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "8eae97562b6bc363f87b332323dca7a7f4b9041d23dfa13a952581d8bbfcdc09",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "0ba58504ba326d20ec0bf45cbf0c564a8b65b4e06256112fb1212833d30348fb",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "claim",
+        "requestHash": "e46b218b5bd69273a8e36a696d80fd0a08a17b1862cba447edaf81b35bcef796",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "695b56c839cce0ecf70db0e4dd876b793697c472a67049c3dbde546013b55b03",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "16fb1f276b832f2f4eb480ec41c3c51a21a02c0a60292c0af8962a90898dd6e1",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "claim",
+        "requestHash": "e46b218b5bd69273a8e36a696d80fd0a08a17b1862cba447edaf81b35bcef796",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "4d68d98e7ffda1a8c4a096dc260008a9671059d400c56255c1f9a0304c4a6d85",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "3502145d29169b020a25c59cb1fb1fde9c8506be39d9f2733fa770644f7262c9",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "claim",
+        "requestHash": "e46b218b5bd69273a8e36a696d80fd0a08a17b1862cba447edaf81b35bcef796",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "9072e1b3a55dbc9e7f101b673aae3e01e4910b708f888ab9c173e61692ddf4bf",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "a60a5a53dd656108e8d1d665837f30db5e3164cba374aab2b4f7899bcaba622c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "claim",
+        "requestHash": "f6f771a7159471d87cdd1610d72064f11702efaaf7cffff2e72bf941a34b9613",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "0e0d632742293e0de3bfb0b350e604ae822a1f303417811f447554dd3e6b107a",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "2fb72607af748f41fa3a0663603e1836877d94b00db1488d468d0e3eaaccbea2",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "claim",
+        "requestHash": "f6f771a7159471d87cdd1610d72064f11702efaaf7cffff2e72bf941a34b9613",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "94113a9c6ff24a4ae58ab2ec8bbebbef3a43d2fe8ca8c04ccb8ab01d4c8ac36f",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "da7251b5c7c502990406dbdfec270ecc8ea946705c1d97ab55e2c8dd7f27a327",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "claim",
+        "requestHash": "eb99aadeb69aca36f05ca5e1cf1db6c38cde54a47dda82732d606ddcd9f5f55c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "73f514b9784dca3de71d186833419885996054f5bade446ebc94da6b8ce77230",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "197903e01e7180fa9ca0d9d801489ace1b3c127c7ee7e7bda8facdfc917c5fc1",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "claim",
+        "requestHash": "eb99aadeb69aca36f05ca5e1cf1db6c38cde54a47dda82732d606ddcd9f5f55c",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "8bd76e90db5bb7d7f13545b69dcf585cb571e3c030a663cae5cf1068ea410f54",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "f2681ee60ab8f5228ea3f8c6331a53bafd75b9a5764845b630335811d83ab284",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "claim",
+        "requestHash": "dee99af70e21ad36ab2b47baaa43bd8e9c63635581d11c6650e401d53517101e",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "3662e9b6af4c66230bae21b9adfb16749adc3119c9fb454dc931c894cafcd1c4",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "9414f6f24aa8baee07f9a23bec6e8d78d73928d72c48fbc70f598774d7be7d68",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_command_v1",
+        "action": "claim",
+        "requestHash": "dee99af70e21ad36ab2b47baaa43bd8e9c63635581d11c6650e401d53517101e",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "9b0196a85eec4ec1ddff8f3d48071660609acbfe95d9a42779699e0f268f9784",
+        "commitObserved": true,
+        "actualServiceRole": true
+      }
+    ],
+    "pendingQueries": 0,
+    "appExit": 143,
+    "appPidPathAbsent": true,
+    "backendIdentityProfile": {
+      "observedRows": [],
+      "effectiveFence": false,
+      "scope": "original captured-schema empty settings; original function COALESCE(false), no settings mutation or formal HBA acceptance"
+    },
+    "leasesAtFinal": 0,
+    "wholePublicTables": 312
+  },
+  "actualReadyScope": "analysis queryEvents records actual ReadyI; HTTP facade awaited query+COMMIT/ROLLBACK but did not independently record ReadyForQuery codes"
+}

@@ -1,0 +1,40 @@
+{
+  "status": "PARTIAL_ACCEPTANCE_CONTINUING",
+  "source": "008cc3bc3393610c8c510fd7c24ee5cee907da72",
+  "testHead": "2d6296e4471f759d570dd0089a7f5ab37226d4e6",
+  "checks": {
+    "pureFinal": {
+      "label": "analysis-sources-direct-02",
+      "pass": 11,
+      "fail": 0
+    },
+    "typeFinal": "analysis-sources-type-03 PASS",
+    "lint": "PASS, inherited warnings retained",
+    "fullWebpackBuild": "analysis-build-01 PASS; product source identical to008cc",
+    "realPG": {
+      "label": "analysis-native-01",
+      "pass": 6,
+      "fail": 0
+    },
+    "actualHTTP": {
+      "label": "analysis-active-http-02",
+      "pass": 1,
+      "fail": 2,
+      "wholeRun": "FAIL42702"
+    }
+  },
+  "notRun": [
+    "new-head hosted CI",
+    "new-head browser acceptance",
+    "actual allowed source acquisition/fullsemanticreview/liveprovider",
+    "positive real two-postclose-session swap",
+    "stock article lifecycle source-rights revocation closure",
+    "weekly/deep/oncecharged dispatcher next slice",
+    "Contabo isolated staging",
+    "protected registered independent source review",
+    "production/merge/deploy/schedule resume"
+  ],
+  "originalReceiptsUnchanged": true,
+  "privateInventoryFiles": 673,
+  "privateInventoryBytes": 79290001
+}

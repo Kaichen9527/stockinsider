@@ -1,0 +1,15 @@
+{
+  "observedAt": "2026-10-22T01:41:26.418419+00:00",
+  "os": "Linux 6.18.55",
+  "node": {
+    "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+    "version": "v22.14.0",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1"
+  },
+  "freeBytes": {
+    "/workspace": 13291225088,
+    "/tmp": 17769889792
+  },
+  "PGImage": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+  "scope": "network-none/memory1GiB per ownedPG, C.UTF-8 captured engineering fixture; no Contabo/production/HBA/liveprovider execution"
+}
