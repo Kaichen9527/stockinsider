@@ -60,6 +60,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/artifact-financial-summary.test.ts | tee /tmp/stockinsider-vnext-ci/financial-summary-source.tap
           node --experimental-strip-types web/src/lib/vnext/preparation-authority.test.ts | tee /tmp/stockinsider-vnext-ci/preparation-authority-source.tap
           node --experimental-strip-types web/src/lib/vnext/research-failure.test.ts | tee /tmp/stockinsider-vnext-ci/research-failure-source.tap
+          node --experimental-strip-types scripts/vnext-business-vectors.test.mjs | tee /tmp/stockinsider-vnext-ci/business-vectors.tap
           node scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
           npm --prefix web run typecheck
           npm --prefix web run lint
