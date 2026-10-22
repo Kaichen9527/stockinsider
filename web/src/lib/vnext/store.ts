@@ -5,6 +5,7 @@ import { validateArtifact, validateReview, type Artifact, type Review, type Evid
 import type { VnextIdentity } from './auth.ts';
 import { runAdmittedResearch } from './runtime.ts';
 import { initialFactors, deepFactors, type ScreeningInputs, type DeepInputs } from './factors.ts';
+import {researchFailureDisposition} from './research-failure.ts';
 type Row = Record<string, unknown>;
 export type TrustedThesisAdmission = { materialHash:string; materialEvidence:Row; deepInputs:DeepInputs; revisionId:string|null; inputHash:string; materialChanged:boolean };
 export function normalizedInput(symbol: string, value: Row, audit?:TrustedThesisAdmission) {
@@ -58,9 +59,9 @@ export async function submitAuthor(identity: VnextIdentity, body: Row) {
   catch (error) { validation = { valid: false, reasons: [`malformed_artifact:${error instanceof Error ? error.message : 'invalid_shape'}`] }; }
   if (!validation.valid) {
     const reason = `vnext_artifact_rejected:${validation.reasons.join(',')}`;
-    // Once a model result is submitted, invalid output is a consumed attempt.
-    // A separately admitted retry is required; validation cannot invite resampling.
-    try { await command(identity, 'fail', { jobId: body.jobId, executionId: body.executionId, reason, permanent: false }); }
+    // A confirmed invalid result consumes this attempt and releases the slot.
+    // Validation cannot invite another generation for the same frozen input.
+    try { await command(identity, 'fail', { jobId: body.jobId, executionId: body.executionId, reason, permanent: researchFailureDisposition(reason)==='permanent' }); }
     catch { throw new Error(`${reason};failure_receipt_uncertain`); }
     throw new Error(reason);
   }
@@ -74,7 +75,7 @@ export async function submitReview(identity: VnextIdentity, body: Row) {
   catch (error) { validation = [`malformed_review:${error instanceof Error ? error.message : 'invalid_shape'}`]; }
   if (validation.length) {
     const reason = `vnext_review_rejected:${validation.join(',')}`;
-    try { await command(identity, 'review-fail', { jobId: body.jobId, executionId: body.executionId, reason }); }
+    try { await command(identity, 'review-fail', { jobId: body.jobId, executionId: body.executionId, reason, permanent:researchFailureDisposition(reason)==='permanent' }); }
     catch { throw new Error(`${reason};failure_receipt_uncertain`); }
     throw new Error(reason);
   }
@@ -97,12 +98,14 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
     const context = { symbol: String(receipt.symbol), jobId: String(receipt.jobId), executionId: String(receipt.executionId),
       verify: async () => { await command(identity, 'work-context', { jobId: activeReceipt.jobId, executionId: activeReceipt.executionId }); } };
     const result = await runAdmittedResearch(context, async () => {
-      const stocks = await writer.supabase.from('stocks').select('id,symbol,name,sector').eq('symbol', context.symbol).eq('market', 'TW').single();
-      if (stocks.error || !stocks.data) throw new Error('vnext_stock_authority_missing');
+      const stocks = await writer.supabase.from('stocks').select('id,symbol,name,sector').eq('symbol', context.symbol).eq('market', 'TW').maybeSingle();
+      if (stocks.error) throw new Error('vnext_stock_authority_read_uncertain');
+      if (!stocks.data) throw new Error('vnext_stock_authority_missing');
       const instrument = await writer.supabase.from('stock_instruments_v3').select('exchange,valid_from').eq('stock_id', stocks.data.id)
         .eq('listing_status', 'active').eq('instrument_type', 'common_stock').lte('valid_from', new Date().toISOString())
         .or(`valid_to.is.null,valid_to.gt.${new Date().toISOString()}`).order('recorded_at', { ascending: false }).limit(1).maybeSingle();
-      if (instrument.error || !instrument.data || !['TWSE', 'TPEX'].includes(String(instrument.data.exchange).toUpperCase())) throw new Error('vnext_trading_authority_missing');
+      if (instrument.error) throw new Error('vnext_trading_authority_read_uncertain');
+      if (!instrument.data || !['TWSE', 'TPEX'].includes(String(instrument.data.exchange).toUpperCase())) throw new Error('vnext_trading_authority_missing');
       const { refreshCandidateOfficialFinancials } = await import('../candidate-official-financials');
       const { processCandidateFinancialDocumentReceipts } = await import('../candidate-financial-document-worker');
       const { validatePendingOfficialFinancials } = await import('../official-financial-validation-worker');
@@ -123,6 +126,7 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
         && f.point_in_time_valid === true && f.consistency_valid === true && ['official_primary', 'official_filing'].includes(String(f.authority_tier)));
       const {resolveFinancialEvidenceSources}=await import('./financial-evidence-sources.ts');
       const financialSources=await resolveFinancialEvidenceSources(writer.supabase,verified,frozenAt);
+      if(financialSources.evidence.length===0)throw new Error('vnext_validated_financial_data_missing');
       const evidence=financialSources.evidence;
       const {currentPriceEvidence}=await import('./cached-price-factors.ts');evidence.push(...currentPriceEvidence(historical));
       const original = activeReceipt.evidence as Row;
@@ -138,8 +142,12 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
     // Current authors see exactly the original cutoff-bound evidence, never resampled input.
     return { ...receipt, inputHash: result.inputHash, evidence: result.evidence, preparation: result, published: false };
   } catch (error) {
-    if (receipt?.execute === true) await command(identity, 'fail', { jobId: receipt.jobId, executionId: receipt.executionId,
-      reason: error instanceof Error ? error.message : 'research_failed', permanent: false });
+    const disposition=researchFailureDisposition(error);
+    if (receipt?.execute === true && disposition!=='uncertain'){
+      const reason=error instanceof Error?error.message:'research_failed';
+      try{await command(identity,'fail',{jobId:receipt.jobId,executionId:receipt.executionId,reason,permanent:disposition==='permanent'});}
+      catch{throw new Error(`${reason};failure_receipt_uncertain`,{cause:error});}
+    }
     throw error;
   } finally {
     await releaseProductionWriteLease(lease);
