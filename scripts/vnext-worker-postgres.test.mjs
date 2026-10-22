@@ -58,7 +58,8 @@ await test('actual durable worker journal and injected provider lifecycle',{time
    const beforeReuse=await x.snapshot();const reused=(await x.observer.query("SELECT provider_response_id FROM public.vnext_provider_invocations_v1 WHERE state='completed' ORDER BY started_at LIMIT 1")).rows[0].provider_response_id;
    await x.rpc(roles.author.principal,'settle',{jobId,executionId:inv[0].execution_id,invocationId:inv[0].invocation_id,status:'completed',responseId:reused,output:authorOutput(),raw:{syntheticDuplicateProviderResponse:true}},true,{code:'23505',message:/vnext_provider_response_identity_v1/u});
    assert.deepEqual(await x.snapshot(),beforeReuse);
-   await assert.rejects(x.writer.query('SELECT public.vnext_set_mode_v1(false)'),e=>e.code==='P0001'&&e.message==='vnext_provider_outcome_unsettled');
+   await assert.rejects(x.writer.query('SELECT public.vnext_set_mode_v1(false)'),e=>e.code==='P0001'&&e.message==='vnext_mode_execution_in_progress');
+   await assert.rejects(x.writer.query('UPDATE public.vnext_mode_v1 SET enabled=false'),e=>e.code==='P0001'&&e.message==='vnext_provider_outcome_unsettled');
    await x.rpc(roles.operator.principal,'retry',{jobId},false,/vnext_retry_forbidden/u);x.save('uncertain-state',await x.snapshot());
   });
   await step('synthetic prior-session unresolved records block a real claim before expensive preparation, exact rollback',async()=>{
