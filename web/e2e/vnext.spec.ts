@@ -7,10 +7,11 @@ async function control(request: APIRequestContext, mode: string, delayMs = 0) {
 test.beforeEach(async ({ request }) => { await control(request, 'full'); });
 test('same published contract drives exactly two primary blocks and detail/history', async ({ page }, testInfo) => {
   await page.goto('/');
+  await expect(page.getByTestId('vnext-home').filter({ visible: true })).toHaveCount(1);
   await expect(page.getByTestId('vnext-home').filter({ visible: true })).toBeVisible();
   await expect(page.getByTestId('vnext-home').filter({ visible: true }).locator(':scope > section')).toHaveCount(2);
   await expect(page.getByRole('heading', { name: '市場判斷', exact: true })).toBeVisible();
-  await expect(page.getByTestId('vnext-market')).toContainText('資料信心');
+  await expect(page.getByTestId('vnext-home').filter({ visible: true }).getByTestId('vnext-market')).toContainText('資料信心');
   await expect(page.getByRole('heading', { name: '主要依據', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: '近三個月背景', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: '轉換與等待條件', exact: true })).toBeVisible();
