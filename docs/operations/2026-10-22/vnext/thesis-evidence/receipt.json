@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "stockinsider-vnext-thesis-public-receipt-v1",
+  "product": "4871d2fe733027a6619fe820314d53e1ffa36e74",
+  "executionSources": [
+    "01174f7ba6f78a9bdc2582a34ab528eee77c91b8",
+    "6c1472cbf58f521b77964bf86b28fd6c8cc7678b"
+  ],
+  "files": [
+    {
+      "path": "checks.json",
+      "bytes": 2178,
+      "sha256": "94a21a2865fca668e988be716c5f4d9ed3cab20a2577b4b176ff6246cbbd8f3a"
+    },
+    {
+      "path": "cleanup.json",
+      "bytes": 2267,
+      "sha256": "afab04bfd7e6c1bd1050da3e9b1b795376262e9a63c310de0e7567536e958188"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 10439,
+      "sha256": "a649d74770fe734022e45a08c77cebb8937f9bada25c8193ce87e0f5cb0d5540"
+    },
+    {
+      "path": "http-table-summaries.json",
+      "bytes": 42799,
+      "sha256": "6648ab2c6956a7b1760987099cdd0ab7b91d812e7d82c44d4cf639e43615bb93"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 145849,
+      "sha256": "ba58dae28efbeaa8428f3541012e1a22db5400d04c43aaa3fff5b05319d84269"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 2676,
+      "sha256": "f618978a7c09b3465543e3a4862500178eb8d7dc8b5778ef4056768d8def47d9"
+    },
+    {
+      "path": "retry-state-hash.json",
+      "bytes": 165,
+      "sha256": "54515783300adeebb94d18bf28955fedc30aa802310270773846c85a55661d75"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 2949,
+      "sha256": "ad701a83736b38b43f78d7e7df49843b34c63feb2c862b25300d3fefdef6d19e"
+    },
+    {
+      "path": "tap.json",
+      "bytes": 3486,
+      "sha256": "61a0e05c845e8812efc50bc9470ca7aae97bd34922f03a2a1282d5679d3d4fbe"
+    },
+    {
+      "path": "thesis-audit-hash.json",
+      "bytes": 164,
+      "sha256": "2eaa3252166a6e1a0971957cae433a2a8cf2c265b1c82e6947bb67c13e65cb1f"
+    }
+  ],
+  "privateScope": "inventory only; actual row/body/private snapshots remain task-local; maker is not independent reviewer"
+}

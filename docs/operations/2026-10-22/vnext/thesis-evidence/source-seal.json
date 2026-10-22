@@ -1,0 +1,74 @@
+{
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "product": "4871d2fe733027a6619fe820314d53e1ffa36e74",
+  "nativeTest": "01174f7ba6f78a9bdc2582a34ab528eee77c91b8",
+  "httpAssertion": "6c1472cbf58f521b77964bf86b28fd6c8cc7678b",
+  "inventory": [
+    {
+      "path": "migrations/20261022_vnext_thesis_audit_v1.sql",
+      "sha256": "ca57c6da05359e25c1bb238bfc47128ea06a7dedb9e01f9c2668f85e196536a4"
+    },
+    {
+      "path": "web/src/lib/vnext/thesis-audit.ts",
+      "sha256": "ebc0628a155040526452284d7a132ecf9822ed8ddc85cceff2e30bb06cee25f1"
+    },
+    {
+      "path": "web/src/lib/vnext/weekly-worker.ts",
+      "sha256": "a101c1ac3663928fbbce132aaf91f1cc047c55570845daeb36984a2e786ce3fd"
+    },
+    {
+      "path": "web/src/lib/vnext/research-dispatcher.ts",
+      "sha256": "72c72c673122fa4685e443a21e44485318f434c65a1918dc7dcd7e035ee578a5"
+    },
+    {
+      "path": "web/src/lib/vnext/research-cycle.ts",
+      "sha256": "3e327a4a01f922c543e94b6a6c2f9ba4b0d5d43cc2f34e7017abc07977ba69dd"
+    },
+    {
+      "path": "web/src/lib/vnext/thesis-cycle.ts",
+      "sha256": "2392e25f2014068798fc8755b2fdcf69458e47c5bd925e4ff07263cfd7ae2d9e"
+    },
+    {
+      "path": "web/src/lib/vnext/thesis-runtime.ts",
+      "sha256": "5c625f66567135532d660ae7223994a35b73018b67addbcfc648117b75d46f95"
+    },
+    {
+      "path": "web/src/lib/vnext/thesis.test.ts",
+      "sha256": "4e71dd56cc6a0bb514cb91fdab5a77421fc848025eb812c44c698ff0ea35d6a5"
+    },
+    {
+      "path": "web/src/lib/vnext/http.ts",
+      "sha256": "ba7430639b2b401b3863c627c3987e6c748d1b5ccb33d6cdbf1ce1f9c4965e79"
+    },
+    {
+      "path": "web/src/lib/vnext/discovery.ts",
+      "sha256": "f8f20f7182ec0ce2c8465badefe480a8361950ca7e997727a20cd9e328e7ceee"
+    },
+    {
+      "path": "web/src/lib/vnext/store.ts",
+      "sha256": "6f6f5e92a528bc150a56fc7df799312c5e3102f9e98667c06ebb2ebad56dbedf"
+    },
+    {
+      "path": "web/src/lib/vnext/policy.ts",
+      "sha256": "4d7800056ab7583874c17a07a3e4a59eb695a7cc7ed7ebc1b210d62e516f7cd7"
+    },
+    {
+      "path": "web/src/lib/vnext/public-contract.ts",
+      "sha256": "fc8918185c428fbdca484d97b2ae4bbf4dd1ded2670913d0a40a887b5c2166e7"
+    },
+    {
+      "path": "web/src/app/components/vnext/Home.tsx",
+      "sha256": "1cfa99554b91845e421ffa4d6a0d7d286b0089c84b95f204431c92bc1285f925"
+    },
+    {
+      "path": "web/src/app/components/vnext/Detail.tsx",
+      "sha256": "03ae419b3c47715ffa865525fb4be950acc2dc10a5aa9761d257c516d02fd079"
+    }
+  ],
+  "migrations": {
+    "20261022_vnext_analysis_sources_v1.sql": "38ebaa113cc2bde07ad3215196bfa898ca0874bd6a1306a142efd740244ffc20",
+    "20261022_vnext_legacy_mode_fence_v1.sql": "272130d1747d3faa1f6d65554c8af8ffbc3d7ab1ad7b1045d4f9b331293c6685",
+    "20261022_vnext_provider_worker_v1.sql": "637e494cb5ccb32ab11d847fb69586cbbf0aec717c1c0991a250195a917826ba",
+    "20261022_vnext_thesis_audit_v1.sql": "ca57c6da05359e25c1bb238bfc47128ea06a7dedb9e01f9c2668f85e196536a4"
+  }
+}

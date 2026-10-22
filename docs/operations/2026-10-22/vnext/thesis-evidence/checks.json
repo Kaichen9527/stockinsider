@@ -1,0 +1,53 @@
+{
+  "status": "PARTIAL_ACCEPTANCE_CONTINUING",
+  "checks": {
+    "pureFinal": {
+      "label": "thesis-source-direct-02",
+      "pass": 10,
+      "fail": 0
+    },
+    "native": {
+      "label": "thesis-native-01",
+      "pass": 7,
+      "fail": 0,
+      "scope": "actual service_role PG and immutable history; synthetic provider/preparation/lease adapter; temporary global source policy withdrawal, not permanent content tombstone"
+    },
+    "activeHTTP": {
+      "label": "thesis-active-http-02",
+      "pass": 3,
+      "fail": 0,
+      "scope": "actual real leases + synthetic active writer release, 4 starts/20 active/zero leases; no production identity"
+    },
+    "rightsBrowser": {
+      "label": "thesis-browser-rights-01",
+      "pass": 2,
+      "fail": 0,
+      "scope": "desktop/mobile actual before/after DB snapshots, same two unqualified revisions and full10sections; temporary policy gate"
+    },
+    "uiBrowser": {
+      "label": "thesis-browser-ui-01",
+      "pass": 12,
+      "fail": 0,
+      "scope": "new full build, historical fixed UI fixture; auth/missing/empty scope zero RPC, not qualified publication"
+    },
+    "types": "PASS",
+    "lint": "PASS, inherited warnings retained",
+    "fullWebpackBuild": "PASS"
+  },
+  "redHistory": {
+    "pure01": "9PASS1FAIL, current material digest/hash provenance corrected without relaxing semantic assertions",
+    "HTTP01": "0PASS2FAIL, obsolete test expected result.jobs; new screen contract reviewed/reports/admission fixed to exact new shape; original log/source retained",
+    "priorAnalysis42702": "actual new additive migration qualifies ambiguous source column; new native and active HTTP pass",
+    "allOriginalRedsPreserved": true
+  },
+  "notRun": [
+    "per-document immutable withdrawal/ABA (next slice)",
+    "trusted cached admission and original adjusted-price authority (next slice)",
+    "real two consecutive postclose sessions atomic replacement",
+    "actual source acquisition/model/independent semantic research",
+    "full financial valuation summary proof",
+    "Contabo isolated staging",
+    "current head hosted/protected review",
+    "production merge deployment schedule resume"
+  ]
+}
