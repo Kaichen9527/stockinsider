@@ -1,0 +1,433 @@
+{
+  "subject": "e1bb126d33f63f4f8c004194b1c3df2f43bec82a",
+  "observation": {
+    "checks": [
+      {
+        "conclusion": "failure",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716715330/job/119620595731",
+        "id": 119620595731,
+        "name": "stockinsider-v3-gate-root",
+        "status": "completed"
+      },
+      {
+        "conclusion": "skipped",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716715330/job/119620594788",
+        "id": 119620594788,
+        "name": "model-runner-code-gate",
+        "status": "completed"
+      },
+      {
+        "conclusion": "skipped",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716715330/job/119620594643",
+        "id": 119620594643,
+        "name": "product-runtime-code-gate",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716715330/job/119620522120",
+        "id": 119620522120,
+        "name": "requirements",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716715330/job/119620522082",
+        "id": 119620522082,
+        "name": "architecture",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716715330/job/119620522047",
+        "id": 119620522047,
+        "name": "exact-review",
+        "status": "completed"
+      },
+      {
+        "conclusion": "skipped",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716717185/job/119620456717",
+        "id": 119620456717,
+        "name": "evaluation-governance",
+        "status": "completed"
+      },
+      {
+        "conclusion": "skipped",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716717185/job/119620456413",
+        "id": 119620456413,
+        "name": "model-runner",
+        "status": "completed"
+      },
+      {
+        "conclusion": null,
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716717185/job/119620455046",
+        "id": 119620455046,
+        "name": "product-runtime",
+        "status": "in_progress"
+      },
+      {
+        "conclusion": "failure",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716717224/job/119620454773",
+        "id": 119620454773,
+        "name": "vnext-quality",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716717178/job/119620454718",
+        "id": 119620454718,
+        "name": "PTT stock-local evidence and collector diagnostics",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716717197/job/119620454695",
+        "id": 119620454695,
+        "name": "Candidate discovery admission and UI diagnostics",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716717218/job/119620454691",
+        "id": 119620454691,
+        "name": "research-publication-tail-quality",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716717170/job/119620454511",
+        "id": 119620454511,
+        "name": "financial-installation-quality",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716717142/job/119620454480",
+        "id": 119620454480,
+        "name": "Financial document owned write lease route contracts",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39716715330/job/119620450280",
+        "id": 119620450280,
+        "name": "stockinsider-v3-gate-bootstrap",
+        "status": "completed"
+      }
+    ],
+    "total_count": 16
+  },
+  "vnextJob": {
+    "conclusion": "failure",
+    "name": "vnext-quality",
+    "steps": [
+      {
+        "completed_at": "2026-10-22T03:25:11Z",
+        "conclusion": "success",
+        "name": "Set up job",
+        "number": 1,
+        "started_at": "2026-10-22T03:25:10Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:13Z",
+        "conclusion": "success",
+        "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "number": 2,
+        "started_at": "2026-10-22T03:25:11Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:18Z",
+        "conclusion": "success",
+        "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "number": 3,
+        "started_at": "2026-10-22T03:25:13Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:18Z",
+        "conclusion": "success",
+        "name": "Workspace and temporary filesystem admission",
+        "number": 4,
+        "started_at": "2026-10-22T03:25:18Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:36Z",
+        "conclusion": "success",
+        "name": "Install unchanged locked dependencies",
+        "number": 5,
+        "started_at": "2026-10-22T03:25:18Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:43Z",
+        "conclusion": "failure",
+        "name": "Actual source contracts, types and lint",
+        "number": 6,
+        "started_at": "2026-10-22T03:25:36Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:43Z",
+        "conclusion": "skipped",
+        "name": "Full ordinary build",
+        "number": 7,
+        "started_at": "2026-10-22T03:25:43Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:43Z",
+        "conclusion": "skipped",
+        "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+        "number": 8,
+        "started_at": "2026-10-22T03:25:43Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:43Z",
+        "conclusion": "skipped",
+        "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+        "number": 9,
+        "started_at": "2026-10-22T03:25:43Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:43Z",
+        "conclusion": "skipped",
+        "name": "Actual durable worker journal with explicitly synthetic provider",
+        "number": 10,
+        "started_at": "2026-10-22T03:25:43Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:43Z",
+        "conclusion": "skipped",
+        "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+        "number": 11,
+        "started_at": "2026-10-22T03:25:43Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:43Z",
+        "conclusion": "skipped",
+        "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+        "number": 12,
+        "started_at": "2026-10-22T03:25:43Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:43Z",
+        "conclusion": "skipped",
+        "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+        "number": 13,
+        "started_at": "2026-10-22T03:25:43Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:44Z",
+        "conclusion": "success",
+        "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+        "number": 14,
+        "started_at": "2026-10-22T03:25:43Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:44Z",
+        "conclusion": "skipped",
+        "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "number": 27,
+        "started_at": "2026-10-22T03:25:44Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:44Z",
+        "conclusion": "success",
+        "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "number": 28,
+        "started_at": "2026-10-22T03:25:44Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:44Z",
+        "conclusion": "success",
+        "name": "Complete job",
+        "number": 29,
+        "started_at": "2026-10-22T03:25:44Z",
+        "status": "completed"
+      }
+    ]
+  },
+  "financialJob": {
+    "conclusion": "failure",
+    "name": "Financial document owned write lease route contracts",
+    "steps": [
+      {
+        "completed_at": "2026-10-22T03:25:11Z",
+        "conclusion": "success",
+        "name": "Set up job",
+        "number": 1,
+        "started_at": "2026-10-22T03:25:10Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:13Z",
+        "conclusion": "success",
+        "name": "Checkout pull request",
+        "number": 2,
+        "started_at": "2026-10-22T03:25:11Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:18Z",
+        "conclusion": "success",
+        "name": "Set up pinned Node 22",
+        "number": 3,
+        "started_at": "2026-10-22T03:25:13Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:36Z",
+        "conclusion": "success",
+        "name": "Install exact locked test dependencies without lifecycle scripts",
+        "number": 4,
+        "started_at": "2026-10-22T03:25:18Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:36Z",
+        "conclusion": "failure",
+        "name": "Execute actual upload and worker routes with synthetic boundaries",
+        "number": 5,
+        "started_at": "2026-10-22T03:25:36Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:36Z",
+        "conclusion": "skipped",
+        "name": "Post Set up pinned Node 22",
+        "number": 9,
+        "started_at": "2026-10-22T03:25:36Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:37Z",
+        "conclusion": "success",
+        "name": "Post Checkout pull request",
+        "number": 10,
+        "started_at": "2026-10-22T03:25:36Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:37Z",
+        "conclusion": "success",
+        "name": "Complete job",
+        "number": 11,
+        "started_at": "2026-10-22T03:25:37Z",
+        "status": "completed"
+      }
+    ]
+  },
+  "requirementsJob": {
+    "conclusion": "failure",
+    "name": "requirements",
+    "steps": [
+      {
+        "completed_at": "2026-10-22T03:25:24Z",
+        "conclusion": "success",
+        "name": "Set up job",
+        "number": 1,
+        "started_at": "2026-10-22T03:25:24Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:28Z",
+        "conclusion": "success",
+        "name": "Checkout only the protected pull-request base",
+        "number": 2,
+        "started_at": "2026-10-22T03:25:24Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:34Z",
+        "conclusion": "failure",
+        "name": "Retrieve bootstrap and prepare detached subject",
+        "number": 3,
+        "started_at": "2026-10-22T03:25:28Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:34Z",
+        "conclusion": "skipped",
+        "name": "Emit protected Requirements envelope",
+        "number": 4,
+        "started_at": "2026-10-22T03:25:34Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:34Z",
+        "conclusion": "skipped",
+        "name": "Publish immutable Requirements envelope",
+        "number": 5,
+        "started_at": "2026-10-22T03:25:34Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:34Z",
+        "conclusion": "success",
+        "name": "Post Retrieve bootstrap and prepare detached subject",
+        "number": 9,
+        "started_at": "2026-10-22T03:25:34Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:34Z",
+        "conclusion": "success",
+        "name": "Post Checkout only the protected pull-request base",
+        "number": 10,
+        "started_at": "2026-10-22T03:25:34Z",
+        "status": "completed"
+      },
+      {
+        "completed_at": "2026-10-22T03:25:34Z",
+        "conclusion": "success",
+        "name": "Complete job",
+        "number": 11,
+        "started_at": "2026-10-22T03:25:34Z",
+        "status": "completed"
+      }
+    ]
+  },
+  "annotations": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Kaichen9527/stockinsider/blob/e1bb126d33f63f4f8c004194b1c3df2f43bec82a/.github",
+      "start_line": 2,
+      "start_column": null,
+      "end_line": 2,
+      "end_column": null,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Kaichen9527/stockinsider/blob/e1bb126d33f63f4f8c004194b1c3df2f43bec82a/.github",
+      "start_line": 617,
+      "start_column": null,
+      "end_line": 617,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "Process completed with exit code 1.",
+      "raw_details": ""
+    }
+  ],
+  "fullJobLogs": "NOT_OBTAINED: signed artifact storage request403; no tunnel/policybypass or unchangedCIrerun",
+  "failureCauseScope": "actualVMsamecommand reproduces missing closedVMadapter dependency ./cached-admission.ts; otherunseen CIlog details notasserted",
+  "fixSource": "76aca1522fa1b3292a85f9f387f01bee7fd43e23",
+  "fix": "only explicit throwing cachedAdmissionBody/currentReceiptBody VM adapter dependency; defaultoffsource path stillactual; no product/gate change",
+  "freshCI": "normal newbranch checks pending; notoldrunrerun"
+}

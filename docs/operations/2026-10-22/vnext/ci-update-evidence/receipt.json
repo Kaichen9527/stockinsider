@@ -1,0 +1,32 @@
+{
+  "runtimeSource": "e1bb126d33f63f4f8c004194b1c3df2f43bec82a",
+  "testAdapterSource": "76aca1522fa1b3292a85f9f387f01bee7fd43e23",
+  "nativeFresh": "NOT_RUN",
+  "files": [
+    {
+      "path": "ci.json",
+      "bytes": 15045,
+      "sha256": "ca8b9ca555b4a9d2e9d09f65e31578b7e9818135a90dc020bb8f34caf7759f26"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 2110,
+      "sha256": "ad6317f7ce3d9f50714da9a244ba82a1c64cdc29ba1ad52aebd87d99a31855f6"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 2008,
+      "sha256": "c2b695d27c7448865b5c9a33be31a44f8df2c6c1a987f2c57b08bf6de62f4dca"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 642,
+      "sha256": "fec940a4d780ec6533d188732a46e148a54d8bebea60d1e0ce6d71be9872a1f4"
+    },
+    {
+      "path": "tap.json",
+      "bytes": 6592,
+      "sha256": "c3812005b08146c33acf62d9c676df14b1bd51419f033e6d53081054731c6428"
+    }
+  ]
+}
