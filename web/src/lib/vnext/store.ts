@@ -7,7 +7,8 @@ import { runAdmittedResearch } from './runtime.ts';
 import { initialFactors, deepFactors, type ScreeningInputs, type DeepInputs } from './factors.ts';
 import { screenRoundRobin } from './screening.ts';
 type Row = Record<string, unknown>;
-export function normalizedInput(symbol: string, value: Row) {
+export type TrustedThesisAdmission = { materialHash:string; materialEvidence:Row; deepInputs:DeepInputs; revisionId:string|null; inputHash:string; materialChanged:boolean };
+export function normalizedInput(symbol: string, value: Row, audit?:TrustedThesisAdmission) {
   const clues = Array.isArray(value.clues) ? value.clues as Clue[] : [];
   const cutoff = typeof value.cutoff === 'string' ? value.cutoff : '';
   if (!Number.isFinite(Date.parse(cutoff)) || Date.parse(cutoff) > Date.now()) throw new Error('vnext_input_cutoff_invalid');
@@ -18,8 +19,9 @@ export function normalizedInput(symbol: string, value: Row) {
   if (!value.screening || typeof value.screening !== 'object') throw new Error('vnext_cached_screening_inputs_required');
   const screening = { ...value.screening as ScreeningInputs, clues: allowed, cutoff };
   const initial = initialFactors(screening);
-  const deep = value.deep && typeof value.deep === 'object' ? deepFactors({ ...value.deep as DeepInputs, cutoff }) : null;
-  const frozen = { cutoff, clues: allowed, evidence, screening, deep: value.deep || null, marketSnapshotHash: value.marketSnapshotHash || null, tradingValid: value.tradingValid === true, contraindication: value.contraindication === true, overheated: value.overheated === true, reasons: Array.isArray(value.reasons) ? value.reasons : [], gaps: Array.isArray(value.gaps) ? value.gaps : [], initialScore: initial, deepScore: deep, factors: initial.factors };
+  const deepInput=audit?.deepInputs || value.deep;
+  const deep = deepInput && typeof deepInput === 'object' ? deepFactors({ ...deepInput as DeepInputs, cutoff }) : null;
+  const frozen = { cutoff, clues: allowed, evidence, screening, deep: deepInput || null, auditMaterial:audit?{materialHash:audit.materialHash,materialEvidence:audit.materialEvidence,revisionId:audit.revisionId,auditedInputHash:audit.inputHash}:null, marketSnapshotHash: value.marketSnapshotHash || null, tradingValid: value.tradingValid === true, contraindication: value.contraindication === true, overheated: value.overheated === true, reasons: Array.isArray(value.reasons) ? value.reasons : [], gaps: Array.isArray(value.gaps) ? value.gaps : [], initialScore: initial, deepScore: deep, factors: initial.factors };
   const mandatoryFinancialKeys = ['annual_eps', 'operating_cashflow', 'revenue', 'shares'];
   const financialReady = mandatoryFinancialKeys.every((key) => evidence.some((e) => e.kind === 'fact' && e.key === key && typeof e.value === 'number' && Number.isFinite(e.value) && e.sourceTier === 'official'));
   return { ...frozen, hash: researchMaterialHash(frozen), eligible: allowed.length > 0 && value.tradingValid === true && value.contraindication !== true,
@@ -35,14 +37,14 @@ export async function command(identity: VnextIdentity, command: string, request:
   if (!result.data || typeof result.data !== 'object') throw new Error('vnext_authority_receipt_missing');
   return result.data as Row;
 }
-export async function enqueue(identity: VnextIdentity, body: Row, entrypoint: string) {
+export async function enqueue(identity: VnextIdentity, body: Row, entrypoint: string, audits?:Record<string,TrustedThesisAdmission>) {
   const symbols = explicitScope(body.symbols ?? (body.symbol ? [body.symbol] : undefined));
   if (!symbols.length) return { jobs: [], reason: 'empty_scope', expensiveCalls: 0 };
   if (typeof body.requestKey !== 'string' || !/^[\w:.-]{1,180}$/u.test(body.requestKey)) throw new Error('vnext_request_key_required');
   const inputs: Record<string, unknown> = {}; const raw = body.inputs as Record<string, Row> | undefined;
   for (const symbol of symbols) {
     const value = raw?.[symbol]; if (!value) throw new Error('vnext_frozen_input_required');
-    inputs[symbol] = normalizedInput(symbol, value);
+    inputs[symbol] = normalizedInput(symbol, value, audits?.[symbol]);
   }
   return command(identity, 'enqueue', { symbols, inputs, requestKey: body.requestKey, entrypoint });
 }

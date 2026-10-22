@@ -35,6 +35,14 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       else {if(action==='market-recover' && (typeof body.invocationId!=='string' || !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu.test(body.invocationId)))throw new Error('vnext_market_invocation_id_required');result=await(await import('./market-ai-worker.ts')).runMarketInterpretation(identity,action==='market-recover'?String(body.invocationId):undefined);}
       return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});
     }
+    if(['screen','weekly-audit','dispatch','cycle'].includes(action)){
+      if(identity.role!=='operator')throw new Error('vnext_operator_required');
+      if(Object.keys(body).some((key)=>key!=='action'))throw new Error('vnext_cycle_closed_body');
+      const result=action==='dispatch'?await(await import('./research-dispatcher.ts')).dispatchResearchQueue(identity)
+        :action==='cycle'?await(await import('./research-cycle.ts')).runPostcloseResearchCycle(identity)
+        :await(await import('./weekly-worker.ts')).runWeeklyThesisAudit(identity,{screen:action==='screen'});
+      return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});
+    }
     const role= ['enqueue','screen','swap','market','content','retry','expire'].includes(action)?'operator':['author','bundle','claim','fail','execute'].includes(action)?'author':['review','publish','review-claim','review-sources'].includes(action)?'reviewer':null;
     if(role && identity.role!==role)throw new Error(`vnext_${role}_required`);
     if(!role)throw new Error('vnext_action_unsupported');

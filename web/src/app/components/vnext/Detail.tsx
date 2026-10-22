@@ -12,12 +12,13 @@ export default async function VnextDetail({ symbol, revision }: { symbol: string
   const invalid = Array.isArray(revision) || Boolean(revision && !/^[a-f0-9-]{36}$/iu.test(revision));
   const chosen = invalid ? null : revision ? history.find((item) => item.revisionId === revision) : history[0];
   const membership = data?.membership as Row | undefined;
-  const current = chosen && membership?.state !== 'exited' && membership?.contraindication !== true && membership?.inputHash === chosen.inputHash;
+  const current = chosen && membership?.state !== 'exited' && membership?.contraindication !== true && membership?.inputHash === chosen.inputHash && (chosen.sourceRights as Row|undefined)?.current===true;
   const content = chosen?.content as Row | undefined; const sections = content?.sections as Record<string, { text: string; evidenceIds: string[] }> | undefined;
   return <main className="mx-auto max-w-4xl space-y-6 px-4 py-8 text-slate-900 dark:text-slate-100" data-testid="vnext-detail">
     <Link className="underline" href="/">返回市場與主動研究</Link><h1 className="text-2xl font-semibold">{symbol} 研究紀錄</h1>
     <p>{membership?.state === 'exited' ? '已退出主動研究' : current ? '已發布研究；進場仍須符合當前市場與個股條件' : '保留歷史研究，目前不具新進場條件'}</p>
     {error ? <p role="alert">研究資料暫時無法讀取。</p> : !chosen ? <p role="status">{invalid || revision ? '指定研究版本不存在或尚未發布。' : '尚無通過獨立審查的研究。'}</p> : <>
+      {(chosen.sourceRights as Row|undefined)?.current!==true && <p className="text-amber-700">原始來源權利目前無法驗證；內容保留為歷史紀錄，不具新進場條件。</p>}
       <p>原始發布時間：<time>{String(chosen.publishedAt)}</time></p>
       <p>估值日期：{String(content?.valuationDate || '缺口')} · 股價日期：{String(content?.quoteDate || '缺口')}</p>
       {Array.isArray(content?.gaps) && content.gaps.length > 0 && <p className="text-amber-700">資料缺口：{content.gaps.map(String).join('、')}</p>}

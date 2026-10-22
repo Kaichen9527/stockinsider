@@ -25,10 +25,13 @@ export function VnextHomeView({ data, error = false, loading = false }: { data: 
     </section>
     <section aria-label="研究標的" aria-labelledby="vnext-research-title" data-testid="vnext-research" className="rounded-2xl border border-slate-300 p-5">
       <div className="flex flex-wrap justify-between gap-2"><h2 id="vnext-research-title" className="text-xl font-semibold">主動研究</h2><p>{data?.members.length || 0} / 20</p></div>
-      <p className="mt-2 text-sm text-slate-500">研究分數為已確認點數／可用權重。研究條件不代表買入建議。</p>
+      <p className="mt-2 text-sm text-slate-500">初選與深度研究分數分開列示，均為已確認點數／可用權重；缺值不補分，分數不是機率。已有當期深度評估的標的依深度分數排列，其餘依初選分數排列。</p>
       {loading ? <p role="status" className="mt-5">研究資料載入中</p> : !data?.members.length ? <p data-testid="vnext-empty" className="mt-5">目前沒有已納入的研究標的。資料與研究條件完整後才會加入。</p> : <div className="mt-5 grid gap-4 md:grid-cols-2">{data.members.map((member) => <article key={member.symbol} className="min-w-0 rounded-xl bg-slate-100 p-4 dark:bg-slate-900" data-testid="vnext-member">
         <div className="flex justify-between gap-2"><h3 className="font-semibold"><Link className="underline" href={`/stock/${member.symbol}${member.revisionId ? `?vnextRevision=${encodeURIComponent(member.revisionId)}` : ''}`}>{member.symbol}</Link></h3><span>{member.entryEligible ? '研究條件符合' : member.state === 'researching' ? '研究中' : '等待條件'}</span></div>
-        {member.score && <p className="mt-2">{member.score.confirmedPoints.toFixed(1)} / {member.score.availableWeight.toFixed(1)}</p>}
+        {(member.initialScore || member.score) && <p className="mt-2">初選：{(member.initialScore || member.score)!.confirmedPoints.toFixed(1)} / {(member.initialScore || member.score)!.availableWeight.toFixed(1)}</p>}
+        <p className="mt-1">深度研究：{member.deepScore && member.deepScore.availableWeight>0 ? `${member.deepScore.confirmedPoints.toFixed(1)} / ${member.deepScore.availableWeight.toFixed(1)}` : '證據尚不足，暫無當期分數'}</p>
+        {member.deepScoreAt && <p className="text-sm">深度評估時間：<time>{member.deepScoreAt}</time></p>}
+        {member.revisionId && member.sourceRights?.current!==true && <p className="mt-2 text-sm text-amber-700">原始來源權利或版本驗證有缺口；保留歷史研究，目前不具新進場條件。</p>}
         <p className="mt-2 text-sm">{member.revisionId ? `研究發布：${member.publishedAt}` : '尚未有通過獨立審查的研究'}</p>
         {member.statusReason && <p className="mt-2 text-sm text-amber-700">研究狀態：{member.statusReason === 'review_rejected_retry_available' ? '獨立審查未通過，等待新的研究重試。' : member.statusReason === 'research_failed_retry_available' ? '研究執行失敗，等待重試。' : member.statusReason === 'research_timed_out_retry_available' ? '執行逾時，等待重試。' : member.statusReason}</p>}
         {member.retained && <p className="mt-2 text-amber-700">保留前次研究，最新輸入仍在審查。</p>}

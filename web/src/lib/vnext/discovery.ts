@@ -1,5 +1,5 @@
 import { getSupabaseServerClient } from '../supabase-server';
-import { command, enqueue, normalizedInput } from './store.ts';
+import { command, enqueue, normalizedInput,type TrustedThesisAdmission } from './store.ts';
 import { inputHash } from './policy.ts';
 import { initialFactors, type ScreeningInputs } from './factors.ts';
 import { screenRoundRobin, type Clue } from './screening.ts';
@@ -9,7 +9,7 @@ import type { VnextIdentity } from './auth.ts';
 type Row = Record<string, unknown>;
 const number = (value: unknown) => typeof value === 'number' && Number.isFinite(value) ? value : null;
 /** Shared cache screening only. No financial coverage, downloads, parsers, external quotes or models. */
-export async function scanCachedCandidates(identity: VnextIdentity, transport?: { client: ReturnType<typeof getSupabaseServerClient>; command: typeof command; enqueue: typeof enqueue; now: string }) {
+export async function scanCachedCandidates(identity: VnextIdentity, transport?: { client: ReturnType<typeof getSupabaseServerClient>; command: typeof command; enqueue: typeof enqueue; now: string }, audits?:Record<string,TrustedThesisAdmission>) {
   const send = transport?.command || command; const admit = transport?.enqueue || enqueue;
   const context = await send(identity, 'screen-context', {}); const cutoff = transport?.now || new Date().toISOString();
   const sourceCommand = transport ? null : (await import('./analysis-runtime.ts')).analysisCommand;
@@ -68,16 +68,16 @@ export async function scanCachedCandidates(identity: VnextIdentity, transport?: 
   const sourceEvidence:Row={};if(sourceCommand)for(let offset=0;offset<symbols.length;offset+=20)Object.assign(sourceEvidence,await sourceCommand(identity,'source-projection',{symbols:symbols.slice(offset,offset+20)}));
   for(const row of frozen) row.input.evidence = (sourceEvidence[row.symbol] as Row|undefined)?.evidence || [];
   const observations: RotationObservation[] = frozen.map((row) => {
-    const normalized = normalizedInput(row.symbol, row.input); const member = active.find((r) => r.symbol === row.symbol);
+    const normalized = normalizedInput(row.symbol, row.input,audits?.[row.symbol]); const member = active.find((r) => r.symbol === row.symbol);
     const instrument = master.get(row.symbol);
     return { symbol: row.symbol, input: normalized, active: Boolean(member), state: String(member?.state || ''),
       candidate: { ...normalized, symbol: row.symbol, eventAt: normalized.eventAt || '', catalystCancelled: false, tradingInvalid: false, targetHit: false, newThesis: false } as Candidate,
       ...(member && instrument && ['delisted','suspended'].includes(String(instrument.listing_status)) ? { verifiedExit: { reason: 'trading_invalid', evidence: [`official_instrument:${instrument.stock_id}:${instrument.source_timestamp}:${instrument.listing_status}`] } } : {}) };
   });
   const rotation = await rotateCachedObservations({ session: String(context.session), completed: context.completed === true, postclose: context.postclose === true, weeklyDue: context.weeklyDue === true }, observations, (action, request) => send(identity, action, request));
-  const considered = frozen.filter((r) => !active.some((m) => m.symbol === r.symbol) || context.weeklyDue === true && context.postclose === true && context.completed === true).slice(0, 20);
+  const considered = frozen.filter((r) => !active.some((m) => m.symbol === r.symbol) || audits?.[r.symbol]?.materialChanged===true && audits[r.symbol].revisionId && context.postclose === true && context.completed === true).slice(0, 20);
   const result = await admit(identity, { symbols: considered.map((c) => c.symbol), inputs: Object.fromEntries(considered.map((c) => [c.symbol, c.input])),
-    requestKey: `shared-screen:${context.session}:${inputHash(considered.map((c) => ({ symbol: c.symbol, points: c.points, clues: c.input.clues })))}` }, 'shared-cache-screen');
+    requestKey: `shared-screen:${context.session}:${inputHash(considered.map((c) => ({ symbol: c.symbol, hash:normalizedInput(c.symbol,c.input,audits?.[c.symbol]).hash })))}` }, 'shared-cache-screen',audits);
   return { ...result, rotation, scope: { screened: clues.length, candidates: frozen.length, considered: considered.length,
     deferredOutsideBound: frozen.length - considered.length }, gaps: ['source_health_and_comparable_volume_not_attested', 'verified_catalyst_cancellation_target_and_contraindication_authority_unavailable'] };
 }

@@ -53,7 +53,7 @@ export function researchMaterialHash(value: Record<string, unknown>) {
       contentHash: clue.contentHash, catalystUntil: clue.catalystUntil, rightsAttested: clue.rightsAttested, operatorClaim: clue.operatorClaim };
   }) : [];
   return inputHash({ policyVersion: POLICY.version, clues, evidence: value.evidence,
-    screening: screening ? { ...screening, cutoff: undefined, clues: undefined } : null, deep: value.deep,
+    screening: screening ? { ...screening, cutoff: undefined, clues: undefined } : null, deep: value.auditMaterial?null:value.deep && typeof value.deep==='object'?{...value.deep as Record<string,unknown>,cutoff:undefined}:null,auditMaterial:value.auditMaterial,
     marketSnapshotHash: value.marketSnapshotHash, tradingValid: value.tradingValid, contraindication: value.contraindication, overheated: value.overheated });
 }
 export function explicitScope(value: unknown): string[] {

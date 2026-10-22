@@ -1,9 +1,10 @@
 import { marketJudgment, type MarketInput } from './market.ts';
 import { inputHash, type Session } from './policy.ts';
 import { REQUIRED_SECTIONS } from './research.ts';
+type ResearchScore={confirmedPoints:number;availableWeight:number};
 export type PublishedMember = { symbol: string; state: 'researching' | 'waiting' | 'eligible'; inputHash: string; publishedInputHash: string | null;
   revisionId: string | null; publishedAt: string | null; eventAt: string | null; reasons: string[]; gaps: string[];
-  score: { confirmedPoints: number; availableWeight: number } | null; content: Record<string, unknown> | null; statusReason?: string | null;
+  score: ResearchScore | null; initialScore?:ResearchScore|null;deepScore?:ResearchScore|null;deepScoreAt?:string|null;sourceRights?:{current:boolean;reason:string|null}; content: Record<string, unknown> | null; statusReason?: string | null;
   qualification?: { qualified: boolean; inputHash: string; expiresAt: string; proofHash: string; financialCoverage: { status: string }; priceBasis: { status: string } };
   citations?: Array<{ id: string; url: string; contentHash: string }> };
 export type PublishedHome = { version: string; market: MarketInput & { sessions: Session[] }; members: PublishedMember[]; publishedAt: string; latestSession?: Session };
@@ -37,7 +38,7 @@ export function publicHome(value: unknown, now: string) {
       && proof.financialCoverage?.status === 'complete' && proof.priceBasis?.status === 'verified';
   };
   const members = home.members.filter((m) => /^\d{4}$/u.test(m.symbol) && ['researching', 'waiting', 'eligible'].includes(m.state))
-    .map((m) => ({ ...m, entryEligible: m.state === 'eligible' && validContent(m) && qualified(m) && m.inputHash === m.publishedInputHash && !judgment.entryBlocked,
+    .map((m) => ({ ...m, entryEligible: m.state === 'eligible' && m.sourceRights?.current===true && validContent(m) && qualified(m) && m.inputHash === m.publishedInputHash && !judgment.entryBlocked,
       retained: Boolean(m.revisionId && m.inputHash !== m.publishedInputHash) }));
   return { ...home, market: judgment, members };
 }
