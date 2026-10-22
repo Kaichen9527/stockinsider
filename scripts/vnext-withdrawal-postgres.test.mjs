@@ -1,0 +1,51 @@
+/** New acceptance: resumes the exact retained, stopped thesis-native06 lab.
+ * It does not reinstall/replay old prefixes or run any previous green test entry.
+ * Original synthetic articles/facts remain unqualified; no real source/model claim. */
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+import {workerFixture,hash} from './vnext-worker-fixture.mjs';
+import {sourceWithdrawalOperation,validateWithdrawalReceipt} from '../web/src/lib/vnext/source-withdrawal.ts';
+import {roles} from './vnext-synthetic-research-vectors.mjs';
+await test('per-content append-only withdrawal fences retained research and resists policy ABA',{timeout:60000},async t=>{
+ const x=await workerFixture();const events=[];let contentHash,request,receipt,baseline;
+ const step=async(name,work)=>{let failed=false;await t.test(name,async()=>{try{await work();}catch(e){failed=true;throw e;}});if(failed)throw Error('dependent_withdrawal_stage_failed');};
+ const rpc=async(name,args,expected)=>{const c=await x.connect();try{await c.query('SET ROLE service_role');const ready=new Promise(resolve=>c.connection.once('readyForQuery',m=>resolve(m.status)));const [q,r]=await Promise.allSettled([c.query(`SELECT public.${name}(${args.map((_,i)=>'$'+(i+1)+(i===args.length-1 && typeof args[i]==='object'?'::jsonb':'')).join(',')}) AS result`,args.map(a=>typeof a==='object'?JSON.stringify(a):a)),ready]);assert.equal(r.status,'fulfilled');assert.equal(r.value,'I');events.push({name,pid:c.processID,ready:r.value,querySettled:true,status:q.status,...q.status==='rejected'?{code:q.reason.code,message:q.reason.message}:{committed:true}});if(expected){assert.equal(q.status,'rejected');assert.equal(q.reason.code,'P0001');assert.match(q.reason.message,expected);return;}if(q.status==='rejected')throw q.reason;return q.value.rows[0].result;}finally{await x.close(c);}};
+ const source=(action,body)=>rpc('vnext_analysis_command_v1',[roles.operator.principal,action,body]);
+ const deps={writer:async work=>work(),rpc:(principal,op,body)=>rpc('vnext_source_withdrawal_v1',[principal,op,body])};
+ const current=()=>rpc('vnext_read_v1',['2409']);
+ const catalog=async()=>{const p=(await x.observer.query("SELECT oid,to_jsonb(p) AS row FROM pg_proc p WHERE pronamespace='public'::regnamespace ORDER BY oid")).rows;const tables=(await x.observer.query("SELECT to_jsonb(c) AS row FROM pg_class c WHERE relnamespace='public'::regnamespace ORDER BY oid")).rows;const roles=(await x.observer.query("SELECT to_jsonb(r) AS row FROM pg_roles r WHERE rolname!~'^pg_' ORDER BY rolname")).rows;return {functions:p,tables,roles};};
+ try{
+  await step('actual retained prefix matches its full original313table snapshot and exact3body installer commits',async()=>{
+   baseline=await x.snapshot();assert.deepEqual(baseline,JSON.parse(fs.readFileSync('/tmp/stockinsider-vnext-oct22-private/thesis-native-01/final-state.json')));assert.equal(baseline.vnext_publications_v1.count,3);assert.equal(baseline.production_write_leases.count,0);
+   const before=await catalog();const sql=fs.readFileSync('migrations/20261022_vnext_source_withdrawals_v1.sql');await x.writer.query(sql.toString());const after=await catalog();let changed=0;
+   for(const p of before.functions){const next=after.functions.find(n=>n.oid===p.oid);assert.ok(next);const a={...p.row},b={...next.row};if(a.prosrc!==b.prosrc){changed++;assert.ok(['vnext_source_evidence_current_v1','vnext_analysis_command_v1','vnext_market_events_current_v1'].includes(a.proname));delete a.prosrc;delete b.prosrc;}assert.deepEqual(b,a);}
+   assert.equal(changed,3);assert.deepEqual(before.roles,after.roles);for(const c of before.tables)assert.ok(after.tables.some(n=>JSON.stringify(n)===JSON.stringify(c)));assert.equal(after.functions.length-before.functions.length,2);
+   x.save('catalog',{before,after,oldBodyChanges:changed,sqlSha256:hash(sql)});
+   const installed=await x.snapshot();for(const key of Object.keys(baseline))assert.deepEqual(installed[key],baseline[key]);assert.equal(installed.vnext_source_withdrawals_v1.count,0);
+   const sources=(await x.observer.query("SELECT * FROM public.vnext_extractions_v1 WHERE state='completed' ORDER BY content_hash")).rows;assert.equal(sources.length,1);contentHash=sources[0].content_hash;assert.equal((await current()).history[0].sourceRights.current,true);
+   request={contentHash,reason:'rights_revoked',citation:'https://www.twse.com.tw/synthetic-withdrawal-receipt'};
+  });
+  await step('operator actual service-role commit creates exactly one immutable observer-visible event',async()=>{
+   const before=await x.snapshot();receipt=await sourceWithdrawalOperation(roles.operator,'commit',request,deps);validateWithdrawalReceipt(receipt,request,'commit',roles.operator.principal);
+   const seen=(await x.observer.query('SELECT * FROM public.vnext_source_withdrawals_v1 WHERE content_hash=$1',[contentHash])).rows;assert.equal(seen.length,1);assert.deepEqual(seen[0].payload,receipt.payload);assert.equal(seen[0].event_hash,receipt.hash);assert.equal(seen[0].logical_bytes,receipt.logicalBytes);
+   const after=await x.snapshot();for(const key of Object.keys(before))if(key!=='vnext_source_withdrawals_v1')assert.deepEqual(after[key],before[key]);assert.equal(after.vnext_source_withdrawals_v1.count,1);x.save('withdrawal',{receipt,before,after,observerPid:x.observer.processID,syntheticCitationNotAcquired:true,writerAdapter:'inactive captured engineering profile; actual role and trigger, no production writer qualification'});
+  });
+  await step('current article/source/clue/provider/market checks refuse withdrawn hash with no new calls or mutations',async()=>{
+   const before=await x.snapshot();const pub=await current();assert.equal(pub.history[0].sourceRights.current,false);assert.deepEqual(pub.history[0].content,baseline.vnext_publications_v1.rows.find(p=>p.symbol==='2409').content);
+   assert.deepEqual((await source('source-projection',{symbols:['2409']}))['2409'],{clues:[],evidence:[]});assert.deepEqual((await source('source-clues',{})).clues,[]);
+   const original=(await x.observer.query('SELECT original FROM public.vnext_extractions_v1 WHERE content_hash=$1',[contentHash])).rows[0].original;
+   const repeat=await source('source-reserve',{item:{contentHash,source:original.source,scope:original.scope,original}});assert.equal(repeat.parse,false);assert.equal(repeat.deferred,'source_content_withdrawn');
+   const job=before.vnext_jobs_v1.rows.find(j=>j.symbol==='2409');await x.rpc(roles.reviewer.principal,'publish',{jobId:job.job_id,inputHash:job.input_hash,executionId:job.reviewer_execution},false,/vnext_research_original_rights_no_longer_current/u);
+   assert.equal((await x.rpc(roles.operator.principal,'inspect',{jobId:job.job_id},true)).state,'published_historical');
+   // Private market predicate is invoked as its existing owner, not newly exposed to service_role.
+   await x.writer.query('SET ROLE stockinsider_vnext_owner');const market=(await x.writer.query('SELECT public.vnext_market_events_current_v1($1::jsonb) AS current',[JSON.stringify({input:JSON.stringify({events:[{content_hash:contentHash,original}]})})])).rows[0];await x.writer.query('RESET ROLE');assert.equal(market.current,false);
+   assert.deepEqual(await x.snapshot(),before);x.save('current-read',{article:pub,market,wholeStateUnchanged:true});
+  });
+  await step('policy disable then re-enable cannot revive a tombstone; explicitREAD and exact replay are immutable',async()=>{
+   await x.writer.query("UPDATE public.vnext_source_policies_v1 SET enabled=false WHERE source='official'");await x.writer.query("UPDATE public.vnext_source_policies_v1 SET enabled=true WHERE source='official'");const before=await x.snapshot();
+   assert.equal((await current()).history[0].sourceRights.current,false);assert.deepEqual(await sourceWithdrawalOperation(roles.operator,'read',{contentHash},deps),receipt);assert.deepEqual(await sourceWithdrawalOperation(roles.operator,'commit',request,deps),receipt);assert.deepEqual(await x.snapshot(),before);
+   await rpc('vnext_source_withdrawal_v1',[roles.operator.principal,'commit',{...request,reason:'source_retracted'}],/vnext_withdrawal_replay_conflict/u);await rpc('vnext_source_withdrawal_v1',[roles.author.principal,'read',{contentHash}],/vnext_operator_required/u);assert.deepEqual(await x.snapshot(),before);
+   for(const statement of ['UPDATE public.vnext_source_withdrawals_v1 SET event_hash=event_hash','DELETE FROM public.vnext_source_withdrawals_v1'])await assert.rejects(()=>x.writer.query(statement),e=>e.code==='P0001'&&e.message==='vnext_source_withdrawal_append_only');
+   assert.deepEqual(await x.snapshot(),before);x.save('aba-state',before);
+  });
+ }finally{x.save('withdrawal-events',{events,syntheticOriginalResearch:true,realSourceAcquisition:false,providerInvocations:0,publicationOrSemanticApproval:false});await x.finish();}
+});
