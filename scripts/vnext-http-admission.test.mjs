@@ -11,29 +11,37 @@ import { createHash, randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 const { Client } = createRequire(import.meta.url)('pg');
+const database=process.env.VNEXT_HTTP_DATABASE||'vnext_legacy';if(!['vnext_legacy','vnext_worker'].includes(database))throw Error('closed_owned_http_database_required');
 const root = process.cwd(), artifacts = process.env.VNEXT_NATIVE_ARTIFACTS, socketParent = process.env.VNEXT_LEGACY_SOCKET_PARENT;
-if (!artifacts || !path.isAbsolute(artifacts) || fs.existsSync(artifacts) || !/^\/tmp\/stockinsider-vnext-oct22-private\/legacy-full-pg-socket(?:-[0-9]{2})?$/u.test(socketParent || '')) throw Error('explicit_fresh_owned_http_fixture_required');
+if (!artifacts || !path.isAbsolute(artifacts) || fs.existsSync(artifacts) || !/^\/tmp\/stockinsider-vnext-oct22-private\/(?:legacy-full-pg-socket(?:-[0-9]{2})?|worker-pg-socket-[0-9]{2})$/u.test(socketParent || '')) throw Error('explicit_fresh_owned_http_fixture_required');
 fs.mkdirSync(artifacts, { mode: 0o700 });
 const save = (n, x) => fs.writeFileSync(path.join(artifacts, n + '.json'), JSON.stringify(x, null, 2) + '\n', { mode: 0o600 });
 const sha = b => createHash('sha256').update(b).digest('hex');
-const connect = async () => { const c = new Client({ host: path.join(socketParent, 'socket'), user: 'postgres', database: 'vnext_legacy', ssl: false, connectionTimeoutMillis: 3000, statement_timeout: 30000 }); await c.connect(); return c; };
+const connect = async () => { const c = new Client({ host: path.join(socketParent, 'socket'), user: 'postgres', database, ssl: false, connectionTimeoutMillis: 3000, statement_timeout: 30000 }); await c.connect(); return c; };
 const key = randomBytes(32).toString('hex'), operatorKey = randomBytes(32).toString('hex'), authorKey = randomBytes(32).toString('hex');
 const operator = 'synthetic-http-operator', author = 'synthetic-http-author';
-const trace = []; let pending = 0;
+const trace = []; let pending = 0; const releaseId='a'.repeat(40);
+const functions={vnext_analysis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_analysis_command_v1($1,$2,$3::jsonb) AS result'},vnext_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_command_v1($1,$2,$3::jsonb) AS result'},vnext_read_v1:{keys:['p_symbol'],sql:'SELECT public.vnext_read_v1($1) AS result'},acquire_production_write_lease:{keys:['p_lease_key','p_owner_id','p_ttl_seconds'],sql:'SELECT public.acquire_production_write_lease($1,$2::uuid,$3::integer) AS result'},release_production_write_lease:{keys:['p_lease_key','p_owner_id'],sql:'SELECT public.release_production_write_lease($1,$2::uuid) AS result'}};
 const bridge = http.createServer(async (req, res) => {
   const chunks = []; let length = 0;
   for await (const chunk of req) { length += chunk.length; if (length > 1048576) { res.writeHead(413).end(); return; } chunks.push(chunk); }
   res.setHeader('content-type', 'application/json');
-  if (req.headers.authorization !== 'Bearer ' + key || req.method !== 'POST' || !['/rest/v1/rpc/vnext_command_v1', '/rest/v1/rpc/vnext_read_v1'].includes(req.url)) { res.writeHead(403).end('{"message":"owned_test_transport_scope"}'); return; }
-  let body; try { body = JSON.parse(Buffer.concat(chunks).toString()); } catch { res.writeHead(400).end(); return; }
-  const command = req.url.endsWith('vnext_command_v1');
-  if (Object.keys(body).some(k => !(command ? ['p_principal', 'p_command', 'p_request'] : ['p_symbol']).includes(k))) { res.writeHead(400).end(); return; }
+  if(req.headers.authorization!=='Bearer '+key){res.writeHead(403).end('{"message":"owned_transport_identity"}');return;}
+  if(req.method==='GET' && req.url.startsWith('/rest/v1/production_writer_releases?')){
+    const parsed=new URL(req.url,'http://127.0.0.1');if(parsed.searchParams.get('select')!=='release_id,writer_kind'||parsed.searchParams.get('active')!=='eq.true'||[...parsed.searchParams.keys()].some(k=>!['select','active'].includes(k))){res.writeHead(400).end();return;}
+    const c=await connect();pending++;try{await c.query('SET ROLE service_role');const result=await c.query('SELECT release_id,writer_kind FROM public.production_writer_releases WHERE active');assert.equal(result.rows.length,1);trace.push({rpc:'active-release-read',actualServiceRole:true});res.end(JSON.stringify(result.rows[0]));}finally{await c.end();pending--;}return;
+  }
+  const name=req.url.startsWith('/rest/v1/rpc/')?req.url.slice('/rest/v1/rpc/'.length):'';const definition=functions[name];
+  if(req.method!=='POST'||!definition){res.writeHead(403).end('{"message":"owned_test_transport_scope"}');return;}
+  let body;try{body=JSON.parse(Buffer.concat(chunks).toString());}catch{res.writeHead(400).end();return;}
+  if(Object.keys(body).some(k=>!definition.keys.includes(k))){res.writeHead(400).end();return;}
+  if(name.includes('production_write_lease') && (body.p_lease_key!=='production-data-plane'||!/^[a-f0-9-]{36}$/u.test(body.p_owner_id)||name==='acquire_production_write_lease' && body.p_ttl_seconds!==300)){res.writeHead(400).end();return;}
   const c = await connect(); pending++;
   try {
     await c.query('BEGIN'); await c.query('SET LOCAL ROLE service_role');
-    const actual = await c.query(command ? 'SELECT public.vnext_command_v1($1,$2,$3::jsonb) AS result' : 'SELECT public.vnext_read_v1($1) AS result',
-      command ? [body.p_principal, body.p_command, JSON.stringify(body.p_request)] : [body.p_symbol]);
-    await c.query('COMMIT'); trace.push({ rpc: command ? 'command' : 'read', action: body.p_command, requestHash: sha(JSON.stringify(body)), commitObserved: true });
+    await c.query("SELECT set_config('request.headers',$1,true),set_config('request.jwt.claims',$2,true)",[JSON.stringify({'x-stockinsider-writer-release':req.headers['x-stockinsider-writer-release']}),JSON.stringify({role:'service_role'})]);
+    const actual=await c.query(definition.sql,definition.keys.map(k=>k==='p_request'?JSON.stringify(body[k]):body[k]));
+    await c.query('COMMIT');trace.push({rpc:name,action:body.p_command,requestHash:sha(JSON.stringify(body)),commitObserved:true,actualServiceRole:true});
     res.end(JSON.stringify(actual.rows[0].result));
   } catch (e) {
     await c.query('ROLLBACK'); trace.push({ action: body.p_command, code: e.code, message: e.message, rollbackSettled: true });
@@ -58,12 +66,17 @@ await test('actual internal HTTP entrypoints share real durable4/20 authority', 
     await admin.query('INSERT INTO public.vnext_sessions_v1(session_date,close_at,completed) VALUES($1,clock_timestamp()-interval\'1 day\',true) ON CONFLICT DO NOTHING', [session]);
     await admin.query('INSERT INTO public.vnext_sessions_v1(session_date,close_at,completed) VALUES($1,clock_timestamp()-interval\'2 days\',true) ON CONFLICT DO NOTHING', [priorSession]);
 
+          await admin.query("INSERT INTO public.vnext_members_v1(symbol,state,input_hash,evidence,admitted_session) SELECT (6000+n)::text,'waiting',repeat('a',64),'{\"syntheticPriorDayFixture\":true}'::jsonb,$1 FROM generate_series(1,16)n", [priorSession]);
+    assert.equal((await admin.query('SELECT identity_fence_enabled FROM public.stockinsider_data_plane_settings_v1 WHERE singleton')).rows[0].identity_fence_enabled,false);
+    await admin.query("INSERT INTO public.production_writer_releases(release_id,writer_kind,active,activated_at) VALUES($1,'vps',true,clock_timestamp())",[releaseId]);
+
     await new Promise(resolve => bridge.listen(34233, '127.0.0.1', resolve));
     const env = { ...process.env, NODE_TEST_CONTEXT: 'child-v8', LEGACY_RADAR_CORRECTNESS_PROJECTION: 'enabled', STOCKINSIDER_VNEXT_ENABLED: 'true', SUPABASE_URL: 'http://127.0.0.1:34233', SUPABASE_SERVICE_ROLE_KEY: key,
       INTERNAL_API_KEY: operatorKey, STOCKINSIDER_VNEXT_OPERATOR_PRINCIPAL: operator, STOCKINSIDER_VNEXT_AUTHOR_KEY: authorKey, STOCKINSIDER_VNEXT_AUTHOR_PRINCIPAL: author,
       STOCKINSIDER_VNEXT_REVIEWER_KEY: randomBytes(32).toString('hex'), STOCKINSIDER_VNEXT_REVIEWER_PRINCIPAL: 'synthetic-http-reviewer', STOCKINSIDER_DATA_PLANE: 'supabase' };
     // No files, model credentials, production selector or inherited Vercel runtime are consulted.
     for (const name of Object.keys(env)) if (/^(OPENAI_|ANTHROPIC_|VERCEL|CREDENTIALS_DIRECTORY|STOCKINSIDER_WRITER_RELEASE_ID|NEXT_PUBLIC_SUPABASE_)/u.test(name)) delete env[name];
+    env.STOCKINSIDER_WRITER_RELEASE_ID=releaseId;
     appLog = fs.openSync(path.join(artifacts, 'next.log'), 'wx', 0o600);
     app = spawn('/workspace/.tools/node22/node_modules/node/bin/node', ['node_modules/next/dist/bin/next', 'start', '--hostname', '127.0.0.1', '--port', '34234'], { cwd: path.join(root, 'web'), env, stdio: ['ignore', appLog, appLog] });
     const until = Date.now() + 30000; let ready = false;
@@ -75,17 +88,22 @@ await test('actual internal HTTP entrypoints share real durable4/20 authority', 
       for(const route of ['pipeline-run','pipeline-research-run','stock-research-refresh','research-report-build','deep-dive-build','candidate-dossier-bundle','candidate-research-run','report-build','thesis-refresh']) {const missing=await post(route,{},operatorKey);assert.equal(missing.status,409);assert.equal(missing.body.error,'vnext_explicit_scope_required');}
       assert.equal((await post('pipeline-run', { symbols: [], symbol: '2330' }, operatorKey)).body.result.expensiveCalls, 0);
       assert.equal(trace.length, 0);
-      const screening=await post('vnext-research',{action:'screen'},operatorKey);assert.equal(screening.status,200);assert.deepEqual(screening.body.result.jobs,[]);assert.equal(trace.length,1);assert.equal(trace[0].action,'screen-context');
+      const screening=await post('vnext-research',{action:'screen'},operatorKey);assert.equal(screening.status,200);assert.deepEqual(screening.body.result.jobs,[]);assert.ok(trace.some(t=>t.action==='screen-context'));assert.ok(trace.some(t=>t.rpc==='acquire_production_write_lease'));assert.ok(trace.some(t=>t.rpc==='release_production_write_lease'));assert.equal(Number((await admin.query('SELECT count(*) FROM public.production_write_leases')).rows[0].count),0);
     });
     await t.test('parallel different aliases plus exact duplicate deliveries reserve only4 slots', async () => {
-          await admin.query("INSERT INTO public.vnext_members_v1(symbol,state,input_hash,evidence,admitted_session) SELECT (6000+n)::text,'waiting',repeat('a',64),'{\"syntheticPriorDayFixture\":true}'::jsonb,$1 FROM generate_series(1,16)n", [priorSession]);
       const routes = ['pipeline-run', 'stock-research-refresh', 'research-report-build', 'deep-dive-build', 'candidate-dossier-bundle', 'candidate-research-run', 'report-build', 'thesis-refresh'];
       const work = routes.map((route, i) => { const symbol = String(3000 + i); return { route, body: { symbols: [symbol], requestKey: 'actual-http-' + i, inputs: { [symbol]: input(symbol) } } }; });
       const receipts = await Promise.all(work.flatMap(w => [post(w.route, w.body, operatorKey), post(w.route, w.body, operatorKey)]));
-      receipts.forEach(r => assert.equal(r.status, 200));
-      const jobs = [...new Set(receipts.flatMap(r => r.body.result.jobs || []).filter(j => j.jobId).map(j => j.jobId))]; assert.equal(jobs.length, 4);
+      for(const r of receipts){if(r.status===409)assert.equal(r.body.error,'production_write_cycle_already_running');else assert.equal(r.status,200);}
+      // Known lease-contention refusals performed no work. Bounded sequential
+      // exact deliveries now prove progress/idempotency without resending a model.
+      for(const w of work)for(let n=0;n<2;n++){const r=await post(w.route,w.body,operatorKey);assert.equal(r.status,200);receipts.push(r);}
+      const jobs = [...new Set(receipts.flatMap(r => r.body.result?.jobs || []).filter(j => j.jobId).map(j => j.jobId))]; assert.equal(jobs.length, 4);
       const claims = await Promise.all(jobs.flatMap(jobId => [post('vnext-research', { action: 'claim', jobId }, authorKey), post('vnext-research', { action: 'claim', jobId }, authorKey)]));
-      assert.equal(claims.filter(r => r.body.result?.execute).length, 4);
+      for(const r of claims){if(r.status===409)assert.equal(r.body.error,'production_write_cycle_already_running');else assert.equal(r.status,200);}
+      for(const jobId of jobs)for(let n=0;n<2;n++){const r=await post('vnext-research',{action:'claim',jobId},authorKey);assert.equal(r.status,200);claims.push(r);}
+      assert.equal(claims.filter(r=>r.body.result?.execute).length,4);
+      assert.equal(Number((await admin.query('SELECT count(*) FROM public.production_write_leases')).rows[0].count),0);
       assert.equal(Number((await admin.query("SELECT count(*) FROM vnext_members_v1 WHERE state<>'exited'")).rows[0].count), 20);
       assert.equal(Number((await admin.query('SELECT count(*) FROM vnext_jobs_v1 WHERE started_at IS NOT NULL')).rows[0].count), 4);
       results.push({ aliases: routes, duplicateEnqueues: receipts.length, duplicateClaims: claims.length, distinctJobs: jobs.length, active: 20, attempts: 4 });
@@ -95,7 +113,7 @@ await test('actual internal HTTP entrypoints share real durable4/20 authority', 
     if (appLog !== undefined) fs.closeSync(appLog);
     await new Promise(resolve => bridge.close(resolve));
     if (admin) await admin.end();
-    save('receipt', { scope: 'actual HTTP/real service_role PG via controlled test REST facade; not PostgREST/HBA/Contabo or actual model/rights acceptance', results, trace, pendingQueries: pending, appExit: app?.exitCode, appPidPathAbsent: app ? !fs.existsSync('/proc/' + app.pid) : null });
+    save('receipt', { scope:'actual HTTP/real service_role PG with active synthetic release and real acquire/release lease RPC via controlled finite facade; backend identity_fence inactive, not formal HBA/Contabo/model/rights acceptance', results, trace, pendingQueries: pending, appExit: app?.exitCode, appPidPathAbsent: app ? !fs.existsSync('/proc/' + app.pid) : null });
     assert.equal(pending, 0);
   }
 });
