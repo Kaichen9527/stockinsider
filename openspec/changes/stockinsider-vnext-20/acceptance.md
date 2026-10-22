@@ -31,3 +31,7 @@ Each ID maps to an executable case and evidence before Release Gate PASS; pendin
 - Existing queue20 and weekly5 SQL: no direct constant replacement. New-policy admission references must guard real enqueue/claim; uninstalled/missing authority rejects enabled work. No legacy fallback to bypass vNext rejection.
 - Existing source policy, financial validators, exact-pin/operator profile/immutable refs/resource floors/role/auth/RLS guards: retained. No paid/member/raw-channel acquisition.
 - Historical parser/native and consumedDD deployment/PR370..383 operations: no reruns, no evidence reassignment to this feature.
+
+## Current evidence and unaccepted scope
+
+See [VN01–VN20 execution matrix](../../../docs/operations/2026-10-22/vnext/evidence/summary.json) and [delivery limits](../../../docs/operations/2026-10-22/vnext/DELIVERY.md). The matrix distinguishes real VM database/HTTP/browser tests from synthetic content, pure contracts, missing implementations and external prerequisites. No requirement is waived by a PASS in a narrower test. Release Gate remains pending.

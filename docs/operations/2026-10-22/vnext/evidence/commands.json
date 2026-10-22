@@ -1,0 +1,595 @@
+[
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/vnext/vnext.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:04:03.664782+00:00",
+    "end": "2026-10-22T00:04:04.195177+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 22543831040,
+      "/tmp": 17839915008
+    },
+    "finalFree": {
+      "/workspace": 22543831040,
+      "/tmp": 17839906816
+    },
+    "sampledSessionPeakRssBytes": 1966080,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "final-pure-rotation",
+    "rawLogSha256": "10a56f363b7f32b42a855d711c34ac378b45f41ce0050b4d96a1703363a9027d",
+    "rawLogBytes": 5034,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/vnext/discovery.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:24:13.523541+00:00",
+    "end": "2026-10-22T00:24:14.534005+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 18392158208,
+      "/tmp": 17806483456
+    },
+    "finalFree": {
+      "/workspace": 18392158208,
+      "/tmp": 17806479360
+    },
+    "sampledSessionPeakRssBytes": 111255552,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "final-discovery-direct",
+    "rawLogSha256": "1338bd7fc1e2e9324a339260ebffba7476943e47194fa384865bead6690453c1",
+    "rawLogBytes": 986,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/vnext/boundaries.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-21T23:33:49.572559+00:00",
+    "end": "2026-10-21T23:33:50.077237+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 24259469312,
+      "/tmp": 17866665984
+    },
+    "finalFree": {
+      "/workspace": 24259469312,
+      "/tmp": 17866661888
+    },
+    "sampledSessionPeakRssBytes": 4849664,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "final-boundary-direct",
+    "rawLogSha256": "ac51775ad12267d5bdc4bb55e4144274bf0b4e99b6bce12e3ec9986ba4396cf9",
+    "rawLogBytes": 954,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "scripts/candidate-financial-document-write-lease-route.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-21T23:45:18.985996+00:00",
+    "end": "2026-10-21T23:45:20.499213+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 23772786688,
+      "/tmp": 17840054272
+    },
+    "finalFree": {
+      "/workspace": 23772786688,
+      "/tmp": 17840050176
+    },
+    "sampledSessionPeakRssBytes": 93741056,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "regression-write-lease-routes-direct",
+    "rawLogSha256": "bdc238a0fa88cea534e9298d71305949eca430ffed3e58be888d081740a5e9b1",
+    "rawLogBytes": 2167,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/candidate-research.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-21T23:44:59.003885+00:00",
+    "end": "2026-10-21T23:44:59.506826+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 23772786688,
+      "/tmp": 17840066560
+    },
+    "finalFree": {
+      "/workspace": 23772786688,
+      "/tmp": 17840058368
+    },
+    "sampledSessionPeakRssBytes": 1703936,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "regression-candidate-core",
+    "rawLogSha256": "de98ceaa1c14d68c3d10ff29a43059bb66940abc16eaf1aaa7dc769c6e08b151",
+    "rawLogBytes": 7445,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "env",
+      "STOCKINSIDER_DOCUMENT_PARSER_PYTHON=/workspace/.tools/vnext-parser-o22/python",
+      "STOCKINSIDER_DOCUMENT_PARSER_SCRIPT=/workspace/stockinsider-vnext-oct22/scripts/candidate_financial_document_parser.py",
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/candidate-financial-local-parser.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-21T23:48:11.236612+00:00",
+    "end": "2026-10-21T23:48:12.250434+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 23504261120,
+      "/tmp": 17839992832
+    },
+    "finalFree": {
+      "/workspace": 23504261120,
+      "/tmp": 17839988736
+    },
+    "sampledSessionPeakRssBytes": 123527168,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "regression-financial-parser-writable-config",
+    "rawLogSha256": "f1e6185d592914233b580afb5174d82290c640238466a5fb1fe6c5d0b88694a9",
+    "rawLogBytes": 1569,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/candidate-official-financials.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-21T23:49:30.484097+00:00",
+    "end": "2026-10-21T23:49:31.992009+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 23504261120,
+      "/tmp": 17839972352
+    },
+    "finalFree": {
+      "/workspace": 23504261120,
+      "/tmp": 17839964160
+    },
+    "sampledSessionPeakRssBytes": 77824000,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "regression-official-financials",
+    "rawLogSha256": "70a973f9a9fcd5c00cc12e256c4de8f7c11e151cd163c42cb4d738a080227944",
+    "rawLogBytes": 5401,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/tw-market.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-21T23:53:03.942300+00:00",
+    "end": "2026-10-21T23:53:27.624894+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 22544076800,
+      "/tmp": 17839955968
+    },
+    "finalFree": {
+      "/workspace": 22544035840,
+      "/tmp": 17839947776
+    },
+    "sampledSessionPeakRssBytes": 87277568,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "regression-tw-market",
+    "rawLogSha256": "8e733f2e8e2c279ce803fca9629afa14cac371129a797a9f225aa3c616700195",
+    "rawLogBytes": 6358,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/source-policy.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-21T23:48:49.525293+00:00",
+    "end": "2026-10-21T23:48:50.032216+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 23504261120,
+      "/tmp": 17839984640
+    },
+    "finalFree": {
+      "/workspace": 23504261120,
+      "/tmp": 17839980544
+    },
+    "sampledSessionPeakRssBytes": 3276800,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "regression-source-policy",
+    "rawLogSha256": "da2e2079b68e88c9224d1c9838b11f814e668ad89b35a8721e034475e201715b",
+    "rawLogBytes": 3025,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/candidate-financial-documents.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-21T23:58:28.264595+00:00",
+    "end": "2026-10-21T23:58:28.858421+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 22543855616,
+      "/tmp": 17839935488
+    },
+    "finalFree": {
+      "/workspace": 22543855616,
+      "/tmp": 17839931392
+    },
+    "sampledSessionPeakRssBytes": 2228224,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "regression-candidate-financial-documents",
+    "rawLogSha256": "a25bd09ac908ddbc66d7ee45755b16c87f3a4d3439a0dc9727290df3eb48e403",
+    "rawLogBytes": 1255,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "scripts/vnext-legacy-fence-postgres.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:24:29.235732+00:00",
+    "end": "2026-10-22T00:24:34.275364+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 18391937024,
+      "/tmp": 17806508032
+    },
+    "finalFree": {
+      "/workspace": 18351341568,
+      "/tmp": 17797971968
+    },
+    "sampledSessionPeakRssBytes": 132022272,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "native-legacy-final",
+    "rawLogSha256": "f08f23cf1aa86fb32139d43749113371cbca503d2bad56c6ee8715888dff621d",
+    "rawLogBytes": 1279,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "scripts/vnext-admission-postgres.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:22:17.175303+00:00",
+    "end": "2026-10-22T00:22:33.296567+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 19358490624,
+      "/tmp": 17806606336
+    },
+    "finalFree": {
+      "/workspace": 19356139520,
+      "/tmp": 17806536704
+    },
+    "sampledSessionPeakRssBytes": 164122624,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "native-admission-final",
+    "rawLogSha256": "c591047cde211747a4bdec814bb85f916f40410c44abcf47658620e48ae0eb85",
+    "rawLogBytes": 1209,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "scripts/vnext-http-admission.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:25:49.602221+00:00",
+    "end": "2026-10-22T00:25:51.117571+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 18351206400,
+      "/tmp": 17797967872
+    },
+    "finalFree": {
+      "/workspace": 18350747648,
+      "/tmp": 17797947392
+    },
+    "sampledSessionPeakRssBytes": 175570944,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "native-http-final",
+    "rawLogSha256": "721e9e7ffaa7a5b3da9eb8702e5376d7b556b7c5cea84bc8327becc24f16e168",
+    "rawLogBytes": 749,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "scripts/vnext-business-postgres.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:36:16.737844+00:00",
+    "end": "2026-10-22T00:36:53.636859+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 18332336128,
+      "/tmp": 17787600896
+    },
+    "finalFree": {
+      "/workspace": 18328682496,
+      "/tmp": 17787469824
+    },
+    "sampledSessionPeakRssBytes": 101928960,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "native-business-sealed",
+    "rawLogSha256": "1eb0f29d2ec8c9625f0a68d508f871367c8590752e16880e1b653f59dc9d6eed",
+    "rawLogBytes": 2193,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "scripts/vnext-business-postgres.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:18:47.230177+00:00",
+    "end": "2026-10-22T00:19:02.839270+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 20354224128,
+      "/tmp": 17815232512
+    },
+    "finalFree": {
+      "/workspace": 20351086592,
+      "/tmp": 17815130112
+    },
+    "sampledSessionPeakRssBytes": 101195776,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "native-revision-02",
+    "rawLogSha256": "0b0d19e3f1b08a6b91c3cecb1294e268c1c326c8d463b01a0af9ff97f542def2",
+    "rawLogBytes": 1690,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "scripts/vnext-rotation-postgres.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:19:23.381139+00:00",
+    "end": "2026-10-22T00:19:23.885231+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 20349714432,
+      "/tmp": 17815117824
+    },
+    "finalFree": {
+      "/workspace": 20330065920,
+      "/tmp": 17815101440
+    },
+    "sampledSessionPeakRssBytes": 2752512,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "native-rotation-01",
+    "rawLogSha256": "cfd975057226c15658e7f619474cc6034141c417908968ee92c2cd570f269953",
+    "rawLogBytes": 930,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-22T00:21:22.223494+00:00",
+    "end": "2026-10-22T00:21:29.304827+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 19421700096,
+      "/tmp": 17806581760
+    },
+    "finalFree": {
+      "/workspace": 19361726464,
+      "/tmp": 17806577664
+    },
+    "sampledSessionPeakRssBytes": 576241664,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "final-typecheck-sealed",
+    "rawLogSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+    "rawLogBytes": 188,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-22T00:11:59.112701+00:00",
+    "end": "2026-10-22T00:12:32.511047+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 20410388480,
+      "/tmp": 17824690176
+    },
+    "finalFree": {
+      "/workspace": 20403367936,
+      "/tmp": 17824681984
+    },
+    "sampledSessionPeakRssBytes": 1099161600,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "final-lint-loader-fix",
+    "rawLogSha256": "df780ecae65df931abfa51c689c852c77c00fd19aad52d895387274911c9ff42",
+    "rawLogBytes": 4676,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build",
+      "--",
+      "--webpack"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-22T00:28:28.315911+00:00",
+    "end": "2026-10-22T00:29:15.604445+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 18350473216,
+      "/tmp": 17797943296
+    },
+    "finalFree": {
+      "/workspace": 18350419968,
+      "/tmp": 17797935104
+    },
+    "sampledSessionPeakRssBytes": 976338944,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "final-build-explicit-screen",
+    "rawLogSha256": "2fd53510cd97bbfe09d8d14a37dc6981c3ba31f333c28cdf99a142d82416eff9",
+    "rawLogBytes": 5628,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/run-vnext-browser-acceptance.py",
+      "--snapshots",
+      "/tmp/stockinsider-vnext-oct22-private/native-business-final",
+      "--output",
+      "/tmp/stockinsider-vnext-oct22-private/browser-final-scoped"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:32:21.212422+00:00",
+    "end": "2026-10-22T00:32:45.089596+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 18350379008,
+      "/tmp": 17792872448
+    },
+    "finalFree": {
+      "/workspace": 18350374912,
+      "/tmp": 17787637760
+    },
+    "sampledSessionPeakRssBytes": 1469739008,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "browser-final-scoped",
+    "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rawLogBytes": 0,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/run-vnext-browser-acceptance.py",
+      "--suite",
+      "revision",
+      "--snapshots",
+      "/tmp/stockinsider-vnext-oct22-private/native-revision-02",
+      "--output",
+      "/tmp/stockinsider-vnext-oct22-private/browser-revision"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:20:34.036220+00:00",
+    "end": "2026-10-22T00:20:45.656066+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 20325445632,
+      "/tmp": 17809846272
+    },
+    "finalFree": {
+      "/workspace": 20324843520,
+      "/tmp": 17806622720
+    },
+    "sampledSessionPeakRssBytes": 1483464704,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "browser-revision",
+    "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rawLogBytes": 0,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  },
+  {
+    "command": [
+      "gh",
+      "pr",
+      "create",
+      "--draft",
+      "--base",
+      "main",
+      "--head",
+      "codex/stockinsider-vnext-oct22",
+      "--title",
+      "feat: introduce opt-in 20-slot research authority and two-block UI (partial)",
+      "--body-file",
+      "docs/operations/2026-10-22/vnext/PR-BODY.md"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T00:38:51.278549+00:00",
+    "end": "2026-10-22T00:38:53.797313+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 18323083264,
+      "/tmp": 17787428864
+    },
+    "finalFree": {
+      "/workspace": 18323083264,
+      "/tmp": 17787424768
+    },
+    "sampledSessionPeakRssBytes": 27525120,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "label": "draft-pr-create",
+    "rawLogSha256": "1c0f1ea9010af1d72f51cbb472d647984116f8be20dd0f638d20bfaa31c83585",
+    "rawLogBytes": 84,
+    "scope": "VM; exact isolated/synthetic scope varies by test; no production or formal research approval"
+  }
+]

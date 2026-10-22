@@ -1,0 +1,35 @@
+{
+  "observedAtUtc": "2026-10-22T00:37:54.495044+00:00",
+  "system": "Linux",
+  "release": "6.18.55",
+  "machine": "x86_64",
+  "uid": 1000,
+  "pid1": "tail",
+  "workspace": "/workspace/stockinsider-vnext-oct22",
+  "binaries": {
+    "node": {
+      "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+      "bytes": 120177224,
+      "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1"
+    },
+    "chromiumLauncher": {
+      "path": "/usr/bin/chromium",
+      "bytes": 5064,
+      "sha256": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779"
+    },
+    "chromiumBinary": {
+      "path": "/usr/lib/chromium/chromium",
+      "bytes": 321686360,
+      "sha256": "d387400aaf740ccb75e5e996a34aa0940e6e97683a4eabd6ae34c1eed6804723"
+    }
+  },
+  "freeBytes": {
+    "/workspace": 18323066880,
+    "/tmp": 17787400192
+  },
+  "nodeVersion": "v22.14.0",
+  "chromiumVersion": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)",
+  "postgresImageDigest": "sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+  "noMacExecution": true,
+  "noProductionConnectionAttempted": true
+}

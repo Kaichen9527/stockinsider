@@ -1,0 +1,17 @@
+TAP version 13
+# Subtest: actual internal HTTP entrypoints share real durable4/20 authority
+    # Subtest: authfirst and missing-vs-empty scopes cause zero actual RPCs
+    ok 1 - authfirst and missing-vs-empty scopes cause zero actual RPCs
+    # Subtest: parallel different aliases plus exact duplicate deliveries reserve only4 slots
+    ok 2 - parallel different aliases plus exact duplicate deliveries reserve only4 slots
+    1..2
+ok 1 - actual internal HTTP entrypoints share real durable4/20 authority
+1..1
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1356.958655

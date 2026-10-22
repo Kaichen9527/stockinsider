@@ -1,0 +1,102 @@
+{
+  "name": "vnext-quality",
+  "head_sha": "6410c9a1b09697bf65567879574baf6b83a32cd7",
+  "status": "completed",
+  "conclusion": "success",
+  "started_at": "2026-10-22T00:38:57Z",
+  "completed_at": "2026-10-22T00:41:40Z",
+  "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941124/job/119569727112",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:38:58Z",
+      "completed_at": "2026-10-22T00:38:59Z"
+    },
+    {
+      "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:38:59Z",
+      "completed_at": "2026-10-22T00:39:00Z"
+    },
+    {
+      "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:39:00Z",
+      "completed_at": "2026-10-22T00:39:05Z"
+    },
+    {
+      "name": "Workspace and temporary filesystem admission",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:39:05Z",
+      "completed_at": "2026-10-22T00:39:05Z"
+    },
+    {
+      "name": "Install unchanged locked dependencies",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:39:05Z",
+      "completed_at": "2026-10-22T00:39:25Z"
+    },
+    {
+      "name": "Actual source contracts, types and lint",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:39:25Z",
+      "completed_at": "2026-10-22T00:40:09Z"
+    },
+    {
+      "name": "Full ordinary build",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:40:09Z",
+      "completed_at": "2026-10-22T00:40:48Z"
+    },
+    {
+      "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:40:48Z",
+      "completed_at": "2026-10-22T00:41:31Z"
+    },
+    {
+      "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:41:31Z",
+      "completed_at": "2026-10-22T00:41:37Z"
+    },
+    {
+      "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:41:37Z",
+      "completed_at": "2026-10-22T00:41:38Z"
+    },
+    {
+      "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:41:38Z",
+      "completed_at": "2026-10-22T00:41:38Z"
+    },
+    {
+      "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:41:38Z",
+      "completed_at": "2026-10-22T00:41:39Z"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-22T00:41:39Z",
+      "completed_at": "2026-10-22T00:41:39Z"
+    }
+  ]
+}

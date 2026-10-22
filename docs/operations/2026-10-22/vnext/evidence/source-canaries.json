@@ -1,0 +1,33 @@
+{
+  "scope": "bounded actual public-source canaries; no subscription or auth bypass",
+  "results": [
+    {
+      "source": "TWSE_public_index",
+      "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261021&type=IND",
+      "attemptedAtUtc": "2026-10-22T00:39:54.019277+00:00",
+      "exit": 0,
+      "httpStatus": "200",
+      "bytes": 28466,
+      "sha256": "54901fd8ee18aa09d9796b84437c148029ecbdef033d0ec2c1a91b3d10cae017",
+      "retries": 0,
+      "scope": "one bounded public index only; not body/transcript/financial fact qualification, provider/model or production ingest",
+      "requestTriggeredBy": "actual GitHub API creation became reachable; one final distinct network observation, no TCP diagnosis",
+      "providerStat": "OK",
+      "dataDate": "20261021",
+      "tableCount": 10,
+      "parsedIndexPayload": true
+    },
+    {
+      "source": "PTT_Stock_public_index",
+      "url": "https://www.ptt.cc/bbs/Stock/index.html",
+      "attemptedAtUtc": "2026-10-22T00:39:54.019898+00:00",
+      "exit": 0,
+      "httpStatus": "403",
+      "bytes": 25,
+      "sha256": "870d84f11d07934098167265fdbe64f27821a0e5d7843d66b6a27efe8a02461b",
+      "retries": 0,
+      "scope": "one bounded public index only; not body/transcript/financial fact qualification, provider/model or production ingest",
+      "requestTriggeredBy": "actual GitHub API creation became reachable; one final distinct network observation, no TCP diagnosis"
+    }
+  ]
+}

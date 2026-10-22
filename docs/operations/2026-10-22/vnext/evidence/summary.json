@@ -1,0 +1,557 @@
+{
+  "status": "PARTIAL_DEFAULT_OFF_NOT_RELEASED",
+  "sourceCommit": "6410c9a1b09697bf65567879574baf6b83a32cd7",
+  "productSourceCommit": "cee65ca8dd8b3ec12bc53b434d17b5913d15592f",
+  "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
+  "runs": {
+    "final-pure-rotation": {
+      "exit": 0,
+      "counts": {
+        "tests": 19,
+        "pass": 19,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "10a56f363b7f32b42a855d711c34ac378b45f41ce0050b4d96a1703363a9027d",
+      "commandLabel": "final-pure-rotation"
+    },
+    "final-discovery-direct": {
+      "exit": 0,
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "1338bd7fc1e2e9324a339260ebffba7476943e47194fa384865bead6690453c1",
+      "commandLabel": "final-discovery-direct"
+    },
+    "final-boundary-direct": {
+      "exit": 0,
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "ac51775ad12267d5bdc4bb55e4144274bf0b4e99b6bce12e3ec9986ba4396cf9",
+      "commandLabel": "final-boundary-direct"
+    },
+    "regression-write-lease-routes-direct": {
+      "exit": 0,
+      "counts": {
+        "tests": 9,
+        "pass": 9,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "bdc238a0fa88cea534e9298d71305949eca430ffed3e58be888d081740a5e9b1",
+      "commandLabel": "regression-write-lease-routes-direct"
+    },
+    "regression-candidate-core": {
+      "exit": 0,
+      "counts": {
+        "tests": 31,
+        "pass": 31,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "de98ceaa1c14d68c3d10ff29a43059bb66940abc16eaf1aaa7dc769c6e08b151",
+      "commandLabel": "regression-candidate-core"
+    },
+    "regression-financial-parser-writable-config": {
+      "exit": 0,
+      "counts": {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "f1e6185d592914233b580afb5174d82290c640238466a5fb1fe6c5d0b88694a9",
+      "commandLabel": "regression-financial-parser-writable-config"
+    },
+    "regression-official-financials": {
+      "exit": 0,
+      "counts": {
+        "tests": 20,
+        "pass": 20,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "70a973f9a9fcd5c00cc12e256c4de8f7c11e151cd163c42cb4d738a080227944",
+      "commandLabel": "regression-official-financials"
+    },
+    "regression-tw-market": {
+      "exit": 0,
+      "counts": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "8e733f2e8e2c279ce803fca9629afa14cac371129a797a9f225aa3c616700195",
+      "commandLabel": "regression-tw-market"
+    },
+    "regression-source-policy": {
+      "exit": 0,
+      "counts": {
+        "tests": 11,
+        "pass": 11,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "da2e2079b68e88c9224d1c9838b11f814e668ad89b35a8721e034475e201715b",
+      "commandLabel": "regression-source-policy"
+    },
+    "regression-candidate-financial-documents": {
+      "exit": 0,
+      "counts": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "a25bd09ac908ddbc66d7ee45755b16c87f3a4d3439a0dc9727290df3eb48e403",
+      "commandLabel": "regression-candidate-financial-documents"
+    },
+    "native-legacy-final": {
+      "exit": 0,
+      "counts": {
+        "tests": 5,
+        "pass": 5,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "f08f23cf1aa86fb32139d43749113371cbca503d2bad56c6ee8715888dff621d",
+      "commandLabel": "native-legacy-final"
+    },
+    "native-admission-final": {
+      "exit": 0,
+      "counts": {
+        "tests": 5,
+        "pass": 5,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "c591047cde211747a4bdec814bb85f916f40410c44abcf47658620e48ae0eb85",
+      "commandLabel": "native-admission-final"
+    },
+    "native-http-final": {
+      "exit": 0,
+      "counts": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "721e9e7ffaa7a5b3da9eb8702e5376d7b556b7c5cea84bc8327becc24f16e168",
+      "commandLabel": "native-http-final"
+    },
+    "native-business-sealed": {
+      "exit": 0,
+      "counts": {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "1eb0f29d2ec8c9625f0a68d508f871367c8590752e16880e1b653f59dc9d6eed",
+      "commandLabel": "native-business-sealed"
+    },
+    "native-revision-02": {
+      "exit": 0,
+      "counts": {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "0b0d19e3f1b08a6b91c3cecb1294e268c1c326c8d463b01a0af9ff97f542def2",
+      "commandLabel": "native-revision-02"
+    },
+    "native-rotation-01": {
+      "exit": 0,
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "rawLogSha256": "cfd975057226c15658e7f619474cc6034141c417908968ee92c2cd570f269953",
+      "commandLabel": "native-rotation-01"
+    },
+    "final-typecheck-sealed": {
+      "exit": 0,
+      "counts": {},
+      "rawLogSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+      "commandLabel": "final-typecheck-sealed"
+    },
+    "final-lint-loader-fix": {
+      "exit": 0,
+      "counts": {},
+      "rawLogSha256": "df780ecae65df931abfa51c689c852c77c00fd19aad52d895387274911c9ff42",
+      "commandLabel": "final-lint-loader-fix"
+    },
+    "final-build-explicit-screen": {
+      "exit": 0,
+      "counts": {},
+      "rawLogSha256": "2fd53510cd97bbfe09d8d14a37dc6981c3ba31f333c28cdf99a142d82416eff9",
+      "commandLabel": "final-build-explicit-screen"
+    },
+    "browser-final-scoped": {
+      "exit": 0,
+      "counts": {},
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commandLabel": "browser-final-scoped"
+    },
+    "browser-revision": {
+      "exit": 0,
+      "counts": {},
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commandLabel": "browser-revision"
+    },
+    "draft-pr-create": {
+      "exit": 0,
+      "counts": {},
+      "rawLogSha256": "1c0f1ea9010af1d72f51cbb472d647984116f8be20dd0f638d20bfaa31c83585",
+      "commandLabel": "draft-pr-create"
+    }
+  },
+  "browserCases": [
+    {
+      "file": "vnext.spec.ts",
+      "title": "same published contract drives exactly two primary blocks and detail/history",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1803,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "empty and unavailable states never fill from legacy cards",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 861,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "unknown revision cannot fall back to a different research version",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 843,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 522,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "loading remains an explicit two-block state and preserves source links",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 3572,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "same published contract drives exactly two primary blocks and detail/history",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 2112,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "empty and unavailable states never fill from legacy cards",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 1196,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "unknown revision cannot fall back to a different research version",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 876,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 403,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "loading remains an explicit two-block state and preserves source links",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 4037,
+      "retry": 0
+    },
+    {
+      "file": "vnext-revision.spec.ts",
+      "title": "substantive source correction selects the new exact revision and retains the old page",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 2416,
+      "retry": 0
+    },
+    {
+      "file": "vnext-revision.spec.ts",
+      "title": "substantive source correction selects the new exact revision and retains the old page",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 3196,
+      "retry": 0
+    }
+  ],
+  "acceptance": [
+    {
+      "id": "VN01",
+      "status": "TESTED_VM",
+      "runs": [
+        "final-boundary-direct",
+        "browser-final-scoped"
+      ],
+      "limits": "Actual guards reject before instrumented financial/network calls; all16 HTTP missing/[] cases; no real-model run."
+    },
+    {
+      "id": "VN02",
+      "status": "PARTIAL",
+      "runs": [
+        "native-legacy-final",
+        "native-http-final",
+        "browser-final-scoped"
+      ],
+      "limits": "14 actual legacy RPC refusals;8 nonempty aliases real DB;16 HTTP auth/missing/empty. Full production legacy/default-off workflows and real PostgREST/HBA not accepted."
+    },
+    {
+      "id": "VN03",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": [
+        "native-admission-final",
+        "native-http-final"
+      ],
+      "limits": "Real concurrent4/20 with16 prior-day synthetic incumbents; not5 actual operating days."
+    },
+    {
+      "id": "VN04",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": [
+        "native-admission-final",
+        "native-business-sealed"
+      ],
+      "limits": "Real duplicate/failure/charged one-retry/twofailure-exit; actual provider invocation idempotency absent."
+    },
+    {
+      "id": "VN05",
+      "status": "TESTED_PURE",
+      "runs": [
+        "final-pure-rotation"
+      ],
+      "limits": "Dates/nulls/roots/voice baseline policy; actual comparable-source producer absent."
+    },
+    {
+      "id": "VN06",
+      "status": "PARTIAL",
+      "runs": [
+        "final-pure-rotation",
+        "final-discovery-direct",
+        "native-rotation-01"
+      ],
+      "limits": "Actual waiting selector and orchestration->SQL premarket refusal; actual two postclose session positive swap NOT_RUN."
+    },
+    {
+      "id": "VN07",
+      "status": "PARTIAL_CODE_AND_TEST_GAPS",
+      "runs": [
+        "final-discovery-direct",
+        "native-business-sealed",
+        "native-rotation-01"
+      ],
+      "limits": "Official instrument-invalid path exists; catalyst/target/contra verification producers and full remaining-upside reevaluation absent."
+    },
+    {
+      "id": "VN08",
+      "status": "PARTIAL",
+      "runs": [
+        "final-pure-rotation",
+        "regression-tw-market",
+        "regression-official-financials"
+      ],
+      "limits": "Pure temporal/data regressions; real calendar/foreign/corporate-action/financial source run not proven."
+    },
+    {
+      "id": "VN09",
+      "status": "PARTIAL_CODE_AND_TEST_GAPS",
+      "runs": [
+        "final-pure-rotation",
+        "native-revision-02",
+        "regression-source-policy"
+      ],
+      "limits": "200/50 structured clue storage/hash cache, not an implemented original-content acquisition/extraction worker."
+    },
+    {
+      "id": "VN10",
+      "status": "PARTIAL_CODE_AND_TEST_GAPS",
+      "runs": [
+        "final-pure-rotation",
+        "browser-final-scoped"
+      ],
+      "limits": "Risk/confidence/staleness helper/UI; actual AI event worker/persisted frozen result and full producers absent."
+    },
+    {
+      "id": "VN11",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": [
+        "native-revision-02",
+        "browser-revision"
+      ],
+      "limits": "Real DB content change->2immutable revisions and2browser exact-page/history cases; actual news/model not acquired."
+    },
+    {
+      "id": "VN12",
+      "status": "PARTIAL_CODE_AND_TEST_GAPS",
+      "runs": [
+        "native-business-sealed",
+        "final-pure-rotation"
+      ],
+      "limits": "Distinct execution/principal protocol/original reads/arithmetic; no real provider worker or semantic independent review."
+    },
+    {
+      "id": "VN13",
+      "status": "PARTIAL",
+      "runs": [
+        "native-business-sealed"
+      ],
+      "limits": "Actual publish and late-after-exit rejection; complete concurrent publish/exit and formal financial qualification not accepted."
+    },
+    {
+      "id": "VN14",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": [
+        "browser-final-scoped",
+        "native-business-sealed"
+      ],
+      "limits": "No draft/legacy fallback, exactrevision/history/waiting/exit; formal live source revocation/qualification remains pending."
+    },
+    {
+      "id": "VN15",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": [
+        "browser-final-scoped",
+        "browser-revision"
+      ],
+      "limits": "10UI+2revision cases, actual Chromium151, desktop/mobile; not real-source/Contabo."
+    },
+    {
+      "id": "VN16",
+      "status": "TESTED_VM_AND_ORDINARY_CI_PROTECTED_PENDING",
+      "runs": [
+        "final-typecheck-sealed",
+        "final-lint-loader-fix",
+        "final-build-explicit-screen"
+      ],
+      "limits": "VM types/lint/fullwebpack pass; VM defaultTurbopack EPERM retained; hosted ordinary source6410 defaultbuild+types/lint/native steps passed. Protected source reviews/code gates unclosed."
+    },
+    {
+      "id": "VN17",
+      "status": "TESTED_VM_SYNTHETIC",
+      "runs": [
+        "native-legacy-final",
+        "native-admission-final",
+        "native-http-final",
+        "native-business-sealed",
+        "native-revision-02",
+        "native-rotation-01"
+      ],
+      "limits": "Real isolated PG17.11, trust/noports/none engineering fixture; production peer/HBA/writer not approved."
+    },
+    {
+      "id": "VN18",
+      "status": "BLOCKED_EXTERNAL",
+      "runs": [],
+      "limits": "Contabo app/DB/schema/queue/storage not provisioned or connected; old SSH key expired, no renewal."
+    },
+    {
+      "id": "VN19",
+      "status": "PARTIAL_OR_EXTERNAL_SOURCE_GAPS",
+      "runs": [],
+      "limits": "Actual final canary results in source-canaries.json; public index is not body/financial fact/research input qualification. No formal foreign or private-source acquisition."
+    },
+    {
+      "id": "VN20",
+      "status": "PARTIAL_REVIEW_PENDING",
+      "runs": [
+        "draft-pr-create"
+      ],
+      "limits": "Draft PR384 created/attached, ordinaryCI passes source6410, protected requirements/architecture/exact-review/root failure; no maker approval/merge/deploy."
+    }
+  ],
+  "scopeParity": "HTTP8alias nonempty DB run used preceding built http.ts; final explicit-screen-only delta is independently covered by latest16route missing/empty UI assertions. Source modules for UI/revision view unchanged. No prior count is relabeled as a later run.",
+  "unimplementedVmCode": [
+    "provider/author/reviewer worker and durable invocation recovery",
+    "market AI event frozen-result worker",
+    "permitted original-content acquisition/extraction worker",
+    "weekly semantic thesis audit",
+    "deep-score evidence population",
+    "trusted calendar/foreign/comparable-volume/catalyst-target-contradiction producers"
+  ],
+  "notRun": [
+    "two actual postclose positive atomic swap sessions",
+    "formal source/model/semantic author+reviewer execution",
+    "Contabo app/database/storage/queue isolation",
+    "full real ACL/HBA/peer/writer acceptance",
+    "reviewer publication race matrix",
+    "required protected source approvals and dependent product/model code gate closure"
+  ],
+  "formalArticlesPublished": 0,
+  "noMakerIndependentApproval": true,
+  "ciObservation": "ci-observation.json",
+  "ordinaryCi": "ordinary-ci.json",
+  "redHistory": "red-history.json",
+  "sourceCanaryAcquired": "TWSE public index only (200/stat OK/20261021); PTT403; no qualified facts or formal research",
+  "protectiveGateStatus": "requirements/architecture/exact-review/root observed failure; product/model code gates skipped; no bypass and no independent approval"
+}

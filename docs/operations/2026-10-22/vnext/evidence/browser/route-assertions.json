@@ -1,0 +1,35 @@
+{
+  "proof": "source loop in vnext.spec.ts + passed desktop/mobile case; per-response raw bodies are not separately published",
+  "routes": [
+    "pipeline-run",
+    "pipeline-research-run",
+    "stock-research-refresh",
+    "candidate-research-run",
+    "research-report-build",
+    "deep-dive-build",
+    "candidate-dossier-bundle",
+    "candidate-dossier-outbox",
+    "candidate-dossier-submission",
+    "candidate-financial-documents",
+    "candidate-financial-documents/worker",
+    "candidate-financial-documents/retry",
+    "candidate-financial-queue-drain",
+    "thesis-refresh",
+    "recommendation-run",
+    "report-build"
+  ],
+  "eachRouteAsserted": {
+    "unauthorized": 401,
+    "authorizedMissingScope": 409,
+    "missingScopeError": "vnext_explicit_scope_required",
+    "authorizedEmptyScope": 200,
+    "emptyExpensiveCalls": 0
+  },
+  "allRouteOperationsTrace": [],
+  "bundleGetWithoutScope": 409,
+  "mixedEmptyScopeWithSymbolAndExecute": {
+    "status": 200,
+    "expensiveCalls": 0
+  },
+  "directDatabasePrincipalIsNotHttpAuthProof": true
+}

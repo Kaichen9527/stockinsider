@@ -1,0 +1,403 @@
+{
+  "legacy": {
+    "scope": "14 actual service_role direct-routine refusals; trigger function separately refused by engine",
+    "targets": 15,
+    "serviceExecutable": 14,
+    "triggerOnly": 1,
+    "queryEvents": [
+      {
+        "sqlSha256": "546d61b11f90841d2f20b304117255ef968a691f1197d8e413161bb741397082",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "546d61b11f90841d2f20b304117255ef968a691f1197d8e413161bb741397082",
+        "code": "P0001",
+        "message": "vnext_database_mode_not_enabled",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "baceb1cc609a6255e04b59025d4179224f068d6407e0d0a3fd2c582ca1058217",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "baceb1cc609a6255e04b59025d4179224f068d6407e0d0a3fd2c582ca1058217",
+        "code": "42501",
+        "message": "permission denied for function vnext_set_mode_v1",
+        "actualQuerySettled": true
+      },
+      {
+        "contract": "concurrent-mode-disable",
+        "code": "P0001",
+        "message": "vnext_database_mode_not_enabled",
+        "lockActuallyBlocked": true,
+        "ready": "I"
+      },
+      {
+        "sqlSha256": "bf91aa0b0a0d878f1682a645fa86cbd3893c81df1bc552744b9968fccc8f62e1",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "bf91aa0b0a0d878f1682a645fa86cbd3893c81df1bc552744b9968fccc8f62e1",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.admit_research_observed_roster_v1(text,text)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "96f32f9d882a638a8ad089cca0958cfa27bbd8ece1776e40b986de43b2f317e5",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "96f32f9d882a638a8ad089cca0958cfa27bbd8ece1776e40b986de43b2f317e5",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.assign_research_reviewer_v2(jsonb,uuid,text,text,text,uuid,text)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "e9887feef4d414b603f67ba331108230c2f022b70501263e84fe7a2966e9bcca",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "e9887feef4d414b603f67ba331108230c2f022b70501263e84fe7a2966e9bcca",
+        "code": "42501",
+        "message": "permission denied for function charge_research_deep_admission_v1",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "e9887feef4d414b603f67ba331108230c2f022b70501263e84fe7a2966e9bcca",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "e9887feef4d414b603f67ba331108230c2f022b70501263e84fe7a2966e9bcca",
+        "code": "0A000",
+        "message": "trigger functions can only be called as triggers",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "708369881c6a570a5eef26df504d619b876ed1342c99481ea163e8389d92d786",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "708369881c6a570a5eef26df504d619b876ed1342c99481ea163e8389d92d786",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.claim_candidate_deep_outbox_v1(uuid,text,integer,uuid,text,text)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "e97f3ae12984f984d2a5a02d288bac09ca4e8d8ac91cea517e0a4d18e236c537",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "e97f3ae12984f984d2a5a02d288bac09ca4e8d8ac91cea517e0a4d18e236c537",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.claim_candidate_dossier_outbox_v5(text,integer)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "84eec0cb341f3fcbe17fbeada34d022bea966f9a2cb37296d8c5011b12117a16",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "84eec0cb341f3fcbe17fbeada34d022bea966f9a2cb37296d8c5011b12117a16",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.claim_research_deep_job_v1(text)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "f48df114eab4af1267c206d07cb5d542bffb5c91200fffeb447da90ea2bcdbca",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "f48df114eab4af1267c206d07cb5d542bffb5c91200fffeb447da90ea2bcdbca",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.claim_research_observed_job_v2(text,text)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "4b34ab5793ed3aab1536530f1cf4964d9c0937e74ebd4dabeac9e3c685586162",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "4b34ab5793ed3aab1536530f1cf4964d9c0937e74ebd4dabeac9e3c685586162",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.enqueue_research_deep_jobs_v1(uuid)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "b8fa743a9167dee0b0c3fae067b19642a072ec143efd61e02e44abca154011b2",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "b8fa743a9167dee0b0c3fae067b19642a072ec143efd61e02e44abca154011b2",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "1055effda7387e276ffb6a3728a03023ddd13440f732e6aa0d5627abb819e1e3",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "1055effda7387e276ffb6a3728a03023ddd13440f732e6aa0d5627abb819e1e3",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.record_budgeted_deep_review_v1(uuid,integer,uuid,jsonb)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "6c8fd90452b31ebe69578df5898bdd1637bbecec3292e22282017e325b23c9fa",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "6c8fd90452b31ebe69578df5898bdd1637bbecec3292e22282017e325b23c9fa",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.record_candidate_deep_submission_v1(uuid,text,integer,uuid,text,uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "7ec48a4b71e8926c1a0449ed8ffc64bbcd570617a6031e945e3696da6751b586",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "7ec48a4b71e8926c1a0449ed8ffc64bbcd570617a6031e945e3696da6751b586",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.record_candidate_dossier_submission_v4(uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "208e392d297f1a422c6bdcbfb6840ab4ab19a1378de3784f8d7f8545433388ca",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "208e392d297f1a422c6bdcbfb6840ab4ab19a1378de3784f8d7f8545433388ca",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.record_candidate_dossier_submission_v6(uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "d7d24b108b8d1343b002af39321492847998f488b2d38c03728adcb0d6d18ba6",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "d7d24b108b8d1343b002af39321492847998f488b2d38c03728adcb0d6d18ba6",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.reserve_research_model_v1(text,text,text)",
+        "actualQuerySettled": true
+      },
+      {
+        "sqlSha256": "9c2b4969ffe68edcd2b061f9f618bac07fa53cadd9c9d4ebacc210a4314d7b4a",
+        "actualReadyForQuery": "I"
+      },
+      {
+        "sqlSha256": "9c2b4969ffe68edcd2b061f9f618bac07fa53cadd9c9d4ebacc210a4314d7b4a",
+        "code": "P0001",
+        "message": "vnext_legacy_authority_disabled: public.store_observed_research_priority_v1(text,timestamp with time zone,text,jsonb,jsonb,jsonb,jsonb)",
+        "actualQuerySettled": true
+      }
+    ]
+  },
+  "http": {
+    "scope": "actual HTTP/real service_role PG via controlled test REST facade; not PostgREST/HBA/Contabo or actual model/rights acceptance",
+    "results": [
+      {
+        "aliases": [
+          "pipeline-run",
+          "stock-research-refresh",
+          "research-report-build",
+          "deep-dive-build",
+          "candidate-dossier-bundle",
+          "candidate-research-run",
+          "report-build",
+          "thesis-refresh"
+        ],
+        "duplicateEnqueues": 16,
+        "duplicateClaims": 8,
+        "distinctJobs": 4,
+        "active": 20,
+        "attempts": 4
+      }
+    ],
+    "pendingQueries": 0,
+    "appExit": 143,
+    "appPidPathAbsent": true,
+    "requestTraceHashes": [
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "b9126120b1de9081932f26847a692317fef7ebab2eba5cd4a0eb7481734ab3d1",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "b9126120b1de9081932f26847a692317fef7ebab2eba5cd4a0eb7481734ab3d1",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "9d19212dba32fd52b6ccd7d607bcffc06300284f78048df0e7312403fc7bd480",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "9d19212dba32fd52b6ccd7d607bcffc06300284f78048df0e7312403fc7bd480",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "315914491a71975ea60b54301be45ff886a2f5d35aea8695851daed44fd22634",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "315914491a71975ea60b54301be45ff886a2f5d35aea8695851daed44fd22634",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "e7c14cfe519b36902e13474df7ead82092223ebfa3723728c2cfb62af5bbfccb",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "e7c14cfe519b36902e13474df7ead82092223ebfa3723728c2cfb62af5bbfccb",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "1d911c1ab0f9fbf381f3dffee6034ae1b43bb75d6d8531ad7e4b38cdd9873415",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "f82604ae32a7f1d0815e9c6ffe28292767d9feb78454875e7f9b531b02fb7b5c",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "1d911c1ab0f9fbf381f3dffee6034ae1b43bb75d6d8531ad7e4b38cdd9873415",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "f82604ae32a7f1d0815e9c6ffe28292767d9feb78454875e7f9b531b02fb7b5c",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "46432daa7a6a4ad59c3eef88cd7e7db53af19adcb0b1b0ef7f2213fe03f02a52",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "46432daa7a6a4ad59c3eef88cd7e7db53af19adcb0b1b0ef7f2213fe03f02a52",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "76ae76ad075facf9be281e971dc3a1598c8d1221e2329ae1c6c7565fa9f42f5a",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "enqueue",
+        "requestHash": "76ae76ad075facf9be281e971dc3a1598c8d1221e2329ae1c6c7565fa9f42f5a",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "claim",
+        "requestHash": "ab6984f5cb50e449abf0f0c8c8eade59c31a807037824c7d75a27b0d93229681",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "claim",
+        "requestHash": "ab6984f5cb50e449abf0f0c8c8eade59c31a807037824c7d75a27b0d93229681",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "claim",
+        "requestHash": "555ab4a19f8b65405573062082bd8b902a0b095d365be6dc30507484803ffbb1",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "claim",
+        "requestHash": "555ab4a19f8b65405573062082bd8b902a0b095d365be6dc30507484803ffbb1",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "claim",
+        "requestHash": "61647db4b62c3ce5190bef5bdf6dfe8ad6ab90d3e34f28cd0465c5e42f02879e",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "claim",
+        "requestHash": "61647db4b62c3ce5190bef5bdf6dfe8ad6ab90d3e34f28cd0465c5e42f02879e",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "claim",
+        "requestHash": "7fe538b93b48b6f63fe22051ed6148dea8d48a4c8d0ac682ebb3e54368232416",
+        "commitObserved": true
+      },
+      {
+        "rpc": "command",
+        "action": "claim",
+        "requestHash": "7fe538b93b48b6f63fe22051ed6148dea8d48a4c8d0ac682ebb3e54368232416",
+        "commitObserved": true
+      }
+    ]
+  },
+  "rotation": {
+    "migrationSha256": "84418af40194689ff6b85a11394bbcd04c28ce8041281bc897149a44e86c90de",
+    "querySha256": "1aec94a9f6770827df081317da0cf9a08aa7ed7a088a6bb5cbbb589de9cc6940",
+    "exactExtractionSha256": "e39cd42ebb9a15a04b225af5cf807c8539c6de20db714daedad6740cbd57d346",
+    "selection": [
+      {
+        "symbol": "6001",
+        "state": "waiting"
+      }
+    ],
+    "rotation": {
+      "reports": [
+        {
+          "deferred": "routine_swap_requires_postclose"
+        }
+      ],
+      "considered": 1
+    },
+    "realPostclose": false,
+    "notRun": [
+      "two actual postclose sessions",
+      "formal source/model/qualification",
+      "production ACL/HBA"
+    ],
+    "scope": "actual orchestration and DB selection/rejection; synthetic calendar/factors; completed two-day positive swap NOT_RUN"
+  },
+  "revision": {
+    "firstRevision": "06ffedf1-4811-47e6-acaf-0621fc3eadf2",
+    "secondRevision": "c69bc66a-6807-4491-b260-13ac69edf271",
+    "oldInput": "42619e999a8618e0ce4ab004c2bdf06d86d43bef994052217307d53708c91e5a",
+    "newInput": "aba7eae08fca682d2697e2550b6e1f8f25777757003200025085b6a4f2fb11c8",
+    "sourceRows": "1",
+    "starts": 2,
+    "scope": "synthetic source bytes and actual durable DB revisions; no real-news/model or semantic content approval"
+  }
+}

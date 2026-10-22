@@ -1,0 +1,21 @@
+TAP version 13
+# Subtest: new vNext shared-authority legacy RPC coexistence
+    # Subtest: exact genuine captured schema and existing approved prefixes in disposable engineering DB
+    ok 1 - exact genuine captured schema and existing approved prefixes in disposable engineering DB
+    # Subtest: full finite predecessor fence commits and preserves old identities and original body bytes
+    ok 2 - full finite predecessor fence commits and preserves old identities and original body bytes
+    # Subtest: concurrent mode disable is rechecked after the actual shared lock, with no mutation
+    ok 3 - concurrent mode disable is rechecked after the actual shared lock, with no mutation
+    # Subtest: admin activation closes actual direct legacy RPCs before any business mutation
+    ok 4 - admin activation closes actual direct legacy RPCs before any business mutation
+    1..4
+ok 1 - new vNext shared-authority legacy RPC coexistence
+1..1
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4648.489137

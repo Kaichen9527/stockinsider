@@ -1,0 +1,14 @@
+StockInsider currently routes broad discovery into expensive research and displays legacy mixed projections. This partial, default-off candidate introduces a private20-active/4-attempt authority, explicit scope guards across the real HTTP entrypoints and legacy DB RPCs, immutable author/reviewer submission/research lineage, cache-based rotation and a two-block published-contract UI.
+
+The approved vNext specification, predecessor change map and VN01–VN20 acceptance inventory are in `openspec/changes/stockinsider-vnext-20`. The new strategy is disabled in both application and database by default. No production migration/deploy, scheduler resumption, merge or consumed-operation rerun occurred.
+
+Validation on the existing Codex Linux VM:
+
+- Real PostgreSQL17.11 exact-prefix legacy coexistence5tests, direct mode/ACL guards; admission5tests; real Next→service_role SQL across8aliases3tests; synthetic author/reviewer/publication6tests; source-correction→durable revision4tests; waiting-incumbent/premarket SQL1test. Counts include parent tests and are separate runs.
+- Actual Chromium151 desktop/mobile:10UIcases and2revision/history cases. Original pinned-browser download403 retained. Read-only transport serves actual isolated-DB synthetic snapshots; no live/formal research claim.
+- Pure contracts19, actual cache adapter1, expensive-call boundaries1; relevant original regressions retained individually. Types/lint passed (33 inherited warnings). Full Next webpack build passed; default Turbopack failed on platform worker bind EPERM and remains a recorded limitation.
+- New ordinary PR-only quality workflow uses pinned actions, frozen dependencies and isolated PG. The hosted ordinary `vnext-quality` job passed on6410c9a (including default build and real PG). Protected requirements/architecture/exact-review/root failed and dependent code gates were skipped; overall required acceptance remains incomplete.
+
+**Draft / partial acceptance.** `DELIVERY.md` and the evidence matrix identify VM-code gaps: automatic author/reviewer/provider invocation and once-only recovery, true semantic review, market AI frozen outputs, permitted content extraction worker, semantic weekly audit, trusted calendar/foreign/cache producers and automatic deep-score evidence population. Two actual postclose trading-day atomic swaps are not yet tested; missing data never becomes a low score to force an exit. Contabo staging, actual source acquisition, formal author/reviewer/model execution, publication qualification and real-data research remain unverified. Do not merge or install based on synthetic tests.
+
+The original errors and retained private raw inventories remain on the VM; only finite safe receipts, source hashes, TAP and marked fixture screenshots are published. See `docs/operations/2026-10-22/vnext/DELIVERY.md` and `evidence/summary.json` for exact commands, subjects and owner actions.

@@ -1,10 +1,13 @@
 {
   "requirementsGate": "USER_APPROVED_PLAN_PERSISTED",
-  "designGate": "IN_REVIEW",
+  "designGate": "INDEPENDENT_REVIEW_PENDING",
   "changeGate": "USER_APPROVED_VERSIONED_REPLACEMENT",
-  "releaseGate": "PENDING_EXECUTION",
+  "releaseGate": "PARTIAL_VM_VALIDATED_NOT_RELEASED",
   "autoMerge": false,
   "autoDeploy": false,
   "sourceOfTruth": "openspec/changes/stockinsider-vnext-20",
-  "acceptanceInventory": "VN01..VN20"
+  "acceptanceInventory": "VN01..VN20",
+  "pullRequest": "https://github.com/Kaichen9527/stockinsider/pull/384",
+  "acceptanceEvidence": "docs/operations/2026-10-22/vnext/evidence/summary.json",
+  "formalArticlesPublished": 0
 }

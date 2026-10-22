@@ -1,0 +1,23 @@
+TAP version 13
+# Subtest: actual durable research/review/publish boundary with synthetic evidence only
+    # Subtest: candidate installs in separate private-ACL database, existing writer fence remains effective
+    ok 1 - candidate installs in separate private-ACL database, existing writer fence remains effective
+    # Subtest: 2409 exact sources/arithmetic author, distinct review and durable publication
+    ok 2 - 2409 exact sources/arithmetic author, distinct review and durable publication
+    # Subtest: 2383 exact sources/arithmetic author, distinct review and durable publication
+    ok 3 - 2383 exact sources/arithmetic author, distinct review and durable publication
+    # Subtest: rejected review consumes attempt, exact replay does not recount, one charged retry exits after second failure
+    ok 4 - rejected review consumes attempt, exact replay does not recount, one charged retry exits after second failure
+    # Subtest: exit rechecks publication, removes public active membership and retains immutable history
+    ok 5 - exit rechecks publication, removes public active membership and retains immutable history
+    1..5
+ok 1 - actual durable research/review/publish boundary with synthetic evidence only
+1..1
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 36139.48001

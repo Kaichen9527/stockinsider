@@ -1,0 +1,28 @@
+{
+  "stats": {
+    "startTime": "2026-10-22T00:20:36.625Z",
+    "duration": 8761.734,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "file": "vnext-revision.spec.ts",
+      "title": "substantive source correction selects the new exact revision and retains the old page",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 2416,
+      "retry": 0
+    },
+    {
+      "file": "vnext-revision.spec.ts",
+      "title": "substantive source correction selects the new exact revision and retains the old page",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 3196,
+      "retry": 0
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+TAP version 13
+# Subtest: internal auth accepts either configured secret without weakening exact bearer auth
+ok 1 - internal auth accepts either configured secret without weakening exact bearer auth
+# Subtest: Threads and licensed sources report explicit blocks instead of false success
+ok 2 - Threads and licensed sources report explicit blocks instead of false success
+# Subtest: Threads keyword discovery never impersonates KOL profile monitoring
+ok 3 - Threads keyword discovery never impersonates KOL profile monitoring
+# Subtest: BullTalk requires a signed scope and real-sample digest before a licensed feed can activate
+ok 4 - BullTalk requires a signed scope and real-sample digest before a licensed feed can activate
+# Subtest: retired connectors remain explicitly queryable as historical-only policy
+ok 5 - retired connectors remain explicitly queryable as historical-only policy
+# Subtest: available Telegram channels have stable identities and unavailable channels never enter the crawler
+ok 6 - available Telegram channels have stable identities and unavailable channels never enter the crawler
+# Subtest: GDELT is active metadata discovery and retired publishers stay retired
+ok 7 - GDELT is active metadata discovery and retired publishers stay retired
+# Subtest: TWSE insider is excluded from VPS schedules until official egress is confirmed
+ok 8 - TWSE insider is excluded from VPS schedules until official egress is confirmed
+# Subtest: Podcast creator-published RSS index is active independently of transcript rights
+ok 9 - Podcast creator-published RSS index is active independently of transcript rights
+# Subtest: Podcast RSS indexing and content analysis are independently allowlisted
+ok 10 - Podcast RSS indexing and content analysis are independently allowlisted
+# Subtest: connector=all includes only sources authorized in the current runtime
+ok 11 - connector=all includes only sources authorized in the current runtime
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 45.141293
