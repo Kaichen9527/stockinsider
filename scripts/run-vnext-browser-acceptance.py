@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 NODE=Path('/workspace/.tools/node22/node_modules/node/bin/node')
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--snapshots',required=True);parser.add_argument('--output',required=True);parser.add_argument('--suite',choices=['ui','revision'],default='ui');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--snapshots',required=True);parser.add_argument('--output',required=True);parser.add_argument('--suite',choices=['ui','revision','worker'],default='ui');args=parser.parse_args()
     output=Path(args.output);snapshots=Path(args.snapshots)
     if not output.is_absolute() or output.exists() or not snapshots.is_absolute():raise SystemExit('fresh_absolute_owned_output_and_snapshot_required')
     for name in (['home.json','detail.json','home-before.json','detail-before.json'] if args.suite=='revision' else ['home.json','detail.json']):
@@ -53,7 +53,7 @@ def main():
         ready(req,bridge)
         app=start('next',[str(NODE),'node_modules/next/dist/bin/next','start','--hostname','127.0.0.1','--port','34230'],ROOT/'web')
         ready('http://127.0.0.1:34230/',app)
-        command=[str(NODE),'node_modules/@playwright/test/cli.js','test',('vnext-revision.spec.ts' if args.suite=='revision' else 'vnext.spec.ts'),'--config','playwright.vnext.config.ts','--output',str(output/'screenshots-traces')]
+        command=[str(NODE),'node_modules/@playwright/test/cli.js','test',({'revision':'vnext-revision.spec.ts','worker':'vnext-worker.spec.ts'}.get(args.suite,'vnext.spec.ts')),'--config','playwright.vnext.config.ts','--output',str(output/'screenshots-traces')]
         log=(output/'test.log').open('wb');logs.append(log)
         completed=subprocess.run(command,cwd=ROOT/'web',env=env,stdout=log,stderr=subprocess.STDOUT,timeout=900);code=completed.returncode
         report.update(testCommand=command,exit=code)
