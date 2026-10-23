@@ -23,7 +23,16 @@ const migration='migrations/20261022_vnext_catalyst_criteria_v1.sql';
 const profile=JSON.parse(fs.readFileSync('scripts/opportunity-v3/vnext-catalyst-criteria-profile-v1.json','utf8'));
 await test('source-bound catalyst actual PG protocol: '+stage,{timeout:300000},async t=>{
  const x=await workerFixture(),events=[],providerCalls=[];let originalState;
- const step=async(name,work)=>{let failed=false;await t.test(name,async()=>{try{await work();}catch(error){failed=true;throw error;}});if(failed)throw Error('dependent_catalyst_stage_failed');};
+ const step=async(name,work)=>{let failed=false;await t.test(name,async()=>{try{await work();}catch(error){
+  failed=true;
+  // Only finite diagnostic metadata may reach CI annotations. Full assertion
+  // objects/rows, source bodies, IDs, credentials and stack remain private.
+  const primitive=v=>v===null||typeof v==='boolean'||typeof v==='number'&&Number.isFinite(v)?v:'REDACTED_NONPRIMITIVE';
+  const code=typeof error.code==='string'&&/^(?:[0-9A-Z]{5}|ERR_ASSERTION)$/u.test(error.code)?error.code:'UNKNOWN';
+  const message=typeof error.message==='string'&&/^vnext_[a-z0-9_]{1,160}$/u.test(error.message)?error.message:'message_sha256:'+hash(String(error.message));
+  const detail={stage:name,code,message,actual:primitive(error.actual),expected:primitive(error.expected)};
+  console.log('CATALYST_FAILURE_SAFE '+JSON.stringify(detail));x.save('failure-safe',detail);throw error;
+ }});if(failed)throw Error('dependent_catalyst_stage_failed');};
  const query=async(sql,args=[],role='service_role',expected)=>{const c=await x.connect();try{
   assert.ok(['service_role','stockinsider_vnext_owner'].includes(role));await c.query('SET ROLE '+role);
   const ready=new Promise(resolve=>c.connection.once('readyForQuery',m=>resolve(m.status)));

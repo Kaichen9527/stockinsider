@@ -260,6 +260,20 @@ jobs:
           test "$ready" = 1
           if node --experimental-strip-types scripts/vnext-catalyst-postgres.test.mjs > /tmp/stockinsider-vnext-ci/catalyst.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
           python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/catalyst.tap.private.log /tmp/stockinsider-vnext-ci/catalyst.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import json,pathlib
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          for line in source.read_text().splitlines():
+              prefix='CATALYST_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'stage','code','message','actual','expected'}: raise SystemExit('closed diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Catalyst finite native diagnostic::'+value)
+          PYCODE
+          fi
           test "$test_status" = 0
       - name: Upload finite synthetic TAP only (no raw rows, env or browser traces)
         if: always()

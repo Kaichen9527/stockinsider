@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL_VM_IMPLEMENTATION_AND_ACCEPTANCE_NOT_RELEASE_COMPLETE",
-  "updatedAt": "2026-10-23T02:16:03.926482+00:00",
+  "updatedAt": "2026-10-23T02:24:35.727367+00:00",
   "runtimeSourceHead": "f9f3a0d0ffa9b50852305ee59f19d48356c2fd13",
   "currentReceiptSha256": "8228d19e2fac75ef6a6dae799dc8e872b66a373df96ef55d374d01000acd014c",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
@@ -143,11 +143,15 @@
   "ReleaseGate": "PENDING",
   "testAdapterSource": "76aca1522fa1b3292a85f9f387f01bee7fd43e23",
   "latestCI": {
-    "subject": "04126596421c8d3824e9899529e57f6a87972152",
-    "vnext": "39885336108 SUCCESS inclfullbuild andfreshTWSEreceiptstep; metadata-only observation",
-    "protected": "39885332804 FAILURE; no guard/pin changes; deeper current step cause not attested here",
-    "newSubject": "NOT_OBSERVED at packaging",
-    "scope": "no transfer from previous subject"
+    "subject": "19824f87909996aba92f09e2db36d07b7d4796ff",
+    "run": 39888698695,
+    "job": 120202937681,
+    "overall": "FAILURE",
+    "failingStep": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+    "preceding": "source/type/lint/fullbuild/admission/legacy/worker/source-market/thesis/cache/TWSE allSUCCESS",
+    "exactCause": "NOT_OBSERVED: one log and one newartifact request403/0bytes; no bypass/retry",
+    "protected": "39888697103 FAILURE separately; no guard/pin changes",
+    "next": "capture-only newharness/workflow annotations; currentproduct bytes unchanged; no prior result transfer"
   },
   "ciReceiptSha256": "65f25e5c05cbe7eafef834050f105e0818522cf6555018e89f000e01214844a2",
   "previousRuntimeSourceHead": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
@@ -205,7 +209,7 @@
     "actualRetainedInstallerSource": "5d4084ee10ea07e34ef531d2fe4471a714dd7beb",
     "sourceContracts": "10PASS final05; types/lintPASS; source03 affected59PASS separately",
     "actualNative": "4PASS retained installer/private authority/repeat rollback only",
-    "freshLifecycle": "new source wired ordinary CI, NOT_RUN at evidence packaging",
+    "freshLifecycle": "Actual19824 ordinaryCI FAILED in newstep; exact failingstatement unavailable due403. Full raw unavailable; source-only safe finite diagnostic added, pending natural newhead execution.",
     "independentConfirmation": "NULL when one official root; different reviewer execution is not independent source",
     "defaultPrompt": "v2 unchanged; trusted finite v3 opt-in; binding rows not changed",
     "remaining": "competitive/risk, event cancellation/contra/target, numericforecast and complete28-day source volume; real model/source/semantic/staging/formal research remain unaccepted"
