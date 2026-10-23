@@ -169,7 +169,7 @@ jobs:
           trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
           ready=0
           for i in $(seq 1 30); do
-            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -U postgres -d vnext_worker; then ready=1; break; fi
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
             sleep 1
           done
           test "$ready" = 1
@@ -485,6 +485,9 @@ jobs:
           python3 - <<'PYCODE'
           import hashlib,json,os,pathlib,re,stat
           root=pathlib.Path('/tmp/stockinsider-vnext-ci');paths=[]
+          for place in [os.getcwd(),'/tmp']:
+              volume=os.statvfs(place)
+              if volume.f_bavail*volume.f_frsize<8589934592+1048576: raise SystemExit('NOT_READY: forecast inventory original floor plus1MiB')
           for name in ['preparation-running-http','preparation-resource']:
               directory=root/name
               if directory.exists():
@@ -508,6 +511,9 @@ jobs:
               if identity(before)!=identity(ended) or identity(before)!=identity(after): raise SystemExit('forecast evidence changed')
               rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
           value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only hosted owned preparation/forecast raw inventory; contents private, not independently retrieved; hosted runner storage ephemeral'}
+          for place in [os.getcwd(),'/tmp']:
+              volume=os.statvfs(place)
+              if volume.f_bavail*volume.f_frsize<8589934592+1048576: raise SystemExit('NOT_READY: forecast inventory publication reserve')
           out=root/'forecast-current-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
           print('::notice title=Forecast private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
           PYCODE
