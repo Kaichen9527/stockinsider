@@ -1,0 +1,35 @@
+TAP version 13
+# Subtest: complete four predecessor bodies and only declared finite insertions reverse exactly
+ok 1 - complete four predecessor bodies and only declared finite insertions reverse exactly
+  ---
+  duration_ms: 4.198934
+  ...
+# Subtest: actual entire prior source authority checks copied with explicit purpose adaptation; no arbitrary input or price factor authority
+ok 2 - actual entire prior source authority checks copied with explicit purpose adaptation; no arbitrary input or price factor authority
+  ---
+  duration_ms: 1.162513
+  ...
+# Subtest: new private bodies/catalog codec/nonbody/ACL/role identity and finite trigger postcondition are sealed
+ok 3 - new private bodies/catalog codec/nonbody/ACL/role identity and finite trigger postcondition are sealed
+  ---
+  duration_ms: 3.04087
+  ...
+# Subtest: frozen/current comparisons and original start/deadline fence cannot be omitted or self-attested
+ok 4 - frozen/current comparisons and original start/deadline fence cannot be omitted or self-attested
+  ---
+  duration_ms: 1.009525
+  ...
+# Subtest: legacy transport validator bytes retained around bounded explicit fiscal pair dispatch; existing caller/provider path is used
+ok 5 - legacy transport validator bytes retained around bounded explicit fiscal pair dispatch; existing caller/provider path is used
+  ---
+  duration_ms: 1.173162
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 23.999902

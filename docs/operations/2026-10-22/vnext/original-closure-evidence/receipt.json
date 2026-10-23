@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-23T16:47:46.436352+00:00",
+  "source": "43c38c0a2ff0bc0d0b1bcdb97b33ce261655fc44",
+  "manifestSha256": "2a591a8b0e17d91d518050b568d7ae149aef1e5b8b74847d577a2f1b10c4600d",
+  "previousObservedNative": "e09 private current-source component positive; whole run FAIL0/1 weekend, new parser not run",
+  "nativeCurrent": "NOT_RUN at seal",
+  "free": {
+    "/workspace": 8873050112,
+    "/tmp": 17242636288
+  },
+  "floor": 8589934592,
+  "smallWorkset": 16777216,
+  "localHeavy": "NOT_ADMITTED",
+  "namespaceApply": false,
+  "grantApplied": false,
+  "production": false,
+  "independentApproval": false,
+  "fullGoal": "INCOMPLETE"
+}

@@ -1,0 +1,194 @@
+{
+  "source": "e09cbd4927263d7b75063d424007f0d4fb752321",
+  "productSource": "2b071a56c06b900c0a4001838bb25290dc518f7d",
+  "runtime": {
+    "parents": [
+      "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "e09cbd4927263d7b75063d424007f0d4fb752321"
+    ],
+    "sha": "6e1406e64325aa633d14cf4bde27642bdb209a19",
+    "tree": "115813762755de5c77987784e5cefc9aae7aa141"
+  },
+  "wholeTreeAndParentParity": true,
+  "run": 39988316920,
+  "job": 120533203617,
+  "overall": "FAIL",
+  "finiteObserved": [
+    {
+      "title": "Business criteria finite native receipt",
+      "value": {
+        "scope": "actual original-bound business inference/current context/audit/public projection/withdrawal; synthetic facts/provider only; no group points, bounded-risk or semantic approval",
+        "sourceHead": "6e1406e64325aa633d14cf4bde27642bdb209a19",
+        "tapSha256": "cd5194ffe2de89ea220821053b56954056987758e1ca7049f64d60c785074859",
+        "actualTapCounts": {
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "resourceObserved": true,
+        "queryEventsPrivateSha256": "92529faf7032ea5f6a0d57a55757572da2a4971e528f8e3059f20a21ae48a3e6",
+        "exit": 0,
+        "resourceViolation": null,
+        "sampledNotInstantaneous": true,
+        "sampledOwnedTreePeakRssBytes": 683909120,
+        "initialFree": {
+          "/home/runner/work/stockinsider/stockinsider": 88710250496,
+          "/tmp": 88710250496
+        },
+        "finalFree": {
+          "/home/runner/work/stockinsider/stockinsider": 88639787008,
+          "/tmp": 88639787008
+        },
+        "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+        "actualPg": {
+          "containerId": "9192231b46392b36bd97244e6c77505e9e7b3c5e460b441b54bb4cfdfa143d6d",
+          "pid": 17130,
+          "start": "29582",
+          "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+          "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+          "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+        },
+        "inputCount": 17,
+        "inputInventorySha256": "92c7fa2a7c04048fe88cb4d157c435c349b647ee03a3f566c3136c05338b5480",
+        "inputInventoryCodec": "utf8_sorted_keys_compact_json_v1"
+      }
+    },
+    {
+      "title": "Forecast private inventory",
+      "value": {
+        "count": 43,
+        "bytes": 206071192,
+        "inventorySha256": "5837609b6d31da9ac19b761cd59ed470187d696c90a0c5e436c09bd4a8597b24",
+        "rawContentsPublished": false
+      }
+    },
+    {
+      "title": "Preparation actual cleanup receipt",
+      "value": {
+        "pgRunning": false,
+        "pgPid": 0,
+        "pgExit": 0,
+        "shutdownObserved": true,
+        "serverLogSha256": "6d546f0fb977ec442c2cfc0bc0a62d5c18bc515207f2382abe70fba2307fbff0",
+        "ownedProcessObservations": [
+          {
+            "pid": 16750,
+            "absent": true
+          },
+          {
+            "pid": 16863,
+            "absent": true
+          },
+          {
+            "pid": 16862,
+            "absent": true
+          },
+          {
+            "pid": 16861,
+            "absent": true
+          },
+          {
+            "pid": 16859,
+            "absent": true
+          },
+          {
+            "pid": 16858,
+            "absent": true
+          },
+          {
+            "pid": 16893,
+            "absent": true
+          },
+          {
+            "pid": 16957,
+            "absent": true
+          },
+          {
+            "pid": 16984,
+            "absent": true
+          },
+          {
+            "pid": 16983,
+            "absent": true
+          },
+          {
+            "pid": 16985,
+            "absent": true
+          },
+          {
+            "pid": 16986,
+            "absent": true
+          },
+          {
+            "pid": 16987,
+            "absent": true
+          },
+          {
+            "pid": 16993,
+            "absent": true
+          },
+          {
+            "pid": 17005,
+            "absent": true
+          }
+        ],
+        "unsettled": false,
+        "zombieIsNotAbsent": true,
+        "clusterRetained": true,
+        "wholeSocketRootAbsence": "NOT_CHECKED"
+      }
+    },
+    {
+      "title": "Forecast current numeric acceptance",
+      "value": {
+        "sourceHead": "6e1406e64325aa633d14cf4bde27642bdb209a19",
+        "observedWitnesses": [
+          {
+            "kind": "FISCAL_SOURCE_COMPONENT_SAFE",
+            "value": {
+              "originals": 2,
+              "wholeOriginals": true,
+              "evidence": 6,
+              "receipts": 6,
+              "wholeRowsUnchanged": true,
+              "privateOwnerRead": true,
+              "authorJobRead": false,
+              "preparation": false,
+              "providerPosts": 0,
+              "syntheticSource": true
+            }
+          }
+        ],
+        "actualTapCounts": {
+          "tests": 1,
+          "pass": 0,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "tapSha256": "eb9033a6cd44b54fb92c234571db6b097c88d846016d3872ec862aebc6afbed6",
+        "privateRowsPublished": false
+      }
+    },
+    {
+      "title": "Preparation finite HTTP diagnostic",
+      "value": {
+        "stage": "preflight",
+        "code": "ERR_ASSERTION",
+        "actual": false,
+        "expected": true,
+        "messageHash": "d8e069eb68bc8145a3de8e19dd8f8162be511fc517bc0e873a51aac9beeb9cfb",
+        "tokens": []
+      }
+    }
+  ],
+  "actualPrivateSourceComponent": "positive current read of two synthetic originals/six evidence+receipts with whole-row invariance; not an extra passing child, author RPC, prepare/provider or semantic acceptance",
+  "laterBusiness": "unchanged actual weekend preflight0PASS1FAIL; public author read/prepare/recovery/action-current/withdrawal NOT_REACHED",
+  "installerComponent": "source-control-flow evidence: exact first COMMIT/RO catalog/first-only rejection/SQL-JS annual parser precede observed current-source component; full private catalog not retrieved",
+  "privateScope": "full rows/TAP/catalog/PNGs not downloaded or independently reviewed; only finite actual annotations and source inspected",
+  "currentChangedParserAndActionValidation": "NOT_RUN; do not transfer this older component positive"
+}

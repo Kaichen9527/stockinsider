@@ -1,0 +1,42 @@
+[
+  {
+    "path": "action-exact-evidence-source-01.tap",
+    "bytes": 4050,
+    "sha256": "ec8dd0c3f1837969bc9be72d27d6dcec9e1207a56d6c7b117bc2a8dea4b0afd0"
+  },
+  {
+    "path": "fiscal-original-marker-free-01.tap",
+    "bytes": 3534,
+    "sha256": "fddd47e2a67312901fb0428f5e20d4f852405fda3cc91b6606e6d8f4b2be6a69"
+  },
+  {
+    "path": "fiscal-original-sql-source-01.tap",
+    "bytes": 1467,
+    "sha256": "074b7928a29de10f2dd94f323cf1a1842a8864848760cef6299d19891789f6e1"
+  },
+  {
+    "path": "hosted-e09-component-observed.json",
+    "bytes": 6448,
+    "sha256": "96324e47046bd97a1a0c2ce3a49c3566599e6b65c6cf9df4d921c3824118cf68"
+  },
+  {
+    "path": "original-complete-source-preparation-01.tap",
+    "bytes": 4162,
+    "sha256": "6ce25ced4b4e9335fd415ad6f2e8ac2395ad604c36b8fba3c21bff5d397ab711"
+  },
+  {
+    "path": "private-inventory.json",
+    "bytes": 5193,
+    "sha256": "4b776cfc2352ea7ad7c69066a2fcb88de1413da075b7669ce67324bbefb118bf"
+  },
+  {
+    "path": "source-seal.json",
+    "bytes": 2113,
+    "sha256": "f08cbeed545065b0fa8e5cf6175d078a71e1f299d9edbc14655a727583920abb"
+  },
+  {
+    "path": "vm-checks.json",
+    "bytes": 6844,
+    "sha256": "c9c8ef47b790ac6d25c67063b8caad0e5fb9879672e6da1463bad1fb294be143"
+  }
+]
