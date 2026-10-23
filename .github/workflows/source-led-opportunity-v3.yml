@@ -120,7 +120,7 @@ jobs:
               print('::error title=Product diagnostic stage::bounded log unavailable')
               raise SystemExit(0)
           scripts=json.loads(pathlib.Path('package.json').read_text())['scripts']
-          last=None;failed=[];codes=set()
+          last=None;failed=[];codes=set();error_hashes=[];failure_types=set();signals=set()
           for line in path.read_text(errors='replace').splitlines():
               match=re.fullmatch(r'> (?:[^\s]{1,120} )?([a-zA-Z0-9:_-]{1,120})',line)
               if match and match[1] in scripts:last=match[1]
@@ -128,7 +128,13 @@ jobs:
               if match and len(failed)<30:failed.append(hashlib.sha256(match[1].encode()).hexdigest())
               match=re.fullmatch(r"\s*code: '?([A-Z0-9_]{4,40})'?",line)
               if match:codes.add(match[1])
-          safe={'lastNpmScript':last,'failedTestNameSha256':failed,'codes':sorted(codes)[:30],'scope':'diagnostic metadata only; original failure preserved'}
+              match=re.fullmatch(r'\s*error: (.{1,4000})',line)
+              if match and len(error_hashes)<16:error_hashes.append(hashlib.sha256(match[1].encode()).hexdigest())
+              match=re.fullmatch(r"\s*failureType: '?([A-Za-z_]{1,80})'?",line)
+              if match:failure_types.add(match[1])
+              match=re.fullmatch(r"\s*signal: '?((?:SIG)[A-Z0-9]{1,12})'?",line)
+              if match:signals.add(match[1])
+          safe={'lastNpmScript':last,'failedTestNameSha256':failed,'codes':sorted(codes)[:30],'errorLineSha256':error_hashes,'failureTypes':sorted(failure_types)[:16],'signals':sorted(signals)[:16],'scope':'diagnostic metadata only; original failure preserved'}
           print('::error title=Product diagnostic stage::'+json.dumps(safe,separators=(',',':')))
           PYCODE
           fi
