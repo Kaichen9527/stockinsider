@@ -38,7 +38,7 @@ test('no target lifetime is inferred from qualification expiry; original invalid
  const input=fixture();const withExpiredEntry={...input,qualification:{qualified:false,expiresAt:'2026-10-21T06:12:00.000Z'}};
  assert.equal(reviewedTargetBaseline(withExpiredEntry).baseline?.base,140);
  const invalid=fixture();invalid.publishedAt='2026-10-21T04:00:00.000Z';assert.equal(reviewedTargetBaseline(invalid).baseline,null);
- const unit=fixture();unit.original[1].unit='TWD_per_share';unit.artifact.claims[1].numeric!.unit='TWD_per_share';unit.artifact.outputHash=inputHash({...unit.artifact,outputHash:undefined});unit.review.authorOutputHash=unit.artifact.outputHash;assert.equal(reviewedTargetBaseline(unit).baseline,null);
+ const unit=fixture();unit.original[1].unit='TWD_thousands';unit.artifact.claims[1].numeric!.unit='TWD_thousands';unit.artifact.outputHash=inputHash({...unit.artifact,outputHash:undefined});unit.review.authorOutputHash=unit.artifact.outputHash;assert.equal(reviewedTargetBaseline(unit).baseline,null);
 });
 test('actual observer sends only configured principal and empty server scope, accepting no quote or proof selectors',async()=>{
  const calls:unknown[]=[];const observation={symbol:'2330',status:'exited',reason:'target_hit',revisionId,inputHash:inputHash('current')};
@@ -68,10 +68,10 @@ test('SQL source profile preserves one original function body and only finite de
  assert.equal(createHash('sha256').update(sql).digest('hex'),profile.migrationSha256);assert.equal(profile.nativeVerified,false);assert.equal(profile.routines[0].predecessorBodySha256,'47a8d220420b10ac931118262032aac74bc66e94d437d9ac381ad3ab50226074');assert.equal(profile.readEdges.length,50);
  assert.ok(sql.includes("vnext_target_unapproved_catalog_delta"));assert.ok(sql.includes("vnext_target_core_metadata_changed"));assert.ok(sql.includes("vnext_target_action_interval")||sql.includes('target_action_interval_evidence_incomplete'));assert.ok(!/GRANT ALL|CREATE ROLE|BYPASSRLS/u.test(sql));
 });
-test('original dimensionless multiple arithmetic mismatch is retained as a separate explicit source gap',()=>{
+test('finite dimensionless multiplier preserves the original per-share output unit',()=>{
  const evidence:Evidence[]=[{id:'eps',key:'quarterly_diluted_eps',value:10,unit:'TWD_per_share',period:'2026-06-30',kind:'fact',sourceTier:'official',source:'https://www.twse.com.tw/synthetic',contentHash:'a'.repeat(64),eventAt:publishedAt,availableAt:publishedAt},{id:'pe',key:'pe_multiple',value:20,unit:'dimensionless',period:'2026-06-30',kind:'fact',sourceTier:'official',source:'https://www.twse.com.tw/synthetic',contentHash:'b'.repeat(64),eventAt:publishedAt,availableAt:publishedAt}];
  const claim={id:'synthetic-derived',text:'Synthetic arithmetic source gap, not real valuation.',kind:'derived' as const,evidenceIds:['eps','pe'],numeric:{key:'valuation_base',unit:'TWD_per_share',period:'2026-06-30',value:200,formula:{operation:'multiply' as const,evidenceIds:['eps','pe']}}};
- assert.ok(validateClaim(claim,evidence).includes('claim_formula_unit_mismatch:synthetic-derived'));
+ assert.deepEqual(validateClaim(claim,evidence),[]);
 });
 test('original action tuple/hash and exact UTC fractional timestamp semantics have fixed reference vectors',()=>{
  const source=readFileSync(new URL('../tw-entry-plan-authority.ts',import.meta.url),'utf8');
@@ -84,4 +84,9 @@ test('original action tuple/hash and exact UTC fractional timestamp semantics ha
  const feeds=[['twse:twt49u:v1',123,'a'.repeat(64),1],['twse:twtauu:v1',10,'b'.repeat(64),0],['twse:twtb8u:v1',10,'c'.repeat(64),0]];
  assert.equal(hash(['corporate-action-snapshot-v3.1','TWSE','2026-10-22',revisionId,'tw-corporate-action-v3.1','twse',canonical('2026-10-22T06:00:00.120000+00:00'),feeds,[['2408','ex_right_dividend',100,99,'twse:twt49u:v1',rowHash]]]),'6e32117f35dacfe9e32c827743df2ddecb7e489a4f9c8f6e789558bd65b3bc2d');
  const sql=readFileSync(new URL('../../../../migrations/20261022_vnext_target_exit_v1.sql',import.meta.url),'utf8');assert.ok(sql.includes('target_action_hash_or_numeric_codec_unavailable'));assert.ok(sql.includes('target_original_quote_hash_or_numeric_codec_unavailable'));
+});
+
+test('actual cached quote TWD permits explicit per-share scenario aliases, never financial flow units',()=>{
+ for(const priceUnit of ['TWD_per_share','TWD/share']){const value=fixture();for(let i=0;i<3;i++){value.original[i].unit=priceUnit;value.artifact.claims[i].numeric!.unit=priceUnit;}value.artifact.outputHash=inputHash({...value.artifact,outputHash:undefined});value.review.authorOutputHash=value.artifact.outputHash;assert.equal(reviewedTargetBaseline(value).baseline?.base,140);}
+ const flow=fixture();for(let i=0;i<3;i++){flow.original[i].unit='TWD_million';flow.artifact.claims[i].numeric!.unit='TWD_million';}flow.artifact.outputHash=inputHash({...flow.artifact,outputHash:undefined});flow.review.authorOutputHash=flow.artifact.outputHash;assert.equal(reviewedTargetBaseline(flow).baseline,null);
 });

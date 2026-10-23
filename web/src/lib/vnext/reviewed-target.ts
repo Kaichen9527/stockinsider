@@ -15,7 +15,10 @@ export function reviewedTargetBaseline(input:BaselineInput){
  if(!price || !source || source.kind!=='fact' || source.sourceTier!=='official' || !Number.isFinite(Date.parse(publishedAt)))return {baseline:null,gaps:['target_original_reviewed_quote_missing']};
  const valuation=reviewedValuation({artifact,review,original,cutoff:publishedAt,quote:{close:price.value,session:price.period,source:source.source,adjusted:true,volume:null,ma20:null,ma60:null,volumeRatio:null,institutionalFlow:null}});
  const scenarioClaims=artifact!.claims.filter(c=>['valuation_bear','valuation_base','valuation_bull'].includes(c.numeric?.key||''));
- if(!valuation.usable || scenarioClaims.some(c=>c.numeric?.unit!==price.unit))return {baseline:null,gaps:[...valuation.gaps,'target_original_scenario_or_quote_unit_unusable']};
+ // current_price is an actual per-share quote even when its original cache
+ // contract uses TWD. These finite price aliases never admit cash-flow units.
+ const priceUnits=new Set(['TWD','TWD_per_share','TWD/share']);
+ if(!valuation.usable || !priceUnits.has(price.unit) || scenarioClaims.some(c=>!priceUnits.has(c.numeric?.unit||'')))return {baseline:null,gaps:[...valuation.gaps,'target_original_scenario_or_quote_unit_unusable']};
  return {baseline:{schemaVersion:'vnext-reviewed-target-baseline-v1' as const,inputHash:artifact!.inputHash,outputHash:artifact!.outputHash,base:valuation.valuation.base!,bear:valuation.valuation.bear!,bull:valuation.valuation.bull!,method:valuation.valuation.method,unit:price.unit,quoteAt:price.period,originalPrice:price.value,valuationAt:artifact!.valuationDate,claimIds:valuation.claimIds,publishedAt},gaps:[]};
 }
 export type TargetObservation={symbol:string;status:'exited'|'deferred';reason:string;revisionId:string|null;inputHash:string|null};

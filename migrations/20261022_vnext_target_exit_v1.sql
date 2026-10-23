@@ -121,7 +121,7 @@ BEGIN
  FOREACH key_name IN ARRAY ARRAY['valuation_bear','valuation_base','valuation_bull'] LOOP
   IF (SELECT count(*) FROM jsonb_array_elements(artifact->'claims') c WHERE c->'numeric'->>'key'=key_name)<>1 THEN RETURN jsonb_build_object('deferred','target_original_scenario_missing');END IF;
   SELECT value INTO scenario FROM jsonb_array_elements(artifact->'claims') c WHERE c.value->'numeric'->>'key'=key_name;
-  IF scenario->'numeric'->>'unit' IS DISTINCT FROM quote_claim->'numeric'->>'unit' OR scenario->'numeric'->>'unit' NOT IN('TWD','TWD_per_share','TWD/share') OR (scenario->'numeric'->>'value')::numeric<=0 THEN RETURN jsonb_build_object('deferred','target_original_scenario_unit_invalid');END IF;
+  IF quote_claim->'numeric'->>'unit' NOT IN('TWD','TWD_per_share','TWD/share') OR scenario->'numeric'->>'unit' NOT IN('TWD','TWD_per_share','TWD/share') OR (scenario->'numeric'->>'value')::numeric<=0 THEN RETURN jsonb_build_object('deferred','target_original_scenario_unit_invalid');END IF;
   scenarios:=scenarios||jsonb_build_object(key_name,scenario);
  END LOOP;
  IF (SELECT count(*) FROM jsonb_each(scenarios) c GROUP BY c.value->'numeric'->>'period' LIMIT 1)<>3 THEN RETURN jsonb_build_object('deferred','target_original_scenario_period_invalid');END IF;

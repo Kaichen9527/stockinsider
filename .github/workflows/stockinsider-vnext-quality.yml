@@ -60,6 +60,8 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/semantic-score-fence.test.ts | tee /tmp/stockinsider-vnext-ci/semantic-score-fence-source.tap
           node --experimental-strip-types web/src/lib/vnext/catalyst-criteria.test.ts | tee /tmp/stockinsider-vnext-ci/catalyst-criteria-source.tap
           node --experimental-strip-types web/src/lib/vnext/forecast-evidence.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-evidence-source.tap
+          node --experimental-strip-types web/src/lib/vnext/dimensionless-arithmetic.test.ts | tee /tmp/stockinsider-vnext-ci/dimensionless-source.tap
+          node --experimental-strip-types web/src/lib/vnext/reviewed-target.test.ts | tee /tmp/stockinsider-vnext-ci/reviewed-target-source.tap
           node --experimental-strip-types web/src/lib/vnext/cached-admission.test.ts | tee /tmp/stockinsider-vnext-ci/cached-source.tap
           node --experimental-strip-types web/src/lib/vnext/source-withdrawal.test.ts | tee /tmp/stockinsider-vnext-ci/withdrawal-source.tap
           node --experimental-strip-types web/src/lib/vnext/artifact-financial-summary.test.ts | tee /tmp/stockinsider-vnext-ci/financial-summary-source.tap
@@ -273,6 +275,46 @@ jobs:
                   if set(item)!={'stage','code','message','actual','expected'}: raise SystemExit('closed diagnostic required')
                   value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
                   print('::error title=Catalyst finite native diagnostic::'+value)
+          PYCODE
+          fi
+          test "$test_status" = 0
+      - name: Reviewed target baseline and atomic exits (synthetic cached originals/provider)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-07
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-07
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/target
+          VNEXT_TARGET_STAGE: fresh
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if node --experimental-strip-types scripts/vnext-target-postgres.test.mjs > /tmp/stockinsider-vnext-ci/target.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/target.tap.private.log /tmp/stockinsider-vnext-ci/target.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import json,pathlib
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/target.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          for line in source.read_text().splitlines():
+              prefix='TARGET_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'stage','code','message'}: raise SystemExit('closed diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Target finite native diagnostic::'+value)
           PYCODE
           fi
           test "$test_status" = 0

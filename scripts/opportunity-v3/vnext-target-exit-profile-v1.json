@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-target-exit-source-profile-v1",
   "migration": "migrations/20261022_vnext_target_exit_v1.sql",
-  "migrationSha256": "4f5a88da24ae824992a934ea2d027552ab1ce6e2d799e4e81635183aaa764513",
+  "migrationSha256": "8a49259e95d6557ac4b7a8a74d90500b0d180735f396fbf1490f337b711bf441",
   "nativeVerified": false,
   "nativeOids": null,
   "catalogMetadata": null,
@@ -363,8 +363,8 @@
     },
     {
       "signature": "public.vnext_target_current_v1(text,uuid,text)",
-      "bodySha256": "45f3e03fbee54c4b3040046d0093a5d6627d0554aef79df2b12b92652917af6b",
-      "bodyBytes": 14360
+      "bodySha256": "bc3fecc3f5c28480f3d18f6073ac39b72a3969e6d7fcf6d19601d45b04b4147b",
+      "bodyBytes": 14356
     }
   ],
   "newServiceRoutine": "public.vnext_target_command_v1(text,jsonb)",

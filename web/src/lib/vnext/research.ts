@@ -55,13 +55,13 @@ export function validateClaim(claim: Claim, evidence: Evidence[]) {
       if (operands.some((e) => e!.unit !== number.unit)) reasons.push(`claim_formula_unit_mismatch:${claim.id}`);
       for (const v of values.slice(1)) result = formula.operation === 'add' ? result + v : result - v;
     } else if (formula.operation === 'multiply') {
-      const units = operands.map((e) => e!.unit).filter((unit) => unit !== 'multiple' && unit !== 'ratio');
+      const units = operands.map((e) => e!.unit).filter((unit) => unit !== 'multiple' && unit !== 'ratio' && unit !== 'dimensionless');
       if (units.length !== 1 || units[0] !== number.unit) reasons.push(`claim_formula_unit_mismatch:${claim.id}`);
       for (const v of values.slice(1)) result *= v;
     } else if (formula.operation === 'divide') {
       if (values.slice(1).includes(0)) reasons.push(`claim_formula_zero_denominator:${claim.id}`);
       const units = operands.map((e) => e!.unit);
-      if (!(units.length === 2 && (units[0] === units[1] && number.unit === 'ratio' || units[0] === number.unit && ['ratio', 'multiple'].includes(String(units[1]))))) reasons.push(`claim_formula_unit_mismatch:${claim.id}`);
+      if (!(units.length === 2 && (units[0] === units[1] && number.unit === 'ratio' || units[0] === number.unit && ['ratio', 'multiple', 'dimensionless'].includes(String(units[1]))))) reasons.push(`claim_formula_unit_mismatch:${claim.id}`);
       for (const v of values.slice(1)) result /= v;
     } else reasons.push(`claim_formula_operation_invalid:${claim.id}`);
     if (!Number.isFinite(result) || Math.abs(result - number.value) > Math.max(1e-8, Math.abs(result) * 1e-8)) reasons.push(`claim_formula_result_mismatch:${claim.id}`);
