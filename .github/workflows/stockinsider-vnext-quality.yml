@@ -59,6 +59,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/source-backlog.test.ts | tee /tmp/stockinsider-vnext-ci/source-backlog.tap
           node --experimental-strip-types scripts/vnext-source-window-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-window-source.tap
           node scripts/vnext-source-namespace-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-namespace-source.tap
+          python3 -B scripts/vnext-reachability-annotation-source.test.py
           node --experimental-strip-types web/src/lib/vnext/twse-snapshot.test.ts | tee /tmp/stockinsider-vnext-ci/twse-snapshot-source.tap
           node --experimental-strip-types web/src/lib/vnext/thesis.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-source.tap
           node --experimental-strip-types web/src/lib/vnext/thesis-semantic-authority.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-semantic-authority-source.tap
@@ -304,7 +305,7 @@ jobs:
           if python3 scripts/vnext-routine-resource-run.py > /tmp/stockinsider-vnext-ci/routine-http.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
           python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/routine-http.tap.private.log /tmp/stockinsider-vnext-ci/routine-http.tap
           python3 - <<'PYCODE'
-          import hashlib,json,pathlib,re
+          import base64,hashlib,json,pathlib,re,zlib
           source=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http.tap.private.log')
           if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
           text=source.read_text()
@@ -327,7 +328,17 @@ jobs:
               if line.startswith('VNEXT_SOURCE_REACHABILITY_SAFE '):
                   item=json.loads(line.removeprefix('VNEXT_SOURCE_REACHABILITY_SAFE '))
                   if set(item)!={'schema','target','role','publicSchema','tables','routines','directOnly','transitiveDefinerBodyReview','rowsOrBodiesPublished','grantExecuted'} or item['grantExecuted'] is not False or item['rowsOrBodiesPublished'] is not False or item['target']!='research_source_fence_owner_v2': raise SystemExit('closed safe direct-rights inventory required')
-                  safe['sourceNamespaceDirectReachability']=item
+                  runtime_source=json.loads(receipt.read_text()).get('sourceCommit') if receipt.exists() else None
+                  if not isinstance(runtime_source,str) or not re.fullmatch('[a-f0-9]{40}',runtime_source): raise SystemExit('actual runtime source binding required')
+                  canonical=json.dumps(item,sort_keys=True,separators=(',',':'),ensure_ascii=True).encode()
+                  packed=zlib.compress(canonical,9);encoded=base64.b64encode(packed).decode('ascii')
+                  chunks=[encoded[n:n+1800] for n in range(0,len(encoded),1800)]
+                  if not 1<=len(chunks)<=8: raise SystemExit('finite reachability chunk bound required')
+                  for n,chunk in enumerate(chunks):
+                      part={'schema':'vnext-safe-reachability-part-v1','sourceCommit':runtime_source,'codec':'zlib-base64-canonical-ascii-json','part':n,'parts':len(chunks),'canonicalBytes':len(canonical),'canonicalSha256':hashlib.sha256(canonical).hexdigest(),'compressedSha256':hashlib.sha256(packed).hexdigest(),'data':chunk}
+                      message=json.dumps(part,separators=(',',':'))
+                      if len(message.encode())>3000: raise SystemExit('finite notice byte bound required')
+                      print('::notice title=Source owner reachability part '+str(n)+'::'+message.replace('%','%25').replace('\r','%0D').replace('\n','%0A'))
           if receipt.exists():
               data=json.loads(receipt.read_text());safe.update({k:data.get(k) for k in ['sourceCommit','results','pendingQueries','appExit','appPidAbsent','clientsSettled','unexpectedExternalFetchObserved']})
           terminal=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/retry-terminal-receipt.json')

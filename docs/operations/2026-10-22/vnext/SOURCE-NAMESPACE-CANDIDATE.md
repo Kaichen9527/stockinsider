@@ -125,3 +125,30 @@ claimed observed; until then it is NOT_RUN. Unknown predecessor still refuses.
 The historical d2bca five-source-contract candidate/ccc native7tests5PASS2FAIL
 remain separate. The new9focused source contracts include projection plus
 transaction-state and no-secret direct-report tests; counts are not added.
+
+## Actual b42 annotation truncation — retained diagnostic RED
+
+Run39963820884/job120448346375 reached the readonly direct-rights reporter and
+still has the mandatory namespace nonready failure. Its combined routine notice
+was truncated by GitHub to exactly4096bytes: messageSHA
+54271c05d82e7c3315fc593aa23491c29071a8d9d5c7355d185c9e5c0527be27.
+The partial first fields show8tests/6PASS/2FAIL; the complete report/remaining
+receipt fields cannot be claimed retrieved or independently checked. This is
+an evidence serialization defect, not SQL permission/role change or a new
+formal lifecycle approval. Original truncated response and initial import-edit
+WIP remain private; no native rerun was dispatched.
+
+The successor leaves the original finite routine result notice separate. It
+serializes only the already allowlisted direct-rights metadata as canonical
+ASCII JSON, zlib/base64 encodes it into at most8parts of1800characters, each
+notice under3000bytes, binds actual runtime source plus uncompressed bytecount/
+SHA and compressed SHA, and never includes rows/bodies/unknown config values.
+A reader must retrieve every exact numbered part, reject unknown/duplicate/
+missing/cross-source/hash drift, reassemble and verify both hashes before
+claiming the complete list. This does not approve transitive reachability.
+Original-VM4source codec tests execute the exact workflow serialization excerpt;
+synthetic positive roundtrip, byte drift/missing/duplicate/cross-source negatives
+and excessive report rejection are separate from native observations. The report
+also labels relation kind so indexes/sequences cannot be misreported as ordinary
+selectable tables, and owner RLS bypass is true only for an RLS-enabled owner
+relation without forceRls. New actual complete report remains pending.
