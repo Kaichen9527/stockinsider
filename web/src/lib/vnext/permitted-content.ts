@@ -32,6 +32,8 @@ function contentIdentity(item:PermittedContent,cutoff:string) {
  const contentHash=inputHash({source:item.source,scope:item.scope,url:item.url,eventAt:item.eventAt,publishedAt:item.publishedAt,eventBasis:item.eventBasis,value,originalRoot,authorRoot,catalystUntil:item.catalystUntil||null});
  return {contentHash,source:item.source,scope:item.scope,original:item,gaps,value};
 }
+/** Cheap validated identity only; does not extract clues, reserve work or parse content. */
+export function permittedContentFingerprint(item:PermittedContent,cutoff:string){return contentIdentity(item,cutoff).contentHash;}
 export function extractPermittedContent(item:PermittedContent,cutoff:string):ContentExtraction {
  const {contentHash,gaps,value}=contentIdentity(item,cutoff);const originalRoot=item.originalRoot;const authorRoot=item.authorRoot;
  const clues=item.symbols.map((symbol):Clue=>({symbol,source:item.source,root:originalRoot,authorRoot,eventAt:item.eventAt,availableAt:item.availableAt,contentHash,...(item.catalystUntil?{catalystUntil:item.catalystUntil}:{}),...(item.scope==='operator_claim'?{rightsAttested:true,operatorClaim:true}:{})})).filter((clue)=>eligibleClue(clue,cutoff));

@@ -43,7 +43,7 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       const allowed=action==='operator-claim'?['action','claim']:action==='market-recover'?['action','invocationId']:['action'];
       if(Object.keys(body).some((key)=>!allowed.includes(key)))throw new Error('vnext_analysis_closed_body');
       let result:Row;
-      if(action==='source-extract')result=await(await import('./source-worker.ts')).runPermittedSourceWorker(identity);
+      if(action==='source-extract')result=await(await import('./source-window-worker.ts')).runSourceWindowWorker(identity);
       else if(action==='operator-claim')result=await(await import('./source-worker.ts')).recordOperatorClaim(identity,body);
       else {if(action==='market-recover' && (typeof body.invocationId!=='string' || !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu.test(body.invocationId)))throw new Error('vnext_market_invocation_id_required');result=await(await import('./market-ai-worker.ts')).runMarketInterpretation(identity,action==='market-recover'?String(body.invocationId):undefined);}
       return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});

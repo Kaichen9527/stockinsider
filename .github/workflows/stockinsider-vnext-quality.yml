@@ -57,6 +57,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/worker.test.ts | tee /tmp/stockinsider-vnext-ci/worker-source.tap
           node --experimental-strip-types web/src/lib/vnext/analysis-sources.test.ts | tee /tmp/stockinsider-vnext-ci/analysis-source.tap
           node --experimental-strip-types web/src/lib/vnext/source-backlog.test.ts | tee /tmp/stockinsider-vnext-ci/source-backlog.tap
+          node --experimental-strip-types scripts/vnext-source-window-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-window-source.tap
           node --experimental-strip-types web/src/lib/vnext/twse-snapshot.test.ts | tee /tmp/stockinsider-vnext-ci/twse-snapshot-source.tap
           node --experimental-strip-types web/src/lib/vnext/thesis.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-source.tap
           node --experimental-strip-types web/src/lib/vnext/thesis-semantic-authority.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-semantic-authority-source.tap
