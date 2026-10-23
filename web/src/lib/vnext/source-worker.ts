@@ -24,7 +24,8 @@ export async function runPermittedSourceWorker(identity:VnextIdentity){
     authorRoot:source==='official'?'official:twse-tpex':'',originalRoot:source==='official'?String(row.document_url):'',...(source==='ptt'?{title:String(row.title)}:{body:String(row.content_text||'')})});
   }
  }
- return analysisWriter(async()=>({...await extractContentBatch(items,cutoff,(action,body)=>analysisCommand(identity,action,body)),coverage}));
+ const snapshotTransport=await(await import('./twse-snapshot-store.ts')).readTwseSnapshotCoverage(identity);
+ return analysisWriter(async()=>({...await extractContentBatch(items,cutoff,(action,body)=>analysisCommand(identity,action,body)),coverage,snapshotTransport}));
 }
 export async function recordOperatorClaim(identity:VnextIdentity,body:Row){
  if(identity.role!=='operator')throw new Error('vnext_operator_required');

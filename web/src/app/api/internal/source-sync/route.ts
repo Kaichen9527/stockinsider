@@ -13,6 +13,7 @@ import { runIsolatedSourceBatch } from '@/lib/source-batch';
 import { classifySourceSyncTerminal } from '@/lib/source-health';
 import { assertThreadsTokenAvailable } from '@/lib/threads-token';
 import { acquireProductionWriteLease, releaseProductionWriteLease } from '@/lib/production-write-lease';
+import type { TwseSnapshotSink } from '@/lib/vnext/twse-snapshot';
 
 const PARSER_VERSION = 'source-ranking-v2.3.0';
 
@@ -109,7 +110,7 @@ async function recordPolicyBlock(connector: string, attemptedAt: string) {
   return { policy, terminalReason };
 }
 
-async function executeConnector(connector: string, dryRun: boolean, symbol: string): Promise<SourceResult> {
+async function executeConnector(connector: string, dryRun: boolean, symbol: string, snapshotSink?: TwseSnapshotSink): Promise<SourceResult> {
   const policy = sourceExecutionPolicy(connector);
   const attemptedAt = new Date().toISOString();
   if (policy.disposition !== 'active') {
@@ -138,7 +139,7 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
             valid_matches: Number(result.validMatches || 0),
           },
         }))
-      : await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}) });
+      : await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}) }, connector === 'twse_insider' ? snapshotSink : undefined);
     const result = publicResult(raw, policy.licenseBasis);
     if (!dryRun) {
       await recordSourceRunLedger({
@@ -199,6 +200,7 @@ export async function POST(req: Request) {
   const auth = requireInternalAuth(req);
   if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
   let leaseOwner: string | null = null;
+  let snapshotSink: TwseSnapshotSink | undefined;
   try {
     const body = await req.json().catch(() => ({}));
     const { searchParams } = new URL(req.url);
@@ -208,6 +210,9 @@ export async function POST(req: Request) {
     const connector = body?.connector ? String(body.connector) : (searchParams.get('connector') || 'telegram');
     const dryRun = Boolean(body?.dryRun);
     const symbol = (body?.symbol ? String(body.symbol) : (searchParams.get('symbol') || '')).toUpperCase();
+    if (!dryRun && process.env.STOCKINSIDER_VNEXT_ENABLED === 'true' && (connector === 'twse_insider' || connector === 'all' && sourceExecutionPolicy('twse_insider').disposition === 'active')) {
+      snapshotSink = await (await import('@/lib/vnext/twse-snapshot-store')).createTwseSnapshotSink(req);
+    }
     if (!dryRun) {
       leaseOwner = await acquireProductionWriteLease(3_600);
       if (!leaseOwner) return NextResponse.json({ ok: false, error: 'production_write_cycle_already_running' }, { status: 409 });
@@ -220,7 +225,7 @@ export async function POST(req: Request) {
       }
       const results = await runIsolatedSourceBatch(
         scheduledSourceConnectorKeys(),
-        (item) => executeConnector(item, dryRun, symbol),
+        (item) => executeConnector(item, dryRun, symbol, snapshotSink),
         (item, caught) => {
           const error = caught as Error & { result?: Record<string, unknown> };
           const policy = sourceExecutionPolicy(item);
@@ -273,7 +278,7 @@ export async function POST(req: Request) {
       }, { status: ok ? 200 : 502 });
     }
 
-    const result = await executeConnector(connector, dryRun, symbol);
+    const result = await executeConnector(connector, dryRun, symbol, snapshotSink);
     const accepted = ['success', 'successful_empty', 'duplicate_only'].includes(result.terminalReason);
     return NextResponse.json({
       ok: accepted,
@@ -284,7 +289,10 @@ export async function POST(req: Request) {
     const error = caught as Error & { status?: number; result?: Record<string, unknown> };
     return NextResponse.json({ ok: false, error: error.message, result: error.result ?? null }, { status: error.status ?? 500 });
   } finally {
-    if (leaseOwner) await releaseProductionWriteLease(leaseOwner).catch(() => undefined);
+    if (leaseOwner) {
+      if (snapshotSink) await releaseProductionWriteLease(leaseOwner);
+      else await releaseProductionWriteLease(leaseOwner).catch(() => undefined);
+    }
   }
 }
 
