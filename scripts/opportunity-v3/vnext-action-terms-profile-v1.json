@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-action-terms-source-profile-v1",
   "migration": "migrations/20261023_vnext_corporate_action_terms_v1.sql",
-  "migrationSha256": "cf7fa5af38f8d3953bd6937985007d22a7457b2ae141266a2efd87aee9ea1814",
+  "migrationSha256": "60236eb9f0d83af775fd0128b3fb02bccb9c92546777bc6bd6596031ae469c01",
   "nativeVerified": false,
   "nativeOids": null,
   "modifiedRoutines": [
@@ -158,5 +158,6 @@
     "timing": "BEFORE INSERT",
     "triggerType": 7,
     "purpose": "current terms mandatory on ALL new preparations; no caller provenance flag; originals unchanged"
-  }
+  },
+  "currentReceiptTimezone": "UTC; current new function configuration only, original routine configs unchanged"
 }
