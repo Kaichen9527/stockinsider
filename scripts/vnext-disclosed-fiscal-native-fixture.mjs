@@ -2,7 +2,19 @@
  * namespace grant, production migration or external/model authority. */
 import assert from 'node:assert/strict';import fs from 'node:fs';import {createHash,randomUUID} from 'node:crypto';
 import {extractDisclosedFiscalForecast,calculateDisclosedFiscalForecast} from '../web/src/lib/vnext/disclosed-fiscal-forecast.ts';
+import {validateCurrentForecasts} from '../web/src/lib/vnext/forecast-current.ts';
 const sha=b=>createHash('sha256').update(b).digest('hex');
+/** This is a private effective-owner source component before BUSINESS weekday
+ * admission. It cannot claim an author job/public RPC/preparation/provider pass.
+ * No job/claim/attempt is created and the original business guard stays fatal. */
+export async function checkDisclosedFiscalComponent(x,stockId,sources){
+ const before=await x.snapshot();let current;
+ await x.observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');try{await x.observer.query('SET LOCAL ROLE opportunity_v3_rpc_owner');current=(await x.observer.query("SELECT public.vnext_forecast_current_internal_v1($1::uuid,'2408',statement_timestamp()) AS value",[stockId])).rows[0].value;await x.observer.query('ROLLBACK');}catch(error){try{await x.observer.query('ROLLBACK');}catch(rollbackError){Object.assign(error,{rollbackError});}throw error;}
+ validateCurrentForecasts(current);assert.equal(current.evidence.length,6);assert.equal(current.receipts.length,6);assert.equal(current.evidence.find(e=>e.key==='source_annual_forecast_eps').value,10);assert.equal(current.evidence.find(e=>e.key==='next_four_quarter_eps').value,5);
+ for(const source of sources)assert.ok(current.evidence.some(e=>e.key==='fiscal_forecast_original'&&e.value.statement===source.body));assert.deepEqual(await x.snapshot(),before);
+ x.save('fiscal-owner-current-component',{before,current,wholeRowsUnchanged:true,observerPid:x.observer.processID,writerPid:x.writer.processID,scope:'actual private effective-owner current projection and complete original/operand/span/hash revalidation ONLY; synthetic sources/metadata, no author job/public reader/prepare/provider or business temporal acceptance'});
+ console.log('FISCAL_SOURCE_COMPONENT_SAFE '+JSON.stringify({originals:sources.length,wholeOriginals:true,evidence:current.evidence.length,receipts:current.receipts.length,wholeRowsUnchanged:true,privateOwnerRead:true,authorJobRead:false,preparation:false,providerPosts:0,syntheticSource:true}));
+}
 export async function installDisclosedFiscalCandidate(x){
  assert.notEqual(x.writer.processID,x.observer.processID);
  const idle=async c=>{let readyListener,errorListener,endListener;const ready=new Promise((resolve,reject)=>{readyListener=m=>resolve(m.status);errorListener=reject;endListener=()=>reject(Error('owned_fiscal_client_ended'));c.connection.once('readyForQuery',readyListener);c.once('error',errorListener);c.once('end',endListener);});try{const [q,r]=await Promise.allSettled([c.query(''),ready]);if(q.status==='rejected')throw q.reason;if(r.status==='rejected')throw r.reason;assert.equal(r.value,'I');}finally{c.connection.off('readyForQuery',readyListener);c.off('error',errorListener);c.off('end',endListener);}};

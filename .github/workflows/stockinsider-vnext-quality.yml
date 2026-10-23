@@ -368,6 +368,7 @@ jobs:
           if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded forecast acceptance log required')
           expected={'FORECAST_CURRENT_SAFE ':{'evidenceCount','receiptCount','numericSourceOnly','sourceDeclaredAnnualAndForward4q','reportedAnnual','actualOriginalAppend','syntheticSource','actualExternalModel'},'FORECAST_FROZEN_REVOKED_SAFE ':{'actualReservedFrozenInput','forecastItems','providerPosts','rightsRevocationCommitted','originalRowsRetained','sourceCurrentFalse','noSecondClaimPrepareOrReserve','directRejectedMutants','duplicateAcquisitionStable','recollectionObservations'}}
           expected['FISCAL_FORECAST_CURRENT_SAFE ']=set('originals sourceDeclaredAnnual sourceDeclaredForwardFour reportedAnnual wholeOriginalContext currentReader frozenProviderInput providerPosts rightsWithdrawals sourceHistoryRetained actualExternalSource'.split())
+          expected['FISCAL_SOURCE_COMPONENT_SAFE ']=set('originals wholeOriginals evidence receipts wholeRowsUnchanged privateOwnerRead authorJobRead preparation providerPosts syntheticSource'.split())
           notices=[]
           for line in raw.read_text().splitlines():
               for prefix,keys in expected.items():

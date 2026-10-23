@@ -9,7 +9,7 @@ import {randomUUID,randomBytes} from 'node:crypto';
 import {workerFixture,hash} from './vnext-worker-fixture.mjs';
 import {installActionTermsCandidate,proveActionTermsOriginals} from './vnext-action-terms-native-fixture.mjs';
 import {seedForecastMetadata} from './vnext-forecast-native-fixture.mjs';
-import {installDisclosedFiscalCandidate,seedDisclosedFiscalFixture} from './vnext-disclosed-fiscal-native-fixture.mjs';
+import {installDisclosedFiscalCandidate,seedDisclosedFiscalFixture,checkDisclosedFiscalComponent} from './vnext-disclosed-fiscal-native-fixture.mjs';
 import {validateCurrentForecasts} from '../web/src/lib/vnext/forecast-current.ts';
 import {validateOfficialFinancialFact} from '../web/src/lib/official-financial-validation.ts';
 import {resolveFinancialEvidenceSources} from '../web/src/lib/vnext/financial-evidence-sources.ts';
@@ -208,6 +208,7 @@ export async function preparationHttpFixture(){
   for(const role of ['operator','author','reviewer'])await x.writer.query('INSERT INTO public.vnext_principals_v1(principal,role,enabled) VALUES($1,$2,true)',[preparationPrincipals[role],role]);
   forecastSource=await seedForecastMetadata(x,query,stockId,runner);
   for(const kind of ['annual','four_quarters'])fiscalSources.push(await seedDisclosedFiscalFixture(x,query,stockId,runner,kind));
+  await checkDisclosedFiscalComponent(x,stockId,fiscalSources);
   // READ needs existing enabled binding metadata, never an API credential or dispatch.
   for(const role of ['author','reviewer']){const b=binding(role);await x.writer.query('INSERT INTO public.vnext_provider_bindings_v1(principal,task,provider,model,model_version,credential_identity,prompt_version,instructions,enabled) VALUES($1,$2,$3,$4,$5,$6,$7,$8,true)',[preparationPrincipals[role],role,b.provider,b.model,b.modelVersion,b.credentialIdentity,b.promptVersion,b.instructions]);}
   const civil=(await x.observer.query("SELECT (clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date::text AS today,extract(isodow FROM clock_timestamp() AT TIME ZONE 'Asia/Taipei')<6 AS weekday")).rows[0];assert.equal(civil.weekday,true,'explicit synthetic weekday calendar only; unknown/nontrading fixture not invented');
