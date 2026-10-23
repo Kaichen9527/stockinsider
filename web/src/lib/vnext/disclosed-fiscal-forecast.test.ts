@@ -50,3 +50,8 @@ test('the same receive byte/depth caps and current public-source restriction are
  const deep=current();let nested:unknown=1;for(let i=0;i<14;i++)nested={item:nested};Object.assign(deep.receipts[0],{unexpected:nested});assert.throws(()=>validateCurrentForecasts(deep),/json_depth/);
  for(const path of ['paid/member-guidance','login','subscription-guidance']){const f=current();f.evidence[1].source='https://mops.twse.com.tw/'+path;assert.throws(()=>validateCurrentForecasts(f),/current_source_or_clocks/);}
 });
+test('unknown metadata is refused even when the material hash intentionally ignores its key',()=>{
+ for(const key of ['fetchedAt','collectedAt','retrievedAt','evaluatedAt'])for(const target of ['evidence','parsed','calculation']){
+  const f=current(),value=target==='evidence'?f.evidence[0]:target==='parsed'?f.receipts[0].parsed:f.receipts[0].calculation,before=inputHash(value);Object.assign(value,{[key]:'UNKNOWN_UNTRUSTED_METADATA'});assert.equal(inputHash(value),before);assert.throws(()=>validateCurrentForecasts(f),/current_pair_or_calculation_drift/);
+ }
+});

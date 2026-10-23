@@ -131,7 +131,7 @@ function controllers(f:ReturnType<typeof fixture>){
   const filename=new URL(name,import.meta.url);const compiled=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:name}).outputText;
   const controllerModule={exports:{}};cache.set(name,controllerModule.exports);
   const require=(dependency:string):unknown=>{
-   if(['node:crypto','node:async_hooks'].includes(dependency))return nativeRequire(dependency);
+   if(['node:crypto','node:async_hooks','node:util'].includes(dependency))return nativeRequire(dependency);
    if(dependency==='next/server')return nativeRequire('next/server');
    if(dependency==='./cached-admission.ts')return {cachedAdmissionBody:()=>{throw Error('unexpected admission');},currentReceiptBody:()=>{throw Error('unexpected content');}};
    if(['../supabase-server','../supabase-server.ts'].includes(dependency))return {getSupabaseServerClient:()=>f.client};

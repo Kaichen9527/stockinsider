@@ -2,6 +2,7 @@
  * current server reader must reparse the same complete original, source hash,
  * issuer, manifest and use permission. No filesystem/network/model owner. */
 import {inputHash} from './policy.ts';
+import {isDeepStrictEqual} from 'node:util';
 import {assertWorkerJsonCodec} from './worker-output.ts';
 import type {Evidence} from './research.ts';
 type Row=Record<string,unknown>;
@@ -81,7 +82,7 @@ export function validateFiscalForecastPairs(evidence:unknown[],receipts:unknown[
   if(typeof e.source!=='string'||typeof e.eventAt!=='string'||typeof e.availableAt!=='string')return fail('current_clocks');const url=new URL(e.source);
   if(url.protocol!=='https:'||!['mops.twse.com.tw','mopsov.twse.com.tw'].includes(url.hostname)||url.username||url.password||url.port||url.search||url.hash||/(paid|member|premium|subscription|login|authenticate|telegram|investanchors|\.invalid|\.local|localhost)/iu.test(e.source)||!Number.isFinite(Date.parse(e.eventAt))||!Number.isFinite(Date.parse(e.availableAt))||Date.parse(e.eventAt)>Date.parse(e.availableAt)||Date.parse(e.availableAt)>Date.parse(scope.asOf)||Date.parse(scope.asOf)-Date.parse(e.eventAt)>90*86400000)fail('current_source_or_clocks');
   const expected=fiscalForecastEvidence(e.value.statement,{stockId:scope.stockId,symbol:scope.symbol,verificationId:r.verificationId as string,revisionId:r.revisionId as string,sourceHash:r.sourceHash as string,publisherAuthorityId:r.publisherAuthorityId as string,sourceAuthorityId:r.sourceAuthorityId as string,policyId:r.policyId as string,manifestHash:r.manifestHash as string,source:e.source,publishedAt:e.eventAt,knownAt:e.availableAt},scope.asOf);
-  for(let i=0;i<2;i++){const actual=selected.filter(v=>object(v.e)&&v.e.id===expected.evidence[i].id);if(actual.length!==1||inputHash(actual[0].e)!==inputHash(expected.evidence[i])||inputHash(actual[0].r)!==inputHash(expected.receipts[i]))fail('current_pair_or_calculation_drift');}
+  for(let i=0;i<2;i++){const actual=selected.filter(v=>object(v.e)&&v.e.id===expected.evidence[i].id);if(actual.length!==1||!isDeepStrictEqual(actual[0].e,expected.evidence[i])||!isDeepStrictEqual(actual[0].r,expected.receipts[i]))fail('current_pair_or_calculation_drift');}
  }
  if(selected.filter(({r})=>object(r)&&r.entryRole==='original').length*2!==selected.length)fail('current_pair_missing');
 }
