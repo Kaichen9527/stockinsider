@@ -465,7 +465,7 @@ jobs:
           import hashlib,json,pathlib,re,subprocess
           root=pathlib.Path('/tmp/stockinsider-vnext-ci');raw=root/'preparation-http.tap.private.log'
           if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded forecast acceptance log required')
-          expected={'FORECAST_CURRENT_SAFE ':{'evidenceCount','receiptCount','numericSourceOnly','annualOrForward4q','actualOriginalAppend','syntheticSource','actualExternalModel'},'FORECAST_FROZEN_REVOKED_SAFE ':{'actualReservedFrozenInput','forecastItems','providerPosts','rightsRevocationCommitted','originalRowsRetained','sourceCurrentFalse','noSecondClaimPrepareOrReserve','directRejectedMutants'}}
+          expected={'FORECAST_CURRENT_SAFE ':{'evidenceCount','receiptCount','numericSourceOnly','annualOrForward4q','actualOriginalAppend','syntheticSource','actualExternalModel'},'FORECAST_FROZEN_REVOKED_SAFE ':{'actualReservedFrozenInput','forecastItems','providerPosts','rightsRevocationCommitted','originalRowsRetained','sourceCurrentFalse','noSecondClaimPrepareOrReserve','directRejectedMutants','duplicateAcquisitionStable','recollectionObservations'}}
           notices=[]
           for line in raw.read_text().splitlines():
               for prefix,keys in expected.items():
