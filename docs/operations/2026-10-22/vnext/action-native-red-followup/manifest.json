@@ -1,0 +1,17 @@
+[
+  {
+    "path": "followup-source-seal.json",
+    "bytes": 3825,
+    "sha256": "ca17af8f385a1900a0b8227784b92989534f5abf09ceef45f149d5cf52be0879"
+  },
+  {
+    "path": "observed-773.json",
+    "bytes": 7039,
+    "sha256": "46686efed857d138c53b7e0f2e9a854607946dcf1ba156a8e7a0f996e012af50"
+  },
+  {
+    "path": "private-inventory.json",
+    "bytes": 1894,
+    "sha256": "94959d94f27e11bab779f570ba50f38cdf31d7f2872f3a9eefe04774de63307b"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "scope": "actual installed Chromium currentbuild over readonly snapshots captured from owned PG09 before/after real contenttombstone; allfinancial/article/modelcontent synthetic",
+  "files": [
+    {
+      "path": "screenshots/desktop-current-complete-article.png",
+      "bytes": 744954,
+      "sha256": "1c9b4314623174809f23b79a2a09a1df23cd029c69c8bc979cda7e7fbbd9c60a"
+    },
+    {
+      "path": "screenshots/desktop-current-withdrawn-history.png",
+      "bytes": 759706,
+      "sha256": "f897f55d20df2a6d83c6ea1aabc40cc9240ab2bf9d3864fa35beb44315e166ba"
+    },
+    {
+      "path": "screenshots/mobile-current-complete-article.png",
+      "bytes": 2485050,
+      "sha256": "16e86c59645ca81c5543e8ebed239f36e2986736eb4ba361bad441c33ae1e2c6"
+    },
+    {
+      "path": "screenshots/mobile-current-withdrawn-history.png",
+      "bytes": 2515253,
+      "sha256": "0a79b21f56bf4fc57a3cb5c6833e51fe23c6a55458ec54c80fdea65c85728750"
+    }
+  ]
+}

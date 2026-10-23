@@ -1,0 +1,63 @@
+{
+  "status": "PARTIAL_VM_RESUMED_NOT_RELEASE_ACCEPTED",
+  "sourceHead": "1ac92cb23b55b95d7c138da57a59f536a50dda36",
+  "nativeIRExecutedHead": "7751f51908b3414c1a83d6a37518147eb3eb8126",
+  "workerExecutedHead": "9e17b5e6d95b5deb29fe71b82c047fa4cfbb274a",
+  "sourceBeforeIRBase": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "branch": "codex/stockinsider-vnext-oct22",
+  "workerDirtyAtExecution": "IR resolver/test/candidate SQL/profile were dirty or new but outside the sealed worker runtime imports; original12 selected inputs unchanged",
+  "outcomes": {
+    "IRFocusedPure": "14PASS",
+    "IRTypes": "PASS",
+    "fullWebpackBuild": "initial sandboxRED; diagnosed unchanged helper captured0bytes vs27517bytes in normalpermissions; corrected execution context PASS",
+    "lint": "PASS",
+    "workerNative": "7PASS/0FAIL",
+    "productEvidenceWithActualPGTools": "43PASS/0FAIL",
+    "productRuntime": "235PASS/1SKIP; correct alreadyinstalledArelle launcher targeted4PASS/0SKIP separate run",
+    "productSourceContractsWithoutOuterPG": "39PASS/4FAIL missinginitdb",
+    "productFullContractsActualPG17": "44PASS/0FAIL",
+    "IRNative": "0PASS/2FAIL; installerCOMMIT component, policycodec testassertion failed; all downstreambusiness NOT_RUN",
+    "IRPolicyCorrection": "sourceonly same JSON OID codec; no product SQL/hash/permission/expectedrole change; no newnative PASS",
+    "sourceCIReproduction": "10 prior suitesPASS, research-failure4PASS2FAIL on missing actualloaderdependency; onlyloaderfix6PASS, tailbusiness2PASS/lease9PASS/typePASS separate",
+    "retainedContinuation01": "0PASS2FAIL;22023emptyACLmetadataquery; originalRED preserved",
+    "retainedContinuation02": "2PASS2FAIL; retainedinstall+denychecksPASS, original financial recordRPC42704 missinglegacyenum; original receipt/parser prefix committed; laterworker/revocationNOT_RUN"
+  },
+  "CI": {
+    "observedAt": "2026-10-23T00:17:03.214120+00:00",
+    "subject": "808d19abd7339610852f763ee9d34d6cd68c1db5",
+    "vnextQuality": {
+      "run": 39875575447,
+      "job": 120160234944,
+      "conclusion": "failure",
+      "failedStep": "Actual source contracts, types and lint",
+      "downstreamBuildNative": "skipped",
+      "signedJobLog": "403, not fetched; no retries/bypass",
+      "VMReproduction": "source-ci-current-o23 ends research-failure2fail:unexpected_failure_source:worker-output.ts; minimal test-loader correction6PASS; not an attestation of all remote logs"
+    },
+    "sourceLed": {
+      "run": 39875575448,
+      "productRuntime": {
+        "job": 120160235003,
+        "conclusion": "success"
+      },
+      "diagnosticProductRuntime": {
+        "job": 120163263603,
+        "conclusion": "success"
+      }
+    },
+    "protectedRoot": {
+      "run": 39875570528,
+      "conclusion": "failure",
+      "guardsAndPinsUnchanged": true
+    },
+    "nextSource": "1ac92cb pushed normal branch; natural fresh CI independent, not observed PASS"
+  },
+  "limits": [
+    "IR financialvalidation42704 compatibility prerequisite unresolved; full healthychain/currentrevocation/worker remain NOT_RUN",
+    "actualfinancialfacts/acquisition/Arelle parserexecution forIR fixture/liveprovider/independentsemantic/formalpublication notproved",
+    "Contabo/TCP/officialtwo-session swap/protectedreviews stillunaccepted",
+    "no further automaticcleanup; PG11 data/container retained"
+  ],
+  "resourceAdmission": "Original floor8589934592 perfilesystem, plus measuredimagecreate912297984+128MiB before native; live recorder no violations",
+  "updatedAt": "2026-10-23T00:17:03.219386+00:00"
+}

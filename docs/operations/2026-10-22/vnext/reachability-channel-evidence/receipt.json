@@ -1,0 +1,11 @@
+{
+  "schema": "vnext-readonly-reachability-channel-source-receipt-v1",
+  "source": "6024b5a84aafc5ee0057457b4a81275b16bc8961",
+  "manifestSha256": "a35cf1c293cfe86510f656ed088de5f135cf281aecd678e9ff288ac880f3fe90",
+  "manifestBytes": 643,
+  "permissionApplyWired": false,
+  "grantExecuted": false,
+  "fullGoal": "INCOMPLETE",
+  "independentApproval": "NOT_APPROVED",
+  "notSelfReferential": true
+}

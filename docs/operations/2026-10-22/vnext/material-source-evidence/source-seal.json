@@ -1,0 +1,170 @@
+{
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "changedGitInputs": [
+    {
+      "blob": "81c0e3533d9543cd3c58baca4a022c7d5cfdde87",
+      "bytes": 108041,
+      "mode": "100644",
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "sha256": "3d148bd288e4a282c96a02414ad10b03a0fb1cfa15d6728ab817d6980f69c2b8",
+      "type": "blob"
+    },
+    {
+      "blob": "c98d5ec951ad59c778071962dd838909a89e5067",
+      "bytes": 7583,
+      "mode": "100644",
+      "path": "docs/operations/2026-10-22/vnext/FORECAST-ACTIVE.md",
+      "sha256": "8e3a5c094ecaf2e76e732444f8a0d0e59175799f6e0afc4bd7024afd680572b3",
+      "type": "blob"
+    },
+    {
+      "blob": "0e1ef8423d0ac03261fa0a45d0a436cc863ef320",
+      "bytes": 3485,
+      "mode": "100644",
+      "path": "docs/operations/2026-10-22/vnext/FORECAST-RECOLLECTION.md",
+      "sha256": "c42931e2429437fbc73661004411797e476f80d742e9a37aa2e55280578cc550",
+      "type": "blob"
+    },
+    {
+      "blob": "cd295392173fa81acc6e017147e9cd893f23f829",
+      "bytes": 3180,
+      "mode": "100644",
+      "path": "docs/operations/2026-10-22/vnext/SOURCE-BACKLOG.md",
+      "sha256": "f033e4c27fec73f0aa7f147ec52b112fcd596185700d246a5b0cfea05dcf59cf",
+      "type": "blob"
+    },
+    {
+      "blob": "078df29e6d83f42200f376b5c64464bdaa8f8c77",
+      "bytes": 18573,
+      "mode": "100644",
+      "path": "migrations/20261023_vnext_forecast_active_v1.sql",
+      "sha256": "949ded9b3af03e897c599f0d7a1d38ae71c08b0acce524e48d9728e205daf74a",
+      "type": "blob"
+    },
+    {
+      "blob": "2d606b2393cf19d88fe19d0addb93a38a5a9f80a",
+      "bytes": 2673,
+      "mode": "100644",
+      "path": "scripts/opportunity-v3/vnext-forecast-active-profile-v1.json",
+      "sha256": "2ba7e23bfc89a4cecb5e24254f4bd25d57866a88f0f69340a888ef112fe802ff",
+      "type": "blob"
+    },
+    {
+      "blob": "42b7fc82c1492c465457a1476e95105aedf835f8",
+      "bytes": 11243,
+      "mode": "100644",
+      "path": "scripts/vnext-analysis-postgres.test.mjs",
+      "sha256": "b499e69de68ad509f1e534cd47d947f5029499b6cf5c8e2d75134c2eaa522352",
+      "type": "blob"
+    },
+    {
+      "blob": "029f981495ada6ac2e32d228a46ab24f02af34ff",
+      "bytes": 32130,
+      "mode": "100644",
+      "path": "scripts/vnext-cached-http.test.mjs",
+      "sha256": "02ecd7c223f7ad13a267500e43476a89e3143b9261bc575c241106e632d5ecf4",
+      "type": "blob"
+    },
+    {
+      "blob": "45b0484d4ae6754604e221fa1c83dee2ccf8b3b7",
+      "bytes": 2248,
+      "mode": "100644",
+      "path": "scripts/vnext-forecast-active-source.test.mjs",
+      "sha256": "6633851c1b8a9b8963f06c3eb86c8298d5a52573778f36f5fadf522cf95d4ccc",
+      "type": "blob"
+    },
+    {
+      "blob": "78e0fa96d9acd8b7a848a8516f6fe9072f5cec66",
+      "bytes": 8940,
+      "mode": "100644",
+      "path": "scripts/vnext-forecast-native-fixture.mjs",
+      "sha256": "1ec8c732ba4c80a40f5e9cf16dd0dbe8ee500f445c4eab183e650c370d5e8f28",
+      "type": "blob"
+    },
+    {
+      "blob": "e3fb9d3c85bb452f57c4244df14f050a42a4649a",
+      "bytes": 57144,
+      "mode": "100644",
+      "path": "scripts/vnext-preparation-http-fixture.mjs",
+      "sha256": "e35e38645c754d5a081655f9aa8c757c73f8a8e78722c233c18898412d830fe9",
+      "type": "blob"
+    },
+    {
+      "blob": "083cbeb7f0c7834b751908a5db651c523651cf89",
+      "bytes": 6514,
+      "mode": "100644",
+      "path": "scripts/vnext-weekly-forecast-source.test.mjs",
+      "sha256": "5e56e51e479a29e5f9c1c243faeec9ba1dc0113a3c6be65470dd10e7590138e4",
+      "type": "blob"
+    },
+    {
+      "blob": "ca0d6563830d54ede47f657dd892c52eb07f607b",
+      "bytes": 6866,
+      "mode": "100644",
+      "path": "web/src/lib/vnext/forecast-active.test.ts",
+      "sha256": "5a708656ecc7ab79bb7f52296e6fd1437237534c36ad53b20dc8d4f852ba3ab8",
+      "type": "blob"
+    },
+    {
+      "blob": "7cf118109fb3a314e9e6d7f0f2739209786b0eab",
+      "bytes": 2053,
+      "mode": "100644",
+      "path": "web/src/lib/vnext/forecast-active.ts",
+      "sha256": "ebf1a4eff4f4378c0e6e75202947a027b4fead4cb1f67545917061e18c4f206a",
+      "type": "blob"
+    },
+    {
+      "blob": "d558315e30beb9c4699c7fea6e2ee6415e985d92",
+      "bytes": 5676,
+      "mode": "100644",
+      "path": "web/src/lib/vnext/forecast-current.ts",
+      "sha256": "9c789343d8dcb6d7ca3799f93c5b731a7660e65e074ba239ec266031a6f630c4",
+      "type": "blob"
+    },
+    {
+      "blob": "49dec446d84e0d4e3da87da4bf0d25eb1c77be8f",
+      "bytes": 9424,
+      "mode": "100644",
+      "path": "web/src/lib/vnext/permitted-content.ts",
+      "sha256": "397865facb878e3b043c0950ed9e5b0d3f5902425170f854c1b3cbaa4668a372",
+      "type": "blob"
+    },
+    {
+      "blob": "f831d3009098fc350ac99fcd5733ae7e3907f7f7",
+      "bytes": 5104,
+      "mode": "100644",
+      "path": "web/src/lib/vnext/source-backlog.test.ts",
+      "sha256": "82f994eb6d8d38bccd45f5e412e65c3fb122f6b246692460bf0ce6a6e0cb1dcb",
+      "type": "blob"
+    },
+    {
+      "blob": "31c91726b8f56ef24e9e74034c39d7f0e2b2ba69",
+      "bytes": 13523,
+      "mode": "100644",
+      "path": "web/src/lib/vnext/thesis-audit.ts",
+      "sha256": "c098b761f36ffc52eca5cc7e5a303f428401406a11687416c15be3aeae056bd4",
+      "type": "blob"
+    },
+    {
+      "blob": "c77474d76e4fcb47664780531bb83e23ab0f8841",
+      "bytes": 7187,
+      "mode": "100644",
+      "path": "web/src/lib/vnext/weekly-worker.ts",
+      "sha256": "43a41f812988a6d6c5f367cad42f8e56288f6cd616669b7a0ebb7de7ce502bf0",
+      "type": "blob"
+    }
+  ],
+  "completeTreeIdentitySha256": "878b5080ad150b209032caeb37e69175241cfef0af0b2f2a292426b3c04717a2",
+  "exactWholeTreeParity": true,
+  "originalUntrackedWipExcluded": true,
+  "previousEvidence": "8c4a467ac6cef13871a5932e51e50f7bf3f20dbe",
+  "runtime": "26e2c2d9a4e7a20c48d5597728c1642c4c0e0855",
+  "runtimeParents": [
+    "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+    "921eb0038c534e36a553ba36fdd7142c5584d8ae"
+  ],
+  "runtimeTree": "f006dca499e89cef1f2b89b830077cf19f16528c",
+  "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+  "trackedWorktreeDiffEmpty": true,
+  "tree": "f006dca499e89cef1f2b89b830077cf19f16528c"
+}

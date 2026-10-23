@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "vnext-issuer-ir-source-candidate-v1",
+  "status": "SOURCE_CANDIDATE_NOT_NATIVE_VERIFIED",
+  "nativeVerified": false,
+  "catalogOids": null,
+  "predecessors": [
+    {
+      "signature": "public.vnext_provider_command_v1(text,text,jsonb)",
+      "owner": "stockinsider_vnext_owner",
+      "securityDefiner": true,
+      "prosrcSha256": "47fdb26746e2d20a2d85348d2e15cf288c8e1e1af84b7b4b6b780d150811288d",
+      "postProsrcSha256": "0e8121100eb0781d27e46f54d667cce39bbd061daa05a10efc4ebbb29a0312bd"
+    },
+    {
+      "signature": "public.vnext_input_sources_current_v1(jsonb,text)",
+      "owner": "stockinsider_vnext_owner",
+      "securityDefiner": true,
+      "prosrcSha256": "dd72f52bd54c6f708e4be68953ae689779340aa69d8d9df775dcb7c43c3cd043",
+      "postProsrcSha256": "83c21c7f7247045c0fe8f66d8d6ae5dbc88c72286ef38274ca8d8a11fe9ca352"
+    },
+    {
+      "signature": "public.read_financial_facts_for_stocks_as_of(timestamptz,uuid[])",
+      "owner": "opportunity_v3_rpc_owner",
+      "securityDefiner": false,
+      "prosrcSha256": "220620b91b5c0ffb41a8e33547b5fdc18642c477036dbdd8da8c619ba3b2d2f2"
+    },
+    {
+      "signature": "public.candidate_financial_fact_has_structural_proof_as_of_v10(uuid,timestamptz,text,timestamptz)",
+      "owner": "postgres",
+      "securityDefiner": true,
+      "prosrcSha256": "67b36db42304d076c38c582070a5cb67408a9417439124ac3593d3c8959ec8f6"
+    }
+  ],
+  "columnSelectGrantee": "opportunity_v3_rpc_owner",
+  "columnSelect": {
+    "public.candidate_financial_document_fact_links_v8": [
+      "receipt_id",
+      "fact_id",
+      "fact_recorded_at",
+      "evidence_id",
+      "created_at"
+    ],
+    "public.candidate_financial_parser_evidence_v8": [
+      "evidence_id",
+      "receipt_id",
+      "document_sha256",
+      "manifest_sha256",
+      "recorded_at"
+    ],
+    "public.candidate_issuer_ir_document_queue_v4": [
+      "document_id",
+      "stock_id",
+      "document_url",
+      "document_sha256",
+      "acquisition_status",
+      "collected_at",
+      "recorded_at"
+    ]
+  },
+  "newSelectPolicies": {
+    "name": "vnext_ir_source_read_v1",
+    "command": "SELECT",
+    "role": "opportunity_v3_rpc_owner",
+    "using": "true",
+    "tables": 3
+  },
+  "executeDelta": [
+    {
+      "signature": "public.candidate_financial_fact_has_structural_proof_as_of_v10(uuid,timestamptz,text,timestamptz)",
+      "grantee": "opportunity_v3_rpc_owner"
+    },
+    {
+      "signature": "public.vnext_issuer_financial_evidence_current_v1(jsonb,jsonb,text)",
+      "grantee": "stockinsider_vnext_owner"
+    }
+  ],
+  "newChecker": {
+    "owner": "opportunity_v3_rpc_owner",
+    "securityDefiner": true,
+    "volatility": "STABLE",
+    "searchPath": "",
+    "statementTimeout": "30s",
+    "lockTimeout": "2s",
+    "timezone": "UTC",
+    "publicOrServiceExecute": false
+  },
+  "unchanged": [
+    "existing role attributes/memberships",
+    "existing object owners",
+    "existing table ACLs and unrelated column ACLs",
+    "existing policies",
+    "existing function metadata except the single structural EXECUTE addition",
+    "non-IR provider statements and evidence-only model projection",
+    "admission/day/global budgets, writer fences and deadlines"
+  ],
+  "hashCodec": "Original inputHash on fixed actual financial fact columns; existing vnext_catalog_canonical_v1 and vnext_provider_json_codec_v1 at both vNext-owned callers; exact originalFact JSON equality to existing as-of scoped reader inside financial definer. Unknown numerical/key/typed JSON formats fail closed; no normalization.",
+  "productionApproval": false,
+  "nativeStatus": "NOT_RUN",
+  "grammarStatus": "NOT_NATIVE_EXECUTED"
+}

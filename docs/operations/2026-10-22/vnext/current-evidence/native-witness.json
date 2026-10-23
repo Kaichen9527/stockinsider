@@ -1,0 +1,198 @@
+{
+  "terminalInstall": {
+    "only2Bodies": [
+      {
+        "function": "vnext_command_v1",
+        "oid": 25832,
+        "predecessorBytes": 41115,
+        "successorBytes": 41167,
+        "predecessorSha256": "e27aa373d4a3d8b444c7bbec2585380329e98c21e35189746b56e72d522e121a",
+        "successorSha256": "47a8d220420b10ac931118262032aac74bc66e94d437d9ac381ad3ab50226074",
+        "completeNonbodyEqual": true
+      },
+      {
+        "function": "vnext_provider_command_v1",
+        "oid": 25935,
+        "predecessorBytes": 11910,
+        "successorBytes": 11964,
+        "predecessorSha256": "85951f8f64b236859f528044e15a875f7e86cdd2b0b77d6480fc0acd5a044156",
+        "successorSha256": "47fdb26746e2d20a2d85348d2e15cf288c8e1e1af84b7b4b6b780d150811288d",
+        "completeNonbodyEqual": true
+      }
+    ],
+    "allOtherFunctionsPreserved": true,
+    "oldBusinessUnchanged": true,
+    "overallRun": "1PASS2FAIL (not wholePASS)"
+  },
+  "terminalOriginalRed": {
+    "actual": "2reviewerstructuralfailures,8totalproviderinvocations",
+    "plannedAuthor422": "NOT_RUN: original test selected doc.evidence.symbol, but SQL frozenrequest evidence has no symbol; fixedfuturefixtureselects exact jobId. No extra same-day attempts or guard changes to chasegreen."
+  },
+  "explicitRead": {
+    "test": "terminal-slots-read-01",
+    "pass": 1,
+    "fail": 0,
+    "mutationCalls": 0,
+    "twoFailedMembersExited": true,
+    "fourStartedRemainCharged": true,
+    "allFullRowsUnchanged": true,
+    "cleanup": {
+      "trackedClientsSettled": true,
+      "priorBackendPids": [
+        285,
+        286
+      ],
+      "priorBackendsAbsent": true,
+      "clusterRetained": true,
+      "externalStopRequired": true
+    }
+  },
+  "httpInitial": {
+    "pass": 2,
+    "fail": 2,
+    "components": "all9aliases auth/missing/[]/rawinputrejection and currentcachedRPC realservice_role withlease PASS; crossdayfixture rejected23503 missing prior-sessionFK before withdrawal. Original preserved."
+  },
+  "httpRecovery": {
+    "pass": 3,
+    "fail": 0,
+    "scope": "actual HTTP/real service_role PG with active synthetic release and real acquire/release lease RPC via controlled finite facade; backend identity_fence inactive, not formal HBA/Contabo/model/rights acceptance",
+    "stage": "resume-prior-session-fk",
+    "priorSyntheticSessionScope": "fixture only prior-session FK plus18priorwaiting members; not originalofficialcalendar/swap proof",
+    "trace": [
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "fee450d5544b09106fa359570f41e553a603e7bed70cb656d5e4d8c675612510",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "action": "claim",
+        "code": "P0001",
+        "message": "vnext_admission_invalid",
+        "rollbackSettled": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "c23d93358de99cb7b71484495311588ade48e038ea7eedd8c19637acf415f07e",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "72af9b66915890c83583653ff83e9266ba495d601f163e590d3744291e66e867",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "action": "claim",
+        "code": "P0001",
+        "message": "vnext_admission_invalid",
+        "rollbackSettled": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "52d22c91bd47cfbd4fc649a73ae133267f54df340e0c0629268d4beab818c871",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "active-release-read",
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "acquire_production_write_lease",
+        "requestHash": "02d34f48de7e7d616f8b6ad9a3773c6ab91f35969559b2a0e9fbb898d09f1b5b",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_source_withdrawal_v1",
+        "requestHash": "e23586c3c12bd42cb2d8ac085388fc17ecad00c74f4e68fe1b3e71f5a476ce1e",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "release_production_write_lease",
+        "requestHash": "2ead34f52eddf1bfbe85ed3326e6d59865b746400d2fc9b897b6306ae19375e3",
+        "commitObserved": true,
+        "actualServiceRole": true
+      },
+      {
+        "rpc": "vnext_source_withdrawal_v1",
+        "requestHash": "7fa1cc29523f839dad6ded1f2f398ae331e43e700891bd51083079fef9230456",
+        "commitObserved": true,
+        "actualServiceRole": true
+      }
+    ],
+    "pendingQueries": 0,
+    "appExit": 143,
+    "appPidPathAbsent": true,
+    "results": [
+      {
+        "withdrawalHash": "affcb3a578bc4a307e9ab6f0ad635b431ebcc5c698c6e328ccaeb4653d32f921",
+        "immutableRead": true,
+        "readAcquiredWriterLease": false
+      }
+    ]
+  },
+  "finalInvariants": {
+    "active": 20,
+    "started": 4,
+    "jobs": 4,
+    "providerInvocations": 8,
+    "publications": 2,
+    "qualified": 0,
+    "permanentWithdrawals": 1,
+    "leases": 0,
+    "scope": "synthetic prior18members explicitlyseeded only for globalcounttest; twoactualreviewerfailures notplannedauthor422; no formalmodel/financialrights"
+  },
+  "finalClients": {
+    "trackedClientsSettled": true,
+    "priorBackendPids": [
+      372,
+      373
+    ],
+    "priorBackendsAbsent": true,
+    "clusterRetained": true,
+    "externalStopRequired": true
+  },
+  "containerShutdown": {
+    "at": "2026-10-22T03:24:45.418500+00:00",
+    "container": "stockinsider-vnext-oct22-worker-09",
+    "stopExit": 0,
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-22T02:42:49.156987279Z",
+      "FinishedAt": "2026-10-22T03:24:45.297400341Z"
+    },
+    "priorContainerHostPid": 286206,
+    "priorPidPathAbsent": true,
+    "remainingPriorPidStatus": null,
+    "socketAbsent": true,
+    "serverShutdownObserved": true,
+    "dataAndContainerRetained": true,
+    "unknownHistoricalProcessStates": "old PID1 RSS0 zombies from other retained labs not killed or called absent",
+    "noOtherServiceStopped": true,
+    "freeBytes": {
+      "/workspace": 9444753408,
+      "/tmp": 17518419968
+    }
+  },
+  "partialContainerMemory": "DockerPG capped1GiB, separate from sampled ownsession; no instantaneous totalpeak claim"
+}

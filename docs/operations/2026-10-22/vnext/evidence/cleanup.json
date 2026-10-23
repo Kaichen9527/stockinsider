@@ -1,0 +1,132 @@
+{
+  "observedAtUtc": "2026-10-22T00:37:52.430430+00:00",
+  "records": [
+    {
+      "container": "stockinsider-vnext-oct22-db",
+      "id": "d0ed108ee501cd6b0d66d86cbe0f7c3b9ecb4a05f64dca8d52ea8e9e1d2d1911",
+      "image": "sha256:e4bdd2f9eeabc0f516e1fa42c4acea97ae571f20877982ac082921b205a52618",
+      "runningBefore": false,
+      "hardMemoryLimitBytes": 1073741824,
+      "dataRetained": true,
+      "removed": false,
+      "runningAfter": false,
+      "containerInitPidAfter": 0,
+      "containerExitCode": 0,
+      "finishedAt": "2026-10-21T23:09:30.080338988Z"
+    },
+    {
+      "container": "stockinsider-vnext-oct22-db02",
+      "id": "c3fdc856e1dfde53b1e3111ab796234d94ecf69fce448fa85b124fc733cf3940",
+      "image": "sha256:e4bdd2f9eeabc0f516e1fa42c4acea97ae571f20877982ac082921b205a52618",
+      "runningBefore": false,
+      "hardMemoryLimitBytes": 1073741824,
+      "dataRetained": true,
+      "removed": false,
+      "runningAfter": false,
+      "containerInitPidAfter": 0,
+      "containerExitCode": 0,
+      "finishedAt": "2026-10-22T00:34:59.024797942Z"
+    },
+    {
+      "container": "stockinsider-vnext-oct22-legacy-full",
+      "id": "f17bb592b3da27e0bf126264aa567127ce03a4f75c67f1161e89fa1b988fe3d3",
+      "image": "sha256:e4bdd2f9eeabc0f516e1fa42c4acea97ae571f20877982ac082921b205a52618",
+      "runningBefore": false,
+      "hardMemoryLimitBytes": 1073741824,
+      "dataRetained": true,
+      "removed": false,
+      "runningAfter": false,
+      "containerInitPidAfter": 0,
+      "containerExitCode": 0,
+      "finishedAt": "2026-10-22T00:35:00.45539553Z"
+    },
+    {
+      "container": "stockinsider-vnext-oct22-legacy-full-02",
+      "id": "cbb490959456d62e13f4fbfc0e8868e92fb275d5d7deb4602283925107dee7a8",
+      "image": "sha256:e4bdd2f9eeabc0f516e1fa42c4acea97ae571f20877982ac082921b205a52618",
+      "runningBefore": false,
+      "hardMemoryLimitBytes": 1073741824,
+      "dataRetained": true,
+      "removed": false,
+      "runningAfter": false,
+      "containerInitPidAfter": 0,
+      "containerExitCode": 0,
+      "finishedAt": "2026-10-22T00:35:00.996316348Z"
+    },
+    {
+      "container": "stockinsider-vnext-oct22-legacy-full-03",
+      "id": "1d6fa4cc736d2c43a05f59b1e288ce2c245dd31834160ca2b71737b0e828aa86",
+      "image": "sha256:e4bdd2f9eeabc0f516e1fa42c4acea97ae571f20877982ac082921b205a52618",
+      "runningBefore": false,
+      "hardMemoryLimitBytes": 1073741824,
+      "dataRetained": true,
+      "removed": false,
+      "runningAfter": false,
+      "containerInitPidAfter": 0,
+      "containerExitCode": 0,
+      "finishedAt": "2026-10-22T00:35:02.013405937Z"
+    },
+    {
+      "container": "stockinsider-vnext-oct22-legacy-full-04",
+      "id": "54ea5a02468012e65c238f4f96b99cb79df6e227134e3620948eac7ce115ded4",
+      "image": "sha256:e4bdd2f9eeabc0f516e1fa42c4acea97ae571f20877982ac082921b205a52618",
+      "runningBefore": false,
+      "hardMemoryLimitBytes": 1073741824,
+      "dataRetained": true,
+      "removed": false,
+      "runningAfter": false,
+      "containerInitPidAfter": 0,
+      "containerExitCode": 0,
+      "finishedAt": "2026-10-22T00:35:02.509965547Z"
+    },
+    {
+      "container": "stockinsider-vnext-oct22-final-db",
+      "id": "df56ce36b2510ec1dd9748952062bee9749988b310cf04d982a31b94f522a6b6",
+      "image": "sha256:e4bdd2f9eeabc0f516e1fa42c4acea97ae571f20877982ac082921b205a52618",
+      "runningBefore": true,
+      "hardMemoryLimitBytes": 1073741824,
+      "dataRetained": true,
+      "removed": false,
+      "clientCheckExit": 0,
+      "otherClientBackends": 0,
+      "cgroupMemoryPeakBytes": 46272512,
+      "stopExit": 0,
+      "shutdownLogFile": "stockinsider-vnext-oct22-final-db-shutdown-final.log",
+      "shutdownLogSha256": "cbabd8c293fc54d67f4a6f948bd975605eeb6a7c60d2622dd6dd7ecfd2003677",
+      "shutdownMessageObserved": true,
+      "runningAfter": false,
+      "containerInitPidAfter": 0,
+      "containerExitCode": 0,
+      "finishedAt": "2026-10-22T00:37:52.351183027Z"
+    }
+  ],
+  "paths": [
+    {
+      "parent": "/tmp/stockinsider-vnext-oct22-private/legacy-full-pg-socket",
+      "parentRetained": true,
+      "socketAbsent": true,
+      "socketLockAbsent": true
+    },
+    {
+      "parent": "/tmp/stockinsider-vnext-oct22-private/legacy-full-pg-socket-02",
+      "parentRetained": true,
+      "socketAbsent": true,
+      "socketLockAbsent": true
+    },
+    {
+      "parent": "/tmp/stockinsider-vnext-oct22-private/legacy-full-pg-socket-03",
+      "parentRetained": true,
+      "socketAbsent": true,
+      "socketLockAbsent": true
+    },
+    {
+      "parent": "/tmp/stockinsider-vnext-oct22-private/legacy-full-pg-socket-04",
+      "parentRetained": true,
+      "socketAbsent": true,
+      "socketLockAbsent": true
+    }
+  ],
+  "wholeSecureTreeAbsent": false,
+  "reason": "owned data/evidence/parents retained; no removal/cleanup of historical or shared data",
+  "outerNamespacePidAbsenceNotInferred": true
+}

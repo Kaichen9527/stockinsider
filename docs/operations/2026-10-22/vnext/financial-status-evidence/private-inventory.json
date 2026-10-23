@@ -1,0 +1,137 @@
+{
+  "scope": "explicit new-run artifacts only; hash inventory is not independent content review; PGdata/container retained and not traversed",
+  "count": 26,
+  "bytes": 2022943,
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/financial-status-text-source-01.log",
+      "bytes": 670,
+      "sha256": "ec1cfb369a6a6a147eb63f1102928d3aad0762276c3a71e1c2fc431dca37592b"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/financial-status-text-source-01.json",
+      "bytes": 756,
+      "sha256": "ac2e77206e5127026697e0c86b9c434119486e4d258ed144f0894d38c790c57c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/financial-status-root-extractor-initial-red-o23.json",
+      "bytes": 275,
+      "sha256": "884ffc16f835c0f3d82a9f2d481a74d726f1011f1663b9b749565bb50bd6f123"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/financial-status-root-source-check-o23.json",
+      "bytes": 352,
+      "sha256": "8817f2f324535bc83ab9657a12fe08c006cf1bcae542087bbbc582924888a6b4"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-harness-before-status-recovery-o23.mjs",
+      "bytes": 39137,
+      "sha256": "564090b8356ad0692f88ab4b8c61448c360098b6b4c618219528a5c921bf61ef"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/run-ir-status-recovery-o23.py",
+      "bytes": 3440,
+      "sha256": "56e62efeb0e379fa8f3dfc37acf300ff351101954c24d75c51dd7b082e21f052"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-status-recovery-monitored-o23.json",
+      "bytes": 2515,
+      "sha256": "9f1697171f9bb1a57501861e6e5ade8bbe4be78fc1ab0bc580b7300fdb9bae98"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-status-recovery-monitored-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-status-recovery-admission-o23.json",
+      "bytes": 450,
+      "sha256": "b52b52612d3028c9f5783b3243c38fe36ff4ed04d151690bea780a4658c3d82f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-status-recovery-o23.log",
+      "bytes": 2923,
+      "sha256": "109931f62fe38ce28194f5ad0e730f356f98d79e0f3bc60ab8f282f6b6b3fe5d"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-status-recovery-server-o23.log",
+      "bytes": 14123,
+      "sha256": "4564e497e8c1c43a865a732c99812795e664958db298d80adf969e9132dc6016"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-status-recovery-cleanup-o23.json",
+      "bytes": 1450,
+      "sha256": "abf734ccfed764594a4e9b22560b1b1e9be1a65ab47d9607108db2994f14442c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-status-recovery-source-seal-o23.json",
+      "bytes": 491275,
+      "sha256": "a8f31ee7f9125afdcd855d5df25ab2d1330ca7f2113329c6b6155f301d254d34"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/cleanup.json",
+      "bytes": 170,
+      "sha256": "5c2816930fbd79671e2b69f66e4cf5b178dd0caf6ea46becf829707ff0382e3a"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/final-state.json",
+      "bytes": 353510,
+      "sha256": "b8637ca706af165aaee3dce944e400b0c60aeb4f0a6b5b6a352053a18958ad19"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/query-events.json",
+      "bytes": 4001,
+      "sha256": "7d0aac2b2fda7cd278c806da773e3f509aa82325c8144489fb997f9bfd23f5c3"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/issuer-ir-events.json",
+      "bytes": 7986,
+      "sha256": "a46b2f2d1c3cb0414d69a0c7a10ddbc30b2892c64aee457c800498ee460a565b"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/issuer-ir-current-revocation.json",
+      "bytes": 12951,
+      "sha256": "665f063ee61dbd4673b64c67dd1d3a6ae4600354a7810330afb301947857c80c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/issuer-ir-publication.json",
+      "bytes": 12386,
+      "sha256": "59959f7236aa99fa6c3d43f399af9537f078bcbed4859c524c2737744bdca1f4"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/issuer-ir-synthetic-calendar.json",
+      "bytes": 817,
+      "sha256": "dd9fe598a7258d47c0b664684c8ff97ffaece82b96074a307b79dfe28012134a"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/issuer-ir-forgery-negatives.json",
+      "bytes": 85,
+      "sha256": "1e668eba1d24d834889638fa05542808445e78c0ab93b15801a90fec5cba6636"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/issuer-ir-financial-chain.json",
+      "bytes": 5601,
+      "sha256": "3f30f92c37a81d843e110aa493140417bf82ce9336c72b77c3b37a01152a2ed8"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/status-text-retained-prefix.json",
+      "bytes": 530,
+      "sha256": "1b66d51de26b77d4acc43f1f25ed6e57f946cc3d9ffa904ce078c92124f51a79"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/status-text-candidate-install.json",
+      "bytes": 1050324,
+      "sha256": "c77c0a8793045eeab8b0857368ed4206910d8a6196a695995b66ba32d3ad293d"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/issuer-ir-negative-before-fixture.json",
+      "bytes": 105,
+      "sha256": "3cc90881fcbfa2de3a9d43d102977d7ebfba563034ad4b354cad406f54a331cb"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ir-native-11-status-recovery-o23/issuer-ir-retained-install-audit.json",
+      "bytes": 17111,
+      "sha256": "027b43b6daddb3a20452d1bd999437da4574e4c0484a53077d27f1e2cd8ab822"
+    }
+  ]
+}

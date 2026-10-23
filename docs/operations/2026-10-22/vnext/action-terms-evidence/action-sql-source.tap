@@ -1,0 +1,18 @@
+TAP version 13
+# Subtest: complete four predecessor/successor bodies and inverse fragments are bound, originals untouched
+ok 1 - complete four predecessor/successor bodies and inverse fragments are bound, originals untouched
+# Subtest: all eight new bodies, original catalog codecs and strict private/public ACL profile are sealed
+ok 2 - all eight new bodies, original catalog codecs and strict private/public ACL profile are sealed
+# Subtest: current MOPS original, exact disclosed span parser and use permission are required, not price factors
+ok 3 - current MOPS original, exact disclosed span parser and use permission are required, not price factors
+# Subtest: fresh terms changes/withdrawal fence preparation, provider and publication through original source callgraph
+ok 4 - fresh terms changes/withdrawal fence preparation, provider and publication through original source callgraph
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 17.948303

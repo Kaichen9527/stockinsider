@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "vnext-disclosed-fiscal-source-profile-v1",
+  "migration": "migrations/20261023_vnext_disclosed_fiscal_forecast_v1.sql",
+  "migrationSha256": "74c0031ed29df2a999cb031eecfb39511f7b1a66328794f1886272fb9193aa4d",
+  "scope": "source-derived predecessor/successor only; actual grammar/permission/catalog/COMMIT NOT_RUN; OIDs never invented",
+  "nativeVerified": false,
+  "nativeOids": null,
+  "catalogQuerySha256": "4398383090e87441958cdf11f0802889e33b70839d25fc30374faf3e125b62cb",
+  "originalAuthorityFragment": {
+    "path": "migrations/20261023_vnext_corporate_action_terms_v1.sql",
+    "startMarker": "  SELECT * INTO revision",
+    "endMarker": "  parsed:=public.vnext_disclosed_action_terms_internal_v1",
+    "adaptation": "only action_ -> fiscal_",
+    "sourceHash": "934e3dcdbe9d69f181901639fa911a3b275ddadb41193b970b1647dc7ec00de3",
+    "adaptedHash": "2418169331c9c61e75af6e415108cef946f479afb1ef4d8be4e7038aec8d143d"
+  },
+  "modifiedRoutines": [
+    {
+      "name": "vnext_forecast_current_internal_v1",
+      "signature": "public.vnext_forecast_current_internal_v1(uuid,text,timestamptz)",
+      "predecessorBodySha256": "507f6e7ffb24af6cc6a4dbd34090b79065ae566fdb3831b9a0fa3e0588268016",
+      "predecessorBytes": 12715,
+      "successorBodySha256": "348d3ec4f6ae27d51ac9dae817a0d17f764600b93420b6e2c7a2b666b5c12982",
+      "successorBytes": 13117,
+      "fragments": [
+        [
+          "DECLARE symbol_value text;",
+          "DECLARE fiscal jsonb;symbol_value text;"
+        ],
+        [
+          " RETURN jsonb_build_object('schemaVersion','vnext-current-forecasts-v1'",
+          " fiscal:=public.vnext_fiscal_current_internal_v1(p_stock,p_symbol,p_cutoff);evidence:=evidence||(fiscal->'evidence');receipts:=receipts||(fiscal->'receipts');\n IF jsonb_array_length(evidence)>32 OR octet_length(convert_to(evidence::text,'UTF8'))>1048576 THEN RAISE EXCEPTION 'vnext_forecast_projection_bound';END IF;\n RETURN jsonb_build_object('schemaVersion','vnext-current-forecasts-v1'"
+        ],
+        [
+          "gaps||'[\"forecast_annual_and_four_quarter_share_basis_unavailable\"]'::jsonb",
+          "gaps||(CASE WHEN fiscal->'evidence'='[]'::jsonb THEN '[\"forecast_annual_and_four_quarter_share_basis_unavailable\"]'::jsonb ELSE fiscal->'gaps' END)"
+        ]
+      ]
+    },
+    {
+      "name": "vnext_forecast_evidence_current_internal_v1",
+      "signature": "public.vnext_forecast_evidence_current_internal_v1(jsonb,text)",
+      "predecessorBodySha256": "56ceca2c904e3e00c08f424ae52cd23bc0b08e5c5a6adb4af0de8e7d4c493d5b",
+      "predecessorBytes": 485,
+      "successorBodySha256": "6f0e87c3d53b11ffb8bbaf86498fde0e4d68b2487e247682f0b6ad82a13bb891",
+      "successorBytes": 964,
+      "fragments": [
+        [
+          "BEGIN\n",
+          "BEGIN\n IF left(item->>'id',16)='fiscal-forecast:' THEN\n  IF item->>'id' !~ '^fiscal-forecast:[a-f0-9-]{36}:[a-f0-9-]{36}:(eps|original)$' OR p_symbol !~ '^[0-9]{4}$' THEN RETURN false;END IF;\n  stock:=public.vnext_forecast_stock_id_internal_v1(p_symbol);IF stock IS NULL THEN RETURN false;END IF;projection:=public.vnext_forecast_current_internal_v1(stock,p_symbol,statement_timestamp());RETURN EXISTS(SELECT FROM jsonb_array_elements(projection->'evidence') e WHERE e=item);\n END IF;\n"
+        ]
+      ]
+    },
+    {
+      "name": "vnext_forecast_input_current_internal_v1",
+      "signature": "public.vnext_forecast_input_current_internal_v1(jsonb,text)",
+      "predecessorBodySha256": "73259367f3d9383e09d704bf226b0d4856cd04ea7362f44aae978a8770584f00",
+      "predecessorBytes": 1308,
+      "successorBodySha256": "e4a927b0cb21aaacef5939c5fdbe43cb018d01dd11b94bb49b80471677b45184",
+      "successorBytes": 1859,
+      "fragments": [
+        [
+          "DECLARE stock uuid; projection jsonb;",
+          "DECLARE stock uuid; current_projection jsonb;projection jsonb;"
+        ],
+        [
+          "WHERE left(e->>'id',9)='forecast:'",
+          "WHERE left(e->>'id',9)='forecast:' OR left(e->>'id',16)='fiscal-forecast:'"
+        ],
+        [
+          "WHERE left(value->>'id',9)='forecast:'",
+          "WHERE left(value->>'id',9)='forecast:' OR left(value->>'id',16)='fiscal-forecast:'"
+        ],
+        [
+          " RETURN frozen_items=projection->'evidence'",
+          " current_projection:=public.vnext_forecast_current_internal_v1(stock,p_symbol,statement_timestamp());\n IF EXISTS(SELECT FROM jsonb_array_elements((projection->'evidence')||(current_projection->'evidence')) e WHERE left(e->>'id',16)='fiscal-forecast:') THEN\n  IF projection->'evidence' IS DISTINCT FROM current_projection->'evidence' OR projection->'receipts' IS DISTINCT FROM current_projection->'receipts' THEN RETURN false;END IF;\n END IF;\n RETURN frozen_items=projection->'evidence'"
+        ]
+      ]
+    },
+    {
+      "name": "vnext_source_evidence_current_v1",
+      "signature": "public.vnext_source_evidence_current_v1(jsonb,text)",
+      "predecessorBodySha256": "571152fe153c72656f128c5c995a726cd994f8698080cf1f8cc7d179bcf0619d",
+      "predecessorBytes": 1201,
+      "successorBodySha256": "11b898c8f3cc0cbe3ddc84fba735c57276d2f662ac7491e7d241667cf1183a9d",
+      "successorBytes": 1340,
+      "fragments": [
+        [
+          "SELECT CASE WHEN left(item->>'id',7)='action:' THEN public.vnext_action_evidence_current_v1(item,p_symbol) ELSE (SELECT CASE WHEN left(item->>'id',9)='forecast:' THEN public.vnext_forecast_evidence_current_internal_v1(item,p_symbol) ELSE (\n SELECT EXISTS(SELECT FROM public.vnext_extractions_v1 receipt JOIN public.vnext_source_policies_v1 policy ON policy.source=receipt.source AND policy.scope=receipt.scope\n WHERE NOT EXISTS(SELECT FROM public.vnext_source_withdrawals_v1 withdrawal WHERE withdrawal.content_hash=receipt.content_hash) AND receipt.state='completed' AND receipt.scope IN('official_original','operator_claim') AND policy.enabled AND policy.valid_until>clock_timestamp() AND policy.rights_subject=receipt.rights_subject AND policy.license_basis=receipt.license_basis\n AND receipt.extraction->'evidence'=item AND receipt.content_hash=item->>'contentHash' AND EXISTS(SELECT FROM jsonb_array_elements(receipt.extraction->'clues') clue WHERE clue->>'symbol'=p_symbol)\n AND ((receipt.original->>'eventAt')::timestamptz>=clock_timestamp()-interval '30 days' OR (receipt.original->>'catalystUntil')::timestamptz BETWEEN clock_timestamp() AND clock_timestamp()+interval '3 months'))\n) END) END",
+          "SELECT CASE WHEN left(item->>'id',16)='fiscal-forecast:' THEN public.vnext_forecast_evidence_current_internal_v1(item,p_symbol) ELSE (SELECT CASE WHEN left(item->>'id',7)='action:' THEN public.vnext_action_evidence_current_v1(item,p_symbol) ELSE (SELECT CASE WHEN left(item->>'id',9)='forecast:' THEN public.vnext_forecast_evidence_current_internal_v1(item,p_symbol) ELSE (\n SELECT EXISTS(SELECT FROM public.vnext_extractions_v1 receipt JOIN public.vnext_source_policies_v1 policy ON policy.source=receipt.source AND policy.scope=receipt.scope\n WHERE NOT EXISTS(SELECT FROM public.vnext_source_withdrawals_v1 withdrawal WHERE withdrawal.content_hash=receipt.content_hash) AND receipt.state='completed' AND receipt.scope IN('official_original','operator_claim') AND policy.enabled AND policy.valid_until>clock_timestamp() AND policy.rights_subject=receipt.rights_subject AND policy.license_basis=receipt.license_basis\n AND receipt.extraction->'evidence'=item AND receipt.content_hash=item->>'contentHash' AND EXISTS(SELECT FROM jsonb_array_elements(receipt.extraction->'clues') clue WHERE clue->>'symbol'=p_symbol)\n AND ((receipt.original->>'eventAt')::timestamptz>=clock_timestamp()-interval '30 days' OR (receipt.original->>'catalystUntil')::timestamptz BETWEEN clock_timestamp() AND clock_timestamp()+interval '3 months'))\n) END) END) END"
+        ]
+      ]
+    }
+  ],
+  "newFunctions": [
+    {
+      "name": "vnext_disclosed_fiscal_internal_v1",
+      "signature": "public.vnext_disclosed_fiscal_internal_v1(text,date)",
+      "tag": "fiscal_parser",
+      "bodySha256": "060ba53f294859a26d17285a2aa7a827396a3053d448bfd22467e41f32d3049a",
+      "bytes": 6192,
+      "owner": "opportunity_v3_rpc_owner",
+      "private": true
+    },
+    {
+      "name": "vnext_fiscal_current_internal_v1",
+      "signature": "public.vnext_fiscal_current_internal_v1(uuid,text,timestamptz)",
+      "tag": "fiscal_reader",
+      "bodySha256": "5976285327c03255b8b23e8193d86ef1733a52a35442bd037ca6fdcf2f674764",
+      "bytes": 12632,
+      "owner": "opportunity_v3_rpc_owner",
+      "private": true
+    },
+    {
+      "name": "vnext_fiscal_preparation_guard_v1",
+      "signature": "public.vnext_fiscal_preparation_guard_v1()",
+      "tag": "fiscal_preparation",
+      "bodySha256": "2e39bf3ad33e964fe1f3d68336052f6402cdbbf4889e5952ef7fda9f79faa344",
+      "bytes": 718,
+      "owner": "stockinsider_vnext_owner",
+      "private": true
+    }
+  ],
+  "permissions": "no GRANT, new table/role/constraint/namespace or public RPC; only existing current forecast signatures compose two owner-private helpers plus invoker preparation fence on original table",
+  "upstream": "captured50/publication26/vnext existing forecast and action source candidates, source-only assembly; not an installed catalog profile"
+}

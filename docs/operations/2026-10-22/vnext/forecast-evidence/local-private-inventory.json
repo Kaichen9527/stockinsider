@@ -1,0 +1,412 @@
+{
+  "files": [
+    {
+      "path": "c892-job120357107796-once.json",
+      "bytes": 386,
+      "sha256": "56e164f319d694060b61f866a12e8efe3296a05e489f548af70459fe2fc99ccb"
+    },
+    {
+      "path": "c892-job120357107796-once.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "c892-job120357107796-once.stderr",
+      "bytes": 522,
+      "sha256": "ee767b80aa17368a2a694246df8387abdc77795fa7aabdcf149cfc420fa666e7"
+    },
+    {
+      "path": "forecast-current-input-seal-o23.json",
+      "bytes": 3467,
+      "sha256": "4e6a1ae95590bfc19933f9e0b490bad83c040d96ce44baebd685266550112538"
+    },
+    {
+      "path": "forecast-current-source-01.json",
+      "bytes": 875,
+      "sha256": "c64050821b8bd308505b98fcb6fc93e9fb96898207080ce4973d1370340d49b6"
+    },
+    {
+      "path": "forecast-current-source-01.log",
+      "bytes": 2191,
+      "sha256": "f8f0e37fbab502cc5f22d71ed3220dfa3a7492431c7152f80862d664607b6195"
+    },
+    {
+      "path": "forecast-current-source-02.json",
+      "bytes": 877,
+      "sha256": "36ec82209eb79d868314f409255bc87008e05bf8997ef0f25edacc542ab476d0"
+    },
+    {
+      "path": "forecast-current-source-02.log",
+      "bytes": 2447,
+      "sha256": "0f3ea7396d95d226fd341264efa942e0507f08224474400cb689aac2b4a8562d"
+    },
+    {
+      "path": "forecast-current-tree-seal-o23.json",
+      "bytes": 600054,
+      "sha256": "c89b5da3cd0fac16091f890b22234552423da2376d3f385e9d8b4e884cd1dd31"
+    },
+    {
+      "path": "forecast-current-types-01.json",
+      "bytes": 13718,
+      "sha256": "5e88bfb7ea5dcfdf9ff2c9ead35100c5a1b453b6d854cd8feeb561e4976ebbd4"
+    },
+    {
+      "path": "forecast-current-types-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "forecast-f5-hosted-witness-o23.json",
+      "bytes": 1130,
+      "sha256": "0cf5d5c6771de875e6a3ecfffd78c3830c0501056cbc99465e7f8f73552984f6"
+    },
+    {
+      "path": "forecast-failure-regression-04.json",
+      "bytes": 1817,
+      "sha256": "03739068fa4ac251a43654a8fd3a4d91f20f70a291ad45ca183642fadc43b960"
+    },
+    {
+      "path": "forecast-failure-regression-04.log",
+      "bytes": 2294,
+      "sha256": "0b2c2e8352de8472d8672ff110c1478c9a946513ac7ce7f7f6a2a0c3c84fe45d"
+    },
+    {
+      "path": "forecast-installer-profile-o23.py",
+      "bytes": 8603,
+      "sha256": "b314c693e4e6ce6bec5b074c591a67ebd3425c915c5251bd7373ffeb98da5fde"
+    },
+    {
+      "path": "forecast-lint-01.json",
+      "bytes": 2189,
+      "sha256": "21ebedc0d72b8eb9f817be89a4374dcc4f460ae239dacd46c3ee8e1e1d3f22bc"
+    },
+    {
+      "path": "forecast-lint-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "forecast-lint-02.json",
+      "bytes": 1678,
+      "sha256": "bf29286daa6658a865aff79ac727fdc9eb5a0365da2235e2250c12b23ed1f019"
+    },
+    {
+      "path": "forecast-lint-02.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "forecast-native31-red-o23.json",
+      "bytes": 826,
+      "sha256": "ac6c747ff8c93679120af3681a19019a0e629c99a44329b61dafd11edb9c604f"
+    },
+    {
+      "path": "forecast-native437-prerequisite-red-o23.json",
+      "bytes": 496,
+      "sha256": "9e81baf17d697f773e3e66805e42c1cb4d71c60cd3f6e1187322ae849e3406d0"
+    },
+    {
+      "path": "forecast-native965-red-o23.json",
+      "bytes": 654,
+      "sha256": "ec419c6f8fa22bef279fe3974431abcb6183bc5ad3058225f8c7f60841b55b77"
+    },
+    {
+      "path": "forecast-nativeb5-receipt-red-o23.json",
+      "bytes": 688,
+      "sha256": "7b64d2a098ec0362140cb13dedea2a51659f3541eaed9c52542ed836bee75b56"
+    },
+    {
+      "path": "forecast-nativec892-analysis-red-o23.json",
+      "bytes": 541,
+      "sha256": "1182b1b28373d52ee85ea23986c37b3f601fb7f9c8382d427921c6a1d64007da"
+    },
+    {
+      "path": "forecast-preparation-regression-01.json",
+      "bytes": 1264,
+      "sha256": "298876bf3e5f8df7a4e26ca7f9bc8ee09058d1dd5f8502be43a94a5a28ea8404"
+    },
+    {
+      "path": "forecast-preparation-regression-01.log",
+      "bytes": 9114,
+      "sha256": "b7359ea51d06ad670505736825ac7c9aaaa3be8fe223467783f2f6df84f7a575"
+    },
+    {
+      "path": "forecast-preparation-regression-02.json",
+      "bytes": 2204,
+      "sha256": "95b39cf3b8883fbf3495a8978c1921364b4d0b5bb2e0db17a4cb503966032d88"
+    },
+    {
+      "path": "forecast-preparation-regression-02.log",
+      "bytes": 4166,
+      "sha256": "669967cb58f7ed0174ba1d09eb87b42423de327ebde544286267a7c0684deae2"
+    },
+    {
+      "path": "forecast-receipt-serialization-initial-red.txt",
+      "bytes": 65,
+      "sha256": "309711870dded2d671603a9ef11597d7b1c6b742c004c5248ad56efbe4fa972b"
+    },
+    {
+      "path": "forecast-receipt-source-01.json",
+      "bytes": 801,
+      "sha256": "6a70d775ad1b31b2131612bc256f94959d9204d93804a61449a76cd2dbe8cdd1"
+    },
+    {
+      "path": "forecast-receipt-source-01.log",
+      "bytes": 89,
+      "sha256": "3c562ecde475adafc8fc8a81f736d283bf50ce4ec0f6e6e9ec834b29964e28b1"
+    },
+    {
+      "path": "forecast-regressions-03.json",
+      "bytes": 2538,
+      "sha256": "99b3d3084f459aa6d3f3b469f22c8ca01b5e585067a0e2df02e04c078e1dd61e"
+    },
+    {
+      "path": "forecast-regressions-03.log",
+      "bytes": 577,
+      "sha256": "41d784d3617e7ceae8e277b920cf63dc4007cf2de2cb1ce4d483926f6fa603cb"
+    },
+    {
+      "path": "forecast-source-02/docs/operations/2026-10-22/vnext/FORECAST-EVIDENCE-SOURCE.md",
+      "bytes": 6359,
+      "sha256": "a7d8067844e87b775d3c59f63aa93c6a1b118e053caffa041d01f1f5e8d709a7"
+    },
+    {
+      "path": "forecast-source-02/inventory.json",
+      "bytes": 521,
+      "sha256": "d3f24821a8bcd6ddd8b7cb37ba85c2ae88c424f3bbfca53554d88dd99e4da852"
+    },
+    {
+      "path": "forecast-source-02/web/src/lib/vnext/forecast-evidence.test.ts",
+      "bytes": 12076,
+      "sha256": "25544241c5162bb52ab06518526815240a53b3d3163ddc5fb82a288efafe19ba"
+    },
+    {
+      "path": "forecast-source-02/web/src/lib/vnext/forecast-evidence.ts",
+      "bytes": 15214,
+      "sha256": "b63b289cea3540d3551ee3db0c1ce5433701f61b693a409e1578b666b426012c"
+    },
+    {
+      "path": "forecast-source-02.json",
+      "bytes": 876,
+      "sha256": "f2f1fc72b8ea97c5bebdadcbc5593bca3640b68186348e78e7e8388588b7d709"
+    },
+    {
+      "path": "forecast-source-02.log",
+      "bytes": 3658,
+      "sha256": "9348bb15c51d4b29b12dee8bf03ac4f3e06d256d74170fb11832ae0e51b7376d"
+    },
+    {
+      "path": "forecast-source-draft-01/docs/operations/2026-10-22/vnext/FORECAST-EVIDENCE-SOURCE.md",
+      "bytes": 6222,
+      "sha256": "1199c860e7a02646da671710b3076eff890200bde050bc807015afa2c67a1515"
+    },
+    {
+      "path": "forecast-source-draft-01/inventory.json",
+      "bytes": 521,
+      "sha256": "a8138be716a50352fb5be2aed4c631dfc78082ba245606e12077d8296dc9e526"
+    },
+    {
+      "path": "forecast-source-draft-01/web/src/lib/vnext/forecast-evidence.test.ts",
+      "bytes": 11929,
+      "sha256": "7aefb174b88ace1c6adf99c5800cd2c7c340d65f583dc58d78d5dc584ece024b"
+    },
+    {
+      "path": "forecast-source-draft-01/web/src/lib/vnext/forecast-evidence.ts",
+      "bytes": 15270,
+      "sha256": "2472b569281a049c14eee47b84664c2a7bcad2b2689ec427e56fc61b314e5755"
+    },
+    {
+      "path": "forecast-source-initial-o23/forecast-before-roster-predecessor-correction.sql",
+      "bytes": 39429,
+      "sha256": "aeb2095442275315dab7b1bd69813b5ddf32f87f5104e6dc8de64d375a79a346"
+    },
+    {
+      "path": "forecast-source-initial-o23/forecast-profile-before-roster-predecessor-correction.json",
+      "bytes": 2753,
+      "sha256": "4cc8c96c75e44ee42e736e29aa5a2814f3beaccabf08fc6dc70615711cb873bd"
+    },
+    {
+      "path": "forecast-source-initial-o23/forecast31-stocks-acl-red.sql",
+      "bytes": 39504,
+      "sha256": "cafe05887a3073fb9db3463bc0c8a6fcb23133b13ab18b5d36a3a3c0a1633209"
+    },
+    {
+      "path": "forecast-source-initial-o23/forecast965-stocks-acl-red.sql",
+      "bytes": 39640,
+      "sha256": "1343f0090854297c218de066d00fb0af29d930f0fdbca86ef26aefa8a569c80f"
+    },
+    {
+      "path": "forecast-source-initial-o23/preparation-reconciliation.test.ts",
+      "bytes": 23583,
+      "sha256": "142bae388060f63d2d189ffebfa0acda55bfce459ac61b6e3c0441bffb66c70a"
+    },
+    {
+      "path": "forecast-source-initial-o23/preparation-reconciliation.ts",
+      "bytes": 15131,
+      "sha256": "a24af6e07a6216a18b48a6da23c2dc4e6f82351aa3ccc947e54d1dfa3789623b"
+    },
+    {
+      "path": "forecast-source-initial-o23/store.ts",
+      "bytes": 17708,
+      "sha256": "f91a43710ab68c5391bb971081464879e0205cf30ac1ba5f192e6f142ed0dada"
+    },
+    {
+      "path": "forecast-source-initial-o23/vnext-preparation-http-fixture.mjs",
+      "bytes": 39704,
+      "sha256": "bf5fa942ca22245576c02dff4ec9fce5c867c7dc1b174ff5eb3df0026344d66c"
+    },
+    {
+      "path": "forecast-source-initial-o23/worker-prompts.ts",
+      "bytes": 15044,
+      "sha256": "7b62c808ebcee10fbb268f7e2513376e74ce015e401fd106cf45d1bbac20ec70"
+    },
+    {
+      "path": "forecast-sql-source-01.json",
+      "bytes": 838,
+      "sha256": "1315df864260871cfff7e5dc2df9b2fa012956eafab22f29b65662679db9e612"
+    },
+    {
+      "path": "forecast-sql-source-01.log",
+      "bytes": 1284,
+      "sha256": "92f4f2305fcd102954f41dddff9ce3b9bdae6098745a4e7f570c6a3d8b4a461a"
+    },
+    {
+      "path": "forecast-sql-source-02.json",
+      "bytes": 838,
+      "sha256": "ed81318183689f9a87b21d3d254132836b781469497a1e1063a2cd97bee87cbd"
+    },
+    {
+      "path": "forecast-sql-source-02.log",
+      "bytes": 1285,
+      "sha256": "1441943dc56603eeb77d03052b2785d9539ca1fe847748362b101148d3dda6d4"
+    },
+    {
+      "path": "forecast-sql-source-03.json",
+      "bytes": 838,
+      "sha256": "9e65c08432e0791b37185baa347de201180f63e99f5b10ffdf733aed1070f162"
+    },
+    {
+      "path": "forecast-sql-source-03.log",
+      "bytes": 1285,
+      "sha256": "6f4c95f70223b2acdd4b2f11b5a746a830494a9cbe053862ad5f0d21453b5c4e"
+    },
+    {
+      "path": "forecast-sql-source-04.json",
+      "bytes": 838,
+      "sha256": "a91ae63cd31d446cc8f5c525a946e7bd18ebac2d500102362dcc2a5bbd2b1a7c"
+    },
+    {
+      "path": "forecast-sql-source-04.log",
+      "bytes": 1285,
+      "sha256": "8433e2eeb344a2c12e1d6073ab0c44e4c8645b4d03f94d6d23a006a6bb71c41e"
+    },
+    {
+      "path": "forecast-sql-source-05.json",
+      "bytes": 840,
+      "sha256": "8f8cecfeb7923ee702a475a55a4cf4f70b79a180b0fee774ef32707a32d44e72"
+    },
+    {
+      "path": "forecast-sql-source-05.log",
+      "bytes": 1552,
+      "sha256": "cb07b8d69c5062dc9d705ce96a6fd1cffb3f86403f4057ccacee5677eaab28e1"
+    },
+    {
+      "path": "forecast-sql-source-06.json",
+      "bytes": 838,
+      "sha256": "b187e8ab23e2395cc80d7434dd6ae313c74e8e214a14526e9d7f4c84e6ab2be1"
+    },
+    {
+      "path": "forecast-sql-source-06.log",
+      "bytes": 1551,
+      "sha256": "29e1d098ff71acd460e54c82bd27ed22400f471578fdaa03f9e7da2b60ea08f4"
+    },
+    {
+      "path": "forecast-syntax-01.json",
+      "bytes": 856,
+      "sha256": "554977111c2081a028d8ffd830a266ab371ec5eb9dcf6f84d25b7df71686b0c1"
+    },
+    {
+      "path": "forecast-syntax-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "forecast-types-02.json",
+      "bytes": 11281,
+      "sha256": "02a8d30972275545d74cc1a6865dc9784fc8baa3244d538c268a1fa7ef19bb61"
+    },
+    {
+      "path": "forecast-types-02.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "forecast84-api-o23/head-runs.json",
+      "bytes": 105373,
+      "sha256": "b3f18befcf187420a8a79fd9d00a14f1833a888f36531236bd9c9a698e42f656"
+    },
+    {
+      "path": "forecast84-api-o23/independent-runtime-jobs.json",
+      "bytes": 6892,
+      "sha256": "67f0a7c2a4ce9ac34ef781a6b98b0174defb402a21e674b2eb7dfd921796aa40"
+    },
+    {
+      "path": "forecast84-api-o23/ordinary-annotations.json",
+      "bytes": 16594,
+      "sha256": "fbb8a9eca34fcb9976ee888fa00e3871975a25f3a2c2d7af3850f7a298159f91"
+    },
+    {
+      "path": "forecast84-api-o23/ordinary-jobs.json",
+      "bytes": 15267,
+      "sha256": "9982fbb11b4d7eca75e7b3e9877b53883b2f42336060b528a284737123859272"
+    },
+    {
+      "path": "forecast84-api-o23/protected-jobs.json",
+      "bytes": 13920,
+      "sha256": "51264706a633fb5e9325621c5b6d2f68aeb3984ca6fe8a941716e398ce12aff3"
+    },
+    {
+      "path": "forecast84-api-o23/runtime-commit.json",
+      "bytes": 2651,
+      "sha256": "dde01943e68ec5a68ca87bdfaf0f7a55162773143120be939a9fa26ba573ef0e"
+    },
+    {
+      "path": "forecast84-evidence-initial-wip/hosted-observations.json",
+      "bytes": 20457,
+      "sha256": "6cc491773593600d18974a2f602f6edcdc3068877c59d9fc79afc3721890fe2d"
+    },
+    {
+      "path": "forecast84-evidence-initial-wip/local-private-inventory.json",
+      "bytes": 12812,
+      "sha256": "9d256fa86c2f6db6abb0cbb32a723ffeffb55c905ba168af474fbc98dadc6ca9"
+    },
+    {
+      "path": "forecast84-evidence-initial-wip/manifest.json",
+      "bytes": 1186,
+      "sha256": "b4eb13d228e8b50ac481961f2994672e7400402527f1982d285c5006f5541708"
+    },
+    {
+      "path": "forecast84-evidence-initial-wip/receipt.json",
+      "bytes": 3509,
+      "sha256": "df68cab4d615d6ebca87ee99fd01b15162bae6c2199e6c81f677b00ad0ade7e3"
+    },
+    {
+      "path": "forecast84-evidence-initial-wip/retained-reds.json",
+      "bytes": 4951,
+      "sha256": "40a2ce15c1834cc7a460501bf75243927d16586ac979f586baf225f2bde6513d"
+    },
+    {
+      "path": "forecast84-evidence-initial-wip/source-seal.json",
+      "bytes": 4817,
+      "sha256": "8d1963e64a605292cda99ebade2d550c8c19e6e83676d5c58494400422d24725"
+    },
+    {
+      "path": "forecast84-evidence-initial-wip/vm-checks.json",
+      "bytes": 8179,
+      "sha256": "9e06e79b224522e26152da6d55b46e227b24d8daddec71c33b1ab7ff2dd56f3a"
+    }
+  ],
+  "count": 81,
+  "bytes": 1213430,
+  "scope": "hash-only current local command/preimage/metadata/initial report WIP; contents not published; derived mutable forecast84-public-receipt-reference.json excluded to avoid self-reference; signed-download stderr contents never published"
+}

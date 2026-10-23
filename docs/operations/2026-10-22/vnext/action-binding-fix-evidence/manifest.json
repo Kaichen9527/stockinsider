@@ -1,0 +1,27 @@
+[
+  {
+    "path": "hosted-e1-observed.json",
+    "bytes": 21287,
+    "sha256": "9469fe328f861d9d70b74bcdfad1f29735c378fe0412ad5b87a61547ccb6c067"
+  },
+  {
+    "path": "private-inventory.json",
+    "bytes": 4692,
+    "sha256": "c0547b625bc84f38ed929a31b84f3f1916525c8d6f13d26eb23a2b0e72d43e5d"
+  },
+  {
+    "path": "source-seal.json",
+    "bytes": 2527,
+    "sha256": "730fde2eeac118070bbb275c8617076231cc01de2c1268f2d495faefe4d85886"
+  },
+  {
+    "path": "vm-checks.json",
+    "bytes": 8001,
+    "sha256": "6ee85f8634fc2eac86fd9b18f3bf3887e6a111063945a332a40963b25ae95de9"
+  },
+  {
+    "path": "workflow-move-parity.json",
+    "bytes": 603,
+    "sha256": "306f76164dca4b62b0420884025dc59659438e79566177aad11f51a1c6700855"
+  }
+]

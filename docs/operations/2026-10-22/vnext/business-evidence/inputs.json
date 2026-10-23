@@ -1,0 +1,61 @@
+{
+  "source": "654346f38f1350000c9554e4aeeee2ab97fc80ca",
+  "paths": [
+    {
+      "path": "web/src/lib/vnext/public-contract.ts",
+      "bytes": 10569,
+      "sha256": "bc99caddab2455da2a9732f6c88a5d5b5eada0163bc46a2afbb2f889628422d9"
+    },
+    {
+      "path": "web/src/lib/vnext/business-public.test.ts",
+      "bytes": 6536,
+      "sha256": "98ac8504aef27dbc8e19f4b390542b7f81346472bd8b51279059e0985a578c20"
+    },
+    {
+      "path": "scripts/vnext-business-criteria-postgres.test.mjs",
+      "bytes": 24137,
+      "sha256": "a992257c773344f9aba3181db8d7247862c670ed8d228c07afa4771dfb59c7ca"
+    },
+    {
+      "path": "scripts/vnext-business-criteria-resource-run.py",
+      "bytes": 6867,
+      "sha256": "59f6fa73ba311015a077374a0200239aea0efeede4db7603de2f1f83238c7785"
+    },
+    {
+      "path": "web/src/lib/vnext/business-criteria.ts",
+      "bytes": 9102,
+      "sha256": "af9e5d716ed0bbb1a1c3be65d4d1686bcbb29a87f33f472fd6d7dfd594f8779b"
+    },
+    {
+      "path": "migrations/20261023_vnext_business_criteria_v1.sql",
+      "bytes": 35292,
+      "sha256": "5385809932404223e2c2a7652c4a6e5fb2f3d8b88f68c9db1edb9a2719093c8b"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-business-criteria-profile-v1.json",
+      "bytes": 6044,
+      "sha256": "fbedcbbef6045eb5e6dcb20228aac5321019cca98a4cbcd6e5286b5eaafbb061"
+    },
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 100398,
+      "sha256": "69b8220a7fd1cea1c53a1d4905105f0e722e4e023772b1abc1996e3d41f1d526"
+    },
+    {
+      "path": "web/e2e/vnext-business.spec.ts",
+      "bytes": 3902,
+      "sha256": "bbd661cf677e3e09998e766f7dc00832085c8aef7b2e8c0059771d4d3c52031e"
+    },
+    {
+      "path": "scripts/run-vnext-browser-acceptance.py",
+      "bytes": 10511,
+      "sha256": "21f8f48c90215fa67fbb54eb12a3c63e1bae36a896dba7c391ef6330894bd17f"
+    },
+    {
+      "path": "web/playwright.vnext.config.ts",
+      "bytes": 939,
+      "sha256": "ef4ac71d69deb5961ae1be775e9023dd0f27e09ad0a6fc7fa6e3764413f0945e"
+    }
+  ],
+  "scope": "changed business/native/browser runtime inputs, not whole Next closure"
+}

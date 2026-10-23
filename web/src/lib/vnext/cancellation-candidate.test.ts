@@ -1,0 +1,28 @@
+/** Static source integrity only: does not execute SQL or establish PG rights. */
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {createHash} from 'node:crypto';
+import {CANCELLATION_WORKER_PROFILE} from './worker-prompts.ts';
+const H=(v:string|Buffer)=>createHash('sha256').update(v).digest('hex');
+const read=(p:string)=>fs.readFileSync(p,'utf8');
+const p=JSON.parse(read('scripts/opportunity-v3/vnext-catalyst-cancellation-profile-v1.json')),sql=read(p.migration);
+test('source candidate exact identity, private function terminators and unmodified prerequisite hashes',()=>{
+ assert.equal(H(sql),p.migrationSha256);assert.equal(p.nativeVerified,false);assert.equal(p.nativeOid,null);assert.equal(p.nativeCatalog,null);assert.equal(p.routines.length,2);assert.equal(p.newPrivateRoutines.length,3);
+ const old=JSON.parse(read('scripts/opportunity-v3/vnext-roster-current-profile-v1.json'));
+ for(const pin of p.routines){const prior=old.routines.find((r:{signature:string})=>r.signature===pin.signature);assert.equal(pin.predecessorBodySha256,prior.successorBodySha256);assert.equal(pin.predecessorBytes,prior.successorBytes);}
+ const bodies=[...sql.matchAll(/AS \$function\$([\s\S]*?)\$function\$/gu)].map(m=>m[1]);assert.equal(bodies.length,3);for(const pin of p.newPrivateRoutines){const b=bodies.find(b=>H(b)===pin.bodySha256);assert.ok(b);assert.equal(Buffer.byteLength(b),pin.bytes);assert.match(b,/END;\n$/u);assert.deepEqual(pin.executeGrantees,['stockinsider_vnext_owner']);}
+ assert.equal(p.promptHashes.AUTHOR,H(CANCELLATION_WORKER_PROFILE.author));assert.equal(p.promptHashes.REVIEWER,H(CANCELLATION_WORKER_PROFILE.reviewer));
+});
+test('only two inherited bodies are replaced; actual metadata/namespace/OID/ACL guard remains mandatory',()=>{
+ assert.equal((sql.match(/EXECUTE replace\(definition,original,changed\)/gu)||[]).length,2);assert.match(sql,/before_namespace IS DISTINCT FROM after_namespace/u);assert.match(sql,/to_regprocedure\('public.vnext_command_v1\(text,text,jsonb\)'\)::oid IS DISTINCT FROM target/u);assert.match(sql,/to_jsonb\(p\)-'prosrc'/u);
+ const grants=sql.split('\n').filter(l=>/^\s*(?:GRANT|REVOKE|ALTER FUNCTION .* OWNER)/u.test(l));assert.equal(grants.length,6);assert.ok(grants.every(l=>/vnext_(?:cancellation_(?:original|context_current)|catalyst_cancellation_current)_v1/u.test(l)));assert.ok(grants.every(l=>!/^\s*GRANT/u.test(l)));assert.doesNotMatch(sql,/CREATE TABLE|CREATE ROLE|ALTER ROLE|GRANT EXECUTE/u);
+ assert.match(sql,/pg_advisory_xact_lock\(64221022\)/u);assert.match(sql,/READ COMMITTED/u);assert.match(sql,/statement_timeout='30s'/u);assert.match(sql,/lock_timeout='2s'/u);
+});
+test('source proof needs two current original sources and independent completed frozen journals, not numeric/negative checklist flags',()=>{
+ const proof=sql.match(/CREATE FUNCTION public\.vnext_catalyst_cancellation_current_v1[\s\S]*?AS \$function\$([\s\S]*?)\$function\$/u)![1];
+ for(const s of ["claim ? 'numeric'","claim ? 'semantic'","supported_explicit_report","vnext_cancellation_original_v1(planned","vnext_cancellation_original_v1(cancelled","a.normalized_output IS DISTINCT FROM job.author_result","r.normalized_output IS DISTINCT FROM job.reviewer_result","a.principal IS DISTINCT FROM job.author_principal","r.principal IS DISTINCT FROM job.reviewer_principal","job.author_principal=job.reviewer_principal","a.provider_response_id=r.provider_response_id","cancellationContext',context","annotation->>'baselineRevisionId' IS DISTINCT FROM context","cancelled->'value'->>'publishedAt'"])assert.ok(proof.includes(s),s);
+ assert.equal((proof.match(/'cancellation'/gu)||[]).length>0,true);assert.doesNotMatch(proof,/approved\s*:=\s*true|LIKE\s*'%取消%'/u);
+ const original=sql.match(/CREATE FUNCTION public\.vnext_cancellation_original_v1[\s\S]*?AS \$function\$([\s\S]*?)\$function\$/u)![1];assert.match(original,/public.vnext_source_evidence_current_v1\(item,p_symbol\) IS DISTINCT FROM true/u);assert.match(original,/receipt.original->'symbols' \? p_symbol/u);assert.match(original,/substring\(statement FROM start_cp\+1 FOR end_cp-start_cp\)/u);
+});
+test('review performs same-principal guarded publication and proof precedes exit; ordinary prompt versions and unknown proof cannot fall back',()=>{
+ const core=p.routines.find((x:{signature:string})=>x.signature==='public.vnext_command_v1(text,text,jsonb)');const delta=core.fragments.map((x:string[])=>x[1]).join('\n');assert.match(delta,/answer:=answer\|\|public.vnext_command_v1\(p_principal,'publish'/u);assert.match(delta,/cancellation_proof:=public.vnext_catalyst_cancellation_current_v1/u);assert.match(delta,/qualified',false/u);assert.match(delta,/state='exited',exit_reason='catalyst_cancelled'/u);assert.match(delta,/r->'evidence' IS DISTINCT FROM jsonb_build_array\(cancellation_proof->>'proofHash'\)/u);
+ const provider=p.routines.find((x:{signature:string})=>x.signature.includes('provider'));assert.equal(provider.fragments.length,2);assert.match(provider.fragments[0][1],/vnext_cancellation_reserve_fields/u);assert.match(provider.fragments[0][1],/vnext_cancellation_profile_binding/u);assert.match(provider.fragments[1][1],/IF binding.prompt_version='vnext-research-worker-v4' THEN/u);assert.match(provider.fragments[1][1],/author_call.state='completed'/u);assert.match(provider.fragments[1][1],/vnext_cancellation_frozen_baseline_changed/u);assert.equal(p.promptConstraint.predecessorDefinition.includes('vnext-research-worker-v4'),false);assert.equal(p.promptConstraint.successorDefinition.includes('vnext-research-worker-v4'),true);
+});

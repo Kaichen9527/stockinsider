@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "vnext-semantic-score-fence-source-profile-v1",
+  "scope": "Additive source candidate only; no native/production install claim",
+  "migration": "migrations/20261022_vnext_semantic_score_fence_v1.sql",
+  "migrationSha256": "548c4df2b9003b1d857a004baadc0b08d27d8d3f90d03ae6ef3d2f4a15d7820b",
+  "source": {
+    "path": "migrations/20261022_vnext_thesis_audit_v1.sql",
+    "sha256": "ca57c6da05359e25c1bb238bfc47128ea06a7dedb9e01f9c2668f85e196536a4"
+  },
+  "referenceCatalogSnapshot": {
+    "path": "migrations/20261022_vnext_financial_status_text_v1.sql",
+    "sha256": "b1fc0a4650a0d39f5f8f8e07bdb7e83eeaa3816561bc575a6ff74b8f38f53460",
+    "onlyDelta": "Exclude exactly target two prosrc via oid[] ANY; all other snapshot fields unchanged"
+  },
+  "nativeVerified": false,
+  "nativeOids": null,
+  "observedCatalogMetadata": null,
+  "routines": [
+    {
+      "argumentName": "input",
+      "volatility": "i",
+      "securityDefiner": false,
+      "old": "  ELSE\n   required:=",
+      "new": "  ELSIF factor='technicalChips' THEN\n   required:=",
+      "signature": "public.vnext_deep_score_v1(jsonb)",
+      "predecessorBodySha256": "9c03345b2b4588c8361baa23dc605898dbb57f2441ef7987e18044aba3dfef62",
+      "successorBodySha256": "12b3cf00b3558c1e80008c7ba905e6482e7c9ef4fc7f5f50df71fd644a27044c",
+      "predecessorBytes": 3266,
+      "successorBytes": 3296,
+      "owner": "stockinsider_vnext_owner",
+      "language": "plpgsql",
+      "searchPath": [
+        "pg_catalog",
+        "public"
+      ],
+      "effectiveAcl": [
+        {
+          "grantee": "stockinsider_vnext_owner",
+          "grantor": "stockinsider_vnext_owner",
+          "privilege": "EXECUTE",
+          "grantable": false
+        }
+      ],
+      "inverseParity": true
+    },
+    {
+      "argumentName": "document",
+      "volatility": "s",
+      "securityDefiner": true,
+      "old": "'deepScore',CASE WHEN current_sources THEN latest_report->'deepScore' ELSE NULL END",
+      "new": "'deepScore',CASE WHEN current_sources AND latest_report IS NOT NULL AND jsonb_typeof(latest_report->'deepInputs')='object' THEN public.vnext_deep_score_v1(latest_report->'deepInputs') ELSE NULL END",
+      "signature": "public.vnext_thesis_project_v1(jsonb)",
+      "predecessorBodySha256": "1db7fcabaa3fe6d01e4c7074f7a0d4c8a46fd3d062ef2651f662c3c2655fc248",
+      "successorBodySha256": "20d07606f16769c3db8db6ec9a3cc2838f9a1009829d8194ada9f7e20adeb5eb",
+      "predecessorBytes": 3086,
+      "successorBytes": 3200,
+      "owner": "stockinsider_vnext_owner",
+      "language": "plpgsql",
+      "searchPath": [
+        "pg_catalog",
+        "public"
+      ],
+      "effectiveAcl": [
+        {
+          "grantee": "stockinsider_vnext_owner",
+          "grantor": "stockinsider_vnext_owner",
+          "privilege": "EXECUTE",
+          "grantable": false
+        }
+      ],
+      "inverseParity": true
+    }
+  ],
+  "preserves": [
+    "All original migration bytes",
+    "Original target OIDs and full non-body metadata",
+    "All source rights, source policies and withdrawal predicates",
+    "Original 30/25/20/15/10 weights and valuation/technical formulas",
+    "All existing routines except exactly two prosrc",
+    "All existing role/ACL/member/default/relation/policy/trigger/index/constraint metadata",
+    "All immutable audit/publication/business rows",
+    "Current public sorting after recomputation"
+  ],
+  "unimplemented": "No positive semantic criterion producer; unsupported groups remain null; raw history is retained"
+}

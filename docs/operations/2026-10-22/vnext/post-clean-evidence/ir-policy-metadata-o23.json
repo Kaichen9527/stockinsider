@@ -1,0 +1,44 @@
+{
+  "actualCapturedStdout": {
+    "policies": [
+      {
+        "relation": "candidate_financial_document_fact_links_v8",
+        "polcmd": "r",
+        "polroles": [
+          "16389"
+        ],
+        "predicate": "true",
+        "polwithcheck": null
+      },
+      {
+        "relation": "candidate_financial_parser_evidence_v8",
+        "polcmd": "r",
+        "polroles": [
+          "16389"
+        ],
+        "predicate": "true",
+        "polwithcheck": null
+      },
+      {
+        "relation": "candidate_issuer_ir_document_queue_v4",
+        "polcmd": "r",
+        "polroles": [
+          "16389"
+        ],
+        "predicate": "true",
+        "polwithcheck": null
+      }
+    ],
+    "role": {
+      "oid": 16389,
+      "json_oid": "16389"
+    },
+    "types": {
+      "oid": "number",
+      "jsonOid": "string",
+      "policyOid": "string"
+    },
+    "actualSqlExactRole": true
+  },
+  "toolingNote": "Diagnostic initially wrote same .json path as recorder; recorder replaced that derived JSON, actual immutable stdout remained and is extracted here without new DB query"
+}

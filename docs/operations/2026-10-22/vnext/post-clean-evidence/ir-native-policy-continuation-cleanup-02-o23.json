@@ -1,0 +1,75 @@
+{
+  "at": "2026-10-23T00:14:15.899667+00:00",
+  "steps": [
+    {
+      "args": [
+        "inspect",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "start",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "exec",
+        "stockinsider-vnext-oct22-worker-11",
+        "pg_isready",
+        "-U",
+        "postgres",
+        "-d",
+        "vnext_worker"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "stop",
+        "--time",
+        "30",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "inspect",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "logs",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 0
+    }
+  ],
+  "nativeExit": 1,
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-23T00:14:14.297350954Z",
+    "FinishedAt": "2026-10-23T00:14:15.814604438Z"
+  },
+  "serverShutdownObserved": true,
+  "containerDataAndVolumesRetained": true,
+  "free": {
+    "/workspace": 8895401984,
+    "/tmp": 17333608448
+  },
+  "scope": "continued retained installed lab; no fresh install proof/no container cleanup"
+}

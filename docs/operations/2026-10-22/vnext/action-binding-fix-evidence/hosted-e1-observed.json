@@ -1,0 +1,623 @@
+{
+  "source": "e1eec0c5034cb6af41f77b70dce101c84d4551fb",
+  "runtime": {
+    "parents": [
+      "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "e1eec0c5034cb6af41f77b70dce101c84d4551fb"
+    ],
+    "sha": "21c849778d0822cc2a9a1707f89b7ff6b28f4749",
+    "tree": "d4e3ed22cea6d6e8e6c0b700a0de6eb893df3e25"
+  },
+  "wholeTreeParity": true,
+  "run": 39978884106,
+  "job": 120500616772,
+  "overall": "FAIL",
+  "finiteActualAnnotations": [
+    {
+      "title": "Browser finite binary and case receipt",
+      "value": {
+        "suite": "business",
+        "exit": 0,
+        "stats": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 7319.893
+        },
+        "cases": [
+          {
+            "title": "current source-bound business inference is visible without score approval and disappears on committed source withdrawal",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "current source-bound business inference is visible without score approval and disappears on committed source withdrawal",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          }
+        ],
+        "screenshots": 8,
+        "screenshotBytes": 7002023,
+        "browserVersion": "Google Chrome 155.0.8059.39",
+        "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+        "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+        "sourceCommit": "21c849778d0822cc2a9a1707f89b7ff6b28f4749",
+        "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+        "resourceViolation": null,
+        "sampledTreePeakRssBytes": 2407047168,
+        "containmentUsed": false,
+        "publicAcceptanceSha256": "4bc19ecad052a1e946564dfa1431b81cfa75bb61636ecbb2086376cdb1655ee8"
+      }
+    },
+    {
+      "title": "Browser finite binary and case receipt",
+      "value": {
+        "suite": "current",
+        "exit": 0,
+        "stats": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 6308.402
+        },
+        "cases": [
+          {
+            "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          }
+        ],
+        "screenshots": 6,
+        "screenshotBytes": 6774399,
+        "browserVersion": "Google Chrome 155.0.8059.39",
+        "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+        "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+        "sourceCommit": "21c849778d0822cc2a9a1707f89b7ff6b28f4749",
+        "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+        "resourceViolation": null,
+        "sampledTreePeakRssBytes": 2257567744,
+        "containmentUsed": false,
+        "publicAcceptanceSha256": "866f661129a7c55ba890d112fecaa676adc5f4b5d824777872939b41f66ae250"
+      }
+    },
+    {
+      "title": "Browser finite binary and case receipt",
+      "value": {
+        "suite": "ui",
+        "exit": 0,
+        "stats": {
+          "expected": 12,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 16314.451000000001
+        },
+        "cases": [
+          {
+            "title": "same published contract drives exactly two primary blocks and detail/history",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "empty and unavailable states never fill from legacy cards",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "unknown revision cannot fall back to a different research version",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "loading remains an explicit two-block state and preserves source links",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "same published contract drives exactly two primary blocks and detail/history",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "empty and unavailable states never fill from legacy cards",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "unknown revision cannot fall back to a different research version",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "loading remains an explicit two-block state and preserves source links",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          }
+        ],
+        "screenshots": 12,
+        "screenshotBytes": 4103611,
+        "browserVersion": "Google Chrome 155.0.8059.39",
+        "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+        "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+        "sourceCommit": "21c849778d0822cc2a9a1707f89b7ff6b28f4749",
+        "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+        "resourceViolation": null,
+        "sampledTreePeakRssBytes": 2017681408,
+        "containmentUsed": false,
+        "publicAcceptanceSha256": "b6d2108a6ef6437e932e0f9506d55a29739a0e39efc35faafb257d3781b1b4b8"
+      }
+    },
+    {
+      "title": "Business criteria private inventory",
+      "value": {
+        "count": 29,
+        "bytes": 28482307,
+        "inventorySha256": "ad263a169df4386ed17044b4b29f7ac3072b859d6470a6a3cf7efa9b43be4ce6",
+        "rawContentsPublished": false
+      }
+    },
+    {
+      "title": "Business criteria cleanup receipt",
+      "value": {
+        "pgRunning": false,
+        "pgPid": 0,
+        "pgExit": 0,
+        "shutdownLogObserved": true,
+        "socketAbsence": {
+          ".s.PGSQL.5432": true,
+          ".s.PGSQL.5432.lock": true
+        },
+        "resourceReceiptObserved": true,
+        "ownedProcessCounts": {
+          "absent": 20,
+          "zeroRssZombie": 0,
+          "pidReused": 0,
+          "unsettled": 0
+        },
+        "fullPrivateCleanupSha256": "ca570bb4b047fc0fa755f26f96ff6d95837e3000986e39ebcddf3fc21603ac12",
+        "dataRetained": true
+      }
+    },
+    {
+      "title": "Business criteria finite native receipt",
+      "value": {
+        "scope": "actual original-bound business inference/current context/audit/public projection/withdrawal; synthetic facts/provider only; no group points, bounded-risk or semantic approval",
+        "sourceHead": "21c849778d0822cc2a9a1707f89b7ff6b28f4749",
+        "tapSha256": "7f494d6122f9bd38221331bd9d66bbfd4a827233a3f3971e5de200909ab19738",
+        "actualTapCounts": {
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "resourceObserved": true,
+        "queryEventsPrivateSha256": "8e90fa2d564283f0cc83e33908be1de83463c9d592860676e6a734afa23e14cb",
+        "exit": 0,
+        "resourceViolation": null,
+        "sampledNotInstantaneous": true,
+        "sampledOwnedTreePeakRssBytes": 822218752,
+        "initialFree": {
+          "/home/runner/work/stockinsider/stockinsider": 88487198720,
+          "/tmp": 88487198720
+        },
+        "finalFree": {
+          "/home/runner/work/stockinsider/stockinsider": 88416768000,
+          "/tmp": 88416768000
+        },
+        "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+        "actualPg": {
+          "containerId": "df7e4fb45a34bf4a8d6481458e35d1c5c8633b15accb1cd70d8e2a94f437a999",
+          "pid": 17848,
+          "start": "49565",
+          "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+          "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+          "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+        },
+        "inputCount": 17,
+        "inputInventorySha256": "92c7fa2a7c04048fe88cb4d157c435c349b647ee03a3f566c3136c05338b5480",
+        "inputInventoryCodec": "utf8_sorted_keys_compact_json_v1"
+      }
+    },
+    {
+      "title": "Forecast private inventory",
+      "value": {
+        "count": 46,
+        "bytes": 162141674,
+        "inventorySha256": "e72c0ae04979b75c87b6c3b77c82f93a4046b709394bd95571e6bd7ca6c343d2",
+        "rawContentsPublished": false
+      }
+    },
+    {
+      "title": "Preparation actual cleanup receipt",
+      "value": {
+        "pgRunning": false,
+        "pgPid": 0,
+        "pgExit": 0,
+        "shutdownObserved": true,
+        "serverLogSha256": "05b0f8325dbec31386280b4b1d3f2f7674af064f50f83a3b915ddf06829a0046",
+        "ownedProcessObservations": [
+          {
+            "pid": 17405,
+            "absent": true
+          },
+          {
+            "pid": 17516,
+            "absent": true
+          },
+          {
+            "pid": 17515,
+            "absent": true
+          },
+          {
+            "pid": 17514,
+            "absent": true
+          },
+          {
+            "pid": 17512,
+            "absent": true
+          },
+          {
+            "pid": 17511,
+            "absent": true
+          },
+          {
+            "pid": 17545,
+            "absent": true
+          },
+          {
+            "pid": 17610,
+            "absent": true
+          },
+          {
+            "pid": 17637,
+            "absent": true
+          },
+          {
+            "pid": 17636,
+            "absent": true
+          },
+          {
+            "pid": 17638,
+            "absent": true
+          },
+          {
+            "pid": 17639,
+            "absent": true
+          },
+          {
+            "pid": 17640,
+            "absent": true
+          },
+          {
+            "pid": 17655,
+            "absent": true
+          },
+          {
+            "pid": 17664,
+            "absent": true
+          },
+          {
+            "pid": 17698,
+            "absent": true
+          },
+          {
+            "pid": 17735,
+            "absent": true
+          }
+        ],
+        "unsettled": false,
+        "zombieIsNotAbsent": true,
+        "clusterRetained": true,
+        "wholeSocketRootAbsence": "NOT_CHECKED"
+      }
+    },
+    {
+      "title": "Preparation actual bridge diagnostic",
+      "value": {
+        "phase": "negative_future",
+        "code": "UNKNOWN",
+        "messageHash": "154c73aba0f3fd33ee188282518943250140bf228ee14be8d6342d49e5b93f4e",
+        "tokens": [],
+        "actual": "REDACTED",
+        "expected": "REDACTED",
+        "settlements": [
+          {
+            "statementSha256": "a8402858d4f1e1d27afee976520485ebb4b96a5387355b823f0d0b8079729032",
+            "queryOutcome": "fulfilled",
+            "ready": "T"
+          },
+          {
+            "statementSha256": "e4ee35f6d7515281298f3e3cdfbcd1690b4707a5e3ea8c2903fc2dc75e37fcff",
+            "queryOutcome": "fulfilled",
+            "ready": "T"
+          },
+          {
+            "statementSha256": "b4e4a455b9409cf87d44fc23645af2078d1b93c3f07d459eac28b1bdbd892dd1",
+            "queryOutcome": "fulfilled",
+            "ready": "T"
+          },
+          {
+            "statementSha256": "40b96b3900f17152950c64da40d88433a774317a4344410caafb339a4a818814",
+            "queryOutcome": "fulfilled",
+            "ready": "T"
+          },
+          {
+            "statementSha256": "6c58e5bea100b56a9f7ea08f5d78a2513437bac9d8caddcfde62a5bbe2b8c7a0",
+            "queryOutcome": "rejected",
+            "ready": "E",
+            "code": "P0001"
+          },
+          {
+            "statementSha256": "587fa628a9fe4642ac0e22825a97e81d388af674f7251a9fb699f96901dcb710",
+            "queryOutcome": "fulfilled",
+            "ready": "I"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Forecast current numeric acceptance",
+      "value": {
+        "sourceHead": "21c849778d0822cc2a9a1707f89b7ff6b28f4749",
+        "observedWitnesses": [
+          {
+            "kind": "FORECAST_CURRENT_SAFE",
+            "value": {
+              "evidenceCount": 2,
+              "receiptCount": 2,
+              "numericSourceOnly": true,
+              "annualOrForward4q": false,
+              "actualOriginalAppend": true,
+              "syntheticSource": true,
+              "actualExternalModel": false
+            }
+          }
+        ],
+        "actualTapCounts": {
+          "tests": 5,
+          "pass": 3,
+          "fail": 2,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "tapSha256": "f9ebbe74bb977169efbb90b7bebcdc7ade5b4a79aada6851e57cfaa648ea65dc",
+        "privateRowsPublished": false
+      }
+    },
+    {
+      "title": "Preparation finite HTTP diagnostic",
+      "value": {
+        "stage": "real_prepare_commit_then_bridge_socket_loss_yields_uncertain_without_resend",
+        "code": "ERR_ASSERTION",
+        "actual": null,
+        "expected": true,
+        "messageHash": "3c97c33573d0e8213d0cf20a00d502f7db3ee8b1261e02d4a97a608f973198a7",
+        "tokens": []
+      }
+    },
+    {
+      "title": "Routine HTTP finite acceptance",
+      "value": {
+        "actualTapCounts": {
+          "tests": 8,
+          "pass": 6,
+          "fail": 2,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "tapSha256": "469894c23100fe485d9a21f36b904e40b2432aaecc980ae5b39e1dce4c9c3cf6",
+        "failures": [
+          {
+            "stage": "actual source-extract HTTP persists original guarded cache progress and replays without another extraction",
+            "code": "UNKNOWN",
+            "actual": "REDACTED",
+            "expected": "REDACTED",
+            "messageHash": "faed1985da2f47b0d9804c0d6ba2c3f35ce6505c5df7e043143c5b446bfa016d",
+            "tokens": [
+              "vnext_test_source_namespace_not_ready"
+            ]
+          }
+        ],
+        "receiptObserved": true,
+        "sourceScope": "hosted actual HTTP/PG, synthetic originals only",
+        "sourcePrerequisites": [
+          {
+            "sourceOwnerUsage": false,
+            "inputOwnerUsage": false,
+            "descriptorHash": "4bd7e1b3d3e3ab74ac0778cb48c108fca32c72eb5b278bb2dc663d8f2c6d569a",
+            "completeCatalog": {
+              "scopeHash": "530bc6a701e824f06071c37850801a2b5a0dedd4f66affd94477e2382aae6185",
+              "namespaceHash": "16054f4e6542fa1adc697eda2a8429e356feb7798e50495fd23f10867117b842",
+              "catalogHash": "e11aa5072518b8590c416d1d76f64c093d0632c75dbddaf17d3c8d40f0dd8b2d",
+              "existingReadCodecs": true
+            },
+            "noGrant": true,
+            "fullPrivateDescriptorRetained": true
+          }
+        ],
+        "sourceCommit": "21c849778d0822cc2a9a1707f89b7ff6b28f4749",
+        "results": [
+          {
+            "kind": "routine-admitted",
+            "newJobs": 1,
+            "newMembers": 1,
+            "startedAttempts": 0,
+            "providerInvocations": 0,
+            "noExternalIO": true
+          },
+          {
+            "kind": "real-deadline-expiry",
+            "actualServer120SecondDeadline": true,
+            "noClockOverride": true,
+            "expiredAttemptsRefunded": 0,
+            "retryRows": 1,
+            "retryIdempotent": true,
+            "totalStartedAttempts": 2,
+            "providerInvocations": 0,
+            "noExternalIO": true,
+            "secondExpiryExit": "NOT_RUN"
+          },
+          {
+            "kind": "repeat-and-withdrawal",
+            "jobRowsImmutable": true,
+            "originalsRetained": true,
+            "noAdditionalStartedAttempts": true,
+            "providerInvocations": 0,
+            "noExternalIO": true
+          }
+        ],
+        "pendingQueries": 0,
+        "appExit": 143,
+        "appPidAbsent": true,
+        "clientsSettled": true,
+        "unexpectedExternalFetchObserved": false,
+        "terminalRetry": {
+          "actualSecond120SecondDeadline": true,
+          "noClockOverride": true,
+          "originalAttemptCharged": true,
+          "retryAttemptCharged": true,
+          "startedAttempts": 2,
+          "attemptsRefunded": 0,
+          "retryRows": 1,
+          "secondRetryRejected": true,
+          "oldRequestRetryRejected": true,
+          "activeSlots": 0,
+          "historyRetained": true,
+          "providerInvocations": 0,
+          "preparations": 0,
+          "actualServiceRole": true,
+          "actualHTTP": false,
+          "wholeStateObserved": true
+        },
+        "terminalRetryCleanup": {
+          "priorBackendsAbsent": true,
+          "clientsSettled": true,
+          "pendingQueries": 0
+        },
+        "resources": {
+          "exit": 1,
+          "initialFree": {
+            "/home/runner/work/stockinsider/stockinsider": 88862232576,
+            "/tmp": 88862232576
+          },
+          "finalFree": {
+            "/home/runner/work/stockinsider/stockinsider": 88789082112,
+            "/tmp": 88789082112
+          },
+          "floor": 8589934592,
+          "nextWorksetReference": {
+            "/home/runner/work/stockinsider/stockinsider": 268435456,
+            "/tmp": 536870912
+          },
+          "sampledNotInstantaneous": true,
+          "sampledNodeAndOwnedPgTreePeakRssBytes": 814997504,
+          "resourceViolation": null,
+          "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+          "ownedPg": {
+            "containerId": "f162533ae78ea05b37978a7ffd3b207f5907864a0a17ef4c0389b8ed71abce1a",
+            "pid": 16860,
+            "start": "20053",
+            "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+            "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+            "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+          }
+        },
+        "resourceReceiptSha256": "4f63730605da68a97f05f4232c60aec91305baebe65db506eab5e75c3a4c9ead"
+      }
+    }
+  ],
+  "root": {
+    "messageSha256": "154c73aba0f3fd33ee188282518943250140bf228ee14be8d6342d49e5b93f4e",
+    "sourceError": "save is not defined",
+    "phase": "negative_future",
+    "classification": "harness ReferenceError after three exact SQL rejections/full-row invariance, before actual positive prepare call",
+    "fixCommit": "d1e5d7de1998306029c43534de685ea7e8fc4370",
+    "fix": "single save(...) -> x.save(...)",
+    "positivePrepare": "NOT_REACHED",
+    "corporateCurrentAndWithdrawal": "NOT_REACHED"
+  },
+  "scope": "finite annotation bytes obtained; complete private TAP/rows/screenshots not downloaded or independently reviewed; hosted synthetic source/provider only; no original-VM native claim",
+  "annotationInput": {
+    "bytes": 28659,
+    "sha256": "fcc8dfc158a7a30a2c0050623e867966cf63e4f8964011e2a73580e6ed1d1e02"
+  }
+}

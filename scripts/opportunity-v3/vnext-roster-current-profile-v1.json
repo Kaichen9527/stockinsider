@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "vnext-roster-current-source-v1",
+  "migration": "migrations/20261023_vnext_roster_current_fence_v1.sql",
+  "migrationSha256": "256960f51e6ec1c43393a243b00e7d385c40a495094b67127c16fd46322a79f2",
+  "signature": "public.vnext_input_sources_current_v1(jsonb,text)",
+  "predecessorBodySha256": "83c21c7f7247045c0fe8f66d8d6ae5dbc88c72286ef38274ca8d8a11fe9ca352",
+  "successorBodySha256": "2e6a155ce7148f2ab550c414297bae42519339e9a4b7bad2ab658ce9a4ab398a",
+  "predecessorBytes": 933,
+  "successorBytes": 1145,
+  "appendFragment": " AND NOT EXISTS(SELECT FROM public.vnext_members_v1 current_member WHERE current_member.symbol=p_symbol AND public.vnext_trading_invalid_current_v1(current_member.symbol,current_member.input_hash) ? 'proofHash')\n",
+  "inverseWholeBodyParity": true,
+  "nativeVerified": false,
+  "nativeOid": null,
+  "catalogMetadata": null,
+  "prerequisites": {
+    "coreSignature": "public.vnext_command_v1(text,text,jsonb)",
+    "coreBodySha256": "c2df728571a9b9914f87acc6cead6d444af2ea0c638e058db50da4bc74ef146c",
+    "privateCheckerSignature": "public.vnext_trading_invalid_current_v1(text,text)",
+    "privateCheckerBodySha256": "dac9ffaf049c8cabfe3f0fa166293447484f69c4daf06b4c6154f3179f396f58",
+    "existingSourceMigration": "migrations/20261022_vnext_issuer_ir_sources_v1.sql",
+    "existingSourceMigrationSha256": "da2b2ccfbedccb0b46f12fe1ee55555d8df14195883a9e603791f3640cc49435",
+    "tradingProfile": "scripts/opportunity-v3/vnext-trading-invalidity-profile-v1.json",
+    "tradingProfileSha256": "e74904bb299ac749b1a3f728b29ff0c7001a1d6fe0638c029700c1bd9b54c379"
+  },
+  "owner": "stockinsider_vnext_owner",
+  "executeGrantees": [
+    "stockinsider_vnext_owner"
+  ],
+  "permissionDelta": "none",
+  "allowedCatalogDelta": [
+    "exact existing source predicate prosrc append",
+    "exact core claim invalidity-proof rejection only",
+    "exact provider reserve-only invalidity-proof rejection before invocation lookup"
+  ],
+  "sourceBase": "6f2574185b9acd9e903830aadd6b75d437a50555",
+  "scope": "confirmed invalidity only; unknown roster retains original source semantics",
+  "routines": [
+    {
+      "signature": "public.vnext_input_sources_current_v1(jsonb,text)",
+      "predecessorBodySha256": "83c21c7f7247045c0fe8f66d8d6ae5dbc88c72286ef38274ca8d8a11fe9ca352",
+      "successorBodySha256": "2e6a155ce7148f2ab550c414297bae42519339e9a4b7bad2ab658ce9a4ab398a",
+      "predecessorBytes": 933,
+      "successorBytes": 1145
+    },
+    {
+      "signature": "public.vnext_command_v1(text,text,jsonb)",
+      "predecessorBodySha256": "c2df728571a9b9914f87acc6cead6d444af2ea0c638e058db50da4bc74ef146c",
+      "successorBodySha256": "0a5ba7953b1925b26a9ced99764786bb3e7d047bb33264d563447ab5e6353472",
+      "predecessorBytes": 42827,
+      "successorBytes": 42978,
+      "fragments": [
+        [
+          "  IF m.state='exited' OR m.contraindication OR m.input_hash<>j.input_hash THEN RAISE EXCEPTION 'vnext_admission_invalid'; END IF;\n  IF j.state<>'queued' THEN RETURN jsonb_build_object('replay',true,'state',j.state,'execute',false); END IF;",
+          "  IF m.state='exited' OR m.contraindication OR m.input_hash<>j.input_hash THEN RAISE EXCEPTION 'vnext_admission_invalid'; END IF;\n  IF public.vnext_trading_invalid_current_v1(j.symbol,j.input_hash) ? 'proofHash' THEN RAISE EXCEPTION 'vnext_claim_confirmed_trading_invalid';END IF;\n  IF j.state<>'queued' THEN RETURN jsonb_build_object('replay',true,'state',j.state,'execute',false); END IF;"
+        ]
+      ]
+    },
+    {
+      "signature": "public.vnext_provider_command_v1(text,text,jsonb)",
+      "predecessorBodySha256": "3ca260d5bf8fc594642564b07b7085e34e01c8a4e4b8bd179022650090cf6ea2",
+      "successorBodySha256": "14ffe7baa787f6808f2cb1e3250344766a51698ef722268361ef5512621cbcba",
+      "predecessorBytes": 13028,
+      "successorBytes": 13204,
+      "fragments": [
+        [
+          " SELECT * INTO invocation FROM public.vnext_provider_invocations_v1 WHERE job_id=j.job_id AND task=role_task;",
+          " IF p_command='reserve' AND public.vnext_trading_invalid_current_v1(j.symbol,j.input_hash) ? 'proofHash' THEN RAISE EXCEPTION 'vnext_reserve_confirmed_trading_invalid';END IF;\n SELECT * INTO invocation FROM public.vnext_provider_invocations_v1 WHERE job_id=j.job_id AND task=role_task;"
+        ]
+      ]
+    }
+  ]
+}

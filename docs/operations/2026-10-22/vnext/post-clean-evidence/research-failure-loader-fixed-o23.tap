@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: only confirmed missing authority, invalid output and definite settled rejections are permanent;429 alone is transient
+ok 1 - only confirmed missing authority, invalid output and definite settled rejections are permanent;429 alone is transient
+# Subtest: actual admitted store rejects zero validated financial data before preparation publication and records one permanent failure
+ok 2 - actual admitted store rejects zero validated financial data before preparation publication and records one permanent failure
+# Subtest: actual store distinguishes absent stock/trading authority from transport uncertainty without extra mutation
+ok 3 - actual store distinguishes absent stock/trading authority from transport uncertainty without extra mutation
+# Subtest: invalid author/review API artifacts pass permanent failure and exact committed author replay performs no new failure
+ok 4 - invalid author/review API artifacts pass permanent failure and exact committed author replay performs no new failure
+# Subtest: lost failure-write response stays explicitly uncertain and is never automatically sent again
+ok 5 - lost failure-write response stays explicitly uncertain and is never automatically sent again
+# Subtest: wrong role fails before writer lease or any source authority access
+ok 6 - wrong role fails before writer lease or any source authority access
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1138.575912

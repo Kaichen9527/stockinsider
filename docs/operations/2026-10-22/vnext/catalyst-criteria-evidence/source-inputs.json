@@ -1,0 +1,84 @@
+{
+  "actualRetainedExecutionSource": "5d4084ee10ea07e34ef531d2fe4471a714dd7beb",
+  "base": "04126596421c8d3824e9899529e57f6a87972152",
+  "currentSource": "f9f3a0d0ffa9b50852305ee59f19d48356c2fd13",
+  "node": {
+    "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1"
+  },
+  "partialClosure": "source identities only; no approved wholeNextC or old native transfer",
+  "products": {
+    "migrations/20261022_vnext_catalyst_criteria_v1.sql": {
+      "bytes": 37828,
+      "sha256": "35ededaf19661f62337654863cdfe6746dff5956780da9373d55cc19179145d7"
+    },
+    "scripts/opportunity-v3/vnext-catalyst-criteria-profile-v1.json": {
+      "bytes": 5887,
+      "sha256": "085c2cb727ff9cb10aa2920dfd6c0424fdc0d17449be1f25fd2ba86d0de81e77"
+    },
+    "web/src/lib/vnext/automatic-worker.ts": {
+      "bytes": 3685,
+      "sha256": "f811ba7c1668767c7f03d9a6be865e6b63f651fb58e98818427e8487201afa5e"
+    },
+    "web/src/lib/vnext/catalyst-criteria.test.ts": {
+      "bytes": 21303,
+      "sha256": "8cb2afb8cfe74b6677e012713e2646b619c253b41941965698cba852a1024a89"
+    },
+    "web/src/lib/vnext/discovery-test-loader.mjs": {
+      "bytes": 1931,
+      "sha256": "beddf040fa11a706150392c558bb95daa6650633b8b591b7177dc3776771e917"
+    },
+    "web/src/lib/vnext/preparation-reconciliation.test.ts": {
+      "bytes": 20604,
+      "sha256": "966a6edf812b8d6f84bab3396179a7ab7a1a5a388b0d96b895e6bc1a87073850"
+    },
+    "web/src/lib/vnext/research-failure.test.ts": {
+      "bytes": 10656,
+      "sha256": "87cb7720add5606ca54b702ed59bb1ec540758150c5d2f3cdf26df97b4deee99"
+    },
+    "web/src/lib/vnext/research.ts": {
+      "bytes": 8959,
+      "sha256": "26848464305f3e59be2dd8c1a2ef58fa87c0b8508ad07d2c9034fa049572040f"
+    },
+    "web/src/lib/vnext/semantic-criteria.ts": {
+      "bytes": 10923,
+      "sha256": "49885889a32b34a27267331d2f30b3eb9f65d44250942fcb697c1cdd10ab41cd"
+    },
+    "web/src/lib/vnext/thesis-audit.ts": {
+      "bytes": 11293,
+      "sha256": "97e4f5a004300284407eb980ec8dfc253167955dc2f4e0f01a7c9912fdf64d3d"
+    },
+    "web/src/lib/vnext/weekly-worker.ts": {
+      "bytes": 6371,
+      "sha256": "dff54004148d5abba58fc301f4aa36fed83208d651a1bc89dd60811f5f87c182"
+    },
+    "web/src/lib/vnext/worker-core.ts": {
+      "bytes": 10022,
+      "sha256": "76b3e8dc277cc4123fb5dd46b3e15a28cf510c9d00e6ba28896c481d50d172e2"
+    },
+    "web/src/lib/vnext/worker-output.ts": {
+      "bytes": 5915,
+      "sha256": "34238779dcbe4bbe6556b07b807ad608b89c3fa416b3e15368c5d3bd49b6c9eb"
+    },
+    "web/src/lib/vnext/worker-prompts.ts": {
+      "bytes": 8927,
+      "sha256": "72d8f7b9004f9cd6ad45bf98340a149c8744aa666931f46a04d826c952c7632c"
+    }
+  },
+  "testPlan": {
+    "afterRunChanges": "fresh-only explicit session/current-public assertions; no changed runtime or retained-mode bytes",
+    "path": "scripts/vnext-catalyst-postgres.test.mjs",
+    "retainedObservedSha256": "3ef9f7dc0d124957bbeb0a83070cc2e8ef3060c245db61aa2e4210df6a9f83a7",
+    "sha256": "33e1006c2aa34d44e7d3b428eb027d5f0157a780ec53687b1c20a5db442d50b5"
+  },
+  "wholeGitExecutionSeal": {
+    "bytes": 52640540,
+    "count": 2548,
+    "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-source-seal-o23.json",
+    "sha256": "f9fe85bb785622dee4da631a4017e0ddb2a15e6c37a406caf585a7eb7e12252f"
+  },
+  "workflow": {
+    "path": ".github/workflows/stockinsider-vnext-quality.yml",
+    "sha256": "68c2f9c003c081a34e29ca2640441589107c6752b602f32f914c3314e8782043"
+  }
+}

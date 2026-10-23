@@ -1,0 +1,69 @@
+{
+  "actual": {
+    "actualTapCounts": {},
+    "appExit": 143,
+    "appPidAbsent": true,
+    "clientsSettled": true,
+    "failures": [
+      {
+        "actual": false,
+        "code": "ERR_ASSERTION",
+        "expected": true,
+        "messageHash": "529ada59a8e5b4ed4ac6672e2f2ffc01c357574fd10516b93a1d180d665fbf86",
+        "stage": "real routine HTTP derives the source receipt and atomically reserves one new researching slot without any claim",
+        "tokens": []
+      }
+    ],
+    "pendingQueries": 0,
+    "receiptObserved": true,
+    "resourceReceiptSha256": "3c2fa8d5496eb0bcdd6393a3f261a6ff76cfa8cbeb7172085b4d54bbe7b54a23",
+    "resources": {
+      "exit": -15,
+      "finalFree": {
+        "/home/runner/work/stockinsider/stockinsider": 88859738112,
+        "/tmp": 88859738112
+      },
+      "floor": 8589934592,
+      "initialFree": {
+        "/home/runner/work/stockinsider/stockinsider": 88901005312,
+        "/tmp": 88901005312
+      },
+      "nextWorksetReference": {
+        "/home/runner/work/stockinsider/stockinsider": 268435456,
+        "/tmp": 536870912
+      },
+      "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+      "ownedPg": {
+        "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+        "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+        "containerId": "69ff8bf19270335080bc7f5e3c7429e724bfa22c86eac6223a3d70afdcd151a4",
+        "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+        "pid": 17146,
+        "start": "52075"
+      },
+      "resourceViolation": {
+        "kind": "test_containment_deadline"
+      },
+      "sampledNodeAndOwnedPgTreePeakRssBytes": 680898560,
+      "sampledNotInstantaneous": true
+    },
+    "results": [],
+    "sourceCommit": "11d08971020774b9029a56431b103ba96726a3c6",
+    "sourceScope": "hosted actual HTTP/PG, synthetic originals only",
+    "tapSha256": "14b69da76e7caaa851e31210bf0f7f0d0e43bc3f7d1fdac3063fc1ae391b4d4d",
+    "unexpectedExternalFetchObserved": false
+  },
+  "counts": "NOT_OBSERVED: final TAP counts absent after containment; no inferred five tests or successful suite",
+  "job": 120405573436,
+  "run": 39951127863,
+  "source": "0d67575345c0d48a257a812db099736b335a2aef",
+  "sourceErrorProof": {
+    "assertion": "finite exact whole-table delta",
+    "changedTableNativeBytes": "NOT_RETRIEVED; source-derived diagnosis, successor will assert exact weekly row",
+    "cleanupSourceDefect": "postcondition assertions preceded x.finish; requested owned Next SIGTERM actual143 was rejected despite PID absent and clients settled",
+    "matchesActual": true,
+    "messageSha256": "529ada59a8e5b4ed4ac6672e2f2ffc01c357574fd10516b93a1d180d665fbf86",
+    "newFix": "only finite weekly row expectation and owned cleanup order/status; no original SQL/TS/guard/resource/timeout change",
+    "originalCallgraph": "rotateCachedObservations weeklyDue -> vnext_command weekly-audit guarded INSERT vnext_weekly_audits_v1; table omitted from test allowlist"
+  }
+}

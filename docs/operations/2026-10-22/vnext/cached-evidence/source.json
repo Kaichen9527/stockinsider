@@ -1,0 +1,39 @@
+{
+  "cachedProduct": "eb558ce",
+  "financialSummary": "feb758b",
+  "nativeFirst": "3a88f95",
+  "nativeContinuation": "2d30a94",
+  "migrations": {
+    "20261022_stockinsider_vnext_20_v1.sql": "84418af40194689ff6b85a11394bbcd04c28ce8041281bc897149a44e86c90de",
+    "20261022_vnext_legacy_mode_fence_v1.sql": "272130d1747d3faa1f6d65554c8af8ffbc3d7ab1ad7b1045d4f9b331293c6685",
+    "20261022_vnext_provider_worker_v1.sql": "637e494cb5ccb32ab11d847fb69586cbbf0aec717c1c0991a250195a917826ba",
+    "20261022_vnext_analysis_sources_v1.sql": "38ebaa113cc2bde07ad3215196bfa898ca0874bd6a1306a142efd740244ffc20",
+    "20261022_vnext_thesis_audit_v1.sql": "ca57c6da05359e25c1bb238bfc47128ea06a7dedb9e01f9c2668f85e196536a4",
+    "20261022_vnext_source_withdrawals_v1.sql": "b383be15890450ee301c756045c6bfa8754804959bffc2d71e1f7a1408ee5a48",
+    "20261022_vnext_financial_summary_v1.sql": "f35641c802b39fcd07fadf6f62e4101080f917e26401941df1fb562ddeb44b66",
+    "20261022_vnext_cached_admission_v2.sql": "a2afbf1436444918379edb29787b051da2fc57a51776f473fc8ad620fdf59eec"
+  },
+  "summaryProfile": {
+    "predecessorBodySha256": "0c23f9932c3062d7e62f2e114655b29d38ae16af595e34873f85e86924127149",
+    "successorBodySha256": "b177e0010a25b9ff27ef25f59a81c44cce47f0b297ea0061d478afbce424b1b8",
+    "successorBytes": 8143,
+    "sqlSha256": "f35641c802b39fcd07fadf6f62e4101080f917e26401941df1fb562ddeb44b66",
+    "originalStatementParity": true,
+    "nativeVerified": false
+  },
+  "summaryGeneratorInverseRed": {
+    "source": "604ec2b",
+    "check": "inverse declaration insertion byte parity",
+    "exit": 1,
+    "cause": "generator replaced original leading newline; declarations valid but inverse bytes missed original newline; no PG attempt",
+    "originalProfile": {
+      "predecessorBodySha256": "0c23f9932c3062d7e62f2e114655b29d38ae16af595e34873f85e86924127149",
+      "successorBodySha256": "ad2d5f44f256f7fb601e8e896e6259b532688ac0b829a858e53cd88bd6a8c078",
+      "successorBytes": 8142,
+      "sqlSha256": "3a6860c6d6498d5022c799f9839ff9932936d47dbb521028ed155c4481e1700e",
+      "originalStatementParity": false,
+      "nativeVerified": false
+    }
+  },
+  "notes": "new focusedfinancialsummaryprofile remains source-derived until actual native01 installation; actual SQL COMMIT recorded below. No old financial/profile pin changed."
+}

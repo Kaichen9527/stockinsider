@@ -1,0 +1,42 @@
+TAP version 13
+# Subtest: both original native company vectors and revisions have explicit EPS claim/review and truthful missing quote
+ok 1 - both original native company vectors and revisions have explicit EPS claim/review and truthful missing quote
+# Subtest: old unbound EPS, altered summary and hidden missing quote remain rejected without changing validators
+ok 2 - old unbound EPS, altered summary and hidden missing quote remain rejected without changing validators
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 63.431679
+TAP version 13
+# Subtest: FDL-00 actual vNext gate defaults off without touching authority and cannot mask enabled mode
+ok 1 - FDL-00 actual vNext gate defaults off without touching authority and cannot mask enabled mode
+# Subtest: FDL-01 exact auth and active writer precede any lease/artifact operation
+ok 2 - FDL-01 exact auth and active writer precede any lease/artifact operation
+# Subtest: FDL-02 invalid or oversized documents and invalid worker requests never acquire
+ok 3 - FDL-02 invalid or oversized documents and invalid worker requests never acquire
+# Subtest: FDL-03 contention and acquisition failure return explicit errors without writes or release
+ok 4 - FDL-03 contention and acquisition failure return explicit errors without writes or release
+# Subtest: FDL-04 upload lease encloses private artifact, receipt and idempotent linked-job reconciliation
+ok 5 - FDL-04 upload lease encloses private artifact, receipt and idempotent linked-job reconciliation
+# Subtest: FDL-05 storage, receipt, job-link errors and thrown mutations all release only their own lease
+ok 6 - FDL-05 storage, receipt, job-link errors and thrown mutations all release only their own lease
+# Subtest: FDL-06 bounded worker acquires its lease before processing and releases success/partial/error/throw
+ok 7 - FDL-06 bounded worker acquires its lease before processing and releases success/partial/error/throw
+# Subtest: FDL-07 read-only receipt GET never acquires or releases a write lease
+ok 8 - FDL-07 read-only receipt GET never acquires or releases a write lease
+# Subtest: FDL-08 a release failure cannot report a successful upload or worker response
+ok 9 - FDL-08 a release failure cannot report a successful upload or worker response
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 396.360921

@@ -1,0 +1,62 @@
+{
+  "scope": "only additional explicitlyselected CI/VM receipts, older rawinventory preserved independently; notcompleteprivate custodyclaim",
+  "files": 11,
+  "bytes": 21885,
+  "inventory": [
+    {
+      "path": "ci-e1bb126-observation.json",
+      "bytes": 3255,
+      "sha256": "c4b617bcf28c6009cee9a8b70b6badeb9f66db3051195611a9e2ca2e83aec6eb"
+    },
+    {
+      "path": "ci-e1-vnext-steps.json",
+      "bytes": 3411,
+      "sha256": "554c9226e0a0a67f0997d869a5dceeeab8baffffbd083e4372894a3a26fddfcd"
+    },
+    {
+      "path": "ci-e1-financial-steps.json",
+      "bytes": 1472,
+      "sha256": "54e5cb5ffe3ee89bc4cf6a00d6750a3aea84b091492f0dab742d5b2a2acb4a2e"
+    },
+    {
+      "path": "ci-e1-requirements-steps.json",
+      "bytes": 1478,
+      "sha256": "bcd2148cdad2626af1d643a8cac206281a7dde0799f1535f0668cf1e3628a4a7"
+    },
+    {
+      "path": "ci-e1-vnext-annotations.json",
+      "bytes": 985,
+      "sha256": "cae361fbba2bb1501fd68a80ac3e9087c24886545aaea658151244f480c7d17e"
+    },
+    {
+      "path": "current-lease-regression-01.json",
+      "bytes": 1003,
+      "sha256": "d19a5f1c96a09b881f186d52574494d79101cf9a81200f971fe33e3ef63ddb29"
+    },
+    {
+      "path": "current-lease-regression-01.log",
+      "bytes": 1069,
+      "sha256": "ea8d3a990355d46101cc2a2cc552b7ad34a129a2bd8a042f9db032d8f4ed06e0"
+    },
+    {
+      "path": "current-lease-regression-02.json",
+      "bytes": 1192,
+      "sha256": "417b6439a0a8d38637cc49294d1f3ede859144a187019641f273d4a4ad400861"
+    },
+    {
+      "path": "current-lease-regression-02.log",
+      "bytes": 2169,
+      "sha256": "b0c88a7c808ebeee5e3448a133d7c3c7c92a3d503d52239f518f4f84304bdfa3"
+    },
+    {
+      "path": "current-policy-after-public-01.json",
+      "bytes": 817,
+      "sha256": "35d9eebde7007dfd045aaac199103736900a835ed9af3b7187b8ec7b3db0963c"
+    },
+    {
+      "path": "current-policy-after-public-01.log",
+      "bytes": 5034,
+      "sha256": "52d2ccb5adb42506ad623e1e1868bfb5c9f007fb71ce7a39fb62000c9724559f"
+    }
+  ]
+}

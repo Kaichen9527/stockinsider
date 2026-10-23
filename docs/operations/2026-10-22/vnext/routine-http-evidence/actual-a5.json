@@ -1,0 +1,94 @@
+{
+  "actualFiniteReceipt": {
+    "actualTapCounts": {
+      "cancelled": 0,
+      "fail": 2,
+      "pass": 4,
+      "skipped": 0,
+      "tests": 6,
+      "todo": 0
+    },
+    "appExit": 143,
+    "appPidAbsent": true,
+    "clientsSettled": true,
+    "failures": [
+      {
+        "actual": "REDACTED",
+        "code": "42501",
+        "expected": "REDACTED",
+        "messageHash": "f90121b0a65e0a79be07611fe6981ec95009683987121f27de1af29470bb6c96",
+        "stage": "actual source-extract HTTP persists original guarded cache progress and replays without another extraction",
+        "tokens": []
+      }
+    ],
+    "pendingQueries": 0,
+    "receiptObserved": true,
+    "resourceReceiptSha256": "431fce01981d70b8d774ae729b018db3c32d5419d2d0540de1641bc454ae7279",
+    "resources": {
+      "exit": 1,
+      "finalFree": {
+        "/home/runner/work/stockinsider/stockinsider": 88853512192,
+        "/tmp": 88853512192
+      },
+      "floor": 8589934592,
+      "initialFree": {
+        "/home/runner/work/stockinsider/stockinsider": 88899092480,
+        "/tmp": 88899092480
+      },
+      "nextWorksetReference": {
+        "/home/runner/work/stockinsider/stockinsider": 268435456,
+        "/tmp": 536870912
+      },
+      "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+      "ownedPg": {
+        "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+        "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+        "containerId": "2bfbb792b2d69c51c411f5d5adea5e2df38f53b552be363d9a81bb2ca7ae1afd",
+        "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+        "pid": 17109,
+        "start": "44844"
+      },
+      "resourceViolation": null,
+      "sampledNodeAndOwnedPgTreePeakRssBytes": 699305984,
+      "sampledNotInstantaneous": true
+    },
+    "results": [
+      {
+        "kind": "routine-admitted",
+        "newJobs": 1,
+        "newMembers": 1,
+        "noExternalIO": true,
+        "providerInvocations": 0,
+        "startedAttempts": 0
+      },
+      {
+        "jobRowsImmutable": true,
+        "kind": "repeat-and-withdrawal",
+        "noAdditionalStartedAttempts": true,
+        "noExternalIO": true,
+        "originalsRetained": true,
+        "providerInvocations": 0
+      }
+    ],
+    "sourceCommit": "8a7ef4ac4a0297a69c3740305200161aba92bfc1",
+    "sourceScope": "hosted actual HTTP/PG, synthetic originals only",
+    "tapSha256": "4ce09c1d6f41c136453c84e44818bfe75ce915aa4fa1fab5c97d74cb9e8e327c",
+    "unexpectedExternalFetchObserved": false
+  },
+  "exactSourceRuntimeTreeParity": true,
+  "interpretation": "overall FAIL; four independent components PASS, raw fixture source namespace42501 remains; no skip/cancel or false full PASS",
+  "job": 120419936043,
+  "phaseMeaning": "actual hosted built HTTP + service-role PostgreSQL, original guarded RPCs and full private snapshots; synthetic original/calendars/stock only, no real source/model/semantic/Contabo approval",
+  "rawAfterShutdownEvidence": "not independently retrieved; client/Next settlement fields are actual finite receipt, PG trap remains separate",
+  "rawRowsTAPContentsRetrieved": false,
+  "run": 39955416482,
+  "runtime": {
+    "parents": [
+      "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "a5ea143920d5b8f06670b6f47be38ee1b2f8ad52"
+    ],
+    "sha": "8a7ef4ac4a0297a69c3740305200161aba92bfc1",
+    "tree": "c816541aa3ac986359f755a5b2eb23af13b05db0"
+  },
+  "source": "a5ea143920d5b8f06670b6f47be38ee1b2f8ad52"
+}

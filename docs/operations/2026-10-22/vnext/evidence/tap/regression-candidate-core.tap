@@ -1,0 +1,72 @@
+TAP version 13
+# Subtest: candidate research retries transient infrastructure errors only
+ok 1 - candidate research retries transient infrastructure errors only
+# Subtest: candidate authority readers continue past the PostgREST 1000-row response cap
+ok 2 - candidate authority readers continue past the PostgREST 1000-row response cap
+# Subtest: bounded pagination also retains source rows after the first response page
+ok 3 - bounded pagination also retains source rows after the first response page
+# Subtest: complete authority reads reject truncation rather than reporting false coverage
+ok 4 - complete authority reads reject truncation rather than reporting false coverage
+# Subtest: run freezes its authority cutoff after live acquisition, not the old global Shadow time
+ok 5 - run freezes its authority cutoff after live acquisition, not the old global Shadow time
+# Subtest: large UUID filters are split into bounded URL batches and each response is paginated
+ok 6 - large UUID filters are split into bounded URL batches and each response is paginated
+# Subtest: official PE scenario holds reported multiple and uses conservative revenue pass-through
+ok 7 - official PE scenario holds reported multiple and uses conservative revenue pass-through
+# Subtest: missing or loss-making official earnings do not manufacture targets
+ok 8 - missing or loss-making official earnings do not manufacture targets
+# Subtest: official exchange PE can supply its formula-implied trailing earnings without inventing EPS
+ok 9 - official exchange PE can supply its formula-implied trailing earnings without inventing EPS
+# Subtest: revenue growth pass-through is capped and cannot create unlimited upside
+ok 10 - revenue growth pass-through is capped and cannot create unlimited upside
+# Subtest: reported price and PE stay internally consistent when EPS dates differ
+ok 11 - reported price and PE stay internally consistent when EPS dates differ
+# Subtest: insufficient historical multiple evidence does not create a target
+ok 12 - insufficient historical multiple evidence does not create a target
+# Subtest: forward valuation requires a complete 48-month multiple distribution
+ok 13 - forward valuation requires a complete 48-month multiple distribution
+# Subtest: forward BVPS x PB reconciles common equity and uses historical quartiles
+ok 14 - forward BVPS x PB reconciles common equity and uses historical quartiles
+# Subtest: forward BVPS x PB refuses insufficient history or invalid ending shares
+ok 15 - forward BVPS x PB refuses insufficient history or invalid ending shares
+# Subtest: EV/EBITDA only publishes with explicit debt, cash, shares, and its own multiple history
+ok 16 - EV/EBITDA only publishes with explicit debt, cash, shares, and its own multiple history
+# Subtest: turnaround EV/sales uses reported revenue and observed multiples without manufacturing earnings
+ok 17 - turnaround EV/sales uses reported revenue and observed multiples without manufacturing earnings
+# Subtest: twenty consecutive fiscal quarters satisfy a five-year normalized-cycle window
+ok 18 - twenty consecutive fiscal quarters satisfy a five-year normalized-cycle window
+# Subtest: candidate historical research is enabled unless production explicitly blocks unavailable official history
+ok 19 - candidate historical research is enabled unless production explicitly blocks unavailable official history
+# Subtest: candidate price refresh reads durable coverage before selecting a bounded fetch depth
+ok 20 - candidate price refresh reads durable coverage before selecting a bounded fetch depth
+# Subtest: new validation does not backdate a historical research cutoff
+ok 21 - new validation does not backdate a historical research cutoff
+# Subtest: financial refresh shards rotate past permanently incomplete issuers
+ok 22 - financial refresh shards rotate past permanently incomplete issuers
+# Subtest: financial facts obtained after evaluation cannot enter point-in-time valuation
+ok 23 - financial facts obtained after evaluation cannot enter point-in-time valuation
+# Subtest: weekend and post-close mentions enter production without mutating the frozen shadow cohort
+ok 24 - weekend and post-close mentions enter production without mutating the frozen shadow cohort
+# Subtest: candidate research uses its own source and financial cutoffs without global Shadow
+ok 25 - candidate research uses its own source and financial cutoffs without global Shadow
+# Subtest: missing official price history still publishes a source-specific fact detail without promotion inputs
+ok 26 - missing official price history still publishes a source-specific fact detail without promotion inputs
+# Subtest: candidate detail fact binding deduplicates historical rows but still requires every wanted identity
+ok 27 - candidate detail fact binding deduplicates historical rows but still requires every wanted identity
+# Subtest: candidate run summary stays bounded and leaves per-stock evidence in the item ledger
+ok 28 - candidate run summary stays bounded and leaves per-stock evidence in the item ledger
+# Subtest: production reruns retain a fixed financial availability cutoff
+ok 29 - production reruns retain a fixed financial availability cutoff
+# Subtest: price provenance is retained on persisted bars and blocks stage promotion when ineligible
+ok 30 - price provenance is retained on persisted bars and blocks stage promotion when ineligible
+# Subtest: history authority reconciliation preserves displaced mirrors and never overwrites exchange-owner conflicts
+ok 31 - history authority reconciliation preserves displaced mirrors and never overwrites exchange-owner conflicts
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 54.802022

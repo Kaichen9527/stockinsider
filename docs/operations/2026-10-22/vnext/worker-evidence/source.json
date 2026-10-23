@@ -1,0 +1,97 @@
+{
+  "head": "b1cdca8e752edab4cfbef99b76a657ed7785621a",
+  "files": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 6992,
+      "sha256": "2dcc3a31150661a5a830c43eb28d12f1474d398b711b5aea318bd8391781f1bc"
+    },
+    {
+      "path": "migrations/20261022_stockinsider_vnext_20_v1.sql",
+      "bytes": 53059,
+      "sha256": "84418af40194689ff6b85a11394bbcd04c28ce8041281bc897149a44e86c90de"
+    },
+    {
+      "path": "migrations/20261022_vnext_legacy_mode_fence_v1.sql",
+      "bytes": 11290,
+      "sha256": "272130d1747d3faa1f6d65554c8af8ffbc3d7ab1ad7b1045d4f9b331293c6685"
+    },
+    {
+      "path": "migrations/20261022_vnext_provider_worker_v1.sql",
+      "bytes": 20783,
+      "sha256": "637e494cb5ccb32ab11d847fb69586cbbf0aec717c1c0991a250195a917826ba"
+    },
+    {
+      "path": "scripts/run-vnext-browser-acceptance.py",
+      "bytes": 5981,
+      "sha256": "4370cdd0b0dffdfb16326e14acf6107a5d372e61c5fcb5bbfa3589b6c329f300"
+    },
+    {
+      "path": "scripts/vnext-worker-fixture.mjs",
+      "bytes": 7900,
+      "sha256": "26cca439ac4b81263ee6127d8b42648779f9967c1f2b86f80845631c36adce52"
+    },
+    {
+      "path": "scripts/vnext-worker-postgres.test.mjs",
+      "bytes": 15739,
+      "sha256": "d16762a2d7e3dd2b55bdecb97b6d5a816a71a01f6e127eb13cc887850f98bd7c"
+    },
+    {
+      "path": "scripts/vnext-worker-publication-read.test.mjs",
+      "bytes": 3819,
+      "sha256": "264350ea050472cee201e39948c53c8626966d2f58355da35bc13469280f9a63"
+    },
+    {
+      "path": "web/e2e/vnext-worker.spec.ts",
+      "bytes": 2335,
+      "sha256": "6b8113168bcd1eb4d19b4650696d8eb6725b1d035737c10e747fc50a8b5357cc"
+    },
+    {
+      "path": "web/e2e/vnext.spec.ts",
+      "bytes": 7843,
+      "sha256": "a4c25915a85a4d5a1d48aa9c57903c1e8e1e646eff9e354f169d0c9674832859"
+    },
+    {
+      "path": "web/playwright.vnext.config.ts",
+      "bytes": 867,
+      "sha256": "96f262eb76d8f96ad84187f41539e912799c5b9f7d122c8f7da65a36b2d129be"
+    },
+    {
+      "path": "web/src/lib/vnext/automatic-worker.ts",
+      "bytes": 3654,
+      "sha256": "032f04e6a6ec5d41714adb8b80091b267f57c62f6d6e6b903ed20c563bb02908"
+    },
+    {
+      "path": "web/src/lib/vnext/provider.ts",
+      "bytes": 5521,
+      "sha256": "0a5b5b0173e06e0ad77041965d3ea72c1bcde464031484d589e4d8fd4732bcb5"
+    },
+    {
+      "path": "web/src/lib/vnext/worker-core.ts",
+      "bytes": 8900,
+      "sha256": "c1003f49e755b1fe69d16e75ff893af23190b839ad28d9d31e0528582829ceb7"
+    },
+    {
+      "path": "web/src/lib/vnext/worker-output.ts",
+      "bytes": 5883,
+      "sha256": "add3e20ce8e58399485c613d646fd0a1881dbeed49f88df201593ea2e1d68025"
+    },
+    {
+      "path": "web/src/lib/vnext/worker-prompts.ts",
+      "bytes": 2855,
+      "sha256": "2e7920b3655f90a107ea41699d1aa6cde39a893dd9ebd39f04ce1dfe5b7a193b"
+    },
+    {
+      "path": "web/src/lib/vnext/worker.test.ts",
+      "bytes": 12093,
+      "sha256": "5b1bb063b49d6c988b6288c4eaada1b06cb1ec7efd3917547ec402f13141246d"
+    }
+  ],
+  "originalMainSha256": "84418af40194689ff6b85a11394bbcd04c28ce8041281bc897149a44e86c90de",
+  "originalLegacyFenceSha256": "272130d1747d3faa1f6d65554c8af8ffbc3d7ab1ad7b1045d4f9b331293c6685",
+  "allUncommittedNextSliceExcluded": true,
+  "gitTree": "0cab6a4fa38d75c87087dc0dc7c2c4a3956da32c",
+  "transitiveBase": "docs/operations/2026-10-22/vnext/evidence/source-inventory.json",
+  "transitiveBaseSha256": "a6cc3df407f4da7478fc72b794b2030c9d6f34350fabd24afdf0a67eca95434a",
+  "transitiveClosureScope": "Whole immutable Git tree plus prior full source manifest; current uncommitted next-slice edits excluded."
+}

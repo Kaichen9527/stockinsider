@@ -1,0 +1,15 @@
+TAP version 13
+# Subtest: finite issuer IR source authority, actual original receipts and current publication fence
+    # Subtest: audit-retained-installed: original failed-run rows and current source/ACL/RLS profile match without reinstall
+    not ok 1 - audit-retained-installed: original failed-run rows and current source/ACL/RLS profile match without reinstall
+    1..1
+not ok 1 - finite issuer IR source authority, actual original receipts and current publication fence
+1..1
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 320.119678

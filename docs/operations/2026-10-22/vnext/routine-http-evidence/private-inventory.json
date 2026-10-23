@@ -1,0 +1,69 @@
+{
+  "bytes": 118732,
+  "contentsPublished": false,
+  "count": 12,
+  "files": [
+    {
+      "bytes": 27225,
+      "name": "historical-local-fixture-6e0-o23.json",
+      "sha256": "1cc4eaa3c538e4ad02f7e210631f25a47c36a61858295111e4e837988d53e6ec"
+    },
+    {
+      "bytes": 8276,
+      "name": "historical-local-profile-6e0-o23.json",
+      "sha256": "ec871858e74d1aee1159157cc505f7a7c3d4e0a8e7670d0936f2d5fcda6458a3"
+    },
+    {
+      "bytes": 904,
+      "name": "raw-readiness-07-runs-o23.json",
+      "sha256": "f550ec1a9b14e820b9e0e2176f0602c2a8c191ae6ecfe91f69740ea0f8b45756"
+    },
+    {
+      "bytes": 787,
+      "name": "raw-source-readiness-source-seal-o23.json",
+      "sha256": "25c792d17ff3e077ec19558d9e57010a967452806adf19659d04bc12ca05acf8"
+    },
+    {
+      "bytes": 8665,
+      "name": "routine-a5-annotations-o23.json",
+      "sha256": "e1832cf1872d9f5d2245c267b15dc500b1ae5468bdf449b77be4a9b9c8f63379"
+    },
+    {
+      "bytes": 1336,
+      "name": "routine-a5-runs-o23.json",
+      "sha256": "34f3e9ae8d3bd71db7f5c66a87f347342b1733cbbf4e70d3e7c641e08b00f435"
+    },
+    {
+      "bytes": 199,
+      "name": "routine-a5-runtime-tree-o23.json",
+      "sha256": "6e75ff7e770af44372c99da6a9ed4f54caccacf65ff8e593e6e2b3401503fa2d"
+    },
+    {
+      "bytes": 26272,
+      "name": "routine-e248-pre-window-o23.mjs",
+      "sha256": "3620951f20d10d18223dc04025a466a008b793bfe46fe4230adf21e489848ad4"
+    },
+    {
+      "bytes": 8346,
+      "name": "source-window-b378-annotations-o23.json",
+      "sha256": "dc62ffc044ad129b9e47f8fc709d9d1083bb50ef69ad09a2a40d20667b6d727c"
+    },
+    {
+      "bytes": 32420,
+      "name": "source-window-b378-red-preimage-o23.mjs",
+      "sha256": "bd0652ced58ed8d6f124e73aef513aaff1aa8f18c359327701b17a8312c9f48a"
+    },
+    {
+      "bytes": 2966,
+      "name": "source-window-b378-retained-red-o23.json",
+      "sha256": "75b285b1c0eabf0665359f480d68fcf80e318e880b3fa4e4e20c7f5327d819e7"
+    },
+    {
+      "bytes": 1336,
+      "name": "source-window-b378-runs-o23.json",
+      "sha256": "597fd54fd879d0228cdc09471061e4346013d809a8fb93ce26ac3b005b8f917c"
+    }
+  ],
+  "historicalPublicSourceLookup": "two exact public GitHub blobs actually decoded/hashed; no module executed, no branch merged",
+  "hostedPrivateRoutineBodies": "not retrieved; public inventory for full private files not available, count/bytes UNKNOWN rather than fabricated"
+}

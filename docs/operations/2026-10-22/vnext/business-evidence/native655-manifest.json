@@ -1,0 +1,79 @@
+{
+  "source": "65580e2d787251c565742fb23159e8519686273c",
+  "previousEvidenceCommit": "3c0a612b36c9b2e89e8c78832f8714e3b24867b1",
+  "files": [
+    {
+      "path": "docs/operations/2026-10-22/vnext/OWNER-ACTIONS.md",
+      "bytes": 13666,
+      "sha256": "7788f5373a76a3f925c9869c38fd9961fb5a87682d36bf013c58ab05fa65444d"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/STATUS.md",
+      "bytes": 5929,
+      "sha256": "f532e432f074aa31ed20dff175ac2e66853345715dded0c56b2e46574445b6bb"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/CURRENT.json",
+      "bytes": 35666,
+      "sha256": "d4073f512e7dbb3d4a4f6ff1f092eac437396f26f551336c76783c5f3daca746"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/VN-EXECUTION-MAP.md",
+      "bytes": 7610,
+      "sha256": "30dc2b6c9250c8d57de8a5dfad386c7648fd892247f3d14223ae120414490a8a"
+    },
+    {
+      "path": "openspec/changes/stockinsider-vnext-20/tasks.md",
+      "bytes": 4379,
+      "sha256": "06354c6c758b3020b9ee4bb6e65bf5f5b241ab1a303123f8e56c30340d53c2fc"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/ci654-business-annotations-o23.json",
+      "bytes": 4343,
+      "sha256": "940c1d383319a513f783fc858483fb519681ebd4a00a34fbdfa6fb9996503145"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/target-profile-followup.json",
+      "bytes": 3080,
+      "sha256": "c49a42796becd5d23dcce2b55904083de018bf49b60810ae5d23e1dfd5510f43"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/target-profiles-source.tap",
+      "bytes": 1092,
+      "sha256": "142028f47b9738f92bfc5df082797918b345c240c9559aae430041456704b2d7"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/target-followup-private-inventory.json",
+      "bytes": 1638,
+      "sha256": "679e8c2b7f8156eed5124b7089359ef4f269280f9999e0a9d33f4a5680656ac3"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/native655-inputs.json",
+      "bytes": 3332,
+      "sha256": "758dd5efdb6c68f251d1f132bad316683943c9402fc2e3ccb60c5a856564054a"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/native655-finite-annotations.json",
+      "bytes": 11355,
+      "sha256": "54ac2420f1017c8ed59444af5392c421c698acfb3cad2d5bed4d05b92c9b6086"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/native655-receipt.json",
+      "bytes": 18658,
+      "sha256": "98ce53b46f8da0666cb24f627d5c33094af7cccc682968c718a2a91c7569a325"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/owner-action-source-pins.json",
+      "bytes": 1750,
+      "sha256": "eb6c7b027008d099aaa0cb015148daeacb41f5f926edbdb5d5d363ed77373625"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/native655-local-read-inventory.json",
+      "bytes": 1374,
+      "sha256": "0fdb1fa22212cdf762310e4cf08271921cdd8298078c4e53c683db72255ba727"
+    }
+  ],
+  "count": 14,
+  "bytes": 113872,
+  "scope": "explicit finite public-safe source/metadata only; no private source/model rows, raw TAP, credential or PNG bytes; original manifests immutable at their own commits"
+}

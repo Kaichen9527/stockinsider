@@ -1,0 +1,137 @@
+{
+  "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
+  "evidence": [
+    {
+      "bytes": 21775,
+      "path": "hosted-observations.json",
+      "sha256": "66d1934d1b5e7f0c65554052369c4e216b7ef9eddca84ddeaa1d95c3d89dd8a2"
+    },
+    {
+      "bytes": 10162,
+      "path": "local-private-inventory.json",
+      "sha256": "45fe844bb0b4c3321c9c6f481cc19a1f3420fb913b14b5e574010387ca9aaadc"
+    },
+    {
+      "bytes": 1656,
+      "path": "retained-reds.json",
+      "sha256": "1a40ce7b48a2cfc757098cb784a95947b9007d22b3201e39511ba1d27b9991ea"
+    },
+    {
+      "bytes": 6077,
+      "path": "source-seal.json",
+      "sha256": "024c27a078310b01f6917ceebf88377b395bc5f41777d6eb529dba2d9fca5365"
+    },
+    {
+      "bytes": 13629,
+      "path": "vm-checks.json",
+      "sha256": "fcdb750262adfe855bcc25a178dc75ca1222dddcd37497f4694918d353a1a7b9"
+    }
+  ],
+  "native": {
+    "actualTapCounts": {
+      "cancelled": 0,
+      "fail": 0,
+      "pass": 7,
+      "skipped": 0,
+      "tests": 7,
+      "todo": 0
+    },
+    "observedWitnesses": [
+      {
+        "kind": "FORECAST_CURRENT_SAFE",
+        "value": {
+          "actualExternalModel": false,
+          "actualOriginalAppend": true,
+          "annualOrForward4q": false,
+          "evidenceCount": 2,
+          "numericSourceOnly": true,
+          "receiptCount": 2,
+          "syntheticSource": true
+        }
+      },
+      {
+        "kind": "FORECAST_FROZEN_REVOKED_SAFE",
+        "value": {
+          "actualReservedFrozenInput": true,
+          "directRejectedMutants": 6,
+          "duplicateAcquisitionStable": true,
+          "forecastItems": 2,
+          "noSecondClaimPrepareOrReserve": true,
+          "originalRowsRetained": true,
+          "providerPosts": 0,
+          "recollectionObservations": 2,
+          "rightsRevocationCommitted": true,
+          "sourceCurrentFalse": true
+        }
+      }
+    ],
+    "privateRowsPublished": false,
+    "sourceHead": "26e2c2d9a4e7a20c48d5597728c1642c4c0e0855",
+    "tapSha256": "4cb0c258b0a066d0e7132354610500e447e6e0bbbf499175065eb80f7cfa9ad2"
+  },
+  "noMergeDeployProductionOrSchedulerAction": true,
+  "notRun": [
+    "actual rights-qualified source acquisition",
+    "external model POST and independent semantic research",
+    "Contabo isolation",
+    "two actual postclose sessions",
+    "annual/4Q/share-authoritative forecast producer",
+    "full forecast material change to author/reviewer new publication",
+    "corporate-action immutable target rebase",
+    "remaining legacy/rights/lease/race/caps matrix"
+  ],
+  "observedAt": "2026-10-23T20:01:01.122557+08:00",
+  "ordinary": {
+    "conclusion": "success",
+    "job": 120397131682,
+    "jobs": "see hosted-observations.json",
+    "run": 39948562267
+  },
+  "originalVM": {
+    "floor": 8589934592,
+    "free": {
+      "/tmp": 17245044736,
+      "/workspace": 8878772224
+    },
+    "heavy": "NOT_ADMITTED",
+    "sourceChecksOnly": true
+  },
+  "productRuntime": {
+    "conclusion": "success",
+    "diagnosticConclusion": "success",
+    "diagnosticJob": 120400332924,
+    "job": 120397132804,
+    "run": 39948562240
+  },
+  "protected": {
+    "architecture": {
+      "conclusion": "failure",
+      "job": 120397204814
+    },
+    "bootstrap": {
+      "conclusion": "success",
+      "job": 120397119712
+    },
+    "exactReview": {
+      "conclusion": "failure",
+      "job": 120397204876
+    },
+    "exclusiveInnerCause": "NOT_OBSERVED",
+    "failedStage": "Retrieve bootstrap and prepare detached subject",
+    "pinsGuardsRefsChanged": false,
+    "requirements": {
+      "conclusion": "failure",
+      "job": 120397204825
+    },
+    "root": {
+      "conclusion": "failure",
+      "job": 120397327868
+    },
+    "run": 39948558260
+  },
+  "rawHostedScope": "inventory-only; original raw TAP/rows/PNGs not obtained; PNGs not visually reviewed",
+  "schemaVersion": "vnext-material-source-receipt-v1",
+  "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+  "status": "PARTIAL_HOSTED_ENGINEERING_PASS_NOT_RELEASED",
+  "tree": "f006dca499e89cef1f2b89b830077cf19f16528c"
+}

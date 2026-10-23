@@ -1,0 +1,13 @@
+{
+  "type01_02": "conditional Supabase dynamic select inferred ParserError; original two REDs retained; branch-specific literal selects fixed, type03PASS",
+  "http01": {
+    "source": "3a64af06a5a6bd04a47a39843afd2cf3a395f5b1",
+    "error": "Root test assumed identity settings singleton exists. Actual captured schema restores table empty; original assert function COALESCE absence=false. No app started/RPC/lease attempt; SQL/product unchanged.",
+    "oldHarnessSha256": "7fbe305fef24bb7c2644dd03be43cf227cb1c2179051dce2e03b0614d7192493",
+    "fix": "observe exact empty rows plus original COALESCE fallback; no data/profile/guard modification",
+    "originalRedRetained": true
+  },
+  "http02": "actual product SQL42702 screen-context; overall1PASS2FAIL; alias/lease4/20 component passed, not whole-run success; no source repair yet under this receipt",
+  "poststate01": "read-only private observer SQL accidentally concatenated table alias without a space,42P01. Original script/log retained; single space fix poststate02PASS; no application rerun or product/data mutation.",
+  "baselineAllRedsRemain": true
+}

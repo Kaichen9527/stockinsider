@@ -1,0 +1,1213 @@
+{
+  "source": "c81e6fe916b3f0b5983495d02b4cdcf62cf2d170",
+  "scope": "original VM source/contracts/type/lint/syntax only, repeated runs are not added",
+  "checks": [
+    {
+      "name": "action-rational-source-final-09",
+      "receipt": {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "web/src/lib/vnext/corporate-action-terms.test.ts"
+        ],
+        "cwd": "/workspace/stockinsider-vnext-oct22",
+        "start": "2026-10-23T15:00:37.610480+00:00",
+        "end": "2026-10-23T15:00:38.699760+00:00",
+        "exit": 0,
+        "initialFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243873280
+        },
+        "finalFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243869184
+        },
+        "sampledSessionPeakRssBytes": 106422272,
+        "resourceViolation": null,
+        "samples": [
+          {
+            "at": "2026-10-23T15:00:37.666092+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243873280
+            },
+            "sessionRssBytes": 19869696
+          },
+          {
+            "at": "2026-10-23T15:00:38.199321+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243869184
+            },
+            "sessionRssBytes": 106422272
+          }
+        ],
+        "sampledNotInstantaneous": true,
+        "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+      },
+      "stdoutBytes": 3626,
+      "stdoutSha256": "1522a0c447135d1d049ed5437de407dea9cf9df4c741840e53550004bf03cbfe",
+      "counts": {
+        "tests": 12,
+        "pass": 12,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "action-utc-sql-source-10",
+      "receipt": {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "scripts/vnext-action-terms-source.test.mjs"
+        ],
+        "cwd": "/workspace/stockinsider-vnext-oct22",
+        "start": "2026-10-23T15:03:21.829901+00:00",
+        "end": "2026-10-23T15:03:22.350632+00:00",
+        "exit": 0,
+        "initialFree": {
+          "/workspace": 8876249088,
+          "/tmp": 17243824128
+        },
+        "finalFree": {
+          "/workspace": 8876249088,
+          "/tmp": 17243820032
+        },
+        "sampledSessionPeakRssBytes": 5767168,
+        "resourceViolation": null,
+        "samples": [
+          {
+            "at": "2026-10-23T15:03:21.849841+00:00",
+            "freeBytes": {
+              "/workspace": 8876249088,
+              "/tmp": 17243824128
+            },
+            "sessionRssBytes": 5767168
+          }
+        ],
+        "sampledNotInstantaneous": true,
+        "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+      },
+      "stdoutBytes": 1138,
+      "stdoutSha256": "571c7fcb1f72c01c90c8532e598ccaecbb96175198ad990de9b68028bc9fdc79",
+      "counts": {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "action-preparation-final-regression-02",
+      "receipt": {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "web/src/lib/vnext/preparation-reconciliation.test.ts"
+        ],
+        "cwd": "/workspace/stockinsider-vnext-oct22",
+        "start": "2026-10-23T14:57:12.568525+00:00",
+        "end": "2026-10-23T14:57:14.623800+00:00",
+        "exit": 0,
+        "initialFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243889664
+        },
+        "finalFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243881472
+        },
+        "sampledSessionPeakRssBytes": 181161984,
+        "resourceViolation": null,
+        "samples": [
+          {
+            "at": "2026-10-23T14:57:12.578853+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243889664
+            },
+            "sessionRssBytes": 9568256
+          },
+          {
+            "at": "2026-10-23T14:57:13.087379+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243885568
+            },
+            "sessionRssBytes": 124055552
+          },
+          {
+            "at": "2026-10-23T14:57:13.596305+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243885568
+            },
+            "sessionRssBytes": 141447168
+          },
+          {
+            "at": "2026-10-23T14:57:14.123483+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243885568
+            },
+            "sessionRssBytes": 181161984
+          }
+        ],
+        "sampledNotInstantaneous": true,
+        "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+      },
+      "stdoutBytes": 4162,
+      "stdoutSha256": "bd0b88fd15efc8aec119ebaa0705d1cbf274f10047e149c6a5da96990c928dd2",
+      "counts": {
+        "tests": 12,
+        "pass": 12,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "action-forecast-affected-regression-01",
+      "receipt": {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "web/src/lib/vnext/forecast-current.test.ts"
+        ],
+        "cwd": "/workspace/stockinsider-vnext-oct22",
+        "start": "2026-10-23T14:50:45.019527+00:00",
+        "end": "2026-10-23T14:50:45.532704+00:00",
+        "exit": 0,
+        "initialFree": {
+          "/workspace": 8876486656,
+          "/tmp": 17244004352
+        },
+        "finalFree": {
+          "/workspace": 8876486656,
+          "/tmp": 17244000256
+        },
+        "sampledSessionPeakRssBytes": 7733248,
+        "resourceViolation": null,
+        "samples": [
+          {
+            "at": "2026-10-23T14:50:45.032433+00:00",
+            "freeBytes": {
+              "/workspace": 8876486656,
+              "/tmp": 17244004352
+            },
+            "sessionRssBytes": 7733248
+          }
+        ],
+        "sampledNotInstantaneous": true,
+        "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+      },
+      "stdoutBytes": 2447,
+      "stdoutSha256": "857f2fc6abaaf402443babf23f253121cb1f6f4fc6aed2e54b5bf278b8e9cd15",
+      "counts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "action-rational-types-final-05",
+      "receipt": {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "web/node_modules/typescript/bin/tsc",
+          "--project",
+          "web/tsconfig.json",
+          "--noEmit",
+          "--incremental",
+          "false"
+        ],
+        "cwd": "/workspace/stockinsider-vnext-oct22",
+        "start": "2026-10-23T15:00:39.335001+00:00",
+        "end": "2026-10-23T15:01:29.832130+00:00",
+        "exit": 0,
+        "initialFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243856896
+        },
+        "finalFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243844608
+        },
+        "sampledSessionPeakRssBytes": 1365286912,
+        "resourceViolation": null,
+        "samples": [
+          {
+            "at": "2026-10-23T15:00:39.352194+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 11927552
+          },
+          {
+            "at": "2026-10-23T15:00:39.871969+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 77590528
+          },
+          {
+            "at": "2026-10-23T15:00:40.419850+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 89255936
+          },
+          {
+            "at": "2026-10-23T15:00:41.077820+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 93843456
+          },
+          {
+            "at": "2026-10-23T15:00:41.595382+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 101707776
+          },
+          {
+            "at": "2026-10-23T15:00:42.115801+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 128970752
+          },
+          {
+            "at": "2026-10-23T15:00:42.652853+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 153743360
+          },
+          {
+            "at": "2026-10-23T15:00:43.672095+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 162263040
+          },
+          {
+            "at": "2026-10-23T15:00:44.292087+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 176812032
+          },
+          {
+            "at": "2026-10-23T15:00:45.015316+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 178909184
+          },
+          {
+            "at": "2026-10-23T15:00:45.531040+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 185987072
+          },
+          {
+            "at": "2026-10-23T15:00:46.050993+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 231075840
+          },
+          {
+            "at": "2026-10-23T15:00:46.657615+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 262270976
+          },
+          {
+            "at": "2026-10-23T15:00:47.179478+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 297922560
+          },
+          {
+            "at": "2026-10-23T15:00:47.700282+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 345763840
+          },
+          {
+            "at": "2026-10-23T15:00:49.355941+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 373026816
+          },
+          {
+            "at": "2026-10-23T15:00:49.920198+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 373026816
+          },
+          {
+            "at": "2026-10-23T15:00:50.449281+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 410120192
+          },
+          {
+            "at": "2026-10-23T15:00:51.095519+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 451538944
+          },
+          {
+            "at": "2026-10-23T15:00:52.495057+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 464384000
+          },
+          {
+            "at": "2026-10-23T15:00:53.056279+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 464384000
+          },
+          {
+            "at": "2026-10-23T15:00:53.658944+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 496758784
+          },
+          {
+            "at": "2026-10-23T15:00:54.172363+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 528347136
+          },
+          {
+            "at": "2026-10-23T15:00:55.116010+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 538308608
+          },
+          {
+            "at": "2026-10-23T15:00:55.643977+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 539619328
+          },
+          {
+            "at": "2026-10-23T15:00:56.159398+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 552595456
+          },
+          {
+            "at": "2026-10-23T15:00:56.667139+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243856896
+            },
+            "sessionRssBytes": 568455168
+          },
+          {
+            "at": "2026-10-23T15:00:57.317381+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243815936
+            },
+            "sessionRssBytes": 575795200
+          },
+          {
+            "at": "2026-10-23T15:00:57.972652+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 575795200
+          },
+          {
+            "at": "2026-10-23T15:00:58.484137+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 580513792
+          },
+          {
+            "at": "2026-10-23T15:00:58.996035+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 597815296
+          },
+          {
+            "at": "2026-10-23T15:00:59.511912+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 605024256
+          },
+          {
+            "at": "2026-10-23T15:01:00.054134+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 616820736
+          },
+          {
+            "at": "2026-10-23T15:01:00.587695+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 619180032
+          },
+          {
+            "at": "2026-10-23T15:01:01.109340+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 619704320
+          },
+          {
+            "at": "2026-10-23T15:01:01.623597+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 625471488
+          },
+          {
+            "at": "2026-10-23T15:01:02.145841+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 632418304
+          },
+          {
+            "at": "2026-10-23T15:01:02.653657+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 661254144
+          },
+          {
+            "at": "2026-10-23T15:01:03.163210+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 680652800
+          },
+          {
+            "at": "2026-10-23T15:01:03.677709+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 691531776
+          },
+          {
+            "at": "2026-10-23T15:01:04.203021+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 705687552
+          },
+          {
+            "at": "2026-10-23T15:01:04.711598+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 721285120
+          },
+          {
+            "at": "2026-10-23T15:01:05.219679+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 747368448
+          },
+          {
+            "at": "2026-10-23T15:01:05.757782+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 764190720
+          },
+          {
+            "at": "2026-10-23T15:01:06.267882+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 767074304
+          },
+          {
+            "at": "2026-10-23T15:01:06.775804+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 768909312
+          },
+          {
+            "at": "2026-10-23T15:01:07.289591+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 782278656
+          },
+          {
+            "at": "2026-10-23T15:01:07.803027+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 800890880
+          },
+          {
+            "at": "2026-10-23T15:01:08.314153+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 826843136
+          },
+          {
+            "at": "2026-10-23T15:01:08.833307+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 845586432
+          },
+          {
+            "at": "2026-10-23T15:01:09.341772+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 862625792
+          },
+          {
+            "at": "2026-10-23T15:01:09.849908+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 902078464
+          },
+          {
+            "at": "2026-10-23T15:01:10.357594+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 932618240
+          },
+          {
+            "at": "2026-10-23T15:01:10.865761+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 958439424
+          },
+          {
+            "at": "2026-10-23T15:01:11.378138+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 984784896
+          },
+          {
+            "at": "2026-10-23T15:01:11.894324+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1004314624
+          },
+          {
+            "at": "2026-10-23T15:01:12.405616+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1015455744
+          },
+          {
+            "at": "2026-10-23T15:01:12.914413+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1030004736
+          },
+          {
+            "at": "2026-10-23T15:01:13.423573+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1053859840
+          },
+          {
+            "at": "2026-10-23T15:01:13.934799+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1078894592
+          },
+          {
+            "at": "2026-10-23T15:01:14.452470+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1104453632
+          },
+          {
+            "at": "2026-10-23T15:01:14.963539+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1125425152
+          },
+          {
+            "at": "2026-10-23T15:01:15.472824+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1138794496
+          },
+          {
+            "at": "2026-10-23T15:01:15.980886+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1160159232
+          },
+          {
+            "at": "2026-10-23T15:01:16.491615+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1171431424
+          },
+          {
+            "at": "2026-10-23T15:01:17.002835+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1181130752
+          },
+          {
+            "at": "2026-10-23T15:01:17.516097+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1193844736
+          },
+          {
+            "at": "2026-10-23T15:01:18.024278+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1214554112
+          },
+          {
+            "at": "2026-10-23T15:01:18.534463+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1222942720
+          },
+          {
+            "at": "2026-10-23T15:01:19.043397+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1233821696
+          },
+          {
+            "at": "2026-10-23T15:01:19.571307+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1242472448
+          },
+          {
+            "at": "2026-10-23T15:01:20.082091+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1252433920
+          },
+          {
+            "at": "2026-10-23T15:01:20.590106+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1262264320
+          },
+          {
+            "at": "2026-10-23T15:01:21.104971+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1273929728
+          },
+          {
+            "at": "2026-10-23T15:01:21.614898+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1280090112
+          },
+          {
+            "at": "2026-10-23T15:01:22.123388+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1284939776
+          },
+          {
+            "at": "2026-10-23T15:01:22.643003+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1289396224
+          },
+          {
+            "at": "2026-10-23T15:01:23.155672+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1292673024
+          },
+          {
+            "at": "2026-10-23T15:01:23.667509+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1298702336
+          },
+          {
+            "at": "2026-10-23T15:01:24.185588+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1301848064
+          },
+          {
+            "at": "2026-10-23T15:01:24.703171+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1307877376
+          },
+          {
+            "at": "2026-10-23T15:01:25.217251+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1312202752
+          },
+          {
+            "at": "2026-10-23T15:01:25.735521+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1319280640
+          },
+          {
+            "at": "2026-10-23T15:01:26.255950+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1324261376
+          },
+          {
+            "at": "2026-10-23T15:01:26.767302+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1326882816
+          },
+          {
+            "at": "2026-10-23T15:01:27.280655+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1332387840
+          },
+          {
+            "at": "2026-10-23T15:01:27.800659+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1341693952
+          },
+          {
+            "at": "2026-10-23T15:01:28.309499+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1354539008
+          },
+          {
+            "at": "2026-10-23T15:01:28.821054+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 1365286912
+          },
+          {
+            "at": "2026-10-23T15:01:29.331861+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243844608
+            },
+            "sessionRssBytes": 0
+          }
+        ],
+        "sampledNotInstantaneous": true,
+        "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+      },
+      "stdoutBytes": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "action-final-lint-02",
+      "receipt": {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "node_modules/eslint/bin/eslint.js",
+          "src/lib/vnext/corporate-action-terms.ts",
+          "src/lib/vnext/corporate-action-terms.test.ts",
+          "src/lib/vnext/preparation-reconciliation.ts",
+          "src/lib/vnext/preparation-reconciliation.test.ts",
+          "src/lib/vnext/store.ts"
+        ],
+        "cwd": "/workspace/stockinsider-vnext-oct22/web",
+        "start": "2026-10-23T14:58:20.995478+00:00",
+        "end": "2026-10-23T14:58:24.060458+00:00",
+        "exit": 0,
+        "initialFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243877376
+        },
+        "finalFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243877376
+        },
+        "sampledSessionPeakRssBytes": 282152960,
+        "resourceViolation": null,
+        "samples": [
+          {
+            "at": "2026-10-23T14:58:21.008153+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243877376
+            },
+            "sessionRssBytes": 6553600
+          },
+          {
+            "at": "2026-10-23T14:58:21.517492+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243877376
+            },
+            "sessionRssBytes": 69468160
+          },
+          {
+            "at": "2026-10-23T14:58:22.028480+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243877376
+            },
+            "sessionRssBytes": 144371712
+          },
+          {
+            "at": "2026-10-23T14:58:22.537750+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243877376
+            },
+            "sessionRssBytes": 202960896
+          },
+          {
+            "at": "2026-10-23T14:58:23.051380+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243877376
+            },
+            "sessionRssBytes": 249843712
+          },
+          {
+            "at": "2026-10-23T14:58:23.560221+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243877376
+            },
+            "sessionRssBytes": 282152960
+          }
+        ],
+        "sampledNotInstantaneous": true,
+        "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+      },
+      "stdoutBytes": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "action-native-final-syntax-03",
+      "receipt": {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--check",
+          "scripts/vnext-action-terms-native-fixture.mjs"
+        ],
+        "cwd": "/workspace/stockinsider-vnext-oct22",
+        "start": "2026-10-23T14:55:46.870634+00:00",
+        "end": "2026-10-23T14:55:47.397239+00:00",
+        "exit": 0,
+        "initialFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243951104
+        },
+        "finalFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243951104
+        },
+        "sampledSessionPeakRssBytes": 9568256,
+        "resourceViolation": null,
+        "samples": [
+          {
+            "at": "2026-10-23T14:55:46.896642+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243951104
+            },
+            "sessionRssBytes": 9568256
+          }
+        ],
+        "sampledNotInstantaneous": true,
+        "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+      },
+      "stdoutBytes": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "action-prep-native-syntax-final-02",
+      "receipt": {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--check",
+          "scripts/vnext-preparation-http-fixture.mjs"
+        ],
+        "cwd": "/workspace/stockinsider-vnext-oct22",
+        "start": "2026-10-23T14:47:15.900855+00:00",
+        "end": "2026-10-23T14:47:16.415862+00:00",
+        "exit": 0,
+        "initialFree": {
+          "/workspace": 8876490752,
+          "/tmp": 17244028928
+        },
+        "finalFree": {
+          "/workspace": 8876490752,
+          "/tmp": 17244028928
+        },
+        "sampledSessionPeakRssBytes": 13369344,
+        "resourceViolation": null,
+        "samples": [
+          {
+            "at": "2026-10-23T14:47:15.915527+00:00",
+            "freeBytes": {
+              "/workspace": 8876490752,
+              "/tmp": 17244028928
+            },
+            "sessionRssBytes": 13369344
+          }
+        ],
+        "sampledNotInstantaneous": true,
+        "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+      },
+      "stdoutBytes": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "action-cached-syntax-01",
+      "receipt": {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--check",
+          "scripts/vnext-cached-http.test.mjs"
+        ],
+        "cwd": "/workspace/stockinsider-vnext-oct22",
+        "start": "2026-10-23T14:42:55.007544+00:00",
+        "end": "2026-10-23T14:42:55.534108+00:00",
+        "exit": 0,
+        "initialFree": {
+          "/workspace": 8876490752,
+          "/tmp": 17244114944
+        },
+        "finalFree": {
+          "/workspace": 8876490752,
+          "/tmp": 17244114944
+        },
+        "sampledSessionPeakRssBytes": 18956288,
+        "resourceViolation": null,
+        "samples": [
+          {
+            "at": "2026-10-23T14:42:55.033854+00:00",
+            "freeBytes": {
+              "/workspace": 8876490752,
+              "/tmp": 17244114944
+            },
+            "sessionRssBytes": 18956288
+          }
+        ],
+        "sampledNotInstantaneous": true,
+        "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+      },
+      "stdoutBytes": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "action-workflow-source-final-01",
+      "receipt": {
+        "command": [
+          "python3",
+          "-B",
+          "/tmp/stockinsider-vnext-oct22-private/action-workflow-source-check.py"
+        ],
+        "cwd": "/workspace/stockinsider-vnext-oct22",
+        "start": "2026-10-23T15:00:56.908129+00:00",
+        "end": "2026-10-23T15:00:57.428433+00:00",
+        "exit": 0,
+        "initialFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243820032
+        },
+        "finalFree": {
+          "/workspace": 8876478464,
+          "/tmp": 17243815936
+        },
+        "sampledSessionPeakRssBytes": 6946816,
+        "resourceViolation": null,
+        "samples": [
+          {
+            "at": "2026-10-23T15:00:56.927549+00:00",
+            "freeBytes": {
+              "/workspace": 8876478464,
+              "/tmp": 17243820032
+            },
+            "sessionRssBytes": 6946816
+          }
+        ],
+        "sampledNotInstantaneous": true,
+        "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+      },
+      "stdoutBytes": 294,
+      "stdoutSha256": "97241f267f0e6bb0f49bbb08e7a487545e630b22506c29c9e2974949128505da"
+    }
+  ],
+  "localNative": "NOT_ADMITTED",
+  "localBuild": "NOT_ADMITTED",
+  "hostedNewCandidate": "NOT_RUN at source seal",
+  "realSourceOrProvider": "NOT_RUN, configured bindings absent"
+}

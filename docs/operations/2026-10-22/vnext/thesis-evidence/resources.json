@@ -1,0 +1,110 @@
+{
+  "thesis-source-direct-01": {
+    "sampleCount": 3,
+    "minimumFreeBytes": {
+      "/workspace": 13290860544,
+      "/tmp": 17769873408
+    },
+    "sampledSessionPeakRssBytes": 149794816,
+    "resourceViolation": null
+  },
+  "thesis-source-direct-02": {
+    "sampleCount": 2,
+    "minimumFreeBytes": {
+      "/workspace": 13290860544,
+      "/tmp": 17769861120
+    },
+    "sampledSessionPeakRssBytes": 120963072,
+    "resourceViolation": null
+  },
+  "thesis-source-type-01": {
+    "sampleCount": 17,
+    "minimumFreeBytes": {
+      "/workspace": 13290860544,
+      "/tmp": 17769857024
+    },
+    "sampledSessionPeakRssBytes": 739364864,
+    "resourceViolation": null
+  },
+  "thesis-native-01": {
+    "sampleCount": 32,
+    "minimumFreeBytes": {
+      "/workspace": 12288757760,
+      "/tmp": 17766694912
+    },
+    "sampledSessionPeakRssBytes": 207900672,
+    "resourceViolation": null
+  },
+  "thesis-lint-01": {
+    "sampleCount": 60,
+    "minimumFreeBytes": {
+      "/workspace": 12288516096,
+      "/tmp": 17765490688
+    },
+    "sampledSessionPeakRssBytes": 1122484224,
+    "resourceViolation": null
+  },
+  "thesis-build-01": {
+    "sampleCount": 157,
+    "minimumFreeBytes": {
+      "/workspace": 12154949632,
+      "/tmp": 17765351424
+    },
+    "sampledSessionPeakRssBytes": 1216561152,
+    "resourceViolation": null
+  },
+  "thesis-http-setup-01": {
+    "sampleCount": 8,
+    "minimumFreeBytes": {
+      "/workspace": 11287048192,
+      "/tmp": 17765273600
+    },
+    "sampledSessionPeakRssBytes": 139595776,
+    "resourceViolation": null
+  },
+  "thesis-active-http-01": {
+    "sampleCount": 3,
+    "minimumFreeBytes": {
+      "/workspace": 11285516288,
+      "/tmp": 17764777984
+    },
+    "sampledSessionPeakRssBytes": 163090432,
+    "resourceViolation": null
+  },
+  "thesis-http-setup-02": {
+    "sampleCount": 8,
+    "minimumFreeBytes": {
+      "/workspace": 10372628480,
+      "/tmp": 17676578816
+    },
+    "sampledSessionPeakRssBytes": 142266368,
+    "resourceViolation": null
+  },
+  "thesis-active-http-02": {
+    "sampleCount": 6,
+    "minimumFreeBytes": {
+      "/workspace": 10372628480,
+      "/tmp": 17675071488
+    },
+    "sampledSessionPeakRssBytes": 216576000,
+    "resourceViolation": null
+  },
+  "thesis-browser-rights-01": {
+    "sampleCount": 28,
+    "minimumFreeBytes": {
+      "/workspace": 10372628480,
+      "/tmp": 17510871040
+    },
+    "sampledSessionPeakRssBytes": 1561980928,
+    "resourceViolation": null
+  },
+  "thesis-browser-ui-01": {
+    "sampleCount": 46,
+    "minimumFreeBytes": {
+      "/workspace": 10372718592,
+      "/tmp": 17552519168
+    },
+    "sampledSessionPeakRssBytes": 1462808576,
+    "resourceViolation": null
+  }
+}

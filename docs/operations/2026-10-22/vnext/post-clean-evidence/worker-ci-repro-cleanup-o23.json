@@ -1,0 +1,147 @@
+{
+  "at": "2026-10-22T23:41:16.236939+00:00",
+  "steps": [
+    {
+      "args": [
+        "image",
+        "inspect",
+        "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "inspect",
+        "stockinsider-vnext-oct22-worker-10"
+      ],
+      "exit": 1
+    },
+    {
+      "args": [
+        "run",
+        "-d",
+        "--name",
+        "stockinsider-vnext-oct22-worker-10",
+        "--label",
+        "codex.task=stockinsider-vnext-oct22",
+        "--network",
+        "none",
+        "--memory=1g",
+        "--cpus=1",
+        "-e",
+        "POSTGRES_HOST_AUTH_METHOD=trust",
+        "-e",
+        "POSTGRES_DB=vnext_worker",
+        "-e",
+        "POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8",
+        "--mount",
+        "type=bind,src=/tmp/stockinsider-vnext-oct22-private/worker-pg-data-10,dst=/var/lib/postgresql/data",
+        "--mount",
+        "type=bind,src=/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-10/socket,dst=/var/run/postgresql",
+        "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "inspect",
+        "stockinsider-vnext-oct22-worker-10"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "exec",
+        "stockinsider-vnext-oct22-worker-10",
+        "pg_isready",
+        "-U",
+        "postgres",
+        "-d",
+        "vnext_worker"
+      ],
+      "exit": 2
+    },
+    {
+      "args": [
+        "exec",
+        "stockinsider-vnext-oct22-worker-10",
+        "pg_isready",
+        "-U",
+        "postgres",
+        "-d",
+        "vnext_worker"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "exec",
+        "stockinsider-vnext-oct22-worker-10",
+        "/usr/lib/postgresql/17/bin/postgres",
+        "--version"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "exec",
+        "stockinsider-vnext-oct22-worker-10",
+        "sha256sum",
+        "/usr/lib/postgresql/17/bin/postgres"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "inspect",
+        "stockinsider-vnext-oct22-worker-10"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "stop",
+        "--time",
+        "30",
+        "stockinsider-vnext-oct22-worker-10"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "logs",
+        "stockinsider-vnext-oct22-worker-10"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "inspect",
+        "stockinsider-vnext-oct22-worker-10"
+      ],
+      "exit": 0
+    }
+  ],
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-22T23:41:09.373821176Z",
+    "FinishedAt": "2026-10-22T23:41:16.156408512Z"
+  },
+  "nativeExit": 0,
+  "serverShutdownObserved": true,
+  "dataRetained": true,
+  "containerRetained": true,
+  "sourceFilesUnchanged": true,
+  "free": {
+    "/workspace": 8896737280,
+    "/tmp": 17426477056
+  }
+}

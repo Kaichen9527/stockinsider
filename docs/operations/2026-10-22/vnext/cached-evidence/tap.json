@@ -1,0 +1,48 @@
+{
+  "financial-summary-direct-01": [
+    "ok 1 - summary reuses an exact actual-producer EPS unit/period/value claim and actual quote session",
+    "ok 2 - unclaimed999 or quarterly/annual/unit crosswire cannot bypass per-claim validation",
+    "ok 3 - future/invalid dates, actualquote mismatch and hiddenmissingprice reject",
+    "ok 4 - next-four EPS is an explicitly supported four-quarter assumption, never reported annual or invented guidance",
+    "# tests 4",
+    "# pass 4",
+    "# fail 0",
+    "# cancelled 0",
+    "# skipped 0",
+    "# todo 0"
+  ],
+  "financial-summary-worker-regression-01": [
+    "ok 1 - automatic two-issuer synthetic worker calls author/reviewer, original evidence, durable receipts, no replay resampling",
+    "ok 2 - unknown provider outcome is held and repeated worker/recovery never generates another output",
+    "ok 3 - committed settlement response loss needs explicit read before receipt, never another provider call",
+    "ok 4 - committed author receipt loss resolves by actual job read with no author re-invocation",
+    "ok 5 - strict output codec rejects exponent domain and unknown/repeated reviewer claims",
+    "ok 6 - fixed-origin provider performs one actual fetch transport call and never retries uncertain POST",
+    "ok 7 - explicit known-response lookup recovers immutable output without a second POST",
+    "ok 8 - actual expired execution fixture may settle a known response but cannot publish or extend its deadline",
+    "# tests 8",
+    "# pass 8",
+    "# fail 0",
+    "# cancelled 0",
+    "# skipped 0",
+    "# todo 0"
+  ],
+  "cached-native-01": [
+    "not ok 1 - actual cached calendar/current-receipt admission and evidence-bound worker candidate",
+    "# tests 4",
+    "# pass 2",
+    "# fail 2",
+    "# cancelled 0",
+    "# skipped 0",
+    "# todo 0"
+  ],
+  "cached-native-02": [
+    "ok 1 - actual cached calendar/current-receipt admission and evidence-bound worker candidate",
+    "# tests 5",
+    "# pass 5",
+    "# fail 0",
+    "# cancelled 0",
+    "# skipped 0",
+    "# todo 0"
+  ]
+}

@@ -1,0 +1,226 @@
+[
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--incremental",
+      "false",
+      "--pretty",
+      "false"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-23T08:11:19.410042+00:00",
+    "end": "2026-10-23T08:11:53.833978+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8881291264,
+      "/tmp": 17247551488
+    },
+    "finalFree": {
+      "/workspace": 8881291264,
+      "/tmp": 17247551488
+    },
+    "sampledSessionPeakRssBytes": 1377103872,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "name": "business-public-types-01",
+    "stdoutBytes": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "node_modules/eslint/bin/eslint.js",
+      "src/lib/vnext/public-contract.ts",
+      "src/lib/vnext/business-public.test.ts",
+      "src/app/components/vnext/Home.tsx",
+      "--max-warnings=0"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-23T08:14:26.370776+00:00",
+    "end": "2026-10-23T08:14:28.944033+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8881258496,
+      "/tmp": 17247506432
+    },
+    "finalFree": {
+      "/workspace": 8881258496,
+      "/tmp": 17247506432
+    },
+    "sampledSessionPeakRssBytes": 261017600,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "name": "business-public-lint-01",
+    "stdoutBytes": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--incremental",
+      "false",
+      "--pretty",
+      "false"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-23T08:20:19.872831+00:00",
+    "end": "2026-10-23T08:20:56.977548+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8881037312,
+      "/tmp": 17247498240
+    },
+    "finalFree": {
+      "/workspace": 8881037312,
+      "/tmp": 17247490048
+    },
+    "sampledSessionPeakRssBytes": 1346228224,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "name": "business-browser-types-01",
+    "stdoutBytes": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "node_modules/eslint/bin/eslint.js",
+      "e2e/vnext-business.spec.ts",
+      "playwright.vnext.config.ts",
+      "--max-warnings=0"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-23T08:23:07.220729+00:00",
+    "end": "2026-10-23T08:23:09.774511+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8881037312,
+      "/tmp": 17247444992
+    },
+    "finalFree": {
+      "/workspace": 8881037312,
+      "/tmp": 17247444992
+    },
+    "sampledSessionPeakRssBytes": 240500736,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "name": "business-browser-lint-01",
+    "stdoutBytes": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/vnext/business-public.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-23T08:33:13.043143+00:00",
+    "end": "2026-10-23T08:33:13.561912+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 8880951296,
+      "/tmp": 17247375360
+    },
+    "finalFree": {
+      "/workspace": 8880951296,
+      "/tmp": 17247371264
+    },
+    "sampledSessionPeakRssBytes": 13238272,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "name": "business-fieldmap-source-01",
+    "stdoutBytes": 3296,
+    "stdoutSha256": "b7b22dc7fa318ffa023211ae1bf94c7ab9d31e5a8f79606175fc468e0d8ce4d9"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/vnext/business-public.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-23T08:33:20.027534+00:00",
+    "end": "2026-10-23T08:33:20.537167+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8880951296,
+      "/tmp": 17247358976
+    },
+    "finalFree": {
+      "/workspace": 8880951296,
+      "/tmp": 17247354880
+    },
+    "sampledSessionPeakRssBytes": 8781824,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "name": "business-fieldmap-source-02",
+    "stdoutBytes": 2454,
+    "stdoutSha256": "176929318fabbcb9063650cb9894f72d3a7d992d4bf19e6fb808ce666fa7ae35"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--incremental",
+      "false"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-23T08:33:28.006641+00:00",
+    "end": "2026-10-23T08:34:00.032942+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8880951296,
+      "/tmp": 17247350784
+    },
+    "finalFree": {
+      "/workspace": 8880951296,
+      "/tmp": 17247350784
+    },
+    "sampledSessionPeakRssBytes": 1359024128,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "name": "business-fieldmap-types-01",
+    "stdoutBytes": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "node_modules/eslint/bin/eslint.js",
+      "src/lib/vnext/public-contract.ts",
+      "src/lib/vnext/business-public.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-23T08:34:48.598076+00:00",
+    "end": "2026-10-23T08:34:52.209968+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8880934912,
+      "/tmp": 17247334400
+    },
+    "finalFree": {
+      "/workspace": 8880934912,
+      "/tmp": 17247334400
+    },
+    "sampledSessionPeakRssBytes": 258850816,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "name": "business-fieldmap-lint-01",
+    "stdoutBytes": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

@@ -1,0 +1,27 @@
+TAP version 13
+# Subtest: finite issuer IR source authority, actual original receipts and current publication fence
+    # Subtest: audit-retained-installed: original failed-run rows and current source/ACL/RLS profile match without reinstall
+    ok 1 - audit-retained-installed: original failed-run rows and current source/ACL/RLS profile match without reinstall
+    # Subtest: private checker denies public/service calls and missing original source proof makes no mutations
+    ok 2 - private checker denies public/service calls and missing original source proof makes no mutations
+    # Subtest: guarded checked-text compatibility candidate commits with exact body-only catalog delta
+    ok 3 - guarded checked-text compatibility candidate commits with exact body-only catalog delta
+    # Subtest: original receipt/parser/fact/validation APIs produce a synthetic issuer financial cache
+    ok 4 - original receipt/parser/fact/validation APIs produce a synthetic issuer financial cache
+    # Subtest: actual DB current predicate rejects cross-issuer, hash, fact, manifest and unsupported codec changes
+    ok 5 - actual DB current predicate rejects cross-issuer, hash, fact, manifest and unsupported codec changes
+    # Subtest: actual distinct author/reviewer worker uses only projected numeric evidence and publishes unqualified research
+    ok 6 - actual distinct author/reviewer worker uses only projected numeric evidence and publishes unqualified research
+    # Subtest: current registry removal fences reserve replay, qualification/publication replay and public reads without rewriting history
+    ok 7 - current registry removal fences reserve replay, qualification/publication replay and public reads without rewriting history
+    1..7
+ok 1 - finite issuer IR source authority, actual original receipts and current publication fence
+1..1
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4079.864599

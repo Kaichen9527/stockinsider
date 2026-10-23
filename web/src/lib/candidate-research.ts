@@ -1,3 +1,4 @@
+import { requireCandidateCycleScope } from './vnext/runtime.ts';
 import { createHash, randomUUID } from 'crypto';
 import { adaptLegacyDiscoveryEvidence } from './live-discovery-evidence-adapter';
 import auoPbHistory from '../data/auo-pb-history-v1.json' with { type: 'json' };
@@ -2062,6 +2063,8 @@ export async function runCandidateResearchCycle(options: {
   targetSession?: string;
   targetCutoffAt?: string;
 }) {
+  requireCandidateCycleScope(options.symbols);
+  if (options.symbols && options.symbols.length === 0) throw new Error('candidate_research_empty_explicit_scope');
   if (options.dryRun) return executeCandidateResearchCycle(options);
   const supabase = getSupabaseServerClient();
   const runId = randomUUID();

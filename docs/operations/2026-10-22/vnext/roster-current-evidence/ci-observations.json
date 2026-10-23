@@ -1,0 +1,1231 @@
+{
+  "scope": "actual GitHub hosted metadata/finite notices, not original Codex VM native or Contabo; private bodies/raw PNGs not downloaded",
+  "jobs": [
+    {
+      "sourceMetadata": "ci6f25741-vnext-final-jobs-o23.json",
+      "metadataSha256": "7d3ee207fd3bd9dd436b58378ba47b233a00212bcadaacdf51d95976e519a843",
+      "jobs": [
+        {
+          "id": 120258705052,
+          "name": "trading-invalidity-native",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Fixed native dependency and workset admission",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Fresh official-roster invalidity installer and unpublished exits (synthetic metadata)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Hash finite owned raw evidence without publishing private contents",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upload finite trading-invalidity TAP and summary only",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 120258705320,
+          "name": "vnext-quality",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Workspace and temporary filesystem admission",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install unchanged locked dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Actual source contracts, types and lint",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Full ordinary build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Actual durable worker journal with explicitly synthetic provider",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Same-build desktop and mobile browser over current-run PostgreSQL snapshots",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upload finite browser summaries and synthetic screenshots only",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceMetadata": "ci6f25741-product-final-jobs-o23.json",
+      "metadataSha256": "e8dd53c32aea10f508ca5575a6ba6c3f875eb10b5b469262067fa1fe49f592ef",
+      "jobs": [
+        {
+          "id": 120258705294,
+          "name": "product-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install PostgreSQL",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install root dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-python@v5",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install isolated offline parser test dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install web dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify candidate revision and historical date contracts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install project-local Playwright Chromium",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-python@v5",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 120258706241,
+          "name": "model-runner",
+          "status": "completed",
+          "conclusion": "skipped",
+          "steps": []
+        },
+        {
+          "id": 120258706382,
+          "name": "evaluation-governance",
+          "status": "completed",
+          "conclusion": "skipped",
+          "steps": []
+        },
+        {
+          "id": 120261032073,
+          "name": "stockinsider-v3-diagnostic-product-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Require executable PR product/runtime evidence only",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceMetadata": "ci6f25741-protected-jobs-o23.json",
+      "metadataSha256": "39d3b83dba729f95fbff7cbd8392f01a81cd6058b2e4e474ed4ea01eaf516a94",
+      "jobs": [
+        {
+          "id": 120258697360,
+          "name": "stockinsider-v3-gate-bootstrap",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Checkout only the protected pull-request base",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify protected authority invariants",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Fetch subject object without executing subject files",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Issue base-owned bootstrap attestation",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Publish immutable bootstrap handoff",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Checkout only the protected pull-request base",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 120258759466,
+          "name": "exact-review",
+          "status": "completed",
+          "conclusion": "failure",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Checkout only the protected pull-request base",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Retrieve bootstrap and prepare detached subject",
+              "status": "completed",
+              "conclusion": "failure"
+            },
+            {
+              "name": "Emit protected exact-review envelope",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Publish immutable exact-review envelope",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Retrieve bootstrap and prepare detached subject",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Checkout only the protected pull-request base",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 120258759506,
+          "name": "architecture",
+          "status": "completed",
+          "conclusion": "failure",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Checkout only the protected pull-request base",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Retrieve bootstrap and prepare detached subject",
+              "status": "completed",
+              "conclusion": "failure"
+            },
+            {
+              "name": "Emit protected Architecture envelope",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Publish immutable Architecture envelope",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Retrieve bootstrap and prepare detached subject",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Checkout only the protected pull-request base",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 120258759529,
+          "name": "requirements",
+          "status": "completed",
+          "conclusion": "failure",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Checkout only the protected pull-request base",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Retrieve bootstrap and prepare detached subject",
+              "status": "completed",
+              "conclusion": "failure"
+            },
+            {
+              "name": "Emit protected Requirements envelope",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Publish immutable Requirements envelope",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Retrieve bootstrap and prepare detached subject",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Checkout only the protected pull-request base",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 120258842619,
+          "name": "model-runner-code-gate",
+          "status": "completed",
+          "conclusion": "skipped",
+          "steps": []
+        },
+        {
+          "id": 120258842917,
+          "name": "product-runtime-code-gate",
+          "status": "completed",
+          "conclusion": "skipped",
+          "steps": []
+        },
+        {
+          "id": 120258849304,
+          "name": "stockinsider-v3-gate-root",
+          "status": "completed",
+          "conclusion": "failure",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Reject incomplete or failed Code Gate prerequisites",
+              "status": "completed",
+              "conclusion": "failure"
+            },
+            {
+              "name": "Checkout only the protected pull-request base",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Retrieve bootstrap and prepare detached subject",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Retrieve all five required immutable external envelopes",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Assemble protected authoritative Code Gate aggregate",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Publish immutable authoritative Code Gate aggregate",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceMetadata": "ci37ba4a6-initial-vnext-jobs-o23.json",
+      "metadataSha256": "ceac7e2931663e27c2b262a4eba59196ee0e5c4c7beea1d3a2c7ead8bf72b503",
+      "jobs": [
+        {
+          "id": 120265795091,
+          "name": "trading-invalidity-native",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Fixed native dependency and workset admission",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Fresh official-roster invalidity installer and unpublished exits (synthetic metadata)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Hash finite owned raw evidence without publishing private contents",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upload finite trading-invalidity TAP and summary only",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 120265795304,
+          "name": "vnext-quality",
+          "status": "completed",
+          "conclusion": "failure",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Workspace and temporary filesystem admission",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install unchanged locked dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Actual source contracts, types and lint",
+              "status": "completed",
+              "conclusion": "failure"
+            },
+            {
+              "name": "Full ordinary build",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Actual durable worker journal with explicitly synthetic provider",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Same-build desktop and mobile browser over current-run PostgreSQL snapshots",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Upload finite browser summaries and synthetic screenshots only",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 120265795383,
+          "name": "roster-current-native",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Fixed native dependency and workset admission",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Fresh current-work, claim and reserve invalidity fences (synthetic metadata)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Hash finite owned raw evidence without publishing private contents",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upload finite roster-current TAP and summary only",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "notices": [
+    {
+      "sourceMetadata": "ci6f25741-trading-annotations-o23.json",
+      "title": "Trading-invalidity private inventory",
+      "value": {
+        "count": 41,
+        "bytes": 59740118,
+        "inventorySha256": "2bc7177426902e0f40440fab7a2150a8451cff782ffe87cab9fcf746d59c7279",
+        "rawContentsPublished": false
+      }
+    },
+    {
+      "sourceMetadata": "ci6f25741-trading-annotations-o23.json",
+      "title": "Trading-invalidity cleanup receipt",
+      "value": {
+        "pgRunning": false,
+        "pgPid": 0,
+        "pgExit": 0,
+        "shutdownLogObserved": true,
+        "socketAbsence": {
+          ".s.PGSQL.5432": true,
+          ".s.PGSQL.5432.lock": true
+        },
+        "resourceReceiptObserved": true,
+        "ownedProcessCounts": {
+          "absent": 20,
+          "zeroRssZombie": 0,
+          "pidReused": 0,
+          "unsettled": 0
+        },
+        "fullPrivateCleanupSha256": "c7c6a7fc855e5026ad043a95c6bd846b2870a09f89b746690b7ed459ae198e7c",
+        "dataRetained": true
+      }
+    },
+    {
+      "sourceMetadata": "ci6f25741-trading-annotations-o23.json",
+      "title": "Trading-invalidity finite native receipt",
+      "value": {
+        "scope": "actual fresh engineering SQL; synthetic eligibility/roster/calendar, no official acquisition or financial approval",
+        "sourceHead": "54f50da2a1f8fe229a2edb125d3f2d4f8e1af00e",
+        "inputs": [
+          {
+            "path": "scripts/vnext-trading-invalidity-postgres.test.mjs",
+            "bytes": 27011,
+            "sha256": "48a62b3ad5cf64d285e2827f967d49727e0cc3c09a5e855674208a79ce87ed3b"
+          },
+          {
+            "path": "scripts/vnext-trading-invalidity-resource-run.py",
+            "bytes": 6872,
+            "sha256": "d2e31e0a6311062a786e26353376499bfb72e90bde412e5d9f8cd5b064ca5495"
+          },
+          {
+            "path": "scripts/vnext-worker-fixture.mjs",
+            "bytes": 7953,
+            "sha256": "67a22c076a74d860c7bb428003f47e1a2722b8ea87c2f9830489fe172ee19874"
+          },
+          {
+            "path": "migrations/20261023_vnext_trading_invalidity_exit_v1.sql",
+            "bytes": 22175,
+            "sha256": "6c904052b5994dc02fe047dcedf95ae64498df489824d08a7b11b62a1685d59f"
+          },
+          {
+            "path": "scripts/opportunity-v3/vnext-trading-invalidity-profile-v1.json",
+            "bytes": 6374,
+            "sha256": "e74904bb299ac749b1a3f728b29ff0c7001a1d6fe0638c029700c1bd9b54c379"
+          }
+        ],
+        "tapSha256": "14468f3b3b5d4b4cdf40997522fa61475b592f9ac232c225a1b827ce38c4c41c",
+        "actualTapCounts": {
+          "tests": 8,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "resourceObserved": true,
+        "exit": 0,
+        "resourceViolation": null,
+        "sampledNotInstantaneous": true,
+        "sampledOwnedTreePeakRssBytes": 646623232,
+        "initialFree": {
+          "/home/runner/work/stockinsider/stockinsider": 90995392512,
+          "/tmp": 90995392512
+        },
+        "finalFree": {
+          "/home/runner/work/stockinsider/stockinsider": 90894192640,
+          "/tmp": 90894192640
+        },
+        "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+        "actualPg": {
+          "containerId": "f78693d205db63e995f5d9b0fc9ba96a10d2125e5c518eff430f1a61d4e350c8",
+          "pid": 2340,
+          "start": "10988",
+          "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+          "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+          "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+        }
+      }
+    },
+    {
+      "sourceMetadata": "ci6f25741-vnext-final-check-annotations-o23.json",
+      "title": "Browser finite binary and case receipt",
+      "value": {
+        "suite": "current",
+        "exit": 0,
+        "stats": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 9497.796
+        },
+        "cases": [
+          {
+            "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          }
+        ],
+        "screenshots": 6,
+        "screenshotBytes": 6776603,
+        "browserVersion": "Google Chrome 155.0.8059.39",
+        "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+        "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+        "sourceCommit": "54f50da2a1f8fe229a2edb125d3f2d4f8e1af00e",
+        "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+        "resourceViolation": null,
+        "sampledTreePeakRssBytes": 2231582720,
+        "containmentUsed": false,
+        "publicAcceptanceSha256": "1aad1e767f893c656e1ef1ca29c6da672d7f53ac6c9e3b0ec1973e050c403777"
+      }
+    },
+    {
+      "sourceMetadata": "ci6f25741-vnext-final-check-annotations-o23.json",
+      "title": "Browser finite binary and case receipt",
+      "value": {
+        "suite": "ui",
+        "exit": 0,
+        "stats": {
+          "expected": 12,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 17994.162999999997
+        },
+        "cases": [
+          {
+            "title": "same published contract drives exactly two primary blocks and detail/history",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "empty and unavailable states never fill from legacy cards",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "unknown revision cannot fall back to a different research version",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "loading remains an explicit two-block state and preserves source links",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "same published contract drives exactly two primary blocks and detail/history",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "empty and unavailable states never fill from legacy cards",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "unknown revision cannot fall back to a different research version",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "loading remains an explicit two-block state and preserves source links",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          }
+        ],
+        "screenshots": 12,
+        "screenshotBytes": 4250898,
+        "browserVersion": "Google Chrome 155.0.8059.39",
+        "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+        "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+        "sourceCommit": "54f50da2a1f8fe229a2edb125d3f2d4f8e1af00e",
+        "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+        "resourceViolation": null,
+        "sampledTreePeakRssBytes": 1999552512,
+        "containmentUsed": false,
+        "publicAcceptanceSha256": "52cbe4b44335139d01a352966dc3b1d2038092449d7520b674ca623a3f7439fd"
+      }
+    },
+    {
+      "sourceMetadata": "ci37ba4a6-roster-annotations-o23.json",
+      "title": "Roster-current private inventory",
+      "value": {
+        "count": 41,
+        "bytes": 60247651,
+        "inventorySha256": "24dfc927f9c4560e932a2d6dbc3a453c8e9a5884b6b10c804e69582b39493c1a",
+        "rawContentsPublished": false
+      }
+    },
+    {
+      "sourceMetadata": "ci37ba4a6-roster-annotations-o23.json",
+      "title": "Roster-current cleanup receipt",
+      "value": {
+        "pgRunning": false,
+        "pgPid": 0,
+        "pgExit": 0,
+        "shutdownLogObserved": true,
+        "socketAbsence": {
+          ".s.PGSQL.5432": true,
+          ".s.PGSQL.5432.lock": true
+        },
+        "resourceReceiptObserved": true,
+        "ownedProcessCounts": {
+          "absent": 24,
+          "zeroRssZombie": 0,
+          "pidReused": 0,
+          "unsettled": 0
+        },
+        "fullPrivateCleanupSha256": "31c2447df6a8fc5096bd37cc1e2f8b2e83d86dfb6d34781cb20aa0c965f6bf18",
+        "dataRetained": true
+      }
+    },
+    {
+      "sourceMetadata": "ci37ba4a6-roster-annotations-o23.json",
+      "title": "Roster-current finite native receipt",
+      "value": {
+        "scope": "actual held-work/claim/provider-reserve SQL fences; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval",
+        "sourceHead": "2d88511238eb528bd1d9e8826540fbfe00ee988d",
+        "inputs": [
+          {
+            "path": "scripts/vnext-roster-current-postgres.test.mjs",
+            "bytes": 29686,
+            "sha256": "52d8a119dca786dd09556796de2348399e323addfec88164bc226ff1cc51c1e4"
+          },
+          {
+            "path": "scripts/vnext-roster-current-resource-run.py",
+            "bytes": 6852,
+            "sha256": "55fa7f332b50c7f856c80f516c59f6f11cee03a30560bdab560a827ee6dc8817"
+          },
+          {
+            "path": "scripts/vnext-worker-fixture.mjs",
+            "bytes": 7953,
+            "sha256": "67a22c076a74d860c7bb428003f47e1a2722b8ea87c2f9830489fe172ee19874"
+          },
+          {
+            "path": "migrations/20261023_vnext_roster_current_fence_v1.sql",
+            "bytes": 17898,
+            "sha256": "256960f51e6ec1c43393a243b00e7d385c40a495094b67127c16fd46322a79f2"
+          },
+          {
+            "path": "scripts/opportunity-v3/vnext-roster-current-profile-v1.json",
+            "bytes": 4337,
+            "sha256": "a5a91e1cfa9e6c1668d5d8a4e445c0b57aaf859d98bf07d18b23e8a28691b99d"
+          },
+          {
+            "path": "migrations/20261023_vnext_trading_invalidity_exit_v1.sql",
+            "bytes": 22175,
+            "sha256": "6c904052b5994dc02fe047dcedf95ae64498df489824d08a7b11b62a1685d59f"
+          },
+          {
+            "path": "scripts/opportunity-v3/vnext-trading-invalidity-profile-v1.json",
+            "bytes": 6374,
+            "sha256": "e74904bb299ac749b1a3f728b29ff0c7001a1d6fe0638c029700c1bd9b54c379"
+          }
+        ],
+        "tapSha256": "095352321f3f2218cc0289d1c1fe849c68e860add5ee80243b4cc533457fa84b",
+        "actualTapCounts": {
+          "tests": 10,
+          "pass": 10,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "resourceObserved": true,
+        "exit": 0,
+        "resourceViolation": null,
+        "sampledNotInstantaneous": true,
+        "sampledOwnedTreePeakRssBytes": 741519360,
+        "initialFree": {
+          "/home/runner/work/stockinsider/stockinsider": 90995126272,
+          "/tmp": 90995126272
+        },
+        "finalFree": {
+          "/home/runner/work/stockinsider/stockinsider": 90893266944,
+          "/tmp": 90893266944
+        },
+        "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+        "actualPg": {
+          "containerId": "c7e0cd2529e346143d82dc42a06a7e825b894a7edf437546589fd1ca57d771cb",
+          "pid": 2552,
+          "start": "4860",
+          "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+          "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+          "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+        }
+      }
+    }
+  ],
+  "mergeTreeParity": [
+    {
+      "PRHead": "6f2574185b9acd9e903830aadd6b75d437a50555",
+      "runtimeMerge": "54f50da2a1f8fe229a2edb125d3f2d4f8e1af00e",
+      "parents": [
+        "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+        "6f2574185b9acd9e903830aadd6b75d437a50555"
+      ],
+      "tree": "ded537d105897686622dd7f70577857cf5d5c21a",
+      "exactSourceTreeParity": true
+    },
+    {
+      "PRHead": "37ba4a6904a70f742f3322b3d29a244d091d35da",
+      "runtimeMerge": "2d88511238eb528bd1d9e8826540fbfe00ee988d",
+      "parents": [
+        "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+        "37ba4a6904a70f742f3322b3d29a244d091d35da"
+      ],
+      "tree": "a735b1407e0a25fad6881998cc946f657ecc0919",
+      "exactSourceTreeParity": true
+    }
+  ],
+  "currentSourceCI": "new28fd566 normal CI pending, no reruns",
+  "retainedFailures": [
+    "ee2a6f independent history failure, actual inner cause unobserved",
+    "a021165 analysis-step exit1, bounded log request Forbidden; no invented cause",
+    "37ba4a6 actual source/type/lint failure before build/HTTP/browser, local stale implementation assertion reproduced7PASS1FAIL",
+    "all prior RED/resource/consumed history retained"
+  ],
+  "actualSemanticProviderApproval": false
+}

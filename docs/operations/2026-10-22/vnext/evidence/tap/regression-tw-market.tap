@@ -1,0 +1,62 @@
+TAP version 13
+# Subtest: TWSE InfoHub revenue accepts only identity-bound aligned official observations
+ok 1 - TWSE InfoHub revenue accepts only identity-bound aligned official observations
+# Subtest: bounded official history fetch requests one issuer-month and reports blocked versus empty precisely
+ok 2 - bounded official history fetch requests one issuer-month and reports blocked versus empty precisely
+# Subtest: bounded TPEx history never makes a TWSE request and preserves real month-end valuation date
+ok 3 - bounded TPEx history never makes a TWSE request and preserves real month-end valuation date
+# Subtest: official JSON outcome distinguishes rate-limit, invalid JSON and successful empty payload
+ok 4 - official JSON outcome distinguishes rate-limit, invalid JSON and successful empty payload
+# Subtest: a single transient official-host failure does not blackhole the next request
+ok 5 - a single transient official-host failure does not blackhole the next request
+# Subtest: a non-retryable official response breaks the host failure streak
+ok 6 - a non-retryable official response breaks the host failure streak
+# Subtest: queued official requests respect an open circuit instead of clearing it
+ok 7 - queued official requests respect an open circuit instead of clearing it
+# Subtest: a CDN challenge response opens the official host circuit instead of becoming a false missing-price result
+ok 8 - a CDN challenge response opens the official host circuit instead of becoming a false missing-price result
+# Subtest: valuation endpoint failures do not blackhole the price-history endpoint on the same host
+ok 9 - valuation endpoint failures do not blackhole the price-history endpoint on the same host
+# Subtest: official requests are serialized per host while other work is queued
+ok 10 - official requests are serialized per host while other work is queued
+# Subtest: candidate daily bars share the official all-stock market endpoint rather than the JavaScript-gated per-stock route
+ok 11 - candidate daily bars share the official all-stock market endpoint rather than the JavaScript-gated per-stock route
+# Subtest: candidate daily bars fetch recent sessions before an old archive failure opens the endpoint circuit
+ok 12 - candidate daily bars fetch recent sessions before an old archive failure opens the endpoint circuit
+# Subtest: TPEx monthly index rows provide official trading sessions when TWSE archives are blocked
+ok 13 - TPEx monthly index rows provide official trading sessions when TWSE archives are blocked
+# Subtest: TPEx official calendar parser rejects malformed dates
+ok 14 - TPEx official calendar parser rejects malformed dates
+# Subtest: valuation cache accepts only official TWSE and TPEx history endpoints
+ok 15 - valuation cache accepts only official TWSE and TPEx history endpoints
+# Subtest: official valuation backfill is bounded and advances through missing months
+ok 16 - official valuation backfill is bounded and advances through missing months
+# Subtest: TPEx official monthly rows normalize ROC dates and trading lots
+ok 17 - TPEx official monthly rows normalize ROC dates and trading lots
+# Subtest: TWSE valuation panel preserves official monthly PE/PB evidence for requested symbols
+ok 18 - TWSE valuation panel preserves official monthly PE/PB evidence for requested symbols
+# Subtest: TPEx valuation panel maps the official all-stock table without scraping HTML
+ok 19 - TPEx valuation panel maps the official all-stock table without scraping HTML
+# Subtest: TPEx valuation parser fails closed when official headers are missing
+ok 20 - TPEx valuation parser fails closed when official headers are missing
+# Subtest: TWSE per-stock monthly history normalizes ROC dates for the five-year backfill
+ok 21 - TWSE per-stock monthly history normalizes ROC dates for the five-year backfill
+# Subtest: FinMind fallback preserves share volume and keeps dividend yield separate from PE
+ok 22 - FinMind fallback preserves share volume and keeps dividend yield separate from PE
+# Subtest: FinMind fallback rejects oversized bodies before JSON parsing
+ok 23 - FinMind fallback rejects oversized bodies before JSON parsing
+# Subtest: official prices win a same-session mirror disagreement while conflict remains promotion-blocking
+ok 24 - official prices win a same-session mirror disagreement while conflict remains promotion-blocking
+# Subtest: FinMind-only or stale price history cannot become actionable
+ok 25 - FinMind-only or stale price history cannot become actionable
+# Subtest: final provider publication uses close datasets, not issuer revenue or retired global Shadow
+ok 26 - final provider publication uses close datasets, not issuer revenue or retired global Shadow
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22965.131707

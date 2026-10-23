@@ -1,0 +1,12 @@
+{
+  "path": "scripts/vnext-forecast-native-fixture.mjs",
+  "sourceFragmentBytes": 6707,
+  "sourceFragmentSha256": "96dee7d073a2ac1fc98f4d0db004da5aa29f5ff81d183aab97990886f3c59f83",
+  "adaptations": [
+    "fixed explicit annual/four-quarter original producer; original text retained",
+    "public original MOPS hostname and publication hash; same original append/manifest codec",
+    "no old financial fact append",
+    "new separately named output only"
+  ],
+  "claim": "adapted finite source, NOT byte-exact original fragment identity"
+}

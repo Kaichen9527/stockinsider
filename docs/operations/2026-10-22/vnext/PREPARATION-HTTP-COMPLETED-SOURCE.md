@@ -1,0 +1,15 @@
+# Completed-history preparation HTTP observation (source candidate)
+
+The cached HTTP entry now exercises the actual configured-author `preparation-read` and explicit `resume-preparation` routes against a completed published job. It requires `not_running`, rights `not_checked`, no evidence returned, and no automatic resume or provider reinvocation. Operator/no-auth requests reject before database reads. This is not a running cache-ready or uncertain prepare recovery acceptance.
+
+The finite REST facade permits only provider journal `inspect`/`read`; actual SQL still executes as service_role. It records actual COMMIT/ROLLBACK ReadyForQuery I and query settlement. Full persisted job, invocation and preparation rows plus original measured counts are retained before HTTP; the new reads require exact row equality and zero leases, with no claim/prepare/reserve/model/FS work. Earlier ordinary screen/acquire-release tests retain their separate mutation scope.
+
+Node22.14 syntax passed. Actual new-case PostgreSQL/HTTP is NOT_RUN until ordinary CI rebuilds the same source. The original running/unprepared cache-ready and real prepare-COMMIT response-loss cases remain pending; no throw-after-RPC or synthetic booleans substitute for them. Previous10 reconciliation source contracts are not native evidence. Private source seal: `preparation-completed-http-source-o23.json`; no raw rows/payloads are published.
+
+## Test containment follow-up
+
+The new actual HTTP run remained active beyond the original180-second test deadline, so its result is not claimed. The test client now has a15-second per-request failure ceiling, preserving timeout as RED rather than accepting it as a receipt. Only its own spawned Next process receives SIGTERM; after35seconds unconfirmed settlement can use SIGKILL containment but forces failure. The owned REST server/connections and tracked PG clients are closed and recorded; containment, nonzero pending clients/queries or surviving app PID forbid success. This changes test containment only, never product budgets or mutation outcomes. Syntax-only until fresh ordinary CI; the outstanding earlier run is not rerun or relabelled.
+
+## Split ReadyForQuery source diagnosis
+
+Exactf63 hosted run39897743142 failed: failed-job claim hit the finite HTTP deadline and the subsequent withdrawal returned409. Original raw protocol frames were not downloaded, so an actual packet trace is not claimed. A source-extracted memory probe deliberately separates query resolution/rejection from its Ready frame: the old bridge mistakes SELECT T for COMMIT I, or error E for ROLLBACK I. It reproduces wrong400/unanswered-error outcomes. New transport settles query+T/E together before separately observing COMMIT/ROLLBACK I; both fragmented vectors pass in source scope. Actual fresh PG/HTTP remains pending. Initial Node probe setup hit spawnSync/git EPERM; its source WIP/RED is retained, then the exact Git blob was supplied by the shell without Node child execution. No product guard, expected refusal, score or quota changed.

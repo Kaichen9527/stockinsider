@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-23T02:11:29.130811+00:00",
+  "checks": [
+    "actual SQL and source profile hash",
+    "vnext_semantic_criteria_current_v1 actual dollar-body hash/bytes",
+    "vnext_current_deep_score_v1 actual dollar-body hash/bytes",
+    "vnext_thesis_command_v1 complete source/inverse byte parity",
+    "vnext_thesis_project_v1 complete source/inverse byte parity",
+    "vnext_provider_command_v1 complete source/inverse byte parity",
+    "AUTHOR_INSTRUCTIONS default value expression byte exact",
+    "REVIEWER_INSTRUCTIONS default value expression byte exact",
+    "migrations/20261022_vnext_semantic_score_fence_v1.sql unchanged",
+    "migrations/20261022_vnext_issuer_ir_sources_v1.sql unchanged"
+  ],
+  "migrationSha256": "35ededaf19661f62337654863cdfe6746dff5956780da9373d55cc19179145d7",
+  "passed": 10,
+  "previousToolingRedPreserved": true,
+  "scope": "source reconstruction only, no native/formal approval"
+}

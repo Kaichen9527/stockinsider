@@ -1,0 +1,48 @@
+TAP version 13
+# Subtest: VN01 explicit empty scope cannot expand into research and unadmitted work has zero IO
+ok 1 - VN01 explicit empty scope cannot expand into research and unadmitted work has zero IO
+# Subtest: VN05 null factors keep original available weights and source/volume halves remain independent
+ok 2 - VN05 null factors keep original available weights and source/volume halves remain independent
+# Subtest: VN05/VN09 original event and source rights, hash dedup, round robin and source limits
+ok 3 - VN05/VN09 original event and source rights, hash dedup, round robin and source limits
+# Subtest: VN06 pair/policy/session confirmation uses initial factors, holiday and same day cannot increment
+ok 4 - VN06 pair/policy/session confirmation uses initial factors, holiday and same day cannot increment
+# Subtest: VN07 verified exits are immediate and overheat retains a waiting candidate
+ok 5 - VN07 verified exits are immediate and overheat retains a waiting candidate
+# Subtest: VN08/VN10 latest completed sessions, Taipei date, confidence and supported AI downgrade
+ok 6 - VN08/VN10 latest completed sessions, Taipei date, confidence and supported AI downgrade
+# Subtest: VN08 actual raw screening cannot convert unadjusted or missing observations into points
+ok 7 - VN08 actual raw screening cannot convert unadjusted or missing observations into points
+# Subtest: VN11 canonical input clocks do not rewrite material content
+ok 8 - VN11 canonical input clocks do not rewrite material content
+# Subtest: VN12 facts, formulas, units, original evidence hashes and every claim require independent review
+ok 9 - VN12 facts, formulas, units, original evidence hashes and every claim require independent review
+# Subtest: VN14 missing, stale and mismatched published snapshots cannot become entry eligible
+ok 10 - VN14 missing, stale and mismatched published snapshots cannot become entry eligible
+# Subtest: VN02 configured role credentials reject spoofed body identity and ambiguous role keys
+ok 11 - VN02 configured role credentials reject spoofed body identity and ambiguous role keys
+# Subtest: VN05 chained syndication and crossplatform author roots count as one independent family
+ok 12 - VN05 chained syndication and crossplatform author roots count as one independent family
+# Subtest: VN05 malformed or future event/availability clocks and absent root identity fail closed
+ok 13 - VN05 malformed or future event/availability clocks and absent root identity fail closed
+# Subtest: VN10 persisted overseas gaps keep confidence limited on redisplay with the same risk snapshot
+ok 14 - VN10 persisted overseas gaps keep confidence limited on redisplay with the same risk snapshot
+# Subtest: VN02 bounded streaming rejects malformed, oversized and excessive depth before dispatch
+ok 15 - VN02 bounded streaming rejects malformed, oversized and excessive depth before dispatch
+# Subtest: VN12 public citations reject private endpoints, credentials and paid member links
+ok 16 - VN12 public citations reject private endpoints, credentials and paid member links
+# Subtest: VN01 feature default off preserves the existing acquisition boundary behavior
+ok 17 - VN01 feature default off preserves the existing acquisition boundary behavior
+# Subtest: VN06/VN07 cached orchestration retains active gaps, audits every member and rotates only postclose
+ok 18 - VN06/VN07 cached orchestration retains active gaps, audits every member and rotates only postclose
+# Subtest: VN04 distinct events from one author are parsed once each without adding independent voices
+ok 19 - VN04 distinct events from one author are parsed once each without adding independent voices
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 102.661143

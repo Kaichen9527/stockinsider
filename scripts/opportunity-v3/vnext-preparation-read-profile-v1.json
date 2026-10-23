@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "vnext-preparation-read-source-v1",
+  "nativeVerified": false,
+  "nativeOid": null,
+  "catalogMetadata": null,
+  "migration": "migrations/20261022_vnext_preparation_read_v1.sql",
+  "migrationSha256": "c6c0c63293f8e93e367a36736dde8d5bf896dc7310f16df25776ddca2f77e686",
+  "signature": "public.vnext_command_v1(text,text,jsonb)",
+  "predecessorBodySha256": "b99885487f46bc01bd9375fb285620058eddda1aa23eb3c3043ce89ec6ca2a17",
+  "successorBodySha256": "63f40aa176395df6a06dc7a50875e251f90714545fd20670b2e34eb39438f016",
+  "predecessorBytes": 42029,
+  "successorBytes": 42088,
+  "fragment": {
+    "before": "   answer:=jsonb_build_object('evidence',m.evidence,'inputHash',j.input_hash);",
+    "after": "   answer:=jsonb_build_object('evidence',m.evidence,'inputHash',j.input_hash);\n   IF p_command='work-context' THEN RETURN answer; END IF;"
+  },
+  "inverseWholeBodyParity": true,
+  "owner": "stockinsider_vnext_owner",
+  "securityDefiner": true,
+  "returnType": "jsonb",
+  "argumentNames": [
+    "p_principal",
+    "p_command",
+    "p_request"
+  ],
+  "searchPath": "pg_catalog, public",
+  "executeGrantees": [
+    "stockinsider_vnext_owner",
+    "service_role"
+  ],
+  "grantor": "stockinsider_vnext_owner",
+  "grantOption": false,
+  "permissionDelta": "none",
+  "allowedCatalogDelta": [
+    "exact original work-context prosrc return insertion only"
+  ],
+  "sourceLineage": {
+    "sourceChain": "main ->thesis ->cached ->terminal ->current target profile exact fragment",
+    "preTargetArchive": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/install.json",
+    "preTargetArchiveSha256": "78a35164c9c8d01c6c1f697cac1ff13e0150ca6ae7cd04e37f0e09c926e4ea2d",
+    "targetProfileSha256": "fd5390cd43db8a9fd76ffd2f44da8eeb3799a692692e6ba6f500c051cd258def",
+    "scope": "source reconstruction only, no native execution of this new successor"
+  },
+  "ownerRolePreconditions": {
+    "source": "exact current target migration guard; no role mutation",
+    "noLogin": true,
+    "noSuperuser": true,
+    "noCreateDb": true,
+    "noCreateRole": true,
+    "noReplication": true,
+    "noBypassRls": true,
+    "roleConfig": null,
+    "memberships": [],
+    "roleDatabaseConfig": null
+  }
+}

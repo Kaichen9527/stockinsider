@@ -1,0 +1,482 @@
+TAP version 13
+# Subtest: candidate detail fact IDs are deduplicated into URL-safe bounded batches
+ok 1 - candidate detail fact IDs are deduplicated into URL-safe bounded batches
+# Subtest: candidate detail rejects a batch size that could rebuild an oversized query
+ok 2 - candidate detail rejects a batch size that could rebuild an oversized query
+# Subtest: candidate dossier cursors round trip and reject malformed input
+ok 3 - candidate dossier cursors round trip and reject malformed input
+# Subtest: bundle IDs are deterministic UUIDs bound to input hash
+ok 4 - bundle IDs are deterministic UUIDs bound to input hash
+# Subtest: input hashes bind the exact article revision as well as its facts
+ok 5 - input hashes bind the exact article revision as well as its facts
+# Subtest: sources are numbered, de-duplicated and paid InvestAnchors references are excluded
+ok 6 - sources are numbered, de-duplicated and paid InvestAnchors references are excluded
+# Subtest: revision evidence excludes other issuers, unadopted facts, future mentions and arbitrary links
+ok 7 - revision evidence excludes other issuers, unadopted facts, future mentions and arbitrary links
+# Subtest: bundle hashes ignore facts that were not adopted by the revision
+ok 8 - bundle hashes ignore facts that were not adopted by the revision
+# Subtest: page ordering and receipts are bound to the exact revision and hash
+ok 9 - page ordering and receipts are bound to the exact revision and hash
+# Subtest: numeric summary and section claims require allowed fact IDs
+ok 10 - numeric summary and section claims require allowed fact IDs
+# Subtest: paid InvestAnchors content and unknown fact IDs are rejected
+ok 11 - paid InvestAnchors content and unknown fact IDs are rejected
+# Subtest: an unrelated price fact cannot support a customer certification claim
+ok 12 - an unrelated price fact cannot support a customer certification claim
+# Subtest: arbitrary prose cannot become a public fact merely by citing an allowed ID
+ok 13 - arbitrary prose cannot become a public fact merely by citing an allowed ID
+# Subtest: arbitrary summary and section prose cannot borrow an unrelated allowed fact
+ok 14 - arbitrary summary and section prose cannot borrow an unrelated allowed fact
+# Subtest: a data-gap fact cannot be cited as proof that an operating milestone happened
+ok 15 - a data-gap fact cannot be cited as proof that an operating milestone happened
+# Subtest: typed operational claims require semantically relevant facts and numeric context
+ok 16 - typed operational claims require semantically relevant facts and numeric context
+# Subtest: derived calculation formulas must form a closed acyclic claim DAG
+ok 17 - derived calculation formulas must form a closed acyclic claim DAG
+# Subtest: a disclosed assumption and an acyclic calculation are accepted as distinct claim kinds
+ok 18 - a disclosed assumption and an acyclic calculation are accepted as distinct claim kinds
+# Subtest: company-specific article claims bind issuer identity without treating its ticker as a financial number
+ok 19 - company-specific article claims bind issuer identity without treating its ticker as a financial number
+# Subtest: company-specific article rejects another issuer fact and generic prose-only output
+ok 20 - company-specific article rejects another issuer fact and generic prose-only output
+# Subtest: a ticker alone cannot satisfy an official numeric value claim
+ok 21 - a ticker alone cannot satisfy an official numeric value claim
+# Subtest: strict company article mode requires typed claims
+ok 22 - strict company article mode requires typed claims
+# Subtest: canonical reported_numeric facts can support a v6 article claim
+ok 23 - canonical reported_numeric facts can support a v6 article claim
+# Subtest: official evidence is not capped at fifty and becomes complete only with all named evidence
+ok 24 - official evidence is not capped at fifty and becomes complete only with all named evidence
+# Subtest: missing broker and peer evidence stays explicit instead of receiving free points
+ok 25 - missing broker and peer evidence stays explicit instead of receiving free points
+# Subtest: research factors expose coarse evidence grades and reject unlawful broker rows
+ok 26 - research factors expose coarse evidence grades and reject unlawful broker rows
+# Subtest: fundamental and overseas price evidence remain distinct factor inputs
+ok 27 - fundamental and overseas price evidence remain distinct factor inputs
+# Subtest: builder evidence reaches the classifier without a hand-authored score fixture
+ok 28 - builder evidence reaches the classifier without a hand-authored score fixture
+# Subtest: licensed broker imports connect to the factor while unknown licenses stay out
+ok 29 - licensed broker imports connect to the factor while unknown licenses stay out
+# Subtest: peer builder respects product type and relationship direction, while unknown price rights cannot score or block
+ok 30 - peer builder respects product type and relationship direction, while unknown price rights cannot score or block
+# Subtest: TPEx general and stock-broker statements use their documented, distinct headers
+ok 31 - TPEx general and stock-broker statements use their documented, distinct headers
+# Subtest: TPEx balance rows preserve endpoint-specific equity label and reject security HTML
+ok 32 - TPEx balance rows preserve endpoint-specific equity label and reject security HTML
+# Subtest: MOPS 307 security body is classified as a security block instead of a generic network failure
+ok 33 - MOPS 307 security body is classified as a security block instead of a generic network failure
+# Subtest: TPEx accepts the live alternate statement labels without emitting competing facts
+ok 34 - TPEx accepts the live alternate statement labels without emitting competing facts
+# Subtest: TWSE listed-company OpenAPI maps AUO common equity without confusing total equity
+ok 35 - TWSE listed-company OpenAPI maps AUO common equity without confusing total equity
+# Subtest: candidate document metadata is exact, source-bound and content-addressed
+ok 36 - candidate document metadata is exact, source-bound and content-addressed
+# Subtest: candidate documents reject MIME confusion and XML external entities
+ok 37 - candidate documents reject MIME confusion and XML external entities
+# Subtest: candidate document ingress hashes a bounded stream
+ok 38 - candidate document ingress hashes a bounded stream
+# Subtest: local parser fails closed until the reviewed VPS interpreter is configured
+ok 39 - local parser fails closed until the reviewed VPS interpreter is configured
+# Subtest: Arelle adapter returns hash-bound XBRL context locators when the local dependency exists
+ok 40 - Arelle adapter returns hash-bound XBRL context locators when the local dependency exists # SKIP reviewed parser virtualenv is not configured
+# Subtest: offline parser implementation retains its local-only boundaries
+ok 41 - offline parser implementation retains its local-only boundaries
+# Subtest: production adapter uses an isolated Unix socket instead of spawning under the web identity
+ok 42 - production adapter uses an isolated Unix socket instead of spawning under the web identity
+# Subtest: normalized cycle requires twenty adjacent reconciled discrete quarters
+ok 43 - normalized cycle requires twenty adjacent reconciled discrete quarters
+# Subtest: financial PB/ROE uses common income and same-period average common equity
+ok 44 - financial PB/ROE uses common income and same-period average common equity
+# Subtest: AUO issuer documents are pinned to the requested financial period
+ok 45 - AUO issuer documents are pinned to the requested financial period
+# Subtest: official attachment empty MIME is normalized only for exact issuer standalone UTF-8 iXBRL
+ok 46 - official attachment empty MIME is normalized only for exact issuer standalone UTF-8 iXBRL
+# Subtest: MOPS acquisition downloads the official filing rather than attempting to parse the preview form
+ok 47 - MOPS acquisition downloads the official filing rather than attempting to parse the preview form
+# Subtest: XBRL arbitrary unit IDs resolve measures; balance values cannot silently accept USD
+ok 48 - XBRL arbitrary unit IDs resolve measures; balance values cannot silently accept USD
+# Subtest: candidate official MOPS history accepts only consolidated year-to-date facts with an auditable filing date
+ok 49 - candidate official MOPS history accepts only consolidated year-to-date facts with an auditable filing date
+# Subtest: official financial refresh completes durable MOPS and TPEx jobs atomically
+ok 50 - official financial refresh completes durable MOPS and TPEx jobs atomically
+# Subtest: TPEx official fetch retries a truncated body and switches encoding without accepting partial JSON
+ok 51 - TPEx official fetch retries a truncated body and switches encoding without accepting partial JSON
+# Subtest: TPEx official fetch reconstructs the exact response from verified byte ranges after edge resets
+ok 52 - TPEx official fetch reconstructs the exact response from verified byte ranges after edge resets
+# Subtest: TPEx range fallback rejects incomplete or contradictory range metadata
+ok 53 - TPEx range fallback rejects incomplete or contradictory range metadata
+# Subtest: TPEx financial acquisition uses the bounded fixed-host transport after both undici paths fail
+ok 54 - TPEx financial acquisition uses the bounded fixed-host transport after both undici paths fail
+# Subtest: a MOPS acquisition job persists only its requested period and leaves comparative contexts to their own job
+ok 55 - a MOPS acquisition job persists only its requested period and leaves comparative contexts to their own job
+# Subtest: financial acquisition includes the earliest fiscal-year prerequisites needed to decumulate eight quarters
+ok 56 - financial acquisition includes the earliest fiscal-year prerequisites needed to decumulate eight quarters
+# Subtest: official listing authority distinguishes unavailable pre-listing periods from missing filings
+ok 57 - official listing authority distinguishes unavailable pre-listing periods from missing filings
+# Subtest: instant balance and outstanding-share facts retain null periodStart
+ok 58 - instant balance and outstanding-share facts retain null periodStart
+# Subtest: FinMind fallback keeps quarterly income and instant balance facts distinct
+ok 59 - FinMind fallback keeps quarterly income and instant balance facts distinct
+# Subtest: FinMind mirror drops same-priority conflicting rows instead of blessing one arbitrarily
+ok 60 - FinMind mirror drops same-priority conflicting rows instead of blessing one arbitrarily
+# Subtest: FinMind financial fallback is period-bounded and works anonymously without leaking a credential
+ok 61 - FinMind financial fallback is period-bounded and works anonymously without leaking a credential
+# Subtest: FinMind fallback refuses to terminally complete when one required statement has no mapped facts
+ok 62 - FinMind fallback refuses to terminally complete when one required statement has no mapped facts
+# Subtest: FinMind production adapter fails closed without a Vault token and uses Vault credentials only server-side
+ok 63 - FinMind production adapter fails closed without a Vault token and uses Vault credentials only server-side
+# Subtest: FinMind financial fallback cancels a chunked response before buffering past its cap
+ok 64 - FinMind financial fallback cancels a chunked response before buffering past its cap
+# Subtest: candidate research retries transient infrastructure errors only
+ok 65 - candidate research retries transient infrastructure errors only
+# Subtest: candidate authority readers continue past the PostgREST 1000-row response cap
+ok 66 - candidate authority readers continue past the PostgREST 1000-row response cap
+# Subtest: bounded pagination also retains source rows after the first response page
+ok 67 - bounded pagination also retains source rows after the first response page
+# Subtest: complete authority reads reject truncation rather than reporting false coverage
+ok 68 - complete authority reads reject truncation rather than reporting false coverage
+# Subtest: run freezes its authority cutoff after live acquisition, not the old global Shadow time
+ok 69 - run freezes its authority cutoff after live acquisition, not the old global Shadow time
+# Subtest: large UUID filters are split into bounded URL batches and each response is paginated
+ok 70 - large UUID filters are split into bounded URL batches and each response is paginated
+# Subtest: official PE scenario holds reported multiple and uses conservative revenue pass-through
+ok 71 - official PE scenario holds reported multiple and uses conservative revenue pass-through
+# Subtest: missing or loss-making official earnings do not manufacture targets
+ok 72 - missing or loss-making official earnings do not manufacture targets
+# Subtest: official exchange PE can supply its formula-implied trailing earnings without inventing EPS
+ok 73 - official exchange PE can supply its formula-implied trailing earnings without inventing EPS
+# Subtest: revenue growth pass-through is capped and cannot create unlimited upside
+ok 74 - revenue growth pass-through is capped and cannot create unlimited upside
+# Subtest: reported price and PE stay internally consistent when EPS dates differ
+ok 75 - reported price and PE stay internally consistent when EPS dates differ
+# Subtest: insufficient historical multiple evidence does not create a target
+ok 76 - insufficient historical multiple evidence does not create a target
+# Subtest: forward valuation requires a complete 48-month multiple distribution
+ok 77 - forward valuation requires a complete 48-month multiple distribution
+# Subtest: forward BVPS x PB reconciles common equity and uses historical quartiles
+ok 78 - forward BVPS x PB reconciles common equity and uses historical quartiles
+# Subtest: forward BVPS x PB refuses insufficient history or invalid ending shares
+ok 79 - forward BVPS x PB refuses insufficient history or invalid ending shares
+# Subtest: EV/EBITDA only publishes with explicit debt, cash, shares, and its own multiple history
+ok 80 - EV/EBITDA only publishes with explicit debt, cash, shares, and its own multiple history
+# Subtest: turnaround EV/sales uses reported revenue and observed multiples without manufacturing earnings
+ok 81 - turnaround EV/sales uses reported revenue and observed multiples without manufacturing earnings
+# Subtest: twenty consecutive fiscal quarters satisfy a five-year normalized-cycle window
+ok 82 - twenty consecutive fiscal quarters satisfy a five-year normalized-cycle window
+# Subtest: candidate historical research is enabled unless production explicitly blocks unavailable official history
+ok 83 - candidate historical research is enabled unless production explicitly blocks unavailable official history
+# Subtest: candidate price refresh reads durable coverage before selecting a bounded fetch depth
+ok 84 - candidate price refresh reads durable coverage before selecting a bounded fetch depth
+# Subtest: new validation does not backdate a historical research cutoff
+ok 85 - new validation does not backdate a historical research cutoff
+# Subtest: financial refresh shards rotate past permanently incomplete issuers
+ok 86 - financial refresh shards rotate past permanently incomplete issuers
+# Subtest: financial facts obtained after evaluation cannot enter point-in-time valuation
+ok 87 - financial facts obtained after evaluation cannot enter point-in-time valuation
+# Subtest: weekend and post-close mentions enter production without mutating the frozen shadow cohort
+ok 88 - weekend and post-close mentions enter production without mutating the frozen shadow cohort
+# Subtest: candidate research uses its own source and financial cutoffs without global Shadow
+ok 89 - candidate research uses its own source and financial cutoffs without global Shadow
+# Subtest: missing official price history still publishes a source-specific fact detail without promotion inputs
+ok 90 - missing official price history still publishes a source-specific fact detail without promotion inputs
+# Subtest: candidate detail fact binding deduplicates historical rows but still requires every wanted identity
+ok 91 - candidate detail fact binding deduplicates historical rows but still requires every wanted identity
+# Subtest: candidate run summary stays bounded and leaves per-stock evidence in the item ledger
+ok 92 - candidate run summary stays bounded and leaves per-stock evidence in the item ledger
+# Subtest: production reruns retain a fixed financial availability cutoff
+ok 93 - production reruns retain a fixed financial availability cutoff
+# Subtest: price provenance is retained on persisted bars and blocks stage promotion when ineligible
+ok 94 - price provenance is retained on persisted bars and blocks stage promotion when ineligible
+# Subtest: history authority reconciliation preserves displaced mirrors and never overwrites exchange-owner conflicts
+ok 95 - history authority reconciliation preserves displaced mirrors and never overwrites exchange-owner conflicts
+# Subtest: balanced risk action prefers hard exits over trim signals
+ok 96 - balanced risk action prefers hard exits over trim signals
+# Subtest: the initial stop does not widen when current ATR later rises
+ok 97 - the initial stop does not widen when current ATR later rises
+# Subtest: maximum drawdown preserves the worst peak-to-close observation in an episode
+ok 98 - maximum drawdown preserves the worst peak-to-close observation in an episode
+# Subtest: ATR uses Wilder smoothing rather than assuming a library SMA convention
+ok 99 - ATR uses Wilder smoothing rather than assuming a library SMA convention
+# Subtest: risk episode sets reference at t+1, freezes initial ATR, and resets on a new episode
+ok 100 - risk episode sets reference at t+1, freezes initial ATR, and resets on a new episode
+# Subtest: MA60 exit only accepts the immediately prior official session
+ok 101 - MA60 exit only accepts the immediately prior official session
+# Subtest: valuation input integration only normalizes reconciled diluted quarters
+ok 102 - valuation input integration only normalizes reconciled diluted quarters
+# Subtest: twenty reported or legacy-validated EPS labels cannot bypass missing or contradictory operands
+ok 103 - twenty reported or legacy-validated EPS labels cannot bypass missing or contradictory operands
+# Subtest: normalized identities require the same discrete period, provider, restatement and units
+ok 104 - normalized identities require the same discrete period, provider, restatement and units
+# Subtest: a conflicting duplicate cannot choose a favorable restatement or shift to an older window
+ok 105 - a conflicting duplicate cannot choose a favorable restatement or shift to an older window
+# Subtest: financial PB/ROE requires common equity, opening balances and common shares—not total equity
+ok 106 - financial PB/ROE requires common equity, opening balances and common shares—not total equity
+# Subtest: financial PB/ROE may derive common shares only from matching common equity and reported BVPS
+ok 107 - financial PB/ROE may derive common shares only from matching common equity and reported BVPS
+# Subtest: forward BVPS anchor must match the latest reported bridge quarter
+ok 108 - forward BVPS anchor must match the latest reported bridge quarter
+# Subtest: a complete forward bridge takes precedence over a generic PB reference
+ok 109 - a complete forward bridge takes precedence over a generic PB reference
+# Subtest: missing financial inputs are an evidence gap, not an impossibility conclusion
+ok 110 - missing financial inputs are an evidence gap, not an impossibility conclusion
+# Subtest: missing loss-making investigation is incomplete, never a completed no-method conclusion
+ok 111 - missing loss-making investigation is incomplete, never a completed no-method conclusion
+# Subtest: valuation routing is evidence-driven and fail closed
+ok 112 - valuation routing is evidence-driven and fail closed
+# Subtest: versioned cyclical asset profile routes to forward BVPS before loss-making turnaround
+ok 113 - versioned cyclical asset profile routes to forward BVPS before loss-making turnaround
+# Subtest: forward BVPS route remains blocked until its equity bridge is complete
+ok 114 - forward BVPS route remains blocked until its equity bridge is complete
+# Subtest: financial PB/ROE scenario remains labelled as PB/ROE rather than forward PE
+ok 115 - financial PB/ROE scenario remains labelled as PB/ROE rather than forward PE
+# Subtest: legacy official numeric facts read as reported numeric without admitting arbitrary kinds
+ok 116 - legacy official numeric facts read as reported numeric without admitting arbitrary kinds
+# Subtest: validated FinMind mirrors are admissible only when every required validation passes
+ok 117 - validated FinMind mirrors are admissible only when every required validation passes
+# Subtest: financial PB/ROE instant fact keys are explicit, finite contract members
+ok 118 - financial PB/ROE instant fact keys are explicit, finite contract members
+# Subtest: missing valuation evidence is partial while an investigated no-method conclusion is terminal
+ok 119 - missing valuation evidence is partial while an investigated no-method conclusion is terminal
+# Subtest: FinMind token bootstrap rejects malformed credentials
+ok 120 - FinMind token bootstrap rejects malformed credentials
+# Subtest: FinMind token bootstrap requires a real successful 2330 canary payload
+ok 121 - FinMind token bootstrap requires a real successful 2330 canary payload
+# Subtest: FinMind token canary cancels a chunked response before buffering past its cap
+ok 122 - FinMind token canary cancels a chunked response before buffering past its cap
+# Subtest: MOPS year-to-date rows are de-cumulated into discrete quarters
+ok 123 - MOPS year-to-date rows are de-cumulated into discrete quarters
+# Subtest: a direct quarter and its YTD comparator coexist only when their algebra reconciles
+ok 124 - a direct quarter and its YTD comparator coexist only when their algebra reconciles
+# Subtest: forward bridge is explicit, reproducible, and separates assumptions from reported facts
+ok 125 - forward bridge is explicit, reproducible, and separates assumptions from reported facts
+# Subtest: forward common-income bridge supports AUO P/B without relabelling basic EPS as diluted EPS
+ok 126 - forward common-income bridge supports AUO P/B without relabelling basic EPS as diluted EPS
+# Subtest: decision target is cutoff-quarter end plus twelve months
+ok 127 - decision target is cutoff-quarter end plus twelve months
+# Subtest: YTD EPS and weighted-average shares are never subtracted as additive flows
+ok 128 - YTD EPS and weighted-average shares are never subtracted as additive flows
+# Subtest: restatement conflicts fail closed
+ok 129 - restatement conflicts fail closed
+# Subtest: official facts supersede mirror observations only for the same metric and reporting date
+ok 130 - official facts supersede mirror observations only for the same metric and reporting date
+# Subtest: an official YTD context does not discard a distinct mirror quarter
+ok 131 - an official YTD context does not discard a distinct mirror quarter
+# Subtest: a complete official YTD series supersedes a reconstructible mirror quarter
+ok 132 - a complete official YTD series supersedes a reconstructible mirror quarter
+# Subtest: missing eight-quarter bridge inputs fail closed
+ok 133 - missing eight-quarter bridge inputs fail closed
+# Subtest: eight non-adjacent reporting rows cannot manufacture a forward bridge
+ok 134 - eight non-adjacent reporting rows cannot manufacture a forward bridge
+# Subtest: formats official market evidence without JavaScript object placeholders
+ok 135 - formats official market evidence without JavaScript object placeholders
+# Subtest: market evidence writes are split below transport body limits
+ok 136 - market evidence writes are split below transport body limits
+# Subtest: market evidence requires both indices, breadth and official flows
+ok 137 - market evidence requires both indices, breadth and official flows
+# Subtest: missing market component disables risk budget
+ok 138 - missing market component disables risk budget
+# Subtest: canonical market evidence maps to the public homepage summary
+ok 139 - canonical market evidence maps to the public homepage summary
+# Subtest: official index acquisition only requests authority dates absent from retained history
+ok 140 - official index acquisition only requests authority dates absent from retained history
+# Subtest: official market parsers normalize TWSE and TPEx evidence
+ok 141 - official market parsers normalize TWSE and TPEx evidence
+# Subtest: official market index backfill accepts only hash-bound official payloads
+ok 142 - official market index backfill accepts only hash-bound official payloads
+# Subtest: a date missing from both complete exchange pages corrects a false completed session
+ok 143 - a date missing from both complete exchange pages corrects a false completed session
+# Subtest: unlicensed overseas prices cannot enter the actionability snapshot
+ok 144 - unlicensed overseas prices cannot enter the actionability snapshot
+# Subtest: a licensed price keeps provenance and point-in-time fields in the prepared write
+ok 145 - a licensed price keeps provenance and point-in-time fields in the prepared write
+# Subtest: pinned HTTPS address policy rejects private, bracketed, and mapped loopback addresses
+ok 146 - pinned HTTPS address policy rejects private, bracketed, and mapped loopback addresses
+# Subtest: public Radar snapshot persists the complete canonical stock plane for paged delivery
+ok 147 - public Radar snapshot persists the complete canonical stock plane for paged delivery
+# Subtest: compaction preserves candidate revision and stale authority for found and actionable
+ok 148 - compaction preserves candidate revision and stale authority for found and actionable
+# Subtest: stage pagination exposes every card from one immutable snapshot without exceeding page size
+ok 149 - stage pagination exposes every card from one immutable snapshot without exceeding page size
+# Subtest: stage pagination clamps invalid offsets and oversized pages
+ok 150 - stage pagination clamps invalid offsets and oversized pages
+# Subtest: Shadow replay hashes only the frozen manifest universe
+ok 151 - Shadow replay hashes only the frozen manifest universe
+# Subtest: a changed publication payload is audit evidence, not a classification replay conflict
+ok 152 - a changed publication payload is audit evidence, not a classification replay conflict
+# Subtest: shadow replay recomputes classification from the persisted immutable input
+ok 153 - shadow replay recomputes classification from the persisted immutable input
+# Subtest: frozen replay payload is ordered, publication-bound, and rejects a changed classification
+ok 154 - frozen replay payload is ordered, publication-bound, and rejects a changed classification
+# Subtest: only distinct final official-session payloads advance Shadow progress
+ok 155 - only distinct final official-session payloads advance Shadow progress
+# Subtest: Shadow observation persists and reloads a frozen final-publication payload instead of replaying mutable stage rows
+ok 156 - Shadow observation persists and reloads a frozen final-publication payload instead of replaying mutable stage rows
+# Subtest: same manifest/final-publication is idempotent only for the same immutable payload
+ok 157 - same manifest/final-publication is idempotent only for the same immutable payload
+# Subtest: invalidated source mentions remain auditable but leave discovery
+ok 158 - invalidated source mentions remain auditable but leave discovery
+# Subtest: legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+ok 159 - legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+# Subtest: PTT institutional ranking is chip evidence instead of discovery
+ok 160 - PTT institutional ranking is chip evidence instead of discovery
+# Subtest: publisher and content identities are canonical and stance is three-valued
+ok 161 - publisher and content identities are canonical and stance is three-valued
+# Subtest: source concentration dedupes content and caps thin platform coverage
+ok 162 - source concentration dedupes content and caps thin platform coverage
+# Subtest: source links rotate platforms and limit one platform
+ok 163 - source links rotate platforms and limit one platform
+# Subtest: internal auth accepts either configured secret without weakening exact bearer auth
+ok 164 - internal auth accepts either configured secret without weakening exact bearer auth
+# Subtest: Threads and licensed sources report explicit blocks instead of false success
+ok 165 - Threads and licensed sources report explicit blocks instead of false success
+# Subtest: Threads keyword discovery never impersonates KOL profile monitoring
+ok 166 - Threads keyword discovery never impersonates KOL profile monitoring
+# Subtest: BullTalk requires a signed scope and real-sample digest before a licensed feed can activate
+ok 167 - BullTalk requires a signed scope and real-sample digest before a licensed feed can activate
+# Subtest: retired connectors remain explicitly queryable as historical-only policy
+ok 168 - retired connectors remain explicitly queryable as historical-only policy
+# Subtest: available Telegram channels have stable identities and unavailable channels never enter the crawler
+ok 169 - available Telegram channels have stable identities and unavailable channels never enter the crawler
+# Subtest: GDELT is active metadata discovery and retired publishers stay retired
+ok 170 - GDELT is active metadata discovery and retired publishers stay retired
+# Subtest: TWSE insider is excluded from VPS schedules until official egress is confirmed
+ok 171 - TWSE insider is excluded from VPS schedules until official egress is confirmed
+# Subtest: Podcast creator-published RSS index is active independently of transcript rights
+ok 172 - Podcast creator-published RSS index is active independently of transcript rights
+# Subtest: Podcast RSS indexing and content analysis are independently allowlisted
+ok 173 - Podcast RSS indexing and content analysis are independently allowlisted
+# Subtest: connector=all includes only sources authorized in the current runtime
+ok 174 - connector=all includes only sources authorized in the current runtime
+# Subtest: close datasets use a completed market session while calendar-only refreshes keep the requested date
+ok 175 - close datasets use a completed market session while calendar-only refreshes keep the requested date
+# Subtest: uses an allowlisted official endpoint before the FinMind mirror
+ok 176 - uses an allowlisted official endpoint before the FinMind mirror
+# Subtest: persists only the requested session from a monthly official price response
+ok 177 - persists only the requested session from a monthly official price response
+# Subtest: accepts TPEx spaced date and lot-volume headers without losing the requested session
+ok 178 - accepts TPEx spaced date and lot-volume headers without losing the requested session
+# Subtest: does not replace a meaningful official empty result with FinMind data
+ok 179 - does not replace a meaningful official empty result with FinMind data
+# Subtest: records a FinMind fallback as a mirror with independent usage and schema terminals
+ok 180 - records a FinMind fallback as a mirror with independent usage and schema terminals
+# Subtest: makes timeout, rate-limit and invalid endpoint identity terminal distinctions explicit
+ok 181 - makes timeout, rate-limit and invalid endpoint identity terminal distinctions explicit
+# Subtest: supports valuation, revenue and financial-statement provider contracts without treating them as interchangeable
+ok 182 - supports valuation, revenue and financial-statement provider contracts without treating them as interchangeable
+# Subtest: rejects a source-shaped daily result when it does not contain the requested session
+ok 183 - rejects a source-shaped daily result when it does not contain the requested session
+# Subtest: pins FinMind credentials to its official API host and supplies explicit index identities
+ok 184 - pins FinMind credentials to its official API host and supplies explicit index identities
+# Subtest: canonicalizes only the requested session from official monthly TAIEX history
+ok 185 - canonicalizes only the requested session from official monthly TAIEX history
+# Subtest: uses current TPEx OpenAPI endpoints for exchange-wide valuation and index evidence
+ok 186 - uses current TPEx OpenAPI endpoints for exchange-wide valuation and index evidence
+# Subtest: uses VPS-reachable TWSE RWD routes for institutional and margin evidence
+ok 187 - uses VPS-reachable TWSE RWD routes for institutional and margin evidence
+# Subtest: exchange-wide TWSE flow canonicalization excludes non-common-stock identities
+ok 188 - exchange-wide TWSE flow canonicalization excludes non-common-stock identities
+# Subtest: selects the securities table from a multi-table TWSE margin response
+ok 189 - selects the securities table from a multi-table TWSE margin response
+# Subtest: canonicalizes TPEx institutional, margin and monthly-revenue OpenAPI object rows
+ok 190 - canonicalizes TPEx institutional, margin and monthly-revenue OpenAPI object rows
+# Subtest: canonicalizes current TPEx OpenAPI valuation rows for the requested ROC session
+ok 191 - canonicalizes current TPEx OpenAPI valuation rows for the requested ROC session
+# Subtest: normalizes unavailable official PE or PB markers without discarding the valid companion multiple
+ok 192 - normalizes unavailable official PE or PB markers without discarding the valid companion multiple
+# Subtest: canonicalizes current TPEx OpenAPI index rows and rejects a missing requested session
+ok 193 - canonicalizes current TPEx OpenAPI index rows and rejects a missing requested session
+# Subtest: stops oversized provider bodies while streaming
+ok 194 - stops oversized provider bodies while streaming
+# Subtest: sanitizes public dossier URLs without exposing credentials or private hosts
+ok 195 - sanitizes public dossier URLs without exposing credentials or private hosts
+# Subtest: golden Wilder ATR seed and recurrence are stable independently of indicator packages
+ok 196 - golden Wilder ATR seed and recurrence are stable independently of indicator packages
+# Subtest: a long-MA confirmation is a held close, not an invented second crossover
+ok 197 - a long-MA confirmation is a held close, not an invented second crossover
+# Subtest: data-deletion callback returns Meta response contract and passes owner-bound revocation
+ok 198 - data-deletion callback returns Meta response contract and passes owner-bound revocation
+# Subtest: deauthorize callback is minimal and invalid requests never reach revocation
+ok 199 - deauthorize callback is minimal and invalid requests never reach revocation
+# Subtest: callback refuses a valid signed body delivered over a different or insecure origin
+ok 200 - callback refuses a valid signed body delivered over a different or insecure origin
+# Subtest: Threads lifecycle verifies an authentic signed_request
+ok 201 - Threads lifecycle verifies an authentic signed_request
+# Subtest: Threads lifecycle rejects tampering, unknown users, and expired requests
+ok 202 - Threads lifecycle rejects tampering, unknown users, and expired requests
+# Subtest: Threads lifecycle uses capability-safe confirmation hashes
+ok 203 - Threads lifecycle uses capability-safe confirmation hashes
+# Subtest: Threads token refresh stays idle before the 30-day boundary
+ok 204 - Threads token refresh stays idle before the 30-day boundary
+# Subtest: Threads token refresh activates at 30 days and before expiry
+ok 205 - Threads token refresh activates at 30 days and before expiry
+# Subtest: Threads token warning starts fourteen days before expiry
+ok 206 - Threads token warning starts fourteen days before expiry
+# Subtest: Threads token validation rejects a missing or expired Vault token
+ok 207 - Threads token validation rejects a missing or expired Vault token
+# Subtest: Threads registry metadata preserves the token owner binding across worker runs
+ok 208 - Threads registry metadata preserves the token owner binding across worker runs
+# Subtest: TWSE InfoHub revenue accepts only identity-bound aligned official observations
+ok 209 - TWSE InfoHub revenue accepts only identity-bound aligned official observations
+# Subtest: bounded official history fetch requests one issuer-month and reports blocked versus empty precisely
+ok 210 - bounded official history fetch requests one issuer-month and reports blocked versus empty precisely
+# Subtest: bounded TPEx history never makes a TWSE request and preserves real month-end valuation date
+ok 211 - bounded TPEx history never makes a TWSE request and preserves real month-end valuation date
+# Subtest: official JSON outcome distinguishes rate-limit, invalid JSON and successful empty payload
+ok 212 - official JSON outcome distinguishes rate-limit, invalid JSON and successful empty payload
+# Subtest: a single transient official-host failure does not blackhole the next request
+ok 213 - a single transient official-host failure does not blackhole the next request
+# Subtest: a non-retryable official response breaks the host failure streak
+ok 214 - a non-retryable official response breaks the host failure streak
+# Subtest: queued official requests respect an open circuit instead of clearing it
+ok 215 - queued official requests respect an open circuit instead of clearing it
+# Subtest: a CDN challenge response opens the official host circuit instead of becoming a false missing-price result
+ok 216 - a CDN challenge response opens the official host circuit instead of becoming a false missing-price result
+# Subtest: valuation endpoint failures do not blackhole the price-history endpoint on the same host
+ok 217 - valuation endpoint failures do not blackhole the price-history endpoint on the same host
+# Subtest: official requests are serialized per host while other work is queued
+ok 218 - official requests are serialized per host while other work is queued
+# Subtest: candidate daily bars share the official all-stock market endpoint rather than the JavaScript-gated per-stock route
+ok 219 - candidate daily bars share the official all-stock market endpoint rather than the JavaScript-gated per-stock route
+# Subtest: candidate daily bars fetch recent sessions before an old archive failure opens the endpoint circuit
+ok 220 - candidate daily bars fetch recent sessions before an old archive failure opens the endpoint circuit
+# Subtest: TPEx monthly index rows provide official trading sessions when TWSE archives are blocked
+ok 221 - TPEx monthly index rows provide official trading sessions when TWSE archives are blocked
+# Subtest: TPEx official calendar parser rejects malformed dates
+ok 222 - TPEx official calendar parser rejects malformed dates
+# Subtest: valuation cache accepts only official TWSE and TPEx history endpoints
+ok 223 - valuation cache accepts only official TWSE and TPEx history endpoints
+# Subtest: official valuation backfill is bounded and advances through missing months
+ok 224 - official valuation backfill is bounded and advances through missing months
+# Subtest: TPEx official monthly rows normalize ROC dates and trading lots
+ok 225 - TPEx official monthly rows normalize ROC dates and trading lots
+# Subtest: TWSE valuation panel preserves official monthly PE/PB evidence for requested symbols
+ok 226 - TWSE valuation panel preserves official monthly PE/PB evidence for requested symbols
+# Subtest: TPEx valuation panel maps the official all-stock table without scraping HTML
+ok 227 - TPEx valuation panel maps the official all-stock table without scraping HTML
+# Subtest: TPEx valuation parser fails closed when official headers are missing
+ok 228 - TPEx valuation parser fails closed when official headers are missing
+# Subtest: TWSE per-stock monthly history normalizes ROC dates for the five-year backfill
+ok 229 - TWSE per-stock monthly history normalizes ROC dates for the five-year backfill
+# Subtest: FinMind fallback preserves share volume and keeps dividend yield separate from PE
+ok 230 - FinMind fallback preserves share volume and keeps dividend yield separate from PE
+# Subtest: FinMind fallback rejects oversized bodies before JSON parsing
+ok 231 - FinMind fallback rejects oversized bodies before JSON parsing
+# Subtest: official prices win a same-session mirror disagreement while conflict remains promotion-blocking
+ok 232 - official prices win a same-session mirror disagreement while conflict remains promotion-blocking
+# Subtest: FinMind-only or stale price history cannot become actionable
+ok 233 - FinMind-only or stale price history cannot become actionable
+# Subtest: final provider publication uses close datasets, not issuer revenue or retired global Shadow
+ok 234 - final provider publication uses close datasets, not issuer revenue or retired global Shadow
+# Subtest: Vercel stays zero-cron while retaining only the HTTPS Threads and policy surfaces
+ok 235 - Vercel stays zero-cron while retaining only the HTTPS Threads and policy surfaces
+# Subtest: long-running production writers fail closed outside the active VPS release
+ok 236 - long-running production writers fail closed outside the active VPS release
+1..236
+# tests 236
+# suites 0
+# pass 235
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 26481.669653

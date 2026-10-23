@@ -1,0 +1,1430 @@
+name: StockInsider vNext isolated quality
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/stockinsider-vnext-quality.yml'
+      - 'web/**'
+      - 'scripts/vnext-*'
+      - 'scripts/opportunity-v3/**'
+      - 'scripts/assert_canonical_vercel_project.mjs'
+      - 'deployment/vps/bootstrap-stockinsider-postgres.sql'
+      - '.nvmrc'
+      - 'scripts/candidate-financial-document-write-lease-route.test.mjs'
+      - 'migrations/20261022_*'
+      - 'migrations/20261023_*'
+      - 'migrations/20261024_*'
+      - 'openspec/changes/stockinsider-vnext-20/**'
+      - 'specs/research-admission/**'
+      - 'package.json'
+      - 'package-lock.json'
+permissions:
+  contents: read
+jobs:
+  vnext-quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Workspace and temporary filesystem admission
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              free=s.f_bavail*s.f_frsize
+              print(p,free)
+              if free<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+      - name: Install unchanged locked dependencies
+        run: |
+          npm ci --ignore-scripts
+          npm --prefix web ci --ignore-scripts
+          node web/scripts/sync-official-authority.mjs
+      - name: Actual source contracts, types and lint
+        run: |
+          mkdir -m 700 /tmp/stockinsider-vnext-ci
+          node --experimental-strip-types web/src/lib/vnext/vnext.test.ts | tee /tmp/stockinsider-vnext-ci/pure.tap
+          node --experimental-strip-types web/src/lib/vnext/discovery.test.ts | tee /tmp/stockinsider-vnext-ci/discovery.tap
+          node --experimental-strip-types web/src/lib/vnext/screening-instrument-identity.test.ts | tee /tmp/stockinsider-vnext-ci/screening-instrument-source.tap
+          node --experimental-strip-types web/src/lib/vnext/boundaries.test.ts | tee /tmp/stockinsider-vnext-ci/boundaries.tap
+          node --experimental-strip-types web/src/lib/vnext/worker.test.ts | tee /tmp/stockinsider-vnext-ci/worker-source.tap
+          node --experimental-strip-types web/src/lib/vnext/analysis-sources.test.ts | tee /tmp/stockinsider-vnext-ci/analysis-source.tap
+          node --experimental-strip-types web/src/lib/vnext/source-backlog.test.ts | tee /tmp/stockinsider-vnext-ci/source-backlog.tap
+          node --experimental-strip-types scripts/vnext-source-window-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-window-source.tap
+          node scripts/vnext-source-namespace-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-namespace-source.tap
+          python3 -B scripts/vnext-reachability-annotation-source.test.py
+          node --experimental-strip-types web/src/lib/vnext/twse-snapshot.test.ts | tee /tmp/stockinsider-vnext-ci/twse-snapshot-source.tap
+          node --experimental-strip-types web/src/lib/vnext/thesis.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-source.tap
+          node --experimental-strip-types web/src/lib/vnext/thesis-semantic-authority.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-semantic-authority-source.tap
+          node --experimental-strip-types web/src/lib/vnext/semantic-score-fence.test.ts | tee /tmp/stockinsider-vnext-ci/semantic-score-fence-source.tap
+          node --experimental-strip-types web/src/lib/vnext/catalyst-criteria.test.ts | tee /tmp/stockinsider-vnext-ci/catalyst-criteria-source.tap
+          node --experimental-strip-types web/src/lib/vnext/forecast-evidence.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-evidence-source.tap
+          node --experimental-strip-types web/src/lib/vnext/corporate-action-terms.test.ts | tee /tmp/stockinsider-vnext-ci/action-terms-source.tap
+          node scripts/vnext-action-terms-source.test.mjs | tee /tmp/stockinsider-vnext-ci/action-terms-sql-source.tap
+          node --experimental-strip-types web/src/lib/vnext/published-target-read.test.ts | tee /tmp/stockinsider-vnext-ci/published-target-read-source.tap
+          node --experimental-strip-types web/src/app/components/vnext/detail-source.test.mjs | tee /tmp/stockinsider-vnext-ci/published-target-ssr-source.tap
+          node scripts/vnext-published-target-read-source.test.mjs | tee /tmp/stockinsider-vnext-ci/published-target-sql-source.tap
+          node --experimental-strip-types scripts/vnext-action-row-reference.test.mjs | tee /tmp/stockinsider-vnext-ci/action-row-reference-source.tap
+          node --experimental-strip-types scripts/vnext-closed-day-source-boundary.test.mjs | tee /tmp/stockinsider-vnext-ci/closed-day-source-boundary.tap
+          node --experimental-strip-types web/src/lib/vnext/disclosed-fiscal-forecast.test.ts | tee /tmp/stockinsider-vnext-ci/disclosed-fiscal-source.tap
+          node scripts/vnext-disclosed-fiscal-source.test.mjs | tee /tmp/stockinsider-vnext-ci/disclosed-fiscal-sql-source.tap
+          node --experimental-strip-types web/src/lib/vnext/forecast-current.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-current-source.tap
+          node --experimental-strip-types web/src/lib/vnext/forecast-active.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-active-source.tap
+          node scripts/vnext-forecast-active-source.test.mjs | tee /tmp/stockinsider-vnext-ci/forecast-active-sql-source.tap
+          node --experimental-strip-types scripts/vnext-weekly-forecast-source.test.mjs | tee /tmp/stockinsider-vnext-ci/forecast-weekly-source.tap
+          node scripts/vnext-forecast-sources.test.mjs | tee /tmp/stockinsider-vnext-ci/forecast-sql-source.tap
+          python3 scripts/vnext-forecast-receipt-source-check.py
+          node --experimental-strip-types web/src/lib/vnext/dimensionless-arithmetic.test.ts | tee /tmp/stockinsider-vnext-ci/dimensionless-source.tap
+          node --experimental-strip-types web/src/lib/vnext/reviewed-target.test.ts | tee /tmp/stockinsider-vnext-ci/reviewed-target-source.tap
+          node --experimental-strip-types web/src/lib/vnext/trading-invalidity.test.ts | tee /tmp/stockinsider-vnext-ci/trading-invalidity-source.tap
+          node --experimental-strip-types web/src/lib/vnext/trading-invalidity-discovery.test.ts | tee /tmp/stockinsider-vnext-ci/trading-invalidity-discovery-source.tap
+          node --experimental-strip-types web/src/lib/vnext/cached-admission.test.ts | tee /tmp/stockinsider-vnext-ci/cached-source.tap
+          node --experimental-strip-types web/src/lib/vnext/source-withdrawal.test.ts | tee /tmp/stockinsider-vnext-ci/withdrawal-source.tap
+          node --experimental-strip-types web/src/lib/vnext/artifact-financial-summary.test.ts | tee /tmp/stockinsider-vnext-ci/financial-summary-source.tap
+          node --experimental-strip-types web/src/lib/vnext/preparation-authority.test.ts | tee /tmp/stockinsider-vnext-ci/preparation-authority-source.tap
+          node --experimental-strip-types web/src/lib/vnext/preparation-reconciliation.test.ts | tee /tmp/stockinsider-vnext-ci/preparation-reconciliation-source.tap
+          node --experimental-strip-types web/src/lib/vnext/preparation-trading-identity.test.ts | tee /tmp/stockinsider-vnext-ci/preparation-trading-identity-source.tap
+          node --experimental-strip-types web/src/lib/vnext/roster-current-fence.test.ts | tee /tmp/stockinsider-vnext-ci/roster-current-fence-source.tap
+          node --experimental-strip-types web/src/lib/vnext/catalyst-cancellation.test.ts | tee /tmp/stockinsider-vnext-ci/cancellation-source.tap
+          node --experimental-strip-types web/src/lib/vnext/cancellation-candidate.test.ts | tee /tmp/stockinsider-vnext-ci/cancellation-candidate-source.tap
+          node --experimental-strip-types web/src/lib/vnext/business-criteria.test.ts | tee /tmp/stockinsider-vnext-ci/business-criteria-source.tap
+          node scripts/vnext-target-profiles.test.mjs | tee /tmp/stockinsider-vnext-ci/target-profiles-source.tap
+          node --experimental-strip-types web/src/lib/vnext/business-public.test.ts | tee /tmp/stockinsider-vnext-ci/business-public-source.tap
+          node scripts/vnext-cancellation-response-loss.test.mjs | tee /tmp/stockinsider-vnext-ci/cancellation-response-frames-source.tap
+          node --experimental-strip-types web/src/lib/vnext/research-failure.test.ts | tee /tmp/stockinsider-vnext-ci/research-failure-source.tap
+          node --experimental-strip-types scripts/vnext-business-vectors.test.mjs | tee /tmp/stockinsider-vnext-ci/business-vectors.tap
+          node scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
+          npm --prefix web run typecheck
+          npm --prefix web run lint
+      - name: Full ordinary build
+        id: current_build
+        run: npm --prefix web run build
+      - name: Isolated PostgreSQL real concurrency and synthetic publication lifecycle
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-ci
+        run: |
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/admission node --experimental-strip-types scripts/vnext-admission-postgres.test.mjs > /tmp/stockinsider-vnext-ci/admission.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/admission.tap.private.log /tmp/stockinsider-vnext-ci/admission.tap
+          test "$test_status" = 0
+          if VNEXT_BUSINESS_DATABASE=vnext_business_01 VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/business node --experimental-strip-types scripts/vnext-business-postgres.test.mjs > /tmp/stockinsider-vnext-ci/business.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/business.tap.private.log /tmp/stockinsider-vnext-ci/business.tap
+          test "$test_status" = 0
+      - name: Genuine captured-prefix legacy coexistence and concurrent mode fence
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-legacy-full-04
+          VNEXT_LEGACY_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/legacy-full-pg-socket-04
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/legacy
+        run: |
+          mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
+          mkdir -m 700 "$VNEXT_LEGACY_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_LEGACY_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_legacy -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_LEGACY_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_legacy; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if node --experimental-strip-types scripts/vnext-legacy-fence-postgres.test.mjs > /tmp/stockinsider-vnext-ci/legacy.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/legacy.tap.private.log /tmp/stockinsider-vnext-ci/legacy.tap
+          test "$test_status" = 0
+      - name: Actual durable worker journal with explicitly synthetic provider
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-01
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-01
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/worker
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if node --experimental-strip-types scripts/vnext-worker-postgres.test.mjs > /tmp/stockinsider-vnext-ci/worker.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/worker.tap.private.log /tmp/stockinsider-vnext-ci/worker.tap
+          test "$test_status" = 0
+      - name: Real permitted-source budgets and frozen market journal (synthetic originals/model)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-02
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-02
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/analysis
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if node --experimental-strip-types scripts/vnext-analysis-postgres.test.mjs > /tmp/stockinsider-vnext-ci/analysis.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/analysis.tap.private.log /tmp/stockinsider-vnext-ci/analysis.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import json,pathlib
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/analysis.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          for line in source.read_text().splitlines():
+              prefix='ANALYSIS_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'stage','code','message','errorType'}: raise SystemExit('closed diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Analysis finite native diagnostic::'+value)
+          PYCODE
+          fi
+          test "$test_status" = 0
+      - name: Actual all-active thesis, revoked source rights and charged retry (synthetic provider)
+        id: current_thesis
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-03
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-03
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/thesis
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if node --experimental-strip-types scripts/vnext-thesis-postgres.test.mjs > /tmp/stockinsider-vnext-ci/thesis.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/thesis.tap.private.log /tmp/stockinsider-vnext-ci/thesis.tap
+          test "$test_status" = 0
+      - name: Actual current-receipt admission, official calendar and strict EPS (synthetic provider)
+        id: current_cached
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-04
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-04
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/cached
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if node --experimental-strip-types scripts/vnext-cached-postgres.test.mjs > /tmp/stockinsider-vnext-ci/cached.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/cached.tap.private.log /tmp/stockinsider-vnext-ci/cached.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/cached.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          text=source.read_text()
+          item={'failedTestHashes':[hashlib.sha256(x.encode()).hexdigest() for x in re.findall(r'^\s*not ok \d+ - (.+)$',text,re.M)][:16],
+                'codes':list(dict.fromkeys(re.findall(r"^\s*code: ['\"]([A-Z0-9_]{1,40})['\"]",text,re.M)))[:16],
+                'errorLineHashes':[hashlib.sha256(x.encode()).hexdigest() for x in re.findall(r'^\s*error: (.+)$',text,re.M)][:16]}
+          print('::error title=vNext finite cached-prefix diagnostic::'+json.dumps(item,separators=(',',':')))
+          PYCODE
+          fi
+          test "$test_status" = 0
+          export VNEXT_HTTP_DATABASE=vnext_worker
+          export VNEXT_LEGACY_SOCKET_PARENT="$VNEXT_WORKER_SOCKET_PARENT"
+          export VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-ci/cached-http
+          if node --experimental-strip-types scripts/vnext-cached-http.test.mjs > /tmp/stockinsider-vnext-ci/cached-http.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/cached-http.tap.private.log /tmp/stockinsider-vnext-ci/cached-http.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import json,pathlib
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/cached-http.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          for line in source.read_text().splitlines():
+              if line.startswith('VNEXT_HTTP_FAILURE_SAFE '):
+                  item=json.loads(line.removeprefix('VNEXT_HTTP_FAILURE_SAFE '))
+                  if set(item)!={'stage','code','actual','expected','tokens'}: raise SystemExit('closed diagnostic required')
+                  print('::error title=vNext finite HTTP diagnostic::'+json.dumps(item,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A'))
+          PYCODE
+          fi
+          test "$test_status" = 0
+      - name: Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)
+        if: ${{ !cancelled() && steps.current_build.outcome == 'success' }}
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-08
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-08
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/preparation-running-http
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592+536870912: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          export VNEXT_PREPARATION_BUILD_SOURCE_SHA="$(git rev-parse HEAD)"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          owned_id="$(docker inspect --format '{{.Id}}' "$VNEXT_TEST_CONTAINER")"
+          cleanup_preparation() {
+            original_exit=$?
+            trap - EXIT
+            if ! docker stop "$owned_id" > /tmp/stockinsider-vnext-ci/preparation-pg-stop.private.log 2>&1; then original_exit=1; fi
+            if ! docker inspect --format '{{json .State}}' "$owned_id" > /tmp/stockinsider-vnext-ci/preparation-pg-stop.private.json; then original_exit=1; fi
+            if ! docker logs --tail 500 "$owned_id" > /tmp/stockinsider-vnext-ci/preparation-pg-server.private.log 2>&1; then original_exit=1; fi
+            if ! python3 - <<'PYCODE'
+          import hashlib,json,pathlib,os
+          state=json.loads(pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-pg-stop.private.json').read_text())
+          if state['Running'] or state['Pid']!=0 or state['ExitCode']!=0: raise SystemExit('owned PG shutdown unconfirmed')
+          logs=pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-pg-server.private.log').read_bytes()
+          if logs.rfind(b'database system is shut down')<=logs.rfind(b'database system is ready to accept connections'): raise SystemExit('PG server shutdown log unconfirmed')
+          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-resource/receipt.json')
+          observations=[];unsettled=False
+          if resource.exists():
+              for owned in json.loads(resource.read_text())['processPostObservation']:
+                  pid=owned['pid']
+                  try:
+                      fields=pathlib.Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()
+                      same=fields[19]==owned['originalStart'];rss=int(fields[21])*os.sysconf('SC_PAGE_SIZE')
+                      observations.append({'pid':pid,'sameProcess':same,'state':fields[0],'rssBytes':rss,'originalIdentitySettled':not same or fields[0]=='Z' and rss==0})
+                      unsettled|=same and not(fields[0]=='Z' and rss==0)
+                  except FileNotFoundError: observations.append({'pid':pid,'absent':True})
+                  except OSError: observations.append({'pid':pid,'unknown':True});unsettled=True
+          pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-cleanup.private.json').write_text(json.dumps({'containerState':state,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'shutdownObserved':True,'ownedProcessObservations':observations,'zombieIsNotAbsent':True,'unsettled':unsettled})+'\n')
+          if unsettled: raise SystemExit('owned process settlement unknown')
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
+          if len(observations)>64: raise SystemExit('bounded owned process summary required')
+          print('::notice title=Preparation actual cleanup receipt::'+json.dumps({'pgRunning':state['Running'],'pgPid':state['Pid'],'pgExit':state['ExitCode'],'shutdownObserved':True,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'ownedProcessObservations':observations,'unsettled':unsettled,'zombieIsNotAbsent':True,'clusterRetained':True,'wholeSocketRootAbsence':'NOT_CHECKED'},separators=(',',':')))
+          PYCODE
+            then original_exit=1; fi
+            exit "$original_exit"
+          }
+          trap cleanup_preparation EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if python3 scripts/vnext-preparation-resource-run.py > /tmp/stockinsider-vnext-ci/preparation-http.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/preparation-http.tap.private.log /tmp/stockinsider-vnext-ci/preparation-http.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import json,pathlib
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-http.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          for line in source.read_text().splitlines():
+              prefix=next((p for p in ('PREPARATION_HTTP_FAILURE_SAFE ','PREPARATION_READ_BOUNDARY_SAFE ') if line.startswith(p)),None)
+              if prefix:
+                  item=json.loads(line[len(prefix):])
+                  expected={'stage','code','actual','expected','messageHash','tokens'} if prefix=='PREPARATION_HTTP_FAILURE_SAFE ' else {'reason','status','bridgeErrors'}
+                  if set(item)!=expected: raise SystemExit('closed diagnostic required')
+                  value=json.dumps(item,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Preparation finite HTTP diagnostic::'+value)
+          PYCODE
+          fi
+          python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re,subprocess
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci');raw=root/'preparation-http.tap.private.log'
+          if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded forecast acceptance log required')
+          for line in raw.read_text().splitlines():
+              if line.startswith('PUBLISHED_TARGET_PREDECESSOR_SAFE '):
+                  observed=json.loads(line[len('PUBLISHED_TARGET_PREDECESSOR_SAFE '):])
+                  allowed={'public.vnext_target_current_v1(text,uuid,text)','public.vnext_read_v1(text)','public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)'}
+                  if not isinstance(observed,list) or len(observed)!=3 or {r.get('signature') for r in observed}!=allowed: raise SystemExit('closed target predecessor metadata required')
+                  for row in observed:
+                      if set(row)!={'signature','bodySha256','proconfig','securityDefiner'} or row['securityDefiner'] is not True or not re.fullmatch('[a-f0-9]{64}',row['bodySha256']) or not isinstance(row['proconfig'],list) or len(row['proconfig'])>6 or any(not isinstance(v,str) or len(v)>100 for v in row['proconfig']): raise SystemExit('bounded target predecessor metadata required')
+                  print('::notice title=Published target actual predecessor::'+json.dumps(observed,separators=(',',':')))
+          expected={'FORECAST_CURRENT_SAFE ':{'evidenceCount','receiptCount','numericSourceOnly','sourceDeclaredAnnualAndForward4q','reportedAnnual','actualOriginalAppend','syntheticSource','actualExternalModel'},'FORECAST_FROZEN_REVOKED_SAFE ':{'actualReservedFrozenInput','forecastItems','providerPosts','rightsRevocationCommitted','originalRowsRetained','sourceCurrentFalse','noSecondClaimPrepareOrReserve','directRejectedMutants','duplicateAcquisitionStable','recollectionObservations'}}
+          expected['FISCAL_CLOSED_DAY_WITHDRAWAL_SAFE ']=set('rightsRevocations originalRowsRetained freshReadonlyObserver sourceEvidenceBefore sourceEvidenceAfter researchClaims providerPosts preparations publications wholeBusinessLedgerUnchanged businessWeekdayGuardBypassed actualExternalSource'.split())
+          expected['PUBLISHED_TARGET_INSTALL_SAFE ']=set('modifiedBodies newFunctions newGrants repeatRejected wholeCatalogInvariant readOnlyProbe publishedBaseline actualRebase'.split())
+          expected['FISCAL_FORECAST_CURRENT_SAFE ']=set('originals sourceDeclaredAnnual sourceDeclaredForwardFour reportedAnnual wholeOriginalContext currentReader frozenProviderInput providerPosts rightsWithdrawals sourceHistoryRetained actualExternalSource'.split())
+          expected['FISCAL_SOURCE_COMPONENT_SAFE ']=set('originals wholeOriginals evidence receipts wholeRowsUnchanged privateOwnerRead authorJobRead preparation providerPosts syntheticSource'.split())
+          notices=[]
+          for line in raw.read_text().splitlines():
+              for prefix,keys in expected.items():
+                  if line.startswith(prefix):
+                      value=json.loads(line[len(prefix):])
+                      if set(value)!=keys or any(type(v) not in [bool,int] for v in value.values()): raise SystemExit('closed forecast safe witness required')
+                      notices.append({'kind':prefix.strip(),'value':value})
+          paths=['migrations/20261024_vnext_published_target_read_v1.sql','scripts/opportunity-v3/vnext-published-target-read-profile-v1.json','scripts/vnext-published-target-read-native-fixture.mjs','web/src/lib/vnext/published-target-read.ts','migrations/20261023_vnext_disclosed_fiscal_forecast_v1.sql','scripts/opportunity-v3/vnext-disclosed-fiscal-profile-v1.json','scripts/vnext-disclosed-fiscal-native-fixture.mjs','web/src/lib/vnext/disclosed-fiscal-forecast.ts','migrations/20261023_vnext_corporate_action_terms_v1.sql','scripts/opportunity-v3/vnext-action-terms-profile-v1.json','scripts/vnext-action-terms-native-fixture.mjs','web/src/lib/vnext/corporate-action-terms.ts','migrations/20261023_vnext_forecast_active_v1.sql','scripts/opportunity-v3/vnext-forecast-active-profile-v1.json','web/src/lib/vnext/forecast-active.ts','web/src/lib/vnext/weekly-worker.ts','web/src/lib/vnext/thesis-audit.ts','migrations/20261023_vnext_forecast_sources_v1.sql','scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json','scripts/vnext-forecast-native-fixture.mjs','scripts/vnext-preparation-http-fixture.mjs','scripts/vnext-preparation-http.test.mjs','web/src/lib/vnext/forecast-current.ts','web/src/lib/vnext/preparation-reconciliation.ts','web/src/lib/vnext/store.ts']
+          inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
+          value={'sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'observedWitnesses':notices,'actualTapCounts':{m[1].decode():int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',(root/'preparation-http.tap').read_bytes(),re.M)},'tapSha256':hashlib.sha256((root/'preparation-http.tap').read_bytes()).hexdigest(),'scope':'hosted genuine PostgreSQL/HTTP assertions if reached; synthetic source metadata and original append APIs, actual journal reservation only, zero external provider calls; absent witness means NOT_REACHED'}
+          (root/'forecast-current-summary.json').write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Forecast current numeric acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'observedWitnesses':notices,'actualTapCounts':value['actualTapCounts'],'tapSha256':value['tapSha256'],'privateRowsPublished':False},separators=(',',':')))
+          for line in raw.read_text().splitlines():
+              if line.startswith('PREPARATION_BRIDGE_FAILURE_SAFE '):
+                  diagnostic=json.loads(line[len('PREPARATION_BRIDGE_FAILURE_SAFE '):])
+                  if set(diagnostic)!=set('phase code messageHash tokens actual expected settlements'.split()) or len(diagnostic['settlements'])>6: raise SystemExit('closed preparation bridge diagnostic required')
+                  print('::error title=Preparation actual bridge diagnostic::'+json.dumps(diagnostic,separators=(',',':')))
+              if line.startswith('ACTION_TERMS_CURRENT_SAFE '):
+                  action=json.loads(line[len('ACTION_TERMS_CURRENT_SAFE '):])
+                  if set(action)!=set('receipts actualSourceAppend currentTerms originalSpans withdrawalCommitted deniedAfterWithdrawal jobsChanged providerInvocations actualExternalSource actualPublishedTargetRebase'.split()) or any(type(v) not in [bool,int] for v in action.values()): raise SystemExit('closed action witness required')
+                  print('::notice title=Current original action terms acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'witness':action,'actualTapCounts':value['actualTapCounts'],'tapSha256':value['tapSha256']},separators=(',',':')))
+          PYCODE
+          test "$test_status" = 0
+      - name: Hash bounded forecast preparation raw receipts without publishing contents
+        if: always()
+        run: |
+          python3 - <<'PYCODE'
+          import hashlib,json,os,pathlib,re,stat
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci');paths=[]
+          for place in [os.getcwd(),'/tmp']:
+              volume=os.statvfs(place)
+              if volume.f_bavail*volume.f_frsize<8589934592+1048576: raise SystemExit('NOT_READY: forecast inventory original floor plus1MiB')
+          for name in ['preparation-running-http','preparation-resource']:
+              directory=root/name
+              if directory.exists():
+                  if directory.is_symlink() or not directory.is_dir(): raise SystemExit('owned forecast raw directory required')
+                  paths.extend(directory.glob('*.json'));paths.extend(directory.glob('*.log'))
+          for name in ['preparation-http.tap.private.log','preparation-pg-stop.private.log','preparation-pg-stop.private.json','preparation-pg-server.private.log','preparation-cleanup.private.json']:
+              p=root/name
+              if p.exists(): paths.append(p)
+          if len(paths)>256: raise SystemExit('bounded forecast inventory required')
+          rows=[];total=0
+          for p in sorted(paths):
+              before=p.lstat();total+=before.st_size
+              if not stat.S_ISREG(before.st_mode) or before.st_uid!=os.getuid() or before.st_nlink!=1 or before.st_size>134217728 or total>1073741824: raise SystemExit('bounded stable owned forecast evidence required')
+              relative=str(p.relative_to(root))
+              if not re.fullmatch('[A-Za-z0-9._/-]{1,200}',relative): raise SystemExit('fixed safe forecast evidence name required')
+              with p.open('rb') as stream:
+                  opened=os.fstat(stream.fileno())
+                  if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino): raise SystemExit('forecast evidence open changed')
+                  digest=hashlib.file_digest(stream,'sha256').hexdigest();ended=os.fstat(stream.fileno())
+              after=p.lstat();identity=lambda v:(v.st_dev,v.st_ino,v.st_size,v.st_mtime_ns,v.st_ctime_ns)
+              if identity(before)!=identity(ended) or identity(before)!=identity(after): raise SystemExit('forecast evidence changed')
+              rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
+          value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only hosted owned preparation/forecast raw inventory; contents private, not independently retrieved; hosted runner storage ephemeral'}
+          for place in [os.getcwd(),'/tmp']:
+              volume=os.statvfs(place)
+              if volume.f_bavail*volume.f_frsize<8589934592+1048576: raise SystemExit('NOT_READY: forecast inventory publication reserve')
+          out=root/'forecast-current-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Forecast private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
+          PYCODE
+      - name: Fresh routine-screen actual HTTP admission and withdrawal (synthetic originals)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-12
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-12
+          VNEXT_LEGACY_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-12
+          VNEXT_HTTP_DATABASE: vnext_worker
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/routine-http
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if python3 scripts/vnext-routine-resource-run.py > /tmp/stockinsider-vnext-ci/routine-http.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/routine-http.tap.private.log /tmp/stockinsider-vnext-ci/routine-http.tap
+          python3 - <<'PYCODE'
+          import base64,hashlib,json,pathlib,re,zlib
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          text=source.read_text()
+          counts={k:int(v) for k,v in re.findall(r'^# (tests|pass|fail|cancelled|skipped|todo) (\d+)$',text,re.M)}
+          failures=[]
+          for line in text.splitlines():
+              if line.startswith('VNEXT_ROUTINE_FAILURE_SAFE '):
+                  item=json.loads(line.removeprefix('VNEXT_ROUTINE_FAILURE_SAFE '))
+                  if set(item)!={'stage','code','actual','expected','messageHash','tokens'}: raise SystemExit('closed diagnostic required')
+                  failures.append(item)
+          prerequisites=[]
+          for line in text.splitlines():
+              if line.startswith('VNEXT_SOURCE_PREREQUISITE_SAFE '):
+                  item=json.loads(line.removeprefix('VNEXT_SOURCE_PREREQUISITE_SAFE '))
+                  if set(item)!={'sourceOwnerUsage','inputOwnerUsage','descriptorHash','completeCatalog','noGrant','fullPrivateDescriptorRetained'}: raise SystemExit('closed prerequisite diagnostic required')
+                  prerequisites.append(item)
+          receipt=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/routine-http-receipt.json')
+          safe={'actualTapCounts':counts,'tapSha256':hashlib.sha256(source.read_bytes()).hexdigest(),'failures':failures,'receiptObserved':receipt.exists(),'sourceScope':'hosted actual HTTP/PG, synthetic originals only','sourcePrerequisites':prerequisites}
+          for line in text.splitlines():
+              if line.startswith('VNEXT_SOURCE_REACHABILITY_SAFE '):
+                  item=json.loads(line.removeprefix('VNEXT_SOURCE_REACHABILITY_SAFE '))
+                  if set(item)!={'schema','target','role','publicSchema','tables','routines','directOnly','transitiveDefinerBodyReview','rowsOrBodiesPublished','grantExecuted','transactionStateProbe'} or item['grantExecuted'] is not False or item['rowsOrBodiesPublished'] is not False or item['target']!='research_source_fence_owner_v2': raise SystemExit('closed safe direct-rights inventory required')
+                  runtime_source=json.loads(receipt.read_text()).get('sourceCommit') if receipt.exists() else None
+                  if not isinstance(runtime_source,str) or not re.fullmatch('[a-f0-9]{40}',runtime_source): raise SystemExit('actual runtime source binding required')
+                  canonical=json.dumps(item,sort_keys=True,separators=(',',':'),ensure_ascii=True).encode()
+                  packed=zlib.compress(canonical,9);encoded=base64.b64encode(packed).decode('ascii')
+                  chunks=[encoded[n:n+1800] for n in range(0,len(encoded),1800)]
+                  if not 1<=len(chunks)<=8: raise SystemExit('finite reachability chunk bound required')
+                  for n,chunk in enumerate(chunks):
+                      part={'schema':'vnext-safe-reachability-part-v1','sourceCommit':runtime_source,'codec':'zlib-base64-canonical-ascii-json','part':n,'parts':len(chunks),'canonicalBytes':len(canonical),'canonicalSha256':hashlib.sha256(canonical).hexdigest(),'compressedSha256':hashlib.sha256(packed).hexdigest(),'data':chunk}
+                      message=json.dumps(part,separators=(',',':'))
+                      if len(message.encode())>3000: raise SystemExit('finite notice byte bound required')
+                      print('::notice title=Source owner reachability part '+str(n)+'::'+message.replace('%','%25').replace('\r','%0D').replace('\n','%0A'))
+          if receipt.exists():
+              data=json.loads(receipt.read_text());safe.update({k:data.get(k) for k in ['sourceCommit','results','pendingQueries','appExit','appPidAbsent','clientsSettled','unexpectedExternalFetchObserved']})
+          terminal=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/retry-terminal-receipt.json')
+          if terminal.exists():
+              if terminal.stat().st_size>4096: raise SystemExit('bounded terminal receipt required')
+              data=json.loads(terminal.read_text())
+              keys={'actualSecond120SecondDeadline','noClockOverride','originalAttemptCharged','retryAttemptCharged','startedAttempts','attemptsRefunded','retryRows','secondRetryRejected','oldRequestRetryRejected','activeSlots','historyRetained','providerInvocations','preparations','actualServiceRole','actualHTTP','wholeStateObserved'}
+              if set(data)!=keys: raise SystemExit('closed terminal receipt required')
+              safe['terminalRetry']=data
+          terminal_cleanup=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/retry-terminal-cleanup.json')
+          if terminal_cleanup.exists():
+              data=json.loads(terminal_cleanup.read_text());safe['terminalRetryCleanup']={k:data.get(k) for k in ['priorBackendsAbsent','clientsSettled','pendingQueries']}
+          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http-resource/receipt.json')
+          if resource.exists():
+              data=json.loads(resource.read_text());safe['resources']={k:data.get(k) for k in ['exit','initialFree','finalFree','floor','nextWorksetReference','sampledNotInstantaneous','sampledNodeAndOwnedPgTreePeakRssBytes','resourceViolation','nodeSha256','ownedPg']};safe['resourceReceiptSha256']=hashlib.sha256(resource.read_bytes()).hexdigest()
+          print('::notice title=Routine HTTP finite acceptance::'+json.dumps(safe,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A'))
+          PYCODE
+          test "$test_status" = 0
+      - name: Actual snapshot receipt install and immutable reads (synthetic Fetch Response)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-05
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-05
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/twse-snapshot
+          VNEXT_TWSE_TEST_STAGE: fresh
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if node --experimental-strip-types scripts/vnext-twse-snapshot-postgres.test.mjs > /tmp/stockinsider-vnext-ci/twse-snapshot.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/twse-snapshot.tap.private.log /tmp/stockinsider-vnext-ci/twse-snapshot.tap
+          test "$test_status" = 0
+      - name: Source-bound catalyst protocol and current score (synthetic sources/provider)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-06
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-06
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/catalyst
+          VNEXT_CATALYST_TEST_STAGE: fresh
+        run: |
+          catalyst_phase=resource_admission
+          trap 'failure=$?; echo "::error title=Catalyst shell boundary::phase=$catalyst_phase exit=$failure"; exit "$failure"' ERR
+          python3 - <<'PYCODE'
+          import os,json
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p); free=s.f_bavail*s.f_frsize
+              if free<8589934592:
+                  print('::error title=Catalyst capacity NOT_READY::'+json.dumps({'filesystem':'checkout' if p==os.getcwd() else 'tmp','free':free,'floor':8589934592},separators=(',',':')))
+                  raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          catalyst_phase=owned_directories
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          catalyst_phase=owned_container_start
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          catalyst_phase=owned_pg_readiness
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          catalyst_phase=native_entry
+          if node --experimental-strip-types scripts/vnext-catalyst-postgres.test.mjs > /tmp/stockinsider-vnext-ci/catalyst.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          catalyst_phase=finite_tap_format
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/catalyst.tap.private.log /tmp/stockinsider-vnext-ci/catalyst.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import json,pathlib
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          for line in source.read_text().splitlines():
+              prefix='CATALYST_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'stage','code','message','actual','expected'}: raise SystemExit('closed diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Catalyst finite native diagnostic::'+value)
+          PYCODE
+          fi
+          catalyst_phase=native_result
+          test "$test_status" = 0
+      - name: Reviewed target baseline and atomic exits (synthetic cached originals/provider)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-07
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-07
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/target
+          VNEXT_TARGET_STAGE: fresh
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if node --experimental-strip-types scripts/vnext-target-postgres.test.mjs > /tmp/stockinsider-vnext-ci/target.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/target.tap.private.log /tmp/stockinsider-vnext-ci/target.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import json,pathlib
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/target.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          for line in source.read_text().splitlines():
+              prefix='TARGET_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'stage','code','message'}: raise SystemExit('closed diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Target finite native diagnostic::'+value)
+          PYCODE
+          fi
+          test "$test_status" = 0
+      - name: Fresh original-bound business components via distinct review/current public projection (synthetic metadata)
+        id: current_business
+        if: ${{ !cancelled() && steps.current_build.outcome == 'success' }}
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-13
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-13
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/business-criteria
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592+536870912: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          owned_id="$(docker inspect --format '{{.Id}}' "$VNEXT_TEST_CONTAINER")"
+          cleanup_trading_invalidity() {
+            original_exit=$?
+            trap - EXIT
+            if ! docker stop "$owned_id" > /tmp/stockinsider-vnext-ci/business-criteria-pg-stop.private.log 2>&1; then original_exit=1; fi
+            if ! docker inspect --format '{{json .State}}' "$owned_id" > /tmp/stockinsider-vnext-ci/business-criteria-pg-stop.private.json; then original_exit=1; fi
+            if ! docker logs --tail 500 "$owned_id" > /tmp/stockinsider-vnext-ci/business-criteria-pg-server.private.log 2>&1; then original_exit=1; fi
+            if ! python3 - <<'PYCODE'
+          import hashlib,json,pathlib,os
+          state=json.loads(pathlib.Path('/tmp/stockinsider-vnext-ci/business-criteria-pg-stop.private.json').read_text())
+          if state['Running'] or state['Pid']!=0 or state['ExitCode']!=0: raise SystemExit('owned PG shutdown unconfirmed')
+          logs=pathlib.Path('/tmp/stockinsider-vnext-ci/business-criteria-pg-server.private.log').read_bytes()
+          if logs.rfind(b'database system is shut down')<=logs.rfind(b'database system is ready to accept connections'): raise SystemExit('PG server shutdown log unconfirmed')
+          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/business-criteria-resource/receipt.json')
+          observations=[];unsettled=False
+          if resource.exists():
+              for owned in json.loads(resource.read_text())['processPostObservation']:
+                  pid=owned['pid']
+                  try:
+                      fields=pathlib.Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()
+                      same=fields[19]==owned['originalStart'];rss=int(fields[21])*os.sysconf('SC_PAGE_SIZE')
+                      observations.append({'pid':pid,'sameProcess':same,'state':fields[0],'rssBytes':rss,'originalIdentitySettled':not same or fields[0]=='Z' and rss==0})
+                      unsettled|=same and not(fields[0]=='Z' and rss==0)
+                  except FileNotFoundError: observations.append({'pid':pid,'absent':True})
+                  except OSError: observations.append({'pid':pid,'unknown':True});unsettled=True
+          pathlib.Path('/tmp/stockinsider-vnext-ci/business-criteria-cleanup.private.json').write_text(json.dumps({'containerState':state,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'shutdownObserved':True,'ownedProcessObservations':observations,'zombieIsNotAbsent':True,'unsettled':unsettled})+'\n')
+          if unsettled: raise SystemExit('owned process settlement unknown')
+          socket_absence={}
+          for name in ['.s.PGSQL.5432','.s.PGSQL.5432.lock']:
+              path=pathlib.Path(os.environ['VNEXT_WORKER_SOCKET_PARENT'])/'socket'/name
+              try: path.lstat();socket_absence[name]=False
+              except FileNotFoundError: socket_absence[name]=True
+          if not all(socket_absence.values()): raise SystemExit('owned PG socket absence unconfirmed')
+          counts={'absent':sum(v.get('absent',False) for v in observations),'zeroRssZombie':sum(v.get('sameProcess',False) and v.get('state')=='Z' and v.get('rssBytes')==0 for v in observations),'pidReused':sum(v.get('sameProcess') is False for v in observations),'unsettled':sum(v.get('unknown',False) or v.get('sameProcess',False) and not(v.get('state')=='Z' and v.get('rssBytes')==0) for v in observations)}
+          print('::notice title=Business criteria cleanup receipt::'+json.dumps({'pgRunning':state['Running'],'pgPid':state['Pid'],'pgExit':state['ExitCode'],'shutdownLogObserved':True,'socketAbsence':socket_absence,'resourceReceiptObserved':resource.exists(),'ownedProcessCounts':counts,'fullPrivateCleanupSha256':hashlib.sha256(pathlib.Path('/tmp/stockinsider-vnext-ci/business-criteria-cleanup.private.json').read_bytes()).hexdigest(),'dataRetained':True},separators=(',',':')))
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
+          PYCODE
+            then original_exit=1; fi
+            exit "$original_exit"
+          }
+          trap cleanup_trading_invalidity EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if python3 scripts/vnext-business-criteria-resource-run.py > /tmp/stockinsider-vnext-ci/business-criteria.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/business-criteria.tap.private.log /tmp/stockinsider-vnext-ci/business-criteria.tap
+          python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re,subprocess
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          raw=root/'business-criteria.tap.private.log'
+          if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded native diagnostic required')
+          for line in raw.read_text().splitlines():
+              prefix='BUSINESS_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'phase','code','message','errorType'}: raise SystemExit('closed native diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Business criteria finite diagnostic::'+value)
+          tap=(root/'business-criteria.tap').read_bytes()
+          paths=['scripts/vnext-business-criteria-postgres.test.mjs', 'scripts/vnext-business-criteria-resource-run.py', 'scripts/vnext-worker-fixture.mjs', 'web/src/lib/vnext/business-criteria.ts', 'web/src/lib/vnext/worker-core.ts', 'web/src/lib/vnext/worker-prompts.ts', 'web/src/lib/vnext/research.ts', 'web/src/lib/vnext/worker-output.ts', 'web/src/lib/vnext/thesis-audit.ts', 'web/src/lib/vnext/public-contract.ts', 'web/src/app/components/vnext/Home.tsx', 'migrations/20261023_vnext_business_criteria_v1.sql', 'scripts/opportunity-v3/vnext-business-criteria-profile-v1.json', 'migrations/20261023_vnext_catalyst_cancellation_v1.sql', 'migrations/20261023_vnext_target_profiles_v1.sql', 'scripts/opportunity-v3/vnext-target-profiles-source-v1.json', 'scripts/vnext-target-profiles.test.mjs']
+          inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
+          summary={'scope':'actual original-bound business inference/current context/audit/public projection/withdrawal; synthetic facts/provider only; no group points, bounded-risk or semantic approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
+          # Decode finite count keys only; no private rows/principals are emitted.
+          summary['actualTapCounts']={k.decode():v for k,v in summary['actualTapCounts'].items()}
+          # Finite SQL error metadata makes a caught worker uncertainty observable
+          # without exposing private source rows, principals, requests or stacks.
+          query_events=root/'business-criteria/business-query-events.json'
+          if query_events.exists():
+              if query_events.is_symlink() or not query_events.is_file() or query_events.stat().st_size>8*1024*1024: raise SystemExit('bounded owned query evidence required')
+              recorded=json.loads(query_events.read_text())
+              observed=recorded['events']
+              if not isinstance(observed,list) or len(observed)>20000: raise SystemExit('bounded owned query event list required')
+              failures=[]
+              for event in observed:
+                  if 'code' not in event: continue
+                  if len(failures)>=64 or not re.fullmatch(r'[0-9A-Z]{5}',event['code']) or not re.fullmatch(r'[a-f0-9]{64}',event['sqlHash']) or event['ready'] not in ['I','E','T']: raise SystemExit('closed query error evidence required')
+                  message=event['message']
+                  if not isinstance(message,str): raise SystemExit('query error message type required')
+                  failures.append({'code':event['code'],'statementSha256':event['sqlHash'],'ready':event['ready'],'querySettled':event['querySettled'],'message':message if re.fullmatch(r'vnext_[a-z0-9_]{1,180}',message) else 'hash:'+hashlib.sha256(message.encode()).hexdigest()})
+              summary['finiteQueryErrors']=failures
+              summary['queryEventsPrivateSha256']=hashlib.sha256(query_events.read_bytes()).hexdigest()
+          resource=root/'business-criteria-resource/receipt.json'
+          if resource.exists():
+              value=json.loads(resource.read_text())
+              summary.update(resourceObserved=True,exit=value['exit'],resourceViolation=value['resourceViolation'],sampledNotInstantaneous=True,sampledOwnedTreePeakRssBytes=value['sampledNodeAndOwnedPgTreePeakRssBytes'],initialFree=value['initialFree'],finalFree=value['finalFree'],nodeSha256=value['nodeSha256'],actualPg=value['ownedPg'])
+          (root/'business-criteria-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          # GitHub truncates a single annotation at4096 bytes. Bind the full
+          # finite input inventory, but emit source/counts/resources separately.
+          seal=json.dumps(inventory,sort_keys=True,separators=(',',':')).encode()
+          finite={k:v for k,v in summary.items() if k not in ['inputs','finiteQueryErrors']}
+          finite.update(inputCount=len(inventory),inputInventorySha256=hashlib.sha256(seal).hexdigest(),inputInventoryCodec='utf8_sorted_keys_compact_json_v1')
+          print('::notice title=Business criteria finite native receipt::'+json.dumps(finite,separators=(',',':')))
+          if summary.get('finiteQueryErrors'):
+              print('::notice title=Business criteria finite SQL errors::'+json.dumps({'events':summary['finiteQueryErrors'],'privateEventsSha256':summary['queryEventsPrivateSha256']},separators=(',',':')))
+
+          PYCODE
+          test "$test_status" = 0
+      - name: Hash finite owned raw evidence without publishing private contents
+        if: always()
+        run: |
+          python3 - <<'PYCODE'
+          import hashlib,json,os,pathlib,re,stat
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          paths=[]
+          for child in ['business-criteria','business-criteria-resource']:
+              directory=root/child
+              if directory.exists():
+                  if directory.is_symlink() or not directory.is_dir(): raise SystemExit('owned raw directory required')
+                  paths.extend(directory.glob('*.json'))
+          for name in ['business-criteria.tap.private.log','business-criteria-pg-stop.private.log','business-criteria-pg-stop.private.json','business-criteria-pg-server.private.log','business-criteria-cleanup.private.json']:
+              path=root/name
+              if path.exists(): paths.append(path)
+          if len(paths)>256: raise SystemExit('finite raw inventory bound exceeded')
+          rows=[];total=0
+          for path in sorted(paths):
+              relative=str(path.relative_to(root))
+              if not re.fullmatch('[a-z0-9._/-]{1,200}',relative): raise SystemExit('finite owned evidence name required')
+              before=path.lstat();total+=before.st_size
+              if not stat.S_ISREG(before.st_mode) or before.st_uid!=os.getuid() or before.st_nlink!=1 or before.st_size>134217728 or total>1073741824: raise SystemExit('bounded regular owned evidence required')
+              with path.open('rb') as stream:
+                  opened=os.fstat(stream.fileno())
+                  if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino): raise SystemExit('evidence open identity changed')
+                  digest=hashlib.file_digest(stream,'sha256').hexdigest()
+                  ended=os.fstat(stream.fileno())
+              after=path.lstat()
+              keys=lambda v:(v.st_dev,v.st_ino,v.st_size,v.st_mtime_ns,v.st_ctime_ns)
+              if keys(before)!=keys(ended) or keys(before)!=keys(after): raise SystemExit('owned evidence changed during hashing')
+              rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
+          value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only inventory of this hosted owned run; raw private contents are not published or independently downloaded; runner retention is ephemeral'}
+          out=root/'business-criteria-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Business criteria private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
+          PYCODE
+      - name: Upload finite business-criteria TAP and summary only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: stockinsider-vnext-business-criteria-synthetic
+          path: |
+            /tmp/stockinsider-vnext-ci/business-criteria.tap
+            /tmp/stockinsider-vnext-ci/business-criteria-summary.json
+            /tmp/stockinsider-vnext-ci/business-criteria-private-inventory.json
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Same-build desktop and mobile browser over current-run PostgreSQL snapshots
+        id: current_browser
+        if: ${{ !cancelled() && steps.current_build.outcome == 'success' && steps.current_thesis.outcome == 'success' && steps.current_cached.outcome == 'success' && steps.current_business.outcome == 'success' }}
+        run: |
+          test -x /usr/bin/google-chrome || { echo '::error title=Browser NOT_READY::required installed /usr/bin/google-chrome unavailable; no browser install attempted'; exit 1; }
+          export VNEXT_BROWSER_BUILD_SOURCE_SHA="$(git rev-parse HEAD)"
+          python3 - <<'PYCODE'
+          import os,json,pathlib,hashlib
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          for p in [os.getcwd(),'/tmp']:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592+268435456: raise SystemExit('NOT_READY: original floor plus browser workset reference')
+          dest=root/'current-browser-inputs';dest.mkdir(mode=0o700)
+          lineage=[]
+          for name,source,field in [('home-before','thesis/thesis-audit.json','home'),('detail-before','thesis/2409-publication.json',None),('home','thesis/revoked-home.json',None),('detail','thesis/2409-revoked.json',None)]:
+              path=root/source
+              if path.is_symlink() or not path.is_file() or path.stat().st_size>1048576: raise SystemExit('bounded original PG snapshot required')
+              raw=path.read_bytes();value=json.loads(raw);payload=value[field] if field else value
+              encoded=(json.dumps(payload,ensure_ascii=False,indent=2)+'\n').encode() if field else raw
+              target=dest/(name+'.json');target.write_bytes(encoded);target.chmod(0o600)
+              if json.loads(target.read_bytes())!=payload: raise SystemExit('snapshot object parity required')
+              lineage.append({'output':name+'.json','source':source,'sourceField':field,'originalSha256':hashlib.sha256(raw).hexdigest(),'outputSha256':hashlib.sha256(encoded).hexdigest(),'noPayloadFieldChanged':True})
+          (dest/'lineage.json').write_text(json.dumps({'scope':'exact original current-run guarded PostgreSQL read payloads; synthetic source/provider, not formal research','inputs':lineage},indent=2)+'\n')
+          PYCODE
+          for suite in ui current business; do
+            if [ "$suite" = ui ]; then inputs=/tmp/stockinsider-vnext-ci/business; elif [ "$suite" = current ]; then inputs=/tmp/stockinsider-vnext-ci/current-browser-inputs; else inputs=/tmp/stockinsider-vnext-ci/business-criteria; fi
+            out="/tmp/stockinsider-vnext-ci/browser-$suite"
+            if python3 scripts/run-vnext-browser-acceptance.py --suite "$suite" --snapshots "$inputs" --output "$out" --browser /usr/bin/google-chrome > "/tmp/stockinsider-vnext-ci/browser-$suite.private.log" 2>&1; then browser_status=0; else browser_status=$?; fi
+            BROWSER_SUITE="$suite" BROWSER_STATUS="$browser_status" python3 - <<'PYCODE'
+          import os,json,pathlib,hashlib
+          suite=os.environ['BROWSER_SUITE'];root=pathlib.Path('/tmp/stockinsider-vnext-ci')/('browser-'+suite)
+          if not root.is_dir(): raise SystemExit('browser preflight failed before artifact creation')
+          result={'suite':suite,'exit':int(os.environ['BROWSER_STATUS']),'scope':'actual installed Chromium-engine browser on same-source build and current-run synthetic PG snapshot transport; no real provider/source or Contabo approval','cases':[]}
+          p=root/'playwright.json'
+          if p.is_file() and not p.is_symlink() and p.stat().st_size<=8388608:
+              raw=json.loads(p.read_bytes());result['stats']={k:raw.get('stats',{}).get(k) for k in ['expected','unexpected','flaky','skipped','duration']}
+              def visit(s):
+                  for spec in s.get('specs',[]):
+                      for test in spec.get('tests',[]): result['cases'].append({'title':spec['title'],'project':test['projectName'],'expectedStatus':test.get('expectedStatus'),'results':[r['status'] for r in test.get('results',[])]})
+                  for child in s.get('suites',[]):visit(child)
+              for s in raw.get('suites',[]):visit(s)
+              if len(result['cases'])>100: raise SystemExit('finite browser cases required')
+          else:result['playwright']='NOT_OBSERVED'
+          receipt=root/'receipt.json'
+          if receipt.is_file() and receipt.stat().st_size<=1048576:
+              source=json.loads(receipt.read_bytes());result['receipt']={k:source[k] for k in ['scope','sourceCommit','nodeSha256','harnessSha256','buildId','requiredServerFilesSha256','browserVersion','browserLauncher','launcherSha256','browserBinarySha256','suite','snapshotHashes','exit','cleanup','ownedPostrun','containmentUsed','resourceViolation','sampledTreePeakRssBytes','sampledNotInstantaneous','minimumFreeBytes','startedAt','endedAt'] if k in source}
+              result['privateReceiptSha256']=hashlib.sha256(receipt.read_bytes()).hexdigest()
+          images=sorted((root/'screenshots-traces').rglob('*.png'));total=0;result['screenshots']=[];verified=[]
+          if len(images)>100: raise SystemExit('bounded screenshot inventory required')
+          for image in images:
+              if image.is_symlink() or not image.is_file() or not image.resolve().is_relative_to((root/'screenshots-traces').resolve()): raise SystemExit('regular owned screenshot required')
+              data=image.read_bytes();total+=len(data)
+              if total>20971520 or data[:8]!=b'\x89PNG\r\n\x1a\n': raise SystemExit('bounded PNG screenshot required')
+              sha=hashlib.sha256(data).hexdigest();verified.append((sha,data));result['screenshots'].append({'privatePath':str(image.relative_to(root)),'publishedPath':'images/'+sha+'.png','bytes':len(data),'sha256':sha})
+          expected=12 if suite=='ui' else 2
+          complete=(len(result['cases'])==expected and all(c['expectedStatus']=='passed' and c['results']==['passed'] for c in result['cases']) and result.get('stats',{}).get('skipped')==0 and result.get('stats',{}).get('unexpected')==0 and result.get('stats',{}).get('flaky')==0)
+          if result['exit']==0 and not complete:result['exit']=1;result['acceptanceError']='complete_non_skipped_desktop_mobile_cases_required'
+          public=root/'public';public.mkdir(mode=0o700);(public/'images').mkdir(mode=0o700)
+          for sha,data in verified:(public/'images'/(sha+'.png')).write_bytes(data)
+          (public/'acceptance.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+          print('Browser finite summary '+json.dumps({'suite':suite,'exit':result['exit'],'stats':result.get('stats'),'cases':len(result['cases']),'screenshots':len(images)},separators=(',',':')))
+          binary=result.get('receipt',{})
+          notice={'suite':suite,'exit':result['exit'],'stats':result.get('stats'),'cases':result['cases'],'screenshots':len(images),'screenshotBytes':total,'browserVersion':binary.get('browserVersion'),'browserBinarySha256':binary.get('browserBinarySha256'),'launcherSha256':binary.get('launcherSha256'),'sourceCommit':binary.get('sourceCommit'),'requiredServerFilesSha256':binary.get('requiredServerFilesSha256'),'resourceViolation':binary.get('resourceViolation'),'sampledTreePeakRssBytes':binary.get('sampledTreePeakRssBytes'),'containmentUsed':binary.get('containmentUsed'),'publicAcceptanceSha256':hashlib.sha256((public/'acceptance.json').read_bytes()).hexdigest()}
+          print('::notice title=Browser finite binary and case receipt::'+json.dumps(notice,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A'))
+          if result['exit']!=0:print('::error title=Browser finite outcome::'+json.dumps({'suite':suite,'exit':result['exit'],'stats':result.get('stats'),'failedCases':[c for c in result['cases'] if any(status!='passed' for status in c['results'])]},separators=(',',':')))
+          if result['exit']!=0:raise SystemExit(result['exit'])
+          PYCODE
+            test "$browser_status" = 0
+          done
+      - name: Upload finite browser summaries and synthetic screenshots only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: stockinsider-vnext-browser-synthetic-screenshots
+          path: |
+            /tmp/stockinsider-vnext-ci/browser-ui/public/acceptance.json
+            /tmp/stockinsider-vnext-ci/browser-ui/public/images/*.png
+            /tmp/stockinsider-vnext-ci/browser-current/public/acceptance.json
+            /tmp/stockinsider-vnext-ci/browser-current/public/images/*.png
+            /tmp/stockinsider-vnext-ci/browser-business/public/acceptance.json
+            /tmp/stockinsider-vnext-ci/browser-business/public/images/*.png
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Upload finite synthetic TAP only (no raw rows, env or browser traces)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: stockinsider-vnext-source-and-synthetic-db-tap
+          path: |
+            /tmp/stockinsider-vnext-ci/*.tap
+            /tmp/stockinsider-vnext-ci/forecast-current-summary.json
+            /tmp/stockinsider-vnext-ci/forecast-current-private-inventory.json
+          if-no-files-found: warn
+          retention-days: 7
+
+  trading-invalidity-native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Fixed native dependency and workset admission
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592+536870912: raise SystemExit('NOT_READY: original floor plus workset reference')
+          PYCODE
+          npm ci --ignore-scripts
+          mkdir -m 700 /tmp/stockinsider-vnext-ci
+          mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
+      - name: Fresh official-roster invalidity installer and unpublished exits (synthetic metadata)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-09
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-09
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/trading-invalidity
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592+536870912: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          owned_id="$(docker inspect --format '{{.Id}}' "$VNEXT_TEST_CONTAINER")"
+          cleanup_trading_invalidity() {
+            original_exit=$?
+            trap - EXIT
+            if ! docker stop "$owned_id" > /tmp/stockinsider-vnext-ci/trading-invalidity-pg-stop.private.log 2>&1; then original_exit=1; fi
+            if ! docker inspect --format '{{json .State}}' "$owned_id" > /tmp/stockinsider-vnext-ci/trading-invalidity-pg-stop.private.json; then original_exit=1; fi
+            if ! docker logs --tail 500 "$owned_id" > /tmp/stockinsider-vnext-ci/trading-invalidity-pg-server.private.log 2>&1; then original_exit=1; fi
+            if ! python3 - <<'PYCODE'
+          import hashlib,json,pathlib,os
+          state=json.loads(pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-pg-stop.private.json').read_text())
+          if state['Running'] or state['Pid']!=0 or state['ExitCode']!=0: raise SystemExit('owned PG shutdown unconfirmed')
+          logs=pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-pg-server.private.log').read_bytes()
+          if logs.rfind(b'database system is shut down')<=logs.rfind(b'database system is ready to accept connections'): raise SystemExit('PG server shutdown log unconfirmed')
+          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-resource/receipt.json')
+          observations=[];unsettled=False
+          if resource.exists():
+              for owned in json.loads(resource.read_text())['processPostObservation']:
+                  pid=owned['pid']
+                  try:
+                      fields=pathlib.Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()
+                      same=fields[19]==owned['originalStart'];rss=int(fields[21])*os.sysconf('SC_PAGE_SIZE')
+                      observations.append({'pid':pid,'sameProcess':same,'state':fields[0],'rssBytes':rss,'originalIdentitySettled':not same or fields[0]=='Z' and rss==0})
+                      unsettled|=same and not(fields[0]=='Z' and rss==0)
+                  except FileNotFoundError: observations.append({'pid':pid,'absent':True})
+                  except OSError: observations.append({'pid':pid,'unknown':True});unsettled=True
+          pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-cleanup.private.json').write_text(json.dumps({'containerState':state,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'shutdownObserved':True,'ownedProcessObservations':observations,'zombieIsNotAbsent':True,'unsettled':unsettled})+'\n')
+          if unsettled: raise SystemExit('owned process settlement unknown')
+          socket_absence={}
+          for name in ['.s.PGSQL.5432','.s.PGSQL.5432.lock']:
+              path=pathlib.Path(os.environ['VNEXT_WORKER_SOCKET_PARENT'])/'socket'/name
+              try: path.lstat();socket_absence[name]=False
+              except FileNotFoundError: socket_absence[name]=True
+          if not all(socket_absence.values()): raise SystemExit('owned PG socket absence unconfirmed')
+          counts={'absent':sum(v.get('absent',False) for v in observations),'zeroRssZombie':sum(v.get('sameProcess',False) and v.get('state')=='Z' and v.get('rssBytes')==0 for v in observations),'pidReused':sum(v.get('sameProcess') is False for v in observations),'unsettled':sum(v.get('unknown',False) or v.get('sameProcess',False) and not(v.get('state')=='Z' and v.get('rssBytes')==0) for v in observations)}
+          print('::notice title=Trading-invalidity cleanup receipt::'+json.dumps({'pgRunning':state['Running'],'pgPid':state['Pid'],'pgExit':state['ExitCode'],'shutdownLogObserved':True,'socketAbsence':socket_absence,'resourceReceiptObserved':resource.exists(),'ownedProcessCounts':counts,'fullPrivateCleanupSha256':hashlib.sha256(pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-cleanup.private.json').read_bytes()).hexdigest(),'dataRetained':True},separators=(',',':')))
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
+          PYCODE
+            then original_exit=1; fi
+            exit "$original_exit"
+          }
+          trap cleanup_trading_invalidity EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if python3 scripts/vnext-trading-invalidity-resource-run.py > /tmp/stockinsider-vnext-ci/trading-invalidity.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/trading-invalidity.tap.private.log /tmp/stockinsider-vnext-ci/trading-invalidity.tap
+          python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re,subprocess
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          raw=root/'trading-invalidity.tap.private.log'
+          if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded native diagnostic required')
+          for line in raw.read_text().splitlines():
+              prefix='TRADING_INVALIDITY_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'phase','code','message','errorType'}: raise SystemExit('closed native diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Trading-invalidity finite diagnostic::'+value)
+          tap=(root/'trading-invalidity.tap').read_bytes()
+          paths=['scripts/vnext-trading-invalidity-postgres.test.mjs','scripts/vnext-trading-invalidity-resource-run.py','scripts/vnext-worker-fixture.mjs','migrations/20261023_vnext_trading_invalidity_exit_v1.sql','scripts/opportunity-v3/vnext-trading-invalidity-profile-v1.json']
+          inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
+          summary={'scope':'actual fresh engineering SQL; synthetic eligibility/roster/calendar, no official acquisition or financial approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
+          # Decode finite count keys only; no private rows/principals are emitted.
+          summary['actualTapCounts']={k.decode():v for k,v in summary['actualTapCounts'].items()}
+          resource=root/'trading-invalidity-resource/receipt.json'
+          if resource.exists():
+              value=json.loads(resource.read_text())
+              summary.update(resourceObserved=True,exit=value['exit'],resourceViolation=value['resourceViolation'],sampledNotInstantaneous=True,sampledOwnedTreePeakRssBytes=value['sampledNodeAndOwnedPgTreePeakRssBytes'],initialFree=value['initialFree'],finalFree=value['finalFree'],nodeSha256=value['nodeSha256'],actualPg=value['ownedPg'])
+          (root/'trading-invalidity-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print('::notice title=Trading-invalidity finite native receipt::'+json.dumps(summary,separators=(',',':')))
+          PYCODE
+          test "$test_status" = 0
+      - name: Hash finite owned raw evidence without publishing private contents
+        if: always()
+        run: |
+          python3 - <<'PYCODE'
+          import hashlib,json,os,pathlib,re,stat
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          paths=[]
+          for child in ['trading-invalidity','trading-invalidity-resource']:
+              directory=root/child
+              if directory.exists():
+                  if directory.is_symlink() or not directory.is_dir(): raise SystemExit('owned raw directory required')
+                  paths.extend(directory.glob('*.json'))
+          for name in ['trading-invalidity.tap.private.log','trading-invalidity-pg-stop.private.log','trading-invalidity-pg-stop.private.json','trading-invalidity-pg-server.private.log','trading-invalidity-cleanup.private.json']:
+              path=root/name
+              if path.exists(): paths.append(path)
+          if len(paths)>256: raise SystemExit('finite raw inventory bound exceeded')
+          rows=[];total=0
+          for path in sorted(paths):
+              relative=str(path.relative_to(root))
+              if not re.fullmatch('[a-z0-9._/-]{1,200}',relative): raise SystemExit('finite owned evidence name required')
+              before=path.lstat();total+=before.st_size
+              if not stat.S_ISREG(before.st_mode) or before.st_uid!=os.getuid() or before.st_nlink!=1 or before.st_size>134217728 or total>1073741824: raise SystemExit('bounded regular owned evidence required')
+              with path.open('rb') as stream:
+                  opened=os.fstat(stream.fileno())
+                  if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino): raise SystemExit('evidence open identity changed')
+                  digest=hashlib.file_digest(stream,'sha256').hexdigest()
+                  ended=os.fstat(stream.fileno())
+              after=path.lstat()
+              keys=lambda v:(v.st_dev,v.st_ino,v.st_size,v.st_mtime_ns,v.st_ctime_ns)
+              if keys(before)!=keys(ended) or keys(before)!=keys(after): raise SystemExit('owned evidence changed during hashing')
+              rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
+          value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only inventory of this hosted owned run; raw private contents are not published or independently downloaded; runner retention is ephemeral'}
+          out=root/'trading-invalidity-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Trading-invalidity private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
+          PYCODE
+      - name: Upload finite trading-invalidity TAP and summary only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: stockinsider-vnext-trading-invalidity-synthetic
+          path: |
+            /tmp/stockinsider-vnext-ci/trading-invalidity.tap
+            /tmp/stockinsider-vnext-ci/trading-invalidity-summary.json
+            /tmp/stockinsider-vnext-ci/trading-invalidity-private-inventory.json
+          if-no-files-found: warn
+          retention-days: 7
+
+
+  roster-current-native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Fixed native dependency and workset admission
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592+536870912: raise SystemExit('NOT_READY: original floor plus workset reference')
+          PYCODE
+          npm ci --ignore-scripts
+          mkdir -m 700 /tmp/stockinsider-vnext-ci
+          mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
+      - name: Fresh current-work, claim and reserve invalidity fences (synthetic metadata)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-10
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-10
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/roster-current
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592+536870912: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          owned_id="$(docker inspect --format '{{.Id}}' "$VNEXT_TEST_CONTAINER")"
+          cleanup_trading_invalidity() {
+            original_exit=$?
+            trap - EXIT
+            if ! docker stop "$owned_id" > /tmp/stockinsider-vnext-ci/roster-current-pg-stop.private.log 2>&1; then original_exit=1; fi
+            if ! docker inspect --format '{{json .State}}' "$owned_id" > /tmp/stockinsider-vnext-ci/roster-current-pg-stop.private.json; then original_exit=1; fi
+            if ! docker logs --tail 500 "$owned_id" > /tmp/stockinsider-vnext-ci/roster-current-pg-server.private.log 2>&1; then original_exit=1; fi
+            if ! python3 - <<'PYCODE'
+          import hashlib,json,pathlib,os
+          state=json.loads(pathlib.Path('/tmp/stockinsider-vnext-ci/roster-current-pg-stop.private.json').read_text())
+          if state['Running'] or state['Pid']!=0 or state['ExitCode']!=0: raise SystemExit('owned PG shutdown unconfirmed')
+          logs=pathlib.Path('/tmp/stockinsider-vnext-ci/roster-current-pg-server.private.log').read_bytes()
+          if logs.rfind(b'database system is shut down')<=logs.rfind(b'database system is ready to accept connections'): raise SystemExit('PG server shutdown log unconfirmed')
+          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/roster-current-resource/receipt.json')
+          observations=[];unsettled=False
+          if resource.exists():
+              for owned in json.loads(resource.read_text())['processPostObservation']:
+                  pid=owned['pid']
+                  try:
+                      fields=pathlib.Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()
+                      same=fields[19]==owned['originalStart'];rss=int(fields[21])*os.sysconf('SC_PAGE_SIZE')
+                      observations.append({'pid':pid,'sameProcess':same,'state':fields[0],'rssBytes':rss,'originalIdentitySettled':not same or fields[0]=='Z' and rss==0})
+                      unsettled|=same and not(fields[0]=='Z' and rss==0)
+                  except FileNotFoundError: observations.append({'pid':pid,'absent':True})
+                  except OSError: observations.append({'pid':pid,'unknown':True});unsettled=True
+          pathlib.Path('/tmp/stockinsider-vnext-ci/roster-current-cleanup.private.json').write_text(json.dumps({'containerState':state,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'shutdownObserved':True,'ownedProcessObservations':observations,'zombieIsNotAbsent':True,'unsettled':unsettled})+'\n')
+          if unsettled: raise SystemExit('owned process settlement unknown')
+          socket_absence={}
+          for name in ['.s.PGSQL.5432','.s.PGSQL.5432.lock']:
+              path=pathlib.Path(os.environ['VNEXT_WORKER_SOCKET_PARENT'])/'socket'/name
+              try: path.lstat();socket_absence[name]=False
+              except FileNotFoundError: socket_absence[name]=True
+          if not all(socket_absence.values()): raise SystemExit('owned PG socket absence unconfirmed')
+          counts={'absent':sum(v.get('absent',False) for v in observations),'zeroRssZombie':sum(v.get('sameProcess',False) and v.get('state')=='Z' and v.get('rssBytes')==0 for v in observations),'pidReused':sum(v.get('sameProcess') is False for v in observations),'unsettled':sum(v.get('unknown',False) or v.get('sameProcess',False) and not(v.get('state')=='Z' and v.get('rssBytes')==0) for v in observations)}
+          print('::notice title=Roster-current cleanup receipt::'+json.dumps({'pgRunning':state['Running'],'pgPid':state['Pid'],'pgExit':state['ExitCode'],'shutdownLogObserved':True,'socketAbsence':socket_absence,'resourceReceiptObserved':resource.exists(),'ownedProcessCounts':counts,'fullPrivateCleanupSha256':hashlib.sha256(pathlib.Path('/tmp/stockinsider-vnext-ci/roster-current-cleanup.private.json').read_bytes()).hexdigest(),'dataRetained':True},separators=(',',':')))
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
+          PYCODE
+            then original_exit=1; fi
+            exit "$original_exit"
+          }
+          trap cleanup_trading_invalidity EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if python3 scripts/vnext-roster-current-resource-run.py > /tmp/stockinsider-vnext-ci/roster-current.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/roster-current.tap.private.log /tmp/stockinsider-vnext-ci/roster-current.tap
+          python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re,subprocess
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          raw=root/'roster-current.tap.private.log'
+          if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded native diagnostic required')
+          for line in raw.read_text().splitlines():
+              prefix='ROSTER_CURRENT_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'phase','code','message','errorType'}: raise SystemExit('closed native diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Roster-current finite diagnostic::'+value)
+          tap=(root/'roster-current.tap').read_bytes()
+          paths=['scripts/vnext-roster-current-postgres.test.mjs','scripts/vnext-roster-current-resource-run.py','scripts/vnext-worker-fixture.mjs','web/src/lib/vnext/screening-instrument-identity.ts','web/src/lib/vnext/preparation-trading-identity.ts','migrations/20261023_vnext_roster_current_fence_v1.sql','scripts/opportunity-v3/vnext-roster-current-profile-v1.json','migrations/20261023_vnext_trading_invalidity_exit_v1.sql','scripts/opportunity-v3/vnext-trading-invalidity-profile-v1.json']
+          inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
+          summary={'scope':'actual held-work/claim/provider-reserve SQL fences; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
+          # Decode finite count keys only; no private rows/principals are emitted.
+          summary['actualTapCounts']={k.decode():v for k,v in summary['actualTapCounts'].items()}
+          resource=root/'roster-current-resource/receipt.json'
+          if resource.exists():
+              value=json.loads(resource.read_text())
+              summary.update(resourceObserved=True,exit=value['exit'],resourceViolation=value['resourceViolation'],sampledNotInstantaneous=True,sampledOwnedTreePeakRssBytes=value['sampledNodeAndOwnedPgTreePeakRssBytes'],initialFree=value['initialFree'],finalFree=value['finalFree'],nodeSha256=value['nodeSha256'],actualPg=value['ownedPg'])
+          (root/'roster-current-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print('::notice title=Roster-current finite native receipt::'+json.dumps(summary,separators=(',',':')))
+          PYCODE
+          test "$test_status" = 0
+      - name: Hash finite owned raw evidence without publishing private contents
+        if: always()
+        run: |
+          python3 - <<'PYCODE'
+          import hashlib,json,os,pathlib,re,stat
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          paths=[]
+          for child in ['roster-current','roster-current-resource']:
+              directory=root/child
+              if directory.exists():
+                  if directory.is_symlink() or not directory.is_dir(): raise SystemExit('owned raw directory required')
+                  paths.extend(directory.glob('*.json'))
+          for name in ['roster-current.tap.private.log','roster-current-pg-stop.private.log','roster-current-pg-stop.private.json','roster-current-pg-server.private.log','roster-current-cleanup.private.json']:
+              path=root/name
+              if path.exists(): paths.append(path)
+          if len(paths)>256: raise SystemExit('finite raw inventory bound exceeded')
+          rows=[];total=0
+          for path in sorted(paths):
+              relative=str(path.relative_to(root))
+              if not re.fullmatch('[a-z0-9._/-]{1,200}',relative): raise SystemExit('finite owned evidence name required')
+              before=path.lstat();total+=before.st_size
+              if not stat.S_ISREG(before.st_mode) or before.st_uid!=os.getuid() or before.st_nlink!=1 or before.st_size>134217728 or total>1073741824: raise SystemExit('bounded regular owned evidence required')
+              with path.open('rb') as stream:
+                  opened=os.fstat(stream.fileno())
+                  if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino): raise SystemExit('evidence open identity changed')
+                  digest=hashlib.file_digest(stream,'sha256').hexdigest()
+                  ended=os.fstat(stream.fileno())
+              after=path.lstat()
+              keys=lambda v:(v.st_dev,v.st_ino,v.st_size,v.st_mtime_ns,v.st_ctime_ns)
+              if keys(before)!=keys(ended) or keys(before)!=keys(after): raise SystemExit('owned evidence changed during hashing')
+              rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
+          value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only inventory of this hosted owned run; raw private contents are not published or independently downloaded; runner retention is ephemeral'}
+          out=root/'roster-current-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Roster-current private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
+          PYCODE
+      - name: Upload finite roster-current TAP and summary only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: stockinsider-vnext-roster-current-synthetic
+          path: |
+            /tmp/stockinsider-vnext-ci/roster-current.tap
+            /tmp/stockinsider-vnext-ci/roster-current-summary.json
+            /tmp/stockinsider-vnext-ci/roster-current-private-inventory.json
+          if-no-files-found: warn
+          retention-days: 7
+
+  cancellation-native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Fixed native dependency and workset admission
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592+536870912: raise SystemExit('NOT_READY: original floor plus workset reference')
+          PYCODE
+          npm ci --ignore-scripts
+          mkdir -m 700 /tmp/stockinsider-vnext-ci
+          mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
+      - name: Fresh source-bound cancellation via distinct reviewer and atomic publication/exit (synthetic metadata)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-12
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-12
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/catalyst-cancellation
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592+536870912: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          owned_id="$(docker inspect --format '{{.Id}}' "$VNEXT_TEST_CONTAINER")"
+          cleanup_trading_invalidity() {
+            original_exit=$?
+            trap - EXIT
+            if ! docker stop "$owned_id" > /tmp/stockinsider-vnext-ci/catalyst-cancellation-pg-stop.private.log 2>&1; then original_exit=1; fi
+            if ! docker inspect --format '{{json .State}}' "$owned_id" > /tmp/stockinsider-vnext-ci/catalyst-cancellation-pg-stop.private.json; then original_exit=1; fi
+            if ! docker logs --tail 500 "$owned_id" > /tmp/stockinsider-vnext-ci/catalyst-cancellation-pg-server.private.log 2>&1; then original_exit=1; fi
+            if ! python3 - <<'PYCODE'
+          import hashlib,json,pathlib,os
+          state=json.loads(pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst-cancellation-pg-stop.private.json').read_text())
+          if state['Running'] or state['Pid']!=0 or state['ExitCode']!=0: raise SystemExit('owned PG shutdown unconfirmed')
+          logs=pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst-cancellation-pg-server.private.log').read_bytes()
+          if logs.rfind(b'database system is shut down')<=logs.rfind(b'database system is ready to accept connections'): raise SystemExit('PG server shutdown log unconfirmed')
+          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst-cancellation-resource/receipt.json')
+          observations=[];unsettled=False
+          if resource.exists():
+              for owned in json.loads(resource.read_text())['processPostObservation']:
+                  pid=owned['pid']
+                  try:
+                      fields=pathlib.Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()
+                      same=fields[19]==owned['originalStart'];rss=int(fields[21])*os.sysconf('SC_PAGE_SIZE')
+                      observations.append({'pid':pid,'sameProcess':same,'state':fields[0],'rssBytes':rss,'originalIdentitySettled':not same or fields[0]=='Z' and rss==0})
+                      unsettled|=same and not(fields[0]=='Z' and rss==0)
+                  except FileNotFoundError: observations.append({'pid':pid,'absent':True})
+                  except OSError: observations.append({'pid':pid,'unknown':True});unsettled=True
+          pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst-cancellation-cleanup.private.json').write_text(json.dumps({'containerState':state,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'shutdownObserved':True,'ownedProcessObservations':observations,'zombieIsNotAbsent':True,'unsettled':unsettled})+'\n')
+          if unsettled: raise SystemExit('owned process settlement unknown')
+          socket_absence={}
+          for name in ['.s.PGSQL.5432','.s.PGSQL.5432.lock']:
+              path=pathlib.Path(os.environ['VNEXT_WORKER_SOCKET_PARENT'])/'socket'/name
+              try: path.lstat();socket_absence[name]=False
+              except FileNotFoundError: socket_absence[name]=True
+          if not all(socket_absence.values()): raise SystemExit('owned PG socket absence unconfirmed')
+          counts={'absent':sum(v.get('absent',False) for v in observations),'zeroRssZombie':sum(v.get('sameProcess',False) and v.get('state')=='Z' and v.get('rssBytes')==0 for v in observations),'pidReused':sum(v.get('sameProcess') is False for v in observations),'unsettled':sum(v.get('unknown',False) or v.get('sameProcess',False) and not(v.get('state')=='Z' and v.get('rssBytes')==0) for v in observations)}
+          print('::notice title=Cancellation cleanup receipt::'+json.dumps({'pgRunning':state['Running'],'pgPid':state['Pid'],'pgExit':state['ExitCode'],'shutdownLogObserved':True,'socketAbsence':socket_absence,'resourceReceiptObserved':resource.exists(),'ownedProcessCounts':counts,'fullPrivateCleanupSha256':hashlib.sha256(pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst-cancellation-cleanup.private.json').read_bytes()).hexdigest(),'dataRetained':True},separators=(',',':')))
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
+          PYCODE
+            then original_exit=1; fi
+            exit "$original_exit"
+          }
+          trap cleanup_trading_invalidity EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if python3 scripts/vnext-catalyst-cancellation-resource-run.py > /tmp/stockinsider-vnext-ci/catalyst-cancellation.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/catalyst-cancellation.tap.private.log /tmp/stockinsider-vnext-ci/catalyst-cancellation.tap
+          python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re,subprocess
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          raw=root/'catalyst-cancellation.tap.private.log'
+          if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded native diagnostic required')
+          for line in raw.read_text().splitlines():
+              prefix='CANCELLATION_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'phase','code','message','errorType'}: raise SystemExit('closed native diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Cancellation finite diagnostic::'+value)
+          tap=(root/'catalyst-cancellation.tap').read_bytes()
+          paths=['scripts/vnext-catalyst-cancellation-postgres.test.mjs','scripts/vnext-cancellation-response-loss.mjs','scripts/vnext-cancellation-response-loss.test.mjs','scripts/vnext-catalyst-cancellation-resource-run.py','scripts/vnext-worker-fixture.mjs','web/src/lib/vnext/catalyst-cancellation.ts','web/src/lib/vnext/worker-core.ts','web/src/lib/vnext/worker-prompts.ts','web/src/lib/vnext/research.ts','web/src/lib/vnext/worker-output.ts','migrations/20261023_vnext_catalyst_cancellation_v1.sql','scripts/opportunity-v3/vnext-catalyst-cancellation-profile-v1.json','migrations/20261023_vnext_roster_current_fence_v1.sql']
+          inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
+          summary={'scope':'actual original-source cancellation/private proof/atomic retained publication+exit; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
+          # Decode finite count keys only; no private rows/principals are emitted.
+          summary['actualTapCounts']={k.decode():v for k,v in summary['actualTapCounts'].items()}
+          # Finite SQL error metadata makes a caught worker uncertainty observable
+          # without exposing private source rows, principals, requests or stacks.
+          query_events=root/'catalyst-cancellation/cancellation-query-events.json'
+          if query_events.exists():
+              if query_events.is_symlink() or not query_events.is_file() or query_events.stat().st_size>8*1024*1024: raise SystemExit('bounded owned query evidence required')
+              recorded=json.loads(query_events.read_text())
+              observed=recorded['events']
+              if not isinstance(observed,list) or len(observed)>20000: raise SystemExit('bounded owned query event list required')
+              failures=[]
+              for event in observed:
+                  if 'code' not in event: continue
+                  if len(failures)>=64 or not re.fullmatch(r'[0-9A-Z]{5}',event['code']) or not re.fullmatch(r'[a-f0-9]{64}',event['sqlHash']) or event['ready'] not in ['I','E','T']: raise SystemExit('closed query error evidence required')
+                  message=event['message']
+                  if not isinstance(message,str): raise SystemExit('query error message type required')
+                  failures.append({'code':event['code'],'statementSha256':event['sqlHash'],'ready':event['ready'],'querySettled':event['querySettled'],'message':message if re.fullmatch(r'vnext_[a-z0-9_]{1,180}',message) else 'hash:'+hashlib.sha256(message.encode()).hexdigest()})
+              summary['finiteQueryErrors']=failures
+              summary['queryEventsPrivateSha256']=hashlib.sha256(query_events.read_bytes()).hexdigest()
+          resource=root/'catalyst-cancellation-resource/receipt.json'
+          if resource.exists():
+              value=json.loads(resource.read_text())
+              summary.update(resourceObserved=True,exit=value['exit'],resourceViolation=value['resourceViolation'],sampledNotInstantaneous=True,sampledOwnedTreePeakRssBytes=value['sampledNodeAndOwnedPgTreePeakRssBytes'],initialFree=value['initialFree'],finalFree=value['finalFree'],nodeSha256=value['nodeSha256'],actualPg=value['ownedPg'])
+          (root/'catalyst-cancellation-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          # GitHub truncates a single annotation at4096 bytes. Bind the full
+          # finite input inventory, but emit source/counts/resources separately.
+          seal=json.dumps(inventory,sort_keys=True,separators=(',',':')).encode()
+          finite={k:v for k,v in summary.items() if k not in ['inputs','finiteQueryErrors']}
+          finite.update(inputCount=len(inventory),inputInventorySha256=hashlib.sha256(seal).hexdigest(),inputInventoryCodec='utf8_sorted_keys_compact_json_v1')
+          print('::notice title=Cancellation finite native receipt::'+json.dumps(finite,separators=(',',':')))
+          if summary.get('finiteQueryErrors'):
+              print('::notice title=Cancellation finite SQL errors::'+json.dumps({'events':summary['finiteQueryErrors'],'privateEventsSha256':summary['queryEventsPrivateSha256']},separators=(',',':')))
+          loss=root/'catalyst-cancellation/review-response-loss-private.json'
+          if summary.get('exit')==0 and not loss.exists(): raise SystemExit('successful native must include actual held-response witness')
+          if loss.exists():
+              if loss.is_symlink() or not loss.is_file() or loss.stat().st_size>16384: raise SystemExit('bounded owned loss receipt required')
+              value=json.loads(loss.read_text())
+              keys=['bytes','sha256','oneDataRow','selectOne','noError','ready','forwardedResponseBytes','commitObservedBeforeSocketClose','actualQueryRejected','bothOwnedSocketsClosed','pendingQuery','automaticResend']
+              finite_loss={k:value[k] for k in keys}
+              print('::notice title=Cancellation real response loss::'+json.dumps(finite_loss,separators=(',',':')))
+          loss_error=root/'catalyst-cancellation/review-response-loss-error-private.json'
+          if loss_error.exists():
+              if loss_error.is_symlink() or not loss_error.is_file() or loss_error.stat().st_size>65536: raise SystemExit('bounded owned loss error required')
+              error=json.loads(loss_error.read_text())
+              print('::notice title=Cancellation response-loss boundary error::'+json.dumps({'phase':error['phase'],'messageSha256':hashlib.sha256(error['message'].encode()).hexdigest(),'privateReceiptSha256':hashlib.sha256(loss_error.read_bytes()).hexdigest()},separators=(',',':')))
+          PYCODE
+          test "$test_status" = 0
+      - name: Hash finite owned raw evidence without publishing private contents
+        if: always()
+        run: |
+          python3 - <<'PYCODE'
+          import hashlib,json,os,pathlib,re,stat
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          paths=[]
+          for child in ['catalyst-cancellation','catalyst-cancellation-resource']:
+              directory=root/child
+              if directory.exists():
+                  if directory.is_symlink() or not directory.is_dir(): raise SystemExit('owned raw directory required')
+                  paths.extend(directory.glob('*.json'))
+          for name in ['catalyst-cancellation.tap.private.log','catalyst-cancellation-pg-stop.private.log','catalyst-cancellation-pg-stop.private.json','catalyst-cancellation-pg-server.private.log','catalyst-cancellation-cleanup.private.json']:
+              path=root/name
+              if path.exists(): paths.append(path)
+          if len(paths)>256: raise SystemExit('finite raw inventory bound exceeded')
+          rows=[];total=0
+          for path in sorted(paths):
+              relative=str(path.relative_to(root))
+              if not re.fullmatch('[a-z0-9._/-]{1,200}',relative): raise SystemExit('finite owned evidence name required')
+              before=path.lstat();total+=before.st_size
+              if not stat.S_ISREG(before.st_mode) or before.st_uid!=os.getuid() or before.st_nlink!=1 or before.st_size>134217728 or total>1073741824: raise SystemExit('bounded regular owned evidence required')
+              with path.open('rb') as stream:
+                  opened=os.fstat(stream.fileno())
+                  if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino): raise SystemExit('evidence open identity changed')
+                  digest=hashlib.file_digest(stream,'sha256').hexdigest()
+                  ended=os.fstat(stream.fileno())
+              after=path.lstat()
+              keys=lambda v:(v.st_dev,v.st_ino,v.st_size,v.st_mtime_ns,v.st_ctime_ns)
+              if keys(before)!=keys(ended) or keys(before)!=keys(after): raise SystemExit('owned evidence changed during hashing')
+              rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
+          value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only inventory of this hosted owned run; raw private contents are not published or independently downloaded; runner retention is ephemeral'}
+          out=root/'catalyst-cancellation-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Cancellation private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
+          PYCODE
+      - name: Upload finite catalyst-cancellation TAP and summary only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: stockinsider-vnext-catalyst-cancellation-synthetic
+          path: |
+            /tmp/stockinsider-vnext-ci/catalyst-cancellation.tap
+            /tmp/stockinsider-vnext-ci/catalyst-cancellation-summary.json
+            /tmp/stockinsider-vnext-ci/catalyst-cancellation-private-inventory.json
+          if-no-files-found: warn
+          retention-days: 7

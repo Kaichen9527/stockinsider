@@ -1,0 +1,133 @@
+{
+  "sourceCommit": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+  "parent": "372542aaa00ac2c38c23f07344455f12484c9af7",
+  "tree": "5df6ee5bc53fc2761b6264936fa0c87c250d5809",
+  "files": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "ac254bfff7cd88e0c33eba8dd9713495605de614",
+      "bytes": 107207,
+      "sha256": "6679ddbb507e7e3e62ffddb2c416efa9d6ed09448201ff91dda524857b4cad91"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/FORECAST-CURRENT.md",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "5b8f406aec95e2a4459e615e5fcf7001480e0849",
+      "bytes": 11749,
+      "sha256": "d15a2892da9b82517e6029f248d77cd31d30d151d052f1ea083ec20c74456a01"
+    },
+    {
+      "path": "migrations/20261023_vnext_forecast_sources_v1.sql",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "77e4e1d7cad1fef1bae3d5d4e3104f1ba406dcdc",
+      "bytes": 41474,
+      "sha256": "72365104a2f1b258ed5421f601bc731107fac0537fc5c4a5a072d09f456ffe8e"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "a45acd6ddd821603d62f8ed13674fa936142993f",
+      "bytes": 3301,
+      "sha256": "3a654237d06eff74c81b595040bde9cc884f5e3878579da3d547979ad8fdd125"
+    },
+    {
+      "path": "scripts/vnext-analysis-postgres.test.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "3d309eb6a97e580f3378937005e4a95687d8d227",
+      "bytes": 10628,
+      "sha256": "26d967a588a0c1f4c04349e906d9a18b264a6afbc218273348fd9095bcb9f3b8"
+    },
+    {
+      "path": "scripts/vnext-forecast-native-fixture.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "fb307e4e6458cfa69779aabeb489b25eb45e6472",
+      "bytes": 8880,
+      "sha256": "ccd25900feffc7253f2977bcf6465ee0b542f125cd1d9bd937670e30319242f5"
+    },
+    {
+      "path": "scripts/vnext-forecast-receipt-source-check.py",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "970a2ed81d2ea0fcac28bf2a439a6065183124c0",
+      "bytes": 1775,
+      "sha256": "028394903e4c0ef085ab27b26c905e2898bd3dc739b89e441a7d29dc43acbf72"
+    },
+    {
+      "path": "scripts/vnext-forecast-sources.test.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "d6e62e6db5e650841070318becb62f5d66afb0e8",
+      "bytes": 5880,
+      "sha256": "2ab555939589c1df1a5037b6649990ca73c473faec713a300df92685a1db5cfa"
+    },
+    {
+      "path": "scripts/vnext-preparation-http-fixture.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "8ea99147739b3eedf1724caeac61da2aae51b542",
+      "bytes": 50610,
+      "sha256": "5a7bf25fb24f4e9bf4fac75fff8cd3fa3ca784516362e05f0bf81181747084a5"
+    },
+    {
+      "path": "scripts/vnext-preparation-http.test.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "25ed8ee1cd9cf1388397dfce04be50cd7c49fbab",
+      "bytes": 15854,
+      "sha256": "5baecf31e19ea16135666ecb08f044933e58bdf44b4397306f0e51623b2775eb"
+    },
+    {
+      "path": "web/src/lib/vnext/forecast-current.test.ts",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "22c6a62aad332313f4571112dbb1457dd57c1af0",
+      "bytes": 8095,
+      "sha256": "f0a2416cd94ec7307f3a8332d4ae6c02741bca0ea895af59899b17545ca455bd"
+    },
+    {
+      "path": "web/src/lib/vnext/forecast-current.ts",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "dcae98744c784753c3bad065c7859f4f6c72926f",
+      "bytes": 5395,
+      "sha256": "4a83341bb06ed767dc2f1e9cd854c5a2129a8f22ac9371234ad2b6034c8c443b"
+    },
+    {
+      "path": "web/src/lib/vnext/preparation-reconciliation.test.ts",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "e5f49017c1bce722c4b8c0aa36bff12691787240",
+      "bytes": 23938,
+      "sha256": "2f0726c143bce98350bdd14b07a1e162552bbbc614c880265cfad9aeb96f0144"
+    },
+    {
+      "path": "web/src/lib/vnext/preparation-reconciliation.ts",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "b82ea82adf36f1a87f361c31244029be7d74823f",
+      "bytes": 15832,
+      "sha256": "6db5dbeb9183163e8285745f2bfefa862b7d8ccd54f5c0f56c31d9e3e61b82c5"
+    },
+    {
+      "path": "web/src/lib/vnext/store.ts",
+      "mode": "100644",
+      "type": "blob",
+      "blob": "5383a7f0c1f5898243ba4d63b8a62dc07b50bc14",
+      "bytes": 18063,
+      "sha256": "58c35b82e0da78d4e6b677ac3a6d7c4d2b94eaddb7dc1dae99dd39119a468ea8"
+    }
+  ],
+  "changedFiles": 15,
+  "changedBytes": 328681,
+  "allTrackedGitIdentities": 2714,
+  "unchangedInheritedIdentities": 2699,
+  "allTrackedIdentityDigestSha256": "919435dff4cdffa6b3733f39b01eee8d859b40107c9d90e77e565b600daac2a7",
+  "scope": "changed source bytes actually read; all tracked mode/type/blob identity digest; original untracked WIP and private raw excluded"
+}

@@ -1,3 +1,4 @@
+import { rejectLegacyResearchInVnext, verifyAdmittedResearch } from './vnext/runtime.ts';
 import { createHash } from 'node:crypto';
 import {
   candidateFinancialFactsFromValidatedManifest,
@@ -122,14 +123,28 @@ async function reconcilePendingDocumentValidations(client: ReturnType<typeof get
   return errors;
 }
 
-export async function processCandidateFinancialDocumentReceipts(limit = 5) {
+export async function processCandidateFinancialDocumentReceipts(limit = 5, scope?: { stockId: string; symbol: string }) {
+  if (scope) await verifyAdmittedResearch(scope.symbol);
+  else rejectLegacyResearchInVnext();
   const owner = fixedRunnerPrincipal();
   if (!owner) throw new Error('candidate_financial_document_runner_principal_missing');
   const client = getOpportunityV3ServerClient();
-  const reconciliationErrors = await reconcilePendingDocumentValidations(client, owner);
-  reconciliationErrors.push(...await reconcileCandidateFinancialDocumentJobs(client, owner));
+  const reconciliationErrors = scope ? [] : await reconcilePendingDocumentValidations(client, owner);
+  if (!scope) reconciliationErrors.push(...await reconcileCandidateFinancialDocumentJobs(client, owner));
   const now = new Date().toISOString();
-  const claim = await client.rpc('claim_candidate_financial_document_receipts_v6', {
+  const claim = scope ? await (async () => {
+    const pending = await client.from('candidate_financial_document_receipts_v6').select('receipt_id')
+      .eq('stock_id', scope.stockId).eq('parser_status', 'queued').order('accepted_at').limit(Math.max(1, Math.min(5, Math.floor(limit))));
+    if (pending.error) return pending;
+    const ids = (pending.data || []).map((row) => String(row.receipt_id));
+    if (!ids.length) return { data: [], error: null };
+    // The full-research attempt was atomically admitted before this function.
+    // Compare-and-set only its issuer's queued rows; never lease a global batch.
+    return client.from('candidate_financial_document_receipts_v6').update({ parser_status: 'running', parser_owner: owner,
+      parser_lease_expires_at: new Date(Date.now() + 120_000).toISOString() }).eq('stock_id', scope.stockId)
+      .eq('parser_status', 'queued').in('receipt_id', ids)
+      .select('receipt_id,stock_id,acquisition_job_id,source_url,exchange,period_end,content_type,document_sha256,object_key,byte_length');
+  })() : await client.rpc('claim_candidate_financial_document_receipts_v6', {
     p_limit: Math.max(1, Math.min(20, Math.floor(limit))), p_owner: owner,
     p_claimed_at: now, p_lease_expires_at: new Date(Date.now() + 20 * 60_000).toISOString(),
   });
@@ -137,6 +152,7 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
   const claimed = (claim.data || []) as Row[];
   const results: Array<{ receiptId: string; status: string; parser: string | null; locatorCount: number; error: string | null; missingRequirements?: string[]; rejectionReasons?: string[]; validation?: Awaited<ReturnType<typeof validatePendingOfficialFinancials>> }> = [];
   for (const receipt of claimed) {
+    if (scope) await verifyAdmittedResearch(scope.symbol);
     const receiptId = String(receipt.receipt_id || '');
     const completedAt = new Date().toISOString();
     let facts: ReturnType<typeof parseCandidateFinancialDocumentFacts> = [];

@@ -1,0 +1,53 @@
+{
+  "initialSource": {
+    "head": "3c4bfb8bfe1f1fb02bdcc502de0543677995734b",
+    "files": [
+      {
+        "path": "migrations/20261022_vnext_source_withdrawals_v1.sql",
+        "sha256": "b383be15890450ee301c756045c6bfa8754804959bffc2d71e1f7a1408ee5a48",
+        "bytes": 24233
+      },
+      {
+        "path": "web/src/lib/vnext/source-withdrawal.ts",
+        "sha256": "b6dc0d6ae7eb6cfb2b3efb2211f62aee4c850bafc4518501f08a7845150da1ab",
+        "bytes": 4971
+      },
+      {
+        "path": "web/src/lib/vnext/source-withdrawal.test.ts",
+        "sha256": "f2fc578f5148b8984d0f5a750771a4817f85dc6105189f8e5c453e1da76d2779",
+        "bytes": 3280
+      }
+    ]
+  },
+  "correctedPrincipalSource": "f7ea340",
+  "finalRecoveryEntry": "4fe627c",
+  "profile": {
+    "sourceOnly": true,
+    "nativeVerified": false,
+    "patches": [
+      {
+        "function": "vnext_source_evidence_current_v1(jsonb,text)",
+        "predecessorBodySha256": "23b7bc55a4b7241f46e8e8b0bd69f3107db98e62c8d1b04a0cc293c09c44b610",
+        "successorBodySha256": "712c701f18809a44fb788453e5e12a9d98b93f28ee3573973606d94bb739f0e8",
+        "oldBytes": 827,
+        "newBytes": 952
+      },
+      {
+        "function": "vnext_analysis_command_v1(text,text,jsonb)",
+        "predecessorBodySha256": "fbadeebc2a6120d07abe8d31dd74202a2834da9134d95734ee24d0e142317014",
+        "successorBodySha256": "9573bf8ed9f9f50704fecbdfc82df6259c5d843cd0237e0e8b20c4ae483ba54b",
+        "oldBytes": 12121,
+        "newBytes": 12759
+      },
+      {
+        "function": "vnext_market_events_current_v1(jsonb)",
+        "predecessorBodySha256": "f948fd6302b286ea64fd4b7cf45733923209f69d573cd1d49ab69a6ef33e3530",
+        "successorBodySha256": "870a38343210c3252fe3edac0aa1dfd98f6ddb6164d40d5568d1f71a6e03d418",
+        "oldBytes": 873,
+        "newBytes": 998
+      }
+    ],
+    "sqlSha256": "b383be15890450ee301c756045c6bfa8754804959bffc2d71e1f7a1408ee5a48"
+  },
+  "scope": "three predecessor pins from frozen analysis38eb, actual initial installer COMMIT native01; source text principal fix does not change migration/bodypins"
+}

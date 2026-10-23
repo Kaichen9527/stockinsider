@@ -1,0 +1,42 @@
+{
+  "sourceHead": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+  "scope": "source byte/AST/syntax/finite predicate only, not PG grammar or native acceptance",
+  "checks": {
+    "scope": "source syntax/static, native NOT_RUN",
+    "newJob": "cancellation-native",
+    "workflowSha256": "2b2cbaef4a4b05cbdda12c5beffbcfbe3d9b2194a0f34c0760567d29beac725a",
+    "bash": [
+      {
+        "step": 2,
+        "bashSyntaxExit": 0
+      },
+      {
+        "step": 3,
+        "bashSyntaxExit": 0
+      },
+      {
+        "step": 4,
+        "bashSyntaxExit": 0
+      }
+    ],
+    "nodeSyntaxExit": 0,
+    "plannedChildren": 6,
+    "plannedParent": 1,
+    "actualNativeTests": "NOT_RUN",
+    "pythonAst": "PASS",
+    "embeddedPythonAst": "PASS",
+    "finalWorkflowSha256": "2b2cbaef4a4b05cbdda12c5beffbcfbe3d9b2194a0f34c0760567d29beac725a",
+    "finalMigrationSha256": "d24ad1cf682776cc3c4e031e754f72e2c59ed8c3de77d4306218e2110c09492e",
+    "initialWorkflowHashIsHistorical": true
+  },
+  "newCancellationFinalSourcePass": 13,
+  "candidateFinalSourcePass": 4,
+  "priorWorkerRegressionPass": 8,
+  "priorCatalystRegressionPass": 10,
+  "separateInvocations": true,
+  "fullTypesExit": 0,
+  "focusedLintExit": 0,
+  "nativeExecution": "NOT_RUN until observed exact-source hosted receipt",
+  "unchangedDefault": "v2, exact v2/v3 prompt bytes asserted in source contracts",
+  "partialIdentity": "current complete Git source sealed; no old native/profile/fullNext closure transferred"
+}

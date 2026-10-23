@@ -1,0 +1,28 @@
+{
+  "head": "2b071a56c06b900c0a4001838bb25290dc518f7d",
+  "initialProducer": "d87d71842beef1cca940c3c0b556435573b8aacd",
+  "initialEvidenceCommit": "e46e792",
+  "initialReceiptSha256": "498be58a559b2f3c10ae4d38d46a154fe132d3057256bfb2345b8703340ea071",
+  "retainedFinding": "../disclosed-fiscal-evidence/REVIEW-WIP.md",
+  "files": [
+    {
+      "path": "web/src/lib/vnext/disclosed-fiscal-forecast.test.ts",
+      "bytes": 10284,
+      "sha256": "f0016a5c14f338253b4d83555a2f9ec766b8b2640abf59615beff8d94f1721c7"
+    },
+    {
+      "path": "web/src/lib/vnext/disclosed-fiscal-forecast.ts",
+      "bytes": 12616,
+      "sha256": "2ae0fc4d2827f6b560f2701d377bed668dda48f7089f97e4b4e6fee123a49c74"
+    },
+    {
+      "path": "web/src/lib/vnext/preparation-reconciliation.test.ts",
+      "bytes": 24345,
+      "sha256": "ea9a1dfc10a56b3edf4973a26d5821c0bf6e2f1a7a7067ffb32435b80a291c15"
+    }
+  ],
+  "wholeSourceTree": "49466567e98d6242e3cd93e60e191b04823527da",
+  "SQLAndAllOtherProductUnchangedFromInitialProducer": true,
+  "fix": "node:util isDeepStrictEqual for complete reconstructed pairs; original material inputHash retained for its purpose, unknown ignored clock keys now rejected; exact pure builtin added to isolated source loader only",
+  "native": "NOT_RUN at seal"
+}

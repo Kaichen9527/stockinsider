@@ -1,0 +1,136 @@
+{
+  "scope": "source structure/inverse/pins/AST only, not independent approval/native",
+  "checks": [
+    {
+      "path": "trading-invalidity-root-source-review-o23.json",
+      "sha256": "a91cf306fd9be68c8e5beef101766b947270e7a21ac07fde1668d8e46b94c573",
+      "value": {
+        "at": "2026-10-23T05:17:00.367564+00:00",
+        "base": "a0211652cab65629c0a5b98bf164fba2817b9e76",
+        "scope": "independent source pin, inverse parity and authority inspection; no native/SQL grammar",
+        "analysisDiagnosticOriginalInverseParity": true,
+        "analysisFailureStillRethrows": true,
+        "tradingSqlHashAndHelperBodyProfile": true,
+        "tradingFragmentsMatchActualSql": true,
+        "noInheritedPermissionGrant": true,
+        "privateCheckerOnly": true,
+        "nativeVerified": false,
+        "native": "NOT_RUN"
+      }
+    },
+    {
+      "path": "roster-current-root-source-review-o23.json",
+      "sha256": "a862ef73623bcd5ddf542b65fa6ee759b4646cbb004f82ddd86df4b149f71cca",
+      "value": {
+        "at": "2026-10-23T05:41:39.987480+00:00",
+        "scope": "source/dollar-body/profile/inverse/catalog inspection only; no native grammar/permission/COMMIT",
+        "migrationSha256": "256960f51e6ec1c43393a243b00e7d385c40a495094b67127c16fd46322a79f2",
+        "originalSourcePredicateBytePreservation": true,
+        "predicateAppendHashCorrect": true,
+        "catalogQueryExactPreviousExceptNoAdditionExclusion": true,
+        "coreAndProviderFragmentsMatchActualInstaller": true,
+        "noAuthorityOrObjectDelta": true,
+        "native": "NOT_RUN",
+        "makerNotIndependentApproval": true
+      }
+    },
+    {
+      "path": "roster-current-workflow-source-o23.json",
+      "sha256": "4530e3aecede941a0a1ed530c9da2b8441b76ff2026563184970d7bdbdc26b58",
+      "value": {
+        "scope": "source AST/YAML/bash and copied-fragment only; no native execution",
+        "checks": [
+          {
+            "path": "scripts/vnext-roster-current-resource-run.py",
+            "bytes": 6852,
+            "sha256": "55fa7f332b50c7f856c80f516c59f6f11cee03a30560bdab560a827ee6dc8817"
+          }
+        ],
+        "workflowSha256": "ac014f711a9391b656c58848039ed3e1d9ac95b14ec43c551fb80503c8377761",
+        "plannedChildStages": 9,
+        "plannedTestsIncludingParent": 10,
+        "native": "NOT_RUN"
+      }
+    },
+    {
+      "path": "roster-preparation-final-source-seal-o23.json",
+      "sha256": "59135affd7e6a6c0ddf8b0462b637aefc2bae79bcbba3d35881c159e2213b3d2",
+      "value": {
+        "scope": "final uncommitted source seal before normal commit; actual PG/build/browser NOT_RUN at this source",
+        "files": [
+          {
+            "path": ".github/workflows/stockinsider-vnext-quality.yml",
+            "bytes": 67184,
+            "sha256": "ac014f711a9391b656c58848039ed3e1d9ac95b14ec43c551fb80503c8377761"
+          },
+          {
+            "path": "scripts/vnext-preparation-http-fixture.mjs",
+            "bytes": 39704,
+            "sha256": "bf5fa942ca22245576c02dff4ec9fce5c867c7dc1b174ff5eb3df0026344d66c"
+          },
+          {
+            "path": "scripts/vnext-roster-current-postgres.test.mjs",
+            "bytes": 29686,
+            "sha256": "52d8a119dca786dd09556796de2348399e323addfec88164bc226ff1cc51c1e4"
+          },
+          {
+            "path": "scripts/vnext-roster-current-resource-run.py",
+            "bytes": 6852,
+            "sha256": "55fa7f332b50c7f856c80f516c59f6f11cee03a30560bdab560a827ee6dc8817"
+          },
+          {
+            "path": "web/src/lib/vnext/preparation-reconciliation.ts",
+            "bytes": 15131,
+            "sha256": "a24af6e07a6216a18b48a6da23c2dc4e6f82351aa3ccc947e54d1dfa3789623b"
+          },
+          {
+            "path": "web/src/lib/vnext/preparation-reconciliation.test.ts",
+            "bytes": 23533,
+            "sha256": "604047eefb26cf84419e049074819137066f1b6aad1de1b93361d4ee854e3072"
+          },
+          {
+            "path": "web/src/lib/vnext/preparation-trading-identity.ts",
+            "bytes": 4721,
+            "sha256": "9842ca07e1b5839274808270f0657a22db256b470c73743f5f6a5ba2f6766d42"
+          },
+          {
+            "path": "web/src/lib/vnext/preparation-trading-identity.test.ts",
+            "bytes": 3164,
+            "sha256": "c4e6abd94051047c4746c119747b3f191283ab85c737351bb41fd1b56cbf9a1c"
+          },
+          {
+            "path": "docs/operations/2026-10-22/vnext/ROSTER-CURRENT-NATIVE-SOURCE.md",
+            "bytes": 6726,
+            "sha256": "ba7bba284efb20ef3cdaa401dd4f075a0c96ad60ab4e574baa71f2f04787f3be"
+          },
+          {
+            "path": "docs/operations/2026-10-22/vnext/PREPARATION-INSTRUMENT-CURRENT.md",
+            "bytes": 2382,
+            "sha256": "0a643d2b36e5e817cb86a1347ff093be845fecc9cd015929d96d319941a7a685"
+          }
+        ]
+      }
+    },
+    {
+      "path": "preparation-instrument-syntax-o23.json",
+      "sha256": "ab1779dea1df914839b016a8d486fbbdc622533a84f9bfd9605ef9131a124b42",
+      "value": {
+        "scope": "syntax only, no imports/native",
+        "checks": [
+          {
+            "path": "scripts/vnext-preparation-http-fixture.mjs",
+            "exit": 0,
+            "bytes": 39704,
+            "sha256": "bf5fa942ca22245576c02dff4ec9fce5c867c7dc1b174ff5eb3df0026344d66c"
+          },
+          {
+            "path": "scripts/vnext-roster-current-postgres.test.mjs",
+            "exit": 0,
+            "bytes": 29686,
+            "sha256": "52d8a119dca786dd09556796de2348399e323addfec88164bc226ff1cc51c1e4"
+          }
+        ]
+      }
+    }
+  ]
+}

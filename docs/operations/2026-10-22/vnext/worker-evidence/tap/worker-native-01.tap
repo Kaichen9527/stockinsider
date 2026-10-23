@@ -1,0 +1,20 @@
+TAP version 13
+# Subtest: actual durable worker journal and injected provider lifecycle
+    # Subtest: exact genuine prefixes and additive worker migration commit, private tables/finite service RPC
+    ok 1 - exact genuine prefixes and additive worker migration commit, private tables/finite service RPC
+    # Subtest: 2409 actual pipeline stores two frozen invocations, distinct executions and an unqualified public revision
+    ok 2 - 2409 actual pipeline stores two frozen invocations, distinct executions and an unqualified public revision
+    # Subtest: 2383 actual pipeline stores two frozen invocations, distinct executions and an unqualified public revision
+    ok 3 - 2383 actual pipeline stores two frozen invocations, distinct executions and an unqualified public revision
+    # Subtest: uncertain provider outcome is durable, repeated delivery does not invoke, no available ID never regenerates
+    not ok 4 - uncertain provider outcome is durable, repeated delivery does not invoke, no available ID never regenerates
+    1..4
+not ok 1 - actual durable worker journal and injected provider lifecycle
+1..1
+# tests 5
+# suites 0
+# pass 3
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0

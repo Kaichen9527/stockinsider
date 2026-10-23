@@ -1,0 +1,286 @@
+TAP version 13
+# Subtest: VN01 explicit empty scope cannot expand into research and unadmitted work has zero IO
+ok 1 - VN01 explicit empty scope cannot expand into research and unadmitted work has zero IO
+# Subtest: VN05 null factors keep original available weights and source/volume halves remain independent
+ok 2 - VN05 null factors keep original available weights and source/volume halves remain independent
+# Subtest: VN05/VN09 original event and source rights, hash dedup, round robin and source limits
+ok 3 - VN05/VN09 original event and source rights, hash dedup, round robin and source limits
+# Subtest: VN06 pair/policy/session confirmation uses initial factors, holiday and same day cannot increment
+ok 4 - VN06 pair/policy/session confirmation uses initial factors, holiday and same day cannot increment
+# Subtest: VN07 verified exits are immediate and overheat retains a waiting candidate
+ok 5 - VN07 verified exits are immediate and overheat retains a waiting candidate
+# Subtest: VN08/VN10 latest completed sessions, Taipei date, confidence and supported AI downgrade
+ok 6 - VN08/VN10 latest completed sessions, Taipei date, confidence and supported AI downgrade
+# Subtest: VN08 actual raw screening cannot convert unadjusted or missing observations into points
+ok 7 - VN08 actual raw screening cannot convert unadjusted or missing observations into points
+# Subtest: VN11 canonical input clocks do not rewrite material content
+ok 8 - VN11 canonical input clocks do not rewrite material content
+# Subtest: VN12 facts, formulas, units, original evidence hashes and every claim require independent review
+ok 9 - VN12 facts, formulas, units, original evidence hashes and every claim require independent review
+# Subtest: VN14 missing, stale and mismatched published snapshots cannot become entry eligible
+ok 10 - VN14 missing, stale and mismatched published snapshots cannot become entry eligible
+# Subtest: VN02 configured role credentials reject spoofed body identity and ambiguous role keys
+ok 11 - VN02 configured role credentials reject spoofed body identity and ambiguous role keys
+# Subtest: VN05 chained syndication and crossplatform author roots count as one independent family
+ok 12 - VN05 chained syndication and crossplatform author roots count as one independent family
+# Subtest: VN05 malformed or future event/availability clocks and absent root identity fail closed
+ok 13 - VN05 malformed or future event/availability clocks and absent root identity fail closed
+# Subtest: VN10 persisted overseas gaps keep confidence limited on redisplay with the same risk snapshot
+ok 14 - VN10 persisted overseas gaps keep confidence limited on redisplay with the same risk snapshot
+# Subtest: VN02 bounded streaming rejects malformed, oversized and excessive depth before dispatch
+ok 15 - VN02 bounded streaming rejects malformed, oversized and excessive depth before dispatch
+# Subtest: VN12 public citations reject private endpoints, credentials and paid member links
+ok 16 - VN12 public citations reject private endpoints, credentials and paid member links
+# Subtest: VN01 feature default off preserves the existing acquisition boundary behavior
+ok 17 - VN01 feature default off preserves the existing acquisition boundary behavior
+# Subtest: VN06/VN07 cached orchestration retains active gaps, audits every member and rotates only postclose
+ok 18 - VN06/VN07 cached orchestration retains active gaps, audits every member and rotates only postclose
+# Subtest: VN04 distinct events from one author are parsed once each without adding independent voices
+ok 19 - VN04 distinct events from one author are parsed once each without adding independent voices
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 152.302949
+TAP version 13
+# Subtest: VN06/VN07 actual cache scan transport screens an incumbent without fresh clues and persists separate current evidence
+ok 1 - VN06/VN07 actual cache scan transport screens an incumbent without fresh clues and persists separate current evidence
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 25.086883
+TAP version 13
+# Subtest: VN01 actual financial coverage/download/parser/document boundaries reject before any DB or network IO
+ok 1 - VN01 actual financial coverage/download/parser/document boundaries reject before any DB or network IO
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16.013648
+TAP version 13
+# Subtest: automatic two-issuer synthetic worker calls author/reviewer, original evidence, durable receipts, no replay resampling
+ok 1 - automatic two-issuer synthetic worker calls author/reviewer, original evidence, durable receipts, no replay resampling
+# Subtest: unknown provider outcome is held and repeated worker/recovery never generates another output
+ok 2 - unknown provider outcome is held and repeated worker/recovery never generates another output
+# Subtest: committed settlement response loss needs explicit read before receipt, never another provider call
+ok 3 - committed settlement response loss needs explicit read before receipt, never another provider call
+# Subtest: committed author receipt loss resolves by actual job read with no author re-invocation
+ok 4 - committed author receipt loss resolves by actual job read with no author re-invocation
+# Subtest: strict output codec rejects exponent domain and unknown/repeated reviewer claims
+ok 5 - strict output codec rejects exponent domain and unknown/repeated reviewer claims
+# Subtest: fixed-origin provider performs one actual fetch transport call and never retries uncertain POST
+ok 6 - fixed-origin provider performs one actual fetch transport call and never retries uncertain POST
+# Subtest: explicit known-response lookup recovers immutable output without a second POST
+ok 7 - explicit known-response lookup recovers immutable output without a second POST
+# Subtest: actual expired execution fixture may settle a known response but cannot publish or extend its deadline
+ok 8 - actual expired execution fixture may settle a known response but cannot publish or extend its deadline
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 48.245914
+TAP version 13
+# Subtest: source original clocks/content hash persist once and acquisition-only refresh never reparses
+ok 1 - source original clocks/content hash persist once and acquisition-only refresh never reparses
+# Subtest: operator public citation, entity and same server author family prevent crossplatform voice multiplication
+ok 2 - operator public citation, entity and same server author family prevent crossplatform voice multiplication
+# Subtest: unresolved PTT metadata remains discovery gap, never admissible root evidence or model body
+ok 3 - unresolved PTT metadata remains discovery gap, never admissible root evidence or model body
+# Subtest: roundrobin bounds every source50 and batch200 without joining distinct new content
+ok 4 - roundrobin bounds every source50 and batch200 without joining distinct new content
+# Subtest: market output cannot upgrade baseline or crosswire event support/confirmed status
+ok 5 - market output cannot upgrade baseline or crosswire event support/confirmed status
+# Subtest: market producer excludes read clock from frozen identity
+ok 6 - market producer excludes read clock from frozen identity
+# Subtest: same frozen market invokes fixed provider once then reuses durable publication
+ok 7 - same frozen market invokes fixed provider once then reuses durable publication
+# Subtest: market unknown transport never auto POSTs again
+ok 8 - market unknown transport never auto POSTs again
+# Subtest: market mutation response uncertainty requires explicit read recovery, no provider resampling
+ok 9 - market mutation response uncertainty requires explicit read recovery, no provider resampling
+# Subtest: revoked original-event rights block completed read recovery and publication replay without resampling
+ok 10 - revoked original-event rights block completed read recovery and publication replay without resampling
+# Subtest: published immutable market replay after execution deadline does not invoke or publish again while baseline remains fresh
+ok 11 - published immutable market replay after execution deadline does not invoke or publish again while baseline remains fresh
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 43.394884
+TAP version 13
+# Subtest: new validated fact ID correcting the same key/unit/period is drift and material; old ID absence cannot mask it
+ok 1 - new validated fact ID correcting the same key/unit/period is drift and material; old ID absence cannot mask it
+# Subtest: financial outage creates a claim gap with no inferred contradiction or forced material rewrite
+ok 2 - financial outage creates a claim gap with no inferred contradiction or forced material rewrite
+# Subtest: actual canonical quarterly keys derive two margin ratios with provenance, absent CFO remains null
+ok 3 - actual canonical quarterly keys derive two margin ratios with provenance, absent CFO remains null
+# Subtest: later audit/acquisition time and equal-value reissued fact ID do not change material hash
+ok 4 - later audit/acquisition time and equal-value reissued fact ID do not change material hash
+# Subtest: known changed technical observations trigger a substantive audit while a missing observation stays a gap
+ok 5 - known changed technical observations trigger a substantive audit while a missing observation stays a gap
+# Subtest: all20 cache audits record before screening with exact material/deep bindings and zero provider work
+ok 6 - all20 cache audits record before screening with exact material/deep bindings and zero provider work
+# Subtest: rejected all-active record cannot proceed to screening or expensive work
+ok 7 - rejected all-active record cannot proceed to screening or expensive work
+# Subtest: dispatch runs only authoritative explicit admitted IDs and charges retry through its authority
+ok 8 - dispatch runs only authoritative explicit admitted IDs and charges retry through its authority
+# Subtest: an older incomplete qualification cannot become current eligible; historical content remains readable
+ok 9 - an older incomplete qualification cannot become current eligible; historical content remains readable
+# Subtest: a canonical server proof binds finite reviewed valuation claims and still requires current source rights
+ok 10 - a canonical server proof binds finite reviewed valuation claims and still requires current source rights
+# Subtest: proof identity/hash, missing valuation and self-hashed boolean or inconsistent numeric results fail closed
+ok 11 - proof identity/hash, missing valuation and self-hashed boolean or inconsistent numeric results fail closed
+# Subtest: actual cache scan binds corrected material/deep inputs and full input hash to its request, never mutates frozen article
+ok 12 - actual cache scan binds corrected material/deep inputs and full input hash to its request, never mutates frozen article
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 473.173197
+TAP version 13
+# Subtest: original full entry authority body remains byte-exact and still refuses missing forward-calendar evidence
+ok 1 - original full entry authority body remains byte-exact and still refuses missing forward-calendar evidence
+# Subtest: actual historical producer validates240 corporate-action-backed cached rows without network or next-session entry authority
+ok 2 - actual historical producer validates240 corporate-action-backed cached rows without network or next-session entry authority
+# Subtest: recent share-basis change and corrupted action receipt cannot become adjusted screening prices
+ok 3 - recent share-basis change and corrupted action receipt cannot become adjusted screening prices
+# Subtest: benchmark return uses exactly the same21 completed sessions and rejects gaps/conflicts/future observations
+ok 4 - benchmark return uses exactly the same21 completed sessions and rejects gaps/conflicts/future observations
+# Subtest: versioned initial score includes MA/relative strength and actual3month percentage conversion; missing sources/catalyst remain null weight
+ok 5 - versioned initial score includes MA/relative strength and actual3month percentage conversion; missing sources/catalyst remain null weight
+# Subtest: initial derivation change resets samepair confirmation even across consecutive sessions; weights never renormalize
+ok 6 - initial derivation change resets samepair confirmation even across consecutive sessions; weights never renormalize
+# Subtest: HTTP cached admission rejects caller facts/root/rights and validates missing scope before any external adapter
+ok 7 - HTTP cached admission rejects caller facts/root/rights and validates missing scope before any external adapter
+# Subtest: one parsed multi-issuer content retains both issuer clues while unique-content source limits and independent voices remain bounded
+ok 8 - one parsed multi-issuer content retains both issuer clues while unique-content source limits and independent voices remain bounded
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 336.939073
+TAP version 13
+# Subtest: closed operator identity and request reject before writer/DB work
+ok 1 - closed operator identity and request reject before writer/DB work
+# Subtest: immutable exact receipt byte/hash lineage is checked, unknown persisted fields reject
+ok 2 - immutable exact receipt byte/hash lineage is checked, unknown persisted fields reject
+# Subtest: mutation uncertainty preserves error identity and only explicit READ reconciles without another writer
+ok 3 - mutation uncertainty preserves error identity and only explicit READ reconciles without another writer
+# Subtest: read absent is finite; unknown absent metadata and caller clock reject
+ok 4 - read absent is finite; unknown absent metadata and caller clock reject
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 31.336807
+TAP version 13
+# Subtest: summary reuses an exact actual-producer EPS unit/period/value claim and actual quote session
+ok 1 - summary reuses an exact actual-producer EPS unit/period/value claim and actual quote session
+# Subtest: unclaimed999 or quarterly/annual/unit crosswire cannot bypass per-claim validation
+ok 2 - unclaimed999 or quarterly/annual/unit crosswire cannot bypass per-claim validation
+# Subtest: future/invalid dates, actualquote mismatch and hiddenmissingprice reject
+ok 3 - future/invalid dates, actualquote mismatch and hiddenmissingprice reject
+# Subtest: next-four EPS is an explicitly supported four-quarter assumption, never reported annual or invented guidance
+ok 4 - next-four EPS is an explicitly supported four-quarter assumption, never reported annual or invented guidance
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 27.508598
+TAP version 13
+# Subtest: actual API reference grammar resolves only exact terminal response provenance and retains original fact hash/classification
+ok 1 - actual API reference grammar resolves only exact terminal response provenance and retains original fact hash/classification
+# Subtest: document citation joins exact fact version, issuer, immutable document hash, parser evidence and as-of receipt
+ok 2 - document citation joins exact fact version, issuer, immutable document hash, parser evidence and as-of receipt
+# Subtest: unsupported issuer IR, private/credential URLs and absent provenance remain explicit gaps with zero fetch
+ok 3 - unsupported issuer IR, private/credential URLs and absent provenance remain explicit gaps with zero fetch
+# Subtest: estimate kind/horizon, invalid original validation and mismatched locator cannot become a reported official fact
+ok 4 - estimate kind/horizon, invalid original validation and mismatched locator cannot become a reported official fact
+# Subtest: actual resolver performs only bounded existing-cache reads, exact as-of filters and empty scope zero IO
+ok 5 - actual resolver performs only bounded existing-cache reads, exact as-of filters and empty scope zero IO
+# Subtest: approved issuer IR joins an existing exact stock-host approval and immutable original fact/parser receipt without relabelling its URL
+ok 6 - approved issuer IR joins an existing exact stock-host approval and immutable original fact/parser receipt without relabelling its URL
+# Subtest: IR current approval, cross-issuer, root, document hash, parser manifest and as-of mismatches all defer
+ok 7 - IR current approval, cross-issuer, root, document hash, parser manifest and as-of mismatches all defer
+# Subtest: IR original fact codec uses existing inputHash domain and rejects unsupported values or unknown record keys without rounding
+ok 8 - IR original fact codec uses existing inputHash domain and rejects unsupported values or unknown record keys without rounding
+# Subtest: IR candidate preserves exact non-IR provider statements and frozen evidence-only model projection
+ok 9 - IR candidate preserves exact non-IR provider statements and frozen evidence-only model projection
+# Subtest: IR source candidate limits existing authority delta to exact three column reads/policies and two execute edges
+ok 10 - IR source candidate limits existing authority delta to exact three column reads/policies and two execute edges
+# Subtest: one private IR checker binds current source through author/reviewer/qualification/publish/current public reads
+ok 11 - one private IR checker binds current source through author/reviewer/qualification/publish/current public reads
+# Subtest: supported finite method/scenarios/current quote derive remaining upside through the existing deep valuation core
+ok 12 - supported finite method/scenarios/current quote derive remaining upside through the existing deep valuation core
+# Subtest: missing/unsupported valuation, source hashes, method, dates or actual quote cannot qualify despite review booleans
+ok 13 - missing/unsupported valuation, source hashes, method, dates or actual quote cannot qualify despite review booleans
+# Subtest: current evidence corrections and exhausted upside invalidate old supported valuation without inventing a replacement
+ok 14 - current evidence corrections and exhausted upside invalidate old supported valuation without inventing a replacement
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 102.161421
+TAP version 13
+# Subtest: only confirmed missing authority, invalid output and definite settled rejections are permanent;429 alone is transient
+ok 1 - only confirmed missing authority, invalid output and definite settled rejections are permanent;429 alone is transient
+# Subtest: actual admitted store rejects zero validated financial data before preparation publication and records one permanent failure
+not ok 2 - actual admitted store rejects zero validated financial data before preparation publication and records one permanent failure
+# Subtest: actual store distinguishes absent stock/trading authority from transport uncertainty without extra mutation
+ok 3 - actual store distinguishes absent stock/trading authority from transport uncertainty without extra mutation
+# Subtest: invalid author/review API artifacts pass permanent failure and exact committed author replay performs no new failure
+ok 4 - invalid author/review API artifacts pass permanent failure and exact committed author replay performs no new failure
+# Subtest: lost failure-write response stays explicitly uncertain and is never automatically sent again
+not ok 5 - lost failure-write response stays explicitly uncertain and is never automatically sent again
+# Subtest: wrong role fails before writer lease or any source authority access
+ok 6 - wrong role fails before writer lease or any source authority access
+1..6
+# tests 6
+# suites 0
+# pass 4
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1102.674811

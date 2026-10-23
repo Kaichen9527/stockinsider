@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "stockinsider-vnext-current-vm-checkpoint-v1",
+  "sourceHead": "e1bb126d33f63f4f8c004194b1c3df2f43bec82a",
+  "at": "2026-10-22T03:26:08.087391+00:00",
+  "status": "PARTIAL_ACCEPTANCE_DRAFT_NOT_RELEASED",
+  "files": [
+    {
+      "path": "browser.json",
+      "bytes": 3460,
+      "sha256": "045d199d8b4f5a21949ee0005a8f65e08433c30dca17eb4571776ddaf45db33c"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 22284,
+      "sha256": "d92384c58c608b67ca3fbe73c47540f70c149fe70f3ef413aab4338cbceb4717"
+    },
+    {
+      "path": "native-witness.json",
+      "bytes": 6683,
+      "sha256": "877c639e8b90448f379512f84332eea52d893e9e5b1711e6354fd5d0c68c4b95"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 187485,
+      "sha256": "b9927543d2a946d3ac50c044403e5a90995f0577c3e67dde94f1ba82a5882546"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 6407,
+      "sha256": "999b3755583100e54ad010b9ce3f89e217df9e082297b831eea4df283cdb8fb3"
+    },
+    {
+      "path": "screenshots/desktop-current-complete-article.png",
+      "bytes": 744954,
+      "sha256": "1c9b4314623174809f23b79a2a09a1df23cd029c69c8bc979cda7e7fbbd9c60a"
+    },
+    {
+      "path": "screenshots/desktop-current-withdrawn-history.png",
+      "bytes": 759706,
+      "sha256": "f897f55d20df2a6d83c6ea1aabc40cc9240ab2bf9d3864fa35beb44315e166ba"
+    },
+    {
+      "path": "screenshots/mobile-current-complete-article.png",
+      "bytes": 2485050,
+      "sha256": "16e86c59645ca81c5543e8ebed239f36e2986736eb4ba361bad441c33ae1e2c6"
+    },
+    {
+      "path": "screenshots/mobile-current-withdrawn-history.png",
+      "bytes": 2515253,
+      "sha256": "0a79b21f56bf4fc57a3cb5c6833e51fe23c6a55458ec54c80fdea65c85728750"
+    },
+    {
+      "path": "screenshots.json",
+      "bytes": 944,
+      "sha256": "376f7c62319245349417d10e111185585b6b07f280461c7798da875b2393628b"
+    },
+    {
+      "path": "source-canaries.json",
+      "bytes": 1475,
+      "sha256": "45377ed39e4c812e5d545de1c8907a8d4d02f9ced108645d05f9c2a455282d45"
+    },
+    {
+      "path": "source-derived-terminal-profile.json",
+      "bytes": 1106,
+      "sha256": "8b60a17563fd3e34b11368ac1dd730d5f685c2c31852c9eb6778601b4973993f"
+    },
+    {
+      "path": "source.json",
+      "bytes": 737246,
+      "sha256": "821ab8e384f1b25f756cb928754cd1508f107e2672b5af3c329516ff4669ea4d"
+    },
+    {
+      "path": "table-summaries.json",
+      "bytes": 43073,
+      "sha256": "c46669d83ececf338ea7eb59197433d336d6c8278b7adf3bd150d5928507083f"
+    },
+    {
+      "path": "tap.json",
+      "bytes": 30893,
+      "sha256": "8433e4c8fcf5479725a0728b0795ea673fb273e35fd1eccc956cfe0f24bf990a"
+    },
+    {
+      "path": "tooling-red.json",
+      "bytes": 775,
+      "sha256": "7b885f2acf7abfeb6309a81ecd70b7a43c95e81b78826c748d6c7732de5a0b36"
+    }
+  ],
+  "privateRawFiles": 1042,
+  "privateRawBytes": 149480096,
+  "makerIndependentApproval": false,
+  "formalArticles": 0,
+  "prodMergeDeployMigrationScheduleResume": "NOT_AUTHORIZED",
+  "remainingVMCode": [
+    "source-window completeness/7vs21 comparablevolumeauthority",
+    "structured semanticcatalyst/contra/cancel/target evidenceproducer",
+    "explicit forecast/valuation numericassumption producer",
+    "approved issuerIR receipt-source mapping extension",
+    "uncertain financialpreparation reconciliation beyond explicitmanualREAD"
+  ],
+  "remainingActualAcceptance": [
+    "2realconsecutivepostclose-session swap",
+    "fresh complete latestnativeCI including author422",
+    "truefinancial/source/model/independent semanticexecution",
+    "Contabo isolatedapplication/DB/schema/queue/storage",
+    "protectedreviews/ReleaseGate"
+  ]
+}

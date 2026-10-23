@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: disclosed actual shares and ALL cash fields are extracted with exact original Unicode spans
+ok 1 - disclosed actual shares and ALL cash fields are extracted with exact original Unicode spans
+# Subtest: absent cash zero, guessed prices, duplicate labels and unsupported numeric/unit/calendar spellings fail
+ok 2 - absent cash zero, guessed prices, duplicate labels and unsupported numeric/unit/calendar spellings fail
+# Subtest: pure split derives a separately hashed per-share target and retains every original byte
+ok 3 - pure split derives a separately hashed per-share target and retains every original byte
+# Subtest: pure reverse split uses actual shares, never pre/post reference prices
+ok 4 - pure reverse split uses actual shares, never pre/post reference prices
+# Subtest: cash dividends, returned cash, rights subscription or reduction need the explicit price/return decision
+ok 5 - cash dividends, returned cash, rights subscription or reduction need the explicit price/return decision
+# Subtest: nonterminating division is a named gap rather than silently rounded target
+ok 6 - nonterminating division is a named gap rather than silently rounded target
+# Subtest: current missing terms/rights remain gaps and cannot authorize a rebased target
+ok 7 - current missing terms/rights remain gaps and cannot authorize a rebased target
+# Subtest: closed receipt rejects unknown fields, crosswired issuer/period/unit/evidence and altered terms/hash
+ok 8 - closed receipt rejects unknown fields, crosswired issuer/period/unit/evidence and altered terms/hash
+# Subtest: job-scoped actual caller chooses only configured author and original IDs; denied RPC never falls back
+ok 9 - job-scoped actual caller chooses only configured author and original IDs; denied RPC never falls back
+# Subtest: actual shared preparation freezes original terms/evidence with fresh hash, no changes to its input or old optional projection
+ok 10 - actual shared preparation freezes original terms/evidence with fresh hash, no changes to its input or old optional projection
+# Subtest: Taipei effective-day boundary and immutable revision are explicit
+ok 11 - Taipei effective-day boundary and immutable revision are explicit
+# Subtest: actual author/review normalizers receive full original context and finite units; synthetic support is not semantic approval
+ok 12 - actual author/review normalizers receive full original context and finite units; synthetic support is not semantic approval
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 246.574208

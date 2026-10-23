@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-23T01:09:46.114413+00:00",
+  "budget": {
+    "estimatesNotUpperBounds": true,
+    "floorEach": 8589934592,
+    "nodeOwnTreeRssCeiling": 8589934592,
+    "pgHardMemoryCap": 1073741824,
+    "tmpEstimatedIncrement": 268435456,
+    "workspaceEstimatedIncrement": 134217728
+  },
+  "freshBundleAndPublicCurrentWrongScore": "NOT_RUN, retained withdrawn binding plus incomplete current session",
+  "resourceRecorderSha256": "512d36701e9526f36bd5bbf8d2f77e2b18c2afc753f586f21409e8cc3fb767c4",
+  "runner": "/tmp/stockinsider-vnext-oct22-private/run-semantic-native-o23.py",
+  "runnerSha256": "032d665c95de3cf16ee8c50367da61b7fc7a2e01a2a170af6c9a0179dd4af8ce",
+  "sourceSealSha256": "3cfcfaa1d85c6548a5ce058d466b28a2957cff343d48a379ba7a624681494209"
+}

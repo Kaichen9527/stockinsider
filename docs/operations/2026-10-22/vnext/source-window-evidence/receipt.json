@@ -1,0 +1,101 @@
+{
+  "evidence": [
+    {
+      "bytes": 5703,
+      "path": "private-inventory.json",
+      "sha256": "3c0d869d4843c80619a2c312741eb6aa9c499d595cc7aea0b8d5565d5f7c9fff"
+    },
+    {
+      "bytes": 3102,
+      "path": "retained-red.json",
+      "sha256": "1d88679ec17c091d5b2e528755611068a05a4f72328ddbb1302e85bb50327a99"
+    },
+    {
+      "bytes": 2784,
+      "path": "source-seal.json",
+      "sha256": "51cdcb92c98e040e0d8b39b61f42aea26416868d801ded102e06b032410cb37b"
+    },
+    {
+      "bytes": 6109,
+      "path": "vm-checks.json",
+      "sha256": "5d14a525a71ea5042361f3b71bdf5513c5521124bc9486325e709050fac5406c"
+    }
+  ],
+  "floor": 8589934592,
+  "freshCapacity": {
+    "/tmp": 17244762112,
+    "/workspace": 8878166016
+  },
+  "lastAcceptedReceipt": "../material-source-evidence/receipt.json",
+  "lastAcceptedReceiptSha256": "b353f94d9f0570f8e5b21ecf308c966c72ba738378ad43f26d92515547938659",
+  "lastAcceptedWholeSource": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+  "newCIMetadata": {
+    "runs": [
+      {
+        "conclusion": null,
+        "head_sha": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+        "id": 39953692459,
+        "name": "Source-led opportunity V3",
+        "status": "in_progress"
+      },
+      {
+        "conclusion": null,
+        "head_sha": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+        "id": 39953692406,
+        "name": "StockInsider vNext isolated quality",
+        "status": "in_progress"
+      },
+      {
+        "conclusion": "success",
+        "head_sha": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+        "id": 39953692516,
+        "name": "Candidate discovery quality diagnostics",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "head_sha": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+        "id": 39953692385,
+        "name": "Financial document write lease quality diagnostics",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "head_sha": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+        "id": 39953692338,
+        "name": "Research publication tail quality diagnostics",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "head_sha": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+        "id": 39953692290,
+        "name": "PTT mention provenance diagnostics",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "head_sha": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+        "id": 39953692336,
+        "name": "Financial installation quality diagnostics",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "head_sha": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+        "id": 39953687971,
+        "name": "Source-led opportunity V3 protected gate root",
+        "status": "completed"
+      }
+    ]
+  },
+  "newNativeCounts": "NOT_OBSERVED; planned6 is not a result",
+  "noMergeDeployProductionOrScheduleAction": true,
+  "observedAt": "2026-10-23T20:34:59.591175+08:00",
+  "originalVMHeavy": "NOT_ADMITTED",
+  "realSourceModelStaging": "NOT_RUN, absent authorized bindings",
+  "remaining": "actual current source-window ledger HTTP/new prefix acceptance, over200 keyset actual native, exhaustive upstream28day contract/coverage/comparable volume, annual/4Q/share and full forecast article flow, authorized action rebasing, remaining rights/lease/race/legacy/caps matrices and protected review",
+  "schemaVersion": "vnext-source-window-checkpoint-v1",
+  "source": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+  "status": "SOURCE_CONTRACT_PASS_NATIVE_PENDING_DRAFT"
+}

@@ -1,0 +1,57 @@
+{
+  "head": "f2f235988d4174a1a46d104738ebfb40964c9428",
+  "branch": "codex/stockinsider-vnext-oct22",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "scope": "diagnostic-only workflow source is committed; preparation HTTP subset is explicitly dirty WIP / NOT_RUN",
+  "inputs": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 25089,
+      "sha256": "37adf7bb135a5830a51bac776554fa27057c01f4ab547c01e847fc6bdbb66a90",
+      "committedBytesEqual": true,
+      "committedSha256": "37adf7bb135a5830a51bac776554fa27057c01f4ab547c01e847fc6bdbb66a90"
+    },
+    {
+      "path": "scripts/vnext-cached-http.test.mjs",
+      "bytes": 27488,
+      "sha256": "b859e09ff0ef9002364e76a46e8f7ba8edf54daa1fe8be9b5b6c64231de0a5e1",
+      "committedBytesEqual": false,
+      "committedSha256": "4138f28e3ca589cbc472fab551c253731a17d56fc45337795a5459bac73d8127"
+    },
+    {
+      "path": "scripts/vnext-cached-postgres.test.mjs",
+      "bytes": 14847,
+      "sha256": "98fa2e1dd6fc3acbdaaf56ada25cc56348a7ead5a86afe46bd9db7315c519e56",
+      "committedBytesEqual": true,
+      "committedSha256": "98fa2e1dd6fc3acbdaaf56ada25cc56348a7ead5a86afe46bd9db7315c519e56"
+    },
+    {
+      "path": "scripts/vnext-target-postgres.test.mjs",
+      "bytes": 12093,
+      "sha256": "c73906495cf4089e7431908becb662b8cb909eaef45c0ae153721d2536e6a397",
+      "committedBytesEqual": true,
+      "committedSha256": "c73906495cf4089e7431908becb662b8cb909eaef45c0ae153721d2536e6a397"
+    },
+    {
+      "path": "scripts/vnext-target-business-fixture.mjs",
+      "bytes": 12103,
+      "sha256": "69156d97d184a30998b473091ab930145cdbc1f04bc61e6a144407117a998fca",
+      "committedBytesEqual": true,
+      "committedSha256": "69156d97d184a30998b473091ab930145cdbc1f04bc61e6a144407117a998fca"
+    },
+    {
+      "path": "migrations/20261022_vnext_target_exit_v1.sql",
+      "bytes": 50714,
+      "sha256": "8a49259e95d6557ac4b7a8a74d90500b0d180735f396fbf1490f337b711bf441",
+      "committedBytesEqual": true,
+      "committedSha256": "8a49259e95d6557ac4b7a8a74d90500b0d180735f396fbf1490f337b711bf441"
+    },
+    {
+      "path": "migrations/20261022_vnext_dimensionless_arithmetic_v1.sql",
+      "bytes": 7852,
+      "sha256": "61b838614afe16ca788154828c7f818f8d4be58104402be5db7fbe2231509721",
+      "committedBytesEqual": true,
+      "committedSha256": "61b838614afe16ca788154828c7f818f8d4be58104402be5db7fbe2231509721"
+    }
+  ]
+}

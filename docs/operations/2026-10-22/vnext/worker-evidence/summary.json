@@ -1,0 +1,79 @@
+{
+  "sourceHead": "b1cdca8e752edab4cfbef99b76a657ed7785621a",
+  "workerProductSource": "984367556a83297b6763bd816830478aa1403395",
+  "changedTestSource": "be66937d7081d35baedeec47e20a49a9af0160c8",
+  "builtAppSource": "be66937d7081d35baedeec47e20a49a9af0160c8",
+  "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
+  "state": "DRAFT_PARTIAL_ACCEPTANCE_CONTINUING_IMPLEMENTATION",
+  "actualChecks": [
+    {
+      "label": "worker-source-direct-01",
+      "pass": 8,
+      "fail": 0,
+      "scope": "pure actual worker/strict provider transport interfaces; all provider behavior synthetic"
+    },
+    {
+      "label": "worker-native-01",
+      "pass": 3,
+      "fail": 2,
+      "scope": "failed run; original test oracle correction only; later cases NOT_RUN"
+    },
+    {
+      "label": "worker-native-02",
+      "pass": 7,
+      "fail": 0,
+      "scope": "real PG journal/worker with synthetic provider/facts/lease,2unqualified revisions/4attempts/6provider calls"
+    },
+    {
+      "label": "worker-public-read-01",
+      "pass": 1,
+      "fail": 0,
+      "scope": "actual read-only service_role RPC; same retained worker fixture, all rows/hash/clocks unchanged"
+    },
+    {
+      "label": "worker-browser-auth-01",
+      "pass": 12,
+      "fail": 0,
+      "scope": "actual desktop/mobile UI+allroute empty/auth +automatic/recoverrole/providerselector rejection; old DB publication fixtures"
+    },
+    {
+      "label": "worker-browser-revision-02",
+      "pass": 2,
+      "fail": 0,
+      "scope": "actual desktop/mobile actualworker revision snapshots from service_role DB READ, all10sections andratio shown"
+    }
+  ],
+  "build": {
+    "worker-typecheck-01": "PASS",
+    "worker-lint-01": "PASS,33 inherited warnings",
+    "worker-build-01": "FAIL sandbox child EPERM, preserved",
+    "worker-build-elevated-01": "PASS full webpack with same source and authorized child process permission",
+    "defaultNpmBuildOnThisNewHead": "NOT_RUN; earlier VM TurbopackRED retained, new hosted ordinaryCI pending"
+  },
+  "implemented": [
+    "author/reviewer fixed-provider adapter and jobId-only actual HTTP actions",
+    "server configured principals/models/prompt/credential hashes match private enabled DB bindings",
+    "reserve-before-POST immutable journal, exactlyone invocation/task, global4 including unresolved acrossdates, independent execution/reviewer originales",
+    "strict perclaim/evidence/hash/period/unit/calculator interface, no model total score or qualification",
+    "uncertain holds slot/no automatic secondPOST; known-response explicit GET/READ recovery; definite failure consumes original daily attempt",
+    "one provider response ID cannot back two executions",
+    "actual publisher revision reachable through public read contract and desktop/mobile"
+  ],
+  "limits": [
+    "provider is synthetic, no live model or semantic investment approval",
+    "financial prep and writer lease are explicit synthetic adapters in new worker native; legacy schema/profile/ACL used but no formal HBA/writer/financial acquisition acceptance",
+    "three prior-session unresolved records are synthetic transaction injections; actual claim rejects and rollback exact, not actual prior-day provider executions",
+    "genuine socket transport response-loss NOT_RUN for new worker; pure mock uncertainty is not COMMIT/connection-loss proof",
+    "positive two actual postclose session swaps NOT_RUN",
+    "real Contabo/source/model/right/principal and formal publication acceptance NOT_RUN",
+    "semantic correctness of real prose remains independent reviewer work, not proved by schema/evidenceIds"
+  ],
+  "remainingVMCode": [
+    "permitted original extraction +immutable rights receipts",
+    "frozen market AI interpretation persistence/overlay",
+    "weekly substantive claim/evidence/valuation reevaluation and automatic deep evidence checklist population",
+    "trusted supplemental/foreign/calendar/comparablevolume producers"
+  ],
+  "nextSlice": "currently being implemented separately; not included or claimed by this receipt",
+  "independentApproval": false
+}

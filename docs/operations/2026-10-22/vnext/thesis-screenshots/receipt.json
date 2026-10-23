@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "stockinsider-vnext-public-synthetic-screenshots-v1",
+  "product": "4871d2fe733027a6619fe820314d53e1ffa36e74",
+  "scope": "two point-in-time actual DB snapshots, desktop/mobile. Not latest-source price/calendar validation; no trace/env/credentials or real research bodies published",
+  "files": [
+    {
+      "path": "desktop-current-deep-evidence.png",
+      "bytes": 240704,
+      "sha256": "dfba5dee169af15167ce35d088adb73060272e21ccb09657bd8a0cea53a3517b",
+      "sourceLabel": "thesis-browser-rights-01",
+      "actualBinary": "Chromium151 installed VM binary; pinneddownload403 retained",
+      "syntheticPrivateFixtureProjection": true
+    },
+    {
+      "path": "desktop-revoked-rights-retained-history.png",
+      "bytes": 725448,
+      "sha256": "3bb69810eb399c8097c0625fa60f0f0c6b039b6ac453d5275fac0379d17efc8d",
+      "sourceLabel": "thesis-browser-rights-01",
+      "actualBinary": "Chromium151 installed VM binary; pinneddownload403 retained",
+      "syntheticPrivateFixtureProjection": true
+    },
+    {
+      "path": "mobile-current-deep-evidence.png",
+      "bytes": 968515,
+      "sha256": "1c049f169ca9839e351b86e5da7a94aaa850559306edd553714c77a20bfa0f49",
+      "sourceLabel": "thesis-browser-rights-01",
+      "actualBinary": "Chromium151 installed VM binary; pinneddownload403 retained",
+      "syntheticPrivateFixtureProjection": true
+    },
+    {
+      "path": "mobile-revoked-rights-retained-history.png",
+      "bytes": 2413481,
+      "sha256": "7cecd51399064ecc1e2b4ba25f78d764c44c8492cc769a8548c43b9691da0598",
+      "sourceLabel": "thesis-browser-rights-01",
+      "actualBinary": "Chromium151 installed VM binary; pinneddownload403 retained",
+      "syntheticPrivateFixtureProjection": true
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "scope": "selected actual local raw files, hash-only; not all historical or remote raw",
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cia2649df-cancellation-annotations-o23.json",
+      "bytes": 6554,
+      "sha256": "f8cd3f038bcbd32416d22f09acb98064d9dbed7ae86170746e70739296a2157b"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cia264-runtime-tree-o23.json",
+      "bytes": 199,
+      "sha256": "8c52fe11870e0d7464279709076c5014e63c075b02808049b80556bc2088a10e"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cia264-ordinary-jobs-o23.json",
+      "bytes": 14400,
+      "sha256": "ae0a6131d163474cddb275a98c8b55fd28572a5a44d6b4474745dd34a07f7677"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ci88dc443-cancellation-annotations-o23.json",
+      "bytes": 7313,
+      "sha256": "c77b37c89e5ee0dd938ed8bf8e8d519d70efb67aad30d56dfa23e6a886ef661b"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ci88dc443-ordinary-jobs-o23.json",
+      "bytes": 14400,
+      "sha256": "565118e128f141a43ad405083553307547960d57891596300d3178caddc3eaa8"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-key-removal-source-fix-o23.json",
+      "bytes": 724,
+      "sha256": "ad59d93cf37bf5dbdea22ccaf9784f9570135fd32087b180539d2c0d6bf67be1"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-key-removal-static-01.tap",
+      "bytes": 272,
+      "sha256": "6679dc4e551ad06e8231e8163bb625b60362d696606ecd5b6adc3c9721695313"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-key-removal-static-direct-01.tap",
+      "bytes": 1840,
+      "sha256": "2559f69cc5d44adb684fa11bd2bd8d4eeab420d09eed2c140a4566b4ef376e81"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-response-loss-frames-source-01.tap",
+      "bytes": 1159,
+      "sha256": "69c7b982b107e2af7b92e68389836467390e1d60d6937b1e3327966ec5696cd9"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-loss-source-seal-o23.json",
+      "bytes": 1119,
+      "sha256": "3b87bf36ab8dd9755c3fe6985834baa6e4c3a7d2cc6eeecd3b007cf03df65373"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-context-before-key-removal-fix-o23.sql",
+      "bytes": 7951,
+      "sha256": "ad018c60e29d9384cd43ec5ebe400ec433f2258c6db642ba7812d4963d071360"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "stockinsider-vnext-roster-current-receipt-v1",
+  "createdAt": "2026-10-23T05:59:17.908331+00:00",
+  "sourceHead": "28fd5667da802dc3c38849bde699c91b083d2cf2",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
+  "scope": "partial source and hosted synthetic engineering acceptance; no merge/deploy/formal approval",
+  "files": [
+    {
+      "path": "ci-observations.json",
+      "bytes": 43006,
+      "sha256": "9af70c36a56ed96bd4f3864a37998cf32de7cdbdc35d78526f756f63b178058b"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 22932,
+      "sha256": "976691f907bf2c5895127833ed759172f477f211cf23e5805539d90fe35deab5"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 9781,
+      "sha256": "77e840e0f3b6df02510316d0499abd210ffd74db436d7d0afa1b5a5afbf78eb5"
+    },
+    {
+      "path": "source-checks.json",
+      "bytes": 5569,
+      "sha256": "aad1cb9d5185b6389baf9e8520f46a5a502bfc18c70528596fbaafc871ce024e"
+    },
+    {
+      "path": "source-inventory.json",
+      "bytes": 802225,
+      "sha256": "b8b7e495de13dabfa486eb6cf0376675b5fc47b2fd2eb244a1c9f8f12b074d85"
+    }
+  ],
+  "capacity": {
+    "/workspace": 8885116928,
+    "/tmp": 17251577856
+  },
+  "floor": 8589934592,
+  "localFullBuildFreshPG": "NOT_ADMITTED",
+  "cleanupThisMilestone": "NONE",
+  "allNativeCountsKeptPerExactRun": true,
+  "releaseGate": "PENDING"
+}

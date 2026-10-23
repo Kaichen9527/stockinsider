@@ -1,3 +1,4 @@
+import { verifyAdmittedResearch } from './vnext/runtime.ts';
 import { createHash } from 'node:crypto';
 import {
   MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES,
@@ -15,6 +16,7 @@ export async function persistDownloadedFinancialDocument(
   db: ReturnType<typeof getOpportunityV3ServerClient>,
   input: { metadata: CandidateFinancialDocumentMetadata; bytes: Uint8Array; contentType: string; originalContentType?: string | null; writerReleaseId: string },
 ) {
+  await verifyAdmittedResearch(input.metadata.symbol);
   const metadata = parseCandidateFinancialDocumentMetadata(JSON.stringify(input.metadata));
   if (!metadata) throw new Error('invalid_candidate_financial_document_metadata');
   if (!input.bytes.byteLength || input.bytes.byteLength > MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES) {

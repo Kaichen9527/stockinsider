@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-23T00:15:57.373001+00:00",
+  "actualNativeSubject": "1ac92cb23b55b95d7c138da57a59f536a50dda36",
+  "actualError": {
+    "code": "42704",
+    "message": "type \"public.financial_validation_status_v3\" does not exist",
+    "statement": "record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid)",
+    "actualQueryRejected": true,
+    "actualReady": "I"
+  },
+  "sourceEvidence": [
+    {
+      "path": "migrations/20260911_05_financial_fact_isolation_v10.sql",
+      "site": 612,
+      "text": "legacy cast to absent public.financial_validation_status_v3"
+    },
+    {
+      "path": "migrations/20260912_02_financial_validation_status_text_hotfix.sql",
+      "sha256": "f17158f0dc73752e6a156682241b9e2a5b35f6451a20e0e661a5e55f71e8d46b",
+      "bytes": 1991,
+      "scope": "historical repair also includes ALTER OWNER/REVOKE; NOT applied, no historical body/profile modified"
+    }
+  ],
+  "state": "receipt/parser/fact prefix truly committed; validation failed; no vNext jobs or provider invocations/publications reached",
+  "next": "independent compatibility review of historical financial validation prerequisite; no enum/grant/oracle invented to pass"
+}

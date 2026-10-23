@@ -1,0 +1,102 @@
+{
+  "source": "c81e6fe916b3f0b5983495d02b4cdcf62cf2d170",
+  "initialCandidate": "681c0473ca43d02f49b14133832332b91c704c16",
+  "parent": "2f17532eb92b198b3bd0e949d73c650daa4a7ca0",
+  "branch": "codex/stockinsider-vnext-oct22",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "changedGitFiles": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 117289,
+      "sha256": "4857ab42f68d06806325e4123579338fdd5f771a33f2787385df57a005b325b9",
+      "gitBlob": "428552e65263d3f37d84f70d2f6b36d05aab9e7c"
+    },
+    {
+      "path": "migrations/20261023_vnext_corporate_action_terms_v1.sql",
+      "bytes": 87367,
+      "sha256": "60236eb9f0d83af775fd0128b3fb02bccb9c92546777bc6bd6596031ae469c01",
+      "gitBlob": "b3d22e0953e587e562a1550a90e0170363950983"
+    },
+    {
+      "path": "openspec/changes/stockinsider-vnext-20/corporate-action-terms-design.md",
+      "bytes": 4532,
+      "sha256": "c1669218ae79f2bf12b4b03e91246ae04926bb2d6f847ba41336d57e4673ed67",
+      "gitBlob": "7cdf46bf0a45f5c1361a64214845352269d6e4f5"
+    },
+    {
+      "path": "openspec/changes/stockinsider-vnext-20/tasks.md",
+      "bytes": 5637,
+      "sha256": "592443a5676b015ad3b37326343e5fbaff03ab81059541c14a8780c928caff2e",
+      "gitBlob": "8832b03a32a30268480c0d9d02cae68bb5e51d60"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-action-terms-profile-v1.json",
+      "bytes": 10651,
+      "sha256": "576fab6219f4a0cf3853b2888b1d4709f40e8e88d9586c520278a05ce85c7b7d",
+      "gitBlob": "e26411a5bbd4f27995f44b1040a47a773d24e8bf"
+    },
+    {
+      "path": "scripts/vnext-action-terms-native-fixture.mjs",
+      "bytes": 19950,
+      "sha256": "40fefcfcd19d87d2f9d291f32840675c61cc3e36c1285e47cb35563f239cbee7",
+      "gitBlob": "1850f495f4d893af17734047a04625ddd2d7ab38"
+    },
+    {
+      "path": "scripts/vnext-action-terms-source.test.mjs",
+      "bytes": 6882,
+      "sha256": "2d2ad115db565f1b66adcc56d28c6e8b42d510e3b0d68c7ff0351273acd791a9",
+      "gitBlob": "cc7b66c532ef11a5943a47a66003e13e2cb13ab5"
+    },
+    {
+      "path": "scripts/vnext-cached-http.test.mjs",
+      "bytes": 32526,
+      "sha256": "1fc006e3c7cef58e4045898cbb193b977433feecf638d4cdf1c1461ac6fa322d",
+      "gitBlob": "354504e27532e0863b3b9f86946165bca5d5116c"
+    },
+    {
+      "path": "scripts/vnext-preparation-http-fixture.mjs",
+      "bytes": 58759,
+      "sha256": "fe9728562c2c8a6f89f55651157eb5cbba16149cdb775e82bdac00758e72ab64",
+      "gitBlob": "ad18f9e9d70571a830afe46702bc725741f56325"
+    },
+    {
+      "path": "scripts/vnext-preparation-http.test.mjs",
+      "bytes": 15975,
+      "sha256": "712e0abfa51cfbb41e13f31187c308b4f134bacef1fe7abfeb838cc138496ead",
+      "gitBlob": "efc4eb5b5908245d7db48d8f04db4761f3681aa3"
+    },
+    {
+      "path": "web/src/lib/vnext/corporate-action-terms.test.ts",
+      "bytes": 11138,
+      "sha256": "76341cc57af5a2370091f5f0fd9b5dbc0b7293018cf6a26983d5282ce03ecfc3",
+      "gitBlob": "5a2c4a7879087cf6614dc9fe0fa6f5741dafc206"
+    },
+    {
+      "path": "web/src/lib/vnext/corporate-action-terms.ts",
+      "bytes": 15112,
+      "sha256": "d746659de6e00acbbc451e0f3fd82b6d02c45ba7721e1f91e08497d19e2bd2be",
+      "gitBlob": "60130039d1396595166c38726f3b0882af6ab488"
+    },
+    {
+      "path": "web/src/lib/vnext/preparation-reconciliation.test.ts",
+      "bytes": 24302,
+      "sha256": "a2adbec218680c254371a4879cc0f4cfc7c905cd4c908f9c36126c787bd71e33",
+      "gitBlob": "e1f04ac80b5879104c37dba039faa999798b6096"
+    },
+    {
+      "path": "web/src/lib/vnext/preparation-reconciliation.ts",
+      "bytes": 16582,
+      "sha256": "9fa594e3e505221b6ad7f3c51f9d97b7a300555aa121ee0386dc0af264ad8f2c",
+      "gitBlob": "56eb6003606aab8383a4fda9984efe345894a137"
+    },
+    {
+      "path": "web/src/lib/vnext/store.ts",
+      "bytes": 18418,
+      "sha256": "4507f91006aec1d7e254611233667528d71c1a822c8c505c6eded755b17326df",
+      "gitBlob": "d240e25fac7933fb517ef319a331f0407d1c6857"
+    }
+  ],
+  "changedBytes": 445120,
+  "completeTreeIdentitiesSha256": "bf6aec4c3152832a1c18b9d9fdd04e035c9d9b7a092fa0eb722e157efdfd7509",
+  "scope": "exact changed Git bytes/SHA256; complete tree mode/type/blob/size identities; no assertion of fresh native/whole Next closure"
+}

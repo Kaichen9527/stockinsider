@@ -1,0 +1,140 @@
+[
+  {
+    "label": "withdrawal-source-direct-01",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/vnext/source-withdrawal.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T02:23:36.056204+00:00",
+    "end": "2026-10-22T02:23:36.562355+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 10372231168,
+      "/tmp": 17661726720
+    },
+    "finalFree": {
+      "/workspace": 10372231168,
+      "/tmp": 17661722624
+    },
+    "sampledSessionPeakRssBytes": 5373952,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "withdrawal-native-01",
+    "command": [
+      "env",
+      "VNEXT_TEST_CONTAINER=stockinsider-vnext-oct22-worker-06",
+      "VNEXT_WORKER_SOCKET_PARENT=/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-06",
+      "VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-oct22-private/withdrawal-native-01",
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/vnext-withdrawal-postgres.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T02:25:14.770929+00:00",
+    "end": "2026-10-22T02:25:18.335476+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 10372038656,
+      "/tmp": 17661743104
+    },
+    "finalFree": {
+      "/workspace": 10372562944,
+      "/tmp": 17653096448
+    },
+    "sampledSessionPeakRssBytes": 138870784,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "withdrawal-source-direct-02",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/vnext/source-withdrawal.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T02:26:15.850251+00:00",
+    "end": "2026-10-22T02:26:16.361252+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 10372235264,
+      "/tmp": 17653071872
+    },
+    "finalFree": {
+      "/workspace": 10372235264,
+      "/tmp": 17653067776
+    },
+    "sampledSessionPeakRssBytes": 5111808,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "withdrawal-native-02",
+    "command": [
+      "env",
+      "VNEXT_TEST_CONTAINER=stockinsider-vnext-oct22-worker-06",
+      "VNEXT_WORKER_SOCKET_PARENT=/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-06",
+      "VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-oct22-private/withdrawal-native-02",
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/vnext-withdrawal-postgres.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T02:26:16.461689+00:00",
+    "end": "2026-10-22T02:26:18.510240+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 10372173824,
+      "/tmp": 17653063680
+    },
+    "finalFree": {
+      "/workspace": 10372157440,
+      "/tmp": 17645658112
+    },
+    "sampledSessionPeakRssBytes": 146571264,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "withdrawal-native-03",
+    "command": [
+      "env",
+      "VNEXT_TEST_CONTAINER=stockinsider-vnext-oct22-worker-06",
+      "VNEXT_WORKER_SOCKET_PARENT=/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-06",
+      "VNEXT_NATIVE_ARTIFACTS=/tmp/stockinsider-vnext-oct22-private/withdrawal-native-03",
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/vnext-withdrawal-postgres.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T02:27:01.246816+00:00",
+    "end": "2026-10-22T02:27:02.767431+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 10372132864,
+      "/tmp": 17645641728
+    },
+    "finalFree": {
+      "/workspace": 10372128768,
+      "/tmp": 17639514112
+    },
+    "sampledSessionPeakRssBytes": 162074624,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  }
+]

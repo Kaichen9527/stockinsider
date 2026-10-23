@@ -1,0 +1,23 @@
+TAP version 13
+# Subtest: new TWSE snapshot transport receipts: retained-semantic-o23 engineering PG authority
+    # Subtest: full candidate commits with exact source pins, no existing function or business row changes
+    ok 1 - full candidate commits with exact source pins, no existing function or business row changes
+    # Subtest: original writer lease and explicit synthetic connector/policy setup precede real service-role append
+    ok 2 - original writer lease and explicit synthetic connector/policy setup precede real service-role append
+    # Subtest: exact replay/read/latest preserve full rows; direct schema/identity mutants reject with actual ReadyI
+    ok 3 - exact replay/read/latest preserve full rows; direct schema/identity mutants reject with actual ReadyI
+    # Subtest: current source-policy withdrawal blocks historical reads without mutating the retained receipt
+    ok 4 - current source-policy withdrawal blocks historical reads without mutating the retained receipt
+    # Subtest: first-only full installer rejects and rollback preserves all rows and function metadata
+    ok 5 - first-only full installer rejects and rollback preserves all rows and function metadata
+    1..5
+ok 1 - new TWSE snapshot transport receipts: retained-semantic-o23 engineering PG authority
+1..1
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1786.006294

@@ -1,0 +1,87 @@
+{
+  "count": 16,
+  "bytes": 25575,
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/retry-b855-annotations-o23.json",
+      "bytes": 10050,
+      "sha256": "43e8e76f0dbb27fa4c39dc68e3b58175af503df4d88fbfbf16bab863e6fc8c09"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/retry-b855-runtime-o23.json",
+      "bytes": 2651,
+      "sha256": "3ba90b09fdac1b8d91d72095d5fc75ba895f629179023ad0a8c598f8ea398106"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/retry-terminal-source-seal-o23.json",
+      "bytes": 857,
+      "sha256": "63515174d7e0c0205864d67ba146cce2b43acdf8b062be88f910dc7a10ce5c44"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-idle-workflow-source-o23.json",
+      "bytes": 186,
+      "sha256": "0bcd29db94f26f93c370f3b885613d0fd6a92b9801167a361578c451e7089f04"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/retry-terminal-syntax-01.json",
+      "bytes": 851,
+      "sha256": "c8e33255dd6e2aef0b48a03935002df24e14930b5189305f9a2243dcc2e9bde1"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/retry-terminal-syntax-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/retry-terminal-syntax-02.json",
+      "bytes": 849,
+      "sha256": "7036290beaec754149d7fc5d37413e0b29de8df0f27b72ed259616e596b8cb3d"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/retry-terminal-syntax-02.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-idle-contract-01.json",
+      "bytes": 845,
+      "sha256": "28b67e5ca6ed492e75b4c40ee72f2bfd8d4decadeee9a9323db5e14f14cfe78a"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-idle-contract-01.log",
+      "bytes": 2263,
+      "sha256": "8bcd0ef5fbdd4232f64ec1575a6d2f660eaee3a13ec074e62a5bce33891b530c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-idle-contract-02.json",
+      "bytes": 845,
+      "sha256": "36498f197ab0f3008f886132a1ac4e82ab1495d3b24177cded0b10e937c49e57"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-idle-contract-02.log",
+      "bytes": 2242,
+      "sha256": "6e690d74c95db6e440e79fd00472d17a2dfc2668d32298f9eb6beb36487242c4"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-idle-contract-03.json",
+      "bytes": 845,
+      "sha256": "7d88a69e1784215c190ab95ccc4b747622d38a223d6adf0993c9c8efa120df96"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-idle-contract-03.log",
+      "bytes": 2242,
+      "sha256": "2791fbed058746aca05adcb470247462f07878f3738d29f9c64dcc02e50bb5c2"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-followup-syntax-01.json",
+      "bytes": 849,
+      "sha256": "c5f32e59af33e659f542c2bde85523a824aafb84af9e1794b7e1e2022e89018b"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-followup-syntax-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "scope": "this milestone only; finite GH metadata/source checks retained locally; hosted full TAP/rows not retrieved; originals never deleted"
+}

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "vnext-financial-status-text-source-candidate-v1",
+  "status": "SOURCE_CANDIDATE_NOT_NATIVE_EXECUTED",
+  "nativeVerified": false,
+  "catalogOid": null,
+  "migration": "migrations/20261022_vnext_financial_status_text_v1.sql",
+  "target": {
+    "signature": "public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid)",
+    "owner": "opportunity_v3_rpc_owner",
+    "securityDefiner": true,
+    "language": "plpgsql",
+    "searchPath": "",
+    "volatility": "VOLATILE",
+    "parallel": "UNSAFE",
+    "strict": false,
+    "leakproof": false,
+    "returns": "boolean",
+    "executeGrantees": ["opportunity_v3_rpc_owner", "service_role"],
+    "grantor": "opportunity_v3_rpc_owner",
+    "grantOption": false,
+    "preProsrcSha256": "b506712e9f05b22736fd76c8ec9fe85f70418f4fdca76d998a30ecd4ea4f2754",
+    "preProsrcBytes": 5152,
+    "postProsrcSha256": "99b05c8cd70214b976da8e4946ee7f62f52f45f067abc14dda28a53040636d73",
+    "postProsrcBytes": 5119
+  },
+  "bodyDelta": {
+    "occurrences": 1,
+    "before": "validation_status=(v_effective->>'validation_status')::public.financial_validation_status_v3,",
+    "after": "validation_status=(v_effective->>'validation_status')::text,",
+    "removedBytes": 33,
+    "inverseMustEqualWholePredecessor": true,
+    "postBodyEqualsCapturedOctober11AlreadyRepairedWriter": true
+  },
+  "columnContract": {
+    "table": "public.opportunity_financial_facts_v3",
+    "column": "validation_status",
+    "type": "pg_catalog.text",
+    "notNull": true,
+    "constraint": "opportunity_financial_facts_v3_validation_status_check",
+    "validated": false,
+    "expression": "(validation_status = ANY (ARRAY['validated'::text, 'pending'::text, 'rejected'::text, 'stale'::text, 'conflict'::text]))",
+    "obsoleteEnumMustBeAbsent": "public.financial_validation_status_v3"
+  },
+  "sourceLineage": [
+    {
+      "path": "migrations/20260911_05_financial_fact_isolation_v10.sql",
+      "sha256": "819af34785d57379c2f2c39168d50d1fb29d317b0d33ece60bcb1c6370fa03f5",
+      "use": "exact predecessor body and existing ownership/ACL contract"
+    },
+    {
+      "path": "migrations/20260912_02_financial_validation_status_text_hotfix.sql",
+      "sha256": "f17158f0dc73752e6a156682241b9e2a5b35f6451a20e0e661a5e55f71e8d46b",
+      "use": "checked-text provenance only; broad owner/revoke statements are not applied"
+    },
+    {
+      "path": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+      "sha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+      "use": "source-derived matching repaired writer body and original text CHECK"
+    }
+  ],
+  "installer": {
+    "isolation": "READ COMMITTED",
+    "statementTimeout": "30s",
+    "lockTimeout": "2s",
+    "advisoryLock": 64221022,
+    "runtimeLocksChanged": false
+  },
+  "preservation": [
+    "target signature and OID",
+    "all target non-prosrc metadata including owner, security, search path and ACL",
+    "all other routine bodies and metadata",
+    "public namespace, relations, columns, types, constraints, defaults, indexes, policies, triggers, rules, operators, collations and default ACLs",
+    "role attributes and memberships",
+    "all existing source files, protected predecessor pins, admission/model budgets and runtime deadlines"
+  ],
+  "permissionDelta": [],
+  "newEnumOrRoutine": false,
+  "businessRowsWrittenByCandidate": false,
+  "runtimeOrHarnessChanged": false,
+  "observedFailureReference": {
+    "run": "ir-native-11-policy-continuation-02-o23",
+    "overall": "2PASS2FAIL; original record RPC42704; later business not reached",
+    "retainedFinalStateSha256": "80197f6c996b14caedea9aa943833fa0ae7752bae7ea629f9ad11159b6d9968c"
+  },
+  "actualNewCandidateGrammar": "NOT_RUN",
+  "actualNewCandidateInstallOrApiRecovery": "NOT_RUN",
+  "productionApproval": false
+}

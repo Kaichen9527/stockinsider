@@ -1,3 +1,4 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { sendOpsAlert } from '@/lib/alerts';
 import { getLatestIngestionState, runPipelineFlow } from '@/lib/domain';
@@ -26,10 +27,14 @@ export const maxDuration = 300;
 
 // Vercel cron triggers via GET
 export async function GET(req: Request) {
+  const vnext = await vnextRoute(req, 'pipeline-run');
+  if (vnext) return vnext;
   return POST(req);
 }
 
 export async function POST(req: Request) {
+  const vnext = await vnextRoute(req, 'pipeline-run');
+  if (vnext) return vnext;
   const auth = requireInternalAuth(req);
   if (!auth.ok) {
     return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });

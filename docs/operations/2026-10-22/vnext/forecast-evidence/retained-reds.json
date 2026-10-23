@@ -1,0 +1,107 @@
+{
+  "records": [
+    {
+      "path": "forecast-native31-red-o23.json",
+      "record": {
+        "source": "31a4201ba195b152e8aff13161c54efd20b1c4de",
+        "runtimeMerge": "15e838ca9a3de344dd2b6b7e526b8e6e7fc3b1db",
+        "run": 39933433221,
+        "job": 120347066095,
+        "conclusion": "failure",
+        "stage": "current_original_numeric_forecasts_use_real_author_reader_and_private_acl",
+        "code": "42501",
+        "messageSha256": "06aade72a53b0855cdc58fce9eeadcfea8fcc6cf41417cfea07dc1737da60383",
+        "exactFiniteMessageHashMatch": "permission denied for table stocks",
+        "scope": "GitHub finite annotation and independent exact hash comparison; raw log/private row contents not retrieved; installation/setup reached, no forecast positive witness; no whole native acceptance",
+        "notRun": [
+          "forecast positive READ",
+          "prepare HTTP",
+          "forecast provider frozen input",
+          "revocation",
+          "later business/browser stages"
+        ]
+      },
+      "bytes": 826,
+      "sha256": "ac6c747ff8c93679120af3681a19019a0e629c99a44329b61dafd11edb9c604f"
+    },
+    {
+      "path": "forecast-native965-red-o23.json",
+      "record": {
+        "source": "9651be53107ae5ce09ba71e28cb8d751e24336de",
+        "runtimeMerge": "d50402b8d93dacb178d479d37e70f8f3a4fe6739",
+        "run": 39934361034,
+        "job": 120350141497,
+        "conclusion": "failure",
+        "stage": "current_original_numeric_forecasts_use_real_author_reader_and_private_acl",
+        "code": "42501",
+        "messageSha256": "06aade72a53b0855cdc58fce9eeadcfea8fcc6cf41417cfea07dc1737da60383",
+        "exactFiniteMessageHashMatch": "permission denied for table stocks",
+        "scope": "same finite message on new source proves first owner move was insufficient; stock owner also lacks stocks read. No raw TAP/private rows retrieved. Later forecast stages NOT_REACHED."
+      },
+      "bytes": 654,
+      "sha256": "ec419c6f8fa22bef279fe3974431abcb6183bc5ad3058225f8c7f60841b55b77"
+    },
+    {
+      "path": "forecast-nativec892-analysis-red-o23.json",
+      "record": {
+        "source": "c8920b8cbbee9a30ffdbbb15d8f304214eaab495",
+        "run": 39936463330,
+        "job": 120357107796,
+        "conclusion": "failure",
+        "stage": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+        "finiteDiagnostic": "NOT_OBSERVED",
+        "forecastStage": "NOT_REACHED",
+        "exactCause": "UNKNOWN",
+        "oneCurrentLogRead": "Forbidden at remote result host; no raw bytes retrieved, no repeat",
+        "notClaimed": "No attribution to temp PostgreSQL startup; new readiness hardening is independent source observation"
+      },
+      "bytes": 541,
+      "sha256": "1182b1b28373d52ee85ea23986c37b3f601fb7f9c8382d427921c6a1d64007da"
+    },
+    {
+      "path": "forecast-native437-prerequisite-red-o23.json",
+      "record": {
+        "source": "437c81884eff0e0dd755198689d53a4c95a72660",
+        "run": 39937455639,
+        "job": 120360386244,
+        "conclusion": "failure",
+        "stage": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+        "exactCause": "UNKNOWN",
+        "finiteDiagnostic": "NOT_OBSERVED",
+        "forecastStage": "NOT_REACHED",
+        "scope": "current step metadata only; no raw-log retry, no attribution to readiness; subsequent final-server check is a stronger documented prerequisite, not a relaxed oracle"
+      },
+      "bytes": 496,
+      "sha256": "9e81baf17d697f773e3e66805e42c1cb4d71c60cd3f6e1187322ae849e3406d0"
+    },
+    {
+      "path": "forecast-nativeb5-receipt-red-o23.json",
+      "record": {
+        "source": "b5fd7632ead232e9f4e9183acc2cf39ba85d5f8c",
+        "run": 39938281912,
+        "job": 120363131029,
+        "overall": "failure",
+        "stage": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)",
+        "nativeTotals": "NOT_OBSERVED",
+        "finiteSummary": "NOT_EMITTED",
+        "rawInventory": {
+          "count": 50,
+          "bytes": 82085286,
+          "sha256": "0ed963bd6a562d6525349289fee3cdfbfa8ca90be5a508e7b0f4a04032b569be",
+          "contentsRetrieved": false
+        },
+        "sourceDefect": "actual AST TAP count expression yields bytes keys; json.dumps reproduces TypeError",
+        "notClaimed": "Does not establish native tests passed or that this was the only failure"
+      },
+      "bytes": 688,
+      "sha256": "7b64d2a098ec0362140cb13dedea2a51659f3541eaed9c52542ed836bee75b56"
+    }
+  ],
+  "sourceProbeInitialRed": {
+    "path": "forecast-receipt-serialization-initial-red.txt",
+    "sha256": "309711870dded2d671603a9ef11597d7b1c6b742c004c5248ad56efbe4fa972b",
+    "scope": "actual workflow AST memory execution TypeError, not a native test result"
+  },
+  "earlierProtocolAndResourceREDs": "unchanged original receipts/branches; not reclassified",
+  "redCountsNotAdded": true
+}

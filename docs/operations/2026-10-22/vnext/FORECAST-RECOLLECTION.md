@@ -1,0 +1,17 @@
+# Acquisition-clock regression — source candidate
+
+Parent/evidence checkpoint: `8c4a467ac6cef13871a5932e51e50f7bf3f20dbe`; last accepted product/test source `84a88774926b6ec1328fffd6f94a2f26919d9260`. This change adds a native assertion to the existing same-build actual HTTP/preparation fixture; it does not change product SQL, TS, profile, permissions or source-version fences.
+
+The original installed `20260816_financial_fact_recollection_idempotency_v3_16_16.sql` (SHA256 `81d6bd393bee34985e7386aee309ec9eec33e87e280b64af3428719a2a280441`) already returns the immutable original fact when only collected_at advances. The installed history wrapper `20261005_financial_history_admission_v1.sql` (`5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27`) records the new acquisition observation atomically with its idempotent audit. There is no proven missing product deduplication.
+
+An initial uncommitted semantic-cohort SQL candidate was unnecessary once this complete predecessor chain was inspected. Its six exact source files, initial source-only checks and inventory remain in the private `forecast-clock-semantic-candidate-wip-o23` record. The owned SQL/profile/source checks were restored byte-for-byte to the parent; no PG run or database failure occurred for that candidate. It is not a product acceptance result.
+
+## New actual-RPC assertions
+
+After the existing prepared input and direct-service mutation negatives, the fixture reuses both original forecast append inputs, advancing only collected_at using the real DB clock. It calls the original append RPC under its original principal and writer lease. Both returned fact IDs and recorded clocks must equal the original rows. Exactly two new history observations and two idempotent audits are permitted; every other complete table row, job, preparation, request/input, provider ledger and original source clock must remain unchanged. The new observations and audits must share exact input hashes and original publication/source clocks, with bounded actual recorded clocks.
+
+A new author/job-bound current reader and private input-current check must return the exact original evidence/receipts and still accept the original preparation. The existing actual provider journal then freezes those original estimates, without external POST; the existing current-rights withdrawal assertions remain. Full before/after private snapshots are saved. The new safe summary exposes only duplicateAcquisitionStable and recollectionObservations, never source bodies/principals.
+
+This adds assertions inside the existing child, not extra test cases. Planned parent/child count is not an actual result. The normal workflow's same-source native execution is required; source84's seven passes cannot attest this changed fixture. Syntax checks for both changed MJS files and all39 existing embedded Python blocks passed in the original VM; SQL/profile/source tests are byte-identical to parent. Original VM fresh PG/build/browser remains NOT_ADMITTED with the full next workset; only small source work was admitted. No cleanup, mount/path change, new container, floor reduction or consumed-run rerun.
+
+Real source/model bindings remain absent. Synthetic metadata/permission is not an issuer license, semantic review or formal publication. Contabo, annual/forward4Q fiscal/share authority, remaining rights/race/lease/caps matrices and protected review remain pending. PR384 stays draft; no merge/deploy or schedule operation.

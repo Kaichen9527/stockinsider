@@ -1,0 +1,74 @@
+{
+  "scope": "actual CodexVM metadata/allowlisted name presence only, no secret files/values read or printed",
+  "observedAt": "2026-10-23T07:52:33.846293+00:00",
+  "environmentId": "ccarenv_b64_Y2NhcmVudl84NzYxZDNhYjY0MDQ4MTkxYjYxNDFmMzAwN2FjNzQ3Yw",
+  "phase": "running",
+  "provider": "cloud",
+  "tool": "cloud_environment_environment_status",
+  "publishedCapabilities": [],
+  "secretBindings": [],
+  "runtimeVariableBindings": [],
+  "outboundIdentityBindings": [],
+  "directRuntimeNames": [
+    {
+      "name": "OPENAI_API_KEY",
+      "configuredNonempty": false
+    },
+    {
+      "name": "INTERNAL_API_KEY",
+      "configuredNonempty": false
+    },
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_URL",
+      "configuredNonempty": false
+    },
+    {
+      "name": "SUPABASE_SERVICE_ROLE_KEY",
+      "configuredNonempty": false
+    },
+    {
+      "name": "STOCKINSIDER_VNEXT_AUTHOR_KEY",
+      "configuredNonempty": false
+    },
+    {
+      "name": "STOCKINSIDER_VNEXT_AUTHOR_PRINCIPAL",
+      "configuredNonempty": false
+    },
+    {
+      "name": "STOCKINSIDER_VNEXT_AUTHOR_MODEL",
+      "configuredNonempty": false
+    },
+    {
+      "name": "STOCKINSIDER_VNEXT_AUTHOR_MODEL_VERSION",
+      "configuredNonempty": false
+    },
+    {
+      "name": "STOCKINSIDER_VNEXT_REVIEWER_KEY",
+      "configuredNonempty": false
+    },
+    {
+      "name": "STOCKINSIDER_VNEXT_REVIEWER_PRINCIPAL",
+      "configuredNonempty": false
+    },
+    {
+      "name": "STOCKINSIDER_VNEXT_REVIEWER_MODEL",
+      "configuredNonempty": false
+    },
+    {
+      "name": "STOCKINSIDER_VNEXT_REVIEWER_MODEL_VERSION",
+      "configuredNonempty": false
+    },
+    {
+      "name": "TWSE_OFFICIAL_OPENAPI_ENABLED",
+      "configuredNonempty": false
+    },
+    {
+      "name": "PTT_METADATA_AUTHORIZED",
+      "configuredNonempty": false
+    }
+  ],
+  "realModelAndDatabaseAdmission": "NOT_READY: missing injected model credentials, distinct configured roles, isolated DB/rights rows; no model POST attempted",
+  "realSourceAcquisition": "NOT_STARTED: official and PTT policies not enabled; no secret/flag or production reuse",
+  "sourceWindow": "No permitted connector currently supplies exhaustive28-original-event-day cursor/identity evidence. TWSE report-date snapshot remainsunknown; PTT bounded partialmetadata; GDELT firstseen metadata not silently equivalent or allowed vNext scope",
+  "ownerMinimum": "Isolated runtime only: platform-managed direct provider credential+existing model/modelVersion; distinct role credential/principal bindings; isolated DB URL+service credential and reviewed mode/role/source-policy rows; enable original official/metadata rights only after owner attestation. Do not post secrets or reuse production writer. No TCP/SSH/Contabo action attempted this checkpoint."
+}

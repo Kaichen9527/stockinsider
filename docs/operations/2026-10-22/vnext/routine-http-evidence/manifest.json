@@ -1,0 +1,31 @@
+{
+  "candidateSource": "ca3612248f0d5f53ecee0e362216ca6ea76ea370",
+  "files": [
+    {
+      "bytes": 3557,
+      "path": "actual-a5.json",
+      "sha256": "039f7d1b714d8a1dcb17265410324bb92b6d3a16a763fce6a3b56709c56d996f"
+    },
+    {
+      "bytes": 2106,
+      "path": "candidate-inputs.json",
+      "sha256": "5015558dd6a0f92fc4aeb7fec758a4d500a4345d08598d5a9ec59836d45c51d7"
+    },
+    {
+      "bytes": 2394,
+      "path": "private-inventory.json",
+      "sha256": "e09754512fb267f37e88abba15117bc31f6bc8ee70140735509631a4192b86d0"
+    },
+    {
+      "bytes": 2966,
+      "path": "retained-b378.json",
+      "sha256": "2ac32839a539596abdf99ebc16b3abc95d6342b8db720a6af2741156e90a9b89"
+    },
+    {
+      "bytes": 1598,
+      "path": "receipt.json",
+      "sha256": "b263dd68f7ccb3b0d832542f9ec9b431e350f85b7e1a54666e2ee80b13537fa8"
+    }
+  ],
+  "receiptSha256": "b263dd68f7ccb3b0d832542f9ec9b431e350f85b7e1a54666e2ee80b13537fa8"
+}

@@ -1,0 +1,60 @@
+{
+  "status": "SOURCE_FIX_TESTED_NEW_HOSTED_PENDING",
+  "sourceHead": "654346f38f1350000c9554e4aeeee2ab97fc80ca",
+  "priorSource": "102ddd39a5015056133d6ab810e0db3be1e0b5b4",
+  "at": "2026-10-23T08:36:31.222932+00:00",
+  "executionEnvironment": "Codex VM source checks; actual native failure observations from GitHub hosted",
+  "nativeFailures": [
+    {
+      "source": "6677c023feb7d7503a233752572c58c3b77b6973",
+      "run": 39923473253,
+      "job": 120314046977,
+      "tests": 2,
+      "pass": 0,
+      "fail": 2,
+      "phase": "stage_1",
+      "cause": "new harness expected absent profile.successorDefinition; finite original profile fields unchanged"
+    },
+    {
+      "source": "102ddd39a5015056133d6ab810e0db3be1e0b5b4",
+      "run": 39924454670,
+      "job": 120317310443,
+      "tests": 6,
+      "pass": 4,
+      "fail": 2,
+      "phase": "stage_5",
+      "cause": "new consumer/native read generic businessComponent instead of SQL marketLiquidity.thesisRiskAnalysis",
+      "actualMessageSha256": "e4523a140ac9f70d026724f69bcbe77ca0f7c26f266fd82faa07b5415beb8fdd",
+      "cleanup": "PG shutdown/socket absence/PID0/18owned observed absent/0zombie/unsettled; data retained",
+      "browser": "NOT_RUN after native failure"
+    }
+  ],
+  "fix": "finite TS consumer field mapping + native exact field assertion + actual SQL-shaped source fixture; risk_bound and original group scores/weights unchanged",
+  "sourceChecks": {
+    "fieldmap": {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    "types": "exit0",
+    "lint": "exit0",
+    "initialEditSyntaxFailure": "preserved, corrected duplicate opening brace in new test fixture; not PG failure"
+  },
+  "sqlAndProfileUnchanged": [
+    {
+      "path": "migrations/20261023_vnext_business_criteria_v1.sql",
+      "bytes": 35292,
+      "sha256": "5385809932404223e2c2a7652c4a6e5fb2f3d8b88f68c9db1edb9a2719093c8b"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-business-criteria-profile-v1.json",
+      "bytes": 6044,
+      "sha256": "fbedcbbef6045eb5e6dcb20228aac5321019cca98a4cbcd6e5286b5eaafbb061"
+    }
+  ],
+  "currentNewNative": "PENDING separate same-source hosted execution; no unchanged rerun",
+  "originalVMFreshPGFullbuildBrowser": "NOT_ADMITTED",
+  "realProviderSourceSemantic": "NOT_RUN: bindings absent",
+  "countsNotAddedAcrossRuns": true,
+  "ownerActions": "../OWNER-ACTIONS.md"
+}

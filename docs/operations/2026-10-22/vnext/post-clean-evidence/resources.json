@@ -1,0 +1,511 @@
+[
+  {
+    "label": "ir-source-direct-01",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/vnext/preparation-authority.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:39:25.188003+00:00",
+    "end": "2026-10-22T23:39:26.211042+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9809010688,
+      "/tmp": 17518026752
+    },
+    "finalFree": {
+      "/workspace": 9809010688,
+      "/tmp": 17518018560
+    },
+    "sampledSessionPeakRssBytes": 98684928,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "ir-source-type-01",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--incremental",
+      "false"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-22T23:39:42.212443+00:00",
+    "end": "2026-10-22T23:40:23.523486+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9809010688,
+      "/tmp": 17518014464
+    },
+    "finalFree": {
+      "/workspace": 9809010688,
+      "/tmp": 17518010368
+    },
+    "sampledSessionPeakRssBytes": 1291239424,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "worker-ci-repro-o23",
+    "command": [
+      "python3",
+      "/tmp/stockinsider-vnext-oct22-private/run-worker-ci-repro-o23.py"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:41:02.513618+00:00",
+    "end": "2026-10-22T23:41:16.744302+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9809027072,
+      "/tmp": 17518018560
+    },
+    "finalFree": {
+      "/workspace": 8896737280,
+      "/tmp": 17426472960
+    },
+    "sampledSessionPeakRssBytes": 202539008,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "product-runtime-candidate-source-o23",
+    "command": [
+      "npm",
+      "run",
+      "test:candidate-shadow-performance"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:42:47.813467+00:00",
+    "end": "2026-10-22T23:42:49.367106+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 9809010688,
+      "/tmp": 17426427904
+    },
+    "finalFree": {
+      "/workspace": 9809010688,
+      "/tmp": 17426423808
+    },
+    "sampledSessionPeakRssBytes": 377892864,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "product-runtime-validation-detail-o23",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "scripts/official-financial-validation-postgres.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:43:25.456446+00:00",
+    "end": "2026-10-22T23:43:25.965219+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 9809010688,
+      "/tmp": 17426419712
+    },
+    "finalFree": {
+      "/workspace": 9809010688,
+      "/tmp": 17426415616
+    },
+    "sampledSessionPeakRssBytes": 6160384,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "product-pg-tools-o23",
+    "command": [
+      "python3",
+      "/tmp/stockinsider-vnext-oct22-private/run-product-pg-tools-o23.py"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:49:16.680271+00:00",
+    "end": "2026-10-22T23:49:55.341822+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9808986112,
+      "/tmp": 17426313216
+    },
+    "finalFree": {
+      "/workspace": 8896671744,
+      "/tmp": 17426296832
+    },
+    "sampledSessionPeakRssBytes": 24903680,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "product-runtime-runtime-o23",
+    "command": [
+      "env",
+      "STOCKINSIDER_DOCUMENT_PARSER_PYTHON=/workspace/.tools/vnext-parser-o22/bin/python",
+      "STOCKINSIDER_DOCUMENT_PARSER_SCRIPT=/workspace/stockinsider-vnext-oct22/scripts/candidate_financial_document_parser.py",
+      "npm",
+      "run",
+      "test:candidate-shadow-performance:runtime"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:50:46.764476+00:00",
+    "end": "2026-10-22T23:51:13.738521+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9808973824,
+      "/tmp": 17426276352
+    },
+    "finalFree": {
+      "/workspace": 9808973824,
+      "/tmp": 17426202624
+    },
+    "sampledSessionPeakRssBytes": 332890112,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "product-runtime-arelle-o23",
+    "command": [
+      "env",
+      "STOCKINSIDER_DOCUMENT_PARSER_PYTHON=/workspace/.tools/vnext-parser-o22/python",
+      "STOCKINSIDER_DOCUMENT_PARSER_SCRIPT=/workspace/stockinsider-vnext-oct22/scripts/candidate_financial_document_parser.py",
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--experimental-strip-types",
+      "web/src/lib/candidate-financial-local-parser.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:52:42.684811+00:00",
+    "end": "2026-10-22T23:52:43.712222+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9808973824,
+      "/tmp": 17426190336
+    },
+    "finalFree": {
+      "/workspace": 9808973824,
+      "/tmp": 17426186240
+    },
+    "sampledSessionPeakRssBytes": 90476544,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "product-runtime-source-contracts-o23",
+    "command": [
+      "python3",
+      "/tmp/stockinsider-vnext-oct22-private/run-product-source-contracts-o23.py"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:54:23.930653+00:00",
+    "end": "2026-10-22T23:54:25.970715+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 9808945152,
+      "/tmp": 17426178048
+    },
+    "finalFree": {
+      "/workspace": 9808945152,
+      "/tmp": 17426161664
+    },
+    "sampledSessionPeakRssBytes": 108519424,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "next-showconfig-helper-o23",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "/tmp/stockinsider-vnext-oct22-private/diagnose-next-showconfig-o23.cjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:45:35.662585+00:00",
+    "end": "2026-10-22T23:45:36.171267+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 9910759424,
+      "/tmp": 17426366464
+    },
+    "finalFree": {
+      "/workspace": 9910759424,
+      "/tmp": 17426362368
+    },
+    "sampledSessionPeakRssBytes": 5505024,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "next-showconfig-helper-unsandboxed-o23",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "/tmp/stockinsider-vnext-oct22-private/diagnose-next-showconfig-o23.cjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:45:47.643105+00:00",
+    "end": "2026-10-22T23:45:48.174556+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9910775808,
+      "/tmp": 17426391040
+    },
+    "finalFree": {
+      "/workspace": 9910775808,
+      "/tmp": 17426386944
+    },
+    "sampledSessionPeakRssBytes": 6160384,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "post-clean-ir-build-o23",
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "build",
+      "--",
+      "--webpack"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:44:37.574271+00:00",
+    "end": "2026-10-22T23:44:40.113010+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 9809010688,
+      "/tmp": 17426411520
+    },
+    "finalFree": {
+      "/workspace": 9910759424,
+      "/tmp": 17426407424
+    },
+    "sampledSessionPeakRssBytes": 294690816,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "post-clean-ir-build-permissions-o23",
+    "command": [
+      "npm",
+      "run",
+      "build",
+      "--",
+      "--webpack"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-22T23:45:59.487366+00:00",
+    "end": "2026-10-22T23:47:22.900532+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9910775808,
+      "/tmp": 17426382848
+    },
+    "finalFree": {
+      "/workspace": 9502154752,
+      "/tmp": 17426374656
+    },
+    "sampledSessionPeakRssBytes": 1462943744,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "post-clean-ir-lint-o23",
+    "command": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22/web",
+    "start": "2026-10-22T23:47:34.574397+00:00",
+    "end": "2026-10-22T23:48:05.788417+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9502138368,
+      "/tmp": 17426309120
+    },
+    "finalFree": {
+      "/workspace": 9502138368,
+      "/tmp": 17426300928
+    },
+    "sampledSessionPeakRssBytes": 1589129216,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "ir-and-contracts-o23",
+    "command": [
+      "python3",
+      "/tmp/stockinsider-vnext-oct22-private/run-ir-and-contracts-o23.py"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:57:50.768755+00:00",
+    "end": "2026-10-22T23:58:07.745796+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 9808822272,
+      "/tmp": 17425424384
+    },
+    "finalFree": {
+      "/workspace": 8896507904,
+      "/tmp": 17335918592
+    },
+    "sampledSessionPeakRssBytes": 202190848,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "ir-policy-readonly-diagnosis-o23",
+    "command": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "/tmp/stockinsider-vnext-oct22-private/diagnose-ir-policy-o23.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T23:58:56.626991+00:00",
+    "end": "2026-10-22T23:58:57.134536+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8896417792,
+      "/tmp": 17335902208
+    },
+    "finalFree": {
+      "/workspace": 8896417792,
+      "/tmp": 17336270848
+    },
+    "sampledSessionPeakRssBytes": 5373952,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "command": [
+      "bash",
+      "-c",
+      "set -euo pipefail; for f in vnext discovery boundaries worker analysis-sources thesis cached-admission source-withdrawal artifact-financial-summary preparation-authority research-failure; do node --experimental-strip-types web/src/lib/vnext/$f.test.ts; done; node --experimental-strip-types scripts/vnext-business-vectors.test.mjs; node scripts/candidate-financial-document-write-lease-route.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-23T00:10:35.123032+00:00",
+    "end": "2026-10-23T00:10:41.774602+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 8895549440,
+      "/tmp": 17335447552
+    },
+    "finalFree": {
+      "/workspace": 8895549440,
+      "/tmp": 17335410688
+    },
+    "sampledSessionPeakRssBytes": 179372032,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "label": "source-ci-current-o23"
+  },
+  {
+    "command": [
+      "node",
+      "--experimental-strip-types",
+      "web/src/lib/vnext/research-failure.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-23T00:10:56.334932+00:00",
+    "end": "2026-10-23T00:10:58.364565+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8895549440,
+      "/tmp": 17335394304
+    },
+    "finalFree": {
+      "/workspace": 8895549440,
+      "/tmp": 17335390208
+    },
+    "sampledSessionPeakRssBytes": 202731520,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "label": "research-failure-loader-fixed-o23"
+  },
+  {
+    "command": [
+      "bash",
+      "-c",
+      "set -euo pipefail; node --experimental-strip-types scripts/vnext-business-vectors.test.mjs; node scripts/candidate-financial-document-write-lease-route.test.mjs; npm --prefix web run typecheck"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-23T00:11:12.880892+00:00",
+    "end": "2026-10-23T00:11:23.111653+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8895549440,
+      "/tmp": 17335341056
+    },
+    "finalFree": {
+      "/workspace": 8895549440,
+      "/tmp": 17335336960
+    },
+    "sampledSessionPeakRssBytes": 779317248,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "label": "source-ci-tail-fixed-o23"
+  },
+  {
+    "command": [
+      "python3",
+      "/tmp/stockinsider-vnext-oct22-private/run-ir-continuation-o23.py"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-23T00:13:28.897544+00:00",
+    "end": "2026-10-23T00:13:30.426980+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 8895471616,
+      "/tmp": 17334870016
+    },
+    "finalFree": {
+      "/workspace": 8895471616,
+      "/tmp": 17334767616
+    },
+    "sampledSessionPeakRssBytes": 91242496,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "label": "ir-continuation-monitored-o23"
+  },
+  {
+    "command": [
+      "python3",
+      "/tmp/stockinsider-vnext-oct22-private/run-ir-continuation-02-o23.py"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-23T00:14:13.966612+00:00",
+    "end": "2026-10-23T00:14:16.021867+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 8895414272,
+      "/tmp": 17334231040
+    },
+    "finalFree": {
+      "/workspace": 8895401984,
+      "/tmp": 17333604352
+    },
+    "sampledSessionPeakRssBytes": 114003968,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+    "label": "ir-continuation-monitored-02-o23"
+  }
+]

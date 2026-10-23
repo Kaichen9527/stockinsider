@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "vnext-dimensionless-arithmetic-source-v1",
+  "migration": "migrations/20261022_vnext_dimensionless_arithmetic_v1.sql",
+  "migrationSha256": "61b838614afe16ca788154828c7f818f8d4be58104402be5db7fbe2231509721",
+  "signature": "public.vnext_validate_claims_v1(jsonb,jsonb)",
+  "predecessorBodySha256": "b177e0010a25b9ff27ef25f59a81c44cce47f0b297ea0061d478afbce424b1b8",
+  "successorBodySha256": "1f8224bd0cec907bb56f8b4cd273edf3bef50da1dae56b3b2b1ceb78f6897f54",
+  "predecessorBytes": 8143,
+  "successorBytes": 8286,
+  "fragments": [
+    [
+      "u NOT IN('ratio','multiple')",
+      "u NOT IN('ratio','multiple','dimensionless')"
+    ],
+    [
+      "NOT(num->>'unit'=ANY(units))",
+      "NOT EXISTS(SELECT FROM unnest(units) scalar_unit WHERE scalar_unit NOT IN('ratio','multiple','dimensionless') AND scalar_unit=num->>'unit')"
+    ],
+    [
+      "units[2] IN('ratio','multiple')",
+      "units[2] IN('ratio','multiple','dimensionless')"
+    ]
+  ],
+  "nativeVerified": false,
+  "nativeOid": null,
+  "catalogMetadata": null,
+  "sourcePredecessor": "migrations/20261022_vnext_financial_summary_v1.sql",
+  "sourcePredecessorSha256": "f35641c802b39fcd07fadf6f62e4101080f917e26401941df1fb562ddeb44b66",
+  "retainedCatalogLineage": {
+    "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/install.json",
+    "sha256": "78a35164c9c8d01c6c1f697cac1ff13e0150ca6ae7cd04e37f0e09c926e4ea2d",
+    "sourceBodyEqualsArchivedActual": true,
+    "scope": "historical source lineage only; no native execution of this new candidate"
+  },
+  "owner": "stockinsider_vnext_owner",
+  "securityDefiner": false,
+  "language": "plpgsql",
+  "volatility": "IMMUTABLE",
+  "parallel": "UNSAFE",
+  "strict": false,
+  "leakproof": false,
+  "searchPath": "pg_catalog, public",
+  "returnType": "void",
+  "argumentNames": [
+    "a",
+    "evidence"
+  ],
+  "executeGrantees": [
+    "stockinsider_vnext_owner"
+  ],
+  "grantor": "stockinsider_vnext_owner",
+  "grantOption": false,
+  "allowedCatalogDelta": [
+    "exact target prosrc only"
+  ],
+  "permissionDelta": "none",
+  "periodConversion": "none",
+  "unitConversion": "none"
+}

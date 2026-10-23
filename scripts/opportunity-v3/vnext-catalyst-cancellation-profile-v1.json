@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "vnext-catalyst-cancellation-source-v1",
+  "migration": "migrations/20261023_vnext_catalyst_cancellation_v1.sql",
+  "migrationSha256": "f26d483a8bf4ce0e12dd21c350dde7f51231be327e223e6efa8877dfa834c22d",
+  "nativeVerified": false,
+  "nativeOid": null,
+  "nativeCatalog": null,
+  "sourcePredecessor": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
+  "routines": [
+    {
+      "signature": "public.vnext_command_v1(text,text,jsonb)",
+      "fragments": [
+        [
+          "qualification jsonb; citations jsonb;",
+          "qualification jsonb; citations jsonb; cancellation_proof jsonb;"
+        ],
+        [
+          "   answer:=jsonb_build_object('reviewRecorded',true,'published',false);",
+          "   answer:=jsonb_build_object('reviewRecorded',true,'published',false);\n   IF r->'review'->>'approved'='true' AND EXISTS(SELECT FROM jsonb_array_elements(j.author_result->'claims') cancellation_claim WHERE cancellation_claim ? 'cancellation') THEN\n    answer:=answer||public.vnext_command_v1(p_principal,'publish',jsonb_build_object('jobId',j.job_id,'executionId',j.reviewer_execution,'inputHash',j.input_hash));\n   END IF;"
+        ],
+        [
+          "   SELECT proof INTO qualification FROM public.vnext_qualifications_v1 WHERE job_id=j.job_id AND input_hash=j.input_hash AND checked_at>=clock_timestamp()-interval '120 seconds';",
+          "   cancellation_proof:=NULL;\n   IF EXISTS(SELECT FROM jsonb_array_elements(j.author_result->'claims') cancellation_claim WHERE cancellation_claim ? 'cancellation') THEN\n    cancellation_proof:=public.vnext_catalyst_cancellation_current_v1(j.job_id,j.input_hash);\n    IF cancellation_proof IS NULL THEN RAISE EXCEPTION 'vnext_cancellation_current_authority_required';END IF;\n   END IF;\n   SELECT proof INTO qualification FROM public.vnext_qualifications_v1 WHERE job_id=j.job_id AND input_hash=j.input_hash AND checked_at>=clock_timestamp()-interval '120 seconds';"
+        ],
+        [
+          "   qualification:=coalesce(qualification,jsonb_build_object('qualified',false,'gaps',jsonb_build_array('actual_authority_not_verified')));",
+          "   qualification:=coalesce(qualification,jsonb_build_object('qualified',false,'gaps',jsonb_build_array('actual_authority_not_verified')));\n   IF cancellation_proof ? 'proofHash' THEN qualification:=jsonb_build_object('qualified',false,'gaps',jsonb_build_array('catalyst_cancelled'),'catalystCancellation',cancellation_proof);END IF;"
+        ],
+        [
+          "   answer:=jsonb_build_object('published',true,'revisionId',v_revision);",
+          "   IF cancellation_proof ? 'proofHash' THEN\n    UPDATE public.vnext_members_v1 SET state='exited',exit_reason='catalyst_cancelled',updated_at=clock_timestamp() WHERE symbol=j.symbol;\n    UPDATE public.vnext_confirmations_v1 SET count=0 WHERE challenger=j.symbol OR incumbent=j.symbol;\n    UPDATE public.vnext_jobs_v1 SET state='rejected',error='membership_exited' WHERE symbol=j.symbol AND state IN('queued','running','authored','reviewing');\n   END IF;\n   answer:=jsonb_build_object('published',true,'revisionId',v_revision);"
+        ],
+        [
+          " ELSIF p_command='exit' THEN\n",
+          " ELSIF p_command='exit' THEN\n  IF r->>'reason'='catalyst_cancelled' THEN\n   IF jsonb_typeof(r->'cancellationProof') IS DISTINCT FROM 'object' OR coalesce(r->'cancellationProof'->>'jobId','') !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$' OR coalesce(r->'cancellationProof'->>'inputHash','') !~ '^[a-f0-9]{64}$' THEN RAISE EXCEPTION 'vnext_cancellation_current_authority_required';END IF;\n   cancellation_proof:=public.vnext_catalyst_cancellation_current_v1((r->'cancellationProof'->>'jobId')::uuid,r->'cancellationProof'->>'inputHash');\n   IF cancellation_proof IS NULL OR cancellation_proof IS DISTINCT FROM r->'cancellationProof' OR cancellation_proof->>'symbol' IS DISTINCT FROM r->>'symbol' OR r->'evidence' IS DISTINCT FROM jsonb_build_array(cancellation_proof->>'proofHash') THEN RAISE EXCEPTION 'vnext_cancellation_current_authority_required';END IF;\n  END IF;\n"
+        ]
+      ],
+      "config": [
+        "search_path=pg_catalog, public"
+      ],
+      "predecessorBodySha256": "0a5ba7953b1925b26a9ced99764786bb3e7d047bb33264d563447ab5e6353472",
+      "successorBodySha256": "130fa80b87ece7cc9bfb59b5998078cfd76ebb852a12632706e3fc5cf7eefafb",
+      "predecessorBytes": 42978,
+      "successorBytes": 45249
+    },
+    {
+      "signature": "public.vnext_provider_command_v1(text,text,jsonb)",
+      "fragments": [
+        [
+          " IF p_command='reserve' THEN\n",
+          " IF p_command='reserve' THEN\n  IF binding.prompt_version='vnext-research-worker-v4' AND EXISTS(SELECT FROM jsonb_object_keys(p_request) request_key WHERE request_key NOT IN('jobId','executionId')) THEN RAISE EXCEPTION 'vnext_cancellation_reserve_fields';END IF;\n  IF actor='reviewer' AND binding.prompt_version IS DISTINCT FROM 'vnext-research-worker-v4' AND EXISTS(SELECT FROM public.vnext_provider_invocations_v1 author_call WHERE author_call.job_id=j.job_id AND author_call.task='author' AND author_call.state='completed' AND author_call.prompt_version='vnext-research-worker-v4' AND author_call.normalized_output=j.author_result) THEN RAISE EXCEPTION 'vnext_cancellation_profile_binding';END IF;\n"
+        ],
+        [
+          "  IF actor='reviewer' THEN document:=document||jsonb_build_object('authorArtifact',j.author_result); END IF;",
+          "  IF binding.prompt_version='vnext-research-worker-v4' THEN\n   document:=document||jsonb_build_object('symbol',j.symbol,'cancellationContext',public.vnext_cancellation_context_current_v1(j.job_id));\n   IF document->'cancellationContext'='null'::jsonb THEN RAISE EXCEPTION 'vnext_cancellation_baseline_unavailable';END IF;\n   IF actor='reviewer' AND NOT EXISTS(SELECT FROM public.vnext_provider_invocations_v1 author_call WHERE author_call.job_id=j.job_id AND author_call.task='author' AND author_call.state='completed' AND author_call.prompt_version=binding.prompt_version AND author_call.normalized_output=j.author_result AND (author_call.frozen_request->>'input')::jsonb->'cancellationContext'=document->'cancellationContext') THEN RAISE EXCEPTION 'vnext_cancellation_frozen_baseline_changed';END IF;\n  END IF;\n  IF actor='reviewer' THEN document:=document||jsonb_build_object('authorArtifact',j.author_result); END IF;"
+        ]
+      ],
+      "config": [
+        "search_path=pg_catalog, public",
+        "statement_timeout=30s",
+        "lock_timeout=2s"
+      ],
+      "predecessorBodySha256": "14ffe7baa787f6808f2cb1e3250344766a51698ef722268361ef5512621cbcba",
+      "successorBodySha256": "d41813f9270b75573d5d30fa366224fea48c9cb1807487c0ca668e4644100227",
+      "predecessorBytes": 13204,
+      "successorBytes": 14688
+    }
+  ],
+  "newPrivateRoutines": [
+    {
+      "signature": "public.vnext_cancellation_original_v1(jsonb,jsonb,text,timestamp with time zone)",
+      "bodySha256": "318f6ccedbe1f9e1ec41aaba0a141eced386d9bf5c9a16bc72427b81e7aabadd",
+      "bytes": 2750,
+      "executeGrantees": [
+        "stockinsider_vnext_owner"
+      ]
+    },
+    {
+      "signature": "public.vnext_cancellation_context_current_v1(uuid)",
+      "bodySha256": "efbdb20da36455cc06b1ca85523e77410d6b9d1a642b444c8d37df9c3f2dfa5c",
+      "bytes": 7953,
+      "executeGrantees": [
+        "stockinsider_vnext_owner"
+      ]
+    },
+    {
+      "signature": "public.vnext_catalyst_cancellation_current_v1(uuid,text)",
+      "bodySha256": "a994ca77a950345602956d58d51f97a9999f6af4ab5015f9546ba7eef4d92758",
+      "bytes": 11979,
+      "executeGrantees": [
+        "stockinsider_vnext_owner"
+      ]
+    }
+  ],
+  "promptConstraint": {
+    "name": "vnext_provider_bindings_v1_prompt_version_check",
+    "predecessorDefinition": "CHECK ((prompt_version = ANY (ARRAY['vnext-research-worker-v1'::text, 'vnext-research-worker-v2'::text, 'vnext-research-worker-v3'::text])))",
+    "successorDefinition": "CHECK ((prompt_version = ANY (ARRAY['vnext-research-worker-v1'::text, 'vnext-research-worker-v2'::text, 'vnext-research-worker-v3'::text, 'vnext-research-worker-v4'::text])))"
+  },
+  "promptHashes": {
+    "AUTHOR": "52d58cf0cf9682d8d87a601392589b642009ab8423a38c3acd1aaaff6719f5a5",
+    "REVIEWER": "6492f9a20300b9e01e62dc17b184aebfadbd916785c40cc2062dea9c8e02895d"
+  },
+  "preimageScope": {
+    "path": "/tmp/stockinsider-vnext-oct22-private/target-exit-preimage-01/independently-reconstructed-core.sql",
+    "bytes": 41167,
+    "sha256": "47a8d220420b10ac931118262032aac74bc66e94d437d9ac381ad3ab50226074",
+    "meaning": "retained independently reconstructed body only; NOT fresh pg_catalog/OID evidence"
+  },
+  "permissionDelta": "three new owner-only private functions; no old grant, role, membership, table, policy or service RPC mutation",
+  "allowedDelta": "exact two routine bodies, three owner-only functions, finite optional prompt-version constraint",
+  "semanticApproval": false
+}

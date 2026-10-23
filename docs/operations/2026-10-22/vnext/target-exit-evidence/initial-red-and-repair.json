@@ -1,0 +1,63 @@
+{
+  "actualError": {
+    "code": "P0001",
+    "message": "vnext_target_read_edge_predecessor_changed:stock_instruments_v3",
+    "stage": "exact retained rows; full candidate COMMIT with one existing body, three functions and finite read-only edges"
+  },
+  "historyRetained": true,
+  "initialSource": "f55798d9855055cdbfa152385533ce7cb3599048",
+  "laterStages": "NOT_RUN",
+  "readOnlyDiagnosis": [
+    {
+      "columnPrivilege": false,
+      "forceRls": false,
+      "owner": "opportunity_v3_rpc_owner",
+      "policyCount": 0,
+      "rls": true,
+      "table": "opportunity_corporate_action_events_v3",
+      "tablePrivilege": false
+    },
+    {
+      "columnPrivilege": false,
+      "forceRls": false,
+      "owner": "opportunity_v3_rpc_owner",
+      "policyCount": 0,
+      "rls": true,
+      "table": "opportunity_corporate_action_feed_evidence_v3",
+      "tablePrivilege": false
+    },
+    {
+      "columnPrivilege": false,
+      "forceRls": false,
+      "owner": "opportunity_v3_rpc_owner",
+      "policyCount": 0,
+      "rls": true,
+      "table": "opportunity_corporate_action_snapshots_v3",
+      "tablePrivilege": false
+    },
+    {
+      "columnPrivilege": false,
+      "forceRls": false,
+      "owner": "opportunity_v3_rpc_owner",
+      "policyCount": 0,
+      "rls": true,
+      "table": "opportunity_price_observations_v3",
+      "tablePrivilege": false
+    },
+    {
+      "columnPrivilege": false,
+      "forceRls": false,
+      "owner": "opportunity_v3_rpc_owner",
+      "policyCount": 0,
+      "rls": true,
+      "table": "stock_instruments_v3",
+      "tablePrivilege": false
+    }
+  ],
+  "repair": "one finite source owner predicate postgres→opportunity_v3_rpc_owner, as original full history17025 and actualcatalog; no actualALTEROWNER/permission relaxation",
+  "tests": {
+    "fail": 2,
+    "pass": 0
+  },
+  "wholeBusinessStateAfterFailureEqualsBefore": true
+}

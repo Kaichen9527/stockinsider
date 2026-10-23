@@ -1,0 +1,162 @@
+{
+  "checks": [
+    {
+      "name": "retry-terminal-syntax-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/vnext-routine-http.test.mjs"
+      ],
+      "start": "2026-10-23T13:36:52.945187+00:00",
+      "end": "2026-10-23T13:36:53.458016+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8877326336,
+        "/tmp": 17244512256
+      },
+      "finalFree": {
+        "/workspace": 8877326336,
+        "/tmp": 17244512256
+      },
+      "sampledSessionPeakRssBytes": 10354688,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "namedCases": null,
+      "scope": "source/synthetic protocol only, not actual PG T/E/GRANT; repeated runs not additive",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "retry-terminal-syntax-02",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/vnext-routine-http.test.mjs"
+      ],
+      "start": "2026-10-23T13:37:47.487995+00:00",
+      "end": "2026-10-23T13:37:48.000809+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8877326336,
+        "/tmp": 17244508160
+      },
+      "finalFree": {
+        "/workspace": 8877326336,
+        "/tmp": 17244508160
+      },
+      "sampledSessionPeakRssBytes": 9175040,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "namedCases": null,
+      "scope": "source/synthetic protocol only, not actual PG T/E/GRANT; repeated runs not additive",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "namespace-idle-contract-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-source-namespace-source.test.mjs"
+      ],
+      "start": "2026-10-23T13:42:12.954430+00:00",
+      "end": "2026-10-23T13:42:13.464548+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8877223936,
+        "/tmp": 17244499968
+      },
+      "finalFree": {
+        "/workspace": 8877223936,
+        "/tmp": 17244495872
+      },
+      "sampledSessionPeakRssBytes": 8781824,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "namedCases": 9,
+      "scope": "source/synthetic protocol only, not actual PG T/E/GRANT; repeated runs not additive",
+      "logSha256": "8bcd0ef5fbdd4232f64ec1575a6d2f660eaee3a13ec074e62a5bce33891b530c"
+    },
+    {
+      "name": "namespace-idle-contract-02",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-source-namespace-source.test.mjs"
+      ],
+      "start": "2026-10-23T13:43:46.210741+00:00",
+      "end": "2026-10-23T13:43:46.722611+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8877223936,
+        "/tmp": 17244487680
+      },
+      "finalFree": {
+        "/workspace": 8877223936,
+        "/tmp": 17244483584
+      },
+      "sampledSessionPeakRssBytes": 7471104,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "namedCases": 9,
+      "scope": "source/synthetic protocol only, not actual PG T/E/GRANT; repeated runs not additive",
+      "logSha256": "6e690d74c95db6e440e79fd00472d17a2dfc2668d32298f9eb6beb36487242c4"
+    },
+    {
+      "name": "namespace-idle-contract-03",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-source-namespace-source.test.mjs"
+      ],
+      "start": "2026-10-23T13:44:25.530792+00:00",
+      "end": "2026-10-23T13:44:26.045127+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8877223936,
+        "/tmp": 17244479488
+      },
+      "finalFree": {
+        "/workspace": 8877223936,
+        "/tmp": 17244475392
+      },
+      "sampledSessionPeakRssBytes": 5242880,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "namedCases": 9,
+      "scope": "source/synthetic protocol only, not actual PG T/E/GRANT; repeated runs not additive",
+      "logSha256": "2791fbed058746aca05adcb470247462f07878f3738d29f9c64dcc02e50bb5c2"
+    },
+    {
+      "name": "namespace-followup-syntax-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/vnext-routine-http.test.mjs"
+      ],
+      "start": "2026-10-23T13:43:08.125029+00:00",
+      "end": "2026-10-23T13:43:08.640851+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8877223936,
+        "/tmp": 17244491776
+      },
+      "finalFree": {
+        "/workspace": 8877223936,
+        "/tmp": 17244491776
+      },
+      "sampledSessionPeakRssBytes": 8126464,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "namedCases": null,
+      "scope": "source/synthetic protocol only, not actual PG T/E/GRANT; repeated runs not additive",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "workflow": {
+    "yamlParsed": true,
+    "embeddedPythonAST": 29,
+    "timeoutUnchanged": 25,
+    "sourceOnly": true,
+    "sourceSha256": "cb330b281920b6c607c3c560cf5a757c190c2e8fb5784cc0a55a8d33b800b35b"
+  },
+  "candidateActualTAndENegatives": "NOT_RUN, independent review/fresh fixture required",
+  "candidateApplyWired": false,
+  "grantExecuted": false,
+  "reachabilityActualReport": "NOT_RUN at source b42; normal CI pending"
+}

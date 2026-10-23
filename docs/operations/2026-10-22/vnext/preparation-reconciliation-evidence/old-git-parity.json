@@ -1,0 +1,23 @@
+{
+  "currentHelperSha256": "dacfd6c2dacc0f3fdcb256f63068f1b11809a08306a1996df392039fb775f207",
+  "groups": [
+    {
+      "name": "missing-price",
+      "outputSha256": "cd5c6778c6277403313f5e4a5abafb131c51b56e1b78abe958df648ec7ee1921",
+      "pass": true
+    },
+    {
+      "name": "verified-price-and-replacement",
+      "outputSha256": "2c7ea2608fcd1212a76eaf2248091307c25fc042fa4b15c979fe6fba54a4950c",
+      "pass": true
+    },
+    {
+      "name": "verified-flag-empty-history",
+      "outputSha256": "e1396cdd03335ae6ef7a3fd0035b0f2d30d01c89219d6c857f9f7f8d01c67ca0",
+      "pass": true
+    }
+  ],
+  "oldCommit": "1afaa8158e3ee670e481781da936f9b75c02bcb7",
+  "oldProjectionSha256": "fdeb7b3956d1f1381a22f601c1b1f1b8e58d057965348da654a5a4bd90452ad9",
+  "scope": "root independent source-only exact old Git projection vs final helper; no DB/HTTP/financial/model approval"
+}

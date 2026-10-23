@@ -1,0 +1,58 @@
+{
+  "rootScope": "this milestone only; original historical raw/WIP/RED untouched",
+  "count": 10,
+  "bytes": 18386,
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/routine-ccc-annotations-o23.json",
+      "bytes": 9517,
+      "sha256": "87aa54b4232c32d96e8809f37cbba4fe5726fafcf8598a4d41d4d1d6d3410445"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/routine-ccc-runtime-o23.json",
+      "bytes": 2651,
+      "sha256": "5e6591449abcf186951e199383eb8fb309a154b4885702af808b8413f02b1126"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/source-namespace-contract-01.json",
+      "bytes": 861,
+      "sha256": "600cfe6760745589ddac2bf9b0da4143ad7e83d90a7c11c5253675cf59540179"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/source-namespace-contract-01.log",
+      "bytes": 269,
+      "sha256": "c8839458125e43e107aa08598057c32c54946b55bfaa20178e32d6a513c38db3"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/source-namespace-contract-02.json",
+      "bytes": 845,
+      "sha256": "56d4bcf342676ea93c1c21c6387e7c1944611b322d8f882a4ebee885176c1c85"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/source-namespace-contract-02.log",
+      "bytes": 1270,
+      "sha256": "12a250c2b89d97223ed62d1af2baba09c2431ee8690207e8e10bd85e76a7f935"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/source-namespace-contract-03.json",
+      "bytes": 847,
+      "sha256": "b59ec7bdd2fbc438bccbdabd681f94dd71f42541aca24af0ca95764918d82552"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/source-namespace-contract-03.log",
+      "bytes": 1268,
+      "sha256": "7ee652424ad2fd40aa5d2c88686eb325bc9a19953bd8b072eff7d406221f1f53"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/source-namespace-syntax-01.json",
+      "bytes": 858,
+      "sha256": "107130624b60dcf7f0074b870ea2c21e30cbc02fcec2bbc331dd448c12dc2b47"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/source-namespace-syntax-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "inventoryOnly": "Host runner full rows/catalog/TAP not retrieved; local finite annotations/source-check raw retained; no claimed Root contents review"
+}

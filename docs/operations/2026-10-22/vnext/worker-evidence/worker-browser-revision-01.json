@@ -1,0 +1,30 @@
+{
+  "scope": "VM real Chromium / synthetic read-only transport of actual isolated DB snapshots, not real-source or Contabo acceptance",
+  "startedAt": "2026-10-22T01:11:47.905287+00:00",
+  "appSourceSha256": "78655af77fe5d729d7ea290c787c26b8b7db0425065095e9241e64918545b224",
+  "browserVersion": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)",
+  "launcherSha256": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779",
+  "suite": "worker",
+  "snapshotHashes": {
+    "home.json": "6518b7252100b0894fb00b37a15ab59170dc1ca87ad23de97572718cd6099ae2",
+    "detail.json": "96387260671dd2bde648c407cc5b8dce1c547e0b991cca5a89c33d83c18c6752"
+  },
+  "exit": 1,
+  "cleanup": [
+    {
+      "name": "next",
+      "pid": 274182,
+      "exit": 143,
+      "directProcessSettled": true,
+      "procPathAbsent": true
+    },
+    {
+      "name": "bridge",
+      "pid": 274171,
+      "exit": 0,
+      "directProcessSettled": true,
+      "procPathAbsent": true
+    }
+  ],
+  "endedAt": "2026-10-22T01:11:51.054726+00:00"
+}

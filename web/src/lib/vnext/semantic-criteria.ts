@@ -1,0 +1,54 @@
+import {inputHash,taipeiDate} from './policy.ts';
+import type {Artifact,Claim,Evidence,Review} from './research.ts';
+export const CATALYST_CRITERIA=['catalyst_dated','catalyst_verified','catalyst_mechanism_documented','catalyst_falsifier_defined'] as const;
+export type CatalystAnnotation={schemaVersion:'vnext-catalyst-annotation-v1';criterion:typeof CATALYST_CRITERIA[number];outcome:'met'|'not_met'|'unknown';symbol:string;evidenceId:string;contentHash:string;field:'statement';startCp:number;endCp:number;quote:string;catalystAt:string;catalystIdentity:string};
+export type CatalystAssessment={schemaVersion:'vnext-catalyst-assessment-v1';annotation:CatalystAnnotation;assessment:'supported_report'|'supported_inference'|'unsupported'|'insufficient';reason:string};
+type Row=Record<string,unknown>;
+export type CatalystReceipt={schemaVersion:'vnext-catalyst-receipt-v1';revisionId:string;inputHash:string;symbol:string;authorInvocation:string;reviewerInvocation:string;authorExecution:string;reviewerExecution:string;criteria:Array<{criterion:string;annotationHash:string;eventIdentityHash:string;sourceId:string;sourceHash:string;validFrom:string;validUntil:string;met:boolean|null;gap:string|null}>};
+const object=(v:unknown):v is Row=>Boolean(v)&&typeof v==='object'&&!Array.isArray(v);
+const exact=(v:Row,keys:string[])=>Object.keys(v).sort().join('|')===keys.slice().sort().join('|');
+export function catalystCalendarDate(value:unknown){if(typeof value!=='string'||Number(value.slice(0,4))<1||!/^\d{4}-\d{2}-\d{2}$/u.test(value))return false;const ms=Date.parse(`${value}T00:00:00.000Z`);return Number.isFinite(ms)&&new Date(ms).toISOString().slice(0,10)===value;}
+function plusThreeMonths(day:string){const year=Number(day.slice(0,4)),month=Number(day.slice(5,7))-1,date=Number(day.slice(8));const target=new Date(Date.UTC(year,month+3,1));const last=new Date(Date.UTC(target.getUTCFullYear(),target.getUTCMonth()+1,0)).getUTCDate();target.setUTCDate(Math.min(date,last));return target.toISOString().slice(0,10);}
+export function catalystAnnotation(claim:Claim,evidence:Evidence[],cutoff?:string,symbol?:string){
+ const a=claim.semantic as CatalystAnnotation|undefined;const fail=()=>{throw Error('vnext_catalyst_annotation_invalid');};
+ if(!object(a)||!exact(a,['schemaVersion','criterion','outcome','symbol','evidenceId','contentHash','field','startCp','endCp','quote','catalystAt','catalystIdentity'])||['schemaVersion','criterion','outcome','symbol','evidenceId','contentHash','field','quote','catalystAt','catalystIdentity'].some(key=>typeof (a as unknown as Row)[key] !=='string')||a.schemaVersion!=='vnext-catalyst-annotation-v1'||!CATALYST_CRITERIA.includes(a.criterion)||!['met','not_met','unknown'].includes(a.outcome)||claim.kind!=='assumption'||claim.numeric!==undefined||!/^\d{4}$/u.test(a.symbol)||symbol!==undefined&&a.symbol!==symbol||!claim.evidenceIds.includes(a.evidenceId)||a.field!=='statement'||!catalystCalendarDate(a.catalystAt))return fail();
+ const original=evidence.find(e=>e.id===a.evidenceId);const value=original?.value;
+ if(!original||original.kind!=='assumption'||original.sourceTier!=='public'||original.key!=='reported_event'||original.contentHash!==a.contentHash||!object(value)||value.scope!=='official_original'||value.originSource!=='official'||value.claimStatus!=='reported'||!['source_publication','original_event'].includes(String(value.eventBasis))||value.originalContentHash!==a.contentHash||typeof value.statement!=='string'||typeof value.publishedAt!=='string'||!Number.isFinite(Date.parse(value.publishedAt))||!Number.isFinite(Date.parse(original.availableAt))||Date.parse(value.publishedAt)>Date.parse(original.availableAt)||typeof a.quote!=='string'||typeof a.catalystIdentity!=='string')return fail();
+ const points=Array.from(value.statement),identity=Array.from(a.catalystIdentity),quote=Array.from(a.quote);
+ if(!Number.isSafeInteger(a.startCp)||!Number.isSafeInteger(a.endCp)||a.startCp<0||a.endCp<=a.startCp||a.endCp>points.length||quote.length<12||quote.length>1024||identity.length<12||identity.length>160||a.catalystIdentity.trim()!==a.catalystIdentity||points.slice(a.startCp,a.endCp).join('')!==a.quote||!a.quote.includes(a.catalystIdentity)||value.statement.indexOf(a.catalystIdentity)!==value.statement.lastIndexOf(a.catalystIdentity))return fail();
+ if(['catalyst_dated','catalyst_verified'].includes(a.criterion)&&!new RegExp(`(?:^|[^0-9])${a.catalystAt}(?:[^0-9]|$)`,'u').test(a.quote))return fail();
+ const known=cutoff||original.availableAt;if(!Number.isFinite(Date.parse(known))||Date.parse(original.availableAt)>Date.parse(known))return fail();
+ const published=taipeiDate(value.publishedAt),day=taipeiDate(known);
+ if(a.catalystAt<published||a.catalystAt<day||a.catalystAt>plusThreeMonths(published)||a.catalystAt>plusThreeMonths(day))return fail();
+ return {annotation:a,annotationHash:inputHash(a),eventIdentityHash:inputHash({symbol:a.symbol,contentHash:a.contentHash,catalystAt:a.catalystAt,catalystIdentity:a.catalystIdentity}),sourceId:a.evidenceId,sourceHash:a.contentHash,validFrom:value.publishedAt,validUntil:new Date(Date.parse(`${a.catalystAt}T00:00:00+08:00`)+86400000-1).toISOString()};
+}
+export function catalystAssessment(value:unknown,annotation:CatalystAnnotation){
+ if(!object(value)||!exact(value,['schemaVersion','annotation','assessment','reason'])||value.schemaVersion!=='vnext-catalyst-assessment-v1'||inputHash(value.annotation)!==inputHash(annotation)||typeof value.reason!=='string'||value.reason.trim().length<20||value.reason.length>2000||!['supported_report','supported_inference','unsupported','insufficient'].includes(String(value.assessment)))throw Error('vnext_catalyst_assessment_invalid');
+ // Echoed source annotations are compared structurally too: canonical hashing
+ // must never hide an extra acquisition-clock key in untrusted model output.
+ if(!object(value.annotation)||!exact(value.annotation,Object.keys(annotation)))throw Error('vnext_catalyst_assessment_invalid');
+ if(['catalyst_mechanism_documented','catalyst_falsifier_defined'].includes(annotation.criterion)&&value.assessment==='supported_report')throw Error('vnext_catalyst_inference_required');
+ if(['catalyst_dated','catalyst_verified'].includes(annotation.criterion)&&value.assessment==='supported_inference')throw Error('vnext_catalyst_report_required');
+ if(value.assessment==='insufficient'&&annotation.outcome!=='unknown')throw Error('vnext_catalyst_known_outcome_unreviewed');
+ return value as unknown as CatalystAssessment;
+}
+/** Receipt transport is server-owned context, never an HTTP proof parameter.
+ * SQL independently derives it from the original published worker executions. */
+export function catalystChecklist(input:{artifact:Artifact|null;review:Review|null;original:Evidence[];current:Evidence[];cutoff:string;symbol:string;revisionId:string|null;inputHash:string;receipt?:CatalystReceipt|null}){
+ const absent=(criterion:string)=>({key:criterion.slice('catalyst_'.length),met:null as boolean|null,provenance:[] as string[],observedAt:input.cutoff,raw:{criterion,status:'source_bound_criterion_authority_missing'}});
+ try{
+  const r=input.receipt;const uuid=(v:unknown)=>typeof v==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu.test(v);
+  if(!r||!object(r)||!exact(r,['schemaVersion','revisionId','inputHash','symbol','authorInvocation','reviewerInvocation','authorExecution','reviewerExecution','criteria'])||!uuid(r.revisionId)||typeof r.inputHash!=='string'||!/^[a-f0-9]{64}$/u.test(r.inputHash)||typeof r.symbol!=='string'||r.symbol!==input.symbol||!Array.isArray(r.criteria)||r.criteria.some(c=>!object(c)||!exact(c,['criterion','annotationHash','eventIdentityHash','sourceId','sourceHash','validFrom','validUntil','met','gap'])||!CATALYST_CRITERIA.includes(c.criterion as typeof CATALYST_CRITERIA[number])||(['annotationHash','eventIdentityHash','sourceHash'] as const).some(key=>typeof c[key]!=='string'||!/^[a-f0-9]{64}$/u.test(c[key] as string))||typeof c.sourceId!=='string'||typeof c.validFrom!=='string'||typeof c.validUntil!=='string'||!Number.isFinite(Date.parse(c.validFrom))||!Number.isFinite(Date.parse(c.validUntil))||Date.parse(c.validFrom)>Date.parse(c.validUntil)||c.met!==null&&typeof c.met!=='boolean'||c.gap!==null&&!['independent_confirmation_missing','criterion_outcome_unknown','criterion_assessment_insufficient'].includes(String(c.gap)))||r.schemaVersion!=='vnext-catalyst-receipt-v1'||r.revisionId!==input.revisionId||r.inputHash!==input.inputHash||![r.authorInvocation,r.reviewerInvocation,r.authorExecution,r.reviewerExecution].every(uuid)||r.authorInvocation===r.reviewerInvocation||r.authorExecution===r.reviewerExecution||r.criteria.length!==4||!input.artifact||!input.review?.approved||input.review.authorOutputHash!==input.artifact.outputHash)throw Error('receipt_missing');
+  const checks=CATALYST_CRITERIA.map(criterion=>{
+   const claims=input.artifact!.claims.filter(c=>c.semantic?.criterion===criterion);if(claims.length!==1)throw Error('claim_missing');const claim=claims[0];const result=catalystAnnotation(claim,input.original,input.cutoff,input.symbol);
+   if(!input.current.some(e=>e.id===result.sourceId&&e.contentHash===result.sourceHash))throw Error('source_not_current');
+   const reviews=input.review!.claimChecks.filter(c=>c.claimId===claim.id&&c.verdict==='supported');if(reviews.length!==1||!reviews[0].sources.some(s=>s.id===result.sourceId&&s.contentHash===result.sourceHash))throw Error('review_missing');
+   const assessment=catalystAssessment(reviews[0].semanticAssessment,claim.semantic!);if(assessment.assessment==='unsupported')throw Error('unsupported');
+   const receipts=r.criteria.filter(c=>c.criterion===criterion&&c.annotationHash===result.annotationHash&&c.eventIdentityHash===result.eventIdentityHash&&c.sourceId===result.sourceId&&c.sourceHash===result.sourceHash&&Date.parse(c.validFrom)===Date.parse(result.validFrom)&&Date.parse(c.validUntil)===Date.parse(result.validUntil));if(receipts.length!==1)throw Error('receipt_binding');
+   const gap=assessment.assessment==='insufficient'?'criterion_assessment_insufficient':claim.semantic!.outcome==='unknown'?'criterion_outcome_unknown':criterion==='catalyst_verified'&&claim.semantic!.outcome==='met'?'independent_confirmation_missing':null;
+   const met=gap?null:claim.semantic!.outcome==='met';if(receipts[0].met!==met||receipts[0].gap!==gap)throw Error('receipt_outcome');
+   return {key:criterion.slice('catalyst_'.length),met,provenance:[result.sourceHash,result.annotationHash,result.eventIdentityHash],observedAt:result.validFrom,raw:{criterion,status:gap||'independent_model_reviewed_official_report',annotationHash:result.annotationHash,eventIdentityHash:result.eventIdentityHash}};
+  });
+  if(new Set(checks.map(c=>c.raw.eventIdentityHash)).size!==1)throw Error('event_crosswired');return {checks};
+ }catch{return {checks:CATALYST_CRITERIA.map(absent)};}
+}

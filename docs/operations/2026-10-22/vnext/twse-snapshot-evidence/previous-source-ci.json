@@ -1,0 +1,28 @@
+{
+  "observedAt": "2026-10-23T01:31:52.446204+00:00",
+  "sourceHead": "b354da5d7f340194e16a7086d3f3ffcbdb1bee0b",
+  "workflowRunId": 39882967807,
+  "scope": "GitHub ordinary job/step metadata, not downloaded private TAP or authoritative Code Gate",
+  "productRuntime": {
+    "jobId": 120184427156,
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "diagnostic": {
+    "jobId": 120187047635,
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "evaluationGovernance": "skipped",
+  "modelRunner": "skipped",
+  "initialSandboxCommand": {
+    "exit": 1,
+    "error": "proxyconnect socket operation not permitted"
+  },
+  "normalPermissionRead": {
+    "exit": 0,
+    "transport": "original configured gh CLI/proxy, no rerun"
+  },
+  "protectedGateFailuresUnchanged": true,
+  "nativeRawDownloaded": false
+}

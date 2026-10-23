@@ -1,0 +1,22 @@
+{
+  "observedSource": "b42ca4a26cbd499e6f6ce6c424159c491119ece3",
+  "run": 39963820884,
+  "job": 120448346375,
+  "actualMessageBytes": 4096,
+  "messageSha256": "54271c05d82e7c3315fc593aa23491c29071a8d9d5c7355d185c9e5c0527be27",
+  "annotationInventorySha256": "a3c54a19336614417da026f50b31394e924d92b48fdd5db0e168f696b2912e87",
+  "parseError": "Unterminated string starting at: line 1 column 4073 (char 4072)",
+  "firstFiniteCountFieldsOnly": {
+    "tests": 8,
+    "pass": 6,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "fullNoticeVerified": false,
+  "completeReachabilityListRetrieved": false,
+  "restOfB42Receipt": "NOT_OBSERVED; do not transfer b855 cleanup/resources",
+  "sourceGrantExecuted": false,
+  "historicalActualB855Receipt": "../retry-terminal-evidence/actual-b855.json"
+}

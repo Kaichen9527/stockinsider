@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "bytes": 21775,
+      "path": "hosted-observations.json",
+      "sha256": "66d1934d1b5e7f0c65554052369c4e216b7ef9eddca84ddeaa1d95c3d89dd8a2"
+    },
+    {
+      "bytes": 10162,
+      "path": "local-private-inventory.json",
+      "sha256": "45fe844bb0b4c3321c9c6f481cc19a1f3420fb913b14b5e574010387ca9aaadc"
+    },
+    {
+      "bytes": 1656,
+      "path": "retained-reds.json",
+      "sha256": "1a40ce7b48a2cfc757098cb784a95947b9007d22b3201e39511ba1d27b9991ea"
+    },
+    {
+      "bytes": 6077,
+      "path": "source-seal.json",
+      "sha256": "024c27a078310b01f6917ceebf88377b395bc5f41777d6eb529dba2d9fca5365"
+    },
+    {
+      "bytes": 13629,
+      "path": "vm-checks.json",
+      "sha256": "fcdb750262adfe855bcc25a178dc75ca1222dddcd37497f4694918d353a1a7b9"
+    },
+    {
+      "bytes": 4043,
+      "path": "receipt.json",
+      "sha256": "b353f94d9f0570f8e5b21ecf308c966c72ba738378ad43f26d92515547938659"
+    }
+  ],
+  "receiptSha256": "b353f94d9f0570f8e5b21ecf308c966c72ba738378ad43f26d92515547938659",
+  "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae"
+}

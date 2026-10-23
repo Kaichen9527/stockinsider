@@ -1,0 +1,138 @@
+{
+  "observedSource": "b855f6948b6ea86c0d2f5556dddeddc4a7888ddc",
+  "runtimeCommit": "0355678355541f145c85513d0db9ed5a1df60474",
+  "runtimeTree": "72c9e9bda76ddff5e706258b9c804466d2f09407",
+  "treeParityVerified": true,
+  "run": 39962930208,
+  "job": 120445284417,
+  "annotation": {
+    "actualTapCounts": {
+      "tests": 8,
+      "pass": 6,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "tapSha256": "0b4822eec5aced9f99fb6b180fbc07c3a4362dafe84902b6351d6cb3bc1962d3",
+    "failures": [
+      {
+        "stage": "actual source-extract HTTP persists original guarded cache progress and replays without another extraction",
+        "code": "UNKNOWN",
+        "actual": "REDACTED",
+        "expected": "REDACTED",
+        "messageHash": "faed1985da2f47b0d9804c0d6ba2c3f35ce6505c5df7e043143c5b446bfa016d",
+        "tokens": [
+          "vnext_test_source_namespace_not_ready"
+        ]
+      }
+    ],
+    "receiptObserved": true,
+    "sourceScope": "hosted actual HTTP/PG, synthetic originals only",
+    "sourcePrerequisites": [
+      {
+        "sourceOwnerUsage": false,
+        "inputOwnerUsage": false,
+        "descriptorHash": "4bd7e1b3d3e3ab74ac0778cb48c108fca32c72eb5b278bb2dc663d8f2c6d569a",
+        "completeCatalog": {
+          "scopeHash": "530bc6a701e824f06071c37850801a2b5a0dedd4f66affd94477e2382aae6185",
+          "namespaceHash": "16054f4e6542fa1adc697eda2a8429e356feb7798e50495fd23f10867117b842",
+          "catalogHash": "e11aa5072518b8590c416d1d76f64c093d0632c75dbddaf17d3c8d40f0dd8b2d",
+          "existingReadCodecs": true
+        },
+        "noGrant": true,
+        "fullPrivateDescriptorRetained": true
+      }
+    ],
+    "sourceCommit": "0355678355541f145c85513d0db9ed5a1df60474",
+    "results": [
+      {
+        "kind": "routine-admitted",
+        "newJobs": 1,
+        "newMembers": 1,
+        "startedAttempts": 0,
+        "providerInvocations": 0,
+        "noExternalIO": true
+      },
+      {
+        "kind": "real-deadline-expiry",
+        "actualServer120SecondDeadline": true,
+        "noClockOverride": true,
+        "expiredAttemptsRefunded": 0,
+        "retryRows": 1,
+        "retryIdempotent": true,
+        "totalStartedAttempts": 2,
+        "providerInvocations": 0,
+        "noExternalIO": true,
+        "secondExpiryExit": "NOT_RUN"
+      },
+      {
+        "kind": "repeat-and-withdrawal",
+        "jobRowsImmutable": true,
+        "originalsRetained": true,
+        "noAdditionalStartedAttempts": true,
+        "providerInvocations": 0,
+        "noExternalIO": true
+      }
+    ],
+    "pendingQueries": 0,
+    "appExit": 143,
+    "appPidAbsent": true,
+    "clientsSettled": true,
+    "unexpectedExternalFetchObserved": false,
+    "terminalRetry": {
+      "actualSecond120SecondDeadline": true,
+      "noClockOverride": true,
+      "originalAttemptCharged": true,
+      "retryAttemptCharged": true,
+      "startedAttempts": 2,
+      "attemptsRefunded": 0,
+      "retryRows": 1,
+      "secondRetryRejected": true,
+      "oldRequestRetryRejected": true,
+      "activeSlots": 0,
+      "historyRetained": true,
+      "providerInvocations": 0,
+      "preparations": 0,
+      "actualServiceRole": true,
+      "actualHTTP": false,
+      "wholeStateObserved": true
+    },
+    "terminalRetryCleanup": {
+      "priorBackendsAbsent": true,
+      "clientsSettled": true,
+      "pendingQueries": 0
+    },
+    "resources": {
+      "exit": 1,
+      "initialFree": {
+        "/home/runner/work/stockinsider/stockinsider": 88899526656,
+        "/tmp": 88899526656
+      },
+      "finalFree": {
+        "/home/runner/work/stockinsider/stockinsider": 88826421248,
+        "/tmp": 88826421248
+      },
+      "floor": 8589934592,
+      "nextWorksetReference": {
+        "/home/runner/work/stockinsider/stockinsider": 268435456,
+        "/tmp": 536870912
+      },
+      "sampledNotInstantaneous": true,
+      "sampledNodeAndOwnedPgTreePeakRssBytes": 850386944,
+      "resourceViolation": null,
+      "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+      "ownedPg": {
+        "containerId": "9b6232a50071cf6fac0246b70f8b439d01344605bdb2e90eef25541e0b361f5a",
+        "pid": 16878,
+        "start": "17025",
+        "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+        "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+        "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+      }
+    },
+    "resourceReceiptSha256": "5efc332558edb385c395a859ebb57373687a419c96a2e097ef03e712c7ffe4e4"
+  },
+  "rawTapAndRowsRetrieved": false,
+  "wholeSuite": "FAIL mandatory namespace prerequisite, not waived"
+}

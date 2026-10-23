@@ -1,3 +1,4 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { processCandidateFinancialDocumentReceipts } from '@/lib/candidate-financial-document-worker';
 import { acquireProductionWriteLease, releaseProductionWriteLease } from '@/lib/production-write-lease';
@@ -7,6 +8,8 @@ import { requireActiveVpsWriter } from '@/lib/taiwan-data-runtime';
 export const runtime = 'nodejs';
 
 export async function POST(request: Request) {
+  const vnext = await vnextRoute(request, 'candidate-financial-documents/worker');
+  if (vnext) return vnext;
   if (!requireExactInternalBearer(request)) return NextResponse.json({ ok: false, error: 'exact_internal_bearer_required' }, { status: 401 });
   const writer = await requireActiveVpsWriter();
   if (!writer.ok) return NextResponse.json({ ok: false, error: writer.error }, { status: 409 });

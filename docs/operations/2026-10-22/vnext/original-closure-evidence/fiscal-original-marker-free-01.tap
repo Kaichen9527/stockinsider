@@ -1,0 +1,70 @@
+(node:420789) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:420789) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/stockinsider-vnext-oct22/web/src/lib/vnext/disclosed-fiscal-forecast.test.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/stockinsider-vnext-oct22/web/package.json.
+TAP version 13
+# Subtest: actual original producer binds calendar/fixed shares/four exact common-income periods with Unicode spans
+ok 1 - actual original producer binds calendar/fixed shares/four exact common-income periods with Unicode spans
+  ---
+  duration_ms: 5.547242
+  ...
+# Subtest: receipt adapter version is not an artificial required issuer-disclosure marker
+ok 2 - receipt adapter version is not an artificial required issuer-disclosure marker
+  ---
+  duration_ms: 55.503658
+  ...
+# Subtest: annual forecast is an assumption with explicit full year; never reported annual EPS
+ok 3 - annual forecast is an assumption with explicit full year; never reported annual EPS
+  ---
+  duration_ms: 3.245415
+  ...
+# Subtest: non-January fiscal calendar works without mislabelling fiscal quarters as calendar-quarter summary
+ok 4 - non-January fiscal calendar works without mislabelling fiscal quarters as calendar-quarter summary
+  ---
+  duration_ms: 1.194255
+  ...
+# Subtest: missing/duplicate calendar or share terms, denominator inference, wrong unit/owner and missing or disordered periods reject
+ok 5 - missing/duplicate calendar or share terms, denominator inference, wrong unit/owner and missing or disordered periods reject
+  ---
+  duration_ms: 8.779135
+  ...
+# Subtest: exact division, losses, leap year and next-future-quarter restriction are deterministic
+ok 6 - exact division, losses, leap year and next-future-quarter restriction are deterministic
+  ---
+  duration_ms: 1.321974
+  ...
+# Subtest: current read reconstructs full original and immutable receipt/calculation; no caller schema or trusted descriptor
+ok 7 - current read reconstructs full original and immutable receipt/calculation; no caller schema or trusted descriptor
+  ---
+  duration_ms: 4.958892
+  ...
+# Subtest: hash-correct scalar/receipt tampering, missing original, classification, source, issuer and clocks still reject
+ok 8 - hash-correct scalar/receipt tampering, missing original, classification, source, issuer and clocks still reject
+  ---
+  duration_ms: 18.359511
+  ...
+# Subtest: actual preparation and author/distinct-review contract consume full original plus exact four-quarter calculation, not reported annual
+ok 9 - actual preparation and author/distinct-review contract consume full original plus exact four-quarter calculation, not reported annual
+  ---
+  duration_ms: 24.927637
+  ...
+# Subtest: the same receive byte/depth caps and current public-source restriction are retained
+ok 10 - the same receive byte/depth caps and current public-source restriction are retained
+  ---
+  duration_ms: 15.531028
+  ...
+# Subtest: unknown metadata is refused even when the material hash intentionally ignores its key
+ok 11 - unknown metadata is refused even when the material hash intentionally ignores its key
+  ---
+  duration_ms: 18.280103
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 181.984386

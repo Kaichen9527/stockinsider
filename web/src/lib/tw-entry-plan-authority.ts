@@ -314,3 +314,74 @@ export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, r
     return { ...base, missingData: [error instanceof Error && /^[a-z0-9_]+$/u.test(error.message) ? error.message : 'entry_authority_read_failed'] };
   }
 }
+
+export type TwEntryHistoricalAuthorityResult={notEntryAuthority:true;nextSessionAuthority:false;completedSessions:string[];bars:Array<TwEntryBar & {observationId:string;rawClose:number;sourceTimestamp:string;recordedAt:string;sourceUrl:string}>;priceBasis:TwEntryPriceBasis|null;sourceDatasetRevision:string;availableAt:string;missingData:string[]};
+/** Read-only historical comparison authority. It grants no next-session entry
+ * authority and never fetches a calendar, prices or corporate actions. */
+export async function loadTwEntryHistoricalPriceAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<TwEntryHistoricalAuthorityResult> {
+  const base: TwEntryHistoricalAuthorityResult = { notEntryAuthority:true,nextSessionAuthority:false,completedSessions:[],bars: [], priceBasis: null, sourceDatasetRevision: `${VERSION}:unavailable`,
+    availableAt: request.cutoff, missingData: [] };
+  try {
+    requireAuthority(UUID.test(request.stockId) && /^\d{4}$/u.test(request.symbol) && ['TWSE', 'TPEX'].includes(request.exchange)
+      && date(request.signalSession) && Number.isFinite(timestamp(request.cutoff)) && timestamp(request.cutoff)<=Date.now(), 'entry_authority_request_invalid');
+    const shared = await sharedAuthority(client, request);
+    // The existing authority proves price factors, not share-volume factors.
+    // A recent split/reduction can make raw volume ratios incomparable; do not
+    // infer a share adjustment from a price adjustment (cash events differ).
+    const volumeBasisChanged = shared.sessions.slice(-21).some((session) => {
+      const snapshot = shared.snapshots.get(session);
+      return snapshot && (shared.events.get(text(snapshot.snapshot_id)) || []).some((event) => event.symbol === request.symbol
+        && ['capital_reduction', 'par_value_change'].includes(text(event.event_kind)));
+    });
+    requireAuthority(!volumeBasisChanged, 'volume_basis_changed_within_lookback');
+    const { cutoff, stockId, exchange, signalSession } = request;
+    const raw = await readRows((from, to) => client.from('opportunity_price_observations_v3')
+      .select('observation_id,stock_id,exchange,session_id,session_authority_id,raw_open,raw_high,raw_low,raw_close,volume,provider,source_timestamp,collected_at,source_ref,recorded_at')
+      .eq('stock_id', stockId).eq('exchange', exchange).eq('provider', exchange.toLowerCase())
+      .gte('session_id', shared.sessions[0]).lte('session_id', signalSession)
+      .lte('source_timestamp', cutoff).lte('collected_at', cutoff).lte('recorded_at', cutoff)
+      .order('session_id').order('source_timestamp', { ascending: false }).order('collected_at', { ascending: false })
+      .order('recorded_at', { ascending: false }).order('observation_id').range(from, to), 4000);
+    for (const row of raw) requireAuthority(knownAt(row, cutoff) && row.stock_id === stockId && row.exchange === exchange
+      && row.provider === exchange.toLowerCase() && UUID.test(text(row.observation_id))
+      && text(row.source_ref).startsWith(`${exchange.toLowerCase()}-`)
+      && shared.calendarById.get(text(row.session_authority_id))?.session_id === row.session_id
+      && shared.calendarById.get(text(row.session_authority_id))?.status === 'completed',
+    'raw_price_authority_invalid');
+    const heads = selectedHeads(raw, 'session_id', ['source_timestamp', 'collected_at', 'recorded_at'],
+      ['raw_open', 'raw_high', 'raw_low', 'raw_close', 'volume', 'session_authority_id']);
+    requireAuthority(shared.sessions.every((session) => heads.has(session)), 'adjusted_history_below_240');
+    const evidenceHashes: string[] = [];
+    const bars = shared.sessions.map((session) => {
+      const row = heads.get(session)!;
+      requireAuthority(typeof row.volume === 'number' && Number.isFinite(row.volume) && row.volume >= 0
+        && timestamp(row.source_timestamp) >= timestamp(shared.calendarRows.get(session)!.close_at), 'raw_price_authority_invalid');
+      const actionDays = shared.sessions.filter((day) => day > session).map((day) => {
+        const snapshot = shared.snapshots.get(day)!;
+        const action = shared.events.get(text(snapshot.snapshot_id))!.find((event) => event.symbol === request.symbol);
+        return [day, snapshot.session_authority_id, snapshot.snapshot_id, snapshot.dataset_hash,
+          action ? [action.event_kind, action.pre_action_reference_price, action.post_action_reference_price, action.feed_identity, action.source_row_ref] : null,
+          action?.daily_adjustment_factor ?? 1];
+      });
+      const factor = actionDays.reduce((product, member) => product * Number(member[5]), 1);
+      const adjusted = [row.raw_open, row.raw_high, row.raw_low, row.raw_close].map((value) => Number(value) * factor);
+      const evidence = ['adjusted-price-evidence-v3.1', signalSession, row.observation_id, row.source_ref, row.session_authority_id,
+        row.raw_open, row.raw_high, row.raw_low, row.raw_close, actionDays, factor, ...adjusted];
+      const ref = hash(evidence);
+      const candidate = { session, exchange, open: adjusted[0], high: adjusted[1], low: adjusted[2], close: adjusted[3],
+        rawSourceRef: row.source_ref, rawSourceUrl: exchange === 'TWSE' ? 'https://www.twse.com.tw/' : 'https://www.tpex.org.tw/', adjustmentEvidence: evidence, adjustmentEvidenceRef: ref };
+      const validateEvidence = validAdjustedEvidence as unknown as (row: unknown, sessions: Set<string>) => boolean;
+      requireAuthority(validateEvidence(candidate, new Set(shared.sessions)), 'adjusted_price_evidence_invalid');
+      evidenceHashes.push(ref);
+      // Every historical point on the signal-session scale becomes knowable only
+      // after the final action snapshot, even when its raw bar is much older.
+      return { session, open: adjusted[0], high: adjusted[1], low: adjusted[2], close: adjusted[3], volume: row.volume,
+        availableAt: maxTime(row.recorded_at, shared.availableAt), sourceRef: ref,observationId:text(row.observation_id),rawClose:Number(row.raw_close),sourceTimestamp:text(row.source_timestamp),recordedAt:text(row.recorded_at),sourceUrl:exchange==='TWSE'?'https://www.twse.com.tw/':'https://www.tpex.org.tw/' };
+    });
+    const priceBasis: TwEntryPriceBasis = { kind: 'adjusted_to_signal_session', anchorSession: signalSession,
+      adjustmentVersion: 'tw-corporate-action-v3.1', adjustmentEvidenceHash: hash(evidenceHashes), status: 'verified' };
+    return {notEntryAuthority:true,nextSessionAuthority:false,completedSessions:[...shared.sessions],bars,priceBasis,sourceDatasetRevision:`${VERSION}:historical:${hash(evidenceHashes)}`,availableAt:maxTime(shared.availableAt,...bars.map((bar)=>bar.availableAt)),missingData:[]};
+  } catch (error) {
+    return { ...base, missingData: [error instanceof Error && /^[a-z0-9_]+$/u.test(error.message) ? error.message : 'entry_authority_read_failed'] };
+  }
+}

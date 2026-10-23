@@ -1,0 +1,232 @@
+{
+  "sourceCommit": "6410c9a1b09697bf65567879574baf6b83a32cd7",
+  "productSourceCommit": "cee65ca8dd8b3ec12bc53b434d17b5913d15592f",
+  "recordedAtUtc": "2026-10-22T00:46:46.794224+00:00",
+  "publicFiles": [
+    {
+      "path": "browser/browser-final-scoped-cases.json",
+      "bytes": 2508,
+      "sha256": "5df40f9ea75893b9b15adc88b5abdafdcc9be235ca825451557f65583813d943"
+    },
+    {
+      "path": "browser/browser-final-scoped-receipt.json",
+      "bytes": 1336,
+      "sha256": "e5863937eeaf634e0dfa6339a3d62e5067bf3ff1aa77bc0ac8cf2f3c2d7c09a3"
+    },
+    {
+      "path": "browser/browser-revision-cases.json",
+      "bytes": 689,
+      "sha256": "c7d431e7040035cc1285042ffdf35c76268baf03c5a7be74e5e3e3499259ee70"
+    },
+    {
+      "path": "browser/browser-revision-receipt.json",
+      "bytes": 1533,
+      "sha256": "c1706e8968c8bae867151a3b5faef493bd2a941946e75bd9a7b0f04e373a5a9b"
+    },
+    {
+      "path": "browser/route-assertions.json",
+      "bytes": 1058,
+      "sha256": "538dc72c093dead51c9ffaa0d7e44e7843125383ff0e0b93529942e8fd4172c4"
+    },
+    {
+      "path": "ci-observation.json",
+      "bytes": 3949,
+      "sha256": "0112dd3381a492f3f3507f80a86e9a077375f07074427830f5bd159815861437"
+    },
+    {
+      "path": "cleanup.json",
+      "bytes": 4918,
+      "sha256": "1db5723683e02fb830928feba0210ab7e7ac05057ba6d21e4f68ca3f902c13e5"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 19808,
+      "sha256": "ccbd6f599ab2600e609c110a366c7300dc8bd84ae052218f2e39290b0b43da49"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 1149,
+      "sha256": "0bd3f4543b99e344da2edebcd146b41929a2b05e61cab5525ec82da97921ce7e"
+    },
+    {
+      "path": "native-witness.json",
+      "bytes": 14714,
+      "sha256": "931cf53a7a29da712e4d8c216a9f5945b9c82436e509c51bebcc1b382ae52e35"
+    },
+    {
+      "path": "ordinary-ci.json",
+      "bytes": 3310,
+      "sha256": "1823d186c4a7c96e0d65501a6965ea72ea64fb323496e489b4f1a692979a459e"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 84671,
+      "sha256": "7d18378c8854c3a957d668511dcb3eda6a7eae6254a5bca389e752b82a734825"
+    },
+    {
+      "path": "red-history.json",
+      "bytes": 11640,
+      "sha256": "c7b25cf30cb26d3d52ef8a668c58240b9002f0624eda4395db2cf955e700c1f1"
+    },
+    {
+      "path": "screenshots/detail-desktop.png",
+      "bytes": 343045,
+      "sha256": "70a23956b78742359df2156f1e21a2077202f8b6c120d1fdeca0508524f6f2f2"
+    },
+    {
+      "path": "screenshots/detail-mobile.png",
+      "bytes": 816241,
+      "sha256": "12cf2d7a553e202e0a9cd9722c55f77a2134fac16abbdd52f797615901217fd8"
+    },
+    {
+      "path": "screenshots/homepage-desktop.png",
+      "bytes": 214627,
+      "sha256": "bc3f36b882282a618b00cd8207c42959d3c18cb35fa080d4c95d4db675bb94be"
+    },
+    {
+      "path": "screenshots/homepage-mobile.png",
+      "bytes": 621609,
+      "sha256": "3613bd37ecd2417bc46acadb7d258d9cb87613f290dc3426d68c2e3e7fec02c4"
+    },
+    {
+      "path": "screenshots/revised-detail-desktop.png",
+      "bytes": 506070,
+      "sha256": "71e289ce48942831e01d06cdaff850060e31cbede290a8e3bf5f594464448291"
+    },
+    {
+      "path": "screenshots/revised-detail-mobile.png",
+      "bytes": 1516270,
+      "sha256": "56ce05b9d9ca55f6405c79bb57aa9eb7688e08e7b3ea346620b755852b06d0aa"
+    },
+    {
+      "path": "source-canaries.json",
+      "bytes": 1475,
+      "sha256": "45377ed39e4c812e5d545de1c8907a8d4d02f9ced108645d05f9c2a455282d45"
+    },
+    {
+      "path": "source-inventory.json",
+      "bytes": 686242,
+      "sha256": "a6cc3df407f4da7478fc72b794b2030c9d6f34350fabd24afdf0a67eca95434a"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 17513,
+      "sha256": "e48f5bfdc0a266988368100765a2467d1c8e2bad23c0b3f918307a1aaf1c311b"
+    },
+    {
+      "path": "tap/final-boundary-direct.tap",
+      "bytes": 340,
+      "sha256": "a9d58106a6966594bd2f2e6cb792885f5e01020ec3e30b3896c082faecfdf5cf"
+    },
+    {
+      "path": "tap/final-discovery-direct.tap",
+      "bytes": 372,
+      "sha256": "526b492df9e004431342fd9d5f6e9573ffb9d122b1a11ff4b242e8d9576ae140"
+    },
+    {
+      "path": "tap/final-pure-rotation.tap",
+      "bytes": 3776,
+      "sha256": "aceb5d016b4c0b567b72641641f004bd7fd13854a5a905d3219031f2a53391e5"
+    },
+    {
+      "path": "tap/native-admission-final.tap",
+      "bytes": 966,
+      "sha256": "1ca3e83f1e72fac2144a77fef28cc1e41c3b90cc4879bb73550ca9af18b536cc"
+    },
+    {
+      "path": "tap/native-business-sealed.tap",
+      "bytes": 1329,
+      "sha256": "bbc9e6162e9aebfa2e97dfcd3cb11326fe778c9ba5e76106febbd791c753026d"
+    },
+    {
+      "path": "tap/native-http-final.tap",
+      "bytes": 611,
+      "sha256": "7ac8855b7e0c3cab81e20cab3b9054d093cb6780b8cc9e7860643a8d5b2c2a2d"
+    },
+    {
+      "path": "tap/native-legacy-final.tap",
+      "bytes": 1039,
+      "sha256": "fa67f60cd35b3e1ab9bc9b4732d3584ca4cc0a76b7cf2a472d2ad70b6b9c666d"
+    },
+    {
+      "path": "tap/native-revision-02.tap",
+      "bytes": 928,
+      "sha256": "82010615d5dbaadb7d7eabcf9f06f7587c132e3338c8c46adcd9fbc1e7ef05df"
+    },
+    {
+      "path": "tap/native-rotation-01.tap",
+      "bytes": 321,
+      "sha256": "51244bf4fa9d1a5823f4ff986655ebb1ce219ff15b7cd1786986c0284ad83b2c"
+    },
+    {
+      "path": "tap/regression-candidate-core.tap",
+      "bytes": 5755,
+      "sha256": "ffccd67b9b0c4349ec8a64d57838655ba7baf627bd8753aeeb27cb369d96f67c"
+    },
+    {
+      "path": "tap/regression-candidate-financial-documents.tap",
+      "bytes": 556,
+      "sha256": "62a144ac2170418434c408da21f9caf521264dfdce9d8761b6f78b8e9823ff92"
+    },
+    {
+      "path": "tap/regression-financial-parser-writable-config.tap",
+      "bytes": 829,
+      "sha256": "afd05297747bd92f30946c49fa94d8d66d62a50473eb016691ad3a972fb57a41"
+    },
+    {
+      "path": "tap/regression-official-financials.tap",
+      "bytes": 4087,
+      "sha256": "ef06525ce874dd5db27bff7ada7cb173096ec57e7ffde40ea7ec9056ee7c85fd"
+    },
+    {
+      "path": "tap/regression-source-policy.tap",
+      "bytes": 2053,
+      "sha256": "8f9dbe7a2c91b4966079ec886bcaa004566734ce102591fa2c90b3ff500ed7d1"
+    },
+    {
+      "path": "tap/regression-tw-market.tap",
+      "bytes": 4829,
+      "sha256": "407d093c139a358c58f32bd0799a0b0b4bdeb5decc97c275f21d9997b2ddd032"
+    },
+    {
+      "path": "tap/regression-write-lease-routes-direct.tap",
+      "bytes": 1835,
+      "sha256": "05eaf43ed6f97f8ea6cddf074bf862c04c446c8df31e3ae410cc40aae96bb5de"
+    }
+  ],
+  "handoffFiles": [
+    {
+      "path": "docs/operations/2026-10-22/vnext/DELIVERY.md",
+      "bytes": 12770,
+      "sha256": "6687f775329ab1c52af29681c5f10c0b32e6ce509b5b72737a4dc772144884bf"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/PR-BODY.md",
+      "bytes": 2907,
+      "sha256": "ab63f8cfba083719c628cab1a3a623abcc9895535e2ea50ddab8a543961e035e"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/EVIDENCE-ALLOWLIST.md",
+      "bytes": 2053,
+      "sha256": "b85c9d70d9398d7c9dd8a3c6cb52be06912cacc5dbbcf0fb13519afadc3c7a27"
+    },
+    {
+      "path": "openspec/changes/stockinsider-vnext-20/tasks.md",
+      "bytes": 2383,
+      "sha256": "375ff4bfaba8ef2edda10a85369d8ce360ce3fbf2c2ac8187c2438b5cfd5d751"
+    },
+    {
+      "path": "openspec/changes/stockinsider-vnext-20/acceptance.md",
+      "bytes": 4270,
+      "sha256": "28207d32eb1aa91c5dbe96891d646da93c7c2b596d7331b36d57b8ea4ee357f4"
+    },
+    {
+      "path": ".loop-engineering/state/changes/stockinsider-vnext-20/status.json",
+      "bytes": 544,
+      "sha256": "589cdcdd0bfbe9c649742ce2bef025512777882cd49317101f58ce68a36db7f0"
+    }
+  ],
+  "privateInventoryScopeOnly": true,
+  "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
+  "makerIndependentApproval": false
+}

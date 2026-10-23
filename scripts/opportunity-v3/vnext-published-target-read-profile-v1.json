@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "vnext-published-target-read-source-v1",
+  "migration": "migrations/20261024_vnext_published_target_read_v1.sql",
+  "migrationSha256": "b7c0c8992c0dbd45fedaf8ddbe2a9d235b15f06a2365e819e4f51f45aad07260",
+  "nativeVerified": false,
+  "nativeOids": null,
+  "modifiedRoutines": [
+    {
+      "signature": "public.vnext_target_current_v1(text,uuid,text)",
+      "predecessorBodySha256": "2cb716f773f8e5069c56f7f85aa20677bd7c83cfa6a12ecc2784ca8ffb8c393f",
+      "predecessorBytes": 17075,
+      "successorBodySha256": "802d70c4a65be2e32b03206471c054479539e694ef4c761efebf451501edf365",
+      "successorBytes": 17526,
+      "fragments": [
+        [
+          "IF (price->'quote'->>'raw_close')::numeric<base THEN RETURN jsonb_build_object('deferred','target_not_reached');END IF;",
+          "IF (price->'quote'->>'raw_close')::numeric<base THEN RETURN jsonb_build_object('deferred','target_not_reached','originalBaseline',original_scenarios,'rebasing',CASE WHEN rebasing IS NULL THEN NULL ELSE rebasing||jsonb_build_object('receiptHash',encode(sha256(convert_to(public.vnext_catalog_canonical_v1(rebasing),'UTF8')),'hex')) END,'currentPrice',jsonb_build_object('value',price->'quote'->'raw_close','session',price->>'session','observationId',price->'quote'->>'observation_id'));END IF;"
+        ],
+        [
+          "IF rebasing IS NOT NULL THEN receipt:=receipt||jsonb_build_object('rebasing',",
+          "receipt:=receipt||jsonb_build_object('originalBaseline',original_scenarios);\n IF rebasing IS NOT NULL THEN receipt:=receipt||jsonb_build_object('rebasing',"
+        ]
+      ],
+      "predecessorProconfig": [
+        "search_path=pg_catalog, public",
+        "statement_timeout=30s",
+        "lock_timeout=2s"
+      ]
+    },
+    {
+      "signature": "public.vnext_read_v1(text)",
+      "predecessorBodySha256": "8a6eb1914c1292fae55f6683d661976de0a09aaae277a3bbfbdcc6a7ffa85f3d",
+      "predecessorBytes": 1088,
+      "successorBodySha256": "20259a7fb00e81257ca6a18faafb3131383f60876272885c09b8fc6566a7d85b",
+      "successorBytes": 2435,
+      "fragments": [],
+      "predecessorProconfig": [
+        "search_path=pg_catalog, public"
+      ]
+    },
+    {
+      "signature": "public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)",
+      "predecessorBodySha256": "f78c879d15d5e9ccce1a15207f9a0f6543e0cf10f58c51bb48ff37d664058320",
+      "predecessorBytes": 13251,
+      "successorBodySha256": "a13c35a4ed4438e3b23f94bc8c4c1cb3f2851ae57c9d5915997495073303ba1d",
+      "successorBytes": 13332,
+      "fragments": [
+        [
+          "IF (event_item->>'event_ordinal')::integer<>ordinal OR",
+          "IF jsonb_typeof(event_item->'daily_adjustment_factor') IS DISTINCT FROM 'number' OR (event_item->>'event_ordinal')::integer<>ordinal OR"
+        ]
+      ],
+      "predecessorProconfig": [
+        "search_path=pg_catalog, public",
+        "statement_timeout=30s",
+        "lock_timeout=2s"
+      ]
+    }
+  ],
+  "catalogQuerySha256": "4398383090e87441958cdf11f0802889e33b70839d25fc30374faf3e125b62cb",
+  "scope": "source-derived three existing body deltas only; current/read plus finite null-adjustment rejection; no new signature/permission/role; grammar/catalog/COMMIT/current baseline/race NOT_RUN on this source",
+  "predecessor": "full action terms candidate installed; complete read predecessor base+thesis projection unchanged by subsequent current-projector bodies",
+  "initialNativeFailure": {
+    "subject": "aa59b7d3c317d01921c1c999dab360c988b239db",
+    "run": 39993673265,
+    "job": 120551546798,
+    "code": "P0001",
+    "message": "vnext_target_read_predecessor_changed",
+    "finding": "new precondition incorrectly assumed target current had only search_path; exact original constructor also has statement_timeout30s/lock_timeout2s; source-derived correction only, no ACL/body hash or old profile change"
+  }
+}

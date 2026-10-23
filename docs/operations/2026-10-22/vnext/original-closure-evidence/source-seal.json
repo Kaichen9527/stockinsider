@@ -1,0 +1,48 @@
+{
+  "source": "43c38c0a2ff0bc0d0b1bcdb97b33ce261655fc44",
+  "parent": "e09cbd4927263d7b75063d424007f0d4fb752321",
+  "files": [
+    {
+      "path": "migrations/20261023_vnext_disclosed_fiscal_forecast_v1.sql",
+      "bytes": 59486,
+      "sha256": "74c0031ed29df2a999cb031eecfb39511f7b1a66328794f1886272fb9193aa4d"
+    },
+    {
+      "path": "openspec/changes/stockinsider-vnext-20/disclosed-fiscal-forecast-design.md",
+      "bytes": 4332,
+      "sha256": "a4b7c0d88f2021d6bf93ef92f14a883db808f1585c0531ea03fc5955ad68c9b5"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-disclosed-fiscal-profile-v1.json",
+      "bytes": 9230,
+      "sha256": "bc5a327f07a4ab39b304c593032aa4461f65ec476fe4b177281c6acc4b3f3adb"
+    },
+    {
+      "path": "web/src/lib/vnext/corporate-action-terms.test.ts",
+      "bytes": 11942,
+      "sha256": "34d864d547ae8e1b38069d70b24f4ec793dd8397b3f6c8475605e7c6473a8179"
+    },
+    {
+      "path": "web/src/lib/vnext/corporate-action-terms.ts",
+      "bytes": 15351,
+      "sha256": "68b74c3206e639977cebbf278759263c2c3c53832e3a53a7dadf2da9f4f5f886"
+    },
+    {
+      "path": "web/src/lib/vnext/disclosed-fiscal-forecast.test.ts",
+      "bytes": 10691,
+      "sha256": "3257824c115cfcf4c3a79884a9cf3e14b9215c0e2bb196b0908a2355aaf114c7"
+    },
+    {
+      "path": "web/src/lib/vnext/disclosed-fiscal-forecast.ts",
+      "bytes": 12546,
+      "sha256": "cb786a89da9f2fd211ae290ccd5f9346e8c16c7d11b1b767f4043b07c5d3388a"
+    }
+  ],
+  "changes": [
+    "complete action evidence equality rejects ignored timing/metadata keys; original material hash unchanged",
+    "receipt adapter version is no longer required as a software label in issuer original; eleven real term labels still mandatory, full original retained",
+    "only new fiscal parser body/source pin/profile migration hash change; all four actual predecessor pins, other new bodies/ACL/roles/limits/old SQL unchanged"
+  ],
+  "nativeThisSource": "NOT_RUN at seal",
+  "scope": "narrow labelled-original adapter candidate, not verified coverage of real issuer document formats; no actual MOPS/provider acquisition occurred"
+}

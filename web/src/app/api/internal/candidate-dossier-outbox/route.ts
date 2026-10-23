@@ -1,3 +1,4 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { getSupabaseServerClient } from '@/lib/supabase-server';
@@ -9,6 +10,8 @@ type Row = Record<string, unknown>;
  * published to the public research revision; it never recalculates scores.
  */
 export async function POST(request: Request) {
+  const vnext = await vnextRoute(request, 'candidate-dossier-outbox');
+  if (vnext) return vnext;
   if (!requireExactInternalBearer(request)) return NextResponse.json({ ok: false, error: 'exact_internal_bearer_required' }, { status: 401 });
   const body = await request.json().catch(() => ({})) as Row;
   const owner = String(body.owner || '').trim();

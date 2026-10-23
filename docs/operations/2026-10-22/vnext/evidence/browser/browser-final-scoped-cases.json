@@ -1,0 +1,92 @@
+{
+  "stats": {
+    "startTime": "2026-10-22T00:32:24.053Z",
+    "duration": 20575.572,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "file": "vnext.spec.ts",
+      "title": "same published contract drives exactly two primary blocks and detail/history",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1803,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "empty and unavailable states never fill from legacy cards",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 861,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "unknown revision cannot fall back to a different research version",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 843,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 522,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "loading remains an explicit two-block state and preserves source links",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 3572,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "same published contract drives exactly two primary blocks and detail/history",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 2112,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "empty and unavailable states never fill from legacy cards",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 1196,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "unknown revision cannot fall back to a different research version",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 876,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 403,
+      "retry": 0
+    },
+    {
+      "file": "vnext.spec.ts",
+      "title": "loading remains an explicit two-block state and preserves source links",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 4037,
+      "retry": 0
+    }
+  ]
+}

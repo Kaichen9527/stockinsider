@@ -1,0 +1,528 @@
+{
+  "source": "d8c8acf91baab7d408ddb46fcebb0bc38bbc02e0",
+  "runtime": {
+    "parents": [
+      "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "d8c8acf91baab7d408ddb46fcebb0bc38bbc02e0"
+    ],
+    "sha": "3b0a72775b7a380ca56886c58e41e0c736d765b8",
+    "tree": "9cd26ceab7f48068de584e6cbeac568d3deb2b9c"
+  },
+  "wholeTreeAndParentParity": true,
+  "run": 39983508733,
+  "job": 120516619915,
+  "overall": "FAIL",
+  "jobsAndSteps": [
+    {
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/120516619663",
+      "conclusion": "success",
+      "id": 120516619663,
+      "name": "cancellation-native",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Fixed native dependency and workset admission",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Fresh source-bound cancellation via distinct reviewer and atomic publication/exit (synthetic metadata)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Hash finite owned raw evidence without publishing private contents",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Upload finite catalyst-cancellation TAP and summary only",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/120516619915",
+      "conclusion": "failure",
+      "id": 120516619915,
+      "name": "vnext-quality",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Workspace and temporary filesystem admission",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Install unchanged locked dependencies",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Actual source contracts, types and lint",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Full ordinary build",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Actual durable worker journal with explicitly synthetic provider",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "failure",
+          "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "failure",
+          "name": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Hash bounded forecast preparation raw receipts without publishing contents",
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Fresh routine-screen actual HTTP admission and withdrawal (synthetic originals)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Fresh original-bound business components via distinct review/current public projection (synthetic metadata)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Hash finite owned raw evidence without publishing private contents",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Upload finite business-criteria TAP and summary only",
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Same-build desktop and mobile browser over current-run PostgreSQL snapshots",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Upload finite browser summaries and synthetic screenshots only",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/120516619977",
+      "conclusion": "success",
+      "id": 120516619977,
+      "name": "trading-invalidity-native",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Fixed native dependency and workset admission",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Fresh official-roster invalidity installer and unpublished exits (synthetic metadata)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Hash finite owned raw evidence without publishing private contents",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Upload finite trading-invalidity TAP and summary only",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "check_run_url": "https://api.github.com/repos/Kaichen9527/stockinsider/check-runs/120516620126",
+      "conclusion": "success",
+      "id": 120516620126,
+      "name": "roster-current-native",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Fixed native dependency and workset admission",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Fresh current-work, claim and reserve invalidity fences (synthetic metadata)",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Hash finite owned raw evidence without publishing private contents",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Upload finite roster-current TAP and summary only",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "status": "completed"
+        }
+      ]
+    }
+  ],
+  "finiteObserved": [
+    {
+      "title": "Business criteria cleanup receipt",
+      "value": {
+        "pgRunning": false,
+        "pgPid": 0,
+        "pgExit": 0,
+        "shutdownLogObserved": true,
+        "socketAbsence": {
+          ".s.PGSQL.5432": true,
+          ".s.PGSQL.5432.lock": true
+        },
+        "resourceReceiptObserved": true,
+        "ownedProcessCounts": {
+          "absent": 23,
+          "zeroRssZombie": 0,
+          "pidReused": 0,
+          "unsettled": 0
+        },
+        "fullPrivateCleanupSha256": "016ed16ed70543f8180ea8d6330dac45ce44ea9d476afcc6e44bc2a9122609ac",
+        "dataRetained": true
+      }
+    },
+    {
+      "title": "Business criteria finite native receipt",
+      "value": {
+        "scope": "actual original-bound business inference/current context/audit/public projection/withdrawal; synthetic facts/provider only; no group points, bounded-risk or semantic approval",
+        "sourceHead": "3b0a72775b7a380ca56886c58e41e0c736d765b8",
+        "tapSha256": "3fdfbe60e2ad1645951cc5582608e262077a7a0f369c53a0ac2ff7fb0a722f1a",
+        "actualTapCounts": {
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "resourceObserved": true,
+        "queryEventsPrivateSha256": "38f2b38f0ea4253cda79436540d25fa370a6da679dee46eda0fcb31c138f8fc5",
+        "exit": 0,
+        "resourceViolation": null,
+        "sampledNotInstantaneous": true,
+        "sampledOwnedTreePeakRssBytes": 741388288,
+        "initialFree": {
+          "/home/runner/work/stockinsider/stockinsider": 88756178944,
+          "/tmp": 88756178944
+        },
+        "finalFree": {
+          "/home/runner/work/stockinsider/stockinsider": 88685715456,
+          "/tmp": 88685715456
+        },
+        "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+        "actualPg": {
+          "containerId": "989fa1fbc5e8e006d6217957296027417acae3c8158cef95b11425c7ce31b1b8",
+          "pid": 16977,
+          "start": "43596",
+          "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+          "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+          "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+        },
+        "inputCount": 17,
+        "inputInventorySha256": "92c7fa2a7c04048fe88cb4d157c435c349b647ee03a3f566c3136c05338b5480",
+        "inputInventoryCodec": "utf8_sorted_keys_compact_json_v1"
+      }
+    },
+    {
+      "title": "Forecast private inventory",
+      "value": {
+        "count": 39,
+        "bytes": 162021871,
+        "inventorySha256": "0438f9e259da431a7f29c67151e456a94fdb2bc3471159744cf6118d8134a13e",
+        "rawContentsPublished": false
+      }
+    },
+    {
+      "title": "Preparation actual cleanup receipt",
+      "value": {
+        "pgRunning": false,
+        "pgPid": 0,
+        "pgExit": 0,
+        "shutdownObserved": true,
+        "serverLogSha256": "ec9d7e942ea9af99b488dfb61d59f1c1aeb304a1f35c27bdb4858229353ca392",
+        "ownedProcessObservations": [
+          {
+            "pid": 16577,
+            "absent": true
+          },
+          {
+            "pid": 16721,
+            "absent": true
+          },
+          {
+            "pid": 16720,
+            "absent": true
+          },
+          {
+            "pid": 16719,
+            "absent": true
+          },
+          {
+            "pid": 16717,
+            "absent": true
+          },
+          {
+            "pid": 16716,
+            "absent": true
+          },
+          {
+            "pid": 16750,
+            "absent": true
+          },
+          {
+            "pid": 16814,
+            "absent": true
+          },
+          {
+            "pid": 16842,
+            "absent": true
+          },
+          {
+            "pid": 16841,
+            "absent": true
+          },
+          {
+            "pid": 16844,
+            "absent": true
+          },
+          {
+            "pid": 16845,
+            "absent": true
+          },
+          {
+            "pid": 16859,
+            "absent": true
+          }
+        ],
+        "unsettled": false,
+        "zombieIsNotAbsent": true,
+        "clusterRetained": true,
+        "wholeSocketRootAbsence": "NOT_CHECKED"
+      }
+    },
+    {
+      "title": "Forecast current numeric acceptance",
+      "value": {
+        "sourceHead": "3b0a72775b7a380ca56886c58e41e0c736d765b8",
+        "observedWitnesses": [],
+        "actualTapCounts": {
+          "tests": 1,
+          "pass": 0,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "tapSha256": "5e94dc5392668e4eaeb8075d1665a2edbe88f033e4f957476a2df902de068dde",
+        "privateRowsPublished": false
+      }
+    },
+    {
+      "title": "Preparation finite HTTP diagnostic",
+      "value": {
+        "stage": "preflight",
+        "code": "ERR_ASSERTION",
+        "actual": false,
+        "expected": true,
+        "messageHash": "d8e069eb68bc8145a3de8e19dd8f8162be511fc517bc0e873a51aac9beeb9cfb",
+        "tokens": []
+      }
+    }
+  ],
+  "preparationRoot": {
+    "scope": "exact source-only reconstruction of original assert error hash + actual stage/values, not a native clock override",
+    "messageSha256": "d8e069eb68bc8145a3de8e19dd8f8162be511fc517bc0e873a51aac9beeb9cfb",
+    "originalGuard": "explicit synthetic weekday calendar only; unknown/nontrading fixture not invented",
+    "localAndHostedTime": "observed run reached Taipei Saturday; no weekday/system clock/source pin changed",
+    "businessPrepareRecoveryActionTerms": "NOT_REACHED",
+    "tests": 1,
+    "pass": 0,
+    "fail": 1
+  },
+  "sameBuildBusiness": "7PASS finite receipt; not transferred to new fiscal source",
+  "browser": "not reached in this source when original thesis dependency failed; earlier e1 browser groups remain separate",
+  "privateContents": "inventory-only, not downloaded/secured/visually reviewed",
+  "newFiscalSourceNative": "NOT_RUN at seal"
+}

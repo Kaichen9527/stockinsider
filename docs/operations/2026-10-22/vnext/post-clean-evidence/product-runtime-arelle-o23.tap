@@ -1,0 +1,18 @@
+TAP version 13
+# Subtest: local parser fails closed until the reviewed VPS interpreter is configured
+ok 1 - local parser fails closed until the reviewed VPS interpreter is configured
+# Subtest: Arelle adapter returns hash-bound XBRL context locators when the local dependency exists
+ok 2 - Arelle adapter returns hash-bound XBRL context locators when the local dependency exists
+# Subtest: offline parser implementation retains its local-only boundaries
+ok 3 - offline parser implementation retains its local-only boundaries
+# Subtest: production adapter uses an isolated Unix socket instead of spawning under the web identity
+ok 4 - production adapter uses an isolated Unix socket instead of spawning under the web identity
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 654.224418

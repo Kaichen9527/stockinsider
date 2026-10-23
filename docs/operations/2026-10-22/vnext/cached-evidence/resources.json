@@ -1,0 +1,92 @@
+{
+  "cached-admission-final-direct-01": {
+    "sampleCount": 4,
+    "minimumFreeBytes": {
+      "/workspace": 10371194880,
+      "/tmp": 17639378944
+    },
+    "sampledSessionPeakRssBytes": 133271552,
+    "resourceViolation": null
+  },
+  "cached-admission-final-pure-01": {
+    "sampleCount": 1,
+    "minimumFreeBytes": {
+      "/workspace": 10371194880,
+      "/tmp": 17639374848
+    },
+    "sampledSessionPeakRssBytes": 4587520,
+    "resourceViolation": null
+  },
+  "cached-admission-final-discovery-02": {
+    "sampleCount": 5,
+    "minimumFreeBytes": {
+      "/workspace": 10362572800,
+      "/tmp": 17639321600
+    },
+    "sampledSessionPeakRssBytes": 130486272,
+    "resourceViolation": null
+  },
+  "cached-admission-final-thesis-01": {
+    "sampleCount": 3,
+    "minimumFreeBytes": {
+      "/workspace": 10371194880,
+      "/tmp": 17639350272
+    },
+    "sampledSessionPeakRssBytes": 137863168,
+    "resourceViolation": null
+  },
+  "cached-admission-final-type-01": {
+    "sampleCount": 24,
+    "minimumFreeBytes": {
+      "/workspace": 10362626048,
+      "/tmp": 17639313408
+    },
+    "sampledSessionPeakRssBytes": 740417536,
+    "resourceViolation": null
+  },
+  "cached-admission-final-type-02": {
+    "sampleCount": 25,
+    "minimumFreeBytes": {
+      "/workspace": 10362572800,
+      "/tmp": 17639333888
+    },
+    "sampledSessionPeakRssBytes": 750903296,
+    "resourceViolation": null
+  },
+  "financial-summary-direct-01": {
+    "sampleCount": 1,
+    "minimumFreeBytes": {
+      "/workspace": 10371424256,
+      "/tmp": 17639428096
+    },
+    "sampledSessionPeakRssBytes": 5242880,
+    "resourceViolation": null
+  },
+  "financial-summary-worker-regression-01": {
+    "sampleCount": 1,
+    "minimumFreeBytes": {
+      "/workspace": 10371321856,
+      "/tmp": 17639395328
+    },
+    "sampledSessionPeakRssBytes": 4849664,
+    "resourceViolation": null
+  },
+  "cached-native-01": {
+    "sampleCount": 8,
+    "minimumFreeBytes": {
+      "/workspace": 9450008576,
+      "/tmp": 17550401536
+    },
+    "sampledSessionPeakRssBytes": 224145408,
+    "resourceViolation": null
+  },
+  "cached-native-02": {
+    "sampleCount": 5,
+    "minimumFreeBytes": {
+      "/workspace": 9449984000,
+      "/tmp": 17547423744
+    },
+    "sampledSessionPeakRssBytes": 139902976,
+    "resourceViolation": null
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "status": "PASS",
+  "checks": 8,
+  "scope": "actual isolated VM OpenSSH; not Contabo login or application/database staging acceptance",
+  "clientFingerprint": "SHA256:okaAaYWT1dHe4K1VaZkQige6fGObt4t5lpWa8K7sBpY",
+  "clientExpiryUnchanged": "2026-10-22T00:08:18.319460+00:00",
+  "bootstrapSha256": "564a76c835e3504af52764e1a9bc5b3d546a815a38c677c5384d6de14543a902",
+  "serverVersion": "OpenSSH_9.2, OpenSSL 3.0.22 25 Aug 2026",
+  "permissionMetadata": "/srv/stockinsider-vnext-oct22-staging root si-vnext-oct22 750\n/srv/stockinsider-vnext-oct22-staging/.ssh root si-vnext-oct22 750\n/srv/stockinsider-vnext-oct22-staging/.ssh/authorized_keys root si-vnext-oct22 640\n",
+  "hostKeyScope": "owned container only, not Contabo trust",
+  "container": "stockinsider-vnext-oct22-sshd",
+  "privateRecords": 18,
+  "recordsScope": "private full fixture records retained on Codex VM; not independently verified by coordinator",
+  "historicalHarnessReds": [
+    "missing test sshd Subsystem declaration",
+    "PTY denial correctly returned255, initial test incorrectly expected0"
+  ],
+  "privateEvidenceInventory": [
+    {
+      "name": "sshd-configured-subsystem-red-records.json",
+      "bytes": 4958,
+      "sha256": "59d902fb991e7f043e9f90663e0b03ea9116618c95d07ac5be8f551c5ccce602"
+    },
+    {
+      "name": "sshd-final-private-records.json",
+      "bytes": 9973,
+      "sha256": "7a5cd9acc65eca33fd3314cadcedb161783eadc9c0961691266d05cfa1398b35"
+    },
+    {
+      "name": "sshd-install-debian-only.json",
+      "bytes": 3963,
+      "sha256": "a577ce8324aa29f766be1de15a8708f8a502674f39774db61054b326d9cad857"
+    },
+    {
+      "name": "sshd-install-debian-only.log",
+      "bytes": 10751,
+      "sha256": "9033c62842f2192a0be640913a554d91139199d003b9bbfc19b8cf16c9a717ca"
+    },
+    {
+      "name": "sshd-install.json",
+      "bytes": 1900,
+      "sha256": "71bad9888d8213a9e6b5c9f63ef935886898ce704d5b6ecabcc5b5361a7fc496"
+    },
+    {
+      "name": "sshd-install.log",
+      "bytes": 829,
+      "sha256": "a107c9cb169e07def3afd7ff585c67a821b57392c16eb8da41b33668b7162b15"
+    },
+    {
+      "name": "sshd-private-records.json",
+      "bytes": 4958,
+      "sha256": "59d902fb991e7f043e9f90663e0b03ea9116618c95d07ac5be8f551c5ccce602"
+    },
+    {
+      "name": "sshd-proof-configured-subsystem.json",
+      "bytes": 1184,
+      "sha256": "e9e4e1794cee53d97ad8afe1d195cb7f04a28959e1995c06480d73ed60909f8b"
+    },
+    {
+      "name": "sshd-proof-configured-subsystem.log",
+      "bytes": 1301,
+      "sha256": "2e67d3fb6aee482cd286d061538e556c667130b8405b2341b85b8f38eccee2af"
+    },
+    {
+      "name": "sshd-proof-final.json",
+      "bytes": 1560,
+      "sha256": "e4819eac23518c8fcbb6422283aa3272af1bffaddeb5e4f324fd15f2eb7fcdf7"
+    },
+    {
+      "name": "sshd-proof-final.log",
+      "bytes": 808,
+      "sha256": "ec74d739e20b9a91df9c5cd21bbfdb836ec496051b44e02b13cdc2aa4a5ef0fe"
+    },
+    {
+      "name": "sshd-proof.json",
+      "bytes": 1372,
+      "sha256": "23d442ef0b48ffc916232064e2aae8104e18749f46299eebc4f4f0bb9765b29b"
+    },
+    {
+      "name": "sshd-proof.log",
+      "bytes": 1109,
+      "sha256": "f6272c6667adfd7a2dedea604b394a47064805b2736ea11934ec11d4a4904293"
+    },
+    {
+      "name": "sshd-safe-receipt.json",
+      "bytes": 808,
+      "sha256": "ec74d739e20b9a91df9c5cd21bbfdb836ec496051b44e02b13cdc2aa4a5ef0fe"
+    },
+    {
+      "name": "sshd-test.conf",
+      "bytes": 284,
+      "sha256": "bcb22fb0bc34005416ed98fed9a6ef7de15f660644c6e9c5a24ea0ab3f952864"
+    }
+  ],
+  "productionOperations": 0
+}

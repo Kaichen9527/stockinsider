@@ -1,0 +1,64 @@
+{
+  "3": {
+    "at": "2026-10-22T01:34:19.915583+00:00",
+    "stopExit": 0,
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-22T01:32:31.075517385Z",
+      "FinishedAt": "2026-10-22T01:34:19.827031642Z"
+    },
+    "zeroOtherBackendsBeforeStop": true,
+    "socketAbsent": true,
+    "serverShutdownObserved": true,
+    "dataAndDirectoryRetained": true,
+    "source": "3a64af06a5a6bd04a47a39843afd2cf3a395f5b1"
+  },
+  "4": {
+    "stopExit": 0,
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-22T01:35:52.063454775Z",
+      "FinishedAt": "2026-10-22T01:37:32.453401575Z"
+    },
+    "zeroOtherBackendsBeforeStop": true,
+    "socketAbsent": true,
+    "serverShutdownObserved": true,
+    "dataAndDirectoryRetained": true
+  },
+  "5": {
+    "stopExit": 0,
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-22T01:37:34.241483925Z",
+      "FinishedAt": "2026-10-22T01:39:51.413479859Z"
+    },
+    "zeroOtherBackendsBeforeStop": true,
+    "socketAbsent": true,
+    "serverShutdownObserved": true,
+    "dataAndDirectoryRetained": true
+  }
+}

@@ -1,0 +1,697 @@
+{
+  "bytes": 3243472,
+  "count": 138,
+  "files": [
+    {
+      "bytes": 450,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-admission-o23.json",
+      "sha256": "6cc74b1b488546abcd8912dcd90415834bded295d49b6fbe2796272208c63f03"
+    },
+    {
+      "bytes": 2225,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-cleanup-o23.json",
+      "sha256": "9543e836bb385f1c040f3bade980b37ab891e859fc1b5e75430f4d1d7c0d853c"
+    },
+    {
+      "bytes": 17691,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-fresh-plan-01.mjs",
+      "sha256": "3ef9f7dc0d124957bbeb0a83070cc2e8ef3060c245db61aa2e4210df6a9f83a7"
+    },
+    {
+      "bytes": 2135,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-monitored-o23.json",
+      "sha256": "c70df15e62d6ecac8100a329b1cf41670568f2a2c4979e89f6e26cd392b6c8af"
+    },
+    {
+      "bytes": 0,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-monitored-o23.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 311,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-pg-binary-o23.json",
+      "sha256": "a41519593225e587ab613b477bd489ce49255d1e6a8ccf738c6dbda0026c010a"
+    },
+    {
+      "bytes": 585,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-plan-review-o23.json",
+      "sha256": "13215c5ce3a41a4defc79aa657f926ae89eedb8f0e47933cc0fc83dc2a346f4b"
+    },
+    {
+      "bytes": 1151,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-postrun-o23.json",
+      "sha256": "245c0e8889fb4a8bf9e284f46bdb917f3b8e072610f1eb57d20edc29428f2d58"
+    },
+    {
+      "bytes": 721,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-retained-o23/catalyst-query-events.json",
+      "sha256": "ebcf480d77b66b15bbba22d7a7790765bf7caf341b1645cffdbb5359430d7936"
+    },
+    {
+      "bytes": 170,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-retained-o23/cleanup.json",
+      "sha256": "31f29bdeb0591ec863f8823d58e7af1dcadd526787c1a955da6f3a70147fe3fa"
+    },
+    {
+      "bytes": 356630,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-retained-o23/final-state.json",
+      "sha256": "15b5d243b7c6036f77c6292bddcce2a2c24415f6c263c037c1e79fab0c610926"
+    },
+    {
+      "bytes": 1074077,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-retained-o23/install.json",
+      "sha256": "86700dde3106f4fd3aa0b4a8562554628e9e8ed7d162a6ef2ec3b88090ef0ee2"
+    },
+    {
+      "bytes": 3,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-retained-o23/query-events.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 98,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-retained-o23/repeat.json",
+      "sha256": "a64ca1b9f444fbc3c9b28c95ca343a0f585fe94334d1f0fbddae722a0e1f2286"
+    },
+    {
+      "bytes": 83387,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-server-o23.log",
+      "sha256": "4f0a6b0a7c77b4d7854f436edd4674dccd2b50261f4d00d7129a27fac0fbf228"
+    },
+    {
+      "bytes": 713114,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-native-source-seal-o23.json",
+      "sha256": "f9fe85bb785622dee4da631a4017e0ddb2a15e6c37a406caf585a7eb7e12252f"
+    },
+    {
+      "bytes": 884,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-authority-01.json",
+      "sha256": "f2940135293e1673e06f54f32f254460e113d728ede410de02f043cdc745377a"
+    },
+    {
+      "bytes": 1420,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-authority-01.log",
+      "sha256": "7725a6b05baef002edf2740896dcd5394fedd6661544d49edeec2a8ad34aa3ea"
+    },
+    {
+      "bytes": 864,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-core-01.json",
+      "sha256": "84c25bca2d7b7619a74b5590e8fcec334b7b86cc120bf643fa092ea14dfd2151"
+    },
+    {
+      "bytes": 5032,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-core-01.log",
+      "sha256": "7a34429e42fa9ae489fe3b4ff39f2fa7474762ec08421b0f50d829f275900af4"
+    },
+    {
+      "bytes": 1246,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-discovery-01.json",
+      "sha256": "79337c90e1a555ed55b0d180222688335cd7476d93dd48b07600577e3be2649b"
+    },
+    {
+      "bytes": 986,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-discovery-01.log",
+      "sha256": "5f8f142e4af17721526ecc89e6a5ab020f9a280e0689ed74b4c80270eecf3e9b"
+    },
+    {
+      "bytes": 1629,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-failure-01.json",
+      "sha256": "f59c11de970aa5fd9fcf63cf69b9c3a65065e2eb4c935788e1746d6fc1a8fa0a"
+    },
+    {
+      "bytes": 2291,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-failure-01.log",
+      "sha256": "423b9d6ebef5fd5027481eb0bcf1e15eb230fbd030a447f2201f4b15f7c356ab"
+    },
+    {
+      "bytes": 1451,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-preparation-01.json",
+      "sha256": "cd811c1cf9b2da0d22976c57303f5f33225396ca78a146173d2fb869f8f2fc09"
+    },
+    {
+      "bytes": 3573,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-preparation-01.log",
+      "sha256": "f06e6ea35ff08d2263923e9930310cd47ddfa88f5d7fba999a3f474c56468076"
+    },
+    {
+      "bytes": 1243,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-thesis-01.json",
+      "sha256": "8fa32d472a6b2a854763fc7252ba088c1f34d7d549fe18f91d00b4085a9ceae0"
+    },
+    {
+      "bytes": 3754,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-thesis-01.log",
+      "sha256": "ad4b9fa2e4162aa99c8bb97b7395c1faf946b031922fffe5c674334b31d75d9a"
+    },
+    {
+      "bytes": 865,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-worker-01.json",
+      "sha256": "711a903fa6cfbfe70bff91e4b640927923b4f74dd0097ef271a774aff44a697f"
+    },
+    {
+      "bytes": 2640,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-regression-worker-01.log",
+      "sha256": "8a8f958fe6535652dfacdf1e54260e9a5761cc2f797a06e6270178747e566e71"
+    },
+    {
+      "bytes": 300,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-root-source-check-initial-red-o23.json",
+      "sha256": "a2d22b0d8ec3481633c94e290619bfc49814b2aa6fb7027baf5efce8dd231964"
+    },
+    {
+      "bytes": 926,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-root-source-review-o23.json",
+      "sha256": "26865713e246d0a3b3ac3f00309772baef8665675d34be1ff59b011a7c3318dc"
+    },
+    {
+      "bytes": 2652,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-lint-01.json",
+      "sha256": "89cf2cd52308ad0b2cdba6bf3a39d49dc429c4ac5c873ed0f56b8ee54a1bf389"
+    },
+    {
+      "bytes": 0,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-lint-01.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 734,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-01/inventory.json",
+      "sha256": "ca5e1f39511a6b919c2c4c0513fd4f996f104415eb6c81f98e0d9415da3026ec"
+    },
+    {
+      "bytes": 8157,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-01/web__src__lib__vnext__research.ts",
+      "sha256": "3e6b5d90f485de289d1a61349147dce06b9770a85ccb96f34de0fb3d18f4ad37"
+    },
+    {
+      "bytes": 10791,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-01/web__src__lib__vnext__thesis-audit.ts",
+      "sha256": "64a45cc20d8ba3c5d74143503f5be783468c13f20866a4236b8502cee859bec6"
+    },
+    {
+      "bytes": 6235,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-01/web__src__lib__vnext__weekly-worker.ts",
+      "sha256": "d50264f887d94f0f1bd7810cd27cd10b64e82e90c39b2b764957a14c71096204"
+    },
+    {
+      "bytes": 5883,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-01/web__src__lib__vnext__worker-output.ts",
+      "sha256": "add3e20ce8e58399485c613d646fd0a1881dbeed49f88df201593ea2e1d68025"
+    },
+    {
+      "bytes": 4943,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-01/web__src__lib__vnext__worker-prompts.ts",
+      "sha256": "769e61fd281fffd64f49f1bdbba8c889451f3c418dca50d94dfff8f315d52f48"
+    },
+    {
+      "bytes": 631,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-02/inventory.json",
+      "sha256": "bb995fbf7f22f39ce8eba9bebd8f0debcf3d5f6987ae8a2a6e1b881dc1e7ee11"
+    },
+    {
+      "bytes": 3654,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-02/web__src__lib__vnext__automatic-worker.ts",
+      "sha256": "032f04e6a6ec5d41714adb8b80091b267f57c62f6d6e6b903ed20c563bb02908"
+    },
+    {
+      "bytes": 1908,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-02/web__src__lib__vnext__discovery-test-loader.mjs",
+      "sha256": "fc8b2c4f0c5c517f24b01fc479df1f9692c1a6b1bcde43784090878806c3ba44"
+    },
+    {
+      "bytes": 20581,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-02/web__src__lib__vnext__preparation-reconciliation.test.ts",
+      "sha256": "d7ea1461fc75926eddf391b73eba83b9163828e12d2537d97c77822e95b9a4ea"
+    },
+    {
+      "bytes": 10633,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-02/web__src__lib__vnext__research-failure.test.ts",
+      "sha256": "59aa7c724828b8ba3892610205c483c3960280379e9074df2ee66cb57f0209a9"
+    },
+    {
+      "bytes": 148,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-03/inventory.json",
+      "sha256": "668483c0246e1baafc6f58f181ebace57111a2713224a68c72013fc5e3943dc7"
+    },
+    {
+      "bytes": 8900,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-preimage-03/worker-core.ts",
+      "sha256": "c1003f49e755b1fe69d16e75ff893af23190b839ad28d9d31e0528582829ceb7"
+    },
+    {
+      "bytes": 2156,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/inventory.json",
+      "sha256": "5eddb39e7ed55db002003b7fddfffbef7f642e8705dfc71a4e76e9a6896f7716"
+    },
+    {
+      "bytes": 32093,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/migrations__20261022_vnext_catalyst_criteria_v1.sql",
+      "sha256": "94ba9404aa854a47984e32004c8bf429dbc5bfe82c777d41e43577803acee6c7"
+    },
+    {
+      "bytes": 5157,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/scripts__opportunity-v3__vnext-catalyst-criteria-profile-v1.json",
+      "sha256": "ccfcaa7df11e068e4dc9957c2e0a79ee85f5d45555442e58c3a9ba7cf3ebb343"
+    },
+    {
+      "bytes": 3685,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__automatic-worker.ts",
+      "sha256": "f811ba7c1668767c7f03d9a6be865e6b63f651fb58e98818427e8487201afa5e"
+    },
+    {
+      "bytes": 19877,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__catalyst-criteria.test.ts",
+      "sha256": "0b35a6a57d0f7a0599708dc20a7ae90e3a2994c43a3950a4364dea9323afd8fd"
+    },
+    {
+      "bytes": 1931,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__discovery-test-loader.mjs",
+      "sha256": "beddf040fa11a706150392c558bb95daa6650633b8b591b7177dc3776771e917"
+    },
+    {
+      "bytes": 20604,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__preparation-reconciliation.test.ts",
+      "sha256": "966a6edf812b8d6f84bab3396179a7ab7a1a5a388b0d96b895e6bc1a87073850"
+    },
+    {
+      "bytes": 10656,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__research-failure.test.ts",
+      "sha256": "87cb7720add5606ca54b702ed59bb1ec540758150c5d2f3cdf26df97b4deee99"
+    },
+    {
+      "bytes": 8959,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__research.ts",
+      "sha256": "26848464305f3e59be2dd8c1a2ef58fa87c0b8508ad07d2c9034fa049572040f"
+    },
+    {
+      "bytes": 10077,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__semantic-criteria.ts",
+      "sha256": "76949a9d6f04e4c1b4191efc77ab7207daa38622da38df87244a084193765c8b"
+    },
+    {
+      "bytes": 11293,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__thesis-audit.ts",
+      "sha256": "97e4f5a004300284407eb980ec8dfc253167955dc2f4e0f01a7c9912fdf64d3d"
+    },
+    {
+      "bytes": 6371,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__weekly-worker.ts",
+      "sha256": "dff54004148d5abba58fc301f4aa36fed83208d651a1bc89dd60811f5f87c182"
+    },
+    {
+      "bytes": 10022,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__worker-core.ts",
+      "sha256": "76b3e8dc277cc4123fb5dd46b3e15a28cf510c9d00e6ba28896c481d50d172e2"
+    },
+    {
+      "bytes": 5915,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__worker-output.ts",
+      "sha256": "34238779dcbe4bbe6556b07b807ad608b89c3fa416b3e15368c5d3bd49b6c9eb"
+    },
+    {
+      "bytes": 8927,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01/web__src__lib__vnext__worker-prompts.ts",
+      "sha256": "3d997b583da40d0798d08f47464b757844c21849ae8afcb2c9210768b85fb255"
+    },
+    {
+      "bytes": 876,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01.json",
+      "sha256": "edb7770919da05278e273455337cfb7663f4f51508e37a4ba8701ec6ed966a60"
+    },
+    {
+      "bytes": 13126,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-01.log",
+      "sha256": "81037e96ffdce18e6ecbd483d2cf7b8b5febda294b51d8e657b31ebc8f6b0622"
+    },
+    {
+      "bytes": 2156,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/inventory.json",
+      "sha256": "e9d974ab5527f58d04aa4af2fb485e9c027fa04aa828251ce19dfef3e4d84a16"
+    },
+    {
+      "bytes": 32093,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/migrations__20261022_vnext_catalyst_criteria_v1.sql",
+      "sha256": "94ba9404aa854a47984e32004c8bf429dbc5bfe82c777d41e43577803acee6c7"
+    },
+    {
+      "bytes": 5157,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/scripts__opportunity-v3__vnext-catalyst-criteria-profile-v1.json",
+      "sha256": "ccfcaa7df11e068e4dc9957c2e0a79ee85f5d45555442e58c3a9ba7cf3ebb343"
+    },
+    {
+      "bytes": 3685,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__automatic-worker.ts",
+      "sha256": "f811ba7c1668767c7f03d9a6be865e6b63f651fb58e98818427e8487201afa5e"
+    },
+    {
+      "bytes": 19877,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__catalyst-criteria.test.ts",
+      "sha256": "0b35a6a57d0f7a0599708dc20a7ae90e3a2994c43a3950a4364dea9323afd8fd"
+    },
+    {
+      "bytes": 1931,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__discovery-test-loader.mjs",
+      "sha256": "beddf040fa11a706150392c558bb95daa6650633b8b591b7177dc3776771e917"
+    },
+    {
+      "bytes": 20604,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__preparation-reconciliation.test.ts",
+      "sha256": "966a6edf812b8d6f84bab3396179a7ab7a1a5a388b0d96b895e6bc1a87073850"
+    },
+    {
+      "bytes": 10656,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__research-failure.test.ts",
+      "sha256": "87cb7720add5606ca54b702ed59bb1ec540758150c5d2f3cdf26df97b4deee99"
+    },
+    {
+      "bytes": 8959,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__research.ts",
+      "sha256": "26848464305f3e59be2dd8c1a2ef58fa87c0b8508ad07d2c9034fa049572040f"
+    },
+    {
+      "bytes": 10077,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__semantic-criteria.ts",
+      "sha256": "ac6c79ef26b2273a3da63be7fff03c6b68107213006d6419d36dc01401e2b982"
+    },
+    {
+      "bytes": 11293,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__thesis-audit.ts",
+      "sha256": "97e4f5a004300284407eb980ec8dfc253167955dc2f4e0f01a7c9912fdf64d3d"
+    },
+    {
+      "bytes": 6371,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__weekly-worker.ts",
+      "sha256": "dff54004148d5abba58fc301f4aa36fed83208d651a1bc89dd60811f5f87c182"
+    },
+    {
+      "bytes": 10022,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__worker-core.ts",
+      "sha256": "76b3e8dc277cc4123fb5dd46b3e15a28cf510c9d00e6ba28896c481d50d172e2"
+    },
+    {
+      "bytes": 5915,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__worker-output.ts",
+      "sha256": "34238779dcbe4bbe6556b07b807ad608b89c3fa416b3e15368c5d3bd49b6c9eb"
+    },
+    {
+      "bytes": 8927,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02/web__src__lib__vnext__worker-prompts.ts",
+      "sha256": "3d997b583da40d0798d08f47464b757844c21849ae8afcb2c9210768b85fb255"
+    },
+    {
+      "bytes": 1064,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02.json",
+      "sha256": "49cbd270a07109df09a2fe9e15e6203c23ccc1f70fb46700efe42c6cb9135de3"
+    },
+    {
+      "bytes": 4382,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-02.log",
+      "sha256": "9955688ab361fd249d5aeacf7ff27a055c95c0f0a5b4367dcf45b92141f8430e"
+    },
+    {
+      "bytes": 2156,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/inventory.json",
+      "sha256": "b8023a97f9540aed7d4128599ffe672420aa5020e717008e4c8eaf2c5d1b6422"
+    },
+    {
+      "bytes": 32451,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/migrations__20261022_vnext_catalyst_criteria_v1.sql",
+      "sha256": "7e66f8b04bd660ae494169c0159e44100ae17334e5e6a005ed0e48367427a4db"
+    },
+    {
+      "bytes": 5157,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/scripts__opportunity-v3__vnext-catalyst-criteria-profile-v1.json",
+      "sha256": "dc23604fdbab231e00dffba6eac74519d86e046cc4c56bd8208574361ad9e317"
+    },
+    {
+      "bytes": 3685,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__automatic-worker.ts",
+      "sha256": "f811ba7c1668767c7f03d9a6be865e6b63f651fb58e98818427e8487201afa5e"
+    },
+    {
+      "bytes": 20028,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__catalyst-criteria.test.ts",
+      "sha256": "b16ea5f3b1e8b8d4c628aecbf0bfc9ee324bf946ee985edce092c7f2666eae62"
+    },
+    {
+      "bytes": 1931,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__discovery-test-loader.mjs",
+      "sha256": "beddf040fa11a706150392c558bb95daa6650633b8b591b7177dc3776771e917"
+    },
+    {
+      "bytes": 20604,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__preparation-reconciliation.test.ts",
+      "sha256": "966a6edf812b8d6f84bab3396179a7ab7a1a5a388b0d96b895e6bc1a87073850"
+    },
+    {
+      "bytes": 10656,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__research-failure.test.ts",
+      "sha256": "87cb7720add5606ca54b702ed59bb1ec540758150c5d2f3cdf26df97b4deee99"
+    },
+    {
+      "bytes": 8959,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__research.ts",
+      "sha256": "26848464305f3e59be2dd8c1a2ef58fa87c0b8508ad07d2c9034fa049572040f"
+    },
+    {
+      "bytes": 10912,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__semantic-criteria.ts",
+      "sha256": "93c6b9d1b7cdf7a68bb478cd7bbce8a2d575c5a1b720695631567c3fb1419d2c"
+    },
+    {
+      "bytes": 11293,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__thesis-audit.ts",
+      "sha256": "97e4f5a004300284407eb980ec8dfc253167955dc2f4e0f01a7c9912fdf64d3d"
+    },
+    {
+      "bytes": 6371,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__weekly-worker.ts",
+      "sha256": "dff54004148d5abba58fc301f4aa36fed83208d651a1bc89dd60811f5f87c182"
+    },
+    {
+      "bytes": 10022,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__worker-core.ts",
+      "sha256": "76b3e8dc277cc4123fb5dd46b3e15a28cf510c9d00e6ba28896c481d50d172e2"
+    },
+    {
+      "bytes": 5915,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__worker-output.ts",
+      "sha256": "34238779dcbe4bbe6556b07b807ad608b89c3fa416b3e15368c5d3bd49b6c9eb"
+    },
+    {
+      "bytes": 8927,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03/web__src__lib__vnext__worker-prompts.ts",
+      "sha256": "3d997b583da40d0798d08f47464b757844c21849ae8afcb2c9210768b85fb255"
+    },
+    {
+      "bytes": 1066,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03.json",
+      "sha256": "a9d1c38320ee776bbe53222a946a7ad1e39d479bf5a8569b8c5b0c1067d834c0"
+    },
+    {
+      "bytes": 3618,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-03.log",
+      "sha256": "965231faafb67d268dff9edcdcf8e725485f7b311618387ed591c5169dae6340"
+    },
+    {
+      "bytes": 2156,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/inventory.json",
+      "sha256": "5ae94bd03694f9915ba1c67724a7fef1e9f17c3faf0f85f53e51503808c350b3"
+    },
+    {
+      "bytes": 37792,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/migrations__20261022_vnext_catalyst_criteria_v1.sql",
+      "sha256": "52b19a9ad5f3548f99e30b95a969f8648d9bdee254480c4b9e4ab98ca158eb8a"
+    },
+    {
+      "bytes": 5887,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/scripts__opportunity-v3__vnext-catalyst-criteria-profile-v1.json",
+      "sha256": "6f716d6d908d8c2502c1e90dcc0890c76239aa5ef5f28edaf540b5d572aa2b27"
+    },
+    {
+      "bytes": 3685,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__automatic-worker.ts",
+      "sha256": "f811ba7c1668767c7f03d9a6be865e6b63f651fb58e98818427e8487201afa5e"
+    },
+    {
+      "bytes": 21261,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__catalyst-criteria.test.ts",
+      "sha256": "9bfd4fee8e3610cec1ecc75141307ce7845c361d35245c1c784c0cd56158ae1c"
+    },
+    {
+      "bytes": 1931,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__discovery-test-loader.mjs",
+      "sha256": "beddf040fa11a706150392c558bb95daa6650633b8b591b7177dc3776771e917"
+    },
+    {
+      "bytes": 20604,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__preparation-reconciliation.test.ts",
+      "sha256": "966a6edf812b8d6f84bab3396179a7ab7a1a5a388b0d96b895e6bc1a87073850"
+    },
+    {
+      "bytes": 10656,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__research-failure.test.ts",
+      "sha256": "87cb7720add5606ca54b702ed59bb1ec540758150c5d2f3cdf26df97b4deee99"
+    },
+    {
+      "bytes": 8959,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__research.ts",
+      "sha256": "26848464305f3e59be2dd8c1a2ef58fa87c0b8508ad07d2c9034fa049572040f"
+    },
+    {
+      "bytes": 10923,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__semantic-criteria.ts",
+      "sha256": "49885889a32b34a27267331d2f30b3eb9f65d44250942fcb697c1cdd10ab41cd"
+    },
+    {
+      "bytes": 11293,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__thesis-audit.ts",
+      "sha256": "97e4f5a004300284407eb980ec8dfc253167955dc2f4e0f01a7c9912fdf64d3d"
+    },
+    {
+      "bytes": 6371,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__weekly-worker.ts",
+      "sha256": "dff54004148d5abba58fc301f4aa36fed83208d651a1bc89dd60811f5f87c182"
+    },
+    {
+      "bytes": 10022,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__worker-core.ts",
+      "sha256": "76b3e8dc277cc4123fb5dd46b3e15a28cf510c9d00e6ba28896c481d50d172e2"
+    },
+    {
+      "bytes": 5915,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__worker-output.ts",
+      "sha256": "34238779dcbe4bbe6556b07b807ad608b89c3fa416b3e15368c5d3bd49b6c9eb"
+    },
+    {
+      "bytes": 8927,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04/web__src__lib__vnext__worker-prompts.ts",
+      "sha256": "72d8f7b9004f9cd6ad45bf98340a149c8744aa666931f46a04d826c952c7632c"
+    },
+    {
+      "bytes": 1064,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04.json",
+      "sha256": "6353b35e4167de03cff7b2b6a4fab8bed1e67402278328d9ec0ccad6898cbdba"
+    },
+    {
+      "bytes": 3613,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-04.log",
+      "sha256": "8681f41c3f123d55f89e4d894e6cc7b4733d66948b78bb551778d4c646ebe132"
+    },
+    {
+      "bytes": 2156,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/inventory.json",
+      "sha256": "02f21ce757698c2dff33306e98b675103f5a5c6b64224e4a834d6f88135cf8bb"
+    },
+    {
+      "bytes": 37828,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/migrations__20261022_vnext_catalyst_criteria_v1.sql",
+      "sha256": "35ededaf19661f62337654863cdfe6746dff5956780da9373d55cc19179145d7"
+    },
+    {
+      "bytes": 5887,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/scripts__opportunity-v3__vnext-catalyst-criteria-profile-v1.json",
+      "sha256": "085c2cb727ff9cb10aa2920dfd6c0424fdc0d17449be1f25fd2ba86d0de81e77"
+    },
+    {
+      "bytes": 3685,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__automatic-worker.ts",
+      "sha256": "f811ba7c1668767c7f03d9a6be865e6b63f651fb58e98818427e8487201afa5e"
+    },
+    {
+      "bytes": 21303,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__catalyst-criteria.test.ts",
+      "sha256": "8cb2afb8cfe74b6677e012713e2646b619c253b41941965698cba852a1024a89"
+    },
+    {
+      "bytes": 1931,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__discovery-test-loader.mjs",
+      "sha256": "beddf040fa11a706150392c558bb95daa6650633b8b591b7177dc3776771e917"
+    },
+    {
+      "bytes": 20604,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__preparation-reconciliation.test.ts",
+      "sha256": "966a6edf812b8d6f84bab3396179a7ab7a1a5a388b0d96b895e6bc1a87073850"
+    },
+    {
+      "bytes": 10656,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__research-failure.test.ts",
+      "sha256": "87cb7720add5606ca54b702ed59bb1ec540758150c5d2f3cdf26df97b4deee99"
+    },
+    {
+      "bytes": 8959,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__research.ts",
+      "sha256": "26848464305f3e59be2dd8c1a2ef58fa87c0b8508ad07d2c9034fa049572040f"
+    },
+    {
+      "bytes": 10923,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__semantic-criteria.ts",
+      "sha256": "49885889a32b34a27267331d2f30b3eb9f65d44250942fcb697c1cdd10ab41cd"
+    },
+    {
+      "bytes": 11293,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__thesis-audit.ts",
+      "sha256": "97e4f5a004300284407eb980ec8dfc253167955dc2f4e0f01a7c9912fdf64d3d"
+    },
+    {
+      "bytes": 6371,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__weekly-worker.ts",
+      "sha256": "dff54004148d5abba58fc301f4aa36fed83208d651a1bc89dd60811f5f87c182"
+    },
+    {
+      "bytes": 10022,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__worker-core.ts",
+      "sha256": "76b3e8dc277cc4123fb5dd46b3e15a28cf510c9d00e6ba28896c481d50d172e2"
+    },
+    {
+      "bytes": 5915,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__worker-output.ts",
+      "sha256": "34238779dcbe4bbe6556b07b807ad608b89c3fa416b3e15368c5d3bd49b6c9eb"
+    },
+    {
+      "bytes": 8927,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05/web__src__lib__vnext__worker-prompts.ts",
+      "sha256": "72d8f7b9004f9cd6ad45bf98340a149c8744aa666931f46a04d826c952c7632c"
+    },
+    {
+      "bytes": 1056,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05.json",
+      "sha256": "6c1a02bfe52bd1613cf46be96ffd8cd7e441f876997ec26dffedc4448003a97c"
+    },
+    {
+      "bytes": 3615,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-source-05.log",
+      "sha256": "639d22a08911b8961e6eb5b04c5fe048ff254133ce03f749e26895abd76f0b09"
+    },
+    {
+      "bytes": 11250,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-types-01.json",
+      "sha256": "443f3420d9bb8b4fa61107300c8998c2b0e8f03d5f678d3abab9febd56ae92d5"
+    },
+    {
+      "bytes": 1244,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-types-01.log",
+      "sha256": "ef093976151cf542d166cfc0e1c31eb40d069d0f5d6d01b88c7dc3b49cf1a19e"
+    },
+    {
+      "bytes": 10686,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-types-02.json",
+      "sha256": "be52673f7cd51e01f18907748dcde64cf58d5a80a577e59dbc89b8a5e63c6453"
+    },
+    {
+      "bytes": 0,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-semantic-types-02.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 7708,
+      "path": "/tmp/stockinsider-vnext-oct22-private/package-catalyst-evidence-o23.py",
+      "sha256": "7be8478b0e661670e469d4964bc1379d6ac05e7667c5950cc27eb7bd0e34d069"
+    },
+    {
+      "bytes": 4047,
+      "path": "/tmp/stockinsider-vnext-oct22-private/run-catalyst-native-o23.py",
+      "sha256": "64670cff8e0d580af865d7a683031372ddbbfd3c1e8be9cd51544706d293905f"
+    }
+  ],
+  "scope": "hash-only selected exact source/WIP/RED/raw/fullrows/catalog/serverlog inventory; no Root cross-chat contents attestation; PGdata not traversed or deleted"
+}

@@ -1,0 +1,103 @@
+{
+  "observedAtUtc": "2026-10-22T00:46:16.056780+00:00",
+  "subjectHead": "6410c9a1b09697bf65567879574baf6b83a32cd7",
+  "checkRuns": [
+    {
+      "name": "stockinsider-v3-gate-root",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941092/job/119569884448"
+    },
+    {
+      "name": "model-runner-code-gate",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941092/job/119569873484"
+    },
+    {
+      "name": "product-runtime-code-gate",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941092/job/119569873071"
+    },
+    {
+      "name": "architecture",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941092/job/119569787203"
+    },
+    {
+      "name": "exact-review",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941092/job/119569787124"
+    },
+    {
+      "name": "requirements",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941092/job/119569787103"
+    },
+    {
+      "name": "evaluation-governance",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941081/job/119569728560"
+    },
+    {
+      "name": "stockinsider-v3-gate-bootstrap",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941092/job/119569728362"
+    },
+    {
+      "name": "model-runner",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941081/job/119569728119"
+    },
+    {
+      "name": "research-publication-tail-quality",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941085/job/119569727335"
+    },
+    {
+      "name": "Financial document owned write lease route contracts",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941101/job/119569727315"
+    },
+    {
+      "name": "vnext-quality",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941124/job/119569727112"
+    },
+    {
+      "name": "Candidate discovery admission and UI diagnostics",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941083/job/119569726990"
+    },
+    {
+      "name": "product-runtime",
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941081/job/119569726904"
+    },
+    {
+      "name": "financial-installation-quality",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941078/job/119569726883"
+    },
+    {
+      "name": "PTT stock-local evidence and collector diagnostics",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39700941102/job/119569726804"
+    }
+  ],
+  "limits": "one bounded observation; later evidence pushes may naturally create different-head runs. No watch/rerun. Failed protected reviews not bypassed. Job log redirect inaccessible; exact failed assertion NOT_OBSERVED. Source worker requires registered independent subject-bound reviews, which this maker did not issue."
+}

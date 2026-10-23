@@ -1,0 +1,135 @@
+{
+  "initialNative": {
+    "label": "withdrawal-native-01",
+    "pass": 1,
+    "fail": 2,
+    "overall": "FAIL",
+    "component": "actual exact3body migration COMMIT, oldmetadata/rows unchanged; then incorrect new composition64hexprincipal assumption, before mutation"
+  },
+  "secondNative": {
+    "label": "withdrawal-native-02",
+    "pass": 2,
+    "fail": 2,
+    "overall": "FAIL",
+    "component": "exactretainedstate then realservice_role tombstone COMMIT, independentRO fullpayload/hash/bytes; then harnessusedoperatorinspect instead originalauthor guard"
+  },
+  "recoveryNative": {
+    "label": "withdrawal-native-03",
+    "pass": 4,
+    "fail": 0,
+    "scope": "exact retained committed state READ recovery, currentpublic/projection/clue/market/providerinspect/publish refusal, policyABA cannotrevive, exactcommit replay/read immutable, conflicting commit/role/appendonly refusal, fullalltable state unchanged"
+  },
+  "queries": [
+    {
+      "name": "vnext_source_withdrawal_v1",
+      "pid": 55,
+      "ready": "I",
+      "querySettled": true,
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_read_v1",
+      "pid": 56,
+      "ready": "I",
+      "querySettled": true,
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_analysis_command_v1",
+      "pid": 57,
+      "ready": "I",
+      "querySettled": true,
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_analysis_command_v1",
+      "pid": 58,
+      "ready": "I",
+      "querySettled": true,
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_analysis_command_v1",
+      "pid": 59,
+      "ready": "I",
+      "querySettled": true,
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_read_v1",
+      "pid": 62,
+      "ready": "I",
+      "querySettled": true,
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_source_withdrawal_v1",
+      "pid": 63,
+      "ready": "I",
+      "querySettled": true,
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_source_withdrawal_v1",
+      "pid": 64,
+      "ready": "I",
+      "querySettled": true,
+      "status": "fulfilled",
+      "committed": true
+    },
+    {
+      "name": "vnext_source_withdrawal_v1",
+      "pid": 65,
+      "ready": "I",
+      "querySettled": true,
+      "status": "rejected",
+      "code": "P0001",
+      "message": "vnext_withdrawal_replay_conflict"
+    },
+    {
+      "name": "vnext_source_withdrawal_v1",
+      "pid": 66,
+      "ready": "I",
+      "querySettled": true,
+      "status": "rejected",
+      "code": "P0001",
+      "message": "vnext_operator_required"
+    }
+  ],
+  "cleanup": {
+    "stopExit": 0,
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-22T02:25:14.526943673Z",
+      "FinishedAt": "2026-10-22T02:27:21.442629949Z"
+    },
+    "priorBackendPids": [
+      53,
+      54
+    ],
+    "backendAbsentBeforeStop": true,
+    "socketAbsent": true,
+    "serverShutdownObserved": true,
+    "dataRetained": true,
+    "physicalDataExcludedFromRawInventory": true
+  },
+  "noNewProviderCalls": true,
+  "syntheticPriorResearch": true,
+  "realAcquisition": false,
+  "formalSemanticApproval": false
+}

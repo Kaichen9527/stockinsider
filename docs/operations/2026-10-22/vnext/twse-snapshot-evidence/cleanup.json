@@ -1,0 +1,54 @@
+{
+  "nativeExit": 0,
+  "state": {
+    "Running": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "StartedAt": "2026-10-23T01:37:16.770003236Z",
+    "FinishedAt": "2026-10-23T01:37:19.535763245Z"
+  },
+  "serverShutdownObserved": true,
+  "containerDataAndVolumesRetained": true,
+  "trackedClients": {
+    "trackedClientsSettled": true,
+    "priorBackendPids": [
+      58,
+      59
+    ],
+    "priorBackendsAbsent": true,
+    "clusterRetained": true,
+    "externalStopRequired": true
+  },
+  "independentPostrunPaths": {
+    "at": "2026-10-23T01:37:41.995542+00:00",
+    "sourceHead": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
+    "paths": [
+      {
+        "path": "/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-11/socket/.s.PGSQL.5432",
+        "exists": false,
+        "error": "ENOENT"
+      },
+      {
+        "path": "/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-11/socket/.s.PGSQL.5432.lock",
+        "exists": false,
+        "error": "ENOENT"
+      },
+      {
+        "path": "/tmp/stockinsider-vnext-oct22-private/worker-pg-data-11",
+        "exists": true,
+        "mode": 16832,
+        "uid": 65534,
+        "dev": 34
+      },
+      {
+        "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23",
+        "exists": true,
+        "mode": 16832,
+        "uid": 1000,
+        "dev": 34
+      }
+    ],
+    "sealedInputsUnchanged": true
+  },
+  "scope": "tracked owned lab only; not every host PID absence or instantaneous RSS"
+}

@@ -1,0 +1,43 @@
+{
+  "currentSource": "b42ca4a26cbd499e6f6ce6c424159c491119ece3",
+  "observedNativeSource": "b855f6948b6ea86c0d2f5556dddeddc4a7888ddc",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "inputs": [
+    {
+      "path": "scripts/vnext-routine-http.test.mjs",
+      "bytes": 51970,
+      "sha256": "f8194b3b716fe109e7aa5936fdd24fc5fc4dc735196a1293df749e13e8587183",
+      "gitBlob": "5f38286e9dd54d6a3e168942e4b4eae2b244195a"
+    },
+    {
+      "path": "scripts/vnext-source-namespace-candidate.mjs",
+      "bytes": 14321,
+      "sha256": "5d0ad56fb2684a5ca70f95851bf96a299f53f8ee1ca71f6f59454b2f2e27c6db",
+      "gitBlob": "ff22391a66ba8c3381706bab528be558f8c25370"
+    },
+    {
+      "path": "scripts/vnext-source-namespace-source.test.mjs",
+      "bytes": 8660,
+      "sha256": "9a6162049a25c1c81ce1c1d959ba1c98ce6fa7d6ef46fb72364772b24b4c9368",
+      "gitBlob": "f60f8c1c46e3415e9d2c9d015455a6cfff0cd2b0"
+    },
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 114497,
+      "sha256": "cb330b281920b6c607c3c560cf5a757c190c2e8fb5784cc0a55a8d33b800b35b",
+      "gitBlob": "21d849ddc4ffe643f64d22f5e09cc562434f5e89"
+    },
+    {
+      "path": "scripts/vnext-routine-resource-run.py",
+      "bytes": 6833,
+      "sha256": "4c15519d6560c106c5e2e0c0ed7dfa2ec71d2e82e921440bfb74716db7190937",
+      "gitBlob": "0e9757110f2da9569fcb94a254ee05ccbc93c995"
+    }
+  ],
+  "rawSourceCaseMandatory": true,
+  "productSQLAndRoleACLChanges": false,
+  "currentNativeNotTransferredFromB855": true,
+  "originalVMHeavy": "NOT_ADMITTED",
+  "expectedCurrentTests": 8,
+  "expectedNotObserved": true
+}

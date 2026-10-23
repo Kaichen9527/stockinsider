@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "vnext-cancellation-followup-receipt-v1",
+  "sourceSubject": "97735207344190fb1113b1632ce4c1f5ca716963",
+  "acceptedSource": "a2649dfa879ed045afb36a69060de35ca09a84d9",
+  "at": "2026-10-23T07:52:33.846293+00:00",
+  "files": [
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/ci-followup-f7-red.json",
+      "bytes": 9398,
+      "sha256": "5d07d99ecec08307062dcb13c5a53e5d7a8ba9f2ed30f0b3d334f01c16428ad2"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/ci-followup-native-o23.json",
+      "bytes": 4165,
+      "sha256": "f6757d452d21546d10dfcab80107c3298875ba6c964b040e19004d29fe95d6cf"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/runtime-bindings-o23.json",
+      "bytes": 2771,
+      "sha256": "dc03fcebdb8121725f07d5f910fc8ab2ccb90987efe943e7a15e5e616cf8ff32"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/native-followup-private-inventory-o23.json",
+      "bytes": 2451,
+      "sha256": "5416bdf7656465d4072929e327f338a0441e6415409e8e1fc55de3264b1eda04"
+    }
+  ],
+  "privateRawContentsPublished": false,
+  "makerIndependentApproval": false,
+  "ReleaseGate": "NOT_CLOSED"
+}

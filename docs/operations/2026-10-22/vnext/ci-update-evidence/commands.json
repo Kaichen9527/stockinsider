@@ -1,0 +1,72 @@
+[
+  {
+    "label": "current-lease-regression-01",
+    "command": [
+      "node",
+      "scripts/candidate-financial-document-write-lease-route.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T03:32:50.873083+00:00",
+    "end": "2026-10-22T03:32:51.896433+00:00",
+    "exit": 1,
+    "initialFree": {
+      "/workspace": 9430462464,
+      "/tmp": 17518325760
+    },
+    "finalFree": {
+      "/workspace": 9430462464,
+      "/tmp": 17518321664
+    },
+    "sampledSessionPeakRssBytes": 75411456,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "current-lease-regression-02",
+    "command": [
+      "node",
+      "scripts/candidate-financial-document-write-lease-route.test.mjs"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T03:33:06.112014+00:00",
+    "end": "2026-10-22T03:33:07.646681+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9430429696,
+      "/tmp": 17518317568
+    },
+    "finalFree": {
+      "/workspace": 9430429696,
+      "/tmp": 17518313472
+    },
+    "sampledSessionPeakRssBytes": 123756544,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  {
+    "label": "current-policy-after-public-01",
+    "command": [
+      "node",
+      "--experimental-strip-types",
+      "web/src/lib/vnext/vnext.test.ts"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-22T03:33:35.351102+00:00",
+    "end": "2026-10-22T03:33:35.857397+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 9430429696,
+      "/tmp": 17518309376
+    },
+    "finalFree": {
+      "/workspace": 9430429696,
+      "/tmp": 17518301184
+    },
+    "sampledSessionPeakRssBytes": 2621440,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  }
+]

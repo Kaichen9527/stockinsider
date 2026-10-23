@@ -1,0 +1,9 @@
+{
+  "sourceParent": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+  "threeFileReverseFullByteParity": true,
+  "newComponentBytes": 1954,
+  "newComponentSha256": "76c1eaeee033eeff050679363585cf4be929a287101cad56cf1ece3f09d35b43",
+  "beforeUnchangedBusinessWeekdayGuard": true,
+  "readOnlyPrivateComponentNotAuthorOrPrepare": true,
+  "scope": "source-boundary only, not native/database/authority/semantic acceptance"
+}

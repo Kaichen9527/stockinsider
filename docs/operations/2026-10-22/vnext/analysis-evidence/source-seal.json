@@ -1,0 +1,62 @@
+{
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "product": "008cc3bc3393610c8c510fd7c24ee5cee907da72",
+  "nativeAndBuildSubject": "3a64af06a5a6bd04a47a39843afd2cf3a395f5b1",
+  "httpObservationFix": "2d6296e4471f759d570dd0089a7f5ab37226d4e6",
+  "productInventory": [
+    {
+      "path": "migrations/20261022_vnext_analysis_sources_v1.sql",
+      "sha256": "38ebaa113cc2bde07ad3215196bfa898ca0874bd6a1306a142efd740244ffc20"
+    },
+    {
+      "path": "web/src/lib/vnext/analysis-runtime.ts",
+      "sha256": "a9ed3006cf5ea9b6c8cf53dbad0d06737f18d421b1c6a1a14d2b14a19b03cfbf"
+    },
+    {
+      "path": "web/src/lib/vnext/analysis-sources.test.ts",
+      "sha256": "008b538241cf2c6d4eef6ce0280d949a9e9a6cac07a8d7ab5fe08c47cb66a7a9"
+    },
+    {
+      "path": "web/src/lib/vnext/market-ai-worker.ts",
+      "sha256": "07376bf09d6a8c887441b9ac9dc4331dcea12cace9a2ecee309c3015e088187f"
+    },
+    {
+      "path": "web/src/lib/vnext/market-interpretation.ts",
+      "sha256": "cbcb6b27d2f2d1778ef4f13c7a22ea6baa1bdf2f796b910f938f3b2c3b2efa26"
+    },
+    {
+      "path": "web/src/lib/vnext/permitted-content.ts",
+      "sha256": "77424f4b0ab3a65f9de0a8b4e33a2726c88eb4964cf8a409723c49afab310f33"
+    },
+    {
+      "path": "web/src/lib/vnext/source-worker.ts",
+      "sha256": "548c9f204d50da853df3ab6ed55b004718e056a136d63e287afcbaf0f263fec3"
+    },
+    {
+      "path": "web/src/lib/vnext/http.ts",
+      "sha256": "18d4409361a581861d12a96feb49d7653d1aaa22b9909a88bf61e2d66173eac0"
+    },
+    {
+      "path": "web/src/lib/vnext/discovery.ts",
+      "sha256": "abedcd306ef86b13f06ce93b6504d572eb434ba2d54fa1fc9d68bee5fde93c20"
+    },
+    {
+      "path": "web/src/lib/vnext/store.ts",
+      "sha256": "1cee8b25458f7f90f252796a720535b003b78b46af4b8ad6a6624484dc14a91c"
+    },
+    {
+      "path": "web/src/lib/vnext/market.ts",
+      "sha256": "c7126d4b0fa8339894f0173f1744d9537731e7dadc32fc8e239c926974321bf4"
+    }
+  ],
+  "originalMigrations": {
+    "migrations/20261022_stockinsider_vnext_20_v1.sql": "84418af40194689ff6b85a11394bbcd04c28ce8041281bc897149a44e86c90de",
+    "migrations/20261022_vnext_legacy_mode_fence_v1.sql": "272130d1747d3faa1f6d65554c8af8ffbc3d7ab1ad7b1045d4f9b331293c6685",
+    "migrations/20261022_vnext_provider_worker_v1.sql": "637e494cb5ccb32ab11d847fb69586cbbf0aec717c1c0991a250195a917826ba"
+  },
+  "testBlobs": {
+    "scripts/vnext-analysis-postgres.test.mjs": "3ba8c5e1f9608ce822f8c02eb46b7d5701891b42463fa754df36c14cddb13094",
+    "scripts/vnext-http-admission.test.mjs": "88c5b7d0e371a358a63f0e6dd3b155bc539a7efe5b7c7ef0334f0acd57d48ed9",
+    ".github/workflows/stockinsider-vnext-quality.yml": "7c1ae12496e2341ff87f0e2a2d08211b99fef54e43ad50fd99f96773c1b00bdc"
+  }
+}

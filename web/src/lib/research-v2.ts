@@ -1,3 +1,4 @@
+import { rejectLegacyResearchInVnext } from './vnext/runtime.ts';
 import fs from 'fs/promises';
 import path from 'path';
 import { createHash, randomUUID } from 'crypto';
@@ -1321,6 +1322,7 @@ type SourceSyncOptions = {
   dryRun?: boolean;
   symbol?: string;
 };
+type TwseSnapshotSink = import('./vnext/twse-snapshot.ts').TwseSnapshotSink;
 
 type SourceDocMatchType = 'direct_symbol' | 'alias' | 'indirect' | 'none';
 type SourceDocCrawlMode = 'symbol_scoped' | 'market_scan' | 'account_feed' | 'public_search' | 'author_watch' | 'channel_scan';
@@ -3693,7 +3695,7 @@ function parseRocDateToIso(input: unknown) {
   return null;
 }
 
-async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null) {
+async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null, snapshotSink?: TwseSnapshotSink) {
   const connectorRunId = await startConnectorRun('source-sync', 'twse_insider', {
     mode: symbolContext ? 'openapi_twse_symbol' : 'openapi_twse',
     crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
@@ -3712,16 +3714,19 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
   const datasets = [
     {
       url: 'https://openapi.twse.com.tw/v1/opendata/t187ap11_L',
+      endpointKey: 'holding_listed',
       kind: 'holding',
       label: '上市公司董監事持股餘額',
     },
     {
       url: 'https://openapi.twse.com.tw/v1/opendata/t187ap11_P',
+      endpointKey: 'holding_public',
       kind: 'holding',
       label: '公發公司董監事持股餘額',
     },
     {
       url: 'https://openapi.twse.com.tw/v1/opendata/t187ap12_L',
+      endpointKey: 'transfer_listed',
       kind: 'transfer',
       label: '內部人持股轉讓申報',
     },
@@ -3743,11 +3748,16 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
   const datasetOutcomes: Array<{ url: string; status: 'success' | 'failed'; rows: number; reason: string | null }> = [];
 
   for (const dataset of datasets) {
+    const snapshotContext = { connectorRunId, endpointKey: dataset.endpointKey, querySymbol: symbolContext?.symbol || null, requestedAt: new Date().toISOString() };
+    let responseReceived = false;
     try {
       const rows = await fetch(dataset.url, {
         headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', accept: 'application/json' },
         signal: AbortSignal.timeout(20_000),
-      }).then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`)))) as Row[];
+      }).then((res) => {
+        responseReceived = true;
+        return snapshotSink ? snapshotSink.response(res, snapshotContext) : (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`)));
+      }) as Row[];
       if (!Array.isArray(rows)) throw new Error('twse_insider_schema_not_array');
       if (rows.length > 0 && !rows.some((row) => row && typeof row === 'object' && '公司代號' in row)) {
         throw new Error('twse_insider_schema_missing_company_symbol');
@@ -3820,6 +3830,10 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
       });
       datasetOutcomes.push({ url: dataset.url, status: 'success', rows: selected.length, reason: null });
     } catch (error) {
+      if (snapshotSink && !responseReceived) {
+        try { await snapshotSink.failure(snapshotContext, error); }
+        catch (receiptError) { error = new Error('vnext_twse_snapshot_write_outcome_uncertain', { cause: receiptError }); }
+      }
       datasetOutcomes.push({ url: dataset.url, status: 'failed', rows: 0, reason: (error as Error).message.slice(0, 500) });
       await createSourceAudit({
         connectorRunId,
@@ -3951,7 +3965,7 @@ export async function runReportIngest(options?: { dryRun?: boolean }) {
   return { runId: randomUUID(), dryRun, filesFound: files.length, recordsWritten };
 }
 
-export async function runSourceSync(options?: SourceSyncOptions): Promise<SourceSyncRunShape & { runId: string; dryRun: boolean }> {
+export async function runSourceSync(options?: SourceSyncOptions, snapshotSink?: TwseSnapshotSink): Promise<SourceSyncRunShape & { runId: string; dryRun: boolean }> {
   const connector = options?.connector || 'twse_insider';
   const dryRun = Boolean(options?.dryRun);
   const symbolContext = options?.symbol ? await resolveSymbolScopedStockContext(options.symbol) : null;
@@ -3984,7 +3998,7 @@ export async function runSourceSync(options?: SourceSyncOptions): Promise<Source
     threads: scrapeThreads,
     telegram: scrapeTelegram,
     gdelt: scrapeGdeltMetadata,
-    twse_insider: scrapeTwseInsider,
+    twse_insider: (context) => scrapeTwseInsider(context, snapshotSink),
   };
   const runner = mapping[connector];
   if (!runner) throw new Error(`unsupported connector: ${connector}`);
@@ -4644,6 +4658,7 @@ function verificationLabelForTier(tier: 'signal_candidate' | 'partially_verified
 }
 
 export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: string[]; topN?: number }) {
+  rejectLegacyResearchInVnext();
   const dryRun = Boolean(options?.dryRun);
   const startedAt = Date.now();
   const supabase = getSupabaseServerClient();
@@ -5164,6 +5179,7 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
 }
 
 export async function runResearchReportBuild(options?: { dryRun?: boolean; symbols?: string[]; topN?: number }) {
+  rejectLegacyResearchInVnext();
   const dryRun = Boolean(options?.dryRun);
   const startedAt = Date.now();
   const today = asDate();

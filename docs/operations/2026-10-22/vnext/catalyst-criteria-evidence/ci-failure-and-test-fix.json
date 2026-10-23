@@ -1,0 +1,16 @@
+{
+  "oldSource": "fabf9510fbabffe02ff14d2fc459590556172dcc",
+  "run": 39889419786,
+  "job": 120205320036,
+  "observedSafeAnnotation": {
+    "stage": "2383 source→actual worker receipts→current semantic receipt and fixed deep score; immutable replay",
+    "code": "P0001",
+    "message": "vnext_weekly_all_current_members_required"
+  },
+  "cause": "test sent only second member audit even though first member remains active; original full-current-member guard correctly rejects",
+  "testOnlyFix": "derive every current member report from same actual current server context; record whole array and mutate one target in otherwise complete negative array",
+  "productsSqlTypesProfilesPinsExpectedValuesChanged": false,
+  "beforeHarnessSha256": "2de3b41faa57420c02f3bfbc0aea8de2ba7b1ff11a06af819732d9ac32cc14b4",
+  "newHarnessSha256": "802c8cf2fe1875eec7ae1afcc796073624c58d1e21eaeb3384e5adc60994fd23",
+  "nativeNewInput": "NOT_RUN until natural newhead CI"
+}

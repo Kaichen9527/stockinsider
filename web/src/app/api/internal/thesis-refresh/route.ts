@@ -1,8 +1,11 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { runThesisRefresh } from '@/lib/research-v2';
 
 export async function POST(req: Request) {
+  const vnext = await vnextRoute(req, 'thesis-refresh');
+  if (vnext) return vnext;
   const auth = requireInternalAuth(req);
   if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
   try {
@@ -26,5 +29,7 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
+  const vnext = await vnextRoute(req, 'thesis-refresh');
+  if (vnext) return vnext;
   return POST(req);
 }

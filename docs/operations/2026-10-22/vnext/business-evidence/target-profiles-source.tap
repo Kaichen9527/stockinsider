@@ -1,0 +1,30 @@
+TAP version 13
+# Subtest: finite target profile candidate has exact complete predecessor, successor and inverse parity
+ok 1 - finite target profile candidate has exact complete predecessor, successor and inverse parity
+  ---
+  duration_ms: 1.863461
+  ...
+# Subtest: only known v5 gains the same exact symbol arm; old profiles and v4 cancellation stay closed
+ok 2 - only known v5 gains the same exact symbol arm; old profiles and v4 cancellation stay closed
+  ---
+  duration_ms: 0.748347
+  ...
+# Subtest: original full namespace codec retained with no allowed edge or new grant/role/table
+ok 3 - original full namespace codec retained with no allowed edge or new grant/role/table
+  ---
+  duration_ms: 0.857937
+  ...
+# Subtest: share/cash terms are never invented from a reference price factor and all original target guards remain exact
+ok 4 - share/cash terms are never invented from a reference price factor and all original target guards remain exact
+  ---
+  duration_ms: 0.334535
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14.728698

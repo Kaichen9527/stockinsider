@@ -1,0 +1,30 @@
+{
+  "actualChecks": {
+    "existingThesis": "12PASS separate",
+    "focusedLint": "exit0",
+    "fullTypes": "exit0 on finalnewTS",
+    "nativeRetained": "5PASS actualPG17.11",
+    "semanticFocused": "3PASS",
+    "sqlStatic": "3PASS"
+  },
+  "approval": "maker engineering receipts only; no independent/native release/formal research attestation",
+  "cleanup": "none; containers/raw/PGdata/oldWIP/RED retained",
+  "free": {
+    "/tmp": 17328668672,
+    "/workspace": 8891301888
+  },
+  "notRun": [
+    "fresh fullbundle install/newthesisprefix/publicoldscorecomparison",
+    "newfullVMbuild/HTTP/browser",
+    "realmodel/sourcecriterion/semanticreview",
+    "staging/productiondeploy"
+  ],
+  "originalRED": "EPS1 reached semantic value1 vs expectednull; exactpreimage retained. Unreached factor.points secondary assertion corrected only after RED保存. Source01 sourcecheck root path failed beforeTAP; correction didnot change SQL/oracle.",
+  "preparationSource": "9c833695e7c7eb840b0eabf7f004c0d4031e893e",
+  "remainingCode": [
+    "real source-bound criterion/event/target producer",
+    "documented complete comparable event-window acquisition +28-day volume",
+    "numeric forecast/valuation source producer"
+  ],
+  "source": "64036920a197f2fd579e430b36503a26ad021e84"
+}

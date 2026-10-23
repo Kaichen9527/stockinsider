@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "stockinsider-vnext-preparation-http-delivery-v1",
+  "createdAt": "2026-10-23T05:08:42.120928+00:00",
+  "sourceSubject": "b0913e5c43e913b5013eadcbb586f392fb17b1c7",
+  "lastSuccessfulNativeSubject": "ee2a6f00a3eae54651a2c801bf12aa11f6f91c2e",
+  "nativeRun": 39902850035,
+  "nativeJob": 120248086348,
+  "nativeResult": "SUCCESS",
+  "scope": "same-source hosted build plus real PostgreSQL and Next HTTP engineering assertions; synthetic issuer parser/source/provider, no formal research/model/staging approval",
+  "actualTAPCounts": "NOT_OBSERVED for9a/ee:9a single download denied; ee TAP contents not downloaded. Planned totals never substituted.",
+  "newCachedInstrumentedAndBrowserEntry": "actual ee ordinary stepSUCCESS; strict12+2 cases enforced but raw actual browser receipt/binary/screenshots not independently downloaded",
+  "sourceWebAndMigrationParityToNative": true,
+  "files": [
+    {
+      "path": "source.json",
+      "bytes": 6710,
+      "sha256": "13a8912fe86e468472aff35e171d2f325858e721524ecceb73954d7c2e5864f7"
+    },
+    {
+      "path": "ci.json",
+      "bytes": 19552,
+      "sha256": "fa6d56dbc1983a28c5828948e06660a6c7bf1fe90848c6e059cee79d8ee69e69"
+    },
+    {
+      "path": "checks.json",
+      "bytes": 5274,
+      "sha256": "7fc20a0f2ce6cf9a2d9f22ac32d801769a965d7764b6b640410ac61736bd4d1c"
+    },
+    {
+      "path": "limits.json",
+      "bytes": 1719,
+      "sha256": "16047612f08a356f8f6c53e60a1ddba17f38b6cfc6eab6c28f7d67cd28e90f12"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 6765,
+      "sha256": "b59695939b61a71ecc8d39e57c2ff2fe2ea30e8ee0c53c577f1f22a7750798f1"
+    }
+  ],
+  "publicBytes": 40020,
+  "privateScope": "finite local inventory only; hosted raw payload/full catalog contents not downloaded/independently attested",
+  "historicalFailuresRetained": true,
+  "makerApproval": false,
+  "releaseGate": "PENDING",
+  "productionActions": "NONE",
+  "independentProductResult": "FAIL ee history test; source close-settlement candidate pending"
+}

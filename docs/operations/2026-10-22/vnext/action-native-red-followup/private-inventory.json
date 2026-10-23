@@ -1,0 +1,47 @@
+{
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-native-773-annotations-01.log",
+      "bytes": 16590,
+      "sha256": "a8187c4e79d746daba5337293b36a46a8557e599b66e53dbd091f43f76a9791a"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-native-773-annotations-01.json",
+      "bytes": 1028,
+      "sha256": "c196fc4f981f03057487a1d5b3181f5954112ea78bcf4f7cee710beaf6d69ce3"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-bridge-diagnostic-source-check.mjs",
+      "bytes": 1662,
+      "sha256": "c204ca8ccb3cf64645a8dc75ed9388a19514bd1900fd79a62233a07bb3d57021"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-bridge-diagnostic-source-probe-01.log",
+      "bytes": 208,
+      "sha256": "b4e04fcbee9fa54920063b625a730da197cd82c8cbed752aa223d272d5fd7996"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-bridge-diagnostic-source-probe-01.json",
+      "bytes": 878,
+      "sha256": "b7820f2fdae6c711bd6048a4bdc357326f457371219216c5472344d86b93e8c9"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/pr384-action-edit-red.json",
+      "bytes": 283,
+      "sha256": "7c37cf3ff7133da87b24eb0ce63b319666f923f87baa5b510e820f5a6a0d0a80"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/pr384-action-current-body.md",
+      "bytes": 4095,
+      "sha256": "ae2e37747976dfb608d5fc063773edcddab083bf80ffc3b540f38fb450df924f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/pr384-action-body-request.json",
+      "bytes": 4127,
+      "sha256": "2bfda626d338842cb9cf4aed232640aae71f6310d36fd2d6f9297e23994be638"
+    }
+  ],
+  "count": 8,
+  "bytes": 28871,
+  "scope": "owned local metadata/tooling error/source probes only; hosted46private162151803bytes are annotation inventory only, not downloaded or permanently secured here"
+}

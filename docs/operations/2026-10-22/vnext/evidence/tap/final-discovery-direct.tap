@@ -1,0 +1,12 @@
+TAP version 13
+# Subtest: VN06/VN07 actual cache scan transport screens an incumbent without fresh clues and persists separate current evidence
+ok 1 - VN06/VN07 actual cache scan transport screens an incumbent without fresh clues and persists separate current evidence
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 40.355255

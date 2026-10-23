@@ -1,0 +1,37 @@
+{
+  "count": 6,
+  "bytes": 41663,
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ci655-ordinary-jobs-o23.json",
+      "bytes": 15051,
+      "sha256": "fb4541cedfa7cac247839f9844173a6f91b2b160184d68ed27bc8e3345d8645f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ci655-runtime-merge-o23.json",
+      "bytes": 2651,
+      "sha256": "2f5082135b93e7e327cf81d6f25c10cf914f47c3f76f5d21442c31af458be2a4"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ci655-settled-annotations-o23.json",
+      "bytes": 15028,
+      "sha256": "004833b965d2d1486bd7f564f66ac8aaa6a9c40dac8250fdba69e7c74401b16d"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ci655-product-jobs-o23.json",
+      "bytes": 6892,
+      "sha256": "48e9dd12ad6d18766a05ccc1462cf9530dcdfbbef2dbdd10277a4fa4e49d6c41"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/owner-package-source-pins-o23.json",
+      "bytes": 1750,
+      "sha256": "eb6c7b027008d099aaa0cb015148daeacb41f5f926edbdb5d5d363ed77373625"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-checkpoint-wip-retention-o23.json",
+      "bytes": 291,
+      "sha256": "7af211a3ab798d909d2648c9712372f89344ed780a939ee390254e14d5fc0978"
+    }
+  ],
+  "scope": "local finite API read/pin receipts; hosted private raw contents not retrieved"
+}

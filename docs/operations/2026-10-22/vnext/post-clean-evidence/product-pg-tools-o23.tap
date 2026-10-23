@@ -1,0 +1,96 @@
+TAP version 13
+# Subtest: official validation migration is additive, guarded, receipt-backed and PIT-stamped
+ok 1 - official validation migration is additive, guarded, receipt-backed and PIT-stamped
+# Subtest: validation covers the full candidate universe independently of acquisition backlog
+ok 2 - validation covers the full candidate universe independently of acquisition backlog
+# Subtest: validation receipt RPC enforces permissions, exact provenance, and idempotent availability
+ok 3 - validation receipt RPC enforces permissions, exact provenance, and idempotent availability
+# Subtest: PCR-004 actual health route returns the TS owner closed fail-closed reasons
+ok 4 - PCR-004 actual health route returns the TS owner closed fail-closed reasons
+# Subtest: actual public route snapshot miss is 503 with zero legacy/research queries
+ok 5 - actual public route snapshot miss is 503 with zero legacy/research queries
+# Subtest: snapshot failure never falls through to research
+ok 6 - snapshot failure never falls through to research
+# Subtest: published public snapshot remains single-read and ETag cacheable
+ok 7 - published public snapshot remains single-read and ETag cacheable
+# Subtest: published summaries use the real bounded revision reader without research queries
+ok 8 - published summaries use the real bounded revision reader without research queries
+# Subtest: authenticated tracked producer retains research authority
+ok 9 - authenticated tracked producer retains research authority
+# Subtest: spoofed tracked producer is rejected before any read
+ok 10 - spoofed tracked producer is rejected before any read
+# Subtest: disabled snapshot mode preserves the existing legacy path
+ok 11 - disabled snapshot mode preserves the existing legacy path
+# Subtest: method requirements include actual denominators and cycle periods
+ok 12 - method requirements include actual denominators and cycle periods
+# Subtest: AUO coverage follows its forward BVPS method instead of a global sector row count
+ok 13 - AUO coverage follows its forward BVPS method instead of a global sector row count
+# Subtest: shared business classification gives all cyclical authority labels twenty financial quarters
+ok 14 - shared business classification gives all cyclical authority labels twenty financial quarters
+# Subtest: financial labels including holding companies and securities use the same eight-quarter route
+ok 15 - financial labels including holding companies and securities use the same eight-quarter route
+# Subtest: October acquisition and coverage select due Q2, not the recently closed but not-yet-due Q3
+ok 16 - October acquisition and coverage select due Q2, not the recently closed but not-yet-due Q3
+# Subtest: due-quarter rollover is Taipei-aware and annual filings do not become due at year-end
+ok 17 - due-quarter rollover is Taipei-aware and annual filings do not become due at year-end
+# Subtest: coverage summary preserves method-specific denominator and opening common-equity balance
+ok 18 - coverage summary preserves method-specific denominator and opening common-equity balance
+# Subtest: conflicting restatements remain gaps just as the valuation consumer rejects the quarter
+ok 19 - conflicting restatements remain gaps just as the valuation consumer rejects the quarter
+# Subtest: a fully covered issuer still has validation work after a pending conflict arrives
+ok 20 - a fully covered issuer still has validation work after a pending conflict arrives
+# Subtest: nonfinite values, units and estimates never close reported coverage
+ok 21 - nonfinite values, units and estimates never close reported coverage
+# Subtest: monetary YTD decumulation follows consumers while EPS stays discrete
+ok 22 - monetary YTD decumulation follows consumers while EPS stays discrete
+# Subtest: conflicting instant balances remain missing and reported BVPS can supply shares
+ok 23 - conflicting instant balances remain missing and reported BVPS can supply shares
+# Subtest: pending rows never make a missing quarter complete
+ok 24 - pending rows never make a missing quarter complete
+# Subtest: same-day revisions keep their own scores and risk after mutable inputs change
+ok 25 - same-day revisions keep their own scores and risk after mutable inputs change
+# Subtest: legacy and malformed contexts explicitly withhold scores and risk
+ok 26 - legacy and malformed contexts explicitly withhold scores and risk
+# Subtest: detail caller reads frozen provenance without mutable stage or tracking joins
+ok 27 - detail caller reads frozen provenance without mutable stage or tracking joins
+# Subtest: valid official observations require provenance and explicit dimensional checks
+ok 28 - valid official observations require provenance and explicit dimensional checks
+# Subtest: unit errors, invalid dates and future availability cannot be promoted
+ok 29 - unit errors, invalid dates and future availability cannot be promoted
+# Subtest: regex iXBRL facts cannot bypass the structural document parser gate
+ok 30 - regex iXBRL facts cannot bypass the structural document parser gate
+# Subtest: duplicate conflicts and available accounting identities are checked
+ok 31 - duplicate conflicts and available accounting identities are checked
+# Subtest: a later conflicting peer revalidates and rejects the previously accepted subject
+ok 32 - a later conflicting peer revalidates and rejects the previously accepted subject
+# Subtest: validation output metadata and peer ordering do not mint new evidence hashes
+ok 33 - validation output metadata and peer ordering do not mint new evidence hashes
+# Subtest: conflicting accounting operands yield identical rejection and hash in either order
+ok 34 - conflicting accounting operands yield identical rejection and hash in either order
+# Subtest: same-context diluted EPS/share/common income contradictions reject all identity participants
+ok 35 - same-context diluted EPS/share/common income contradictions reject all identity participants
+# Subtest: missing or different-context identity operands do not condemn standalone safe reported facts
+ok 36 - missing or different-context identity operands do not condemn standalone safe reported facts
+# Subtest: reconciled and rounded diluted earnings are accepted without changing the reported values
+ok 37 - reconciled and rounded diluted earnings are accepted without changing the reported values
+# Subtest: the frozen EPS policy changes the receipt hash so legacy validation cannot suppress rechecking
+ok 38 - the frozen EPS policy changes the receipt hash so legacy validation cannot suppress rechecking
+# Subtest: ingestion preserves the token-bound public-search canary rather than erasing it
+ok 39 - ingestion preserves the token-bound public-search canary rather than erasing it
+# Subtest: readiness requires a fresh complete receipt bound to the current token hash
+ok 40 - readiness requires a fresh complete receipt bound to the current token hash
+# Subtest: zero-result streak is monotonic only across consecutive zero-row provider attempts
+ok 41 - zero-result streak is monotonic only across consecutive zero-row provider attempts
+# Subtest: market discovery always searches 股票 and 台股 with bounded deduplicated queries
+ok 42 - market discovery always searches 股票 and 台股 with bounded deduplicated queries
+# Subtest: untracked authors survive discovery; repeated search hits do not inflate KOL evidence
+ok 43 - untracked authors survive discovery; repeated search hits do not inflate KOL evidence
+1..43
+# tests 43
+# suites 0
+# pass 43
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5334.483464

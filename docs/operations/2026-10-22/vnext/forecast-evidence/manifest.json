@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "vnext-forecast-checkpoint-manifest-v1",
+  "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+  "files": [
+    {
+      "path": "hosted-observations.json",
+      "bytes": 22143,
+      "sha256": "cc9f361fc24d51f2920486130ffa3847b0d1c200e9267b368182bc3ce8a13aa2"
+    },
+    {
+      "path": "local-private-inventory.json",
+      "bytes": 14343,
+      "sha256": "0d45cc23d49de7a8fa3aec45bfb83b0dd4e1897f7b7502acbe88ff1f9d5ac32d"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 3509,
+      "sha256": "8230258b3de9ead25c9813601dfb65017b51e87af0b7b8614ebb45ca41446f26"
+    },
+    {
+      "path": "retained-reds.json",
+      "bytes": 4951,
+      "sha256": "40a2ce15c1834cc7a460501bf75243927d16586ac979f586baf225f2bde6513d"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 4817,
+      "sha256": "8d1963e64a605292cda99ebade2d550c8c19e6e83676d5c58494400422d24725"
+    },
+    {
+      "path": "vm-checks.json",
+      "bytes": 8179,
+      "sha256": "9e06e79b224522e26152da6d55b46e227b24d8daddec71c33b1ab7ff2dd56f3a"
+    }
+  ],
+  "count": 6,
+  "bytes": 57942,
+  "scope": "explicit public-safe allowlist, no private raw; manifest not self-hashed"
+}

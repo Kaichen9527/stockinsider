@@ -1,0 +1,159 @@
+{
+  "head": "3847a542444b447e924cfd415d0eebb4829bd485",
+  "checkRuns": [
+    {
+      "conclusion": "success",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704697788/job/119584461547",
+      "name": "stockinsider-v3-diagnostic-product-runtime",
+      "status": "completed"
+    },
+    {
+      "conclusion": "skipped",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704694129/job/119582007797",
+      "name": "product-runtime-code-gate",
+      "status": "completed"
+    },
+    {
+      "conclusion": "skipped",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704694129/job/119582007250",
+      "name": "model-runner-code-gate",
+      "status": "completed"
+    },
+    {
+      "conclusion": "failure",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704694129/job/119582006249",
+      "name": "stockinsider-v3-gate-root",
+      "status": "completed"
+    },
+    {
+      "conclusion": "failure",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704694129/job/119581918384",
+      "name": "architecture",
+      "status": "completed"
+    },
+    {
+      "conclusion": "failure",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704694129/job/119581918345",
+      "name": "requirements",
+      "status": "completed"
+    },
+    {
+      "conclusion": "failure",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704694129/job/119581918270",
+      "name": "exact-review",
+      "status": "completed"
+    },
+    {
+      "conclusion": "skipped",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704697788/job/119581864064",
+      "name": "model-runner",
+      "status": "completed"
+    },
+    {
+      "conclusion": "skipped",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704697788/job/119581863817",
+      "name": "evaluation-governance",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704697765/job/119581862459",
+      "name": "vnext-quality",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704697788/job/119581862394",
+      "name": "product-runtime",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704697748/job/119581862268",
+      "name": "research-publication-tail-quality",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704697754/job/119581862259",
+      "name": "financial-installation-quality",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704697739/job/119581862185",
+      "name": "Candidate discovery admission and UI diagnostics",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704697781/job/119581862086",
+      "name": "Financial document owned write lease route contracts",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704697817/job/119581862040",
+      "name": "PTT stock-local evidence and collector diagnostics",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "details_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39704694129/job/119581852068",
+      "name": "stockinsider-v3-gate-bootstrap",
+      "status": "completed"
+    }
+  ],
+  "requirementsSteps": {
+    "conclusion": "failure",
+    "id": 119581918345,
+    "steps": [
+      {
+        "conclusion": "success",
+        "name": "Set up job"
+      },
+      {
+        "conclusion": "success",
+        "name": "Checkout only the protected pull-request base"
+      },
+      {
+        "conclusion": "failure",
+        "name": "Retrieve bootstrap and prepare detached subject"
+      },
+      {
+        "conclusion": "skipped",
+        "name": "Emit protected Requirements envelope"
+      },
+      {
+        "conclusion": "skipped",
+        "name": "Publish immutable Requirements envelope"
+      },
+      {
+        "conclusion": "success",
+        "name": "Post Retrieve bootstrap and prepare detached subject"
+      },
+      {
+        "conclusion": "success",
+        "name": "Post Checkout only the protected pull-request base"
+      },
+      {
+        "conclusion": "success",
+        "name": "Complete job"
+      }
+    ]
+  },
+  "requirementsAnnotations": [
+    {
+      "annotation_level": "warning",
+      "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+      "title": ""
+    },
+    {
+      "annotation_level": "failure",
+      "message": "Process completed with exit code 1.",
+      "title": ""
+    }
+  ],
+  "exactFailureAssertion": "NOT_OBSERVED; actual failed step is Retrieve bootstrap and prepare detached subject; no guard/pin modification or exclusion",
+  "scope": "CI success/failure applies only to prior3847 worker head, not new analysis subject"
+}

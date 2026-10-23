@@ -1,0 +1,18 @@
+{
+  "predecessor": "85951f8f64b236859f528044e15a875f7e86cdd2b0b77d6480fc0acd5a044156",
+  "successor": "47fdb26746e2d20a2d85348d2e15cf288c8e1e1af84b7b4b6b780d150811288d",
+  "actual09Oid": 25935,
+  "oldBytes": 11910,
+  "newBytes": 11964,
+  "finiteDelta": "provider definite settled failure permanent argument + original main reviewer-fail two CASE expressions honoring permanent; no post-block",
+  "sqlSha256": "20d41e89a29a44515980aa8c51bde2f221cd8a09527a57a188bf4e1ea7162fdb",
+  "nativeVerified": false,
+  "predecessorMethod": "independently rebuilt originalprovider→exactanalysisprojection→exactthesisinspect; equals actualPG09catalog hash, no profilepin changed",
+  "reviewMain": {
+    "predecessor": "e27aa373d4a3d8b444c7bbec2585380329e98c21e35189746b56e72d522e121a",
+    "successor": "47a8d220420b10ac931118262032aac74bc66e94d437d9ac381ad3ab50226074",
+    "exactOriginalFragmentParity": true,
+    "delta": "only two review-fail CASE honorpermanent asauthorfail alreadydoes",
+    "metadataSource": "actualPG09, eb558 completeinstalled predecessor, catalogbodyhash captured before newmutation"
+  }
+}

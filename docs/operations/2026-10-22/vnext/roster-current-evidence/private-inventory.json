@@ -1,0 +1,277 @@
+{
+  "scope": "explicit local source-command/metadata allowlist bytes hashed; not a scan/claim over older private database payloads. Hosted raw inventory claims are separate finite notices; no hosted raw contents downloaded",
+  "count": 54,
+  "bytes": 192906,
+  "files": [
+    {
+      "path": "trading-invalidity-discovery-initial-red-o23.json",
+      "bytes": 1265,
+      "sha256": "4971b45a8f056ad72b1e87df3e0aad78e03dc96a91e23c007580ab750233d423"
+    },
+    {
+      "path": "trading-invalidity-discovery-initial-red-o23.log",
+      "bytes": 2169,
+      "sha256": "f965d24eb2276bcd19ceb60152be6b537d45820de4b45d59f474cfeee5824baf"
+    },
+    {
+      "path": "trading-invalidity-discovery-final-o23.json",
+      "bytes": 1265,
+      "sha256": "ae3aba2c521db0a5174df92a81d8fd861d8418006a332fd2b09c73ead8f2ece5"
+    },
+    {
+      "path": "trading-invalidity-discovery-final-o23.log",
+      "bytes": 1257,
+      "sha256": "8567d36b28bf4b2a83a69c5c611d04213da0a2225effd7d808dc4e8c41cdfa38"
+    },
+    {
+      "path": "trading-invalidity-caller-types-o23.json",
+      "bytes": 13925,
+      "sha256": "695e3b80ee56798aa63091efba49345d46c0dd7b70e24632cfd9eabb4e78010c"
+    },
+    {
+      "path": "trading-invalidity-caller-types-o23.log",
+      "bytes": 727,
+      "sha256": "3dfad621453c675713d943417ea3dadf13dd0e5800c6921b9ddd27ce6df096b6"
+    },
+    {
+      "path": "trading-invalidity-caller-types-fixed-o23.json",
+      "bytes": 14506,
+      "sha256": "f22a5e26b8e216f31f140adb1ca2fb1b7cc7871e8120219a3a8b9f7fbbc82824"
+    },
+    {
+      "path": "trading-invalidity-caller-types-fixed-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "trading-invalidity-caller-lint-o23.json",
+      "bytes": 1909,
+      "sha256": "611be74cc146b8ae7b6126bcfcd1d0caa775458af8c414fbca2d4e4ff5fe68ef"
+    },
+    {
+      "path": "trading-invalidity-caller-lint-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "roster-current-source-01.json",
+      "bytes": 879,
+      "sha256": "cd90f5a3290a3435efa632b41ddf231a670f151f3e85de7cbd853031623d652a"
+    },
+    {
+      "path": "roster-current-source-01.log",
+      "bytes": 2817,
+      "sha256": "021b0c2ed1c4f3c127d4f88af20600e6bb1e6a9d7cfd7f33dcd654776d4615f9"
+    },
+    {
+      "path": "roster-current-lint-01.json",
+      "bytes": 1451,
+      "sha256": "4883b82ef165a809dc5e563b579918a3f5ee1fa4f19eddd689ebb2719e19068d"
+    },
+    {
+      "path": "roster-current-lint-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "roster-current-native-syntax-01.json",
+      "bytes": 860,
+      "sha256": "62d33cd3a2549e6868444d0cf7dfcedc2eff8dcffdbb8753d3b29954d99c1d5f"
+    },
+    {
+      "path": "roster-current-native-syntax-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "preparation-instrument-source-o23.json",
+      "bytes": 1743,
+      "sha256": "3f58a77926ad259c96e22e6b871fbda3f2ad048a48e7531c60c31834457e9830"
+    },
+    {
+      "path": "preparation-instrument-source-o23.log",
+      "bytes": 669,
+      "sha256": "d7779124370952acad249c55916375df09075c8119d11068a192124e34572e09"
+    },
+    {
+      "path": "preparation-instrument-reconciliation-direct-o23.json",
+      "bytes": 2014,
+      "sha256": "8e7cc5d6483b51d02e76b8a3637c3a53a0bc989f78b55a9e56d0b4d0320e1eaf"
+    },
+    {
+      "path": "preparation-instrument-reconciliation-direct-o23.log",
+      "bytes": 4774,
+      "sha256": "ad3ce8a0bb61f8900691b31106c0b8310ed518a43261c591dca54cec8733e944"
+    },
+    {
+      "path": "preparation-instrument-reconciliation-fixed-o23.json",
+      "bytes": 1640,
+      "sha256": "f41c83b7f74ae9630c611c1fc1e8bcde6089f1179d4698844938bd64c1080695"
+    },
+    {
+      "path": "preparation-instrument-reconciliation-fixed-o23.log",
+      "bytes": 4162,
+      "sha256": "c9e8fbdb11ac62606a85167cbc7c176a037b186e17312a8422f92b4b6ecd3317"
+    },
+    {
+      "path": "preparation-instrument-selector-final-o23.json",
+      "bytes": 887,
+      "sha256": "469a7a0a5ec0d9ff3d34dd6089d598040b7e4ca65d44e66cf8a746bae70aeb45"
+    },
+    {
+      "path": "preparation-instrument-selector-final-o23.log",
+      "bytes": 1837,
+      "sha256": "89432a8a12d0faa7645d4bf397b59d2fbb29c2e48f59afcaed3da93ba492f99e"
+    },
+    {
+      "path": "preparation-instrument-composition-final-o23.json",
+      "bytes": 1638,
+      "sha256": "f4673c5446cb89cfb998a2f1c79d0f75e733aff7d02f740bb7fbbd502c48d642"
+    },
+    {
+      "path": "preparation-instrument-composition-final-o23.log",
+      "bytes": 4162,
+      "sha256": "f46fbcffbb7a59cbe9d27021665127765b38dd07fa9e3162d9e2b67962344028"
+    },
+    {
+      "path": "preparation-instrument-types-initial-o23.json",
+      "bytes": 11811,
+      "sha256": "0c345c803d890b12d98c6c5c6912009e03d4428f94a00910cc22f4c2c7bf57ad"
+    },
+    {
+      "path": "preparation-instrument-types-initial-o23.log",
+      "bytes": 471,
+      "sha256": "dca21b15f71dd178a3d1fe8567a4a5d1e36bbd55f0c5e48d5664a19a7d7443c6"
+    },
+    {
+      "path": "preparation-instrument-types-fixed-o23.json",
+      "bytes": 17474,
+      "sha256": "708c36afb5e062ba0eb997fa7de9b669638a7e1ae2d68b4d8d5034dc837ede25"
+    },
+    {
+      "path": "preparation-instrument-types-fixed-o23.log",
+      "bytes": 199,
+      "sha256": "649dcb3f10bac05dc09d16c2e502e1043552b297a5b2966af59b95e5807725ba"
+    },
+    {
+      "path": "preparation-instrument-types-final-o23.json",
+      "bytes": 16519,
+      "sha256": "73b3b959dd1a8815ad0079d959f5be02ee58c754d009c5336d177a37e7090474"
+    },
+    {
+      "path": "preparation-instrument-types-final-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "preparation-instrument-lint-final-o23.json",
+      "bytes": 2370,
+      "sha256": "ac946fbce549bfdc27e9db37594f4b9adfd37cc84653eea8da1c1ee60eb07a3e"
+    },
+    {
+      "path": "preparation-instrument-lint-final-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "roster-current-after-preparation-initial-o23.json",
+      "bytes": 879,
+      "sha256": "97ee166af5381969b4cb229f6788aa184e71dbc760d225d2b68d6b86e8cc3638"
+    },
+    {
+      "path": "roster-current-after-preparation-initial-o23.log",
+      "bytes": 3728,
+      "sha256": "8b6ef9be1e11f8ab1fa84ef7298210d8018659a6e6f87d988dd6cb85a4735faf"
+    },
+    {
+      "path": "roster-current-after-preparation-fixed-o23.json",
+      "bytes": 879,
+      "sha256": "36e49caee5388c92326fb551c2b2be94203e04f6059f5e4363a663465021693b"
+    },
+    {
+      "path": "roster-current-after-preparation-fixed-o23.log",
+      "bytes": 2714,
+      "sha256": "825b1a23e8fc0d544c662e42ed7da3e8f71de46bb6c2ed716e58d08419514499"
+    },
+    {
+      "path": "roster-current-after-preparation-lint-o23.json",
+      "bytes": 1639,
+      "sha256": "45d07f2dd5c326ac646d16a98033be0a435eb25866db73806e85fa82d3650d4f"
+    },
+    {
+      "path": "roster-current-after-preparation-lint-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "trading-invalidity-root-source-review-o23.json",
+      "bytes": 499,
+      "sha256": "a91cf306fd9be68c8e5beef101766b947270e7a21ac07fde1668d8e46b94c573"
+    },
+    {
+      "path": "roster-current-root-source-review-o23.json",
+      "bytes": 551,
+      "sha256": "a862ef73623bcd5ddf542b65fa6ee759b4646cbb004f82ddd86df4b149f71cca"
+    },
+    {
+      "path": "roster-current-workflow-source-o23.json",
+      "bytes": 456,
+      "sha256": "4530e3aecede941a0a1ed530c9da2b8441b76ff2026563184970d7bdbdc26b58"
+    },
+    {
+      "path": "roster-preparation-final-source-seal-o23.json",
+      "bytes": 2000,
+      "sha256": "59135affd7e6a6c0ddf8b0462b637aefc2bae79bcbba3d35881c159e2213b3d2"
+    },
+    {
+      "path": "preparation-instrument-syntax-o23.json",
+      "bytes": 460,
+      "sha256": "ab1779dea1df914839b016a8d486fbbdc622533a84f9bfd9605ef9131a124b42"
+    },
+    {
+      "path": "ci6f25741-vnext-final-jobs-o23.json",
+      "bytes": 8577,
+      "sha256": "7d3ee207fd3bd9dd436b58378ba47b233a00212bcadaacdf51d95976e519a843"
+    },
+    {
+      "path": "ci6f25741-product-final-jobs-o23.json",
+      "bytes": 6892,
+      "sha256": "e8dd53c32aea10f508ca5575a6ba6c3f875eb10b5b469262067fa1fe49f592ef"
+    },
+    {
+      "path": "ci6f25741-protected-jobs-o23.json",
+      "bytes": 13920,
+      "sha256": "39d3b83dba729f95fbff7cbd8392f01a81cd6058b2e4e474ed4ea01eaf516a94"
+    },
+    {
+      "path": "ci37ba4a6-initial-vnext-jobs-o23.json",
+      "bytes": 11473,
+      "sha256": "ceac7e2931663e27c2b262a4eba59196ee0e5c4c7beea1d3a2c7ead8bf72b503"
+    },
+    {
+      "path": "ci6f25741-trading-annotations-o23.json",
+      "bytes": 4160,
+      "sha256": "f64ec7c6e3f905d440b15ea57e5f37cb3c7cb5774f6a3f6574259d7c64ab02e6"
+    },
+    {
+      "path": "ci6f25741-vnext-final-check-annotations-o23.json",
+      "bytes": 8877,
+      "sha256": "ab7d2f48f576409a8f2a0c0e10f2478dafd5248e36b2dbee3d17c3cf556a319c"
+    },
+    {
+      "path": "ci37ba4a6-roster-annotations-o23.json",
+      "bytes": 4500,
+      "sha256": "cff8f2c47acfe50e6239c2b329b9533bf0d59cd78cef31579eab318e9263a67c"
+    },
+    {
+      "path": "ci6f25741-merge-commit-o23.json",
+      "bytes": 2651,
+      "sha256": "e28f57515231da9c1bffae51de4be37b71bb04a5da3e6728384d1a43d7fa9238"
+    },
+    {
+      "path": "ci37ba4a6-merge-commit-o23.json",
+      "bytes": 2651,
+      "sha256": "6ed21755165acc533ce7f7bc7aa9dd9cfa2fe0d8547f7370fc01a0e51c9bed05"
+    }
+  ]
+}

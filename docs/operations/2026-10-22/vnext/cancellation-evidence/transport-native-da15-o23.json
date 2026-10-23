@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "vnext-cancellation-real-transport-native-v1",
+  "subject": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
+  "run": 39921032226,
+  "job": 120306028726,
+  "observedAt": "2026-10-23T07:59:40.540469+00:00",
+  "runtime": {
+    "parents": [
+      "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "da15a5c388f3ed37d1d6f1e105812862a99194a8"
+    ],
+    "sha": "936b44d568ac652709946986d1290b4287637b5b",
+    "tree": "91874a89b555c7b2b4df92de974fb11e5eae8ef8"
+  },
+  "exactTreeParity": true,
+  "actualReceipts": {
+    "Cancellation cleanup receipt": {
+      "pgRunning": false,
+      "pgPid": 0,
+      "pgExit": 0,
+      "shutdownLogObserved": true,
+      "socketAbsence": {
+        ".s.PGSQL.5432": true,
+        ".s.PGSQL.5432.lock": true
+      },
+      "resourceReceiptObserved": true,
+      "ownedProcessCounts": {
+        "absent": 24,
+        "zeroRssZombie": 0,
+        "pidReused": 0,
+        "unsettled": 0
+      },
+      "fullPrivateCleanupSha256": "ec135fdf170548a1d91b252bfd2816a49171efadb434040c50303d05e87ab6b2",
+      "dataRetained": true
+    },
+    "Cancellation private inventory": {
+      "count": 35,
+      "bytes": 50251541,
+      "inventorySha256": "003207b5e5f018e43d61866d52fb25b84c32bb14d34d3a600b547d139b0a60b8",
+      "rawContentsPublished": false
+    },
+    "Cancellation finite native receipt": {
+      "scope": "actual original-source cancellation/private proof/atomic retained publication+exit; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval",
+      "sourceHead": "936b44d568ac652709946986d1290b4287637b5b",
+      "tapSha256": "22ad6a91da3368057b4eb1d42bb8400b888d011a3331ac54912086818f4d9025",
+      "actualTapCounts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "resourceObserved": true,
+      "queryEventsPrivateSha256": "9d1eb4bd16d48c26cccaa13ce88c868fd5872eacd3733f82215965ff9a83d29d",
+      "exit": 0,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledOwnedTreePeakRssBytes": 799227904,
+      "initialFree": {
+        "/home/runner/work/stockinsider/stockinsider": 90992607232,
+        "/tmp": 90992607232
+      },
+      "finalFree": {
+        "/home/runner/work/stockinsider/stockinsider": 90900336640,
+        "/tmp": 90900336640
+      },
+      "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+      "actualPg": {
+        "containerId": "ece54070009a72ef97152f0542562b0a370a313bb9b212fefb754d3015319340",
+        "pid": 2343,
+        "start": "5512",
+        "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+        "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+        "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+      },
+      "inputCount": 13,
+      "inputInventorySha256": "6c9eebe8acbe2710522cb4d8cdddba916f45ae9a7cf2e861602eee9fe49e5991",
+      "inputInventoryCodec": "utf8_sorted_keys_compact_json_v1"
+    },
+    "Cancellation real response loss": {
+      "bytes": 170,
+      "sha256": "b949cbe779cb94e694aa35257b29a6509a5b9f868dc52f0df0b9155afdfab3f3",
+      "oneDataRow": true,
+      "selectOne": true,
+      "noError": true,
+      "ready": "I",
+      "forwardedResponseBytes": 0,
+      "commitObservedBeforeSocketClose": true,
+      "actualQueryRejected": true,
+      "bothOwnedSocketsClosed": true,
+      "pendingQuery": false,
+      "automaticResend": false
+    }
+  },
+  "scope": "actual fresh hosted PG protocol/independent COMMIT/true socket close/query rejection/explicit immutable READ; synthetic original events and provider outputs; NOT CodexVM/Contabo/formal financial or semantic research",
+  "original977AcceptanceGapPreserved": "transport-gap-977-o23.json",
+  "privateRawContentsDownloaded": false,
+  "rawLocalInputs": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cida15a5c-cancellation-annotations-o23.json",
+      "bytes": 6996,
+      "sha256": "33c11cc69d72caa208b29f6e99f4a6ae8fa5e69909db5561bdcecbd8b8b45daa"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cida15-runtime-tree-o23.json",
+      "bytes": 199,
+      "sha256": "e9d2b1c858c7f0d06b649fdb3d434f143450ee9754a281561ea59246cf92239c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cida15-ordinary-jobs-o23.json",
+      "bytes": 14400,
+      "sha256": "f94f4c051ceec975e32122fd52807c9c2920b1224307c4dafdbd5d90865d0290"
+    }
+  ],
+  "pending": [
+    "actual cancellation HTTP",
+    "full remaining rights/lease/expiry/race/legacy/caps",
+    "actual source/provider/semantic research",
+    "business/risk source slice",
+    "forecast/current producer/rebase",
+    "Contabo",
+    "protected/ReleaseGate"
+  ]
+}

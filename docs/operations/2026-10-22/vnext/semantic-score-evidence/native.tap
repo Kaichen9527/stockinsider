@@ -1,0 +1,21 @@
+TAP version 13
+# Subtest: new semantic score guard: retained lab catalog and immutable audit history
+    # Subtest: exact retained rows and original score body match; original SQL counts unsupported scalar checklists
+    ok 1 - exact retained rows and original score body match; original SQL counts unsupported scalar checklists
+    # Subtest: full new guarded candidate commits; only two prosrc change and every business row stays immutable
+    ok 2 - full new guarded candidate commits; only two prosrc change and every business row stays immutable
+    # Subtest: actual SQL leaves unsupported groups null, preserves weighted valuation/technical arithmetic and private ACL
+    ok 3 - actual SQL leaves unsupported groups null, preserves weighted valuation/technical arithmetic and private ACL
+    # Subtest: installed first-only candidate rejects and explicit rollback leaves exact catalog and rows
+    ok 4 - installed first-only candidate rejects and explicit rollback leaves exact catalog and rows
+    1..4
+ok 1 - new semantic score guard: retained lab catalog and immutable audit history
+1..1
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1850.245616

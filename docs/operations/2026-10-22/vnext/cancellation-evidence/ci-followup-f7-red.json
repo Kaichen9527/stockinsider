@@ -1,0 +1,166 @@
+{
+  "at": "2026-10-23T07:28:06.020236+00:00",
+  "failedSource": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+  "fixedSource": "63a93183da671d072cae8eee633082eb3c81644a",
+  "run": 39916672249,
+  "quality": {
+    "job": 120291619699,
+    "result": "FAIL",
+    "stage": "Actual source contracts, types and lint",
+    "innerHostedLog": "one new read denied403; no retry; private signed redirect NOT published",
+    "localSourceReproduction": [
+      {
+        "case": "actual preparation handler/store closed source loader",
+        "tests": 12,
+        "pass": 11,
+        "fail": 1,
+        "error": "unexpected_preparation_source:catalyst-cancellation.ts"
+      },
+      {
+        "case": "actual admitted failure store closed source loader",
+        "tests": 6,
+        "pass": 1,
+        "fail": 5,
+        "error": "unexpected_failure_source:catalyst-cancellation.ts"
+      }
+    ],
+    "fixedLocal": [
+      {
+        "tests": 12,
+        "pass": 12,
+        "fail": 0
+      },
+      {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0
+      }
+    ],
+    "sameActualHostedInnerCauseClaim": false
+  },
+  "native": {
+    "job": 120291619445,
+    "result": "FAIL",
+    "tests": 1,
+    "pass": 0,
+    "fail": 1,
+    "childrenReached": 0,
+    "installer": "NOT_RUN",
+    "lifecycle": "NOT_RUN",
+    "observedSocketMismatch": {
+      "at": "2026-10-23T07:23:08.196613+00:00",
+      "source": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+      "scope": "actual workflow literal + source entry assertion reproduction; not decoded hosted raw TAP",
+      "observedWorkflow": [
+        [
+          "stockinsider-vnext-oct22-worker-12",
+          "/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-10"
+        ]
+      ],
+      "entryRequiresSocketSuffix": 12,
+      "reproduction": "false equality deterministic at entry before first native child/installer",
+      "actualHostedTests": {
+        "tests": 1,
+        "pass": 0,
+        "fail": 1
+      },
+      "actualPGInstaller": "NOT_RUN"
+    },
+    "sourceFix": "new job socket-10->socket-12; exactly two test-loader allowlist module literals. All product/SQL/profile/native entry unchanged. No guard/pin/expected/cap changes."
+  },
+  "otherJobs": {
+    "roster": {
+      "id": 120291619803,
+      "result": "SUCCESS"
+    },
+    "tradingInvalidity": {
+      "id": 120291619837,
+      "result": "SUCCESS"
+    }
+  },
+  "actualFiniteAnnotations": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Kaichen9527/stockinsider/blob/f7c7b667ad392c5208ffac53f4334f42f04647b0/.github",
+      "start_line": 2,
+      "start_column": null,
+      "end_line": 2,
+      "end_column": null,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Kaichen9527/stockinsider/blob/f7c7b667ad392c5208ffac53f4334f42f04647b0/.github",
+      "start_line": 36,
+      "start_column": null,
+      "end_line": 36,
+      "end_column": null,
+      "annotation_level": "notice",
+      "title": "Cancellation private inventory",
+      "message": "{\"count\":6,\"bytes\":12036,\"inventorySha256\":\"0787f81b411f8341a332c7871688e0ccb0bd5a332b9964b3ecd625ab73d130e9\",\"rawContentsPublished\":false}",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Kaichen9527/stockinsider/blob/f7c7b667ad392c5208ffac53f4334f42f04647b0/.github",
+      "start_line": 181,
+      "start_column": null,
+      "end_line": 181,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "Process completed with exit code 1.",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Kaichen9527/stockinsider/blob/f7c7b667ad392c5208ffac53f4334f42f04647b0/.github",
+      "start_line": 180,
+      "start_column": null,
+      "end_line": 180,
+      "end_column": null,
+      "annotation_level": "notice",
+      "title": "Cancellation cleanup receipt",
+      "message": "{\"pgRunning\":false,\"pgPid\":0,\"pgExit\":0,\"shutdownLogObserved\":true,\"socketAbsence\":{\".s.PGSQL.5432\":true,\".s.PGSQL.5432.lock\":true},\"resourceReceiptObserved\":true,\"ownedProcessCounts\":{\"absent\":8,\"zeroRssZombie\":0,\"pidReused\":0,\"unsettled\":0},\"fullPrivateCleanupSha256\":\"01f0bc06f64e429aa5046e2116620b1428bf92179048c36082090ea32ce2ce95\",\"dataRetained\":true}",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Kaichen9527/stockinsider/blob/f7c7b667ad392c5208ffac53f4334f42f04647b0/.github",
+      "start_line": 179,
+      "start_column": null,
+      "end_line": 179,
+      "end_column": null,
+      "annotation_level": "notice",
+      "title": "Cancellation finite native receipt",
+      "message": "{\"scope\":\"actual original-source cancellation/private proof/atomic retained publication+exit; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval\",\"sourceHead\":\"1e7999840359a78f0188ed26c7b8aa871bf077ad\",\"inputs\":[{\"path\":\"scripts/vnext-catalyst-cancellation-postgres.test.mjs\",\"bytes\":26152,\"sha256\":\"54ca2058eb32edad70094bbf3a1406cd867e72435d64ab2c1c1768e22b1b7f01\"},{\"path\":\"scripts/vnext-catalyst-cancellation-resource-run.py\",\"bytes\":6887,\"sha256\":\"7bbf852aaa425ef5761a1b8661593a3d72ce6a119a48efcd0f816fda61efdbe9\"},{\"path\":\"scripts/vnext-worker-fixture.mjs\",\"bytes\":7953,\"sha256\":\"67a22c076a74d860c7bb428003f47e1a2722b8ea87c2f9830489fe172ee19874\"},{\"path\":\"web/src/lib/vnext/catalyst-cancellation.ts\",\"bytes\":10359,\"sha256\":\"ecb344abfe0b4863d298e396842d88097ec1f3d52d80ba2d8664ede8b52c981a\"},{\"path\":\"web/src/lib/vnext/worker-core.ts\",\"bytes\":14671,\"sha256\":\"0b6f48e69045998eea18a040835ce0cc9e1fbf4bc56e5c28c4e1e3f79777dbfe\"},{\"path\":\"web/src/lib/vnext/worker-prompts.ts\",\"bytes\":12206,\"sha256\":\"b1761441c9962efe6c3db4586bb18e189214b500e9c1733acf9a154bdf101268\"},{\"path\":\"web/src/lib/vnext/research.ts\",\"bytes\":9822,\"sha256\":\"365581580281f16047ca2e24675dc6e50edc5e26fd013671b20c771d30db21d8\"},{\"path\":\"web/src/lib/vnext/worker-output.ts\",\"bytes\":5955,\"sha256\":\"9a7614bedcc16a244469efa03b1fb22511d1cbab888216bb860690a15a3e52a5\"},{\"path\":\"migrations/20261023_vnext_catalyst_cancellation_v1.sql\",\"bytes\":52528,\"sha256\":\"d24ad1cf682776cc3c4e031e754f72e2c59ed8c3de77d4306218e2110c09492e\"},{\"path\":\"scripts/opportunity-v3/vnext-catalyst-cancellation-profile-v1.json\",\"bytes\":8953,\"sha256\":\"a7c5b0af83dd44608a299e4589ff7c92e76b98539cce3d5e5ec853469e6a7054\"},{\"path\":\"migrations/20261023_vnext_roster_current_fence_v1.sql\",\"bytes\":17898,\"sha256\":\"256960f51e6ec1c43393a243b00e7d385c40a495094b67127c16fd46322a79f2\"}],\"tapSha256\":\"b7de9dbc73c8c4153428f33b0c895c2e78b4c56a1f7c78d49aa48ed2666140bd\",\"actualTapCounts\":{\"tests\":1,\"pass\":0,\"fail\":1,\"cancelled\":0,\"skipped\":0,\"todo\":0},\"resourceObserved\":true,\"exit\":1,\"resourceViolation\":null,\"sampledNotInstantaneous\":true,\"sampledOwnedTreePeakRssBytes\":97038336,\"initialFree\":{\"/home/runner/work/stockinsider/stockinsider\":90993061888,\"/tmp\":90993061888},\"finalFree\":{\"/home/runner/work/stockinsider/stockinsider\":90993057792,\"/tmp\":90993057792},\"nodeSha256\":\"1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1\",\"actualPg\":{\"containerId\":\"952b8419f0d71872df11ee654fb30c8b2d2e234560bfb7e12059ec7448c42691\",\"pid\":2356,\"start\":\"28611\",\"image\":\"postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27\",\"actualVersion\":\"postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)\",\"actualBinarySha256\":\"f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed\"}}",
+      "raw_details": ""
+    }
+  ],
+  "newSourceAcceptance": "PENDING ordinary new-source event, no old rerun or new green inferred",
+  "localFixProof": {
+    "scope": "source/config boundary check only; new actual native pending",
+    "sourcePreimage": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+    "changes": "one new-job socket literal; two closed test loader source literals; no product/SQL/profile/prompt/guards/expected changes",
+    "matchingEnvironment": {
+      "VNEXT_TEST_CONTAINER": "stockinsider-vnext-oct22-worker-12",
+      "VNEXT_WORKER_SOCKET_PARENT": "/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-12"
+    },
+    "reverseParity": [
+      ".github/workflows/stockinsider-vnext-quality.yml",
+      "web/src/lib/vnext/preparation-reconciliation.test.ts",
+      "web/src/lib/vnext/research-failure.test.ts"
+    ]
+  },
+  "safeLogDenialReceipt": {
+    "exit": 1,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrBytes": 521,
+    "stderrSha256": "9cb22277d40e765bb90cbd2ae0cf0675fa5b723604e5b2d8d86f4106253a9d84",
+    "scope": "one read of new ordinary job logs; no old denied endpoint retry"
+  }
+}

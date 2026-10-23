@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "vnext-twse-snapshot-source-profile-v1",
+  "scope": "SOURCE CANDIDATE; actual acquisition/SQL grammar/catalog/native runtime NOT_RUN",
+  "migration": "migrations/20261022_vnext_twse_snapshot_receipts_v1.sql",
+  "migrationSha256": "58e2fd49e5035332954d8d6a47e83b129d583da09ebfb123d38ef71c6125ad9c",
+  "nativeVerified": false,
+  "nativeOids": null,
+  "observedCatalogMetadata": null,
+  "legacyPrivilegeDelta": "none",
+  "newObjects": [
+    {
+      "name": "public.vnext_twse_snapshot_receipts_v1",
+      "type": "table",
+      "owner": "stockinsider_vnext_owner",
+      "rls": true,
+      "directServiceAccess": false,
+      "appendOnly": true
+    },
+    {
+      "name": "public.vnext_twse_snapshot_immutable_v1()",
+      "type": "trigger function",
+      "owner": "stockinsider_vnext_owner",
+      "serviceExecute": false
+    },
+    {
+      "name": "public.vnext_twse_snapshot_v1(text,text,jsonb)",
+      "type": "SECURITY DEFINER RPC",
+      "owner": "stockinsider_vnext_owner",
+      "serviceExecute": true,
+      "searchPath": [
+        "pg_catalog",
+        "public"
+      ],
+      "statementTimeout": "30s",
+      "lockTimeout": "2s"
+    }
+  ],
+  "dependencyBodies": [
+    {
+      "signature": "public.enforce_production_writer_fence()",
+      "source": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+      "sourceSha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+      "bodySha256": "8230515bef78902c9f955f5c87a77f8b04ef02fa22525a5c4828849f56a9273a"
+    },
+    {
+      "signature": "public.vnext_provider_envelope_v1(jsonb,integer)",
+      "bodySha256": "f30e724618b242f2e40ee3f64ced5f131baf5505ac51827238bb6992f9c27264"
+    },
+    {
+      "signature": "public.vnext_catalog_canonical_v1(jsonb)",
+      "bodySha256": "597081dda160ac0e369b5f5306bee102caac5b78b19cd82583e0e9408cc4f464"
+    }
+  ],
+  "runtimeClosure": [
+    {
+      "path": "web/src/lib/research-v2.ts",
+      "predecessorSha256": "b97bd062db68973f77f36abe78a898d05c0e92b344f71da6b2c9458a80129056",
+      "successorSha256": "e87e4e9b5b8079d9c493752f787b24da81fed8a980c889d7b1e3e8ba3c8af7d9",
+      "capsuleOrProfilePinsUpdated": false
+    },
+    {
+      "path": "web/src/app/api/internal/source-sync/route.ts",
+      "predecessorSha256": "e71d185f81cbbf242fd696560269c9e0fcdedc1c872030b4fbce5bf60819479a",
+      "successorSha256": "fbe0302710ea7dcdcdf284fcd02a701803897dc6f2b2dad1b1bbbd3323da8a16",
+      "capsuleOrProfilePinsUpdated": false
+    },
+    {
+      "path": "web/src/lib/vnext/source-worker.ts",
+      "predecessorSha256": "548c9f204d50da853df3ab6ed55b004718e056a136d63e287afcbaf0f263fec3",
+      "successorSha256": "2ec7a01b97347836517d5abed8edf4cae1ddaae48a8ff92db341daf0cfcc3a57",
+      "capsuleOrProfilePinsUpdated": false
+    },
+    {
+      "path": "web/src/lib/vnext/twse-snapshot.ts",
+      "predecessorSha256": null,
+      "successorSha256": "cd21c85a3e9d99dd512b7380ece578ffe3823c76d32a98633e9b490c065b8290",
+      "capsuleOrProfilePinsUpdated": false
+    },
+    {
+      "path": "web/src/lib/vnext/twse-snapshot-store.ts",
+      "predecessorSha256": null,
+      "successorSha256": "3e99a1fc62dbb5437ddc4d1856f90adb5805ab5b935aa3cb9743533b0c2216c8",
+      "capsuleOrProfilePinsUpdated": false
+    }
+  ],
+  "profileVersion": "twse-insider-snapshot-v1",
+  "endpoints": {
+    "holding_listed": "https://openapi.twse.com.tw/v1/opendata/t187ap11_L",
+    "holding_public": "https://openapi.twse.com.tw/v1/opendata/t187ap11_P",
+    "transfer_listed": "https://openapi.twse.com.tw/v1/opendata/t187ap12_L"
+  },
+  "maximumDecodedBytes": 8388608,
+  "timeoutMs": 20000,
+  "requestsPerExistingRun": 3,
+  "automaticRetries": 0,
+  "selectionCaps": {
+    "symbol": 60,
+    "market": 500
+  },
+  "maximumManifestRows": 500,
+  "eventWindow": null,
+  "eventVolume": null,
+  "exhaustion": "not_exposed_by_snapshot_api",
+  "rootResolution": "unresolved",
+  "byteBasis": "fetch_response_body_after_http_content_decoding",
+  "rowHashBasis": "sha256_json_stringify_parsed_row_v1",
+  "runLinkage": "FK proves only existing connector_runs.id; trusted configured server checks source-sync/twse_insider/start clock using preexisting service SELECT. No hostile-service transport attestation. No old-table grant/RLS addition.",
+  "rights": "Current official_original policy license_basis/rights_subject/valid_until exact identity; receipts never financial evidence or event authority. Stale observations retain asOf; global source-policy ABA cannot give them financial authority.",
+  "unknownMutationRecovery": "Explicit read(run UUID,endpoint enum), no automatic append/refetch.",
+  "sourceIdentityImpact": "research-v2.ts changes actual source closure Hs/Hc; original capsules/profile pins deliberately unchanged, prior native receipts apply only prior source. New acquisition runtime NOT_RUN.",
+  "unchangedBudgets": "No new fetch/schedule/model, no change200/day50/source extraction authority, no event-volume positive baseline."
+}

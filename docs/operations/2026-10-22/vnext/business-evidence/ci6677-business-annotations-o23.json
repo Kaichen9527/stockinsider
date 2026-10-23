@@ -1,0 +1,26 @@
+{
+  "annotations": [
+    {
+      "title": "Business criteria private inventory",
+      "level": "notice",
+      "message": "{\"count\":18,\"bytes\":609109,\"inventorySha256\":\"b31914a8c02551b33132e7f298ccf1096e6f1d7a50ccc528856b5a3eb8d0d98c\",\"rawContentsPublished\":false}"
+    },
+    {
+      "title": "Business criteria cleanup receipt",
+      "level": "notice",
+      "message": "{\"pgRunning\":false,\"pgPid\":0,\"pgExit\":0,\"shutdownLogObserved\":true,\"socketAbsence\":{\".s.PGSQL.5432\":true,\".s.PGSQL.5432.lock\":true},\"resourceReceiptObserved\":true,\"ownedProcessCounts\":{\"absent\":15,\"zeroRssZombie\":0,\"pidReused\":0,\"unsettled\":0},\"fullPrivateCleanupSha256\":\"f9f21691ccb5d807b7f6470d954afbe4023f27ecd71305fdda1e21bdd3034eb3\",\"dataRetained\":true}"
+    },
+    {
+      "title": "Business criteria finite native receipt",
+      "level": "notice",
+      "message": "{\"scope\":\"actual original-bound business inference/current context/audit/public projection/withdrawal; synthetic facts/provider only; no group points, bounded-risk or semantic approval\",\"sourceHead\":\"717d2e86009f98af03990931bb5193c1cdb87edc\",\"tapSha256\":\"c4452fa4467ca7fc5b5f36d41c61c37e6e01679857f64e4dd9415d9a1c342ede\",\"actualTapCounts\":{\"tests\":2,\"pass\":0,\"fail\":2,\"cancelled\":0,\"skipped\":0,\"todo\":0},\"resourceObserved\":true,\"queryEventsPrivateSha256\":\"d62a4d8d09bfed2cb74ac75aa469bdf970c58d4a8f13bc19239fe6ed26a13165\",\"exit\":1,\"resourceViolation\":null,\"sampledNotInstantaneous\":true,\"sampledOwnedTreePeakRssBytes\":772366336,\"initialFree\":{\"/home/runner/work/stockinsider/stockinsider\":90991927296,\"/tmp\":90991927296},\"finalFree\":{\"/home/runner/work/stockinsider/stockinsider\":90950103040,\"/tmp\":90950103040},\"nodeSha256\":\"1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1\",\"actualPg\":{\"containerId\":\"4f6c8f5b3c6180823caaaee3653cf16c188b2c4cea01c2cd5efb0e2721916d7e\",\"pid\":2562,\"start\":\"4826\",\"image\":\"postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27\",\"actualVersion\":\"postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)\",\"actualBinarySha256\":\"f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed\"},\"inputCount\":14,\"inputInventorySha256\":\"01c6b5d2bd5eccc15a436d1421ae645309a2bb59a84aca878b0227f740d846f1\",\"inputInventoryCodec\":\"utf8_sorted_keys_compact_json_v1\"}"
+    },
+    {
+      "title": "Business criteria finite diagnostic",
+      "level": "failure",
+      "message": "{\"phase\":\"stage_1\",\"code\":\"UNKNOWN\",\"message\":\"hash:ac5b6aa1b8c842a4830f5ecf87d3cc3fcc42ab76a206309a6655646b12cb6ca2\",\"errorType\":\"AssertionError\"}"
+    }
+  ],
+  "apiBytesSha256": "88716fb46defcd5268e6b5383389bf2f740a9d5cc8980301fbfa86c6a7fee474",
+  "scope": "finite public-safe GitHub annotation fields only; private raw contents not downloaded"
+}

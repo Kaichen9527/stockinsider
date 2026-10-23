@@ -1,0 +1,310 @@
+{
+  "scope": "all top-level run-recorded nonzero receipts in this VM task; additional old source/SSH/tooling errors remain separately scoped in private inventory/chat, not asserted fully enumerated here",
+  "runs": [
+    {
+      "label": "browser-01",
+      "start": "2026-10-21T23:41:42.465738+00:00",
+      "end": "2026-10-21T23:42:11.621200+00:00",
+      "exit": 1,
+      "counts": {
+        "browserExpected": 5,
+        "browserUnexpected": 5,
+        "browserSkipped": 0
+      },
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rawLogBytes": 0,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "browser-explicit-scope",
+      "start": "2026-10-22T00:30:59.133165+00:00",
+      "end": "2026-10-22T00:31:32.128375+00:00",
+      "exit": 1,
+      "counts": {
+        "browserExpected": 9,
+        "browserUnexpected": 1,
+        "browserSkipped": 0
+      },
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rawLogBytes": 0,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "browser-install",
+      "start": "2026-10-21T22:59:17.881995+00:00",
+      "end": "2026-10-21T22:59:19.971030+00:00",
+      "exit": 1,
+      "counts": {},
+      "rawLogSha256": "513c750b7b5612c530e528a59ff2cc2d680cd278fdfa96f121fb2031a8ee0a07",
+      "rawLogBytes": 3786,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "build-webpack-platform-adaptation",
+      "start": "2026-10-21T23:39:00.995047+00:00",
+      "end": "2026-10-21T23:39:51.737158+00:00",
+      "exit": 1,
+      "counts": {},
+      "rawLogSha256": "55a400f4a3d31b5ae9c947fb3f1c7d8bc9055326875c00ca18ffb84b69ffbcf3",
+      "rawLogBytes": 1524,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "final-build-actual-context",
+      "start": "2026-10-21T23:37:49.671707+00:00",
+      "end": "2026-10-21T23:38:07.242273+00:00",
+      "exit": 1,
+      "counts": {},
+      "rawLogSha256": "6ce939fdcb9b63f8c823939c2b45736ba949a7c4ace3990dbcc4543bd4ba60cb",
+      "rawLogBytes": 5011,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "final-build",
+      "start": "2026-10-21T23:36:25.071315+00:00",
+      "end": "2026-10-21T23:37:13.229375+00:00",
+      "exit": 1,
+      "counts": {},
+      "rawLogSha256": "5cb9c4f8b22a83eda8f75c2060e9cf6831e10bba003991e64bdd6e011e624b07",
+      "rawLogBytes": 4689,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "final-discovery",
+      "start": "2026-10-22T00:04:10.510780+00:00",
+      "end": "2026-10-22T00:04:11.014250+00:00",
+      "exit": 1,
+      "counts": {},
+      "rawLogSha256": "c6d68d59addb0893d196f1a3ffa74edb66631f44b29e34a56be4455f3dd22ab4",
+      "rawLogBytes": 1563,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "final-lint-rotation",
+      "start": "2026-10-22T00:10:03.841287+00:00",
+      "end": "2026-10-22T00:10:38.749088+00:00",
+      "exit": 1,
+      "counts": {},
+      "rawLogSha256": "a283c832401b9511f66ab6c0bf650fc173ee58ca850502e9e9c6d676843bb863",
+      "rawLogBytes": 4913,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "final-lint",
+      "start": "2026-10-21T23:34:00.830731+00:00",
+      "end": "2026-10-21T23:34:30.500442+00:00",
+      "exit": 1,
+      "counts": {},
+      "rawLogSha256": "660c669b534397343e838946d66d528818f5df9695394de49abeb523493b4252",
+      "rawLogBytes": 5645,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "native-admission-01",
+      "start": "2026-10-21T23:04:23.871557+00:00",
+      "end": "2026-10-21T23:04:34.405376+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 5,
+        "pass": 3,
+        "fail": 2,
+        "skipped": 0
+      },
+      "rawLogSha256": "48227a475e6a6716deb718fa891179b5518b1ff84f4fc5bca143d28436f9a54e",
+      "rawLogBytes": 2549,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "native-business-01",
+      "start": "2026-10-21T23:15:32.844762+00:00",
+      "end": "2026-10-21T23:15:46.880733+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 5,
+        "pass": 1,
+        "fail": 4,
+        "skipped": 0
+      },
+      "rawLogSha256": "4c303493a30e72a026719ccbb79090ca60a29435d33b3d15eef8ba1b567055e8",
+      "rawLogBytes": 6800,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "native-business-02",
+      "start": "2026-10-21T23:35:11.202668+00:00",
+      "end": "2026-10-21T23:35:14.213571+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "pass": 0,
+        "fail": 2,
+        "skipped": 0
+      },
+      "rawLogSha256": "43fb78eeeacdeaf3462b7b758f29ef6d9509182f2397c03e1e7f1aa66553e4e3",
+      "rawLogBytes": 3052,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "native-legacy-full-01",
+      "start": "2026-10-22T00:04:31.127404+00:00",
+      "end": "2026-10-22T00:04:32.636438+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "pass": 0,
+        "fail": 2,
+        "skipped": 0
+      },
+      "rawLogSha256": "5d71f9bd1243dd74ae308c3b79157a50608ca736e03ce6cdbf61c15b90054c0d",
+      "rawLogBytes": 2588,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "native-legacy-full-02",
+      "start": "2026-10-22T00:05:44.515338+00:00",
+      "end": "2026-10-22T00:05:47.537866+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "pass": 0,
+        "fail": 2,
+        "skipped": 0
+      },
+      "rawLogSha256": "673add3fad7e2ee255edd5d3fdbc3c24e0bf2169f5c4539747c8f3b251a5e255",
+      "rawLogBytes": 2681,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "native-legacy-full-03",
+      "start": "2026-10-22T00:08:07.280161+00:00",
+      "end": "2026-10-22T00:08:12.315863+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 3,
+        "pass": 1,
+        "fail": 2,
+        "skipped": 0
+      },
+      "rawLogSha256": "793cd55c1c8841331e5f79a1a4e608bbec5f6effb88efe6edcb04ad6c6ecbca0",
+      "rawLogBytes": 3040,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "native-legacy-full-04",
+      "start": "2026-10-22T00:08:47.169259+00:00",
+      "end": "2026-10-22T00:08:49.693428+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "pass": 0,
+        "fail": 2,
+        "skipped": 0
+      },
+      "rawLogSha256": "3f78704a7328c4c54a9525f28520050f85da60939e5f0a58ba96b775476cd62b",
+      "rawLogBytes": 2681,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "native-legacy-full-05",
+      "start": "2026-10-22T00:11:01.498216+00:00",
+      "end": "2026-10-22T00:11:05.526597+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 5,
+        "pass": 3,
+        "fail": 2,
+        "skipped": 0
+      },
+      "rawLogSha256": "67bab1023414c0db5d6038499506947829b2e882817fafa08a4d9723e93471b0",
+      "rawLogBytes": 3457,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "native-revision-01",
+      "start": "2026-10-22T00:16:18.798781+00:00",
+      "end": "2026-10-22T00:16:33.941911+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 4,
+        "pass": 2,
+        "fail": 2,
+        "skipped": 0
+      },
+      "rawLogSha256": "dc63b6e3c194f6110d73ee9092a089b8d63bd83b9d121052ecc070a96d66c981",
+      "rawLogBytes": 4352,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "regression-financial-local-parser-configured",
+      "start": "2026-10-21T23:46:09.328214+00:00",
+      "end": "2026-10-21T23:46:10.335661+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 4,
+        "pass": 3,
+        "fail": 1,
+        "skipped": 0
+      },
+      "rawLogSha256": "42e337bdded2bf5c304e808ebb810c4870316ad112e902cee8511e84cdabd381",
+      "rawLogBytes": 2099,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "regression-financial-local-parser-pinned",
+      "start": "2026-10-21T23:47:32.320533+00:00",
+      "end": "2026-10-21T23:47:33.326865+00:00",
+      "exit": 1,
+      "counts": {
+        "tests": 4,
+        "pass": 3,
+        "fail": 1,
+        "skipped": 0
+      },
+      "rawLogSha256": "d9716b68c7769ef77bdd155075f1e15129d8269bf04b64449f794242c5a18756",
+      "rawLogBytes": 2099,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "sshd-install",
+      "start": "2026-10-21T23:28:32.994143+00:00",
+      "end": "2026-10-21T23:28:35.501191+00:00",
+      "exit": 100,
+      "counts": {},
+      "rawLogSha256": "a107c9cb169e07def3afd7ff585c67a821b57392c16eb8da41b33668b7162b15",
+      "rawLogBytes": 829,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "sshd-proof-configured-subsystem",
+      "start": "2026-10-21T23:30:29.294957+00:00",
+      "end": "2026-10-21T23:30:30.799996+00:00",
+      "exit": 1,
+      "counts": {},
+      "rawLogSha256": "2e67d3fb6aee482cd286d061538e556c667130b8405b2341b85b8f38eccee2af",
+      "rawLogBytes": 1301,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    },
+    {
+      "label": "sshd-proof",
+      "start": "2026-10-21T23:30:00.495667+00:00",
+      "end": "2026-10-21T23:30:02.507784+00:00",
+      "exit": 1,
+      "counts": {},
+      "rawLogSha256": "f6272c6667adfd7a2dedea604b394a47064805b2736ea11934ec11d4a4904293",
+      "rawLogBytes": 1109,
+      "sourceScope": "this actual earlier run only; no relabeling as product/native PASS"
+    }
+  ],
+  "specificDiagnoses": {
+    "native-legacy-full-01": "new harness reused pg_dump empty search_path; corrected fresh connection",
+    "native-legacy-full-02": "Docker default locale differs from original exact fixture ordering",
+    "native-legacy-full-03": "expected disabled-mode message test oracle wrong; actual source message retained",
+    "native-legacy-full-04": "same cluster retained new global owner after prior candidate install; original namespace guard correctly rejects",
+    "native-legacy-full-05": "trigger function cannot be directly called; 0A000 engine refusal separated from14 real service-role routines",
+    "native-revision-01": "actual SQL42702 unqualified source column; fixed aliases only",
+    "browser-explicit-scope": "9passed/1failed hidden streamed market locator; unique visible-main scope correction only",
+    "default-build": "Turbopack worker bind EPERM, supported full webpack backend used; not a PASS of original default command",
+    "packaging-01": "public packager failed to recognize distinct mode event shape; original WIP/source/exit preserved; not product failure"
+  },
+  "latestSourceTestsRemainPartial": true
+}

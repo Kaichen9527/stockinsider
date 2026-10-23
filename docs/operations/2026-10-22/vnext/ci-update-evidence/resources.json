@@ -1,0 +1,29 @@
+{
+  "current-lease-regression-01": {
+    "sampleCount": 2,
+    "minimumFreeBytes": {
+      "/workspace": 9430462464,
+      "/tmp": 17518325760
+    },
+    "sampledPeakRssBytes": 75411456,
+    "violation": null
+  },
+  "current-lease-regression-02": {
+    "sampleCount": 3,
+    "minimumFreeBytes": {
+      "/workspace": 9430429696,
+      "/tmp": 17518317568
+    },
+    "sampledPeakRssBytes": 123756544,
+    "violation": null
+  },
+  "current-policy-after-public-01": {
+    "sampleCount": 1,
+    "minimumFreeBytes": {
+      "/workspace": 9430429696,
+      "/tmp": 17518309376
+    },
+    "sampledPeakRssBytes": 2621440,
+    "violation": null
+  }
+}

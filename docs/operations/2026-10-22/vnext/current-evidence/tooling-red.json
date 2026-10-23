@@ -1,0 +1,12 @@
+{
+  "snapshotSandbox": {
+    "operation": "read ownedPG publicprojection snapshot",
+    "exit": 1,
+    "error": "connect EPERM default sandbox local socket",
+    "noDBquery": true,
+    "emptyOwnedLeafRetained": "current-stock-rights-snapshots"
+  },
+  "lintInitial": "final-current-lint-01: newtestlocal variable module violated Next lint; e92e1c7 renamed onlylocal identifiers, focused6PASS+lint02PASS. No rule disabled.",
+  "originalWebpackMode": "uses supported --webpack fullbuild; original default Turbopack/sandbox EPERM and Chromium download403 remain historical receipts, not relabelledPASS",
+  "rawExclusions": "ephemeral socket/lock trees, retained DockerPGdata volumes and external tmpdata directories not hashed as artifactfiles; no deletion/permission change."
+}

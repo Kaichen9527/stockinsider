@@ -1,0 +1,89 @@
+{
+  "scope": "source boundaries/byte parity/AST only; not independent approval",
+  "checks": [
+    {
+      "scope": "AST/YAML/bash/Node syntax only; enhanced native NOT_RUN",
+      "workflowSha256": "804b775d67848f4c5d1cc578b6b50c40d3e4fc8d96af4125cc4b41cf26a3c8e8",
+      "bashBlocks": 21,
+      "copiedNativeHelperByteParity": true,
+      "plannedChildStages": 9,
+      "plannedTests": 10,
+      "newNativeSha256": "2a1a1815119c708047aeac1230a99356fc6cac4ab7297384ed76dec72b2f6874"
+    },
+    {
+      "scope": "final actual source bytes; no new source native result claimed",
+      "files": [
+        {
+          "path": ".github/workflows/stockinsider-vnext-quality.yml",
+          "bytes": 67452,
+          "sha256": "804b775d67848f4c5d1cc578b6b50c40d3e4fc8d96af4125cc4b41cf26a3c8e8"
+        },
+        {
+          "path": "scripts/vnext-roster-current-postgres.test.mjs",
+          "bytes": 32150,
+          "sha256": "2a1a1815119c708047aeac1230a99356fc6cac4ab7297384ed76dec72b2f6874"
+        },
+        {
+          "path": "web/src/lib/vnext/discovery-test-loader.mjs",
+          "bytes": 2000,
+          "sha256": "e9453a7d4847fe4e4c6179fa9d00e0c61608704c8aecbc6ef701ddca14776c8d"
+        },
+        {
+          "path": "web/src/lib/vnext/discovery.ts",
+          "bytes": 13922,
+          "sha256": "12846cfb307d24daad3ad8accf79a8421fecd8c57b55c4019fd8fb09db3be400"
+        },
+        {
+          "path": "web/src/lib/vnext/discovery.test.ts",
+          "bytes": 3752,
+          "sha256": "281692314b65b53cd1724eedbee344b5329ff1aab43da60375f78b05492020a3"
+        },
+        {
+          "path": "web/src/lib/vnext/thesis.test.ts",
+          "bytes": 17039,
+          "sha256": "1e1f82874230f0efaa0850ad49d0f4bda398be864f56a7a37c9413a2726e6e2c"
+        },
+        {
+          "path": "web/src/lib/vnext/trading-invalidity-discovery.test.ts",
+          "bytes": 6719,
+          "sha256": "53306bfa062710a04b4ed8b052e886aec7712d7abc8da64e84270d6359f80df0"
+        },
+        {
+          "path": "web/src/lib/vnext/screening-instrument-identity.ts",
+          "bytes": 4021,
+          "sha256": "e82ddec9b9dbaf7f4230df8492005a7c797145f797ec0053c3a67d2cfbdfa446"
+        },
+        {
+          "path": "web/src/lib/vnext/screening-instrument-identity.test.ts",
+          "bytes": 4846,
+          "sha256": "53afc9c47ea4da5cf4349f8ccc12be01d9c0bca24f641b2735c8d9bb8f73881b"
+        },
+        {
+          "path": "docs/operations/2026-10-22/vnext/SCREENING-ROSTER-CURRENT.md",
+          "bytes": 3098,
+          "sha256": "c74ecc688498ac4768b1b12c480268227479932155507cdaf27fe3db861a46f7"
+        }
+      ]
+    },
+    {
+      "sourceHead": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
+      "scope": "source call order/input boundary/copied fragment only, not native or independent approval",
+      "mode": "full master/latest symbol+stock lookup before per-stock reads/admission; empty/auth reject earlier",
+      "changedPaths": [
+        ".github/workflows/stockinsider-vnext-quality.yml",
+        "docs/operations/2026-10-22/vnext/SCREENING-ROSTER-CURRENT.md",
+        "scripts/vnext-roster-current-postgres.test.mjs",
+        "web/src/lib/vnext/discovery-test-loader.mjs",
+        "web/src/lib/vnext/discovery.test.ts",
+        "web/src/lib/vnext/discovery.ts",
+        "web/src/lib/vnext/screening-instrument-identity.test.ts",
+        "web/src/lib/vnext/screening-instrument-identity.ts",
+        "web/src/lib/vnext/thesis.test.ts",
+        "web/src/lib/vnext/trading-invalidity-discovery.test.ts"
+      ],
+      "SQLRolesPinsLocksLimitsWeights": "UNCHANGED",
+      "copiedNativeQuerySnapshotLeaseHelperSha256": "dc72229b6ef27b7e3e0d3fb691d098c2cb37f64a781494637c7e5679e5b8daf1",
+      "actualNativeNewAdapter": "NOT_RUN"
+    }
+  ]
+}

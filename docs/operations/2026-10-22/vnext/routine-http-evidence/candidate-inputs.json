@@ -1,0 +1,52 @@
+{
+  "candidateChange": "read-only current namespace dependency observation before mandatory raw input case; requires only the actual source-fence owner, unrelated input-owner is diagnostic only",
+  "files": [
+    {
+      "blob": "086626dfc162304e04e54b6aebbcaf9a21f38916",
+      "bytes": 35393,
+      "path": "scripts/vnext-routine-http.test.mjs",
+      "sha256": "900f54a5433feaaf034c7b5eba3738556f37dc4b940f6086b7a5209e376132c5"
+    },
+    {
+      "blob": "0e9757110f2da9569fcb94a254ee05ccbc93c995",
+      "bytes": 6833,
+      "path": "scripts/vnext-routine-resource-run.py",
+      "sha256": "4c15519d6560c106c5e2e0c0ed7dfa2ec71d2e82e921440bfb74716db7190937"
+    },
+    {
+      "blob": "d93300b67b39733d7e6234af128ade698452f1fc",
+      "bytes": 112637,
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "sha256": "ab4b5f217bb7b74911ec2eeb1412534fa0af2cada5ac2f068609f9e509a6ba95"
+    },
+    {
+      "blob": "82edd17f9957bfacaab6e4f3b1dc65e5835824ac",
+      "bytes": 11477,
+      "path": "web/src/lib/vnext/source-window-worker.ts",
+      "sha256": "c3bbb8b75a6c138802709086353a3ff1a36fbe2d85d5a861915e145470f36f95"
+    },
+    {
+      "blob": "b99f8964740e7761544c359fc0b20514a0309b02",
+      "bytes": 9648,
+      "path": "web/src/lib/vnext/permitted-content.ts",
+      "sha256": "2852e0c14a426a66affc1d27138282268dd784adb16b2cb1789f6dc096504e83"
+    },
+    {
+      "blob": "4887c1807ea951bf93d3434b9db7510c2d09940b",
+      "bytes": 7263,
+      "path": "web/src/lib/vnext/http.ts",
+      "sha256": "ed586fde690e8330f2b0c046faeb91bb9c59261f796c1c3f973c1d1e3d8fa34b"
+    },
+    {
+      "blob": "dec62558a1be3fb1728fbf48d7cc105d49897130",
+      "bytes": 1424,
+      "path": "web/src/lib/vnext/research-cycle.ts",
+      "sha256": "c880fb6b50766714733e70415fc55b1790d53b03ec9ff21c1b5b6e54b2be1031"
+    }
+  ],
+  "newNative": "NOT_RUN at packaging; no old green transfer",
+  "noGrantOrProductACLChange": true,
+  "productSource": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+  "source": "ca3612248f0d5f53ecee0e362216ca6ea76ea370",
+  "testSource": "ca3612248f0d5f53ecee0e362216ca6ea76ea370"
+}

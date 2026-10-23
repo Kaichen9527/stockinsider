@@ -1,0 +1,74 @@
+{
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "files": [
+    {
+      "blob": "acbfbc8c34d1a164aed463981f733e9d13067336",
+      "bytes": 112140,
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "sha256": "6f7eefadb2ab365ede8d30a46ea503476201f1b16e9ab9df111e212461e36e6c"
+    },
+    {
+      "blob": "c839edbe5ca4920d63e9d347cd602b6997ce9a44",
+      "bytes": 5202,
+      "path": "docs/operations/2026-10-22/vnext/ROUTINE-HTTP.md",
+      "sha256": "9940882412c7422e2f0c1c6ce38ed6372ab4abe319d3a39fa68a13e90a368847"
+    },
+    {
+      "blob": "9d97db01a3475ebeb64c5846743963858909d13d",
+      "bytes": 3343,
+      "path": "docs/operations/2026-10-22/vnext/SOURCE-WINDOW.md",
+      "sha256": "c6257375f446e3b53df6671fdc391409dfb93ba588de7053bee75ed8c226ec95"
+    },
+    {
+      "blob": "cb46f3d412b1bbdb2422970666306a8d4784bc47",
+      "bytes": 32420,
+      "path": "scripts/vnext-routine-http.test.mjs",
+      "sha256": "bd0652ced58ed8d6f124e73aef513aaff1aa8f18c359327701b17a8312c9f48a"
+    },
+    {
+      "blob": "0e9757110f2da9569fcb94a254ee05ccbc93c995",
+      "bytes": 6833,
+      "path": "scripts/vnext-routine-resource-run.py",
+      "sha256": "4c15519d6560c106c5e2e0c0ed7dfa2ec71d2e82e921440bfb74716db7190937"
+    },
+    {
+      "blob": "9bf2e6082b0e5e192d1d2ab8de4417442f2822a1",
+      "bytes": 10802,
+      "path": "scripts/vnext-source-window-source.test.mjs",
+      "sha256": "c4addc914959663070e66726a86879786148cf2d19a0183a5c35bb50c959f264"
+    },
+    {
+      "blob": "4887c1807ea951bf93d3434b9db7510c2d09940b",
+      "bytes": 7263,
+      "path": "web/src/lib/vnext/http.ts",
+      "sha256": "ed586fde690e8330f2b0c046faeb91bb9c59261f796c1c3f973c1d1e3d8fa34b"
+    },
+    {
+      "blob": "b99f8964740e7761544c359fc0b20514a0309b02",
+      "bytes": 9648,
+      "path": "web/src/lib/vnext/permitted-content.ts",
+      "sha256": "2852e0c14a426a66affc1d27138282268dd784adb16b2cb1789f6dc096504e83"
+    },
+    {
+      "blob": "dec62558a1be3fb1728fbf48d7cc105d49897130",
+      "bytes": 1424,
+      "path": "web/src/lib/vnext/research-cycle.ts",
+      "sha256": "c880fb6b50766714733e70415fc55b1790d53b03ec9ff21c1b5b6e54b2be1031"
+    },
+    {
+      "blob": "82edd17f9957bfacaab6e4f3b1dc65e5835824ac",
+      "bytes": 11477,
+      "path": "web/src/lib/vnext/source-window-worker.ts",
+      "sha256": "c3bbb8b75a6c138802709086353a3ff1a36fbe2d85d5a861915e145470f36f95"
+    }
+  ],
+  "oldSourceWorkerAndTWSESnapshotPinsUnchanged": true,
+  "parentEvidence": "26e3166292bdfbd73bc0c16f81f63d93624035d0",
+  "permittedContentInverseParity": {
+    "allOriginalBytesUnchanged": true,
+    "insertionBytes": 224
+  },
+  "source": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+  "tree": "fc2f6f6ec76d0c201ac0b7c70608c3acedc08a95",
+  "untrackedOriginalWipExcluded": true
+}

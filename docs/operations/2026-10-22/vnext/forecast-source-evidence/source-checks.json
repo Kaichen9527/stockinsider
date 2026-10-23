@@ -1,0 +1,109 @@
+{
+  "inputs": [
+    {
+      "bytes": 15214,
+      "difference": null,
+      "parity": true,
+      "path": "web/src/lib/vnext/forecast-evidence.ts",
+      "sha256": "b63b289cea3540d3551ee3db0c1ce5433701f61b693a409e1578b666b426012c",
+      "source02Sha256": "b63b289cea3540d3551ee3db0c1ce5433701f61b693a409e1578b666b426012c"
+    },
+    {
+      "bytes": 12076,
+      "difference": null,
+      "parity": true,
+      "path": "web/src/lib/vnext/forecast-evidence.test.ts",
+      "sha256": "25544241c5162bb52ab06518526815240a53b3d3163ddc5fb82a288efafe19ba",
+      "source02Sha256": "25544241c5162bb52ab06518526815240a53b3d3163ddc5fb82a288efafe19ba"
+    },
+    {
+      "bytes": 7197,
+      "difference": "execution-receipt doc append only",
+      "parity": false,
+      "path": "docs/operations/2026-10-22/vnext/FORECAST-EVIDENCE-SOURCE.md",
+      "sha256": "1571d605f0dcf243345ce5aeb1fade06dce374e884faab1e8679460bc9e9a08a",
+      "source02Sha256": "a7d8067844e87b775d3c59f63aa93c6a1b118e053caffa041d01f1f5e8d709a7"
+    }
+  ],
+  "neededCurrentAuthority": true,
+  "runs": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/forecast-evidence.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "end": "2026-10-23T02:33:57.377027+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17319030784,
+        "/workspace": 8889655296
+      },
+      "initialFree": {
+        "/tmp": 17319034880,
+        "/workspace": 8889655296
+      },
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 8781824,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T02:33:56.863893+00:00"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "--incremental",
+        "false"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T02:34:28.495894+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17319026688,
+        "/workspace": 8889655296
+      },
+      "initialFree": {
+        "/tmp": 17319026688,
+        "/workspace": 8889655296
+      },
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 1334751232,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T02:34:01.753852+00:00"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/lib/vnext/forecast-evidence.ts",
+        "src/lib/vnext/forecast-evidence.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T02:34:36.042112+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17319014400,
+        "/workspace": 8889655296
+      },
+      "initialFree": {
+        "/tmp": 17319014400,
+        "/workspace": 8889655296
+      },
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 258650112,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T02:34:33.490557+00:00"
+    }
+  ],
+  "runtimeImportsAdded": false,
+  "scope": "12synthetic disconnected descriptor source contracts/type/lint only, NOT DB/financial authority/runtime consumer; docappend is not a runtime change",
+  "source": "42a5b49c258226597c349181c7e22c0938815346",
+  "sourceRewritesOrSQLPermissionChanges": false
+}

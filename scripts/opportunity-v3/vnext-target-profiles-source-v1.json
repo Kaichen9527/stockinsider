@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "vnext-target-profiles-source-v1",
+  "source": "migrations/20261022_vnext_target_exit_v1.sql",
+  "signature": "public.vnext_target_current_v1(text,uuid,text)",
+  "predecessorBodySha256": "bc3fecc3f5c28480f3d18f6073ac39b72a3969e6d7fcf6d19601d45b04b4147b",
+  "predecessorBytes": 14356,
+  "successorBodySha256": "36c4904a11c58981e11264294500d161a86655495f512868a712ded08a30f3fb",
+  "successorBytes": 14418,
+  "fragments": [
+    [
+      "author_call.prompt_version='vnext-research-worker-v3'",
+      "author_call.prompt_version IN('vnext-research-worker-v3','vnext-research-worker-v5')"
+    ],
+    [
+      "reviewer_call.prompt_version='vnext-research-worker-v3'",
+      "reviewer_call.prompt_version IN('vnext-research-worker-v3','vnext-research-worker-v5')"
+    ]
+  ],
+  "migration": "migrations/20261023_vnext_target_profiles_v1.sql",
+  "migrationSha256": "d377920d0ef9cab5ac42c40f00127baf75f06167979068d2b02ab8e896112624",
+  "nativeVerified": false,
+  "actualOid": null,
+  "scope": "finite known v5 symbol in exact server-frozen request; corporate-action terms unavailable remains rejected; v4 cancellation context unsupported stays closed"
+}

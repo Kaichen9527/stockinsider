@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "vnext-cancellation-native-followup-v1",
+  "observedAt": "2026-10-23T07:52:33.846293+00:00",
+  "currentCandidateSource": "97735207344190fb1113b1632ce4c1f5ca716963",
+  "acceptedSubjectExact": "a2649dfa879ed045afb36a69060de35ca09a84d9",
+  "runtime": {
+    "parents": [
+      "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "a2649dfa879ed045afb36a69060de35ca09a84d9"
+    ],
+    "sha": "143a556b527a0f37a322a730df5c9b1e6ab9a7bb",
+    "tree": "bd8b43e98f89174f7e556c2e0d6cc58a3d57d3d0"
+  },
+  "sourceTree": "bd8b43e98f89174f7e556c2e0d6cc58a3d57d3d0",
+  "exactTreeParity": true,
+  "ordinaryRun": 39919712314,
+  "ordinaryJob": 120301725217,
+  "ordinaryResult": "success",
+  "cancellationJob": 120301725292,
+  "actualTapCounts": {
+    "tests": 7,
+    "pass": 7,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "tapSha256": "22d4bf7a681950630131d6f7b52ef51dc21c1640f69fddb397e509c53da3a90d",
+  "cleanup": {
+    "pgRunning": false,
+    "pgPid": 0,
+    "pgExit": 0,
+    "shutdownLogObserved": true,
+    "socketAbsence": {
+      ".s.PGSQL.5432": true,
+      ".s.PGSQL.5432.lock": true
+    },
+    "resourceReceiptObserved": true,
+    "ownedProcessCounts": {
+      "absent": 26,
+      "zeroRssZombie": 0,
+      "pidReused": 0,
+      "unsettled": 0
+    },
+    "fullPrivateCleanupSha256": "efaededc6999d26d2f6ea7e5553633d0ab26b88d97ae49a20f6e98a5f9ac97e6",
+    "dataRetained": true
+  },
+  "scope": "actual hosted fresh PG full original installer, first research+retained prior baseline+distinct synthetic provider/reviewer, atomic unqualified publication/exit, immutable replay; NOT CodexVM or formal source/model approval",
+  "annotationLimit": {
+    "bytes": 4096,
+    "truncated": true,
+    "originalJsonDecodeToolingRedPreserved": true,
+    "boundedExactFieldsOnly": true
+  },
+  "fullPrivateRawDownloaded": false,
+  "earlierRed": [
+    {
+      "subject": "63a93183da671d072cae8eee633082eb3c81644a",
+      "run": 39917771915,
+      "job": 120295355710,
+      "tests": 6,
+      "pass": 4,
+      "fail": 2,
+      "unobservedBackendCode": true,
+      "stage": "prior baseline"
+    },
+    {
+      "subject": "88dc4431501b65a526d79f0748f5c6616962c8c8",
+      "run": 39919064226,
+      "job": 120299599842,
+      "tests": 6,
+      "pass": 4,
+      "fail": 2,
+      "actualBackend": "42725",
+      "actualMessageSha256": "b4b8f8ed11784e5221997aa1b38fac685409a2ab28daac9012b8178c9b865fd9",
+      "exactSourceMessageMatch": "operator is not unique: unknown - unknown",
+      "querySettled": true,
+      "ReadyForQuery": "I"
+    }
+  ],
+  "sourceRepairs": [
+    {
+      "scope": "source repair only; actual 88dc hosted 42725 matches exact message hash, native new-input pending",
+      "base": "88dc4431501b65a526d79f0748f5c6616962c8c8",
+      "oldBody": {
+        "bytes": 7951,
+        "sha256": "ad018c60e29d9384cd43ec5ebe400ec433f2258c6db642ba7812d4963d071360"
+      },
+      "newBody": {
+        "bytes": 7953,
+        "sha256": "efbdb20da36455cc06b1ca85523e77410d6b9d1a642b444c8d37df9c3f2dfa5c"
+      },
+      "oldSqlSha256": "6406312ddacd14f4df4d098bbe51529997d5ea04941dd613998484b2b6b00629",
+      "newSqlSha256": "f26d483a8bf4ce0e12dd21c350dde7f51231be327e223e6efa8877dfa834c22d",
+      "inverseParity": true,
+      "oldMessageHash": "b4b8f8ed11784e5221997aa1b38fac685409a2ab28daac9012b8178c9b865fd9",
+      "noOtherBodyChanges": true
+    }
+  ],
+  "pendingNewContract": {
+    "source": "97735207344190fb1113b1632ce4c1f5ca716963",
+    "plannedTests": 7,
+    "actualTransportLoss": "PENDING new-source ordinary39920450723; no pass inferred",
+    "permanentWithdrawal": "PENDING same run",
+    "productSQLAndTS": "byteexact accepted a264",
+    "localPureFrames": {
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "notNative": true
+    },
+    "actualHTTP": "NOT_RUN",
+    "actualFormalSourcesAndModel": "NOT_RUN"
+  },
+  "notRun": [
+    "originalVM freshPG/fullbuild:NOT_ADMITTED",
+    "Contabo",
+    "real original acquisition/model/semantic review",
+    "cancellation HTTP",
+    "remaining rights/lease/race/legacy/caps",
+    "corporate-action rebasing",
+    "Q-R/formal publication"
+  ],
+  "noCleanupOrGuardChange": true
+}

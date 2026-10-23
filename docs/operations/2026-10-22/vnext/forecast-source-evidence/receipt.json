@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-23T02:38:59.627618+00:00",
+  "files": [
+    {
+      "bytes": 6387,
+      "path": "previous-catalyst-ci.json",
+      "sha256": "4d9b5f3f2a68832fa8043ecfb21cf39ac8c7fac3bb42eb27846e4e1c08be53e1"
+    },
+    {
+      "bytes": 3048,
+      "path": "private-inventory.json",
+      "sha256": "c48cb1b6912fb2463b23e008ccf0ae7f76964f89129a1b8d87e31e9d421f157e"
+    },
+    {
+      "bytes": 3773,
+      "path": "source-checks.json",
+      "sha256": "d51e5bd269d5644f064ecadfe0553fb211a0b244de9e600019e622e5719670cf"
+    }
+  ],
+  "notRun": [
+    "licensed/source acquisition",
+    "actual numeric field/source/rights DB validation",
+    "preparation/worker/qualification/publish/current-read integration",
+    "freshnewhead build/HTTP/browser/staging/formal semantics"
+  ],
+  "privateBytes": 30561,
+  "privateFiles": 14,
+  "scope": "new forecast diagnostic prerequisite only; previous54269 CI actual build/fresh catalyst success not transferred to newhead or formalresearch",
+  "source": "42a5b49c258226597c349181c7e22c0938815346"
+}

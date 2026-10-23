@@ -10,6 +10,8 @@ import ResearchOnlyDetail from './ResearchOnlyDetail';
 import CandidateDetailView from './CandidateDetailView';
 import { loadCandidateDetail } from '@/lib/candidate-detail';
 import { parseCandidateRevision } from '@/lib/candidate-revision-query';
+import { vnextEnabled } from '@/lib/vnext/policy';
+import VnextDetail from '@/app/components/vnext/Detail';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,6 +42,7 @@ export default async function StockDetail({
   const { symbol } = await params;
   const query = await searchParams;
   const normalizedSymbol = symbol.toUpperCase();
+  if (vnextEnabled()) return <VnextDetail symbol={normalizedSymbol} revision={query.vnextRevision} />;
   const revisionQuery=parseDecisionRevisionQuery(query);
   const revisionParameterPresent=revisionQuery.status!=='absent';
   const validRequestedRevision=revisionQuery.status==='valid'?revisionQuery.revisionId:null;

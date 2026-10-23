@@ -1,0 +1,105 @@
+{
+  "sourceHead": "b1cdca8e752edab4cfbef99b76a657ed7785621a",
+  "createdAt": "2026-10-22T01:14:29.355914+00:00",
+  "files": [
+    {
+      "path": "cleanup.json",
+      "bytes": 1231,
+      "sha256": "c4376b16b18818e1e28ab53285e4dd7d5efe9de516fe0ead0da5dbcf921662f4"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 9430,
+      "sha256": "13a1a730d40a7908e1d33d49102206ce28802d43a192d9b8bc881a83f24f0381"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 726,
+      "sha256": "72375ad655fb5ec2f43ca4a370d4c0c0050232ff8aba51e9fe71406b651c1b4b"
+    },
+    {
+      "path": "native.json",
+      "bytes": 151014,
+      "sha256": "558e445e02c7249bbec1d0059dd26bf20ac5e22300ae1c794af3b913398806a6"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 105130,
+      "sha256": "14bdc2c0f9f00c3c50f394023dd5d2df0615dcae1cac9bb491152a6530b42217"
+    },
+    {
+      "path": "red-history.json",
+      "bytes": 1619,
+      "sha256": "823f6f74553054c5608608b9c4b8e9e0808ef9cf3dce8602e593aadef02cbf07"
+    },
+    {
+      "path": "screenshots/worker-revision-desktop.png",
+      "bytes": 691508,
+      "sha256": "308bf9b5bfa02374c741e7b1225c2fd5a7dfc16e3d090dbc1d2bd2518b2e494c"
+    },
+    {
+      "path": "screenshots/worker-revision-mobile.png",
+      "bytes": 2314285,
+      "sha256": "2c3472e0f06c8909b12d20261a7e28a7323f213a6f2f722de4c0ebcb10875a36"
+    },
+    {
+      "path": "source.json",
+      "bytes": 3608,
+      "sha256": "332e92c7e0944e6114b28f01a17fc36aadb6f65974af2e793514546eee40333c"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 4087,
+      "sha256": "fd0d95828e0b15e69d265518e329672e2fee833dd080b2be0dcd3fcee66eabbc"
+    },
+    {
+      "path": "tap/worker-native-01.tap",
+      "bytes": 1191,
+      "sha256": "7791dc3092cbff6ecaa60fb550174ad9927fe7bb5b823a1a03ec3101741b6f93"
+    },
+    {
+      "path": "tap/worker-native-02.tap",
+      "bytes": 1645,
+      "sha256": "f7a2fb3110006d6b2a55e14a06564a6fafa8ac6d25136c839854f84ea67cd164"
+    },
+    {
+      "path": "tap/worker-public-read-01.tap",
+      "bytes": 296,
+      "sha256": "a856f3126e4428fbfab9a77e88be879f6c12d93feb3df92a4c2ca9fdac246698"
+    },
+    {
+      "path": "tap/worker-source-direct-01.tap",
+      "bytes": 1752,
+      "sha256": "afaf5280e2a13dbae9377197ff5594889855d8e949b4c2b671f1519b5ad443ac"
+    },
+    {
+      "path": "worker-browser-auth-01.json",
+      "bytes": 1026,
+      "sha256": "2cf7a3e97bf0b97fedb131c07a78cb18d36ee3bc8181550b015255857fecbf89"
+    },
+    {
+      "path": "worker-browser-revision-01.json",
+      "bytes": 1030,
+      "sha256": "5aafe93709414afa7a0379c1cbffb7a8bd43c3a17c336fa9fb4c2b6508b07cf5"
+    },
+    {
+      "path": "worker-browser-revision-02.json",
+      "bytes": 1030,
+      "sha256": "b66e88b7c9d0e55e6377b5aea37b98ccf505278ab0193064a365dd026cae39ab"
+    }
+  ],
+  "privateInventoryOnly": true,
+  "independentApproval": false,
+  "handoff": [
+    {
+      "path": "docs/operations/2026-10-22/vnext/WORKER-DELIVERY.md",
+      "bytes": 5628,
+      "sha256": "4c2b1c5024327e5e8bf739b0c8a4c1bcf74a5149951e498ee04d1c5d6cc45bd6"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/STATUS.md",
+      "bytes": 1106,
+      "sha256": "56f90710a9976c4e91880a5c0f00f4d152d10b473d2a1652b7da0beee2b4c9d3"
+    }
+  ]
+}

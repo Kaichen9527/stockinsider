@@ -1,0 +1,25 @@
+{
+  "schema": "finite-publicsafe-hash-manifest-v1",
+  "files": [
+    {
+      "path": "actual-ccc.json",
+      "bytes": 4018,
+      "sha256": "4dd58f69f869b74d3870d176cab864d05ba139b54d1926262440f05fa75d3bd2"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 2327,
+      "sha256": "cb36a8e13957b96fcc12a9a2326bcae4b247058d2ead231659e6606aed81351a"
+    },
+    {
+      "path": "source-checks.json",
+      "bytes": 3567,
+      "sha256": "55698d9b066bb2891747b73ffbdb3c35ad9cf931b1aca3dc0166f399512fa234"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 1322,
+      "sha256": "f1eded0a81555705bf06d89b3f34e2a45a0f220ea18c01518b23a245dbdeb219"
+    }
+  ]
+}

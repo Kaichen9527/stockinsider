@@ -1,0 +1,33 @@
+{
+  "observedAt": "2026-10-23T05:08:42.120599+00:00",
+  "free": {
+    "/workspace": 8886972416,
+    "/tmp": 17254346752
+  },
+  "floor": 8589934592,
+  "localWork": "source/syntax/Git inventory and finite report writes only; no new local PG/build/socket/app",
+  "nextLocalFullBuildOrFreshClone": "NOT_ADMITTED under measured prior workset plus floor",
+  "newCleanup": "NONE",
+  "hostedNativeScope": "GitHub independent Ubuntu runner; same checked-out build; explicitly synthetic source/parser/provider only, not local VM or Contabo formal acceptance",
+  "notRun": [
+    "new-source complete browser UI",
+    "real provider execution/independent semantic review",
+    "real source acquisition for this synthetic fixture",
+    "Contabo isolated staging",
+    "two actual consecutive postclose successful swap",
+    "formal publication/whole closure",
+    "production deploy/migration/schedule resumption"
+  ],
+  "localCommands": [
+    "11 source-contract cases; full noEmit/incrementalfalse types; focused lint",
+    "4 extracted fetch-boundary vectors; 5 extracted browser-completion vectors; syntax only",
+    "no local new PG/build/app/socket/browser workload; no cleanup"
+  ],
+  "newBrowserAcceptance": "ee actual hosted stepSUCCESS under12+2 complete guard; raw per-case/browser version/hash/PNGs not independently downloaded; future source adds finite actual notices",
+  "remainingVMCode": [
+    "comparable28-day original-event source completeness/volume authority",
+    "source-bound cancellation/contradiction and competitive/risk producer",
+    "numeric forecast current server reader/fence/preparation/provider integration",
+    "corporate-action target rebasing and remaining race/role/rights acceptance"
+  ]
+}

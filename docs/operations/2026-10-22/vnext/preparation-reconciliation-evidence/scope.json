@@ -1,0 +1,42 @@
+{
+  "actualSourceHashes": {
+    "web/src/lib/vnext/http.ts": "f519a738dc56ac2206cfed14eca09aab1eb5cd36a796e11b3d15c6f19df7dc46",
+    "web/src/lib/vnext/preparation-reconciliation.test.ts": "d7ea1461fc75926eddf391b73eba83b9163828e12d2537d97c77822e95b9a4ea",
+    "web/src/lib/vnext/preparation-reconciliation.ts": "dacfd6c2dacc0f3fdcb256f63068f1b11809a08306a1996df392039fb775f207",
+    "web/src/lib/vnext/store.ts": "f91a43710ab68c5391bb971081464879e0205cf30ac1ba5f192e6f142ed0dada"
+  },
+  "approval": "maker evidence only, no independent/formal approval",
+  "cleanup": "none in this milestone",
+  "coverage": "TWSE current three-array snapshot cannot prove28 complete event-days; volume stays null",
+  "finalSourceTests": {
+    "fail": 0,
+    "pass": 10,
+    "skip": 0
+  },
+  "floor": 8589934592,
+  "focusedLint": "exit0",
+  "free": {
+    "/tmp": 17330712576,
+    "/workspace": 8892293120
+  },
+  "nativeHTTPPostgresBuildBrowser": "NOT_RUN on this source",
+  "nextBuild": "NOT_ADMITTED measured306835456 buildcache+128MiB reserve exceeds workspace margin; unknown costs remain",
+  "observedAt": "2026-10-23T00:51:00.446985+00:00",
+  "originalFailureRegression": "6PASS separate run",
+  "originalRED": [
+    "source01 adapter arity",
+    "types01 compiler errors",
+    "root parity sandbox spawnSync EPERM"
+  ],
+  "previousCI": {
+    "diagnostic120170769620": "success",
+    "product120168069294": "success",
+    "protected": "unclosed/failing, no pin changes",
+    "source": "e359d7d634fa88db938fd57db8b4a33123006904",
+    "vnext39877948120": "success"
+  },
+  "rootOldGitParity": "3groupsPASS separate run",
+  "source": "9c833695e7c7eb840b0eabf7f004c0d4031e893e",
+  "source01Preimage": "derived later, NOT contemporaneous exact seal",
+  "typecheck": "exit0 noEmit/incremental false"
+}

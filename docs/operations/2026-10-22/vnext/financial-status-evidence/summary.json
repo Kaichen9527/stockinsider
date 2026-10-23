@@ -1,0 +1,33 @@
+{
+  "status": "BOUNDED_ENGINEERING_ACCEPTANCE_PASS_NOT_RELEASE_ACCEPTED",
+  "source": "e359d7d634fa88db938fd57db8b4a33123006904",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "branch": "codex/stockinsider-vnext-oct22",
+  "actualRun": "ir-status-recovery-monitored-o23",
+  "actualStart": "2026-10-23T00:23:19.667548+00:00",
+  "actualEnd": "2026-10-23T00:23:24.756154+00:00",
+  "exit": 0,
+  "tests": 8,
+  "pass": 8,
+  "fail": 0,
+  "skip": 0,
+  "resourceViolation": null,
+  "noNewContainerOrCleanup": true,
+  "retainedPrefix": "snapshot80197 exact rows; originalreceipt/parser not repeated",
+  "newCandidateInstall": "complete SQL realCOMMIT, oneexistingbody only, metadata/ACL/namespace preserved",
+  "protectedOriginalSourcesUnchanged": true,
+  "previousResults": "initial0PASS2FAIL; continuation01 0PASS2FAIL; continuation02 2PASS2FAIL preserved, not summed or rewritten",
+  "notRun": [
+    "fresh full financialprefix+allnewmigrations installer sequence at newsubject",
+    "actualfiling acquisition/Arelle for thisIRfixture/liveprovider/independentsemantic",
+    "real2postclose-session swap",
+    "newHTTP/browser regression since SQL-onlycompatibility",
+    "Contabo/production/protectedReleaseGate"
+  ],
+  "nextVMCode": [
+    "comparable coverage/volume authority producer",
+    "structured source-bound catalyst/contra/target producer",
+    "explicitnumeric forecast/valuationinputs",
+    "preparationuncertainty reconciliation"
+  ]
+}

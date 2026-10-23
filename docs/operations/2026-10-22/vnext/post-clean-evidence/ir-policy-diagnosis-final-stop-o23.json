@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-23T00:01:28.842848+00:00",
+  "scope": "read-only policy diagnosis ended; no native rerun or DBbusiness writes",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-22T23:58:56.456790599Z",
+    "FinishedAt": "2026-10-23T00:01:28.756959949Z"
+  },
+  "stopExit": 0,
+  "serverShutdownObserved": true,
+  "containerAndDataRetained": true
+}

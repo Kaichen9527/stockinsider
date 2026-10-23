@@ -1,3 +1,4 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { createHash } from 'crypto';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
@@ -8,6 +9,8 @@ import { candidateDossierBundleId, candidateDossierInputHash, candidateFactLocat
 type Row = Record<string, unknown>;
 
 export async function POST(request: Request) {
+  const vnext = await vnextRoute(request, 'candidate-dossier-submission');
+  if (vnext) return vnext;
   if (!requireExactInternalBearer(request)) {
     return NextResponse.json({ ok: false, error: 'exact_internal_bearer_required' }, { status: 401 });
   }

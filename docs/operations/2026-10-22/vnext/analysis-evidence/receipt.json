@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "stockinsider-vnext-analysis-public-receipt-v1",
+  "source": "008cc3bc3393610c8c510fd7c24ee5cee907da72",
+  "testHead": "2d6296e4471f759d570dd0089a7f5ab37226d4e6",
+  "files": [
+    {
+      "path": "cleanup.json",
+      "bytes": 1619,
+      "sha256": "50b71b8c627f3d0c5c05afc4a56fa2a9b33c46cd85b0f3851f81fc2a3e3d12b8"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 11758,
+      "sha256": "eec731982bccf096ba85a9d2690b281d747daaf6de8263f1bfb6bbdb4ede0667"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 599,
+      "sha256": "d5405de3db7fe5fd07f10f8697a48243d132bab61b928f4b8e537c82249d80a5"
+    },
+    {
+      "path": "native-witness.json",
+      "bytes": 111613,
+      "sha256": "ff5c940400f42b7ea1d6b0e2428e9774e7d22077c5dfeee5f1d196d6b43143a1"
+    },
+    {
+      "path": "prior-head-ci.json",
+      "bytes": 5790,
+      "sha256": "71378506e76e6373eb5c600dc3c4721f857bb7739e187bf3c16afc4db1f2b67d"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 121285,
+      "sha256": "1ac75fec5a9b5955b7ddf586fa30d0a92744cc84328999d164c7c0f62489365b"
+    },
+    {
+      "path": "red-history.json",
+      "bytes": 1113,
+      "sha256": "baf7a5e26d861e3c97ad265421f0c905ea4b377c618c83e6af8aea00da89554c"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 3150,
+      "sha256": "7f82c11f00a5d25eb992e7332faf7d81f1d515ee2a9a1323aa8c6cc2861093c7"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 2700,
+      "sha256": "ffa519b238ec41f60de0ed5572d0a87d05b4588daed2f5a9622ffee9391c509a"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 1250,
+      "sha256": "1e89291764f8c32ae458c314d7ef9d6e581789adcbcbc8999469db268a75adcf"
+    },
+    {
+      "path": "table-summaries.json",
+      "bytes": 135596,
+      "sha256": "3ab6dd2c5aa614e2ec272c4d6750f63b0aba918bd84e122ef50e8518cf5f3852"
+    }
+  ],
+  "privateRawScope": "inventory only; full rows/bodies/logs kept in task VM; maker evidence is not independent approval"
+}

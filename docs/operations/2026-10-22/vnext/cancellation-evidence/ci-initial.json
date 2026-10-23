@@ -1,0 +1,89 @@
+{
+  "sourceHead": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+  "ordinaryInitial": [
+    {
+      "id": 120291619445,
+      "name": "cancellation-native",
+      "status": "queued",
+      "conclusion": null,
+      "startedAt": "2026-10-23T07:16:21Z",
+      "completedAt": null,
+      "steps": []
+    },
+    {
+      "id": 120291619699,
+      "name": "vnext-quality",
+      "status": "queued",
+      "conclusion": null,
+      "startedAt": "2026-10-23T07:16:21Z",
+      "completedAt": null,
+      "steps": []
+    },
+    {
+      "id": 120291619803,
+      "name": "roster-current-native",
+      "status": "queued",
+      "conclusion": null,
+      "startedAt": "2026-10-23T07:16:21Z",
+      "completedAt": null,
+      "steps": []
+    },
+    {
+      "id": 120291619837,
+      "name": "trading-invalidity-native",
+      "status": "queued",
+      "conclusion": null,
+      "startedAt": "2026-10-23T07:16:21Z",
+      "completedAt": null,
+      "steps": []
+    }
+  ],
+  "protectedInitial": [
+    {
+      "id": 120291613209,
+      "name": "stockinsider-v3-gate-bootstrap",
+      "status": "queued",
+      "conclusion": null,
+      "startedAt": "2026-10-23T07:16:20Z",
+      "completedAt": null,
+      "steps": []
+    },
+    {
+      "id": 120291689217,
+      "name": "architecture",
+      "status": "queued",
+      "conclusion": null,
+      "startedAt": "2026-10-23T07:16:35Z",
+      "completedAt": null,
+      "steps": []
+    },
+    {
+      "id": 120291689261,
+      "name": "requirements",
+      "status": "queued",
+      "conclusion": null,
+      "startedAt": "2026-10-23T07:16:35Z",
+      "completedAt": null,
+      "steps": []
+    },
+    {
+      "id": 120291689284,
+      "name": "exact-review",
+      "status": "queued",
+      "conclusion": null,
+      "startedAt": "2026-10-23T07:16:35Z",
+      "completedAt": null,
+      "steps": []
+    },
+    {
+      "id": 120291781270,
+      "name": "stockinsider-v3-gate-root",
+      "status": "queued",
+      "conclusion": null,
+      "startedAt": "2026-10-23T07:16:53Z",
+      "completedAt": null,
+      "steps": []
+    }
+  ],
+  "scope": "bounded job metadata initial queued observations only; not completed acceptance. Later followups append separate files."
+}

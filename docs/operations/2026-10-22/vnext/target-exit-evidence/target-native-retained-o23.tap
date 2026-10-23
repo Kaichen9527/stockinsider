@@ -1,0 +1,15 @@
+TAP version 13
+# Subtest: new target-exit actual retained PostgreSQL installer and service authority (not target-positive acceptance)
+    # Subtest: exact retained rows; full candidate COMMIT with one existing body, three functions and finite read-only edges
+    not ok 1 - exact retained rows; full candidate COMMIT with one existing body, three functions and finite read-only edges
+    1..1
+not ok 1 - new target-exit actual retained PostgreSQL installer and service authority (not target-positive acceptance)
+1..1
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 921.72031

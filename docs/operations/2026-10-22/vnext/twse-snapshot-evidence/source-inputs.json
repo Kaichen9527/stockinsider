@@ -1,0 +1,118 @@
+{
+  "sourceHead": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
+  "base": "b354da5d7f340194e16a7086d3f3ffcbdb1bee0b",
+  "changedFileCount": 11,
+  "changedFiles": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 16908,
+      "sha256": "3a10e34154d45334ec3fee8619492d9443847a26c4ffd210bbcf9943bd30d7fa",
+      "blob": "545d51d95d7a7dc54e9437203572ac21921efe6f"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/TWSE-SNAPSHOT-SOURCE.md",
+      "bytes": 3583,
+      "sha256": "4e4f1c5604d7b827b3d715dd417ef4c23ecf551e6a8cded86ee78b62862097ba",
+      "blob": "704791501ab8d43e73fe1dac25a88a82948197ba"
+    },
+    {
+      "path": "migrations/20261022_vnext_twse_snapshot_receipts_v1.sql",
+      "bytes": 15386,
+      "sha256": "58e2fd49e5035332954d8d6a47e83b129d583da09ebfb123d38ef71c6125ad9c",
+      "blob": "10a559a46690f99a638b6a3a58e602c1e712674d"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-twse-snapshot-profile-v1.json",
+      "bytes": 4955,
+      "sha256": "e2a43d7ada5536cade2641f47f5606e6afc5d5b9f3659857dabbf6fe454b36bb",
+      "blob": "01438ae5bb0c5f99475602fd084e1b007a310059"
+    },
+    {
+      "path": "scripts/vnext-twse-snapshot-postgres.test.mjs",
+      "bytes": 12207,
+      "sha256": "4fab4a09898f3f4c9a3f440895ea4805c1ef7d3ecbbc2c341e8e299b597b4527",
+      "blob": "0b6ec72a79094b274c1638aeaa462a7fad9352e6"
+    },
+    {
+      "path": "web/src/app/api/internal/source-sync/route.ts",
+      "bytes": 13835,
+      "sha256": "fbe0302710ea7dcdcdf284fcd02a701803897dc6f2b2dad1b1bbbd3323da8a16",
+      "blob": "ba610c0c62fa2ee249228b7ad076338acf933906"
+    },
+    {
+      "path": "web/src/lib/research-v2.ts",
+      "bytes": 282760,
+      "sha256": "e87e4e9b5b8079d9c493752f787b24da81fed8a980c889d7b1e3e8ba3c8af7d9",
+      "blob": "cae6c737e523bedd676af132d37d6b0f21786f05"
+    },
+    {
+      "path": "web/src/lib/vnext/source-worker.ts",
+      "bytes": 4441,
+      "sha256": "2ec7a01b97347836517d5abed8edf4cae1ddaae48a8ff92db341daf0cfcc3a57",
+      "blob": "117b911d275188cd3f4b38866a01ecea0ac186c3"
+    },
+    {
+      "path": "web/src/lib/vnext/twse-snapshot-store.ts",
+      "bytes": 4698,
+      "sha256": "3e99a1fc62dbb5437ddc4d1856f90adb5805ab5b935aa3cb9743533b0c2216c8",
+      "blob": "172d5ea16e55f9f531761fd1c0394649588825e7"
+    },
+    {
+      "path": "web/src/lib/vnext/twse-snapshot.test.ts",
+      "bytes": 22917,
+      "sha256": "d707ca2dd223e009cd45a5db61b996840f8b5881c072b68369f0117d8989bd76",
+      "blob": "eabcf4cbe3b890d1e3b3118a50cd9ac1ec16bbc1"
+    },
+    {
+      "path": "web/src/lib/vnext/twse-snapshot.ts",
+      "bytes": 13952,
+      "sha256": "cd21c85a3e9d99dd512b7380ece578ffe3823c76d32a98633e9b490c065b8290",
+      "blob": "72495c50f524bbb8fd2599d8f60be1160e7fc064"
+    }
+  ],
+  "wholeTrackedGitIdentityCount": 2531,
+  "wholeTrackedGitIdentityInventorySha256": "13bd983e550647ff77565b177f4d84dd3ebd49cabfaa5852bb0204ca824a7041",
+  "runtimeInputs": [
+    {
+      "path": "migrations/20261022_vnext_twse_snapshot_receipts_v1.sql",
+      "bytes": 15386,
+      "sha256": "58e2fd49e5035332954d8d6a47e83b129d583da09ebfb123d38ef71c6125ad9c",
+      "blob": "10a559a46690f99a638b6a3a58e602c1e712674d"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-twse-snapshot-profile-v1.json",
+      "bytes": 4955,
+      "sha256": "e2a43d7ada5536cade2641f47f5606e6afc5d5b9f3659857dabbf6fe454b36bb",
+      "blob": "01438ae5bb0c5f99475602fd084e1b007a310059"
+    },
+    {
+      "path": "scripts/vnext-twse-snapshot-postgres.test.mjs",
+      "bytes": 12207,
+      "sha256": "4fab4a09898f3f4c9a3f440895ea4805c1ef7d3ecbbc2c341e8e299b597b4527",
+      "blob": "0b6ec72a79094b274c1638aeaa462a7fad9352e6"
+    },
+    {
+      "path": "scripts/vnext-worker-fixture.mjs",
+      "bytes": 7953,
+      "sha256": "67a22c076a74d860c7bb428003f47e1a2722b8ea87c2f9830489fe172ee19874",
+      "blob": "6c0e990c5d430c24f942fb586ad9f06f5a05edfe"
+    },
+    {
+      "path": "web/src/lib/vnext/twse-snapshot.ts",
+      "bytes": 13952,
+      "sha256": "cd21c85a3e9d99dd512b7380ece578ffe3823c76d32a98633e9b490c065b8290",
+      "blob": "72495c50f524bbb8fd2599d8f60be1160e7fc064"
+    },
+    {
+      "path": "web/src/lib/vnext/policy.ts",
+      "bytes": 5423,
+      "sha256": "6920dd2267e5c974efd5b50841d19bc11a7b82b3fa480680ab5f1f0e41734e51",
+      "blob": "d12945840d29f3da98206f0ead35551c8d7fe214"
+    }
+  ],
+  "node": {
+    "version": "v22.14.0",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1"
+  },
+  "partialClosureImpact": "research-v2.ts physical source changed; historical capsule/Hs/Hc pins not updated or claimed valid for new execution"
+}

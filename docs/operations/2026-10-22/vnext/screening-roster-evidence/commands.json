@@ -1,0 +1,354 @@
+{
+  "separateInvocationsNeverSummed": true,
+  "commands": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/screening-instrument-identity.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T06:09:51.781757+00:00",
+      "end": "2026-10-23T06:09:52.303671+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8884711424,
+        "/tmp": 17251328000
+      },
+      "finalFree": {
+        "/workspace": 8884711424,
+        "/tmp": 17251323904
+      },
+      "sampledSessionPeakRssBytes": 10092544,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "label": "screening-roster-adapter-initial-o23",
+      "scope": "local source/types/lint only",
+      "stdout": {
+        "bytes": 2250,
+        "sha256": "c9e01de774a6a2268a24804d84649d7c0153f11769af699d731182d3b3cc4d7a"
+      },
+      "actualTapCounts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/discovery.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T06:10:00.182314+00:00",
+      "end": "2026-10-23T06:10:01.708506+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8884711424,
+        "/tmp": 17251319808
+      },
+      "finalFree": {
+        "/workspace": 8884711424,
+        "/tmp": 17251315712
+      },
+      "sampledSessionPeakRssBytes": 111783936,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "label": "screening-roster-discovery-o23",
+      "scope": "local source/types/lint only",
+      "stdout": {
+        "bytes": 986,
+        "sha256": "0a338af8afa78da4ef6b2fbe3f9f3d19b2a0dae5f30c2a70db3cf1cca8e3e43c"
+      },
+      "actualTapCounts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/trading-invalidity-discovery.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T06:10:01.749800+00:00",
+      "end": "2026-10-23T06:10:02.767598+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8884711424,
+        "/tmp": 17251311616
+      },
+      "finalFree": {
+        "/workspace": 8884711424,
+        "/tmp": 17251307520
+      },
+      "sampledSessionPeakRssBytes": 117723136,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "label": "screening-roster-invalidity-discovery-o23",
+      "scope": "local source/types/lint only",
+      "stdout": {
+        "bytes": 1256,
+        "sha256": "37a87d85ae3f53d74dbb7fbb288bc52ab653dabcb5c3a10ba00e331eb12f6a53"
+      },
+      "actualTapCounts": {
+        "tests": 2,
+        "pass": 2,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/thesis.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T06:10:02.823974+00:00",
+      "end": "2026-10-23T06:10:04.376379+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8884711424,
+        "/tmp": 17251303424
+      },
+      "finalFree": {
+        "/workspace": 8884711424,
+        "/tmp": 17251299328
+      },
+      "sampledSessionPeakRssBytes": 153333760,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "label": "screening-roster-thesis-o23",
+      "scope": "local source/types/lint only",
+      "stdout": {
+        "bytes": 3751,
+        "sha256": "b60065058fab8c1dfe8263639bdc2995487a18629c3022bfe93826c3880f3776"
+      },
+      "actualTapCounts": {
+        "tests": 12,
+        "pass": 12,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/trading-invalidity-discovery.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T06:11:04.320733+00:00",
+      "end": "2026-10-23T06:11:05.928015+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8884707328,
+        "/tmp": 17251295232
+      },
+      "finalFree": {
+        "/workspace": 8884707328,
+        "/tmp": 17251291136
+      },
+      "sampledSessionPeakRssBytes": 142462976,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "label": "screening-roster-composition-final-o23",
+      "scope": "local source/types/lint only",
+      "stdout": {
+        "bytes": 1525,
+        "sha256": "4980b0e18e10e8689c21d4b86d0df803f3f8ebcc9e4be9d6025c865e6e3dc004"
+      },
+      "actualTapCounts": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/trading-invalidity-discovery.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T06:14:16.268250+00:00",
+      "end": "2026-10-23T06:14:17.297779+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8884703232,
+        "/tmp": 17251233792
+      },
+      "finalFree": {
+        "/workspace": 8884703232,
+        "/tmp": 17251229696
+      },
+      "sampledSessionPeakRssBytes": 116113408,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "label": "screening-roster-composition-sealed-o23",
+      "scope": "local source/types/lint only",
+      "stdout": {
+        "bytes": 1524,
+        "sha256": "eb5240524a5af52a721c3f897aa20857c6d2661e4d7c9523022e9794973684b2"
+      },
+      "actualTapCounts": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--incremental",
+        "false"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "start": "2026-10-23T06:11:14.022885+00:00",
+      "end": "2026-10-23T06:11:45.096539+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8884707328,
+        "/tmp": 17251287040
+      },
+      "finalFree": {
+        "/workspace": 8884707328,
+        "/tmp": 17251287040
+      },
+      "sampledSessionPeakRssBytes": 1329754112,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "label": "screening-roster-types-o23",
+      "scope": "local source/types/lint only",
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--incremental",
+        "false"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "start": "2026-10-23T06:14:17.432200+00:00",
+      "end": "2026-10-23T06:14:41.721101+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8884703232,
+        "/tmp": 17251225600
+      },
+      "finalFree": {
+        "/workspace": 8884703232,
+        "/tmp": 17251217408
+      },
+      "sampledSessionPeakRssBytes": 1314529280,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "label": "screening-roster-types-final-o23",
+      "scope": "local source/types/lint only",
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/lib/vnext/discovery.ts",
+        "src/lib/vnext/discovery.test.ts",
+        "src/lib/vnext/trading-invalidity-discovery.test.ts",
+        "src/lib/vnext/thesis.test.ts",
+        "src/lib/vnext/screening-instrument-identity.ts",
+        "src/lib/vnext/screening-instrument-identity.test.ts",
+        "src/lib/vnext/discovery-test-loader.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "start": "2026-10-23T06:13:08.392409+00:00",
+      "end": "2026-10-23T06:13:10.960372+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8884707328,
+        "/tmp": 17251241984
+      },
+      "finalFree": {
+        "/workspace": 8884703232,
+        "/tmp": 17251241984
+      },
+      "sampledSessionPeakRssBytes": 256794624,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "label": "screening-roster-lint-o23",
+      "scope": "local source/types/lint only",
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/lib/vnext/discovery.ts",
+        "src/lib/vnext/trading-invalidity-discovery.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "start": "2026-10-23T06:15:46.195426+00:00",
+      "end": "2026-10-23T06:16:09.080152+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8884703232,
+        "/tmp": 17251205120
+      },
+      "finalFree": {
+        "/workspace": 8884703232,
+        "/tmp": 17251205120
+      },
+      "sampledSessionPeakRssBytes": 255787008,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "label": "screening-roster-lint-final-o23",
+      "scope": "local source/types/lint only",
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

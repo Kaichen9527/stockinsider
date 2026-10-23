@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "vnext-action-terms-source-profile-v1",
+  "migration": "migrations/20261023_vnext_corporate_action_terms_v1.sql",
+  "migrationSha256": "925a41ac3284ccdb139f8a4164ccea1611e1301cb38fb8ccdae68fc1cb88fe8a",
+  "nativeVerified": false,
+  "nativeOids": null,
+  "modifiedRoutines": [
+    {
+      "signature": "public.vnext_source_evidence_current_v1(jsonb,text)",
+      "predecessorBodySha256": "440d0dcee04334f57a2ee9e8fdc920b09d3329d3c3c26e859c7a19e9789c292b",
+      "predecessorBytes": 1083,
+      "successorBodySha256": "571152fe153c72656f128c5c995a726cd994f8698080cf1f8cc7d179bcf0619d",
+      "successorBytes": 1201,
+      "fragments": []
+    },
+    {
+      "signature": "public.vnext_input_sources_current_v1(jsonb,text)",
+      "predecessorBodySha256": "ce58e3b7f1a98fcac4dbcb537ba4336e7bbb3c9c7247e1354d6a07bf2bcc8008",
+      "predecessorBytes": 1222,
+      "successorBodySha256": "912b039211f3624f82fa1940740b9cb47a8f0ed46817e108504b29d5a528b8e4",
+      "successorBytes": 1294,
+      "fragments": []
+    },
+    {
+      "signature": "public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)",
+      "predecessorBodySha256": "92f1112444ddcacebce692fbc8c0897eb309c33babee28f9dcff3215f7243325",
+      "predecessorBytes": 12216,
+      "successorBodySha256": "f78c879d15d5e9ccce1a15207f9a0f6543e0cf10f58c51bb48ff37d664058320",
+      "successorBytes": 13251,
+      "fragments": [
+        [
+          "timestamp_text text;",
+          "timestamp_text text; action_projection jsonb; action_receipt jsonb; action_receipts jsonb:='[]';"
+        ],
+        [
+          "IF event_item->>'symbol'=p_symbol THEN RETURN jsonb_build_object('deferred','target_rebase_after_corporate_action_unavailable');END IF;",
+          "IF event_item->>'symbol'=p_symbol THEN\n    IF action_projection IS NULL THEN action_projection:=public.vnext_action_terms_current_internal_v1(p_stock,p_symbol,cutoff);END IF;\n    SELECT value INTO action_receipt FROM jsonb_array_elements(action_projection->'receipts') r WHERE r->'event'->>'snapshotId'=snapshot->>'snapshot_id' AND r->'event'->'ordinal'=event_item->'event_ordinal';\n    IF action_receipt IS NULL THEN RETURN jsonb_build_object('deferred','target_current_action_terms_incomplete');END IF;\n    IF action_receipt->'event'->>'kind'<>'par_value_change' OR (action_receipt->'terms'->>'cashDividendPerOldShare')::numeric<>0 OR (action_receipt->'terms'->>'cashReturnPerOldShare')::numeric<>0 OR (action_receipt->'terms'->>'subscriptionCashPerOldShare')::numeric<>0 THEN RETURN jsonb_build_object('deferred','target_cash_or_rights_intent_decision_required');END IF;\n    action_receipts:=action_receipts||jsonb_build_array(action_receipt);\n   END IF;"
+        ],
+        [
+          "'hex'));\nEND",
+          "'hex'))||CASE WHEN jsonb_array_length(action_receipts)>0 THEN jsonb_build_object('corporateActionReceipts',action_receipts) ELSE '{}'::jsonb END;\nEND"
+        ]
+      ]
+    },
+    {
+      "signature": "public.vnext_target_current_v1(text,uuid,text)",
+      "predecessorBodySha256": "36c4904a11c58981e11264294500d161a86655495f512868a712ded08a30f3fb",
+      "predecessorBytes": 14418,
+      "successorBodySha256": "2cb716f773f8e5069c56f7f85aa20677bd7c83cfa6a12ecc2784ca8ffb8c393f",
+      "successorBytes": 17075,
+      "fragments": [
+        [
+          "reviewer_input jsonb;",
+          "reviewer_input jsonb; action_receipt jsonb; share_gcd numeric; share_numerator numeric:=1; share_denominator numeric:=1; original_scenarios jsonb; rebasing jsonb;"
+        ],
+        [
+          "public.vnext_input_sources_current_v1(frozen,p_symbol)",
+          "public.vnext_target_baseline_sources_current_v1(frozen,p_symbol)"
+        ],
+        [
+          " IF (price->'quote'->>'raw_close')::numeric<base THEN",
+          " original_scenarios:=jsonb_build_object('base',base,'bear',bear,'bull',bull,'unit',quote_claim->'numeric'->'unit','quoteAt',artifact->'quoteDate');\n IF price ? 'corporateActionReceipts' THEN\n  FOR action_receipt IN SELECT value FROM jsonb_array_elements(price->'corporateActionReceipts') LOOP\n   share_numerator:=share_numerator*(action_receipt->'terms'->>'newShares')::numeric;share_denominator:=share_denominator*(action_receipt->'terms'->>'oldShares')::numeric;share_gcd:=gcd(share_numerator,share_denominator);share_numerator:=trim_scale(share_numerator/share_gcd);share_denominator:=trim_scale(share_denominator/share_gcd);\n   IF share_numerator*1000000<share_denominator OR share_numerator>share_denominator*1000000 THEN RETURN jsonb_build_object('deferred','target_share_ratio_unusable');END IF;\n  END LOOP;\n  IF base*1000000<>trunc(base*1000000) OR bear*1000000<>trunc(bear*1000000) OR bull*1000000<>trunc(bull*1000000) OR mod(base*1000000*share_denominator,share_numerator)<>0 OR mod(bear*1000000*share_denominator,share_numerator)<>0 OR mod(bull*1000000*share_denominator,share_numerator)<>0 THEN RETURN jsonb_build_object('deferred','target_exact_decimal_rebase_unavailable');END IF;\n  base:=trim_scale(base*share_denominator/share_numerator);bear:=trim_scale(bear*share_denominator/share_numerator);bull:=trim_scale(bull*share_denominator/share_numerator);\n  IF bear<0.000001 OR bull>=1e21 THEN RETURN jsonb_build_object('deferred','target_exact_decimal_rebase_unavailable');END IF;\n  rebasing:=jsonb_build_object('schemaVersion','vnext-per-share-target-rebase-v1','symbol',p_symbol,'revisionId',p_revision,'originalBaselineHash',encode(sha256(convert_to(public.vnext_catalog_canonical_v1(original_scenarios||jsonb_build_object('inputHash',p_input_hash,'outputHash',artifact->'outputHash')),'UTF8')),'hex'),'originalInputHash',p_input_hash,'originalOutputHash',artifact->'outputHash','original',original_scenarios,'shareRatio',jsonb_build_object('numerator',share_numerator::text,'denominator',share_denominator::text),'rebased',jsonb_build_object('base',base,'bear',bear,'bull',bull,'unit','TWD_per_share'),'actionReceiptHashes',(SELECT jsonb_agg(value->'receiptHash' ORDER BY ordinality) FROM jsonb_array_elements(price->'corporateActionReceipts') WITH ORDINALITY));\n END IF;\n IF (price->'quote'->>'raw_close')::numeric<base THEN"
+        ],
+        [
+          " RETURN receipt||jsonb_build_object('proofHash'",
+          " IF rebasing IS NOT NULL THEN receipt:=receipt||jsonb_build_object('rebasing',rebasing||jsonb_build_object('receiptHash',encode(sha256(convert_to(public.vnext_catalog_canonical_v1(rebasing),'UTF8')),'hex')));END IF;\n RETURN receipt||jsonb_build_object('proofHash'"
+        ]
+      ],
+      "successorBodyTag": "successor3"
+    }
+  ],
+  "newFunctions": [
+    {
+      "name": "vnext_action_terms_rights_guard_v1",
+      "signature": "public.vnext_action_terms_rights_guard_v1()",
+      "owner": "opportunity_v3_rpc_owner",
+      "bodySha256": "6108b878208979236a4ec71439606a69196df09d72f4a4bf42a73f57dac258bf",
+      "bytes": 490,
+      "definer": false,
+      "volatility": "v"
+    },
+    {
+      "name": "vnext_disclosed_action_terms_internal_v1",
+      "signature": "public.vnext_disclosed_action_terms_internal_v1(text)",
+      "owner": "opportunity_v3_rpc_owner",
+      "bodySha256": "2405f04908c4e644b993921f613d5e5eedd1ea4ccb32d494edee750f244482b1",
+      "bytes": 2586,
+      "definer": false,
+      "volatility": "i"
+    },
+    {
+      "name": "vnext_action_terms_current_internal_v1",
+      "signature": "public.vnext_action_terms_current_internal_v1(uuid,text,timestamptz)",
+      "owner": "opportunity_v3_rpc_owner",
+      "bodySha256": "3ccc6cb6a3637baaa8ef19d13ee7cb2999e910504adc588c2432783ff2f1eb75",
+      "bytes": 13270,
+      "definer": true,
+      "volatility": "s"
+    },
+    {
+      "name": "vnext_action_terms_read_v1",
+      "signature": "public.vnext_action_terms_read_v1(text,uuid,uuid)",
+      "owner": "stockinsider_vnext_owner",
+      "bodySha256": "4ccddbda3b926c73ddf35228f2652eb8bfa83390f0adb1c4eed8143a5f9e8c74",
+      "bytes": 1080,
+      "definer": true,
+      "volatility": "v"
+    },
+    {
+      "name": "vnext_action_terms_input_current_v1",
+      "signature": "public.vnext_action_terms_input_current_v1(jsonb,text)",
+      "owner": "stockinsider_vnext_owner",
+      "bodySha256": "df9829fa0c2097c8e241023dddea18a9e92914d3352e63475cf50d942319199d",
+      "bytes": 2398,
+      "definer": true,
+      "volatility": "s"
+    },
+    {
+      "name": "vnext_action_evidence_current_v1",
+      "signature": "public.vnext_action_evidence_current_v1(jsonb,text)",
+      "owner": "stockinsider_vnext_owner",
+      "bodySha256": "b16002c239b1f9d90e468b5f4bfc16761c873c74318f02fa90f6bd03a7fc9426",
+      "bytes": 531,
+      "definer": true,
+      "volatility": "s"
+    },
+    {
+      "name": "vnext_target_baseline_sources_current_v1",
+      "signature": "public.vnext_target_baseline_sources_current_v1(jsonb,text)",
+      "owner": "stockinsider_vnext_owner",
+      "bodySha256": "ce58e3b7f1a98fcac4dbcb537ba4336e7bbb3c9c7247e1354d6a07bf2bcc8008",
+      "bytes": 1222,
+      "definer": true,
+      "volatility": "s",
+      "sourceParity": "exact complete existing input-source gate (including current forecasts and each current original); private immutable-target baseline only, no service EXECUTE"
+    },
+    {
+      "name": "vnext_action_preparation_guard_v1",
+      "signature": "public.vnext_action_preparation_guard_v1()",
+      "owner": "stockinsider_vnext_owner",
+      "bodySha256": "ee96f0820b710ecf57aaebb659e75afa2b2a749acae476fbed35697a0ea430cf",
+      "bytes": 745,
+      "definer": false,
+      "volatility": "v"
+    }
+  ],
+  "authorityFragment": {
+    "source": "migrations/20261023_vnext_forecast_sources_v1.sql",
+    "originalSha256": "2c34c0d6aa1dc3236c7a1ac82c8d3a34af8f555f666e319fd045ba2dc0d75afc",
+    "adaptedSha256": "3d019c45287b43985e8479ca776109bc13f789d5303783b292f9c27d9d8bc738",
+    "scope": "same source revision/publisher/identity/manifest guards; official MOPS only, own rights policy, full manifest tuple, no forecast fact date comparison; canonical MOPS host pair only"
+  },
+  "catalogQuerySha256": "4398383090e87441958cdf11f0802889e33b70839d25fc30374faf3e125b62cb",
+  "permissionScope": "one private append-only terms-use table, no existing-role/schema/table grants; one new private function EXECUTE to existing stock owner; one new job-scoped service RPC",
+  "newPreparationTrigger": {
+    "table": "public.vnext_preparations_v1",
+    "name": "vnext_action_preparation_current",
+    "timing": "BEFORE INSERT",
+    "triggerType": 7,
+    "purpose": "current terms mandatory on ALL new preparations; no caller provenance flag; originals unchanged"
+  },
+  "currentReceiptTimezone": "UTC; current new function configuration only, original routine configs unchanged",
+  "frozenAndCurrentUse": "actual asOf projection AND current projection; source knownAt includes rights/authority validFrom; new preparation actual started/deadline, no backdating/clock refresh"
+}

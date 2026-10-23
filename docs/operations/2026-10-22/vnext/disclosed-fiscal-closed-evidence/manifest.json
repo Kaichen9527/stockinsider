@@ -1,0 +1,27 @@
+[
+  {
+    "path": "fiscal-closed-pairs-04.tap",
+    "bytes": 3319,
+    "sha256": "c986c6857fb83cb3ccfc48869dc1c192ea716e374c6f16cf63730737df00b0ab"
+  },
+  {
+    "path": "fiscal-exact-preparation-04.tap",
+    "bytes": 4163,
+    "sha256": "2a2ae3bb75d135ab56a4cd724da292db7a14144df1deb7ebdfe676c4163eb6c2"
+  },
+  {
+    "path": "private-inventory.json",
+    "bytes": 3436,
+    "sha256": "ed65d701906315f28fb2c22d35a0b3ecf1a44788fde4aac3392e9dbcf465a97e"
+  },
+  {
+    "path": "source-seal.json",
+    "bytes": 1277,
+    "sha256": "85372a6c1227cff90759b6d44027de81cab438cd85d9bc959c501d64f0362726"
+  },
+  {
+    "path": "vm-checks.json",
+    "bytes": 4654,
+    "sha256": "4da03f1e4d1fb7de90257392349180d391e8ea14a6ee8d62ca4874f871dd2a50"
+  }
+]

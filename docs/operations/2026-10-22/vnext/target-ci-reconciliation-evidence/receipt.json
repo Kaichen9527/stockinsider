@@ -1,0 +1,29 @@
+{
+  "subject": "f2f235988d4174a1a46d104738ebfb40964c9428",
+  "native": "NOT_RUN for this diagnostic-only source",
+  "files": [
+    {
+      "name": "ci.json",
+      "bytes": 2502,
+      "sha256": "05cbfa10ad55f083d3137801aa71d956ecc92b8d3b00355466bd7a7003a0f8f6"
+    },
+    {
+      "name": "limits.json",
+      "bytes": 915,
+      "sha256": "31cd44162403094b47c01f916377f97e280820b0ef731592b682f0c370ed854a"
+    },
+    {
+      "name": "private-inventory.json",
+      "bytes": 1573,
+      "sha256": "418cabe2835913a3c983ce4beae22fb8d5b4c11b7d75bd19c1a587b168b536b9"
+    },
+    {
+      "name": "source.json",
+      "bytes": 2441,
+      "sha256": "2901550d2e710022ac77cb294115aca464728a4444103d61a6d2ed4008a42bff"
+    }
+  ],
+  "publicBytes": 7431,
+  "publicCount": 4,
+  "privateContentsVerifiedByCoordinator": false
+}

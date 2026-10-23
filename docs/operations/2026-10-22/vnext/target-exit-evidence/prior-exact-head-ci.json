@@ -1,0 +1,324 @@
+{
+  "observedAt": "2026-10-23T02:49:48.492470+00:00",
+  "runs": [
+    {
+      "conclusion": "success",
+      "created_at": "2026-10-23T02:41:43Z",
+      "head_sha": "115fdb1b0646a438cb8146ed850f535c3a980739",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39890964443",
+      "id": 39890964443,
+      "name": "Financial document write lease quality diagnostics",
+      "status": "completed",
+      "updated_at": "2026-10-23T02:42:15Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-10-23T02:41:43Z",
+      "head_sha": "115fdb1b0646a438cb8146ed850f535c3a980739",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39890964438",
+      "id": 39890964438,
+      "name": "PTT mention provenance diagnostics",
+      "status": "completed",
+      "updated_at": "2026-10-23T02:42:10Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-10-23T02:41:43Z",
+      "head_sha": "115fdb1b0646a438cb8146ed850f535c3a980739",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39890964407",
+      "id": 39890964407,
+      "name": "Research publication tail quality diagnostics",
+      "status": "completed",
+      "updated_at": "2026-10-23T02:43:17Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-10-23T02:41:43Z",
+      "head_sha": "115fdb1b0646a438cb8146ed850f535c3a980739",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39890964457",
+      "id": 39890964457,
+      "name": "Financial installation quality diagnostics",
+      "status": "completed",
+      "updated_at": "2026-10-23T02:42:39Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-10-23T02:41:43Z",
+      "head_sha": "115fdb1b0646a438cb8146ed850f535c3a980739",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39890964404",
+      "id": 39890964404,
+      "name": "Candidate discovery quality diagnostics",
+      "status": "completed",
+      "updated_at": "2026-10-23T02:42:40Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-10-23T02:41:43Z",
+      "head_sha": "115fdb1b0646a438cb8146ed850f535c3a980739",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39890964470",
+      "id": 39890964470,
+      "jobs": [
+        {
+          "completed_at": "2026-10-23T02:45:06Z",
+          "conclusion": "success",
+          "id": 120210362316,
+          "name": "vnext-quality",
+          "started_at": "2026-10-23T02:41:46Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Workspace and temporary filesystem admission",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install unchanged locked dependencies",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual source contracts, types and lint",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Full ordinary build",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual durable worker journal with explicitly synthetic provider",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "status": "completed"
+            }
+          ]
+        }
+      ],
+      "name": "StockInsider vNext isolated quality",
+      "status": "completed",
+      "updated_at": "2026-10-23T02:45:07Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-10-23T02:41:43Z",
+      "head_sha": "115fdb1b0646a438cb8146ed850f535c3a980739",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39890964417",
+      "id": 39890964417,
+      "jobs": [
+        {
+          "completed_at": "2026-10-23T02:47:35Z",
+          "conclusion": "success",
+          "id": 120210362225,
+          "name": "product-runtime",
+          "started_at": "2026-10-23T02:41:46Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v4",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install PostgreSQL",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install root dependencies",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install isolated offline parser test dependencies",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install web dependencies",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Verify candidate revision and historical date contracts",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install project-local Playwright Chromium",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "status": "completed"
+            }
+          ]
+        },
+        {
+          "completed_at": "2026-10-23T02:41:44Z",
+          "conclusion": "skipped",
+          "id": 120210363821,
+          "name": "evaluation-governance",
+          "started_at": "2026-10-23T02:41:44Z",
+          "status": "completed",
+          "steps": []
+        },
+        {
+          "completed_at": "2026-10-23T02:41:44Z",
+          "conclusion": "skipped",
+          "id": 120210363902,
+          "name": "model-runner",
+          "started_at": "2026-10-23T02:41:44Z",
+          "status": "completed",
+          "steps": []
+        },
+        {
+          "completed_at": "2026-10-23T02:47:39Z",
+          "conclusion": "success",
+          "id": 120212086312,
+          "name": "stockinsider-v3-diagnostic-product-runtime",
+          "started_at": "2026-10-23T02:47:37Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Require executable PR product/runtime evidence only",
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "status": "completed"
+            }
+          ]
+        }
+      ],
+      "name": "Source-led opportunity V3",
+      "status": "completed",
+      "updated_at": "2026-10-23T02:47:40Z"
+    },
+    {
+      "conclusion": "failure",
+      "created_at": "2026-10-23T02:41:42Z",
+      "head_sha": "115fdb1b0646a438cb8146ed850f535c3a980739",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39890961660",
+      "id": 39890961660,
+      "name": "Source-led opportunity V3 protected gate root",
+      "status": "completed",
+      "updated_at": "2026-10-23T02:42:21Z"
+    }
+  ],
+  "scope": "current exacthead API metadata, not downloaded logs/TAP or independent release approval",
+  "source": "115fdb1b0646a438cb8146ed850f535c3a980739"
+}

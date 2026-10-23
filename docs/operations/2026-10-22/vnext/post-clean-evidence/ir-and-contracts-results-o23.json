@@ -1,0 +1,150 @@
+{
+  "at": "2026-10-22T23:58:07.708417+00:00",
+  "steps": [
+    {
+      "args": [
+        "inspect",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 1
+    },
+    {
+      "args": [
+        "run",
+        "-d",
+        "--name",
+        "stockinsider-vnext-oct22-worker-11",
+        "--label",
+        "codex.task=stockinsider-vnext-oct22",
+        "--network",
+        "none",
+        "--memory=1g",
+        "--cpus=1",
+        "-e",
+        "POSTGRES_HOST_AUTH_METHOD=trust",
+        "-e",
+        "POSTGRES_DB=vnext_worker",
+        "-e",
+        "POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8",
+        "--mount",
+        "type=bind,src=/tmp/stockinsider-vnext-oct22-private/worker-pg-data-11,dst=/var/lib/postgresql/data",
+        "--mount",
+        "type=bind,src=/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-11/socket,dst=/var/run/postgresql",
+        "--mount",
+        "type=bind,src=/tmp/stockinsider-vnext-oct22-private/product-tools-tmp-11,dst=/tmp",
+        "--mount",
+        "type=bind,src=/workspace/stockinsider-vnext-oct22,dst=/workspace/stockinsider-vnext-oct22,readonly",
+        "--mount",
+        "type=bind,src=/workspace/.tools/node22,dst=/workspace/.tools/node22,readonly",
+        "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "inspect",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "exec",
+        "stockinsider-vnext-oct22-worker-11",
+        "pg_isready",
+        "-U",
+        "postgres",
+        "-d",
+        "vnext_worker"
+      ],
+      "exit": 2
+    },
+    {
+      "args": [
+        "exec",
+        "stockinsider-vnext-oct22-worker-11",
+        "pg_isready",
+        "-U",
+        "postgres",
+        "-d",
+        "vnext_worker"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "exec",
+        "stockinsider-vnext-oct22-worker-11",
+        "useradd",
+        "--uid",
+        "1000",
+        "--user-group",
+        "--no-create-home",
+        "agent"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "inspect",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "stop",
+        "--time",
+        "30",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "logs",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 0
+    },
+    {
+      "args": [
+        "inspect",
+        "stockinsider-vnext-oct22-worker-11"
+      ],
+      "exit": 0
+    }
+  ],
+  "results": [
+    {
+      "label": "product-runtime-contracts-native-o23",
+      "exit": 0,
+      "scope": "all unchanged contract files with actual PG17tools; not Ubuntu24/PG16 equivalent"
+    },
+    {
+      "label": "ir-native-o23",
+      "exit": 1,
+      "scope": "separate mainDB/sourcecandidate, independent from contracts clusters; failfast own dependencies"
+    }
+  ],
+  "exit": 1,
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-22T23:57:52.32408512Z",
+    "FinishedAt": "2026-10-22T23:58:07.614989764Z"
+  },
+  "serverShutdownObserved": true,
+  "containerDataAndVolumesRetained": true,
+  "free": {
+    "/workspace": 8896507904,
+    "/tmp": 17335922688
+  }
+}

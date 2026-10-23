@@ -1,0 +1,42 @@
+{
+  "scope": "VM real Chromium / synthetic read-only transport of actual isolated DB snapshots, not real-source or Contabo acceptance",
+  "startedAt": "2026-10-22T00:20:34.100361+00:00",
+  "appSourceSha256": "78655af77fe5d729d7ea290c787c26b8b7db0425065095e9241e64918545b224",
+  "browserVersion": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)",
+  "launcherSha256": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779",
+  "suite": "revision",
+  "snapshotHashes": {
+    "home.json": "ae110bca9d209e7a98fd36b4f8827bff0faaed0e0528fbf5ba9d483da16301aa",
+    "detail.json": "9b75041b24e216a8fd2345e4fa76703314d1fbae2772e69026ce113c19f5314b",
+    "home-before.json": "c19d199bcd08fca201a8873960730210d8628565f32cc414d1381000c46b264a",
+    "detail-before.json": "4d7f79140a78d339a56775c4a28ed02dd2f56cc5ce02d0ad673ebd35f060a1dd"
+  },
+  "testCommand": [
+    "/workspace/.tools/node22/node_modules/node/bin/node",
+    "node_modules/@playwright/test/cli.js",
+    "test",
+    "vnext-revision.spec.ts",
+    "--config",
+    "playwright.vnext.config.ts",
+    "--output",
+    "/tmp/stockinsider-vnext-oct22-private/browser-revision/screenshots-traces"
+  ],
+  "exit": 0,
+  "cleanup": [
+    {
+      "name": "next",
+      "pid": 250978,
+      "exit": 143,
+      "directProcessSettled": true,
+      "procPathAbsent": true
+    },
+    {
+      "name": "bridge",
+      "pid": 250967,
+      "exit": 0,
+      "directProcessSettled": true,
+      "procPathAbsent": true
+    }
+  ],
+  "endedAt": "2026-10-22T00:20:45.461101+00:00"
+}

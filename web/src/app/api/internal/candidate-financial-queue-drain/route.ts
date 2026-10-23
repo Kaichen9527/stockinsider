@@ -1,3 +1,4 @@
+import { vnextRoute } from '@/lib/vnext/http';
 import { NextResponse } from 'next/server';
 import { refreshCandidateOfficialFinancials, type CandidateOfficialFinancial } from '@/lib/candidate-official-financials';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
@@ -38,6 +39,8 @@ async function readDueFinancialJobs(client: SupabaseClient, now: string) {
 }
 
 export async function POST(request: Request) {
+  const vnext = await vnextRoute(request, 'candidate-financial-queue-drain');
+  if (vnext) return vnext;
   if (!requireExactInternalBearer(request)) return NextResponse.json({ ok: false, error: 'unauthorized_internal_writer' }, { status: 401 });
   const raw = await request.text();
   if (Buffer.byteLength(raw, 'utf8') > BODY_LIMIT) return NextResponse.json({ ok: false, error: 'payload_too_large' }, { status: 413 });

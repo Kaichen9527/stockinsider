@@ -119,8 +119,10 @@ test('history completion is atomic, private, idempotent and preserves conflictin
       writer.stderr.on('data',(chunk)=>{writerError+=chunk;});
       reader.stdout.on('data',(chunk)=>{readerOutput+=chunk;});
       reader.stderr.on('data',(chunk)=>{readerError+=chunk;});
-      const writerDone=new Promise((resolve)=>writer.on('exit',(code)=>resolve(code)));
-      const readerDone=new Promise((resolve)=>reader.on('exit',(code)=>resolve(code)));
+      // 'exit' may precede the final stdout/stderr chunks. Parse only after
+      // actual process AND stdio settlement; preserve the original race bounds.
+      const writerDone=new Promise((resolve)=>writer.once('close',(code)=>resolve(code)));
+      const readerDone=new Promise((resolve)=>reader.once('close',(code)=>resolve(code)));
       const until=async(predicate)=>{
         const deadline=Date.now()+5000;
         while(!predicate()){

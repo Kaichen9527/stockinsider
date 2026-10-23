@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-23T16:02:17.723280+00:00",
+  "source": "7f896849aa6296bfa302fa56fa5da7eb808f6b02",
+  "manifestSha256": "f282a6f89b433e17a3ebad498ebd01d7d8bf2358dd3206d2948f6a510704ca9a",
+  "nativeNew": "NOT_RUN at seal",
+  "nativePrevious": "e1 overall FAIL; exact harness root confirmed; no result transferred",
+  "free": {
+    "/workspace": 8875008000,
+    "/tmp": 17243549696
+  },
+  "floor": 8589934592,
+  "nextSmallWorkset": 16777216,
+  "localHeavy": "NOT_ADMITTED",
+  "independentApproval": false,
+  "namespaceApplied": false,
+  "production": false,
+  "fullGoal": "INCOMPLETE"
+}

@@ -1,0 +1,90 @@
+{
+  "actualNode": {
+    "path": "/workspace/.tools/node22/node_modules/node/bin/node",
+    "sha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "version": "v22.14.0"
+  },
+  "actualPG": {
+    "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+    "path": "/usr/lib/postgresql/17/bin/postgres",
+    "sha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+    "version": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)"
+  },
+  "actualRetainedExecutionSource": "0a40c8bda8d8c964ee556e2c9644f9fb3abed7f9",
+  "currentFiles": [
+    {
+      "bytes": 14196,
+      "path": "web/src/lib/vnext/discovery.ts",
+      "sha256": "dd8aed46f8f958e98871ccd40f98f4e099c35b2433cadc83b997cde988c76cdb"
+    },
+    {
+      "bytes": 9004,
+      "path": "web/src/lib/vnext/research.ts",
+      "sha256": "b011ec24b7cd1ff3424db9122d17b272bff9000011af150a3ed34db61cb65c88"
+    },
+    {
+      "bytes": 4495,
+      "path": "web/src/lib/vnext/reviewed-target.ts",
+      "sha256": "7d6edf5aae52d5bb70d3dd8ca27b72469261db72486a167484b51ce7ba6ce737"
+    },
+    {
+      "bytes": 13108,
+      "path": "web/src/lib/vnext/reviewed-target.test.ts",
+      "sha256": "737f465064c45bf5711ca1a3594aa1161468b147be04681d2e824d2d0a1e0032"
+    },
+    {
+      "bytes": 6326,
+      "path": "web/src/lib/vnext/dimensionless-arithmetic.test.ts",
+      "sha256": "cdf3b85d61c991e0d58fe80d42f72abf3b85fc99b2c777b958ac301887fc8736"
+    },
+    {
+      "bytes": 50714,
+      "path": "migrations/20261022_vnext_target_exit_v1.sql",
+      "sha256": "8a49259e95d6557ac4b7a8a74d90500b0d180735f396fbf1490f337b711bf441"
+    },
+    {
+      "bytes": 7852,
+      "path": "migrations/20261022_vnext_dimensionless_arithmetic_v1.sql",
+      "sha256": "61b838614afe16ca788154828c7f818f8d4be58104402be5db7fbe2231509721"
+    },
+    {
+      "bytes": 12414,
+      "path": "scripts/opportunity-v3/vnext-target-exit-profile-v1.json",
+      "sha256": "fd5390cd43db8a9fd76ffd2f44da8eeb3799a692692e6ba6f500c051cd258def"
+    },
+    {
+      "bytes": 2132,
+      "path": "scripts/opportunity-v3/vnext-dimensionless-arithmetic-profile-v1.json",
+      "sha256": "f7700421374ec082f0e8719009844980b6cd37546a4bfa7424643b72b7b08dbf"
+    },
+    {
+      "bytes": 12093,
+      "path": "scripts/vnext-target-postgres.test.mjs",
+      "sha256": "c73906495cf4089e7431908becb662b8cb909eaef45c0ae153721d2536e6a397"
+    },
+    {
+      "bytes": 11963,
+      "path": "scripts/vnext-target-business-fixture.mjs",
+      "sha256": "195dbb47671ed7767cf529b1ad363d5c50d1746b2237af1270f969aac86282e9"
+    },
+    {
+      "bytes": 24324,
+      "path": "scripts/vnext-cached-http.test.mjs",
+      "sha256": "f6967cf63d11bebc33d10108b628768f726c4214ebf5532ed41b5ba49e473143"
+    },
+    {
+      "bytes": 24233,
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "sha256": "90ac2793014bab18b197bb6ac990d85f3975021670039489feeabde3a3aa814e"
+    }
+  ],
+  "currentSource": "b0f09e050a3078d0a1e955316a7a6960ae14adc6",
+  "noWholeNextClosureApproval": true,
+  "sourceOnlyCurrent": true,
+  "wholeActualGitInputSeal": {
+    "bytes": 52935387,
+    "count": 2573,
+    "path": "/tmp/stockinsider-vnext-oct22-private/target-native-readowner-source-seal-o23.json",
+    "sha256": "16845e40805355c300d4aa38813f8aeef153655e39618e7a12788210a9ce6239"
+  }
+}

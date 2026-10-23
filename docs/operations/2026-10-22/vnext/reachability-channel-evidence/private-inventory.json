@@ -1,0 +1,82 @@
+{
+  "count": 15,
+  "bytes": 136617,
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/reachability-b42-truncated-annotations-o23.json",
+      "bytes": 10959,
+      "sha256": "a3c54a19336614417da026f50b31394e924d92b48fdd5db0e168f696b2912e87"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/reachability-chunk-import-initial-wip.yml",
+      "bytes": 115522,
+      "sha256": "392b23d1b5c28d50298745617a76805fab7de5414cd566540560f905f98d2afc"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/reachability-codec-workflow-source-o23.json",
+      "bytes": 166,
+      "sha256": "ed014c5369163621e1c83fb4fab4919b2a0e5e251990e9b6a23e0d9aa289e508"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/reachability-codec-contract-01.json",
+      "bytes": 817,
+      "sha256": "b6d5ba481a48fe1c656444994391358e3a1dc81693312228aa0ae91b27605d99"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/reachability-codec-contract-01.log",
+      "bytes": 102,
+      "sha256": "a10efbea5a2da673780ddea94385d1bfa907df20dc3df2d9d51280d2194cf796"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/reachability-codec-contract-02.json",
+      "bytes": 817,
+      "sha256": "369cc3e1b8834ad678cd34d489ae05574a9a66775be82f68e2748aa9176b1ee3"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/reachability-codec-contract-02.log",
+      "bytes": 102,
+      "sha256": "8dc7c03cabe82d416fbad5daa63afa03f1bc054e42e67fe37e9754e3741d4cc2"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-kind-contract-01.json",
+      "bytes": 1033,
+      "sha256": "852f3563a22713253911f7e125ca026eebebd2bcf535d79ef19d603642ce470f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/namespace-kind-contract-01.log",
+      "bytes": 2244,
+      "sha256": "427916dbc3c56e4b426aaefc8dcb7e02ac1c427487f19f6eb9c5e737bef9e962"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/readonly-guard-syntax-01.json",
+      "bytes": 851,
+      "sha256": "753d3ff45c92a322887ab40a59e5805d9b661de3d28571f2ef4c357bf2d98ee0"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/readonly-guard-syntax-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/readonly-guard-contract-01.json",
+      "bytes": 845,
+      "sha256": "44da1099b0ce8a151e8c73438554d6a77b91252999f154c90a6636c0ef9b9d59"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/readonly-guard-contract-01.log",
+      "bytes": 2240,
+      "sha256": "0c94c7bcf30388639beb189e1461545f454a95db662b7084d4b89d30774ed847"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/readonly-codec-contract-01.json",
+      "bytes": 817,
+      "sha256": "c320bc5d12cebe26289cb8ef16c701e50f7253889d0e214f01cfad59a2a6d6cb"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/readonly-codec-contract-01.log",
+      "bytes": 102,
+      "sha256": "98255317dbdec068621cfd1c730ebd962e38b6f8c534b73c2b3cbfc806ea738c"
+    }
+  ],
+  "scope": "finite local new-source metadata/checks/initialWIP; hosted rows/body/TAP not retrieved; prior evidence untouched"
+}

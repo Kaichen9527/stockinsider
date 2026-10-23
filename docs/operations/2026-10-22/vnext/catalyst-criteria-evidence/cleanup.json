@@ -1,0 +1,166 @@
+{
+  "clientAndBackend": {
+    "clusterRetained": true,
+    "externalStopRequired": true,
+    "priorBackendPids": [
+      65,
+      66
+    ],
+    "priorBackendsAbsent": true,
+    "trackedClientsSettled": true
+  },
+  "dataAndRawRetained": true,
+  "externalPG": {
+    "at": "2026-10-23T02:12:40.106872+00:00",
+    "containerDataAndVolumesRetained": true,
+    "free": {
+      "/tmp": 17319272448,
+      "/workspace": 8890155008
+    },
+    "nativeExit": 0,
+    "scope": "new catalyst criterion protocol retained installer component; no fresh bundle or business-prefix replay; no container/data cleanup",
+    "serverShutdownObserved": true,
+    "state": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 0,
+      "FinishedAt": "2026-10-23T02:12:40.020175093Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-10-23T02:12:36.512943856Z",
+      "Status": "exited"
+    },
+    "steps": [
+      {
+        "args": [
+          "inspect",
+          "stockinsider-vnext-oct22-worker-11"
+        ],
+        "exit": 0
+      },
+      {
+        "args": [
+          "start",
+          "stockinsider-vnext-oct22-worker-11"
+        ],
+        "exit": 0
+      },
+      {
+        "args": [
+          "exec",
+          "stockinsider-vnext-oct22-worker-11",
+          "pg_isready",
+          "-U",
+          "postgres",
+          "-d",
+          "vnext_worker"
+        ],
+        "exit": 1
+      },
+      {
+        "args": [
+          "exec",
+          "stockinsider-vnext-oct22-worker-11",
+          "pg_isready",
+          "-U",
+          "postgres",
+          "-d",
+          "vnext_worker"
+        ],
+        "exit": 0
+      },
+      {
+        "args": [
+          "exec",
+          "stockinsider-vnext-oct22-worker-11",
+          "postgres",
+          "--version"
+        ],
+        "exit": 0
+      },
+      {
+        "args": [
+          "exec",
+          "stockinsider-vnext-oct22-worker-11",
+          "sh",
+          "-c",
+          "command -v postgres"
+        ],
+        "exit": 0
+      },
+      {
+        "args": [
+          "exec",
+          "stockinsider-vnext-oct22-worker-11",
+          "sha256sum",
+          "/usr/lib/postgresql/17/bin/postgres"
+        ],
+        "exit": 0
+      },
+      {
+        "args": [
+          "stop",
+          "--time",
+          "30",
+          "stockinsider-vnext-oct22-worker-11"
+        ],
+        "exit": 0
+      },
+      {
+        "args": [
+          "inspect",
+          "stockinsider-vnext-oct22-worker-11"
+        ],
+        "exit": 0
+      },
+      {
+        "args": [
+          "logs",
+          "stockinsider-vnext-oct22-worker-11"
+        ],
+        "exit": 0
+      }
+    ]
+  },
+  "noFurtherCleanup": true,
+  "postrun": {
+    "at": "2026-10-23T02:14:13.361634+00:00",
+    "exception": "only finite fresh-mode test plan added after completed retained run; products and retained-mode implementation unchanged. New test plan not retroactively attested by that run.",
+    "floor": {
+      "/tmp": 17319206912,
+      "/workspace": 8890138624
+    },
+    "noDataRemoved": true,
+    "originalRunSource": "5d4084ee10ea07e34ef531d2fe4471a714dd7beb",
+    "paths": {
+      "/tmp/stockinsider-vnext-oct22-private/catalyst-native-retained-o23": {
+        "dev": 34,
+        "exists": true,
+        "inode": 106840,
+        "mode": "0o700",
+        "uid": 1000
+      },
+      "/tmp/stockinsider-vnext-oct22-private/worker-pg-data-11": {
+        "dev": 34,
+        "exists": true,
+        "inode": 91598,
+        "mode": "0o700",
+        "uid": 65534
+      },
+      "/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-11/socket/.s.PGSQL.5432": {
+        "errno": "ENOENT",
+        "exists": false
+      },
+      "/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-11/socket/.s.PGSQL.5432.lock": {
+        "errno": "ENOENT",
+        "exists": false
+      }
+    },
+    "postRunChangedPaths": [
+      "scripts/vnext-catalyst-postgres.test.mjs"
+    ]
+  }
+}
