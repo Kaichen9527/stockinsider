@@ -1,3 +1,16 @@
+# Current: explicit preparation reconciliation source slice
+
+Runtime source `9c833695e7c7eb840b0eabf7f004c0d4031e893e`; [source boundary and checks](PREPARATION-RECONCILIATION.md), [current VN01–VN20](CURRENT.json), [receipt](preparation-reconciliation-evidence/receipt.json) SHA256 `b8a3cd2c59617270436834ebcdc1d6b703218deda8b26fbef00762ae1ece9222`.
+
+Configured-author READ and explicit cached resume are wired through the actual HTTP-handler/store source. Final10source contracts, types and focused lint pass; independent prior-Git projection parity3groups pass. External DB/cache/lease transports are synthetic; actual new-source PostgreSQL/HTTP/network/build/browser acceptance is NOT_RUN. Unknown prepare outcome requires explicit READ, with no automatic second mutation or model resend. No cleanup occurred this milestone.
+
+Previous runtimee359 hosted vNext quality39877948120, product-runtime120168069294 and diagnostic120170769620 are SUCCESS. New-source ordinary CI is separate. Protected independent review gates remain unclosed/failing. PR384 stays draft; no merge/deploy or formal research approval.
+
+Workspace margin about303MB permits bounded work but not a fresh cloned runtime or new fullVM build with measured working sets plus reserve. All old data/RED/WIP/receipts remain. Existing TWSE endpoints are snapshots, not exhaustive event-window APIs: comparable28-day volume remains null, and structured event/forecast producers remain VM work.
+
+---
+Earlier milestone, retained with its own source/evidence:
+
 # Latest bounded financial acceptance
 
 Current source `e359d7d634fa88db938fd57db8b4a33123006904`; [delivery](FINANCIAL-STATUS-DELIVERY.md), [VN01–VN20](CURRENT.json), [receipt](financial-status-evidence/receipt.json) SHA256 `da9c947d87f385cbb42a932a49d5c546df667037328ccca4f3d48b71f5e96363`. The current retained-lab continuation is **8PASS/0FAIL**, with true guarded SQLCOMMIT and original service-role financialvalidation, exact source projection, synthetic distinct author/reviewer, unqualified publication and live registry撤權/ABA fences. It is not a fresh whole-install, realfiling/model/semantic or formalresearch approval. All prior REDs and the post-clean milestone below remain.

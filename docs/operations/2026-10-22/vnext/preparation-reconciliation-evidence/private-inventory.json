@@ -1,0 +1,162 @@
+{
+  "bytes": 170824,
+  "count": 31,
+  "files": [
+    {
+      "bytes": 2013,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source-01.json",
+      "sha256": "d00910ce4efc8ae9929a7434a5143a7a2288c57b1932ba077709efb3c571a68c"
+    },
+    {
+      "bytes": 4231,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source-01.log",
+      "sha256": "d37e80920635f15d460542ac8c3123a89468672a16306365b4aca6889049869d"
+    },
+    {
+      "bytes": 1263,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source-02.json",
+      "sha256": "028888c587a9ba34f32e671caa734ae0b56b9234e9d4f8c88a916be70dd6eb53"
+    },
+    {
+      "bytes": 3561,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source-02.log",
+      "sha256": "ddb389e638f2f6c68219ab1602c587f551eb153684d84813133295465f6acc4c"
+    },
+    {
+      "bytes": 1263,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source-03.json",
+      "sha256": "b2a60e0d2fa58244c767a00405fb44bed64947b9770218f26be1297a73ab4c8d"
+    },
+    {
+      "bytes": 3573,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source-03.log",
+      "sha256": "103ef3be3aa39b818a330cd1398b0ff0348d7e458529bbdb052791a7527c32e7"
+    },
+    {
+      "bytes": 1451,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source-04.json",
+      "sha256": "4b2a8008df10aa028905c0c25ece90086731790bca5e945d0df0aba648742a2a"
+    },
+    {
+      "bytes": 3574,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source-04.log",
+      "sha256": "06bcc97b54d5e99f7ab128c6a737b6c2b497da332afa2d43b43ee007e36c2142"
+    },
+    {
+      "bytes": 1452,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source-05.json",
+      "sha256": "919ef3ee355e3961ee33616080c48684de069dbd7e97d233b629e08b363c0360"
+    },
+    {
+      "bytes": 3573,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source-05.log",
+      "sha256": "86cf00b55d17bd60c6f439120666caa5721c679758cccbe456a7536a8198805e"
+    },
+    {
+      "bytes": 9734,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-types-01.json",
+      "sha256": "4dc2af7d045f83ca9bf6130bf40418fab5527ed424b8a6b7e87cf8dee179ec08"
+    },
+    {
+      "bytes": 743,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-types-01.log",
+      "sha256": "022e78a5445aa642771202f37a8320a6881299937867d0e77b5d130caa06675a"
+    },
+    {
+      "bytes": 10121,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-types-02.json",
+      "sha256": "3c65d872f4fac45ad3250ec340dd8140418c3a4f1b683cc3b9acb1beca080027"
+    },
+    {
+      "bytes": 0,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-types-02.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1629,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-failure-regression-01.json",
+      "sha256": "95ac2df087ec65abe139f8ad903a7ac06017383a7f2b1766d2a7c3c7ee3989de"
+    },
+    {
+      "bytes": 2296,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-failure-regression-01.log",
+      "sha256": "2813b5195383981fa0808acf1bd8bd48c77670260dcb2016ed4122a26c120f92"
+    },
+    {
+      "bytes": 2063,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-focused-lint-o23.json",
+      "sha256": "7cb23398fbb1ac63f9a19ae2e3b1ff13574552ee26784ce5833d33c8f03247e4"
+    },
+    {
+      "bytes": 0,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-focused-lint-o23.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 902,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-root-parity-o23.json",
+      "sha256": "787de25a45d0e8f44445744c4d260c9a4ad868af7d75b373403207dff3a40ecc"
+    },
+    {
+      "bytes": 24075,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-root-parity-o23.log",
+      "sha256": "cc543ea92c12ebd98d7837e8698d72254c7902a33169e37e154997c69ac7083d"
+    },
+    {
+      "bytes": 4288,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-root-parity-o23.mjs",
+      "sha256": "f442e7552e6c915a7104a2ae7b879e55038895eef0edae70b9a166403eebb38a"
+    },
+    {
+      "bytes": 1095,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-root-parity-02-o23.json",
+      "sha256": "f8dd8bdc06679cb8ef314d0b01670f325bab5ee61d617ae68242fcdd60836d49"
+    },
+    {
+      "bytes": 1446,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-root-parity-02-o23.log",
+      "sha256": "7a46954ee6b306965158d27ce14458c8263fbb7ebdf35cbbc981b9530892501e"
+    },
+    {
+      "bytes": 4300,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-root-parity-02-o23.mjs",
+      "sha256": "a521516fc50d5ac39293383bed497d7c5de3bef4a428fe76674fb9e1cc55859b"
+    },
+    {
+      "bytes": 7259,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source04-types01-exact/http.ts",
+      "sha256": "f519a738dc56ac2206cfed14eca09aab1eb5cd36a796e11b3d15c6f19df7dc46"
+    },
+    {
+      "bytes": 848,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source04-types01-exact/inventory.json",
+      "sha256": "6fdd116165070106ba80661d8110be36af545674fec0b2b44009d5a5b1644ebf"
+    },
+    {
+      "bytes": 20579,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source04-types01-exact/preparation-reconciliation.test.ts",
+      "sha256": "cbfedd33d0c70ca86ff8ec4027644bf2fc2a6e9e6cf55b4c2356c1903612b7dc"
+    },
+    {
+      "bytes": 14924,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source04-types01-exact/preparation-reconciliation.ts",
+      "sha256": "9a9191be08a9913f24137bde6f23fd23c2b5dfc64c4563209dc748f8a279879c"
+    },
+    {
+      "bytes": 17708,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source04-types01-exact/store.ts",
+      "sha256": "f91a43710ab68c5391bb971081464879e0205cf30ac1ba5f192e6f142ed0dada"
+    },
+    {
+      "bytes": 667,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source01-derived/README.json",
+      "sha256": "6b9a7106548ce1e7b27cbd8c1bf9d6e1c3a00d7ac0dcbd29281494db1c77775e"
+    },
+    {
+      "bytes": 20193,
+      "path": "/tmp/stockinsider-vnext-oct22-private/preparation-reconciliation-source01-derived/preparation-reconciliation.test.ts.derived",
+      "sha256": "96d9fc9707baf3e0e89f37d20a9a8437a91141bb98a4d760c1aa5b8424f30c14"
+    }
+  ],
+  "scope": "inventory only; local private bytes not supplied to independent reviewer; source01 derived is not contemporaneous seal"
+}

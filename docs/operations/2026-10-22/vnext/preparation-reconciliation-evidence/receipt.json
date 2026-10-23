@@ -1,0 +1,39 @@
+{
+  "bytes": 818112,
+  "files": [
+    {
+      "bytes": 39135,
+      "path": "commands-resources.json",
+      "sha256": "cc138c2f192be18f81ab0195f31c50b4e583289408167972ca58a6f9dbce856e"
+    },
+    {
+      "bytes": 2617,
+      "path": "final-source.tap",
+      "sha256": "c74a03aec60207e4fdf6395ad87d6a7a4fb6eaa496b0949fb5bbe2afd53f4e05"
+    },
+    {
+      "bytes": 877,
+      "path": "old-git-parity.json",
+      "sha256": "488588724607b314a3cae22ac3933c6e86c7201ebac8e1bbd4c27041a5acbf9c"
+    },
+    {
+      "bytes": 6959,
+      "path": "private-inventory.json",
+      "sha256": "84dc02fc83ebe76fcc9f37f17a673576ac473cb94a4e94678a99182ce184aa58"
+    },
+    {
+      "bytes": 1783,
+      "path": "scope.json",
+      "sha256": "dfbc66ceb5f8a3ecdab63da508d7f069e44f0eacd893760912a9739f79128e6e"
+    },
+    {
+      "bytes": 766741,
+      "path": "source-seal.json",
+      "sha256": "8b79238aa0fd92aa98239431686205cf0cae7c2cf68306fbb6a05bb4ddbd01ce"
+    }
+  ],
+  "kind": "source-only preparation reconciliation; no native approval",
+  "privateBytes": 170824,
+  "privateFiles": 31,
+  "source": "9c833695e7c7eb840b0eabf7f004c0d4031e893e"
+}
