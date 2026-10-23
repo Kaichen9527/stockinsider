@@ -1,0 +1,42 @@
+{
+  "count": 7,
+  "bytes": 63863,
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-profiles-source-01.json",
+      "bytes": 839,
+      "sha256": "5245defc1f4fea6d0f39541c653ea81bf5ebbb3c9c7102cbb0cff3db9a2dde81"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-profiles-source-01.log",
+      "bytes": 1092,
+      "sha256": "142028f47b9738f92bfc5df082797918b345c240c9559aae430041456704b2d7"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-profile-input-seal-o23.json",
+      "bytes": 873,
+      "sha256": "20cc9f958b9dc0155b9e32cd1211ead5671fef162381d78eed7fccec17e7f922"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/business-before-target-profile-source.mjs",
+      "bytes": 24137,
+      "sha256": "a992257c773344f9aba3181db8d7247862c670ed8d228c07afa4771dfb59c7ca"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ci654-business-annotations-o23.json",
+      "bytes": 10461,
+      "sha256": "f965dcef4401172870e8f0aa4a707aed8e750e5e9e8692f6b87530b25ed97ae6"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/business-before-historical-oracle-fix-01/diagnosis.json",
+      "bytes": 660,
+      "sha256": "eff657ee95e5776ee7c6a4ececdad53082a13f121fbe953462feea89959d0788"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/business-before-historical-oracle-fix-01/native.mjs",
+      "bytes": 25801,
+      "sha256": "4d5352a8d03c46da3505ebef26dd0a9aa61d096c2210f08a176f71b67c0c1c9a"
+    }
+  ],
+  "scope": "explicit owned local files only; prior native full raw remains hosted inventory scope"
+}

@@ -1,0 +1,319 @@
+{
+  "source": "65580e2d787251c565742fb23159e8519686273c",
+  "business": {
+    "Business criteria private inventory": {
+      "count": 29,
+      "bytes": 28484733,
+      "inventorySha256": "4bc20be9311cfb15ab0ef280796bbf4d8aff7edb3268136d3456d11f19c5a9de",
+      "rawContentsPublished": false
+    },
+    "Business criteria cleanup receipt": {
+      "pgRunning": false,
+      "pgPid": 0,
+      "pgExit": 0,
+      "shutdownLogObserved": true,
+      "socketAbsence": {
+        ".s.PGSQL.5432": true,
+        ".s.PGSQL.5432.lock": true
+      },
+      "resourceReceiptObserved": true,
+      "ownedProcessCounts": {
+        "absent": 24,
+        "zeroRssZombie": 0,
+        "pidReused": 0,
+        "unsettled": 0
+      },
+      "fullPrivateCleanupSha256": "3ccaee4ee45d359ce63840d7e461dd3a33e380e52d97043eb710fb9c641a0279",
+      "dataRetained": true
+    },
+    "Business criteria finite SQL errors": {
+      "events": [
+        {
+          "code": "42501",
+          "statementSha256": "c13dd5a3adf8fdeac5152df7c60c6d92dde509e6ed50b285c9feae97d2de98ea",
+          "ready": "I",
+          "querySettled": true,
+          "message": "hash:bfcc39125379a29fcf0f1a9fc361891a092d45125b2ef72e076eea77b01d7511"
+        },
+        {
+          "code": "42501",
+          "statementSha256": "b91d6b677fe6a9af3d807719743428168bfa97b38d2c3b0990d588bddbc5c745",
+          "ready": "I",
+          "querySettled": true,
+          "message": "hash:ebcef86003feed0c720b1e16e81dbf59b20366e329d2a5c2521961125e624352"
+        },
+        {
+          "code": "P0001",
+          "statementSha256": "fdb67b8fceb98b6f262f0f02bc5490c0b73072466e00ce9b3952e8b30313910c",
+          "ready": "I",
+          "querySettled": true,
+          "message": "vnext_business_reserve_fields"
+        },
+        {
+          "code": "P0001",
+          "statementSha256": "2d378c4fd6f79bd18978f2434c0e9d75e8b1f5024040d57c2b73e0529fbf4a27",
+          "ready": "E",
+          "querySettled": true,
+          "message": "vnext_business_profile_binding"
+        },
+        {
+          "code": "P0001",
+          "statementSha256": "fdb67b8fceb98b6f262f0f02bc5490c0b73072466e00ce9b3952e8b30313910c",
+          "ready": "I",
+          "querySettled": true,
+          "message": "vnext_business_reserve_fields"
+        },
+        {
+          "code": "P0001",
+          "statementSha256": "2d378c4fd6f79bd18978f2434c0e9d75e8b1f5024040d57c2b73e0529fbf4a27",
+          "ready": "E",
+          "querySettled": true,
+          "message": "vnext_business_profile_binding"
+        }
+      ],
+      "privateEventsSha256": "0f314c3f8fc850dd783480969a96fd67fb5d93f587230e1099f59b0198bfff35"
+    },
+    "Business criteria finite native receipt": {
+      "scope": "actual original-bound business inference/current context/audit/public projection/withdrawal; synthetic facts/provider only; no group points, bounded-risk or semantic approval",
+      "sourceHead": "72f9637c5e5ebd20c855d39ffe5f562de6d576ae",
+      "tapSha256": "d9573b18c18174dc9f9254b6bdeb8439a6278cad190d2733298f7890c20162fa",
+      "actualTapCounts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "resourceObserved": true,
+      "queryEventsPrivateSha256": "0f314c3f8fc850dd783480969a96fd67fb5d93f587230e1099f59b0198bfff35",
+      "exit": 0,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledOwnedTreePeakRssBytes": 784605184,
+      "initialFree": {
+        "/home/runner/work/stockinsider/stockinsider": 88436359168,
+        "/tmp": 88436359168
+      },
+      "finalFree": {
+        "/home/runner/work/stockinsider/stockinsider": 88365740032,
+        "/tmp": 88365740032
+      },
+      "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+      "actualPg": {
+        "containerId": "4f357fad094114d4c1a0369d6e0284d77af32f84755b60a1aa9dc6175119114e",
+        "pid": 18206,
+        "start": "30745",
+        "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+        "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+        "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+      },
+      "inputCount": 17,
+      "inputInventorySha256": "c04d5b38fccf31963c73d22caf2a646a4eb6da2db53003d4c7dced5366548449",
+      "inputInventoryCodec": "utf8_sorted_keys_compact_json_v1"
+    }
+  },
+  "browserSuites": [
+    {
+      "suite": "business",
+      "exit": 0,
+      "stats": {
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 10687.563999999998
+      },
+      "cases": [
+        {
+          "title": "current source-bound business inference is visible without score approval and disappears on committed source withdrawal",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "current source-bound business inference is visible without score approval and disappears on committed source withdrawal",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        }
+      ],
+      "screenshots": 8,
+      "screenshotBytes": 7076400,
+      "browserVersion": "Google Chrome 155.0.8059.39",
+      "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+      "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+      "sourceCommit": "72f9637c5e5ebd20c855d39ffe5f562de6d576ae",
+      "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+      "resourceViolation": null,
+      "sampledTreePeakRssBytes": 2324738048,
+      "containmentUsed": false,
+      "publicAcceptanceSha256": "ded5460414aed8e3603bba09739a91e54032cd0ccdc056f6e1706c8f3f96403f"
+    },
+    {
+      "suite": "current",
+      "exit": 0,
+      "stats": {
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 9528.279
+      },
+      "cases": [
+        {
+          "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        }
+      ],
+      "screenshots": 6,
+      "screenshotBytes": 6759283,
+      "browserVersion": "Google Chrome 155.0.8059.39",
+      "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+      "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+      "sourceCommit": "72f9637c5e5ebd20c855d39ffe5f562de6d576ae",
+      "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+      "resourceViolation": null,
+      "sampledTreePeakRssBytes": 2232885248,
+      "containmentUsed": false,
+      "publicAcceptanceSha256": "af93d68956b6d6077fc53be56b91ad7e256beaadd6a95faf61198a54f6aa90c3"
+    },
+    {
+      "suite": "ui",
+      "exit": 0,
+      "stats": {
+        "expected": 12,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 19226.608
+      },
+      "cases": [
+        {
+          "title": "same published contract drives exactly two primary blocks and detail/history",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "empty and unavailable states never fill from legacy cards",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "unknown revision cannot fall back to a different research version",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "loading remains an explicit two-block state and preserves source links",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "same published contract drives exactly two primary blocks and detail/history",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "empty and unavailable states never fill from legacy cards",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "unknown revision cannot fall back to a different research version",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "loading remains an explicit two-block state and preserves source links",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        }
+      ],
+      "screenshots": 12,
+      "screenshotBytes": 4209872,
+      "browserVersion": "Google Chrome 155.0.8059.39",
+      "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+      "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+      "sourceCommit": "72f9637c5e5ebd20c855d39ffe5f562de6d576ae",
+      "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+      "resourceViolation": null,
+      "sampledTreePeakRssBytes": 1983557632,
+      "containmentUsed": false,
+      "publicAcceptanceSha256": "dc674a6b6d773ef077f98148ba095be88d30b4061116d1ae068b23641c8fc373"
+    }
+  ],
+  "scope": "finite public CI observations; full private rows, raw TAP and PNG bytes not independently retrieved"
+}

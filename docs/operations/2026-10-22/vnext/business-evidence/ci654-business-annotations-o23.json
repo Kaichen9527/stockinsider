@@ -1,0 +1,31 @@
+{
+  "annotations": [
+    {
+      "title": "Business criteria private inventory",
+      "message": "{\"count\":24,\"bytes\":23622586,\"inventorySha256\":\"62102cff3e9709b18e133d1467c8e09e2fb5fdf6038d502dd660ee56c246c0de\",\"rawContentsPublished\":false}",
+      "level": "notice"
+    },
+    {
+      "title": "Business criteria cleanup receipt",
+      "message": "{\"pgRunning\":false,\"pgPid\":0,\"pgExit\":0,\"shutdownLogObserved\":true,\"socketAbsence\":{\".s.PGSQL.5432\":true,\".s.PGSQL.5432.lock\":true},\"resourceReceiptObserved\":true,\"ownedProcessCounts\":{\"absent\":24,\"zeroRssZombie\":0,\"pidReused\":0,\"unsettled\":0},\"fullPrivateCleanupSha256\":\"048986e35166f14bff4b8615389c419e4c9d5cafc12f7bcd005bfe8cf126b2fb\",\"dataRetained\":true}",
+      "level": "notice"
+    },
+    {
+      "title": "Business criteria finite SQL errors",
+      "message": "{\"events\":[{\"code\":\"42501\",\"statementSha256\":\"c13dd5a3adf8fdeac5152df7c60c6d92dde509e6ed50b285c9feae97d2de98ea\",\"ready\":\"I\",\"querySettled\":true,\"message\":\"hash:bfcc39125379a29fcf0f1a9fc361891a092d45125b2ef72e076eea77b01d7511\"},{\"code\":\"42501\",\"statementSha256\":\"b91d6b677fe6a9af3d807719743428168bfa97b38d2c3b0990d588bddbc5c745\",\"ready\":\"I\",\"querySettled\":true,\"message\":\"hash:ebcef86003feed0c720b1e16e81dbf59b20366e329d2a5c2521961125e624352\"},{\"code\":\"P0001\",\"statementSha256\":\"fdb67b8fceb98b6f262f0f02bc5490c0b73072466e00ce9b3952e8b30313910c\",\"ready\":\"I\",\"querySettled\":true,\"message\":\"vnext_business_reserve_fields\"},{\"code\":\"P0001\",\"statementSha256\":\"2d378c4fd6f79bd18978f2434c0e9d75e8b1f5024040d57c2b73e0529fbf4a27\",\"ready\":\"E\",\"querySettled\":true,\"message\":\"vnext_business_profile_binding\"},{\"code\":\"P0001\",\"statementSha256\":\"fdb67b8fceb98b6f262f0f02bc5490c0b73072466e00ce9b3952e8b30313910c\",\"ready\":\"I\",\"querySettled\":true,\"message\":\"vnext_business_reserve_fields\"},{\"code\":\"P0001\",\"statementSha256\":\"2d378c4fd6f79bd18978f2434c0e9d75e8b1f5024040d57c2b73e0529fbf4a27\",\"ready\":\"E\",\"querySettled\":true,\"message\":\"vnext_business_profile_binding\"}],\"privateEventsSha256\":\"9f27997cf1f60a5e8c4925d954804a10b4e2aaf51a702c54ae2cd6e7a40cdc0d\"}",
+      "level": "notice"
+    },
+    {
+      "title": "Business criteria finite native receipt",
+      "message": "{\"scope\":\"actual original-bound business inference/current context/audit/public projection/withdrawal; synthetic facts/provider only; no group points, bounded-risk or semantic approval\",\"sourceHead\":\"f00448b353dfc47af870fc16adf61770fa1cbf6b\",\"tapSha256\":\"852e5f215ceec8b9859d865c719ac0436f00da526add0ef6252e0198df432297\",\"actualTapCounts\":{\"tests\":7,\"pass\":5,\"fail\":2,\"cancelled\":0,\"skipped\":0,\"todo\":0},\"resourceObserved\":true,\"queryEventsPrivateSha256\":\"9f27997cf1f60a5e8c4925d954804a10b4e2aaf51a702c54ae2cd6e7a40cdc0d\",\"exit\":1,\"resourceViolation\":null,\"sampledNotInstantaneous\":true,\"sampledOwnedTreePeakRssBytes\":822738944,\"initialFree\":{\"/home/runner/work/stockinsider/stockinsider\":88436596736,\"/tmp\":88436596736},\"finalFree\":{\"/home/runner/work/stockinsider/stockinsider\":88371019776,\"/tmp\":88371019776},\"nodeSha256\":\"1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1\",\"actualPg\":{\"containerId\":\"565a0d9d2e80982ba114088851c0091bd83a0a1bf55370c915c08259b0bdbac0\",\"pid\":18325,\"start\":\"48140\",\"image\":\"postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27\",\"actualVersion\":\"postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)\",\"actualBinarySha256\":\"f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed\"},\"inputCount\":14,\"inputInventorySha256\":\"56bb7513101aa6883d04be057a02bf6c8ba9b05b08b8c576fa441f3d43893fd6\",\"inputInventoryCodec\":\"utf8_sorted_keys_compact_json_v1\"}",
+      "level": "notice"
+    },
+    {
+      "title": "Business criteria finite diagnostic",
+      "message": "{\"phase\":\"stage_6\",\"code\":\"UNKNOWN\",\"message\":\"hash:9bb02a83295363bc9d9d7693bbef121f156d12b4fba391654abf291dab29ab54\",\"errorType\":\"AssertionError\"}",
+      "level": "failure"
+    }
+  ],
+  "apiBytesSha256": "f965dcef4401172870e8f0aa4a707aed8e750e5e9e8692f6b87530b25ed97ae6",
+  "scope": "finite public metadata only, hosted full raw not downloaded"
+}

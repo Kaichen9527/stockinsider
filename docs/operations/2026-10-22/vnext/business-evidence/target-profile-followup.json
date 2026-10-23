@@ -1,0 +1,69 @@
+{
+  "status": "SOURCE_FIX_TESTED_NATIVE_PENDING",
+  "sourceHead": "65580e2d787251c565742fb23159e8519686273c",
+  "at": "2026-10-23T08:44:01.447778+00:00",
+  "previousSource": "654346f38f1350000c9554e4aeeee2ab97fc80ca",
+  "preservedNativeFailure": {
+    "run": 39925707207,
+    "job": 120321425640,
+    "tests": 7,
+    "pass": 5,
+    "fail": 2,
+    "phase": "stage_6",
+    "messageSha256": "9bb02a83295363bc9d9d7693bbef121f156d12b4fba391654abf291dab29ab54",
+    "cause": "test expected replay:true after actual source withdrawal; original SQL correctly returns published_historical and worker reinvoke:false",
+    "cleanup": "PG shutdown/PID0/exit0/socket absence/24owned observed absent/0zombie/unsettled; data retained"
+  },
+  "sourceDeltas": {
+    "businessSQL": "UNCHANGED",
+    "rightsGuards": "UNCHANGED",
+    "historicalOracle": "exact published_historical/reinvoke:false, not current approval",
+    "targetReader": "additive exact known-v5 server symbol frozen-request comparison only; one existing private body/OID/nonbody/ACL retained",
+    "actionRebase": "not implemented; actual share/cash/convention terms missing; existing rejection retained"
+  },
+  "newTargetSourceChecks": {
+    "tests": 4,
+    "pass": 4,
+    "fail": 0,
+    "native": false,
+    "record": "target-profiles-source-01"
+  },
+  "newActualNative": {
+    "run": 39926547367,
+    "job": 120324239349,
+    "status": "IN_PROGRESS at observation; no result inferred",
+    "twoIssuerRealPG": true,
+    "modelAndOriginals": "synthetic, not actual model/semantic approval"
+  },
+  "originalVMFreshPGFullbuild": "NOT_ADMITTED",
+  "countsNotSummed": true,
+  "ownerActions": "../OWNER-ACTIONS.md",
+  "unchangedOriginalTargetSQL": {
+    "path": "migrations/20261022_vnext_target_exit_v1.sql",
+    "sha256": "8a49259e95d6557ac4b7a8a74d90500b0d180735f396fbf1490f337b711bf441"
+  },
+  "targetSourceProfile": {
+    "schemaVersion": "vnext-target-profiles-source-v1",
+    "source": "migrations/20261022_vnext_target_exit_v1.sql",
+    "signature": "public.vnext_target_current_v1(text,uuid,text)",
+    "predecessorBodySha256": "bc3fecc3f5c28480f3d18f6073ac39b72a3969e6d7fcf6d19601d45b04b4147b",
+    "predecessorBytes": 14356,
+    "successorBodySha256": "36c4904a11c58981e11264294500d161a86655495f512868a712ded08a30f3fb",
+    "successorBytes": 14418,
+    "fragments": [
+      [
+        "author_call.prompt_version='vnext-research-worker-v3'",
+        "author_call.prompt_version IN('vnext-research-worker-v3','vnext-research-worker-v5')"
+      ],
+      [
+        "reviewer_call.prompt_version='vnext-research-worker-v3'",
+        "reviewer_call.prompt_version IN('vnext-research-worker-v3','vnext-research-worker-v5')"
+      ]
+    ],
+    "migration": "migrations/20261023_vnext_target_profiles_v1.sql",
+    "migrationSha256": "d377920d0ef9cab5ac42c40f00127baf75f06167979068d2b02ab8e896112624",
+    "nativeVerified": false,
+    "actualOid": null,
+    "scope": "finite known v5 symbol in exact server-frozen request; corporate-action terms unavailable remains rejected; v4 cancellation context unsupported stays closed"
+  }
+}

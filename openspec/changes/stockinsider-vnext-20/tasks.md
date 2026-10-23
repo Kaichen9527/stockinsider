@@ -15,6 +15,9 @@
 - [x] Original adjusted-price MA20/MA60/relative-market and three-month operations cache adapters implemented and focused-tested; actual full240-price qualification positive remains unverified, missing values stay null.
 - [x] Semantic numeric-one misclassification safety repair: TS and actual retained SQL5PASS; same-head hosted fresh current-public reclassification/raw immutability/dedup/directRPC rejection on b354. Positive semantic producer is a separate pending requirement.
 - [x] Bounded existing TWSE snapshot transport receipts: sourced9a7340, source10PASS/types/lint, actual retainedPG6PASS; same published0412659 ordinaryCI fresh receipt step/fullbuild success. Synthetic Responses are not real acquisition; snapshot coverage remains unknown/volume null.
+- [x] Source-bound catalyst/cancellation engineering protocol, true committed-response loss and no-resend recovery on da15; synthetic original/provider scope, not real semantic approval.
+- [x] Exact655 business v5 author/distinct reviewer/current SQL receipt/audit/public inference and permanent-withdrawal history; hosted native7PASS, same-build desktop/mobile business2PASS. Original weights/group authority/risk_bound unchanged.
+- [x] Finite v5 frozen-packet target-reader compatibility: additive only1privatebody, exact metadata/namespace invariant, actual current RPC accepts packet then defers missing original quote; no corporate-action target rebasing.
 - [ ] Complete trusted calendar/foreign/FX/margin/operations/comparable-volume/catalyst/target/contra producers and rights-qualified real source ingestion.
 - [ ] Actual two-session postclose atomic swap, remaining race/legacy/ACL/lease/revocation matrices; never change real clock/guard to simulate acceptance.
 - [ ] Contabo application/database/schema/queue/storage isolation and formal-source/model/semantic research acceptance.

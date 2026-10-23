@@ -1,0 +1,505 @@
+{
+  "status": "HOSTED_SYNTHETIC_ENGINEERING_SUBSET_PASS_NOT_FORMAL_ACCEPTANCE",
+  "sourceHead": "65580e2d787251c565742fb23159e8519686273c",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "runtimeMerge": "72f9637c5e5ebd20c855d39ffe5f562de6d576ae",
+  "runtimeTree": "1f4a93db7c603caee5fd41a6c64e81bbab65433a",
+  "wholeTreeParity": true,
+  "observedAt": "2026-10-23T08:53:15.709074+00:00",
+  "run": 39926547367,
+  "job": 120324239349,
+  "jobStart": "2026-10-23T08:42:27Z",
+  "jobEnd": "2026-10-23T08:48:31Z",
+  "jobScope": "whole ordinary job; not native-only duration",
+  "steps": [
+    {
+      "name": "Set up job",
+      "start": "2026-10-23T08:42:28Z",
+      "end": "2026-10-23T08:42:29Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "start": "2026-10-23T08:42:29Z",
+      "end": "2026-10-23T08:42:31Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "start": "2026-10-23T08:42:31Z",
+      "end": "2026-10-23T08:42:36Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Workspace and temporary filesystem admission",
+      "start": "2026-10-23T08:42:36Z",
+      "end": "2026-10-23T08:42:36Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install unchanged locked dependencies",
+      "start": "2026-10-23T08:42:36Z",
+      "end": "2026-10-23T08:42:56Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Actual source contracts, types and lint",
+      "start": "2026-10-23T08:42:56Z",
+      "end": "2026-10-23T08:43:55Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Full ordinary build",
+      "start": "2026-10-23T08:43:55Z",
+      "end": "2026-10-23T08:44:36Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+      "start": "2026-10-23T08:44:36Z",
+      "end": "2026-10-23T08:45:23Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+      "start": "2026-10-23T08:45:23Z",
+      "end": "2026-10-23T08:45:29Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Actual durable worker journal with explicitly synthetic provider",
+      "start": "2026-10-23T08:45:29Z",
+      "end": "2026-10-23T08:45:36Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+      "start": "2026-10-23T08:45:36Z",
+      "end": "2026-10-23T08:45:46Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+      "start": "2026-10-23T08:45:46Z",
+      "end": "2026-10-23T08:45:54Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+      "start": "2026-10-23T08:45:54Z",
+      "end": "2026-10-23T08:46:11Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+      "start": "2026-10-23T08:46:11Z",
+      "end": "2026-10-23T08:46:17Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+      "start": "2026-10-23T08:46:17Z",
+      "end": "2026-10-23T08:46:30Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)",
+      "start": "2026-10-23T08:46:30Z",
+      "end": "2026-10-23T08:46:45Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)",
+      "start": "2026-10-23T08:46:45Z",
+      "end": "2026-10-23T08:47:04Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Fresh original-bound business components via distinct review/current public projection (synthetic metadata)",
+      "start": "2026-10-23T08:47:04Z",
+      "end": "2026-10-23T08:47:26Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Hash finite owned raw evidence without publishing private contents",
+      "start": "2026-10-23T08:47:26Z",
+      "end": "2026-10-23T08:47:26Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Upload finite business-criteria TAP and summary only",
+      "start": "2026-10-23T08:47:26Z",
+      "end": "2026-10-23T08:47:27Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Same-build desktop and mobile browser over current-run PostgreSQL snapshots",
+      "start": "2026-10-23T08:47:27Z",
+      "end": "2026-10-23T08:48:23Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Upload finite browser summaries and synthetic screenshots only",
+      "start": "2026-10-23T08:48:23Z",
+      "end": "2026-10-23T08:48:26Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+      "start": "2026-10-23T08:48:26Z",
+      "end": "2026-10-23T08:48:27Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "start": "2026-10-23T08:48:27Z",
+      "end": "2026-10-23T08:48:28Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "start": "2026-10-23T08:48:28Z",
+      "end": "2026-10-23T08:48:28Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "start": "2026-10-23T08:48:28Z",
+      "end": "2026-10-23T08:48:28Z",
+      "conclusion": "success"
+    }
+  ],
+  "native": {
+    "scope": "actual original-bound business inference/current context/audit/public projection/withdrawal; synthetic facts/provider only; no group points, bounded-risk or semantic approval",
+    "sourceHead": "72f9637c5e5ebd20c855d39ffe5f562de6d576ae",
+    "tapSha256": "d9573b18c18174dc9f9254b6bdeb8439a6278cad190d2733298f7890c20162fa",
+    "actualTapCounts": {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "resourceObserved": true,
+    "queryEventsPrivateSha256": "0f314c3f8fc850dd783480969a96fd67fb5d93f587230e1099f59b0198bfff35",
+    "exit": 0,
+    "resourceViolation": null,
+    "sampledNotInstantaneous": true,
+    "sampledOwnedTreePeakRssBytes": 784605184,
+    "initialFree": {
+      "/home/runner/work/stockinsider/stockinsider": 88436359168,
+      "/tmp": 88436359168
+    },
+    "finalFree": {
+      "/home/runner/work/stockinsider/stockinsider": 88365740032,
+      "/tmp": 88365740032
+    },
+    "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "actualPg": {
+      "containerId": "4f357fad094114d4c1a0369d6e0284d77af32f84755b60a1aa9dc6175119114e",
+      "pid": 18206,
+      "start": "30745",
+      "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+      "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+      "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+    },
+    "inputCount": 17,
+    "inputInventorySha256": "c04d5b38fccf31963c73d22caf2a646a4eb6da2db53003d4c7dced5366548449",
+    "inputInventoryCodec": "utf8_sorted_keys_compact_json_v1"
+  },
+  "cleanup": {
+    "pgRunning": false,
+    "pgPid": 0,
+    "pgExit": 0,
+    "shutdownLogObserved": true,
+    "socketAbsence": {
+      ".s.PGSQL.5432": true,
+      ".s.PGSQL.5432.lock": true
+    },
+    "resourceReceiptObserved": true,
+    "ownedProcessCounts": {
+      "absent": 24,
+      "zeroRssZombie": 0,
+      "pidReused": 0,
+      "unsettled": 0
+    },
+    "fullPrivateCleanupSha256": "3ccaee4ee45d359ce63840d7e461dd3a33e380e52d97043eb710fb9c641a0279",
+    "dataRetained": true
+  },
+  "privateHostedInventory": {
+    "count": 29,
+    "bytes": 28484733,
+    "inventorySha256": "4bc20be9311cfb15ab0ef280796bbf4d8aff7edb3268136d3456d11f19c5a9de",
+    "rawContentsPublished": false
+  },
+  "actualNativeCoverage": [
+    "full captured prefix and exact business candidate COMMIT, 3existingbody+2private helpers+finite prompt constraint; all other rows/metadata/OIDs/ACL/catalog invariant",
+    "additive target-profile candidate COMMIT only1privatebody change; current v5 exact frozen packet RPC proceeds to genuine missing reviewed quote rejection, no fair target invented",
+    "two issuer actual runResearchWorker author/distinct reviewer/prepare/receive/publish with synthetic originals/provider and qualification false",
+    "current DB business receipt, audit record, service_role public READ and actual publicHome metadata projection with original missing-group/null/risk_bound invariants",
+    "extra reserve field and reviewer downgraded profile reject with actual query+Ready E/I+rollback invariants; private helpers denied42501",
+    "append-only committed source withdrawal; current receipt disappears, history/provider journals/full table snapshots/charge unchanged; explicit recovery returns published_historical/reinvoke:false"
+  ],
+  "browser": [
+    {
+      "suite": "business",
+      "exit": 0,
+      "stats": {
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 10687.563999999998
+      },
+      "cases": [
+        {
+          "title": "current source-bound business inference is visible without score approval and disappears on committed source withdrawal",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "current source-bound business inference is visible without score approval and disappears on committed source withdrawal",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        }
+      ],
+      "screenshots": 8,
+      "screenshotBytes": 7076400,
+      "browserVersion": "Google Chrome 155.0.8059.39",
+      "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+      "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+      "sourceCommit": "72f9637c5e5ebd20c855d39ffe5f562de6d576ae",
+      "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+      "resourceViolation": null,
+      "sampledTreePeakRssBytes": 2324738048,
+      "containmentUsed": false,
+      "publicAcceptanceSha256": "ded5460414aed8e3603bba09739a91e54032cd0ccdc056f6e1706c8f3f96403f"
+    },
+    {
+      "suite": "current",
+      "exit": 0,
+      "stats": {
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 9528.279
+      },
+      "cases": [
+        {
+          "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        }
+      ],
+      "screenshots": 6,
+      "screenshotBytes": 6759283,
+      "browserVersion": "Google Chrome 155.0.8059.39",
+      "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+      "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+      "sourceCommit": "72f9637c5e5ebd20c855d39ffe5f562de6d576ae",
+      "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+      "resourceViolation": null,
+      "sampledTreePeakRssBytes": 2232885248,
+      "containmentUsed": false,
+      "publicAcceptanceSha256": "af93d68956b6d6077fc53be56b91ad7e256beaadd6a95faf61198a54f6aa90c3"
+    },
+    {
+      "suite": "ui",
+      "exit": 0,
+      "stats": {
+        "expected": 12,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 19226.608
+      },
+      "cases": [
+        {
+          "title": "same published contract drives exactly two primary blocks and detail/history",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "empty and unavailable states never fill from legacy cards",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "unknown revision cannot fall back to a different research version",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "loading remains an explicit two-block state and preserves source links",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "same published contract drives exactly two primary blocks and detail/history",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "empty and unavailable states never fill from legacy cards",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "unknown revision cannot fall back to a different research version",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "loading remains an explicit two-block state and preserves source links",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        }
+      ],
+      "screenshots": 12,
+      "screenshotBytes": 4209872,
+      "browserVersion": "Google Chrome 155.0.8059.39",
+      "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+      "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+      "sourceCommit": "72f9637c5e5ebd20c855d39ffe5f562de6d576ae",
+      "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+      "resourceViolation": null,
+      "sampledTreePeakRssBytes": 1983557632,
+      "containmentUsed": false,
+      "publicAcceptanceSha256": "dc674a6b6d773ef077f98148ba095be88d30b4061116d1ae068b23641c8fc373"
+    }
+  ],
+  "sameHeadOtherOrdinary": "source/types/lint/fullbuild/legacy/concurrency/worker/analysis/thesis/cache/snapshot/catalyst/target/preparationHTTP job steps SUCCESS; individual counts not inferred or summed",
+  "rawIndependentReview": {
+    "privateHostedRows": "inventory only, 29files28,484,733B",
+    "rawTap": "hash+actual CI-emitted counts, not independently downloaded",
+    "screenshots": "finite CI metadata only, not downloaded/visually reviewed"
+  },
+  "originalCodexVM": "source7PASS, targetsource4PASS, complete types/lint; new PG/fullbuild/browser NOT_ADMITTED",
+  "realSourceProviderSemanticContabo": "NOT_RUN: no injected provider/role/isolated DB/current-source bindings",
+  "protected": {
+    "run": 39926541924,
+    "bootstrap": {
+      "job": 120324222690,
+      "conclusion": "success"
+    },
+    "requirements": {
+      "job": 120324315402,
+      "conclusion": "failure",
+      "stage": "Retrieve bootstrap and prepare detached subject"
+    },
+    "architecture": {
+      "job": 120324315327,
+      "conclusion": "failure",
+      "stage": "Retrieve bootstrap and prepare detached subject"
+    },
+    "exactReview": {
+      "job": 120324315395,
+      "conclusion": "failure",
+      "stage": "Retrieve bootstrap and prepare detached subject"
+    },
+    "root": {
+      "job": 120324423561,
+      "conclusion": "failure",
+      "stage": "Reject incomplete or failed Code Gate prerequisites"
+    },
+    "innerExclusiveCause": "NOT_OBSERVED; no denied403 retry/pin/ref/guard change"
+  },
+  "independentProductRuntime": {
+    "run": 39926547495,
+    "job": 120324239218,
+    "conclusion": "success",
+    "diagnosticJob": 120327536366,
+    "diagnosticConclusion": "success"
+  },
+  "priorFailuresPreserved": [
+    "667 0PASS2FAIL test profile field",
+    "102 4PASS2FAIL new risk field consumer mismatch",
+    "654 5PASS2FAIL new historical recovery assertion",
+    "initial new source test syntax RED",
+    "all original cancellation/other historical REDs"
+  ],
+  "remainingVMCode": [
+    "source-specific28-day exhaustive connector/cursor/receipt/current-reader, actual original event and independent root authority",
+    "numeric forecast source/current-reader/preparation/provider period/share/unit integration beyond diagnostic descriptor",
+    "action-term-supported target rebasing, preserving immutable original target and gaps for missing share/cash terms",
+    "remaining routine-screen positive HTTP/full financial-qualified/rights/lease/expiry/provider/race/legacy/caps acceptance"
+  ],
+  "ownerActions": "../OWNER-ACTIONS.md",
+  "formalResearchPublished": false,
+  "mergeDeployApproved": false
+}

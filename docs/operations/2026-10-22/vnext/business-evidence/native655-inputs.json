@@ -1,0 +1,94 @@
+{
+  "source": "65580e2d787251c565742fb23159e8519686273c",
+  "runtimeMerge": "72f9637c5e5ebd20c855d39ffe5f562de6d576ae",
+  "runtimeTree": "1f4a93db7c603caee5fd41a6c64e81bbab65433a",
+  "treeParity": true,
+  "inputInventorySha256": "c04d5b38fccf31963c73d22caf2a646a4eb6da2db53003d4c7dced5366548449",
+  "inputs": [
+    {
+      "path": "scripts/vnext-business-criteria-postgres.test.mjs",
+      "bytes": 25882,
+      "sha256": "b125ab4108032d562b981217c48aeff24d2a6cb2a24b04581774d4e8de980c7b"
+    },
+    {
+      "path": "scripts/vnext-business-criteria-resource-run.py",
+      "bytes": 6867,
+      "sha256": "59f6fa73ba311015a077374a0200239aea0efeede4db7603de2f1f83238c7785"
+    },
+    {
+      "path": "scripts/vnext-worker-fixture.mjs",
+      "bytes": 7953,
+      "sha256": "67a22c076a74d860c7bb428003f47e1a2722b8ea87c2f9830489fe172ee19874"
+    },
+    {
+      "path": "web/src/lib/vnext/business-criteria.ts",
+      "bytes": 9102,
+      "sha256": "af9e5d716ed0bbb1a1c3be65d4d1686bcbb29a87f33f472fd6d7dfd594f8779b"
+    },
+    {
+      "path": "web/src/lib/vnext/worker-core.ts",
+      "bytes": 16393,
+      "sha256": "353abad3281f7d768a75b731da19004ffeb48e2d23ff0a5a23b36a07f088b900"
+    },
+    {
+      "path": "web/src/lib/vnext/worker-prompts.ts",
+      "bytes": 15044,
+      "sha256": "7b62c808ebcee10fbb268f7e2513376e74ce015e401fd106cf45d1bbac20ec70"
+    },
+    {
+      "path": "web/src/lib/vnext/research.ts",
+      "bytes": 10546,
+      "sha256": "1e7b0649e97970fe7a493217607ebeef6c3ef9b38b4e91e64fb279d8280df961"
+    },
+    {
+      "path": "web/src/lib/vnext/worker-output.ts",
+      "bytes": 5987,
+      "sha256": "1f5e84fdbafea186dcad8bbd7733f0efef00377ae4f8829eb29e759920b2db6c"
+    },
+    {
+      "path": "web/src/lib/vnext/thesis-audit.ts",
+      "bytes": 12318,
+      "sha256": "3a7f5fe2639f0a293ef98eae3c75f43e20ca681b1d1c3efc5ce6e97fb5210931"
+    },
+    {
+      "path": "web/src/lib/vnext/public-contract.ts",
+      "bytes": 10569,
+      "sha256": "bc99caddab2455da2a9732f6c88a5d5b5eada0163bc46a2afbb2f889628422d9"
+    },
+    {
+      "path": "web/src/app/components/vnext/Home.tsx",
+      "bytes": 7899,
+      "sha256": "e577f2cc56643e901c77ecf385d2f6de1da2e1381fe465c18113dc79b76572d5"
+    },
+    {
+      "path": "migrations/20261023_vnext_business_criteria_v1.sql",
+      "bytes": 35292,
+      "sha256": "5385809932404223e2c2a7652c4a6e5fb2f3d8b88f68c9db1edb9a2719093c8b"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-business-criteria-profile-v1.json",
+      "bytes": 6044,
+      "sha256": "fbedcbbef6045eb5e6dcb20228aac5321019cca98a4cbcd6e5286b5eaafbb061"
+    },
+    {
+      "path": "migrations/20261023_vnext_catalyst_cancellation_v1.sql",
+      "bytes": 52574,
+      "sha256": "f26d483a8bf4ce0e12dd21c350dde7f51231be327e223e6efa8877dfa834c22d"
+    },
+    {
+      "path": "migrations/20261023_vnext_target_profiles_v1.sql",
+      "bytes": 7606,
+      "sha256": "d377920d0ef9cab5ac42c40f00127baf75f06167979068d2b02ab8e896112624"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-target-profiles-source-v1.json",
+      "bytes": 1164,
+      "sha256": "34e56231e81e03daa82cad18a07b07a0a78bf64e99428f3f275c3cd66a5f1994"
+    },
+    {
+      "path": "scripts/vnext-target-profiles.test.mjs",
+      "bytes": 3597,
+      "sha256": "53a5c743711cddb6b46915fdffd1eff8f01175c7d136ecf09ff46aa20fad3eb1"
+    }
+  ]
+}
