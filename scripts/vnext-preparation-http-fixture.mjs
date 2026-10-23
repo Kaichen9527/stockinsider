@@ -113,7 +113,7 @@ export async function preparationHttpFixture(){
       await assert.rejects(()=>query(def.sql,[body.p_principal,'prepare',JSON.stringify({...body.p_request,evidence:mutant,inputHash:inputHash(mutant)})]),error=>error.code==='P0001'&&error.message===expected);
       assert.deepEqual(await x.snapshot(),stable);negative.push({kind,code:'P0001',expected,wholeRowsUnchanged:true});
      }
-     save('actual-action-preparation-negatives',{negative,stable,scope:'actual service RPC before the one successful preparation; original query/ReadyE/RollbackI trace; no model or second prepare success'});
+     x.save('actual-action-preparation-negatives',{negative,stable,scope:'actual service RPC before the one successful preparation; original query/ReadyE/RollbackI trace; no model or second prepare success'});
     }
     preparationPhase=name==='vnext_command_v1'&&body.p_command==='prepare'?'prepare_commit':'rpc';
     result=(await query(def.sql,def.keys.map(k=>k==='p_request'?JSON.stringify(body[k]):body[k]),{readonly:false})).rows[0].result;
