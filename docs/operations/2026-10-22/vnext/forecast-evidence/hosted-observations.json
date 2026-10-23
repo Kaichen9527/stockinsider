@@ -1,0 +1,704 @@
+{
+  "observedAt": "2026-10-23T10:46:39.814150+00:00",
+  "scope": "GitHub metadata/finite notice bytes obtained via authorized API; not raw hosted PG/TAP/PNG/private contents",
+  "ordinaryRun": 39939708681,
+  "ordinaryJobs": [
+    {
+      "id": 120367840961,
+      "name": "roster-current-native",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fixed native dependency and workset admission",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fresh current-work, claim and reserve invalidity fences (synthetic metadata)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Hash finite owned raw evidence without publishing private contents",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload finite roster-current TAP and summary only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 120367841242,
+      "name": "trading-invalidity-native",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fixed native dependency and workset admission",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fresh official-roster invalidity installer and unpublished exits (synthetic metadata)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Hash finite owned raw evidence without publishing private contents",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload finite trading-invalidity TAP and summary only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 120367841359,
+      "name": "cancellation-native",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fixed native dependency and workset admission",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fresh source-bound cancellation via distinct reviewer and atomic publication/exit (synthetic metadata)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Hash finite owned raw evidence without publishing private contents",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload finite catalyst-cancellation TAP and summary only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 120367843221,
+      "name": "vnext-quality",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Workspace and temporary filesystem admission",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install unchanged locked dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Actual source contracts, types and lint",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Full ordinary build",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Actual durable worker journal with explicitly synthetic provider",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Hash bounded forecast preparation raw receipts without publishing contents",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fresh original-bound business components via distinct review/current public projection (synthetic metadata)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Hash finite owned raw evidence without publishing private contents",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload finite business-criteria TAP and summary only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Same-build desktop and mobile browser over current-run PostgreSQL snapshots",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload finite browser summaries and synthetic screenshots only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "forecastNotice": {
+    "sourceHead": "3642f1c79162e461d71d5d3a19b247a11ec1be30",
+    "observedWitnesses": [
+      {
+        "kind": "FORECAST_CURRENT_SAFE",
+        "value": {
+          "evidenceCount": 2,
+          "receiptCount": 2,
+          "numericSourceOnly": true,
+          "annualOrForward4q": false,
+          "actualOriginalAppend": true,
+          "syntheticSource": true,
+          "actualExternalModel": false
+        }
+      },
+      {
+        "kind": "FORECAST_FROZEN_REVOKED_SAFE",
+        "value": {
+          "actualReservedFrozenInput": true,
+          "forecastItems": 2,
+          "providerPosts": 0,
+          "rightsRevocationCommitted": true,
+          "originalRowsRetained": true,
+          "sourceCurrentFalse": true,
+          "noSecondClaimPrepareOrReserve": true,
+          "directRejectedMutants": 6
+        }
+      }
+    ],
+    "actualTapCounts": {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "tapSha256": "26d7d88f25215196dec4a8120e5706b6f884fbdf523bbfa408b1d799e4e7c1c5",
+    "privateRowsPublished": false
+  },
+  "privateInventoryNotice": {
+    "count": 50,
+    "bytes": 82081999,
+    "inventorySha256": "d0a532e4dfb5825ee9445fad3c8967995efada7535101d86f19982e1bd80a50f",
+    "rawContentsPublished": false
+  },
+  "browserNotices": [
+    {
+      "suite": "business",
+      "exit": 0,
+      "stats": {
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 8207.226
+      },
+      "cases": [
+        {
+          "title": "current source-bound business inference is visible without score approval and disappears on committed source withdrawal",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "current source-bound business inference is visible without score approval and disappears on committed source withdrawal",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        }
+      ],
+      "screenshots": 8,
+      "screenshotBytes": 7103559,
+      "browserVersion": "Google Chrome 155.0.8059.39",
+      "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+      "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+      "sourceCommit": "3642f1c79162e461d71d5d3a19b247a11ec1be30",
+      "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+      "resourceViolation": null,
+      "sampledTreePeakRssBytes": 2350739456,
+      "containmentUsed": false,
+      "publicAcceptanceSha256": "646f22af037897779b144e3209a01ca88d7958581963062d87e2c3d9463b8a6f"
+    },
+    {
+      "suite": "current",
+      "exit": 0,
+      "stats": {
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 7964.999000000001
+      },
+      "cases": [
+        {
+          "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        }
+      ],
+      "screenshots": 6,
+      "screenshotBytes": 6757637,
+      "browserVersion": "Google Chrome 155.0.8059.39",
+      "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+      "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+      "sourceCommit": "3642f1c79162e461d71d5d3a19b247a11ec1be30",
+      "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+      "resourceViolation": null,
+      "sampledTreePeakRssBytes": 2237489152,
+      "containmentUsed": false,
+      "publicAcceptanceSha256": "f8f83a5ebef82a44e1b0d8f03e57aa6902a1524b4c70e3dbba390d9f2c6629f3"
+    },
+    {
+      "suite": "ui",
+      "exit": 0,
+      "stats": {
+        "expected": 12,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 16692.798
+      },
+      "cases": [
+        {
+          "title": "same published contract drives exactly two primary blocks and detail/history",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "empty and unavailable states never fill from legacy cards",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "unknown revision cannot fall back to a different research version",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "loading remains an explicit two-block state and preserves source links",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+          "project": "desktop",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "same published contract drives exactly two primary blocks and detail/history",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "empty and unavailable states never fill from legacy cards",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "unknown revision cannot fall back to a different research version",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "loading remains an explicit two-block state and preserves source links",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+          "project": "mobile",
+          "expectedStatus": "passed",
+          "results": [
+            "passed"
+          ]
+        }
+      ],
+      "screenshots": 12,
+      "screenshotBytes": 4249857,
+      "browserVersion": "Google Chrome 155.0.8059.39",
+      "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+      "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+      "sourceCommit": "3642f1c79162e461d71d5d3a19b247a11ec1be30",
+      "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+      "resourceViolation": null,
+      "sampledTreePeakRssBytes": 1985011712,
+      "containmentUsed": false,
+      "publicAcceptanceSha256": "756071712b1093505fd06e4036772b09945d75a1b850bec97c61aa97e126a8e2"
+    }
+  ],
+  "runtimeCommit": {
+    "sha": "3642f1c79162e461d71d5d3a19b247a11ec1be30",
+    "tree": "5df6ee5bc53fc2761b6264936fa0c87c250d5809",
+    "parents": [
+      "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "84a88774926b6ec1328fffd6f94a2f26919d9260"
+    ]
+  },
+  "independentOrdinary": {
+    "run": 39939708637,
+    "productRuntimeJob": 120367840286,
+    "conclusion": "success",
+    "diagnosticJob": 120371066239,
+    "diagnosticConclusion": "success"
+  },
+  "protected": {
+    "run": 39939706054,
+    "bootstrap": {
+      "job": 120367832362,
+      "conclusion": "success"
+    },
+    "requirements": {
+      "job": 120367915952,
+      "conclusion": "failure"
+    },
+    "architecture": {
+      "job": 120367915703,
+      "conclusion": "failure"
+    },
+    "exactReview": {
+      "job": 120367915863,
+      "conclusion": "failure"
+    },
+    "root": {
+      "job": 120368051912,
+      "conclusion": "failure"
+    },
+    "sharedFailedStage": "Retrieve bootstrap and prepare detached subject",
+    "exclusiveInnerCause": "NOT_OBSERVED",
+    "noPinsGuardsOrRefsChanged": true,
+    "observedJobs": [
+      {
+        "id": 120367832362,
+        "name": "stockinsider-v3-gate-bootstrap",
+        "status": "completed",
+        "conclusion": "success",
+        "failedSteps": []
+      },
+      {
+        "id": 120367915703,
+        "name": "architecture",
+        "status": "completed",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Retrieve bootstrap and prepare detached subject"
+        ]
+      },
+      {
+        "id": 120367915863,
+        "name": "exact-review",
+        "status": "completed",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Retrieve bootstrap and prepare detached subject"
+        ]
+      },
+      {
+        "id": 120367915952,
+        "name": "requirements",
+        "status": "completed",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Retrieve bootstrap and prepare detached subject"
+        ]
+      },
+      {
+        "id": 120368043031,
+        "name": "model-runner-code-gate",
+        "status": "completed",
+        "conclusion": "skipped",
+        "failedSteps": []
+      },
+      {
+        "id": 120368043584,
+        "name": "product-runtime-code-gate",
+        "status": "completed",
+        "conclusion": "skipped",
+        "failedSteps": []
+      },
+      {
+        "id": 120368051912,
+        "name": "stockinsider-v3-gate-root",
+        "status": "completed",
+        "conclusion": "failure",
+        "failedSteps": [
+          "Reject incomplete or failed Code Gate prerequisites"
+        ]
+      }
+    ]
+  },
+  "apiBodyInventory": [
+    {
+      "name": "head-runs.json",
+      "bytes": 105373,
+      "sha256": "b3f18befcf187420a8a79fd9d00a14f1833a888f36531236bd9c9a698e42f656"
+    },
+    {
+      "name": "independent-runtime-jobs.json",
+      "bytes": 6892,
+      "sha256": "67f0a7c2a4ce9ac34ef781a6b98b0174defb402a21e674b2eb7dfd921796aa40"
+    },
+    {
+      "name": "ordinary-annotations.json",
+      "bytes": 16594,
+      "sha256": "fbb8a9eca34fcb9976ee888fa00e3871975a25f3a2c2d7af3850f7a298159f91"
+    },
+    {
+      "name": "ordinary-jobs.json",
+      "bytes": 15267,
+      "sha256": "9982fbb11b4d7eca75e7b3e9877b53883b2f42336060b528a284737123859272"
+    },
+    {
+      "name": "protected-jobs.json",
+      "bytes": 13920,
+      "sha256": "51264706a633fb5e9325621c5b6d2f68aeb3984ca6fe8a941716e398ce12aff3"
+    },
+    {
+      "name": "runtime-commit.json",
+      "bytes": 2651,
+      "sha256": "dde01943e68ec5a68ca87bdfaf0f7a55162773143120be939a9fa26ba573ef0e"
+    }
+  ]
+}

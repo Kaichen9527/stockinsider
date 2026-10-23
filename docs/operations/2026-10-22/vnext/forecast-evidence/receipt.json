@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "vnext-forecast-current-checkpoint-v1",
+  "status": "PARTIAL_ENGINEERING_ACCEPTANCE_NOT_RELEASED",
+  "createdAt": "2026-10-23T10:46:39.814150+00:00",
+  "sourceCommit": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "sourceTree": "5df6ee5bc53fc2761b6264936fa0c87c250d5809",
+  "runtimeCommit": "3642f1c79162e461d71d5d3a19b247a11ec1be30",
+  "runtimeTreeEqualsSource": true,
+  "sourceSealSha256": "8d1963e64a605292cda99ebade2d550c8c19e6e83676d5c58494400422d24725",
+  "vmChecksSha256": "9e06e79b224522e26152da6d55b46e227b24d8daddec71c33b1ab7ff2dd56f3a",
+  "observationsSha256": "cc9f361fc24d51f2920486130ffa3847b0d1c200e9267b368182bc3ce8a13aa2",
+  "retainedREDsSha256": "40a2ce15c1834cc7a460501bf75243927d16586ac979f586baf225f2bde6513d",
+  "localPrivateInventorySha256": "0d45cc23d49de7a8fa3aec45bfb83b0dd4e1897f7b7502acbe88ff1f9d5ac32d",
+  "ordinaryRun": 39939708681,
+  "ordinaryJob": 120367843221,
+  "ordinaryConclusion": "success",
+  "nativeCounts": {
+    "tests": 7,
+    "pass": 7,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "nativeCountScope": "7total tests include parent; six direct RPC mutations are assertions within the one suite, not six extra tests; no historical counts added",
+  "nativeTapSha256": "26d7d88f25215196dec4a8120e5706b6f884fbdf523bbfa408b1d799e4e7c1c5",
+  "numericBoundary": {
+    "evidence": 2,
+    "receipts": 2,
+    "keys": [
+      "source_quarterly_diluted_eps_estimate",
+      "source_target_price_12m"
+    ],
+    "reportedOrAnnualOrForward4q": false,
+    "providerPosts": 0,
+    "directServiceMutantsRejected": 6,
+    "currentUseRevocationCommitted": true,
+    "historyRetained": true
+  },
+  "privateHostedRaw": {
+    "count": 50,
+    "bytes": 82081999,
+    "inventorySha256": "d0a532e4dfb5825ee9445fad3c8967995efada7535101d86f19982e1bd80a50f",
+    "rawContentsPublished": false,
+    "contentsRetrieved": false,
+    "durableRetention": "NOT_GUARANTEED; hosted runner files are ephemeral, only finite safe artifact/hash inventory is published"
+  },
+  "browserSuiteCounts": {
+    "business": 2,
+    "current": 2,
+    "ui": 12
+  },
+  "browserScope": "same-build current-run synthetic PG snapshots; finite metadata observed; raw PNG/TAP not independently downloaded or visually reviewed; no actual source/provider/semantic approval",
+  "independentProductAndDiagnostic": "SUCCESS on same source; protected requirements/architecture/exact/root FAILURE",
+  "originalVmHeavy": "NOT_ADMITTED; no new PG/container/fullbuild/browser, no extra cleanup/path/mount/floor changes",
+  "realSourceModelStaging": "NOT_RUN: configured bindings/rights/principals/current real data and isolated Contabo unavailable",
+  "remainingVM": [
+    "exhaustive28day connector/cursor/coverage/volume/currentreader",
+    "source-bound annual/4Q fiscal/share forecast producer and full article flow",
+    "action-term-authorized immutable target rebasing",
+    "routine-screen positive enqueue HTTP, cancellation HTTP, remaining qualified-financial/rights/lease/expiry/race/legacy/caps/fullbundle acceptance"
+  ],
+  "remainingExternal": [
+    "real source/provider/isolated DB+role bindings and rights",
+    "Contabo trusted host identity/scoped TCP/access/independent resources",
+    "capacity for original-VM heavy work with original reserves",
+    "independent protected review and exact inner prerequisite diagnostics"
+  ],
+  "noProductionOrMergeAuthorization": true,
+  "independentApproval": "PENDING"
+}
