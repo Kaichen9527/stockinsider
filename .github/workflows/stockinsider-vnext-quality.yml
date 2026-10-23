@@ -416,7 +416,7 @@ jobs:
               prefix='PREPARATION_HTTP_FAILURE_SAFE '
               if line.startswith(prefix):
                   item=json.loads(line[len(prefix):])
-                  if set(item)!={'stage','code','actual','expected','messageHash'}: raise SystemExit('closed diagnostic required')
+                  if set(item)!={'stage','code','actual','expected','messageHash','tokens'}: raise SystemExit('closed diagnostic required')
                   value=json.dumps(item,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
                   print('::error title=Preparation finite HTTP diagnostic::'+value)
           PYCODE
