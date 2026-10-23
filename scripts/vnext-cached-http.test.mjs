@@ -18,7 +18,8 @@ if (!artifacts || !path.isAbsolute(artifacts) || fs.existsSync(artifacts) || !/^
 fs.mkdirSync(artifacts, { mode: 0o700 });
 const save = (n, x) => fs.writeFileSync(path.join(artifacts, n + '.json'), JSON.stringify(x, null, 2) + '\n', { mode: 0o600 });
 const sha = b => createHash('sha256').update(b).digest('hex');
-const connect = async () => { const c = new Client({ host: path.join(socketParent, 'socket'), user: 'postgres', database, ssl: false, connectionTimeoutMillis: 3000, statement_timeout: 30000 }); await c.connect(); return c; };
+const ownedClients=new Set();
+const connect = async () => { const c = new Client({ host: path.join(socketParent, 'socket'), user: 'postgres', database, ssl: false, connectionTimeoutMillis: 3000, statement_timeout: 30000 }); await c.connect();ownedClients.add(c);c.once('end',()=>ownedClients.delete(c));return c; };
 const key = randomBytes(32).toString('hex'), operatorKey = randomBytes(32).toString('hex'), authorKey = randomBytes(32).toString('hex');
 const operator = 'synthetic-worker-operator', author = 'synthetic-worker-author';
 const stage=process.env.VNEXT_HTTP_STAGE??'fresh';if(!['fresh','resume-prior-session-fk'].includes(stage))throw Error('closed_http_recovery_stage_required');
@@ -75,7 +76,7 @@ const bridge = http.createServer(async (req, res) => {
   } finally { await c.end(); pending--; }
 });
 const post = async (route, payload, token) => {
-  const response = await fetch('http://127.0.0.1:34234/api/internal/' + route, { method: 'POST', headers: { 'content-type': 'application/json', ...(token ? { authorization: 'Bearer ' + token } : {}) }, body: JSON.stringify(payload) });
+  const response = await fetch('http://127.0.0.1:34234/api/internal/' + route, { method: 'POST', signal: AbortSignal.timeout(15000), headers: { 'content-type': 'application/json', ...(token ? { authorization: 'Bearer ' + token } : {}) }, body: JSON.stringify(payload) });
   return { status: response.status, body: await response.json() };
 };
 const now = new Date().toISOString(); const session = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
@@ -83,7 +84,7 @@ const priorSession = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei',
 const input = symbol => ({ cutoff: now, tradingValid: true, clues: [{ symbol, source: 'ptt', root: 'synthetic-root-' + symbol, authorRoot: 'synthetic-author-' + symbol, eventAt: now, availableAt: now, contentHash: sha(symbol) }], evidence: [],
   screening: { sourceHealthy: false, recent7: null, prior21: null, corporateActionAdjusted: false, priceReturn20: { value: null, source: '', observedAt: '' }, volumeRatio20: { value: null, source: '', observedAt: '' }, institutionalFlowRatio: { value: null, source: '', observedAt: '' }, revenueGrowth: { value: null, source: '', observedAt: '' }, catalystVerified: { value: null, source: '', observedAt: '' } } });
 await test('actual closed cached HTTP input, shared leases and per-document withdrawal',{timeout:180000},async t=>{
- let app;let admin;let appLog;const results=[];
+ let app;let admin;let appLog;let cleanupContainment=false;const results=[];
  const step=async(name,work)=>{let failed=false;await t.test(name,async()=>{try{await work();}catch(error){failed=true;const primitive=v=>v===null||typeof v==='number'||typeof v==='boolean'?v:'REDACTED';console.log('VNEXT_HTTP_FAILURE_SAFE '+JSON.stringify({stage:name,code:/^[A-Z0-9_]{1,40}$/u.test(error.code||'')?error.code:'UNKNOWN',actual:primitive(error.actual),expected:primitive(error.expected),tokens:(String(error.message).match(/vnext_[a-z_]{1,120}/gu)||[]).slice(0,3)}));throw error;}});if(failed)throw Error('dependent_cached_http_stage_failed');};
  try{
   admin=await connect();assert.equal(Number((await admin.query('SELECT count(*) FROM public.vnext_jobs_v1')).rows[0].count),4);assert.equal(Number((await admin.query('SELECT count(*) FROM public.vnext_publications_v1')).rows[0].count),2);
@@ -140,11 +141,16 @@ await test('actual closed cached HTTP input, shared leases and per-document with
    const contentHash=(await admin.query('SELECT content_hash FROM public.vnext_extractions_v1')).rows[0].content_hash;const request={action:'source-withdraw',contentHash,reason:'rights_revoked',citation:'https://www.twse.com.tw/synthetic-http-withdrawal'};const r=await post('vnext-research',request,operatorKey);assert.equal(r.status,200);const value=r.body.result;assert.equal(value.payload.contentHash,contentHash);const traceCount=trace.length;const read=await post('vnext-research',{action:'source-withdraw-read',contentHash},operatorKey);assert.equal(read.status,200);assert.deepEqual(read.body.result,value);assert.equal(trace.slice(traceCount).some(x=>x.rpc?.includes('production_write_lease')),false);const observer=await connect();try{const rows=(await observer.query('SELECT * FROM public.vnext_source_withdrawals_v1 WHERE content_hash=$1',[contentHash])).rows;assert.equal(rows.length,1);assert.deepEqual(rows[0].payload,value.payload);assert.equal(rows[0].event_hash,value.hash);assert.equal(rows[0].logical_bytes,value.logicalBytes);}finally{await observer.end();}assert.equal(Number((await admin.query('SELECT count(*) FROM public.production_write_leases')).rows[0].count),0);results.push({withdrawalHash:value.hash,immutableRead:true,readAcquiredWriterLease:false,formalSourceRevocation:false});
   });
   } finally {
-    if (app && app.exitCode === null) { app.kill('SIGTERM'); await new Promise(resolve => app.once('close', resolve)); }
+    if (app && app.exitCode === null && app.signalCode === null) {
+      const closed=new Promise(resolve=>app.once('close',resolve));app.kill('SIGTERM');
+      let timer;const settled=await Promise.race([closed.then(()=>true),new Promise(resolve=>{timer=setTimeout(()=>resolve(false),35000);})]);clearTimeout(timer);
+      if(!settled){cleanupContainment=true;app.kill('SIGKILL');await closed;}
+    }
     if (appLog !== undefined) fs.closeSync(appLog);
-    await new Promise(resolve => bridge.close(resolve));
+    const bridgeClosed=new Promise(resolve=>bridge.close(resolve));bridge.closeAllConnections();await bridgeClosed;
     if (admin) await admin.end();
-    save('receipt', { stage, priorSyntheticSessionScope:'fixture only prior-session FK plus18priorwaiting members; not originalofficialcalendar/swap proof', scope:'actual HTTP/real service_role PG with active synthetic release and real acquire/release lease RPC via controlled finite facade; backend identity_fence inactive, not formal HBA/Contabo/model/rights acceptance', results, trace, pendingQueries: pending, appExit: app?.exitCode, appPidPathAbsent: app ? !fs.existsSync('/proc/' + app.pid) : null });
-    assert.equal(pending, 0);
+    if(ownedClients.size){cleanupContainment=true;await Promise.allSettled([...ownedClients].map(c=>c.end()));}
+    save('receipt', { stage, priorSyntheticSessionScope:'fixture only prior-session FK plus18priorwaiting members; not originalofficialcalendar/swap proof', scope:'actual HTTP/real service_role PG with active synthetic release and real acquire/release lease RPC via controlled finite facade; backend identity_fence inactive, not formal HBA/Contabo/model/rights acceptance', results, trace, cleanupContainment, trackedClientsRemaining:ownedClients.size, pendingQueries: pending, appExit: app?.exitCode, appPidPathAbsent: app ? !fs.existsSync('/proc/' + app.pid) : null });
+    assert.equal(cleanupContainment,false,'owned HTTP cleanup needed containment; no success claim');assert.equal(ownedClients.size,0);assert.equal(pending, 0);if(app)assert.equal(fs.existsSync('/proc/'+app.pid),false);
   }
 });
