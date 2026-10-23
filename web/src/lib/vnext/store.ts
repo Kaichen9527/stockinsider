@@ -117,7 +117,6 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       if (acquisition.failures.length || parsing.reconciliationErrors.length || parsing.results.some((r) => r.error || r.status !== 'accepted') || validation.status !== 'success') throw new Error('vnext_financial_preparation_incomplete');
       const {loadTwEntryHistoricalPriceAuthority}=await import('../tw-entry-plan-authority.ts');
       const historical=await loadTwEntryHistoricalPriceAuthority(writer.supabase,{stockId:String(stocks.data.id),symbol:context.symbol,exchange:String(instrument.data.exchange).toUpperCase() as 'TWSE'|'TPEX',signalSession:String(calendar.latestCompleted||''),cutoff:new Date().toISOString()});
-      const currentPrice=historical.priceBasis?.status==='verified'?historical.bars.at(-1):undefined;
       const frozenAt = new Date().toISOString();
       const official = await writer.supabase.rpc('read_financial_facts_for_stocks_as_of', { p_cutoff: frozenAt, p_stock_ids: [stocks.data.id] }).limit(10000);
       if (official.error) throw new Error('vnext_preparation_verified_facts_unavailable');
@@ -127,14 +126,9 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       const {resolveFinancialEvidenceSources}=await import('./financial-evidence-sources.ts');
       const financialSources=await resolveFinancialEvidenceSources(writer.supabase,verified,frozenAt);
       if(financialSources.evidence.length===0)throw new Error('vnext_validated_financial_data_missing');
-      const evidence=financialSources.evidence;
-      const {currentPriceEvidence}=await import('./cached-price-factors.ts');evidence.push(...currentPriceEvidence(historical));
       const original = activeReceipt.evidence as Row;
-      const frozen = { ...original, cutoff: frozenAt, admissionHash: original.hash,priceAuthority:historical,financialSourceReceipts:financialSources.receipts,
-        financialSourceDeferrals:{count:financialSources.deferredCount,digest:financialSources.deferredDigest,details:financialSources.deferredDetails,detailsTruncated:financialSources.deferredDetailsTruncated},
-        gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...financialSources.gaps,...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
-        evidence: [...(Array.isArray(original.evidence) ? original.evidence as Evidence[] : []).filter((e) => !evidence.some((f) => f.id === e.id)), ...evidence] };
-      const preparedHash = inputHash(frozen);
+      const {freezeFinancialPreparation}=await import('./preparation-reconciliation.ts');
+      const {inputHash:preparedHash,evidence:frozen}=freezeFinancialPreparation(original,historical,financialSources,frozenAt);
       await command(identity, 'prepare', { jobId: context.jobId, executionId: context.executionId, inputHash: preparedHash, evidence: frozen });
       return { acquisition, parsing, validation, inputHash: preparedHash, evidence: frozen };
     });
@@ -153,6 +147,33 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
     await releaseProductionWriteLease(lease);
   }
 }
+/** Authenticated explicit READ/reconciliation needs no provider API credential.
+ * Only an actual cached prepare write acquires the original writer lease. */
+async function preparationOperation(identity:VnextIdentity,body:Row,resume:boolean){
+  const reconciliation=await import('./preparation-reconciliation.ts');
+  reconciliation.preparationRequest(identity,body);
+  if(!vnextEnabled())throw Error('vnext_authority_not_configured');
+  const {requireActiveVpsWriter}=await import('../taiwan-data-runtime');
+  const writer=await requireActiveVpsWriter();if(!writer.ok)throw Error(writer.error);
+  const deps:import('./preparation-reconciliation.ts').PreparationDependencies={client:writer.supabase,
+    command:async(action,request)=>{
+      if(action!=='prepare')return command(identity,action,request);
+      if(!resume)throw Error('vnext_preparation_read_only');
+      const {acquireProductionWriteLease,releaseProductionWriteLease}=await import('../production-write-lease');
+      const lease=await acquireProductionWriteLease(300);if(!lease)throw Error('production_write_cycle_already_running');
+      try{return await command(identity,action,request);}finally{await releaseProductionWriteLease(lease);}
+    },
+    journal:async(action,request)=>{
+      const result=await writer.supabase.rpc('vnext_provider_command_v1',{p_principal:identity.principal,p_command:action,p_request:request});
+      if(result.error)throw Error(`vnext_provider_authority_rejected:${result.error.message}`);
+      if(!result.data || typeof result.data!=='object' || Array.isArray(result.data))throw Error('vnext_provider_receipt_missing');
+      return result.data as Row;
+    },
+    historical:async(request)=>(await import('../tw-entry-plan-authority.ts')).loadTwEntryHistoricalPriceAuthority(writer.supabase,request)};
+  return reconciliation.reconcilePreparation(identity,body,deps,resume);
+}
+export async function readResearchPreparation(identity:VnextIdentity,body:Row){return preparationOperation(identity,body,false);}
+export async function resumeResearchPreparation(identity:VnextIdentity,body:Row){return preparationOperation(identity,body,true);}
 export async function swap(identity: VnextIdentity, body: Row) {
   if (typeof body.challengerSymbol !== 'string' || !/^\d{4}$/u.test(body.challengerSymbol)) throw new Error('vnext_challenger_required');
   return command(identity, 'swap', { challengerSymbol: body.challengerSymbol, policy: body.policy, requestKey: body.requestKey });

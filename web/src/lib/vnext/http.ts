@@ -1,7 +1,7 @@
 import {cachedAdmissionBody,currentReceiptBody} from './cached-admission.ts';
 import { NextResponse } from 'next/server';
 import { vnextEnabled } from './policy.ts';
-import { cacheContent, command, executeResearch, publishMarket, publishResearch, submitAuthor, submitReview, swap } from './store.ts';
+import { cacheContent, command, executeResearch, publishMarket, publishResearch, readResearchPreparation, resumeResearchPreparation, submitAuthor, submitReview, swap } from './store.ts';
 import { vnextIdentity } from './auth.ts';
 import { boundedRequestBody } from './request.ts';
 type Row = Record<string, unknown>;
@@ -19,6 +19,11 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       : entrypoint === 'candidate-dossier-outbox' && body.jobId ? 'claim'
       : entrypoint === 'candidate-dossier-submission' && body.artifact ? 'author'
       : entrypoint === 'candidate-dossier-bundle' && body.jobId ? 'bundle' : 'enqueue';
+    if(action==='preparation-read' || action==='resume-preparation'){
+      if(identity.role!=='author')throw new Error('vnext_author_required');
+      const result=action==='preparation-read'?await readResearchPreparation(identity,body):await resumeResearchPreparation(identity,body);
+      return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});
+    }
     if (action === 'automatic' || action === 'recover') {
       if (identity.role !== 'author') throw new Error('vnext_author_required');
       if (Object.keys(body).some((key) => !['action', 'jobId'].includes(key)) || typeof body.jobId !== 'string') throw new Error('vnext_worker_job_id_only');
