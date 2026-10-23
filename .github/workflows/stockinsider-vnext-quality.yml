@@ -314,8 +314,14 @@ jobs:
                   item=json.loads(line.removeprefix('VNEXT_ROUTINE_FAILURE_SAFE '))
                   if set(item)!={'stage','code','actual','expected','messageHash','tokens'}: raise SystemExit('closed diagnostic required')
                   failures.append(item)
+          prerequisites=[]
+          for line in text.splitlines():
+              if line.startswith('VNEXT_SOURCE_PREREQUISITE_SAFE '):
+                  item=json.loads(line.removeprefix('VNEXT_SOURCE_PREREQUISITE_SAFE '))
+                  if set(item)!={'sourceOwnerUsage','inputOwnerUsage','descriptorHash','noGrant','fullPrivateDescriptorRetained'}: raise SystemExit('closed prerequisite diagnostic required')
+                  prerequisites.append(item)
           receipt=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/routine-http-receipt.json')
-          safe={'actualTapCounts':counts,'tapSha256':hashlib.sha256(source.read_bytes()).hexdigest(),'failures':failures,'receiptObserved':receipt.exists(),'sourceScope':'hosted actual HTTP/PG, synthetic originals only'}
+          safe={'actualTapCounts':counts,'tapSha256':hashlib.sha256(source.read_bytes()).hexdigest(),'failures':failures,'receiptObserved':receipt.exists(),'sourceScope':'hosted actual HTTP/PG, synthetic originals only','sourcePrerequisites':prerequisites}
           if receipt.exists():
               data=json.loads(receipt.read_text());safe.update({k:data.get(k) for k in ['sourceCommit','results','pendingQueries','appExit','appPidAbsent','clientsSettled','unexpectedExternalFetchObserved']})
           resource=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http-resource/receipt.json')
