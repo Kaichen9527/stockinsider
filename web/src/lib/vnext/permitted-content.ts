@@ -45,9 +45,29 @@ export function roundRobinContents<T extends {contentHash:string;source:string;o
  const result:T[]=[];for(let i=0;i<POLICY.sourceContent && result.length<POLICY.dailyContent;i++)for(const source of [...groups.keys()].sort()){const row=groups.get(source)?.[i];if(row && result.length<POLICY.dailyContent)result.push(row);}return result;
 }
 export async function extractContentBatch(items:PermittedContent[],cutoff:string,send:(action:string,body:Record<string,unknown>)=>Promise<Record<string,unknown>>){
+ // Two bounded cache feeds each supply at most200 rows. This is a cheap
+ // scan bound, never a larger new-content, parsing or model quota.
+ if(items.length>POLICY.dailyContent*2)throw new Error('vnext_content_scan_bound');
  const rejected:Array<{id:string;reason:string}>=[];const candidates:Array<ReturnType<typeof contentIdentity>>=[];
  for(const item of items)try{candidates.push(contentIdentity(item,cutoff));}catch(error){rejected.push({id:item.id,reason:error instanceof Error?error.message:'invalid_content'});}
- const selected=roundRobinContents(candidates);const results=[];
- for(const item of selected){const reservationItem={contentHash:item.contentHash,source:item.source,scope:item.scope,original:item.original,gaps:item.gaps};const reservation=await send('source-reserve',{item:reservationItem});if(reservation.parse!==true){results.push(reservation);continue;}results.push(await send('source-complete',{contentHash:item.contentHash,extraction:extractPermittedContent(item.original,cutoff)}));}
- return {selected:selected.length,rejected,results,deferredOutsideRoundRobin:candidates.length-selected.length,parserVersion:'vnext-permitted-content-v1',batchHash:inputHash(selected.map((r)=>r.contentHash))};
+ const seen=new Set<string>(),blocked=new Set<string>(),acceptedBySource=new Map<string,number>(),selected:string[]=[],results=[];
+ let reservations=0;
+ while(selected.length<POLICY.dailyContent){
+  const page=roundRobinContents(candidates.filter(item=>!seen.has(item.contentHash)&&!blocked.has(item.source)&&(acceptedBySource.get(item.source)||0)<POLICY.sourceContent));
+  if(!page.length)break;
+  for(const item of page){
+   if(selected.length>=POLICY.dailyContent)break;
+   if(blocked.has(item.source)||(acceptedBySource.get(item.source)||0)>=POLICY.sourceContent)continue;
+   seen.add(item.contentHash);reservations++;
+   const reservationItem={contentHash:item.contentHash,source:item.source,scope:item.scope,original:item.original,gaps:item.gaps};
+   const reservation=await send('source-reserve',{item:reservationItem});
+   if(reservation.parse!==true){results.push(reservation);if(['daily_content_budget','source_rights_not_current'].includes(String(reservation.deferred)))blocked.add(item.source);continue;}
+   // Count immediately after the durable reservation: failure still consumes
+   // the existing SQL allowance; uncertain completion is never auto-resubmitted.
+   selected.push(item.contentHash);acceptedBySource.set(item.source,(acceptedBySource.get(item.source)||0)+1);
+   results.push(await send('source-complete',{contentHash:item.contentHash,extraction:extractPermittedContent(item.original,cutoff)}));
+  }
+ }
+ const uniqueCandidates=new Set(candidates.map(item=>item.contentHash));
+ return {selected:selected.length,rejected,results,reservations,scannedUnique:seen.size,replayed:results.filter(result=>result.replay===true).length,deferredOutsideRoundRobin:[...uniqueCandidates].filter(hash=>!seen.has(hash)).length,parserVersion:'vnext-permitted-content-v1',scanPolicyVersion:'vnext-source-scan-v2',batchHash:inputHash(selected),scanHash:inputHash([...seen])};
 }
