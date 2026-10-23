@@ -368,6 +368,14 @@ jobs:
           import hashlib,json,pathlib,re,subprocess
           root=pathlib.Path('/tmp/stockinsider-vnext-ci');raw=root/'preparation-http.tap.private.log'
           if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded forecast acceptance log required')
+          for line in raw.read_text().splitlines():
+              if line.startswith('PUBLISHED_TARGET_PREDECESSOR_SAFE '):
+                  observed=json.loads(line[len('PUBLISHED_TARGET_PREDECESSOR_SAFE '):])
+                  allowed={'public.vnext_target_current_v1(text,uuid,text)','public.vnext_read_v1(text)'}
+                  if not isinstance(observed,list) or len(observed)!=2 or {r.get('signature') for r in observed}!=allowed: raise SystemExit('closed target predecessor metadata required')
+                  for row in observed:
+                      if set(row)!={'signature','bodySha256','proconfig','securityDefiner'} or row['securityDefiner'] is not True or not re.fullmatch('[a-f0-9]{64}',row['bodySha256']) or not isinstance(row['proconfig'],list) or len(row['proconfig'])>6 or any(not isinstance(v,str) or len(v)>100 for v in row['proconfig']): raise SystemExit('bounded target predecessor metadata required')
+                  print('::notice title=Published target actual predecessor::'+json.dumps(observed,separators=(',',':')))
           expected={'FORECAST_CURRENT_SAFE ':{'evidenceCount','receiptCount','numericSourceOnly','sourceDeclaredAnnualAndForward4q','reportedAnnual','actualOriginalAppend','syntheticSource','actualExternalModel'},'FORECAST_FROZEN_REVOKED_SAFE ':{'actualReservedFrozenInput','forecastItems','providerPosts','rightsRevocationCommitted','originalRowsRetained','sourceCurrentFalse','noSecondClaimPrepareOrReserve','directRejectedMutants','duplicateAcquisitionStable','recollectionObservations'}}
           expected['PUBLISHED_TARGET_INSTALL_SAFE ']=set('modifiedBodies newFunctions newGrants repeatRejected wholeCatalogInvariant readOnlyProbe publishedBaseline actualRebase'.split())
           expected['FISCAL_FORECAST_CURRENT_SAFE ']=set('originals sourceDeclaredAnnual sourceDeclaredForwardFour reportedAnnual wholeOriginalContext currentReader frozenProviderInput providerPosts rightsWithdrawals sourceHistoryRetained actualExternalSource'.split())

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-published-target-read-source-v1",
   "migration": "migrations/20261024_vnext_published_target_read_v1.sql",
-  "migrationSha256": "06766d9f89e41a80e3d8c3a77d98042a1fd6f384f55929f0e6be4c8d4670fb19",
+  "migrationSha256": "249685db904fa90ca1794896cb3f534df07b99a1dffbd8b8ca61ba2d8a020061",
   "nativeVerified": false,
   "nativeOids": null,
   "modifiedRoutines": [
@@ -20,6 +20,11 @@
           "IF rebasing IS NOT NULL THEN receipt:=receipt||jsonb_build_object('rebasing',",
           "receipt:=receipt||jsonb_build_object('originalBaseline',original_scenarios);\n IF rebasing IS NOT NULL THEN receipt:=receipt||jsonb_build_object('rebasing',"
         ]
+      ],
+      "predecessorProconfig": [
+        "search_path=pg_catalog, public",
+        "statement_timeout=30s",
+        "lock_timeout=2s"
       ]
     },
     {
@@ -28,10 +33,21 @@
       "predecessorBytes": 1088,
       "successorBodySha256": "20259a7fb00e81257ca6a18faafb3131383f60876272885c09b8fc6566a7d85b",
       "successorBytes": 2435,
-      "fragments": []
+      "fragments": [],
+      "predecessorProconfig": [
+        "search_path=pg_catalog, public"
+      ]
     }
   ],
   "catalogQuerySha256": "4398383090e87441958cdf11f0802889e33b70839d25fc30374faf3e125b62cb",
   "scope": "source-derived only; two existing bodies, no new signature/permission/role; actual grammar/catalog/COMMIT/current published baseline/race NOT_RUN",
-  "predecessor": "full action terms candidate installed; complete read predecessor base+thesis projection unchanged by subsequent current-projector bodies"
+  "predecessor": "full action terms candidate installed; complete read predecessor base+thesis projection unchanged by subsequent current-projector bodies",
+  "initialNativeFailure": {
+    "subject": "aa59b7d3c317d01921c1c999dab360c988b239db",
+    "run": 39993673265,
+    "job": 120551546798,
+    "code": "P0001",
+    "message": "vnext_target_read_predecessor_changed",
+    "finding": "new precondition incorrectly assumed target current had only search_path; exact original constructor also has statement_timeout30s/lock_timeout2s; source-derived correction only, no ACL/body hash or old profile change"
+  }
 }
