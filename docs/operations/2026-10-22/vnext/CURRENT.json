@@ -1,7 +1,7 @@
 {
-  "status": "PARTIAL_VM_IMPLEMENTATION_AND_ACCEPTANCE_NOT_RELEASE_COMPLETE",
-  "updatedAt": "2026-10-23T07:21:28.427345+00:00",
-  "runtimeSourceHead": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
+  "status": "PARTIAL_ENGINEERING_ACCEPTANCE_DRAFT_NOT_RELEASED",
+  "updatedAt": "2026-10-23T07:56:56.011434+00:00",
+  "runtimeSourceHead": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
   "currentReceiptSha256": "79e0941042256898c569937197eef8c467ecd2aa40f6fdd234ece80586d3a634",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
   "primaryReport": "STATUS.md",
@@ -12,45 +12,49 @@
       "status": "PARTIAL_ACTUAL_HTTP",
       "runs": "cached-active-http-01; current-browser-ui-01; native-legacy-final",
       "limits": "Exact aeb actual fullbuild/preparation HTTP succeeds; genuine adapter PG and scanner composition separately tested. Positive routine-screen HTTP not separately exercised.",
-      "currentFollowup": "Exactaeb normal source/types/lint/fullbuild/actual preparation HTTP/browser success; enhanced adapter realPG10PASS, genuine fullstate+source current/claim/reserve/exit. Scope synthetic; positive routine-screen HTTP not separately exercised; no counter/forecast/sourcewindow/formal claim."
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN02",
       "status": "TESTED_VM_SUBSETS",
       "runs": "native-legacy-final; cached-active-http-01; current-browser-ui-01",
       "limits": "14actuallegacyRPC fences at their earlier source;9currentHTTPaliases/GETscope/claims same20/4ledger. No blanket latest-head legacy acceptance inferred.",
-      "currentFollowup": "Exactaeb normal source/types/lint/fullbuild/actual preparation HTTP/browser success; enhanced adapter realPG10PASS, genuine fullstate+source current/claim/reserve/exit. Scope synthetic; positive routine-screen HTTP not separately exercised; no counter/forecast/sourcewindow/formal claim."
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN03",
       "status": "TESTED_VM_SYNTHETIC",
       "runs": "cached-native-02; cached-active-http-recovery-01",
-      "limits": "8parallelduplicate deliveries reserve4jobs;4actualstarts remaincharged;2livepubs+18explicitprior-day waitingfixture=20active. Prior-sessionrow is syntheticFK setup, not officialtwo-day rotationproof."
+      "limits": "8parallelduplicate deliveries reserve4jobs;4actualstarts remaincharged;2livepubs+18explicitprior-day waitingfixture=20active. Prior-sessionrow is syntheticFK setup, not officialtwo-day rotationproof.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN04",
       "status": "PARTIAL_ACTUAL_PG_HTTP_RECOVERY",
       "runs": "thesis-native-01; terminal-slots-native-01; terminal-slots-read-01; final-terminal-test-01; preparation-reconciliation-source-05; preparation-empty-journal-source-o23; hosted39901837447",
-      "limits": "9a/6f actual prepare COMMIT/socket-loss READ recovery separate;37 actual current roster blocks held prepare/reserve, no new attempts; full rights/lease/provider matrix pending"
+      "limits": "da15 real PG-wire committed cancellation response loss, true query rejection+both sockets close, explicit no-resend current stored READ7PASS. Same-head preparationHTTP ordinary pending separate. Full remaining lease/expiry/provider matrix incomplete.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN05",
       "status": "PARTIAL_COVERAGE_AUTHORITY_MISSING",
       "runs": "cached-admission-final-direct-01; cached-admission-final-pure-01; preparation-authority-source-direct-01",
-      "limits": "Deterministic/null/rootpolicy and originalpricecache producer parity tested. No trusted28-day sourceexhaustion/completeness receipts;7/21 sourcevolume remainsnull. This is namedacquisition/coverage producer VMcodework, not justTCP."
+      "limits": "Readonly actual connector audit: TWSE current report-date only/eventWindownull; PTT cap-limited metadata; GDELT observation windows not original-event authority or allowed vNext scope. No comparable28-original-event-day completeness/roots; count staysnull, not0.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN06",
       "status": "PARTIAL_REAL_TIME_PROOF_PENDING",
       "runs": "native-rotation-01; final-discovery-direct; cached-admission-final-direct-01",
-      "limits": "Actualwaitingincumbent SQL path and premarket guards earlier; sameday/holiday/policy/null purecases. Real2consecutivepostclose-session positiveatomicexchange NOT_RUN; no clock/guard changes."
+      "limits": "Actualwaitingincumbent SQL path and premarket guards earlier; sameday/holiday/policy/null purecases. Real2consecutivepostclose-session positiveatomicexchange NOT_RUN; no clock/guard changes.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN07",
       "status": "PARTIAL_ACTUAL_SERVER_EXIT",
       "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01; thesis-semantic-authority-source-02; semantic-native-monitored-o23; catalyst-semantic-source-05; catalyst-native-monitored-o23; target-exit-evidence/receipt.json",
-      "limits": "6f actual private current roster proof/exit8PASS;37 actual current-work+claim/reserve fencing/real target caller10PASS. Counts separate. Semantic cancellation/contra/target and rebase remain incomplete",
-      "currentFollowup": "Exactaeb normal source/types/lint/fullbuild/actual preparation HTTP/browser success; enhanced adapter realPG10PASS, genuine fullstate+source current/claim/reserve/exit. Scope synthetic; positive routine-screen HTTP not separately exercised; no counter/forecast/sourcewindow/formal claim.",
+      "limits": "da15 actual fresh hosted cancellation7PASS first/prior version, falseauthority/profile rejection, atomically retained history+exit, exact replay, committed current-source withdrawal; group scores/weights unchanged. Synthetic originals/provider; contra/competitive/risk/rebase incomplete.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance.",
       "cancellationFollowup": "f7 coherent candidate source13PASS +4SQL sourcechecks; new actual native queued, no old native green transfer. Other source-bound contra/competitive/risk remains VM work."
     },
     {
@@ -58,95 +62,120 @@
       "status": "TESTED_CORE_AND_CACHE_ADAPTERS_PARTIAL_DATA",
       "runs": "cached-native-01; cached-native-02; preparation-authority-source-direct-01",
       "limits": "Actualofficialcalendar row/as-of/futureclose/privatecompletedfalse and source-derived originaladjustedpricefunction reuse. Actual240-price PostgREST+fullqualification positive notrun. Missingannual/forwardEPS staysnull. New forecast-source02 diagnostic12PASS/type/lint only. Actual source receipt/current authority/preparation/provider wiring remains UNIMPLEMENTED, not simply unavailabledata.",
-      "currentFollowup": "Exactaeb normal source/types/lint/fullbuild/actual preparation HTTP/browser success; enhanced adapter realPG10PASS, genuine fullstate+source current/claim/reserve/exit. Scope synthetic; positive routine-screen HTTP not separately exercised; no counter/forecast/sourcewindow/formal claim."
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN09",
       "status": "TESTED_VM_SYNTHETIC_EXTRACTION_WITHDRAWAL_AND_SNAPSHOT_TRANSPORT",
       "runs": "analysis-native-01; withdrawal-native-03; cached-active-http-recovery-01",
-      "limits": "200/50 crossentry/currentrights/contentwithdrawal tested on original sources. New d9a source10contracts+retainedPG6PASS metadata receipt capture/currentpolicy/immutable read; Responses synthetic. Complete comparable eventwindow/volume producer remains UNIMPLEMENTED; eventVolume null."
+      "limits": "200/50 crossentry/currentrights/contentwithdrawal tested on original sources. New d9a source10contracts+retainedPG6PASS metadata receipt capture/currentpolicy/immutable read; Responses synthetic. Complete comparable eventwindow/volume producer remains UNIMPLEMENTED; eventVolume null.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN10",
       "status": "TESTED_VM_SYNTHETIC_PROVIDER",
       "runs": "analysis-native-01; analysis-sources-direct-02",
-      "limits": "Fixedproviderinput/journal/reuse and ruleonlydowngrade tested onrealPG. Actualoverseasprice/foreignFX/margin/dataandactualAI execution notacquired; no seeded marketproducer promoted."
+      "limits": "Fixedproviderinput/journal/reuse and ruleonlydowngrade tested onrealPG. Actualoverseasprice/foreignFX/margin/dataandactualAI execution notacquired; no seeded marketproducer promoted.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN11",
-      "status": "TESTED_VM_SYNTHETIC_REVISION",
+      "status": "TESTED_HOSTED_SYNTHETIC_REVISION",
       "runs": "worker-native-02; worker-browser-revision-02; thesis-native-01",
-      "limits": "Actualjournal→revision/snapshot→pagefixture; substantivefacts differ fromfetchclock. No realnewsevent/model semanticproof."
+      "limits": "a264 actual fresh source journal/prior published revision retained byteexact while new cancellation revision+exit commit; model/source semantics synthetic. No real-new-event/model/semantic publication proof.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN12",
       "status": "TESTED_VM_CONTRACT_NOT_FORMAL_REVIEW",
       "runs": "worker-native-02; terminal-slots-native-01; current-browser-summary-01",
       "limits": "Distinct configuredrole/execution, originalsource hashes/claimchecks/formulas;2actualstructuralreviewfailuresneverpublish. Semantic fixturechecks not independentrealcontentreview. Transportuncertainty keptheld; noautoresend. New typed original quote/issuer/event/date/explicit outcome+full reviewer echo bound to completed provider journals. Protocol not actual semantic support or independent news confirmation.",
-      "cancellationFollowup": "f7 coherent candidate source13PASS +4SQL sourcechecks; new actual native queued, no old native green transfer. Other source-bound contra/competitive/risk remains VM work."
+      "cancellationFollowup": "f7 coherent candidate source13PASS +4SQL sourcechecks; new actual native queued, no old native green transfer. Other source-bound contra/competitive/risk remains VM work.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN13",
       "status": "PARTIAL_REAL_PRODUCER_ACCEPTANCE",
       "runs": "native-legacy-final; worker-native-02; withdrawal-native-03; cached-native-02",
-      "limits": "Atomicrevision/membership gates+unadmitteddeferredprefix tested withsyntheticrows. Realfinancial/valuationhappy-path and fullnewhead late-exit concurrency stillunverified."
+      "limits": "Atomicrevision/membership gates+unadmitteddeferredprefix tested withsyntheticrows. Realfinancial/valuationhappy-path and fullnewhead late-exit concurrency stillunverified.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN14",
       "status": "TESTED_VM_FAIL_CLOSED_READ",
       "runs": "public-valuation-read-direct-01; current-browser-summary-01; current-browser-ui-01",
-      "limits": "Newcurrentpublicread requires exactproofcanonicalhash/expiry/usablevaluation/claim/date/arithmetic. Older incompleteproofdenied; no legacyfallback; actualwithdrawnarticlehistoryretained.12sourcecontracts,2currentbrowsercases."
+      "limits": "Newcurrentpublicread requires exactproofcanonicalhash/expiry/usablevaluation/claim/date/arithmetic. Older incompleteproofdenied; no legacyfallback; actualwithdrawnarticlehistoryretained.12sourcecontracts,2currentbrowsercases.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN15",
-      "status": "HOSTED_FINITE_BROWSER_CASES_OBSERVED",
+      "status": "HOSTED_BROWSER_STEPS_OBSERVED_RAW_NOT_REVIEWED",
       "runs": "current-browser-ui-01; current-browser-summary-01",
-      "limits": "Exactaeb Chrome155 binary/hash and12UI+2current desktop/mobile PASS;18finite screenshots notice, raw PNGs not downloaded/visually reviewed. Actual synthetic PG data, not real source/model or Contabo."
+      "limits": "a264 same-head normal browser stepSUCCESS over same-run synthetic PG/build. No independently downloaded new raw TAP/PNG/visual review; earlier aeb12UI+2current version/hash remains its own exact receipt.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN16",
-      "status": "PARTIAL_TYPES_LINT_AND_HOSTED_BUILD",
+      "status": "PARTIAL_TYPES_LINT_HOSTED_BUILD",
       "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23; semantic-final-types-o23",
-      "limits": "Exact aeb hosted fullbuild/source/types/lint succeed. Local fullbuild not admitted. Earlier37 source-stage failure remains historical; corrected28 independently succeeded.",
-      "currentFollowup": "Exactaeb normal source/types/lint/fullbuild/actual preparation HTTP/browser success; enhanced adapter realPG10PASS, genuine fullstate+source current/claim/reserve/exit. Scope synthetic; positive routine-screen HTTP not separately exercised; no counter/forecast/sourcewindow/formal claim."
+      "limits": "a264 exact-source hosted fullbuild/types/lint/sourceSUCCESS; local fresh fullbuild NOT_ADMITTED. New da15 normal CI pending; no green transferred to uncommitted business criteria.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN17",
       "status": "PARTIAL_FRESH_HOSTED_NATIVE",
       "runs": "cached-native-02; terminal-slots-read-01; cached-active-http-recovery-01",
-      "limits": "37 actual fresh three-body installer/current-work/claim/provider negative+exit10PASS/full snapshots/cleanup notice; synthetic sources, no formal qualification/independent raw custody",
-      "currentFollowup": "Exactaeb normal source/types/lint/fullbuild/actual preparation HTTP/browser success; enhanced adapter realPG10PASS, genuine fullstate+source current/claim/reserve/exit. Scope synthetic; positive routine-screen HTTP not separately exercised; no counter/forecast/sourcewindow/formal claim."
+      "limits": "da15 genuine fresh hosted full installer/private helper/first and prior publication7PASS, mandatory successful extended PG frames/independent COMMIT/real socket loss/explicit no-resend READ; permanent withdrawal and whole state invariants. Actual raw private rows not independently downloaded; not CodexVM/Contabo/formal research.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN18",
       "status": "EXTERNAL_NOT_ACCEPTED",
       "runs": "staging/tcp-readiness historical metadata",
-      "limits": "No Contaboisolatedapp/DB/schema/queue/storage. TCP22unsupported/no grant, no trustedhostkey/newactiveidentity. Expiredkeynotrenewed. No productionlocatorasstaging."
+      "limits": "No Contaboisolatedapp/DB/schema/queue/storage. TCP22unsupported/no grant, no trustedhostkey/newactiveidentity. Expiredkeynotrenewed. No productionlocatorasstaging.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN19",
-      "status": "PARTIAL_ACTUAL_SOURCE_CANARY",
+      "status": "REAL_EXECUTION_BLOCKED_MISSING_ISOLATED_BINDINGS",
       "runs": "source-canary-final.json; analysis-native-01; ir-native-o23; ir-continuation-monitored-02-o23; ir-status-recovery-monitored-o23",
-      "limits": "OriginalactualcanaryTWSEindex200/PTT403 onlyindex/bodygap. Newretained-lab IRcontinuation8PASS: fullguardedcheckedtextcandidateCOMMIT/body-onlyparity, actualoriginalfinancialRPCvalidation, exactIRprojection, different author/reviewer syntheticprovider, immutableunqualifiedpublication, registryremoval/late-reapprovalcurrentfences. Prior0/2,0/2,2/2 REDs preserved. No acquiredIRfiling/Arelle/liveprovider/semantic/financialapproval. Freshwholeprefix+newcandidateinstaller at latestsubject NOT_RUN."
+      "limits": "Fresh metadata has no injected secret/runtime/outbound identity, required provider/DB/roles and official/PTT policy bindings absent. No secret files read/values printed or actual model/fetch attempted. Prior canaries/IR8PASS remain their historical subjects; synthetic original is not actual acquisition.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     },
     {
       "id": "VN20",
       "status": "DRAFT_PR_PARTIAL_RELEASE_GATE",
       "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json; preparation-reconciliation-evidence/receipt.json; SEMANTIC-SCORE-DELIVERY.md; semantic-score-evidence/receipt.json; TWSE-SNAPSHOT-DELIVERY.md; twse-snapshot-evidence/receipt.json",
-      "limits": "Codeaeb ordinary39910540527 and independent product39910540580+diagnosticSUCCESS; current protected39910538699 architecture/requirements/exact/rootFAIL at actual prerequisites. No pin changes, merge/deploy/schedules."
+      "limits": "PR384 source da15/new normal CI pending; earlier a264 normal job120301725217SUCCESS and cancellation7PASS; protected39919707261FAIL unchanged. Exact review prerequisite must follow independent original process; no maker approval or merge/deploy.",
+      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
     }
   ],
   "externalOwnerActions": [
-    "Only whenresumingContabo: supportedplatform exact5.104.83.211/32TCP22; separately stricttrustedhostkey/newexplicitlyapprovedshortlivedidentity and actualisolatedresources",
-    "No expired Console APPLY; no HTTPsecretasSSH; no assumption oldHTTPdraft stillneeded becauseactualGitHub/TWSElaterworked",
-    "Actualprovider/sourcepermissions+semanticexecution requirelegitimateinjection; neverpastecreds/chat/argv/Git"
+    {
+      "action": "Inject approved isolated runtime provider/role/database credentials and enabled current source-rights rows through platform management; never chat/argv/Git or production reuse",
+      "necessary": "fresh actual metadata shows no secret/runtime/outbound identity bindings and allowlisted necessary environment names absent; no actual model/acquisition attempted",
+      "source": "cancellation-evidence/runtime-bindings-o23.json"
+    },
+    {
+      "action": "Original VM retained-data capacity expansion via supported platform management/support, including separate custody of tmpfs/agent state",
+      "necessary": "fresh local fullPG/build workset not admitted despite floor+small-source margin; no further cleanup authorized this turn"
+    },
+    {
+      "action": "Contabo strict trusted host key, scoped TCP22 support and isolated staging identity/resources",
+      "necessary": "production locator is not staging; no active injected SSH identity or verified raw TCP22 capability; existing expired key not renewed"
+    },
+    {
+      "action": "Independent existing protected exact-source review after source freeze",
+      "necessary": "maker cannot self-issue review refs; earlier readonly exact subject ref absent, req/arch source graph refs present; hosted inner exclusive failure cause not claimed"
+    }
   ],
   "remainingVMCode": [
-    "actual cancellation fresh installer/role/proof/history-exit/replay/rights acceptance pending newsource CI",
-    "complete comparable28-day original-event sourcewindow/volume/root authority",
-    "source-bound contradiction and competitive/risk producer",
-    "numeric forecast source/current-reader/preparation/provider integration",
-    "corporate-action rebasing and remaining financial/role/rights/race acceptance; routine-screen positiveHTTP"
+    "Current source-bound competitive/thesis-risk component producer and original-group authority gaps (in progress, no risk_bound redefinition)",
+    "28-day original-event coverage/volume/root producer: no current permitted exhaustive endpoint; actual connector-specific receipt/parser/current reader code still required after source contract",
+    "numeric forecast current issuer source/receipt/server reader/preparation/provider and period/share/unit binding",
+    "corporate-action target rebasing",
+    "cancellation actual HTTP plus remaining rights/lease/expiry/invocation/race/legacy/caps matrix",
+    "routine-screen positive HTTP; same-new-source fullprefix/build/HTTP/browser after new slices"
   ],
   "remainingTimeAcceptance": "2actualconsecutivecompletedpostclose sessions; no guard/clock bypass",
   "ReleaseGate": "PENDING",
@@ -266,35 +295,32 @@
     "latestSuccessfulNativeSubject": "9a6e73f49f2efd513e55c6bdb3289e0b95114157"
   },
   "newSourceCI": {
-    "head": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
-    "run": 39910540527,
-    "ordinaryJob": 120272263999,
-    "result": "SUCCESS",
-    "sourceTypesLint": "SUCCESS",
-    "fullbuild": "SUCCESS",
-    "actualPreparationHTTP": "SUCCESS",
-    "sameBuildBrowser": "12UI+2current PASS",
-    "tradingNativeJob": 120272263913,
-    "rosterNativeJob": 120272263697,
-    "actualRosterTests": 10,
-    "pass": 10,
+    "head": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
+    "status": "new-source ordinary pending",
+    "latestAcceptedHead": "a2649dfa879ed045afb36a69060de35ca09a84d9",
+    "acceptedRun": 39919712314,
+    "acceptedOrdinaryJob": 120301725217,
+    "ordinaryResult": "success",
+    "acceptedCancellationJob": 120301725292,
+    "tests": 7,
+    "pass": 7,
     "fail": 0,
-    "protected": "FAIL, not bypassed"
+    "protected": "FAIL; unchanged pins/guards; independent exact review still required"
   },
   "dirtyWip": {
-    "product": "none at sealedf7 source; evidence changes only",
+    "product": "separate business-criteria/current projection implementation in progress, unsealed and not included in da15; no green transferred",
     "historicalUntracked": "cached-evidence-initial-wip retained/excluded"
   },
-  "sourceHead": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+  "sourceHead": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
   "latestDelivery": "CATALYST-CANCELLATION.md",
   "independentProductCI": {
-    "head": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
-    "run": 39910540580,
-    "job": 120272264109,
+    "head": "a2649dfa879ed045afb36a69060de35ca09a84d9",
+    "run": 39919712055,
+    "job": 120301723697,
     "result": "SUCCESS",
-    "diagnosticJob": 120274999808,
+    "diagnosticJob": 120304534078,
     "diagnosticResult": "SUCCESS",
-    "olderFailures": "preserved exact-source; not retroactively relabelled"
+    "scope": "exacta264 only; not transferred to later code/WIP"
   },
   "currentBrowser": {
     "head": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
@@ -420,21 +446,61 @@
     "noAuthorityCreated": true,
     "sameMultiQueryAtomicSnapshotClaim": false
   },
-  "candidateSourceHead": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+  "candidateSourceHead": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
   "candidateReceipt": "cancellation-evidence/receipt.json",
   "candidateReceiptSha256": "99025efa1f61087a0b4a5aef140e5c8a011845bf4b8d8635b6e818e72ab4b9bd",
-  "candidateRuntime": "PENDING new-source ordinary39916672249: cancellation120291619445, quality120291619699; initial queued. Last actual passed remainsaeb, not transferred.",
+  "candidateRuntime": "da15 new actual cancellation7PASS; ordinary fullbuild/HTTP/browser job status observed separately, no green transferred to unsealed business WIP.",
   "catalystCancellation": {
-    "source": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+    "source": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
     "implementation": "optional server-selected v4, original pair/prior baseline, distinct full echo, owner-only proof, original guarded atomic retained publication+exit; no role/quota/old prompt changes",
     "newSourceTests": 13,
     "sourceSQLChecks": 4,
     "changedWorkerRegression": 8,
     "changedCatalystRegression": 10,
     "countsNotSummed": true,
-    "newNative": "NOT_RUN as of initial metadata; queued, no PASS inferred",
+    "newNative": "da15 actual hosted7PASS with mandatory complete successful extended-PG response, independent COMMIT, true socket closes/query rejection, backend absence and explicit no-resend immutable READ. Not original VM/HTTP/formal source/model approval.",
     "localPGFullbuild": "NOT_ADMITTED",
-    "scope": "synthetic/source engineering protocol only; actual semantic/financial approval absent"
+    "scope": "actual hosted PG protocol with synthetic source/model data only; no financial/model/semantic approval",
+    "previousSource": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+    "integrationSourceTests": "two actual handler/store source tests reproduced missing import; fixed12PASS and6PASS separately, targetlint0",
+    "lastAcceptedSubject": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
+    "lastAcceptedNative": {
+      "run": 39921032226,
+      "job": 120306028726,
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "runtimeMerge": "936b44d568ac652709946986d1290b4287637b5b",
+      "exactTreeParity": true
+    },
+    "previous977Native": {
+      "run": 39920450723,
+      "job": 120304136015,
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "coverageGap": "receipt absent; ordinary uncertain assertion alone insufficient; NOT accepted native response loss"
+    },
+    "localTransportSource": {
+      "tests": 6,
+      "pass": 6,
+      "fail": 0,
+      "scope": "pure synthetic frame parser; no sockets/PG"
+    },
+    "permanentWithdrawal": "da15 actual final child commits append-only withdrawal, private original-current=false and full other-table history/charge/provider invariant; full raw rows remain hosted inventory-only",
+    "actualCancellationHTTP": "NOT_RUN",
+    "followupReceipt": "cancellation-evidence/native-followup-receipt-o23.json",
+    "followupReceiptSha256": "e38fc19ca8d824fb4ae913f1bd6c166f7b9bb5e4ab9a244bde686b6e9bc05f8d",
+    "transportLoss": {
+      "receipt": "cancellation-evidence/transport-native-da15-o23.json",
+      "sha256": "7baf975a4e2eb93bcd598a8d0f7667695193058ae4e8012f135201ab65881f27",
+      "heldBytes": 170,
+      "forwardedResponseBytes": 0,
+      "commitObservedBeforeSocketClose": true,
+      "actualQueryRejected": true,
+      "noAutomaticResend": true,
+      "actualHTTP": "NOT_RUN"
+    }
   },
   "protectedPrerequisiteDiagnosis": {
     "source": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
@@ -443,5 +509,10 @@
     "concreteUnfulfilledSourcePrerequisite": "single readonly exact subject ref absent while graph-bound requirements/architecture refs present",
     "action": "independent authorized exact-subject review needed through existing process after code freeze; maker must not self-create/force refs or alter pins",
     "platformFailureClaim": false
+  },
+  "cancellationCIFollowup": {
+    "path": "cancellation-evidence/ci-followup-f7-red.json",
+    "sha256": "5d07d99ecec08307062dcb13c5a53e5d7a8ba9f2ed30f0b3d334f01c16428ad2",
+    "appendOnly": true
   }
 }

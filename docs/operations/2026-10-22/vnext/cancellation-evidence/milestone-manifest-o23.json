@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "vnext-cancellation-milestone-manifest-v1",
+  "sourceSubject": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
+  "at": "2026-10-23T08:00:43.612816+00:00",
+  "files": [
+    {
+      "path": "docs/operations/2026-10-22/vnext/STATUS.md",
+      "bytes": 4518,
+      "sha256": "171e5da08e2be9fa36aa75883d6a0a15645b0415d4153a6b87740b40030da036"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/CURRENT.json",
+      "bytes": 34299,
+      "sha256": "c6cacd791080bf72458b74fa9bc22a8c565ab06eda203dec4e962aea9e9744bb"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/CATALYST-CANCELLATION.md",
+      "bytes": 8709,
+      "sha256": "c476677bc14e537b1db556dbeea8164e6142f2734de4f7bb0f5ad1ae9d477ccf"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/VN-EXECUTION-MAP.md",
+      "bytes": 7475,
+      "sha256": "9e923bfcdf546feb21416955504c11f2b3d77ccdbbc7314c3557f31d43d4eaee"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/ci-followup-f7-red.json",
+      "bytes": 9398,
+      "sha256": "5d07d99ecec08307062dcb13c5a53e5d7a8ba9f2ed30f0b3d334f01c16428ad2"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/ci-followup-native-o23.json",
+      "bytes": 4165,
+      "sha256": "f6757d452d21546d10dfcab80107c3298875ba6c964b040e19004d29fe95d6cf"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/runtime-bindings-o23.json",
+      "bytes": 2771,
+      "sha256": "dc03fcebdb8121725f07d5f910fc8ab2ccb90987efe943e7a15e5e616cf8ff32"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/native-followup-private-inventory-o23.json",
+      "bytes": 2451,
+      "sha256": "5416bdf7656465d4072929e327f338a0441e6415409e8e1fc55de3264b1eda04"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/native-followup-receipt-o23.json",
+      "bytes": 1237,
+      "sha256": "e38fc19ca8d824fb4ae913f1bd6c166f7b9bb5e4ab9a244bde686b6e9bc05f8d"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/transport-gap-977-o23.json",
+      "bytes": 4868,
+      "sha256": "9695ed34e0ceaeb0bffc83544fc6625737bf7fa9b3d6445f6c9f104231092b42"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/cancellation-evidence/transport-native-da15-o23.json",
+      "bytes": 4828,
+      "sha256": "7baf975a4e2eb93bcd598a8d0f7667695193058ae4e8012f135201ab65881f27"
+    }
+  ],
+  "count": 11,
+  "logicalBytes": 84719,
+  "sourceScope": "explicit docs/evidence only; business criteria product edits remain unsealed WIP",
+  "privateRawContentsPublished": false,
+  "independentApproval": false,
+  "fullGoal": "INCOMPLETE"
+}

@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "cancellation-transport-gap-v1",
+  "at": "2026-10-23T07:57:21.938668+00:00",
+  "exactSubject": "97735207344190fb1113b1632ce4c1f5ca716963",
+  "run": 39920450723,
+  "job": 120304136015,
+  "observed": {
+    "Cancellation private inventory": {
+      "count": 31,
+      "bytes": 49337341,
+      "inventorySha256": "2659a7157ff993f74c86d0515216df633ca05c06cf0aa06e0bc3294f08e8bc75",
+      "rawContentsPublished": false
+    },
+    "Cancellation cleanup receipt": {
+      "pgRunning": false,
+      "pgPid": 0,
+      "pgExit": 0,
+      "shutdownLogObserved": true,
+      "socketAbsence": {
+        ".s.PGSQL.5432": true,
+        ".s.PGSQL.5432.lock": true
+      },
+      "resourceReceiptObserved": true,
+      "ownedProcessCounts": {
+        "absent": 28,
+        "zeroRssZombie": 0,
+        "pidReused": 0,
+        "unsettled": 0
+      },
+      "fullPrivateCleanupSha256": "01e5c04c1314606ecf58bbcd19e2f4539e2f521cb13c4dff4ddcce5fdd92dfea",
+      "dataRetained": true
+    },
+    "Cancellation finite native receipt": {
+      "scope": "actual original-source cancellation/private proof/atomic retained publication+exit; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval",
+      "sourceHead": "7323c2dcf2041ce65251ad27ca591051321d8ab6",
+      "tapSha256": "8cb2e483afc438a701e130a196b0a0cb7719b017d46bcd84b9ae33978a8c0ed5",
+      "actualTapCounts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "resourceObserved": true,
+      "queryEventsPrivateSha256": "d8e2848f4ce3bc47abd757b907025e9807eef50d80dcf8ce10abc9a3c5c098eb",
+      "exit": 0,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledOwnedTreePeakRssBytes": 689754112,
+      "initialFree": {
+        "/home/runner/work/stockinsider/stockinsider": 90992156672,
+        "/tmp": 90992156672
+      },
+      "finalFree": {
+        "/home/runner/work/stockinsider/stockinsider": 90900807680,
+        "/tmp": 90900807680
+      },
+      "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+      "actualPg": {
+        "containerId": "afc422d30986f6eb611fc5d40c76d30eadd79b7970b78ab5e66c164072f30138",
+        "pid": 2535,
+        "start": "4945",
+        "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+        "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+        "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed"
+      },
+      "inputCount": 13,
+      "inputInventorySha256": "0dcabcf7706950fbcc7a0d051dc7b00e117c543307feb31d6d5292066d009aa2",
+      "inputInventoryCodec": "utf8_sorted_keys_compact_json_v1"
+    }
+  },
+  "missingRequiredNotice": "Cancellation real response loss",
+  "acceptance": "actual7PASS retained; NOT accepted native transport-loss proof because outer test did not require successful held-protocol witness",
+  "sourceFixSubject": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
+  "sourceFix": "finite successful extended protocol sequence12TDCZ and mandatory full hold/COMMIT/query rejection/socket/backend receipts; guard not weakened",
+  "actualNewAcceptance": "PENDING",
+  "localPureFrames": {
+    "tests": 6,
+    "pass": 6,
+    "fail": 0,
+    "scope": "synthetic source only, no sockets"
+  },
+  "rawFiles": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/ci9773520-cancellation-annotations-o23.json",
+      "bytes": 6348,
+      "sha256": "7b60ed438003cb9ad0f18d281ae385990c348786b19f40b2e306df02da3724e0"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-response-loss-frames-source-02.tap",
+      "bytes": 1434,
+      "sha256": "34204f18d5b57d4a501fda7709e7bdea2e6d7685bf722269794c194f7639d776"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-loss-before-mandatory-witness-01/discovery.json",
+      "bytes": 740,
+      "sha256": "866d47e32307ebcdba9c0a911827e1f12fa8814a5fb1a5ef17c4d496df99aa92"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-loss-before-mandatory-witness-01/vnext-catalyst-cancellation-postgres.test.mjs",
+      "bytes": 30233,
+      "sha256": "a6f1e725ee393bb1683ecaa2fb0d632502e0d637ceb28355ed44fcb1671488e9"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-loss-before-mandatory-witness-01/vnext-cancellation-response-loss.test.mjs",
+      "bytes": 2636,
+      "sha256": "f5faafac2aca158dd990c1dbeffc3d45a0346834a5c81b1d36646423542ba72a"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/cancellation-loss-before-mandatory-witness-01/vnext-cancellation-response-loss.mjs",
+      "bytes": 7542,
+      "sha256": "66f228f8c9de17d41539b11056c782fb32599ee57e17e265dc9ef285227a82de"
+    }
+  ]
+}
