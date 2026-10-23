@@ -27,3 +27,8 @@ The observed strict clock assertion compared1792754180000 versus1792754180147. I
 ## Pending
 
 New installer/current operator RPC/HTTP assertions require actual fresh PG execution. Routine positive new-job enqueue, a true material forecast update through distinct author/reviewer/publication, annual/forward4Q fiscal/share authority, expiry/race/legacy/caps and the complete combined bundle remain unaccepted. Source/model/role/isolated-DB bindings are absent: real acquisition/model/semantic/Contabo NOT_RUN. Protected independent review remains unclosed. PR384 remains draft, no merge/deploy/production migration/schedule operation.
+
+
+## First active-slice prefix RED
+
+Source1d9ed784f4bb105212e3bbb0916d4796fd18c977 ordinary39945971089/job120388595556 FAILED in cached HTTP current-receipt acceptance, before new forecast-native setup (forecast inventory0files; actual new forecast TAP NOT_REACHED). No finite inner diagnostic was emitted; its exclusive actual inner cause is NOT_OBSERVED. Source inspection independently establishes that the new cached fixture sequence omitted the unchanged original preparation-read migration. Trading-invalidity requires its exact successor63f40aa176395df6a06dc7a50875e251f90714545fd20670b2e34eb39438f016; that body is the source-derived preparation profile successor. The next source adds only that original prerequisite in the correct order and a bounded candidate-install code/hash diagnostic. No migration/profile/hash/expectation is edited. The full original failure and pre-fix source remain private/history; a new-input normal run is needed, not rerun of the failed subject.
