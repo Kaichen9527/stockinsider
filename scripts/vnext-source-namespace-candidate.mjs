@@ -19,6 +19,29 @@ export const SOURCE_NAMESPACE_GRANT='GRANT USAGE ON SCHEMA public TO research_so
 export const SOURCE_SCOPE_SQL="SELECT jsonb_build_object('tables',(SELECT jsonb_agg(relname ORDER BY relname) FROM pg_class WHERE relnamespace='public'::regnamespace),'functions',(SELECT jsonb_agg(DISTINCT proname ORDER BY proname) FROM pg_proc WHERE pronamespace='public'::regnamespace),'types',(SELECT jsonb_agg(typname ORDER BY typname) FROM pg_type WHERE typnamespace='public'::regnamespace),'roles',(SELECT jsonb_agg(rolname ORDER BY rolname) FROM pg_roles WHERE rolname !~ '^pg_')) AS scope";
 const clone=value=>JSON.parse(JSON.stringify(value));
 const same=(a,b)=>assert.equal(canonicalTailMetadata(a),canonicalTailMetadata(b),'vnext_source_namespace_unexpected_delta');
+/** Empty simple Query -> actual backend ReadyForQuery I/T/E. An empty Query
+ * does not COMMIT/ROLLBACK the caller's transaction, even when it is aborted.
+ * Driver queue checks supplement, never replace, the actual protocol status.
+ * Pinned pg8.18 internals are intentional: unknown driver state fails closed. */
+export async function assertSourceNamespaceIdleClient(client){
+ assert.ok(client&&client._connected===true&&client._queryable===true&&client._ending===false&&client._ended===false&&client.readyForQuery===true&&typeof client._getActiveQuery==='function'&&client._getActiveQuery()===null&&Array.isArray(client._queryQueue)&&client._queryQueue.length===0,'vnext_source_namespace_exclusive_client');
+ let onReady,onError,onEnd,rejectReady;
+ const ready=new Promise((resolve,reject)=>{
+  rejectReady=reject;
+  onReady=message=>resolve(message.status);onError=reject;onEnd=()=>reject(Error('vnext_source_namespace_connection_ended'));
+  client.connection.once('readyForQuery',onReady);client.once('error',onError);client.once('end',onEnd);
+ });
+ try{
+  const query=client.query('');query.catch(rejectReady);
+  const [queried,protocol]=await Promise.allSettled([query,ready]);
+  if(queried.status==='rejected')throw queried.reason;
+  if(protocol.status==='rejected')throw protocol.reason;
+  const result=queried.value,status=protocol.value;
+  assert.equal(result.command,null,'vnext_source_namespace_empty_query');
+  if(status!=='I'){const error=Error('vnext_source_namespace_existing_transaction');error.transactionStatus=status;throw error;}
+  return {actualProtocolStatus:status,emptyQueryObserved:true};
+ }finally{client.connection.removeListener('readyForQuery',onReady);client.removeListener('error',onError);client.removeListener('end',onEnd);}
+}
 // Extra actual OID/default/role-setting inventory is compared within the same
 // transaction. Stable-name profiles above are never passed off as actual OIDs.
 const rawSql=`SELECT jsonb_build_object(
@@ -82,9 +105,28 @@ export async function inspectSourceNamespaceCandidate(client){
  const before=await read(client),post=deriveSourceNamespacePost(before,(await client.query(aclSql)).rows[0].acl);
  return {before,derivedPost:post,profile:SOURCE_NAMESPACE_PROFILE,grant:SOURCE_NAMESPACE_GRANT,applied:false};
 }
+/** Direct existing privileges only. This is an inspection list, not authority
+ * or a proof of transitive SECURITY DEFINER safety. No SQL bodies/row values. */
+export function sourceNamespaceReachability(before){
+ for(const [part,key] of [['scope','scopeHash'],['namespace','namespaceHash'],['catalog','catalogHash']])assert.equal(tailMetadataSha(before[part]),SOURCE_NAMESPACE_PROFILE[key],'vnext_source_namespace_reachability_predecessor');
+ return projectSourceNamespaceReachability(before.catalog);
+}
+export function projectSourceNamespaceReachability(catalog){
+ const target=SOURCE_NAMESPACE_PROFILE.target,role=catalog.roles.find(r=>r.name===target),schema=catalog.schemas.find(s=>s.name==='public');
+ const digest=value=>value===null?null:tailMetadataSha(value);
+ const tables=catalog.tables.flatMap(table=>{
+  const effective=[...table.effectiveAcl,...table.effectiveOtherAcl].filter(row=>row[0]===target&&row.slice(2).some(value=>value===true));
+  return effective.length?[{name:table.name,owner:table.owner,rls:table.rls,forceRls:table.forceRls,ownerRlsBypass:table.owner===target&&!table.forceRls,effective,grantSources:table.acl.filter(row=>row[1]===target||row[1]==='PUBLIC'),columnGrants:table.columns.filter(c=>c.acl.some(row=>row[1]===target||row[1]==='PUBLIC')).map(c=>({name:c.name,acl:c.acl.filter(row=>row[1]===target||row[1]==='PUBLIC')})),policies:table.policies.map(p=>({name:p.name,command:p.command,permissive:p.permissive,roles:p.roles,usingSha256:digest(p.using),checkSha256:digest(p.check)}))}]:[];
+ });
+ const routines=catalog.functions.filter(fn=>fn.effectiveAcl.some(row=>row[0]===target&&row[1]===true)).map(fn=>({signature:fn.signature,owner:fn.owner,securityDefiner:fn.securityDefiner,definitionSha256:fn.definitionSha256,grantSources:fn.acl.filter(row=>row[1]===target||row[1]==='PUBLIC'),configSha256:digest(fn.config),searchPath:(fn.config||[]).filter(value=>value.startsWith('search_path='))}));
+ return {schema:'vnext-source-namespace-direct-reachability-v1',target,role:{name:role.name,login:role.login,inherit:role.inherit,super:role.super,createRole:role.createRole,createDb:role.createDb,replication:role.replication,bypassRls:role.bypassRls,membership:role.membership,configSha256:digest(role.config)},publicSchema:{owner:schema.owner,currentEffective:schema.effectiveAcl.filter(row=>row[0]===target),proposedUsageOnly:true},tables,routines,directOnly:true,transitiveDefinerBodyReview:'REQUIRED_NOT_APPROVED',rowsOrBodiesPublished:false,grantExecuted:false};
+}
 /** SOURCE ONLY until independent review; deliberately not imported by any test
  * entry, worker, route, migration runner or workflow. Fresh LOCAL caller only. */
 export async function applySourceNamespaceEngineeringCandidate(client){
+ // Reject pre-existing T/E/unknown before the try/finally that owns any lock
+ // or transaction. Do not roll back, commit, unlock or close caller's work.
+ await assertSourceNamespaceIdleClient(client);
  let locked=false,open=false,primary;
  try{
   assert.equal((await client.query("SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked")).rows[0].locked,true,'vnext_source_namespace_busy');locked=true;

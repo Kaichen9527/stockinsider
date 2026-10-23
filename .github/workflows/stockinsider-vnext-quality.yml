@@ -58,6 +58,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/analysis-sources.test.ts | tee /tmp/stockinsider-vnext-ci/analysis-source.tap
           node --experimental-strip-types web/src/lib/vnext/source-backlog.test.ts | tee /tmp/stockinsider-vnext-ci/source-backlog.tap
           node --experimental-strip-types scripts/vnext-source-window-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-window-source.tap
+          node scripts/vnext-source-namespace-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-namespace-source.tap
           node --experimental-strip-types web/src/lib/vnext/twse-snapshot.test.ts | tee /tmp/stockinsider-vnext-ci/twse-snapshot-source.tap
           node --experimental-strip-types web/src/lib/vnext/thesis.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-source.tap
           node --experimental-strip-types web/src/lib/vnext/thesis-semantic-authority.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-semantic-authority-source.tap
@@ -322,6 +323,11 @@ jobs:
                   prerequisites.append(item)
           receipt=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/routine-http-receipt.json')
           safe={'actualTapCounts':counts,'tapSha256':hashlib.sha256(source.read_bytes()).hexdigest(),'failures':failures,'receiptObserved':receipt.exists(),'sourceScope':'hosted actual HTTP/PG, synthetic originals only','sourcePrerequisites':prerequisites}
+          for line in text.splitlines():
+              if line.startswith('VNEXT_SOURCE_REACHABILITY_SAFE '):
+                  item=json.loads(line.removeprefix('VNEXT_SOURCE_REACHABILITY_SAFE '))
+                  if set(item)!={'schema','target','role','publicSchema','tables','routines','directOnly','transitiveDefinerBodyReview','rowsOrBodiesPublished','grantExecuted'} or item['grantExecuted'] is not False or item['rowsOrBodiesPublished'] is not False or item['target']!='research_source_fence_owner_v2': raise SystemExit('closed safe direct-rights inventory required')
+                  safe['sourceNamespaceDirectReachability']=item
           if receipt.exists():
               data=json.loads(receipt.read_text());safe.update({k:data.get(k) for k in ['sourceCommit','results','pendingQueries','appExit','appPidAbsent','clientsSettled','unexpectedExternalFetchObserved']})
           terminal=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/retry-terminal-receipt.json')

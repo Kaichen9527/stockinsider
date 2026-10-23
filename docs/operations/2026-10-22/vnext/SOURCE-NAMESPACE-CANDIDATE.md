@@ -39,7 +39,8 @@ proposed.
 
 `scripts/vnext-source-namespace-candidate.mjs` has no CLI/network/connection or
 production runner. Its engineering-only apply function is exported for review
-but no worker, test entry, workflow or migration installer imports it. The only
+but no worker, test entry, workflow or migration installer calls the apply function.
+The test entry imports only a pure read-only reachability projector. The only
 permission statement is:
 
 ```sql
@@ -87,3 +88,40 @@ extra privilege/member/drift rejection and frozen entry/source boundaries only.
 No local PG/container/build/browser/grant was run. Original floor8GiB plus
 workset/RSS limits remain; formal source/model/semantic/Contabo, remaining
 28day/fiscal/share/rebase/matrices/protected gates and full release are open.
+
+## Transaction-state and reachability followup — native still pending review
+
+Before the installer lock/BEGIN/try-finally can own anything, the apply entry
+checks the pinned pg8.18 driver's actual exclusive idle queue and sends an empty
+simple Query. Its backend ReadyForQuery must be I; T/E/unknown rejects before
+any lock, BEGIN, GRANT, COMMIT, ROLLBACK or client close. Empty Query does not
+commit/rollback caller work. Query/end/error listeners settle and are removed;
+original transport error identity is retained. Driver booleans alone are not
+transaction proof; the backend status is required. The unchanged source profile
+is still required after this check. The apply function is not wired/called.
+
+Original-VM synthetic protocol contracts cover T/E/unknown, real-status-I shaped
+response, active/queued/disconnected state and original transport error. They
+are source-only, NOT actual PostgreSQL negatives. After independent review and
+before any apply wiring, a fresh isolated native guard proof must show caller
+uncommitted marker/transaction T and aborted E remain uncommitted/unmodified,
+no GRANT/COMMIT/unlock/client-close, and the same primary error/rollback-unlock
+uncertainty. No new current native approval is claimed.
+
+The current mandatory raw-source case only builds a direct reachability list
+from the exact actual-pinned readonly catalog: fixed target role and public
+schema, existing table/column/PUBLIC grants, RLS/forceRLS/owner bypass, policy
+expression hashes, every currently EXECUTE-accessible public routine (including
+PUBLIC EXECUTE) with owner/SECURITY DEFINER/definition hash/search path. No row,
+body, unknown config value or principal record is published. Only the finite
+safe list is emitted for review. This reporter executes no apply/grant and
+cannot declare permission approval. It explicitly labels direct-only scope:
+transitive/dynamic SECURITY DEFINER bodies, existing type/operator/trigger paths
+and complete source-owner reachability still require independent review using
+the pinned definitions. It does not infer safety from three hashes alone.
+
+The safe list must be actually produced by the new source run before being
+claimed observed; until then it is NOT_RUN. Unknown predecessor still refuses.
+The historical d2bca five-source-contract candidate/ccc native7tests5PASS2FAIL
+remain separate. The new9focused source contracts include projection plus
+transaction-state and no-secret direct-report tests; counts are not added.
