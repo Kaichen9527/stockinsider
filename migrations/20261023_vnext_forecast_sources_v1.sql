@@ -67,13 +67,14 @@ ALTER FUNCTION public.vnext_forecast_rights_guard_v1() OWNER TO opportunity_v3_r
 REVOKE ALL ON FUNCTION public.vnext_forecast_rights_guard_v1() FROM PUBLIC,anon,authenticated,service_role;
 CREATE TRIGGER vnext_forecast_rights_append_only BEFORE INSERT OR UPDATE OR DELETE ON public.vnext_forecast_rights_v1 FOR EACH ROW EXECUTE FUNCTION public.vnext_forecast_rights_guard_v1();
 CREATE TRIGGER vnext_writer_fence BEFORE INSERT OR UPDATE OR DELETE ON public.vnext_forecast_rights_v1 FOR EACH ROW EXECUTE FUNCTION public.enforce_production_writer_fence();
-CREATE FUNCTION public.vnext_forecast_current_internal_v1(p_stock uuid,p_cutoff timestamptz) RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET statement_timeout='30s' SET lock_timeout='2s' AS $reader$
+CREATE FUNCTION public.vnext_forecast_current_internal_v1(p_stock uuid,p_symbol text,p_cutoff timestamptz) RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET statement_timeout='30s' SET lock_timeout='2s' AS $reader$
 DECLARE symbol_value text;fact record;verification public.source_publication_verifications_v3;revision public.source_document_revisions_v3;publisher public.publisher_verification_authorities_v3;identity_row public.source_identity_authorities_v3;policy public.vnext_forecast_rights_v1;manifest public.opportunity_manifests_v3;
  evidence jsonb:='[]'::jsonb;receipts jsonb:='[]'::jsonb;gaps jsonb:='[]'::jsonb;item jsonb;receipt jsonb;url text;term text;start_day date;end_day date;latest_time timestamptz;known_at timestamptz;observed_at timestamptz:=statement_timestamp();amount integer:=0;
 BEGIN
  IF p_stock IS NULL OR p_cutoff IS NULL OR NOT isfinite(p_cutoff) OR p_cutoff>observed_at THEN RAISE EXCEPTION 'vnext_forecast_scope';END IF;
- SELECT symbol INTO symbol_value FROM public.stocks WHERE id=p_stock AND market='TW';
- IF symbol_value IS NULL OR symbol_value !~ '^[0-9]{4}$' THEN RAISE EXCEPTION 'vnext_forecast_issuer';END IF;
+ -- Only the stock-owning private composition may supply this closed identity.
+ -- The source owner receives no SELECT grant on stocks.
+ symbol_value:=p_symbol;IF symbol_value IS NULL OR symbol_value !~ '^[0-9]{4}$' THEN RAISE EXCEPTION 'vnext_forecast_issuer';END IF;
  FOR fact IN SELECT f.* FROM public.opportunity_financial_facts_v3 f WHERE f.stock_id=p_stock AND f.estimate_kind IN('analyst_estimate','broker_consensus') AND f.recorded_at<=p_cutoff AND f.filing_published_at<=p_cutoff AND f.source_timestamp<=p_cutoff AND f.collected_at<=p_cutoff ORDER BY f.recorded_at DESC,f.fact_id LIMIT 201 LOOP
   amount:=amount+1;IF amount>200 THEN RAISE EXCEPTION 'vnext_forecast_fact_bound';END IF;
   -- Unknown periods/bases are not normalized to annual EPS, forward4Q or NTM.
@@ -113,18 +114,18 @@ BEGIN
  END LOOP;
  RETURN jsonb_build_object('schemaVersion','vnext-current-forecasts-v1','stockId',p_stock,'symbol',symbol_value,'asOf',p_cutoff,'evidence',evidence,'receipts',receipts,'gaps',(SELECT coalesce(jsonb_agg(DISTINCT value),'[]'::jsonb) FROM jsonb_array_elements(gaps||'["forecast_annual_and_four_quarter_share_basis_unavailable"]'::jsonb)));
 END $reader$;
-ALTER FUNCTION public.vnext_forecast_current_internal_v1(uuid,timestamptz) OWNER TO opportunity_v3_rpc_owner;
-REVOKE ALL ON FUNCTION public.vnext_forecast_current_internal_v1(uuid,timestamptz) FROM PUBLIC,anon,authenticated,service_role;
-GRANT EXECUTE ON FUNCTION public.vnext_forecast_current_internal_v1(uuid,timestamptz) TO stockinsider_vnext_owner;
+ALTER FUNCTION public.vnext_forecast_current_internal_v1(uuid,text,timestamptz) OWNER TO opportunity_v3_rpc_owner;
+REVOKE ALL ON FUNCTION public.vnext_forecast_current_internal_v1(uuid,text,timestamptz) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.vnext_forecast_current_internal_v1(uuid,text,timestamptz) TO stockinsider_vnext_owner;
 CREATE FUNCTION public.vnext_forecast_evidence_current_internal_v1(item jsonb,p_symbol text) RETURNS boolean LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET statement_timeout='30s' SET lock_timeout='2s' AS $check$
 DECLARE stock uuid; projection jsonb;
 BEGIN
  IF coalesce(item->>'id','') !~ '^forecast:[a-f0-9-]{36}:[a-f0-9-]{36}$' OR p_symbol !~ '^[0-9]{4}$' THEN RETURN false;END IF;
  SELECT id INTO stock FROM public.stocks WHERE symbol=p_symbol AND market='TW';IF stock IS NULL THEN RETURN false;END IF;
- projection:=public.vnext_forecast_current_internal_v1(stock,statement_timestamp());
+ projection:=public.vnext_forecast_current_internal_v1(stock,p_symbol,statement_timestamp());
  RETURN EXISTS(SELECT FROM jsonb_array_elements(projection->'evidence') current_item WHERE current_item=item);
 END $check$;
-ALTER FUNCTION public.vnext_forecast_evidence_current_internal_v1(jsonb,text) OWNER TO opportunity_v3_rpc_owner;
+ALTER FUNCTION public.vnext_forecast_evidence_current_internal_v1(jsonb,text) OWNER TO stockinsider_vnext_owner;
 REVOKE ALL ON FUNCTION public.vnext_forecast_evidence_current_internal_v1(jsonb,text) FROM PUBLIC,anon,authenticated,service_role;
 GRANT EXECUTE ON FUNCTION public.vnext_forecast_evidence_current_internal_v1(jsonb,text) TO stockinsider_vnext_owner;
 CREATE FUNCTION public.vnext_forecast_read_v1(p_principal text,p_job uuid,p_execution uuid) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public SET statement_timeout='30s' SET lock_timeout='2s' AS $public_reader$
@@ -137,7 +138,7 @@ BEGIN
  SELECT * INTO job FROM public.vnext_jobs_v1 WHERE job_id=p_job;
  IF job.state IS DISTINCT FROM 'running' OR job.execution_id IS DISTINCT FROM p_execution OR job.author_principal IS DISTINCT FROM p_principal OR job.deadline_at<=clock_timestamp() OR context->>'inputHash' IS DISTINCT FROM job.input_hash THEN RAISE EXCEPTION 'vnext_forecast_active_execution_required';END IF;
  SELECT id INTO stock FROM public.stocks WHERE symbol=job.symbol AND market='TW';
- RETURN public.vnext_forecast_current_internal_v1(stock,statement_timestamp());
+ RETURN public.vnext_forecast_current_internal_v1(stock,job.symbol,statement_timestamp());
 END $public_reader$;
 ALTER FUNCTION public.vnext_forecast_read_v1(text,uuid,uuid) OWNER TO stockinsider_vnext_owner;
 REVOKE ALL ON FUNCTION public.vnext_forecast_read_v1(text,uuid,uuid) FROM PUBLIC,anon,authenticated;
@@ -159,11 +160,11 @@ BEGIN
  cutoff:=(input->>'forecastSourceAsOf')::timestamptz;
  IF NOT isfinite(cutoff) OR cutoff>statement_timestamp() OR cutoff>(input->>'cutoff')::timestamptz THEN RETURN false;END IF;
  SELECT id INTO stock FROM public.stocks WHERE symbol=p_symbol AND market='TW';IF stock IS NULL THEN RETURN false;END IF;
- projection:=public.vnext_forecast_current_internal_v1(stock,cutoff);
+ projection:=public.vnext_forecast_current_internal_v1(stock,p_symbol,cutoff);
  SELECT coalesce(jsonb_agg(value ORDER BY ordinal),'[]'::jsonb) INTO frozen_items FROM jsonb_array_elements(input->'evidence') WITH ORDINALITY item(value,ordinal) WHERE left(value->>'id',9)='forecast:';
  RETURN frozen_items=projection->'evidence' AND input->'forecastSourceReceipts'=projection->'receipts';
 END $input_check$;
-ALTER FUNCTION public.vnext_forecast_input_current_internal_v1(jsonb,text) OWNER TO opportunity_v3_rpc_owner;
+ALTER FUNCTION public.vnext_forecast_input_current_internal_v1(jsonb,text) OWNER TO stockinsider_vnext_owner;
 REVOKE ALL ON FUNCTION public.vnext_forecast_input_current_internal_v1(jsonb,text) FROM PUBLIC,anon,authenticated,service_role;
 GRANT EXECUTE ON FUNCTION public.vnext_forecast_input_current_internal_v1(jsonb,text) TO stockinsider_vnext_owner;
 DO $input_patch$
@@ -229,10 +230,10 @@ BEGIN
  IF (SELECT count(*) FROM pg_proc p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE p.oid=codec)<>2 OR EXISTS(SELECT FROM pg_proc p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE p.oid=codec AND (a.grantee NOT IN(stock_owner,owner_oid) OR a.grantor<>stock_owner OR a.privilege_type<>'EXECUTE' OR a.is_grantable)) THEN RAISE EXCEPTION 'vnext_forecast_codec_acl_changed';END IF;
  IF EXISTS(SELECT FROM pg_proc p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE p.pronamespace='public'::regnamespace AND p.proname IN('vnext_forecast_rights_guard_v1','vnext_forecast_current_internal_v1','vnext_forecast_evidence_current_internal_v1','vnext_forecast_input_current_internal_v1','vnext_forecast_read_v1') AND (a.grantee NOT IN(p.proowner,CASE WHEN p.proname='vnext_forecast_read_v1' THEN 'service_role'::regrole::oid ELSE stock_owner END) OR a.grantor<>p.proowner OR a.privilege_type<>'EXECUTE' OR a.is_grantable)) THEN RAISE EXCEPTION 'vnext_forecast_routine_acl';END IF;
  IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_forecast_rights_guard_v1()'::regprocedure AND pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef=false AND provolatile='v' AND proconfig=ARRAY['search_path=pg_catalog, public'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='6d90196a6ccaf0fdbc296ad196ae8c2525a7cd9febc504a5431d8d3322f4e414') THEN RAISE EXCEPTION 'vnext_forecast_new_routine_profile';END IF;
- IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_forecast_current_internal_v1(uuid,timestamp with time zone)'::regprocedure AND pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef=true AND provolatile='s' AND proconfig=ARRAY['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='9eba1d26cd9b865f88894b2cbd0c101912f94dddac0c14f7d92b39d47d7e0541') THEN RAISE EXCEPTION 'vnext_forecast_new_routine_profile';END IF;
- IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_forecast_evidence_current_internal_v1(jsonb,text)'::regprocedure AND pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef=true AND provolatile='s' AND proconfig=ARRAY['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='bbdaebc1b249fa99ee81ad209620f3f60669de03263a2e3f1b5a44c0e2f43a94') THEN RAISE EXCEPTION 'vnext_forecast_new_routine_profile';END IF;
- IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_forecast_read_v1(text,uuid,uuid)'::regprocedure AND pg_get_userbyid(proowner)='stockinsider_vnext_owner' AND prosecdef=true AND provolatile='v' AND proconfig=ARRAY['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='03d613896825a250df78a22550fb046518a0de4ed1c97cf460b44ff69d030c02') THEN RAISE EXCEPTION 'vnext_forecast_new_routine_profile';END IF;
- IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_forecast_input_current_internal_v1(jsonb,text)'::regprocedure AND pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef=true AND provolatile='s' AND proconfig=ARRAY['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='9ba62ccf378723865f285e5865375ea7a7f13cfbea9f3f732f1ed1277b29a84d') THEN RAISE EXCEPTION 'vnext_forecast_new_routine_profile';END IF;
+ IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_forecast_current_internal_v1(uuid,text,timestamp with time zone)'::regprocedure AND pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef=true AND provolatile='s' AND proconfig=ARRAY['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='507f6e7ffb24af6cc6a4dbd34090b79065ae566fdb3831b9a0fa3e0588268016') THEN RAISE EXCEPTION 'vnext_forecast_new_routine_profile';END IF;
+ IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_forecast_evidence_current_internal_v1(jsonb,text)'::regprocedure AND pg_get_userbyid(proowner)='stockinsider_vnext_owner' AND prosecdef=true AND provolatile='s' AND proconfig=ARRAY['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='ea56374732dbbd7ddc191b935550ff93a9a5bc30da9f878812d91019d06d8dac') THEN RAISE EXCEPTION 'vnext_forecast_new_routine_profile';END IF;
+ IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_forecast_read_v1(text,uuid,uuid)'::regprocedure AND pg_get_userbyid(proowner)='stockinsider_vnext_owner' AND prosecdef=true AND provolatile='v' AND proconfig=ARRAY['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='8fb85bec6e37309f030495d223b51c00e9105a221df07a8025c61f9418b282be') THEN RAISE EXCEPTION 'vnext_forecast_new_routine_profile';END IF;
+ IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_forecast_input_current_internal_v1(jsonb,text)'::regprocedure AND pg_get_userbyid(proowner)='stockinsider_vnext_owner' AND prosecdef=true AND provolatile='s' AND proconfig=ARRAY['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='5d183e682d372658b061f055b597b7fb5d15c2946ad2b02e4d9c75131ed0d4d0') THEN RAISE EXCEPTION 'vnext_forecast_new_routine_profile';END IF;
  IF (SELECT encode(sha256(convert_to(prosrc,'UTF8')),'hex') FROM pg_proc WHERE oid='public.vnext_source_evidence_current_v1(jsonb,text)'::regprocedure) IS DISTINCT FROM '440d0dcee04334f57a2ee9e8fdc920b09d3329d3c3c26e859c7a19e9789c292b' THEN RAISE EXCEPTION 'vnext_forecast_successor_body';END IF;
  IF (SELECT encode(sha256(convert_to(prosrc,'UTF8')),'hex') FROM pg_proc WHERE oid='public.vnext_input_sources_current_v1(jsonb,text)'::regprocedure) IS DISTINCT FROM 'ce58e3b7f1a98fcac4dbcb537ba4336e7bbb3c9c7247e1354d6a07bf2bcc8008' THEN RAISE EXCEPTION 'vnext_forecast_successor_body';END IF;
 END $post$;

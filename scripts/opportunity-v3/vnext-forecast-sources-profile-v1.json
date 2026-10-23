@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-forecast-sources-source-profile-v1",
   "migration": "migrations/20261023_vnext_forecast_sources_v1.sql",
-  "migrationSha256": "cafe05887a3073fb9db3463bc0c8a6fcb23133b13ab18b5d36a3a3c0a1633209",
+  "migrationSha256": "1343f0090854297c218de066d00fb0af29d930f0fdbca86ef26aefa8a569c80f",
   "nativeVerified": false,
   "nativeOids": null,
   "oldSourcesUnchanged": true,
@@ -31,30 +31,31 @@
     },
     {
       "name": "vnext_forecast_current_internal_v1",
-      "signature": "public.vnext_forecast_current_internal_v1(uuid,timestamp with time zone)",
-      "bodySha256": "9eba1d26cd9b865f88894b2cbd0c101912f94dddac0c14f7d92b39d47d7e0541",
-      "bytes": 12642
+      "signature": "public.vnext_forecast_current_internal_v1(uuid,text,timestamp with time zone)",
+      "bodySha256": "507f6e7ffb24af6cc6a4dbd34090b79065ae566fdb3831b9a0fa3e0588268016",
+      "bytes": 12715
     },
     {
       "name": "vnext_forecast_evidence_current_internal_v1",
       "signature": "public.vnext_forecast_evidence_current_internal_v1(jsonb,text)",
-      "bodySha256": "bbdaebc1b249fa99ee81ad209620f3f60669de03263a2e3f1b5a44c0e2f43a94",
-      "bytes": 494
+      "bodySha256": "ea56374732dbbd7ddc191b935550ff93a9a5bc30da9f878812d91019d06d8dac",
+      "bytes": 503
     },
     {
       "name": "vnext_forecast_read_v1",
       "signature": "public.vnext_forecast_read_v1(text,uuid,uuid)",
-      "bodySha256": "03d613896825a250df78a22550fb046518a0de4ed1c97cf460b44ff69d030c02",
-      "bytes": 1087
+      "bodySha256": "8fb85bec6e37309f030495d223b51c00e9105a221df07a8025c61f9418b282be",
+      "bytes": 1098
     },
     {
       "name": "vnext_forecast_input_current_internal_v1",
       "signature": "public.vnext_forecast_input_current_internal_v1(jsonb,text)",
-      "bodySha256": "9ba62ccf378723865f285e5865375ea7a7f13cfbea9f3f732f1ed1277b29a84d",
-      "bytes": 1317
+      "bodySha256": "5d183e682d372658b061f055b597b7fb5d15c2946ad2b02e4d9c75131ed0d4d0",
+      "bytes": 1326
     }
   ],
   "privilegeDelta": "one existing pure canonical codec EXECUTE to opportunity_v3_rpc_owner; new private helpers EXECUTE only stockinsider_vnext_owner, new job-scoped reader EXECUTE service_role",
   "scope": "quarterly diluted EPS estimates/raw period only and original 12month price target; never annual/forward4Q/NTM or investment fair value",
-  "predecessorAssembly": "captured50/pub26 + existing vNext prefix through 20261023_vnext_roster_current_fence_v1; not pre-roster IR-only"
+  "predecessorAssembly": "captured50/pub26 + existing vNext prefix through 20261023_vnext_roster_current_fence_v1; not pre-roster IR-only",
+  "stockIdentityAuthority": "existing stock-owning private wrappers resolve stockId+symbol, then source-owner reader; no stocks ACL change"
 }

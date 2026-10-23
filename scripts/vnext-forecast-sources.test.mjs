@@ -26,3 +26,8 @@ test('numeric projection preserves original quarter/12month assumptions, never a
  for(const s of ["fact.duration_kind::text='quarterly'","date_trunc('quarter',fact.period_start)","term:='source_quarterly_diluted_eps_estimate'","term:='source_target_price_12m'","'kind','assumption'","'denominatorShares',NULL,'annualEps',NULL,'nextFourQuarterEps',NULL",'forecast_horizon_not_supported','forecast_original_period_or_unit_unavailable'])assert.ok(sql.includes(s));
  const input=/\$input_check\$([\s\S]*?)\$input_check\$/u.exec(sql)[1];assert.ok(input.includes("input->'forecastSourceReceipts'=projection->'receipts'"));assert.ok(input.includes("frozen_items=projection->'evidence'"));assert.ok(input.includes("cutoff>(input->>'cutoff')::timestamptz"));
 });
+test('stock identity stays in the existing stock-owning composition without granting stocks to the source owner',()=>{
+ const source=/\$reader\$([\s\S]*?)\$reader\$/u.exec(sql)[1];assert.ok(!source.includes('FROM public.stocks'));assert.ok(source.includes('symbol_value:=p_symbol'));
+ for(const name of ['vnext_forecast_evidence_current_internal_v1','vnext_forecast_input_current_internal_v1'])assert.ok(sql.includes('ALTER FUNCTION public.'+name+'(jsonb,text) OWNER TO stockinsider_vnext_owner;'));
+ assert.ok(sql.includes('vnext_forecast_current_internal_v1(stock,job.symbol,statement_timestamp())'));assert.ok(sql.includes('vnext_forecast_current_internal_v1(stock,p_symbol,cutoff)'));assert.ok(!/GRANT[^;]*ON(?: TABLE)? public\.stocks/iu.test(sql));
+});
