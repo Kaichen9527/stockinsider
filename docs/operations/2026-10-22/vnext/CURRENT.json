@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL_VM_IMPLEMENTATION_AND_ACCEPTANCE_NOT_RELEASE_COMPLETE",
-  "updatedAt": "2026-10-23T02:24:35.727367+00:00",
+  "updatedAt": "2026-10-23T02:29:35.755208+00:00",
   "runtimeSourceHead": "f9f3a0d0ffa9b50852305ee59f19d48356c2fd13",
   "currentReceiptSha256": "8228d19e2fac75ef6a6dae799dc8e872b66a373df96ef55d374d01000acd014c",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
@@ -151,7 +151,11 @@
     "preceding": "source/type/lint/fullbuild/admission/legacy/worker/source-market/thesis/cache/TWSE allSUCCESS",
     "exactCause": "NOT_OBSERVED: one log and one newartifact request403/0bytes; no bypass/retry",
     "protected": "39888697103 FAILURE separately; no guard/pin changes",
-    "next": "capture-only newharness/workflow annotations; currentproduct bytes unchanged; no prior result transfer"
+    "next": "minimal full-current-member test-array fix; no product or assertion/pin relaxation; natural newheadCI pending",
+    "captureSubject": "fabf9510fbabffe02ff14d2fc459590556172dcc",
+    "captureRun": 39889419786,
+    "captureJob": 120205320036,
+    "captureCause": "actual finite annotation P0001 vnext_weekly_all_current_members_required during second issuer; test-only missing first active report"
   },
   "ciReceiptSha256": "65f25e5c05cbe7eafef834050f105e0818522cf6555018e89f000e01214844a2",
   "previousRuntimeSourceHead": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
@@ -209,7 +213,7 @@
     "actualRetainedInstallerSource": "5d4084ee10ea07e34ef531d2fe4471a714dd7beb",
     "sourceContracts": "10PASS final05; types/lintPASS; source03 affected59PASS separately",
     "actualNative": "4PASS retained installer/private authority/repeat rollback only",
-    "freshLifecycle": "Actual19824 ordinaryCI FAILED in newstep; exact failingstatement unavailable due403. Full raw unavailable; source-only safe finite diagnostic added, pending natural newhead execution.",
+    "freshLifecycle": "New fresh capture stage reaches second issuer actual semantic receipt, then original all-current-weekly guard correctly rejects partial test array. OverallFAIL preserved; corrected full-array input pending natural newheadCI.",
     "independentConfirmation": "NULL when one official root; different reviewer execution is not independent source",
     "defaultPrompt": "v2 unchanged; trusted finite v3 opt-in; binding rows not changed",
     "remaining": "competitive/risk, event cancellation/contra/target, numericforecast and complete28-day source volume; real model/source/semantic/staging/formal research remain unaccepted"

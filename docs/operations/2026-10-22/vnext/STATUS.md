@@ -1,3 +1,5 @@
+Current fresh CI diagnosis: capturefabf951 actual annotation confirms a **test-only** partial weekly report array (`vnext_weekly_all_current_members_required`) for second issuer. New input sends all actual current members; product/guard/score/expected values untouched. Overall REDs preserved, next natural CI pending.
+
 # Current: source-bound catalyst criteria candidate
 
 Read [current delivery](CATALYST-CRITERIA-DELIVERY.md), [bound receipt](catalyst-criteria-evidence/receipt.json), and [VN01–VN20](VN-EXECUTION-MAP.md). Sourcef9f3a0d; retained installer4PASS source5d4084e only. Final10source/type/lint pass; fresh worker/public-score step FAILED in19824 CI after fullbuild/precedingnative stepsPASS; exact raw cause unavailable (newlog/artifact403). Capture-only finite annotations added for newsource diagnosis. One source is not independent confirmation; missing remainsnull. No further cleanup/production changes; PR384 draft and fullgoal incomplete.
