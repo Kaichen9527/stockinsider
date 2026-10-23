@@ -275,6 +275,54 @@ jobs:
           PYCODE
           fi
           test "$test_status" = 0
+      - name: Fresh routine-screen actual HTTP admission and withdrawal (synthetic originals)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-12
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-12
+          VNEXT_LEGACY_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-12
+          VNEXT_HTTP_DATABASE: vnext_worker
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/routine-http
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if python3 scripts/vnext-routine-resource-run.py > /tmp/stockinsider-vnext-ci/routine-http.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/routine-http.tap.private.log /tmp/stockinsider-vnext-ci/routine-http.tap
+          python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          text=source.read_text()
+          counts={k:int(v) for k,v in re.findall(r'^# (tests|pass|fail|cancelled|skipped|todo) (\d+)$',text,re.M)}
+          failures=[]
+          for line in text.splitlines():
+              if line.startswith('VNEXT_ROUTINE_FAILURE_SAFE '):
+                  item=json.loads(line.removeprefix('VNEXT_ROUTINE_FAILURE_SAFE '))
+                  if set(item)!={'stage','code','actual','expected','messageHash','tokens'}: raise SystemExit('closed diagnostic required')
+                  failures.append(item)
+          receipt=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/routine-http-receipt.json')
+          safe={'actualTapCounts':counts,'tapSha256':hashlib.sha256(source.read_bytes()).hexdigest(),'failures':failures,'receiptObserved':receipt.exists(),'sourceScope':'hosted actual HTTP/PG, synthetic originals only'}
+          if receipt.exists():
+              data=json.loads(receipt.read_text());safe.update({k:data.get(k) for k in ['sourceCommit','results','pendingQueries','appExit','appPidAbsent','clientsSettled','unexpectedExternalFetchObserved']})
+          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http-resource/receipt.json')
+          if resource.exists():
+              data=json.loads(resource.read_text());safe['resources']={k:data.get(k) for k in ['exit','initialFree','finalFree','floor','nextWorksetReference','sampledNotInstantaneous','sampledNodeAndOwnedPgTreePeakRssBytes','resourceViolation','nodeSha256','ownedPg']};safe['resourceReceiptSha256']=hashlib.sha256(resource.read_bytes()).hexdigest()
+          print('::notice title=Routine HTTP finite acceptance::'+json.dumps(safe,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A'))
+          PYCODE
+          test "$test_status" = 0
       - name: Actual snapshot receipt install and immutable reads (synthetic Fetch Response)
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-05
