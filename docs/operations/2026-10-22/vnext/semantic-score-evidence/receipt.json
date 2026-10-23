@@ -1,0 +1,49 @@
+{
+  "bytes": 408500,
+  "files": [
+    {
+      "bytes": 759,
+      "path": "command-seal.json",
+      "sha256": "f0e3bb0975f8adfb7207ea4903a2b837bc86c66694f955050218308299ade8ed"
+    },
+    {
+      "bytes": 35441,
+      "path": "commands-resources.json",
+      "sha256": "62f608a6d75130834393dabb299211ce3d321ec980a155cb02d0503ddf8519fc"
+    },
+    {
+      "bytes": 55908,
+      "path": "native-witness.json",
+      "sha256": "ab7ed002af7f4bf2aae3e5a5a1a444e1f85d9852655ede27c8b4e9ea2bb92509"
+    },
+    {
+      "bytes": 1199,
+      "path": "native.tap",
+      "sha256": "a3b21bf481dad4966fd12f92e8831003c0b30bb1e4db8ef8ef384fcd91f53f75"
+    },
+    {
+      "bytes": 312,
+      "path": "pg-binary.json",
+      "sha256": "1a79c62ce0ef02d36fc92506b674eefac1f22f7f2d7c72895c534f1f898a563f"
+    },
+    {
+      "bytes": 13026,
+      "path": "private-inventory.json",
+      "sha256": "13c4f6240693e201a20dc87d3ff5d5a7b76bcd13db4178cd8c5f1600de4e88c5"
+    },
+    {
+      "bytes": 1273,
+      "path": "scope.json",
+      "sha256": "8b9e5a22b6e49ab635d0d8e143a27f181c1b6478b19941446be96e945677fc1f"
+    },
+    {
+      "bytes": 300582,
+      "path": "source-seal.json",
+      "sha256": "4d22dc81d3945fcbcd1bd965e1352069fc9e375791435c2bbd7e22f380f8402f"
+    }
+  ],
+  "privateBytes": 1911459,
+  "privateFiles": 58,
+  "scope": "scoped source + retained native evidence; no cross-source count summation",
+  "source": "64036920a197f2fd579e430b36503a26ad021e84"
+}

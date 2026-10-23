@@ -1,10 +1,10 @@
 {
   "status": "PARTIAL_VM_IMPLEMENTATION_AND_ACCEPTANCE_NOT_RELEASE_COMPLETE",
-  "updatedAt": "2026-10-23T00:51:26.538534+00:00",
-  "runtimeSourceHead": "9c833695e7c7eb840b0eabf7f004c0d4031e893e",
-  "currentReceiptSha256": "b8a3cd2c59617270436834ebcdc1d6b703218deda8b26fbef00762ae1ece9222",
+  "updatedAt": "2026-10-23T01:13:34.147415+00:00",
+  "runtimeSourceHead": "64036920a197f2fd579e430b36503a26ad021e84",
+  "currentReceiptSha256": "9817296ad65f08e9637845ba0c2fbc0ef3c568265765532e22071d21d6ace812",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
-  "primaryReport": "PREPARATION-RECONCILIATION.md",
+  "primaryReport": "SEMANTIC-SCORE-DELIVERY.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
   "acceptance": [
     {
@@ -46,8 +46,8 @@
     {
       "id": "VN07",
       "status": "PARTIAL_SEMANTIC_PRODUCERS_PENDING",
-      "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01",
-      "limits": "Currentfinancialcorrection/substantiveinput/materialhash/deepscore/retainedhistory/rights tested inVM. Structured realcatalystcancel/contra/target semanticproducer stillunwired; no pretendverifiedfalse→true."
+      "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01; thesis-semantic-authority-source-02; semantic-native-monitored-o23",
+      "limits": "Currentfinancialcorrection/substantiveinput/materialhash/deepscore/retainedhistory/rights tested inVM. Structured realcatalystcancel/contra/target semanticproducer stillunwired; no pretendverifiedfalse→true. Semantic numeric1 misclassification repaired TS+twoSQLbodies; actual5PASS retained catalog/score/immutability/rollback. Positive sourcebound criteria/exit producer remains UNIMPLEMENTED; fresh current-public comparison pending."
     },
     {
       "id": "VN08",
@@ -100,8 +100,8 @@
     {
       "id": "VN16",
       "status": "TESTED_VM_RUNTIME_SOURCE",
-      "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23",
-      "limits": "Node22.14/TS5.9.3 types/lint/fullwebpack PASS currentruntimee1bb126.33inheritedwarnings. Originaltest-variablelintRED then renamedlocal only. No locks/rules disabled. New IRproductfiles fulltypes/build/lintPASS; firstsandboxbuildRED retained, normalpermissionhelper capture diagnosis documented. Current source1ac onlytest corrections after product7751 fullbuild; source-ci-tail-fixed typePASS. No whole-source native acceptance inferred. Currentprep9c types/focusedlint10sourcecontractsPASS; newfullVMbuildNOT_ADMITTED at303MBmargin; e359hostedbuildsuccess doesnottransfer."
+      "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23; semantic-final-types-o23",
+      "limits": "Node22.14/TS5.9.3 types/lint/fullwebpack PASS currentruntimee1bb126.33inheritedwarnings. Originaltest-variablelintRED then renamedlocal only. No locks/rules disabled. New IRproductfiles fulltypes/build/lintPASS; firstsandboxbuildRED retained, normalpermissionhelper capture diagnosis documented. Current source1ac onlytest corrections after product7751 fullbuild; source-ci-tail-fixed typePASS. No whole-source native acceptance inferred. Currentprep9c types/focusedlint10sourcecontractsPASS; newfullVMbuildNOT_ADMITTED at303MBmargin; e359hostedbuildsuccess doesnottransfer. Finalsemantic640 fulltypesPASS; new fullVMbuild notadmitted. FreshordinaryCI exacthead separate."
     },
     {
       "id": "VN17",
@@ -124,7 +124,7 @@
     {
       "id": "VN20",
       "status": "DRAFT_PR_PARTIAL_RELEASE_GATE",
-      "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json; preparation-reconciliation-evidence/receipt.json",
+      "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json; preparation-reconciliation-evidence/receipt.json; SEMANTIC-SCORE-DELIVERY.md; semantic-score-evidence/receipt.json",
       "limits": "ExactVMhead/receiptspublished, historypreserved. Protectedreviews failing/pending; latestCI independentstatusnottransferred. No merge/deploy/migration/scheduleresume authorization."
     }
   ],
@@ -142,21 +142,22 @@
   "remainingTimeAcceptance": "2actualconsecutivecompletedpostclose sessions; no guard/clock bypass",
   "ReleaseGate": "PENDING",
   "testAdapterSource": "76aca1522fa1b3292a85f9f387f01bee7fd43e23",
-  "latestCI": "Exact e359: vnext39877948120 SUCCESS; product-runtime120168069294 and diagnostic120170769620 SUCCESS. New9c source ordinaryCI not yet observed. Protected independent requirements/architecture/exact/root unclosed; no pin/guard changes.",
+  "latestCI": "Exact e359 hosted vnext39877948120/product120168069294/diagnostic120170769620 SUCCESS. Newpreparation7f/newsemantic640 ordinaryCI independent/pending; no transfer of those results. Protected independent gates remain unclosed/failing, no pin/guard changes.",
   "ciReceiptSha256": "52269e1b6c22d0f84c15c70d56b27dd30d2f59c37714314a32789dfcd7dfd7f7",
-  "previousRuntimeSourceHead": "e359d7d634fa88db938fd57db8b4a33123006904",
-  "previousReceiptSha256": "da9c947d87f385cbb42a932a49d5c546df667037328ccca4f3d48b71f5e96363",
+  "previousRuntimeSourceHead": "9c833695e7c7eb840b0eabf7f004c0d4031e893e",
+  "previousReceiptSha256": "b8a3cd2c59617270436834ebcdc1d6b703218deda8b26fbef00762ae1ece9222",
   "capacity": {
     "status": "RESUMED_BOUNDED_VM_WORK",
     "floorPerFilesystem": 8589934592,
-    "latestWorkspaceFree": 8893231104,
-    "latestTmpFree": 17330720768,
+    "latestWorkspaceFree": 8891289600,
+    "latestTmpFree": 17328660480,
     "previousHoldAndCleanupReceiptsRetained": true,
     "furtherAutomaticCleanupAuthorized": false,
-    "retainedLab": "worker11 stopped/PID0/exit0, PGdata/container/evidence retained",
+    "retainedLab": "worker11 stopped/PID0/exit0 after semantic candidate; all data/rows/raw retained, onlytwo newfunctionbody changes",
     "nextFreshClone": "NOT_ADMITTED:912297984reference+128MiB exceeds workspace margin; not upperbound",
     "boundedContinuation": "estimate128MiBworkspace+256MiBtmp with original live monitor, no resourceViolation",
-    "nextFullBuild": "NOT_ADMITTED:306835456measuredcompiler-cache+128MiBreserve exceeds workspace margin, unknown costs remain"
+    "nextFullBuild": "NOT_ADMITTED:306835456measuredcompiler-cache+128MiBreserve exceeds workspace margin, unknown costs remain",
+    "transientEnvironmentStarting": "returnedready, selectedsource/receipt/raw hashes revalidated; no resize/reimage or universal tmpfs preservation claimed"
   },
   "financialStatusCompatibility": {
     "source": "e359d7d634fa88db938fd57db8b4a33123006904",
@@ -172,5 +173,13 @@
     "independentOldGitParity": "3groupsPASS",
     "actualPGHTTPBuildBrowser": "NOT_RUN on this source",
     "receipt": "preparation-reconciliation-evidence/receipt.json"
+  },
+  "semanticScoreSafety": {
+    "source": "64036920a197f2fd579e430b36503a26ad021e84",
+    "TS": "3focusedPASS/12originalthesisPASS; sixunsupportedcriteria null+namedgaps",
+    "SQL": "new retained-native5PASS, fulltwo-bodyCOMMIT/body-onlycatalog preserved, allbusinessrowsunchanged, weightedvaluation/technical arithmetic and privateACL/repeatrollback PASS",
+    "currentPublicOldScorePositive": "NOT_RUN retainedpublicationwithdrawn and current/completed session mismatch; changedfreshCI fixture pending, no clock/rights bypass",
+    "positiveSemanticProducer": "UNIMPLEMENTED, not substituted by disabling unsupportedclaims",
+    "receipt": "semantic-score-evidence/receipt.json"
   }
 }

@@ -1,0 +1,1245 @@
+{
+  "runs": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "src/lib/vnext/thesis-semantic-authority.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T00:52:38.224178+00:00",
+      "exit": 1,
+      "finalFree": {
+        "/tmp": 17330647040,
+        "/workspace": 8891977728
+      },
+      "initialFree": {
+        "/tmp": 17330651136,
+        "/workspace": 8891977728
+      },
+      "label": "thesis-semantic-authority-red-01",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 6029312,
+      "samples": [
+        {
+          "at": "2026-10-23T00:52:37.723878+00:00",
+          "freeBytes": {
+            "/tmp": 17330651136,
+            "/workspace": 8891977728
+          },
+          "sessionRssBytes": 6029312
+        }
+      ],
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T00:52:37.716044+00:00"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "src/lib/vnext/thesis-semantic-authority.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T00:54:15.852024+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17330634752,
+        "/workspace": 8891973632
+      },
+      "initialFree": {
+        "/tmp": 17330638848,
+        "/workspace": 8891973632
+      },
+      "label": "thesis-semantic-authority-source-02",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 6160384,
+      "samples": [
+        {
+          "at": "2026-10-23T00:54:15.351164+00:00",
+          "freeBytes": {
+            "/tmp": 17330638848,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 6160384
+        }
+      ],
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T00:54:15.342895+00:00"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "src/lib/vnext/thesis.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T00:54:28.557780+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17330626560,
+        "/workspace": 8891973632
+      },
+      "initialFree": {
+        "/tmp": 17330630656,
+        "/workspace": 8891973632
+      },
+      "label": "thesis-semantic-thesis-regression-01",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 149270528,
+      "samples": [
+        {
+          "at": "2026-10-23T00:54:27.034983+00:00",
+          "freeBytes": {
+            "/tmp": 17330630656,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 6160384
+        },
+        {
+          "at": "2026-10-23T00:54:27.545121+00:00",
+          "freeBytes": {
+            "/tmp": 17330626560,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 119517184
+        },
+        {
+          "at": "2026-10-23T00:54:28.057530+00:00",
+          "freeBytes": {
+            "/tmp": 17330626560,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 149270528
+        }
+      ],
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T00:54:27.028104+00:00"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--incremental",
+        "false"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T00:55:05.293044+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17330622464,
+        "/workspace": 8891973632
+      },
+      "initialFree": {
+        "/tmp": 17330622464,
+        "/workspace": 8891973632
+      },
+      "label": "thesis-semantic-types-01",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 1311051776,
+      "samples": [
+        {
+          "at": "2026-10-23T00:54:40.652276+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 5242880
+        },
+        {
+          "at": "2026-10-23T00:54:41.165509+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 122023936
+        },
+        {
+          "at": "2026-10-23T00:54:41.685358+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 179564544
+        },
+        {
+          "at": "2026-10-23T00:54:42.199159+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 245493760
+        },
+        {
+          "at": "2026-10-23T00:54:42.709768+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 312078336
+        },
+        {
+          "at": "2026-10-23T00:54:43.222148+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 379318272
+        },
+        {
+          "at": "2026-10-23T00:54:43.738328+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 449179648
+        },
+        {
+          "at": "2026-10-23T00:54:44.262244+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 502394880
+        },
+        {
+          "at": "2026-10-23T00:54:44.776346+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 542896128
+        },
+        {
+          "at": "2026-10-23T00:54:45.299107+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 562032640
+        },
+        {
+          "at": "2026-10-23T00:54:45.813868+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 586018816
+        },
+        {
+          "at": "2026-10-23T00:54:46.328873+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 612233216
+        },
+        {
+          "at": "2026-10-23T00:54:46.835280+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 636874752
+        },
+        {
+          "at": "2026-10-23T00:54:47.346274+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 664137728
+        },
+        {
+          "at": "2026-10-23T00:54:47.852198+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 682094592
+        },
+        {
+          "at": "2026-10-23T00:54:48.360169+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 706342912
+        },
+        {
+          "at": "2026-10-23T00:54:48.867479+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 741994496
+        },
+        {
+          "at": "2026-10-23T00:54:49.374304+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 787476480
+        },
+        {
+          "at": "2026-10-23T00:54:49.883804+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 807137280
+        },
+        {
+          "at": "2026-10-23T00:54:50.395797+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 821817344
+        },
+        {
+          "at": "2026-10-23T00:54:50.906039+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 829493248
+        },
+        {
+          "at": "2026-10-23T00:54:51.413629+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 831721472
+        },
+        {
+          "at": "2026-10-23T00:54:51.920568+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 838799360
+        },
+        {
+          "at": "2026-10-23T00:54:52.432201+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 879169536
+        },
+        {
+          "at": "2026-10-23T00:54:52.946784+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 897650688
+        },
+        {
+          "at": "2026-10-23T00:54:53.559146+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 925700096
+        },
+        {
+          "at": "2026-10-23T00:54:54.066889+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 959647744
+        },
+        {
+          "at": "2026-10-23T00:54:54.599518+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 974983168
+        },
+        {
+          "at": "2026-10-23T00:54:55.114442+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1004474368
+        },
+        {
+          "at": "2026-10-23T00:54:55.622255+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1043402752
+        },
+        {
+          "at": "2026-10-23T00:54:56.128376+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1075253248
+        },
+        {
+          "at": "2026-10-23T00:54:56.634916+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1099501568
+        },
+        {
+          "at": "2026-10-23T00:54:57.145860+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1119293440
+        },
+        {
+          "at": "2026-10-23T00:54:57.653223+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1135153152
+        },
+        {
+          "at": "2026-10-23T00:54:58.159847+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1156386816
+        },
+        {
+          "at": "2026-10-23T00:54:58.673291+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1171984384
+        },
+        {
+          "at": "2026-10-23T00:54:59.179476+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1185091584
+        },
+        {
+          "at": "2026-10-23T00:54:59.687460+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1197936640
+        },
+        {
+          "at": "2026-10-23T00:55:00.197637+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1214320640
+        },
+        {
+          "at": "2026-10-23T00:55:00.703326+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1222840320
+        },
+        {
+          "at": "2026-10-23T00:55:01.214963+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1228214272
+        },
+        {
+          "at": "2026-10-23T00:55:01.725729+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1235816448
+        },
+        {
+          "at": "2026-10-23T00:55:02.231690+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1247219712
+        },
+        {
+          "at": "2026-10-23T00:55:02.738160+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1254166528
+        },
+        {
+          "at": "2026-10-23T00:55:03.252481+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1263865856
+        },
+        {
+          "at": "2026-10-23T00:55:03.767253+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1269239808
+        },
+        {
+          "at": "2026-10-23T00:55:04.282133+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1287720960
+        },
+        {
+          "at": "2026-10-23T00:55:04.792695+00:00",
+          "freeBytes": {
+            "/tmp": 17330622464,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 1311051776
+        }
+      ],
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T00:54:40.645253+00:00"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/lib/vnext/thesis-audit.ts",
+        "src/lib/vnext/thesis-semantic-authority.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T00:55:15.467318+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17330610176,
+        "/workspace": 8891973632
+      },
+      "initialFree": {
+        "/tmp": 17330610176,
+        "/workspace": 8891973632
+      },
+      "label": "thesis-semantic-lint-01",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 254218240,
+      "samples": [
+        {
+          "at": "2026-10-23T00:55:12.927103+00:00",
+          "freeBytes": {
+            "/tmp": 17330610176,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 6553600
+        },
+        {
+          "at": "2026-10-23T00:55:13.433766+00:00",
+          "freeBytes": {
+            "/tmp": 17330610176,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 81395712
+        },
+        {
+          "at": "2026-10-23T00:55:13.940047+00:00",
+          "freeBytes": {
+            "/tmp": 17330610176,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 163655680
+        },
+        {
+          "at": "2026-10-23T00:55:14.446568+00:00",
+          "freeBytes": {
+            "/tmp": 17330610176,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 212459520
+        },
+        {
+          "at": "2026-10-23T00:55:14.967059+00:00",
+          "freeBytes": {
+            "/tmp": 17330610176,
+            "/workspace": 8891973632
+          },
+          "sessionRssBytes": 254218240
+        }
+      ],
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T00:55:12.912648+00:00"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "src/lib/vnext/semantic-score-fence.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T01:01:13.259866+00:00",
+      "exit": 1,
+      "finalFree": {
+        "/tmp": 17330561024,
+        "/workspace": 8891858944
+      },
+      "initialFree": {
+        "/tmp": 17330565120,
+        "/workspace": 8891858944
+      },
+      "label": "semantic-score-fence-source-01",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 4849664,
+      "samples": [
+        {
+          "at": "2026-10-23T01:01:12.759547+00:00",
+          "freeBytes": {
+            "/tmp": 17330565120,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 4849664
+        }
+      ],
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T01:01:12.742108+00:00"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "src/lib/vnext/semantic-score-fence.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T01:01:28.308819+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17330524160,
+        "/workspace": 8891858944
+      },
+      "initialFree": {
+        "/tmp": 17330528256,
+        "/workspace": 8891858944
+      },
+      "label": "semantic-score-fence-source-02",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 6160384,
+      "samples": [
+        {
+          "at": "2026-10-23T01:01:27.808444+00:00",
+          "freeBytes": {
+            "/tmp": 17330528256,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 6160384
+        }
+      ],
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T01:01:27.799839+00:00"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/lib/vnext/semantic-score-fence.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T01:02:06.348753+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17330515968,
+        "/workspace": 8891858944
+      },
+      "initialFree": {
+        "/tmp": 17330515968,
+        "/workspace": 8891858944
+      },
+      "label": "semantic-score-fence-lint-01",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 248733696,
+      "samples": [
+        {
+          "at": "2026-10-23T01:02:03.800564+00:00",
+          "freeBytes": {
+            "/tmp": 17330515968,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 6553600
+        },
+        {
+          "at": "2026-10-23T01:02:04.308515+00:00",
+          "freeBytes": {
+            "/tmp": 17330515968,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 78426112
+        },
+        {
+          "at": "2026-10-23T01:02:04.818596+00:00",
+          "freeBytes": {
+            "/tmp": 17330515968,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 156639232
+        },
+        {
+          "at": "2026-10-23T01:02:05.342484+00:00",
+          "freeBytes": {
+            "/tmp": 17330515968,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 213868544
+        },
+        {
+          "at": "2026-10-23T01:02:05.848481+00:00",
+          "freeBytes": {
+            "/tmp": 17330515968,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 248733696
+        }
+      ],
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T01:02:03.791339+00:00"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--incremental",
+        "false"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T01:03:18.017703+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17330483200,
+        "/workspace": 8891858944
+      },
+      "initialFree": {
+        "/tmp": 17330483200,
+        "/workspace": 8891858944
+      },
+      "label": "semantic-final-types-o23",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 1314283520,
+      "samples": [
+        {
+          "at": "2026-10-23T01:02:51.953893+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 4194304
+        },
+        {
+          "at": "2026-10-23T01:02:52.461695+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 94892032
+        },
+        {
+          "at": "2026-10-23T01:02:52.972034+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 163966976
+        },
+        {
+          "at": "2026-10-23T01:02:53.494891+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 219148288
+        },
+        {
+          "at": "2026-10-23T01:02:54.001743+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 264499200
+        },
+        {
+          "at": "2026-10-23T01:02:54.515946+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 316534784
+        },
+        {
+          "at": "2026-10-23T01:02:55.047787+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 401993728
+        },
+        {
+          "at": "2026-10-23T01:02:55.560067+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 454946816
+        },
+        {
+          "at": "2026-10-23T01:02:56.066452+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 500297728
+        },
+        {
+          "at": "2026-10-23T01:02:56.572634+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 542502912
+        },
+        {
+          "at": "2026-10-23T01:02:57.080115+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 561901568
+        },
+        {
+          "at": "2026-10-23T01:02:57.591158+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 582610944
+        },
+        {
+          "at": "2026-10-23T01:02:58.102217+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 599781376
+        },
+        {
+          "at": "2026-10-23T01:02:58.638790+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 617082880
+        },
+        {
+          "at": "2026-10-23T01:02:59.152144+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 649064448
+        },
+        {
+          "at": "2026-10-23T01:02:59.663880+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 665448448
+        },
+        {
+          "at": "2026-10-23T01:03:00.170016+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 684060672
+        },
+        {
+          "at": "2026-10-23T01:03:00.676899+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 706473984
+        },
+        {
+          "at": "2026-10-23T01:03:01.188523+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 751562752
+        },
+        {
+          "at": "2026-10-23T01:03:01.709399+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 786296832
+        },
+        {
+          "at": "2026-10-23T01:03:02.225611+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 791961600
+        },
+        {
+          "at": "2026-10-23T01:03:02.733172+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 797204480
+        },
+        {
+          "at": "2026-10-23T01:03:03.248910+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 797859840
+        },
+        {
+          "at": "2026-10-23T01:03:03.756470+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 811360256
+        },
+        {
+          "at": "2026-10-23T01:03:04.267665+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 837967872
+        },
+        {
+          "at": "2026-10-23T01:03:04.779853+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 886595584
+        },
+        {
+          "at": "2026-10-23T01:03:05.290365+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 915300352
+        },
+        {
+          "at": "2026-10-23T01:03:05.802947+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 950165504
+        },
+        {
+          "at": "2026-10-23T01:03:06.315997+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 973889536
+        },
+        {
+          "at": "2026-10-23T01:03:06.822976+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1007706112
+        },
+        {
+          "at": "2026-10-23T01:03:07.329708+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1048338432
+        },
+        {
+          "at": "2026-10-23T01:03:07.837197+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1082023936
+        },
+        {
+          "at": "2026-10-23T01:03:08.344710+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1103388672
+        },
+        {
+          "at": "2026-10-23T01:03:08.850810+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1124360192
+        },
+        {
+          "at": "2026-10-23T01:03:09.357736+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1136680960
+        },
+        {
+          "at": "2026-10-23T01:03:09.865161+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1154113536
+        },
+        {
+          "at": "2026-10-23T01:03:10.383753+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1170628608
+        },
+        {
+          "at": "2026-10-23T01:03:10.892718+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1183997952
+        },
+        {
+          "at": "2026-10-23T01:03:11.417725+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1192517632
+        },
+        {
+          "at": "2026-10-23T01:03:11.925700+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1205755904
+        },
+        {
+          "at": "2026-10-23T01:03:12.436114+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1220042752
+        },
+        {
+          "at": "2026-10-23T01:03:12.943249+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1227513856
+        },
+        {
+          "at": "2026-10-23T01:03:13.454943+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1233412096
+        },
+        {
+          "at": "2026-10-23T01:03:13.961883+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1239834624
+        },
+        {
+          "at": "2026-10-23T01:03:14.469013+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1246912512
+        },
+        {
+          "at": "2026-10-23T01:03:14.975836+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1254907904
+        },
+        {
+          "at": "2026-10-23T01:03:15.483250+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1261330432
+        },
+        {
+          "at": "2026-10-23T01:03:15.988915+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1270505472
+        },
+        {
+          "at": "2026-10-23T01:03:16.495721+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1276010496
+        },
+        {
+          "at": "2026-10-23T01:03:17.002225+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1294229504
+        },
+        {
+          "at": "2026-10-23T01:03:17.517378+00:00",
+          "freeBytes": {
+            "/tmp": 17330483200,
+            "/workspace": 8891858944
+          },
+          "sessionRssBytes": 1314283520
+        }
+      ],
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T01:02:51.945034+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "/tmp/stockinsider-vnext-oct22-private/run-semantic-native-o23.py"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "end": "2026-10-23T01:09:49.234300+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17328713728,
+        "/workspace": 8891748352
+      },
+      "initialFree": {
+        "/tmp": 17330196480,
+        "/workspace": 8891764736
+      },
+      "label": "semantic-native-monitored-o23",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 98885632,
+      "samples": [
+        {
+          "at": "2026-10-23T01:09:46.168201+00:00",
+          "freeBytes": {
+            "/tmp": 17330196480,
+            "/workspace": 8891764736
+          },
+          "sessionRssBytes": 4849664
+        },
+        {
+          "at": "2026-10-23T01:09:46.675712+00:00",
+          "freeBytes": {
+            "/tmp": 17330565120,
+            "/workspace": 8891674624
+          },
+          "sessionRssBytes": 24248320
+        },
+        {
+          "at": "2026-10-23T01:09:47.186180+00:00",
+          "freeBytes": {
+            "/tmp": 17330561024,
+            "/workspace": 8891674624
+          },
+          "sessionRssBytes": 89518080
+        },
+        {
+          "at": "2026-10-23T01:09:47.715819+00:00",
+          "freeBytes": {
+            "/tmp": 17330556928,
+            "/workspace": 8891674624
+          },
+          "sessionRssBytes": 92172288
+        },
+        {
+          "at": "2026-10-23T01:09:48.226066+00:00",
+          "freeBytes": {
+            "/tmp": 17330556928,
+            "/workspace": 8891674624
+          },
+          "sessionRssBytes": 95449088
+        },
+        {
+          "at": "2026-10-23T01:09:48.734059+00:00",
+          "freeBytes": {
+            "/tmp": 17329491968,
+            "/workspace": 8891658240
+          },
+          "sessionRssBytes": 98885632
+        }
+      ],
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "start": "2026-10-23T01:09:46.158699+00:00"
+    }
+  ],
+  "scope": "source scopes separate from new retained-native5PASS; sampled not instantaneous; originalRED retained"
+}

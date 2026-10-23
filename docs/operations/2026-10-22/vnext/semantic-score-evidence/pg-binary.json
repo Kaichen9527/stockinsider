@@ -1,0 +1,6 @@
+{
+  "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+  "path": "/usr/lib/postgresql/17/bin/postgres",
+  "sha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+  "version": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)"
+}

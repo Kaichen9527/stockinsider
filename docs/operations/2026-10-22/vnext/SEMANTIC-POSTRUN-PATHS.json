@@ -1,0 +1,29 @@
+{
+  "source": "64036920a197f2fd579e430b36503a26ad021e84",
+  "observedAt": "2026-10-23T01:15:08.207947+00:00",
+  "scope": "independent postrun pathname metadata after original confirmed shutdown; data intentionally retained; not all-host-PID absence proof",
+  "paths": {
+    "/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-11/socket/.s.PGSQL.5432": {
+      "exists": false,
+      "reason": "ENOENT"
+    },
+    "/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-11/socket/.s.PGSQL.5432.lock": {
+      "exists": false,
+      "reason": "ENOENT"
+    },
+    "/tmp/stockinsider-vnext-oct22-private/worker-pg-data-11": {
+      "exists": true,
+      "symlink": false,
+      "directory": true,
+      "uid": 65534,
+      "mode": "0o700"
+    },
+    "/tmp/stockinsider-vnext-oct22-private/semantic-native-retained-o23": {
+      "exists": true,
+      "symlink": false,
+      "directory": true,
+      "uid": 1000,
+      "mode": "0o700"
+    }
+  }
+}

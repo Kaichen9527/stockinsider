@@ -1,3 +1,16 @@
+# Current: semantic score correction and preparation recovery
+
+Runtime source `64036920a197f2fd579e430b36503a26ad021e84`; read [latest delivery](SEMANTIC-SCORE-DELIVERY.md), [VN01–VN20 and limits](CURRENT.json), [receipt](semantic-score-evidence/receipt.json) SHA256 `9817296ad65f08e9637845ba0c2fbc0ef3c568265765532e22071d21d6ace812`.
+
+Actual new retained PG17.11 acceptance5PASS: full guarded two-body SQL COMMIT, original unsupported scalar checklist50points becomes0/null, supported arithmetic preserved, allrows/catalog authority unchanged, repeatreject/rollback and shutdown confirmed. New TS negative3PASS/originalthesis12PASS/staticSQL3PASS/types/lint are separate. Raw/history remain exact. Current public wrong-score positive needs changedfreshCI fixture; retained oldpublication iswithdrawn and current session incomplete, so no clock/rights are bypassed. No positive semantic criterion producer is claimed.
+
+Configured-author preparation READ/resume is implemented/source-tested10PASS at9c, with original receipt/fence/journal and no automatic secondmutation/model. Its new actualPG/HTTP/build/browser acceptance is still pending. E359 hosted vNext/product/diagnostic success belongs only to e359; latest normalCI is separate. Protected independent gates unclosed, PR384 draft, no merge/deploy.
+
+Workspace remains~8.89GB with only~302MBmargin. No additional cleanup; no freshclone/fullVMbuild admission. Source/PGdata/WIP/RED/receipts preserved. A transient starting notification returnedready and selected files/hashes were rechecked. Complete sourcewindow/volume, structured event/target and numericforecast producers remain VMcode gaps, not TCP excuses. Real source/model/semantic/staging/fullrelease remain unaccepted.
+
+---
+Historical milestone, exact scope retained:
+
 # Current: explicit preparation reconciliation source slice
 
 Runtime source `9c833695e7c7eb840b0eabf7f004c0d4031e893e`; [source boundary and checks](PREPARATION-RECONCILIATION.md), [current VN01–VN20](CURRENT.json), [receipt](preparation-reconciliation-evidence/receipt.json) SHA256 `b8a3cd2c59617270436834ebcdc1d6b703218deda8b26fbef00762ae1ece9222`.
