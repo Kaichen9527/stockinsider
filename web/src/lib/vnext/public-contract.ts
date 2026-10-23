@@ -68,10 +68,10 @@ export function publicHome(value: unknown, now: string) {
     if(member.sourceRights?.current!==true || member.inputHash!==member.publishedInputHash || !validContent(member))return [];
     const result:PublishedBusinessComponent[]=[];
     const object=(v:unknown):v is Record<string,unknown>=>Boolean(v)&&typeof v==='object'&&!Array.isArray(v);
-    for(const [group,criterion,weight] of [['profitability','competitive_advantage',25],['marketLiquidity','thesis_risk_analysis',10]] as const){
+    for(const [group,criterion,weight,field] of [['profitability','competitive_advantage',25,'businessComponent'],['marketLiquidity','thesis_risk_analysis',10,'thesisRiskAnalysis']] as const){
       const factor=member.deepScore?.factors?.[group];
       if(!object(factor)||factor.value!==null||factor.weight!==weight||factor.interpretation!=='labelled_inference_not_confirmed_fact'||factor.groupGap!=='remaining_components_not_db_verified')continue;
-      const c=factor.businessComponent;
+      const c=factor[field];
       if(!object(c)||Object.keys(c).sort().join('|')!==['criterion','annotationHash','sourceId','sourceHash','observedAt','met','gap'].sort().join('|')||c.criterion!==criterion||c.met!==null&&typeof c.met!=='boolean'||c.gap!==null&&!['component_outcome_unknown','component_assessment_insufficient'].includes(String(c.gap))||c.met===null&&c.gap===null||c.met!==null&&c.gap!==null||typeof c.sourceId!=='string'||c.sourceId.length<1||c.sourceId.length>240||typeof c.annotationHash!=='string'||!/^[a-f0-9]{64}$/u.test(c.annotationHash)||typeof c.sourceHash!=='string'||!/^[a-f0-9]{64}$/u.test(c.sourceHash)||typeof c.observedAt!=='string'||!Number.isFinite(Date.parse(c.observedAt))||Date.parse(c.observedAt)>Date.parse(now))continue;
       const claims=(member.content?.claims as Claim[]).filter(claim=>claim&&typeof claim==='object'&&Array.isArray(claim.evidenceIds)&&claim.business?.criterion===criterion&&inputHash(claim.business)===c.annotationHash&&claim.business.symbol===member.symbol&&claim.business.evidenceId===c.sourceId&&claim.business.contentHash===c.sourceHash&&(c.met===null?claim.business.outcome==='unknown':claim.business.outcome===(c.met?'met':'not_met'))&&claim.evidenceIds.length===1&&claim.evidenceIds[0]===c.sourceId);
       if(claims.length!==1||typeof claims[0].text!=='string')continue;
