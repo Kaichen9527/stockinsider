@@ -1,0 +1,31 @@
+{
+  "annotations": [
+    {
+      "title": "Business criteria private inventory",
+      "level": "notice",
+      "message": "{\"count\":21,\"bytes\":22461421,\"inventorySha256\":\"5c61c4975bb63b2d91e5928ce7cac0760c92c507f56f865379e0a36762ea322f\",\"rawContentsPublished\":false}"
+    },
+    {
+      "title": "Business criteria cleanup receipt",
+      "level": "notice",
+      "message": "{\"pgRunning\":false,\"pgPid\":0,\"pgExit\":0,\"shutdownLogObserved\":true,\"socketAbsence\":{\".s.PGSQL.5432\":true,\".s.PGSQL.5432.lock\":true},\"resourceReceiptObserved\":true,\"ownedProcessCounts\":{\"absent\":18,\"zeroRssZombie\":0,\"pidReused\":0,\"unsettled\":0},\"fullPrivateCleanupSha256\":\"fce01b6212a2db0e5c86db20145d6d434335cf88577ac5615bf56fc643944051\",\"dataRetained\":true}"
+    },
+    {
+      "title": "Business criteria finite SQL errors",
+      "level": "notice",
+      "message": "{\"events\":[{\"code\":\"42501\",\"statementSha256\":\"c13dd5a3adf8fdeac5152df7c60c6d92dde509e6ed50b285c9feae97d2de98ea\",\"ready\":\"I\",\"querySettled\":true,\"message\":\"hash:bfcc39125379a29fcf0f1a9fc361891a092d45125b2ef72e076eea77b01d7511\"},{\"code\":\"42501\",\"statementSha256\":\"b91d6b677fe6a9af3d807719743428168bfa97b38d2c3b0990d588bddbc5c745\",\"ready\":\"I\",\"querySettled\":true,\"message\":\"hash:ebcef86003feed0c720b1e16e81dbf59b20366e329d2a5c2521961125e624352\"},{\"code\":\"P0001\",\"statementSha256\":\"fdb67b8fceb98b6f262f0f02bc5490c0b73072466e00ce9b3952e8b30313910c\",\"ready\":\"I\",\"querySettled\":true,\"message\":\"vnext_business_reserve_fields\"},{\"code\":\"P0001\",\"statementSha256\":\"2d378c4fd6f79bd18978f2434c0e9d75e8b1f5024040d57c2b73e0529fbf4a27\",\"ready\":\"E\",\"querySettled\":true,\"message\":\"vnext_business_profile_binding\"},{\"code\":\"P0001\",\"statementSha256\":\"fdb67b8fceb98b6f262f0f02bc5490c0b73072466e00ce9b3952e8b30313910c\",\"ready\":\"I\",\"querySettled\":true,\"message\":\"vnext_business_reserve_fields\"},{\"code\":\"P0001\",\"statementSha256\":\"2d378c4fd6f79bd18978f2434c0e9d75e8b1f5024040d57c2b73e0529fbf4a27\",\"ready\":\"E\",\"querySettled\":true,\"message\":\"vnext_business_profile_binding\"}],\"privateEventsSha256\":\"8e3b502c55a907b01faee7223034db85157ecade40e7e2ddcd66613d7efb2588\"}"
+    },
+    {
+      "title": "Business criteria finite native receipt",
+      "level": "notice",
+      "message": "{\"scope\":\"actual original-bound business inference/current context/audit/public projection/withdrawal; synthetic facts/provider only; no group points, bounded-risk or semantic approval\",\"sourceHead\":\"f3ce4d76fdfb4acfc973954facbf236cd2a03488\",\"tapSha256\":\"345fb9eb4f061b2344fe07d4292451a7c4dcc9fa0f69e05bb38c9a7d3491f53c\",\"actualTapCounts\":{\"tests\":6,\"pass\":4,\"fail\":2,\"cancelled\":0,\"skipped\":0,\"todo\":0},\"resourceObserved\":true,\"queryEventsPrivateSha256\":\"8e3b502c55a907b01faee7223034db85157ecade40e7e2ddcd66613d7efb2588\",\"exit\":1,\"resourceViolation\":null,\"sampledNotInstantaneous\":true,\"sampledOwnedTreePeakRssBytes\":885190656,\"initialFree\":{\"/home/runner/work/stockinsider/stockinsider\":88436391936,\"/tmp\":88436391936},\"finalFree\":{\"/home/runner/work/stockinsider/stockinsider\":88372031488,\"/tmp\":88372031488},\"nodeSha256\":\"1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1\",\"actualPg\":{\"containerId\":\"1ca765fb55b0363bb4ecb4d0c711071b1b7eb34861ed731fa96baede134788a7\",\"pid\":17999,\"start\":\"20574\",\"image\":\"postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27\",\"actualVersion\":\"postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)\",\"actualBinarySha256\":\"f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed\"},\"inputCount\":14,\"inputInventorySha256\":\"73c505a6eb73c1bc1b97faafd2e83c6d401e4851be51e402a59d36b9c8e0ef26\",\"inputInventoryCodec\":\"utf8_sorted_keys_compact_json_v1\"}"
+    },
+    {
+      "title": "Business criteria finite diagnostic",
+      "level": "failure",
+      "message": "{\"phase\":\"stage_5\",\"code\":\"UNKNOWN\",\"message\":\"hash:e4523a140ac9f70d026724f69bcbe77ca0f7c26f266fd82faa07b5415beb8fdd\",\"errorType\":\"UnknownError\"}"
+    }
+  ],
+  "apiBytesSha256": "4e8eca0426e53003f38dd6b0e3e552a5c80c2775c6b25008774f0afca6332e16",
+  "scope": "finite public-safe GitHub annotation fields only; private raw contents not downloaded"
+}

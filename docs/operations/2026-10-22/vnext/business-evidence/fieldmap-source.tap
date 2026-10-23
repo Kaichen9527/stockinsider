@@ -1,0 +1,50 @@
+(node:389149) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:389149) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/stockinsider-vnext-oct22/web/src/lib/vnext/business-public.test.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/stockinsider-vnext-oct22/web/package.json.
+TAP version 13
+# Subtest: current immutable article gets labelled component analysis without points, risk_bound or entry approval
+ok 1 - current immutable article gets labelled component analysis without points, risk_bound or entry approval
+  ---
+  duration_ms: 25.74421
+  ...
+# Subtest: withdrawal, changed input or artifact hash hides explanatory inference while preserving history
+ok 2 - withdrawal, changed input or artifact hash hides explanatory inference while preserving history
+  ---
+  duration_ms: 5.396768
+  ...
+# Subtest: caller-made checklist is removed and unknown/projected crosswire fields cannot supply a component
+ok 3 - caller-made checklist is removed and unknown/projected crosswire fields cannot supply a component
+  ---
+  duration_ms: 1.770562
+  ...
+# Subtest: negative and unknown source outcomes remain distinct labelled inferences, with no score changes
+ok 4 - negative and unknown source outcomes remain distinct labelled inferences, with no score changes
+  ---
+  duration_ms: 4.303402
+  ...
+# Subtest: future source, mismatched outcome and duplicate claim cannot be represented as current support
+ok 5 - future source, mismatched outcome and duplicate claim cannot be represented as current support
+  ---
+  duration_ms: 4.582446
+  ...
+# Subtest: legacy score without new projected metadata retains its prior output shape and totals
+ok 6 - legacy score without new projected metadata retains its prior output shape and totals
+  ---
+  duration_ms: 1.059059
+  ...
+# Subtest: risk analysis uses the exact SQL field and cannot be relabelled as investment risk_bound or a generic component
+ok 7 - risk analysis uses the exact SQL field and cannot be relabelled as investment risk_bound or a generic component
+  ---
+  duration_ms: 1.286607
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 124.189597

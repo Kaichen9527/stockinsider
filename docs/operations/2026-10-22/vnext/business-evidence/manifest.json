@@ -1,0 +1,63 @@
+{
+  "source": "654346f38f1350000c9554e4aeeee2ab97fc80ca",
+  "publicSafeFiles": [
+    {
+      "path": "docs/operations/2026-10-22/vnext/CURRENT.json",
+      "bytes": 34481,
+      "sha256": "ba3db27ccdf4331ca2a6993afcf2098e3f5ca962b41009217b3c063eb3d45dcf"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/OWNER-ACTIONS.md",
+      "bytes": 13406,
+      "sha256": "a7b801ce4aec1238f5469749ffac5b2b8427d9e0dd12c1172a732494ca81120d"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/STATUS.md",
+      "bytes": 4210,
+      "sha256": "ad1f0c7cb37615a0954de9b586a5f5e198153ee0c76bec3908928205fd78220d"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/VN-EXECUTION-MAP.md",
+      "bytes": 7515,
+      "sha256": "e86b93dfa09a843e3527a5e37a14f2a14dd282849e7158b8c9b63da6b2d88cfd"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/ci102-business-annotations-o23.json",
+      "bytes": 4367,
+      "sha256": "896fd8aad306c0f50ba1a8ab78ba20157f9297f2fdc0c736b72233febbb11f11"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/ci6677-business-annotations-o23.json",
+      "bytes": 2900,
+      "sha256": "a599f492c2ce2f2e9ca008c1eac79f6f182778ab58f250e62f0887043d24d0e9"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/commands.json",
+      "bytes": 7295,
+      "sha256": "1fc344ad981cbb12c7b1bfacb73b2d454f917b1b3874047b8bb45eb00acc7e66"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/fieldmap-source.tap",
+      "bytes": 2454,
+      "sha256": "176929318fabbcb9063650cb9894f72d3a7d992d4bf19e6fb808ce666fa7ae35"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/inputs.json",
+      "bytes": 2121,
+      "sha256": "405afb317f06d4d4e3c7ee33a885582b3bc05064756565b350ed8b8076625bdd"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/private-inventory.json",
+      "bytes": 5165,
+      "sha256": "56c35419737d181de9fc43f4e68b1637582ca79555c3daa0a9bd507c67a03299"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/business-evidence/receipt.json",
+      "bytes": 2375,
+      "sha256": "ecaa547e796788a5c18001ed6faedf91f73b94f16ec672ab3bc50e35081ba25b"
+    }
+  ],
+  "count": 11,
+  "bytes": 86289,
+  "scope": "explicit finite public-safe evidence/metadata only; no raw bodies, source principals or credentials"
+}

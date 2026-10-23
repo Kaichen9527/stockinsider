@@ -1,6 +1,6 @@
-Latest cancellation source candidate f7: `catalyst-cancellation.test.ts`13PASS and `cancellation-candidate.test.ts`4source checks; new actual hosted entry `scripts/vnext-catalyst-cancellation-postgres.test.mjs` planned6children+parent, initial queued (NOT_RUN until real receipt). See cancellation-evidence; earlier runtime rows retain exact subjects.
-
 # VN01–VN20 executable evidence map
+
+Current product/test source **654346f38f1350000c9554e4aeeee2ab97fc80ca**: [CURRENT.json](CURRENT.json), [STATUS.md](STATUS.md), [business receipt](business-evidence/receipt.json), [owner actions](OWNER-ACTIONS.md). New actual business native/browser is pending after two preserved failures; the historical rows below retain their original subjects. This index is not current full acceptance.
 
 Current code subjectaeb6ff2 is indexed in SCREENING-ROSTER-DELIVERY.md and screening-roster-evidence/. Exactaeb ordinary/fullbuild/preparationHTTP/browser and independent product/diagnostic succeeded; enhanced adapter native10PASS is its own run. Older37 source-stageFAIL and28/6f successes remain exact-source history. This is an index, not a new test run or a Release Gate PASS. [CURRENT.json](CURRENT.json) supplies each requirement's status and limitations; [STATUS.md](STATUS.md) points to the exact current source/receipt. Every historical run retains its own source and failed attempts. A pure test, synthetic source/model or earlier-source browser result is never promoted to current full acceptance.
 

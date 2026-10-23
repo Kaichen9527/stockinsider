@@ -1,8 +1,8 @@
 {
   "status": "PARTIAL_ENGINEERING_ACCEPTANCE_DRAFT_NOT_RELEASED",
-  "updatedAt": "2026-10-23T07:56:56.011434+00:00",
-  "runtimeSourceHead": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
-  "currentReceiptSha256": "79e0941042256898c569937197eef8c467ecd2aa40f6fdd234ece80586d3a634",
+  "updatedAt": "2026-10-23T08:36:31.222932+00:00",
+  "runtimeSourceHead": "654346f38f1350000c9554e4aeeee2ab97fc80ca",
+  "currentReceiptSha256": "ecaa547e796788a5c18001ed6faedf91f73b94f16ec672ab3bc50e35081ba25b",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
   "primaryReport": "STATUS.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
@@ -12,142 +12,140 @@
       "status": "PARTIAL_ACTUAL_HTTP",
       "runs": "cached-active-http-01; current-browser-ui-01; native-legacy-final",
       "limits": "Exact aeb actual fullbuild/preparation HTTP succeeds; genuine adapter PG and scanner composition separately tested. Positive routine-screen HTTP not separately exercised.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN02",
       "status": "TESTED_VM_SUBSETS",
       "runs": "native-legacy-final; cached-active-http-01; current-browser-ui-01",
       "limits": "14actuallegacyRPC fences at their earlier source;9currentHTTPaliases/GETscope/claims same20/4ledger. No blanket latest-head legacy acceptance inferred.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN03",
       "status": "TESTED_VM_SYNTHETIC",
       "runs": "cached-native-02; cached-active-http-recovery-01",
       "limits": "8parallelduplicate deliveries reserve4jobs;4actualstarts remaincharged;2livepubs+18explicitprior-day waitingfixture=20active. Prior-sessionrow is syntheticFK setup, not officialtwo-day rotationproof.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN04",
       "status": "PARTIAL_ACTUAL_PG_HTTP_RECOVERY",
       "runs": "thesis-native-01; terminal-slots-native-01; terminal-slots-read-01; final-terminal-test-01; preparation-reconciliation-source-05; preparation-empty-journal-source-o23; hosted39901837447",
       "limits": "da15 real PG-wire committed cancellation response loss, true query rejection+both sockets close, explicit no-resend current stored READ7PASS. Same-head preparationHTTP ordinary pending separate. Full remaining lease/expiry/provider matrix incomplete.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN05",
       "status": "PARTIAL_COVERAGE_AUTHORITY_MISSING",
       "runs": "cached-admission-final-direct-01; cached-admission-final-pure-01; preparation-authority-source-direct-01",
       "limits": "Readonly actual connector audit: TWSE current report-date only/eventWindownull; PTT cap-limited metadata; GDELT observation windows not original-event authority or allowed vNext scope. No comparable28-original-event-day completeness/roots; count staysnull, not0.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN06",
       "status": "PARTIAL_REAL_TIME_PROOF_PENDING",
       "runs": "native-rotation-01; final-discovery-direct; cached-admission-final-direct-01",
       "limits": "Actualwaitingincumbent SQL path and premarket guards earlier; sameday/holiday/policy/null purecases. Real2consecutivepostclose-session positiveatomicexchange NOT_RUN; no clock/guard changes.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN07",
       "status": "PARTIAL_ACTUAL_SERVER_EXIT",
       "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01; thesis-semantic-authority-source-02; semantic-native-monitored-o23; catalyst-semantic-source-05; catalyst-native-monitored-o23; target-exit-evidence/receipt.json",
-      "limits": "da15 actual fresh hosted cancellation7PASS first/prior version, falseauthority/profile rejection, atomically retained history+exit, exact replay, committed current-source withdrawal; group scores/weights unchanged. Synthetic originals/provider; contra/competitive/risk/rebase incomplete.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance.",
-      "cancellationFollowup": "f7 coherent candidate source13PASS +4SQL sourcechecks; new actual native queued, no old native green transfer. Other source-bound contra/competitive/risk remains VM work."
+      "limits": "da15 cancellation7PASS remains exact historical proof. New business/current public component source 654346f7sourcePASS; prior102 native4PASS2FAIL field mapping defect preserved; new native pending. Corporate action terms/rebase and real semantic approval remain incomplete.",
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN08",
       "status": "TESTED_CORE_AND_CACHE_ADAPTERS_PARTIAL_DATA",
       "runs": "cached-native-01; cached-native-02; preparation-authority-source-direct-01",
       "limits": "Actualofficialcalendar row/as-of/futureclose/privatecompletedfalse and source-derived originaladjustedpricefunction reuse. Actual240-price PostgREST+fullqualification positive notrun. Missingannual/forwardEPS staysnull. New forecast-source02 diagnostic12PASS/type/lint only. Actual source receipt/current authority/preparation/provider wiring remains UNIMPLEMENTED, not simply unavailabledata.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN09",
       "status": "TESTED_VM_SYNTHETIC_EXTRACTION_WITHDRAWAL_AND_SNAPSHOT_TRANSPORT",
       "runs": "analysis-native-01; withdrawal-native-03; cached-active-http-recovery-01",
       "limits": "200/50 crossentry/currentrights/contentwithdrawal tested on original sources. New d9a source10contracts+retainedPG6PASS metadata receipt capture/currentpolicy/immutable read; Responses synthetic. Complete comparable eventwindow/volume producer remains UNIMPLEMENTED; eventVolume null.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN10",
       "status": "TESTED_VM_SYNTHETIC_PROVIDER",
       "runs": "analysis-native-01; analysis-sources-direct-02",
       "limits": "Fixedproviderinput/journal/reuse and ruleonlydowngrade tested onrealPG. Actualoverseasprice/foreignFX/margin/dataandactualAI execution notacquired; no seeded marketproducer promoted.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN11",
       "status": "TESTED_HOSTED_SYNTHETIC_REVISION",
       "runs": "worker-native-02; worker-browser-revision-02; thesis-native-01",
       "limits": "a264 actual fresh source journal/prior published revision retained byteexact while new cancellation revision+exit commit; model/source semantics synthetic. No real-new-event/model/semantic publication proof.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN12",
       "status": "TESTED_VM_CONTRACT_NOT_FORMAL_REVIEW",
       "runs": "worker-native-02; terminal-slots-native-01; current-browser-summary-01",
       "limits": "Distinct configuredrole/execution, originalsource hashes/claimchecks/formulas;2actualstructuralreviewfailuresneverpublish. Semantic fixturechecks not independentrealcontentreview. Transportuncertainty keptheld; noautoresend. New typed original quote/issuer/event/date/explicit outcome+full reviewer echo bound to completed provider journals. Protocol not actual semantic support or independent news confirmation.",
-      "cancellationFollowup": "f7 coherent candidate source13PASS +4SQL sourcechecks; new actual native queued, no old native green transfer. Other source-bound contra/competitive/risk remains VM work.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN13",
       "status": "PARTIAL_REAL_PRODUCER_ACCEPTANCE",
       "runs": "native-legacy-final; worker-native-02; withdrawal-native-03; cached-native-02",
       "limits": "Atomicrevision/membership gates+unadmitteddeferredprefix tested withsyntheticrows. Realfinancial/valuationhappy-path and fullnewhead late-exit concurrency stillunverified.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN14",
       "status": "TESTED_VM_FAIL_CLOSED_READ",
       "runs": "public-valuation-read-direct-01; current-browser-summary-01; current-browser-ui-01",
       "limits": "Newcurrentpublicread requires exactproofcanonicalhash/expiry/usablevaluation/claim/date/arithmetic. Older incompleteproofdenied; no legacyfallback; actualwithdrawnarticlehistoryretained.12sourcecontracts,2currentbrowsercases.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN15",
       "status": "HOSTED_BROWSER_STEPS_OBSERVED_RAW_NOT_REVIEWED",
       "runs": "current-browser-ui-01; current-browser-summary-01",
-      "limits": "a264 same-head normal browser stepSUCCESS over same-run synthetic PG/build. No independently downloaded new raw TAP/PNG/visual review; earlier aeb12UI+2current version/hash remains its own exact receipt.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "limits": "102 same-head build/preparation HTTP succeeded, business native failed; new business browser NOT_RUN. Prior exact raw PNGs were not independently downloaded/visually reviewed; no transfer.",
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN16",
       "status": "PARTIAL_TYPES_LINT_HOSTED_BUILD",
       "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23; semantic-final-types-o23",
       "limits": "a264 exact-source hosted fullbuild/types/lint/sourceSUCCESS; local fresh fullbuild NOT_ADMITTED. New da15 normal CI pending; no green transferred to uncommitted business criteria.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN17",
       "status": "PARTIAL_FRESH_HOSTED_NATIVE",
       "runs": "cached-native-02; terminal-slots-read-01; cached-active-http-recovery-01",
       "limits": "da15 genuine fresh hosted full installer/private helper/first and prior publication7PASS, mandatory successful extended PG frames/independent COMMIT/real socket loss/explicit no-resend READ; permanent withdrawal and whole state invariants. Actual raw private rows not independently downloaded; not CodexVM/Contabo/formal research.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN18",
       "status": "EXTERNAL_NOT_ACCEPTED",
       "runs": "staging/tcp-readiness historical metadata",
       "limits": "No Contaboisolatedapp/DB/schema/queue/storage. TCP22unsupported/no grant, no trustedhostkey/newactiveidentity. Expiredkeynotrenewed. No productionlocatorasstaging.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN19",
       "status": "REAL_EXECUTION_BLOCKED_MISSING_ISOLATED_BINDINGS",
       "runs": "source-canary-final.json; analysis-native-01; ir-native-o23; ir-continuation-monitored-02-o23; ir-status-recovery-monitored-o23",
       "limits": "Fresh metadata has no injected secret/runtime/outbound identity, required provider/DB/roles and official/PTT policy bindings absent. No secret files read/values printed or actual model/fetch attempted. Prior canaries/IR8PASS remain their historical subjects; synthetic original is not actual acquisition.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     },
     {
       "id": "VN20",
       "status": "DRAFT_PR_PARTIAL_RELEASE_GATE",
       "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json; preparation-reconciliation-evidence/receipt.json; SEMANTIC-SCORE-DELIVERY.md; semantic-score-evidence/receipt.json; TWSE-SNAPSHOT-DELIVERY.md; twse-snapshot-evidence/receipt.json",
       "limits": "PR384 source da15/new normal CI pending; earlier a264 normal job120301725217SUCCESS and cancellation7PASS; protected39919707261FAIL unchanged. Exact review prerequisite must follow independent original process; no maker approval or merge/deploy.",
-      "currentFollowup": "Current latest slice details are in catalystCancellation/newSourceCI; all counts remain per exact source/run. Earlier observations are history, not blanket acceptance."
+      "currentFollowup": "Latest business source 654346f and exact separate native/source receipts: businessCurrent; prior cancellation accepted da15, not transferred. Full real acceptance incomplete."
     }
   ],
   "externalOwnerActions": [
@@ -514,5 +512,14 @@
     "path": "cancellation-evidence/ci-followup-f7-red.json",
     "sha256": "5d07d99ecec08307062dcb13c5a53e5d7a8ba9f2ed30f0b3d334f01c16428ad2",
     "appendOnly": true
+  },
+  "currentReceipt": "business-evidence/receipt.json",
+  "ownerActions": "OWNER-ACTIONS.md",
+  "businessCurrent": {
+    "source": "654346f38f1350000c9554e4aeeee2ab97fc80ca",
+    "receipt": "business-evidence/receipt.json",
+    "status": "SOURCE_FIX_TESTED_NEW_HOSTED_PENDING",
+    "native": "new source pending; 102 stage5 4PASS2FAIL preserved",
+    "scope": "labelled source-supported competitive/thesis-risk inference only; complete group score and risk_bound remain null"
   }
 }
