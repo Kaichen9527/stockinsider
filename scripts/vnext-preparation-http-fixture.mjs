@@ -10,7 +10,7 @@ import {workerFixture,hash} from './vnext-worker-fixture.mjs';
 import {installActionTermsCandidate,proveActionTermsOriginals} from './vnext-action-terms-native-fixture.mjs';
 import {installPublishedTargetReadCandidate} from './vnext-published-target-read-native-fixture.mjs';
 import {seedForecastMetadata} from './vnext-forecast-native-fixture.mjs';
-import {installDisclosedFiscalCandidate,seedDisclosedFiscalFixture,checkDisclosedFiscalComponent} from './vnext-disclosed-fiscal-native-fixture.mjs';
+import {installDisclosedFiscalCandidate,seedDisclosedFiscalFixture,checkDisclosedFiscalComponent,checkClosedDayFiscalWithdrawal} from './vnext-disclosed-fiscal-native-fixture.mjs';
 import {validateCurrentForecasts} from '../web/src/lib/vnext/forecast-current.ts';
 import {validateOfficialFinancialFact} from '../web/src/lib/official-financial-validation.ts';
 import {resolveFinancialEvidenceSources} from '../web/src/lib/vnext/financial-evidence-sources.ts';
@@ -213,7 +213,9 @@ export async function preparationHttpFixture(){
   await checkDisclosedFiscalComponent(x,stockId,fiscalSources);
   // READ needs existing enabled binding metadata, never an API credential or dispatch.
   for(const role of ['author','reviewer']){const b=binding(role);await x.writer.query('INSERT INTO public.vnext_provider_bindings_v1(principal,task,provider,model,model_version,credential_identity,prompt_version,instructions,enabled) VALUES($1,$2,$3,$4,$5,$6,$7,$8,true)',[preparationPrincipals[role],role,b.provider,b.model,b.modelVersion,b.credentialIdentity,b.promptVersion,b.instructions]);}
-  const civil=(await x.observer.query("SELECT (clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date::text AS today,extract(isodow FROM clock_timestamp() AT TIME ZONE 'Asia/Taipei')<6 AS weekday")).rows[0];assert.equal(civil.weekday,true,'explicit synthetic weekday calendar only; unknown/nontrading fixture not invented');
+  const civil=(await x.observer.query("SELECT (clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date::text AS today,extract(isodow FROM clock_timestamp() AT TIME ZONE 'Asia/Taipei')<6 AS weekday")).rows[0];
+  if(civil.weekday===false)await checkClosedDayFiscalWithdrawal(x,stockId,fiscalSources,withLease);
+  assert.equal(civil.weekday,true,'explicit synthetic weekday calendar only; unknown/nontrading fixture not invented');
   const historicalDay=(await x.observer.query("SELECT d::date::text AS day FROM generate_series((clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date-8,(clock_timestamp() AT TIME ZONE 'Asia/Taipei')::date,interval'1 day')d WHERE extract(isodow FROM d)<6 AND (d::date+time'13:30') AT TIME ZONE 'Asia/Taipei'<=clock_timestamp() ORDER BY d DESC LIMIT 1")).rows[0].day;
   for(const day of [...new Set([civil.today,historicalDay])])for(const [market,provider]of [['TWSE','twse'],['TPEX','tpex']])await x.writer.query("INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,provider,source_timestamp,collected_at,source_ref) VALUES($1,$2,$3,$4,$5,'completed',$6,$7,$7,'synthetic-preparation-calendar-not-acquired')",[randomUUID(),day,market,day+'T01:00:00Z',day+'T05:30:00Z',provider,await clock()]);
   const sync=(await query("SELECT public.vnext_cached_admission_v1($1,'sync-calendar','{}'::jsonb) AS result",[preparationPrincipals.operator])).rows[0].result;const completed=Date.parse(sync.sourceCutoff)>=Date.parse(civil.today+'T05:30:00Z');const selected=(await x.observer.query('SELECT completed FROM public.vnext_sessions_v1 WHERE session_date=$1',[civil.today])).rows[0];assert.equal(selected.completed,completed);

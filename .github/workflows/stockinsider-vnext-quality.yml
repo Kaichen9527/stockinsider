@@ -73,6 +73,7 @@ jobs:
           node --experimental-strip-types web/src/app/components/vnext/detail-source.test.mjs | tee /tmp/stockinsider-vnext-ci/published-target-ssr-source.tap
           node scripts/vnext-published-target-read-source.test.mjs | tee /tmp/stockinsider-vnext-ci/published-target-sql-source.tap
           node --experimental-strip-types scripts/vnext-action-row-reference.test.mjs | tee /tmp/stockinsider-vnext-ci/action-row-reference-source.tap
+          node --experimental-strip-types scripts/vnext-closed-day-source-boundary.test.mjs | tee /tmp/stockinsider-vnext-ci/closed-day-source-boundary.tap
           node --experimental-strip-types web/src/lib/vnext/disclosed-fiscal-forecast.test.ts | tee /tmp/stockinsider-vnext-ci/disclosed-fiscal-source.tap
           node scripts/vnext-disclosed-fiscal-source.test.mjs | tee /tmp/stockinsider-vnext-ci/disclosed-fiscal-sql-source.tap
           node --experimental-strip-types web/src/lib/vnext/forecast-current.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-current-source.tap
@@ -380,6 +381,7 @@ jobs:
                       if set(row)!={'signature','bodySha256','proconfig','securityDefiner'} or row['securityDefiner'] is not True or not re.fullmatch('[a-f0-9]{64}',row['bodySha256']) or not isinstance(row['proconfig'],list) or len(row['proconfig'])>6 or any(not isinstance(v,str) or len(v)>100 for v in row['proconfig']): raise SystemExit('bounded target predecessor metadata required')
                   print('::notice title=Published target actual predecessor::'+json.dumps(observed,separators=(',',':')))
           expected={'FORECAST_CURRENT_SAFE ':{'evidenceCount','receiptCount','numericSourceOnly','sourceDeclaredAnnualAndForward4q','reportedAnnual','actualOriginalAppend','syntheticSource','actualExternalModel'},'FORECAST_FROZEN_REVOKED_SAFE ':{'actualReservedFrozenInput','forecastItems','providerPosts','rightsRevocationCommitted','originalRowsRetained','sourceCurrentFalse','noSecondClaimPrepareOrReserve','directRejectedMutants','duplicateAcquisitionStable','recollectionObservations'}}
+          expected['FISCAL_CLOSED_DAY_WITHDRAWAL_SAFE ']=set('rightsRevocations originalRowsRetained freshReadonlyObserver sourceEvidenceBefore sourceEvidenceAfter researchClaims providerPosts preparations publications wholeBusinessLedgerUnchanged businessWeekdayGuardBypassed actualExternalSource'.split())
           expected['PUBLISHED_TARGET_INSTALL_SAFE ']=set('modifiedBodies newFunctions newGrants repeatRejected wholeCatalogInvariant readOnlyProbe publishedBaseline actualRebase'.split())
           expected['FISCAL_FORECAST_CURRENT_SAFE ']=set('originals sourceDeclaredAnnual sourceDeclaredForwardFour reportedAnnual wholeOriginalContext currentReader frozenProviderInput providerPosts rightsWithdrawals sourceHistoryRetained actualExternalSource'.split())
           expected['FISCAL_SOURCE_COMPONENT_SAFE ']=set('originals wholeOriginals evidence receipts wholeRowsUnchanged privateOwnerRead authorJobRead preparation providerPosts syntheticSource'.split())

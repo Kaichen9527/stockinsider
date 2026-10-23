@@ -68,3 +68,28 @@ export async function seedDisclosedFiscalFixture(x,call,stockId,runner,kind){
  await x.writer.query("INSERT INTO public.vnext_forecast_rights_v1(policy_id,verification_id,stock_id,operation,license_basis,permitted_use,rights_evidence_ref,valid_from,valid_until) VALUES($1,$2,$5,'allow','public_issuer_guidance','structured_numeric_forecast','https://mops.twse.com.tw/synthetic-guidance-permission',$3,$4)",[policy,verification,known,until,stockId]);
  const result={identity,verification,policy,revision,manifest,sourceHash:contentHash,body,kind,parsed:extractDisclosedFiscalForecast(body),calculation:calculateDisclosedFiscalForecast(extractDisclosedFiscalForecast(body),known),scope:'synthetic original; existing role-bound append APIs and explicit private use metadata; no real acquisition/rights/model or sealed input mutation'};x.save('fiscal-original-'+kind,result);return result;
 }
+
+/** Independent NON-business component for an actually observed closed market
+ * day. It preserves the fatal business guard and commits real append-only use
+ * revocations instead of pretending a model/job can start on the weekend. */
+export async function checkClosedDayFiscalWithdrawal(x,stockId,sources,withLease){
+ const civil=(await x.observer.query("SELECT extract(isodow FROM clock_timestamp() AT TIME ZONE 'Asia/Taipei')>=6 AS closed_day")).rows[0];assert.equal(civil.closed_day,true);
+ assert.deepEqual((await x.observer.query('SELECT * FROM public.stockinsider_data_plane_settings_v1')).rows,[],'original disposable engineering prefix only, no configured formal writer');
+ assert.equal(sources.length,2);assert.deepEqual(sources.map(s=>s.kind),['annual','four_quarters']);assert.notEqual(x.writer.processID,x.observer.processID);
+ const read=async()=>{await x.observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');try{await x.observer.query('SET LOCAL ROLE opportunity_v3_rpc_owner');const value=(await x.observer.query("SELECT public.vnext_forecast_current_internal_v1($1::uuid,'2408',statement_timestamp()) AS value",[stockId])).rows[0].value;await x.observer.query('ROLLBACK');return validateCurrentForecasts(value);}catch(error){try{await x.observer.query('ROLLBACK');}catch(rollbackError){Object.assign(error,{rollbackError});}throw error;}};
+ const original=await x.snapshot(),accepted=await read();assert.equal(original.vnext_jobs_v1.count,0);assert.equal(original.vnext_provider_invocations_v1.count,0);assert.equal(accepted.evidence.length,6);
+ const stages=[];
+ for(const [index,source]of sources.entries()){
+  const before=await x.snapshot();const prior=before.vnext_forecast_rights_v1.rows.find(r=>r.policy_id===source.policy);assert.ok(prior&&prior.operation==='allow'&&prior.verification_id===source.verification&&prior.stock_id===stockId);
+  let committed;
+  await withLease(async()=>{await x.writer.query('BEGIN');try{const inserted=await x.writer.query("INSERT INTO public.vnext_forecast_rights_v1(policy_id,stock_id,verification_id,operation,license_basis,permitted_use,rights_evidence_ref,valid_from,valid_until) SELECT $1,stock_id,verification_id,'revoke',license_basis,permitted_use,rights_evidence_ref,valid_from,valid_until FROM public.vnext_forecast_rights_v1 WHERE policy_id=$2 AND operation='allow' RETURNING to_jsonb(vnext_forecast_rights_v1) AS value",[randomUUID(),source.policy]);assert.equal(inserted.rowCount,1);committed=inserted.rows[0].value;await x.writer.query('COMMIT');}catch(error){try{await x.writer.query('ROLLBACK');}catch(rollbackError){Object.assign(error,{rollbackError});}throw error;}});
+  const after=await x.snapshot();assert.equal(after.vnext_forecast_rights_v1.count,before.vnext_forecast_rights_v1.count+1);assert.ok(after.vnext_forecast_rights_v1.rows.some(r=>r.policy_id===committed.policy_id&&r.operation==='revoke'));
+  for(const row of before.vnext_forecast_rights_v1.rows)assert.ok(after.vnext_forecast_rights_v1.rows.some(r=>JSON.stringify(r)===JSON.stringify(row)));
+  for(const table of Object.keys(before))if(table!=='vnext_forecast_rights_v1')assert.deepEqual(after[table],before[table]);
+  const denied=await read();assert.equal(denied.evidence.length,4-2*index);assert.ok(!denied.evidence.some(e=>e.id.startsWith('fiscal-forecast:'+source.verification+':')));assert.ok(denied.evidence.every(e=>!String(e.id).includes(source.verification)));assert.ok(denied.gaps.length>0);
+  assert.deepEqual(await x.snapshot(),after);stages.push({before,committed,after,denied,freshReadonlyObserver:true});
+ }
+ const final=await x.snapshot();assert.equal(final.vnext_jobs_v1.count,0);assert.equal(final.vnext_provider_invocations_v1.count,0);assert.equal(final.vnext_preparations_v1.count,0);assert.equal(final.vnext_publications_v1.count,0);
+ x.save('closed-day-fiscal-current-withdrawal',{original,accepted,stages,final,observerPid:x.observer.processID,writerPid:x.writer.processID,researchClaims:0,providerPosts:0,preparations:0,rightsRevocations:2,scope:'actual future committed private engineering metadata tombstones plus fresh RO source projections only; original data preserved and original business weekend rejection remains fatal; original DB writer lease used for authorized injection, not zero total prerequisite writes; no author/public RPC, preparation response-loss, model or semantic/rights approval'});
+ console.log('FISCAL_CLOSED_DAY_WITHDRAWAL_SAFE '+JSON.stringify({rightsRevocations:2,originalRowsRetained:true,freshReadonlyObserver:true,sourceEvidenceBefore:6,sourceEvidenceAfter:2,researchClaims:0,providerPosts:0,preparations:0,publications:0,wholeBusinessLedgerUnchanged:true,businessWeekdayGuardBypassed:false,actualExternalSource:false}));
+}
