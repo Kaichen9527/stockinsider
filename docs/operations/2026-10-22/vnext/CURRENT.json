@@ -1,10 +1,10 @@
 {
   "status": "PARTIAL_VM_IMPLEMENTATION_AND_ACCEPTANCE_NOT_RELEASE_COMPLETE",
-  "updatedAt": "2026-10-22T03:28:42.515811+00:00",
-  "runtimeSourceHead": "e1bb126d33f63f4f8c004194b1c3df2f43bec82a",
-  "currentReceiptSha256": "64840a8de2aebdee78abf35db3c3ac17826c020a013fbe0963eadb04262724df",
+  "updatedAt": "2026-10-23T00:18:01.669420+00:00",
+  "runtimeSourceHead": "1ac92cb23b55b95d7c138da57a59f536a50dda36",
+  "currentReceiptSha256": "3465c0df6be29b15325b0c6ecb338330692e96892c36d93a9ef498af94a2e356",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
-  "primaryReport": "CURRENT-DELIVERY.md",
+  "primaryReport": "POST-CLEAN-DELIVERY.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
   "acceptance": [
     {
@@ -100,8 +100,8 @@
     {
       "id": "VN16",
       "status": "TESTED_VM_RUNTIME_SOURCE",
-      "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01",
-      "limits": "Node22.14/TS5.9.3 types/lint/fullwebpack PASS currentruntimee1bb126.33inheritedwarnings. Originaltest-variablelintRED then renamedlocal only. No locks/rules disabled."
+      "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23",
+      "limits": "Node22.14/TS5.9.3 types/lint/fullwebpack PASS currentruntimee1bb126.33inheritedwarnings. Originaltest-variablelintRED then renamedlocal only. No locks/rules disabled. New IRproductfiles fulltypes/build/lintPASS; firstsandboxbuildRED retained, normalpermissionhelper capture diagnosis documented. Current source1ac onlytest corrections after product7751 fullbuild; source-ci-tail-fixed typePASS. No whole-source native acceptance inferred."
     },
     {
       "id": "VN17",
@@ -118,13 +118,13 @@
     {
       "id": "VN19",
       "status": "PARTIAL_ACTUAL_SOURCE_CANARY",
-      "runs": "source-canary-final.json; analysis-native-01",
-      "limits": "TWSEactualpublicindex200/statOK/date20261021;PTT403. Indexnotbody/fact/modelapproval. Otherauthorizedsourcecapabilities do notprove acquisition. ApprovedIRreceipt-map extension and truebody/sourcehealth coverage remainpending."
+      "runs": "source-canary-final.json; analysis-native-01; ir-native-o23; ir-continuation-monitored-02-o23",
+      "limits": "Original TWSEindexcanary200 is onlyindex; PTT403. FiniteIRmapping14purePASS; freshinstall committed within overall0PASS2FAIL. Continuedexactlab2PASS2FAIL: currentinstallACL/RLS+denychecksPASS, originalrecordvalidation42704 absentlegacyenum. Actualsource/parser/receipt prefix synthetic; healthy projection/provider/publication/revocation NOT_RUN. Originalfailures retained. No realacquiredIRfiling/model/semanticapproval."
     },
     {
       "id": "VN20",
       "status": "DRAFT_PR_PARTIAL_RELEASE_GATE",
-      "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json",
+      "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json",
       "limits": "ExactVMhead/receiptspublished, historypreserved. Protectedreviews failing/pending; latestCI independentstatusnottransferred. No merge/deploy/migration/scheduleresume authorization."
     }
   ],
@@ -137,12 +137,25 @@
     "Immutableconnector sourcewindow/exhaustion/manifest authority and comparable28days builder",
     "Structured source-bound catalyst/cancel/contra/target semanticadjudication producer",
     "Explicit numericguidance/forecast/valuation assumptions input producer; no invented estimates",
-    "Finite approvedissuerIR receipt-source mapping extension",
+    "Issuer-IR sourcecandidate implemented; genuinehealthy financial chain/native revocation pending after firstnative metadata-codec assertionRED and sourcefix",
     "Financialpreparation uncertainty reconciliation beyond explicitheld/manualREAD"
   ],
   "remainingTimeAcceptance": "2actualconsecutivecompletedpostclose sessions; no guard/clock bypass",
   "ReleaseGate": "PENDING",
   "testAdapterSource": "76aca1522fa1b3292a85f9f387f01bee7fd43e23",
-  "latestCI": "e1bb126 ordinary vnext-quality+financial-route failures; default-off adaptermissingstaticimport reproduced and corrected9PASS inVM; protected bootstrap/detachedsource failure persists; freshCI pending",
-  "ciReceiptSha256": "794150159d1e3c7fa05dbe84bfc66f81d57573ee39494793ba5e1d77e1d3089e"
+  "latestCI": "Observed808d: product-runtime120160235003 and diagnostic120163263603 SUCCESS. vnext39875575447 failed sourcecontracts step; VM reproduced closedloaderdependency2FAIL, minimaltestfix6PASS/tail2+9PASS/typePASS. New1ac normalpush freshCI independent/not yet observed. Protectedroot39875570528 FAILURE; no pins/guards changed.",
+  "ciReceiptSha256": "52269e1b6c22d0f84c15c70d56b27dd30d2f59c37714314a32789dfcd7dfd7f7",
+  "previousRuntimeSourceHead": "e1bb126d33f63f4f8c004194b1c3df2f43bec82a",
+  "previousReceiptSha256": "64840a8de2aebdee78abf35db3c3ac17826c020a013fbe0963eadb04262724df",
+  "capacity": {
+    "status": "RESUMED_BOUNDED_VM_WORK",
+    "floorPerFilesystem": 8589934592,
+    "latestWorkspaceFree": 8894779392,
+    "latestTmpFree": 17333522432,
+    "previousHoldAndCleanupReceiptsRetained": true,
+    "furtherAutomaticCleanupAuthorized": false,
+    "retainedLab": "worker11 stopped/PID0/exit0, PGdata/container/evidence retained",
+    "nextFreshClone": "NOT_ADMITTED:912297984reference+128MiB exceeds workspace margin; not upperbound",
+    "boundedContinuation": "estimate128MiBworkspace+256MiBtmp with original live monitor, no resourceViolation"
+  }
 }

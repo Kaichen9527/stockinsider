@@ -1,0 +1,30 @@
+{
+  "observedAt": "2026-10-23T00:17:03.214120+00:00",
+  "subject": "808d19abd7339610852f763ee9d34d6cd68c1db5",
+  "vnextQuality": {
+    "run": 39875575447,
+    "job": 120160234944,
+    "conclusion": "failure",
+    "failedStep": "Actual source contracts, types and lint",
+    "downstreamBuildNative": "skipped",
+    "signedJobLog": "403, not fetched; no retries/bypass",
+    "VMReproduction": "source-ci-current-o23 ends research-failure2fail:unexpected_failure_source:worker-output.ts; minimal test-loader correction6PASS; not an attestation of all remote logs"
+  },
+  "sourceLed": {
+    "run": 39875575448,
+    "productRuntime": {
+      "job": 120160235003,
+      "conclusion": "success"
+    },
+    "diagnosticProductRuntime": {
+      "job": 120163263603,
+      "conclusion": "success"
+    }
+  },
+  "protectedRoot": {
+    "run": 39875570528,
+    "conclusion": "failure",
+    "guardsAndPinsUnchanged": true
+  },
+  "nextSource": "1ac92cb pushed normal branch; natural fresh CI independent, not observed PASS"
+}

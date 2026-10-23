@@ -1,0 +1,96 @@
+TAP version 13
+# Subtest: internal caller waits for a delayed response within its configured deadline
+ok 1 - internal caller waits for a delayed response within its configured deadline
+# Subtest: internal caller enforces the configured absolute deadline
+ok 2 - internal caller enforces the configured absolute deadline
+# Subtest: candidate financial parser migration persists only bounded, hash-bound receipt locators
+ok 3 - candidate financial parser migration persists only bounded, hash-bound receipt locators
+# Subtest: v8 document completion persists structural evidence and awaits exact fact validation
+ok 4 - v8 document completion persists structural evidence and awaits exact fact validation
+# Subtest: migration is additive and installs research, shadow and last-good publication planes
+ok 5 - migration is additive and installs research, shadow and last-good publication planes
+# Subtest: valuation writes use the same official-session composite idempotency key as the migration
+ok 6 - valuation writes use the same official-session composite idempotency key as the migration
+# Subtest: candidate research reads the durable official calendar and refreshes the latest official window every cycle
+ok 7 - candidate research reads the durable official calendar and refreshes the latest official window every cycle
+# Subtest: official roster normalization happens before a missing price history can fail closed
+ok 8 - official roster normalization happens before a missing price history can fail closed
+# Subtest: candidate technical features and the core scheduler remain bound to official completed sessions
+ok 9 - candidate technical features and the core scheduler remain bound to official completed sessions
+# Subtest: GitHub write workflows are manual-only and VPS timers own the approved cadence
+ok 10 - GitHub write workflows are manual-only and VPS timers own the approved cadence
+# Subtest: orphaned production lease recovery remains authenticated, owner-bound and older than the caller deadline
+ok 11 - orphaned production lease recovery remains authenticated, owner-bound and older than the caller deadline
+# Subtest: scheduled core pipeline is candidate-first, isolates unavailable official history, and leaves legacy seed ingestion to manual full recovery
+ok 12 - scheduled core pipeline is candidate-first, isolates unavailable official history, and leaves legacy seed ingestion to manual full recovery
+# Subtest: candidate research records prerequisite failures on the canonical run before rethrowing
+ok 13 - candidate research records prerequisite failures on the canonical run before rethrowing
+# Subtest: Threads joins the VPS scheduler only after official policy activation and the 20:00 monitor owns missing-run/publication alerts
+ok 14 - Threads joins the VPS scheduler only after official policy activation and the 20:00 monitor owns missing-run/publication alerts
+# Subtest: public snapshot publication is atomic and failed refreshes retain last-good fail-closed state
+ok 15 - public snapshot publication is atomic and failed refreshes retain last-good fail-closed state
+# Subtest: shadow observations are canonical per official session and preserve conflicts
+ok 16 - shadow observations are canonical per official session and preserve conflicts
+# Subtest: retired shadow evidence remains auditable without coupling production to a cohort
+ok 17 - retired shadow evidence remains auditable without coupling production to a cohort
+# Subtest: production source writes require the active VPS release and production lease
+ok 18 - production source writes require the active VPS release and production lease
+# Subtest: enterprise multiples are append-only point-in-time observations instead of fabricated historical facts
+not ok 19 - enterprise multiples are append-only point-in-time observations instead of fabricated historical facts
+# Subtest: enterprise multiple migration reapplies and the RPC preserves idempotent and revised observations
+not ok 20 - enterprise multiple migration reapplies and the RPC preserves idempotent and revised observations
+# Subtest: evidence and valuation migration is additive and accepts every runtime contract value
+ok 21 - evidence and valuation migration is additive and accepts every runtime contract value
+# Subtest: financial documents follow the truth and evidence contract migrations
+ok 22 - financial documents follow the truth and evidence contract migrations
+# Subtest: migration keeps the old fact kind for read compatibility while new writers use reported numeric
+ok 23 - migration keeps the old fact kind for read compatibility while new writers use reported numeric
+# Subtest: research funnel v4 migration plan is exact, additive and dry by default
+ok 24 - research funnel v4 migration plan is exact, additive and dry by default
+# Subtest: runtime tables, append-only revisions and source identity are covered by the migration chain
+ok 25 - runtime tables, append-only revisions and source identity are covered by the migration chain
+# Subtest: migration is repeatable and starts Shadow v2 without rewriting v1 audit evidence
+not ok 26 - migration is repeatable and starts Shadow v2 without rewriting v1 audit evidence
+# Subtest: writer fence is dormant before activation and then requires exact release plus a live lease
+not ok 27 - writer fence is dormant before activation and then requires exact release plus a live lease
+# Subtest: FinMind is persistently labelled as a fallback mirror, never an official source
+ok 28 - FinMind is persistently labelled as a fallback mirror, never an official source
+# Subtest: terminal outcome contract distinguishes API usage, timeout, schema and empty results
+ok 29 - terminal outcome contract distinguishes API usage, timeout, schema and empty results
+# Subtest: provider receipt storage accepts every response admitted by the bounded runtime
+ok 30 - provider receipt storage accepts every response admitted by the bounded runtime
+# Subtest: VPS-only authenticated routes queue and drain the durable provider plane
+ok 31 - VPS-only authenticated routes queue and drain the durable provider plane
+# Subtest: issuer IR acquisition jobs remain visible to the Browser-assisted receipt worker
+ok 32 - issuer IR acquisition jobs remain visible to the Browser-assisted receipt worker
+# Subtest: candidate research retains revenue support while close schedules exclude issuer-period revenue
+ok 33 - candidate research retains revenue support while close schedules exclude issuer-period revenue
+# Subtest: candidate queue completeness retains missing work and cannot certify a single drained batch
+ok 34 - candidate queue completeness retains missing work and cannot certify a single drained batch
+# Subtest: a provider contract generation replaces the active scope without mutating terminal audit rows
+ok 35 - a provider contract generation replaces the active scope without mutating terminal audit rows
+# Subtest: company data gaps permit isolated research while market-regime evidence remains critical
+ok 36 - company data gaps permit isolated research while market-regime evidence remains critical
+# Subtest: VPS timers separate the approved preliminary, final, pipeline and hourly drain cadences
+ok 37 - VPS timers separate the approved preliminary, final, pipeline and hourly drain cadences
+# Subtest: Threads lifecycle migration deletes only the named Vault credential and is service-role only
+ok 38 - Threads lifecycle migration deletes only the named Vault credential and is service-role only
+# Subtest: truth research migration quarantines legacy TPEx multiples without deleting audit rows
+ok 39 - truth research migration quarantines legacy TPEx multiples without deleting audit rows
+# Subtest: source search and coverage share the versioned GDELT validity predicate
+ok 40 - source search and coverage share the versioned GDELT validity predicate
+# Subtest: historical PTT bulk rankings are retained but invalidated for candidate discovery
+ok 41 - historical PTT bulk rankings are retained but invalidated for candidate discovery
+# Subtest: source verification filters use explicit evidence state instead of confidence thresholds
+ok 42 - source verification filters use explicit evidence state instead of confidence thresholds
+# Subtest: connector cursor authority is private and scoped per connector
+ok 43 - connector cursor authority is private and scoped per connector
+1..43
+# tests 43
+# suites 0
+# pass 39
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1565.509837

@@ -1,0 +1,189 @@
+{
+  "scope": "User authorized unused data removal; exact generated cache/test runtimes only, no data/volume/image/raw/Git/source deletion. No further automatic cleanup after coordinator narrowed scope.",
+  "records": [
+    {
+      "at": "2026-10-22T23:36:59.750395+00:00",
+      "authority": "User current request explicitly authorizes deleting unused data; limited to generated vNext compiler cache",
+      "root": "/workspace/stockinsider-vnext-oct22/web/.next/cache",
+      "metadataSha256": "dc5e2e5d5500d79aac87eb9a210f8188c80f6bf0ae97ca579aa140a81b66c1b1",
+      "nodes": 58,
+      "allocatedBytesBefore": 378839040,
+      "freeBefore": {
+        "workspace": 8517922816,
+        "tmp": 17518100480
+      },
+      "sourceGitDataWipRedReceiptsDeleted": false,
+      "rootPreserved": true,
+      "deletedFiles": 49,
+      "deletedDirectories": 9,
+      "status": "confirmed",
+      "freeAfter": {
+        "workspace": 8896761856,
+        "tmp": 17518096384
+      },
+      "reclaimedWorkspaceBytesObserved": 378839040
+    },
+    {
+      "at": "2026-10-22T23:38:46.464995+00:00",
+      "authority": "User current request authorizes deleting unused data; exact task-owned never-started empty container only",
+      "id": "6e6c3933037fe98faa97b352cbff6ff6fba5ee3b777a4f26358e642ee84473ea",
+      "name": "stockinsider-vnext-oct22-ci-repro-01",
+      "beforeState": {
+        "Status": "created",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "0001-01-01T00:00:00Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "writableLayerBytes": 0,
+      "diffEmpty": true,
+      "bindPath": "/tmp/stockinsider-vnext-oct22-ci-repro-data-01",
+      "emptyBindPathRetained": true,
+      "freeBefore": {
+        "workspace": 8896774144,
+        "tmp": 17518063616
+      },
+      "imagesVolumesOtherContainersDeleted": false,
+      "rmFlags": "no-force; no-volumes",
+      "removeExit": 0,
+      "status": "confirmed",
+      "containerAbsent": true,
+      "freeAfter": {
+        "workspace": 9809031168,
+        "tmp": 17518059520
+      },
+      "observedWorkspaceReclaimedBytes": 912257024
+    },
+    {
+      "at": "2026-10-22T23:42:18.694381+00:00",
+      "name": "stockinsider-vnext-oct22-worker-10",
+      "id": "88908f1213ee3b9e23e0c0078c066dcb9b8366209683479d248463e60b6da97c",
+      "authority": "User-authorized unused output removal; tested container runtime only after confirmed clean shutdown",
+      "PGDataRawReceiptsRetained": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "/tmp/stockinsider-vnext-oct22-private/worker-pg-data-10",
+          "Destination": "/var/lib/postgresql/data",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-10/socket",
+          "Destination": "/var/run/postgresql",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-22T23:41:09.373821176Z",
+        "FinishedAt": "2026-10-22T23:41:16.156408512Z"
+      },
+      "trackedClientsSettled": true,
+      "priorBackendsAbsent": true,
+      "freeBefore": 8896737280,
+      "flags": "no-force; no-volumes",
+      "status": "confirmed",
+      "containerAbsent": true,
+      "allBindDirectoriesSameInode": true,
+      "freeAfter": 9809027072,
+      "observedWorkspaceReclaimedBytes": 912289792
+    },
+    {
+      "at": "2026-10-22T23:48:31.940867+00:00",
+      "root": "/workspace/stockinsider-vnext-oct22/web/.next/cache",
+      "authority": "User-authorized unused cache cleanup after successful completedbuild; preserve generated runtime outputs and all receipts",
+      "completedBuildRecord": "post-clean-ir-build-permissions-o23.json",
+      "metadataSha256": "a8dca5f91ea372ec841e9ebfadac0655af17e42657fe0b038b89b48c3b42818c",
+      "files": 9,
+      "allocatedBytes": 306835456,
+      "freeBefore": 9502134272,
+      "runtimeBuildOutputsRemoved": false,
+      "status": "confirmed",
+      "freeAfter": 9808969728,
+      "observedWorkspaceReclaimedBytes": 306835456
+    },
+    {
+      "at": "2026-10-22T23:50:32.721681+00:00",
+      "name": "stockinsider-vnext-oct22-product-tools-01",
+      "id": "4c0f1a87ee0893f43df1e1006b47aa7f14cbafa39aad7a9f875f7503b133ee64",
+      "flags": "no-force; no-volumes",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 137,
+        "Error": "",
+        "StartedAt": "2026-10-22T23:49:19.100783221Z",
+        "FinishedAt": "2026-10-22T23:49:54.909740226Z"
+      },
+      "actualTestExit": 0,
+      "PGToolContainerPid1SleepExit137NotDatabaseShutdownClaim": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "/tmp/stockinsider-vnext-oct22-private/product-tools-tmp-01",
+          "Destination": "/tmp",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "volume",
+          "Name": "858b3acfe1c476562286c58d301964822048f809b44a4bc354f9f631b8c117fd",
+          "Source": "/var/lib/docker/volumes/858b3acfe1c476562286c58d301964822048f809b44a4bc354f9f631b8c117fd/_data",
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "/workspace/stockinsider-vnext-oct22",
+          "Destination": "/workspace/stockinsider-vnext-oct22",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "/workspace/.tools/node22",
+          "Destination": "/workspace/.tools/node22",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "freeBefore": 8896671744,
+      "allFilesAndVolumesPreserved": true,
+      "status": "confirmed",
+      "freeAfter": 9808973824,
+      "containerAbsent": true,
+      "observedWorkspaceReclaimedBytes": 912302080
+    }
+  ]
+}

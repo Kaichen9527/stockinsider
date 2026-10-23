@@ -1,5 +1,16 @@
 # Current vNext status — partial implementation and acceptance
 
+Current source: `1ac92cb23b55b95d7c138da57a59f536a50dda36`. Read [post-clean delivery](POST-CLEAN-DELIVERY.md), [VN01–VN20](CURRENT.json), and [bound receipt](post-clean-evidence/receipt.json), SHA256 `3465c0df6be29b15325b0c6ecb338330692e96892c36d93a9ef498af94a2e356`. This supersedes capacity/source/CI conclusions in the historical milestone below.
+
+Only identified user-authorized generated compiler-cache and exact unused/settled test runtimes were removed; source/Git/PGdata/WIP/RED/receipts remain. Capacity supports bounded work; a fresh container clone is not admitted at the current margin, and no further automatic cleanup is authorized.
+
+New IR source candidate has14purePASS/types/fullbuild/lintPASS. Actual worker7PASS is on9e17 worker inputs; product evidence43PASS, runtime235PASS/1SKIP plus correct-launcherArelle4PASS, and actualPGcontracts44PASS are distinct runs. Fresh IR install committed within0PASS2FAIL at metadata-codec comparison; continuation01 remains0PASS2FAIL (empty ACL metadata query). Changed continuation02 is2PASS2FAIL: retained install/rights audit and deny checks pass, original financial validation fails42704 at an absent legacy enum. Business prefix receipt/parser rows are retained; later healthyIRworker/publication/revocation remainNOT_RUN. No formal financial/model/semantic approval follows.
+
+Observed hosted808d product-runtime and diagnostic **success**; vNext quality failed before build/native in source contracts. VM reproduced a closed-loader missing dependency and the minimal test-only correction passed6 cases; tail2+9 cases/type passed separately. New-head CI is independent. Protected root still failed; no guard or pin was waived.
+
+---
+Historical committed milestone (exact subjects retained):
+
 PR384: https://github.com/Kaichen9527/stockinsider/pull/384 — **draft; no merge/deploy**.
 
 Current runtime source: `e1bb126d33f63f4f8c004194b1c3df2f43bec82a`. Read [current delivery](CURRENT-DELIVERY.md), [VN01–VN20](CURRENT.json), and [bound receipt](current-evidence/receipt.json) SHA256 `64840a8de2aebdee78abf35db3c3ac17826c020a013fbe0963eadb04262724df`. These replace outdated implementation conclusions in the historical milestone documents; they do not replace their original evidence.
