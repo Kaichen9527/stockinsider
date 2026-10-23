@@ -75,6 +75,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/roster-current-fence.test.ts | tee /tmp/stockinsider-vnext-ci/roster-current-fence-source.tap
           node --experimental-strip-types web/src/lib/vnext/catalyst-cancellation.test.ts | tee /tmp/stockinsider-vnext-ci/cancellation-source.tap
           node --experimental-strip-types web/src/lib/vnext/cancellation-candidate.test.ts | tee /tmp/stockinsider-vnext-ci/cancellation-candidate-source.tap
+          node scripts/vnext-cancellation-response-loss.test.mjs | tee /tmp/stockinsider-vnext-ci/cancellation-response-frames-source.tap
           node --experimental-strip-types web/src/lib/vnext/research-failure.test.ts | tee /tmp/stockinsider-vnext-ci/research-failure-source.tap
           node --experimental-strip-types scripts/vnext-business-vectors.test.mjs | tee /tmp/stockinsider-vnext-ci/business-vectors.tap
           node scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
@@ -973,7 +974,7 @@ jobs:
                   value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
                   print('::error title=Cancellation finite diagnostic::'+value)
           tap=(root/'catalyst-cancellation.tap').read_bytes()
-          paths=['scripts/vnext-catalyst-cancellation-postgres.test.mjs','scripts/vnext-catalyst-cancellation-resource-run.py','scripts/vnext-worker-fixture.mjs','web/src/lib/vnext/catalyst-cancellation.ts','web/src/lib/vnext/worker-core.ts','web/src/lib/vnext/worker-prompts.ts','web/src/lib/vnext/research.ts','web/src/lib/vnext/worker-output.ts','migrations/20261023_vnext_catalyst_cancellation_v1.sql','scripts/opportunity-v3/vnext-catalyst-cancellation-profile-v1.json','migrations/20261023_vnext_roster_current_fence_v1.sql']
+          paths=['scripts/vnext-catalyst-cancellation-postgres.test.mjs','scripts/vnext-cancellation-response-loss.mjs','scripts/vnext-cancellation-response-loss.test.mjs','scripts/vnext-catalyst-cancellation-resource-run.py','scripts/vnext-worker-fixture.mjs','web/src/lib/vnext/catalyst-cancellation.ts','web/src/lib/vnext/worker-core.ts','web/src/lib/vnext/worker-prompts.ts','web/src/lib/vnext/research.ts','web/src/lib/vnext/worker-output.ts','migrations/20261023_vnext_catalyst_cancellation_v1.sql','scripts/opportunity-v3/vnext-catalyst-cancellation-profile-v1.json','migrations/20261023_vnext_roster_current_fence_v1.sql']
           inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
           summary={'scope':'actual original-source cancellation/private proof/atomic retained publication+exit; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
           # Decode finite count keys only; no private rows/principals are emitted.
@@ -1000,7 +1001,21 @@ jobs:
               value=json.loads(resource.read_text())
               summary.update(resourceObserved=True,exit=value['exit'],resourceViolation=value['resourceViolation'],sampledNotInstantaneous=True,sampledOwnedTreePeakRssBytes=value['sampledNodeAndOwnedPgTreePeakRssBytes'],initialFree=value['initialFree'],finalFree=value['finalFree'],nodeSha256=value['nodeSha256'],actualPg=value['ownedPg'])
           (root/'catalyst-cancellation-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
-          print('::notice title=Cancellation finite native receipt::'+json.dumps(summary,separators=(',',':')))
+          # GitHub truncates a single annotation at4096 bytes. Bind the full
+          # finite input inventory, but emit source/counts/resources separately.
+          seal=json.dumps(inventory,sort_keys=True,separators=(',',':')).encode()
+          finite={k:v for k,v in summary.items() if k not in ['inputs','finiteQueryErrors']}
+          finite.update(inputCount=len(inventory),inputInventorySha256=hashlib.sha256(seal).hexdigest(),inputInventoryCodec='utf8_sorted_keys_compact_json_v1')
+          print('::notice title=Cancellation finite native receipt::'+json.dumps(finite,separators=(',',':')))
+          if summary.get('finiteQueryErrors'):
+              print('::notice title=Cancellation finite SQL errors::'+json.dumps({'events':summary['finiteQueryErrors'],'privateEventsSha256':summary['queryEventsPrivateSha256']},separators=(',',':')))
+          loss=root/'catalyst-cancellation/review-response-loss-private.json'
+          if loss.exists():
+              if loss.is_symlink() or not loss.is_file() or loss.stat().st_size>16384: raise SystemExit('bounded owned loss receipt required')
+              value=json.loads(loss.read_text())
+              keys=['bytes','sha256','oneDataRow','selectOne','noError','ready','forwardedResponseBytes','commitObservedBeforeSocketClose','actualQueryRejected','bothOwnedSocketsClosed','pendingQuery','automaticResend']
+              finite_loss={k:value[k] for k in keys}
+              print('::notice title=Cancellation real response loss::'+json.dumps(finite_loss,separators=(',',':')))
           PYCODE
           test "$test_status" = 0
       - name: Hash finite owned raw evidence without publishing private contents
