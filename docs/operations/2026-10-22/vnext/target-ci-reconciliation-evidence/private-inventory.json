@@ -1,0 +1,52 @@
+{
+  "scope": "hash inventory only; private stderr may contain signed storage URL and is NOT published",
+  "files": [
+    {
+      "name": "ci5da-4313-observation-o23.json",
+      "bytes": 23066,
+      "sha256": "726e43c8cd230e3c9b12907c18e7be540b942f60f5be9c62ea1c3c4b8bbf60a7"
+    },
+    {
+      "name": "ci5da-log-attempt.json",
+      "bytes": 101,
+      "sha256": "278f5cada84cbe7650ca6be888fe570c996ea31462f749289179c54e4e7959a6"
+    },
+    {
+      "name": "ci5da-vnext-job.raw",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ci5da-vnext-job.stderr",
+      "bytes": 525,
+      "sha256": "e63d172813b5aad318a340cdd5bce738865ede9fd17108a577976b0cce65d0e1"
+    },
+    {
+      "name": "ci5da-safe-tap.zip",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ci5da-safe-tap.attempt.json",
+      "bytes": 101,
+      "sha256": "278f5cada84cbe7650ca6be888fe570c996ea31462f749289179c54e4e7959a6"
+    },
+    {
+      "name": "ci5da-safe-tap.stderr",
+      "bytes": 672,
+      "sha256": "74e71556b64f6dbc3304bd8f4faf3683c3623186c972295a297c575bf9df5e84"
+    },
+    {
+      "name": "ci-cached-diagnostic-source-o23.json",
+      "bytes": 772,
+      "sha256": "f172af07a6dc33b8da318ce0f68a644f547ea945bb970d718e437a315482e218"
+    },
+    {
+      "name": "cif2-jobs-o23.json",
+      "bytes": 4243,
+      "sha256": "e2a9814474437f64c4d7bd444fe90fbf70c3493277b4d24ca76025470305e703"
+    }
+  ],
+  "count": 9,
+  "bytes": 29480
+}

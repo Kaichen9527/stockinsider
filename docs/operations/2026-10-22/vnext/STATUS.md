@@ -1,3 +1,16 @@
+# Current: ordinary CI failure localization; draft acceptance remains incomplete
+
+Exact diagnostic source `f2f235988d4174a1a46d104738ebfb40964c9428`. Read [current reconciliation receipt](target-ci-reconciliation-evidence/receipt.json), [CI timeline](target-ci-reconciliation-evidence/ci.json), [source seal](target-ci-reconciliation-evidence/source.json) and [VN01–20](CURRENT.json).
+
+Latest5da ordinary vNext run39895789445 FAILED in the combined cached-prefix/HTTP step; both new log and safe-TAP downloads were403. No finite HTTP failure annotation was observed. The actual inner cause and boundary remain UNOBSERVED; do not infer that either subcommand passed. Current f2 only adds bounded failure hashes/codes for the cached prefix, preserving the exact test command/exit and all assertions. Natural CI39896610222 is in progress at this report. Earlier34/4313 product-runtime successes remain exact-source observations, not current-head acceptance. Protected gates remain unclosed/failing.
+
+Earlier target retained0a40 installer5PASS is not current fresh target-positive proof. bc raw_open23502,34 HTTP-order assertion and4313 historical8-versus7 provider-count REDs are retained separately. Full ledger equality replaced that stale count; no product/schema/guard was relaxed. Actual completed-history preparation HTTP READ/resume is dirty WIP, syntax-only and NOT_RUN; it does not prove running preparation uncertainty or native response loss. Full source seal explicitly distinguishes it from committed inputs.
+
+No cleanup or production operation occurred. Workspace/tmp8GiB floors remain; local fullbuild/new clone is not admitted at the measured margin. Source-volume staysnull without complete comparable original-event coverage; real source/model/semantic and Contabo acceptance, current full HTTP/UI/target path and the full goal remain incomplete. PR384 stays draft.
+
+---
+Historical milestones retain only their exact source and evidence scopes.
+
 # Current: reviewed-target source and same-built-source HTTP acceptance
 
 Product/test source `b0f09e050a3078d0a1e955316a7a6960ae14adc6`. Read [current delivery](TARGET-EXIT-DELIVERY.md), [bound receipt](target-exit-evidence/receipt.json), [CURRENT/VN01–20](CURRENT.json) and [executionmap](VN-EXECUTION-MAP.md). Target observer/directRPC fence is implemented; new source types/lint/11target contracts pass. Finite dimensionless repair8sourcePASS has separate prior5/3RED. Corrected0a40 retained installer/authority5PASS is an earlier exactcomponent, not new targetpositive/HTTP acceptance; f557 first0/2RED remains. NewordinaryCI pending; prior115exact vNext/fullbuild/product-runtimeSUCCESS, protectedgateFAIL.

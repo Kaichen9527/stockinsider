@@ -1,0 +1,56 @@
+{
+  "observedAt": "2026-10-23T03:46:09.465204+00:00",
+  "vnext": [
+    {
+      "source": "bc1479162cdfc4c6ae03e4846ee4d93643737ea4",
+      "run": 39893554186,
+      "job": 120218627319,
+      "result": "FAIL",
+      "scope": "source/type/lint/build/prior native steps PASS; fresh target business23502; raw_open NOTNULL omitted by synthetic fixture; complete OHLC/volume/turnover fixture fixed later, no schema or guard change"
+    },
+    {
+      "source": "34f594eac25229539320ddece69f1dd777afc178",
+      "run": 39894688012,
+      "job": 120222270649,
+      "result": "FAIL",
+      "scope": "actual HTTP ordering assertion incorrectly selected preliminary weekly screen-context; later source distinguishes preliminary READ from subsequent routine work"
+    },
+    {
+      "source": "4313ba50b642323cc1600311feabcd41b658c3ee",
+      "run": 39894902917,
+      "job": 120222951810,
+      "result": "FAIL",
+      "scope": "HTTP target-before-routine-screen component passed; later old hardcoded8 invocation count observed7 in newly fresh prefix. Later source compares full provider ledger instead of weakening cardinality"
+    },
+    {
+      "source": "5da4300f064c571191158968f57f624db828909e",
+      "run": 39895789445,
+      "job": 120225816975,
+      "result": "FAIL",
+      "scope": "aggregate cached-prefix/HTTP step; raw logs and safe TAP download each403/zero bytes. No finite HTTP annotation observed, actual inner cause UNOBSERVED. Cached-prefix versus HTTP boundary not independently established; do not infer successful components"
+    },
+    {
+      "source": "f2f235988d4174a1a46d104738ebfb40964c9428",
+      "run": 39896610222,
+      "job": 120228418016,
+      "result": "IN_PROGRESS_AT_OBSERVATION",
+      "scope": "diagnostic-only change exposes bounded failed-test/error hashes and codes if cached prefix fails; no expectations or actual command changed"
+    }
+  ],
+  "productRuntime": [
+    {
+      "source": "34f594eac25229539320ddece69f1dd777afc178",
+      "run": 39894688080,
+      "job": 120222270911,
+      "result": "SUCCESS"
+    },
+    {
+      "source": "4313ba50b642323cc1600311feabcd41b658c3ee",
+      "run": 39894903115,
+      "job": 120222952205,
+      "result": "SUCCESS"
+    }
+  ],
+  "protected": "requirements/architecture/exact-review/root still failing or unclosed; no pin/guard changes",
+  "notTransferred": "any earlier success belongs only to its exact head; target fresh positive and dirty preparation HTTP subset remain NOT_RUN / pending current fresh execution"
+}
