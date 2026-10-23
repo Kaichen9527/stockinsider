@@ -15,7 +15,7 @@ after(()=>{if(previousEnabled===undefined)delete process.env.STOCKINSIDER_VNEXT_
  * execution or official financial readiness is asserted by this fixture. */
 function fixture(mode='empty_financial'){
  const calls:Array<{action:string;body?:Row}>=[];const cache=new Map<string,Record<string,unknown>>();
- const allowed=new Set(['store.ts','policy.ts','research.ts','runtime.ts','factors.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','research-failure.ts']);
+ const allowed=new Set(['store.ts','policy.ts','research.ts','runtime.ts','factors.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','worker-output.ts','research-failure.ts']);
  const identity={principal:'synthetic-author',role:'author' as const};
  const body={jobId:'00000000-0000-4000-8000-000000000001',executionId:'00000000-0000-4000-8000-000000000002'};
  const client={from(table:string){calls.push({action:`cache:${table}`});const query={select:()=>query,eq:()=>query,or:()=>query,lte:()=>query,order:()=>query,limit:()=>query,maybeSingle:async()=>table==='stocks'?{data:mode==='stock_missing'?null:{id:'synthetic-stock',symbol:'2330',name:'Synthetic',sector:'general'},error:mode==='stock_timeout'?{message:'timeout'}:null}:{data:mode==='trading_missing'?null:{exchange:'TWSE',valid_from:'2020-01-01'},error:mode==='trading_timeout'?{message:'timeout'}:null}};return query;},rpc(name:string,args:Row){
