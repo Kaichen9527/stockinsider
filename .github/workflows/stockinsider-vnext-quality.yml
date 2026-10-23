@@ -897,7 +897,7 @@ jobs:
       - name: Fresh source-bound cancellation via distinct reviewer and atomic publication/exit (synthetic metadata)
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-12
-          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-10
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-12
           VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/catalyst-cancellation
         run: |
           python3 - <<'PYCODE'
