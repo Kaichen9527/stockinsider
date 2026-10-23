@@ -413,10 +413,11 @@ jobs:
           source=pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-http.tap.private.log')
           if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
           for line in source.read_text().splitlines():
-              prefix='PREPARATION_HTTP_FAILURE_SAFE '
-              if line.startswith(prefix):
+              prefix=next((p for p in ('PREPARATION_HTTP_FAILURE_SAFE ','PREPARATION_READ_BOUNDARY_SAFE ') if line.startswith(p)),None)
+              if prefix:
                   item=json.loads(line[len(prefix):])
-                  if set(item)!={'stage','code','actual','expected','messageHash','tokens'}: raise SystemExit('closed diagnostic required')
+                  expected={'stage','code','actual','expected','messageHash','tokens'} if prefix=='PREPARATION_HTTP_FAILURE_SAFE ' else {'reason','status','bridgeErrors'}
+                  if set(item)!=expected: raise SystemExit('closed diagnostic required')
                   value=json.dumps(item,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
                   print('::error title=Preparation finite HTTP diagnostic::'+value)
           PYCODE
