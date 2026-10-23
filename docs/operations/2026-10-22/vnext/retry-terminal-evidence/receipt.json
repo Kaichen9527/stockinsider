@@ -1,0 +1,12 @@
+{
+  "schema": "vnext-second-deadline-and-namespace-source-receipt-v1",
+  "source": "b42ca4a26cbd499e6f6ce6c424159c491119ece3",
+  "actualNativeSource": "b855f6948b6ea86c0d2f5556dddeddc4a7888ddc",
+  "manifestSha256": "c25973c556f433a042c1632738543cef889c1f743eab49aa787a8c521b2c9c24",
+  "manifestBytes": 632,
+  "grantExecuted": false,
+  "candidateApplyWired": false,
+  "independentReview": "REQUIRED_NOT_APPROVED",
+  "fullGoal": "INCOMPLETE",
+  "notSelfReferential": true
+}
