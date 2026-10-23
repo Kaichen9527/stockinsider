@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-target-exit-source-profile-v1",
   "migration": "migrations/20261022_vnext_target_exit_v1.sql",
-  "migrationSha256": "209d9fe7b833815feb808f2b8ff8a80598b0220be2267ba867b70dbfb1a060f9",
+  "migrationSha256": "4f5a88da24ae824992a934ea2d027552ab1ce6e2d799e4e81635183aaa764513",
   "nativeVerified": false,
   "nativeOids": null,
   "catalogMetadata": null,
@@ -385,5 +385,11 @@
     "sha256": "78a35164c9c8d01c6c1f697cac1ff13e0150ca6ae7cd04e37f0e09c926e4ea2d",
     "scope": "retained d9a catalog lineage only, not native proof of this new candidate"
   },
-  "numericCodec": "Existing vnext_catalog_canonical_v1 only; original action hash mismatch defers, no new numeric codec/rounding."
+  "numericCodec": "Existing vnext_catalog_canonical_v1 only; original action hash mismatch defers, no new numeric codec/rounding.",
+  "existingReadRelationOwner": "opportunity_v3_rpc_owner",
+  "readRelationOwnerEvidence": {
+    "source": "migrations/20260724_source_led_opportunity_engine_v3.sql:17025",
+    "actualReadOnlyCatalog": "target-readedge-diagnosis-o23.json",
+    "scope": "actual retained captured+financial50 installed owner; not captured schema-only postgres owner; no ALTER OWNER"
+  }
 }
