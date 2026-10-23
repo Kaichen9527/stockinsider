@@ -1,3 +1,4 @@
+import {readCurrentForecasts,type CurrentForecasts} from './forecast-current.ts';
 import type {getSupabaseServerClient} from '../supabase-server.ts';
 import type {TwEntryHistoricalAuthorityResult} from '../tw-entry-plan-authority.ts';
 import type {VnextIdentity} from './auth.ts';
@@ -19,12 +20,14 @@ export function preparationRequest(identity:VnextIdentity,body:Row){
 }
 /** Same frozen projection used by ordinary admitted preparation and cached
  * reconciliation. Source descriptors stay outside the provider projection. */
-export function freezeFinancialPreparation(original:Row,historical:TwEntryHistoricalAuthorityResult,financialSources:Sources,cutoff:string){
- const evidence=[...financialSources.evidence,...currentPriceEvidence(historical)];
+export function freezeFinancialPreparation(original:Row,historical:TwEntryHistoricalAuthorityResult,financialSources:Sources,cutoff:string,forecasts?:CurrentForecasts){
+ const evidence=[...financialSources.evidence,...currentPriceEvidence(historical),...(forecasts?.evidence||[])];
+ if(forecasts&&Date.parse(forecasts.asOf)>Date.parse(cutoff))throw Error('vnext_forecast_future_snapshot');
  const currentPrice=historical.priceBasis?.status==='verified'?historical.bars.at(-1):undefined;
  const frozen={...original,cutoff,admissionHash:original.hash,priceAuthority:historical,financialSourceReceipts:financialSources.receipts,
+  ...(forecasts?{forecastSourceReceipts:forecasts.receipts,forecastSourceAsOf:forecasts.asOf}:{}),
   financialSourceDeferrals:{count:financialSources.deferredCount,digest:financialSources.deferredDigest,details:financialSources.deferredDetails,detailsTruncated:financialSources.deferredDetailsTruncated},
-  gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...financialSources.gaps,...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
+  gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...financialSources.gaps,...(forecasts?.gaps||[]),...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
   evidence:[...(Array.isArray(original.evidence)?original.evidence as Evidence[]:[]).filter(e=>!evidence.some(f=>f.id===e.id)),...evidence]};
  return {inputHash:inputHash(frozen),evidence:frozen};
 }
@@ -74,7 +77,7 @@ async function signalSession(client:Client,exchange:string,cutoff:string){
  }
  return [...heads.values()].filter(row=>row.status==='completed' && known(row.close_at,cutoff)).map(row=>String(row.session_id)).sort().at(-1)||'';
 }
-async function cachedProjection(deps:PreparationDependencies,state:Row,original:Row,cutoff:string){
+async function cachedProjection(deps:PreparationDependencies,state:Row,original:Row,cutoff:string,identity:VnextIdentity){
  const stocks=await deps.client.from('stocks').select('id,symbol,market').eq('symbol',String(state.symbol)).eq('market','TW').maybeSingle();
  if(stocks.error)throw Error('vnext_stock_authority_read_uncertain');
  if(!stocks.data)return {status:'gap',reason:'vnext_stock_authority_missing'};
@@ -101,7 +104,10 @@ async function cachedProjection(deps:PreparationDependencies,state:Row,original:
  if(!financial.evidence.length)return {status:'gap',reason:'vnext_validated_financial_data_missing',gaps:financial.gaps};
  const session=await signalSession(deps.client,exchange,cutoff);
  const historical=await deps.historical({stockId,symbol:String(state.symbol),exchange,signalSession:session,cutoff});
- return {status:'ready',...freezeFinancialPreparation(original,historical,financial,cutoff),financialFacts:financial.evidence.length,sourceReceipts:financial.receipts.length,priceAvailable:historical.priceBasis?.status==='verified'};
+ const forecasts=await readCurrentForecasts(deps.client,identity,String(state.jobId),String(state.executionId));
+ if(forecasts.stockId!==stockId||forecasts.symbol!==state.symbol)throw Error('vnext_forecast_issuer_binding');
+ const frozenAt=(deps.now||(()=>new Date().toISOString()))();
+ return {status:'ready',...freezeFinancialPreparation(original,historical,financial,frozenAt,forecasts),financialFacts:financial.evidence.length,sourceReceipts:financial.receipts.length,priceAvailable:historical.priceBasis?.status==='verified'};
 }
 /** READ is cache/journal observation only. The explicit resume uses exactly one
  * original prepare command; an unknown mutation outcome is read-recovered.
@@ -126,7 +132,7 @@ export async function reconcilePreparation(identity:VnextIdentity,body:Row,deps:
  }
  if(journal.invocation_id)return unresolved('provider_invocation_already_exists',descriptor);
  let cached:Row;
- try{cached=await cachedProjection(deps,state,original,now());}catch{return unresolved('cached_financial_authority_unresolved',descriptor);}
+ try{cached=await cachedProjection(deps,state,original,now(),identity);}catch{return unresolved('cached_financial_authority_unresolved',descriptor);}
  // Recheck original rights/admission and the exact execution after all reads.
  let after:Row;
  try{await currentContext(deps,state);after=await deps.journal('inspect',{jobId});journal=await readJournal(deps,state,identity);}catch{return unresolved('active_work_context_changed',descriptor);}

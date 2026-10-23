@@ -51,6 +51,7 @@ function fixture(mode='ready'){
    maybeSingle:async()=>({data:tables[table].filter(row=>filters.every(f=>f(row)))[0]||null,error:null}),
    then(resolve:(value:unknown)=>void,reject:(error:unknown)=>void){return Promise.resolve({data:tables[table].filter(row=>filters.every(f=>f(row))),error:mode==='cache_read_lost'?{message:'uncertain transport'}:null}).then(resolve,reject);}};return query;
  },rpc(name:string,args:Row){
+  if(name==='vnext_forecast_read_v1'){calls.push('forecast-current');assert.deepEqual(args,{p_principal:author.principal,p_job:jobId,p_execution:executionId});return Promise.resolve({data:{schemaVersion:'vnext-current-forecasts-v1',stockId,symbol:'2330',asOf:cutoff,evidence:[],receipts:[],gaps:[]},error:null});}
   if(name==='read_financial_facts_for_stocks_as_of'){calls.push('financial-asof');assert.deepEqual(args.p_stock_ids,[stockId]);return {limit:async(count:number)=>{assert.equal(count,2001);return {data:mode==='empty_facts'?[]:[fact],error:mode==='facts_read_lost'?{message:'uncertain'}:null};}};}
   if(name==='vnext_provider_command_v1')return journal(String(args.p_command) as 'inspect'|'read',args.p_request as Row).then(data=>({data,error:null}));
   assert.equal(name,'vnext_command_v1');return command(String(args.p_command),args.p_request as Row).then(data=>({data,error:null}));
@@ -88,7 +89,7 @@ test('READ of ready immutable receipts has no mutation and exposes only readines
  const f=fixture();const result=await reconcilePreparation(author,{jobId},f.deps);
  assert.equal(result.status,'ready');assert.equal(result.entryEligible,false);assert.equal(result.nextAction,'resume-preparation');assert.equal(result.automaticResume,false);assert.equal(result.priceAvailable,false);assert.equal(result.financialFacts,1);
  assert.equal(f.calls.includes('prepare'),false);assert.equal(f.state.prepared,false);assert.equal('evidence' in result,false);assert.equal('frozen_request' in result,false);
- assert.deepEqual(f.calls.filter(c=>!c.startsWith('cache:')),['inspect','work-context','read','financial-asof','historical','work-context','inspect','read']);
+ assert.deepEqual(f.calls.filter(c=>!c.startsWith('cache:')),['inspect','work-context','read','financial-asof','historical','forecast-current','work-context','inspect','read']);
 });
 test('prepared replay observes immutable frozen state without cache or prepare; an existing invocation directs explicit recovery without exposing raw output',async()=>{
  for(const mode of ['prepared','provider_present']){const f=fixture(mode);const result=await reconcilePreparation(author,{jobId},f.deps,true);assert.equal(result.status,'prepared');assert.equal(result.inputHash,f.state.inputHash);assert.equal(result.nextAction,mode==='prepared'?'automatic':'recover');assert.deepEqual(f.calls,['inspect','work-context','read']);assert.equal(JSON.stringify(result).includes('must not expose'),false);}
@@ -123,7 +124,7 @@ test('shared frozen projection is byte/hash equivalent to the original admitted 
  assert.deepEqual(freezeFinancialPreparation(f.original,f.historical,sources,cutoff),{inputHash:inputHash(frozen),evidence:frozen});assert.equal(JSON.stringify(sources),before);
 });
 function controllers(f:ReturnType<typeof fixture>){
- const cache=new Map<string,Record<string,unknown>>();const allowed=new Set(['http.ts','store.ts','policy.ts','auth.ts','request.ts','research.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','worker-output.ts','research-failure.ts','preparation-reconciliation.ts','preparation-trading-identity.ts','cached-price-factors.ts']);
+ const cache=new Map<string,Record<string,unknown>>();const allowed=new Set(['http.ts','store.ts','policy.ts','auth.ts','request.ts','research.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','worker-output.ts','research-failure.ts','preparation-reconciliation.ts','forecast-current.ts','preparation-trading-identity.ts','cached-price-factors.ts']);
  const load=(name:string):Record<string,unknown>=>{
   if(!allowed.has(name))throw Error(`unexpected_preparation_source:${name}`);const prior=cache.get(name);if(prior)return prior;
   const filename=new URL(name,import.meta.url);const compiled=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:name}).outputText;

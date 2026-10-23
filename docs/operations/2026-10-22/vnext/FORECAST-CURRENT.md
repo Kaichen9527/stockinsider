@@ -1,0 +1,29 @@
+# Current numeric forecast slice — candidate, not formal research
+
+Parent: `372542aaa00ac2c38c23f07344455f12484c9af7`. The executed source identity is the subsequent source commit containing this file; evidence is committed separately. Original business source65580e2 and its receipts remain historical evidence, not acceptance of this changed source.
+
+## Actual behavior
+
+Both admitted `executeResearch` and cached preparation reconciliation now call the fixed author/job/execution-scoped `vnext_forecast_read_v1` before freezing preparation. HTTP cannot supply forecasts, roots, principal, schema, clock or a validation flag. Missing RPC/current-source errors fail closed; no legacy reader fallback.
+
+The additive migration consumes the existing v3 original estimate facts, source publication verification, original revision/family, current publisher/identity and complete manifest. A new private append-only, stock-and-publication-scoped metadata-use permission is also required. It has no service-role or HTTP write path, RLS and the original writer fence. An allow is not proof of a real external license; installation/configuration requires the reviewed isolated/staging process. Revocation is permanent for that publication and never modifies original fact/history rows. No real license or source acquisition is asserted by the fixture.
+
+Only exact original `quarterly_diluted_eps / analyst_estimate / next_twelve_months` and `broker_target_price / broker_consensus / target_12m` tuples are projected. The former remains a single exact Gregorian-quarter estimate, despite the legacy horizon enum. The latter remains a 12month source target, not investment fair value. Both are numeric assumptions, never reported facts. Unit is TWD_per_share; raw period and original hashes are retained. Unknown denominator, annual EPS and forward4Q EPS stay null; no annualization/aggregation or shares are fabricated. Unsupported tuples give specific gaps.
+
+Whole forecast receipts and saved source cutoff enter the preparation hash, while the existing provider projects the actual typed evidence. Current SQL input and per-item gates recalculate against current authority/rights; altered value/unit/period/kind/receipt or revoked publication cannot become current evidence. Missing both new metadata keys retains the original legacy arm only when it contains no forecast-prefixed item.
+
+## Installation boundary
+
+Predecessor assembly is captured50/pub26 plus the existing vNext sequence **through roster-current fence**, not the earlier IR-only state. The input-current predecessor body is2e6a155ce7148f2ab550c414297bae42519339e9a4b7bad2ab658ce9a4ab398a; source-evidence predecessor is712c701f18809a44fb788453e5e12a9d98b93f28ee3573973606d94bb739f0e8. Both original bodies are preserved inside finite wrappers. Profile contains exact predecessor/successor/new-body hashes; nativeVerified=false, OIDs unknown. The pre-roster WIP/profile is retained locally, not labelled an actual PG failure.
+
+Only those two existing bodies change. New private rights metadata/five routines and one EXECUTE edge on the existing pure invoker canonical codec are explicit candidate deltas. No existing body/owner/signature/ACL is otherwise changed. Full original catalog/namespace/default/role snapshots guard the transaction; new routines have pinned bodies/owner/security/config and bounded ACLs. Unknown predecessors or extra deltas reject; no hash normalization or relaxed profile. Original migrations are byte unchanged.
+
+The server reader uses the original work-context fences and row lock in an ordinary transaction. It is a logical read with full-row nonmutation assertions, **not** a PostgreSQL READ ONLY transaction. The separate observer uses RR/READ ONLY. No new claim/reserve/model budget is introduced by this read.
+
+## Checks and pending runtime acceptance
+
+Original Codex VM: forecast source contracts7PASS, SQL/profile construction4PASS; preparation reconciliation12PASS and focused full-type/no-emit plus changed-file lint exit0. Failures from the initial closed mock/loader are retained. A combined Node --test invocation reported only3file-level cases; do not invent assertion counts from it. Direct regression receipts retain their own actual TAP counts. All are source scope.
+
+The existing normal hosted quality workflow now runs these source contracts and the changed same-build preparation HTTP fixture. The new fixture uses the original role-bound identity/revision/fact append APIs, explicitly synthetic publisher-manifest/use-policy metadata, real author reader/private ACL rejection and full catalog/row snapshots. It plans real HTTP cached READ → actual prepare COMMIT → socket response loss → explicit READ/resume, then real provider-journal frozen-input reservation (zero provider POST), full current SQL mutation negatives, and a committed permission revocation with unchanged other rows/journals/clocks. Original matrix assertions remain. First-install/repeat checks and all raw/ReadyForQuery observations are retained. Planned assertions are not results; a fresh new-source hosted run is required.
+
+Local fresh PG/build/browser remains NOT_ADMITTED under the original8GiB floor plus next workset. No local container, cleanup, path/mount change or floor reduction was used. Real current-source/provider/role/isolated-DB bindings remain absent; real source/model, Contabo staging, annual/forward4Q producer with fiscal/share authority, provider response-loss for this slice, full rights/expiry/race matrix, independent review/protected gates and formal publications are NOT_RUN/pending. This source slice is not whole S-C-B-Q-R-A or investment approval. PR384 remains draft; no merge/deploy/scheduler operation.

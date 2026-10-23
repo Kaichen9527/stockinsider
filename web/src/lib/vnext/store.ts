@@ -127,8 +127,11 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       const financialSources=await resolveFinancialEvidenceSources(writer.supabase,verified,frozenAt);
       if(financialSources.evidence.length===0)throw new Error('vnext_validated_financial_data_missing');
       const original = activeReceipt.evidence as Row;
+      const {readCurrentForecasts}=await import('./forecast-current.ts');
+      const forecasts=await readCurrentForecasts(writer.supabase,identity,String(context.jobId),String(context.executionId));
+      if(forecasts.stockId!==stocks.data.id||forecasts.symbol!==context.symbol)throw new Error('vnext_forecast_issuer_binding');
       const {freezeFinancialPreparation}=await import('./preparation-reconciliation.ts');
-      const {inputHash:preparedHash,evidence:frozen}=freezeFinancialPreparation(original,historical,financialSources,frozenAt);
+      const {inputHash:preparedHash,evidence:frozen}=freezeFinancialPreparation(original,historical,financialSources,new Date().toISOString(),forecasts);
       await command(identity, 'prepare', { jobId: context.jobId, executionId: context.executionId, inputHash: preparedHash, evidence: frozen });
       return { acquisition, parsing, validation, inputHash: preparedHash, evidence: frozen };
     });

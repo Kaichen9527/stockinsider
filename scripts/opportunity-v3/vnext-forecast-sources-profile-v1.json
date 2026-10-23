@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "vnext-forecast-sources-source-profile-v1",
+  "migration": "migrations/20261023_vnext_forecast_sources_v1.sql",
+  "migrationSha256": "cafe05887a3073fb9db3463bc0c8a6fcb23133b13ab18b5d36a3a3c0a1633209",
+  "nativeVerified": false,
+  "nativeOids": null,
+  "oldSourcesUnchanged": true,
+  "modifiedRoutines": [
+    {
+      "signature": "public.vnext_source_evidence_current_v1(jsonb,text)",
+      "predecessorBodySha256": "712c701f18809a44fb788453e5e12a9d98b93f28ee3573973606d94bb739f0e8",
+      "predecessorBytes": 952,
+      "successorBodySha256": "440d0dcee04334f57a2ee9e8fdc920b09d3329d3c3c26e859c7a19e9789c292b",
+      "successorBytes": 1083
+    },
+    {
+      "signature": "public.vnext_input_sources_current_v1(jsonb,text)",
+      "predecessorBodySha256": "2e6a155ce7148f2ab550c414297bae42519339e9a4b7bad2ab658ce9a4ab398a",
+      "predecessorBytes": 1145,
+      "successorBodySha256": "ce58e3b7f1a98fcac4dbcb537ba4336e7bbb3c9c7247e1354d6a07bf2bcc8008",
+      "successorBytes": 1222
+    }
+  ],
+  "newRights": "private append-only stock+publication metadata-use policy; no service-role write or public policy",
+  "newFunctions": [
+    {
+      "name": "vnext_forecast_rights_guard_v1",
+      "signature": "public.vnext_forecast_rights_guard_v1()",
+      "bodySha256": "6d90196a6ccaf0fdbc296ad196ae8c2525a7cd9febc504a5431d8d3322f4e414",
+      "bytes": 396
+    },
+    {
+      "name": "vnext_forecast_current_internal_v1",
+      "signature": "public.vnext_forecast_current_internal_v1(uuid,timestamp with time zone)",
+      "bodySha256": "9eba1d26cd9b865f88894b2cbd0c101912f94dddac0c14f7d92b39d47d7e0541",
+      "bytes": 12642
+    },
+    {
+      "name": "vnext_forecast_evidence_current_internal_v1",
+      "signature": "public.vnext_forecast_evidence_current_internal_v1(jsonb,text)",
+      "bodySha256": "bbdaebc1b249fa99ee81ad209620f3f60669de03263a2e3f1b5a44c0e2f43a94",
+      "bytes": 494
+    },
+    {
+      "name": "vnext_forecast_read_v1",
+      "signature": "public.vnext_forecast_read_v1(text,uuid,uuid)",
+      "bodySha256": "03d613896825a250df78a22550fb046518a0de4ed1c97cf460b44ff69d030c02",
+      "bytes": 1087
+    },
+    {
+      "name": "vnext_forecast_input_current_internal_v1",
+      "signature": "public.vnext_forecast_input_current_internal_v1(jsonb,text)",
+      "bodySha256": "9ba62ccf378723865f285e5865375ea7a7f13cfbea9f3f732f1ed1277b29a84d",
+      "bytes": 1317
+    }
+  ],
+  "privilegeDelta": "one existing pure canonical codec EXECUTE to opportunity_v3_rpc_owner; new private helpers EXECUTE only stockinsider_vnext_owner, new job-scoped reader EXECUTE service_role",
+  "scope": "quarterly diluted EPS estimates/raw period only and original 12month price target; never annual/forward4Q/NTM or investment fair value",
+  "predecessorAssembly": "captured50/pub26 + existing vNext prefix through 20261023_vnext_roster_current_fence_v1; not pre-roster IR-only"
+}

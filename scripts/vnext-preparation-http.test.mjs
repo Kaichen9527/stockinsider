@@ -44,6 +44,7 @@ await test('running cached preparation HTTP read, actual committed response loss
    assert.equal(f.trace.length,start);assert.deepEqual(await f.x.snapshot(),baseline);receipts.push({authFirst:true,closedSelectors:true,zeroRpc:true});
   });
   const claim=await f.enqueueAndClaim();let readyState;
+  await step('current_original_numeric_forecasts_use_real_author_reader_and_private_acl',()=>f.checkForecastSource());
   await step('running_read_reports_real_cached_financial_ready_without_any_write',async()=>{
    const baseline=await f.x.snapshot(),start=f.trace.length;
    const empty=await f.emptyJournal();const sqlColumns='invocation_id job_id task execution_id principal input_hash provider model model_version credential_identity prompt_version frozen_request request_hash state provider_response_id raw_response raw_output normalized_output error started_at deadline_at settled_at'.split(' ');
@@ -67,6 +68,8 @@ await test('running cached preparation HTTP read, actual committed response loss
    assert.deepEqual(await f.x.snapshot(),baseline);const events=f.trace.slice(start);assert.equal(events.some(e=>e.kind==='cache'&&e.table!=='production_writer_releases'||e.rpc?.includes('production_write_lease')||['prepare','claim','reserve'].includes(e.action)),false);assert.equal(f.trace.filter(e=>e.kind==='rpc-attempt'&&e.action==='prepare').length,1);assert.equal(f.trace.filter(e=>e.action==='prepare'&&e.committed).length,1);assert.equal(f.trace.filter(e=>e.kind==='bridge-error').length,0);assert.equal(f.trace.filter(e=>e.action==='reserve'||e.action==='claim').length,0);assert.equal(baseline.vnext_provider_invocations_v1.count,0);assert.ok(!fs.existsSync(deniedPath));
    f.x.save('read-recovery-full-state',baseline);f.x.save('preparation-http-receipt',{built,receipts,actualHttp:true,actualDatabase:true,syntheticIssuerParserOnly:true,actualModel:false,actualAcquiredDocument:false,noSecondClaimPrepareProviderOrLease:true,scope:'immutable frozen-state observation; original DB row separately proven by owned observer, not exposed as HTTP receipt'});
   });
+  await step('frozen_actual_provider_input_and_current_forecast_use_revocation',()=>f.checkForecastFrozenAndRevoked());
+
  }catch(error){throw safeFailure(error);}finally{
   let cleanupError;
   if(app){
