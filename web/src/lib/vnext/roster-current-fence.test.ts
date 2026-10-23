@@ -1,6 +1,7 @@
 /** SOURCE reconstruction/guard contracts only; no PostgreSQL acceptance. */
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {currentPreparationInstrument} from './preparation-trading-identity.ts';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 const read=(file:string)=>readFileSync(new URL('../../../../'+file,import.meta.url),'utf8');
@@ -64,6 +65,11 @@ test('three existing routines retain full nonbody metadata/OIDs/catalog with ori
  assert.equal(profile.routines.length,3);for(const value of ['vnext_roster_current_namespace_changed','vnext_roster_current_metadata_changed','vnext_roster_current_claim_metadata_changed','vnext_roster_current_reserve_metadata_changed',"to_jsonb(p)-'prosrc'",'CASE WHEN p.oid=ANY($1)','USING ARRAY[target,core_target,provider_target]',"p.proargnames=ARRAY['input','p_symbol']","p.proconfig=ARRAY['search_path=pg_catalog, public']",'vnext_roster_current_source_acl_changed','vnext_roster_current_core_acl_changed','vnext_roster_current_provider_acl_changed'])assert.ok(sql.includes(value),value);
  assert.ok(sql.indexOf('pg_advisory_xact_lock(64221022)')<sql.indexOf('SELECT prosrc,pg_get_functiondef'));assert.ok(!sql.includes('to_jsonb(p) END ORDER BY p.oid LIMIT'));
 });
-test('preparation active-only query remains a named independent limitation; this candidate does not assert unknown roster healthy',()=>{
- const prep=read('web/src/lib/vnext/preparation-reconciliation.ts');assert.ok(prep.includes(".eq('listing_status','active').eq('instrument_type','common_stock')"));assert.ok(profile.scope.includes('unknown roster retains original source semantics'));assert.ok(!profile.appendFragment.includes("'active'"));
+test('SQL unknown-proof semantics never supply a positive preparation identity',()=>{
+ // SQL preserves its prior source predicate for unknown roster data. The
+ // independent actual preparation selector must still withhold identity;
+ // preserving the old active-only query was never an acceptance requirement.
+ assert.ok(profile.scope.includes('unknown roster retains original source semantics'));assert.ok(!profile.appendFragment.includes("'active'"));
+ const scope={stockId:'10000000-0000-4000-8000-000000000001',symbol:'2330',cutoff:'2026-10-23T05:30:00Z'};
+ for(const rows of [[],[{}],[{validated:true}],[{proofHash:'synthetic-only'}]])assert.equal(currentPreparationInstrument(rows,scope).status,'gap');
 });
