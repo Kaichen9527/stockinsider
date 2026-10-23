@@ -327,7 +327,7 @@ jobs:
           for line in text.splitlines():
               if line.startswith('VNEXT_SOURCE_REACHABILITY_SAFE '):
                   item=json.loads(line.removeprefix('VNEXT_SOURCE_REACHABILITY_SAFE '))
-                  if set(item)!={'schema','target','role','publicSchema','tables','routines','directOnly','transitiveDefinerBodyReview','rowsOrBodiesPublished','grantExecuted'} or item['grantExecuted'] is not False or item['rowsOrBodiesPublished'] is not False or item['target']!='research_source_fence_owner_v2': raise SystemExit('closed safe direct-rights inventory required')
+                  if set(item)!={'schema','target','role','publicSchema','tables','routines','directOnly','transitiveDefinerBodyReview','rowsOrBodiesPublished','grantExecuted','transactionStateProbe'} or item['grantExecuted'] is not False or item['rowsOrBodiesPublished'] is not False or item['target']!='research_source_fence_owner_v2': raise SystemExit('closed safe direct-rights inventory required')
                   runtime_source=json.loads(receipt.read_text()).get('sourceCommit') if receipt.exists() else None
                   if not isinstance(runtime_source,str) or not re.fullmatch('[a-f0-9]{40}',runtime_source): raise SystemExit('actual runtime source binding required')
                   canonical=json.dumps(item,sort_keys=True,separators=(',',':'),ensure_ascii=True).encode()

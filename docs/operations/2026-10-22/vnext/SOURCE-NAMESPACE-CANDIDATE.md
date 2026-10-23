@@ -152,3 +152,24 @@ and excessive report rejection are separate from native observations. The report
 also labels relation kind so indexes/sequences cannot be misreported as ordinary
 selectable tables, and owner RLS bypass is true only for an RLS-enabled owner
 relation without forceRls. New actual complete report remains pending.
+
+## Guard-only readonly native probe candidate; permission apply still uncalled
+
+The existing prerequisite case now opens a separate fresh fixture connection
+(different writer/observer PID), enters READ ONLY, and sets only a transaction-
+local synthetic GUC marker. It calls the exported idle guard function alone:
+actual T must reject with exactly one empty Query and retain that caller marker.
+A fixed SELECT1/0 must produce actual22012/ReadyE; guard-only E must reject with
+one empty Query, leaving the caller's original error intact. The caller then
+performs its own explicit ROLLBACK/ReadyI and observes guard-only I. Full unknown-
+field row snapshots must remain equal; no grant/commit/advisory call is allowed
+by the tracked probe and its backend must settle. No financial/source/authority
+row is inserted for this probe; the only marker is a local non-authority GUC.
+
+This is not an apply-entry invocation or permission installation. The entire
+permission apply function remains uncalled, and its native T/E entry/marker,
+GRANT/COMMIT/rollback/uncertainty proof still requires the independent review
+and fresh isolated caller decision. The report labels this narrower scope
+explicitly. Until the exact successor executes, these native guard-only probes
+are NOT_RUN. Original snapshot/profile/limits and mandatory raw-source failure
+are preserved; no existing safe/failed receipt is rewritten.
