@@ -69,6 +69,7 @@ await test('running cached preparation HTTP read, actual committed response loss
    f.x.save('read-recovery-full-state',baseline);f.x.save('preparation-http-receipt',{built,receipts,actualHttp:true,actualDatabase:true,syntheticIssuerParserOnly:true,actualModel:false,actualAcquiredDocument:false,noSecondClaimPrepareProviderOrLease:true,scope:'immutable frozen-state observation; original DB row separately proven by owned observer, not exposed as HTTP receipt'});
   });
   await step('frozen_actual_provider_input_and_current_forecast_use_revocation',()=>f.checkForecastFrozenAndRevoked());
+  await step('current_original_action_share_cash_terms_and_permanent_use_withdrawal',()=>f.checkActionTermsOriginals());
 
  }catch(error){throw safeFailure(error);}finally{
   let cleanupError;

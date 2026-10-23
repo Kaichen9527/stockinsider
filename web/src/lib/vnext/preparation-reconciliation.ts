@@ -1,4 +1,5 @@
 import {readCurrentForecasts,type CurrentForecasts} from './forecast-current.ts';
+import {readCurrentActionTerms,validateCurrentActionTerms,type CurrentActionTerms} from './corporate-action-terms.ts';
 import type {getSupabaseServerClient} from '../supabase-server.ts';
 import type {TwEntryHistoricalAuthorityResult} from '../tw-entry-plan-authority.ts';
 import type {VnextIdentity} from './auth.ts';
@@ -20,14 +21,17 @@ export function preparationRequest(identity:VnextIdentity,body:Row){
 }
 /** Same frozen projection used by ordinary admitted preparation and cached
  * reconciliation. Source descriptors stay outside the provider projection. */
-export function freezeFinancialPreparation(original:Row,historical:TwEntryHistoricalAuthorityResult,financialSources:Sources,cutoff:string,forecasts?:CurrentForecasts){
- const evidence=[...financialSources.evidence,...currentPriceEvidence(historical),...(forecasts?.evidence||[])];
+export function freezeFinancialPreparation(original:Row,historical:TwEntryHistoricalAuthorityResult,financialSources:Sources,cutoff:string,forecasts?:CurrentForecasts,actionTerms?:CurrentActionTerms){
+ if(actionTerms)validateCurrentActionTerms(actionTerms);
+ const evidence=[...financialSources.evidence,...currentPriceEvidence(historical),...(forecasts?.evidence||[]),...(actionTerms?.evidence||[])];
  if(forecasts&&Date.parse(forecasts.asOf)>Date.parse(cutoff))throw Error('vnext_forecast_future_snapshot');
+ if(actionTerms&&Date.parse(actionTerms.asOf)>Date.parse(cutoff))throw Error('vnext_action_future_snapshot');
  const currentPrice=historical.priceBasis?.status==='verified'?historical.bars.at(-1):undefined;
  const frozen={...original,cutoff,admissionHash:original.hash,priceAuthority:historical,financialSourceReceipts:financialSources.receipts,
   ...(forecasts?{forecastSourceReceipts:forecasts.receipts,forecastSourceAsOf:forecasts.asOf}:{}),
+  ...(actionTerms?{actionTermsReceipts:actionTerms.receipts,actionTermsAsOf:actionTerms.asOf,actionTermsGaps:actionTerms.gaps}:{}),
   financialSourceDeferrals:{count:financialSources.deferredCount,digest:financialSources.deferredDigest,details:financialSources.deferredDetails,detailsTruncated:financialSources.deferredDetailsTruncated},
-  gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...financialSources.gaps,...(forecasts?.gaps||[]),...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
+  gaps:[...(Array.isArray(original.gaps)?original.gaps:[]),...financialSources.gaps,...(forecasts?.gaps||[]),...(actionTerms?.gaps||[]),...(!currentPrice?['current_price_authority_unavailable',...historical.missingData]:[])],
   evidence:[...(Array.isArray(original.evidence)?original.evidence as Evidence[]:[]).filter(e=>!evidence.some(f=>f.id===e.id)),...evidence]};
  return {inputHash:inputHash(frozen),evidence:frozen};
 }
@@ -106,8 +110,10 @@ async function cachedProjection(deps:PreparationDependencies,state:Row,original:
  const historical=await deps.historical({stockId,symbol:String(state.symbol),exchange,signalSession:session,cutoff});
  const forecasts=await readCurrentForecasts(deps.client,identity,String(state.jobId),String(state.executionId));
  if(forecasts.stockId!==stockId||forecasts.symbol!==state.symbol)throw Error('vnext_forecast_issuer_binding');
+ const actionTerms=await readCurrentActionTerms(deps.client,identity,String(state.jobId),String(state.executionId));
+ if(actionTerms.stockId!==stockId||actionTerms.symbol!==state.symbol)throw Error('vnext_action_issuer_binding');
  const frozenAt=(deps.now||(()=>new Date().toISOString()))();
- return {status:'ready',...freezeFinancialPreparation(original,historical,financial,frozenAt,forecasts),financialFacts:financial.evidence.length,sourceReceipts:financial.receipts.length,priceAvailable:historical.priceBasis?.status==='verified'};
+ return {status:'ready',...freezeFinancialPreparation(original,historical,financial,frozenAt,forecasts,actionTerms),financialFacts:financial.evidence.length,sourceReceipts:financial.receipts.length,priceAvailable:historical.priceBasis?.status==='verified'};
 }
 /** READ is cache/journal observation only. The explicit resume uses exactly one
  * original prepare command; an unknown mutation outcome is read-recovered.

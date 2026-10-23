@@ -130,8 +130,11 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       const {readCurrentForecasts}=await import('./forecast-current.ts');
       const forecasts=await readCurrentForecasts(writer.supabase,identity,String(context.jobId),String(context.executionId));
       if(forecasts.stockId!==stocks.data.id||forecasts.symbol!==context.symbol)throw new Error('vnext_forecast_issuer_binding');
+      const {readCurrentActionTerms}=await import('./corporate-action-terms.ts');
+      const actionTerms=await readCurrentActionTerms(writer.supabase,identity,String(context.jobId),String(context.executionId));
+      if(actionTerms.stockId!==stocks.data.id||actionTerms.symbol!==context.symbol)throw new Error('vnext_action_issuer_binding');
       const {freezeFinancialPreparation}=await import('./preparation-reconciliation.ts');
-      const {inputHash:preparedHash,evidence:frozen}=freezeFinancialPreparation(original,historical,financialSources,new Date().toISOString(),forecasts);
+      const {inputHash:preparedHash,evidence:frozen}=freezeFinancialPreparation(original,historical,financialSources,new Date().toISOString(),forecasts,actionTerms);
       await command(identity, 'prepare', { jobId: context.jobId, executionId: context.executionId, inputHash: preparedHash, evidence: frozen });
       return { acquisition, parsing, validation, inputHash: preparedHash, evidence: frozen };
     });

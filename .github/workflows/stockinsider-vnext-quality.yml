@@ -66,6 +66,8 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/semantic-score-fence.test.ts | tee /tmp/stockinsider-vnext-ci/semantic-score-fence-source.tap
           node --experimental-strip-types web/src/lib/vnext/catalyst-criteria.test.ts | tee /tmp/stockinsider-vnext-ci/catalyst-criteria-source.tap
           node --experimental-strip-types web/src/lib/vnext/forecast-evidence.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-evidence-source.tap
+          node --experimental-strip-types web/src/lib/vnext/corporate-action-terms.test.ts | tee /tmp/stockinsider-vnext-ci/action-terms-source.tap
+          node scripts/vnext-action-terms-source.test.mjs | tee /tmp/stockinsider-vnext-ci/action-terms-sql-source.tap
           node --experimental-strip-types web/src/lib/vnext/forecast-current.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-current-source.tap
           node --experimental-strip-types web/src/lib/vnext/forecast-active.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-active-source.tap
           node scripts/vnext-forecast-active-source.test.mjs | tee /tmp/stockinsider-vnext-ci/forecast-active-sql-source.tap
@@ -95,6 +97,7 @@ jobs:
           npm --prefix web run typecheck
           npm --prefix web run lint
       - name: Full ordinary build
+        id: current_build
         run: npm --prefix web run build
       - name: Isolated PostgreSQL real concurrency and synthetic publication lifecycle
         env:
@@ -474,6 +477,7 @@ jobs:
           fi
           test "$test_status" = 0
       - name: Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)
+        if: ${{ !cancelled() && steps.current_build.outcome == 'success' }}
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-08
           VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-08
@@ -559,11 +563,16 @@ jobs:
                       value=json.loads(line[len(prefix):])
                       if set(value)!=keys or any(type(v) not in [bool,int] for v in value.values()): raise SystemExit('closed forecast safe witness required')
                       notices.append({'kind':prefix.strip(),'value':value})
-          paths=['migrations/20261023_vnext_forecast_active_v1.sql','scripts/opportunity-v3/vnext-forecast-active-profile-v1.json','web/src/lib/vnext/forecast-active.ts','web/src/lib/vnext/weekly-worker.ts','web/src/lib/vnext/thesis-audit.ts','migrations/20261023_vnext_forecast_sources_v1.sql','scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json','scripts/vnext-forecast-native-fixture.mjs','scripts/vnext-preparation-http-fixture.mjs','scripts/vnext-preparation-http.test.mjs','web/src/lib/vnext/forecast-current.ts','web/src/lib/vnext/preparation-reconciliation.ts','web/src/lib/vnext/store.ts']
+          paths=['migrations/20261023_vnext_corporate_action_terms_v1.sql','scripts/opportunity-v3/vnext-action-terms-profile-v1.json','scripts/vnext-action-terms-native-fixture.mjs','web/src/lib/vnext/corporate-action-terms.ts','migrations/20261023_vnext_forecast_active_v1.sql','scripts/opportunity-v3/vnext-forecast-active-profile-v1.json','web/src/lib/vnext/forecast-active.ts','web/src/lib/vnext/weekly-worker.ts','web/src/lib/vnext/thesis-audit.ts','migrations/20261023_vnext_forecast_sources_v1.sql','scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json','scripts/vnext-forecast-native-fixture.mjs','scripts/vnext-preparation-http-fixture.mjs','scripts/vnext-preparation-http.test.mjs','web/src/lib/vnext/forecast-current.ts','web/src/lib/vnext/preparation-reconciliation.ts','web/src/lib/vnext/store.ts']
           inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
           value={'sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'observedWitnesses':notices,'actualTapCounts':{m[1].decode():int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',(root/'preparation-http.tap').read_bytes(),re.M)},'tapSha256':hashlib.sha256((root/'preparation-http.tap').read_bytes()).hexdigest(),'scope':'hosted genuine PostgreSQL/HTTP assertions if reached; synthetic source metadata and original append APIs, actual journal reservation only, zero external provider calls; absent witness means NOT_REACHED'}
           (root/'forecast-current-summary.json').write_text(json.dumps(value,indent=2)+'\n')
           print('::notice title=Forecast current numeric acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'observedWitnesses':notices,'actualTapCounts':value['actualTapCounts'],'tapSha256':value['tapSha256'],'privateRowsPublished':False},separators=(',',':')))
+          for line in raw.read_text().splitlines():
+              if line.startswith('ACTION_TERMS_CURRENT_SAFE '):
+                  action=json.loads(line[len('ACTION_TERMS_CURRENT_SAFE '):])
+                  if set(action)!=set('receipts actualSourceAppend currentTerms originalSpans withdrawalCommitted deniedAfterWithdrawal jobsChanged providerInvocations actualExternalSource actualPublishedTargetRebase'.split()) or any(type(v) not in [bool,int] for v in action.values()): raise SystemExit('closed action witness required')
+                  print('::notice title=Current original action terms acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'witness':action,'actualTapCounts':value['actualTapCounts'],'tapSha256':value['tapSha256']},separators=(',',':')))
           PYCODE
           test "$test_status" = 0
       - name: Hash bounded forecast preparation raw receipts without publishing contents
