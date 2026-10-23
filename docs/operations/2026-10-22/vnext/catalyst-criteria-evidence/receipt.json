@@ -1,0 +1,45 @@
+{
+  "actualRetainedExecutionSource": "5d4084ee10ea07e34ef531d2fe4471a714dd7beb",
+  "bytes": 120926,
+  "currentSource": "f9f3a0d0ffa9b50852305ee59f19d48356c2fd13",
+  "files": [
+    {
+      "bytes": 3980,
+      "path": "cleanup.json",
+      "sha256": "25dcc5815df6d0b8bb1c9a0592117de3287fb480dc3fc6cc22aa24fa65567338"
+    },
+    {
+      "bytes": 13799,
+      "path": "commands-resources.json",
+      "sha256": "b924c8b57fdebf644825451cb95f3b6efb5661534f1f54be7298661bd1a428d2"
+    },
+    {
+      "bytes": 65750,
+      "path": "native-summary.json",
+      "sha256": "fd63ed261d5e729a0cc25ad2d0a85a7fe57f11650168ff07057f658a76b5dbaa"
+    },
+    {
+      "bytes": 1023,
+      "path": "native.tap",
+      "sha256": "e9d394437fc4de7eb948a429471b8b5b0dc97061abe85155f390c54055302135"
+    },
+    {
+      "bytes": 31914,
+      "path": "private-inventory.json",
+      "sha256": "8e19b66cf5102d1701987ad4caa6f60ec26340de37241b0ec63c87e2ae2d7f27"
+    },
+    {
+      "bytes": 3534,
+      "path": "source-inputs.json",
+      "sha256": "a98a7885787e36da6a1d41eb911c94b76e2183837e38198cd01f75bf3069d6a1"
+    },
+    {
+      "bytes": 926,
+      "path": "source-review.json",
+      "sha256": "dd0b7f79753f197cfba5952c9c7106f82abc9255f2aa304b80aa4de6ee1a1614"
+    }
+  ],
+  "privateBytes": 3243472,
+  "privateFiles": 138,
+  "scope": "source+retained installer engineering proof only; NOT fresh lifecycle/nativeHTTP/formal approval"
+}

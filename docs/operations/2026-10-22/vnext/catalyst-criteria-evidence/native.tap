@@ -1,0 +1,19 @@
+TAP version 13
+# Subtest: source-bound catalyst actual PG protocol: retained-twse-o23
+    # Subtest: full exact candidate COMMIT preserves prior rows/metadata and permits only three body plus one constraint deltas
+    ok 1 - full exact candidate COMMIT preserves prior rows/metadata and permits only three body plus one constraint deltas
+    # Subtest: private semantic/core functions reject service-role execution; unknown revision owner READ is null and writes nothing
+    ok 2 - private semantic/core functions reject service-role execution; unknown revision owner READ is null and writes nothing
+    # Subtest: full installer repeat rejects with actual ReadyE then explicit ROLLBACK I preserving complete rows/routines
+    ok 3 - full installer repeat rejects with actual ReadyE then explicit ROLLBACK I preserving complete rows/routines
+    1..3
+ok 1 - source-bound catalyst actual PG protocol: retained-twse-o23
+1..1
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2082.022051

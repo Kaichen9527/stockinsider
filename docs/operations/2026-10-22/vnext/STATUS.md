@@ -1,3 +1,10 @@
+# Current: source-bound catalyst criteria candidate
+
+Read [current delivery](CATALYST-CRITERIA-DELIVERY.md), [bound receipt](catalyst-criteria-evidence/receipt.json), and [VN01–VN20](VN-EXECUTION-MAP.md). Sourcef9f3a0d; retained installer4PASS source5d4084e only. Final10source/type/lint pass; full fresh worker/public-score path wired pending new-headCI. One source is not independent confirmation; missing remainsnull. No further cleanup/production changes; PR384 draft and fullgoal incomplete.
+
+---
+Historical milestone, exact scope retained:
+
 # Current: bounded TWSE transport receipts and semantic score correction
 
 Runtime/source `d9a7340cb8d9c6ce332003d813f5859fcfc15f06`; [delivery](TWSE-SNAPSHOT-DELIVERY.md), [VN01–VN20](CURRENT.json), [bound receipt](twse-snapshot-evidence/receipt.json) SHA256 `a0d2823d1d8fbb0630580eda734b2f4a1532156f737f3696466a1daea7c65416`.
