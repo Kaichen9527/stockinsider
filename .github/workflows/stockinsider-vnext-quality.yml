@@ -64,6 +64,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/dimensionless-arithmetic.test.ts | tee /tmp/stockinsider-vnext-ci/dimensionless-source.tap
           node --experimental-strip-types web/src/lib/vnext/reviewed-target.test.ts | tee /tmp/stockinsider-vnext-ci/reviewed-target-source.tap
           node --experimental-strip-types web/src/lib/vnext/trading-invalidity.test.ts | tee /tmp/stockinsider-vnext-ci/trading-invalidity-source.tap
+          node --experimental-strip-types web/src/lib/vnext/trading-invalidity-discovery.test.ts | tee /tmp/stockinsider-vnext-ci/trading-invalidity-discovery-source.tap
           node --experimental-strip-types web/src/lib/vnext/cached-admission.test.ts | tee /tmp/stockinsider-vnext-ci/cached-source.tap
           node --experimental-strip-types web/src/lib/vnext/source-withdrawal.test.ts | tee /tmp/stockinsider-vnext-ci/withdrawal-source.tap
           node --experimental-strip-types web/src/lib/vnext/artifact-financial-summary.test.ts | tee /tmp/stockinsider-vnext-ci/financial-summary-source.tap
@@ -603,6 +604,14 @@ jobs:
                   except OSError: observations.append({'pid':pid,'unknown':True});unsettled=True
           pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-cleanup.private.json').write_text(json.dumps({'containerState':state,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'shutdownObserved':True,'ownedProcessObservations':observations,'zombieIsNotAbsent':True,'unsettled':unsettled})+'\n')
           if unsettled: raise SystemExit('owned process settlement unknown')
+          socket_absence={}
+          for name in ['.s.PGSQL.5432','.s.PGSQL.5432.lock']:
+              path=pathlib.Path(os.environ['VNEXT_WORKER_SOCKET_PARENT'])/'socket'/name
+              try: path.lstat();socket_absence[name]=False
+              except FileNotFoundError: socket_absence[name]=True
+          if not all(socket_absence.values()): raise SystemExit('owned PG socket absence unconfirmed')
+          counts={'absent':sum(v.get('absent',False) for v in observations),'zeroRssZombie':sum(v.get('sameProcess',False) and v.get('state')=='Z' and v.get('rssBytes')==0 for v in observations),'pidReused':sum(v.get('sameProcess') is False for v in observations),'unsettled':sum(v.get('unknown',False) or v.get('sameProcess',False) and not(v.get('state')=='Z' and v.get('rssBytes')==0) for v in observations)}
+          print('::notice title=Trading-invalidity cleanup receipt::'+json.dumps({'pgRunning':state['Running'],'pgPid':state['Pid'],'pgExit':state['ExitCode'],'shutdownLogObserved':True,'socketAbsence':socket_absence,'resourceReceiptObserved':resource.exists(),'ownedProcessCounts':counts,'fullPrivateCleanupSha256':hashlib.sha256(pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-cleanup.private.json').read_bytes()).hexdigest(),'dataRetained':True},separators=(',',':')))
           for p in [os.getcwd(),'/tmp']:
               v=os.statvfs(p)
               if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
@@ -645,6 +654,41 @@ jobs:
           print('::notice title=Trading-invalidity finite native receipt::'+json.dumps(summary,separators=(',',':')))
           PYCODE
           test "$test_status" = 0
+      - name: Hash finite owned raw evidence without publishing private contents
+        if: always()
+        run: |
+          python3 - <<'PYCODE'
+          import hashlib,json,os,pathlib,re,stat
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          paths=[]
+          for child in ['trading-invalidity','trading-invalidity-resource']:
+              directory=root/child
+              if directory.exists():
+                  if directory.is_symlink() or not directory.is_dir(): raise SystemExit('owned raw directory required')
+                  paths.extend(directory.glob('*.json'))
+          for name in ['trading-invalidity.tap.private.log','trading-invalidity-pg-stop.private.log','trading-invalidity-pg-stop.private.json','trading-invalidity-pg-server.private.log','trading-invalidity-cleanup.private.json']:
+              path=root/name
+              if path.exists(): paths.append(path)
+          if len(paths)>256: raise SystemExit('finite raw inventory bound exceeded')
+          rows=[];total=0
+          for path in sorted(paths):
+              relative=str(path.relative_to(root))
+              if not re.fullmatch('[a-z0-9._/-]{1,200}',relative): raise SystemExit('finite owned evidence name required')
+              before=path.lstat();total+=before.st_size
+              if not stat.S_ISREG(before.st_mode) or before.st_uid!=os.getuid() or before.st_nlink!=1 or before.st_size>134217728 or total>1073741824: raise SystemExit('bounded regular owned evidence required')
+              with path.open('rb') as stream:
+                  opened=os.fstat(stream.fileno())
+                  if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino): raise SystemExit('evidence open identity changed')
+                  digest=hashlib.file_digest(stream,'sha256').hexdigest()
+                  ended=os.fstat(stream.fileno())
+              after=path.lstat()
+              keys=lambda v:(v.st_dev,v.st_ino,v.st_size,v.st_mtime_ns,v.st_ctime_ns)
+              if keys(before)!=keys(ended) or keys(before)!=keys(after): raise SystemExit('owned evidence changed during hashing')
+              rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
+          value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only inventory of this hosted owned run; raw private contents are not published or independently downloaded; runner retention is ephemeral'}
+          out=root/'trading-invalidity-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Trading-invalidity private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
+          PYCODE
       - name: Upload finite trading-invalidity TAP and summary only
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -653,5 +697,6 @@ jobs:
           path: |
             /tmp/stockinsider-vnext-ci/trading-invalidity.tap
             /tmp/stockinsider-vnext-ci/trading-invalidity-summary.json
+            /tmp/stockinsider-vnext-ci/trading-invalidity-private-inventory.json
           if-no-files-found: warn
           retention-days: 7

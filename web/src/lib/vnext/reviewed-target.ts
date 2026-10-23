@@ -38,5 +38,5 @@ export async function evaluateCachedTargets(identity:VnextIdentity,transport?:{r
   if(!row || Object.keys(row).sort().join('|')!=='inputHash|reason|revisionId|status|symbol' || typeof row.symbol!=='string' || !/^\d{4}$/u.test(row.symbol) || seen.has(row.symbol) || typeof row.status!=='string' || !['exited','deferred'].includes(row.status) || typeof row.reason!=='string' || !/^[a-z_]{1,120}$/u.test(row.reason) || row.revisionId!==null && (typeof row.revisionId!=='string' || !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/u.test(row.revisionId)) || row.inputHash!==null && (typeof row.inputHash!=='string' || !/^[a-f0-9]{64}$/u.test(row.inputHash)))throw Error('vnext_target_receipt_invalid');
   seen.add(row.symbol);
  }
- return {observations:data.observations as TargetObservation[],receiptDigest:inputHash(data),scope:'server_current_publication_and_work_only' as const};
+ return {observations:data.observations as TargetObservation[],receiptDigest:inputHash(data),scope:'server_current_membership_roster_and_publication' as const};
 }

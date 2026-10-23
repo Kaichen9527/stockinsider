@@ -100,10 +100,11 @@ export async function scanCachedCandidates(identity: VnextIdentity, transport?: 
   for(const row of frozen) row.input.evidence = (sourceEvidence[row.symbol] as Row|undefined)?.evidence || [];
   const observations: RotationObservation[] = frozen.map((row) => {
     const normalized = normalizedInput(row.symbol, row.input,audits?.[row.symbol]); const member = active.find((r) => r.symbol === row.symbol);
-    const instrument = master.get(row.symbol);
+    // The preceding empty-scope server command owns trading-invalidity exits.
+    // This projection can lack conflicting/history/clock fields and must never
+    // turn a deferred roster check into a second caller-authored exit proof.
     return { symbol: row.symbol, input: normalized, active: Boolean(member), state: String(member?.state || ''),
-      candidate: { ...normalized, symbol: row.symbol, eventAt: normalized.eventAt || '', catalystCancelled: false, tradingInvalid: false, targetHit: false, newThesis: false } as Candidate,
-      ...(member && instrument && ['delisted','suspended'].includes(String(instrument.listing_status)) ? { verifiedExit: { reason: 'trading_invalid', evidence: [`official_instrument:${instrument.stock_id}:${instrument.source_timestamp}:${instrument.listing_status}`] } } : {}) };
+      candidate: { ...normalized, symbol: row.symbol, eventAt: normalized.eventAt || '', catalystCancelled: false, tradingInvalid: false, targetHit: false, newThesis: false } as Candidate };
   });
   const rotation = options?{reason:'explicit_admission_does_not_rotate'}:await rotateCachedObservations({ session: String(context.session), completed: context.completed === true, postclose: context.postclose === true, weeklyDue: context.weeklyDue === true }, observations, (action, request) => send(identity, action, request));
   const considered = frozen.filter((r) => options || !active.some((m) => m.symbol === r.symbol) || audits?.[r.symbol]?.materialChanged===true && audits[r.symbol].revisionId && context.postclose === true && context.completed === true).slice(0, 20);

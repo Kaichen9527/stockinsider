@@ -1,0 +1,11 @@
+# Current roster command owns trading-invalidity exits
+
+The inherited cache discovery had a second exit producer: after the authoritative target/roster RPC returned, it inferred `verifiedExit` from partial `stock_instruments_v3` projection fields. Those fields omit clock/history/conflict/complete current identity checks. With the new core proof fence the inferred request would reject; with only the older core it could bypass those checks.
+
+A new actual discovery/rotation composition contract with explicitly synthetic cache/RPC transports reproduced an attempted `exit` after server deferral (1PASS/1FAIL); the initial RED remains private with a hash inventory. Removing only that partial projection closes this caller path. The authoritative empty-request command still runs before screen-context and owns all trading-invalidity decisions. Missing/conflicting current proof does not become a forced exit; invalid screening stays ineligible without removing the member. No raw/history/source/SQL guard or quota changed.
+
+Both focused cases now pass, including server-confirmed exit followed by an empty current set with zero per-stock reads/enqueue. New strict TypeScript initially found only two union-narrowing errors in this new test; adding explicit runtime shape assertions fixed them. Final full module types, focused ESLint and the2focused cases pass. Earlier source8/static, old native tests and browser tests were not mechanically rerun locally. No new local PG/build/browser or cleanup occurred.
+
+The new native entry now invokes the actual `evaluateCachedTargets` composition over actual service-role PG transport and checks its exact digest/observations. This is not HTTP/Next acceptance. The independent native job also publishes only a stable file hash inventory of its finite owned private evidence and finite verified cleanup metadata; private row bodies remain unexposed.
+
+First native source d3d4d63 already passed8tests in hosted job120256677194 with complete installer and direct-PG authority assertions. That run does not establish this changed TS caller or new evidence extension; these require their new exact ordinary CI subject. Synthetic roster/calendar/eligibility are not real official acquisition, semantic/financial approval or production deployment. All earlier REDs stay immutable.
