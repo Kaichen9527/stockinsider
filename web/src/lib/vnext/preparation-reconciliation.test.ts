@@ -21,7 +21,7 @@ function fixture(mode='ready'){
  let context=original;
  const fact:Row={fact_id:'00000000-0000-4000-8000-000000000004',stock_id:stockId,fact_key:'quarterly_revenue',period_end:'2026-06-30',duration_kind:'quarterly',value:100,unit:'TWD',provider:'tpex',authority_tier:'official_filing',estimate_kind:'reported',estimate_horizon:'reported_period',source_ref:'tpex-openapi:synthetic-original',source_timestamp:sourceAt,collected_at:sourceAt,recorded_at:sourceAt,validation_status:'validated',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true};
  const sourceUrl='https://www.tpex.org.tw/synthetic-original.json',sha='a'.repeat(64);
- const tables:Record<string,Row[]>={stocks:[{id:stockId,symbol:'2330',market:'TW'}],stock_instruments_v3:[{stock_id:stockId,symbol:'2330',exchange:'TWSE',listing_status:'active',instrument_type:'common_stock',valid_from:'2020-01-01',valid_to:null,recorded_at:sourceAt,source_timestamp:sourceAt}],
+ const tables:Record<string,Row[]>={stocks:[{id:stockId,symbol:'2330',market:'TW'}],stock_instruments_v3:[{instrument_authority_id:'10000000-0000-4000-8000-000000000001',stock_id:stockId,symbol:'2330',exchange:'TWSE',listing_status:'active',instrument_type:'common_stock',provider:'twse',roster_version:'tw-instrument-roster-v3.0',valid_from:'2020-01-01T00:00:00Z',valid_to:null,recorded_at:sourceAt,source_timestamp:sourceAt}],
   candidate_financial_acquisition_jobs_v4:[{job_id:'synthetic-original-acquisition',stock_id:stockId,period_end:'2026-06-30',status:'terminal',terminal_reason:'complete',response_sha256:sha,source_url:sourceUrl,collected_at:sourceAt,created_at:sourceAt,updated_at:sourceAt}],
   candidate_financial_document_receipts_v6:[],candidate_financial_document_fact_links_v8:[],candidate_issuer_ir_document_queue_v4:[],
   candidate_financial_fact_provenance_v4:[{provenance_id:'synthetic-provenance',fact_id:fact.fact_id,acquisition_job_id:'synthetic-original-acquisition',source_url:sourceUrl,source_sha256:sha,locator:{source_ref:fact.source_ref,period_end:fact.period_end,fact_key:fact.fact_key},extracted_at:sourceAt,recorded_at:sourceAt}],
@@ -34,13 +34,19 @@ function fixture(mode='ready'){
  if(mode==='missing_stock')tables.stocks=[];
  if(mode==='future_instrument')tables.stock_instruments_v3[0].recorded_at='2099-01-01T00:00:00Z';
  if(mode==='future_instrument_source')tables.stock_instruments_v3[0].source_timestamp='2099-01-01T00:00:00Z';
+ if(['latest_suspended','latest_delisted','latest_stock_crosswire','latest_conflict'].includes(mode)){
+  const head:Row={...tables.stock_instruments_v3[0],instrument_authority_id:'10000000-0000-4000-8000-000000000002',listing_status:mode==='latest_delisted'?'delisted':'suspended',recorded_at:'2026-10-23T00:59:30.123456Z'};
+  if(mode==='latest_stock_crosswire')head.stock_id='10000000-0000-4000-8000-000000000003';
+  tables.stock_instruments_v3.push(head);
+  if(mode==='latest_conflict')tables.stock_instruments_v3.push({...head,instrument_authority_id:'10000000-0000-4000-8000-000000000004',listing_status:'active'});
+ }
  if(mode==='calendar_cancelled')tables.tw_trading_sessions_v3.push({...tables.tw_trading_sessions_v3[0],status:'cancelled',recorded_at:'2026-10-22T07:00:00Z'});
  const historical={notEntryAuthority:true as const,nextSessionAuthority:false as const,completedSessions:[],bars:[],priceBasis:null,sourceDatasetRevision:'synthetic-missing-price',availableAt:sourceAt,missingData:['adjusted_history_below_240']};
  const client={from(table:string){
   calls.push(`cache:${table}`);assert.ok(table in tables,`unexpected read ${table}`);
   const filters:Array<(row:Row)=>boolean>=[];
   const query={select:()=>query,eq:(key:string,value:unknown)=>{filters.push(row=>row[key]===value);return query;},in:(key:string,ids:unknown[])=>{filters.push(row=>ids.includes(row[key]));return query;},
-   lte:(key:string,value:string)=>{filters.push(row=>Date.parse(String(row[key]))<=Date.parse(value));return query;},or:()=>query,order:()=>query,
+   lte:(key:string,value:string)=>{filters.push(row=>Date.parse(String(row[key]))<=Date.parse(value));return query;},or:(scope:string)=>{assert.equal(scope,`symbol.eq.2330,stock_id.eq.${stockId}`);filters.push(row=>row.symbol==='2330'||row.stock_id===stockId);return query;},order:()=>query,
    limit:(count:number)=>{assert.ok(count<=2001);return query;},
    maybeSingle:async()=>({data:tables[table].filter(row=>filters.every(f=>f(row)))[0]||null,error:null}),
    then(resolve:(value:unknown)=>void,reject:(error:unknown)=>void){return Promise.resolve({data:tables[table].filter(row=>filters.every(f=>f(row))),error:mode==='cache_read_lost'?{message:'uncertain transport'}:null}).then(resolve,reject);}};return query;
@@ -117,7 +123,7 @@ test('shared frozen projection is byte/hash equivalent to the original admitted 
  assert.deepEqual(freezeFinancialPreparation(f.original,f.historical,sources,cutoff),{inputHash:inputHash(frozen),evidence:frozen});assert.equal(JSON.stringify(sources),before);
 });
 function controllers(f:ReturnType<typeof fixture>){
- const cache=new Map<string,Record<string,unknown>>();const allowed=new Set(['http.ts','store.ts','policy.ts','auth.ts','request.ts','research.ts','semantic-criteria.ts','runtime.ts','factors.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','worker-output.ts','research-failure.ts','preparation-reconciliation.ts','cached-price-factors.ts']);
+ const cache=new Map<string,Record<string,unknown>>();const allowed=new Set(['http.ts','store.ts','policy.ts','auth.ts','request.ts','research.ts','semantic-criteria.ts','runtime.ts','factors.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','worker-output.ts','research-failure.ts','preparation-reconciliation.ts','preparation-trading-identity.ts','cached-price-factors.ts']);
  const load=(name:string):Record<string,unknown>=>{
   if(!allowed.has(name))throw Error(`unexpected_preparation_source:${name}`);const prior=cache.get(name);if(prior)return prior;
   const filename=new URL(name,import.meta.url);const compiled=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:name}).outputText;
@@ -156,4 +162,13 @@ test('actual HTTP-handler/store source contract uses configured author only; REA
 test('original SQL empty invocation row is absence only; any extra, missing or populated field rejects before cache or prepare',async()=>{
  const ready=fixture('sql_empty_journal');const r=await reconcilePreparation(author,{jobId},ready.deps);assert.equal(r.status,'ready');assert.equal(ready.calls.includes('prepare'),false);
  for(const mode of ['sql_empty_journal_unknown','sql_empty_journal_value','sql_empty_journal_missing']){const f=fixture(mode);const r=await reconcilePreparation(author,{jobId},f.deps,true);assert.equal(r.status,'unresolved');assert.equal(r.reason,'provider_journal_read_unavailable');assert.equal(f.calls.some(c=>c.startsWith('cache:')||c==='prepare'),false);assert.equal(f.state.prepared,false);}
+});
+
+test('actual preparation composition cannot use an older active row after an invalid or ambiguous latest roster observation',async()=>{
+ for(const mode of ['latest_suspended','latest_delisted','latest_stock_crosswire','latest_conflict']){
+  const f=fixture(mode);const result=await reconcilePreparation(author,{jobId},f.deps,true);
+  assert.equal(result.status,'gap',mode);assert.equal(f.state.prepared,false);
+  assert.equal(f.calls.some(c=>['financial-asof','historical','prepare','claim','reserve'].includes(c)),false,mode);
+  assert.deepEqual(f.calls.filter(c=>c.startsWith('cache:')),['cache:stocks','cache:stock_instruments_v3']);
+ }
 });

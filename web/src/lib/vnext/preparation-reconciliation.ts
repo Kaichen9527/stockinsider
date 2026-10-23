@@ -5,6 +5,7 @@ import type {Evidence} from './research.ts';
 import {inputHash} from './policy.ts';
 import {resolveFinancialEvidenceSources} from './financial-evidence-sources.ts';
 import {currentPriceEvidence} from './cached-price-factors.ts';
+import {currentPreparationInstrument,PREPARATION_INSTRUMENT_COLUMNS} from './preparation-trading-identity.ts';
 type Row=Record<string,unknown>;
 type Client=ReturnType<typeof getSupabaseServerClient>;
 type Sources=Awaited<ReturnType<typeof resolveFinancialEvidenceSources>>;
@@ -79,13 +80,14 @@ async function cachedProjection(deps:PreparationDependencies,state:Row,original:
  if(!stocks.data)return {status:'gap',reason:'vnext_stock_authority_missing'};
  if(stocks.data.symbol!==state.symbol || stocks.data.market!=='TW' || typeof stocks.data.id!=='string' || !uuid.test(stocks.data.id))throw Error('vnext_preparation_stock_scope_mismatch');
  const stockId=String(stocks.data.id);
- const instrument=await deps.client.from('stock_instruments_v3').select('stock_id,symbol,exchange,source_timestamp,recorded_at,valid_from,valid_to').eq('stock_id',stockId).eq('symbol',String(state.symbol)).eq('listing_status','active').eq('instrument_type','common_stock')
-  .lte('recorded_at',cutoff).lte('source_timestamp',cutoff).lte('valid_from',cutoff).or(`valid_to.is.null,valid_to.gt.${cutoff}`).order('recorded_at',{ascending:false}).limit(1).maybeSingle();
+ // Read both the symbol and retained stock identity BEFORE filtering listing
+ // status/validity. An older active row cannot hide a newer invalid/ambiguous head.
+ const instrument=await deps.client.from('stock_instruments_v3').select(PREPARATION_INSTRUMENT_COLUMNS)
+  .or(`symbol.eq.${state.symbol},stock_id.eq.${stockId}`).order('recorded_at',{ascending:false}).limit(1001);
  if(instrument.error)throw Error('vnext_trading_authority_read_uncertain');
- if(!instrument.data || !['TWSE','TPEX'].includes(String(instrument.data.exchange).toUpperCase()))return {status:'gap',reason:'vnext_trading_authority_missing'};
- const selectedInstrument=instrument.data as Row;
- if(selectedInstrument.stock_id!==stockId || selectedInstrument.symbol!==state.symbol || !['source_timestamp','recorded_at','valid_from'].every(key=>known(selectedInstrument[key],cutoff)) || (selectedInstrument.valid_to!==null && (typeof selectedInstrument.valid_to!=='string' || !Number.isFinite(Date.parse(selectedInstrument.valid_to)) || Date.parse(selectedInstrument.valid_to)<=Date.parse(cutoff))))throw Error('vnext_preparation_instrument_scope_mismatch');
- const exchange=String(instrument.data.exchange).toUpperCase() as 'TWSE'|'TPEX';
+ const selected=currentPreparationInstrument(instrument.data,{stockId,symbol:String(state.symbol),cutoff});
+ if(selected.status!=='current')return selected;
+ const exchange=selected.exchange;
  // Stock-scoped cache observation, not proof of this execution's lineage.
  // Never claim, settle, validate or reschedule any of that existing work.
  const jobs=await deps.client.from('candidate_financial_acquisition_jobs_v4').select('job_id,status,terminal_reason').eq('stock_id',stockId).order('created_at').limit(1001);
