@@ -1,3 +1,15 @@
+# Latest candidate — b378, new runtime acceptance pending
+
+Current product/test candidate **b378642a1144c03df16bf58ab1e76f8c5c21431a**; [candidate receipt](source-window-evidence/receipt.json), SHA **314a20961d03e2a37779459044b134c524865b86d5920d2a5cfa95dc498c55dc**. [CURRENT/VN01–20](CURRENT.json), [source-window design/scope](SOURCE-WINDOW.md), [routine HTTP and retained RED](ROUTINE-HTTP.md). Last complete accepted tree remains921 with its separate material-source receipt below.
+
+The actual HTTP source-extract and postclose cycle now select a writer-leased durable keyset worker over the fixed permitted cache feeds, using the existing source run ledger and original extraction RPC/budget. It advances only accounted pages, holds budget-limited pages, rejects malformed/current-rights drift and never turns cache enumeration into upstream coverage or zero volume. No new SQL/role/grant or old snapshot/source pin changes. Original VM5focused actual-composition synthetic contracts,11and4separate affected regressions, no-emit types and changed-file lint PASS. Initial TS2737/TS2352 is preserved. Original VM PG/fullbuild/browser remain NOT_ADMITTED.
+
+Earlier0d routine HTTP actually reached a new member/job, then failed its finite delta assertion; actual error hash identifies a missing original weekly-audit table in the test expectation. Cleanup asserted before fixture settlement and rejected its owned requested-SIGTERM143; containment terminated the incomplete run. Final TAP counts NOT_OBSERVED, no success claimed. The new fixture asserts the exact permissible weekly row, settles fixture clients first, and also exercises actual source-cache ledger write/replay. **New b378 ordinary39953692406 and independent39953692459 were in progress at this checkpoint; protected39953687971 FAILURE.** No new native totals or fresh complete acceptance are inferred.
+
+Source/provider/role/isolatedDB bindings remain absent, real source/model/semantic/Contabo acceptance NOT_RUN. Exhaustive28day/upstream volume authority, annual/4Q/share source producer/full forecast article flow, authorized action rebasing, remaining HTTP/rights/lease/race/legacy/caps/time/protected matrices remain incomplete. No merge/deploy/production/schedule or consumed operation performed.
+
+---
+
 # Current vNext delivery — incomplete, PR384 remains draft
 
 Current product/test source **921eb0038c534e36a553ba36fdd7142c5584d8ae**, base **93e44475cbb0c27beb26e4dcb68e382096a4e212**. [VN01–20](CURRENT.json), [executable map](VN-EXECUTION-MAP.md), [current bound receipt](material-source-evidence/receipt.json), [manifest](material-source-evidence/manifest.json), [owner actions](OWNER-ACTIONS.md). Receipt SHA **b353f94d9f0570f8e5b21ecf308c966c72ba738378ad43f26d92515547938659**. Historical milestones below retain their exact subjects.

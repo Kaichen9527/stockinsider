@@ -1,0 +1,31 @@
+{
+  "files": [
+    {
+      "bytes": 5703,
+      "path": "private-inventory.json",
+      "sha256": "3c0d869d4843c80619a2c312741eb6aa9c499d595cc7aea0b8d5565d5f7c9fff"
+    },
+    {
+      "bytes": 3102,
+      "path": "retained-red.json",
+      "sha256": "1d88679ec17c091d5b2e528755611068a05a4f72328ddbb1302e85bb50327a99"
+    },
+    {
+      "bytes": 2784,
+      "path": "source-seal.json",
+      "sha256": "51cdcb92c98e040e0d8b39b61f42aea26416868d801ded102e06b032410cb37b"
+    },
+    {
+      "bytes": 6109,
+      "path": "vm-checks.json",
+      "sha256": "5d14a525a71ea5042361f3b71bdf5513c5521124bc9486325e709050fac5406c"
+    },
+    {
+      "bytes": 3617,
+      "path": "receipt.json",
+      "sha256": "314a20961d03e2a37779459044b134c524865b86d5920d2a5cfa95dc498c55dc"
+    }
+  ],
+  "receiptSha256": "314a20961d03e2a37779459044b134c524865b86d5920d2a5cfa95dc498c55dc",
+  "source": "b378642a1144c03df16bf58ab1e76f8c5c21431a"
+}
