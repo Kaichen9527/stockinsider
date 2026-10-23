@@ -12,6 +12,7 @@ on:
       - 'scripts/candidate-financial-document-write-lease-route.test.mjs'
       - 'migrations/20261022_*'
       - 'migrations/20261023_*'
+      - 'migrations/20261024_*'
       - 'openspec/changes/stockinsider-vnext-20/**'
       - 'specs/research-admission/**'
       - 'package.json'
@@ -69,6 +70,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/corporate-action-terms.test.ts | tee /tmp/stockinsider-vnext-ci/action-terms-source.tap
           node scripts/vnext-action-terms-source.test.mjs | tee /tmp/stockinsider-vnext-ci/action-terms-sql-source.tap
           node --experimental-strip-types web/src/lib/vnext/published-target-read.test.ts | tee /tmp/stockinsider-vnext-ci/published-target-read-source.tap
+          node --experimental-strip-types web/src/app/components/vnext/detail-source.test.mjs | tee /tmp/stockinsider-vnext-ci/published-target-ssr-source.tap
           node scripts/vnext-published-target-read-source.test.mjs | tee /tmp/stockinsider-vnext-ci/published-target-sql-source.tap
           node --experimental-strip-types web/src/lib/vnext/disclosed-fiscal-forecast.test.ts | tee /tmp/stockinsider-vnext-ci/disclosed-fiscal-source.tap
           node scripts/vnext-disclosed-fiscal-source.test.mjs | tee /tmp/stockinsider-vnext-ci/disclosed-fiscal-sql-source.tap
