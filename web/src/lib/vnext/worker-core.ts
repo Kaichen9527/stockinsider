@@ -1,3 +1,4 @@
+import {assertBusinessScope} from './business-criteria.ts';
 import {assertCancellationScope,cancellationContext,cancellationExact,type CancellationScope} from './catalyst-cancellation.ts';
 import {catalystAnnotation} from './semantic-criteria.ts';
 import type { VnextIdentity } from './auth.ts';
@@ -27,6 +28,7 @@ function journalMatches(row: WorkerRow, binding: WorkerBinding) {
  * Never takes a provider, principal, model, URL or raw result from an HTTP body. */
 export async function runResearchWorker(jobId: string, deps: WorkerDependencies, recovery = false): Promise<WorkerRow> {
  if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu.test(jobId)) throw new Error('vnext_worker_job_id_invalid');
+ if([deps.author,deps.reviewer].some(b=>b.promptVersion==='vnext-research-worker-v5')&&[deps.author,deps.reviewer].some(b=>b.promptVersion!=='vnext-research-worker-v5'))throw Error('vnext_worker_business_profile_pair_required');
  if([deps.author,deps.reviewer].some(b=>b.promptVersion==='vnext-research-worker-v4')&&[deps.author,deps.reviewer].some(b=>b.promptVersion!=='vnext-research-worker-v4'))throw Error('vnext_worker_cancellation_profile_pair_required');
  if(deps.author.identity.role!=='author' || deps.reviewer.identity.role!=='reviewer' || deps.author.identity.principal===deps.reviewer.identity.principal) throw new Error('vnext_worker_distinct_identities_required');
  for (const binding of [deps.author,deps.reviewer]) if (!matchesBinding(await deps.journal(binding.identity,'binding',{}),binding)) throw new Error('vnext_worker_server_binding_mismatch');
@@ -93,7 +95,7 @@ export async function runResearchWorker(jobId: string, deps: WorkerDependencies,
   if(record.state==='failed') return {status:'failed',attemptConsumed:true,reinvoke:false};
   if(record.state==='completed' && !recovery) return {status:'recovery_required',stage:'immutable_output_receipt',reinvoke:false};
   if(binding.promptVersion==='vnext-research-worker-v4')try{await cancellationPacket(record,binding);}catch{return uncertain('cancellation_server_context');}
-  else {const frozen=JSON.parse((record.frozen_request as ProviderRequest).input);try{assertCancellationProfile(frozen.authorArtifact,binding.promptVersion);}catch{return uncertain('cancellation_profile');}}
+  else {const frozen=JSON.parse((record.frozen_request as ProviderRequest).input);try{assertCancellationProfile(frozen.authorArtifact,binding.promptVersion);assertBusinessProfile(frozen.authorArtifact,binding.promptVersion);if(binding.promptVersion==='vnext-research-worker-v5'&&binding.identity.role==='reviewer')assertBusinessScope(frozen.authorArtifact,{symbol:frozen.symbol,cutoff:frozen.evidence.cutoff,evidence:frozen.evidence.evidence});}catch{return uncertain('cancellation_profile');}}
   if(record.state!=='completed') {
    let outcome: ProviderOutcome;
    if(recovery) {
@@ -111,7 +113,9 @@ export async function runResearchWorker(jobId: string, deps: WorkerDependencies,
     // Invalid completed output is a settled, consumed failure, never resampling.
     try {
      const frozen=JSON.parse((record.frozen_request as ProviderRequest).input) as {symbol?:string;inputHash:string;evidence:{cutoff?:string;evidence:Evidence[]};authorArtifact?:Artifact;cancellationContext?:unknown};
-     if(['vnext-research-worker-v3','vnext-research-worker-v4'].includes(binding.promptVersion))assertSemanticScope(binding.identity.role==='author'?outcome.output:frozen.authorArtifact,frozen);
+     if(['vnext-research-worker-v3','vnext-research-worker-v4','vnext-research-worker-v5'].includes(binding.promptVersion))assertSemanticScope(binding.identity.role==='author'?outcome.output:frozen.authorArtifact,frozen);
+     assertBusinessProfile(outcome.output,binding.promptVersion);
+     if(binding.promptVersion==='vnext-research-worker-v5')assertBusinessScope(binding.identity.role==='author'?outcome.output:frozen.authorArtifact,{symbol:frozen.symbol!,cutoff:frozen.evidence.cutoff!,evidence:frozen.evidence.evidence});
      assertCancellationProfile(outcome.output,binding.promptVersion);
      if(frozen.authorArtifact)assertCancellationProfile(frozen.authorArtifact,binding.promptVersion);
      if(binding.promptVersion==='vnext-research-worker-v4')assertCancellationScope(binding.identity.role==='author'?outcome.output:frozen.authorArtifact,frozen.cancellationContext,frozenScope(frozen));
@@ -126,7 +130,9 @@ export async function runResearchWorker(jobId: string, deps: WorkerDependencies,
    if(record.state!=='completed') return uncertain('provider_pending');
   }
   if(!allowReceipt || Date.parse(String(record.deadline_at))<=Date.now()) return {status:'settled_after_execution_window',published:false,reinvoke:false};
-  if(['vnext-research-worker-v3','vnext-research-worker-v4'].includes(binding.promptVersion)){const frozen=JSON.parse((record.frozen_request as ProviderRequest).input);assertSemanticScope(binding.identity.role==='author'?record.normalized_output:frozen.authorArtifact,frozen);}
+  if(['vnext-research-worker-v3','vnext-research-worker-v4','vnext-research-worker-v5'].includes(binding.promptVersion)){const frozen=JSON.parse((record.frozen_request as ProviderRequest).input);assertSemanticScope(binding.identity.role==='author'?record.normalized_output:frozen.authorArtifact,frozen);}
+  assertBusinessProfile(record.normalized_output,binding.promptVersion);
+  if(binding.promptVersion==='vnext-research-worker-v5'){const frozen=JSON.parse((record.frozen_request as ProviderRequest).input);assertBusinessScope(binding.identity.role==='author'?record.normalized_output:frozen.authorArtifact,{symbol:frozen.symbol,cutoff:frozen.evidence.cutoff,evidence:frozen.evidence.evidence});}
   assertCancellationProfile(record.normalized_output,binding.promptVersion);
   if(binding.promptVersion==='vnext-research-worker-v4'){const frozen=await cancellationPacket(record,binding);assertCancellationScope(binding.identity.role==='author'?record.normalized_output:frozen.authorArtifact,frozen.cancellationContext,frozenScope(frozen));}
   if(record.normalized_output==null) throw new Error('vnext_worker_normalized_output_missing');
@@ -153,4 +159,10 @@ function assertCancellationProfile(value:unknown,profile:string){
  if(profile==='vnext-research-worker-v4')return;
  const row=value as {claims?:Array<{cancellation?:unknown}>;claimChecks?:Array<{cancellationAssessment?:unknown}>}|null;
  if(row?.claims?.some(c=>c.cancellation!==undefined)||row?.claimChecks?.some(c=>c.cancellationAssessment!==undefined))throw Error('vnext_worker_cancellation_profile_required');
+}
+
+function assertBusinessProfile(value:unknown,profile:string){
+ if(profile==='vnext-research-worker-v5')return;
+ const row=value as {claims?:Array<{business?:unknown}>;claimChecks?:Array<{businessAssessment?:unknown}>}|null;
+ if(row?.claims?.some(c=>c.business!==undefined)||row?.claimChecks?.some(c=>c.businessAssessment!==undefined))throw Error('vnext_worker_business_profile_required');
 }

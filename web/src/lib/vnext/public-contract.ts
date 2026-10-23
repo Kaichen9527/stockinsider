@@ -3,12 +3,13 @@ import { inputHash,taipeiDate, type Session } from './policy.ts';
 import { REQUIRED_SECTIONS } from './research.ts';
 import type {Claim} from './research.ts';
 import type {reviewedValuation} from './reviewed-valuation.ts';
-type ResearchScore={confirmedPoints:number;availableWeight:number};
+type ResearchScore={confirmedPoints:number;availableWeight:number;factors?:Record<string,unknown>};
+export type PublishedBusinessComponent={criterion:'competitive_advantage'|'thesis_risk_analysis';met:boolean|null;observedAt:string;analysis:string;interpretation:'labelled_inference_not_confirmed_fact'};
 export type PublishedMember = { symbol: string; state: 'researching' | 'waiting' | 'eligible'; inputHash: string; publishedInputHash: string | null;
   revisionId: string | null; publishedAt: string | null; eventAt: string | null; reasons: string[]; gaps: string[];
   score: ResearchScore | null; initialScore?:ResearchScore|null;deepScore?:ResearchScore|null;deepScoreAt?:string|null;sourceRights?:{current:boolean;reason:string|null}; content: Record<string, unknown> | null; statusReason?: string | null;
   qualification?: Record<string,unknown> & { qualified: boolean; inputHash: string; expiresAt: string; proofHash: string; financialCoverage: { status: string }; priceBasis: { status: string };schemaVersion?:string;checkedAt?:string;valuation?:ReturnType<typeof reviewedValuation> };
-  citations?: Array<{ id: string; url: string; contentHash: string }> };
+  citations?: Array<{ id: string; url: string; contentHash: string }>; businessComponents?:PublishedBusinessComponent[] };
 export type PublishedHome = { version: string; market: MarketInput & { sessions: Session[] }; members: PublishedMember[]; publishedAt: string; latestSession?: Session };
 export function publicHome(value: unknown, now: string) {
   const home = value as PublishedHome | null;
@@ -61,8 +62,25 @@ export function publicHome(value: unknown, now: string) {
     const expected=new Set([...scenarios.map((matches)=>matches[0].id),price[0].id,method[0].id]);
     return expected.size===valuation.claimIds.length && valuation.claimIds.every((id)=>expected.has(id));
   };
+  // These explanatory components come from the current DB projection, never a
+  // caller-supplied checklist. They cannot change score, rank or entry gates.
+  const businessComponents=(member:PublishedMember):PublishedBusinessComponent[]=>{
+    if(member.sourceRights?.current!==true || member.inputHash!==member.publishedInputHash || !validContent(member))return [];
+    const result:PublishedBusinessComponent[]=[];
+    const object=(v:unknown):v is Record<string,unknown>=>Boolean(v)&&typeof v==='object'&&!Array.isArray(v);
+    for(const [group,criterion,weight] of [['profitability','competitive_advantage',25],['marketLiquidity','thesis_risk_analysis',10]] as const){
+      const factor=member.deepScore?.factors?.[group];
+      if(!object(factor)||factor.value!==null||factor.weight!==weight||factor.interpretation!=='labelled_inference_not_confirmed_fact'||factor.groupGap!=='remaining_components_not_db_verified')continue;
+      const c=factor.businessComponent;
+      if(!object(c)||Object.keys(c).sort().join('|')!==['criterion','annotationHash','sourceId','sourceHash','observedAt','met','gap'].sort().join('|')||c.criterion!==criterion||c.met!==null&&typeof c.met!=='boolean'||c.gap!==null&&!['component_outcome_unknown','component_assessment_insufficient'].includes(String(c.gap))||c.met===null&&c.gap===null||c.met!==null&&c.gap!==null||typeof c.sourceId!=='string'||c.sourceId.length<1||c.sourceId.length>240||typeof c.annotationHash!=='string'||!/^[a-f0-9]{64}$/u.test(c.annotationHash)||typeof c.sourceHash!=='string'||!/^[a-f0-9]{64}$/u.test(c.sourceHash)||typeof c.observedAt!=='string'||!Number.isFinite(Date.parse(c.observedAt))||Date.parse(c.observedAt)>Date.parse(now))continue;
+      const claims=(member.content?.claims as Claim[]).filter(claim=>claim&&typeof claim==='object'&&Array.isArray(claim.evidenceIds)&&claim.business?.criterion===criterion&&inputHash(claim.business)===c.annotationHash&&claim.business.symbol===member.symbol&&claim.business.evidenceId===c.sourceId&&claim.business.contentHash===c.sourceHash&&(c.met===null?claim.business.outcome==='unknown':claim.business.outcome===(c.met?'met':'not_met'))&&claim.evidenceIds.length===1&&claim.evidenceIds[0]===c.sourceId);
+      if(claims.length!==1||typeof claims[0].text!=='string')continue;
+      result.push({criterion,met:c.met as boolean|null,observedAt:c.observedAt,analysis:claims[0].text,interpretation:'labelled_inference_not_confirmed_fact'});
+    }
+    return result;
+  };
   const members = home.members.filter((m) => /^\d{4}$/u.test(m.symbol) && ['researching', 'waiting', 'eligible'].includes(m.state))
-    .map((m) => ({ ...m, entryEligible: m.state === 'eligible' && m.sourceRights?.current===true && validContent(m) && qualified(m) && m.inputHash === m.publishedInputHash && !judgment.entryBlocked,
-      retained: Boolean(m.revisionId && m.inputHash !== m.publishedInputHash) }));
+    .map((m) => {const member={...m};delete member.businessComponents;const components=businessComponents(m);return { ...member,...(components.length?{businessComponents:components}:{}), entryEligible: m.state === 'eligible' && m.sourceRights?.current===true && validContent(m) && qualified(m) && m.inputHash === m.publishedInputHash && !judgment.entryBlocked,
+      retained: Boolean(m.revisionId && m.inputHash !== m.publishedInputHash) };});
   return { ...home, market: judgment, members };
 }

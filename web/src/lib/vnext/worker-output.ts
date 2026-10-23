@@ -20,7 +20,7 @@ export function normalizeWorkerAuthor(raw: unknown, binding: { model: string; mo
  for (const section of Object.values(raw.sections)) if (!object(section) || !keys(section,['text','evidenceIds','claimIds']) || typeof section.text!=='string' || !Array.isArray(section.evidenceIds) || !section.evidenceIds.every((id) => typeof id==='string') || !Array.isArray(section.claimIds) || !section.claimIds.every((id) => typeof id==='string')) throw new Error('vnext_worker_section_closed_shape');
  if (!Array.isArray(raw.claims)) throw new Error('vnext_worker_claims_required');
  for (const claim of raw.claims) {
-  if (!object(claim) || !keys(claim,['id','text','kind','evidenceIds','numeric','semantic','cancellation']) || typeof claim.id!=='string' || typeof claim.text!=='string' || !Array.isArray(claim.evidenceIds) || !claim.evidenceIds.every((id) => typeof id==='string')) throw new Error('vnext_worker_claim_closed_shape');
+  if (!object(claim) || !keys(claim,['id','text','kind','evidenceIds','numeric','semantic','cancellation','business']) || typeof claim.id!=='string' || typeof claim.text!=='string' || !Array.isArray(claim.evidenceIds) || !claim.evidenceIds.every((id) => typeof id==='string')) throw new Error('vnext_worker_claim_closed_shape');
   if (claim.numeric!==undefined) {
    if (!object(claim.numeric) || !keys(claim.numeric,['value','unit','period','key','formula'])) throw new Error('vnext_worker_numeric_closed_shape');
    const formula=claim.numeric.formula; if (formula!==undefined && (!object(formula) || !keys(formula,['operation','evidenceIds']) || !Array.isArray(formula.evidenceIds) || !formula.evidenceIds.every((id) => typeof id==='string'))) throw new Error('vnext_worker_formula_closed_shape');
@@ -37,7 +37,7 @@ export function normalizeWorkerReview(raw: unknown, modelVersion: string, artifa
   || !Array.isArray(raw.findings) || !raw.findings.every((finding) => typeof finding==='string' && finding.length>0) || !Array.isArray(raw.claimChecks) || raw.claimChecks.length!==artifact.claims.length) throw new Error('vnext_worker_review_closed_shape');
  const seen=new Set<string>();
  for (const check of raw.claimChecks) {
-  if (!object(check) || !keys(check,['claimId','verdict','reason','sources','semanticAssessment','cancellationAssessment']) || typeof check.claimId!=='string' || seen.has(check.claimId) || !['supported','unsupported'].includes(String(check.verdict)) || typeof check.reason!=='string' || !check.reason.trim() || !Array.isArray(check.sources)) throw new Error('vnext_worker_review_check_closed_shape');
+  if (!object(check) || !keys(check,['claimId','verdict','reason','sources','semanticAssessment','cancellationAssessment','businessAssessment']) || typeof check.claimId!=='string' || seen.has(check.claimId) || !['supported','unsupported'].includes(String(check.verdict)) || typeof check.reason!=='string' || !check.reason.trim() || !Array.isArray(check.sources)) throw new Error('vnext_worker_review_check_closed_shape');
   seen.add(check.claimId); const claim=artifact.claims.find((c) => c.id===check.claimId); if (!claim || check.sources.length!==claim.evidenceIds.length) throw new Error('vnext_worker_review_claim_binding');
   const ids=new Set<string>(); for (const source of check.sources) {
    if (!object(source) || !keys(source,['id','contentHash']) || typeof source.id!=='string' || ids.has(source.id) || !claim.evidenceIds.includes(source.id) || evidence.find((e) => e.id===source.id)?.contentHash!==source.contentHash) throw new Error('vnext_worker_review_source_binding'); ids.add(source.id);
