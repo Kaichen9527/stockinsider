@@ -1,193 +1,215 @@
 {
   "status": "PARTIAL_ENGINEERING_ACCEPTANCE_DRAFT_NOT_RELEASED",
-  "updatedAt": "2026-10-23T14:08:57.137960+00:00",
-  "runtimeSourceHead": "b855f6948b6ea86c0d2f5556dddeddc4a7888ddc",
-  "currentReceiptSha256": "2c95c2fa7b8ca78385822fc2ecef2b682210f72b23f934cc48d6d00677b7e2fa",
+  "updatedAt": "2026-10-23T15:06:54.416128+00:00",
+  "runtimeSourceHead": "6024b5a84aafc5ee0057457b4a81275b16bc8961",
+  "currentReceiptSha256": "fa591d59ad7f2c64f4dd903899aaedec12ded33a41cfb77b42deaafecd6de325",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
   "primaryReport": "STATUS.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
   "acceptance": [
     {
       "id": "VN01",
-      "status": "PARTIAL_ACTUAL_POSITIVE_HTTP",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "cached-active-http-01; current-browser-ui-01; native-legacy-final",
       "limits": "Exact aeb actual fullbuild/preparation HTTP succeeds; genuine adapter PG and scanner composition separately tested. Positive routine-screen HTTP not separately exercised.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply.",
-      "currentActual": "ccc actual unauth/wrong-role/extra-fields/explicit[] zero SQL; one admitted researching slot before claim, replay/withdrawal retain immutable history. Raw-source path still not accepted."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "currentActual": "ccc actual unauth/wrong-role/extra-fields/explicit[] zero SQL; one admitted researching slot before claim, replay/withdrawal retain immutable history. Raw-source path still not accepted.",
+      "previousScopedStatus": "PARTIAL_ACTUAL_POSITIVE_HTTP"
     },
     {
       "id": "VN02",
-      "status": "TESTED_VM_SUBSETS",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "native-legacy-final; cached-active-http-01; current-browser-ui-01",
       "limits": "14actuallegacyRPC fences at their earlier source;9currentHTTPaliases/GETscope/claims same20/4ledger. No blanket latest-head legacy acceptance inferred.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "TESTED_VM_SUBSETS"
     },
     {
       "id": "VN03",
-      "status": "TESTED_VM_SYNTHETIC",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "cached-native-02; cached-active-http-recovery-01",
       "limits": "8parallelduplicate deliveries reserve4jobs;4actualstarts remaincharged;2livepubs+18explicitprior-day waitingfixture=20active. Prior-sessionrow is syntheticFK setup, not officialtwo-day rotationproof.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "TESTED_VM_SYNTHETIC"
     },
     {
       "id": "VN04",
-      "status": "PARTIAL_ACTUAL_PG_HTTP_RECOVERY",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "thesis-native-01; terminal-slots-native-01; terminal-slots-read-01; final-terminal-test-01; preparation-reconciliation-source-05; preparation-empty-journal-source-o23; hosted39901837447",
       "limits": "655 actual hosted preparation HTTP committed socket-loss/explicit read stepSUCCESS; da15 cancellation real PGwire no-resend receipt remains exacthistorical. Full remaining lease/expiry/provider matrix incomplete.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply.",
-      "expiryActual": "b855 actual first HTTP expiry/idempotent retry plus real second deadline via service-role writer header/lease; failure2/activeSlots0/2charged/0refund/old+retry further retry rejected/0provider-preparation. Separate transport scopes, hosted synthetic source content, full suite still FAIL."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "expiryActual": "b855 actual first HTTP expiry/idempotent retry plus real second deadline via service-role writer header/lease; failure2/activeSlots0/2charged/0refund/old+retry further retry rejected/0provider-preparation. Separate transport scopes, hosted synthetic source content, full suite still FAIL.",
+      "previousScopedStatus": "PARTIAL_ACTUAL_PG_HTTP_RECOVERY"
     },
     {
       "id": "VN05",
-      "status": "PARTIAL_COVERAGE_AUTHORITY_MISSING",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "cached-admission-final-direct-01; cached-admission-final-pure-01; preparation-authority-source-direct-01",
       "limits": "Readonly actual connector audit: TWSE current report-date only/eventWindownull; PTT cap-limited metadata; GDELT observation windows not original-event authority or allowed vNext scope. No comparable28-original-event-day completeness/roots; count staysnull, not0.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "PARTIAL_COVERAGE_AUTHORITY_MISSING"
     },
     {
       "id": "VN06",
-      "status": "PARTIAL_REAL_TIME_PROOF_PENDING",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "native-rotation-01; final-discovery-direct; cached-admission-final-direct-01",
       "limits": "Actualwaitingincumbent SQL path and premarket guards earlier; sameday/holiday/policy/null purecases. Real2consecutivepostclose-session positiveatomicexchange NOT_RUN; no clock/guard changes.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "PARTIAL_REAL_TIME_PROOF_PENDING"
     },
     {
       "id": "VN07",
-      "status": "PARTIAL_ACTUAL_SERVER_EXIT",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01; thesis-semantic-authority-source-02; semantic-native-monitored-o23; catalyst-semantic-source-05; catalyst-native-monitored-o23; target-exit-evidence/receipt.json",
       "limits": "655 actual7PASS business/current-source/public component/withdrawal and finite target-v5 packet compatibility; original weights/groupnull/risk_bound unchanged. Corporate action terms/rebase/contra and real semantic approval remain incomplete; da15 cancellation receipt remains separate.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "actionTermsFollowup": "12 sourcecontracts/4 SQL construction; source-bound new native original-terms/withdrawal/prepare-forgery entry wired but NOT_RUN. Actual original published target rebasing, cash/rights intent and real source remain pending.",
+      "previousScopedStatus": "PARTIAL_ACTUAL_SERVER_EXIT"
     },
     {
       "id": "VN08",
-      "status": "PARTIAL_ACTUAL_FORECAST_CURRENT_RPC_PREPARATION_PROVIDER_FROZEN",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "cached-native-01; cached-native-02; preparation-authority-source-direct-01",
       "limits": "Original quarterly/12month server reader, active batch, recollection invariant and preparation frozen input actual-native tested; full material change to new article and annual/4Q/share authority remain.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "actionTermsFollowup": "12 sourcecontracts/4 SQL construction; source-bound new native original-terms/withdrawal/prepare-forgery entry wired but NOT_RUN. Actual original published target rebasing, cash/rights intent and real source remain pending.",
+      "previousScopedStatus": "PARTIAL_ACTUAL_FORECAST_CURRENT_RPC_PREPARATION_PROVIDER_FROZEN"
     },
     {
       "id": "VN09",
-      "status": "CURSOR_CODE_SOURCE_TESTED_RAW_NATIVE_PREREQUISITE_BLOCKED",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "analysis-native-01; withdrawal-native-03; cached-active-http-recovery-01",
       "limits": "Current source400cheap-scan avoids replayed-prefix starvation; original SQL daily200/source50 retained; actual50RPC replay no writes. Exhaustive28day/comparable volume and real acquisition unverified.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "CURSOR_CODE_SOURCE_TESTED_RAW_NATIVE_PREREQUISITE_BLOCKED"
     },
     {
       "id": "VN10",
-      "status": "TESTED_VM_SYNTHETIC_PROVIDER",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "analysis-native-01; analysis-sources-direct-02",
       "limits": "Fixedproviderinput/journal/reuse and ruleonlydowngrade tested onrealPG. Actualoverseasprice/foreignFX/margin/dataandactualAI execution notacquired; no seeded marketproducer promoted.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "TESTED_VM_SYNTHETIC_PROVIDER"
     },
     {
       "id": "VN11",
-      "status": "TESTED_HOSTED_SYNTHETIC_REVISION",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "worker-native-02; worker-browser-revision-02; thesis-native-01",
       "limits": "a264 actual fresh source journal/prior published revision retained byteexact while new cancellation revision+exit commit; model/source semantics synthetic. No real-new-event/model/semantic publication proof.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "TESTED_HOSTED_SYNTHETIC_REVISION"
     },
     {
       "id": "VN12",
-      "status": "TESTED_VM_CONTRACT_NOT_FORMAL_REVIEW",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "worker-native-02; terminal-slots-native-01; current-browser-summary-01",
       "limits": "Distinct configuredrole/execution, originalsource hashes/claimchecks/formulas;2actualstructuralreviewfailuresneverpublish. Semantic fixturechecks not independentrealcontentreview. Transportuncertainty keptheld; noautoresend. New typed original quote/issuer/event/date/explicit outcome+full reviewer echo bound to completed provider journals. Protocol not actual semantic support or independent news confirmation.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "TESTED_VM_CONTRACT_NOT_FORMAL_REVIEW"
     },
     {
       "id": "VN13",
-      "status": "PARTIAL_REAL_PRODUCER_ACCEPTANCE",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "native-legacy-final; worker-native-02; withdrawal-native-03; cached-native-02",
       "limits": "Atomicrevision/membership gates+unadmitteddeferredprefix tested withsyntheticrows. Realfinancial/valuationhappy-path and fullnewhead late-exit concurrency stillunverified.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "PARTIAL_REAL_PRODUCER_ACCEPTANCE"
     },
     {
       "id": "VN14",
-      "status": "TESTED_VM_FAIL_CLOSED_READ",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "public-valuation-read-direct-01; current-browser-summary-01; current-browser-ui-01",
       "limits": "Newcurrentpublicread requires exactproofcanonicalhash/expiry/usablevaluation/claim/date/arithmetic. Older incompleteproofdenied; no legacyfallback; actualwithdrawnarticlehistoryretained.12sourcecontracts,2currentbrowsercases.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "TESTED_VM_FAIL_CLOSED_READ"
     },
     {
       "id": "VN15",
-      "status": "HOSTED_BROWSER_STEPS_OBSERVED_RAW_NOT_REVIEWED",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "current-browser-ui-01; current-browser-summary-01",
       "limits": "655 same-build current-run PG snapshot transport: UI12/current2/business2 actual desktop/mobile PASS, Chrome155.0.8059.39/hash bound. Business8PNG7,076,400B in finite hosted artifact; not downloaded/visually reviewed.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "HOSTED_BROWSER_STEPS_OBSERVED_RAW_NOT_REVIEWED"
     },
     {
       "id": "VN16",
-      "status": "PARTIAL_TYPES_LINT_HOSTED_BUILD",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23; semantic-final-types-o23",
       "limits": "655 hosted complete type/lint/build SUCCESS and original VM source/types/lint receipts distinct. Original VM fresh fullbuild NOT_ADMITTED.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "PARTIAL_TYPES_LINT_HOSTED_BUILD"
     },
     {
       "id": "VN17",
-      "status": "PARTIAL_FRESH_HOSTED_NATIVE",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "cached-native-02; terminal-slots-read-01; cached-active-http-recovery-01",
       "limits": "655 fresh original-prefix ordinary PG stages and new business7PASS/finite target-v5 installer +currentRPC; synthetic sources/model; remaining financial-qualified and ACL/race matrix incomplete.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "PARTIAL_FRESH_HOSTED_NATIVE"
     },
     {
       "id": "VN18",
-      "status": "EXTERNAL_NOT_ACCEPTED",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "staging/tcp-readiness historical metadata",
       "limits": "No Contaboisolatedapp/DB/schema/queue/storage. TCP22unsupported/no grant, no trustedhostkey/newactiveidentity. Expiredkeynotrenewed. No productionlocatorasstaging.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "EXTERNAL_NOT_ACCEPTED"
     },
     {
       "id": "VN19",
-      "status": "REAL_EXECUTION_BLOCKED_MISSING_ISOLATED_BINDINGS",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "source-canary-final.json; analysis-native-01; ir-native-o23; ir-continuation-monitored-02-o23; ir-status-recovery-monitored-o23",
       "limits": "Fresh metadata has no injected secret/runtime/outbound identity, required provider/DB/roles and official/PTT policy bindings absent. No secret files read/values printed or actual model/fetch attempted. Prior canaries/IR8PASS remain their historical subjects; synthetic original is not actual acquisition.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "REAL_EXECUTION_BLOCKED_MISSING_ISOLATED_BINDINGS"
     },
     {
       "id": "VN20",
-      "status": "DRAFT_PR_PARTIAL_RELEASE_GATE",
+      "status": "PARTIAL_SOURCE_ONLY_CURRENT_NATIVE_PENDING",
       "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json; preparation-reconciliation-evidence/receipt.json; SEMANTIC-SCORE-DELIVERY.md; semantic-score-evidence/receipt.json; TWSE-SNAPSHOT-DELIVERY.md; twse-snapshot-evidence/receipt.json",
       "limits": "PR384 source da15/new normal CI pending; earlier a264 normal job120301725217SUCCESS and cancellation7PASS; protected39919707261FAIL unchanged. Exact review prerequisite must follow independent original process; no maker approval or merge/deploy.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "Current6024 source/protocol9 and source-codec4 separately pass. Full b855 native8/6/2 retains mandatory raw RED; b42 notice actually truncated, new complete list/readonly guard probe and full source acceptance pending. No permission apply."
+      "candidateFollowup": "c81 action terms/current reader/preparation/provider/publication source fences and immutable exact-rational zero-cash target candidate. VM source/type/lint only; new native pending.6024 guard-only/reachability reconstructed independently; mandatory raw positive still RED/no permission apply.",
+      "previousScopedStatus": "DRAFT_PR_PARTIAL_RELEASE_GATE"
     }
   ],
   "externalOwnerActions": [
@@ -728,7 +750,7 @@
     "sha256": "5d07d99ecec08307062dcb13c5a53e5d7a8ba9f2ed30f0b3d334f01c16428ad2",
     "appendOnly": true
   },
-  "currentReceipt": "reachability-channel-evidence/receipt.json",
+  "currentReceipt": "action-terms-evidence/receipt.json",
   "ownerActions": "OWNER-ACTIONS.md",
   "businessCurrent": {
     "source": "65580e2d787251c565742fb23159e8519686273c",
@@ -1041,5 +1063,9 @@
     "corporateAction": "Stored reference prices/factors are not cash/share action terms; new immutable original terms/current reader/rebase integration remains engineering, no ratio inference",
     "annual4Q": "Existing source facts/enum periods lack durable disclosed fiscal-calendar/share basis. Need finite receipt/source/current reader/preparation/provider union; no quarterly/TTM/NTM relabeling",
     "notOwnerOnly": true
-  }
+  },
+  "currentSourceHead": "c81e6fe916b3f0b5983495d02b4cdcf62cf2d170",
+  "newCandidateNative": "NOT_RUN at source seal; hosted independent after actual current build",
+  "namespaceApply": "NOT_RUN; guard-only actual T/E/I is narrower; transitive/independent review pending",
+  "historyScope": "Historical runs/limits and previousScopedStatus retain prior exact-source evidence; current status does not transfer them to c81."
 }

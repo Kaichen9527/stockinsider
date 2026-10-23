@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "vnext-action-terms-source-receipt-v1",
+  "at": "2026-10-23T15:06:04.556628+00:00",
+  "source": "c81e6fe916b3f0b5983495d02b4cdcf62cf2d170",
+  "sourceTree": "6123ee3b67f37e912cd544ee68d71e2a6dc173d7",
+  "manifestSha256": "e9de29871ba7defa0d541089b782a5b646b94e302e0bb9c1db7f16f88a398259",
+  "filesBeforeManifest": 9,
+  "bytesBeforeManifest": 433042,
+  "originalVm": {
+    "kernel": "Linux",
+    "workdir": "/workspace/stockinsider-vnext-oct22",
+    "free": {
+      "/workspace": 8875724800,
+      "/tmp": 17243807744
+    },
+    "floor": 8589934592,
+    "smallSourceReserve": 16777216,
+    "heavy": "NOT_ADMITTED"
+  },
+  "nativeNewCandidate": "NOT_RUN at source seal; ordinary new-source hosted CI pending",
+  "approval": {
+    "independent": false,
+    "production": false,
+    "wholeClosure": false
+  },
+  "namespacePermissionApply": false,
+  "fullGoal": "INCOMPLETE"
+}

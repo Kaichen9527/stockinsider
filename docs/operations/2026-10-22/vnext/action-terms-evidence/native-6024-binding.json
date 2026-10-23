@@ -1,0 +1,36 @@
+{
+  "source": "6024b5a84aafc5ee0057457b4a81275b16bc8961",
+  "runtime": "9da5e3e9ea3b16aeaf4e0778bf1fc5f3fdbe9051",
+  "runtimeParents": [
+    "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+    "6024b5a84aafc5ee0057457b4a81275b16bc8961"
+  ],
+  "tree": "a41d561057a0d61f8be8e6e3187c1dfd27476555",
+  "localSourceTree": "a41d561057a0d61f8be8e6e3187c1dfd27476555",
+  "run": 39966660265,
+  "job": 120458165105,
+  "overall": "FAIL, 8tests/6PASS/2FAIL",
+  "parts": 2,
+  "partIndexes": [
+    0,
+    1
+  ],
+  "canonicalBytes": 18001,
+  "canonicalSha256": "444bab7259aca463dc82906f4853bd23bd4d580aabf14ff91446539ecc9f4f32",
+  "actualGuardOnly": {
+    "actualERejected": true,
+    "actualTRejected": true,
+    "applyEntryInvoked": false,
+    "callerLocalMarkerRetained": true,
+    "grantExecuted": false,
+    "guardOnlyEmptyQueries": true,
+    "idleIObserved": true,
+    "ownerRollbackReadyI": true,
+    "primary22012Retained": true,
+    "scope": "readonly guard function only, NOT permission apply entry",
+    "wholeRowsUnchanged": true
+  },
+  "applyEntry": "NOT_RUN, independent review prerequisite",
+  "scope": "actual complete direct reachability/current scope hashes and READONLY guard-only T/E/I; NOT full apply-entry proof, no GRANT, no transitive review, no raw full TAP/private rows/PNG retrieved",
+  "decoderInitialRed": "initial local decoder assumed1-based indexes and rejected; corrected to actual frozen0-based emitter; no native/source change"
+}

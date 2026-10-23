@@ -1,0 +1,47 @@
+[
+  {
+    "path": "action-contract.tap",
+    "bytes": 2605,
+    "sha256": "608b79f01a4cd4be0ceb2527135990bec9a3927434b01eee5a82f4dc4c306497"
+  },
+  {
+    "path": "action-sql-source.tap",
+    "bytes": 994,
+    "sha256": "78bb53c6f6d944aa9ef86f916a705807a9bf110f9d2ed8799b0955e9c7f49494"
+  },
+  {
+    "path": "checks.json",
+    "bytes": 36887,
+    "sha256": "a5ac64b1c9c1d7e67407d7b0c7f02503698779ef130852d7eab4e2dd814fd073"
+  },
+  {
+    "path": "direct-reachability-6024.json",
+    "bytes": 18001,
+    "sha256": "444bab7259aca463dc82906f4853bd23bd4d580aabf14ff91446539ecc9f4f32"
+  },
+  {
+    "path": "native-6024-binding.json",
+    "bytes": 1445,
+    "sha256": "093129d84a6a8ab181a9778d8b7ac7938869493c6ff5f501512e0f5d5f313cd6"
+  },
+  {
+    "path": "native-6024-finite.json",
+    "bytes": 4074,
+    "sha256": "57c277047d966d17c8a8354d5ade726ace25ee7d2a5aa59580fbb245d640bbbb"
+  },
+  {
+    "path": "private-inventory.json",
+    "bytes": 17036,
+    "sha256": "f8a178e8ce82d26bc4f17172147e85b661b0161829f81811b4d861c7cfacd316"
+  },
+  {
+    "path": "source-seal.json",
+    "bytes": 4225,
+    "sha256": "3e98081f516ec00209de3b8912de18ca2502ee1f6b55cfcbeb21cb25efa236e1"
+  },
+  {
+    "path": "source-tree-identities.txt",
+    "bytes": 347775,
+    "sha256": "bf6aec4c3152832a1c18b9d9fdd04e035c9d9b7a092fa0eb722e157efdfd7509"
+  }
+]
