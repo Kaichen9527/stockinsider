@@ -1010,12 +1010,18 @@ jobs:
           if summary.get('finiteQueryErrors'):
               print('::notice title=Cancellation finite SQL errors::'+json.dumps({'events':summary['finiteQueryErrors'],'privateEventsSha256':summary['queryEventsPrivateSha256']},separators=(',',':')))
           loss=root/'catalyst-cancellation/review-response-loss-private.json'
+          if summary.get('exit')==0 and not loss.exists(): raise SystemExit('successful native must include actual held-response witness')
           if loss.exists():
               if loss.is_symlink() or not loss.is_file() or loss.stat().st_size>16384: raise SystemExit('bounded owned loss receipt required')
               value=json.loads(loss.read_text())
               keys=['bytes','sha256','oneDataRow','selectOne','noError','ready','forwardedResponseBytes','commitObservedBeforeSocketClose','actualQueryRejected','bothOwnedSocketsClosed','pendingQuery','automaticResend']
               finite_loss={k:value[k] for k in keys}
               print('::notice title=Cancellation real response loss::'+json.dumps(finite_loss,separators=(',',':')))
+          loss_error=root/'catalyst-cancellation/review-response-loss-error-private.json'
+          if loss_error.exists():
+              if loss_error.is_symlink() or not loss_error.is_file() or loss_error.stat().st_size>65536: raise SystemExit('bounded owned loss error required')
+              error=json.loads(loss_error.read_text())
+              print('::notice title=Cancellation response-loss boundary error::'+json.dumps({'phase':error['phase'],'messageSha256':hashlib.sha256(error['message'].encode()).hexdigest(),'privateReceiptSha256':hashlib.sha256(loss_error.read_bytes()).hexdigest()},separators=(',',':')))
           PYCODE
           test "$test_status" = 0
       - name: Hash finite owned raw evidence without publishing private contents
