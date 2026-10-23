@@ -1,0 +1,152 @@
+{
+  "scope": "source and syntax only; each run independent, no combined PASS count",
+  "sourceProduct": "9a6e73f49f2efd513e55c6bdb3289e0b95114157",
+  "sourceCases": {
+    "tests": 11,
+    "pass": 11,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "recorded": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/preparation-reconciliation.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T04:42:08.322916+00:00",
+      "end": "2026-10-23T04:42:20.449153+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8887382016,
+        "/tmp": 17256419328
+      },
+      "finalFree": {
+        "/workspace": 8887382016,
+        "/tmp": 17256415232
+      },
+      "sampledSessionPeakRssBytes": 198938624,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/lib/tsc.js",
+        "--noEmit",
+        "--incremental",
+        "false",
+        "-p",
+        "web/tsconfig.json"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T04:43:30.835079+00:00",
+      "end": "2026-10-23T04:44:11.462845+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8887283712,
+        "/tmp": 17256411136
+      },
+      "finalFree": {
+        "/workspace": 8887283712,
+        "/tmp": 17256411136
+      },
+      "sampledSessionPeakRssBytes": 1348198400,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/lib/vnext/preparation-reconciliation.ts",
+        "src/lib/vnext/preparation-reconciliation.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "start": "2026-10-23T04:44:19.468569+00:00",
+      "end": "2026-10-23T04:44:22.034174+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8887283712,
+        "/tmp": 17256394752
+      },
+      "finalFree": {
+        "/workspace": 8887283712,
+        "/tmp": 17256394752
+      },
+      "sampledSessionPeakRssBytes": 255406080,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true
+    }
+  ],
+  "fetchBoundary": {
+    "scope": "extracted actual bootstrap source, memory-only fake fetch/filesystem; no actual app/network/socket",
+    "checks": 4,
+    "pass": 4,
+    "fail": 0,
+    "fragmentSha256": "5ae0469074794d420dbc0fbfd20ad3d5357627fcaac9c26ab32b04185dfb9535",
+    "renderedSha256": "ffb0d94089b248be4839c8668bfd488be13f7fc9e1ab74f4157e9cc2d1664a7f",
+    "syntaxExit": 0
+  },
+  "browserPredicate": {
+    "scope": "actual extracted completion predicate in memory, no browser/app/PG",
+    "checks": [
+      {
+        "case": "two_actual_passes",
+        "exit": 0
+      },
+      {
+        "case": "zero_cases",
+        "exit": 1
+      },
+      {
+        "case": "skip",
+        "exit": 1
+      },
+      {
+        "case": "flaky",
+        "exit": 1
+      },
+      {
+        "case": "failed_runner",
+        "exit": 3
+      }
+    ],
+    "workflowSha256": "93c16d76832d24d4f517d14d82cd2bebb7b9921721f58f9913ad0f394018e0db",
+    "harnessSha256": "09849395df283c4e0cc45ab47f4df59240502796a09b3c077580288740d123de"
+  },
+  "syntax": "Node --check, Python AST/compile without pycache, YAML/embedded Python/bash syntax passed; no actual browser/app invoked",
+  "historySettlementSource": {
+    "scope": "exact old/new child settlement declarations in memory with controlled exit\u2192final stdio\u2192close ordering; no PG/process/native executed",
+    "observedCIError": "unknown beyond exact test-name hash/ERR_TEST_FAILURE; no original error string or cause inferred",
+    "old": {
+      "fragmentSha256": "446a09a2c0324b74121392e5bc6d214af23c9db4633dbf40510d85475aea5781",
+      "beforeFinalStdioClose": true,
+      "prematureParseError": {
+        "name": "SyntaxError",
+        "messageSha256": "2e49920ee7dbe3efc6ac58efc4b3aaf2060d476557ae185b452b5387eb9df66c"
+      },
+      "afterClose": "conflict"
+    },
+    "new": {
+      "fragmentSha256": "c8a9f012d2507332e427385e88e3099b4836c25ac86adfc0fe3ab18d533f3d67",
+      "beforeFinalStdioClose": false,
+      "prematureParseError": null,
+      "afterClose": "conflict"
+    },
+    "originalSynchronizationAndSQLUnchanged": true
+  },
+  "historyInitialToolRed": {
+    "at": "2026-10-23T05:02:30.179784+00:00",
+    "scope": "source-only extraction tool failure, not product/PG failure",
+    "command": "Node memory probe with execFileSync git show ee2a6f0:scripts/candidate-history-backfill-postgres.test.mjs",
+    "exit": 1,
+    "observedCode": "EPERM",
+    "observedMessage": "spawnSync git EPERM",
+    "originalRawLocation": "immutable tool output in this VM conversation; no private stderr byte count claimed",
+    "fix": "read exact original Git blob using shell before memory probe; no test or product expectation changed"
+  },
+  "newBrowserNotices": "source AST/bash syntax only; source makes future actual binary/case receipts available as finite notices without raw screenshots/TAP download"
+}

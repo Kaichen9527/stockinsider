@@ -1,0 +1,517 @@
+{
+  "protected": "FAIL/unclosed; original pins/guards unchanged",
+  "previousExactHead": {
+    "head": "8b345fdce3a7e54686191074e7423fb17bf36261",
+    "run": 39899714600,
+    "targetStep": "SUCCESS",
+    "cachedHTTPAggregateStep": "SUCCESS",
+    "newPreparationStep": "FAIL",
+    "scope": "independent prior-head components, no transfer of success to new source"
+  },
+  "diagnosticSourceRed": {
+    "head": "62e9520bc042017cb64db2b1aa6466a7a778c18d",
+    "run": 39901261003,
+    "job": 120243138486,
+    "failureStep": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+    "startedAt": "2026-10-23T04:40:15Z",
+    "completedAt": "2026-10-23T04:40:16Z",
+    "innerCause": "UNKNOWN; one normal log download denied/zero bytes; no native failure token",
+    "laterTargetPreparation": "NOT_RUN",
+    "laterSuccessDoesNotRewriteRed": true
+  },
+  "protectedExactObserved": {
+    "head": "f16536706a511c7c72337681f11714b53d2a416a",
+    "run": 39900617847,
+    "bootstrap": "SUCCESS",
+    "requirementsArchitectureExactReview": "FAIL at Retrieve bootstrap and prepare detached subject",
+    "root": "FAIL at Reject incomplete or failed Code Gate prerequisites",
+    "notWaived": true
+  },
+  "productExactObserved": {
+    "head": "f16536706a511c7c72337681f11714b53d2a416a",
+    "run": 39900620410,
+    "productJob": 120241125537,
+    "productResult": "SUCCESS",
+    "diagnosticJob": 120243454126,
+    "diagnosticResult": "SUCCESS"
+  },
+  "currentNativeAcceptance": {
+    "head": "ee2a6f00a3eae54651a2c801bf12aa11f6f91c2e",
+    "run": 39902850035,
+    "job": 120248086348,
+    "result": "SUCCESS",
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:54:47Z",
+        "completed_at": "2026-10-23T04:54:48Z"
+      },
+      {
+        "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:54:48Z",
+        "completed_at": "2026-10-23T04:54:51Z"
+      },
+      {
+        "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:54:51Z",
+        "completed_at": "2026-10-23T04:54:55Z"
+      },
+      {
+        "name": "Workspace and temporary filesystem admission",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:54:55Z",
+        "completed_at": "2026-10-23T04:54:55Z"
+      },
+      {
+        "name": "Install unchanged locked dependencies",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:54:55Z",
+        "completed_at": "2026-10-23T04:55:08Z"
+      },
+      {
+        "name": "Actual source contracts, types and lint",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:55:08Z",
+        "completed_at": "2026-10-23T04:55:47Z"
+      },
+      {
+        "name": "Full ordinary build",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:55:47Z",
+        "completed_at": "2026-10-23T04:56:15Z"
+      },
+      {
+        "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:56:15Z",
+        "completed_at": "2026-10-23T04:56:49Z"
+      },
+      {
+        "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:56:49Z",
+        "completed_at": "2026-10-23T04:56:53Z"
+      },
+      {
+        "name": "Actual durable worker journal with explicitly synthetic provider",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:56:53Z",
+        "completed_at": "2026-10-23T04:56:58Z"
+      },
+      {
+        "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:56:58Z",
+        "completed_at": "2026-10-23T04:57:05Z"
+      },
+      {
+        "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:57:05Z",
+        "completed_at": "2026-10-23T04:57:10Z"
+      },
+      {
+        "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:57:10Z",
+        "completed_at": "2026-10-23T04:57:20Z"
+      },
+      {
+        "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:57:20Z",
+        "completed_at": "2026-10-23T04:57:24Z"
+      },
+      {
+        "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:57:24Z",
+        "completed_at": "2026-10-23T04:57:33Z"
+      },
+      {
+        "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:57:33Z",
+        "completed_at": "2026-10-23T04:57:42Z"
+      },
+      {
+        "name": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:57:42Z",
+        "completed_at": "2026-10-23T04:57:52Z"
+      },
+      {
+        "name": "Same-build desktop and mobile browser over current-run PostgreSQL snapshots",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:57:52Z",
+        "completed_at": "2026-10-23T04:58:25Z"
+      },
+      {
+        "name": "Upload finite browser summaries and synthetic screenshots only",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:58:25Z",
+        "completed_at": "2026-10-23T04:58:26Z"
+      },
+      {
+        "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:58:26Z",
+        "completed_at": "2026-10-23T04:58:28Z"
+      },
+      {
+        "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:58:28Z",
+        "completed_at": "2026-10-23T04:58:28Z"
+      },
+      {
+        "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:58:28Z",
+        "completed_at": "2026-10-23T04:58:28Z"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:58:28Z",
+        "completed_at": "2026-10-23T04:58:28Z"
+      }
+    ],
+    "browserEnforcedCases": {
+      "ui": 12,
+      "currentRightsArticle": 2,
+      "interpretation": "actual job step success under strict total/project/result/no-skip/no-flaky checks; raw per-case JSON and browser binary values not downloaded/independently reviewed"
+    },
+    "browserArtifact": {
+      "id": 12479488373,
+      "githubReportedBytes": 9211367,
+      "githubReportedDigest": "sha256:0d543a0dede2e8a4694eabcf2c2ddb735a5c8441cbfbbee5bba793addf05289a",
+      "singleDownloadExit": 1,
+      "downloadedBytes": 0,
+      "visualScreenshotReview": "NOT_DONE"
+    },
+    "nativeTapArtifact": {
+      "id": 12479607757,
+      "githubReportedBytes": 24244,
+      "githubReportedDigest": "sha256:b220c35f235b76afbfd33592d890492cd499cb0dfdd28104da245353d6f874a3",
+      "localContents": "NOT_DOWNLOADED",
+      "noCountAggregation": true
+    }
+  },
+  "currentProductFailure": {
+    "head": "ee2a6f00a3eae54651a2c801bf12aa11f6f91c2e",
+    "run": 39902849832,
+    "job": 120248085763,
+    "result": "FAIL",
+    "diagnosticJob": 120248797973,
+    "diagnosticResult": "FAIL",
+    "lastScript": "test:financial-evidence-completion",
+    "failedTestNameSha256": "b0d0c27e8121ab3860c1ee1bd6d9babf2e58429790f987c5564636d215e61349",
+    "independentlyMatchedTest": "history completion is atomic, private, idempotent and preserves conflicting official evidence",
+    "testPath": "scripts/candidate-history-backfill-postgres.test.mjs",
+    "codes": [
+      "ERR_TEST_FAILURE"
+    ],
+    "actualInnerError": "NOT_OBSERVED; independent exit-before-stdio source bug does not prove original CI cause"
+  },
+  "currentProtected": {
+    "head": "ee2a6f00a3eae54651a2c801bf12aa11f6f91c2e",
+    "run": 39902846550,
+    "result": "FAIL/unclosed",
+    "pinsChanged": false
+  },
+  "earlierPreparationRed": {
+    "observedHead": "f16536706a511c7c72337681f11714b53d2a416a",
+    "run": 39900620423,
+    "job": 120241125488,
+    "overall": "failure",
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:29:51Z",
+        "completed_at": "2026-10-23T04:29:52Z"
+      },
+      {
+        "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:29:52Z",
+        "completed_at": "2026-10-23T04:29:54Z"
+      },
+      {
+        "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:29:54Z",
+        "completed_at": "2026-10-23T04:29:58Z"
+      },
+      {
+        "name": "Workspace and temporary filesystem admission",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:29:58Z",
+        "completed_at": "2026-10-23T04:29:58Z"
+      },
+      {
+        "name": "Install unchanged locked dependencies",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:29:58Z",
+        "completed_at": "2026-10-23T04:30:09Z"
+      },
+      {
+        "name": "Actual source contracts, types and lint",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:30:09Z",
+        "completed_at": "2026-10-23T04:30:43Z"
+      },
+      {
+        "name": "Full ordinary build",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:30:43Z",
+        "completed_at": "2026-10-23T04:31:09Z"
+      },
+      {
+        "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:31:09Z",
+        "completed_at": "2026-10-23T04:31:44Z"
+      },
+      {
+        "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:31:44Z",
+        "completed_at": "2026-10-23T04:31:48Z"
+      },
+      {
+        "name": "Actual durable worker journal with explicitly synthetic provider",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:31:48Z",
+        "completed_at": "2026-10-23T04:31:52Z"
+      },
+      {
+        "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:31:52Z",
+        "completed_at": "2026-10-23T04:31:59Z"
+      },
+      {
+        "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:31:59Z",
+        "completed_at": "2026-10-23T04:32:04Z"
+      },
+      {
+        "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:32:04Z",
+        "completed_at": "2026-10-23T04:32:14Z"
+      },
+      {
+        "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:32:14Z",
+        "completed_at": "2026-10-23T04:32:18Z"
+      },
+      {
+        "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:32:18Z",
+        "completed_at": "2026-10-23T04:32:26Z"
+      },
+      {
+        "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:32:26Z",
+        "completed_at": "2026-10-23T04:32:35Z"
+      },
+      {
+        "name": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)",
+        "conclusion": "failure",
+        "started_at": "2026-10-23T04:32:35Z",
+        "completed_at": "2026-10-23T04:32:45Z"
+      },
+      {
+        "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:32:45Z",
+        "completed_at": "2026-10-23T04:32:46Z"
+      },
+      {
+        "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "conclusion": "skipped",
+        "started_at": "2026-10-23T04:32:46Z",
+        "completed_at": "2026-10-23T04:32:46Z"
+      },
+      {
+        "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:32:46Z",
+        "completed_at": "2026-10-23T04:32:46Z"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:32:46Z",
+        "completed_at": "2026-10-23T04:32:47Z"
+      }
+    ],
+    "failure": {
+      "stage": "running_read_reports_real_cached_financial_ready_without_any_write",
+      "code": "ERR_ASSERTION",
+      "messageSha256": "b738a2652c3be95037bb564d5a2dd25bbadc06d6cb8abf479816994038d2f979",
+      "independentReconstruction": {
+        "actual": "unresolved",
+        "expected": "ready"
+      },
+      "reason": "not publicly observed at this subject",
+      "prepareLossAndRecovery": "NOT_RUN"
+    },
+    "TAPCounts": "not retrieved; no planned count represented as observed"
+  },
+  "firstSuccessfulRunningHttp": {
+    "head": "9a6e73f49f2efd513e55c6bdb3289e0b95114157",
+    "run": 39901837447,
+    "job": 120244936386,
+    "overall": "success",
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:43:30Z",
+        "completed_at": "2026-10-23T04:43:32Z"
+      },
+      {
+        "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:43:32Z",
+        "completed_at": "2026-10-23T04:43:34Z"
+      },
+      {
+        "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:43:34Z",
+        "completed_at": "2026-10-23T04:43:38Z"
+      },
+      {
+        "name": "Workspace and temporary filesystem admission",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:43:38Z",
+        "completed_at": "2026-10-23T04:43:38Z"
+      },
+      {
+        "name": "Install unchanged locked dependencies",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:43:38Z",
+        "completed_at": "2026-10-23T04:43:57Z"
+      },
+      {
+        "name": "Actual source contracts, types and lint",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:43:57Z",
+        "completed_at": "2026-10-23T04:44:48Z"
+      },
+      {
+        "name": "Full ordinary build",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:44:48Z",
+        "completed_at": "2026-10-23T04:45:28Z"
+      },
+      {
+        "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:45:28Z",
+        "completed_at": "2026-10-23T04:46:11Z"
+      },
+      {
+        "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:46:11Z",
+        "completed_at": "2026-10-23T04:46:16Z"
+      },
+      {
+        "name": "Actual durable worker journal with explicitly synthetic provider",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:46:16Z",
+        "completed_at": "2026-10-23T04:46:22Z"
+      },
+      {
+        "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:46:22Z",
+        "completed_at": "2026-10-23T04:46:31Z"
+      },
+      {
+        "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:46:31Z",
+        "completed_at": "2026-10-23T04:46:39Z"
+      },
+      {
+        "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:46:39Z",
+        "completed_at": "2026-10-23T04:46:54Z"
+      },
+      {
+        "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:46:54Z",
+        "completed_at": "2026-10-23T04:46:59Z"
+      },
+      {
+        "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:46:59Z",
+        "completed_at": "2026-10-23T04:47:11Z"
+      },
+      {
+        "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:47:11Z",
+        "completed_at": "2026-10-23T04:47:25Z"
+      },
+      {
+        "name": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:47:25Z",
+        "completed_at": "2026-10-23T04:47:41Z"
+      },
+      {
+        "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:47:41Z",
+        "completed_at": "2026-10-23T04:47:42Z"
+      },
+      {
+        "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:47:42Z",
+        "completed_at": "2026-10-23T04:47:42Z"
+      },
+      {
+        "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:47:42Z",
+        "completed_at": "2026-10-23T04:47:42Z"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success",
+        "started_at": "2026-10-23T04:47:42Z",
+        "completed_at": "2026-10-23T04:47:42Z"
+      }
+    ],
+    "interpretation": "same checked-out hosted build; actual PostgreSQL/Next HTTP with synthetic engineering source/parser/provider, no formal approval",
+    "safeTAPArtifact": {
+      "id": 12479327069,
+      "githubReportedBytes": 24313,
+      "githubReportedDigest": "sha256:9b7850fff9ef00e02101fe1e6689843e3ac5f9049b0cb3f9d29eb9077aa54db5",
+      "singleDownloadExit": 1,
+      "downloadedBytes": 0,
+      "actualTAPCounts": "NOT_OBSERVED; do not substitute planned5"
+    }
+  },
+  "sourceCurrent": "b0913e5c43e913b5013eadcbb586f392fb17b1c7",
+  "sourceCurrentStatus": "source-only child close settlement and finite error/binary notices; new ordinary result pending"
+}

@@ -1,0 +1,181 @@
+{
+  "source": "b0913e5c43e913b5013eadcbb586f392fb17b1c7",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "branch": "codex/stockinsider-vnext-oct22",
+  "fullGitInputs": {
+    "count": 2604,
+    "bytes": 53233228,
+    "privateInventoryBytes": 640297,
+    "privateInventorySha256": "c6f9454a4dd1d3940e77fec1615f65cdc1742b5d1d5707d075a7286c6400682d",
+    "baselineSubject": "ee2a6f00a3eae54651a2c801bf12aa11f6f91c2e",
+    "reusedExactModeTypeOid": 2600,
+    "changedActualBlobPaths": [
+      ".github/workflows/source-led-opportunity-v3.yml",
+      ".github/workflows/stockinsider-vnext-quality.yml",
+      "docs/operations/2026-10-22/vnext/HISTORY-STDIO-CI-SOURCE.md",
+      "scripts/candidate-history-backfill-postgres.test.mjs"
+    ],
+    "scope": "complete tree mode/type/OID check; immutable OID actual byte hashes reused only on exact identity, changed blobs actually read/hashed; report WIP and untracked agent candidate excluded"
+  },
+  "finiteRuntimeInputs": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "mode": "100644",
+      "type": "blob",
+      "gitOid": "bfef62f27fd2b6b8aac563ec8015775ca40d3460",
+      "bytes": 39893,
+      "sha256": "d68f7220464d08dc9a05b8e955997c1e6140564fb7db3b1a3b3ed6df1ffcdf54"
+    },
+    {
+      "bytes": 7852,
+      "gitOid": "c2778745679719fe3afd02ef03ffd7093b0a720b",
+      "mode": "100644",
+      "path": "migrations/20261022_vnext_dimensionless_arithmetic_v1.sql",
+      "sha256": "61b838614afe16ca788154828c7f818f8d4be58104402be5db7fbe2231509721",
+      "type": "blob"
+    },
+    {
+      "bytes": 7522,
+      "gitOid": "a59d24fa24b08ebcf539bf5bca7f3df7c1e42b2b",
+      "mode": "100644",
+      "path": "migrations/20261022_vnext_preparation_read_v1.sql",
+      "sha256": "c6c0c63293f8e93e367a36736dde8d5bf896dc7310f16df25776ddca2f77e686",
+      "type": "blob"
+    },
+    {
+      "bytes": 50714,
+      "gitOid": "37445ef384da91b86284e6e3cb08d54818e6a7bf",
+      "mode": "100644",
+      "path": "migrations/20261022_vnext_target_exit_v1.sql",
+      "sha256": "8a49259e95d6557ac4b7a8a74d90500b0d180735f396fbf1490f337b711bf441",
+      "type": "blob"
+    },
+    {
+      "bytes": 2209,
+      "gitOid": "4c28bcf85bb7d90c39c387190feb5bc8d8635fe5",
+      "mode": "100644",
+      "path": "scripts/opportunity-v3/vnext-preparation-read-profile-v1.json",
+      "sha256": "b2835df67aae84e5a047a085cf7287bf39d7618be7fe3139916807b973f5f1fd",
+      "type": "blob"
+    },
+    {
+      "bytes": 31255,
+      "gitOid": "cbe1a0c789e898a6d24a6a431e84c877238c3121",
+      "mode": "100644",
+      "path": "scripts/vnext-cached-http.test.mjs",
+      "sha256": "01e7618f1ca9f5193b3477442e15b8b2716b6210cbfa29cf3a6edc28843ab1ea",
+      "type": "blob"
+    },
+    {
+      "bytes": 38911,
+      "gitOid": "5ffb7f8d06941423a4257880567f47e9081e6039",
+      "mode": "100644",
+      "path": "scripts/vnext-preparation-http-fixture.mjs",
+      "sha256": "cd874045994a7af0e747114e9e01d97829b1667f2f67d2dc1c45bb7f3818801b",
+      "type": "blob"
+    },
+    {
+      "bytes": 15614,
+      "gitOid": "3fcce5f86e16a2574f6d93cdff7686c6c3b424f9",
+      "mode": "100644",
+      "path": "scripts/vnext-preparation-http.test.mjs",
+      "sha256": "2898e80d85b3aa6973445ebb7069320e06cfaf8df069300e9d9a1f6727a60f00",
+      "type": "blob"
+    },
+    {
+      "bytes": 6833,
+      "gitOid": "ae3e30cdbc04954099326621d938f4b12bebba61",
+      "mode": "100644",
+      "path": "scripts/vnext-preparation-resource-run.py",
+      "sha256": "3802feb7ce9276f80f5c321ce8ee04f83f091e1864095523ba9255170ee9b720",
+      "type": "blob"
+    },
+    {
+      "bytes": 12943,
+      "gitOid": "641a595627c0a28a21b95a21f577495ba1d51370",
+      "mode": "100644",
+      "path": "scripts/vnext-target-business-fixture.mjs",
+      "sha256": "be43d0c9752e4c6fbd3b7d1cbe9d6511c1326694ddebcfffc2f27b4243aad2dd",
+      "type": "blob"
+    },
+    {
+      "bytes": 12093,
+      "gitOid": "fc035c976bff4722f60a30f5b08030e13ff0fa66",
+      "mode": "100644",
+      "path": "scripts/vnext-target-postgres.test.mjs",
+      "sha256": "c73906495cf4089e7431908becb662b8cb909eaef45c0ae153721d2536e6a397",
+      "type": "blob"
+    },
+    {
+      "bytes": 21954,
+      "gitOid": "cb29ee701dfde4f44c0ff3b1787412f4cc8b157c",
+      "mode": "100644",
+      "path": "web/src/lib/vnext/preparation-reconciliation.test.ts",
+      "sha256": "051a86a832ceb26d022b25d4a9be5abcfc324b4213deee802fdda324323f5f81",
+      "type": "blob"
+    },
+    {
+      "bytes": 15673,
+      "gitOid": "0a72ee391ba6da1411963a8d4f33ca8b1e825dd0",
+      "mode": "100644",
+      "path": "web/src/lib/vnext/preparation-reconciliation.ts",
+      "sha256": "59e658ac7ff68cad0ceb858232f1ae6ecfd8d4e47cc4d5b05e404dc92f436847",
+      "type": "blob"
+    },
+    {
+      "bytes": 10442,
+      "gitOid": "dc6ee899ffd63c41c0e5a7ab19ef714f280e4e8c",
+      "mode": "100644",
+      "path": "scripts/run-vnext-browser-acceptance.py",
+      "sha256": "09849395df283c4e0cc45ab47f4df59240502796a09b3c077580288740d123de",
+      "type": "blob"
+    },
+    {
+      "bytes": 914,
+      "gitOid": "11772fff85286526a5eb8c59c8ca3ed37f256990",
+      "mode": "100644",
+      "path": "web/playwright.vnext.config.ts",
+      "sha256": "c58768d7b62869545c47fa098df68ad7c9745fb24828742dc0a25512d7c56e80",
+      "type": "blob"
+    },
+    {
+      "bytes": 7843,
+      "gitOid": "7da2a0edc0a95f2630e6306b858f66e862910447",
+      "mode": "100644",
+      "path": "web/e2e/vnext.spec.ts",
+      "sha256": "a4c25915a85a4d5a1d48aa9c57903c1e8e1e646eff9e354f169d0c9674832859",
+      "type": "blob"
+    },
+    {
+      "bytes": 3369,
+      "gitOid": "23679a00cede8246b291ec93d59e5f5fc9a6164d",
+      "mode": "100644",
+      "path": "web/e2e/vnext-current.spec.ts",
+      "sha256": "22211301c2b0fa4e31ed87ef6acf16fb476cdc3c68c8f866134860fbb3efee69",
+      "type": "blob"
+    },
+    {
+      "path": "scripts/candidate-history-backfill-postgres.test.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "gitOid": "28c952224046c50752def681da6b62a2579de918",
+      "bytes": 13290,
+      "sha256": "92bcb54ee3ae192c31a2c565e2e1cbe42b1936272d227ad62ff8feab083db620"
+    },
+    {
+      "path": ".github/workflows/source-led-opportunity-v3.yml",
+      "mode": "100644",
+      "type": "blob",
+      "gitOid": "384808bf2ce1d109a179d1859e2ce17ed9c558ac",
+      "bytes": 8551,
+      "sha256": "81114c375285ec50f5088c158a841677707067ce421c012bbf974b68a73654db"
+    }
+  ],
+  "localDirtyAtSeal": [
+    "historical untracked cached-evidence-initial-wip/ (excluded)",
+    "new explicit public-safe evidence/report draft (excluded)"
+  ],
+  "unitNativeResultNotTransferred": true,
+  "lastNativeRuntimeSubject": "ee2a6f00a3eae54651a2c801bf12aa11f6f91c2e",
+  "webAndMigrationsByteParityToNativeSubject": true
+}
