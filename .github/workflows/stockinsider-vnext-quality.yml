@@ -59,6 +59,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/thesis-semantic-authority.test.ts | tee /tmp/stockinsider-vnext-ci/thesis-semantic-authority-source.tap
           node --experimental-strip-types web/src/lib/vnext/semantic-score-fence.test.ts | tee /tmp/stockinsider-vnext-ci/semantic-score-fence-source.tap
           node --experimental-strip-types web/src/lib/vnext/catalyst-criteria.test.ts | tee /tmp/stockinsider-vnext-ci/catalyst-criteria-source.tap
+          node --experimental-strip-types web/src/lib/vnext/forecast-evidence.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-evidence-source.tap
           node --experimental-strip-types web/src/lib/vnext/cached-admission.test.ts | tee /tmp/stockinsider-vnext-ci/cached-source.tap
           node --experimental-strip-types web/src/lib/vnext/source-withdrawal.test.ts | tee /tmp/stockinsider-vnext-ci/withdrawal-source.tap
           node --experimental-strip-types web/src/lib/vnext/artifact-financial-summary.test.ts | tee /tmp/stockinsider-vnext-ci/financial-summary-source.tap
