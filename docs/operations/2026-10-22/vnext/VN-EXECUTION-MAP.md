@@ -1,3 +1,7 @@
+Current product/test source **921eb0038c534e36a553ba36fdd7142c5584d8ae**: [bound receipt](material-source-evidence/receipt.json), [STATUS](STATUS.md), [VN01–20 limitations](CURRENT.json). Exact921 hosted ordinary fullbuild/actual PG/HTTP and browser SUCCESS; forecast7PASS, active source-batch/material audit and replay invariants; source-market totals not obtained. Protected still FAIL. Original VM heavy NOT_ADMITTED; synthetic fixtures are not real source/model/semantic or Contabo approval.
+
+Historical indices below retain their own subjects:
+
 Current tested source84a88774926b6ec1328fffd6f94a2f26919d9260: [forecast receipt](forecast-evidence/receipt.json), ordinary39939708681/job120367843221 SUCCESS. Real current RPC/SQL/preparation/provider-frozen native7PASS with6direct mutation assertions; no external provider POST. Same-source build and UI12/current2/business2 metadata succeed, raw PNG/TAP unreviewed. Per-row historical evidence below remains its own subject; current followup is also in CURRENT.json.
 
 # VN01–VN20 executable evidence map

@@ -1,8 +1,8 @@
 {
   "status": "PARTIAL_ENGINEERING_ACCEPTANCE_DRAFT_NOT_RELEASED",
-  "updatedAt": "2026-10-23T10:49:19.376859+00:00",
-  "runtimeSourceHead": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-  "currentReceiptSha256": "8230258b3de9ead25c9813601dfb65017b51e87af0b7b8614ebb45ca41446f26",
+  "updatedAt": "2026-10-23T20:01:01.122557+08:00",
+  "runtimeSourceHead": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+  "currentReceiptSha256": "b353f94d9f0570f8e5b21ecf308c966c72ba738378ad43f26d92515547938659",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
   "primaryReport": "STATUS.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
@@ -13,7 +13,7 @@
       "runs": "cached-active-http-01; current-browser-ui-01; native-legacy-final",
       "limits": "Exact aeb actual fullbuild/preparation HTTP succeeds; genuine adapter PG and scanner composition separately tested. Positive routine-screen HTTP not separately exercised.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 source has ordinary build/PG/HTTP/browser success; this does not convert historical or real-source/time/staging gaps to full acceptance."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN02",
@@ -21,7 +21,7 @@
       "runs": "native-legacy-final; cached-active-http-01; current-browser-ui-01",
       "limits": "14actuallegacyRPC fences at their earlier source;9currentHTTPaliases/GETscope/claims same20/4ledger. No blanket latest-head legacy acceptance inferred.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 source has ordinary build/PG/HTTP/browser success; this does not convert historical or real-source/time/staging gaps to full acceptance."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN03",
@@ -29,7 +29,7 @@
       "runs": "cached-native-02; cached-active-http-recovery-01",
       "limits": "8parallelduplicate deliveries reserve4jobs;4actualstarts remaincharged;2livepubs+18explicitprior-day waitingfixture=20active. Prior-sessionrow is syntheticFK setup, not officialtwo-day rotationproof.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 source has ordinary build/PG/HTTP/browser success; this does not convert historical or real-source/time/staging gaps to full acceptance."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN04",
@@ -37,7 +37,7 @@
       "runs": "thesis-native-01; terminal-slots-native-01; terminal-slots-read-01; final-terminal-test-01; preparation-reconciliation-source-05; preparation-empty-journal-source-o23; hosted39901837447",
       "limits": "655 actual hosted preparation HTTP committed socket-loss/explicit read stepSUCCESS; da15 cancellation real PGwire no-resend receipt remains exacthistorical. Full remaining lease/expiry/provider matrix incomplete.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 forecast native7PASS/6direct RPC mutation assertions, current source/prepare/frozen provider input and revoked-use refusal. One original job,0external provider POST; annual/4Q/source-model/formal/fullcombined/race gaps remain."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN05",
@@ -45,7 +45,7 @@
       "runs": "cached-admission-final-direct-01; cached-admission-final-pure-01; preparation-authority-source-direct-01",
       "limits": "Readonly actual connector audit: TWSE current report-date only/eventWindownull; PTT cap-limited metadata; GDELT observation windows not original-event authority or allowed vNext scope. No comparable28-original-event-day completeness/roots; count staysnull, not0.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 source has ordinary build/PG/HTTP/browser success; this does not convert historical or real-source/time/staging gaps to full acceptance."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN06",
@@ -53,7 +53,7 @@
       "runs": "native-rotation-01; final-discovery-direct; cached-admission-final-direct-01",
       "limits": "Actualwaitingincumbent SQL path and premarket guards earlier; sameday/holiday/policy/null purecases. Real2consecutivepostclose-session positiveatomicexchange NOT_RUN; no clock/guard changes.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 source has ordinary build/PG/HTTP/browser success; this does not convert historical or real-source/time/staging gaps to full acceptance."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN07",
@@ -61,23 +61,23 @@
       "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01; thesis-semantic-authority-source-02; semantic-native-monitored-o23; catalyst-semantic-source-05; catalyst-native-monitored-o23; target-exit-evidence/receipt.json",
       "limits": "655 actual7PASS business/current-source/public component/withdrawal and finite target-v5 packet compatibility; original weights/groupnull/risk_bound unchanged. Corporate action terms/rebase/contra and real semantic approval remain incomplete; da15 cancellation receipt remains separate.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 source has ordinary build/PG/HTTP/browser success; this does not convert historical or real-source/time/staging gaps to full acceptance."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN08",
       "status": "PARTIAL_ACTUAL_FORECAST_CURRENT_RPC_PREPARATION_PROVIDER_FROZEN",
       "runs": "cached-native-01; cached-native-02; preparation-authority-source-direct-01",
-      "limits": "Actualofficialcalendar row/as-of/futureclose/privatecompletedfalse and source-derived originaladjustedpricefunction reuse. Actual240-price PostgREST+fullqualification positive notrun. Missingannual/forwardEPS staysnull. New forecast-source02 diagnostic12PASS/type/lint only. Actual source receipt/current authority/preparation/provider wiring remains UNIMPLEMENTED, not simply unavailabledata.",
+      "limits": "Original quarterly/12month server reader, active batch, recollection invariant and preparation frozen input actual-native tested; full material change to new article and annual/4Q/share authority remain.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 forecast native7PASS/6direct RPC mutation assertions, current source/prepare/frozen provider input and revoked-use refusal. One original job,0external provider POST; annual/4Q/source-model/formal/fullcombined/race gaps remain."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN09",
       "status": "TESTED_VM_SYNTHETIC_EXTRACTION_WITHDRAWAL_AND_SNAPSHOT_TRANSPORT",
       "runs": "analysis-native-01; withdrawal-native-03; cached-active-http-recovery-01",
-      "limits": "200/50 crossentry/currentrights/contentwithdrawal tested on original sources. New d9a source10contracts+retainedPG6PASS metadata receipt capture/currentpolicy/immutable read; Responses synthetic. Complete comparable eventwindow/volume producer remains UNIMPLEMENTED; eventVolume null.",
+      "limits": "Current source400cheap-scan avoids replayed-prefix starvation; original SQL daily200/source50 retained; actual50RPC replay no writes. Exhaustive28day/comparable volume and real acquisition unverified.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 source has ordinary build/PG/HTTP/browser success; this does not convert historical or real-source/time/staging gaps to full acceptance."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN10",
@@ -85,7 +85,7 @@
       "runs": "analysis-native-01; analysis-sources-direct-02",
       "limits": "Fixedproviderinput/journal/reuse and ruleonlydowngrade tested onrealPG. Actualoverseasprice/foreignFX/margin/dataandactualAI execution notacquired; no seeded marketproducer promoted.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 source has ordinary build/PG/HTTP/browser success; this does not convert historical or real-source/time/staging gaps to full acceptance."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN11",
@@ -93,7 +93,7 @@
       "runs": "worker-native-02; worker-browser-revision-02; thesis-native-01",
       "limits": "a264 actual fresh source journal/prior published revision retained byteexact while new cancellation revision+exit commit; model/source semantics synthetic. No real-new-event/model/semantic publication proof.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 forecast native7PASS/6direct RPC mutation assertions, current source/prepare/frozen provider input and revoked-use refusal. One original job,0external provider POST; annual/4Q/source-model/formal/fullcombined/race gaps remain."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN12",
@@ -101,7 +101,7 @@
       "runs": "worker-native-02; terminal-slots-native-01; current-browser-summary-01",
       "limits": "Distinct configuredrole/execution, originalsource hashes/claimchecks/formulas;2actualstructuralreviewfailuresneverpublish. Semantic fixturechecks not independentrealcontentreview. Transportuncertainty keptheld; noautoresend. New typed original quote/issuer/event/date/explicit outcome+full reviewer echo bound to completed provider journals. Protocol not actual semantic support or independent news confirmation.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 source has ordinary build/PG/HTTP/browser success; this does not convert historical or real-source/time/staging gaps to full acceptance."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN13",
@@ -109,7 +109,7 @@
       "runs": "native-legacy-final; worker-native-02; withdrawal-native-03; cached-native-02",
       "limits": "Atomicrevision/membership gates+unadmitteddeferredprefix tested withsyntheticrows. Realfinancial/valuationhappy-path and fullnewhead late-exit concurrency stillunverified.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 forecast native7PASS/6direct RPC mutation assertions, current source/prepare/frozen provider input and revoked-use refusal. One original job,0external provider POST; annual/4Q/source-model/formal/fullcombined/race gaps remain."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN14",
@@ -117,7 +117,7 @@
       "runs": "public-valuation-read-direct-01; current-browser-summary-01; current-browser-ui-01",
       "limits": "Newcurrentpublicread requires exactproofcanonicalhash/expiry/usablevaluation/claim/date/arithmetic. Older incompleteproofdenied; no legacyfallback; actualwithdrawnarticlehistoryretained.12sourcecontracts,2currentbrowsercases.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 source has ordinary build/PG/HTTP/browser success; this does not convert historical or real-source/time/staging gaps to full acceptance."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN15",
@@ -125,7 +125,7 @@
       "runs": "current-browser-ui-01; current-browser-summary-01",
       "limits": "655 same-build current-run PG snapshot transport: UI12/current2/business2 actual desktop/mobile PASS, Chrome155.0.8059.39/hash bound. Business8PNG7,076,400B in finite hosted artifact; not downloaded/visually reviewed.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 same-build current-PG snapshots: UI12/current2/business2 desktop/mobile; Chrome155 and binary/hash bound. PNGs not independently retrieved/visually reviewed; synthetic only."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN16",
@@ -133,7 +133,7 @@
       "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23; semantic-final-types-o23",
       "limits": "655 hosted complete type/lint/build SUCCESS and original VM source/types/lint receipts distinct. Original VM fresh fullbuild NOT_ADMITTED.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 hosted source/types/lint/fullbuild success. Original VM no-emit/source/lint separate; original VM fullbuild NOT_ADMITTED."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN17",
@@ -141,7 +141,7 @@
       "runs": "cached-native-02; terminal-slots-read-01; cached-active-http-recovery-01",
       "limits": "655 fresh original-prefix ordinary PG stages and new business7PASS/finite target-v5 installer +currentRPC; synthetic sources/model; remaining financial-qualified and ACL/race matrix incomplete.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Exact84 forecast native7PASS/6direct RPC mutation assertions, current source/prepare/frozen provider input and revoked-use refusal. One original job,0external provider POST; annual/4Q/source-model/formal/fullcombined/race gaps remain."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN18",
@@ -149,7 +149,7 @@
       "runs": "staging/tcp-readiness historical metadata",
       "limits": "No Contaboisolatedapp/DB/schema/queue/storage. TCP22unsupported/no grant, no trustedhostkey/newactiveidentity. Expiredkeynotrenewed. No productionlocatorasstaging.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Contabo/real source-provider-role injection/independent protected release remain unaccepted. PR384 draft, no merge/deploy."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN19",
@@ -157,7 +157,7 @@
       "runs": "source-canary-final.json; analysis-native-01; ir-native-o23; ir-continuation-monitored-02-o23; ir-status-recovery-monitored-o23",
       "limits": "Fresh metadata has no injected secret/runtime/outbound identity, required provider/DB/roles and official/PTT policy bindings absent. No secret files read/values printed or actual model/fetch attempted. Prior canaries/IR8PASS remain their historical subjects; synthetic original is not actual acquisition.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Contabo/real source-provider-role injection/independent protected release remain unaccepted. PR384 draft, no merge/deploy."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     },
     {
       "id": "VN20",
@@ -165,7 +165,7 @@
       "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json; preparation-reconciliation-evidence/receipt.json; SEMANTIC-SCORE-DELIVERY.md; semantic-score-evidence/receipt.json; TWSE-SNAPSHOT-DELIVERY.md; twse-snapshot-evidence/receipt.json",
       "limits": "PR384 source da15/new normal CI pending; earlier a264 normal job120301725217SUCCESS and cancellation7PASS; protected39919707261FAIL unchanged. Exact review prerequisite must follow independent original process; no maker approval or merge/deploy.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
-      "currentSourceFollowup": "Contabo/real source-provider-role injection/independent protected release remain unaccepted. PR384 draft, no merge/deploy."
+      "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain."
     }
   ],
   "externalOwnerActions": [
@@ -188,36 +188,35 @@
     }
   ],
   "remainingVMCode": [
-    "exhaustive28day connector/cursor/coverage/volume/currentreader",
-    "source-bound annual/4Q fiscal/share forecast producer and full article flow",
-    "action-term-authorized immutable target rebasing",
-    "routine-screen positive enqueue HTTP, cancellation HTTP, remaining qualified-financial/rights/lease/expiry/race/legacy/caps/fullbundle acceptance"
+    "connector-specific keyset cursor/conservation/coverage/comparable28day volume/currentreader",
+    "source-bound annual/4Q fiscal/share forecast producer and complete material-change author/review/article flow",
+    "source-term-authorized immutable corporate-action target rebasing",
+    "positive routine enqueue/cancellation HTTP and remaining qualified-financial/rights/lease/expiry/race/legacy/caps/fullbundle acceptance"
   ],
   "remainingTimeAcceptance": "2actualconsecutivecompletedpostclose sessions; no guard/clock bypass",
   "ReleaseGate": "PENDING",
   "testAdapterSource": "84a88774926b6ec1328fffd6f94a2f26919d9260",
   "latestCI": {
-    "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-    "ordinaryRun": 39939708681,
-    "ordinaryJob": 120367843221,
+    "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+    "ordinaryRun": 39948562267,
+    "ordinaryJob": 120397131682,
     "conclusion": "success",
     "build": "success",
-    "native": "7PASS forecast suite; other stages retain their separate exact counts",
-    "browser": "UI12/current2/business2; raw PNG not independently viewed"
+    "native": "forecast7PASS; source-market actual step SUCCESS, no unseen counts",
+    "browser": "UI12/current2/business2 finite metadata, raw PNG unreviewed"
   },
   "ciReceiptSha256": "cc9f361fc24d51f2920486130ffa3847b0d1c200e9267b368182bc3ce8a13aa2",
   "previousRuntimeSourceHead": "65580e2d787251c565742fb23159e8519686273c",
   "previousReceiptSha256": "98ce53b46f8da0666cb24f627d5c33094af7cccc682968c718a2a91c7569a325",
   "capacity": {
-    "freshFree": {
-      "/workspace": 8879501312,
-      "/tmp": 17245925376
-    },
     "floor": 8589934592,
-    "localFreshCloneOrFullBuild": "NOT_ADMITTED",
-    "newCleanup": "NONE in forecast slice",
-    "localWork": "bounded source/types/lint/Git/receipt writes",
-    "newNative": "GitHub hosted runner; original VM fresh heavy NOT_ADMITTED"
+    "freshFree": {
+      "/workspace": 8878772224,
+      "/tmp": 17245044736
+    },
+    "localFreshPGFullbuildBrowser": "NOT_ADMITTED",
+    "newCleanup": "NONE",
+    "sourceWorksetReference": 16777216
   },
   "financialStatusCompatibility": {
     "source": "e359d7d634fa88db938fd57db8b4a33123006904",
@@ -242,8 +241,8 @@
     "positiveSemanticProducer": "UNIMPLEMENTED, not substituted by disabling unsupportedclaims",
     "receipt": "semantic-score-evidence/receipt.json"
   },
-  "receiptSha256": "8230258b3de9ead25c9813601dfb65017b51e87af0b7b8614ebb45ca41446f26",
-  "receipt": "forecast-evidence/receipt.json",
+  "receiptSha256": "b353f94d9f0570f8e5b21ecf308c966c72ba738378ad43f26d92515547938659",
+  "receipt": "material-source-evidence/receipt.json",
   "twseSnapshotTransport": {
     "source": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
     "sourceContracts": "10PASS synthetic transports/actual extracted connector and HTTP handler functions; not networkHTTP",
@@ -274,9 +273,9 @@
     "checks": "12synthetic structural PASS; fullnoEmittypes andfocusedlintPASS",
     "status": "disconnected prerequisite only; server/current SQL/source/worker producer NOT_IMPLEMENTED; reportedAnnualEps alwaysnull; NTM neverexact4"
   },
-  "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-  "primaryReceipt": "forecast-evidence/receipt.json",
-  "primaryReceiptSha256": "8230258b3de9ead25c9813601dfb65017b51e87af0b7b8614ebb45ca41446f26",
+  "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+  "primaryReceipt": "material-source-evidence/receipt.json",
+  "primaryReceiptSha256": "b353f94d9f0570f8e5b21ecf308c966c72ba738378ad43f26d92515547938659",
   "targetExit": {
     "source": "b0f09e050a3078d0a1e955316a7a6960ae14adc6",
     "actualRetainedNativeSource": "0a40c8bda8d8c964ee556e2c9644f9fb3abed7f9",
@@ -304,86 +303,529 @@
     "latestSuccessfulNativeSubject": "9a6e73f49f2efd513e55c6bdb3289e0b95114157"
   },
   "newSourceCI": {
-    "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+    "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
     "ordinary": {
-      "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-      "ordinaryRun": 39939708681,
-      "ordinaryJob": 120367843221,
+      "run": 39948562267,
+      "job": 120397131682,
       "conclusion": "success",
-      "build": "success",
-      "native": "7PASS forecast suite; other stages retain their separate exact counts",
-      "browser": "UI12/current2/business2; raw PNG not independently viewed"
+      "jobs": [
+        {
+          "conclusion": "success",
+          "id": 120397131131,
+          "name": "roster-current-native",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+            },
+            {
+              "conclusion": "success",
+              "name": "Fixed native dependency and workset admission"
+            },
+            {
+              "conclusion": "success",
+              "name": "Fresh current-work, claim and reserve invalidity fences (synthetic metadata)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Hash finite owned raw evidence without publishing private contents"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload finite roster-current TAP and summary only"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job"
+            }
+          ]
+        },
+        {
+          "conclusion": "success",
+          "id": 120397131442,
+          "name": "trading-invalidity-native",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+            },
+            {
+              "conclusion": "success",
+              "name": "Fixed native dependency and workset admission"
+            },
+            {
+              "conclusion": "success",
+              "name": "Fresh official-roster invalidity installer and unpublished exits (synthetic metadata)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Hash finite owned raw evidence without publishing private contents"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload finite trading-invalidity TAP and summary only"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job"
+            }
+          ]
+        },
+        {
+          "conclusion": "success",
+          "id": 120397131598,
+          "name": "cancellation-native",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+            },
+            {
+              "conclusion": "success",
+              "name": "Fixed native dependency and workset admission"
+            },
+            {
+              "conclusion": "success",
+              "name": "Fresh source-bound cancellation via distinct reviewer and atomic publication/exit (synthetic metadata)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Hash finite owned raw evidence without publishing private contents"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload finite catalyst-cancellation TAP and summary only"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job"
+            }
+          ]
+        },
+        {
+          "conclusion": "success",
+          "id": 120397131682,
+          "name": "vnext-quality",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+            },
+            {
+              "conclusion": "success",
+              "name": "Workspace and temporary filesystem admission"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install unchanged locked dependencies"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual source contracts, types and lint"
+            },
+            {
+              "conclusion": "success",
+              "name": "Full ordinary build"
+            },
+            {
+              "conclusion": "success",
+              "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle"
+            },
+            {
+              "conclusion": "success",
+              "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual durable worker journal with explicitly synthetic provider"
+            },
+            {
+              "conclusion": "success",
+              "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Hash bounded forecast preparation raw receipts without publishing contents"
+            },
+            {
+              "conclusion": "success",
+              "name": "Fresh original-bound business components via distinct review/current public projection (synthetic metadata)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Hash finite owned raw evidence without publishing private contents"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload finite business-criteria TAP and summary only"
+            },
+            {
+              "conclusion": "success",
+              "name": "Same-build desktop and mobile browser over current-run PostgreSQL snapshots"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload finite browser summaries and synthetic screenshots only"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job"
+            }
+          ]
+        }
+      ]
     },
     "productRuntime": {
-      "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-      "run": 39939708637,
-      "productRuntime": {
-        "job": 120367840286,
-        "conclusion": "success"
-      },
-      "diagnostic": {
-        "job": 120371066239,
-        "conclusion": "success"
-      }
+      "run": 39948562240,
+      "job": 120397132804,
+      "conclusion": "success",
+      "diagnosticJob": 120400332924,
+      "diagnosticConclusion": "success"
     },
     "protected": {
-      "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-      "run": 39939706054,
-      "bootstrap": "success",
-      "requirements": "failure",
-      "architecture": "failure",
-      "exactReview": "failure",
-      "root": "failure",
+      "run": 39948558260,
+      "bootstrap": {
+        "job": 120397119712,
+        "conclusion": "success"
+      },
+      "architecture": {
+        "job": 120397204814,
+        "conclusion": "failure"
+      },
+      "requirements": {
+        "job": 120397204825,
+        "conclusion": "failure"
+      },
+      "exactReview": {
+        "job": 120397204876,
+        "conclusion": "failure"
+      },
+      "root": {
+        "job": 120397327868,
+        "conclusion": "failure"
+      },
+      "failedStage": "Retrieve bootstrap and prepare detached subject",
       "exclusiveInnerCause": "NOT_OBSERVED",
       "pinsGuardsRefsChanged": false
-    },
-    "noOldGreenTransfer": true
-  },
-  "dirtyWip": "Only original untracked cached-evidence-initial-wip/target-checkpoint-manifest retained; excluded from staging/publication",
-  "sourceHead": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-  "latestDelivery": "STATUS.md",
-  "independentProductCI": {
-    "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-    "run": 39939708637,
-    "productRuntime": {
-      "job": 120367840286,
-      "conclusion": "success"
-    },
-    "diagnostic": {
-      "job": 120371066239,
-      "conclusion": "success"
     }
   },
-  "currentBrowser": {
-    "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-    "receipt": "forecast-evidence/hosted-observations.json",
-    "suiteCounts": {
-      "business": 2,
-      "current": 2,
-      "ui": 12
-    },
-    "rawPngsIndependentlyRetrieved": false,
-    "visuallyReviewed": false
+  "dirtyWip": "Only original two untracked evidence WIP locations, excluded; product/test tracked tree921 clean before evidence packaging",
+  "sourceHead": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+  "latestDelivery": "STATUS.md",
+  "independentProductCI": {
+    "run": 39948562240,
+    "job": 120397132804,
+    "conclusion": "success",
+    "diagnosticJob": 120400332924,
+    "diagnosticConclusion": "success"
   },
-  "sourceCommitMeaning": "exact code/test/workflow subject; later evidence-only PR head changes no runtime blobs",
+  "currentBrowser": {
+    "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+    "receipts": [
+      {
+        "suite": "business",
+        "exit": 0,
+        "stats": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 10690.307
+        },
+        "cases": [
+          {
+            "title": "current source-bound business inference is visible without score approval and disappears on committed source withdrawal",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "current source-bound business inference is visible without score approval and disappears on committed source withdrawal",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          }
+        ],
+        "screenshots": 8,
+        "screenshotBytes": 7022998,
+        "browserVersion": "Google Chrome 155.0.8059.39",
+        "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+        "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+        "sourceCommit": "26e2c2d9a4e7a20c48d5597728c1642c4c0e0855",
+        "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+        "resourceViolation": null,
+        "sampledTreePeakRssBytes": 2330669056,
+        "containmentUsed": false,
+        "publicAcceptanceSha256": "f3cfe371ffc4f47406c16c784f90cc5e1d172ec64ee3e59fc8860f05ff30b8d3"
+      },
+      {
+        "suite": "current",
+        "exit": 0,
+        "stats": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 9359.153
+        },
+        "cases": [
+          {
+            "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "current durable EPS claims and complete article persist after actual content withdrawal",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          }
+        ],
+        "screenshots": 6,
+        "screenshotBytes": 6747115,
+        "browserVersion": "Google Chrome 155.0.8059.39",
+        "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+        "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+        "sourceCommit": "26e2c2d9a4e7a20c48d5597728c1642c4c0e0855",
+        "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+        "resourceViolation": null,
+        "sampledTreePeakRssBytes": 2224500736,
+        "containmentUsed": false,
+        "publicAcceptanceSha256": "86a35a892e7468c8c19be6485489c10f5acf40dbe0bd981617507fd3d561804f"
+      },
+      {
+        "suite": "ui",
+        "exit": 0,
+        "stats": {
+          "expected": 12,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 18594.375
+        },
+        "cases": [
+          {
+            "title": "same published contract drives exactly two primary blocks and detail/history",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "empty and unavailable states never fill from legacy cards",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "unknown revision cannot fall back to a different research version",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "loading remains an explicit two-block state and preserves source links",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+            "project": "desktop",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "same published contract drives exactly two primary blocks and detail/history",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "empty and unavailable states never fill from legacy cards",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "unknown revision cannot fall back to a different research version",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "every internal trigger rejects unauthorized callers and empty authorized scope performs no RPC work",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "loading remains an explicit two-block state and preserves source links",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          },
+          {
+            "title": "automatic worker is auth-first, author-only and accepts no client provider or principal",
+            "project": "mobile",
+            "expectedStatus": "passed",
+            "results": [
+              "passed"
+            ]
+          }
+        ],
+        "screenshots": 12,
+        "screenshotBytes": 4250386,
+        "browserVersion": "Google Chrome 155.0.8059.39",
+        "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+        "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+        "sourceCommit": "26e2c2d9a4e7a20c48d5597728c1642c4c0e0855",
+        "requiredServerFilesSha256": "2a0c607c2f86eba528c66703fa6d6365bd832b8a07a4eca7fb22af4b198062ae",
+        "resourceViolation": null,
+        "sampledTreePeakRssBytes": 2004373504,
+        "containmentUsed": false,
+        "publicAcceptanceSha256": "7ab505c6180d22822ddcc3807476b27c89c96b1da278a03263b2bedc9982f25b"
+      }
+    ],
+    "rawPNGsVisuallyReviewed": false
+  },
+  "sourceCommitMeaning": "Source seal points to tested product/test tree; later evidence-only commits do not create new runtime acceptance",
   "lastSuccessfulOrdinary": {
-    "head": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-    "run": 39939708681,
-    "ordinaryJob": 120367843221,
-    "result": "SUCCESS",
-    "sourceTypesLint": "SUCCESS",
-    "fullbuild": "SUCCESS",
-    "actualPreparationHTTP": "SUCCESS",
-    "forecastNativeCounts": {
-      "tests": 7,
-      "pass": 7,
-      "fail": 0,
-      "cancelled": 0,
-      "skipped": 0,
-      "todo": 0
-    },
-    "sameBuildBrowser": "UI12/current2/business2 PASS, finite metadata only",
-    "protected": "FAIL, not bypassed"
+    "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+    "ordinaryRun": 39948562267,
+    "ordinaryJob": 120397131682,
+    "conclusion": "success",
+    "build": "success",
+    "native": "forecast7PASS; source-market actual step SUCCESS, no unseen counts",
+    "browser": "UI12/current2/business2 finite metadata, raw PNG unreviewed"
   },
   "tradingInvalidity": {
     "source": "2aa68f359d1d6b40da2eaadc955a65ff96506ae9",
@@ -417,15 +859,30 @@
     "actualPGHTTP": "Exact aeb ordinary fullbuild+actual preparation HTTP/browser steps SUCCESS, distinct from earlier28 receipts; raw HTTP TAP count not separately claimed.",
     "selection": "max1000 full12fieldsymbol-or-stock rows; latest status/clocks/conflicts before filtering, microseconds retained; no positive unknown/false qualification"
   },
-  "currentCIFollowup": "Exact84 ordinary and independent runtime/diagnostic success; protected prerequisites/root failed. Evidence-only commits do not transfer approval.",
+  "currentCIFollowup": "material-source-evidence/hosted-observations.json",
   "protectedCI": {
-    "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-    "run": 39939706054,
-    "bootstrap": "success",
-    "requirements": "failure",
-    "architecture": "failure",
-    "exactReview": "failure",
-    "root": "failure",
+    "run": 39948558260,
+    "bootstrap": {
+      "job": 120397119712,
+      "conclusion": "success"
+    },
+    "architecture": {
+      "job": 120397204814,
+      "conclusion": "failure"
+    },
+    "requirements": {
+      "job": 120397204825,
+      "conclusion": "failure"
+    },
+    "exactReview": {
+      "job": 120397204876,
+      "conclusion": "failure"
+    },
+    "root": {
+      "job": 120397327868,
+      "conclusion": "failure"
+    },
+    "failedStage": "Retrieve bootstrap and prepare detached subject",
     "exclusiveInnerCause": "NOT_OBSERVED",
     "pinsGuardsRefsChanged": false
   },
@@ -441,10 +898,10 @@
     "noAuthorityCreated": true,
     "sameMultiQueryAtomicSnapshotClaim": false
   },
-  "candidateSourceHead": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-  "candidateReceipt": "forecast-evidence/receipt.json",
-  "candidateReceiptSha256": "8230258b3de9ead25c9813601dfb65017b51e87af0b7b8614ebb45ca41446f26",
-  "candidateRuntime": "Exact84 hosted native7PASS,6direct mutation assertions and current-use revocation; zero external provider POST, no formal or original-VM heavy acceptance",
+  "candidateSourceHead": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+  "candidateReceipt": "material-source-evidence/receipt.json",
+  "candidateReceiptSha256": "b353f94d9f0570f8e5b21ecf308c966c72ba738378ad43f26d92515547938659",
+  "candidateRuntime": "PARTIAL_HOSTED_ENGINEERING_PASS_NOT_RELEASED",
   "catalystCancellation": {
     "source": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
     "implementation": "optional server-selected v4, original pair/prior baseline, distinct full echo, owner-only proof, original guarded atomic retained publication+exit; no role/quota/old prompt changes",
@@ -498,18 +955,38 @@
     }
   },
   "protectedPrerequisiteDiagnosis": {
-    "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-    "run": 39939706054,
+    "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+    "run": 39948558260,
+    "bootstrap": {
+      "job": 120397119712,
+      "conclusion": "success"
+    },
+    "architecture": {
+      "job": 120397204814,
+      "conclusion": "failure"
+    },
+    "requirements": {
+      "job": 120397204825,
+      "conclusion": "failure"
+    },
+    "exactReview": {
+      "job": 120397204876,
+      "conclusion": "failure"
+    },
+    "root": {
+      "job": 120397327868,
+      "conclusion": "failure"
+    },
     "failedStage": "Retrieve bootstrap and prepare detached subject",
-    "innerExclusiveCause": "NOT_OBSERVED",
-    "annotations": "exit1 only; composite source contains setup/download/prepare substeps; no inferred cause or guard change"
+    "exclusiveInnerCause": "NOT_OBSERVED",
+    "pinsGuardsRefsChanged": false
   },
   "cancellationCIFollowup": {
     "path": "cancellation-evidence/ci-followup-f7-red.json",
     "sha256": "5d07d99ecec08307062dcb13c5a53e5d7a8ba9f2ed30f0b3d334f01c16428ad2",
     "appendOnly": true
   },
-  "currentReceipt": "forecast-evidence/receipt.json",
+  "currentReceipt": "material-source-evidence/receipt.json",
   "ownerActions": "OWNER-ACTIONS.md",
   "businessCurrent": {
     "source": "65580e2d787251c565742fb23159e8519686273c",
@@ -533,9 +1010,8 @@
     "actionRebase": "NOT_RUN: full action terms unavailable; no price/share inference"
   },
   "forecastCurrent": {
-    "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
-    "receipt": "forecast-evidence/receipt.json",
-    "receiptSha256": "8230258b3de9ead25c9813601dfb65017b51e87af0b7b8614ebb45ca41446f26",
+    "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
+    "receipt": "material-source-evidence/receipt.json",
     "nativeCounts": {
       "tests": 7,
       "pass": 7,
@@ -544,20 +1020,16 @@
       "skipped": 0,
       "todo": 0
     },
-    "directMutants": 6,
-    "scope": "original quarterly estimate/12month source target -> real current RPC/SQL/preparation/provider frozen input; synthetic source, actual DB/HTTP; annual/4Q null,0provider POST",
+    "recollectionStable": true,
+    "originalObservationRows": 2,
+    "actualOperatorBatchRead": true,
+    "weeklyCurrentForecastCompositionSourceTest": true,
+    "classification": "reported/reported_period only; estimates remain assumptions",
     "rawHostedInventory": {
-      "count": 50,
-      "bytes": 82081999,
-      "inventorySha256": "d0a532e4dfb5825ee9445fad3c8967995efada7535101d86f19982e1bd80a50f",
-      "rawContentsPublished": false,
-      "contentsRetrieved": false,
-      "durableRetention": "NOT_GUARANTEED; hosted runner files are ephemeral, only finite safe artifact/hash inventory is published"
-    },
-    "ordinary": {
-      "run": 39939708681,
-      "job": 120367843221,
-      "conclusion": "success"
+      "count": 53,
+      "bytes": 121203379,
+      "inventorySha256": "576914fde031e8ee6495c1160f83d295745c93dbc39e9caee57d3b8e4274de3a",
+      "rawContentsPublished": false
     }
   },
   "historicalMilestoneFields": {
@@ -661,6 +1133,96 @@
       "concreteUnfulfilledSourcePrerequisite": "single readonly exact subject ref absent while graph-bound requirements/architecture refs present",
       "action": "independent authorized exact-subject review needed through existing process after code freeze; maker must not self-create/force refs or alter pins",
       "platformFailureClaim": false
+    }
+  },
+  "historicalMaterialMilestones": {
+    "84a88774926b6ec1328fffd6f94a2f26919d9260": {
+      "forecastCurrent": {
+        "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+        "receipt": "forecast-evidence/receipt.json",
+        "receiptSha256": "8230258b3de9ead25c9813601dfb65017b51e87af0b7b8614ebb45ca41446f26",
+        "nativeCounts": {
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "directMutants": 6,
+        "scope": "original quarterly estimate/12month source target -> real current RPC/SQL/preparation/provider frozen input; synthetic source, actual DB/HTTP; annual/4Q null,0provider POST",
+        "rawHostedInventory": {
+          "count": 50,
+          "bytes": 82081999,
+          "inventorySha256": "d0a532e4dfb5825ee9445fad3c8967995efada7535101d86f19982e1bd80a50f",
+          "rawContentsPublished": false,
+          "contentsRetrieved": false,
+          "durableRetention": "NOT_GUARANTEED; hosted runner files are ephemeral, only finite safe artifact/hash inventory is published"
+        },
+        "ordinary": {
+          "run": 39939708681,
+          "job": 120367843221,
+          "conclusion": "success"
+        }
+      },
+      "currentBrowser": {
+        "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+        "receipt": "forecast-evidence/hosted-observations.json",
+        "suiteCounts": {
+          "business": 2,
+          "current": 2,
+          "ui": 12
+        },
+        "rawPngsIndependentlyRetrieved": false,
+        "visuallyReviewed": false
+      },
+      "latestCI": {
+        "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+        "ordinaryRun": 39939708681,
+        "ordinaryJob": 120367843221,
+        "conclusion": "success",
+        "build": "success",
+        "native": "7PASS forecast suite; other stages retain their separate exact counts",
+        "browser": "UI12/current2/business2; raw PNG not independently viewed"
+      },
+      "newSourceCI": {
+        "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+        "ordinary": {
+          "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+          "ordinaryRun": 39939708681,
+          "ordinaryJob": 120367843221,
+          "conclusion": "success",
+          "build": "success",
+          "native": "7PASS forecast suite; other stages retain their separate exact counts",
+          "browser": "UI12/current2/business2; raw PNG not independently viewed"
+        },
+        "productRuntime": {
+          "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+          "run": 39939708637,
+          "productRuntime": {
+            "job": 120367840286,
+            "conclusion": "success"
+          },
+          "diagnostic": {
+            "job": 120371066239,
+            "conclusion": "success"
+          }
+        },
+        "protected": {
+          "source": "84a88774926b6ec1328fffd6f94a2f26919d9260",
+          "run": 39939706054,
+          "bootstrap": "success",
+          "requirements": "failure",
+          "architecture": "failure",
+          "exactReview": "failure",
+          "root": "failure",
+          "exclusiveInnerCause": "NOT_OBSERVED",
+          "pinsGuardsRefsChanged": false
+        },
+        "noOldGreenTransfer": true
+      },
+      "currentReceipt": "forecast-evidence/receipt.json",
+      "currentReceiptSha256": "8230258b3de9ead25c9813601dfb65017b51e87af0b7b8614ebb45ca41446f26"
     }
   }
 }

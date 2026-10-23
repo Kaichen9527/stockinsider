@@ -1,0 +1,40 @@
+{
+  "events": [
+    {
+      "actualNative": {
+        "fail": 2,
+        "pass": 5,
+        "tests": 7
+      },
+      "cause": "test Date.parse(Date) string conversion dropped milliseconds; Date.getTime preserves exact original equality, no tolerance/SQL/clock change",
+      "independentlyReproducedErrorSha256": "fbba4a51ea3834cd12a03cd921c6fa1e0ebc7d46763b8d216cc6902e5a76d696",
+      "job": 120383731512,
+      "run": 39944508200,
+      "source": "3d2b84fc7493258fdb84fa960a1f8456d2575943",
+      "tapSha256": "e851756f736d1f783e51d754ddfb6ff3318248c6f86936e7ac49287d717c061e"
+    },
+    {
+      "exclusiveInnerCause": "NOT_OBSERVED",
+      "failedStage": "cached current receipt prerequisite; forecast native NOT_RUN",
+      "job": 120388595556,
+      "run": 39945971089,
+      "source": "1d9ed784f4bb105212e3bbb0916d4796fd18c977",
+      "sourceIssueRepaired": "missing unchanged preparation-read prerequisite, repaired in210c534d5699d2263ec33df45ac43927331f12ab"
+    },
+    {
+      "cause": "TS7006 synthetic callback params; explicit name:string,args:unknown repair only",
+      "exit": 2,
+      "local": "forecast-active-types-01"
+    },
+    {
+      "cause": "source edit script ValueError before remaining edits; not product/native error",
+      "local": "source-backlog-edit-wip-o23.json"
+    },
+    {
+      "local": "forecast-clock-semantic-candidate-wip-o23",
+      "scope": "uncommitted never-PG-executed candidate withdrawn after reading complete original recollection-idempotency chain; all candidate bytes retained, original SQL/profile restored exactly"
+    }
+  ],
+  "historicalNativeSuccessesNotAdded": true,
+  "historyImmutable": true
+}

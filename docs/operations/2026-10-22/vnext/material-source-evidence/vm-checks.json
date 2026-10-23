@@ -1,0 +1,397 @@
+{
+  "checks": [
+    {
+      "actualTapCounts": {
+        "cancelled": 0,
+        "fail": 0,
+        "pass": 5,
+        "skipped": 0,
+        "tests": 5,
+        "todo": 0
+      },
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/forecast-active.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "end": "2026-10-23T11:34:53.389560+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245249536,
+        "/workspace": 8878977024
+      },
+      "initialFree": {
+        "/tmp": 17245253632,
+        "/workspace": 8878977024
+      },
+      "name": "forecast-active-source-02",
+      "receiptSha256": "2b3cee9553fb0959a31363cb21e45ae6d436a5625a02b7a7d808792c82a06136",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 99823616,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:34:52.348504+00:00",
+      "stdoutBytes": 1918,
+      "stdoutSha256": "3206786a20c40c742ed19cd97f280912c3146110761a1c3b46a9ce330c752bc8"
+    },
+    {
+      "actualTapCounts": {
+        "cancelled": 0,
+        "fail": 0,
+        "pass": 7,
+        "skipped": 0,
+        "tests": 7,
+        "todo": 0
+      },
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/forecast-current.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "end": "2026-10-23T11:18:59.630620+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245442048,
+        "/workspace": 8879230976
+      },
+      "initialFree": {
+        "/tmp": 17245446144,
+        "/workspace": 8879230976
+      },
+      "name": "forecast-current-parity-03",
+      "receiptSha256": "08e9cdd47e17fc3742a85eeefd6d21e92df8f95abc6b9d7726bbf6bd9ba9d1ef",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 97361920,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:18:58.585836+00:00",
+      "stdoutBytes": 2447,
+      "stdoutSha256": "7320d216cc5668ce35ef98fe91d149d8885af179c492ace3da666b932fe3723f"
+    },
+    {
+      "actualTapCounts": {
+        "cancelled": 0,
+        "fail": 0,
+        "pass": 2,
+        "skipped": 0,
+        "tests": 2,
+        "todo": 0
+      },
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-forecast-active-source.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "end": "2026-10-23T11:23:47.742561+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245306880,
+        "/workspace": 8879214592
+      },
+      "initialFree": {
+        "/tmp": 17245310976,
+        "/workspace": 8879214592
+      },
+      "name": "forecast-active-sql-source-02",
+      "receiptSha256": "b6925e6ac4cbd8efc0c1b217665c8c0d50c6b9279a157b30c654d80c35c0d009",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 7733248,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:23:47.232134+00:00",
+      "stdoutBytes": 692,
+      "stdoutSha256": "84aab685570ad0f9118c03a35075cc4237f25cda91210b99e249099fcf3a44de"
+    },
+    {
+      "actualTapCounts": {
+        "cancelled": 0,
+        "fail": 0,
+        "pass": 12,
+        "skipped": 0,
+        "tests": 12,
+        "todo": 0
+      },
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/thesis.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "end": "2026-10-23T11:19:50.768217+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245425664,
+        "/workspace": 8879226880
+      },
+      "initialFree": {
+        "/tmp": 17245429760,
+        "/workspace": 8879226880
+      },
+      "name": "forecast-active-thesis-regression-01",
+      "receiptSha256": "911b0216f6a4079c71f8fbdf94ae280a171d9be507a10eddb4ce372a3c02ff25",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 160849920,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:19:49.235331+00:00",
+      "stdoutBytes": 3752,
+      "stdoutSha256": "5cce4f74a3cb50eb703130320eb69fe0812948c553d5e06b68549dc3ad086af7"
+    },
+    {
+      "actualTapCounts": {
+        "cancelled": 0,
+        "fail": 0,
+        "pass": 3,
+        "skipped": 0,
+        "tests": 3,
+        "todo": 0
+      },
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-weekly-forecast-source.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "end": "2026-10-23T11:34:55.050239+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245241344,
+        "/workspace": 8878977024
+      },
+      "initialFree": {
+        "/tmp": 17245245440,
+        "/workspace": 8878977024
+      },
+      "name": "forecast-weekly-composition-02",
+      "receiptSha256": "4ea6d8d9c00804011c845d2db097edfcd14051427d77d49bc10569a837c1b6d5",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 121155584,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:34:53.468816+00:00",
+      "stdoutBytes": 1515,
+      "stdoutSha256": "e14e443499dfd6ba43a4a52c927813f3b2dfe54247b41d14f072a4013327bb82"
+    },
+    {
+      "actualTapCounts": null,
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--incremental",
+        "false",
+        "--pretty",
+        "false"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T11:36:24.814708+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245237248,
+        "/workspace": 8878977024
+      },
+      "initialFree": {
+        "/tmp": 17245237248,
+        "/workspace": 8878977024
+      },
+      "name": "forecast-active-types-03",
+      "receiptSha256": "87744796d3d16074985829320e189bee6f7ec36c3156e3d552381511b58212fa",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 1376530432,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:35:34.149853+00:00",
+      "stdoutBytes": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "actualTapCounts": null,
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/lib/vnext/thesis-audit.ts",
+        "src/lib/vnext/forecast-active.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T11:37:00.037752+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245212672,
+        "/workspace": 8878977024
+      },
+      "initialFree": {
+        "/tmp": 17245216768,
+        "/workspace": 8878977024
+      },
+      "name": "forecast-active-lint-02",
+      "receiptSha256": "95739cfc9689e07e7d719bd853cb9a2d67ab3a8c5b046aac495431de2fac50af",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 257007616,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:36:55.742035+00:00",
+      "stdoutBytes": 223,
+      "stdoutSha256": "80e96525ec8176f3db91b1129dc248ae20f17c7389afef5eb5e96aaf8f31f371"
+    },
+    {
+      "actualTapCounts": {
+        "cancelled": 0,
+        "fail": 0,
+        "pass": 4,
+        "skipped": 0,
+        "tests": 4,
+        "todo": 0
+      },
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/source-backlog.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "end": "2026-10-23T11:44:59.304424+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245143040,
+        "/workspace": 8878882816
+      },
+      "initialFree": {
+        "/tmp": 17245147136,
+        "/workspace": 8878882816
+      },
+      "name": "source-backlog-contract-02",
+      "receiptSha256": "0bfc583d065854bda0ef3d2d44b113cddb26a5c064173b23d3b7c2dc14be4fa1",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 7733248,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:44:58.795101+00:00",
+      "stdoutBytes": 1629,
+      "stdoutSha256": "b14b9da5e121ff80350f4532097bc2086921a2c2ec501eb6719616de517a6cf7"
+    },
+    {
+      "actualTapCounts": {
+        "cancelled": 0,
+        "fail": 0,
+        "pass": 11,
+        "skipped": 0,
+        "tests": 11,
+        "todo": 0
+      },
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/analysis-sources.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "end": "2026-10-23T11:42:22.194310+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245171712,
+        "/workspace": 8878891008
+      },
+      "initialFree": {
+        "/tmp": 17245175808,
+        "/workspace": 8878891008
+      },
+      "name": "source-backlog-analysis-regression-01",
+      "receiptSha256": "650c8afc10aba1ec2ef03553c62494be6b2c6cff4567e759d066c8537322a372",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 7077888,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:42:21.682761+00:00",
+      "stdoutBytes": 3214,
+      "stdoutSha256": "2946c5599992c4a3e06fe291373df86816b09aa4cb163f9384a08126875eb375"
+    },
+    {
+      "actualTapCounts": null,
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--incremental",
+        "false",
+        "--pretty",
+        "false"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T11:46:15.431146+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245134848,
+        "/workspace": 8878882816
+      },
+      "initialFree": {
+        "/tmp": 17245134848,
+        "/workspace": 8878882816
+      },
+      "name": "source-backlog-types-02",
+      "receiptSha256": "e6ed154b0765c434685de0d11d77c31f7d8a80a276d6e6c7534401b6eb22d1c1",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 1384935424,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:45:45.885929+00:00",
+      "stdoutBytes": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "actualTapCounts": null,
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/lib/vnext/permitted-content.ts",
+        "src/lib/vnext/source-backlog.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22/web",
+      "end": "2026-10-23T11:47:04.718766+00:00",
+      "exit": 0,
+      "finalFree": {
+        "/tmp": 17245118464,
+        "/workspace": 8878882816
+      },
+      "initialFree": {
+        "/tmp": 17245118464,
+        "/workspace": 8878882816
+      },
+      "name": "source-backlog-lint-02",
+      "receiptSha256": "d8ce8eb0fe09b92d348d741a8fefadbf1967609a83faee91261d4b68d91f690d",
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "sampledSessionPeakRssBytes": 240766976,
+      "scope": "original Codex VM source/type/lint only; not PG/build/browser",
+      "start": "2026-10-23T11:47:00.433505+00:00",
+      "stdoutBytes": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "cleanup": "NONE",
+  "currentFreshCapacity": {
+    "/tmp": 17245044736,
+    "/workspace": 8878772224
+  },
+  "floor": 8589934592,
+  "localPGFullbuildBrowser": "NOT_ADMITTED",
+  "runsNotSummed": true,
+  "sourceBoundaryParities": [
+    {
+      "allEmbeddedPythonBlocksParsed": 39,
+      "originalActiveAuthorPrefixByteExact": true,
+      "parent": "3d2b84fc7493258fdb84fa960a1f8456d2575943",
+      "scope": "source-only byte parity",
+      "validatorSeam": "exact complete old validation tail with only local variable binding changed from RPC data to pure argument",
+      "validatorTailSha256": "a5669b4bb52c54bd80672febbfe00e15eecbf5bed79f095c704aefc0376d619f"
+    },
+    {
+      "caps": "unchanged SQL daily200/perSource50; new cheap scan bound400 from existing two feeds200 each",
+      "meaning": "all original source/body/rights/clock/hash validation and roundRobinContents unchanged; only batch orchestration differs",
+      "parent": "bdceb7fd8c1c8acb9c810a39dc8d9d8c7b1681f1",
+      "scope": "source-only inverse boundary",
+      "unchangedPrefixBytes": 6852,
+      "unchangedPrefixSha256": "ca3cb035dcfe0db595aca646f2811150163964ef6a34c79f9d905e790ee390ed"
+    }
+  ],
+  "sourceWorksetReference": 16777216
+}
