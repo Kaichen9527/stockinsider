@@ -46,3 +46,34 @@ The prerequisite catalog read is enclosed in an actual REPEATABLE READ READ ONLY
 An independent case before source withdrawal uses actual authenticated HTTP claim, the original server-created120second deadline and readonly DB clock observations. It never inserts/backdates a job or overrides clocks. A live bundle succeeds; after the actual deadline the same request must reject, exact job/member/source/provider/preparation rows remain, and repeat claim cannot renew clocks. Original expire must charge without refund; the original operator retry must create exactly one row despite replay, then actual retry claim starts a second independently charged attempt. No provider POST or preparation is permitted. The second-expiry exit and full financial/model path remain NOT_RUN. Original240second parent/570sample supervisor/25minute job limits are unchanged; previous a5 fixture step took34seconds, leaving the necessary original120second wait within the existing budget. Six children+parent are planned, never actual counts. Mandatory raw-source prerequisite remains failed/nonready until an applicable reviewed fixture profile exists.
 
 The same readonly prerequisite observation also runs the existing, unmodified full publication catalog and tail namespace readers, retaining their complete private result and publishing only scope/namespace/catalog hashes through the original canonicalTailMetadata codec. This supplies an actual current-prefix basis for later finite profile review instead of inventing a predecessor hash or reusing candidate36. It executes no GRANT/DDL and does not remove the mandatory nonready failure. The passwordSet boolean in the existing catalog is metadata only; no password/token value is read or published.
+
+## Second real deadline / retry terminal continuation candidate
+
+A separate180second bounded parent follows the original240second parent in the
+same serial entry/container. It accepts only the first parent's actual second
+claim immutable job/execution lineage; no job insert, backdating, clock override,
+replacement prefix or provider call is introduced. Even while the mandatory
+raw-source child/parent remains RED, this distinct terminal-cleanup contract can
+run after the first parent's clients and Next process settle. Missing original
+prefix fails nonzero. Eight total tests are planned, not measured.
+
+The continuation reconnects a real service_role writer and different READONLY
+observer. Its actual RPC uses the original release header and writer lease in
+READ COMMITTED. It observes DB clock_timestamp until the original second
+120second deadline, then expire must atomically retain both charged attempts,
+fail the retry, increment failures2 and exit/release the member. Old input/hash/
+execution/start/deadline/history fields remain exact; only known expiry tables
+can differ. Both old and retry job retry requests must rejectP0001 without any
+partial write/refund/new row; repeat expire must return0 without changing jobs,
+members or session. Original audit/home refresh writes remain visible, never
+mislabelled zero-write. Provider/preparation/publication0 remain.
+
+Actual query ReadyT/E and COMMIT/ROLLBACK ReadyI, complete before/after/final
+snapshots and separate client/backend settlement are retained privately. A new
+finite terminal receipt is explicit allowlisted; it says actualHTTP=false,
+actualServiceRole=true. It must not borrow the first parent's HTTP label. The
+first parent's receipt remains separate. Original supervisor570samples,
+8GiBfloor+workset/RSS limits and job25minute bound are unchanged. No additional
+container, local PG/build or resource cleanup is used. New second-deadline native
+counts/results remain NOT_RUN until this exact new source executes on hostedCI;
+the old ccc first-expiry PASS and mandatory raw-source RED are unchanged.

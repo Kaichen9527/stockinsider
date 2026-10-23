@@ -324,6 +324,16 @@ jobs:
           safe={'actualTapCounts':counts,'tapSha256':hashlib.sha256(source.read_bytes()).hexdigest(),'failures':failures,'receiptObserved':receipt.exists(),'sourceScope':'hosted actual HTTP/PG, synthetic originals only','sourcePrerequisites':prerequisites}
           if receipt.exists():
               data=json.loads(receipt.read_text());safe.update({k:data.get(k) for k in ['sourceCommit','results','pendingQueries','appExit','appPidAbsent','clientsSettled','unexpectedExternalFetchObserved']})
+          terminal=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/retry-terminal-receipt.json')
+          if terminal.exists():
+              if terminal.stat().st_size>4096: raise SystemExit('bounded terminal receipt required')
+              data=json.loads(terminal.read_text())
+              keys={'actualSecond120SecondDeadline','noClockOverride','originalAttemptCharged','retryAttemptCharged','startedAttempts','attemptsRefunded','retryRows','secondRetryRejected','oldRequestRetryRejected','activeSlots','historyRetained','providerInvocations','preparations','actualServiceRole','actualHTTP','wholeStateObserved'}
+              if set(data)!=keys: raise SystemExit('closed terminal receipt required')
+              safe['terminalRetry']=data
+          terminal_cleanup=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/retry-terminal-cleanup.json')
+          if terminal_cleanup.exists():
+              data=json.loads(terminal_cleanup.read_text());safe['terminalRetryCleanup']={k:data.get(k) for k in ['priorBackendsAbsent','clientsSettled','pendingQueries']}
           resource=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http-resource/receipt.json')
           if resource.exists():
               data=json.loads(resource.read_text());safe['resources']={k:data.get(k) for k in ['exit','initialFree','finalFree','floor','nextWorksetReference','sampledNotInstantaneous','sampledNodeAndOwnedPgTreePeakRssBytes','resourceViolation','nodeSha256','ownedPg']};safe['resourceReceiptSha256']=hashlib.sha256(resource.read_bytes()).hexdigest()

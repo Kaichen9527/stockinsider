@@ -27,6 +27,7 @@ const connect = async () => { const c = new Client({ host: path.join(socketParen
 const key = randomBytes(32).toString('hex'), operatorKey = randomBytes(32).toString('hex'), authorKey = randomBytes(32).toString('hex');
 const operator = 'synthetic-worker-operator', author = 'synthetic-worker-author';
 const stage=process.env.VNEXT_HTTP_STAGE??'fresh';if(!['fresh','resume-prior-session-fk'].includes(stage))throw Error('closed_http_recovery_stage_required');
+let terminalRetryPrefix; // Immutable real first-parent prefix; never a fabricated job.
 const trace = []; let pending = 0; const releaseId='a'.repeat(40);
 const functions={vnext_forecast_active_read_v1:{keys:['p_principal'],sql:'SELECT public.vnext_forecast_active_read_v1($1) AS result'},vnext_provider_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_provider_command_v1($1,$2,$3::jsonb) AS result'},read_financial_facts_for_stocks_as_of:{keys:['p_cutoff','p_stock_ids'],sql:'SELECT * FROM public.read_financial_facts_for_stocks_as_of($1::timestamptz,$2::uuid[]) LIMIT 10000',setReturning:true},vnext_target_command_v1:{keys:['p_principal','p_request'],sql:'SELECT public.vnext_target_command_v1($1,$2::jsonb) AS result'},vnext_cached_admission_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_cached_admission_v1($1,$2,$3::jsonb) AS result'},vnext_source_withdrawal_v1:{keys:['p_principal','p_operation','p_request'],sql:'SELECT public.vnext_source_withdrawal_v1($1,$2,$3::jsonb) AS result'},vnext_thesis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_thesis_command_v1($1,$2,$3::jsonb) AS result'},vnext_analysis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_analysis_command_v1($1,$2,$3::jsonb) AS result'},vnext_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_command_v1($1,$2,$3::jsonb) AS result'},vnext_read_v1:{keys:['p_symbol'],sql:'SELECT public.vnext_read_v1($1) AS result'},acquire_production_write_lease:{keys:['p_lease_key','p_owner_id','p_ttl_seconds'],sql:'SELECT public.acquire_production_write_lease($1,$2::uuid,$3::integer) AS result'},release_production_write_lease:{keys:['p_lease_key','p_owner_id'],sql:'SELECT public.release_production_write_lease($1,$2::uuid) AS result'}};
 const bridge = http.createServer(async (req, res) => {
@@ -166,6 +167,7 @@ await test('fresh routine-screen HTTP admits from current original receipts befo
    const retry=await post('vnext-research',{action:'retry',jobId:job.job_id},operatorKey);assert.equal(retry.status,200);const retryId=retry.body.result.jobId;assert.ok(retryId);assert.notEqual(retryId,job.job_id);
    const retryReplay=await post('vnext-research',{action:'retry',jobId:job.job_id},operatorKey);assert.equal(retryReplay.status,200);assert.equal(retryReplay.body.result.jobId,retryId);assert.equal(retryReplay.body.result.replay,true);state=await x.snapshot();assert.equal(state.vnext_jobs_v1.count,2);let retried=state.vnext_jobs_v1.rows.find(row=>row.job_id===retryId);assert.equal(retried.retry_of,job.job_id);assert.equal(retried.attempt_no,1);assert.equal(retried.started_at,null);assert.equal(retried.admission_hash,job.admission_hash);noExpensive(state);
    const secondStart=await post('vnext-research',{action:'claim',jobId:retryId},authorKey);assert.equal(secondStart.status,200);assert.equal(secondStart.body.result.execute,true);assert.notEqual(secondStart.body.result.executionId,executionId);state=await x.snapshot();observedStartedAttempts=2;noExpensive(state);retried=state.vnext_jobs_v1.rows.find(row=>row.job_id===retryId);assert.equal(retried.state,'running');assert.equal(state.vnext_jobs_v1.rows.filter(row=>row.session_date===job.session_date&&row.started_at).length,2);assert.equal(state.vnext_jobs_v1.rows.find(row=>row.job_id===job.job_id).deadline_at,running.deadline_at);
+   terminalRetryPrefix=JSON.parse(JSON.stringify({original:running,retry:retried,executionId:secondStart.body.result.executionId}));
    const forbidden=await post('vnext-research',{action:'retry',jobId:retryId},operatorKey);assert.equal(forbidden.status,409);assert.match(forbidden.body.error,/vnext_retry_forbidden/u);assert.equal((await x.snapshot()).vnext_jobs_v1.count,2);
    const events=trace.slice(start);assert.ok(events.some(event=>event.code==='P0001'&&event.ready==='I'&&event.rollbackSettled));assert.equal(events.some(event=>event.rpc?.includes('provider')||event.action==='prepare'),false);x.save('actual-expiry-retry-states',{wholeInitial:before,wholeRunning:expiredBefore,wholeExpired:expired,wholeRetryRunning:state,events,actualClockProof:clocks.at(-1)});results.push({kind:'real-deadline-expiry',actualServer120SecondDeadline:true,noClockOverride:true,expiredAttemptsRefunded:0,retryRows:1,retryIdempotent:true,totalStartedAttempts:2,providerInvocations:0,noExternalIO:true,secondExpiryExit:'NOT_RUN'});
   });
@@ -197,5 +199,58 @@ await test('fresh routine-screen HTTP admits from current original receipts befo
   if(app&&app.exitCode===null){appStopRequested=true;assert.equal(app.kill('SIGTERM'),true);await new Promise(resolve=>app.once('close',resolve));}if(appLog!==undefined)fs.closeSync(appLog);
   if(bridge.listening)await new Promise(resolve=>bridge.close(resolve));for(const client of [...ownedClients])await client.end();
   x.save('routine-http-receipt',{scope:'actual built Next HTTP/real service_role PG through finite REST facade; synthetic calendar/stock/source only, not formal source/model/research/staging approval',sourceCommit:process.env.GITHUB_SHA||null,results,trace,pendingQueries:pending,appExit:app?.exitCode,appPidAbsent:app?!fs.existsSync('/proc/'+app.pid):null,clientsSettled:ownedClients.size===0,appStopRequested,unexpectedExternalFetchObserved:unexpectedFetch?fs.existsSync(unexpectedFetch):null});await x.finish();assert.equal(pending,0);assert.equal(ownedClients.size,0);if(app){assert.equal(fs.existsSync('/proc/'+app.pid),false);assert.ok(app.exitCode===0||appStopRequested&&app.exitCode===143,'owned Next must terminate cleanly or with its requested SIGTERM status');}
+ }
+});
+
+// Separate bounded parent: the first parent retains its mandatory raw-source
+// positive failure. This continues only the actually started retry, using real
+// service_role RPC and the original writer header/lease, not HTTP/model claims.
+await test('real second deadline atomically exits after exactly one charged retry',{timeout:180000},async()=>{
+ let writer,observer,primary;const events=[],clocks=[];
+ const snapshot=async()=>{await observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');try{
+  assert.equal((await observer.query("SHOW transaction_read_only")).rows[0].transaction_read_only,'on');const all={};
+  for(const {tablename:name} of (await observer.query("SELECT tablename FROM pg_tables WHERE schemaname='public' ORDER BY tablename")).rows){assert.match(name,/^[a-z0-9_]+$/u);const rows=(await observer.query(`SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY to_jsonb(t)::text),'[]'::jsonb) AS rows FROM public.${name} t`)).rows[0].rows;all[name]={rows,count:rows.length,sha256:sha(JSON.stringify(rows))};}
+  await observer.query('COMMIT');return all;
+ }catch(error){await observer.query('ROLLBACK');throw error;}};
+ const rpc=async(principal,action,body,expected)=>{
+  pending++;let open=false,rpcError;try{
+   await writer.query('BEGIN ISOLATION LEVEL READ COMMITTED');open=true;
+   await writer.query("SELECT set_config('request.headers',$1,true)",[JSON.stringify({'x-stockinsider-writer-release':releaseId})]);const owner=randomUUID();
+   assert.equal((await writer.query("SELECT public.acquire_production_write_lease('production-data-plane',$1::uuid,300) AS acquired",[owner])).rows[0].acquired,true);
+   const ready=new Promise(resolve=>writer.connection.once('readyForQuery',m=>resolve(m.status)));
+   const [query,settled]=await Promise.allSettled([writer.query('SELECT public.vnext_command_v1($1,$2,$3::jsonb) AS result',[principal,action,JSON.stringify(body)]),ready]);assert.equal(settled.status,'fulfilled');
+   if(query.status==='rejected'){
+    assert.equal(settled.value,'E');const rollback=new Promise(resolve=>writer.connection.once('readyForQuery',m=>resolve(m.status)));await writer.query('ROLLBACK');open=false;assert.equal(await rollback,'I');events.push({action,code:query.reason.code,messageHash:sha(query.reason.message),ready:'E',rollbackReady:'I',querySettled:true,actualServiceRole:true});
+    if(!expected)throw query.reason;assert.equal(query.reason.code,'P0001');assert.match(query.reason.message,expected);return;
+   }
+   assert.equal(settled.value,'T');assert.equal(expected,undefined,'expected rejection cannot be a successful query');
+   assert.equal((await writer.query("SELECT public.release_production_write_lease('production-data-plane',$1::uuid) AS released",[owner])).rows[0].released,true);
+   const commit=new Promise(resolve=>writer.connection.once('readyForQuery',m=>resolve(m.status)));await writer.query('COMMIT');open=false;assert.equal(await commit,'I');events.push({action,ready:'T',commitReady:'I',querySettled:true,actualServiceRole:true});return query.value.rows[0].result;
+  }catch(error){rpcError=error;throw error;}finally{try{if(open){const settled=new Promise(resolve=>writer.connection.once('readyForQuery',m=>resolve(m.status)));await writer.query('ROLLBACK');assert.equal(await settled,'I');}}catch(error){if(rpcError)rpcError.rollbackError=error;else throw error;}finally{pending--;}}
+ };
+ const noExtra=state=>{assert.equal(state.vnext_jobs_v1.count,2);assert.equal(state.vnext_jobs_v1.rows.filter(j=>j.started_at).length,2);for(const name of ['vnext_preparations_v1','vnext_provider_invocations_v1','vnext_provider_events_v1','vnext_publications_v1','production_write_leases'])assert.equal(state[name].count,0);};
+ try{
+  assert.ok(terminalRetryPrefix,'actual successful first expiry/retry prefix required; no synthetic replacement');
+  writer=await connect();observer=await connect();assert.notEqual(writer.processID,observer.processID);await writer.query('SET ROLE service_role');assert.equal((await writer.query('SELECT current_user AS role')).rows[0].role,'service_role');
+  const before=await snapshot(),{original,retry}=terminalRetryPrefix;noExtra(before);assert.deepEqual(before.vnext_jobs_v1.rows.find(j=>j.job_id===retry.job_id),retry);assert.equal(retry.state,'running');assert.equal(retry.attempt_no,1);assert.equal(retry.retry_of,original.job_id);
+  await observer.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');try{
+   for(let n=0;n<150;n++){const value=(await observer.query('SELECT clock_timestamp()::text AS db_now,deadline_at::text AS deadline_at,(clock_timestamp()>deadline_at) AS elapsed FROM public.vnext_jobs_v1 WHERE job_id=$1',[retry.job_id])).rows[0];clocks.push(value);if(value.elapsed===true)break;await new Promise(resolve=>setTimeout(resolve,1000));}await observer.query('COMMIT');
+  }catch(error){await observer.query('ROLLBACK');throw error;}
+  assert.equal(clocks.at(-1).elapsed,true,'real second server deadline must have elapsed');save('retry-second-real-clock',{original:retry,clocks,noClockOverride:true});assert.deepEqual(await snapshot(),before,'waiting alone must not mutate any table');
+  const expired=await rpc(operator,'expire',{});assert.deepEqual(expired,{expired:1,attemptsRefunded:0});const after=await snapshot();noExtra(after);
+  const terminal=after.vnext_jobs_v1.rows.find(j=>j.job_id===retry.job_id);assert.equal(terminal.state,'failed');assert.equal(terminal.error,'execution_timed_out');assert.ok(terminal.finished_at);
+  const untouched=Object.keys(retry).filter(k=>!['state','error','finished_at'].includes(k));for(const key of untouched)assert.deepEqual(terminal[key],retry[key]);assert.deepEqual(after.vnext_jobs_v1.rows.find(j=>j.job_id===original.job_id),before.vnext_jobs_v1.rows.find(j=>j.job_id===original.job_id));
+  const member=after.vnext_members_v1.rows[0];assert.equal(member.failures,2);assert.equal(member.state,'exited');assert.equal(member.exit_reason,'research_timed_out');assert.equal(member.last_failure_hash,retry.input_hash);assert.equal(after.vnext_members_v1.rows.filter(m=>m.state!=='exited').length,0);
+  const changed=Object.keys(before).filter(name=>JSON.stringify(before[name].rows)!==JSON.stringify(after[name].rows));assert.ok(changed.every(name=>['vnext_jobs_v1','vnext_members_v1','vnext_audit_v1','vnext_home_v1'].includes(name)),'finite terminal expiry table delta only');
+  const memberBefore=before.vnext_members_v1.rows[0];for(const key of Object.keys(memberBefore).filter(k=>!['failures','last_failure_hash','state','exit_reason','updated_at'].includes(k)))assert.deepEqual(member[key],memberBefore[key]);
+  save('retry-second-expiry-whole-state',{before,after,changed,events});
+  for(const jobId of [original.job_id,retry.job_id]){const stable=await snapshot();await rpc(operator,'retry',{jobId},/vnext_retry_forbidden/u);assert.deepEqual(await snapshot(),stable,'rejected second retry has no partial write or refund');}
+  const repeated=await rpc(operator,'expire',{});assert.deepEqual(repeated,{expired:0,attemptsRefunded:0});const final=await snapshot();noExtra(final);for(const table of ['vnext_jobs_v1','vnext_members_v1','vnext_sessions_v1'])assert.deepEqual(final[table].rows,after[table].rows);
+  save('retry-terminal-whole-final',{final,events});save('retry-terminal-receipt',{actualSecond120SecondDeadline:true,noClockOverride:true,originalAttemptCharged:true,retryAttemptCharged:true,startedAttempts:2,attemptsRefunded:0,retryRows:1,secondRetryRejected:true,oldRequestRetryRejected:true,activeSlots:0,historyRetained:true,providerInvocations:0,preparations:0,actualServiceRole:true,actualHTTP:false,wholeStateObserved:true});
+ }catch(error){primary=error;console.log('VNEXT_ROUTINE_FAILURE_SAFE '+JSON.stringify({stage:'second real deadline and once-only retry',code:/^[A-Z0-9_]{1,40}$/u.test(error.code||'')?error.code:'UNKNOWN',actual:null,expected:null,messageHash:sha(String(error.message)),tokens:(String(error.message).match(/vnext_[a-z_]{1,120}/gu)||[]).slice(0,3)}));throw error;
+ }finally{
+  save('retry-terminal-query-events',events);const pids=[...ownedClients].map(c=>c.processID);
+  try{for(const c of [...ownedClients])await c.end();const check=await connect();try{assert.deepEqual((await check.query('SELECT pid FROM pg_stat_activity WHERE pid=ANY($1::int[])',[pids])).rows,[]);}finally{await check.end();}assert.equal(ownedClients.size,0);assert.equal(pending,0);save('retry-terminal-cleanup',{pids,priorBackendsAbsent:true,clientsSettled:true,pendingQueries:0});}
+  catch(error){if(primary)primary.cleanupError=error;else throw error;}
  }
 });
