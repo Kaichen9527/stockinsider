@@ -1,4 +1,5 @@
 import {inputHash} from './policy.ts';
+import {isDeepStrictEqual} from 'node:util';
 import {assertWorkerJsonCodec} from './worker-output.ts';
 import type {VnextIdentity} from './auth.ts';
 import type {Evidence} from './research.ts';
@@ -77,7 +78,7 @@ export function validateCurrentActionTerms(value:unknown):CurrentActionTerms{
   previous=identity;seen.add(`${raw.event.snapshotId}:${raw.event.ordinal}`);receipts.push(raw as ActionReceipt);
  }
  const expected=receipts.flatMap(r=>{const context=originals.find(e=>object(e)&&e.id===`action:${r.source.policyId}:originalBody`) as Row;return actionTermEvidence(r,String((context.value as Row).statement));});
- if(inputHash(value.evidence)!==inputHash(expected))throw Error('vnext_action_current_evidence');
+ if(!isDeepStrictEqual(value.evidence,expected))throw Error('vnext_action_current_evidence');
  return structuredClone(value) as CurrentActionTerms;
 }
 export async function readCurrentActionTerms(client:{rpc:(name:string,args:Row)=>PromiseLike<{data:unknown;error:unknown}>},identity:VnextIdentity,jobId:string,executionId:string):Promise<CurrentActionTerms>{

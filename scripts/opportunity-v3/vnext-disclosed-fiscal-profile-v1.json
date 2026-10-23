@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-disclosed-fiscal-source-profile-v1",
   "migration": "migrations/20261023_vnext_disclosed_fiscal_forecast_v1.sql",
-  "migrationSha256": "2c305d7e7cacc16ad90e77b8092d4857b1722bb413590d9fa8e4893e8e2c95d3",
+  "migrationSha256": "74c0031ed29df2a999cb031eecfb39511f7b1a66328794f1886272fb9193aa4d",
   "scope": "source-derived predecessor/successor only; actual grammar/permission/catalog/COMMIT NOT_RUN; OIDs never invented",
   "nativeVerified": false,
   "nativeOids": null,
@@ -97,8 +97,8 @@
       "name": "vnext_disclosed_fiscal_internal_v1",
       "signature": "public.vnext_disclosed_fiscal_internal_v1(text,date)",
       "tag": "fiscal_parser",
-      "bodySha256": "599309280a61005ce0e21f51bf2823afaf39956d1fba68a1eaf73086e6decf6e",
-      "bytes": 6264,
+      "bodySha256": "060ba53f294859a26d17285a2aa7a827396a3053d448bfd22467e41f32d3049a",
+      "bytes": 6192,
       "owner": "opportunity_v3_rpc_owner",
       "private": true
     },

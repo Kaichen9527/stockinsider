@@ -6,7 +6,7 @@ import {isDeepStrictEqual} from 'node:util';
 import {assertWorkerJsonCodec} from './worker-output.ts';
 import type {Evidence} from './research.ts';
 type Row=Record<string,unknown>;
-const labels={profile:'數值預測口徑',symbol:'股票代號',yearStartMonth:'會計年度起始月',yearLabel:'財年標示',kind:'預測期間類型',shareBasis:'預測股數基礎',shares:'預測固定股數',sharesStart:'股數假設開始日期',sharesEnd:'股數假設結束日期',sharesAssumption:'期間股數假設',incomeUnit:'預估淨利單位',incomeScope:'預估淨利歸屬'} as const;
+const labels={symbol:'股票代號',yearStartMonth:'會計年度起始月',yearLabel:'財年標示',kind:'預測期間類型',shareBasis:'預測股數基礎',shares:'預測固定股數',sharesStart:'股數假設開始日期',sharesEnd:'股數假設結束日期',sharesAssumption:'期間股數假設',incomeUnit:'預估淨利單位',incomeScope:'預估淨利歸屬'} as const;
 type Span={startCp:number;endCp:number;quote:string};
 export type FiscalForecastOriginal={schemaVersion:'vnext-disclosed-fiscal-forecast-v1';symbol:string;kind:'annual'|'four_quarters';yearStartMonth:number;yearLabel:'starting_year';shareBasis:'basic'|'diluted';shares:string;sharesStart:string;sharesEnd:string;sharesAssumption:'source_disclosed_fixed_forecast_denominator';rows:{year:number;quarter:number|null;start:string;end:string;commonIncome:string}[];spans:Record<string,Span>};
 const fail=(s:string):never=>{throw Error('vnext_fiscal_'+s);};
@@ -33,7 +33,7 @@ export function extractDisclosedFiscalForecast(body:string):FiscalForecastOrigin
   }
   offset+=[...line].length+1;
  }
- if(Object.keys(values).length!==Object.keys(labels).length||values.profile!=='財年固定股數v1'||!/^\d{4}$/u.test(values.symbol)||!/^([1-9]|1[0-2])$/u.test(values.yearStartMonth)||values.yearLabel!=='起始年'||!['全年度','未來四季'].includes(values.kind)||!['基本','稀釋'].includes(values.shareBasis)||!/^([1-9]\d{0,11})$/u.test(values.shares)||!civil(values.sharesStart)||!civil(values.sharesEnd)||values.sharesStart>values.sharesEnd||values.sharesAssumption!=='明示預測期間固定股數'||values.incomeUnit!=='TWD'||values.incomeScope!=='普通股股東')fail('explicit_calendar_share_basis_missing');
+ if(Object.keys(values).length!==Object.keys(labels).length||!/^\d{4}$/u.test(values.symbol)||!/^([1-9]|1[0-2])$/u.test(values.yearStartMonth)||values.yearLabel!=='起始年'||!['全年度','未來四季'].includes(values.kind)||!['基本','稀釋'].includes(values.shareBasis)||!/^([1-9]\d{0,11})$/u.test(values.shares)||!civil(values.sharesStart)||!civil(values.sharesEnd)||values.sharesStart>values.sharesEnd||values.sharesAssumption!=='明示預測期間固定股數'||values.incomeUnit!=='TWD'||values.incomeScope!=='普通股股東')fail('explicit_calendar_share_basis_missing');
  const kind=values.kind==='全年度'?'annual':'four_quarters',month=Number(values.yearStartMonth);
  if(rows.length!==(kind==='annual'?1:4))fail('complete_period_vector_required');
  for(const [i,r]of rows.entries()){

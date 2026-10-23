@@ -16,6 +16,9 @@ test('actual original producer binds calendar/fixed shares/four exact common-inc
  const p=extractDisclosedFiscalForecast(body),c=calculateDisclosedFiscalForecast(p,at);assert.equal(p.shares,'1000');assert.equal(c.value,5);assert.equal(c.numeratorCommonIncome,'5000');assert.equal(c.key,'next_four_quarter_eps');assert.equal(c.period,'2027-Q1/2027-Q4');assert.equal(c.reported,false);
  for(const span of Object.values(p.spans))assert.equal([...body].slice(span.startCp,span.endCp).join(''),span.quote);
 });
+test('receipt adapter version is not an artificial required issuer-disclosure marker',()=>{
+ const actualFields=body.replace('數值預測口徑: 財年固定股數v1\n','');const p=extractDisclosedFiscalForecast(actualFields);assert.equal(calculateDisclosedFiscalForecast(p,at).value,5);assert.equal('profile' in p.spans,false);assert.doesNotThrow(()=>validateCurrentForecasts(current(actualFields)));
+});
 test('annual forecast is an assumption with explicit full year; never reported annual EPS',()=>{
  const annual=header.replace('未來四季','全年度')+'\n預估列: 2027|A|2027-01-01|2027-12-31|10000';const c=calculateDisclosedFiscalForecast(extractDisclosedFiscalForecast(annual),at);assert.equal(c.value,10);assert.equal(c.key,'source_annual_forecast_eps');assert.equal(c.period,'2027-01-01/2027-12-31');assert.equal(current(annual).evidence[0].kind,'assumption');
 });

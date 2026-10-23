@@ -79,3 +79,8 @@ test('actual author/review normalizers receive full original context and finite 
  assert.throws(()=>normalizeWorkerAuthor({...raw,claims:[{...claim,numeric:{...claim.numeric,unit:'TWD_per_share'}}]},{model:'synthetic',modelVersion:'synthetic'},inputHash(f.evidence),f.evidence),/invalid/);
  const drift=structuredClone(f);(drift.evidence[5].value as {statement:string}).statement+='!';assert.throws(()=>validateCurrentActionTerms(drift),/body_hash/);
 });
+test('complete evidence rejects metadata keys intentionally omitted by material hashes',()=>{
+ for(const key of ['fetchedAt','collectedAt','retrievedAt','evaluatedAt'])for(const index of [0,5]){
+  const f=fixture(),before=inputHash(f.evidence);Object.assign(f.evidence[index],{[key]:'UNEXPECTED_METADATA'});assert.equal(inputHash(f.evidence),before);assert.throws(()=>validateCurrentActionTerms(f),/current_evidence/);
+ }
+});

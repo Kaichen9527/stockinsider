@@ -4,7 +4,7 @@ This implements the existing annual/forward-four-quarter source requirement. It
 does not extend the original financial fact enum, relabel TTM/NTM, infer shares
 from historical EPS, or approve model/semantic/production execution.
 
-The bounded adapter accepts only a complete original body with the twelve exact
+The adapter version belongs to the receipt, not a required software marker in an issuer document. Unknown surrounding prose is retained in full and cannot supply numeric operands. The bounded adapter accepts only a complete original body with the eleven exact
 Chinese labels in `disclosed-fiscal-forecast.ts`, plus one annual or four explicit
 common-shareholder-income rows. A row identifies starting fiscal year, quarter
 (`A` for annual), exact start/end, and common-income amount in TWD. Calendar
