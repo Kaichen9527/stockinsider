@@ -82,7 +82,7 @@ export async function preparationHttpFixture(){
   acquire_production_write_lease:{keys:['p_lease_key','p_owner_id','p_ttl_seconds'],sql:'SELECT public.acquire_production_write_lease($1,$2::uuid,$3::integer) AS result'},release_production_write_lease:{keys:['p_lease_key','p_owner_id'],sql:'SELECT public.release_production_write_lease($1,$2::uuid) AS result'},
  };
  let claim,beforeLoss,committed,prepareStartedAt,forecastSource;const bridge=http.createServer(async(req,res)=>{
-  sockets.add(req.socket);req.socket.once('close',()=>sockets.delete(req.socket));const responseStartBytes=req.socket.bytesWritten;
+  sockets.add(req.socket);req.socket.once('close',()=>sockets.delete(req.socket));const responseStartBytes=req.socket.bytesWritten;let preparationPhase='request';
   try{
    if(req.headers.authorization!=='Bearer '+keys.bridge){res.writeHead(403).end();return;}
    if(req.headers['x-stockinsider-writer-release']!==releaseId)throw Error('owned_release_header_required');
@@ -104,6 +104,7 @@ export async function preparationHttpFixture(){
     if(name==='vnext_command_v1'&&body.p_command==='prepare'){
      const stable=await x.snapshot(),negative=[];
      for(const kind of ['omitted','forged','future']){
+      preparationPhase='negative_'+kind;
       const mutant=structuredClone(body.p_request.evidence);
       if(kind==='omitted'){delete mutant.actionTermsReceipts;delete mutant.actionTermsAsOf;delete mutant.actionTermsGaps;}
       if(kind==='forged')mutant.actionTermsReceipts=[{validated:true}];
@@ -114,11 +115,13 @@ export async function preparationHttpFixture(){
      }
      save('actual-action-preparation-negatives',{negative,stable,scope:'actual service RPC before the one successful preparation; original query/ReadyE/RollbackI trace; no model or second prepare success'});
     }
+    preparationPhase=name==='vnext_command_v1'&&body.p_command==='prepare'?'prepare_commit':'rpc';
     result=(await query(def.sql,def.keys.map(k=>k==='p_request'?JSON.stringify(body[k]):body[k]),{readonly:false})).rows[0].result;
     trace.push({kind:'rpc',rpc:name,action:body.p_command||null,committed:true,ready:'I'});
     if(name==='vnext_command_v1'&&body.p_command==='prepare'){
      // The COMMIT/ReadyI above settled. Independent RRRO proves the real row
      // before the actual bridge socket is destroyed; no response bytes sent.
+     preparationPhase='prepare_observer';
      committed=await x.snapshot();const preparation=committed.vnext_preparations_v1.rows.find(r=>r.job_id===claim.jobId);assert.ok(preparation);assert.equal(preparation.input_hash,body.p_request.inputHash);assert.equal(inputHash(preparation.evidence),preparation.input_hash);assert.deepEqual(preparation.evidence,body.p_request.evidence);
      const job=committed.vnext_jobs_v1.rows.find(r=>r.job_id===claim.jobId),member=committed.vnext_members_v1.rows.find(r=>r.symbol==='2408');assert.equal(job.execution_id,claim.executionId);assert.equal(job.deadline_at,claim.deadline);assert.equal(job.input_hash,preparation.input_hash);assert.equal(member.input_hash,preparation.input_hash);assert.equal(job.state,'running');assert.equal(committed.vnext_provider_invocations_v1.count,0);
      const allowed=new Set(['vnext_preparations_v1','vnext_jobs_v1','vnext_members_v1','vnext_home_v1','vnext_audit_v1']);for(const table of Object.keys(beforeLoss))if(!allowed.has(table))assert.deepEqual(committed[table],beforeLoss[table],table);assert.equal(committed.vnext_preparations_v1.count,beforeLoss.vnext_preparations_v1.count+1);assert.equal(committed.vnext_audit_v1.count,beforeLoss.vnext_audit_v1.count+1);
@@ -144,7 +147,11 @@ export async function preparationHttpFixture(){
     }
    }
    res.writeHead(200,{'content-type':'application/json'}).end(JSON.stringify(result));
-  }catch(error){trace.push({kind:'bridge-error',code:error.code||null,message:error.message});x.save('bridge-error-'+trace.length,{name:error.name,message:error.message,stack:error.stack});if(!res.headersSent&&!res.destroyed)res.writeHead(400,{'content-type':'application/json'}).end(JSON.stringify({message:error.message,code:error.code||'P0001'}));}
+  }catch(error){
+   const primitive=v=>v===null||typeof v==='boolean'||typeof v==='number'?v:typeof v==='string'&&/^vnext_[a-z_]{1,120}$/u.test(v)?v:'REDACTED';
+   const safe={phase:preparationPhase,code:/^[A-Z0-9_]{1,40}$/u.test(error.code||'')?error.code:'UNKNOWN',messageHash:hash(String(error.message)),tokens:(String(error.message).match(/vnext_[a-z_]{1,120}/gu)||[]).slice(0,5),actual:primitive(error.actual),expected:primitive(error.expected),settlements:trace.filter(e=>e.kind==='database-settlement').slice(-6).map(e=>({statementSha256:e.statementSha256,queryOutcome:e.queryOutcome,ready:e.ready,...(e.code?{code:e.code}:{})}))};
+   console.log('PREPARATION_BRIDGE_FAILURE_SAFE '+JSON.stringify(safe));
+   trace.push({kind:'bridge-error',code:error.code||null,message:error.message});x.save('bridge-error-'+trace.length,{name:error.name,message:error.message,stack:error.stack});if(!res.headersSent&&!res.destroyed)res.writeHead(400,{'content-type':'application/json'}).end(JSON.stringify({message:error.message,code:error.code||'P0001'}));}
  });
  let stockId,runner,documentReceipt;
  async function install(){

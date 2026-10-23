@@ -202,6 +202,7 @@ jobs:
           fi
           test "$test_status" = 0
       - name: Actual all-active thesis, revoked source rights and charged retry (synthetic provider)
+        id: current_thesis
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-03
           VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-03
@@ -227,6 +228,7 @@ jobs:
           python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/thesis.tap.private.log /tmp/stockinsider-vnext-ci/thesis.tap
           test "$test_status" = 0
       - name: Actual current-receipt admission, official calendar and strict EPS (synthetic provider)
+        id: current_cached
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-04
           VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-04
@@ -523,6 +525,8 @@ jobs:
           for p in [os.getcwd(),'/tmp']:
               v=os.statvfs(p)
               if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
+          if len(observations)>64: raise SystemExit('bounded owned process summary required')
+          print('::notice title=Preparation actual cleanup receipt::'+json.dumps({'pgRunning':state['Running'],'pgPid':state['Pid'],'pgExit':state['ExitCode'],'shutdownObserved':True,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'ownedProcessObservations':observations,'unsettled':unsettled,'zombieIsNotAbsent':True,'clusterRetained':True,'wholeSocketRootAbsence':'NOT_CHECKED'},separators=(',',':')))
           PYCODE
             then original_exit=1; fi
             exit "$original_exit"
@@ -569,6 +573,10 @@ jobs:
           (root/'forecast-current-summary.json').write_text(json.dumps(value,indent=2)+'\n')
           print('::notice title=Forecast current numeric acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'observedWitnesses':notices,'actualTapCounts':value['actualTapCounts'],'tapSha256':value['tapSha256'],'privateRowsPublished':False},separators=(',',':')))
           for line in raw.read_text().splitlines():
+              if line.startswith('PREPARATION_BRIDGE_FAILURE_SAFE '):
+                  diagnostic=json.loads(line[len('PREPARATION_BRIDGE_FAILURE_SAFE '):])
+                  if set(diagnostic)!=set('phase code messageHash tokens actual expected settlements'.split()) or len(diagnostic['settlements'])>6: raise SystemExit('closed preparation bridge diagnostic required')
+                  print('::error title=Preparation actual bridge diagnostic::'+json.dumps(diagnostic,separators=(',',':')))
               if line.startswith('ACTION_TERMS_CURRENT_SAFE '):
                   action=json.loads(line[len('ACTION_TERMS_CURRENT_SAFE '):])
                   if set(action)!=set('receipts actualSourceAppend currentTerms originalSpans withdrawalCommitted deniedAfterWithdrawal jobsChanged providerInvocations actualExternalSource actualPublishedTargetRebase'.split()) or any(type(v) not in [bool,int] for v in action.values()): raise SystemExit('closed action witness required')
@@ -614,6 +622,8 @@ jobs:
           print('::notice title=Forecast private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
           PYCODE
       - name: Fresh original-bound business components via distinct review/current public projection (synthetic metadata)
+        id: current_business
+        if: ${{ !cancelled() && steps.current_build.outcome == 'success' }}
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-13
           VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-13
@@ -778,6 +788,8 @@ jobs:
           retention-days: 7
 
       - name: Same-build desktop and mobile browser over current-run PostgreSQL snapshots
+        id: current_browser
+        if: ${{ !cancelled() && steps.current_build.outcome == 'success' && steps.current_thesis.outcome == 'success' && steps.current_cached.outcome == 'success' && steps.current_business.outcome == 'success' }}
         run: |
           test -x /usr/bin/google-chrome || { echo '::error title=Browser NOT_READY::required installed /usr/bin/google-chrome unavailable; no browser install attempted'; exit 1; }
           export VNEXT_BROWSER_BUILD_SOURCE_SHA="$(git rev-parse HEAD)"
