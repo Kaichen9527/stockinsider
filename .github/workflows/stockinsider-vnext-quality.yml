@@ -464,7 +464,7 @@ jobs:
           import hashlib,json,pathlib,re,subprocess
           root=pathlib.Path('/tmp/stockinsider-vnext-ci');raw=root/'preparation-http.tap.private.log'
           if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded forecast acceptance log required')
-          expected={'FORECAST_CURRENT_SAFE ':{'evidenceCount','receiptCount','numericSourceOnly','annualOrForward4q','actualOriginalAppend','syntheticSource','actualExternalModel'},'FORECAST_FROZEN_REVOKED_SAFE ':{'actualReservedFrozenInput','forecastItems','providerPosts','rightsRevocationCommitted','originalRowsRetained','sourceCurrentFalse','noSecondClaimPrepareOrReserve'}}
+          expected={'FORECAST_CURRENT_SAFE ':{'evidenceCount','receiptCount','numericSourceOnly','annualOrForward4q','actualOriginalAppend','syntheticSource','actualExternalModel'},'FORECAST_FROZEN_REVOKED_SAFE ':{'actualReservedFrozenInput','forecastItems','providerPosts','rightsRevocationCommitted','originalRowsRetained','sourceCurrentFalse','noSecondClaimPrepareOrReserve','directRejectedMutants'}}
           notices=[]
           for line in raw.read_text().splitlines():
               for prefix,keys in expected.items():
@@ -474,11 +474,43 @@ jobs:
                       notices.append({'kind':prefix.strip(),'value':value})
           paths=['migrations/20261023_vnext_forecast_sources_v1.sql','scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json','scripts/vnext-forecast-native-fixture.mjs','scripts/vnext-preparation-http-fixture.mjs','scripts/vnext-preparation-http.test.mjs','web/src/lib/vnext/forecast-current.ts','web/src/lib/vnext/preparation-reconciliation.ts','web/src/lib/vnext/store.ts']
           inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
-          value={'sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'observedWitnesses':notices,'tapSha256':hashlib.sha256((root/'preparation-http.tap').read_bytes()).hexdigest(),'scope':'hosted genuine PostgreSQL/HTTP assertions if reached; synthetic source metadata and original append APIs, actual journal reservation only, zero external provider calls; absent witness means NOT_REACHED'}
+          value={'sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'observedWitnesses':notices,'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',(root/'preparation-http.tap').read_bytes(),re.M)},'tapSha256':hashlib.sha256((root/'preparation-http.tap').read_bytes()).hexdigest(),'scope':'hosted genuine PostgreSQL/HTTP assertions if reached; synthetic source metadata and original append APIs, actual journal reservation only, zero external provider calls; absent witness means NOT_REACHED'}
           (root/'forecast-current-summary.json').write_text(json.dumps(value,indent=2)+'\n')
-          print('::notice title=Forecast current numeric acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'observedWitnesses':notices,'tapSha256':value['tapSha256'],'privateRowsPublished':False},separators=(',',':')))
+          print('::notice title=Forecast current numeric acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'observedWitnesses':notices,'actualTapCounts':value['actualTapCounts'],'tapSha256':value['tapSha256'],'privateRowsPublished':False},separators=(',',':')))
           PYCODE
           test "$test_status" = 0
+      - name: Hash bounded forecast preparation raw receipts without publishing contents
+        if: always()
+        run: |
+          python3 - <<'PYCODE'
+          import hashlib,json,os,pathlib,re,stat
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci');paths=[]
+          for name in ['preparation-running-http','preparation-resource']:
+              directory=root/name
+              if directory.exists():
+                  if directory.is_symlink() or not directory.is_dir(): raise SystemExit('owned forecast raw directory required')
+                  paths.extend(directory.glob('*.json'));paths.extend(directory.glob('*.log'))
+          for name in ['preparation-http.tap.private.log','preparation-pg-stop.private.log','preparation-pg-stop.private.json','preparation-pg-server.private.log','preparation-cleanup.private.json']:
+              p=root/name
+              if p.exists(): paths.append(p)
+          if len(paths)>256: raise SystemExit('bounded forecast inventory required')
+          rows=[];total=0
+          for p in sorted(paths):
+              before=p.lstat();total+=before.st_size
+              if not stat.S_ISREG(before.st_mode) or before.st_uid!=os.getuid() or before.st_nlink!=1 or before.st_size>134217728 or total>1073741824: raise SystemExit('bounded stable owned forecast evidence required')
+              relative=str(p.relative_to(root))
+              if not re.fullmatch('[A-Za-z0-9._/-]{1,200}',relative): raise SystemExit('fixed safe forecast evidence name required')
+              with p.open('rb') as stream:
+                  opened=os.fstat(stream.fileno())
+                  if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino): raise SystemExit('forecast evidence open changed')
+                  digest=hashlib.file_digest(stream,'sha256').hexdigest();ended=os.fstat(stream.fileno())
+              after=p.lstat();identity=lambda v:(v.st_dev,v.st_ino,v.st_size,v.st_mtime_ns,v.st_ctime_ns)
+              if identity(before)!=identity(ended) or identity(before)!=identity(after): raise SystemExit('forecast evidence changed')
+              rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
+          value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only hosted owned preparation/forecast raw inventory; contents private, not independently retrieved; hosted runner storage ephemeral'}
+          out=root/'forecast-current-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Forecast private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
+          PYCODE
       - name: Fresh original-bound business components via distinct review/current public projection (synthetic metadata)
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-13
@@ -732,6 +764,7 @@ jobs:
           path: |
             /tmp/stockinsider-vnext-ci/*.tap
             /tmp/stockinsider-vnext-ci/forecast-current-summary.json
+            /tmp/stockinsider-vnext-ci/forecast-current-private-inventory.json
           if-no-files-found: warn
           retention-days: 7
 
