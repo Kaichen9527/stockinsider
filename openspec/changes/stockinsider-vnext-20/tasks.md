@@ -13,6 +13,8 @@
 - [x] Implement bounded permitted-content extraction and frozen market AI result integration; source008cc3b, source11/realPG6 PASS. Active HTTP screen-context42702 is a separate retained failure, not whole-slice acceptance.
 - [x] Weekly substantive thesis/deep-score orchestration, once-charged settled-failure dispatcher, permanent stock-article source-rights closure and screen SQL repair implemented; exact VM subsets and preserved new terminal-test RED are listed in CURRENT-DELIVERY.md. No full acceptance inferred.
 - [x] Original adjusted-price MA20/MA60/relative-market and three-month operations cache adapters implemented and focused-tested; actual full240-price qualification positive remains unverified, missing values stay null.
+- [x] Semantic numeric-one misclassification safety repair: TS and actual retained SQL5PASS; same-head hosted fresh current-public reclassification/raw immutability/dedup/directRPC rejection on b354. Positive semantic producer is a separate pending requirement.
+- [x] Bounded existing TWSE snapshot transport receipts: sourced9a7340, source10PASS/types/lint, actual retainedPG6PASS; same published0412659 ordinaryCI fresh receipt step/fullbuild success. Synthetic Responses are not real acquisition; snapshot coverage remains unknown/volume null.
 - [ ] Complete trusted calendar/foreign/FX/margin/operations/comparable-volume/catalyst/target/contra producers and rights-qualified real source ingestion.
 - [ ] Actual two-session postclose atomic swap, remaining race/legacy/ACL/lease/revocation matrices; never change real clock/guard to simulate acceptance.
 - [ ] Contabo application/database/schema/queue/storage isolation and formal-source/model/semantic research acceptance.

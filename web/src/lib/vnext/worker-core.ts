@@ -1,3 +1,4 @@
+import {catalystAnnotation} from './semantic-criteria.ts';
 import type { VnextIdentity } from './auth.ts';
 import type { Artifact, Evidence, Review } from './research.ts';
 import type { ResearchProvider, ProviderOutcome, ProviderRequest } from './provider.ts';
@@ -89,7 +90,8 @@ export async function runResearchWorker(jobId: string, deps: WorkerDependencies,
     // Exact finite interface and the existing validators run before receipt.
     // Invalid completed output is a settled, consumed failure, never resampling.
     try {
-     const frozen=JSON.parse((record.frozen_request as ProviderRequest).input) as { inputHash:string; evidence:{ evidence:Evidence[] }; authorArtifact?:Artifact };
+     const frozen=JSON.parse((record.frozen_request as ProviderRequest).input) as {symbol?:string;inputHash:string;evidence:{cutoff?:string;evidence:Evidence[]};authorArtifact?:Artifact};
+     if(binding.promptVersion==='vnext-research-worker-v3')assertSemanticScope(binding.identity.role==='author'?outcome.output:frozen.authorArtifact,frozen);
      const evidence=frozen.evidence.evidence;
      if(binding.identity.role==='author') normalizeWorkerAuthor(outcome.output,binding,frozen.inputHash,evidence);
      else normalizeWorkerReview(outcome.output,binding.modelVersion,frozen.authorArtifact!,evidence);
@@ -101,6 +103,7 @@ export async function runResearchWorker(jobId: string, deps: WorkerDependencies,
    if(record.state!=='completed') return uncertain('provider_pending');
   }
   if(!allowReceipt || Date.parse(String(record.deadline_at))<=Date.now()) return {status:'settled_after_execution_window',published:false,reinvoke:false};
+  if(binding.promptVersion==='vnext-research-worker-v3'){const frozen=JSON.parse((record.frozen_request as ProviderRequest).input);assertSemanticScope(binding.identity.role==='author'?record.normalized_output:frozen.authorArtifact,frozen);}
   if(record.normalized_output==null) throw new Error('vnext_worker_normalized_output_missing');
   try {
    if(binding.identity.role==='author') await deps.authorReceipt(binding.identity,{...body,inputHash:record.input_hash,artifact:record.normalized_output});
@@ -108,4 +111,10 @@ export async function runResearchWorker(jobId: string, deps: WorkerDependencies,
    return {status:'received'};
   } catch { return uncertain(binding.identity.role==='author'?'author_receipt':'review_receipt'); }
  }
+}
+
+function assertSemanticScope(value:unknown,frozen:{symbol?:string;evidence:{cutoff?:string;evidence:Evidence[]}}){
+ if(typeof frozen.symbol!=='string'||!/^\d{4}$/u.test(frozen.symbol)||typeof frozen.evidence.cutoff!=='string'||!Number.isFinite(Date.parse(frozen.evidence.cutoff)))throw Error('vnext_worker_semantic_server_scope_missing');
+ const artifact=value as {claims?:Artifact['claims']};if(!Array.isArray(artifact?.claims))throw Error('vnext_worker_semantic_claims_missing');
+ for(const claim of artifact.claims)if(claim.semantic!==undefined)catalystAnnotation(claim,frozen.evidence.evidence,frozen.evidence.cutoff,frozen.symbol);
 }

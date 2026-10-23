@@ -1,18 +1,19 @@
 import { createHash } from 'node:crypto';
 import { vnextEnabled } from './policy.ts';
 import { openAiResponsesProvider, providerCredentialIdentity } from './provider.ts';
-import { AUTHOR_INSTRUCTIONS, REVIEWER_INSTRUCTIONS, WORKER_PROMPT_VERSION } from './worker-prompts.ts';
+import { AUTHOR_INSTRUCTIONS, REVIEWER_INSTRUCTIONS,serverWorkerPromptProfile } from './worker-prompts.ts';
 import { runResearchWorker, type WorkerDependencies, type WorkerBinding, type WorkerRow } from './worker-core.ts';
 function serverBindings() {
+ const profile=serverWorkerPromptProfile();
  const key=process.env.OPENAI_API_KEY;
  if(!key) throw new Error('vnext_provider_credential_missing');
  const configured = (role: 'author'|'reviewer',instructions:string):WorkerBinding => {
   const prefix=`STOCKINSIDER_VNEXT_${role.toUpperCase()}`;
   const principal=process.env[`${prefix}_PRINCIPAL`]; const model=process.env[`${prefix}_MODEL`]; const version=process.env[`${prefix}_MODEL_VERSION`];
   if(!principal || !model || !version || !process.env[`${prefix}_KEY`] || !/^[A-Za-z0-9_.:/-]{1,160}$/u.test(model) || !/^[A-Za-z0-9_.:/-]{1,160}$/u.test(version)) throw new Error(`vnext_${role}_provider_binding_missing`);
-  return {identity:{principal,role},provider:'openai-responses',model,modelVersion:version,credentialIdentity:providerCredentialIdentity(key),instructions,promptVersion:WORKER_PROMPT_VERSION};
+  return {identity:{principal,role},provider:'openai-responses',model,modelVersion:version,credentialIdentity:providerCredentialIdentity(key),instructions,promptVersion:profile.version};
  };
- return {key,author:configured('author',AUTHOR_INSTRUCTIONS),reviewer:configured('reviewer',REVIEWER_INSTRUCTIONS)};
+ return {key,author:configured('author',profile.author),reviewer:configured('reviewer',profile.reviewer)};
 }
 /** Only jobId and an explicit recovery operation cross the HTTP seam. Provider,
  * model, instructions and principals are server config + enabled DB bindings. */

@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "vnext-catalyst-criteria-source-profile-v1",
+  "migration": "migrations/20261022_vnext_catalyst_criteria_v1.sql",
+  "migrationSha256": "35ededaf19661f62337654863cdfe6746dff5956780da9373d55cc19179145d7",
+  "nativeVerified": false,
+  "nativeOids": null,
+  "catalogMetadata": null,
+  "scope": "SOURCE CANDIDATE: structural model-reviewed official report interpretation, never formal semantic truth",
+  "promptConstraint": {
+    "relation": "public.vnext_provider_bindings_v1",
+    "name": "vnext_provider_bindings_v1_prompt_version_check",
+    "predecessorDefinition": "CHECK ((prompt_version = ANY (ARRAY['vnext-research-worker-v1'::text, 'vnext-research-worker-v2'::text])))",
+    "successorDefinition": "CHECK ((prompt_version = ANY (ARRAY['vnext-research-worker-v1'::text, 'vnext-research-worker-v2'::text, 'vnext-research-worker-v3'::text])))",
+    "allowedMetadataDelta": [
+      "oid",
+      "conbin"
+    ],
+    "bindingRowsChanged": false
+  },
+  "promptHashes": {
+    "AUTHOR": "e9fd13b01b3d961cd612f1ef44136f07b7538ebcaae6142f2cedf21d96877803",
+    "REVIEWER": "9c5d0ccd2ef984d9924bf92eb59a70a3ba1bccdefb3d1086b783570d67f96f69"
+  },
+  "routines": [
+    {
+      "signature": "public.vnext_thesis_command_v1(text,text,jsonb)",
+      "fragments": [
+        [
+          "'review',(SELECT reviewer_result FROM public.vnext_jobs_v1 WHERE job_id=pub.job_id))",
+          "'review',(SELECT reviewer_result FROM public.vnext_jobs_v1 WHERE job_id=pub.job_id),'semanticReceipt',public.vnext_semantic_criteria_current_v1(pub.revision_id,m.input_hash))"
+        ],
+        [
+          "score:=public.vnext_deep_score_v1(item->'deepInputs');",
+          "score:=public.vnext_current_deep_score_v1(item->'deepInputs',publication.revision_id,member.input_hash);"
+        ]
+      ],
+      "predecessorBodySha256": "db179b05d33bd89f1c6dfeb11f24da50614ffdb012d8c3e6ca63a82c728a0fcb",
+      "successorBodySha256": "eea43a99a6de1fb205dbe459ff1eb4991ea27cca372aff7afdc001cbe227e181",
+      "predecessorBytes": 5915,
+      "successorBytes": 6055
+    },
+    {
+      "signature": "public.vnext_thesis_project_v1(jsonb)",
+      "fragments": [
+        [
+          "public.vnext_deep_score_v1(latest_report->'deepInputs')",
+          "public.vnext_current_deep_score_v1(latest_report->'deepInputs',publication.revision_id,member.input_hash)"
+        ]
+      ],
+      "predecessorBodySha256": "20d07606f16769c3db8db6ec9a3cc2838f9a1009829d8194ada9f7e20adeb5eb",
+      "successorBodySha256": "46b773a4f0268fdf76f118f39b56c88a389aac584bb8cc7831549637947bad7c",
+      "predecessorBytes": 3200,
+      "successorBytes": 3250
+    },
+    {
+      "signature": "public.vnext_provider_command_v1(text,text,jsonb)",
+      "fragments": [
+        [
+          "  document:=jsonb_build_object('schemaVersion','vnext-worker-input-v1','task',actor,'jobId',j.job_id,'executionId',expected_execution,'inputHash',j.input_hash,'evidence',jsonb_build_object('cutoff',member.evidence->'cutoff','evidence',member.evidence->'evidence'));",
+          "  document:=jsonb_build_object('schemaVersion','vnext-worker-input-v1','task',actor,'jobId',j.job_id,'executionId',expected_execution,'inputHash',j.input_hash,'evidence',jsonb_build_object('cutoff',member.evidence->'cutoff','evidence',member.evidence->'evidence'));\n  IF binding.prompt_version='vnext-research-worker-v3' THEN document:=document||jsonb_build_object('symbol',j.symbol); END IF;"
+        ]
+      ],
+      "predecessorBodySha256": "0e8121100eb0781d27e46f54d667cce39bbd061daa05a10efc4ebbb29a0312bd",
+      "successorBodySha256": "3ca260d5bf8fc594642564b07b7085e34e01c8a4e4b8bd179022650090cf6ea2",
+      "predecessorBytes": 12901,
+      "successorBytes": 13028
+    }
+  ],
+  "newPrivateRoutines": [
+    {
+      "signature": "public.vnext_semantic_criteria_current_v1(uuid,text)",
+      "bodySha256": "51b5987e5a5ade918419d323e771ba42ee51e7caa1929f39efc02c0cc6dae186",
+      "bodyBytes": 14733
+    },
+    {
+      "signature": "public.vnext_current_deep_score_v1(jsonb,uuid,text)",
+      "bodySha256": "1d505a0fa8487b2cce06ed7347b8e8c848eaa9bcbbf500938516c49039f1dbfd",
+      "bodyBytes": 869
+    }
+  ],
+  "unchangedDeepScoreSha256": "12b3cf00b3558c1e80008c7ba905e6482e7c9ef4fc7f5f50df71fd644a27044c",
+  "legacyPrivilegeDelta": "none",
+  "predecessorMetadata": "Exact source-derived function signature/return/plpgsql/owner/SECDEF/volatility/config/strict/parallel/leakproof/defaults and effective owner-grantor EXECUTE ACL; command/provider owner+service, project owner only. Unknown constraint comment rejected. Native metadata not observed for this candidate.",
+  "newPrivateExecute": "stockinsider_vnext_owner only; PUBLIC/anon/authenticated/service_role revoked",
+  "proof": "Revision/current membership/preparation/2completed v3 provider requests+outputs/distinct external responseIDs+executions+principals/source-read-order/current original extraction rights+issuer/date/uniqueanchor/Unicode locator/explicitoutcome independently derived in SQL",
+  "weights": [
+    30,
+    25,
+    20,
+    15,
+    10
+  ],
+  "remainingGaps": [
+    "independent_source_confirmation_authority",
+    "competitive_advantage",
+    "risk_bound",
+    "source acquisition of actual catalyst evidence",
+    "real independent semantic/model execution",
+    "cancel/contra/target/forward guidance producers"
+  ],
+  "source": {
+    "path": "migrations/20261022_vnext_thesis_audit_v1.sql",
+    "sha256": "ca57c6da05359e25c1bb238bfc47128ea06a7dedb9e01f9c2668f85e196536a4"
+  },
+  "defaultV2Source": {
+    "commit": "04126596421c8d3824e9899529e57f6a87972152",
+    "path": "web/src/lib/vnext/worker-prompts.ts",
+    "sourceSha256": "769e61fd281fffd64f49f1bdbba8c889451f3c418dca50d94dfff8f315d52f48",
+    "authorSha256": "c9702f13c8cfc12b7a87de06320b98c6a6e5a103a3eb5c8b046d7e895ad6b9fd",
+    "reviewerSha256": "b46cea03906e93147daf1bf5e5cf2892859a77ea04fc935aa603d83bacd0a4b8"
+  }
+}

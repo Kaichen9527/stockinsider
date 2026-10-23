@@ -34,4 +34,4 @@ Each ID maps to an executable case and evidence before Release Gate PASS; pendin
 
 ## Current evidence and unaccepted scope
 
-See [current VN01–VN20 execution matrix](../../../docs/operations/2026-10-22/vnext/CURRENT.json) and [current delivery limits](../../../docs/operations/2026-10-22/vnext/CURRENT-DELIVERY.md). Historical evidence/summary.json remains the6410 checkpoint. The matrix distinguishes real VM database/HTTP/browser tests from synthetic content, pure contracts, missing implementations and external prerequisites. No requirement is waived by a PASS in a narrower test. Release Gate remains pending.
+See [current VN01–VN20 execution matrix](../../../docs/operations/2026-10-22/vnext/CURRENT.json) and [single current status and delivery index](../../../docs/operations/2026-10-22/vnext/STATUS.md). Historical evidence/summary.json remains the6410 checkpoint. The matrix distinguishes real VM database/HTTP/browser tests from synthetic content, pure contracts, missing implementations and external prerequisites. No requirement is waived by a PASS in a narrower test. Release Gate remains pending.

@@ -9,7 +9,7 @@ const nativeRequire = createRequire(import.meta.url);
  * Cache/model/DB behavior is supplied explicitly by each transport fixture. */
 export function loadActualDiscovery() {
   const cache = new Map();
-  const allowed = new Set(['discovery.ts', 'store.ts', 'policy.ts', 'research.ts', 'runtime.ts', 'factors.ts', 'screening.ts', 'rotation.ts', 'replacement.ts','cached-price-factors.ts','citations.ts','artifact-financial-summary.ts','research-failure.ts']);
+  const allowed = new Set(['discovery.ts', 'store.ts', 'policy.ts', 'research.ts','semantic-criteria.ts', 'runtime.ts', 'factors.ts', 'screening.ts', 'rotation.ts', 'replacement.ts','cached-price-factors.ts','citations.ts','artifact-financial-summary.ts','research-failure.ts']);
   function load(name) {
     if (!allowed.has(name)) throw new Error(`unexpected_discovery_source:${name}`);
     if (cache.has(name)) return cache.get(name);

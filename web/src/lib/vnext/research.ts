@@ -1,10 +1,11 @@
+import {catalystAnnotation,catalystAssessment,type CatalystAnnotation,type CatalystAssessment} from './semantic-criteria.ts';
 import { artifactFinancialSummary } from './artifact-financial-summary.ts';
 import { inputHash } from './policy.ts';
 export const REQUIRED_SECTIONS = ['conclusion', 'productsRevenue', 'competitionDemand', 'profitBridge', 'cashflows', 'valuation', 'catalysts', 'falsifiers', 'technical', 'history'] as const;
 export type Evidence = { id: string; key?: string; value: unknown; unit?: string; period?: string; contentHash: string;
   source: string; sourceTier?: 'official' | 'public' | 'operator'; eventAt: string; availableAt: string; kind: 'fact' | 'assumption' | 'derived' };
 export type Claim = { id: string; text: string; kind: 'fact' | 'assumption' | 'guidance' | 'derived'; evidenceIds: string[];
-  numeric?: { value: number; unit: string; period: string; key: string; formula?: { operation: 'add' | 'subtract' | 'multiply' | 'divide'; evidenceIds: string[] } } };
+  semantic?:CatalystAnnotation; numeric?: { value: number; unit: string; period: string; key: string; formula?: { operation: 'add' | 'subtract' | 'multiply' | 'divide'; evidenceIds: string[] } } };
 export type Artifact = { schemaVersion: 'stockinsider-vnext-research-v1'; model: string; modelVersion: string; inputHash: string; outputHash: string;
   sections: Record<string, { text: string; evidenceIds: string[]; claimIds: string[] }>; claims: Claim[]; quoteDate: string; valuationDate: string;
   annualEps: number | null; nextFourQuarterEps: number | null; gaps: string[] };
@@ -36,6 +37,7 @@ export function validateClaim(claim: Claim, evidence: Evidence[]) {
   if (!claim.id || !claim.text || !claim.evidenceIds.length || cited.length !== claim.evidenceIds.length || cited.some((e) => !/^[a-f0-9]{64}$/u.test(e.contentHash))) return [`claim_evidence_invalid:${claim.id}`];
   if (claim.kind === 'fact' && cited.some((e) => e.kind !== 'fact' || e.sourceTier !== 'official')) reasons.push(`claim_fact_authority_invalid:${claim.id}`);
   if (claim.kind === 'assumption' && !cited.some((e) => e.kind === 'assumption')) reasons.push(`claim_assumption_not_labelled:${claim.id}`);
+  if(claim.semantic!==undefined)try{catalystAnnotation(claim,evidence);}catch{reasons.push(`claim_semantic_source_invalid:${claim.id}`);}
   const number = claim.numeric;
   if (!number) return reasons; // Semantic prose is independently checked against originals by the reviewer.
   if (!Number.isFinite(number.value) || !number.unit || !number.period || !number.key) return [...reasons, `claim_numeric_context_invalid:${claim.id}`];
@@ -68,7 +70,7 @@ export function validateClaim(claim: Claim, evidence: Evidence[]) {
 }
 export type Review = { approved: boolean; authorOutputHash: string; modelVersion: string; findings: string[];
   factsChecked: boolean; valuationChecked: boolean; claimsChecked: boolean;
-  claimChecks: Array<{ claimId: string; verdict: 'supported' | 'unsupported'; reason: string; sources: Array<{ id: string; contentHash: string }> }> };
+  claimChecks: Array<{ claimId: string; verdict: 'supported' | 'unsupported'; reason: string; semanticAssessment?:CatalystAssessment; sources: Array<{ id: string; contentHash: string }> }> };
 export function validateReview(review: Review, artifact: Artifact, evidence: Evidence[]) {
   const reasons: string[] = [];
   if (!review || typeof review.approved !== 'boolean' || review.authorOutputHash !== artifact.outputHash || !review.modelVersion || !Array.isArray(review.findings) || !Array.isArray(review.claimChecks)) return ['review_artifact_binding_invalid'];
@@ -77,6 +79,8 @@ export function validateReview(review: Review, artifact: Artifact, evidence: Evi
     const checks = review.claimChecks.filter((check) => check.claimId === claim.id);
     if (checks.length !== 1) { reasons.push(`review_claim_unchecked:${claim.id}`); continue; }
     const check = checks[0];
+    if(claim.semantic!==undefined)try{const assessment=catalystAssessment(check.semanticAssessment,claim.semantic);if(review.approved&&(assessment.assessment==='unsupported'||assessment.assessment==='insufficient'&&claim.semantic.outcome!=='unknown'))throw Error('semantic_unsupported');}catch{reasons.push(`review_semantic_source_invalid:${claim.id}`);}
+    else if(check.semanticAssessment!==undefined)reasons.push(`review_semantic_annotation_missing:${claim.id}`);
     if (!check.reason || review.approved && check.verdict !== 'supported') reasons.push(`review_claim_unsupported:${claim.id}`);
     for (const id of claim.evidenceIds) {
       const original = evidence.find((e) => e.id === id);

@@ -1,0 +1,30 @@
+# VN01–VN20 executable evidence map
+
+This is an index, not a new test run or a Release Gate PASS. [CURRENT.json](CURRENT.json) supplies each requirement's status and limitations; [STATUS.md](STATUS.md) points to the exact current source/receipt. Every historical run retains its own source and failed attempts. A pure test, synthetic source/model or earlier-source browser result is never promoted to current full acceptance.
+
+Exact historical commands/exits/times are in [current checkpoint commands](current-evidence/commands.json), [original checkpoint](evidence/summary.json), and each subsequent bound receipt. The paths below identify executable implementations; retained-state scripts require their exact private baseline and must not be casually rerun. Normal CI provisions its own new disposable fixtures.
+
+| ID | Executable boundary / evidence | Remaining acceptance |
+|---|---|---|
+| VN01 | `vnext.test.ts` explicit scope/default-off; `boundaries.test.ts`; actual `vnext-http-admission.test.mjs` auth/missing versus empty across routes; genuine legacy fence script | New-source full actualHTTP regression; not just helper counts |
+| VN02 | `boundaries.test.ts`, `vnext-http-admission.test.mjs`, `vnext-legacy-fence-postgres.test.mjs`: actual handlers/legacy RPC and common authority | Complete remaining ACL/actor matrices |
+| VN03 | `vnext-admission-postgres.test.mjs`, actual HTTP parallel aliases/idempotent delivery and prior-day waiting fixtures | Real multi-session operational acceptance; fixture prior day is labelled synthetic |
+| VN04 | `vnext-worker-postgres.test.mjs`, `vnext-terminal-failure-postgres.test.mjs`, `research-failure.test.ts`, thesis PostgreSQL retry cases | Full remaining interruption/lease/rights matrix; uncertain provider is never auto-resubmitted |
+| VN05 | `vnext.test.ts`, `discovery.test.ts`, `cached-admission.test.ts`, source/analysis PG tests | Comparable actual28-day source window remains unavailable; null is not zero |
+| VN06 | Pure pair/policy/calendar cases; `vnext-rotation-postgres.test.mjs` actual weakest-waiting comparison and real postclose refusal | Two actual consecutive postclose sessions and atomic successful exchange NOT_RUN; no clock bypass |
+| VN07 | `thesis.test.ts`, actual thesis PG/current-public score correction, instrument invalidity path | Source-bound semantic contradiction/cancel/target exit producers incomplete; helper exit flags do not establish authority |
+| VN08 | `cached-admission.test.ts`, `preparation-authority.test.ts`, `vnext-cached-postgres.test.mjs`; actual official-calendar/cache queries | Full real240-bar/source-qualified positive and numeric forecast input coverage |
+| VN09 | `analysis-sources.test.ts`, `vnext-analysis-postgres.test.mjs` actual200/50 ledger; withdrawal PostgreSQL; new TWSE source contracts/PG receipt test | TWSE Response fixtures are synthetic; snapshots do not establish source-day completeness or comparable volume |
+| VN10 | Market interpretation/source tests and analysis PG frozen journal reserve/settle/reuse | Real overseas/FX/margin/data availability and actual AI semantic output |
+| VN11 | Worker/revision PostgreSQL and browser fixtures; thesis material-hash and immutable audit/dedup/current-read cases | Real new source event → true independently reviewed content; fixture revisions are not formal research |
+| VN12 | `worker.test.ts`, actual durable provider journal/two executions/source-read ordering, terminal rejection; receipt-bound claim/formula checks | Actual independent semantic review and current complete role/timeout matrices |
+| VN13 | `vnext-business-postgres.test.mjs`, worker/withdrawal/cache PG: atomic membership/input/revision/publication fence | Latest complete fresh financial-qualified path and remaining late-exit/publication races |
+| VN14 | `public-valuation-read-direct-01` command; `vnext-current.spec.ts`, `vnext-rights.spec.ts`; current SQL projections and source withdrawal | Full current-source actualHTTP/browser regression; no old UI receipt transfer |
+| VN15 | `web/e2e/vnext.spec.ts`, current/rights/worker/revision specs; `run-vnext-browser-acceptance.py` and retained desktop/mobile screenshots | Current-source full new browser acceptance. Installed Chromium151 is distinguished from failed original CDN download |
+| VN16 | Node22.14/TS5.9.3; individual recorded types/lint/build; ordinary CI exact0412659 full build success | New full Codex-VM build not admitted at current disk margin; hosted build is separately labelled |
+| VN17 | Admission/business/legacy/worker/analysis/thesis/cache/IR/TWSE PostgreSQL scripts, each independent receipt and owned shutdown | Full fresh latest candidate bundle and remaining ACL/race matrices; no synthetic fixture as production/peer approval |
+| VN18 | Staging dry-run/identity/isolation runbooks and nonsecret readiness metadata | Contabo isolated service/DB/schema/queue/storage unavailable; TCP/host trust/identity remain external, production host is not staging |
+| VN19 | Retained actual source canary index/body-gap report; actual original financial receipt APIs and synthetic IR/provider test | No newly acquired IR/Arelle/live model or complete source coverage; source failure/auth-blocked is not acquisition PASS |
+| VN20 | Draft PR384, source/evidence separate commits, hash-bound receipts/current index; normal CI exact head metadata | Protected reviews/Release Gate remain unclosed. No merge/deploy/migration/schedule authorization |
+
+Representative source command: `node --experimental-strip-types web/src/lib/vnext/vnext.test.ts`. Actual native commands include their fresh fixture environment and are recorded in their receipt rather than replaced by a generic invocation. Browser receipts bind an isolated server, `E2E_BASE_URL`, `PLAYWRIGHT_SKIP_WEBSERVER=1`, actual Chromium binary and desktop/mobile cases. No command in this index authorizes replay of consumed fixtures or production operations.
