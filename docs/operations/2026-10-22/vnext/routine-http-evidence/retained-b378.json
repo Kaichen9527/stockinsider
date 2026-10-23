@@ -1,0 +1,70 @@
+{
+  "actual": {
+    "actualTapCounts": {
+      "cancelled": 0,
+      "fail": 2,
+      "pass": 0,
+      "skipped": 0,
+      "tests": 2,
+      "todo": 0
+    },
+    "appExit": null,
+    "appPidAbsent": null,
+    "clientsSettled": true,
+    "failures": [
+      {
+        "actual": "REDACTED",
+        "code": "42501",
+        "expected": "REDACTED",
+        "messageHash": "f90121b0a65e0a79be07611fe6981ec95009683987121f27de1af29470bb6c96",
+        "stage": "full original candidates commit and legal original content seeds a fresh empty business ledger",
+        "tokens": []
+      }
+    ],
+    "pendingQueries": 0,
+    "receiptObserved": true,
+    "resourceReceiptSha256": "c91c1c873327cd200017a343eb019cc75ac21bbdcb4d59988751214abb8d2c36",
+    "resources": {
+      "exit": 1,
+      "finalFree": {
+        "/home/runner/work/stockinsider/stockinsider": 88857264128,
+        "/tmp": 88857264128
+      },
+      "floor": 8589934592,
+      "initialFree": {
+        "/home/runner/work/stockinsider/stockinsider": 88899018752,
+        "/tmp": 88899018752
+      },
+      "nextWorksetReference": {
+        "/home/runner/work/stockinsider/stockinsider": 268435456,
+        "/tmp": 536870912
+      },
+      "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+      "ownedPg": {
+        "actualBinarySha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+        "actualVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+        "containerId": "a3fd2eb5db5d3f169259f1e49b687ce89f499b3c10f8800ed626b4d7e9ddbd8f",
+        "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27",
+        "pid": 17131,
+        "start": "46700"
+      },
+      "resourceViolation": null,
+      "sampledNodeAndOwnedPgTreePeakRssBytes": 652767232,
+      "sampledNotInstantaneous": true
+    },
+    "results": [],
+    "sourceCommit": "0039dc17262f29b32bf85c0d218d0032a2286a34",
+    "sourceScope": "hosted actual HTTP/PG, synthetic originals only",
+    "tapSha256": "e2a4479371ae4eba91d1fb6100d3a1d05ac35a569e407c8366c64c960625c267",
+    "unexpectedExternalFetchObserved": null
+  },
+  "errorLiteral": "permission denied for schema public",
+  "historicalProfileLookup": "exact6e0 profile blob1fe388bdcf22cc46b1f4eb09548ebc65aa3cb0de/SHA2e6c2196dcc780d9f2f6a56a6a9c5d851c23b12d3834bb22e52bae6b62c5830b; its complete descriptor contains historical candidate36 and is not an attestation of this vNext predecessor",
+  "job": 120414152634,
+  "literalHashMatchesActual": true,
+  "nextSourceChange": "independent routine cases run before final raw-seed dependent case, which retains its exact expected positive path and remains a strict quality failure if prerequisite absent; not skipped/allowed failure",
+  "noGrantExecuted": true,
+  "run": 39953692406,
+  "scope": "raw cache fixture setup failure; app/business/source-window NOT_RUN",
+  "source": "b378642a1144c03df16bf58ab1e76f8c5c21431a"
+}

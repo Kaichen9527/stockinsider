@@ -1,3 +1,15 @@
+# Latest checkpoint — actual routine HTTP subset, full acceptance still blocked
+
+Current candidate **ca3612248f0d5f53ecee0e362216ca6ea76ea370** (product source b378; diagnostic/test successor ca361). [Current receipt](routine-http-evidence/receipt.json), SHA **b263dd68f7ccb3b0d832542f9ec9b431e350f85b7e1a54666e2ee80b13537fa8**; [VN01–20](CURRENT.json), [retained exact a5 native receipt](routine-http-evidence/actual-a5.json), [source-window contracts](source-window-evidence/receipt.json). Historical milestones below retain their original subjects; last complete accepted tree remains921.
+
+Actual a5 hosted39955416482/job120419936043 is **overallFAIL:6tests/4PASS/2FAIL/0cancel/skip/todo**. Runtime8a7ef4ac has exact tree parity c816541aa3ac986359f755a5b2eb23af13b05db0 with a5. Independent real Next HTTP/service-role PG components admit one current queued/researching member from an original guarded synthetic receipt; repeat/withdrawal retains immutable job rows/clocks and original history. Started attempts0/provider invocations0/no external IO. These are actual engineering components, not formal source/model/semantic publication or a whole suite PASS.
+
+The final raw-cache fixture case remains mandatory and fails42501 `permission denied for schema public` (exact message hash verified). Earlier b378 failed at setup0PASS2FAIL; both REDs retained. The source-window data path and exhaustive cache/native tests are NOT_RUN. The historical6e0 two-owner profile guards a different candidate36 predecessor and cannot attest current vNext. No grant, ACL/pin/hash/guard change was made. Current ca361 adds only readonly actual namespace/role/function dependency observation before the same mandatory nonzero case; it is not a missing-permission bypass or independent approval. New ca361 native remains NOT_RUN until ordinary CI actually executes.
+
+Original Codex VM source-window5focused cases, separate11and4affected regressions, full no-emit types and lint PASS; TS2737/TS2352 RED preserved. New original-VM PG/fullbuild/browser remain NOT_ADMITTED under unchanged8GiB+workset. All source/model/role/isolatedDB runtime bindings remain absent; real acquisition, model calls, independent semantic research and Contabo remain NOT_RUN. Remaining code/matrices and internal fixture-profile review are distinct from the consolidated true external OWNER-ACTIONS. No merge/deploy/production/schedule/consumed operation or further cleanup occurred.
+
+---
+
 # Latest candidate — b378, new runtime acceptance pending
 
 Current product/test candidate **b378642a1144c03df16bf58ab1e76f8c5c21431a**; [candidate receipt](source-window-evidence/receipt.json), SHA **314a20961d03e2a37779459044b134c524865b86d5920d2a5cfa95dc498c55dc**. [CURRENT/VN01–20](CURRENT.json), [source-window design/scope](SOURCE-WINDOW.md), [routine HTTP and retained RED](ROUTINE-HTTP.md). Last complete accepted tree remains921 with its separate material-source receipt below.

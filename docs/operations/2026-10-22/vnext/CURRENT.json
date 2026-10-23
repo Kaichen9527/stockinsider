@@ -1,20 +1,21 @@
 {
   "status": "PARTIAL_ENGINEERING_ACCEPTANCE_DRAFT_NOT_RELEASED",
-  "updatedAt": "2026-10-23T20:34:59.591175+08:00",
+  "updatedAt": "2026-10-23T20:56:22.701933+08:00",
   "runtimeSourceHead": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
-  "currentReceiptSha256": "314a20961d03e2a37779459044b134c524865b86d5920d2a5cfa95dc498c55dc",
+  "currentReceiptSha256": "b263dd68f7ccb3b0d832542f9ec9b431e350f85b7e1a54666e2ee80b13537fa8",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
   "primaryReport": "STATUS.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
   "acceptance": [
     {
       "id": "VN01",
-      "status": "PARTIAL_ACTUAL_HTTP",
+      "status": "PARTIAL_ACTUAL_POSITIVE_HTTP",
       "runs": "cached-active-http-01; current-browser-ui-01; native-legacy-final",
       "limits": "Exact aeb actual fullbuild/preparation HTTP succeeds; genuine adapter PG and scanner composition separately tested. Positive routine-screen HTTP not separately exercised.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only.",
+      "currentActual": "A5 real configured operator HTTP -> original cached receipt -> one new queued researching slot; no started attempt/provider IO; replay/withdrawal keeps exact job rows. Overall suite still FAIL at independent raw-source fixture."
     },
     {
       "id": "VN02",
@@ -23,7 +24,7 @@
       "limits": "14actuallegacyRPC fences at their earlier source;9currentHTTPaliases/GETscope/claims same20/4ledger. No blanket latest-head legacy acceptance inferred.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN03",
@@ -32,7 +33,7 @@
       "limits": "8parallelduplicate deliveries reserve4jobs;4actualstarts remaincharged;2livepubs+18explicitprior-day waitingfixture=20active. Prior-sessionrow is syntheticFK setup, not officialtwo-day rotationproof.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN04",
@@ -41,7 +42,7 @@
       "limits": "655 actual hosted preparation HTTP committed socket-loss/explicit read stepSUCCESS; da15 cancellation real PGwire no-resend receipt remains exacthistorical. Full remaining lease/expiry/provider matrix incomplete.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN05",
@@ -50,7 +51,7 @@
       "limits": "Readonly actual connector audit: TWSE current report-date only/eventWindownull; PTT cap-limited metadata; GDELT observation windows not original-event authority or allowed vNext scope. No comparable28-original-event-day completeness/roots; count staysnull, not0.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN06",
@@ -59,7 +60,7 @@
       "limits": "Actualwaitingincumbent SQL path and premarket guards earlier; sameday/holiday/policy/null purecases. Real2consecutivepostclose-session positiveatomicexchange NOT_RUN; no clock/guard changes.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN07",
@@ -68,7 +69,7 @@
       "limits": "655 actual7PASS business/current-source/public component/withdrawal and finite target-v5 packet compatibility; original weights/groupnull/risk_bound unchanged. Corporate action terms/rebase/contra and real semantic approval remain incomplete; da15 cancellation receipt remains separate.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN08",
@@ -77,16 +78,16 @@
       "limits": "Original quarterly/12month server reader, active batch, recollection invariant and preparation frozen input actual-native tested; full material change to new article and annual/4Q/share authority remain.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN09",
-      "status": "TESTED_VM_SYNTHETIC_EXTRACTION_WITHDRAWAL_AND_SNAPSHOT_TRANSPORT",
+      "status": "CURSOR_CODE_SOURCE_TESTED_RAW_NATIVE_PREREQUISITE_BLOCKED",
       "runs": "analysis-native-01; withdrawal-native-03; cached-active-http-recovery-01",
       "limits": "Current source400cheap-scan avoids replayed-prefix starvation; original SQL daily200/source50 retained; actual50RPC replay no writes. Exhaustive28day/comparable volume and real acquisition unverified.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN10",
@@ -95,7 +96,7 @@
       "limits": "Fixedproviderinput/journal/reuse and ruleonlydowngrade tested onrealPG. Actualoverseasprice/foreignFX/margin/dataandactualAI execution notacquired; no seeded marketproducer promoted.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN11",
@@ -104,7 +105,7 @@
       "limits": "a264 actual fresh source journal/prior published revision retained byteexact while new cancellation revision+exit commit; model/source semantics synthetic. No real-new-event/model/semantic publication proof.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN12",
@@ -113,7 +114,7 @@
       "limits": "Distinct configuredrole/execution, originalsource hashes/claimchecks/formulas;2actualstructuralreviewfailuresneverpublish. Semantic fixturechecks not independentrealcontentreview. Transportuncertainty keptheld; noautoresend. New typed original quote/issuer/event/date/explicit outcome+full reviewer echo bound to completed provider journals. Protocol not actual semantic support or independent news confirmation.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN13",
@@ -122,7 +123,7 @@
       "limits": "Atomicrevision/membership gates+unadmitteddeferredprefix tested withsyntheticrows. Realfinancial/valuationhappy-path and fullnewhead late-exit concurrency stillunverified.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN14",
@@ -131,7 +132,7 @@
       "limits": "Newcurrentpublicread requires exactproofcanonicalhash/expiry/usablevaluation/claim/date/arithmetic. Older incompleteproofdenied; no legacyfallback; actualwithdrawnarticlehistoryretained.12sourcecontracts,2currentbrowsercases.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN15",
@@ -140,7 +141,7 @@
       "limits": "655 same-build current-run PG snapshot transport: UI12/current2/business2 actual desktop/mobile PASS, Chrome155.0.8059.39/hash bound. Business8PNG7,076,400B in finite hosted artifact; not downloaded/visually reviewed.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN16",
@@ -149,7 +150,7 @@
       "limits": "655 hosted complete type/lint/build SUCCESS and original VM source/types/lint receipts distinct. Original VM fresh fullbuild NOT_ADMITTED.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN17",
@@ -158,7 +159,7 @@
       "limits": "655 fresh original-prefix ordinary PG stages and new business7PASS/finite target-v5 installer +currentRPC; synthetic sources/model; remaining financial-qualified and ACL/race matrix incomplete.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN18",
@@ -167,7 +168,7 @@
       "limits": "No Contaboisolatedapp/DB/schema/queue/storage. TCP22unsupported/no grant, no trustedhostkey/newactiveidentity. Expiredkeynotrenewed. No productionlocatorasstaging.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN19",
@@ -176,7 +177,7 @@
       "limits": "Fresh metadata has no injected secret/runtime/outbound identity, required provider/DB/roles and official/PTT policy bindings absent. No secret files read/values printed or actual model/fetch attempted. Prior canaries/IR8PASS remain their historical subjects; synthetic original is not actual acquisition.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     },
     {
       "id": "VN20",
@@ -185,7 +186,7 @@
       "limits": "PR384 source da15/new normal CI pending; earlier a264 normal job120301725217SUCCESS and cancellation7PASS; protected39919707261FAIL unchanged. Exact review prerequisite must follow independent original process; no maker approval or merge/deploy.",
       "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
-      "candidateFollowup": "b378 source-window5 + separate11/4 regressions/types/lint; new actual HTTP/native CI pending;0d earlier routine RED retained. No old green transfer."
+      "candidateFollowup": "Current ca361 test readiness NOT_RUN. A5 actual routine HTTP partial6tests4PASS2FAIL; raw-source prerequisite42501 blocks full acceptance. Source-window5 and separate11/4 are source scope only."
     }
   ],
   "externalOwnerActions": [
@@ -208,10 +209,11 @@
     }
   ],
   "remainingVMCode": [
-    "actual current-source-window SQL/HTTP/cursor fault/rights matrix and exhaustive28day feed conservation/comparable volume",
-    "annual/4Q/fiscal/share producer and full current forecast material-change to new author/reviewer/article",
+    "applicable current isolated source-fence namespace dependency profile/independent review; actual raw cache cursor path and over200-case native",
+    "exhaustive28day upstream connector/conservation/coverage/comparable volume",
+    "annual/4Q/fiscal/share source producer and full current forecast material-change to author/reviewer/article",
     "authorized corporate-action immutable target rebasing",
-    "positive routine HTTP full acceptance, cancellation HTTP and remaining qualified-financial/rights/lease/expiry/race/legacy/caps/fullbundle acceptance"
+    "complete current routine HTTP/source path, cancellation HTTP and remaining qualified-financial/rights/lease/expiry/race/legacy/caps/fullbundle acceptance"
   ],
   "remainingTimeAcceptance": "2actualconsecutivecompletedpostclose sessions; no guard/clock bypass",
   "ReleaseGate": "PENDING",
@@ -293,9 +295,9 @@
     "checks": "12synthetic structural PASS; fullnoEmittypes andfocusedlintPASS",
     "status": "disconnected prerequisite only; server/current SQL/source/worker producer NOT_IMPLEMENTED; reportedAnnualEps alwaysnull; NTM neverexact4"
   },
-  "source": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
-  "primaryReceipt": "source-window-evidence/receipt.json",
-  "primaryReceiptSha256": "314a20961d03e2a37779459044b134c524865b86d5920d2a5cfa95dc498c55dc",
+  "source": "ca3612248f0d5f53ecee0e362216ca6ea76ea370",
+  "primaryReceipt": "routine-http-evidence/receipt.json",
+  "primaryReceiptSha256": "b263dd68f7ccb3b0d832542f9ec9b431e350f85b7e1a54666e2ee80b13537fa8",
   "targetExit": {
     "source": "b0f09e050a3078d0a1e955316a7a6960ae14adc6",
     "actualRetainedNativeSource": "0a40c8bda8d8c964ee556e2c9644f9fb3abed7f9",
@@ -323,26 +325,25 @@
     "latestSuccessfulNativeSubject": "9a6e73f49f2efd513e55c6bdb3289e0b95114157"
   },
   "newSourceCI": {
-    "source": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
-    "ordinary": {
-      "run": 39953692406,
-      "status": "in_progress",
-      "conclusion": null
+    "source": "ca3612248f0d5f53ecee0e362216ca6ea76ea370",
+    "ordinary": "NOT_YET_OBSERVED: normal push pending",
+    "actualPriorSource": "a5ea143920d5b8f06670b6f47be38ee1b2f8ad52",
+    "actualPriorRun": 39955416482,
+    "actualPriorJob": 120419936043,
+    "actualPriorConclusion": "failure",
+    "actualPriorNative": {
+      "tests": 6,
+      "pass": 4,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
     },
-    "independentProduct": {
-      "run": 39953692459,
-      "status": "in_progress",
-      "conclusion": null
-    },
-    "protected": {
-      "run": 39953687971,
-      "conclusion": "failure"
-    },
-    "metadataObservedAt": "2026-10-23T20:34:59.591175+08:00",
+    "samePriorTreeParity": true,
     "noOldGreenTransfer": true
   },
   "dirtyWip": "Only original two untracked evidence WIP locations, excluded; product/test tracked tree921 clean before evidence packaging",
-  "sourceHead": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+  "sourceHead": "ca3612248f0d5f53ecee0e362216ca6ea76ea370",
   "latestDelivery": "STATUS.md",
   "independentProductCI": {
     "run": 39948562240,
@@ -638,10 +639,10 @@
     "noAuthorityCreated": true,
     "sameMultiQueryAtomicSnapshotClaim": false
   },
-  "candidateSourceHead": "b378642a1144c03df16bf58ab1e76f8c5c21431a",
+  "candidateSourceHead": "ca3612248f0d5f53ecee0e362216ca6ea76ea370",
   "candidateReceipt": "material-source-evidence/receipt.json",
   "candidateReceiptSha256": "b353f94d9f0570f8e5b21ecf308c966c72ba738378ad43f26d92515547938659",
-  "candidateRuntime": "source5 + standalone11and4 regressions/types/lint PASS; new native pending; old0d RED retained, no final counts",
+  "candidateRuntime": "Current candidate source/readonly namespace diagnostic NOT_RUN; actual a5 routine HTTP components PASS but overall6tests4PASS2FAIL due42501 raw-source prerequisite; no full acceptance",
   "catalystCancellation": {
     "source": "da15a5c388f3ed37d1d6f1e105812862a99194a8",
     "implementation": "optional server-selected v4, original pair/prior baseline, distinct full echo, owner-only proof, original guarded atomic retained publication+exit; no role/quota/old prompt changes",
@@ -726,7 +727,7 @@
     "sha256": "5d07d99ecec08307062dcb13c5a53e5d7a8ba9f2ed30f0b3d334f01c16428ad2",
     "appendOnly": true
   },
-  "currentReceipt": "source-window-evidence/receipt.json",
+  "currentReceipt": "routine-http-evidence/receipt.json",
   "ownerActions": "OWNER-ACTIONS.md",
   "businessCurrent": {
     "source": "65580e2d787251c565742fb23159e8519686273c",
@@ -966,5 +967,24 @@
     }
   },
   "lastAcceptedWholeSource": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
-  "lastAcceptedReceipt": "material-source-evidence/receipt.json"
+  "lastAcceptedReceipt": "material-source-evidence/receipt.json",
+  "routineHTTP": {
+    "source": "a5ea143920d5b8f06670b6f47be38ee1b2f8ad52",
+    "receipt": "routine-http-evidence/actual-a5.json",
+    "newJobs": 1,
+    "newMembers": 1,
+    "startedAttempts": 0,
+    "providerInvocations": 0,
+    "jobRowsImmutableAfterReplayAndWithdrawal": true,
+    "wholeSuite": "FAIL",
+    "rawSource": "NOT_RUN,42501 in fixture dependency"
+  },
+  "rawSourcePrerequisite": {
+    "currentCandidate": "ca3612248f0d5f53ecee0e362216ca6ea76ea370",
+    "historicalProfileApplicable": false,
+    "permissionDeniedLiteralSha256": "f90121b0a65e0a79be07611fe6981ec95009683987121f27de1af29470bb6c96",
+    "actualFailingDefinerRole": "NOT_OBSERVED; source callgraph suggests source-fence owner; new readonly descriptor required",
+    "noGrantExecuted": true,
+    "internalEngineeringReview": "applicable finite current-fixture dependency profile required; not an owner instruction to touch production"
+  }
 }
