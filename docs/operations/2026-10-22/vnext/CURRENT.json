@@ -1,17 +1,17 @@
 {
   "status": "PARTIAL_VM_IMPLEMENTATION_AND_ACCEPTANCE_NOT_RELEASE_COMPLETE",
-  "updatedAt": "2026-10-23T05:08:42.121202+00:00",
-  "runtimeSourceHead": "b0913e5c43e913b5013eadcbb586f392fb17b1c7",
-  "currentReceiptSha256": "79d574affa0ac579083e8354bedd18cff90a4cce8152dc0c6f0373d07f5c7f05",
+  "updatedAt": "2026-10-23T06:00:51.429359+00:00",
+  "runtimeSourceHead": "28fd5667da802dc3c38849bde699c91b083d2cf2",
+  "currentReceiptSha256": "108ef0a079bf9e92d05e5a17fa1c1e87cbc897a749356ed80bc52dd4ae6f9fcb",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
   "primaryReport": "STATUS.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
   "acceptance": [
     {
       "id": "VN01",
-      "status": "TESTED_VM_BOUNDARIES",
+      "status": "PARTIAL_ACTUAL_HTTP",
       "runs": "cached-active-http-01; current-browser-ui-01; native-legacy-final",
-      "limits": "Actual ee same-built cached HTTP exact alias/scope and no-call assertions succeeded. Complete job/provider/prep ledgers preserved and attempted external fetch denied/observednone; synthetic original/source only."
+      "limits": "6f actual samebuild preparation+cached readonly instrumented stepSUCCESS; new28 latestinstrument runtime HTTP pending; source12+5 only"
     },
     {
       "id": "VN02",
@@ -27,9 +27,9 @@
     },
     {
       "id": "VN04",
-      "status": "TESTED_BOUNDED_RUNNING_HTTP_RECOVERY_PARTIAL_MATRIX",
+      "status": "PARTIAL_ACTUAL_PG_HTTP_RECOVERY",
       "runs": "thesis-native-01; terminal-slots-native-01; terminal-slots-read-01; final-terminal-test-01; preparation-reconciliation-source-05; preparation-empty-journal-source-o23; hosted39901837447",
-      "limits": "Actual exact9a running READ/one prepare COMMIT/zero-byte owned HTTP socket loss/underlying fetch rejection/explicit immutable read recovery passed; original whole-public snapshots no second prepare/provider/claim/lease. Full lease/expiry/rights matrix and real provider remain separate; completed history onlyNOT_RUNNING/rights not_checked."
+      "limits": "9a/6f actual prepare COMMIT/socket-loss READ recovery separate;37 actual current roster blocks held prepare/reserve, no new attempts; full rights/lease/provider matrix pending"
     },
     {
       "id": "VN05",
@@ -45,9 +45,9 @@
     },
     {
       "id": "VN07",
-      "status": "PARTIAL_SEMANTIC_PRODUCERS_PENDING",
+      "status": "PARTIAL_ACTUAL_SERVER_EXIT",
       "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01; thesis-semantic-authority-source-02; semantic-native-monitored-o23; catalyst-semantic-source-05; catalyst-native-monitored-o23; target-exit-evidence/receipt.json",
-      "limits": "Actual exact9a fresh catalyst and target SQL/business + target-before-routine HTTP steps SUCCESS; synthetic originals/provider, TAP bytes/counts unavailable. Corporate-action rebasing/cancellation and real semantic authority remain incomplete."
+      "limits": "6f actual private current roster proof/exit8PASS;37 actual current-work+claim/reserve fencing/real target caller10PASS. Counts separate. Semantic cancellation/contra/target and rebase remain incomplete"
     },
     {
       "id": "VN08",
@@ -93,21 +93,21 @@
     },
     {
       "id": "VN15",
-      "status": "HOSTED_SAME_BUILD_STEP_SUCCESS_RAW_REVIEW_PENDING",
+      "status": "HOSTED_FINITE_BROWSER_CASES_OBSERVED",
       "runs": "current-browser-ui-01; current-browser-summary-01",
-      "limits": "Exactee hosted step passed strict12desktop/mobile UI+2current article/withdrawal completion/no-skip/no-flaky guard. Actual browser receipt/version/hash and9.2MB screenshots published but not downloaded/independently visually reviewed. Original VM Chromium151/CDN403 stay separate."
+      "limits": "6f actual Chrome155/binary hash,12UI+2current desktop/mobile passed,18finite screenshots notice; raw PNGs not downloaded/visually reviewed. New28 runtime browser NOT_RUN"
     },
     {
       "id": "VN16",
-      "status": "TESTED_VM_RUNTIME_SOURCE",
+      "status": "PARTIAL_TYPES_LINT_AND_HOSTED_BUILD",
       "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23; semantic-final-types-o23",
-      "limits": "Exactee ordinary source/types/lint/fullbuild stepSUCCESS; currentb091 web/migrations byte-identical. Exactee independent product-runtimeFAIL in history native; new child close-settlement source probe only, newCI pending. Local fullbuild not admitted."
+      "limits": "new37/28 focused source/types/lint pass locally;6f hosted fullbuild success;37 ordinary source-stageFAIL/new28 CI pending. Local fullbuild not admitted"
     },
     {
       "id": "VN17",
-      "status": "TESTED_VM_ISOLATED_ENGINEERING_SUBSETS",
+      "status": "PARTIAL_FRESH_HOSTED_NATIVE",
       "runs": "cached-native-02; terminal-slots-read-01; cached-active-http-recovery-01",
-      "limits": "Exact9a whole ordinary fresh captured-prefix/legacy/native/catalyst/target/running HTTP recovery job SUCCESS; all source/parser/provider fixtures synthetic, raw private snapshot contents not independently downloaded. Remaining financial-qualified/role/rights/race/formal peer acceptance unclosed."
+      "limits": "37 actual fresh three-body installer/current-work/claim/provider negative+exit10PASS/full snapshots/cleanup notice; synthetic sources, no formal qualification/independent raw custody"
     },
     {
       "id": "VN18",
@@ -125,7 +125,7 @@
       "id": "VN20",
       "status": "DRAFT_PR_PARTIAL_RELEASE_GATE",
       "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json; preparation-reconciliation-evidence/receipt.json; SEMANTIC-SCORE-DELIVERY.md; semantic-score-evidence/receipt.json; TWSE-SNAPSHOT-DELIVERY.md; twse-snapshot-evidence/receipt.json",
-      "limits": "Draft PR384; ee ordinarySUCCESS, independentproduct+diagnosticFAIL and protectedrootFAIL remain separate. Newb091 normalCI pending; no merge/deploy/schedules."
+      "limits": "PR384 new source28;6f ordinary+independent productSUCCESS;37 nativeSUCCESS but ordinarysourceFAIL, new28 pending; protected gates unclosed; no merge/deploy"
     }
   ],
   "externalOwnerActions": [
@@ -143,25 +143,38 @@
   "ReleaseGate": "PENDING",
   "testAdapterSource": "76aca1522fa1b3292a85f9f387f01bee7fd43e23",
   "latestCI": {
-    "head": "ee2a6f00a3eae54651a2c801bf12aa11f6f91c2e",
-    "run": 39902850035,
-    "job": 120248086348,
-    "result": "SUCCESS",
-    "scope": "ordinary engineering including stronger cached completed-read and installed Chrome browser; not formal/source/Contabo approval"
+    "head": "37ba4a6904a70f742f3322b3d29a244d091d35da",
+    "run": 39908491021,
+    "ordinary": {
+      "job": 120265795304,
+      "result": "FAIL",
+      "stage": "Actual source contracts, types and lint",
+      "localReproduction": "roster-current source test7PASS1FAIL preserves obsolete query bug; corrected8PASS on newsource; originalCI innerlog not downloaded",
+      "buildHTTPBrowser": "NOT_RUN"
+    },
+    "newNative": {
+      "job": 120265795383,
+      "result": "SUCCESS",
+      "actualTests": 10,
+      "pass": 10,
+      "fail": 0,
+      "scope": "actual isolated held-work/queued-claim/provider-reserve/exit with synthetic roster/facts; not official/model/financial qualification"
+    },
+    "currentHeadCI": "28fd566 normal newsource pending"
   },
   "ciReceiptSha256": "65f25e5c05cbe7eafef834050f105e0818522cf6555018e89f000e01214844a2",
-  "previousRuntimeSourceHead": "f9f3a0d0ffa9b50852305ee59f19d48356c2fd13",
-  "previousReceiptSha256": "a0d2823d1d8fbb0630580eda734b2f4a1532156f737f3696466a1daea7c65416",
+  "previousRuntimeSourceHead": "b0913e5c43e913b5013eadcbb586f392fb17b1c7",
+  "previousReceiptSha256": "79d574affa0ac579083e8354bedd18cff90a4cce8152dc0c6f0373d07f5c7f05",
   "capacity": {
     "freshFree": {
-      "/workspace": 8886972416,
-      "/tmp": 17254346752
+      "/workspace": 8886067200,
+      "/tmp": 17251594240
     },
     "floor": 8589934592,
     "localFreshCloneOrFullBuild": "NOT_ADMITTED",
     "newCleanup": "NONE",
-    "localWork": "source/types/lint/extracted probes/bounded Git and receipt writes",
-    "newNative": "independent hosted runner only, not local Codex VM or Contabo"
+    "localWork": "bounded source/types/lint/Git/receipt writes",
+    "newNative": "independent GitHub hosted runner only, not original CodexVM/Contabo"
   },
   "financialStatusCompatibility": {
     "source": "e359d7d634fa88db938fd57db8b4a33123006904",
@@ -186,8 +199,8 @@
     "positiveSemanticProducer": "UNIMPLEMENTED, not substituted by disabling unsupportedclaims",
     "receipt": "semantic-score-evidence/receipt.json"
   },
-  "receiptSha256": "79d574affa0ac579083e8354bedd18cff90a4cce8152dc0c6f0373d07f5c7f05",
-  "receipt": "preparation-http-evidence/receipt.json",
+  "receiptSha256": "108ef0a079bf9e92d05e5a17fa1c1e87cbc897a749356ed80bc52dd4ae6f9fcb",
+  "receipt": "roster-current-evidence/receipt.json",
   "twseSnapshotTransport": {
     "source": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
     "sourceContracts": "10PASS synthetic transports/actual extracted connector and HTTP handler functions; not networkHTTP",
@@ -218,9 +231,9 @@
     "checks": "12synthetic structural PASS; fullnoEmittypes andfocusedlintPASS",
     "status": "disconnected prerequisite only; server/current SQL/source/worker producer NOT_IMPLEMENTED; reportedAnnualEps alwaysnull; NTM neverexact4"
   },
-  "source": "b0913e5c43e913b5013eadcbb586f392fb17b1c7",
-  "primaryReceipt": "preparation-http-evidence/receipt.json",
-  "primaryReceiptSha256": "79d574affa0ac579083e8354bedd18cff90a4cce8152dc0c6f0373d07f5c7f05",
+  "source": "28fd5667da802dc3c38849bde699c91b083d2cf2",
+  "primaryReceipt": "roster-current-evidence/receipt.json",
+  "primaryReceiptSha256": "108ef0a079bf9e92d05e5a17fa1c1e87cbc897a749356ed80bc52dd4ae6f9fcb",
   "targetExit": {
     "source": "b0f09e050a3078d0a1e955316a7a6960ae14adc6",
     "actualRetainedNativeSource": "0a40c8bda8d8c964ee556e2c9644f9fb3abed7f9",
@@ -248,45 +261,87 @@
     "latestSuccessfulNativeSubject": "9a6e73f49f2efd513e55c6bdb3289e0b95114157"
   },
   "newSourceCI": {
-    "head": "b0913e5c43e913b5013eadcbb586f392fb17b1c7",
+    "head": "28fd5667da802dc3c38849bde699c91b083d2cf2",
     "status": "PENDING",
-    "scope": "history stdio settlement + finite diagnostic/binary notices",
-    "protected": "ee root failed; no old pin or guard change"
+    "protected": "prior6f protected exact/requirements/architecture failed at bootstrap retrieval; root rejected prerequisites; no pins/guards changed"
   },
   "dirtyWip": {
-    "product": "none in inherited runtime source; new trading-invalidity candidate separately uncommitted, excluded",
+    "product": "none at sealed code subject",
     "historicalUntracked": "cached-evidence-initial-wip/ retained/excluded"
   },
-  "sourceHead": "b0913e5c43e913b5013eadcbb586f392fb17b1c7",
-  "latestDelivery": "PREPARATION-READ-DELIVERY.md",
+  "sourceHead": "28fd5667da802dc3c38849bde699c91b083d2cf2",
+  "latestDelivery": "ROSTER-CURRENT-DELIVERY.md",
   "independentProductCI": {
-    "head": "ee2a6f00a3eae54651a2c801bf12aa11f6f91c2e",
-    "run": 39902849832,
-    "job": 120248085763,
-    "result": "FAIL",
-    "diagnosticJob": 120248797973,
-    "diagnosticResult": "FAIL",
-    "lastScript": "test:financial-evidence-completion",
-    "failedTestNameSha256": "b0d0c27e8121ab3860c1ee1bd6d9babf2e58429790f987c5564636d215e61349",
-    "independentlyMatchedTest": "history completion is atomic, private, idempotent and preserves conflicting official evidence",
-    "testPath": "scripts/candidate-history-backfill-postgres.test.mjs",
-    "codes": [
-      "ERR_TEST_FAILURE"
-    ],
-    "actualInnerError": "NOT_OBSERVED; independent exit-before-stdio source bug does not prove original CI cause"
+    "head": "6f2574185b9acd9e903830aadd6b75d437a50555",
+    "run": 39906227422,
+    "job": 120258705294,
+    "result": "SUCCESS",
+    "diagnosticJob": 120261032073,
+    "diagnosticResult": "SUCCESS",
+    "previousEEFailure": "retained; same native history case failed at ee, inner cause NOT_OBSERVED, source stdio repair does not prove original cause"
   },
   "currentBrowser": {
-    "ui": 12,
-    "currentRightsArticle": 2,
-    "interpretation": "actual job step success under strict total/project/result/no-skip/no-flaky checks; raw per-case JSON and browser binary values not downloaded/independently reviewed",
-    "artifact": {
-      "id": 12479488373,
-      "githubReportedBytes": 9211367,
-      "githubReportedDigest": "sha256:0d543a0dede2e8a4694eabcf2c2ddb735a5c8441cbfbbee5bba793addf05289a",
-      "singleDownloadExit": 1,
-      "downloadedBytes": 0,
-      "visualScreenshotReview": "NOT_DONE"
+    "head": "6f2574185b9acd9e903830aadd6b75d437a50555",
+    "job": 120258705320,
+    "runtimeMerge": "54f50da2a1f8fe229a2edb125d3f2d4f8e1af00e",
+    "exactTreeParity": true,
+    "actualCaseCounts": {
+      "ui": 12,
+      "current": 2
     },
-    "browserVersionHash": "NOT_OBSERVED_ROOT; future notice source only"
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "browserVersion": "Google Chrome 155.0.8059.39",
+    "browserBinarySha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58",
+    "launcherSha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec",
+    "screenshots": {
+      "uiCount": 12,
+      "uiBytes": 4250898,
+      "currentCount": 6,
+      "currentBytes": 6776603
+    },
+    "scope": "actual hosted same-build browser over actual synthetic PG publication payload; not original CodexVM/Contabo or actual formal source/model research",
+    "rawScreenshotsDownloadedOrVisuallyReviewed": false,
+    "latest28Browser": "NOT_RUN"
+  },
+  "sourceCommitMeaning": "exact code/test/workflow subject; later evidence-only PR head changes no runtime blobs",
+  "lastSuccessfulOrdinary": {
+    "head": "6f2574185b9acd9e903830aadd6b75d437a50555",
+    "run": 39906227469,
+    "job": 120258705320,
+    "result": "SUCCESS",
+    "scope": "fullbuild/source/native/actual preparationHTTP+browser; not transferred to new28 runtime"
+  },
+  "tradingInvalidity": {
+    "source": "2aa68f359d1d6b40da2eaadc955a65ff96506ae9",
+    "actualCallerNativeHead": "6f2574185b9acd9e903830aadd6b75d437a50555",
+    "run": 39906227469,
+    "job": 120258705052,
+    "actualTests": 8,
+    "pass": 8,
+    "fail": 0,
+    "scope": "full genuine fresh installer+private helper+caller+append roster+whole state rejection/exits; synthetic metadata, no source/model authority",
+    "receipt": "roster-current-evidence/ci-observations.json"
+  },
+  "rosterCurrentFence": {
+    "source": "d8cd0de346dd443bdf37541eb98a72c31f8e71b1",
+    "actualNativeSubject": "37ba4a6904a70f742f3322b3d29a244d091d35da",
+    "runtimeMerge": "2d88511238eb528bd1d9e8826540fbfe00ee988d",
+    "treeParity": true,
+    "actualTests": 10,
+    "pass": 10,
+    "fail": 0,
+    "installer": "actual three-body COMMIT, OID/nonbody/catalog/state preserve, repeat error/ReadyE+rollbackI",
+    "coverage": "current-source false, held work-context/prepare denied, queued claim denied before start, otherwise valid reserve denied before new invocation; original attempt/prep/ledger immutable; real empty target composition exits both",
+    "limits": "synthetic nonempty official-shaped vector; no actual financial qualification/published-eligible positive/model/API",
+    "cleanup": "actual PG stopped/PID0/exit0/shutdown+socket absence;24 observed process identities absent,0zombie/unsettled; raw hosted41files60247651bytes only inventorynotice; ephemeral runner storage, no independent raw download"
+  },
+  "preparationCurrentInstrument": {
+    "source": "37ba4a6904a70f742f3322b3d29a244d091d35da",
+    "local": "actual composition12PASS+pure selector5PASS, fulltypes+targetlint0; initial loader/typeRED preserved",
+    "currentHead": "newsource test-only28fd566 changes obsolete implementation assertion, no SQL/product behavior change",
+    "actualPGHTTP": "new source after full projection/candidatechain NOT_RUN because37 source stage failed; old6f success remains historical",
+    "selection": "max1000 full12fieldsymbol-or-stock rows; latest status/clocks/conflicts before filtering, microseconds retained; no positive unknown/false qualification"
   }
 }
