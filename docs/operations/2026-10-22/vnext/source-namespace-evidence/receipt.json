@@ -1,0 +1,28 @@
+{
+  "schema": "vnext-source-namespace-review-candidate-receipt-v1",
+  "sourceHead": "d2bca628e5b7c1d6d3e55417cb9e28b105ae6928",
+  "parentObservedNativeSubject": "ccc127179d881dfce2afe9edefb1c131c8aa1851",
+  "manifestSha256": "7ee166755247c7cdedfee2580635bb4dbcedeb04c9b7ed1b37179b50c3fa7d5f",
+  "manifestBytes": 681,
+  "notSelfReferential": true,
+  "nativeCounts": {
+    "tests": 7,
+    "pass": 5,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "candidateNative": "NOT_RUN",
+  "grantExecuted": false,
+  "independentReview": "REQUIRED_NOT_SELF_APPROVED",
+  "fullGoal": "INCOMPLETE",
+  "publicSafeAllowlist": [
+    "manifest.json",
+    "private-inventory.json",
+    "source-seal.json",
+    "source-checks.json",
+    "actual-ccc.json",
+    "receipt.json"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "sourceHead": "d2bca628e5b7c1d6d3e55417cb9e28b105ae6928",
+  "directParent": "ccc127179d881dfce2afe9edefb1c131c8aa1851",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "sourceTree": "a3c21101571fda2392c90133c52b548d6822b460",
+  "inheritedIdentitiesUnchanged": 2756,
+  "inheritedIdentityChanges": [],
+  "newFiles": [
+    {
+      "path": "docs/operations/2026-10-22/vnext/SOURCE-NAMESPACE-CANDIDATE.md",
+      "identity": "100644 blob 1773dcce697861e0480cc7e2c4ed5f59e4db5621",
+      "bytes": 5163,
+      "sha256": "d90c9a8a341599b5e3959a799bb1de11c27c25b52bc9eabdbb68cc8848c3d41a"
+    },
+    {
+      "path": "scripts/vnext-source-namespace-candidate.mjs",
+      "identity": "100644 blob 0e9b15c5476bcc0ffaca14b248df92c3f79f5ce6",
+      "bytes": 9849,
+      "sha256": "1fcc0ca2c00494b19caae4e5e049a885ddd0ff1e629f6e6cd59fb390d3475012"
+    },
+    {
+      "path": "scripts/vnext-source-namespace-source.test.mjs",
+      "identity": "100644 blob cd147992d07e4c6c83ab099ac6b18d64eba2e449",
+      "bytes": 4718,
+      "sha256": "726df76a486a5c110f7b336fdc3f493156679655428bfae731689214e6e22a84"
+    }
+  ],
+  "grantExecuted": false,
+  "candidateWired": false,
+  "candidateNativeVerified": false,
+  "profileSource": "actual ccc read-only current-prefix catalog; not historical candidate36; no predecessor hash edits"
+}

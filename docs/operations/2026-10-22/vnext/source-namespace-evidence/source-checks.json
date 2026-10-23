@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "name": "source-namespace-contract-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--test",
+        "scripts/vnext-source-namespace-source.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T13:25:36.929122+00:00",
+      "end": "2026-10-23T13:25:37.464585+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8877510656,
+        "/tmp": 17244545024
+      },
+      "finalFree": {
+        "/workspace": 8877510656,
+        "/tmp": 17244540928
+      },
+      "sampledSessionPeakRssBytes": 13893632,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "countScope": "one file group only; NOT five cases",
+      "logSha256": "c8839458125e43e107aa08598057c32c54946b55bfaa20178e32d6a513c38db3"
+    },
+    {
+      "name": "source-namespace-contract-02",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-source-namespace-source.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T13:26:15.151776+00:00",
+      "end": "2026-10-23T13:26:15.663478+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8877510656,
+        "/tmp": 17244536832
+      },
+      "finalFree": {
+        "/workspace": 8877510656,
+        "/tmp": 17244532736
+      },
+      "sampledSessionPeakRssBytes": 4194304,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "countScope": "five named stdlib source contracts, standalone; not additive with earlier run",
+      "logSha256": "12a250c2b89d97223ed62d1af2baba09c2431ee8690207e8e10bd85e76a7f935"
+    },
+    {
+      "name": "source-namespace-contract-03",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-source-namespace-source.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T13:27:15.724826+00:00",
+      "end": "2026-10-23T13:27:16.242436+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8877502464,
+        "/tmp": 17244528640
+      },
+      "finalFree": {
+        "/workspace": 8877502464,
+        "/tmp": 17244524544
+      },
+      "sampledSessionPeakRssBytes": 12451840,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "countScope": "five named stdlib source contracts, standalone; not additive with earlier run",
+      "logSha256": "7ee652424ad2fd40aa5d2c88686eb325bc9a19953bd8b072eff7d406221f1f53"
+    },
+    {
+      "name": "source-namespace-syntax-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/vnext-source-namespace-candidate.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T13:27:32.829854+00:00",
+      "end": "2026-10-23T13:27:33.341980+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8877502464,
+        "/tmp": 17244520448
+      },
+      "finalFree": {
+        "/workspace": 8877502464,
+        "/tmp": 17244520448
+      },
+      "sampledSessionPeakRssBytes": 7471104,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "countScope": "syntax only",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "nativeGrantOrSQLExecution": "NOT_RUN",
+  "localPGFullbuildBrowser": "NOT_ADMITTED",
+  "sourceGrantorSemantics": "SOURCE_CANDIDATE_NOT_NATIVE_VERIFIED"
+}
