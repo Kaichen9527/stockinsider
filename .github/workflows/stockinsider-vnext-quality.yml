@@ -73,6 +73,8 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/preparation-reconciliation.test.ts | tee /tmp/stockinsider-vnext-ci/preparation-reconciliation-source.tap
           node --experimental-strip-types web/src/lib/vnext/preparation-trading-identity.test.ts | tee /tmp/stockinsider-vnext-ci/preparation-trading-identity-source.tap
           node --experimental-strip-types web/src/lib/vnext/roster-current-fence.test.ts | tee /tmp/stockinsider-vnext-ci/roster-current-fence-source.tap
+          node --experimental-strip-types web/src/lib/vnext/catalyst-cancellation.test.ts | tee /tmp/stockinsider-vnext-ci/cancellation-source.tap
+          node --experimental-strip-types web/src/lib/vnext/cancellation-candidate.test.ts | tee /tmp/stockinsider-vnext-ci/cancellation-candidate-source.tap
           node --experimental-strip-types web/src/lib/vnext/research-failure.test.ts | tee /tmp/stockinsider-vnext-ci/research-failure-source.tap
           node --experimental-strip-types scripts/vnext-business-vectors.test.mjs | tee /tmp/stockinsider-vnext-ci/business-vectors.tap
           node scripts/candidate-financial-document-write-lease-route.test.mjs | tee /tmp/stockinsider-vnext-ci/lease-routes.tap
@@ -865,5 +867,168 @@ jobs:
             /tmp/stockinsider-vnext-ci/roster-current.tap
             /tmp/stockinsider-vnext-ci/roster-current-summary.json
             /tmp/stockinsider-vnext-ci/roster-current-private-inventory.json
+          if-no-files-found: warn
+          retention-days: 7
+
+  cancellation-native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Fixed native dependency and workset admission
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592+536870912: raise SystemExit('NOT_READY: original floor plus workset reference')
+          PYCODE
+          npm ci --ignore-scripts
+          mkdir -m 700 /tmp/stockinsider-vnext-ci
+          mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
+      - name: Fresh source-bound cancellation via distinct reviewer and atomic publication/exit (synthetic metadata)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-12
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-10
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/catalyst-cancellation
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592+536870912: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          owned_id="$(docker inspect --format '{{.Id}}' "$VNEXT_TEST_CONTAINER")"
+          cleanup_trading_invalidity() {
+            original_exit=$?
+            trap - EXIT
+            if ! docker stop "$owned_id" > /tmp/stockinsider-vnext-ci/catalyst-cancellation-pg-stop.private.log 2>&1; then original_exit=1; fi
+            if ! docker inspect --format '{{json .State}}' "$owned_id" > /tmp/stockinsider-vnext-ci/catalyst-cancellation-pg-stop.private.json; then original_exit=1; fi
+            if ! docker logs --tail 500 "$owned_id" > /tmp/stockinsider-vnext-ci/catalyst-cancellation-pg-server.private.log 2>&1; then original_exit=1; fi
+            if ! python3 - <<'PYCODE'
+          import hashlib,json,pathlib,os
+          state=json.loads(pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst-cancellation-pg-stop.private.json').read_text())
+          if state['Running'] or state['Pid']!=0 or state['ExitCode']!=0: raise SystemExit('owned PG shutdown unconfirmed')
+          logs=pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst-cancellation-pg-server.private.log').read_bytes()
+          if logs.rfind(b'database system is shut down')<=logs.rfind(b'database system is ready to accept connections'): raise SystemExit('PG server shutdown log unconfirmed')
+          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst-cancellation-resource/receipt.json')
+          observations=[];unsettled=False
+          if resource.exists():
+              for owned in json.loads(resource.read_text())['processPostObservation']:
+                  pid=owned['pid']
+                  try:
+                      fields=pathlib.Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()
+                      same=fields[19]==owned['originalStart'];rss=int(fields[21])*os.sysconf('SC_PAGE_SIZE')
+                      observations.append({'pid':pid,'sameProcess':same,'state':fields[0],'rssBytes':rss,'originalIdentitySettled':not same or fields[0]=='Z' and rss==0})
+                      unsettled|=same and not(fields[0]=='Z' and rss==0)
+                  except FileNotFoundError: observations.append({'pid':pid,'absent':True})
+                  except OSError: observations.append({'pid':pid,'unknown':True});unsettled=True
+          pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst-cancellation-cleanup.private.json').write_text(json.dumps({'containerState':state,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'shutdownObserved':True,'ownedProcessObservations':observations,'zombieIsNotAbsent':True,'unsettled':unsettled})+'\n')
+          if unsettled: raise SystemExit('owned process settlement unknown')
+          socket_absence={}
+          for name in ['.s.PGSQL.5432','.s.PGSQL.5432.lock']:
+              path=pathlib.Path(os.environ['VNEXT_WORKER_SOCKET_PARENT'])/'socket'/name
+              try: path.lstat();socket_absence[name]=False
+              except FileNotFoundError: socket_absence[name]=True
+          if not all(socket_absence.values()): raise SystemExit('owned PG socket absence unconfirmed')
+          counts={'absent':sum(v.get('absent',False) for v in observations),'zeroRssZombie':sum(v.get('sameProcess',False) and v.get('state')=='Z' and v.get('rssBytes')==0 for v in observations),'pidReused':sum(v.get('sameProcess') is False for v in observations),'unsettled':sum(v.get('unknown',False) or v.get('sameProcess',False) and not(v.get('state')=='Z' and v.get('rssBytes')==0) for v in observations)}
+          print('::notice title=Cancellation cleanup receipt::'+json.dumps({'pgRunning':state['Running'],'pgPid':state['Pid'],'pgExit':state['ExitCode'],'shutdownLogObserved':True,'socketAbsence':socket_absence,'resourceReceiptObserved':resource.exists(),'ownedProcessCounts':counts,'fullPrivateCleanupSha256':hashlib.sha256(pathlib.Path('/tmp/stockinsider-vnext-ci/catalyst-cancellation-cleanup.private.json').read_bytes()).hexdigest(),'dataRetained':True},separators=(',',':')))
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
+          PYCODE
+            then original_exit=1; fi
+            exit "$original_exit"
+          }
+          trap cleanup_trading_invalidity EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if python3 scripts/vnext-catalyst-cancellation-resource-run.py > /tmp/stockinsider-vnext-ci/catalyst-cancellation.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/catalyst-cancellation.tap.private.log /tmp/stockinsider-vnext-ci/catalyst-cancellation.tap
+          python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re,subprocess
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          raw=root/'catalyst-cancellation.tap.private.log'
+          if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded native diagnostic required')
+          for line in raw.read_text().splitlines():
+              prefix='CANCELLATION_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'phase','code','message','errorType'}: raise SystemExit('closed native diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Cancellation finite diagnostic::'+value)
+          tap=(root/'catalyst-cancellation.tap').read_bytes()
+          paths=['scripts/vnext-catalyst-cancellation-postgres.test.mjs','scripts/vnext-catalyst-cancellation-resource-run.py','scripts/vnext-worker-fixture.mjs','web/src/lib/vnext/catalyst-cancellation.ts','web/src/lib/vnext/worker-core.ts','web/src/lib/vnext/worker-prompts.ts','web/src/lib/vnext/research.ts','web/src/lib/vnext/worker-output.ts','migrations/20261023_vnext_catalyst_cancellation_v1.sql','scripts/opportunity-v3/vnext-catalyst-cancellation-profile-v1.json','migrations/20261023_vnext_roster_current_fence_v1.sql']
+          inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
+          summary={'scope':'actual original-source cancellation/private proof/atomic retained publication+exit; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
+          # Decode finite count keys only; no private rows/principals are emitted.
+          summary['actualTapCounts']={k.decode():v for k,v in summary['actualTapCounts'].items()}
+          resource=root/'catalyst-cancellation-resource/receipt.json'
+          if resource.exists():
+              value=json.loads(resource.read_text())
+              summary.update(resourceObserved=True,exit=value['exit'],resourceViolation=value['resourceViolation'],sampledNotInstantaneous=True,sampledOwnedTreePeakRssBytes=value['sampledNodeAndOwnedPgTreePeakRssBytes'],initialFree=value['initialFree'],finalFree=value['finalFree'],nodeSha256=value['nodeSha256'],actualPg=value['ownedPg'])
+          (root/'catalyst-cancellation-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print('::notice title=Cancellation finite native receipt::'+json.dumps(summary,separators=(',',':')))
+          PYCODE
+          test "$test_status" = 0
+      - name: Hash finite owned raw evidence without publishing private contents
+        if: always()
+        run: |
+          python3 - <<'PYCODE'
+          import hashlib,json,os,pathlib,re,stat
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          paths=[]
+          for child in ['catalyst-cancellation','catalyst-cancellation-resource']:
+              directory=root/child
+              if directory.exists():
+                  if directory.is_symlink() or not directory.is_dir(): raise SystemExit('owned raw directory required')
+                  paths.extend(directory.glob('*.json'))
+          for name in ['catalyst-cancellation.tap.private.log','catalyst-cancellation-pg-stop.private.log','catalyst-cancellation-pg-stop.private.json','catalyst-cancellation-pg-server.private.log','catalyst-cancellation-cleanup.private.json']:
+              path=root/name
+              if path.exists(): paths.append(path)
+          if len(paths)>256: raise SystemExit('finite raw inventory bound exceeded')
+          rows=[];total=0
+          for path in sorted(paths):
+              relative=str(path.relative_to(root))
+              if not re.fullmatch('[a-z0-9._/-]{1,200}',relative): raise SystemExit('finite owned evidence name required')
+              before=path.lstat();total+=before.st_size
+              if not stat.S_ISREG(before.st_mode) or before.st_uid!=os.getuid() or before.st_nlink!=1 or before.st_size>134217728 or total>1073741824: raise SystemExit('bounded regular owned evidence required')
+              with path.open('rb') as stream:
+                  opened=os.fstat(stream.fileno())
+                  if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino): raise SystemExit('evidence open identity changed')
+                  digest=hashlib.file_digest(stream,'sha256').hexdigest()
+                  ended=os.fstat(stream.fileno())
+              after=path.lstat()
+              keys=lambda v:(v.st_dev,v.st_ino,v.st_size,v.st_mtime_ns,v.st_ctime_ns)
+              if keys(before)!=keys(ended) or keys(before)!=keys(after): raise SystemExit('owned evidence changed during hashing')
+              rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
+          value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only inventory of this hosted owned run; raw private contents are not published or independently downloaded; runner retention is ephemeral'}
+          out=root/'catalyst-cancellation-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Cancellation private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
+          PYCODE
+      - name: Upload finite catalyst-cancellation TAP and summary only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: stockinsider-vnext-catalyst-cancellation-synthetic
+          path: |
+            /tmp/stockinsider-vnext-ci/catalyst-cancellation.tap
+            /tmp/stockinsider-vnext-ci/catalyst-cancellation-summary.json
+            /tmp/stockinsider-vnext-ci/catalyst-cancellation-private-inventory.json
           if-no-files-found: warn
           retention-days: 7

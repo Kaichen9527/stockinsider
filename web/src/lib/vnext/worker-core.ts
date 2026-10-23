@@ -1,8 +1,9 @@
+import {assertCancellationScope,cancellationContext,cancellationExact,type CancellationScope} from './catalyst-cancellation.ts';
 import {catalystAnnotation} from './semantic-criteria.ts';
 import type { VnextIdentity } from './auth.ts';
 import type { Artifact, Evidence, Review } from './research.ts';
 import type { ResearchProvider, ProviderOutcome, ProviderRequest } from './provider.ts';
-import { normalizeWorkerAuthor, normalizeWorkerReview } from './worker-output.ts';
+import { assertWorkerJsonCodec, normalizeWorkerAuthor, normalizeWorkerReview } from './worker-output.ts';
 export type WorkerRow = Record<string, unknown>;
 export type WorkerBinding = { identity: VnextIdentity; provider: 'openai-responses'; model: string; modelVersion: string; credentialIdentity: string; instructions: string; promptVersion: string };
 export type WorkerDependencies = {
@@ -26,6 +27,7 @@ function journalMatches(row: WorkerRow, binding: WorkerBinding) {
  * Never takes a provider, principal, model, URL or raw result from an HTTP body. */
 export async function runResearchWorker(jobId: string, deps: WorkerDependencies, recovery = false): Promise<WorkerRow> {
  if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu.test(jobId)) throw new Error('vnext_worker_job_id_invalid');
+ if([deps.author,deps.reviewer].some(b=>b.promptVersion==='vnext-research-worker-v4')&&[deps.author,deps.reviewer].some(b=>b.promptVersion!=='vnext-research-worker-v4'))throw Error('vnext_worker_cancellation_profile_pair_required');
  if(deps.author.identity.role!=='author' || deps.reviewer.identity.role!=='reviewer' || deps.author.identity.principal===deps.reviewer.identity.principal) throw new Error('vnext_worker_distinct_identities_required');
  for (const binding of [deps.author,deps.reviewer]) if (!matchesBinding(await deps.journal(binding.identity,'binding',{}),binding)) throw new Error('vnext_worker_server_binding_mismatch');
  let state=await deps.journal(deps.author.identity,'inspect',{jobId});
@@ -67,6 +69,22 @@ export async function runResearchWorker(jobId: string, deps: WorkerDependencies,
   try { return {status:'published',...await deps.publish(deps.reviewer.identity,{jobId,inputHash:state.inputHash,executionId:state.reviewerExecutionId})}; }
   catch { return uncertain('publication_receipt'); }
  });
+ async function cancellationPacket(record:WorkerRow,binding:WorkerBinding){
+  const request=record.frozen_request as ProviderRequest;
+  if(typeof request?.input!=='string'||new TextEncoder().encode(request.input).length>1048576)throw Error('vnext_worker_cancellation_packet_bound');
+  const frozen=JSON.parse(request.input) as CancellationPacket;assertWorkerJsonCodec(frozen);
+  if(frozen.task!==binding.identity.role||frozen.jobId!==jobId||frozen.executionId!==record.execution_id||frozen.inputHash!==record.input_hash||record.job_id!==jobId||record.principal!==binding.identity.principal||record.task!==binding.identity.role)throw Error('vnext_worker_cancellation_packet_binding');
+  cancellationContext(frozen.cancellationContext,frozenScope(frozen));
+  if(binding.identity.role==='reviewer'){
+   assertCancellationScope(frozen.authorArtifact,frozen.cancellationContext,frozenScope(frozen));
+   const author=await deps.journal(deps.author.identity,'read',{jobId,executionId:state.executionId});
+   if(author.state!=='completed'||author.task!=='author'||author.principal!==deps.author.identity.principal||author.job_id!==jobId||author.execution_id!==state.executionId||author.input_hash!==record.input_hash||!journalMatches(author,deps.author)||author.invocation_id===record.invocation_id||author.execution_id===record.execution_id||typeof author.provider_response_id!=='string'||!author.provider_response_id)throw Error('vnext_worker_cancellation_author_journal_binding');
+   if(record.provider_response_id!==undefined&&record.provider_response_id!==null&&record.provider_response_id===author.provider_response_id)throw Error('vnext_worker_cancellation_response_identity_reused');
+   const original=await cancellationPacket(author,deps.author);
+   if(!cancellationExact(original.cancellationContext,frozen.cancellationContext)||!cancellationExact(original.evidence,frozen.evidence)||!cancellationExact(author.normalized_output,frozen.authorArtifact))throw Error('vnext_worker_cancellation_context_changed');
+  }
+  return frozen;
+ }
  async function phase(binding: WorkerBinding, executionId: unknown, allowReceipt=true): Promise<WorkerRow> {
   const body={jobId,executionId}; let record: WorkerRow;
   try { record=await deps.journal(binding.identity,recovery?'read':'reserve',body); } catch { return uncertain('provider_reservation'); }
@@ -74,6 +92,8 @@ export async function runResearchWorker(jobId: string, deps: WorkerDependencies,
   if(!journalMatches(record,binding)) throw new Error('vnext_worker_immutable_provider_binding_changed');
   if(record.state==='failed') return {status:'failed',attemptConsumed:true,reinvoke:false};
   if(record.state==='completed' && !recovery) return {status:'recovery_required',stage:'immutable_output_receipt',reinvoke:false};
+  if(binding.promptVersion==='vnext-research-worker-v4')try{await cancellationPacket(record,binding);}catch{return uncertain('cancellation_server_context');}
+  else {const frozen=JSON.parse((record.frozen_request as ProviderRequest).input);try{assertCancellationProfile(frozen.authorArtifact,binding.promptVersion);}catch{return uncertain('cancellation_profile');}}
   if(record.state!=='completed') {
    let outcome: ProviderOutcome;
    if(recovery) {
@@ -90,8 +110,11 @@ export async function runResearchWorker(jobId: string, deps: WorkerDependencies,
     // Exact finite interface and the existing validators run before receipt.
     // Invalid completed output is a settled, consumed failure, never resampling.
     try {
-     const frozen=JSON.parse((record.frozen_request as ProviderRequest).input) as {symbol?:string;inputHash:string;evidence:{cutoff?:string;evidence:Evidence[]};authorArtifact?:Artifact};
-     if(binding.promptVersion==='vnext-research-worker-v3')assertSemanticScope(binding.identity.role==='author'?outcome.output:frozen.authorArtifact,frozen);
+     const frozen=JSON.parse((record.frozen_request as ProviderRequest).input) as {symbol?:string;inputHash:string;evidence:{cutoff?:string;evidence:Evidence[]};authorArtifact?:Artifact;cancellationContext?:unknown};
+     if(['vnext-research-worker-v3','vnext-research-worker-v4'].includes(binding.promptVersion))assertSemanticScope(binding.identity.role==='author'?outcome.output:frozen.authorArtifact,frozen);
+     assertCancellationProfile(outcome.output,binding.promptVersion);
+     if(frozen.authorArtifact)assertCancellationProfile(frozen.authorArtifact,binding.promptVersion);
+     if(binding.promptVersion==='vnext-research-worker-v4')assertCancellationScope(binding.identity.role==='author'?outcome.output:frozen.authorArtifact,frozen.cancellationContext,frozenScope(frozen));
      const evidence=frozen.evidence.evidence;
      if(binding.identity.role==='author') normalizeWorkerAuthor(outcome.output,binding,frozen.inputHash,evidence);
      else normalizeWorkerReview(outcome.output,binding.modelVersion,frozen.authorArtifact!,evidence);
@@ -103,7 +126,9 @@ export async function runResearchWorker(jobId: string, deps: WorkerDependencies,
    if(record.state!=='completed') return uncertain('provider_pending');
   }
   if(!allowReceipt || Date.parse(String(record.deadline_at))<=Date.now()) return {status:'settled_after_execution_window',published:false,reinvoke:false};
-  if(binding.promptVersion==='vnext-research-worker-v3'){const frozen=JSON.parse((record.frozen_request as ProviderRequest).input);assertSemanticScope(binding.identity.role==='author'?record.normalized_output:frozen.authorArtifact,frozen);}
+  if(['vnext-research-worker-v3','vnext-research-worker-v4'].includes(binding.promptVersion)){const frozen=JSON.parse((record.frozen_request as ProviderRequest).input);assertSemanticScope(binding.identity.role==='author'?record.normalized_output:frozen.authorArtifact,frozen);}
+  assertCancellationProfile(record.normalized_output,binding.promptVersion);
+  if(binding.promptVersion==='vnext-research-worker-v4'){const frozen=await cancellationPacket(record,binding);assertCancellationScope(binding.identity.role==='author'?record.normalized_output:frozen.authorArtifact,frozen.cancellationContext,frozenScope(frozen));}
   if(record.normalized_output==null) throw new Error('vnext_worker_normalized_output_missing');
   try {
    if(binding.identity.role==='author') await deps.authorReceipt(binding.identity,{...body,inputHash:record.input_hash,artifact:record.normalized_output});
@@ -117,4 +142,15 @@ function assertSemanticScope(value:unknown,frozen:{symbol?:string;evidence:{cuto
  if(typeof frozen.symbol!=='string'||!/^\d{4}$/u.test(frozen.symbol)||typeof frozen.evidence.cutoff!=='string'||!Number.isFinite(Date.parse(frozen.evidence.cutoff)))throw Error('vnext_worker_semantic_server_scope_missing');
  const artifact=value as {claims?:Artifact['claims']};if(!Array.isArray(artifact?.claims))throw Error('vnext_worker_semantic_claims_missing');
  for(const claim of artifact.claims)if(claim.semantic!==undefined)catalystAnnotation(claim,frozen.evidence.evidence,frozen.evidence.cutoff,frozen.symbol);
+}
+
+type CancellationPacket={symbol:string;inputHash:string;jobId:string;executionId:string;task:string;evidence:{cutoff:string;evidence:Evidence[]};authorArtifact?:Artifact;cancellationContext:unknown};
+function frozenScope(frozen:{symbol?:string;inputHash:string;evidence:{cutoff?:string;evidence:Evidence[]}}):CancellationScope{
+ if(typeof frozen.symbol!=='string'||!/^\d{4}$/u.test(frozen.symbol)||typeof frozen.evidence?.cutoff!=='string')throw Error('vnext_worker_cancellation_server_scope_missing');
+ return {symbol:frozen.symbol,inputHash:frozen.inputHash,cutoff:frozen.evidence.cutoff,evidence:frozen.evidence.evidence};
+}
+function assertCancellationProfile(value:unknown,profile:string){
+ if(profile==='vnext-research-worker-v4')return;
+ const row=value as {claims?:Array<{cancellation?:unknown}>;claimChecks?:Array<{cancellationAssessment?:unknown}>}|null;
+ if(row?.claims?.some(c=>c.cancellation!==undefined)||row?.claimChecks?.some(c=>c.cancellationAssessment!==undefined))throw Error('vnext_worker_cancellation_profile_required');
 }
