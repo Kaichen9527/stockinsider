@@ -1,7 +1,7 @@
 {
   "status": "PARTIAL_VM_IMPLEMENTATION_AND_ACCEPTANCE_NOT_RELEASE_COMPLETE",
-  "updatedAt": "2026-10-23T02:29:35.755208+00:00",
-  "runtimeSourceHead": "f9f3a0d0ffa9b50852305ee59f19d48356c2fd13",
+  "updatedAt": "2026-10-23T02:41:37.530921+00:00",
+  "runtimeSourceHead": "42a5b49c258226597c349181c7e22c0938815346",
   "currentReceiptSha256": "8228d19e2fac75ef6a6dae799dc8e872b66a373df96ef55d374d01000acd014c",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
   "primaryReport": "CATALYST-CRITERIA-DELIVERY.md",
@@ -47,13 +47,13 @@
       "id": "VN07",
       "status": "PARTIAL_SEMANTIC_PRODUCERS_PENDING",
       "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01; thesis-semantic-authority-source-02; semantic-native-monitored-o23; catalyst-semantic-source-05; catalyst-native-monitored-o23",
-      "limits": "Original EPS1 safety repair and immutable old report/current-public correction remain. New positive source-bound v3 annotation/assessment/current DB derivation implemented; final10source contracts/type/lint and retained4PASS installer/authority proof only. New fresh lifecycle/public-score path wired but not yet observed at packaging. Single-source verified met staysnull; cancel/contra/target producers remain missing. Weights30/25/20/15/10 unchanged/null/no renormalization."
+      "limits": "Final10source/type/lint and retained4PASS; corrected54269 ordinary freshsource→actualdistinct syntheticworkers→currentsemanticreceipt/audit/publicscore, explicitnegative/single-source-null/directforgery/replay/withdrawal stepSUCCESS. Guardtestomission RED kept. No independent news/model/semantic approval; cancel/contra/target source currently underimplementation. No weights/null relaxation."
     },
     {
       "id": "VN08",
       "status": "TESTED_CORE_AND_CACHE_ADAPTERS_PARTIAL_DATA",
       "runs": "cached-native-01; cached-native-02; preparation-authority-source-direct-01",
-      "limits": "Actualofficialcalendar row/as-of/futureclose/privatecompletedfalse and source-derived originaladjustedpricefunction reuse. Actual240-price PostgREST+fullqualification positive notrun. Missingannual/forwardEPS staysnull."
+      "limits": "Actualofficialcalendar row/as-of/futureclose/privatecompletedfalse and source-derived originaladjustedpricefunction reuse. Actual240-price PostgREST+fullqualification positive notrun. Missingannual/forwardEPS staysnull. New forecast-source02 diagnostic12PASS/type/lint only. Actual source receipt/current authority/preparation/provider wiring remains UNIMPLEMENTED, not simply unavailabledata."
     },
     {
       "id": "VN09",
@@ -101,13 +101,13 @@
       "id": "VN16",
       "status": "TESTED_VM_RUNTIME_SOURCE",
       "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23; semantic-final-types-o23",
-      "limits": "New TS types/lint/source tests pass on explicit seals; new fullVMbuild NOT_ADMITTED by measured working set plus8GiB reserve. Previous0412659 hosted fullbuild/vNext success is not transferred to f9f3a0d."
+      "limits": "New forecast fullnoEmittypes/focusedlint/source12PASS. Corrected54269 actual ordinary fullbuildSUCCESS. New fullCodexVMbuild remains NOT_ADMITTED by known working set+8GiB; no build-result transfer to42a/latestuncommittedtargetsource."
     },
     {
       "id": "VN17",
       "status": "TESTED_VM_ISOLATED_ENGINEERING_SUBSETS",
       "runs": "cached-native-02; terminal-slots-read-01; cached-active-http-recovery-01",
-      "limits": "RealPG17.11/service_role/actualleaseRPC finiteRESTfacade; genuinecaptured50/pub26 prerequisites. Unknownimmutableprofilesnotmodified. FinalPG09stopped/backendssettled/socketabsent/dataretained; noformalHBApeer claim."
+      "limits": "Corrected54269 fresh genuine capturedprefix/status/IRcandidateinstaller and newcatalyst actualworker/public-score stepSUCCESS; synthetic event/model, no actualIRfiling/parser/model approval. Retained4PASS separately. Fullnewfinancial-qualifiedIRbusiness andnewHTTP/remainingACL/race remainpending."
     },
     {
       "id": "VN18",
@@ -134,31 +134,61 @@
     "Actualprovider/sourcepermissions+semanticexecution requirelegitimateinjection; neverpastecreds/chat/argv/Git"
   ],
   "remainingVMCode": [
-    "Complete connector-owned comparable28day event-window/volume authority; current TWSE snapshot transport receipt implemented but proves no event coverage",
-    "Structured source-bound semantic checklist/catalyst/cancel/contra/target adjudication producer; numeric1/boolean/provenance cannot substitute",
-    "Explicit numeric guidance/forecast/valuation assumptions producer; unavailable data staysnull",
-    "Preparation explicitREAD/cachedresume implemented; actual new-source PG/HTTP/fullbrowser acceptance pending"
+    "complete comparable28-day sourcewindow/volume authority",
+    "source-bound contradiction/cancel/target exit producer (target implementation currentlyWIP)",
+    "numericforecast source/current authority/preparation/worker producer (typed diagnostic prerequisite12PASS only)",
+    "competitive/risk criterion authority",
+    "current fullHTTP/browser and remaining financial/ACL/race acceptance"
   ],
   "remainingTimeAcceptance": "2actualconsecutivecompletedpostclose sessions; no guard/clock bypass",
   "ReleaseGate": "PENDING",
   "testAdapterSource": "76aca1522fa1b3292a85f9f387f01bee7fd43e23",
   "latestCI": {
-    "subject": "19824f87909996aba92f09e2db36d07b7d4796ff",
-    "run": 39888698695,
-    "job": 120202937681,
-    "overall": "FAILURE",
-    "failingStep": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
-    "preceding": "source/type/lint/fullbuild/admission/legacy/worker/source-market/thesis/cache/TWSE allSUCCESS",
-    "exactCause": "NOT_OBSERVED: one log and one newartifact request403/0bytes; no bypass/retry",
-    "protected": "39888697103 FAILURE separately; no guard/pin changes",
-    "next": "minimal full-current-member test-array fix; no product or assertion/pin relaxation; natural newheadCI pending",
-    "captureSubject": "fabf9510fbabffe02ff14d2fc459590556172dcc",
-    "captureRun": 39889419786,
-    "captureJob": 120205320036,
-    "captureCause": "actual finite annotation P0001 vnext_weekly_all_current_members_required during second issuer; test-only missing first active report"
+    "subject": "54269b7a73631590b7c8547e7b16d735bbc39c6e",
+    "vnextRun": 39889864193,
+    "vnextJob": 120206783473,
+    "vnextConclusion": "SUCCESS",
+    "observedScope": "actual API metadata/stepconclusions: source/type/lint/fullbuild/alllistedfreshPGsteps includingnewcatalyst/currentpublic score",
+    "tapCounts": "NOT_DOWNLOADED or independentlydecoded; no inferredTAPtotal",
+    "sourceLed": [
+      {
+        "id": 120206783244,
+        "name": "product-runtime",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-23T02:29:44Z",
+        "completed_at": null,
+        "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39889864164/job/120206783244"
+      },
+      {
+        "id": 120206784919,
+        "name": "evaluation-governance",
+        "status": "completed",
+        "conclusion": "skipped",
+        "started_at": "2026-10-23T02:29:42Z",
+        "completed_at": "2026-10-23T02:29:42Z",
+        "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39889864164/job/120206784919"
+      },
+      {
+        "id": 120206785148,
+        "name": "model-runner",
+        "status": "completed",
+        "conclusion": "skipped",
+        "started_at": "2026-10-23T02:29:42Z",
+        "completed_at": "2026-10-23T02:29:42Z",
+        "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39889864164/job/120206785148"
+      }
+    ],
+    "protected": "39889861817 FAILURE separately/unclosed; no pin/guard changes",
+    "currentSource": "42a5b49c258226597c349181c7e22c0938815346",
+    "currentNewHeadCI": "NOT_OBSERVED; previous54269 not transferred as newhead success",
+    "originalReds": [
+      "19824run39888698695 overallFAIL; rawdownloads403",
+      "fabf951capture39889419786 overallFAIL; actual weeklyallcurrentguard refused partialtestarray; fixedtestonly"
+    ]
   },
   "ciReceiptSha256": "65f25e5c05cbe7eafef834050f105e0818522cf6555018e89f000e01214844a2",
-  "previousRuntimeSourceHead": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
+  "previousRuntimeSourceHead": "f9f3a0d0ffa9b50852305ee59f19d48356c2fd13",
   "previousReceiptSha256": "a0d2823d1d8fbb0630580eda734b2f4a1532156f737f3696466a1daea7c65416",
   "capacity": {
     "freshFree": {
@@ -213,9 +243,16 @@
     "actualRetainedInstallerSource": "5d4084ee10ea07e34ef531d2fe4471a714dd7beb",
     "sourceContracts": "10PASS final05; types/lintPASS; source03 affected59PASS separately",
     "actualNative": "4PASS retained installer/private authority/repeat rollback only",
-    "freshLifecycle": "New fresh capture stage reaches second issuer actual semantic receipt, then original all-current-weekly guard correctly rejects partial test array. OverallFAIL preserved; corrected full-array input pending natural newheadCI.",
+    "freshLifecycle": "Corrected54269 ordinary job120206783473 SUCCESS including actual fullcaptured prefix/status/IRinstall/catalyst worker/currentpublic-negative/replay/sourcewithdrawal step; synthetic sources/provider only. Current14runtimefilesbyteequal, not whole newhead acceptance.",
     "independentConfirmation": "NULL when one official root; different reviewer execution is not independent source",
     "defaultPrompt": "v2 unchanged; trusted finite v3 opt-in; binding rows not changed",
     "remaining": "competitive/risk, event cancellation/contra/target, numericforecast and complete28-day source volume; real model/source/semantic/staging/formal research remain unaccepted"
+  },
+  "forecastDiagnostic": {
+    "source": "42a5b49c258226597c349181c7e22c0938815346",
+    "receipt": "forecast-source-evidence/receipt.json",
+    "receiptSha256": "1428acb07a343a765b39f404ab505e41a63749ffde46ecd2f34b5c95e9ffd008",
+    "checks": "12synthetic structural PASS; fullnoEmittypes andfocusedlintPASS",
+    "status": "disconnected prerequisite only; server/current SQL/source/worker producer NOT_IMPLEMENTED; reportedAnnualEps alwaysnull; NTM neverexact4"
   }
 }

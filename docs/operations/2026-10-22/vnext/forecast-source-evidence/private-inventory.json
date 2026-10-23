@@ -1,0 +1,77 @@
+{
+  "bytes": 30561,
+  "count": 14,
+  "files": [
+    {
+      "bytes": 521,
+      "path": "/tmp/stockinsider-vnext-oct22-private/forecast-source-draft-01/inventory.json",
+      "sha256": "a8138be716a50352fb5be2aed4c631dfc78082ba245606e12077d8296dc9e526"
+    },
+    {
+      "bytes": 521,
+      "path": "/tmp/stockinsider-vnext-oct22-private/forecast-source-02/inventory.json",
+      "sha256": "d3f24821a8bcd6ddd8b7cb37ba85c2ae88c424f3bbfca53554d88dd99e4da852"
+    },
+    {
+      "bytes": 876,
+      "path": "/tmp/stockinsider-vnext-oct22-private/forecast-source-02.json",
+      "sha256": "f2f1fc72b8ea97c5bebdadcbc5593bca3640b68186348e78e7e8388588b7d709"
+    },
+    {
+      "bytes": 3658,
+      "path": "/tmp/stockinsider-vnext-oct22-private/forecast-source-02.log",
+      "sha256": "9348bb15c51d4b29b12dee8bf03ac4f3e06d256d74170fb11832ae0e51b7376d"
+    },
+    {
+      "bytes": 10523,
+      "path": "/tmp/stockinsider-vnext-oct22-private/forecast-types-02.json",
+      "sha256": "82141f3b676ccd9e0955d3bd1db019568f0b806f96e5d51deee3817c248ef900"
+    },
+    {
+      "bytes": 0,
+      "path": "/tmp/stockinsider-vnext-oct22-private/forecast-types-02.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1678,
+      "path": "/tmp/stockinsider-vnext-oct22-private/forecast-lint-02.json",
+      "sha256": "bf29286daa6658a865aff79ac727fdc9eb5a0365da2235e2250c12b23ed1f019"
+    },
+    {
+      "bytes": 0,
+      "path": "/tmp/stockinsider-vnext-oct22-private/forecast-lint-02.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-ci-19824-job-log-o23.raw",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 528,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-ci-19824-job-log-o23.stderr",
+      "sha256": "a67393c206cd1ca1ee9406e0631916e0388b15365a9d3c10155bc1489bd36312"
+    },
+    {
+      "bytes": 0,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-ci-19824-artifact-o23.zip",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 675,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-ci-19824-artifact-o23.stderr",
+      "sha256": "eb677ae3d825ab6224229544c50dcfc48c706ba58be7326f8d62d5bbb08048d2"
+    },
+    {
+      "bytes": 5194,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-ci-fabf951-annotations-o23.json",
+      "sha256": "7a044fd8af5bf8c8b5bcba41969c3eee5fa005535a5327e379d7a32d71c607ea"
+    },
+    {
+      "bytes": 6387,
+      "path": "/tmp/stockinsider-vnext-oct22-private/catalyst-ci-54269-success-o23.json",
+      "sha256": "e76ec44c3826e6a4cfcd55a8cbaea3a4a38fcb754763e400eb0f79ce00f505d5"
+    }
+  ],
+  "scope": "hash-only local source/source-checks/initial draft and selected CI metadata/denieddownload bytes; stderr URLs remain private, no independent formal attestation"
+}

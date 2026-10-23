@@ -1,3 +1,12 @@
+# Current milestone: corrected fresh catalyst flow passes ordinary CI
+
+Exact54269b7 vNext39889864193/job120206783473 **SUCCESS**, including fullbuild and fresh actual PG/worker/current-public catalyst step. Original19824/fabf951 REDs remain; only missing all-active-member test input was fixed. No product guard/score relaxation. RawTAP/privatecatalog not downloaded; metadata/step scope is explicit. Protected gates stillFAIL/unclosed.
+
+Source42a5b49 adds a disconnected forecast descriptor prerequisite:12source/type/lintPASS, no runtime/current DB authority. Target-exit coherent producer is active WIP, no validation claimed. Read [delivery](CATALYST-CRITERIA-DELIVERY.md), [CURRENT/VN01–20](CURRENT.json) and [executionmap](VN-EXECUTION-MAP.md). PR384 draft, formal articles/staging/wholeclosure incomplete; no further cleanup or production operations.
+
+---
+Historical observations, exact scopes retained:
+
 Current fresh CI diagnosis: capturefabf951 actual annotation confirms a **test-only** partial weekly report array (`vnext_weekly_all_current_members_required`) for second issuer. New input sends all actual current members; product/guard/score/expected values untouched. Overall REDs preserved, next natural CI pending.
 
 # Current: source-bound catalyst criteria candidate

@@ -1,0 +1,178 @@
+{
+  "vnext": {
+    "id": 120206783473,
+    "run_id": 39889864193,
+    "head_sha": "54269b7a73631590b7c8547e7b16d735bbc39c6e",
+    "status": "completed",
+    "conclusion": "success",
+    "started_at": "2026-10-23T02:29:45Z",
+    "completed_at": "2026-10-23T02:33:26Z",
+    "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39889864193/job/120206783473",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:29:46Z",
+        "completed_at": "2026-10-23T02:29:47Z"
+      },
+      {
+        "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:29:47Z",
+        "completed_at": "2026-10-23T02:29:48Z"
+      },
+      {
+        "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:29:48Z",
+        "completed_at": "2026-10-23T02:29:53Z"
+      },
+      {
+        "name": "Workspace and temporary filesystem admission",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:29:53Z",
+        "completed_at": "2026-10-23T02:29:53Z"
+      },
+      {
+        "name": "Install unchanged locked dependencies",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:29:53Z",
+        "completed_at": "2026-10-23T02:30:12Z"
+      },
+      {
+        "name": "Actual source contracts, types and lint",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:30:12Z",
+        "completed_at": "2026-10-23T02:31:04Z"
+      },
+      {
+        "name": "Full ordinary build",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:31:04Z",
+        "completed_at": "2026-10-23T02:31:43Z"
+      },
+      {
+        "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:31:43Z",
+        "completed_at": "2026-10-23T02:32:26Z"
+      },
+      {
+        "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:32:26Z",
+        "completed_at": "2026-10-23T02:32:32Z"
+      },
+      {
+        "name": "Actual durable worker journal with explicitly synthetic provider",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:32:32Z",
+        "completed_at": "2026-10-23T02:32:38Z"
+      },
+      {
+        "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:32:38Z",
+        "completed_at": "2026-10-23T02:32:47Z"
+      },
+      {
+        "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:32:47Z",
+        "completed_at": "2026-10-23T02:32:55Z"
+      },
+      {
+        "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:32:55Z",
+        "completed_at": "2026-10-23T02:33:02Z"
+      },
+      {
+        "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:33:02Z",
+        "completed_at": "2026-10-23T02:33:08Z"
+      },
+      {
+        "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:33:08Z",
+        "completed_at": "2026-10-23T02:33:21Z"
+      },
+      {
+        "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:33:21Z",
+        "completed_at": "2026-10-23T02:33:23Z"
+      },
+      {
+        "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:33:23Z",
+        "completed_at": "2026-10-23T02:33:23Z"
+      },
+      {
+        "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:33:23Z",
+        "completed_at": "2026-10-23T02:33:23Z"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-23T02:33:23Z",
+        "completed_at": "2026-10-23T02:33:23Z"
+      }
+    ]
+  },
+  "source-led": [
+    {
+      "id": 120206783244,
+      "name": "product-runtime",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-23T02:29:44Z",
+      "completed_at": null,
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39889864164/job/120206783244"
+    },
+    {
+      "id": 120206784919,
+      "name": "evaluation-governance",
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-10-23T02:29:42Z",
+      "completed_at": "2026-10-23T02:29:42Z",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39889864164/job/120206784919"
+    },
+    {
+      "id": 120206785148,
+      "name": "model-runner",
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-10-23T02:29:42Z",
+      "completed_at": "2026-10-23T02:29:42Z",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39889864164/job/120206785148"
+    }
+  ],
+  "scope": "Actual API metadata/step conclusions, not downloaded TAP/log/catalog or independent formal approval. Previous rawdownload403 retained, no retry.",
+  "observedAt": "2026-10-23T02:35:55.575072+00:00"
+}
