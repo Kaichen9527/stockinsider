@@ -23,6 +23,8 @@
 - [ ] Complete trusted calendar/foreign/FX/margin/operations/comparable-volume/catalyst/target/contra producers and rights-qualified real source ingestion.
 - [x] Corporate-action source candidate: explicit original share/cash/rights terms, current source/permission read, actual preparation guard and provider/publication source fence; immutable pure zero-cash per-share target derivation. Source contracts only; no cash/total-return decision invented.
 - [ ] Observe new candidate installer/current original terms/withdrawal on same-source hosted PG; then complete published immutable-baseline-to-current-action target/replay/race native acceptance. Real MOPS/provider and CA-D1 cash intent remain distinct prerequisites.
+- [x] Source candidate: exact original-disclosed fiscal calendar/fixed forecast shares/full annual or four-quarter common-income producer, existing current forecast RPC/receipt union and provider preparation path; separate source-only evidence, not reported annual or real guidance.
+- [ ] Observe fresh fiscal SQL installer/current-source/actual preparation/provider-frozen receipt/withdrawal native acceptance; existing weekday/real-time guards stay unchanged. Real source/model/semantic and non-calendar summary limitations remain explicit.
 - [ ] Actual two-session postclose atomic swap, remaining race/legacy/ACL/lease/revocation matrices; never change real clock/guard to simulate acceptance.
 - [ ] Contabo application/database/schema/queue/storage isolation and formal-source/model/semantic research acceptance.
 - [x] Fresh hosted ordinary vnext-quality passed, including default full build and native PG, on source6410c9a.
