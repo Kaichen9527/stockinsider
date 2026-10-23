@@ -275,23 +275,32 @@ jobs:
           VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/catalyst
           VNEXT_CATALYST_TEST_STAGE: fresh
         run: |
+          catalyst_phase=resource_admission
+          trap 'failure=$?; echo "::error title=Catalyst shell boundary::phase=$catalyst_phase exit=$failure"; exit "$failure"' ERR
           python3 - <<'PYCODE'
-          import os
+          import os,json
           for p in [os.getcwd(),"/tmp"]:
-              s=os.statvfs(p)
-              if s.f_bavail*s.f_frsize<8589934592: raise SystemExit("NOT_READY: original 8GiB floor")
+              s=os.statvfs(p); free=s.f_bavail*s.f_frsize
+              if free<8589934592:
+                  print('::error title=Catalyst capacity NOT_READY::'+json.dumps({'filesystem':'checkout' if p==os.getcwd() else 'tmp','free':free,'floor':8589934592},separators=(',',':')))
+                  raise SystemExit("NOT_READY: original 8GiB floor")
           PYCODE
+          catalyst_phase=owned_directories
           mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
           mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          catalyst_phase=owned_container_start
           docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
           trap 'docker stop "$VNEXT_TEST_CONTAINER"' EXIT
+          catalyst_phase=owned_pg_readiness
           ready=0
           for i in $(seq 1 30); do
             if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -U postgres -d vnext_worker; then ready=1; break; fi
             sleep 1
           done
           test "$ready" = 1
+          catalyst_phase=native_entry
           if node --experimental-strip-types scripts/vnext-catalyst-postgres.test.mjs > /tmp/stockinsider-vnext-ci/catalyst.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          catalyst_phase=finite_tap_format
           python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/catalyst.tap.private.log /tmp/stockinsider-vnext-ci/catalyst.tap
           if [ "$test_status" != 0 ]; then
             python3 - <<'PYCODE'
@@ -307,6 +316,7 @@ jobs:
                   print('::error title=Catalyst finite native diagnostic::'+value)
           PYCODE
           fi
+          catalyst_phase=native_result
           test "$test_status" = 0
       - name: Reviewed target baseline and atomic exits (synthetic cached originals/provider)
         env:

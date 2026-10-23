@@ -46,7 +46,14 @@ async function readJournal(deps:PreparationDependencies,state:Row,identity:Vnext
  if(record.dispatch!==false)throw Error('vnext_preparation_journal_read_invalid');
  if(record.invocation_id){
   if(!uuid.test(String(record.invocation_id)) || record.job_id!==state.jobId || record.execution_id!==state.executionId || record.input_hash!==state.inputHash || record.principal!==identity.principal || record.task!=='author' || !['dispatching','pending','uncertain','completed','failed'].includes(String(record.state)))throw Error('vnext_preparation_journal_binding');
- }else if(Object.keys(record).some(key=>key!=='dispatch'))throw Error('vnext_preparation_journal_read_invalid');
+ }else if(Object.keys(record).some(key=>key!=='dispatch')){
+  // Existing SQL SELECT INTO a %ROWTYPE with no matching invocation returns
+  // to_jsonb(invocation) with every declared column null, rather than {}.
+  // Accept only that exact empty-row representation; no value is authority.
+  const columns='invocation_id job_id task execution_id principal input_hash provider model model_version credential_identity prompt_version frozen_request request_hash state provider_response_id raw_response raw_output normalized_output error started_at deadline_at settled_at'.split(' ');
+  if(Object.keys(record).sort().join('|')!==[...columns,'dispatch'].sort().join('|') || columns.some(key=>record[key]!==null))throw Error('vnext_preparation_journal_read_invalid');
+  return {dispatch:false};
+ }
  return record;
 }
 /** The latest cached session is only a query anchor. The existing historical

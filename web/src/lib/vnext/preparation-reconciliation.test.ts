@@ -55,6 +55,13 @@ function fixture(mode='ready'){
   if(action==='inspect'){inspectCount++;if(mode==='race' && inspectCount===2)state.inputHash=inputHash('competing-input');return {...state};}
   assert.equal(body.executionId,executionId);
   if(mode==='journal_read_lost')throw Error('uncertain journal read');
+  if(mode.startsWith('sql_empty_journal')){
+   const empty:Row=Object.fromEntries('invocation_id job_id task execution_id principal input_hash provider model model_version credential_identity prompt_version frozen_request request_hash state provider_response_id raw_response raw_output normalized_output error started_at deadline_at settled_at'.split(' ').map(key=>[key,null]));empty.dispatch=false;
+   if(mode==='sql_empty_journal_unknown')empty.unknown=null;
+   if(mode==='sql_empty_journal_value')empty.request_hash='a'.repeat(64);
+   if(mode==='sql_empty_journal_missing')delete empty.provider;
+   return empty;
+  }
   return state.prepared===true && mode==='provider_present'?{dispatch:false,invocation_id:'00000000-0000-4000-8000-000000000005',job_id:jobId,execution_id:executionId,input_hash:state.inputHash,principal:author.principal,task:'author',state:'uncertain',frozen_request:{private:'must not expose'},raw_response:{private:'must not expose'}}:{dispatch:false};
  }
  async function command(action:string,body:Row){
@@ -144,4 +151,9 @@ test('actual HTTP-handler/store source contract uses configured author only; REA
   const before=f.calls.length;await store.resumeResearchPreparation(author,{jobId});assert.deepEqual(f.calls.slice(before),['writer-metadata-read','inspect','work-context','read']);assert.equal(f.calls.includes('prepare'),false);
   const ready=fixture();ready.state.deadline='2099-01-01T00:00:00.000Z';const actual=controllers(ready);const prepared=await actual.store.resumeResearchPreparation(author,{jobId});assert.equal(prepared.status,'prepared');assert.equal(ready.calls.filter(call=>call==='lease-acquire').length,1);assert.equal(ready.calls.filter(call=>call==='lease-release').length,1);assert.deepEqual(ready.calls.slice(-3),['lease-acquire','prepare','lease-release']);
  }finally{names.forEach((name,i)=>{if(prior[i]===undefined)delete process.env[name];else process.env[name]=prior[i];});}
+});
+
+test('original SQL empty invocation row is absence only; any extra, missing or populated field rejects before cache or prepare',async()=>{
+ const ready=fixture('sql_empty_journal');const r=await reconcilePreparation(author,{jobId},ready.deps);assert.equal(r.status,'ready');assert.equal(ready.calls.includes('prepare'),false);
+ for(const mode of ['sql_empty_journal_unknown','sql_empty_journal_value','sql_empty_journal_missing']){const f=fixture(mode);const r=await reconcilePreparation(author,{jobId},f.deps,true);assert.equal(r.status,'unresolved');assert.equal(r.reason,'provider_journal_read_unavailable');assert.equal(f.calls.some(c=>c.startsWith('cache:')||c==='prepare'),false);assert.equal(f.state.prepared,false);}
 });
