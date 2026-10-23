@@ -1,3 +1,14 @@
+# Current: bounded TWSE transport receipts and semantic score correction
+
+Runtime/source `d9a7340cb8d9c6ce332003d813f5859fcfc15f06`; [delivery](TWSE-SNAPSHOT-DELIVERY.md), [VN01–VN20](CURRENT.json), [bound receipt](twse-snapshot-evidence/receipt.json) SHA256 `a0d2823d1d8fbb0630580eda734b2f4a1532156f737f3696466a1daea7c65416`.
+
+New source10contracts/types/lint pass; new retainedPG17.11 test6PASS with actual full migration COMMIT, private ACL/immutable append-read-replay, direct negative/currentrights withdrawal/repeat rollback and confirmed shutdown. Responses/policies are synthetic; coverage remains unknown/volume null, not a positive semantic or complete-volume producer. Raw/history/WIP/RED are retained. No additional cleanup.
+
+Same prior b354 head ordinary vNext/fullbuild/fresh current-public score correction, product-runtime and diagnostic all succeeded. New d9a CI is independent/pending; protected review gates remain failing/unclosed. New fullVMbuild/freshclone is not admitted at~300MB margin; HTTP/UI/live source/model/Contabo/fullrelease remain unaccepted. Positive structured semantic/event/forecast producers are still VMcode work, not external TCP blockers. PR384 draft; no merge/deploy/schedules.
+
+---
+Earlier exact milestones below retain their historical scopes:
+
 # Current: semantic score correction and preparation recovery
 
 Runtime source `64036920a197f2fd579e430b36503a26ad021e84`; read [latest delivery](SEMANTIC-SCORE-DELIVERY.md), [VN01–VN20 and limits](CURRENT.json), [receipt](semantic-score-evidence/receipt.json) SHA256 `9817296ad65f08e9637845ba0c2fbc0ef3c568265765532e22071d21d6ace812`.

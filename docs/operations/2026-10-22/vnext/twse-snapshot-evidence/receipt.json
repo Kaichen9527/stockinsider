@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-23T01:38:49.428284+00:00",
+  "sourceHead": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
+  "evidenceScope": "maker VM source/native engineering evidence; not independent Root/formal approval",
+  "safeFileCount": 8,
+  "safeBytes": 36839,
+  "files": [
+    {
+      "path": "cleanup.json",
+      "bytes": 1469,
+      "sha256": "b840577799b7b272e555cb04030e583c23fd378900b4e5cdf10844fd3856ed21"
+    },
+    {
+      "path": "native-summary.json",
+      "bytes": 3628,
+      "sha256": "f176f55d9c9be5adf566478e56b0027aa055eaefb3bafaaaab8e9451eedcafb5"
+    },
+    {
+      "path": "native.tap",
+      "bytes": 1403,
+      "sha256": "ae0a115c92f2d6108d7fc86b0af367a51ea9fdeec6127c18b0544c775f688554"
+    },
+    {
+      "path": "previous-source-ci.json",
+      "bytes": 821,
+      "sha256": "65f25e5c05cbe7eafef834050f105e0818522cf6555018e89f000e01214844a2"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 18089,
+      "sha256": "b4db6fe8a5f971c56c9a1f77fac9a6ad42dde84e3ff39138277f0737f3f42335"
+    },
+    {
+      "path": "resource-command.json",
+      "bytes": 2864,
+      "sha256": "af9b2c8a001798a566570d11f42b9b5d617597019204799b0b94cccf85f46ab0"
+    },
+    {
+      "path": "source-checks.json",
+      "bytes": 3927,
+      "sha256": "daed939a999c9d2a98b17ad8d5cbc8af1dd1a6e1b0366e999389dd3e5bbfd259"
+    },
+    {
+      "path": "source-inputs.json",
+      "bytes": 4638,
+      "sha256": "5d12f13654aec38156b3212b1278798bb9e0605c310f977ff3f7821b55e69a4d"
+    }
+  ],
+  "privateInventoryScopeOnly": true,
+  "freshFullVMBuild": "NOT_ADMITTED: measured compilercache306835456+128MiB exceeds workspace margin",
+  "freshNative": "NOT_RUN locally; future ordinary CI new mode",
+  "actualHTTPUI": "NOT_RUN on new TWSE source",
+  "realTWSEAcquisition": "NOT_RUN in this milestone",
+  "formalResearch": "NOT_APPROVED"
+}

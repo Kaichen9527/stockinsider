@@ -1,0 +1,385 @@
+{
+  "scope": "explicit selected files of this milestone only, no whole private tree scan; rows/principals/bodies remain private",
+  "count": 63,
+  "bytes": 5170076,
+  "items": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-source-seal-o23.json",
+      "bytes": 302547,
+      "sha256": "8a50047ded94fb1addec6fa34c1259b6567ead861977310dbe491c57f4a55f8f",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-command-seal-o23.json",
+      "bytes": 460,
+      "sha256": "8f85c09b23207ebe0520090c455c2d6ca30d85c3fa8d886c3a46d09c734ab7f6",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/run-twse-native-o23.py",
+      "bytes": 4016,
+      "sha256": "e036c9256bc85989aea046c8180ce1229c02701bf5a7983ab3d6ec3d42d55978",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-admission-o23.json",
+      "bytes": 450,
+      "sha256": "777ead7dfa08d32cf0407ee05845ad93dc8d1c7d741e5f669a32eaf9c9a3a1dc",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-pg-binary-o23.json",
+      "bytes": 311,
+      "sha256": "a41519593225e587ab613b477bd489ce49255d1e6a8ccf738c6dbda0026c010a",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23.log",
+      "bytes": 2260,
+      "sha256": "2a694d2578a0355b8a41c0cc1fb81907c451c4911cd9daea417e49348e11a8cc",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-monitored-o23.json",
+      "bytes": 1754,
+      "sha256": "f3d07bbe35a3027c0923174325a9da760dd121dead6ac6c95c8d8e25e1b13735",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-monitored-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-cleanup-o23.json",
+      "bytes": 2004,
+      "sha256": "42d41f22fcfa2742e277304269c866c0db3ef4c73a2c76bd8a4070ec4fa630f8",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-server-o23.log",
+      "bytes": 43422,
+      "sha256": "de5bdbf361609695b1081725eb626cd35107cdb5cec13782b5bfd6e200081ecc",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-postrun-o23.json",
+      "bytes": 810,
+      "sha256": "a3194494b7d8a44f0e707fcafcadcfbdedb8fe44dc969cea67f2a3b2b1227f37",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-root-parity-o23.json",
+      "bytes": 932,
+      "sha256": "f75f3feda379cff3aa3bb82b0a33c13960bb9ce265c2aadabf7f0d4d9743472b",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01.json",
+      "bytes": 1438,
+      "sha256": "3955d29d46f6a2dd640b666cac22b325f589178eb9dbedd2631e385713444297",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01.log",
+      "bytes": 3421,
+      "sha256": "955d1b9d15a20612654a87a4fd6e98fcda1ccf584047e43266bd03b124df2584",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01/inventory.json",
+      "bytes": 1243,
+      "sha256": "993a25040a5842e73552161819037442ec4895e595acf636aa459232970e684a",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01/web__src__lib__vnext__twse-snapshot.test.ts",
+      "bytes": 20861,
+      "sha256": "adf311451bd10d7a3e3892b472c485ffc981ffddcba88b8cd663f2db83cb0d0f",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01/scripts__opportunity-v3__vnext-twse-snapshot-profile-v1.json",
+      "bytes": 4955,
+      "sha256": "8ab55a67b78640e069bdb0173d638ed0dcd9d58e9c6507875e025239a6211069",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01/migrations__20261022_vnext_twse_snapshot_receipts_v1.sql",
+      "bytes": 15384,
+      "sha256": "27bd8c7dfd34aad713fdf18c8be37b8f756ea3db655b2367189208c946e7b84b",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01/web__src__lib__vnext__twse-snapshot-store.ts",
+      "bytes": 4493,
+      "sha256": "9670398077e5ff43a0800dea259436859e56233d721a3a1181be5a13dd2fef0d",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01/web__src__lib__vnext__twse-snapshot.ts",
+      "bytes": 9140,
+      "sha256": "e4d3b815ba3ec93b710441ba5023340381bd450372ce9a2be5723cd95ccb171c",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01/web__src__lib__vnext__source-worker.ts",
+      "bytes": 4441,
+      "sha256": "2ec7a01b97347836517d5abed8edf4cae1ddaae48a8ff92db341daf0cfcc3a57",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01/web__src__app__api__internal__source-sync__route.ts",
+      "bytes": 13835,
+      "sha256": "fbe0302710ea7dcdcdf284fcd02a701803897dc6f2b2dad1b1bbbd3323da8a16",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-01/web__src__lib__research-v2.ts",
+      "bytes": 282760,
+      "sha256": "e87e4e9b5b8079d9c493752f787b24da81fed8a980c889d7b1e3e8ba3c8af7d9",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02.json",
+      "bytes": 1626,
+      "sha256": "8c95314224197a512779e23553092e4c2c1fcdaa1908081b73df89c3321ea313",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02.log",
+      "bytes": 3752,
+      "sha256": "d3293b8442ecddac8a798a38cf1715e2798847386be93579d9407ade67fce56a",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02/inventory.json",
+      "bytes": 1244,
+      "sha256": "bb63bb53b8fb7b9905e17b36dcbc437496f6dca412463ee49bb46a9588e6e20f",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02/web__src__lib__vnext__twse-snapshot.test.ts",
+      "bytes": 22745,
+      "sha256": "28fac2b64244cabd67a6272fbdf5c0f907fdb874467800867082c0754033621b",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02/scripts__opportunity-v3__vnext-twse-snapshot-profile-v1.json",
+      "bytes": 4955,
+      "sha256": "83c7a1e38ff095689ad1f5397768af41ca7a4770217b3690acb1e072165f59a8",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02/migrations__20261022_vnext_twse_snapshot_receipts_v1.sql",
+      "bytes": 15386,
+      "sha256": "58e2fd49e5035332954d8d6a47e83b129d583da09ebfb123d38ef71c6125ad9c",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02/web__src__lib__vnext__twse-snapshot-store.ts",
+      "bytes": 4701,
+      "sha256": "ae83b920b3b6a924698b8057968a0303b089314ce169504cbdc4b7c03f12446b",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02/web__src__lib__vnext__twse-snapshot.ts",
+      "bytes": 13952,
+      "sha256": "cd21c85a3e9d99dd512b7380ece578ffe3823c76d32a98633e9b490c065b8290",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02/web__src__lib__vnext__source-worker.ts",
+      "bytes": 4441,
+      "sha256": "2ec7a01b97347836517d5abed8edf4cae1ddaae48a8ff92db341daf0cfcc3a57",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02/web__src__app__api__internal__source-sync__route.ts",
+      "bytes": 13835,
+      "sha256": "fbe0302710ea7dcdcdf284fcd02a701803897dc6f2b2dad1b1bbbd3323da8a16",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-02/web__src__lib__research-v2.ts",
+      "bytes": 282760,
+      "sha256": "e87e4e9b5b8079d9c493752f787b24da81fed8a980c889d7b1e3e8ba3c8af7d9",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03.json",
+      "bytes": 1438,
+      "sha256": "601467d9fb80a59c492e424afcfdec333ebfb190036fbf154a5cb339548c256d",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03.log",
+      "bytes": 3752,
+      "sha256": "1b5096eaeda5cf9b5bdd11595cdaa4cfb0f177fc0dc9f77192614d8991a85a91",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03/inventory.json",
+      "bytes": 1244,
+      "sha256": "17956ca4f4776b84e1afda642d2aa85d944945cb1ed16d776d1ed43a2cabf8be",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03/web__src__lib__vnext__twse-snapshot.test.ts",
+      "bytes": 22917,
+      "sha256": "d707ca2dd223e009cd45a5db61b996840f8b5881c072b68369f0117d8989bd76",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03/scripts__opportunity-v3__vnext-twse-snapshot-profile-v1.json",
+      "bytes": 4955,
+      "sha256": "e2a43d7ada5536cade2641f47f5606e6afc5d5b9f3659857dabbf6fe454b36bb",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03/migrations__20261022_vnext_twse_snapshot_receipts_v1.sql",
+      "bytes": 15386,
+      "sha256": "58e2fd49e5035332954d8d6a47e83b129d583da09ebfb123d38ef71c6125ad9c",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03/web__src__lib__vnext__twse-snapshot-store.ts",
+      "bytes": 4698,
+      "sha256": "3e99a1fc62dbb5437ddc4d1856f90adb5805ab5b935aa3cb9743533b0c2216c8",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03/web__src__lib__vnext__twse-snapshot.ts",
+      "bytes": 13952,
+      "sha256": "cd21c85a3e9d99dd512b7380ece578ffe3823c76d32a98633e9b490c065b8290",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03/web__src__lib__vnext__source-worker.ts",
+      "bytes": 4441,
+      "sha256": "2ec7a01b97347836517d5abed8edf4cae1ddaae48a8ff92db341daf0cfcc3a57",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03/web__src__app__api__internal__source-sync__route.ts",
+      "bytes": 13835,
+      "sha256": "fbe0302710ea7dcdcdf284fcd02a701803897dc6f2b2dad1b1bbbd3323da8a16",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-source-03/web__src__lib__research-v2.ts",
+      "bytes": 282760,
+      "sha256": "e87e4e9b5b8079d9c493752f787b24da81fed8a980c889d7b1e3e8ba3c8af7d9",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-types-01.json",
+      "bytes": 10121,
+      "sha256": "0dabb69efd48444b70ded4c50f18931a9760a2850d4e08d2b2e31b6eb705da7b",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-types-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-types-02.json",
+      "bytes": 13134,
+      "sha256": "5c2a5b1e09159b17042421d8ce1f2fa1acbfbba7fc30b72e70dea09a09ea885a",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-types-02.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-types-03.json",
+      "bytes": 10874,
+      "sha256": "c909dceb3155454c789ec2b3a4a908eecd00f17b5d5a8e040dd9975ba57ed647",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-types-03.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-lint-01.json",
+      "bytes": 2763,
+      "sha256": "773bcc507cc3e062fa7d32434e81a63e184317f2eed666429429954ee1dc4af3",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-snapshot-lint-01.log",
+      "bytes": 2790,
+      "sha256": "bb36517deece71026df05dee8b96eb17e029a458cf0d1360ea9bdda830348d6d",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/cleanup.json",
+      "bytes": 170,
+      "sha256": "ebf06b9ae3658f0ff7e5b3c481f0c3cefbb2cea7292e29bb85c96102754da9da",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/final-state.json",
+      "bytes": 356630,
+      "sha256": "15b5d243b7c6036f77c6292bddcce2a2c24415f6c263c037c1e79fab0c610926",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/query-events.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/twse-query-events.json",
+      "bytes": 1500,
+      "sha256": "f4bcf616ce517fe3023e1b84928ce32a8419a974910775fd2b7657930c8f6784",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/repeat.json",
+      "bytes": 104,
+      "sha256": "c2b8981007aadcaa61f35c3e07d551bd757d8b6fd1c4a58093e2e9ead33bf7be",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/withdrawal.json",
+      "bytes": 737364,
+      "sha256": "4c7f6a9c21c4f64cfd41882735e9b5d3fdab3df1cd851974a9a2c3f3b61400de",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/replay-and-negatives.json",
+      "bytes": 2187,
+      "sha256": "8cac18f8b9d30beb1049ee4aa9222373b6530607c070d174678328bbe66338f0",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/committed-receipt.json",
+      "bytes": 3441,
+      "sha256": "f8e64a6a56b1c277e78197cdcdf81832d86a6fb4a8c5a3d3e0894a8f1c0a3893",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/synthetic-setup.json",
+      "bytes": 345,
+      "sha256": "57c6c06e97ad8ff5fb63f5768f71874c70a953002fdd5f70d3bb558572f7a9dc",
+      "visibility": "private-local, hash-only public inventory"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/install.json",
+      "bytes": 2568938,
+      "sha256": "78a35164c9c8d01c6c1f697cac1ff13e0150ca6ae7cd04e37f0e09c926e4ea2d",
+      "visibility": "private-local, hash-only public inventory"
+    }
+  ]
+}

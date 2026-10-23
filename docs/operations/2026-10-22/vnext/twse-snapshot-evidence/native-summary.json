@@ -1,0 +1,121 @@
+{
+  "sourceHead": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
+  "scope": "actual retained engineering PG17.11; synthetic Fetch Response/connector/policy. Not live source/model/HTTP/fresh complete bundle",
+  "tests": {
+    "pass": 6,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "installer": "full candidate COMMIT, two new functions and one new table; all prior pg_proc metadata/body and all prior business rows unchanged before explicit fixture setup",
+  "catalogLimits": "No blanket full fresh catalog/namespace/defaultACL attestation. New FK also creates its normal dependency/internal triggers. Native verified subset is explicit.",
+  "receipt": {
+    "receiptId": "d7566740-fc13-4e5b-aa8a-ff3a6dd07708",
+    "receiptHash": "774277f075d06a796da3eddaec2cb8ca0b281cc3b84c2926cf321c569f877f8b",
+    "recordedAt": "2026-10-23T01:37:18.531967+00:00"
+  },
+  "observation": {
+    "profileVersion": "twse-insider-snapshot-v1",
+    "endpointKey": "holding_listed",
+    "status": "response_observed",
+    "responseSha256": "aaec3d164686a51630460d05ff26f39d7f031ddb4b888d7af5fd3c717a98e391",
+    "responseBytes": 114,
+    "returnedRows": 1,
+    "matchedRows": 1,
+    "selectedRows": 1,
+    "deferredRows": 0,
+    "eventWindow": null,
+    "eventVolume": null,
+    "exhaustion": "not_exposed_by_snapshot_api",
+    "rootResolution": "unresolved",
+    "byteBasis": "fetch_response_body_after_http_content_decoding",
+    "rowHashBasis": "sha256_json_stringify_parsed_row_v1"
+  },
+  "selectedManifestHash": "95fae7f25f9deb9f14d92080b3611e0cb044e1669071bd9fae8f315b793cc7b2",
+  "queryEvents": [
+    {
+      "operation": "append",
+      "pid": 61,
+      "ready": "I",
+      "querySettled": true,
+      "committed": true
+    },
+    {
+      "operation": "append",
+      "pid": 62,
+      "ready": "I",
+      "querySettled": true,
+      "committed": true
+    },
+    {
+      "operation": "read",
+      "pid": 63,
+      "ready": "I",
+      "querySettled": true,
+      "committed": true
+    },
+    {
+      "operation": "latest",
+      "pid": 64,
+      "ready": "I",
+      "querySettled": true,
+      "committed": true
+    },
+    {
+      "operation": "append",
+      "pid": 65,
+      "ready": "I",
+      "querySettled": true,
+      "code": "P0001",
+      "message": "vnext_twse_snapshot_profile_invalid"
+    },
+    {
+      "operation": "append",
+      "pid": 66,
+      "ready": "I",
+      "querySettled": true,
+      "code": "P0001",
+      "message": "vnext_twse_snapshot_count_invalid"
+    },
+    {
+      "operation": "append",
+      "pid": 67,
+      "ready": "I",
+      "querySettled": true,
+      "code": "P0001",
+      "message": "vnext_twse_snapshot_profile_invalid"
+    },
+    {
+      "operation": "read",
+      "pid": 68,
+      "ready": "I",
+      "querySettled": true,
+      "code": "P0001",
+      "message": "vnext_twse_snapshot_operator_mode_required"
+    },
+    {
+      "operation": "read",
+      "pid": 69,
+      "ready": "I",
+      "querySettled": true,
+      "code": "P0001",
+      "message": "vnext_twse_snapshot_current_rights_required"
+    },
+    {
+      "operation": "latest",
+      "pid": 70,
+      "ready": "I",
+      "querySettled": true,
+      "code": "P0001",
+      "message": "vnext_twse_snapshot_current_rights_required"
+    }
+  ],
+  "wholeRows": {
+    "replayAndDirectRejects": "unchanged",
+    "withdrawal": "only explicit synthetic policy enabled field changes; receipt/full other rows unchanged",
+    "repeat": "P0001/ReadyE, explicit rollbackReadyI, rows/functions unchanged"
+  },
+  "freshCI": "new fresh mode source wired; NOT_RUN in VM",
+  "positiveSemanticEventOrWindowAuthority": false
+}

@@ -1,10 +1,10 @@
 {
   "status": "PARTIAL_VM_IMPLEMENTATION_AND_ACCEPTANCE_NOT_RELEASE_COMPLETE",
-  "updatedAt": "2026-10-23T01:13:34.147415+00:00",
-  "runtimeSourceHead": "64036920a197f2fd579e430b36503a26ad021e84",
-  "currentReceiptSha256": "9817296ad65f08e9637845ba0c2fbc0ef3c568265765532e22071d21d6ace812",
+  "updatedAt": "2026-10-23T01:40:00.075114+00:00",
+  "runtimeSourceHead": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
+  "currentReceiptSha256": "a0d2823d1d8fbb0630580eda734b2f4a1532156f737f3696466a1daea7c65416",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
-  "primaryReport": "SEMANTIC-SCORE-DELIVERY.md",
+  "primaryReport": "TWSE-SNAPSHOT-DELIVERY.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
   "acceptance": [
     {
@@ -47,7 +47,7 @@
       "id": "VN07",
       "status": "PARTIAL_SEMANTIC_PRODUCERS_PENDING",
       "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01; thesis-semantic-authority-source-02; semantic-native-monitored-o23",
-      "limits": "Currentfinancialcorrection/substantiveinput/materialhash/deepscore/retainedhistory/rights tested inVM. Structured realcatalystcancel/contra/target semanticproducer stillunwired; no pretendverifiedfalse→true. Semantic numeric1 misclassification repaired TS+twoSQLbodies; actual5PASS retained catalog/score/immutability/rollback. Positive sourcebound criteria/exit producer remains UNIMPLEMENTED; fresh current-public comparison pending."
+      "limits": "Semantic numeric1 misclassification repaired TS+twoSQLbodies; retained5PASS verifies catalog/score/immutability. Actual changed fresh ordinary CI public-read recalculation/immutable raw/dedup/directRPC rejection succeeded on b354 metadata. No transfer to new d9a. Positive source-bound semantic/catalyst/cancel/contra/target producer remains UNIMPLEMENTED; supported factor weights30/25/20/15/10 unchanged, absent values null/no renormalization."
     },
     {
       "id": "VN08",
@@ -57,9 +57,9 @@
     },
     {
       "id": "VN09",
-      "status": "TESTED_VM_SYNTHETIC_EXTRACTION_WITHDRAWAL",
+      "status": "TESTED_VM_SYNTHETIC_EXTRACTION_WITHDRAWAL_AND_SNAPSHOT_TRANSPORT",
       "runs": "analysis-native-01; withdrawal-native-03; cached-active-http-recovery-01",
-      "limits": "200/50crossentry, currentrights and realappend-onlycontentwithdrawalCOMMIT/read/ABArefusals. Sources/documents synthetic; no paid/member/rawchannel acquisition. Source-healthwindow receipts notimplemented."
+      "limits": "200/50 crossentry/currentrights/contentwithdrawal tested on original sources. New d9a source10contracts+retainedPG6PASS metadata receipt capture/currentpolicy/immutable read; Responses synthetic. Complete comparable eventwindow/volume producer remains UNIMPLEMENTED; eventVolume null."
     },
     {
       "id": "VN10",
@@ -101,7 +101,7 @@
       "id": "VN16",
       "status": "TESTED_VM_RUNTIME_SOURCE",
       "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23; semantic-final-types-o23",
-      "limits": "Node22.14/TS5.9.3 types/lint/fullwebpack PASS currentruntimee1bb126.33inheritedwarnings. Originaltest-variablelintRED then renamedlocal only. No locks/rules disabled. New IRproductfiles fulltypes/build/lintPASS; firstsandboxbuildRED retained, normalpermissionhelper capture diagnosis documented. Current source1ac onlytest corrections after product7751 fullbuild; source-ci-tail-fixed typePASS. No whole-source native acceptance inferred. Currentprep9c types/focusedlint10sourcecontractsPASS; newfullVMbuildNOT_ADMITTED at303MBmargin; e359hostedbuildsuccess doesnottransfer. Finalsemantic640 fulltypesPASS; new fullVMbuild notadmitted. FreshordinaryCI exacthead separate."
+      "limits": "Node22.14/TS5.9.3 types/lint/fullwebpack PASS currentruntimee1bb126.33inheritedwarnings. Originaltest-variablelintRED then renamedlocal only. No locks/rules disabled. New IRproductfiles fulltypes/build/lintPASS; firstsandboxbuildRED retained, normalpermissionhelper capture diagnosis documented. Current source1ac onlytest corrections after product7751 fullbuild; source-ci-tail-fixed typePASS. No whole-source native acceptance inferred. Currentprep9c types/focusedlint10sourcecontractsPASS; newfullVMbuildNOT_ADMITTED at303MBmargin; e359hostedbuildsuccess doesnottransfer. Finalsemantic640 fulltypesPASS; new fullVMbuild notadmitted. FreshordinaryCI exacthead separate. New d9a source contracts10/types/focusedlintPASS; full VM build NOT_ADMITTED. Same-source new hosted CI pending; b354 fullbuild success remains separate."
     },
     {
       "id": "VN17",
@@ -124,7 +124,7 @@
     {
       "id": "VN20",
       "status": "DRAFT_PR_PARTIAL_RELEASE_GATE",
-      "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json; preparation-reconciliation-evidence/receipt.json; SEMANTIC-SCORE-DELIVERY.md; semantic-score-evidence/receipt.json",
+      "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json; preparation-reconciliation-evidence/receipt.json; SEMANTIC-SCORE-DELIVERY.md; semantic-score-evidence/receipt.json; TWSE-SNAPSHOT-DELIVERY.md; twse-snapshot-evidence/receipt.json",
       "limits": "ExactVMhead/receiptspublished, historypreserved. Protectedreviews failing/pending; latestCI independentstatusnottransferred. No merge/deploy/migration/scheduleresume authorization."
     }
   ],
@@ -134,26 +134,26 @@
     "Actualprovider/sourcepermissions+semanticexecution requirelegitimateinjection; neverpastecreds/chat/argv/Git"
   ],
   "remainingVMCode": [
-    "Immutableconnector sourcewindow/exhaustion/manifest authority and comparable28days builder",
-    "Structured source-bound catalyst/cancel/contra/target semanticadjudication producer",
-    "Explicit numericguidance/forecast/valuation assumptions input producer; no invented estimates",
-    "Preparation explicitREAD/cachedresume source implemented; actual new-source PG/HTTP and fullbuild/browser acceptance pending"
+    "Complete connector-owned comparable28day event-window/volume authority; current TWSE snapshot transport receipt implemented but proves no event coverage",
+    "Structured source-bound semantic checklist/catalyst/cancel/contra/target adjudication producer; numeric1/boolean/provenance cannot substitute",
+    "Explicit numeric guidance/forecast/valuation assumptions producer; unavailable data staysnull",
+    "Preparation explicitREAD/cachedresume implemented; actual new-source PG/HTTP/fullbrowser acceptance pending"
   ],
   "remainingTimeAcceptance": "2actualconsecutivecompletedpostclose sessions; no guard/clock bypass",
   "ReleaseGate": "PENDING",
   "testAdapterSource": "76aca1522fa1b3292a85f9f387f01bee7fd43e23",
-  "latestCI": "Exact e359 hosted vnext39877948120/product120168069294/diagnostic120170769620 SUCCESS. Newpreparation7f/newsemantic640 ordinaryCI independent/pending; no transfer of those results. Protected independent gates remain unclosed/failing, no pin/guard changes.",
-  "ciReceiptSha256": "52269e1b6c22d0f84c15c70d56b27dd30d2f59c37714314a32789dfcd7dfd7f7",
-  "previousRuntimeSourceHead": "9c833695e7c7eb840b0eabf7f004c0d4031e893e",
-  "previousReceiptSha256": "b8a3cd2c59617270436834ebcdc1d6b703218deda8b26fbef00762ae1ece9222",
+  "latestCI": "Exact b354da5 hosted ordinary vnext39882967952, product-runtime120184427156 and diagnostic120187047635 SUCCESS. Includes fresh synthetic current-public old-score correction/dedup/directRPC fence and full build. Original TAP artifact403/0bytes retained; metadata only. New d9a TWSE source CI pending; protected gates failed detached-subject preparation and remain unclosed, no guard/pin changes.",
+  "ciReceiptSha256": "65f25e5c05cbe7eafef834050f105e0818522cf6555018e89f000e01214844a2",
+  "previousRuntimeSourceHead": "64036920a197f2fd579e430b36503a26ad021e84",
+  "previousReceiptSha256": "9817296ad65f08e9637845ba0c2fbc0ef3c568265765532e22071d21d6ace812",
   "capacity": {
     "status": "RESUMED_BOUNDED_VM_WORK",
     "floorPerFilesystem": 8589934592,
-    "latestWorkspaceFree": 8891289600,
-    "latestTmpFree": 17328660480,
+    "latestWorkspaceFree": 8890638336,
+    "latestTmpFree": 17322823680,
     "previousHoldAndCleanupReceiptsRetained": true,
     "furtherAutomaticCleanupAuthorized": false,
-    "retainedLab": "worker11 stopped/PID0/exit0 after semantic candidate; all data/rows/raw retained, onlytwo newfunctionbody changes",
+    "retainedLab": "worker11 stopped/PID0/exit0 after TWSE receipt candidate; original data/rows/raw retained; new explicit engineering receipt/policy/connector rows preserved",
     "nextFreshClone": "NOT_ADMITTED:912297984reference+128MiB exceeds workspace margin; not upperbound",
     "boundedContinuation": "estimate128MiBworkspace+256MiBtmp with original live monitor, no resourceViolation",
     "nextFullBuild": "NOT_ADMITTED:306835456measuredcompiler-cache+128MiBreserve exceeds workspace margin, unknown costs remain",
@@ -178,8 +178,23 @@
     "source": "64036920a197f2fd579e430b36503a26ad021e84",
     "TS": "3focusedPASS/12originalthesisPASS; sixunsupportedcriteria null+namedgaps",
     "SQL": "new retained-native5PASS, fulltwo-bodyCOMMIT/body-onlycatalog preserved, allbusinessrowsunchanged, weightedvaluation/technical arithmetic and privateACL/repeatrollback PASS",
-    "currentPublicOldScorePositive": "NOT_RUN retainedpublicationwithdrawn and current/completed session mismatch; changedfreshCI fixture pending, no clock/rights bypass",
+    "currentPublicOldScorePositive": "Actual changed fresh ordinary CI fixture passed on b354da5; metadata step observed, original artifact403 not locally downloaded. Retained semantic test did not exercise that positive. No transfer to new d9a source.",
     "positiveSemanticProducer": "UNIMPLEMENTED, not substituted by disabling unsupportedclaims",
     "receipt": "semantic-score-evidence/receipt.json"
+  },
+  "receiptSha256": "a0d2823d1d8fbb0630580eda734b2f4a1532156f737f3696466a1daea7c65416",
+  "receipt": "twse-snapshot-evidence/receipt.json",
+  "twseSnapshotTransport": {
+    "source": "d9a7340cb8d9c6ce332003d813f5859fcfc15f06",
+    "sourceContracts": "10PASS synthetic transports/actual extracted connector and HTTP handler functions; not networkHTTP",
+    "types": "PASS",
+    "lint": "0errors/22 inherited research-v2 warnings",
+    "retainedNative": "6PASS: actual full new candidate COMMIT/privateACL/immutable service-role append-read-replay/directnegative/current policy withdrawal/repeat rollback",
+    "nativeData": "synthetic Response/connector/policy, no actual acquisition",
+    "eventCoverage": "unknown",
+    "eventVolume": null,
+    "freshMode": "ordinaryCI wired; VMfresh clone notadmitted",
+    "newSourceHTTPUI": "NOT_RUN",
+    "receipt": "twse-snapshot-evidence/receipt.json"
   }
 }

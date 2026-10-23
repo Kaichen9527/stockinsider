@@ -1,0 +1,91 @@
+{
+  "monitored": {
+    "command": [
+      "python3",
+      "/tmp/stockinsider-vnext-oct22-private/run-twse-native-o23.py"
+    ],
+    "cwd": "/workspace/stockinsider-vnext-oct22",
+    "start": "2026-10-23T01:37:16.609862+00:00",
+    "end": "2026-10-23T01:37:19.683381+00:00",
+    "exit": 0,
+    "initialFree": {
+      "/workspace": 8890753024,
+      "/tmp": 17326768128
+    },
+    "finalFree": {
+      "/workspace": 8890720256,
+      "/tmp": 17322864640
+    },
+    "sampledSessionPeakRssBytes": 129212416,
+    "resourceViolation": null,
+    "samples": [
+      {
+        "at": "2026-10-23T01:37:16.622708+00:00",
+        "freeBytes": {
+          "/workspace": 8890753024,
+          "/tmp": 17326768128
+        },
+        "sessionRssBytes": 5373952
+      },
+      {
+        "at": "2026-10-23T01:37:17.133111+00:00",
+        "freeBytes": {
+          "/workspace": 8890662912,
+          "/tmp": 17327140864
+        },
+        "sessionRssBytes": 22020096
+      },
+      {
+        "at": "2026-10-23T01:37:17.642254+00:00",
+        "freeBytes": {
+          "/workspace": 8890662912,
+          "/tmp": 17327132672
+        },
+        "sessionRssBytes": 82612224
+      },
+      {
+        "at": "2026-10-23T01:37:18.154961+00:00",
+        "freeBytes": {
+          "/workspace": 8890662912,
+          "/tmp": 17327132672
+        },
+        "sessionRssBytes": 88248320
+      },
+      {
+        "at": "2026-10-23T01:37:18.665631+00:00",
+        "freeBytes": {
+          "/workspace": 8890662912,
+          "/tmp": 17324412928
+        },
+        "sessionRssBytes": 120360960
+      },
+      {
+        "at": "2026-10-23T01:37:19.183151+00:00",
+        "freeBytes": {
+          "/workspace": 8890658816,
+          "/tmp": 17323667456
+        },
+        "sessionRssBytes": 129212416
+      }
+    ],
+    "sampledNotInstantaneous": true,
+    "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+  },
+  "pgBinary": {
+    "version": "postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg12+2)",
+    "path": "/usr/lib/postgresql/17/bin/postgres",
+    "sha256": "f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed",
+    "image": "postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27"
+  },
+  "commandSeal": {
+    "runner": "/tmp/stockinsider-vnext-oct22-private/run-twse-native-o23.py",
+    "bytes": 4016,
+    "sha256": "e036c9256bc85989aea046c8180ce1229c02701bf5a7983ab3d6ec3d42d55978",
+    "lineage": "adapted exact retained semantic runner; output names/native entry/stage/scope only; original floor, memory/network/container identity, binary, stop and containment unchanged",
+    "originalRunnerSha256": "032d665c95de3cf16ee8c50367da61b7fc7a2e01a2a170af6c9a0179dd4af8ce"
+  },
+  "floor": 8589934592,
+  "pgMemoryCap": 1073741824,
+  "sampledNotInstantaneous": true,
+  "noCleanupOrDataDeletion": true
+}
