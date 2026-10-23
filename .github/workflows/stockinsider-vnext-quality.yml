@@ -11,6 +11,7 @@ on:
       - '.nvmrc'
       - 'scripts/candidate-financial-document-write-lease-route.test.mjs'
       - 'migrations/20261022_*'
+      - 'migrations/20261023_*'
       - 'openspec/changes/stockinsider-vnext-20/**'
       - 'specs/research-admission/**'
       - 'package.json'
@@ -62,6 +63,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/forecast-evidence.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-evidence-source.tap
           node --experimental-strip-types web/src/lib/vnext/dimensionless-arithmetic.test.ts | tee /tmp/stockinsider-vnext-ci/dimensionless-source.tap
           node --experimental-strip-types web/src/lib/vnext/reviewed-target.test.ts | tee /tmp/stockinsider-vnext-ci/reviewed-target-source.tap
+          node --experimental-strip-types web/src/lib/vnext/trading-invalidity.test.ts | tee /tmp/stockinsider-vnext-ci/trading-invalidity-source.tap
           node --experimental-strip-types web/src/lib/vnext/cached-admission.test.ts | tee /tmp/stockinsider-vnext-ci/cached-source.tap
           node --experimental-strip-types web/src/lib/vnext/source-withdrawal.test.ts | tee /tmp/stockinsider-vnext-ci/withdrawal-source.tap
           node --experimental-strip-types web/src/lib/vnext/artifact-financial-summary.test.ts | tee /tmp/stockinsider-vnext-ci/financial-summary-source.tap
@@ -532,5 +534,124 @@ jobs:
         with:
           name: stockinsider-vnext-source-and-synthetic-db-tap
           path: /tmp/stockinsider-vnext-ci/*.tap
+          if-no-files-found: warn
+          retention-days: 7
+
+  trading-invalidity-native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Fixed native dependency and workset admission
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592+536870912: raise SystemExit('NOT_READY: original floor plus workset reference')
+          PYCODE
+          npm ci --ignore-scripts
+          mkdir -m 700 /tmp/stockinsider-vnext-ci
+          mkdir -m 700 /tmp/stockinsider-vnext-oct22-private
+      - name: Fresh official-roster invalidity installer and unpublished exits (synthetic metadata)
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-09
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-09
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/trading-invalidity
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592+536870912: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          owned_id="$(docker inspect --format '{{.Id}}' "$VNEXT_TEST_CONTAINER")"
+          cleanup_trading_invalidity() {
+            original_exit=$?
+            trap - EXIT
+            if ! docker stop "$owned_id" > /tmp/stockinsider-vnext-ci/trading-invalidity-pg-stop.private.log 2>&1; then original_exit=1; fi
+            if ! docker inspect --format '{{json .State}}' "$owned_id" > /tmp/stockinsider-vnext-ci/trading-invalidity-pg-stop.private.json; then original_exit=1; fi
+            if ! docker logs --tail 500 "$owned_id" > /tmp/stockinsider-vnext-ci/trading-invalidity-pg-server.private.log 2>&1; then original_exit=1; fi
+            if ! python3 - <<'PYCODE'
+          import hashlib,json,pathlib,os
+          state=json.loads(pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-pg-stop.private.json').read_text())
+          if state['Running'] or state['Pid']!=0 or state['ExitCode']!=0: raise SystemExit('owned PG shutdown unconfirmed')
+          logs=pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-pg-server.private.log').read_bytes()
+          if logs.rfind(b'database system is shut down')<=logs.rfind(b'database system is ready to accept connections'): raise SystemExit('PG server shutdown log unconfirmed')
+          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-resource/receipt.json')
+          observations=[];unsettled=False
+          if resource.exists():
+              for owned in json.loads(resource.read_text())['processPostObservation']:
+                  pid=owned['pid']
+                  try:
+                      fields=pathlib.Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()
+                      same=fields[19]==owned['originalStart'];rss=int(fields[21])*os.sysconf('SC_PAGE_SIZE')
+                      observations.append({'pid':pid,'sameProcess':same,'state':fields[0],'rssBytes':rss,'originalIdentitySettled':not same or fields[0]=='Z' and rss==0})
+                      unsettled|=same and not(fields[0]=='Z' and rss==0)
+                  except FileNotFoundError: observations.append({'pid':pid,'absent':True})
+                  except OSError: observations.append({'pid':pid,'unknown':True});unsettled=True
+          pathlib.Path('/tmp/stockinsider-vnext-ci/trading-invalidity-cleanup.private.json').write_text(json.dumps({'containerState':state,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'shutdownObserved':True,'ownedProcessObservations':observations,'zombieIsNotAbsent':True,'unsettled':unsettled})+'\n')
+          if unsettled: raise SystemExit('owned process settlement unknown')
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
+          PYCODE
+            then original_exit=1; fi
+            exit "$original_exit"
+          }
+          trap cleanup_trading_invalidity EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if python3 scripts/vnext-trading-invalidity-resource-run.py > /tmp/stockinsider-vnext-ci/trading-invalidity.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/trading-invalidity.tap.private.log /tmp/stockinsider-vnext-ci/trading-invalidity.tap
+          python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re,subprocess
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          raw=root/'trading-invalidity.tap.private.log'
+          if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded native diagnostic required')
+          for line in raw.read_text().splitlines():
+              prefix='TRADING_INVALIDITY_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'phase','code','message','errorType'}: raise SystemExit('closed native diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Trading-invalidity finite diagnostic::'+value)
+          tap=(root/'trading-invalidity.tap').read_bytes()
+          paths=['scripts/vnext-trading-invalidity-postgres.test.mjs','scripts/vnext-trading-invalidity-resource-run.py','scripts/vnext-worker-fixture.mjs','migrations/20261023_vnext_trading_invalidity_exit_v1.sql','scripts/opportunity-v3/vnext-trading-invalidity-profile-v1.json']
+          inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
+          summary={'scope':'actual fresh engineering SQL; synthetic eligibility/roster/calendar, no official acquisition or financial approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
+          # Decode finite count keys only; no private rows/principals are emitted.
+          summary['actualTapCounts']={k.decode():v for k,v in summary['actualTapCounts'].items()}
+          resource=root/'trading-invalidity-resource/receipt.json'
+          if resource.exists():
+              value=json.loads(resource.read_text())
+              summary.update(resourceObserved=True,exit=value['exit'],resourceViolation=value['resourceViolation'],sampledNotInstantaneous=True,sampledOwnedTreePeakRssBytes=value['sampledNodeAndOwnedPgTreePeakRssBytes'],initialFree=value['initialFree'],finalFree=value['finalFree'],nodeSha256=value['nodeSha256'],actualPg=value['ownedPg'])
+          (root/'trading-invalidity-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print('::notice title=Trading-invalidity finite native receipt::'+json.dumps(summary,separators=(',',':')))
+          PYCODE
+          test "$test_status" = 0
+      - name: Upload finite trading-invalidity TAP and summary only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: stockinsider-vnext-trading-invalidity-synthetic
+          path: |
+            /tmp/stockinsider-vnext-ci/trading-invalidity.tap
+            /tmp/stockinsider-vnext-ci/trading-invalidity-summary.json
           if-no-files-found: warn
           retention-days: 7
