@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL_VM_IMPLEMENTATION_AND_ACCEPTANCE_NOT_RELEASE_COMPLETE",
-  "updatedAt": "2026-10-23T06:46:25.439184+00:00",
+  "updatedAt": "2026-10-23T07:21:28.427345+00:00",
   "runtimeSourceHead": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
   "currentReceiptSha256": "79e0941042256898c569937197eef8c467ecd2aa40f6fdd234ece80586d3a634",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
@@ -50,7 +50,8 @@
       "status": "PARTIAL_ACTUAL_SERVER_EXIT",
       "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01; thesis-semantic-authority-source-02; semantic-native-monitored-o23; catalyst-semantic-source-05; catalyst-native-monitored-o23; target-exit-evidence/receipt.json",
       "limits": "6f actual private current roster proof/exit8PASS;37 actual current-work+claim/reserve fencing/real target caller10PASS. Counts separate. Semantic cancellation/contra/target and rebase remain incomplete",
-      "currentFollowup": "Exactaeb normal source/types/lint/fullbuild/actual preparation HTTP/browser success; enhanced adapter realPG10PASS, genuine fullstate+source current/claim/reserve/exit. Scope synthetic; positive routine-screen HTTP not separately exercised; no counter/forecast/sourcewindow/formal claim."
+      "currentFollowup": "Exactaeb normal source/types/lint/fullbuild/actual preparation HTTP/browser success; enhanced adapter realPG10PASS, genuine fullstate+source current/claim/reserve/exit. Scope synthetic; positive routine-screen HTTP not separately exercised; no counter/forecast/sourcewindow/formal claim.",
+      "cancellationFollowup": "f7 coherent candidate source13PASS +4SQL sourcechecks; new actual native queued, no old native green transfer. Other source-bound contra/competitive/risk remains VM work."
     },
     {
       "id": "VN08",
@@ -81,7 +82,8 @@
       "id": "VN12",
       "status": "TESTED_VM_CONTRACT_NOT_FORMAL_REVIEW",
       "runs": "worker-native-02; terminal-slots-native-01; current-browser-summary-01",
-      "limits": "Distinct configuredrole/execution, originalsource hashes/claimchecks/formulas;2actualstructuralreviewfailuresneverpublish. Semantic fixturechecks not independentrealcontentreview. Transportuncertainty keptheld; noautoresend. New typed original quote/issuer/event/date/explicit outcome+full reviewer echo bound to completed provider journals. Protocol not actual semantic support or independent news confirmation."
+      "limits": "Distinct configuredrole/execution, originalsource hashes/claimchecks/formulas;2actualstructuralreviewfailuresneverpublish. Semantic fixturechecks not independentrealcontentreview. Transportuncertainty keptheld; noautoresend. New typed original quote/issuer/event/date/explicit outcome+full reviewer echo bound to completed provider journals. Protocol not actual semantic support or independent news confirmation.",
+      "cancellationFollowup": "f7 coherent candidate source13PASS +4SQL sourcechecks; new actual native queued, no old native green transfer. Other source-bound contra/competitive/risk remains VM work."
     },
     {
       "id": "VN13",
@@ -140,10 +142,11 @@
     "Actualprovider/sourcepermissions+semanticexecution requirelegitimateinjection; neverpastecreds/chat/argv/Git"
   ],
   "remainingVMCode": [
-    "complete comparable28-day original-event sourcewindow/volume authority",
-    "source-bound contradiction/cancellation and competitive/risk producer",
+    "actual cancellation fresh installer/role/proof/history-exit/replay/rights acceptance pending newsource CI",
+    "complete comparable28-day original-event sourcewindow/volume/root authority",
+    "source-bound contradiction and competitive/risk producer",
     "numeric forecast source/current-reader/preparation/provider integration",
-    "corporate-action rebasing and remaining financial/role/rights/race acceptance"
+    "corporate-action rebasing and remaining financial/role/rights/race acceptance; routine-screen positiveHTTP"
   ],
   "remainingTimeAcceptance": "2actualconsecutivecompletedpostclose sessions; no guard/clock bypass",
   "ReleaseGate": "PENDING",
@@ -279,12 +282,11 @@
     "protected": "FAIL, not bypassed"
   },
   "dirtyWip": {
-    "product": "none at sealed aeb code subject",
-    "historicalUntracked": "cached-evidence-initial-wip/ retained/excluded",
-    "nextEventExitWork": "read-only source design review, no product bytes changed yet"
+    "product": "none at sealedf7 source; evidence changes only",
+    "historicalUntracked": "cached-evidence-initial-wip retained/excluded"
   },
-  "sourceHead": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
-  "latestDelivery": "SCREENING-ROSTER-DELIVERY.md",
+  "sourceHead": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+  "latestDelivery": "CATALYST-CANCELLATION.md",
   "independentProductCI": {
     "head": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
     "run": 39910540580,
@@ -417,5 +419,29 @@
     "bounds": "stock scope<=220; original shared2000-roster bound, two1000+sentinel queries; overflow/drift/unknown defer",
     "noAuthorityCreated": true,
     "sameMultiQueryAtomicSnapshotClaim": false
+  },
+  "candidateSourceHead": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+  "candidateReceipt": "cancellation-evidence/receipt.json",
+  "candidateReceiptSha256": "99025efa1f61087a0b4a5aef140e5c8a011845bf4b8d8635b6e818e72ab4b9bd",
+  "candidateRuntime": "PENDING new-source ordinary39916672249: cancellation120291619445, quality120291619699; initial queued. Last actual passed remainsaeb, not transferred.",
+  "catalystCancellation": {
+    "source": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+    "implementation": "optional server-selected v4, original pair/prior baseline, distinct full echo, owner-only proof, original guarded atomic retained publication+exit; no role/quota/old prompt changes",
+    "newSourceTests": 13,
+    "sourceSQLChecks": 4,
+    "changedWorkerRegression": 8,
+    "changedCatalystRegression": 10,
+    "countsNotSummed": true,
+    "newNative": "NOT_RUN as of initial metadata; queued, no PASS inferred",
+    "localPGFullbuild": "NOT_ADMITTED",
+    "scope": "synthetic/source engineering protocol only; actual semantic/financial approval absent"
+  },
+  "protectedPrerequisiteDiagnosis": {
+    "source": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
+    "path": "cancellation-evidence/protected-prerequisite.json",
+    "actualAnnotation": "exit1 at prepare; inner exclusive cause not observed",
+    "concreteUnfulfilledSourcePrerequisite": "single readonly exact subject ref absent while graph-bound requirements/architecture refs present",
+    "action": "independent authorized exact-subject review needed through existing process after code freeze; maker must not self-create/force refs or alter pins",
+    "platformFailureClaim": false
   }
 }

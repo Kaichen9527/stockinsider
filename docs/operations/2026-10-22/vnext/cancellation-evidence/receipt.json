@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "vnext-cancellation-source-receipt-v1",
+  "sourceHead": "f7c7b667ad392c5208ffac53f4334f42f04647b0",
+  "at": "2026-10-23T07:20:43.339929+00:00",
+  "files": [
+    {
+      "path": "ci-initial.json",
+      "bytes": 2194,
+      "sha256": "5d1f4af9e033a6578c6541b4db97ce67571b5bcc10a0841126209ab9bb3ad946"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 11381,
+      "sha256": "08423333a25f9dfe33efda315c29307924a4387ffb9b83771be76e23b8ffe354"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 20453,
+      "sha256": "005f268bfd7c78a338a579409ed858fcb8a47001f0b5917d0fd9bd6b267878ec"
+    },
+    {
+      "path": "protected-prerequisite.json",
+      "bytes": 3329,
+      "sha256": "62526720fd37fcc9d7566155fddb1134489b898dec4a41d96d30502ea0920597"
+    },
+    {
+      "path": "source-checks.json",
+      "bytes": 1464,
+      "sha256": "00620649b05de477db64bc5884fdf2d8bf0b84b9f12f1545ad7e5ba85e149a8b"
+    },
+    {
+      "path": "source-inventory.json",
+      "bytes": 752047,
+      "sha256": "6238d513c36c250f44d37c28a1f0b421be74b5e8aabd053058ce7f98b70212ad"
+    }
+  ],
+  "freshFree": {
+    "/workspace": 8883003392,
+    "/tmp": 17249452032
+  },
+  "floor": 8589934592,
+  "newCleanup": "NONE",
+  "localFreshPGFullbuild": "NOT_ADMITTED",
+  "scope": "candidate implementation and synthetic source tests only; current native pending, no formal semantics/approval",
+  "remaining": "source-window/volume; other source-bound contra/competitive/risk; forecast producer/current-reader/preparation/provider; rebase/races; real sources/models/semantic; protected/Contabo/ReleaseGate"
+}

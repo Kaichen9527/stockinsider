@@ -1,0 +1,65 @@
+{
+  "sourceIdentity": {
+    "scope": "readonly exact source derived identity; not hosted failure log",
+    "subject": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
+    "tree": "796f982bc72fe27e38bd8afc4f8645a12d93b172",
+    "activeGraphSha256": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+    "graphMappingLiteralPresent": true,
+    "workerExactProtectedBaseBytes": true,
+    "workerSourceSha256": "70cfdad3d4777db4341cb17a31c6899ba6104522d3d1ddcd652237be8751ec47",
+    "expectedSubjectExactRef": "refs/heads/evidence/source-led-opportunity-v3-exact-review-aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
+    "prepareSource": "treeIdentity->reviewSourceValues->fetch all immutable selected refs; no mutation/reproduction of protected run"
+  },
+  "annotations": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Kaichen9527/stockinsider/blob/aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69/.github",
+      "start_line": 2,
+      "start_column": null,
+      "end_line": 2,
+      "end_column": null,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Kaichen9527/stockinsider/blob/aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69/.github",
+      "start_line": 62,
+      "start_column": null,
+      "end_line": 62,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "Process completed with exit code 1.",
+      "raw_details": ""
+    }
+  ],
+  "selectedRefs": {
+    "at": "2026-10-23T07:19:35.362064+00:00",
+    "scope": "single authorized-origin readonly ls-remote, not exact hosted error log",
+    "requested": [
+      {
+        "ref": "refs/heads/evidence/source-led-opportunity-v3-exact-review-aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
+        "present": false,
+        "commit": null
+      },
+      {
+        "ref": "refs/heads/evidence/source-led-opportunity-v3-requirements-v325-digest",
+        "present": true,
+        "commit": "cf942588ffa03c81c4af384bb7cc4442468cf13d"
+      },
+      {
+        "ref": "refs/heads/evidence/source-led-opportunity-v3-architecture-v325-digest",
+        "present": true,
+        "commit": "2a710eab65e8c60204493ae08848d47fec3faa9c"
+      }
+    ],
+    "rawSha256": "f71682dd517045bb714fc53dc1900507b8bd5b50fe91e3a7cddc3b5c4be869b1",
+    "rawBytes": 224,
+    "writes": "none; no fetch/ref creation/force",
+    "sourceDerivedEffect": "prepare fetch requires all three refs; missing subject-addressed exact review is a concrete unfulfilled prerequisite. Actual generic exit1 annotation alone does not identify this as exclusive hosted cause."
+  },
+  "actualHostedCause": "NOT_EXCLUSIVELY_OBSERVED; finite actual annotation says exit1. Source+remote proves a concrete missing mandatory exact-subject review ref. No denied logs/artifact retries, no self approval/pin or ref mutation."
+}
