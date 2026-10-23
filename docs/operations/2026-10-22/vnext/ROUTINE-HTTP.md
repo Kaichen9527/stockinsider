@@ -14,3 +14,9 @@ Planned cases (not runtime results):
 - Re-evaluation retains original job clocks/input; committed source withdrawal retains history and prevents new jobs/expensive IO.
 
 Four children plus parent are planned, never an inferred PASS count. All full snapshots/trace/errors/SQL codes remain private; CI publishes a finite notice with actual TAP counts, safe result summaries, source marker, resource and cleanup observations. Actual external acquisition, full financial qualification, actual semantic/model author/reviewer execution, Contabo and formal publication remain NOT_RUN. Root/current protected gates remain unclosed; no old green is transferred to this candidate.
+
+## First actual hosted RED, source0d67575 — retained
+
+Run39951127863/job120405573436 reached one actual member/job admission before a finite whole-table-delta assertion failed. The actual messageSHA529ada59a8e5b4ed4ac6672e2f2ffc01c357574fd10516b93a1d180d665fbf86 exactly matches `finite exact whole-table delta`. Source callgraph proves the original postclose weeklyDue path can insert one `vnext_weekly_audits_v1` row; the test omitted that table. Full private changed rows were not retrieved, so this is a source-derived diagnosis, not an independent raw-row proof. The successor permits only that exact expected empty-active weekly row, still rejects every other unknown table delta and saves snapshots before the assertion.
+
+The failure cleanup also asserted before x.finish and rejected the owned Next process's actual requested-SIGTERM exit143. The fix settles the fixture first and only accepts0 or143 tied to its own explicit SIGTERM and actual PID absence. No SQL/body/guard/timeout/resource limit changes. Original output has no final TAP counts; supervisor reports exit-15/test_containment_deadline, sampled680898560B, no external fetch, pending0 and clients settled. Do not infer5PASS or a successful suite. This RED remains separate from any new source run.
