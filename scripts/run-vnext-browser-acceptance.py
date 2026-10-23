@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 NODE_SHA='1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1'
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--snapshots',required=True);parser.add_argument('--output',required=True);parser.add_argument('--suite',choices=['ui','revision','worker','rights','current'],default='ui');parser.add_argument('--browser',choices=['/usr/bin/chromium','/usr/bin/google-chrome'],default='/usr/bin/chromium');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--snapshots',required=True);parser.add_argument('--output',required=True);parser.add_argument('--suite',choices=['ui','revision','worker','rights','current','business'],default='ui');parser.add_argument('--browser',choices=['/usr/bin/chromium','/usr/bin/google-chrome'],default='/usr/bin/chromium');args=parser.parse_args()
     NODE=Path(shutil.which('node') or '/workspace/.tools/node22/node_modules/node/bin/node').resolve(strict=True)
     with NODE.open('rb') as f:node_sha=hashlib.file_digest(f,'sha256').hexdigest()
     if subprocess.check_output([str(NODE),'--version'],text=True).strip()!='v22.14.0' or node_sha!=NODE_SHA:raise SystemExit('original_pinned_Node22_required')
@@ -16,7 +16,7 @@ def main():
     if os.environ.get('VNEXT_BROWSER_BUILD_SOURCE_SHA')!=source or subprocess.run(['git','diff','--quiet','--','web/src'],cwd=ROOT).returncode:raise SystemExit('same_built_clean_runtime_source_required')
     output=Path(args.output);snapshots=Path(args.snapshots)
     if not output.is_absolute() or output.exists() or not snapshots.is_absolute():raise SystemExit('fresh_absolute_owned_output_and_snapshot_required')
-    for name in (['home.json','detail.json','home-before.json','detail-before.json'] if args.suite in ['revision','rights','current'] else ['home.json','detail.json']):
+    for name in (['home.json','detail.json','home-before.json','detail-before.json'] if args.suite in ['revision','rights','current','business'] else ['home.json','detail.json']):
         p=snapshots/name
         if p.is_symlink() or not p.is_file() or p.stat().st_size>1048576:raise SystemExit('bounded_regular_snapshots_required')
     for p in [str(ROOT),'/tmp']:
@@ -41,7 +41,7 @@ def main():
         'sourceCommit':source,'nodeSha256':NODE_SHA,'harnessSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         'buildId':(ROOT/'web/.next/BUILD_ID').read_text().strip(),'requiredServerFilesSha256':hashlib.sha256((ROOT/'web/.next/required-server-files.json').read_bytes()).hexdigest(),
         'browserVersion':subprocess.run([args.browser,'--version'],capture_output=True,text=True,check=True).stdout.strip(),
-        'browserLauncher':args.browser,'launcherSha256':hashlib.sha256(Path(args.browser).read_bytes()).hexdigest(),'suite':args.suite,'snapshotHashes':{name:hashlib.sha256((snapshots/name).read_bytes()).hexdigest() for name in (['home.json','detail.json','home-before.json','detail-before.json'] if args.suite in ['revision','rights','current'] else ['home.json','detail.json'])}}
+        'browserLauncher':args.browser,'launcherSha256':hashlib.sha256(Path(args.browser).read_bytes()).hexdigest(),'suite':args.suite,'snapshotHashes':{name:hashlib.sha256((snapshots/name).read_bytes()).hexdigest() for name in (['home.json','detail.json','home-before.json','detail-before.json'] if args.suite in ['revision','rights','current','business'] else ['home.json','detail.json'])}}
     # Chrome's distro launcher can be a shell script, not the actual ELF.
     browser_binary=Path('/opt/google/chrome/chrome') if args.browser=='/usr/bin/google-chrome' else Path('/usr/lib/chromium/chromium')
     if not browser_binary.is_file():raise SystemExit('installed_browser_ELF_identity_required')
@@ -94,7 +94,7 @@ def main():
         ready(req,bridge)
         app=start('next',[str(NODE),'node_modules/next/dist/bin/next','start','--hostname','127.0.0.1','--port','34230'],ROOT/'web')
         ready('http://127.0.0.1:34230/',app)
-        command=[str(NODE),'node_modules/@playwright/test/cli.js','test',({'revision':'vnext-revision.spec.ts','worker':'vnext-worker.spec.ts','rights':'vnext-rights.spec.ts','current':'vnext-current.spec.ts'}.get(args.suite,'vnext.spec.ts')),'--config','playwright.vnext.config.ts','--output',str(output/'screenshots-traces')]
+        command=[str(NODE),'node_modules/@playwright/test/cli.js','test',({'revision':'vnext-revision.spec.ts','worker':'vnext-worker.spec.ts','rights':'vnext-rights.spec.ts','current':'vnext-current.spec.ts','business':'vnext-business.spec.ts'}.get(args.suite,'vnext.spec.ts')),'--config','playwright.vnext.config.ts','--output',str(output/'screenshots-traces')]
         log=(output/'test.log').open('wb');logs.append(log)
         completed=subprocess.Popen(command,cwd=ROOT/'web',env=env,stdout=log,stderr=subprocess.STDOUT);children.append(('playwright',completed));end=time.monotonic()+900
         while completed.poll() is None:
