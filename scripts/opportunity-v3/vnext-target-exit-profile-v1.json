@@ -1,0 +1,389 @@
+{
+  "schemaVersion": "vnext-target-exit-source-profile-v1",
+  "migration": "migrations/20261022_vnext_target_exit_v1.sql",
+  "migrationSha256": "209d9fe7b833815feb808f2b8ff8a80598b0220be2267ba867b70dbfb1a060f9",
+  "nativeVerified": false,
+  "nativeOids": null,
+  "catalogMetadata": null,
+  "routines": [
+    {
+      "signature": "public.vnext_command_v1(text,text,jsonb)",
+      "predecessorBodySha256": "47a8d220420b10ac931118262032aac74bc66e94d437d9ac381ad3ab50226074",
+      "successorBodySha256": "b99885487f46bc01bd9375fb285620058eddda1aa23eb3c3043ce89ec6ca2a17",
+      "predecessorBytes": 41167,
+      "successorBytes": 42029,
+      "oldFragment": " ELSIF p_command='exit' THEN\n",
+      "newFragment": " ELSIF p_command='exit' THEN\n  IF r->>'reason'='target_hit' THEN\n   IF jsonb_typeof(r->'targetProof') IS DISTINCT FROM 'object' OR jsonb_typeof(r->'targetProof'->'revisionId') IS DISTINCT FROM 'string' OR coalesce(r->'targetProof'->>'revisionId','') !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$' OR jsonb_typeof(r->'targetProof'->'inputHash') IS DISTINCT FROM 'string' OR coalesce(r->'targetProof'->>'inputHash','') !~ '^[a-f0-9]{64}$' THEN RAISE EXCEPTION 'vnext_target_current_authority_required'; END IF;\n   IF public.vnext_target_current_v1(r->>'symbol',(r->'targetProof'->>'revisionId')::uuid,r->'targetProof'->>'inputHash') IS DISTINCT FROM r->'targetProof' OR NOT(r->'targetProof' ? 'proofHash') OR r->'evidence' IS DISTINCT FROM jsonb_build_array(r->'targetProof'->>'proofHash') THEN RAISE EXCEPTION 'vnext_target_current_authority_required'; END IF;\n  END IF;\n"
+    }
+  ],
+  "readEdges": [
+    {
+      "relation": "stock_instruments_v3",
+      "column": "instrument_authority_id",
+      "type": "uuid",
+      "notNull": true
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "stock_id",
+      "type": "uuid",
+      "notNull": true
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "symbol",
+      "type": "text",
+      "notNull": true
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "exchange",
+      "type": "public.stock_exchange_v3",
+      "notNull": true
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "instrument_type",
+      "type": "public.instrument_type_v3",
+      "notNull": true
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "listing_status",
+      "type": "public.listing_status_v3",
+      "notNull": true
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "provider",
+      "type": "public.official_roster_provider_v3",
+      "notNull": true
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "source_timestamp",
+      "type": "timestamp with time zone",
+      "notNull": true
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "valid_from",
+      "type": "timestamp with time zone",
+      "notNull": true
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "valid_to",
+      "type": "timestamp with time zone",
+      "notNull": false
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "roster_version",
+      "type": "text",
+      "notNull": true
+    },
+    {
+      "relation": "stock_instruments_v3",
+      "column": "recorded_at",
+      "type": "timestamp with time zone",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "observation_id",
+      "type": "uuid",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "stock_id",
+      "type": "uuid",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "exchange",
+      "type": "public.stock_exchange_v3",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "session_id",
+      "type": "date",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "session_authority_id",
+      "type": "uuid",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "raw_close",
+      "type": "double precision",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "provider",
+      "type": "public.price_provider_v3",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "source_timestamp",
+      "type": "timestamp with time zone",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "collected_at",
+      "type": "timestamp with time zone",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "source_ref",
+      "type": "text",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_price_observations_v3",
+      "column": "recorded_at",
+      "type": "timestamp with time zone",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_snapshots_v3",
+      "column": "snapshot_id",
+      "type": "uuid",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_snapshots_v3",
+      "column": "exchange",
+      "type": "public.stock_exchange_v3",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_snapshots_v3",
+      "column": "session_id",
+      "type": "date",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_snapshots_v3",
+      "column": "session_authority_id",
+      "type": "uuid",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_snapshots_v3",
+      "column": "corporate_action_version",
+      "type": "text",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_snapshots_v3",
+      "column": "provider",
+      "type": "public.official_roster_provider_v3",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_snapshots_v3",
+      "column": "collected_at",
+      "type": "timestamp with time zone",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_snapshots_v3",
+      "column": "declared_event_count",
+      "type": "integer",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_snapshots_v3",
+      "column": "dataset_hash",
+      "type": "text",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_snapshots_v3",
+      "column": "recorded_at",
+      "type": "timestamp with time zone",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_feed_evidence_v3",
+      "column": "snapshot_id",
+      "type": "uuid",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_feed_evidence_v3",
+      "column": "feed_ordinal",
+      "type": "integer",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_feed_evidence_v3",
+      "column": "feed_identity",
+      "type": "text",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_feed_evidence_v3",
+      "column": "response_byte_count",
+      "type": "integer",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_feed_evidence_v3",
+      "column": "response_sha256",
+      "type": "text",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_feed_evidence_v3",
+      "column": "parsed_row_count",
+      "type": "integer",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_feed_evidence_v3",
+      "column": "recorded_at",
+      "type": "timestamp with time zone",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_events_v3",
+      "column": "snapshot_id",
+      "type": "uuid",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_events_v3",
+      "column": "event_ordinal",
+      "type": "integer",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_events_v3",
+      "column": "symbol",
+      "type": "text",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_events_v3",
+      "column": "event_kind",
+      "type": "public.corporate_action_kind_v3",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_events_v3",
+      "column": "pre_action_reference_price",
+      "type": "double precision",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_events_v3",
+      "column": "post_action_reference_price",
+      "type": "double precision",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_events_v3",
+      "column": "feed_identity",
+      "type": "text",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_events_v3",
+      "column": "source_row_ref",
+      "type": "text",
+      "notNull": true
+    },
+    {
+      "relation": "opportunity_corporate_action_events_v3",
+      "column": "daily_adjustment_factor",
+      "type": "double precision",
+      "notNull": false
+    },
+    {
+      "relation": "opportunity_corporate_action_events_v3",
+      "column": "recorded_at",
+      "type": "timestamp with time zone",
+      "notNull": true
+    }
+  ],
+  "readPolicies": {
+    "stock_instruments_v3": {
+      "name": "vnext_target_read_v1",
+      "command": "SELECT",
+      "role": "stockinsider_vnext_owner",
+      "using": "true",
+      "withCheck": null
+    },
+    "opportunity_price_observations_v3": {
+      "name": "vnext_target_read_v1",
+      "command": "SELECT",
+      "role": "stockinsider_vnext_owner",
+      "using": "true",
+      "withCheck": null
+    },
+    "opportunity_corporate_action_snapshots_v3": {
+      "name": "vnext_target_read_v1",
+      "command": "SELECT",
+      "role": "stockinsider_vnext_owner",
+      "using": "true",
+      "withCheck": null
+    },
+    "opportunity_corporate_action_feed_evidence_v3": {
+      "name": "vnext_target_read_v1",
+      "command": "SELECT",
+      "role": "stockinsider_vnext_owner",
+      "using": "true",
+      "withCheck": null
+    },
+    "opportunity_corporate_action_events_v3": {
+      "name": "vnext_target_read_v1",
+      "command": "SELECT",
+      "role": "stockinsider_vnext_owner",
+      "using": "true",
+      "withCheck": null
+    }
+  },
+  "newPrivateRoutines": [
+    {
+      "signature": "public.vnext_target_quote_v1(uuid,text,text,date,timestamp with time zone)",
+      "bodySha256": "92f1112444ddcacebce692fbc8c0897eb309c33babee28f9dcff3215f7243325",
+      "bodyBytes": 12216
+    },
+    {
+      "signature": "public.vnext_target_current_v1(text,uuid,text)",
+      "bodySha256": "45f3e03fbee54c4b3040046d0093a5d6627d0554aef79df2b12b92652917af6b",
+      "bodyBytes": 14360
+    }
+  ],
+  "newServiceRoutine": "public.vnext_target_command_v1(text,jsonb)",
+  "newServiceRoutineBodySha256": "e5601edb1d3d49a607bb4a66c18c0de165bf3d7c45e3e655bf035660df105472",
+  "existingTableGrantsAdded": false,
+  "columnGrantsAdded": true,
+  "rolesOrOwnersChanged": false,
+  "predecessorSourceChain": [
+    "20261022_stockinsider_vnext_20_v1.sql",
+    "20261022_vnext_thesis_audit_v1.sql",
+    "20261022_vnext_cached_admission_v2.sql",
+    "20261022_vnext_terminal_failure_slots_v1.sql"
+  ],
+  "capturedSchema": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+  "capturedSchemaSha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+  "priorActualCatalogSource": {
+    "path": "/tmp/stockinsider-vnext-oct22-private/twse-native-retained-o23/install.json",
+    "sha256": "78a35164c9c8d01c6c1f697cac1ff13e0150ca6ae7cd04e37f0e09c926e4ea2d",
+    "scope": "retained d9a catalog lineage only, not native proof of this new candidate"
+  },
+  "numericCodec": "Existing vnext_catalog_canonical_v1 only; original action hash mismatch defers, no new numeric codec/rounding."
+}

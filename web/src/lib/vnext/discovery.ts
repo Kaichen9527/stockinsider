@@ -10,10 +10,14 @@ import type { VnextIdentity } from './auth.ts';
 type Row = Record<string, unknown>;
 const number = (value: unknown) => typeof value === 'number' && Number.isFinite(value) ? value : null;
 /** Shared cache screening only. No financial coverage, downloads, parsers, external quotes or models. */
-export async function scanCachedCandidates(identity: VnextIdentity, transport?: { client: ReturnType<typeof getSupabaseServerClient>; command: typeof command; enqueue: typeof enqueue; now: string }, audits?:Record<string,TrustedThesisAdmission>,options?:{symbols:string[];requestKey:string;admissionOnly:true}) {
+export async function scanCachedCandidates(identity: VnextIdentity, transport?: { client: ReturnType<typeof getSupabaseServerClient>; command: typeof command; enqueue: typeof enqueue; now: string; targets?:()=>Promise<unknown> }, audits?:Record<string,TrustedThesisAdmission>,options?:{symbols:string[];requestKey:string;admissionOnly:true}) {
   if(identity.role!=='operator')throw new Error('vnext_operator_required');
   if(options && !options.symbols.length)return {jobs:[],reason:'empty_scope',expensiveCalls:0};
   const send = transport?.command || command; const admit = transport?.enqueue || enqueue;
+  // Evaluate all active target baselines before any routine update/admission can
+  // create new work. The SQL command rechecks current membership under the same
+  // mutex; explicit scope admission retains its original zero/limited behavior.
+  const targets=options?null:transport?transport.targets?await transport.targets():null:await(await import('./reviewed-target.ts')).evaluateCachedTargets(identity);
   const context = await send(identity, 'screen-context', {}); const cutoff = transport?.now || new Date().toISOString();
   const sourceCommand = transport ? null : (await import('./analysis-runtime.ts')).analysisCommand;
   const sourceContext:Row = sourceCommand ? await sourceCommand(identity,'source-clues',{}) : {};
@@ -25,7 +29,7 @@ export async function scanCachedCandidates(identity: VnextIdentity, transport?: 
   });
   const symbols=options?options.symbols:[...new Set([...candidateSymbols.slice(0,200),...active.map((row)=>String(row.symbol))])].sort();
   const deferredOutsideSymbolBound=options?0:Math.max(0,candidateSymbols.length-200);
-  if (!symbols.length) return { jobs: [], scope: { screened: 0, admitted: 0, deferred: 0 }, gaps: ['allowed_source_cache_empty_or_identity_unresolved'] }; const client = transport?.client || getSupabaseServerClient();
+  if (!symbols.length) return { jobs: [], targets, scope: { screened: 0, admitted: 0, deferred: 0 }, gaps: ['allowed_source_cache_empty_or_identity_unresolved'] }; const client = transport?.client || getSupabaseServerClient();
   const instruments = await client.from('stock_instruments_v3').select('stock_id,symbol,exchange,listing_status,recorded_at,source_timestamp')
     .in('symbol', symbols).eq('instrument_type', 'common_stock')
     .lte('recorded_at', cutoff).lte('source_timestamp', cutoff).lte('valid_from', cutoff)
@@ -33,7 +37,7 @@ export async function scanCachedCandidates(identity: VnextIdentity, transport?: 
   if (instruments.error) throw new Error('vnext_shared_instrument_cache_unavailable');
   const master = new Map<string, Row>(); for (const row of (instruments.data || []) as Row[]) if (!master.has(String(row.symbol))) master.set(String(row.symbol), row);
   const ids = [...new Set([...master.values()].map((r) => String(r.stock_id)))];
-  if (!ids.length) return { jobs: [], scope: { screened:new Set(clues.map((clue)=>clue.contentHash)).size,screenedClues:clues.length, admitted: 0, deferred: symbols.length }, gaps: ['official_instrument_cache_empty'] };
+  if (!ids.length) return { jobs: [], targets, scope: { screened:new Set(clues.map((clue)=>clue.contentHash)).size,screenedClues:clues.length, admitted: 0, deferred: symbols.length }, gaps: ['official_instrument_cache_empty'] };
   const [technicals, revenues] = await Promise.all([
     client.from('technical_feature_snapshots').select('stock_id,session_date,close,volume_ratio_20_median,institutional_flow_20d_norm,as_of,available_at,provenance,ruleset_version')
       .in('stock_id', ids).eq('session_date', (context.priceSessions as string[]|undefined)?.[0]||context.session).lte('available_at', cutoff).order('available_at', { ascending: false }).limit(1000),
@@ -105,6 +109,6 @@ export async function scanCachedCandidates(identity: VnextIdentity, transport?: 
   const considered = frozen.filter((r) => options || !active.some((m) => m.symbol === r.symbol) || audits?.[r.symbol]?.materialChanged===true && audits[r.symbol].revisionId && context.postclose === true && context.completed === true).slice(0, 20);
   const result = await admit(identity, { symbols: considered.map((c) => c.symbol), inputs: Object.fromEntries(considered.map((c) => [c.symbol, c.input])),
     requestKey: options?.requestKey || `shared-screen:${context.session}:${inputHash(considered.map((c) => ({ symbol: c.symbol, hash:normalizedInput(c.symbol,c.input,audits?.[c.symbol]).hash })))}` }, 'shared-cache-screen',audits);
-  return { ...result, rotation, scope: { screened:new Set(clues.map((clue)=>clue.contentHash)).size,screenedClues:clues.length, candidates: frozen.length, considered: considered.length,
-    deferredOutsideSymbolBound,deferredOutsideBound: frozen.length - considered.length }, gaps: ['source_health_and_comparable_volume_not_attested', 'verified_catalyst_cancellation_target_and_contraindication_authority_unavailable'] };
+  return { ...result, rotation, targets, scope: { screened:new Set(clues.map((clue)=>clue.contentHash)).size,screenedClues:clues.length, candidates: frozen.length, considered: considered.length,
+    deferredOutsideSymbolBound,deferredOutsideBound: frozen.length - considered.length }, gaps: ['source_health_and_comparable_volume_not_attested', 'verified_catalyst_cancellation_and_contraindication_authority_unavailable'] };
 }
