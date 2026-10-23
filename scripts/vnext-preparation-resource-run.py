@@ -32,6 +32,10 @@ if not node or subprocess.check_output([node, '--version'], text=True).strip() !
 identity = subprocess.check_output(['docker', '--host=unix:///var/run/docker.sock', 'inspect', '--format', '{{.Id}} {{.State.Pid}} {{.Config.Image}} {{index .Config.Labels "codex.task"}} {{.HostConfig.NetworkMode}} {{.HostConfig.Memory}}', CONTAINER], text=True).strip().split()
 if len(identity) != 6 or not re.fullmatch('[a-f0-9]{64}', identity[0]) or identity[2:] != [IMAGE, 'stockinsider-vnext-oct22', 'none', '1073741824']:
     raise SystemExit('owned PG identity required')
+pg_version = subprocess.check_output(['docker', '--host=unix:///var/run/docker.sock', 'exec', '--user=postgres', identity[0], '/usr/lib/postgresql/17/bin/postgres', '--version'], text=True).strip()
+pg_binary = subprocess.check_output(['docker', '--host=unix:///var/run/docker.sock', 'exec', '--user=postgres', identity[0], 'sha256sum', '/usr/lib/postgresql/17/bin/postgres'], text=True).split()[0]
+if not pg_version.startswith('postgres (PostgreSQL) 17.11 ') or pg_binary != 'f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed':
+    raise SystemExit('original pinned PostgreSQL17.11 binary required')
 pg_pid = int(identity[1])
 if pg_pid <= 1:
     raise SystemExit('owned PG running PID required')
@@ -110,7 +114,7 @@ for (pid, start), before in seen.items():
         post.append({'pid': pid, 'originalStart': start, 'sameProcess': current['start'] == start, 'state': current['state'], 'rssBytes': current['rssBytes'], 'scope': 'PG still owned/running until outer trap' if pid == pg_pid else 'supervisor still active' if pid == os.getpid() else 'observed; zombie is not absent'})
     except FileNotFoundError:
         post.append({'pid': pid, 'originalStart': start, 'absent': True})
-result = {'command': command, 'start': started, 'end': now(), 'exit': code, 'initialFree': initial, 'finalFree': free(), 'floor': FLOOR, 'nextWorksetReference': RESERVE, 'referenceNotUpperBound': True, 'sampledNotInstantaneous': True, 'sampledNodeAndOwnedPgTreePeakRssBytes': peak, 'resourceViolation': violation, 'samples': samples, 'processPostObservation': post, 'ownedPg': {'containerId': identity[0], 'pid': pg_pid, 'start': pg_start, 'image': IMAGE}, 'nodeSha256': hashlib.file_digest(open(node, 'rb'), 'sha256').hexdigest(), 'cleanup': 'test finally plus outer exact-owned-container trap; no data removal'}
+result = {'command': command, 'start': started, 'end': now(), 'exit': code, 'initialFree': initial, 'finalFree': free(), 'floor': FLOOR, 'nextWorksetReference': RESERVE, 'referenceNotUpperBound': True, 'sampledNotInstantaneous': True, 'sampledNodeAndOwnedPgTreePeakRssBytes': peak, 'resourceViolation': violation, 'samples': samples, 'processPostObservation': post, 'ownedPg': {'containerId': identity[0], 'pid': pg_pid, 'start': pg_start, 'image': IMAGE, 'actualVersion': pg_version, 'actualBinarySha256': pg_binary}, 'nodeSha256': hashlib.file_digest(open(node, 'rb'), 'sha256').hexdigest(), 'cleanup': 'test finally plus outer exact-owned-container trap; no data removal'}
 (OUTPUT / 'receipt.json').write_text(json.dumps(result, indent=2) + '\n')
 print(json.dumps({key: value for key, value in result.items() if key not in ('samples', 'processPostObservation')}))
 raise SystemExit(3 if violation else code)
