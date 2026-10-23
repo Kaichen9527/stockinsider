@@ -1,0 +1,10 @@
+{
+  "sourceParent": "d1e5d7de1998306029c43534de685ea7e8fc4370",
+  "originalWorkflowSha256": "ccc55338315f75d0bbcc51be3e90e7cc380765c9ceea5346507b5122b0bb91de",
+  "newWorkflowSha256": "fdfb90e0e96c0ac779c71a80ab753f5cdfa8ab22156feb8c63ff66983997e10b",
+  "exactMovedBlockBytes": 14018,
+  "exactMovedBlockSha256": "4c7d195dc185706e9f092d57a79ecc8329f4ad49c871d947d050bc6e08ca34a8",
+  "reverseWholeBytesEqual": true,
+  "caseOrGuardChanged": false,
+  "reason": "run changed independent preparation before unrelated known4minute raw/retry path; preserve serial ownership, real clocks and fatal raw failure"
+}

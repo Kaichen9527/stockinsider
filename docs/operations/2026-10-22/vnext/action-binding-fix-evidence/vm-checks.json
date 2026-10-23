@@ -1,0 +1,243 @@
+{
+  "checks": [
+    {
+      "name": "action-frozen-source-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/corporate-action-terms.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T15:41:46.076642+00:00",
+      "end": "2026-10-23T15:41:47.098040+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875282432,
+        "/tmp": 17243717632
+      },
+      "finalFree": {
+        "/workspace": 8875282432,
+        "/tmp": 17243713536
+      },
+      "sampledSessionPeakRssBytes": 101060608,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "stdout": {
+        "bytes": 3837,
+        "sha256": "207e0800fefcc5b8302267345e9b045e3afe85546d511505c2f74f03c0b54024"
+      }
+    },
+    {
+      "name": "action-frozen-sql-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-action-terms-source.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T15:41:47.149759+00:00",
+      "end": "2026-10-23T15:41:47.659027+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875282432,
+        "/tmp": 17243709440
+      },
+      "finalFree": {
+        "/workspace": 8875282432,
+        "/tmp": 17243705344
+      },
+      "sampledSessionPeakRssBytes": 6553600,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "stdout": {
+        "bytes": 1138,
+        "sha256": "3eda95ba4c5074d6ef650203e170c2076ff80368828a2786d823e96235b0730b"
+      }
+    },
+    {
+      "name": "action-frozen-types-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--project",
+        "web/tsconfig.json",
+        "--noEmit",
+        "--incremental",
+        "false"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T15:51:20.744231+00:00",
+      "end": "2026-10-23T15:51:50.620993+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875233280,
+        "/tmp": 17243594752
+      },
+      "finalFree": {
+        "/workspace": 8875233280,
+        "/tmp": 17243594752
+      },
+      "sampledSessionPeakRssBytes": 1404002304,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "action-frozen-prep-regression-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/vnext/preparation-reconciliation.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T16:00:30.343308+00:00",
+      "end": "2026-10-23T16:00:32.896361+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875233280,
+        "/tmp": 17243570176
+      },
+      "finalFree": {
+        "/workspace": 8875233280,
+        "/tmp": 17243566080
+      },
+      "sampledSessionPeakRssBytes": 194617344,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "stdout": {
+        "bytes": 283,
+        "sha256": "9a429ea16e4c66004d85dd5287f9b0ec7a10dbf3718b81e7e8863aad405dfedd"
+      }
+    },
+    {
+      "name": "action-frozen-native-source-syntax-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/vnext-action-terms-native-fixture.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T15:51:20.182744+00:00",
+      "end": "2026-10-23T15:51:20.694935+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875233280,
+        "/tmp": 17243598848
+      },
+      "finalFree": {
+        "/workspace": 8875233280,
+        "/tmp": 17243598848
+      },
+      "sampledSessionPeakRssBytes": 7077888,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "action-frozen-workflow-source-04",
+      "command": [
+        "python3",
+        "-B",
+        "/tmp/stockinsider-vnext-oct22-private/action-workflow-source-check.py"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T15:54:32.436780+00:00",
+      "end": "2026-10-23T15:54:32.948194+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875233280,
+        "/tmp": 17243578368
+      },
+      "finalFree": {
+        "/workspace": 8875233280,
+        "/tmp": 17243574272
+      },
+      "sampledSessionPeakRssBytes": 4849664,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "stdout": {
+        "bytes": 294,
+        "sha256": "97241f267f0e6bb0f49bbb08e7a487545e630b22506c29c9e2974949128505da"
+      }
+    },
+    {
+      "name": "action-frozen-lint-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/eslint/bin/eslint.js",
+        "--config",
+        "web/eslint.config.mjs",
+        "web/src/lib/vnext/corporate-action-terms.ts",
+        "web/src/lib/vnext/corporate-action-terms.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T16:01:01.334065+00:00",
+      "end": "2026-10-23T16:01:04.420485+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875233280,
+        "/tmp": 17243557888
+      },
+      "finalFree": {
+        "/workspace": 8875233280,
+        "/tmp": 17243553792
+      },
+      "sampledSessionPeakRssBytes": 264876032,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "stdout": {
+        "bytes": 235,
+        "sha256": "0f01afe313ff7d2dabdb53805b99007a51fb1feb2a9dfad76405d4facd0d1560"
+      }
+    },
+    {
+      "name": "action-save-index-syntax-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "/tmp/stockinsider-vnext-oct22-private/action-save-exact-index.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T15:44:49.605381+00:00",
+      "end": "2026-10-23T15:44:50.118357+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875257856,
+        "/tmp": 17243602944
+      },
+      "finalFree": {
+        "/workspace": 8875257856,
+        "/tmp": 17243602944
+      },
+      "sampledSessionPeakRssBytes": 13238272,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "scope": "source/builtin contracts/strict TS/lint/syntax only; NOT PG grammar, actual current-source, lifecycle or permission approval",
+  "counts": {
+    "actionContracts": 13,
+    "sqlConstruction": 4,
+    "affectedPreparation": 12
+  },
+  "localHeavy": "NOT_ADMITTED"
+}

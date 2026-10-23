@@ -1,0 +1,58 @@
+{
+  "head": "7f896849aa6296bfa302fa56fa5da7eb808f6b02",
+  "singleLineHarnessFix": "d1e5d7de1998306029c43534de685ea7e8fc4370",
+  "base": "e1eec0c5034cb6af41f77b70dce101c84d4551fb",
+  "files": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 118686,
+      "sha256": "fdfb90e0e96c0ac779c71a80ab753f5cdfa8ab22156feb8c63ff66983997e10b"
+    },
+    {
+      "path": "migrations/20261023_vnext_corporate_action_terms_v1.sql",
+      "bytes": 88340,
+      "sha256": "925a41ac3284ccdb139f8a4164ccea1611e1301cb38fb8ccdae68fc1cb88fe8a"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-action-terms-profile-v1.json",
+      "bytes": 10847,
+      "sha256": "1e61c98df54f9083631c3de37b569d78b516f6d25161e0a98064336b21726a58"
+    },
+    {
+      "path": "scripts/vnext-action-terms-native-fixture.mjs",
+      "bytes": 20853,
+      "sha256": "9142b52911320dfd6f4515307fa99fb63f1e1ab90ae52f173bbf2a0b1b117954"
+    },
+    {
+      "path": "scripts/vnext-action-terms-source.test.mjs",
+      "bytes": 7240,
+      "sha256": "12816becdf0045a5d94876216289ecad0f061cfb0ef383f33a275bd34aecfb1d"
+    },
+    {
+      "path": "scripts/vnext-preparation-http-fixture.mjs",
+      "bytes": 59897,
+      "sha256": "f96f558df10a93b6fb1ff047cf3218fa2e8614eb461827708642bd40282f4a4e"
+    },
+    {
+      "path": "web/src/lib/vnext/corporate-action-terms.test.ts",
+      "bytes": 11516,
+      "sha256": "19b2e89b3bfbce2d3f7662267dd0e8634db9313ed179ca6b156171854af33a48"
+    },
+    {
+      "path": "web/src/lib/vnext/corporate-action-terms.ts",
+      "bytes": 15310,
+      "sha256": "85509fb6edbe6ed6bb9aec75c5e9a8f8f1d2fcdf427d1c78945330dbebce6def"
+    }
+  ],
+  "changes": [
+    "single unbound diagnostic save corrected",
+    "new action terms current reader includes policy approval/valid-from knownAt and 1MiB guard",
+    "same original worker depth/number codec reused",
+    "terms must match both preparation asOf and current server projection",
+    "new preparation guard requires original job startedAt<=asOf and unchanged deadline",
+    "one exact backdating negative added, original three expectations unchanged",
+    "entire independent preparation workflow block moved byte-exact before unrelated routine path; no original temporal/floor/oracle change"
+  ],
+  "nativeNewSource": "NOT_RUN at seal; ordinary PR CI may run after normal push; Taipei Saturday time guard unchanged",
+  "permissions": "namespace candidate uncalled, GRANT not applied; new action candidate itself remains source-only review subject"
+}
