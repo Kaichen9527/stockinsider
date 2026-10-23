@@ -1,0 +1,7 @@
+# Completed-history preparation HTTP observation (source candidate)
+
+The cached HTTP entry now exercises the actual configured-author `preparation-read` and explicit `resume-preparation` routes against a completed published job. It requires `not_running`, rights `not_checked`, no evidence returned, and no automatic resume or provider reinvocation. Operator/no-auth requests reject before database reads. This is not a running cache-ready or uncertain prepare recovery acceptance.
+
+The finite REST facade permits only provider journal `inspect`/`read`; actual SQL still executes as service_role. It records actual COMMIT/ROLLBACK ReadyForQuery I and query settlement. Full persisted job, invocation and preparation rows plus original measured counts are retained before HTTP; the new reads require exact row equality and zero leases, with no claim/prepare/reserve/model/FS work. Earlier ordinary screen/acquire-release tests retain their separate mutation scope.
+
+Node22.14 syntax passed. Actual new-case PostgreSQL/HTTP is NOT_RUN until ordinary CI rebuilds the same source. The original running/unprepared cache-ready and real prepare-COMMIT response-loss cases remain pending; no throw-after-RPC or synthetic booleans substitute for them. Previous10 reconciliation source contracts are not native evidence. Private source seal: `preparation-completed-http-source-o23.json`; no raw rows/payloads are published.
