@@ -8,6 +8,7 @@ import http from 'node:http';
 import {randomUUID,randomBytes} from 'node:crypto';
 import {workerFixture,hash} from './vnext-worker-fixture.mjs';
 import {installActionTermsCandidate,proveActionTermsOriginals} from './vnext-action-terms-native-fixture.mjs';
+import {installPublishedTargetReadCandidate} from './vnext-published-target-read-native-fixture.mjs';
 import {seedForecastMetadata} from './vnext-forecast-native-fixture.mjs';
 import {installDisclosedFiscalCandidate,seedDisclosedFiscalFixture,checkDisclosedFiscalComponent} from './vnext-disclosed-fiscal-native-fixture.mjs';
 import {validateCurrentForecasts} from '../web/src/lib/vnext/forecast-current.ts';
@@ -186,6 +187,7 @@ export async function preparationHttpFixture(){
   x.save('forecast-active-installed',{sourceSha256:hash(activeSql),activeBefore,activeAfter,activeMetadata,repeat:{code:activeRepeat.code,message:activeRepeat.message},observerPid:x.observer.processID,writerPid:x.writer.processID,onlyOneNewFunction:true,originalCatalogAndRowsUnchanged:true});
   await installActionTermsCandidate(x);
   await installDisclosedFiscalCandidate(x);
+  await installPublishedTargetReadCandidate(x);
   const documentSha=hash('synthetic clean issuer parser observation; no actual stored/downloaded document'),url='https://www.nanya.com/synthetic-vnext-ir/'+documentSha+'.xhtml';
    stockId=randomUUID();runner=randomUUID();await x.writer.query('INSERT INTO public.stocks(id,symbol,name,market) VALUES($1,$2,$3,$4)',[stockId,'2408','Synthetic IR engineering issuer only','TW']);
    // Exact existing curated host recipe from 20260907_02, not an invented host.

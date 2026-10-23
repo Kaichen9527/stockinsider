@@ -207,6 +207,7 @@ export async function cacheContent(identity: VnextIdentity, body: Row) {
   return cachedAdmissionCommand(identity,'content-receipts',{receiptIds});
 }
 export async function readPublished(symbol?: string) {
+  if(symbol){const {readPublishedStockTarget}=await import('./published-target-read.ts');return readPublishedStockTarget(getSupabaseServerClient(),symbol);}
   const result = await getSupabaseServerClient().rpc('vnext_read_v1', { p_symbol: symbol || null });
   if (result.error) throw new Error('vnext_published_contract_unavailable');
   return result.data as Row | null;
