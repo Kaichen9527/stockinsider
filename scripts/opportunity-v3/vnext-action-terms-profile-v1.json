@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-action-terms-source-profile-v1",
   "migration": "migrations/20261023_vnext_corporate_action_terms_v1.sql",
-  "migrationSha256": "60236eb9f0d83af775fd0128b3fb02bccb9c92546777bc6bd6596031ae469c01",
+  "migrationSha256": "925a41ac3284ccdb139f8a4164ccea1611e1301cb38fb8ccdae68fc1cb88fe8a",
   "nativeVerified": false,
   "nativeOids": null,
   "modifiedRoutines": [
@@ -92,8 +92,8 @@
       "name": "vnext_action_terms_current_internal_v1",
       "signature": "public.vnext_action_terms_current_internal_v1(uuid,text,timestamptz)",
       "owner": "opportunity_v3_rpc_owner",
-      "bodySha256": "d945d76fcc1bf622d02b4615e45858033260fd303d0ff89303dbff4d15a91bc2",
-      "bytes": 12904,
+      "bodySha256": "3ccc6cb6a3637baaa8ef19d13ee7cb2999e910504adc588c2432783ff2f1eb75",
+      "bytes": 13270,
       "definer": true,
       "volatility": "s"
     },
@@ -110,8 +110,8 @@
       "name": "vnext_action_terms_input_current_v1",
       "signature": "public.vnext_action_terms_input_current_v1(jsonb,text)",
       "owner": "stockinsider_vnext_owner",
-      "bodySha256": "4b0f64a1a87931564a50354d8ffa9275e1b719fa0e35836da67ba41c9af4765f",
-      "bytes": 2064,
+      "bodySha256": "df9829fa0c2097c8e241023dddea18a9e92914d3352e63475cf50d942319199d",
+      "bytes": 2398,
       "definer": true,
       "volatility": "s"
     },
@@ -138,8 +138,8 @@
       "name": "vnext_action_preparation_guard_v1",
       "signature": "public.vnext_action_preparation_guard_v1()",
       "owner": "stockinsider_vnext_owner",
-      "bodySha256": "4e6ecb8467234210e4f18511a43cd646fb6029de608c1865ec45314461567a07",
-      "bytes": 472,
+      "bodySha256": "ee96f0820b710ecf57aaebb659e75afa2b2a749acae476fbed35697a0ea430cf",
+      "bytes": 745,
       "definer": false,
       "volatility": "v"
     }
@@ -159,5 +159,6 @@
     "triggerType": 7,
     "purpose": "current terms mandatory on ALL new preparations; no caller provenance flag; originals unchanged"
   },
-  "currentReceiptTimezone": "UTC; current new function configuration only, original routine configs unchanged"
+  "currentReceiptTimezone": "UTC; current new function configuration only, original routine configs unchanged",
+  "frozenAndCurrentUse": "actual asOf projection AND current projection; source knownAt includes rights/authority validFrom; new preparation actual started/deadline, no backdating/clock refresh"
 }

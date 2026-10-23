@@ -1,4 +1,5 @@
 import {inputHash} from './policy.ts';
+import {assertWorkerJsonCodec} from './worker-output.ts';
 import type {VnextIdentity} from './auth.ts';
 import type {Evidence} from './research.ts';
 type Row=Record<string,unknown>;
@@ -50,6 +51,8 @@ export function actionTermEvidence(r:ActionReceipt,body:string):Evidence[]{
  * obtain this only from the current job-scoped server RPC, then SQL rechecks it
  * at prepare/provider/publish. A synthetic RPC tests code contracts only. */
 export function validateCurrentActionTerms(value:unknown):CurrentActionTerms{
+ if(Buffer.byteLength(JSON.stringify(value)??'null')>1048576)throw Error('vnext_action_current_wire_bound');
+ assertWorkerJsonCodec(value);
  if(!object(value)||!keys(value,'schemaVersion stockId symbol asOf receipts evidence gaps')||value.schemaVersion!=='vnext-current-action-terms-v1'||!uuid.test(String(value.stockId))||!/^\d{4}$/u.test(String(value.symbol))||typeof value.asOf!=='string'||!Number.isFinite(Date.parse(value.asOf))||Date.parse(value.asOf)>Date.now()||!Array.isArray(value.receipts)||value.receipts.length>32||!Array.isArray(value.evidence)||!Array.isArray(value.gaps)||value.gaps.length>64||value.gaps.some(g=>typeof g!=='string'||!/^[a-z_]{1,120}$/u.test(g)))throw Error('vnext_action_current_shape');
  const originals=value.evidence;
  const receipts:ActionReceipt[]=[];const seen=new Set<string>();let previous='';

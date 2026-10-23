@@ -23,6 +23,10 @@ test('disclosed actual shares and ALL cash fields are extracted with exact origi
  assert.ok(p.spans.oldShares.startCp<body.indexOf('換發前股數')); // astral codepoint, not UTF16 offset
  assert.equal(validateCurrentActionTerms(fixture()).evidence.length,6);
 });
+test('current source wire reuses1MiB/depth12 limits before accepting any receipt',()=>{
+ const large={...fixture(),gaps:['x'.repeat(1048576)]};assert.throws(()=>validateCurrentActionTerms(large),/wire_bound/);
+ let nested:unknown='bounded';for(let i=0;i<14;i++)nested={child:nested};assert.throws(()=>validateCurrentActionTerms({...fixture(),unknown:nested}),/json_depth/);
+});
 test('absent cash zero, guessed prices, duplicate labels and unsupported numeric/unit/calendar spellings fail',()=>{
  for(const changed of [body.replace('每舊股現金股利: 0\n',''),body.replace('換發前股數: 1000','前參考價: 1000'),body+'\n換發前股數: 1000',body.replace('1000','1,000'),body.replace('1000','-1000'),body.replace('1000','0'),body.replace('1000','1000.5'),body.replace('TWD','USD'),body.replace('2026-10-22','2026-02-30'),body.replace('每股面額變更','split inferred by price')])assert.throws(()=>extractDisclosedActionTerms(changed));
 });

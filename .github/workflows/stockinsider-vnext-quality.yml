@@ -283,6 +283,149 @@ jobs:
           PYCODE
           fi
           test "$test_status" = 0
+      - name: Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)
+        if: ${{ !cancelled() && steps.current_build.outcome == 'success' }}
+        env:
+          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-08
+          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-08
+          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/preparation-running-http
+        run: |
+          python3 - <<'PYCODE'
+          import os
+          for p in [os.getcwd(),"/tmp"]:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592+536870912: raise SystemExit("NOT_READY: original 8GiB floor")
+          PYCODE
+          export VNEXT_PREPARATION_BUILD_SOURCE_SHA="$(git rev-parse HEAD)"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
+          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
+          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+          owned_id="$(docker inspect --format '{{.Id}}' "$VNEXT_TEST_CONTAINER")"
+          cleanup_preparation() {
+            original_exit=$?
+            trap - EXIT
+            if ! docker stop "$owned_id" > /tmp/stockinsider-vnext-ci/preparation-pg-stop.private.log 2>&1; then original_exit=1; fi
+            if ! docker inspect --format '{{json .State}}' "$owned_id" > /tmp/stockinsider-vnext-ci/preparation-pg-stop.private.json; then original_exit=1; fi
+            if ! docker logs --tail 500 "$owned_id" > /tmp/stockinsider-vnext-ci/preparation-pg-server.private.log 2>&1; then original_exit=1; fi
+            if ! python3 - <<'PYCODE'
+          import hashlib,json,pathlib,os
+          state=json.loads(pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-pg-stop.private.json').read_text())
+          if state['Running'] or state['Pid']!=0 or state['ExitCode']!=0: raise SystemExit('owned PG shutdown unconfirmed')
+          logs=pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-pg-server.private.log').read_bytes()
+          if logs.rfind(b'database system is shut down')<=logs.rfind(b'database system is ready to accept connections'): raise SystemExit('PG server shutdown log unconfirmed')
+          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-resource/receipt.json')
+          observations=[];unsettled=False
+          if resource.exists():
+              for owned in json.loads(resource.read_text())['processPostObservation']:
+                  pid=owned['pid']
+                  try:
+                      fields=pathlib.Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()
+                      same=fields[19]==owned['originalStart'];rss=int(fields[21])*os.sysconf('SC_PAGE_SIZE')
+                      observations.append({'pid':pid,'sameProcess':same,'state':fields[0],'rssBytes':rss,'originalIdentitySettled':not same or fields[0]=='Z' and rss==0})
+                      unsettled|=same and not(fields[0]=='Z' and rss==0)
+                  except FileNotFoundError: observations.append({'pid':pid,'absent':True})
+                  except OSError: observations.append({'pid':pid,'unknown':True});unsettled=True
+          pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-cleanup.private.json').write_text(json.dumps({'containerState':state,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'shutdownObserved':True,'ownedProcessObservations':observations,'zombieIsNotAbsent':True,'unsettled':unsettled})+'\n')
+          if unsettled: raise SystemExit('owned process settlement unknown')
+          for p in [os.getcwd(),'/tmp']:
+              v=os.statvfs(p)
+              if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
+          if len(observations)>64: raise SystemExit('bounded owned process summary required')
+          print('::notice title=Preparation actual cleanup receipt::'+json.dumps({'pgRunning':state['Running'],'pgPid':state['Pid'],'pgExit':state['ExitCode'],'shutdownObserved':True,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'ownedProcessObservations':observations,'unsettled':unsettled,'zombieIsNotAbsent':True,'clusterRetained':True,'wholeSocketRootAbsence':'NOT_CHECKED'},separators=(',',':')))
+          PYCODE
+            then original_exit=1; fi
+            exit "$original_exit"
+          }
+          trap cleanup_preparation EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          if python3 scripts/vnext-preparation-resource-run.py > /tmp/stockinsider-vnext-ci/preparation-http.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
+          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/preparation-http.tap.private.log /tmp/stockinsider-vnext-ci/preparation-http.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import json,pathlib
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-http.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          for line in source.read_text().splitlines():
+              prefix=next((p for p in ('PREPARATION_HTTP_FAILURE_SAFE ','PREPARATION_READ_BOUNDARY_SAFE ') if line.startswith(p)),None)
+              if prefix:
+                  item=json.loads(line[len(prefix):])
+                  expected={'stage','code','actual','expected','messageHash','tokens'} if prefix=='PREPARATION_HTTP_FAILURE_SAFE ' else {'reason','status','bridgeErrors'}
+                  if set(item)!=expected: raise SystemExit('closed diagnostic required')
+                  value=json.dumps(item,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Preparation finite HTTP diagnostic::'+value)
+          PYCODE
+          fi
+          python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re,subprocess
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci');raw=root/'preparation-http.tap.private.log'
+          if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded forecast acceptance log required')
+          expected={'FORECAST_CURRENT_SAFE ':{'evidenceCount','receiptCount','numericSourceOnly','annualOrForward4q','actualOriginalAppend','syntheticSource','actualExternalModel'},'FORECAST_FROZEN_REVOKED_SAFE ':{'actualReservedFrozenInput','forecastItems','providerPosts','rightsRevocationCommitted','originalRowsRetained','sourceCurrentFalse','noSecondClaimPrepareOrReserve','directRejectedMutants','duplicateAcquisitionStable','recollectionObservations'}}
+          notices=[]
+          for line in raw.read_text().splitlines():
+              for prefix,keys in expected.items():
+                  if line.startswith(prefix):
+                      value=json.loads(line[len(prefix):])
+                      if set(value)!=keys or any(type(v) not in [bool,int] for v in value.values()): raise SystemExit('closed forecast safe witness required')
+                      notices.append({'kind':prefix.strip(),'value':value})
+          paths=['migrations/20261023_vnext_corporate_action_terms_v1.sql','scripts/opportunity-v3/vnext-action-terms-profile-v1.json','scripts/vnext-action-terms-native-fixture.mjs','web/src/lib/vnext/corporate-action-terms.ts','migrations/20261023_vnext_forecast_active_v1.sql','scripts/opportunity-v3/vnext-forecast-active-profile-v1.json','web/src/lib/vnext/forecast-active.ts','web/src/lib/vnext/weekly-worker.ts','web/src/lib/vnext/thesis-audit.ts','migrations/20261023_vnext_forecast_sources_v1.sql','scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json','scripts/vnext-forecast-native-fixture.mjs','scripts/vnext-preparation-http-fixture.mjs','scripts/vnext-preparation-http.test.mjs','web/src/lib/vnext/forecast-current.ts','web/src/lib/vnext/preparation-reconciliation.ts','web/src/lib/vnext/store.ts']
+          inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
+          value={'sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'observedWitnesses':notices,'actualTapCounts':{m[1].decode():int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',(root/'preparation-http.tap').read_bytes(),re.M)},'tapSha256':hashlib.sha256((root/'preparation-http.tap').read_bytes()).hexdigest(),'scope':'hosted genuine PostgreSQL/HTTP assertions if reached; synthetic source metadata and original append APIs, actual journal reservation only, zero external provider calls; absent witness means NOT_REACHED'}
+          (root/'forecast-current-summary.json').write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Forecast current numeric acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'observedWitnesses':notices,'actualTapCounts':value['actualTapCounts'],'tapSha256':value['tapSha256'],'privateRowsPublished':False},separators=(',',':')))
+          for line in raw.read_text().splitlines():
+              if line.startswith('PREPARATION_BRIDGE_FAILURE_SAFE '):
+                  diagnostic=json.loads(line[len('PREPARATION_BRIDGE_FAILURE_SAFE '):])
+                  if set(diagnostic)!=set('phase code messageHash tokens actual expected settlements'.split()) or len(diagnostic['settlements'])>6: raise SystemExit('closed preparation bridge diagnostic required')
+                  print('::error title=Preparation actual bridge diagnostic::'+json.dumps(diagnostic,separators=(',',':')))
+              if line.startswith('ACTION_TERMS_CURRENT_SAFE '):
+                  action=json.loads(line[len('ACTION_TERMS_CURRENT_SAFE '):])
+                  if set(action)!=set('receipts actualSourceAppend currentTerms originalSpans withdrawalCommitted deniedAfterWithdrawal jobsChanged providerInvocations actualExternalSource actualPublishedTargetRebase'.split()) or any(type(v) not in [bool,int] for v in action.values()): raise SystemExit('closed action witness required')
+                  print('::notice title=Current original action terms acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'witness':action,'actualTapCounts':value['actualTapCounts'],'tapSha256':value['tapSha256']},separators=(',',':')))
+          PYCODE
+          test "$test_status" = 0
+      - name: Hash bounded forecast preparation raw receipts without publishing contents
+        if: always()
+        run: |
+          python3 - <<'PYCODE'
+          import hashlib,json,os,pathlib,re,stat
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci');paths=[]
+          for place in [os.getcwd(),'/tmp']:
+              volume=os.statvfs(place)
+              if volume.f_bavail*volume.f_frsize<8589934592+1048576: raise SystemExit('NOT_READY: forecast inventory original floor plus1MiB')
+          for name in ['preparation-running-http','preparation-resource']:
+              directory=root/name
+              if directory.exists():
+                  if directory.is_symlink() or not directory.is_dir(): raise SystemExit('owned forecast raw directory required')
+                  paths.extend(directory.glob('*.json'));paths.extend(directory.glob('*.log'))
+          for name in ['preparation-http.tap.private.log','preparation-pg-stop.private.log','preparation-pg-stop.private.json','preparation-pg-server.private.log','preparation-cleanup.private.json']:
+              p=root/name
+              if p.exists(): paths.append(p)
+          if len(paths)>256: raise SystemExit('bounded forecast inventory required')
+          rows=[];total=0
+          for p in sorted(paths):
+              before=p.lstat();total+=before.st_size
+              if not stat.S_ISREG(before.st_mode) or before.st_uid!=os.getuid() or before.st_nlink!=1 or before.st_size>134217728 or total>1073741824: raise SystemExit('bounded stable owned forecast evidence required')
+              relative=str(p.relative_to(root))
+              if not re.fullmatch('[A-Za-z0-9._/-]{1,200}',relative): raise SystemExit('fixed safe forecast evidence name required')
+              with p.open('rb') as stream:
+                  opened=os.fstat(stream.fileno())
+                  if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino): raise SystemExit('forecast evidence open changed')
+                  digest=hashlib.file_digest(stream,'sha256').hexdigest();ended=os.fstat(stream.fileno())
+              after=p.lstat();identity=lambda v:(v.st_dev,v.st_ino,v.st_size,v.st_mtime_ns,v.st_ctime_ns)
+              if identity(before)!=identity(ended) or identity(before)!=identity(after): raise SystemExit('forecast evidence changed')
+              rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
+          value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only hosted owned preparation/forecast raw inventory; contents private, not independently retrieved; hosted runner storage ephemeral'}
+          for place in [os.getcwd(),'/tmp']:
+              volume=os.statvfs(place)
+              if volume.f_bavail*volume.f_frsize<8589934592+1048576: raise SystemExit('NOT_READY: forecast inventory publication reserve')
+          out=root/'forecast-current-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
+          print('::notice title=Forecast private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
+          PYCODE
       - name: Fresh routine-screen actual HTTP admission and withdrawal (synthetic originals)
         env:
           VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-12
@@ -478,149 +621,6 @@ jobs:
           PYCODE
           fi
           test "$test_status" = 0
-      - name: Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)
-        if: ${{ !cancelled() && steps.current_build.outcome == 'success' }}
-        env:
-          VNEXT_TEST_CONTAINER: stockinsider-vnext-oct22-worker-08
-          VNEXT_WORKER_SOCKET_PARENT: /tmp/stockinsider-vnext-oct22-private/worker-pg-socket-08
-          VNEXT_NATIVE_ARTIFACTS: /tmp/stockinsider-vnext-ci/preparation-running-http
-        run: |
-          python3 - <<'PYCODE'
-          import os
-          for p in [os.getcwd(),"/tmp"]:
-              s=os.statvfs(p)
-              if s.f_bavail*s.f_frsize<8589934592+536870912: raise SystemExit("NOT_READY: original 8GiB floor")
-          PYCODE
-          export VNEXT_PREPARATION_BUILD_SOURCE_SHA="$(git rev-parse HEAD)"
-          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT"
-          mkdir -m 700 "$VNEXT_WORKER_SOCKET_PARENT/socket"
-          docker run -d --name "$VNEXT_TEST_CONTAINER" --label codex.task=stockinsider-vnext-oct22 --network none --memory=1g --cpus=1 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=vnext_worker -e 'POSTGRES_INITDB_ARGS=--locale=C.UTF-8 --encoding=UTF8' --mount "type=bind,src=$VNEXT_WORKER_SOCKET_PARENT/socket,dst=/var/run/postgresql" postgres:17.11-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
-          owned_id="$(docker inspect --format '{{.Id}}' "$VNEXT_TEST_CONTAINER")"
-          cleanup_preparation() {
-            original_exit=$?
-            trap - EXIT
-            if ! docker stop "$owned_id" > /tmp/stockinsider-vnext-ci/preparation-pg-stop.private.log 2>&1; then original_exit=1; fi
-            if ! docker inspect --format '{{json .State}}' "$owned_id" > /tmp/stockinsider-vnext-ci/preparation-pg-stop.private.json; then original_exit=1; fi
-            if ! docker logs --tail 500 "$owned_id" > /tmp/stockinsider-vnext-ci/preparation-pg-server.private.log 2>&1; then original_exit=1; fi
-            if ! python3 - <<'PYCODE'
-          import hashlib,json,pathlib,os
-          state=json.loads(pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-pg-stop.private.json').read_text())
-          if state['Running'] or state['Pid']!=0 or state['ExitCode']!=0: raise SystemExit('owned PG shutdown unconfirmed')
-          logs=pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-pg-server.private.log').read_bytes()
-          if logs.rfind(b'database system is shut down')<=logs.rfind(b'database system is ready to accept connections'): raise SystemExit('PG server shutdown log unconfirmed')
-          resource=pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-resource/receipt.json')
-          observations=[];unsettled=False
-          if resource.exists():
-              for owned in json.loads(resource.read_text())['processPostObservation']:
-                  pid=owned['pid']
-                  try:
-                      fields=pathlib.Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()
-                      same=fields[19]==owned['originalStart'];rss=int(fields[21])*os.sysconf('SC_PAGE_SIZE')
-                      observations.append({'pid':pid,'sameProcess':same,'state':fields[0],'rssBytes':rss,'originalIdentitySettled':not same or fields[0]=='Z' and rss==0})
-                      unsettled|=same and not(fields[0]=='Z' and rss==0)
-                  except FileNotFoundError: observations.append({'pid':pid,'absent':True})
-                  except OSError: observations.append({'pid':pid,'unknown':True});unsettled=True
-          pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-cleanup.private.json').write_text(json.dumps({'containerState':state,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'shutdownObserved':True,'ownedProcessObservations':observations,'zombieIsNotAbsent':True,'unsettled':unsettled})+'\n')
-          if unsettled: raise SystemExit('owned process settlement unknown')
-          for p in [os.getcwd(),'/tmp']:
-              v=os.statvfs(p)
-              if v.f_bavail*v.f_frsize<8589934592: raise SystemExit('original floor not held after owned PG stop')
-          if len(observations)>64: raise SystemExit('bounded owned process summary required')
-          print('::notice title=Preparation actual cleanup receipt::'+json.dumps({'pgRunning':state['Running'],'pgPid':state['Pid'],'pgExit':state['ExitCode'],'shutdownObserved':True,'serverLogSha256':hashlib.sha256(logs).hexdigest(),'ownedProcessObservations':observations,'unsettled':unsettled,'zombieIsNotAbsent':True,'clusterRetained':True,'wholeSocketRootAbsence':'NOT_CHECKED'},separators=(',',':')))
-          PYCODE
-            then original_exit=1; fi
-            exit "$original_exit"
-          }
-          trap cleanup_preparation EXIT
-          ready=0
-          for i in $(seq 1 30); do
-            if docker exec "$VNEXT_TEST_CONTAINER" pg_isready -h 127.0.0.1 -U postgres -d vnext_worker; then ready=1; break; fi
-            sleep 1
-          done
-          test "$ready" = 1
-          if python3 scripts/vnext-preparation-resource-run.py > /tmp/stockinsider-vnext-ci/preparation-http.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
-          python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/preparation-http.tap.private.log /tmp/stockinsider-vnext-ci/preparation-http.tap
-          if [ "$test_status" != 0 ]; then
-            python3 - <<'PYCODE'
-          import json,pathlib
-          source=pathlib.Path('/tmp/stockinsider-vnext-ci/preparation-http.tap.private.log')
-          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
-          for line in source.read_text().splitlines():
-              prefix=next((p for p in ('PREPARATION_HTTP_FAILURE_SAFE ','PREPARATION_READ_BOUNDARY_SAFE ') if line.startswith(p)),None)
-              if prefix:
-                  item=json.loads(line[len(prefix):])
-                  expected={'stage','code','actual','expected','messageHash','tokens'} if prefix=='PREPARATION_HTTP_FAILURE_SAFE ' else {'reason','status','bridgeErrors'}
-                  if set(item)!=expected: raise SystemExit('closed diagnostic required')
-                  value=json.dumps(item,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
-                  print('::error title=Preparation finite HTTP diagnostic::'+value)
-          PYCODE
-          fi
-          python3 - <<'PYCODE'
-          import hashlib,json,pathlib,re,subprocess
-          root=pathlib.Path('/tmp/stockinsider-vnext-ci');raw=root/'preparation-http.tap.private.log'
-          if raw.stat().st_size>8*1024*1024: raise SystemExit('bounded forecast acceptance log required')
-          expected={'FORECAST_CURRENT_SAFE ':{'evidenceCount','receiptCount','numericSourceOnly','annualOrForward4q','actualOriginalAppend','syntheticSource','actualExternalModel'},'FORECAST_FROZEN_REVOKED_SAFE ':{'actualReservedFrozenInput','forecastItems','providerPosts','rightsRevocationCommitted','originalRowsRetained','sourceCurrentFalse','noSecondClaimPrepareOrReserve','directRejectedMutants','duplicateAcquisitionStable','recollectionObservations'}}
-          notices=[]
-          for line in raw.read_text().splitlines():
-              for prefix,keys in expected.items():
-                  if line.startswith(prefix):
-                      value=json.loads(line[len(prefix):])
-                      if set(value)!=keys or any(type(v) not in [bool,int] for v in value.values()): raise SystemExit('closed forecast safe witness required')
-                      notices.append({'kind':prefix.strip(),'value':value})
-          paths=['migrations/20261023_vnext_corporate_action_terms_v1.sql','scripts/opportunity-v3/vnext-action-terms-profile-v1.json','scripts/vnext-action-terms-native-fixture.mjs','web/src/lib/vnext/corporate-action-terms.ts','migrations/20261023_vnext_forecast_active_v1.sql','scripts/opportunity-v3/vnext-forecast-active-profile-v1.json','web/src/lib/vnext/forecast-active.ts','web/src/lib/vnext/weekly-worker.ts','web/src/lib/vnext/thesis-audit.ts','migrations/20261023_vnext_forecast_sources_v1.sql','scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json','scripts/vnext-forecast-native-fixture.mjs','scripts/vnext-preparation-http-fixture.mjs','scripts/vnext-preparation-http.test.mjs','web/src/lib/vnext/forecast-current.ts','web/src/lib/vnext/preparation-reconciliation.ts','web/src/lib/vnext/store.ts']
-          inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
-          value={'sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'observedWitnesses':notices,'actualTapCounts':{m[1].decode():int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',(root/'preparation-http.tap').read_bytes(),re.M)},'tapSha256':hashlib.sha256((root/'preparation-http.tap').read_bytes()).hexdigest(),'scope':'hosted genuine PostgreSQL/HTTP assertions if reached; synthetic source metadata and original append APIs, actual journal reservation only, zero external provider calls; absent witness means NOT_REACHED'}
-          (root/'forecast-current-summary.json').write_text(json.dumps(value,indent=2)+'\n')
-          print('::notice title=Forecast current numeric acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'observedWitnesses':notices,'actualTapCounts':value['actualTapCounts'],'tapSha256':value['tapSha256'],'privateRowsPublished':False},separators=(',',':')))
-          for line in raw.read_text().splitlines():
-              if line.startswith('PREPARATION_BRIDGE_FAILURE_SAFE '):
-                  diagnostic=json.loads(line[len('PREPARATION_BRIDGE_FAILURE_SAFE '):])
-                  if set(diagnostic)!=set('phase code messageHash tokens actual expected settlements'.split()) or len(diagnostic['settlements'])>6: raise SystemExit('closed preparation bridge diagnostic required')
-                  print('::error title=Preparation actual bridge diagnostic::'+json.dumps(diagnostic,separators=(',',':')))
-              if line.startswith('ACTION_TERMS_CURRENT_SAFE '):
-                  action=json.loads(line[len('ACTION_TERMS_CURRENT_SAFE '):])
-                  if set(action)!=set('receipts actualSourceAppend currentTerms originalSpans withdrawalCommitted deniedAfterWithdrawal jobsChanged providerInvocations actualExternalSource actualPublishedTargetRebase'.split()) or any(type(v) not in [bool,int] for v in action.values()): raise SystemExit('closed action witness required')
-                  print('::notice title=Current original action terms acceptance::'+json.dumps({'sourceHead':value['sourceHead'],'witness':action,'actualTapCounts':value['actualTapCounts'],'tapSha256':value['tapSha256']},separators=(',',':')))
-          PYCODE
-          test "$test_status" = 0
-      - name: Hash bounded forecast preparation raw receipts without publishing contents
-        if: always()
-        run: |
-          python3 - <<'PYCODE'
-          import hashlib,json,os,pathlib,re,stat
-          root=pathlib.Path('/tmp/stockinsider-vnext-ci');paths=[]
-          for place in [os.getcwd(),'/tmp']:
-              volume=os.statvfs(place)
-              if volume.f_bavail*volume.f_frsize<8589934592+1048576: raise SystemExit('NOT_READY: forecast inventory original floor plus1MiB')
-          for name in ['preparation-running-http','preparation-resource']:
-              directory=root/name
-              if directory.exists():
-                  if directory.is_symlink() or not directory.is_dir(): raise SystemExit('owned forecast raw directory required')
-                  paths.extend(directory.glob('*.json'));paths.extend(directory.glob('*.log'))
-          for name in ['preparation-http.tap.private.log','preparation-pg-stop.private.log','preparation-pg-stop.private.json','preparation-pg-server.private.log','preparation-cleanup.private.json']:
-              p=root/name
-              if p.exists(): paths.append(p)
-          if len(paths)>256: raise SystemExit('bounded forecast inventory required')
-          rows=[];total=0
-          for p in sorted(paths):
-              before=p.lstat();total+=before.st_size
-              if not stat.S_ISREG(before.st_mode) or before.st_uid!=os.getuid() or before.st_nlink!=1 or before.st_size>134217728 or total>1073741824: raise SystemExit('bounded stable owned forecast evidence required')
-              relative=str(p.relative_to(root))
-              if not re.fullmatch('[A-Za-z0-9._/-]{1,200}',relative): raise SystemExit('fixed safe forecast evidence name required')
-              with p.open('rb') as stream:
-                  opened=os.fstat(stream.fileno())
-                  if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino): raise SystemExit('forecast evidence open changed')
-                  digest=hashlib.file_digest(stream,'sha256').hexdigest();ended=os.fstat(stream.fileno())
-              after=p.lstat();identity=lambda v:(v.st_dev,v.st_ino,v.st_size,v.st_mtime_ns,v.st_ctime_ns)
-              if identity(before)!=identity(ended) or identity(before)!=identity(after): raise SystemExit('forecast evidence changed')
-              rows.append({'path':relative,'bytes':before.st_size,'sha256':digest})
-          value={'files':rows,'count':len(rows),'bytes':total,'scope':'hash-only hosted owned preparation/forecast raw inventory; contents private, not independently retrieved; hosted runner storage ephemeral'}
-          for place in [os.getcwd(),'/tmp']:
-              volume=os.statvfs(place)
-              if volume.f_bavail*volume.f_frsize<8589934592+1048576: raise SystemExit('NOT_READY: forecast inventory publication reserve')
-          out=root/'forecast-current-private-inventory.json';out.write_text(json.dumps(value,indent=2)+'\n')
-          print('::notice title=Forecast private inventory::'+json.dumps({'count':len(rows),'bytes':total,'inventorySha256':hashlib.sha256(out.read_bytes()).hexdigest(),'rawContentsPublished':False},separators=(',',':')))
-          PYCODE
       - name: Fresh original-bound business components via distinct review/current public projection (synthetic metadata)
         id: current_business
         if: ${{ !cancelled() && steps.current_build.outcome == 'success' }}

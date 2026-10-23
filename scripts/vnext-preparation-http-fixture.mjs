@@ -103,13 +103,14 @@ export async function preparationHttpFixture(){
     if(name==='vnext_command_v1'&&body.p_command==='prepare'){assert.equal(armed,true,'no prepare without exact one-shot loss arm');assert.equal(body.p_request.jobId,claim.jobId);armed=false;prepareStartedAt=await clock();beforeLoss=await x.snapshot();}
     if(name==='vnext_command_v1'&&body.p_command==='prepare'){
      const stable=await x.snapshot(),negative=[];
-     for(const kind of ['omitted','forged','future']){
+     for(const kind of ['omitted','forged','future','backdated']){
       preparationPhase='negative_'+kind;
       const mutant=structuredClone(body.p_request.evidence);
       if(kind==='omitted'){delete mutant.actionTermsReceipts;delete mutant.actionTermsAsOf;delete mutant.actionTermsGaps;}
       if(kind==='forged')mutant.actionTermsReceipts=[{validated:true}];
       if(kind==='future')mutant.actionTermsAsOf='2099-01-01T00:00:00Z';
-      const expected=kind==='omitted'?'vnext_action_preparation_terms_required':'vnext_prepared_original_rights_no_longer_current';
+      if(kind==='backdated')mutant.actionTermsAsOf=new Date(Date.parse(stable.vnext_jobs_v1.rows.find(j=>j.job_id===claim.jobId).started_at)-1).toISOString();
+      const expected=kind==='omitted'?'vnext_action_preparation_terms_required':kind==='backdated'?'vnext_action_preparation_window':'vnext_prepared_original_rights_no_longer_current';
       await assert.rejects(()=>query(def.sql,[body.p_principal,'prepare',JSON.stringify({...body.p_request,evidence:mutant,inputHash:inputHash(mutant)})]),error=>error.code==='P0001'&&error.message===expected);
       assert.deepEqual(await x.snapshot(),stable);negative.push({kind,code:'P0001',expected,wholeRowsUnchanged:true});
      }
