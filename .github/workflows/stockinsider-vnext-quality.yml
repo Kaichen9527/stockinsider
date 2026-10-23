@@ -485,11 +485,15 @@ jobs:
               data=image.read_bytes();total+=len(data)
               if total>20971520 or data[:8]!=b'\x89PNG\r\n\x1a\n': raise SystemExit('bounded PNG screenshot required')
               sha=hashlib.sha256(data).hexdigest();verified.append((sha,data));result['screenshots'].append({'privatePath':str(image.relative_to(root)),'publishedPath':'images/'+sha+'.png','bytes':len(data),'sha256':sha})
+          expected=12 if suite=='ui' else 2
+          complete=(len(result['cases'])==expected and all(c['expectedStatus']=='passed' and c['results']==['passed'] for c in result['cases']) and result.get('stats',{}).get('skipped')==0 and result.get('stats',{}).get('unexpected')==0 and result.get('stats',{}).get('flaky')==0)
+          if result['exit']==0 and not complete:result['exit']=1;result['acceptanceError']='complete_non_skipped_desktop_mobile_cases_required'
           public=root/'public';public.mkdir(mode=0o700);(public/'images').mkdir(mode=0o700)
           for sha,data in verified:(public/'images'/(sha+'.png')).write_bytes(data)
           (public/'acceptance.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
           print('Browser finite summary '+json.dumps({'suite':suite,'exit':result['exit'],'stats':result.get('stats'),'cases':len(result['cases']),'screenshots':len(images)},separators=(',',':')))
           if result['exit']!=0:print('::error title=Browser finite outcome::'+json.dumps({'suite':suite,'exit':result['exit'],'stats':result.get('stats'),'failedCases':[c for c in result['cases'] if any(status!='passed' for status in c['results'])]},separators=(',',':')))
+          if result['exit']!=0:raise SystemExit(result['exit'])
           PYCODE
             test "$browser_status" = 0
           done
