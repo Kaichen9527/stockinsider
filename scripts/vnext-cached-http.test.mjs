@@ -67,7 +67,13 @@ const bridge = http.createServer(async (req, res) => {
   try {
     await c.query('BEGIN'); await c.query('SET LOCAL ROLE service_role');
     await c.query("SELECT set_config('request.headers',$1,true),set_config('request.jwt.claims',$2,true)",[JSON.stringify({'x-stockinsider-writer-release':req.headers['x-stockinsider-writer-release']}),JSON.stringify({role:'service_role'})]);
-    const actual=await c.query(definition.sql,definition.keys.map(k=>k==='p_request'?JSON.stringify(body[k]):body[k]));
+    // Query rejection can precede its ReadyForQuery frame. Settle BOTH before
+    // attaching the next transaction command's listener (T success / E error).
+    const queryReady=new Promise(resolve=>c.connection.once('readyForQuery',m=>resolve(m.status)));
+    const [queried,querySettled]=await Promise.allSettled([c.query(definition.sql,definition.keys.map(k=>k==='p_request'?JSON.stringify(body[k]):body[k])),queryReady]);
+    assert.equal(querySettled.status,'fulfilled');assert.equal(querySettled.value,queried.status==='fulfilled'?'T':'E');
+    trace.push({rpc:name,action:body.p_command,queryStatus:queried.status,queryReady:querySettled.value,querySettled:true});
+    if(queried.status==='rejected')throw queried.reason;const actual=queried.value;
     const ready=new Promise(resolve=>c.connection.once('readyForQuery',m=>resolve(m.status)));await c.query('COMMIT');assert.equal(await ready,'I');trace.push({rpc:name,action:body.p_command,requestHash:sha(JSON.stringify(body)),commitObserved:true,actualServiceRole:true,ready:'I',querySettled:true});
     res.end(JSON.stringify(definition.setReturning?actual.rows:actual.rows[0].result));
   } catch (e) {
