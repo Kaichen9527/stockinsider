@@ -161,6 +161,20 @@ jobs:
           test "$ready" = 1
           if node --experimental-strip-types scripts/vnext-analysis-postgres.test.mjs > /tmp/stockinsider-vnext-ci/analysis.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
           python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/analysis.tap.private.log /tmp/stockinsider-vnext-ci/analysis.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import json,pathlib
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/analysis.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          for line in source.read_text().splitlines():
+              prefix='ANALYSIS_FAILURE_SAFE '
+              if line.startswith(prefix):
+                  item=json.loads(line[len(prefix):])
+                  if set(item)!={'stage','code','message','errorType'}: raise SystemExit('closed diagnostic required')
+                  value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                  print('::error title=Analysis finite native diagnostic::'+value)
+          PYCODE
+          fi
           test "$test_status" = 0
       - name: Actual all-active thesis, revoked source rights and charged retry (synthetic provider)
         env:
