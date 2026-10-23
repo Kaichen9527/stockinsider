@@ -60,9 +60,8 @@ export function officialResearchEvidenceFactor(input: {
 
 export type BrokerEvidenceRow = { sourceCount: number; freshness: string; asOf: string | null; lawful?: boolean; licenseStatus?: 'licensed' | 'permitted' | 'unknown' | 'blocked' };
 
-/** Maps an imported broker snapshot to the factor contract. A report can only
- * earn evidence when its actual ingestion mode is within an explicit license;
- * a software package license is not evidence of redistribution rights. */
+/** Maps an imported broker snapshot to the factor contract. Ingestion mode is
+ * provenance only: manual/imported files do not prove factor-use rights. */
 export function brokerEvidenceRowsFromSnapshots(rows: Array<{
   sourceCount: number | null | undefined;
   freshnessStatus: string | null | undefined;
@@ -70,24 +69,27 @@ export function brokerEvidenceRowsFromSnapshots(rows: Array<{
   permittedSourceModes?: string[] | null;
   licenseStatus?: BrokerEvidenceRow['licenseStatus'];
 }>): BrokerEvidenceRow[] {
-  const allowedModes = new Set(['manual_pdf', 'manual_csv', 'imported_pdf']);
   return rows.map((row) => {
-    const modes = (row.permittedSourceModes || []).filter((mode): mode is string => typeof mode === 'string');
     const explicitlyLicensed = row.licenseStatus === 'licensed' || row.licenseStatus === 'permitted';
     return {
       sourceCount: Math.max(0, Number(row.sourceCount) || 0),
       freshness: String(row.freshnessStatus || 'missing'),
       asOf: row.asOfDate || null,
       licenseStatus: row.licenseStatus,
-      lawful: explicitlyLicensed || (modes.length > 0 && modes.every((mode) => allowedModes.has(mode))),
+      lawful: explicitlyLicensed,
     };
   });
 }
 
 function brokerIsLawful(row: BrokerEvidenceRow): boolean {
+  // An explicit negative/unknown status always wins; callers cannot override
+  // it with a convenience boolean or an ingestion-mode-derived value.
+  if (row.licenseStatus === 'blocked' || row.licenseStatus === 'unknown') return false;
+  if (row.licenseStatus === 'licensed' || row.licenseStatus === 'permitted') return true;
   // `freshness_status=licensed` is the legacy storage representation of an
-  // explicit permitted report. It is the only compatibility interpretation.
-  return row.lawful === true || row.licenseStatus === 'licensed' || row.licenseStatus === 'permitted' || row.freshness === 'licensed';
+  // explicit permitted report. Only rows with no explicit license status may
+  // use this or a prevalidated `lawful` flag for compatibility.
+  return row.lawful === true || row.freshness === 'licensed';
 }
 
 /** Lawful, fresh broker evidence only; unlicensed reports never contribute. */

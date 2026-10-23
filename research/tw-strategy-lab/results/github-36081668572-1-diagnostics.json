@@ -1,0 +1,168 @@
+{
+  "schema_version": "tw-strategy-lab-diagnostics-v1",
+  "created_at": "2026-09-25T02:50:53Z",
+  "source_commit": "e1fb505a894105e05fb08aa28fd0fb8ad8e520fa",
+  "research_run_id": "a9123545831d8ee1a39b231c",
+  "dataset_hash": "a89bf8e5cbcfc464463a53c29f1f5f68f6419d72f2a06befcaeb008e3cff5cca",
+  "registry_hash": "abd03f9bbe3230575f3e14016c8c1fd92fef6ad00155c0d743612754e8bcc98d",
+  "diagnostic_only": true,
+  "new_backtest_executed": false,
+  "holdout_accessed": false,
+  "parameter_changes": false,
+  "strategies": {
+    "S1": {
+      "raw_confirmations": 146,
+      "eligible_orders": 76,
+      "avoid_chase": 70,
+      "baseline_buy_fills": 35,
+      "baseline_completed_trades": 33,
+      "baseline_open_positions": 2,
+      "eligible_to_buy_fill_fraction": 0.4605263157894737,
+      "baseline_buy_skip_reasons": {
+        "already_held": 16,
+        "corporate_action_day_order_cancelled": 3,
+        "limit_not_crossed_or_limit_up": 22
+      },
+      "baseline_trade_statistics": {
+        "winning_fraction": 0.2727272727272727,
+        "median_net_return": -0.03576617367074659,
+        "average_net_return": 0.002732957430440509,
+        "best_net_return": 0.28233460898961205,
+        "worst_net_return": -0.08045841519102395,
+        "profit_factor": 1.0227847796767944
+      },
+      "baseline_net_total_return": 0.001064137077000371,
+      "baseline_cost_addback_same_filled_share_path": 0.02838426457700042,
+      "baseline_average_exposure": 0.031510278943026784
+    },
+    "S2": {
+      "raw_confirmations": 225,
+      "eligible_orders": 162,
+      "avoid_chase": 63,
+      "baseline_buy_fills": 82,
+      "baseline_completed_trades": 79,
+      "baseline_open_positions": 3,
+      "eligible_to_buy_fill_fraction": 0.5061728395061729,
+      "baseline_buy_skip_reasons": {
+        "limit_not_crossed_or_limit_up": 52,
+        "already_held": 26,
+        "corporate_action_day_order_cancelled": 1
+      },
+      "baseline_trade_statistics": {
+        "winning_fraction": 0.17721518987341772,
+        "median_net_return": -0.016662446489942338,
+        "average_net_return": -0.008786449803004564,
+        "best_net_return": 0.2127436237238156,
+        "worst_net_return": -0.11549149080207774,
+        "profit_factor": 0.5182456464305268
+      },
+      "baseline_net_total_return": -0.05036689662499949,
+      "baseline_cost_addback_same_filled_share_path": 0.013855000000000436,
+      "baseline_average_exposure": 0.03299159703550822
+    },
+    "S3": {
+      "raw_confirmations": 170,
+      "eligible_orders": 170,
+      "avoid_chase": 0,
+      "baseline_buy_fills": 37,
+      "baseline_completed_trades": 36,
+      "baseline_open_positions": 1,
+      "eligible_to_buy_fill_fraction": 0.21764705882352942,
+      "baseline_buy_skip_reasons": {
+        "limit_not_crossed_or_limit_up": 29,
+        "already_held": 101,
+        "no_same_open_reentry": 1,
+        "corporate_action_day_order_cancelled": 1
+      },
+      "baseline_trade_statistics": {
+        "winning_fraction": 0.3333333333333333,
+        "median_net_return": -0.019557843507296564,
+        "average_net_return": 0.020406984968169107,
+        "best_net_return": 0.7371970720270329,
+        "worst_net_return": -0.13622309520408826,
+        "profit_factor": 1.577267361308098
+      },
+      "largest_winner": {
+        "symbol": "8069",
+        "entry_date": "2021-10-25",
+        "exit_date": "2022-01-18",
+        "net_pnl_twd": 704066.7150000001,
+        "net_return": 0.7371970720270329,
+        "fraction_of_realized_gross_profit": 0.42214036543033484
+      },
+      "same_path_total_return_after_arithmetic_removal_of_largest_winner": -0.007546913145,
+      "largest_winner_removal_is_counterfactual": false,
+      "baseline_net_total_return": 0.06285975835500057,
+      "baseline_cost_addback_same_filled_share_path": 0.09351854260500056,
+      "baseline_average_exposure": 0.05738409781740353
+    },
+    "S4": {
+      "raw_confirmations": 0,
+      "eligible_orders": 0,
+      "avoid_chase": 0,
+      "baseline_buy_fills": 0,
+      "baseline_completed_trades": 0,
+      "baseline_open_positions": 0,
+      "eligible_to_buy_fill_fraction": null,
+      "baseline_buy_skip_reasons": {},
+      "baseline_trade_statistics": null,
+      "baseline_net_total_return": 0.0,
+      "baseline_cost_addback_same_filled_share_path": 0.0,
+      "baseline_average_exposure": 0.0
+    },
+    "S6": {
+      "raw_confirmations": 74,
+      "eligible_orders": 74,
+      "avoid_chase": 0,
+      "baseline_buy_fills": 25,
+      "baseline_completed_trades": 25,
+      "baseline_open_positions": 0,
+      "eligible_to_buy_fill_fraction": 0.33783783783783783,
+      "baseline_buy_skip_reasons": {
+        "limit_not_crossed_or_limit_up": 39,
+        "already_held": 9,
+        "no_same_open_reentry": 1
+      },
+      "baseline_trade_statistics": {
+        "winning_fraction": 0.6,
+        "median_net_return": 0.008604482337899715,
+        "average_net_return": -0.0020678315559426457,
+        "best_net_return": 0.049963469415749896,
+        "worst_net_return": -0.0818513533263643,
+        "profit_factor": 0.8362150174447734
+      },
+      "baseline_net_total_return": -0.004792850999999598,
+      "baseline_cost_addback_same_filled_share_path": 0.01444000000000038,
+      "baseline_average_exposure": 0.006422375133803963
+    }
+  },
+  "s4_partial_checkpoint_funnel": {
+    "scope": "Previously saved incomplete local checkpoint only: 1216 and 2330 through 2019-12-31; 5347 through 2019-11-29. This is a diagnostic sample, not the complete CI dataset.",
+    "basic_valid_windows": 704,
+    "individual_gate_pass_counts": {
+      "prior_atr5_over_atr20_at_most_0_60": 0,
+      "ten_session_breakout": 91,
+      "volume_at_least_prior20_mean": 277,
+      "close_above_ma60": 474
+    },
+    "compression_ratio_quantiles": {
+      "p05": 0.7787324475562565,
+      "p25": 0.8820252970080567,
+      "p50": 0.9574018540166207,
+      "p75": 1.047437849846523,
+      "p95": 1.2055538988632641
+    },
+    "minimum_observed_ratio": 0.6555001030669183,
+    "minimum_observed_ratio_symbol_session": "1216/2019-12-05",
+    "closest_ratio_with_all_other_gates_passed": 0.730779947748595,
+    "closest_all_other_gates_symbol_session": "5347/2019-01-28",
+    "frozen_threshold": 0.6,
+    "finding": "The preregistered compression gate rejected every inspected partial-checkpoint window. The minimum ratio was 0.6555 but that window also failed breakout and MA60; the closest ratio among windows passing all other gates was 0.7308. Full-run S4 signal output is also empty, but full normalized CSVs were not retained in the artifact, so the remaining years were not independently refunnelled here."
+  },
+  "reporting_finding": {
+    "severity": "medium",
+    "code": "signal_count_combines_eligible_and_avoid_chase_confirmations",
+    "effect": "The original results signal_count field is not an executable-order count for S1 and S2. Performance simulation is unaffected because the engine admits only plan_state=eligible_proxy.",
+    "recommended_repair": "A later reviewed runner version should emit raw_confirmation_count, eligible_order_count and avoid_chase_count separately. Because that changes research output code, preserve this run and use a new commit and new run."
+  }
+}

@@ -1,0 +1,50 @@
+name: Official supplied-card identity audit
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/official_roster_audit.py'
+      - 'scripts/test_official_roster_audit.py'
+      - '.github/workflows/official-identity-audit.yml'
+permissions:
+  contents: read
+jobs:
+  bounded-identity-read:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'codex/tw-strategy-lab-v1'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s scripts -p test_official_roster_audit.py -v
+      - name: Admit only changed observer code before explicit audit expiry
+        id: scope
+        run: |
+          python - <<'PY'
+          from datetime import datetime, timezone
+          import os, subprocess
+          changed = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD^', 'HEAD'], text=True).splitlines()
+          execute = 'scripts/official_roster_audit.py' in changed and datetime.now(timezone.utc) < datetime(2026, 9, 26, 12, tzinfo=timezone.utc)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('execute=' + str(execute).lower() + '\n')
+          PY
+      - name: Audit only supplied card identities, no historical simulation
+        if: steps.scope.outputs.execute == 'true'
+        run: |
+          python scripts/official_roster_audit.py \
+            --cards research/tw-strategy-lab/sources/public-roster-20260925T134939Z.csv \
+            --cards-sha256 1e24943467ac3053b4e163027b916f66f6fda79e0c73355055559e672791d853 \
+            --output "$RUNNER_TEMP/official-company-identities.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: steps.scope.outputs.execute == 'true' && !cancelled()
+        with:
+          name: official-company-identities-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/official-company-identities.json
+          retention-days: 7
+          if-no-files-found: error

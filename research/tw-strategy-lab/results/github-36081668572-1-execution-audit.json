@@ -1,0 +1,84 @@
+{
+  "schema": "tw-strategy-execution-audit/v1",
+  "reviewed_at": "2026-09-25T04:52:51Z",
+  "source_run": 36081668572,
+  "source_commit": "e1fb505a894105e05fb08aa28fd0fb8ad8e520fa",
+  "engine_sha256": "89ff9e4b9169ab0b8fdf6b539b4acbe822e66e60d361eb68ce32efa3cbd65c21",
+  "strategies_sha256": "5b921beca51aacf3b504b625b7bdf6639f185b6e61b2e9bab23b5a906a435501",
+  "network_data_requests": 0,
+  "holdout_accessed": false,
+  "official_rule_cross_check": {
+    "checked_on": "2026-09-25",
+    "twse": "https://www.twse.com.tw/en/products/system/trading.html",
+    "tpex": "https://www.tpex.org.tw/en-us/mainboard/trading/rules/system.html",
+    "common_stock_tick_schedule": [
+      { "minimum": 0, "maximum_exclusive": 10, "tick": 0.01 },
+      { "minimum": 10, "maximum_exclusive": 50, "tick": 0.05 },
+      { "minimum": 50, "maximum_exclusive": 100, "tick": 0.1 },
+      { "minimum": 100, "maximum_exclusive": 500, "tick": 0.5 },
+      { "minimum": 500, "maximum_exclusive": 1000, "tick": 1 },
+      { "minimum": 1000, "maximum_exclusive": null, "tick": 5 }
+    ],
+    "opening_auction_order_type": "limit ROD only",
+    "ordinary_daily_price_limit": "10 percent around the auction reference price at market opening",
+    "code_matches_tick_schedule": true,
+    "false_positive_rejected": "A raw-text extraction of the TWSE multi-product table visually associated warrant/other-product cells with common stocks. The explicit TPEx domestic-stock rows and the code boundary matrix confirmed the existing common-stock schedule. No source or result was invalidated."
+  },
+  "derived_evidence_checks": {
+    "assertions": 22744,
+    "signals": 615,
+    "non_null_signal_price_fields": 1446,
+    "trial_result_files": 15,
+    "fills": 851,
+    "buy_fills": 432,
+    "sell_fills": 419,
+    "illegal_tick_prices": 0,
+    "non_lot_fills": 0,
+    "buys_not_on_next_recorded_session": 0,
+    "same_symbol_same_open_sell_and_rebuy": 0,
+    "negative_cash_curve_rows": 0
+  },
+  "implementation_findings": [
+    {
+      "severity": "pass",
+      "area": "timing",
+      "finding": "Eligible closing signals map only to the next official calendar session; all 432 preserved buys match that mapping."
+    },
+    {
+      "severity": "pass",
+      "area": "pre_open_sizing",
+      "finding": "Share quantities and cash reservations are computed before the current opening bar is read; same-opening sale proceeds and gap savings are not reassigned."
+    },
+    {
+      "severity": "pass",
+      "area": "tick_and_lot",
+      "finding": "Engine and signal tick functions match the official common-stock grid; all 851 fills and 1,446 non-null signal price fields are legal, and all fills use 1,000-share lots."
+    },
+    {
+      "severity": "pass_with_proxy_limit",
+      "area": "locked_limits",
+      "finding": "The engine conservatively refuses opening buys at the computed limit-up and exits at or through the computed limit-down, but daily OHLCV cannot prove queue priority or partial execution."
+    },
+    {
+      "severity": "medium_residual",
+      "area": "daily_reference_and_status",
+      "finding": "The proxy derives ordinary limits from previous close and verified cash-action factors. It lacks an authoritative per-session auction-reference and disposition/special-trading-status history, so exceptional limit regimes cannot be independently verified."
+    },
+    {
+      "severity": "low_residual",
+      "area": "cash_payment_sequence",
+      "finding": "A known dividend payment due on a closed day is credited on the next session after opening orders have been sized. This is conservative but should be explicit in a future registry. It does not affect run 36081668572 because all positive-dividend rows lack payment dates."
+    },
+    {
+      "severity": "low_residual",
+      "area": "fee_rounding",
+      "finding": "Commission and tax are modeled as fractional TWD under frozen rates; broker-specific discounts and invoice-level integer rounding are not reconstructed."
+    },
+    {
+      "severity": "low_guardrail",
+      "area": "corporate_action_uniqueness",
+      "finding": "The engine does not reject duplicate action keys itself. The byte-identical v1 corporate-action input has 69 unique symbol/session and symbol/session/kind keys, so the preserved run is unaffected."
+    }
+  ],
+  "conclusion": "No new high or blocker execution defect was demonstrated. Run 36081668572 remains an exploratory daily-auction proxy with unchanged metrics, not verified fills, alpha evidence, production eligibility, or deployment approval."
+}

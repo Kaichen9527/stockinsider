@@ -1,0 +1,116 @@
+name: Bounded research input readiness
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/research-readiness.yml'
+      - 'research/tw-strategy-lab/**'
+      - 'scripts/official_roster_audit.py'
+      - 'scripts/test_official_roster_audit.py'
+
+permissions:
+  contents: read
+
+jobs:
+  admit-request:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'codex/tw-strategy-lab-v1'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      acquire: ${{ steps.request.outputs.acquire }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Test recovery and public-source boundaries
+        run: |
+          python -m unittest discover -s research/tw-strategy-lab -p test_replay_inputs.py -v
+          python -m unittest discover -s scripts -p test_official_roster_audit.py -v
+      - name: Admit explicit unexpired data-only request once per changed commit
+        id: request
+        run: |
+          python - <<'PY'
+          from datetime import datetime, timezone
+          import json, os, pathlib, subprocess
+          path = 'research/tw-strategy-lab/continuation-request.json'
+          request = json.loads(pathlib.Path(path).read_text())
+          assert set(request) == {'schema', 'request_id', 'expires_at', 'scope'}
+          assert request['schema'] == 'stockinsider-continuation-acquisition-v1'
+          assert request['scope'] == 'frozen_2018_2023_inputs_and_supplied_company_identities_only'
+          expiry = datetime.fromisoformat(request['expires_at'].replace('Z', '+00:00'))
+          assert expiry.tzinfo is not None
+          changed = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD^', 'HEAD'], text=True).splitlines()
+          acquire = path in changed and datetime.now(timezone.utc) < expiry
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('acquire=' + str(acquire).lower() + '\n')
+          print(json.dumps({'acquire': acquire, 'request': request, 'new_simulations': 0, 'production_write': False}))
+          PY
+
+  recover-normalized:
+    needs: admit-request
+    if: needs.admit-request.outputs.acquire == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Reacquire only frozen development inputs, no simulation
+        timeout-minutes: 42
+        run: |
+          python research/tw-strategy-lab/official_data.py \
+            --root "$RUNNER_TEMP/replay-acquisition" \
+            --output "$RUNNER_TEMP/replay-candidate"
+      - name: Admit replay only on three exact original table hashes
+        if: ${{ !cancelled() }}
+        run: |
+          python research/tw-strategy-lab/replay_inputs.py \
+            --candidate "$RUNNER_TEMP/replay-candidate" \
+            --output "$RUNNER_TEMP/replay-recovery"
+      - name: Preserve normalized tables and truthful recovery outcome
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: replay-input-readiness-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/replay-recovery/
+            ${{ runner.temp }}/replay-candidate/
+          retention-days: 7
+          if-no-files-found: error
+
+  official-company-identities:
+    needs: admit-request
+    if: needs.admit-request.outputs.acquire == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Validate supplied 176 cards against two official company feeds
+        run: |
+          python scripts/official_roster_audit.py \
+            --cards research/tw-strategy-lab/sources/public-roster-20260925T134939Z.csv \
+            --cards-sha256 1e24943467ac3053b4e163027b916f66f6fda79e0c73355055559e672791d853 \
+            --output "$RUNNER_TEMP/official-company-identities.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: official-company-identities-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/official-company-identities.json
+          retention-days: 7
+          if-no-files-found: error
