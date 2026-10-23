@@ -122,7 +122,7 @@ jobs:
           scripts=json.loads(pathlib.Path('package.json').read_text())['scripts']
           last=None;failed=[];codes=set()
           for line in path.read_text(errors='replace').splitlines():
-              match=re.fullmatch(r'> ([a-zA-Z0-9:_-]{1,120})',line)
+              match=re.fullmatch(r'> (?:[^\s]{1,120} )?([a-zA-Z0-9:_-]{1,120})',line)
               if match and match[1] in scripts:last=match[1]
               match=re.match(r'\s*not ok [0-9]+ - (.+)',line)
               if match and len(failed)<30:failed.append(hashlib.sha256(match[1].encode()).hexdigest())
