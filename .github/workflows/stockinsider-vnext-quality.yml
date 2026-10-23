@@ -433,6 +433,78 @@ jobs:
           PYCODE
           fi
           test "$test_status" = 0
+      - name: Same-build desktop and mobile browser over current-run PostgreSQL snapshots
+        run: |
+          test -x /usr/bin/google-chrome || { echo '::error title=Browser NOT_READY::required installed /usr/bin/google-chrome unavailable; no browser install attempted'; exit 1; }
+          export VNEXT_BROWSER_BUILD_SOURCE_SHA="$(git rev-parse HEAD)"
+          python3 - <<'PYCODE'
+          import os,json,pathlib,hashlib
+          root=pathlib.Path('/tmp/stockinsider-vnext-ci')
+          for p in [os.getcwd(),'/tmp']:
+              s=os.statvfs(p)
+              if s.f_bavail*s.f_frsize<8589934592+268435456: raise SystemExit('NOT_READY: original floor plus browser workset reference')
+          dest=root/'current-browser-inputs';dest.mkdir(mode=0o700)
+          lineage=[]
+          for name,source,field in [('home-before','thesis/thesis-audit.json','home'),('detail-before','thesis/2409-publication.json',None),('home','thesis/revoked-home.json',None),('detail','thesis/2409-revoked.json',None)]:
+              path=root/source
+              if path.is_symlink() or not path.is_file() or path.stat().st_size>1048576: raise SystemExit('bounded original PG snapshot required')
+              raw=path.read_bytes();value=json.loads(raw);payload=value[field] if field else value
+              encoded=(json.dumps(payload,ensure_ascii=False,indent=2)+'\n').encode() if field else raw
+              target=dest/(name+'.json');target.write_bytes(encoded);target.chmod(0o600)
+              if json.loads(target.read_bytes())!=payload: raise SystemExit('snapshot object parity required')
+              lineage.append({'output':name+'.json','source':source,'sourceField':field,'originalSha256':hashlib.sha256(raw).hexdigest(),'outputSha256':hashlib.sha256(encoded).hexdigest(),'noPayloadFieldChanged':True})
+          (dest/'lineage.json').write_text(json.dumps({'scope':'exact original current-run guarded PostgreSQL read payloads; synthetic source/provider, not formal research','inputs':lineage},indent=2)+'\n')
+          PYCODE
+          for suite in ui current; do
+            if [ "$suite" = ui ]; then inputs=/tmp/stockinsider-vnext-ci/business; else inputs=/tmp/stockinsider-vnext-ci/current-browser-inputs; fi
+            out="/tmp/stockinsider-vnext-ci/browser-$suite"
+            if python3 scripts/run-vnext-browser-acceptance.py --suite "$suite" --snapshots "$inputs" --output "$out" --browser /usr/bin/google-chrome > "/tmp/stockinsider-vnext-ci/browser-$suite.private.log" 2>&1; then browser_status=0; else browser_status=$?; fi
+            BROWSER_SUITE="$suite" BROWSER_STATUS="$browser_status" python3 - <<'PYCODE'
+          import os,json,pathlib,hashlib
+          suite=os.environ['BROWSER_SUITE'];root=pathlib.Path('/tmp/stockinsider-vnext-ci')/('browser-'+suite)
+          if not root.is_dir(): raise SystemExit('browser preflight failed before artifact creation')
+          result={'suite':suite,'exit':int(os.environ['BROWSER_STATUS']),'scope':'actual installed Chromium-engine browser on same-source build and current-run synthetic PG snapshot transport; no real provider/source or Contabo approval','cases':[]}
+          p=root/'playwright.json'
+          if p.is_file() and not p.is_symlink() and p.stat().st_size<=8388608:
+              raw=json.loads(p.read_bytes());result['stats']={k:raw.get('stats',{}).get(k) for k in ['expected','unexpected','flaky','skipped','duration']}
+              def visit(s):
+                  for spec in s.get('specs',[]):
+                      for test in spec.get('tests',[]): result['cases'].append({'title':spec['title'],'project':test['projectName'],'expectedStatus':test.get('expectedStatus'),'results':[r['status'] for r in test.get('results',[])]})
+                  for child in s.get('suites',[]):visit(child)
+              for s in raw.get('suites',[]):visit(s)
+              if len(result['cases'])>100: raise SystemExit('finite browser cases required')
+          else:result['playwright']='NOT_OBSERVED'
+          receipt=root/'receipt.json'
+          if receipt.is_file() and receipt.stat().st_size<=1048576:
+              source=json.loads(receipt.read_bytes());result['receipt']={k:source[k] for k in ['scope','sourceCommit','nodeSha256','harnessSha256','buildId','requiredServerFilesSha256','browserVersion','browserLauncher','launcherSha256','browserBinarySha256','suite','snapshotHashes','exit','cleanup','ownedPostrun','containmentUsed','resourceViolation','sampledTreePeakRssBytes','sampledNotInstantaneous','minimumFreeBytes','startedAt','endedAt'] if k in source}
+              result['privateReceiptSha256']=hashlib.sha256(receipt.read_bytes()).hexdigest()
+          images=sorted((root/'screenshots-traces').rglob('*.png'));total=0;result['screenshots']=[];verified=[]
+          if len(images)>100: raise SystemExit('bounded screenshot inventory required')
+          for image in images:
+              if image.is_symlink() or not image.is_file() or not image.resolve().is_relative_to((root/'screenshots-traces').resolve()): raise SystemExit('regular owned screenshot required')
+              data=image.read_bytes();total+=len(data)
+              if total>20971520 or data[:8]!=b'\x89PNG\r\n\x1a\n': raise SystemExit('bounded PNG screenshot required')
+              sha=hashlib.sha256(data).hexdigest();verified.append((sha,data));result['screenshots'].append({'privatePath':str(image.relative_to(root)),'publishedPath':'images/'+sha+'.png','bytes':len(data),'sha256':sha})
+          public=root/'public';public.mkdir(mode=0o700);(public/'images').mkdir(mode=0o700)
+          for sha,data in verified:(public/'images'/(sha+'.png')).write_bytes(data)
+          (public/'acceptance.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+          print('Browser finite summary '+json.dumps({'suite':suite,'exit':result['exit'],'stats':result.get('stats'),'cases':len(result['cases']),'screenshots':len(images)},separators=(',',':')))
+          if result['exit']!=0:print('::error title=Browser finite outcome::'+json.dumps({'suite':suite,'exit':result['exit'],'stats':result.get('stats'),'failedCases':[c for c in result['cases'] if any(status!='passed' for status in c['results'])]},separators=(',',':')))
+          PYCODE
+            test "$browser_status" = 0
+          done
+      - name: Upload finite browser summaries and synthetic screenshots only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: stockinsider-vnext-browser-synthetic-screenshots
+          path: |
+            /tmp/stockinsider-vnext-ci/browser-ui/public/acceptance.json
+            /tmp/stockinsider-vnext-ci/browser-ui/public/images/*.png
+            /tmp/stockinsider-vnext-ci/browser-current/public/acceptance.json
+            /tmp/stockinsider-vnext-ci/browser-current/public/images/*.png
+          if-no-files-found: warn
+          retention-days: 7
       - name: Upload finite synthetic TAP only (no raw rows, env or browser traces)
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
