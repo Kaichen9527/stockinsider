@@ -1,0 +1,195 @@
+{
+  "apiExit": 0,
+  "observedAt": "2026-10-23T03:13:04.716185+00:00",
+  "runs": [
+    {
+      "conclusion": null,
+      "head_sha": "bc1479162cdfc4c6ae03e4846ee4d93643737ea4",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39893554186",
+      "id": 39893554186,
+      "jobs": [
+        {
+          "completed_at": null,
+          "conclusion": null,
+          "id": 120218627319,
+          "name": "vnext-quality",
+          "started_at": "2026-10-23T03:10:13Z",
+          "status": "in_progress",
+          "steps": [
+            {
+              "completed_at": "2026-10-23T03:10:15Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "started_at": "2026-10-23T03:10:14Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-23T03:10:17Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "number": 2,
+              "started_at": "2026-10-23T03:10:15Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-23T03:10:22Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "number": 3,
+              "started_at": "2026-10-23T03:10:17Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-23T03:10:22Z",
+              "conclusion": "success",
+              "name": "Workspace and temporary filesystem admission",
+              "number": 4,
+              "started_at": "2026-10-23T03:10:22Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-23T03:10:41Z",
+              "conclusion": "success",
+              "name": "Install unchanged locked dependencies",
+              "number": 5,
+              "started_at": "2026-10-23T03:10:22Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-23T03:11:35Z",
+              "conclusion": "success",
+              "name": "Actual source contracts, types and lint",
+              "number": 6,
+              "started_at": "2026-10-23T03:10:41Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-23T03:12:15Z",
+              "conclusion": "success",
+              "name": "Full ordinary build",
+              "number": 7,
+              "started_at": "2026-10-23T03:11:35Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": "2026-10-23T03:13:02Z",
+              "conclusion": "success",
+              "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+              "number": 8,
+              "started_at": "2026-10-23T03:12:15Z",
+              "status": "completed"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+              "number": 9,
+              "started_at": "2026-10-23T03:13:02Z",
+              "status": "in_progress"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Actual durable worker journal with explicitly synthetic provider",
+              "number": 10,
+              "started_at": null,
+              "status": "pending"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+              "number": 11,
+              "started_at": null,
+              "status": "pending"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+              "number": 12,
+              "started_at": null,
+              "status": "pending"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+              "number": 13,
+              "started_at": null,
+              "status": "pending"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+              "number": 14,
+              "started_at": null,
+              "status": "pending"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+              "number": 15,
+              "started_at": null,
+              "status": "pending"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)",
+              "number": 16,
+              "started_at": null,
+              "status": "pending"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+              "number": 17,
+              "started_at": null,
+              "status": "pending"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "number": 33,
+              "started_at": null,
+              "status": "pending"
+            },
+            {
+              "completed_at": null,
+              "conclusion": null,
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "number": 34,
+              "started_at": null,
+              "status": "pending"
+            }
+          ]
+        }
+      ],
+      "name": "StockInsider vNext isolated quality",
+      "status": "in_progress"
+    },
+    {
+      "conclusion": null,
+      "head_sha": "bc1479162cdfc4c6ae03e4846ee4d93643737ea4",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39893554253",
+      "id": 39893554253,
+      "name": "Source-led opportunity V3",
+      "status": "in_progress"
+    },
+    {
+      "conclusion": "failure",
+      "head_sha": "bc1479162cdfc4c6ae03e4846ee4d93643737ea4",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/39893551724",
+      "id": 39893551724,
+      "name": "Source-led opportunity V3 protected gate root",
+      "status": "completed"
+    }
+  ],
+  "source": "bc1479162cdfc4c6ae03e4846ee4d93643737ea4"
+}

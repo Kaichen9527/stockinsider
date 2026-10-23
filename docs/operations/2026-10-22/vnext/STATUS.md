@@ -1,3 +1,12 @@
+# Current: reviewed-target source and same-built-source HTTP acceptance
+
+Product/test source `b0f09e050a3078d0a1e955316a7a6960ae14adc6`. Read [current delivery](TARGET-EXIT-DELIVERY.md), [bound receipt](target-exit-evidence/receipt.json), [CURRENT/VN01–20](CURRENT.json) and [executionmap](VN-EXECUTION-MAP.md). Target observer/directRPC fence is implemented; new source types/lint/11target contracts pass. Finite dimensionless repair8sourcePASS has separate prior5/3RED. Corrected0a40 retained installer/authority5PASS is an earlier exactcomponent, not new targetpositive/HTTP acceptance; f557 first0/2RED remains. NewordinaryCI pending; prior115exact vNext/fullbuild/product-runtimeSUCCESS, protectedgateFAIL.
+
+Fresh target/native and realNext→PG HTTP are now wired at the current head, with synthetic original/model scope and no clock/rights/guard bypass. Fullgoal/formalarticles/staging remain incomplete. No new cleanup; resource floor unchanged; no merge/deploy/schedule operations.
+
+---
+Historical observations below retain only their own exactsource scopes.
+
 # Current milestone: corrected fresh catalyst flow passes ordinary CI
 
 Exact54269b7 vNext39889864193/job120206783473 **SUCCESS**, including fullbuild and fresh actual PG/worker/current-public catalyst step. Original19824/fabf951 REDs remain; only missing all-active-member test input was fixed. No product guard/score relaxation. RawTAP/privatecatalog not downloaded; metadata/step scope is explicit. Protected gates stillFAIL/unclosed.
