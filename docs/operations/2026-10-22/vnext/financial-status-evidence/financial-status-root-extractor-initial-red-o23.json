@@ -1,0 +1,8 @@
+{
+  "scope": "readonly source tooling, not product",
+  "exit": 1,
+  "error": "ValueError:substring not found",
+  "cause": "extractor assumed AS $$; actual original uses $function$ and capture uses $_$",
+  "productModified": false,
+  "at": "2026-10-23T00:22:38.932323+00:00"
+}

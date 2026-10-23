@@ -1,0 +1,22 @@
+{
+  "command": [
+    "python3",
+    "/tmp/stockinsider-vnext-oct22-private/run-ir-status-recovery-o23.py"
+  ],
+  "cwd": "/workspace/stockinsider-vnext-oct22",
+  "start": "2026-10-23T00:23:19.667548+00:00",
+  "end": "2026-10-23T00:23:24.756154+00:00",
+  "exit": 0,
+  "initialFree": {
+    "/workspace": 8894148608,
+    "/tmp": 17332994048
+  },
+  "finalFree": {
+    "/workspace": 8894144512,
+    "/tmp": 17331015680
+  },
+  "sampledSessionPeakRssBytes": 127197184,
+  "resourceViolation": null,
+  "sampledNotInstantaneous": true,
+  "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+}

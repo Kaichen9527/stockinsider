@@ -1,10 +1,10 @@
 {
   "status": "PARTIAL_VM_IMPLEMENTATION_AND_ACCEPTANCE_NOT_RELEASE_COMPLETE",
-  "updatedAt": "2026-10-23T00:18:01.669420+00:00",
-  "runtimeSourceHead": "1ac92cb23b55b95d7c138da57a59f536a50dda36",
-  "currentReceiptSha256": "3465c0df6be29b15325b0c6ecb338330692e96892c36d93a9ef498af94a2e356",
+  "updatedAt": "2026-10-23T00:26:13.435404+00:00",
+  "runtimeSourceHead": "e359d7d634fa88db938fd57db8b4a33123006904",
+  "currentReceiptSha256": "da9c947d87f385cbb42a932a49d5c546df667037328ccca4f3d48b71f5e96363",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
-  "primaryReport": "POST-CLEAN-DELIVERY.md",
+  "primaryReport": "FINANCIAL-STATUS-DELIVERY.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
   "acceptance": [
     {
@@ -118,13 +118,13 @@
     {
       "id": "VN19",
       "status": "PARTIAL_ACTUAL_SOURCE_CANARY",
-      "runs": "source-canary-final.json; analysis-native-01; ir-native-o23; ir-continuation-monitored-02-o23",
-      "limits": "Original TWSEindexcanary200 is onlyindex; PTT403. FiniteIRmapping14purePASS; freshinstall committed within overall0PASS2FAIL. Continuedexactlab2PASS2FAIL: currentinstallACL/RLS+denychecksPASS, originalrecordvalidation42704 absentlegacyenum. Actualsource/parser/receipt prefix synthetic; healthy projection/provider/publication/revocation NOT_RUN. Originalfailures retained. No realacquiredIRfiling/model/semanticapproval."
+      "runs": "source-canary-final.json; analysis-native-01; ir-native-o23; ir-continuation-monitored-02-o23; ir-status-recovery-monitored-o23",
+      "limits": "OriginalactualcanaryTWSEindex200/PTT403 onlyindex/bodygap. Newretained-lab IRcontinuation8PASS: fullguardedcheckedtextcandidateCOMMIT/body-onlyparity, actualoriginalfinancialRPCvalidation, exactIRprojection, different author/reviewer syntheticprovider, immutableunqualifiedpublication, registryremoval/late-reapprovalcurrentfences. Prior0/2,0/2,2/2 REDs preserved. No acquiredIRfiling/Arelle/liveprovider/semantic/financialapproval. Freshwholeprefix+newcandidateinstaller at latestsubject NOT_RUN."
     },
     {
       "id": "VN20",
       "status": "DRAFT_PR_PARTIAL_RELEASE_GATE",
-      "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json",
+      "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json",
       "limits": "ExactVMhead/receiptspublished, historypreserved. Protectedreviews failing/pending; latestCI independentstatusnottransferred. No merge/deploy/migration/scheduleresume authorization."
     }
   ],
@@ -145,17 +145,23 @@
   "testAdapterSource": "76aca1522fa1b3292a85f9f387f01bee7fd43e23",
   "latestCI": "Observed808d: product-runtime120160235003 and diagnostic120163263603 SUCCESS. vnext39875575447 failed sourcecontracts step; VM reproduced closedloaderdependency2FAIL, minimaltestfix6PASS/tail2+9PASS/typePASS. New1ac normalpush freshCI independent/not yet observed. Protectedroot39875570528 FAILURE; no pins/guards changed.",
   "ciReceiptSha256": "52269e1b6c22d0f84c15c70d56b27dd30d2f59c37714314a32789dfcd7dfd7f7",
-  "previousRuntimeSourceHead": "e1bb126d33f63f4f8c004194b1c3df2f43bec82a",
-  "previousReceiptSha256": "64840a8de2aebdee78abf35db3c3ac17826c020a013fbe0963eadb04262724df",
+  "previousRuntimeSourceHead": "1ac92cb23b55b95d7c138da57a59f536a50dda36",
+  "previousReceiptSha256": "3465c0df6be29b15325b0c6ecb338330692e96892c36d93a9ef498af94a2e356",
   "capacity": {
     "status": "RESUMED_BOUNDED_VM_WORK",
     "floorPerFilesystem": 8589934592,
-    "latestWorkspaceFree": 8894779392,
-    "latestTmpFree": 17333522432,
+    "latestWorkspaceFree": 8893534208,
+    "latestTmpFree": 17330978816,
     "previousHoldAndCleanupReceiptsRetained": true,
     "furtherAutomaticCleanupAuthorized": false,
     "retainedLab": "worker11 stopped/PID0/exit0, PGdata/container/evidence retained",
     "nextFreshClone": "NOT_ADMITTED:912297984reference+128MiB exceeds workspace margin; not upperbound",
     "boundedContinuation": "estimate128MiBworkspace+256MiBtmp with original live monitor, no resourceViolation"
+  },
+  "financialStatusCompatibility": {
+    "source": "e359d7d634fa88db938fd57db8b4a33123006904",
+    "actual": "8PASS retained lab continuation; real onebodyCOMMIT/metadata and rows preserved; source registry revoke/ABA fences PASS",
+    "freshWholeInstall": "NOT_RUN",
+    "formalFinancialOrProviderApproval": false
   }
 }

@@ -1,3 +1,12 @@
+# Latest bounded financial acceptance
+
+Current source `e359d7d634fa88db938fd57db8b4a33123006904`; [delivery](FINANCIAL-STATUS-DELIVERY.md), [VN01–VN20](CURRENT.json), [receipt](financial-status-evidence/receipt.json) SHA256 `da9c947d87f385cbb42a932a49d5c546df667037328ccca4f3d48b71f5e96363`. The current retained-lab continuation is **8PASS/0FAIL**, with true guarded SQLCOMMIT and original service-role financialvalidation, exact source projection, synthetic distinct author/reviewer, unqualified publication and live registry撤權/ABA fences. It is not a fresh whole-install, realfiling/model/semantic or formalresearch approval. All prior REDs and the post-clean milestone below remain.
+
+No more cleanup occurred. Container/data/evidence remain; original resource floors held, and a fresh clone is still not admitted at this margin. Newsource ordinaryCI is independent; draftPR/ReleaseGate remains partial.
+
+---
+Previous post-clean milestone (superseded only for this financial gap):
+
 # Current vNext status — partial implementation and acceptance
 
 Current source: `1ac92cb23b55b95d7c138da57a59f536a50dda36`. Read [post-clean delivery](POST-CLEAN-DELIVERY.md), [VN01–VN20](CURRENT.json), and [bound receipt](post-clean-evidence/receipt.json), SHA256 `3465c0df6be29b15325b0c6ecb338330692e96892c36d93a9ef498af94a2e356`. This supersedes capacity/source/CI conclusions in the historical milestone below.

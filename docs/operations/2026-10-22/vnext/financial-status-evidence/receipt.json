@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "stockinsider-vnext-financial-status-receipt-v1",
+  "sourceHead": "e359d7d634fa88db938fd57db8b4a33123006904",
+  "previousPublicReceiptSha256": "3465c0df6be29b15325b0c6ecb338330692e96892c36d93a9ef498af94a2e356",
+  "files": [
+    {
+      "path": "financial-status-root-extractor-initial-red-o23.json",
+      "bytes": 275,
+      "sha256": "884ffc16f835c0f3d82a9f2d481a74d726f1011f1663b9b749565bb50bd6f123"
+    },
+    {
+      "path": "financial-status-root-source-check-o23.json",
+      "bytes": 352,
+      "sha256": "8817f2f324535bc83ab9657a12fe08c006cf1bcae542087bbbc582924888a6b4"
+    },
+    {
+      "path": "focused-source-checks.json",
+      "bytes": 670,
+      "sha256": "ec1cfb369a6a6a147eb63f1102928d3aad0762276c3a71e1c2fc431dca37592b"
+    },
+    {
+      "path": "ir-native-status-recovery-cleanup-o23.json",
+      "bytes": 1450,
+      "sha256": "abf734ccfed764594a4e9b22560b1b1e9be1a65ab47d9607108db2994f14442c"
+    },
+    {
+      "path": "ir-status-recovery-source-seal-o23.json",
+      "bytes": 491275,
+      "sha256": "a8f31ee7f9125afdcd855d5df25ab2d1330ca7f2113329c6b6155f301d254d34"
+    },
+    {
+      "path": "native-safe-witness.json",
+      "bytes": 54692,
+      "sha256": "eedef50ed8a70be2c5cb487e24d1330095712e62a927c7877fa17687a2c56359"
+    },
+    {
+      "path": "native.tap",
+      "bytes": 1947,
+      "sha256": "b9d091950f8c4439e6429e5dd553eb0a317d327b6ddb449b4b0410ed154870b6"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 5982,
+      "sha256": "39b649f188980d1d8d3761d65a958f3866a224055bc11b08053179bff9108528"
+    },
+    {
+      "path": "resources.json",
+      "bytes": 619,
+      "sha256": "e82b7bf3675ee711c09ac393859e08ad8fd9024cb86abe6bb8ba3ef4f7754fc2"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 1452,
+      "sha256": "599b49ff131d7800f0037c8ac87a7b2c9def909b5a76ccbff519ebaef46ed6fc"
+    }
+  ]
+}

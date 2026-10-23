@@ -1,0 +1,15 @@
+{
+  "sourceOnly": true,
+  "preBodySha256": "b506712e9f05b22736fd76c8ec9fe85f70418f4fdca76d998a30ecd4ea4f2754",
+  "postBodySha256": "99b05c8cd70214b976da8e4946ee7f62f52f45f067abc14dda28a53040636d73",
+  "changedAssignments": 1,
+  "removedBytes": 33,
+  "wholeInverseParity": true,
+  "exactCapturedOctober11BodyEquality": true,
+  "newGrantOwnerEnumOrRoutineStatements": 0,
+  "exactTwoEntryAclGuard": true,
+  "namespaceAndNonbodyPostconditionsPresent": true,
+  "candidateSha256": "b1fc0a4650a0d39f5f8f8e07bdb7e83eeaa3816561bc575a6ff74b8f38f53460",
+  "profileSha256": "62cc1147568925572840481237e50e794898033414b299885670acb05da14abe",
+  "nativeSqlOrApiRecovery": "NOT_RUN"
+}

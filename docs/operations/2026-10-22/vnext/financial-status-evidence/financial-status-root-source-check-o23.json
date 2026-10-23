@@ -1,0 +1,10 @@
+{
+  "rootSourceOnly": true,
+  "oneAssignment": 1,
+  "wholeInverseParity": true,
+  "postBytes": 5119,
+  "capturedFixedBodyByteParity": true,
+  "sourcePinPre": "b506712e9f05b22736fd76c8ec9fe85f70418f4fdca76d998a30ecd4ea4f2754",
+  "sourcePinPost": "99b05c8cd70214b976da8e4946ee7f62f52f45f067abc14dda28a53040636d73",
+  "nativeSqlNotRunByThisCheck": true
+}
