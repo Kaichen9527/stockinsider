@@ -1,0 +1,46 @@
+{
+  "source": "6024b5a84aafc5ee0057457b4a81275b16bc8961",
+  "previousEvidence": "96102aa4cee7e89270ee98cbd3b5488ef7979146",
+  "files": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 115932,
+      "sha256": "52274b541db4bec99c7522558ff33366cafc5901acade0c7022321ca9b3ee71e",
+      "gitBlob": "4d3c8cf5bdacea040d61e61bfe7629c2577763e0"
+    },
+    {
+      "path": "docs/operations/2026-10-22/vnext/SOURCE-NAMESPACE-CANDIDATE.md",
+      "bytes": 10920,
+      "sha256": "3430493591ba2a26918e3ed4e02b7b9580b3579035143e489bc09452d61e7c12",
+      "gitBlob": "3796499ba4aa38ed188ef64a73945f081f1992e3"
+    },
+    {
+      "path": "scripts/vnext-reachability-annotation-source.test.py",
+      "bytes": 4350,
+      "sha256": "cc28389b9c4025707973e8d33a9a9eb546333780088cf40e34cad2dd22092558",
+      "gitBlob": "b61b7ea83218c9818c7250def257804fa25940d7"
+    },
+    {
+      "path": "scripts/vnext-routine-http.test.mjs",
+      "bytes": 54859,
+      "sha256": "050138c67fdae2e6d47aedd5539c0b0c1b11a83a2bac0e4b2c8ff59232824c46",
+      "gitBlob": "93ab5e367893aa8b8350ba175abaa845d30ea9e2"
+    },
+    {
+      "path": "scripts/vnext-source-namespace-candidate.mjs",
+      "bytes": 14427,
+      "sha256": "bbd2e45c4ede19b8b7905485367609bcd1a5adacc3e361b95d7039c1d11042b3",
+      "gitBlob": "70a2143099f0d793299cbfb19dd384009e4d5653"
+    },
+    {
+      "path": "scripts/vnext-source-namespace-source.test.mjs",
+      "bytes": 8784,
+      "sha256": "211115a922a09abc5117e14a18ba243286a4dd6bbd6ea2ef8d10c2a997f820d5",
+      "gitBlob": "fd6231a1fccb50db925c526d76dbec4ce9ca6b2b"
+    }
+  ],
+  "productTSSQLRolesACLAndProfileUnchanged": true,
+  "candidateApplyWired": false,
+  "knownBadNoticeRetained": true,
+  "mandatoryRawPositiveStillRequired": true
+}

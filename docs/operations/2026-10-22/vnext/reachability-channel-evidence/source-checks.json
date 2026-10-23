@@ -1,0 +1,157 @@
+{
+  "checks": [
+    {
+      "name": "reachability-codec-contract-01",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/vnext-reachability-annotation-source.test.py"
+      ],
+      "start": "2026-10-23T14:00:02.887835+00:00",
+      "end": "2026-10-23T14:00:03.411236+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8876986368,
+        "/tmp": 17244315648
+      },
+      "finalFree": {
+        "/workspace": 8876986368,
+        "/tmp": 17244311552
+      },
+      "sampledSessionPeakRssBytes": 5242880,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "scope": "source serialization or synthetic protocol only",
+      "namedCases": 4,
+      "logSha256": "a10efbea5a2da673780ddea94385d1bfa907df20dc3df2d9d51280d2194cf796"
+    },
+    {
+      "name": "reachability-codec-contract-02",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/vnext-reachability-annotation-source.test.py"
+      ],
+      "start": "2026-10-23T14:01:33.985103+00:00",
+      "end": "2026-10-23T14:01:34.497582+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8876978176,
+        "/tmp": 17244295168
+      },
+      "finalFree": {
+        "/workspace": 8876978176,
+        "/tmp": 17244291072
+      },
+      "sampledSessionPeakRssBytes": 3276800,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "scope": "source serialization or synthetic protocol only",
+      "namedCases": 4,
+      "logSha256": "8dc7c03cabe82d416fbad5daa63afa03f1bc054e42e67fe37e9754e3741d4cc2"
+    },
+    {
+      "name": "namespace-kind-contract-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-source-namespace-source.test.mjs"
+      ],
+      "start": "2026-10-23T14:01:12.100867+00:00",
+      "end": "2026-10-23T14:01:13.474297+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8876982272,
+        "/tmp": 17244307456
+      },
+      "finalFree": {
+        "/workspace": 8876982272,
+        "/tmp": 17244303360
+      },
+      "sampledSessionPeakRssBytes": 34684928,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "scope": "source serialization or synthetic protocol only",
+      "namedCases": 9,
+      "logSha256": "427916dbc3c56e4b426aaefc8dcb7e02ac1c427487f19f6eb9c5e737bef9e962"
+    },
+    {
+      "name": "readonly-guard-syntax-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/vnext-routine-http.test.mjs"
+      ],
+      "start": "2026-10-23T14:04:23.781885+00:00",
+      "end": "2026-10-23T14:04:24.294068+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8876879872,
+        "/tmp": 17244286976
+      },
+      "finalFree": {
+        "/workspace": 8876879872,
+        "/tmp": 17244286976
+      },
+      "sampledSessionPeakRssBytes": 10354688,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "scope": "source serialization or synthetic protocol only",
+      "namedCases": null,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "readonly-guard-contract-01",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-source-namespace-source.test.mjs"
+      ],
+      "start": "2026-10-23T14:04:24.367043+00:00",
+      "end": "2026-10-23T14:04:24.886907+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8876879872,
+        "/tmp": 17244282880
+      },
+      "finalFree": {
+        "/workspace": 8876879872,
+        "/tmp": 17244278784
+      },
+      "sampledSessionPeakRssBytes": 8257536,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "scope": "source serialization or synthetic protocol only",
+      "namedCases": 9,
+      "logSha256": "0c94c7bcf30388639beb189e1461545f454a95db662b7084d4b89d30774ed847"
+    },
+    {
+      "name": "readonly-codec-contract-01",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/vnext-reachability-annotation-source.test.py"
+      ],
+      "start": "2026-10-23T14:04:24.937874+00:00",
+      "end": "2026-10-23T14:04:25.447538+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8876879872,
+        "/tmp": 17244274688
+      },
+      "finalFree": {
+        "/workspace": 8876879872,
+        "/tmp": 17244270592
+      },
+      "sampledSessionPeakRssBytes": 4849664,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "scope": "source serialization or synthetic protocol only",
+      "namedCases": 4,
+      "logSha256": "98255317dbdec068621cfd1c730ebd962e38b6f8c534b73c2b3cbfc806ea738c"
+    }
+  ],
+  "newNative": "NOT_RUN; normal new-source hosted CI only",
+  "permissionApply": "UNWIRED_UNCALLED",
+  "actualCandidateEntryTEProof": "NOT_RUN independent review/fresh fixture required",
+  "guardOnlyReadonlyProbe": "source candidate; not permission apply",
+  "byteCodec": "canonical ASCII JSON+zlib+base64,8parts max1800chars each <3000bytes, actual runtime source+compressed/uncompressed hashes, no rows/bodies/config values"
+}

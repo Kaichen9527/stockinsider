@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "path": "private-inventory.json",
+      "bytes": 3276,
+      "sha256": "21089fa78181a75eb4f010e537762885d1f79d0259955c3e32a300cb615d6586"
+    },
+    {
+      "path": "retained-b42-truncation.json",
+      "bytes": 815,
+      "sha256": "0379ac253a4d29701b819ad5381fabaf37580edecd1912672c87f84844c714b5"
+    },
+    {
+      "path": "source-checks.json",
+      "bytes": 5196,
+      "sha256": "fe23f1b4b1a0db86ba88c5f338b514ffb55b8bfe3b45c24c6ae4e4b21d97738c"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 1772,
+      "sha256": "78e6a2dd3074b20881872868ae8bbfbfd9193150d726cfbc3a7aceea4d502c44"
+    }
+  ]
+}
