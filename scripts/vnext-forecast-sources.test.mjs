@@ -9,7 +9,7 @@ test('candidate seal pins every new function and preserves original current-sour
  originals[1]+=/changed:=original\|\|\$fence\$([\s\S]*?)\$fence\$/u.exec(read('migrations/20261023_vnext_roster_current_fence_v1.sql'))[1];
  const wrappers=[a=>"SELECT CASE WHEN left(item->>'id',9)='forecast:' THEN public.vnext_forecast_evidence_current_internal_v1(item,p_symbol) ELSE ("+a+') END',a=>'SELECT public.vnext_forecast_input_current_internal_v1(input,p_symbol) AND ('+a+')'];
  profile.modifiedRoutines.forEach((r,i)=>{assert.equal(hash(originals[i]),r.predecessorBodySha256);assert.equal(Buffer.byteLength(originals[i]),r.predecessorBytes);assert.equal(hash(wrappers[i](originals[i])),r.successorBodySha256);assert.equal(Buffer.byteLength(wrappers[i](originals[i])),r.successorBytes);assert.ok(sql.includes(r.predecessorBodySha256)&&sql.includes(r.successorBodySha256));});
- const bodies=[...sql.matchAll(/CREATE FUNCTION public\.(\w+)\([^;]*?AS \$(\w+)\$([\s\S]*?)\$\2\$;/gu)];assert.equal(bodies.length,5);
+ const bodies=[...sql.matchAll(/CREATE FUNCTION public\.(\w+)\([^;]*?AS \$(\w+)\$([\s\S]*?)\$\2\$;/gu)];assert.equal(bodies.length,6);
  for(const [,name,,body]of bodies){const row=profile.newFunctions.find(r=>r.name===name);assert.ok(row);assert.equal(hash(body),row.bodySha256);assert.equal(Buffer.byteLength(body),row.bytes);assert.ok(sql.includes("oid='"+row.signature+"'::regprocedure"));assert.ok(sql.includes(row.bodySha256));}
 });
 test('full original catalog codec and rows remain guarded; only explicit new private metadata and one pure dependency grant are allowed',()=>{
@@ -29,5 +29,5 @@ test('numeric projection preserves original quarter/12month assumptions, never a
 test('stock identity stays in the existing stock-owning composition without granting stocks to the source owner',()=>{
  const source=/\$reader\$([\s\S]*?)\$reader\$/u.exec(sql)[1];assert.ok(!source.includes('FROM public.stocks'));assert.ok(source.includes('symbol_value:=p_symbol'));
  for(const name of ['vnext_forecast_evidence_current_internal_v1','vnext_forecast_input_current_internal_v1'])assert.ok(sql.includes('ALTER FUNCTION public.'+name+'(jsonb,text) OWNER TO stockinsider_vnext_owner;'));
- assert.ok(sql.includes('vnext_forecast_current_internal_v1(stock,job.symbol,statement_timestamp())'));assert.ok(sql.includes('vnext_forecast_current_internal_v1(stock,p_symbol,cutoff)'));assert.ok(!/GRANT[^;]*ON(?: TABLE)? public\.stocks/iu.test(sql));
+ assert.ok(sql.includes('vnext_forecast_current_internal_v1(stock,job.symbol,statement_timestamp())'));assert.ok(sql.includes('vnext_forecast_current_internal_v1(stock,p_symbol,cutoff)'));assert.ok(sql.includes('stock:=public.vnext_forecast_stock_id_internal_v1(job.symbol)'));assert.ok(sql.includes('retained>1000 OR identities<>1'));assert.ok(!sql.includes('FROM public.stocks'));assert.ok(!/GRANT[^;]*ON(?: TABLE)? public\.stocks/iu.test(sql));
 });
