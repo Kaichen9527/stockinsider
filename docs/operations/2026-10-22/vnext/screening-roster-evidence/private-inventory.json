@@ -1,0 +1,152 @@
+{
+  "scope": "only selected local source receipts/CI metadata hashed; hosted private raw separate inventory notice only, not independently obtained",
+  "count": 29,
+  "bytes": 97422,
+  "files": [
+    {
+      "path": "screening-roster-adapter-initial-o23.json",
+      "bytes": 890,
+      "sha256": "e85d927b1dbb1b90e60e34e3bb2b3701c3ad297b3c532f0ab172b7d663300d21"
+    },
+    {
+      "path": "screening-roster-adapter-initial-o23.log",
+      "bytes": 2250,
+      "sha256": "c9e01de774a6a2268a24804d84649d7c0153f11769af699d731182d3b3cc4d7a"
+    },
+    {
+      "path": "screening-roster-discovery-o23.json",
+      "bytes": 1246,
+      "sha256": "1fa4003f067466d971def39135ff6cb3a654ee6c5a3e79b5915956fdeb9f0503"
+    },
+    {
+      "path": "screening-roster-discovery-o23.log",
+      "bytes": 986,
+      "sha256": "0a338af8afa78da4ef6b2fbe3f9f3d19b2a0dae5f30c2a70db3cf1cca8e3e43c"
+    },
+    {
+      "path": "screening-roster-invalidity-discovery-o23.json",
+      "bytes": 1077,
+      "sha256": "975ff14ccf32bdbf5aced96c2ff64e450c8808fb1c830d7f04f235c26d6104b6"
+    },
+    {
+      "path": "screening-roster-invalidity-discovery-o23.log",
+      "bytes": 1256,
+      "sha256": "37a87d85ae3f53d74dbb7fbb288bc52ab653dabcb5c3a10ba00e331eb12f6a53"
+    },
+    {
+      "path": "screening-roster-thesis-o23.json",
+      "bytes": 1243,
+      "sha256": "7864533f50bf3334c0dfcd52f9f1edcc786a18fecc4197a460129bb16e115fff"
+    },
+    {
+      "path": "screening-roster-thesis-o23.log",
+      "bytes": 3751,
+      "sha256": "b60065058fab8c1dfe8263639bdc2995487a18629c3022bfe93826c3880f3776"
+    },
+    {
+      "path": "screening-roster-composition-final-o23.json",
+      "bytes": 1265,
+      "sha256": "8b8f9568a3e772006ad7f11089e53e228f0e726798661c7335a77276916257a8"
+    },
+    {
+      "path": "screening-roster-composition-final-o23.log",
+      "bytes": 1525,
+      "sha256": "4980b0e18e10e8689c21d4b86d0df803f3f8ebcc9e4be9d6025c865e6e3dc004"
+    },
+    {
+      "path": "screening-roster-composition-sealed-o23.json",
+      "bytes": 1077,
+      "sha256": "99f23fb19efb082fb87c92dbcf3dbec913516f9f1c9657f52688884f0cb867bc"
+    },
+    {
+      "path": "screening-roster-composition-sealed-o23.log",
+      "bytes": 1524,
+      "sha256": "eb5240524a5af52a721c3f897aa20857c6d2661e4d7c9523022e9794973684b2"
+    },
+    {
+      "path": "screening-roster-types-o23.json",
+      "bytes": 11813,
+      "sha256": "2ce000f12b5aa59ee8d01bf6b0a999aeb86d72b63c475a5ef0d4162f2bc1f4a7"
+    },
+    {
+      "path": "screening-roster-types-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "screening-roster-types-final-o23.json",
+      "bytes": 9553,
+      "sha256": "3981a2f7328217c66eedbf4e1c333417a8a1134fb3d90529802a3b3b0933aaca"
+    },
+    {
+      "path": "screening-roster-types-final-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "screening-roster-lint-o23.json",
+      "bytes": 1916,
+      "sha256": "3d6311372fd94c6399912f44170734815bee1456fe546a4f39d485b9584b4789"
+    },
+    {
+      "path": "screening-roster-lint-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "screening-roster-lint-final-o23.json",
+      "bytes": 4122,
+      "sha256": "a102e8e8007510f3c84ca2566a3ff7a2daf8aaa26a9b841e7ec66a4803aeab61"
+    },
+    {
+      "path": "screening-roster-lint-final-o23.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "screening-roster-source-checks-o23.json",
+      "bytes": 359,
+      "sha256": "ee83b5756da7f85c3afaee9352b01a9606ab651813815249c606c0eeacc55930"
+    },
+    {
+      "path": "screening-roster-final-source-seal-o23.json",
+      "bytes": 1904,
+      "sha256": "21660b9341b7d6813af79b440a00292ab4ef0298769983c2e47ca87a5db79969"
+    },
+    {
+      "path": "screening-roster-source-review-o23.json",
+      "bytes": 1040,
+      "sha256": "5e4601a9bf180017015a79d863f9263a2bbaef61e90636326aaccb1cab331a95"
+    },
+    {
+      "path": "ciaeb6ff2-vnext-later-jobs-o23.json",
+      "bytes": 11473,
+      "sha256": "c364df5853157879dc81bc87209d70e33f0c2660da15f4d4a1ce884417ec2730"
+    },
+    {
+      "path": "ciaeb6ff2-product-jobs-o23.json",
+      "bytes": 6892,
+      "sha256": "2f2158056b1a211028653acbc12b1b289e83ea4ae4212236576f07d384633c01"
+    },
+    {
+      "path": "ciaeb6ff2-protected-jobs-o23.json",
+      "bytes": 13920,
+      "sha256": "cd4c3afa9258439b08b465403623cf250bb4c99322a9fdc77e937299be533206"
+    },
+    {
+      "path": "ciaeb6ff2-roster-annotations-o23.json",
+      "bytes": 4821,
+      "sha256": "a4d52f952453cbacf0f3f405c91680e3ce33fd61738989e4e44405e7d54af6e1"
+    },
+    {
+      "path": "ciaeb6ff2-vnext-annotations-o23.json",
+      "bytes": 8868,
+      "sha256": "d126187d37edea674877d4558388d7c96eafc375cdc006ac72932f0946be59fe"
+    },
+    {
+      "path": "ciaeb6ff2-merge-commit-o23.json",
+      "bytes": 2651,
+      "sha256": "e410f0de9b3a3a3f6c240897af1c0d13b1e27ac52b764bd65c327d2741a7e55e"
+    }
+  ]
+}

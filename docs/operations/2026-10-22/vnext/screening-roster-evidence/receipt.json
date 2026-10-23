@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "stockinsider-vnext-screening-current-roster-receipt-v1",
+  "at": "2026-10-23T06:43:15.174070+00:00",
+  "sourceHead": "aeb6ff2aa644d36ce6653b39d01994d4ee3ddb69",
+  "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "files": [
+    {
+      "path": "ci-observations.json",
+      "bytes": 29049,
+      "sha256": "409e04c2e61d7000f25df431a492d643fee9af2fd3d682b3186927713a7ebf4e"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 11423,
+      "sha256": "49dab8721e186e9addadeaeab286ef9984d4ace7731035d24e0d452c36898af3"
+    },
+    {
+      "path": "private-inventory.json",
+      "bytes": 5168,
+      "sha256": "d922f46de7cde41ea7d76849b33a0ab6c7b8e69f9efefed23d90b8a286103f6b"
+    },
+    {
+      "path": "source-checks.json",
+      "bytes": 3742,
+      "sha256": "7c545ee9559d1c28fbce79bc8f5d858d67f19ff38cc9bec4ef83f40b6af84315"
+    },
+    {
+      "path": "source-inventory.json",
+      "bytes": 805631,
+      "sha256": "6f341642264096cfb93a41429e7685b525f3dfaa4b53dabdcc802fc9d7c12edc"
+    }
+  ],
+  "scope": "partial synthetic engineering acceptance; no formal semantic/source/model/release approval",
+  "floor": 8589934592,
+  "freshFree": {
+    "/workspace": 8883703808,
+    "/tmp": 17251000320
+  },
+  "localFreshPGFullbuild": "NOT_ADMITTED",
+  "newCleanup": "NONE",
+  "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
+  "remaining": "source-window/volume; source-bound cancellation/contra/competitive/risk; forecast current-source/preparation/provider; rebase/remaining role/race; real2postclose; real sources/models/semantic; protected/Contabo/ReleaseGate"
+}
