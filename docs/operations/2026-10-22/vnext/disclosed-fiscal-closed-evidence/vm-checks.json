@@ -1,0 +1,143 @@
+{
+  "checks": [
+    {
+      "name": "fiscal-closed-pairs-04",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/disclosed-fiscal-forecast.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T16:28:23.616913+00:00",
+      "end": "2026-10-23T16:28:24.636568+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8873648128,
+        "/tmp": 17243082752
+      },
+      "finalFree": {
+        "/workspace": 8873648128,
+        "/tmp": 17243078656
+      },
+      "sampledSessionPeakRssBytes": 95485952,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "counts": {
+        "tests": 10,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdout": {
+        "bytes": 3319,
+        "sha256": "c986c6857fb83cb3ccfc48869dc1c192ea716e374c6f16cf63730737df00b0ab"
+      }
+    },
+    {
+      "name": "fiscal-exact-preparation-04",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "web/src/lib/vnext/preparation-reconciliation.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T16:29:18.606774+00:00",
+      "end": "2026-10-23T16:29:20.684872+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8873648128,
+        "/tmp": 17242992640
+      },
+      "finalFree": {
+        "/workspace": 8873648128,
+        "/tmp": 17242984448
+      },
+      "sampledSessionPeakRssBytes": 189337600,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "counts": {
+        "tests": 12,
+        "pass": 12,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdout": {
+        "bytes": 4163,
+        "sha256": "2a2ae3bb75d135ab56a4cd724da292db7a14144df1deb7ebdfe676c4163eb6c2"
+      }
+    },
+    {
+      "name": "fiscal-exact-lint-03",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/eslint/bin/eslint.js",
+        "--config",
+        "web/eslint.config.mjs",
+        "web/src/lib/vnext/disclosed-fiscal-forecast.ts",
+        "web/src/lib/vnext/disclosed-fiscal-forecast.test.ts",
+        "web/src/lib/vnext/preparation-reconciliation.test.ts"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T16:29:20.741685+00:00",
+      "end": "2026-10-23T16:29:24.366817+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8873648128,
+        "/tmp": 17242980352
+      },
+      "finalFree": {
+        "/workspace": 8873648128,
+        "/tmp": 17242976256
+      },
+      "sampledSessionPeakRssBytes": 267960320,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "counts": {},
+      "stdout": {
+        "bytes": 235,
+        "sha256": "0f01afe313ff7d2dabdb53805b99007a51fb1feb2a9dfad76405d4facd0d1560"
+      }
+    },
+    {
+      "name": "fiscal-exact-types-06",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--project",
+        "web/tsconfig.json",
+        "--noEmit",
+        "--incremental",
+        "false"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T16:29:24.457362+00:00",
+      "end": "2026-10-23T16:30:00.707369+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8873648128,
+        "/tmp": 17242972160
+      },
+      "finalFree": {
+        "/workspace": 8873648128,
+        "/tmp": 17242972160
+      },
+      "sampledSessionPeakRssBytes": 1370914816,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "counts": {},
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "scope": "actual original-VM pure source/code contracts only;10fiscal and12preparation independently, no native/model/semantic or approval claim. SQL5 and unaffected forecast7 remain bound to unchanged initial portions, not added to repeated runs."
+}

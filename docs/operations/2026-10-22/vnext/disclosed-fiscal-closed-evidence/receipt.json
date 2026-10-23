@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-23T16:30:37.331195+00:00",
+  "source": "2b071a56c06b900c0a4001838bb25290dc518f7d",
+  "manifestSha256": "65389d55664b06b1289c50e1eea942d5c654759a26679da55b381a1cc4bf90cf",
+  "initialReceiptSha256": "498be58a559b2f3c10ae4d38d46a154fe132d3057256bfb2345b8703340ea071",
+  "free": {
+    "/workspace": 8873558016,
+    "/tmp": 17242955776
+  },
+  "floor": 8589934592,
+  "smallWorkset": 16777216,
+  "localHeavy": "NOT_ADMITTED",
+  "newNative": "NOT_RUN at seal",
+  "namespaceApply": false,
+  "grantApplied": false,
+  "production": false,
+  "independentApproval": false,
+  "fullGoal": "INCOMPLETE"
+}
