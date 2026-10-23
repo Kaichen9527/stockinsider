@@ -1,0 +1,120 @@
+{
+  "head": "1ff1c918039aebe4108e885195f64c741f11bed7",
+  "productSource": "c81e6fe916b3f0b5983495d02b4cdcf62cf2d170",
+  "parent": "773366bd46d83e98b8b6601a5b30800dc465be7a",
+  "files": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 118686,
+      "sha256": "ccc55338315f75d0bbcc51be3e90e7cc380765c9ceea5346507b5122b0bb91de"
+    },
+    {
+      "path": "scripts/vnext-preparation-http-fixture.mjs",
+      "bytes": 59671,
+      "sha256": "05fca3dc34b7f9dcc2703f0c18ca92efbda70d3c8613619ad0ad83be5a931ae4"
+    }
+  ],
+  "oracleOrProductChanged": false,
+  "changes": "bounded actual bridge phase/query state diagnostics and finite cleanup summary; independent business/browser requires exact current successful build and own source snapshots, raw failure stays fatal",
+  "native": "NOT_RUN at this seal",
+  "checks": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--check",
+        "scripts/vnext-preparation-http-fixture.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T15:21:17.865019+00:00",
+      "end": "2026-10-23T15:21:18.376656+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875479040,
+        "/tmp": 17243766784
+      },
+      "finalFree": {
+        "/workspace": 8875479040,
+        "/tmp": 17243766784
+      },
+      "sampledSessionPeakRssBytes": 10354688,
+      "resourceViolation": null,
+      "samples": [
+        {
+          "at": "2026-10-23T15:21:17.876385+00:00",
+          "freeBytes": {
+            "/workspace": 8875479040,
+            "/tmp": 17243766784
+          },
+          "sessionRssBytes": 10354688
+        }
+      ],
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/tmp/stockinsider-vnext-oct22-private/action-workflow-source-check.py"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T15:25:14.936676+00:00",
+      "end": "2026-10-23T15:25:15.450570+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875479040,
+        "/tmp": 17243754496
+      },
+      "finalFree": {
+        "/workspace": 8875479040,
+        "/tmp": 17243750400
+      },
+      "sampledSessionPeakRssBytes": 4849664,
+      "resourceViolation": null,
+      "samples": [
+        {
+          "at": "2026-10-23T15:25:14.949264+00:00",
+          "freeBytes": {
+            "/workspace": 8875479040,
+            "/tmp": 17243754496
+          },
+          "sessionRssBytes": 4849664
+        }
+      ],
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "/tmp/stockinsider-vnext-oct22-private/action-bridge-diagnostic-source-check.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T15:25:40.580879+00:00",
+      "end": "2026-10-23T15:25:41.105138+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8875479040,
+        "/tmp": 17243742208
+      },
+      "finalFree": {
+        "/workspace": 8875479040,
+        "/tmp": 17243738112
+      },
+      "sampledSessionPeakRssBytes": 7733248,
+      "resourceViolation": null,
+      "samples": [
+        {
+          "at": "2026-10-23T15:25:40.590357+00:00",
+          "freeBytes": {
+            "/workspace": 8875479040,
+            "/tmp": 17243742208
+          },
+          "sessionRssBytes": 7733248
+        }
+      ],
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim"
+    }
+  ]
+}
