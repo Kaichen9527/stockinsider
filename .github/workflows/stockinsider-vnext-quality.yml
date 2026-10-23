@@ -52,6 +52,7 @@ jobs:
           mkdir -m 700 /tmp/stockinsider-vnext-ci
           node --experimental-strip-types web/src/lib/vnext/vnext.test.ts | tee /tmp/stockinsider-vnext-ci/pure.tap
           node --experimental-strip-types web/src/lib/vnext/discovery.test.ts | tee /tmp/stockinsider-vnext-ci/discovery.tap
+          node --experimental-strip-types web/src/lib/vnext/screening-instrument-identity.test.ts | tee /tmp/stockinsider-vnext-ci/screening-instrument-source.tap
           node --experimental-strip-types web/src/lib/vnext/boundaries.test.ts | tee /tmp/stockinsider-vnext-ci/boundaries.tap
           node --experimental-strip-types web/src/lib/vnext/worker.test.ts | tee /tmp/stockinsider-vnext-ci/worker-source.tap
           node --experimental-strip-types web/src/lib/vnext/analysis-sources.test.ts | tee /tmp/stockinsider-vnext-ci/analysis-source.tap
@@ -807,7 +808,7 @@ jobs:
                   value=json.dumps(item,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
                   print('::error title=Roster-current finite diagnostic::'+value)
           tap=(root/'roster-current.tap').read_bytes()
-          paths=['scripts/vnext-roster-current-postgres.test.mjs','scripts/vnext-roster-current-resource-run.py','scripts/vnext-worker-fixture.mjs','migrations/20261023_vnext_roster_current_fence_v1.sql','scripts/opportunity-v3/vnext-roster-current-profile-v1.json','migrations/20261023_vnext_trading_invalidity_exit_v1.sql','scripts/opportunity-v3/vnext-trading-invalidity-profile-v1.json']
+          paths=['scripts/vnext-roster-current-postgres.test.mjs','scripts/vnext-roster-current-resource-run.py','scripts/vnext-worker-fixture.mjs','web/src/lib/vnext/screening-instrument-identity.ts','web/src/lib/vnext/preparation-trading-identity.ts','migrations/20261023_vnext_roster_current_fence_v1.sql','scripts/opportunity-v3/vnext-roster-current-profile-v1.json','migrations/20261023_vnext_trading_invalidity_exit_v1.sql','scripts/opportunity-v3/vnext-trading-invalidity-profile-v1.json']
           inventory=[{'path':p,'bytes':pathlib.Path(p).stat().st_size,'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for p in paths]
           summary={'scope':'actual held-work/claim/provider-reserve SQL fences; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
           # Decode finite count keys only; no private rows/principals are emitted.

@@ -1,3 +1,4 @@
+import {readCurrentScreeningInstruments} from './screening-instrument-identity.ts';
 import {historicalPriceFactors,comparableBenchmark,operationsMonths} from './cached-price-factors.ts';
 import { getSupabaseServerClient } from '../supabase-server';
 import { command, enqueue, normalizedInput,type TrustedThesisAdmission } from './store.ts';
@@ -30,14 +31,10 @@ export async function scanCachedCandidates(identity: VnextIdentity, transport?: 
   const symbols=options?options.symbols:[...new Set([...candidateSymbols.slice(0,200),...active.map((row)=>String(row.symbol))])].sort();
   const deferredOutsideSymbolBound=options?0:Math.max(0,candidateSymbols.length-200);
   if (!symbols.length) return { jobs: [], targets, scope: { screened: 0, admitted: 0, deferred: 0 }, gaps: ['allowed_source_cache_empty_or_identity_unresolved'] }; const client = transport?.client || getSupabaseServerClient();
-  const instruments = await client.from('stock_instruments_v3').select('stock_id,symbol,exchange,listing_status,recorded_at,source_timestamp')
-    .in('symbol', symbols).eq('instrument_type', 'common_stock')
-    .lte('recorded_at', cutoff).lte('source_timestamp', cutoff).lte('valid_from', cutoff)
-    .or(`valid_to.is.null,valid_to.gt.${cutoff}`).order('recorded_at', { ascending: false }).limit(2000);
-  if (instruments.error) throw new Error('vnext_shared_instrument_cache_unavailable');
-  const master = new Map<string, Row>(); for (const row of (instruments.data || []) as Row[]) if (!master.has(String(row.symbol))) master.set(String(row.symbol), row);
+  const roster=await readCurrentScreeningInstruments(client,symbols,cutoff);
+  const master=roster.identities;
   const ids = [...new Set([...master.values()].map((r) => String(r.stock_id)))];
-  if (!ids.length) return { jobs: [], targets, scope: { screened:new Set(clues.map((clue)=>clue.contentHash)).size,screenedClues:clues.length, admitted: 0, deferred: symbols.length }, gaps: ['official_instrument_cache_empty'] };
+  if (!ids.length) return { jobs: [], targets, scope: { screened:new Set(clues.map((clue)=>clue.contentHash)).size,screenedClues:clues.length, admitted: 0, deferred: symbols.length }, rosterDeferrals:[...roster.gaps].map(([symbol,reason])=>({symbol,reason})), gaps: ['official_instrument_cache_empty',...new Set(roster.gaps.values())] };
   const [technicals, revenues] = await Promise.all([
     client.from('technical_feature_snapshots').select('stock_id,session_date,close,volume_ratio_20_median,institutional_flow_20d_norm,as_of,available_at,provenance,ruleset_version')
       .in('stock_id', ids).eq('session_date', (context.priceSessions as string[]|undefined)?.[0]||context.session).lte('available_at', cutoff).order('available_at', { ascending: false }).limit(1000),
@@ -91,7 +88,7 @@ export async function scanCachedCandidates(identity: VnextIdentity, transport?: 
     }
     const score = initialFactors(screening);
     const input = { cutoff, clues: matching, screening, evidence: [], tradingValid: Boolean(stockId) && master.get(symbol)?.listing_status === 'active', marketSnapshotHash: (context.market as Row | null)?.snapshotHash || null,
-      gaps: ['comparable_source_volume_baseline_unavailable', ...(!screening.corporateActionAdjusted ? ['shared_adjusted_price_basis_unavailable'] : [])],
+      gaps: ['comparable_source_volume_baseline_unavailable',...(roster.gaps.has(symbol)?[roster.gaps.get(symbol)!]:[]), ...(!screening.corporateActionAdjusted ? ['shared_adjusted_price_basis_unavailable'] : [])],
       reasons: ['recent_original_event', 'shared_cached_screening'], initialScore: score };
     frozen.push({ symbol, input, points: score.confirmedPoints, weight: score.availableWeight, eventAt: matching.map((c) => c.eventAt).sort().at(-1) || '' });
   }
@@ -107,9 +104,9 @@ export async function scanCachedCandidates(identity: VnextIdentity, transport?: 
       candidate: { ...normalized, symbol: row.symbol, eventAt: normalized.eventAt || '', catalystCancelled: false, tradingInvalid: false, targetHit: false, newThesis: false } as Candidate };
   });
   const rotation = options?{reason:'explicit_admission_does_not_rotate'}:await rotateCachedObservations({ session: String(context.session), completed: context.completed === true, postclose: context.postclose === true, weeklyDue: context.weeklyDue === true }, observations, (action, request) => send(identity, action, request));
-  const considered = frozen.filter((r) => options || !active.some((m) => m.symbol === r.symbol) || audits?.[r.symbol]?.materialChanged===true && audits[r.symbol].revisionId && context.postclose === true && context.completed === true).slice(0, 20);
+  const considered = frozen.filter((r)=>master.has(r.symbol)).filter((r) => options || !active.some((m) => m.symbol === r.symbol) || audits?.[r.symbol]?.materialChanged===true && audits[r.symbol].revisionId && context.postclose === true && context.completed === true).slice(0, 20);
   const result = await admit(identity, { symbols: considered.map((c) => c.symbol), inputs: Object.fromEntries(considered.map((c) => [c.symbol, c.input])),
     requestKey: options?.requestKey || `shared-screen:${context.session}:${inputHash(considered.map((c) => ({ symbol: c.symbol, hash:normalizedInput(c.symbol,c.input,audits?.[c.symbol]).hash })))}` }, 'shared-cache-screen',audits);
   return { ...result, rotation, targets, scope: { screened:new Set(clues.map((clue)=>clue.contentHash)).size,screenedClues:clues.length, candidates: frozen.length, considered: considered.length,
-    deferredOutsideSymbolBound,deferredOutsideBound: frozen.length - considered.length }, gaps: ['source_health_and_comparable_volume_not_attested', 'verified_catalyst_cancellation_and_contraindication_authority_unavailable'] };
+    deferredOutsideSymbolBound,deferredOutsideBound: frozen.length - considered.length }, rosterDeferrals:[...roster.gaps].map(([symbol,reason])=>({symbol,reason})), gaps: ['source_health_and_comparable_volume_not_attested', 'verified_catalyst_cancellation_and_contraindication_authority_unavailable'] };
 }

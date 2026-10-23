@@ -16,14 +16,14 @@ test('VN06/VN07 actual cache scan transport screens an incumbent without fresh c
  const send: typeof command = async (_identity, action, body) => { calls.push({ action, body }); return action === 'screen-context' ? context : { recorded: true }; };
  const client = { from(table: string) {
   reads.push(table);
-  const data = table === 'stock_instruments_v3' ? [{ symbol: '2330', stock_id: 'synthetic', listing_status: 'active', source_timestamp: '2026-10-20T00:00:00Z' }]
-    : table === 'official_price_history' ? dates.map((date,i) => ({ stock_id: 'synthetic', session_date: date, close: 100-i, source_url: 'https://fixture.invalid/price', provenance: { adjustment_status: 'verified' } })) : [];
+  const data = table === 'stocks' ? [{id:'10000000-0000-4000-8000-000000000001',symbol:'2330',market:'TW'}] : table === 'stock_instruments_v3' ? [{instrument_authority_id:'20000000-0000-4000-8000-000000000001',symbol:'2330',stock_id:'10000000-0000-4000-8000-000000000001',exchange:'TWSE',instrument_type:'common_stock',listing_status:'active',provider:'twse',source_timestamp:'2026-10-20T00:00:00Z',valid_from:'2026-10-20T00:00:00Z',valid_to:null,roster_version:'tw-instrument-roster-v3.0',recorded_at:'2026-10-20T00:01:00Z'}]
+    : table === 'official_price_history' ? dates.map((date,i) => ({ stock_id: '10000000-0000-4000-8000-000000000001', session_date: date, close: 100-i, source_url: 'https://fixture.invalid/price', provenance: { adjustment_status: 'verified' } })) : [];
   const query: Record<string, unknown> = {}; for (const method of ['select','in','eq','lte','gte','or','order']) query[method] = () => query;
   query.limit = async () => ({ data, error: null }); return query;
  } } as unknown as ReturnType<typeof getSupabaseServerClient>;
  const admit: typeof enqueue = async (_identity, body) => { calls.push({ action: 'enqueue', body }); return { jobs: [] }; };
  await scanCachedCandidates({ principal: 'synthetic-operator', role: 'operator' }, { client, command: send, enqueue: admit, now });
- assert.deepEqual(reads.sort(), ['official_price_history','revenue_signals','stock_instruments_v3','technical_feature_snapshots'].sort());
+ assert.deepEqual(reads.sort(), ['stocks','official_price_history','revenue_signals','stock_instruments_v3','stock_instruments_v3','technical_feature_snapshots'].sort());
  const observations = calls.find((c) => c.action === 'screen-observations')!.body.observations as Array<{ symbol: string; input: { eventAt: string; priceEvidence: boolean } }>;
  assert.equal(observations[0].symbol, '2330'); assert.equal(observations[0].input.eventAt, clues[0].eventAt);
  assert.equal(observations[0].input.priceEvidence, false); // no verified technical adjustment authority; no imputation
