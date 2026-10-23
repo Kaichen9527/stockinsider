@@ -318,7 +318,7 @@ jobs:
           for line in text.splitlines():
               if line.startswith('VNEXT_SOURCE_PREREQUISITE_SAFE '):
                   item=json.loads(line.removeprefix('VNEXT_SOURCE_PREREQUISITE_SAFE '))
-                  if set(item)!={'sourceOwnerUsage','inputOwnerUsage','descriptorHash','noGrant','fullPrivateDescriptorRetained'}: raise SystemExit('closed prerequisite diagnostic required')
+                  if set(item)!={'sourceOwnerUsage','inputOwnerUsage','descriptorHash','completeCatalog','noGrant','fullPrivateDescriptorRetained'}: raise SystemExit('closed prerequisite diagnostic required')
                   prerequisites.append(item)
           receipt=pathlib.Path('/tmp/stockinsider-vnext-ci/routine-http/routine-http-receipt.json')
           safe={'actualTapCounts':counts,'tapSha256':hashlib.sha256(source.read_bytes()).hexdigest(),'failures':failures,'receiptObserved':receipt.exists(),'sourceScope':'hosted actual HTTP/PG, synthetic originals only','sourcePrerequisites':prerequisites}
