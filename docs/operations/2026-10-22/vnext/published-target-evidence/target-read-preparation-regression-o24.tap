@@ -1,0 +1,33 @@
+TAP version 13
+# Subtest: READ of ready immutable receipts has no mutation and exposes only readiness/authority gaps
+ok 1 - READ of ready immutable receipts has no mutation and exposes only readiness/authority gaps
+# Subtest: prepared replay observes immutable frozen state without cache or prepare; an existing invocation directs explicit recovery without exposing raw output
+ok 2 - prepared replay observes immutable frozen state without cache or prepare; an existing invocation directs explicit recovery without exposing raw output
+# Subtest: current rights, expired/queued/historical work and unreadable journal never authorize preparation or cached IO
+ok 3 - current rights, expired/queued/historical work and unreadable journal never authorize preparation or cached IO
+# Subtest: pending originals and definite missing cached facts are distinct from unknown reads; no read or resume fails/claims/restarts anything
+ok 4 - pending originals and definite missing cached facts are distinct from unknown reads; no read or resume fails/claims/restarts anything
+# Subtest: explicit cached resume prepares exactly once; subsequent requests observe frozen state without re-freezing
+ok 5 - explicit cached resume prepares exactly once; subsequent requests observe frozen state without re-freezing
+# Subtest: a committed prepare with lost response is uncertain and recovered only by explicit READ; no second mutation or new clock
+ok 6 - a committed prepare with lost response is uncertain and recovered only by explicit READ; no second mutation or new clock
+# Subtest: malformed successful mutation receipts stay uncertain; malformed inspect/journal cannot report preparation
+ok 7 - malformed successful mutation receipts stay uncertain; malformed inspect/journal cannot report preparation
+# Subtest: a changed execution/input or latest cancelled calendar cannot silently use stale authority
+ok 8 - a changed execution/input or latest cancelled calendar cannot silently use stale authority
+# Subtest: shared frozen projection is byte/hash equivalent to the original admitted execute projection and does not mutate sources
+ok 9 - shared frozen projection is byte/hash equivalent to the original admitted execute projection and does not mutate sources
+# Subtest: actual HTTP-handler/store source contract uses configured author only; READ/replay has no lease and actual prepare has one
+ok 10 - actual HTTP-handler/store source contract uses configured author only; READ/replay has no lease and actual prepare has one
+# Subtest: original SQL empty invocation row is absence only; any extra, missing or populated field rejects before cache or prepare
+ok 11 - original SQL empty invocation row is absence only; any extra, missing or populated field rejects before cache or prepare
+# Subtest: actual preparation composition cannot use an older active row after an invalid or ambiguous latest roster observation
+ok 12 - actual preparation composition cannot use an older active row after an invalid or ambiguous latest roster observation
+1..12
+# tests 12
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 953.168914

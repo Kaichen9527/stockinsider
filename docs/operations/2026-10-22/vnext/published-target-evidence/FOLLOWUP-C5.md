@@ -1,0 +1,9 @@
+# New-source constructor correction: actual boundary
+
+Initial aa59 normal run39993673265/job120551546798 remains FAIL/P0001, source-only guard assumed target current had only search_path. Exact original constructor also sets statement_timeout30s and lock_timeout2s. New source c5b0c3c corrects only that finite precondition; both complete successor bodies, all original profiles/ACL/OID/owner/security/default metadata expectations remain unchanged. No unknown configuration was accepted.
+
+Actual c5/runtime8ff7 full-tree parity is verified using public Git commit metadata. Run39994464409/job120554268700 remains overall FAIL with preparation1test/0PASS/1FAIL. The new two-body installer first COMMIT, full RO catalog invariance, original metadata/OID/ACL preservation, repeat rejection and existing service-role READ probe emitted the bounded success component. It adds zero functions/grants and has zero published baseline or actual rebase coverage. Do not count it as a new passing test.
+
+The changed original-marker-free fiscal/current reader also emitted2 synthetic originals/6evidence/6receipts with whole-row invariance, zero preparation/provider. The original weekend guard then rejected false/true with exact old message hash d8e069eb68bc8145a3de8e19dd8f8162be511fc517bc0e873a51aac9beeb9cfb. No clock, holiday, expectation or authority was changed. Public author READ, preparation/recovery, immutable published baseline/rebase/race are NOT_REACHED.
+
+Finite actual cleanup is in hosted-c5-observed.json. PG shutdown/backend/PID statements are scoped to that witness; cluster retained and whole socket-root absence NOT_CHECKED remain. Private inventory is not a claim to possession/approval of hosted private rows/catalog/TAP/PNGs. Newest f51 source adds actual-component isolated SSR tests and migration path matching; it does not inherit a whole-head native PASS. Native real-source/model/semantic/Contabo/formal publication remain untested.

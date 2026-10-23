@@ -1,0 +1,24 @@
+{
+  "observedAt": "2026-10-23T17:26:19.521359+00:00",
+  "environmentId": "ccarenv_b64_Y2NhcmVudl84NzYxZDNhYjY0MDQ4MTkxYjYxNDFmMzAwN2FjNzQ3Yw",
+  "actualStatus": "observed running/current at slice start",
+  "free": {
+    "/workspace": 8872116224,
+    "/tmp": 17242185728
+  },
+  "floor": 8589934592,
+  "sourceWorksetReference": 16777216,
+  "sampledPeakAcrossListedChecks": 1400868864,
+  "fullOriginalVmPG/build/browser": "NOT_ADMITTED",
+  "newCleanup": "NONE",
+  "newEnvironmentOrPathOrClockChange": false,
+  "outboundBindings/runtimeVariables/secrets": {
+    "counts": [
+      0,
+      0,
+      0
+    ],
+    "valuesRead": false
+  },
+  "realSource/model/staging": "NOT_RUN; actual binding prerequisites remain absent"
+}

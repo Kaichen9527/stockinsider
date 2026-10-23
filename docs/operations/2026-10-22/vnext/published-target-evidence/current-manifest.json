@@ -1,0 +1,80 @@
+{
+  "earlierReceipts": [
+    {
+      "file": "receipt.json",
+      "sha256": "4c5285214317f86d44d255d01bb0f813cd9ed053d69f85665795ca8ae7cfba47"
+    },
+    {
+      "file": "followup-receipt.json",
+      "sha256": "f206d813d5f92d4aa62226e1181a13de4a1aa578cd23e33baa3e09c02868ccf0"
+    }
+  ],
+  "files": [
+    {
+      "file": "current-source-seal.json",
+      "bytes": 4514,
+      "sha256": "0dce942f44c98f232571e43a39f66826075663d2b8e55d2dc44cfff39795300a"
+    },
+    {
+      "file": "current-git-tree-inventory.txt",
+      "bytes": 335201,
+      "sha256": "69c7a7f6d12038788d59ec54d7d14d67e627f4eec1f510be72fbb16a71e48413"
+    },
+    {
+      "file": "CONFIG-COMPLETE.patch",
+      "bytes": 7155,
+      "sha256": "c0c999c4aab0c978393c7aca602f3df97d527d5b5332e5898d659606ef38c097"
+    },
+    {
+      "file": "hosted-cbb-red.json",
+      "bytes": 3898,
+      "sha256": "097d5e0f35dffa13cc9a9df78b449ce367d5e3782a4cdeea9d915eddc163be77"
+    },
+    {
+      "file": "current-vm-checks.json",
+      "bytes": 8443,
+      "sha256": "470d62fa6cc86d058b60c15e23b43653c473886720b31cb51bc84d6261ae923a"
+    },
+    {
+      "file": "current-private-inventory.json",
+      "bytes": 14809,
+      "sha256": "de41939cbdd8af7942eef94391f95636b330ec23eceebba20d00bac70335ae89"
+    },
+    {
+      "file": "CURRENT-HANDOFF.md",
+      "bytes": 4365,
+      "sha256": "72e1688749181983e7a164abdf0882ba5fb5bbde695c8417ea53295e7f6b9ecf"
+    },
+    {
+      "file": "action-row-reference-fixed-o24.tap",
+      "bytes": 529,
+      "sha256": "5af3f34f456472803c4e429140a4e5e3bdcb52ebaf7867465a614420d1123842"
+    },
+    {
+      "file": "closed-day-source-boundary-fixed-o24.tap",
+      "bytes": 774,
+      "sha256": "0af20f28c9481e5df50ac515447b093b7dc982bb9c9e8c8c8d17cd0691dba23c"
+    },
+    {
+      "file": "target-read-complete-constructor-wip-o24.tap",
+      "bytes": 1325,
+      "sha256": "9172299b7c24840c1504f5963b08f07b9486141f03a35e946f201c294e026174"
+    },
+    {
+      "file": "action-row-reference-initial-red-o24.tap",
+      "bytes": 537,
+      "sha256": "e8e679cbe14634ff630308461415197d12ae32ad7d220b866681d8fa8f3b398f"
+    },
+    {
+      "file": "closed-day-source-boundary-o24.tap",
+      "bytes": 778,
+      "sha256": "d258f47dc10038544eab89d159acd412b1e1d4cc49a7b07206c64b764bf2366c"
+    },
+    {
+      "file": "target-read-null-guard-source-final-o24.tap",
+      "bytes": 1325,
+      "sha256": "ba3619cecbe917a86deab6f56901628661f7cf5426cb68ef80b47b446ad8b210"
+    }
+  ],
+  "appendOnlyEarlierEvidencePreserved": true
+}

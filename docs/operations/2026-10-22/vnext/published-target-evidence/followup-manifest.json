@@ -1,0 +1,24 @@
+{
+  "initialReceipt": {
+    "file": "receipt.json",
+    "sha256": "4c5285214317f86d44d255d01bb0f813cd9ed053d69f85665795ca8ae7cfba47"
+  },
+  "files": [
+    {
+      "file": "hosted-c5-observed.json",
+      "bytes": 9554,
+      "sha256": "4eafd9b6136cf4b1e97376a7d8453dee2b656d3a222b649affdb6fcd8dbd7790"
+    },
+    {
+      "file": "followup-private-inventory.json",
+      "bytes": 1002,
+      "sha256": "8a1c6912ef4c6f2a9bc87790c95d01671dcdecaf45f5c03acaa73c4e3e968feb"
+    },
+    {
+      "file": "FOLLOWUP-C5.md",
+      "bytes": 1952,
+      "sha256": "7e9ed1d13b57bd179980f277728b4a757b65f9dd9c2d9be10a8c995a7f9ab258"
+    }
+  ],
+  "appendOnlyInitialEvidenceUnchanged": true
+}

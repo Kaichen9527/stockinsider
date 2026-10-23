@@ -1,0 +1,31 @@
+{
+  "source": "aa59b7d3c317d01921c1c999dab360c988b239db",
+  "run": 39993673265,
+  "job": 120551546798,
+  "runtime": "f5fe50b19e8c7fef00b7a86de95dd06c9e037b90",
+  "actualPreparationCounts": {
+    "tests": 1,
+    "pass": 0,
+    "fail": 1,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "actualCode": "P0001",
+  "actualMessageHash": "890004facd3925a314c6b08bb36710db2c4b05c5012fb3e56ef1a8df16ba5e7a",
+  "exactSourceMessageHashMatch": "vnext_target_read_predecessor_changed",
+  "inferredNarrowRoot": "new guard expects only search_path for target current; original CREATE declares search_path plus statement_timeout30s and lock_timeout2s; bodyhash precheck already awaited by harness; current private raw metadata not retrieved",
+  "notClaimed": "not current candidate install COMMIT, not weekday failure, not actual published rebase, no whole native PASS",
+  "nativePrivateInventory": {
+    "files": 40,
+    "bytes": 227474887,
+    "sha256": "a4e8b5b250027886e392f403371f46589124a7aaac0281365ab9026f9712fd4d",
+    "contentsRetrieved": false
+  },
+  "additionalReadDiagnostic": {
+    "oldTargetInstallSnapshotBytes": 37188344,
+    "memoryReadBound": 33554432,
+    "outcome": "bounded read rejected before contents; no limit raised/no file changed"
+  },
+  "preserved": true
+}

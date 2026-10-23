@@ -1,0 +1,31 @@
+TAP version 13
+# Subtest: separate result binds exact published revision/hash and original scenario without rewriting article
+ok 1 - separate result binds exact published revision/hash and original scenario without rewriting article
+# Subtest: target reached is compared with derived base, never original base or caller Boolean
+ok 2 - target reached is compared with derived base, never original base or caller Boolean
+# Subtest: wrong publication/revision/input/output or changed original content rejects
+ok 3 - wrong publication/revision/input/output or changed original content rejects
+# Subtest: signed-looking arithmetic/hash/ratio and unknown persisted metadata still reject
+ok 4 - signed-looking arithmetic/hash/ratio and unknown persisted metadata still reject
+# Subtest: revoked, newer publication or current-version failure returns no stale original/rebase
+ok 5 - revoked, newer publication or current-version failure returns no stale original/rebase
+# Subtest: read clocks future/stale/inverted cannot refresh an old assessment
+ok 6 - read clocks future/stale/inverted cannot refresh an old assessment
+# Subtest: finite shapes, units, unapproved cash/rights annotations and wire bounds reject
+ok 7 - finite shapes, units, unapproved cash/rights annotations and wire bounds reject
+# Subtest: actual READ composition sends one fixed RPC, immutable response clone and no mutation
+ok 8 - actual READ composition sends one fixed RPC, immutable response clone and no mutation
+# Subtest: transport uncertainty is preserved as read failure with no automatic second call
+ok 9 - transport uncertainty is preserved as read failure with no automatic second call
+# Subtest: source-version/publication race after an earlier read is observed by explicit second READ
+ok 10 - source-version/publication race after an earlier read is observed by explicit second READ
+# Subtest: missing candidate/null/history mismatch fail closed for rebasing, never legacy fallback arithmetic
+ok 11 - missing candidate/null/history mismatch fail closed for rebasing, never legacy fallback arithmetic
+1..11
+# tests 11
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 108.113447

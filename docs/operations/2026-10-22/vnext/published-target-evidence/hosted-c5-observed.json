@@ -1,0 +1,323 @@
+{
+  "source": "c5b0c3ce5086156b24ad1f3588e5159052de2559",
+  "runtime": "8ff7b1debcb37da498c473c245ecb275fa25a3d4",
+  "wholeTreeParity": {
+    "runtimeTree": "a10a634670194cfcd006d2d4105c59e117d76fc3",
+    "sourceTree": "a10a634670194cfcd006d2d4105c59e117d76fc3",
+    "parents": [
+      "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "c5b0c3ce5086156b24ad1f3588e5159052de2559"
+    ]
+  },
+  "run": 39994464409,
+  "job": 120554268700,
+  "overall": "FAIL",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Workspace and temporary filesystem admission",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install unchanged locked dependencies",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Actual source contracts, types and lint",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Full ordinary build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Isolated PostgreSQL real concurrency and synthetic publication lifecycle",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Genuine captured-prefix legacy coexistence and concurrent mode fence",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Actual durable worker journal with explicitly synthetic provider",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Real permitted-source budgets and frozen market journal (synthetic originals/model)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Actual all-active thesis, revoked source rights and charged retry (synthetic provider)",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "name": "Actual current-receipt admission, official calendar and strict EPS (synthetic provider)",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Actual running preparation HTTP READ and explicit committed-response recovery (synthetic issuer parser)",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "name": "Hash bounded forecast preparation raw receipts without publishing contents",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Fresh routine-screen actual HTTP admission and withdrawal (synthetic originals)",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Actual snapshot receipt install and immutable reads (synthetic Fetch Response)",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Source-bound catalyst protocol and current score (synthetic sources/provider)",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Reviewed target baseline and atomic exits (synthetic cached originals/provider)",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Fresh original-bound business components via distinct review/current public projection (synthetic metadata)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Hash finite owned raw evidence without publishing private contents",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Upload finite business-criteria TAP and summary only",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Same-build desktop and mobile browser over current-run PostgreSQL snapshots",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Upload finite browser summaries and synthetic screenshots only",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Upload finite synthetic TAP only (no raw rows, env or browser traces)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "finiteAnnotations": [
+    {
+      "title": "Forecast private inventory",
+      "data": {
+        "count": 44,
+        "bytes": 250012900,
+        "inventorySha256": "4de8c0a225188eac087deed9de66d4e32526191ab116a05877f3e68b6599259b",
+        "rawContentsPublished": false
+      }
+    },
+    {
+      "title": "Preparation actual cleanup receipt",
+      "data": {
+        "pgRunning": false,
+        "pgPid": 0,
+        "pgExit": 0,
+        "shutdownObserved": true,
+        "serverLogSha256": "0ac23a69e44e0d9eeb11a2b8f8286124c925b280e7f1d5b97e6259ed55b4946f",
+        "ownedProcessObservations": [
+          {
+            "pid": 16704,
+            "absent": true
+          },
+          {
+            "pid": 16815,
+            "absent": true
+          },
+          {
+            "pid": 16814,
+            "absent": true
+          },
+          {
+            "pid": 16813,
+            "absent": true
+          },
+          {
+            "pid": 16811,
+            "absent": true
+          },
+          {
+            "pid": 16810,
+            "absent": true
+          },
+          {
+            "pid": 16843,
+            "absent": true
+          },
+          {
+            "pid": 16906,
+            "absent": true
+          },
+          {
+            "pid": 16933,
+            "absent": true
+          },
+          {
+            "pid": 16932,
+            "absent": true
+          },
+          {
+            "pid": 16934,
+            "absent": true
+          },
+          {
+            "pid": 16935,
+            "absent": true
+          },
+          {
+            "pid": 16936,
+            "absent": true
+          },
+          {
+            "pid": 16946,
+            "absent": true
+          }
+        ],
+        "unsettled": false,
+        "zombieIsNotAbsent": true,
+        "clusterRetained": true,
+        "wholeSocketRootAbsence": "NOT_CHECKED"
+      }
+    },
+    {
+      "title": "Forecast current numeric acceptance",
+      "data": {
+        "sourceHead": "8ff7b1debcb37da498c473c245ecb275fa25a3d4",
+        "observedWitnesses": [
+          {
+            "kind": "PUBLISHED_TARGET_INSTALL_SAFE",
+            "value": {
+              "modifiedBodies": 2,
+              "newFunctions": 0,
+              "newGrants": 0,
+              "repeatRejected": true,
+              "wholeCatalogInvariant": true,
+              "readOnlyProbe": true,
+              "publishedBaseline": false,
+              "actualRebase": false
+            }
+          },
+          {
+            "kind": "FISCAL_SOURCE_COMPONENT_SAFE",
+            "value": {
+              "originals": 2,
+              "wholeOriginals": true,
+              "evidence": 6,
+              "receipts": 6,
+              "wholeRowsUnchanged": true,
+              "privateOwnerRead": true,
+              "authorJobRead": false,
+              "preparation": false,
+              "providerPosts": 0,
+              "syntheticSource": true
+            }
+          }
+        ],
+        "actualTapCounts": {
+          "tests": 1,
+          "pass": 0,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "tapSha256": "70efa90ba121cc20e5857c713727423677c02a38c5428d7ae49017330e9dc66b",
+        "privateRowsPublished": false
+      }
+    },
+    {
+      "title": "Published target actual predecessor",
+      "data": [
+        {
+          "signature": "public.vnext_target_current_v1(text,uuid,text)",
+          "bodySha256": "2cb716f773f8e5069c56f7f85aa20677bd7c83cfa6a12ecc2784ca8ffb8c393f",
+          "proconfig": [
+            "search_path=pg_catalog, public",
+            "statement_timeout=30s",
+            "lock_timeout=2s"
+          ],
+          "securityDefiner": true
+        },
+        {
+          "signature": "public.vnext_read_v1(text)",
+          "bodySha256": "8a6eb1914c1292fae55f6683d661976de0a09aaae277a3bbfbdcc6a7ffa85f3d",
+          "proconfig": [
+            "search_path=pg_catalog, public"
+          ],
+          "securityDefiner": true
+        }
+      ]
+    },
+    {
+      "title": "Preparation finite HTTP diagnostic",
+      "data": {
+        "stage": "preflight",
+        "code": "ERR_ASSERTION",
+        "actual": false,
+        "expected": true,
+        "messageHash": "d8e069eb68bc8145a3de8e19dd8f8162be511fc517bc0e873a51aac9beeb9cfb",
+        "tokens": []
+      }
+    }
+  ],
+  "scope": "Actual new native installer/current source component, public witness+Git only; full private metadata/rows/TAP/PNG not retrieved. Preparation overall0/1 at unchanged Saturday preflight. No passing child invented, no whole business/native/formal claim.",
+  "newestSource": "f51f5b716b60ac16f69f2e5e239e3970402ba309",
+  "newestSourceAcceptance": "NOT_TRANSFERRED; SSR tests/workflow-only source follows c5, whole head must be separately observed"
+}

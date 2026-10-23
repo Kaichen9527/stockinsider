@@ -1,0 +1,93 @@
+{
+  "source": "f51f5b716b60ac16f69f2e5e239e3970402ba309",
+  "base": "8f70ea8552649f28210de97f08908270ac96658a",
+  "branch": "codex/stockinsider-vnext-oct22",
+  "rootTree": "6b825e833037e29f3f4b57bee089657108de5b4d",
+  "completeGitIdentityInventory": {
+    "file": "git-tree-inventory.txt",
+    "bytes": 335001,
+    "sha256": "1a7461268f6ef3150f100e3ad40846bcbdd24ca25af6b9d54fb393d4cdcbcd9f",
+    "entries": 2859
+  },
+  "changedFiles": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 121646,
+      "sha256": "87d73edecefb693d4af0f4b57263e6eecc15782bf69297ed8b7366920ffe6ade",
+      "blob": "78978eaa0e9bbdd7574f8f4a4aec611003b79536"
+    },
+    {
+      "path": "migrations/20261024_vnext_published_target_read_v1.sql",
+      "bytes": 31013,
+      "sha256": "249685db904fa90ca1794896cb3f534df07b99a1dffbd8b8ca61ba2d8a020061",
+      "blob": "3eb672d3ba80a81f3bb803ce29ef769f8f580a25"
+    },
+    {
+      "path": "openspec/changes/stockinsider-vnext-20/published-target-read-design.md",
+      "bytes": 4078,
+      "sha256": "8120c7ec5da011ac638250c08d3b276dc34c5eae0cb0d4f634793f8a21ec0c17",
+      "blob": "af188e4a3f5ca1ef4aa612f2dd047c6aeb79b682"
+    },
+    {
+      "path": "scripts/opportunity-v3/vnext-published-target-read-profile-v1.json",
+      "bytes": 3040,
+      "sha256": "f85ad4354744f42687499a12cfb446f84510f56b786397ad7034d06e640031ee",
+      "blob": "e8c19529dce545b9cffa3d664727f4f28ef2da71"
+    },
+    {
+      "path": "scripts/vnext-preparation-http-fixture.mjs",
+      "bytes": 64682,
+      "sha256": "f5602c558d8948e1faffc8215ee58e6d5cd4473ef64a33f175b94ebca7380789",
+      "blob": "6cbe6ca4513f6b889f13d38298c59b49d48a72d0"
+    },
+    {
+      "path": "scripts/vnext-published-target-read-native-fixture.mjs",
+      "bytes": 5467,
+      "sha256": "1cc2f8d6c29fbe57e3e885ca04a62e540a8bd2e72c93872c38bd5933a8c66185",
+      "blob": "da3e443d6a03f3d994b3945923d1c78b8ec47b52"
+    },
+    {
+      "path": "scripts/vnext-published-target-read-source.test.mjs",
+      "bytes": 5151,
+      "sha256": "6969f29ca28cb8cf06f64cf3fa35796ef7b448cae4f8744336484cb3a8fb8f9a",
+      "blob": "a3ee5bb8985f42f3c4825c4bdb3476fb531a8e8b"
+    },
+    {
+      "path": "web/src/app/components/vnext/Detail.tsx",
+      "bytes": 6408,
+      "sha256": "7703c230ddc7ac8190db851221dfc08f289d45bbca8546abe73e9ae733a53c39",
+      "blob": "176db812cfbb646314ab8100dbdb70575eea0d35"
+    },
+    {
+      "path": "web/src/app/components/vnext/detail-source.test.mjs",
+      "bytes": 5544,
+      "sha256": "dd71a3c42ecab19f7608509ab70e17bfedc5d089f067f518842d33c4da1788f3",
+      "blob": "2217e7a2a7ed76407ea0aee9c58f7f9ba383fa6c"
+    },
+    {
+      "path": "web/src/lib/vnext/published-target-read.test.ts",
+      "bytes": 7778,
+      "sha256": "b86ba948e7c7ea98899da1304eed070584d897713030a73ca88b404bab3a857d",
+      "blob": "27e2956c56705c52b633ff0618cc931422886fd8"
+    },
+    {
+      "path": "web/src/lib/vnext/published-target-read.ts",
+      "bytes": 7758,
+      "sha256": "42d949d6e47c0dfffb3272acb1c4c6b415a27332d96e203cd82818616fdcc107",
+      "blob": "e624d373b84a349b610cd10827779335f8ecc1e7"
+    },
+    {
+      "path": "web/src/lib/vnext/store.ts",
+      "bytes": 18575,
+      "sha256": "4382a08b81f86a408b508521901bf87785761a8713479bbf0186477fa68e184a",
+      "blob": "6dd2102fb0759f37373777906cc67f69d62c10ea"
+    }
+  ],
+  "initialSource": "aa59b7d3c317d01921c1c999dab360c988b239db",
+  "constructorFixSource": "c5b0c3ce5086156b24ad1f3588e5159052de2559",
+  "preservedUntrackedWip": [
+    "docs/operations/2026-10-22/vnext/business-evidence/target-checkpoint-manifest.json",
+    "docs/operations/2026-10-22/vnext/cached-evidence-initial-wip/"
+  ],
+  "noModelOrSourceOrProductionApproval": true
+}

@@ -1,0 +1,118 @@
+{
+  "source": "aa59b7d3c317d01921c1c999dab360c988b239db",
+  "runtime": "f5fe50b19e8c7fef00b7a86de95dd06c9e037b90",
+  "run": 39993673265,
+  "job": 120551546798,
+  "overall": "FAIL",
+  "build": "observed full ordinary build step SUCCESS",
+  "preparation": "1 test/0PASS/1FAIL actual P0001 predecessor predicate, NOT weekday assertion; new install COMMIT NOT_REACHED",
+  "finiteAnnotations": [
+    {
+      "title": "Forecast private inventory",
+      "data": {
+        "count": 40,
+        "bytes": 227474887,
+        "inventorySha256": "a4e8b5b250027886e392f403371f46589124a7aaac0281365ab9026f9712fd4d",
+        "rawContentsPublished": false
+      }
+    },
+    {
+      "title": "Preparation actual cleanup receipt",
+      "data": {
+        "pgRunning": false,
+        "pgPid": 0,
+        "pgExit": 0,
+        "shutdownObserved": true,
+        "serverLogSha256": "02b3efdbf7fa9c894f304b6dda7bb697a8539dddcdab6d6419dbdbff53d069c5",
+        "ownedProcessObservations": [
+          {
+            "pid": 16722,
+            "absent": true
+          },
+          {
+            "pid": 16838,
+            "absent": true
+          },
+          {
+            "pid": 16837,
+            "absent": true
+          },
+          {
+            "pid": 16836,
+            "absent": true
+          },
+          {
+            "pid": 16834,
+            "absent": true
+          },
+          {
+            "pid": 16833,
+            "absent": true
+          },
+          {
+            "pid": 16866,
+            "absent": true
+          },
+          {
+            "pid": 16930,
+            "absent": true
+          },
+          {
+            "pid": 16957,
+            "absent": true
+          },
+          {
+            "pid": 16956,
+            "absent": true
+          },
+          {
+            "pid": 16958,
+            "absent": true
+          },
+          {
+            "pid": 16959,
+            "absent": true
+          },
+          {
+            "pid": 16960,
+            "absent": true
+          }
+        ],
+        "unsettled": false,
+        "zombieIsNotAbsent": true,
+        "clusterRetained": true,
+        "wholeSocketRootAbsence": "NOT_CHECKED"
+      }
+    },
+    {
+      "title": "Forecast current numeric acceptance",
+      "data": {
+        "sourceHead": "f5fe50b19e8c7fef00b7a86de95dd06c9e037b90",
+        "observedWitnesses": [],
+        "actualTapCounts": {
+          "tests": 1,
+          "pass": 0,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "tapSha256": "df9267c79a846182a316ab9e9257229c74d1d0734a1765588b3a624cba5af3c5",
+        "privateRowsPublished": false
+      }
+    },
+    {
+      "title": "Preparation finite HTTP diagnostic",
+      "data": {
+        "stage": "preflight",
+        "code": "P0001",
+        "actual": "REDACTED",
+        "expected": "REDACTED",
+        "messageHash": "890004facd3925a314c6b08bb36710db2c4b05c5012fb3e56ef1a8df16ba5e7a",
+        "tokens": []
+      }
+    }
+  ],
+  "privateContentsRetrieved": false,
+  "scope": "hosted Linux independent executor, not original VM or Contabo; no current positive transfer"
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "vnext-target-current-wip-receipt-v1",
+  "committedProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "exactCandidateWipPatchSha256": "c0c999c4aab0c978393c7aca602f3df97d527d5b5332e5898d659606ef38c097",
+  "sourceSealSha256": "0dce942f44c98f232571e43a39f66826075663d2b8e55d2dc44cfff39795300a",
+  "currentManifestSha256": "7cf4da49b4589acc850e7060b0047f63dd231897688355b2dba5e6686410dccf",
+  "rawInventorySha256": "de41939cbdd8af7942eef94391f95636b330ec23eceebba20d00bac70335ae89",
+  "status": "PARTIAL_DRAFT_NOT_RELEASED",
+  "nativeRetry": "HOLD_SAME_FAILURE_LIMIT2_REVIEW_REQUIRED",
+  "actualCurrentNative": "1test0PASS1FAIL, codeERR_ASSERTION before install; no positive transferred",
+  "candidateNative": "NOT_RUN",
+  "makerIndependentApproval": false,
+  "fullgoal": "ACTIVE_INCOMPLETE",
+  "observedResources": {
+    "at": "2026-10-23T17:47:55.651976+00:00",
+    "free": {
+      "/workspace": 8871403520,
+      "/tmp": 17241853952
+    },
+    "floor": 8589934592,
+    "nextSourceWorkset": 16777216,
+    "fullLocalPG/build/browser": "NOT_ADMITTED",
+    "cleanup": "NONE"
+  }
+}

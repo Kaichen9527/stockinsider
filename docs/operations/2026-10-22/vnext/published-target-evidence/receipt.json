@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "vnext-published-target-source-receipt-v1",
+  "source": "f51f5b716b60ac16f69f2e5e239e3970402ba309",
+  "base": "8f70ea8552649f28210de97f08908270ac96658a",
+  "sourceSealSha256": "c403ec24fd4b380b8c17001ced8b56136fcec5d8fd4911c4300f4d345107ca1d",
+  "manifestSha256": "d056f14e4354146994c6ae1c2e61c2844a443f3a44b3a2aac4c4526bd38f730a",
+  "vmChecksSha256": "9beea2eeaeaaa2fd94d2f790504c4f6597a84924cfe517d5554f69c944ac3b48",
+  "rawInventorySha256": "d09f455b07301d6e164a438c1adca5daa55bfd2f719bcb4e0edb157dcca5b04d",
+  "independentReview": "NOT_APPROVED_BY_MAKER",
+  "status": "PARTIAL_SOURCE_SLICE_NOT_RELEASED",
+  "nativeCurrentSource": "NOT_RUN at seal",
+  "actualEarlierAa59": "FAIL preserved, constructor-only guard mismatch diagnosed from exact source; no unknown predecessor permitted",
+  "notRun": [
+    "genuine persisted baseline and later actual completed corporate-action session",
+    "current source rebase/preparation/provider/publication full native",
+    "actual rights-versus-exit race",
+    "same-source browser desktop/mobile",
+    "real issuer acquisition/model/semantic/Contabo/protected release"
+  ],
+  "noFormalApproval": true
+}

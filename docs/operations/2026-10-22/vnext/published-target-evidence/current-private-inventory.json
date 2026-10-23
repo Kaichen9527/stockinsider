@@ -1,0 +1,357 @@
+{
+  "count": 70,
+  "bytes": 583274,
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-fixture-source-initial-red-o24.mjs",
+      "bytes": 20853,
+      "sha256": "9142b52911320dfd6f4515307fa99fb63f1e1ab90ae52f173bbf2a0b1b117954"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-row-reference-fixed-o24.json",
+      "bytes": 876,
+      "sha256": "98779c5545abaea10f150aea7901b2d3003537b723f2bc574741cb1e627527f2"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-row-reference-fixed-o24.log",
+      "bytes": 1193,
+      "sha256": "3fb1eed35fdd1d3ea6f224b7dc691799de1910786619a073f1c6a4e0df3faf2d"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-row-reference-initial-red-o24.json",
+      "bytes": 876,
+      "sha256": "31d34ed7011aa47d03f2488e5c755d0c77a0d725b4d00126792a18608abe6c6d"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-row-reference-initial-red-o24.log",
+      "bytes": 3105,
+      "sha256": "e86cc80ca7f7794d20e892b7f59b6fda65af995fd4528bde781e02e8ec0700aa"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-cbb-annotations-o24.json",
+      "bytes": 12911,
+      "sha256": "ec8aa76d46a23a371d553d0582f0a9af78da94cb4cd0440bcceb72b5ec210d2d"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-cbb-jobs-final-o24.json",
+      "bytes": 15488,
+      "sha256": "de9797631f70d441866dbe7a49635abdcc09ac06c18eef6952f12c020e93ba92"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-cbb-root-annotations-o24.json",
+      "bytes": 985,
+      "sha256": "5fcf82f5e8a3228fdedc8281a510d33719c4b2898197fffb278c34677f365d30"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-cbb-root-jobs-o24.json",
+      "bytes": 13920,
+      "sha256": "6a41014abbd14f7866b4d1b5fc5768f95b84a5a62dbb38679399430dcdd03cf9"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-cbb-runs-first-o24.json",
+      "bytes": 105581,
+      "sha256": "cbcf52558384fd2b9b0de89bf02ca04ae037cd537206f62cb0c7437b9dd07432"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-cbb-runtime-git-o24.json",
+      "bytes": 2651,
+      "sha256": "f679b2403d97fb62a5a05349978de940a532ffb1a07929e36fa5d362ea6a39d3"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-fiscal-syntax-o24.json",
+      "bytes": 1142,
+      "sha256": "4b45c931d8f88a246f9bb1756c3300835cc6f50a029577c4de5d2f2f0d63f61d"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-fiscal-syntax-o24.log",
+      "bytes": 40,
+      "sha256": "c0a02b5de4150235a72ebb21e228171606453ddac14c0047e6ac8c95dca5fb66"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-source-boundary-fixed-o24.json",
+      "bytes": 882,
+      "sha256": "1504704a00b6a1ec6405e4a20fc6b48afe5b4e4a0f114839474c8d0c6db077fc"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-source-boundary-fixed-o24.log",
+      "bytes": 1481,
+      "sha256": "c9593f76e4feb292ed5176db0e1aadc6167ff10af8106c1d9c1ed118257103ca"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-source-boundary-o24.json",
+      "bytes": 882,
+      "sha256": "83b2d2ed68b1e2ff415daea5f744b7296260d60106ae7f0e35a650d1887f5a70"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-source-boundary-o24.log",
+      "bytes": 2313,
+      "sha256": "a84778effe3bfe0736b067f5ceafeabe247d73e1cf3dfafa1b3c1d2a5d7a10a7"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/closed-day-source-initial-red-o24.mjs",
+      "bytes": 2620,
+      "sha256": "32524964d98236d8088bf60a5f2d623058ccc4151d361562a6d6b947b1161ced"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-aa59-annotations-o24.json",
+      "bytes": 12871,
+      "sha256": "c9db5085ccda363495656a75faadf05a86ccfbf5d739c80e62718ba6782ccbb9"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-aa59-jobs-first-o24.json",
+      "bytes": 14733,
+      "sha256": "1fc53b3632fbc00d1e0c4eb26d4a4e116ec2f3a2e410ca3a60f2df53b10314de"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-aa59-jobs-second-o24.json",
+      "bytes": 15488,
+      "sha256": "fae5a4cf936011df5149529148dd9ade9e875de4d0bfe257d050fe209ef1f2dc"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-aa59-runs-full-o24.json",
+      "bytes": 105453,
+      "sha256": "b07af80d32d6581077b615b37b8b7a392a19ade57e6e4d553d906251d3c64078"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-aa59-runs-initial-o24.json",
+      "bytes": 36,
+      "sha256": "a2790a384d7d281e7395679000c35d27768d89dbd7052f725b8f4688beb59915"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-aa59-source-diagnosis-o24.json",
+      "bytes": 1282,
+      "sha256": "208344caeff8a7b7ba9633efe637ed2419a93bee14a1d8ec3fca849163fdc19d"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-actual-component-ssr-o24.json",
+      "bytes": 1074,
+      "sha256": "2473ec1a8cec8929e83746b7df06977497172a98dc80abe1dcdae26c55caf79e"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-actual-component-ssr-o24.log",
+      "bytes": 1380,
+      "sha256": "7c63bf078da1f6232e01a683a9342a447e1c95876ffd2b62b6e45ceb337ff9c5"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-before-commit-o24.json",
+      "bytes": 2286,
+      "sha256": "9694e3bdcc57a23cd306c1ca78c482260bc2b637766580a5b7393e01c3480bc1"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-c5-annotations-o24.json",
+      "bytes": 14194,
+      "sha256": "f4d6b8a2364b0769875d2f1f79f92ee0e521d7b2ffd1852abc1a8e4820f9e042"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-c5-jobs-o24.json",
+      "bytes": 15488,
+      "sha256": "63b9a6a32c57d6253966d3a102ad32597ba026ba2f9043d20053dcf22a10b6af"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-c5-runs-first-o24.json",
+      "bytes": 105389,
+      "sha256": "858cc79dc0bf08a8285ecd142efe9ef2a0c820f251f809699a97c0a1cae9f4ce"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-c5-runtime-git-o24.json",
+      "bytes": 2651,
+      "sha256": "c1f54964732206c5fa567086bd8fc907926fe0d958998bfd0e0b4233b4392179"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-complete-constructor-wip-o24.json",
+      "bytes": 850,
+      "sha256": "492cf3403676a7b0aff6d069ca645c299b3a28a74ffc23584427b5fcad7da55b"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-complete-constructor-wip-o24.log",
+      "bytes": 1551,
+      "sha256": "c52fa16ffd3078aa91f4410b01e3d53f67882308800923f0ef480a9db4654c78"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-config-source-fixed-o24.json",
+      "bytes": 850,
+      "sha256": "8571f2bfd1d824c99ba64fb1278d51c410654c68c128ada8c6116940a31e194c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-config-source-fixed-o24.log",
+      "bytes": 1313,
+      "sha256": "76355cf4e2f4a4b6ee2d59d9441da8717dd79d38e8fe09a51dd48aaf4bccc523"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-config-syntax-o24.json",
+      "bytes": 1096,
+      "sha256": "b2af15f4e73f30198d97f73e993afa568ed3ff2690559630c450f9aba9d6bfd4"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-config-syntax-o24.log",
+      "bytes": 49,
+      "sha256": "14d6806bef59b2d1e8d1f7c789d90381db5027ea6edb0f9ef5e39548d65c5a93"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-final-package-o24.py",
+      "bytes": 12005,
+      "sha256": "59d00757e92b5cf1a8b7f7fd4953e80a121126776a3241cff01a084e6f9daee1"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-followup-o24.py",
+      "bytes": 5554,
+      "sha256": "3b102b2351ffd74051d2c111e7caeef473e85ae23bf39646cae85a3a8488fb32"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-lint-o24.json",
+      "bytes": 2196,
+      "sha256": "14564c0fc63418d825afbaa668ca7c4b0593c161910d47c3eb8a46c2fe6b7251"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-lint-o24.log",
+      "bytes": 235,
+      "sha256": "0f01afe313ff7d2dabdb53805b99007a51fb1feb2a9dfad76405d4facd0d1560"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-null-guard-build-o24.py",
+      "bytes": 6632,
+      "sha256": "9400a717642c3146a7cfc6a185bb2857603ef0bbfa4f4a7c2d432bf90ffc7292"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-null-guard-source-final-o24.json",
+      "bytes": 852,
+      "sha256": "7199714a05d6cd0a935ab8b72023a941388cd22998316cf0fef129358a72d3ea"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-null-guard-source-final-o24.log",
+      "bytes": 1551,
+      "sha256": "bec8ec3607ed5dba8e4d27836f8de90d64d86e48695dc1cbe1ed66ffbf291719"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-null-guard-source-o24.json",
+      "bytes": 852,
+      "sha256": "71f1c10fd15e5287b4fd30ca4981a0fe6581b79c7a504fc1fea888875cb592e5"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-null-guard-source-o24.log",
+      "bytes": 1552,
+      "sha256": "31770ec47f41e5cc3c9f76c92e44a7677008057a4b4c32d16e9fbfb62cbddff0"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-null-syntax-o24.json",
+      "bytes": 1164,
+      "sha256": "243b87b6905b4122ed9baa0d2dd1ad3fd12c4f2aaa8c941fa30c9aca8498ed37"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-null-syntax-o24.log",
+      "bytes": 53,
+      "sha256": "9a028b0733d885a08a466b7d30edf8566e8d61df780e4d46e256bd996a97355f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-package-o24.py",
+      "bytes": 6716,
+      "sha256": "cbaf35055a66e87e95f9349ea628599e581a6159b1f5fb5faaf4591aa029aa3c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-preparation-regression-o24.json",
+      "bytes": 1451,
+      "sha256": "9956b916f32838b18fba75562f2c301ef532683ec22e641e8be4cf26cc44267c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-preparation-regression-o24.log",
+      "bytes": 4156,
+      "sha256": "d409ef17cbe5fdd0d8481c1692c75c9432709d4cd69be78375b12b4587b69876"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-seal-inspection-red-o24.json",
+      "bytes": 294,
+      "sha256": "ee714454b4208997ebe73a09468503e6f7be3839532f48a05b37d0e4e3ee6511"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-source-final-o24.json",
+      "bytes": 880,
+      "sha256": "d483d226c0a8932f908d7402980714307a677b54c193f43233ad11d601033947"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-source-final-o24.log",
+      "bytes": 3168,
+      "sha256": "fe7677bfc2fe7a3322a8913ecb8449f08a87a0239e8f97d06bc37dd8495c033a"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-source-freeze-o24.json",
+      "bytes": 2173,
+      "sha256": "d00ea3d07d4a623d234607a369be7b241dfdc8db6906f9ab07c5ca2a2960924b"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-source-freeze-o24.log",
+      "bytes": 123,
+      "sha256": "ee8f5f3a19b196d9b57a9589c09aa5f03e78700f7d75c3d51ae9ae2957054590"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-source-initial-o24.json",
+      "bytes": 880,
+      "sha256": "3b465f4e136e946aff2756ead597d7e715880f14894fb5fe94f4804b9316ea94"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-source-initial-o24.log",
+      "bytes": 3168,
+      "sha256": "91a848d42bfdbff65c45dec4dc4c217a1d06288051b5ad0e5f75093fdccd2501"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-sql-source-initial-o24.json",
+      "bytes": 852,
+      "sha256": "62910270114047b41a9e7eff908d3541a99779623f451a39875758090089812c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-sql-source-initial-o24.log",
+      "bytes": 1055,
+      "sha256": "0c5347e7804e833a12d3152cae78838f217bf20789e7d79b1b32ed0e8fc00b8d"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-ssr-lint-o24.json",
+      "bytes": 1693,
+      "sha256": "1083b5007396807e7ee36f5ccda2d1a3da6fa2dd6502d3df640786f4cbb2ede3"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-ssr-lint-o24.log",
+      "bytes": 235,
+      "sha256": "0f01afe313ff7d2dabdb53805b99007a51fb1feb2a9dfad76405d4facd0d1560"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-syntax-o24.json",
+      "bytes": 1238,
+      "sha256": "427ad6f8bdc3e1f15e75f8d66d4fbf40c8925786604c93da7e1558355fd8fdbd"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-syntax-o24.log",
+      "bytes": 57,
+      "sha256": "d9ecb518492e73b88d805b4ad285e4ae5b555aae8a9c1f62f17e93435fbdb0ff"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-type-initial-o24.json",
+      "bytes": 12606,
+      "sha256": "41fbb36eb1588abbc2f0fca44da97697b9f7f912853c757c181084c54ba1c74a"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-type-initial-o24.log",
+      "bytes": 894,
+      "sha256": "7a396ca765122ae57be5f4d42b4b923382a322939f65b0a4249c8ad700df9139"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-types-final-o24.json",
+      "bytes": 11484,
+      "sha256": "83b0fc3795272f47533b03c11a2ac5f69101ba70862469303b331e34253a6c9f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-types-final-o24.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-types-final2-o24.json",
+      "bytes": 11672,
+      "sha256": "b54dda9a3c06781202c5fc7c1555d9871045f08599bd0d43a035767f90835f13"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-types-final2-o24.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "scope": "original VM this-slice raw/source/check and finite remote metadata only; hosted raw39files205634636bytes inventory-only and not fetched; all older raw/RED retained, not re-inventoried"
+}

@@ -1,0 +1,27 @@
+{
+  "count": 4,
+  "bytes": 137722,
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-c5-runs-first-o24.json",
+      "bytes": 105389,
+      "sha256": "858cc79dc0bf08a8285ecd142efe9ef2a0c820f251f809699a97c0a1cae9f4ce"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-c5-jobs-o24.json",
+      "bytes": 15488,
+      "sha256": "63b9a6a32c57d6253966d3a102ad32597ba026ba2f9043d20053dcf22a10b6af"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-c5-annotations-o24.json",
+      "bytes": 14194,
+      "sha256": "f4d6b8a2364b0769875d2f1f79f92ee0e521d7b2ffd1852abc1a8e4820f9e042"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/target-read-c5-runtime-git-o24.json",
+      "bytes": 2651,
+      "sha256": "c1f54964732206c5fa567086bd8fc907926fe0d958998bfd0e0b4233b4392179"
+    }
+  ],
+  "scope": "additional exact public Git/CI metadata retrieved to original VM only; no hosted private contents obtained"
+}

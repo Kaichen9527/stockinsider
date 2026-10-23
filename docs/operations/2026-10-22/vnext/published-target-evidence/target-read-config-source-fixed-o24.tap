@@ -1,0 +1,19 @@
+TAP version 13
+# Subtest: exact complete predecessors and two finite body changes retain all original authority checks
+ok 1 - exact complete predecessors and two finite body changes retain all original authority checks
+# Subtest: same full catalog codec excludes only two body fields; no new role/function/table/permission
+ok 2 - same full catalog codec excludes only two body fields; no new role/function/table/permission
+# Subtest: public read uses actual latest stored revision and current-source checker, not caller approval
+ok 3 - public read uses actual latest stored revision and current-source checker, not caller approval
+# Subtest: cash/rights remain rejected and exit recomputes whole proof under original lock
+ok 4 - cash/rights remain rejected and exit recomputes whole proof under original lock
+# Subtest: predecessor SET configuration is derived per exact original constructor, not a shared assumed profile
+ok 5 - predecessor SET configuration is derived per exact original constructor, not a shared assumed profile
+1..5
+# tests 5
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16.393735

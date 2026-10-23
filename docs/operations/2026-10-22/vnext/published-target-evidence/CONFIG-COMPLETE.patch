@@ -1,0 +1,66 @@
+diff --git a/migrations/20261024_vnext_published_target_read_v1.sql b/migrations/20261024_vnext_published_target_read_v1.sql
+index 54c922f..e93dabd 100644
+--- a/migrations/20261024_vnext_published_target_read_v1.sql
++++ b/migrations/20261024_vnext_published_target_read_v1.sql
+@@ -31,7 +31,7 @@ DO $pre$ DECLARE state jsonb;catalog_sql constant text:=$catalog$
+  $catalog$;BEGIN
+  IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_target_current_v1(text,uuid,text)'::regprocedure AND pg_get_userbyid(proowner)='stockinsider_vnext_owner' AND prosecdef AND proconfig=ARRAY['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='2cb716f773f8e5069c56f7f85aa20677bd7c83cfa6a12ecc2784ca8ffb8c393f' AND octet_length(convert_to(prosrc,'UTF8'))=17075) THEN RAISE EXCEPTION 'vnext_target_read_predecessor_changed';END IF;
+  IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_read_v1(text)'::regprocedure AND pg_get_userbyid(proowner)='stockinsider_vnext_owner' AND prosecdef AND proconfig=ARRAY['search_path=pg_catalog, public'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='8a6eb1914c1292fae55f6683d661976de0a09aaae277a3bbfbdcc6a7ffa85f3d' AND octet_length(convert_to(prosrc,'UTF8'))=1088) THEN RAISE EXCEPTION 'vnext_target_read_predecessor_changed';END IF;
+- IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)'::regprocedure AND pg_get_userbyid(proowner)='stockinsider_vnext_owner' AND prosecdef AND proconfig=ARRAY['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='f78c879d15d5e9ccce1a15207f9a0f6543e0cf10f58c51bb48ff37d664058320' AND octet_length(convert_to(prosrc,'UTF8'))=13251) THEN RAISE EXCEPTION 'vnext_target_read_predecessor_changed';END IF;
++ IF NOT EXISTS(SELECT FROM pg_proc WHERE oid='public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)'::regprocedure AND pg_get_userbyid(proowner)='stockinsider_vnext_owner' AND prosecdef AND proconfig=ARRAY['search_path=pg_catalog, public','TimeZone=UTC','statement_timeout=30s','lock_timeout=2s'] AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')='f78c879d15d5e9ccce1a15207f9a0f6543e0cf10f58c51bb48ff37d664058320' AND octet_length(convert_to(prosrc,'UTF8'))=13251) THEN RAISE EXCEPTION 'vnext_target_read_predecessor_changed';END IF;
+  EXECUTE catalog_sql INTO state USING ARRAY['public.vnext_target_current_v1(text,uuid,text)'::regprocedure::oid,'public.vnext_read_v1(text)'::regprocedure::oid,'public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)'::regprocedure::oid],ARRAY[]::oid[],'{}'::jsonb;INSERT INTO vnext_target_read_before_v1 VALUES(state);
+ END $pre$;
+ DO $patch0$ DECLARE original text;definition text;changed text;metadata jsonb;target oid:='public.vnext_target_current_v1(text,uuid,text)'::regprocedure;BEGIN
+diff --git a/scripts/opportunity-v3/vnext-published-target-read-profile-v1.json b/scripts/opportunity-v3/vnext-published-target-read-profile-v1.json
+index 6c31ed6..07524fb 100644
+--- a/scripts/opportunity-v3/vnext-published-target-read-profile-v1.json
++++ b/scripts/opportunity-v3/vnext-published-target-read-profile-v1.json
+@@ -1,7 +1,7 @@
+ {
+   "schemaVersion": "vnext-published-target-read-source-v1",
+   "migration": "migrations/20261024_vnext_published_target_read_v1.sql",
+-  "migrationSha256": "b7c0c8992c0dbd45fedaf8ddbe2a9d235b15f06a2365e819e4f51f45aad07260",
++  "migrationSha256": "213823d9c1a90aee259b90974329431369eb07634901caddb560d1d0853e7025",
+   "nativeVerified": false,
+   "nativeOids": null,
+   "modifiedRoutines": [
+@@ -52,6 +52,7 @@
+       ],
+       "predecessorProconfig": [
+         "search_path=pg_catalog, public",
++        "TimeZone=UTC",
+         "statement_timeout=30s",
+         "lock_timeout=2s"
+       ]
+@@ -67,5 +68,14 @@
+     "code": "P0001",
+     "message": "vnext_target_read_predecessor_changed",
+     "finding": "new precondition incorrectly assumed target current had only search_path; exact original constructor also has statement_timeout30s/lock_timeout2s; source-derived correction only, no ACL/body hash or old profile change"
++  },
++  "secondConstructorFinding": {
++    "subject": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
++    "run": 39996620417,
++    "job": 120561693293,
++    "actualMessageHash": "52c7cc08ab309eda6015c8991ffeedae7a5318ef3d8a3179bb2f016dea56d8aa",
++    "exactSourceDerivedErrorMessageMatches": true,
++    "scope": "quote constructor TimeZone=UTC precedes30s/2s; guard rejects before apply; no new installer COMMIT/fiscal/withdrawal positive on this subject",
++    "nativeRetry": "HOLD_SAME_FAILURE_LIMIT_2; exact source review required; no lowering or unknown setting allowed"
+   }
+ }
+diff --git a/scripts/vnext-published-target-read-source.test.mjs b/scripts/vnext-published-target-read-source.test.mjs
+index cc87438..0668d61 100644
+--- a/scripts/vnext-published-target-read-source.test.mjs
++++ b/scripts/vnext-published-target-read-source.test.mjs
+@@ -15,7 +15,11 @@ test('cash/rights remain rejected and exit recomputes whole proof under original
+ test('predecessor SET configuration is derived per exact original constructor, not a shared assumed profile',()=>{
+  const original=read('migrations/20261022_vnext_target_exit_v1.sql');assert.ok(original.includes("LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET statement_timeout='30s' SET lock_timeout='2s' AS $current$"));
+  const base=read('migrations/20261022_stockinsider_vnext_20_v1.sql');assert.ok(base.includes("RETURNS jsonb LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,public AS $$"));
+- const configs=[['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s'],['search_path=pg_catalog, public'],['search_path=pg_catalog, public','statement_timeout=30s','lock_timeout=2s']];
++ // Derive the COMPLETE SET list from each pinned original constructor.
++ // No shared guessed subset, unknown SET, expanded schema or config OR.
++ const declaration=(text,name,tag)=>{const start=text.indexOf('CREATE FUNCTION public.'+name+'(');assert.ok(start>=0);const end=text.indexOf(' AS '+tag,start);assert.ok(end>start);return text.slice(start,end);};
++ const clauses=[declaration(original,'vnext_target_current_v1','$current$'),declaration(base,'vnext_read_v1','$$'),declaration(original,'vnext_target_quote_v1','$quote$')];
++ const configs=clauses.map(text=>{const found=[...text.matchAll(/\bSET (search_path|timezone|statement_timeout|lock_timeout)=(pg_catalog,public|'[^']+')/gu)];assert.equal(found.length,(text.match(/\bSET /gu)||[]).length,'unknown constructor setting rejected');return found.map(([,key,value])=>key==='search_path'?'search_path=pg_catalog, public':(key==='timezone'?'TimeZone':key)+'='+value.slice(1,-1));});
+  p.modifiedRoutines.forEach((r,i)=>{assert.deepEqual(r.predecessorProconfig,configs[i]);const predicate="oid='"+r.signature+"'::regprocedure AND pg_get_userbyid(proowner)='stockinsider_vnext_owner' AND prosecdef AND proconfig=ARRAY["+configs[i].map(v=>"'"+v+"'").join(',')+"]";assert.ok(sql.includes(predicate));});
+ });
+ 

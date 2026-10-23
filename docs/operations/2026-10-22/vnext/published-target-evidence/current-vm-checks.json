@@ -1,0 +1,251 @@
+{
+  "checks": [
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-action-row-reference.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T17:31:23.014208+00:00",
+      "end": "2026-10-23T17:31:23.526221+00:00",
+      "exit": 1,
+      "initialFree": {
+        "/workspace": 8872071168,
+        "/tmp": 17242140672
+      },
+      "finalFree": {
+        "/workspace": 8872071168,
+        "/tmp": 17242136576
+      },
+      "sampledSessionPeakRssBytes": 9437184,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "name": "action-row-reference-initial-red-o24",
+      "stdout": {
+        "bytes": 3105,
+        "sha256": "e86cc80ca7f7794d20e892b7f59b6fda65af995fd4528bde781e02e8ec0700aa"
+      },
+      "actualCounts": {
+        "tests": 2,
+        "pass": 0,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-action-row-reference.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T17:32:06.742875+00:00",
+      "end": "2026-10-23T17:32:07.255704+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8872054784,
+        "/tmp": 17242099712
+      },
+      "finalFree": {
+        "/workspace": 8872054784,
+        "/tmp": 17242095616
+      },
+      "sampledSessionPeakRssBytes": 7733248,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "name": "action-row-reference-fixed-o24",
+      "stdout": {
+        "bytes": 1193,
+        "sha256": "3fb1eed35fdd1d3ea6f224b7dc691799de1910786619a073f1c6a4e0df3faf2d"
+      },
+      "actualCounts": {
+        "tests": 2,
+        "pass": 2,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-closed-day-source-boundary.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T17:36:27.602948+00:00",
+      "end": "2026-10-23T17:36:28.114275+00:00",
+      "exit": 1,
+      "initialFree": {
+        "/workspace": 8871919616,
+        "/tmp": 17242058752
+      },
+      "finalFree": {
+        "/workspace": 8871919616,
+        "/tmp": 17242054656
+      },
+      "sampledSessionPeakRssBytes": 7733248,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "name": "closed-day-source-boundary-o24",
+      "stdout": {
+        "bytes": 2313,
+        "sha256": "a84778effe3bfe0736b067f5ceafeabe247d73e1cf3dfafa1b3c1d2a5d7a10a7"
+      },
+      "actualCounts": {
+        "tests": 3,
+        "pass": 2,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-closed-day-source-boundary.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T17:36:53.638964+00:00",
+      "end": "2026-10-23T17:36:54.166251+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8871919616,
+        "/tmp": 17242046464
+      },
+      "finalFree": {
+        "/workspace": 8871919616,
+        "/tmp": 17242042368
+      },
+      "sampledSessionPeakRssBytes": 7208960,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "name": "closed-day-source-boundary-fixed-o24",
+      "stdout": {
+        "bytes": 1481,
+        "sha256": "c9593f76e4feb292ed5176db0e1aadc6167ff10af8106c1d9c1ed118257103ca"
+      },
+      "actualCounts": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-published-target-read-source.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T17:33:13.556241+00:00",
+      "end": "2026-10-23T17:33:14.074805+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8872050688,
+        "/tmp": 17242075136
+      },
+      "finalFree": {
+        "/workspace": 8872050688,
+        "/tmp": 17242071040
+      },
+      "sampledSessionPeakRssBytes": 10616832,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "name": "target-read-null-guard-source-final-o24",
+      "stdout": {
+        "bytes": 1551,
+        "sha256": "bec8ec3607ed5dba8e4d27836f8de90d64d86e48695dc1cbe1ed66ffbf291719"
+      },
+      "actualCounts": {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "scripts/vnext-published-target-read-source.test.mjs"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T17:44:53.817729+00:00",
+      "end": "2026-10-23T17:44:54.333432+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8871825408,
+        "/tmp": 17241878528
+      },
+      "finalFree": {
+        "/workspace": 8871825408,
+        "/tmp": 17241874432
+      },
+      "sampledSessionPeakRssBytes": 7733248,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "name": "target-read-complete-constructor-wip-o24",
+      "stdout": {
+        "bytes": 1551,
+        "sha256": "c52fa16ffd3078aa91f4410b01e3d53f67882308800923f0ef480a9db4654c78"
+      },
+      "actualCounts": {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import pathlib,subprocess,yaml;[subprocess.run(['/workspace/.tools/node22/node_modules/node/bin/node','--check',p],check=True) for p in ['scripts/vnext-disclosed-fiscal-native-fixture.mjs','scripts/vnext-preparation-http-fixture.mjs']];yaml.safe_load(pathlib.Path('.github/workflows/stockinsider-vnext-quality.yml').read_text());print('2 syntax + YAML PASS, PG/native NOT_RUN')"
+      ],
+      "cwd": "/workspace/stockinsider-vnext-oct22",
+      "start": "2026-10-23T17:35:38.307235+00:00",
+      "end": "2026-10-23T17:35:38.819264+00:00",
+      "exit": 0,
+      "initialFree": {
+        "/workspace": 8871923712,
+        "/tmp": 17242066944
+      },
+      "finalFree": {
+        "/workspace": 8871923712,
+        "/tmp": 17242062848
+      },
+      "sampledSessionPeakRssBytes": 3145728,
+      "resourceViolation": null,
+      "sampledNotInstantaneous": true,
+      "selection": "same owned session plus recursive descendants; no instantaneous peak claim",
+      "name": "closed-day-fiscal-syntax-o24",
+      "stdout": {
+        "bytes": 40,
+        "sha256": "c0a02b5de4150235a72ebb21e228171606453ddac14c0047e6ac8c95dca5fb66"
+      }
+    }
+  ],
+  "countsNotAddedAcrossRuns": true,
+  "sourceScopes": "actual official formatter/extracted function and new component guard mocks; no PostgreSQL/source/model authority; actual component SSR11reader/3SSR/12preparation at initial exact bytes remain linked in vm-checks.json; runtime TS unchanged, not new whole-head native acceptance",
+  "initialGuardProbeRed": "2PASS1FAIL because child git EPERM, fixed using exact preexisting Git-byte pins/shallow-safe source extraction; no permission escalation or guard loosening",
+  "sourceTypeRed": "initial TS narrowing retained separately",
+  "newHeavyLocal": "NOT_ADMITTED"
+}

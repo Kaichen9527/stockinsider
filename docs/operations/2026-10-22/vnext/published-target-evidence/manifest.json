@@ -1,0 +1,62 @@
+{
+  "files": [
+    {
+      "file": "constructor-diagnosis.json",
+      "bytes": 1282,
+      "sha256": "208344caeff8a7b7ba9633efe637ed2419a93bee14a1d8ec3fca849163fdc19d"
+    },
+    {
+      "file": "git-tree-inventory.txt",
+      "bytes": 335001,
+      "sha256": "1a7461268f6ef3150f100e3ad40846bcbdd24ca25af6b9d54fb393d4cdcbcd9f"
+    },
+    {
+      "file": "hosted-aa59-red.json",
+      "bytes": 3107,
+      "sha256": "d772d9bd07986a4beb86f6cb2760fde65df16e1e09c5f6a2148f722896c5e497"
+    },
+    {
+      "file": "private-inventory.json",
+      "bytes": 8324,
+      "sha256": "d09f455b07301d6e164a438c1adca5daa55bfd2f719bcb4e0edb157dcca5b04d"
+    },
+    {
+      "file": "resources.json",
+      "bytes": 718,
+      "sha256": "6a2338250e20b4f13b6519bbf5a8f2b47c7f82d02e81be7b3e62df6cb5c4fe8b"
+    },
+    {
+      "file": "source-seal.json",
+      "bytes": 3726,
+      "sha256": "c403ec24fd4b380b8c17001ced8b56136fcec5d8fd4911c4300f4d345107ca1d"
+    },
+    {
+      "file": "target-read-actual-component-ssr-o24.tap",
+      "bytes": 676,
+      "sha256": "6fb30e46b349f26b4e90878b4b23072eac22b66dbdcfa364bbf6723cf2e78b28"
+    },
+    {
+      "file": "target-read-config-source-fixed-o24.tap",
+      "bytes": 1123,
+      "sha256": "ee14f929481e24d3efe66535acf5540a2175dfdbae299864ca6636607e903c5c"
+    },
+    {
+      "file": "target-read-preparation-regression-o24.tap",
+      "bytes": 3122,
+      "sha256": "1bad767033288a373f5bfe8fe6c19a5ef6e64b51931e0be1018fbe7f7fccb5a6"
+    },
+    {
+      "file": "target-read-source-final-o24.tap",
+      "bytes": 2173,
+      "sha256": "9e79cea207b216c7bf45f60eb9209fd53ce1f218e0321353ca2baba5262c8440"
+    },
+    {
+      "file": "vm-checks.json",
+      "bytes": 9037,
+      "sha256": "9beea2eeaeaaa2fd94d2f790504c4f6597a84924cfe517d5554f69c944ac3b48"
+    }
+  ],
+  "bytes": 368289,
+  "publicSafeExplicitAllowlist": true,
+  "noPrivateRowsBodiesCredentialsOrURLs": true
+}

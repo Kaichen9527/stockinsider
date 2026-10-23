@@ -1,0 +1,13 @@
+TAP version 13
+# Subtest: fixture event identity agrees with actual unchanged official protocol, not a local almost-same tuple
+not ok 1 - fixture event identity agrees with actual unchanged official protocol, not a local almost-same tuple
+# Subtest: fixture supplies finite original adjustment metadata without using it as issued-share terms
+not ok 2 - fixture supplies finite original adjustment metadata without using it as issued-share terms
+1..2
+# tests 2
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 25.986746

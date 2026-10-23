@@ -1,0 +1,140 @@
+{
+  "source": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "runtime": "a8fbdfdbf55d77d2928a9134a396091001994769",
+  "wholeTreeParity": true,
+  "run": 39996620417,
+  "job": 120561693293,
+  "overall": "FAIL",
+  "finiteAnnotations": [
+    {
+      "title": "Forecast private inventory",
+      "data": {
+        "count": 39,
+        "bytes": 205634636,
+        "inventorySha256": "563803fe15b1cd05d2e1719853b7d38b4ffe08df951d7d7a31fa381752882c53",
+        "rawContentsPublished": false
+      }
+    },
+    {
+      "title": "Preparation actual cleanup receipt",
+      "data": {
+        "pgRunning": false,
+        "pgPid": 0,
+        "pgExit": 0,
+        "shutdownObserved": true,
+        "serverLogSha256": "35ffdc95050923f37ea988d972d5a46b413a17e26ef2362034a96152876588c4",
+        "ownedProcessObservations": [
+          {
+            "pid": 17023,
+            "absent": true
+          },
+          {
+            "pid": 17137,
+            "absent": true
+          },
+          {
+            "pid": 17136,
+            "absent": true
+          },
+          {
+            "pid": 17135,
+            "absent": true
+          },
+          {
+            "pid": 17133,
+            "absent": true
+          },
+          {
+            "pid": 17132,
+            "absent": true
+          },
+          {
+            "pid": 17167,
+            "absent": true
+          },
+          {
+            "pid": 17233,
+            "absent": true
+          },
+          {
+            "pid": 17261,
+            "absent": true
+          },
+          {
+            "pid": 17260,
+            "absent": true
+          },
+          {
+            "pid": 17262,
+            "absent": true
+          },
+          {
+            "pid": 17263,
+            "absent": true
+          },
+          {
+            "pid": 17264,
+            "absent": true
+          },
+          {
+            "pid": 17267,
+            "absent": true
+          }
+        ],
+        "unsettled": false,
+        "zombieIsNotAbsent": true,
+        "clusterRetained": true,
+        "wholeSocketRootAbsence": "NOT_CHECKED"
+      }
+    },
+    {
+      "title": "Forecast current numeric acceptance",
+      "data": {
+        "sourceHead": "a8fbdfdbf55d77d2928a9134a396091001994769",
+        "observedWitnesses": [],
+        "actualTapCounts": {
+          "tests": 1,
+          "pass": 0,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "tapSha256": "5939d78a5f88c518d2e79e79fc6693ee3085af7b7a2bd0b6b0709c1667000289",
+        "privateRowsPublished": false
+      }
+    },
+    {
+      "title": "Preparation finite HTTP diagnostic",
+      "data": {
+        "stage": "preflight",
+        "code": "ERR_ASSERTION",
+        "actual": "REDACTED",
+        "expected": "REDACTED",
+        "messageHash": "52c7cc08ab309eda6015c8991ffeedae7a5318ef3d8a3179bb2f016dea56d8aa",
+        "tokens": []
+      }
+    }
+  ],
+  "causeEvidence": {
+    "originalConstructor": "target_quote search_path,TimeZone=UTC,statement_timeout30s,lock_timeout2s in that order",
+    "actualErrorHash": "52c7cc08ab309eda6015c8991ffeedae7a5318ef3d8a3179bb2f016dea56d8aa",
+    "memoryNodeAssertionFromOriginalConstructorSameHash": true,
+    "notFreshPrivateMetadataClaim": true
+  },
+  "nativeScopes": {
+    "threeBodyInstaller": "NOT_REACHED; helper precondition rejects first",
+    "newFiscalOrClosedDayWithdrawal": "NOT_REACHED",
+    "publishedTargetRebaseOrRace": "NOT_REACHED"
+  },
+  "rawContentsRetrieved": false,
+  "protected": {
+    "run": 39996616648,
+    "bootstrap": "SUCCESS",
+    "requirementsArchitectureExactReview": "FAIL at Retrieve bootstrap and prepare detached subject before issuing envelopes",
+    "root": "FAIL incomplete prerequisites",
+    "annotation": "only generic exit1; deeper concrete cause UNKNOWN, no forbidden log download retried",
+    "baseOwnedSourceInspected": true,
+    "oldPinsOrReviewRefsChanged": false
+  }
+}

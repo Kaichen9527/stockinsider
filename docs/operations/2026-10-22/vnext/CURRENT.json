@@ -1,8 +1,8 @@
 {
   "status": "PARTIAL_ENGINEERING_ACCEPTANCE_DRAFT_NOT_RELEASED",
-  "updatedAt": "2026-10-23T16:48:32.224443+00:00",
-  "runtimeSourceHead": "e09cbd4927263d7b75063d424007f0d4fb752321",
-  "currentReceiptSha256": "2bbf8f9d162acd734efa2763bb2870ac80948f53c81f7558369fc842ece9bc04",
+  "updatedAt": "2026-10-23T17:49:04.211895+00:00",
+  "runtimeSourceHead": "a8fbdfdbf55d77d2928a9134a396091001994769",
+  "currentReceiptSha256": "a82cd1dc53278f9333ae166329aed0a43d75bb07227261b17393b24dbc9deb0b",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
   "primaryReport": "STATUS.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
@@ -17,7 +17,10 @@
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "currentActual": "ccc actual unauth/wrong-role/extra-fields/explicit[] zero SQL; one admitted researching slot before claim, replay/withdrawal retain immutable history. Raw-source path still not accepted.",
       "previousScopedStatus": "PARTIAL_ACTUAL_POSITIVE_HTTP",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN02",
@@ -28,7 +31,10 @@
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "TESTED_VM_SUBSETS",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN03",
@@ -39,7 +45,10 @@
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "TESTED_VM_SYNTHETIC",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN04",
@@ -51,7 +60,10 @@
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "expiryActual": "b855 actual first HTTP expiry/idempotent retry plus real second deadline via service-role writer header/lease; failure2/activeSlots0/2charged/0refund/old+retry further retry rejected/0provider-preparation. Separate transport scopes, hosted synthetic source content, full suite still FAIL.",
       "previousScopedStatus": "PARTIAL_ACTUAL_PG_HTTP_RECOVERY",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN05",
@@ -62,7 +74,10 @@
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "PARTIAL_COVERAGE_AUTHORITY_MISSING",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN06",
@@ -73,31 +88,40 @@
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "PARTIAL_REAL_TIME_PROOF_PENDING",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN07",
       "status": "PARTIAL_NEW_SOURCE_ACCEPTANCE_PENDING",
       "runs": "thesis-native-01; thesis-active-http-02; current-browser-summary-01; thesis-semantic-authority-source-02; semantic-native-monitored-o23; catalyst-semantic-source-05; catalyst-native-monitored-o23; target-exit-evidence/receipt.json",
       "limits": "655 actual7PASS business/current-source/public component/withdrawal and finite target-v5 packet compatibility; original weights/groupnull/risk_bound unchanged. Corporate action terms/rebase/contra and real semantic approval remain incomplete; da15 cancellation receipt remains separate.",
-      "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
+      "currentFollowup": "Published immutable target/read/detail source path implemented; separate11reader/3SSR/6SQL/2official-row/3closed-day/12prep source scopes. Exact configurationWIP review/nativeHOLD; cbb0/1beforeinstall, c5oldercomponent not transferred. No actual published rebase/race/real source/model/formal claim.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "actionTermsFollowup": "12 sourcecontracts/4 SQL construction; source-bound new native original-terms/withdrawal/prepare-forgery entry wired but NOT_RUN. Actual original published target rebasing, cash/rights intent and real source remain pending.",
       "previousScopedStatus": "PARTIAL_ACTUAL_SERVER_EXIT",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN08",
       "status": "PARTIAL_NEW_SOURCE_ACCEPTANCE_PENDING",
       "runs": "cached-native-01; cached-native-02; preparation-authority-source-direct-01",
       "limits": "Original quarterly/12month server reader, active batch, recollection invariant and preparation frozen input actual-native tested; full material change to new article and annual/4Q/share authority remain.",
-      "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
+      "currentFollowup": "Published immutable target/read/detail source path implemented; separate11reader/3SSR/6SQL/2official-row/3closed-day/12prep source scopes. Exact configurationWIP review/nativeHOLD; cbb0/1beforeinstall, c5oldercomponent not transferred. No actual published rebase/race/real source/model/formal claim.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "actionTermsFollowup": "12 sourcecontracts/4 SQL construction; source-bound new native original-terms/withdrawal/prepare-forgery entry wired but NOT_RUN. Actual original published target rebasing, cash/rights intent and real source remain pending.",
       "previousScopedStatus": "PARTIAL_ACTUAL_FORECAST_CURRENT_RPC_PREPARATION_PROVIDER_FROZEN",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN09",
@@ -108,7 +132,10 @@
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "CURSOR_CODE_SOURCE_TESTED_RAW_NATIVE_PREREQUISITE_BLOCKED",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN10",
@@ -119,7 +146,10 @@
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "TESTED_VM_SYNTHETIC_PROVIDER",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN11",
@@ -130,7 +160,10 @@
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "TESTED_HOSTED_SYNTHETIC_REVISION",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN12",
@@ -141,62 +174,80 @@
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "TESTED_VM_CONTRACT_NOT_FORMAL_REVIEW",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN13",
       "status": "PARTIAL_NEW_SOURCE_ACCEPTANCE_PENDING",
       "runs": "native-legacy-final; worker-native-02; withdrawal-native-03; cached-native-02",
       "limits": "Atomicrevision/membership gates+unadmitteddeferredprefix tested withsyntheticrows. Realfinancial/valuationhappy-path and fullnewhead late-exit concurrency stillunverified.",
-      "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
+      "currentFollowup": "Published immutable target/read/detail source path implemented; separate11reader/3SSR/6SQL/2official-row/3closed-day/12prep source scopes. Exact configurationWIP review/nativeHOLD; cbb0/1beforeinstall, c5oldercomponent not transferred. No actual published rebase/race/real source/model/formal claim.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "PARTIAL_REAL_PRODUCER_ACCEPTANCE",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN14",
       "status": "PARTIAL_NEW_SOURCE_ACCEPTANCE_PENDING",
       "runs": "public-valuation-read-direct-01; current-browser-summary-01; current-browser-ui-01",
       "limits": "Newcurrentpublicread requires exactproofcanonicalhash/expiry/usablevaluation/claim/date/arithmetic. Older incompleteproofdenied; no legacyfallback; actualwithdrawnarticlehistoryretained.12sourcecontracts,2currentbrowsercases.",
-      "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
+      "currentFollowup": "Published immutable target/read/detail source path implemented; separate11reader/3SSR/6SQL/2official-row/3closed-day/12prep source scopes. Exact configurationWIP review/nativeHOLD; cbb0/1beforeinstall, c5oldercomponent not transferred. No actual published rebase/race/real source/model/formal claim.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "TESTED_VM_FAIL_CLOSED_READ",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN15",
       "status": "PARTIAL_NEW_SOURCE_ACCEPTANCE_PENDING",
       "runs": "current-browser-ui-01; current-browser-summary-01",
       "limits": "655 same-build current-run PG snapshot transport: UI12/current2/business2 actual desktop/mobile PASS, Chrome155.0.8059.39/hash bound. Business8PNG7,076,400B in finite hosted artifact; not downloaded/visually reviewed.",
-      "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
+      "currentFollowup": "Published immutable target/read/detail source path implemented; separate11reader/3SSR/6SQL/2official-row/3closed-day/12prep source scopes. Exact configurationWIP review/nativeHOLD; cbb0/1beforeinstall, c5oldercomponent not transferred. No actual published rebase/race/real source/model/formal claim.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "HOSTED_BROWSER_STEPS_OBSERVED_RAW_NOT_REVIEWED",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN16",
       "status": "PARTIAL_NEW_SOURCE_ACCEPTANCE_PENDING",
       "runs": "public-valuation-read-type-01; final-qualified-lint-01; final-qualified-build-01; ir-source-type-01; post-clean-ir-build-permissions-o23; post-clean-ir-lint-o23; semantic-final-types-o23",
       "limits": "655 hosted complete type/lint/build SUCCESS and original VM source/types/lint receipts distinct. Original VM fresh fullbuild NOT_ADMITTED.",
-      "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
+      "currentFollowup": "Published immutable target/read/detail source path implemented; separate11reader/3SSR/6SQL/2official-row/3closed-day/12prep source scopes. Exact configurationWIP review/nativeHOLD; cbb0/1beforeinstall, c5oldercomponent not transferred. No actual published rebase/race/real source/model/formal claim.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "PARTIAL_TYPES_LINT_HOSTED_BUILD",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN17",
       "status": "PARTIAL_NEW_SOURCE_ACCEPTANCE_PENDING",
       "runs": "cached-native-02; terminal-slots-read-01; cached-active-http-recovery-01",
       "limits": "655 fresh original-prefix ordinary PG stages and new business7PASS/finite target-v5 installer +currentRPC; synthetic sources/model; remaining financial-qualified and ACL/race matrix incomplete.",
-      "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
+      "currentFollowup": "Published immutable target/read/detail source path implemented; separate11reader/3SSR/6SQL/2official-row/3closed-day/12prep source scopes. Exact configurationWIP review/nativeHOLD; cbb0/1beforeinstall, c5oldercomponent not transferred. No actual published rebase/race/real source/model/formal claim.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "PARTIAL_FRESH_HOSTED_NATIVE",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN18",
@@ -207,7 +258,10 @@
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "EXTERNAL_NOT_ACCEPTED",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN19",
@@ -218,18 +272,24 @@
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "REAL_EXECUTION_BLOCKED_MISSING_ISOLATED_BINDINGS",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     },
     {
       "id": "VN20",
       "status": "PARTIAL_NEW_SOURCE_ACCEPTANCE_PENDING",
       "runs": "PR384; STATUS.md; CURRENT.json; current-evidence/receipt.json; POST-CLEAN-DELIVERY.md; post-clean-evidence/receipt.json; FINANCIAL-STATUS-DELIVERY.md; financial-status-evidence/receipt.json; preparation-reconciliation-evidence/receipt.json; SEMANTIC-SCORE-DELIVERY.md; semantic-score-evidence/receipt.json; TWSE-SNAPSHOT-DELIVERY.md; twse-snapshot-evidence/receipt.json",
       "limits": "PR384 source da15/new normal CI pending; earlier a264 normal job120301725217SUCCESS and cancellation7PASS; protected39919707261FAIL unchanged. Exact review prerequisite must follow independent original process; no maker approval or merge/deploy.",
-      "currentFollowup": "Exact655 hosted ordinary build/PG/HTTP/browser receipt native655; synthetic protocol scope only. Remaining VN gaps and prior exact-source runs remain separate.",
+      "currentFollowup": "Published immutable target/read/detail source path implemented; separate11reader/3SSR/6SQL/2official-row/3closed-day/12prep source scopes. Exact configurationWIP review/nativeHOLD; cbb0/1beforeinstall, c5oldercomponent not transferred. No actual published rebase/race/real source/model/formal claim.",
       "currentSourceFollowup": "Exact921 same-tree hosted ordinary fullbuild/PG/HTTP/browser SUCCESS; finite receipt material-source-evidence/receipt.json. Historical and real-source/time/staging gaps remain.",
       "candidateFollowup": "Exact2b071 source-disclosed fiscal/share/annual4Q current reader -> preparation/provider/publication fences implemented; VM10fiscal/5SQL/7forecast/12preparation separately pass, not added across repeats. New native NOT_RUN at seal. Previous d8 preparation1/0/1FAIL at unchanged Saturday preflight; business7PASS separate, no transfer. Namespace apply/GRANT uncalled; mandatory raw-source older RED and all remaining matrices still open.",
       "previousScopedStatus": "DRAFT_PR_PARTIAL_RELEASE_GATE",
-      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed."
+      "latestExactScope": "43c38 original-VM14action/11fiscal/5SQL/12preparation separately pass; exact types/lint. Previous e09 private-source current component positive, overall1test0pass1failweekend; real source/model/public author/preparation still not accepted. Namespace apply pending independent review. Full remaining matrices/real timing/staging not closed.",
+      "latestProductSource": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "latestStatus": "PARTIAL_CURRENT_SLICE_NOT_RELEASED",
+      "currentReceipt": "published-target-evidence/current-receipt.json"
     }
   ],
   "externalOwnerActions": [
@@ -252,23 +312,22 @@
     }
   ],
   "remainingVMCode": [
-    "applicable current isolated source-fence namespace dependency profile/independent review; actual raw cache cursor path and over200-case native",
-    "exhaustive28day upstream connector/conservation/coverage/comparable volume",
-    "annual/4Q/fiscal/share source producer and full current forecast material-change to author/reviewer/article",
-    "authorized corporate-action immutable target rebasing",
-    "complete current routine HTTP/source path, cancellation HTTP and remaining qualified-financial/rights/lease/expiry/race/legacy/caps/fullbundle acceptance"
+    "independent review of complete constructor patch before native; true persisted target baseline/action-term rebase/read/preparation/publication/current-rights/exit race",
+    "current source-fence namespace transitive/independent review and actual apply-entry negatives/raw positive; candidate not applied",
+    "complete existing bounded cache/cursor/receipt architecture with genuine exhaustive upstream28day source coverage/comparable volume contract; unknown is not zero",
+    "fiscal annual/fixed shares/complete4Q producer is implemented; current private source component proved only on c5; full job/current-reader/preparation/provider/rights native still pending",
+    "remaining qualified-financial/rights/lease/expiry/race/legacy/caps/fullbundle and current HTTP/UI/protected acceptance"
   ],
   "remainingTimeAcceptance": "2actualconsecutivecompletedpostclose sessions; no guard/clock bypass",
   "ReleaseGate": "PENDING",
   "testAdapterSource": "84a88774926b6ec1328fffd6f94a2f26919d9260",
   "latestCI": {
-    "source": "921eb0038c534e36a553ba36fdd7142c5584d8ae",
-    "ordinaryRun": 39948562267,
-    "ordinaryJob": 120397131682,
-    "conclusion": "success",
-    "build": "success",
-    "native": "forecast7PASS; source-market actual step SUCCESS, no unseen counts",
-    "browser": "UI12/current2/business2 finite metadata, raw PNG unreviewed"
+    "source": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "runtime": "a8fbdfdbf55d77d2928a9134a396091001994769",
+    "run": 39996620417,
+    "job": 120561693293,
+    "conclusion": "failure",
+    "actualPreparation": "1test0PASS1FAIL before new install; quote constructor profile omitted originalTimeZoneUTC; no current positive transferred"
   },
   "ciReceiptSha256": "cc9f361fc24d51f2920486130ffa3847b0d1c200e9267b368182bc3ce8a13aa2",
   "previousRuntimeSourceHead": "65580e2d787251c565742fb23159e8519686273c",
@@ -1078,26 +1137,44 @@
       "completeJSON": false
     }
   },
-  "actualRuntimeCommit": "0355678355541f145c85513d0db9ed5a1df60474",
+  "actualRuntimeCommit": "a8fbdfdbf55d77d2928a9134a396091001994769",
   "producerInternalBoundaries": {
-    "corporateAction": "Stored reference prices/factors are not cash/share action terms; new immutable original terms/current reader/rebase integration remains engineering, no ratio inference",
-    "annual4Q": "Existing source facts/enum periods lack durable disclosed fiscal-calendar/share basis. Need finite receipt/source/current reader/preparation/provider union; no quarterly/TTM/NTM relabeling",
+    "corporateAction": "zero-cash original-share terms and published current reader/rebase are source-implemented; explicit immutable baseline/current rights required; three-body native/config patch pending; cash/rights/total-returnCA-D1 not decided",
+    "annual4Q": "finite disclosed fiscal-calendar/fixed-share/common-income complete-period producer is source-implemented; private2original/6evidence+receipts actualc5 component only, no full current author/prep/provider or genuine issuer format coverage",
     "notOwnerOnly": true
   },
-  "currentSourceHead": "43c38c0a2ff0bc0d0b1bcdb97b33ce261655fc44",
-  "newCandidateNative": "Actual773 preparation5/3/2FAIL, inner bridge cause UNKNOWN; diagnostic1ff NOT_RUN at seal; target/current terms withdrawal NOT_REACHED; do not infer0COMMIT",
+  "currentSourceHead": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "newCandidateNative": "Current3-body install NOT_REACHED. Exact constructor patch6sourcePASS/nativeNOT_RUN. Previousc5two-body install/fiscal component positive only; overallweekend0/1 remainsFAIL.",
   "namespaceApply": "NOT_RUN; guard-only actual T/E/I is narrower; transitive/independent review pending",
   "historyScope": "Historical runs/limits and previousScopedStatus retain prior exact-source evidence; current status does not transfer them to c81.",
-  "currentProductSourceHead": "43c38c0a2ff0bc0d0b1bcdb97b33ce261655fc44",
+  "currentProductSourceHead": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
   "fiscalProducerSource": "d87d718 initial;2b071 exact closed-pair correction; native pending; original receipt498be58/finala4315e74",
-  "currentProductReceiptSha256": "2bbf8f9d162acd734efa2763bb2870ac80948f53c81f7558369fc842ece9bc04",
+  "currentProductReceiptSha256": "a82cd1dc53278f9333ae166329aed0a43d75bb07227261b17393b24dbc9deb0b",
   "latestObservedCI": {
-    "source": "e09cbd4927263d7b75063d424007f0d4fb752321",
-    "runtime": "6e1406e64325aa633d14cf4bde27642bdb209a19",
-    "run": 39988316920,
-    "job": 120533203617,
-    "status": "completed",
+    "source": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "runtime": "a8fbdfdbf55d77d2928a9134a396091001994769",
+    "run": 39996620417,
+    "job": 120561693293,
     "conclusion": "failure",
-    "scope": "actual private current-source2original/6evidence+receipts component positive, no new testPASS; overall preparation0/1weekend, no current changed-parser native result"
+    "actualPreparation": "1test0PASS1FAIL before new install; quote constructor profile omitted originalTimeZoneUTC; no current positive transferred"
+  },
+  "previousCurrentIndex": "8f70ea8552649f28210de97f08908270ac96658a:docs/operations/2026-10-22/vnext/CURRENT.json",
+  "currentSlice": {
+    "source": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "receipt": "a82cd1dc53278f9333ae166329aed0a43d75bb07227261b17393b24dbc9deb0b",
+    "wipPatchSha256": "c0c999c4aab0c978393c7aca602f3df97d527d5b5332e5898d659606ef38c097",
+    "wipNative": "HOLD_SAME_FAILURE_LIMIT_2",
+    "wipCommit": "UNCOMMITTED_EXACT_PATCH_FOR_REVIEW",
+    "evidenceReviewBranch": "codex/stockinsider-vnext-target-review-o24",
+    "countsSeparate": {
+      "reader": 11,
+      "SSR": 3,
+      "SQLSource": 6,
+      "officialRowReference": 2,
+      "closedDayGuards": 3,
+      "changedPreparation": 12
+    },
+    "realSource/model/semantic/Contabo": "NOT_RUN",
+    "independentApproval": false
   }
 }
