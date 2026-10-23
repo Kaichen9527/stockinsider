@@ -76,7 +76,7 @@ export async function preparationHttpFixture(){
   acquire_production_write_lease:{keys:['p_lease_key','p_owner_id','p_ttl_seconds'],sql:'SELECT public.acquire_production_write_lease($1,$2::uuid,$3::integer) AS result'},release_production_write_lease:{keys:['p_lease_key','p_owner_id'],sql:'SELECT public.release_production_write_lease($1,$2::uuid) AS result'},
  };
  let claim,beforeLoss,committed,prepareStartedAt;const bridge=http.createServer(async(req,res)=>{
-  sockets.add(req.socket);req.socket.once('close',()=>sockets.delete(req.socket));
+  sockets.add(req.socket);req.socket.once('close',()=>sockets.delete(req.socket));const responseStartBytes=req.socket.bytesWritten;
   try{
    if(req.headers.authorization!=='Bearer '+keys.bridge){res.writeHead(403).end();return;}
    if(req.headers['x-stockinsider-writer-release']!==releaseId)throw Error('owned_release_header_required');
@@ -116,8 +116,11 @@ export async function preparationHttpFixture(){
      const actualRefresh=(await x.observer.query("SELECT prosrc FROM pg_proc WHERE oid='public.vnext_refresh_home_v1()'::regprocedure")).rows[0].prosrc;assert.equal(actualRefresh,refresh);const select=refresh.replace(/^\s*INSERT INTO public\.vnext_home_v1\(market,members\)\s*/u,'');assert.ok(select.trimStart().startsWith('SELECT '));
      await x.observer.query('BEGIN READ ONLY');let expectedHome;try{expectedHome=(await x.observer.query('SELECT to_jsonb(expected) AS value FROM('+select+') expected(market,members)')).rows[0].value;await x.observer.query('COMMIT');}catch(error){await x.observer.query('ROLLBACK');throw error;}
      const oldVersions=new Set(beforeLoss.vnext_home_v1.rows.map(r=>r.version)),addedHomes=committed.vnext_home_v1.rows.filter(r=>!oldVersions.has(r.version));assert.deepEqual(committed.vnext_home_v1.rows.filter(r=>oldVersions.has(r.version)),beforeLoss.vnext_home_v1.rows);assert.equal(addedHomes.length,1);assert.equal(committed.vnext_home_v1.count,beforeLoss.vnext_home_v1.count+1);const home=addedHomes[0];assert.deepEqual(Object.keys(home).sort(),['version','market','members','published_at'].sort());assert.match(home.version,uuid);within(home.published_at);assert.deepEqual({market:home.market,members:home.members},expectedHome);
-     assert.equal(res.headersSent,false);
-     loss={jobId:claim.jobId,inputHash:preparation.input_hash,executionId:job.execution_id,deadline:job.deadline_at,commitReady:'I',observerVerified:true,responseBytesSent:0,scope:'owned HTTP response socket loss AFTER database COMMIT, not PG protocol loss'};x.save('prepare-before-loss',beforeLoss);x.save('prepare-committed-before-http-loss',committed);x.save('http-response-loss',loss);req.socket.destroy();return;
+     assert.equal(res.headersSent,false);assert.equal(req.socket.destroyed,false);const responseBytesSent=req.socket.bytesWritten-responseStartBytes;assert.equal(responseBytesSent,0);
+     loss={jobId:claim.jobId,inputHash:preparation.input_hash,executionId:job.execution_id,deadline:job.deadline_at,commitReady:'I',observerVerified:true,responseBytesSent,socketClosed:false,scope:'owned HTTP response socket loss AFTER database COMMIT, not PG protocol loss'};
+     x.save('prepare-before-loss',beforeLoss);x.save('prepare-committed-before-http-loss',committed);
+     let closeTimer;const closed=new Promise((resolve,reject)=>{req.socket.once('close',hadError=>resolve(hadError));closeTimer=setTimeout(()=>reject(Error('owned_loss_socket_close_unconfirmed')),5000);});
+     req.socket.destroy();try{loss.socketCloseHadError=await closed;loss.socketClosed=true;loss.socketDestroyed=req.socket.destroyed;}finally{clearTimeout(closeTimer);x.save('http-response-loss',loss);}return;
     }
    }
    res.writeHead(200,{'content-type':'application/json'}).end(JSON.stringify(result));
