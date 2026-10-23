@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-catalyst-cancellation-source-v1",
   "migration": "migrations/20261023_vnext_catalyst_cancellation_v1.sql",
-  "migrationSha256": "d24ad1cf682776cc3c4e031e754f72e2c59ed8c3de77d4306218e2110c09492e",
+  "migrationSha256": "6406312ddacd14f4df4d098bbe51529997d5ea04941dd613998484b2b6b00629",
   "nativeVerified": false,
   "nativeOid": null,
   "nativeCatalog": null,
@@ -77,8 +77,8 @@
     },
     {
       "signature": "public.vnext_cancellation_context_current_v1(uuid)",
-      "bodySha256": "bb9edf36aba6cec208c784e7747577524aa2c3bd3b4cf42d4bd8af76450ea739",
-      "bytes": 7907,
+      "bodySha256": "ad018c60e29d9384cd43ec5ebe400ec433f2258c6db642ba7812d4963d071360",
+      "bytes": 7951,
       "executeGrantees": [
         "stockinsider_vnext_owner"
       ]

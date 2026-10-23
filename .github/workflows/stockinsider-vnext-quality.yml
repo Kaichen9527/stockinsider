@@ -978,6 +978,23 @@ jobs:
           summary={'scope':'actual original-source cancellation/private proof/atomic retained publication+exit; synthetic facts/eligibility/roster/calendar, no model invocation or financial approval','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'inputs':inventory,'tapSha256':hashlib.sha256(tap).hexdigest(),'actualTapCounts':{m[1]:int(m[2]) for m in re.finditer(rb'^# (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$',tap,re.M)},'resourceObserved':False}
           # Decode finite count keys only; no private rows/principals are emitted.
           summary['actualTapCounts']={k.decode():v for k,v in summary['actualTapCounts'].items()}
+          # Finite SQL error metadata makes a caught worker uncertainty observable
+          # without exposing private source rows, principals, requests or stacks.
+          query_events=root/'catalyst-cancellation/cancellation-query-events.json'
+          if query_events.exists():
+              if query_events.is_symlink() or not query_events.is_file() or query_events.stat().st_size>8*1024*1024: raise SystemExit('bounded owned query evidence required')
+              recorded=json.loads(query_events.read_text())
+              observed=recorded['events']
+              if not isinstance(observed,list) or len(observed)>20000: raise SystemExit('bounded owned query event list required')
+              failures=[]
+              for event in observed:
+                  if 'code' not in event: continue
+                  if len(failures)>=64 or not re.fullmatch(r'[0-9A-Z]{5}',event['code']) or not re.fullmatch(r'[a-f0-9]{64}',event['sqlHash']) or event['ready'] not in ['I','E','T']: raise SystemExit('closed query error evidence required')
+                  message=event['message']
+                  if not isinstance(message,str): raise SystemExit('query error message type required')
+                  failures.append({'code':event['code'],'statementSha256':event['sqlHash'],'ready':event['ready'],'querySettled':event['querySettled'],'message':message if re.fullmatch(r'vnext_[a-z0-9_]{1,180}',message) else 'hash:'+hashlib.sha256(message.encode()).hexdigest()})
+              summary['finiteQueryErrors']=failures
+              summary['queryEventsPrivateSha256']=hashlib.sha256(query_events.read_bytes()).hexdigest()
           resource=root/'catalyst-cancellation-resource/receipt.json'
           if resource.exists():
               value=json.loads(resource.read_text())
