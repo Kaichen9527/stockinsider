@@ -1,7 +1,7 @@
 {
   "schemaVersion": "vnext-published-target-read-source-v1",
   "migration": "migrations/20261024_vnext_published_target_read_v1.sql",
-  "migrationSha256": "249685db904fa90ca1794896cb3f534df07b99a1dffbd8b8ca61ba2d8a020061",
+  "migrationSha256": "b7c0c8992c0dbd45fedaf8ddbe2a9d235b15f06a2365e819e4f51f45aad07260",
   "nativeVerified": false,
   "nativeOids": null,
   "modifiedRoutines": [
@@ -37,10 +37,28 @@
       "predecessorProconfig": [
         "search_path=pg_catalog, public"
       ]
+    },
+    {
+      "signature": "public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)",
+      "predecessorBodySha256": "f78c879d15d5e9ccce1a15207f9a0f6543e0cf10f58c51bb48ff37d664058320",
+      "predecessorBytes": 13251,
+      "successorBodySha256": "a13c35a4ed4438e3b23f94bc8c4c1cb3f2851ae57c9d5915997495073303ba1d",
+      "successorBytes": 13332,
+      "fragments": [
+        [
+          "IF (event_item->>'event_ordinal')::integer<>ordinal OR",
+          "IF jsonb_typeof(event_item->'daily_adjustment_factor') IS DISTINCT FROM 'number' OR (event_item->>'event_ordinal')::integer<>ordinal OR"
+        ]
+      ],
+      "predecessorProconfig": [
+        "search_path=pg_catalog, public",
+        "statement_timeout=30s",
+        "lock_timeout=2s"
+      ]
     }
   ],
   "catalogQuerySha256": "4398383090e87441958cdf11f0802889e33b70839d25fc30374faf3e125b62cb",
-  "scope": "source-derived only; two existing bodies, no new signature/permission/role; actual grammar/catalog/COMMIT/current published baseline/race NOT_RUN",
+  "scope": "source-derived three existing body deltas only; current/read plus finite null-adjustment rejection; no new signature/permission/role; grammar/catalog/COMMIT/current baseline/race NOT_RUN on this source",
   "predecessor": "full action terms candidate installed; complete read predecessor base+thesis projection unchanged by subsequent current-projector bodies",
   "initialNativeFailure": {
     "subject": "aa59b7d3c317d01921c1c999dab360c988b239db",

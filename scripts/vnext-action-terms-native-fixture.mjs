@@ -46,12 +46,12 @@ export async function proveActionTermsOriginals(x,call,withLease,runner,releaseI
    const session=(await x.observer.query("SELECT session_id::text AS day,session_authority_id FROM public.tw_trading_sessions_v3 WHERE market='TWSE' AND status='completed' AND close_at<=clock_timestamp() ORDER BY session_id DESC,recorded_at DESC LIMIT 1")).rows[0];assert.ok(session);
    const collected=(await x.observer.query('SELECT to_jsonb(clock_timestamp()) AS value')).rows[0].value;
    const feeds=['twse:twt49u:v1','twse:twtauu:v1','twse:twtb8u:v1'].map((name,i)=>[name,Buffer.byteLength('synthetic exact action feed '+i),hash('synthetic exact action feed '+i),i===2?1:0]);
-   const eventReference=hash(JSON.stringify(['TWSE',session.day,'2409','par_value_change',10,5,feeds[2][0]]));
+   const eventReference=hash(JSON.stringify(['corporate-action-source-row-v3.1','TWSE',session.day,'2409','par_value_change',10,5,feeds[2][0]]));
    const events=[['2409','par_value_change',10,5,feeds[2][0],eventReference]];
    const dataset=hash(JSON.stringify(['corporate-action-snapshot-v3.1','TWSE',session.day,session.session_authority_id,'tw-corporate-action-v3.1','twse',collected,feeds,events]));
    await x.writer.query("INSERT INTO public.opportunity_corporate_action_snapshots_v3(snapshot_id,exchange,session_id,session_authority_id,corporate_action_version,provider,collected_at,declared_event_count,dataset_hash) VALUES($1,'TWSE',$2,$3,'tw-corporate-action-v3.1','twse',$4,1,$5)",[snapshot,session.day,session.session_authority_id,collected,dataset]);
    for(const [i,f]of feeds.entries())await x.writer.query('INSERT INTO public.opportunity_corporate_action_feed_evidence_v3(snapshot_id,feed_ordinal,feed_identity,response_byte_count,response_sha256,parsed_row_count) VALUES($1,$2,$3,$4,$5,$6)',[snapshot,i,...f]);
-   await x.writer.query("INSERT INTO public.opportunity_corporate_action_events_v3(snapshot_id,event_ordinal,symbol,event_kind,pre_action_reference_price,post_action_reference_price,feed_identity,source_row_ref) VALUES($1,0,'2409','par_value_change',10,5,$2,$3)",[snapshot,feeds[2][0],eventReference]);
+   await x.writer.query("INSERT INTO public.opportunity_corporate_action_events_v3(snapshot_id,event_ordinal,symbol,event_kind,pre_action_reference_price,post_action_reference_price,feed_identity,source_row_ref,daily_adjustment_factor) VALUES($1,0,'2409','par_value_change',10,5,$2,$3,0.5)",[snapshot,feeds[2][0],eventReference]);
    const body='Synthetic local engineering original, NOT an actual acquired issuer.\n股票代號: 2409\n生效日期: '+session.day+'\n公司行動類型: 每股面額變更\n換發前股數: 1000\n換發後股數: 2000\n每舊股現金股利: 0\n每舊股退還現金: 0\n每舊股認購價款: 0\n計價幣別: TWD';
  const clock=async()=>(await x.observer.query('SELECT clock_timestamp()::text AS at')).rows[0].at;
  const identity=randomUUID(),sourceReviewer=randomUUID(),publisherReviewer=randomUUID();

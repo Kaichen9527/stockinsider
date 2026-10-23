@@ -1,0 +1,11 @@
+/** Executes unchanged original official row-reference formatter against actual
+ * fixture expression. Source-only, no source/DB/native authority assertion. */
+import fs from 'node:fs';import vm from 'node:vm';import {createHash} from 'node:crypto';import {createRequire} from 'node:module';import test from 'node:test';import assert from 'node:assert/strict';
+import {canonicalJson} from '../web/src/lib/opportunity-v3/canonical.ts';
+const ts=createRequire(new URL('../web/package.json',import.meta.url))('typescript');
+const source=fs.readFileSync('web/src/lib/opportunity-v3/request-values.ts','utf8');const fragment=/function sourceRowRef\([\s\S]*?\n\}/u.exec(source)[0];
+const js=ts.transpileModule(fragment,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText.trim();const official=vm.runInNewContext('('+js+')',{createHash,canonicalJson});
+const fixture=fs.readFileSync('scripts/vnext-action-terms-native-fixture.mjs','utf8'),expression=/const eventReference=(.*);/u.exec(fixture)[1];const actual=vm.runInNewContext('(hash,session,feeds)=>'+expression,{});
+const hash=v=>createHash('sha256').update(v).digest('hex');
+test('fixture event identity agrees with actual unchanged official protocol, not a local almost-same tuple',()=>{for(const day of ['2026-10-22','2026-10-23']){const expected=official({exchange:'TWSE',sessionId:day},{symbol:'2409',eventKind:'par_value_change',preActionReferencePrice:10,postActionReferencePrice:5,feedIdentity:'twse:twtb8u:v1'});assert.equal(actual(hash,{day},[['twse:twt49u:v1'],['twse:twtauu:v1'],['twse:twtb8u:v1']]),expected);assert.notEqual(expected,hash(JSON.stringify(['TWSE',day,'2409','par_value_change',10,5,'twse:twtb8u:v1'])));}});
+test('fixture supplies finite original adjustment metadata without using it as issued-share terms',()=>{assert.ok(fixture.includes('source_row_ref,daily_adjustment_factor) VALUES($1,0,\'2409\',\'par_value_change\',10,5,$2,$3,0.5)'));assert.ok(fixture.includes('換發前股數: 1000\\n換發後股數: 2000'));const target=fs.readFileSync('migrations/20261023_vnext_corporate_action_terms_v1.sql','utf8');const body=/\$successor3\$([\s\S]*?)\$successor3\$/u.exec(target)[1];assert.ok(body.includes("action_receipt->'terms'->>'newShares'"));assert.ok(!body.includes('daily_adjustment_factor'));});

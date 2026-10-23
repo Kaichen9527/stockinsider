@@ -72,6 +72,7 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/published-target-read.test.ts | tee /tmp/stockinsider-vnext-ci/published-target-read-source.tap
           node --experimental-strip-types web/src/app/components/vnext/detail-source.test.mjs | tee /tmp/stockinsider-vnext-ci/published-target-ssr-source.tap
           node scripts/vnext-published-target-read-source.test.mjs | tee /tmp/stockinsider-vnext-ci/published-target-sql-source.tap
+          node --experimental-strip-types scripts/vnext-action-row-reference.test.mjs | tee /tmp/stockinsider-vnext-ci/action-row-reference-source.tap
           node --experimental-strip-types web/src/lib/vnext/disclosed-fiscal-forecast.test.ts | tee /tmp/stockinsider-vnext-ci/disclosed-fiscal-source.tap
           node scripts/vnext-disclosed-fiscal-source.test.mjs | tee /tmp/stockinsider-vnext-ci/disclosed-fiscal-sql-source.tap
           node --experimental-strip-types web/src/lib/vnext/forecast-current.test.ts | tee /tmp/stockinsider-vnext-ci/forecast-current-source.tap
@@ -373,8 +374,8 @@ jobs:
           for line in raw.read_text().splitlines():
               if line.startswith('PUBLISHED_TARGET_PREDECESSOR_SAFE '):
                   observed=json.loads(line[len('PUBLISHED_TARGET_PREDECESSOR_SAFE '):])
-                  allowed={'public.vnext_target_current_v1(text,uuid,text)','public.vnext_read_v1(text)'}
-                  if not isinstance(observed,list) or len(observed)!=2 or {r.get('signature') for r in observed}!=allowed: raise SystemExit('closed target predecessor metadata required')
+                  allowed={'public.vnext_target_current_v1(text,uuid,text)','public.vnext_read_v1(text)','public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)'}
+                  if not isinstance(observed,list) or len(observed)!=3 or {r.get('signature') for r in observed}!=allowed: raise SystemExit('closed target predecessor metadata required')
                   for row in observed:
                       if set(row)!={'signature','bodySha256','proconfig','securityDefiner'} or row['securityDefiner'] is not True or not re.fullmatch('[a-f0-9]{64}',row['bodySha256']) or not isinstance(row['proconfig'],list) or len(row['proconfig'])>6 or any(not isinstance(v,str) or len(v)>100 for v in row['proconfig']): raise SystemExit('bounded target predecessor metadata required')
                   print('::notice title=Published target actual predecessor::'+json.dumps(observed,separators=(',',':')))
