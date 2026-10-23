@@ -211,6 +211,18 @@ jobs:
           test "$ready" = 1
           if node --experimental-strip-types scripts/vnext-cached-postgres.test.mjs > /tmp/stockinsider-vnext-ci/cached.tap.private.log 2>&1; then test_status=0; else test_status=$?; fi
           python3 scripts/vnext-safe-tap.py /tmp/stockinsider-vnext-ci/cached.tap.private.log /tmp/stockinsider-vnext-ci/cached.tap
+          if [ "$test_status" != 0 ]; then
+            python3 - <<'PYCODE'
+          import hashlib,json,pathlib,re
+          source=pathlib.Path('/tmp/stockinsider-vnext-ci/cached.tap.private.log')
+          if source.stat().st_size>8*1024*1024: raise SystemExit('bounded diagnostic required')
+          text=source.read_text()
+          item={'failedTestHashes':[hashlib.sha256(x.encode()).hexdigest() for x in re.findall(r'^\s*not ok \d+ - (.+)$',text,re.M)][:16],
+                'codes':list(dict.fromkeys(re.findall(r"^\s*code: ['\"]([A-Z0-9_]{1,40})['\"]",text,re.M)))[:16],
+                'errorLineHashes':[hashlib.sha256(x.encode()).hexdigest() for x in re.findall(r'^\s*error: (.+)$',text,re.M)][:16]}
+          print('::error title=vNext finite cached-prefix diagnostic::'+json.dumps(item,separators=(',',':')))
+          PYCODE
+          fi
           test "$test_status" = 0
           export VNEXT_HTTP_DATABASE=vnext_worker
           export VNEXT_LEGACY_SOCKET_PARENT="$VNEXT_WORKER_SOCKET_PARENT"
