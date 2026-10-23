@@ -1,0 +1,64 @@
+{
+  "migration": "migrations/20261023_vnext_forecast_active_v1.sql",
+  "migrationSha256": "949ded9b3af03e897c599f0d7a1d38ae71c08b0acce524e48d9728e205daf74a",
+  "nativeVerified": false,
+  "nativeOids": null,
+  "predecessor": {
+    "forecastProfile": "scripts/opportunity-v3/vnext-forecast-sources-profile-v1.json",
+    "sha256": "3a654237d06eff74c81b595040bde9cc884f5e3878579da3d547979ad8fdd125",
+    "requiredRoutines": [
+      {
+        "name": "vnext_forecast_rights_guard_v1",
+        "signature": "public.vnext_forecast_rights_guard_v1()",
+        "bodySha256": "6d90196a6ccaf0fdbc296ad196ae8c2525a7cd9febc504a5431d8d3322f4e414",
+        "bytes": 396
+      },
+      {
+        "name": "vnext_forecast_stock_id_internal_v1",
+        "signature": "public.vnext_forecast_stock_id_internal_v1(text)",
+        "bodySha256": "d1508916a64a8e9414dad908c730da4f7abaeb9b1e83920b7143ac6bf6283f26",
+        "bytes": 537
+      },
+      {
+        "name": "vnext_forecast_current_internal_v1",
+        "signature": "public.vnext_forecast_current_internal_v1(uuid,text,timestamp with time zone)",
+        "bodySha256": "507f6e7ffb24af6cc6a4dbd34090b79065ae566fdb3831b9a0fa3e0588268016",
+        "bytes": 12715
+      },
+      {
+        "name": "vnext_forecast_evidence_current_internal_v1",
+        "signature": "public.vnext_forecast_evidence_current_internal_v1(jsonb,text)",
+        "bodySha256": "56ceca2c904e3e00c08f424ae52cd23bc0b08e5c5a6adb4af0de8e7d4c493d5b",
+        "bytes": 485
+      },
+      {
+        "name": "vnext_forecast_read_v1",
+        "signature": "public.vnext_forecast_read_v1(text,uuid,uuid)",
+        "bodySha256": "45ba04f9632a3b5f11883326f59dce072eea2a3a7c1d49ecb4d390e8947295a8",
+        "bytes": 1080
+      },
+      {
+        "name": "vnext_forecast_input_current_internal_v1",
+        "signature": "public.vnext_forecast_input_current_internal_v1(jsonb,text)",
+        "bodySha256": "73259367f3d9383e09d704bf226b0d4856cd04ea7362f44aae978a8770584f00",
+        "bytes": 1308
+      }
+    ]
+  },
+  "newRoutine": {
+    "signature": "public.vnext_forecast_active_read_v1(text)",
+    "bodySha256": "00e8e39e8743300212ca9212a412d4bf22b62d9597a403c5209f78f02f4aa0c4",
+    "bytes": 1303,
+    "owner": "stockinsider_vnext_owner",
+    "grants": [
+      "owner EXECUTE",
+      "service_role EXECUTE"
+    ]
+  },
+  "existingBodyOrAclChanges": [],
+  "catalogCodecSource": {
+    "path": "migrations/20261023_vnext_forecast_sources_v1.sql",
+    "fragmentSha256": "4398383090e87441958cdf11f0802889e33b70839d25fc30374faf3e125b62cb"
+  },
+  "scope": "operator read, actual active membership only, same original private forecast source authority; no claim/model/prepare/budget"
+}
