@@ -492,6 +492,9 @@ jobs:
           for sha,data in verified:(public/'images'/(sha+'.png')).write_bytes(data)
           (public/'acceptance.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
           print('Browser finite summary '+json.dumps({'suite':suite,'exit':result['exit'],'stats':result.get('stats'),'cases':len(result['cases']),'screenshots':len(images)},separators=(',',':')))
+          binary=result.get('receipt',{})
+          notice={'suite':suite,'exit':result['exit'],'stats':result.get('stats'),'cases':result['cases'],'screenshots':len(images),'screenshotBytes':total,'browserVersion':binary.get('browserVersion'),'browserBinarySha256':binary.get('browserBinarySha256'),'launcherSha256':binary.get('launcherSha256'),'sourceCommit':binary.get('sourceCommit'),'requiredServerFilesSha256':binary.get('requiredServerFilesSha256'),'resourceViolation':binary.get('resourceViolation'),'sampledTreePeakRssBytes':binary.get('sampledTreePeakRssBytes'),'containmentUsed':binary.get('containmentUsed'),'publicAcceptanceSha256':hashlib.sha256((public/'acceptance.json').read_bytes()).hexdigest()}
+          print('::notice title=Browser finite binary and case receipt::'+json.dumps(notice,ensure_ascii=True,separators=(',',':')).replace('%','%25').replace('\r','%0D').replace('\n','%0A'))
           if result['exit']!=0:print('::error title=Browser finite outcome::'+json.dumps({'suite':suite,'exit':result['exit'],'stats':result.get('stats'),'failedCases':[c for c in result['cases'] if any(status!='passed' for status in c['results'])]},separators=(',',':')))
           if result['exit']!=0:raise SystemExit(result['exit'])
           PYCODE
