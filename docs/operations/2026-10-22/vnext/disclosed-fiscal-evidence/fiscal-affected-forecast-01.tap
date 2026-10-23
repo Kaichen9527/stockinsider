@@ -1,0 +1,50 @@
+(node:418573) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:418573) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/stockinsider-vnext-oct22/web/src/lib/vnext/forecast-current.test.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/stockinsider-vnext-oct22/web/package.json.
+TAP version 13
+# Subtest: actual current reader sends only authenticated execution IDs and preserves exact numeric source period
+ok 1 - actual current reader sends only authenticated execution IDs and preserves exact numeric source period
+  ---
+  duration_ms: 14.512709
+  ...
+# Subtest: wrong role fails before RPC; DB refusal has no legacy or all-null fallback
+ok 2 - wrong role fails before RPC; DB refusal has no legacy or all-null fallback
+  ---
+  duration_ms: 0.767681
+  ...
+# Subtest: unknown receipt fields, crossissuer, wrong hash, timestamp and NTM relabelling reject
+ok 3 - unknown receipt fields, crossissuer, wrong hash, timestamp and NTM relabelling reject
+  ---
+  duration_ms: 2.796787
+  ...
+# Subtest: same preparation projection freezes originals/receipts and changes its hash when source changes, never reported EPS
+ok 4 - same preparation projection freezes originals/receipts and changes its hash when source changes, never reported EPS
+  ---
+  duration_ms: 5.92186
+  ...
+# Subtest: real author and independent review normalizers consume frozen original estimates; relabelling as reported/annual/4Q fails
+ok 5 - real author and independent review normalizers consume frozen original estimates; relabelling as reported/annual/4Q fails
+  ---
+  duration_ms: 19.322585
+  ...
+# Subtest: a legitimate 12month source price target stays distinct from fair value and EPS
+ok 6 - a legitimate 12month source price target stays distinct from fair value and EPS
+  ---
+  duration_ms: 0.817461
+  ...
+# Subtest: original civil quarter, verification identity and scalar magnitude cannot be relabelled at transport
+ok 7 - original civil quarter, verification identity and scalar magnitude cannot be relabelled at transport
+  ---
+  duration_ms: 1.588917
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 65.413071

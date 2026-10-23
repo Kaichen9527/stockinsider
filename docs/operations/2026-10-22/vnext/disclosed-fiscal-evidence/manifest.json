@@ -1,0 +1,47 @@
+[
+  {
+    "path": "fiscal-affected-forecast-01.tap",
+    "bytes": 2447,
+    "sha256": "5745e741e71a5f5db095c75313163b7e7b0d8e482adb78c0fa98438643b55b30"
+  },
+  {
+    "path": "fiscal-preparation-module-02.tap",
+    "bytes": 4162,
+    "sha256": "3802ca0225ff11d4a12cdad80e74a95d1ffd3342fa65eb35a32918d6595a595a"
+  },
+  {
+    "path": "fiscal-source-final-03.tap",
+    "bytes": 3090,
+    "sha256": "c0bff66730e66405c917766467b1bc9a7130ca036eba81116a2a46e6ec6381dc"
+  },
+  {
+    "path": "fiscal-sql-final-03.tap",
+    "bytes": 1468,
+    "sha256": "0db29270a8bfb3c682c71ba1d4ad8fa450518ee6abd30984b57267323aabfe2e"
+  },
+  {
+    "path": "fragment-lineage.json",
+    "bytes": 540,
+    "sha256": "700846d332c904fa377ca45597e86c6e33f3ce498c020ff2abf342c89cc98fb6"
+  },
+  {
+    "path": "hosted-d8-temporal-observed.json",
+    "bytes": 17328,
+    "sha256": "c2969f545fe7c796fdb6e28f47877f61f878cf1e19e2b0da8598effee72f8848"
+  },
+  {
+    "path": "private-inventory.json",
+    "bytes": 14133,
+    "sha256": "43838ad2de9bcd4598738f01a384a66c62c4a24c641a011d190927ba3af1ca81"
+  },
+  {
+    "path": "source-seal.json",
+    "bytes": 616043,
+    "sha256": "0e4d8204b669a174f544fd31df6115787da33fe73eb764e4fa374908a747f32d"
+  },
+  {
+    "path": "vm-checks.json",
+    "bytes": 10618,
+    "sha256": "595a8b3e782b01e7d0d4fc3bedc4837e3758900b6aefa79ab9688a3db644abb0"
+  }
+]

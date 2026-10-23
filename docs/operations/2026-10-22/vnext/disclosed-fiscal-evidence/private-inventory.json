@@ -1,0 +1,328 @@
+{
+  "count": 63,
+  "bytes": 305370,
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-affected-forecast-01.json",
+      "bytes": 875,
+      "sha256": "81b8df2ab4f6a1a5909dce5850ebee8628572c007de01c2642edf3a6301126cf"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-affected-forecast-01.log",
+      "bytes": 2447,
+      "sha256": "5745e741e71a5f5db095c75313163b7e7b0d8e482adb78c0fa98438643b55b30"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-final-lint-02.json",
+      "bytes": 2415,
+      "sha256": "96b6c1936a7c647a0999c6e5547086b7933fd4597ac2223a42c0fce85402dbe3"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-final-lint-02.log",
+      "bytes": 235,
+      "sha256": "0f01afe313ff7d2dabdb53805b99007a51fb1feb2a9dfad76405d4facd0d1560"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-final-native-syntax-02.json",
+      "bytes": 856,
+      "sha256": "8c200ffac7e2764a54d0a8d902713fca462ef2762994207d8bdd4ff4e1bb54ad"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-final-native-syntax-02.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-final-types-04.json",
+      "bytes": 12226,
+      "sha256": "764e3812a1a7de75f38f8e85087b16af7d98511d4565e3b9fdf54184e8bfa245"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-final-types-04.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-finite-publisher-source-01.json",
+      "bytes": 834,
+      "sha256": "d430e482012cd04c08f6d49c0bad55630b09f810f08ba85981c4a7b406efd9c7"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-finite-publisher-source-01.log",
+      "bytes": 166,
+      "sha256": "c8cc251045452cef325de49873f618c75270095ef005d5994d3f8fb49cf5141f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-helper-final-syntax-02.json",
+      "bytes": 863,
+      "sha256": "ff0023ff8ab3ddd36bf113625929ecac60f09f317b3ad4e46840d6d2d9bd8b2b"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-helper-final-syntax-02.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-initial-source-red/inventory.json",
+      "bytes": 1054,
+      "sha256": "ee0898a09f7341d7fb464da55fcc24773000df44ae75dfff7566a515934368a2"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-initial-source-red/migrations/20261023_vnext_disclosed_fiscal_forecast_v1.sql",
+      "bytes": 56741,
+      "sha256": "cf89e180cadf8665988363546b55af0ebdab626b6d5f1fb2d3166b04bdbde220"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-initial-source-red/scripts/opportunity-v3/vnext-disclosed-fiscal-profile-v1.json",
+      "bytes": 9230,
+      "sha256": "a857a7b3da1bf94eed68bfe91f5ac502735b6d64065e1768bf12ce4d3cdcdf0f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-initial-source-red/scripts/vnext-disclosed-fiscal-source.test.mjs",
+      "bytes": 6223,
+      "sha256": "59535cd576ab6fa8cf5c406076c9fe4a2ea7b78c44c91d37638fa1ed773cac13"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-initial-source-red/web/src/lib/vnext/disclosed-fiscal-forecast.test.ts",
+      "bytes": 9016,
+      "sha256": "8b56209ef1f010240f0c462a3b2b79eda97d65f704bb0414161ac27b25b7eee7"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-initial-source-red/web/src/lib/vnext/disclosed-fiscal-forecast.ts",
+      "bytes": 12349,
+      "sha256": "d248768de163e6fa648ff3d2893cfc6cccbca068e0043419589c40feb8eb47a1"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-initial-source-red/web/src/lib/vnext/forecast-current.ts",
+      "bytes": 5941,
+      "sha256": "0290c8ad8a830fa453c961fe0fe14bda156bbb1dad3b25d8e5057882596e718f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-lint-01.json",
+      "bytes": 1980,
+      "sha256": "3a37a68b6374c3b4cb86993322a90647c4dd7d7e9b789b635f2b270fc4f22c75"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-lint-01.log",
+      "bytes": 235,
+      "sha256": "0f01afe313ff7d2dabdb53805b99007a51fb1feb2a9dfad76405d4facd0d1560"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-metadata-fragment-lineage.json",
+      "bytes": 540,
+      "sha256": "700846d332c904fa377ca45597e86c6e33f3ce498c020ff2abf342c89cc98fb6"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-native-syntax-01.json",
+      "bytes": 863,
+      "sha256": "4f2d9e168a76eb37e43ded665cddb9111cc75a3292e8de2ae4e0540667588f1a"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-native-syntax-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-preparation-module-02.json",
+      "bytes": 1452,
+      "sha256": "669d338b3b6e83f32a586f477a7be7e0656f5d47f27e89eefa7b24b2eae800fe"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-preparation-module-02.log",
+      "bytes": 4162,
+      "sha256": "3802ca0225ff11d4a12cdad80e74a95d1ffd3342fa65eb35a32918d6595a595a"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-preparation-module-red/web/src/lib/vnext/disclosed-fiscal-forecast.ts",
+      "bytes": 12579,
+      "sha256": "c8bfcc6b62bdbbb335aecb3368d1df618911453b5c1731213403e9ed1e207a9e"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-preparation-module-red/web/src/lib/vnext/forecast-current.ts",
+      "bytes": 5941,
+      "sha256": "0290c8ad8a830fa453c961fe0fe14bda156bbb1dad3b25d8e5057882596e718f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-preparation-module-red/web/src/lib/vnext/preparation-reconciliation.test.ts",
+      "bytes": 24302,
+      "sha256": "a2adbec218680c254371a4879cc0f4cfc7c905cd4c908f9c36126c787bd71e33"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-preparation-regression-01.json",
+      "bytes": 1452,
+      "sha256": "0ce748ac3a2dd1542ea54d91c7c6d81d7ade0e15c92979fe7997f141938bd85e"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-preparation-regression-01.log",
+      "bytes": 4773,
+      "sha256": "16ccde2e44e42c17b14beb593bf927fcfd6071db72fbbefc13fab558a4e4fc72"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-preparation-syntax-01.json",
+      "bytes": 856,
+      "sha256": "b12d15e4d6583e5a02f6f17c26509315d8b9bb67f36c5b6b8ea9c2d4f35f3120"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-preparation-syntax-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-source-before-final-checks.json",
+      "bytes": 1750,
+      "sha256": "5c5a2f154bc6668dee6f3d3ccca3a3413697339d9632802e2c46cd5d83ce6929"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-source-final-03.json",
+      "bytes": 886,
+      "sha256": "9169479256302dfeead723cb8ffaa24498954456b93d1e96687857cadb3bc1fe"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-source-final-03.log",
+      "bytes": 3090,
+      "sha256": "c0bff66730e66405c917766467b1bc9a7130ca036eba81116a2a46e6ec6381dc"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-source-fixed-02.json",
+      "bytes": 884,
+      "sha256": "c40112ae5de545679f8059f8b2169ea17621f45e3e07ddef959ad848b36844c4"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-source-fixed-02.log",
+      "bytes": 2866,
+      "sha256": "373d4c51b84969b1b56e775199fae2b868412811dc76834d419e349647503259"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-source-initial-01.json",
+      "bytes": 926,
+      "sha256": "bd07435d346a9beeef2d8671e843bce68aea89af70cae2d29a0be08946660cc9"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-source-initial-01.log",
+      "bytes": 279,
+      "sha256": "ab2219c9aa96e21780d14c75e5aa655fa8e25bd2c510c62b7f256e02c886de91"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-sql-final-03.json",
+      "bytes": 845,
+      "sha256": "36988f50add32fef6ef6f5250ef6a2746f76f0907e2dc093394e29f1cb2a5645"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-sql-final-03.log",
+      "bytes": 1468,
+      "sha256": "0db29270a8bfb3c682c71ba1d4ad8fa450518ee6abd30984b57267323aabfe2e"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-sql-literal-fragments-02.json",
+      "bytes": 847,
+      "sha256": "bb6f46e1404ab81c91eb48d8609fe20a646f8bb7fc28acd63870f517db34ff9c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-sql-literal-fragments-02.log",
+      "bytes": 1468,
+      "sha256": "48f44810c77f5bb61c9a9a6b4cfe0e75e571d5d5c8946ebee908ef861b06eb23"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-sql-root-diagnostic-01.json",
+      "bytes": 845,
+      "sha256": "c9d16ad415afc3350a90f5393c0345c7469339225839b01b9c9dd87df22812af"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-sql-root-diagnostic-01.log",
+      "bytes": 7228,
+      "sha256": "77734c4f53dec53f51c8cf8136a80e7517b2f851611d55d4a09f45f19d814bc5"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-sql-source-initial-01.json",
+      "bytes": 889,
+      "sha256": "08b8a6ed15edd7a83cb67ebf50584d4c2e285ba0aee38dbb0e00533ac0091e40"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-sql-source-initial-01.log",
+      "bytes": 481,
+      "sha256": "d8384a8d4ef250c1401e5065a59f18c2e488a8f7093058cddfc3624b7174f4b1"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-types-final-03.json",
+      "bytes": 15615,
+      "sha256": "bd1506df0af798a4682b2fe24e4a1aa768d54e3b454f4d8d2aa31e235a972d61"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-types-final-03.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-types-fixed-02.json",
+      "bytes": 13559,
+      "sha256": "e824058e4e14986207281d0cbc9912ce54c602f920f28c15b9d13148026312c6"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-types-fixed-02.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-types-initial-01.json",
+      "bytes": 11850,
+      "sha256": "d755c56e1dead541b3c424d725befd6127744929221b5eaa76745823a0e94cc2"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-types-initial-01.log",
+      "bytes": 5634,
+      "sha256": "0b023c343f7d3df002de7103a237aeac3282207917cf1810317d5ead71abe7d9"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-workflow-publisher-source-check.py",
+      "bytes": 1339,
+      "sha256": "d9976d77600c49a07dc5d129cf01cf7fa0f95c8fa5c6f83d316a198397ccf534"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-workflow-source-01.json",
+      "bytes": 824,
+      "sha256": "77bd893674b462cdbed677b9409b1179fc5bd1261b260aec3a1ff15cbee599f9"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-workflow-source-01.log",
+      "bytes": 294,
+      "sha256": "97241f267f0e6bb0f49bbb08e7a487545e630b22506c29c9e2974949128505da"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/build-fiscal-candidate.py",
+      "bytes": 28443,
+      "sha256": "1fda6cbf093ef5ddf42c0ac39cf09ca7af808cc141e7463398e033ba61641c60"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-d8-runs-01.json",
+      "bytes": 1573,
+      "sha256": "acbbe4f17fc28902737e71f7b48d95d0ec08653c65e55a1b0abef233ebfb0f08"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-d8-jobs-01.json",
+      "bytes": 7442,
+      "sha256": "6fbb5eb65b11fbcaaa85289e9e101ead46b0107cae1759cce5a7984f65ff431c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-d8-checks-01.json",
+      "bytes": 376,
+      "sha256": "7f9c1131b805990c52132cddbf7c130951b69829e4754f440d40b64ecc846ae7"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-d8-annotations-01.json",
+      "bytes": 12864,
+      "sha256": "e2b1566c69c33099e1305554e502637e06c1682810da5af15ccbea91a32f25a9"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/action-d8-runtime-git-01.json",
+      "bytes": 199,
+      "sha256": "79fc428bd2235f622a7b045f27dacddb73d8100face7d807afa550b224cccce9"
+    }
+  ],
+  "scope": "owned local source/check/tooling raw and exact initial RED copies; remote private native rows/TAP/PNGs not obtained",
+  "retainedRed": [
+    "fiscal-types-initial-01: TS2352/2737/18046, corrected by actual narrow/constructor/mock type fix, not target downgrade",
+    "fiscal-sql-source-initial-01: generic child failure; bounded direct diagnostic4PASS1FAIL exposes JS replacement-string metacharacter interpretation of SQL regex dollar; source scanner fixed to literal callbacks, SQL/oracle unchanged",
+    "fiscal-preparation-regression-01:11PASS1FAIL due isolated loader rejecting new pure module; exact allowlist addition restores required200, no assertion weakening"
+  ],
+  "sameFailurePolicy": "second direct invocation only bounded root diagnostic after opaque child TAP; same immutable initial source preserved, then known literal-extractor correction. Not an unchanged native rerun or a permission exception."
+}
