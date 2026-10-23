@@ -104,7 +104,36 @@ jobs:
         working-directory: web
         run: ./node_modules/.bin/playwright install --with-deps chromium
       - name: Run diagnostic product/runtime suite (not authoritative Code Gate evidence)
-        run: npm run diagnostic:source-led-opportunity-v3:product-runtime
+        run: |
+          # Preserve the exact diagnostic command/exit; emit only bounded safe
+          # failure metadata because raw job-log downloads may be unavailable.
+          diagnostic_log="$(mktemp /tmp/stockinsider-product-runtime.XXXXXX)"
+          set +e
+          npm run diagnostic:source-led-opportunity-v3:product-runtime 2>&1 | tee "$diagnostic_log"
+          statuses=("${PIPESTATUS[@]}")
+          set -e
+          if [ "${statuses[0]}" != 0 ]; then
+            python3 - "$diagnostic_log" <<'PYCODE'
+          import pathlib,json,re,sys,hashlib
+          path=pathlib.Path(sys.argv[1])
+          if not path.is_file() or path.is_symlink() or path.stat().st_size>16*1024*1024:
+              print('::error title=Product diagnostic stage::bounded log unavailable')
+              raise SystemExit(0)
+          scripts=json.loads(pathlib.Path('package.json').read_text())['scripts']
+          last=None;failed=[];codes=set()
+          for line in path.read_text(errors='replace').splitlines():
+              match=re.fullmatch(r'> ([a-zA-Z0-9:_-]{1,120})',line)
+              if match and match[1] in scripts:last=match[1]
+              match=re.match(r'\s*not ok [0-9]+ - (.+)',line)
+              if match and len(failed)<30:failed.append(hashlib.sha256(match[1].encode()).hexdigest())
+              match=re.fullmatch(r"\s*code: '?([A-Z0-9_]{4,40})'?",line)
+              if match:codes.add(match[1])
+          safe={'lastNpmScript':last,'failedTestNameSha256':failed,'codes':sorted(codes)[:30],'scope':'diagnostic metadata only; original failure preserved'}
+          print('::error title=Product diagnostic stage::'+json.dumps(safe,separators=(',',':')))
+          PYCODE
+          fi
+          test "${statuses[1]}" = 0
+          exit "${statuses[0]}"
 
   evaluation-governance:
     if: github.event_name == 'workflow_dispatch'

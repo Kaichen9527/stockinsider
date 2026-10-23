@@ -23,7 +23,7 @@ const key = randomBytes(32).toString('hex'), operatorKey = randomBytes(32).toStr
 const operator = 'synthetic-worker-operator', author = 'synthetic-worker-author';
 const stage=process.env.VNEXT_HTTP_STAGE??'fresh';if(!['fresh','resume-prior-session-fk'].includes(stage))throw Error('closed_http_recovery_stage_required');
 const trace = []; let pending = 0; const releaseId='a'.repeat(40);
-const functions={vnext_target_command_v1:{keys:['p_principal','p_request'],sql:'SELECT public.vnext_target_command_v1($1,$2::jsonb) AS result'},vnext_cached_admission_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_cached_admission_v1($1,$2,$3::jsonb) AS result'},vnext_source_withdrawal_v1:{keys:['p_principal','p_operation','p_request'],sql:'SELECT public.vnext_source_withdrawal_v1($1,$2,$3::jsonb) AS result'},vnext_thesis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_thesis_command_v1($1,$2,$3::jsonb) AS result'},vnext_analysis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_analysis_command_v1($1,$2,$3::jsonb) AS result'},vnext_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_command_v1($1,$2,$3::jsonb) AS result'},vnext_read_v1:{keys:['p_symbol'],sql:'SELECT public.vnext_read_v1($1) AS result'},acquire_production_write_lease:{keys:['p_lease_key','p_owner_id','p_ttl_seconds'],sql:'SELECT public.acquire_production_write_lease($1,$2::uuid,$3::integer) AS result'},release_production_write_lease:{keys:['p_lease_key','p_owner_id'],sql:'SELECT public.release_production_write_lease($1,$2::uuid) AS result'}};
+const functions={read_financial_facts_for_stocks_as_of:{keys:['p_cutoff','p_stock_ids'],sql:'SELECT * FROM public.read_financial_facts_for_stocks_as_of($1::timestamptz,$2::uuid[]) LIMIT 10000',setReturning:true},vnext_target_command_v1:{keys:['p_principal','p_request'],sql:'SELECT public.vnext_target_command_v1($1,$2::jsonb) AS result'},vnext_cached_admission_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_cached_admission_v1($1,$2,$3::jsonb) AS result'},vnext_source_withdrawal_v1:{keys:['p_principal','p_operation','p_request'],sql:'SELECT public.vnext_source_withdrawal_v1($1,$2,$3::jsonb) AS result'},vnext_thesis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_thesis_command_v1($1,$2,$3::jsonb) AS result'},vnext_analysis_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_analysis_command_v1($1,$2,$3::jsonb) AS result'},vnext_command_v1:{keys:['p_principal','p_command','p_request'],sql:'SELECT public.vnext_command_v1($1,$2,$3::jsonb) AS result'},vnext_read_v1:{keys:['p_symbol'],sql:'SELECT public.vnext_read_v1($1) AS result'},acquire_production_write_lease:{keys:['p_lease_key','p_owner_id','p_ttl_seconds'],sql:'SELECT public.acquire_production_write_lease($1,$2::uuid,$3::integer) AS result'},release_production_write_lease:{keys:['p_lease_key','p_owner_id'],sql:'SELECT public.release_production_write_lease($1,$2::uuid) AS result'}};
 const bridge = http.createServer(async (req, res) => {
   const chunks = []; let length = 0;
   for await (const chunk of req) { length += chunk.length; if (length > 1048576) { res.writeHead(413).end(); return; } chunks.push(chunk); }
@@ -55,7 +55,8 @@ const bridge = http.createServer(async (req, res) => {
       if(String(req.headers.accept).includes('application/vnd.pgrst.object+json')){if(result.rows.length>1)throw Error('closed_single');res.end(JSON.stringify(result.rows[0]||null));}else res.end(JSON.stringify(result.rows));
     }catch(e){res.writeHead(400).end(JSON.stringify({message:e.message,code:e.code}));}finally{await c.end();pending--;}return;
   }
-  const name=req.url.startsWith('/rest/v1/rpc/')?req.url.slice('/rest/v1/rpc/'.length):'';const definition=functions[name];
+  const rpcURL=new URL(req.url,'http://127.0.0.1');const name=rpcURL.pathname.startsWith('/rest/v1/rpc/')?rpcURL.pathname.slice('/rest/v1/rpc/'.length):'';const definition=functions[name];
+  if([...rpcURL.searchParams.keys()].some(k=>name!=='read_financial_facts_for_stocks_as_of'||k!=='limit')||rpcURL.searchParams.has('limit')&&rpcURL.searchParams.get('limit')!=='10000'){res.writeHead(400).end();return;}
   if(req.method!=='POST'||!definition){res.writeHead(403).end('{"message":"owned_test_transport_scope"}');return;}
   let body;try{body=JSON.parse(Buffer.concat(chunks).toString());}catch{res.writeHead(400).end();return;}
   if(Object.keys(body).some(k=>!definition.keys.includes(k))){res.writeHead(400).end();return;}
@@ -66,7 +67,7 @@ const bridge = http.createServer(async (req, res) => {
     await c.query("SELECT set_config('request.headers',$1,true),set_config('request.jwt.claims',$2,true)",[JSON.stringify({'x-stockinsider-writer-release':req.headers['x-stockinsider-writer-release']}),JSON.stringify({role:'service_role'})]);
     const actual=await c.query(definition.sql,definition.keys.map(k=>k==='p_request'?JSON.stringify(body[k]):body[k]));
     await c.query('COMMIT');trace.push({rpc:name,action:body.p_command,requestHash:sha(JSON.stringify(body)),commitObserved:true,actualServiceRole:true});
-    res.end(JSON.stringify(actual.rows[0].result));
+    res.end(JSON.stringify(definition.setReturning?actual.rows:actual.rows[0].result));
   } catch (e) {
     await c.query('ROLLBACK'); trace.push({ action: body.p_command, code: e.code, message: e.message, rollbackSettled: true });
     res.writeHead(400).end(JSON.stringify({ message: e.message, code: e.code }));
