@@ -1,0 +1,56 @@
+{
+  "count": 10,
+  "bytes": 6153,
+  "files": [
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-component-helper-syntax-01.json",
+      "bytes": 865,
+      "sha256": "355284d3bf897f5164d85f274f6a0232563d05eb90227baf96f699f2abad8638"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-component-helper-syntax-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-component-preparation-syntax-01.json",
+      "bytes": 858,
+      "sha256": "efb84d487ecea6b93527223beb2baf4bf292147d7e88375539ccf0b6d3c26e81"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-component-preparation-syntax-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-component-sql-source-01.json",
+      "bytes": 845,
+      "sha256": "4570720880851682c42d26668d0e4cc5dd9494e21d5eb022ba86aa1fb78485e3"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-component-sql-source-01.log",
+      "bytes": 1467,
+      "sha256": "094f7deecc49143fa0a7c1d8d0c67f0df579afe689e926bfcbbbdb5705729430"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-component-publisher-source-01.json",
+      "bytes": 834,
+      "sha256": "dbd3fbb8fcab231a11b626e5a49c3a09e9adae874f3c2ec06200bc636558a02c"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-component-publisher-source-01.log",
+      "bytes": 166,
+      "sha256": "c8cc251045452cef325de49873f618c75270095ef005d5994d3f8fb49cf5141f"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-component-workflow-source-01.json",
+      "bytes": 824,
+      "sha256": "3ff822965daee701f68e8026ccfd555a03ca5acee0f416c3c17b758fd00cacc6"
+    },
+    {
+      "path": "/tmp/stockinsider-vnext-oct22-private/fiscal-component-workflow-source-01.log",
+      "bytes": 294,
+      "sha256": "97241f267f0e6bb0f49bbb08e7a487545e630b22506c29c9e2974949128505da"
+    }
+  ]
+}

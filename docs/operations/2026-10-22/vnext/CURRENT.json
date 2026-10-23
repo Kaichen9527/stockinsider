@@ -1,8 +1,8 @@
 {
   "status": "PARTIAL_ENGINEERING_ACCEPTANCE_DRAFT_NOT_RELEASED",
-  "updatedAt": "2026-10-23T16:31:20.326918+00:00",
+  "updatedAt": "2026-10-23T16:37:05.069964+00:00",
   "runtimeSourceHead": "d8c8acf91baab7d408ddb46fcebb0bc38bbc02e0",
-  "currentReceiptSha256": "a4315e742d766a059bfccffe15579375dcbbff9bf32e13b5753076035fcdabd4",
+  "currentReceiptSha256": "c493e6eaa1e236d847b262e63419fb41e59346daaf3113ae8f07af30e6a2b55c",
   "PR": "https://github.com/Kaichen9527/stockinsider/pull/384",
   "primaryReport": "STATUS.md",
   "historicalMatrices": "evidence/summary.json=6410; allmilestone receipts retain exactsubjects, no results added acrossversions",
@@ -1064,10 +1064,18 @@
     "annual4Q": "Existing source facts/enum periods lack durable disclosed fiscal-calendar/share basis. Need finite receipt/source/current reader/preparation/provider union; no quarterly/TTM/NTM relabeling",
     "notOwnerOnly": true
   },
-  "currentSourceHead": "2b071a56c06b900c0a4001838bb25290dc518f7d",
+  "currentSourceHead": "34f2d24d86ab1259466f488ba0a574b166e7fc0b",
   "newCandidateNative": "Actual773 preparation5/3/2FAIL, inner bridge cause UNKNOWN; diagnostic1ff NOT_RUN at seal; target/current terms withdrawal NOT_REACHED; do not infer0COMMIT",
   "namespaceApply": "NOT_RUN; guard-only actual T/E/I is narrower; transitive/independent review pending",
   "historyScope": "Historical runs/limits and previousScopedStatus retain prior exact-source evidence; current status does not transfer them to c81.",
-  "currentProductSourceHead": "c81e6fe916b3f0b5983495d02b4cdcf62cf2d170",
-  "fiscalProducerSource": "d87d718 initial;2b071 exact closed-pair correction; native pending; original receipt498be58/finala4315e74"
+  "currentProductSourceHead": "2b071a56c06b900c0a4001838bb25290dc518f7d",
+  "fiscalProducerSource": "d87d718 initial;2b071 exact closed-pair correction; native pending; original receipt498be58/finala4315e74",
+  "currentProductReceiptSha256": "a4315e742d766a059bfccffe15579375dcbbff9bf32e13b5753076035fcdabd4",
+  "latestObservedCI": {
+    "source": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+    "run": 39987532053,
+    "status": "in_progress",
+    "conclusion": null,
+    "scope": "single bounded read, not a new-harness result"
+  }
 }

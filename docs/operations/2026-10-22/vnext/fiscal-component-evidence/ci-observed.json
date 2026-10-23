@@ -1,0 +1,70 @@
+{
+  "source": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+  "readOnce": [
+    {
+      "check_suite_id": 108387119738,
+      "conclusion": null,
+      "head_sha": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+      "id": 39987532315,
+      "name": "Source-led opportunity V3",
+      "status": "in_progress"
+    },
+    {
+      "check_suite_id": 108387119116,
+      "conclusion": null,
+      "head_sha": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+      "id": 39987532053,
+      "name": "StockInsider vNext isolated quality",
+      "status": "in_progress"
+    },
+    {
+      "check_suite_id": 108387119520,
+      "conclusion": "success",
+      "head_sha": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+      "id": 39987532206,
+      "name": "PTT mention provenance diagnostics",
+      "status": "completed"
+    },
+    {
+      "check_suite_id": 108387119824,
+      "conclusion": "success",
+      "head_sha": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+      "id": 39987532342,
+      "name": "Financial installation quality diagnostics",
+      "status": "completed"
+    },
+    {
+      "check_suite_id": 108387119652,
+      "conclusion": "success",
+      "head_sha": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+      "id": 39987532251,
+      "name": "Candidate discovery quality diagnostics",
+      "status": "completed"
+    },
+    {
+      "check_suite_id": 108387119826,
+      "conclusion": "success",
+      "head_sha": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+      "id": 39987532338,
+      "name": "Financial document write lease quality diagnostics",
+      "status": "completed"
+    },
+    {
+      "check_suite_id": 108387119727,
+      "conclusion": "success",
+      "head_sha": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+      "id": 39987532290,
+      "name": "Research publication tail quality diagnostics",
+      "status": "completed"
+    },
+    {
+      "check_suite_id": 108387111222,
+      "conclusion": "failure",
+      "head_sha": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+      "id": 39987529116,
+      "name": "Source-led opportunity V3 protected gate root",
+      "status": "completed"
+    }
+  ],
+  "scope": "actual ordinary run metadata was in_progress; no terminal conclusion at seal; results do not transfer to new harness"
+}

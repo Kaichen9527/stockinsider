@@ -1,0 +1,27 @@
+[
+  {
+    "path": "boundary-parity.json",
+    "bytes": 415,
+    "sha256": "3966845d2fa11d042cb82171d2b72681b99511abd347ced87bd8d6420b3ff74c"
+  },
+  {
+    "path": "checks.json",
+    "bytes": 3807,
+    "sha256": "06349199235a28a4fb53c3352e3b23f6b6f3d576ffe3224c0fee43ef623ab8de"
+  },
+  {
+    "path": "ci-observed.json",
+    "bytes": 2239,
+    "sha256": "756f647edc520d632185b26ef2a95d4337c760bb845613dc4882a70efa2eacc1"
+  },
+  {
+    "path": "private-inventory.json",
+    "bytes": 2158,
+    "sha256": "2653f7006731c3cf5f30e7e415ef5be8660c50527fe40eb6ea6be1d8dcd20011"
+  },
+  {
+    "path": "source-seal.json",
+    "bytes": 1088,
+    "sha256": "3745509bda6389c0e836c48b5d5a640fe7c8cb55e243d2bdb3c24cd0f0d4f3a1"
+  }
+]

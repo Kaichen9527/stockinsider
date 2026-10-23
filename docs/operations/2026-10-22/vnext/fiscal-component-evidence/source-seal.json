@@ -1,0 +1,26 @@
+{
+  "source": "34f2d24d86ab1259466f488ba0a574b166e7fc0b",
+  "productSource": "2b071a56c06b900c0a4001838bb25290dc518f7d",
+  "productReceiptSha256": "a4315e742d766a059bfccffe15579375dcbbff9bf32e13b5753076035fcdabd4",
+  "parent": "d63c171fdd5b45c78ea33b638f8c5a9c0796881b",
+  "files": [
+    {
+      "path": ".github/workflows/stockinsider-vnext-quality.yml",
+      "bytes": 119697,
+      "sha256": "f80d791a1349d7fd6b8117f07b91fb737c5d16c4fda991c81a424c7bc93f22ef"
+    },
+    {
+      "path": "scripts/vnext-disclosed-fiscal-native-fixture.mjs",
+      "bytes": 16348,
+      "sha256": "13bdd5d125296e44a1d7f67b63c5b314c01f17c45d672aac419b40d10be5bc5e"
+    },
+    {
+      "path": "scripts/vnext-preparation-http-fixture.mjs",
+      "bytes": 64532,
+      "sha256": "3e15a5e2def996263dbf76d24f989c60e7a2c047333b102ccc3879a6a9534145"
+    }
+  ],
+  "allTS_SQL_Profiles_OldGuardsUnchanged": true,
+  "newNative": "NOT_RUN at seal",
+  "scope": "new read-only private-owner component observation before unchanged fatal business calendar admission; no business pass/author read/prepare/provider claim"
+}
