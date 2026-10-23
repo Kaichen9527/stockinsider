@@ -8,8 +8,9 @@ import {roles,binding,input,authorOutput,reviewerOutput,day,now,ids} from './vne
 import {runResearchWorker} from '../web/src/lib/vnext/worker-core.ts';
 import {extractContentBatch} from '../web/src/lib/vnext/permitted-content.ts';
 import {auditThesisCycle} from '../web/src/lib/vnext/thesis-cycle.ts';
+import {auditPublishedThesis} from '../web/src/lib/vnext/thesis-audit.ts';
 import {inputHash} from '../web/src/lib/vnext/policy.ts';
-import {initialFactors} from '../web/src/lib/vnext/factors.ts';
+import {initialFactors,deepFactors} from '../web/src/lib/vnext/factors.ts';
 await test('actual thesis audit, current-source closure and durable retry budget',{timeout:240000},async t=>{
  const x=await workerFixture();const providerCalls=[],extraEvents=[];let sourceEvidence,rateLimit=false;
  const step=async(name,work)=>{let failed=false;await t.test(name,async()=>{try{await work();}catch(e){failed=true;throw e;}});if(failed)throw Error('dependent_thesis_stage_failed');};
@@ -35,9 +36,40 @@ await test('actual thesis audit, current-source closure and durable retry budget
   await step('actual all-active audit persists separate deep evidence; corrected new fact IDs cause substantive drift',async()=>{
    const context=await thesis('context',{});assert.equal(context.members.length,2);const cutoff=new Date().toISOString();
    const inputs=context.members.map(m=>{const p=m.publication;const original=p.originalEvidence.evidence;const current=original.map(e=>e.id===ids.cfo?{...e,id:'00000000-0000-4000-8000-000000000099',value:200,contentHash:hash('synthetic-corrected-cfo200')}:e);return {symbol:m.symbol,inputHash:m.inputHash,revisionId:p.revision_id,publishedInputHash:p.input_hash,artifact:p.content,review:p.review,original,current,newContent:[],quote:{close:20,session:day,source:'https://www.twse.com.tw/synthetic-audit-price',adjusted:true,volume:1000,ma20:18,ma60:17,volumeRatio:1.1,institutionalFlow:1},cutoff,market:{risk:'selective',snapshotHash:'b'.repeat(64)},previousMarketHash:'b'.repeat(64),tradingValid:true};});
+   // Intentionally reproduce an old, structurally accepted but unsupported
+   // scalar-semantic score BEFORE installing the correction. This fixture's
+   // private current session is explicitly synthetic/completed; it is not a
+   // real premarket close or two-session calendar acceptance.
+   const correctReports=inputs.map(auditPublishedThesis),oldWrongReports=structuredClone(correctReports);
+   oldWrongReports[0].deepInputs.catalystChecklist.checks=oldWrongReports[0].deepInputs.catalystChecklist.checks.map(check=>({...check,met:true,provenance:['synthetic-unrelated-numeric-one']}));
+   oldWrongReports[0].deepScore=deepFactors(oldWrongReports[0].deepInputs);
+   await thesis('record',{reports:oldWrongReports});
+   const oldPublic=await publicRead(null),wrongSymbol=oldWrongReports[0].symbol;
+   assert.equal(oldPublic.members.find(m=>m.symbol===wrongSymbol).deepScore.confirmedPoints,oldWrongReports[0].deepScore.confirmedPoints);
+   assert.ok(oldWrongReports[0].deepScore.confirmedPoints>correctReports[0].deepScore.confirmedPoints);
+   const oldRaw=await x.snapshot();const semanticFile='migrations/20261022_vnext_semantic_score_fence_v1.sql',semanticBytes=fs.readFileSync(semanticFile);
+   const candidateReady=new Promise(resolve=>x.writer.connection.once('readyForQuery',m=>resolve(m.status)));
+   await x.writer.query(semanticBytes.toString());assert.equal(await candidateReady,'I');
+   assert.deepEqual(await x.snapshot(),oldRaw);
+   const recalculated=await publicRead(null);
+   assert.equal(recalculated.members.find(m=>m.symbol===wrongSymbol).deepScore.confirmedPoints,correctReports[0].deepScore.confirmedPoints);
+   assert.ok(recalculated.members.every(m=>m.sourceRights.current));
+   const sorted=[...recalculated.members].sort((a,b)=>(b.deepScore.confirmedPoints-a.deepScore.confirmedPoints)||(b.deepScore.availableWeight-a.deepScore.availableWeight)||(b.initialScore.confirmedPoints-a.initialScore.confirmedPoints)||String(b.eventAt).localeCompare(String(a.eventAt))||a.symbol.localeCompare(b.symbol));
+   assert.deepEqual(recalculated.members.map(m=>m.symbol),sorted.map(m=>m.symbol));
+   assert.deepEqual(await x.snapshot(),oldRaw);
+   x.save('semantic-current-public-recalculation',{migration:{path:semanticFile,bytes:semanticBytes.length,sha256:hash(semanticBytes)},oldPublic,recalculated,oldRaw,originalRowsUnchanged:true,oldWrongReportPreserved:true,scope:'fresh captured fixture actual service-role report/public READ and full correction COMMIT; private synthetic completed session, not official clock/time acceptance'});
    const result=await auditThesisCycle(inputs,{record:reports=>thesis('record',{reports})});assert.equal(result.reviewed,2);assert.ok(result.reports.every(r=>r.materialChanged && r.claimChecks.some(c=>c.status==='drift'&&c.changed.some(d=>d.currentId.endsWith('0099')))));assert.ok(result.reports.every(r=>r.deepScore.availableWeight>0 && r.deepScore.availableWeight<100));
    const home=await publicRead(null);assert.equal(home.members.length,2);assert.ok(home.members.every(m=>m.initialScore && m.deepScore && m.sourceRights.current));x.save('thesis-audit',{inputs,result,home});
-   const before=await x.snapshot();const wrong=structuredClone(result.reports);wrong[0].deepScore.confirmedPoints+=1;await rpc('vnext_thesis_command_v1','record',{reports:wrong},/vnext_thesis_fixed_deep_score_mismatch/u);assert.deepEqual(await x.snapshot(),before);
+   const before=await x.snapshot();assert.deepEqual(before.vnext_thesis_audits_v1,oldRaw.vnext_thesis_audits_v1);const wrong=structuredClone(result.reports);wrong[0].deepScore.confirmedPoints+=1;await rpc('vnext_thesis_command_v1','record',{reports:wrong},/vnext_thesis_fixed_deep_score_mismatch/u);assert.deepEqual(await x.snapshot(),before);
+   // Direct service-role SQL must not accept arbitrary numeric/Boolean catalyst
+   // assertions even if the generic pure arithmetic can sum those15points.
+   const scalarSemantic=structuredClone(result.reports);
+   scalarSemantic[0].deepInputs.catalystChecklist.checks=scalarSemantic[0].deepInputs.catalystChecklist.checks.map(check=>({...check,met:true,provenance:['synthetic-unrelated-numeric-one']}));
+   scalarSemantic[0].deepScore=deepFactors(scalarSemantic[0].deepInputs);
+   assert.ok(scalarSemantic[0].deepScore.confirmedPoints>result.reports[0].deepScore.confirmedPoints);
+   await rpc('vnext_thesis_command_v1','record',{reports:scalarSemantic},/vnext_thesis_fixed_deep_score_mismatch/u);
+   assert.deepEqual(await x.snapshot(),before);
+   x.save('semantic-record-rejection',{actualServiceRole:true,unsupportedScalarSemanticRejected:true,wholeStateUnchanged:true,source:'new semantic fence installed through fresh prerequisite path; synthetic numeric assertions, not semantic review'});
   });
   await step('read-rights withdrawal blocks current replay and worker dispatch while immutable history remains exact',async()=>{
    const before=await x.snapshot();const calls=providerCalls.length;await x.writer.query("UPDATE public.vnext_source_policies_v1 SET enabled=false WHERE source='official'");const revoked=await x.snapshot();
