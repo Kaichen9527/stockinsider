@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "vnext-trading-invalidity-source-v1",
+  "migration": "migrations/20261023_vnext_trading_invalidity_exit_v1.sql",
+  "migrationSha256": "6c904052b5994dc02fe047dcedf95ae64498df489824d08a7b11b62a1685d59f",
+  "nativeVerified": false,
+  "nativeOids": null,
+  "catalogMetadata": null,
+  "routines": [
+    {
+      "signature": "public.vnext_command_v1(text,text,jsonb)",
+      "predecessorBodySha256": "63f40aa176395df6a06dc7a50875e251f90714545fd20670b2e34eb39438f016",
+      "successorBodySha256": "c2df728571a9b9914f87acc6cead6d444af2ea0c638e058db50da4bc74ef146c",
+      "predecessorBytes": 42088,
+      "successorBytes": 42827,
+      "fragments": [
+        [
+          " ELSIF p_command='exit' THEN\n",
+          " ELSIF p_command='exit' THEN\n  IF r->>'reason'='trading_invalid' THEN\n   IF jsonb_typeof(r->'tradingInvalidityProof') IS DISTINCT FROM 'object' OR jsonb_typeof(r->'tradingInvalidityProof'->'inputHash') IS DISTINCT FROM 'string' OR coalesce(r->'tradingInvalidityProof'->>'inputHash','') !~ '^[a-f0-9]{64}$' THEN RAISE EXCEPTION 'vnext_trading_invalid_current_authority_required';END IF;\n   IF public.vnext_trading_invalid_current_v1(r->>'symbol',r->'tradingInvalidityProof'->>'inputHash') IS DISTINCT FROM r->'tradingInvalidityProof' OR NOT(r->'tradingInvalidityProof' ? 'proofHash') OR r->'evidence' IS DISTINCT FROM jsonb_build_array(r->'tradingInvalidityProof'->>'proofHash') THEN RAISE EXCEPTION 'vnext_trading_invalid_current_authority_required';END IF;\n  END IF;\n"
+        ]
+      ],
+      "args": "25 25 3802",
+      "names": [
+        "p_principal",
+        "p_command",
+        "p_request"
+      ],
+      "config": [
+        "search_path=pg_catalog, public"
+      ]
+    },
+    {
+      "signature": "public.vnext_target_command_v1(text,jsonb)",
+      "predecessorBodySha256": "e5601edb1d3d49a607bb4a66c18c0de165bf3d7c45e3e655bf035660df105472",
+      "successorBodySha256": "dd7f1409efbafe0e6fa308c39580cd66838238879c0b6787ab22c7ab6adc1bea",
+      "predecessorBytes": 1890,
+      "successorBytes": 2458,
+      "fragments": [
+        [
+          "observations jsonb:='[]'::jsonb;",
+          "observations jsonb:='[]'::jsonb; invalidity jsonb;"
+        ],
+        [
+          "  SELECT * INTO pub FROM public.vnext_publications_v1 WHERE symbol=member.symbol ORDER BY published_at DESC,revision_id DESC LIMIT 1;",
+          "  invalidity:=public.vnext_trading_invalid_current_v1(member.symbol,member.input_hash);\n  IF invalidity ? 'proofHash' THEN\n   result:=public.vnext_command_v1(p_principal,'exit',jsonb_build_object('symbol',member.symbol,'reason','trading_invalid','evidence',jsonb_build_array(invalidity->>'proofHash'),'tradingInvalidityProof',invalidity));\n   observations:=observations||jsonb_build_array(jsonb_build_object('symbol',member.symbol,'status','exited','reason','trading_invalid','revisionId',NULL,'inputHash',member.input_hash));\n   CONTINUE;\n  END IF;\n  SELECT * INTO pub FROM public.vnext_publications_v1 WHERE symbol=member.symbol ORDER BY published_at DESC,revision_id DESC LIMIT 1;"
+        ]
+      ],
+      "args": "25 3802",
+      "names": [
+        "p_principal",
+        "p_request"
+      ],
+      "config": [
+        "search_path=pg_catalog, public",
+        "statement_timeout=30s",
+        "lock_timeout=2s"
+      ]
+    }
+  ],
+  "newPrivateRoutine": {
+    "signature": "public.vnext_trading_invalid_current_v1(text,text)",
+    "bodySha256": "dac9ffaf049c8cabfe3f0fa166293447484f69c4daf06b4c6154f3179f396f58",
+    "bytes": 4266,
+    "owner": "stockinsider_vnext_owner",
+    "executeGrantees": [
+      "stockinsider_vnext_owner"
+    ]
+  },
+  "existingReadEdge": {
+    "columnProfile": [
+      {
+        "relation": "stock_instruments_v3",
+        "column": "instrument_authority_id",
+        "type": "uuid",
+        "notNull": true
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "stock_id",
+        "type": "uuid",
+        "notNull": true
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "symbol",
+        "type": "text",
+        "notNull": true
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "exchange",
+        "type": "public.stock_exchange_v3",
+        "notNull": true
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "instrument_type",
+        "type": "public.instrument_type_v3",
+        "notNull": true
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "listing_status",
+        "type": "public.listing_status_v3",
+        "notNull": true
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "provider",
+        "type": "public.official_roster_provider_v3",
+        "notNull": true
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "source_timestamp",
+        "type": "timestamp with time zone",
+        "notNull": true
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "valid_from",
+        "type": "timestamp with time zone",
+        "notNull": true
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "valid_to",
+        "type": "timestamp with time zone",
+        "notNull": false
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "roster_version",
+        "type": "text",
+        "notNull": true
+      },
+      {
+        "relation": "stock_instruments_v3",
+        "column": "recorded_at",
+        "type": "timestamp with time zone",
+        "notNull": true
+      }
+    ],
+    "relation": "public.stock_instruments_v3",
+    "columns": [
+      "instrument_authority_id",
+      "stock_id",
+      "symbol",
+      "exchange",
+      "instrument_type",
+      "listing_status",
+      "provider",
+      "source_timestamp",
+      "valid_from",
+      "valid_to",
+      "roster_version",
+      "recorded_at"
+    ],
+    "policy": "vnext_target_read_v1",
+    "sourceMigration": "migrations/20261022_vnext_target_exit_v1.sql",
+    "sourceSha256": "8a49259e95d6557ac4b7a8a74d90500b0d180735f396fbf1490f337b711bf441",
+    "permissionDelta": "none"
+  },
+  "allowedCatalogDelta": [
+    "two exact existing prosrc replacements",
+    "one new private routine only"
+  ],
+  "sourceBase": "ae74061e7587b12e114f7067a49f185e20239dd2",
+  "scope": "source-derived candidate only, no native install/authority approval"
+}
