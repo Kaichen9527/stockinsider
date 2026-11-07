@@ -56,7 +56,7 @@ export function calendarStockCandles(data: readonly (CandlestickData & { volume?
     if (previous && JSON.stringify(previous) !== JSON.stringify(row)) throw new Error('stock_chart_conflicting_session');
     sessions.set(date, row);
   }
-  const candles: CandlestickData[] = []; const periods: CalendarPeriod[] = [];
+  const candles: CandlestickData<string>[] = []; const periods: CalendarPeriod[] = [];
   for (const [date, row] of [...sessions].sort(([a], [b]) => a.localeCompare(b))) {
     const key = periodStart(date, timeframe); const last = periods.at(-1);
     if (last?.periodStart === key) {
@@ -65,7 +65,7 @@ export function calendarStockCandles(data: readonly (CandlestickData & { volume?
       last.sourceDates.push(date); last.volume = last.volume === null || row.volume === null ? null : last.volume + row.volume;
       if (last.volume !== null && !Number.isFinite(last.volume)) throw new Error('stock_chart_volume_invalid');
     } else {
-      candles.push({ ...row.candle });
+      candles.push({ ...row.candle, time: date });
       periods.push({ periodStart: key, sourceDates: [date], provisional: currentPeriod === null ? null : key >= currentPeriod, volume: row.volume });
     }
   }

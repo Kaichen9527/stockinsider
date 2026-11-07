@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { readPublished } from '@/lib/vnext/store';
 import { rankingEnabled, readRankingSnapshot, rankingMemberCurrent } from '@/lib/vnext/ranking-read';
+import { publicationQualificationCurrent } from '@/lib/vnext/public-contract';
 import { publicCitation } from '@/lib/vnext/citations';
 import { REQUIRED_SECTIONS } from '@/lib/vnext/research';
 import type {TargetAssessment} from '@/lib/vnext/published-target-read';
@@ -9,6 +10,7 @@ const claimKinds: Record<string, string> = { fact: '已確認事實', assumption
 type Row = Record<string, unknown>;
 export default async function VnextDetail({ symbol, revision, rankingRunId }: { symbol: string; revision?: string | string[]; rankingRunId?: string | string[] }) {
   let data: Row | null = null; let error = false;
+  let readAt = new Date().toISOString();
   let rankingBound = false; let rankingCurrent = false;
   try {
     if (rankingRunId !== undefined) {
@@ -19,23 +21,25 @@ export default async function VnextDetail({ symbol, revision, rankingRunId }: { 
       data = read.detail as Row|null;
       const history = data?.history;
       if (!Array.isArray(history) || !history.some(h => h.revisionId === member.revisionId && h.inputHash === member.inputHash)) throw Error('ranking_revision_missing');
-      rankingBound = true; rankingCurrent = rankingMemberCurrent(member, read.currentHome);
-    } else data = await readPublished(symbol);
+      rankingBound = true; readAt = read.readAt; rankingCurrent = rankingMemberCurrent(member, read.currentHome, readAt);
+    } else { data = await readPublished(symbol); readAt = new Date().toISOString(); }
   } catch { data = null; error = true; }
   const history = (Array.isArray(data?.history) ? data.history : []) as Row[];
   const invalid = Array.isArray(revision) || Boolean(revision && !/^[a-f0-9-]{36}$/iu.test(revision));
   const chosen = invalid ? null : revision ? history.find((item) => item.revisionId === revision) : history[0];
   const membership = data?.membership as Row | undefined;
-  const current = (!rankingBound || rankingCurrent) && chosen && membership?.state !== 'exited' && membership?.contraindication !== true && membership?.inputHash === chosen.inputHash && (chosen.sourceRights as Row|undefined)?.current===true;
+  const qualificationCurrent = publicationQualificationCurrent(chosen, readAt);
+  const current = (!rankingBound || rankingCurrent) && qualificationCurrent && chosen && chosen.revisionId === history[0]?.revisionId && membership?.state !== 'exited' && membership?.contraindication !== true && membership?.inputHash === chosen.inputHash && (chosen.sourceRights as Row|undefined)?.current===true;
   const target=data?.targetAssessment as TargetAssessment|undefined;
   const targetResult=target&&target.revisionId===chosen?.revisionId?target.result:null;
   const rebased=targetResult?.rebasing as {rebased:{base:number;bear:number;bull:number}}|null|undefined;
   const content = chosen?.content as Row | undefined; const sections = content?.sections as Record<string, { text: string; evidenceIds: string[] }> | undefined;
   return <main className="mx-auto max-w-4xl space-y-6 px-4 py-8 text-slate-900 dark:text-slate-100" data-testid="vnext-detail">
     <Link className="underline" href="/">返回市場與主動研究</Link><h1 className="text-2xl font-semibold">{symbol} 研究紀錄</h1>
-    {rankingBound && <p data-testid="vnext-ranking-binding">榜單版本：{rankingRunId} · {rankingCurrent ? '當前研究條件仍符合' : '當前條件已失效或尚待重新驗證，原版本保留'}</p>}
+    {rankingBound && <p data-testid="vnext-ranking-binding">榜單版本：{rankingRunId} · {rankingCurrent ? '當前研究條件仍符合' : '目前等待、已失效或尚待重新驗證，原版本保留'}</p>}
     <p>{membership?.state === 'exited' ? '已退出主動研究' : current ? '已發布研究；進場仍須符合當前市場與個股條件' : '保留歷史研究，目前不具新進場條件'}</p>
     {error ? <p role="alert">研究資料暫時無法讀取。</p> : !chosen ? <p role="status">{invalid || revision ? '指定研究版本不存在或尚未發布。' : '尚無通過獨立審查的研究。'}</p> : <>
+      {!qualificationCurrent && <p className="text-amber-700">當前財務與股價資格已逾期或無法驗證；保留原始研究，目前不具新進場條件。</p>}
       {(chosen.sourceRights as Row|undefined)?.current!==true && <p className="text-amber-700">原始來源權利目前無法驗證；內容保留為歷史紀錄，不具新進場條件。</p>}
       <p>原始發布時間：<time>{String(chosen.publishedAt)}</time></p>
       {targetResult && <section aria-label="公司行動與原始估值"><h2 className="font-semibold">原始估值與股數調整</h2>{targetResult.status==='deferred' ? <p>目前無法確認：{String(targetResult.reason)}</p> : rebased ? <><p>零現金股數調整後每股情境：悲觀 {rebased.rebased.bear}／基準 {rebased.rebased.base}／樂觀 {rebased.rebased.bull} TWD。</p><p>原始文章與估值不變；這是當次來源與市場資料重核的衍生結果，不代表新的進場批准或保證報酬。</p><p>核對時間：<time>{target?.observedAt}</time></p></> : <p>目前未有可適用的零現金股數調整。</p>}</section>}

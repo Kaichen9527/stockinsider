@@ -1,6 +1,7 @@
 import { rejectLegacyResearchInVnext } from './vnext/runtime.ts';
 import { randomUUID } from 'crypto';
 import { normalizeRelatedStockSymbols, normalizeSourceDocumentSymbols } from './stock-symbol';
+import { calendarStockCandles } from './stock-chart-calendar';
 import { loadActiveCandidateSourceErrors, loadCandidateStageCards, runCandidateResearchCycle } from './candidate-research';
 import { reconcilePublishedCandidateTradePlanCoverage } from './candidate-trade-plan-coverage';
 import { screenedCandidateSymbols } from './candidate-screened-universe';
@@ -11049,28 +11050,6 @@ function buildPendingChipEntryAssessment(reason: string): NonNullable<StockDeepD
   };
 }
 
-function aggregateCandles(
-  candles: Array<{ time: string; open: number; high: number; low: number; close: number }>,
-  chunkSize: number,
-) {
-  if (chunkSize <= 1) return candles;
-  const out: Array<{ time: string; open: number; high: number; low: number; close: number }> = [];
-  for (let index = 0; index < candles.length; index += chunkSize) {
-    const chunk = candles.slice(index, index + chunkSize);
-    if (chunk.length === 0) continue;
-    const first = chunk[0];
-    const last = chunk[chunk.length - 1];
-    out.push({
-      time: last.time,
-      open: first.open,
-      high: Math.max(...chunk.map((item) => item.high)),
-      low: Math.min(...chunk.map((item) => item.low)),
-      close: last.close,
-    });
-  }
-  return out;
-}
-
 function getLineClient(): LineClient {
   const channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
   if (!channelAccessToken) {
@@ -14763,13 +14742,14 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
         ? null
         : insight.chartMissingReason || '目前缺少足夠的日線資料，暫時無法完整計算技術指標。',
     );
+    // Supplied sessions only: calendar grouping does not certify acquisition coverage or period completion.
     const timeframeCharts = {
       daily: insight.chart,
-      weekly: aggregateCandles(insight.chart, 5),
-      monthly: aggregateCandles(insight.chart, 21),
-      quarterly: aggregateCandles(insight.chart, 63),
-      halfYear: aggregateCandles(insight.chart, 126),
-      yearly: aggregateCandles(insight.chart, 252),
+      weekly: calendarStockCandles(insight.chart, 'weekly').candles,
+      monthly: calendarStockCandles(insight.chart, 'monthly').candles,
+      quarterly: calendarStockCandles(insight.chart, 'quarterly').candles,
+      halfYear: calendarStockCandles(insight.chart, 'halfYear').candles,
+      yearly: calendarStockCandles(insight.chart, 'yearly').candles,
     };
     const sourceGroups = {
       investanchors: sourceCoverage.filter((item) => item.sourceType === 'investanchors'),
@@ -17121,13 +17101,14 @@ async function buildLightStockDeepDiveSnapshot(stock: Row, symbol: string): Prom
     insight.chartSource || (insight.chart.length > 0 ? 'stock_signals' : 'missing'),
     insight.chart.length > 0 ? null : insight.chartMissingReason || '目前缺少足夠的日線資料，暫時無法完整計算技術指標。',
   );
+  // Supplied sessions only: calendar grouping does not certify acquisition coverage or period completion.
   const timeframeCharts = {
     daily: insight.chart,
-    weekly: aggregateCandles(insight.chart, 5),
-    monthly: aggregateCandles(insight.chart, 21),
-    quarterly: aggregateCandles(insight.chart, 63),
-    halfYear: aggregateCandles(insight.chart, 126),
-    yearly: aggregateCandles(insight.chart, 252),
+    weekly: calendarStockCandles(insight.chart, 'weekly').candles,
+    monthly: calendarStockCandles(insight.chart, 'monthly').candles,
+    quarterly: calendarStockCandles(insight.chart, 'quarterly').candles,
+    halfYear: calendarStockCandles(insight.chart, 'halfYear').candles,
+    yearly: calendarStockCandles(insight.chart, 'yearly').candles,
   };
   const latestMarket = (marketRes.data?.[0] as Row | undefined) || null;
   const marketFocus: DailyMarketFocus | null = latestMarket

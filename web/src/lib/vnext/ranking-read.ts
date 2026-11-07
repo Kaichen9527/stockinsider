@@ -1,5 +1,5 @@
 import { POLICY, vnextEnabled } from './policy.ts';
-import { publicHome } from './public-contract.ts';
+import { publicHome, publicationQualificationCurrent } from './public-contract.ts';
 import { readPublishedStockTarget } from './published-target-read.ts';
 type Row = Record<string, unknown>;
 const row = (v: unknown): v is Row => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -15,7 +15,7 @@ function invalid(): never { throw Error('vnext_ranking_contract_invalid'); }
 export function parseRankingRead(value: unknown, requestedRun?: string, now = new Date().toISOString()) {
   if (!row(value) || !row(value.current) || Buffer.byteLength(JSON.stringify(value)) > 2 * 1024 * 1024) invalid();
   if (requestedRun !== undefined && !uuid(requestedRun)) invalid();
-  if (value.snapshot === null) return { snapshot: null, currentHome: publicHome(value.current.home, now), detail: value.current.detail };
+  if (value.snapshot === null) return { readAt: now, snapshot: null, currentHome: publicHome(value.current.home, now), detail: value.current.detail };
   const s = value.snapshot;
   if (!row(s) || s.schemaVersion !== 'vnext-ranking-snapshot-v1' || !uuid(s.rankingRunId) || (requestedRun !== undefined && s.rankingRunId !== requestedRun)
     || s.previousRankingRunId !== null && !uuid(s.previousRankingRunId) || s.policyVersion !== POLICY.version || !hash(s.marketRevision)
@@ -33,7 +33,7 @@ export function parseRankingRead(value: unknown, requestedRun?: string, now = ne
   if (new Set(members.map(m => m.symbol)).size !== members.length) invalid();
   const snapshot: RankingSnapshot = { schemaVersion: s.schemaVersion, rankingRunId: s.rankingRunId, previousRankingRunId: s.previousRankingRunId as string|null,
     cutoff: s.cutoff, policyVersion: s.policyVersion, marketRevision: s.marketRevision, market: structuredClone(s.market), members };
-  return { snapshot, currentHome: publicHome(value.current.home, now), detail: value.current.detail };
+  return { readAt: now, snapshot, currentHome: publicHome(value.current.home, now), detail: value.current.detail };
 }
 export async function readRankingSnapshot(rankingRunId?: string, symbol?: string) {
   if (!rankingEnabled()) throw Error('vnext_ranking_disabled');
@@ -45,10 +45,12 @@ export async function readRankingSnapshot(rankingRunId?: string, symbol?: string
   if (symbol) read.detail = await readPublishedStockTarget({ rpc: async () => ({ data: read.detail, error: null }) }, symbol);
   return read;
 }
-export function rankingMemberCurrent(member: RankingMember, current: ReturnType<typeof publicHome>) {
+/** Current display validity only: recheck the original proof at this cutoff,
+ * even when a previously parsed home's entryEligible was true. No proof renewal. */
+export function rankingMemberCurrent(member: RankingMember, current: ReturnType<typeof publicHome>, now = new Date().toISOString()) {
   const live = current?.members.find(m => m.symbol === member.symbol);
   return !!live && live.revisionId === member.revisionId && live.inputHash === member.inputHash && live.publishedInputHash === member.inputHash
-    && live.sourceRights?.current === true && live.entryEligible === true && live.deepScore?.availableWeight === 100
+    && live.sourceRights?.current === true && live.entryEligible === true && publicationQualificationCurrent(live, now) && live.deepScore?.availableWeight === 100
     && typeof live.deepScore.confirmedPoints === 'number' && Number.isFinite(live.deepScore.confirmedPoints)
     && live.deepScore.confirmedPoints >= 0 && live.deepScore.confirmedPoints <= 100;
 }
