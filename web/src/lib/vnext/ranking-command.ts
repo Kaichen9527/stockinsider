@@ -21,14 +21,19 @@ export async function publishRanking(identity: VnextIdentity, body: Record<strin
 }
 
 /** Stable session identity; reruns reuse the original predecessor, not self-CAS. */
-export function cycleRankingRequest(session: unknown, previous: RankingSnapshot|null) {
+export function cycleRankingRequest(session: unknown, previous: RankingSnapshot|null, existing?: RankingSnapshot|null) {
   if (typeof session !== 'string' || !/^\d{4}-\d{2}-\d{2}$/u.test(session) || !Number.isFinite(Date.parse(session)) || new Date(session).toISOString().slice(0,10)!==session) throw Error('vnext_ranking_session_required');
   const digest=inputHash({purpose:'vnext-ranking-cycle-v1',policyVersion:POLICY.version,session});
   const run=`${digest.slice(0,8)}-${digest.slice(8,12)}-4${digest.slice(13,16)}-8${digest.slice(17,20)}-${digest.slice(20,32)}`;
+  if (existing && existing.rankingRunId !== run) throw Error('vnext_ranking_existing_run_mismatch');
+  if (existing) previous=existing;
   return rankingPublishRequest({rankingRunId:run,expectedPreviousRankingRunId:previous?.rankingRunId===run?previous.previousRankingRunId:previous?.rankingRunId||null});
 }
 export async function publishCycleRanking(identity: VnextIdentity, session: unknown) {
   if (!rankingEnabled()) return {status:'disabled',scheduleEnabled:false};
+  const requested=cycleRankingRequest(session,null).rankingRunId;
+  const historical=await readRankingSnapshot(requested);
+  if (historical.snapshot) return publishRanking(identity,cycleRankingRequest(session,null,historical.snapshot));
   const current=await readRankingSnapshot();
   return publishRanking(identity,cycleRankingRequest(session,current.snapshot));
 }

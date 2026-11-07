@@ -42,6 +42,9 @@ test('same-session cycle rerun preserves original request/CAS, next session adva
   const initial=cycleRankingRequest('2026-11-06',null);const previous=parseRankingRead(packet()).snapshot!;
   previous.rankingRunId=initial.rankingRunId;previous.previousRankingRunId=null;
   assert.deepEqual(cycleRankingRequest('2026-11-06',previous),initial);
+  const successor={...previous,rankingRunId:revision,previousRankingRunId:initial.rankingRunId};
+  assert.deepEqual(cycleRankingRequest('2026-11-06',successor,previous),initial);
+  assert.throws(()=>cycleRankingRequest('2026-11-06',null,successor),/existing_run_mismatch/);
   assert.notEqual(cycleRankingRequest('2026-11-09',previous).rankingRunId,initial.rankingRunId);
   assert.equal(cycleRankingRequest('2026-11-09',previous).expectedPreviousRankingRunId,initial.rankingRunId);
   assert.throws(()=>cycleRankingRequest('2026-02-31',null),/session_required/);
