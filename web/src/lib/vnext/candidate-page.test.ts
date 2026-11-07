@@ -41,11 +41,11 @@ test('duplicate symbols, overfull catalogs and unexpected non-null source fail c
 test('unknown snapshot schema and policy are never presented as a candidate catalog', () => {
   for (const key of ['schemaVersion', 'policyVersion'] as const) { const input = fixture(); input.snapshot[key] = 'other'; assert.throws(() => candidatePage(input, candidateQuery({})), /invalid/u); }
 });
-test('page remains feature-gated and invokes only existing read RPC without work calls', () => {
+test('page remains feature-gated and delegates only to bounded history read without work calls', () => {
   const source = readFileSync(new URL('../../app/candidates/page.tsx', import.meta.url), 'utf8');
   assert.ok(source.includes('if (!rankingEnabled()) notFound()'));
-  assert.equal([...source.matchAll(/\.rpc\(/gu)].length, 1);
-  assert.ok(source.includes(".rpc('vnext_ranking_read_v1'"));
+  assert.equal([...source.matchAll(/\.rpc\(/gu)].length, 0);
+  assert.ok(source.includes('data = await readCandidateHistory(query)'));
   assert.equal(/\b(?:enqueue|prepare|claim|publish|dispatch|record|runResearch)\s*\(/u.test(source), false);
   assert.equal(/export (?:async )?function POST/u.test(source), false);
 });

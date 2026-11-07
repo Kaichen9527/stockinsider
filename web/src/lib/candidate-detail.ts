@@ -8,6 +8,7 @@ import { resolveTaiwanFinalPublicationSemantics } from './tw-market.ts';
 import { readCandidateRevisionContext, type CandidateRevisionScores } from './candidate-revision-context.ts';
 import { readCandidateTradePlan } from './candidate-trade-plan.ts';
 import type { TwEntryPlanBundle } from './tw-entry-plan-contract.ts';
+import type { CandidatePriceHistoryCoverage } from './candidate-price-history.ts';
 
 type Row = Record<string, unknown>;
 
@@ -41,6 +42,7 @@ export type CandidateDetailPayload = {
     historicalPercentile?: number | null;
     historicalMultiples?: Array<{ date: string; peRatio: number | null; pbRatio: number | null }>;
     historicalPrices?: Array<{ month?: string; date?: string; frequency?: 'monthly' | 'daily'; close: number; ma5?: number | null; ma20?: number | null; ma60?: number | null; ma120?: number | null; ma240?: number | null }>;
+    priceHistoryCoverage?: CandidatePriceHistoryCoverage;
     researchCoverage?: { status: 'complete' | 'incomplete'; requiredFieldPeriods: number; verifiedFieldPeriods: number; completenessPct: number; missing: Array<{ factKey: string; periodEnd: string }>; evaluationAt: string };
     businessProfile?: { version: string; businessModel: string; primaryValuationMethod: string; forecastHorizonMonths: number; operatingSegments: readonly string[]; sourceRefs: readonly string[] } | null;
     forwardCommonEquityBridge?: { status: 'complete' | 'incomplete'; startingCommonEquity: number | null; endingCommonShares: number | null; targetPeriodEnd: string | null; projectedDividends: { kind: 'model_assumption'; bear: number; base: number; bull: number }; projectedCapitalAndOci: { kind: 'model_assumption'; bear: number; base: number; bull: number } } | null;

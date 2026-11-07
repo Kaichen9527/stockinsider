@@ -4,7 +4,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import fs f
 import * as content from '../web/src/lib/vnext/permitted-content.ts';import {inputHash} from '../web/src/lib/vnext/policy.ts';
 const ts=createRequire(new URL('../web/package.json',import.meta.url))('typescript');
 const id=n=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`,identity={role:'operator',principal:'synthetic-source-operator'};
-function lab({rows=[],parseLimit=50,policies=['official'],completeError=false,appendError=false,enabled=true}={}){
+function lab({rows=[],parseLimit=50,policies=['official'],completeError=false,appendError=false,enabled=true,reply}={}){
  const trace=[],progress=[],receipts=new Map();let completions=0,reservations=0,binding='synthetic-current-rights',corrupt;
  const before=new Date(Date.now()-2*86400000).toISOString(),until=new Date(Date.now()+3600000).toISOString();
  const queryFor=table=>{const filters=[],orders=[];let count,projection;
@@ -16,8 +16,8 @@ function lab({rows=[],parseLimit=50,policies=['official'],completeError=false,ap
    selected.sort((a,b)=>b.published_at.localeCompare(a.published_at)||b.id.localeCompare(a.id));return {data:selected.slice(0,max),error:null};
   },async insert(row){assert.equal(table,'source_run_ledger');assert.equal(row.content_analyzable,false);assert.equal(row.succeeded_at,null);assert.equal(row.written,0);progress.push({id:id(progress.length+9000),...structuredClone(row)});trace.push({insert:true,connector:row.connector});return {data:null,error:appendError?{synthetic:true}:null};}};return chain;};
  const send=async(_identity,action,body)=>{trace.push({action});if(action==='source-policies')return {policies:policies.map(source=>({source,scope:source==='official'?'official_original':'metadata',enabled:true,rights_subject:binding,license_basis:'synthetic-public-license',valid_until:until}))};
-  if(action==='source-reserve'){reservations++;const hash=body.item.contentHash;if(receipts.has(hash))return {parse:false,replay:true,state:receipts.get(hash),contentHash:hash};if(completions>=parseLimit)return {parse:false,deferred:'daily_content_budget'};receipts.set(hash,'reserved');return {parse:true,contentHash:hash};}
-  assert.equal(action,'source-complete');if(completeError)throw Error('synthetic completion uncertainty');completions++;receipts.set(body.contentHash,'completed');return {parsed:true};};
+  if(action==='source-reserve'){reservations++;const hash=body.item.contentHash;if(receipts.has(hash))return {...{parse:false,replay:true,state:receipts.get(hash),contentHash:hash},...reply};if(completions>=parseLimit)return {parse:false,deferred:'daily_content_budget'};receipts.set(hash,'reserved');return {parse:true,contentHash:hash};}
+  assert.equal(action,'source-complete');if(completeError)throw Error('synthetic completion uncertainty');completions++;receipts.set(body.contentHash,'completed');return {parsed:true,contentHash:body.contentHash,...reply};};
  const modules={'./permitted-content.ts':content,'./policy.ts':{inputHash,vnextEnabled:()=>enabled},'./analysis-runtime.ts':{analysisCommand:send,analysisWriter:async work=>{trace.push({writer:true});return work();}},'../supabase-server.ts':{getSupabaseServerClient:()=>({from:queryFor})},'../source-policy.ts':{sourceExecutionPolicy:()=>({disposition:'active',licenseBasis:'synthetic-public-license'})},'./twse-snapshot-store.ts':{readTwseSnapshotCoverage:async()=>({eventVolume:null,eventCoverage:'unknown',observations:[]})}};
  const filename='web/src/lib/vnext/source-window-worker.ts',compiled=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:filename}).outputText,output={exports:{}};vm.compileFunction(compiled,['exports','require','module'],{filename})(output.exports,name=>{assert.ok(Object.hasOwn(modules,name),'unexpected dependency '+name);return modules[name];},output);
  const seed=(n,extra={})=>({id:id(n),platform:'twse_insider',document_url:`https://www.twse.com.tw/synthetic-window-${n}`,title:'Synthetic cache only',published_at:before,collected_at:before,symbols:['2409'],metadata:{},content_text:`Synthetic original ${n}, not acquired.`,...extra});
@@ -48,4 +48,23 @@ test('rights changes restart cache enumeration without resetting original extrac
 test('actual keyset page retains PostgreSQL microsecond ordering and refuses clock drift beyond its frozen cutoff',async()=>{
  const rows=[],f=lab({rows});const before=new Date(Date.now()-86400000).toISOString().replace(/\.\d{3}Z$/u,'.123000Z');rows.push(f.seed(1,{published_at:before.replace('123000','123999'),collected_at:before.replace('123000','124000')}),f.seed(2,{published_at:before.replace('123000','123001'),collected_at:before.replace('123000','124000')}));const result=await f.run();assert.equal(result.selected,2);assert.equal(f.progress[0].metadata.accounted,2);assert.equal(f.progress[0].metadata.finished,true);
  const malformed=[],bad=lab({rows:malformed});malformed.push(bad.seed(1,{collected_at:'2026-10-22T00:00:00.000001Z',published_at:'2026-10-22T00:00:00.000002Z'}));await assert.rejects(bad.run,/cache_window_row/);assert.equal(bad.progress.length,0);assert.equal(bad.reservations,0);
+});
+
+// Run the configured producer twice: unresolved receipts must never become
+// successful coverage, a cursor advance or an automatic completion retry.
+test('reserved and failed replays hold the actual producer page with zero new parsing',async()=>{
+ for(const state of ['reserved','failed']){
+  const rows=[],f=lab({rows});const row=f.seed(1);rows.push(row);
+  const item={id:row.id,source:'official',scope:'official_original',url:row.document_url,eventAt:row.published_at,publishedAt:row.published_at,eventBasis:'source_publication',availableAt:row.collected_at,symbols:['2409'],authorRoot:'official:twse-tpex',originalRoot:row.document_url,body:row.content_text};
+  f.receipts.set(content.permittedContentFingerprint(item,new Date().toISOString()),state);
+  for(let run=0;run<2;run++){const result=await f.run();assert.equal(result.selected,0);assert.equal(result.coverage[1].pageAdvanced,false);assert.equal(result.coverage[1].eventVolume,null);const saved=f.progress.at(-1).metadata;assert.equal(saved.accounted,0);assert.equal(saved.finished,false);assert.equal(saved.cursor,null);}
+  assert.equal(f.completions,0);assert.equal(f.trace.some(event=>event.action==='source-complete'),false);
+ }
+});
+test('actual producer refuses completed replay or completion bound to another content hash',async()=>{
+ for(const replay of [true,false]){
+  const rows=[],f=lab({rows,reply:{contentHash:'f'.repeat(64)}});const row=f.seed(1);rows.push(row);
+  if(replay){const item={id:row.id,source:'official',scope:'official_original',url:row.document_url,eventAt:row.published_at,publishedAt:row.published_at,eventBasis:'source_publication',availableAt:row.collected_at,symbols:['2409'],authorRoot:'official:twse-tpex',originalRoot:row.document_url,body:row.content_text};f.receipts.set(content.permittedContentFingerprint(item,new Date().toISOString()),'completed');}
+  await assert.rejects(f.run,/receipt_hash_mismatch/);assert.equal(f.progress.length,0);assert.equal(f.reservations,1);assert.equal(f.completions,replay?0:1);
+ }
 });

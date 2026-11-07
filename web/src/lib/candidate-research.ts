@@ -2,7 +2,7 @@ import { requireCandidateCycleScope } from './vnext/runtime.ts';
 import { createHash, randomUUID } from 'crypto';
 import { adaptLegacyDiscoveryEvidence } from './live-discovery-evidence-adapter';
 import auoPbHistory from '../data/auo-pb-history-v1.json' with { type: 'json' };
-import { dailyCandidatePrices, monthlyCandidatePrices, isOfficialCandidatePriceSource, isOfficialCandidatePriceProvider } from './candidate-price-history';
+import { candidateDisplayPriceHistory, monthlyCandidatePrices, isOfficialCandidatePriceSource, isOfficialCandidatePriceProvider } from './candidate-price-history';
 import { candidateRevisionHref } from './candidate-revision-query';
 import { freezeCandidateRevisionContext } from './candidate-revision-context.ts';
 import { getSupabaseServerClient } from './supabase-server';
@@ -1684,7 +1684,10 @@ async function executeCandidateResearchCycle(options: {
           : null,
         factorEvidence,
       });
-      const historicalPrices = [...dailyCandidatePrices(bars), ...monthlyCandidatePrices(bars)];
+      const displayPriceHistory = candidateDisplayPriceHistory({ bars, officialSessions: marketSessions,
+        latestSession: latestMarketSession, verifiedSessions: bars.filter((bar) => bar.authorityTier === 'official_primary'
+          && bar.integrityStatus !== 'conflict').map((bar) => bar.time) });
+      const historicalPrices = [...displayPriceHistory.dailyPrices, ...monthlyCandidatePrices(bars)];
       const historicalMultiples = officialMultiples.slice(-60).map((point) => ({ date: point.date, peRatio: point.peRatio, pbRatio: point.pbRatio }));
       const priorTracking = ((trackingRes.data as Row[]) || [])[0] || null;
       const priorTechnical = ((priorTechnicalRes.data as Row[]) || [])[0] || null;
@@ -1730,6 +1733,7 @@ async function executeCandidateResearchCycle(options: {
           historicalPercentile: valuation?.historicalPercentile ?? null,
           historicalMultiples,
           historicalPrices,
+          priceHistoryCoverage: displayPriceHistory.coverage,
           forwardBvps: valuation && 'forwardBvps' in valuation ? valuation.forwardBvps : null,
           targetPeriodEnd: valuation && 'targetPeriodEnd' in valuation ? valuation.targetPeriodEnd : null,
           researchCoverage: valuationResearchCoverage,

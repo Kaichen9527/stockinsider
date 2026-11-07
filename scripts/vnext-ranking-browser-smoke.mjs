@@ -32,11 +32,19 @@ function envelope(symbol){const size=mode==='zero'?0:mode==='ten'?10:1;
  const market={risk:'unknown',confidence:'insufficient',session:'2026-11-06',sourceAt:cutoff,expiresAt:cutoff,continuity:false,provenance:[],gaps:['synthetic_market'],overseas:[],reasons:[],risks:[],conditions:[],sessions:[]};
  return {snapshot:{schemaVersion:'vnext-ranking-snapshot-v1',rankingRunId:run,previousRankingRunId:null,cutoff,policyVersion:POLICY.version,marketRevision,market,members,candidates},current:{home:{version:run,market,members:[],publishedAt:cutoff},detail:symbol?{symbol,membership:{state:'waiting',inputHash:'b'.repeat(64)},history:[{revisionId:newer,inputHash:'b'.repeat(64),publishedAt:cutoff,content:newContent,sourceRights:{current:false}},{revisionId:revision,inputHash:'b'.repeat(64),publishedAt:cutoff,content:oldContent,sourceRights:{current:false}}]}:null}};
 }
+const older='44444444-4444-4444-8444-444444444444';
+function historyEnvelope(requested){
+ const latest=envelope(null).snapshot;
+ const previous={...latest,rankingRunId:older,previousRankingRunId:null,cutoff:new Date(Date.parse(cutoff)-86400000).toISOString(),candidates:[{...latest.candidates[0],symbol:'1020'}]};
+ latest.previousRankingRunId=older;
+ return requested===older?{snapshot:previous,previousSnapshot:null,nextSnapshot:{rankingRunId:run,previousRankingRunId:older,cutoff}}:{snapshot:latest,previousSnapshot:previous,nextSnapshot:null};
+}
 const receipts=[];let code=0;
 try{
  bridge=http.createServer(async(req,res)=>{let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>10000){res.writeHead(413).end();return;}}
   const args=JSON.parse(raw||'{}');calls.push({method:req.method,path:req.url,args});
-  if(req.method!=='POST'||req.url!=='/rest/v1/rpc/vnext_ranking_read_v1'){res.writeHead(500,{'content-type':'application/json'}).end(JSON.stringify({message:'unexpected_nonread_rpc'}));return;}
+  if(req.method!=='POST'||!['/rest/v1/rpc/vnext_ranking_read_v1','/rest/v1/rpc/vnext_candidate_history_read_v1'].includes(req.url)){res.writeHead(500,{'content-type':'application/json'}).end(JSON.stringify({message:'unexpected_nonread_rpc'}));return;}
+  if(req.url==='/rest/v1/rpc/vnext_candidate_history_read_v1'){res.writeHead(200,{'content-type':'application/json'}).end(JSON.stringify(historyEnvelope(args.p_ranking_run_id)));return;}
   const value=envelope(args.p_symbol);if(args.p_ranking_run_id&&args.p_ranking_run_id!==run)value.snapshot=null;
   res.writeHead(200,{'content-type':'application/json'}).end(JSON.stringify(value));
  });bridge.listen(34235,'127.0.0.1');await once(bridge,'listening');
@@ -52,9 +60,12 @@ try{
   mode='one';await page.goto('http://127.0.0.1:34236/');await page.getByTestId('vnext-top10').waitFor({state:'visible'});await page.getByTestId('vnext-ranked-member').filter({visible:true}).getByRole('link').click();await page.getByTestId('vnext-ranking-binding').waitFor();const text=await page.getByTestId('vnext-detail').filter({visible:true}).innerText();assert.ok(text.includes('Synthetic frozen revision conclusion'));assert.ok(!text.includes('LATEST MUST NOT REPLACE FROZEN'));assert.ok(text.includes('當前財務與股價資格已逾期或無法驗證'));assert.ok(text.includes('原版本保留'));receipts.push(viewport.name+':bound-detail-invalidity');
   await page.goto('http://127.0.0.1:34236/stock/1000?vnextRevision='+newer+'&rankingRunId='+run);await page.getByTestId('vnext-detail').filter({visible:true}).getByRole('alert').waitFor();assert.ok((await page.getByTestId('vnext-detail').filter({visible:true}).innerText()).includes('研究資料暫時無法讀取'));receipts.push(viewport.name+':wrong-revision-closed');
   await page.goto('http://127.0.0.1:34236/candidates?limit=1');await page.getByTestId('vnext-candidates').waitFor({state:'visible'});assert.equal(await page.locator('tbody tr').count(),1);const href=await page.getByRole('link',{name:'下一頁',exact:true}).getAttribute('href');assert.ok(href.includes('cursor='),'cursor_link_present');await page.getByRole('link',{name:'下一頁',exact:true}).click();await page.locator('tbody').getByRole('link',{name:'1001',exact:true}).waitFor();assert.equal(await page.locator('tbody tr').count(),1);assert.ok((await page.locator('tbody').innerText()).includes('1001'),'next_cursor_page_1001');assert.ok(!(await page.content()).includes('PRIVATE_MUST_NOT_RENDER'),'private_allowlist_html_and_flight');receipts.push(viewport.name+':stable-page-private-allowlist');
+  await page.goto('http://127.0.0.1:34236/candidates?status=exited');await page.locator('tbody').getByRole('link',{name:'1020',exact:true}).waitFor();assert.ok((await page.locator('tbody').innerText()).includes('確切退出時間／原因未保存'));assert.ok((await page.locator('tbody').innerText()).includes('歷史紀錄，不具本版進場資格'));
+  await page.getByRole('link',{name:/較早版本/u}).click();await page.getByTestId('vnext-candidates').getByText('榜單版本：'+older,{exact:true}).waitFor();
+  await page.getByRole('link',{name:/較新版本/u}).click();await page.locator('tbody').getByRole('link',{name:'1020',exact:true}).waitFor();receipts.push(viewport.name+':saved-history-version-and-observed-exit');
   const bounds=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(bounds.scroll<=bounds.width+1,'no_horizontal_overflow_'+JSON.stringify(bounds));await page.screenshot({path:path.join(out,viewport.name+'-candidates.png'),fullPage:true});await context.close();
  }
- assert.ok(calls.length>0&&calls.every(c=>c.path==='/rest/v1/rpc/vnext_ranking_read_v1'));
+ assert.ok(calls.length>0&&calls.every(c=>['/rest/v1/rpc/vnext_ranking_read_v1','/rest/v1/rpc/vnext_candidate_history_read_v1'].includes(c.path)));
  fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify({scope:'actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority',status:'PASS',source:built,harnessCommit,runtimeWebTree,browserVersion:browser.version(),checks:receipts,readRpcCalls:calls.length,writeRpcCalls:0,providerCalls:0},null,2)+'\n');
 }catch(e){code=1;fs.writeFileSync(path.join(out,'failure.json'),JSON.stringify({status:'FAIL',error:e.message,checks:receipts,readRpcCalls:calls.length},null,2)+'\n');}
 finally{if(browser)await browser.close();if(bridge)await new Promise(r=>bridge.close(r));if(app&&app.exitCode===null){app.kill('SIGTERM');await once(app,'exit');}fs.writeFileSync(path.join(out,'cleanup.json'),JSON.stringify({appPid:app?.pid,appExit:app?.exitCode,appSignal:app?.signalCode,bridgeClosed:!bridge?.listening})+'\n');}

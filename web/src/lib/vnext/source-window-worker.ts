@@ -68,8 +68,14 @@ export async function runSourceWindowWorker(identity:VnextIdentity){
    const result=await analysisCommand(identity,action,body);
    if(action==='source-reserve'){
     const item=body.item as Row,hash=String(item.contentHash);
-    if(result.replay===true||result.deferred==='source_content_withdrawn')for(const id of hashes.get(hash)!)accounted.add(id);
-   }else if(action==='source-complete'&&result.parsed===true)for(const id of hashes.get(String(body.contentHash))||[])accounted.add(id);
+    // A replay proves idempotency, not extraction completion. Reserved/failed
+    // receipts hold this page without another parse/completion attempt.
+    if(result.replay===true&&result.contentHash!==hash)throw Error('vnext_cache_receipt_hash_mismatch');
+    if((result.replay===true&&result.state==='completed')||result.deferred==='source_content_withdrawn')for(const id of hashes.get(hash)||[])accounted.add(id);
+   }else if(action==='source-complete'&&result.parsed===true){
+    if(result.contentHash!==body.contentHash)throw Error('vnext_cache_receipt_hash_mismatch');
+    for(const id of hashes.get(String(body.contentHash))||[])accounted.add(id);
+   }
    return result;
   });
   for(const rejected of extraction.rejected)accounted.add(rejected.id);
