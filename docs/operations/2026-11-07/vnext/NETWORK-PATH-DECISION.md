@@ -1,0 +1,11 @@
+# Supported network path decision — 2026-11-07
+
+This supersedes earlier hypothetical public TCP22 provisioning suggestions; it does not change configuration. Owner/coordinator inspected the stockinsider Cloud draft: Public internet exposes HTTP/domain controls; Advanced exposes OIDC/Tailscale, Tailscale Key not set, no specific publicTCP22 or SSH-agent mount field. Owner also read-only confirmed no Tailscale client/service on Contabo and capacity still passes. These are operator observations, not host operations by this Cloud executor. No fingerprint re-acquisition is required.
+
+The runtime skill cloud-environment-runtime/references/vpn.md states rawTCP is Tailscale-only, with no general Internet route; even legacy TCP grants must select Tailscale transport. Generic network.enabled, a public IP allowlist or HTTP domain permission cannot establish SSH to the public Contabo address. The operator checked official networking guidance requiring new task/executor after configuration changes. No changes were saved/published, and no replacement task/executor is created in this turn.
+
+Until an administrator approves a single-purpose path and secure credential custody, do not generate/install a short-lived staging key, SSH/probe the destination, install Tailscale on Contabo, alter production units/services, configure forwarding/proxy routes or change environment networking. This turn does none of them. Existing public ED25519 facts and host capacity receipts remain retained separately from connection readiness.
+
+A future admin-approved plan must define the tailnet destination/host identity and an ACL limited to that staging SSH destination/port22, network enrollment and revocation, safe short-lived SSH-agent custody (not inferred from VPN enrollment), trusted host-key pin and original restricted forced-command policy. Any host client installation or new executor is a separate explicit lifecycle action with preservation/retention review. Do not borrow production credentials or generate a key while awaiting those prerequisites.
+
+Current selected executor remains running/current/enforced, with no ready secrets or outbound identities. A null VPN failure is not VPN readiness. No diagnostics logs/keys were read; no old VM or iCloud changes. Source development continues here under the original native/protected/release gates.

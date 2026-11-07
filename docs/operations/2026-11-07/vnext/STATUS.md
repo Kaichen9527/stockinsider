@@ -1,3 +1,15 @@
+# Current cached producer checkpoint — ACTIVE / INCOMPLETE
+
+[Actual source/caller changes and limits](CURRENT-CACHED-PRODUCER.md) · [204-case/build/14-browser receipt](current-cached-producer-checks.json) · [Corrected supported networking path](NETWORK-PATH-DECISION.md).
+
+Sourced5929d1: cached official revision/cutoff comparison producer is wired into weekly audit; source lineage/rights progress and microsecond boundaries hardened.204tests/types/lint/build +14synthetic HTTP/browser regressions PASS. Formal qualification remains unavailable; weekly formal quote signals null pending current-rights/action protocol. No native retry/original PR-head change.
+
+Network UI/documentation now confirms Tailscale-only/new-executor path; neither side configured, no key/probe/config/task/host service operation. Prior public fingerprint/capacity facts retained. All release/external/real-source/time gates remain.
+
+---
+
+## Historical saved-history/source checkpoint
+
 # Current stored-history/source checkpoint — ACTIVE / INCOMPLETE
 
 [Delivered source, actual tests and remaining gates](STORED-HISTORY-SOURCE.md) · [150-case/build/14-browser receipt](stored-history-source-checks.json) · [SSH admission/operator facts](SSH-READINESS-RECEIPT.json).
