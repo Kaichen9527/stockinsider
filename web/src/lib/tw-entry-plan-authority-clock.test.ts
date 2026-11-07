@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {loadTwEntryHistoricalPriceAuthority,loadTwEntryPlanAuthority} from './tw-entry-plan-authority.ts';
 import {historicalAuthorityFixture} from './vnext/cached-authority-fixture.mjs';
+type Row=Record<string,unknown>;
 const {fixture,mockClient}=historicalAuthorityFixture();
 const prices='opportunity_price_observations_v3';
 test('actual historical reader selects a distinct microsecond correction and retains immutable raw predecessors',async()=>{
@@ -28,11 +29,11 @@ test('actual historical reader preserves the exact latest action availability cl
  assert.ok(result.bars.every(bar=>bar.availableAt===result.availableAt));
 });
 test('actual historical reader selects the latest microsecond action correction with the original hash protocol',async()=>{
- const {data,request}=fixture(true);const old=data.opportunity_corporate_action_snapshots_v3.find(row=>row.declared_event_count===1)!;
+ const {data,request}=fixture(true);const old=data.opportunity_corporate_action_snapshots_v3.find((row:Row)=>row.declared_event_count===1)!;
  old.recorded_at='2026-09-24T08:00:00.123001Z';
  const snapshot={...old,snapshot_id:'00000000-0000-4000-8000-000000009992',recorded_at:'2026-09-24T08:00:00.123002Z'};
  const hash=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
- const feeds=data.opportunity_corporate_action_feed_evidence_v3.filter(row=>row.snapshot_id===old.snapshot_id).map(row=>({...row,snapshot_id:snapshot.snapshot_id}));
+ const feeds:Row[]=data.opportunity_corporate_action_feed_evidence_v3.filter((row:Row)=>row.snapshot_id===old.snapshot_id).map((row:Row)=>({...row,snapshot_id:snapshot.snapshot_id}));
  const event={...data.opportunity_corporate_action_events_v3[0],snapshot_id:snapshot.snapshot_id,post_action_reference_price:80,daily_adjustment_factor:.4};
  event.source_row_ref=hash(['corporate-action-source-row-v3.1','TWSE',snapshot.session_id,event.symbol,event.event_kind,event.pre_action_reference_price,event.post_action_reference_price,event.feed_identity]);
  snapshot.dataset_hash=hash(['corporate-action-snapshot-v3.1','TWSE',snapshot.session_id,snapshot.session_authority_id,snapshot.corporate_action_version,snapshot.provider,snapshot.collected_at,
