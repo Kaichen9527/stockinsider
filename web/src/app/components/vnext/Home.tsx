@@ -48,12 +48,16 @@ export function VnextHomeView({ data, error = false, loading = false, ranking }:
 }
 export default async function VnextHome() {
   if (rankingEnabled()) {
+    let snapshot: RankingSnapshot|null = null;
+    let current: ReturnType<typeof publicHome> = null;
+    let frozenHome: ReturnType<typeof publicHome> = null;
+    let unavailable = false;
     try {
       const read = await readRankingSnapshot();
-      const snapshot = read.snapshot;
-      const frozenHome = snapshot ? publicHome({version:snapshot.rankingRunId, market:snapshot.market, members:[], publishedAt:snapshot.cutoff}, new Date().toISOString()) : null;
-      return <VnextHomeView data={frozenHome} ranking={{snapshot, current:read.currentHome}} />;
-    } catch { return <VnextHomeView data={null} error ranking={{snapshot:null,current:null}} />; }
+      snapshot = read.snapshot; current = read.currentHome;
+      frozenHome = snapshot ? publicHome({version:snapshot.rankingRunId, market:snapshot.market, members:[], publishedAt:snapshot.cutoff}, new Date().toISOString()) : null;
+    } catch { unavailable = true; }
+    return <VnextHomeView data={frozenHome} error={unavailable} ranking={{snapshot,current}} />;
   }
   let data: ReturnType<typeof publicHome> = null;
   let error = false;
