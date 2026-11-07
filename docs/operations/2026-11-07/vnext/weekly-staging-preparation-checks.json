@@ -1,0 +1,250 @@
+{
+  "schemaVersion": "vnext-weekly-authority-staging-preparation-evidence-v1",
+  "sourceCommit": "0269fcca2f154f6644b0a0c17664e03c84e5aebb",
+  "sourceTree": "8fa47def87fb89307af8e549d9a056972765066b",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "high",
+  "sameDevelopmentVm": true,
+  "checks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "scripts/vnext-weekly-forecast-source.test.mjs",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/forecast-current.test.ts",
+        "web/src/lib/vnext/thesis.test.ts"
+      ],
+      "start": "2026-11-07T14:01:44.228186+00:00",
+      "end": "2026-11-07T14:01:47.264637+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40243200,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31463444480,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "e9aa97e2dc118f11524ab8644eea63c41d12e887a9f09d8097e1d03d4e3a05a4"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-07T14:01:47.265103+00:00",
+      "end": "2026-11-07T14:01:51.275793+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40931328,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31463428096,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-07T14:01:51.276614+00:00",
+      "end": "2026-11-07T14:02:08.824961+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40239104,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31463419904,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-07T14:02:08.825418+00:00",
+      "end": "2026-11-07T14:02:14.847243+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40321024,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31463415808,
+        "/tmp": 9422872576
+      },
+      "resourceViolation": null,
+      "logSha256": "569905c3815713c3b13e8d4acfecf8d2be1b6cb49a448267e8eadb62569de49a"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-ranking-browser-smoke.mjs"
+      ],
+      "start": "2026-11-07T14:02:14.847630+00:00",
+      "end": "2026-11-07T14:02:20.358540+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 153645056,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31458811904,
+        "/tmp": 9304207360
+      },
+      "resourceViolation": null,
+      "logSha256": "3eb3f00962938ae765eb851d67d7ef5732703b553e98a84d33b92475af48886b"
+    }
+  ],
+  "focusedTests": 217,
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 34
+  },
+  "browser": {
+    "scope": "actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority",
+    "status": "PASS",
+    "source": "0269fcca2f154f6644b0a0c17664e03c84e5aebb",
+    "harnessCommit": "0269fcca2f154f6644b0a0c17664e03c84e5aebb",
+    "runtimeWebTree": "99ce4d0082ffaa5eb0148e7e22fa613cf1721a01",
+    "browserVersion": "151.0.7922.173",
+    "checks": [
+      "desktop:top0",
+      "desktop:top1",
+      "desktop:top10",
+      "desktop:bound-detail-invalidity",
+      "desktop:wrong-revision-closed",
+      "desktop:stable-page-private-allowlist",
+      "desktop:saved-history-version-and-observed-exit",
+      "mobile:top0",
+      "mobile:top1",
+      "mobile:top10",
+      "mobile:bound-detail-invalidity",
+      "mobile:wrong-revision-closed",
+      "mobile:stable-page-private-allowlist",
+      "mobile:saved-history-version-and-observed-exit"
+    ],
+    "readRpcCalls": 23,
+    "writeRpcCalls": 0,
+    "providerCalls": 0
+  },
+  "cleanup": {
+    "appPid": 18119,
+    "appExit": 143,
+    "appSignal": null,
+    "bridgeClosed": true
+  },
+  "stagingCLI": [
+    {
+      "arguments": [],
+      "exit": 2,
+      "result": {
+        "scope": "offline isolated staging preparation only",
+        "mode": "DRY_RUN",
+        "planSha256": "c93c8cca6305ef41e90f5221c6e1b5b54bc3a13421d2345b91fc53adcebb1af2",
+        "errors": [
+          "isolated_candidate_writer_identity_required",
+          "single_tailnet_ipv4_tcp22_required",
+          "exact_client_public_fingerprint_required",
+          "explicit_client_utc_expiry_required",
+          "dedicated_executor_binding_required"
+        ],
+        "liveBlocker": "official_sidecar_connector_not_implemented_or_independently_reviewed",
+        "environmentRead": false,
+        "childProcesses": 0,
+        "networkAttempts": 0,
+        "provisioned": false,
+        "stagingAcceptance": "NOT_RUN"
+      }
+    },
+    {
+      "arguments": [
+        "--verify-read-only"
+      ],
+      "exit": 2,
+      "result": {
+        "scope": "offline isolated staging preparation only",
+        "mode": "OFFLINE_NOT_ADMITTED",
+        "planSha256": "c93c8cca6305ef41e90f5221c6e1b5b54bc3a13421d2345b91fc53adcebb1af2",
+        "errors": [
+          "isolated_candidate_writer_identity_required",
+          "single_tailnet_ipv4_tcp22_required",
+          "exact_client_public_fingerprint_required",
+          "explicit_client_utc_expiry_required",
+          "dedicated_executor_binding_required"
+        ],
+        "liveBlocker": "official_sidecar_connector_not_implemented_or_independently_reviewed",
+        "environmentRead": false,
+        "childProcesses": 0,
+        "networkAttempts": 0,
+        "provisioned": false,
+        "stagingAcceptance": "NOT_RUN"
+      }
+    }
+  ],
+  "independentEngineeringReview": {
+    "blockerHigh": 0,
+    "weeklyFocusedPassed": 11,
+    "stagingMockPassed": 15,
+    "retainedFinding": "CLI raw exception messages could echo JSON/plan fragments; fixed constant typed diagnostic. No real secret was read."
+  },
+  "weeklyFormalPositive": "NOT_AUTHORIZED_NO_COMPLETE_EXISTING_CONTRACT",
+  "weeklyFormalQuote": "NULL_UNADJUSTED",
+  "capabilityProof": "typed blocked/no added proof/qualification/120s renewal; comparison retained",
+  "stagingScope": "OFFLINE_NOT_ADMITTED + SYNTHETIC_FIXTURE_ONLY, no platformReady",
+  "operatorPolicyReport": {
+    "initialTailnet": "empty",
+    "allow": "tag:stockinsider-staging-vm -> tag:stockinsider-contabo TCP22 only",
+    "denyTests": "operator reports added",
+    "authKey": "pending user secure draft field; not read"
+  },
+  "actualNetworkAgentKeyHostOperations": "NONE",
+  "newExecutorCreated": false,
+  "writerOrScheduleEnabled": false,
+  "nativeHoldProtectedReviewOriginalPrHead": "UNCHANGED",
+  "realSourceModelTwoSessionStagingRestoreRelease": "BLOCKED_NOT_RUN",
+  "oldVmICloudProduction": "NOT_TOUCHED",
+  "fullGoal": "ACTIVE_INCOMPLETE"
+}

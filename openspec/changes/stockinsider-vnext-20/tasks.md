@@ -78,3 +78,12 @@ Evidence: docs/operations/2026-11-07/vnext/STORED-HISTORY-SOURCE.md.
 - [ ] Native HOLD/protected/real-source/two-session/staging/restore/iCloud/release gates retained.
 
 Evidence: docs/operations/2026-11-07/vnext/CURRENT-CACHED-PRODUCER.md.
+
+## Weekly authority / staging offline v2
+
+- [x] Typed publication/comparison/6-capability formal refusal actualweekly consumption, no invented positive.
+- [x] Offline staging v2 strict endpoint/public identity/newexecutor/command preparation and15mock cases; no live connector.
+- [x] SameVM217related tests/types/lint/build +14synthetic public browser regressions, separate source engineering review.
+- [ ] All formal positive/native/A1/enrollment/agent/transport/staging/time/release acceptance remains required and incomplete.
+
+Evidence: docs/operations/2026-11-07/vnext/WEEKLY-STAGING-PREPARATION.md.

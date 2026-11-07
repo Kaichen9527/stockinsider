@@ -1,3 +1,15 @@
+# Current weekly authority/staging preparation — ACTIVE / INCOMPLETE
+
+[Implemented bounded source and exact limits](WEEKLY-STAGING-PREPARATION.md) · [217/build/14browser/CLI receipt](weekly-staging-preparation-checks.json) · [Operator staging status](STAGING-PREPARATION-STATUS.md).
+
+Source0269fcc: actualweekly typed formal eligibility/quote consumption; no sufficient formal-positive authority found, so comparison remains separate and quote null. Staging verifier v2 is strictlyoffline/mock, known devexecutor denied, no livechild/env/key/network.217tests/types/lint/build and14synthetic HTTP/browser regressions PASS.
+
+Native HOLD/formal review/original PR head unchanged. No new executor/key/Contabo/writer/schedule action. Operator reports sole-tagTCP22 grant/denytests; secureauthkey pending, not observed/handled by this VM. Live adapter/enrollment/identity and full qualification/source/time/staging/release gates remain.
+
+---
+
+## Historical cached producer checkpoint
+
 # Current cached producer checkpoint — ACTIVE / INCOMPLETE
 
 [Actual source/caller changes and limits](CURRENT-CACHED-PRODUCER.md) · [204-case/build/14-browser receipt](current-cached-producer-checks.json) · [Corrected supported networking path](NETWORK-PATH-DECISION.md).

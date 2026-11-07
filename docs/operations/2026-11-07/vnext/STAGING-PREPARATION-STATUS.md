@@ -1,0 +1,9 @@
+# Staging preparation status — operator report, 2026-11-07
+
+Coordinator reports an initially empty tailnet policy replaced default all-allow with one grant: tag:stockinsider-staging-vm → tag:stockinsider-contabo TCP22, with rejection tests. This is operator-reported control-plane preparation; this Cloud task did not read or modify policy, keys, tailnet clients or services. The user is entering the tagged reusable/ephemeral Tailscale auth key only into the secure Cloud draft field; it is pending and never requested/read in chat. Tailscale enrollment and SSH key/agent are separate authorities.
+
+Development remains on the current selected VM/protection branch. No rebuild/replacement executor, Cloud Save/Publish, VPN installation/enrollment, transport probe, SSH, key generation, Contabo operation, writer or schedule activation occurs in this batch. Existing trusted public host facts stay retained; no re-acquisition is required.
+
+A new independent staging executor is a future explicit lifecycle action. Its public executor identity/config revision, actual tailnet IPv4 for the pinned Contabo host, supported official connector, current enrollment/ACL observations and safe ephemeral SSH-agent custody/expiry/revoke evidence remain prerequisites. The narrow verifier source/fixtures validate preparation and reject other uses; they cannot mint platform/agent readiness from plan booleans. Official sidecar rawTCP transport and SSH forwarding are distinct; arbitrary ProxyCommand/SSH forwarding/PTY are not permitted. Any live adapter requires separate exact review; no current fixture result is staging acceptance.
+
+Native HOLD, formal independent review binding and original PR head remain unchanged. Empty/default plans must fail closed. No existing production key, old VM or iCloud is touched.
