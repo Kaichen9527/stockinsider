@@ -49,3 +49,12 @@ See [V2 Top10 / Cloud / iCloud / Contabo amendment](v2-top10-cloud-amendment.md)
 - [ ] Current qualified financial/price proof refresh and complete deep100 producer under original authority.
 - [ ] Unadmitted/exited/full historical candidates catalog and authoritative source/industry filters.
 - [ ] Existing external/source/model/two-session/Contabo/iCloud/protected/release gates remain.
+
+## 2026-11-07 qualification-read slice
+
+- [x] Recheck existing proof at current shared cutoff; strict120s half-open expiry, revision/hash/current-rights negatives and retained history. No renewal authority.
+- [x] Wire both actual domain supplied chart callers to existing calendar helper; coverage/completion unknown remains explicit.
+- [x] Source-reviewed owner public-console/staging prerequisites, no connection/keys/network/apply.
+- [ ] Fresh current financial/price producer for published research still needs reviewed authority protocol. Native HOLD and all formal/staging/time/release gates retained.
+
+Exact evidence: docs/operations/2026-11-07/vnext/QUALIFICATION-READ.md.

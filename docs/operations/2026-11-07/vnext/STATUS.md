@@ -1,3 +1,15 @@
+# Current qualification-read checkpoint — ACTIVE / INCOMPLETE
+
+[Current implemented slice and remaining gates](QUALIFICATION-READ.md) · [Exact VM evidence](qualification-read-checks.json) · [Owner Console/SSH prerequisites](CONTABO-OWNER-VERIFIED-STEPS.md).
+
+Source07216a4: existing120second proof is rechecked at one current read cutoff, expired/missing data fails closed while history remains; both real supplied chart paths use calendar aggregation.94focused tests/types/lint/build PASS,12synthetic HTTP/desktop-mobile browser checks PASS. No new financial authority/TTL renewal, no native retry or original PR-head change. GPT-6.1 Sol High authoring and independent engineering review selected explicitly.
+
+True current-finance/price producer, full candidate history, three-year/warmup and formal/external/release gates remain unfinished. Contabo connection/network/keys/production and old VM/iCloud untouched. Owner must first supply only public ED25519 trust facts through trusted Console; secure identity, exact scoped access and revocation are not configured.
+
+---
+
+## Historical second-batch checkpoint
+
 # Current second-batch checkpoint — ACTIVE / INCOMPLETE
 
 See [bounded product integration and remaining gates](SECOND-BATCH.md), [exact second-batch checks](second-batch-checks.json) and [browser/history observations](BROWSER-AND-HISTORY-NEXT.md). Runtime9aacbcd / browser harness103c650 are on the same protected branch and continue original PR384; original PR head remains cbb under native HOLD.
