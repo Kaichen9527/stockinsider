@@ -25,6 +25,16 @@ test('document citation joins exact fact version, issuer, immutable document has
  const mutations:Array<(copy:typeof rows)=>void>=[r=>r.links[0].fact_recorded_at='2026-10-21T05:59:59Z',r=>r.links[0].evidence_id='different-parser',r=>r.receipts[0].stock_id='other',r=>r.receipts[0].period_end='2026-03-31',r=>r.receipts[0].document_sha256='f'.repeat(64),r=>r.receipts[0].completed_at='2027-01-01',r=>r.receipts[0].receipt_status='rejected',r=>r.documents[0].document_url='https://mops.twse.com.tw/different',r=>r.documents[0].acquisition_status='queued',r=>(r.provenance[0].locator as Row).manifest_sha256='unproven'];
  for(const mutate of mutations){const copy=structuredClone(rows);mutate(copy);assert.equal(projectFinancialEvidenceSources([fact],copy,cutoff).evidence.length,0);}
 });
+test('financial original publication/source clocks and exact fact revision retain PostgreSQL microseconds',()=>{
+ const boundary='2026-10-21T10:00:00.000001Z',future='2026-10-21T10:00:00.000002Z';
+ for(const make of [()=>sourceFixture(true),issuerFixture]){
+  const f=make();f.rows.receipts[0].published_at=future;assert.equal(projectFinancialEvidenceSources([f.fact],f.rows,boundary).evidence.length,0);
+  f.rows.receipts[0].published_at=boundary;const valid=projectFinancialEvidenceSources([f.fact],f.rows,boundary);assert.equal(valid.evidence.length,1);assert.equal(valid.receipts[0].knownAt,boundary);assert.equal(valid.evidence[0].availableAt,boundary);
+  f.rows.links[0].fact_recorded_at='2026-10-21T06:00:00.000001Z';assert.equal(projectFinancialEvidenceSources([f.fact],f.rows,boundary).evidence.length,0);
+ }
+ const f=sourceFixture();f.rows.provenance[0].extracted_at=boundary;assert.equal(projectFinancialEvidenceSources([f.fact],f.rows,boundary).evidence[0].availableAt,boundary);
+ f.rows.provenance[0].extracted_at=future;assert.equal(projectFinancialEvidenceSources([f.fact],f.rows,boundary).evidence.length,0);
+});
 test('unsupported issuer IR, private/credential URLs and absent provenance remain explicit gaps with zero fetch',async()=>{
  let calls=0;const prior=globalThis.fetch;globalThis.fetch=async()=>{calls++;throw Error('no external fetch permitted');};
  try{for(const url of ['https://www.nanya.com/reviewed-original.pdf','https://user:pass@mops.twse.com.tw/a','https://mops.twse.com.tw:444/a','http://mops.twse.com.tw/a','https://127.0.0.1/a'])assert.equal(financialProviderSourceUrl(url),null);

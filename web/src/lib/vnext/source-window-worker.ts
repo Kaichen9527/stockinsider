@@ -62,15 +62,40 @@ export async function runSourceWindowWorker(identity:VnextIdentity){
    }
    pages.push({source,rightsHash,cycleCutoff,prior,rows,connector,policy});
   }
-  const hashes=new Map<string,string[]>();
-  for(const item of contents){try{const hash=permittedContentFingerprint(item,now);hashes.set(hash,[...(hashes.get(hash)||[]),item.id]);}catch{/* The original batch returns the exact validation rejection. */}}
+  const hashes=new Map<string,string[]>(),sourcesByHash=new Map<string,Source>();const cacheLineage:Row[]=[];
+  for(const item of contents){
+   let contentHash:string|null=null;
+   try{contentHash=permittedContentFingerprint(item,now);hashes.set(contentHash,[...(hashes.get(contentHash)||[]),item.id]);sourcesByHash.set(contentHash,item.source as Source);}catch{/* The original batch returns the exact validation rejection. */}
+   // These are frozen cache input versions, not a current publisher revision.
+   // The existing raw cache does not retain publisher revision authority and
+   // acquisition time must never manufacture one, even after a complete pass.
+   cacheLineage.push({rawDocumentId:item.id,source:item.source,cutoff:now,cacheCycleCutoff:pages.find(page=>page.source===item.source)!.cycleCutoff,eventAt:item.eventAt,publishedAt:item.publishedAt,availableAt:item.availableAt,contentHash,sourceRevision:null,gaps:['publisher_revision_not_recorded_in_cache']});
+  }
+  const assertCurrentRights=async(source:Source)=>{
+   const page=pages.find(page=>page.source===source);if(!page)throw Error('vnext_cache_source_binding_missing');
+   const current=await analysisCommand(identity,'source-policies',{}),checkedAt=new Date().toISOString();
+   if(!Array.isArray(current.policies))throw Error('vnext_source_policies_shape');
+   const scope=source==='ptt'?'metadata':'official_original',matches=(current.policies as Row[]).filter(policy=>policy.source===source&&policy.scope===scope);
+   if(matches.length>1)throw Error('vnext_source_policy_conflict');
+   const binding=matches[0];
+   if(!binding||binding.enabled!==true||!instant(binding.valid_until)||precise(binding.valid_until)<=precise(checkedAt)||inputHash({source,scope,rightsSubject:binding.rights_subject,licenseBasis:binding.license_basis,validUntil:binding.valid_until})!==page.rightsHash)throw Error('vnext_source_rights_changed_during_scan');
+  };
   const extraction=await extractContentBatch(contents,now,async(action,body)=>{
+   const source=action==='source-reserve'?(body.item as Row).source:sourcesByHash.get(String(body.contentHash));
+   if(source!=='ptt'&&source!=='official')throw Error('vnext_cache_source_binding_missing');
+   // Replays can precede policy checking in the existing reserve RPC. Re-read
+   // rights before both replay/reservation and completion, without retrying an
+   // uncertain command. The SQL remains the final atomic completion authority.
+   await assertCurrentRights(source);
    const result=await analysisCommand(identity,action,body);
+   // A completed replay may have been returned after the permission changed.
+   // Such a read must not account the page or advance durable progress.
+   await assertCurrentRights(source);
    if(action==='source-reserve'){
     const item=body.item as Row,hash=String(item.contentHash);
     // A replay proves idempotency, not extraction completion. Reserved/failed
     // receipts hold this page without another parse/completion attempt.
-    if(result.replay===true&&result.contentHash!==hash)throw Error('vnext_cache_receipt_hash_mismatch');
+    if((result.replay===true||result.parse===true)&&result.contentHash!==hash)throw Error('vnext_cache_receipt_hash_mismatch');
     if((result.replay===true&&result.state==='completed')||result.deferred==='source_content_withdrawn')for(const id of hashes.get(hash)||[])accounted.add(id);
    }else if(action==='source-complete'&&result.parsed===true){
     if(result.contentHash!==body.contentHash)throw Error('vnext_cache_receipt_hash_mismatch');
@@ -82,6 +107,9 @@ export async function runSourceWindowWorker(identity:VnextIdentity){
   // Complete extraction before appending progress. An uncertain completion or
   // ledger append propagates once; no internal retry or new reservation loop.
   for(const page of pages){
+   // Also cover empty pages and permission changes after the last receipt.
+   // This is a conservative caller check; it is not an atomic withdrawal gate.
+   await assertCurrentRights(page.source);
    const complete=page.rows.every(row=>accounted.has(String(row.id))),finished=complete&&page.rows.length<PAGE;
    const tail=page.rows.at(-1);const cursor=complete?(finished?null:{publishedAt:String(tail!.published_at),id:String(tail!.id)}):page.prior?.cursor||null;
    const progress:Progress={schemaVersion:VERSION,source:page.source,principal:identity.principal,rightsHash:page.rightsHash,cycleCutoff:page.cycleCutoff,cursor,finished,enumerated:page.rows.length,accounted:page.rows.filter(row=>accounted.has(String(row.id))).length,acquisitionAttempted:false,eventCoverage:'unknown',eventVolume:null};
@@ -90,6 +118,6 @@ export async function runSourceWindowWorker(identity:VnextIdentity){
    coverage.push({source:page.source,status:finished?'cached_window_enumerated':'cached_window_partial',enumerated:progress.enumerated,accounted:progress.accounted,pageAdvanced:complete&&!finished,cycleCutoff:page.cycleCutoff,progressHash:inputHash(progress),eventCoverage:'unknown',eventVolume:null,acquisitionAttempted:false,reason:row.terminal_detail});
   }
   const snapshotTransport=await(await import('./twse-snapshot-store.ts')).readTwseSnapshotCoverage(identity);
-  return {...extraction,coverage,snapshotTransport,cacheScanVersion:VERSION,upstreamCoverage:'unknown',eventVolume:null};
+  return {...extraction,coverage,cacheLineage,snapshotTransport,cacheScanVersion:VERSION,upstreamCoverage:'unknown',eventVolume:null};
  });
 }
