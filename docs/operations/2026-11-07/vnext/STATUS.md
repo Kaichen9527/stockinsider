@@ -1,3 +1,15 @@
+# Current immutable outcome/epoch checkpoint — SOURCE CANDIDATE / INCOMPLETE
+
+[Implemented source and exact limits](EPOCH-OUTCOME-CANDIDATE.md) · [Full mutation map](EPOCH-MUTATION-MAP.md) · [296/build/14browser receipt](epoch-outcome-checks.json).
+
+Source170e5a9 adds private append-only journal SQL/retention/CAS/replay source design and pure closed public fixture projection/keysets. Append helper unconditionally raises before its algorithm; runtime read Disabled and every real mutation hook NOT_CONNECTED. Three prospective cases only, no complete workflow/history or old epoch bootstrap. Cause/proof identifiers remain unverified opaque values; no current rights/entry authority granted.
+
+296tests/types/lint/fullbuild +14existing synthetic HTTP/browser PASS, not native SQL/journal acceptance. Independent readonly engineering source/doc review0openblocker/high; formal A1/native HOLD/original PR cbb head/release gates unchanged. Coordinator reports CloudKeynotset/noTailscaledevices/ContaboNeedsLogin; no key/SSH/Contabo/newVM/SQL/writer/oldVM/iCloud action.
+
+---
+
+## Historical source/candidate completeness checkpoint
+
 # Current source/candidate completeness checkpoint — ACTIVE / INCOMPLETE
 
 [Source inventory/implemented limits](SOURCE-COMPLETENESS.md) · [279/build/14browser receipt](source-completeness-checks.json) · [Independent-reviewer request packet](EXACT-REVIEW-HANDOFF.md).

@@ -110,3 +110,14 @@ Evidence: docs/operations/2026-11-07/vnext/EXECUTION-BOUNDARY-CLOCK.md and execu
 - [ ] Full never-admitted/exact membership-epoch catalog, formal/native/protected/source/time/staging/restore/iCloud/CI/release gates remain incomplete.
 
 Evidence: docs/operations/2026-11-07/vnext/SOURCE-COMPLETENESS.md, source-completeness-checks.json and EXACT-REVIEW-HANDOFF.md.
+
+## Immutable outcome / membership epoch source slice
+
+- [x] Inspect complete source mutation/delegation map, including early-return audit gaps; distinguish prospective hooks and unsupported paths.
+- [x] Private immutable journal schema/retention/replay/CAS source candidate with unconditional append barrier, original owner/fence and revoked app/public access. NOT_APPLIED, no existing writer hook/installer registration.
+- [x] Strict pure fixture epoch/chain/reason/public allowlist and packet-bound readonly keyset; runtime boundary always Disabled, false cause/entry authority, legacy/uncovered gaps.
+- [x] SameVM296focused/types/lint/fullordinarybuild and14existing synthetic HTTP/browser regressions PASS; independent readonly engineering source/doc review, not formal A1/native acceptance.
+- [ ] Actual original-writer mutation integration, immutable causal/proof/rights binding and complete workflow coverage remain NOT_CONNECTED/unimplemented; no journal writes occurred.
+- [ ] SQL grammar/catalog/install/ACL/RLS/writer/replay/CAS/concurrency/rollback/read acceptance NOT_RUN/native HOLD. Existing formal/protected/source/model/real-session/CI/staging/restore/iCloud/release gates remain.
+
+Evidence: docs/operations/2026-11-07/vnext/EPOCH-OUTCOME-CANDIDATE.md, EPOCH-MUTATION-MAP.md and epoch-outcome-checks.json. Design/amendment: candidate-epoch-journal-design.md and candidate-epoch-outcome-amendment.md.
