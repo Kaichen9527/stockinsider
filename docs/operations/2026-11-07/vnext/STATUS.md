@@ -1,3 +1,15 @@
+# Current second-batch checkpoint — ACTIVE / INCOMPLETE
+
+See [bounded product integration and remaining gates](SECOND-BATCH.md), [exact second-batch checks](second-batch-checks.json) and [browser/history observations](BROWSER-AND-HISTORY-NEXT.md). Runtime9aacbcd / browser harness103c650 are on the same protected branch and continue original PR384; original PR head remains cbb under native HOLD.
+
+New source implements immutable SQL ranking/CAS/idempotency/FK pins under existing authority, default-off cycle/internal endpoint, same-version Home/Detail, read-only active-catalog candidates, and Taiwan-calendar fallback charts.59 source/SSR checks + types/lint/build PASS; actual synthetic HTTP/Chromium desktop/mobile12PASS. All original failures remain recorded. PostgreSQL/native CAS/concurrency/rollback NOT_RUN, not implied by those results.
+
+Current financial qualification renewal/deep100 producers, full candidate source/history catalog and full3year+warmup integration remain unfinished engineering. Protected independent ref, real-source/model roles, two actual sessions, Contabo/restore/rollback and iCloud verification remain blocked/unverified.0bytes reclaimed; no archive or production deployment. Owner reports old VM objects/3WIP originals preserved there; no old lab rerun or cross-VM restore verification is claimed.
+
+---
+
+## Historical first-batch checkpoint (original subjects retained)
+
 # V2 checkpoint — ACTIVE / INCOMPLETE
 
 Source **4a941ac219911949bef8044d7c1000b15a180757**, tree **ec32a9918a6da7bf9841e15cee1919033baddf3b**, parent original PR384 headcbb581662e72942610ff85b0bf5e7e47ddddfa46. Branch codex/stockinsider-v2-cloud-nov07 protects work. No force push or main reconstruction. Evidence branch35165a7451b7153c3f768c78dfde0869a89406d1 inspected. Old unpublished source/evidence/receipt remain unverified custody gaps; original VM not modified.

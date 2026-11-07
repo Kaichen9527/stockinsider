@@ -32,3 +32,9 @@ Only /workspace/stockinsider is present; original /workspace/stockinsider-vnext-
 | Contabo live data/release/DB/ledger/timers | not observable | Require trusted read-only inventory and locks before budgets/restore/deploy |
 
 No archive was produced or uploaded because independent key custody/iCloud quota and canary restore are unverified. Archive location: none verified. Reclaimed capacity:0 bytes. Do not broadly prune or delete tables by date.
+
+## Second-batch custody correction — user report
+
+The owner now confirms the two unpublished commits and three tracked WIP originals exist in the original VM, where manifest/protection refs are being established. This is an owner-reported original-VM custody observation, not an object/restore verification on this new VM. Recoverable encrypted archival is still incomplete. Do not request an old lab rerun, move/delete PGdata/WIP, merge unverified objects or clean iCloud originals. The preceding missing-local-object statements remain dated observations of this new executor only.
+
+The same new VM now has trusted installed system Chromium151 and an actual Playwright launch succeeds. The earlier absent-binary/403 download result remains historical; no network change or new download is necessary for the supported installed path. See BROWSER-AND-HISTORY-NEXT.md.
