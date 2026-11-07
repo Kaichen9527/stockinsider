@@ -1,3 +1,15 @@
+# Current source/candidate completeness checkpoint — ACTIVE / INCOMPLETE
+
+[Source inventory/implemented limits](SOURCE-COMPLETENESS.md) · [279/build/14browser receipt](source-completeness-checks.json) · [Independent-reviewer request packet](EXACT-REVIEW-HANDOFF.md).
+
+Sourcec5cbf17: shared actual-cache admission/version evidence rejects hash/truncation/malformed/unverified-original-event inputs before reserve; preserves legacy identity without recharge. Publisher revision/origin/true upstream coverage remain unavailable,7/21null. Candidate saved-history microsecond/cursor/predecessor/cycle validation hardened; no invented never-admitted/exact exit journal.279tests/types/lint/build +14synthetic local HTTP/browser checks PASS; independent readonly source/doc review0openfindings, not A1.
+
+Exactcbb reviewer ref remains missing; packet states precise commit/tree/range/graph, allowed3A/directchild contract and readonly commands. Original PR head/native HOLD/formal qualification/release gates unchanged. Coordinator corrects outer draft key was not retained and Contabo NeedsLogin; no key/config/SSH/Contabo/newtask/SQL/oldVM/iCloud action.
+
+---
+
+## Historical execution boundary/cache clock checkpoint
+
 # Current execution boundary/cache clock checkpoint — ACTIVE / INCOMPLETE
 
 [Implemented source and limits](EXECUTION-BOUNDARY-CLOCK.md) · [256/build/14browser and retained-failure receipt](execution-boundary-clock-checks.json) · [Operator staging status](STAGING-PREPARATION-STATUS.md).

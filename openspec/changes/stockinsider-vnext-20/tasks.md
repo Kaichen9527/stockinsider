@@ -98,3 +98,15 @@ Evidence: docs/operations/2026-11-07/vnext/WEEKLY-STAGING-PREPARATION.md.
 - [ ] Six formal authority gaps, native HOLD/A1/protected/real-source/two-session/restore/iCloud/CI/release gates remain. No acceptance or permissions relaxed.
 
 Evidence: docs/operations/2026-11-07/vnext/EXECUTION-BOUNDARY-CLOCK.md and execution-boundary-clock-checks.json.
+
+## Source admission / candidate completeness slice
+
+- [x] Inspect actual official announcement/IR/cache and normalized revision contracts; document missing raw→revision/original-event/root/exhaustive coverage bridge without new acquisition.
+- [x] Shared actual-cache admission/version evidence; reject invalid hash/truncation/metadata/clock inputs before reserve, preserve completed legacy identity without relabel/recharge; publisher/origin/7/21 staynull.
+- [x] Saved-history exact clocks, read boundary, predecessor-bound cursor and visible cycle rejection; readonly public allowlist/scope preserved.
+- [x] Maker-authored independent-reviewer REQUEST ONLY: exact source/PR distinction, base-owned refs/3A/directchild/graph, readonly commands and scope. No approval/ref issued.
+- [x] SameVM279focused/types/lint/fullbuild and14synthetic HTTP/browser PASS; independent readonly engineering review, no formal A1 substitution.
+- [ ] Actual authorized complete event/revision/origin and terminal upstream coverage; truly comparable7/21 baseline remain unverified/unconnected.
+- [ ] Full never-admitted/exact membership-epoch catalog, formal/native/protected/source/time/staging/restore/iCloud/CI/release gates remain incomplete.
+
+Evidence: docs/operations/2026-11-07/vnext/SOURCE-COMPLETENESS.md, source-completeness-checks.json and EXACT-REVIEW-HANDOFF.md.

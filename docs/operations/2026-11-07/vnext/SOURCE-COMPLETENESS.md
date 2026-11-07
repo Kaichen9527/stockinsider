@@ -1,0 +1,53 @@
+# Source admission / candidate completeness — ACTIVE / INCOMPLETE
+
+Tested source **c5cbf170b927155d5fabb040cbfcf3fd8fbbee94**, tree **482116bdb1e7ccaa2add79f61b815eef20ffde1f**, runtime web tree **3e0a4ae72b42ca0cd30d248f99166b398c9045e4**. Continuesa069b5e on the same development VM/protection branch with explicitly selected GPT-6.1 Sol High authors and separate engineering reviewer. Original PR384 remains at cbb581662e72942610ff85b0bf5e7e47ddddfa46. No formal reviewer approval/binding is issued here.
+
+## Existing official/IR/source capabilities inspected
+
+These are source contracts and code bounds, not observed live permissions, database rows or successful acquisition.
+
+| Existing producer/contract | Facts safely reusable | Missing authority/completeness |
+|---|---|---|
+| `research-v2.ts` / `upsertSourceRawDocuments` | Raw UUID, platform, citation, publication/collection clocks, cached body/title, symbols and original canonical hash normalization | Reads existing platform+URL and skips duplicates; body may be truncated. Cannot establish latest same-URL correction, immutable supersession or exhaustive upstream history. |
+| `scrapeTwseInsider` / existing `twse_insider` cache | Three bounded TWSE open-data datasets, report-date/row transport observations | Dataset URL is reused for multiple issuer rows; rows can collapse and per-row JSON was already sliced before raw upsert. Generic truncation flags do not prove complete upstream original text. Report date is not the original event; no terminal original-event window/pagination. |
+| `fetchOfficialDisclosureRows`, `runMopsFilingIngest`, `runEarningsCallIngest` | Existing TWSE/TPEx official announcement/IR excerpts in `conference_transcripts` | Upserted excerpt≤2000chars and dataset link are not immutable full original/transcript. Missing date may fall back to current time. No exact publication/acquisition/recorded revision bridge suitable for this worker. These stores are not silently added as authorized originals. |
+| Broker/podcast/creator workflows and `financial-evidence-sources.ts` | Existing separate rights/document/financial provenance contracts within their original admitted workflows | Metadata/status or a financial fact receipt does not confer legal transcript/discovery-original/root/full-feed permission. No John/new-source/Telegram raw/member-text scope added. |
+| `discovery-revision-publisher-reader.ts` / `discovery-frozen-snapshot-reader.ts` | Existing normalized revisions, source identities, publisher verification, registry and exact manifest; pure precise-clock projection and dedicated readonly frozen-population protocol | No approved raw UUID→normalized revision bridge or configured admitted runtime for this cache worker. Hash equality/metadata cannot replace it. No client/socket/SQL is invoked; pure output is not investment admission or verified independent origin. |
+
+## Implemented source composition
+
+Both actual cache callers, `source-window-worker.ts` and `source-worker.ts`, now reuse `cached-source-admission.ts` before the original extraction/reservation path. The helper reuses original canonical hash normalization and unchanged `permittedContentFingerprint`, validates exact original/publication/acquisition/cutoff ordering, and refuses known truncation, hash mismatch, malformed present metadata/hash/restriction flags, invalid discovery eligibility and unsupported body bounds. Missing/null legacy fields remain explicit gaps; they do not supply authority.
+
+An `original_event_at` metadata declaration remains an observed clock. It cannot prove an original event. Its legacy identity/hash is preserved as observation evidence, but extraction is refused with `vnext_cached_original_event_authority_unavailable`. No relabelled identity, reserve, reparse or charge is sent. An actual-worker fixture seeds the completed legacy hash and proves receipt preservation with0reserve/0complete. The older event is never refreshed to publication/acquisition time. Publication-only inputs keep their unchanged extraction identity; acquisition-only recollection changes only the observation version.
+
+New body-free evidence retains raw ID/citation/exact clocks, original extraction fingerprint, bounded cache-version hash, event identity basis, canonical hash observations and typed status/reason/gaps. Version hash binds event basis and denial restrictions. Same-citation fingerprints are unordered observed versions, with no latest/supersedes/publisher head claim. Official content stays in the existing single conservative source family; PTT stays unresolved metadata and never selects a body. Unverified publisher/root/origin metadata cannot add independent voices.
+
+`publisherRevision` and `verifiedIndependentOrigin` remain null. `upstreamCoverage` stays unknown and `eventVolume`, `recent7`, `prior21` stay null. Actual discovery retains `sourceHealthy:false` and null7/21 inputs. Finished cache enumeration or healthy/successful-empty terminal does not establish complete28day coverage, known-zero baseline or comparability. No new baseline is connected.
+
+Existing authenticated source policies, writer, durable reserve/complete receipts, rights rechecks and200/day/50/source limits remain the authority. Rejected cache rows may be accounted with explicit refusal without parsing; reserved/failed receipts still hold progress and uncertain commands are not retried. No SQL, RLS, ledger authority, parser identity, rights grant, external IO/model or public GET work was added. Evidence is returned by the existing internal composition; it is not a new immutable publisher record or formal current qualification.
+
+## Candidate history boundary
+
+Existing immutable snapshots save at most20 non-exited active members; their readonly history RPC exposes the selected snapshot, exact predecessor and successor metadata. Current members are mutable symbol-PK rows; screening inputs are per-session upserts; current clues are rights/time/withdrawal filtered. Private command audit contains early-return gaps and count-only expiration outcomes. None is an exhaustive public never-admitted/exit journal. A missing symbol cannot be labelled never-admitted, and transitions between saves remain unobservable.
+
+`candidate-page.ts` now reuses the existing exact evidence clock, rejects invalid civil/non-ISO/future clocks and microsecond predecessor/successor inversions, and refuses visible self/back/three-node cycles. The cursor binds predecessor identity/cutoff even when no symbol disappears. A legitimate appended successor still preserves the selected row population/cursor. Older predecessor-unbound cursors fail closed and restart pagination.
+
+The public allowlist, original feature fence, one readonly RPC,≤20active/≤40adjacent observations, selected immutable version and explicit coverage gaps remain. Absence from successor is only a conservative observed exit with entryEligiblefalse; it is not an exact ledger exit time/reason or current validity. No new SQL/RPC/catalog/industry/source metadata or UI/GET producer was invented. A full catalog still needs a reviewed immutable per-symbol outcome/membership-epoch contract, complete mutation-path coverage, retention and rights/public-field rules under the original writer.
+
+## Checks and review
+
+[Exact commands, hashes, resources and browser receipt](source-completeness-checks.json): **279 focused cases PASS /0fail /0skip**, types PASS, lint PASS (0errors/34existingwarnings), full ordinary `npm --prefix web run build` PASS. Installed Chromium151 actual local HTTP/SSR desktop/mobile: **14 checks PASS**, synthetic RPC23reads/0writes/0provider. Source/harness/runtime tree are bound in the receipt. These are public-read regressions and synthetic transport tests, not real source or native publication/staging acceptance.
+
+Author separately ran40source cases (8new pure,17actual source-window composition,11analysis,4backlog) with synthetic cached/ledger replies. The legacy worker's shared call was source-inspected and type/build checked; no dedicated legacy-worker execution fixture was added. Independent reviewer inspected source diffs, exact base contract and receipt scope, reporting0blocker/high/0openfindings; the reviewer did not independently execute these final tests. Counts are overlapping scopes, not additive acceptance totals.
+
+Review found and closed: a draft event-basis change that would have minted another extraction identity; malformed-present fields treated as missing; event-basis omission from observation version; and a visible three-node candidate cycle. No approved oracle/guard or original test assertion was weakened. Earlier33source tests passed before these review findings/new cases; only the final fixed source receives this279/build/browser result. Historical failures and previous256/14 receipt remain unchanged. Native same_failure_limit2 HOLD and max_task_iterations5 remain; no native retry was attempted.
+
+Heavy checks were serial on the same VM with original8GiB workspace/tmp floors plus512MiB admission reference and8GiB sampled descendant RSS guard; no violation or deletion. Samples are not instantaneous/cgroup maxima. Browser cleanup reports test app exited and local fixture bridge closed. Dependency locks and Node22.14 remain pinned.
+
+## Exact-review and external gates
+
+[Reviewer handoff](EXACT-REVIEW-HANDOFF.md) identifies distinct cbb PR subject and c5cbf17 product source, full tree/range/graph, missing exact-subject ref, v325 R/A refs, exact3-added-file/direct-child constraint and safe inspection commands. It is maker-authored REQUEST ONLY. No self-signing, approval/attestation/ref creation, protected pipeline or PR-head change occurred. Remote R/A tip existence is not newly validated review content. Same active graph is not same product source or legal review.
+
+Current managed Cloud development executor remains running/current revision1, restricted/enforced, with no secret bindings or outbound identities observed. Coordinator corrects the earlier key-filled report: outer draft did not retain the auth key and Contabo still NeedsLogin. No key read/change, connection, enrollment, config, new task or development VM rebuild was performed. Execution boundary stays Disabled; no platform/broker/approval/agent provenance is inferred.
+
+Formal current financial/price/action/rights/requalification gaps, VN01–VN20, native/A1/protected review, actual legal-source→distinctauthor/reviewer→website positive, real adjacent sessions, CI, isolated staging, backup/restore/rollback, iCloud and release gates remain incomplete. No SQL/PG, writer/schedule, production/merge/deployment, old VM/iCloud or archive/deletion action.0bytes reclaimed; archive location unverified.
