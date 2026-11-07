@@ -1,3 +1,13 @@
+# Current stored-history/source checkpoint — ACTIVE / INCOMPLETE
+
+[Delivered source, actual tests and remaining gates](STORED-HISTORY-SOURCE.md) · [150-case/build/14-browser receipt](stored-history-source-checks.json) · [SSH admission/operator facts](SSH-READINESS-RECEIPT.json).
+
+Sourcea6b944b adds bounded three-year history/warmup and truthful gaps, saved candidate version navigation/observed exits, and exact completed source progress.150tests/types/lint/build and14synthetic HTTP/Chromium checks PASS. Native HOLD and original PR head unchanged. No Contabo route/agent readiness was established; no probe/key/config/host mutation. Operator public trust/capacity facts are retained separately.
+
+---
+
+## Historical qualification-read checkpoint
+
 # Current qualification-read checkpoint — ACTIVE / INCOMPLETE
 
 [Current implemented slice and remaining gates](QUALIFICATION-READ.md) · [Exact VM evidence](qualification-read-checks.json) · [Owner Console/SSH prerequisites](CONTABO-OWNER-VERIFIED-STEPS.md).

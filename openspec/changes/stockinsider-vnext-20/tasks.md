@@ -58,3 +58,13 @@ See [V2 Top10 / Cloud / iCloud / Contabo amendment](v2-top10-cloud-amendment.md)
 - [ ] Fresh current financial/price producer for published research still needs reviewed authority protocol. Native HOLD and all formal/staging/time/release gates retained.
 
 Exact evidence: docs/operations/2026-11-07/vnext/QUALIFICATION-READ.md.
+
+## Stored-history/source slice
+
+- [x] Existing bounded price data→three-calendar-year anniversary window+239warmup/gap metadata and UI; exhaustive calendar remains unknown.
+- [x] Saved immutable candidate versions/adjacent absence navigation+bounded keyset/negative-entry; full event/unadmitted history still gap.
+- [x] Exact completed receipt progress, held reserved/failed cursor, finite/null source volume and origin dedup.
+- [x] Current executor names-only/network evidence + owner-attested public host/capacity record; no SSH/key/config.
+- [ ] Formal/native/current-financial/exhaustive-source/two-session/Contabo/iCloud/release gates unchanged.
+
+Evidence: docs/operations/2026-11-07/vnext/STORED-HISTORY-SOURCE.md.

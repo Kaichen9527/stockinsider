@@ -1,0 +1,193 @@
+{
+  "schemaVersion": "vnext-stored-history-source-evidence-v1",
+  "sourceCommit": "a6b944be5f007c7c626bb1d53ecee543a892d568",
+  "sourceTree": "64f15da5ebb405402f21b292e8adfbff83648e5d",
+  "authorAndIndependentReviewModel": "gpt-6.1-sol",
+  "reasoningEffort": "high",
+  "executor": "same selected stockinsider Cloud VM",
+  "checks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts"
+      ],
+      "start": "2026-11-07T09:15:56.275409+00:00",
+      "end": "2026-11-07T09:15:57.779571+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 38088704,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31501000704,
+        "/tmp": 9422893056
+      },
+      "resourceViolation": null,
+      "logSha256": "128ca46befeb09691a053be8f012fb928bf0a011465ac2ce29ef0cb68691e3c4"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-07T09:15:57.779948+00:00",
+      "end": "2026-11-07T09:16:04.801569+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 40235008,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31500967936,
+        "/tmp": 9422893056
+      },
+      "resourceViolation": null,
+      "logSha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-07T09:16:04.801966+00:00",
+      "end": "2026-11-07T09:16:21.594320+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 41185280,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31500963840,
+        "/tmp": 9422893056
+      },
+      "resourceViolation": null,
+      "logSha256": "84df8aab33a2588ebae98ea51a5abfccb758ea53330f1013e6b9766025759b29"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-07T09:16:21.594735+00:00",
+      "end": "2026-11-07T09:16:36.404642+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 41590784,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31490830336,
+        "/tmp": 9422893056
+      },
+      "resourceViolation": null,
+      "logSha256": "e4bcef90f95459eeaaaddd825d96cbd0ef6be0a4388a83ca65fa53bfdfb9266c"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "scripts/vnext-ranking-browser-smoke.mjs"
+      ],
+      "start": "2026-11-07T09:16:36.405048+00:00",
+      "end": "2026-11-07T09:16:43.418819+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 155176960,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 31483486208,
+        "/tmp": 9298206720
+      },
+      "resourceViolation": null,
+      "logSha256": "ac4d84780e28c3cc5c972b480b2cacf92cdb8d5f385f0e171bff8febe6333c82"
+    }
+  ],
+  "focusedTests": 150,
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 34
+  },
+  "browser": {
+    "scope": "actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority",
+    "status": "PASS",
+    "source": "a6b944be5f007c7c626bb1d53ecee543a892d568",
+    "harnessCommit": "a6b944be5f007c7c626bb1d53ecee543a892d568",
+    "runtimeWebTree": "1566a18894ff6e4f0a0b5603f42b2f9a678d6a9a",
+    "browserVersion": "151.0.7922.173",
+    "checks": [
+      "desktop:top0",
+      "desktop:top1",
+      "desktop:top10",
+      "desktop:bound-detail-invalidity",
+      "desktop:wrong-revision-closed",
+      "desktop:stable-page-private-allowlist",
+      "desktop:saved-history-version-and-observed-exit",
+      "mobile:top0",
+      "mobile:top1",
+      "mobile:top10",
+      "mobile:bound-detail-invalidity",
+      "mobile:wrong-revision-closed",
+      "mobile:stable-page-private-allowlist",
+      "mobile:saved-history-version-and-observed-exit"
+    ],
+    "readRpcCalls": 23,
+    "writeRpcCalls": 0,
+    "providerCalls": 0
+  },
+  "cleanup": {
+    "appPid": 12419,
+    "appExit": 143,
+    "appSignal": null,
+    "bridgeClosed": true
+  },
+  "independentReview": {
+    "unresolvedCodeFindings": 0,
+    "scope": "bounded source/synthetic contracts, not native/A1",
+    "retainedFinding": "Supply calendar+bars with the same intermediate day removed initially produced complete; fixed to supplied_sessions_covered/calendarCompleteness unknown, original reviewer repro rechecked."
+  },
+  "historyScope": "three-calendar-year anniversary display +239 prior MA warmup from bounded existing1320; supplied-calendar completeness/listing/suspension unknown; no new acquisition",
+  "candidatesScope": "all saved ranking versions navigable; selected active pool+adjacent prior absence only<=40; not unadmitted/full ledger events or exact exit time/reason",
+  "producerScope": "exact-hash completed cursor accounting and original root/author/hash dedup;7/21unknown staysnull, no new coverageauthority",
+  "nativeSQL": "NOT_RUN_HOLD_RETAINED",
+  "protectedReviewBinding": "BLOCKED_UNCHANGED",
+  "currentFinancialPriceRenewalProducer": "UNIMPLEMENTED",
+  "realSourceModelTwoSessions": "BLOCKED_NOT_RUN",
+  "sshAdmission": "BLOCKED_NO_OBSERVED_PRECISE_ROUTE_OR_SAFE_AGENT",
+  "contaboOperations": "NOT_RUN_FROM_THIS_VM",
+  "privateKeyGeneration": "NOT_PERFORMED",
+  "networkConfiguration": "NOT_CHANGED",
+  "oldVmICloudProduction": "NOT_TOUCHED",
+  "archiveLocation": null,
+  "reclaimedBytes": 0,
+  "fullGoal": "ACTIVE_INCOMPLETE"
+}
