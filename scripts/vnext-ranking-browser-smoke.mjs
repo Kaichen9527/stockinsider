@@ -12,7 +12,11 @@ import { REQUIRED_SECTIONS } from '../web/src/lib/vnext/research.ts';
 const require=createRequire(import.meta.url),{chromium}=require('../web/node_modules/playwright');
 const root=process.cwd();
 assert.equal(process.version,'v22.14.0');
-assert.equal(process.env.VNEXT_RANKING_BUILD_SOURCE_SHA,execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),'exact built source required');
+const built=process.env.VNEXT_RANKING_BUILD_SOURCE_SHA;
+assert.match(built||'',/^[a-f0-9]{40}$/u,'exact build commit required');
+const harnessCommit=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+const runtimeWebTree=execFileSync('git',['rev-parse',built+':web'],{encoding:'utf8'}).trim();
+assert.equal(runtimeWebTree,execFileSync('git',['rev-parse','HEAD:web'],{encoding:'utf8'}).trim(),'runtime web tree equals fixed build');
 execFileSync('git',['diff','--quiet','--','web/src']);
 const out=path.resolve(process.env.VNEXT_RANKING_SMOKE_OUTPUT||'work/v2-integration/browser');
 if(fs.existsSync(out))throw Error('fresh_output_required');
@@ -47,11 +51,11 @@ try{
   for(const [state,count]of [['zero',0],['one',1],['ten',10]]){mode=state;await page.goto('http://127.0.0.1:34236/');assert.equal(await page.getByTestId('vnext-ranked-member').count(),count);assert.equal(await page.getByTestId('vnext-home').filter({visible:true}).locator(':scope > section').count(),2);await page.screenshot({path:path.join(out,viewport.name+'-'+state+'.png'),fullPage:true});receipts.push(viewport.name+':top'+count);}
   mode='one';await page.goto('http://127.0.0.1:34236/');await page.getByTestId('vnext-ranked-member').getByRole('link').click();await page.getByTestId('vnext-ranking-binding').waitFor();const text=await page.locator('main').innerText();assert.ok(text.includes('Synthetic frozen revision conclusion'));assert.ok(!text.includes('LATEST MUST NOT REPLACE FROZEN'));assert.ok(text.includes('當前條件已失效'));receipts.push(viewport.name+':bound-detail-invalidity');
   await page.goto('http://127.0.0.1:34236/stock/1000?vnextRevision='+newer+'&rankingRunId='+run);assert.ok((await page.locator('main').innerText()).includes('研究資料暫時無法讀取'));receipts.push(viewport.name+':wrong-revision-closed');
-  await page.goto('http://127.0.0.1:34236/candidates?limit=1');assert.equal(await page.locator('tbody tr').count(),1);const href=await page.getByRole('link',{name:'下一頁',exact:true}).getAttribute('href');assert.ok(href.includes('cursor='));await page.getByRole('link',{name:'下一頁',exact:true}).click();assert.equal(await page.locator('tbody tr').count(),1);assert.ok((await page.locator('tbody').innerText()).includes('1001'));assert.ok(!(await page.locator('main').innerText()).includes('PRIVATE_MUST_NOT_RENDER'));receipts.push(viewport.name+':stable-page-private-allowlist');
-  const bounds=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(bounds.scroll<=bounds.width+1);await page.screenshot({path:path.join(out,viewport.name+'-candidates.png'),fullPage:true});await context.close();
+  await page.goto('http://127.0.0.1:34236/candidates?limit=1');assert.equal(await page.locator('tbody tr').count(),1);const href=await page.getByRole('link',{name:'下一頁',exact:true}).getAttribute('href');assert.ok(href.includes('cursor='),'cursor_link_present');await page.getByRole('link',{name:'下一頁',exact:true}).click();await page.locator('tbody').getByRole('link',{name:'1001',exact:true}).waitFor();assert.equal(await page.locator('tbody tr').count(),1);assert.ok((await page.locator('tbody').innerText()).includes('1001'),'next_cursor_page_1001');assert.ok(!(await page.content()).includes('PRIVATE_MUST_NOT_RENDER'),'private_allowlist_html_and_flight');receipts.push(viewport.name+':stable-page-private-allowlist');
+  const bounds=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(bounds.scroll<=bounds.width+1,'no_horizontal_overflow_'+JSON.stringify(bounds));await page.screenshot({path:path.join(out,viewport.name+'-candidates.png'),fullPage:true});await context.close();
  }
  assert.ok(calls.length>0&&calls.every(c=>c.path==='/rest/v1/rpc/vnext_ranking_read_v1'));
- fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify({scope:'actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority',status:'PASS',source:process.env.VNEXT_RANKING_BUILD_SOURCE_SHA||null,browserVersion:browser.version(),checks:receipts,readRpcCalls:calls.length,writeRpcCalls:0,providerCalls:0},null,2)+'\n');
+ fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify({scope:'actual isolated HTTP/SSR/Chromium desktop/mobile; synthetic RPC transport only, no native PG/review authority',status:'PASS',source:built,harnessCommit,runtimeWebTree,browserVersion:browser.version(),checks:receipts,readRpcCalls:calls.length,writeRpcCalls:0,providerCalls:0},null,2)+'\n');
 }catch(e){code=1;fs.writeFileSync(path.join(out,'failure.json'),JSON.stringify({status:'FAIL',error:e.message,checks:receipts,readRpcCalls:calls.length},null,2)+'\n');}
 finally{if(browser)await browser.close();if(bridge)await new Promise(r=>bridge.close(r));if(app&&app.exitCode===null){app.kill('SIGTERM');await once(app,'exit');}fs.writeFileSync(path.join(out,'cleanup.json'),JSON.stringify({appPid:app?.pid,appExit:app?.exitCode,appSignal:app?.signalCode,bridgeClosed:!bridge?.listening})+'\n');}
 process.exitCode=code;
