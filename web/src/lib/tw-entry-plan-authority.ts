@@ -3,6 +3,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { validAdjustedEvidence } from './generated/official-authority/official-market-authority-v314.js';
 import { loadOfficialTradingCalendarV314 } from './generated/official-authority/official-calendar-v314.js';
 import type { TwEntryBar, TwEntryCalendar, TwEntryPriceBasis } from './tw-entry-plan-contract.ts';
+import {evidenceInstant, evidenceKnownAt, compareEvidenceClocks} from './vnext/evidence-clock.ts';
 
 type Row = Record<string, unknown>;
 type Exchange = 'TWSE' | 'TPEX';
@@ -36,19 +37,25 @@ const timestamp = (value: unknown) => typeof value === 'string' && /T.*(?:Z|[+-]
   && Number.isFinite(Date.parse(value)) ? Date.parse(value) : NaN;
 const date = (value: unknown): value is string => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(value)
   && Number.isFinite(Date.parse(`${value}T00:00:00Z`)) && new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value;
-const maxTime = (...values: unknown[]) => new Date(Math.max(...values.map(timestamp))).toISOString();
+const maxTime = (...values: unknown[]) => {
+  const latest = [...values].sort(compareEvidenceClocks).at(-1);
+  requireAuthority(typeof latest === 'string' && evidenceInstant(latest) !== null, 'entry_authority_clock_invalid');
+  // Keep established millisecond serialization; never truncate a PostgreSQL
+  // microsecond maximum into an earlier availability time.
+  return evidenceInstant(latest)! % BigInt(1000) === BigInt(0) ? new Date(timestamp(latest)).toISOString() : latest;
+};
 const finitePositive = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value) && value > 0;
 const civilTaipei = (value: unknown) => new Date(timestamp(value) + 8 * 3_600_000).toISOString().slice(0, 10);
 function requireAuthority(ok: unknown, code: string): asserts ok { if (!ok) throw new Error(code); }
 function knownAt(row: Row, cutoff: string, keys = ['source_timestamp', 'collected_at', 'recorded_at']) {
-  const values = keys.map((key) => timestamp(row[key]));
-  return values.every((value, i) => Number.isFinite(value) && value <= timestamp(cutoff) && (i === 0 || values[i - 1] <= value));
+  return keys.every((key, i) => evidenceKnownAt(row[key], cutoff)
+    && (i === 0 || compareEvidenceClocks(row[keys[i - 1]], row[key]) <= 0));
 }
 function canonicalPgTimestamp(value: unknown) {
   // PostgreSQL's jsonb timestamptz representation is UTC with a numeric offset.
   // Preserve sub-millisecond digits when PostgREST supplied them.
   const raw = text(value).replace(/Z$/u, '+00:00');
-  requireAuthority(Number.isFinite(timestamp(raw)) && /\+00:00$/u.test(raw), 'corporate_action_timestamp_invalid');
+  requireAuthority(evidenceInstant(raw) !== null && /\+00:00$/u.test(raw), 'corporate_action_timestamp_invalid');
   return raw.replace(/\.(\d*?)0+(?=\+00:00$)/u, (_match, digits: string) => digits ? `.${digits}` : '');
 }
 async function readRows(query: (from: number, to: number) => PromiseLike<{ data: Row[] | null; error: unknown }>, maximum: number) {
@@ -72,11 +79,11 @@ function selectedHeads(rows: Row[], key: string, clocks: string[], semantics: st
   }
   return new Map([...groups].map(([id, members]) => {
     members.sort((a, b) => {
-      for (const clock of clocks) { const diff = timestamp(b[clock]) - timestamp(a[clock]); if (diff) return diff; }
+      for (const clock of clocks) { const diff = compareEvidenceClocks(b[clock], a[clock]); if (diff) return diff; }
       return 0;
     });
     const head = members[0];
-    const tied = members.filter((row) => clocks.every((clock) => timestamp(row[clock]) === timestamp(head[clock])));
+    const tied = members.filter((row) => clocks.every((clock) => compareEvidenceClocks(row[clock], head[clock]) === 0));
     requireAuthority(tied.every((row) => semantics.every((field) => JSON.stringify(row[field]) === JSON.stringify(head[field]))), 'entry_authority_conflict');
     return [id, head];
   }));
@@ -98,6 +105,7 @@ export async function acquireTwEntryForwardCalendar(): Promise<TwEntryForwardCal
 type SharedAuthority = { sessions: string[]; calendarRows: Map<string, Row>; calendarById: Map<string, Row>; snapshots: Map<string, Row>; events: Map<string, Row[]>; availableAt: string };
 const sharedByClient = new WeakMap<object, Map<string, Promise<SharedAuthority>>>();
 function sharedAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest) {
+  requireAuthority(evidenceKnownAt(request.cutoff, new Date().toISOString()), 'entry_authority_request_invalid');
   let cache = sharedByClient.get(client);
   if (!cache) { cache = new Map(); sharedByClient.set(client, cache); }
   const key = `${request.exchange}:${request.signalSession}:${request.cutoff}`;
@@ -119,10 +127,10 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
   requireAuthority(calendarRows.length, 'official_calendar_history_missing');
   for (const row of calendarRows) requireAuthority(date(row.session_id) && row.market === exchange && row.provider === exchange.toLowerCase()
     && UUID.test(text(row.session_authority_id)) && knownAt(row, cutoff)
-    && ['completed', 'cancelled'].includes(text(row.status)) && timestamp(row.open_at) < timestamp(row.close_at)
+    && ['completed', 'cancelled'].includes(text(row.status)) && evidenceInstant(row.open_at) !== null && evidenceInstant(row.close_at) !== null && compareEvidenceClocks(row.open_at, row.close_at) < 0
     && civilTaipei(row.open_at) === row.session_id && civilTaipei(row.close_at) === row.session_id && text(row.source_ref), 'official_calendar_authority_invalid');
   const heads = selectedHeads(calendarRows, 'session_id', ['recorded_at'], ['status', 'open_at', 'close_at', 'provider', 'source_timestamp', 'collected_at', 'source_ref']);
-  const sessions = [...heads].filter(([session, row]) => session <= signalSession && row.status === 'completed' && timestamp(row.close_at) <= timestamp(cutoff))
+  const sessions = [...heads].filter(([session, row]) => session <= signalSession && row.status === 'completed' && evidenceKnownAt(row.close_at, cutoff))
     .map(([session]) => session).sort().slice(-HISTORY);
   requireAuthority(sessions.length === HISTORY && sessions.at(-1) === signalSession, 'adjusted_history_below_240');
   const snapshots = await readRows((from, to) => client.from('opportunity_corporate_action_snapshots_v3')
@@ -159,7 +167,7 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
     const snapshotEvents = events.filter((row) => row.snapshot_id === snapshot.snapshot_id).sort((a, b) => Number(a.event_ordinal) - Number(b.event_ordinal));
     requireAuthority(snapshotFeeds.length === 3 && snapshotFeeds.every((row, i) => row.feed_ordinal === i && row.feed_identity === FEEDS[exchange][i]
       && HASH.test(text(row.response_sha256)) && Number.isInteger(row.response_byte_count) && Number(row.response_byte_count) >= 0
-      && Number.isInteger(row.parsed_row_count) && Number(row.parsed_row_count) >= 0 && timestamp(row.recorded_at) <= timestamp(cutoff))
+      && Number.isInteger(row.parsed_row_count) && Number(row.parsed_row_count) >= 0 && knownAt(row, cutoff, ['recorded_at']))
       && snapshotEvents.length === snapshot.declared_event_count
       && snapshotFeeds.reduce((sum, row) => sum + Number(row.parsed_row_count), 0) === snapshotEvents.length, 'corporate_action_evidence_incomplete');
     for (let i = 0; i < snapshotEvents.length; i++) {
@@ -168,7 +176,7 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
       requireAuthority(row.event_ordinal === i && /^[0-9A-Za-z]{2,12}$/u.test(text(row.symbol)) && (i === 0 || text(row.symbol) > text(snapshotEvents[i - 1].symbol))
         && kind >= 0 && row.feed_identity === FEEDS[exchange][kind] && finitePositive(row.pre_action_reference_price) && finitePositive(row.post_action_reference_price)
         && finitePositive(row.daily_adjustment_factor) && Math.abs(row.daily_adjustment_factor - row.post_action_reference_price / row.pre_action_reference_price) < 1e-10
-        && timestamp(row.recorded_at) <= timestamp(cutoff)
+        && knownAt(row, cutoff, ['recorded_at'])
         && row.source_row_ref === hash(['corporate-action-source-row-v3.1', exchange, snapshot.session_id, row.symbol, row.event_kind,
           row.pre_action_reference_price, row.post_action_reference_price, row.feed_identity]), 'corporate_action_event_invalid');
     }
@@ -186,7 +194,7 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
 function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRequest): TwEntryCalendar {
   const evidence = request.forwardCalendar;
   requireAuthority(evidence?.schema === 'official-calendar-acquisition-v3.14'
-    && timestamp(evidence.availableAt) <= timestamp(request.cutoff) && Array.isArray(evidence.calendarSessions)
+    && evidenceKnownAt(evidence.availableAt, request.cutoff) && Array.isArray(evidence.calendarSessions)
     && evidence.calendarSessions.length <= 1200, 'official_next_session_missing');
   const forward = evidence.calendarSessions.filter((row) => row.market === request.exchange && date(row.session) && row.session >= authority.sessions[0])
     .sort((a, b) => text(a.session).localeCompare(text(b.session)));
@@ -195,8 +203,8 @@ function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRe
     const sourceHash = text(row.sourceSha256);
     requireAuthority(HASH.test(sourceHash) && row.provider === request.exchange.toLowerCase()
       && row.sourceRef === `${request.exchange.toLowerCase()}-annual-calendar:${text(row.session).slice(0, 4)}:${row.session}:${sourceHash}`
-      && ['completed', 'scheduled', 'holiday'].includes(text(row.status)) && timestamp(row.collectedAt) <= timestamp(evidence.availableAt)
-      && timestamp(row.sourceTimestamp) <= timestamp(row.collectedAt) && !byDate.has(text(row.session)), 'official_next_calendar_invalid');
+      && ['completed', 'scheduled', 'holiday'].includes(text(row.status)) && evidenceKnownAt(row.collectedAt, evidence.availableAt)
+      && evidenceKnownAt(row.sourceTimestamp, text(row.collectedAt)) && !byDate.has(text(row.session)), 'official_next_calendar_invalid');
     const url = new URL(text(row.sourceUrl));
     requireAuthority(url.protocol === 'https:' && url.hostname === (request.exchange === 'TWSE' ? 'www.twse.com.tw' : 'www.tpex.org.tw'), 'official_next_calendar_invalid');
     byDate.set(text(row.session), row);
@@ -231,10 +239,10 @@ function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRe
     if (recorded?.status === 'cancelled') { knownCancellations.push(recorded); continue; }
     if (row.status === 'scheduled') { next = row; break; }
   }
-  requireAuthority(next && timestamp(next.openAt) < timestamp(next.scheduledCloseAt)
+  requireAuthority(next && evidenceInstant(next.openAt) !== null && evidenceInstant(next.scheduledCloseAt) !== null && compareEvidenceClocks(next.openAt, next.scheduledCloseAt) < 0
     && civilTaipei(next.openAt) === next.session && civilTaipei(next.scheduledCloseAt) === next.session, 'official_next_session_missing');
   const signal = authority.calendarRows.get(request.signalSession)!;
-  requireAuthority(timestamp(signal.close_at) < timestamp(next.openAt), 'official_next_calendar_invalid');
+  requireAuthority(compareEvidenceClocks(signal.close_at, next.openAt) < 0, 'official_next_calendar_invalid');
   return {
     version: `${VERSION}:${hash([authority.sessions.map((session) => [session, authority.calendarRows.get(session)!.session_authority_id]), intervening, knownCancellations])}`,
     knownAt: maxTime(evidence.availableAt, ...authority.sessions.map((session) => authority.calendarRows.get(session)!.recorded_at), ...knownCancellations.map((row) => row.recorded_at)),
@@ -323,7 +331,7 @@ export async function loadTwEntryHistoricalPriceAuthority(client: TwEntryAuthori
     availableAt: request.cutoff, missingData: [] };
   try {
     requireAuthority(UUID.test(request.stockId) && /^\d{4}$/u.test(request.symbol) && ['TWSE', 'TPEX'].includes(request.exchange)
-      && date(request.signalSession) && Number.isFinite(timestamp(request.cutoff)) && timestamp(request.cutoff)<=Date.now(), 'entry_authority_request_invalid');
+      && date(request.signalSession) && evidenceKnownAt(request.cutoff, new Date().toISOString()), 'entry_authority_request_invalid');
     const shared = await sharedAuthority(client, request);
     // The existing authority proves price factors, not share-volume factors.
     // A recent split/reduction can make raw volume ratios incomparable; do not
@@ -355,7 +363,7 @@ export async function loadTwEntryHistoricalPriceAuthority(client: TwEntryAuthori
     const bars = shared.sessions.map((session) => {
       const row = heads.get(session)!;
       requireAuthority(typeof row.volume === 'number' && Number.isFinite(row.volume) && row.volume >= 0
-        && timestamp(row.source_timestamp) >= timestamp(shared.calendarRows.get(session)!.close_at), 'raw_price_authority_invalid');
+        && evidenceKnownAt(shared.calendarRows.get(session)!.close_at, text(row.source_timestamp)), 'raw_price_authority_invalid');
       const actionDays = shared.sessions.filter((day) => day > session).map((day) => {
         const snapshot = shared.snapshots.get(day)!;
         const action = shared.events.get(text(snapshot.snapshot_id))!.find((event) => event.symbol === request.symbol);

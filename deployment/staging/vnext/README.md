@@ -87,6 +87,43 @@ unknown connector/executable/ready fields, alias/command injection, permissive
 SSH settings, malformed gateway/capacity output and formal namespace reuse.
 No actual SSH, agent command, key operation or remote service is exercised.
 
+## Closed execution boundary
+
+`execution-boundary.mjs` adds a source/fixture execution contract without a live
+adapter. `inspectExecutionBoundary(plan, { now })` reports `Disabled` even for a
+complete public plan; `executeReadOnlyPreflight` always rejects. Its only option
+is the explicit UTC clock. Caller adapters, approval booleans and provenance
+objects are rejected, and no public platform-adapter registration exists.
+Independent platform executor identity, official sidecar broker, exact platform
+approval and ephemeral agent provenance remain typed `NOT_OBSERVED`
+requirements. A future verified platform integration needs its own reviewed
+implementation; filling in public plan metadata cannot enable execution.
+
+`verifyExecutionBoundaryFixture` accepts only an explicitly labeled fixture
+adapter with `open`, `execute` and `close` functions. The immutable request binds
+the new staging executor intent, official outer-executor sidecar CONNECT path,
+one tailnet IPv4:22, retained host pin, one short-lived public fingerprint and
+one forced command. Its SSH arguments remain a nonexecutable template. No CLI
+calls this adapter. Success is `FixtureOnly`, `executable=false`,
+`platformReadiness=NOT_OBSERVED`, `stagingAcceptance=NOT_RUN`; `capacityReady`
+is separate from `NOT_PROVISIONED` application/database isolation and the other
+unobserved isolation dimensions.
+
+Fixture execution and cleanup each have bounded deadlines. Cancellation aborts
+the fixture and waits for in-flight work to settle before accepting its cleanup
+receipt. Unsettled work taints cleanup even if the adapter claims zero resources;
+a late settlement triggers another best-effort fixture close and never changes
+the rejected result. These checks validate fixture lifecycle behavior, not
+platform process ownership or live cleanup. Gateway output is a bounded flat
+JSON protocol: duplicate/unknown fields, malformed/trailing output, stderr,
+timeout, incorrect scope and invented provisioning are rejected.
+
+Run the focused source/fixture checks with the repository's pinned Node22:
+
+```sh
+/workspace/.tools/node22/node_modules/node/bin/node --test scripts/vnext-staging-preflight.test.mjs scripts/vnext-staging-execution-boundary.test.mjs
+```
+
 ## Preserved bootstrap and isolation boundaries
 
 `bootstrap.py` is unchanged. It is a separately reviewed account-owner console
