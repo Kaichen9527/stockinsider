@@ -29,3 +29,7 @@ One work comprises preparation, author and ONE independent review; distinct exec
 
 ## R7 VM verification and isolated staging
 All commands/install/build/tests on Codex Linux VM, never Mac. Contabo validation requires independently named isolated services/database/schema/queue/storage and proof no formal writer/schedules. No secret file modification or disclosure. Browser uses isolated server with E2E_BASE_URL and PLAYWRIGHT_SKIP_WEBSERVER=1, avoiding legacy .env-loading webServer. Complete build/lint/types/unit/integration/browser desktop/mobile and fixeddata replay; distinguish codePASS, actualsource acquired and notacquired. External authorization/runtime gaps are explicit and do not block unrelated VM implementation. Deliver branch/normal PR; no merge/deploy.
+
+## 2026-11-07 V2 amendment
+
+See [V2 Top10 / Cloud / iCloud / Contabo amendment](v2-top10-cloud-amendment.md). User requirements are recorded; exact independent design/protected review and release acceptance remain pending. Historical results and original failure HOLD are retained.

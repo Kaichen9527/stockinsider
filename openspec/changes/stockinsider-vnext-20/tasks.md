@@ -35,3 +35,7 @@ The current milestone index is `docs/operations/2026-10-22/vnext/STATUS.md`.
 The earlier VN01–VN20 matrix in `evidence/summary.json` is source6410 history;
 worker/analysis receipts are separate and do not overwrite it. Checked tasks
 establish only their stated VM engineering slice, not full plan completion.
+
+## 2026-11-07 V2 amendment
+
+See [V2 Top10 / Cloud / iCloud / Contabo amendment](v2-top10-cloud-amendment.md). User requirements are recorded; exact independent design/protected review and release acceptance remain pending. Historical results and original failure HOLD are retained.
