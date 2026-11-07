@@ -64,10 +64,42 @@ test('real cache envelope retains comparison quote/action lineage and refuses pu
   const f = cache([fact()]), financial = await readCurrentFinancialCache(f.client, [id(99)], at), h = history();
   const input = { symbol: '2330', stockId: id(99), inputHash: 'a'.repeat(64), revisionId: id(7), publishedInputHash: 'd'.repeat(64), cutoff: at, signalSession: h.completedSessions.at(-1)!, financial, history: h, original: [] };
   const result = currentEvidenceRead(input); assert.equal(result.qualification, 'unavailable'); assert.equal(result.comparisonOnly, true);
+  assert.deepEqual(result.formalAudit.eligibility, {
+    status: 'blocked', authorityScope: 'cached_comparison_only', publication: 'input_changed',
+    financialComparison: 'available', priceComparison: 'available', missingAuthority: [
+      'financial_structural_hidden_newer_revision_unknown', 'published_financial_current_rights_authority_missing',
+      'published_action_target_authority_missing', 'published_price_dataset_binding_authority_missing',
+      'published_weekly_single_cutoff_authority_missing', 'published_requalification_protocol_unavailable',
+    ],
+  });
+  assert.ok(result.refusalReasons.includes('published_revision_input_changed'));
+  assert.deepEqual(result.formalAudit.quote, { close: null, session: null, source: '', adjusted: false,
+    volume: null, ma20: null, ma60: null, volumeRatio: null, institutionalFlow: null, provenance: [] });
   assert.equal(result.price?.sourceDatasetRevision, h.sourceDatasetRevision); assert.equal(result.price?.adjustmentEvidenceHash, h.priceBasis!.adjustmentEvidenceHash); assert.equal(result.comparisonPriceEvidence[0].value, 100);
   assert.equal(result.evidence.some(e => e.key === 'current_price'), false); assert.equal('proofHash' in result, false); assert.equal('expiresAt' in result, false);
   assert.ok(result.refusalReasons.includes('published_action_target_authority_missing')); assert.ok(result.refusalReasons.includes('financial_structural_hidden_newer_revision_unknown'));
   for (const mutate of [(v: typeof input) => { v.financial.cutoff = '2026-10-23T06:00:00.000001Z'; }, (v: typeof input) => { v.revisionId = 'unknown'; }, (v: typeof input) => { v.history.availableAt = '2026-10-23T06:00:00.000001Z'; }, (v: typeof input) => { v.history.sourceDatasetRevision = 'wrong-version'; }, (v: typeof input) => { v.history.priceBasis!.adjustmentVersion = 'unknown'; }, (v: typeof input) => { v.history.missingData = ['corporate_action_authority_missing']; }, (v: typeof input) => { v.signalSession = '2026-10-23'; }]) {
     const changed = structuredClone(input); mutate(changed); const rejected = currentEvidenceRead(changed); assert.equal(rejected.price, null); assert.deepEqual(rejected.comparisonPriceEvidence, []); assert.equal(rejected.qualification, 'unavailable');
+    assert.equal(rejected.formalAudit.eligibility.priceComparison, 'unavailable'); assert.deepEqual(rejected.formalAudit.quote, result.formalAudit.quote);
   }
+});
+test('matching immutable publication input and complete comparison do not supply missing weekly current-use authority', async () => {
+  const f = cache([fact()]), financial = await readCurrentFinancialCache(f.client, [id(99)], at), h = history();
+  const input = { symbol: '2330', stockId: id(99), inputHash: 'd'.repeat(64), revisionId: id(7), publishedInputHash: 'd'.repeat(64), cutoff: at, signalSession: h.completedSessions.at(-1)!, financial, history: h, original: [] };
+  const before = structuredClone(input), calls = f.calls.length;
+  const result = currentEvidenceRead(input);
+  assert.equal(result.formalAudit.eligibility.publication, 'input_matches');
+  assert.equal(result.formalAudit.eligibility.status, 'blocked');
+  assert.equal(result.formalAudit.eligibility.priceComparison, 'available');
+  assert.equal(result.formalAudit.quote.close, null); assert.equal(result.formalAudit.quote.adjusted, false);
+  assert.equal(result.refusalReasons.includes('published_revision_input_changed'), false);
+  assert.ok(result.refusalReasons.includes('published_weekly_single_cutoff_authority_missing'));
+  assert.ok(result.refusalReasons.includes('published_price_dataset_binding_authority_missing'));
+  assert.deepEqual(input, before); assert.equal(f.calls.length, calls);
+  const absent = currentEvidenceRead({ ...input, revisionId: null, publishedInputHash: null });
+  assert.equal(absent.formalAudit.eligibility.publication, 'missing'); assert.ok(absent.refusalReasons.includes('published_revision_missing'));
+  const malformed = currentEvidenceRead({ ...input, revisionId: 'unknown' });
+  assert.equal(malformed.formalAudit.eligibility.publication, 'binding_invalid');
+  assert.equal(malformed.formalAudit.eligibility.financialComparison, 'unavailable');
+  assert.deepEqual(malformed.formalAudit.quote, result.formalAudit.quote);
 });

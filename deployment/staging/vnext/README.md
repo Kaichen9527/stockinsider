@@ -1,33 +1,117 @@
-# Isolated Contabo staging preparation
+# Isolated Contabo staging: offline v2 preparation
 
-This is an executable fail-closed preflight and restricted identity bootstrap, not an installed staging service or deployment framework. No SSH/Contabo command has been executed by this VM. The historical production host is only a locator, not proof of staging. Repository `staging` matches mostly describe backup/taxonomy temporary output. No application staging manifest or injection exists in the observed runtime.
+`verify.mjs` is an offline, fail-closed preparation tool. It imports no process
+runner or network client, reads only its adjacent public `plan.json`, and never
+reads environment configuration, an agent socket, public/private key files or
+known_hosts. Both the default CLI and `--verify-read-only` exit2 without child
+processes or network attempts. The latter reports `OFFLINE_NOT_ADMITTED`: the old
+live alias-based verifier has been removed. Other arguments, including the old
+`--plan`, are rejected. This source change creates no connection authority.
 
-## Actual remaining connection requirement
+## Current public facts and intended scope
 
-One legitimate **staging management connection** must be authorized by its account owner: a public key installed with the forced scope below, nonsecret host+user+trusted SSH host-key fingerprint, and platform TCP access to that exact host:22. The initial runtime had no SSH identity, aliases or TCP grants; the task now has the explicitly authorized expiring memory-only agent identity described below. No Contabo TCP grant or trusted host key has been observed. HTTPS network secrets are proxy placeholders for HTTPS:443, not SSH keys or direct database credentials. Existing tasks must re-observe any newly published runtime configuration; readiness is never inherited from settings alone.
+The public ED25519 host key and fingerprint in `plan.json` are retained from
+[the existing owner-attested receipt](../../../docs/operations/2026-11-07/vnext/SSH-READINESS-RECEIPT.json):
+`SHA256:yQ4VCXl76rLr6Zep0ybQcHZeK4CfuFmMiZcWJrp2DYg`.
+The public key's SSH wire-format SHA256 is recomputed offline. No host key is
+re-acquired and no known_hosts file is created. Its authority is the owner's
+previous strict pinned login, not a first connection, keyscan or accept-new.
 
-A task-specific one-hour Ed25519 identity was generated wholly in VM memory and loaded via stdin into ssh-agent. Its public key/fingerprint/expiry are in the VM report; no private key file, secret environment value, argv, Git or artifact was created. The user must not copy a Mac private key or paste a private key here. The agent socket is a nonsecret selector, not a credential value. An expired identity is not silently regenerated or made permanent.
+The v2 connection contract allows exactly one canonical `100.64.0.0/10` tailnet
+IPv4 and remote TCP22, fixed source `tag:stockinsider-staging-vm`, destination
+`tag:stockinsider-contabo`, nonroot user `si-vnext-oct22` and exact forced command
+`vnext-preflight-v1`. The destination address remains null until supplied through
+reviewed public operator evidence. Tags express intended policy; this file does
+not observe ACLs, enrollment or a particular machine's tag/IP binding.
 
-## Single reviewable console action (not executed)
+The client public Ed25519 key, exact SHA256 fingerprint, <=1hour future expiry,
+intended dedicated executor and candidate writer identity remain unset. The
+intended executor must differ from the development executor ID retained in the
+existing receipt; a different supplied ID is only intent, not creation or
+platform readiness evidence. Public
+wire-format/fingerprint consistency and a single matching agent public-key
+fixture are mandatory in offline tests. These tests do not establish live agent
+custody, key lifetime, server installation, expiry or revocation. No identity is
+generated or silently renewed. A source commit is not evidence of a provisioned
+writer identity.
 
-Account owner reviews `bootstrap.py` and supplies the public key as a public-only file on the VPS. Default `python3 -I bootstrap.py` is dry-run. Explicit `--apply --public-key-file <PUBLIC_ONLY_FILE> --expires-utc <UTC_EXPIRY>` additionally requires root console, unchanged capacity margins and a wholly absent namespace/account. It creates only `si-vnext-oct22`, an empty unique `/srv/stockinsider-vnext-oct22-staging` tree, and root-owned forced-command gateway. It refuses overwrite. The key expires within one hour, forbids forwarding/PTY/user-rc, and accepts only `vnext-preflight-v1`; all arbitrary commands fail. No generic root/sudo/docker permission, existing secrets/service/DB/scheduler or production writer access is granted. Unknown or partial setup requires explicit operator review; there is no cleanup/retry loop.
+## Official Tailscale transport remains unimplemented
 
-This minimal action grants readonly capacity/namespace custody. Application/database/queue/service provisioning remains **NOT_PROVISIONED** and must be reviewed against actual host capacity and an exact built candidate artifact before use. Empty directories are not isolation proof. The VM cannot fabricate access or inject an SSH identity/TCP grant into the platform or account without owner authorization.
+The [official VPN reference](skill://plugin_connector_1p_c5b7d5df5d7081918f2c4be5a633ed5d/cloud-environment-runtime/references/vpn.md)
+states that Tailscale runs in the sidecar: the executor has no VPN interface or
+general Internet route. Raw TCP uses the official outer-executor sidecar
+workflow through `proxy:8088`; the reference describes a maintained socat
+forwarding workflow. Direct OS SSH to the intended tailnet address is therefore
+not a working transport on this executor. Generic network permission, an HTTPS
+allowlist, a public IP locator or a saved auth key does not prove readiness.
 
-## Exact candidate isolation configuration
+The contract records only that fixed official reference and
+`NOT_IMPLEMENTED_NOT_ADMITTED`. It accepts no connector executable, proxy
+command, arguments, ready boolean or caller-created admission attestation.
+There is no CONNECT implementation, listener, forward, downloader or installer
+in these files. Integrating a supported official connector requires a separate
+independent review and applicable authorization on the new dedicated staging
+executor. An offline complete plan never passes that gate.
 
-`plan.json`: unique namespace/service/runtime identity `stockinsider-vnext-oct22-staging`; independent database `stockinsider_vnext_oct22_staging`, schema public *inside that separate database*; own queue namespace/storage; localhost-only ports34222/34223/34224; fixture-only, schedulesoff; a fresh candidate writer identity separate from formal writer. Alias/host/trustedhostkey/writer identity deliberately unset. No production credential reuse.
+`prepareOfflineRequest` returns a non-executable SSH argument **template** and
+an intended remote endpoint, always `OFFLINE_NOT_ADMITTED`,
+`platformReadiness=NOT_OBSERVED`, `executable=false`. The address in that template
+is intent only; executing it directly cannot provide the required sidecar path.
+Future transport integration must preserve the remote IPv4:22 binding and
+retained host identity instead of treating this template as a runnable command.
 
-`node verify.mjs` is a dry-run and currently exits2 with exact missing fields. `--verify-read-only` requires complete names, agent fingerprints and an already trusted exact host key (StrictHostKeyChecking=yes, no ssh-keyscan/accept-new). Host capacity only never establishes service/database isolation. It always leaves staging acceptance pending until independent runtime proof is present. The verifier invokes only account-owner restricted gateway `vnext-preflight-v1` and requires the exact namespace/nonroot identity in its JSON. No unrestricted remote shell is used.
+The template discards SSH configuration with `-F /dev/null`; fixes nonroot user,
+port and command; selects a dedicated public key and agent socket; pins ED25519
+via an exact dedicated known_hosts record for `HostKeyAlias=vmi3152467`; disables
+password/interactive alternatives, host-key updates/DNS, arbitrary proxy/jumps,
+PTY, SSH agent/X11/port forwarding, tunnels, local/remote commands and multiplex
+reuse. Public selector paths are fixed placeholders under
+`/run/stockinsider-vnext-staging/`; no such files or socket are created/read here.
+The eventual official sidecar transport is distinct from SSH forwarding, which
+remains forbidden.
 
-The full workload deducts1GiB WAL+0.5GiB temp+128MiB deploy+2GiB growth and preserves15GiB disk; memory deducts1GiB peak and preserves1.5GiB; below20GiB diskwarn. No lowering thresholds or paid services. Further acceptance requires independent service user/unit/source identity, separate DB-role/RLS/writer/queue/storage, stopped formal schedules, and actual fixture requests; none is claimed by these source-only/dry-run files.
+## Offline verification
 
-Existing application Contabo guard requires loopback REST3302. Host-exposed stagingREST34223 must therefore map into an **independent network namespace** where its own REST3302 lives; never connect staging to host formal3302 and never relax the guard. This namespace/port mapping is part of runtime isolation acceptance still pending. VM browser tests instead use the existing explicitly controlled Node-test loopback adapter; that is a synthetic test transport, not Contabo staging.
+```sh
+node --test scripts/vnext-staging-preflight.test.mjs
+node deployment/staging/vnext/verify.mjs
+node deployment/staging/vnext/verify.mjs --verify-read-only
+```
 
-## Actual isolated SSH proof (2026-10-22 Taipei)
+`verifyOfflineFixture` has an explicitly injected mock child runner and supplied
+public fixture strings. The CLI cannot call it. Positive results always say
+`SYNTHETIC_FIXTURE_ONLY`, retain `OFFLINE_NOT_ADMITTED`, `stagingAcceptance=NOT_RUN`
+and pending isolation proof. Negatives cover public/noncanonical/multiple
+addresses, non22 ports, changed pins, key/fingerprint/agent mismatch, expiry,
+unknown connector/executable/ready fields, alias/command injection, permissive
+SSH settings, malformed gateway/capacity output and formal namespace reuse.
+No actual SSH, agent command, key operation or remote service is exercised.
 
-The exact bootstrap was applied inside the task-owned Debian12/OpenSSH9.2 VM container, never on Contabo. Eight actual SSH checks passed: forced preflight public-key login as nonroot, arbitrary command refusal, compound command refusal, SFTP forced-command refusal, PTY refusal, remote forwarding refusal, strict changed-host-key refusal, and expired-key refusal. `UsePAM no` and `StrictModes yes` exercised the locked-account and ownership edge directly. The bootstrap gives the new account an unretained cryptographically random password hash through stdin so the account is not locked; no password is distributed or logged. The home and `.ssh` remain root:new-group0750 and authorized_keys root:new-group0640, readable but not writable by the new user. Existing users, SSH daemon configuration and keys are unchanged. The single public key is restricted and expires; no client private key is written.
+## Preserved bootstrap and isolation boundaries
 
-The test's original missing Subsystem declaration and mistaken PTY exit expectation produced preserved harness REDs before correction; they are not Contabo failures. Host trust in this test came from the locally owned container's public host key, not an untrusted remote keyscan. The actual Contabo version, trust fingerprint, TCP route, effective account policy and login remain unverified. Source references locate `5.104.83.211` / `vmi3152467`; no trusted SSH host-key pin was found in the bounded deployment/runbook search. Console must return its public Ed25519 host key and SHA256 fingerprint through the owner's trusted Console.
+`bootstrap.py` is unchanged. It is a separately reviewed account-owner console
+instrument, default dry-run; `--apply` requires its own owner authorization,
+root console, current capacity, exact reviewed source, absent account/group/
+namespace/gateway, public-only client key and future <=1hour UTC expiry. Nothing
+here runs it. Its root-owned restricted authorized key accepts only
+`vnext-preflight-v1`, forbids PTY/forwarding/user-rc and grants no sudo/docker or
+production writer access. The historical one-hour identity expired; neither that
+identity nor historical local container SSH checks establish current Contabo
+access. Revocation, existing-session handling and partial-apply custody still
+need a precise owner-reviewed procedure; bootstrap has no cleanup/revoke helper.
 
-No `sshd_config` change, sudoers entry, docker membership, existing service mutation or application/database install is made. Empty namespace directories and the fixed preflight gateway are not application isolation or production-access approval. The network draft tool exposes HTTP domains only; it cannot publish a raw TCP22 rule or activate settings. An owner/platform-admin must authorize that exact host:22 separately and save/publish applicable environment changes.
+The unique service/runtime identity/queue/storage remain
+`stockinsider-vnext-oct22-staging`; database
+`stockinsider_vnext_oct22_staging`, schema public within that separate database;
+loopback ports34222/34223/34224; fixtures only and schedules disabled. An independent
+application network namespace must expose its own REST3302 through staging34223;
+never point staging at formal host3302 or relax its guard. No service, database,
+writer, queue, storage or application network namespace has been provisioned or
+verified by this preparation.
+
+Capacity guards remain unchanged: deduct1GiB WAL+0.5GiB temp+128MiB deployment+
+2GiB growth and retain15GiB disk; deduct1GiB peak and retain1.5GiB available memory;
+warn below20GiB disk. Full archive/download/restore/deploy peaks require separate
+current measurements. Even a synthetically successful readonly gateway response
+is not backup/restore, rollback, app isolation, real source/model, native or
+release acceptance. All existing gates remain in place.

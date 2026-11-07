@@ -1,9 +1,6 @@
 {
-  "schemaVersion": "stockinsider-vnext-isolated-staging-v1",
+  "schemaVersion": "stockinsider-vnext-isolated-staging-v2",
   "namespace": "stockinsider-vnext-oct22-staging",
-  "sshAlias": null,
-  "expectedHostName": null,
-  "expectedHostKeySha256": null,
   "identityMode": "ssh-agent",
   "service": "stockinsider-vnext-oct22-staging.service",
   "database": "stockinsider_vnext_oct22_staging",
@@ -35,5 +32,30 @@
     "applicationLoopbackRestPort": 3302,
     "hostExposedRestPort": 34223,
     "productionNetworkNamespaceReuse": false
+  },
+  "connection": {
+    "schemaVersion": "stockinsider-staging-readonly-connection-v2",
+    "transport": "official-tailscale-sidecar-only",
+    "destinationTailnetIPv4": null,
+    "destinationPort": 22,
+    "sourceTag": "tag:stockinsider-staging-vm",
+    "destinationTag": "tag:stockinsider-contabo",
+    "sshUser": "si-vnext-oct22",
+    "forcedCommand": "vnext-preflight-v1",
+    "hostPublicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICb2EOs2bC/szIaSZyXr/slT5iLFqXLFS1VLWepWMj4X",
+    "hostFingerprint": "SHA256:yQ4VCXl76rLr6Zep0ybQcHZeK4CfuFmMiZcWJrp2DYg",
+    "clientPublicKey": null,
+    "clientFingerprint": null,
+    "clientExpiresUtc": null,
+    "publicPaths": {
+      "agentSocket": "/run/stockinsider-vnext-staging/agent.sock",
+      "clientPublicKey": "/run/stockinsider-vnext-staging/client.pub",
+      "knownHosts": "/run/stockinsider-vnext-staging/known_hosts"
+    },
+    "intendedExecutorId": null,
+    "officialConnector": {
+      "reference": "skill://plugin_connector_1p_c5b7d5df5d7081918f2c4be5a633ed5d/cloud-environment-runtime/references/vpn.md",
+      "status": "NOT_IMPLEMENTED_NOT_ADMITTED"
+    }
   }
 }

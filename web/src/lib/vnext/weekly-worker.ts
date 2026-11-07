@@ -5,7 +5,7 @@ import {thesisCommand} from './thesis-runtime.ts';
 import {readActiveForecasts} from './forecast-active.ts';
 import {auditThesisCycle} from './thesis-cycle.ts';
 import { analysisCommand,analysisWriter } from './analysis-runtime.ts';
-import type { AuditQuote,ThesisAuditInput } from './thesis-audit.ts';
+import type { ThesisAuditInput } from './thesis-audit.ts';
 import type { VnextIdentity } from './auth.ts';
 import type { Evidence,Artifact,Review } from './research.ts';
 type Row=Record<string,unknown>;
@@ -30,9 +30,9 @@ export async function runWeeklyThesisAudit(identity:VnextIdentity,options:{scree
   const history=instrument && ['TWSE','TPEX'].includes(String(instrument.exchange))?await loadTwEntryHistoricalPriceAuthority(client,{stockId,symbol,exchange:instrument.exchange as 'TWSE'|'TPEX',signalSession:String((screen.priceSessions as string[]|undefined)?.[0]||''),cutoff}):null;
   const currentRead=currentEvidenceRead({symbol,stockId,inputHash:String(member.inputHash),revisionId:publication?String(publication.revision_id):null,publishedInputHash:publication?String(publication.input_hash):null,cutoff,signalSession:String((screen.priceSessions as string[]|undefined)?.[0]||''),financial,history,original});currentEvidenceReads.push(currentRead);
   const current=[...forecasts.evidence,...currentRead.evidence,...originalSources.filter((e)=>!e.id.startsWith('forecast:') && ((validity.valid||[]) as string[]).includes(e.id)),...newContent.filter((e)=>!originalSources.some((o)=>o.id===e.id))];
-  // The cache quote remains in the comparison envelope. Current published
-  // target/action and financial-rights authority cannot be inferred from it.
-  const quote:AuditQuote={close:null,session:null,source:'',adjusted:false,volume:null,ma20:null,ma60:null,volumeRatio:null,institutionalFlow:null,provenance:[]};
+  // Consume the producer's typed eligibility decision and formal quote; cache
+  // availability alone cannot promote its separately labelled comparison.
+  const quote=currentRead.formalAudit.quote;
   const frozen=member.evidence as Row;inputs.push({businessReceipt:publication?.businessReceipt as BusinessReceipt|null||null,semanticReceipt:publication?.semanticReceipt as CatalystReceipt|null||null,symbol,inputHash:String(member.inputHash),revisionId:publication?String(publication.revision_id):null,publishedInputHash:publication?String(publication.input_hash):null,previousAudit:member.previousAudit as {materialEvidence?:Row}|null,artifact:publication?.content as Artifact|null||null,review:publication?.review as Review|null||null,original,current,newContent,quote,cutoff,session:String(screen.session),market:{risk:String((screen.market as Row)?.risk||'unknown'),snapshotHash:String((screen.market as Row)?.snapshotHash||'')||null},previousMarketHash:String(frozen.marketSnapshotHash||'')||null,tradingValid:instrument?instrument.listing_status==='active':null});
  }
  return analysisWriter(async()=>({...await auditThesisCycle(inputs,{record:(reports)=>thesisCommand(identity,'record',{reports}),...(options.screen?{screen:(audits)=>import('./discovery.ts').then((module)=>module.scanCachedCandidates(identity,undefined,audits))}:{})}),

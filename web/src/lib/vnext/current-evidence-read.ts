@@ -6,11 +6,38 @@ import { resolveFinancialEvidenceSources } from './financial-evidence-sources.ts
 import { historicalPriceFactors, currentPriceEvidence } from './cached-price-factors.ts';
 import { inputHash } from './policy.ts';
 import type { Evidence } from './research.ts';
+import type { AuditQuote } from './thesis-audit.ts';
 import {evidenceInstant as micros,evidenceKnownAt as known} from './evidence-clock.ts';
 type Row = Record<string, unknown>;
 type Client = Pick<ReturnType<typeof getSupabaseServerClient>, 'rpc' | 'from'>;
 const uuid = /^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/iu;
 const hash = /^[a-f0-9]{64}$/u;
+/** Existing readers attest these narrower scopes only. None returns the
+ * published-revision authority at the weekly audit's shared cutoff. Keep this
+ * a closed refusal inventory, rather than accepting a caller qualification. */
+export type WeeklyFormalAuthorityGap =
+  | 'financial_structural_hidden_newer_revision_unknown'
+  | 'published_financial_current_rights_authority_missing'
+  | 'published_action_target_authority_missing'
+  | 'published_price_dataset_binding_authority_missing'
+  | 'published_weekly_single_cutoff_authority_missing'
+  | 'published_requalification_protocol_unavailable';
+export type WeeklyFormalEligibility = {
+  status: 'blocked';
+  authorityScope: 'cached_comparison_only';
+  publication: 'missing' | 'binding_invalid' | 'input_changed' | 'input_matches';
+  financialComparison: 'available' | 'unavailable';
+  priceComparison: 'available' | 'unavailable';
+  missingAuthority: WeeklyFormalAuthorityGap[];
+};
+const missingWeeklyAuthority: WeeklyFormalAuthorityGap[] = [
+  'financial_structural_hidden_newer_revision_unknown',
+  'published_financial_current_rights_authority_missing',
+  'published_action_target_authority_missing',
+  'published_price_dataset_binding_authority_missing',
+  'published_weekly_single_cutoff_authority_missing',
+  'published_requalification_protocol_unavailable',
+];
 export type CurrentFinancialCache = {
   cutoff: string; stockIds: string[]; evidence: Evidence[];
   revisions: Array<{ stockId: string; factId: string; recordedAt: string; validationRecordedAt: string; restatementId: string | null; contentHash: string }>;
@@ -76,13 +103,29 @@ export function currentEvidenceRead(input: {
   const priceEvidence = priceValid ? currentPriceEvidence(history!, new Set(input.original.filter(e => e.key === 'current_price').map(e => e.id))) : [];
   const comparisonGaps = [...(!bindingValid ? ['current_evidence_binding_invalid'] : []), ...financial.gaps,
     ...(!financialEvidence.length ? ['financial_cache_missing_for_symbol'] : []), ...(!priceValid ? ['current_price_cache_unavailable', ...(history?.missingData || [])] : [])];
+  const publication: WeeklyFormalEligibility['publication'] = !bindingValid ? 'binding_invalid'
+    : input.revisionId === null ? 'missing' : input.inputHash !== input.publishedInputHash ? 'input_changed' : 'input_matches';
+  const eligibility: WeeklyFormalEligibility = {
+    status: 'blocked', authorityScope: 'cached_comparison_only', publication,
+    financialComparison: financialEvidence.length ? 'available' : 'unavailable',
+    priceComparison: priceValid ? 'available' : 'unavailable', missingAuthority: [...missingWeeklyAuthority],
+  };
+  // The public target assessment is a current read observation, not a weekly
+  // cutoff-bound qualification. Job-scoped action/qualification receipts also
+  // cannot authorize a published revision here. Even complete cached lineage
+  // must produce the same unusable formal quote until that contract exists.
+  const quote: AuditQuote = { close: null, session: null, source: '', adjusted: false,
+    volume: null, ma20: null, ma60: null, volumeRatio: null, institutionalFlow: null, provenance: [] };
   return {
     schemaVersion: 'vnext-current-evidence-read-v1' as const, symbol: input.symbol, stockId: input.stockId, cutoff,
     inputHash: input.inputHash, publishedRevisionId: input.revisionId, publishedInputHash: input.publishedInputHash,
     comparisonOnly: true as const, qualification: 'unavailable' as const,
+    formalAudit: { eligibility, quote },
     // Source receipts prove cached original lineage, not a fresh current-rights
     // decision or immutable published-target action transformation/review.
-    refusalReasons: [...new Set([...comparisonGaps, 'financial_structural_hidden_newer_revision_unknown', 'published_financial_current_rights_authority_missing', 'published_action_target_authority_missing', 'published_requalification_protocol_unavailable'])],
+    refusalReasons: [...new Set([...comparisonGaps,
+      ...(publication === 'missing' ? ['published_revision_missing'] : publication === 'input_changed' ? ['published_revision_input_changed'] : []),
+      ...eligibility.missingAuthority])],
     financial: { revisions, receipts: financial.receipts.filter(r => ids.has(String(r.factId))) },
     price: priceValid ? { sourceDatasetRevision: history!.sourceDatasetRevision, availableAt: history!.availableAt, session: input.signalSession, adjustmentEvidenceHash: history!.priceBasis!.adjustmentEvidenceHash } : null,
     // Preserve the real quote as comparison evidence. The actual audit receives
