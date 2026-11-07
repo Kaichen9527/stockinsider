@@ -1,5 +1,7 @@
 # Staging preparation status — operator report, 2026-11-07
 
+Latest operator update: staging-only Tailscale auth key is now filled in the secure Cloud draft field; actual publication confirmation and Contabo one-time device registration remain pending. This is an operator report, not observed enrollment. This development executor remains without admitted staging transport/SSH identity. No key was requested, read, generated or handled here. New execution boundary stays Disabled; source/mock checks are recorded in [the latest checkpoint](EXECUTION-BOUNDARY-CLOCK.md). The pending-entry wording below is historical.
+
 Coordinator reports an initially empty tailnet policy replaced default all-allow with one grant: tag:stockinsider-staging-vm → tag:stockinsider-contabo TCP22, with rejection tests. This is operator-reported control-plane preparation; this Cloud task did not read or modify policy, keys, tailnet clients or services. The user is entering the tagged reusable/ephemeral Tailscale auth key only into the secure Cloud draft field; it is pending and never requested/read in chat. Tailscale enrollment and SSH key/agent are separate authorities.
 
 Development remains on the current selected VM/protection branch. No rebuild/replacement executor, Cloud Save/Publish, VPN installation/enrollment, transport probe, SSH, key generation, Contabo operation, writer or schedule activation occurs in this batch. Existing trusted public host facts stay retained; no re-acquisition is required.

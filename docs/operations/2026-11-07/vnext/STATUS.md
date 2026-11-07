@@ -1,3 +1,15 @@
+# Current execution boundary/cache clock checkpoint — ACTIVE / INCOMPLETE
+
+[Implemented source and limits](EXECUTION-BOUNDARY-CLOCK.md) · [256/build/14browser and retained-failure receipt](execution-boundary-clock-checks.json) · [Operator staging status](STAGING-PREPARATION-STATUS.md).
+
+Source209b290: independent readonly execution facade remains Disabled without platform executor/broker/approval/agent provenance. Separate fixture lifecycle and gateway JSON validation; actual cached price/action microsecond correction selection and cutoff checks hardened.256tests/types/lint/build +14synthetic HTTP/browser checks PASS after one reviewed type-only fixture correction; initial failure retained.
+
+Formal quote remains null; six authority gaps, pinned formal body precision limitation,120s qualification and all native/A1/protected/source/time/staging/release gates remain. Operator reports secure draft authkey filled, actual publication/registration pending. No key/network/SSH/Contabo/newtask/SQL/writer/oldVM/iCloud action; original PR head unchanged.
+
+---
+
+## Historical weekly authority/staging checkpoint
+
 # Current weekly authority/staging preparation — ACTIVE / INCOMPLETE
 
 [Implemented bounded source and exact limits](WEEKLY-STAGING-PREPARATION.md) · [217/build/14browser/CLI receipt](weekly-staging-preparation-checks.json) · [Operator staging status](STAGING-PREPARATION-STATUS.md).

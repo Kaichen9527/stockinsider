@@ -87,3 +87,14 @@ Evidence: docs/operations/2026-11-07/vnext/CURRENT-CACHED-PRODUCER.md.
 - [ ] All formal positive/native/A1/enrollment/agent/transport/staging/time/release acceptance remains required and incomplete.
 
 Evidence: docs/operations/2026-11-07/vnext/WEEKLY-STAGING-PREPARATION.md.
+
+## Closed execution boundary / cached clock slice
+
+- [x] Independent execution facade always Disabled; reject caller adapter/approval/provenance injection. No live transport registration.
+- [x] Separate fixture-only single destination/identity/command and strict capacity JSON; bounded cancel/late-completion/cleanup contracts. Capacity never proves isolation.
+- [x] Actual cached price/action microsecond correction, provenance chain/cutoff and availability fixes;10new actual-loader fixtures. Formal body pin unchanged, internal formal ms guard remains a limitation.
+- [x] Independent source/mock engineering review;256focused/types/lint/build and14synthetic HTTP/browser checks PASS after one reviewed type-only fixture correction; initial failure retained.
+- [ ] Platform-authenticated dedicated executor/broker/approval/ephemeral agent integration and actual readonly/staging/isolation acceptance remain unimplemented/unverified.
+- [ ] Six formal authority gaps, native HOLD/A1/protected/real-source/two-session/restore/iCloud/CI/release gates remain. No acceptance or permissions relaxed.
+
+Evidence: docs/operations/2026-11-07/vnext/EXECUTION-BOUNDARY-CLOCK.md and execution-boundary-clock-checks.json.
