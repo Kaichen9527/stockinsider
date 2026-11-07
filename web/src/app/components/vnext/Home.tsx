@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { readPublished } from '@/lib/vnext/store';
 import { publicHome } from '@/lib/vnext/public-contract';
+import { rankingEnabled, readRankingSnapshot, type RankingSnapshot } from '@/lib/vnext/ranking-read';
+import Top10 from './Top10';
 
 const actionLabels = { evaluate: '可評估', selective: '選擇性評估', wait: '等待', cannot_determine: '無法判定' };
 const confidenceLabels = { complete: '完整', limited: '有限', insufficient: '不足' };
-export function VnextHomeView({ data, error = false, loading = false }: { data: ReturnType<typeof publicHome>; error?: boolean; loading?: boolean }) {
+export function VnextHomeView({ data, error = false, loading = false, ranking }: { ranking?: {snapshot: RankingSnapshot|null; current: ReturnType<typeof publicHome>}; data: ReturnType<typeof publicHome>; error?: boolean; loading?: boolean }) {
   return <main className="mx-auto max-w-6xl space-y-8 px-4 py-8 text-slate-900 dark:text-slate-100" data-testid="vnext-home" data-contract-version={data?.version || 'unavailable'}>
     <header><Link href="/" className="text-2xl font-semibold">StockInsider</Link><p className="mt-2 text-sm text-slate-500">台股研究 · 有證據才有判斷</p></header>
     <section aria-label="大盤判斷" aria-labelledby="vnext-market-title" data-testid="vnext-market" className="rounded-2xl border border-slate-300 p-5">
@@ -24,6 +26,7 @@ export function VnextHomeView({ data, error = false, loading = false }: { data: 
       {data?.market.overseas.length ? <div className="mt-3 flex flex-wrap gap-3">{data.market.overseas.map((item) => <p key={item.name} className="text-sm">{item.name}：{item.value ?? '資料缺口'}{item.provenance && <a className="ml-1 underline" href={item.provenance} rel="noreferrer" target="_blank">來源</a>}</p>)}</div> : null}
     </section>
     <section aria-label="研究標的" aria-labelledby="vnext-research-title" data-testid="vnext-research" className="rounded-2xl border border-slate-300 p-5">
+      {ranking ? <Top10 snapshot={ranking.snapshot} current={ranking.current} /> : <>
       <div className="flex flex-wrap justify-between gap-2"><h2 id="vnext-research-title" className="text-xl font-semibold">主動研究</h2><p>{data?.members.length || 0} / 20</p></div>
       <p className="mt-2 text-sm text-slate-500">初選與深度研究分數分開列示，均為已確認點數／可用權重；缺值不補分，分數不是機率。已有當期深度評估的標的依深度分數排列，其餘依初選分數排列。</p>
       {loading ? <p role="status" className="mt-5">研究資料載入中</p> : !data?.members.length ? <p data-testid="vnext-empty" className="mt-5">目前沒有已納入的研究標的。資料與研究條件完整後才會加入。</p> : <div className="mt-5 grid gap-4 md:grid-cols-2">{data.members.map((member) => <article key={member.symbol} className="min-w-0 rounded-xl bg-slate-100 p-4 dark:bg-slate-900" data-testid="vnext-member">
@@ -39,10 +42,19 @@ export function VnextHomeView({ data, error = false, loading = false }: { data: 
         {member.reasons?.length ? <ul className="mt-2 list-disc pl-5 text-sm">{member.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul> : null}
         {member.gaps?.length ? <p className="mt-2 break-words text-sm text-amber-700">資料缺口：{member.gaps.join('、')}</p> : null}
       </article>)}</div>}
+      </>}
     </section>
   </main>;
 }
 export default async function VnextHome() {
+  if (rankingEnabled()) {
+    try {
+      const read = await readRankingSnapshot();
+      const snapshot = read.snapshot;
+      const frozenHome = snapshot ? publicHome({version:snapshot.rankingRunId, market:snapshot.market, members:[], publishedAt:snapshot.cutoff}, new Date().toISOString()) : null;
+      return <VnextHomeView data={frozenHome} ranking={{snapshot, current:read.currentHome}} />;
+    } catch { return <VnextHomeView data={null} error ranking={{snapshot:null,current:null}} />; }
+  }
   let data: ReturnType<typeof publicHome> = null;
   let error = false;
   try { data = publicHome(await readPublished(), new Date().toISOString()); }

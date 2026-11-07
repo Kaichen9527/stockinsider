@@ -14,6 +14,7 @@ function fixture(){const symbol='2409',revisionId='11111111-1111-4111-8111-11111
 async function render(data,revision){const calls=[],out={};const modules={
  'react/jsx-runtime':require('react/jsx-runtime'),'next/link':require('next/link'),
  '@/lib/vnext/store':{readPublished:async symbol=>{calls.push(symbol);return readPublishedStockTarget({rpc:async(name,args)=>{assert.equal(name,'vnext_read_v1');assert.deepEqual(args,{p_symbol:symbol});return {data,error:null};}},symbol);}},
+ '@/lib/vnext/ranking-read':{rankingEnabled:()=>false,readRankingSnapshot:async()=>{throw Error('unexpected_ranking_read');}},
  '@/lib/vnext/citations':{publicCitation},'@/lib/vnext/research':{REQUIRED_SECTIONS}
 };const load=name=>{assert.ok(Object.hasOwn(modules,name),'finite SSR import only: '+name);return modules[name];};const fn=vm.runInNewContext('(function(exports,require){'+compiled.outputText+'\n})',{});fn(out,load);const element=await out.default({symbol:'2409',revision});const html=renderToStaticMarkup(element);assert.deepEqual(calls,['2409']);return {html,React};}
 test('actual component renders separate share result while preserving original140 and all sections',async()=>{const data=fixture(),before=structuredClone(data),{html}=await render(data);assert.match(html,/股數調整後每股情境/u);assert.match(html,/基準 70/u);assert.match(html,/>140 /u);assert.match(html,/原始文章與估值不變/u);assert.equal((html.match(/<main\b/gu)||[]).length,1);for(const k of REQUIRED_SECTIONS)assert.ok(html.includes('Synthetic full original '+k));assert.deepEqual(data,before);});

@@ -12,5 +12,6 @@ export async function runPostcloseResearchCycle(identity:VnextIdentity){
  // Publication changes the original thesis/revision. Recompute only shared
  // cache checklists; this epilogue cannot admit another update or call a model.
  const afterPublication=await(await import('./weekly-worker.ts')).runWeeklyThesisAudit(identity);
- return {sources,market,audit,dispatch,afterPublication,scheduleEnabled:false};
+ const ranking=await(await import('./ranking-command.ts')).publishCycleRanking(identity,context.session);
+ return {sources,market,audit,dispatch,afterPublication,ranking,scheduleEnabled:false};
 }

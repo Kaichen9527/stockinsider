@@ -39,3 +39,13 @@ establish only their stated VM engineering slice, not full plan completion.
 ## 2026-11-07 V2 amendment
 
 See [V2 Top10 / Cloud / iCloud / Contabo amendment](v2-top10-cloud-amendment.md). User requirements are recorded; exact independent design/protected review and release acceptance remain pending. Historical results and original failure HOLD are retained.
+
+## V2 bounded integration — 2026-11-07 second batch
+
+- [x] Additive immutable ranking/CAS/idempotency source candidate with original writer/RLS/review gates and FK retention pins. Source construction reviewed; native NOT_RUN/HOLD.
+- [x] Default-off original-cycle/internal-POST integration, snapshot-bound Home/Detail and read-only frozen-active candidates page; source tests, exact build/browser evidence tracked in second-batch report.
+- [x] Taiwan calendar week/month fallback and truthful missing/provisional series; full three-year warmed history remains incomplete.
+- [ ] Actual native grammar/catalog/RLS/writer/concurrent CAS/replay/rollback acceptance after legitimate HOLD release.
+- [ ] Current qualified financial/price proof refresh and complete deep100 producer under original authority.
+- [ ] Unadmitted/exited/full historical candidates catalog and authoritative source/industry filters.
+- [ ] Existing external/source/model/two-session/Contabo/iCloud/protected/release gates remain.

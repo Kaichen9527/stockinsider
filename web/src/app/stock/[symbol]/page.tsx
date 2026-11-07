@@ -42,7 +42,7 @@ export default async function StockDetail({
   const { symbol } = await params;
   const query = await searchParams;
   const normalizedSymbol = symbol.toUpperCase();
-  if (vnextEnabled()) return <VnextDetail symbol={normalizedSymbol} revision={query.vnextRevision} />;
+  if (vnextEnabled()) return <VnextDetail symbol={normalizedSymbol} revision={query.vnextRevision} rankingRunId={query.rankingRunId} />;
   const revisionQuery=parseDecisionRevisionQuery(query);
   const revisionParameterPresent=revisionQuery.status!=='absent';
   const validRequestedRevision=revisionQuery.status==='valid'?revisionQuery.revisionId:null;

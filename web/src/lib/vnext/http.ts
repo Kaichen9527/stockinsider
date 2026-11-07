@@ -19,6 +19,13 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       : entrypoint === 'candidate-dossier-outbox' && body.jobId ? 'claim'
       : entrypoint === 'candidate-dossier-submission' && body.artifact ? 'author'
       : entrypoint === 'candidate-dossier-bundle' && body.jobId ? 'bundle' : 'enqueue';
+    if (action === 'ranking-publish') {
+      if (!(await import('../internal-auth.ts')).requireExactInternalBearer(request)) throw Error('vnext_internal_bearer_required');
+      if (identity.role !== 'operator') throw Error('vnext_operator_required');
+      const {action: _action, ...payload} = body; void _action;
+      const result = await (await import('./ranking-command.ts')).publishRanking(identity, payload);
+      return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});
+    }
     if(action==='preparation-read' || action==='resume-preparation'){
       if(identity.role!=='author')throw new Error('vnext_author_required');
       const result=action==='preparation-read'?await readResearchPreparation(identity,body):await resumeResearchPreparation(identity,body);

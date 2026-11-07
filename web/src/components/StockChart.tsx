@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createChart, ColorType, CandlestickData, CandlestickSeries, LineSeries } from 'lightweight-charts';
+import { calendarStockCandles, selectStockChartSeries } from '../lib/stock-chart-calendar';
 
 interface ChartProps {
   data: CandlestickData[];
@@ -28,25 +29,6 @@ const timeframeLabel: Record<TimeframeKey, string> = {
   yearly: '年線',
 };
 
-function aggregateCandles(data: CandlestickData[], chunkSize: number) {
-  if (chunkSize <= 1) return data;
-  const output: CandlestickData[] = [];
-  for (let index = 0; index < data.length; index += chunkSize) {
-    const chunk = data.slice(index, index + chunkSize);
-    if (chunk.length === 0) continue;
-    const first = chunk[0];
-    const last = chunk[chunk.length - 1];
-    output.push({
-      time: last.time,
-      open: Number(first.open),
-      high: Math.max(...chunk.map((item) => Number(item.high))),
-      low: Math.min(...chunk.map((item) => Number(item.low))),
-      close: Number(last.close),
-    });
-  }
-  return output;
-}
-
 function buildMaSeries(candles: CandlestickData[], period: number) {
   const output: Array<{ time: CandlestickData['time']; value: number }> = [];
   for (let index = period - 1; index < candles.length; index += 1) {
@@ -64,6 +46,7 @@ function buildMaSeries(candles: CandlestickData[], period: number) {
 export default function StockChart({ data, timeframeCharts, missingReason, height = 390 }: ChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const [timeframe, setTimeframe] = useState<TimeframeKey>('daily');
+  const [calendarCutoff, setCalendarCutoff] = useState<string>();
 
   const normalizedDaily = useMemo(() => {
     return [...data]
@@ -75,22 +58,24 @@ export default function StockChart({ data, timeframeCharts, missingReason, heigh
   }, [data]);
 
   const dataset = useMemo(() => {
-    const fallbackCharts = {
-      daily: Array.from(normalizedDaily.values()),
-      weekly: aggregateCandles(Array.from(normalizedDaily.values()), 5),
-      monthly: aggregateCandles(Array.from(normalizedDaily.values()), 21),
-      quarterly: aggregateCandles(Array.from(normalizedDaily.values()), 63),
-      halfYear: aggregateCandles(Array.from(normalizedDaily.values()), 126),
-      yearly: aggregateCandles(Array.from(normalizedDaily.values()), 252),
-    };
-    return timeframeCharts || fallbackCharts;
-  }, [normalizedDaily, timeframeCharts]);
+    if (timeframeCharts) return { charts: timeframeCharts, calendar: null, calendarError: false };
+    try {
+      const calendar = {
+        weekly: calendarStockCandles(data, 'weekly', calendarCutoff),
+        monthly: calendarStockCandles(data, 'monthly', calendarCutoff),
+        quarterly: calendarStockCandles(data, 'quarterly', calendarCutoff),
+        halfYear: calendarStockCandles(data, 'halfYear', calendarCutoff),
+        yearly: calendarStockCandles(data, 'yearly', calendarCutoff),
+      };
+      return { charts: { daily: Array.from(normalizedDaily.values()), weekly: calendar.weekly.candles,
+        monthly: calendar.monthly.candles, quarterly: calendar.quarterly.candles,
+        halfYear: calendar.halfYear.candles, yearly: calendar.yearly.candles }, calendar, calendarError: false };
+    } catch {
+      return { charts: { daily: Array.from(normalizedDaily.values()), weekly: [], monthly: [], quarterly: [], halfYear: [], yearly: [] }, calendar: null, calendarError: true };
+    }
+  }, [data, normalizedDaily, timeframeCharts, calendarCutoff]);
 
-  const selectedData = useMemo(() => {
-    const rows = dataset[timeframe];
-    if (rows && rows.length > 0) return rows;
-    return Array.from(normalizedDaily.values());
-  }, [dataset, timeframe, normalizedDaily]);
+  const selectedData = useMemo(() => selectStockChartSeries(dataset.charts, timeframe, Array.from(normalizedDaily.values())), [dataset, timeframe, normalizedDaily]);
 
   useEffect(() => {
     if (!chartContainerRef.current) return;
@@ -160,7 +145,7 @@ export default function StockChart({ data, timeframeCharts, missingReason, heigh
           <button
             key={key}
             type="button"
-            onClick={() => setTimeframe(key)}
+            onClick={() => { setCalendarCutoff(new Date().toISOString()); setTimeframe(key); }}
             className={`rounded-full border px-3 py-1 text-xs transition ${
               timeframe === key
                 ? 'border-accent bg-accent-soft text-accent'
@@ -172,6 +157,14 @@ export default function StockChart({ data, timeframeCharts, missingReason, heigh
         ))}
       </div>
 
+      {timeframeCharts && (timeframe === 'weekly' || timeframe === 'monthly') && <p className="text-xs text-slate-500" role="status">本期完成狀態與交易日覆蓋尚未提供，請以來源資料為準。</p>}
+      {!timeframeCharts && (timeframe === 'weekly' || timeframe === 'monthly') && <p className="text-xs text-slate-500" role="status">
+        {dataset.calendarError ? '期別資料有衝突或格式不完整，暫不繪製。' : <>
+          依台灣曆{timeframe === 'weekly' ? '週' : '月'}聚合；只含已提供交易日，歷史期別不代表資料完整。
+          {dataset.calendar?.[timeframe].periods.some(period => period.provisional === true) ? '本期尚未完成（暫定）。'
+            : calendarCutoff === undefined ? '本期完成狀態待確認。' : ''}
+        </>}
+      </p>}
       {selectedData.length > 0 ? (
         <div ref={chartContainerRef} className="w-full overflow-hidden rounded-lg border border-gray-800" style={{ height }} />
       ) : (
@@ -179,7 +172,7 @@ export default function StockChart({ data, timeframeCharts, missingReason, heigh
           className="flex w-full items-center justify-center rounded-lg border border-dashed border-gray-700 bg-black/5 px-6 text-center text-sm leading-7 text-slate-600 dark:text-emerald-100/60"
           style={{ height }}
         >
-          {missingReason || '目前還沒有足夠的日線資料可繪製 K 線圖。'}
+          {missingReason || `目前還沒有足夠的${timeframeLabel[timeframe]}資料可繪製 K 線圖。`}
         </div>
       )}
     </div>
