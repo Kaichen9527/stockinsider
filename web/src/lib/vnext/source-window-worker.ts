@@ -1,4 +1,5 @@
-import {extractContentBatch,permittedContentFingerprint,type PermittedContent} from './permitted-content.ts';
+import {extractContentBatch,type PermittedContent} from './permitted-content.ts';
+import {projectCachedSourceAdmission,summarizeCachedSourceAdmissions,type CachedSourceAdmission} from './cached-source-admission.ts';
 import {inputHash,vnextEnabled} from './policy.ts';
 import {analysisCommand,analysisWriter} from './analysis-runtime.ts';
 import type {VnextIdentity} from './auth.ts';
@@ -34,7 +35,7 @@ export async function runSourceWindowWorker(identity:VnextIdentity){
  return analysisWriter(async()=>{
   const {getSupabaseServerClient}=await import('../supabase-server.ts');const {sourceExecutionPolicy}=await import('../source-policy.ts');const client=getSupabaseServerClient();const now=new Date().toISOString();
   const policies=await analysisCommand(identity,'source-policies',{});if(!Array.isArray(policies.policies))throw Error('vnext_source_policies_shape');
-  const pages:Array<{source:Source;rightsHash:string;cycleCutoff:string;prior:Progress|null;rows:Row[];connector:string;policy:ReturnType<typeof sourceExecutionPolicy>}>=[];const contents:PermittedContent[]=[],accounted=new Set<string>();const coverage:Row[]=[];
+  const pages:Array<{source:Source;rightsHash:string;cycleCutoff:string;prior:Progress|null;rows:Row[];connector:string;policy:ReturnType<typeof sourceExecutionPolicy>}>=[];const contents:PermittedContent[]=[],accounted=new Set<string>();const coverage:Row[]=[];const admissions:CachedSourceAdmission[]=[];
   for(const source of ['ptt','official'] as const){
    const scope=source==='ptt'?'metadata':'official_original',platform=source==='ptt'?'ptt':'twse_insider',policy=sourceExecutionPolicy(platform);
    const matches=(policies.policies as Row[]).filter(p=>p.source===source&&p.scope===scope);if(matches.length>1)throw Error('vnext_source_policy_conflict');
@@ -46,7 +47,7 @@ export async function runSourceWindowWorker(identity:VnextIdentity){
    const history=read.data as Row[];if(history.length>2||history.some(r=>!uuid(r.id)||!instant(r.attempted_at)))throw Error('vnext_cache_progress_invalid');
    if(history.length===2&&history[0].attempted_at===history[1].attempted_at&&inputHash(history[0].metadata)!==inputHash(history[1].metadata))throw Error('vnext_cache_progress_conflict');
    const prior=previousProgress(history[0]?.metadata,source,identity.principal,rightsHash,now),cycleCutoff=prior?.cycleCutoff||now;
-   const select=()=>source==='official'?client.from('source_raw_documents').select('id,document_url,title,published_at,collected_at,symbols,metadata,content_text'):client.from('source_raw_documents').select('id,document_url,title,published_at,collected_at,symbols,metadata');
+   const select=()=>source==='official'?client.from('source_raw_documents').select('id,document_url,title,published_at,collected_at,symbols,canonical_content_hash,metadata,content_text'):client.from('source_raw_documents').select('id,document_url,title,published_at,collected_at,symbols,canonical_content_hash,metadata');
    let query=select().eq('platform',platform).gte('published_at',new Date(Date.parse(cycleCutoff)-30*DAY).toISOString()).lte('published_at',cycleCutoff).lte('collected_at',cycleCutoff);
    if(prior?.cursor){const cursor=prior.cursor;query=query.or(`published_at.lt.${cursor.publishedAt},and(published_at.eq.${cursor.publishedAt},id.lt.${cursor.id})`);}
    const page=await query.order('published_at',{ascending:false}).order('id',{ascending:false}).limit(PAGE);
@@ -56,20 +57,19 @@ export async function runSourceWindowWorker(identity:VnextIdentity){
    for(const row of rows){
     if(!uuid(row.id)||!instant(row.published_at)||!instant(row.collected_at)||precise(row.published_at)>precise(row.collected_at)||precise(row.collected_at)>precise(cycleCutoff)||Date.parse(row.published_at)<Date.parse(cycleCutoff)-30*DAY)throw Error('vnext_cache_window_row');
     if(last&&(precise(row.published_at)>precise(last.publishedAt)||precise(row.published_at)===precise(last.publishedAt)&&row.id>=last.id))throw Error('vnext_cache_window_order');last={publishedAt:row.published_at,id:row.id};
-    const metadata=object(row.metadata)?row.metadata:{};
-    if(source==='ptt'&&metadata.retention_mode!=='metadata_link_only'){accounted.add(row.id);continue;}
-    contents.push({id:row.id,source,scope,url:String(row.document_url),eventAt:String(metadata.original_event_at||row.published_at),publishedAt:row.published_at,eventBasis:metadata.original_event_at?'original_event':'source_publication',availableAt:row.collected_at,symbols:Array.isArray(row.symbols)?row.symbols as string[]:[],authorRoot:source==='official'?'official:twse-tpex':'',originalRoot:source==='official'?String(row.document_url):'',...(source==='ptt'?{title:String(row.title)}:{body:String(row.content_text||'')})});
+    const projection=projectCachedSourceAdmission(row,source,now,cycleCutoff);admissions.push(projection.evidence);
+    if(projection.item)contents.push(projection.item);else accounted.add(row.id);
    }
    pages.push({source,rightsHash,cycleCutoff,prior,rows,connector,policy});
   }
   const hashes=new Map<string,string[]>(),sourcesByHash=new Map<string,Source>();const cacheLineage:Row[]=[];
-  for(const item of contents){
-   let contentHash:string|null=null;
-   try{contentHash=permittedContentFingerprint(item,now);hashes.set(contentHash,[...(hashes.get(contentHash)||[]),item.id]);sourcesByHash.set(contentHash,item.source as Source);}catch{/* The original batch returns the exact validation rejection. */}
+  for(const evidence of admissions){
+   const contentHash=evidence.contentHash;
+   if(contentHash){hashes.set(contentHash,[...(hashes.get(contentHash)||[]),evidence.rawDocumentId]);sourcesByHash.set(contentHash,evidence.source);}
    // These are frozen cache input versions, not a current publisher revision.
    // The existing raw cache does not retain publisher revision authority and
    // acquisition time must never manufacture one, even after a complete pass.
-   cacheLineage.push({rawDocumentId:item.id,source:item.source,cutoff:now,cacheCycleCutoff:pages.find(page=>page.source===item.source)!.cycleCutoff,eventAt:item.eventAt,publishedAt:item.publishedAt,availableAt:item.availableAt,contentHash,sourceRevision:null,gaps:['publisher_revision_not_recorded_in_cache']});
+   cacheLineage.push({rawDocumentId:evidence.rawDocumentId,source:evidence.source,cutoff:now,cacheCycleCutoff:evidence.cacheCycleCutoff,eventAt:evidence.eventAt,publishedAt:evidence.publishedAt,availableAt:evidence.availableAt,contentHash,sourceRevision:null,gaps:['publisher_revision_not_recorded_in_cache'],cacheAdmission:evidence});
   }
   const assertCurrentRights=async(source:Source)=>{
    const page=pages.find(page=>page.source===source);if(!page)throw Error('vnext_cache_source_binding_missing');
@@ -103,6 +103,7 @@ export async function runSourceWindowWorker(identity:VnextIdentity){
    }
    return result;
   });
+  extraction.rejected.push(...admissions.filter(row=>row.reason!==null).map(row=>({id:row.rawDocumentId,reason:row.reason!})));
   for(const rejected of extraction.rejected)accounted.add(rejected.id);
   // Complete extraction before appending progress. An uncertain completion or
   // ledger append propagates once; no internal retry or new reservation loop.
@@ -118,6 +119,6 @@ export async function runSourceWindowWorker(identity:VnextIdentity){
    coverage.push({source:page.source,status:finished?'cached_window_enumerated':'cached_window_partial',enumerated:progress.enumerated,accounted:progress.accounted,pageAdvanced:complete&&!finished,cycleCutoff:page.cycleCutoff,progressHash:inputHash(progress),eventCoverage:'unknown',eventVolume:null,acquisitionAttempted:false,reason:row.terminal_detail});
   }
   const snapshotTransport=await(await import('./twse-snapshot-store.ts')).readTwseSnapshotCoverage(identity);
-  return {...extraction,coverage,cacheLineage,snapshotTransport,cacheScanVersion:VERSION,upstreamCoverage:'unknown',eventVolume:null};
+  return {...extraction,coverage,cacheLineage,sourceAdmissions:summarizeCachedSourceAdmissions(admissions),snapshotTransport,cacheScanVersion:VERSION,upstreamCoverage:'unknown',eventVolume:null};
  });
 }

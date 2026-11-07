@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { POLICY } from './policy.ts';
+import { evidenceInstant } from './evidence-clock.ts';
 
 /** Read-only pagination over an already persisted immutable ranking catalog.
  * It neither validates review authority nor extends the catalog's coverage. */
@@ -42,7 +43,7 @@ export function candidateRankingRunId(query: CandidateQuery): string | null {
 }
 /** Strict public allowlist: input hashes, reasons, evidence and all unknown keys stay private. */
 function parseCatalog(snapshot: Record<string, unknown>) {
-  if (snapshot.schemaVersion !== 'vnext-ranking-snapshot-v1' || snapshot.policyVersion !== POLICY.version || typeof snapshot.rankingRunId !== 'string' || !uuid.test(snapshot.rankingRunId) || typeof snapshot.cutoff !== 'string' || !Number.isFinite(Date.parse(snapshot.cutoff)) || !Array.isArray(snapshot.candidates) || snapshot.candidates.length > 20) return fail();
+  if (snapshot.schemaVersion !== 'vnext-ranking-snapshot-v1' || snapshot.policyVersion !== POLICY.version || typeof snapshot.rankingRunId !== 'string' || !uuid.test(snapshot.rankingRunId) || typeof snapshot.cutoff !== 'string' || evidenceInstant(snapshot.cutoff) === null || !Array.isArray(snapshot.candidates) || snapshot.candidates.length > 20) return fail();
   const all: PublicCandidate[] = snapshot.candidates.map((raw: unknown) => {
     if (!plain(raw) || typeof raw.symbol !== 'string' || !/^\d{4}$/u.test(raw.symbol) || !statuses.includes(raw.state as typeof statuses[number]) || typeof raw.entryEligible !== 'boolean'
       || !(raw.date === null || typeof raw.date === 'string' && validDate(raw.date)) || !(raw.revisionId === null || typeof raw.revisionId === 'string' && uuid.test(raw.revisionId)) || raw.source !== null || raw.industry !== null) return fail();
@@ -51,10 +52,10 @@ function parseCatalog(snapshot: Record<string, unknown>) {
   if (new Set(all.map(row => row.symbol)).size !== all.length) return fail();
   return all;
 }
-function paginate<T extends PublicCandidate>(snapshot: Record<string, unknown>, all: T[], query: CandidateQuery) {
+function paginate<T extends PublicCandidate>(snapshot: Record<string, unknown>, all: T[], query: CandidateQuery, lineage?: { previousSnapshot: { rankingRunId: string; cutoff: string } | null }) {
   const requested = candidateRankingRunId(query);
   if (requested && requested !== snapshot.rankingRunId) return fail();
-  const catalogHash = hash({ rankingRunId: snapshot.rankingRunId, cutoff: snapshot.cutoff, rows: all });
+  const catalogHash = hash({ rankingRunId: snapshot.rankingRunId, cutoff: snapshot.cutoff, rows: all, ...(lineage ? { lineage } : {}) });
   const cursor = query.cursor ? decodeCursor(query.cursor) : null;
   if (cursor && (cursor.rankingRunId !== snapshot.rankingRunId || cursor.catalogHash !== catalogHash || cursor.filtersHash !== hash(query.filters) || !all.some(row => row.symbol === cursor.after))) return fail();
   const filtered = all.filter(row => (!query.filters.date || row.date === query.filters.date) && (!query.filters.status || row.state === query.filters.status) && !query.filters.source && !query.filters.industry);
@@ -72,10 +73,12 @@ export type CandidateHistoryRow = PublicCandidate & { stateBasis: 'saved_active_
 export const CANDIDATE_HISTORY_GAPS = ['not_admitted_catalog_not_available', 'between_snapshot_transitions_not_available', 'exact_exit_time_and_reason_not_available', 'source_metadata_not_available', 'industry_metadata_not_available'] as const;
 /** Only stored adjacent snapshots establish these observations. An absence is not
  * an exact ledger exit event; never use it for current validity or entry authority. */
-export function candidateHistoryPage(value: unknown, query: CandidateQuery) {
+export function candidateHistoryPage(value: unknown, query: CandidateQuery, readAt = new Date().toISOString()) {
   if (!plain(value) || !plain(value.snapshot) || Buffer.byteLength(JSON.stringify(value)) > 256 * 1024) return fail();
   const current = value.snapshot;
   const active = parseCatalog(current);
+  const cutoff = evidenceInstant(current.cutoff)!, readCutoff = evidenceInstant(readAt);
+  if (readCutoff === null || cutoff > readCutoff) return fail();
   if (active.some(row => row.state === 'exited')) return fail();
   if (!(current.previousRankingRunId === null || typeof current.previousRankingRunId === 'string' && uuid.test(current.previousRankingRunId)) || current.previousRankingRunId === current.rankingRunId) return fail();
   let prior: PublicCandidate[] = [];
@@ -85,21 +88,26 @@ export function candidateHistoryPage(value: unknown, query: CandidateQuery) {
     if (!plain(value.previousSnapshot)) return fail();
     prior = parseCatalog(value.previousSnapshot);
     if (prior.some(row => row.state === 'exited')) return fail();
-    if (value.previousSnapshot.rankingRunId !== current.previousRankingRunId || Date.parse(value.previousSnapshot.cutoff as string) > Date.parse(current.cutoff as string)) return fail();
+    if (value.previousSnapshot.rankingRunId !== current.previousRankingRunId || evidenceInstant(value.previousSnapshot.cutoff)! > cutoff
+      || !(value.previousSnapshot.previousRankingRunId === null || typeof value.previousSnapshot.previousRankingRunId === 'string' && uuid.test(value.previousSnapshot.previousRankingRunId))
+      || value.previousSnapshot.previousRankingRunId === current.rankingRunId || value.previousSnapshot.previousRankingRunId === value.previousSnapshot.rankingRunId) return fail();
     previousSnapshot = { rankingRunId: value.previousSnapshot.rankingRunId as string, cutoff: value.previousSnapshot.cutoff as string };
   }
   let nextSnapshot: { rankingRunId: string; cutoff: string } | null = null;
   if (value.nextSnapshot !== null) {
     const next = value.nextSnapshot;
     if (!plain(next) || typeof next.rankingRunId !== 'string' || !uuid.test(next.rankingRunId) || next.rankingRunId === current.rankingRunId || next.rankingRunId === current.previousRankingRunId
-      || next.previousRankingRunId !== current.rankingRunId || typeof next.cutoff !== 'string' || !Number.isFinite(Date.parse(next.cutoff)) || Date.parse(next.cutoff) < Date.parse(current.cutoff as string)) return fail();
+      || plain(value.previousSnapshot) && value.previousSnapshot.previousRankingRunId === next.rankingRunId
+      || next.previousRankingRunId !== current.rankingRunId || typeof next.cutoff !== 'string' || evidenceInstant(next.cutoff) === null || evidenceInstant(next.cutoff)! < cutoff || evidenceInstant(next.cutoff)! > readCutoff) return fail();
     nextSnapshot = { rankingRunId: next.rankingRunId, cutoff: next.cutoff };
   }
   const rows: CandidateHistoryRow[] = active.map(row => ({ ...row, stateBasis: 'saved_active_pool', observedAt: current.cutoff as string, lastObservedAt: current.cutoff as string }));
   const currentSymbols = new Set(active.map(row => row.symbol));
   for (const old of prior) if (!currentSymbols.has(old.symbol)) rows.push({ ...old, state: 'exited', entryEligible: false, stateBasis: 'absent_from_successor', observedAt: current.cutoff as string, lastObservedAt: previousSnapshot!.cutoff });
   rows.sort((a, b) => a.symbol < b.symbol ? -1 : a.symbol > b.symbol ? 1 : 0);
-  return { ...paginate(current, rows, query), previousSnapshot, nextSnapshot, gaps: [...CANDIDATE_HISTORY_GAPS], scope: 'saved_adjacent_active_pool_snapshots' as const };
+  // Predecessor identity/cutoff defines the observation interval even when no
+  // symbol disappeared. A newly appended successor does not change these rows.
+  return { ...paginate(current, rows, query, { previousSnapshot }), previousSnapshot, nextSnapshot, gaps: [...CANDIDATE_HISTORY_GAPS], scope: 'saved_adjacent_active_pool_snapshots' as const };
 }
 
 /** Catalog members outside Top10 have publication history, not a ranked detail binding. */

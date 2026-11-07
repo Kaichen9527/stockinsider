@@ -2,6 +2,8 @@
  * Not PG, PostgREST, HTTP, writer-lease, real source or native acceptance. */
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';import {createRequire} from 'node:module';
 import * as content from '../web/src/lib/vnext/permitted-content.ts';import {inputHash} from '../web/src/lib/vnext/policy.ts';
+import * as cachedAdmission from '../web/src/lib/vnext/cached-source-admission.ts';
+import {canonicalContentHash} from '../web/src/lib/source-content-semantics.ts';
 const ts=createRequire(new URL('../web/package.json',import.meta.url))('typescript');
 const id=n=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`,identity={role:'operator',principal:'synthetic-source-operator'};
 function lab({rows=[],parseLimit=50,policies=['official'],completeError=false,appendError=false,enabled=true,reply,withdrawOnPolicyRead=Infinity,expireOnPolicyRead=Infinity,withdrawAfterReservation=false,withdrawAfterCompletion=false,withdrawAfterReplay=false}={}){
@@ -18,7 +20,7 @@ function lab({rows=[],parseLimit=50,policies=['official'],completeError=false,ap
  const send=async(_identity,action,body)=>{trace.push({action,contentHash:body?.item?.contentHash||body?.contentHash});if(action==='source-policies'){policyReads++;return {policies:withdrawn||policyReads>=withdrawOnPolicyRead?[]:policies.map(source=>({source,scope:source==='official'?'official_original':'metadata',enabled:true,rights_subject:binding,license_basis:'synthetic-public-license',valid_until:policyReads>=expireOnPolicyRead?new Date(Date.now()-1000).toISOString():until}))};}
   if(action==='source-reserve'){reservations++;const hash=body.item.contentHash;if(receipts.has(hash)){if(withdrawAfterReplay)withdrawn=true;return {...{parse:false,replay:true,state:receipts.get(hash),contentHash:hash},...reply};}if(completions>=parseLimit)return {parse:false,deferred:'daily_content_budget'};receipts.set(hash,'reserved');if(withdrawAfterReservation)withdrawn=true;return {parse:true,contentHash:hash};}
   assert.equal(action,'source-complete');if(completeError)throw Error('synthetic completion uncertainty');completions++;receipts.set(body.contentHash,'completed');if(withdrawAfterCompletion)withdrawn=true;return {parsed:true,contentHash:body.contentHash,...reply};};
- const modules={'./permitted-content.ts':content,'./policy.ts':{inputHash,vnextEnabled:()=>enabled},'./analysis-runtime.ts':{analysisCommand:send,analysisWriter:async work=>{trace.push({writer:true});return work();}},'../supabase-server.ts':{getSupabaseServerClient:()=>({from:queryFor})},'../source-policy.ts':{sourceExecutionPolicy:()=>({disposition:'active',licenseBasis:'synthetic-public-license'})},'./twse-snapshot-store.ts':{readTwseSnapshotCoverage:async()=>({eventVolume:null,eventCoverage:'unknown',observations:[]})}};
+ const modules={'./permitted-content.ts':content,'./cached-source-admission.ts':cachedAdmission,'./policy.ts':{inputHash,vnextEnabled:()=>enabled},'./analysis-runtime.ts':{analysisCommand:send,analysisWriter:async work=>{trace.push({writer:true});return work();}},'../supabase-server.ts':{getSupabaseServerClient:()=>({from:queryFor})},'../source-policy.ts':{sourceExecutionPolicy:()=>({disposition:'active',licenseBasis:'synthetic-public-license'})},'./twse-snapshot-store.ts':{readTwseSnapshotCoverage:async()=>({eventVolume:null,eventCoverage:'unknown',observations:[]})}};
  const filename='web/src/lib/vnext/source-window-worker.ts',compiled=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:filename}).outputText,output={exports:{}};vm.compileFunction(compiled,['exports','require','module'],{filename})(output.exports,name=>{assert.ok(Object.hasOwn(modules,name),'unexpected dependency '+name);return modules[name];},output);
  const seed=(n,extra={})=>({id:id(n),platform:'twse_insider',document_url:`https://www.twse.com.tw/synthetic-window-${n}`,title:'Synthetic cache only',published_at:before,collected_at:before,symbols:['2409'],metadata:{},content_text:`Synthetic original ${n}, not acquired.`,...extra});
  return {run:()=>output.exports.runSourceWindowWorker(identity),as:who=>output.exports.runSourceWindowWorker(who),trace,progress,receipts,seed,get completions(){return completions;},get reservations(){return reservations;},setBinding(value){binding=value;},corrupt(value){corrupt=value;}};
@@ -117,4 +119,42 @@ test('permission expiry or withdrawal before progress also holds empty and compl
   const rows=[],f=lab({rows,withdrawOnPolicyRead:empty?2:6});if(!empty)rows.push(f.seed(1));
   await assert.rejects(f.run,/rights_changed_during_scan/);assert.equal(f.progress.length,0);assert.equal(f.completions,empty?0:1);
  }
+});
+
+test('actual cache worker filters truncated or changed stored originals before reserve while retaining terminal refusal evidence',async()=>{
+ const rows=[],f=lab({rows});const good=f.seed(1),changed=f.seed(2),truncated=f.seed(3);
+ good.canonical_content_hash=canonicalContentHash(good.content_text);
+ changed.canonical_content_hash=canonicalContentHash(changed.content_text);changed.content_text+=' unrecorded changed body';
+ truncated.metadata={content_truncated:true};rows.push(good,changed,truncated);
+ const original=structuredClone(rows),result=await f.run();assert.equal(result.selected,1);assert.equal(f.reservations,1);assert.equal(f.completions,1);assert.deepEqual(rows,original);
+ assert.deepEqual(result.rejected.map(row=>row.reason).sort(),['vnext_cached_canonical_content_mismatch','vnext_cached_original_truncated']);
+ assert.equal(result.sourceAdmissions.evidence.length,3);assert.equal(result.sourceAdmissions.upstreamCoverage,'unknown');assert.equal(result.sourceAdmissions.recent7,null);assert.equal(result.sourceAdmissions.prior21,null);
+ assert.equal(f.progress[0].metadata.accounted,3);assert.equal(f.progress[0].metadata.finished,true);assert.equal(result.coverage[1].status,'cached_window_enumerated');assert.equal(result.coverage[1].eventCoverage,'unknown');
+ assert.ok(result.cacheLineage.every(row=>row.sourceRevision===null&&row.cacheAdmission.publisherRevision===null));
+});
+test('actual cache worker reuses both same-citation observed versions without creating a publisher head or independent voices',async()=>{
+ const rows=[],f=lab({rows});const original=f.seed(1),correction={...f.seed(2),document_url:original.document_url,content_text:'Synthetic correction already stored as another row.'};rows.push(original,correction);
+ const first=await f.run();assert.equal(first.selected,2);assert.equal(first.sourceAdmissions.observedSameCitationVersions.length,1);assert.equal(first.sourceAdmissions.observedSameCitationVersions[0].contentHashes.length,2);
+ const admissions=first.sourceAdmissions.evidence;assert.equal(admissions[0].conservativeOriginGroup,admissions[1].conservativeOriginGroup);assert.ok(admissions.every(row=>row.publisherRevision===null&&row.verifiedIndependentOrigin===null));
+ const second=await f.run();assert.equal(second.selected,0);assert.equal(f.completions,2);assert.deepEqual(second.sourceAdmissions.evidence.map(row=>row.cacheVersionHash),admissions.map(row=>row.cacheVersionHash));assert.equal(second.eventVolume,null);
+});
+test('actual cache worker retains an older unverified original clock and ignores metadata publisher/origin/coverage assertions',async()=>{
+ const rows=[],f=lab({rows});const row=f.seed(1);const older=new Date(Date.parse(row.published_at)-40*86400000).toISOString();row.metadata={original_event_at:older,publisher_revision:'forged',original_root:'invented',coverage:'complete',rights_attested:true};rows.push(row);
+ const result=await f.run();const evidence=result.sourceAdmissions.evidence[0];assert.equal(evidence.eventAt,older);assert.ok(evidence.gaps.includes('declared_original_event_not_authority'));
+ assert.equal(evidence.publisherRevision,null);assert.equal(evidence.verifiedIndependentOrigin,null);assert.equal(result.sourceAdmissions.independentOriginVerified,false);assert.equal(result.sourceAdmissions.recent7,null);
+ assert.equal(evidence.reason,'vnext_cached_original_event_authority_unavailable');assert.equal(evidence.identityEventBasis,'original_event');assert.equal(f.reservations,0);assert.equal(f.completions,0);
+});
+test('completed legacy original-event identity is preserved as evidence without relabelling, reserving or charging it again',async()=>{
+ const rows=[],f=lab({rows});const row=f.seed(1);row.metadata={original_event_at:new Date(Date.parse(row.published_at)-3600000).toISOString()};rows.push(row);
+ const legacy={id:row.id,source:'official',scope:'official_original',url:row.document_url,eventAt:row.metadata.original_event_at,publishedAt:row.published_at,eventBasis:'original_event',availableAt:row.collected_at,symbols:row.symbols,authorRoot:'official:twse-tpex',originalRoot:row.document_url,body:row.content_text};
+ const legacyHash=content.permittedContentFingerprint(legacy,new Date().toISOString());f.receipts.set(legacyHash,'completed');
+ const result=await f.run();assert.equal(result.selected,0);assert.equal(f.reservations,0);assert.equal(f.completions,0);assert.deepEqual([...f.receipts],[ [legacyHash,'completed'] ]);
+ assert.equal(result.cacheLineage[0].contentHash,legacyHash);assert.equal(result.cacheLineage[0].eventAt,legacy.eventAt);assert.equal(result.cacheLineage[0].sourceRevision,null);
+ assert.equal(result.sourceAdmissions.evidence[0].reason,'vnext_cached_original_event_authority_unavailable');assert.equal(result.sourceAdmissions.evidence[0].identityEventBasis,'original_event');
+});
+test('actual cache worker cannot erase malformed present cache metadata, canonical hashes or restriction flags into missing legacy fields',async()=>{
+ const rows=[],f=lab({rows});for(const [index,extra] of [{metadata:[]},{canonical_content_hash:123},{metadata:{content_truncated:'true'}},{metadata:{invalidated:'true'}},{metadata:{discovery_eligible:'false'}},{metadata:{candidate_discovery_eligible:0}}].entries())rows.push(f.seed(index+1,extra));
+ const result=await f.run();assert.equal(result.selected,0);assert.equal(f.reservations,0);assert.equal(f.completions,0);assert.equal(result.rejected.length,6);
+ assert.equal(result.sourceAdmissions.evidence.filter(row=>row.reason==='vnext_cached_source_metadata_invalid').length,5);assert.equal(result.sourceAdmissions.evidence.filter(row=>row.reason==='vnext_cached_canonical_content_invalid').length,1);
+ assert.equal(result.coverage[1].eventCoverage,'unknown');assert.equal(result.eventVolume,null);assert.equal(f.progress[0].metadata.finished,true);
 });

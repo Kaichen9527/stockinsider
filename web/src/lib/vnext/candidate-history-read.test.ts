@@ -106,3 +106,49 @@ test('injected adapter actually requests the selected immutable run and rejects 
     if (priorRanking === undefined) delete process.env.STOCKINSIDER_VNEXT_TOP10_ENABLED; else process.env.STOCKINSIDER_VNEXT_TOP10_ENABLED = priorRanking;
   }
 });
+
+test('historical cutoffs reject invalid civil dates, non-ISO clocks and future observations at the actual read boundary', () => {
+  const readAt = '2026-11-03T12:30:00.000001Z';
+  for (const cutoff of ['2026-02-30T12:30:00Z', '2026-11-02', 'November 2, 2026 12:30:00 UTC', '2026-11-03T12:30:00.000002Z', '2026-11-02T24:00:00Z']) {
+    const value = { snapshot: snapshot(1, [], null), previousSnapshot: null, nextSnapshot: null };
+    value.snapshot.cutoff = cutoff;
+    assert.throws(() => candidateHistoryPage(value, candidateQuery({}), readAt), /invalid/u);
+  }
+  assert.throws(() => candidateHistoryPage(fixture(), candidateQuery({}), '2026-02-30T12:30:00Z'), /invalid/u);
+  const futureNext = fixture(); futureNext.nextSnapshot.cutoff = '2026-11-03T12:30:00.000002Z';
+  assert.throws(() => candidateHistoryPage(futureNext, candidateQuery({}), readAt), /invalid/u);
+});
+
+test('microsecond predecessor/successor ordering and offset-equivalent boundaries never collapse to milliseconds', () => {
+  const value = fixture();
+  value.previousSnapshot.cutoff = '2026-11-02T12:30:00.000001Z';
+  value.snapshot.cutoff = '2026-11-02T12:30:00.000002Z';
+  value.nextSnapshot.cutoff = '2026-11-02T20:30:00.000003+08:00';
+  const readAt = '2026-11-02T12:30:00.000003Z';
+  assert.equal(candidateHistoryPage(value, candidateQuery({}), readAt).rows.length, 3);
+  const laterPrior = structuredClone(value); laterPrior.previousSnapshot.cutoff = '2026-11-02T12:30:00.000003Z';
+  assert.throws(() => candidateHistoryPage(laterPrior, candidateQuery({}), readAt), /invalid/u);
+  const earlierNext = structuredClone(value); earlierNext.nextSnapshot.cutoff = '2026-11-02T12:30:00.000001Z';
+  assert.throws(() => candidateHistoryPage(earlierNext, candidateQuery({}), readAt), /invalid/u);
+});
+
+test('cursor binds predecessor identity and observation clock even when no candidate disappeared', () => {
+  const value = fixture(); value.previousSnapshot.candidates = structuredClone(value.snapshot.candidates);
+  const first = candidateHistoryPage(value, candidateQuery({ limit: '1' }));
+  const query = candidateQuery({ cursor: first.nextCursor! });
+  const changedIdentity = structuredClone(value);
+  changedIdentity.snapshot.previousRankingRunId = id(4); changedIdentity.previousSnapshot.rankingRunId = id(4);
+  assert.throws(() => candidateHistoryPage(changedIdentity, query), /invalid/u);
+  const changedClock = structuredClone(value); changedClock.previousSnapshot.cutoff = '2026-11-01T12:30:00.000001Z';
+  assert.throws(() => candidateHistoryPage(changedClock, query), /invalid/u);
+  const noSuccessor = { ...value, nextSnapshot: null };
+  const withoutNext = candidateHistoryPage(noSuccessor, candidateQuery({ limit: '1' }));
+  assert.deepEqual(candidateHistoryPage(value, candidateQuery({ cursor: withoutNext.nextCursor! })).rows.map(row => row.symbol), ['1002']);
+});
+
+test('immediate predecessor cannot point to any identity in the visible current/prior/next fragment', () => {
+  for (const previousRankingRunId of [id(1), id(2), id(3), 'invalid']) {
+    const value = fixture(); value.previousSnapshot.previousRankingRunId = previousRankingRunId;
+    assert.throws(() => candidateHistoryPage(value, candidateQuery({})), /invalid/u);
+  }
+});
