@@ -1,4 +1,6 @@
-# Contabo owner 可核對步驟（2026-11-07，仍未建立連線）
+# Contabo owner 可核對步驟（2026-11-07，Cloud 仍未建立連線）
+
+**最新狀態：owner 已提供嚴格既有 pin 登入取得的公開 ED25519 key／指紋及容量 dry-run；已記錄並離線重算吻合，不要求重取。請以本文末尾 Updated operator facts 與 [本輪 receipt](SSH-READINESS-RECEIPT.json) 為目前狀態。下列初始缺件表／console 指令保留其前次 checkpoint 範圍；目前阻擋是 Cloud 精確 route、safe agent/custody 與撤銷流程，不能因初始表而抹去 owner 新證據。**
 
 核對來源：`02b4bd5995a50e0497edae5382d34733d5dbc2f9`。本文件是本機 source review 與 owner 操作邊界，**不是 owner 已完成 console 驗證的收據**。沒有連 Contabo、設定網路、產生 SSH identity、執行 bootstrap apply 或讀寫秘密／env；沒有部署、正式 DB／服務／排程變更。
 
