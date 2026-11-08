@@ -13,6 +13,7 @@ const verifier=fileURLToPath(new URL('./verify-standalone-release.mjs',import.me
 async function receipt(fixture,change=()=>{}){
  const manifest=structuredClone(fixture.manifest);change(manifest);
  await writeFile(path.join(fixture.release,'release-manifest.json'),JSON.stringify({manifest,manifestSha256:digest(JSON.stringify(manifest))}),{mode:0o644});
+ await chmod(path.join(fixture.release,'release-manifest.json'),0o644);
  return manifest;
 }
 async function fixture(t,nested=false){
@@ -28,6 +29,8 @@ async function fixture(t,nested=false){
  const files=[];
  for(const [name,body] of Object.entries(contents)){
   await mkdir(path.dirname(path.join(release,name)),{recursive:true});await writeFile(path.join(release,name),body,{mode:0o644});
+  // Fixture manifest declares0644; create mode alone is narrowed by VM umask.
+  await chmod(path.join(release,name),0o644);
   files.push({path:name,bytes:Buffer.byteLength(body),mode:0o644,sha256:digest(body)});
  }
  const result={parent,release,manifest:{schema:'stockinsider-standalone-release-v2',releaseId:sourceCommit,sourceCommit,packagerCommit:'b'.repeat(40),createdAt:'2026-11-08T00:00:00Z',
