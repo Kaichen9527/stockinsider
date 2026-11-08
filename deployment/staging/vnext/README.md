@@ -1,5 +1,10 @@
 # Isolated Contabo staging: offline v2 preparation
 
+The separate [Linux restore source candidate](LINUX-RESTORE-CANDIDATE.md)
+records PG17/authenticated-source/key-custody requirements and bounded synthetic
+fixtures. Its live facade always rejects; it does not extend this verifier's
+connection authority or admit a backup, database restore or Next rollback.
+
 `verify.mjs` is an offline, fail-closed preparation tool. It imports no process
 runner or network client, reads only its adjacent public `plan.json`, and never
 reads environment configuration, an agent socket, public/private key files or

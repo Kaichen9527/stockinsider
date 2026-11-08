@@ -16,3 +16,7 @@ Legacy change map is in acceptance.md. Candidate migration is source-only until 
 ## 2026-11-07 V2 amendment
 
 See [V2 Top10 / Cloud / iCloud / Contabo amendment](v2-top10-cloud-amendment.md). User requirements are recorded; exact independent design/protected review and release acceptance remain pending. Historical results and original failure HOLD are retained.
+
+## 2026-11-08 Linux restore / release source slice
+
+See [bounded Linux restore / release amendment](linux-restore-release-amendment.md). Cloud work is source and NONPRODUCTION fixtures only; separate coordinator staging owns actual backup/PG17/Next rollback. Existing Mac authenticated-source reopening remains an execution blocker. No production artifact, key or private log is received; no native HOLD retry or original PR-head change.
