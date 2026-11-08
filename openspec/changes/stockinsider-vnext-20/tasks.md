@@ -149,8 +149,10 @@ Evidence: docs/operations/2026-11-08/vnext/SSH-PATH-REPLAY.md and ssh-path-repla
 - [x] Inventory existing envelope, complete-set/retention, key backend, Mac restore and separate release formats from repository source only; retain the authentication/reopen execution blocker.
 - [x] Bounded Linux staging candidate and authenticated-copy NONPRODUCTION fixture; no host execution adapter or key FD authority.
 - [x] Harden existing standalone V2 member/entrypoint/manifest verification without changing its canonical format; structural fixtures only, no new synthetic HTTP.
-- [ ] Same-VM resource-monitored relevant fixtures, retained vNext regression, types/lint/full build and independent engineering source review; publish exact-source sanitized receipt.
+- [x] Same-VM382/382 resource-monitored relevant fixtures and retained vNext regression, types/lint/full build and independent engineering source review; exact source0c6eadd sanitized receipt preserves first379/382/3FAIL and reviewed mode correction. No new synthetic HTTP/browser.
 - [ ] Actual Linux key custody/immutable artifact, PG17 isolation/restore, storage/provider recovery, real Next rollback and production-continuity evidence remain separate coordinator acceptance.
 - [ ] Native HOLD, A1/protected review, original PR head, real-source/two-session and release/deployment gates remain incomplete. No Cloud backup/key/SSH/PG/SQL/service/timer/iCloud action.
 
 Design: linux-restore-release-amendment.md. Source inventory: docs/operations/2026-11-08/vnext/BACKUP-RESTORE-SOURCE-MAP.md.
+
+Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-restore-release-checks.json. This is source/fixture evidence, not actual backup/PG/Next staging acceptance.

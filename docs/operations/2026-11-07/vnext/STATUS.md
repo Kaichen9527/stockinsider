@@ -1,4 +1,10 @@
-# Latest checkpoint: Taipei schedule source candidate
+# Latest checkpoint: Linux restore / standalone source candidate
+
+See [2026-11-08 current status](../../2026-11-08/vnext/STATUS.md) and [source0c6eadd/382/build/retained first failures](../../2026-11-08/vnext/LINUX-RESTORE-RELEASE.md). Linux live execution remains Disabled and actual backup/PG17/Next rollback evidence stays with the separate coordinator. Existing archive-reopen blocker/nativeHOLD/formalA1/originalPR head are retained; no new syntheticHTTP/browser. Earlier receipts below retain their original subjects/scopes.
+
+---
+
+# Prior checkpoint: Taipei schedule source candidate
 
 See [2026-11-08 current status](../../2026-11-08/vnext/STATUS.md), [isolated path/replay330/16behavior/14browser receipt](../../2026-11-08/vnext/ssh-path-replay-checks.json). Sourceb3a3486; host/scheduler/ledger/source connections remain disabled/unverified and actualkernelACL injection BLOCKED. OriginalPRhead/nativeHOLD/formalreview gates retained. Everything below is historical evidence with its original subject/scope.
 

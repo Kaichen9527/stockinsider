@@ -1,3 +1,13 @@
+# Current Linux restore / release checkpoint — SOURCE ONLY / INCOMPLETE
+
+[Delivered source and limits](LINUX-RESTORE-RELEASE.md) · [Repository backup/restore inventory](BACKUP-RESTORE-SOURCE-MAP.md) · [Exact-source receipt](linux-restore-release-checks.json).
+
+Source0c6eadd hardens existing standaloneV2 entrypoint/member/manifest verification and adds an alwaysDisabled LinuxPG17 staging design with bounded NONPRODUCTION crypto fixtures. All9 live integrations remainNOT_IMPLEMENTED. Actual backup/key/PG17/Next rollback belong to the separate coordinator; no actual artifact or private evidence entered Cloud. Existing Mac archive-authentication/reopen execution blocker remains unresolved.
+
+382Node/types/lint/fullbuild PASS after reviewed fixture-mode correction; first379/382 with3FAIL remains recorded. Newsource readonly engineering review0openP0/P1 is not formalA1. No new syntheticHTTP/browser; earlier14 retains prior scope. NativeHOLD/originalPRcbb and all real-source/session/staging/restore/CI/release gates retained. No CloudSSH/VPN/PG/SQL/service/timer/oldVM/iCloud/merge/deploy;0bytes reclaimed.
+
+---
+
 # Current isolated authorization/replay checkpoint — OFFLINE / INCOMPLETE
 
 [Source changes and exact limits](SSH-PATH-REPLAY.md) · [Behavior-only receipt](ssh-path-replay-checks.json).
