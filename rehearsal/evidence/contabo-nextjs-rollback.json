@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "scope": "real packaged Next.js releases with isolated read-only REST fixture",
+  "transitions": [
+    {
+      "commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "nextVersion": "16.3.4",
+      "buildId": "8ScL_J9rBSjyekr5pb9GV",
+      "manifestSha256": "2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a",
+      "homeStatus": 200,
+      "staticStatus": 200,
+      "staticDigest": "678f6ce2cb80b1fe72fc67e7412be6e2ab6ada083111b64f7c40d35e3cba5e00",
+      "radarStatus": 503
+    },
+    {
+      "commit": "dd59817f750684b093965f539dd4de466be13077",
+      "nextVersion": "16.3.4",
+      "buildId": "e2WBkpZ_wkvn0YPEkko03",
+      "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+      "homeStatus": 200,
+      "staticStatus": 200,
+      "staticDigest": "678f6ce2cb80b1fe72fc67e7412be6e2ab6ada083111b64f7c40d35e3cba5e00",
+      "radarStatus": 503
+    },
+    {
+      "commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "nextVersion": "16.3.4",
+      "buildId": "8ScL_J9rBSjyekr5pb9GV",
+      "manifestSha256": "2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a",
+      "homeStatus": 200,
+      "staticStatus": 200,
+      "staticDigest": "678f6ce2cb80b1fe72fc67e7412be6e2ab6ada083111b64f7c40d35e3cba5e00",
+      "radarStatus": 503
+    },
+    {
+      "commit": "dd59817f750684b093965f539dd4de466be13077",
+      "nextVersion": "16.3.4",
+      "buildId": "e2WBkpZ_wkvn0YPEkko03",
+      "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+      "homeStatus": 200,
+      "staticStatus": 200,
+      "staticDigest": "678f6ce2cb80b1fe72fc67e7412be6e2ab6ada083111b64f7c40d35e3cba5e00",
+      "radarStatus": 503
+    },
+    {
+      "commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "nextVersion": "16.3.4",
+      "buildId": "8ScL_J9rBSjyekr5pb9GV",
+      "manifestSha256": "2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a",
+      "homeStatus": 200,
+      "staticStatus": 200,
+      "staticDigest": "678f6ce2cb80b1fe72fc67e7412be6e2ab6ada083111b64f7c40d35e3cba5e00",
+      "radarStatus": 503
+    }
+  ],
+  "injectedFault": "stopped only isolated candidate process",
+  "faultHealthUnreachable": true,
+  "healthyBuildRestored": true,
+  "fixtureRestRequests": {
+    "get": 310,
+    "blocked": 0
+  },
+  "nextListenerClosed": true,
+  "fixtureListenerClosed": true,
+  "productionServiceSignaturesUnchanged": true,
+  "originalProductionReleasePointersUnchanged": true,
+  "releaseManifestVerifiedBeforeAndAfter": true,
+  "beforeDiskBytes": 28756619264,
+  "beforeAvailableMemoryBytes": 4022153216,
+  "privateNetworkLoopbackOnly": true,
+  "stagingUnitStopped": true,
+  "schema": "stockinsider-contabo-nextjs-rollback-rehearsal-v1",
+  "observedOnUtcDate": "2026-11-08",
+  "releasePair": {
+    "previous": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "current": "dd59817f750684b093965f539dd4de466be13077"
+  },
+  "scopeLimits": [
+    "Real Next.js release binaries and real HTTP, with isolated empty REST fixtures.",
+    "All daily radar probes returned HTTP 503; restored production data path was not part of this run.",
+    "No production backup restored by this receipt; no production rollout or writer acceptance."
+  ]
+}
