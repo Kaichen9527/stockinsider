@@ -126,16 +126,18 @@ Run the focused source/fixture checks with the repository's pinned Node22:
 
 ## Preserved bootstrap and isolation boundaries
 
-`bootstrap.py` is unchanged. It is a separately reviewed account-owner console
-instrument, default dry-run; `--apply` requires its own owner authorization,
-root console, current capacity, exact reviewed source, absent account/group/
-namespace/gateway, public-only client key and future <=1hour UTC expiry. Nothing
-here runs it. Its root-owned restricted authorized key accepts only
-`vnext-preflight-v1`, forbids PTY/forwarding/user-rc and grants no sudo/docker or
-production writer access. The historical one-hour identity expired; neither that
-identity nor historical local container SSH checks establish current Contabo
-access. Revocation, existing-session handling and partial-apply custody still
-need a precise owner-reviewed procedure; bootstrap has no cleanup/revoke helper.
+`bootstrap.py` retains its capacity dry-run, CLI flags and original gateway
+source, but `--apply` now rejects before capacity, file, account or key processing.
+The old private-root `.ssh` mutation fallback is removed: `mkdir(mode=0750)` was
+masked to `0700` under umask077 and a `0640` file could still be unreadable through
+those ancestors. The [isolated authorization-path contract](AUTHORIZED-KEY-PATH.md)
+records the intended separate root-owned runtime directory and exact isolated
+daemon absolute-file binding, both unverified here. Its new helper only writes
+NONKEY temporary fixtures; host application stays disabled. No SSH configuration
+is changed. The gateway still allows only `vnext-preflight-v1`; restricted key
+options alone do not establish the daemon's other authentication policies.
+Historical identities/container checks do not establish current access,
+revocation, existing-session handling or production writer authority.
 
 The unique service/runtime identity/queue/storage remain
 `stockinsider-vnext-oct22-staging`; database
