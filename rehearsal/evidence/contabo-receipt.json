@@ -1,0 +1,117 @@
+{
+  "schema": "stockinsider-offline-fixture-drill-v1",
+  "sourceCommit": "6428918f540d5d088814be324ab8578c0cb41e4e",
+  "startedUtc": "2026-11-08T03:01:36.215991+00:00",
+  "finishedUtc": "2026-11-08T03:01:45.623164+00:00",
+  "durationSeconds": 9.407173,
+  "schemaSha256": "e7cef559f44a34ad7562bd3c8543580754d17cfc78d99c210a27ee4dd8d5fb25",
+  "backup": {
+    "sha256": "0cf84f0e8dd1ce9a0e45642ced4800c4177ec7a4bfe1e090b2119939db4840a8",
+    "bytes": 5443,
+    "tocSha256": "8369bb201ddd5e1e9538763d8c34ed0ca739c26c9f983bf71930dbec2a35ca1c",
+    "tocEntries": 9
+  },
+  "dataSha256": "ae2de4c41bb6c228813b8d6b0cc106c2a5e8dc59545f1e4b920c9a3633af1743",
+  "tests": {
+    "fixtureCounts": {
+      "stocks": 2,
+      "stock_signals": 12
+    },
+    "restoreHashMatches": true,
+    "restoredConstraintCount": 7,
+    "constraintStructureMatches": true,
+    "constraintRejections": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "corruptionRejectedBeforeDatabaseCreation": true,
+    "aToBToA": true,
+    "failedHealthRollback": true,
+    "dataRecoveredToOriginalHash": true,
+    "previousReleaseUnmodified": true
+  },
+  "releases": [
+    {
+      "release": "A",
+      "httpStatus": 200,
+      "dataHash": "ae2de4c41bb6c228813b8d6b0cc106c2a5e8dc59545f1e4b920c9a3633af1743"
+    },
+    {
+      "release": "B",
+      "httpStatus": 200,
+      "dataHash": "7778c6ec65bb2a5f8c38d2b1025f095eda90d5668a3d63da3e73efd59a0a3ddb"
+    },
+    {
+      "release": "A",
+      "httpStatus": 200,
+      "dataHash": "ae2de4c41bb6c228813b8d6b0cc106c2a5e8dc59545f1e4b920c9a3633af1743"
+    },
+    {
+      "release": "B-fault",
+      "httpStatus": 503,
+      "dataHash": "1e7f8efe3cac4f6411ad4587055c06ab9b6ddcb0b6584c73b08509b3506f2ec2"
+    },
+    {
+      "release": "A",
+      "httpStatus": 200,
+      "dataHash": "ae2de4c41bb6c228813b8d6b0cc106c2a5e8dc59545f1e4b920c9a3633af1743"
+    }
+  ],
+  "cleanup": {
+    "pgStopExit": 0,
+    "postmasterPidRemoved": true,
+    "postmasterChildReaped": true,
+    "socketRemovedBeforeTreeCleanup": true,
+    "webListenerClosed": true,
+    "privateTreeRemoved": true
+  },
+  "scriptSha256": "8e5400033f2c1eebf132abe35b702fc7208cc61aa3ee1268a4948821c78cd0af",
+  "hardSandboxEvidence": {
+    "tmpCapacityBytes": 268435456,
+    "memoryMax": 805306368,
+    "tasksMax": 32,
+    "interfaces": [
+      "lo"
+    ]
+  },
+  "peakTreeBytesSampled": 112909900,
+  "runnerCommit": "c9086325e4769f688de258152aa3a147e8b1552f",
+  "passed": true,
+  "postgresVersion": "17.11",
+  "postgresTcpListeners": false,
+  "runner": "nonroot transient staging-only systemd unit; reviewed Python and SQL; no user launcher",
+  "beforeDiskBytes": 28762779648,
+  "beforeAvailableMemoryBytes": 4004024320,
+  "productionServiceSignaturesUnchanged": true,
+  "cleanupPolicy": "ephemeral tmpfs and reviewed transfer directory",
+  "scope": "synthetic PostgreSQL backup and fixture HTTP release rollback",
+  "sshKeyPathSourceCommit": "b3a3486c923d48a185d76b87cd0d28e682da8234",
+  "prProtectionBranchCommit": "e8f99139f8ba98175adf7718f089ad3362b96dd5",
+  "coordinatorIsolation": {
+    "executionIdentity": "existing nonroot staging identity",
+    "privateNetwork": true,
+    "privateTmpfsBytes": 268435456,
+    "memoryMaxBytes": 805306368,
+    "memorySwapMaxBytes": 0,
+    "tasksMax": 32,
+    "cpuQuotaPercent": 50,
+    "runtimeMaxSeconds": 180,
+    "stopTimeoutSeconds": 15,
+    "allowedAddressFamilies": [
+      "AF_UNIX",
+      "AF_INET",
+      "AF_NETLINK"
+    ],
+    "timezone": "Etc/UTC via read-only mount inside the staging unit",
+    "productionSocketAndConfigurationBlocked": true,
+    "sharedRestoreAndHeavyOperationLocksAcquired": true
+  },
+  "scopeLimits": [
+    "PostgreSQL 17 backup and restore of synthetic rows in two public-schema tables",
+    "Fixture HTTP service and release pointer rollback only",
+    "No production backup, full database schema, deployed Next.js release, scheduler or writer acceptance"
+  ]
+}
