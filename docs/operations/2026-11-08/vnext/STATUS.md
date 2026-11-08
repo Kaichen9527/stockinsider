@@ -1,3 +1,15 @@
+# Current isolated authorization/replay checkpoint — OFFLINE / INCOMPLETE
+
+[Source changes and exact limits](SSH-PATH-REPLAY.md) · [Behavior-only receipt](ssh-path-replay-checks.json).
+
+Sourceb3a3486: bootstrap apply refuses before host/key/account observation; default capacity arithmetic/gateway retained. New runtime authorization-path contract is host-disabled and writes only NONKEY fixtures. Actual same-VM isolated DAC16behaviors PASS including oldumaskdenial/newnonrootread/no-write/groupdenial; realkernelACL injection BLOCKED, unavailable-inspection denial verified. No host SSH/access/key/account change.
+
+Optional pure schedule replay binding separates fixedslot/material identity, retains completed dates/expiry and forbids uncertain/pending/failed automaticPOST; whole-entry authority staysfalse/unconnected.330Node/types/lint/fullbuild +14existing synthetic HTTP/browser PASS. Independent readonly source/doc review0openblocker/high; not formalA1/hostacceptance. NativeHOLD/originalPRhead and all real-source/currentrights/session/scheduler/staging/release gates retained.
+
+No remoteSSH/VPN/hostdaemon/timer/SQL/native/newVM/oldVM/iCloud action. Coordinator's independent real SSH validation remains separate and is not published here. Earlier schedule checkpoint below retains its original source/319/14 scope.
+
+---
+
 # Current Taipei schedule checkpoint — SOURCE CANDIDATE / INCOMPLETE
 
 [Implementation and exact limits](SCHEDULE-CANDIDATE.md) · [Source/control map](SCHEDULE-SOURCE-MAP.md) · [319/build/14browser/offline unit checks](schedule-checks.json).

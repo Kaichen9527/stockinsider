@@ -132,3 +132,14 @@ Evidence: docs/operations/2026-11-07/vnext/EPOCH-OUTCOME-CANDIDATE.md, EPOCH-MUT
 - [ ] Native HOLD/formal protected review, real-source/model/two-actual-session/CI/staging/restore/iCloud/release gates remain incomplete. No timer/service/VPN/Contabo/SQL action.
 
 Evidence: docs/operations/2026-11-08/vnext/SCHEDULE-CANDIDATE.md, SCHEDULE-SOURCE-MAP.md and schedule-checks.json; source amendment schedule-admission-amendment.md.
+
+## Isolated authorization path / replay identity slice
+
+- [x] Reproduce old mkdir/umask traversal failure using NONKEY root-owned fixture and real child nonroot access; implement exact0710/0640/no-follow/idempotent permission contract, expiry/options and isolated CLI negatives.
+- [x] Close legacy bootstrap apply before host/key/account observation; retain dry-run arithmetic/gateway; host writer remainsDisabled pending true isolated-daemon binding.
+- [x] Optional pure fixedslot/material replay identity, original opaque ledger refs, completed date/expiry preservation and no automatic uncertain/pending/failed POST; all execution/charge/whole-entry authority false.
+- [x] SameVM16offlineDACbehaviors +330Node/types/lint/fullbuild +14existing synthetic HTTP/browser PASS; separate readonly engineering review and behavior-only public evidence.
+- [ ] Actual kernelaccess/defaultACL injection BLOCKED in fixture runtime; reject-on-unavailable path verified, not a kernelACL acceptance pass.
+- [ ] Live isolated daemon/path/group/authentication/expiry/revocation, whole-entry durable ledger connection and all native/A1/protected/currentqualification/source/session/CI/staging/restore/release gates remain unverified. No host/timer/SQL/native action.
+
+Evidence: docs/operations/2026-11-08/vnext/SSH-PATH-REPLAY.md and ssh-path-replay-checks.json; source amendment isolated-authorized-path-replay-amendment.md.

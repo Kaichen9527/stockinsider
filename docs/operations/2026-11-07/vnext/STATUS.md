@@ -1,6 +1,6 @@
 # Latest checkpoint: Taipei schedule source candidate
 
-See [2026-11-08 current status](../../2026-11-08/vnext/STATUS.md), [319/build/14browser and inert-unit receipt](../../2026-11-08/vnext/schedule-checks.json). Source2f1050a; actual scheduler/ledger/source connection remains disabled/unverified. OriginalPRhead/nativeHOLD/formalreview gates retained. Everything below is historical evidence with its original subject/scope.
+See [2026-11-08 current status](../../2026-11-08/vnext/STATUS.md), [isolated path/replay330/16behavior/14browser receipt](../../2026-11-08/vnext/ssh-path-replay-checks.json). Sourceb3a3486; host/scheduler/ledger/source connections remain disabled/unverified and actualkernelACL injection BLOCKED. OriginalPRhead/nativeHOLD/formalreview gates retained. Everything below is historical evidence with its original subject/scope.
 
 ---
 
