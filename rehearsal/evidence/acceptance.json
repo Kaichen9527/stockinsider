@@ -1,0 +1,22 @@
+{
+  "schema": "stockinsider-fixture-acceptance-v1",
+  "revision": "1",
+  "sourceCommit": "6428918f540d5d088814be324ab8578c0cb41e4e",
+  "fixtureFunctionalPassed": true,
+  "fullHardIsolationAcceptancePassed": false,
+  "contaboExecutionPerformed": false,
+  "productionAccessPerformed": false,
+  "applicationDeploymentPerformed": false,
+  "strictModeNegative": "rejected before PGDATA/output creation: 256MiB_private_filesystem_required",
+  "userSystemdProbe": "unavailable: user bus absent",
+  "livePostgresProcessesRemaining": 0,
+  "finalTrialPostmasterReaped": true,
+  "runtimeReceiptSha256": "fead918bbfd78ae8bea2e704c0ce9db75620a96189e4395dceb607f6297abcc1",
+  "untested": [
+    "Contabo user-systemd namespace/cgroup compatibility",
+    "real Next.js release deployment",
+    "full schema/extensions/roles/RLS restore",
+    "aggregate hard memory/disk limits in this executor"
+  ],
+  "priorTrialDefunctPostgresCountHeldByPid1": 5
+}

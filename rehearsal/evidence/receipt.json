@@ -1,0 +1,121 @@
+{
+  "schema": "stockinsider-offline-fixture-drill-v1",
+  "sourceCommit": "6428918f540d5d088814be324ab8578c0cb41e4e",
+  "startedUtc": "2026-11-08T02:48:16.668310+00:00",
+  "mechanism": "fixture atomic release pointer plus fixture HTTP health; not actual app deployment",
+  "limits": {
+    "wallSeconds": 180,
+    "commandSeconds": 25,
+    "addressSpaceBytesPerProcess": 536870912,
+    "cpuSecondsPerProcess": 45,
+    "fileBytesHard": 67108864,
+    "openFilesPerProcess": 64,
+    "treeBytesWatchdog": 536870912,
+    "treeSamplingSeconds": 0.2,
+    "aggregateDiskHardQuota": false,
+    "aggregateMemoryCgroup": false
+  },
+  "tests": {
+    "fixtureCounts": {
+      "stocks": 2,
+      "stock_signals": 12
+    },
+    "restoreHashMatches": true,
+    "restoredConstraintCount": 7,
+    "constraintStructureMatches": true,
+    "constraintRejections": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "corruptionRejectedBeforeDatabaseCreation": true,
+    "aToBToA": true,
+    "failedHealthRollback": true,
+    "dataRecoveredToOriginalHash": true,
+    "previousReleaseUnmodified": true
+  },
+  "releases": [
+    {
+      "release": "A",
+      "httpStatus": 200,
+      "dataHash": "ae2de4c41bb6c228813b8d6b0cc106c2a5e8dc59545f1e4b920c9a3633af1743"
+    },
+    {
+      "release": "B",
+      "httpStatus": 200,
+      "dataHash": "7778c6ec65bb2a5f8c38d2b1025f095eda90d5668a3d63da3e73efd59a0a3ddb"
+    },
+    {
+      "release": "A",
+      "httpStatus": 200,
+      "dataHash": "ae2de4c41bb6c228813b8d6b0cc106c2a5e8dc59545f1e4b920c9a3633af1743"
+    },
+    {
+      "release": "B-fault",
+      "httpStatus": 503,
+      "dataHash": "1e7f8efe3cac4f6411ad4587055c06ab9b6ddcb0b6584c73b08509b3506f2ec2"
+    },
+    {
+      "release": "A",
+      "httpStatus": 200,
+      "dataHash": "ae2de4c41bb6c228813b8d6b0cc106c2a5e8dc59545f1e4b920c9a3633af1743"
+    }
+  ],
+  "hardSandboxEvidence": null,
+  "versions": {
+    "postgres": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "pg_dump": "pg_dump (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "pg_restore": "pg_restore (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "initdb": "initdb (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "psql": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)"
+  },
+  "server": {
+    "version": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+    "version_num": "170011",
+    "listen_addresses": ""
+  },
+  "schemaSha256": "e7cef559f44a34ad7562bd3c8543580754d17cfc78d99c210a27ee4dd8d5fb25",
+  "backup": {
+    "sha256": "140966a30665d77acb35c2e3a009570ca28df98481df92efdd5510c40b6df797",
+    "bytes": 5435,
+    "tocSha256": "91f4c39c27aa872bb19853383e9e5503de590872653641845027cbf26430a5d9",
+    "tocEntries": 9
+  },
+  "dataSha256": "ae2de4c41bb6c228813b8d6b0cc106c2a5e8dc59545f1e4b920c9a3633af1743",
+  "limitations": [
+    "PG17 dump/restore rewrites equivalent CHECK casts; structural constraint comparison plus executable rejection cases, not textual CHECK equality",
+    "fixture subset only; no full Supabase schema, extensions, roles or RLS rehearsal",
+    "release health fixture only; no real application build or deployment",
+    "VM aggregate disk watchdog is not a hard quota; aggregate memory cgroup not configured"
+  ],
+  "constraintSha256": "6158f3a30b028facf1f9eddc68ca663ac2377b60fe0b81a939bcde365db2d1c7",
+  "releaseHashes": {
+    "A": "4c7b62381d310b801b4f78f4cdcec48f25a0d097cf768e7c473d292d1cc1d4fa",
+    "B": "6fef743c3246b6bd74b5c6e55689bfd3f2bb99eab61dc0417782ea47e63f0239",
+    "B-fault": "29837a94b50d5a4d13c2c18845f3f8f2b42ba613320c60812ad18fdd1214f335"
+  },
+  "databaseBytes": 7919283,
+  "passed": true,
+  "cleanup": {
+    "pgStopExit": 0,
+    "postmasterPidRemoved": true,
+    "postmasterChildReaped": true,
+    "socketRemovedBeforeTreeCleanup": true,
+    "webListenerClosed": true,
+    "privateTreeRemoved": true
+  },
+  "peakTreeBytesSampled": 113565177,
+  "finishedUtc": "2026-11-08T02:48:18.533323+00:00",
+  "durationSeconds": 1.865013,
+  "scriptSha256": "8e5400033f2c1eebf132abe35b702fc7208cc61aa3ee1268a4948821c78cd0af",
+  "redaction": {
+    "removed": [
+      "runtime UID",
+      "private PGDATA path",
+      "private socket path"
+    ],
+    "runnerBytesUnchanged": true
+  }
+}
