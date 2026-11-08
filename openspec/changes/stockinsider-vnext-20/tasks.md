@@ -121,3 +121,14 @@ Evidence: docs/operations/2026-11-07/vnext/SOURCE-COMPLETENESS.md, source-comple
 - [ ] SQL grammar/catalog/install/ACL/RLS/writer/replay/CAS/concurrency/rollback/read acceptance NOT_RUN/native HOLD. Existing formal/protected/source/model/real-session/CI/staging/restore/iCloud/release gates remain.
 
 Evidence: docs/operations/2026-11-07/vnext/EPOCH-OUTCOME-CANDIDATE.md, EPOCH-MUTATION-MAP.md and epoch-outcome-checks.json. Design/amendment: candidate-epoch-journal-design.md and candidate-epoch-outcome-amendment.md.
+
+## 2026-11-08 Taipei schedule source slice
+
+- [x] Inspect actual postclose/market/calendar/ranking chain and production21:00/20:15/20:40 units/installers; document real cutoff/replay/source/singleowner gaps.
+- [x] Deterministic fixture20:30rank/08:15sharedmarket cutoff/windows, official calendar/holiday/latest-head negatives, original-date retention, completed/pending/conflict and duplicate scheduler cases; runtime always Disabled/chargefalse.
+- [x] Four inert staging-only unit sources + disabled config/requirements, no install target/worker payload/grants; offline source syntax/calendar parsing PASS. Planned disabled constant corrected20:30, no production/SQLguard change.
+- [x] SameVM319focused/types/lint/fullordinarybuild and14existing synthetic HTTP/browser PASS; separate readonly engineering review, not A1/time/scheduler acceptance.
+- [ ] Actual official calendar/advance-day coverage, fixedcutoff propagation, original proof expiry/rights, whole-entry durable replay, allwriter serialization/live singleowner inventory and isolated worker integration remain NOT_CONNECTED/NOT_PROVEN.
+- [ ] Native HOLD/formal protected review, real-source/model/two-actual-session/CI/staging/restore/iCloud/release gates remain incomplete. No timer/service/VPN/Contabo/SQL action.
+
+Evidence: docs/operations/2026-11-08/vnext/SCHEDULE-CANDIDATE.md, SCHEDULE-SOURCE-MAP.md and schedule-checks.json; source amendment schedule-admission-amendment.md.

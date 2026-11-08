@@ -1,3 +1,9 @@
+# Latest checkpoint: Taipei schedule source candidate
+
+See [2026-11-08 current status](../../2026-11-08/vnext/STATUS.md), [319/build/14browser and inert-unit receipt](../../2026-11-08/vnext/schedule-checks.json). Source2f1050a; actual scheduler/ledger/source connection remains disabled/unverified. OriginalPRhead/nativeHOLD/formalreview gates retained. Everything below is historical evidence with its original subject/scope.
+
+---
+
 # Current immutable outcome/epoch checkpoint — SOURCE CANDIDATE / INCOMPLETE
 
 [Implemented source and exact limits](EPOCH-OUTCOME-CANDIDATE.md) · [Full mutation map](EPOCH-MUTATION-MAP.md) · [296/build/14browser receipt](epoch-outcome-checks.json).
