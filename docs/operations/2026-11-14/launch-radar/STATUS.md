@@ -1,5 +1,13 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## Current actual11371 CLI followup
+
+External **e24bbec829500b557a83e6abc5555d124f1eb924** executes fixed **c54f1b7ed8a6dea4c7d04ac2997b8743200e090e**:5274 and6488 each57/57,8,040,900bytes;6488 exact+50M interval with event/effective/factornull,5274 unchanged, both prospective-limit authorityfalse. [Followup and genuine clocks](../../2026-11-15/launch-radar/NATIVE-SHARE-EXTERNAL.md), [copied receipt/source glue](../../2026-11-15/launch-radar/native-share-external-followup.json). Cloud verified metadata, not raw bytes. Selected-cache/appscore/real-ranking date not run; T09 controls07dcbc23 are future persistence inputs, not issued-signal performance. Prior pending-parser labels retain their earlier checkpoint time; other gates unchanged.
+
+## Current native11371 selected-overlay checkpoint (Taipei2026-11-15)
+
+Source **c54f1b7ed8a6dea4c7d04ac2997b8743200e090e**: [licensed native parser/private selected-reader overlay](../../2026-11-15/launch-radar/NATIVE-SHARE.md), [560/types/lint/build+33controlledbrowser receipt](../../2026-11-15/launch-radar/native-share-checks.json), [exact two single-symbol CLI manifests](../../2026-11-15/launch-radar/NATIVE-SHARE-HANDOFF.md). First560PASS/types-buildTS2339/browserNOT_RUN is preserved with the reviewed one-line correction. Existing history/revisions/legacy prefix unchanged; actual volume requires independent continuity with no rounded fallback. External5274 stable/932-day-history and6488+50M evidence are controls, not this source's actual raw replay or cache binding. All real bytes stay external; exact11371actual replay pending. Earlier labels below retain checkpoint-time scope. HOLD/A1/PRhead/production unchanged.
+
 ## Current licensed CSV43-page checkpoint (Taipei2026-11-15)
 
 Source **36caa9822bb905ca149661805f06ca084a9f2d21**: [threeCSVreader/source contract and actual43/43](../../2026-11-15/launch-radar/LICENSED-CSV.md), [539/types/lint/build+33controlledbrowser receipt](../../2026-11-15/launch-radar/licensed-csv-checks.json). Externala17f8085 freshcapture/analysis clocks are preserved; not11/12–13 publication. Actualnative11371/capital-change overlay is next, not supplied by rawCSV parsing. Earlier noCSV/noactualraw statements below refer to older source checkpoints; Cloudofficialacquisition remainsblocked. No formal gate cleared.

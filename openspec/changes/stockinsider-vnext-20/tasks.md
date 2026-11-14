@@ -1,5 +1,16 @@
 # Tasks — partial VM implementation, not release-complete
 
+## Native11371 source checkpoint — source c54f1b7
+
+- [x] Separate licensed native CSV parser, exact issued-share intervals, private selected51+predecessor/price/calendar/action/cutoff binding and immutable independent volume revision; no original history/ledger/writer/RLS change.
+- [x] All actual volume/core/scorer/chip consumers use one proof; missing/invalid evidence staysnull with no rounded fallback, request/mutation/clone/Proxy/accessor/toJSON negatives. Synthetic actual-parser/mockselector full100/70 and20flow positive retained.
+- [x] SameVM560/560/types/lint/build+33controlledOIDCbrowser PASS after independently reviewed one-line type correction; retain first560PASS/types-buildFAIL/browserNOT_RUN. Source/design engineering review zero open newP0/P1, not formal A1.
+- [x] External fixed-sourcec54f1b7 product CLI parses real5274/6488 each57/57 and8,040,900bytes (e24bbec8); retain true acquisition and19:01:47UTC analysis cutoff, issued interval/unknownfactor and false current-limit authority. Cloud verified public receipt fields, not raw57bytes.
+- [ ] Real selected-cache/native overlay, appscore/real-ranking date remain NOT_RUN. T09 real-price controls07dcbc23 await durable outcome acceptance; not published performance. External controls alone never mint a binding.
+- [ ] Actual source/rights/currentqualification/research/two-live-session/nativeHOLD/A1/CI/release and T10 approved21:30 migration remain incomplete. No production/SQL/timer/host action.
+
+Evidence: docs/operations/2026-11-15/launch-radar/NATIVE-SHARE.md, native-share-checks.json and NATIVE-SHARE-HANDOFF.md. Earlier next-slice labels below are retained as prior checkpoint history.
+
 ## Active Goal #385 / first source frontier
 
 ### Licensed CSV checkpoint / native11371 frontier
