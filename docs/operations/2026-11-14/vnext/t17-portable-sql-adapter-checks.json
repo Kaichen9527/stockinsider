@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "name": "combined",
+      "exit": 0,
+      "seconds": 4.426,
+      "logSha256": "29405983938a147e8bfc7ad055070ac29436c91ea195e4aceb6242111847cba1"
+    },
+    {
+      "name": "candidate",
+      "exit": 0,
+      "seconds": 0.285,
+      "logSha256": "90b2694361685e9e7c61ceb7ab38b883b1db8033a72cc83da9e6d42fc4a2cf0b"
+    }
+  ],
+  "fixture": {
+    "checks": {
+      "compatLogin": 0,
+      "dataPlaneRls": 4,
+      "fenceDisabled": true,
+      "fixtureOwners": 2,
+      "fixturePolicies": 2,
+      "fixtureRls": 2,
+      "legacyFunctionAbsent": true,
+      "portableRoles": 14,
+      "providerRows": 0,
+      "signals": 12,
+      "stocks": 2,
+      "vaultAbsent": true
+    },
+    "cleanup": {
+      "postmasterReaped": true,
+      "privateTreeRemoved": true,
+      "socketRemoved": true
+    },
+    "currentDatabaseObserved": true,
+    "dataSha256": "53e611e465041f220bdb816e208f2b3ecddfc1a45e5412b8a12fca4f8393e1ca",
+    "diskCiphertextCustodyIntegrated": false,
+    "fixtureAnonWriteRejected": true,
+    "fullApplicationAcceptance": false,
+    "limitations": [
+      "fixed generated SQL subset only",
+      "not full seven-table application validation",
+      "no backup/key/ciphertext integration",
+      "no production admission; live entry disabled"
+    ],
+    "liveRestoreAllowed": false,
+    "nonroot": true,
+    "ownedPgdataObserved": true,
+    "ownerAclReplayed": true,
+    "passed": true,
+    "postgresToolVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "productionBackupOrKeyReceived": false,
+    "schema": "stockinsider-t17-portable-sql-fixture-v1",
+    "scope": "generated_public_sql_fixture_only",
+    "serverVersionNum": "170011",
+    "sourceSqlBlobIds": {
+      "deployment/vps/bootstrap-stockinsider-postgres.sql": "c58d12585d312701d47b5789d0572f8453424697",
+      "migrations/20260911_contabo_data_plane_v1.sql": "f3fa038cf6695f9ff8a8b422b1b3a64ed6da565a",
+      "scripts/build-contabo-restore-list.mjs": "897c74009ced9a8f8d8991d8eee80a5e7e4444a0"
+    },
+    "tocExcluded": 5,
+    "unixSocketOnly": true
+  },
+  "combinedCount": 37,
+  "schema": "stockinsider-t17-portable-sql-adapter-checks-v1",
+  "recordedAtUtc": "2026-11-14T15:18:09.643934+00:00",
+  "parentCommit": "c904760ace6859c7935938fa060d3ae726f9b4b6",
+  "sha256": {
+    "deployment/staging/vnext/t17_keyfd/portable_sql_fixture_adapter.py": "3316972bcc97163e1c9b712ec7d4d38b87db70a64c66bd933133b004d3ee9f50",
+    "scripts/tests/test_t17_portable_sql_fixture.py": "c9ddef68a957c164450c37799fc471c6f60b3f1c7485dcbda4194c43cb7c2933"
+  },
+  "independentReview": {
+    "focusedPass": 4,
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false,
+    "scope": "fixed public fixture adapter only; actual PG17.11 execution"
+  },
+  "failedIntermediateAttempts": [
+    {
+      "reason": "fixed conventional Node absent",
+      "intermediateSourceHashCaptured": false
+    },
+    {
+      "reason": "initial Cloud Node mapped UID65534 ownership rejection",
+      "intermediateSourceHashCaptured": false
+    }
+  ],
+  "nativeHoldRetained": true,
+  "productionBackupOrKeyReceived": false,
+  "liveRestoreEnabled": false,
+  "T17Accepted": false,
+  "fullExactBranchWebBuildTypesLint": "NOT_RUN: exact full checkout unavailable; Git CONNECT503"
+}
