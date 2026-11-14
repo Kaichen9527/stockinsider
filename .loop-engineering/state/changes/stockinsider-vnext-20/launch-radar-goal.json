@@ -32,7 +32,10 @@
   "paidCallsEnabled": false,
   "releaseGate": "INCOMPLETE",
   "T02PrivateResearchReader": "NOT_CONNECTED_RIGHTS_UNVERIFIED",
-  "latestValidatedSource": "88f06626470dd25367ffd95bc35638ad3e31786b",
-  "latestEvidence": "docs/operations/2026-11-14/launch-radar/owner-oidc-score-checks.json",
-  "actualGoogleOwnerConfigured": false
+  "latestValidatedSource": "9e77d243e99bb1c042b4b7ae760424dac78f84fd",
+  "latestEvidence": "docs/operations/2026-11-15/launch-radar/ptt-body-checks.json",
+  "actualGoogleOwnerConfigured": false,
+  "T04PttBodyProvenance": "ACTUAL_SCRAPER_CONNECTED_SYNTHETIC_515_PASS_REAL_HTML_BLOCKED",
+  "T04OriginalQueueAdmission": "BLOCKED_METADATA_SCOPE_FORBIDS_ORIGINAL_ROOTS",
+  "T04OrdinaryShareAndLiquidityAuthority": false
 }

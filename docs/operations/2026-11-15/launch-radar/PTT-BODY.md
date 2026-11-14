@@ -1,0 +1,38 @@
+# T04 actual scraper/body-provenance checkpoint — partial
+
+Validated source `9e77d243e99bb1c042b4b7ae760424dac78f84fd`, source tree `c50863e07e970441d4407a1d73c1cac5a6051c4d`, web tree `06ffe27283b49d6834cc2c97a85ca8bd66029c26`. Continues protectionafce744, same branch/PR384/Goal385/T04#389. [Machine receipt](ptt-body-checks.json), [design/rights boundary](../../../../openspec/changes/stockinsider-vnext-20/ptt-official-supply-amendment.md).
+
+The actual `scrapePttStock` now calls `projectPttCollectorArticle`, reusing its existing stock-context matcher after bounded balanced parse5 extraction. Exactly one closed main-content container and unique Taipei header metadata are required. Metadata, board/example templates (including nested example parentheses), pushes, quoted text, scripts, signatures and footers are removed before body-only matching/hash. Unsupported/truncated/ambiguous layouts stay incomplete; title is never a body fallback. Legacy title and comment-local matching remain separate. No raw body, actual author or connection data enters this public evidence.
+
+Canonical original ID/URL, header publication, separate filename epoch (versioned<=5second consistency tolerance), acquisition and parser/clean-body hashes retain distinct meanings. Missing/conflicting/future headers cannot use acquired time as a fresh event: raw metadata may remain but legacy candidate_source_mentions/ptt_post_signals are skipped. Valid legacy title/comment metadata and mention writes remain; they carry explicit false candidate-discovery eligibility. This is not a claim that every legacy mention write is disabled. Existing URL-only known-document skipping remains unchanged; refreshing corrected already-known URLs into immutable revision history is **NOT_CONNECTED**.
+
+The real cache projector used by both existing source workers refuses new body-provenance rows **before** fingerprint/reserve/complete with `vnext_ptt_body_original_scope_unavailable`. Existing SQL metadata scope forbids authorRoot/originalRoot, while eligibleClue needs both. Metadata-link rights or changed license text cannot create a legitimate body-original candidate. No new SQL/scope/grant/writer/budget or policy enablement was introduced. Actual rights-qualified queue admission and candidate-card end-to-end acceptance remain **BLOCKED**, not fake positive tests.
+
+`ready_observation` means only same-page body-local observation at valid exact clocks. Research admission, independent-origin, instrument and liquidity authorities stayfalse. Four-digit authority matching does not prove ordinary-share classification orNT$50M liquidity; exclusion of00981A/template2330 is not a universal ETF classifier. No current catalyst authority is supplied for old originals.
+
+## Source cases versus fixtures
+
+The following are external facts from issue389, not downloaded bodies or local parser results:
+
+| Case | Public original | Reported Taipei publication | External expectation | This VM actual replay |
+| --- | --- | --- | --- | --- |
+| Current original4763 | https://www.ptt.cc/bbs/Stock/M.1794636177.A.3FD.html |2026-11-14 14:02:55 |Own body code; requires later official/instrument/rights qualification |BLOCKED_HTML_UNAVAILABLE |
+| Old original2330 | https://www.ptt.cc/bbs/Stock/M.1786339102.A.4BB.html |2026-08-10 13:18:20 |Original older than30days; no verified current catalyst supplied |BLOCKED_HTML_UNAVAILABLE |
+|00981A/template2330 | https://www.ptt.cc/bbs/Stock/M.1793668906.A.F2F.html |2026-11-03 09:21:44 |ETF target; template2330 must not become body evidence |BLOCKED_HTML_UNAVAILABLE |
+|Re3443/unresolved root | https://www.ptt.cc/bbs/Stock/M.1794662133.A.F4F.html |Original time unresolved |Reply date cannot reset an unverified original event |BLOCKED_HTML_UNAVAILABLE |
+
+A single bounded allowed GET of4763 on2026-11-15T00:29:32+08:00 failed at transport (`URLError`). No body was received, no other sample fetched, no proxy/origin/TLS workaround or retry occurred. Previous official CONNECT403 remains its separate earlier network evidence. Public old hashes are not substitute bytes and may change with pushes.
+
+Invented NONPRODUCTION HTML covers nested body, own fields/template/title/push/quote separation, hash stability/correction, age, unknown lineage, malformed/bounded layouts, invalid/future/conflicting clocks, microsecond cutoff, retained allowlist and forged metadata/rights refusal. A narrowed AST loader executes actual production composition/matcher bodies plus actual parser/evidence-clock under an empty environment; other import/IO edges throw. Existing provenance boundary assertions retain two-author/stock-local/excerpt semantics with valid synthetic source clocks and new zero-mention negatives. No actual PTT author/text is copied into tests.
+
+`scripts/ptt-body-replay.mjs` is a callable offline private-artifact runner (Node22.14, up to4cases). Its private manifest kind is `private-authorized-ptt-replay-v1`, cases:label/htmlPath/documentUrl/title/observedAt/cutoff; bounded stockAuthority:symbol/name. It verifies no-follow opened FDs/fstat and actual Linux FD target under canonicalwork, reads at mostlimit+1 and returns generic errors. HTML limit512KiB; manifest32KiB; output only deidentified status/hash/time/symbols and false queue authority. Caller stock authority remains no listing proof. Raw PTT HTML/manifests stay in private VMwork, never Git or public artifacts. No real input was manufactured. Synthetic CLI positive and malformed/oversize/symlink/wrong-kind negatives establish only runner behavior.
+
+## VM verification / preserved limits
+
+Final **515/515 PASS**, zero skipped; types/lint(0errors/34existingwarnings)/full production build PASS, alongside **5/5 synthetic private CLI behaviors**. All are version-bound in the receipt. First source6a62f1c retained503passing cases and1module failure before12newcases started; types/build passed, lint failed on a test-loader variable name. The material reviewed fix selects only the three actual required function declarations, avoiding unrelated top-level KOL constants, and renames the local module record. No product logic, inputs, assertions or IO restrictions were relaxed. One bounded retry follows; no blind identical/native retry occurred.
+
+Independent SolHigh engineering source review found0opennewP0/P1 and ran no tests. Executor selection is observed; actual-runtime model attestation remains unobserved. This is not formal A1/protected approval. Root ran serial Node22.14 checks under existing16GiB/4CPU,8GiB free floor+512MiB margin and8GiB sampled RSS ceiling. Samples are not exact peaks; no cleanup/purchase/upgrade was used. Existing283preservedWIP files are rehashed separately, not declared restored/archived.
+
+Official supply continues next on the existing scorer seam. Coordinator receipts1f9dd6e/a2e3d2f establish external availability/precision observations, not this VM raw replay or earlier-cutoff knowledge. T86 public raw redistribution is unverified; only hashes/true clocks are public. Licensed CSV datasets11755/11391/11856 require their own resource/attribution provenance. TPEX rounded monthly units cannot become exact shares by multiplication; two daily exact samples cannot prove20/51days. No actual source values were imported from those receipts.
+
+Original PR draft headcbb581662e72942610ff85b0bf5e7e47ddddfa46/main93e44475 remain unchanged. NativeHOLD, VN01–VN20 native/A1/formal design/rights/source/CI/staging/real-adjacent-ranking-session/release gates remain incomplete. No Contabo/SSH/VPN, SQL/PG, timer/service/metric, actual key/private backup/iCloud/paid operation. No deployment/archive;0bytes reclaimed.

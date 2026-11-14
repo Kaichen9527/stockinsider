@@ -1,5 +1,9 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## Latest T04 scraper/body-provenance checkpoint (Taipei2026-11-15)
+
+Source **9e77d243e99bb1c042b4b7ae760424dac78f84fd**: [actual parser/scraper/provenance and queue refusal](../../2026-11-15/launch-radar/PTT-BODY.md), [515/types/lint/build and5synthetic CLI receipt](../../2026-11-15/launch-radar/ptt-body-checks.json). The four real#389 bodies are unavailable locally; current PTT metadata scope cannot authorize original admission. Valid legacy title/comment metadata is retained with false candidate eligibility. Actual rights/ordinary/liquidity/queue/source acceptance remain incomplete. Earlier OIDC/T08 evidence below retains its exact scope.
+
 ## Latest callable OIDC / fixed-score checkpoint
 
 Source **88f06626470dd25367ffd95bc35638ad3e31786b**: [T02 actual default-disabled browser path and T08 connected deterministic score](OWNER-OIDC-SCORE.md), [478/types/lint/build +33 actual controlled HTTP/desktop/mobile receipt](owner-oidc-score-checks.json), [secure owner setup requirements](OWNER-OIDC-SETUP.md). Actual Google owner configuration and rights-qualified research remain absent. Fixed16-rule70/20/10 computes partial points through existing selected reads; no fake chips/index, qualification or publication authority. All failed attempts and reviewed corrections retained; nativeHOLD/A1/originalPRhead unchanged. External f4d280f official receipt is separate host evidence, not Cloud acquisition/raw replay/two complete rankings. Earlier checkpoints retain their original scope.

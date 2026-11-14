@@ -2,6 +2,16 @@
 
 ## Active Goal #385 / first source frontier
 
+### T04 actual PTT body/provenance continuation
+
+- [x] Actual scrapePttStock calls bounded balanced own-body parser and existing symbol matcher; separate title/comment metadata, Taipei publication/ID/acquisition clocks, body/parser hashes and allowlist. Unknown/conflicting/future headers do not become fresh mentions/signals.
+- [x] Both actual source workers consume explicit cache-projection refusal before reserve for body-original observations; unchanged SQL metadata rights cannot admit original roots. No fake license, writer, scope or queue positive.
+- [x] Source9e77d24:515/515 +types/lint/fullbuild PASS and5synthetic privateCLI behaviors; original503pass/module-start/lint failure retained and narrowed harness reviewed before retry. No actualHTML replay/rights/instrument/queue acceptance.
+- [ ] Four external#389 samples remain BLOCKED_HTML_UNAVAILABLE after one allowed GET transport failure; ordinary/liquidity/current-catalyst and original-scope/rights support remain incomplete. Existing known-URL corrected-revision refresh remains NOT_CONNECTED.
+
+Evidence: docs/operations/2026-11-15/launch-radar/PTT-BODY.md and ptt-body-checks.json. NativeHOLD/A1/originalPRhead/release remain unchanged; official supply is the next independent source slice.
+
+
 ### Current callable owner / fixed-score checkpoint
 
 - [x] Default-disabled standard Google OIDC production path: actual Next login/callback/logout/session/research routes, private UI and public static navigation; controlled local IdP only in explicit trusted test bootstrap. Exact issuer/audience/subject/signature/state/nonce/PKCE, bounded short opaque sessions, CSRF, replay/cancellation and no-store isolation.
