@@ -1,0 +1,137 @@
+{
+  "schema": "stockinsider-contabo-effective-publication-entrypoints-v1",
+  "scope": "READONLY_EFFECTIVE_SYSTEMD_PAYLOAD_TRACE",
+  "fixedActiveRelease": "dd59817f750684b093965f539dd4de466be13077",
+  "observed": [
+    {
+      "service": "stockinsider-research-cycle.service",
+      "timerExpression": "*-*-* 21:00:00 Asia/Taipei",
+      "ordered": [
+        {
+          "endpoint": "/api/internal/taiwan-data-queue-drain",
+          "limit": 100,
+          "maxBatches": 30,
+          "requireComplete": true,
+          "phase": "final"
+        },
+        {
+          "endpoint": "/api/internal/pipeline-run",
+          "dryRun": false,
+          "mode": "core",
+          "syncTimeoutMs": 5400000,
+          "recoverOrphanedLease": true
+        }
+      ]
+    },
+    {
+      "service": "stockinsider-taiwan-data-preliminary.service",
+      "timerExpression": "*-*-* 19:00:00 Asia/Taipei",
+      "ordered": [
+        {
+          "endpoint": "/api/internal/taiwan-data-refresh",
+          "phase": "preliminary"
+        },
+        {
+          "endpoint": "/api/internal/taiwan-data-queue-drain",
+          "limit": 100,
+          "maxBatches": 30,
+          "requireComplete": true,
+          "phase": "preliminary"
+        },
+        {
+          "endpoint": "/api/internal/pipeline-run",
+          "dryRun": false,
+          "mode": "core",
+          "syncTimeoutMs": 3600000,
+          "recoverOrphanedLease": true
+        }
+      ]
+    },
+    {
+      "service": "stockinsider-taiwan-data-close-preliminary.service",
+      "timerExpression": "*-*-* 18:15:00 Asia/Taipei",
+      "ordered": [
+        {
+          "endpoint": "/api/internal/taiwan-data-refresh",
+          "phase": "preliminary"
+        },
+        {
+          "endpoint": "/api/internal/taiwan-data-queue-drain",
+          "limit": 100,
+          "maxBatches": 30,
+          "requireComplete": true,
+          "phase": "preliminary"
+        }
+      ]
+    },
+    {
+      "service": "stockinsider-taiwan-data-final-freeze.service",
+      "timerExpression": "*-*-* 20:15:00 Asia/Taipei",
+      "ordered": [
+        {
+          "endpoint": "/api/internal/taiwan-data-refresh",
+          "phase": "final"
+        },
+        {
+          "endpoint": "/api/internal/taiwan-data-queue-drain",
+          "limit": 100,
+          "maxBatches": 30,
+          "requireComplete": true,
+          "phase": "final"
+        }
+      ]
+    },
+    {
+      "service": "stockinsider-taiwan-data-final-reconcile.service",
+      "timerExpression": "*-*-* 20:40:00 Asia/Taipei",
+      "ordered": [
+        {
+          "endpoint": "/api/internal/taiwan-data-refresh",
+          "phase": "final"
+        },
+        {
+          "endpoint": "/api/internal/taiwan-data-queue-drain",
+          "limit": 100,
+          "maxBatches": 30,
+          "requireComplete": true,
+          "phase": "final"
+        }
+      ]
+    },
+    {
+      "service": "stockinsider-taiwan-data-queue-drain.service",
+      "timerExpression": "*-*-* 00..17,22..23:10:00 Asia/Taipei",
+      "ordered": [
+        {
+          "endpoint": "/api/internal/taiwan-data-queue-drain",
+          "limit": 20
+        },
+        {
+          "endpoint": "/api/internal/candidate-financial-queue-drain",
+          "limit": 240
+        },
+        {
+          "endpoint": "/api/internal/candidate-financial-documents/worker",
+          "limit": 5
+        }
+      ]
+    }
+  ],
+  "staticContract": {
+    "file": "web/src/lib/domain.ts",
+    "lines": [
+      22005,
+      22047
+    ],
+    "dailySnapshotsWriteInOrdinaryNonDryCore": true,
+    "skipsForHistoricalResearchOnly": true,
+    "metadataCanDowngradeLegacyPublicationToPreliminary": true
+  },
+  "results": {
+    "effectiveNonDryCoreTimerEdges": 2,
+    "previousPartialInventoryMissed1900CoreEdge": true,
+    "dataPreparationTimersMustRemainFunctional": true,
+    "lightweightStandaloneWriterBypassPermitted": false
+  },
+  "productionMutation": false
+}
