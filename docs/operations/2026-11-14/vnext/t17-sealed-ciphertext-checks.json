@@ -1,0 +1,67 @@
+{
+  "schema": "stockinsider-t17-sealed-fixture-source-v1",
+  "parentCommit": "b5aec9843baf5e76f94065e6e2def4d88cbe414e",
+  "recordedAtUtc": "2026-11-14T14:33:43.620376+00:00",
+  "scope": "bounded_nonproduction_kernel_descriptor_tests_only",
+  "kernel": "6.18.57",
+  "memfdKernelSealsObserved": true,
+  "requiredSeals": [
+    "WRITE",
+    "GROW",
+    "SHRINK",
+    "SEAL"
+  ],
+  "mutationRejections": [
+    "pwrite",
+    "shrink",
+    "grow",
+    "shared_writable_mmap",
+    "add_seals_after_seal_seal"
+  ],
+  "ciphertextLimitBytes": 65536,
+  "copyChunkLimitBytes": 8192,
+  "authenticationFixture": "two AES-256-GCM passes on same kernel-sealed FD with SI-BACKUP-1 layout; public test data",
+  "filesystemProbe": {
+    "scope": "new tiny public tmp fixture only",
+    "fsverityEnableErrno": 25,
+    "diskCustodyEstablished": false,
+    "contaboFilesystemObserved": false
+  },
+  "checks": [
+    {
+      "name": "keyAndCustody",
+      "exit": 0,
+      "durationSeconds": 2.242,
+      "logSha256": "8e2cf21c543173767ada72d4942841d933d99ecd1964e2fa8d0d3900824938fe"
+    },
+    {
+      "name": "closedCandidate",
+      "exit": 0,
+      "durationSeconds": 0.321,
+      "logSha256": "65b64846978c1da6a4ed65a4fc646cd9ddf792cc76872141d2cf3e0fd1818378"
+    }
+  ],
+  "tests": {
+    "keyPipePass": 10,
+    "newCustodyPass": 10,
+    "retainedCandidatePass": 12,
+    "fail": 0,
+    "skipped": 0
+  },
+  "liveFacadeChanged": false,
+  "liveRestoreAllowed": false,
+  "largeBackupCustodyVerified": false,
+  "keyBackendIntegrated": false,
+  "nativeHoldRetained": true,
+  "SSHAttempted": false,
+  "productionArtifactsOrKeysReceived": false,
+  "contaboTouched": false,
+  "T17Accepted": false,
+  "fullExactBranchBuildTypesLint": "NOT_RUN: Git CONNECT 503; no full exact checkout",
+  "independentFormalReview": "NOT_RUN",
+  "sha256": {
+    "deployment/staging/vnext/t17_keyfd/sealed_fixture.py": "7995b9f65d2a2fa5436a9fc9b1f24cdc2d8191e2ef6e4061614f7d25f856feb1",
+    "scripts/tests/test_t17_sealed_fixture.py": "502f12e4885de6e8c8b2d450347deaba9ee66fe08f35e224d88fea30038d8167",
+    "docs/operations/2026-11-14/vnext/T17-SEALED-CIPHERTEXT-SOURCE.md": "082546ad10602b295b4e5110ce9c8532fd75a851eae113149413ae18bd3717ae"
+  }
+}
