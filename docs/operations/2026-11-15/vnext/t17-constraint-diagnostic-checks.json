@@ -1,0 +1,154 @@
+{
+  "checks": [
+    {
+      "name": "python",
+      "exit": 0,
+      "seconds": 21.891,
+      "logSha256": "31afb361a7f8fa55c764c2832076ace30d5b7e9158d3fecb509116ac7cc49fd3"
+    },
+    {
+      "name": "candidate",
+      "exit": 0,
+      "seconds": 0.159,
+      "logSha256": "95c145e7b4abed2e0764be7da5308384cc70895999415af78629ea1a681ab798"
+    }
+  ],
+  "pythonTests": 59,
+  "publicDiagnosticFixtures": [
+    {
+      "byContype": {
+        "c": {
+          "total": 19,
+          "unvalidated": 1
+        },
+        "f": {
+          "total": 2,
+          "unvalidated": 0
+        },
+        "other": {
+          "total": 0,
+          "unvalidated": 0
+        },
+        "p": {
+          "total": 14,
+          "unvalidated": 0
+        },
+        "t": {
+          "total": 0,
+          "unvalidated": 0
+        },
+        "u": {
+          "total": 1,
+          "unvalidated": 0
+        },
+        "x": {
+          "total": 0,
+          "unvalidated": 0
+        }
+      },
+      "cleanup": {
+        "postmasterReaped": true,
+        "privateTreeRemoved": true,
+        "socketRemoved": true
+      },
+      "foreignKeys": 2,
+      "invalidConstraints": 1,
+      "knownLegacyPaidContentCheck": {
+        "matches": 1,
+        "unvalidated": 1
+      },
+      "phase": "post_restore_constraint_observation"
+    },
+    {
+      "byContype": {
+        "c": {
+          "total": 19,
+          "unvalidated": 1
+        },
+        "f": {
+          "total": 2,
+          "unvalidated": 0
+        },
+        "other": {
+          "total": 0,
+          "unvalidated": 0
+        },
+        "p": {
+          "total": 14,
+          "unvalidated": 0
+        },
+        "t": {
+          "total": 0,
+          "unvalidated": 0
+        },
+        "u": {
+          "total": 1,
+          "unvalidated": 0
+        },
+        "x": {
+          "total": 0,
+          "unvalidated": 0
+        }
+      },
+      "cleanup": {
+        "postmasterReaped": true,
+        "privateTreeRemoved": true,
+        "socketRemoved": true
+      },
+      "foreignKeys": 2,
+      "invalidConstraints": 1,
+      "knownLegacyPaidContentCheck": {
+        "matches": 1,
+        "unvalidated": 1
+      },
+      "phase": "post_restore_constraint_observation"
+    }
+  ],
+  "schema": "stockinsider-t17-constraint-diagnostic-checks-v1",
+  "parentCommit": "5b65286c02bc2f3e64030b6ba6c15eb83315e3d4",
+  "recordedAtUtc": "2026-11-14T16:45:49.083653+00:00",
+  "sha256": {
+    "deployment/staging/vnext/t17_keyfd/constraint_diagnostics.py": "71b27350014e83b635365b5184f08a0c1c8731993095cc39aff961ba4d2d8064",
+    "deployment/staging/vnext/t17_keyfd/portable_restore_engine.py": "03c089a3013397641df3a7c9080157246914323a02d12dc92d079f03d03e8a5a",
+    "deployment/staging/vnext/t17_keyfd/stage_database_restore.py": "6a15edb7a0007908b878b82fdd08b9af1e34ecd19a9222b4b1240067d164de30",
+    "scripts/tests/test_t17_constraint_diagnostics.py": "537e3d520fa63625a80dcdae2ad33bcd68ed281eec21753f9dffcf1096dae6a9",
+    "scripts/tests/test_t17_portable_restore_engine.py": "4a3b20f3a2c6eec5116c0b01f1b658dc9259854ccd4eb0ff5834e10777922ff8",
+    "docs/operations/2026-11-15/vnext/T17-CONSTRAINT-MIGRATION-AUDIT.md": "4778682be49eefd14cc2921a6052c8789c4863396876ce32fe5aba41f49e0b71"
+  },
+  "queryScope": "public_catalog_counts_only",
+  "fixedContypes": [
+    "c",
+    "f",
+    "p",
+    "u",
+    "t",
+    "x",
+    "other"
+  ],
+  "knownProfile": "fixed_public_paid_check_tuple_only_not_predicate_or_row_attestation",
+  "independentEngineeringReview": {
+    "focusedPass": 3,
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false,
+    "scope": "diagnostic-only delta; actual public PG cases and sanitizer/cleanup"
+  },
+  "sourceGateUnchanged": "invalidConstraints != 0 OR foreignKeys < 1 still rejects",
+  "validationOrRepairExecuted": false,
+  "actualSnapshotPredicateOrRowsInspected": false,
+  "actualSnapshotState": "UNKNOWN",
+  "realRunRetained": {
+    "source": "coordinator_report_not_Cloud",
+    "commit": "5b65286c02bc2f3e64030b6ba6c15eb83315e3d4",
+    "ciphertextBytes": 491423538,
+    "durationSeconds": 346.254,
+    "reason": "lineage_structure_rejected",
+    "productionIndicatorsUnchangedReported": true,
+    "stagingCleanupReported": true,
+    "acceptanceGranted": false
+  },
+  "nativeHoldRetained": true,
+  "productionOrBackupOriginalChanged": false,
+  "productionBackupOrKeyReceivedInCloud": false,
+  "exactFullBranchBuildTypesLint": "NOT_RUN: full exact checkout unavailable; Git CONNECT503"
+}

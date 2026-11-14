@@ -20,6 +20,7 @@ import tempfile
 import threading
 import time
 from .portable_sql_fixture_adapter import _tools, _pinned_sources, PORTABLE_ROLES, PINNED, DISARM_SQL
+from .constraint_diagnostics import CONSTRAINT_COUNTS_SQL, project_constraint_diagnostics
 
 ROOT = Path(__file__).resolve().parents[4]
 HISTORICAL = 'scripts/rehearse-contabo-database-restore.mjs'
@@ -93,6 +94,7 @@ def restore_owned_database(replay, work_root):
     root=Path(tempfile.mkdtemp(prefix='t17-owned-restore-',dir=base))
     sock,data=root/'socket',root/'data'
     process=log=None
+    diagnostic_error=None
     deadline=time.monotonic()+900
     phase='setup'
     receipt={'schema':'stockinsider-owned-db-restore-v1','databaseRestored':False,
@@ -206,11 +208,18 @@ def restore_owned_database(replay, work_root):
         owners=checks['owners']
         if not isinstance(owners,dict) or not owners or not set(owners)<=allowed:
             raise RestoreEngineRejected('owner_allowlist_rejected')
-        structural=json.loads(sql(b"SELECT json_build_object('invalidConstraints',(SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace WHERE n.nspname='public' AND NOT convalidated),'foreignKeys',(SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace WHERE n.nspname='public' AND contype='f'),'maxRelationBytes',(SELECT COALESCE(max(pg_relation_size(c.oid)),0) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('public','pg_toast')))"))
         if not portable:raise RestoreEngineRejected('portable_contract_rejected')
         if not application:raise RestoreEngineRejected('application_object_contract_rejected')
+        phase='post_restore_constraint_observation'
+        constraint_observation=project_constraint_diagnostics(json.loads(sql(CONSTRAINT_COUNTS_SQL)))
+        if constraint_observation is None:
+            raise RestoreEngineRejected('constraint_diagnostic_contract_rejected')
+        structural={k:constraint_observation[k] for k in ('invalidConstraints','foreignKeys')}
+        structural['maxRelationBytes']=int(sql(b"SELECT COALESCE(max(pg_relation_size(c.oid)),0) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('public','pg_toast')"))
         if structural['invalidConstraints']!=0 or structural['foreignKeys']<1:
-            raise RestoreEngineRejected('lineage_structure_rejected')
+            diagnostic_error=RestoreEngineRejected('lineage_structure_rejected')
+            diagnostic_error.constraint_diagnostics=constraint_observation
+            raise diagnostic_error
         named_app=json.loads(sql(b"SELECT json_build_object('appRls',(SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relname IN ('source_run_ledger','candidate_source_mentions','candidate_research_runs','candidate_research_run_items','official_price_history','candidate_detail_snapshots','radar_public_snapshots') AND c.relkind IN ('r','p') AND c.relrowsecurity),'appSelect',(SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relname IN ('source_run_ledger','candidate_source_mentions','candidate_research_runs','candidate_research_run_items','official_price_history','candidate_detail_snapshots','radar_public_snapshots') AND c.relkind IN ('r','p') AND has_table_privilege('service_role',c.oid,'SELECT')),'appExecute',(SELECT count(DISTINCT p.proname) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.proname IN ('source_document_coverage','publish_radar_public_snapshots','candidate_research_stock_authority_page') AND has_function_privilege('service_role',p.oid,'EXECUTE')))"))
         if named_app!={'appRls':7,'appSelect':7,'appExecute':3}:
             raise RestoreEngineRejected('named_application_rls_grants_rejected')
@@ -255,6 +264,8 @@ def restore_owned_database(replay, work_root):
         reaped=process is None or process.poll() is not None
         shutil.rmtree(root)
         receipt['cleanup']={'postmasterReaped':reaped,'socketRemoved':socket_gone,'privateTreeRemoved':not root.exists()}
+        if diagnostic_error is not None:
+            diagnostic_error.diagnostic_cleanup=dict(receipt['cleanup'])
     if not all(receipt['cleanup'].values()):
         raise RestoreEngineRejected('engine_cleanup_failed')
     return receipt

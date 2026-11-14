@@ -17,6 +17,7 @@ from .staging_admission import observe_staging, StagingAdmissionRejected
 from .verified_backup_stream import (
     owned_staging_key, read_manifest, VerifiedBackupStream, BackupStreamRejected)
 from .portable_restore_engine import restore_owned_database, RestoreEngineRejected
+from .constraint_diagnostics import diagnostic_after_cleanup
 
 
 def protect_key_process():
@@ -93,6 +94,10 @@ def main():
         receipt={'schema':'stockinsider-staging-database-restore-v1',
                  'status':'REJECTED','reason':str(error),'databaseRestored':False,
                  'nativeHoldRetained':True}
+        if isinstance(error,RestoreEngineRejected) and str(error)=='lineage_structure_rejected':
+            diagnostic=diagnostic_after_cleanup(error)
+            if diagnostic is not None:
+                receipt['constraintDiagnostics']=diagnostic
         code=2
     except BaseException:
         receipt={'schema':'stockinsider-staging-database-restore-v1',

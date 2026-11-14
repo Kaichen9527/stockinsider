@@ -17,7 +17,7 @@ from deployment.staging.vnext.t17_keyfd.portable_sql_fixture_adapter import (
     _tools, _pinned_sources, PINNED, FIXTURE_SQL)
 
 
-def public_archive(work, orphan=False, large_rows=12000, null_required=False):
+def public_archive(work, orphan=False, large_rows=12000, null_required=False, not_valid_case=None):
     if type(large_rows) is not int or not 0<=large_rows<=12000:
         raise ValueError('public_fixture_row_bound')
     pg,_=_tools();user=pwd.getpwuid(os.getuid()).pw_name
@@ -87,6 +87,20 @@ def public_archive(work, orphan=False, large_rows=12000, null_required=False):
         if null_required:
             statements.append('UPDATE candidate_source_mentions SET stock_id=NULL WHERE id=1;')
         sql('\n'.join(statements).encode())
+        if not_valid_case not in (None,'valid_rows','violating_rows'):
+            raise ValueError('public_fixture_case_rejected')
+        if not_valid_case is not None:
+            # Public synthetic marker only: demonstrate catalog NOT VALID is
+            # distinct from whether historical rows satisfy the exact CHECK.
+            marker='SAFE_PUBLIC_FIXTURE' if not_valid_case=='valid_rows' else 'investanchors_PUBLIC_FIXTURE'
+            sql(("CREATE TABLE public.candidate_research_dossiers(id integer PRIMARY KEY,content jsonb);"
+                 "INSERT INTO public.candidate_research_dossiers VALUES(1,jsonb_build_object('marker','"+marker+"'));"
+                 "ALTER TABLE public.candidate_research_dossiers ADD CONSTRAINT candidate_research_dossiers_paid_content_check "
+                 "CHECK(content::text !~* '(investanchors|investanchor|定錨投資|定錨會員)') NOT VALID;").encode())
+            violations=run('psql',['-X','-A','-t','-v','ON_ERROR_STOP=1','-d','public_fixture','-c',
+                "SELECT count(*) FROM public.candidate_research_dossiers WHERE (content::text !~* '(investanchors|investanchor|定錨投資|定錨會員)') IS FALSE"]).decode().strip()
+            if violations!=('0' if not_valid_case=='valid_rows' else '1'):
+                raise RuntimeError('public_fixture_case_not_proven')
         archive=run('pg_dump',['-Fc','-d','public_fixture'])
         if len(archive)>8*1024**2:raise RuntimeError('public_fixture_archive_oversize')
         return archive
