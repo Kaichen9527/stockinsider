@@ -1,0 +1,293 @@
+{
+  "schema": "stockinsider-official-corporate-action-range-observation-v1",
+  "sourceImplementation": "afce744dfafd5fd3e118187d5504dca1507307f2",
+  "scope": "readonly_response_observations",
+  "sampleEquities": {
+    "TWSE": "2330",
+    "TPEX": "6488"
+  },
+  "sharesComparable": false,
+  "cashOnlyProof": false,
+  "historicalCutoffProof": false,
+  "observations": [
+    {
+      "market": "TWSE",
+      "kind": "dividend",
+      "range": [
+        "2026-01-02",
+        "2026-05-20"
+      ],
+      "url": "https://wwwc.twse.com.tw/rwd/zh/exRight/TWT49U?startDate=20260102&endDate=20260520&response=json",
+      "observedAt": "2026-11-14T16:51:47.936188+00:00",
+      "bytes": 61406,
+      "sha256": "9168539635b10a35afa162109c363eefb7f0d5a06f86bb039933e2174c322504",
+      "status": "ok",
+      "rows": 312,
+      "candidateDays": [
+        "2026-03-17"
+      ],
+      "header": [
+        "資料日期",
+        "股票代號",
+        "股票名稱",
+        "除權息前收盤價",
+        "除權息參考價"
+      ],
+      "outOfRange": 0
+    },
+    {
+      "market": "TWSE",
+      "kind": "reduction",
+      "range": [
+        "2026-01-02",
+        "2026-05-20"
+      ],
+      "url": "https://wwwc.twse.com.tw/rwd/zh/reducation/TWTAUU?startDate=20260102&endDate=20260520&response=json",
+      "observedAt": "2026-11-14T16:51:45.521193+00:00",
+      "bytes": 1226,
+      "sha256": "a9649e4fd66f35dad44b1d1786d3269b37fc1bcba7be6dcb103000bcc5b27b6f",
+      "status": "ok",
+      "rows": 1,
+      "candidateDays": [],
+      "header": [
+        "恢復買賣日期",
+        "股票代號",
+        "名稱",
+        "停止買賣前收盤價格",
+        "恢復買賣參考價"
+      ],
+      "outOfRange": 0
+    },
+    {
+      "market": "TWSE",
+      "kind": "par_value",
+      "range": [
+        "2026-01-02",
+        "2026-05-20"
+      ],
+      "url": "https://wwwc.twse.com.tw/rwd/zh/change/TWTB8U?startDate=20260102&endDate=20260520&response=json",
+      "observedAt": "2026-11-14T16:51:45.592270+00:00",
+      "bytes": 580,
+      "sha256": "272209e3adf2ecb155952f55eed9793252cea9101fe77350f400428474ea0824",
+      "status": "ok",
+      "rows": 1,
+      "candidateDays": [],
+      "header": [
+        "恢復買賣日期",
+        "股票代號",
+        "名稱",
+        "停止買賣前收盤價格",
+        "恢復買賣參考價"
+      ],
+      "outOfRange": 0
+    },
+    {
+      "market": "TPEX",
+      "kind": "dividend",
+      "range": [
+        "2026-01-02",
+        "2026-05-20"
+      ],
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F01%2F02&endDate=2026%2F05%2F20&response=json",
+      "observedAt": "2026-11-14T16:51:45.809656+00:00",
+      "bytes": 74671,
+      "sha256": "66af3db39cbbe6f4aacda2f65d3ba42ad48de6cb5c1150a6e62c60fe0873cd38",
+      "status": "ok",
+      "rows": 361,
+      "candidateDays": [],
+      "header": [
+        "除權息日期",
+        "代號",
+        "名稱",
+        "除權息前收盤價",
+        "除權息參考價"
+      ],
+      "outOfRange": 0
+    },
+    {
+      "market": "TPEX",
+      "kind": "reduction",
+      "range": [
+        "2026-01-02",
+        "2026-05-20"
+      ],
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/revivt?startDate=2026%2F01%2F02&endDate=2026%2F05%2F20&response=json",
+      "observedAt": "2026-11-14T16:52:18.977389+00:00",
+      "bytes": 2498,
+      "sha256": "88ee26adff270940e0d9c456dfa2d8855b0dc555de80b271f7e5badbeaeca3e8",
+      "status": "ok",
+      "rows": 3,
+      "candidateDays": [],
+      "header": [
+        "恢復買賣日期",
+        "股票代號",
+        "名稱",
+        "最後交易日之收盤價格",
+        "減資恢復買賣開始日參考價格"
+      ]
+    },
+    {
+      "market": "TPEX",
+      "kind": "par_value",
+      "range": [
+        "2026-01-02",
+        "2026-05-20"
+      ],
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/pvChgRslt?startDate=2026%2F01%2F02&endDate=2026%2F05%2F20&response=json",
+      "observedAt": "2026-11-14T16:52:18.860582+00:00",
+      "bytes": 1949,
+      "sha256": "2cfc2ca9fa2d6e8f23e451e7e74f47c3197b099f06193e0863b43a638c7d4842",
+      "status": "ok",
+      "rows": 3,
+      "candidateDays": [],
+      "header": [
+        "恢復買賣日期",
+        "證券代號",
+        "證券名稱",
+        "最後交易日之收盤價格",
+        "恢復買賣開始參考價"
+      ]
+    },
+    {
+      "market": "TWSE",
+      "kind": "dividend",
+      "range": [
+        "2026-05-21",
+        "2026-11-13"
+      ],
+      "url": "https://wwwc.twse.com.tw/rwd/zh/exRight/TWT49U?startDate=20260521&endDate=20261113&response=json",
+      "observedAt": "2026-11-14T16:51:50.082281+00:00",
+      "bytes": 213957,
+      "sha256": "a2001b3eef08d1b610ce3742d94197a43aa71602c860d65f8fb342d2c12fb298",
+      "status": "ok",
+      "rows": 1092,
+      "candidateDays": [
+        "2026-06-11",
+        "2026-09-16"
+      ],
+      "header": [
+        "資料日期",
+        "股票代號",
+        "股票名稱",
+        "除權息前收盤價",
+        "除權息參考價"
+      ],
+      "outOfRange": 0
+    },
+    {
+      "market": "TWSE",
+      "kind": "reduction",
+      "range": [
+        "2026-05-21",
+        "2026-11-13"
+      ],
+      "url": "https://wwwc.twse.com.tw/rwd/zh/reducation/TWTAUU?startDate=20260521&endDate=20261113&response=json",
+      "observedAt": "2026-11-14T16:51:48.038364+00:00",
+      "bytes": 2734,
+      "sha256": "0cbb6a6a1cb85dfc157d1625d1deef9410d2033b693a830a70a736074ff2e02a",
+      "status": "ok",
+      "rows": 14,
+      "candidateDays": [],
+      "header": [
+        "恢復買賣日期",
+        "股票代號",
+        "名稱",
+        "停止買賣前收盤價格",
+        "恢復買賣參考價"
+      ],
+      "outOfRange": 0
+    },
+    {
+      "market": "TWSE",
+      "kind": "par_value",
+      "range": [
+        "2026-05-21",
+        "2026-11-13"
+      ],
+      "url": "https://wwwc.twse.com.tw/rwd/zh/change/TWTB8U?startDate=20260521&endDate=20261113&response=json",
+      "observedAt": "2026-11-14T16:51:48.434868+00:00",
+      "bytes": 586,
+      "sha256": "2fca41bbc6de9c76c22da9d931237db4da8d4e14c28e7b5e4159bf8bcbfefa27",
+      "status": "ok",
+      "rows": 1,
+      "candidateDays": [],
+      "header": [
+        "恢復買賣日期",
+        "股票代號",
+        "名稱",
+        "停止買賣前收盤價格",
+        "恢復買賣參考價"
+      ],
+      "outOfRange": 0
+    },
+    {
+      "market": "TPEX",
+      "kind": "dividend",
+      "range": [
+        "2026-05-21",
+        "2026-11-13"
+      ],
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F05%2F21&endDate=2026%2F11%2F13&response=json",
+      "observedAt": "2026-11-14T16:51:48.707581+00:00",
+      "bytes": 178250,
+      "sha256": "db24eea2c8204687157ad3f55156ecf85af0ab227ded16eddb1ee850cf9597de",
+      "status": "ok",
+      "rows": 877,
+      "candidateDays": [
+        "2026-07-16"
+      ],
+      "header": [
+        "除權息日期",
+        "代號",
+        "名稱",
+        "除權息前收盤價",
+        "除權息參考價"
+      ],
+      "outOfRange": 0
+    },
+    {
+      "market": "TPEX",
+      "kind": "reduction",
+      "range": [
+        "2026-05-21",
+        "2026-11-13"
+      ],
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/revivt?startDate=2026%2F05%2F21&endDate=2026%2F11%2F13&response=json",
+      "observedAt": "2026-11-14T16:52:19.075838+00:00",
+      "bytes": 14664,
+      "sha256": "d8331d23548d41aae309c002e811d7499cbc9f7b75f0e042501bef927b39d8ec",
+      "status": "ok",
+      "rows": 20,
+      "candidateDays": [],
+      "header": [
+        "恢復買賣日期",
+        "股票代號",
+        "名稱",
+        "最後交易日之收盤價格",
+        "減資恢復買賣開始日參考價格"
+      ]
+    },
+    {
+      "market": "TPEX",
+      "kind": "par_value",
+      "range": [
+        "2026-05-21",
+        "2026-11-13"
+      ],
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/pvChgRslt?startDate=2026%2F05%2F21&endDate=2026%2F11%2F13&response=json",
+      "observedAt": "2026-11-14T16:52:19.040457+00:00",
+      "bytes": 1397,
+      "sha256": "d810398468cbafd9bec8b1880c2bb5df53cd23ecc2fabb1cff75ca8d376db3ad",
+      "status": "ok",
+      "rows": 2,
+      "candidateDays": [],
+      "header": [
+        "恢復買賣日期",
+        "證券代號",
+        "證券名稱",
+        "最後交易日之收盤價格",
+        "恢復買賣開始參考價"
+      ]
+    }
+  ]
+}
