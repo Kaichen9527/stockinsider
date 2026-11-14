@@ -1,0 +1,408 @@
+{
+  "schema": "stockinsider-native-cli-per-page-digest-proof-v1",
+  "runtimeCommit": "c54f1b7ed8a6dea4c7d04ac2997b8743200e090e",
+  "receiptCommit": "e24bbec829500b557a83e6abc5555d124f1eb924",
+  "sourceCaptureManifestAgrees": true,
+  "sameTransportAndDecodedDigestBothSymbols": true,
+  "pages": [
+    {
+      "session": "2026-08-20",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F08%2F20",
+      "observedAt": "2026-11-14T18:10:29.592816+00:00",
+      "rawSha256": "82d17bd27111d94377da95905a10a18c183a57a267e87df4d19c473507be1e0d",
+      "csvRowsSha256": "36e6cf42aba3c2480b81c6874447b29c07f390576de9830b2441320057fb70f2"
+    },
+    {
+      "session": "2026-08-21",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F08%2F21",
+      "observedAt": "2026-11-14T18:10:28.297591+00:00",
+      "rawSha256": "106839f99e84b137198a4a9ab9f54545d832311b9b12a3fcacab37957d9d7146",
+      "csvRowsSha256": "c255bb45607b81a3f1e6f067b4b08d647856a29097bb1045edabc8be0eac5662"
+    },
+    {
+      "session": "2026-08-24",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F08%2F24",
+      "observedAt": "2026-11-14T18:10:28.670211+00:00",
+      "rawSha256": "e3ba9d2df0ab074a5864302a19b1496252b1c1675bd2db176e8c1b10fb23087a",
+      "csvRowsSha256": "1956be9b85dd2bd5af7cdc7b81fd24f373d7f83e75bd70a93b952bd0d52207ae"
+    },
+    {
+      "session": "2026-08-25",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F08%2F25",
+      "observedAt": "2026-11-14T18:10:29.266601+00:00",
+      "rawSha256": "320659062aa36704ee4f27cf882dbcac6a6ab5d88532e9ec46acf475467d59ea",
+      "csvRowsSha256": "0114eb3c0023a35d4cb002984d07219938865a2ac97811a7cf4855b774faec1c"
+    },
+    {
+      "session": "2026-08-26",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F08%2F26",
+      "observedAt": "2026-11-14T18:10:29.682514+00:00",
+      "rawSha256": "0ce0c6adbfdb804e46a9dc8743028167ff4b10d91cedba8b77f912c23cd43463",
+      "csvRowsSha256": "869e27881dd746b99a465c3ddf77aa6d6a1ee4eacd4e8939ff11273b3b598c53"
+    },
+    {
+      "session": "2026-08-27",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F08%2F27",
+      "observedAt": "2026-11-14T18:10:29.871776+00:00",
+      "rawSha256": "c1a9926a15b4d6b0d5dab3b21f617bea3707d9aab8d06ddd98fd12adae195981",
+      "csvRowsSha256": "4e8c29402ea8f6135887b700557203279484bc0c8e933a2940d16dd90c364d6f"
+    },
+    {
+      "session": "2026-08-28",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F08%2F28",
+      "observedAt": "2026-11-14T18:10:30.391781+00:00",
+      "rawSha256": "17b20daf4219243b2708ed958fb3053ffa075a6ac3fc9a73962d62c85e4fb6a6",
+      "csvRowsSha256": "60b5471bd39f759172af8d80871f10b439a00ab31e1c7dd3fb041285629789a8"
+    },
+    {
+      "session": "2026-08-31",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F08%2F31",
+      "observedAt": "2026-11-14T18:10:30.338500+00:00",
+      "rawSha256": "6d975b567367875a6599b3287c8b1a12a8bcbd6cd95ee2fa6cffcb4e0d4b28d7",
+      "csvRowsSha256": "065dbf3c63adc7bea0fc888edca4ca7770773e9629470d51fb8223182a53eb68"
+    },
+    {
+      "session": "2026-09-01",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F01",
+      "observedAt": "2026-11-14T18:10:30.621747+00:00",
+      "rawSha256": "b2846b684a88b30e359635ae5162e3e56e281f4ce4dd14cf581136e57bd4d278",
+      "csvRowsSha256": "a134bfa7b8467bcf55931335ff37e8d0edebb7bbad00ae8ac5e21c10b4525824"
+    },
+    {
+      "session": "2026-09-02",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F02",
+      "observedAt": "2026-11-14T18:10:30.763794+00:00",
+      "rawSha256": "a17671bc179c2f91249fe9f05272f65a0d5ab7acfb34dac8b70a37095eadb27c",
+      "csvRowsSha256": "77233e8eb8f9b87b6d0e17cef400e7e2edd7c401d4ca5572c1f691544dae7e8b"
+    },
+    {
+      "session": "2026-09-03",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F03",
+      "observedAt": "2026-11-14T18:10:31.512665+00:00",
+      "rawSha256": "31c2640e2fe218539d46b99b8322e8763841852b044bc1a7ab34fca109d2ce21",
+      "csvRowsSha256": "64d85d8b9656f0b1d6fc395c0ef4c1088c478c06857f46276ceae54a1407870f"
+    },
+    {
+      "session": "2026-09-04",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F04",
+      "observedAt": "2026-11-14T18:10:31.109591+00:00",
+      "rawSha256": "0ec009eec36badcea93a1ec6ad3fc96874ef5515b418aaff53cbc5baeb295480",
+      "csvRowsSha256": "959424e5d9fb39fca503f09fd49bc2815bb7cbce0a37a453c4a0fd48db49ccc8"
+    },
+    {
+      "session": "2026-09-07",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F07",
+      "observedAt": "2026-11-14T18:10:32.023517+00:00",
+      "rawSha256": "f64bc375c04c2306353036a5947087baaba963f5c12b5166ac511a159a370466",
+      "csvRowsSha256": "84e9c57157c9b88315b96259822aa5eeb509596f333bad4e9f96e765a3da7eff"
+    },
+    {
+      "session": "2026-09-08",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F08",
+      "observedAt": "2026-11-14T18:10:32.575060+00:00",
+      "rawSha256": "bb711dfae90959a5567e956675f036464bb34e651c5d6482cef6eecebcac9ccf",
+      "csvRowsSha256": "0a1b3ac836ee7ad2e8a36395f592e3cd42a2c0998616fab05a1515897b1ea3f3"
+    },
+    {
+      "session": "2026-09-09",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F09",
+      "observedAt": "2026-11-14T18:10:32.962345+00:00",
+      "rawSha256": "fa830ec1117e04445091b9182bd81ea68d5ba7c7cc1df14fcc20d813bba57e4a",
+      "csvRowsSha256": "794240e956be2f80955907d9cdeed9976ed33db1ee91bec40dfb54e56bd8130e"
+    },
+    {
+      "session": "2026-09-10",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F10",
+      "observedAt": "2026-11-14T18:10:32.848396+00:00",
+      "rawSha256": "fb4f7958981bb02d4794a47a380cfd5178653abbe57319986bba570d07b79216",
+      "csvRowsSha256": "59b6d7a4efd4a54a64d3406fa355f1b3e9a973c31f03188c1b5a410abe9e13f0"
+    },
+    {
+      "session": "2026-09-11",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F11",
+      "observedAt": "2026-11-14T18:10:33.427807+00:00",
+      "rawSha256": "905e6dfd7a4ab35dae2aa6b18c76edcf29f3b761a1f870a0c4c5fd80f4e7f917",
+      "csvRowsSha256": "9114cbb69487dce0770fa73cac539aa4f0b17f12455febfe0767320d0a248a54"
+    },
+    {
+      "session": "2026-09-14",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F14",
+      "observedAt": "2026-11-14T18:10:33.557702+00:00",
+      "rawSha256": "2d2169e7c10e03e72959eaf80fcc9a4b55bbbea4f5b48897cd5f3b41ecf4069f",
+      "csvRowsSha256": "45a85d9adf12ac704a09b93e82c8ce10ee167c5be974c60b3fbeb63789fc36c6"
+    },
+    {
+      "session": "2026-09-15",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F15",
+      "observedAt": "2026-11-14T18:10:33.965645+00:00",
+      "rawSha256": "09d26db273f4a6f7dcafa7baa8ca57b563553e41ddf2cdb59e46fd410e3d77e9",
+      "csvRowsSha256": "377176dee8131380d4eeda467f3dd3d148f3f04bf57a253c933f537b651b778c"
+    },
+    {
+      "session": "2026-09-16",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F16",
+      "observedAt": "2026-11-14T18:10:33.848237+00:00",
+      "rawSha256": "8f3b3bb38dfc851970b60f5e76fbe58184e00a89f6c71041eff05bb92a9b5204",
+      "csvRowsSha256": "0886fa170e9e323876eb998460cb794bcd014ee0252b02e4ed366484267b610a"
+    },
+    {
+      "session": "2026-09-17",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F17",
+      "observedAt": "2026-11-14T18:10:34.279933+00:00",
+      "rawSha256": "96713ae00a782e0e892120eda1c5d68e86503d6bca56d33b50c7f91e4986c9e4",
+      "csvRowsSha256": "f44b38487f40ab70134df7c888386a9c6d994bbefffb46c3772df22acd0f2c62"
+    },
+    {
+      "session": "2026-09-18",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F18",
+      "observedAt": "2026-11-14T18:10:34.638692+00:00",
+      "rawSha256": "63f28ec80cd2f88ba6fdc0e905aa61ee46e2a308c8b486a476d4d647e451368e",
+      "csvRowsSha256": "0f20d179799e217b163b4590143843a3572806640bae52b4ae5faa6bc27cc0e9"
+    },
+    {
+      "session": "2026-09-21",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F21",
+      "observedAt": "2026-11-14T18:10:34.795710+00:00",
+      "rawSha256": "fe30a2fd79ceb2163df22c5b711637cf29ee13f7a318aee3d179053783e81d4b",
+      "csvRowsSha256": "0743e469ed3ac8dc97420ffe47b38496193721b24653c1652e6251e2220617f0"
+    },
+    {
+      "session": "2026-09-22",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F22",
+      "observedAt": "2026-11-14T18:10:35.243177+00:00",
+      "rawSha256": "b40295f6741f39a11308ab84d03c67faeedfabcddccbfa3e37b6f148daa76599",
+      "csvRowsSha256": "0186fc7689c596dbb970328949a6c933e17cc6b67ad95a4f83ce97c1c28b25aa"
+    },
+    {
+      "session": "2026-09-23",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F23",
+      "observedAt": "2026-11-14T18:10:36.697110+00:00",
+      "rawSha256": "2e3da5850de074a4ae108482fb82d1bb09d5358f09d2be59ae2e8654ab27ed23",
+      "csvRowsSha256": "dfc4ee3202cd08d990735ef9bef9fbd7388d36f9588a9c4e902aeb9d9bf79053"
+    },
+    {
+      "session": "2026-09-24",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F24",
+      "observedAt": "2026-11-14T18:10:36.833152+00:00",
+      "rawSha256": "8d438cc0249c877d464e366a620456f18d5ef30f82f75617a90a69b2d266832a",
+      "csvRowsSha256": "b092806b6641d278ec832be6ef51bddc0ee94d935324505b2310e5598018b8ca"
+    },
+    {
+      "session": "2026-09-29",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F29",
+      "observedAt": "2026-11-14T18:10:39.444186+00:00",
+      "rawSha256": "f99ca6d36cbde21ce1badc5e42cdef77483ce2a99370e5b27d4d1d6ebeb20945",
+      "csvRowsSha256": "62c1614b04c30f653759f0a10fef1f56d6cdca26c89d5e84e1a3c8ab07f5db5c"
+    },
+    {
+      "session": "2026-09-30",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F09%2F30",
+      "observedAt": "2026-11-14T18:10:37.193387+00:00",
+      "rawSha256": "377faadc0a8d398a02260ad0e16563a0f4559b9aa6344cf034858760b3ac9a5e",
+      "csvRowsSha256": "ab4bab994a4b7c4a388590bd2caf84366325fddfe26e98cb63e9ca8dd38dfec0"
+    },
+    {
+      "session": "2026-10-01",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F01",
+      "observedAt": "2026-11-14T18:10:37.652476+00:00",
+      "rawSha256": "91ff8acc7a268da727482985cff9a565f07ee0f2e60148785edaa9351440f7cc",
+      "csvRowsSha256": "adf00203901ee5962bc968cd22aba8f83d997dd8190f2a6059de4edcf1a03d27"
+    },
+    {
+      "session": "2026-10-02",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F02",
+      "observedAt": "2026-11-14T18:10:37.938198+00:00",
+      "rawSha256": "39bc9f332076fa8b94a5fad5123a6bb8d1e21e63014424c84611238d4ef58b57",
+      "csvRowsSha256": "d6bf3343cca54809b1ca4dcaab4bde257e490aa8d37e80cb730fc1bc3dce4bee"
+    },
+    {
+      "session": "2026-10-05",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F05",
+      "observedAt": "2026-11-14T18:10:39.177533+00:00",
+      "rawSha256": "68743bee0c712aa1b272c40951bced846859cefeff79bf702cb63c065ea9a3c1",
+      "csvRowsSha256": "7c91c1a5c06626c773dcacce16320d0e31965da6680e56a37f1fb3ada6673ee5"
+    },
+    {
+      "session": "2026-10-06",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F06",
+      "observedAt": "2026-11-14T18:10:39.579657+00:00",
+      "rawSha256": "89888a1261978fbcaebd249666bdeee3c963fbcfd777e937e3b4756a0f1bd6e1",
+      "csvRowsSha256": "71b2586278cd7ad81d69d517ae0e3d1f071d7acf17f605cee77f18ddc090d36a"
+    },
+    {
+      "session": "2026-10-07",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F07",
+      "observedAt": "2026-11-14T18:10:40.108900+00:00",
+      "rawSha256": "3263f5b7f06f26a6c82c8fb7ceb139c9b09a0f4be7d6d7cd4633b30cd1c5eb2f",
+      "csvRowsSha256": "708c6da8511bf5d36e46eb0f6bb5c0cf52fcc896d2c93b739ace2f75ad7b79ad"
+    },
+    {
+      "session": "2026-10-08",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F08",
+      "observedAt": "2026-11-14T18:10:39.981298+00:00",
+      "rawSha256": "e018dcab07f24cf0f00997d3c51993beb190603cf2d05baceb8c6f042dffbb8b",
+      "csvRowsSha256": "d3acd211eb55831ecfed7c250db4b01fcdb60ed0831bff15f5a301c795b43154"
+    },
+    {
+      "session": "2026-10-12",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F12",
+      "observedAt": "2026-11-14T18:10:40.449869+00:00",
+      "rawSha256": "764905d846d29f9d1569d029df4908b8ddf925c10ee77dc93f832c40a517b1e5",
+      "csvRowsSha256": "6a20266546546bae192d39b435adbeb8a84072df4631c0d6a1e8bfaead36417d"
+    },
+    {
+      "session": "2026-10-13",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F13",
+      "observedAt": "2026-11-14T18:10:40.454360+00:00",
+      "rawSha256": "bb1d8a3d58df09cd9655174c7dc08d1d76f295d61929fb6d487d22963483cc62",
+      "csvRowsSha256": "2e969e12e0f4eca535116f5931dc69e5c99d99a3b30276e185fc66c7fa2003dc"
+    },
+    {
+      "session": "2026-10-14",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F14",
+      "observedAt": "2026-11-14T18:10:40.837179+00:00",
+      "rawSha256": "c9a3a9162791d672a9596e12a0ae6ac3220359d97d82fa5e05d7ed9f70fd1a1b",
+      "csvRowsSha256": "5e3fd02b1b7e4a63eb859dfd85dc02b72c1e1359d5fb525f2dda242224158e7f"
+    },
+    {
+      "session": "2026-10-15",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F15",
+      "observedAt": "2026-11-14T18:10:40.957827+00:00",
+      "rawSha256": "5a0aebb21a0b2ee3b1bd5a1b9c82efd953b4ce352ba06eed96e58d43c9bd54b9",
+      "csvRowsSha256": "74a54db160b18e13669f26a01a4591e1db060eb65df375021aecff2f80d15c38"
+    },
+    {
+      "session": "2026-10-16",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F16",
+      "observedAt": "2026-11-14T18:10:41.070912+00:00",
+      "rawSha256": "7359d37d7594f57f8ed59b820f26926758d9b363987868c4f01ac152eaccc7c1",
+      "csvRowsSha256": "dd41bdefcd08c769880953f04435e4d0a5b70a7e2c03f3afdca4c8c8bd86c293"
+    },
+    {
+      "session": "2026-10-19",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F19",
+      "observedAt": "2026-11-14T18:10:41.925015+00:00",
+      "rawSha256": "f1d5899bd99f953399e8a19283c7a23f307c468b57ab195ae7ca4b904d89ae8c",
+      "csvRowsSha256": "eb9f1ff10e65522fb20e833672237251e5cc35998c176d8e32fefddc18e57051"
+    },
+    {
+      "session": "2026-10-20",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F20",
+      "observedAt": "2026-11-14T18:10:41.676683+00:00",
+      "rawSha256": "7f4a5928b7ab5f00a8aa9b1fd4fa1684d3f63a20060b4b341cdeb831d2057a28",
+      "csvRowsSha256": "30953dd42d62e05f3706779401bc8c9349d579972af52e5c65d139843a78c034"
+    },
+    {
+      "session": "2026-10-21",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F21",
+      "observedAt": "2026-11-14T18:10:41.986850+00:00",
+      "rawSha256": "0240d002701fe754e8cb2f88e738d30c5643ee4ecc5b6270cefb2d8158763085",
+      "csvRowsSha256": "132643fd3ef5e87c29a12cb5f7346a57f004230c8383c2c62a49cff8b03bff0d"
+    },
+    {
+      "session": "2026-10-22",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F22",
+      "observedAt": "2026-11-14T18:10:42.373935+00:00",
+      "rawSha256": "c57a72d7864203d633c76716e56c35b689c0134fffbed7f069e41f2646372d1a",
+      "csvRowsSha256": "0e319a66aac4e456dd6c1668d3aa3e331d2901e9ade25ef7aad597cc7c72435a"
+    },
+    {
+      "session": "2026-10-27",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F27",
+      "observedAt": "2026-11-14T18:10:42.381751+00:00",
+      "rawSha256": "397582e6e5235e95c5bed23325cd29c66f0269a2c2b5b84539475572eb6841b5",
+      "csvRowsSha256": "8190a0ca3f0859641c611360d7ed3522f03f87d187b98ae3bee1a9a4f604806a"
+    },
+    {
+      "session": "2026-10-28",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F28",
+      "observedAt": "2026-11-14T18:10:42.725495+00:00",
+      "rawSha256": "a35ea669e338cec5714f129c3089696146c9606e68792554868f100c5e3987de",
+      "csvRowsSha256": "c73e2069ff4f1b630bc3ae8c64692fcaaa20db1cdc280ab302207c99463e3c3f"
+    },
+    {
+      "session": "2026-10-29",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F29",
+      "observedAt": "2026-11-14T18:10:42.897281+00:00",
+      "rawSha256": "7a0d72109be97e2ec13e16eb0ae43221bfd74da19151802a8d2f03dbdcbb0048",
+      "csvRowsSha256": "cd2e7bd5d745929554eff5015762b121b36612860c1b21b56ea05f54c60b6eac"
+    },
+    {
+      "session": "2026-10-30",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F10%2F30",
+      "observedAt": "2026-11-14T18:10:44.313567+00:00",
+      "rawSha256": "272474625f7781f4ceaace4f2334426aba68e1ab2104ed9ee3f4eb6db5e09ed0",
+      "csvRowsSha256": "f310ec80f911a4039e191d9c19d68586b211a787a2bb8eae54bf1af75ceb23a7"
+    },
+    {
+      "session": "2026-11-02",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F02",
+      "observedAt": "2026-11-14T18:10:43.401876+00:00",
+      "rawSha256": "0c26c28bb6bb80613d38c58419cad9b2e0027fb93289277cc7e2e0639b0e033f",
+      "csvRowsSha256": "82b534e9f9c509f1b63bfe9b2d342d6f26117b7f0ffe8a39b5c66fffc49ccba5"
+    },
+    {
+      "session": "2026-11-03",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F03",
+      "observedAt": "2026-11-14T18:10:43.691590+00:00",
+      "rawSha256": "420dd7d48934257910f2c6696b278d673cb9c24a20bdb8e93d5b8a89ee7e6fbf",
+      "csvRowsSha256": "92a743ccd0eec4a5aa10350513c5df65b756e08194da0b460c4b9f81c8268bec"
+    },
+    {
+      "session": "2026-11-04",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F04",
+      "observedAt": "2026-11-14T18:10:44.003670+00:00",
+      "rawSha256": "2361377e48b2139f8dd93369b6c3c14303c88a0b95878cb26689ad8152cca119",
+      "csvRowsSha256": "d9361450e3a2e621d644aec29540663a7e5757cbf00a6c459822cee77cad36d8"
+    },
+    {
+      "session": "2026-11-05",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F05",
+      "observedAt": "2026-11-14T18:10:44.278962+00:00",
+      "rawSha256": "01fbc8bf86c28aa2694eaebf3ea7ba0990c5fdbfb91f429891a40d28add6a1c9",
+      "csvRowsSha256": "1d1055dc31ea2a331f37193ff4c1126b567111ff6b99e96e5a2221c0dbbcc387"
+    },
+    {
+      "session": "2026-11-06",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F06",
+      "observedAt": "2026-11-14T18:10:44.802497+00:00",
+      "rawSha256": "1a08850b3703132e48ad2626c8f3c82b980eadef20a385bab67915f27cad1f43",
+      "csvRowsSha256": "b967cf0a2f61c23cbf1ea72a8984a341243d020e4a0a747dcda996d3c5e99023"
+    },
+    {
+      "session": "2026-11-09",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F09",
+      "observedAt": "2026-11-14T18:10:44.801604+00:00",
+      "rawSha256": "5c77f9bed0ed8a419fb8d7e17ba637ec10a8d0a64acdf41635e672a4648f71a2",
+      "csvRowsSha256": "6d22ba2ee74c8ae0ddc3a75cfadf4231d71751cf6f7482f45f87ac6ef4adbc8b"
+    },
+    {
+      "session": "2026-11-10",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F10",
+      "observedAt": "2026-11-14T18:10:45.217014+00:00",
+      "rawSha256": "d7146839682048f8837c734cfde5eb049754646137996b892a8de0970ab9b63c",
+      "csvRowsSha256": "3c788e857e2fca19f01b2e74ec60848eeecd93b7702e7839e6de01df8a230a22"
+    },
+    {
+      "session": "2026-11-11",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F11",
+      "observedAt": "2026-11-14T18:10:45.219575+00:00",
+      "rawSha256": "3acace845d730b22238f8816dac6fe5c7142a6b5e673e0d9211ddd017885bdb5",
+      "csvRowsSha256": "eeb22f592ddc4fcb02b1323b0d80604f49375c7a25b2114641fe8ed383e5adec"
+    },
+    {
+      "session": "2026-11-12",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F12",
+      "observedAt": "2026-11-14T18:10:45.545600+00:00",
+      "rawSha256": "eebb91fd70fd7394fb23bfcdfec42f3f1c21a74c71a35bb132de42251301e0a4",
+      "csvRowsSha256": "ce69b5743a258386fef2cea8b44cf277c1a41f97c062220991ad60bbb2567bb9"
+    },
+    {
+      "session": "2026-11-13",
+      "sourceUrl": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F13",
+      "observedAt": "2026-11-14T18:10:45.510486+00:00",
+      "rawSha256": "e67648bdd22dfb8f6828027cf91384813af24c6303c0ff40fa2f2d203a7b6a39",
+      "csvRowsSha256": "d6ca47c83237d9111c2f99f1760e979f2d3d331a3c701677c212a85d97eb6a74"
+    }
+  ]
+}
