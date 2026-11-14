@@ -1,0 +1,78 @@
+{
+  "schema": "stockinsider-tpex-native-share-stable-control-v1",
+  "symbol": "5274",
+  "name": "信驊",
+  "market": "TPEX",
+  "nativeShareDataset": "https://data.gov.tw/dataset/11371",
+  "nativeShareCaptureSource": "https://github.com/Kaichen9527/stockinsider/commit/d2a4a77a0b0fd97f6ee0732a8c5fa16afee0b665",
+  "nativeShareBodiesHashChecked": 57,
+  "independentWindows": [
+    {
+      "firstDate": "2026-08-26",
+      "asOf": "2026-11-12",
+      "issuedShares": 41582953,
+      "coverage": 52,
+      "firstSha256": "0ce0c6adbfdb804e46a9dc8743028167ff4b10d91cedba8b77f912c23cd43463",
+      "lastSha256": "eebb91fd70fd7394fb23bfcdfec42f3f1c21a74c71a35bb132de42251301e0a4",
+      "minLiquidityPassed": true
+    },
+    {
+      "firstDate": "2026-08-27",
+      "asOf": "2026-11-13",
+      "issuedShares": 41582953,
+      "coverage": 52,
+      "firstSha256": "c1a9926a15b4d6b0d5dab3b21f617bea3707d9aab8d06ddd98fd12adae195981",
+      "lastSha256": "e67648bdd22dfb8f6828027cf91384813af24c6303c0ff40fa2f2d203a7b6a39",
+      "minLiquidityPassed": true
+    }
+  ],
+  "officialChecks": [
+    {
+      "feed": "exDailyQ",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F08%2F26&endDate=2026%2F11%2F13&response=json",
+      "sha256": "2f7fd082efca841ede08227c92a3ebd7df83056301543ad3611c4e7503fde22b",
+      "bytes": 45993,
+      "observedAt": "2026-11-14T18:32:57.367216+00:00",
+      "rowCount": 223,
+      "matchingDates": []
+    },
+    {
+      "feed": "revivt",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/revivt?startDate=2026%2F08%2F26&endDate=2026%2F11%2F13&response=json",
+      "sha256": "55b4a9bc9f930d83bba55366004c6526be0716d07242c8b7ff74b38499631c66",
+      "bytes": 13227,
+      "observedAt": "2026-11-14T18:32:57.581221+00:00",
+      "rowCount": 18,
+      "matchingDates": []
+    },
+    {
+      "feed": "pvChgRslt",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/pvChgRslt?startDate=2026%2F08%2F26&endDate=2026%2F11%2F13&response=json",
+      "sha256": "2ab151f68bcc6778f1b4ece474507f74e06e718e888dd9e7e504933054663227",
+      "bytes": 845,
+      "observedAt": "2026-11-14T18:32:57.681775+00:00",
+      "rowCount": 1,
+      "matchingDates": []
+    },
+    {
+      "feed": "mopsfin_t187ap03_O",
+      "url": "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O",
+      "sha256": "c592d2977949db58ffa5ff4e471c7cc18a8402f2afd1ed90c98e4a951a154414",
+      "bytes": 1079447,
+      "observedAt": "2026-11-14T18:32:58.945210+00:00",
+      "code": "5274",
+      "name": "信驊",
+      "board": "TPEX",
+      "reportedIssueShares": 41582953,
+      "dateOfListing": "20130430"
+    }
+  ],
+  "sourceMention": "https://www.ptt.cc/bbs/Stock/M.1793864517.A.EFD.html",
+  "sourceMentionRightsAccepted": false,
+  "scope": {
+    "laterObserved": true,
+    "selectiveCorporateActionFeedCoverage": true,
+    "fullScoreOrRecommendation": false,
+    "productionAffected": false
+  }
+}
