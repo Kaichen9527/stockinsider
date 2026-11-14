@@ -1,0 +1,721 @@
+{
+  "startedAt": "2026-11-14T19:16:04.020002+00:00",
+  "completedAt": "2026-11-14T19:16:23.533822+00:00",
+  "captureScriptSha256": "7bc9f60572a75dd766de4e3a9cfdc12e7b93046f20d84db326b49c5b7f6d88ed",
+  "responses": [
+    {
+      "datasetId": 11370,
+      "session": "2026-10-14",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F14&response=data&type=DailyClose",
+      "file": "bodies/2026-10-14.csv",
+      "observedAt": "2026-11-14T19:16:07.647381+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1819807,
+      "rows": 12466,
+      "rawSha256": "0cc18de15f05f69e86198775e5721a9aee04d6478437f8d43636a2353f7fa74a",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 370485,
+          "allSessionTurnoverNtd": 6666530945,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 10898821,
+          "allSessionTurnoverNtd": 11042138914,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "7fc61d85e66da01d31d6245308f5dd88507ea095fa7415617c0896fde88d27ed"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-10-15",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F15&response=data&type=DailyClose",
+      "file": "bodies/2026-10-15.csv",
+      "observedAt": "2026-11-14T19:16:15.722957+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1837408,
+      "rows": 12565,
+      "rawSha256": "d9515fcaae1057fbbfb401ecec74b6abb9884631d4a180c303d6ff43dba78735",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 732151,
+          "allSessionTurnoverNtd": 11789440070,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 18849886,
+          "allSessionTurnoverNtd": 17853384461,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "170ec5c5dc4dea18b9a453b1bea57b84a4dccbe074eddfd6309c618dcca41b80"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-10-16",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F16&response=data&type=DailyClose",
+      "file": "bodies/2026-10-16.csv",
+      "observedAt": "2026-11-14T19:16:09.621460+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1836109,
+      "rows": 12587,
+      "rawSha256": "e8cb0537dcce4ceb7510314d0d8139abb4f45d4dfa36e47a51115ddadd6ab2f3",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 311059,
+          "allSessionTurnoverNtd": 5073876945,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 16378861,
+          "allSessionTurnoverNtd": 14927121246,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "8148a9660124d29a357bd6c6135a384f7f408981ddac63c870335d20ebd0a762"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-10-19",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F19&response=data&type=DailyClose",
+      "file": "bodies/2026-10-19.csv",
+      "observedAt": "2026-11-14T19:16:10.090259+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1864984,
+      "rows": 12779,
+      "rawSha256": "d9d5a47aa79d99b13c8ab4893c50f31b368087a65195b3b71f10665f94a69a84",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 384124,
+          "allSessionTurnoverNtd": 6085326865,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 12879456,
+          "allSessionTurnoverNtd": 11056130759,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "debdd1c108eb41ed2bfcbbcd7feed7411970a2d1bf57c350113ec50324099a44"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-10-20",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F20&response=data&type=DailyClose",
+      "file": "bodies/2026-10-20.csv",
+      "observedAt": "2026-11-14T19:16:10.814338+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1868661,
+      "rows": 12848,
+      "rawSha256": "cd57a7bf3dac1180cc16bea6948928f23f12abc2a857b93c31fe45b14272bc31",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 168771,
+          "allSessionTurnoverNtd": 2701281290,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 11865479,
+          "allSessionTurnoverNtd": 10238655780,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "73103f2abc95d48e8fd7409ac36595492d7aea98ddb8a695f9523e8aa004e7e3"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-10-21",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F21&response=data&type=DailyClose",
+      "file": "bodies/2026-10-21.csv",
+      "observedAt": "2026-11-14T19:16:11.989664+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1886231,
+      "rows": 12950,
+      "rawSha256": "29ec9912e7e0d9205ea3efa71f0dde67927b2e1e729b4aae9cd9c342a92041c1",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 278073,
+          "allSessionTurnoverNtd": 4563911295,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 8903488,
+          "allSessionTurnoverNtd": 7862555085,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "d806af11b0320189697848def2462f499316842fec197bd64535da3700e42cf8"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-10-22",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F22&response=data&type=DailyClose",
+      "file": "bodies/2026-10-22.csv",
+      "observedAt": "2026-11-14T19:16:12.263788+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1895494,
+      "rows": 13032,
+      "rawSha256": "cad32d135f716fc6d0c4fe040edfc8c1b9ac3b73e96863e8e344bfbafedd0858",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 277570,
+          "allSessionTurnoverNtd": 4524227688,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 10520541,
+          "allSessionTurnoverNtd": 8963825169,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "270b4e31adcf654a72326a2881e05c29bcf97e86905cceec26788762efc764d0"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-10-27",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F27&response=data&type=DailyClose",
+      "file": "bodies/2026-10-27.csv",
+      "observedAt": "2026-11-14T19:16:15.030518+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1909069,
+      "rows": 13186,
+      "rawSha256": "cddd90719e36e59ae831ad1aedb0782f1b71841ea37226188b6a9a22c132928c",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 390440,
+          "allSessionTurnoverNtd": 6350939630,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 12207216,
+          "allSessionTurnoverNtd": 10009542741,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "ae69745c5646ff60568431d9b8d14744c87f43e35bc079dc52199ecac6380e6b"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-10-28",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F28&response=data&type=DailyClose",
+      "file": "bodies/2026-10-28.csv",
+      "observedAt": "2026-11-14T19:16:14.351270+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1910104,
+      "rows": 13127,
+      "rawSha256": "d825e0d63346444e20cf5ff74f2a4c875178084c79846ac4c94154abdb262a80",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 439529,
+          "allSessionTurnoverNtd": 7481914600,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 6892320,
+          "allSessionTurnoverNtd": 5852153367,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "0711c49fa31983e60b70b4e13c1faacd3a646a99d80913e3e14232805606e548"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-10-29",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F29&response=data&type=DailyClose",
+      "file": "bodies/2026-10-29.csv",
+      "observedAt": "2026-11-14T19:16:13.506933+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1924574,
+      "rows": 13242,
+      "rawSha256": "5ff383890b2b41462e692bdad15c2816eeb7d6fc8e75f292b7825455b460da09",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 248530,
+          "allSessionTurnoverNtd": 4249317135,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 7652732,
+          "allSessionTurnoverNtd": 6256954695,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "11ded4fd67737bee4933e5606592947246169b15a81d140fe8d468ad34097d77"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-10-30",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F10%2F30&response=data&type=DailyClose",
+      "file": "bodies/2026-10-30.csv",
+      "observedAt": "2026-11-14T19:16:16.289503+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1937874,
+      "rows": 13360,
+      "rawSha256": "26b61c96838acf5e7ba0b2c123322a594a44a64e4c73eb2a2d15df0a02dc1d2f",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 516761,
+          "allSessionTurnoverNtd": 8206135180,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 9849934,
+          "allSessionTurnoverNtd": 7444909918,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "9107ac45f8bbc193933d40535add5a2909d3af5aacbfbca1b06d0caadd897b30"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-11-02",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F02&response=data&type=DailyClose",
+      "file": "bodies/2026-11-02.csv",
+      "observedAt": "2026-11-14T19:16:17.224932+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1950281,
+      "rows": 13454,
+      "rawSha256": "904ea3bde2db4263b5300998692066806b91a7f21860ecaff3bb0d735794fdaf",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 279440,
+          "allSessionTurnoverNtd": 4378499270,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 10401885,
+          "allSessionTurnoverNtd": 7831068682,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "6dd8e22415deb461548b89095bce4d24746acd0e4c496adc20b70bddd2b76ce3"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-11-03",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F03&response=data&type=DailyClose",
+      "file": "bodies/2026-11-03.csv",
+      "observedAt": "2026-11-14T19:16:16.393565+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1971696,
+      "rows": 13569,
+      "rawSha256": "f9e2d9b485fdeb20a87e3fe9f76be65c1c3747f66e4dfe3c81b18ed0866cd1fe",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 383872,
+          "allSessionTurnoverNtd": 5832646329,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 11326427,
+          "allSessionTurnoverNtd": 8013367310,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "0492b41b06013414251b505d379798b74c3e340312918033dc94d5482aa056bd"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-11-04",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F04&response=data&type=DailyClose",
+      "file": "bodies/2026-11-04.csv",
+      "observedAt": "2026-11-14T19:16:21.544211+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1975575,
+      "rows": 13626,
+      "rawSha256": "dec94c16cc3f7b62e8828daf8a487b1ed3af131aabfbd6968f7c8c5083555c5e",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 783335,
+          "allSessionTurnoverNtd": 10887303215,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 25023622,
+          "allSessionTurnoverNtd": 15789819375,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "42dec7648b312266dfd56dc926a9bd3b3b8d799234ef2685c9ca458b4e67863a"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-11-05",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F05&response=data&type=DailyClose",
+      "file": "bodies/2026-11-05.csv",
+      "observedAt": "2026-11-14T19:16:18.662513+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1977938,
+      "rows": 13679,
+      "rawSha256": "f7ec5410c2aab7493a7bd824d50855bd2358cbb1705d395e7b6dfeefcfe4cd8d",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 704449,
+          "allSessionTurnoverNtd": 9075253275,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 18953974,
+          "allSessionTurnoverNtd": 11018999667,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "9fe09e90100c6c78f24184cb02060e993465c19d2ddb9e9c1d21a4bc1f1cdd96"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-11-06",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F06&response=data&type=DailyClose",
+      "file": "bodies/2026-11-06.csv",
+      "observedAt": "2026-11-14T19:16:20.119990+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1962983,
+      "rows": 13618,
+      "rawSha256": "baec3e026a50a988b3eb70c80f9af4b6ea762beeec4703e86a206cedb5d096e8",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 287678,
+          "allSessionTurnoverNtd": 3272992195,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 14376531,
+          "allSessionTurnoverNtd": 7387830495,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "5b0d9ffcc53409ef87fd1f765ffda4b5bb5a317108651580964bf3c8dac17f1c"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-11-09",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F09&response=data&type=DailyClose",
+      "file": "bodies/2026-11-09.csv",
+      "observedAt": "2026-11-14T19:16:18.598965+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1963667,
+      "rows": 13674,
+      "rawSha256": "7ec550ff9f06b5d746c1d1e3d1699a250ce5b7b831260d4d1f22d26cf2fbed89",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 874790,
+          "allSessionTurnoverNtd": 10102169055,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 6430510,
+          "allSessionTurnoverNtd": 3525531521,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "9a0b3af84e593b818f551dcc139643be4c870bcf234e0892773fb662729d6bd0"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-11-10",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F10&response=data&type=DailyClose",
+      "file": "bodies/2026-11-10.csv",
+      "observedAt": "2026-11-14T19:16:21.086603+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1982528,
+      "rows": 13715,
+      "rawSha256": "faa4f40199c2e2366ec437769560232b45f6276361d2fe1fe323e60e0146a3e6",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 1076694,
+          "allSessionTurnoverNtd": 12217125231,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 23791080,
+          "allSessionTurnoverNtd": 14452983500,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "f75d25d8a684377e44b8b3dba79e8e0ad884be676c009a44508b6246881564b5"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-11-11",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F11&response=data&type=DailyClose",
+      "file": "bodies/2026-11-11.csv",
+      "observedAt": "2026-11-14T19:16:22.933732+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1989071,
+      "rows": 13752,
+      "rawSha256": "210749e0795a8e04dc5605a163a7bdeac339c3715aa1ec7d9d4006a6a09ed8ac",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 565864,
+          "allSessionTurnoverNtd": 6935978995,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 11401175,
+          "allSessionTurnoverNtd": 7037484299,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "c1a073a06d56804362279d6e9c536b3c47f7f0c570925c23aa0160d3d44f8433"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-11-12",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F12&response=data&type=DailyClose",
+      "file": "bodies/2026-11-12.csv",
+      "observedAt": "2026-11-14T19:16:23.214133+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 2000242,
+      "rows": 13789,
+      "rawSha256": "5b70a8ac8571b44f9d4f1e43755032a07f8ae255e5bb299f2c17f355ee6340d8",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 433343,
+          "allSessionTurnoverNtd": 5466688980,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 15508871,
+          "allSessionTurnoverNtd": 9966400370,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "0030173f9ac184bf217d4628155a950a2f6108a8bcf49748d981e823ac6a79f1"
+    },
+    {
+      "datasetId": 11370,
+      "session": "2026-11-13",
+      "sourceUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F13&response=data&type=DailyClose",
+      "file": "bodies/2026-11-13.csv",
+      "observedAt": "2026-11-14T19:16:23.444135+00:00",
+      "publisherPublishedAt": null,
+      "httpStatus": 200,
+      "redirectCount": 0,
+      "contentType": "application/csv;charset=utf-8",
+      "bytes": 1998356,
+      "rows": 13807,
+      "rawSha256": "51c8a90f766f9416a3991273f1c20ad5ea83b15696da5c813a736440d3cde55a",
+      "matches": {
+        "5274": {
+          "allSessionTradeShares": 390878,
+          "allSessionTurnoverNtd": 4787703525,
+          "issuedShares": 41582953
+        },
+        "6488": {
+          "allSessionTradeShares": 8891386,
+          "allSessionTurnoverNtd": 5692722244,
+          "issuedShares": 528113725
+        }
+      },
+      "flow11856RawSha256": "dabfc58353c59e619bd25391eb945ae3a8f0c115533fce0c1717d5dd7d149ed0"
+    }
+  ],
+  "controls": [
+    {
+      "symbol": "5274",
+      "session": "2026-11-12",
+      "span": 5,
+      "allSessionDenominator": 3238369,
+      "netShares": {
+        "foreign": -195601,
+        "trust": -85414
+      },
+      "ratio": {
+        "foreign": -0.060401085,
+        "trust": -0.026375623
+      }
+    },
+    {
+      "symbol": "5274",
+      "session": "2026-11-12",
+      "span": 20,
+      "allSessionDenominator": 9506958,
+      "netShares": {
+        "foreign": -897955,
+        "trust": 353041
+      },
+      "ratio": {
+        "foreign": -0.0944524,
+        "trust": 0.037135012
+      }
+    },
+    {
+      "symbol": "5274",
+      "session": "2026-11-13",
+      "span": 5,
+      "allSessionDenominator": 3341569,
+      "netShares": {
+        "foreign": -72790,
+        "trust": -76911
+      },
+      "ratio": {
+        "foreign": -0.02178318,
+        "trust": -0.023016433
+      }
+    },
+    {
+      "symbol": "5274",
+      "session": "2026-11-13",
+      "span": 20,
+      "allSessionDenominator": 9527351,
+      "netShares": {
+        "foreign": -784975,
+        "trust": 287736
+      },
+      "ratio": {
+        "foreign": -0.082391737,
+        "trust": 0.03020105
+      }
+    },
+    {
+      "symbol": "6488",
+      "session": "2026-11-12",
+      "span": 5,
+      "allSessionDenominator": 71508167,
+      "netShares": {
+        "foreign": 655025,
+        "trust": -3269093
+      },
+      "ratio": {
+        "foreign": 0.009160143,
+        "trust": -0.045716359
+      }
+    },
+    {
+      "symbol": "6488",
+      "session": "2026-11-12",
+      "span": 20,
+      "allSessionDenominator": 264112809,
+      "netShares": {
+        "foreign": -20995252,
+        "trust": -7890313
+      },
+      "ratio": {
+        "foreign": -0.079493502,
+        "trust": -0.029874784
+      }
+    },
+    {
+      "symbol": "6488",
+      "session": "2026-11-13",
+      "span": 5,
+      "allSessionDenominator": 66023022,
+      "netShares": {
+        "foreign": -359647,
+        "trust": -1556116
+      },
+      "ratio": {
+        "foreign": -0.005447297,
+        "trust": -0.023569294
+      }
+    },
+    {
+      "symbol": "6488",
+      "session": "2026-11-13",
+      "span": 20,
+      "allSessionDenominator": 262105374,
+      "netShares": {
+        "foreign": -19453952,
+        "trust": -8038766
+      },
+      "ratio": {
+        "foreign": -0.074221874,
+        "trust": -0.030669978
+      }
+    }
+  ],
+  "schema": "stockinsider-tpex-11370-all-trade-share-capture-v1",
+  "dataset": "https://data.gov.tw/dataset/11370",
+  "derivedRatioDefinition": "11856 foreign excluding foreign dealers or investment trust net shares divided by 11370 all-session per-security shares",
+  "rawStoredInStagingOnly": true,
+  "pointInTimeProven": false,
+  "scorerOrWriterInvoked": false,
+  "registrySameDayByteMatch": {
+    "registeredLegacyUrl": "https://www.tpex.org.tw/web/stock/aftertrading/DAILY_CLOSE_quotes/stk_quote_result.php?l=zh-tw&o=data",
+    "officialDatedUrl": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F13&response=data&type=DailyClose",
+    "identicalBytesSha256": "51c8a90f766f9416a3991273f1c20ad5ea83b15696da5c813a736440d3cde55a",
+    "observedResponseRocDate": "1151113",
+    "legacyDateFilterIgnoredInProbe": true,
+    "datedCsvHeader": [
+      "資料日期",
+      "代號",
+      "名稱",
+      "收盤",
+      "漲跌",
+      "開盤",
+      "最高",
+      "最低",
+      "均價",
+      "成交股數",
+      "成交金額",
+      "成交筆數",
+      "最後買價",
+      "最後賣價",
+      "發行股數",
+      "次日參考價",
+      "次日漲停價",
+      "次日跌停價"
+    ]
+  }
+}
