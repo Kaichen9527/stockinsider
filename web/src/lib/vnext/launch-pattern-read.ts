@@ -1,14 +1,14 @@
 import { loadTwLaunchPatternReadEvidence, type TwEntryAuthorityClient, type TwEntryAuthorityRequest } from '../tw-entry-plan-authority.ts';
 import { launchPatternFixture } from './launch-patterns.ts';
 import { scoreLaunchReadEvidence } from './launch-score.ts';
-import { bindLaunchOfficialReplay, type parseLaunchOfficialReplay } from './launch-official-replay.ts';
+import { bindLaunchOfficialReplay, type LaunchOfficialReplayRead } from './launch-official-replay.ts';
 
 /** Thin read-only consumer of the existing official selection protocol. No
  * client/provider is constructed here, and no acquisition/writer is invoked.
  * Selected-cache validation feeds offline arithmetic, never external authority. */
-export async function readLaunchPatterns(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest, replay?: ReturnType<typeof parseLaunchOfficialReplay>) {
+export async function readLaunchPatterns(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest, replay?: LaunchOfficialReplayRead) {
   const evidence = await loadTwLaunchPatternReadEvidence(client, request);
-  const replayBinding = replay ? bindLaunchOfficialReplay(replay, request, evidence) : { external: {}, gaps: [] };
+  const replayBinding = replay ? bindLaunchOfficialReplay(replay, request, evidence) : { external: {}, gaps: [], attributions: [] };
   const calendar = evidence.calendar;
   const shareVolume = evidence.shareVolume;
   const arithmetic = launchPatternFixture({
@@ -25,7 +25,7 @@ export async function readLaunchPatterns(client: TwEntryAuthorityClient, request
   return { scope: 'selected_read_evidence_with_offline_arithmetic' as const, sourceAuthority: false as const,
     publicationAuthority: false as const, entryAuthority: false as const, rankingAuthority: false as const,
     evidence, arithmetic, launchScore: scoreLaunchReadEvidence(request, { evidence, arithmetic }, replayBinding.external),
-    officialReplay: replay ? { parserVersion: replay.parserVersion, gaps: replayBinding.gaps, sourceAuthority: false as const } : null,
+    officialReplay: replay ? { parserVersion: replay.parserVersion, attributions: replayBinding.attributions, gaps: replayBinding.gaps, sourceAuthority: false as const } : null,
     gaps: [...new Set([...evidence.missingData, ...arithmetic.gaps, ...replayBinding.gaps,
       'external_acquisition_and_actual_database_not_verified'])].sort() };
 }

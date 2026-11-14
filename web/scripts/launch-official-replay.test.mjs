@@ -42,6 +42,25 @@ test('offline CLI imports an actual bounded synthetic byte member without emitti
   const output = JSON.parse(result.stdout); assert.equal(output.parsedPages, 1); assert.equal(output.responseReceipts[0].indexRows, 1);
   assert.equal(output.sourceAuthority, false); assert.ok(!result.stdout.includes(marker)); assert.ok(!result.stdout.includes('"close"'));
 });
+test('offline CLI dispatches licensed CSV with resource attribution and separate CSV hash provenance', () => {
+  const { root } = fixture(), directory = path.join(root, 'bodies'); fs.mkdirSync(directory, { mode: 0o700 });
+  const bytes = '\uFEFF"日期","開盤指數","最高指數","最低指數","收盤指數"\r\n"115/11/13","1,000","1,100","900","1,001"\r\n';
+  fs.writeFileSync(path.join(directory, 'index.csv'), bytes, { mode: 0o600 });
+  const observedAt = '2026-11-14T18:00:00Z', input = path.join(root, 'csv-manifest.json');
+  fs.writeFileSync(input, JSON.stringify({ schema: 'launch-official-licensed-csv-v1', parserContract: 'gov-open-data-11755-11391-11856-csv-v1',
+    targets: [{ market: 'TWSE', symbol: '2330' }, { market: 'TPEX', symbol: '6488' }], throughSessions: ['2026-11-12', '2026-11-13'], cutoff: '2026-11-15T00:00:00Z',
+    capture: { repository: 'fixture/offline', sourceCommit: 'e'.repeat(40), workflowPath: null, runId: null, runAttempt: null, startedAt: null, completedAt: observedAt },
+    indexMonths: { TWSE: ['2026-11'], TPEX: [] }, flowSessions: [], responses: [{ datasetId: 11755, market: 'TWSE', kind: 'index_month', requestKey: '2026-11',
+      sourceUrl: 'https://www.twse.com.tw/indicesReport/MI_5MINS_HIST?response=open_data&date=20261101', observedAt, publisherPublishedAt: null,
+      httpStatus: 200, redirectCount: 0, contentType: 'text/csv', bytes: Buffer.byteLength(bytes), rawSha256: createHash('sha256').update(bytes).digest('hex'),
+      body: { encoding: 'file', path: 'bodies/index.csv' } }] }), { mode: 0o600 });
+  const result = run(root, '--manifest', input); assert.equal(result.status, 0, result.stderr);
+  const output = JSON.parse(result.stdout); assert.equal(output.schema, 'launch-official-licensed-csv-v1');
+  assert.equal(output.attributions[0].datasetId, 11755); assert.equal(output.attributions[0].datasetUrl, 'https://data.gov.tw/dataset/11755');
+  assert.equal(output.attributions[0].licenseUrl, 'https://data.gov.tw/license'); assert.equal(output.sourceAuthority, false);
+  assert.equal(output.responseReceipts[0].canonicalPayloadSha256, undefined);
+  assert.notEqual(output.responseReceipts[0].rawSha256, output.responseReceipts[0].canonicalCsvRowsSha256);
+});
 test('offline CLI rejects outside roots, symlinks, broad permissions and oversized input without path disclosure', () => {
   const { root, input } = fixture(), outside = fixture(), link = path.join(root, 'linked.json'); fs.symlinkSync(input, link);
   const huge = path.join(root, 'large.json'); fs.writeFileSync(huge, ''); fs.truncateSync(huge, 1048577);

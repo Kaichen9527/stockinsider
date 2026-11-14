@@ -3,7 +3,7 @@
  * rights inferred. Output contains receipts/counts/gaps, never raw bodies. */
 import fs from 'node:fs';
 import path from 'node:path';
-import { parseLaunchOfficialReplay, officialReplayObservationPlan } from '../src/lib/vnext/launch-official-replay.ts';
+import { parseLaunchOfficialReplay, parseLaunchLicensedCsvReplay, LICENSED_CSV_SCHEMA, officialReplayObservationPlan } from '../src/lib/vnext/launch-official-replay.ts';
 
 try {
   const args = process.argv.slice(2);
@@ -55,7 +55,8 @@ try {
       if (member.byteLength !== descriptor.bytes || (total += member.byteLength) > 112 * 1024 * 1024) throw Error('input');
       files.set(body.path, member);
     }
-    process.stdout.write(JSON.stringify(parseLaunchOfficialReplay(input, files)) + '\n');
+    const read = input?.schema === LICENSED_CSV_SCHEMA ? parseLaunchLicensedCsvReplay(input, files) : parseLaunchOfficialReplay(input, files);
+    process.stdout.write(JSON.stringify(read) + '\n');
   }
 } catch {
   process.stderr.write('official_exchange_replay_refused\n'); process.exitCode = 1;

@@ -12,6 +12,8 @@ import { sha256Canonical } from '../opportunity-v3/canonical.ts';
 
 export const OFFICIAL_REPLAY_SCHEMA = 'launch-official-public-replay-v1';
 export const OFFICIAL_REPLAY_PARSER = 'twse-t86-taiex-and-tpex-dailytrade-inx-v1';
+export const LICENSED_CSV_SCHEMA = 'launch-official-licensed-csv-v1';
+export const LICENSED_CSV_PARSER = 'gov-open-data-11755-11391-11856-csv-v1';
 const MAX_BYTES = 112 * 1024 * 1024, MAX_PAGES = 68;
 const FLOW_HTML = 'https://www.tpex.org.tw/zh-tw/mainboard/trading/major-institutional/detail/day.html';
 const INDEX_HTML = 'https://www.tpex.org.tw/zh-tw/indices/stock-index/industrial/inxh.html';
@@ -23,8 +25,10 @@ type Page = { market: Market; kind: Kind; requestKey: string; sourceUrl: string;
 type Header = { kind: 'tpex_flow_group_header' | 'tpex_index_header'; sourceUrl: string; observedAt: string; bytes: number; rawSha256: string; body: Body };
 type IndexRow = { session: string; close: number };
 type FlowRow = { session: string; symbol: string; foreignNetShares: number; trustNetShares: number };
-type Parsed = { page: Omit<Page, 'body'>; canonicalPayloadSha256: string; availableAt: string; schemaRevision: string | null; index: IndexRow[]; flow: FlowRow | null };
-type State = { cutoff: string; pages: Parsed[]; gaps: string[]; throughSessions: string[] };
+type Attribution = { datasetId: number; datasetUrl: string; owner: string; licenseUrl: string; license: string; exchange: Market };
+type Parsed = { page: Omit<Page, 'body'>; canonicalPayloadSha256: string | null; canonicalCsvRowsSha256?: string; datasetId?: number;
+  availableAt: string; schemaRevision: string | null; index: IndexRow[]; flow: FlowRow | null };
+type State = { cutoff: string; pages: Parsed[]; gaps: string[]; throughSessions: string[]; parserVersion: string; attributions?: Attribution[] };
 const states = new WeakMap<object, State>();
 function fail(code: string): never { throw Error(code); }
 const text = (v: unknown, max = 512): v is string => typeof v === 'string' && v.length > 0 && v.length <= max;
@@ -60,7 +64,7 @@ export function officialLaunchHistoricalUrl(market: Market, kind: Kind, key: str
     : `https://www.tpex.org.tw/www/zh-tw/insti/dailyTrade?date=${encodeURIComponent(session.replace(/-/gu, '/'))}&type=Daily&response=json&sect=EW`;
 }
 
-function raw(page: { bytes: number; rawSha256: string; body: Body }, files: ReadonlyMap<string, Uint8Array>, maximum: number) {
+function raw(page: { bytes: number; rawSha256: string; body: Body }, files: ReadonlyMap<string, Uint8Array>, maximum: number, preserveBom = false) {
   if (!Number.isSafeInteger(page.bytes) || page.bytes < 2 || page.bytes > maximum || !hash(page.rawSha256)) fail('official_replay_bytes_invalid');
   const body = page.body;
   if (exact(body, 'encoding') && body.encoding === 'absent') return null;
@@ -73,7 +77,7 @@ function raw(page: { bytes: number; rawSha256: string; body: Body }, files: Read
     const found = files.get(body.path); if (!found) return null; bytes = found;
   } else return fail('official_replay_body_invalid');
   if (bytes.byteLength !== page.bytes || sha(bytes) !== page.rawSha256) fail('official_replay_raw_hash_mismatch');
-  return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  return new TextDecoder('utf-8', { fatal: true, ignoreBOM: preserveBom }).decode(bytes);
 }
 
 type Element = Tree.Element;
@@ -249,7 +253,7 @@ export function parseLaunchOfficialReplay(value: unknown, files: ReadonlyMap<str
       availableAt: flow && page.market === 'TPEX' && schemaAvailableAt && evidenceInstant(schemaAvailableAt)! > evidenceInstant(page.observedAt)! ? schemaAvailableAt : page.observedAt,
       schemaRevision: flow && page.market === 'TPEX' ? schemaRevision : null, index, flow });
   }
-  const state: State = { cutoff, pages, gaps, throughSessions: [...value.throughSessions as string[]] };
+  const state: State = { cutoff, pages, gaps, throughSessions: [...value.throughSessions as string[]], parserVersion: OFFICIAL_REPLAY_PARSER };
   const result = Object.freeze({ schema: OFFICIAL_REPLAY_SCHEMA, parserVersion: OFFICIAL_REPLAY_PARSER,
     scope: 'staging_raw_schema_replay_only' as const, cutoff, decodedBytes: bytes, parsedPages: pages.length,
     responseReceipts: pages.map(({ page, canonicalPayloadSha256, index, flow }) => ({ market: page.market, kind: page.kind,
@@ -261,15 +265,17 @@ export function parseLaunchOfficialReplay(value: unknown, files: ReadonlyMap<str
 
 /** Only parser-created state can bind; all requested sessions still come from
  * actual existing selected price/action/calendar evidence, not observed dates. */
-export function bindLaunchOfficialReplay(read: ReturnType<typeof parseLaunchOfficialReplay>, request: TwEntryAuthorityRequest, selected: TwLaunchPatternReadEvidence) {
+export type LaunchOfficialReplayRead = ReturnType<typeof parseLaunchOfficialReplay> | ReturnType<typeof parseLaunchLicensedCsvReplay>;
+export function bindLaunchOfficialReplay(read: LaunchOfficialReplayRead, request: TwEntryAuthorityRequest, selected: TwLaunchPatternReadEvidence) {
   const state = states.get(read); if (!state) fail('official_replay_foreign_or_cloned_read');
   const gaps = [...state.gaps], external: LaunchExternalEvidence = {};
+  const attributions = state.attributions?.map(item => ({ ...item })) ?? [];
   const calendar = selected.calendar;
   if (state.cutoff !== request.cutoff || !state.throughSessions.includes(request.signalSession) || calendar?.status !== 'validated_selected_window'
     || selected.history.missingData.length || selected.history.completedSessions.at(-1) !== request.signalSession
     || selected.history.bars.length < 240 || selected.history.priceBasis?.status !== 'verified' || !selected.corporateActions
     || !known(calendar.availableAt, request.cutoff) || !known(selected.history.availableAt, request.cutoff)
-    || !known(selected.corporateActions.availableAt, request.cutoff)) return { external, gaps: [...gaps, 'official_replay_selected_binding_missing'] };
+    || !known(selected.corporateActions.availableAt, request.cutoff)) return { external, attributions, gaps: [...gaps, 'official_replay_selected_binding_missing'] };
   const pages = state.pages.filter(item => item.page.market === request.exchange && known(item.page.observedAt, request.cutoff));
   type Match = { item: Parsed; row: IndexRow | FlowRow };
   const select = (kind: Kind, length: number): Array<Match | null> => calendar.sessions.slice(-length).map(session => {
@@ -284,7 +290,7 @@ export function bindLaunchOfficialReplay(read: ReturnType<typeof parseLaunchOffi
   const indexes = select('index_month', 200).filter((item): item is Match => item !== null);
   const source = (items: Array<{ item: Parsed }>) => ({ revisionId: `official-replay:${sha256Canonical(items.map(({ item }) => [item.page.sourceUrl, item.page.rawSha256, item.page.observedAt, item.schemaRevision, item.availableAt]))}`,
     market: request.exchange, provider: request.exchange.toLowerCase() as 'twse' | 'tpex', sourceUrl: items.at(-1)!.item.page.sourceUrl,
-    sourceRef: OFFICIAL_REPLAY_PARSER, availableAt: items.map(({ item }) => item.availableAt).sort((a, b) => evidenceInstant(a)! < evidenceInstant(b)! ? -1 : 1).at(-1)!, cutoff: request.cutoff });
+    sourceRef: state.parserVersion, availableAt: items.map(({ item }) => item.availableAt).sort((a, b) => evidenceInstant(a)! < evidenceInstant(b)! ? -1 : 1).at(-1)!, cutoff: request.cutoff });
   if (indexes.length === 200) external.index = { ...source(indexes), rows: indexes.map(({ item, row }) =>
     ({ session: row.session, close: (row as IndexRow).close, sourceTimestamp: item.page.observedAt, availableAt: item.availableAt })) };
   else gaps.push('official_replay_200_selected_index_sessions_missing');
@@ -299,7 +305,7 @@ export function bindLaunchOfficialReplay(read: ReturnType<typeof parseLaunchOffi
     rows: flows.map(({ item, row }) => ({ session: row.session, foreignNetShares: (row as FlowRow).foreignNetShares,
       trustNetShares: (row as FlowRow).trustNetShares, sourceTimestamp: item.page.observedAt, availableAt: item.availableAt })) };
   else gaps.push('official_replay_20_selected_flow_sessions_or_exact_volume_missing');
-  return { external, gaps: [...new Set(gaps)].sort() };
+  return { external, attributions, gaps: [...new Set(gaps)].sort() };
 }
 
 /** External observation metadata plans collection/replay; it never creates raw
@@ -331,4 +337,151 @@ export function officialReplayObservationPlan(value: unknown) {
       const sessions = [...dates[market]].filter(day => day <= throughSession).sort();
       return { market, throughSession, observedIndexSessions: sessions.slice(-200), observedFlowSessions: sessions.slice(-20), calendarAuthority: false as const };
     })), gaps: ['raw_bodies_not_present_in_observation_receipt', 'reported_dates_are_not_calendar_authority', 'public_raw_redistribution_rights_not_established'] };
+}
+
+const CSV_FLOW_HEADER = Object.freeze(['資料日期', '代號', '名稱',
+  '外資及陸資不含外資自營商買進股數', '外資及陸資不含外資自營商賣出股數', '外資及陸資不含外資自營商買賣超股數',
+  '外資自營商買進股數', '外資自營商賣出股數', '外資自營商買賣超股數', '外資及陸資買進股數', '外資及陸資賣出股數', '外資及陸資買賣超股數',
+  '投信買進股數', '投信賣出股數', '投信買賣超股數', '自營商自行買賣買進股數', '自營商自行買賣賣出股數', '自營商自行買賣買賣超股數',
+  '自營商避險買進股數', '自營商避險賣出股數', '自營商避險買賣超股數', '自營商買進股數', '自營商賣出股數', '自營商買賣超股數', '三大法人買賣超股數合計']);
+const CSV_RESOURCES = Object.freeze({
+  11755: { exchange: 'TWSE' as const, kind: 'index_month' as const, headers: Object.freeze(['日期', '開盤指數', '最高指數', '最低指數', '收盤指數']) },
+  11391: { exchange: 'TPEX' as const, kind: 'index_month' as const, headers: Object.freeze(['資料日期', '開市', '最高價', '最低價', '收市', '漲跌']) },
+  11856: { exchange: 'TPEX' as const, kind: 'institutional_day' as const, headers: CSV_FLOW_HEADER },
+});
+type CsvDataset = keyof typeof CSV_RESOURCES;
+type CsvPage = Page & { datasetId: CsvDataset };
+function attribution(datasetId: CsvDataset): Attribution {
+  return { datasetId, datasetUrl: `https://data.gov.tw/dataset/${datasetId}`, exchange: CSV_RESOURCES[datasetId].exchange,
+    owner: 'Securities and Futures Bureau, Financial Supervisory Commission', license: 'Taiwan Open Government Data License 1.0', licenseUrl: 'https://data.gov.tw/license' };
+}
+export function officialLicensedCsvUrl(datasetId: CsvDataset, key: string) {
+  const resource = CSV_RESOURCES[datasetId];
+  if (!resource) fail('official_csv_dataset_invalid');
+  const day = resource.kind === 'index_month' ? `${key}-01` : key;
+  if (!isHistoryDate(day)) fail('official_csv_request_invalid');
+  if (datasetId === 11755) return `https://www.twse.com.tw/indicesReport/MI_5MINS_HIST?response=open_data&date=${day.replace(/-/gu, '')}`;
+  if (datasetId === 11391) return `https://www.tpex.org.tw/www/zh-tw/indexInfo/inx?response=data&date=${encodeURIComponent(day.replace(/-/gu, '/'))}`;
+  const year = Number(day.slice(0, 4)) - 1911;
+  if (year < 1 || year > 999) fail('official_csv_request_invalid');
+  return `https://www.tpex.org.tw/web/stock/3insti/DAILY_TradE/3itrade_hedge_result.php?l=zh-tw&o=data&se=EW&t=D&d=${encodeURIComponent(`${year}/${day.slice(5, 7)}/${day.slice(8)}`)}`;
+}
+
+/** Strict bounded RFC4180 fields, accepting CRLF or LF records, one UTF8 BOM,
+ * doubled quotes and quoted commas/newlines. No preamble/header guessing. */
+function csvRecords(input: string, maximumRows: number) {
+  const value = input.startsWith('\uFEFF') ? input.slice(1) : input;
+  const rows: string[][] = []; let row: string[] = [], field = '', quoted = false, closed = false;
+  const endField = () => { row.push(field); field = ''; closed = false; if (row.length > 32) fail('official_csv_column_bound'); };
+  const endRow = () => { endField(); rows.push(row); row = []; if (rows.length > maximumRows) fail('official_csv_row_bound'); };
+  for (let i = 0; i < value.length; i++) {
+    const c = value[i];
+    if (quoted) {
+      if (c === '"') { if (value[i + 1] === '"') { field += '"'; i++; } else { quoted = false; closed = true; } }
+      else field += c;
+    } else if (c === ',') endField();
+    else if (c === '\r' || c === '\n') { if (c === '\r' && value[++i] !== '\n') fail('official_csv_line_ending_invalid'); endRow(); }
+    else if (closed) fail('official_csv_quote_invalid');
+    else if (c === '"') { if (field !== '') fail('official_csv_quote_invalid'); quoted = true; }
+    else field += c;
+    if (field.length > 1024) fail('official_csv_cell_bound');
+  }
+  if (quoted) fail('official_csv_quote_invalid');
+  if (field !== '' || closed || row.length) endRow();
+  return rows;
+}
+function csvRows(page: CsvPage, body: string) {
+  const resource = CSV_RESOURCES[page.datasetId], records = csvRecords(body, resource.kind === 'index_month' ? 32 : 5001);
+  if (records.length < 2 || JSON.stringify(records[0]) !== JSON.stringify(resource.headers)
+    || records.some(row => row.length !== resource.headers.length)) fail('official_csv_header_or_width_invalid');
+  const rows = records.slice(1), seen = new Set<string>(), index: IndexRow[] = []; let flow: FlowRow | null = null;
+  const decimal = (value: string) => {
+    if (!/^[+-]?(?:\d+(?:\.\d+)?|\d{1,3}(?:,\d{3})+(?:\.\d+)?)$/u.test(value.trim())) return null;
+    const parsed = Number(value.replace(/,/gu, '').trim()); return Number.isFinite(parsed) ? parsed : null;
+  };
+  for (const row of rows) {
+    const session = date(row[0]);
+    if (!session || (resource.kind === 'index_month' ? session.slice(0, 7) !== page.requestKey : session !== page.requestKey)) fail('official_csv_date_invalid');
+    const key = resource.kind === 'index_month' ? session : `${session}:${row[1]}`;
+    if (seen.has(key)) fail('official_csv_duplicate_row'); seen.add(key);
+    if (resource.kind === 'index_month') {
+      const ohlc = row.slice(1, 5).map(decimal);
+      if (ohlc.some(n => n === null || n <= 0)) fail('official_csv_index_number_invalid');
+      const [open, high, low, close] = ohlc as number[];
+      if (high < Math.max(open, close) || low > Math.min(open, close) || high < low) fail('official_csv_index_ohlc_invalid');
+      index.push({ session, close });
+    } else {
+      if (!/^[0-9A-Za-z]{2,12}$/u.test(row[1])) fail('official_csv_symbol_invalid');
+      if (row[1] !== '6488') continue;
+      const header = resource.headers as readonly string[];
+      const net = (prefix: string) => {
+        const buy = integer(row[header.indexOf(prefix + '買進股數')]), sell = integer(row[header.indexOf(prefix + '賣出股數')]), reported = integer(row[header.indexOf(prefix + '買賣超股數')]);
+        if (buy === null || sell === null || reported === null || buy < 0 || sell < 0 || buy - sell !== reported) fail('official_csv_flow_net_invalid');
+        return reported;
+      };
+      flow = { session, symbol: '6488', foreignNetShares: net('外資及陸資不含外資自營商'), trustNetShares: net('投信') };
+    }
+  }
+  if (resource.kind === 'institutional_day' && !flow) fail('official_csv_candidate_missing');
+  return { index: index.sort((a, b) => a.session.localeCompare(b.session)), flow, records };
+}
+
+/** Distinct licensed CSV protocol. It neither rewrites bytes into JSON nor
+ * grants the CSV dataset's license to any different JSON/T86 endpoint. */
+export function parseLaunchLicensedCsvReplay(value: unknown, files: ReadonlyMap<string, Uint8Array> = new Map()) {
+  if (!exact(value, 'schema parserContract targets throughSessions cutoff capture indexMonths flowSessions responses')
+    || value.schema !== LICENSED_CSV_SCHEMA || value.parserContract !== LICENSED_CSV_PARSER || evidenceInstant(value.cutoff) === null
+    || JSON.stringify(value.targets) !== JSON.stringify([{ market: 'TWSE', symbol: '2330' }, { market: 'TPEX', symbol: '6488' }])
+    || JSON.stringify(value.throughSessions) !== JSON.stringify(['2026-11-12', '2026-11-13'])
+    || !exact(value.capture, 'repository sourceCommit workflowPath runId runAttempt startedAt completedAt')
+    || !text(value.capture.repository) || !/^[a-f0-9]{40}$/u.test(String(value.capture.sourceCommit))
+    || !known(value.capture.completedAt, String(value.cutoff)) || evidenceInstant(value.capture.completedAt)! >= evidenceInstant(value.cutoff)!
+    || value.capture.startedAt !== null && !known(value.capture.startedAt, String(value.capture.completedAt))
+    || !exact(value.indexMonths, 'TWSE TPEX') || !Array.isArray(value.flowSessions) || value.flowSessions.length > 21
+    || value.flowSessions.some((day, i) => !isHistoryDate(day) || i > 0 && day <= (value.flowSessions as string[])[i - 1])
+    || !Array.isArray(value.responses) || value.responses.length > MAX_PAGES) fail('official_csv_manifest_invalid');
+  const capture = value.capture;
+  const noWorkflow = capture.workflowPath === null && capture.runId === null && capture.runAttempt === null;
+  const hasWorkflow = typeof capture.workflowPath === 'string' && /^\.github\/workflows\/[A-Za-z0-9_-]+\.ya?ml$/u.test(capture.workflowPath)
+    && typeof capture.runId === 'string' && /^\d{1,20}$/u.test(capture.runId) && Number.isSafeInteger(capture.runAttempt) && Number(capture.runAttempt) >= 1;
+  if (!noWorkflow && !hasWorkflow) fail('official_csv_capture_invalid');
+  for (const market of ['TWSE', 'TPEX']) {
+    const months = value.indexMonths[market];
+    if (!Array.isArray(months) || months.length > 13 || months.some((month, i) => typeof month !== 'string' || !isHistoryDate(`${month}-01`) || i > 0 && month <= months[i - 1])) fail('official_csv_months_invalid');
+  }
+  const cutoff = value.cutoff as string, pages: Parsed[] = [], identities = new Set<string>(), paths = new Set<string>(), datasets = new Set<CsvDataset>(); let bytes = 0;
+  const gaps = ['selected_price_action_calendar_binding_not_connected', 'licensed_csv_is_not_publication_or_acquisition_authority'];
+  if (noWorkflow) gaps.push('capture_workflow_identity_unverified');
+  for (const candidate of value.responses) {
+    if (!exact(candidate, 'datasetId market kind requestKey sourceUrl observedAt publisherPublishedAt httpStatus redirectCount contentType bytes rawSha256 body')
+      || ![11755, 11391, 11856].includes(candidate.datasetId as number) || candidate.publisherPublishedAt !== null
+      || ![200, null].includes(candidate.httpStatus as number | null) || ![0, null].includes(candidate.redirectCount as number | null)
+      || candidate.contentType !== null && !text(candidate.contentType, 128) || !known(candidate.observedAt, String(capture.completedAt))) fail('official_csv_response_invalid');
+    const page = candidate as unknown as CsvPage, resource = CSV_RESOURCES[page.datasetId];
+    if (page.market !== resource.exchange || page.kind !== resource.kind || page.sourceUrl !== officialLicensedCsvUrl(page.datasetId, page.requestKey)) fail('official_csv_source_invalid');
+    if (capture.startedAt !== null && evidenceInstant(page.observedAt)! < evidenceInstant(capture.startedAt)!) fail('official_csv_capture_clock_invalid');
+    if (page.kind === 'index_month' ? !(value.indexMonths as Record<Market, string[]>)[page.market].includes(page.requestKey)
+      : !(value.flowSessions as string[]).includes(page.requestKey)) fail('official_csv_unplanned_page');
+    const identity = `${page.datasetId}:${page.requestKey}`;
+    if (identities.has(identity)) fail('official_csv_duplicate_page'); identities.add(identity);
+    bytes += page.bytes; if (!Number.isSafeInteger(bytes) || bytes > MAX_BYTES) fail('official_csv_total_bound');
+    if ('path' in page.body) { if (paths.has(page.body.path)) fail('official_csv_duplicate_file'); paths.add(page.body.path); }
+    const body = raw(page, files, 500000, true);
+    if (body === null) { gaps.push(`raw_body_missing:${identity}`); continue; }
+    const parsed = csvRows(page, body), attributed = attribution(page.datasetId); datasets.add(page.datasetId);
+    const receipt = { market: page.market, kind: page.kind, requestKey: page.requestKey, sourceUrl: page.sourceUrl, observedAt: page.observedAt,
+      publisherPublishedAt: null, httpStatus: page.httpStatus, redirectCount: page.redirectCount, contentType: page.contentType, bytes: page.bytes, rawSha256: page.rawSha256 };
+    if (page.httpStatus === null || page.redirectCount === null) gaps.push(`transport_receipt_unverified:${identity}`);
+    pages.push({ page: receipt, canonicalPayloadSha256: null, canonicalCsvRowsSha256: sha256Canonical(parsed.records), datasetId: page.datasetId,
+      availableAt: page.observedAt, schemaRevision: sha256Canonical([LICENSED_CSV_PARSER, attributed, resource.headers]), index: parsed.index, flow: parsed.flow });
+  }
+  const attributions = [...datasets].sort((a, b) => a - b).map(attribution);
+  const state: State = { cutoff, pages, gaps, throughSessions: [...value.throughSessions as string[]], parserVersion: LICENSED_CSV_PARSER, attributions };
+  const result = Object.freeze({ schema: LICENSED_CSV_SCHEMA, parserVersion: LICENSED_CSV_PARSER, scope: 'licensed_csv_schema_replay_only' as const,
+    cutoff, decodedBytes: bytes, parsedPages: pages.length, attributions: attributions.map(item => ({ ...item })),
+    responseReceipts: pages.map(({ page, canonicalCsvRowsSha256, datasetId, index, flow }) => ({ datasetId, market: page.market, kind: page.kind,
+      requestKey: page.requestKey, sourceUrl: page.sourceUrl, observedAt: page.observedAt, bytes: page.bytes, rawSha256: page.rawSha256,
+      canonicalCsvRowsSha256, indexRows: index.length, candidateFlowRows: flow ? 1 : 0 })),
+    sourceAuthority: false as const, publicationAuthority: false as const, redistributionAuthority: false as const, gaps: [...new Set(gaps)].sort() });
+  states.set(result, state); return result;
 }
