@@ -2,6 +2,7 @@ import {canonicalContentHash} from '../source-content-semantics.ts';
 import {evidenceInstant,evidenceKnownAt} from './evidence-clock.ts';
 import {permittedContentFingerprint,type PermittedContent} from './permitted-content.ts';
 import {inputHash} from './policy.ts';
+import {projectPttBodyObservation} from '../ptt-article-parser.ts';
 type Row=Record<string,unknown>;
 export type CachedSource='official'|'ptt';
 export type CachedSourceAdmission={
@@ -45,6 +46,14 @@ export function projectCachedSourceAdmission(row:Row,source:CachedSource,cutoff:
  let contentHash:string|null=null,reason:string|null=null;
  try{
   if(metadataInvalid||restrictionInvalid)throw Error('vnext_cached_source_metadata_invalid');
+  if(source==='ptt'&&Object.hasOwn(metadata,'ptt_body_provenance')){
+   const observation=projectPttBodyObservation(metadata.ptt_body_provenance,item.url,availableAt,cutoff);
+   gaps.push(...(observation.reason?[observation.reason]:[]),'ptt_body_observation_not_source_rights','ptt_metadata_scope_rejects_resolved_original_roots');
+   // Existing source-reserve explicitly forbids resolved PTT roots under its
+   // metadata scope. Never relabel a metadata license or manufacture a new
+   // writer/scope. Both source workers consume this refusal before reservation.
+   throw Error('vnext_ptt_body_original_scope_unavailable');
+  }
   if(canonicalInvalid)throw Error('vnext_cached_canonical_content_invalid');
   if(!evidenceKnownAt(cacheCycleCutoff,cutoff)||!evidenceKnownAt(availableAt,cacheCycleCutoff)||evidenceInstant(eventAt)===null||!evidenceKnownAt(eventAt,publishedAt)||!evidenceKnownAt(publishedAt,availableAt)||declaredEvent!==undefined&&typeof declaredEvent!=='string')throw Error('vnext_content_original_clocks_required');
   if(source==='ptt'&&metadata.retention_mode!=='metadata_link_only')throw Error('vnext_metadata_retention_required');

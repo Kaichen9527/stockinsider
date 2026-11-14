@@ -19,6 +19,7 @@ import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 import { isExpectedPttArticleMissing } from './ptt-policy';
 import { buildPttMentionProvenance, type PttBodyReadStatus } from './ptt-mention-provenance';
+import { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt, type PttArticleRead, type PttBodyProvenance } from './ptt-article-parser.ts';
 import { fetchPinnedHttpsText, isPublicNetworkAddress } from './pinned-https-fetch';
 
 type Row = Record<string, unknown>;
@@ -2217,7 +2218,7 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
         canonical_content_hash: contentHash,
         canonical_publisher_key: publisherKey,
         stance_semantics: stanceSemantics,
-        candidate_discovery_eligible: (item.contentSemantics || 'editorial_discussion') !== 'bulk_institutional_ranking',
+        candidate_discovery_eligible: item.metadata?.candidate_discovery_eligible !== false && (item.contentSemantics || 'editorial_discussion') !== 'bulk_institutional_ranking',
         content_chars: compacted.originalChars,
         content_truncated: compacted.truncated,
         content_max_chars: SOURCE_RAW_CONTENT_MAX_CHARS,
@@ -2239,6 +2240,9 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
     const availableAt = nowIso();
     const mentionRows = newItems
       .filter((item) => (item.contentSemantics || 'editorial_discussion') !== 'bulk_institutional_ranking')
+      // A PTT header gap must never acquire a fresh event via availableAt.
+      // Metadata/link retention remains available for the legacy caller.
+      .filter((item) => item.platform !== 'ptt' || item.metadata?.ptt_publication_valid === true && Boolean(item.publishedAt))
       .flatMap((item) => (item.symbols || []).flatMap((symbol) => {
       const stockId = stockIdBySymbol.get(symbol);
       if (!stockId || !item.documentUrl) return [];
@@ -2266,6 +2270,7 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
         publisher_name: item.publisherName || compactText(item.metadata?.author_name || item.metadata?.source_name) || null,
         provenance: {
           retention_mode: item.metadata?.retention_mode || 'source_document',
+          ...(item.platform === 'ptt' ? { candidate_discovery_eligible: false } : {}),
           source_entity_id: item.sourceEntityId,
           ...(item.platform === 'gdelt' ? {
             discovery_eligible: item.metadata?.discovery_eligible === true,
@@ -2679,6 +2684,19 @@ function detectCrossThemeKeys(text: string) {
   return themes;
 }
 
+/** Actual scraper composition, also exposed for isolated source integration
+ * checks. Body text is transient; the retained proof carries only metadata. */
+export function projectPttCollectorArticle(input: {
+  html: string; documentUrl: string; title: string; observedAt: string; validSymbols: Set<string>;
+  stockNamesBySymbol: Map<string, string>; aliasesBySymbol: Map<string, string[]>;
+}) {
+  const article = parsePttArticleHtml(input.html, input.documentUrl);
+  const context = { validSymbols: input.validSymbols, stockNamesBySymbol: input.stockNamesBySymbol, aliasesBySymbol: input.aliasesBySymbol };
+  const bodyExtracted = extractTwSymbolsWithEvidence(article.bodyText ?? '', context);
+  const legacyExtracted = extractTwSymbolsWithEvidence(`${input.title}\n${article.bodyText ?? ''}`, context);
+  return { article, bodyExtracted, legacyExtracted, publicationValid: pttPublicationKnownAt(article, input.observedAt), provenance: pttBodyProvenance(article, bodyExtracted.symbols) };
+}
+
 async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
   const supabase = getSupabaseServerClient();
   const baseUrl = 'https://www.ptt.cc/bbs/Stock/index.html';
@@ -2793,6 +2811,10 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     let articleBodyText = title;
     let comments: Array<{ tag: string; author: string | null; text: string }> = [];
     let articleAuthor: string | null = null;
+    let articleRead: PttArticleRead | null = null;
+    let ownBodyProvenance: PttBodyProvenance | null = null;
+    let articleObservedAt: string | null = null;
+    let publicationValid = false;
     let bodyReadStatus: PttBodyReadStatus = 'title_only_fetch_failed';
 
     try {
@@ -2803,15 +2825,14 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       });
       articlesFetched += 1;
       comments = parsePushComments(bodyHtml);
-      articleAuthor = stripHtml(bodyHtml.match(/article-meta-tag[^>]*>作者<\/span>\s*<span[^>]*class="article-meta-value"[^>]*>([\s\S]*?)<\/span>/u)?.[1] || '') || null;
+      articleObservedAt = nowIso();
+      const parsed = projectPttCollectorArticle({ html: bodyHtml, documentUrl: articleUrl, title, observedAt: articleObservedAt, validSymbols, stockNamesBySymbol, aliasesBySymbol });
+      articleRead = parsed.article; ownBodyProvenance = parsed.provenance;
+      publicationValid = parsed.publicationValid;
+      articleAuthor = articleRead.author;
       pushCommentsParsed += comments.length;
-      const mainBlock = bodyHtml.match(/<div id="main-content">([\s\S]*?)<\/div>\s*<div id="article-polling"/)?.[1] ||
-        bodyHtml.match(/<div id="main-content">([\s\S]*?)<\/div>/)?.[1] ||
-        bodyHtml;
-      const bodyWithoutPushes = mainBlock.replace(/<div class="push">[\s\S]*?<\/div>/g, ' ');
-      const bodyText = stripHtml(bodyWithoutPushes).slice(0, 5000);
-      bodyReadStatus = bodyHtml.includes('<div id="main-content">') && bodyText
-        ? 'body_read_bounded' : 'title_only_body_missing';
+      const bodyText = articleRead.bodyText ?? '';
+      bodyReadStatus = articleRead.status === 'body_read' ? 'body_read_bounded' : 'title_only_body_missing';
       const commentText = comments.map((item) => `${item.tag} ${item.text}`).join('\n').slice(0, 3000);
       articleBodyText = bodyText || title;
       contentText = compactText([bodyText, commentText].filter(Boolean).join('\n\n推噓留言：\n')) || title;
@@ -2854,6 +2875,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       documentUrl: articleUrl,
       title,
       summary: title,
+      publishedAt: articleRead?.sourcePublishedAt ?? null,
       // Use full text only transiently for symbol/sentiment extraction.  The
       // retained record is metadata + title + original URL, not a copied post.
       contentText: title,
@@ -2872,6 +2894,10 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         author_name: articleAuthor,
         body_read_status: bodyReadStatus,
         body_retained: false,
+        ptt_publication_valid: publicationValid,
+        ptt_body_provenance: ownBodyProvenance,
+        ptt_body_observed_at: articleObservedAt,
+        candidate_discovery_eligible: false,
         replies_read_completeness: 'partial',
         reply_sample_truncated: comments.length > 20,
         matched_symbols: symbols,
@@ -2908,6 +2934,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         title: `PTT 留言｜${title}`,
         summary: comment.text.slice(0, 160),
         contentText: comment.text.slice(0, 240),
+        publishedAt: articleRead?.sourcePublishedAt ?? null,
         symbols: commentExtracted.symbols,
         sentimentLabel: commentSentimentLabel,
         confidence: 0.52,
@@ -2921,13 +2948,15 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
           matched_symbol_reason: 'comment_local_tw_symbol_or_name_proximity',
           matched_symbols: commentExtracted.symbols,
           body_read_status: bodyReadStatus, body_retained: false,
+          ptt_publication_valid: publicationValid,
+          candidate_discovery_eligible: false,
           replies_read_completeness: 'partial', reply_sample_truncated: comments.length > 20,
           content_semantics: 'editorial_discussion', retention_mode: 'metadata_local_excerpt',
           excluded_false_positives: commentExtracted.excludedFalsePositives,
         },
       });
     });
-    for (const symbol of symbols) {
+    for (const symbol of publicationValid ? symbols : []) {
       pttSignalRows.push({
         stock_id: stockBySymbol.get(symbol)?.id || null,
         symbol,
@@ -2946,6 +2975,9 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
           crawl_mode: symbolContext ? 'symbol_scoped' : 'board_scan',
           content_semantics: contentSemantics,
           author_name: articleAuthor,
+          source_published_at: articleRead?.sourcePublishedAt ?? null,
+          ptt_body_observed_at: articleObservedAt,
+          candidate_discovery_eligible: false,
           comment_evidence: comments.slice(0, 20).map((item) => ({ author: item.author, tag: item.tag, excerpt: item.text.slice(0, 120) })),
           excluded_false_positives: extracted.excludedFalsePositives,
         },

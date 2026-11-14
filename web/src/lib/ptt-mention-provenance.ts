@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { projectPttBodyObservation } from './ptt-article-parser.ts';
 
 export type PttBodyReadStatus = 'body_read_bounded' | 'title_only_fetch_failed' | 'title_only_body_missing';
 
@@ -73,6 +74,10 @@ export function buildPttMentionProvenance(input: {
   const localMatch = symbol !== null && symbols.includes(symbol) && basis !== null
     && readStatus === 'body_read_bounded' && documentUrl !== null
     && (!reply || (parentUrl !== null && author !== null && index !== null && !issues.has('reply_index_mismatch')));
+  const bodyProof = field('ptt_body_provenance');
+  const observedAt = field('ptt_body_observed_at');
+  const bodyObservation = bodyProof === undefined ? null : projectPttBodyObservation(bodyProof, input.documentUrl,
+    typeof observedAt === 'string' ? observedAt : '', typeof observedAt === 'string' ? observedAt : '');
   return {
     schema: 'ptt-mention-provenance-v1', kind: reply ? 'reply' : 'article',
     document_url_basis: reply ? 'collector_push_index_fragment' : 'public_article_url',
@@ -81,6 +86,7 @@ export function buildPttMentionProvenance(input: {
     comment_index: index, comment_tag: reply ? text(field('comment_tag'), 8) : null,
     matched_symbols: symbols, mention_symbol: symbol, matched_symbol_reason: basis,
     stock_local_match_basis_retained: localMatch,
+    body_observation: bodyObservation,
     evidence_excerpt: excerpt,
     evidence_excerpt_sha256: excerpt ? createHash('sha256').update(excerpt, 'utf8').digest('hex') : null,
     retention_mode: retentionMode, body_read_status: readStatus,

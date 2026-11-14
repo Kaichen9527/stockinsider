@@ -6,6 +6,7 @@ import vm from 'node:vm';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { buildPttMentionProvenance } from '../web/src/lib/ptt-mention-provenance.ts';
+import { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt } from '../web/src/lib/ptt-article-parser.ts';
 const require = createRequire(import.meta.url), ts = require('../web/node_modules/typescript');
 // Only a fixed immutable baseline is selectable for the explicit red probe.
 // The ordinary command always tests the current actual call boundary.
@@ -22,6 +23,9 @@ function actual(name, bindings) {
 }
 const compactText = value => String(value ?? '').replace(/\s+/g, ' ').trim();
 const parent = 'https://www.ptt.cc/bbs/Stock/M.1791737000.A.123.html';
+const publishedAt = '2026-10-11T16:43:18.000Z', observedAt = '2026-10-11T16:45:00.000Z';
+const header = '<div class="article-metaline"><span class="article-meta-tag">作者</span><span class="article-meta-value">synthetic-author</span></div><div class="article-metaline"><span class="article-meta-tag">標題</span><span class="article-meta-value">[情報] 2409</span></div><div class="article-metaline"><span class="article-meta-tag">時間</span><span class="article-meta-value">Mon Oct 12 00:43:18 2026</span></div>';
+const article = body => `<div id="main-content">${header}${body}</div><div id="article-polling"></div>`;
 const hash = value => createHash('sha256').update(value).digest('hex');
 function upsertHarness() {
   const writes = [];
@@ -31,6 +35,7 @@ function upsertHarness() {
       in: async () => ({ data: [{ id: 'stock-2409', symbol: '2409' }, { id: 'stock-2383', symbol: '2383' }], error: null }) }; },
   }; } };
   const fn = actual('upsertSourceRawDocuments', { getSupabaseServerClient: () => client,
+    Date: class extends Date { static now() { return Date.parse(observedAt); } },
     resolveSourceSyncLookbackHours: () => 24, sourceRawKey: x => `${x.platform}::${x.documentUrl}`,
     chunkArray: (x, n) => Array.from({ length: Math.ceil(x.length / n) }, (_, i) => x.slice(i * n, (i + 1) * n)),
     truncateSourceContent: text => ({ contentText: text, originalChars: text.length, truncated: false }),
@@ -40,8 +45,9 @@ function upsertHarness() {
   return { fn, writes };
 }
 function doc(platform = 'ptt', author = 'reader', index = 1) { return { platform, sourceEntityId: 'entity', documentUrl: `${parent}#push-${index}`,
+  publishedAt,
   title: 'PTT 留言｜2409', summary: '2409 尚待查證', contentText: '2409 尚待查證', symbols: ['2409', '2383'],
-  metadata: { source_surface: 'ptt_stock_push', parent_document_url: parent, author_name: author, comment_index: index,
+  metadata: { source_surface: 'ptt_stock_push', ptt_publication_valid: true, parent_document_url: parent, author_name: author, comment_index: index,
     comment_tag: '推', matched_symbols: ['2409'], matched_symbol_reason: 'comment_local_tw_symbol_or_name_proximity',
     evidence_excerpt: '2409 尚待查證', body_read_status: 'body_read_bounded', retention_mode: 'metadata_local_excerpt', extraPrivate: 'do not copy' } }; }
 test('actual upsert boundary retains stock-local reply provenance for two authors without ID substitution', async () => {
@@ -61,15 +67,24 @@ test('actual mention boundary leaves non-PTT provenance unchanged', async () => 
   const { fn, writes } = upsertHarness(); await fn([doc('threads')]);
   assert.ok(writes.find(x => x.table === 'candidate_source_mentions').rows.every(row => !('ptt' in row.provenance)));
 });
+test('actual upsert retains metadata but skips PTT mentions when publication header is missing or conflicting', async () => {
+  for (const invalid of [{ publishedAt: null }, { metadata: { ...doc().metadata, ptt_publication_valid: false } }]) {
+    const { fn, writes } = upsertHarness(); await fn([{ ...doc(), ...invalid }]);
+    assert.ok(writes.some(write => write.table === 'source_raw_documents'));
+    assert.equal(writes.some(write => write.table === 'candidate_source_mentions'), false);
+  }
+});
 async function collector(body) {
   const docs = [], signalRows = [];
+  const extractTwSymbolsWithEvidence = actual('extractTwSymbolsWithEvidence', { compactText });
+  const projectPttCollectorArticle = actual('projectPttCollectorArticle', { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt, extractTwSymbolsWithEvidence });
   const fn = actual('scrapePttStock', { getSupabaseServerClient: () => ({ from: () => ({ upsert: async rows => { signalRows.push(...rows); return { error: null }; } }) }),
     loadTwStockAuthority: async () => [{ id: 'stock-2409', symbol: '2409', name: '友達' }, { id: 'stock-2383', symbol: '2383', name: '台光電' }], compactText,
     getSymbolAliases: () => ['友達'], upsertSourceEntity: async () => ({ id: 'entity' }),
     fetchTextWithRetry: async ({ url }) => { if (url === parent) { if (body instanceof Error) throw body; return { text: body }; }
       return { text: '<div class="title"><a href="/bbs/Stock/M.1791737000.A.123.html">[情報] 2409</a></div>' }; },
     sourceFetchFailureCode: () => 'synthetic_failure', isExpectedPttArticleMissing: () => false,
-    extractTwSymbolsWithEvidence: actual('extractTwSymbolsWithEvidence', { compactText }),
+    extractTwSymbolsWithEvidence, projectPttCollectorArticle,
     roundTo: x => x, classifyPttContentSemantics: () => 'editorial_discussion', publisherKeyFor: x => `ptt:${x.author}`,
     filterSymbolScopedDocs: x => x, upsertSourceRawDocuments: async x => { docs.push(...x); return x.length; }, nowIso: () => '2026-10-11T16:45:00Z' });
   await fn(); return { docs, signalRows };
@@ -81,7 +96,7 @@ test('actual body-fetch failure stores title-only status and never manufactures 
 });
 test('actual bounded collector retains minimum per-comment matches, no post body or full-coverage claim', async () => {
   const push = (author, text) => `<div class="push"><span class="push-tag">推</span><span class="push-userid">${author}</span><span class="push-content">: ${text}</span></div>`;
-  const { docs } = await collector(`<div id="main-content">友達 2409 股票 public synthetic body${push('a', '2409 股票未證實')}${push('b', '2409 股票有風險')}${push('c', '無關回覆')}</div><div id="article-polling">`);
+  const { docs } = await collector(article(`友達 2409 股票 public synthetic body${push('a', '2409 股票未證實')}${push('b', '2409 股票有風險')}${push('c', '無關回覆')}`));
   assert.equal(docs.length, 3); assert.equal(docs[0].contentText, '[情報] 2409'); assert.equal(docs[0].metadata.body_read_status, 'body_read_bounded');
   for (const d of docs.slice(1)) { assert.equal(d.metadata.parent_document_url, parent); assert.equal(d.metadata.body_retained, false);
     assert.equal(d.metadata.replies_read_completeness, 'partial'); assert.deepEqual(Array.from(d.metadata.matched_symbols), ['2409']); }
@@ -91,7 +106,7 @@ test('actual fetched shell reports missing body instead of full text', async () 
   assert.equal(docs[0].metadata.body_read_status, 'title_only_body_missing'); assert.equal(docs[0].metadata.body_retained, false);
 });
 test('actual symbol extractor keeps reply2383 separate from parent2409', async () => {
-  const { docs } = await collector('<div id="main-content">友達 2409 股票正文<div class="push"><span class="push-tag">→</span><span class="push-userid">reader</span><span class="push-content">: 2383 股票另有風險</span></div></div><div id="article-polling">');
+  const { docs } = await collector(article('友達 2409 股票正文<div class="push"><span class="push-tag">→</span><span class="push-userid">reader</span><span class="push-content">: 2383 股票另有風險</span></div>'));
   assert.equal(docs.length, 2); assert.deepEqual(Array.from(docs[0].symbols), ['2409']);
   assert.deepEqual(Array.from(docs[1].metadata.matched_symbols), ['2383']);
   assert.equal(buildPttMentionProvenance({ ...docs[1], symbol: '2409' }).stock_local_match_basis_retained, false);
