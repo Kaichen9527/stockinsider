@@ -1,0 +1,145 @@
+{
+  "schema": "stockinsider-contabo-ptt-real-replay-v1",
+  "commit": "e676e04aa34c42abc0b539ad087b2902abeb3ff2",
+  "inputs": [
+    {
+      "case": "fresh-common",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1794636177.A.3FD.html",
+      "retrievedAt": "2026-11-14T17:02:31.714425+00:00",
+      "sha256": "689df2790b218adf57319160cc31bc92ee00dec444743cadad18f3f1e93fea05",
+      "length": 19199
+    },
+    {
+      "case": "old-common",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786339102.A.4BB.html",
+      "retrievedAt": "2026-11-14T17:02:31.851006+00:00",
+      "sha256": "753cebed1dfd72f83c672aa1c12325a5f52aa74ea6b786d176154b36c783b4c4",
+      "length": 28216
+    },
+    {
+      "case": "etf-template",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1793668906.A.F2F.html",
+      "retrievedAt": "2026-11-14T17:02:32.019900+00:00",
+      "sha256": "be600ee5d11d895d419a55193e8c9f390bcde1a47564d935139bc6e1cf8f0073",
+      "length": 101267
+    },
+    {
+      "case": "reply",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1794662133.A.F4F.html",
+      "retrievedAt": "2026-11-14T17:02:32.243937+00:00",
+      "sha256": "83d2b4db858af559912b5428429aabd11f516c910482c0e109cb32e90471d907",
+      "length": 23306
+    }
+  ],
+  "version": {
+    "node": "22.14.0",
+    "parse5": "7.3.0",
+    "typescript": "5.9.3",
+    "entities": "6.0.1"
+  },
+  "isolation": {
+    "network": "loopback-only",
+    "productionDatabase": false,
+    "rawDisclosed": false
+  },
+  "acceptance": false,
+  "findings": [
+    {
+      "case": "fresh-common",
+      "expected": "own-body symbol 4763",
+      "observed": "no body symbol",
+      "status": "FAIL"
+    },
+    {
+      "case": "old-common",
+      "expected": "original date rejected when older than 30 days",
+      "observed": "same",
+      "status": "PASS"
+    },
+    {
+      "case": "etf-template",
+      "expected": "no template-linked 2330",
+      "observed": "template false positive 2330",
+      "status": "FAIL"
+    },
+    {
+      "case": "reply",
+      "expected": "unresolved original blocked",
+      "observed": "same",
+      "status": "PASS"
+    }
+  ],
+  "parser": {
+    "kind": "ptt-private-artifact-replay-v1",
+    "source": "explicit_private_input_only",
+    "stockAuthority": "caller_supplied_not_listing_proof",
+    "coverage": "unknown",
+    "actualRightsOrQueueAcceptance": false,
+    "rows": [
+      {
+        "label": "fresh-common",
+        "htmlSha256": "689df2790b218adf57319160cc31bc92ee00dec444743cadad18f3f1e93fea05",
+        "parserVersion": "ptt-own-body-v1",
+        "bodyStatus": "body_read",
+        "sourcePublishedAt": "2026-11-14T06:02:55.000Z",
+        "clockConsistent": true,
+        "cleanBodySha256": "cc2d46c5dab868328e2f08cefde67e3420785fc56b279677b31be8a40788d91d",
+        "bodySymbols": [],
+        "observationStatus": "blocked",
+        "reason": "body_local_symbol_basis_missing_or_partial",
+        "researchAdmissionAuthority": false,
+        "instrumentQualificationAuthority": false,
+        "queue": "blocked_existing_metadata_scope"
+      },
+      {
+        "label": "old-common",
+        "htmlSha256": "753cebed1dfd72f83c672aa1c12325a5f52aa74ea6b786d176154b36c783b4c4",
+        "parserVersion": "ptt-own-body-v1",
+        "bodyStatus": "body_read",
+        "sourcePublishedAt": "2026-08-10T05:18:20.000Z",
+        "clockConsistent": true,
+        "cleanBodySha256": "526d5b9e191691e8b46750f5043a524f97f7106166d408c4d6ea0aa46212db84",
+        "bodySymbols": [
+          "2330"
+        ],
+        "observationStatus": "blocked",
+        "reason": "source_publication_older_than_30_days",
+        "researchAdmissionAuthority": false,
+        "instrumentQualificationAuthority": false,
+        "queue": "blocked_existing_metadata_scope"
+      },
+      {
+        "label": "etf-template",
+        "htmlSha256": "be600ee5d11d895d419a55193e8c9f390bcde1a47564d935139bc6e1cf8f0073",
+        "parserVersion": "ptt-own-body-v1",
+        "bodyStatus": "body_read",
+        "sourcePublishedAt": "2026-11-03T01:21:44.000Z",
+        "clockConsistent": true,
+        "cleanBodySha256": "03aea8fbba98e1e0d8c2b3b7f82db1b230ad4a6350cb2eb029acdbed2f337e40",
+        "bodySymbols": [
+          "2330"
+        ],
+        "observationStatus": "ready_observation",
+        "reason": null,
+        "researchAdmissionAuthority": false,
+        "instrumentQualificationAuthority": false,
+        "queue": "blocked_existing_metadata_scope"
+      },
+      {
+        "label": "reply",
+        "htmlSha256": "83d2b4db858af559912b5428429aabd11f516c910482c0e109cb32e90471d907",
+        "parserVersion": "ptt-own-body-v1",
+        "bodyStatus": "body_read",
+        "sourcePublishedAt": "2026-11-14T13:15:31.000Z",
+        "clockConsistent": true,
+        "cleanBodySha256": "3ed47eb2b97401def28b7f63d3067afe0953086294a47c6595313d9eab3d9133",
+        "bodySymbols": [],
+        "observationStatus": "blocked",
+        "reason": "quoted_or_reposted_original_unresolved",
+        "researchAdmissionAuthority": false,
+        "instrumentQualificationAuthority": false,
+        "queue": "blocked_existing_metadata_scope"
+      }
+    ]
+  }
+}
