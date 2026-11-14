@@ -1,0 +1,74 @@
+{
+  "schema": "stockinsider-contabo-native-share-product-replay-v1",
+  "runtimeCommit": "c54f1b7ed8a6dea4c7d04ac2997b8743200e090e",
+  "fixedGitBlobCount": 17,
+  "nodeVersion": "v22.14.0",
+  "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+  "captureCommit": "d2a4a77a0b0fd97f6ee0732a8c5fa16afee0b665",
+  "sameBodiesForBothSymbols": true,
+  "deltaVisibleWithoutInferredEvent": true,
+  "results": [
+    {
+      "decodedBytes": 8040900,
+      "gaps": [
+        "native_share_capture_workflow_identity_unverified",
+        "native_share_original_publication_clock_unverified",
+        "native_share_parser_not_acquisition_or_publication_authority"
+      ],
+      "parserVersion": "sfb-11371-ohlc-shares-issued-capital-v1",
+      "parsedSessions": 57,
+      "cutoff": "2026-11-14T19:01:47.197648+00:00",
+      "symbol": "5274",
+      "sourceAuthority": false,
+      "schema": "launch-tpex-11371-native-shares-v1",
+      "availableAt": "2026-11-14T18:10:45.547237+00:00",
+      "issuedShareChanges": [],
+      "revisionId": "native-11371:fab525799450e92d09be22a9f2724212d9b0b1eb37f1ffff263058f874024f06",
+      "declaredBytes": 8040900,
+      "datasetId": 11371,
+      "publicationAuthority": false,
+      "responseReceiptCount": 57,
+      "nextQuoteRowsWithoutCurrentLimitAuthority": 57
+    },
+    {
+      "decodedBytes": 8040900,
+      "gaps": [
+        "native_share_capture_workflow_identity_unverified",
+        "native_share_original_publication_clock_unverified",
+        "native_share_parser_not_acquisition_or_publication_authority"
+      ],
+      "parserVersion": "sfb-11371-ohlc-shares-issued-capital-v1",
+      "parsedSessions": 57,
+      "cutoff": "2026-11-14T19:01:47.197648+00:00",
+      "symbol": "6488",
+      "sourceAuthority": false,
+      "schema": "launch-tpex-11371-native-shares-v1",
+      "availableAt": "2026-11-14T18:10:45.547237+00:00",
+      "issuedShareChanges": [
+        {
+          "previousSession": "2026-10-02",
+          "currentSession": "2026-10-05",
+          "previousIssuedShares": 478113725,
+          "currentIssuedShares": 528113725,
+          "deltaShares": 50000000,
+          "effectiveSession": null,
+          "eventKind": null,
+          "adjustmentFactor": null
+        }
+      ],
+      "revisionId": "native-11371:014630cb924ee2e3d69ced49714e774e4cbe20c94e890be0674b7a40a5870e25",
+      "declaredBytes": 8040900,
+      "datasetId": 11371,
+      "publicationAuthority": false,
+      "responseReceiptCount": 57,
+      "nextQuoteRowsWithoutCurrentLimitAuthority": 57
+    }
+  ],
+  "scope": {
+    "network": "PRIVATE_LOOPBACK",
+    "osActor": "NONROOT",
+    "actualSelectedCacheBinding": false,
+    "momentOfHistoricalPublicationEstablished": false,
+    "productionMutated": false
+  }
+}
