@@ -1,0 +1,60 @@
+{
+  "schema": "stockinsider-tpex-ex-date-return-basis-control-v1",
+  "scope": "EXCHANGE_REFERENCE_AND_HISTORICAL_DAILY_OHLC_ARITHMETIC_CONTROLS",
+  "symbol": "5274",
+  "exchangeMethod": "https://www.tpex.org.tw/zh-tw/announce/market/ex/cal.html",
+  "actualTermsEvidence": "1b22f1a767c7ff9607907bbaf6a3add6b38be246",
+  "sourcePricesEvidence": "4d4c0622700ee0a495f3dd4510888621beb9d6d5",
+  "rows": [
+    {
+      "pre": "2026-06-25",
+      "action": "2026-06-26",
+      "rawPreviousClose": "17425",
+      "rawActionDayOhlc": [
+        "16620",
+        "17070",
+        "15615",
+        "15615"
+      ],
+      "officialReferencePrice": "17345.0000000000",
+      "officialTickRoundedTradingBase": null,
+      "referenceFromCashAndShareTerms": "17345.0000000000",
+      "referenceRoundedTwoMatches": true,
+      "rawCloseChange": "-0.1038737446",
+      "referenceNormalizedRawCloseChange": "-0.0997405592",
+      "holderValueChangeCashNoReinvestmentControl": "-0.0992826399",
+      "referenceFactorForPreActionRawBars": "3469/3485",
+      "separateTickRoundedBaseFactorIfUsed": null
+    },
+    {
+      "pre": "2026-07-06",
+      "action": "2026-07-07",
+      "rawPreviousClose": "16270",
+      "rawActionDayOhlc": [
+        "15665",
+        "15695",
+        "14270",
+        "14415"
+      ],
+      "officialReferencePrice": "14790.9100000000",
+      "officialTickRoundedTradingBase": "14790.0000000000",
+      "referenceFromCashAndShareTerms": "14790.9092688034",
+      "referenceRoundedTwoMatches": true,
+      "rawCloseChange": "-0.1140135218",
+      "referenceNormalizedRawCloseChange": "-0.0254149339",
+      "holderValueChangeCashNoReinvestmentControl": "-0.0254148857",
+      "referenceFactorForPreActionRawBars": "1479091/1627000",
+      "separateTickRoundedBaseFactorIfUsed": "1479/1627"
+    }
+  ],
+  "monthlySha256": {
+    "2026-06": "b9d8d51a8117aaa1334bdf292bee51221cfb6d6363270bec9e8410ef46e3c307",
+    "2026-07": "80c78fa5616b9b91a958ef7c39598584fbe5f1215dc9c066adf95b2772e42a42"
+  },
+  "limits": [
+    "No adjustment authorized for current selected cache.",
+    "The mathematical cash control assumes qualification for the distribution, and excludes tax, reinvestment and execution. It is not a portfolio return.",
+    "Official reference and tradable tick-rounded auction base are separate.",
+    "No asserted complete event coverage, historical publication clock, or exact product score."
+  ]
+}
