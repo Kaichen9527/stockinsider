@@ -81,7 +81,9 @@ def _tools():
         info = (pg/name).stat()
         if not stat.S_ISREG(info.st_mode) or info.st_uid not in (0,os.getuid()) or info.st_mode & 0o022:
             raise PortableFixtureRejected('tool_ownership_rejected')
-    conventional_node = Path('/usr/bin/node')
+    # Onsite explicitly supplies /usr/bin/node22; retain conventional node for
+    # installations where Node22 owns that path. Neither comes from caller PATH.
+    conventional_node = Path('/usr/bin/node22') if Path('/usr/bin/node22').is_file() else Path('/usr/bin/node')
     runtime_node = Path('/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node')
     node = conventional_node if conventional_node.is_file() else runtime_node
     info = node.stat()

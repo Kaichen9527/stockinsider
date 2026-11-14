@@ -1,0 +1,230 @@
+{
+  "pythonTests": 56,
+  "OWNED_RESTORE_ENGINE_FIXTURE": {
+    "appExecute": 3,
+    "appRls": 7,
+    "appSelect": 7,
+    "applicationObjectContractVerified": true,
+    "cleanup": {
+      "postmasterReaped": true,
+      "privateTreeRemoved": true,
+      "socketRemoved": true
+    },
+    "currentDatabaseObserved": true,
+    "databaseBytes": 76134067,
+    "databaseRestored": true,
+    "filteredTocSha256": "602d0c1f09c3c2b413227e6c4a91497cdf1cea3a3200cf11856dedab5afe1aad",
+    "fixture": "GENERATED_PUBLIC_STRUCTURAL_STUBS_NOT_REAL_APP",
+    "foreignKeys": 2,
+    "fullBusinessDataAcceptance": false,
+    "invalidConstraints": 0,
+    "limitations": [
+      "declared constraints and seven fixed public row relations only",
+      "no provider/key-escrow or full business-semantic validation",
+      "no Next rollback/service activation"
+    ],
+    "lineageOrphans": 0,
+    "lineageRelationsChecked": 7,
+    "lineageValidation": "DECLARED_FKS_AND_FIXED_PUBLIC_RELATIONS",
+    "maxRelationBytes": 65536000,
+    "nextRollback": "NOT_RUN",
+    "ownerAllowlistVerified": true,
+    "policies": 9,
+    "portableContractVerified": true,
+    "privateUnixClusterObserved": true,
+    "productionContinuity": "HOST_REQUIRED",
+    "providerRecovery": "NOT_RUN",
+    "publicTables": 13,
+    "restoredIdentityFenceDisabled": true,
+    "rlsTables": 13,
+    "schema": "stockinsider-owned-db-restore-v1",
+    "serverVersionNum": "170011",
+    "serviceActivation": "NOT_RUN",
+    "tocExcluded": 5,
+    "tocSha256": "23341f627f73c172cead51ce415d376e9d62ea54000180ecd96d90ac4c32382e"
+  },
+  "COMPOSED_PUBLIC_GCM_PG": {
+    "appExecute": 3,
+    "appRls": 7,
+    "appSelect": 7,
+    "applicationObjectContractVerified": true,
+    "cleanup": {
+      "postmasterReaped": true,
+      "privateTreeRemoved": true,
+      "socketRemoved": true
+    },
+    "currentDatabaseObserved": true,
+    "databaseBytes": 8459955,
+    "databaseRestored": true,
+    "filteredTocSha256": "0a741f129d11ab5bd17744e8a2ee95bf6148ea799d76ff5386df23d1ef383a85",
+    "foreignKeys": 2,
+    "fullBusinessDataAcceptance": false,
+    "invalidConstraints": 0,
+    "limitations": [
+      "declared constraints and seven fixed public row relations only",
+      "no provider/key-escrow or full business-semantic validation",
+      "no Next rollback/service activation"
+    ],
+    "lineageOrphans": 0,
+    "lineageRelationsChecked": 7,
+    "lineageValidation": "DECLARED_FKS_AND_FIXED_PUBLIC_RELATIONS",
+    "maxRelationBytes": 516096,
+    "nextRollback": "NOT_RUN",
+    "ownerAllowlistVerified": true,
+    "policies": 9,
+    "portableContractVerified": true,
+    "privateUnixClusterObserved": true,
+    "productionContinuity": "HOST_REQUIRED",
+    "providerRecovery": "NOT_RUN",
+    "publicTables": 13,
+    "restoredIdentityFenceDisabled": true,
+    "rlsTables": 13,
+    "schema": "stockinsider-owned-db-restore-v1",
+    "serverVersionNum": "170011",
+    "serviceActivation": "NOT_RUN",
+    "tocExcluded": 5,
+    "tocSha256": "877c2a82bd3c06b5d95ce57a21e84d2227dbaf805305b83950fda9c5c1547420"
+  },
+  "PORTABLE_SQL_FIXTURE_EVIDENCE": {
+    "checks": {
+      "compatLogin": 0,
+      "dataPlaneRls": 4,
+      "fenceDisabled": true,
+      "fixtureOwners": 2,
+      "fixturePolicies": 2,
+      "fixtureRls": 2,
+      "legacyFunctionAbsent": true,
+      "portableRoles": 14,
+      "providerRows": 0,
+      "signals": 12,
+      "stocks": 2,
+      "vaultAbsent": true
+    },
+    "cleanup": {
+      "postmasterReaped": true,
+      "privateTreeRemoved": true,
+      "socketRemoved": true
+    },
+    "currentDatabaseObserved": true,
+    "dataSha256": "53e611e465041f220bdb816e208f2b3ecddfc1a45e5412b8a12fca4f8393e1ca",
+    "diskCiphertextCustodyIntegrated": false,
+    "fixtureAnonWriteRejected": true,
+    "fullApplicationAcceptance": false,
+    "limitations": [
+      "fixed generated SQL subset only",
+      "not full seven-table application validation",
+      "no backup/key/ciphertext integration",
+      "no production admission; live entry disabled"
+    ],
+    "liveRestoreAllowed": false,
+    "nonroot": true,
+    "ownedPgdataObserved": true,
+    "ownerAclReplayed": true,
+    "passed": true,
+    "postgresToolVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "productionBackupOrKeyReceived": false,
+    "schema": "stockinsider-t17-portable-sql-fixture-v1",
+    "scope": "generated_public_sql_fixture_only",
+    "serverVersionNum": "170011",
+    "sourceSqlBlobIds": {
+      "deployment/vps/bootstrap-stockinsider-postgres.sql": "c58d12585d312701d47b5789d0572f8453424697",
+      "migrations/20260911_contabo_data_plane_v1.sql": "f3fa038cf6695f9ff8a8b422b1b3a64ed6da565a",
+      "scripts/build-contabo-restore-list.mjs": "897c74009ced9a8f8d8991d8eee80a5e7e4444a0"
+    },
+    "tocExcluded": 5,
+    "unixSocketOnly": true
+  },
+  "DISK_CUSTODY_EVIDENCE": {
+    "fixturePlaintextBytes": 33554432,
+    "kernelCustody": "REFUSED",
+    "kernelErrno": 25,
+    "maxCopyChunkBytes": 1048576
+  },
+  "actualCli": {
+    "databaseRestored": false,
+    "durationSeconds": 0.001,
+    "nativeHoldRetained": true,
+    "reason": "private_loopback_network_required",
+    "schema": "stockinsider-staging-database-restore-v1",
+    "status": "REJECTED"
+  },
+  "checks": [
+    {
+      "name": "python",
+      "exit": 0,
+      "expectedExit": 0,
+      "seconds": 14.336,
+      "logSha256": "c30b067f49b9c3d84d7995f35d1f436f9c559a4e9d8a02f586a45f65faf7c0fa"
+    },
+    {
+      "name": "candidate",
+      "exit": 0,
+      "expectedExit": 0,
+      "seconds": 0.193,
+      "logSha256": "0f7c02e8d03c85378825bb6d221c7c6c408bcfab12de453ea55aa457d5a08984"
+    },
+    {
+      "name": "cli",
+      "exit": 2,
+      "expectedExit": 2,
+      "seconds": 0.089,
+      "logSha256": "382a441ee32bf3a889d066a03c8f8c56e6ea2d41fe68e0940da3759f2879fcb4"
+    }
+  ],
+  "schema": "stockinsider-runnable-db-staging-checks-v1",
+  "parentCommit": "aad99a49be95e09f6a58c4f38dda2ca79c25c408",
+  "recordedAtUtc": "2026-11-14T16:14:37.807184+00:00",
+  "sha256": {
+    "deployment/staging/vnext/t17_keyfd/portable_sql_fixture_adapter.py": "d15d15ac9b74a3af2539aab4b9169ce8d330eb65132953553afb0ac1871da33f",
+    "deployment/staging/vnext/t17_keyfd/portable_restore_engine.py": "ed4cab9c0f490a0f4e1128c22e215d9319035b63fa1cd821291889fbea133b77",
+    "deployment/staging/vnext/t17_keyfd/staging_admission.py": "6166526166e8005bbb28fd2c47c937afca22ff2d1980065e1a8af6a37e1dcb21",
+    "deployment/staging/vnext/t17_keyfd/verified_backup_stream.py": "dffea7b392ae443d4d5b2afd4ce081d0da2cdffae3b8fb813931ca3f09e0ea3e",
+    "deployment/staging/vnext/t17_keyfd/stage_database_restore.py": "2e0fb79f3d1888ef940d7ec7973da136fcb18c488634c0f34f280f4f38c096fb",
+    "scripts/staging_restore_database.py": "1acc301e4f37f696b2518a77739c9ba59c782a702a76d707a01466f5c3c6c8b2",
+    "scripts/tests/test_t17_portable_restore_engine.py": "3b459d3233d1be930deef2ad8af32a79062f76af5648b0b91cbdc61204617d9a",
+    "scripts/tests/test_t17_staging_admission.py": "dcec6a0a522226398d8ad8430d8ee5ffee71e2ed9d655b94d9e6862fafe41fed",
+    "scripts/tests/test_t17_verified_backup_stream.py": "939e494ff279ce0b5e47b2f7c221e2df10ba522f2cb31dca85794dc0a68e3f65"
+  },
+  "independentEngineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "engineActualTestsPass": 5,
+    "admissionTestsPass": 7,
+    "streamActualTestsPass": 7,
+    "formalA1": false,
+    "premise": "trusted host root-coordinator fixed-FD handoff and uncompromised kernel; full onsite OS positive not claimed"
+  },
+  "newEntryRunnable": true,
+  "historicalDisabledFacadesChanged": false,
+  "realBackupOrKeyReceivedInCloud": false,
+  "productionTouched": false,
+  "nativeHoldRetained": true,
+  "providerRecovery": "NOT_RUN_SEPARATE",
+  "nextRollback": "NOT_RUN_SEPARATE",
+  "productionContinuity": "HOST_REQUIRED_SEPARATE",
+  "fullReleaseAcceptance": false,
+  "fullOnsiteRealBackupExecution": "NOT_RUN_BY_CLOUD",
+  "fullExactBranchWebBuildTypesLint": "NOT_RUN: full checkout unavailable Git CONNECT503",
+  "reportedHost": {
+    "source": "coordinator_report_not_admission",
+    "ciphertextBytes": 491423538,
+    "workFreeBytes": 8333492224,
+    "hostFreeAfterImageBytes": 18731298816,
+    "hostAvailableMemoryBytes": 4211789824,
+    "sourceDatabaseApproxBytes": 3611817651,
+    "workCostAtReportedDatabaseBytes": 7504131763,
+    "sourceReadOnlyVerity4096Reported": true,
+    "workPreallocatedDmCryptExt4Reported": true
+  },
+  "resolvedReviewFindings": [
+    "exclusive originalOFD host lock acquired",
+    "preallocated image exact backing binding and host reserve outside image",
+    "2GiB relation-file ceiling and512MiB temp bound",
+    "original v2/v3/compact manifest gates retained",
+    "key parent nondumpable and noNewPrivileges before read",
+    "full authentication per consumer no readyBoolean",
+    "seven actual row lineage checks and named RLS/grants",
+    "cleanup fail closed and repeated softstop ignored",
+    "only typed bounded numeric SQL-derived receipt fields"
+  ]
+}
