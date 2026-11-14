@@ -1,0 +1,63 @@
+{
+  "schema": "stockinsider.gmail-notice-exact-taipei-window-controls.v1",
+  "scope": "Existing user-authorized read-only Gmail connector, exact sender-domain query, metadata/IDs inspected in memory; aggregates only",
+  "observationUtc": "2026-11-14 23:11:16 UTC",
+  "comparisonWindows": [
+    {
+      "date": "2026-11-08",
+      "counts": {
+        "taipeiEpoch": 1,
+        "pstEpoch": 0,
+        "dateText": 0
+      },
+      "dateTextEqualsTaipei": false,
+      "dateTextEqualsPst": true,
+      "epochResultsDiffer": true
+    },
+    {
+      "date": "2026-11-12",
+      "counts": {
+        "taipeiEpoch": 1,
+        "pstEpoch": 0,
+        "dateText": 1
+      },
+      "dateTextEqualsTaipei": true,
+      "dateTextEqualsPst": false,
+      "epochResultsDiffer": true
+    }
+  ],
+  "exactRepeatAndOverlap": {
+    "sampleDay": "2026-11-12",
+    "resultCount": 1,
+    "repeatSameIdSet": true,
+    "overlapSameIdSet": true
+  },
+  "metadataSample": {
+    "knownSenderMatches": 5,
+    "providerInternalDatesWithDifferentTaipeiAndPacificDate": 2
+  },
+  "recordedPrivateData": {
+    "mailIds": false,
+    "senderAddresses": false,
+    "messageHeaders": false,
+    "exactMessageTimestamps": false,
+    "subject": false,
+    "body": false,
+    "memberLinks": false
+  },
+  "productionWorker": "NOT_RUN",
+  "membershipArticle": "NOT_RUN",
+  "mailboxMutation": false,
+  "officialReferences": [
+    "https://developers.google.com/workspace/gmail/api/guides/filtering",
+    "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message",
+    "https://developers.google.com/workspace/gmail/api/auth/scopes",
+    "https://developers.google.com/identity/protocols/oauth2#expiration"
+  ],
+  "acceptanceDesign": [
+    "Build numeric query window from Taipei start and cutoff, with bounded overlap, then enforce exact half-open window on provider internalDate in milliseconds before admission",
+    "Dedupe with immutable message ID under existing private source ledger; do not advance a checkpoint over unaccounted pages or replace source-publication time with internalDate",
+    "Existing interactive connector authorization does not establish StockInsider background OAuth; obtain a dedicated approved read-only flow and verify expiry and revocation",
+    "Keep coverage gaps explicit when scopes, credentials, GMail API or member article access fail"
+  ]
+}
