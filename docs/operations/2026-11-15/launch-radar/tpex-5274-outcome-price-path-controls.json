@@ -1,0 +1,65 @@
+{
+  "schema": "stockinsider-launch-radar-outcome-price-path-control-v1",
+  "symbol": "5274",
+  "sourcePriceReceipt": "https://github.com/Kaichen9527/stockinsider/commit/4d4c0622700ee0a495f3dd4510888621beb9d6d5",
+  "scope": "Reproducible price-path controls on later-observed official OHLC. Dates are controls, not published ranking signals. No claim of trade execution, costs, corporate-action adjustment, or stock-picking validity.",
+  "cases": [
+    {
+      "case": "fixed_report_date_control",
+      "hypotheticalSignalSession": "2026-11-05",
+      "observationThrough": "2026-11-13",
+      "researchClose": {
+        "observedSessions": 6,
+        "basis": "12635.00",
+        "status": "stop_first",
+        "hitSession": "2026-11-10",
+        "hitOffset": 3
+      },
+      "simulatedOpenPricePathBeforeCosts": {
+        "observedSessions": 6,
+        "basis": "11375.00",
+        "status": "pending",
+        "hitSession": null,
+        "hitOffset": null
+      }
+    },
+    {
+      "case": "known_before_maturity",
+      "hypotheticalSignalSession": "2026-11-11",
+      "observationThrough": "2026-11-13",
+      "researchClose": {
+        "observedSessions": 2,
+        "basis": "12555.00",
+        "status": "pending",
+        "hitSession": null,
+        "hitOffset": null
+      },
+      "simulatedOpenPricePathBeforeCosts": {
+        "observedSessions": 2,
+        "basis": "13375.00",
+        "status": "pending",
+        "hitSession": null,
+        "hitOffset": null
+      }
+    },
+    {
+      "case": "historical_target_math_control",
+      "hypotheticalSignalSession": "2026-08-26",
+      "observationThrough": "2026-09-09",
+      "researchClose": {
+        "observedSessions": 10,
+        "basis": "15690.00",
+        "status": "target_first",
+        "hitSession": "2026-09-07",
+        "hitOffset": 8
+      },
+      "simulatedOpenPricePathBeforeCosts": {
+        "observedSessions": 10,
+        "basis": "15690.00",
+        "status": "target_first",
+        "hitSession": "2026-09-07",
+        "hitOffset": 8
+      }
+    }
+  ]
+}
