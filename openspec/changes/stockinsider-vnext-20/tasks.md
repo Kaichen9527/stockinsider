@@ -1,5 +1,15 @@
 # Tasks — partial VM implementation, not release-complete
 
+## Corrected volume coverage / actual11370 parser / real launch writer frontier
+
+- [x] Evidence-backed Goal385 correction:11371 technical-only; raw11856nets survive but absent independent same-scope denominator keepsratios/chipweightsnull. Publicb331 equals local03d565+33 validatedtree, notnewexact-commit formalapproval.
+- [x] Separate11370licenseddatedCSV/private proof/exactselected20/issuedregime/wholeflow-content binding, fixed5274v2 profile+CLI4keyobservations; publicab667 equals locallytestedea3 whole tree,581/581/types/lint/build+33controlledbrowserPASS. Preservefirst581types-buildTS2345/browserNOT_RUN and reviewedrepair. Existingprefix/weights/legacyprofiles retained.
+- [x] Externalfixedab667productCLI real5274/6488 each21/21,40462652bytes,all8windowSUMsPASS(b629); capture19:16UTC laterobserved, noCloudraw/DB/appscore/rank/onlineclock acceptance.
+- [ ] Implementreal additive licensed-source artifact/ingest/factproducer, ownSQL16rule score/launchqualification/21:30snapshotCAS, discriminatedread/UI+singlepolicydispatch. FinanceNULL maynotveto puremomentum; missingchips/fullweight/currentrights/venue/liquidity/price-actions/review blocks. Existingdenialguard/legacyRPC not completion. No JSproof/serializedpoints DBauthority, no TWDflow-as-shares proxy.
+- [ ] Actualselectedcache/DB/score/publication, realadjacentsessions, nativeHOLD/A1/CI/release remainpending. Raw932prices needactionlineage;11633/venue/one-price/TWSEscope metadata/T09 hypotheticalcontrols retainedforfuturetests. Financialdrainownedleasefix remainsdistinctlater task. No SQLapply/production/timer/iCloud action.
+
+Evidence: docs/operations/2026-11-15/launch-radar/ALL-SESSION.md, all-session-checks.json and chip-coverage-checks.json; existing volume-coverage-amendment.md. Old checkpoints below are historical.
+
 ## Native11371 source checkpoint — source c54f1b7
 
 - [x] Separate licensed native CSV parser, exact issued-share intervals, private selected51+predecessor/price/calendar/action/cutoff binding and immutable independent volume revision; no original history/ledger/writer/RLS change.
@@ -237,3 +247,9 @@ Evidence: docs/operations/2026-11-08/vnext/SSH-PATH-REPLAY.md and ssh-path-repla
 Design: linux-restore-release-amendment.md. Source inventory: docs/operations/2026-11-08/vnext/BACKUP-RESTORE-SOURCE-MAP.md.
 
 Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-restore-release-checks.json. This is source/fixture evidence, not actual backup/PG/Next staging acceptance.
+
+## 2026-11-15 launch UI checkpoint (engineering only)
+
+- [x] Default-off real Home/detail new-policy reader, immutable version links and maximum120-second current-proof demotion; public allowlist, mixed-policy/revision refusal and original historical reader preserved. Source96f4650 equals locally testedf79cfb4 tree;593/types/lint/build+33OIDC+10controlled launch desktop/mobile PASS. See `docs/operations/2026-11-15/launch-radar/LAUNCH-UI.md`.
+- [ ] Actual licensed source-fact producer, SQL16-rule score/new qualification/CAS writer and21:30cycle integration/acceptance. No fullT08 completion inferred from UI or legacy denial guards.
+- [ ] Single-writer cutover must account for BOTH loaded19:00 preliminary and21:00research core publication plus direct/manual/retry/failure paths; preserve preparation/20:15freeze/20:40reconcile and old snapshots. Source-only work in progress, no live timer/service call or change.

@@ -1,5 +1,13 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## Current launch UI source checkpoint
+
+Public **96f4650bc4385301741db589344e0c91093eacb7**, identical whole-tree to local **f79cfb4647ed3df60c379f0df24ccda9edf15db0**, passes593/types/lint/build plus33controlledOIDC and10real-Next/synthetic-RPC desktop/mobile cases. [Behavior, history compatibility, failures and limits](../../2026-11-15/launch-radar/LAUNCH-UI.md), [receipt](../../2026-11-15/launch-radar/launch-ui-checks.json). Default-off same-version homepage/detail and120-second current-proof demotion are connected; old historical URLs remain original-reader. SQL source facts/newscore/qualification/CAS writer and21:30cutover remain inprogress, not actual publication acceptance. Native HOLD/A1/PRhead/production remain unchanged. Older labels below retain checkpoint-time scope.
+
+## Current corrected coverage /11370 source checkpoint
+
+Public **ab667c9c74df974fe22fdaa37a4fbc6069a6084c** exactly matches the whole tree of local **ea3b3c3ff6ec2b4f72edb9d186d6341d23a57567** validated581/types/lint/build+33controlledbrowser; metadata differs through supported nonforce connector publication. [Source/status](../../2026-11-15/launch-radar/ALL-SESSION.md), [receipt](../../2026-11-15/launch-radar/all-session-checks.json), [CLI/manifest contract](../../2026-11-15/launch-radar/ALL-SESSION-HANDOFF.md).11371technical-only is separatefrom11370all-session/11856flows. Priorc54chipdenominator/full100scope assumption is superseded by fbc8c engineering evidence under approvedGoal385. Externalb629actualab667CLI parsedboth21/21/40462652bytes andall8sumsPASS; actualselectedDB/appscore/rank/onlineclock NOT_RUN. Nextreal launch source-fact producer/SQLwriter/read/UI is inprogress, legacyRPC/financial20:30/denialguard are NOTT08completion. NativeHOLD/A1/PRhead/production unchanged. Older labels below retain checkpoint-time meaning.
+
 ## Current actual11371 CLI followup
 
 External **e24bbec829500b557a83e6abc5555d124f1eb924** executes fixed **c54f1b7ed8a6dea4c7d04ac2997b8743200e090e**:5274 and6488 each57/57,8,040,900bytes;6488 exact+50M interval with event/effective/factornull,5274 unchanged, both prospective-limit authorityfalse. [Followup and genuine clocks](../../2026-11-15/launch-radar/NATIVE-SHARE-EXTERNAL.md), [copied receipt/source glue](../../2026-11-15/launch-radar/native-share-external-followup.json). Cloud verified metadata, not raw bytes. Selected-cache/appscore/real-ranking date not run; T09 controls07dcbc23 are future persistence inputs, not issued-signal performance. Prior pending-parser labels retain their earlier checkpoint time; other gates unchanged.
