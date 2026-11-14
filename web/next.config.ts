@@ -8,7 +8,10 @@ const nextConfig: NextConfig = {
       { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
       { key: 'Surrogate-Control', value: 'no-store' },
       { key: 'Vary', value: 'Cookie, Authorization' },
-      { key: 'Referrer-Policy', value: 'no-referrer' },
+      // Native POST forms need their same-origin Origin header for CSRF checks.
+      // no-referrer turns that Origin into null for navigation requests. This
+      // policy still suppresses Referer entirely when navigating to the IdP.
+      { key: 'Referrer-Policy', value: 'same-origin' },
       { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
     ] }];
   },

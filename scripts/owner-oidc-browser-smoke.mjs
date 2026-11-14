@@ -39,8 +39,10 @@ const OWNER = 'NONPRODUCTION_owner_subject_0001';
 const sessionName = '__Host-stockinsider-owner-session';
 const transactionName = '__Host-stockinsider-owner-transaction';
 const receipts = [], failures = [], children = [], servers = [];
+const navigation = [];
 const sensitive = new Set([SECRET, OWNER, 'NONPRODUCTION-unused-access']);
 let cleanupVerified = false, summary = null, primaryFailure = null;
+let activePage, failureLocation = null, failureCookiePresence = null;
 const cleanupFailures = [];
 let browser, scenario = 'owner';
 const codes = new Map();
@@ -59,7 +61,7 @@ function noStore(response, html = false) {
   const headers = typeof response.headers === 'function' ? response.headers() : Object.fromEntries(response.headers);
   assert.ok(headers['cache-control']?.includes('private') && headers['cache-control']?.includes('no-store'));
   assert.equal(headers['surrogate-control'], 'no-store');
-  assert.equal(headers['referrer-policy'], 'no-referrer');
+  assert.equal(headers['referrer-policy'], html ? 'same-origin' : 'no-referrer');
   if (html) assert.ok(headers['x-robots-tag']?.includes('noindex'));
   else assert.ok(headers.vary?.toLowerCase().includes('cookie') && headers.vary?.toLowerCase().includes('authorization'));
 }
@@ -157,6 +159,11 @@ try {
     const context = await browser.newContext({ viewport, ignoreHTTPSErrors: true });
     await context.route('**/*', route => [APP + '/', DISABLED + '/', ISSUER + '/'].some(prefix => route.request().url().startsWith(prefix)) ? route.continue() : route.abort());
     const page = await context.newPage();
+    activePage = page;
+    page.on('response', response => {
+      const url = new URL(response.url());
+      if (response.request().isNavigationRequest()) navigation.push({ origin: url.origin === ISSUER ? 'local_idp' : url.origin === APP ? 'enabled_app' : 'disabled_app', path: url.pathname, status: response.status() });
+    });
     noStore(await page.goto(APP + '/private-research'), true); await state(page, 'signed_out');
     await checkApi(context, APP + '/api/owner/research', 401); record(viewport.name + ':unauthenticated-http');
     const csrf = await context.request.post(APP + '/api/owner/login', { headers: { Origin: 'https://attacker.invalid' }, maxRedirects: 0 });
@@ -237,7 +244,16 @@ try {
     harnessCommit: current, runtimeWebTree: webTree, status: 'PASS', cases: receipts.length, receipts, counts, screenshots,
     identity: 'NONPRODUCTION_LOCAL_CONTROLLED_OIDC_ONLY', secureCookieOnTls: true, productionTlsVerificationDisabled: false,
     actualGoogleOwnerOrPrivateContent: false, databaseOrPaidProviderCalls: 0, productionActions: 0 };
-} catch (error) { primaryFailure = error; }
+} catch (error) {
+  primaryFailure = error;
+  try {
+    if (activePage) {
+      const url = new URL(activePage.url()); failureLocation = { origin: url.origin === ISSUER ? 'local_idp' : url.origin === APP ? 'enabled_app' : 'disabled_app', path: url.pathname };
+      const cookies = await activePage.context().cookies(APP);
+      failureCookiePresence = { transaction: cookies.some(value => value.name === transactionName), session: cookies.some(value => value.name === sessionName) };
+    }
+  } catch { /* No raw URL, cookie or token is retained in diagnostics. */ }
+}
 finally {
   try { if (browser) await browser.close(); } catch { cleanupFailures.push('owned_browser_close_failed'); }
   for (const child of children) {
@@ -268,7 +284,8 @@ finally {
 }
 if (primaryFailure || !cleanupVerified) {
   fs.writeFileSync(path.join(out, 'failure-receipt.json'), JSON.stringify({ status: 'FAIL', completedCases: receipts,
-    ownedProcessesStopped: cleanupVerified, cleanupFailures, primaryFailure: !!primaryFailure }, null, 2) + '\n', { mode: 0o600 });
+    ownedProcessesStopped: cleanupVerified, cleanupFailures, primaryFailure: !!primaryFailure, counts, navigation,
+    failureLocation, failureCookiePresence }, null, 2) + '\n', { mode: 0o600 });
   throw primaryFailure || Error('owned_fixture_cleanup_failed');
 }
 assert.ok(summary && cleanupVerified);
