@@ -456,8 +456,15 @@ export async function loadTwLaunchPatternReadEvidence(client: TwEntryAuthorityCl
     const volumeSnapshots = volumeSessions.map((session) => shared.snapshots.get(session)!);
     const candidateEvents = volumeSnapshots.flatMap((snapshot) =>
       shared.events.get(text(snapshot.snapshot_id))!.filter((event) => event.symbol === request.symbol));
+    // No-event evidence does not prove the precision/unit of a volume number.
+    // TPEx monthly thousand-share/lot data may have been multiplied by1000;
+    // that cannot establish native exact shares over the required51 sessions.
     if (candidateEvents.length) result.missingData.push('launch_share_volume_candidate_action_within_51');
-    else {
+    if (request.exchange === 'TPEX') result.missingData.push('launch_tpex_exact_native_share_volume_51_not_proven');
+    else if (!history.bars.slice(-51).every(bar => Number.isSafeInteger(bar.volume) && bar.volume >= 0)) {
+      result.missingData.push('launch_twse_exact_integer_share_volume_51_not_proven');
+    }
+    else if (!candidateEvents.length) {
       const snapshotIds = volumeSnapshots.map((snapshot) => text(snapshot.snapshot_id));
       result.shareVolume = { status: 'no_candidate_events_in_selected_51',
         revisionId: `${VERSION}:launch-share-volume:${hash([request.exchange, request.symbol, request.cutoff,

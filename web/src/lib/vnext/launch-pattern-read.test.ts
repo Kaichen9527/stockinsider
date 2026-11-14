@@ -240,3 +240,55 @@ test('read failures become data gaps and the client only exposes readonly select
   assert.equal(result.arithmetic.close, null);
   assert.equal(result.publicationAuthority, false);
 });
+
+test('launch TWSE share-volume proof refuses fractional generic raw volumes without changing historical price reads', async () => {
+  const { data, request } = fixture();
+  data[tables.prices].at(-1)!.volume = 1000.5;
+  const result = await readLaunchPatterns(mockClient(data).client, request);
+  assert.equal(result.evidence.history.bars.length, 240);
+  assert.equal(result.arithmetic.close, 100);
+  assert.equal(result.evidence.shareVolume, null);
+  assert.ok(result.evidence.missingData.includes('launch_twse_exact_integer_share_volume_51_not_proven'));
+  assert.equal(result.arithmetic.breakout.volumeRatio, null);
+});
+
+test('TPEx integer thousand-share normalization cannot mint native-share proof; action gap is independent', async () => {
+  for (const action of [false, true]) {
+    const { data, request } = fixture(action ? { index: 199, kind: 'ex_right_dividend', factor: 1 } : undefined);
+    request.exchange = 'TPEX'; request.symbol = '6488';
+    const tpexFeeds = ['tpex:exright-cal:v1', 'tpex:reduction-reference:v1', 'tpex:change-reference:v1'];
+    for (const row of data[tables.calendar]) {
+      row.market = 'TPEX'; row.provider = 'tpex'; row.source_ref = String(row.source_ref).replace('twse-', 'tpex-');
+    }
+    for (const row of data[tables.prices]) {
+      row.exchange = 'TPEX'; row.provider = 'tpex'; row.source_ref = `tpex-openapi:${row.session_id}:6488`;
+    }
+    for (const row of data[tables.feeds]) row.feed_identity = tpexFeeds[Number(row.feed_ordinal)];
+    for (const row of data[tables.events]) {
+      row.symbol = '6488'; row.feed_identity = tpexFeeds[0];
+      const snapshot = data[tables.snapshots].find(item => item.snapshot_id === row.snapshot_id)!;
+      row.source_row_ref = hash(['corporate-action-source-row-v3.1', 'TPEX', snapshot.session_id, row.symbol,
+        row.event_kind, row.pre_action_reference_price, row.post_action_reference_price, row.feed_identity]);
+    }
+    for (const row of data[tables.snapshots]) {
+      row.exchange = 'TPEX'; row.provider = 'tpex';
+      row.dataset_hash = hash(['corporate-action-snapshot-v3.1', 'TPEX', row.session_id, row.session_authority_id,
+        row.corporate_action_version, row.provider, row.collected_at,
+        data[tables.feeds].filter(feed => feed.snapshot_id === row.snapshot_id).map(feed =>
+          [feed.feed_identity, feed.response_byte_count, feed.response_sha256, feed.parsed_row_count]),
+        data[tables.events].filter(event => event.snapshot_id === row.snapshot_id).map(event =>
+          [event.symbol, event.event_kind, event.pre_action_reference_price, event.post_action_reference_price, event.feed_identity, event.source_row_ref])]);
+    }
+    for (const row of request.forwardCalendar!.calendarSessions) {
+      row.market = 'TPEX'; row.provider = 'tpex'; row.sourceUrl = 'https://www.tpex.org.tw/fixture-annual-calendar';
+      row.sourceRef = String(row.sourceRef).replace('twse-', 'tpex-');
+    }
+    const result = await readLaunchPatterns(mockClient(data).client, request);
+    assert.equal(result.evidence.history.bars.length, 240);
+    assert.equal(result.evidence.shareVolume, null);
+    assert.ok(result.evidence.missingData.includes('launch_tpex_exact_native_share_volume_51_not_proven'));
+    assert.equal(result.evidence.missingData.includes('launch_share_volume_candidate_action_within_51'), action);
+    assert.equal(result.arithmetic.breakout.volumeRatio, null);
+    assert.equal(result.arithmetic.contraction.volumeContractionRatio, null);
+  }
+});
