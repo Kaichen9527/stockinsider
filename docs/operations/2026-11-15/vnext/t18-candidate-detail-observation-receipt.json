@@ -1,0 +1,178 @@
+{
+  "actualDetailHttp": "NOT_RUN",
+  "actualEnrichedDetail": "NOT_RUN",
+  "actualTrueCloneObserver": "NOT_RUN",
+  "build": {
+    "appSourceChanged": false,
+    "exitCode": 127,
+    "status": "NEXT_EXECUTABLE_MISSING_IN_ISOLATED_CHECKOUT"
+  },
+  "callerBooleanOrReceiptGrantsRuntimeAuthority": false,
+  "cloudRootOrSystemdUnitActions": false,
+  "contaboAccessed": false,
+  "coordinatorReportedCurrentControls": {
+    "admissionExit": 0,
+    "admissionSeconds": 16.118,
+    "backupKeyRead": false,
+    "formalSignaturesUnchanged": true,
+    "invalid": "PASSED_WRONG_KEY_CONTROL",
+    "invalidEvidenceCommit": "a72b737215be493d45fd58eefba249726135e6a0",
+    "onlyRuntimeChange": "scripts/staging_t18_host.py",
+    "source": "COORDINATOR_REPORT_NOT_NEW_OBSERVER_ADMISSION",
+    "stagingCleaned": true,
+    "subject": "cc0a1c06dad1f50b426da14b9dd86c784b4e2975",
+    "threeUidCgroupCookieVerified": true,
+    "verifiedBlobs": 46
+  },
+  "detailStaleAndActionDisabledAcceptance": "NOT_RUN_NOT_INHERITED_FROM_DAILY",
+  "generatedAtUtc": "2026-11-14T22:03:13.292059+00:00",
+  "nativeHoldRetained": true,
+  "observationContract": {
+    "adoptedFactMax": 2000,
+    "afterOldPairExerciseBeforeSameCloneCleanup": true,
+    "countsDatesPublicRouteAndHashesOnly": true,
+    "dossierAndReceiptRows": "OPTIONAL_NOT_ENRICHED_ACCEPTANCE",
+    "factClosure": [
+      "uuid",
+      "deduplicated",
+      "exists",
+      "same_stock",
+      "available_before_detail",
+      "no_paid_url_or_provenance"
+    ],
+    "hashScheme": "PG17_JSONB_PROJECTION_SHA256_NOT_JS_DOSSIER_INPUT_HASH",
+    "lockSeconds": 1,
+    "ordinaryTables": 7,
+    "privateLatestFallback": false,
+    "publishedCardMax": 1000,
+    "publishedPayloadMaxBytes": 2097152,
+    "queryLockExhaustion": "GAP_QUERY_BUDGET",
+    "requiredContext": "TRUE_REVISION_CONTEXT_V1_NOT_SYNTHETIC_SCORES",
+    "routePin": "LEX_FIRST_MATCHING_GENUINE_PUBLIC_DAILY_STAGE_EXACT_HREF_STOCK_REVISION",
+    "rpcPresenceAndSourceHash": "CATALOG_INVENTORY_NOT_SAFE_EXECUTION_APPROVAL",
+    "sameBackendTransaction": "REPEATABLE_READ_READ_ONLY",
+    "statementSeconds": 5,
+    "unknownOrMissingTrueData": "EXPLICIT_GAP"
+  },
+  "otherSource": [
+    {
+      "gitBlob": "ed5ec6ad2bdfa3d60b4d6c8ca838abf34e98f9d2",
+      "path": "scripts/tests/test_t18_candidate_detail_observation.py",
+      "sha256": "b438d2361cddbb76a0ee839b8cae4f153ebb12e680868d5c0eed4ea6dae4331c"
+    },
+    {
+      "gitBlob": "a028f71c96be872e34dc8d8caacca64afabd19b3",
+      "path": "docs/operations/2026-11-15/vnext/T18-CANDIDATE-DETAIL-PREFLIGHT.md",
+      "sha256": "0d77dbafaa13914a05e621e0222cbbe8124fdff4d036081049c64e3279f1d680"
+    },
+    {
+      "gitBlob": "a5e59ed45fcfcc6cba4305023bf1a051ae2e64a3",
+      "path": "docs/operations/2026-11-15/vnext/T18-HOST-ORCHESTRATION.md",
+      "sha256": "1cde28697e91de276cce16f1ee97ae768a0a519dae16afe1ccabf01db80b8345"
+    },
+    {
+      "gitBlob": "1a7d7aa71e2f6e7de9a904245ad754b92f8db6b7",
+      "path": "docs/operations/2026-11-15/vnext/t18-candidate-detail-stage-manifest.json",
+      "sha256": "9075c27e3e0d258e5c69a23078b0923ce969d6cd817fc05ca017bbb51b3e1e44"
+    }
+  ],
+  "parentCommit": "cc0a1c06dad1f50b426da14b9dd86c784b4e2975",
+  "pinnedSourceAudit": {
+    "apiGitBlob": "3b06b3833a409830b9e4879ab68197c9ba7d2b02",
+    "bothRefsIndependentlyFetchedAndIdentical": true,
+    "existingDetailTestScope": "BATCH_HELPER_NOT_LOADER_HTTP",
+    "filterColumnsAlsoRequired": 2,
+    "loaderGitBlob": "37cb3fa5ad0046db3a03c5a73a3670fe2e16af56",
+    "loaderTables": 5,
+    "pageGitBlob": "c84c39a0d49e0a23f1bef54c7c60feddd2d2ac9a",
+    "projectedColumns": 46,
+    "readRpc": "POST_read_taiwan_data_publication_metadata_v5_date_final",
+    "refs": [
+      "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "dd59817f750684b093965f539dd4de466be13077"
+    ],
+    "schemaObservedColumnsIncludingMetadataAndPublicSnapshot": 60,
+    "testGitBlob": "37466dee9724c947ad75e12ef0211ef5f2eb183c"
+  },
+  "priorTrueEvidence": {
+    "firstIntermittentStartupFailure": "PRESERVED_UNCONFIRMED_CAUSE",
+    "oldPairRealReceiptCommit": "3e49dfd23aba8c74d4cd36b74f9946992495dc6e",
+    "receiptCopyGitBlob": "927df1262f866401bde942d5e0f0942fa64a3a2b",
+    "seconds": 644.826,
+    "status": "DB_VERIFIED_FIXED_T18_EXERCISED",
+    "stockDetail": "NOT_RUN_TWO_TABLE_SCOPE",
+    "subject": "7811aaa79dc4f3942e1a9615e59da1254c4ffad5"
+  },
+  "productionBackupOrCredentialReceivedInCloud": false,
+  "productionChanges": false,
+  "realBackupKeyReadInCloud": false,
+  "runtimeSource": [
+    {
+      "gitBlob": "d8f4aab922b599d5899d2568618b939b4770e4ad",
+      "path": "deployment/staging/vnext/t17_keyfd/portable_restore_engine.py",
+      "sha256": "f9fb7369ab4b83b4c8588f64d5b17677d1b454623e3232d521ba81dc2e8c6d4c"
+    },
+    {
+      "gitBlob": "3da20379c450758f87cd102e21a235214daa0c80",
+      "path": "deployment/staging/vnext/t17_keyfd/stage_next_rollback.py",
+      "sha256": "ffae8dc87e4c6205056952c4945562089dda09248b16d202a844b5833765becf"
+    },
+    {
+      "gitBlob": "4ef7e87ab6ffc828c96f3770be45a8fe2779bc7c",
+      "path": "deployment/staging/vnext/t17_keyfd/candidate_detail_observation.py",
+      "sha256": "43c65b8651b8901807560cb4c8926285936d1ccc70ddd7a1ec647b1314d0ce7c"
+    }
+  ],
+  "schema": "stockinsider-t18-candidate-detail-observation-source-v1",
+  "stageManifest": "docs/operations/2026-11-15/vnext/t18-candidate-detail-stage-manifest.json",
+  "tests": {
+    "combinedT17T18BeforeExtraLockBudgetTest": {
+      "failed": 0,
+      "passed": 175,
+      "seconds": 76.581,
+      "skipped": 0
+    },
+    "independentPg17": {
+      "failed": 0,
+      "openP0P1": 0,
+      "passed": 9,
+      "seconds": 13.837
+    },
+    "latestFocusedActualPg17": {
+      "failed": 0,
+      "passed": 10,
+      "seconds": 10.886
+    },
+    "realComponents": [
+      "source_supported_varchar_types",
+      "exact_public_route_and_point_in_time",
+      "schema_and_missing_data_gaps",
+      "uuid_missing_duplicate_cross_stock_future_paid_fact_gaps",
+      "null_section_scalar_fact_ids_and_blank_body_gaps",
+      "optional_dossier_receipt_rows",
+      "unavailable_revision_context",
+      "malicious_stable_definer_never_called",
+      "rows_catalogs_roles_and_grants_unchanged",
+      "unknown_output_and_boolean_counts_rejected",
+      "actual_lock_timeout_gap_and_owned_client_reaped"
+    ],
+    "typescriptContractTests": {
+      "failed": 0,
+      "milliseconds": 899.895248,
+      "passed": 10
+    }
+  },
+  "unchangedBoundaries": {
+    "appReaderTables": 2,
+    "appTableGrants": 11,
+    "dbOnlyEntryChanged": false,
+    "fixedNextAssetBytesAndPinsChanged": false,
+    "newDetailGrants": 0,
+    "oldNegativeHttpChecks": 8,
+    "originalRpcCalledOrGranted": false,
+    "proxyAndRaw3301ProfileChanged": false,
+    "publicRoutineExecutions": 0,
+    "rootFD3To9AndOriginalLock": true,
+    "rootLauncherSha256": "e25cf94578b4c5f83331bdc0979c69af2222f22a95335602cd5c0e3bf6e91024"
+  }
+}

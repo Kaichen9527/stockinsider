@@ -1,0 +1,50 @@
+{
+  "schema": "stockinsider-t18-candidate-detail-stage-delta-v1",
+  "baselineCommit": "cc0a1c06dad1f50b426da14b9dd86c784b4e2975",
+  "baselineVerifiedBlobs": 46,
+  "expectedStagedBlobsAfter": 47,
+  "replace": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/portable_restore_engine.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "90d942e03b13ba4d535940074d13e4e637296565",
+        "sha256": "c67d2d754d15c29e64a15be4dd3e199b4198a1435b27c92ef3144055c68a294d"
+      },
+      "after": {
+        "gitBlob": "d8f4aab922b599d5899d2568618b939b4770e4ad",
+        "sha256": "f9fb7369ab4b83b4c8588f64d5b17677d1b454623e3232d521ba81dc2e8c6d4c"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/stage_next_rollback.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "f017bd3f08e078b17ed08d3586dfe2bba5113487",
+        "sha256": "0debe665c52c83b8775c136cae09905e71e2318c281cb5866ab6e14e56e1913c"
+      },
+      "after": {
+        "gitBlob": "3da20379c450758f87cd102e21a235214daa0c80",
+        "sha256": "ffae8dc87e4c6205056952c4945562089dda09248b16d202a844b5833765becf"
+      }
+    }
+  ],
+  "add": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/candidate_detail_observation.py",
+      "mode": "100644",
+      "gitBlob": "4ef7e87ab6ffc828c96f3770be45a8fe2779bc7c",
+      "sha256": "43c65b8651b8901807560cb4c8926285936d1ccc70ddd7a1ec647b1314d0ce7c"
+    }
+  ],
+  "remove": [],
+  "rootLauncherUnchangedSha256": "e25cf94578b4c5f83331bdc0979c69af2222f22a95335602cd5c0e3bf6e91024",
+  "fixedSourceRoot": "/run/stockinsider-t18-host-source",
+  "fixedSourceUnitRoot": "/readonly/t18-source",
+  "scope": "READ_ONLY_DETAIL_OBSERVATION_AFTER_OLD_PAIR_ON_SAME_VERIFIED_CLONE",
+  "applicationDetailGrantsAdded": 0,
+  "originalRpcCalledOrGranted": false,
+  "detailHttpAcceptance": "NOT_RUN",
+  "callerBooleanOrReceiptGrantsRuntimeAuthority": false,
+  "nativeHoldRetained": true
+}

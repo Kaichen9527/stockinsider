@@ -8,17 +8,21 @@ This source is not a full release acceptance or production deployment approval.
 
 ## Exact source and onsite roots
 
-Start with the 45 Git blobs verified onsite at af9f0008. Apply the six required
-replacements and add the one module in
-[t18-systemd-credential-stage-manifest.json](t18-systemd-credential-stage-manifest.json).
-The required source set becomes 46 blobs. Retain all other baseline runtime
-sources, including all four historical migration pins. Three example unit files
-are updated as documentation; this launcher generates its own fixed argv and
-never installs or reads those examples. Do not apply them to existing services.
+The native credential baseline7811aaa used46 verified blobs and is now backed by
+an actual same-clone old-pair rollback receipt (3e49dfd23aba8c74d4cd36b74f9946992495dc6e).
+The separate startup registration subjectcc0 retains46; its no-key admission was
+reported successful in16.118 seconds. See T18-STARTUP-REGISTRATION.md for the
+preserved initial intermittent failure and the bounded scheduling fix.
 
-The current [source receipt](t18-systemd-credential-receipt.json) lists exact
-SHA256/Git blob identities, tests, review and the distinct runtime gaps. Older
-receipts retain evidence for their original commits, not current admission.
+The current candidate-detail preflight starts from exactcc0: apply the two
+replacements and one added module in
+[t18-candidate-detail-stage-manifest.json](t18-candidate-detail-stage-manifest.json),
+for47 required blobs. All other baseline sources, four historical migrations and
+original asset pins remain. The root launcher stays exactly the cc0 hash.
+The old native-credential stage manifest/receipt describe their original subject;
+use the current preflight receipt and T18-CANDIDATE-DETAIL-PREFLIGHT.md for scope.
+This adds no detail HTTP/RPC/grants. Three example units remain documentation;
+the launcher never installs or reads them. No build artifacts from Cloud are needed.
 
 | Input | Host path | Unit binding |
 | --- | --- | --- |
@@ -202,6 +206,7 @@ no crash-proof cleanup or automatic rerun permission is claimed.
 
 Cloud tests use public bytes, actual kernel seals/SCM/UID refusals, PG17 public
 fixtures and owned HTTP mechanics. No privileged root/three-unit/native-systemd
-positive was run in Cloud. The newly combined admission/invalid/real route and
-actual pinned Next HTTP require onsite execution; prior controls and receipts
-are not substitutes. Build remains separately reported if dependencies are absent.
+positive was run in Cloud. The native credential/FD9 old-pair route was verified onsite at7811aaa; the new
+candidate-detail observation still needs its own true-clone run. Actual stock
+detail HTTP and broader read permissions remain NOT_RUN/closed. Prior receipts
+do not substitute for admission on a new subject. Build remains separately reported if dependencies are absent.

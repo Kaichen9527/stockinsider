@@ -17,6 +17,7 @@ from .t18_broker_transport import BrokerTransportRejected
 from .t18_runtime_observation import ThreeUidBudgetRejected
 from .t18_receipt import project_exercise,project_three_uid_budget
 from .stage_credentials import observe_stage_fd,StageCredentialRejected
+from .candidate_detail_observation import project_candidate_detail_observation
 
 
 def _wait_fixed_broker_sockets():
@@ -44,8 +45,10 @@ def execute_staging_next_rollback(work_root):
         result=rehearse_owned_fixed_next(backup.replay,Path(work_root))
         _validate_receipt_counts(result['database'])
         exercise=project_exercise(result.get('exercise'));budget=project_three_uid_budget(result.get('threeUidBudget'))
-        if exercise is None or budget is None:raise RestoreEngineRejected('sanitized_t18_receipt_rejected')
+        detail=project_candidate_detail_observation(result.get('candidateDetailObservation'))
+        if exercise is None or budget is None or detail is None:raise RestoreEngineRejected('sanitized_t18_receipt_rejected')
         result['exercise']=exercise;result['threeUidBudget']=budget
+        result['candidateDetailObservation']=detail
         return {'schema':'stockinsider-staging-next-rollback-v1','status':('DB_VERIFIED_T18_GAP' if exercise['status']=='GAP_GENUINE_SNAPSHOT_OR_SCHEMA' else 'DB_VERIFIED_FIXED_T18_EXERCISED'),
             'observations':observations,**result,'manifestSchema':manifest['schema'],
             'authenticatedPlaintextBytes':manifest['plaintextBytes'],

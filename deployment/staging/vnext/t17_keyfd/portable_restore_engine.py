@@ -103,6 +103,12 @@ class _ValidatedClone:
         from .radar_reader_observation import assess_radar_reader
         return assess_radar_reader(self.__sql)
 
+    def observe_candidate_detail(self):
+        if self.__sql is None:raise RestoreEngineRejected('verified_clone_scope_closed')
+        from .candidate_detail_observation import assess_candidate_detail,CandidateDetailObservationRejected
+        try:return assess_candidate_detail(self.__sql)
+        except CandidateDetailObservationRejected as error:raise RestoreEngineRejected(str(error)) from None
+
     def rehearse_fixed_next(self,app,rest,assets):
         if self.__sql is None or self.__rest_socket is None:
             raise RestoreEngineRejected('verified_clone_scope_closed')
@@ -150,8 +156,11 @@ def rehearse_owned_fixed_next(replay,work_root):
             budget=observe_three_uid_budget(app,rest)
             with _owned_validated_clone(replay,work_root) as clone:
                 result=clone.rehearse_fixed_next(app,rest,assets)
+                # Read-only discovery AFTER the already-verified daily exercise;
+                # no detail grants/RPC/HTTP, and no extra time before JWT use.
+                detail_observation=clone.observe_candidate_detail()
                 receipt=clone.receipt
-            return {'database':receipt,'exercise':result,'threeUidBudget':budget}
+            return {'database':receipt,'exercise':result,'threeUidBudget':budget,'candidateDetailObservation':detail_observation}
 
 
 @contextmanager
