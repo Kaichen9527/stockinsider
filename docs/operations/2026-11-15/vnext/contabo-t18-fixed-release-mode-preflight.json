@@ -1,0 +1,35 @@
+{
+  "schema": "stockinsider-t18-onsite-asset-compatibility-v1",
+  "observedAtUtc": "2026-11-14T18:29:00Z",
+  "controllerSourceCommit": "fa1d6c4658f703718f33d7307aaa88a2071056fb",
+  "observations": [
+    {
+      "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "manifestSha256": "2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a",
+      "modeCounts": {
+        "0644": 1246,
+        "0664": 1328,
+        "0755": 10
+      },
+      "groupWriteMembersRootOwnedAndRootGroup": 1328,
+      "recordedModeMismatches": 0
+    },
+    {
+      "sourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+      "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+      "modeCounts": {
+        "0644": 1246,
+        "0664": 1330,
+        "0755": 10
+      },
+      "groupWriteMembersRootOwnedAndRootGroup": 1330,
+      "recordedModeMismatches": 0
+    }
+  ],
+  "preflight": "FIXED_ASSET_PREDICATE_REJECTS_MANIFEST_0664",
+  "stagingSourceGitBlobsVerified": 39,
+  "stagingKeyOpened": false,
+  "backupRestoreStarted": false,
+  "nextExerciseStarted": false,
+  "productionPackageModesChanged": false
+}
