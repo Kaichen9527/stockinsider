@@ -61,7 +61,7 @@ function decimal(value: string): number | null {
   const n = Number(value.replace(/,/gu, '').trim()); return Number.isFinite(n) && n > 0 ? n : null;
 }
 function sourceDate(value: string): string | null {
-  if (isHistoryDate(value)) return value;
+  if (isHistoryDate(String(value))) return value;
   const match = /^(\d{3,4})[/-]?(\d{2})[/-]?(\d{2})$/u.exec(value.trim());
   if (!match) return null;
   const day = `${Number(match[1]) < 1911 ? Number(match[1]) + 1911 : match[1]}-${match[2]}-${match[3]}`;
