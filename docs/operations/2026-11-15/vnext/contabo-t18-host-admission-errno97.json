@@ -1,0 +1,56 @@
+{
+  "schema": "stockinsider-t18-contabo-host-admission-errno97-v1",
+  "scope": "CONTABO_ISOLATED_NO_KEY_HOST_ADMISSION_AND_NETWORK_INTERFACE_DUAL_CONTROL",
+  "runtimeCommit": "793c0cbc034db45552bedd540da88f0e566397c6",
+  "runtimeFilesVerifiedAgainstGitBlobs": 45,
+  "phase": {
+    "exit": 2,
+    "reason": "broker_socket_startup_deadline",
+    "durationSeconds": 16.633,
+    "applicationBrokers": {
+      "appPythonExit": 2,
+      "restPythonExit": 2
+    },
+    "keyRead": false,
+    "databaseStarted": false,
+    "nextStarted": false,
+    "postgrestStarted": false,
+    "productionSignaturesUnchanged": true,
+    "stagingResourcesCleaned": true,
+    "stagingLockedAccountsReserved": true,
+    "minimumHostDiskBytes": 26732896256,
+    "minimumHostAvailableMemoryBytes": 4086140928
+  },
+  "isolatedDualControl": {
+    "operation": "Python socket.if_nameindex()",
+    "sameLockedAppAccount": true,
+    "privateNetwork": true,
+    "protectSystemStrict": true,
+    "capabilities": false,
+    "noNewPrivileges": true,
+    "baseline": {
+      "addressFamilies": [
+        "AF_UNIX",
+        "AF_INET",
+        "AF_INET6"
+      ],
+      "exit": 2,
+      "errno": 97
+    },
+    "diagnosticOnly": {
+      "addressFamilies": [
+        "AF_UNIX",
+        "AF_INET",
+        "AF_INET6",
+        "AF_NETLINK"
+      ],
+      "exit": 0,
+      "interfaces": [
+        "lo"
+      ]
+    }
+  },
+  "followup": "Use a real kernel namespace interface observation compatible with the broker address-family restriction and repeat admission. Invalid and authentic-key phases were not attempted.",
+  "productionMutation": false,
+  "nativeHoldRetained": true
+}
