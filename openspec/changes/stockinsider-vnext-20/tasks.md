@@ -260,7 +260,13 @@ Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-re
 - [x] Exclusive new command/cycle and lowest legacy publication/failure fences, defaultOFF; no timer or physical cutover.
 - [x] Binary64-v2 strict wire/postRPC read clock and separately bound public citations/defaultOFF no-store API; source d68f5a3 equals localbd6bf3e,649/types/lint/build+33/10/6browser PASS. Retained first92edfda4harnessfail/typefail and reviewed test-only repair.
 - [x] External61f25d67 fixed-source PG17.11 synthetic SELECT17/17 wire replay; receipt-reported PG/consumer digest pairs compared; eight committed source-file identities independently checked; original PG bytes not rehashed in Cloud. First wrong Node22.23.1 refusal retained. This is NOT product migration, PostgREST, source/current-rights, CAS or real ranking acceptance.
-- [ ] Full SQL16-rule/qualification/CAS/read/source-and-market authority: separate unpublished WIP, preserve unknownrequired-input=>prior date; optional finance is not a market/rights/data gate exemption.
+- [x] Full SQL16-rule/qualification/CAS/read additive source candidate763a0c6,12 STATIC checks/build PASS; no SQL execution/native inference. See LAUNCH-SQL-WRITER.md.
+- [ ] Actual source/use-purpose/venue/action/market authority, SQL grammar/ACL/RLS/codecs/CAS/replay/concurrency/PostgREST/retention and real ranking. Known authoritative disposal/halt/liquidity excludes only that candidate; required unknown retains prior/date. Optional finance does not waive required gates.
 - [ ] Source-first candidates samewriter mutation/metadata-publication rights producer;21/20 controlled projections/page fixtures may not assert complete actual history or infer never-admitted from absence.
 - [ ] Financial data-preparation actual scheduled route must work in enabledmode instead of generic research enqueue; owned global lease before artifact persistence, no borrowed owner/reentrant deadlock/network-held global lock. Actual route/busy/unauthorized/retry/partial/failure tests then separately authorized native acceptance; original timers/flags/HOLD unchanged.
 - [ ] T07 period start/end/type, basic/diluted and CA restatement/known-time/fixed receipt remain distinct;9af10f1d actual controls cannot backfill11/12–13 frozen evidence.
+
+## Candidate catalog source checkpoint
+
+- [x] Canonical page/API immutable source-first projection,38 related cases/types/lint/build and2 actual unavailable desktop/mobile browser checks;32bd9df exact locally tested tree. Original two failures retained, material inlining repair independently reviewed before local retry.
+- [ ] Actual public metadata rights/mutation producer and true complete history remain missing/hard-disabled;21 clues/20 admissions are controlled fixtures only. Native HOLD/A1/original PR head unchanged.

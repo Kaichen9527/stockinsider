@@ -1,5 +1,11 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## Current candidate catalog / SQL source checkpoint
+
+Candidate source **32bd9df** equals locally tested **b806546** whole tree:38 related cases/types/lint/build and two actual Next.js unavailable desktop/mobile checks PASS. [Contract, preserved two failures and reviewed emitted-code repair](../../2026-11-15/launch-radar/CANDIDATE-CATALOG.md). Actual public metadata/mutation producer is missing and hard-disabled;21/20 positives are synthetic, not complete actual history.
+
+SQL source **763a0c6** equals local **342c65d** whole tree:12 static source checks/build PASS, unchanged validated web bytes. [Writer contract and unresolved authority/native scope](../../2026-11-15/launch-radar/LAUNCH-SQL-WRITER.md). No SQL execution/grammar/RLS/CAS/PostgREST or real ranking acceptance. Next: authoritative per-stock exclusion versus required unknown/prior-date retention; source/use-purpose, venue, market and action gaps remain. Charts/support/counterevidence/finance/valuation/TWSE flow remain incompletely connected. Original PR head/native HOLD/A1/production flags/timers unchanged. Older paragraphs retain their checkpoint scope.
+
 ## Current source foundation / wire / public citation checkpoint
 
 Public **d68f5a33b8345e66fe324749101bd1f92abfdcc0** equals locally validated **bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c** tree;649units (625core/16wire/8citation),types/lint/build and33OIDC+10launch+6citation controlled browsers PASS. [Source behavior/deployment dependencies/failures](../../2026-11-15/launch-radar/LAUNCH-FOUNDATION.md), [separate wire](../../2026-11-15/launch-radar/LAUNCH-WIRE.md), [separate security](../../2026-11-15/launch-radar/PUBLIC-CITATION.md). External61f25d67 adds17/17 PG17.11 synthetic SELECT wire PASS with true-clock/digest binding and retained wrong-Node first attempt; no product migration/PostgREST/source/CAS approval. New source-fact and command/cutover code is default-disabled; full SQLscore/qualification/CAS/read remains separate WIP and not part of this tested source. Canonicalsource-first candidate UI/fixtures and actualfinancialroute preparation/ownedlease repair remain distinct followups. No current PRhead/nativeHOLD/A1/production/timer changes. Older labels retain their checkpoint scope.

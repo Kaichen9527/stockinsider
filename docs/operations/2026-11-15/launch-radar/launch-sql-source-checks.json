@@ -1,0 +1,126 @@
+{
+  "schema": "stockinsider-launch-sql-source-checkpoint-v1",
+  "observedAt": "2026-11-14T23:39:15.160108+00:00",
+  "localValidationCommit": "342c65d74cdbd1f9df82585c3f10975bacac67d5",
+  "publicSourceCommit": "763a0c676b48598196762cbe550e56675fcbfcd1",
+  "wholeTree": "72b9e068facb93fd879d3ab7308c6bb684ccf4b4",
+  "webTree": "5b550abb272614db3ee2ea434b0fbaa60b19c83f",
+  "publication": {
+    "transport": "configured GitHub connector",
+    "baseCommit": "32bd9df832475111ffcf6e77574d028c31b43a5a",
+    "expectedParentVerified": true,
+    "treeEqualityVerified": true,
+    "force": false,
+    "testsRanLocalIdenticalTree": true,
+    "testsRanPublicCommit": false
+  },
+  "sourceInventory": [
+    {
+      "path": "migrations/20261115_vnext_launch_ranking_v1.sql",
+      "sha256": "045240b0a1b3b9d4db2ab1566d7256d3b44a5d83577f4a057605f1b860fbbb8a"
+    },
+    {
+      "path": "scripts/vnext-launch-ranking-source.test.mjs",
+      "sha256": "12035923ebf2d9a8f30b7e64dce4b8aa174badcc065426c0a753d04c116d325e"
+    }
+  ],
+  "checks": [
+    {
+      "name": "sql_static",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--test",
+        "scripts/vnext-launch-ranking-source.test.mjs"
+      ],
+      "start": "2026-11-14T23:31:45.136265+00:00",
+      "end": "2026-11-14T23:31:45.386828+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29421785088,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "80cfd05c2e5cad2e5f33500b44544df5cd2fc8ed9386041ca546e86f0930fe5b"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-14T23:31:45.387191+00:00",
+      "end": "2026-11-14T23:31:51.657542+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81719296,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29421772800,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "fef8445232da1e4241c56a2c43d22636c0e93d1b362a5d2e69dd58b23a7cf7d5"
+    }
+  ],
+  "staticCases": 12,
+  "staticScope": "TEXT_SOURCE_CONTRACT_ONLY_NOT_SQL_EXECUTION",
+  "runtimeWebReuse": {
+    "unchangedFromLocal": "b806546e25a51f84111159db54e54e3c477e0466",
+    "unchangedFromPublic": "32bd9df832475111ffcf6e77574d028c31b43a5a",
+    "webTree": "5b550abb272614db3ee2ea434b0fbaa60b19c83f",
+    "relatedRuntimeEvidence": "launch-candidate-catalog-checks.json",
+    "claim": "Prior web checks apply to unchanged web bytes; no new native SQL inference"
+  },
+  "engineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false
+  },
+  "implementedSource": [
+    "SQL selected facts and ordered binary64 16-rule engine",
+    "immutable score evidence and source/price/action pins",
+    "new qualification distinct from optional legacy finance",
+    "owned writer lease IDs-only immutable CAS/replay",
+    "exact21:30 official same-day cutoff/admission",
+    "read-only v2 current validity/detail/rights-qualified citation projection"
+  ],
+  "producerGaps": [
+    "exact original-source and independent current-use-purpose binding",
+    "authoritative positive disposition status coverage",
+    "typed cash/stock action and codec coverage for consumed history",
+    "SQL-authorized shared market breadth/foreign-flow regime beyond520 indices",
+    "fixed original breakout/current official limit entry evidence where required"
+  ],
+  "nextQualificationSlice": "Known authoritative disposal/halt/illiquidity remains a candidate/exclusion without blocking complete peers; genuinely unknown required evidence retains prior/date. Native proof pending.",
+  "limits": {
+    "actualSqlApply": "NOT_RUN_HOLD",
+    "sqlGrammar": "NOT_RUN",
+    "sqlAclRlsCodecCommit": "NOT_RUN",
+    "casReplayConcurrency": "NOT_RUN",
+    "rawRetention": "NOT_RUN",
+    "actualScoreOrRanking": "NOT_RUN",
+    "actualPostgrest": "NOT_RUN",
+    "syntheticPg17Wire": "EXTERNAL61F25D67_ONLY_NOT_THIS_KERNEL",
+    "T08Complete": false,
+    "chartSupportCounterFinanceValuationTwseVolumeFlow": "NOT_FULLY_CONNECTED",
+    "formalA1": "BLOCKED_UNCHANGED",
+    "nativeHold": "PRESERVED",
+    "originalPrHead": "UNCHANGED",
+    "productionActions": 0,
+    "timersChanged": false,
+    "paidCalls": 0
+  },
+  "preservation": {
+    "observedAt": "2026-11-14T23:39:15.141645+00:00",
+    "originalFiles": 283,
+    "missing": 0,
+    "changed": 0,
+    "archiveOrRecoveryVerified": false
+  }
+}
