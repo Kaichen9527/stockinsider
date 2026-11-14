@@ -1,0 +1,107 @@
+{
+  "schema": "stockinsider-launch-radar-outcome-cost-sensitivity-control-v1",
+  "scope": "CONTABO_READONLY_RATIONAL_ARITHMETIC_ON_ARCHIVED_OFFICIAL_DAILY_BARS",
+  "historyReceipt": "4d4c0622700ee0a495f3dd4510888621beb9d6d5",
+  "symbol": "5274",
+  "dailyPriceSeries": "raw_tpex_ohlc",
+  "simulationBasis": "first_next_session_open_before_assumed_cost_bumps",
+  "limitDays": 20,
+  "assumptions": {
+    "buyFee": "0.001425",
+    "sellFee": "0.001425",
+    "sellTax": "0.003",
+    "perSideSlippage": "0.001",
+    "buyCashFactor": "40097057/40000000",
+    "sellCashFactor": "39783177/40000000",
+    "netReturn": "rawExit*sellCashFactor/(rawEntry*buyCashFactor)-1",
+    "noPerTradeTickOrBrokerRoundingApplied": true
+  },
+  "controls": [
+    {
+      "caseDate": "2026-07-08",
+      "through": "2026-08-06",
+      "nextOpen": "13975",
+      "gross": {
+        "offset": 20,
+        "session": "2026-08-06",
+        "target": true,
+        "stop": false,
+        "highReturn": 0.216457961,
+        "lowReturn": 0.14490161,
+        "high": "17000",
+        "low": "16000"
+      },
+      "net": {
+        "offset": 7,
+        "session": "2026-07-20",
+        "target": false,
+        "stop": true,
+        "highReturn": -0.061430142,
+        "lowReturn": -0.15656506,
+        "high": "13220",
+        "low": "11880"
+      },
+      "months": {
+        "2026-07": "80c78fa5616b9b91a958ef7c39598584fbe5f1215dc9c066adf95b2772e42a42",
+        "2026-08": "5a6a4c41d32826d2f34d97f7ce89c037f519437613a3cefb54859449befb8c7a"
+      }
+    },
+    {
+      "caseDate": "2026-07-15",
+      "through": "2026-08-12",
+      "nextOpen": "13900",
+      "gross": {
+        "offset": 16,
+        "session": "2026-08-06",
+        "target": true,
+        "stop": false,
+        "highReturn": 0.223021583,
+        "lowReturn": 0.151079137,
+        "high": "17000",
+        "low": "16000"
+      },
+      "net": {
+        "offset": 3,
+        "session": "2026-07-20",
+        "target": false,
+        "stop": true,
+        "highReturn": -0.056365916,
+        "lowReturn": -0.152014152,
+        "high": "13220",
+        "low": "11880"
+      },
+      "months": {
+        "2026-07": "80c78fa5616b9b91a958ef7c39598584fbe5f1215dc9c066adf95b2772e42a42",
+        "2026-08": "5a6a4c41d32826d2f34d97f7ce89c037f519437613a3cefb54859449befb8c7a"
+      }
+    },
+    {
+      "caseDate": "2026-08-11",
+      "through": "2026-09-08",
+      "nextOpen": "16450",
+      "gross": {
+        "offset": 20,
+        "session": "2026-09-08",
+        "target": true,
+        "stop": false,
+        "highReturn": 0.203343465,
+        "lowReturn": 0.145288754,
+        "high": "19795",
+        "low": "18840"
+      },
+      "net": null,
+      "months": {
+        "2026-08": "5a6a4c41d32826d2f34d97f7ce89c037f519437613a3cefb54859449befb8c7a",
+        "2026-09": "d414113acc52bf8c4dc0830c448c826db419cc17b7ab5a4dc5cfcaf890cab705"
+      }
+    }
+  ],
+  "limitations": {
+    "exPostPriceControls": true,
+    "noHistoricalCandidateSelection": true,
+    "settlementAndActualFillNotVerified": true,
+    "corporateActionCompleteCoverageNotVerified": true,
+    "policyBarrierConventionStillToBePinned": true,
+    "rawOhlcIsNotARankingSignal": true
+  }
+}
