@@ -1,0 +1,69 @@
+{
+  "schema": "stockinsider-tpex-native-volume-and-flow-offline-join-v1",
+  "symbol": "5274",
+  "sessions": [
+    {
+      "cutoff": "2026-11-12",
+      "sessions": 5,
+      "first": "2026-11-06",
+      "last": "2026-11-12",
+      "completeOfficialShareDayJoin": true,
+      "denominatorShares": 2908000,
+      "flowShares": {
+        "foreignExcludingProprietary": -195601,
+        "investmentTrust": -85414
+      }
+    },
+    {
+      "cutoff": "2026-11-12",
+      "sessions": 20,
+      "first": "2026-10-14",
+      "last": "2026-11-12",
+      "completeOfficialShareDayJoin": true,
+      "denominatorShares": 8480000,
+      "flowShares": {
+        "foreignExcludingProprietary": -897955,
+        "investmentTrust": 353041
+      }
+    },
+    {
+      "cutoff": "2026-11-13",
+      "sessions": 5,
+      "first": "2026-11-09",
+      "last": "2026-11-13",
+      "completeOfficialShareDayJoin": true,
+      "denominatorShares": 3053000,
+      "flowShares": {
+        "foreignExcludingProprietary": -72790,
+        "investmentTrust": -76911
+      }
+    },
+    {
+      "cutoff": "2026-11-13",
+      "sessions": 20,
+      "first": "2026-10-15",
+      "last": "2026-11-13",
+      "completeOfficialShareDayJoin": true,
+      "denominatorShares": 8517000,
+      "flowShares": {
+        "foreignExcludingProprietary": -784975,
+        "investmentTrust": 287736
+      }
+    }
+  ],
+  "dataSources": [
+    {
+      "dataset": 11371,
+      "capture": "https://github.com/Kaichen9527/stockinsider/commit/d2a4a77a0b0fd97f6ee0732a8c5fa16afee0b665"
+    },
+    {
+      "dataset": 11856,
+      "capture": "https://github.com/Kaichen9527/stockinsider/commit/a17f8085aa4266824e867d094091ddd4696181a7"
+    }
+  ],
+  "scope": {
+    "productParser": false,
+    "published": false,
+    "pointInTime": false
+  }
+}
