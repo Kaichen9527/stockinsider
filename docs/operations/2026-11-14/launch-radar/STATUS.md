@@ -1,5 +1,9 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## Current licensed CSV43-page checkpoint (Taipei2026-11-15)
+
+Source **36caa9822bb905ca149661805f06ca084a9f2d21**: [threeCSVreader/source contract and actual43/43](../../2026-11-15/launch-radar/LICENSED-CSV.md), [539/types/lint/build+33controlledbrowser receipt](../../2026-11-15/launch-radar/licensed-csv-checks.json). Externala17f8085 freshcapture/analysis clocks are preserved; not11/12–13 publication. Actualnative11371/capital-change overlay is next, not supplied by rawCSV parsing. Earlier noCSV/noactualraw statements below refer to older source checkpoints; Cloudofficialacquisition remainsblocked. No formal gate cleared.
+
 ## Current external PTT4/4 / official importer checkpoint (Taipei2026-11-15)
 
 Externalb063b9ed/blob46573266 validates4/4 fixed PTT cases on4a77e325 with all four hashes equal to the retained old2/4 bytes. [Followup](../../2026-11-15/launch-radar/ptt-external-four-byte-followup.json). Cloud acquisition/rights/queue/coverage remain incomplete. Official source **e4bd698aa0ae716a193354db1a41b5335f240ace** has callable raw JSON/CLI→selected-reader staging seam, **532/types/lint/build +33controlled browser PASS**; [receipt](../../2026-11-15/launch-radar/official-replay-checks.json), [bounded sample tasks](../../2026-11-15/launch-radar/OFFICIAL-READABLE-TASKS.md). Actual official raw replay remains NOT_RUN; CSV licensing/format integration follows separately. All old failures/pending labels below retain checkpoint-time meaning. No formal release/production gate was cleared.

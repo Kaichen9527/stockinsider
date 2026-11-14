@@ -2,6 +2,16 @@
 
 ## Active Goal #385 / first source frontier
 
+### Licensed CSV checkpoint / native11371 frontier
+
+- [x] Source36caa982 actualCSVconstructor/CLI/private-state reader seam for exact11755/11391/11856, separate JSON provenance/registry attribution;539/539/types/lint/fullbuild+33controlledbrowser PASS, no CSVbatch failure.
+- [x] External fixed-source actual43/43 CSV pages (a17f8085/blob e3cab6ed),416indexrows/21TPEXflow, truecapture5d844b029 and18:07:47UTCNov14analysis cutoff, allauthorityfalse; not original11/12–13 publication or Cloudacquisition.
+- [ ] Next11371 raw/selected51overlay must bindexactunits+issued-share continuity/predecessor/calendar/rawandadjustedprice/CA/clocks withnewvolume revision, never rewriteoldhistory. Actual6488+50Mwithinwindow is a negative, not no-event proof; allactualvolume signals require independentcontinuity.
+- [ ] T86rights/FinMindactualplan/PTTbodyrights/originalqueue/nativeHOLD/A1/formalCI/real-rankingsession/staging/release remain incomplete. No production/scheduler/writer/ledger activation.
+
+Evidence: docs/operations/2026-11-15/launch-radar/LICENSED-CSV.md and licensed-csv-checks.json; native-share-overlay-amendment.md is the separately approved next design.
+
+
 ### Current T04 external followup / official staging replay
 
 - [x] Fixed source4a77e325 SAMEfourbytes external isolated parser4/4, independently cross-checked all four hashes against retained5285068 old2/4 failures. Source519/types/lint/build+7syntheticCLI remain separate VM evidence; external4/4 receiptb063b9ed has false rights/queue authority and unknown coverage.
