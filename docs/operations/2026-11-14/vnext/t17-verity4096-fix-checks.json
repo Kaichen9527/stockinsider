@@ -1,0 +1,74 @@
+{
+  "recordedAtUtc": "2026-11-14T15:04:02.335110+00:00",
+  "checks": [
+    {
+      "name": "python",
+      "exit": 0,
+      "expectedExit": 0,
+      "logSha256": "513ef12cb8f1877b22e3444bb3e47f8591e84a20951526798347e5db26ea71e5"
+    },
+    {
+      "name": "runner",
+      "exit": 2,
+      "expectedExit": 2,
+      "logSha256": "46f6827424e50287ebfe166d3b5b15aeda976460a3d41600b6bc8bb888e4c1ae"
+    },
+    {
+      "name": "candidate",
+      "exit": 0,
+      "expectedExit": 0,
+      "logSha256": "19a163cba7c2e201adebd3c185f02a8107c1c18d8052dd1c923826de93d68450"
+    }
+  ],
+  "runner": {
+    "cleanup": {
+      "ownedPostmasterReaped": true,
+      "privateTreeRemoved": true
+    },
+    "finishedUtc": "2026-11-14T15:04:02.003894+00:00",
+    "kernelErrno": 25,
+    "liveAuthority": false,
+    "nativeHoldRetained": true,
+    "pgStarted": false,
+    "reason": "fsverity_enable_required",
+    "restoreVerified": false,
+    "schema": "stockinsider-t17-disk-pg17-fixture-v1",
+    "scope": "fixed_public_fixture_only",
+    "startedUtc": "2026-11-14T15:04:01.998929+00:00",
+    "status": "REFUSED"
+  },
+  "schema": "stockinsider-t17-verity4096-fix-v1",
+  "parentCommit": "d537de28891d5224bd64ea08281d574e9ba898e9",
+  "blockBytes": 4096,
+  "pageBytes": 4096,
+  "filesystemBlockBytes": 4096,
+  "sha256": {
+    "deployment/staging/vnext/t17_keyfd/disk_custody.py": "71a1acf2e243a9f9faee088a95453d4a3ac552ab08604347bbc3603c2dd86d39",
+    "scripts/tests/test_t17_disk_custody.py": "a53324716ab084d53e111cf0b3ed265a3f683dde11727535b1c21fe09a6058df",
+    "scripts/t17_disk_pg17_fixture.py": "034b9551a1e7e1e5c2c62c65dcb0dad4ca0ea9c08cd8e871fb0f387e0f01b49e"
+  },
+  "sourceReview": {
+    "independent": true,
+    "focusedTestsPass": 6,
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false,
+    "scope": "4096 fix and unchanged fixed-public PG runner; no PG or SSH executed"
+  },
+  "siteReport": {
+    "source": "coordinator_not_Cloud_observation",
+    "kernel": "6.8",
+    "newExt4ImageBytes": 33554432,
+    "explicit4096EnableSucceeded": true,
+    "separatelySealedDatabaseCiphertextBytes": 491423538,
+    "realKeyTransferred": false,
+    "realRestorePerformed": false,
+    "originalFixtureErrno": 22,
+    "firstSystemdStartExit": 226,
+    "mountNamespaceCorrectionReported": true
+  },
+  "liveRestoreAllowed": false,
+  "nativeHoldRetained": true,
+  "positiveOnsiteRetest": "PENDING",
+  "fullExactBranchBuildTypesLint": "NOT_RUN: full checkout unavailable; Git CONNECT503"
+}

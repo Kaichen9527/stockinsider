@@ -18,12 +18,32 @@ MAX_BYTES = 256 * 1024**3
 COPY_SECONDS = 120
 ENABLE_VERITY = 0x40806685  # Linux fsverity_enable_arg, 128 bytes
 MEASURE_VERITY = 0xc0046686  # Linux fsverity_digest, 4-byte header
+VERITY_BLOCK_BYTES = 4096
 
 
 class DiskCustodyRejected(Exception):
     def __init__(self, code, kernel_errno=None):
         super().__init__(code)
         self.kernel_errno = kernel_errno  # sanitized numeric capability evidence
+
+
+def _validate_block_geometry(page_bytes, filesystem_block_bytes):
+    """Pure validation for tests; not an admission API or a caller override."""
+    for observed in (page_bytes, filesystem_block_bytes):
+        if type(observed) is not int or observed < 1024 or observed & (observed - 1):
+            raise DiskCustodyRejected('fsverity_block_geometry_unverified')
+    if VERITY_BLOCK_BYTES > min(page_bytes, filesystem_block_bytes):
+        raise DiskCustodyRejected('fsverity_4096_block_incompatible')
+
+
+def _enable_argument(fd):
+    # Linux fs-verity requires a nonzero power-of-two block size. Do not assume
+    # the kernel supplies a default for zero. Observe THIS held file's FS first.
+    page_bytes = os.sysconf('SC_PAGESIZE')
+    filesystem_block_bytes = os.fstatvfs(fd).f_bsize
+    _validate_block_geometry(page_bytes, filesystem_block_bytes)
+    return struct.pack('<IIIIQIIQ11Q', 1, 1, VERITY_BLOCK_BYTES,
+                       0, 0, 0, 0, 0, *([0] * 11))
 
 
 def _measure(fd):
@@ -124,8 +144,8 @@ def borrow_disk_snapshot(source_fd, directory_fd):
                 raise DiskCustodyRejected('copy_identity_rejected')
             os.close(writer)
             writer = None
-            # version=1, SHA256, kernel-default block size, no salt/signature.
-            argument = struct.pack('<IIIIQIIQ11Q', 1, 1, 0, 0, 0, 0, 0, 0, *([0] * 11))
+            # version=1, SHA256, checked explicit4096 block, no salt/signature.
+            argument = _enable_argument(reader)
             try:
                 fcntl.ioctl(reader, ENABLE_VERITY, argument)
             except OSError as error:

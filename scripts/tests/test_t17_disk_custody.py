@@ -2,17 +2,38 @@
 import hashlib
 import json
 import os
+import struct
 from pathlib import Path
 import tempfile
 import unittest
 from deployment.staging.vnext.t17_keyfd.disk_custody import (
-    borrow_disk_snapshot, DiskCustodyRejected, _DiskSnapshot, CHUNK)
+    borrow_disk_snapshot, DiskCustodyRejected, _DiskSnapshot, CHUNK,
+    _enable_argument, _validate_block_geometry, VERITY_BLOCK_BYTES)
 from deployment.staging.vnext.t17_keyfd.stream_fixture_gcm import (
     authenticate_then_replay, FixtureAuthenticationRejected)
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 
 class DiskCustodyTests(unittest.TestCase):
+    def test_explicit4096_argument_uses_actual_page_and_filesystem_geometry(self):
+        with tempfile.TemporaryFile() as f:
+            argument = _enable_argument(f.fileno())
+            self.assertEqual(len(argument), 128)
+            fields = struct.unpack('<IIIIQIIQ11Q', argument)
+            self.assertEqual(fields[:3], (1, 1, 4096))
+            self.assertEqual(fields[3:], (0,) * 16)
+            self.assertGreaterEqual(os.sysconf('SC_PAGESIZE'), VERITY_BLOCK_BYTES)
+            self.assertGreaterEqual(os.fstatvfs(f.fileno()).f_bsize, VERITY_BLOCK_BYTES)
+
+    def test_incompatible_or_unknown_geometry_never_reaches_enable(self):
+        for page, block in ((4096,0),(0,4096),(4096,3000),(4096,1024),
+                            (2048,4096),(True,4096),(4096,-1)):
+            with self.subTest(page=page,block=block):
+                with self.assertRaises(DiskCustodyRejected):
+                    _validate_block_geometry(page,block)
+        _validate_block_geometry(4096,4096)
+        _validate_block_geometry(65536,4096)
+
     def test_real_32MiB_streamed_ciphertext_supported_or_explicit_refusal(self):
         # Larger than the complete memfd fixture allowance, generated O(CHUNK).
         # Real positive branch can execute on a separately provisioned fs-verity FS.
