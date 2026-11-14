@@ -1,0 +1,193 @@
+{
+  "acceptanceScope": {
+    "fullReleaseAcceptance": false,
+    "newRadarAcceptance": false,
+    "realNextHttpAcceptance": false,
+    "stockDetailAcceptance": false,
+    "twoTableMinimumReadOnly": true
+  },
+  "build": {
+    "applicationSourceChanged": false,
+    "command": "cd web && npm run build",
+    "exitCode": 127,
+    "status": "BLOCKED_NEXT_EXECUTABLE_NOT_INSTALLED_IN_ISOLATED_CHECKOUT"
+  },
+  "callerBooleanOrReceiptGrantsRuntimeAuthority": false,
+  "ciAndFormalReleaseGatesChanged": false,
+  "cleanup": {
+    "activeBackingImageDeletion": "REFUSED",
+    "cloudRootProvisioningMountsOrUnitsCreated": false,
+    "originalHostLock": "HELD_THROUGH_CLEANUP_AND_FORMAL_SIGNATURE_COMPARISON",
+    "ownedPublicPgFixturesStopped": true,
+    "reservedOnsiteAccounts": "PERSIST_LOCKED_NOLOGIN_NOT_TRANSIENT_RESOURCES",
+    "sigkillOrHostCrashCleanupGuarantee": false,
+    "unknownLoopBaseline": "NO_DETACH_AUTHORITY"
+  },
+  "cloudFixedNextPostgrestHttpAcceptance": "NOT_RUN",
+  "cloudPrivilegedLauncherExecuted": false,
+  "cloudThreeUnitRuntimeAdmission": "NOT_RUN",
+  "contaboAccessed": false,
+  "documentation": {
+    "gitBlob": "388a55a09ff417e5604c4b687e33011cc6015142",
+    "path": "docs/operations/2026-11-15/vnext/T18-HOST-ORCHESTRATION.md",
+    "sha256": "f0b250f6d38254549238da1fd93d97b41271a6f9437e22538c385dcddfd5c37a"
+  },
+  "fixedRoots": {
+    "assetCopiesHost": "/var/tmp/stockinsider-t18-fa1d6c-assets",
+    "assetUnit": "/run/t18-assets",
+    "globalAssetTargetCreated": false,
+    "sourceHost": "/run/stockinsider-t18-host-source",
+    "sourceUnit": "/readonly/t18-source"
+  },
+  "formalServiceMutation": false,
+  "generatedAtUtc": "2026-11-14T19:49:09.151178Z",
+  "independentReview": {
+    "independentLauncherPassed": 8,
+    "independentPlanPassed": 4,
+    "independentScmPassed": 6,
+    "openBlockerOrHighFindings": 0,
+    "scope": "EXACT_ROOT_SOURCE_SCM_HANDOFF_UNIT_ARGV_DOCS_AVAILABLE_PUBLIC_TESTS"
+  },
+  "keyReadInCloud": false,
+  "limits": {
+    "cgroupMemoryMaxBytes": {
+      "app": 536870912,
+      "db": 805306368,
+      "rest": 268435456
+    },
+    "initialHostDiskMinBytes": 24696061952,
+    "initialHostMemoryMinBytes": 3221225472,
+    "liveHostDiskMinBytes": 16106127360,
+    "liveHostMemoryMinBytes": 1610612736,
+    "preKeyHostMemoryMinBytes": 3221225472,
+    "privateTmpAndVarTmpEachBytes": 33554432,
+    "stdoutAndStderrEachMaxBytes": 1048576,
+    "swapMaxBytes": 0,
+    "tasksPerUnitMax": 64,
+    "unitRuntimeMaxSeconds": {
+      "app": 1100,
+      "db": 1250,
+      "rest": 1100
+    },
+    "unitStopTimeoutSeconds": 25,
+    "workImageBytes": 8589934592
+  },
+  "modes": {
+    "admission": {
+      "applicationServerStarted": false,
+      "databaseStarted": false,
+      "encryptedWorkAdmission": "NOT_RUN",
+      "keyRead": false,
+      "manifestOrCipherOpened": false
+    },
+    "invalid": {
+      "expectedRunnerReason": "backup_authentication_failed",
+      "payload": "FIXED_32_ZERO_BYTES"
+    },
+    "real": {
+      "gapExitCode": 3,
+      "keyDeadlineSeconds": 5,
+      "keySource": "EXACT_32_BINARY_STDIN_BYTES_THEN_EOF"
+    }
+  },
+  "nativeHoldRetained": true,
+  "onsiteReportedEvidence": {
+    "assetOnlyAcceptanceCommit": "704524c19259df7ef9399a52b97a934bc44b2b93",
+    "exactPackageMembers": [
+      2584,
+      2586
+    ],
+    "intentionalRwBindRejected": "fixed_readonly_asset_mount_required",
+    "sharedPrivateNamespaceProbeEvidenceAbbreviation": "7e0e253",
+    "source": "COORDINATOR_REPORT_NOT_CLOUD_RUNTIME_ADMISSION",
+    "testedSourceCommit": "e6e73ad75a65b9d0415bec6a06f58d55979852d6"
+  },
+  "originalReaderLauncherAdvertisedSha256": "1de4b4c85b2859ae030f85a2424a6ba2e4e7d69ac1cde41e29573d38abefa9e4",
+  "originalReaderLauncherByteIdentityClaimed": false,
+  "originalSealedImageOrReleaseModesChanged": false,
+  "parentCommit": "e6e73ad75a65b9d0415bec6a06f58d55979852d6",
+  "productionBackupOrKeyReceivedInCloud": false,
+  "retainPriorVerifiedRuntimeBlobs": {
+    "commit": "e6e73ad75a65b9d0415bec6a06f58d55979852d6",
+    "count": 40,
+    "historicalMigrationPins": 4,
+    "privateManifestMustNotBeStaged": true
+  },
+  "runtimeFilesToAdd": [
+    {
+      "gitBlob": "a63a4c14b6cda8fde2964ba35ba44e1e3b24cd0c",
+      "path": "deployment/staging/vnext/t17_keyfd/t18_host_plan.py",
+      "sha256": "cfda78acb8665a94cbe9b8d17390d82e7005d06c285b5066c594024f66fc3526"
+    },
+    {
+      "gitBlob": "874a647ef1824557d08b45e27606ea102dd7d947",
+      "path": "deployment/staging/vnext/t17_keyfd/t18_fd_handoff.py",
+      "sha256": "29ced08ee0fccc08d6e180a4c1b9ddf53e51a9f5789761229304828e3631a726"
+    },
+    {
+      "gitBlob": "ba6145a56c519824dc09abb94c692c4f4bd74f58",
+      "path": "scripts/staging_t18_fd_bootstrap.py",
+      "sha256": "74f0362aa6e42364d23b9588f353b7d8a34718ab9675416cd2b5b1c410005d86"
+    },
+    {
+      "gitBlob": "8f62f795785f59551b356deb5e804e5b7b45240f",
+      "path": "scripts/staging_t18_host_admission.py",
+      "sha256": "da9c7518ac89d329e924becef03b293202fe752f3641ad52d97f0ef5c7e246bf"
+    },
+    {
+      "gitBlob": "84ab9ae2ac39fa54f20a0d84a5625da37a080ad3",
+      "path": "scripts/staging_t18_host.py",
+      "sha256": "ec79f1f9cc4858fb373c991e1d09b7a461294a744d772e152c2a04e6deec2238"
+    }
+  ],
+  "schema": "stockinsider-t18-host-orchestration-source-v1",
+  "scope": "REVIEWED_ROOT_ONSITE_SOURCE_WITH_CLOUD_PUBLIC_FIXTURE_TESTS",
+  "testSource": [
+    {
+      "gitBlob": "5856a3fa14b9cb3773f098cd3fcf71774e594789",
+      "path": "scripts/tests/test_t18_host_plan.py",
+      "sha256": "196323828b239d447ebedaed997b3407737aecc977dc934c1fffb615db67d543"
+    },
+    {
+      "gitBlob": "6ce28081ded1c49c258144bf0fbfd2d355ce180a",
+      "path": "scripts/tests/test_t18_fd_handoff.py",
+      "sha256": "4b003d23a9e5ea1cdaf521243955c87c030104fce187521b272cd7db213cddaf"
+    },
+    {
+      "gitBlob": "8b38a81b311962fe6c348f3f7f38372dea55220d",
+      "path": "scripts/tests/test_t18_host_launcher.py",
+      "sha256": "4d773ccd16c94b1421da2b43ebba8fe9183987e80ba927684def634872c838e7"
+    }
+  ],
+  "tests": {
+    "actualCloudChecks": [
+      "nonroot_host_entry_refuses_before_host_actions",
+      "three_uid_admission_refuses_without_key",
+      "exact_32_eof_public_byte_transport",
+      "collision_safe_scm_rights_six_descriptor_remap",
+      "truncated_and_malformed_ancillary_reject",
+      "bounded_large_child_output_drained",
+      "unknown_loop_baseline_never_authorizes_detach",
+      "real_gap_exit3_not_success",
+      "owned_pg17_public_restore_and_reader_regressions"
+    ],
+    "combinedT17T18": {
+      "command": "python3 -m unittest discover -s scripts/tests -p 'test_t1[78]_*.py'",
+      "durationSeconds": 42.943,
+      "failed": 0,
+      "passed": 140,
+      "skipped": 0
+    },
+    "newHostSubset": {
+      "actualScmDescriptorPassed": 6,
+      "launcherPassed": 8,
+      "pureUnitPlanPassed": 4
+    },
+    "originalDisabledFacade": {
+      "failed": 0,
+      "passed": 12,
+      "skipped": 0
+    },
+    "publicPostgresqlVersion": "17.11 (Debian 17.11-0+deb13u1)"
+  }
+}

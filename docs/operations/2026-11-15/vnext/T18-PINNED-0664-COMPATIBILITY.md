@@ -58,10 +58,11 @@ An asset-only transient unit may use DynamicUser, PrivateNetwork, ProtectSystem
 strict, capability bounds empty and private RO binds of the fixed source/assets;
 there is no reason to give it a key or production paths.
 
-The repository still lacks the known-good root-only SCM_RIGHTS host loader
-source/protocol. The e1987ea commit identifies the reader adapter; its public
-receipt stores launcher SHA256, not launcher bytes. Full reusable real-key host
-orchestration therefore requires the coordinator's exact sanitized loader source
-and FD3–8/peer/lock/cleanup protocol. Do not guess a replacement or execute the
-real restore entry as a no-key admission check. HOLD remains and no formal service,
+At the e6e73ad boundary the repository lacked the root-only SCM_RIGHTS host
+loader source/protocol; e1987ea identified the reader adapter and its receipt
+stored only launcher SHA256. The coordinator subsequently supplied the sanitized
+launcher source and authoritative host paths. The separately reviewed follow-up
+is described in [fixed host orchestration](T18-HOST-ORCHESTRATION.md), with distinct
+no-key admission and fixed invalid/real FD handoff. The real restore entry is
+never used as a no-key admission check. HOLD remains; no formal service,
 production mode or protected release/PR branch is changed.
