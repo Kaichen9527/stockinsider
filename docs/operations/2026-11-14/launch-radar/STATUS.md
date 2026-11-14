@@ -1,5 +1,9 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## Current external PTT4/4 / official importer checkpoint (Taipei2026-11-15)
+
+Externalb063b9ed/blob46573266 validates4/4 fixed PTT cases on4a77e325 with all four hashes equal to the retained old2/4 bytes. [Followup](../../2026-11-15/launch-radar/ptt-external-four-byte-followup.json). Cloud acquisition/rights/queue/coverage remain incomplete. Official source **e4bd698aa0ae716a193354db1a41b5335f240ace** has callable raw JSON/CLI→selected-reader staging seam, **532/types/lint/build +33controlled browser PASS**; [receipt](../../2026-11-15/launch-radar/official-replay-checks.json), [bounded sample tasks](../../2026-11-15/launch-radar/OFFICIAL-READABLE-TASKS.md). Actual official raw replay remains NOT_RUN; CSV licensing/format integration follows separately. All old failures/pending labels below retain checkpoint-time meaning. No formal release/production gate was cleared.
+
 ## T04 actual-regression correction (Taipei2026-11-15)
 
 Source **4a77e32537b00c62b31c72516d28fb0c474fefb3**: [v2 template/issuer-summary fix](../../2026-11-15/launch-radar/PTT-REGRESSION-FIX.md), [519/types/lint/build +7synthetic CLI receipt](../../2026-11-15/launch-radar/ptt-regression-fix-checks.json), [same-four-byte replay source/dependency pins](../../2026-11-15/launch-radar/PTT-FIXED-BYTE-REPLAY.json). External old-sourcee676e04 actual2/4 failure is retained; fixed-source actual replay is PENDING, not supplied by synthetic PASS. Rights/queue/instrument/native/A1 remain closed. Earlier source results below retain their subject.

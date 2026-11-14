@@ -1,4 +1,6 @@
-# T04 exact-byte regressions — source fix, actual replay pending
+# T04 exact-byte regressions — source fix and external4/4 followup
+
+Current followup: [external SAME-four-byte replay](ptt-external-four-byte-followup.json), commitb063b9ed7d14cff17cbefc7a8ee9adcb8e48fe75/blob46573266a4d503da5a820304593ce15440f822ef, verifies4/4 on4a77e325. All four HTMLhashes equal the earlier5285068 failure artifacts. This is external isolated parser evidence, not Cloud acquisition or rights/queue/coverage acceptance. The pending labels below describe the earlier published handoff time and remain in its immutable receipt.
 
 Source **4a77e32537b00c62b31c72516d28fb0c474fefb3**, tree **5ff9bb9da2f9ded329220667e4d24dbced39733a**, web tree **abe24175642c9ecef814bfde30d55c911243d2ef**. Same protection branch/PR384. [VM receipt](ptt-regression-fix-checks.json) · [six exact source blobs/three dependency pins for coordinator replay](PTT-FIXED-BYTE-REPLAY.json) · [prior source/515 result and limits](PTT-BODY.md).
 

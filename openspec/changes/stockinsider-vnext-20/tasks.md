@@ -2,6 +2,16 @@
 
 ## Active Goal #385 / first source frontier
 
+### Current T04 external followup / official staging replay
+
+- [x] Fixed source4a77e325 SAMEfourbytes external isolated parser4/4, independently cross-checked all four hashes against retained5285068 old2/4 failures. Source519/types/lint/build+7syntheticCLI remain separate VM evidence; external4/4 receiptb063b9ed has false rights/queue authority and unknown coverage.
+- [x] Sourcee4bd698 callable JSON staging raw importer/CLI, opaque parsed state→actual optional selected-reader→scorer seam, strict TWSE6-field net arithmetic/TPEXgroup proof and independent volume-precision/CA gaps.532/532/types/lint/fullbuild+33controlledbrowser PASS; first531/runtimePASS/types-build28errors retained and reviewed CFA/host-null capture repair.
+- [ ] Actual Cloud PTT acquisition remains BLOCKED; actual body-scope rights, original queue/instrument/liquidity/coverage and immutable corrected known-URL refresh remain incomplete. Earlier BLOCKED_HTML_UNAVAILABLE means local acquisition; it does not erase the current external4/4 replay.
+- [ ] Official CSV11755/11391/11856 is the next approved source slice; JSON metadata/body=absent replay cannot count raw success. Exact51shares/CA/native/A1/source-time/formalCI/staging/release remain closed.
+
+Evidence: docs/operations/2026-11-15/launch-radar/ptt-external-four-byte-followup.json and official-replay-checks.json; OFFICIAL-READABLE-TASKS.md gives exact bounded private input and purpose/destination constraints. No T86raw publication, FinMind calls, production/SQL/timer or nativeHOLD retry.
+
+
 ### T04 actual PTT body/provenance continuation
 
 - [x] Actual scrapePttStock calls bounded balanced own-body parser and existing symbol matcher; separate title/comment metadata, Taipei publication/ID/acquisition clocks, body/parser hashes and allowlist. Unknown/conflicting/future headers do not become fresh mentions/signals.
