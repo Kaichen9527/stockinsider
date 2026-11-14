@@ -1,0 +1,72 @@
+{
+  "schema": "stockinsider-tpex-official-liquidity-window-proof-v1",
+  "source": "https://github.com/Kaichen9527/stockinsider/commit/20c961ba458428800d4234e7c33d92ebf06228a0",
+  "policy": {
+    "sessions": 20,
+    "minimumAverageNtd": 50000000,
+    "inclusive": true
+  },
+  "controls": [
+    {
+      "symbol": "5274",
+      "cutoff": "2026-11-12",
+      "sessions": 20,
+      "first": "2026-10-14",
+      "totalNtd": 135861558188,
+      "averageDailyNtd": "6793077909.4",
+      "passes50mn": true
+    },
+    {
+      "symbol": "6488",
+      "cutoff": "2026-11-12",
+      "sessions": 20,
+      "first": "2026-10-14",
+      "totalNtd": 196530857354,
+      "averageDailyNtd": "9826542867.7",
+      "passes50mn": true
+    },
+    {
+      "symbol": "5274",
+      "cutoff": "2026-11-13",
+      "sessions": 20,
+      "first": "2026-10-15",
+      "totalNtd": 133982730768,
+      "averageDailyNtd": "6699136538.4",
+      "passes50mn": true
+    },
+    {
+      "symbol": "6488",
+      "cutoff": "2026-11-13",
+      "sessions": 20,
+      "first": "2026-10-15",
+      "totalNtd": 191181440684,
+      "averageDailyNtd": "9559072034.2",
+      "passes50mn": true
+    }
+  ],
+  "crossingControl": {
+    "market": "TPEX",
+    "symbol": "3551",
+    "officialCompany": "https://ic.tpex.org.tw/company_basic.php?stk_code=3551",
+    "cutoffs": [
+      {
+        "date": "2026-11-12",
+        "windowTotalNtd": 1015377528,
+        "averageNtd": 50768876.4,
+        "passes": true
+      },
+      {
+        "date": "2026-11-13",
+        "windowTotalNtd": 996100054,
+        "averageNtd": 49805002.7,
+        "passes": false
+      }
+    ],
+    "evidenceOfSourceMention": false
+  },
+  "scope": {
+    "replayedLater": true,
+    "sourceFirstCandidateAdmission": false,
+    "publicationAuthority": false
+  }
+}
