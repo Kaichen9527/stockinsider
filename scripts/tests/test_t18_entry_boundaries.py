@@ -13,6 +13,7 @@ from deployment.staging.vnext.t17_keyfd.t18_receipt import project_exercise,proj
 from deployment.staging.vnext.t17_keyfd.t18_reader_roles import ROLE_COUNTS
 from deployment.staging.vnext.t17_keyfd.fixed_read_proxy import METRICS
 from deployment.staging.vnext.t17_keyfd.t18_release_assets import RELEASE_PINS
+from deployment.staging.vnext.t17_keyfd.t18_host_plan import project_broker_refusal
 from test_t17_portable_restore_engine import public_archive
 
 
@@ -70,7 +71,11 @@ class FixedT18EntryBoundariesTests(unittest.TestCase):
             if 'restore' in script:
                 value=json.loads(p.stdout);self.assertEqual(value['status'],'REJECTED')
                 self.assertFalse(value['databaseRestored']);self.assertTrue(value['nativeHoldRetained'])
-            else:self.assertEqual(p.stdout,b'')
+            else:
+                role='APP' if script=='staging_t18_app_broker.py' else 'REST'
+                observed=project_broker_refusal(p.stdout,role)
+                self.assertIsNotNone(observed)
+                self.assertTrue(observed['tag'].startswith('namespace_'))
 
     def test_actual_pg_fast_shutdown_cancels_open_client_and_cleans(self):
         with tempfile.TemporaryDirectory(prefix='t18-pg-cleanup-',dir='/tmp') as directory:

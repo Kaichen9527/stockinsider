@@ -34,12 +34,13 @@ reserved account/group identity and the host manager mount namespace. Run it
 only from the exact fresh fixed source root in the systemd manager's host mount
 namespace. Do not invoke it in Cloud or a caller-private mount namespace.
 
-Start with the 45 verified 793c0cbc runtime blobs (the original 40, including
-four historical migrations, plus the five files below). Apply the exact TWO
-replacements in [the current stage manifest](t18-host-procfs-stage-manifest.json):
-shared staging_admission.py and the root staging_t18_host.py. Retain the other
-43 blobs unchanged. The runtime source count remains 45; do not mix the old
-shared observer with the new root launcher. These five host files remain required:
+Start with the 45 verified 337dc5bd runtime blobs (the original host source plus
+its two procfs replacements). Apply the exact THREE replacements in
+[the current stage manifest](t18-host-broker-diagnostic-stage-manifest.json):
+t18_app_broker.py, t18_host_plan.py and staging_t18_host.py. Retain the other
+42 blobs unchanged, including the shared procfs observer and all four historical
+migrations. The runtime source count remains 45. These five host files remain
+required; do not mix old broker/output routing with the new collector:
 
 - deployment/staging/vnext/t17_keyfd/t18_host_plan.py
 - deployment/staging/vnext/t17_keyfd/t18_fd_handoff.py
@@ -48,9 +49,10 @@ shared observer with the new root launcher. These five host files remain require
 - scripts/staging_t18_host.py
 
 The original [host source receipt](t18-host-orchestration-receipt.json) is historical
-evidence for 793c0cbc. Use the current stage manifest for the two replacement
-SHA256/Git blob IDs and [the procfs fix receipt](t18-host-procfs-receipt.json) for
-current test/review evidence. Tests/docs/receipts are not runtime dependencies.
+evidence for 793c0cbc; [the procfs fix receipt](t18-host-procfs-receipt.json) records
+337dc5bd. Use the current stage manifest for the three replacement SHA256/Git
+blob IDs and [the broker diagnostic receipt](t18-host-broker-diagnostic-receipt.json)
+for current test/review evidence. Tests/docs/receipts are not runtime dependencies.
 Do not place database-manifest.json, env files, backups or
 keys in this public source tree; the private manifest remains in the original
 root-only location. The host coordinator must stage/verify exact Git blobs before
@@ -72,6 +74,39 @@ broker exits while its socket is awaited; these are fixed role-only labels and
 do not include raw exceptions, stderr or journal contents. A socket that remains
 absent with live brokers still reaches the bounded broker_socket_startup_deadline.
 This source fix does not convert the failed onsite run into admission success.
+
+The coordinator then verified exact 337dc5bd replacements and reported a no-key
+failure after 3.965 seconds: app_broker_startup_refused, keyRead=false, unchanged
+formal signatures and cleaned staging resources. This is the latest onsite
+observation, not evidence that any later source has been admitted.
+
+The current broker emits ONE failure-only JSON record on stdout with exactly
+schema=stockinsider-t18-broker-refusal-v1, role=APP or REST, and one compiled tag.
+There is no exception text, errno, path, namespace cookie, SQL, row or log field.
+Fixed check groups cover namespace/interface/capability refusal, formal PG path
+access, account/group, each prctl, each private work tmpfs, cgroup path/memory/
+swap/tasks, each control socket operation, asset context entry, namespace cookie,
+tool installation, exact Node version and peer accept/identity. runtime_or_cleanup
+is the fixed fallback, never exception interpolation. Tags identify the refusing
+check, not an inferred host-specific cause. The exact allowlist is in the receipt.
+
+APP/REST retain StandardError=null. StandardOutput=null is removed ONLY for these
+two new staging units, so existing systemd-run --pipe supplies the direct host
+stdout pipe. This does not route broker diagnostics through the journal. Host
+reader threads cap both broker streams at 512 bytes each, keep draining on
+overflow, and refuse overflow/incomplete capture. DB capture retains its original
+1 MiB cap. Node/PostgREST/app output continues to use its existing private sinks.
+The host exports only one exact-schema, duplicate-free, allowlisted role/tag
+record in brokerDiagnostics, never raw captured bytes. Normal exit 0 adds no
+refusal. A complete record captured before cleanup also covers a still-waiting
+systemd-run wrapper; exit-2 records of already-failed wrappers are collected after
+draining. Import-time failure, kill or invalid/missing records can remain
+NO_VALID_REFUSAL_RECORD. Refusals emitted only after an intentional cleanup stop
+are not promoted to startup observations. Empty or classified diagnostics never
+grant admission, trigger a retry, read a key or alter any existing gate/exit code.
+Actual systemd stdout routing and the newly identified host check remain for the
+coordinator's next no-key run. Cloud has tested real owned pipes and refusals,
+not the three privileged onsite units.
 
 ## Modes
 
@@ -174,8 +209,9 @@ cannot bypass any of them.
 
 ## Cleanup and interruption
 
-Bounded reader threads drain all child pipes while units run; each buffer caps
-at 1 MiB, continues draining on overflow and forces refusal. The monitor samples
+Bounded reader threads drain all child pipes while units run; each DB buffer caps
+at 1 MiB and each broker buffer at 512 bytes. They continue draining on overflow
+and force refusal. The monitor samples
 host reserve/work space and observable kernel unit-memory peaks every 150ms.
 SIGTERM/INT/HUP defer cancellation to checkpoints so side effects cannot precede
 ownership records; native commands time out. Cleanup stops only the three fixed

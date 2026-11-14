@@ -60,6 +60,10 @@ class FixedHostPlanTests(unittest.TestCase):
                 '/tmp:rw,size=32M,mode=1777','/var/tmp:rw,size=32M,mode=1777'])
             if kind!='DB':
                 for key in ('Requires','After','BindsTo','JoinsNamespaceOf'):self.assertEqual(p[key],m.DB_UNIT)
+                self.assertEqual(p['StandardError'],'null')
+                self.assertNotIn('StandardOutput',p)  # --pipe owns the stdout FD.
+                self.assertIn('--pipe',m.build_unit_argv(kind,'real'))
+                self.assertEqual(p['RestrictAddressFamilies'],'AF_UNIX AF_INET AF_INET6')
             for path in ('/var/lib/postgresql','/run/postgresql','/etc/stockinsider'):
                 self.assertIn(path,p['InaccessiblePaths'])
 

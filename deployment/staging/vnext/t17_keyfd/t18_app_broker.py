@@ -5,6 +5,7 @@ si-t18-app, seals the fixed control socket root-owned, and supplies only fixed
 RO assets plus private tmpfs scratch/credentials. Never run as the DB UID.
 """
 import base64
+from contextlib import contextmanager,ExitStack
 import ctypes
 import hashlib
 import hmac
@@ -22,7 +23,8 @@ import subprocess
 import tempfile
 import time
 from .portable_sql_fixture_adapter import _tools
-from .staging_admission import _namespace_and_privileges, _production_pg_inaccessible, _mounts
+from .staging_admission import _namespace_and_privileges, _production_pg_inaccessible, _mounts, StagingAdmissionRejected
+from .t18_host_plan import BROKER_REFUSAL_TAGS,broker_refusal_bytes
 from .t18_release_assets import observe_fixed_release_assets, RELEASE_PINS
 from .t18_broker_transport import observe_network_namespace_cookie
 
@@ -39,6 +41,28 @@ OPS=('HELLO','CONFIGURE','START_A','START_B','STOP_NEXT','FAULT_NEXT','SHUTDOWN'
 
 class AppBrokerRejected(Exception):
     def __init__(self):super().__init__('fixed_app_broker_rejected')
+
+
+class _StartupRejected(AppBrokerRejected):
+    def __init__(self,tag):
+        super().__init__()
+        self.tag=tag if type(tag) is str and tag in BROKER_REFUSAL_TAGS else 'runtime_or_cleanup'
+
+
+@contextmanager
+def _startup_check(tag):
+    """Preserve all checks, project failures to compiled labels only."""
+    try:yield
+    except _StartupRejected:raise
+    except BaseException as error:
+        if tag=='namespace_observation' and isinstance(error,StagingAdmissionRejected):
+            known={'nonroot_required':'namespace_nonroot','capability_free_required':'namespace_capabilities',
+              'network_interface_observation_invalid':'namespace_interfaces_invalid',
+              'network_interface_observation_unavailable':'namespace_interfaces_unavailable',
+              'private_loopback_network_required':'namespace_not_loopback',
+              'independent_network_namespace_required':'namespace_not_independent'}
+            if len(error.args)==1 and type(error.args[0]) is str:tag=known.get(error.args[0],tag)
+        raise _StartupRejected(tag) from None
 
 
 def _b64(data):return base64.urlsafe_b64encode(data).rstrip(b'=').decode('ascii')
@@ -112,43 +136,61 @@ def _child_limits():
 
 
 def _observe_app_runtime(expected_user):
-    _namespace_and_privileges();_production_pg_inaccessible()
-    if expected_user not in (APP_USER,REST_USER) or pwd.getpwuid(os.getuid()).pw_name!=expected_user:raise AppBrokerRejected()
+    with _startup_check('namespace_observation'):_namespace_and_privileges()
+    with _startup_check('production_pg_paths'):_production_pg_inaccessible()
+    with _startup_check('broker_identity'):
+        if expected_user not in (APP_USER,REST_USER) or pwd.getpwuid(os.getuid()).pw_name!=expected_user:raise AppBrokerRejected()
     import grp
-    dbaccess=grp.getgrnam('stockinsider-t18-dbaccess').gr_gid
-    groups=set(os.getgroups())|{os.getegid()}
-    if (dbaccess in groups)!=(expected_user==REST_USER):raise AppBrokerRejected()
-    libc=ctypes.CDLL(None,use_errno=True)
-    if libc.prctl(4,0,0,0,0)!=0 or libc.prctl(38,1,0,0,0)!=0:raise AppBrokerRejected()
-    if os.access('/run/t18-db-work',os.X_OK):raise AppBrokerRejected()
-    mounts=_mounts(Path('/proc/self/mountinfo').read_text())
+    with _startup_check('broker_group_lookup'):dbaccess=grp.getgrnam('stockinsider-t18-dbaccess').gr_gid
+    with _startup_check('broker_group_membership'):
+        groups=set(os.getgroups())|{os.getegid()}
+        if (dbaccess in groups)!=(expected_user==REST_USER):raise AppBrokerRejected()
+    with _startup_check('prctl_library'):libc=ctypes.CDLL(None,use_errno=True)
+    with _startup_check('prctl_dumpable'):
+        if libc.prctl(4,0,0,0,0)!=0:raise AppBrokerRejected()
+    with _startup_check('prctl_no_new_privileges'):
+        if libc.prctl(38,1,0,0,0)!=0:raise AppBrokerRejected()
+    with _startup_check('db_work_inaccessible'):
+        if os.access('/run/t18-db-work',os.X_OK):raise AppBrokerRejected()
+    with _startup_check('mount_observation'):mounts=_mounts(Path('/proc/self/mountinfo').read_text())
     for fixed in ((WORK,CREDENTIALS) if expected_user==APP_USER else (REST_WORK,)):
-        info=os.lstat(fixed)
-        exact=[m for m in mounts if m['mount']==fixed]
-        if (not stat.S_ISDIR(info.st_mode) or info.st_uid!=os.getuid() or stat.S_IMODE(info.st_mode)!=0o700
-            or len(exact)!=1 or exact[0]['filesystem']!='tmpfs'
-            or any(x.startswith('shared:') for x in exact[0]['optional'])
-            or os.statvfs(fixed).f_blocks*os.statvfs(fixed).f_frsize>256*1024**2):raise AppBrokerRejected()
-    cg=Path('/proc/self/cgroup').read_text().strip().split('0::')[-1]
-    if not cg.startswith('/') or '..' in Path(cg).parts:raise AppBrokerRejected()
-    cgroot=Path('/sys/fs/cgroup')/cg.lstrip('/')
-    maximum=(cgroot/'memory.max').read_text().strip()
-    if not maximum.isdecimal() or not 0<int(maximum)<=512*1024**2 or (cgroot/'memory.swap.max').read_text().strip()!='0':raise AppBrokerRejected()
-    tasks=(cgroot/'pids.max').read_text().strip()
-    if not tasks.isdecimal() or not 1<=int(tasks)<=64:raise AppBrokerRejected()
+        tag={WORK:'app_work_tmpfs',CREDENTIALS:'credential_tmpfs',REST_WORK:'rest_work_tmpfs'}[fixed]
+        with _startup_check(tag):
+            info=os.lstat(fixed)
+            exact=[m for m in mounts if m['mount']==fixed]
+            if (not stat.S_ISDIR(info.st_mode) or info.st_uid!=os.getuid() or stat.S_IMODE(info.st_mode)!=0o700
+                or len(exact)!=1 or exact[0]['filesystem']!='tmpfs'
+                or any(x.startswith('shared:') for x in exact[0]['optional'])
+                or os.statvfs(fixed).f_blocks*os.statvfs(fixed).f_frsize>256*1024**2):raise AppBrokerRejected()
+    with _startup_check('cgroup_path'):
+        cg=Path('/proc/self/cgroup').read_text().strip().split('0::')[-1]
+        if not cg.startswith('/') or '..' in Path(cg).parts:raise AppBrokerRejected()
+        cgroot=Path('/sys/fs/cgroup')/cg.lstrip('/')
+    with _startup_check('cgroup_memory'):
+        maximum=(cgroot/'memory.max').read_text().strip()
+        if not maximum.isdecimal() or not 0<int(maximum)<=512*1024**2:raise AppBrokerRejected()
+    with _startup_check('cgroup_swap'):
+        if (cgroot/'memory.swap.max').read_text().strip()!='0':raise AppBrokerRejected()
+    with _startup_check('cgroup_tasks'):
+        tasks=(cgroot/'pids.max').read_text().strip()
+        if not tasks.isdecimal() or not 1<=int(tasks)<=64:raise AppBrokerRejected()
 
 
 class _FixedChildren:
     """Internal fixed operation state; assets are already observed/held."""
     def __init__(self,assets):
-        self.namespace_cookie=observe_network_namespace_cookie()
-        self.role=pwd.getpwuid(os.getuid()).pw_name
-        if self.role not in (APP_USER,REST_USER):raise AppBrokerRejected()
+        with _startup_check('namespace_cookie'):self.namespace_cookie=observe_network_namespace_cookie()
+        with _startup_check('children_identity'):
+            self.role=pwd.getpwuid(os.getuid()).pw_name
+            if self.role not in (APP_USER,REST_USER):raise AppBrokerRejected()
         self.work=WORK if self.role==APP_USER else REST_WORK
-        self.assets=assets;self.pg,_=_tools();self.node=Path(assets.node_path);self.next=None;self.postgrest=None
+        self.assets=assets
+        with _startup_check('tool_installation'):self.pg,_=_tools()
+        self.node=Path(assets.node_path);self.next=None;self.postgrest=None
         self.logs=[];self.token=None;self.release=None;self.configured=False;self.configfd=None
-        version=subprocess.run([str(self.node),'--version'],env={'PATH':'/usr/bin:/bin','LC_ALL':'C'},capture_output=True,timeout=5)
-        if version.returncode or version.stdout.strip()!=b'v22.23.1':raise AppBrokerRejected()
+        with _startup_check('node_version'):
+            version=subprocess.run([str(self.node),'--version'],env={'PATH':'/usr/bin:/bin','LC_ALL':'C'},capture_output=True,timeout=5)
+            if version.returncode or version.stdout.strip()!=b'v22.23.1':raise AppBrokerRejected()
     def response(self,op,status):
         return {'op':op,'status':status,'networkNamespaceCookie':self.namespace_cookie,'sourceCommit':None if self.release is None else self.release['sourceCommit'],
             'buildId':None if self.release is None else self.release['buildId'],
@@ -275,17 +317,25 @@ class _FixedChildren:
 def _serve_fixed_broker(expected_user):
     _observe_app_runtime(expected_user)
     control=CONTROL if expected_user==APP_USER else REST_CONTROL
-    if os.path.lexists(control):raise AppBrokerRejected()
-    listener=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);listener.settimeout(1100)
-    deadline=time.monotonic()+1100;children=None
+    with _startup_check('control_path'):
+        if os.path.lexists(control):raise AppBrokerRejected()
+    deadline=time.monotonic()+1100;children=None;listener=None
     try:
-        listener.bind(control);listener.listen(1)
-        with observe_fixed_release_assets() as assets:
+        with _startup_check('control_socket_create'):
+            listener=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);listener.settimeout(1100)
+        with _startup_check('control_socket_bind'):listener.bind(control)
+        with _startup_check('control_socket_listen'):listener.listen(1)
+        with ExitStack() as stack:
+            # Attribute only context entry to assets, never subsequent operations.
+            with _startup_check('asset_verification'):
+                assets=stack.enter_context(observe_fixed_release_assets())
             children=_FixedChildren(assets)
-            connection,_=listener.accept();listener.close();connection.settimeout(1100)
+            with _startup_check('peer_accept'):
+                connection,_=listener.accept();listener.close();connection.settimeout(1100)
             with connection:
-                pid,uid,gid=struct.unpack('3i',connection.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,12))
-                if uid==0 or uid==os.getuid() or pwd.getpwuid(uid).pw_name!='si-t18-db':raise AppBrokerRejected()
+                with _startup_check('peer_identity'):
+                    pid,uid,gid=struct.unpack('3i',connection.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,12))
+                    if uid==0 or uid==os.getuid() or pwd.getpwuid(uid).pw_name!='si-t18-db':raise AppBrokerRejected()
                 while time.monotonic()<deadline:
                     value=_recv_frame(connection);op=value['op']
                     if expected_user==REST_USER and op not in ('HELLO','CONFIGURE','SHUTDOWN'):raise AppBrokerRejected()
@@ -303,19 +353,30 @@ def _serve_fixed_broker(expected_user):
                 raise AppBrokerRejected()
     finally:
         if children:children.close()
-        listener.close()
+        if listener:listener.close()
+
+
+def _emit_refusal(expected_user,error):
+    role={APP_USER:'APP',REST_USER:'REST'}.get(expected_user)
+    if role is None:return
+    tag=error.tag if type(error) is _StartupRejected else 'runtime_or_cleanup'
+    try:os.write(1,broker_refusal_bytes(role,tag))
+    except OSError:pass
 
 
 def _main(expected_user):
-    resource.setrlimit(resource.RLIMIT_CORE,(0,0))
     def stop(*_):
         signal.alarm(0)
         for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(sig,signal.SIG_IGN)
         raise TimeoutError()
-    for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(sig,stop)
-    signal.alarm(1200)
-    try:_serve_fixed_broker(expected_user);return 0
-    except BaseException:return 2
+    try:
+        with _startup_check('process_setup'):
+            resource.setrlimit(resource.RLIMIT_CORE,(0,0))
+            for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(sig,stop)
+            signal.alarm(1200)
+        _serve_fixed_broker(expected_user);return 0
+    except BaseException as error:
+        _emit_refusal(expected_user,error);return 2
     finally:signal.alarm(0)
 
 

@@ -26,7 +26,7 @@ import tempfile
 import time
 import threading
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from deployment.staging.vnext.t17_keyfd.t18_host_plan import build_unit_argv,SOURCE_HOST,ASSETS_HOST,DB_UNIT,APP_UNIT,REST_UNIT
+from deployment.staging.vnext.t17_keyfd.t18_host_plan import build_unit_argv,SOURCE_HOST,ASSETS_HOST,DB_UNIT,APP_UNIT,REST_UNIT,BROKER_REFUSAL_MAX_BYTES,project_broker_refusal
 from deployment.staging.vnext.t17_keyfd.t18_fd_handoff import send_six_fds,HANDOFF_PARENT,HANDOFF_SOCKET
 
 ORIGINAL=Path('/run/stockinsider-t17-5b65286')
@@ -65,7 +65,9 @@ def command(*args,timeout=30,stdin=None,pass_fds=()):
 
 class _Capture:
     """Continuously drain both pipes; bounded buffers never backpressure exit."""
-    def __init__(self,child):
+    def __init__(self,child,limit=1024**2):
+        if type(limit) is not int or not 0<limit<=1024**2:raise HostRejected('host_capture_limit')
+        self.limit=limit
         self.buffers=[bytearray(),bytearray()];self.overflow=threading.Event();self.stop=threading.Event()
         self.streams=(child.stdout,child.stderr);self.threads=[]
         for index,stream in enumerate(self.streams):
@@ -78,7 +80,7 @@ class _Capture:
                 if not select.select([fd],[],[],.1)[0]:continue
                 block=os.read(fd,65536)
                 if not block:return
-                left=1024**2-len(self.buffers[index])
+                left=self.limit-len(self.buffers[index])
                 self.buffers[index].extend(block[:left])
                 if len(block)>left:self.overflow.set()
             except BlockingIOError:continue
@@ -271,6 +273,23 @@ def _require_starting_brokers(children):
         if children[kind].poll() is not None:raise HostRejected(label)
 
 
+def _failed_broker_diagnostic(kind,code,data):
+    observed=project_broker_refusal(data,kind) if type(code) is int and code==2 else None
+    return observed or {'status':'NO_VALID_REFUSAL_RECORD'}
+
+
+def _snapshot_broker_diagnostics(children,captures):
+    # Observe before sending STOP: normal exits and subsequent cancellations are
+    # not startup failures. A complete pre-STOP record also covers wrapper lag.
+    failed={kind for kind in ('APP','REST') if kind in children and children[kind].poll() not in (None,0)}
+    records={}
+    for kind in ('APP','REST'):
+        if kind in captures and not captures[kind].overflow.is_set():
+            observed=project_broker_refusal(bytes(captures[kind].buffers[0]),kind)
+            if observed:records[kind]=observed
+    return failed,records
+
+
 def _seal_controls(children):
     deadline=time.monotonic()+15;ipc=grp.getgrnam(IPC).gr_gid
     for parent in ('/run/t18-broker','/run/t18-rest'):
@@ -331,6 +350,7 @@ def execute(mode,manifest_sha):
     work_loop=cipher_loop=None;mapped=False;name='si-t18-'+secrets.token_hex(6)
     peak={'minimumHostDiskBytes':disk('/var/tmp'),'minimumHostAvailableMemoryBytes':memory()}
     runner=None;cleanup_ok=False;state_ok=False;key_read_attempted=False;accounts_verified=False;started=time.monotonic()
+    broker_diagnostics={}
     try:
         for unit in UNITS:_unit_available(unit)
         if any(os.path.lexists(p) for p in DIRS):raise HostRejected('staging_path_already_exists')
@@ -400,7 +420,7 @@ def execute(mode,manifest_sha):
                 argv[index]+=' '+str(storage)
             children[kind]=subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0,
                 env={'PATH':'/usr/sbin:/usr/bin:/sbin:/bin','LC_ALL':'C'})
-            captures[kind]=_Capture(children[kind])
+            captures[kind]=_Capture(children[kind],1024**2 if kind=='DB' else BROKER_REFUSAL_MAX_BYTES)
         _seal_controls(children);_check_stop()
         if mode!='admission':
             conn,_=broker.accept();broker.close()
@@ -439,12 +459,16 @@ def execute(mode,manifest_sha):
     finally:
         _CLEANING=True
         failures=[]
+        failed_brokers,broker_diagnostics=_snapshot_broker_diagnostics(children,captures)
         for kind in ('APP','REST','DB'):
             if kind in unit_intents:
                 try:
                     _stop_unit({'DB':DB_UNIT,'APP':APP_UNIT,'REST':REST_UNIT}[kind])
                     if kind in children:children[kind].wait(timeout=30)
-                    if kind in captures:captures[kind].finish();del captures[kind]
+                    if kind in captures:
+                        captured_out,_=captures[kind].finish();del captures[kind]
+                        if kind in failed_brokers:
+                            broker_diagnostics[kind]=_failed_broker_diagnostic(kind,children[kind].returncode,captured_out)
                 except Exception:failures.append('unit_cleanup')
         if broker:broker.close()
         for fd in fds:
@@ -508,7 +532,7 @@ def execute(mode,manifest_sha):
         except Exception:state_ok=False
         finally:os.close(lock)  # original exclusive OFD lock released LAST
         print(json.dumps({'schema':'stockinsider-t18-host-launcher-v1','mode':mode,'runner':runner,'runnerExit':None if 'DB' not in children else children['DB'].returncode,
-            'resourceSample':peak,'durationSeconds':round(time.monotonic()-started,3),'stagingResourcesCleaned':cleanup_ok,'productionSignaturesUnchanged':state_ok,
+            'resourceSample':peak,'brokerDiagnostics':broker_diagnostics,'durationSeconds':round(time.monotonic()-started,3),'stagingResourcesCleaned':cleanup_ok,'productionSignaturesUnchanged':state_ok,
             'stagingAccounts':('RESERVED_LOCKED_NOLOGIN' if accounts_verified else 'NOT_VERIFIED'),'keyRead':key_read_attempted,'nativeHoldRetained':True},sort_keys=True),flush=True)
         _CLEANING=False
         if not cleanup_ok or not state_ok:raise HostRejected('cleanup_or_production_signature_failed')

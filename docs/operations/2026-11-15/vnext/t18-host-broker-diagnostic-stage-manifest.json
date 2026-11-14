@@ -1,0 +1,59 @@
+{
+  "schema": "stockinsider-t18-host-stage-delta-v1",
+  "baselineCommit": "337dc5bd99431a8ca550039595e057fba9690feb",
+  "baselineRuntimeBlobCount": 45,
+  "runtimeBlobCountAfter": 45,
+  "unchangedRuntimeBlobs": 42,
+  "add": [],
+  "remove": [],
+  "replace": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_app_broker.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "2b75c556065a5410677390b935bca82d4ac35b28",
+        "sha256": "5c934143115de7ec2e9f70d9b94b04d9e728aa0e475ffd52c1536fd0ca701f86"
+      },
+      "after": {
+        "gitBlob": "8751fc1c9896e1ed951167b61e84b0f5b3cbb273",
+        "sha256": "8badc1d97f414477877ac20aa43b039c6bd1774ee1b7ef0e8456d901a931d1af"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_host_plan.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "a63a4c14b6cda8fde2964ba35ba44e1e3b24cd0c",
+        "sha256": "cfda78acb8665a94cbe9b8d17390d82e7005d06c285b5066c594024f66fc3526"
+      },
+      "after": {
+        "gitBlob": "f6096489a41b85122335b1db664db4abbd06c8f9",
+        "sha256": "5510d6c143bd3bea3cd86cb82ea7dca5880f604c8b924f7fac040835b92bced4"
+      }
+    },
+    {
+      "path": "scripts/staging_t18_host.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "d9f742557dfb5e15a9a8ee40e8b2e40312c232bb",
+        "sha256": "88281164ad90505281b464a0c9cb40152e062cda564ae9b17a72425e678d84c3"
+      },
+      "after": {
+        "gitBlob": "608129b390a50d534aa0e411bf1da32175450d68",
+        "sha256": "6a11a28ccdf047966b6772ed73e2d76d22e7eff3d8b0c0855bbfecdbd9d76d58"
+      }
+    }
+  ],
+  "fixedSourceRoot": "/run/stockinsider-t18-host-source",
+  "fixedSourceUnitRoot": "/readonly/t18-source",
+  "beforeReplacement": "VERIFY_EXACT_BASELINE_BLOB_AND_SHA256",
+  "afterReplacement": "VERIFY_EXACT_AFTER_BLOB_AND_SHA256_FROM_THIS_REVIEWED_COMMIT",
+  "remainingRuntimeBlobs": "RETAIN_EXACT_337dc5bd_BASELINE_IDENTITIES_INCLUDING_SHARED_PROCFS_OBSERVER",
+  "scope": "SOURCE_IDENTITY_DELTA_ONLY_NOT_RUNTIME_ADMISSION",
+  "brokerStdout": "FIXED_FAILURE_ONLY_RECORD_VIA_EXISTING_SYSTEMD_RUN_PIPE",
+  "brokerStderr": "NULL_UNCHANGED",
+  "brokerCaptureEachStreamMaxBytes": 512,
+  "addressFamilyPermissionExpanded": false,
+  "nativeHoldRetained": true,
+  "callerBooleanOrReceiptGrantsRuntimeAuthority": false
+}

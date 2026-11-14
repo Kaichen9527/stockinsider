@@ -1,0 +1,196 @@
+{
+  "build": {
+    "applicationSourceChanged": false,
+    "command": "cd web && npm run build",
+    "exitCode": 127,
+    "status": "NEXT_EXECUTABLE_MISSING_IN_ISOLATED_CHECKOUT"
+  },
+  "callerBooleanOrReceiptGrantsRuntimeAuthority": false,
+  "checksPreserved": [
+    "namespace_capability_and_exact_loopback_observation",
+    "production_pg_paths_inaccessible",
+    "fixed_broker_identity_and_db_group_membership",
+    "prctl_dumpable_and_no_new_privileges",
+    "db_work_inaccessible",
+    "each_owned_0700_private_bounded_tmpfs",
+    "actual_cgroup_path_memory_swap_and_tasks",
+    "fixed_control_socket",
+    "exact_readonly_assets_and_binary_pins",
+    "kernel_namespace_cookie",
+    "fixed_tools_and_node_version",
+    "fixed_peer_identity",
+    "root_original_exclusive_host_lock_through_cleanup_and_formal_comparison",
+    "all_fixed_scope_paths_resources_and_hold"
+  ],
+  "ciAndFormalReleaseGatesChanged": false,
+  "cloudRootOrSystemdUnitActions": false,
+  "contaboAccessed": false,
+  "diagnosticContract": {
+    "allowlistedTags": [
+      "app_work_tmpfs",
+      "asset_verification",
+      "broker_group_lookup",
+      "broker_group_membership",
+      "broker_identity",
+      "cgroup_memory",
+      "cgroup_path",
+      "cgroup_swap",
+      "cgroup_tasks",
+      "children_identity",
+      "control_path",
+      "control_socket_bind",
+      "control_socket_create",
+      "control_socket_listen",
+      "credential_tmpfs",
+      "db_work_inaccessible",
+      "mount_observation",
+      "namespace_capabilities",
+      "namespace_cookie",
+      "namespace_interfaces_invalid",
+      "namespace_interfaces_unavailable",
+      "namespace_nonroot",
+      "namespace_not_independent",
+      "namespace_not_loopback",
+      "namespace_observation",
+      "node_version",
+      "peer_accept",
+      "peer_identity",
+      "prctl_dumpable",
+      "prctl_library",
+      "prctl_no_new_privileges",
+      "process_setup",
+      "production_pg_paths",
+      "rest_work_tmpfs",
+      "runtime_or_cleanup",
+      "tool_installation"
+    ],
+    "brokerStderr": "NULL_UNCHANGED",
+    "brokerStdout": "EXISTING_SYSTEMD_RUN_PIPE",
+    "diagnosticsGrantAuthority": false,
+    "eachBrokerStreamBufferMaxBytes": 512,
+    "eachDbStreamBufferMaxBytes": 1048576,
+    "exactFields": [
+      "schema",
+      "role",
+      "tag"
+    ],
+    "exceptionOrPathOrRowsOrLogsExported": false,
+    "missingInvalidOrKilledRecord": "NO_VALID_REFUSAL_RECORD",
+    "normalExitZeroMisclassified": false,
+    "normalSuccessOutput": "EMPTY",
+    "oneRecordPerRefusingProcess": true,
+    "overflow": "KEEP_DRAINING_THEN_REFUSE",
+    "postCleanupOnlyCancellationPromoted": false,
+    "preCleanupCompleteRecordObserved": true,
+    "projection": "SINGLE_EXACT_SCHEMA_DUPLICATE_FREE_COMPILED_ROLE_AND_TAG_ONLY",
+    "roles": [
+      "APP",
+      "REST"
+    ],
+    "schema": "stockinsider-t18-broker-refusal-v1",
+    "unknownException": "runtime_or_cleanup"
+  },
+  "generatedAtUtc": "2026-11-14T20:15:08.538410Z",
+  "independentReview": {
+    "diagnosticsDurationSeconds": 0.27,
+    "diagnosticsPassed": 9,
+    "entryDurationSeconds": 4.985,
+    "entryPassed": 4,
+    "hostLauncherDurationSeconds": 1.034,
+    "hostLauncherPassed": 9,
+    "openBlockerOrHighFindings": 0,
+    "planDurationSeconds": 0.003,
+    "planPassed": 4,
+    "scope": "EXACT_SOURCE_AND_PUBLIC_FOCUSED_TESTS"
+  },
+  "limitations": [
+    "partial_or_not_yet_drained_pre_stop_record_can_remain_unavailable",
+    "per_check_labels_identify_refusal_phase_not_inferred_host_root_cause",
+    "no_privileged_three_unit_cloud_positive_claim"
+  ],
+  "nativeHoldRetained": true,
+  "onsiteAdmissionAfterFix": "NOT_RUN",
+  "onsiteBrokerRefusalTagAfterFix": "NOT_OBSERVED",
+  "onsiteInvalidKeyAfterFix": "NOT_RUN",
+  "onsiteRealKeyAfterFix": "NOT_RUN",
+  "onsiteSystemdStdoutRoutingAfterFix": "NOT_RUN",
+  "otherSourceFiles": [
+    {
+      "gitBlob": "d2b367395f72778b5b98c2fec8498f4a4ea5a867",
+      "path": "scripts/tests/test_t18_broker_diagnostics.py",
+      "sha256": "0caee66c2fe09a457c581a7fd743d5f4ad471fbec00d68bf512de44f4cbd2962"
+    },
+    {
+      "gitBlob": "437528015ccb9c4b6459dbd7571aca3fceda0ae4",
+      "path": "scripts/tests/test_t18_host_plan.py",
+      "sha256": "8a6b087b1e3c6d9f860278b93cbf8346d01908cd78b78d3784bca1acfcad1e37"
+    },
+    {
+      "gitBlob": "e7a44ff79fd0aee69abde24c0fd510cd3c1cd61e",
+      "path": "scripts/tests/test_t18_entry_boundaries.py",
+      "sha256": "e04f9c2faa08fa41d02b9ec701fc9861455124a937611a4fa7453546a74ca104"
+    },
+    {
+      "gitBlob": "b34e742f9451b966fc7ab8c1cf43060f8a1be1e0",
+      "path": "docs/operations/2026-11-15/vnext/T18-HOST-ORCHESTRATION.md",
+      "sha256": "e9d4f1e5786d7e8df9d4d2ed3daacfdc76dc86236a808aeaa01f00dfe40a3465"
+    },
+    {
+      "gitBlob": "33d51017372921771681f73d72dfeb15e2658c93",
+      "path": "docs/operations/2026-11-15/vnext/t18-host-broker-diagnostic-stage-manifest.json",
+      "sha256": "e0484419bfa110b8c7c9dcc2b5575e12714038ffa88b706bfe2700383bb9f627"
+    }
+  ],
+  "parentCommit": "337dc5bd99431a8ca550039595e057fba9690feb",
+  "productionBackupOrCredentialReceivedInCloud": false,
+  "productionServiceMutation": false,
+  "reportedOnsiteObservation": {
+    "bothProcfsReplacementsVerifiedBeforeAndAfter": true,
+    "durationSeconds": 3.965,
+    "exactCommit": "337dc5bd99431a8ca550039595e057fba9690feb",
+    "keyRead": false,
+    "mode": "admission",
+    "productionSignaturesUnchanged": true,
+    "reason": "app_broker_startup_refused",
+    "source": "COORDINATOR_REPORT_NOT_CLOUD_ADMISSION",
+    "stagingResourcesCleaned": true
+  },
+  "runtimeReplacements": [
+    {
+      "gitBlob": "8751fc1c9896e1ed951167b61e84b0f5b3cbb273",
+      "path": "deployment/staging/vnext/t17_keyfd/t18_app_broker.py",
+      "sha256": "8badc1d97f414477877ac20aa43b039c6bd1774ee1b7ef0e8456d901a931d1af"
+    },
+    {
+      "gitBlob": "f6096489a41b85122335b1db664db4abbd06c8f9",
+      "path": "deployment/staging/vnext/t17_keyfd/t18_host_plan.py",
+      "sha256": "5510d6c143bd3bea3cd86cb82ea7dca5880f604c8b924f7fac040835b92bced4"
+    },
+    {
+      "gitBlob": "608129b390a50d534aa0e411bf1da32175450d68",
+      "path": "scripts/staging_t18_host.py",
+      "sha256": "6a11a28ccdf047966b6772ed73e2d76d22e7eff3d8b0c0855bbfecdbd9d76d58"
+    }
+  ],
+  "runtimeSourceCount": 45,
+  "schema": "stockinsider-t18-broker-diagnostic-source-v1",
+  "stageManifest": "docs/operations/2026-11-15/vnext/t18-host-broker-diagnostic-stage-manifest.json",
+  "tests": {
+    "actual512ByteOverflowDrainedAndRefused": true,
+    "actualLiveWrapperLagPreStopRecord": true,
+    "actualNormalExitNotRefusal": true,
+    "actualOwnedPipeTransport": true,
+    "assetContextOnlyEntryAttribution": true,
+    "cloudEntriesStillReject": true,
+    "combinedT17T18": {
+      "command": "python3 -m unittest discover -s scripts/tests -p 'test_t1[78]_*.py'",
+      "durationSeconds": 61.691,
+      "failed": 0,
+      "passed": 155,
+      "skipped": 0
+    },
+    "duplicateExtraRawWrongRoleOrOversizePayload": "REJECT",
+    "focusedNewDiagnosticsPassed": 9,
+    "negativeRuntimeComponentPhases": 16
+  }
+}
