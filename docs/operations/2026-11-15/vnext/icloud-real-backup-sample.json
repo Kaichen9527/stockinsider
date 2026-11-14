@@ -1,0 +1,37 @@
+{
+  "schema": "stockinsider-icloud-real-set-sample-v1",
+  "verifiedAt": "2026-11-14T17:55:16Z",
+  "cloudProvider": "iCloud Drive",
+  "observedCloudFolderItems": 259,
+  "observedCloudBackupSets": 11,
+  "displayedCloudFreeSpace": "1.67 TB",
+  "latestVerifiedDatabaseBackupDate": "2026-09-19",
+  "latestDatabaseCiphertextVisible": true,
+  "independentBrowserDownload": {
+    "setManifest": {
+      "matchesOriginalBytes": true,
+      "bytes": 5301,
+      "fileSha256": "646b32c5b36daf667266311aa0ae1f10304331bd315f3fab7fe022ad87cd8eb0",
+      "setManifestSha256": "4ca7ef80ac7bea6047a61913a1caa06109ed5c06617f4646c9235db18263b5bb",
+      "members": 26,
+      "encryptedMembers": 11,
+      "independentOffsiteVerified": false
+    },
+    "encryptedStorageMemberSample": {
+      "originalManifestMemberVerified": true,
+      "ciphertextSha256": "33aad08cfe6ba1aef5b588051fef52d5d8541abec70c15bfb97d7a9bae67cfd8",
+      "bytes": 544239,
+      "gcmAuthenticated": true,
+      "plaintextBytes": 544167,
+      "plaintextHashMatches": true,
+      "plaintextWritten": false
+    }
+  },
+  "envelopeVerifierGitBlob": "33cd0f917759751a5772edceefaeee56155bd14c",
+  "latestDatabaseContaboRestoreEvidence": "75e8493f0047da3d2cec7f0e2c7af8e7817f81f9",
+  "allCloudMembersIndependentlyVerified": false,
+  "archiveCleanupApprovedByManifest": false,
+  "originalBackupBytesDeleted": 0,
+  "macAvailableKiB": 11916108,
+  "san128gbMounted": false
+}
