@@ -1,0 +1,108 @@
+{
+  "schema": "stockinsider-t11-t06-wealtholic-liquidity-negative-v1",
+  "symbol": "3004",
+  "verifiedSources": [
+    {
+      "source": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260801&stockNo=3004&response=json",
+      "bytes": 2771,
+      "sha256": "3758518a2b8a9eec3699d8159e018ade10069c4e03f785f33d8d1bb2b2c80228",
+      "observedAt": "2026-11-14T22:27:12.534186+00:00"
+    },
+    {
+      "source": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260901&stockNo=3004&response=json",
+      "bytes": 2670,
+      "sha256": "78b73d185f9d4edeb8f00367849137ee7c8b5c87ab104bb42501b2842f9cd3e0",
+      "observedAt": "2026-11-14T22:27:13.311137+00:00"
+    },
+    {
+      "source": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261001&stockNo=3004&response=json",
+      "bytes": 2576,
+      "sha256": "a71b7bbab86f861053ef42433304fc65b82cf5d0157684db5c9549580f5e042c",
+      "observedAt": "2026-11-14T22:27:13.924747+00:00"
+    },
+    {
+      "source": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261101&stockNo=3004&response=json",
+      "bytes": 1772,
+      "sha256": "9da61fa1af3a0d5bf2a0499c93a97528c2dcff78eaf65e469ae376a82df143fe",
+      "observedAt": "2026-11-14T22:27:14.617327+00:00"
+    },
+    {
+      "source": "https://wwwc.twse.com.tw/rwd/zh/exRight/TWT49U?startDate=20260801&endDate=20261113&response=json",
+      "bytes": 74742,
+      "sha256": "55244ab1a96d18f498c2eac202cea58423e801c218486adfcd0ff210871549f2",
+      "observedAt": "2026-11-14T22:27:18.431888+00:00"
+    },
+    {
+      "source": "https://wwwc.twse.com.tw/rwd/zh/reducation/TWTAUU?startDate=20260801&endDate=20261113&response=json",
+      "bytes": 2627,
+      "sha256": "11c736e1069c09c44469e09119c612e174520a1eb3e189ab4cff10db83f9fe40",
+      "observedAt": "2026-11-14T22:27:18.653907+00:00"
+    },
+    {
+      "source": "https://wwwc.twse.com.tw/rwd/zh/change/TWTB8U?startDate=20260801&endDate=20261113&response=json",
+      "bytes": 586,
+      "sha256": "26d9cfc795072a74d0a9490f743f718b0b249a19edb8ecde1c27e699e1cfd646",
+      "observedAt": "2026-11-14T22:27:18.853489+00:00"
+    }
+  ],
+  "matchingActionRowsInSelectedFeeds": {
+    "exRight/TWT49U": 0,
+    "reducation/TWTAUU": 0,
+    "change/TWTB8U": 0
+  },
+  "controls": [
+    {
+      "date": "2026-11-02",
+      "prior25Start": "2026-09-21",
+      "prior25High": "124.50",
+      "close": "127.50",
+      "abovePriorHigh": true,
+      "prior50Start": "2026-08-17",
+      "volumeMultiple": "4.9441",
+      "meetsVolume14": true,
+      "dailyAverageTurnover20": "36623503.8",
+      "meetsLiquidity": false
+    },
+    {
+      "date": "2026-11-12",
+      "prior25Start": "2026-10-05",
+      "prior25High": "129.50",
+      "close": "124.00",
+      "abovePriorHigh": false,
+      "prior50Start": "2026-08-27",
+      "volumeMultiple": "1.1547",
+      "meetsVolume14": false,
+      "dailyAverageTurnover20": "46514598.55",
+      "meetsLiquidity": false
+    },
+    {
+      "date": "2026-11-13",
+      "prior25Start": "2026-10-06",
+      "prior25High": "129.50",
+      "close": "128.50",
+      "abovePriorHigh": false,
+      "prior50Start": "2026-08-28",
+      "volumeMultiple": "1.5327",
+      "meetsVolume14": true,
+      "dailyAverageTurnover20": "49008363.5",
+      "meetsLiquidity": false
+    }
+  ],
+  "observedRawSessions": 70,
+  "resultUsesOnlyUnadjustedPrices": true,
+  "laterFetchNotOriginalPublication": true,
+  "sourceArticle": {
+    "sameAuthorIndex": "https://www.cmoney.tw/notes/?aid=3422",
+    "documentId": "1289186",
+    "sourceUrl": "https://www.cmoney.tw/notes/note-detail.aspx?nid=1289186",
+    "displayedFirstPublishedAt": "2026-11-07 09:46",
+    "displayedLastUpdatedAt": "2026-11-08 08:30",
+    "displayTimeZoneIndependentlyAttested": false,
+    "observedMarketSectionDate": "2026-11-02",
+    "classification": "PUBLIC_EXCERPT_WITH_EDITORIAL_POSITIVE_MENTION",
+    "autonomousAcquisitionRights": "NOT_ATTESTED"
+  },
+  "publicLaunchRankingCandidate": false,
+  "pointInTimeProductIngestionProven": false,
+  "note": "Unadjusted report controls for timing and liquidity only. On Nov 2 a market event cannot be inferred to have been published with this article yet. All three controls fail the 50 million TWD rule independently, and do not imply a strategy score or financial conclusion."
+}
