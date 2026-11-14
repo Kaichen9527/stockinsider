@@ -1,0 +1,131 @@
+{
+  "schema": "stockinsider-launch-11370-contabo-parser-replay-v1",
+  "scope": "ISOLATED_READONLY_OFFICIAL_11370_BYTE_PARSER_AND_EXTERNAL_WINDOW_CROSSCHECK",
+  "sourceCommit": "ab667c9c74df974fe22fdaa37a4fbc6069a6084c",
+  "captureReceipt": "20c961ba458428800d4234e7c33d92ebf06228a0",
+  "rawOfficials": {
+    "fileCount": 21,
+    "uniqueBytes": 40462652,
+    "retainedGit": false,
+    "stageUsedHardlinks": true
+  },
+  "runtime": {
+    "version": "v22.14.0",
+    "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "officialSourceGitBlobs": 19,
+    "nonRoot": true,
+    "externalNetwork": false,
+    "formalPathsUnavailable": true,
+    "readonlyRoot": true,
+    "packageLockCompared": true
+  },
+  "comparisonsPassed": 8,
+  "observations": [
+    {
+      "symbol": "5274",
+      "exit": 0,
+      "parsedSessions": 21,
+      "declaredBytes": 40462652,
+      "decodedBytes": 40462652,
+      "revisionId": "institutional-11370:e1766f2fc1ff4bc9edec8dd145b49afc7a29ec5d38335cbee270e64a93ca595a",
+      "sourceAuthority": false,
+      "publicationAuthority": false,
+      "rankingAuthority": false,
+      "gaps": [
+        "institutional_volume_capture_workflow_identity_unverified",
+        "institutional_volume_original_publication_clock_unverified",
+        "institutional_volume_parser_not_acquisition_or_publication_authority"
+      ]
+    },
+    {
+      "symbol": "6488",
+      "exit": 0,
+      "parsedSessions": 21,
+      "declaredBytes": 40462652,
+      "decodedBytes": 40462652,
+      "revisionId": "institutional-11370:d81ed24e92df5c7e3b057145f6a035d759694f93060c762c88cdc1175a7a5357",
+      "sourceAuthority": false,
+      "publicationAuthority": false,
+      "rankingAuthority": false,
+      "gaps": [
+        "institutional_volume_capture_workflow_identity_unverified",
+        "institutional_volume_original_publication_clock_unverified",
+        "institutional_volume_parser_not_acquisition_or_publication_authority"
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "through": "2026-11-12",
+      "span": 5,
+      "shares": 3238369,
+      "constantIssuedShares": true,
+      "symbol": "5274",
+      "independentShares": 3238369
+    },
+    {
+      "through": "2026-11-12",
+      "span": 20,
+      "shares": 9506958,
+      "constantIssuedShares": true,
+      "symbol": "5274",
+      "independentShares": 9506958
+    },
+    {
+      "through": "2026-11-13",
+      "span": 5,
+      "shares": 3341569,
+      "constantIssuedShares": true,
+      "symbol": "5274",
+      "independentShares": 3341569
+    },
+    {
+      "through": "2026-11-13",
+      "span": 20,
+      "shares": 9527351,
+      "constantIssuedShares": true,
+      "symbol": "5274",
+      "independentShares": 9527351
+    },
+    {
+      "through": "2026-11-12",
+      "span": 5,
+      "shares": 71508167,
+      "constantIssuedShares": true,
+      "symbol": "6488",
+      "independentShares": 71508167
+    },
+    {
+      "through": "2026-11-12",
+      "span": 20,
+      "shares": 264112809,
+      "constantIssuedShares": true,
+      "symbol": "6488",
+      "independentShares": 264112809
+    },
+    {
+      "through": "2026-11-13",
+      "span": 5,
+      "shares": 66023022,
+      "constantIssuedShares": true,
+      "symbol": "6488",
+      "independentShares": 66023022
+    },
+    {
+      "through": "2026-11-13",
+      "span": 20,
+      "shares": 262105374,
+      "constantIssuedShares": true,
+      "symbol": "6488",
+      "independentShares": 262105374
+    }
+  ],
+  "footprint": {
+    "databaseConnected": false,
+    "selectedCacheBound": false,
+    "appScoreChecked": false,
+    "rankingPublished": false,
+    "productionMutation": false
+  },
+  "nativeHoldRetained": true
+}
