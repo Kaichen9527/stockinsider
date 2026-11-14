@@ -1,0 +1,282 @@
+{
+  "schema": "stockinsider-tpex-5274-long-history-action-boundary-v1",
+  "symbol": "5274",
+  "scope": {
+    "laterObserved": true,
+    "shortNativeWindowNoMatchingEvents": true,
+    "pricesAdjusted": false,
+    "completeAllEventClasses": false
+  },
+  "queries": [
+    {
+      "year": "2023",
+      "kind": "exDailyQ",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2023%2F01%2F01&endDate=2023%2F12%2F31&response=json",
+      "tableFields": [
+        "除權息日期",
+        "代號",
+        "名稱",
+        "除權息前收盤價",
+        "除權息參考價",
+        "權值",
+        "息值"
+      ],
+      "rowCount": 1014,
+      "matches": [
+        {
+          "eventDate": "2023-06-15",
+          "除權息前收盤價": "2675.00",
+          "除權息參考價": "2630.00",
+          "權值+息值": "45.000000"
+        }
+      ],
+      "bodySha256": "a20968667df0b86b1535cd86a1fd42a6f677e6fa66e15e196683e763ff789107",
+      "observedAt": "2026-11-14T19:08:05.953177+00:00"
+    },
+    {
+      "year": "2023",
+      "kind": "revivt",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/revivt?startDate=2023%2F01%2F01&endDate=2023%2F12%2F31&response=json",
+      "tableFields": [
+        "恢復買賣日期",
+        "股票代號",
+        "名稱",
+        "最後交易日之收盤價格",
+        "減資恢復買賣開始日參考價格",
+        "漲停價格",
+        "跌停價格"
+      ],
+      "rowCount": 15,
+      "matches": [],
+      "bodySha256": "a8156ecb7aeaf2f902ce38491730dab95ed896191f3b62c76eb8b1433f5eafef",
+      "observedAt": "2026-11-14T19:08:05.884900+00:00"
+    },
+    {
+      "year": "2023",
+      "kind": "pvChgRslt",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/pvChgRslt?startDate=2023%2F01%2F01&endDate=2023%2F12%2F31&response=json",
+      "tableFields": [
+        "恢復買賣日期",
+        "證券代號",
+        "證券名稱",
+        "最後交易日之收盤價格",
+        "恢復買賣開始參考價",
+        "漲停價格",
+        "跌停價格"
+      ],
+      "rowCount": 0,
+      "matches": [],
+      "bodySha256": "2a1da60bc94723a82870bd4ce41e9c24aa42c2dc7314d169c76ae1d2ceb0ad2a",
+      "observedAt": "2026-11-14T19:08:05.633752+00:00"
+    },
+    {
+      "year": "2024",
+      "kind": "exDailyQ",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2024%2F01%2F01&endDate=2024%2F12%2F31&response=json",
+      "tableFields": [
+        "除權息日期",
+        "代號",
+        "名稱",
+        "除權息前收盤價",
+        "除權息參考價",
+        "權值",
+        "息值"
+      ],
+      "rowCount": 1060,
+      "matches": [
+        {
+          "eventDate": "2024-06-26",
+          "除權息前收盤價": "4770.00",
+          "除權息參考價": "4750.00",
+          "權值+息值": "20.000000"
+        }
+      ],
+      "bodySha256": "cb5dceed186487ec86a442e5f74d74f32d6cf8b804bb3b999089f2f41937115e",
+      "observedAt": "2026-11-14T19:08:06.285497+00:00"
+    },
+    {
+      "year": "2024",
+      "kind": "revivt",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/revivt?startDate=2024%2F01%2F01&endDate=2024%2F12%2F31&response=json",
+      "tableFields": [
+        "恢復買賣日期",
+        "股票代號",
+        "名稱",
+        "最後交易日之收盤價格",
+        "減資恢復買賣開始日參考價格",
+        "漲停價格",
+        "跌停價格"
+      ],
+      "rowCount": 10,
+      "matches": [],
+      "bodySha256": "61fd4965c0d6b561e856c34d02700cc35353666d7daadf5fb760bb669cfd929a",
+      "observedAt": "2026-11-14T19:08:06.389981+00:00"
+    },
+    {
+      "year": "2024",
+      "kind": "pvChgRslt",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/pvChgRslt?startDate=2024%2F01%2F01&endDate=2024%2F12%2F31&response=json",
+      "tableFields": [
+        "恢復買賣日期",
+        "證券代號",
+        "證券名稱",
+        "最後交易日之收盤價格",
+        "恢復買賣開始參考價",
+        "漲停價格",
+        "跌停價格"
+      ],
+      "rowCount": 3,
+      "matches": [],
+      "bodySha256": "1dc84681da64191d78e6515931cab04a481f5da04a882e045ed093e213cc76f7",
+      "observedAt": "2026-11-14T19:08:06.247149+00:00"
+    },
+    {
+      "year": "2025",
+      "kind": "exDailyQ",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2025%2F01%2F01&endDate=2025%2F12%2F31&response=json",
+      "tableFields": [
+        "除權息日期",
+        "代號",
+        "名稱",
+        "除權息前收盤價",
+        "除權息參考價",
+        "權值",
+        "息值"
+      ],
+      "rowCount": 1250,
+      "matches": [
+        {
+          "eventDate": "2025-06-13",
+          "除權息前收盤價": "4545.00",
+          "除權息參考價": "4493.00",
+          "權值+息值": "52.000000"
+        }
+      ],
+      "bodySha256": "82ef3b5af932af1248b7c42f850c43d6e8dce88683fc664c48571072d5f24300",
+      "observedAt": "2026-11-14T19:08:07.495529+00:00"
+    },
+    {
+      "year": "2025",
+      "kind": "revivt",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/revivt?startDate=2025%2F01%2F01&endDate=2025%2F12%2F31&response=json",
+      "tableFields": [
+        "恢復買賣日期",
+        "股票代號",
+        "名稱",
+        "最後交易日之收盤價格",
+        "減資恢復買賣開始日參考價格",
+        "漲停價格",
+        "跌停價格"
+      ],
+      "rowCount": 10,
+      "matches": [],
+      "bodySha256": "43ee5bda85f6b6f7f74151b4a6c9ed6f7bc96e250d5309053813696078b02ad7",
+      "observedAt": "2026-11-14T19:08:07.300538+00:00"
+    },
+    {
+      "year": "2025",
+      "kind": "pvChgRslt",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/pvChgRslt?startDate=2025%2F01%2F01&endDate=2025%2F12%2F31&response=json",
+      "tableFields": [
+        "恢復買賣日期",
+        "證券代號",
+        "證券名稱",
+        "最後交易日之收盤價格",
+        "恢復買賣開始參考價",
+        "漲停價格",
+        "跌停價格"
+      ],
+      "rowCount": 1,
+      "matches": [],
+      "bodySha256": "02e89a1cc0fc0bb0d4a3f14e797ca5d12ae712528330b99c0d0bf324fec57f8d",
+      "observedAt": "2026-11-14T19:08:06.484435+00:00"
+    },
+    {
+      "year": "2026",
+      "kind": "exDailyQ",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F01%2F01&endDate=2026%2F11%2F13&response=json",
+      "tableFields": [
+        "除權息日期",
+        "代號",
+        "名稱",
+        "除權息前收盤價",
+        "除權息參考價",
+        "權值",
+        "息值"
+      ],
+      "rowCount": 1238,
+      "matches": [
+        {
+          "eventDate": "2026-06-26",
+          "除權息前收盤價": "17425.00",
+          "除權息參考價": "17345.00",
+          "權值+息值": "80.000000"
+        },
+        {
+          "eventDate": "2026-07-07",
+          "除權息前收盤價": "16270.00",
+          "除權息參考價": "14790.91",
+          "權值+息值": "1479.090731"
+        }
+      ],
+      "bodySha256": "e8e3201e5031ca1e97e3f4135a0fcd0bf9ea7faf8cbdb23a5518c7c70a2715cf",
+      "observedAt": "2026-11-14T19:08:07.499647+00:00"
+    },
+    {
+      "year": "2026",
+      "kind": "revivt",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/revivt?startDate=2026%2F01%2F01&endDate=2026%2F11%2F13&response=json",
+      "tableFields": [
+        "恢復買賣日期",
+        "股票代號",
+        "名稱",
+        "最後交易日之收盤價格",
+        "減資恢復買賣開始日參考價格",
+        "漲停價格",
+        "跌停價格"
+      ],
+      "rowCount": 23,
+      "matches": [],
+      "bodySha256": "f5a92194d67e854dadc56669c02c6647e25ab832d9f2e4c09ee2c59063a4b315",
+      "observedAt": "2026-11-14T19:08:08.005327+00:00"
+    },
+    {
+      "year": "2026",
+      "kind": "pvChgRslt",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/pvChgRslt?startDate=2026%2F01%2F01&endDate=2026%2F11%2F13&response=json",
+      "tableFields": [
+        "恢復買賣日期",
+        "證券代號",
+        "證券名稱",
+        "最後交易日之收盤價格",
+        "恢復買賣開始參考價",
+        "漲停價格",
+        "跌停價格"
+      ],
+      "rowCount": 5,
+      "matches": [],
+      "bodySha256": "4990186f8ccb6f8073cbd371935ac16ddd73099b4b36a1f09a114298ea38c577",
+      "observedAt": "2026-11-14T19:08:07.681437+00:00"
+    }
+  ],
+  "exact2026EventTerms": [
+    {
+      "eventDate": "115/06/26",
+      "sourceType": "除息",
+      "cashDividendNtdPerShare": "80.00000000",
+      "stockDistributionSharesPerThousand": "0.00000000",
+      "cashSubscriptionShares": "0",
+      "officialReferencePrice": "17345.00",
+      "officialOpeningBase": "17345.00"
+    },
+    {
+      "eventDate": "115/07/07",
+      "sourceType": "除權",
+      "cashDividendNtdPerShare": "0.00000000",
+      "stockDistributionSharesPerThousand": "99.99998677",
+      "cashSubscriptionShares": "0",
+      "officialReferencePrice": "14790.91",
+      "officialOpeningBase": "14790.00"
+    }
+  ]
+}
