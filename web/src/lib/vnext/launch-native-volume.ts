@@ -9,7 +9,8 @@ import { evidenceInstant } from './evidence-clock.ts';
 import { decodeLicensedCsvRecords } from './licensed-csv-decoder.ts';
 
 export const NATIVE_SHARE_SCHEMA = 'launch-tpex-11371-native-shares-v1';
-export const NATIVE_SHARE_PARSER = 'sfb-11371-ohlc-shares-issued-capital-v1';
+export const NATIVE_SHARE_PARSER = 'sfb-11371-technical-shares-issued-capital-v2';
+export const NATIVE_TECHNICAL_COVERAGE = 'tpex_11371_report_excluding_fixed_price_v1';
 export const NATIVE_SHARE_HEADERS = Object.freeze(['資料日期','代號','名稱','收盤','漲跌','開盤','最高','最低','成交股數','成交金額','成交筆數','最後買價','最後賣價','發行股數','次日漲停價','次日跌停價']);
 export const NATIVE_SHARE_ATTRIBUTION = Object.freeze({ datasetId: 11371, datasetUrl: 'https://data.gov.tw/dataset/11371',
   owner: 'Securities and Futures Bureau, Financial Supervisory Commission / Taipei Exchange',
@@ -23,7 +24,8 @@ type Change = Readonly<{ previousSession: string; currentSession: string; previo
 type ReplayState = { symbol: string; cutoff: string; revisionId: string; availableAt: string; rows: readonly Row[]; changes: readonly Change[]; incomplete: boolean; gaps: string[] };
 const replays = new WeakMap<object, ReplayState>();
 type NativeSeriesRow = Readonly<{ session: string; shares: number; issuedShares: number; observedAt: string }>;
-export type NativeVolumeOverlay = Readonly<{ schema: 'launch-native-volume-overlay-v1'; revisionId: string; sourceDatasetRevision: string;
+export type NativeVolumeOverlay = Readonly<{ schema: 'launch-native-technical-volume-overlay-v2'; revisionId: string; sourceDatasetRevision: string;
+  purpose: 'technical_turnover'; coverage: typeof NATIVE_TECHNICAL_COVERAGE; institutionalDenominatorAuthority: false;
   symbol: string; stockId: string; market: 'TPEX';
   calendarRevision: string; actionsRevision: string; availableAt: string; cutoff: string; fromSession: string; throughSession: string;
   capitalRegime: 'observed_issued_shares_constant_with_predecessor'; sourceAuthority: false; publicationAuthority: false }>;
@@ -150,9 +152,10 @@ export function parseTpexNativeShareReplay(value: unknown, files: ReadonlyMap<st
       previousIssuedShares: rows[index - 1].issuedShares, currentIssuedShares: rows[index].issuedShares,
       deltaShares: rows[index].issuedShares - rows[index - 1].issuedShares, effectiveSession: null, eventKind: null, adjustmentFactor: null }));
   }
-  const revisionId = `native-11371:${launchNativeContentDigest([NATIVE_SHARE_PARSER, NATIVE_SHARE_ATTRIBUTION, NATIVE_SHARE_HEADERS, value.capture, sessions, rows])}`;
+  const revisionId = `native-11371:${launchNativeContentDigest([NATIVE_SHARE_PARSER, NATIVE_TECHNICAL_COVERAGE, NATIVE_SHARE_ATTRIBUTION, NATIVE_SHARE_HEADERS, value.capture, sessions, rows])}`;
   const result = Object.freeze({ schema: NATIVE_SHARE_SCHEMA, parserVersion: NATIVE_SHARE_PARSER, datasetId: 11371, symbol, cutoff,
     revisionId, attribution: NATIVE_SHARE_ATTRIBUTION, declaredBytes: total, decodedBytes, parsedSessions: rows.length, availableAt: capture.completedAt as string,
+    purpose: 'technical_turnover' as const, coverage: NATIVE_TECHNICAL_COVERAGE, institutionalDenominatorAuthority: false as const,
     issuedShareChanges: Object.freeze(changes), nextDayLimitQuotes: Object.freeze(rows.map(row => Object.freeze({ quotedOnSession: row.session,
       upper: row.nextUpper, lower: row.nextLower, targetSession: null, currentLimitAuthority: false, onePriceLocked: null }))),
     responseReceipts: Object.freeze(rows.map(row => Object.freeze({ session: row.session, sourceUrl: row.sourceUrl, rawSha256: row.rawSha256,
@@ -202,7 +205,8 @@ export function bindTpexNativeShareReplay(proof: unknown, request: TwEntryAuthor
     if (!context) return blocked('native_share_binding_context_invalid');
     const revisionId = `native-volume-overlay:${launchNativeContentDigest([NATIVE_SHARE_PARSER, state.revisionId, state.rows, binding,
       selectedRows, predecessor, request, context])}`;
-    const overlay: NativeVolumeOverlay = Object.freeze({ schema: 'launch-native-volume-overlay-v1', revisionId,
+    const overlay: NativeVolumeOverlay = Object.freeze({ schema: 'launch-native-technical-volume-overlay-v2', revisionId,
+      purpose: 'technical_turnover', coverage: NATIVE_TECHNICAL_COVERAGE, institutionalDenominatorAuthority: false,
       sourceDatasetRevision: binding.priceRevision, symbol: request.symbol, stockId: request.stockId, market: 'TPEX', calendarRevision: binding.calendarRevision, actionsRevision: binding.actionsRevision,
       availableAt, cutoff: request.cutoff, fromSession: first, throughSession: last,
       capitalRegime: 'observed_issued_shares_constant_with_predecessor', sourceAuthority: false, publicationAuthority: false });

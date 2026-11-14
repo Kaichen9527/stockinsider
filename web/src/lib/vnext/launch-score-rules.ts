@@ -3,16 +3,20 @@ import { launchPatternFixture, type LaunchPatternFixture } from './launch-patter
 import { evidenceInstant } from './evidence-clock.ts';
 import { sha256Canonical } from '../opportunity-v3/canonical.ts';
 import { resolveNativeVolumeOverlay, nativeVolumeContext } from './launch-native-volume.ts';
+import { resolveInstitutionalVolumeProof, sumInstitutionalShares, type InstitutionalFlowCoverage } from './launch-institutional-volume.ts';
 
 export const LAUNCH_RULE_POLICY = 'stockinsider-launch-radar-v1';
-export const LAUNCH_RULE_VERSION = 'launch-radar-comparisons-v3';
+export const LAUNCH_RULE_VERSION = 'launch-radar-comparisons-v4';
 type Market = 'TWSE' | 'TPEX';
 type Source = { revisionId: string; market: Market; provider: 'twse' | 'tpex'; sourceUrl: string; sourceRef: string; availableAt: string; cutoff: string };
 export type LaunchIndexEvidence = Source & { rows: Array<{ session: string; close: number; sourceTimestamp: string; availableAt: string }> };
-export type LaunchChipEvidence = Source & { symbol: string; unit: 'shares'; volumeUnit: 'shares';
-  priceRevision: string; calendarRevision: string; shareVolumeRevision: string;
+export type LaunchChipEvidence = Source & { symbol: string; unit: 'shares'; flowCoverage?: InstitutionalFlowCoverage;
+  /** Legacy fields are not institutional-denominator authority. */
+  volumeUnit?: 'shares'; shareVolumeRevision?: string;
+  priceRevision: string; calendarRevision: string;
   rows: Array<{ session: string; foreignNetShares: number | null; trustNetShares: number | null; sourceTimestamp: string; availableAt: string }> };
 export type LaunchExternalEvidence = { index?: LaunchIndexEvidence | null; chips?: LaunchChipEvidence | null;
+  institutionalVolumeProof?: unknown;
   frozenOriginal?: LaunchPatternFixture['originalBreakout'] };
 type Selected = { evidence: TwLaunchPatternReadEvidence; arithmetic: ReturnType<typeof launchPatternFixture>; nativeVolumeOverlay?: unknown };
 type Request = Pick<TwEntryAuthorityRequest, 'symbol' | 'exchange' | 'cutoff' | 'signalSession'> & { stockId?: string };
@@ -105,17 +109,18 @@ export function evaluateLaunchRules(request: Request, selected: Selected, extern
     && evidenceInstant(native.availableAt)! >= evidenceInstant(calendar!.sessions.at(-1)!.closeAt)!
     && native.fromSession === bars[bars.length - 51].session && native.throughSession === request.signalSession;
   const chip = external.chips;
-  const chipRows = chip && chip.rows.length === 20 && chip.symbol === request.symbol && chip.unit === 'shares' && chip.volumeUnit === 'shares'
+  const chipRows = chip && chip.rows.length === 20 && chip.symbol === request.symbol && chip.unit === 'shares'
     && chip.priceRevision === history.sourceDatasetRevision && chip.calendarRevision === calendar?.revisionId
-    && chip.shareVolumeRevision === native?.revisionId && shareValid ? aligned(chip.rows, 20, chip) : null;
+    ? aligned(chip.rows, 20, chip) : null;
+  const institutional = chipRows ? resolveInstitutionalVolumeProof(external.institutionalVolumeProof,request,evidence,
+    chip?.flowCoverage ?? 'unverified_institutional_scope') : null;
   const flow = (owner: 'foreignNetShares' | 'trustNetShares', period: 5 | 20) => {
-    const rows = chipRows?.slice(-period), volumes = valid && native ? bars.slice(-period).map(bar => native.volumeOf(bar.session)) : [];
-    const volume = volumes.length === period && volumes.every((value): value is number => value !== null && Number.isSafeInteger(value) && value >= 0) ? sum(volumes) : null;
-    const net = rows && rows.every((row, i) => Number.isSafeInteger(row[owner]) && volumes[i] !== null && Math.abs(row[owner] as number) <= volumes[i]!)
-      ? sum(rows.map(row => row[owner] as number)) : null;
-    const ratio = net !== null && volume !== null && volume > 0 ? net / volume : null;
+    const rows = chipRows?.slice(-period), volumes = institutional?.rows.slice(-period).map(row=>row.shares) ?? [];
+    const volume = volumes.length === period && volumes.every(value=>Number.isSafeInteger(value)&&value>=0) ? sumInstitutionalShares(volumes) : null;
+    const net = rows && rows.every(row=>Number.isSafeInteger(row[owner])) ? sumInstitutionalShares(rows.map(row=>row[owner] as number)) : null;
+    const ratio = net !== null && volume !== null && volume > 0 && rows?.every((row,index)=>Math.abs(row[owner] as number)<=volumes[index]) ? net / volume : null;
     const comparable = ratio !== null && finite(ratio) && Number.isSafeInteger(net) && Number.isSafeInteger(volume);
-    return { netShares: comparable ? net : null, volumeShares: comparable ? volume : null, netVolumeRatio: comparable ? ratio : null };
+    return { netShares: net, volumeShares: volume, netVolumeRatio: comparable ? ratio : null };
   };
   const chipObservations = { foreign5: flow('foreignNetShares', 5), foreign20: flow('foreignNetShares', 20),
     trust5: flow('trustNetShares', 5), trust20: flow('trustNetShares', 20) };
@@ -129,7 +134,8 @@ export function evaluateLaunchRules(request: Request, selected: Selected, extern
   const breakoutOrHold = or(breakout, closingHold);
   const revisions = { price: history.sourceDatasetRevision, calendar: calendar?.revisionId ?? null,
     actions: evidence.corporateActions?.revisionId ?? null, shareVolume: native?.revisionId ?? null,
-    chips: chipRows ? chip!.revisionId : null, market: sourceValid(index) ? index!.revisionId : null, original: originalValid ? frozen!.revisionId : null };
+    chips: chipRows ? chip!.revisionId : null, chipDenominator: institutional?.revisionId ?? null,
+    market: sourceValid(index) ? index!.revisionId : null, original: originalValid ? frozen!.revisionId : null };
   const rule = (id: string, group: Group, weight: number, matches: boolean | null, operands: Record<string, unknown>) => {
     const definition = canonicalRules[id as keyof typeof canonicalRules];
     if (!definition || group !== definition[0] || weight !== definition[1]) throw Error('launch_rule_definition_invalid');
@@ -150,7 +156,8 @@ export function evaluateLaunchRules(request: Request, selected: Selected, extern
       { ratio: shareValid ? arithmetic.contraction.volumeContractionRatio : null }),
     rule('breakout_or_fixed_closing_hold', 'breakoutHold', 20, breakoutOrHold, { breakout, closingHold,
       originalSession: originalValid ? original!.session : null, originalLevel: originalValid ? original!.level : null }),
-    ...Object.entries(chipObservations).map(([name, values]) => rule(`chips_${name}_positive`, 'chips', 5, compare(values.netShares, 0), values)),
+    ...Object.entries(chipObservations).map(([name, values]) => rule(`chips_${name}_positive`, 'chips', 5,
+      values.netVolumeRatio === null ? null : compare(values.netShares, 0), values)),
     rule('market_close_above_ma50', 'market', 5, compare(indexRows(1)?.[0].close ?? null, marketMean(50)), { close: indexRows(1)?.[0].close ?? null, ma50: marketMean(50) }),
     rule('market_close_above_ma200', 'market', 5, compare(indexRows(1)?.[0].close ?? null, marketMean(200)), { close: indexRows(1)?.[0].close ?? null, ma200: marketMean(200) }),
   ];
@@ -168,6 +175,7 @@ export function evaluateLaunchRules(request: Request, selected: Selected, extern
   const superseded = new Set(['long_ma_slope_horizon_unspecified', 'relative_strength_normalization_unspecified', 'hold_close_or_intraday_low_rule_unspecified']);
   const gaps = [...new Set([...evidence.missingData.filter(gap => !native || gap !== 'launch_tpex_exact_native_share_volume_51_not_proven'), ...arithmetic.gaps.filter(gap => !superseded.has(gap)),
     ...rules.filter(item => item.points === null).map(item => `${item.id}_input_unavailable`),
+    ...(chipRows && !institutional ? ['institutional_volume_same_scope_proof_missing'] : []),
     ...(closingHold === null ? ['fixed_closing_hold_original_window_share_evidence_not_connected'] : []),
     'formal_review_and_publication_not_connected', ...(bindingValid ? [] : ['selected_read_score_revision_or_cutoff_mismatch'])])].sort();
   return { schemaVersion: LAUNCH_RULE_VERSION, derivationVersion: LAUNCH_RULE_VERSION, policyVersion: LAUNCH_RULE_POLICY,
@@ -177,7 +185,10 @@ export function evaluateLaunchRules(request: Request, selected: Selected, extern
     observations: bindingValid ? { trend: { ...arithmetic.trend, ma200Prior5: priorMa200, excessReturn20: excess20, excessReturn63: excess63 },
       consolidation: arithmetic.consolidation, contraction: arithmetic.contraction, breakout: arithmetic.breakout,
       originalBreakout: arithmetic.originalBreakout, closingHold, waiting: arithmetic.waiting,
-      chips: chipRows ? chipObservations : null, market: sourceValid(index) ? { ma50: marketMean(50), ma200: marketMean(200), return20: market20, return63: market63 } : null } : null,
+      chips: chipRows ? { ...chipObservations, flowSource: { type: 'institutional_net_shares' as const,
+        sourceUrl: chip!.sourceUrl, sourceVersion: chip!.sourceRef, coverage: chip!.flowCoverage ?? 'unverified_institutional_scope' },
+        denominatorSource: institutional?.source ?? null, denominatorRevision: institutional?.revisionId ?? null } : null,
+      market: sourceValid(index) ? { ma50: marketMean(50), ma200: marketMean(200), return20: market20, return63: market63 } : null } : null,
     rankable: false as const, rankingAuthority: false as const, publicationAuthority: false as const,
     sourceAuthority: false as const, entryAuthority: false as const, probability: false as const, gaps };
 }

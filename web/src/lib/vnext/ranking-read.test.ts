@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parseRankingRead, rankingMemberCurrent } from './ranking-read.ts';
-import { rankingPublishRequest, cycleRankingRequest } from './ranking-command.ts';
+import { rankingPublishRequest, cycleRankingRequest, publishRanking } from './ranking-command.ts';
 import { publicHome, publicationQualificationCurrent } from './public-contract.ts';
 import { REQUIRED_SECTIONS } from './research.ts';
 import { POLICY, inputHash } from './policy.ts';
@@ -41,6 +41,40 @@ test('requested version, research/market revisions and cutoff must match, unknow
 test('publication request is run and CAS only, no score/qualification/clock/source inputs',()=>{
   const request={rankingRunId:run,expectedPreviousRankingRunId:null};assert.deepEqual(rankingPublishRequest(request),request);
   for(const bad of [{...request,ranks:[]},{...request,qualified:true},{rankingRunId:run},{...request,expectedPreviousRankingRunId:'wrong'}])assert.throws(()=>rankingPublishRequest(bad),/closed_request/);
+});
+test('closed publication envelope snapshots only plain own data and never evaluates accessors or Proxy traps',()=>{
+  const request={rankingRunId:run,expectedPreviousRankingRunId:null};
+  assert.deepEqual(rankingPublishRequest(Object.assign(Object.create(null),request)),request);
+  assert.deepEqual(rankingPublishRequest(Object.freeze({...request})),request);
+  let evaluated=0;
+  const accessor={expectedPreviousRankingRunId:null,get rankingRunId(){evaluated++;return run;}};
+  const proxy=new Proxy({...request},{ownKeys(){evaluated++;return Reflect.ownKeys(request);},getPrototypeOf(){evaluated++;return Object.prototype;}});
+  for(const bad of [accessor,proxy,Object.assign(Object.create({policyVersion:'stockinsider-launch-radar-v1'}),request),
+    Object.defineProperty({...request},'score',{value:{availableWeight:100},enumerable:false}),
+    {...request,[Symbol('launchScore')]:{availableWeight:100}},
+    Object.defineProperty({...request},'rankingRunId',{value:run,enumerable:false})]) {
+    assert.throws(()=>rankingPublishRequest(bad),/vnext_ranking_closed_request/);
+  }
+  assert.equal(evaluated,0);
+});
+test('actual ranking writer rejects launch score and missing-coverage payloads before any writer or fetch path',async()=>{
+  const request={rankingRunId:run,expectedPreviousRankingRunId:null};
+  const launch={policyVersion:'stockinsider-launch-radar-v1',derivationVersion:'launch-radar-comparisons-v4',
+    scope:'selected_read_deterministic_launch_rules',sourceAuthority:false,publicationAuthority:false};
+  const previous=globalThis.fetch;let calls=0;
+  globalThis.fetch=async()=>{calls++;throw Error('unexpected ranking IO');};
+  try{
+    // Even a complete numeric result cannot enter the old policy's SQL writer;
+    // its formal source/review/version binding needs a separate future adapter.
+    for(const unsupported of [
+      {launchScore:{...launch,availableWeight:80,totalScore:null,gaps:['institutional_volume_scope_unproven']}},
+      {launchScore:{...launch,availableWeight:0,totalScore:null,gaps:['source_coverage_missing']}},
+      {launchScore:{...launch,availableWeight:100,totalScore:100,gaps:[]}},
+      {policyVersion:launch.policyVersion},{score:{availableWeight:100,confirmedPoints:100}},
+      {ranks:[]},{qualified:true},{externalEvidence:{chips:{coverage:'complete'}}}
+    ])await assert.rejects(publishRanking({role:'operator',principal:'synthetic-gate-only'}, {...request,...unsupported}),/vnext_ranking_closed_request/);
+    assert.equal(calls,0);
+  }finally{globalThis.fetch=previous;}
 });
 
 test('current proof is rechecked at each read cutoff while frozen ranks and old content remain unchanged',()=>{

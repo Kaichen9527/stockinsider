@@ -53,7 +53,7 @@ function dataset(zero = false) {
   return { request, selected: { evidence, arithmetic }, external };
 }
 
-test('v3 actual native-parser/mockselector proof produces100 points and70 technical without publication or ranking', async () => {
+test('v4 actual technical-parser/mockselector proof produces70 technical and80 available with unpriced raw chip nets', async () => {
   const fixture = nativeVolumeFixture(), native = parseTpexNativeShareReplay(fixture.manifest);
   const replay = parseLaunchLicensedCsvReplay(officialCsvForNativeFixture(fixture));
   const read = await readLaunchPatterns(fixture.client, fixture.request, replay, native);
@@ -63,12 +63,15 @@ test('v3 actual native-parser/mockselector proof produces100 points and70 techni
   const result = evaluateLaunchRules(data.request, data.selected, data.external);
   assert.equal(result.derivationVersion, LAUNCH_RULE_VERSION);
   assert.equal(result.rules.length, 16);
-  assert.equal(result.availableWeight, 100);
-  assert.equal(result.totalScore, 100);
+  assert.equal(result.availableWeight, 80);
+  assert.equal(result.totalScore, null);
   assert.equal(result.technicalScore, 70);
   assert.equal(result.rankable, false); assert.equal(result.publicationAuthority, false); assert.equal(result.probability, false);
   assert.equal(result.observations!.chips!.foreign5.netShares, 5);
-  assert.equal(result.observations!.chips!.foreign5.volumeShares, 4 * 2001 + 14002);
+  assert.equal(result.observations!.chips!.foreign5.volumeShares, null);
+  assert.equal(result.observations!.chips!.foreign5.netVolumeRatio, null);
+  assert.equal(result.components.chips.availableWeight,0);
+  assert.equal(result.observations!.chips!.flowSource.coverage,'tpex_11856_combined_sessions_v1');
   const stock = 101 / data.selected.evidence.history.bars[176].close - 1;
   const market = data.external.index!.rows.at(-1)!.close / data.external.index!.rows.at(-64)!.close - 1;
   assert.equal(result.relativeStrength63, stock - market);
@@ -125,6 +128,19 @@ test('known false remains zero and missing original hold proof cannot be widened
   }
 });
 
+test('actual scorer retains exact signed nets through large cancellation without technical-volume magnitude assumptions', () => {
+  const data=dataset(), rows=data.external.chips!.rows, max=Number.MAX_SAFE_INTEGER;
+  for(const row of rows)row.foreignNetShares=0;
+  rows.at(-3)!.foreignNetShares=max;rows.at(-2)!.foreignNetShares=2;rows.at(-1)!.foreignNetShares=-max;
+  const score=evaluateLaunchRules(data.request,data.selected,data.external);
+  assert.equal(score.observations!.chips!.foreign5.netShares,2);
+  assert.equal(score.observations!.chips!.foreign20.netShares,2);
+  assert.equal(score.observations!.chips!.foreign5.netVolumeRatio,null);
+  assert.equal(score.components.chips.availableWeight,0);
+  rows.at(-1)!.foreignNetShares=0;
+  assert.equal(evaluateLaunchRules(data.request,data.selected,data.external).observations!.chips!.foreign5.netShares,null);
+});
+
 test('partial weights, missing units/source/cutoff/finality/horizon and unknown ties stay explicit', () => {
   const data = dataset(), partial = evaluateLaunchRules(data.request, data.selected);
   assert.equal(partial.availableWeight, 35);
@@ -147,7 +163,8 @@ test('partial weights, missing units/source/cutoff/finality/horizon and unknown 
     assert.ok(score.availableWeight < 100, mode);
     if (mode === 'chips_fractional' || mode === 'chips_impossible') {
       assert.equal(score.components.chips.availableWeight, 0, mode);
-      assert.equal(score.observations!.chips, null, 'legacy numeric volumes lack independent continuity before net validation');
+      assert.equal(score.observations!.chips!.foreign5.netShares,mode==='chips_fractional'?null:145);
+      assert.equal(score.observations!.chips!.foreign5.netVolumeRatio,null,'technical volume never bounds combined-session raw nets');
     }
   }
   const mismatch = dataset(); mismatch.selected.arithmetic.sourceDatasetRevision = 'wrong-source';

@@ -10,7 +10,6 @@ import type { LaunchExternalEvidence } from './launch-score-rules.ts';
 import { evidenceInstant } from './evidence-clock.ts';
 import { sha256Canonical } from '../opportunity-v3/canonical.ts';
 import { decodeLicensedCsvRecords as csvRecords } from './licensed-csv-decoder.ts';
-import { resolveNativeVolumeOverlay, nativeVolumeContext } from './launch-native-volume.ts';
 
 export const OFFICIAL_REPLAY_SCHEMA = 'launch-official-public-replay-v1';
 export const OFFICIAL_REPLAY_PARSER = 'twse-t86-taiex-and-tpex-dailytrade-inx-v1';
@@ -269,6 +268,9 @@ export function parseLaunchOfficialReplay(value: unknown, files: ReadonlyMap<str
  * actual existing selected price/action/calendar evidence, not observed dates. */
 export type LaunchOfficialReplayRead = ReturnType<typeof parseLaunchOfficialReplay> | ReturnType<typeof parseLaunchLicensedCsvReplay>;
 export function bindLaunchOfficialReplay(read: LaunchOfficialReplayRead, request: TwEntryAuthorityRequest, selected: TwLaunchPatternReadEvidence, nativeVolumeOverlay?: unknown) {
+  // Retained fourth-argument compatibility: technical turnover is never an
+  // institutional-flow denominator, regardless of its native-share precision.
+  void nativeVolumeOverlay;
   const state = states.get(read); if (!state) fail('official_replay_foreign_or_cloned_read');
   const gaps = [...state.gaps], external: LaunchExternalEvidence = {};
   const attributions = state.attributions?.map(item => ({ ...item })) ?? [];
@@ -297,14 +299,15 @@ export function bindLaunchOfficialReplay(read: LaunchOfficialReplayRead, request
     ({ session: row.session, close: (row as IndexRow).close, sourceTimestamp: item.page.observedAt, availableAt: item.availableAt })) };
   else gaps.push('official_replay_200_selected_index_sessions_missing');
   const flows = select('institutional_day', 20).filter((item): item is Match => item !== null);
-  const native = resolveNativeVolumeOverlay(nativeVolumeOverlay, nativeVolumeContext(selected, request));
-  if (!native) gaps.push(request.exchange === 'TPEX' ? 'tpex_exact_native_share_volume_20_and_51_not_proven' : 'official_replay_independent_capital_continuity_missing');
-  else if (native.fromSession === selected.history.bars.at(-51)!.session && native.throughSession === request.signalSession && flows.length === 20
-    && flows.every(({ row }) => (row as FlowRow).symbol === request.symbol)) external.chips = { ...source(flows), symbol: request.symbol, unit: 'shares', volumeUnit: 'shares',
-    priceRevision: selected.history.sourceDatasetRevision, calendarRevision: calendar.revisionId, shareVolumeRevision: native.revisionId,
+  if (flows.length === 20
+    && flows.every(({ row }) => (row as FlowRow).symbol === request.symbol)) external.chips = { ...source(flows), symbol: request.symbol, unit: 'shares',
+    priceRevision: selected.history.sourceDatasetRevision, calendarRevision: calendar.revisionId,
+    flowCoverage: state.parserVersion === LICENSED_CSV_PARSER && flows.every(({item})=>item.datasetId===11856)
+      ? 'tpex_11856_combined_sessions_v1' : 'unverified_institutional_scope',
     rows: flows.map(({ item, row }) => ({ session: row.session, foreignNetShares: (row as FlowRow).foreignNetShares,
       trustNetShares: (row as FlowRow).trustNetShares, sourceTimestamp: item.page.observedAt, availableAt: item.availableAt })) };
-  else gaps.push('official_replay_20_selected_flow_sessions_or_exact_volume_missing');
+  else gaps.push('official_replay_20_selected_flow_sessions_missing');
+  if (external.chips) gaps.push('institutional_volume_same_scope_proof_missing');
   return { external, attributions, gaps: [...new Set(gaps)].sort() };
 }
 

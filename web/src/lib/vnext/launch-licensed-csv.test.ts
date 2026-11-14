@@ -82,8 +82,19 @@ test('BOM/CRLF RFC4180 quotes/commas/newline decode exact25-header flows and ind
   const bound = bindLaunchOfficialReplay(read, request, selectedWithoutNative(sessions));
   assert.equal(bound.external.index?.rows.length, 200);
   assert.equal(bound.external.index?.sourceRef, LICENSED_CSV_PARSER);
-  assert.equal(bound.external.chips, undefined, 'capital continuity cannot be supplied by a legacy no-event DTO');
-  assert.ok(bound.gaps.includes('tpex_exact_native_share_volume_20_and_51_not_proven'));
+  // Authorized scope correction:11856 raw all-session flows remain visible;
+  //11371 technical turnover/legacy no-event metadata is not their denominator.
+  const chips = bound.external.chips; assert.ok(chips);
+  assert.equal(chips.symbol, '6488'); assert.equal(chips.unit, 'shares');
+  assert.equal(chips.flowCoverage, 'tpex_11856_combined_sessions_v1');
+  assert.equal(chips.sourceRef, LICENSED_CSV_PARSER); assert.equal(chips.cutoff, cutoff);
+  assert.equal(chips.priceRevision, 'fixture-price'); assert.equal(chips.calendarRevision, 'fixture-calendar');
+  assert.equal(chips.availableAt, observedAt); assert.match(chips.revisionId, /^official-replay:[a-f0-9]{64}$/u);
+  assert.deepEqual(chips.rows.map(row => row.session), sessions.slice(-20));
+  assert.ok(chips.rows.every(row => row.foreignNetShares === 1 && row.trustNetShares === -2
+    && row.sourceTimestamp === observedAt && row.availableAt === observedAt));
+  assert.equal(bound.external.institutionalVolumeProof, undefined);
+  assert.ok(bound.gaps.includes('institutional_volume_same_scope_proof_missing'));
   assert.deepEqual(bound.attributions.map(row => row.datasetId), [11391, 11755, 11856]);
   assert.ok(read.gaps.includes('capture_workflow_identity_unverified')); assert.deepEqual(manifest, before);
   assert.throws(() => parseLaunchOfficialReplay(manifest), /manifest_invalid/u);

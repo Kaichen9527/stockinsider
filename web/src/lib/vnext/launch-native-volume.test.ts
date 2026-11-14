@@ -33,7 +33,7 @@ test('standalone11371 target is same-request four-digit stock rather than a hard
   const proof=parseTpexNativeShareReplay(f.manifest); assert.equal(proof.symbol,'5274'); assert.equal(proof.parsedSessions,57);
   assert.equal(proof.instrumentQualificationAuthority,false);
 });
-test('stable synthetic capital proof feeds actual selected reader, all16rules/full100 and exact20row chip/source lineage', async () => {
+test('stable synthetic technical proof feeds70 technical points while20 aligned net rows lack same-scope denominator', async () => {
   const f = nativeVolumeFixture(), before = structuredClone(f.data), native = parseTpexNativeShareReplay(f.manifest);
   const official = parseLaunchLicensedCsvReplay(officialCsvForNativeFixture(f));
   const result = await readLaunchPatterns(f.client,f.request,official,native);
@@ -45,22 +45,31 @@ test('stable synthetic capital proof feeds actual selected reader, all16rules/fu
   const priorMean = f.sessions.slice(-51,-1).reduce((sum,session)=>sum+f.nativeShares(f.sessions.indexOf(session)),0)/50;
   assert.equal(result.arithmetic.breakout.prior50MeanVolume,priorMean);
   assert.equal(result.arithmetic.breakout.volumeRatio,14002/priorMean);
-  assert.equal(result.launchScore.rules.length,16); assert.equal(result.launchScore.availableWeight,100);
-  assert.equal(result.launchScore.totalScore,100); assert.equal(result.launchScore.technicalScore,70);
-  assert.equal(result.launchScore.observations!.chips!.foreign5.volumeShares,4*2001+14002);
+  assert.equal(result.launchScore.rules.length,16); assert.equal(result.launchScore.availableWeight,80);
+  assert.equal(result.launchScore.totalScore,null); assert.equal(result.launchScore.technicalScore,70);
+  assert.equal(result.launchScore.observations!.chips!.foreign5.volumeShares,null);
+  assert.equal(result.launchScore.observations!.chips!.foreign5.netVolumeRatio,null);
+  assert.equal(result.launchScore.observations!.chips!.denominatorSource,null);
+  assert.ok(result.launchScore.gaps.includes('institutional_volume_same_scope_proof_missing'));
+  assert.equal(result.nativeVolumeOverlay.purpose,'technical_turnover');
+  assert.equal(result.nativeVolumeOverlay.coverage,'tpex_11371_report_excluding_fixed_price_v1');
+  assert.equal(result.nativeVolumeOverlay.institutionalDenominatorAuthority,false);
   assert.equal(result.launchScore.observations!.chips!.foreign5.netShares,5);
   assert.equal(result.launchScore.rankable,false); assert.equal(result.publicationAuthority,false);
   const flows = bindLaunchOfficialReplay(official,f.request,result.evidence,result.nativeVolumeOverlay).external.chips!;
   assert.equal(flows.rows.length,20); assert.equal(flows.rows[0].foreignNetShares,1);
   assert.equal(flows.rows[0].sourceTimestamp,f.manifest.responses[0].observedAt);
-  assert.equal(flows.shareVolumeRevision,result.nativeVolumeOverlay.revisionId); assert.deepEqual(f.data,before);
+  assert.equal(flows.shareVolumeRevision,undefined); assert.equal(flows.flowCoverage,'tpex_11856_combined_sessions_v1');
+  assert.deepEqual(f.data,before);
 });
 test('observed issued-share change blocks native overlay despite empty supported feeds, raw OHLC and factor1', async () => {
   const {f,bound,selected} = await prepared(nativeVolumeFixture({capitalChangeIndex:220}));
   assert.equal(bound.overlay,null); assert.deepEqual(bound.gaps,['native_share_issued_count_changed_in_selected_51']);
-  const result = await readLaunchPatterns(f.client,f.request,undefined,parseTpexNativeShareReplay(f.manifest));
+  const result = await readLaunchPatterns(f.client,f.request,parseLaunchLicensedCsvReplay(officialCsvForNativeFixture(f)),parseTpexNativeShareReplay(f.manifest));
   assert.equal(result.arithmetic.breakout.volumeRatio,null); assert.equal(result.arithmetic.contraction.volumeContractionRatio,null);
   assert.equal(result.arithmetic.close,101); assert.equal(selected.history.missingData.length,0);
+  assert.equal(result.launchScore.observations!.chips!.foreign20.netShares,20);
+  assert.equal(result.launchScore.observations!.chips!.foreign20.netVolumeRatio,null);
 });
 test('predecessor boundary change or absent predecessor refuses the consumed51 capital regime', async () => {
   assert.equal((await prepared(nativeVolumeFixture({capitalChangeIndex:189}))).bound.overlay,null);
@@ -157,7 +166,7 @@ test('native parser rejects header/date/unit/integer/hash/capture defects and ex
     assert.throws(()=>parseTpexNativeShareReplay(f.manifest),/native_share_|official_csv_/u,mode);
   }
 });
-test('valid native capital proof still rejects fractional/impossible net shares and unit/source revision changes', async () => {
+test('raw exact nets survive technical coverage mismatch while fractional nets and source binding changes fail closed', async () => {
   const f=nativeVolumeFixture(), official=parseLaunchLicensedCsvReplay(officialCsvForNativeFixture(f));
   const result=await readLaunchPatterns(f.client,f.request,official,parseTpexNativeShareReplay(f.manifest));
   const base=bindLaunchOfficialReplay(official,f.request,result.evidence,result.nativeVolumeOverlay).external;
@@ -169,17 +178,25 @@ test('valid native capital proof still rejects fractional/impossible net shares 
     if(mode==='units')Object.assign(external.chips!,{unit:'lots'});
     if(mode==='price_revision')external.chips!.priceRevision='wrong-price';
     const score=evaluateLaunchRules(f.request,result,external);
-    if(mode==='units'||mode==='price_revision')assert.equal(score.components.chips.availableWeight,0,mode);
-    else {assert.equal(score.components.chips.availableWeight,10,mode);assert.equal(score.observations!.chips!.foreign5.netShares,null);assert.equal(score.observations!.chips!.trust5.netShares,10);}
+    assert.equal(score.components.chips.availableWeight,0,mode);
+    if(mode==='units'||mode==='price_revision')assert.equal(score.observations!.chips,null,mode);
+    else {assert.equal(score.observations!.chips!.foreign5.netShares,mode==='impossible'?14007:null);
+      assert.equal(score.observations!.chips!.trust5.netShares,10);assert.equal(score.observations!.chips!.foreign5.netVolumeRatio,null);}
   }
 });
-test('native revision binds complete row inventory/issued counts and caller cannot substitute chip share revision', async () => {
+test('native revision binds row inventory and technical overlay/public same-coverage DTO cannot authorize chip ratios', async () => {
   const a=await prepared(), f=nativeVolumeFixture(); changeCsv(f,0,text=>text.replace('"1000000"','"1000001"'));
   const b=await prepared(f); assert.ok(a.bound.overlay&&b.bound.overlay); assert.notEqual(a.bound.overlay.revisionId,b.bound.overlay.revisionId);
   const official=parseLaunchLicensedCsvReplay(officialCsvForNativeFixture(a.f));
   const result=await readLaunchPatterns(a.f.client,a.f.request,official,a.proof); assert.ok(result.nativeVolumeOverlay);
   const external=bindLaunchOfficialReplay(official,a.f.request,result.evidence,result.nativeVolumeOverlay).external;
-  external.chips!.shareVolumeRevision='wrong-native-revision';
-  const score=evaluateLaunchRules(a.f.request,result,external); assert.equal(score.components.chips.availableWeight,0);
-  assert.equal(score.observations!.chips,null);
+  for(const fake of [result.nativeVolumeOverlay,structuredClone(result.nativeVolumeOverlay),
+    {sameCoverage:true,coverage:'tpex_11856_combined_sessions_v1',datasetId:11370,sourceVersion:'invented',rows:external.chips!.rows},
+    {...result.nativeVolumeOverlay,coverage:'tpex_11856_combined_sessions_v1',institutionalDenominatorAuthority:true}]) {
+    external.institutionalVolumeProof=fake;
+    const score=evaluateLaunchRules(a.f.request,result,external); assert.equal(score.components.chips.availableWeight,0);
+    assert.equal(score.observations!.chips!.foreign5.netShares,5);
+    assert.equal(score.observations!.chips!.foreign5.volumeShares,null);
+    assert.equal(score.revisions.chipDenominator,null);
+  }
 });

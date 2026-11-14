@@ -1,16 +1,25 @@
 import type { VnextIdentity } from './auth.ts';
+import { types } from 'node:util';
 import { inputHash, POLICY } from './policy.ts';
 import { rankingEnabled, readRankingSnapshot, type RankingSnapshot } from './ranking-read.ts';
 const uuid = (v: unknown): v is string => typeof v === 'string' && /^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/u.test(v);
 export function rankingPublishRequest(body: Record<string, unknown>) {
-  if (Object.keys(body).sort().join('|') !== 'expectedPreviousRankingRunId|rankingRunId' || !uuid(body.rankingRunId)
-    || body.expectedPreviousRankingRunId !== null && !uuid(body.expectedPreviousRankingRunId)) throw Error('vnext_ranking_closed_request');
-  return { rankingRunId: body.rankingRunId, expectedPreviousRankingRunId: body.expectedPreviousRankingRunId };
+  if (!body || typeof body !== 'object' || Array.isArray(body) || types.isProxy(body)
+    || ![Object.prototype, null].includes(Object.getPrototypeOf(body))) throw Error('vnext_ranking_closed_request');
+  const descriptors = Object.getOwnPropertyDescriptors(body);
+  if (Reflect.ownKeys(descriptors).length !== 2 || !['rankingRunId', 'expectedPreviousRankingRunId'].every(key =>
+    descriptors[key]?.enumerable === true && Object.hasOwn(descriptors[key], 'value'))) throw Error('vnext_ranking_closed_request');
+  const rankingRunId: unknown = descriptors.rankingRunId.value;
+  const expectedPreviousRankingRunId: unknown = descriptors.expectedPreviousRankingRunId.value;
+  if (!uuid(rankingRunId) || expectedPreviousRankingRunId !== null && !uuid(expectedPreviousRankingRunId)) throw Error('vnext_ranking_closed_request');
+  return { rankingRunId, expectedPreviousRankingRunId };
 }
 /** Existing operator/writer lease, SQL shared lock and DB authority remain mandatory. */
 export async function publishRanking(identity: VnextIdentity, body: Record<string, unknown>) {
-  if (!rankingEnabled() || identity.role !== 'operator' || !identity.principal) throw Error('vnext_ranking_operator_required');
+  // This legacy writer accepts only run/CAS identity. Launch arithmetic, even
+  // complete weight100, has no reviewed publication adapter into this command.
   const request = rankingPublishRequest(body);
+  if (!rankingEnabled() || identity.role !== 'operator' || !identity.principal) throw Error('vnext_ranking_operator_required');
   const { analysisWriter } = await import('./analysis-runtime.ts');
   return analysisWriter(async () => {
     const { getSupabaseServerClient } = await import('../supabase-server.ts');
