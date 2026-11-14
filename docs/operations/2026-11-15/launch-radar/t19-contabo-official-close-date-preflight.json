@@ -1,0 +1,262 @@
+{
+  "schema": "stockinsider.real-close-transport-preflight.v1",
+  "scope": "Contabo standalone public data control; raw response bytes not retained or republished",
+  "marketDatesPlanned": [
+    "2026-11-16",
+    "2026-11-17"
+  ],
+  "asOfWindows": {
+    "taipeiClose": "13:30",
+    "taipeiRelease": "21:30",
+    "utcClose": "05:30",
+    "utcRelease": "13:30"
+  },
+  "meaning": {
+    "settledControl": "11/13 queried later, transport-positive only",
+    "futureControls": "HTTP 200 with no required symbol/date evidence; TPEx 11370 nevertheless has the exact requested date on a non-instrument marker row",
+    "licensedScope": "TPEx dataset 11856 and 11370 via observed dated report transports remain distinct from the TWSE public website observations; no new license claimed",
+    "actualCloseCapture": "NOT_RUN",
+    "writerIntegration": "NOT_RUN",
+    "productionMutation": false
+  },
+  "independentObservations": [
+    {
+      "source": "TPEX_11370_dated",
+      "requestDate": "2026-11-13",
+      "startUtc": "2026-11-14T23:02:57.559674+00:00",
+      "observedUtc": "2026-11-14T23:02:59.122661+00:00",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F13&response=data&type=DailyClose",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 1998356,
+      "sha256": "51c8a90f766f9416a3991273f1c20ad5ea83b15696da5c813a736440d3cde55a",
+      "embeddedDates": [
+        "2026-11-13"
+      ],
+      "exactTargetRows": 1,
+      "parse": "CONTRACT_METADATA",
+      "exactDateWithTarget": true,
+      "dataRows": 13807,
+      "nonInstrumentDatedRows": 0,
+      "allEmbeddedDates": [
+        "2026-11-13"
+      ],
+      "invalidDataRows": 0,
+      "recognizedHeaderWidths": [
+        18
+      ]
+    },
+    {
+      "source": "TPEX_11856_dated",
+      "requestDate": "2026-11-13",
+      "startUtc": "2026-11-14T23:02:56.739766+00:00",
+      "observedUtc": "2026-11-14T23:02:57.539368+00:00",
+      "url": "https://www.tpex.org.tw/web/stock/3insti/DAILY_TradE/3itrade_hedge_result.php?l=zh-tw&o=data&se=EW&t=D&d=115%2F11%2F13",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 142887,
+      "sha256": "dabfc58353c59e619bd25391eb945ae3a8f0c115533fce0c1717d5dd7d149ed0",
+      "embeddedDates": [
+        "2026-11-13"
+      ],
+      "exactTargetRows": 1,
+      "parse": "CONTRACT_METADATA",
+      "exactDateWithTarget": true,
+      "dataRows": 896,
+      "nonInstrumentDatedRows": 0,
+      "allEmbeddedDates": [
+        "2026-11-13"
+      ],
+      "invalidDataRows": 0,
+      "recognizedHeaderWidths": [
+        25
+      ]
+    },
+    {
+      "source": "TWSE_MI_INDEX",
+      "requestDate": "2026-11-13",
+      "startUtc": "2026-11-14T23:01:37.442480+00:00",
+      "observedUtc": "2026-11-14T23:01:38.314114+00:00",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date=20261113&type=ALLBUT0999&response=json",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 247687,
+      "sha256": "b51f87609d6e47eb82c818ab7bf1ef5a9e706504e10146cd49c24954969a9429",
+      "embeddedDates": [
+        "2026-11-13"
+      ],
+      "exactTargetRows": 1,
+      "parse": "PARSED_METADATA_ONLY",
+      "exactDateWithTarget": true
+    },
+    {
+      "source": "TWSE_T86",
+      "requestDate": "2026-11-13",
+      "startUtc": "2026-11-14T23:01:35.042671+00:00",
+      "observedUtc": "2026-11-14T23:01:37.247180+00:00",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261113&response=json&selectType=ALLBUT0999",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 198650,
+      "sha256": "9d8076daab79cd1b97d11f609a0bc24c6d60a7e2978f373d7aa6510b8dba737b",
+      "embeddedDates": [
+        "2026-11-13"
+      ],
+      "exactTargetRows": 1,
+      "parse": "PARSED_METADATA_ONLY",
+      "exactDateWithTarget": true
+    },
+    {
+      "source": "TPEX_11370_dated",
+      "requestDate": "2026-11-16",
+      "startUtc": "2026-11-14T23:02:59.717805+00:00",
+      "observedUtc": "2026-11-14T23:03:00.145119+00:00",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F16&response=data&type=DailyClose",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 258,
+      "sha256": "cce7bcae90576fbb0eff50c742d445faac5d9b74632605caf5b49d17d073de34",
+      "embeddedDates": [],
+      "exactTargetRows": 0,
+      "parse": "CONTRACT_METADATA",
+      "exactDateWithTarget": false,
+      "dataRows": 0,
+      "nonInstrumentDatedRows": 1,
+      "allEmbeddedDates": [
+        "2026-11-16"
+      ],
+      "invalidDataRows": 0,
+      "recognizedHeaderWidths": [
+        18
+      ]
+    },
+    {
+      "source": "TPEX_11856_dated",
+      "requestDate": "2026-11-16",
+      "startUtc": "2026-11-14T23:02:59.281329+00:00",
+      "observedUtc": "2026-11-14T23:02:59.710956+00:00",
+      "url": "https://www.tpex.org.tw/web/stock/3insti/DAILY_TradE/3itrade_hedge_result.php?l=zh-tw&o=data&se=EW&t=D&d=115%2F11%2F16",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 793,
+      "sha256": "121db7c6bbf139fff9016c5989d3d697bad7ea7b65161eb91fc0e1b4236ecab9",
+      "embeddedDates": [],
+      "exactTargetRows": 0,
+      "parse": "CONTRACT_METADATA",
+      "exactDateWithTarget": false,
+      "dataRows": 0,
+      "nonInstrumentDatedRows": 0,
+      "allEmbeddedDates": [],
+      "invalidDataRows": 1,
+      "recognizedHeaderWidths": [
+        25
+      ]
+    },
+    {
+      "source": "TWSE_MI_INDEX",
+      "requestDate": "2026-11-16",
+      "startUtc": "2026-11-14T23:01:41.547480+00:00",
+      "observedUtc": "2026-11-14T23:01:42.130746+00:00",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date=20261116&type=ALLBUT0999&response=json",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 54,
+      "sha256": "2a56faaeaa95fde10cda527e57a38e28d8104367d3cde0e9f0e5846dd89cde5e",
+      "embeddedDates": [],
+      "exactTargetRows": 0,
+      "parse": "PARSED_METADATA_ONLY",
+      "exactDateWithTarget": false
+    },
+    {
+      "source": "TWSE_T86",
+      "requestDate": "2026-11-16",
+      "startUtc": "2026-11-14T23:01:40.749101+00:00",
+      "observedUtc": "2026-11-14T23:01:41.546954+00:00",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261116&response=json&selectType=ALLBUT0999",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 79,
+      "sha256": "48a8f20b13e1eabdf19aa9a7b8a2f72c2e51a2fe91e958423648ece6c63cb9ce",
+      "embeddedDates": [],
+      "exactTargetRows": 0,
+      "parse": "PARSED_METADATA_ONLY",
+      "exactDateWithTarget": false
+    },
+    {
+      "source": "TPEX_11370_dated",
+      "requestDate": "2026-11-17",
+      "startUtc": "2026-11-14T23:03:00.572358+00:00",
+      "observedUtc": "2026-11-14T23:03:00.701133+00:00",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F17&response=data&type=DailyClose",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 258,
+      "sha256": "037e4197a24ce9d998f41b396cebb81fbf489cdca8c4ddb58ffc31b9f686c2c9",
+      "embeddedDates": [],
+      "exactTargetRows": 0,
+      "parse": "CONTRACT_METADATA",
+      "exactDateWithTarget": false,
+      "dataRows": 0,
+      "nonInstrumentDatedRows": 1,
+      "allEmbeddedDates": [
+        "2026-11-17"
+      ],
+      "invalidDataRows": 0,
+      "recognizedHeaderWidths": [
+        18
+      ]
+    },
+    {
+      "source": "TPEX_11856_dated",
+      "requestDate": "2026-11-17",
+      "startUtc": "2026-11-14T23:03:00.145319+00:00",
+      "observedUtc": "2026-11-14T23:03:00.572183+00:00",
+      "url": "https://www.tpex.org.tw/web/stock/3insti/DAILY_TradE/3itrade_hedge_result.php?l=zh-tw&o=data&se=EW&t=D&d=115%2F11%2F17",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 793,
+      "sha256": "1866a1f4fa33d47b4b8895497ae336b8e0542c6ff3d4d35f0089b6e06983a65c",
+      "embeddedDates": [],
+      "exactTargetRows": 0,
+      "parse": "CONTRACT_METADATA",
+      "exactDateWithTarget": false,
+      "dataRows": 0,
+      "nonInstrumentDatedRows": 0,
+      "allEmbeddedDates": [],
+      "invalidDataRows": 1,
+      "recognizedHeaderWidths": [
+        25
+      ]
+    },
+    {
+      "source": "TWSE_MI_INDEX",
+      "requestDate": "2026-11-17",
+      "startUtc": "2026-11-14T23:01:45.424328+00:00",
+      "observedUtc": "2026-11-14T23:01:46.054557+00:00",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date=20261117&type=ALLBUT0999&response=json",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 54,
+      "sha256": "2a56faaeaa95fde10cda527e57a38e28d8104367d3cde0e9f0e5846dd89cde5e",
+      "embeddedDates": [],
+      "exactTargetRows": 0,
+      "parse": "PARSED_METADATA_ONLY",
+      "exactDateWithTarget": false
+    },
+    {
+      "source": "TWSE_T86",
+      "requestDate": "2026-11-17",
+      "startUtc": "2026-11-14T23:01:42.546194+00:00",
+      "observedUtc": "2026-11-14T23:01:45.424176+00:00",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261117&response=json&selectType=ALLBUT0999",
+      "http": 200,
+      "transportExit": 0,
+      "bytes": 79,
+      "sha256": "48a8f20b13e1eabdf19aa9a7b8a2f72c2e51a2fe91e958423648ece6c63cb9ce",
+      "embeddedDates": [],
+      "exactTargetRows": 0,
+      "parse": "PARSED_METADATA_ONLY",
+      "exactDateWithTarget": false
+    }
+  ]
+}
