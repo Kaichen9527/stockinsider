@@ -1,0 +1,189 @@
+{
+  "schema": "stockinsider.tpex-compound-price-basis-control.v1",
+  "scope": "Independent historical engineering control with exact fractions. All raw report hashes reconfirmed; no product scoring or historical eligibility claimed.",
+  "existingBodyReceipt": "4d4c0622700ee0a495f3dd4510888621beb9d6d5",
+  "existingTypedActionReceipt": "1b22f1a767c7ff9607907bbaf6a3add6b38be246",
+  "earlierSingleEventControls": "5cbe1dd315e0e37cc786acde1cea435d013248f4",
+  "candidateSql": "763a0c676b48598196762cbe550e56675fcbfcd1",
+  "normalization": "Multiply pre-event bars by published reference ÷ preceding unadjusted close, independently for each observed action, to express this control in the signal-date price basis. Execution prices and return-with-cash remain distinct.",
+  "limits": [
+    "Later observation on Nov 15 Taipei; cannot qualify an earlier original cutoff",
+    "Illustrative control, not yet approved in native authority; no assumed rights, corporate action availability or live launch writer",
+    "No raw exchange response retained or republished. No candidate rank, execution or investment recommendation."
+  ],
+  "symbol": "5274",
+  "latest": "2026-11-13",
+  "first": "2025-11-17",
+  "sessions": 240,
+  "priorEvidenceHashMatches": 13,
+  "sourceReports": [
+    {
+      "month": "2025-11",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F11%2F01&response=json",
+      "sha256": "8fdcf192d505b10b041433f13f5041052ecdd72bcc7a323a9fb3eb20f62cc014",
+      "bytes": 2453,
+      "reObservedAtUtc": "2026-11-14T23:39:59.834416+00:00"
+    },
+    {
+      "month": "2025-12",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F12%2F01&response=json",
+      "sha256": "9ad40093de8aa87be28fe551f4f01d0d6e6ed09150311c509130c1e3a01aca7a",
+      "bytes": 2636,
+      "reObservedAtUtc": "2026-11-14T23:40:00.028104+00:00"
+    },
+    {
+      "month": "2026-01",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F01%2F01&response=json",
+      "sha256": "5887dd466b16051951d8d40c34a0244f922d703e1a8b4d20cc22b2d288a1ee4f",
+      "bytes": 2540,
+      "reObservedAtUtc": "2026-11-14T23:40:00.255484+00:00"
+    },
+    {
+      "month": "2026-02",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F02%2F01&response=json",
+      "sha256": "d2973e28b0d20c981b6cbc36eaf902d7b74660a3874b472fa9791ed589ca645d",
+      "bytes": 1706,
+      "reObservedAtUtc": "2026-11-14T23:40:00.553015+00:00"
+    },
+    {
+      "month": "2026-03",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F03%2F01&response=json",
+      "sha256": "146c4666518357f432ee1578bfd15c6d866325d28cc5ba2da3dcffbe74667e63",
+      "bytes": 2704,
+      "reObservedAtUtc": "2026-11-14T23:40:00.991944+00:00"
+    },
+    {
+      "month": "2026-04",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F04%2F01&response=json",
+      "sha256": "1258f466c8b9b125215aafe2eaf24e1a6c4fb0b3af473633fa6a6d3b4b73ee8b",
+      "bytes": 2534,
+      "reObservedAtUtc": "2026-11-14T23:40:01.301870+00:00"
+    },
+    {
+      "month": "2026-05",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F05%2F01&response=json",
+      "sha256": "f8702689d2e573dd275324c13e384157361225cf34ec8de6ceb6ee538830dc01",
+      "bytes": 2552,
+      "reObservedAtUtc": "2026-11-14T23:40:01.513588+00:00"
+    },
+    {
+      "month": "2026-06",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F06%2F01&response=json",
+      "sha256": "b9d8d51a8117aaa1334bdf292bee51221cfb6d6363270bec9e8410ef46e3c307",
+      "bytes": 2642,
+      "reObservedAtUtc": "2026-11-14T23:40:01.777291+00:00"
+    },
+    {
+      "month": "2026-07",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F07%2F01&response=json",
+      "sha256": "80c78fa5616b9b91a958ef7c39598584fbe5f1215dc9c066adf95b2772e42a42",
+      "bytes": 2743,
+      "reObservedAtUtc": "2026-11-14T23:40:02.334563+00:00"
+    },
+    {
+      "month": "2026-08",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F08%2F01&response=json",
+      "sha256": "5a6a4c41d32826d2f34d97f7ce89c037f519437613a3cefb54859449befb8c7a",
+      "bytes": 2638,
+      "reObservedAtUtc": "2026-11-14T23:40:02.523255+00:00"
+    },
+    {
+      "month": "2026-09",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F09%2F01&response=json",
+      "sha256": "d414113acc52bf8c4dc0830c448c826db419cc17b7ab5a4dc5cfcaf890cab705",
+      "bytes": 2547,
+      "reObservedAtUtc": "2026-11-14T23:40:03.252406+00:00"
+    },
+    {
+      "month": "2026-10",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F10%2F01&response=json",
+      "sha256": "1f645440992e235a8e9fd856effc466d222a18a1e6dc5a8990d43331f043082a",
+      "bytes": 2457,
+      "reObservedAtUtc": "2026-11-14T23:40:03.578558+00:00"
+    },
+    {
+      "month": "2026-11",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F11%2F01&response=json",
+      "sha256": "476b845822d51a6676808fc5b4252bb550031806834e4de3ac57ee34008f5f27",
+      "bytes": 1579,
+      "reObservedAtUtc": "2026-11-14T23:40:03.803213+00:00"
+    }
+  ],
+  "raw": {
+    "approx": {
+      "close": 12000,
+      "ma50": 16919.1,
+      "ma200": 14773.075,
+      "previousMa200": 14666.125,
+      "ma200FiveSessionChange": 106.95,
+      "return20": -0.31428571,
+      "return63": -0.27007299
+    },
+    "exact": {
+      "close": "12000",
+      "ma50": "169191/10",
+      "ma200": "590923/40",
+      "previousMa200": "117329/8",
+      "ma200FiveSessionChange": "2139/20",
+      "return20": "-11/35",
+      "return63": "-37/137"
+    },
+    "thresholdBoolean": {
+      "ma50AboveMa200": true,
+      "ma200RisingFiveSessions": true
+    }
+  },
+  "referenceNormalized": {
+    "approx": {
+      "close": 12000,
+      "ma50": 16919.1,
+      "ma200": 14046.3388413,
+      "previousMa200": 13920.96417815,
+      "ma200FiveSessionChange": 125.37466315,
+      "return20": -0.31428571,
+      "return63": -0.27007299
+    },
+    "exact": {
+      "close": "12000",
+      "ma50": "169191/10",
+      "ma200": "11712364063583/833837500",
+      "previousMa200": "631465515053701/45360760000",
+      "ma200FiveSessionChange": "28435450026071/226803800000",
+      "return20": "-11/35",
+      "return63": "-37/137"
+    },
+    "thresholdBoolean": {
+      "ma50AboveMa200": true,
+      "ma200RisingFiveSessions": true
+    }
+  },
+  "incorrectTickBasisControl": {
+    "approx": {
+      "close": 12000,
+      "ma50": 16919.1,
+      "ma200": 14045.91174817,
+      "previousMa200": 13920.52629672,
+      "ma200FiveSessionChange": 125.38545145,
+      "return20": -0.31428571,
+      "return63": -0.27007299
+    },
+    "exact": {
+      "close": "12000",
+      "ma50": "169191/10",
+      "ma200": "187392126997/13341400",
+      "previousMa200": "37143861907/2668280",
+      "ma200FiveSessionChange": "836408731/6670700",
+      "return20": "-11/35",
+      "return63": "-37/137"
+    },
+    "thresholdBoolean": {
+      "ma50AboveMa200": true,
+      "ma200RisingFiveSessions": true
+    }
+  },
+  "eventFactors": {
+    "2026-06-26": "3469/3485",
+    "2026-07-07": "1479091/1627000"
+  },
+  "preBothEventFactor": "5130966679/5670095000"
+}
