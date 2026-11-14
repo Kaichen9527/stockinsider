@@ -1,0 +1,45 @@
+{
+  "schema": "stockinsider-t18-host-stage-delta-v1",
+  "baselineCommit": "793c0cbc034db45552bedd540da88f0e566397c6",
+  "baselineRuntimeBlobCount": 45,
+  "runtimeBlobCountAfter": 45,
+  "unchangedRuntimeBlobs": 43,
+  "add": [],
+  "remove": [],
+  "replace": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/staging_admission.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "1601bfa8a1f3e1c6927d7b8933bd5ee009ae8f1d",
+        "sha256": "6166526166e8005bbb28fd2c47c937afca22ff2d1980065e1a8af6a37e1dcb21"
+      },
+      "after": {
+        "gitBlob": "1278f5118ab89f8a9751acdda904fa9650e4dec0",
+        "sha256": "ddc77fd2029dab19d01dc8ab8d6e3a704861c791798767b93a07cec0247403f1"
+      }
+    },
+    {
+      "path": "scripts/staging_t18_host.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "84ab9ae2ac39fa54f20a0d84a5625da37a080ad3",
+        "sha256": "ec79f1f9cc4858fb373c991e1d09b7a461294a744d772e152c2a04e6deec2238"
+      },
+      "after": {
+        "gitBlob": "d9f742557dfb5e15a9a8ee40e8b2e40312c232bb",
+        "sha256": "88281164ad90505281b464a0c9cb40152e062cda564ae9b17a72425e678d84c3"
+      }
+    }
+  ],
+  "fixedSourceRoot": "/run/stockinsider-t18-host-source",
+  "fixedSourceUnitRoot": "/readonly/t18-source",
+  "beforeReplacement": "VERIFY_EXACT_BASELINE_BLOB_AND_SHA256",
+  "afterReplacement": "VERIFY_EXACT_AFTER_BLOB_AND_SHA256_FROM_THIS_REVIEWED_COMMIT",
+  "remainingRuntimeBlobs": "RETAIN_EXACT_793c0cbc_BASELINE_IDENTITIES",
+  "privateManifestKeysAndBackupInPublicSourceTree": "FORBIDDEN",
+  "scope": "SOURCE_IDENTITY_DELTA_ONLY_NOT_RUNTIME_ADMISSION",
+  "addressFamilyPermissionExpanded": false,
+  "nativeHoldRetained": true,
+  "callerBooleanOrReceiptGrantsRuntimeAuthority": false
+}

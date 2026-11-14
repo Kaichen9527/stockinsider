@@ -9,7 +9,6 @@ import fcntl
 import os
 from pathlib import Path, PurePosixPath
 import re
-import socket
 import stat
 
 GiB = 1024**3
@@ -97,6 +96,60 @@ def _check_preallocation(image, work_bytes):
         raise StagingAdmissionRejected('work_filesystem_image_size_rejected')
 
 
+def _parse_proc_net_dev(data):
+    """Internal strict parser, never a namespace/admission authority by itself."""
+    if (type(data) is not bytes or not 0 < len(data) <= 16384
+            or not data.endswith(b'\n')
+            or any(c not in (9,10) and not 32 <= c <= 126 for c in data)):
+        raise StagingAdmissionRejected('network_interface_observation_invalid')
+    lines = data[:-1].split(b'\n')
+    headers = (
+        (b'Inter-',b'Receive',b'Transmit'),
+        (b'face',b'bytes packets errs drop fifo frame compressed multicast',
+         b'bytes packets errs drop fifo colls carrier compressed'),
+    )
+    if not 3 <= len(lines) <= 66:
+        raise StagingAdmissionRejected('network_interface_observation_invalid')
+    for line,expected in zip(lines[:2],headers):
+        if tuple(b' '.join(part.split()) for part in line.split(b'|')) != expected:
+            raise StagingAdmissionRejected('network_interface_observation_invalid')
+    names = set()
+    for line in lines[2:]:
+        name,separator,counts = line.partition(b':')
+        name = name.strip()
+        values = counts.split()
+        if (not separator or not re.fullmatch(rb'[A-Za-z0-9_.-]{1,15}',name)
+                or name in names or len(values) != 16
+                or any(not re.fullmatch(rb'[0-9]{1,20}',v)
+                       or int(v) > 2**64-1 for v in values)):
+            raise StagingAdmissionRejected('network_interface_observation_invalid')
+        names.add(name)
+    return frozenset(name.decode('ascii') for name in names)
+
+
+def _observe_network_interfaces():
+    """Read only the current task's fixed kernel procfs view; no socket/fallback.
+
+    glibc if_nameindex() needs AF_NETLINK, excluded from the broker allowlist.
+    Like the existing /proc status/ns checks, this observes the host-provisioned
+    proc mount. No caller path, metadata flag or supplied parser input admits it.
+    """
+    try:
+        fd = os.open('/proc/self/net/dev',os.O_RDONLY|os.O_CLOEXEC|os.O_NOFOLLOW)
+        try:
+            if not stat.S_ISREG(os.fstat(fd).st_mode):
+                raise StagingAdmissionRejected('network_interface_observation_invalid')
+            data = bytearray()
+            while len(data) <= 16384:
+                part = os.read(fd,16385-len(data))
+                if not part:break
+                data.extend(part)
+            return _parse_proc_net_dev(bytes(data))
+        finally:os.close(fd)
+    except OSError:
+        raise StagingAdmissionRejected('network_interface_observation_unavailable') from None
+
+
 def _namespace_and_privileges():
     if os.getuid() == 0 or os.geteuid() == 0:
         raise StagingAdmissionRejected('nonroot_required')
@@ -105,7 +158,7 @@ def _namespace_and_privileges():
         caps = re.search(r'^'+name+r':\s*([0-9a-fA-F]+)$',status,re.M)
         if caps is None or int(caps.group(1),16) != 0:
             raise StagingAdmissionRejected('capability_free_required')
-    if {name for _,name in socket.if_nameindex()} != {'lo'}:
+    if _observe_network_interfaces() != {'lo'}:
         raise StagingAdmissionRejected('private_loopback_network_required')
     current = os.stat('/proc/self/ns/net')
     # DynamicUser/ProtectProc may prohibit root-PID1 namespace stat. That does

@@ -15,6 +15,21 @@ host=importlib.util.module_from_spec(spec);spec.loader.exec_module(host)
 
 
 class HostLauncherTests(unittest.TestCase):
+    def test_broker_early_exit_uses_only_fixed_role_labels(self):
+        failed=subprocess.Popen([sys.executable,'-I','-B','-c',
+            "import sys;sys.stderr.write('PUBLIC_DO_NOT_EXPORT');raise SystemExit(2)"],stderr=subprocess.PIPE)
+        live=subprocess.Popen([sys.executable,'-I','-B','-c','import time;time.sleep(10)'])
+        try:
+            failed.wait(timeout=5)
+            host._require_starting_brokers({'APP':live,'REST':live})
+            for kind,label in (('APP','app_broker_startup_refused'),('REST','rest_broker_startup_refused')):
+                children={'APP':live,'REST':live};children[kind]=failed
+                with self.assertRaisesRegex(host.HostRejected,'^'+label+'$'):
+                    host._require_starting_brokers(children)
+        finally:
+            failed.communicate(timeout=5)
+            live.terminate();live.wait(timeout=5)
+
     def test_actual_cloud_refuses_before_any_host_action_or_key(self):
         for args in (['admission'],['invalid','--manifest-sha256','0'*64],['real','--manifest-sha256','0'*64]):
             result=subprocess.run([sys.executable,'-I','-B',str(SOURCE),*args],

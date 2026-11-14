@@ -1,0 +1,141 @@
+{
+  "actualNextHttpAcceptance": "NOT_RUN",
+  "actualOnsiteAdmissionAfterFix": "NOT_RUN",
+  "actualOnsiteInvalidKeyAfterFix": "NOT_RUN",
+  "actualOnsiteRealKeyAfterFix": "NOT_RUN",
+  "build": {
+    "applicationSourceChanged": false,
+    "command": "cd web && npm run build",
+    "exitCode": 127,
+    "status": "NEXT_EXECUTABLE_MISSING_IN_ISOLATED_CHECKOUT"
+  },
+  "callerBooleanOrReceiptGrantsRuntimeAuthority": false,
+  "ciAndFormalReleaseGatesChanged": false,
+  "cloudRootOrSystemdUnitActions": false,
+  "contaboAccessed": false,
+  "generatedAtUtc": "2026-11-14T20:00:27.251192Z",
+  "implementation": {
+    "acceptedBytesMax": 16384,
+    "acceptedInterfaceRowsMax": 64,
+    "acceptedInterfaceRowsMin": 1,
+    "brokerAddressFamilyAllowlistChanged": false,
+    "callerPathOrFallback": false,
+    "capabilityAndNamespaceChecksChanged": false,
+    "counterColumns": 16,
+    "counters": "ASCII_UINT64_ONLY",
+    "duplicatesOrMalformedOrTruncated": "REJECT",
+    "fixedKernelPath": "/proc/self/net/dev",
+    "rawBrokerOutputExported": false,
+    "readBytesMax": 16385,
+    "runtimeInterfaceSetRequired": [
+      "lo"
+    ],
+    "startupRefusalLabels": [
+      "app_broker_startup_refused",
+      "rest_broker_startup_refused"
+    ],
+    "strictHeaders": true
+  },
+  "independentReview": {
+    "admissionDurationSeconds": 0.086,
+    "admissionPassed": 12,
+    "hostLauncherDurationSeconds": 0.942,
+    "hostLauncherPassed": 9,
+    "openBlockerOrHighFindings": 0,
+    "scope": "EXACT_SOURCE_AND_FOCUSED_PUBLIC_TESTS"
+  },
+  "nativeHoldRetained": true,
+  "parentCommit": "793c0cbc034db45552bedd540da88f0e566397c6",
+  "productionBackupOrCredentialReceivedInCloud": false,
+  "productionServiceMutation": false,
+  "reportedOnsiteDiagnostics": {
+    "diagnosticOnlyAddingNetlinkObserved": "LO_ONLY",
+    "fixedAllowedFamilies": [
+      "AF_UNIX",
+      "AF_INET",
+      "AF_INET6"
+    ],
+    "glibcIfNameindexErrno": 97,
+    "observedAppCgroupMemoryMaxBytes": 536870912,
+    "productionSignaturesUnchanged": true,
+    "source": "COORDINATOR_REPORT_NOT_RUNTIME_ADMISSION",
+    "unchangedAllowlistProcNetDev": "LO_ONLY",
+    "unchangedAllowlistProcSelfNetDev": "LO_ONLY"
+  },
+  "reportedOnsiteFailure": {
+    "bothBrokersEnteredPythonAndExited": 2,
+    "exit": 2,
+    "keyRead": false,
+    "mode": "admission",
+    "productionSignaturesUnchanged": true,
+    "reason": "broker_socket_startup_deadline",
+    "source": "COORDINATOR_REPORT_NOT_CLOUD_ADMISSION",
+    "stagingResourcesCleaned": true,
+    "testedCommit": "793c0cbc034db45552bedd540da88f0e566397c6",
+    "verifiedRuntimeBlobs": 45
+  },
+  "schema": "stockinsider-t18-procfs-interface-observation-fix-v1",
+  "sourceFiles": [
+    {
+      "gitBlob": "1278f5118ab89f8a9751acdda904fa9650e4dec0",
+      "path": "deployment/staging/vnext/t17_keyfd/staging_admission.py",
+      "sha256": "ddc77fd2029dab19d01dc8ab8d6e3a704861c791798767b93a07cec0247403f1"
+    },
+    {
+      "gitBlob": "d9f742557dfb5e15a9a8ee40e8b2e40312c232bb",
+      "path": "scripts/staging_t18_host.py",
+      "sha256": "88281164ad90505281b464a0c9cb40152e062cda564ae9b17a72425e678d84c3"
+    },
+    {
+      "gitBlob": "70386078d1ce1c5a6dd8ed25759f817e2c602c6d",
+      "path": "scripts/tests/test_t17_staging_admission.py",
+      "sha256": "f6819c42fef1a9ffb0bbd7d1e3e7fadb8ec4d0f97f582d82a4bd3bb5a6fc3881"
+    },
+    {
+      "gitBlob": "9fc258e6b5970db2cea4098024af8cf73e6a1a83",
+      "path": "scripts/tests/test_t18_host_launcher.py",
+      "sha256": "e860fb3d4f81eeae521c7495c2aad732925ec5a167cee691a9ad6e2c79f9976f"
+    },
+    {
+      "gitBlob": "378b5729b25f2149a3367c9e8a601eb7e89304f9",
+      "path": "docs/operations/2026-11-15/vnext/T18-HOST-ORCHESTRATION.md",
+      "sha256": "c2a51910d490da27fdb279dd0740bcc1ef28bf50b2ed2572f60dd031de6372ff"
+    },
+    {
+      "gitBlob": "52225dcd929e53305732cc69ba2785d793350d7e",
+      "path": "docs/operations/2026-11-15/vnext/t18-host-procfs-stage-manifest.json",
+      "sha256": "b56951d2da4b7a2c090279b02fe00e9bd0623b1b360b953748801819d9efdbd0"
+    }
+  ],
+  "stageManifest": "docs/operations/2026-11-15/vnext/t18-host-procfs-stage-manifest.json",
+  "tests": {
+    "combinedT17T18": {
+      "command": "python3 -m unittest discover -s scripts/tests -p 'test_t1[78]_*.py'",
+      "durationSeconds": 44.515,
+      "failed": 0,
+      "passed": 146,
+      "skipped": 0
+    },
+    "focusedAdmissionPassed": 12,
+    "focusedHostLauncherPassed": 9,
+    "kernelRegression": {
+      "actualProcInterfaceObservationStillMatches": true,
+      "cloudFullAdmissionStillRejected": true,
+      "ownedNonrootChildOnly": true,
+      "seccompAfNetlinkDeniedErrno": 97
+    },
+    "syntheticCoverage": [
+      "valid_kernel_headers_and_uint64",
+      "nonloopback_interfaces_not_admission",
+      "duplicate_name",
+      "malformed_headers",
+      "wrong_counter_count",
+      "negative_signed_float_overflow_or_nonascii_counters",
+      "truncated_newline",
+      "invalid_interface_name",
+      "over_16KiB_or_64_rows",
+      "no_caller_path_override",
+      "fixed_role_labels_from_actual_child_exits"
+    ]
+  }
+}

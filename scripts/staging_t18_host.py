@@ -265,12 +265,19 @@ def _introspect_three_units(accounts):
     if len(set(namespaces))!=1 or namespaces[0]==(host.st_dev,host.st_ino):raise HostRejected('unit_private_namespace_mismatch')
 
 
-def _seal_controls():
+def _require_starting_brokers(children):
+    # Fixed role labels only, never stderr, exceptions, command text or rows.
+    for kind,label in (('APP','app_broker_startup_refused'),('REST','rest_broker_startup_refused')):
+        if children[kind].poll() is not None:raise HostRejected(label)
+
+
+def _seal_controls(children):
     deadline=time.monotonic()+15;ipc=grp.getgrnam(IPC).gr_gid
     for parent in ('/run/t18-broker','/run/t18-rest'):
         endpoint=Path(parent)/'control.sock'
         while not endpoint.exists():
             _check_stop()
+            _require_starting_brokers(children)
             if time.monotonic()>deadline:raise HostRejected('broker_socket_startup_deadline')
             time.sleep(.05)
         if not stat.S_ISSOCK(endpoint.lstat().st_mode):raise HostRejected('broker_socket_type')
@@ -394,7 +401,7 @@ def execute(mode,manifest_sha):
             children[kind]=subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0,
                 env={'PATH':'/usr/sbin:/usr/bin:/sbin:/bin','LC_ALL':'C'})
             captures[kind]=_Capture(children[kind])
-        _seal_controls();_check_stop()
+        _seal_controls(children);_check_stop()
         if mode!='admission':
             conn,_=broker.accept();broker.close()
             with conn:

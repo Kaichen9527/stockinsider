@@ -34,9 +34,12 @@ reserved account/group identity and the host manager mount namespace. Run it
 only from the exact fresh fixed source root in the systemd manager's host mount
 namespace. Do not invoke it in Cloud or a caller-private mount namespace.
 
-Retain all 40 previously verified e6e73ad runtime blobs, including all four
-historical migration pins, and add only these FIVE runtime files in the fresh
-source root:
+Start with the 45 verified 793c0cbc runtime blobs (the original 40, including
+four historical migrations, plus the five files below). Apply the exact TWO
+replacements in [the current stage manifest](t18-host-procfs-stage-manifest.json):
+shared staging_admission.py and the root staging_t18_host.py. Retain the other
+43 blobs unchanged. The runtime source count remains 45; do not mix the old
+shared observer with the new root launcher. These five host files remain required:
 
 - deployment/staging/vnext/t17_keyfd/t18_host_plan.py
 - deployment/staging/vnext/t17_keyfd/t18_fd_handoff.py
@@ -44,14 +47,31 @@ source root:
 - scripts/staging_t18_host_admission.py
 - scripts/staging_t18_host.py
 
-The adjacent [machine-readable receipt](t18-host-orchestration-receipt.json) lists
-SHA256/Git blob IDs. Tests/docs/receipts are not
-runtime dependencies. Do not place database-manifest.json, env files, backups or
+The original [host source receipt](t18-host-orchestration-receipt.json) is historical
+evidence for 793c0cbc. Use the current stage manifest for the two replacement
+SHA256/Git blob IDs and [the procfs fix receipt](t18-host-procfs-receipt.json) for
+current test/review evidence. Tests/docs/receipts are not runtime dependencies.
+Do not place database-manifest.json, env files, backups or
 keys in this public source tree; the private manifest remains in the original
 root-only location. The host coordinator must stage/verify exact Git blobs before
 invoking root source, as with the previous 40-file staging. Metadata ownership is
 not a substitute for reviewing exact source. No build artifacts from Cloud are
 needed; both fixed genuine release packages and binaries stay onsite.
+
+The coordinator's 793c0cbc no-key run rejected before sockets/key read because
+glibc if_nameindex() required AF_NETLINK. The current shared observer instead
+opens only /proc/self/net/dev read-only, reads at most 16385 bytes to detect
+overflow, and rejects more than 16 KiB, malformed/truncated headers or rows,
+duplicate names, over 64 interfaces, or counters outside the 16 uint64 columns.
+Admission still requires exactly lo and the unchanged zero-capability/network
+namespace checks. No broker address-family permission is expanded: the fixed
+AF_UNIX/AF_INET/AF_INET6 allowlist remains. Missing/unreadable or unexpected procfs
+observations reject without falling back to libc, another path or caller data.
+The host reports app_broker_startup_refused or rest_broker_startup_refused if a
+broker exits while its socket is awaited; these are fixed role-only labels and
+do not include raw exceptions, stderr or journal contents. A socket that remains
+absent with live brokers still reaches the bounded broker_socket_startup_deadline.
+This source fix does not convert the failed onsite run into admission success.
 
 ## Modes
 
