@@ -8,28 +8,37 @@ const nativeRequire = createRequire(import.meta.url);
  * environment/client/provider is loaded; every unused external edge fails. */
 export function loadActualPttCollector() {
   const cache = new Map();
-  const sources = new Set(['research-v2.ts', 'ptt-article-parser.ts', 'ptt-mention-provenance.ts', 'vnext/evidence-clock.ts']);
-  const nodes = new Set(['path', 'crypto', 'util', 'node:crypto']);
+  const sources = new Set(['research-v2.ts', 'ptt-article-parser.ts', 'vnext/evidence-clock.ts']);
   const context = vm.createContext({ Buffer, URL, TextDecoder, process: { env: {}, cwd: () => '/NONPRODUCTION' },
     fetch() { throw Error('unexpected_ptt_test_network'); } });
   function load(name) {
     if (!sources.has(name)) throw Error('unexpected_ptt_test_source');
     if (cache.has(name)) return cache.get(name);
     const filename = new URL(name, import.meta.url);
-    const compiled = ts.transpileModule(fs.readFileSync(filename, 'utf8'), { fileName: name,
+    let source = fs.readFileSync(filename, 'utf8');
+    if (name === 'research-v2.ts') {
+      // Execute the real composition and real symbol matcher without unrelated
+      // top-level provider configuration or environment/constants initialization.
+      const ast = ts.createSourceFile(name, source, ts.ScriptTarget.Latest, true);
+      const names = ['compactText', 'extractTwSymbolsWithEvidence', 'projectPttCollectorArticle'];
+      const declarations = names.map(expected => {
+        const matches = ast.statements.filter(node => ts.isFunctionDeclaration(node) && node.name?.text === expected);
+        if (matches.length !== 1) throw Error('unexpected_ptt_test_function');
+        return matches[0].getText(ast);
+      });
+      source = "import {parsePttArticleHtml,pttBodyProvenance,pttPublicationKnownAt} from './ptt-article-parser.ts';\n" + declarations.join('\n');
+    }
+    const compiled = ts.transpileModule(source, { fileName: name,
       compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText;
-    const module = { exports: {} }; cache.set(name, module.exports);
+    const isolatedModule = { exports: {} }; cache.set(name, isolatedModule.exports);
     const require = dependency => {
-      if (nodes.has(dependency) || dependency === 'parse5') return nativeRequire(dependency);
-      if (dependency === 'child_process') return { execFile() { throw Error('unexpected_ptt_test_process'); } };
-      if (dependency === 'fs/promises') return new Proxy({}, { get(_, key) { if (key === '__esModule') return false; throw Error('unexpected_ptt_test_filesystem'); } });
-      if (['./ptt-article-parser.ts', './ptt-mention-provenance'].includes(dependency)) return load(dependency.includes('parser') ? 'ptt-article-parser.ts' : 'ptt-mention-provenance.ts');
+      if (dependency === 'node:crypto' || dependency === 'parse5') return nativeRequire(dependency);
+      if (dependency === './ptt-article-parser.ts') return load('ptt-article-parser.ts');
       if (dependency === './vnext/evidence-clock.ts') return load('vnext/evidence-clock.ts');
-      if (!dependency.startsWith('./')) throw Error('unexpected_ptt_test_dependency');
-      return new Proxy({}, { get() { throw Error('unexpected_ptt_test_external_edge'); } });
+      throw Error('unexpected_ptt_test_dependency');
     };
-    vm.compileFunction(compiled, ['exports', 'require', 'module'], { filename: filename.pathname, parsingContext: context })(module.exports, require, module);
-    return module.exports;
+    vm.compileFunction(compiled, ['exports', 'require', 'module'], { filename: filename.pathname, parsingContext: context })(isolatedModule.exports, require, isolatedModule);
+    return isolatedModule.exports;
   }
   return { projectPttCollectorArticle: load('research-v2.ts').projectPttCollectorArticle };
 }
