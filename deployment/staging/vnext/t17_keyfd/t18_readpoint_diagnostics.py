@@ -7,7 +7,7 @@ from .stage_credentials import StageCredentialRejected
 PHASES=frozenset(('radar_readpoint','snapshot_fingerprint','snapshot_dates','reader_role_install',
  'owned_socket_activation','initial_app_shutdown','stage_credential_handoff','stage_credential_lifetime',
  'fresh_app_binding','port_preconditions','rest_configure','app_configure','fixed_http_exercise',
- 'final_token_check','broker_cleanup','snapshot_final_check','candidate_detail_query'))
+ 'final_token_check','broker_cleanup','snapshot_final_check','candidate_detail_query','candidate_detail_prepare','candidate_detail_http'))
 CLASSES=frozenset(('stage_lifetime','stage_material','stage_handoff','timeout','os_error','parse_error','rejected','unexpected'))
 
 

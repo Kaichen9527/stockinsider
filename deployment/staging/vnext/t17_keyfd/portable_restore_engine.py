@@ -165,11 +165,12 @@ def rehearse_owned_fixed_next(replay,work_root):
             budget=observe_three_uid_budget(app,rest)
             with _owned_validated_clone(replay,work_root) as clone:
                 result=clone.rehearse_fixed_next(app,rest,assets)
+                detail_http=result.pop('candidateDetailHttp')
                 # Read-only discovery AFTER the already-verified daily exercise;
                 # no detail grants/RPC/HTTP, and no extra time before JWT use.
                 detail_observation=clone.observe_candidate_detail()
                 receipt=clone.receipt
-            return {'database':receipt,'exercise':result,'threeUidBudget':budget,'candidateDetailObservation':detail_observation}
+            return {'database':receipt,'exercise':result,'threeUidBudget':budget,'candidateDetailObservation':detail_observation,'candidateDetailHttp':detail_http}
 
 
 @contextmanager

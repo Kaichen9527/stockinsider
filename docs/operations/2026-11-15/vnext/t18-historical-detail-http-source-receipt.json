@@ -1,0 +1,105 @@
+{
+  "schema": "stockinsider-t18-historical-detail-http-source-receipt-v1",
+  "recordedAtUtc": "2026-11-14T23:30:04.147308Z",
+  "baselineCommit": "5359a946a43373dbf5233fdc56467c946685679a",
+  "scope": "CLOUD_PUBLIC_SYNTHETIC_SOURCE_AND_COMPONENT_VERIFICATION_ONLY",
+  "newOnsiteSubject": "NOT_RUN",
+  "preservedEvidence": {
+    "lateCredentialNativeSuccessCommit": "4998a2a4be77ea7c87351b27268aa50eec3177d2",
+    "nativeSubject": "5359a946a43373dbf5233fdc56467c946685679a",
+    "nativeDurationSeconds": 619.346,
+    "receiptGitBlob": "4b2230f6838600e03d2ab392a80c3a7a78795792",
+    "oldSuccessAndFailureRetained": true
+  },
+  "manifest": {
+    "path": "docs/operations/2026-11-15/vnext/t18-historical-detail-http-stage-manifest.json",
+    "sha256": "573f97da227540b2cdacb519f93c23c57fb86c24cf1471f362755dd55c7fbb3e",
+    "replace": 5,
+    "add": 2,
+    "expectedStagedBlobsAfter": 51
+  },
+  "runtimeSha256": {
+    "t18_detail_read_adapter": "e3596f0c8cab942bd49270c609dff733ce9afe1b8a996d177f6ed579897c38c4",
+    "t18_detail_http": "17ae50179e88e3bbb56fd356c16623f12246ada8aabff7d64eb92aee9f2bb1fa",
+    "fixed_read_proxy": "863bf7c3ccfb282f7d128feac277f24e6b43d03401c9929f797f0d1c89554571",
+    "t18_same_clone": "395377c1dd2aefd65cc2ca36b7c8952fd57c6e375f36b778aafbfd7d6dcb2913",
+    "portable_restore_engine": "06b3a06532eee3176363b61fb8f00c0d79440116637b113ffe5437980f0298e8",
+    "stage_next_rollback": "928e0ea67d56abf8f65084d31b03d1991cfd9b715e36624bfcf3e7110675e14b",
+    "t18_readpoint_diagnostics": "73db2de9247dcc5f04f7e3ecc7bc967215fc847c92d3de9c8cc624f687897b6b"
+  },
+  "boundaries": {
+    "sameActualValidatedCloneRequired": true,
+    "originalDatabaseGrantsAdded": 0,
+    "originalRpcGrantedOrExecuted": false,
+    "newRoleOrSchema": false,
+    "postgrestConfigurationChanged": false,
+    "rootOrUnitPlanChanged": false,
+    "brokerApiOrCredentialFdProtocolChanged": false,
+    "releaseBytesOrPinsChanged": false,
+    "maximumPrivateProjectionBytes": 524288,
+    "maximumAdoptedFacts": 40,
+    "maximumDetailRequests": 128,
+    "detailLeaseSeconds": 60,
+    "requiresGenuineFoundOrWaiting": true,
+    "tradePlanOrEnrichedRows": "GAP",
+    "unknownForwardedJsonKeysOrWrongNestedTypes": "GAP",
+    "nativeHoldRetained": true,
+    "callerBooleanOrReceiptRuntimeAuthority": false
+  },
+  "verification": {
+    "actualPostgresVersion": "PostgreSQL17.11 (Debian17.11-0+deb13u1)",
+    "combinedT17T18": {
+      "passed": 199,
+      "seconds": 83.629
+    },
+    "finalIndependentAdapter": {
+      "passed": 12,
+      "seconds": 12.802
+    },
+    "finalIndependentLegacyProxy": {
+      "passed": 8,
+      "seconds": 0.67
+    },
+    "independentSourceReview": {
+      "remainingP0": 0,
+      "remainingP1": 0,
+      "hashesMatchFrozenRuntime": true
+    },
+    "actualPrivateHttpAndPgFixture": true,
+    "pinnedSourceLoaderApiSupabaseSdkNextResponseComponent": true,
+    "componentNextVersion": "16.3.4",
+    "nativeNextStandaloneCloudAcceptance": false,
+    "realBackupOrKeyReceived": false,
+    "rootContaboOrProductionActions": false,
+    "ownedPgProxyCleanupVerified": true,
+    "cases": [
+      "exact stock/revision/market/fact subset",
+      "original prose/date/value preservation",
+      "real zero dossier/receipt vs nonzero GAP",
+      "unknown nested JSON fields/wrong types rejected",
+      "source-supported factor and metadata profile",
+      "wrong Authorization/schema/Prefer/Range rejected",
+      "unknown/mutating RPC and writes rejected",
+      "detail lease starts only after accepted authenticated target",
+      "proxy lifetime and final expiry on detail AND GAP branches",
+      "primary HTTP timeout survives failed STOP_NEXT",
+      "closed receipt projection rejects raw payload"
+    ],
+    "webBuild": {
+      "exitCode": 127,
+      "status": "NEXT_EXECUTABLE_MISSING_IN_ISOLATED_CHECKOUT",
+      "canonicalBridge": "PASS"
+    }
+  },
+  "acceptanceLimits": {
+    "detailNativePackageHttp": "ONSITE_REQUIRED",
+    "detailPostgrestAndRls": "NOT_RUN",
+    "originalRpc": "NOT_GRANTED_NOT_CALLED",
+    "freshnessAndAction": "GAP_FIXED_UI_HAS_NO_AGE_FENCE",
+    "enrichedDossier": "NOT_RUN",
+    "fullEvidenceLinkAndInputHash": "NOT_RUN",
+    "site": "NOT_RUN",
+    "newRadar": "NOT_RUN",
+    "productionRelease": "NOT_AUTHORIZED_BY_THIS_RECEIPT"
+  }
+}

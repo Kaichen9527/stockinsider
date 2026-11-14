@@ -20,6 +20,7 @@ from .stage_credentials import observe_stage_fd,StageCredentialRejected
 from .late_stage_credentials import observe_root_channel
 from .t18_readpoint_diagnostics import readpoint_after_cleanup
 from .candidate_detail_observation import project_candidate_detail_observation
+from .t18_detail_http import project_detail_http
 
 
 def _wait_fixed_broker_sockets():
@@ -48,9 +49,11 @@ def execute_staging_next_rollback(work_root):
         _validate_receipt_counts(result['database'])
         exercise=project_exercise(result.get('exercise'));budget=project_three_uid_budget(result.get('threeUidBudget'))
         detail=project_candidate_detail_observation(result.get('candidateDetailObservation'))
-        if exercise is None or budget is None or detail is None:raise RestoreEngineRejected('sanitized_t18_receipt_rejected')
+        detail_http=project_detail_http(result.get('candidateDetailHttp'))
+        if exercise is None or budget is None or detail is None or detail_http is None:raise RestoreEngineRejected('sanitized_t18_receipt_rejected')
         result['exercise']=exercise;result['threeUidBudget']=budget
         result['candidateDetailObservation']=detail
+        result['candidateDetailHttp']=detail_http
         return {'schema':'stockinsider-staging-next-rollback-v1','status':('DB_VERIFIED_T18_GAP' if exercise['status']=='GAP_GENUINE_SNAPSHOT_OR_SCHEMA' else 'DB_VERIFIED_FIXED_T18_EXERCISED'),
             'observations':observations,**result,'manifestSchema':manifest['schema'],
             'authenticatedPlaintextBytes':manifest['plaintextBytes'],
@@ -59,7 +62,8 @@ def execute_staging_next_rollback(work_root):
             'fixedManifestBindings':[{'sourceCommit':commit,'manifestSha256':pin} for commit,pin in RELEASE_PINS],
             'nodeSha256':NODE_SHA256,'postgrestSha256':POSTGREST_SHA256,
             'nativeHoldRetained':True,'providerRecovery':'NOT_RUN',
-            'stockDetailAcceptance':'NOT_RUN_TWO_TABLE_SCOPE','newRadarReleaseAcceptance':'NOT_RUN',
+            'stockDetailAcceptance':('HISTORICAL_CONTENT_DATE_IDENTITY_ONLY' if detail_http['status']=='HISTORICAL_DETAIL_HTTP_VERIFIED' else 'NOT_RUN_DETAIL_PROFILE_GAP'),
+            'freshnessActionAcceptance':'GAP_FIXED_UI_HAS_NO_AGE_FENCE','newRadarReleaseAcceptance':'NOT_RUN',
             'productionContinuity':'HOST_REQUIRED','fullReleaseAcceptance':False}
 
 

@@ -199,10 +199,13 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     if (observation['status']!='OBSERVED_PUBLISHED_SNAPSHOT' or observation['homeValidSnapshots']<1
         or observation['dailyValidSnapshots']<1 or observation['missingContentDates']):
         return {'status':'GAP_GENUINE_SNAPSHOT_OR_SCHEMA','readerObservation':observation,
-            'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN'}
+            'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN','candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
     with readpoint_phase('snapshot_fingerprint'):before=_fingerprint(sql)
     with readpoint_phase('snapshot_dates'):dates=_expected_dates(sql)
     with readpoint_phase('reader_role_install'):roles=install_fixed_reader_roles(sql)
+    with readpoint_phase('candidate_detail_prepare'):
+        from .t18_detail_read_adapter import prepare_detail_read
+        detail_read,detail_http=prepare_detail_read(sql)
     with readpoint_phase('owned_socket_activation'):activate_rest_socket()
     # The original pre-key APP was kernel/asset-verified with public placeholder
     # only. Root must stop/recreate it; no credential file is rewritten in-place.
@@ -222,9 +225,12 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
                 with readpoint_phase('rest_configure'):rest.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
                 with readpoint_phase('app_configure'):fresh_app.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
                 with readpoint_phase('fixed_http_exercise'):
-                    with start_fixed_read_proxy(token) as proxy:
+                    with start_fixed_read_proxy(token,detail_read=detail_read) as proxy:
                         negatives=_negative_http(token)
                         sequence=_execute_fixed_sequence(fresh_app,rest,assets.releases,dates)
+                        if detail_read is not None:
+                            from .t18_detail_http import exercise_detail_http
+                            detail_http=exercise_detail_http(fresh_app,assets.releases,detail_read)
                         with readpoint_phase('final_token_check'):validate_stage_token(secret,token,minimum_remaining=0)
                         metrics=proxy.metrics
             except BaseException as error:
@@ -245,7 +251,7 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     with readpoint_phase('snapshot_final_check'):
         after=_fingerprint(sql)
         if before!=after:raise FixedRollbackRejected('snapshot_rows_or_constraint_bits_changed')
-    return {'status':'FIXED_OLD_RELEASE_DAILY_ROLLBACK_VERIFIED','readerObservation':observation,
+    return {'candidateDetailHttp':detail_http,'status':'FIXED_OLD_RELEASE_DAILY_ROLLBACK_VERIFIED','readerObservation':observation,
         'readerRoleChecks':roles,'negativeHttpChecks':negatives,'proxyMetrics':metrics,
         'rollback':sequence,'snapshotDataAndConstraintBitsUnchanged':True,
         'postgrestAcceptance':'FIXED_READER_ONLY','nextRollback':'FIXED_OLD_PAIR_VERIFIED',

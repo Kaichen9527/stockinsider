@@ -1,0 +1,93 @@
+{
+  "schema": "stockinsider-t18-historical-detail-http-stage-delta-v1",
+  "baselineCommit": "5359a946a43373dbf5233fdc56467c946685679a",
+  "baselineVerifiedBlobs": 49,
+  "expectedStagedBlobsAfter": 51,
+  "replace": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/fixed_read_proxy.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "693c7d588089e3e8024e447c189f00c27d0cc8a0",
+        "sha256": "393c3cdd5403f4a0f4eeb8aa6fb3b4b188a43ef914ca977fcd395565e73056fe"
+      },
+      "after": {
+        "gitBlob": "bafb3829de71c80ca658bcef6a083f940b39c580",
+        "sha256": "863bf7c3ccfb282f7d128feac277f24e6b43d03401c9929f797f0d1c89554571"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/portable_restore_engine.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "96d4f98ac0f0a37375917cfb32c3b1bba8dd9f76",
+        "sha256": "1a32e8cbbf05e77b03fe520727da72f6cc3e276bb706e5270269d7faaba247ff"
+      },
+      "after": {
+        "gitBlob": "b02f3bdeebbfaf6fb61b2da1531b52966c089ba6",
+        "sha256": "06b3a06532eee3176363b61fb8f00c0d79440116637b113ffe5437980f0298e8"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/stage_next_rollback.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "4d200d4847fc5a49b5d40052ee4a09c6be15116b",
+        "sha256": "0496e4485be2107a0a1a208311f39e5868d38369606eb7cf9958d2f2353819f8"
+      },
+      "after": {
+        "gitBlob": "53703920f14bb08829f82dfde0d9b6017a2ff32e",
+        "sha256": "928e0ea67d56abf8f65084d31b03d1991cfd9b715e36624bfcf3e7110675e14b"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_readpoint_diagnostics.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "08d2e6b449b5750e9ebf9b8d5261098066009c63",
+        "sha256": "8458f629d47c5cff2d3a1ef851de571a84971ffbb140a2b8dfef39c09f4d3249"
+      },
+      "after": {
+        "gitBlob": "c58110e55a0d9f078337ace0f7bafcf5d161c216",
+        "sha256": "73db2de9247dcc5f04f7e3ecc7bc967215fc847c92d3de9c8cc624f687897b6b"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_same_clone.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "e757a87e6f6f51f61ffca7ec8c2023d0e27092c8",
+        "sha256": "3d05dca2bfc2aca96564811de8ed4dee0a002b5d979c497c3a8155042e9bca8f"
+      },
+      "after": {
+        "gitBlob": "f355b632579b7c3058a90ba912739c3bc54496c8",
+        "sha256": "395377c1dd2aefd65cc2ca36b7c8952fd57c6e375f36b778aafbfd7d6dcb2913"
+      }
+    }
+  ],
+  "add": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_detail_read_adapter.py",
+      "mode": "100644",
+      "gitBlob": "d8ba71232d4e5d92dab63b1a270c2ad05c7be4eb",
+      "sha256": "e3596f0c8cab942bd49270c609dff733ce9afe1b8a996d177f6ed579897c38c4"
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_detail_http.py",
+      "mode": "100644",
+      "gitBlob": "63ee2100a1f53d326aabb5bc9779e2850ed9a58a",
+      "sha256": "17ae50179e88e3bbb56fd356c16623f12246ada8aabff7d64eb92aee9f2bb1fa"
+    }
+  ],
+  "remove": [],
+  "fixedSourceRoot": "/run/stockinsider-t18-host-source",
+  "fixedSourceUnitRoot": "/readonly/t18-source",
+  "rootLauncherUnchangedSha256": "0c265ed6b0a797764825093cdae0cc2954b07a56662bc68d2fdcd8db5f61873d",
+  "scope": "FIXED_HISTORICAL_NON_ENRICHED_DETAIL_HTTP_VIA_PRIVATE_VALIDATED_CLONE_SQL",
+  "databaseGrantsAdded": 0,
+  "originalRpcGrantedOrExecuted": false,
+  "postgrestDetailAcceptance": "NOT_RUN",
+  "callerBooleanOrReceiptRuntimeAuthority": false,
+  "nativeHoldRetained": true,
+  "onsiteNewSubject": "NOT_RUN"
+}

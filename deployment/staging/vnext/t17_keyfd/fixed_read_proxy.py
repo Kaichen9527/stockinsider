@@ -8,6 +8,8 @@ write, arbitrary URL/port, client credential passthrough, redirect or logs.
 from contextlib import contextmanager
 import http.client
 import http.server
+import time
+import hmac
 import json
 import re
 import socket
@@ -78,7 +80,7 @@ class _Handle:
 
 
 @contextmanager
-def start_fixed_read_proxy(stage_jwt):
+def start_fixed_read_proxy(stage_jwt,detail_read=None):
     """Own/reap a fixed HTTP server thread; no listener or token in receipts.
 
     The token is an internal stage credential, not an admission flag. Caller
@@ -87,7 +89,10 @@ def start_fixed_read_proxy(stage_jwt):
     if (type(stage_jwt) is not str or not 64<=len(stage_jwt)<=4096
             or not re.fullmatch(r'[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+',stage_jwt)):
         raise FixedReadProxyRejected()
-    handle=_Handle()
+    if detail_read is not None:
+        from .t18_detail_read_adapter import _DetailRead
+        if type(detail_read) is not _DetailRead:raise FixedReadProxyRejected()
+    handle=_Handle();detail_started=[None];detail_requests=[0]
 
     class Handler(http.server.BaseHTTPRequestHandler):
         protocol_version='HTTP/1.1'
@@ -126,22 +131,59 @@ def start_fixed_read_proxy(stage_jwt):
                 if not self.parse_request():return
                 if not self.rfile.complete or self.server.request_expired(self.request):self._blocked(400);return
                 if self.path!=raw_target:self._blocked(400);return
-                if self.command not in ('GET','HEAD'):self._blocked(405);return
+                if self.command not in (('GET','HEAD','POST') if detail_read is not None else ('GET','HEAD')):self._blocked(405);return
                 self._read()
                 self.wfile.flush()
             except (TimeoutError,OSError,http.client.HTTPException):
                 self.close_connection=True
             finally:self.close_connection=True
+        def _detail_read(self):
+            from .t18_detail_read_adapter import RPC_PATH
+            detail_requests[0]+=1
+            if detail_requests[0]>128:
+                self._blocked(429);return
+            auth=self.headers.get_all('Authorization',[])
+            if self.command not in ('GET','POST') or len(auth)!=1 or not hmac.compare_digest(auth[0].encode('latin1'),('Bearer '+stage_jwt).encode('ascii')):
+                self._blocked();return
+            if (any(self.headers.get(x) is not None for x in ('Range','Range-Unit','Prefer','Forwarded','X-HTTP-Method-Override'))
+                or self.headers.get_all('Accept-Profile',[]) not in ([],['public'])
+                or self.headers.get_all('Content-Profile',[]) not in ([],['public'])):
+                self._blocked();return
+            accept=self.headers.get_all('Accept',['application/json'])
+            if len(accept)!=1 or accept[0] not in ('application/json','application/vnd.pgrst.object+json','*/*'):
+                self._blocked();return
+            body=b''
+            if self.command=='POST':
+                lengths=self.headers.get_all('Content-Length',[])
+                if (self.path!=RPC_PATH or len(lengths)!=1 or not lengths[0].isdecimal()
+                    or not 1<=int(lengths[0])<=256 or self.headers.get_all('Content-Type',[])!=['application/json']):
+                    self._blocked();return
+                body=self.rfile.read(int(lengths[0]))
+                if len(body)!=int(lengths[0]) or self.server.request_expired(self.request):self._blocked();return
+            value=detail_read.response(self.command,self.path,body)
+            if value is None:self._blocked();return
+            if detail_started[0] is None:detail_started[0]=time.monotonic()
+            if time.monotonic()-detail_started[0]>60:self._blocked(429);return
+            if accept[0]=='application/vnd.pgrst.object+json' and type(value) is list:
+                if len(value)!=1:self._blocked(406);return
+                value=value[0]
+            data=json.dumps(value,ensure_ascii=False,separators=(',',':'),allow_nan=False).encode()
+            if len(data)>RESPONSE_BYTES_LIMIT:self._blocked();return
+            handle._counts['allowedReads']+=1;handle._counts['responseBytes']+=len(data)
+            self._reply(200,data)
+
         def _read(self):
             if self.server.request_expired(self.request):self._blocked(408);return
             if (len(self.headers)>HEADER_COUNT_LIMIT
                 or self.headers.get_all('Host',[])!=['127.0.0.1:3302']
                 or self.headers.get('Transfer-Encoding') is not None
                 or self.headers.get('Upgrade') is not None
-                or self.headers.get_all('Content-Length',[]) not in ([],['0'])):
+                or self.command!='POST' and self.headers.get_all('Content-Length',[]) not in ([],['0'])):
                 self._blocked(400);return
             target=_fixed_target(self.path)
-            if target is None:self._blocked();return
+            if target is None and detail_read is not None:
+                self._detail_read();return
+            if target is None or self.command=='POST':self._blocked();return
             accept=self.headers.get('Accept','application/json')
             if accept not in ('application/json','application/vnd.pgrst.object+json','*/*'):
                 self._blocked(400);return
