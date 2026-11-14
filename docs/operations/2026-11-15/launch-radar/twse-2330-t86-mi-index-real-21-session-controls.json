@@ -1,0 +1,609 @@
+{
+  "schema": "stockinsider-twse-native-flow-volume-control-v1",
+  "scope": "HISTORICAL_READONLY_OFFICIAL_BYTE_CONTROL_ON_CONTABO",
+  "symbol": "2330",
+  "previousScopeReceipt": "cd26c8d9a925a587566e1dcda1dacb9062ef366f",
+  "separatelyComparedStockDayMonthlyUrls": [
+    "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=2330",
+    "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261101&stockNo=2330"
+  ],
+  "twseStockDaySharesAndTurnoverMatchedAll": true,
+  "scopeSameOnAll": true,
+  "missingExactDateResponses": 0,
+  "netBuyMinusSellIdentityVerified": true,
+  "ownVolumeShareBoundVerified": true,
+  "startedAt": "2026-11-14T21:22:32.196200+00:00",
+  "endedAt": "2026-11-14T21:22:52.532621+00:00",
+  "count": 21,
+  "gaps": [],
+  "windows": [
+    {
+      "through": "20261112",
+      "span": 5,
+      "denominator": 260589363,
+      "nets": {
+        "foreign": -37702230,
+        "trust": 16637050
+      },
+      "ratios": {
+        "foreign": "-12567410/86863121",
+        "trust": "16637050/260589363"
+      }
+    },
+    {
+      "through": "20261112",
+      "span": 20,
+      "denominator": 798640364,
+      "nets": {
+        "foreign": -210660265,
+        "trust": 47089423
+      },
+      "ratios": {
+        "foreign": "-210660265/798640364",
+        "trust": "47089423/798640364"
+      }
+    },
+    {
+      "through": "20261113",
+      "span": 5,
+      "denominator": 180847903,
+      "nets": {
+        "foreign": -17475819,
+        "trust": 14913635
+      },
+      "ratios": {
+        "foreign": "-17475819/180847903",
+        "trust": "14913635/180847903"
+      }
+    },
+    {
+      "through": "20261113",
+      "span": 20,
+      "denominator": 801501551,
+      "nets": {
+        "foreign": -206526094,
+        "trust": 49235004
+      },
+      "ratios": {
+        "foreign": "-206526094/801501551",
+        "trust": "49235004/801501551"
+      }
+    }
+  ],
+  "records": [
+    {
+      "session": "20261014",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261014&selectType=ALLBUT0999",
+        "bytes": 191158,
+        "sha256": "ede27db16bfd01c16b891eda85f50303eb109a710470afe9e323d5973a3c9f85",
+        "observedAt": "2026-11-14T21:22:34.323270+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -6752241,
+          "trust": 800488
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261014&type=ALLBUT0999",
+        "bytes": 246531,
+        "sha256": "c57d055dc12b39cacf6795051d77c5af0f55deb28eb0393db877029b16928446",
+        "observedAt": "2026-11-14T21:22:35.119093+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 28111940,
+          "ntd": 70485890790
+        }
+      }
+    },
+    {
+      "session": "20261015",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261015&selectType=ALLBUT0999",
+        "bytes": 198478,
+        "sha256": "686343b71820305aa454ef875520519e638f63c09991e14f95808ca96c2be2d5",
+        "observedAt": "2026-11-14T21:22:34.165238+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -34111365,
+          "trust": 3235000
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261015&type=ALLBUT0999",
+        "bytes": 249822,
+        "sha256": "b224faa7e4a5e46f6e9c2b91e6d7cb3dde202398273937ed27bf6d41aa829936",
+        "observedAt": "2026-11-14T21:22:34.981552+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 58486711,
+          "ntd": 142629538814
+        }
+      }
+    },
+    {
+      "session": "20261016",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261016&selectType=ALLBUT0999",
+        "bytes": 194455,
+        "sha256": "82293ef9d1063d663b56a56101cce7f352effee841f84b629e15d9034fc18fe2",
+        "observedAt": "2026-11-14T21:22:34.088171+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -22046142,
+          "trust": 710240
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261016&type=ALLBUT0999",
+        "bytes": 246183,
+        "sha256": "874d491246bde2f2237dd6cc7cd9840e28c2e4174fb7c9b9e0e0c3bdc8d4bdfd",
+        "observedAt": "2026-11-14T21:22:35.350696+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 43046982,
+          "ntd": 104583063462
+        }
+      }
+    },
+    {
+      "session": "20261019",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261019&selectType=ALLBUT0999",
+        "bytes": 196497,
+        "sha256": "c7f829267bfd3c26dfb455afa4226ddb4e9c87a3d0d6c561a055a97ea31c32ab",
+        "observedAt": "2026-11-14T21:22:37.001950+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -9834711,
+          "trust": 3884574
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261019&type=ALLBUT0999",
+        "bytes": 248766,
+        "sha256": "b99a420c687fe49e3136cb664a6573c92bac8e396df42161ccd4455e40730782",
+        "observedAt": "2026-11-14T21:22:38.067393+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 27694594,
+          "ntd": 66518978315
+        }
+      }
+    },
+    {
+      "session": "20261020",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261020&selectType=ALLBUT0999",
+        "bytes": 197033,
+        "sha256": "bb95c0c4cd0f2c287b682a6dd82ad1ee06219da42be59d64975ccda165126959",
+        "observedAt": "2026-11-14T21:22:36.992812+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -9364622,
+          "trust": 1029673
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261020&type=ALLBUT0999",
+        "bytes": 248074,
+        "sha256": "b4d92aa4c853f115b623d4b8573a98cdddc905ff0921936a7c876c9fbee26a0e",
+        "observedAt": "2026-11-14T21:22:38.051819+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 22402430,
+          "ntd": 53857463127
+        }
+      }
+    },
+    {
+      "session": "20261021",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261021&selectType=ALLBUT0999",
+        "bytes": 192360,
+        "sha256": "a1a261b291a9e3bd85859d1ac969f59755490c1c5e097c5a17aff82c4e2f5faf",
+        "observedAt": "2026-11-14T21:22:37.098689+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -6153898,
+          "trust": 1397512
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261021&type=ALLBUT0999",
+        "bytes": 246645,
+        "sha256": "3b5b2c7edb29c3991b1fba75bf3051b4c92f9f4c638b4498ef702ea7622cccf8",
+        "observedAt": "2026-11-14T21:22:38.516369+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 27095005,
+          "ntd": 65515856247
+        }
+      }
+    },
+    {
+      "session": "20261022",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261022&selectType=ALLBUT0999",
+        "bytes": 191031,
+        "sha256": "261cac76e816b42e49a09e8c4cc342ff0d48345fa6efb22a31bc3bff316bf7bc",
+        "observedAt": "2026-11-14T21:22:39.976213+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -12694626,
+          "trust": 1349951
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261022&type=ALLBUT0999",
+        "bytes": 248993,
+        "sha256": "9fde9e2ac3df3fb7a84dfe9305a567f65384d4881d1c0b749d4014c000e78a2f",
+        "observedAt": "2026-11-14T21:22:41.174833+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 29796590,
+          "ntd": 71536783195
+        }
+      }
+    },
+    {
+      "session": "20261027",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261027&selectType=ALLBUT0999",
+        "bytes": 193382,
+        "sha256": "dc74e03fba88fe593a92304ad5f44b18f11935fe4f6b4a2f428c03e3b7b87c92",
+        "observedAt": "2026-11-14T21:22:39.965575+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -1618431,
+          "trust": 2420415
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261027&type=ALLBUT0999",
+        "bytes": 248335,
+        "sha256": "f97392357ecb84dfaab20e1f5d4d6695099c28395a04e2b519c47ba9b86f9ed8",
+        "observedAt": "2026-11-14T21:22:41.222706+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 38173147,
+          "ntd": 91313227194
+        }
+      }
+    },
+    {
+      "session": "20261028",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261028&selectType=ALLBUT0999",
+        "bytes": 192293,
+        "sha256": "a606c28ccdbfc9bf1d96f4eb08324c321ba3be5801d02855e02b073d1f89d664",
+        "observedAt": "2026-11-14T21:22:40.621155+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -3175021,
+          "trust": 844056
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261028&type=ALLBUT0999",
+        "bytes": 247013,
+        "sha256": "ab2551c796bfd90d1f300ab427270250416c786010a4edc2ba90c2be978cbfe7",
+        "observedAt": "2026-11-14T21:22:41.432740+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 21866835,
+          "ntd": 52940678675
+        }
+      }
+    },
+    {
+      "session": "20261029",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261029&selectType=ALLBUT0999",
+        "bytes": 188815,
+        "sha256": "75e59b95b375ce6c7474da8a154cd89fae69a2f142d03d3506eae2c80aa33563",
+        "observedAt": "2026-11-14T21:22:43.253843+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -10199,
+          "trust": 443114
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261029&type=ALLBUT0999",
+        "bytes": 248313,
+        "sha256": "e8bb2a44bbcf685954d6e0d644e85e973824544987bda17f0eb31237d23eb591",
+        "observedAt": "2026-11-14T21:22:44.145720+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 18403916,
+          "ntd": 44316626887
+        }
+      }
+    },
+    {
+      "session": "20261030",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261030&selectType=ALLBUT0999",
+        "bytes": 193966,
+        "sha256": "633a37e69b36fe0e29d8acf5647e6d247743fb8d8f81b60303f27761c68e0ab6",
+        "observedAt": "2026-11-14T21:22:43.498863+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -8632834,
+          "trust": 1854677
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261030&type=ALLBUT0999",
+        "bytes": 251239,
+        "sha256": "2cfdd0b508f0174e0d296a8038c113fc0d943d04e01a0e69a3fe3de10f1aff2e",
+        "observedAt": "2026-11-14T21:22:45.027765+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 36615931,
+          "ntd": 86833096690
+        }
+      }
+    },
+    {
+      "session": "20261102",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261102&selectType=ALLBUT0999",
+        "bytes": 193517,
+        "sha256": "2638cb18510b27afed17f98b2d42958d4a93b9f9ab4152ae9f9be49f098764d0",
+        "observedAt": "2026-11-14T21:22:43.481702+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -15005014,
+          "trust": 3682223
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261102&type=ALLBUT0999",
+        "bytes": 247269,
+        "sha256": "466eca860aaa25a3e20ecf7fa3dbc6f76e497a684f725fbfc3d959333069405f",
+        "observedAt": "2026-11-14T21:22:44.983474+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 41165068,
+          "ntd": 95950896264
+        }
+      }
+    },
+    {
+      "session": "20261103",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261103&selectType=ALLBUT0999",
+        "bytes": 199159,
+        "sha256": "e17d8b6ab171726acf6488bca4fd427d4002f3965afefa503ca2338457be940e",
+        "observedAt": "2026-11-14T21:22:45.855167+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -11703020,
+          "trust": 2345645
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261103&type=ALLBUT0999",
+        "bytes": 252021,
+        "sha256": "bc342dafebc1842cb996d75b636ef94a28176a68273312af03a71300351e8ae1",
+        "observedAt": "2026-11-14T21:22:46.907886+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 46137336,
+          "ntd": 106329297685
+        }
+      }
+    },
+    {
+      "session": "20261104",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261104&selectType=ALLBUT0999",
+        "bytes": 198401,
+        "sha256": "6076c2f825a9af82ff37476b7cb73c684315da144be5b196474afc2892fdbba5",
+        "observedAt": "2026-11-14T21:22:46.692944+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -21603811,
+          "trust": 3715164
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261104&type=ALLBUT0999",
+        "bytes": 249501,
+        "sha256": "58cc6d37cd599af3ca7463f25842319e3b9dc596b60728f578afb327172f0e3f",
+        "observedAt": "2026-11-14T21:22:47.878615+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 53879371,
+          "ntd": 122293100290
+        }
+      }
+    },
+    {
+      "session": "20261105",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261105&selectType=ALLBUT0999",
+        "bytes": 200106,
+        "sha256": "d7e5e61483b587745c38ba83941bc0306b83fab1cd1d9a75e66ad507ec191669",
+        "observedAt": "2026-11-14T21:22:46.674499+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -10252100,
+          "trust": 2739641
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261105&type=ALLBUT0999",
+        "bytes": 250908,
+        "sha256": "d622493cd9d54183d895b32b94a806d12586af33fd54343c8670305ae1e39484",
+        "observedAt": "2026-11-14T21:22:47.726129+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 45175145,
+          "ntd": 101826543759
+        }
+      }
+    },
+    {
+      "session": "20261106",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261106&selectType=ALLBUT0999",
+        "bytes": 208047,
+        "sha256": "c6e22decf5958af23e4d904ad39455d615f48bba43d171e7a498870b4264c6df",
+        "observedAt": "2026-11-14T21:22:48.497820+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -22844481,
+          "trust": 4669484
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261106&type=ALLBUT0999",
+        "bytes": 253043,
+        "sha256": "2c58023dc668b201451d8b31cfc914007231aa57a394ec81aea607446af2ecde",
+        "observedAt": "2026-11-14T21:22:49.218459+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 110714587,
+          "ntd": 231893102005
+        }
+      }
+    },
+    {
+      "session": "20261109",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261109&selectType=ALLBUT0999",
+        "bytes": 203513,
+        "sha256": "aa82f2e3c4e0358a4ab6e22240b7d1d829d0ce47c0027a062b5bd45b53f38d3c",
+        "observedAt": "2026-11-14T21:22:48.637661+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -8758880,
+          "trust": 3828210
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261109&type=ALLBUT0999",
+        "bytes": 248473,
+        "sha256": "50fb42ec1ed8dbed8e09414aed557525c4d421bd7026c177be32449b81c9c5ec",
+        "observedAt": "2026-11-14T21:22:49.622282+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 45883218,
+          "ntd": 102581042177
+        }
+      }
+    },
+    {
+      "session": "20261110",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261110&selectType=ALLBUT0999",
+        "bytes": 202048,
+        "sha256": "f6b49f8c34fa7042c3c2fa7fe491934bd355d296f0dec3cd460dd47c4c6a7cce",
+        "observedAt": "2026-11-14T21:22:48.943547+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -8181770,
+          "trust": 5634335
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261110&type=ALLBUT0999",
+        "bytes": 248709,
+        "sha256": "66cdfe35efe975f72e14218408f1c3fde88f745d4a39b78b93ec56fbc3a763ab",
+        "observedAt": "2026-11-14T21:22:50.182741+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 36575797,
+          "ntd": 82847295812
+        }
+      }
+    },
+    {
+      "session": "20261111",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261111&selectType=ALLBUT0999",
+        "bytes": 192657,
+        "sha256": "56132483e014c1d808c0d74d469b990af7c7594efd2e9a9ce9b80ef37d861743",
+        "observedAt": "2026-11-14T21:22:51.036102+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": 6038319,
+          "trust": 2385276
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261111&type=ALLBUT0999",
+        "bytes": 247881,
+        "sha256": "5bcd8bfc7f1027a5b2b30f8992bee4438cc18b6799fe2cc7d4533cc1a04e904f",
+        "observedAt": "2026-11-14T21:22:52.521024+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 33056476,
+          "ntd": 77900786705
+        }
+      }
+    },
+    {
+      "session": "20261112",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261112&selectType=ALLBUT0999",
+        "bytes": 196231,
+        "sha256": "cbc751396bf7e14411c23a5bc0b1172b8946457ae6e94b274b53dc5b1815d427",
+        "observedAt": "2026-11-14T21:22:50.435998+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -3955418,
+          "trust": 119745
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261112&type=ALLBUT0999",
+        "bytes": 249584,
+        "sha256": "cde27d4eba9c726529527afaada2c6be837d46625751a7fb8ca36e542ff76668",
+        "observedAt": "2026-11-14T21:22:51.873701+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 34359285,
+          "ntd": 81282658016
+        }
+      }
+    },
+    {
+      "session": "20261113",
+      "flow": {
+        "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261113&selectType=ALLBUT0999",
+        "bytes": 198650,
+        "sha256": "a1730d5d23193dcd7dab1d3d5451d4a4fc854a68da6a71300db2466d32dafaeb",
+        "observedAt": "2026-11-14T21:22:51.024825+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。",
+        "values": {
+          "foreign": -2618070,
+          "trust": 2946069
+        }
+      },
+      "volume": {
+        "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261113&type=ALLBUT0999",
+        "bytes": 247687,
+        "sha256": "3e0330967ecdf0de193fbdeea3447691c9d35719b1752a65607285a1216a2a43",
+        "observedAt": "2026-11-14T21:22:52.003460+00:00",
+        "scope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。",
+        "values": {
+          "shares": 30973127,
+          "ntd": 73326711390
+        }
+      }
+    }
+  ],
+  "independentlyVerifiedTotalBytes": 9346787,
+  "limits": {
+    "staticObservedTimestampNotHistoricalPublicationClock": true,
+    "allRawBodiesKeptRestrictedOnContabo": true,
+    "exchangeCalendarAndCorporateActionGateNotRun": true,
+    "officialFlowAutomatedUseNotConfirmed": true,
+    "productionOrRankingMutation": false,
+    "actualRankingAuthorized": false
+  }
+}
