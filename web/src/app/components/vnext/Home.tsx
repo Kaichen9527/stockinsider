@@ -3,6 +3,8 @@ import { readPublished } from '@/lib/vnext/store';
 import { publicHome } from '@/lib/vnext/public-contract';
 import { rankingEnabled, readRankingSnapshot, type RankingSnapshot } from '@/lib/vnext/ranking-read';
 import Top10 from './Top10';
+import { launchRankingEnabled } from '@/lib/vnext/launch-ranking-read';
+import LaunchHome from './LaunchHome';
 
 const actionLabels = { evaluate: '可評估', selective: '選擇性評估', wait: '等待', cannot_determine: '無法判定' };
 const confidenceLabels = { complete: '完整', limited: '有限', insufficient: '不足' };
@@ -47,6 +49,7 @@ export function VnextHomeView({ data, error = false, loading = false, ranking }:
   </main>;
 }
 export default async function VnextHome() {
+  if (launchRankingEnabled()) return <LaunchHome/>;
   if (rankingEnabled()) {
     let snapshot: RankingSnapshot|null = null;
     let current: ReturnType<typeof publicHome> = null;

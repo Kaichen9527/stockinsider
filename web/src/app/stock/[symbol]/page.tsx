@@ -12,6 +12,8 @@ import { loadCandidateDetail } from '@/lib/candidate-detail';
 import { parseCandidateRevision } from '@/lib/candidate-revision-query';
 import { vnextEnabled } from '@/lib/vnext/policy';
 import VnextDetail from '@/app/components/vnext/Detail';
+import LaunchDetail from '@/app/components/vnext/LaunchDetail';
+import { launchRankingEnabled } from '@/lib/vnext/launch-ranking-read';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,6 +44,9 @@ export default async function StockDetail({
   const { symbol } = await params;
   const query = await searchParams;
   const normalizedSymbol = symbol.toUpperCase();
+  if (['launchRunId','launchResearchRevision','launchScoreRevision'].some(key=>query[key]!==undefined)) return <LaunchDetail symbol={normalizedSymbol} query={query}/>;
+  if (vnextEnabled() && (query.vnextRevision!==undefined || query.rankingRunId!==undefined)) return <VnextDetail symbol={normalizedSymbol} revision={query.vnextRevision} rankingRunId={query.rankingRunId}/>;
+  if (launchRankingEnabled()) return <LaunchDetail symbol={normalizedSymbol} query={query}/>;
   if (vnextEnabled()) return <VnextDetail symbol={normalizedSymbol} revision={query.vnextRevision} rankingRunId={query.rankingRunId} />;
   const revisionQuery=parseDecisionRevisionQuery(query);
   const revisionParameterPresent=revisionQuery.status!=='absent';
