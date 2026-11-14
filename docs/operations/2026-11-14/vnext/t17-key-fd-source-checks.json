@@ -1,0 +1,44 @@
+{
+  "schema": "stockinsider-t17-key-pipe-source-v1",
+  "observedAtUtc": "2026-11-14T14:22:23.989431+00:00",
+  "sourceBase": "9bca1e30b3f6d481c722fcc33f12f93cc286749e",
+  "t18Evidence": "8cf11bed86cc091eec9686aa6fb2bc48af758bc5",
+  "scope": "synthetic_OS_pipe_source_only",
+  "ssh": {
+    "expiryUtc": "2026-11-08T03:11:04Z",
+    "expired": true,
+    "attempted": false,
+    "renewed": false
+  },
+  "contaboCurrentPreflight": "NOT_OBSERVED",
+  "productionArtifactsOrKeysReceived": false,
+  "liveFacadeChanged": false,
+  "liveExecutionAllowed": false,
+  "nativeHoldRetained": true,
+  "originalWorktreesCleanAndPreserved": true,
+  "keyPipeTests": {
+    "pass": 10,
+    "fail": 0,
+    "skipped": 0
+  },
+  "baselineCandidateTests": {
+    "pass": 12,
+    "fail": 0,
+    "skipped": 0,
+    "firstReferenceAttempt": {
+      "pass": 11,
+      "fail": 1,
+      "reason": "missing historical source-contract input; fetched exact file; no changed assertions"
+    }
+  },
+  "fullExactBaselineBuildTypesLint": "NOT_RUN: git transport CONNECT 503, exact full checkout unavailable",
+  "formalReview": "NOT_RUN",
+  "requestedModel": "GPT-6.1 Sol High",
+  "runtimeModelAttested": false,
+  "T17Accepted": false,
+  "contaboRestoreExecuted": false,
+  "sha256": {
+    "deployment/staging/vnext/t17_keyfd/owned_pipe.py": "4df16b6212b48fe9d0756d8b1ce6022e9898914f2be771d5c4d6ffbd9f0dd828",
+    "scripts/tests/test_t17_owned_key_pipe.py": "b56b541bb1dcce9cc15f377073a93a3f2f2222df56fd2b19b75ac56f5859a495"
+  }
+}
