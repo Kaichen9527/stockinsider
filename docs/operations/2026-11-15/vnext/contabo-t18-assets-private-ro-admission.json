@@ -1,0 +1,82 @@
+{
+  "schema": "stockinsider-t18-contabo-assets-admission-evidence-v1",
+  "runtimeCommit": "e6e73ad75a65b9d0415bec6a06f58d55979852d6",
+  "stagingRuntimeFilesByGitBlob": 40,
+  "oldReadonlyProbe": {
+    "runtimeCommit": "fa1d6c4658f703718f33d7307aaa88a2071056fb",
+    "exit": 0,
+    "status": "EXPECTED_REFUSAL_OBSERVED",
+    "refusalCode": "asset_member_rejected"
+  },
+  "resolvedReadonlyProbe": {
+    "exit": 0,
+    "receipt": {
+      "applicationStarted": false,
+      "databaseStarted": false,
+      "keyRead": false,
+      "nativeHoldRetained": true,
+      "nodeSha256": "93956de2e59480474a7b46571da1651180b1a050cdf32641ebec4ce6e478e068",
+      "postgrestSha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71",
+      "releases": [
+        {
+          "buildId": "8ScL_J9rBSjyekr5pb9GV",
+          "bytes": 79290260,
+          "fileCount": 2584,
+          "manifestSha256": "2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a",
+          "nextVersion": "16.3.4",
+          "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806"
+        },
+        {
+          "buildId": "e2WBkpZ_wkvn0YPEkko03",
+          "bytes": 79354761,
+          "fileCount": 2586,
+          "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+          "nextVersion": "16.3.4",
+          "sourceCommit": "dd59817f750684b093965f539dd4de466be13077"
+        }
+      ],
+      "runtimeRestoreAdmission": false,
+      "schema": "stockinsider-t18-assets-admission-v1",
+      "status": "ASSETS_VERIFIED_ONLY"
+    }
+  },
+  "negativeWritableBindProbe": {
+    "exit": 2,
+    "receipt": {
+      "applicationStarted": false,
+      "databaseStarted": false,
+      "keyRead": false,
+      "nativeHoldRetained": true,
+      "reason": "fixed_readonly_asset_mount_required",
+      "runtimeRestoreAdmission": false,
+      "schema": "stockinsider-t18-assets-admission-v1",
+      "status": "REJECTED"
+    }
+  },
+  "hostIsolatedNamespaceProbe": {
+    "kernelCookieSameAcrossTwoUnits": true,
+    "isolatedFromHost": true,
+    "loopbackOnly": true,
+    "protectSystemRootReadonly": true,
+    "formalServicesUnchanged": true,
+    "probeUnitsCleaned": true
+  },
+  "assetCopies": {
+    "copies": [
+      {
+        "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+        "manifestMembersVerified": 2584,
+        "manifestSha256": "2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a"
+      },
+      {
+        "sourceCommit": "dd59817f750684b093965f539dd4de466be13077",
+        "manifestMembersVerified": 2586,
+        "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a"
+      }
+    ],
+    "postgrestPinned": true,
+    "stagingCopiesBytes": 180349201,
+    "formalSignaturesUnchanged": true
+  },
+  "sameCloneRollback": "NOT_RUN"
+}
