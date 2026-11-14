@@ -1,0 +1,27 @@
+{
+  "schema": "stockinsider-t17-orchestration-source-checks-v1",
+  "recordedAtUtc": "2026-11-14T15:09:21.712037+00:00",
+  "parentCommit": "511f0dcb4a61658635df08b008dbc2f0e09d0b0b",
+  "protectionSource": "9bca1e30b3f6d481c722fcc33f12f93cc286749e",
+  "scope": "closed_source_plan_only",
+  "sourcePlanTestsPass": 7,
+  "combinedPythonTestsPass": 33,
+  "fail": 0,
+  "skipped": 0,
+  "independentSourceReview": {
+    "testsPass": 7,
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false
+  },
+  "pinnedBlobsIndependentlyCheckedViaProvider": true,
+  "liveExecutionAllowed": false,
+  "realBackupRestoreExecuted": false,
+  "productionKeyOrDataReceived": false,
+  "nativeHoldRetained": true,
+  "exactFullBranchWebBuildTypesLint": "NOT_RUN: full checkout unavailable; Git CONNECT503",
+  "sha256": {
+    "deployment/staging/vnext/t17_keyfd/restore_orchestration.py": "5d5c4ffbefcce25582bdf90b4e1e46b2f1106ff08faafe04c1243200b9106e8b",
+    "scripts/tests/test_t17_restore_orchestration.py": "4cb2eafe9782ad6b68df40100e27f66ab8fd4bb95ec3e06cd4d1306545dab703"
+  }
+}

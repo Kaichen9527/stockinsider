@@ -1,0 +1,36 @@
+{
+  "schema": "stockinsider-t17-onsite-pg17-fixture-report-v1",
+  "recordedAtUtc": "2026-11-14T15:09:21.712037+00:00",
+  "evidenceSource": "coordinator_message_not_Cloud_execution",
+  "reportedIssue": "https://github.com/Kaichen9527/stockinsider/issues/402",
+  "sourceCommit": "511f0dcb4a61658635df08b008dbc2f0e09d0b0b",
+  "reportedResult": {
+    "postgresVersion": "17.11",
+    "exit": 0,
+    "stocks": 2,
+    "signals": 12,
+    "constraints": 6,
+    "negativeCases": 3,
+    "orphans": 0,
+    "corruptTagRejectedBeforeConsumer": true,
+    "dedicatedPgProcessRemoved": true,
+    "scratchRemoved": true,
+    "imageAndLoopCleaned": true,
+    "reportedSha256": "53e611e465041f220bdb816e208f2b3ecddfc1a45e5412b8a12fca4f8393e1ca"
+  },
+  "sandboxReported": {
+    "dynamicUser": true,
+    "privateNetwork": true,
+    "strictFilesystem": true,
+    "productionPgPathsInaccessible": true,
+    "memoryLimitBytes": 805306368,
+    "swapAllowed": false,
+    "scratchExt4VerityLoopBytes": 268435456
+  },
+  "scope": "public_nonproduction_fixture_positive_only",
+  "CloudWitnessedExecution": false,
+  "productionBackupRestoreAccepted": false,
+  "keystoreIntegrated": false,
+  "nativeHoldRetained": true,
+  "liveRestoreEnabled": false
+}
