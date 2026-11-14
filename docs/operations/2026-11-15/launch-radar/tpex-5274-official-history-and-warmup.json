@@ -1,0 +1,455 @@
+{
+  "schema": "stockinsider-tpex-5274-warmup-and-raw-price-observation-v1",
+  "market": "TPEX",
+  "symbol": "5274",
+  "prices": "UNADJUSTED_EXCHANGE",
+  "officialMonths": 47,
+  "sessions": 932,
+  "first": "2023-01-03",
+  "last": "2026-11-13",
+  "threeCalendarYearSessions": 693,
+  "hashesAndTransport": [
+    {
+      "month": "2023-01",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F01%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:28.692473+00:00",
+      "bytes": 1748,
+      "sha256": "f968dbe2fbb01a7e644280f1e785d77423835fa9dfe73a7178664a6423371434",
+      "sessions": 13,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-02",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F02%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:28.784613+00:00",
+      "bytes": 2251,
+      "sha256": "e6be2f250a5a35106695a893e8683fc62648e159c2344ce9c3fe4d08ea503bf9",
+      "sessions": 18,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-03",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F03%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:28.807531+00:00",
+      "bytes": 2708,
+      "sha256": "40f31a50d69f0eb1157d72b83bb0801c8afad2fef1ca1f64be607edb89b7bc05",
+      "sessions": 23,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-04",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F04%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:28.910910+00:00",
+      "bytes": 2136,
+      "sha256": "b40fe47f7a0e719c05fb98dfa364c868cdca289a834201110cbc2951c04fa583",
+      "sessions": 17,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-05",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F05%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:28.872654+00:00",
+      "bytes": 2603,
+      "sha256": "010c117136ff7c0d640ed958a2e5485b881f7704963b152a7092b67235ca8070",
+      "sessions": 22,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-06",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F06%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:29.472803+00:00",
+      "bytes": 2424,
+      "sha256": "3306c3c27cf0b72b87c2161ed8d6638de71db5bd4aea107f26490d41affe0022",
+      "sessions": 20,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-07",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F07%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:29.475621+00:00",
+      "bytes": 2513,
+      "sha256": "b6eca094cc4fa13fd6a3490720b0d2da1f1e362d9fe4572435b034186ff7f550",
+      "sessions": 21,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-08",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F08%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:29.226381+00:00",
+      "bytes": 2608,
+      "sha256": "c42977ac7e113074518787628b2f00a0ed58b20b324f215290a7a38a9b334c49",
+      "sessions": 22,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-09",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F09%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:29.815317+00:00",
+      "bytes": 2422,
+      "sha256": "df6367ab48f76df1bf91c21c71e9c76cdf1a77035f0fbec4f43a6e500d0b1f0e",
+      "sessions": 20,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-10",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F10%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:29.879633+00:00",
+      "bytes": 2425,
+      "sha256": "703165e5f5ea3c8cd6f7c499adfb322f5c90ba3619cbe7e52fdd6a876b5426ac",
+      "sessions": 20,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-11",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F11%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:29.641800+00:00",
+      "bytes": 2568,
+      "sha256": "0068124f97b815e8273f5362081ba0f080f8cc94831b172d11506f1d6cb4c85c",
+      "sessions": 22,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2023-12",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2023%2F12%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:29.881685+00:00",
+      "bytes": 2463,
+      "sha256": "16781fb56995d68efb6695061f94219d4f511d49116050d85776d8269d0a0857",
+      "sessions": 21,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-01",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F01%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:30.108952+00:00",
+      "bytes": 2585,
+      "sha256": "91917b251a1fddec777aabee5a5b4b710bf4753ad559680794835ce72470b524",
+      "sessions": 22,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-02",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F02%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:30.041955+00:00",
+      "bytes": 1792,
+      "sha256": "689afc937525f45c49e1e896833c5b87c1e5f3fde3e4a34c59c82ea53999f4f1",
+      "sessions": 13,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-03",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F03%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:30.012186+00:00",
+      "bytes": 2529,
+      "sha256": "c43331ed106c0ef9f0a069d8a62218f68f2284dcbb0d8af820a727e0ed16ce97",
+      "sessions": 21,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-04",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F04%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:30.769846+00:00",
+      "bytes": 2426,
+      "sha256": "f50328a71f7bd2abb9c6ec76138a507ac131f9cf5e800b0ff35d9980bd666b7d",
+      "sessions": 20,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-05",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F05%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:30.721387+00:00",
+      "bytes": 2607,
+      "sha256": "db8c39ab1a6a826d147ec92261adf165a1a1dcedd8ef54f8584e83bb4d032a6d",
+      "sessions": 22,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-06",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F06%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:30.756116+00:00",
+      "bytes": 2345,
+      "sha256": "6688ed6a99879becae8cf44c0b6c09794befd84d01ffbe42ae2b6ef63789a961",
+      "sessions": 19,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-07",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F07%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.388557+00:00",
+      "bytes": 2525,
+      "sha256": "d8dd82d6954c7321d8a40410ce47fafd614c145bd0de7cc03b306313d4aa4f40",
+      "sessions": 21,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-08",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F08%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:30.986129+00:00",
+      "bytes": 2630,
+      "sha256": "991d20e7eb1dbe75245b04c2ba389ab55c9fb9cca621150865c8a547fe892a1d",
+      "sessions": 22,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-09",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F09%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:30.999176+00:00",
+      "bytes": 2440,
+      "sha256": "4bd5655031a9658efbb2be980a692846b552ed949c1225e54ab921d62145ed1e",
+      "sessions": 20,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-10",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F10%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.197864+00:00",
+      "bytes": 2347,
+      "sha256": "cefaf34af9d7c83899bdeff797b3b458c7128b3359c857f5aa15a053588e7ea4",
+      "sessions": 19,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-11",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F11%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.363999+00:00",
+      "bytes": 2538,
+      "sha256": "e4eb75baaddaf43a4217d5c4bfe8e75812f8ec704e5abfd68187b7ca706d4354",
+      "sessions": 21,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2024-12",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2024%2F12%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.385208+00:00",
+      "bytes": 2644,
+      "sha256": "e1d80f2ecd15ad7997d8a844b9c3f7c6850ae0a836d6bb7b5eb39ad27672ab33",
+      "sessions": 22,
+      "volumeUnit": "成交仟股"
+    },
+    {
+      "month": "2025-01",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F01%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.461528+00:00",
+      "bytes": 1981,
+      "sha256": "1b7ddb1037199c930aa1db36537f49ba4da3f7374834f58db364164ab132fe5d",
+      "sessions": 15,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-02",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F02%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.700765+00:00",
+      "bytes": 2348,
+      "sha256": "b6e6bbfa4be292448f18edb90b33554ef981787c1fef34c31edcaa4d480c2d79",
+      "sessions": 19,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-03",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F03%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.673357+00:00",
+      "bytes": 2521,
+      "sha256": "b2257d891ad7a9004619edfce36cfab7989ade15adf3c948b76f1d898829016e",
+      "sessions": 21,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-04",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F04%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.689863+00:00",
+      "bytes": 2428,
+      "sha256": "367d8c3cd626ee11ba38fed7c3de3f9bd54382f2596d072109ee4d9bad5775b6",
+      "sessions": 20,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-05",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F05%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.931690+00:00",
+      "bytes": 2438,
+      "sha256": "2a6eeb9ca5a7cd9d85dd8e8fdbfca05118d1aba9e2f3f12132f17bbbe1672d61",
+      "sessions": 20,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-06",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F06%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.797457+00:00",
+      "bytes": 2538,
+      "sha256": "cdaf823d4ec5387c325d880c5beac39add6fbe67ad16171aae5073566900c4f1",
+      "sessions": 21,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-07",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F07%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.901498+00:00",
+      "bytes": 2725,
+      "sha256": "1b2a907e8d6d507e273f12a2f7978e5e9f4b1ada5046999ac2a22209092e6203",
+      "sessions": 23,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-08",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F08%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:31.959500+00:00",
+      "bytes": 2544,
+      "sha256": "3ad081579f1c14d5248432d4baf218d3a60097be70182ce2704cc4af748d78f5",
+      "sessions": 21,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-09",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F09%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:33.093977+00:00",
+      "bytes": 2542,
+      "sha256": "58582eea69e2f0f7d3ee487441936f38d61677517061cc1c38891389cd5b0b54",
+      "sessions": 21,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-10",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F10%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:32.058330+00:00",
+      "bytes": 2447,
+      "sha256": "f90c002ad118d2eaea64d34258c6b6ca15af2399031a63df42f18fee2cdb301e",
+      "sessions": 20,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-11",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F11%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:32.188420+00:00",
+      "bytes": 2453,
+      "sha256": "8fdcf192d505b10b041433f13f5041052ecdd72bcc7a323a9fb3eb20f62cc014",
+      "sessions": 20,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2025-12",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2025%2F12%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:32.357211+00:00",
+      "bytes": 2636,
+      "sha256": "9ad40093de8aa87be28fe551f4f01d0d6e6ed09150311c509130c1e3a01aca7a",
+      "sessions": 22,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-01",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F01%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:32.458765+00:00",
+      "bytes": 2540,
+      "sha256": "5887dd466b16051951d8d40c34a0244f922d703e1a8b4d20cc22b2d288a1ee4f",
+      "sessions": 21,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-02",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F02%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:32.454278+00:00",
+      "bytes": 1706,
+      "sha256": "d2973e28b0d20c981b6cbc36eaf902d7b74660a3874b472fa9791ed589ca645d",
+      "sessions": 12,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-03",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F03%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:32.668404+00:00",
+      "bytes": 2704,
+      "sha256": "146c4666518357f432ee1578bfd15c6d866325d28cc5ba2da3dcffbe74667e63",
+      "sessions": 22,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-04",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F04%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:32.705444+00:00",
+      "bytes": 2534,
+      "sha256": "1258f466c8b9b125215aafe2eaf24e1a6c4fb0b3af473633fa6a6d3b4b73ee8b",
+      "sessions": 20,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-05",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F05%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:32.798248+00:00",
+      "bytes": 2552,
+      "sha256": "f8702689d2e573dd275324c13e384157361225cf34ec8de6ceb6ee538830dc01",
+      "sessions": 20,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-06",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F06%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:32.933880+00:00",
+      "bytes": 2642,
+      "sha256": "b9d8d51a8117aaa1334bdf292bee51221cfb6d6363270bec9e8410ef46e3c307",
+      "sessions": 21,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-07",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F07%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:32.978573+00:00",
+      "bytes": 2743,
+      "sha256": "80c78fa5616b9b91a958ef7c39598584fbe5f1215dc9c066adf95b2772e42a42",
+      "sessions": 22,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-08",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F08%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:33.098302+00:00",
+      "bytes": 2638,
+      "sha256": "5a6a4c41d32826d2f34d97f7ce89c037f519437613a3cefb54859449befb8c7a",
+      "sessions": 21,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-09",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F09%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:33.337457+00:00",
+      "bytes": 2547,
+      "sha256": "d414113acc52bf8c4dc0830c448c826db419cc17b7ab5a4dc5cfcaf890cab705",
+      "sessions": 20,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-10",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F10%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:33.250656+00:00",
+      "bytes": 2457,
+      "sha256": "1f645440992e235a8e9fd856effc466d222a18a1e6dc5a8990d43331f043082a",
+      "sessions": 19,
+      "volumeUnit": "成交張數"
+    },
+    {
+      "month": "2026-11",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F11%2F01&response=json",
+      "observedAt": "2026-11-14T18:50:33.227773+00:00",
+      "bytes": 1579,
+      "sha256": "476b845822d51a6676808fc5b4252bb550031806834e4de3ac57ee34008f5f27",
+      "sessions": 10,
+      "volumeUnit": "成交張數"
+    }
+  ],
+  "volumeAndPriceCrosscheck": {
+    "nativeCandidateSessions": 57,
+    "exactOHLCMatch": 57,
+    "historicalThousandsTimes1000ExactTradeShares": 0
+  },
+  "cutoffs": [
+    {
+      "cutoff": "2026-11-12",
+      "prior2026Sessions": 206,
+      "priorWarmupSessionsBefore2024": 239
+    },
+    {
+      "cutoff": "2026-11-13",
+      "prior2026Sessions": 207,
+      "priorWarmupSessionsBefore2024": 239
+    }
+  ],
+  "corporateActionAdjustmentApplied": false,
+  "pointInTimeAccepted": false
+}
