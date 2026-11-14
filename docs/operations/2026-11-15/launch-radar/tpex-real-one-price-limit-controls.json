@@ -1,0 +1,79 @@
+{
+  "schema": "stockinsider-tpex-one-price-limit-controls-v1",
+  "upstream": {
+    "volume": "https://data.gov.tw/dataset/11371",
+    "fullSession": "https://data.gov.tw/dataset/11370",
+    "exception": "https://www.tpex.org.tw/zh-tw/mainboard/trading/rules/system.html"
+  },
+  "cases": [
+    {
+      "symbol": "6140",
+      "prev": "2026-11-11",
+      "session": "2026-11-12",
+      "priorUpperLimit": "28.85",
+      "priorReference": "26.25",
+      "priorClosingPrice": "26.25",
+      "ohlc": [
+        "28.85",
+        "28.85",
+        "28.85",
+        "28.85"
+      ],
+      "currentOwnNextUpperLimit": "31.70",
+      "normalSessionTradeShares": 1437000,
+      "allSessionTradeShares": 1459268,
+      "currentClosedAtReportedLimit": true,
+      "allOhlcAtReportedLimit": true,
+      "prior11370Digest": "210749e0795a8e04dc5605a163a7bdeac339c3715aa1ec7d9d4006a6a09ed8ac",
+      "session11370Digest": "5b70a8ac8571b44f9d4f1e43755032a07f8ae255e5bb299f2c17f355ee6340d8"
+    },
+    {
+      "symbol": "3570",
+      "prev": "2026-11-12",
+      "session": "2026-11-13",
+      "priorUpperLimit": "204.50",
+      "priorReference": "186.00",
+      "priorClosingPrice": "186.00",
+      "ohlc": [
+        "204.50",
+        "204.50",
+        "204.50",
+        "204.50"
+      ],
+      "currentOwnNextUpperLimit": "224.50",
+      "normalSessionTradeShares": 268000,
+      "allSessionTradeShares": 291105,
+      "currentClosedAtReportedLimit": true,
+      "allOhlcAtReportedLimit": true,
+      "prior11370Digest": "5b70a8ac8571b44f9d4f1e43755032a07f8ae255e5bb299f2c17f355ee6340d8",
+      "session11370Digest": "51c8a90f766f9416a3991273f1c20ad5ea83b15696da5c813a736440d3cde55a"
+    },
+    {
+      "symbol": "3105",
+      "prev": "2026-11-12",
+      "session": "2026-11-13",
+      "priorUpperLimit": "568.00",
+      "priorReference": "517.00",
+      "priorClosingPrice": "517.00",
+      "ohlc": [
+        "568.00",
+        "568.00",
+        "552.00",
+        "568.00"
+      ],
+      "currentOwnNextUpperLimit": "624.00",
+      "normalSessionTradeShares": 28239000,
+      "allSessionTradeShares": 29076097,
+      "currentClosedAtReportedLimit": true,
+      "allOhlcAtReportedLimit": false,
+      "prior11370Digest": "5b70a8ac8571b44f9d4f1e43755032a07f8ae255e5bb299f2c17f355ee6340d8",
+      "session11370Digest": "51c8a90f766f9416a3991273f1c20ad5ea83b15696da5c813a736440d3cde55a"
+    }
+  ],
+  "scope": {
+    "priorQuoteAlignedUsingObservedAdjacentCompletedSessions": true,
+    "exDateOverrideAndNoLimitStateBoundByProduct": false,
+    "actualFillabilityProven": false,
+    "actualRankingSignal": false
+  }
+}
