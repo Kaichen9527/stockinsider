@@ -2,6 +2,18 @@
 
 ## Active Goal #385 / first source frontier
 
+### Current callable owner / fixed-score checkpoint
+
+- [x] Default-disabled standard Google OIDC production path: actual Next login/callback/logout/session/research routes, private UI and public static navigation; controlled local IdP only in explicit trusted test bootstrap. Exact issuer/audience/subject/signature/state/nonce/PKCE, bounded short opaque sessions, CSRF, replay/cancellation and no-store isolation.
+- [x] Source88f0662:478/478 retained/affected tests, types/lint/full build and33 actual controlled HTTP/desktop/mobile cases; five bounded batches retain all failures/repairs/reviews, final screenshot contrast corrected. No real Google/source-content or usable public-data acceptance.
+- [x] Fixed16-rule comparisons-v2 derivation under approved70/20/10, existing selected-read caller and canonical score/tie pagination checks. Recompute raw T06 observations; null for missing chip/index/hold evidence. No old-policy or writer/qualification bypass.
+- [x] Dedicated secure owner-configuration handoff; no actual config read/installed. External public official receipt f4d280f read via supported GitHub, exact blob retained; no raw response bytes or Cloud official acquisition.
+- [ ] Actual owner identity/runtime setup, rights-qualified private research reader, official raw artifact registration/replay, real20-session chips/200-session index and qualified published launch ranking remain incomplete.
+- [ ] NativeHOLD, formal A1/protected binding/design/CI/staging/real-adjacent-ranking-session/release gates remain unchanged. No production/SQL/timer/paid/key/iCloud operation.
+
+Evidence: docs/operations/2026-11-14/launch-radar/OWNER-OIDC-SCORE.md and owner-oidc-score-checks.json. Earlier no-route/not-implemented statements below are historical checkpoint scope, superseded only as explicitly described here.
+
+
 ### Selected-read continuation from addcaec
 
 - [x] Additive existing official-selector evidence export; unchanged legacy prefix/240 floor, annual continuity reuse and separate conservative51-session share-volume proof. New thin reader remains without app/provider/publication authority.

@@ -1,4 +1,8 @@
-# 強勢發動雷達 — active Goal, source-only checkpoint
+# 強勢發動雷達 — active Goal, controlled browser / source checkpoint
+
+## Latest callable OIDC / fixed-score checkpoint
+
+Source **88f06626470dd25367ffd95bc35638ad3e31786b**: [T02 actual default-disabled browser path and T08 connected deterministic score](OWNER-OIDC-SCORE.md), [478/types/lint/build +33 actual controlled HTTP/desktop/mobile receipt](owner-oidc-score-checks.json), [secure owner setup requirements](OWNER-OIDC-SETUP.md). Actual Google owner configuration and rights-qualified research remain absent. Fixed16-rule70/20/10 computes partial points through existing selected reads; no fake chips/index, qualification or publication authority. All failed attempts and reviewed corrections retained; nativeHOLD/A1/originalPRhead unchanged. External f4d280f official receipt is separate host evidence, not Cloud acquisition/raw replay/two complete rankings. Earlier checkpoints retain their original scope.
 
 ## Latest selected-read / owner-boundary checkpoint
 
