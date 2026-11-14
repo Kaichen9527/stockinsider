@@ -1,0 +1,76 @@
+{
+  "schema": "stockinsider-contabo-backup-constraint-diagnostic-receipt-v1",
+  "runnerCommit": "56e7a9a1acccbdff0aac87fb275d1fd7c463aace",
+  "sourceBackupDate": "2026-09-19",
+  "scope": "isolated-staging-owned-postgres-only",
+  "restoreAcceptance": false,
+  "result": {
+    "resourceSample": {
+      "minimumHostAvailableMemoryBytes": 3922923520,
+      "minimumHostDiskBytes": 18708004864,
+      "minimumWorkFreeBytes": 5966098432,
+      "stagingMemoryPeakBytes": 805310464
+    },
+    "runner": {
+      "constraintDiagnostics": {
+        "byContype": {
+          "c": {
+            "total": 820,
+            "unvalidated": 3
+          },
+          "f": {
+            "total": 288,
+            "unvalidated": 0
+          },
+          "other": {
+            "total": 0,
+            "unvalidated": 0
+          },
+          "p": {
+            "total": 229,
+            "unvalidated": 0
+          },
+          "t": {
+            "total": 6,
+            "unvalidated": 0
+          },
+          "u": {
+            "total": 121,
+            "unvalidated": 0
+          },
+          "x": {
+            "total": 0,
+            "unvalidated": 0
+          }
+        },
+        "cleanup": {
+          "postmasterReaped": true,
+          "privateTreeRemoved": true,
+          "socketRemoved": true
+        },
+        "foreignKeys": 288,
+        "invalidConstraints": 3,
+        "knownLegacyPaidContentCheck": {
+          "matches": 1,
+          "unvalidated": 1
+        },
+        "phase": "post_restore_constraint_observation"
+      },
+      "databaseRestored": false,
+      "durationSeconds": 316.136,
+      "nativeHoldRetained": true,
+      "reason": "lineage_structure_rejected",
+      "schema": "stockinsider-staging-database-restore-v1",
+      "status": "REJECTED"
+    },
+    "runnerExit": 2
+  },
+  "cleanup": {
+    "checks": {},
+    "postCleanupFreeBytes": 27299065856,
+    "productionSignaturesUnchanged": true,
+    "stagingCustodyCleaned": true,
+    "stagingUnitStopped": true
+  },
+  "interpretation": "Catalog validation flags only. Data violations were not measured."
+}
