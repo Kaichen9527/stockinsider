@@ -1,0 +1,120 @@
+{
+  "schema": "stockinsider-t18-matching-public-detail-url-control-v1",
+  "scope": "Read-only GET to ordinary active Contabo public candidate detail route; only matching published revision and fixed categories measured; no DB access or product write",
+  "diagnosedStageSubject": "e2af3017c5409dab0acb20bbdac3f7e60adad668",
+  "diagnosedStageGitReceipt": "cc139b9d06e4fcc031def93c48af078cf1ed9953",
+  "publicApiRelease": "dd59817f750684b093965f539dd4de466be13077",
+  "observations": {
+    "availability": {
+      "exactPublishedRevision": {
+        "status": 200,
+        "responseBytes": 13368,
+        "responseSha256": "c6eede46822fc7500fa8c80991b39c309b048aedd1ca0427a9ceb0375c9d3aeb",
+        "transportExit": 0,
+        "startedAt": "2026-11-14T23:49:40.723517+00:00",
+        "observedAt": "2026-11-14T23:49:41.232377+00:00",
+        "responseKind": "candidate_detail",
+        "matchingRevision": true,
+        "knownPublicTypes": {
+          "sections": "list",
+          "facts": "list",
+          "valuation": "dict",
+          "technical": "dict",
+          "tradePlan": "NoneType",
+          "status": "NoneType",
+          "priceChart": "NoneType",
+          "marketData": "NoneType",
+          "provenance": "NoneType"
+        },
+        "counts": {
+          "sections": 6,
+          "facts": 9
+        }
+      },
+      "defaultPublicDetail": {
+        "status": 200,
+        "responseBytes": 57883,
+        "responseSha256": "3dede215bed0c24cad088429b4772d03380dc8a5e8bd0140a4e3af68c7e629cb",
+        "transportExit": 0,
+        "startedAt": "2026-11-14T23:49:41.232919+00:00",
+        "observedAt": "2026-11-14T23:49:41.487434+00:00",
+        "responseKind": "candidate_detail",
+        "matchingRevision": false,
+        "knownPublicTypes": {
+          "sections": "list",
+          "facts": "list",
+          "valuation": "dict",
+          "technical": "dict",
+          "tradePlan": "dict",
+          "status": "NoneType",
+          "priceChart": "NoneType",
+          "marketData": "NoneType",
+          "provenance": "NoneType"
+        },
+        "counts": {
+          "sections": 7,
+          "facts": 12
+        }
+      }
+    },
+    "candidateValuationTechnicalPartialShape": {
+      "http": 200,
+      "exactPublishedRevisionMatched": true,
+      "summaryProseNotRecorded": true,
+      "valueOrUnknownKeyRecorded": false,
+      "runAtUtc": "2026-11-14T23:50:44.012585+00:00",
+      "responseBytes": 13368,
+      "responseSha256": "c6eede46822fc7500fa8c80991b39c309b048aedd1ca0427a9ceb0375c9d3aeb",
+      "observedProblems": {},
+      "sections": 6,
+      "facts": 9,
+      "noTradePlan": true
+    },
+    "candidateReferences": {
+      "scope": "actual_public_candidate_detail_frozen_pin_only",
+      "matchedRevision": true,
+      "checkedAt": "2026-11-14T23:51:28.690992+00:00",
+      "responseSha256": "c6eede46822fc7500fa8c80991b39c309b048aedd1ca0427a9ceb0375c9d3aeb",
+      "urlClassification": {
+        "public_source_links": {
+          "pass_no_query": 1
+        },
+        "numbered_public_sources": {
+          "pass_no_query": 5,
+          "query_on_non_allowlisted_host": 4,
+          "pass_audited_query": 1
+        },
+        "published_facts": {
+          "query_on_non_allowlisted_host": 4,
+          "pass_no_query": 4,
+          "pass_audited_query": 1
+        }
+      },
+      "publicSectionNonProfileFieldCount": 0,
+      "revisionContextStatus": "available",
+      "countOnly": true
+    },
+    "knownQueryHostCategories": {
+      "samePublicResponseSha256": "c6eede46822fc7500fa8c80991b39c309b048aedd1ca0427a9ceb0375c9d3aeb",
+      "publicFactQueryHostCategories": {
+        "other_unclassified": 4,
+        "twse_www": 1
+      },
+      "knownOfficialSelectorOccurrences": {
+        "date": 1,
+        "selectType": 1,
+        "response": 1
+      },
+      "noRawUrlsOrValuesRecorded": true
+    }
+  },
+  "trustedInterpretation": [
+    "Existing active public API returns the same frozen revision as restored-detail selection, with 6 sections, 9 facts and no trade plan.",
+    "The four fact URLs retained by active frontend's sanitization use HTTPS, keep query strings, and are outside the pinned adapter's four official hosts; the staging adapter requires its stricter URL profile for raw SQL fact references.",
+    "This is a specific incompatibility confirmed on the public counterpart. It does not identify the exact first exception in the original staging execution, prove the clone's other nested metadata fields, or expand permissions."
+  ],
+  "next": "Prioritize fixed-enum facts URL rejection in staging. Verify original frozen consumer compatibility, minimum safe provenance, and rights before accepting any finite selector. Never allow a generic host/query wildcard.",
+  "rawUrlOrValuesPersisted": false,
+  "productionChanged": false,
+  "detailStagingAcceptance": "NOT_RUN"
+}
