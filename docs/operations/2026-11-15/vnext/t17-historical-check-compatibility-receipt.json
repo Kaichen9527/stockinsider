@@ -1,0 +1,98 @@
+{
+  "build": {
+    "applicationSourceChanged": false,
+    "nextVersion": "16.3.4",
+    "status": "BLOCKED_BASELINE_TYPES",
+    "typecheck": "FAIL_PREEXISTING_EXPORTED_LAYOUT_AND_PAGE_SYMBOLS",
+    "webpackCompilation": "PASS"
+  },
+  "contaboAccessed": false,
+  "coordinatorReportedOnsitePreviousRun": {
+    "backupDate": "2026-09-19",
+    "cleanupReported": true,
+    "commit": "56e7a9a1acccbdff0aac87fb275d1fd7c463aace",
+    "durationSeconds": 316.136,
+    "foreignKeys": 288,
+    "knownPaidTupleMatches": 1,
+    "knownPaidTupleUnvalidated": 1,
+    "newProfileDefinitionsOrRowCountsConfirmed": false,
+    "otherUnvalidated": 0,
+    "productionSignaturesUnchangedReported": true,
+    "publicChecks": 820,
+    "status": "REJECTED",
+    "unvalidatedChecks": 3,
+    "unvalidatedForeignKeys": 0
+  },
+  "formalA1Acceptance": "NOT_CLAIMED",
+  "fullBusinessDataAcceptance": false,
+  "generatedAtUtc": "2026-11-14T17:10:57.845112Z",
+  "historicalDisabledFacadesUnchanged": true,
+  "independentReview": {
+    "archiveIntegration": {
+      "durationSeconds": 9.133,
+      "passed": 4
+    },
+    "formalA1Acceptance": "NOT_CLAIMED",
+    "historicalProfiles": {
+      "durationSeconds": 3.559,
+      "passed": 10
+    },
+    "mainOutputProjectionMalformedNegatives": "PASS",
+    "openBlockerOrHighFindings": 0,
+    "restoreEngine": {
+      "durationSeconds": 10.584,
+      "passed": 5
+    },
+    "scope": "CURRENT_COMPATIBILITY_SOURCE_AND_SYNTHETIC_PG_INTEGRATION"
+  },
+  "nativeHoldRetained": true,
+  "nextRollback": "NOT_RUN",
+  "parentCommit": "56e7a9a1acccbdff0aac87fb275d1fd7c463aace",
+  "postgresVersion": "17.11",
+  "productionBackupOrKeyReceived": false,
+  "productionContinuity": "HOST_REQUIRED",
+  "providerRecovery": "NOT_RUN",
+  "runtimeAdmissionGrantedByReceipt": false,
+  "schema": "stockinsider-t17-historical-check-compatibility-v1",
+  "scope": "CLOUD_GENERATED_PUBLIC_ONLY",
+  "serverVersionNum": "170011",
+  "sourceSha256": {
+    "deployment/staging/vnext/t17_keyfd/constraint_diagnostics.py": "5fe7db0da8d59cdfcbecd56416881b77501c6200436db60af6af29fef6e062dc",
+    "deployment/staging/vnext/t17_keyfd/historical_check_profiles.py": "808c964ea9c2235c5575d9333482d543d542e8b93750114f7d9282ede5175c9d",
+    "deployment/staging/vnext/t17_keyfd/portable_restore_engine.py": "e3cfb7278ad0075314c91a9149e0455502ec56be21f3177aa505aafddc06521f",
+    "deployment/staging/vnext/t17_keyfd/stage_database_restore.py": "a79f33700e1be21019296a5aef917892f30f257570fb36f2c8e2691a786210be",
+    "docs/operations/2026-11-15/vnext/T17-HISTORICAL-CHECK-COMPATIBILITY.md": "8e1508b5f9d5ffc6eeeb1a8ac29d260fe8025d451d2cf7ba6ab2b57503897aa3",
+    "scripts/tests/test_t17_constraint_diagnostics.py": "1d5dd60908029e7a00fe13a3a5a87845228fa86265107e92261b7b64436fd923",
+    "scripts/tests/test_t17_historical_check_profiles.py": "e8f73237ec6196d153f7ca61189ec0c619881d07f0058d5ecd0ed43c82808a23",
+    "scripts/tests/test_t17_portable_restore_engine.py": "6e244723adfe520a22c576974933e5a7fa090d4a585da7fe8b6fd3b79d697826"
+  },
+  "tests": {
+    "originalDisabledFacade": {
+      "failed": 0,
+      "passed": 12
+    },
+    "python": {
+      "durationSeconds": 24.051,
+      "failed": 0,
+      "passed": 70,
+      "skipped": 0
+    },
+    "realPgCases": [
+      "three_known_zero_false_rows",
+      "single_known_archive_roundtrip",
+      "three_known_archive_roundtrip",
+      "catalog_bits_and_rows_unchanged",
+      "historical_violation_rejected",
+      "same_name_changed_definition_rejected",
+      "same_name_wrong_table_rejected",
+      "unknown_not_valid_rejected",
+      "unvalidated_fk_rejected",
+      "collation_drift_rejected",
+      "fixture_enum_rejected",
+      "null_false_only_semantics",
+      "not_null_drift_rejected",
+      "named_rls_grants_and_seven_antijoins_retained",
+      "all_owned_resources_cleaned"
+    ]
+  }
+}

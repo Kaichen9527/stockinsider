@@ -21,6 +21,7 @@ import threading
 import time
 from .portable_sql_fixture_adapter import _tools, _pinned_sources, PORTABLE_ROLES, PINNED, DISARM_SQL
 from .constraint_diagnostics import CONSTRAINT_COUNTS_SQL, project_constraint_diagnostics
+from .historical_check_profiles import assess_historical_check_profiles, HistoricalCheckRejected
 
 ROOT = Path(__file__).resolve().parents[4]
 HISTORICAL = 'scripts/rehearse-contabo-database-restore.mjs'
@@ -216,10 +217,20 @@ def restore_owned_database(replay, work_root):
             raise RestoreEngineRejected('constraint_diagnostic_contract_rejected')
         structural={k:constraint_observation[k] for k in ('invalidConstraints','foreignKeys')}
         structural['maxRelationBytes']=int(sql(b"SELECT COALESCE(max(pg_relation_size(c.oid)),0) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('public','pg_toast')"))
-        if structural['invalidConstraints']!=0 or structural['foreignKeys']<1:
+        # The catalog bit is retained. Only exact historical definitions whose
+        # source-bound predicates have zero FALSE rows can cross this gate.
+        # This runs against the owned clone, never a caller receipt/Boolean.
+        compatibility=None
+        try:
+            compatibility=assess_historical_check_profiles(sql)
+            if (compatibility['totalUnvalidated']!=structural['invalidConstraints']
+                    or structural['foreignKeys']<1):
+                raise HistoricalCheckRejected()
+        except HistoricalCheckRejected as error:
             diagnostic_error=RestoreEngineRejected('lineage_structure_rejected')
             diagnostic_error.constraint_diagnostics=constraint_observation
-            raise diagnostic_error
+            diagnostic_error.historical_check_compatibility=error.diagnostic
+            raise diagnostic_error from None
         named_app=json.loads(sql(b"SELECT json_build_object('appRls',(SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relname IN ('source_run_ledger','candidate_source_mentions','candidate_research_runs','candidate_research_run_items','official_price_history','candidate_detail_snapshots','radar_public_snapshots') AND c.relkind IN ('r','p') AND c.relrowsecurity),'appSelect',(SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relname IN ('source_run_ledger','candidate_source_mentions','candidate_research_runs','candidate_research_run_items','official_price_history','candidate_detail_snapshots','radar_public_snapshots') AND c.relkind IN ('r','p') AND has_table_privilege('service_role',c.oid,'SELECT')),'appExecute',(SELECT count(DISTINCT p.proname) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.proname IN ('source_document_coverage','publish_radar_public_snapshots','candidate_research_stock_authority_page') AND has_function_privilege('service_role',p.oid,'EXECUTE')))"))
         if named_app!={'appRls':7,'appSelect':7,'appExecute':3}:
             raise RestoreEngineRejected('named_application_rls_grants_rejected')
@@ -244,7 +255,7 @@ def restore_owned_database(replay, work_root):
           currentDatabaseObserved=True,privateUnixClusterObserved=True,
           serverVersionNum=observed['version'],databaseBytes=checks['databaseBytes'],
           publicTables=checks['publicTables'],rlsTables=checks['rlsTables'],policies=checks['policies'],
-          foreignKeys=structural['foreignKeys'],maxRelationBytes=structural['maxRelationBytes'],invalidConstraints=0,tocExcluded=excluded,
+          foreignKeys=structural['foreignKeys'],maxRelationBytes=structural['maxRelationBytes'],invalidConstraints=structural['invalidConstraints'],historicalCheckCompatibility=compatibility,tocExcluded=excluded,
           appRls=named_app['appRls'],appSelect=named_app['appSelect'],appExecute=named_app['appExecute'],
           lineageValidation='DECLARED_FKS_AND_FIXED_PUBLIC_RELATIONS',lineageRelationsChecked=len(LINEAGE_EDGES),lineageOrphans=0,
           tocSha256=hashlib.sha256(toc).hexdigest(),filteredTocSha256=hashlib.sha256(filtered.read_bytes()).hexdigest(),

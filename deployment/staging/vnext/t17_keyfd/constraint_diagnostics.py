@@ -1,7 +1,7 @@
 """Read-only public catalog counts; no identifiers/definitions/rows in output.
 
 This observes NOT VALID state, not row violations. It never validates, repairs
-or permits a restore that the existing structural gate rejects.
+or grants compatibility; the separate source-bound evaluator checks rows.
 """
 PHASE = 'post_restore_constraint_observation'
 CONTYPES = ('c','f','p','u','t','x','other')
@@ -80,4 +80,8 @@ def diagnostic_after_cleanup(error):
             or set(cleanup)!={'postmasterReaped','socketRemoved','privateTreeRemoved'}
             or any(type(v) is not bool or not v for v in cleanup.values())):
         return None
-    return {**projected,'cleanup':{k:True for k in ('postmasterReaped','socketRemoved','privateTreeRemoved')}}
+    from .historical_check_profiles import project_historical_check_profiles
+    historical=project_historical_check_profiles(getattr(error,'historical_check_compatibility',None))
+    output={**projected,'cleanup':{k:True for k in ('postmasterReaped','socketRemoved','privateTreeRemoved')}}
+    if historical is not None:output['historicalCheckCompatibility']=historical
+    return output

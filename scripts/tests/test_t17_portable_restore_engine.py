@@ -87,20 +87,30 @@ def public_archive(work, orphan=False, large_rows=12000, null_required=False, no
         if null_required:
             statements.append('UPDATE candidate_source_mentions SET stock_id=NULL WHERE id=1;')
         sql('\n'.join(statements).encode())
-        if not_valid_case not in (None,'valid_rows','violating_rows'):
+        if not_valid_case not in (None,'valid_rows','all_valid_rows','violating_rows'):
             raise ValueError('public_fixture_case_rejected')
         if not_valid_case is not None:
             # Public synthetic marker only: demonstrate catalog NOT VALID is
             # distinct from whether historical rows satisfy the exact CHECK.
-            marker='SAFE_PUBLIC_FIXTURE' if not_valid_case=='valid_rows' else 'investanchors_PUBLIC_FIXTURE'
-            sql(("CREATE TABLE public.candidate_research_dossiers(id integer PRIMARY KEY,content jsonb);"
+            marker='investanchors_PUBLIC_FIXTURE' if not_valid_case=='violating_rows' else 'SAFE_PUBLIC_FIXTURE'
+            sql(("CREATE TABLE public.candidate_research_dossiers(id integer PRIMARY KEY,content jsonb NOT NULL);"
                  "INSERT INTO public.candidate_research_dossiers VALUES(1,jsonb_build_object('marker','"+marker+"'));"
                  "ALTER TABLE public.candidate_research_dossiers ADD CONSTRAINT candidate_research_dossiers_paid_content_check "
                  "CHECK(content::text !~* '(investanchors|investanchor|定錨投資|定錨會員)') NOT VALID;").encode())
             violations=run('psql',['-X','-A','-t','-v','ON_ERROR_STOP=1','-d','public_fixture','-c',
                 "SELECT count(*) FROM public.candidate_research_dossiers WHERE (content::text !~* '(investanchors|investanchor|定錨投資|定錨會員)') IS FALSE"]).decode().strip()
-            if violations!=('0' if not_valid_case=='valid_rows' else '1'):
+            if violations!=('1' if not_valid_case=='violating_rows' else '0'):
                 raise RuntimeError('public_fixture_case_not_proven')
+            if not_valid_case=='all_valid_rows':
+                sql(b"""CREATE TABLE public.opportunity_financial_facts_v3(id integer PRIMARY KEY,validation_status text NOT NULL);
+                  INSERT INTO public.opportunity_financial_facts_v3 VALUES(1,'pending'),(2,'validated');
+                  ALTER TABLE public.opportunity_financial_facts_v3 ADD CONSTRAINT opportunity_financial_facts_v3_validation_status_check
+                    CHECK(validation_status IN ('validated','pending','rejected','stale','conflict')) NOT VALID;
+                  ALTER TABLE public.candidate_research_run_items ADD COLUMN valuation_method text;
+                  UPDATE public.candidate_research_run_items SET valuation_method='forward_12m' WHERE id=1;
+                  ALTER TABLE public.candidate_research_run_items ADD CONSTRAINT candidate_research_run_items_valuation_method_check
+                    CHECK(valuation_method IS NULL OR valuation_method IN ('forward_12m','normalized_cycle','pb_reference','ev_ebitda',
+                     'financial_pb_roe','ttm_multiple_reference','turnaround_conditional','no_defensible_valuation_method','insufficient_official_evidence')) NOT VALID;""")
         archive=run('pg_dump',['-Fc','-d','public_fixture'])
         if len(archive)>8*1024**2:raise RuntimeError('public_fixture_archive_oversize')
         return archive

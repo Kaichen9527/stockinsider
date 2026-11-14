@@ -18,6 +18,7 @@ from .verified_backup_stream import (
     owned_staging_key, read_manifest, VerifiedBackupStream, BackupStreamRejected)
 from .portable_restore_engine import restore_owned_database, RestoreEngineRejected
 from .constraint_diagnostics import diagnostic_after_cleanup
+from .historical_check_profiles import require_historical_check_profiles, HistoricalCheckRejected
 
 
 def protect_key_process():
@@ -39,6 +40,12 @@ def _validate_receipt_counts(database):
                  'lineageOrphans','appRls','appSelect','appExecute'):
         if type(database.get(name)) is not int or not 0<=database[name]<=8*1024**3:
             raise RestoreEngineRejected('sanitized_count_contract_rejected')
+    try:
+        historical=require_historical_check_profiles(database.get('historicalCheckCompatibility'))
+        if historical['totalUnvalidated']!=database['invalidConstraints']:
+            raise HistoricalCheckRejected()
+    except HistoricalCheckRejected:
+        raise RestoreEngineRejected('sanitized_historical_check_contract_rejected') from None
     if not re.fullmatch(r'17[0-9]{4}',str(database.get('serverVersionNum',''))):
         raise RestoreEngineRejected('sanitized_version_contract_rejected')
 
