@@ -1,5 +1,6 @@
 import { loadTwLaunchPatternReadEvidence, type TwEntryAuthorityClient, type TwEntryAuthorityRequest } from '../tw-entry-plan-authority.ts';
 import { launchPatternFixture } from './launch-patterns.ts';
+import { scoreLaunchReadEvidence } from './launch-score.ts';
 
 /** Thin read-only consumer of the existing official selection protocol. No
  * client/provider is constructed here, and no acquisition/writer is invoked.
@@ -21,6 +22,7 @@ export async function readLaunchPatterns(client: TwEntryAuthorityClient, request
   });
   return { scope: 'selected_read_evidence_with_offline_arithmetic' as const, sourceAuthority: false as const,
     publicationAuthority: false as const, entryAuthority: false as const, rankingAuthority: false as const,
-    evidence, arithmetic, gaps: [...new Set([...evidence.missingData, ...arithmetic.gaps,
+    evidence, arithmetic, launchScore: scoreLaunchReadEvidence(request, { evidence, arithmetic }),
+    gaps: [...new Set([...evidence.missingData, ...arithmetic.gaps,
       'external_acquisition_and_actual_database_not_verified'])].sort() };
 }

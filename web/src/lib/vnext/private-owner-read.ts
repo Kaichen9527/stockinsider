@@ -75,15 +75,25 @@ function trustedConfig(value: OwnerReadTrust | null): {
     return { issuer: config.issuer, audience: config.audience, subjects: new Set(subjects), ids: new Set(ids), key };
   } catch { return null; }
 }
-function reply(status: number, body: unknown): Response {
-  return new Response(JSON.stringify(body), { status, headers: {
+/** Shared transport only; this helper grants no authentication/read authority. */
+export function ownerPrivateResponse(status: number, body: unknown, headers?: HeadersInit): Response {
+  const outputHeaders = new Headers(headers);
+  for (const [name, value] of Object.entries({
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'private, no-store, max-age=0',
     'Surrogate-Control': 'no-store',
     Pragma: 'no-cache',
     Expires: '0',
-    Vary: 'Authorization',
-  } });
+    Vary: 'Authorization, Cookie',
+    'Referrer-Policy': 'no-referrer',
+  })) outputHeaders.set(name, value);
+  return new Response(JSON.stringify(body), { status, headers: outputHeaders });
+}
+function reply(status: number, body: unknown): Response {
+  // Preserve the original independent JWS contract's Authorization variation.
+  const response = ownerPrivateResponse(status, body);
+  response.headers.set('Vary', 'Authorization');
+  return response;
 }
 
 /** The optional clock is a trusted server dependency, in epoch seconds. Neither

@@ -4,6 +4,8 @@ Current approved Goal: [強勢發動雷達/#385 amendment](launch-radar-amendmen
 
 Latest approved continuation: [selected-read / owner-boundary amendment](launch-radar-read-boundary-amendment.md). Connect T06 to the existing readonly official selector with unchanged legacy functions/240 floor and stricter51-session volume evidence; permit one bounded public official GET under supported current policy. A proxy denial remains BLOCKED. Optional T02 independent signed owner-capability/no-store source contract defaults Disabled with no actual issuer/login/route. No paid/private/production IO or original gate activation.
 
+Current product continuation: [OIDC browser vertical / engineering score rulebook](owner-oidc-vertical-amendment.md). Implement actual default-disabled Next login/callback/logout/private-page APIs using pinned standard OIDC and a controlled local IdP for real HTTP/desktop/mobile. Independently review a fixed initial16-rule70/20/10 rubric under explicit user authorization; known source operands now compute points, missing actual chips/index remainnull. No formal owner/production configuration or gate activation. Earlier source-only limitations below retain their historical scope.
+
 1. Typed versioned policies/snapshots, deterministic null-preserving scoring, source rights/freshness and acceptance inventory.
 2. Durable atomic admission/day-attempt authority with explicit scope, lifecycle, idempotency, global concurrency and route closure; install only in disposable verification. Keep source->global lock order and legacy contracts; enabled vNext must not catch to legacy on errors.
 3. Shared point-in-time market snapshot, deterministic conservative risk overlay and bounded rights-aware discovery cache. Real foreign provenance or explicit unavailable.
