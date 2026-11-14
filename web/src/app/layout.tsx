@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="zh-Hant" suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
         <nav aria-label="帳號入口" className="mx-auto flex max-w-7xl justify-end px-5 pt-4 text-sm">
-          <Link href="/private-research" prefetch={false} className="text-sky-500 underline underline-offset-4">私人研究</Link>
+          <Link href="/private-research" prefetch={false} className="text-sky-700 underline underline-offset-4 dark:text-sky-300">私人研究</Link>
         </nav>
         {children}
       </body>
