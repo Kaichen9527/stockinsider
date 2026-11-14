@@ -1,3 +1,9 @@
+# Latest approved Goal checkpoint — launch radar source only
+
+[2026-11-14 launch Goal/T01/T06 status](../../2026-11-14/launch-radar/STATUS.md), sourcee9ec4d5.406Node/types/lint/build PASS; four skills pinned5863806; accessibleWIP283files unchanged. Newtechnical70 policy remains unconnected, T01 actual-model metadata unavailable/T02 owner session absent/T06 actual producer+UI incomplete. NativeHOLD/A1/originalPR head and every release gate retained. No Contabo/private-original/credential/paid/timer action. All earlier checkpoints below retain original subjects and limits.
+
+---
+
 # Current Linux restore / release checkpoint — SOURCE ONLY / INCOMPLETE
 
 [Delivered source and limits](LINUX-RESTORE-RELEASE.md) · [Repository backup/restore inventory](BACKUP-RESTORE-SOURCE-MAP.md) · [Exact-source receipt](linux-restore-release-checks.json).

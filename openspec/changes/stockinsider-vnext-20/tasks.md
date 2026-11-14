@@ -7,12 +7,14 @@
 - [x] T01 fixed MattPocock5863806 four skills plus license/blob/SHA; same-name installed skills preserved.
 - [x] Record approved requirement delta before T06 changes, separate legacy scoring/qualification/tests from launch policy.
 - [ ] T01 actual authenticated model/effort attestation and old WIP/archive recovery remain unverified; selected Sol High executor is not runtime attestation.
-- [ ] T06 bounded provider-independent historical-price→pattern observations/explicit gaps→fixture tests; review/types/lint/build/exact-source receipt pending.
+- [x] T06 bounded provider-independent historical-price→pattern observations/explicit gaps→18 fixture tests; source e9ec4d5,406/406 retained+affected regressions/types/lint/build PASS and independent bounded engineering review. No provider/UI/publication authority.
 - [ ] T06 actual official source/flow/action/calendar producer and UI integration, new scoring/publishing/T08, two real sessions remain incomplete.
 - [ ] T02 verified owner-session private,no-store reader and cache/public-exclusion tests NOT_IMPLEMENTED; existing worker bearer roles are insufficient.
 - [ ] Native HOLD, formal A1/protected review, source/rights/CI/Contabo/restore/rollback/release gates retained. No paid calls, private originals/credentials, production metric/timer/head change this turn.
 
 See [launch amendment](launch-radar-amendment.md) and docs/operations/2026-11-14/launch-radar/. Prior-policy checked work below remains bound to its original source and is not launch acceptance.
+
+Current evidence: docs/operations/2026-11-14/launch-radar/STATUS.md and source-checks.json. T01/T06 remain partial tickets; actual model metadata, owner login, producers, formal gates and real acceptance are not supplied by fixture PASS.
 
 ## Prior-policy implementation history
 
