@@ -1,0 +1,54 @@
+{
+  "schema": "stockinsider.t18-matching-public-historical-render-control.v1",
+  "scope": "Ordinary GET on active public Contabo application, only the fixed published candidate HTML/date and age labels observed",
+  "existingPublicApiIdentityReceipt": "79119dec1e1d86bba321288f5b4c426cdae66dbd",
+  "fixedActivePublicRelease": "dd59817f750684b093965f539dd4de466be13077",
+  "restoredCandidateHttpAttempt": "cc139b9d06e4fcc031def93c48af078cf1ed9953",
+  "firstControl": {
+    "pageUsedApiParameter": true,
+    "pinnedPageDateMatched": false,
+    "keptOnlyAsRoutingContrast": true
+  },
+  "correctedObservation": {
+    "pageParameter": "candidateRevision",
+    "apiParameter": "revision",
+    "matchingApiRevision": true,
+    "matchedDateFields": {
+      "asOf": {
+        "apiDate": "2026-09-14",
+        "found": true,
+        "matches": true
+      },
+      "availableAt": {
+        "apiDate": "2026-09-14",
+        "found": true,
+        "matches": true
+      }
+    },
+    "rawDetailSha256": "c6eede46822fc7500fa8c80991b39c309b048aedd1ca0427a9ceb0375c9d3aeb",
+    "htmlSha256": "a50aa8989066c5baae7b2a99d6d941f686f216a22b11fc735750591b0c4972f7",
+    "observedAtUtc": "2026-11-14T23:56:29.580505+00:00",
+    "availabilityAgeHoursFloor": 1478,
+    "apiFinalSemantics": "preliminary",
+    "apiFreshness": null,
+    "apiLifecycle": "found",
+    "hasTradePlan": false,
+    "htmlMarkers": {
+      "snapshotHeader": true,
+      "revisionBoundBody": true,
+      "confirmedPublication": false,
+      "staleReadonly": false,
+      "preliminary": true,
+      "currentAction": false,
+      "found": true
+    },
+    "sectionsDisplayed": 5,
+    "privateContentsRecorded": false
+  },
+  "conclusions": [
+    "Retain route-specific revision parameter name; the actual pinned HTML and API agree on both original Taipei dates and render historical content.",
+    "The old sample is 1478 or more hours since availability but only states preliminary, without an explicit stale-readonly label or current-action label. This sample has no trade plan; it cannot establish behavior for an actionable or confirmed stale revision.",
+    "Read-only existing app observation. The isolated backup clone route, mobile browser and newly developed age fence must still be tested separately."
+  ],
+  "productionChanged": false
+}
