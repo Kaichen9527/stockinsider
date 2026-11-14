@@ -514,5 +514,126 @@
     "noPaidAction": true,
     "noProductionDataMutation": true,
     "notFiveTwentyDayAcceptance": true
+  },
+  "registeredLicensedVolume": {
+    "datasetId": 11549,
+    "datasetUrl": "https://data.gov.tw/dataset/11549",
+    "licenseUrl": "https://data.gov.tw/license",
+    "clockProof": "Observation after requested date. Capture actual daily file during each upcoming session before cutoff. Date parameter is ignored.",
+    "registeredResourceObserved": [
+      {
+        "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=open_data",
+        "http": 200,
+        "type": "text/csv",
+        "codec": "utf-8-sig",
+        "hash": "8fc1f6407bfc06a691fac6523a9095c18ddb095648aec82183a1f44c25594542",
+        "bytes": 137780,
+        "header": [
+          "日期",
+          "證券代號",
+          "證券名稱",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數"
+        ],
+        "records": 1389,
+        "selected": [
+          [
+            "1151113",
+            "2330",
+            "台積電",
+            "30973127",
+            "73326711390",
+            "2375.00",
+            "2390.00",
+            "2340.00",
+            "2350.00",
+            "10.0000",
+            "76864"
+          ]
+        ]
+      },
+      {
+        "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=open_data&date=20261112",
+        "http": 200,
+        "type": "text/csv",
+        "codec": "utf-8-sig",
+        "hash": "8fc1f6407bfc06a691fac6523a9095c18ddb095648aec82183a1f44c25594542",
+        "bytes": 137780,
+        "header": [
+          "日期",
+          "證券代號",
+          "證券名稱",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數"
+        ],
+        "records": 1389,
+        "selected": [
+          [
+            "1151113",
+            "2330",
+            "台積電",
+            "30973127",
+            "73326711390",
+            "2375.00",
+            "2390.00",
+            "2340.00",
+            "2350.00",
+            "10.0000",
+            "76864"
+          ]
+        ]
+      },
+      {
+        "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=open_data&date=20261113",
+        "http": 200,
+        "type": "text/csv",
+        "codec": "utf-8-sig",
+        "hash": "8fc1f6407bfc06a691fac6523a9095c18ddb095648aec82183a1f44c25594542",
+        "bytes": 137780,
+        "header": [
+          "日期",
+          "證券代號",
+          "證券名稱",
+          "成交股數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌價差",
+          "成交筆數"
+        ],
+        "records": 1389,
+        "selected": [
+          [
+            "1151113",
+            "2330",
+            "台積電",
+            "30973127",
+            "73326711390",
+            "2375.00",
+            "2390.00",
+            "2340.00",
+            "2350.00",
+            "10.0000",
+            "76864"
+          ]
+        ]
+      }
+    ],
+    "twseInstitutionalT86Rights": "Separate, exact dated T86 is not established as a registered open dataset by this receipt.",
+    "datedMiIndexRole": "Five historical scope and per-stock volume matching controls. Persist registered daily CSV separately with its own clock and checksum."
   }
 }
