@@ -393,3 +393,80 @@ export async function loadTwEntryHistoricalPriceAuthority(client: TwEntryAuthori
     return { ...base, missingData: [error instanceof Error && /^[a-z0-9_]+$/u.test(error.message) ? error.message : 'entry_authority_read_failed'] };
   }
 }
+
+/** Additive selected-cache evidence for Launch Radar arithmetic. Existing
+ * selectors retain their original bounds, price gate and return contracts.
+ * Protocol validation does not prove external acquisition or publication. */
+export type TwLaunchPatternReadEvidence = {
+  scope: 'selected_cache_protocol_evidence'; sourceAuthority: false; publicationAuthority: false; entryAuthority: false;
+  history: TwEntryHistoricalAuthorityResult;
+  calendar: null | {
+    status: 'validated_selected_window' | 'selected_rows_only'; revisionId: string; availableAt: string;
+    sessions: Array<{ session: string; closeAt: string; authorityId: string; sourceRef: string;
+      sourceTimestamp: string; collectedAt: string; recordedAt: string }>;
+  };
+  corporateActions: null | { revisionId: string; version: 'tw-corporate-action-v3.1'; availableAt: string;
+    snapshots: Array<{ session: string; snapshotId: string; sessionAuthorityId: string; datasetHash: string;
+      collectedAt: string; recordedAt: string }> };
+  shareVolume: null | { revisionId: string; sourceDatasetRevision: string; availableAt: string;
+    fromSession: string; throughSession: string; snapshotIds: string[]; status: 'no_candidate_events_in_selected_51' };
+  missingData: string[];
+};
+
+export async function loadTwLaunchPatternReadEvidence(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<TwLaunchPatternReadEvidence> {
+  const history = await loadTwEntryHistoricalPriceAuthority(client, request);
+  const result: TwLaunchPatternReadEvidence = { scope: 'selected_cache_protocol_evidence', sourceAuthority: false,
+    publicationAuthority: false, entryAuthority: false, history, calendar: null, corporateActions: null, shareVolume: null,
+    missingData: [...history.missingData] };
+  if (history.missingData.length) return result;
+  const gap = (error: unknown) => error instanceof Error && /^[a-z0-9_]+$/u.test(error.message)
+    ? error.message : 'launch_selected_evidence_read_failed';
+  try {
+    // Reuse exactly the same cutoff-bound selected maps, including complete
+    // three-feed receipts/hash checks for all239 price-adjustment transitions.
+    const shared = await sharedAuthority(client, request);
+    const sessions = shared.sessions.map((session) => {
+      const row = shared.calendarRows.get(session)!;
+      return { session, closeAt: text(row.close_at), authorityId: text(row.session_authority_id),
+        sourceRef: text(row.source_ref), sourceTimestamp: text(row.source_timestamp),
+        collectedAt: text(row.collected_at), recordedAt: text(row.recorded_at) };
+    });
+    result.calendar = { status: 'selected_rows_only', revisionId: `${VERSION}:launch-calendar:${hash(sessions)}`,
+      availableAt: shared.availableAt, sessions };
+    try {
+      // A table containing240 completed rows alone cannot prove continuity.
+      // Reuse annual-history/cancellation validation; do not acquire a calendar.
+      const annual = forwardCalendar(shared, request);
+      result.calendar = { ...result.calendar, status: 'validated_selected_window', availableAt: maxTime(shared.availableAt, annual.knownAt),
+        revisionId: `${VERSION}:launch-calendar:${hash([sessions, annual.version, request.forwardCalendar])}` };
+    } catch (error) { result.missingData.push('launch_calendar_continuity_unproven', gap(error)); }
+    const snapshots = shared.sessions.slice(1).map((session) => {
+      const row = shared.snapshots.get(session)!;
+      return { session, snapshotId: text(row.snapshot_id), sessionAuthorityId: text(row.session_authority_id),
+        datasetHash: text(row.dataset_hash), collectedAt: text(row.collected_at), recordedAt: text(row.recorded_at) };
+    });
+    result.corporateActions = { version: 'tw-corporate-action-v3.1', availableAt: shared.availableAt,
+      revisionId: `${VERSION}:launch-actions:${hash(snapshots)}`, snapshots };
+    // Raw share-volume comparability is local to the51 consumed bars. Older
+    // events still affect the verified price basis, but do not veto this window.
+    // Even a price-factor1 ex-right/dividend event may change share counts:
+    // this legacy feed has no separate cash-only proof, so every target event
+    // inside the window refuses comparability rather than inventing a factor.
+    const volumeSessions = shared.sessions.slice(-51);
+    const volumeSnapshots = volumeSessions.map((session) => shared.snapshots.get(session)!);
+    const candidateEvents = volumeSnapshots.flatMap((snapshot) =>
+      shared.events.get(text(snapshot.snapshot_id))!.filter((event) => event.symbol === request.symbol));
+    if (candidateEvents.length) result.missingData.push('launch_share_volume_candidate_action_within_51');
+    else {
+      const snapshotIds = volumeSnapshots.map((snapshot) => text(snapshot.snapshot_id));
+      result.shareVolume = { status: 'no_candidate_events_in_selected_51',
+        revisionId: `${VERSION}:launch-share-volume:${hash([request.exchange, request.symbol, request.cutoff,
+          history.sourceDatasetRevision, volumeSessions, volumeSnapshots.map((snapshot) =>
+            [snapshot.snapshot_id, snapshot.dataset_hash, snapshot.session_authority_id])])}`,
+        sourceDatasetRevision: history.sourceDatasetRevision, availableAt: maxTime(shared.availableAt, history.availableAt),
+        fromSession: volumeSessions[0], throughSession: volumeSessions.at(-1)!, snapshotIds };
+    }
+  } catch (error) { result.missingData.push(gap(error)); }
+  result.missingData = [...new Set(result.missingData)].sort();
+  return result;
+}

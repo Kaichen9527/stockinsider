@@ -2,6 +2,8 @@
 
 Current approved Goal: [強勢發動雷達/#385 amendment](launch-radar-amendment.md), T01–T20/#386–#405. Preserve the same pipeline, branch/PR and all external gates. First protect accessible WIP/pins/spec (T01), then bounded offline existing-history→launch observations→fixture tests (T06). T02 private reads require a real verified owner session; existing operator bearer credentials are not a substitute. No paid/provider IO or activation in this slice. Old execution order below is retained as prior-policy history where the new amendment supersedes it.
 
+Latest approved continuation: [selected-read / owner-boundary amendment](launch-radar-read-boundary-amendment.md). Connect T06 to the existing readonly official selector with unchanged legacy functions/240 floor and stricter51-session volume evidence; permit one bounded public official GET under supported current policy. A proxy denial remains BLOCKED. Optional T02 independent signed owner-capability/no-store source contract defaults Disabled with no actual issuer/login/route. No paid/private/production IO or original gate activation.
+
 1. Typed versioned policies/snapshots, deterministic null-preserving scoring, source rights/freshness and acceptance inventory.
 2. Durable atomic admission/day-attempt authority with explicit scope, lifecycle, idempotency, global concurrency and route closure; install only in disposable verification. Keep source->global lock order and legacy contracts; enabled vNext must not catch to legacy on errors.
 3. Shared point-in-time market snapshot, deterministic conservative risk overlay and bounded rights-aware discovery cache. Real foreign provenance or explicit unavailable.

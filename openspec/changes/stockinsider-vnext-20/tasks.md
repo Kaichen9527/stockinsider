@@ -2,6 +2,14 @@
 
 ## Active Goal #385 / first source frontier
 
+### Selected-read continuation from addcaec
+
+- [x] Additive existing official-selector evidence export; unchanged legacy prefix/240 floor, annual continuity reuse and separate conservative51-session share-volume proof. New thin reader remains without app/provider/publication authority.
+- [x] Independent public-key-only owner capability/private,no-store metadata source boundary; default unconfigured, no worker-key fallback, actual owner session/route/source permission remain absent.
+- [ ] Serial readonly-client integration/cryptographic negative regressions, types/lint/build and exact-source sanitized receipt pending.
+- [ ] Local official annual-calendar canary BLOCKED at proxy CONNECT403; coordinator separately reports public response hash/27holidays/statok, not observed/acquired/registered in this VM. No authority or real-session inference.
+- [ ] Real official producer/DB/owner login/UI/review/CI/source-session/staging/release acceptance remains incomplete; nativeHOLD/originalPRhead unchanged. See launch-radar-read-boundary-amendment.md.
+
 - [x] Read approved parent#385 and all T01–T20/#386–#405; retain exact snapshot and dependency map, no duplicate tickets/parent closure.
 - [x] T01 accessible checkout/protection9bca1e3, local preservation ref and existing-WIP hash manifest; old unavailable checkout untouched, recovery not claimed.
 - [x] T01 fixed MattPocock5863806 four skills plus license/blob/SHA; same-name installed skills preserved.
