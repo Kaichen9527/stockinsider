@@ -45,6 +45,20 @@ function refused(result) {
   assert.equal(result.status, 1); assert.equal(result.stdout, '');
   assert.equal(result.stderr, 'official_exchange_replay_refused\n');
 }
+function institutionalFixture({ absent=false, large=false }={}) {
+  const f=nativeFixture();
+  Object.assign(f.manifest,{schema:'launch-tpex-11370-institutional-volume-v1',datasetId:11370});
+  const header=['資料日期','代號','名稱','收盤','漲跌','開盤','最高','最低','均價','成交股數','成交金額','成交筆數','最後買價','最後賣價','發行股數','次日參考價','次日漲停價','次日跌停價'];
+  for(const [index,page] of f.manifest.responses.entries()) {
+    const row=symbol=>[`115/11/${page.session.slice(8)}`,symbol,'SYNTHETIC_ALL_SESSION','101','0','100','102','99','101','50,001','5,000,000','100','100','101','150,000,000','100','110','90'];
+    const rows=[header,row('6488'),row('5274'),...(large&&index===0?Array.from({length:15998},(_,i)=>row(`W${String(i).padStart(5,'0')}`)):[])];
+    const bytes='\uFEFF'+rows.map(values=>values.map(value=>`"${value}"`).join(',')).join('\r\n')+'\r\n';
+    fs.writeFileSync(path.join(f.root,page.body.path),bytes,{mode:0o600});
+    Object.assign(page,{sourceUrl:`https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes?date=2026%2F11%2F${page.session.slice(8)}&response=data&type=DailyClose`,
+      bytes:Buffer.byteLength(bytes),rawSha256:createHash('sha256').update(bytes).digest('hex'),body:absent?{encoding:'absent'}:page.body});
+  }
+  f.save();return f;
+}
 test('offline CLI reads only explicit private work inputs and emits metadata, never raw data or rights', () => {
   const { root, input } = fixture(), result = run(root, '--receipt', input);
   assert.equal(result.status, 0, result.stderr);
@@ -140,6 +154,40 @@ test('offline CLI native import refuses hash, native page bound, symlink and pri
   manifest.responses[0].body.path = 'bodies/../../private.csv'; save(); refused(run(root, '--manifest', input));
   manifest.responses[0] = original; save(); refused(run(root, '--manifest', outside.input));
   fs.chmodSync(root, 0o755); refused(run(root, '--manifest', input));
+});
+test('offline CLI dispatches distinct11370 profile with16000 data rows above11371 cap and immutable resource attribution',()=>{
+  const {root,input,manifest,save}=institutionalFixture({large:true});
+  assert.ok(manifest.responses[0].bytes>500000);assert.ok(manifest.responses[0].bytes<3*1024*1024);
+  for(const symbol of ['5274','6488']) {
+    manifest.symbol=symbol;save();const result=run(root,'--manifest',input);assert.equal(result.status,0,result.stderr);
+    const output=JSON.parse(result.stdout);
+    assert.equal(output.schema,'launch-tpex-11370-institutional-volume-v1');assert.equal(output.symbol,symbol);assert.equal(output.parsedSessions,2);
+    assert.equal(output.decodedBytes,manifest.responses.reduce((sum,page)=>sum+page.bytes,0));assert.equal(output.declaredBytes,output.decodedBytes);
+    assert.equal(output.attribution.datasetId,11370);assert.equal(output.attribution.datasetUrl,'https://data.gov.tw/dataset/11370');
+    assert.equal(output.attribution.licenseUrl,'https://data.gov.tw/license');assert.equal(output.resourceMapping.legacyHistoricalFallback,false);
+    assert.equal(output.sourceAuthority,false);assert.equal(output.publicationAuthority,false);assert.equal(output.rankingAuthority,false);
+    assert.equal(output.observedShareRows.length,2);
+    for(const [index,row] of output.observedShareRows.entries()) {
+      assert.deepEqual(Object.keys(row).sort(),['issuedShares','observedAt','session','shares']);
+      assert.equal(row.session,manifest.sessions[index]);assert.equal(row.observedAt,manifest.responses[index].observedAt);
+      assert.equal(row.shares,50001);assert.equal(row.issuedShares,150000000);assert.ok(Number.isSafeInteger(row.shares)&&Number.isSafeInteger(row.issuedShares));
+    }
+    assert.notEqual(output.responseReceipts[0].rawSha256,output.responseReceipts[0].csvRowsSha256);
+    assert.ok(!result.stdout.includes('SYNTHETIC_ALL_SESSION'));assert.ok(!result.stdout.includes('"tradedNtd"'));
+  }
+});
+test('offline CLI11370 absence decodeszero; hash, legacydatedroute, profilepagebound and symlink negatives stay generic',()=>{
+  const absent=institutionalFixture({absent:true}), result=run(absent.root,'--manifest',absent.input);assert.equal(result.status,0,result.stderr);
+  const output=JSON.parse(result.stdout);assert.equal(output.decodedBytes,0);assert.equal(output.parsedSessions,0);assert.ok(output.declaredBytes>0);
+  assert.deepEqual(output.observedShareRows,[]);
+  assert.ok(output.gaps.includes('institutional_volume_raw_body_missing'));
+  const {root,input,manifest,save}=institutionalFixture(), original=structuredClone(manifest.responses[0]);
+  manifest.responses[0].rawSha256='0'.repeat(64);save();refused(run(root,'--manifest',input));
+  manifest.responses[0]=structuredClone(original);manifest.responses[0].sourceUrl='https://www.tpex.org.tw/web/stock/aftertrading/DAILY_CLOSE_quotes/stk_quote_result.php?l=zh-tw&o=data&date=20261113';save();refused(run(root,'--manifest',input));
+  manifest.responses[0]=structuredClone(original);const huge=path.join(root,'bodies','large11370.csv');fs.writeFileSync(huge,'');fs.truncateSync(huge,3*1024*1024+1);
+  manifest.responses[0].body.path='bodies/large11370.csv';manifest.responses[0].bytes=3*1024*1024+1;save();refused(run(root,'--manifest',input));
+  manifest.responses[0]=structuredClone(original);const outside=fixture();fs.symlinkSync(outside.input,path.join(root,'bodies','linked11370.csv'));
+  manifest.responses[0].body.path='bodies/linked11370.csv';save();refused(run(root,'--manifest',input));
 });
 test('offline CLI rejects outside roots, symlinks, broad permissions and oversized input without path disclosure', () => {
   const { root, input } = fixture(), outside = fixture(), link = path.join(root, 'linked.json'); fs.symlinkSync(input, link);

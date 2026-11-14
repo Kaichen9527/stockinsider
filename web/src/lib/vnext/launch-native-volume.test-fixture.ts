@@ -13,7 +13,7 @@ export const nativeTables = { calendar: 'tw_trading_sessions_v3', prices: 'oppor
   snapshots: 'opportunity_corporate_action_snapshots_v3', feeds: 'opportunity_corporate_action_feed_evidence_v3', events: 'opportunity_corporate_action_events_v3' };
 const feeds = ['tpex:exright-cal:v1','tpex:reduction-reference:v1','tpex:change-reference:v1'];
 const csv = (fields: unknown[]) => fields.map(value => `"${String(value).replace(/"/gu, '""')}"`).join(',');
-export function nativeVolumeFixture(options: { capitalChangeIndex?: number; cashEvent?: boolean } = {}) {
+export function nativeVolumeFixture(options: { capitalChangeIndex?: number; cashEvent?: boolean; cashEventIndex?: number } = {}) {
   const sessions: string[] = [];
   for (let cursor = Date.parse('2026-11-13T00:00:00Z'); sessions.length < 240; cursor -= 86400000) {
     const value = new Date(cursor); if (![0,6].includes(value.getUTCDay())) sessions.unshift(value.toISOString().slice(0,10));
@@ -31,7 +31,7 @@ export function nativeVolumeFixture(options: { capitalChangeIndex?: number; cash
       raw_low: Math.round((close - spread) * 100) / 100, raw_close: close, volume: Math.round(nativeShares(index) / 1000) * 1000,
       source_timestamp: `${session}T06:00:00Z`, collected_at: collected, recorded_at: '2026-11-14T08:10:00Z', source_ref: `tpex-openapi:${session}:6488` });
     if (index === 0) continue;
-    const hasEvent = options.cashEvent && index === 220;
+    const hasEvent = options.cashEvent && index === (options.cashEventIndex ?? 220);
     const snapshot: Row = { snapshot_id: id(index + 2000), exchange: 'TPEX', session_id: session, session_authority_id: id(index + 1),
       corporate_action_version: 'tw-corporate-action-v3.1', provider: 'tpex', collected_at: collected, recorded_at: '2026-11-14T08:00:00Z',
       declared_event_count: hasEvent ? 1 : 0, dataset_hash: '' };

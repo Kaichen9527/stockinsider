@@ -15,6 +15,7 @@ export const OFFICIAL_REPLAY_SCHEMA = 'launch-official-public-replay-v1';
 export const OFFICIAL_REPLAY_PARSER = 'twse-t86-taiex-and-tpex-dailytrade-inx-v1';
 export const LICENSED_CSV_SCHEMA = 'launch-official-licensed-csv-v1';
 export const LICENSED_CSV_PARSER = 'gov-open-data-11755-11391-11856-csv-v1';
+export const LICENSED_CSV_5274_PARSER = 'gov-open-data-11755-11391-11856-csv-5274-v2';
 const MAX_BYTES = 112 * 1024 * 1024, MAX_PAGES = 68;
 const FLOW_HTML = 'https://www.tpex.org.tw/zh-tw/mainboard/trading/major-institutional/detail/day.html';
 const INDEX_HTML = 'https://www.tpex.org.tw/zh-tw/indices/stock-index/industrial/inxh.html';
@@ -302,7 +303,7 @@ export function bindLaunchOfficialReplay(read: LaunchOfficialReplayRead, request
   if (flows.length === 20
     && flows.every(({ row }) => (row as FlowRow).symbol === request.symbol)) external.chips = { ...source(flows), symbol: request.symbol, unit: 'shares',
     priceRevision: selected.history.sourceDatasetRevision, calendarRevision: calendar.revisionId,
-    flowCoverage: state.parserVersion === LICENSED_CSV_PARSER && flows.every(({item})=>item.datasetId===11856)
+    flowCoverage: [LICENSED_CSV_PARSER, LICENSED_CSV_5274_PARSER].includes(state.parserVersion) && flows.every(({item})=>item.datasetId===11856)
       ? 'tpex_11856_combined_sessions_v1' : 'unverified_institutional_scope',
     rows: flows.map(({ item, row }) => ({ session: row.session, foreignNetShares: (row as FlowRow).foreignNetShares,
       trustNetShares: (row as FlowRow).trustNetShares, sourceTimestamp: item.page.observedAt, availableAt: item.availableAt })) };
@@ -372,7 +373,7 @@ export function officialLicensedCsvUrl(datasetId: CsvDataset, key: string) {
 
 /** Strict bounded RFC4180 fields, accepting CRLF or LF records, one UTF8 BOM,
  * doubled quotes and quoted commas/newlines. No preamble/header guessing. */
-function csvRows(page: CsvPage, body: string) {
+function csvRows(page: CsvPage, body: string, target: '6488' | '5274') {
   const resource = CSV_RESOURCES[page.datasetId], records = csvRecords(body, resource.kind === 'index_month' ? 32 : 5001);
   if (records.length < 2 || JSON.stringify(records[0]) !== JSON.stringify(resource.headers)
     || records.some(row => row.length !== resource.headers.length)) fail('official_csv_header_or_width_invalid');
@@ -394,14 +395,14 @@ function csvRows(page: CsvPage, body: string) {
       index.push({ session, close });
     } else {
       if (!/^[0-9A-Za-z]{2,12}$/u.test(row[1])) fail('official_csv_symbol_invalid');
-      if (row[1] !== '6488') continue;
+      if (row[1] !== target) continue;
       const header = resource.headers as readonly string[];
       const net = (prefix: string) => {
         const buy = integer(row[header.indexOf(prefix + '買進股數')]), sell = integer(row[header.indexOf(prefix + '賣出股數')]), reported = integer(row[header.indexOf(prefix + '買賣超股數')]);
         if (buy === null || sell === null || reported === null || buy < 0 || sell < 0 || buy - sell !== reported) fail('official_csv_flow_net_invalid');
         return reported;
       };
-      flow = { session, symbol: '6488', foreignNetShares: net('外資及陸資不含外資自營商'), trustNetShares: net('投信') };
+      flow = { session, symbol: target, foreignNetShares: net('外資及陸資不含外資自營商'), trustNetShares: net('投信') };
     }
   }
   if (resource.kind === 'institutional_day' && !flow) fail('official_csv_candidate_missing');
@@ -412,8 +413,10 @@ function csvRows(page: CsvPage, body: string) {
  * grants the CSV dataset's license to any different JSON/T86 endpoint. */
 export function parseLaunchLicensedCsvReplay(value: unknown, files: ReadonlyMap<string, Uint8Array> = new Map()) {
   if (!exact(value, 'schema parserContract targets throughSessions cutoff capture indexMonths flowSessions responses')
-    || value.schema !== LICENSED_CSV_SCHEMA || value.parserContract !== LICENSED_CSV_PARSER || evidenceInstant(value.cutoff) === null
-    || JSON.stringify(value.targets) !== JSON.stringify([{ market: 'TWSE', symbol: '2330' }, { market: 'TPEX', symbol: '6488' }])
+    || value.schema !== LICENSED_CSV_SCHEMA || typeof value.parserContract !== 'string'
+    || ![LICENSED_CSV_PARSER, LICENSED_CSV_5274_PARSER].includes(value.parserContract) || evidenceInstant(value.cutoff) === null
+    || JSON.stringify(value.targets) !== JSON.stringify([{ market: 'TWSE', symbol: '2330' },
+      { market: 'TPEX', symbol: value.parserContract === LICENSED_CSV_PARSER ? '6488' : '5274' }])
     || JSON.stringify(value.throughSessions) !== JSON.stringify(['2026-11-12', '2026-11-13'])
     || !exact(value.capture, 'repository sourceCommit workflowPath runId runAttempt startedAt completedAt')
     || !text(value.capture.repository) || !/^[a-f0-9]{40}$/u.test(String(value.capture.sourceCommit))
@@ -422,7 +425,8 @@ export function parseLaunchLicensedCsvReplay(value: unknown, files: ReadonlyMap<
     || !exact(value.indexMonths, 'TWSE TPEX') || !Array.isArray(value.flowSessions) || value.flowSessions.length > 21
     || value.flowSessions.some((day, i) => !isHistoryDate(day) || i > 0 && day <= (value.flowSessions as string[])[i - 1])
     || !Array.isArray(value.responses) || value.responses.length > MAX_PAGES) fail('official_csv_manifest_invalid');
-  const capture = value.capture;
+  const capture = value.capture, parserVersion = value.parserContract as string;
+  const target = parserVersion === LICENSED_CSV_PARSER ? '6488' : '5274';
   const noWorkflow = capture.workflowPath === null && capture.runId === null && capture.runAttempt === null;
   const hasWorkflow = typeof capture.workflowPath === 'string' && /^\.github\/workflows\/[A-Za-z0-9_-]+\.ya?ml$/u.test(capture.workflowPath)
     && typeof capture.runId === 'string' && /^\d{1,20}$/u.test(capture.runId) && Number.isSafeInteger(capture.runAttempt) && Number(capture.runAttempt) >= 1;
@@ -450,16 +454,17 @@ export function parseLaunchLicensedCsvReplay(value: unknown, files: ReadonlyMap<
     if ('path' in page.body) { if (paths.has(page.body.path)) fail('official_csv_duplicate_file'); paths.add(page.body.path); }
     const body = raw(page, files, 500000, true);
     if (body === null) { gaps.push(`raw_body_missing:${identity}`); continue; }
-    const parsed = csvRows(page, body), attributed = attribution(page.datasetId); datasets.add(page.datasetId);
+    const parsed = csvRows(page, body, target), attributed = attribution(page.datasetId); datasets.add(page.datasetId);
     const receipt = { market: page.market, kind: page.kind, requestKey: page.requestKey, sourceUrl: page.sourceUrl, observedAt: page.observedAt,
       publisherPublishedAt: null, httpStatus: page.httpStatus, redirectCount: page.redirectCount, contentType: page.contentType, bytes: page.bytes, rawSha256: page.rawSha256 };
     if (page.httpStatus === null || page.redirectCount === null) gaps.push(`transport_receipt_unverified:${identity}`);
     pages.push({ page: receipt, canonicalPayloadSha256: null, canonicalCsvRowsSha256: sha256Canonical(parsed.records), datasetId: page.datasetId,
-      availableAt: page.observedAt, schemaRevision: sha256Canonical([LICENSED_CSV_PARSER, attributed, resource.headers]), index: parsed.index, flow: parsed.flow });
+      availableAt: page.observedAt, schemaRevision: sha256Canonical(parserVersion === LICENSED_CSV_PARSER
+        ? [parserVersion, attributed, resource.headers] : [parserVersion, target, attributed, resource.headers]), index: parsed.index, flow: parsed.flow });
   }
   const attributions = [...datasets].sort((a, b) => a - b).map(attribution);
-  const state: State = { cutoff, pages, gaps, throughSessions: [...value.throughSessions as string[]], parserVersion: LICENSED_CSV_PARSER, attributions };
-  const result = Object.freeze({ schema: LICENSED_CSV_SCHEMA, parserVersion: LICENSED_CSV_PARSER, scope: 'licensed_csv_schema_replay_only' as const,
+  const state: State = { cutoff, pages, gaps, throughSessions: [...value.throughSessions as string[]], parserVersion, attributions };
+  const result = Object.freeze({ schema: LICENSED_CSV_SCHEMA, parserVersion, scope: 'licensed_csv_schema_replay_only' as const,
     cutoff, decodedBytes: bytes, parsedPages: pages.length, attributions: attributions.map(item => ({ ...item })),
     responseReceipts: pages.map(({ page, canonicalCsvRowsSha256, datasetId, index, flow }) => ({ datasetId, market: page.market, kind: page.kind,
       requestKey: page.requestKey, sourceUrl: page.sourceUrl, observedAt: page.observedAt, bytes: page.bytes, rawSha256: page.rawSha256,

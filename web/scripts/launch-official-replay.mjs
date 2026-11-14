@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { parseLaunchOfficialReplay, parseLaunchLicensedCsvReplay, LICENSED_CSV_SCHEMA, officialReplayObservationPlan } from '../src/lib/vnext/launch-official-replay.ts';
 import { parseTpexNativeShareReplay, NATIVE_SHARE_SCHEMA } from '../src/lib/vnext/launch-native-volume.ts';
+import { parseTpexInstitutionalVolumeReplay, INSTITUTIONAL_VOLUME_SCHEMA } from '../src/lib/vnext/launch-institutional-volume.ts';
 
 try {
   const args = process.argv.slice(2);
@@ -46,18 +47,22 @@ try {
   if (args[2] === '--receipt') process.stdout.write(JSON.stringify(officialReplayObservationPlan(input)) + '\n');
   else {
     const nativeShares = input?.schema === NATIVE_SHARE_SCHEMA;
+    const institutionalVolume = input?.schema === INSTITUTIONAL_VOLUME_SCHEMA;
+    const limits = institutionalVolume ? { pages: 21, pageBytes: 3 * 1024 * 1024, totalBytes: 64 * 1024 * 1024 }
+      : nativeShares ? { pages: 57, pageBytes: 500000, totalBytes: 32 * 1024 * 1024 }
+        : { pages: 68, pageBytes: 5000000, totalBytes: 112 * 1024 * 1024 };
     const files = new Map(); let total = 0;
     const descriptors = [...(Array.isArray(input.responses) ? input.responses : []), ...(Array.isArray(input.schemaEvidence) ? input.schemaEvidence : [])];
-    if (descriptors.length > (nativeShares ? 57 : 68)) throw Error('input');
+    if (descriptors.length > limits.pages) throw Error('input');
     for (const descriptor of descriptors) {
       const body = descriptor?.body;
       if (body?.encoding !== 'file') continue;
       if (typeof body.path !== 'string' || !/^bodies\/[A-Za-z0-9_./-]+$/.test(body.path) || body.path.split('/').some(p => !p || p === '.' || p === '..') || files.has(body.path)) throw Error('input');
-      const member = privateFile(path.resolve(path.dirname(manifestPath), body.path), nativeShares ? 500000 : 5000000);
-      if (member.byteLength !== descriptor.bytes || (total += member.byteLength) > (nativeShares ? 32 : 112) * 1024 * 1024) throw Error('input');
+      const member = privateFile(path.resolve(path.dirname(manifestPath), body.path), limits.pageBytes);
+      if (member.byteLength !== descriptor.bytes || (total += member.byteLength) > limits.totalBytes) throw Error('input');
       files.set(body.path, member);
     }
-    const read = nativeShares ? parseTpexNativeShareReplay(input, files)
+    const read = institutionalVolume ? parseTpexInstitutionalVolumeReplay(input, files) : nativeShares ? parseTpexNativeShareReplay(input, files)
       : input?.schema === LICENSED_CSV_SCHEMA ? parseLaunchLicensedCsvReplay(input, files) : parseLaunchOfficialReplay(input, files);
     process.stdout.write(JSON.stringify(read) + '\n');
   }

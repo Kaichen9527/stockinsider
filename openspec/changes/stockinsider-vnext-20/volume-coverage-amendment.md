@@ -1,7 +1,9 @@
 # Institutional denominator coverage correction
 
-Authority: explicit user followup to approved Goal385, evidence
-`fbc8c2e0d2ea3bd0c4df666aa71d12b21e0cf751`. The real11371 report excludes
+Requirements authority: the already user-approved Goal385. Evidence
+`fbc8c2e0d2ea3bd0c4df666aa71d12b21e0cf751` supports an engineering correction
+implementing that Goal; it is not a separate direct-user approval or new rights
+grant. The real11371 report excludes
 fixed-price trading;11856 institutional scope includes common shares, block and
 odd-lot trades. Four actual symbol/day comparisons differ, including5274
 November13 364000 versus390878 shares. Matching dates and integer units did not

@@ -612,3 +612,50 @@ export function readTwLaunchNativeVolumeBinding(selected: TwLaunchPatternReadEvi
       && binding.publicDigest === launchNativeContentDigest(selected) && saved.history === selected.history ? binding : null;
   } catch { return null; }
 }
+
+export type TwLaunchInstitutionalSelection = Readonly<{
+  requestDigest: string; publicDigest: string; priceRevision: string; calendarRevision: string; actionsRevision: string;
+  availableAt: string; snapshotIds: readonly string[];
+  sessions: readonly Readonly<{ session: string; closeAt: string; calendarId: string }>[];
+  targetEvents: readonly Readonly<{ session: string; eventKind: string; sourceRowRef: string }>[];
+}>;
+/** Separate20-session selection provenance for an institutional denominator.
+ * Only the genuine prior loader result can be read. Technical51 capital/raw
+ * volume preparation is deliberately independent of this window. */
+export function readTwLaunchInstitutionalSelection(selected: TwLaunchPatternReadEvidence,
+  request: Pick<TwEntryAuthorityRequest, 'symbol' | 'exchange' | 'signalSession' | 'cutoff'> & { stockId?: string }): TwLaunchInstitutionalSelection | null {
+  try {
+    const saved = launchSelections.get(selected);
+    requireAuthority(saved && saved.requestDigest === launchNativeContentDigest(request)
+      && saved.publicDigest === launchNativeContentDigest(selected) && saved.history === selected.history,
+    'institutional_volume_selected_read_not_original');
+    const history = selected.history, calendar = selected.calendar, actions = selected.corporateActions;
+    requireAuthority(request.exchange === 'TPEX' && history.missingData.length === 0 && history.bars.length >= 240
+      && history.priceBasis?.status === 'verified' && history.priceBasis.anchorSession === request.signalSession
+      && calendar?.status === 'validated_selected_window' && actions
+      && history.bars.length === calendar.sessions.length && history.bars.length === saved.shared.sessions.length
+      && evidenceKnownAt(history.availableAt, request.cutoff) && evidenceKnownAt(calendar.availableAt, request.cutoff)
+      && evidenceKnownAt(actions.availableAt, request.cutoff), 'institutional_volume_selected_basis_missing');
+    const days = saved.shared.sessions.slice(-20), bars = history.bars.slice(-20), calendarRows = calendar.sessions.slice(-20);
+    requireAuthority(days.length === 20 && days.at(-1) === request.signalSession
+      && days.every((day, index) => bars[index].session === day && calendarRows[index].session === day
+        && calendarRows[index].authorityId === saved.shared.calendarRows.get(day)?.session_authority_id
+        && evidenceKnownAt(calendarRows[index].closeAt, request.cutoff)
+        && evidenceKnownAt(calendarRows[index].closeAt, bars[index].sourceTimestamp)
+        && evidenceKnownAt(bars[index].sourceTimestamp, bars[index].availableAt)
+        && evidenceKnownAt(bars[index].availableAt, request.cutoff)), 'institutional_volume_selected_sessions_invalid');
+    const snapshots = days.map(day => saved.shared.snapshots.get(day));
+    requireAuthority(snapshots.every(snapshot => snapshot && evidenceKnownAt(snapshot.collected_at, request.cutoff)
+      && evidenceKnownAt(snapshot.recorded_at, request.cutoff)
+      && saved.shared.events.has(text(snapshot.snapshot_id))), 'institutional_volume_selected_actions_missing');
+    const targetEvents = days.flatMap((session, index) => saved.shared.events.get(text(snapshots[index]!.snapshot_id))!
+      .filter(event => event.symbol === request.symbol).map(event => Object.freeze({ session,
+        eventKind: text(event.event_kind), sourceRowRef: text(event.source_row_ref) })));
+    return Object.freeze({ requestDigest: saved.requestDigest, publicDigest: saved.publicDigest,
+      priceRevision: history.sourceDatasetRevision, calendarRevision: calendar.revisionId, actionsRevision: actions.revisionId,
+      availableAt: maxTime(history.availableAt, calendar.availableAt, actions.availableAt),
+      snapshotIds: Object.freeze(snapshots.map(snapshot => text(snapshot!.snapshot_id))),
+      sessions: Object.freeze(calendarRows.map(day => Object.freeze({ session: day.session, closeAt: day.closeAt, calendarId: day.authorityId }))),
+      targetEvents: Object.freeze(targetEvents) });
+  } catch { return null; }
+}

@@ -6,7 +6,7 @@ import { resolveNativeVolumeOverlay, nativeVolumeContext } from './launch-native
 import { resolveInstitutionalVolumeProof, sumInstitutionalShares, type InstitutionalFlowCoverage } from './launch-institutional-volume.ts';
 
 export const LAUNCH_RULE_POLICY = 'stockinsider-launch-radar-v1';
-export const LAUNCH_RULE_VERSION = 'launch-radar-comparisons-v4';
+export const LAUNCH_RULE_VERSION = 'launch-radar-comparisons-v5';
 type Market = 'TWSE' | 'TPEX';
 type Source = { revisionId: string; market: Market; provider: 'twse' | 'tpex'; sourceUrl: string; sourceRef: string; availableAt: string; cutoff: string };
 export type LaunchIndexEvidence = Source & { rows: Array<{ session: string; close: number; sourceTimestamp: string; availableAt: string }> };
@@ -112,8 +112,7 @@ export function evaluateLaunchRules(request: Request, selected: Selected, extern
   const chipRows = chip && chip.rows.length === 20 && chip.symbol === request.symbol && chip.unit === 'shares'
     && chip.priceRevision === history.sourceDatasetRevision && chip.calendarRevision === calendar?.revisionId
     ? aligned(chip.rows, 20, chip) : null;
-  const institutional = chipRows ? resolveInstitutionalVolumeProof(external.institutionalVolumeProof,request,evidence,
-    chip?.flowCoverage ?? 'unverified_institutional_scope') : null;
+  const institutional = chipRows ? resolveInstitutionalVolumeProof(external.institutionalVolumeProof,request,evidence,chip!) : null;
   const flow = (owner: 'foreignNetShares' | 'trustNetShares', period: 5 | 20) => {
     const rows = chipRows?.slice(-period), volumes = institutional?.rows.slice(-period).map(row=>row.shares) ?? [];
     const volume = volumes.length === period && volumes.every(value=>Number.isSafeInteger(value)&&value>=0) ? sumInstitutionalShares(volumes) : null;
