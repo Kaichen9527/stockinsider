@@ -1,0 +1,49 @@
+{
+  "schema": "stockinsider-t18-contabo-host-procfs-recheck-v1",
+  "commit": "337dc5bd99431a8ca550039595e057fba9690feb",
+  "stage": {
+    "files": 45,
+    "unchanged": 43,
+    "replacedWithOldAndNewHashesChecked": 2
+  },
+  "isolatedProcfsPositive": {
+    "allowlist": [
+      "AF_UNIX",
+      "AF_INET",
+      "AF_INET6"
+    ],
+    "procNetDev": [
+      "lo"
+    ],
+    "procSelfNetDev": [
+      "lo"
+    ],
+    "memoryMax": 536870912
+  },
+  "admission": {
+    "exit": 2,
+    "durationSeconds": 3.965,
+    "keyRead": false,
+    "mode": "admission",
+    "nativeHoldRetained": true,
+    "productionSignaturesUnchanged": true,
+    "resourceSample": {
+      "minimumHostAvailableMemoryBytes": 4073508864,
+      "minimumHostDiskBytes": 26609680384
+    },
+    "runner": null,
+    "runnerExit": 2,
+    "schema": "stockinsider-t18-host-launcher-v1",
+    "stagingAccounts": "RESERVED_LOCKED_NOLOGIN",
+    "stagingResourcesCleaned": true,
+    "reason": "app_broker_startup_refused"
+  },
+  "footprint": {
+    "manifestOpened": false,
+    "keyRead": false,
+    "productionMutation": false,
+    "invalidStarted": false,
+    "authenticatedRestoreStarted": false
+  },
+  "next": "Observe broker startup with bounded fixed reason labels in exact host unit."
+}
