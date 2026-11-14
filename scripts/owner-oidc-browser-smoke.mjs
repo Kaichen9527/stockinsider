@@ -166,6 +166,12 @@ try {
     });
     noStore(await page.goto(APP + '/private-research'), true); await state(page, 'signed_out');
     await checkApi(context, APP + '/api/owner/research', 401); record(viewport.name + ':unauthenticated-http');
+    // This isolated process has no configured data plane. The unchanged legacy
+    // reader reports its exact configuration error; compare it before/after
+    // owner login rather than inventing a usable public snapshot/backend.
+    const publicBefore = await context.request.get(APP + '/api/radar/daily');
+    assert.equal(publicBefore.status(), 500);
+    assert.deepEqual(await publicBefore.json(), { error: 'supabase_data_plane_invalid' });
     const csrf = await context.request.post(APP + '/api/owner/login', { headers: { Origin: 'https://attacker.invalid' }, maxRedirects: 0 });
     assert.equal(csrf.status(), 403); noStore(csrf); record(viewport.name + ':csrf-rejected');
     scenario = 'owner'; await page.getByTestId('owner-login-submit').click(); await state(page, 'authenticated');
@@ -184,9 +190,10 @@ try {
     assert.ok(publicHtml.includes('/private-research'));
     record(viewport.name + ':public-html-excludes-owner');
     const publicApi = await context.request.get(APP + '/api/radar/daily');
-    assert.ok([200, 503].includes(publicApi.status()), 'public reader responds independently of owner login');
+    assert.equal(publicApi.status(), publicBefore.status());
+    assert.deepEqual(await publicApi.json(), { error: 'supabase_data_plane_invalid' });
     const publicPayload = await publicApi.text(); for (const value of sensitive) assert.ok(!publicPayload.includes(value));
-    record(viewport.name + ':public-api-excludes-owner');
+    record(viewport.name + ':public-api-unchanged-missing-backend-500-excludes-owner');
     const logoutCsrf = await context.request.post(APP + '/api/owner/logout', { headers: { Origin: 'https://attacker.invalid' }, maxRedirects: 0 });
     assert.equal(logoutCsrf.status(), 403); noStore(logoutCsrf); record(viewport.name + ':logout-csrf-rejected');
     const loggedOut = page.waitForResponse(response => new URL(response.url()).pathname === '/api/owner/logout' && response.request().method() === 'POST');
@@ -243,7 +250,8 @@ try {
   summary = { schema: 'stockinsider-owner-oidc-local-browser-v1', buildSource: built,
     harnessCommit: current, runtimeWebTree: webTree, status: 'PASS', cases: receipts.length, receipts, counts, screenshots,
     identity: 'NONPRODUCTION_LOCAL_CONTROLLED_OIDC_ONLY', secureCookieOnTls: true, productionTlsVerificationDisabled: false,
-    actualGoogleOwnerOrPrivateContent: false, databaseOrPaidProviderCalls: 0, productionActions: 0 };
+    actualGoogleOwnerOrPrivateContent: false, publicApiDataAcceptance: 'NOT_RUN_UNCONFIGURED_BACKEND_EXACT_500_UNCHANGED_BY_LOGIN',
+    databaseOrPaidProviderCalls: 0, productionActions: 0 };
 } catch (error) {
   primaryFailure = error;
   try {
