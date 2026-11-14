@@ -6,9 +6,11 @@
 
 - [x] Additive existing official-selector evidence export; unchanged legacy prefix/240 floor, annual continuity reuse and separate conservative51-session share-volume proof. New thin reader remains without app/provider/publication authority.
 - [x] Independent public-key-only owner capability/private,no-store metadata source boundary; default unconfigured, no worker-key fallback, actual owner session/route/source permission remain absent.
-- [ ] Serial readonly-client integration/cryptographic negative regressions, types/lint/build and exact-source sanitized receipt pending.
+- [x] Source3250ad8:437/437 readonly-client integration/cryptographic negative+retained regressions, types/lint/build PASS; independent bounded engineering review and exact-source sanitized receipt. No actual producer/owner/native acceptance.
 - [ ] Local official annual-calendar canary BLOCKED at proxy CONNECT403; coordinator separately reports public response hash/27holidays/statok, not observed/acquired/registered in this VM. No authority or real-session inference.
 - [ ] Real official producer/DB/owner login/UI/review/CI/source-session/staging/release acceptance remains incomplete; nativeHOLD/originalPRhead unchanged. See launch-radar-read-boundary-amendment.md.
+
+Evidence: docs/operations/2026-11-14/launch-radar/SELECTED-READ-OWNER.md and selected-read-checks.json. Public official artifact registration is a design-only path with missing bytes/clocks/TPEX/years/review; no new writer or registration was executed.
 
 - [x] Read approved parent#385 and all T01–T20/#386–#405; retain exact snapshot and dependency map, no duplicate tickets/parent closure.
 - [x] T01 accessible checkout/protection9bca1e3, local preservation ref and existing-WIP hash manifest; old unavailable checkout untouched, recovery not claimed.

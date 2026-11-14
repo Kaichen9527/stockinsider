@@ -1,5 +1,11 @@
 # 強勢發動雷達 — active Goal, source-only checkpoint
 
+## Latest selected-read / owner-boundary checkpoint
+
+Source **3250ad88cfb49d807df88b82a69f3c281c8968f8**: [T06 existing-selector integration, T02 independent owner source boundary and exact limits](SELECTED-READ-OWNER.md) · [437/types/lint/build receipt](selected-read-checks.json). Local official canary BLOCKED at proxy CONNECT403; coordinator's separate reported27holiday/statok/hash is not this runtime's acquisition. Real owner issuer/session/route and source/UI integration remain unconfigured/unconnected; no A1/native/release gate is cleared. Earlier T01/e9ec4d5/406 evidence below retains its original scope.
+
+---
+
 Source **e9ec4d588d9607d5c713a704c500ae03e4815f00**, tree **04bb4d963a24d3a5f760317bed195aed3d205ef3**, web tree **72f0ae5a73ccdb7a37929d1bf8ea7eeaff7eb6d5**. Continues protection9bca1e30b3f6d481c722fcc33f12f93cc286749e in the existing checkout/branch and PR384. [Machine receipt](source-checks.json), [approved issue snapshot](APPROVED-SPEC-385.md), [20-ticket dependency snapshot](ticket-map.json), [existing change amendment](../../../../openspec/changes/stockinsider-vnext-20/launch-radar-amendment.md).
 
 ## T01 delivered and limits
