@@ -1,0 +1,104 @@
+{
+  "schema": "stockinsider-t18-startup-registration-onsite-v1",
+  "subject": "cc0a1c06dad1f50b426da14b9dd86c784b4e2975",
+  "previousStagedSubject": "7811aaa79dc4f3942e1a9615e59da1254c4ffad5",
+  "changedPath": "scripts/staging_t18_host.py",
+  "exactGithubRuntimeBlobsVerifiedBeforeAndAfter": 46,
+  "changedSha256": "e25cf94578b4c5f83331bdc0979c69af2222f22a95335602cd5c0e3bf6e91024",
+  "positiveNoKeyHostAdmission": {
+    "brokerDiagnostics": {},
+    "durationSeconds": 16.118,
+    "keyRead": false,
+    "mode": "admission",
+    "nativeHoldRetained": true,
+    "productionSignaturesUnchanged": true,
+    "resourceSample": {
+      "appMemoryPeakObservedBytes": 163430400,
+      "dbMemoryPeakObservedBytes": 144957440,
+      "minimumHostAvailableMemoryBytes": 4116037632,
+      "minimumHostDiskBytes": 26585022464,
+      "restMemoryPeakObservedBytes": 17657856
+    },
+    "runner": {
+      "applicationStarted": false,
+      "databaseStarted": false,
+      "encryptedWorkAdmission": "NOT_RUN",
+      "fixedReleases": [
+        {
+          "buildId": "8ScL_J9rBSjyekr5pb9GV",
+          "fileCount": 2584,
+          "manifestSha256": "2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a",
+          "nextVersion": "16.3.4",
+          "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806"
+        },
+        {
+          "buildId": "e2WBkpZ_wkvn0YPEkko03",
+          "fileCount": 2586,
+          "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+          "nextVersion": "16.3.4",
+          "sourceCommit": "dd59817f750684b093965f539dd4de466be13077"
+        }
+      ],
+      "keyRead": false,
+      "namespaceKernelCookiesMatched": true,
+      "nativeHoldRetained": true,
+      "runtimeRestoreAdmission": false,
+      "schema": "stockinsider-t18-host-admission-v1",
+      "status": "HOST_PREREQUISITES_VERIFIED_ONLY",
+      "threeUidBudget": {
+        "appMemoryLimitBytes": 536870912,
+        "databaseMemoryLimitBytes": 805306368,
+        "distinctBoundedCgroupsObserved": true,
+        "hostAvailableMemoryBytes": 4148224000,
+        "reservedHostMemoryBytes": 1610612736,
+        "restMemoryLimitBytes": 268435456,
+        "swapLimitBytes": 0
+      }
+    },
+    "runnerExit": 0,
+    "schema": "stockinsider-t18-host-launcher-v1",
+    "stagingAccounts": "RESERVED_LOCKED_NOLOGIN",
+    "stagingResourcesCleaned": true
+  },
+  "syntheticInvalidKeyInputExpectedRefusal": {
+    "brokerDiagnostics": {
+      "APP": {
+        "role": "APP",
+        "schema": "stockinsider-t18-broker-refusal-v1",
+        "tag": "peer_accept"
+      },
+      "REST": {
+        "role": "REST",
+        "schema": "stockinsider-t18-broker-refusal-v1",
+        "tag": "asset_verification"
+      }
+    },
+    "durationSeconds": 17.378,
+    "keyRead": false,
+    "mode": "invalid",
+    "nativeHoldRetained": true,
+    "productionSignaturesUnchanged": true,
+    "resourceSample": {
+      "appMemoryPeakObservedBytes": 17670144,
+      "dbMemoryPeakObservedBytes": 23830528,
+      "minimumHostAvailableMemoryBytes": 4102852608,
+      "minimumHostDiskBytes": 17995026432,
+      "minimumWorkFreeBytes": 8333496320,
+      "restMemoryPeakObservedBytes": 16932864
+    },
+    "runner": {
+      "databaseRestored": false,
+      "durationSeconds": 5.173,
+      "nativeHoldRetained": true,
+      "reason": "backup_authentication_failed",
+      "schema": "stockinsider-staging-next-rollback-v1",
+      "status": "REJECTED"
+    },
+    "runnerExit": 2,
+    "schema": "stockinsider-t18-host-launcher-v1",
+    "stagingAccounts": "RESERVED_LOCKED_NOLOGIN",
+    "stagingResourcesCleaned": true
+  },
+  "realRestoreOrDetailRunOnThisSubject": false,
+  "nativeHoldRetained": true
+}
