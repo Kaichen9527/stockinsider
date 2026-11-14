@@ -397,6 +397,7 @@ export async function loadTwEntryHistoricalPriceAuthority(client: TwEntryAuthori
 /** Additive selected-cache evidence for Launch Radar arithmetic. Existing
  * selectors retain their original bounds, price gate and return contracts.
  * Protocol validation does not prove external acquisition or publication. */
+import { types as launchNativeNodeTypes } from 'node:util';
 export type TwLaunchPatternReadEvidence = {
   scope: 'selected_cache_protocol_evidence'; sourceAuthority: false; publicationAuthority: false; entryAuthority: false;
   history: TwEntryHistoricalAuthorityResult;
@@ -409,9 +410,63 @@ export type TwLaunchPatternReadEvidence = {
     snapshots: Array<{ session: string; snapshotId: string; sessionAuthorityId: string; datasetHash: string;
       collectedAt: string; recordedAt: string }> };
   shareVolume: null | { revisionId: string; sourceDatasetRevision: string; availableAt: string;
-    fromSession: string; throughSession: string; snapshotIds: string[]; status: 'no_candidate_events_in_selected_51' };
+    fromSession: string; throughSession: string; snapshotIds: string[]; status: 'no_candidate_events_in_selected_51';
+    coverage?: 'supported_feeds_only'; completeCapitalCoverage?: false };
   missingData: string[];
 };
+
+type LaunchShared = Awaited<ReturnType<typeof sharedAuthority>>;
+/** New additive digests inspect data descriptors and encode owned primitive
+ * values directly. No serialization hook/accessor/custom prototype is invoked. */
+export function launchNativeContentDigest(value: unknown): string {
+  let nodes = 0; const ancestors = new Set<object>();
+  const encode = (item: unknown, depth: number): string => {
+    requireAuthority(++nodes <= 100000 && depth <= 32, 'native_volume_digest_bound');
+    if (item === null || typeof item === 'boolean') return String(item);
+    if (typeof item === 'string') { requireAuthority(item.length <= 524288, 'native_volume_digest_bound'); return JSON.stringify(item); }
+    if (typeof item === 'number') { requireAuthority(Number.isFinite(item), 'native_volume_digest_invalid'); return JSON.stringify(item); }
+    requireAuthority(typeof item === 'object' && item !== null && !ancestors.has(item), 'native_volume_digest_invalid');
+    requireAuthority(!launchNativeNodeTypes.isProxy(item), 'native_volume_digest_invalid');
+    const prototype = Object.getPrototypeOf(item);
+    requireAuthority(Array.isArray(item) ? prototype === Array.prototype : prototype === Object.prototype || prototype === null, 'native_volume_digest_invalid');
+    ancestors.add(item);
+    try {
+      const keys = Reflect.ownKeys(item);
+      requireAuthority(keys.every(key => typeof key === 'string') && !keys.includes('toJSON'), 'native_volume_digest_invalid');
+      if (Array.isArray(item)) {
+        const length = Object.getOwnPropertyDescriptor(item, 'length')?.value;
+        requireAuthority(Number.isSafeInteger(length) && length >= 0 && length <= 10000 && keys.length === length + 1, 'native_volume_digest_invalid');
+        const values: string[] = [];
+        for (let index = 0; index < length; index++) {
+          const descriptor = Object.getOwnPropertyDescriptor(item, String(index));
+          requireAuthority(descriptor && descriptor.enumerable && Object.hasOwn(descriptor, 'value'), 'native_volume_digest_invalid');
+          values.push(encode(descriptor.value, depth + 1));
+        }
+        return `[${values.join(',')}]`;
+      }
+      const values: string[] = [];
+      for (const key of (keys as string[]).sort()) {
+        const descriptor = Object.getOwnPropertyDescriptor(item, key);
+        requireAuthority(descriptor && descriptor.enumerable && Object.hasOwn(descriptor, 'value'), 'native_volume_digest_invalid');
+        values.push(`${JSON.stringify(key)}:${encode(descriptor.value, depth + 1)}`);
+      }
+      return `{${values.join(',')}}`;
+    } finally { ancestors.delete(item); }
+  };
+  const encoded = encode(value, 0);
+  requireAuthority(Buffer.byteLength(encoded) <= 2 * 1024 * 1024, 'native_volume_digest_bound');
+  return createHash('sha256').update(encoded).digest('hex');
+}
+const launchSelections = new WeakMap<object, { requestDigest: string; publicDigest: string;
+  history: TwEntryHistoricalAuthorityResult; shared: LaunchShared }>();
+export type TwLaunchNativePriceBinding = Readonly<{
+  requestDigest: string; publicDigest: string; priceRevision: string; calendarRevision: string; actionsRevision: string;
+  availableAt: string; snapshotIds: readonly string[];
+  rows: readonly Readonly<{ session: string; observationId: string; sourceRef: string; calendarId: string;
+    rawOpen: number; rawHigh: number; rawLow: number; rawClose: number; factor: 1; legacyVolume: number;
+    sourceTimestamp: string; recordedAt: string; availableAt: string }>[];
+}>;
+const launchNativeBindings = new WeakMap<object, TwLaunchNativePriceBinding>();
 
 export async function loadTwLaunchPatternReadEvidence(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<TwLaunchPatternReadEvidence> {
   const history = await loadTwEntryHistoricalPriceAuthority(client, request);
@@ -421,10 +476,12 @@ export async function loadTwLaunchPatternReadEvidence(client: TwEntryAuthorityCl
   if (history.missingData.length) return result;
   const gap = (error: unknown) => error instanceof Error && /^[a-z0-9_]+$/u.test(error.message)
     ? error.message : 'launch_selected_evidence_read_failed';
+  let selectedShared: LaunchShared | null = null;
   try {
     // Reuse exactly the same cutoff-bound selected maps, including complete
     // three-feed receipts/hash checks for all239 price-adjustment transitions.
     const shared = await sharedAuthority(client, request);
+    selectedShared = shared;
     const sessions = shared.sessions.map((session) => {
       const row = shared.calendarRows.get(session)!;
       return { session, closeAt: text(row.close_at), authorityId: text(row.session_authority_id),
@@ -471,9 +528,87 @@ export async function loadTwLaunchPatternReadEvidence(client: TwEntryAuthorityCl
           history.sourceDatasetRevision, volumeSessions, volumeSnapshots.map((snapshot) =>
             [snapshot.snapshot_id, snapshot.dataset_hash, snapshot.session_authority_id])])}`,
         sourceDatasetRevision: history.sourceDatasetRevision, availableAt: maxTime(shared.availableAt, history.availableAt),
-        fromSession: volumeSessions[0], throughSession: volumeSessions.at(-1)!, snapshotIds };
+        fromSession: volumeSessions[0], throughSession: volumeSessions.at(-1)!, snapshotIds,
+        coverage: 'supported_feeds_only', completeCapitalCoverage: false };
     }
   } catch (error) { result.missingData.push(gap(error)); }
   result.missingData = [...new Set(result.missingData)].sort();
+  result.missingData.push('launch_supported_feeds_do_not_prove_capital_continuity');
+  if (selectedShared) {
+    try { launchSelections.set(result, { requestDigest: launchNativeContentDigest(request), publicDigest: launchNativeContentDigest(result),
+      history, shared: structuredClone(selectedShared) }); }
+    catch { result.missingData.push('native_volume_selected_registration_invalid'); }
+  }
   return result;
+}
+
+/** Additive exact-ID read. Legacy historical selectors and their byte prefix,
+ * volumes and revisions are unchanged. Only an actual selected result can be
+ * prepared; public/caller-created data never becomes a binding credential. */
+export async function prepareTwLaunchNativeVolumeBinding(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest, selected: TwLaunchPatternReadEvidence) {
+  try {
+    const saved = launchSelections.get(selected);
+    requireAuthority(saved && saved.requestDigest === launchNativeContentDigest(request)
+      && saved.publicDigest === launchNativeContentDigest(selected) && saved.history === selected.history, 'native_volume_selected_read_not_original');
+    requireAuthority(request.exchange === 'TPEX' && selected.calendar?.status === 'validated_selected_window'
+      && selected.corporateActions && selected.history.missingData.length === 0 && selected.history.bars.length >= 240
+      && evidenceKnownAt(selected.history.availableAt, request.cutoff) && evidenceKnownAt(selected.calendar.availableAt, request.cutoff)
+      && evidenceKnownAt(selected.corporateActions.availableAt, request.cutoff), 'native_volume_selected_basis_missing');
+    const shared = saved.shared, bars = selected.history.bars.slice(-51), days = shared.sessions.slice(-51);
+    requireAuthority(bars.length === 51 && days.length === 51 && days.at(-1) === request.signalSession
+      && bars.every((bar, index) => bar.session === days[index]), 'native_volume_session_binding_invalid');
+    const snapshots = days.map(day => shared.snapshots.get(day)!);
+    requireAuthority(snapshots.every(snapshot => snapshot && !(shared.events.get(text(snapshot.snapshot_id)) ?? []).some(event => event.symbol === request.symbol)),
+      'native_volume_supported_feed_target_event');
+    const ids = bars.map(bar => bar.observationId);
+    requireAuthority(new Set(ids).size === 51 && ids.every(value => UUID.test(value)), 'native_volume_observation_ids_invalid');
+    const read = await client.from('opportunity_price_observations_v3')
+      .select('observation_id,stock_id,exchange,session_id,session_authority_id,raw_open,raw_high,raw_low,raw_close,volume,provider,source_timestamp,collected_at,source_ref,recorded_at')
+      .eq('stock_id', request.stockId).eq('exchange', request.exchange).eq('provider', 'tpex').in('observation_id', ids)
+      .lte('source_timestamp', request.cutoff).lte('collected_at', request.cutoff).lte('recorded_at', request.cutoff).range(0, 51);
+    requireAuthority(!read.error && Array.isArray(read.data) && read.data.length === 51 && saved.publicDigest === launchNativeContentDigest(selected)
+      && saved.requestDigest === launchNativeContentDigest(request) && saved.history === selected.history, 'native_volume_raw_read_changed');
+    const raw = read.data as Row[], rows: Array<TwLaunchNativePriceBinding['rows'][number]> = [];
+    requireAuthority(new Set(raw.map(row => row.observation_id)).size === 51, 'native_volume_raw_duplicate');
+    for (const bar of bars) {
+      const row = raw.find(item => item.observation_id === bar.observationId);
+      requireAuthority(row && row.stock_id === request.stockId && row.exchange === 'TPEX' && row.provider === 'tpex'
+        && row.session_id === bar.session && row.session_authority_id === shared.calendarRows.get(bar.session)?.session_authority_id
+        && knownAt(row, request.cutoff) && text(row.source_ref).startsWith('tpex-')
+        && compareEvidenceClocks(row.source_timestamp, bar.sourceTimestamp) === 0 && compareEvidenceClocks(row.recorded_at, bar.recordedAt) === 0
+        && row.volume === bar.volume, 'native_volume_raw_row_binding_invalid');
+      const actionDays = shared.sessions.filter(day => day > bar.session).map(day => {
+        const snapshot = shared.snapshots.get(day)!;
+        const action = shared.events.get(text(snapshot.snapshot_id))!.find(event => event.symbol === request.symbol);
+        return [day, snapshot.session_authority_id, snapshot.snapshot_id, snapshot.dataset_hash,
+          action ? [action.event_kind, action.pre_action_reference_price, action.post_action_reference_price, action.feed_identity, action.source_row_ref] : null,
+          action?.daily_adjustment_factor ?? 1];
+      });
+      const factor = actionDays.reduce((value, member) => value * Number(member[5]), 1);
+      const prices = [row.raw_open, row.raw_high, row.raw_low, row.raw_close];
+      requireAuthority(factor === 1 && prices.every(finitePositive) && prices.every((value, index) => value === [bar.open, bar.high, bar.low, bar.close][index])
+        && row.raw_close === bar.rawClose && hash(['adjusted-price-evidence-v3.1', request.signalSession, row.observation_id, row.source_ref,
+          row.session_authority_id, ...prices, actionDays, factor, ...prices]) === bar.sourceRef, 'native_volume_raw_ohlc_or_revision_mismatch');
+      rows.push(Object.freeze({ session: bar.session, observationId: bar.observationId, sourceRef: bar.sourceRef, calendarId: text(row.session_authority_id),
+        rawOpen: Number(row.raw_open), rawHigh: Number(row.raw_high), rawLow: Number(row.raw_low), rawClose: Number(row.raw_close), factor: 1,
+        legacyVolume: bar.volume, sourceTimestamp: bar.sourceTimestamp, recordedAt: bar.recordedAt, availableAt: bar.availableAt }));
+    }
+    requireAuthority(saved.publicDigest === launchNativeContentDigest(selected), 'native_volume_selected_read_changed');
+    launchNativeBindings.set(selected, Object.freeze({ requestDigest: saved.requestDigest, publicDigest: saved.publicDigest,
+      priceRevision: selected.history.sourceDatasetRevision, calendarRevision: selected.calendar.revisionId, actionsRevision: selected.corporateActions.revisionId,
+      availableAt: maxTime(selected.history.availableAt, selected.calendar.availableAt, selected.corporateActions.availableAt),
+      snapshotIds: Object.freeze(snapshots.map(snapshot => text(snapshot.snapshot_id))), rows: Object.freeze(rows) }));
+    return { ready: true, gaps: [] as string[] };
+  } catch (error) {
+    launchNativeBindings.delete(selected);
+    return { ready: false, gaps: [error instanceof Error && /^native_volume_[a-z_]+$/u.test(error.message) ? error.message : 'native_volume_binding_unavailable'] };
+  }
+}
+/** Read-only private-brand lookup; never accepts a caller-provided sidecar. */
+export function readTwLaunchNativeVolumeBinding(selected: TwLaunchPatternReadEvidence, request: TwEntryAuthorityRequest): TwLaunchNativePriceBinding | null {
+  try {
+    const saved = launchSelections.get(selected), binding = launchNativeBindings.get(selected);
+    return saved && binding && saved.requestDigest === launchNativeContentDigest(request)
+      && binding.publicDigest === launchNativeContentDigest(selected) && saved.history === selected.history ? binding : null;
+  } catch { return null; }
 }

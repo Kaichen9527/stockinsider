@@ -3,6 +3,10 @@ import test from 'node:test';
 import { launchPatternFixture } from './launch-patterns.ts';
 import { evaluateLaunchRules, launchRuleScorePage, LAUNCH_RULE_VERSION, type LaunchExternalEvidence } from './launch-score-rules.ts';
 import type { TwLaunchPatternReadEvidence } from '../tw-entry-plan-authority.ts';
+import { nativeVolumeFixture, officialCsvForNativeFixture } from './launch-native-volume.test-fixture.ts';
+import { parseTpexNativeShareReplay } from './launch-native-volume.ts';
+import { parseLaunchLicensedCsvReplay, bindLaunchOfficialReplay } from './launch-official-replay.ts';
+import { readLaunchPatterns } from './launch-pattern-read.ts';
 
 /** Entirely invented source-shaped numeric datasets, not acquired official data. */
 function dataset(zero = false) {
@@ -35,8 +39,7 @@ function dataset(zero = false) {
       snapshotIds: sessions.slice(-51).map((_, i) => `fixture-volume-snapshot-${i}`) } };
   const arithmetic = launchPatternFixture({ cutoff, market: 'TWSE', history,
     calendar: { completeness: 'complete_fixture', revisionId: calendar.revisionId, availableAt: calendar.availableAt, sessions: calendar.sessions },
-    volumeBasis: { status: 'comparable_fixture', revisionId: 'fixture-volume-v2', sourceDatasetRevision: history.sourceDatasetRevision,
-      availableAt: history.availableAt, fromSession: sessions[189], throughSession: last } });
+    volumeBasis: null, nativeVolumeOverlay: null, nativeVolumeSelection: evidence, actionsRevision: evidence.corporateActions!.revisionId });
   const source = { market: 'TWSE' as const, provider: 'twse' as const, sourceUrl: 'https://openapi.twse.com.tw/v1/exchangeReport/MI_INDEX',
     sourceRef: 'fixture-official-protocol', cutoff, availableAt: `${last}T14:02:00+08:00` };
   const external: LaunchExternalEvidence = {
@@ -50,8 +53,13 @@ function dataset(zero = false) {
   return { request, selected: { evidence, arithmetic }, external };
 }
 
-test('v2 fixed16-rule dataset produces100 points and70 technical without granting publication or ranking', () => {
-  const data = dataset(), before = structuredClone(data);
+test('v3 actual native-parser/mockselector proof produces100 points and70 technical without publication or ranking', async () => {
+  const fixture = nativeVolumeFixture(), native = parseTpexNativeShareReplay(fixture.manifest);
+  const replay = parseLaunchLicensedCsvReplay(officialCsvForNativeFixture(fixture));
+  const read = await readLaunchPatterns(fixture.client, fixture.request, replay, native);
+  const data = { request: fixture.request, selected: { evidence: read.evidence, arithmetic: read.arithmetic, nativeVolumeOverlay: read.nativeVolumeOverlay },
+    external: bindLaunchOfficialReplay(replay, fixture.request, read.evidence, read.nativeVolumeOverlay).external };
+  const before = structuredClone(data);
   const result = evaluateLaunchRules(data.request, data.selected, data.external);
   assert.equal(result.derivationVersion, LAUNCH_RULE_VERSION);
   assert.equal(result.rules.length, 16);
@@ -60,9 +68,9 @@ test('v2 fixed16-rule dataset produces100 points and70 technical without grantin
   assert.equal(result.technicalScore, 70);
   assert.equal(result.rankable, false); assert.equal(result.publicationAuthority, false); assert.equal(result.probability, false);
   assert.equal(result.observations!.chips!.foreign5.netShares, 5);
-  assert.equal(result.observations!.chips!.foreign5.volumeShares, 220);
+  assert.equal(result.observations!.chips!.foreign5.volumeShares, 4 * 2001 + 14002);
   const stock = 101 / data.selected.evidence.history.bars[176].close - 1;
-  const market = data.external.index!.rows[239].close / data.external.index!.rows[176].close - 1;
+  const market = data.external.index!.rows.at(-1)!.close / data.external.index!.rows.at(-64)!.close - 1;
   assert.equal(result.relativeStrength63, stock - market);
   assert.equal(result.rules.filter(rule => rule.group === 'trendRelativeStrength').reduce((sum, rule) => sum + rule.weight, 0), 25);
   assert.ok(!result.rules.some(rule => rule.id === 'trend_close_above_ma200'));
@@ -98,11 +106,13 @@ test('v2 fixed16-rule dataset produces100 points and70 technical without grantin
 
 test('known false remains zero and missing original hold proof cannot be widened beyond selected51', () => {
   const data = dataset(true), result = evaluateLaunchRules(data.request, data.selected, data.external);
-  assert.equal(result.availableWeight, 80);
+  assert.equal(result.availableWeight, 55);
   assert.equal(result.confirmedPoints, 0);
   assert.equal(result.totalScore, null);
-  assert.equal(result.components.consolidation.score, 0);
-  assert.equal(result.components.chips.score, 0);
+  assert.equal(result.components.consolidation.confirmedPoints, 0);
+  assert.equal(result.components.consolidation.availableWeight, 20);
+  assert.equal(result.components.consolidation.score, null);
+  assert.equal(result.components.chips.score, null);
   assert.equal(result.observations!.closingHold, null);
   for (const after of [1, 5, 6]) {
     const missing = dataset(true), original = missing.selected.evidence.history.bars[239 - after];
@@ -117,8 +127,8 @@ test('known false remains zero and missing original hold proof cannot be widened
 
 test('partial weights, missing units/source/cutoff/finality/horizon and unknown ties stay explicit', () => {
   const data = dataset(), partial = evaluateLaunchRules(data.request, data.selected);
-  assert.equal(partial.availableWeight, 60);
-  assert.equal(partial.confirmedPoints, 60);
+  assert.equal(partial.availableWeight, 35);
+  assert.equal(partial.confirmedPoints, 35);
   assert.equal(partial.totalScore, null);
   for (const mode of ['chips_missing_net', 'chips_fractional', 'chips_impossible', 'wrong_units', 'wrong_revision', 'preclose', 'index_short', 'wrong_market', 'share_action', 'cutoff'] as const) {
     const changed = dataset();
@@ -136,9 +146,8 @@ test('partial weights, missing units/source/cutoff/finality/horizon and unknown 
     assert.equal(score.totalScore, null, mode);
     assert.ok(score.availableWeight < 100, mode);
     if (mode === 'chips_fractional' || mode === 'chips_impossible') {
-      assert.equal(score.components.chips.availableWeight, 10, mode);
-      assert.equal(score.observations!.chips!.foreign5.netShares, null, mode);
-      assert.equal(score.observations!.chips!.trust5.netShares, 10, mode);
+      assert.equal(score.components.chips.availableWeight, 0, mode);
+      assert.equal(score.observations!.chips, null, 'legacy numeric volumes lack independent continuity before net validation');
     }
   }
   const mismatch = dataset(); mismatch.selected.arithmetic.sourceDatasetRevision = 'wrong-source';

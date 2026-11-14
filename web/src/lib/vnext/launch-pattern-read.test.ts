@@ -104,9 +104,11 @@ test('existing selector evidence feeds240-bar offline arithmetic with explicit f
   assert.equal(result.evidence.shareVolume?.fromSession, sessions[189]);
   assert.equal(result.arithmetic.scope, 'offline_fixture_only');
   assert.equal(result.arithmetic.close, 100);
-  assert.equal(result.arithmetic.breakout.volumeRatio, 1);
+  assert.equal(result.arithmetic.breakout.volumeRatio, null);
+  assert.equal(result.evidence.shareVolume?.completeCapitalCoverage, false);
+  assert.ok(result.gaps.includes('launch_supported_feeds_do_not_prove_capital_continuity'));
   assert.equal(result.arithmetic.originalBreakout, null);
-  assert.deepEqual(result.evidence.missingData, []);
+  assert.deepEqual(result.evidence.missingData, ['launch_supported_feeds_do_not_prove_capital_continuity']);
   assert.deepEqual(data, before);
   assert.ok(reads.every(table => Object.values(tables).includes(table)));
 });
@@ -156,7 +158,7 @@ test('unrelated instrument events do not become candidate share changes', async 
   const { data, request } = fixture({ index: 199, kind: 'ex_right_dividend', symbol: '00984D' });
   const result = await readLaunchPatterns(mockClient(data).client, request);
   assert.equal(result.evidence.shareVolume?.status, 'no_candidate_events_in_selected_51');
-  assert.equal(result.arithmetic.breakout.volumeRatio, 1);
+  assert.equal(result.arithmetic.breakout.volumeRatio, null, 'empty supported feeds are not independent capital continuity');
 });
 
 test('recent21 share-change refusal remains exactly the original historical guard', async () => {

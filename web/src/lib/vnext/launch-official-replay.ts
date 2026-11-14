@@ -9,6 +9,8 @@ import type { TwEntryAuthorityRequest, TwLaunchPatternReadEvidence } from '../tw
 import type { LaunchExternalEvidence } from './launch-score-rules.ts';
 import { evidenceInstant } from './evidence-clock.ts';
 import { sha256Canonical } from '../opportunity-v3/canonical.ts';
+import { decodeLicensedCsvRecords as csvRecords } from './licensed-csv-decoder.ts';
+import { resolveNativeVolumeOverlay, nativeVolumeContext } from './launch-native-volume.ts';
 
 export const OFFICIAL_REPLAY_SCHEMA = 'launch-official-public-replay-v1';
 export const OFFICIAL_REPLAY_PARSER = 'twse-t86-taiex-and-tpex-dailytrade-inx-v1';
@@ -266,7 +268,7 @@ export function parseLaunchOfficialReplay(value: unknown, files: ReadonlyMap<str
 /** Only parser-created state can bind; all requested sessions still come from
  * actual existing selected price/action/calendar evidence, not observed dates. */
 export type LaunchOfficialReplayRead = ReturnType<typeof parseLaunchOfficialReplay> | ReturnType<typeof parseLaunchLicensedCsvReplay>;
-export function bindLaunchOfficialReplay(read: LaunchOfficialReplayRead, request: TwEntryAuthorityRequest, selected: TwLaunchPatternReadEvidence) {
+export function bindLaunchOfficialReplay(read: LaunchOfficialReplayRead, request: TwEntryAuthorityRequest, selected: TwLaunchPatternReadEvidence, nativeVolumeOverlay?: unknown) {
   const state = states.get(read); if (!state) fail('official_replay_foreign_or_cloned_read');
   const gaps = [...state.gaps], external: LaunchExternalEvidence = {};
   const attributions = state.attributions?.map(item => ({ ...item })) ?? [];
@@ -294,14 +296,12 @@ export function bindLaunchOfficialReplay(read: LaunchOfficialReplayRead, request
   if (indexes.length === 200) external.index = { ...source(indexes), rows: indexes.map(({ item, row }) =>
     ({ session: row.session, close: (row as IndexRow).close, sourceTimestamp: item.page.observedAt, availableAt: item.availableAt })) };
   else gaps.push('official_replay_200_selected_index_sessions_missing');
-  const flows = select('institutional_day', 20).filter((item): item is Match => item !== null), share = selected.shareVolume;
-  if (request.exchange === 'TPEX') gaps.push('tpex_exact_native_share_volume_20_and_51_not_proven');
-  else if (share && share.status === 'no_candidate_events_in_selected_51' && share.snapshotIds.length === 51
-    && share.sourceDatasetRevision === selected.history.sourceDatasetRevision && known(share.availableAt, request.cutoff)
-    && selected.history.bars.slice(-51).every(bar => Number.isSafeInteger(bar.volume) && bar.volume >= 0)
-    && share.fromSession <= selected.history.bars.at(-51)!.session && share.throughSession === request.signalSession && flows.length === 20
+  const flows = select('institutional_day', 20).filter((item): item is Match => item !== null);
+  const native = resolveNativeVolumeOverlay(nativeVolumeOverlay, nativeVolumeContext(selected, request));
+  if (!native) gaps.push(request.exchange === 'TPEX' ? 'tpex_exact_native_share_volume_20_and_51_not_proven' : 'official_replay_independent_capital_continuity_missing');
+  else if (native.fromSession === selected.history.bars.at(-51)!.session && native.throughSession === request.signalSession && flows.length === 20
     && flows.every(({ row }) => (row as FlowRow).symbol === request.symbol)) external.chips = { ...source(flows), symbol: request.symbol, unit: 'shares', volumeUnit: 'shares',
-    priceRevision: selected.history.sourceDatasetRevision, calendarRevision: calendar.revisionId, shareVolumeRevision: share.revisionId,
+    priceRevision: selected.history.sourceDatasetRevision, calendarRevision: calendar.revisionId, shareVolumeRevision: native.revisionId,
     rows: flows.map(({ item, row }) => ({ session: row.session, foreignNetShares: (row as FlowRow).foreignNetShares,
       trustNetShares: (row as FlowRow).trustNetShares, sourceTimestamp: item.page.observedAt, availableAt: item.availableAt })) };
   else gaps.push('official_replay_20_selected_flow_sessions_or_exact_volume_missing');
@@ -369,27 +369,6 @@ export function officialLicensedCsvUrl(datasetId: CsvDataset, key: string) {
 
 /** Strict bounded RFC4180 fields, accepting CRLF or LF records, one UTF8 BOM,
  * doubled quotes and quoted commas/newlines. No preamble/header guessing. */
-function csvRecords(input: string, maximumRows: number) {
-  const value = input.startsWith('\uFEFF') ? input.slice(1) : input;
-  const rows: string[][] = []; let row: string[] = [], field = '', quoted = false, closed = false;
-  const endField = () => { row.push(field); field = ''; closed = false; if (row.length > 32) fail('official_csv_column_bound'); };
-  const endRow = () => { endField(); rows.push(row); row = []; if (rows.length > maximumRows) fail('official_csv_row_bound'); };
-  for (let i = 0; i < value.length; i++) {
-    const c = value[i];
-    if (quoted) {
-      if (c === '"') { if (value[i + 1] === '"') { field += '"'; i++; } else { quoted = false; closed = true; } }
-      else field += c;
-    } else if (c === ',') endField();
-    else if (c === '\r' || c === '\n') { if (c === '\r' && value[++i] !== '\n') fail('official_csv_line_ending_invalid'); endRow(); }
-    else if (closed) fail('official_csv_quote_invalid');
-    else if (c === '"') { if (field !== '') fail('official_csv_quote_invalid'); quoted = true; }
-    else field += c;
-    if (field.length > 1024) fail('official_csv_cell_bound');
-  }
-  if (quoted) fail('official_csv_quote_invalid');
-  if (field !== '' || closed || row.length) endRow();
-  return rows;
-}
 function csvRows(page: CsvPage, body: string) {
   const resource = CSV_RESOURCES[page.datasetId], records = csvRecords(body, resource.kind === 'index_month' ? 32 : 5001);
   if (records.length < 2 || JSON.stringify(records[0]) !== JSON.stringify(resource.headers)

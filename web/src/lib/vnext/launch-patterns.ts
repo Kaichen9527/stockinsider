@@ -1,11 +1,12 @@
 import { isHistoryDate } from '../candidate-price-history.ts';
 import { wilderAtr } from '../technical-indicator-adapter.ts';
-import type { TwEntryHistoricalAuthorityResult } from '../tw-entry-plan-authority.ts';
+import type { TwEntryHistoricalAuthorityResult, TwLaunchPatternReadEvidence } from '../tw-entry-plan-authority.ts';
 import { evidenceInstant } from './evidence-clock.ts';
+import { resolveNativeVolumeOverlay } from './launch-native-volume.ts';
 
 /** Offline arithmetic only. No provider, calendar or publication authority is
  * established by the supplied fixture or by this module. */
-export const LAUNCH_PATTERN_RULESET = 'launch-pattern-observations-v1';
+export const LAUNCH_PATTERN_RULESET = 'launch-pattern-observations-v2';
 type Market = 'TWSE' | 'TPEX';
 type Bar = TwEntryHistoricalAuthorityResult['bars'][number];
 type Revision = { revisionId: string; availableAt: string };
@@ -18,6 +19,13 @@ export type LaunchPatternFixture = {
   /** Price adjustments do not prove comparable share volumes. The current
    * historical loader only checks its recent21 window, less than prior50. */
   volumeBasis: (Revision & { status: 'comparable_fixture'; sourceDatasetRevision: string; fromSession: string; throughSession: string }) | null;
+  /** Explicit native overlay in selected reads; null/invalid means no fallback.
+   * Omission is reserved for labelled offline fixture assumptions. */
+  nativeVolumeOverlay?: unknown;
+  symbol?: string;
+  stockId?: string;
+  nativeVolumeSelection?: TwLaunchPatternReadEvidence;
+  actionsRevision?: string | null;
   benchmark?: Revision & { market: Market; points: Array<{ session: string; close: number; availableAt: string }> };
   officialLimit?: Revision & { market: Market; session: string; upperLimit: number; onePriceLocked: boolean };
   /** Frozen original event. A later action/correction cannot silently rebase
@@ -55,6 +63,13 @@ export function launchPatternFixture(input: LaunchPatternFixture) {
   };
   const revisionKnown = (value: Revision) => nonempty(value.revisionId) && known(value.availableAt);
   const history = input.history;
+  const overlaySupplied = Object.hasOwn(input, 'nativeVolumeOverlay');
+  const native = overlaySupplied ? resolveNativeVolumeOverlay(input.nativeVolumeOverlay, { history, selection: input.nativeVolumeSelection,
+    symbol: input.symbol ?? null, stockId: input.stockId ?? null, market: input.market, signalSession: history.completedSessions.at(-1) ?? null,
+    calendarRevision: input.calendar.revisionId, calendarAvailableAt: input.calendar.availableAt,
+    calendarRows: input.calendar.sessions.map(row => ({ session: row.session, closeAt: row.closeAt })),
+    actionsRevision: input.actionsRevision ?? null, cutoff: input.cutoff }) : null;
+  if (overlaySupplied && native === null) gaps.add('native_volume_overlay_missing_or_invalid');
   const sessions = input.calendar.sessions;
   const bars = history.bars;
   const current = bars.at(-1);
@@ -103,6 +118,7 @@ export function launchPatternFixture(input: LaunchPatternFixture) {
     return selected ? average(selected.map(bar => bar.close)) : null;
   };
   const comparableVolume = (selected: Bar[] | null) => {
+    if (overlaySupplied) return selected !== null && native !== null && selected.every(bar => native.volumeOf(bar.session) !== null);
     const evidence = input.volumeBasis;
     const through = evidence === null ? undefined : sessions.find(row => row.session === evidence.throughSession);
     return selected !== null && evidence !== null && evidence.status === 'comparable_fixture'
@@ -112,6 +128,11 @@ export function launchPatternFixture(input: LaunchPatternFixture) {
       && evidenceInstant(evidence.availableAt)! >= evidenceInstant(through.closeAt)!
       && evidence.fromSession <= selected[0].session && evidence.throughSession >= selected.at(-1)!.session;
   };
+  const volumeOf = (bar: Bar | undefined): number | null => !bar ? null : overlaySupplied ? native?.volumeOf(bar.session) ?? null : bar.volume;
+  const meanVolume = (selected: Bar[]) => {
+    const values = selected.map(volumeOf);
+    return values.every((value): value is number => value !== null) ? average(values) : null;
+  };
   const prior25 = window(25, bars.length - 1);
   const prior25High = prior25 ? Math.max(...prior25.map(bar => bar.high)) : null;
   const prior25Low = prior25 ? Math.min(...prior25.map(bar => bar.low)) : null;
@@ -120,19 +141,19 @@ export function launchPatternFixture(input: LaunchPatternFixture) {
   const consolidation = rangeDepth === null || distanceFromHigh === null ? null : rangeDepth <= 0.15 && distanceFromHigh <= 0.05;
   const prior50 = window(50, bars.length - 1);
   const volume51 = window(51);
-  const prior50MeanVolume = comparableVolume(volume51) ? average(prior50!.map(bar => bar.volume)) : null;
+  const prior50MeanVolume = comparableVolume(volume51) ? meanVolume(prior50!) : null;
   if (!prior25) gaps.add('prior25_official_prices_missing');
   if (!prior50) gaps.add('prior50_official_prices_missing');
   if (!comparableVolume(volume51)) gaps.add('prior50_and_current_share_volume_basis_unproven');
-  const breakoutVolumeRatio = ratio(valid ? current!.volume : null, prior50MeanVolume);
+  const breakoutVolumeRatio = ratio(valid ? volumeOf(current) : null, prior50MeanVolume);
   if (breakoutVolumeRatio === null) gaps.add('breakout_volume_ratio_unavailable');
   const breakout = prior25High === null || breakoutVolumeRatio === null ? null
     : current!.close > prior25High && breakoutVolumeRatio >= 1.4;
   // Disjoint volume windows: recent5[t-4..t], previous20[t-24..t-5].
   // Current belongs to the numerator only, never its comparison baseline.
   const recent25 = window(25);
-  const recent5MeanVolume = comparableVolume(recent25) ? average(recent25!.slice(-5).map(bar => bar.volume)) : null;
-  const previous20MeanVolume = comparableVolume(recent25) ? average(recent25!.slice(0, 20).map(bar => bar.volume)) : null;
+  const recent5MeanVolume = comparableVolume(recent25) ? meanVolume(recent25!.slice(-5)) : null;
+  const previous20MeanVolume = comparableVolume(recent25) ? meanVolume(recent25!.slice(0, 20)) : null;
   const volumeContractionRatio = ratio(recent5MeanVolume, previous20MeanVolume);
   if (volumeContractionRatio === null) gaps.add('volume_contraction_ratio_unavailable');
   if (!comparableVolume(recent25)) gaps.add('contraction_share_volume_basis_unproven');
@@ -160,8 +181,8 @@ export function launchPatternFixture(input: LaunchPatternFixture) {
     const original = bars[breakoutIndex];
     const level = Math.max(...bars.slice(breakoutIndex - 25, breakoutIndex).map(bar => bar.high));
     const originalWindow = window(51, breakoutIndex + 1);
-    const mean = comparableVolume(originalWindow) ? average(bars.slice(breakoutIndex - 50, breakoutIndex).map(bar => bar.volume)) : null;
-    if (frozenBreakout.level === level && original.close > level && mean !== null && ratio(original.volume, mean)! >= 1.4) {
+    const mean = comparableVolume(originalWindow) ? meanVolume(bars.slice(breakoutIndex - 50, breakoutIndex)) : null;
+    if (frozenBreakout.level === level && original.close > level && mean !== null && ratio(volumeOf(original), mean)! >= 1.4) {
       const after = bars.slice(breakoutIndex + 1);
       originalBreakout = { session: original.session, level: frozenBreakout.level, sessionsSince: after.length,
         closesAtOrAboveLevel: after.length >= 1 && after.length <= 5 ? after.every(bar => bar.close >= level) : null,
@@ -214,6 +235,7 @@ export function launchPatternFixture(input: LaunchPatternFixture) {
     rulesetVersion: LAUNCH_PATTERN_RULESET, scope: 'offline_fixture_only' as const, activation: 'not_connected' as const,
     sourceAuthority: false as const, rankingAuthority: false as const, publicationAuthority: false as const, cutoff: input.cutoff,
     sourceDatasetRevision: history.sourceDatasetRevision, calendarRevision: input.calendar.revisionId,
+    nativeVolumeRevision: native?.revisionId ?? null,
     adjustmentEvidenceHash: basis?.adjustmentEvidenceHash ?? null,
     session: valid ? current!.session : null, close: valid ? current!.close : null,
     consolidation: { prior25High, prior25Low, rangeDepth, distanceFromHigh, matches: consolidation },

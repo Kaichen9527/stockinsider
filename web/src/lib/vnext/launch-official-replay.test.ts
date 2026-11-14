@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { officialTaiwanDataUrl } from '../taiwan-data-provider.ts';
+import { sha256Canonical } from '../opportunity-v3/canonical.ts';
 import { officialLaunchHistoricalUrl, parseLaunchOfficialReplay, bindLaunchOfficialReplay, officialReplayObservationPlan } from './launch-official-replay.ts';
 import type { TwLaunchPatternReadEvidence } from '../tw-entry-plan-authority.ts';
 
@@ -76,15 +77,28 @@ test('historical constructors preserve latest provider defaults and canonical ro
   assert.equal(officialTaiwanDataUrl({ dataset: 'institutional_flow', exchange: 'TPEX', phase: 'final', sessionDate: '2026-11-13' }), 'https://www.tpex.org.tw/openapi/v1/tpex_3insti_daily_trading');
 });
 
-test('real byte hashing differs from canonical JSON; bounded synthetic rows bind200 index/20 share flows without authority', () => {
+test('raw share flows still parse and200 index rows bind, while missing independent capital continuity withholds chips', () => {
   const { manifest, sessions } = fixture(), before = structuredClone(manifest), read = parseLaunchOfficialReplay(manifest);
   assert.equal(read.sourceAuthority, false); assert.equal(read.redistributionAuthority, false);
   assert.equal(read.parsedPages, manifest.responses.length);
   assert.notEqual(read.responseReceipts[0].rawSha256, read.responseReceipts[0].canonicalPayloadSha256);
+  for (const market of ['TWSE', 'TPEX'] as const) {
+    const flows = read.responseReceipts.filter(row => row.market === market && row.kind === 'institutional_day');
+    assert.equal(flows.length, 21);
+    for (const flow of flows) {
+      assert.equal(flow.candidateFlowRows, 1, 'valid buy/sell/net packets still pass raw parsing');
+      const page = manifest.responses.find(row => row.market === market && row.kind === 'institutional_day' && row.requestKey === flow.requestKey)!;
+      const payload = JSON.parse(Buffer.from(page.body.data, 'base64').toString('utf8'));
+      assert.equal(flow.canonicalPayloadSha256, sha256Canonical(payload));
+    }
+  }
   const twse = bindLaunchOfficialReplay(read, request('TWSE'), selected(sessions, 'TWSE'));
-  assert.equal(twse.external.index?.rows.length, 200); assert.equal(twse.external.chips?.rows.length, 20);
-  assert.equal(twse.external.chips?.rows[0].foreignNetShares, 1);
-  assert.equal(twse.external.chips?.rows[0].sourceTimestamp, observedAt);
+  assert.equal(twse.external.index?.rows.length, 200);
+  // User-authorized capitalChange/GDS finding: the old no-event fixture is
+  // not independent continuity proof. Full chip positives require the native
+  // parser/selected-reader brand covered by the native overlay suite.
+  assert.equal(twse.external.chips, undefined);
+  assert.ok(twse.gaps.includes('official_replay_independent_capital_continuity_missing'));
   const tpex = bindLaunchOfficialReplay(read, request('TPEX'), selected(sessions, 'TPEX'));
   assert.equal(tpex.external.index?.rows.length, 200);
   assert.equal(tpex.external.chips, undefined, 'integer scaled lots cannot prove exact native shares');
@@ -155,7 +169,7 @@ test('physical missing bytes are gaps, not zeros; metadata-only receipt cannot i
   assert.throws(() => bindLaunchOfficialReplay(plan as unknown as ReturnType<typeof parseLaunchOfficialReplay>, request('TWSE'), selected(sessions, 'TWSE')), /foreign_or_cloned/u);
 });
 
-test('selected calendar/action availability and exact integerTWSE volume remain mandatory, with no earlier-cutoff replay', () => {
+test('selected prerequisites fail before index binding and no native overlay can be replaced by legacy volume', () => {
   const { manifest, sessions } = fixture(), read = parseLaunchOfficialReplay(manifest);
   for (const mode of ['clock', 'calendar', 'action', 'volume'] as const) {
     const source = selected(sessions, 'TWSE');
@@ -165,6 +179,13 @@ test('selected calendar/action availability and exact integerTWSE volume remain 
     if (mode === 'volume') source.history.bars.at(-1)!.volume = 1.5;
     const bound = bindLaunchOfficialReplay(read, request('TWSE'), source);
     assert.equal(bound.external.chips, undefined, mode);
+    if (mode === 'volume') {
+      assert.equal(bound.external.index?.rows.length, 200, 'volume uncertainty does not erase price-only inputs');
+      assert.ok(bound.gaps.includes('official_replay_independent_capital_continuity_missing'));
+    } else {
+      assert.equal(bound.external.index, undefined, mode);
+      assert.ok(bound.gaps.includes('official_replay_selected_binding_missing'), mode);
+    }
   }
   assert.equal(bindLaunchOfficialReplay(read, { ...request('TWSE'), cutoff: '2026-11-13T21:30:00+08:00' }, selected(sessions, 'TWSE')).external.index, undefined);
 });

@@ -19,6 +19,32 @@ function run(root, mode, input) {
   return spawnSync(process.execPath, ['--no-warnings', '--experimental-strip-types', script, '--root', root, mode, input],
     { cwd: repo, encoding: 'utf8', timeout: 10000, env: { PATH: '/usr/bin:/bin' } });
 }
+// Synthetic native-share rows exercise the byte importer, not real acquisition
+// or the private selected-price/calendar/action overlay required by scoring.
+function nativeFixture({ changedIssuedShares = false, absent = false } = {}) {
+  const { root } = fixture(), directory = path.join(root, 'bodies'); fs.mkdirSync(directory, { mode: 0o700 });
+  const sessions = ['2026-11-12', '2026-11-13'], observedAt = '2026-11-14T18:00:00Z';
+  const headers = ['資料日期', '代號', '名稱', '收盤', '漲跌', '開盤', '最高', '最低', '成交股數', '成交金額', '成交筆數', '最後買價', '最後賣價', '發行股數', '次日漲停價', '次日跌停價'];
+  const responses = sessions.map((session, index) => {
+    const issued = changedIssuedShares && index === 1 ? '1,100,000' : '1,000,000';
+    const rows = ['5274', '6488'].map(symbol => [`115/11/${session.slice(8)}`, symbol, 'SYNTHETIC_NATIVE_FIXTURE', '101', '1', '100', '102', '99', '10,000', '1,010,000', '100', '100', '101', issued, '111', '91']);
+    const bytes = '\uFEFF' + [headers, ...rows].map(row => row.map(cell => `"${cell.replaceAll('"', '""')}"`).join(',')).join('\r\n') + '\r\n';
+    const filename = `bodies/${session}.csv`; fs.writeFileSync(path.join(root, filename), bytes, { mode: 0o600 });
+    return { session, sourceUrl: `https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F11%2F${session.slice(8)}`,
+      observedAt, publisherPublishedAt: null, httpStatus: 200, redirectCount: 0, contentType: 'text/csv', bytes: Buffer.byteLength(bytes),
+      rawSha256: createHash('sha256').update(bytes).digest('hex'), body: absent ? { encoding: 'absent' } : { encoding: 'file', path: filename } };
+  });
+  const manifest = { schema: 'launch-tpex-11371-native-shares-v1', datasetId: 11371, symbol: '6488', cutoff: '2026-11-15T00:00:00Z',
+    capture: { repository: 'fixture/offline', sourceCommit: 'f'.repeat(40), workflowPath: null, runId: null, runAttempt: null, startedAt: '2026-11-14T17:00:00Z', completedAt: observedAt },
+    sessions, responses };
+  const input = path.join(root, 'native-manifest.json');
+  const save = () => fs.writeFileSync(input, JSON.stringify(manifest), { mode: 0o600 }); save();
+  return { root, input, manifest, save };
+}
+function refused(result) {
+  assert.equal(result.status, 1); assert.equal(result.stdout, '');
+  assert.equal(result.stderr, 'official_exchange_replay_refused\n');
+}
 test('offline CLI reads only explicit private work inputs and emits metadata, never raw data or rights', () => {
   const { root, input } = fixture(), result = run(root, '--receipt', input);
   assert.equal(result.status, 0, result.stderr);
@@ -60,6 +86,60 @@ test('offline CLI dispatches licensed CSV with resource attribution and separate
   assert.equal(output.attributions[0].licenseUrl, 'https://data.gov.tw/license'); assert.equal(output.sourceAuthority, false);
   assert.equal(output.responseReceipts[0].canonicalPayloadSha256, undefined);
   assert.notEqual(output.responseReceipts[0].rawSha256, output.responseReceipts[0].canonicalCsvRowsSha256);
+});
+test('offline CLI dispatches native11371 bytes once per symbol with attribution and no selected overlay authority', () => {
+  const { root, input, manifest, save } = nativeFixture();
+  for (const symbol of ['5274', '6488']) {
+    manifest.symbol = symbol; save();
+    const result = run(root, '--manifest', input); assert.equal(result.status, 0, result.stderr);
+    const output = JSON.parse(result.stdout);
+    assert.equal(output.schema, manifest.schema); assert.equal(output.symbol, symbol); assert.equal(output.parsedSessions, 2);
+    assert.equal(output.declaredBytes, manifest.responses.reduce((sum, response) => sum + response.bytes, 0));
+    assert.equal(output.decodedBytes, output.declaredBytes); assert.deepEqual(output.issuedShareChanges, []);
+    assert.equal(output.attribution.datasetId, 11371); assert.equal(output.attribution.datasetUrl, 'https://data.gov.tw/dataset/11371');
+    assert.equal(output.attribution.licenseUrl, 'https://data.gov.tw/license'); assert.equal(output.attribution.exchange, 'TPEX');
+    assert.equal(output.sourceAuthority, false); assert.equal(output.publicationAuthority, false);
+    assert.equal(output.instrumentQualificationAuthority, false); assert.equal(output.liquidityQualificationAuthority, false);
+    assert.ok(output.gaps.includes('native_share_capture_workflow_identity_unverified'));
+    assert.equal(output.responseReceipts.length, 2);
+    assert.equal(output.responseReceipts[0].rawSha256, manifest.responses[0].rawSha256);
+    assert.notEqual(output.responseReceipts[0].rawSha256, output.responseReceipts[0].csvRowsSha256);
+    for (const quote of output.nextDayLimitQuotes) {
+      assert.equal(quote.targetSession, null); assert.equal(quote.currentLimitAuthority, false); assert.equal(quote.onePriceLocked, null);
+    }
+    assert.ok(!result.stdout.includes('SYNTHETIC_NATIVE_FIXTURE')); assert.ok(!result.stdout.includes('"shares"'));
+  }
+});
+test('offline CLI exposes an observed issued-share change interval without inventing event, effective session or factor', () => {
+  const { root, input } = nativeFixture({ changedIssuedShares: true }), result = run(root, '--manifest', input);
+  assert.equal(result.status, 0, result.stderr);
+  const output = JSON.parse(result.stdout);
+  assert.deepEqual(output.issuedShareChanges, [{ previousSession: '2026-11-12', currentSession: '2026-11-13',
+    previousIssuedShares: 1000000, currentIssuedShares: 1100000, deltaShares: 100000, effectiveSession: null, eventKind: null, adjustmentFactor: null }]);
+  assert.equal(output.sourceAuthority, false); assert.equal(output.publicationAuthority, false);
+});
+test('offline CLI native metadata-only manifests decode zero bytes and cannot establish native rows', () => {
+  const { root, input, manifest } = nativeFixture({ absent: true }), result = run(root, '--manifest', input);
+  assert.equal(result.status, 0, result.stderr);
+  const output = JSON.parse(result.stdout);
+  assert.equal(output.decodedBytes, 0); assert.equal(output.parsedSessions, 0);
+  assert.equal(output.declaredBytes, manifest.responses.reduce((sum, response) => sum + response.bytes, 0));
+  assert.deepEqual(output.responseReceipts, []); assert.deepEqual(output.issuedShareChanges, []); assert.deepEqual(output.nextDayLimitQuotes, []);
+  assert.ok(output.gaps.includes('native_share_raw_body_missing')); assert.equal(output.sourceAuthority, false);
+});
+test('offline CLI native import refuses hash, native page bound, symlink and private-path violations without disclosure', () => {
+  const { root, input, manifest, save } = nativeFixture();
+  const original = structuredClone(manifest.responses[0]);
+  manifest.responses[0].rawSha256 = '0'.repeat(64); save(); refused(run(root, '--manifest', input));
+  manifest.responses[0] = structuredClone(original);
+  const oversized = path.join(root, 'bodies', 'large.csv'); fs.writeFileSync(oversized, ''); fs.truncateSync(oversized, 500001);
+  manifest.responses[0].body.path = 'bodies/large.csv'; manifest.responses[0].bytes = 500001; save(); refused(run(root, '--manifest', input));
+  manifest.responses[0] = structuredClone(original);
+  const outside = fixture(); fs.symlinkSync(outside.input, path.join(root, 'bodies', 'linked.csv'));
+  manifest.responses[0].body.path = 'bodies/linked.csv'; save(); refused(run(root, '--manifest', input));
+  manifest.responses[0].body.path = 'bodies/../../private.csv'; save(); refused(run(root, '--manifest', input));
+  manifest.responses[0] = original; save(); refused(run(root, '--manifest', outside.input));
+  fs.chmodSync(root, 0o755); refused(run(root, '--manifest', input));
 });
 test('offline CLI rejects outside roots, symlinks, broad permissions and oversized input without path disclosure', () => {
   const { root, input } = fixture(), outside = fixture(), link = path.join(root, 'linked.json'); fs.symlinkSync(input, link);

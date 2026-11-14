@@ -2,9 +2,10 @@ import type { TwEntryAuthorityRequest, TwLaunchPatternReadEvidence } from '../tw
 import { launchPatternFixture, type LaunchPatternFixture } from './launch-patterns.ts';
 import { evidenceInstant } from './evidence-clock.ts';
 import { sha256Canonical } from '../opportunity-v3/canonical.ts';
+import { resolveNativeVolumeOverlay, nativeVolumeContext } from './launch-native-volume.ts';
 
 export const LAUNCH_RULE_POLICY = 'stockinsider-launch-radar-v1';
-export const LAUNCH_RULE_VERSION = 'launch-radar-comparisons-v2';
+export const LAUNCH_RULE_VERSION = 'launch-radar-comparisons-v3';
 type Market = 'TWSE' | 'TPEX';
 type Source = { revisionId: string; market: Market; provider: 'twse' | 'tpex'; sourceUrl: string; sourceRef: string; availableAt: string; cutoff: string };
 export type LaunchIndexEvidence = Source & { rows: Array<{ session: string; close: number; sourceTimestamp: string; availableAt: string }> };
@@ -13,8 +14,8 @@ export type LaunchChipEvidence = Source & { symbol: string; unit: 'shares'; volu
   rows: Array<{ session: string; foreignNetShares: number | null; trustNetShares: number | null; sourceTimestamp: string; availableAt: string }> };
 export type LaunchExternalEvidence = { index?: LaunchIndexEvidence | null; chips?: LaunchChipEvidence | null;
   frozenOriginal?: LaunchPatternFixture['originalBreakout'] };
-type Selected = { evidence: TwLaunchPatternReadEvidence; arithmetic: ReturnType<typeof launchPatternFixture> };
-type Request = Pick<TwEntryAuthorityRequest, 'symbol' | 'exchange' | 'cutoff' | 'signalSession'>;
+type Selected = { evidence: TwLaunchPatternReadEvidence; arithmetic: ReturnType<typeof launchPatternFixture>; nativeVolumeOverlay?: unknown };
+type Request = Pick<TwEntryAuthorityRequest, 'symbol' | 'exchange' | 'cutoff' | 'signalSession'> & { stockId?: string };
 type Group = 'trendRelativeStrength' | 'consolidation' | 'breakoutHold' | 'chips' | 'market';
 const groupWeights: Record<Group, number> = { trendRelativeStrength: 25, consolidation: 25, breakoutHold: 20, chips: 20, market: 10 };
 const canonicalRules = {
@@ -47,14 +48,13 @@ export function evaluateLaunchRules(request: Request, selected: Selected, extern
   const known = (at: string) => evidenceInstant(at) !== null && evidenceInstant(at)! <= evidenceInstant(request.cutoff)!;
   // Matching metadata does not validate caller-supplied pattern flags. Reuse
   // the actual deterministic core on selected operands before awarding points.
-  const shareEvidence = evidence.shareVolume;
-  const arithmetic = launchPatternFixture({ cutoff: request.cutoff, market: request.exchange, history,
+  const native = resolveNativeVolumeOverlay(selected.nativeVolumeOverlay, nativeVolumeContext(evidence, request));
+  const arithmetic = launchPatternFixture({ cutoff: request.cutoff, market: request.exchange, symbol: request.symbol, stockId: request.stockId, history,
     calendar: { completeness: calendar?.status === 'validated_selected_window' ? 'complete_fixture' : 'unknown',
       revisionId: calendar?.revisionId ?? '', availableAt: calendar?.availableAt ?? request.cutoff,
       sessions: calendar?.sessions.map(row => ({ session: row.session, closeAt: row.closeAt })) ?? [] },
-    volumeBasis: shareEvidence ? { status: 'comparable_fixture', revisionId: shareEvidence.revisionId,
-      sourceDatasetRevision: shareEvidence.sourceDatasetRevision, availableAt: shareEvidence.availableAt,
-      fromSession: shareEvidence.fromSession, throughSession: shareEvidence.throughSession } : null,
+    volumeBasis: null, nativeVolumeOverlay: selected.nativeVolumeOverlay ?? null, nativeVolumeSelection: evidence,
+    actionsRevision: evidence.corporateActions?.revisionId ?? null,
     originalBreakout: external.frozenOriginal });
   const bindingValid = sha256Canonical(selected.arithmetic) === sha256Canonical(arithmetic);
   const valid = bindingValid && arithmetic.close !== null && history.missingData.length === 0
@@ -101,19 +101,17 @@ export function evaluateLaunchRules(request: Request, selected: Selected, extern
   const stock20 = priceReturn(20), stock63 = priceReturn(63), market20 = marketReturn(20), market63 = marketReturn(63);
   const excess20 = stock20 !== null && market20 !== null ? stock20 - market20 : null;
   const excess63 = stock63 !== null && market63 !== null ? stock63 - market63 : null;
-  const share = evidence.shareVolume;
-  const shareValid = valid && share !== null && share.status === 'no_candidate_events_in_selected_51'
-    && share.snapshotIds.length === 51 && share.sourceDatasetRevision === history.sourceDatasetRevision && known(share.availableAt)
-    && evidenceInstant(share.availableAt)! >= evidenceInstant(calendar!.sessions.at(-1)!.closeAt)!
-    && share.fromSession <= bars[bars.length - 51].session && share.throughSession === request.signalSession;
+  const shareValid = valid && native !== null && known(native.availableAt)
+    && evidenceInstant(native.availableAt)! >= evidenceInstant(calendar!.sessions.at(-1)!.closeAt)!
+    && native.fromSession === bars[bars.length - 51].session && native.throughSession === request.signalSession;
   const chip = external.chips;
   const chipRows = chip && chip.rows.length === 20 && chip.symbol === request.symbol && chip.unit === 'shares' && chip.volumeUnit === 'shares'
     && chip.priceRevision === history.sourceDatasetRevision && chip.calendarRevision === calendar?.revisionId
-    && chip.shareVolumeRevision === share?.revisionId && shareValid ? aligned(chip.rows, 20, chip) : null;
+    && chip.shareVolumeRevision === native?.revisionId && shareValid ? aligned(chip.rows, 20, chip) : null;
   const flow = (owner: 'foreignNetShares' | 'trustNetShares', period: 5 | 20) => {
-    const rows = chipRows?.slice(-period), volumes = valid ? bars.slice(-period).map(bar => bar.volume) : [];
-    const volume = volumes.length === period && volumes.every(value => Number.isSafeInteger(value) && value >= 0) ? sum(volumes) : null;
-    const net = rows && rows.every((row, i) => Number.isSafeInteger(row[owner]) && Math.abs(row[owner] as number) <= volumes[i])
+    const rows = chipRows?.slice(-period), volumes = valid && native ? bars.slice(-period).map(bar => native.volumeOf(bar.session)) : [];
+    const volume = volumes.length === period && volumes.every((value): value is number => value !== null && Number.isSafeInteger(value) && value >= 0) ? sum(volumes) : null;
+    const net = rows && rows.every((row, i) => Number.isSafeInteger(row[owner]) && volumes[i] !== null && Math.abs(row[owner] as number) <= volumes[i]!)
       ? sum(rows.map(row => row[owner] as number)) : null;
     const ratio = net !== null && volume !== null && volume > 0 ? net / volume : null;
     const comparable = ratio !== null && finite(ratio) && Number.isSafeInteger(net) && Number.isSafeInteger(volume);
@@ -124,13 +122,13 @@ export function evaluateLaunchRules(request: Request, selected: Selected, extern
   const frozen = external.frozenOriginal, original = arithmetic.originalBreakout;
   const originalValid = valid && frozen !== undefined && original !== null && frozen.session === original.session && frozen.level === original.level
     && frozen.priceScale === 'unchanged_fixture' && frozen.comparedSourceDatasetRevision === history.sourceDatasetRevision
-    && text(frozen.revisionId) && known(frozen.availableAt) && shareValid && share!.fromSession <= original.session;
+    && text(frozen.revisionId) && known(frozen.availableAt) && shareValid && native!.fromSession <= original.session;
   const closingHold = !originalValid ? null : original!.sessionsSince >= 1 && original!.sessionsSince <= 5
     ? original!.closesAtOrAboveLevel : false;
   const breakout = shareValid ? arithmetic.breakout.matches : null;
   const breakoutOrHold = or(breakout, closingHold);
   const revisions = { price: history.sourceDatasetRevision, calendar: calendar?.revisionId ?? null,
-    actions: evidence.corporateActions?.revisionId ?? null, shareVolume: share?.revisionId ?? null,
+    actions: evidence.corporateActions?.revisionId ?? null, shareVolume: native?.revisionId ?? null,
     chips: chipRows ? chip!.revisionId : null, market: sourceValid(index) ? index!.revisionId : null, original: originalValid ? frozen!.revisionId : null };
   const rule = (id: string, group: Group, weight: number, matches: boolean | null, operands: Record<string, unknown>) => {
     const definition = canonicalRules[id as keyof typeof canonicalRules];
@@ -168,7 +166,7 @@ export function evaluateLaunchRules(request: Request, selected: Selected, extern
   const technicalWeight = tech.reduce((sum, group) => sum + components[group].availableWeight, 0);
   const confirmedTechnicalPoints = tech.reduce((sum, group) => sum + components[group].confirmedPoints, 0);
   const superseded = new Set(['long_ma_slope_horizon_unspecified', 'relative_strength_normalization_unspecified', 'hold_close_or_intraday_low_rule_unspecified']);
-  const gaps = [...new Set([...evidence.missingData, ...arithmetic.gaps.filter(gap => !superseded.has(gap)),
+  const gaps = [...new Set([...evidence.missingData.filter(gap => !native || gap !== 'launch_tpex_exact_native_share_volume_51_not_proven'), ...arithmetic.gaps.filter(gap => !superseded.has(gap)),
     ...rules.filter(item => item.points === null).map(item => `${item.id}_input_unavailable`),
     ...(closingHold === null ? ['fixed_closing_hold_original_window_share_evidence_not_connected'] : []),
     'formal_review_and_publication_not_connected', ...(bindingValid ? [] : ['selected_read_score_revision_or_cutoff_mismatch'])])].sort();

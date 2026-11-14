@@ -47,6 +47,21 @@ function fixture() {
     indexMonths: { TWSE: months, TPEX: months }, flowSessions, responses } };
 }
 const request = { stockId: '00000000-0000-4000-8000-000000009999', symbol: '6488', exchange: 'TPEX' as const, signalSession: '2026-11-13', cutoff };
+/** Deliberately unbranded legacy fixture: supported-feed absence and integer
+ * volume are not independent capital continuity after the GDS finding. */
+function selectedWithoutNative(sessions: string[]): TwLaunchPatternReadEvidence {
+  return { scope: 'selected_cache_protocol_evidence', sourceAuthority: false, publicationAuthority: false, entryAuthority: false, missingData: [],
+    history: { notEntryAuthority: true, nextSessionAuthority: false, completedSessions: sessions, sourceDatasetRevision: 'fixture-price', availableAt: observedAt,
+      missingData: [], priceBasis: { status: 'verified', kind: 'adjusted_to_signal_session', anchorSession: request.signalSession, adjustmentVersion: 'fixture', adjustmentEvidenceHash: 'b'.repeat(64) },
+      bars: sessions.map((session, i) => ({ session, open: 10, high: 11, low: 9, close: 10, rawClose: 10, volume: 100,
+        sourceRef: `fixture-price-${i}`, observationId: `fixture-obs-${i}`, sourceTimestamp: observedAt, recordedAt: observedAt, availableAt: observedAt, sourceUrl: 'https://www.tpex.org.tw/' })) },
+    calendar: { status: 'validated_selected_window', revisionId: 'fixture-calendar', availableAt: observedAt, sessions: sessions.map((session, i) =>
+      ({ session, closeAt: `${session}T13:30:00+08:00`, authorityId: `fixture-${i}`, sourceRef: 'fixture', sourceTimestamp: observedAt, collectedAt: observedAt, recordedAt: observedAt })) },
+    corporateActions: { version: 'tw-corporate-action-v3.1', revisionId: 'fixture-actions', availableAt: observedAt, snapshots: [] },
+    shareVolume: { status: 'no_candidate_events_in_selected_51', revisionId: 'fixture-old-volume', sourceDatasetRevision: 'fixture-price', availableAt: observedAt,
+      fromSession: sessions.at(-51)!, throughSession: request.signalSession, snapshotIds: sessions.slice(-51).map((_, i) => `fixture-snapshot-${i}`),
+      coverage: 'supported_feeds_only', completeCapitalCoverage: false } };
+}
 
 test('three licensed CSV constructors retain exact route/query/ROC identities separate from JSON', () => {
   assert.equal(officialLicensedCsvUrl(11755, '2026-11'), 'https://www.twse.com.tw/indicesReport/MI_5MINS_HIST?response=open_data&date=20261101');
@@ -54,14 +69,22 @@ test('three licensed CSV constructors retain exact route/query/ROC identities se
   assert.equal(officialLicensedCsvUrl(11856, '2026-11-12'), 'https://www.tpex.org.tw/web/stock/3insti/DAILY_TradE/3itrade_hedge_result.php?l=zh-tw&o=data&se=EW&t=D&d=115%2F11%2F12');
 });
 test('BOM/CRLF RFC4180 quotes/commas/newline decode exact25-header flows and index rows with computed attribution', () => {
-  const { manifest } = fixture(), before = structuredClone(manifest), read = parseLaunchLicensedCsvReplay(manifest);
+  const { manifest, sessions } = fixture(), before = structuredClone(manifest), read = parseLaunchLicensedCsvReplay(manifest);
   assert.equal(read.parsedPages, manifest.responses.length);
   assert.equal(read.attributions.length, 3); assert.equal(read.sourceAuthority, false); assert.equal(read.redistributionAuthority, false);
   assert.deepEqual(read.attributions.map(row => row.datasetId), [11391, 11755, 11856]);
   assert.equal(read.attributions[0].licenseUrl, 'https://data.gov.tw/license');
   assert.ok(read.attributions.every(row => row.owner === 'Securities and Futures Bureau, Financial Supervisory Commission'));
-  assert.ok(read.responseReceipts.filter(row => row.datasetId === 11856).every(row => row.candidateFlowRows === 1));
+  const flows = read.responseReceipts.filter(row => row.datasetId === 11856);
+  assert.equal(flows.length, 21);
+  assert.ok(flows.every(row => row.candidateFlowRows === 1), 'valid exact-name buy/sell/net CSV still parses');
   assert.ok(read.responseReceipts.every(row => row.rawSha256 !== row.canonicalCsvRowsSha256));
+  const bound = bindLaunchOfficialReplay(read, request, selectedWithoutNative(sessions));
+  assert.equal(bound.external.index?.rows.length, 200);
+  assert.equal(bound.external.index?.sourceRef, LICENSED_CSV_PARSER);
+  assert.equal(bound.external.chips, undefined, 'capital continuity cannot be supplied by a legacy no-event DTO');
+  assert.ok(bound.gaps.includes('tpex_exact_native_share_volume_20_and_51_not_proven'));
+  assert.deepEqual(bound.attributions.map(row => row.datasetId), [11391, 11755, 11856]);
   assert.ok(read.gaps.includes('capture_workflow_identity_unverified')); assert.deepEqual(manifest, before);
   assert.throws(() => parseLaunchOfficialReplay(manifest), /manifest_invalid/u);
 });

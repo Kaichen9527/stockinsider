@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseLaunchOfficialReplay, parseLaunchLicensedCsvReplay, LICENSED_CSV_SCHEMA, officialReplayObservationPlan } from '../src/lib/vnext/launch-official-replay.ts';
+import { parseTpexNativeShareReplay, NATIVE_SHARE_SCHEMA } from '../src/lib/vnext/launch-native-volume.ts';
 
 try {
   const args = process.argv.slice(2);
@@ -44,18 +45,20 @@ try {
   const input = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(privateFile(manifestPath, args[2] === '--receipt' ? 1048576 : 160 * 1024 * 1024)));
   if (args[2] === '--receipt') process.stdout.write(JSON.stringify(officialReplayObservationPlan(input)) + '\n');
   else {
+    const nativeShares = input?.schema === NATIVE_SHARE_SCHEMA;
     const files = new Map(); let total = 0;
     const descriptors = [...(Array.isArray(input.responses) ? input.responses : []), ...(Array.isArray(input.schemaEvidence) ? input.schemaEvidence : [])];
-    if (descriptors.length > 68) throw Error('input');
+    if (descriptors.length > (nativeShares ? 57 : 68)) throw Error('input');
     for (const descriptor of descriptors) {
       const body = descriptor?.body;
       if (body?.encoding !== 'file') continue;
       if (typeof body.path !== 'string' || !/^bodies\/[A-Za-z0-9_./-]+$/.test(body.path) || body.path.split('/').some(p => !p || p === '.' || p === '..') || files.has(body.path)) throw Error('input');
-      const member = privateFile(path.resolve(path.dirname(manifestPath), body.path), 5000000);
-      if (member.byteLength !== descriptor.bytes || (total += member.byteLength) > 112 * 1024 * 1024) throw Error('input');
+      const member = privateFile(path.resolve(path.dirname(manifestPath), body.path), nativeShares ? 500000 : 5000000);
+      if (member.byteLength !== descriptor.bytes || (total += member.byteLength) > (nativeShares ? 32 : 112) * 1024 * 1024) throw Error('input');
       files.set(body.path, member);
     }
-    const read = input?.schema === LICENSED_CSV_SCHEMA ? parseLaunchLicensedCsvReplay(input, files) : parseLaunchOfficialReplay(input, files);
+    const read = nativeShares ? parseTpexNativeShareReplay(input, files)
+      : input?.schema === LICENSED_CSV_SCHEMA ? parseLaunchLicensedCsvReplay(input, files) : parseLaunchOfficialReplay(input, files);
     process.stdout.write(JSON.stringify(read) + '\n');
   }
 } catch {

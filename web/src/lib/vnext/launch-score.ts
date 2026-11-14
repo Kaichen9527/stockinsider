@@ -86,8 +86,8 @@ export function assembleLaunchScore(input: LaunchScoreAssemblyInput) {
 
 /** Actual T06 consumer of the separately versioned, user-authorized fixed
  * engineering rulebook. Missing source operands retain atomic null weights. */
-export function scoreLaunchReadEvidence(request: Pick<TwEntryAuthorityRequest, 'symbol' | 'exchange' | 'cutoff' | 'signalSession'>,
-  selected: { evidence: TwLaunchPatternReadEvidence; arithmetic: ReturnType<typeof launchPatternFixture> }, external: LaunchExternalEvidence = {}) {
+export function scoreLaunchReadEvidence(request: Pick<TwEntryAuthorityRequest, 'symbol' | 'exchange' | 'cutoff' | 'signalSession'> & { stockId?: string },
+  selected: { evidence: TwLaunchPatternReadEvidence; arithmetic: ReturnType<typeof launchPatternFixture>; nativeVolumeOverlay?: unknown }, external: LaunchExternalEvidence = {}) {
   return evaluateLaunchRules(request, selected, external);
 }
 
