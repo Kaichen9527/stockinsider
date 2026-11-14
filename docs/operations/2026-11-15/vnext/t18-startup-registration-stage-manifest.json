@@ -1,0 +1,25 @@
+{
+  "add": [],
+  "baselineCommit": "7811aaa79dc4f3942e1a9615e59da1254c4ffad5",
+  "baselineRuntimeBlobs": 46,
+  "callerReadinessAccepted": false,
+  "nativeHoldRetained": true,
+  "remove": [],
+  "replace": [
+    {
+      "after": {
+        "gitBlob": "ce9a5a7c9d40b47d170ba22fdc9f4c115a347967",
+        "path": "scripts/staging_t18_host.py",
+        "sha256": "e25cf94578b4c5f83331bdc0979c69af2222f22a95335602cd5c0e3bf6e91024"
+      },
+      "before": {
+        "gitBlob": "e3c69af98a1a1a9bc1a859201b943334fc7d06de",
+        "sha256": "3cd6ff85dbeaa396974c1144715da8e20fc766e5b6e6ca1dc73331fccde14d91"
+      },
+      "path": "scripts/staging_t18_host.py"
+    }
+  ],
+  "runtimeBlobsAfter": 46,
+  "schema": "stockinsider-t18-host-stage-delta-v1",
+  "scope": "FIXED_DB_REGISTRATION_SCHEDULING_ONLY"
+}

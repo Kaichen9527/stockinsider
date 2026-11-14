@@ -274,6 +274,32 @@ def _require_starting_brokers(children):
         if children[kind].poll() is not None:raise HostRejected(label)
 
 
+def _wait_registered_db(child):
+    """Ordering only: Popen is not a completed StartTransientUnit registration.
+
+    Never substitutes for later actual three-UID/net/capability/key admission.
+    Query only the fixed DB unit; no caller unit name or readiness assertion.
+    """
+    deadline=time.monotonic()+5
+    while True:
+        _check_stop()
+        if child.poll() is not None:raise HostRejected('fixed_db_unit_exited_before_brokers')
+        left=deadline-time.monotonic()
+        if left<=0:raise HostRejected('fixed_db_unit_registration_timeout')
+        try:
+            observed=command('systemctl','show',DB_UNIT,'-p','LoadState','-p','ActiveState','-p','MainPID',timeout=min(1,left))
+        except (HostRejected,subprocess.TimeoutExpired):
+            _check_stop();observed=''
+        values=dict(line.split('=',1) for line in observed.splitlines() if '=' in line)
+        if values.get('LoadState') in ('error','masked','bad-setting'):
+            raise HostRejected('fixed_db_unit_registration_rejected')
+        if (values.get('LoadState')=='loaded' and values.get('ActiveState')=='active'
+            and re.fullmatch('[1-9][0-9]*',values.get('MainPID',''))):
+            if child.poll() is not None:raise HostRejected('fixed_db_unit_exited_before_brokers')
+            return
+        time.sleep(min(.05,max(0,deadline-time.monotonic())))
+
+
 def _failed_broker_diagnostic(kind,code,data):
     observed=project_broker_refusal(data,kind) if type(code) is int and code==2 else None
     return observed or {'status':'NO_VALID_REFUSAL_RECORD'}
@@ -431,6 +457,7 @@ def execute(mode,manifest_sha):
             children[kind]=subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0,
                 env={'PATH':'/usr/sbin:/usr/bin:/sbin:/bin','LC_ALL':'C'})
             captures[kind]=_Capture(children[kind],1024**2 if kind=='DB' else BROKER_REFUSAL_MAX_BYTES)
+            if kind=='DB':_wait_registered_db(children[kind])
             if kind=='APP':
                 serve_credential_once(credential_loader,stage_payload)
                 credential_loader.close();credential_loader=None;stage_payload=None

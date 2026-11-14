@@ -15,6 +15,29 @@ host=importlib.util.module_from_spec(spec);spec.loader.exec_module(host)
 
 
 class HostLauncherTests(unittest.TestCase):
+    def test_db_registration_waits_for_loaded_active_actual_pid_fields(self):
+        child=__import__('unittest.mock',fromlist=['Mock']).Mock();child.poll.return_value=None
+        values=['LoadState=not-found\nActiveState=inactive\nMainPID=0',
+                'LoadState=loaded\nActiveState=activating\nMainPID=123',
+                'LoadState=loaded\nActiveState=active\nMainPID=0',
+                'LoadState=loaded\nActiveState=active\nMainPID=123']
+        with patch.object(host,'command',side_effect=values) as observe,patch.object(host.time,'sleep'):
+            host._wait_registered_db(child)
+        self.assertEqual(observe.call_count,4)
+        for call in observe.call_args_list:
+            self.assertEqual(call.args,('systemctl','show',host.DB_UNIT,'-p','LoadState','-p','ActiveState','-p','MainPID'))
+            self.assertGreater(call.kwargs['timeout'],0);self.assertLessEqual(call.kwargs['timeout'],1)
+
+    def test_db_registration_exit_and_deadline_refuse_without_starting_brokers(self):
+        child=__import__('unittest.mock',fromlist=['Mock']).Mock();child.poll.return_value=1
+        with patch.object(host,'command',side_effect=AssertionError('must_not_query_after_exit')):
+            with self.assertRaisesRegex(host.HostRejected,'^fixed_db_unit_exited_before_brokers$'):host._wait_registered_db(child)
+        child.poll.return_value=None
+        with patch.object(host.time,'monotonic',side_effect=[0,6]):
+            with self.assertRaisesRegex(host.HostRejected,'^fixed_db_unit_registration_timeout$'):host._wait_registered_db(child)
+        with patch.object(host,'command',return_value='LoadState=masked'):
+            with self.assertRaisesRegex(host.HostRejected,'^fixed_db_unit_registration_rejected$'):host._wait_registered_db(child)
+
     def test_broker_early_exit_uses_only_fixed_role_labels(self):
         failed=subprocess.Popen([sys.executable,'-I','-B','-c',
             "import sys;sys.stderr.write('PUBLIC_DO_NOT_EXPORT');raise SystemExit(2)"],stderr=subprocess.PIPE)

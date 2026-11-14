@@ -1,0 +1,64 @@
+{
+  "change": {
+    "keyReadBeforeExistingGates": false,
+    "onlyFixedUnit": "stockinsider-t18-db.service",
+    "perQueryMaxSeconds": 1,
+    "permissionOrPathDenialChanges": false,
+    "readinessOrReceiptGrantsAuthority": false,
+    "requiredProperties": [
+      "LoadState=loaded",
+      "ActiveState=active",
+      "MainPID>0",
+      "wrapper_still_alive"
+    ],
+    "waitSeconds": 5
+  },
+  "cloudRootOrSystemdUnitActions": false,
+  "contaboAccessed": false,
+  "firstOnsiteFailurePreserved": {
+    "app": "NO_VALID_REFUSAL_RECORD",
+    "appRestJournalCreationReported": false,
+    "dbJournalStartReported": true,
+    "durationSeconds": 16.231,
+    "keyRead": false,
+    "productionUnchanged": true,
+    "reason": "inspect_nonsecret_host_observations",
+    "rootCause": "UNCONFIRMED",
+    "source": "COORDINATOR_REPORT",
+    "stagingCleaned": true
+  },
+  "generatedAtUtc": "2026-11-14T21:33:28.841230+00:00",
+  "laterOnsiteEvidence": {
+    "canonicalAdmission": "PASSED",
+    "canonicalAdmissionSeconds": 20.229,
+    "invalid": "BACKUP_AUTHENTICATION_FAILED_BEFORE_DB_RESTORE",
+    "realReceiptCommit": "3e49dfd23aba8c74d4cd36b74f9946992495dc6e",
+    "realReceiptGitBlob": "927df1262f866401bde942d5e0f0942fa64a3a2b",
+    "realSeconds": 644.826,
+    "realStatus": "DB_VERIFIED_FIXED_T18_EXERCISED",
+    "source": "COORDINATOR_REPORT_AND_EXACT_PUBLIC_RECEIPT",
+    "stockDetail": "NOT_RUN_TWO_TABLE_SCOPE"
+  },
+  "nativeHoldRetained": true,
+  "parentCommit": "7811aaa79dc4f3942e1a9615e59da1254c4ffad5",
+  "productionChanges": false,
+  "runtimeSource": {
+    "gitBlob": "ce9a5a7c9d40b47d170ba22fdc9f4c115a347967",
+    "path": "scripts/staging_t18_host.py",
+    "sha256": "e25cf94578b4c5f83331bdc0979c69af2222f22a95335602cd5c0e3bf6e91024"
+  },
+  "schema": "stockinsider-t18-registration-source-v1",
+  "stageManifest": "docs/operations/2026-11-15/vnext/t18-startup-registration-stage-manifest.json",
+  "testSource": {
+    "gitBlob": "7f3c3fe2dbec7a277f2ac5808a34bb0f5cc398c0",
+    "path": "scripts/tests/test_t18_host_launcher.py",
+    "sha256": "1cd508e79aeba20e0579abffdaf015a17b3e397c4a8c4e2e4ae882989b1a5eba"
+  },
+  "tests": {
+    "focusedFailed": 0,
+    "focusedHostPassed": 11,
+    "independentDurationSeconds": 1.486,
+    "independentHostPassed": 11,
+    "openP0P1": 0
+  }
+}
