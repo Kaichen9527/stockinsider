@@ -371,10 +371,17 @@ BEGIN
   RETURN jsonb_build_object('owned',true,'owner',p_lease_owner,'backendId',backend->>'backendId');
  ELSIF p_operation='enqueue-current' THEN
   IF p_request<>'{}'::jsonb OR p_body IS NOT NULL THEN RAISE EXCEPTION 'launch_csv_closed_plan';END IF;
-  IF NOT EXISTS(SELECT FROM public.vnext_members_v1 WHERE state<>'exited') THEN RETURN jsonb_build_object('schemaVersion','licensed-launch-csv-plan-v1','jobs',0,'session',NULL,'sourceAuthority',false);END IF;
+  IF NOT EXISTS(SELECT FROM public.vnext_members_v1 WHERE state<>'exited') THEN RETURN jsonb_build_object('schemaVersion','licensed-launch-csv-plan-v2','status','no_active_pool','reason',NULL,'jobs',0,'session',NULL,'sourceAuthority',false);END IF;
   IF (SELECT count(*) FROM public.vnext_members_v1 WHERE state<>'exited')>20 THEN RAISE EXCEPTION 'launch_csv_active_pool_bound';END IF;
   SELECT session_date INTO session_day FROM public.vnext_sessions_v1 WHERE completed AND close_at<=at ORDER BY session_date DESC LIMIT 1;
-  IF session_day IS NULL OR session_day<>(at AT TIME ZONE 'Asia/Taipei')::date THEN RAISE EXCEPTION 'launch_csv_completed_current_session_required';END IF;
+  -- Deferral is not evidence of a holiday, complete coverage or permission.
+  -- Policy, exact owned lease and current active-pool bounds were checked above.
+  -- Do not enqueue older sessions as fresh today; existing queue work has its
+  -- own independent classification/adoption guards and may still be drained.
+  IF session_day IS NULL OR session_day<>(at AT TIME ZONE 'Asia/Taipei')::date THEN
+   RETURN jsonb_build_object('schemaVersion','licensed-launch-csv-plan-v2','status','deferred','reason','awaiting_current_completed_session',
+    'jobs',0,'session',NULL,'sourceAuthority',false);
+  END IF;
   FOR target_market IN SELECT unnest(ARRAY['TWSE','TPEX']) LOOP
    FOR date_key IN SELECT DISTINCT to_char(session_id,'YYYY-MM') FROM(
     SELECT session_id FROM(SELECT DISTINCT ON(session_id) session_id,status,close_at FROM public.tw_trading_sessions_v3
@@ -396,7 +403,8 @@ BEGIN
    PERFORM public.vnext_launch_csv_command_v1(p_principal,p_lease_owner,'enqueue',jsonb_build_object('datasetId',11856,'requestKey',date_key),NULL);planned:=planned+2;
    IF planned>200 THEN RAISE EXCEPTION 'launch_csv_plan_bound';END IF;
   END LOOP;
-  RETURN jsonb_build_object('schemaVersion','licensed-launch-csv-plan-v1','jobs',planned,'session',session_day,'sourceAuthority',false);
+  IF planned=0 THEN RAISE EXCEPTION 'launch_csv_current_plan_empty';END IF;
+  RETURN jsonb_build_object('schemaVersion','licensed-launch-csv-plan-v2','status','planned','reason',NULL,'jobs',planned,'session',session_day,'sourceAuthority',false);
  ELSIF p_operation='enqueue' THEN
   IF NOT EXISTS(SELECT FROM public.vnext_members_v1 WHERE state<>'exited') THEN RAISE EXCEPTION 'launch_csv_admission_required';END IF;
   IF (SELECT count(*) FROM jsonb_object_keys(p_request))<>2 OR NOT(p_request ?& ARRAY['datasetId','requestKey'])

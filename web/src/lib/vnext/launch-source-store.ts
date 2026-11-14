@@ -162,18 +162,32 @@ export async function drainLaunchSources(identity:VnextIdentity,limit=1){
   if(!launchSourcesEnabled())return {status:'disabled' as const,sourceAuthority:false as const};
   return drainLaunchSourceWithDependencies(await production(identity),limit);
 }
+export type LaunchSourcePlan={schemaVersion:'licensed-launch-csv-plan-v2';status:'planned'|'no_active_pool'|'deferred';
+  reason:null|'awaiting_current_completed_session';jobs:number;session:string|null;sourceAuthority:false};
+/** Transport validation only. Deferral never proves a holiday, coverage or
+ * permission. SQL alone decides from its own clock and guarded current pool. */
+export function parseLaunchSourcePlan(value:unknown):LaunchSourcePlan{
+  if(!exact(value,'schemaVersion status reason jobs session sourceAuthority')||value.schemaVersion!=='licensed-launch-csv-plan-v2'
+    ||!Number.isSafeInteger(value.jobs)||Number(value.jobs)<0||Number(value.jobs)>200||value.sourceAuthority!==false)throw Error('launch_source_plan_unavailable');
+  if(value.status==='planned'){
+    let valid=false;
+    if(typeof value.session==='string'&&/^\d{4}-\d{2}-\d{2}$/u.test(value.session)){
+      const stamp=Date.parse(value.session+'T00:00:00Z');valid=Number.isFinite(stamp)&&new Date(stamp).toISOString().slice(0,10)===value.session;
+    }
+    if(!valid||Number(value.jobs)===0||value.reason!==null)throw Error('launch_source_plan_unavailable');
+  }else if(value.status==='no_active_pool'){
+    if(value.jobs!==0||value.session!==null||value.reason!==null)throw Error('launch_source_plan_unavailable');
+  }else if(value.status==='deferred'){
+    if(value.jobs!==0||value.session!==null||value.reason!=='awaiting_current_completed_session')throw Error('launch_source_plan_unavailable');
+  }else throw Error('launch_source_plan_unavailable');
+  return value as LaunchSourcePlan;
+}
 /** Plans only from SQL's actual active pool/completed cached sessions. There is
  * no HTTP-supplied symbol list, date expansion, URL or profile binding. */
 export async function prepareLaunchSources(identity:VnextIdentity){
   if(!launchSourcesEnabled())return {status:'disabled' as const,sourceAuthority:false as const};
   const deps=await production(identity);
-  return owned(deps,async owner=>{
-    const result=await deps.command(owner,'enqueue-current',{});
-    if(!exact(result,'schemaVersion jobs session sourceAuthority')||result.schemaVersion!=='licensed-launch-csv-plan-v1'
-      ||!Number.isSafeInteger(result.jobs)||Number(result.jobs)<0||Number(result.jobs)>200||result.sourceAuthority!==false
-      ||result.session!==null&&(typeof result.session!=='string'||!/^\d{4}-\d{2}-\d{2}$/u.test(result.session)))throw Error('launch_source_plan_unavailable');
-    return result;
-  });
+  return owned(deps,async owner=>parseLaunchSourcePlan(await deps.command(owner,'enqueue-current',{})));
 }
 export async function adoptClaimedLaunchSource(identity:VnextIdentity,jobId:string,queueOwner:string){
   return adoptLaunchSourceWithDependencies(await production(identity),jobId,queueOwner);

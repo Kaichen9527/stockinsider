@@ -39,7 +39,7 @@ export async function POST(request: Request) {
   let finMindToken:Promise<string>|undefined;
   const licensedSources:Array<{jobId:string;attemptId:string;status:string;captureId:string|null}>=[];
   const sourceDispatchErrors:Array<{jobId:string;error:string}>=[];
-  let sourcePrepass:{status:string;jobs:number}|null=null;
+  let sourcePrepass:{status:string;jobs:number;reason?:string;sourceAuthority:false}|null=null;
   let sourceNoActivePool=false;
   if(launchSourcesEnabled()){
     const identity=vnextIdentity(request);
@@ -47,9 +47,11 @@ export async function POST(request: Request) {
     try{
       const plan=await prepareLaunchSources(identity);
       if(!('jobs' in plan)||!Number.isSafeInteger(plan.jobs))throw Error('launch_source_plan_unavailable');
-      sourceNoActivePool=plan.jobs===0;
-      sourcePrepass={status:sourceNoActivePool?'no_active_pool':'planned',jobs:Number(plan.jobs)};
-      if(!sourceNoActivePool){
+      sourceNoActivePool=plan.status==='no_active_pool';
+      sourcePrepass={status:plan.status,jobs:Number(plan.jobs),sourceAuthority:false,...(plan.status==='deferred'?{reason:plan.reason!}:{})};
+      // Only fresh planning defers. Independently classified existing jobs still
+      // use their original bound adoption or unbound queue authority below.
+      if(plan.status==='planned'){
         const drained=await drainLaunchSources(identity,Math.min(input.limit,4));
         if(!('outcomes' in drained))throw Error('launch_source_drain_unavailable');
         licensedSources.push(...drained.outcomes);sourcePrepass.status=drained.outcomes.length?'processed':'no_pending';
