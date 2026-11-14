@@ -1,0 +1,71 @@
+{
+  "schema": "stockinsider-t06-t09-face-value-session-control-v1",
+  "symbol": "4763",
+  "sources": [
+    {
+      "source": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20250601&stockNo=4763&response=json",
+      "bytes": 2236,
+      "sha256": "2b1e5c08eff9f9b7ef83760c034689a470c9afa22f08f78b8f117b06177e38e0",
+      "observedAt": "2026-11-14T22:06:21.831297+00:00"
+    },
+    {
+      "source": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20250101",
+      "bytes": 2227,
+      "sha256": "5c85396aa2c0bf45add08a257aa6343aac2d48f9d6bb54da17c7f88fefcb71f8",
+      "observedAt": "2026-11-14T22:06:22.656232+00:00"
+    },
+    {
+      "source": "https://wwwc.twse.com.tw/rwd/zh/change/TWTB8U?startDate=20250601&endDate=20251031&response=json",
+      "bytes": 780,
+      "sha256": "38ea1047a58c85efe8decdee6deac8c80530f4d52f18218c540b5cdbfd9492f6",
+      "observedAt": "2026-11-14T22:06:22.877167+00:00"
+    }
+  ],
+  "lastSessionClose": {
+    "date": "2025-06-18",
+    "close": "885.00"
+  },
+  "scheduledExchangeSessionsWithoutInstrumentBar": [
+    "2025-06-19",
+    "2025-06-20",
+    "2025-06-23",
+    "2025-06-24",
+    "2025-06-25",
+    "2025-06-26",
+    "2025-06-27"
+  ],
+  "reopenedSession": {
+    "date": "2025-06-30",
+    "ohlc": [
+      "90.20",
+      "93.50",
+      "88.90",
+      "90.50"
+    ],
+    "officialReopeningReference": "88.50",
+    "officialLimits": [
+      "79.70",
+      "97.30"
+    ],
+    "officialFeedChangeMarker": "**"
+  },
+  "naiveCloseReturnPercent": "-89.77",
+  "usingOfficialReferenceCloseReturnPercent": "2.26",
+  "usingOfficialReferenceLowReturnPercent": "0.45",
+  "comparisonShareUnitFactor": "10",
+  "pttFixture": {
+    "publishedAt": "2026-11-14T06:02:55.000Z",
+    "receiptCommit": "b063b9ed7d14cff17cbefc7a8ee9adcb8e48fe75",
+    "qualifies20261112Or13": false
+  },
+  "usesRealHistoricalPrices": true,
+  "hypotheticalSignalOnly": true,
+  "expectedModelControls": {
+    "startingReferenceSession": "2025-06-18",
+    "nextMarketSession": "2025-06-19",
+    "substitutingReopeningSessionAsNextSessionAllowed": false,
+    "unadjustedComparisonValid": false,
+    "requiresActionAndInstrumentStatusVersions": true
+  },
+  "authoritativeObservationsOnly": true
+}
