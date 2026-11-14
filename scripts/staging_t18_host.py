@@ -28,6 +28,7 @@ import threading
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from deployment.staging.vnext.t17_keyfd.t18_host_plan import build_unit_argv,SOURCE_HOST,ASSETS_HOST,DB_UNIT,APP_UNIT,REST_UNIT,BROKER_REFUSAL_MAX_BYTES,project_broker_refusal
 from deployment.staging.vnext.t17_keyfd.t18_fd_handoff import send_six_fds,HANDOFF_PARENT,HANDOFF_SOCKET
+from deployment.staging.vnext.t17_keyfd.stage_credentials import create_root_material,send_stage_fd,serve_credential_once,LOADER_PARENT,LOADER_SOCKET,APP_CREDENTIALS,ADMISSION_ONLY
 
 ORIGINAL=Path('/run/stockinsider-t17-5b65286')
 MANIFEST=ORIGINAL/'source/database-manifest.json'
@@ -41,7 +42,7 @@ DBACCESS='stockinsider-t18-dbaccess'
 CIPHER_SHA='f0845866ae749e88cbc0b9d0370e982ad8f5e9c98ce754cc68e45551f02202d4'
 CIPHER_BYTES=491423538
 DIRS=('/run/stockinsider-t18','/run/t18-db-work','/run/t18-pg','/run/t18-broker',
-      '/run/t18-rest','/run/t18-app-work','/run/t18-rest-work','/run/credentials/stockinsider-t18-app')
+      '/run/t18-rest','/run/t18-app-work','/run/t18-rest-work',LOADER_PARENT)
 
 
 class HostRejected(Exception):pass
@@ -351,20 +352,21 @@ def execute(mode,manifest_sha):
     peak={'minimumHostDiskBytes':disk('/var/tmp'),'minimumHostAvailableMemoryBytes':memory()}
     runner=None;cleanup_ok=False;state_ok=False;key_read_attempted=False;accounts_verified=False;started=time.monotonic()
     broker_diagnostics={}
+    credential_loader=None;stage_material=None;stage_payload=None
     try:
         for unit in UNITS:_unit_available(unit)
         if any(os.path.lexists(p) for p in DIRS):raise HostRejected('staging_path_already_exists')
-        credentials=Path('/run/credentials').lstat()
-        if not stat.S_ISDIR(credentials.st_mode) or credentials.st_uid!=0 or credentials.st_mode&0o022:raise HostRejected('system_credential_parent_required')
+        runtime_parent=Path('/run').lstat()
+        if not stat.S_ISDIR(runtime_parent.st_mode) or runtime_parent.st_uid!=0 or runtime_parent.st_mode&0o022:raise HostRejected('root_runtime_parent_required')
+        if os.path.lexists(APP_CREDENTIALS):raise HostRejected('native_staging_credential_already_exists')
         accounts=_ensure_accounts();accounts_verified=True
         db=accounts['si-t18-db'];app=accounts['si-t18-app'];rest=accounts['si-t18-rest']
         owners=((0,0,0o711),(db.pw_uid,db.pw_gid,0o700),(db.pw_uid,grp.getgrnam(DBACCESS).gr_gid,0o750),
                 (app.pw_uid,app.pw_gid,0o700),(rest.pw_uid,rest.pw_gid,0o700),
-                (app.pw_uid,app.pw_gid,0o700),(rest.pw_uid,rest.pw_gid,0o700),(app.pw_uid,app.pw_gid,0o700))
+                (app.pw_uid,app.pw_gid,0o700),(rest.pw_uid,rest.pw_gid,0o700),(0,0,0o700))
         for path,(uid,gid,mode_bits) in zip(DIRS,owners):
             Path(path).mkdir();created.append(path);os.chown(path,uid,gid);os.chmod(path,mode_bits)
-        for path,size,user in (('/run/t18-app-work','128M',app),('/run/t18-rest-work','64M',rest),
-                              ('/run/credentials/stockinsider-t18-app','1M',app)):
+        for path,size,user in (('/run/t18-app-work','128M',app),('/run/t18-rest-work','64M',rest)):
             mounts.append(path)
             command('mount','-t','tmpfs','-o',f'size={size},mode=0700,uid={user.pw_uid},gid={user.pw_gid},nosuid,nodev,noexec','tmpfs',path)
             command('mount','--make-private',path)
@@ -410,6 +412,14 @@ def execute(mode,manifest_sha):
             key_r,key_w=os.pipe2(os.O_CLOEXEC);fds.extend((hostdir,backing,key_r,key_w))
             broker=socket.socket(socket.AF_UNIX,socket.SOCK_SEQPACKET);broker.bind(HANDOFF_SOCKET)
             os.chown(HANDOFF_SOCKET,0,grp.getgrnam(IPC).gr_gid);os.chmod(HANDOFF_SOCKET,0o660);broker.listen(1);broker.settimeout(15)
+        # Root0700 one-shot channel contains only a fresh staging reader JWT.
+        # Serve it before waiting for APP MainPID/socket: LoadCredential precedes exec.
+        if mode=='admission':stage_payload=ADMISSION_ONLY
+        else:
+            stage_material,stage_payload=create_root_material();fds.append(stage_material)
+        credential_loader=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM)
+        credential_loader.bind(LOADER_SOCKET);os.chmod(LOADER_SOCKET,0o600)
+        credential_loader.listen(1);credential_loader.settimeout(15)
         for kind in ('DB','APP','REST'):
             _check_stop()
             unit_intents.add(kind)
@@ -421,6 +431,9 @@ def execute(mode,manifest_sha):
             children[kind]=subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0,
                 env={'PATH':'/usr/sbin:/usr/bin:/sbin:/bin','LC_ALL':'C'})
             captures[kind]=_Capture(children[kind],1024**2 if kind=='DB' else BROKER_REFUSAL_MAX_BYTES)
+            if kind=='APP':
+                serve_credential_once(credential_loader,stage_payload)
+                credential_loader.close();credential_loader=None;stage_payload=None
         _seal_controls(children);_check_stop()
         if mode!='admission':
             conn,_=broker.accept();broker.close()
@@ -436,6 +449,8 @@ def execute(mode,manifest_sha):
                 else:os.write(key_w,bytes(32))
                 os.close(key_w);fds.remove(key_w)
                 send_six_fds(conn,[key_r,sealed,manifest,lock,hostdir,backing])
+                send_stage_fd(conn,stage_material)
+                os.close(stage_material);fds.remove(stage_material);stage_material=None
             os.close(key_r);fds.remove(key_r)
         deadline=time.monotonic()+1250
         while children['DB'].poll() is None:
@@ -471,6 +486,8 @@ def execute(mode,manifest_sha):
                             broker_diagnostics[kind]=_failed_broker_diagnostic(kind,children[kind].returncode,captured_out)
                 except Exception:failures.append('unit_cleanup')
         if broker:broker.close()
+        if credential_loader:credential_loader.close()
+        stage_payload=None
         for fd in fds:
             try:os.close(fd)
             except OSError:failures.append('descriptor_cleanup')
@@ -517,7 +534,7 @@ def execute(mode,manifest_sha):
         if storage is not None and not failures:
             try:storage.rmdir()
             except OSError:failures.append('storage_cleanup')
-        for path in (Path(HANDOFF_SOCKET),Path('/run/t18-broker/control.sock'),Path('/run/t18-rest/control.sock')):
+        for path in (Path(HANDOFF_SOCKET),Path(LOADER_SOCKET),Path('/run/t18-broker/control.sock'),Path('/run/t18-rest/control.sock')):
             if path.exists() and not failures:
                 if stat.S_ISSOCK(path.lstat().st_mode):
                     try:path.unlink()
@@ -527,6 +544,7 @@ def execute(mode,manifest_sha):
             for path in reversed(created):
                 try:Path(path).rmdir()
                 except OSError:failures.append('directory_cleanup')
+        if os.path.lexists(APP_CREDENTIALS):failures.append('native_staging_credential_remaining')
         cleanup_ok=not failures
         try:state_ok=system_state()==before
         except Exception:state_ok=False

@@ -16,7 +16,7 @@ import socket
 import threading
 import time
 from urllib.parse import urlencode
-from .t18_app_broker import create_stage_jwt
+from .stage_credentials import read_stage_credentials,validate_stage_token,StageCredentialRejected
 from .t18_reader_roles import install_fixed_reader_roles
 from .fixed_read_proxy import start_fixed_read_proxy,SNAPSHOT_SELECT,STATE_SELECT,_BoundedResponse
 
@@ -198,7 +198,7 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     before=_fingerprint(sql);dates=_expected_dates(sql)
     roles=install_fixed_reader_roles(sql)
     activate_rest_socket()
-    secret,token=create_stage_jwt()
+    secret,token=read_stage_credentials()
     try:
         for port in (3000,3301,3302):
             if not _port_closed(port):raise FixedRollbackRejected('private_test_port_occupied')
@@ -208,6 +208,8 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
         with start_fixed_read_proxy(token) as proxy:
             negatives=_negative_http(token)
             sequence=_execute_fixed_sequence(app,rest,assets.releases,dates)
+            # A cached Next HTTP200 cannot extend the fixed JWT lifetime.
+            validate_stage_token(secret,token,minimum_remaining=0)
             metrics=proxy.metrics
     finally:
         for i in range(len(secret)):secret[i]=0

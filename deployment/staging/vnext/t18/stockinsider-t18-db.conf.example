@@ -1,4 +1,5 @@
-# Apply ONLY to a NEW stockinsider-t18-db.service using the reviewed FD3-8 loader.
+# Apply ONLY to a NEW stockinsider-t18-db.service using the reviewed loader:
+# unchanged V+FD3-8 backup packet, then separate T+sealed staging-auth FD9.
 # Keep its owned 8GiB dm-crypt/host-lock/cipher/key handoff and production-denials.
 # The loader must exec this EXACT entry, not take arbitrary command arguments:
 # /usr/bin/python3 -I -B /readonly/t18-source/scripts/staging_restore_next_rollback.py --work-root /run/t18-db-work
@@ -22,7 +23,7 @@ AmbientCapabilities=
 UMask=0077
 BindReadOnlyPaths=/readonly/t18-source /run/t18-assets /run/t18-broker /run/t18-rest
 ReadWritePaths=/run/t18-db-work /run/t18-pg
-InaccessiblePaths=-/var/lib/postgresql -/run/postgresql -/var/run/postgresql -/srv/stockinsider/pgdata -/srv/stockinsider-postgres -/etc/stockinsider /run/t18-app-work /run/t18-rest-work /run/credentials/stockinsider-t18-app
+InaccessiblePaths=-/var/lib/postgresql -/run/postgresql -/var/run/postgresql -/srv/stockinsider/pgdata -/srv/stockinsider-postgres -/etc/stockinsider /run/t18-app-work /run/t18-rest-work /run/credentials/stockinsider-t18-app.service
 MemoryMax=768M
 MemorySwapMax=0
 CPUQuota=50%

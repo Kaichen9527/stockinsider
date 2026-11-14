@@ -117,6 +117,7 @@ class BrokerDiagnosticTests(unittest.TestCase):
                 stub(b.__name__+'._mounts',return_value=[{'mount':p,'filesystem':'tmpfs','optional':[]} for p in (b.WORK,b.CREDENTIALS)])
                 info=SimpleNamespace(st_mode=0o40700,st_uid=os.getuid())
                 metadata=stub(b.__name__+'.os.lstat',return_value=info)
+                managed=stub(b.__name__+'._observe_systemd_credential',return_value=None)
                 stub(b.__name__+'.os.statvfs',return_value=SimpleNamespace(f_blocks=1024,f_frsize=4096))
                 error=OSError('PUBLIC_DO_NOT_EXPORT')
                 if target=='namespace_observation':ns.side_effect=error
@@ -129,9 +130,8 @@ class BrokerDiagnosticTests(unittest.TestCase):
                 elif target=='prctl_no_new_privileges':libc.prctl=lambda option,*args:int(option==38)
                 elif target=='db_work_inaccessible':access.return_value=True
                 elif target=='mount_observation':reader.side_effect=error
-                elif target in ('app_work_tmpfs','credential_tmpfs'):
-                    rejected=b.WORK if target=='app_work_tmpfs' else b.CREDENTIALS
-                    metadata.side_effect=lambda path: (_ for _ in ()).throw(error) if path==rejected else info
+                elif target=='app_work_tmpfs':metadata.side_effect=error
+                elif target=='credential_tmpfs':managed.side_effect=error
                 elif target=='cgroup_path':reader.side_effect=lambda path:'PUBLIC_INVALID' if str(path)=='/proc/self/cgroup' else read(path)
                 else:
                     file={'cgroup_memory':'memory.max','cgroup_swap':'memory.swap.max','cgroup_tasks':'pids.max'}[target]

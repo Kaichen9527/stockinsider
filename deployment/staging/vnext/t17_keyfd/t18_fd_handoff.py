@@ -13,6 +13,7 @@ import socket
 import stat
 import struct
 import sys
+from .stage_credentials import receive_stage_fd
 
 HANDOFF_PARENT='/run/stockinsider-t18'
 HANDOFF_SOCKET=HANDOFF_PARENT+'/handoff'
@@ -123,7 +124,7 @@ def _observe_fixed_endpoint():
 
 def bootstrap_main():
     """No args. Authenticate fixed root socket, map FD3..8, exec exact entry."""
-    fds=None
+    fds=None;stage_fd=None
     try:
         if len(sys.argv)!=1 or os.getuid()==0 or os.geteuid()!=os.getuid() or pwd.getpwuid(os.getuid()).pw_name!='si-t18-db':
             raise FdHandoffRejected()
@@ -136,10 +137,13 @@ def bootstrap_main():
             # bind the accepted connection even if a pathname raced in between.
             _observe_fixed_endpoint()
             fds=receive_six_fds(connection)
+            stage_fd=receive_stage_fd(connection)
         install_fixed_fds(fds);fds=None
+        os.dup2(stage_fd,9,inheritable=True);os.close(stage_fd);stage_fd=None
         os.execve(FIXED_EXEC[0],list(FIXED_EXEC),{'PATH':'/usr/bin:/bin','LC_ALL':'C','PYTHONDONTWRITEBYTECODE':'1'})
     except BaseException:
         if fds is not None:_close(fds)
+        if stage_fd is not None:_close([stage_fd])
         # A failed exec must close the installed capability set too.
-        _close(range(3,9))
+        _close(range(3,10))
         return 2

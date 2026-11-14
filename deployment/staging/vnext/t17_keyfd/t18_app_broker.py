@@ -25,6 +25,7 @@ import time
 from .portable_sql_fixture_adapter import _tools
 from .staging_admission import _namespace_and_privileges, _production_pg_inaccessible, _mounts, StagingAdmissionRejected
 from .t18_host_plan import BROKER_REFUSAL_TAGS,broker_refusal_bytes
+from .stage_credentials import APP_CREDENTIALS,APP_CREDENTIAL_NAME,MAX_TOKEN,create_stage_jwt,validate_stage_token,StageCredentialRejected
 from .t18_release_assets import observe_fixed_release_assets, RELEASE_PINS
 from .t18_broker_transport import observe_network_namespace_cookie
 
@@ -34,7 +35,7 @@ CONTROL='/run/t18-broker/control.sock'
 REST_CONTROL='/run/t18-rest/control.sock'
 REST_WORK='/run/t18-rest-work'
 WORK='/run/t18-app-work'
-CREDENTIALS='/run/credentials/stockinsider-t18-app'
+CREDENTIALS=APP_CREDENTIALS
 MAX_FRAME=16384
 OPS=('HELLO','CONFIGURE','START_A','START_B','STOP_NEXT','FAULT_NEXT','SHUTDOWN')
 
@@ -68,33 +69,18 @@ def _startup_check(tag):
 def _b64(data):return base64.urlsafe_b64encode(data).rstrip(b'=').decode('ascii')
 
 
-def create_stage_jwt():
-    """Fresh staging-only15-minute token; no formal credential input."""
-    secret=bytearray(os.urandom(32));now=int(time.time())
-    header=_b64(b'{"alg":"HS256","typ":"JWT"}')
-    claim=_b64(json.dumps({'role':'t18_reader','aud':'stockinsider-t18','iat':now,'exp':now+900},separators=(',',':')).encode())
-    signed=(header+'.'+claim).encode();token=signed.decode()+'.'+_b64(hmac.new(secret,signed,hashlib.sha256).digest())
-    return secret,token
-
-
 def _validate_config(value):
     if type(value) is not dict or set(value)!={'op','stageJwt','hmacSecretB64'} or value['op']!='CONFIGURE':raise AppBrokerRejected()
     token=value['stageJwt'];encoded=value['hmacSecretB64']
     if type(token) is not str or not 64<=len(token)<=4096 or type(encoded) is not str or len(encoded)>64:raise AppBrokerRejected()
+    secret=None
     try:
-        secret=bytearray(base64.b64decode(encoded,validate=True));parts=token.split('.')
-        if len(secret)!=32 or len(parts)!=3:raise ValueError()
-        header=json.loads(base64.urlsafe_b64decode(parts[0]+'='*(-len(parts[0])%4)))
-        claim=json.loads(base64.urlsafe_b64decode(parts[1]+'='*(-len(parts[1])%4)))
-        expected=_b64(hmac.new(secret,(parts[0]+'.'+parts[1]).encode(),hashlib.sha256).digest())
-        now=int(time.time())
-        if (header!={'alg':'HS256','typ':'JWT'} or set(claim)!={'role','aud','iat','exp'}
-            or claim['role']!='t18_reader' or claim['aud']!='stockinsider-t18'
-            or type(claim['iat']) is not int or type(claim['exp']) is not int
-            or not now-30<=claim['iat']<=now+5 or not now<claim['exp']<=now+900
-            or not hmac.compare_digest(parts[2],expected)):raise ValueError()
+        secret=bytearray(base64.b64decode(encoded,validate=True))
+        validate_stage_token(secret,token)
         return secret,token
-    except (ValueError,TypeError,UnicodeError):raise AppBrokerRejected() from None
+    except (ValueError,TypeError,UnicodeError,StageCredentialRejected):
+        if secret is not None:secret[:]=bytes(len(secret))
+        raise AppBrokerRejected() from None
 
 
 def _recv_frame(connection):
@@ -153,8 +139,8 @@ def _observe_app_runtime(expected_user):
     with _startup_check('db_work_inaccessible'):
         if os.access('/run/t18-db-work',os.X_OK):raise AppBrokerRejected()
     with _startup_check('mount_observation'):mounts=_mounts(Path('/proc/self/mountinfo').read_text())
-    for fixed in ((WORK,CREDENTIALS) if expected_user==APP_USER else (REST_WORK,)):
-        tag={WORK:'app_work_tmpfs',CREDENTIALS:'credential_tmpfs',REST_WORK:'rest_work_tmpfs'}[fixed]
+    for fixed in ((WORK,) if expected_user==APP_USER else (REST_WORK,)):
+        tag={WORK:'app_work_tmpfs',REST_WORK:'rest_work_tmpfs'}[fixed]
         with _startup_check(tag):
             info=os.lstat(fixed)
             exact=[m for m in mounts if m['mount']==fixed]
@@ -162,6 +148,8 @@ def _observe_app_runtime(expected_user):
                 or len(exact)!=1 or exact[0]['filesystem']!='tmpfs'
                 or any(x.startswith('shared:') for x in exact[0]['optional'])
                 or os.statvfs(fixed).f_blocks*os.statvfs(fixed).f_frsize>256*1024**2):raise AppBrokerRejected()
+    if expected_user==APP_USER:
+        with _startup_check('credential_tmpfs'):_observe_systemd_credential(mounts)
     with _startup_check('cgroup_path'):
         cg=Path('/proc/self/cgroup').read_text().strip().split('0::')[-1]
         if not cg.startswith('/') or '..' in Path(cg).parts:raise AppBrokerRejected()
@@ -174,6 +162,53 @@ def _observe_app_runtime(expected_user):
     with _startup_check('cgroup_tasks'):
         tasks=(cgroot/'pids.max').read_text().strip()
         if not tasks.isdecimal() or not 1<=int(tasks)<=64:raise AppBrokerRejected()
+
+
+def _credential_acl(data,uid,permissions):
+    """Actual Linux POSIX ACL, not mode-mask inference or a caller permission bit."""
+    if not 4<=len(data)<=128 or (len(data)-4)%8 or struct.unpack('<I',data[:4])[0]!=2:raise AppBrokerRejected()
+    entries={}
+    for offset in range(4,len(data),8):
+        tag,perms,identity=struct.unpack('<HHI',data[offset:offset+8])
+        if (tag,identity) in entries or perms&~7:raise AppBrokerRejected()
+        entries[tag,identity]=perms
+    base=0xffffffff
+    required={(1,base):permissions,(2,uid):permissions,(16,base):permissions,(32,base):0}
+    if (set(entries)!=set(required)|{(4,base)} or any(entries.get(k)!=v for k,v in required.items())
+        or entries[4,base]!=0):raise AppBrokerRejected()
+
+
+def _observe_systemd_credential(mounts):
+    directory=credential=None
+    try:
+        if os.environ.get('CREDENTIALS_DIRECTORY')!=CREDENTIALS:raise AppBrokerRejected()
+        directory=os.open(CREDENTIALS,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+        info=os.fstat(directory);fs=os.fstatvfs(directory)
+        exact=[m for m in mounts if m['mount']==CREDENTIALS]
+        if (not stat.S_ISDIR(info.st_mode) or (info.st_uid,info.st_gid)!=(0,0)
+            or stat.S_IMODE(info.st_mode)!=0o550 or len(exact)!=1 or exact[0]['filesystem']!='tmpfs'
+            or not {'ro','nosuid','nodev','noexec'}<=exact[0]['options']
+            or any(x.startswith('shared:') for x in exact[0]['optional'])
+            or not fs.f_flag&os.ST_RDONLY or not 0<fs.f_blocks*fs.f_frsize<=1024**2):raise AppBrokerRejected()
+        _credential_acl(os.getxattr(directory,'system.posix_acl_access'),os.getuid(),5)
+        credential=os.open(APP_CREDENTIAL_NAME,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=directory)
+        info=os.fstat(credential)
+        if (not stat.S_ISREG(info.st_mode) or (info.st_uid,info.st_gid)!=(0,0) or info.st_nlink!=1
+            or stat.S_IMODE(info.st_mode)!=0o440 or not 1<=info.st_size<=MAX_TOKEN):raise AppBrokerRejected()
+        _credential_acl(os.getxattr(credential,'system.posix_acl_access'),os.getuid(),4)
+    finally:
+        if credential is not None:os.close(credential)
+        if directory is not None:os.close(directory)
+
+
+def _managed_token_matches(token):
+    fd=os.open(CREDENTIALS+'/'+APP_CREDENTIAL_NAME,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)
+    try:
+        info=os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or not 1<=info.st_size<=MAX_TOKEN:raise AppBrokerRejected()
+        actual=os.pread(fd,MAX_TOKEN+1,0)
+        if not hmac.compare_digest(actual,token.encode('ascii')):raise AppBrokerRejected()
+    finally:os.close(fd)
 
 
 class _FixedChildren:
@@ -216,10 +251,7 @@ class _FixedChildren:
         try:
             if self.role==APP_USER:
                 if os.access('/run/t18-pg',os.X_OK):raise AppBrokerRejected()
-                credential=Path(CREDENTIALS)/'postgrest-service-role.jwt'
-                fd=os.open(credential,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o400)
-                try:os.write(fd,token.encode())
-                finally:os.close(fd)
+                _managed_token_matches(token)
                 self.token=token;self.configured=True
                 return
             self._psql('t18_authenticator',b'SET ROLE t18_reader; SELECT count(*) FROM public.radar_public_snapshots;',True)
@@ -305,9 +337,7 @@ class _FixedChildren:
             except ProcessLookupError:pass
             self.postgrest=None
         if self.configfd is not None:os.close(self.configfd);self.configfd=None
-        if self.role==APP_USER:
-            try:(Path(CREDENTIALS)/'postgrest-service-role.jwt').unlink()
-            except FileNotFoundError:pass
+        # The native credential belongs to systemd and disappears on unit stop.
         self.token=None
         for log in self.logs:log.close()
         self.logs=[]

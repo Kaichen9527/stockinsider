@@ -5,6 +5,7 @@ observed responsibilities. Admission/invalid/real modes never add a free command
 path, environment value or credential to these generated argv tuples.
 """
 import json
+from .stage_credentials import APP_CREDENTIALS,APP_CREDENTIAL_NAME,LOADER_SOCKET
 
 BROKER_REFUSAL_SCHEMA='stockinsider-t18-broker-refusal-v1'
 BROKER_REFUSAL_MAX_BYTES=512
@@ -89,14 +90,15 @@ def _properties(kind):
                          '/run/stockinsider-t18:/run/stockinsider-t18'))
         writable=('/run/t18-db-work','/run/t18-pg')
         denied=PRODUCTION_DENIALS+('/run/t18-app-work','/run/t18-rest-work',
-                                  '/run/credentials/stockinsider-t18-app')
+                                  APP_CREDENTIALS)
     elif kind=='APP':
-        writable=('/run/t18-app-work','/run/credentials/stockinsider-t18-app','/run/t18-broker')
+        writable=('/run/t18-app-work','/run/t18-broker')
+        properties.extend(('LoadCredential='+APP_CREDENTIAL_NAME+':'+LOADER_SOCKET,'TimeoutStartSec=20'))
         denied=PRODUCTION_DENIALS+('/run/t18-db-work','/run/t18-pg','-/run/t18-rest-work')
     else:
         writable=('/run/t18-rest-work','/run/t18-rest')
         denied=PRODUCTION_DENIALS+('/run/t18-db-work','-/run/t18-app-work',
-                                  '-/run/credentials/stockinsider-t18-app')
+                                  '-'+APP_CREDENTIALS)
     properties.extend(('BindReadOnlyPaths='+' '.join(readonly),
                        'ReadWritePaths='+' '.join(writable),
                        'InaccessiblePaths='+' '.join(denied)))

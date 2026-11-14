@@ -1,234 +1,207 @@
-# Fixed onsite host orchestration — admission first, fixed FD handoff
+# Fixed onsite T18 orchestration — native credentials, admission first
 
-This source adapts the coordinator-supplied successful reader launcher, identified
-onsite by SHA256 1de4b4c85b2859ae030f85a2424a6ba2e4e7d69ac1cde41e29573d38abefa9e4.
-It preserves root-only capability delivery, the original restore lock, production
-baseline comparisons, an 8 GiB one-use dm-crypt workspace, resource floors and
-reverse cleanup. It does not claim byte equality with the original launcher.
-The new root code and fixed unprivileged bootstrap are separately reviewed.
-No root provisioning/mount/unit commands were run in Cloud.
+Use only the reviewed staging source and the two original pinned release COPIES.
+No production release, database path, credential, service or timer is modified.
+The original T17 host lock remains held through cleanup and formal signature
+comparison. HOLD, formal A1/CI and the disabled generic facade remain unchanged.
+This source is not a full release acceptance or production deployment approval.
 
-## Already observed onsite
+## Exact source and onsite roots
 
-Exact e6e73ad asset-only admission passed both actual 2584/2586-member packages;
-intentional RW bind rejected fixed_readonly_asset_mount_required. Receipt:
-704524c19259df7ef9399a52b97a934bc44b2b93. The earlier systemd 255 probe observed
-shared dedicated unit namespace cookies different from host, loopback only and
-strict RO roots, with cleanup and unchanged formal signatures (7e0e253). Those
-facts close the reported packaging incompatibility; they are not reusable
-runtime permission, root-launcher execution evidence or real Next HTTP evidence.
+Start with the 45 Git blobs verified onsite at af9f0008. Apply the six required
+replacements and add the one module in
+[t18-systemd-credential-stage-manifest.json](t18-systemd-credential-stage-manifest.json).
+The required source set becomes 46 blobs. Retain all other baseline runtime
+sources, including all four historical migration pins. Three example unit files
+are updated as documentation; this launcher generates its own fixed argv and
+never installs or reads those examples. Do not apply them to existing services.
 
-## Fixed roots and exact source staging
+The current [source receipt](t18-systemd-credential-receipt.json) lists exact
+SHA256/Git blob identities, tests, review and the distinct runtime gaps. Older
+receipts retain evidence for their original commits, not current admission.
 
-| Input | Host path | Unit path |
+| Input | Host path | Unit binding |
 | --- | --- | --- |
-| Existing verified staging asset COPIES |/var/tmp/stockinsider-t18-fa1d6c-assets |/run/t18-assets, private RO bind |
-| Fresh public reviewed source |/run/stockinsider-t18-host-source |/readonly/t18-source, private RO bind |
-| Original private database manifest |/run/stockinsider-t17-5b65286/source/database-manifest.json |FD5 only; never bind this source tree |
-| Original exclusive host lock |/run/stockinsider-t17-5b65286/restore-host.lock |FD6, same open description |
+| Public reviewed source | /run/stockinsider-t18-host-source | RO /readonly/t18-source |
+| Existing verified asset COPIES | /var/tmp/stockinsider-t18-fa1d6c-assets | RO /run/t18-assets |
+| Original private manifest | /run/stockinsider-t17-5b65286/source/database-manifest.json | FD5 only |
+| Original exclusive lock | /run/stockinsider-t17-5b65286/restore-host.lock | SAME open description, FD6 |
 
-No root-global /run/t18-assets is created. No production release path is mounted,
-chmodded or copied. Existing asset file bytes/modes remain unchanged. The root
-launcher verifies fixed input root ownership, public readable source metadata,
-reserved account/group identity and the host manager mount namespace. Run it
-only from the exact fresh fixed source root in the systemd manager's host mount
-namespace. Do not invoke it in Cloud or a caller-private mount namespace.
+Stage and verify exact Git blobs as root before invocation. Public code must be
+root-owned, non-writable by other users and readable by the three staging users;
+no env files, private manifest, backup or key belongs in this source root.
+The manifest stays root 0400 in its original private location. No production
+release path is bound, copied or chmodded. Original asset bytes, modes and pins
+remain unchanged. No build artifacts from Cloud are needed.
 
-Start with the 45 verified 337dc5bd runtime blobs (the original host source plus
-its two procfs replacements). Apply the exact THREE replacements in
-[the current stage manifest](t18-host-broker-diagnostic-stage-manifest.json):
-t18_app_broker.py, t18_host_plan.py and staging_t18_host.py. Retain the other
-42 blobs unchanged, including the shared procfs observer and all four historical
-migrations. The runtime source count remains 45. These five host files remain
-required; do not mix old broker/output routing with the new collector:
+Only these NEW fixed unit names are used: stockinsider-t18-db.service,
+stockinsider-t18-app.service and stockinsider-t18-rest.service. The host source
+rejects existing units, mutable staging paths or a pre-existing native APP
+credential. It must run in PID1's host mount namespace, not a caller-private one.
+Locked no-login si-t18-db/app/rest accounts and their reserved groups persist
+between runs. Aliases, unexpected memberships and active account processes reject.
 
-- deployment/staging/vnext/t17_keyfd/t18_host_plan.py
-- deployment/staging/vnext/t17_keyfd/t18_fd_handoff.py
-- scripts/staging_t18_fd_bootstrap.py
-- scripts/staging_t18_host_admission.py
-- scripts/staging_t18_host.py
+## Native systemd credentials: why the path alone was insufficient
 
-The original [host source receipt](t18-host-orchestration-receipt.json) is historical
-evidence for 793c0cbc; [the procfs fix receipt](t18-host-procfs-receipt.json) records
-337dc5bd. Use the current stage manifest for the three replacement SHA256/Git
-blob IDs and [the broker diagnostic receipt](t18-host-broker-diagnostic-receipt.json)
-for current test/review evidence. Tests/docs/receipts are not runtime dependencies.
-Do not place database-manifest.json, env files, backups or
-keys in this public source tree; the private manifest remains in the original
-root-only location. The host coordinator must stage/verify exact Git blobs before
-invoking root source, as with the previous 40-file staging. Metadata ownership is
-not a substitute for reviewing exact source. No build artifacts from Cloud are
-needed; both fixed genuine release packages and binaries stay onsite.
+The coordinator's exact af9f0008 no-key run stopped at APP credential_tmpfs after
+5.359 seconds, with no backup key, unchanged formal signatures and complete
+staging cleanup. Actual systemd255 controls then established these differences:
 
-The coordinator's 793c0cbc no-key run rejected before sockets/key read because
-glibc if_nameindex() required AF_NETLINK. The current shared observer instead
-opens only /proc/self/net/dev read-only, reads at most 16385 bytes to detect
-overflow, and rejects more than 16 KiB, malformed/truncated headers or rows,
-duplicate names, over 64 interfaces, or counters outside the 16 uint64 columns.
-Admission still requires exactly lo and the unchanged zero-capability/network
-namespace checks. No broker address-family permission is expanded: the fixed
-AF_UNIX/AF_INET/AF_INET6 allowlist remains. Missing/unreadable or unexpected procfs
-observations reject without falling back to libc, another path or caller data.
-The host reports app_broker_startup_refused or rest_broker_startup_refused if a
-broker exits while its socket is awaited; these are fixed role-only labels and
-do not include raw exceptions, stderr or journal contents. A socket that remains
-absent with live brokers still reaches the bounded broker_socket_startup_deadline.
-This source fix does not convert the failed onsite run into admission success.
+- A host-mounted scratch child under /run/credentials is hidden by systemd's
+  covering readonly tmpfs; even an explicit child RO bind was absent/EACCES.
+- An ordinary private /run child works as a 1 MiB RW tmpfs, but BOTH fixed Next
+  source commits require a normalized /run/credentials/ credential prefix.
+- Official LoadCredential from a root-only UNIX stream socket works: the loader
+  peer is root, reads bytes plus EOF, and installs a native credential without a
+  host plaintext file or payload output.
+- The native path is /run/credentials/<full-unit>.service. Its single private
+  tmpfs is exactly 1 MiB and ST_RDONLY; flags include ro,nosuid,nodev,noexec.
+  Directory/file are root:root 0550/0440 with a named APP read ACL. APP can read
+  but not write; distinct DB and REST controls got EACCES.
 
-The coordinator then verified exact 337dc5bd replacements and reported a no-key
-failure after 3.965 seconds: app_broker_startup_refused, keyRead=false, unchanged
-formal signatures and cleaned staging resources. This is the latest onsite
-observation, not evidence that any later source has been admitted.
+These are coordinator-reported kernel observations, not admission for this new
+source. The launcher uses official LoadCredential, not the failed ordinary-path
+alias, a symlink bypass, a projection mode or modified release bytes.
 
-The current broker emits ONE failure-only JSON record on stdout with exactly
-schema=stockinsider-t18-broker-refusal-v1, role=APP or REST, and one compiled tag.
-There is no exception text, errno, path, namespace cookie, SQL, row or log field.
-Fixed check groups cover namespace/interface/capability refusal, formal PG path
-access, account/group, each prctl, each private work tmpfs, cgroup path/memory/
-swap/tasks, each control socket operation, asset context entry, namespace cookie,
-tool installation, exact Node version and peer accept/identity. runtime_or_cleanup
-is the fixed fallback, never exception interpolation. Tags identify the refusing
-check, not an inferred host-specific cause. The exact allowlist is in the receipt.
+APP receives the fixed property:
 
-APP/REST retain StandardError=null. StandardOutput=null is removed ONLY for these
-two new staging units, so existing systemd-run --pipe supplies the direct host
-stdout pipe. This does not route broker diagnostics through the journal. Host
-reader threads cap both broker streams at 512 bytes each, keep draining on
-overflow, and refuse overflow/incomplete capture. DB capture retains its original
-1 MiB cap. Node/PostgREST/app output continues to use its existing private sinks.
-The host exports only one exact-schema, duplicate-free, allowlisted role/tag
-record in brokerDiagnostics, never raw captured bytes. Normal exit 0 adds no
-refusal. A complete record captured before cleanup also covers a still-waiting
-systemd-run wrapper; exit-2 records of already-failed wrappers are collected after
-draining. Import-time failure, kill or invalid/missing records can remain
-NO_VALID_REFUSAL_RECORD. Refusals emitted only after an intentional cleanup stop
-are not promoted to startup observations. Empty or classified diagnostics never
-grant admission, trigger a retry, read a key or alter any existing gate/exit code.
-Actual systemd stdout routing and the newly identified host check remain for the
-coordinator's next no-key run. Cloud has tested real owned pipes and refusals,
-not the three privileged onsite units.
+```
+LoadCredential=postgrest-service-role.jwt:/run/stockinsider-t18/credential-loader/credential.sock
+```
 
-## Modes
+The host creates that loader parent root 0700 and socket root 0600. After preparing
+storage/cipher inputs, it starts DB then APP and serves one bounded payload to
+the actual root loader peer BEFORE waiting for APP MainPID/control socket.
+The listener accepts within 15 seconds and transfer is bounded by 5 seconds;
+APP startup has a 20-second limit. There is no credential-file source, caller
+path, callback, URL or secret in argv/environment/unit properties.
 
-Run the fixed root entry with Python isolated mode. It accepts only a fixed mode
-and, for invalid/real, the non-secret expected original manifest SHA256. There
-is no command, URL, role, source/assets path, key-file or release override.
+Admission serves only PUBLIC_T18_ADMISSION_ONLY_NO_AUTHORITY. It creates no JWT
+HMAC, opens no backup/manifest, reads no backup key, starts no PG or app server,
+and still performs the actual source/assets/UID/group/namespace/cgroup checks.
+The placeholder cannot pass CONFIGURE authentication.
+
+Invalid/real modes instead create one fresh reader JWT plus a 32-byte staging-only
+HMAC. ONLY the JWT goes to systemd's memory-backed native credential. APP's fixed
+path is /run/credentials/stockinsider-t18-app.service; it checks the actual root
+ownership, 0550/0440 modes, named APP POSIX ACL, private 1 MiB readonly tmpfs and
+read-only flags. Unknown ACL grants/mounts reject. DB and REST retain explicit
+native-path denials. The token filename remains the one compiled into both Next
+packages; despite its historical service-role filename, this is only the fresh
+t18_reader staging token, never a production/service-role credential.
+
+APP no longer writes or unlinks the credential. CONFIGURE must carry a valid
+reader JWT/HMAC and the token must match the actual systemd file byte-for-byte
+with constant-time comparison. systemd owns credential cleanup on unit stop.
+
+## Original backup handoff plus separately scoped FD9
+
+Both data modes retain the original 8 GiB preallocated one-use AES-XTS dm-crypt
+workspace, retained root 0400 verity image, exact ciphertext size/SHA, fixed private
+PG17 Unix socket, GCM authentication and every existing DB restore/reader gate.
+The six backup-capability packet and its sender/receiver functions are unchanged:
+
+1. FD3: exactly 32+EOF backup key pipe (32 zero-valued bytes in invalid mode).
+2. FD4: held readonly immutable ciphertext inode.
+3. FD5: original root-only manifest pinned by the expected digest.
+4. FD6: SAME exclusive host-lock open description.
+5. FD7: host backing directory for reserve/device checks.
+6. FD8: readonly preallocated workspace image for loop/dm identity checks.
+
+AF_UNIX SOCK_SEQPACKET, root peer authentication, one V record and exactly six
+SCM_RIGHTS capabilities remain. AFTER that packet, a distinct T record carries
+ONE readonly root-owned anonymous sealed memfd for FD9. It holds only the staging
+HMAC/JWT, at most 4135 bytes; no backup key or data is included. The receiver
+protects FD9 above29 before mapping the original 3..8 slots, then maps9. Any
+malformed/truncated rights or exec failure closes all owned 3..9 descriptors.
+
+The fixed DB entry observes actual FD9 root ownership, nlink 0, mode 0400, readonly
+access and all kernel seals before proceeding, and removes inheritance. The
+controller reads its bounded bytes only in the already-validated clone path.
+FD9 cannot grant restore authority: UID/namespace/cgroup/lock, original FD3–8,
+manifest, held verity ciphertext, two-phase GCM, PG/SQL/RLS/lineage gates remain.
+There is no additional caller FD selector or readiness flag. Existing CONFIGURE
+operations and their exact fields are unchanged.
+
+The old 30-second iat freshness check assumed generation AFTER restore and cannot
+serve a preloaded immutable credential. The reviewed replacement requires exact
+900-second exp-minus-iat, correct HS256 signature, t18_reader role, stockinsider-t18
+audience, issuance no more than5 seconds ahead, and at least 300 seconds remaining AFTER restore
+before CONFIGURE. A restore that consumes over roughly 600 seconds therefore
+refuses the app phase; it does not refresh, extend or silently replace the token.
+The fixed HTTP exercise remains bounded and checks the signed token unexpired
+again before accepting, so cached Next HTTP200 cannot extend credential lifetime.
+Root keeps no host secret file; HMAC never enters APP's systemd credential.
+Mutable secret copies are wiped where owned, FDs close on failure/cleanup; no
+claim is made to erase Python immutable strings or kernel IPC copies in place.
+
+## Invocation and phase meanings
 
 ```sh
-# Root onsite only: source/assets/group/cookie/cgroup prerequisites, no key/PG.
+# Root onsite only; no backup key/manifest/cipher/PG/app server.
 /usr/bin/python3 -I -B /run/stockinsider-t18-host-source/scripts/staging_t18_host.py admission
 
-# Then fixed zero-key negative; still no real stdin key. Replace only digest.
+# Fixed wrong-key negative. Supply only the previously trusted manifest digest.
 /usr/bin/python3 -I -B /run/stockinsider-t18-host-source/scripts/staging_t18_host.py invalid \
   --manifest-sha256 EXPECTED_ORIGINAL_MANIFEST_SHA256
 
-# The SAME fixed entry's real mode receives exactly 32 binary bytes plus EOF
-# from the coordinator's existing trusted stdin channel. No bytes in argv.
+# Existing trusted stdin channel supplies exactly 32 binary backup-key bytes+EOF.
 /usr/bin/python3 -I -B /run/stockinsider-t18-host-source/scripts/staging_t18_host.py real \
   --manifest-sha256 EXPECTED_ORIGINAL_MANIFEST_SHA256
 ```
 
-The two digest placeholders are not accepted literally. Use the non-secret
-expected manifest digest already established by the trusted original launcher;
-do not derive authority from this document or a previous PASS receipt. Cipher
-identity is compiled to the existing 491423538-byte official ciphertext SHA256
-f0845866ae749e88cbc0b9d0370e982ad8f5e9c98ce754cc68e45551f02202d4. A different
-backup requires separate review, not a replacement path/hash command argument.
-Never put key bytes in a shell command, environment, transcript or artifact.
-Do not use stdin simultaneously to supply Python source and a backup key.
+The digest placeholder is not accepted literally. Use the nonsecret expected
+original digest; no key bytes belong in a shell command, env, transcript or
+artifact. Do not supply Python source and a backup key through the same stdin.
+The real key is read only after the original root/three-unit identity, private
+network/capability and reserve checks, with its original 5-second bound and wipe.
 
-Exit 0 is a verified requested phase after cleanup: admission-only prerequisites,
-expected invalid-key rejection, or the restricted fixed-old-pair daily exercise.
-Real runner GAP remains exit 3, never a host success for rollback. Other failures
-exit 2. Output is bounded JSON lines: runner/resource/cleanup observation, and a
-fixed refusal record on failure. It contains no raw command output, SQL, app
-payload, journal, private key or stdin bytes. Host wrappers must preserve exit 3.
+Exit0 verifies only the requested phase: prerequisites, expected invalid-key
+rejection, or the fixed old-pair daily rollback. Real GAP remains exit3 and must
+not be converted into rollback acceptance. Other failures exit2. Fresh staging
+JWT creation in data modes is separate from the receipt's backup keyRead field.
+No artifact, model, checkbox or receipt grants runtime admission.
 
-## What admission actually does
+Only two public reader tables/11 columns and GET are supported. Fixed releases
+169aad1/dd59817 remain pinned, with original stale_readonly data/dates and disabled
+actions. Home HTTP200 means liveness; detail/new radar acceptance remains NOT_RUN.
+No replacement snapshot, full detail RPC or broader access is introduced.
 
-Admission locks the original host restore lock and observes the four formal
-services/current release/timer inventory without mutating them. It refuses
-existing fixed staging units or any pre-existing mutable target directory. It
-reserves locked no-login si-t18-db/app/rest accounts and the two dedicated groups;
-UID/GID aliases, unrelated primary/supplementary users and active account processes
-reject. Reserved locked system accounts remain for subsequent runs; they are not
-removed automatically or confused with transient unit/process cleanup.
+## Bounds, diagnostics and cleanup
 
-The prepare phase creates only new fixed staging directories and private bounded
-APP/REST/JWT tmpfs mounts. It uses a plain empty DB work directory for scheduling;
-NO encrypted-work admission is claimed. It does not open the database manifest,
-cipher image, key, PG or real app. Fixed three transient units are launched from
-immutable argv tuples: strict FS, private joined DB network, no capabilities,
-production denials, DB 768 MiB/50%, APP 512 MiB/50%, REST 256 MiB/25%, no swap, 64 tasks,
-bounded runtime/stop and control-group killing. Both /tmp and /var/tmp are
-private 32 MiB tmpfs; the real backing-image directory is explicitly bound RO over
-the private /var/tmp so kernel device/inode checks retain the original view. The no-key DB entry
-observes the actual fixed RO assets, SO_PEERCRED/group/capability identity, kernel network
-cookies and three cgroup memory budgets, then requests SHUTDOWN only. Brokers
-may execute the fixed Node --version metadata probe; Next/PostgREST servers do
-not start. Root seals the two broker socket parents/inodes before admission.
+Initial host floors remain 23 GiB disk and 3 GiB available memory, live floors
+15 GiB/1.5 GiB. DB/APP/REST retain 768/512/256 MiB, swap 0, 64 tasks, bounded CPU/runtime
+and whole-cgroup stop. Shared private network, zero caps, strict RO root,
+production denials, fixed RO assets and private 32 MiB /tmp + /var/tmp remain.
+Kernel SO_NETNS_COOKIE and actual distinct UIDs/cgroups are reobserved.
 
-Initial available capacity is at least 23 GiB disk and 3 GiB memory. Live host floors
-remain 15 GiB disk and 1.5 GiB memory; the unprivileged three-UID budget independently
-subtracts actual maxima. Formal service PID/start/active state, release symlink
-and timer inventory must be identical after every phase. The account and source
-setup is not a reason to restart or repair a formal service if observations differ.
+The shared strict /proc/self/net/dev observer still requires exactly lo without
+AF_NETLINK. Broker address families remain AF_UNIX/AF_INET/AF_INET6. Each broker
+failure emits one compiled schema/role/tag record; stdout goes through existing
+systemd-run --pipe, stderr remains null. Host capture caps 512 bytes per broker
+stream and 1 MiB per DB stream, drains on overflow then refuses. Only exact-schema
+allowlisted diagnostics are exported; no raw output, exceptions, paths, SQL,
+rows, secrets or journals. Normal exit 0 and post-cleanup cancellation are not
+promoted to startup failure. Partial/missing/import-time records may remain
+NO_VALID_REFUSAL_RECORD.
 
-## Real/invalid capability handoff
+Cleanup stops ONLY the three new fixed units and verifies empty cgroups, closes
+FD9/material and original owned FDs, closes/removes the root loader socket, then
+reconciles owned mounts, mapper and loops before deleting inactive backing files.
+The native credential is checked absent after systemd unit cleanup; the launcher
+never unlinks/chmods/remounts it or the host global credentials tree. Unknown
+loop baselines cannot authorize detaching retained source loops. Active backing
+images are quarantined if cleanup cannot be confirmed. Original source, sealed
+image and asset copies remain unchanged. Formal service PID/start/active state,
+current release and timer inventory must match before releasing the original
+exclusive lock LAST. Locked staging accounts remain reserved.
 
-Both data modes create the same original 8 GiB preallocated AES-XTS512 plain dm-crypt
-workspace; its 64-byte random workspace key goes directly from /dev/urandom to
-cryptsetup stdin. It is unrelated to the backup key. The retained root 0400 sealed
-image is opened once with NOFOLLOW after validating its root/non-writable intake
-and seal directories. Root mounts via that held FD, verifies the exact ciphertext
-member identity, and passes its held read-only immutable inode. Original image
-bytes/links/modes are not modified or deleted.
+SIGKILL, host crash or power loss cannot execute Python finally. Such events
+require coordinator-local inspection of only these fixed staging resources;
+no crash-proof cleanup or automatic rerun permission is claimed.
 
-The DB bootstrap uses fixed root-owned 0711 /run/stockinsider-t18 and root:IPC 0660
-handoff socket, SOCK_SEQPACKET, actual root peer, one V record and exactly six
-SCM_RIGHTS descriptors. Root authenticates the connecting DB MainPID, exact static
-UID/GID, system.slice cgroup and zero capabilities. It also observes all three
-actual private namespace inodes/interfaces and capabilities before reading real
-stdin. The control listener closes after one accept. Root then sends:
-
-1. Exact 32+EOF key pipe (32 zero-valued bytes in invalid mode; root stdin only in real).
-2. Held authenticated-source ciphertext descriptor.
-3. Root-only manifest descriptor pinned by the expected digest.
-4. SAME open host-lock description, retained by root through all cleanup.
-5. Host backing directory for reserve/device identity.
-6. Read-only preallocated workspace image for actual loop/dm binding.
-
-The bootstrap rejects truncated/malformed rights, duplicates all six above 19
-BEFORE closing originals/mapping 3–8, closes its socket and execs only the fixed
-staging_restore_next_rollback.py --work-root /run/t18-db-work with a whitelist
-environment. Handoff is bounded 45s for three-unit startup. No key is serialized
-into the protocol, argv, env, disk, stdout or stderr; root readv uses a 33-byte
-buffer, requires exact32+EOF within 5s and wipes it. The real unprivileged entry
-reobserves its own OS/FD/key/manifest/custody/gates. Host mode or earlier receipts
-cannot bypass any of them.
-
-## Cleanup and interruption
-
-Bounded reader threads drain all child pipes while units run; each DB buffer caps
-at 1 MiB and each broker buffer at 512 bytes. They continue draining on overflow
-and force refusal. The monitor samples
-host reserve/work space and observable kernel unit-memory peaks every 150ms.
-SIGTERM/INT/HUP defer cancellation to checkpoints so side effects cannot precede
-ownership records; native commands time out. Cleanup stops only the three fixed
-NEW unit names and verifies empty cgroups, then closes descriptors and reconciles
-actual mounts, owned loops and random-name mapper/backing identity. An unknown
-loop baseline never authorizes detaching retained source loops. Existing source
-loops are excluded. Work image deletion requires zero remaining associations.
-Unconfirmed cleanup quarantines the workspace rather than deleting an active
-backing file. The original exclusive lock releases LAST, after resource cleanup
-and formal signature comparison. Inputs, sealed image and old source stay intact.
-
-A SIGKILL, host crash or power loss cannot execute Python finally. Such events
-require coordinator-local inspection/cleanup of the compiled staging unit names
-and newly created si-t18 workspace resources; no crash-proof recovery is claimed.
-A failed cleanup must not be treated as permission to rerun or broad-delete files.
-No full three-unit privileged/root or actual Next/PostgREST success was executed
-in Cloud. The tests cover real SCM descriptors, bounded byte streams/output,
-pure fixed argv, fail-closed Cloud entries and public PG/HTTP mechanisms. Actual
-onsite execution remains separate from source review, formal A1/CI, HOLD, true
-stock detail/new-radar acceptance and production continuity.
+Cloud tests use public bytes, actual kernel seals/SCM/UID refusals, PG17 public
+fixtures and owned HTTP mechanics. No privileged root/three-unit/native-systemd
+positive was run in Cloud. The newly combined admission/invalid/real route and
+actual pinned Next HTTP require onsite execution; prior controls and receipts
+are not substitutes. Build remains separately reported if dependencies are absent.
