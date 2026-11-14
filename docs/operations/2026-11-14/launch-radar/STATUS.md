@@ -1,5 +1,9 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## T04 actual-regression correction (Taipei2026-11-15)
+
+Source **4a77e32537b00c62b31c72516d28fb0c474fefb3**: [v2 template/issuer-summary fix](../../2026-11-15/launch-radar/PTT-REGRESSION-FIX.md), [519/types/lint/build +7synthetic CLI receipt](../../2026-11-15/launch-radar/ptt-regression-fix-checks.json), [same-four-byte replay source/dependency pins](../../2026-11-15/launch-radar/PTT-FIXED-BYTE-REPLAY.json). External old-sourcee676e04 actual2/4 failure is retained; fixed-source actual replay is PENDING, not supplied by synthetic PASS. Rights/queue/instrument/native/A1 remain closed. Earlier source results below retain their subject.
+
 ## Latest T04 scraper/body-provenance checkpoint (Taipei2026-11-15)
 
 Source **9e77d243e99bb1c042b4b7ae760424dac78f84fd**: [actual parser/scraper/provenance and queue refusal](../../2026-11-15/launch-radar/PTT-BODY.md), [515/types/lint/build and5synthetic CLI receipt](../../2026-11-15/launch-radar/ptt-body-checks.json). The four real#389 bodies are unavailable locally; current PTT metadata scope cannot authorize original admission. Valid legacy title/comment metadata is retained with false candidate eligibility. Actual rights/ordinary/liquidity/queue/source acceptance remain incomplete. Earlier OIDC/T08 evidence below retains its exact scope.

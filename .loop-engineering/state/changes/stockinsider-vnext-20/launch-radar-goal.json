@@ -32,10 +32,12 @@
   "paidCallsEnabled": false,
   "releaseGate": "INCOMPLETE",
   "T02PrivateResearchReader": "NOT_CONNECTED_RIGHTS_UNVERIFIED",
-  "latestValidatedSource": "9e77d243e99bb1c042b4b7ae760424dac78f84fd",
-  "latestEvidence": "docs/operations/2026-11-15/launch-radar/ptt-body-checks.json",
+  "latestValidatedSource": "4a77e32537b00c62b31c72516d28fb0c474fefb3",
+  "latestEvidence": "docs/operations/2026-11-15/launch-radar/ptt-regression-fix-checks.json",
   "actualGoogleOwnerConfigured": false,
-  "T04PttBodyProvenance": "ACTUAL_SCRAPER_CONNECTED_SYNTHETIC_515_PASS_REAL_HTML_BLOCKED",
+  "T04PttBodyProvenance": "OWN_BODY_V2_REAL_REGRESSION_SOURCE_FIX_519_PASS",
   "T04OriginalQueueAdmission": "BLOCKED_METADATA_SCOPE_FORBIDS_ORIGINAL_ROOTS",
-  "T04OrdinaryShareAndLiquidityAuthority": false
+  "T04OrdinaryShareAndLiquidityAuthority": false,
+  "T04PriorActualExternalReplay": "E676E04_2_OF_4_FAIL_RETAINED",
+  "T04NewExactByteReplay": "PENDING_COORDINATOR_SAME_FOUR_BYTES"
 }

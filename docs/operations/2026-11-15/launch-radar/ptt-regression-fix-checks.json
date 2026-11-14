@@ -1,0 +1,258 @@
+{
+  "schema": "stockinsider-ptt-real-regression-fix-checkpoint-v1",
+  "observedAtTaipei": "2026-11-15T01:22:27.287754+08:00",
+  "sourceCommit": "4a77e32537b00c62b31c72516d28fb0c474fefb3",
+  "tree": "5ff9bb9da2f9ded329220667e4d24dbced39733a",
+  "webTree": "abe24175642c9ecef814bfde30d55c911243d2ef",
+  "priorProtection": "e676e04aa34c42abc0b539ad087b2902abeb3ff2",
+  "parserVersion": "ptt-own-body-v2",
+  "checks": [
+    {
+      "name": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/top10-projection.test.ts",
+        "web/src/lib/vnext/published-target-read.test.ts",
+        "web/src/lib/vnext/ranking-read.test.ts",
+        "web/src/lib/vnext/candidate-page.test.ts",
+        "web/src/lib/stock-chart-calendar.test.ts",
+        "web/src/app/components/vnext/detail-source.test.mjs",
+        "scripts/vnext-ranking-snapshot-source.test.mjs",
+        "web/src/lib/ptt-article-parser.test.ts",
+        "web/src/lib/ptt-mention-provenance.test.ts",
+        "web/src/lib/ptt-policy.test.ts",
+        "scripts/ptt-mention-provenance-boundary.test.mjs",
+        "web/src/lib/vnext/launch-score.test.ts",
+        "web/src/lib/vnext/launch-score-rules.test.ts",
+        "web/src/lib/vnext/owner-oidc.test.ts",
+        "web/src/lib/vnext/launch-pattern-read.test.ts",
+        "web/src/lib/vnext/private-owner-read.test.ts",
+        "web/src/lib/vnext/launch-patterns.test.ts",
+        "web/src/lib/technical-indicator-adapter.test.ts",
+        "web/src/lib/technical-features-v2.test.ts",
+        "scripts/vnext-linux-restore-candidate.test.mjs",
+        "scripts/local-backup-envelope.test.mjs",
+        "scripts/local-backup-artifact.test.mjs",
+        "scripts/local-backup-lifecycle.test.mjs",
+        "scripts/build-contabo-restore-list.test.mjs",
+        "scripts/export-contabo-database-backup.test.mjs",
+        "scripts/contabo-production-restore-contract.test.mjs",
+        "scripts/contabo-local-backup-cutover.test.mjs",
+        "scripts/rehearse-contabo-database-restore.test.mjs",
+        "scripts/verify-standalone-release.test.mjs",
+        "scripts/package-standalone-release.test.mjs",
+        "web/src/lib/stock-chart-supply.test.ts",
+        "web/src/lib/vnext/business-public.test.ts",
+        "web/src/lib/vnext/vnext.test.ts",
+        "scripts/vnext-staging-preflight.test.mjs",
+        "web/src/lib/vnext/candidate-history-read.test.ts",
+        "scripts/vnext-candidate-history-source.test.mjs",
+        "web/src/lib/candidate-price-history.test.ts",
+        "scripts/vnext-source-window-source.test.mjs",
+        "web/src/lib/vnext/source-volume-boundary.test.ts",
+        "web/src/lib/vnext/analysis-sources.test.ts",
+        "web/src/lib/vnext/source-backlog.test.ts",
+        "web/src/lib/vnext/cached-source-admission.test.ts",
+        "web/src/lib/vnext/candidate-epoch-journal.test.ts",
+        "web/src/lib/vnext/schedule-admission.test.ts",
+        "web/src/lib/vnext/schedule-replay-binding.test.ts",
+        "scripts/vnext-staging-schedule-candidate.test.mjs",
+        "scripts/vnext-candidate-epoch-source.test.mjs",
+        "web/src/lib/source-content-semantics.test.ts",
+        "web/src/lib/vnext/cached-admission.test.ts",
+        "web/src/lib/vnext/current-evidence-read.test.ts",
+        "web/src/lib/vnext/preparation-authority.test.ts",
+        "scripts/vnext-weekly-forecast-source.test.mjs",
+        "web/src/lib/vnext/forecast-active.test.ts",
+        "web/src/lib/vnext/forecast-current.test.ts",
+        "web/src/lib/vnext/thesis.test.ts",
+        "scripts/vnext-staging-execution-boundary.test.mjs",
+        "web/src/lib/tw-entry-plan-authority-clock.test.ts",
+        "web/src/lib/tw-entry-plan-authority.test.ts"
+      ],
+      "start": "2026-11-14T17:19:50.555518+00:00",
+      "end": "2026-11-14T17:19:56.838182+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 47456256,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 30971789312,
+        "/tmp": 9419788288
+      },
+      "resourceViolation": null,
+      "logSha256": "be795d32f58eac242d425848f50efc3321466ab54864dd6e0e6fd70aeb518bb8"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-14T17:19:56.839008+00:00",
+      "end": "2026-11-14T17:20:03.362481+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82399232,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 30971768832,
+        "/tmp": 9421017088
+      },
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-14T17:20:03.362913+00:00",
+      "end": "2026-11-14T17:20:20.664447+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81887232,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 30971760640,
+        "/tmp": 9421017088
+      },
+      "resourceViolation": null,
+      "logSha256": "f714a4a43ff768d13293fd895d65660cc159bf6b67738cf5ddde67bd246626ea"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-14T17:20:20.664853+00:00",
+      "end": "2026-11-14T17:20:30.446125+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81702912,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider": 30971752448,
+        "/tmp": 9421017088
+      },
+      "resourceViolation": null,
+      "logSha256": "9c21f27de6428989ed932032a0d4d234646d40241823bece031e5da6846f9077"
+    }
+  ],
+  "focused": {
+    "passed": 519,
+    "failed": 0,
+    "skipped": 0,
+    "topLevelCases": 508
+  },
+  "privateCli": {
+    "scope": "INVENTED_PRIVATE_FIXTURE_CLI_ONLY",
+    "sourceCommit": "4a77e32537b00c62b31c72516d28fb0c474fefb3",
+    "cases": [
+      {
+        "case": "synthetic-positive",
+        "status": "PASS",
+        "exit": 0,
+        "stdoutSha256": "d30d7946ff27db331d492ec8726fcf21c78eedf5a367710aee292fbb01e1ecc4",
+        "stderrSha256": "f280b533110e0e5c7630e9f319668d0d94fa7c5b9aa9d56abe2dda11d34babda"
+      },
+      {
+        "case": "synthetic-financial-issuer-summary",
+        "status": "PASS",
+        "exit": 0,
+        "stdoutSha256": "b1e1683766a94e5cc0585f52b076267435dd1c89fcc6b934c0a16590e60e06dc",
+        "stderrSha256": "dc9f07d382a09867d23f2add53e3638adfa15c4ecce07f869c5ad2deda684604"
+      },
+      {
+        "case": "synthetic-unparenthesized-template",
+        "status": "PASS",
+        "exit": 0,
+        "stdoutSha256": "25645cd964b1e078fc971f15978678402e6e43d5104068ed67111b231ce15ea3",
+        "stderrSha256": "ce196ccce5c9cd6d9f4e63b67f69620d04acb00538c867a61b75990a5e1154fb"
+      },
+      {
+        "case": "overbound",
+        "status": "PASS",
+        "exit": 1,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "2accbbdd26a8cd33527eead36d416f3503769405c7e3ea01c80521539eb4a5e0"
+      },
+      {
+        "case": "invalid-utf8",
+        "status": "PASS",
+        "exit": 1,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "a2727ad45fa4b76e2afdceedebd5786a38c5d43fd5bc288b056c3ed35ce00645"
+      },
+      {
+        "case": "leaf-symlink-refused",
+        "status": "PASS",
+        "exit": 1,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "5b6a4f3df206b1bf7c5e8d30e3fa905ad61147017158c4f237a5202c5f22cff8"
+      },
+      {
+        "case": "wrong-manifest-kind",
+        "status": "PASS",
+        "exit": 1,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "1ce2d6538b05bb5bcb090eaad9cf60358916909cd05951607f7631752989703f"
+      }
+    ],
+    "realPttReplay": false,
+    "productionActions": 0
+  },
+  "fixedByteRequest": "PTT-FIXED-BYTE-REPLAY.json",
+  "firstActualReplay": {
+    "commit": "5285068e432925cd339cd40cb9436ff37f445deb",
+    "blob": "317dfd7e4bbd65b0f519074b4d2d566fe7033d84",
+    "source": "e676e04aa34c42abc0b539ad087b2902abeb3ff2",
+    "metExpectations": 2,
+    "total": 4,
+    "failures": [
+      "00981A_ex_template_2330_false_positive",
+      "4763_financial_issuer_summary_false_negative"
+    ],
+    "sameBytesReplayedWithOfficialName": "STILL_2_OF_4_EXTERNAL_USER_REPORT"
+  },
+  "newSourceActualFourByteReplay": "PENDING_EXTERNAL_COORDINATOR_NOT_SUBSTITUTED_BY_FIXTURES",
+  "rightsAndQueueAuthority": false,
+  "scope": "BODY_LOCAL_MATCH_FIX_NO_FINANCIAL_FACT_OR_EPS_INTERPRETATION",
+  "genericLegacyMatcherChanged": false,
+  "approvedStructure": "TICKERISSUER  ROC_YEAR\u5e74 Q1_TO_4:SIGNED_DECIMAL  \u7d2f\u7a4d:SIGNED_DECIMAL",
+  "priorVmEvidence": "ptt-body-checks.json",
+  "independentEngineeringReview": {
+    "openNewP0P1": 0,
+    "reviewerTestsRun": false,
+    "formalA1": false
+  },
+  "loop": {
+    "pttFullBatchesSoFar": 3,
+    "maxTaskIterations": 5,
+    "sameFailureLimit": 2,
+    "substantiveSourceCorrectionReviewedBeforeNewReplay": true,
+    "nativeHoldRetries": 0
+  },
+  "gates": {
+    "native": "HOLD",
+    "A1Protected": "BLOCKED_UNCHANGED",
+    "realPttCandidateAdmission": "BLOCKED_METADATA_SCOPE",
+    "instrumentLiquidityAndOfficialCrossEvidence": "NOT_AUTHORIZED_BY_BODY_MATCH",
+    "sqlApply": 0,
+    "productionActions": 0,
+    "deployment": false
+  }
+}
