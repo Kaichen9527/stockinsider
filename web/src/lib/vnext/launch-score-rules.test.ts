@@ -82,8 +82,11 @@ test('v2 fixed16-rule dataset produces100 points and70 technical without grantin
     if (mode === 'technical_confirmed') tampered.confirmedTechnicalPoints = 69;
     if (mode === 'group') tampered.rules[0].group = 'market';
     if (mode === 'weight') {
-      tampered.rules[0].weight = 6; tampered.rules[0].points = 6;
-      tampered.rules[1].weight = 4; tampered.rules[1].points = 4; //preserve100 total
+      // Deliberately violate the canonical literal types to model hostile input.
+      const first = tampered.rules[0] as unknown as { weight: number; points: number };
+      const second = tampered.rules[1] as unknown as { weight: number; points: number };
+      first.weight = 6; first.points = 6;
+      second.weight = 4; second.points = 4; //preserve100 total
     }
     if (mode === 'id') tampered.rules[0].id = 'invented-rule';
     if (mode === 'rs_finite') tampered.relativeStrength63 = .999;
