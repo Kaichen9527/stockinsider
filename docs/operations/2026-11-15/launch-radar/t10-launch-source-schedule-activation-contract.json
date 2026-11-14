@@ -1,0 +1,67 @@
+{
+  "schema": "stockinsider.launch-source-existing-drain-preclose-contract.v1",
+  "scope": "Defensive static contract check on fixed Cloud sources combined with read-only Contabo timer inventory",
+  "sourceCommit": "3941e358dd5d1a17161ba328bce32d3770aa7a30",
+  "observedTimers": {
+    "receiptCommit": "1549f2ef2c767e07a99d9dc7397019d99dbe6012",
+    "effectiveGeneric": {
+      "calendar": "*-*-* 00..17,22..23:10:00 Asia/Taipei",
+      "active": true,
+      "limit": 20,
+      "maxBatchesDefault": 1,
+      "phase": null,
+      "calledBefore": [
+        "candidate-financial-queue-drain",
+        "candidate-financial-documents/worker"
+      ]
+    },
+    "ordinaryPrecloseInvocations": "00:10 through 13:10 Taipei inclusive",
+    "phaseScoped": [
+      [
+        "18:15",
+        "preliminary"
+      ],
+      [
+        "19:00",
+        "preliminary"
+      ],
+      [
+        "20:15",
+        "final"
+      ],
+      [
+        "20:40",
+        "final"
+      ],
+      [
+        "21:00",
+        "final"
+      ]
+    ]
+  },
+  "verifiedFromSource": {
+    "activePoolRequiredForIssue": true,
+    "entersPlannerBeforeLegacyClaims": true,
+    "emptyPoolShortCircuit": true,
+    "nonemptyPlannerRequiresLatestCompletedSessionSameTaipeiDate": true,
+    "missingOrPriorDayThrows": "launch_csv_completed_current_session_required",
+    "httpCatch": "503 launch_source_prepass_unavailable",
+    "unchangedLegacyClaimFilter": "requested_session_date = p_session_date when explicitly cutoff-scoped",
+    "dedicatedPrepassMaxClaimsPerInvocation": 4,
+    "newDayRequeuesDistinctCaptureGeneration": true,
+    "newHistoricalCappedDailyKeys": 99,
+    "additionalIndexTasksPerMarket": "distinct months over most-recent 240 completed sessions"
+  },
+  "requiredRegression": [
+    "On a close day before 13:30 and on a non-session day with an active pool, continue authorized due unbound jobs while explicitly deferring fresh launch source plan.",
+    "After an authoritative current session close, time-bound successful ready acknowledgments before 21:30. Measure cold-start backlog vs verified eligible reusable history and budget, including indexed-month and historical date jobs.",
+    "Preserve failures and prior frozen rank if a required source is missing at cutoff. Do not grant additional writer authority or drop source ownership checks."
+  ],
+  "explicitLimits": {
+    "enabledModeExecuted": false,
+    "productionRequestSent": false,
+    "productionChanged": false,
+    "installedMigration": false,
+    "HOLDRetained": true
+  }
+}
