@@ -1,0 +1,201 @@
+{
+  "schema": "stockinsider-contabo-scheduler-real-session-incomplete-v1",
+  "scope": "READONLY_EXISTING_SERVICE_JOURNAL_AND_LOADED_COMMAND_METADATA",
+  "sessionDate": "2026-11-13",
+  "fixedRelease": "dd59817f750684b093965f539dd4de466be13077",
+  "existingEntrypoints": [
+    {
+      "unit": "stockinsider-taiwan-data-preliminary.service",
+      "orderedRequired": [
+        {
+          "endpoint": "/api/internal/taiwan-data-refresh",
+          "continueOnError": false
+        },
+        {
+          "endpoint": "/api/internal/taiwan-data-queue-drain",
+          "continueOnError": false
+        },
+        {
+          "endpoint": "/api/internal/pipeline-run",
+          "continueOnError": false
+        }
+      ]
+    },
+    {
+      "unit": "stockinsider-taiwan-data-preliminary.service",
+      "localTimestamp": "2026-11-13T19:02:39+08:00",
+      "failingEndpoint": "/api/internal/taiwan-data-queue-drain",
+      "http": 503,
+      "reason": "taiwan_refresh_scope_incomplete"
+    },
+    {
+      "unit": "stockinsider-research-cycle.service",
+      "orderedRequired": [
+        {
+          "endpoint": "/api/internal/taiwan-data-queue-drain",
+          "continueOnError": false
+        },
+        {
+          "endpoint": "/api/internal/pipeline-run",
+          "continueOnError": false
+        }
+      ]
+    },
+    {
+      "unit": "stockinsider-research-cycle.service",
+      "localTimestamp": "2026-11-13T21:00:11+08:00",
+      "failingEndpoint": "/api/internal/taiwan-data-queue-drain",
+      "http": 503,
+      "reason": "taiwan_refresh_scope_incomplete"
+    },
+    {
+      "unit": "stockinsider-taiwan-data-queue-drain.service",
+      "orderedRequired": [
+        {
+          "endpoint": "/api/internal/taiwan-data-queue-drain",
+          "continueOnError": false
+        },
+        {
+          "endpoint": "/api/internal/candidate-financial-queue-drain",
+          "continueOnError": true
+        },
+        {
+          "endpoint": "/api/internal/candidate-financial-documents/worker",
+          "continueOnError": true
+        }
+      ]
+    }
+  ],
+  "terminal": [
+    {
+      "unit": "stockinsider-taiwan-data-preliminary.service",
+      "selected": {
+        "claimed": 272,
+        "completed": 272,
+        "batches": 3,
+        "budgetExhausted": false,
+        "status": "incomplete",
+        "scopeComplete": false,
+        "dataComplete": false,
+        "researchReady": false,
+        "progress": {
+          "ready": false,
+          "failed": 0,
+          "queued": 3,
+          "missing": 0,
+          "running": 0,
+          "settled": false,
+          "cutoffAt": "2026-11-13T12:00:11.719+01:00",
+          "expected": 274,
+          "retrying": 3,
+          "completed": 271,
+          "scopeSource": "registered_scope",
+          "researchReady": false,
+          "failedCritical": 0,
+          "contractVersion": "taiwan-data-provider-v12",
+          "failedCandidate": 0
+        },
+        "phase": "preliminary",
+        "sessionDate": "2026-11-13",
+        "terminalCounts": {
+          "complete": 269,
+          "retry_scheduled": 3
+        },
+        "publication": [
+          {
+            "dataCutoffAt": "2026-11-13T12:02:39.784+01:00",
+            "shadowEligible": false,
+            "refreshProgress": {
+              "ready": false,
+              "failed": 0,
+              "queued": 3,
+              "missing": 0,
+              "running": 0,
+              "settled": false,
+              "cutoffAt": "2026-11-13T12:00:11.719+01:00",
+              "expected": 274,
+              "retrying": 3,
+              "completed": 271,
+              "scopeSource": "registered_scope",
+              "researchReady": false,
+              "failedCritical": 0,
+              "contractVersion": "taiwan-data-provider-v12",
+              "failedCandidate": 0
+            },
+            "publicationPhase": "preliminary",
+            "datasetCompletenessPct": null
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "unit": "stockinsider-research-cycle.service",
+      "selected": {
+        "claimed": 3,
+        "completed": 3,
+        "batches": 1,
+        "budgetExhausted": false,
+        "status": "incomplete",
+        "scopeComplete": false,
+        "dataComplete": false,
+        "researchReady": false,
+        "progress": {
+          "ready": false,
+          "failed": 1,
+          "queued": 1,
+          "missing": 0,
+          "running": 0,
+          "settled": false,
+          "cutoffAt": "2026-11-13T13:40:10.315+01:00",
+          "expected": 272,
+          "retrying": 1,
+          "completed": 270,
+          "scopeSource": "registered_scope",
+          "researchReady": false,
+          "failedCritical": 0,
+          "contractVersion": "taiwan-data-provider-v12",
+          "failedCandidate": 1
+        },
+        "phase": "final",
+        "sessionDate": "2026-11-13",
+        "terminalCounts": {
+          "complete": 1,
+          "retry_scheduled": 1,
+          "network_error": 1
+        },
+        "publication": [
+          {
+            "dataCutoffAt": "2026-11-13T14:00:11.531+01:00",
+            "shadowEligible": false,
+            "refreshProgress": {
+              "ready": false,
+              "failed": 1,
+              "queued": 1,
+              "missing": 0,
+              "running": 0,
+              "settled": false,
+              "cutoffAt": "2026-11-13T13:40:10.315+01:00",
+              "expected": 272,
+              "retrying": 1,
+              "completed": 270,
+              "scopeSource": "registered_scope",
+              "researchReady": false,
+              "failedCritical": 0,
+              "contractVersion": "taiwan-data-provider-v12",
+              "failedCandidate": 1
+            },
+            "publicationPhase": "final",
+            "datasetCompletenessPct": null
+          }
+        ],
+        "errors": []
+      }
+    }
+  ],
+  "sequenceAbortOnFirstRequiredFailure": true,
+  "writerReachedForTheseInvocations": false,
+  "latestDataRetainedByNewWriterVerified": false,
+  "productionMutation": false,
+  "notes": "The final drain declares research not ready and records a network terminal without disclosing the provider or payload. The case validates the historical gap only, not the not-yet-installed 21:30 writer."
+}
