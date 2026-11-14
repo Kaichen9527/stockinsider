@@ -1,0 +1,7 @@
+# Official market data read verification
+
+Pinned parser source: `a1faae8f53647877948b0523b406eb0d1573edb3`. In a read-only Contabo process on Node v22.23.1, the exact calendar parser and codec blobs were checked before execution. It made six bounded HTTPS reads to the existing TWSE and TPEx endpoints, from 2024 through 2026. Each response digest matched the parser's recorded source digest. The parser emitted 868 rows and confirmed 377 completed days for each market.
+
+The JSON receipt lists each canonical URL, observed response time, length and SHA-256. The same URLs returned the same hashes in the coordinator's earlier public acquisition. The calendar and existing official price and index responses establish the adjacent market dates 2026-11-12 and 2026-11-13. Separate public T86 reads on those two dates each returned one 2330 row with foreign and investment-trust columns. The index read returned both dates. No individual market prices or source-body bytes are included here.
+
+The provider call here was deliberately read-only. It establishes official endpoint and parser behavior in the intended hosting location. Candidate selection, a point-in-time trial at the next real close, authenticated official ingestion, rank publication, and all release gates have their own evidence. The platform denial observed by the development VM is recorded in the selected-read receipt for that environment.

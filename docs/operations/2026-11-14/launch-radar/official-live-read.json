@@ -1,0 +1,97 @@
+{
+  "schema": "stockinsider-t06-official-readonly-probe-v1",
+  "sourceCommit": "a1faae8f53647877948b0523b406eb0d1573edb3",
+  "calendar": {
+    "runtime": "v22.23.1",
+    "parserBlob": "8a0ef915ed246e0d959639e814d5a50653140efd",
+    "codecBlob": "1683982f54a10c401cd0f7b521abc073bdb05ea1",
+    "probeStartedAt": "2026-11-14T15:22:49.429Z",
+    "observedAt": "2026-11-14T15:22:50.443Z",
+    "readOnly": true,
+    "ingested": false,
+    "outputRows": 868,
+    "completed": {
+      "TWSE": 377,
+      "TPEX": 377
+    },
+    "source": [
+      {
+        "url": "https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_113.htm",
+        "bytes": 6230,
+        "retrievedAt": "2026-11-14T15:22:49.955Z",
+        "sha256": "7d33b57379598a4baecf0e4179d7217c11b4adac3b3a5219b11517bcee8c821b"
+      },
+      {
+        "url": "https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_114.htm",
+        "bytes": 7490,
+        "retrievedAt": "2026-11-14T15:22:50.195Z",
+        "sha256": "549196c37f5545a9aac80c51e9993a4932981a92c82d0f157c0f0d9abf6acc6f"
+      },
+      {
+        "url": "https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_115.htm",
+        "bytes": 7595,
+        "retrievedAt": "2026-11-14T15:22:50.359Z",
+        "sha256": "b7c0ae6990f4e14aff19decf1932243a0d867f1abbad51d5ebc28eb7c05d7432"
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20240101",
+        "bytes": 2209,
+        "retrievedAt": "2026-11-14T15:22:50.104Z",
+        "sha256": "af465bb1c10da0e4acfe99f9a6cc0edfdb96fa3f0d89835bed1316670a4de26d"
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20250101",
+        "bytes": 2227,
+        "retrievedAt": "2026-11-14T15:22:50.296Z",
+        "sha256": "5c85396aa2c0bf45add08a257aa6343aac2d48f9d6bb54da17c7f88fefcb71f8"
+      },
+      {
+        "url": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20260101",
+        "bytes": 2783,
+        "retrievedAt": "2026-11-14T15:22:50.439Z",
+        "sha256": "7fefe785ea7155a5004a2eb74486ad865ea5c4b5f02ee0cffbbdacb1ca2ea390"
+      }
+    ]
+  },
+  "twseCanaries": [
+    {
+      "name": "flow12",
+      "sourceDate": "20261112",
+      "stat": "OK",
+      "bytes": 2541453,
+      "rows": 19765,
+      "matched": 1,
+      "hasForeign": true,
+      "hasTrust": true,
+      "sha256": "398436083c232d0083668a6d784f895a3661d4e03a4e207b2510aef9d95f1226"
+    },
+    {
+      "name": "flow13",
+      "sourceDate": "20261113",
+      "stat": "OK",
+      "bytes": 2446461,
+      "rows": 19024,
+      "matched": 1,
+      "hasForeign": true,
+      "hasTrust": true,
+      "sha256": "3ac1060d3c66c10e034d4fddc293df1bc3f04964dd8326ab9848059f41e8734e"
+    },
+    {
+      "name": "index",
+      "sourceDate": "20261101",
+      "stat": "OK",
+      "bytes": 813,
+      "rows": 10,
+      "matched": 2,
+      "hasForeign": false,
+      "hasTrust": false,
+      "sha256": "82e93d477808fa5aaf8c6e4d0ca70dd21b548ffb086f1743781e9101fb87753c"
+    }
+  ],
+  "assessment": {
+    "officialCalendarLiveRead": true,
+    "officialIndexAndFlowRead": true,
+    "productIngested": false,
+    "productPublished": false
+  }
+}
