@@ -67,5 +67,47 @@
     "unadjustedComparisonValid": false,
     "requiresActionAndInstrumentStatusVersions": true
   },
-  "authoritativeObservationsOnly": true
+  "authoritativeObservationsOnly": true,
+  "crossMonthChartControl": {
+    "exchangeWeek": "2025-W27",
+    "exchangeWeekType": "Taipei local Monday-Sunday",
+    "july": {
+      "close": "80.10",
+      "high": "92.50",
+      "low": "79.80",
+      "open": "91.40",
+      "sessionEnd": "2025-07-31",
+      "sessionStart": "2025-07-01",
+      "sessions": 23,
+      "shares": 339626430
+    },
+    "juneBarAcrossMultipleShareBases": true,
+    "juneLastClose": "90.50",
+    "juneLastSession": "2025-06-30",
+    "sources": [
+      {
+        "bytes": 2236,
+        "observedAt": "2026-11-14T22:14:35.935321+00:00",
+        "sha256": "2b1e5c08eff9f9b7ef83760c034689a470c9afa22f08f78b8f117b06177e38e0",
+        "source": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20250601&stockNo=4763&response=json"
+      },
+      {
+        "bytes": 3020,
+        "observedAt": "2026-11-14T22:14:36.635358+00:00",
+        "sha256": "851ed94df2aaea30cf76765934b2cd55b48a4af2d698016e87929a8c31022b00",
+        "source": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20250701&stockNo=4763&response=json"
+      }
+    ],
+    "symbol": "4763",
+    "week": {
+      "close": "88.40",
+      "high": "93.50",
+      "low": "84.60",
+      "open": "90.20",
+      "sessionEnd": "2025-07-04",
+      "sessionStart": "2025-06-30",
+      "sessions": 5,
+      "shares": 108740329
+    }
+  }
 }
