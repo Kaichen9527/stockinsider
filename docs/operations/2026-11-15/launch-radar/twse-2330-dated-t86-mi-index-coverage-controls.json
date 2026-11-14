@@ -1,0 +1,518 @@
+{
+  "schema": "stockinsider-launch-twse-dated-venue-scope-crosscheck-v1",
+  "subject": "2330",
+  "previousEvidence": "520489611e5eaefcc7cc81eda086017deed482cc",
+  "scope": "BOUNDED_EXCHANGE_PUBLIC_RESPONSE_AND_SAME_DAY_MEASUREMENT",
+  "flowResponses": [
+    {
+      "probe": "t86_day_rwd",
+      "requestDay": "20261014",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261014&selectType=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 191158,
+      "hash": "ede27db16bfd01c16b891eda85f50303eb109a710470afe9e323d5973a3c9f85",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261014",
+      "schema": "OK",
+      "row2330": {
+        "foreign": "-6,752,241",
+        "trust": "800,488"
+      }
+    },
+    {
+      "probe": "t86_day_legacy",
+      "requestDay": "20261014",
+      "url": "https://www.twse.com.tw/fund/T86?response=json&date=20261014&selectType=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 191158,
+      "hash": "70785b34c5dec5c63b38c20de1038b3b5d74a66277fa7af211242e0c70e06100",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261014",
+      "schema": "OK",
+      "row2330": {
+        "foreign": "-6,752,241",
+        "trust": "800,488"
+      }
+    },
+    {
+      "probe": "t86_day_rwd",
+      "requestDay": "20261106",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261106&selectType=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 208047,
+      "hash": "12697a822d60751253590f1ac56aedca53afa83fd47925e5b8c0744a4617e8af",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261106",
+      "schema": "OK",
+      "row2330": {
+        "foreign": "-22,844,481",
+        "trust": "4,669,484"
+      }
+    },
+    {
+      "probe": "t86_day_legacy",
+      "requestDay": "20261106",
+      "url": "https://www.twse.com.tw/fund/T86?response=json&date=20261106&selectType=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 208047,
+      "hash": "91665f651aa5ed3ee695fa394aea50c438b2c0dc25f739cee86b76da150d27f1",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261106",
+      "schema": "OK",
+      "row2330": {
+        "foreign": "-22,844,481",
+        "trust": "4,669,484"
+      }
+    },
+    {
+      "probe": "t86_day_rwd",
+      "requestDay": "20261111",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261111&selectType=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 192657,
+      "hash": "2362d68877e38168414965b98d6038cb4256cc794b066ec4b4dc3540f44fa7d6",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261111",
+      "schema": "OK",
+      "row2330": {
+        "foreign": "6,038,319",
+        "trust": "2,385,276"
+      }
+    },
+    {
+      "probe": "t86_day_legacy",
+      "requestDay": "20261111",
+      "url": "https://www.twse.com.tw/fund/T86?response=json&date=20261111&selectType=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 192657,
+      "hash": "789c35927bb17f2c617cc2d0b26201e38f6e713601b5c9c4c1786d952cb409ad",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261111",
+      "schema": "OK",
+      "row2330": {
+        "foreign": "6,038,319",
+        "trust": "2,385,276"
+      }
+    },
+    {
+      "probe": "t86_day_rwd",
+      "requestDay": "20261112",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261112&selectType=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 196231,
+      "hash": "cbc751396bf7e14411c23a5bc0b1172b8946457ae6e94b274b53dc5b1815d427",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261112",
+      "schema": "OK",
+      "row2330": {
+        "foreign": "-3,955,418",
+        "trust": "119,745"
+      }
+    },
+    {
+      "probe": "t86_day_legacy",
+      "requestDay": "20261112",
+      "url": "https://www.twse.com.tw/fund/T86?response=json&date=20261112&selectType=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 196231,
+      "hash": "69839e804a6d252214756aaadf9aa6b961de9f70a1d7e410091fd39bd1e9bfdf",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261112",
+      "schema": "OK",
+      "row2330": {
+        "foreign": "-3,955,418",
+        "trust": "119,745"
+      }
+    },
+    {
+      "probe": "t86_day_rwd",
+      "requestDay": "20261113",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20261113&selectType=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 198650,
+      "hash": "a1730d5d23193dcd7dab1d3d5451d4a4fc854a68da6a71300db2466d32dafaeb",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261113",
+      "schema": "OK",
+      "row2330": {
+        "foreign": "-2,618,070",
+        "trust": "2,946,069"
+      }
+    },
+    {
+      "probe": "t86_day_legacy",
+      "requestDay": "20261113",
+      "url": "https://www.twse.com.tw/fund/T86?response=json&date=20261113&selectType=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 198650,
+      "hash": "9d8076daab79cd1b97d11f609a0bc24c6d60a7e2978f373d7aa6510b8dba737b",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261113",
+      "schema": "OK",
+      "row2330": {
+        "foreign": "-2,618,070",
+        "trust": "2,946,069"
+      }
+    }
+  ],
+  "marketAndStockResponses": [
+    {
+      "date": "20261014",
+      "dataSet": "close",
+      "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261014&type=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 246531,
+      "rawSha256": "c57d055dc12b39cacf6795051d77c5af0f55deb28eb0393db877029b16928446",
+      "observedAt": "2026-11-14T21:19:20.584+00:00",
+      "tableIndex": 8,
+      "matchingColumns": [
+        "證券代號",
+        "證券名稱",
+        "成交股數",
+        "成交筆數",
+        "成交金額"
+      ],
+      "shares": 28111940,
+      "tradedNtd": 70485890790,
+      "selectedTableScope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。"
+    },
+    {
+      "date": "20261014",
+      "dataSet": "stock",
+      "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261014&stockNo=2330",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 2950,
+      "rawSha256": "43ceb87552d26f43d9fe553537d83bee81d94eacca73a0e8e42d8982351337b4",
+      "observedAt": "2026-11-14T21:19:19.775+00:00",
+      "shares": 28111940,
+      "tradedNtd": 70485890790,
+      "selectedTableScope": null
+    },
+    {
+      "date": "20261106",
+      "dataSet": "close",
+      "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261106&type=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 253043,
+      "rawSha256": "2c58023dc668b201451d8b31cfc914007231aa57a394ec81aea607446af2ecde",
+      "observedAt": "2026-11-14T21:19:20.671+00:00",
+      "tableIndex": 8,
+      "matchingColumns": [
+        "證券代號",
+        "證券名稱",
+        "成交股數",
+        "成交筆數",
+        "成交金額"
+      ],
+      "shares": 110714587,
+      "tradedNtd": 231893102005,
+      "selectedTableScope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。"
+    },
+    {
+      "date": "20261106",
+      "dataSet": "stock",
+      "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261106&stockNo=2330",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 1974,
+      "rawSha256": "20990397176ef440d628dc8aacb39632f333e6de230b18958bbe318a9c8d7144",
+      "observedAt": "2026-11-14T21:19:21.127+00:00",
+      "shares": 110714587,
+      "tradedNtd": 231893102005,
+      "selectedTableScope": null
+    },
+    {
+      "date": "20261111",
+      "dataSet": "close",
+      "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261111&type=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 247881,
+      "rawSha256": "5bcd8bfc7f1027a5b2b30f8992bee4438cc18b6799fe2cc7d4533cc1a04e904f",
+      "observedAt": "2026-11-14T21:19:21.530+00:00",
+      "tableIndex": 8,
+      "matchingColumns": [
+        "證券代號",
+        "證券名稱",
+        "成交股數",
+        "成交筆數",
+        "成交金額"
+      ],
+      "shares": 33056476,
+      "tradedNtd": 77900786705,
+      "selectedTableScope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。"
+    },
+    {
+      "date": "20261111",
+      "dataSet": "stock",
+      "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261111&stockNo=2330",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 1974,
+      "rawSha256": "9b5333fc97c753aed89156335205ae53f0315909a17f5da5c061ddbd056aa4e5",
+      "observedAt": "2026-11-14T21:19:21.691+00:00",
+      "shares": 33056476,
+      "tradedNtd": 77900786705,
+      "selectedTableScope": null
+    },
+    {
+      "date": "20261112",
+      "dataSet": "close",
+      "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261112&type=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 249584,
+      "rawSha256": "cde27d4eba9c726529527afaada2c6be837d46625751a7fb8ca36e542ff76668",
+      "observedAt": "2026-11-14T21:19:22.899+00:00",
+      "tableIndex": 8,
+      "matchingColumns": [
+        "證券代號",
+        "證券名稱",
+        "成交股數",
+        "成交筆數",
+        "成交金額"
+      ],
+      "shares": 34359285,
+      "tradedNtd": 81282658016,
+      "selectedTableScope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。"
+    },
+    {
+      "date": "20261112",
+      "dataSet": "stock",
+      "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261112&stockNo=2330",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 1974,
+      "rawSha256": "08dbd98f51ac721a1c968fccf1656ecfb29ae995aca646a8eb545f1d14d9003c",
+      "observedAt": "2026-11-14T21:19:22.211+00:00",
+      "shares": 34359285,
+      "tradedNtd": 81282658016,
+      "selectedTableScope": null
+    },
+    {
+      "date": "20261113",
+      "dataSet": "close",
+      "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261113&type=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 247687,
+      "rawSha256": "3e0330967ecdf0de193fbdeea3447691c9d35719b1752a65607285a1216a2a43",
+      "observedAt": "2026-11-14T21:19:23.026+00:00",
+      "tableIndex": 8,
+      "matchingColumns": [
+        "證券代號",
+        "證券名稱",
+        "成交股數",
+        "成交筆數",
+        "成交金額"
+      ],
+      "shares": 30973127,
+      "tradedNtd": 73326711390,
+      "selectedTableScope": "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。"
+    },
+    {
+      "date": "20261113",
+      "dataSet": "stock",
+      "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261113&stockNo=2330",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 1974,
+      "rawSha256": "a334d9024ba80def58ff3d582ab5146bb4625747cb322336de765a96de2f47b2",
+      "observedAt": "2026-11-14T21:19:23.337+00:00",
+      "shares": 30973127,
+      "tradedNtd": 73326711390,
+      "selectedTableScope": null
+    }
+  ],
+  "blockResponses": [
+    {
+      "date": "20261106",
+      "url": "https://www.twse.com.tw/rwd/zh/block/BFIAUU?response=json&date=20261106",
+      "rawSha256": "5d1fe4b92dd8e7c9ff4094f4e9314e2c8ea9d5bc60e448736ce78996379e1ded",
+      "2330Shares": 1823000,
+      "matchingRows": 12
+    },
+    {
+      "date": "20261014",
+      "url": "https://www.twse.com.tw/rwd/zh/block/BFIAUU?response=json&date=20261014",
+      "rawSha256": "d4717dda3f385c745e63d3423cdd129da415c25e21e8d2209947cefa73d3828b",
+      "2330Shares": 3231000,
+      "matchingRows": 9
+    },
+    {
+      "date": "20261111",
+      "url": "https://www.twse.com.tw/rwd/zh/block/BFIAUU?response=json&date=20261111",
+      "rawSha256": "c73f5d0d3318322c6a45371983fcaf5ebac4c95344e2def50cdde4aa316668a8",
+      "2330Shares": 18000,
+      "matchingRows": 2
+    },
+    {
+      "date": "20261113",
+      "url": "https://www.twse.com.tw/rwd/zh/block/BFIAUU?response=json&date=20261113",
+      "rawSha256": "f85c6bf6c767abb5d8e514da12a44871be65393a15afb23108104cbc5e50462e",
+      "2330Shares": 855000,
+      "matchingRows": 5
+    },
+    {
+      "date": "20261112",
+      "url": "https://www.twse.com.tw/rwd/zh/block/BFIAUU?response=json&date=20261112",
+      "rawSha256": "30419e300bc540727036054ae5ce39ddca05d778e1d8eaa64a30b43cd24afaa9",
+      "2330Shares": 3138000,
+      "matchingRows": 10
+    }
+  ],
+  "comparisons": [
+    {
+      "session": "20261014",
+      "closeShares": 28111940,
+      "stockShares": 28111940,
+      "turnoverNtd": 70485890790,
+      "independentBlockShares": 3231000,
+      "possibleExcludingBlockDenominator": 24880940,
+      "foreignNet": -6752241,
+      "investmentTrustNet": 800488,
+      "forensicOnly": true
+    },
+    {
+      "session": "20261106",
+      "closeShares": 110714587,
+      "stockShares": 110714587,
+      "turnoverNtd": 231893102005,
+      "independentBlockShares": 1823000,
+      "possibleExcludingBlockDenominator": 108891587,
+      "foreignNet": -22844481,
+      "investmentTrustNet": 4669484,
+      "forensicOnly": true
+    },
+    {
+      "session": "20261111",
+      "closeShares": 33056476,
+      "stockShares": 33056476,
+      "turnoverNtd": 77900786705,
+      "independentBlockShares": 18000,
+      "possibleExcludingBlockDenominator": 33038476,
+      "foreignNet": 6038319,
+      "investmentTrustNet": 2385276,
+      "forensicOnly": true
+    },
+    {
+      "session": "20261112",
+      "closeShares": 34359285,
+      "stockShares": 34359285,
+      "turnoverNtd": 81282658016,
+      "independentBlockShares": 3138000,
+      "possibleExcludingBlockDenominator": 31221285,
+      "foreignNet": -3955418,
+      "investmentTrustNet": 119745,
+      "forensicOnly": true
+    },
+    {
+      "session": "20261113",
+      "closeShares": 30973127,
+      "stockShares": 30973127,
+      "turnoverNtd": 73326711390,
+      "independentBlockShares": 855000,
+      "possibleExcludingBlockDenominator": 30118127,
+      "foreignNet": -2618070,
+      "investmentTrustNet": 2946069,
+      "forensicOnly": true
+    }
+  ],
+  "otherTransportControls": [
+    {
+      "probe": "stockday_rwd",
+      "requestDay": "latest",
+      "url": "https://www.twse.com.tw/rwd/zh/exchangeReport/STOCK_DAY?response=json&date=20261113&stockNo=2330",
+      "http": 200,
+      "contentType": "text/html",
+      "bytes": 752,
+      "hash": "a2b4cf27aef44aa3db9d84fed30ba13b024385cce4fe571c7518ee047b8fb56f",
+      "scope": [],
+      "error": "JSONDecodeError"
+    },
+    {
+      "probe": "stockday_openapi",
+      "requestDay": "latest",
+      "url": "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 321004,
+      "hash": "67f5c4ea2d705326a07f8f1cb5bcca99551f4381dc98c5a802e77484c1eaba9b",
+      "scope": [],
+      "row2330": [
+        {
+          "Date": "1151113",
+          "Code": "2330",
+          "Name": "台積電",
+          "TradeVolume": "30973127",
+          "TradeValue": "73326711390",
+          "OpeningPrice": "2375.00",
+          "HighestPrice": "2390.00",
+          "LowestPrice": "2340.00",
+          "ClosingPrice": "2350.00",
+          "Change": "10.0000",
+          "Transaction": "76864"
+        }
+      ]
+    },
+    {
+      "probe": "mi_legacy",
+      "requestDay": "latest",
+      "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261113&type=ALLBUT0999",
+      "http": 200,
+      "contentType": "application/json",
+      "bytes": 247687,
+      "hash": "3e0330967ecdf0de193fbdeea3447691c9d35719b1752a65607285a1216a2a43",
+      "scope": [
+        "本統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。"
+      ],
+      "returnedDate": "20261113",
+      "schema": "OK",
+      "2330TradingShares": 30973127,
+      "table": "115年11月13日 每日收盤行情(全部(不含權證、牛熊證、可展延牛熊證))"
+    }
+  ],
+  "limitations": {
+    "unfrozenOfficialRevision": "Live/latest T86 public HTML displayed an excludes-block footnote at a separate retrieval. Scope must bind exact accepted payload.",
+    "unverifiedOfficialTimestamp": true,
+    "notHistoricalPublishedClock": true,
+    "stockDayOnlyLacksScopeFootnote": true,
+    "blockSubtractionNotProductAuthority": true,
+    "noPaidAction": true,
+    "noProductionDataMutation": true,
+    "notFiveTwentyDayAcceptance": true
+  }
+}
