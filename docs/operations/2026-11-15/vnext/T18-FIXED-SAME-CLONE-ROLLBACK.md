@@ -34,8 +34,10 @@ real detail contracts require separate403 acceptance; full release remains false
 Host creates staging COPIES, without changing the retained production releases.
 Mount a root-owned private RO tree at /run/t18-assets containing exactly the two
 release directories plus the fixed PostgREST executable. Keep it immutable to all
-three unprivileged UIDs until every unit stops. No symlinks, writable members,
-hardlinks, special files, env/key/backup files or caller pins are accepted. Exact
+three unprivileged UIDs until every unit stops. No symlinks, hardlinks, special files, env/key/backup files or caller pins are
+accepted. The only group-writable member exception is ordinary0664 at an exact
+original manifest pin, root UID/GID0, nlink1, bound to the live private RO release
+FD/mount. All other group/other-writable files and writable directories reject. Exact
 manifest member sets/modes/streamed hashes and Next16.3.4 BUILD_IDs are checked.
 
 | Artifact | Fixed identity |

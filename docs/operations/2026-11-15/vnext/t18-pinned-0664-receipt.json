@@ -1,0 +1,93 @@
+{
+  "applicationStartedOnsite": false,
+  "build": {
+    "applicationSourceChanged": false,
+    "priorFullBuild": "PREEXISTING_LAYOUT_PAGE_EXPORT_TYPES_BLOCKED",
+    "status": "UNAVAILABLE_NEXT_DEPENDENCY_IN_ISOLATED_CHECKOUT"
+  },
+  "cloudFullPinnedRoAssetAdmission": "UNAVAILABLE_NOT_CLAIMED",
+  "cloudTestsGrantRuntimeAuthority": false,
+  "contaboAccessed": false,
+  "databaseStartedOnsite": false,
+  "fullReleaseAcceptance": false,
+  "generatedAtUtc": "2026-11-14T18:45:02.920788Z",
+  "independentReview": {
+    "durationSeconds": 0.163,
+    "focusedAssetsPassed": 12,
+    "openBlockerOrHighFindings": 0,
+    "scope": "EXACT_SOURCE_AND_AVAILABLE_SYNTHETIC_TESTS"
+  },
+  "keyRead": false,
+  "nativeHoldRetained": true,
+  "onsiteReportedPackaging": {
+    "A": {
+      "members": 2584,
+      "modes": {
+        "0644": 1246,
+        "0664": 1328,
+        "0755": 10
+      }
+    },
+    "B": {
+      "members": 2586,
+      "modes": {
+        "0644": 1246,
+        "0664": 1330,
+        "0755": 10
+      }
+    },
+    "directoriesPerPackage": 513,
+    "directoryMode": "0755",
+    "evidenceCommitAbbreviation": "7e0e253",
+    "groupWritableMembers": "ROOT_UID_0_GID_0_ORDINARY_0664",
+    "manifestMode": "0644",
+    "source": "COORDINATOR_REPORTED_NOT_CLOUD_ADMISSION",
+    "totalAssetBytes": 180349201
+  },
+  "originalPackageOrModeChanged": false,
+  "originalPinsUnchanged": true,
+  "parentCommit": "fa1d6c4658f703718f33d7307aaa88a2071056fb",
+  "realKeyLoaderSource": "NOT_PRESENT_IN_REPO_SOURCE_REQUIRED_BEFORE_REUSE",
+  "runtimeFilesToStage": [
+    {
+      "gitBlob": "9d49a3b25475bd3a49218307a20e58356a9a3e47",
+      "path": "deployment/staging/vnext/t17_keyfd/t18_release_assets.py",
+      "sha256": "e684ea9f250565d7bb2d6eca66546ff69d8320bba888686f6598f89a25163670"
+    },
+    {
+      "gitBlob": "ebeecbc7e52e84b60c2995601da0206cf71052f2",
+      "path": "scripts/staging_t18_assets_preflight.py",
+      "sha256": "9a0ad7cf3ff10d1dc282fd495f061030f859d1ff36235cf87fd2344213eabd5e"
+    }
+  ],
+  "schema": "stockinsider-t18-pinned-0664-compatibility-v1",
+  "sourceSha256": {
+    "deployment/staging/vnext/t17_keyfd/t18_release_assets.py": "e684ea9f250565d7bb2d6eca66546ff69d8320bba888686f6598f89a25163670",
+    "docs/operations/2026-11-15/vnext/T18-FIXED-SAME-CLONE-ROLLBACK.md": "3265a3be67ada21536d2814ac17d03d6562ed50a306b7c4bd34e7eacbe7e6e5a",
+    "docs/operations/2026-11-15/vnext/T18-PINNED-0664-COMPATIBILITY.md": "a08ef6cb52e7a598e5bfbf81c9816c20b394f1d0a8ee4e09018632971fc0f059",
+    "scripts/staging_t18_assets_preflight.py": "9a0ad7cf3ff10d1dc282fd495f061030f859d1ff36235cf87fd2344213eabd5e",
+    "scripts/tests/test_t18_release_assets.py": "a68251bf976f7da0730b8a1391b4ea6ac24ecb9f005f1587beeefef5db71ddad"
+  },
+  "tests": {
+    "cases": [
+      "captured_2584_2586_mode_histograms_structural_only",
+      "unknown_pin_0664_reject",
+      "wrong_uid_gid_link_or_mode_reject",
+      "actual_0664_without_live_lease_reject",
+      "actual_rw_held_mount_reject",
+      "unrelated_or_closed_lease_reject",
+      "no_key_cli_cloud_and_argument_refusal"
+    ],
+    "combinedT17T18": {
+      "durationSeconds": 43.0,
+      "failed": 0,
+      "passed": 122,
+      "skipped": 0
+    },
+    "focusedAssets": {
+      "durationSeconds": 0.201,
+      "failed": 0,
+      "passed": 12
+    }
+  }
+}

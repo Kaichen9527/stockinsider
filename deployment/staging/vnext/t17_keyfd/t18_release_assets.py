@@ -87,15 +87,86 @@ def _open_relative(rootfd,relative,directory=False):
         raise
 
 
-def _inspect_file(rootfd,relative,limit,expected=None,capture=False):
+def _manifest_mode_allowed(mode,commit,pin):
+    # Parsing permission only. The canonical manifest digest is checked first;
+    # no file or executable is admitted by this structural predicate.
+    return not mode&0o022 or (mode==0o664 and (commit,pin) in RELEASE_PINS)
+
+
+def _root_0664_metadata(info):
+    return (stat.S_ISREG(info.st_mode) and stat.S_IMODE(info.st_mode)==0o664
+            and info.st_uid==0 and info.st_gid==0 and info.st_nlink==1)
+
+
+def _fd_mount_id(fd):
+    matches=re.findall(r'^mnt_id:\s*(\d+)$',Path('/proc/self/fdinfo/'+str(fd)).read_text(),re.M)
+    if len(matches)!=1:raise ReleaseAssetsRejected('release_mount_identity_required')
+    return int(matches[0])
+
+
+class _PinnedReadonlyRelease:
+    """Private live kernel-observed lease, never caller readiness/metadata."""
+    def __init__(self,held,identity,commit,pin):
+        self.held,self.identity,self.commit,self.pin=held,identity,commit,pin
+        self.members=None
+        self.mount_id=_fd_mount_id(held)
+
+    def require_root(self,rootfd):
+        if self.held is None or (self.commit,self.pin) not in RELEASE_PINS:
+            raise ReleaseAssetsRejected('pinned_readonly_release_required')
+        for fd in (self.held,rootfd):
+            info=os.fstat(fd)
+            if ((info.st_dev,info.st_ino)!=self.identity or not stat.S_ISDIR(info.st_mode)
+                or info.st_uid!=0 or info.st_mode&0o7022 or _fd_mount_id(fd)!=self.mount_id
+                or not os.fstatvfs(fd).f_flag&os.ST_RDONLY):
+                raise ReleaseAssetsRejected('pinned_readonly_release_required')
+
+    def require_member(self,rootfd,relative,info,filefd=None):
+        self.require_root(rootfd)
+        if (self.members is None or self.members.get(relative)!=0o664
+            or not _root_0664_metadata(info)
+            or filefd is not None and not os.fstatvfs(filefd).f_flag&os.ST_RDONLY):
+            raise ReleaseAssetsRejected('pinned_root_group_0664_member_required')
+
+    def close(self):
+        if self.held is not None:os.close(self.held);self.held=None
+        self.members=None
+
+
+def _observe_pinned_release(rootfd,commit,pin):
+    # Public runtime accepts no path/pin override. This internal factory is
+    # called only for the two compiled release pairs and observes the fixed RO
+    # root before binding an independently opened fixed release to this FD.
+    if (commit,pin) not in RELEASE_PINS:
+        raise ReleaseAssetsRejected('fixed_release_pair_required')
+    _observe_root()
+    fixed=None;held=None
+    try:
+        fixed=os.open(ASSET_ROOT,os.O_RDONLY|os.O_DIRECTORY|os.O_CLOEXEC|os.O_NOFOLLOW)
+        held=_open_relative(fixed,commit,True)
+        info=os.fstat(held)
+        lease=_PinnedReadonlyRelease(held,(info.st_dev,info.st_ino),commit,pin)
+        lease.require_root(rootfd)
+        held=None
+        return lease
+    finally:
+        if held is not None:os.close(held)
+        if fixed is not None:os.close(fixed)
+
+
+def _inspect_file(rootfd,relative,limit,expected=None,capture=False,readonly_release=None):
     fd=None
     try:
         fd=_open_relative(rootfd,relative)
         before=os.fstat(fd)
         if (not stat.S_ISREG(before.st_mode) or before.st_nlink!=1 or before.st_size>limit
-                or before.st_mode&0o7000 or before.st_mode&0o022
+                or before.st_mode&0o7000
                 or expected and (before.st_size!=expected['bytes'] or stat.S_IMODE(before.st_mode)!=expected['mode'])):
             raise ReleaseAssetsRejected('asset_file_metadata_rejected')
+        if before.st_mode&0o022:
+            if type(readonly_release) is not _PinnedReadonlyRelease:
+                raise ReleaseAssetsRejected('asset_file_metadata_rejected')
+            readonly_release.require_member(rootfd,relative,before,fd)
         digest=hashlib.sha256();captured=bytearray();total=0
         while chunk:=os.read(fd,CHUNK):
             total+=len(chunk)
@@ -103,7 +174,7 @@ def _inspect_file(rootfd,relative,limit,expected=None,capture=False):
             digest.update(chunk)
             if capture:captured.extend(chunk)
         after=os.fstat(fd)
-        names=('st_dev','st_ino','st_size','st_mode','st_nlink','st_mtime_ns','st_ctime_ns')
+        names=('st_dev','st_ino','st_size','st_mode','st_uid','st_gid','st_nlink','st_mtime_ns','st_ctime_ns')
         if total!=before.st_size or any(getattr(before,n)!=getattr(after,n) for n in names):
             raise ReleaseAssetsRejected('asset_file_changed')
         return digest.hexdigest(),bytes(captured) if capture else None
@@ -134,7 +205,7 @@ def _validate_manifest(receipt,commit,pin):
     paths=set();total=0
     for item in manifest['files']:
         if (not _exact(item,'path bytes mode sha256') or not _integer(item['bytes'],MAX_FILE_BYTES)
-                or not _integer(item['mode'],0o777) or item['mode']&0o022
+                or not _integer(item['mode'],0o777) or not _manifest_mode_allowed(item['mode'],commit,pin)
                 or type(item['sha256']) is not str or not HEX64.fullmatch(item['sha256'])):
             raise ReleaseAssetsRejected('asset_member_rejected')
         _relative(item['path'])
@@ -148,7 +219,7 @@ def _validate_manifest(receipt,commit,pin):
     return manifest,paths
 
 
-def _tree(rootfd,root_owner=False):
+def _tree(rootfd,root_owner=False,readonly_release=None):
     actual=set();pending=[''];members=0
     while pending:
         relative=pending.pop();fd=os.dup(rootfd) if not relative else _open_relative(rootfd,relative,True)
@@ -162,9 +233,12 @@ def _tree(rootfd,root_owner=False):
                     _relative(path);members+=1
                     if members>MAX_TREE:raise ReleaseAssetsRejected('asset_tree_limit')
                     info=entry.stat(follow_symlinks=False)
-                    if (info.st_mode&0o7000 or info.st_mode&0o022
-                            or root_owner and info.st_uid!=0):
+                    if (info.st_mode&0o7000 or root_owner and info.st_uid!=0):
                         raise ReleaseAssetsRejected('asset_tree_metadata_rejected')
+                    if info.st_mode&0o022:
+                        if type(readonly_release) is not _PinnedReadonlyRelease:
+                            raise ReleaseAssetsRejected('asset_tree_metadata_rejected')
+                        readonly_release.require_member(rootfd,path,info)
                     if stat.S_ISDIR(info.st_mode):pending.append(path)
                     elif stat.S_ISREG(info.st_mode) and info.st_nlink==1:
                         if path!='release-manifest.json':actual.add(path)
@@ -175,24 +249,31 @@ def _tree(rootfd,root_owner=False):
 
 
 def _verify_release_contents(rootfd,commit,pin):
-    # Private content helper for synthetic tests; runtime NEVER skips actual
-    # RO mount/root-owned-tree checks via this helper or caller booleans.
-    _,data=_inspect_file(rootfd,'release-manifest.json',MAX_MANIFEST,capture=True)
-    manifest,paths=_validate_manifest(_json(data),commit,pin)
-    if _tree(rootfd)!=paths:raise ReleaseAssetsRejected('asset_member_set_rejected')
-    for item in manifest['files']:
-        digest,_=_inspect_file(rootfd,item['path'],item['bytes'],item)
-        if digest!=item['sha256']:raise ReleaseAssetsRejected('asset_member_digest_rejected')
-    _,package=_inspect_file(rootfd,'app/node_modules/next/package.json',1024**2,capture=True)
-    package_json=_json(package)
-    if type(package_json) is not dict or package_json.get('version')!='16.3.4':
-        raise ReleaseAssetsRejected('fixed_next_version_required')
-    _,build=_inspect_file(rootfd,'app/.next/BUILD_ID',4096,capture=True)
-    try:build_id=build.decode('ascii').strip()
-    except UnicodeError:raise ReleaseAssetsRejected('asset_build_id_rejected') from None
-    if not re.fullmatch(r'[A-Za-z0-9_-]{1,256}',build_id):raise ReleaseAssetsRejected('asset_build_id_rejected')
-    return {'sourceCommit':commit,'manifestSha256':pin,'bytes':manifest['bytes'],
-            'fileCount':manifest['fileCount'],'buildId':build_id,'nextVersion':'16.3.4','entrypoint':'app/server.js'}
+    # Unknown synthetic pins retain the original strict non-writable content
+    # helper. The 0664 exception requires actual fixed-root admission even here.
+    lease=_observe_pinned_release(rootfd,commit,pin) if (commit,pin) in RELEASE_PINS else None
+    try:
+        _,data=_inspect_file(rootfd,'release-manifest.json',MAX_MANIFEST,capture=True)
+        manifest,paths=_validate_manifest(_json(data),commit,pin)
+        if lease is not None:
+            lease.members=MappingProxyType({item['path']:item['mode'] for item in manifest['files']})
+        if _tree(rootfd,root_owner=lease is not None,readonly_release=lease)!=paths:
+            raise ReleaseAssetsRejected('asset_member_set_rejected')
+        for item in manifest['files']:
+            digest,_=_inspect_file(rootfd,item['path'],item['bytes'],item,readonly_release=lease)
+            if digest!=item['sha256']:raise ReleaseAssetsRejected('asset_member_digest_rejected')
+        _,package=_inspect_file(rootfd,'app/node_modules/next/package.json',1024**2,capture=True,readonly_release=lease)
+        package_json=_json(package)
+        if type(package_json) is not dict or package_json.get('version')!='16.3.4':
+            raise ReleaseAssetsRejected('fixed_next_version_required')
+        _,build=_inspect_file(rootfd,'app/.next/BUILD_ID',4096,capture=True,readonly_release=lease)
+        try:build_id=build.decode('ascii').strip()
+        except UnicodeError:raise ReleaseAssetsRejected('asset_build_id_rejected') from None
+        if not re.fullmatch(r'[A-Za-z0-9_-]{1,256}',build_id):raise ReleaseAssetsRejected('asset_build_id_rejected')
+        return {'sourceCommit':commit,'manifestSha256':pin,'bytes':manifest['bytes'],
+                'fileCount':manifest['fileCount'],'buildId':build_id,'nextVersion':'16.3.4','entrypoint':'app/server.js'}
+    finally:
+        if lease is not None:lease.close()
 
 
 def _observe_root():
@@ -282,7 +363,6 @@ def observe_fixed_release_assets():
         for commit,pin in RELEASE_PINS:
             fd=_open_relative(rootfd,commit,True);held.append(fd);release_fds.append(fd)
             identity=_verify_release_contents(fd,commit,pin)
-            _tree(fd,root_owner=True)
             identity['directory']=ASSET_ROOT+'/'+commit
             identity['serverPath']=identity['directory']+'/app/server.js'
             releases.append(identity)

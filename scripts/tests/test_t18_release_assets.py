@@ -2,6 +2,11 @@
 import hashlib
 import json
 import os
+import stat
+import subprocess
+import sys
+from types import SimpleNamespace
+from unittest.mock import patch
 from pathlib import Path
 import tempfile
 import unittest
@@ -34,6 +39,81 @@ class ReleaseAssetTests(unittest.TestCase):
                 self.assertEqual(evidence['fileCount'],3)
                 self.assertEqual(evidence['nextVersion'],'16.3.4')
             finally:os.close(fd)
+
+    def test_captured_packaging_histograms_only_allow_original_0664_pairs(self):
+        # Real onsite histogram, structural policy only; no manifest is forged
+        # and no observed-root/runtime lease is issued by these metadata tests.
+        for pair,histogram in zip(m.RELEASE_PINS,({0o644:1246,0o664:1328,0o755:10},
+                                                  {0o644:1246,0o664:1330,0o755:10})):
+            self.assertTrue(all(m._manifest_mode_allowed(mode,*pair)
+                                for mode,total in histogram.items() for _ in range(total)))
+            self.assertFalse(m._manifest_mode_allowed(0o664,'a'*40,'b'*64))
+            for mode in (0o666,0o674,0o764,0o774,0o775,0o776):
+                self.assertFalse(m._manifest_mode_allowed(mode,*pair))
+
+    def test_0664_requires_root_uid_root_gid_regular_single_link(self):
+        good=dict(st_mode=stat.S_IFREG|0o664,st_uid=0,st_gid=0,st_nlink=1)
+        # Pure metadata policy is necessary, never sufficient for admission.
+        self.assertTrue(m._root_0664_metadata(SimpleNamespace(**good)))
+        for changed in ({'st_uid':1001},{'st_gid':1001},{'st_nlink':2},
+                        {'st_mode':stat.S_IFDIR|0o664},{'st_mode':stat.S_IFLNK|0o664},
+                        {'st_mode':stat.S_IFREG|0o666},{'st_mode':stat.S_IFREG|0o2664}):
+            self.assertFalse(m._root_0664_metadata(SimpleNamespace(**{**good,**changed})))
+
+    def test_real_0664_file_never_passes_without_fixed_ro_lease(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);commit,pin,receipt=self.fixture(root)
+            (root/'app/server.js').chmod(0o664)
+            for item in receipt['manifest']['files']:
+                if item['path']=='app/server.js':item['mode']=0o664
+            pin=hashlib.sha256(json.dumps(receipt['manifest'],separators=(',',':')).encode()).hexdigest()
+            receipt['manifestSha256']=pin
+            (root/'release-manifest.json').write_text(json.dumps(receipt))
+            fd=os.open(root,os.O_RDONLY|os.O_DIRECTORY)
+            try:
+                with self.assertRaises(m.ReleaseAssetsRejected):m._validate_manifest(receipt,commit,pin)
+                with self.assertRaises(m.ReleaseAssetsRejected):m._verify_release_contents(fd,commit,pin)
+                with self.assertRaises(m.ReleaseAssetsRejected):m._inspect_file(fd,'app/server.js',4096)
+                with self.assertRaises(m.ReleaseAssetsRejected):m._tree(fd)
+                # Even compiled pins cannot manufacture fixed-root admission.
+                with self.assertRaises((m.ReleaseAssetsRejected,OSError)):
+                    m._verify_release_contents(fd,*m.RELEASE_PINS[0])
+            finally:os.close(fd)
+
+    def test_rw_held_directory_rejects_even_with_root_metadata(self):
+        with tempfile.TemporaryDirectory() as directory,tempfile.TemporaryDirectory() as other:
+            fd=os.open(directory,os.O_RDONLY|os.O_DIRECTORY)
+            otherfd=os.open(other,os.O_RDONLY|os.O_DIRECTORY)
+            held=os.dup(fd);info=os.fstat(fd)
+            lease=m._PinnedReadonlyRelease(held,(info.st_dev,info.st_ino),*m.RELEASE_PINS[0])
+            real_fstat=os.fstat
+            def root_metadata(number):
+                actual=real_fstat(number)
+                return SimpleNamespace(st_dev=actual.st_dev,st_ino=actual.st_ino,
+                    st_mode=stat.S_IFDIR|0o755,st_uid=0,st_gid=0)
+            try:
+                self.assertFalse(os.fstatvfs(fd).f_flag&os.ST_RDONLY)
+                # Instrument root ownership only; actual RW kernel flag stays
+                # real and must reject. This is never a runtime-positive test.
+                with patch.object(m.os,'fstat',side_effect=root_metadata):
+                    with self.assertRaises(m.ReleaseAssetsRejected):lease.require_root(fd)
+                    with self.assertRaises(m.ReleaseAssetsRejected):lease.require_root(otherfd)
+                lease.close()
+                with self.assertRaises(m.ReleaseAssetsRejected):lease.require_root(fd)
+            finally:
+                lease.close();os.close(fd);os.close(otherfd)
+
+    def test_no_key_asset_entry_refuses_cloud_and_all_arguments(self):
+        script=Path(__file__).resolve().parents[2]/'scripts/staging_t18_assets_preflight.py'
+        for args in ([],['--ready=true']):
+            result=subprocess.run([sys.executable,'-I','-B',str(script),*args],
+                env={'PATH':'/usr/bin:/bin','LC_ALL':'C'},capture_output=True,timeout=10)
+            self.assertEqual(result.returncode,2);self.assertEqual(result.stderr,b'')
+            output=json.loads(result.stdout)
+            self.assertEqual(output['status'],'REJECTED')
+            if not args:
+                for field in ('keyRead','databaseStarted','applicationStarted','runtimeRestoreAdmission'):
+                    self.assertIs(output[field],False)
 
     def test_actual_cloud_fixed_mount_is_not_silently_admitted(self):
         with self.assertRaises(m.ReleaseAssetsRejected):
