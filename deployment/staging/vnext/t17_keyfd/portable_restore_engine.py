@@ -15,6 +15,7 @@ import pwd
 import re
 import resource
 import shutil
+import signal
 import stat
 import subprocess
 import tempfile
@@ -74,13 +75,26 @@ def _limits(node=False,capture=False):
     if not node:resource.setrlimit(resource.RLIMIT_AS,(768*1024**2,768*1024**2))
 
 
+def _stop_owned_postgres(process):
+    if process.poll() is None:
+        process.send_signal(signal.SIGINT)  # PG fast shutdown, aborts open clients
+    try:process.wait(timeout=10)
+    except subprocess.TimeoutExpired:
+        try:os.killpg(process.pid,signal.SIGKILL)
+        except ProcessLookupError:pass
+        process.wait(timeout=5)
+    try:os.killpg(process.pid,signal.SIGKILL)
+    except ProcessLookupError:pass
+
+
 class _ValidatedClone:
     """Private scoped handle issued only after this engine's actual DB checks.
 
     Its receipt is descriptive, never authority. The only extra operation is a
     source-fixed reader observation; no caller SQL/command/connection selector.
     """
-    def __init__(self,sql,receipt):
+    def __init__(self,sql,receipt,rest_socket=None):
+        self.__rest_socket=rest_socket
         self.__sql=sql
         self.receipt=receipt
 
@@ -89,7 +103,19 @@ class _ValidatedClone:
         from .radar_reader_observation import assess_radar_reader
         return assess_radar_reader(self.__sql)
 
+    def rehearse_fixed_next(self,app,rest,assets):
+        if self.__sql is None or self.__rest_socket is None:
+            raise RestoreEngineRejected('verified_clone_scope_closed')
+        from .t18_same_clone import run_fixed_same_clone,FixedRollbackRejected
+        from .t18_reader_roles import FixedReaderRolesRejected
+        from .t18_broker_transport import BrokerTransportRejected
+        from .t18_app_broker import AppBrokerRejected
+        try:return run_fixed_same_clone(self.__sql,self.__rest_socket,app,rest,assets)
+        except (FixedRollbackRejected,FixedReaderRolesRejected,BrokerTransportRejected,AppBrokerRejected) as error:
+            raise RestoreEngineRejected(str(error)) from None
+
     def _close(self):
+        self.__rest_socket=None
         self.__sql=None
 
 
@@ -110,6 +136,22 @@ def observe_owned_radar_reader(replay, work_root):
         observation=clone.observe_radar_reader()
         receipt=clone.receipt
     return {'database':receipt,'readerObservation':observation}
+
+
+def rehearse_owned_fixed_next(replay,work_root):
+    """INTERNAL fixed workflow; broker channels are sealed before any PG child."""
+    from .t18_release_assets import observe_fixed_release_assets
+    from .t18_broker_transport import connect_fixed_app_broker,connect_fixed_rest_broker
+    from .t18_runtime_observation import observe_three_uid_budget
+    if pwd.getpwuid(os.getuid()).pw_name!='si-t18-db' or str(work_root)!='/run/t18-db-work':
+        raise RestoreEngineRejected('fixed_t18_db_identity_and_work_required')
+    with observe_fixed_release_assets() as assets:
+        with connect_fixed_app_broker() as app,connect_fixed_rest_broker() as rest:
+            budget=observe_three_uid_budget(app,rest)
+            with _owned_validated_clone(replay,work_root) as clone:
+                result=clone.rehearse_fixed_next(app,rest,assets)
+                receipt=clone.receipt
+            return {'database':receipt,'exercise':result,'threeUidBudget':budget}
 
 
 @contextmanager
@@ -137,6 +179,7 @@ def _owned_validated_clone(replay, work_root):
     process=log=None
     diagnostic_error=None
     clone=None
+    rest_socket_active=False
     deadline=time.monotonic()+900
     phase='setup'
     receipt={'schema':'stockinsider-owned-db-restore-v1','databaseRestored':False,
@@ -162,6 +205,39 @@ def _owned_validated_clone(replay, work_root):
 
     def sql(text):
         return run(pg_bin/'psql',['-X','-A','-t','-v','ON_ERROR_STOP=1','-d','t17_restored'],text).decode().strip()
+
+    def activate_rest_socket():
+        # Fixed newT18 profile only. Restart ONLY this owned clone to expose a
+        # second Unix socket to the separate REST uid, never to the APP uid.
+        nonlocal process,rest_socket_active
+        import grp
+        if user!='si-t18-db' or str(base)!='/run/t18-db-work':
+            raise RestoreEngineRejected('fixed_t18_db_identity_and_work_required')
+        shared=Path('/run/t18-pg');info=shared.lstat()
+        group=grp.getgrnam('stockinsider-t18-dbaccess').gr_gid
+        if (not stat.S_ISDIR(info.st_mode) or info.st_uid!=os.getuid() or info.st_gid!=group
+            or stat.S_IMODE(info.st_mode)!=0o750 or group not in set(os.getgroups())|{os.getegid()}):
+            raise RestoreEngineRejected('private_rest_socket_directory_required')
+        if any(shared.iterdir()):raise RestoreEngineRejected('private_rest_socket_directory_not_empty')
+        (data/'pg_ident.conf').write_text('t18_rest si-t18-rest t18_authenticator\n')
+        (data/'pg_hba.conf').write_text('local t17_restored t18_authenticator peer map=t18_rest\n'
+            'local all si-t18-db peer\nlocal all all reject\n'
+            'host all all 0.0.0.0/0 reject\nhost all all ::/0 reject\n')
+        with (data/'postgresql.conf').open('a') as config:
+            config.write("\nunix_socket_directories='"+str(sock)+",/run/t18-pg'\n"
+                "unix_socket_group='stockinsider-t18-dbaccess'\nunix_socket_permissions=0770\n")
+        _stop_owned_postgres(process)
+        rest_socket_active=True
+        process=subprocess.Popen([str(pg_bin/'postgres'),'-D',str(data)],env=env,
+            stdin=subprocess.DEVNULL,stdout=log,stderr=log,close_fds=True,start_new_session=True,preexec_fn=_limits)
+        for _ in range(50):
+            if process.poll() is not None:raise RestoreEngineRejected('private_rest_socket_start_failed')
+            ready=subprocess.run([str(pg_bin/'pg_isready')],env=env,capture_output=True,timeout=2,preexec_fn=_limits)
+            if ready.returncode==0:break
+            time.sleep(.1)
+        else:raise RestoreEngineRejected('private_rest_socket_start_failed')
+        if sql(b"SELECT current_setting('listen_addresses')=''")!='t':
+            raise RestoreEngineRejected('owned_cluster_tcp_must_remain_disabled')
 
     def replay_pg(args,allow_early_close=False):
         child=None;timer=None;input_error=None;written=0
@@ -220,7 +296,7 @@ def _owned_validated_clone(replay, work_root):
               "max_wal_size=64MB\nmin_wal_size=32MB\ntemp_file_limit=512MB\nmaintenance_work_mem=32MB\nlog_statement=none\nlog_min_error_statement=panic\n")
         log=(root/'postgres.log').open('wb')
         process=subprocess.Popen([str(pg_bin/'postgres'),'-D',str(data)],env=env,
-            stdin=subprocess.DEVNULL,stdout=log,stderr=log,preexec_fn=_limits)
+            stdin=subprocess.DEVNULL,stdout=log,stderr=log,start_new_session=True,preexec_fn=_limits)
         phase='startup'
         for _ in range(50):
             if process.poll() is not None:raise RestoreEngineRejected('postgres_start_failed')
@@ -304,7 +380,7 @@ def _owned_validated_clone(replay, work_root):
           'no provider/key-escrow or full business-semantic validation','no Next rollback/service activation'])
         # Sole yield point, after source/owner/RLS/grants/constraint/row checks.
         # A fixed consumer finishes within this scope; cleanup always follows.
-        clone=_ValidatedClone(sql,receipt)
+        clone=_ValidatedClone(sql,receipt,activate_rest_socket)
         phase='validated_clone_readpoint'
         yield clone
     except RestoreEngineRejected:
@@ -313,12 +389,22 @@ def _owned_validated_clone(replay, work_root):
         raise RestoreEngineRejected(phase+'_failed') from None
     finally:
         if clone is not None:clone._close()
-        if process:
-            if process.poll() is None:process.terminate()
-            try:process.wait(timeout=10)
-            except subprocess.TimeoutExpired:process.kill();process.wait(timeout=5)
+        if process:_stop_owned_postgres(process)
+        if user=='si-t18-db':
+            from .t18_runtime_observation import require_controller_only_cgroup
+            require_controller_only_cgroup()
         if log:log.close()
+        if rest_socket_active:
+            for name in ('.s.PGSQL.6551','.s.PGSQL.6551.lock'):
+                stale=Path('/run/t18-pg')/name
+                try:
+                    info=stale.lstat()
+                    if info.st_uid!=os.getuid() or stat.S_ISLNK(info.st_mode):
+                        raise RestoreEngineRejected('rest_socket_cleanup_identity_rejected')
+                    stale.unlink()
+                except FileNotFoundError:pass
         socket_gone=not (sock/'.s.PGSQL.6551').exists()
+        if rest_socket_active:socket_gone=socket_gone and not (Path('/run/t18-pg')/'.s.PGSQL.6551').exists()
         reaped=process is None or process.poll() is not None
         shutil.rmtree(root)
         receipt['cleanup']={'postmasterReaped':reaped,'socketRemoved':socket_gone,'privateTreeRemoved':not root.exists()}

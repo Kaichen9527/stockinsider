@@ -1,0 +1,49 @@
+# NEW staging unit only. Shares only DB private network and restricted Unix IPC.
+[Unit]
+Description=StockInsider T18 fixed PostgREST broker
+Requires=stockinsider-t18-db.service
+After=stockinsider-t18-db.service
+BindsTo=stockinsider-t18-db.service
+JoinsNamespaceOf=stockinsider-t18-db.service
+
+[Service]
+Type=simple
+User=si-t18-rest
+Group=si-t18-rest
+SupplementaryGroups=stockinsider-t18-ipc stockinsider-t18-dbaccess
+ExecStart=/usr/bin/python3 -I -B /readonly/t18-source/scripts/staging_t18_rest_broker.py
+WorkingDirectory=/run/t18-rest-work
+PrivateNetwork=yes
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateMounts=yes
+MountFlags=private
+ProtectSystem=strict
+ProtectHome=yes
+ProtectControlGroups=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectProc=default
+NoNewPrivileges=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+AmbientCapabilities=
+UMask=0077
+BindReadOnlyPaths=/readonly/t18-source /run/t18-assets
+ReadWritePaths=/run/t18-rest-work /run/t18-rest
+InaccessiblePaths=-/var/lib/postgresql -/run/postgresql -/var/run/postgresql -/srv/stockinsider/pgdata -/srv/stockinsider-postgres -/etc/stockinsider /run/t18-db-work -/run/t18-app-work -/run/credentials/stockinsider-t18-app
+MemoryMax=256M
+MemorySwapMax=0
+CPUQuota=25%
+TasksMax=64
+RuntimeMaxSec=1100
+TimeoutStopSec=15
+KillMode=control-group
+SendSIGKILL=yes
+LimitCORE=0
+LimitNOFILE=128
+StandardOutput=null
+StandardError=null

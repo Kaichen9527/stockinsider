@@ -1,0 +1,159 @@
+{
+  "schema": "stockinsider-contabo-restored-reader-evidence-v1",
+  "verifiedAt": "2026-11-14T17:35:35Z",
+  "artifactBackupDate": "2026-09-19",
+  "stagingSourceCommit": "e1987eacc1c36a68708a647af28bf1b92fd5f959",
+  "launcherSha256": "1de4b4c85b2859ae030f85a2424a6ba2e4e7d69ac1cde41e29573d38abefa9e4",
+  "priorDbReceiptCommit": "75e8493f0047da3d2cec7f0e2c7af8e7817f81f9",
+  "restore": {
+    "resourceSample": {
+      "minimumHostAvailableMemoryBytes": 3664801792,
+      "minimumHostDiskBytes": 18687635456,
+      "minimumWorkFreeBytes": 5966024704,
+      "stagingMemoryPeakBytes": 805310464
+    },
+    "runner": {
+      "authenticatedPlaintextBytes": 491423466,
+      "authenticatedPlaintextSha256": "cc55d2c15091d81f3d972fb524b98e9f3791b16b017b3cecc9ccfb13fd9cd6f1",
+      "ciphertextSha256": "f0845866ae749e88cbc0b9d0370e982ad8f5e9c98ce754cc68e45551f02202d4",
+      "database": {
+        "appExecute": 3,
+        "appRls": 7,
+        "appSelect": 7,
+        "applicationObjectContractVerified": true,
+        "cleanup": {
+          "postmasterReaped": true,
+          "privateTreeRemoved": true,
+          "socketRemoved": true
+        },
+        "currentDatabaseObserved": true,
+        "databaseBytes": 2258785971,
+        "databaseRestored": true,
+        "filteredTocSha256": "d62fc63b43a861edf95f3e07778b8af77c26179d0ccb5ee946f6b4e3f8056f77",
+        "foreignKeys": 288,
+        "fullBusinessDataAcceptance": false,
+        "historicalCheckCompatibility": {
+          "invalidForeignKeys": 0,
+          "invalidOther": 0,
+          "profiles": [
+            {
+              "checked": 1,
+              "columnMismatch": 0,
+              "definitionMismatch": 0,
+              "id": "financial_status_v6",
+              "matched": 1,
+              "typeMismatch": 0,
+              "unvalidated": 1,
+              "violations": 0
+            },
+            {
+              "checked": 1,
+              "columnMismatch": 0,
+              "definitionMismatch": 0,
+              "id": "paid_content_v4",
+              "matched": 1,
+              "typeMismatch": 0,
+              "unvalidated": 1,
+              "violations": 0
+            },
+            {
+              "checked": 1,
+              "columnMismatch": 0,
+              "definitionMismatch": 0,
+              "id": "valuation_method_v6",
+              "matched": 1,
+              "typeMismatch": 0,
+              "unvalidated": 1,
+              "violations": 0
+            }
+          ],
+          "totalUnvalidated": 3,
+          "unknownChecks": 0
+        },
+        "invalidConstraints": 3,
+        "limitations": [
+          "declared constraints and seven fixed public row relations only",
+          "no provider/key-escrow or full business-semantic validation",
+          "no Next rollback/service activation"
+        ],
+        "lineageOrphans": 0,
+        "lineageRelationsChecked": 7,
+        "lineageValidation": "DECLARED_FKS_AND_FIXED_PUBLIC_RELATIONS",
+        "maxRelationBytes": 181927936,
+        "nextRollback": "NOT_RUN",
+        "ownerAllowlistVerified": true,
+        "policies": 51,
+        "portableContractVerified": true,
+        "privateUnixClusterObserved": true,
+        "productionContinuity": "HOST_REQUIRED",
+        "providerRecovery": "NOT_RUN",
+        "publicTables": 250,
+        "restoredIdentityFenceDisabled": true,
+        "rlsTables": 193,
+        "schema": "stockinsider-owned-db-restore-v1",
+        "serverVersionNum": "170011",
+        "serviceActivation": "NOT_RUN",
+        "tocExcluded": 1,
+        "tocSha256": "bff0f311b8d5d485dbe7d5295c0b00e4a216c351e4862ab546c5728f7ab093cb"
+      },
+      "durationSeconds": 333.808,
+      "fullReleaseAcceptance": false,
+      "genuineSnapshotAcceptance": "ONSITE_REQUIRED",
+      "immutableCustody": "fsverity",
+      "manifestSchema": "stockinsider-database-export-v3",
+      "nativeHoldRetained": true,
+      "nextRollback": "NOT_RUN",
+      "observations": {
+        "backingImageDeviceBindingObserved": true,
+        "backingImagePreallocationObserved": true,
+        "effectiveCapabilities": 0,
+        "exclusiveHostLockObserved": true,
+        "hostAvailableMemoryBytes": 3899998208,
+        "hostFreeBytes": 18687983616,
+        "memoryLimitBytes": 805306368,
+        "networkNamespaceComparison": "unavailable",
+        "nonroot": true,
+        "privateLoopbackNetwork": true,
+        "productionPgPathsInaccessible": true,
+        "strictPrivateWorkMount": true,
+        "swapLimitBytes": 0,
+        "workFreeBytes": 8333496320,
+        "workStorage": "kernel_dm_crypt"
+      },
+      "postgrestAcceptance": "NOT_RUN",
+      "productionContinuity": "HOST_REQUIRED",
+      "rankingHealth": "NOT_ACCEPTED",
+      "readerObservation": {
+        "appAcceptance": false,
+        "dailyValidSnapshots": 131,
+        "homeValidSnapshots": 131,
+        "matchingColumns": 11,
+        "matchingTables": 2,
+        "missingColumns": 0,
+        "missingContentDates": 0,
+        "newestContentDate": "2026-09-14",
+        "oldestContentDate": "2026-08-16",
+        "readOnly": true,
+        "requiredColumns": 11,
+        "rowObservation": "COUNTS_AND_DATES_ONLY",
+        "staleSnapshots26h": 262,
+        "status": "OBSERVED_PUBLISHED_SNAPSHOT",
+        "typeMismatchColumns": 0
+      },
+      "schema": "stockinsider-staging-reader-preflight-v1",
+      "serviceActivation": "NOT_RUN",
+      "status": "DB_VERIFIED_READER_OBSERVED"
+    },
+    "runnerExit": 0
+  },
+  "host": {
+    "checks": {
+      "runnerExpected": true
+    },
+    "postCleanupFreeBytes": 27277688832,
+    "productionSignaturesUnchanged": true,
+    "stagingCustodyCleaned": true,
+    "stagingUnitStopped": true
+  },
+  "productionDeployment": false
+}

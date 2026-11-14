@@ -1,0 +1,34 @@
+# Apply ONLY to a NEW stockinsider-t18-db.service using the reviewed FD3-8 loader.
+# Keep its owned 8GiB dm-crypt/host-lock/cipher/key handoff and production-denials.
+# The loader must exec this EXACT entry, not take arbitrary command arguments:
+# /usr/bin/python3 -I -B /readonly/t18-source/scripts/staging_restore_next_rollback.py --work-root /run/t18-db-work
+[Service]
+Type=simple
+DynamicUser=no
+User=si-t18-db
+Group=si-t18-db
+SupplementaryGroups=stockinsider-t18-ipc stockinsider-t18-dbaccess
+PrivateNetwork=yes
+PrivateTmp=yes
+PrivateMounts=yes
+MountFlags=private
+ProtectSystem=strict
+ProtectHome=yes
+ProtectControlGroups=yes
+ProtectProc=default
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+UMask=0077
+BindReadOnlyPaths=/readonly/t18-source /run/t18-assets /run/t18-broker /run/t18-rest
+ReadWritePaths=/run/t18-db-work /run/t18-pg
+InaccessiblePaths=-/var/lib/postgresql -/run/postgresql -/var/run/postgresql -/srv/stockinsider/pgdata -/srv/stockinsider-postgres -/etc/stockinsider /run/t18-app-work /run/t18-rest-work /run/credentials/stockinsider-t18-app
+MemoryMax=768M
+MemorySwapMax=0
+CPUQuota=50%
+TasksMax=64
+RuntimeMaxSec=1200
+TimeoutStopSec=15
+KillMode=control-group
+SendSIGKILL=yes
+LimitCORE=0

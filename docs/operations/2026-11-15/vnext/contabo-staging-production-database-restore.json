@@ -1,0 +1,145 @@
+{
+  "schema": "stockinsider-contabo-real-restore-evidence-v1",
+  "verifiedAt": "2026-11-14T17:28:16Z",
+  "artifactBackupDate": "2026-09-19",
+  "stagingSourceCommit": "bddce6ba2de5b1b81d94ab532624a365d556f8c7",
+  "launcherSha256": "c320559978a40297958c78203d2dd016d8f9da417ded96523c47d05dede2a55b",
+  "referenceMigrationGitBlobs": {
+    "20260901_source_research_shadow_v2.sql": "2fbc579a08efbfdfe09b16c07b4ebf2b55061c43",
+    "20260906_candidate_dossier_v4.sql": "dee480e983c4ccd02dd325a512ff447de55347c1",
+    "20260907_evidence_valuation_contract_v6.sql": "44da6b3d32f953dbf2050f9faef26039e933b4a9",
+    "20260912_02_financial_validation_status_text_hotfix.sql": "0c76a94817374c19a186e539ab5f26400857e851"
+  },
+  "restore": {
+    "resourceSample": {
+      "minimumHostAvailableMemoryBytes": 3663052800,
+      "minimumHostDiskBytes": 18567954432,
+      "minimumWorkFreeBytes": 5944852480,
+      "stagingMemoryPeakBytes": 805310464
+    },
+    "runner": {
+      "authenticatedPlaintextBytes": 491423466,
+      "authenticatedPlaintextSha256": "cc55d2c15091d81f3d972fb524b98e9f3791b16b017b3cecc9ccfb13fd9cd6f1",
+      "ciphertextSha256": "f0845866ae749e88cbc0b9d0370e982ad8f5e9c98ce754cc68e45551f02202d4",
+      "database": {
+        "appExecute": 3,
+        "appRls": 7,
+        "appSelect": 7,
+        "applicationObjectContractVerified": true,
+        "cleanup": {
+          "postmasterReaped": true,
+          "privateTreeRemoved": true,
+          "socketRemoved": true
+        },
+        "currentDatabaseObserved": true,
+        "databaseBytes": 2258785971,
+        "databaseRestored": true,
+        "filteredTocSha256": "d62fc63b43a861edf95f3e07778b8af77c26179d0ccb5ee946f6b4e3f8056f77",
+        "foreignKeys": 288,
+        "fullBusinessDataAcceptance": false,
+        "historicalCheckCompatibility": {
+          "invalidForeignKeys": 0,
+          "invalidOther": 0,
+          "profiles": [
+            {
+              "checked": 1,
+              "columnMismatch": 0,
+              "definitionMismatch": 0,
+              "id": "financial_status_v6",
+              "matched": 1,
+              "typeMismatch": 0,
+              "unvalidated": 1,
+              "violations": 0
+            },
+            {
+              "checked": 1,
+              "columnMismatch": 0,
+              "definitionMismatch": 0,
+              "id": "paid_content_v4",
+              "matched": 1,
+              "typeMismatch": 0,
+              "unvalidated": 1,
+              "violations": 0
+            },
+            {
+              "checked": 1,
+              "columnMismatch": 0,
+              "definitionMismatch": 0,
+              "id": "valuation_method_v6",
+              "matched": 1,
+              "typeMismatch": 0,
+              "unvalidated": 1,
+              "violations": 0
+            }
+          ],
+          "totalUnvalidated": 3,
+          "unknownChecks": 0
+        },
+        "invalidConstraints": 3,
+        "limitations": [
+          "declared constraints and seven fixed public row relations only",
+          "no provider/key-escrow or full business-semantic validation",
+          "no Next rollback/service activation"
+        ],
+        "lineageOrphans": 0,
+        "lineageRelationsChecked": 7,
+        "lineageValidation": "DECLARED_FKS_AND_FIXED_PUBLIC_RELATIONS",
+        "maxRelationBytes": 181927936,
+        "nextRollback": "NOT_RUN",
+        "ownerAllowlistVerified": true,
+        "policies": 51,
+        "portableContractVerified": true,
+        "privateUnixClusterObserved": true,
+        "productionContinuity": "HOST_REQUIRED",
+        "providerRecovery": "NOT_RUN",
+        "publicTables": 250,
+        "restoredIdentityFenceDisabled": true,
+        "rlsTables": 193,
+        "schema": "stockinsider-owned-db-restore-v1",
+        "serverVersionNum": "170011",
+        "serviceActivation": "NOT_RUN",
+        "tocExcluded": 1,
+        "tocSha256": "bff0f311b8d5d485dbe7d5295c0b00e4a216c351e4862ab546c5728f7ab093cb"
+      },
+      "durationSeconds": 335.617,
+      "fullReleaseAcceptance": false,
+      "immutableCustody": "fsverity",
+      "manifestSchema": "stockinsider-database-export-v3",
+      "nativeHoldRetained": true,
+      "nextRollback": "NOT_RUN",
+      "observations": {
+        "backingImageDeviceBindingObserved": true,
+        "backingImagePreallocationObserved": true,
+        "effectiveCapabilities": 0,
+        "exclusiveHostLockObserved": true,
+        "hostAvailableMemoryBytes": 3888177152,
+        "hostFreeBytes": 18688204800,
+        "memoryLimitBytes": 805306368,
+        "networkNamespaceComparison": "unavailable",
+        "nonroot": true,
+        "privateLoopbackNetwork": true,
+        "productionPgPathsInaccessible": true,
+        "strictPrivateWorkMount": true,
+        "swapLimitBytes": 0,
+        "workFreeBytes": 8333496320,
+        "workStorage": "kernel_dm_crypt"
+      },
+      "productionContinuity": "HOST_REQUIRED",
+      "providerRecovery": "NOT_RUN",
+      "schema": "stockinsider-staging-database-restore-v1",
+      "serviceActivation": "NOT_RUN",
+      "status": "DB_RESTORE_VERIFIED"
+    },
+    "runnerExit": 0
+  },
+  "host": {
+    "checks": {
+      "runnerExpected": true
+    },
+    "postCleanupFreeBytes": 27278032896,
+    "productionSignaturesUnchanged": true,
+    "stagingCustodyCleaned": true,
+    "stagingUnitStopped": true
+  },
+  "productionDeployment": false
+}

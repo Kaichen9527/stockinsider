@@ -1,0 +1,134 @@
+{
+  "acceptanceScope": {
+    "dailySnapshot": "ONSITE_HTTP_NOT_RUN",
+    "fullReleaseAcceptance": false,
+    "home": "HTTP_LIVENESS_ONLY",
+    "newRadarRelease": "NOT_RUN",
+    "productionContinuity": "HOST_REQUIRED",
+    "stockDetail": "NOT_RUN_TWO_TABLE_SCOPE"
+  },
+  "actualCloudCapabilities": {
+    "fixedNodeAndReleaseAssets": "UNAVAILABLE_NO_FALLBACK",
+    "fullThreeUidHostContract": "UNAVAILABLE_ACTUAL_ENTRIES_REFUSED",
+    "kernelNamespaceCookieSyscall": "PASS",
+    "landlockVersionProbe": {
+      "errno": 38,
+      "result": "ENOSYS",
+      "sameUidFallbackUsed": false
+    },
+    "postgresVersion": "17.11",
+    "postgrest16_3Download": {
+      "approvedOuterHttpStatus": 503,
+      "normalHttpStatus": 503
+    }
+  },
+  "build": {
+    "applicationSourceChanged": false,
+    "compilationSeconds": 30.5,
+    "nextVersion": "16.3.4",
+    "typecheck": "BLOCKED_PREEXISTING_LAYOUT_PAGE_EXPORT_TYPES",
+    "webpackCompilation": "PASS"
+  },
+  "callerBooleanOrReceiptGrantsRuntimeAuthority": false,
+  "ciAndFormalReleaseGatesChanged": false,
+  "cleanup": {
+    "onsiteUnitsAndMountCleanup": "HOST_REQUIRED",
+    "remainingCloudOwnedPostgresProcesses": 0,
+    "syntheticChildrenReaped": true,
+    "syntheticHttpListenersClosed": true
+  },
+  "contaboAccessed": false,
+  "generatedAtUtc": "2026-11-14T18:22:19.143212Z",
+  "independentReview": {
+    "assetTestsPassed": 7,
+    "engineTestsPassed": 5,
+    "entryBoundaryTestsPassed": 4,
+    "formalA1Acceptance": "NOT_CLAIMED",
+    "mechanicsTestsPassed": 4,
+    "openBlockerOrHighFindings": 0,
+    "proxyTestsPassed": 8,
+    "roleTestsPassed": 3,
+    "scope": "FIXED_SOURCE_AND_AVAILABLE_PUBLIC_SYNTHETIC_TESTS",
+    "transportTestsPassed": 11
+  },
+  "intendedOnsiteLimits": {
+    "appCpuPercent": 50,
+    "appMemoryMaxBytes": 536870912,
+    "brokerWallSeconds": 1100,
+    "controllerWallSeconds": 1200,
+    "databaseCpuPercent": 50,
+    "databaseMemoryMaxBytes": 805306368,
+    "hostDiskReserveBytes": 16106127360,
+    "hostMemoryReserveBytes": 1610612736,
+    "preKeySchedulingWaitSeconds": 15,
+    "restCpuPercent": 25,
+    "restMemoryMaxBytes": 268435456,
+    "rollbackHealthBudgetSeconds": 180,
+    "swapMaxBytes": 0,
+    "tasksMaxPerUnit": 64,
+    "workVolumeBytes": 8589934592
+  },
+  "nativeHoldRetained": true,
+  "onsiteEvidenceReferences": {
+    "artifactBackupDate": "2026-09-19",
+    "dailyValidSnapshots": 131,
+    "homeValidSnapshots": 131,
+    "missingContentDates": 0,
+    "newestContentDate": "2026-09-14",
+    "oldestContentDate": "2026-08-16",
+    "realDatabaseRestoreCommit": "75e8493f0047da3d2cec7f0e2c7af8e7817f81f9",
+    "realReaderObservationCommit": "58ce289cc6eecc585818f1be91a14c6ba6d6e3e7",
+    "source": "COORDINATOR_REPORTED_RECEIPTS_NOT_CLOUD_ADMISSION",
+    "staleSnapshots26h": 262
+  },
+  "parentCommit": "e1987eacc1c36a68708a647af28bf1b92fd5f959",
+  "productionBackupOrKeyReceivedInCloud": false,
+  "schema": "stockinsider-t18-fixed-same-clone-source-evidence-v1",
+  "scope": "CLOUD_GENERATED_PUBLIC_TESTS_AND_REVIEWED_ONSITE_ADAPTER_SOURCE",
+  "sourceSha256": {
+    "deployment/staging/vnext/t17_keyfd/fixed_read_proxy.py": "393c3cdd5403f4a0f4eeb8aa6fb3b4b188a43ef914ca977fcd395565e73056fe",
+    "deployment/staging/vnext/t17_keyfd/portable_restore_engine.py": "c67d2d754d15c29e64a15be4dd3e199b4198a1435b27c92ef3144055c68a294d",
+    "deployment/staging/vnext/t17_keyfd/stage_next_rollback.py": "ecfaf60605655371e433fff87e1315e32edb2974e162726b3df3ee1fbb348e90",
+    "deployment/staging/vnext/t17_keyfd/t18_app_broker.py": "5c934143115de7ec2e9f70d9b94b04d9e728aa0e475ffd52c1536fd0ca701f86",
+    "deployment/staging/vnext/t17_keyfd/t18_broker_transport.py": "3c8d54e83c202b29233911bdf0e5c755e7c297226410159a67eb24515032ff98",
+    "deployment/staging/vnext/t17_keyfd/t18_reader_roles.py": "ce1bc06d983dfdf22386b4ff8d20291d0fbaea98618ba7ab8e5df6f53ef61467",
+    "deployment/staging/vnext/t17_keyfd/t18_receipt.py": "6ff3fb76d52bf1f64cc9c9ff11113379001077fb15a0330a0cb1582387dc2877",
+    "deployment/staging/vnext/t17_keyfd/t18_release_assets.py": "caca043e37e53ab0af567d642cd420fa8623a1e7b267e7581e17b6fa8b0ecec0",
+    "deployment/staging/vnext/t17_keyfd/t18_runtime_observation.py": "f87d6cb500162ce7bdd5f75297a47b3f14c1c1bb39946b048587ac27db42dd2c",
+    "deployment/staging/vnext/t17_keyfd/t18_same_clone.py": "fdff7848f5af63c1f21d1006aa668aa7389db376247d60f1a3c791d4b5a2b4ec",
+    "deployment/staging/vnext/t18/stockinsider-t18-app.service.example": "5a90c686b94a1c57cf0f7aab10f3672a4e5535f6cae1c457622b47161b4fe76a",
+    "deployment/staging/vnext/t18/stockinsider-t18-db.conf.example": "35dd3271d226943d122fc8e869ae98b5d63ae9b9b1c6f8d85ef97e15b147bc82",
+    "deployment/staging/vnext/t18/stockinsider-t18-rest.service.example": "5c49a22f7711e9e54486b1762e3ec8e2b8030ae9235f5453413df766b830ac12",
+    "docs/operations/2026-11-15/vnext/T18-FIXED-SAME-CLONE-ROLLBACK.md": "66d196f38ddaf7107f88fe2bbecb5fb4e3554f175d67069927d962baa28bbe02",
+    "docs/operations/2026-11-15/vnext/contabo-staging-production-database-restore.json": "b65e2ec4979dca0c4d0bd13d7009ef63f742cd6acd8e40579c116dbdc3f20ae7",
+    "docs/operations/2026-11-15/vnext/contabo-staging-restored-radar-observation.json": "ccd78ca5e0a37b8f702b5068cb2bedd189ee4b504ba05ae893f3d93e87318400",
+    "scripts/staging_restore_next_rollback.py": "37f55c0737313330333c414a3964ada7617ab3bd25377a0c906fbc7b8d2ee3e3",
+    "scripts/staging_t18_app_broker.py": "1950459abe9379c80482a95fca1873c6c88b72e2438dec1cd0547e3085817608",
+    "scripts/staging_t18_rest_broker.py": "e37e950514f608269a4b56458c00a8b571ed18bfebd36e9d22968e16ee05a4fb",
+    "scripts/tests/test_t18_broker_transport.py": "0ff9697fa520fd95d4af49e8a2f440cd9f991a27e91045ea9162bdf0c5d3b31f",
+    "scripts/tests/test_t18_entry_boundaries.py": "57ba83ad608051974d4ac76289ef6dde4e0cd264a6c289fb1dc6fb6380400ebf",
+    "scripts/tests/test_t18_fixed_read_proxy.py": "b91035663c6e5fc6f764b0807aea9ba3c086c27dccada9ebbe451ec5dfd0b6ec",
+    "scripts/tests/test_t18_reader_roles.py": "1df85aa834e2eaf9b6a99a2e0cca59c9d59118772856182c2a99e23ab3b2fa7c",
+    "scripts/tests/test_t18_release_assets.py": "f8bcb73a3cf380af5c48f7697d8307e7d5b5095b790fb2827d3ea9bfbb4a15e8",
+    "scripts/tests/test_t18_same_clone_mechanics.py": "55791f14d7e9e917decaf6d3f4c6c11ede181af064bd8511614f323714839b04"
+  },
+  "tests": {
+    "actualLoopbackProxyTests": 8,
+    "actualPg17RoleTests": 3,
+    "actualUnixTransportAndKernelTests": 11,
+    "assetTests": 7,
+    "combinedT17T18": {
+      "durationSeconds": 44.475,
+      "failed": 0,
+      "passed": 117,
+      "skipped": 0
+    },
+    "entryAndOutputBoundaryTests": 4,
+    "mechanicsFixture": "GENERATED_PYTHON_HTTP_NOT_NEXT_OR_POSTGREST",
+    "originalDisabledFacade": {
+      "failed": 0,
+      "passed": 12
+    },
+    "syntheticPythonProcessRollbackMechanicsTests": 4
+  }
+}
