@@ -1,17 +1,24 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { rankingEnabled } from '@/lib/vnext/ranking-read';
+import {launchRankingEnabled} from '@/lib/vnext/launch-ranking-read';
+import LaunchCandidateCatalog from '@/app/components/vnext/LaunchCandidateCatalog';
 import { candidateDetailHref, candidateQuery, candidateRankingRunId } from '@/lib/vnext/candidate-page';
 import { readCandidateHistory } from '@/lib/vnext/candidate-history-read';
 
 export const dynamic = 'force-dynamic';
 const statusLabels = { researching: '研究中', waiting: '等待', eligible: '條件符合', exited: '已離開快照研究池' };
 export default async function CandidatesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const launch=launchRankingEnabled();
+  const params=await searchParams;
+  const newStatus=['recorded_active_epoch','recorded_exited_epoch','admission_history_unknown'];
+  const explicitlyNew=params.catalogId!==undefined||typeof params.status==='string'&&newStatus.includes(params.status);
+  if(explicitlyNew||launch&&params.rankingRunId===undefined&&params.cursor===undefined)return <LaunchCandidateCatalog searchParams={params} enabled={launch}/>;
   if (!rankingEnabled()) notFound();
   let data: Awaited<ReturnType<typeof readCandidateHistory>> | null = null;
   let query: ReturnType<typeof candidateQuery> | null = null;
   let invalid = false;
-  try { query = candidateQuery(await searchParams); candidateRankingRunId(query); } catch { invalid = true; }
+  try { query = candidateQuery(params); candidateRankingRunId(query); } catch { invalid = true; }
   if (query && !invalid) {
     try { data = await readCandidateHistory(query); } catch { data = null; }
   }
