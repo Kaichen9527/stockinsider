@@ -1,6 +1,6 @@
 /** Invented PUBLIC transport packets, never source/producer/review authority.
  * The supplied dates name a synthetic calendar; no real ranking is claimed. */
-import {LAUNCH_RANKING_POLICY,LAUNCH_RANKING_RULES,LAUNCH_RANKING_SCHEMA} from './launch-ranking-read.ts';
+import {LAUNCH_RANKING_POLICY,LAUNCH_RANKING_RULES,LAUNCH_RANKING_SCHEMA,LAUNCH_RANKING_ARITHMETIC} from './launch-ranking-read.ts';
 const id=(value:number)=>`00000000-0000-4000-8000-${String(value).padStart(12,'0')}`;
 export const LAUNCH_TEST_RUN=id(1),LAUNCH_TEST_NOW='2026-11-13T13:30:30Z';
 export function launchRankingFixture(size=1,detail=false,clock?:string){
@@ -30,13 +30,14 @@ export function launchRankingFixture(size=1,detail=false,clock?:string){
     ['market_close_above_ma50','market',5,{close:150,ma50:140}],['market_close_above_ma200','market',5,{close:150,ma200:120}]
   ] as const;
   const selected=members[0];
-  return {schemaVersion:'vnext-launch-ranking-read-v1',availability:'ready',reason:null as string|null,
-    snapshot:{schemaVersion:LAUNCH_RANKING_SCHEMA,policyVersion:LAUNCH_RANKING_POLICY,rulesVersion:LAUNCH_RANKING_RULES,rankingRunId:LAUNCH_TEST_RUN,previousRankingRunId:null as string|null,
+  return {schemaVersion:'vnext-launch-ranking-read-v2',arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,availability:'ready',reason:null as string|null,
+    snapshot:{schemaVersion:LAUNCH_RANKING_SCHEMA,policyVersion:LAUNCH_RANKING_POLICY,rulesVersion:LAUNCH_RANKING_RULES,arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,rankingRunId:LAUNCH_TEST_RUN,previousRankingRunId:null as string|null,
       cutoff,inputCutoff:cutoff,session,publishedAt:cutoff,marketRevision,market:{session,risk:'risk_on',confidence:'complete',sourceAt:new Date(publication-3600000).toISOString(),expiresAt:new Date(publication+86400000).toISOString(),
         reasons:['合成市場比較；非實際資料。'],conditions:[] as string[],gaps:[] as string[]},members,candidates:members.map(m=>({symbol:m.symbol,state:'eligible',reasons:[] as string[]})),changes:members.map(m=>({symbol:m.symbol,kind:'entered',reason:'synthetic_complete_evidence'}))},
-    current:{schemaVersion:'vnext-launch-current-validity-v1',members:members.map(m=>({symbol:m.symbol,revisionId:m.revisionId,inputHash:m.inputHash,scoreRevision:m.scoreRevision,launchQualificationRevision:m.launchQualificationRevision,revisions:{...m.revisions},checkedAt:now,expiresAt:new Date(current.getTime()+90000).toISOString(),status:'current',entryEligible:true,
+    current:{schemaVersion:'vnext-launch-current-validity-v2',arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,members:members.map(m=>({symbol:m.symbol,revisionId:m.revisionId,inputHash:m.inputHash,scoreRevision:m.scoreRevision,launchQualificationRevision:m.launchQualificationRevision,revisions:{...m.revisions},checkedAt:now,expiresAt:new Date(current.getTime()+90000).toISOString(),status:'current',entryEligible:true,
       checks:{rights:true,review:true,venue:true,liquidity:true,price:true,actions:true,source:true,completeWeight:true},reasons:[] as string[]}))},
-    detail:detail&&selected?{rankingRunId:LAUNCH_TEST_RUN,symbol:selected.symbol,revisionId:selected.revisionId,scoreRevision:selected.scoreRevision,launchQualificationRevision:selected.launchQualificationRevision,inputHash:selected.inputHash,
+    detail:detail&&selected?{arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,rankingRunId:LAUNCH_TEST_RUN,symbol:selected.symbol,revisionId:selected.revisionId,scoreRevision:selected.scoreRevision,launchQualificationRevision:selected.launchQualificationRevision,inputHash:selected.inputHash,
       summary:'Synthetic public research summary. Financial and valuation observations remain unknown.',scoreEvidence:rawRules.map(([ruleId,group,weight,operands])=>({id:ruleId,group,weight,matches:true,points:weight,operands:{...operands},cutoff,throughSession:session,revisions:{...selected.revisions}})),
-      citations:[{id:'synthetic-public-reference',url:'https://www.tpex.org.tw/',contentHash:'b'.repeat(64)}],chart:null}:null};
+      citations:[{id:`licensed-dataset:11370:${id(370)}`,url:'https://data.gov.tw/dataset/11370',contentHash:'b'.repeat(64),sourceRevision:id(370),publicRights:{schemaVersion:'launch-public-rights-v1',datasetId:11370,
+        license:'Taiwan Open Government Data License 1.0',licenseUrl:'https://data.gov.tw/license',attribution:'Securities and Futures Bureau, Financial Supervisory Commission',rightsRevision:'c'.repeat(64)}}],chart:null}:null};
 }

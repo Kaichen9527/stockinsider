@@ -87,7 +87,7 @@ test('onefixed newRPC preserves explicitmissing/versionerrors and sourceunavaila
     assert.equal((await readLaunchRankingTransport(client,{rankingRunId:LAUNCH_TEST_RUN},LAUNCH_TEST_NOW)).availability,'ready');
     assert.deepEqual(calls,[{name:'vnext_launch_ranking_read_v1',args:{p_ranking_run_id:LAUNCH_TEST_RUN,p_symbol:null}}]);
     for(const code of ['42883','PGRST202'])assert.equal((await readLaunchRankingTransport({rpc:async()=>({data:null,error:{code}})}, {},LAUNCH_TEST_NOW)).availability,'schema_unavailable');
-    const missing={schemaVersion:'vnext-launch-ranking-read-v1',availability:'not_found',reason:'specified_run_not_found',snapshot:null,current:{schemaVersion:'vnext-launch-current-validity-v1',members:[]},detail:null};
+    const missing={schemaVersion:'vnext-launch-ranking-read-v2',arithmeticVersion:'binary64-v1',availability:'not_found',reason:'specified_run_not_found',snapshot:null,current:{schemaVersion:'vnext-launch-current-validity-v2',arithmeticVersion:'binary64-v1',members:[]},detail:null};
     assert.equal((await readLaunchRankingTransport({rpc:async()=>({data:missing,error:null})},{rankingRunId:LAUNCH_TEST_RUN},LAUNCH_TEST_NOW)).availability,'not_found');
     await assert.rejects(readLaunchRankingTransport(client,{rankingRunId:'00000000-0000-4000-8000-000000000999'},LAUNCH_TEST_NOW),/contract_invalid/u);
     assert.equal(fetches,0);

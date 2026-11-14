@@ -1,11 +1,12 @@
 import { types } from 'node:util';
 import { vnextEnabled, taipeiDate } from './policy.ts';
 import { evidenceInstant } from './evidence-clock.ts';
-import { publicCitation } from './citations.ts';
+import {parseLaunchPublicCitation,type LaunchPublicCitation} from './launch-public-citation.ts';
 
 export const LAUNCH_RANKING_POLICY = 'stockinsider-launch-radar-v1';
 export const LAUNCH_RANKING_RULES = 'launch-radar-comparisons-v5';
-export const LAUNCH_RANKING_SCHEMA = 'vnext-launch-ranking-snapshot-v1';
+export const LAUNCH_RANKING_ARITHMETIC = 'binary64-v1';
+export const LAUNCH_RANKING_SCHEMA = 'vnext-launch-ranking-snapshot-v2';
 export const launchRankingEnabled = () => vnextEnabled() && process.env.STOCKINSIDER_LAUNCH_RANKING_ENABLED === 'true';
 const revisionKeys = ['research','score','qualification','price','calendar','actions','technicalVolume','institutionalVolume','flow','market'] as const;
 export type LaunchRankingRevisions = Record<typeof revisionKeys[number],string>;
@@ -16,7 +17,7 @@ export type LaunchRankingMember = {rank:number;symbol:string;revisionId:string;i
   revisions:LaunchRankingRevisions;financial:null;valuation:null};
 export type LaunchRankingMarket = {session:string;risk:'risk_on'|'selective'|'risk_off'|'breakdown'|'unknown';confidence:'complete'|'limited'|'insufficient';
   sourceAt:string;expiresAt:string;reasons:string[];conditions:string[];gaps:string[]};
-export type LaunchRankingSnapshot = {schemaVersion:typeof LAUNCH_RANKING_SCHEMA;policyVersion:typeof LAUNCH_RANKING_POLICY;rulesVersion:typeof LAUNCH_RANKING_RULES;
+export type LaunchRankingSnapshot = {schemaVersion:typeof LAUNCH_RANKING_SCHEMA;policyVersion:typeof LAUNCH_RANKING_POLICY;rulesVersion:typeof LAUNCH_RANKING_RULES;arithmeticVersion:typeof LAUNCH_RANKING_ARITHMETIC;
   rankingRunId:string;previousRankingRunId:string|null;cutoff:string;inputCutoff:string;session:string;publishedAt:string;marketRevision:string;market:LaunchRankingMarket;
   members:LaunchRankingMember[];candidates:Array<{symbol:string;state:'researching'|'waiting'|'eligible'|'exited';reasons:string[]}>;
   changes:Array<{symbol:string;kind:'entered'|'maintained'|'exited';reason:string}>};
@@ -27,8 +28,8 @@ export type LaunchRankingCurrent = {symbol:string;revisionId:string;inputHash:st
 type Operand = number|string|boolean|null;
 export type LaunchRankingRule = {id:string;group:Group;weight:number;matches:boolean;points:number;operands:Record<string,Operand>;
   cutoff:string;throughSession:string;revisions:LaunchRankingRevisions};
-export type LaunchRankingDetail = {rankingRunId:string;symbol:string;revisionId:string;scoreRevision:string;launchQualificationRevision:string;inputHash:string;
-  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:Array<{id:string;url:string;contentHash:string}>;chart:null};
+export type LaunchRankingDetail = {arithmeticVersion:typeof LAUNCH_RANKING_ARITHMETIC;rankingRunId:string;symbol:string;revisionId:string;scoreRevision:string;launchQualificationRevision:string;inputHash:string;
+  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:null};
 export type LaunchRankingRead = {availability:'ready'|'not_published'|'producer_unavailable'|'not_found'|'schema_unavailable'|'unavailable';reason:string|null;
   readAt:string;snapshot:LaunchRankingSnapshot|null;current:LaunchRankingCurrent[];detail:LaunchRankingDetail|null};
 type Row=Record<string,unknown>;
@@ -39,7 +40,7 @@ const text=(value:unknown,max=240):value is string=>typeof value==='string'&&val
 const uuid=(value:unknown):value is string=>typeof value==='string'&&/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/u.test(value);
 const hash=(value:unknown):value is string=>typeof value==='string'&&/^[a-f0-9]{64}$/u.test(value);
 const symbol=(value:unknown):value is string=>typeof value==='string'&&/^\d{4}$/u.test(value);
-const number=(value:unknown):value is number=>typeof value==='number'&&Number.isFinite(value);
+const number=(value:unknown):value is number=>typeof value==='number'&&Number.isFinite(value)&&!Object.is(value,-0);
 const date=(value:unknown):value is string=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/u.test(value)&&Number.isFinite(Date.parse(value))&&new Date(value).toISOString().slice(0,10)===value;
 const stamp=(value:unknown):value is string=>typeof value==='string'&&evidenceInstant(value)!==null;
 function strings(value:unknown,maximum=30):string[] {if(!Array.isArray(value)||value.length>maximum||!value.every(item=>text(item)))invalid();return [...value];}
@@ -146,14 +147,14 @@ function rules(value:unknown,snapshot:LaunchRankingSnapshot,selected:LaunchRanki
 export function parseLaunchRankingRead(value:unknown,query:{rankingRunId?:string;symbol?:string}={},now=new Date().toISOString()):LaunchRankingRead {
   envelope(value);
   if(!stamp(now)||query.rankingRunId!==undefined&&!uuid(query.rankingRunId)||query.symbol!==undefined&&!symbol(query.symbol))invalid();
-  if(!exact(value,'schemaVersion availability reason snapshot current detail')||value.schemaVersion!=='vnext-launch-ranking-read-v1'
+  if(!exact(value,'schemaVersion arithmeticVersion availability reason snapshot current detail')||value.schemaVersion!=='vnext-launch-ranking-read-v2'||value.arithmeticVersion!==LAUNCH_RANKING_ARITHMETIC
     ||!['ready','not_published','producer_unavailable','not_found'].includes(String(value.availability))||value.reason!==null&&!text(value.reason)
-    ||!exact(value.current,'schemaVersion members')||value.current.schemaVersion!=='vnext-launch-current-validity-v1'||!Array.isArray(value.current.members)||value.current.members.length>20)invalid();
+    ||!exact(value.current,'schemaVersion arithmeticVersion members')||value.current.schemaVersion!=='vnext-launch-current-validity-v2'||value.current.arithmeticVersion!==LAUNCH_RANKING_ARITHMETIC||!Array.isArray(value.current.members)||value.current.members.length>20)invalid();
   let snapshot:LaunchRankingSnapshot|null=null;
   if(value.snapshot!==null){
     const s=value.snapshot;
-    if(!exact(s,'schemaVersion policyVersion rulesVersion rankingRunId previousRankingRunId cutoff inputCutoff session publishedAt marketRevision market members candidates changes')
-      ||s.schemaVersion!==LAUNCH_RANKING_SCHEMA||s.policyVersion!==LAUNCH_RANKING_POLICY||s.rulesVersion!==LAUNCH_RANKING_RULES||!uuid(s.rankingRunId)
+    if(!exact(s,'schemaVersion policyVersion rulesVersion arithmeticVersion rankingRunId previousRankingRunId cutoff inputCutoff session publishedAt marketRevision market members candidates changes')
+      ||s.schemaVersion!==LAUNCH_RANKING_SCHEMA||s.policyVersion!==LAUNCH_RANKING_POLICY||s.rulesVersion!==LAUNCH_RANKING_RULES||s.arithmeticVersion!==LAUNCH_RANKING_ARITHMETIC||!uuid(s.rankingRunId)
       ||query.rankingRunId!==undefined&&s.rankingRunId!==query.rankingRunId||s.previousRankingRunId!==null&&!uuid(s.previousRankingRunId)||s.previousRankingRunId===s.rankingRunId
       ||!stamp(s.cutoff)||s.inputCutoff!==s.cutoff||evidenceInstant(s.cutoff)!>evidenceInstant(now)!||!date(s.session)||taipeiDate(s.cutoff)!==s.session
       ||!stamp(s.publishedAt)||evidenceInstant(s.publishedAt)!<evidenceInstant(s.cutoff)!||evidenceInstant(s.publishedAt)!>evidenceInstant(now)!||!hash(s.marketRevision)
@@ -170,7 +171,7 @@ export function parseLaunchRankingRead(value:unknown,query:{rankingRunId?:string
     const candidates=s.candidates.map(item=>{if(!exact(item,'symbol state reasons')||!symbol(item.symbol)||!['researching','waiting','eligible','exited'].includes(String(item.state)))invalid();return {symbol:item.symbol,state:item.state as LaunchRankingSnapshot['candidates'][number]['state'],reasons:strings(item.reasons)};});
     if(new Set(candidates.map(item=>item.symbol)).size!==candidates.length||members.some(item=>!candidates.some(candidate=>candidate.symbol===item.symbol)))invalid();
     const changes=s.changes.map(item=>{if(!exact(item,'symbol kind reason')||!symbol(item.symbol)||!['entered','maintained','exited'].includes(String(item.kind))||!text(item.reason))invalid();return {symbol:item.symbol,kind:item.kind as LaunchRankingSnapshot['changes'][number]['kind'],reason:item.reason};});
-    snapshot={schemaVersion:LAUNCH_RANKING_SCHEMA,policyVersion:LAUNCH_RANKING_POLICY,rulesVersion:LAUNCH_RANKING_RULES,rankingRunId:s.rankingRunId,previousRankingRunId:s.previousRankingRunId as string|null,
+    snapshot={schemaVersion:LAUNCH_RANKING_SCHEMA,policyVersion:LAUNCH_RANKING_POLICY,rulesVersion:LAUNCH_RANKING_RULES,arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,rankingRunId:s.rankingRunId,previousRankingRunId:s.previousRankingRunId as string|null,
       cutoff:s.cutoff,inputCutoff:s.cutoff,session:s.session,publishedAt:s.publishedAt,marketRevision:s.marketRevision,
       market:{session:s.session,risk:m.risk as LaunchRankingMarket['risk'],confidence:m.confidence as LaunchRankingMarket['confidence'],sourceAt:m.sourceAt,expiresAt:m.expiresAt,reasons:strings(m.reasons),conditions:strings(m.conditions),gaps:strings(m.gaps)},members,candidates,changes};
   }
@@ -179,12 +180,11 @@ export function parseLaunchRankingRead(value:unknown,query:{rankingRunId?:string
   let detail:LaunchRankingDetail|null=null;
   if(value.detail!==null){
     const d=value.detail,selected=snapshot?.members.find(item=>item.symbol===query.symbol);
-    if(!query.symbol||!snapshot||!selected||!exact(d,'rankingRunId symbol revisionId scoreRevision launchQualificationRevision inputHash summary scoreEvidence citations chart')
-      ||d.rankingRunId!==snapshot.rankingRunId||d.symbol!==selected.symbol||d.revisionId!==selected.revisionId||d.scoreRevision!==selected.scoreRevision
+    if(!query.symbol||!snapshot||!selected||!exact(d,'arithmeticVersion rankingRunId symbol revisionId scoreRevision launchQualificationRevision inputHash summary scoreEvidence citations chart')
+      ||d.arithmeticVersion!==LAUNCH_RANKING_ARITHMETIC||d.rankingRunId!==snapshot.rankingRunId||d.symbol!==selected.symbol||d.revisionId!==selected.revisionId||d.scoreRevision!==selected.scoreRevision
       ||d.launchQualificationRevision!==selected.launchQualificationRevision||d.inputHash!==selected.inputHash||d.summary!==null&&!text(d.summary,2000)||d.chart!==null||!Array.isArray(d.citations)||d.citations.length>30)invalid();
-    const citations=d.citations.map(item=>{if(!exact(item,'id url contentHash')||!text(item.id,120)||!text(item.url,2048)||!hash(item.contentHash))invalid();
-      const url=publicCitation(item.url);if(!url||!url.startsWith('https://')||new URL(url).username||new URL(url).password)invalid();return {id:item.id,url,contentHash:item.contentHash};});
-    detail={rankingRunId:snapshot.rankingRunId,symbol:selected.symbol,revisionId:selected.revisionId,scoreRevision:selected.scoreRevision,launchQualificationRevision:selected.launchQualificationRevision,
+    const citations=d.citations.map(item=>{const citation=parseLaunchPublicCitation(item);if(!citation)invalid();return citation;});
+    detail={arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,rankingRunId:snapshot.rankingRunId,symbol:selected.symbol,revisionId:selected.revisionId,scoreRevision:selected.scoreRevision,launchQualificationRevision:selected.launchQualificationRevision,
       inputHash:selected.inputHash,summary:d.summary as string|null,scoreEvidence:rules(d.scoreEvidence,snapshot,selected),citations,chart:null};
   }
   return {availability:value.availability as LaunchRankingRead['availability'],reason:value.reason as string|null,readAt:now,snapshot,current:live,detail};
@@ -196,12 +196,13 @@ export function launchRankingMemberCurrent(member:LaunchRankingMember,currentRow
     &&checkKeys.every(key=>live.checks[key]===true)&&at!==null&&checked!==null&&expires!==null&&checked<=at&&at<expires&&expires>checked&&expires-checked<=BigInt(120000000);
 }
 type Reader={rpc:(name:'vnext_launch_ranking_read_v1',args:{p_ranking_run_id:string|null;p_symbol:string|null})=>PromiseLike<{data:unknown;error:unknown}>};
-export async function readLaunchRankingTransport(client:Reader,query:{rankingRunId?:string;symbol?:string}={},now=new Date().toISOString()):Promise<LaunchRankingRead> {
+export async function readLaunchRankingTransport(client:Reader,query:{rankingRunId?:string;symbol?:string}={},now?:string):Promise<LaunchRankingRead> {
   if(query.rankingRunId!==undefined&&!uuid(query.rankingRunId)||query.symbol!==undefined&&!symbol(query.symbol))invalid();
   const result=await client.rpc('vnext_launch_ranking_read_v1',{p_ranking_run_id:query.rankingRunId??null,p_symbol:query.symbol??null});
+  const readAt=now??new Date().toISOString();if(!stamp(readAt))invalid();
   if(result.error){const code=row(result.error)?result.error.code:null;return {availability:['42883','42P01','PGRST202','PGRST205'].includes(String(code))?'schema_unavailable':'unavailable',
-    reason:'launch_ranking_read_unavailable',readAt:now,snapshot:null,current:[],detail:null};}
-  return parseLaunchRankingRead(result.data,query,now);
+    reason:'launch_ranking_read_unavailable',readAt,snapshot:null,current:[],detail:null};}
+  return parseLaunchRankingRead(result.data,query,readAt);
 }
 export async function readLaunchRankingSnapshot(query:{rankingRunId?:string;symbol?:string}={}):Promise<LaunchRankingRead> {
   if(!launchRankingEnabled())throw Error('launch_ranking_disabled');

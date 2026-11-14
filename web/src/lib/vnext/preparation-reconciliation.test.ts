@@ -125,7 +125,7 @@ test('shared frozen projection is byte/hash equivalent to the original admitted 
  assert.deepEqual(freezeFinancialPreparation(f.original,f.historical,sources,cutoff),{inputHash:inputHash(frozen),evidence:frozen});assert.equal(JSON.stringify(sources),before);
 });
 function controllers(f:ReturnType<typeof fixture>){
- const cache=new Map<string,Record<string,unknown>>();const allowed=new Set(['http.ts','store.ts','policy.ts','auth.ts','request.ts','research.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','worker-output.ts','research-failure.ts','preparation-reconciliation.ts','forecast-current.ts','disclosed-fiscal-forecast.ts','corporate-action-terms.ts','preparation-trading-identity.ts','cached-price-factors.ts']);
+ const cache=new Map<string,Record<string,unknown>>();const allowed=new Set(['http.ts','store.ts','policy.ts','auth.ts','request.ts','research.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','evidence-clock.ts','worker-output.ts','research-failure.ts','preparation-reconciliation.ts','forecast-current.ts','disclosed-fiscal-forecast.ts','corporate-action-terms.ts','preparation-trading-identity.ts','cached-price-factors.ts']);
  const load=(name:string):Record<string,unknown>=>{
   if(!allowed.has(name))throw Error(`unexpected_preparation_source:${name}`);const prior=cache.get(name);if(prior)return prior;
   const filename=new URL(name,import.meta.url);const compiled=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:name}).outputText;
@@ -133,6 +133,8 @@ function controllers(f:ReturnType<typeof fixture>){
   const require=(dependency:string):unknown=>{
    if(['node:crypto','node:async_hooks','node:util'].includes(dependency))return nativeRequire(dependency);
    if(dependency==='next/server')return nativeRequire('next/server');
+   if(dependency==='../public-source-url.ts')return nativeRequire('../public-source-url.ts');
+   if(dependency==='./launch-ranking-read.ts')return {launchRankingEnabled:()=>false,LAUNCH_RANKING_POLICY:'stockinsider-launch-radar-v1'};
    if(dependency==='./cached-admission.ts')return {cachedAdmissionBody:()=>{throw Error('unexpected admission');},currentReceiptBody:()=>{throw Error('unexpected content');}};
    if(['../supabase-server','../supabase-server.ts'].includes(dependency))return {getSupabaseServerClient:()=>f.client};
    if(dependency==='../taiwan-data-runtime')return {requireActiveVpsWriter:async()=>{f.calls.push('writer-metadata-read');return {ok:true,supabase:f.client};}};
@@ -155,7 +157,7 @@ test('actual HTTP-handler/store source contract uses configured author only; REA
   for(const body of [{action:'preparation-read',jobId,principal:'forged'},{action:'resume-preparation',jobId:'invalid'}])assert.equal((await http.vnextRoute(request(body),'vnext-research'))!.status,409);
   assert.equal((await http.vnextRoute(request({action:'resume-preparation',jobId},'synthetic-operator-key'),'vnext-research'))!.status,409);
   assert.equal((await http.vnextRoute(request({action:'resume-preparation',symbols:[]},'synthetic-author-key'),'vnext-research'))!.status,200);assert.equal(f.calls.length,0);
-  const response=await http.vnextRoute(request({action:'preparation-read',jobId}),'vnext-research');assert.equal(response!.status,200);const read=await response!.json();assert.equal(read.result.status,'prepared');assert.deepEqual(f.calls,['writer-metadata-read','inspect','work-context','read']);
+  const response=await http.vnextRoute(request({action:'preparation-read',jobId}),'vnext-research');assert.equal(response!.status,200,await response!.clone().text());const read=await response!.json();assert.equal(read.result.status,'prepared');assert.deepEqual(f.calls,['writer-metadata-read','inspect','work-context','read']);
   const before=f.calls.length;await store.resumeResearchPreparation(author,{jobId});assert.deepEqual(f.calls.slice(before),['writer-metadata-read','inspect','work-context','read']);assert.equal(f.calls.includes('prepare'),false);
   const ready=fixture();ready.state.deadline='2099-01-01T00:00:00.000Z';const actual=controllers(ready);const prepared=await actual.store.resumeResearchPreparation(author,{jobId});assert.equal(prepared.status,'prepared');assert.equal(ready.calls.filter(call=>call==='lease-acquire').length,1);assert.equal(ready.calls.filter(call=>call==='lease-release').length,1);assert.deepEqual(ready.calls.slice(-3),['lease-acquire','prepare','lease-release']);
  }finally{names.forEach((name,i)=>{if(prior[i]===undefined)delete process.env[name];else process.env[name]=prior[i];});}

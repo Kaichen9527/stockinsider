@@ -4,6 +4,7 @@ import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { loadCandidateStageCards } from '@/lib/candidate-research';
 import { publishRadarPublicSnapshots } from '@/lib/radar-public-snapshot';
 import { requireActiveVpsWriter, resolveLatestCompletedTaiwanSession } from '@/lib/taiwan-data-runtime';
+import {assertLegacyPublicationAllowed} from '@/lib/vnext/launch-cutover';
 
 function taipeiDate() {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -17,6 +18,7 @@ export async function POST(request: Request) {
   if (!requireExactInternalBearer(request)) {
     return NextResponse.json({ ok: false, error: 'unauthorized_internal_writer' }, { status: 401 });
   }
+  try{assertLegacyPublicationAllowed();}catch{return NextResponse.json({ok:false,error:'launch_ranking_legacy_publication_forbidden'},{status:409});}
   const raw = await request.text();
   if (raw && raw !== '{}') return NextResponse.json({ ok: false, error: 'unexpected_request_body' }, { status: 422 });
   const writer = await requireActiveVpsWriter();

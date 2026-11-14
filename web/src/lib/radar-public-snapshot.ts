@@ -4,6 +4,7 @@ import { STAGE_RULESET_VERSION } from './stage-classifier';
 import { CANDIDATE_RESEARCH_MODEL_VERSION } from './candidate-research';
 import type { CandidateShadowProgress, CandidateStageCard, RadarDailyPayload } from './types';
 import { buildCanonicalStagePlane } from './radar-stage-pagination';
+import {assertLegacyPublicationAllowed} from './vnext/launch-cutover.ts';
 
 type Row = Record<string, unknown>;
 export type PublicRadarWindow = 'home' | 'daily' | 'hot' | 'weekly';
@@ -191,6 +192,7 @@ export async function publishRadarPublicSnapshots(input: {
   dataCutoffAt?: string | null;
   datasetCompletenessPct?: number | null;
 }) {
+  assertLegacyPublicationAllowed();
   const supabase = getSupabaseServerClient();
   const compact = buildCompactPublicRadarPayload(input.payload, input.stages);
   const publishedAt = new Date().toISOString();
@@ -255,6 +257,7 @@ export async function publishRadarPublicSnapshots(input: {
 }
 
 export async function markRadarPublicSnapshotsFailed(reason: string, attemptedAt = new Date().toISOString()) {
+  assertLegacyPublicationAllowed();
   const result = await getSupabaseServerClient().rpc('mark_radar_publication_failed', {
     p_terminal_reason: reason.slice(0, 500),
     p_attempted_at: attemptedAt,

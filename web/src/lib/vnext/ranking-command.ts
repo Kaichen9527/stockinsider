@@ -2,6 +2,8 @@ import type { VnextIdentity } from './auth.ts';
 import { types } from 'node:util';
 import { inputHash, POLICY } from './policy.ts';
 import { rankingEnabled, readRankingSnapshot, type RankingSnapshot } from './ranking-read.ts';
+import {launchRankingEnabled} from './launch-ranking-read.ts';
+import {assertLegacyPublicationAllowed} from './launch-cutover.ts';
 const uuid = (v: unknown): v is string => typeof v === 'string' && /^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/u.test(v);
 export function rankingPublishRequest(body: Record<string, unknown>) {
   if (!body || typeof body !== 'object' || Array.isArray(body) || types.isProxy(body)
@@ -19,6 +21,7 @@ export async function publishRanking(identity: VnextIdentity, body: Record<strin
   // This legacy writer accepts only run/CAS identity. Launch arithmetic, even
   // complete weight100, has no reviewed publication adapter into this command.
   const request = rankingPublishRequest(body);
+  assertLegacyPublicationAllowed();
   if (!rankingEnabled() || identity.role !== 'operator' || !identity.principal) throw Error('vnext_ranking_operator_required');
   const { analysisWriter } = await import('./analysis-runtime.ts');
   return analysisWriter(async () => {
@@ -39,6 +42,7 @@ export function cycleRankingRequest(session: unknown, previous: RankingSnapshot|
   return rankingPublishRequest({rankingRunId:run,expectedPreviousRankingRunId:previous?.rankingRunId===run?previous.previousRankingRunId:previous?.rankingRunId||null});
 }
 export async function publishCycleRanking(identity: VnextIdentity, session: unknown) {
+  if(launchRankingEnabled()){cycleRankingRequest(session,null);assertLegacyPublicationAllowed();}
   if (!rankingEnabled()) return {status:'disabled',scheduleEnabled:false};
   const requested=cycleRankingRequest(session,null).rankingRunId;
   const historical=await readRankingSnapshot(requested);

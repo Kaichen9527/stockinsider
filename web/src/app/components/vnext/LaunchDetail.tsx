@@ -33,7 +33,10 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
       <section aria-label="固定評分比較"><h2 className="font-semibold">固定評分比較與原始數值</h2><div className="mt-3 overflow-x-auto"><table className="w-full text-left text-sm"><thead><tr><th className="p-2">條件</th><th className="p-2">點數</th><th className="p-2">原始數值</th></tr></thead>
         <tbody>{detail.scoreEvidence.map(rule=><tr key={rule.id} className="border-t border-slate-300"><td className="min-w-40 p-2">{ruleNames[rule.id]}</td><td className="p-2">{rule.points} / {rule.weight}</td><td className="max-w-md break-words p-2">{Object.entries(rule.operands).map(([key,value])=><p key={key}>{key}：{value===null?'未知':typeof value==='boolean'?value?'成立':'未成立':String(value)}</p>)}</td></tr>)}</tbody></table></div>
       </section>
-      <section aria-label="公開來源"><h2 className="font-semibold">公開來源</h2><ul className="mt-2 space-y-2">{detail.citations.map(citation=><li key={citation.id}><a className="break-words underline" href={citation.url} target="_blank" rel="noreferrer">{citation.id} · {new URL(citation.url).hostname}</a></li>)}</ul></section>
+      <section aria-label="公開來源"><h2 className="font-semibold">公開來源</h2><ul className="mt-2 space-y-2">{detail.citations.map(citation=><li key={citation.id}>
+        <a className="break-words underline" href={citation.url} target="_blank" rel="noreferrer">{citation.id} · {new URL(citation.url).hostname}</a>
+        <p className="text-sm">資料來源：{citation.publicRights.attribution}；<a className="underline" href={citation.publicRights.licenseUrl} target="_blank" rel="noreferrer">{citation.publicRights.license}</a>。</p>
+      </li>)}</ul></section>
       <details className="text-sm"><summary>榜單與資料版本</summary><p className="mt-2 break-all">榜單：{read!.snapshot!.rankingRunId}</p><p>政策：{read!.snapshot!.policyVersion} · 規則：{read!.snapshot!.rulesVersion}</p><ul className="mt-2 space-y-1">{Object.entries(member.revisions).map(([key,value])=><li className="break-all" key={key}>{key}：{value}</li>)}</ul></details>
     </>}
   </main>;

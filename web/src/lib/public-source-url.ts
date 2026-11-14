@@ -1,5 +1,9 @@
 const SENSITIVE_QUERY_KEY = /(?:^|[_-])(access[_-]?token|token|api[_-]?key|apikey|auth(?:orization)?|bearer|credential|jwt|password|secret|signature|sig)(?:$|[_-])/iu;
 
+export function isSensitivePublicSourceQueryKey(value:string){
+  return SENSITIVE_QUERY_KEY.test(value.normalize('NFKC'));
+}
+
 function privateIpv4(hostname: string) {
   const parts = hostname.split('.');
   if (parts.length !== 4 || parts.some((part) => !/^\d{1,3}$/u.test(part) || Number(part) > 255)) return false;
@@ -32,7 +36,7 @@ export function sanitizePublicSourceUrl(value: unknown): string | null {
     const url = new URL(raw);
     if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password || privateHostname(url.hostname)) return null;
     for (const key of [...url.searchParams.keys()]) {
-      if (SENSITIVE_QUERY_KEY.test(key)) url.searchParams.delete(key);
+      if (isSensitivePublicSourceQueryKey(key)) url.searchParams.delete(key);
     }
     url.hash = '';
     return url.toString();

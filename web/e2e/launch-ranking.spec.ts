@@ -11,7 +11,7 @@ test('real Home/stock route reads newpolicy Top10/nullfinance/16rules through ex
   await link.click();const detail=page.getByTestId('launch-detail');await expect(detail).toBeVisible();await expect(page.getByTestId('launch-ranking-binding')).toBeVisible();
   await expect(detail.getByRole('table').locator('tbody tr')).toHaveCount(16);await expect(detail).toContainText('已確認分數 100.0 / 100');
   await expect(detail).toContainText('尚無經驗證的調整後圖表資料');await expect(detail).toContainText('Synthetic public research summary');
-  await expect(detail.getByRole('link',{name:/synthetic-public-reference/u})).toHaveAttribute('href','https://www.tpex.org.tw/');
+  await expect(detail.getByRole('link',{name:/licensed-dataset:11370:/u})).toHaveAttribute('href','https://data.gov.tw/dataset/11370');
   const stats=await (await request.get(bridge+'/__fixture/stats')).json();expect(stats.reads).toBeGreaterThanOrEqual(2);expect(stats.unsupported).toBe(0);
   const width=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:innerWidth}));expect(width.scroll).toBeLessThanOrEqual(width.viewport+1);
   await page.screenshot({path:info.outputPath('launch-version-bound-detail.png'),fullPage:true});

@@ -2,9 +2,13 @@
  * Run explicitly with Node22 strip-types; production code never imports it. */
 import http from 'node:http';
 import {launchRankingFixture,LAUNCH_TEST_RUN} from '../src/lib/vnext/launch-ranking.test-fixture.ts';
+import {unsafeCitationUrls,unknownRightsCitationUrls} from '../src/lib/vnext/launch-citation.test-fixture.ts';
 const args=process.argv.slice(2);
 if(args.length!==2||args[0]!=='--port'||!/^\d{4,5}$/.test(args[1])||Number(args[1])<1024||Number(args[1])>65535)throw Error('launch_test_bridge_arguments');
 const modes=new Set(['ready','empty','not_published','producer_unavailable','schema_unavailable','outage','expired','short_expiry','partial','private','wrong_policy']);
+const unsafeCitations=[...unsafeCitationUrls,...unknownRightsCitationUrls];
+for(let i=0;i<unsafeCitations.length;i++)modes.add(`citation_${i}`);
+for(const name of ['missing_rights','wrong_license','wrong_binding','unknown_revision','private_extra','wrong_attribution'])modes.add(`citation_${name}`);
 let mode='ready',packet=launchRankingFixture(1,true,new Date().toISOString()),reads=0,unsupported=0,controls=0;
 function json(response,status,value){response.writeHead(status,{'content-type':'application/json','cache-control':'no-store'});response.end(JSON.stringify(value));}
 async function body(request){let size=0;const chunks=[];for await(const chunk of request){size+=chunk.length;if(size>8192)throw Error('bound');chunks.push(chunk);}return JSON.parse(Buffer.concat(chunks).toString('utf8'));}
@@ -22,6 +26,14 @@ const server=http.createServer(async(request,response)=>{
       if(mode==='partial')Object.assign(packet.snapshot.members[0],{availableWeight:80,totalScore:null});
       if(mode==='private')Object.assign(packet,{rawOriginal:'DO_NOT_RENDER_PRIVATE_FIXTURE'});
       if(mode==='wrong_policy')packet.snapshot.policyVersion='stockinsider-vnext-20-v1';
+      const citation=packet.detail?.citations[0];
+      if(/^citation_\d+$/u.test(mode))citation.url=unsafeCitations[Number(mode.slice('citation_'.length))];
+      if(mode==='citation_missing_rights')delete citation.publicRights;
+      if(mode==='citation_wrong_license')citation.publicRights.license='SYNTHETIC_UNKNOWN';
+      if(mode==='citation_wrong_binding')citation.sourceRevision='00000000-0000-4000-8000-000000000999';
+      if(mode==='citation_unknown_revision')citation.publicRights.rightsRevision='SYNTHETIC_UNKNOWN';
+      if(mode==='citation_private_extra')citation.rawBody='SYNTHETIC_PRIVATE_ONLY';
+      if(mode==='citation_wrong_attribution')citation.publicRights.attribution='SYNTHETIC_UNKNOWN';
       return json(response,200,{synthetic:true,mode});
     }
     if(request.method==='POST'&&request.url==='/rest/v1/rpc/vnext_launch_ranking_read_v1'){
@@ -32,7 +44,7 @@ const server=http.createServer(async(request,response)=>{
       const result=structuredClone(packet);
       if(['not_published','producer_unavailable'].includes(mode)||query.p_ranking_run_id!==null&&query.p_ranking_run_id!==LAUNCH_TEST_RUN||query.p_symbol!==null&&query.p_symbol!=='5274'){
         const availability=['not_published','producer_unavailable'].includes(mode)?mode:'not_found';
-        return json(response,200,{schemaVersion:result.schemaVersion,availability,reason:'synthetic_read_state',snapshot:null,current:{schemaVersion:result.current.schemaVersion,members:[]},detail:null});
+        return json(response,200,{schemaVersion:result.schemaVersion,arithmeticVersion:result.arithmeticVersion,availability,reason:'synthetic_read_state',snapshot:null,current:{schemaVersion:result.current.schemaVersion,arithmeticVersion:result.current.arithmeticVersion,members:[]},detail:null});
       }
       if(query.p_symbol===null)result.detail=null;
       return json(response,200,result);

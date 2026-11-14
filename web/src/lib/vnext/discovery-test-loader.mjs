@@ -22,6 +22,7 @@ export function loadActualDiscovery() {
     const require = dependency => {
       if (dependency === '../supabase-server') return { getSupabaseServerClient() { throw new Error('unexpected_default_database_client'); } };
       if (['node:crypto', 'node:async_hooks'].includes(dependency)) return nativeRequire(dependency);
+      if (dependency === '../public-source-url.ts') return nativeRequire('../public-source-url.ts');
       if (dependency.startsWith('./')) return load(dependency.slice(2));
       throw new Error(`unexpected_discovery_dependency:${dependency}`);
     };

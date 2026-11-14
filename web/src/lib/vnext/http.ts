@@ -4,6 +4,7 @@ import { vnextEnabled } from './policy.ts';
 import { cacheContent, command, executeResearch, publishMarket, publishResearch, readResearchPreparation, resumeResearchPreparation, submitAuthor, submitReview, swap } from './store.ts';
 import { vnextIdentity } from './auth.ts';
 import { boundedRequestBody } from './request.ts';
+import {launchRankingEnabled,LAUNCH_RANKING_POLICY} from './launch-ranking-read.ts';
 type Row = Record<string, unknown>;
 /** Called before legacy parsing, reads, queue mutations, financial IO or models. */
 export async function vnextRoute(request: Request, entrypoint: string) {
@@ -12,17 +13,21 @@ export async function vnextRoute(request: Request, entrypoint: string) {
   if (!identity) return NextResponse.json({ ok: false, error: 'vnext_configured_role_bearer_required' }, { status: 401 });
   try {
     const body = await boundedRequestBody(request) as Row;
-    if (Array.isArray(body.symbols) && body.symbols.length === 0) {
-      return NextResponse.json({ ok: true, policyVersion: 'stockinsider-vnext-20-v1', result: { jobs: [], reason: 'empty_scope', expensiveCalls: 0 } });
-    }
     const action = entrypoint === 'vnext-research' ? String(body.action || 'enqueue')
       : entrypoint === 'candidate-dossier-outbox' && body.jobId ? 'claim'
       : entrypoint === 'candidate-dossier-submission' && body.artifact ? 'author'
       : entrypoint === 'candidate-dossier-bundle' && body.jobId ? 'bundle' : 'enqueue';
+    if (Array.isArray(body.symbols) && body.symbols.length === 0 && action!=='ranking-publish' && !(action==='cycle'&&launchRankingEnabled())) {
+      return NextResponse.json({ ok: true, policyVersion: 'stockinsider-vnext-20-v1', result: { jobs: [], reason: 'empty_scope', expensiveCalls: 0 } });
+    }
     if (action === 'ranking-publish') {
       if (!(await import('../internal-auth.ts')).requireExactInternalBearer(request)) throw Error('vnext_internal_bearer_required');
       if (identity.role !== 'operator') throw Error('vnext_operator_required');
       const {action: _action, ...payload} = body; void _action;
+      if(launchRankingEnabled()){
+        const result=await(await import('./launch-ranking-command.ts')).publishLaunchRanking(identity,payload);
+        return NextResponse.json({ok:true,policyVersion:LAUNCH_RANKING_POLICY,result});
+      }
       const result = await (await import('./ranking-command.ts')).publishRanking(identity, payload);
       return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});
     }
@@ -61,7 +66,7 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       const result=action==='dispatch'?await(await import('./research-dispatcher.ts')).dispatchResearchQueue(identity)
         :action==='cycle'?await(await import('./research-cycle.ts')).runPostcloseResearchCycle(identity)
         :await(await import('./weekly-worker.ts')).runWeeklyThesisAudit(identity,{screen:action==='screen'});
-      return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});
+      return NextResponse.json({ok:true,policyVersion:action==='cycle'&&launchRankingEnabled()?LAUNCH_RANKING_POLICY:'stockinsider-vnext-20-v1',result});
     }
     const role= ['enqueue','screen','swap','market','content','retry','expire'].includes(action)?'operator':['author','bundle','claim','fail','execute'].includes(action)?'author':['review','publish','review-claim','review-sources'].includes(action)?'reviewer':null;
     if(role && identity.role!==role)throw new Error(`vnext_${role}_required`);
