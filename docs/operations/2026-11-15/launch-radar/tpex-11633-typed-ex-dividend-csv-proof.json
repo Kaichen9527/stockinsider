@@ -1,0 +1,185 @@
+{
+  "schema": "stockinsider-tpex-11633-typed-ex-dividend-csv-proof-v1",
+  "officialDataset": "https://data.gov.tw/dataset/11633",
+  "sameDayIdentity": {
+    "latestKnown11633Date": "2026-11-16",
+    "sameByteHash": true,
+    "hashes": [
+      "4f0ae99240ea0985b6f30bcf6082ad42b51b57c2828f4bc6212c82eda12ae3a2",
+      "4f0ae99240ea0985b6f30bcf6082ad42b51b57c2828f4bc6212c82eda12ae3a2"
+    ],
+    "bytes": [
+      2314,
+      2314
+    ],
+    "datedUrl": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F11%2F16&endDate=2026%2F11%2F16&response=data"
+  },
+  "observations": [
+    {
+      "url": "https://www.tpex.org.tw/web/stock/exright/dailyquo/exDailyQ_result.php?l=zh-tw&o=data",
+      "sha": "4f0ae99240ea0985b6f30bcf6082ad42b51b57c2828f4bc6212c82eda12ae3a2",
+      "media": "application/csv;charset=utf-8",
+      "bytes": 2314,
+      "header": [
+        "除權息日期",
+        "代號",
+        "名稱",
+        "除權息前收盤價",
+        "除權息參考價",
+        "權值",
+        "息值",
+        "權值加息值",
+        "權或息",
+        "漲停價",
+        "跌停價",
+        "開始交易基準價",
+        "減除股利參考價",
+        "現金股利",
+        "每仟股無償配股",
+        "現金增資股數",
+        "現金增資認購價",
+        "公開承銷股數",
+        "員工認購股數",
+        "原股東認購股數",
+        "按持股比例仟股認購"
+      ],
+      "n": 10,
+      "match": [],
+      "dates": [
+        "1151116"
+      ]
+    },
+    {
+      "url": "https://www.tpex.org.tw/web/stock/exright/dailyquo/exDailyQ_result.php?l=zh-tw&o=data&d=115%2F07%2F07",
+      "sha": "4f0ae99240ea0985b6f30bcf6082ad42b51b57c2828f4bc6212c82eda12ae3a2",
+      "media": "application/csv;charset=utf-8",
+      "bytes": 2314,
+      "header": [
+        "除權息日期",
+        "代號",
+        "名稱",
+        "除權息前收盤價",
+        "除權息參考價",
+        "權值",
+        "息值",
+        "權值加息值",
+        "權或息",
+        "漲停價",
+        "跌停價",
+        "開始交易基準價",
+        "減除股利參考價",
+        "現金股利",
+        "每仟股無償配股",
+        "現金增資股數",
+        "現金增資認購價",
+        "公開承銷股數",
+        "員工認購股數",
+        "原股東認購股數",
+        "按持股比例仟股認購"
+      ],
+      "n": 10,
+      "match": [],
+      "dates": [
+        "1151116"
+      ]
+    },
+    {
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F07%2F07&endDate=2026%2F07%2F07&response=data",
+      "sha": "cc1fe0e5d94dbbcced834ae3146dc8ed4ff19afd20303adb1f9ced85c508a1ab",
+      "media": "application/csv;charset=utf-8",
+      "bytes": 2555,
+      "header": [
+        "除權息日期",
+        "代號",
+        "名稱",
+        "除權息前收盤價",
+        "除權息參考價",
+        "權值",
+        "息值",
+        "權值加息值",
+        "權或息",
+        "漲停價",
+        "跌停價",
+        "開始交易基準價",
+        "減除股利參考價",
+        "現金股利",
+        "每仟股無償配股",
+        "現金增資股數",
+        "現金增資認購價",
+        "公開承銷股數",
+        "員工認購股數",
+        "原股東認購股數",
+        "按持股比例仟股認購"
+      ],
+      "n": 12,
+      "match": [
+        [
+          "1150707",
+          "5274",
+          "信驊",
+          "16270.00",
+          "14790.91",
+          "1479.090731",
+          "0.000000",
+          "1479.090731",
+          "除權",
+          "16270.00",
+          "13315.00"
+        ]
+      ],
+      "dates": [
+        "1150707"
+      ]
+    },
+    {
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F06%2F26&endDate=2026%2F06%2F26&response=data",
+      "sha": "336fa37bcb41866cf8ca5fd4425a94b2c2615636abc90ccf55c7bfef53829c67",
+      "media": "application/csv;charset=utf-8",
+      "bytes": 1263,
+      "header": [
+        "除權息日期",
+        "代號",
+        "名稱",
+        "除權息前收盤價",
+        "除權息參考價",
+        "權值",
+        "息值",
+        "權值加息值",
+        "權或息",
+        "漲停價",
+        "跌停價",
+        "開始交易基準價",
+        "減除股利參考價",
+        "現金股利",
+        "每仟股無償配股",
+        "現金增資股數",
+        "現金增資認購價",
+        "公開承銷股數",
+        "員工認購股數",
+        "原股東認購股數",
+        "按持股比例仟股認購"
+      ],
+      "n": 5,
+      "match": [
+        [
+          "1150626",
+          "5274",
+          "信驊",
+          "17425.00",
+          "17345.00",
+          "0.000000",
+          "80.000000",
+          "80.000000",
+          "除息",
+          "19075.00",
+          "15615.00"
+        ]
+      ],
+      "dates": [
+        "1150626"
+      ]
+    }
+  ],
+  "prospectiveRowIsActionReferenceNotTradeResult": true,
+  "adjustedPriceMaterialized": false
+}
