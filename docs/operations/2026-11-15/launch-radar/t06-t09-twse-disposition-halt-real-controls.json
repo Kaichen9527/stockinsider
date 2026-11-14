@@ -1,0 +1,432 @@
+{
+  "schema": "stockinsider.real-twse-disposition-and-suspension-controls.v1",
+  "scope": "Contabo bounded public exchange reports; metadata, derived controls, and transport hashes only",
+  "licenses": {
+    "dispositions": "https://data.gov.tw/dataset/29082",
+    "halt": "https://data.gov.tw/dataset/11677",
+    "license": "https://data.gov.tw/license",
+    "boundary": "Attribution is for the registered open CSV resources. Historical JSON reports were used as comparison sources; no rights extension inferred."
+  },
+  "permissions": {
+    "productionWrite": false,
+    "publication": false,
+    "ptiHistoricalAcceptance": "NOT_RUN",
+    "firstFutureMarketSessionObserved": "NOT_RUN"
+  },
+  "sourceReports": {
+    "punish_open": {
+      "url": "https://www.twse.com.tw/announcement/punish?response=open_data",
+      "http": 200,
+      "exit": 0,
+      "bytes": 2575,
+      "sha256": "3e18e3b0f0d1de5c15fca10c7c534fb11afada88179e464c42cf2ae8017a2c84",
+      "startedAt": "2026-11-14T23:06:24.788200+00:00",
+      "observedAt": "2026-11-14T23:06:25.528759+00:00",
+      "fields": [
+        "編號",
+        "公布日期",
+        "證券代號",
+        "證券名稱",
+        "累計",
+        "處置條件",
+        "處置起迄時間",
+        "處置措施",
+        "處置內容",
+        "備註"
+      ],
+      "rows": 2,
+      "sample": [
+        [
+          "1151110",
+          "2455",
+          "1",
+          "115/11/11～115/11/17"
+        ],
+        [
+          "1151109",
+          "3189",
+          "1",
+          "115/11/10～115/11/16"
+        ]
+      ],
+      "last": [
+        [
+          "1151110",
+          "2455",
+          "1",
+          "115/11/11～115/11/17"
+        ],
+        [
+          "1151109",
+          "3189",
+          "1",
+          "115/11/10～115/11/16"
+        ]
+      ]
+    },
+    "halt_open": {
+      "url": "https://www.twse.com.tw/exchangeReport/TWTAWU?response=open_data",
+      "http": 200,
+      "exit": 0,
+      "bytes": 169,
+      "sha256": "1bdd6daf1607f4485c8c021915b42ad0addc9ed4e39decbc5ee2c68c271a10f8",
+      "startedAt": "2026-11-14T23:06:25.530030+00:00",
+      "observedAt": "2026-11-14T23:06:25.936551+00:00",
+      "fields": [
+        "編號",
+        "證券代號",
+        "證券名稱",
+        "暫停交易日期",
+        "暫停交易時間",
+        "恢復交易日期",
+        "恢復交易時間"
+      ],
+      "rows": 1,
+      "sample": [
+        [
+          "2314",
+          "1151110",
+          "080000",
+          "1151111",
+          "080000"
+        ]
+      ],
+      "last": [
+        [
+          "2314",
+          "1151110",
+          "080000",
+          "1151111",
+          "080000"
+        ]
+      ]
+    },
+    "punish_dated": {
+      "url": "https://www.twse.com.tw/rwd/zh/announcement/punish?response=json&startDate=20261001&endDate=20261114",
+      "http": 200,
+      "exit": 0,
+      "bytes": 70403,
+      "sha256": "368d32f852d21be58d9c1ecf576485e364c08b9e3f9feb275583a0cdc19d45e3",
+      "startedAt": "2026-11-14T23:06:25.936797+00:00",
+      "observedAt": "2026-11-14T23:06:26.954424+00:00",
+      "statOk": true,
+      "fields": [
+        "編號",
+        "公布日期",
+        "證券代號",
+        "證券名稱",
+        "累計",
+        "處置條件",
+        "處置起迄時間",
+        "處置措施",
+        "處置內容",
+        "備註"
+      ],
+      "rows": 49,
+      "sample": [
+        [
+          "115/10/19",
+          "053040",
+          2,
+          "115/10/20～115/10/27"
+        ],
+        [
+          "115/10/14",
+          "053040",
+          2,
+          "115/10/15～115/10/21"
+        ],
+        [
+          "115/11/06",
+          "064019",
+          1,
+          "115/11/09～115/11/13"
+        ],
+        [
+          "115/10/27",
+          "071804",
+          2,
+          "115/10/28～115/11/03"
+        ],
+        [
+          "115/10/12",
+          "071804",
+          2,
+          "115/10/13～115/10/19"
+        ],
+        [
+          "115/09/30",
+          "086845",
+          1,
+          "115/10/01～115/10/07"
+        ],
+        [
+          "115/11/04",
+          "088008",
+          1,
+          "115/11/05～115/11/11"
+        ]
+      ],
+      "last": [
+        [
+          "115/10/02",
+          "8996",
+          1,
+          "115/10/05～115/10/12"
+        ],
+        [
+          "115/10/13",
+          "9103",
+          1,
+          "115/10/14～115/10/20"
+        ],
+        [
+          "115/10/16",
+          "911608",
+          1,
+          "115/10/19～115/10/23"
+        ]
+      ]
+    },
+    "halt_dated": {
+      "url": "https://www.twse.com.tw/rwd/zh/trading/historical/TWTAWU?response=json&startDate=20261001&endDate=20261114",
+      "http": 302,
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "startedAt": "2026-11-14T23:06:26.955221+00:00",
+      "observedAt": "2026-11-14T23:06:27.705315+00:00"
+    },
+    "halt_legacy": {
+      "url": "https://www.twse.com.tw/exchangeReport/TWTAWU?response=json&startDate=20261001&endDate=20261114",
+      "http": 200,
+      "exit": 0,
+      "bytes": 441,
+      "sha256": "27371727678a4e1277241d0474f62bc3645c798edbdaccfb7520854fc53c660c",
+      "startedAt": "2026-11-14T23:06:27.705389+00:00",
+      "observedAt": "2026-11-14T23:06:28.414352+00:00",
+      "statOk": true,
+      "fields": [
+        "編號",
+        "證券代號",
+        "證券名稱",
+        "暫停交易日期",
+        "暫停交易時間",
+        "恢復交易日期",
+        "恢復交易時間"
+      ],
+      "rows": 1,
+      "sample": [
+        [
+          "2314",
+          "115/11/10",
+          "8:00",
+          "115/11/11",
+          "8:00"
+        ]
+      ],
+      "last": [
+        [
+          "2314",
+          "115/11/10",
+          "8:00",
+          "115/11/11",
+          "8:00"
+        ]
+      ]
+    }
+  },
+  "datedDisposition": {
+    "url": "https://www.twse.com.tw/rwd/zh/announcement/punish?response=json&startDate=20261001&endDate=20261114",
+    "observedAt": "2026-11-14T23:07:03.411422+00:00",
+    "startedAt": "2026-11-14T23:07:02.580245+00:00",
+    "bytes": 70403,
+    "sha256": "368d32f852d21be58d9c1ecf576485e364c08b9e3f9feb275583a0cdc19d45e3"
+  },
+  "datedSuspension": {
+    "url": "https://www.twse.com.tw/exchangeReport/TWTAWU?response=json&startDate=20261001&endDate=20261114",
+    "observedAt": "2026-11-14T23:07:04.111626+00:00",
+    "startedAt": "2026-11-14T23:07:03.411674+00:00",
+    "bytes": 441,
+    "sha256": "27371727678a4e1277241d0474f62bc3645c798edbdaccfb7520854fc53c660c"
+  },
+  "pausedControl": {
+    "symbol": "2314",
+    "haltDate": "2026-11-10",
+    "haltTaipeiClock": "8:00",
+    "resumeDate": "2026-11-11",
+    "resumeTaipeiClock": "8:00"
+  },
+  "cases": {
+    "2455": {
+      "intervals": [
+        [
+          "2026-11-10",
+          "2026-11-11",
+          "2026-11-17"
+        ],
+        [
+          "2026-09-22",
+          "2026-09-23",
+          "2026-10-05"
+        ]
+      ],
+      "announcedThenActive": [
+        [
+          "2026-11-12",
+          true
+        ],
+        [
+          "2026-11-13",
+          true
+        ],
+        [
+          "2026-11-16",
+          true
+        ],
+        [
+          "2026-11-17",
+          true
+        ]
+      ]
+    },
+    "3189": {
+      "intervals": [
+        [
+          "2026-11-09",
+          "2026-11-10",
+          "2026-11-16"
+        ]
+      ],
+      "announcedThenActive": [
+        [
+          "2026-11-12",
+          true
+        ],
+        [
+          "2026-11-13",
+          true
+        ],
+        [
+          "2026-11-16",
+          true
+        ],
+        [
+          "2026-11-17",
+          false
+        ]
+      ]
+    }
+  },
+  "monthPriceControl": {
+    "2314": {
+      "transports": [
+        {
+          "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=2314",
+          "observedAt": "2026-11-14T23:07:04.802190+00:00",
+          "startedAt": "2026-11-14T23:07:04.111720+00:00",
+          "bytes": 2436,
+          "sha256": "24c3da03c251d84cc03ec425f665a37a57ed95d9f8394c7d57902ddcfcf4ee1e"
+        },
+        {
+          "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261101&stockNo=2314",
+          "observedAt": "2026-11-14T23:07:05.189623+00:00",
+          "startedAt": "2026-11-14T23:07:04.803018+00:00",
+          "bytes": 1644,
+          "sha256": "11b768bc5534172a63cf1716e62bfc81435f901f821d911c1d6651b1f07c75ea"
+        }
+      ],
+      "openControls": {
+        "2026-11-09": true,
+        "2026-11-10": false,
+        "2026-11-11": true,
+        "2026-11-13": true
+      },
+      "last20ListedRows": {
+        "from": "2026-10-15",
+        "through": "2026-11-13",
+        "count": 20,
+        "totalTurnoverNtd": 29198891,
+        "meanTurnoverNtd": 1459944.55
+      }
+    },
+    "2455": {
+      "transports": [
+        {
+          "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=2455",
+          "observedAt": "2026-11-14T23:07:05.815550+00:00",
+          "startedAt": "2026-11-14T23:07:05.189920+00:00",
+          "bytes": 2729,
+          "sha256": "a0bf42b54df22fd4a8c15313c09d41d453bc72c3c8d013b9c9958ed095f3f027"
+        },
+        {
+          "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261101&stockNo=2455",
+          "observedAt": "2026-11-14T23:07:06.229375+00:00",
+          "startedAt": "2026-11-14T23:07:05.815770+00:00",
+          "bytes": 1847,
+          "sha256": "3c1d7820c7908830f4e267cbe05d4fd632fb187dbb00cee1f8013c971bb48256"
+        }
+      ],
+      "openControls": {
+        "2026-11-09": true,
+        "2026-11-10": true,
+        "2026-11-11": true,
+        "2026-11-13": true
+      },
+      "last20ListedRows": {
+        "from": "2026-10-15",
+        "through": "2026-11-13",
+        "count": 20,
+        "totalTurnoverNtd": 60913066180,
+        "meanTurnoverNtd": 3045653309
+      }
+    },
+    "3189": {
+      "transports": [
+        {
+          "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=3189",
+          "observedAt": "2026-11-14T23:07:06.987275+00:00",
+          "startedAt": "2026-11-14T23:07:06.229590+00:00",
+          "bytes": 2875,
+          "sha256": "bbab89955c96381367ab9044d4fcb7e7ba9947d9a545f570a13151661dea6c41"
+        },
+        {
+          "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261101&stockNo=3189",
+          "observedAt": "2026-11-14T23:07:07.664134+00:00",
+          "startedAt": "2026-11-14T23:07:06.987532+00:00",
+          "bytes": 1865,
+          "sha256": "9e89a16cf5f6108025e1952b05ae6a00a4c4db2f30ccfb5241cb4178b9d6670b"
+        }
+      ],
+      "openControls": {
+        "2026-11-09": true,
+        "2026-11-10": true,
+        "2026-11-11": true,
+        "2026-11-13": true
+      },
+      "last20ListedRows": {
+        "from": "2026-10-15",
+        "through": "2026-11-13",
+        "count": 20,
+        "totalTurnoverNtd": 294447986489,
+        "meanTurnoverNtd": 14722399324.45
+      }
+    }
+  },
+  "independentPttObservation": {
+    "url": "https://www.ptt.cc/bbs/Stock/M.1794480295.A.104.html",
+    "displayedPublishedTaipei": "2026-11-12T18:44:53+08:00",
+    "observedSymbols": [
+      "2455",
+      "3189"
+    ],
+    "role": "public factual lists of trading measures, not an independent bullish signal or a primary market record",
+    "quotationRetained": false
+  },
+  "testExpectations": {
+    "nov16": "2455 and 3189 in the officially observed active intervals; recheck live notices and latest valid coverage",
+    "nov17": "2455 in the officially observed interval, while the observed 3189 interval ends on Nov 16; absence of a new control requires fresh coverage",
+    "halt": "2314 has a listed report row but no open-price on the next session Nov 10. Mark unable to trade and do not roll a Nov 9 signal forward to Nov 11 for a more favorable open",
+    "liquidity": "2455 and 3189 each clear NTD 50M using last 20 published daily-turnover rows through Nov 13, independently of exclusion by disposition. No admission or ranking attempted."
+  }
+}
