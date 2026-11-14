@@ -1,0 +1,191 @@
+{
+  "schema": "stockinsider-schedule-cutover-baseline-v1",
+  "observedAt": "2026-11-14T18:03:13Z",
+  "hostTimers": [
+    {
+      "unit": "stockinsider-candidate-history-backfill.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 00..17,22..23:25:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-candidate-history-backfill.service"
+    },
+    {
+      "unit": "stockinsider-capacity-watch.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* *:00:00",
+      "persistent": "yes",
+      "target": "stockinsider-capacity-watch.service"
+    },
+    {
+      "unit": "stockinsider-health-check.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 21:45:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-health-check.service"
+    },
+    {
+      "unit": "stockinsider-official-calendar-sync.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 06:05:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-official-calendar-sync.service"
+    },
+    {
+      "unit": "stockinsider-research-cycle.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 21:00:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-research-cycle.service"
+    },
+    {
+      "unit": "stockinsider-source-refresh.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 06,12,18,23:30:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-source-refresh.service"
+    },
+    {
+      "unit": "stockinsider-taiwan-data-close-preliminary.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 18:15:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-taiwan-data-close-preliminary.service"
+    },
+    {
+      "unit": "stockinsider-taiwan-data-final-freeze.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 20:15:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-taiwan-data-final-freeze.service"
+    },
+    {
+      "unit": "stockinsider-taiwan-data-final-reconcile.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 20:40:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-taiwan-data-final-reconcile.service"
+    },
+    {
+      "unit": "stockinsider-taiwan-data-master-calendar.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 06:00:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-taiwan-data-master-calendar.service"
+    },
+    {
+      "unit": "stockinsider-taiwan-data-preliminary.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 19:00:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-taiwan-data-preliminary.service"
+    },
+    {
+      "unit": "stockinsider-taiwan-data-queue-drain.timer",
+      "active": "active",
+      "enablement": "enabled",
+      "calendar": "*-*-* 00..17,22..23:10:00 Asia/Taipei",
+      "persistent": "yes",
+      "target": "stockinsider-taiwan-data-queue-drain.service"
+    }
+  ],
+  "hostCron": {
+    "systemFilesInspected": 5,
+    "matchingEntries": 0,
+    "rootPersonalCrontabPresent": false,
+    "stockinsiderPersonalCrontabPresent": false
+  },
+  "selectedEffectiveServiceRoutes": [
+    {
+      "runtimeUnit": "research-cycle",
+      "writesVia": [
+        "/api/internal/pipeline-run",
+        "/api/internal/taiwan-data-queue-drain"
+      ],
+      "productionLock": true,
+      "canRunCorePipeline": true
+    },
+    {
+      "runtimeUnit": "taiwan-data-queue-drain",
+      "writesVia": [
+        "/api/internal/candidate-financial-documents/worker",
+        "/api/internal/candidate-financial-queue-drain",
+        "/api/internal/taiwan-data-queue-drain"
+      ],
+      "productionLock": true,
+      "canRunCorePipeline": false
+    },
+    {
+      "runtimeUnit": "taiwan-data-final-reconcile",
+      "writesVia": [
+        "/api/internal/taiwan-data-queue-drain",
+        "/api/internal/taiwan-data-refresh"
+      ],
+      "productionLock": true,
+      "canRunCorePipeline": false
+    },
+    {
+      "runtimeUnit": "source-refresh",
+      "writesVia": [
+        "/api/internal/source-sync"
+      ],
+      "productionLock": true,
+      "canRunCorePipeline": false
+    },
+    {
+      "runtimeUnit": "taiwan-data-final-freeze",
+      "writesVia": [
+        "/api/internal/taiwan-data-queue-drain",
+        "/api/internal/taiwan-data-refresh"
+      ],
+      "productionLock": true,
+      "canRunCorePipeline": false
+    }
+  ],
+  "githubDefaultBranch": {
+    "main": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+    "workflowCount": 14,
+    "scheduled": [],
+    "manualRuntime": [
+      {
+        "path": ".github/workflows/ai-night-shift.yml",
+        "scheduled": false,
+        "triggers": [
+          "workflow_dispatch:"
+        ],
+        "cronEntries": []
+      },
+      {
+        "path": ".github/workflows/night-shift.yml",
+        "scheduled": false,
+        "triggers": [
+          "workflow_dispatch:"
+        ],
+        "cronEntries": []
+      },
+      {
+        "path": ".github/workflows/source-refresh.yml",
+        "scheduled": false,
+        "triggers": [
+          "workflow_dispatch:"
+        ],
+        "cronEntries": []
+      }
+    ],
+    "vercelCrons": 0
+  },
+  "checkedScope": "official job definitions, root and app crontab, GitHub default branch and repository Vercel configuration",
+  "otherUserAndExternalSchedulersEnumerated": false,
+  "liveVercelProviderStateChecked": false,
+  "productionMutations": 0
+}
