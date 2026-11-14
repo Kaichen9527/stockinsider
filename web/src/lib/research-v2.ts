@@ -19,7 +19,7 @@ import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 import { isExpectedPttArticleMissing } from './ptt-policy';
 import { buildPttMentionProvenance, type PttBodyReadStatus } from './ptt-mention-provenance';
-import { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt, type PttArticleRead, type PttBodyProvenance } from './ptt-article-parser.ts';
+import { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt, matchPttFinancialSummarySymbols, type PttArticleRead, type PttBodyProvenance } from './ptt-article-parser.ts';
 import { fetchPinnedHttpsText, isPublicNetworkAddress } from './pinned-https-fetch';
 
 type Row = Record<string, unknown>;
@@ -2692,7 +2692,11 @@ export function projectPttCollectorArticle(input: {
 }) {
   const article = parsePttArticleHtml(input.html, input.documentUrl);
   const context = { validSymbols: input.validSymbols, stockNamesBySymbol: input.stockNamesBySymbol, aliasesBySymbol: input.aliasesBySymbol };
-  const bodyExtracted = extractTwSymbolsWithEvidence(article.bodyText ?? '', context);
+  const bodyText = article.bodyText ?? '';
+  const genericBodyExtracted = extractTwSymbolsWithEvidence(bodyText, context);
+  const financialSymbols = matchPttFinancialSummarySymbols(bodyText, input.validSymbols, input.stockNamesBySymbol);
+  const bodySymbols = [...new Set([...genericBodyExtracted.symbols, ...financialSymbols])];
+  const bodyExtracted = { symbols: bodySymbols, excludedFalsePositives: genericBodyExtracted.excludedFalsePositives.filter(row => !bodySymbols.includes(row.token)) };
   const legacyExtracted = extractTwSymbolsWithEvidence(`${input.title}\n${article.bodyText ?? ''}`, context);
   return { article, bodyExtracted, legacyExtracted, publicationValid: pttPublicationKnownAt(article, input.observedAt), provenance: pttBodyProvenance(article, bodyExtracted.symbols) };
 }

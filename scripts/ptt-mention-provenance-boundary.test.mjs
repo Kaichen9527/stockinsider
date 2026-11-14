@@ -6,7 +6,7 @@ import vm from 'node:vm';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { buildPttMentionProvenance } from '../web/src/lib/ptt-mention-provenance.ts';
-import { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt } from '../web/src/lib/ptt-article-parser.ts';
+import { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt, matchPttFinancialSummarySymbols } from '../web/src/lib/ptt-article-parser.ts';
 const require = createRequire(import.meta.url), ts = require('../web/node_modules/typescript');
 // Only a fixed immutable baseline is selectable for the explicit red probe.
 // The ordinary command always tests the current actual call boundary.
@@ -77,7 +77,7 @@ test('actual upsert retains metadata but skips PTT mentions when publication hea
 async function collector(body) {
   const docs = [], signalRows = [];
   const extractTwSymbolsWithEvidence = actual('extractTwSymbolsWithEvidence', { compactText });
-  const projectPttCollectorArticle = actual('projectPttCollectorArticle', { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt, extractTwSymbolsWithEvidence });
+  const projectPttCollectorArticle = actual('projectPttCollectorArticle', { parsePttArticleHtml, pttBodyProvenance, pttPublicationKnownAt, matchPttFinancialSummarySymbols, extractTwSymbolsWithEvidence });
   const fn = actual('scrapePttStock', { getSupabaseServerClient: () => ({ from: () => ({ upsert: async rows => { signalRows.push(...rows); return { error: null }; } }) }),
     loadTwStockAuthority: async () => [{ id: 'stock-2409', symbol: '2409', name: '友達' }, { id: 'stock-2383', symbol: '2383', name: '台光電' }], compactText,
     getSymbolAliases: () => ['友達'], upsertSourceEntity: async () => ({ id: 'entity' }),

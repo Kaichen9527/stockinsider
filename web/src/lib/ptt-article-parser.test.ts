@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { parsePttArticleHtml, pttBodyProvenance, projectPttBodyObservation } from './ptt-article-parser.ts';
+import { parsePttArticleHtml, pttBodyProvenance, projectPttBodyObservation, normalizePttOfficialStockName, matchPttFinancialSummarySymbols } from './ptt-article-parser.ts';
 import { loadActualPttCollector } from './ptt-collector-test-loader.mjs';
 import { projectCachedSourceAdmission } from './vnext/cached-source-admission.ts';
 import { buildPttMentionProvenance } from './ptt-mention-provenance.ts';
@@ -39,6 +39,54 @@ test('T04 actual numbered original stock field remains after board-template remo
   assert.deepEqual([...value.bodyExtracted.symbols], ['2330']);
   const old = '2026-04-04T04:00:00.000Z';
   assert.equal(projectPttBodyObservation(value.provenance, url, old, old).reason, 'source_publication_older_than_30_days');
+});
+test('T04 unparenthesized English board examples are removed without deleting ordinary author prose', () => {
+  for (const marker of ['ex [標的]', 'EX. [標的]', 'e.g. [標的]', 'ex: 1. 標的：']) {
+    const value = collect(`<p>1. 標的：00981A ETF</p><p>${marker} 2330 合成公司乙</p>`);
+    assert.deepEqual([...value.bodyExtracted.symbols], []); assert.doesNotMatch(value.article.bodyText!, /2330/u);
+  }
+  const original = collect('<p>1. 標的：2330 合成公司乙</p><p>作者的 exposure 分析。</p>');
+  assert.deepEqual([...original.bodyExtracted.symbols], ['2330']); assert.match(original.article.bodyText!, /exposure/u);
+  const prose = collect('<p>作者說明 ex [標的] 2330 合成公司乙，保留原作者觀點。</p>');
+  assert.match(prose.article.bodyText!, /ex \[標的\]/u);
+});
+test('T04 same-symbol official-name normalization is limited to width, whitespace and terminal legal markers', () => {
+  const normalized = normalizePttOfficialStockName('合成材料*-KY');
+  for (const name of ['合成材料－ＫＹ', '合成材料＊－ＫＹ', ' 合成材料 - ky ', '合成材料-KY*']) assert.equal(normalizePttOfficialStockName(name), normalized);
+  assert.notEqual(normalizePttOfficialStockName('另一材料-KY'), normalized);
+  assert.notEqual(normalizePttOfficialStockName('合成*材料-KY'), normalized);
+  assert.notEqual(normalizePttOfficialStockName('合成材料股份有限公司'), normalized);
+  assert.equal(normalizePttOfficialStockName('4763'), null);
+});
+test('T04 actual collector recognizes only same-line issuer financial summaries against the same-code official name', () => {
+  // Invented values/names following the externally reported shape; these are
+  // not the actual restricted PTT source bytes or financial facts.
+  const financialContext = { validSymbols: new Set(['4763','2330']), stockNamesBySymbol: new Map([['4763','合成材料*-KY'], ['2330','另一材料-KY']]), aliasesBySymbol: new Map<string, string[]>() };
+  for (const line of ['4763合成材料-KY 115年 Q3:-1.25 累積:0', '４７６３合成材料－ＫＹ　１１５年　Ｑ３：０　累積：－２']) {
+    const value = collector({ html: html(line), documentUrl: url, title: 'Synthetic unrelated title', observedAt, ...financialContext });
+    assert.deepEqual([...value.bodyExtracted.symbols], ['4763']); assert.equal(value.article.parserVersion, 'ptt-own-body-v2');
+    const observation = projectPttBodyObservation(value.provenance, url, observedAt, observedAt);
+    assert.equal(observation.status, 'ready_observation'); assert.equal(observation.researchAdmissionAuthority, false);
+  }
+  for (const body of ['4763另一材料-KY 115年 Q3:1 累積:2', '4763未知材料-KY 115年 Q3:1 累積:2',
+    '4763合成材料-KY\n115年 Q3:1 累積:2', '金額：94763.00\n115年 Q3:1 累積:2']) {
+    const value = collector({ html: html(body), documentUrl: url, title: '[情報] 4763 股票', observedAt, ...financialContext });
+    assert.deepEqual([...value.bodyExtracted.symbols], []);
+  }
+});
+test('T04 summary format refuses amounts, unknown authority, malformed quarter/year/numbers and trailing prose', () => {
+  const names = new Map([['4763','合成材料*-KY']]); const valid = new Set(['4763']);
+  for (const line of ['4763.00合成材料-KY 115年 Q3:1 累積:2', '94763合成材料-KY 115年 Q3:1 累積:2',
+    '前文4763合成材料-KY 115年 Q3:1 累積:2', '4763 合成材料-KY 115年 Q3:1 累積:2',
+    '4763合成材料-KY 0年 Q3:1 累積:2', '4763合成材料-KY 200年 Q3:1 累積:2',
+    '4763合成材料-KY 115年 Q0:1 累積:2', '4763合成材料-KY 115年 Q5:1 累積:2',
+    '4763合成材料-KY 115年 Q3:100000000 累積:2', '4763合成材料-KY 115年 Q3:1e3 累積:2',
+    '4763合成材料-KY 115年 Q3:1', '4763合成材料-KY 115年 Q3:1 累積:2 後文']) {
+    assert.deepEqual(matchPttFinancialSummarySymbols(line, valid, names), []);
+  }
+  const line = '4763合成材料-KY 115年 Q3:1 累積:2';
+  assert.deepEqual(matchPttFinancialSummarySymbols(line, new Set(), names), []);
+  assert.deepEqual(matchPttFinancialSummarySymbols(line, valid, new Map()), []);
 });
 test('T04 Re/Fw and quoted text never acquire original-root eligibility from a newer reply header', () => {
   for (const [body, title] of [['※ 引述《NONPRODUCTION》\n: 股票 2330 合成公司乙\n合成公司丙觀點', 'Re: [標的] 3443 股票'],

@@ -26,7 +26,7 @@ export function loadActualPttCollector() {
         if (matches.length !== 1) throw Error('unexpected_ptt_test_function');
         return matches[0].getText(ast);
       });
-      source = "import {parsePttArticleHtml,pttBodyProvenance,pttPublicationKnownAt} from './ptt-article-parser.ts';\n" + declarations.join('\n');
+      source = "import {parsePttArticleHtml,pttBodyProvenance,pttPublicationKnownAt,matchPttFinancialSummarySymbols} from './ptt-article-parser.ts';\n" + declarations.join('\n');
     }
     const compiled = ts.transpileModule(source, { fileName: name,
       compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText;

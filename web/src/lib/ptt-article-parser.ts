@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { parse, type DefaultTreeAdapterTypes as Tree } from 'parse5';
 import { evidenceInstant, evidenceKnownAt } from './vnext/evidence-clock.ts';
 
-export const PTT_ARTICLE_PARSER = 'ptt-own-body-v1' as const;
+export const PTT_ARTICLE_PARSER = 'ptt-own-body-v2' as const;
 const MAX_HTML_BYTES = 524288, MAX_NODES = 20000, MAX_DEPTH = 64, MAX_BODY_BYTES = 32768;
 const CLOCK_TOLERANCE_SECONDS = 5;
 type Status = 'body_read' | 'body_missing' | 'html_overbound' | 'layout_unsupported' | 'body_overbound';
@@ -22,6 +22,32 @@ export type PttBodyProvenance = {
   publisher_revision_verified: false; original_root_verified: false; gaps: string[];
 };
 const sha = (value: string) => createHash('sha256').update(value, 'utf8').digest('hex');
+/** Compare only a same-symbol official short name. No inferred company aliases,
+ * corporate-suffix removal, substring identity or cross-symbol name matching. */
+export function normalizePttOfficialStockName(value: string): string | null {
+  if (typeof value !== 'string' || value.length > 128) return null;
+  const name = value.normalize('NFKC').replace(/\s+/gu, '').replace(/[‐‑‒–—−]/gu, '-')
+    .replace(/\*$/u, '').replace(/\*(?=-?KY$)/iu, '').replace(/-?KY$/iu, '-KY');
+  return name && /\p{L}/u.test(name) ? name : null;
+}
+/** A body-local issuer summary format, not financial-fact extraction. The code
+ * must directly adjoin its own official issuer and the entire same line must
+ * match. No title, neighboring line, fuzzy alias or numeric amount is a basis. */
+export function matchPttFinancialSummarySymbols(body: string, validSymbols: ReadonlySet<string>, stockNamesBySymbol: ReadonlyMap<string, string>): string[] {
+  const symbols = new Set<string>();
+  const row = /^([1-9]\d{3})(\S[^\r\n]{0,127}?)\s+([1-9]\d{0,2})年\s+Q([1-4])\s*:\s*([+-]?(?:0|[1-9]\d{0,7})(?:\.\d{1,6})?)\s+累積\s*:\s*([+-]?(?:0|[1-9]\d{0,7})(?:\.\d{1,6})?)$/iu;
+  for (const raw of body.split(/\r\n?|\n|\u2028|\u2029/u)) {
+    const line = raw.normalize('NFKC').trim();
+    if (line.length > 256) continue;
+    const match = row.exec(line);
+    if (!match || Number(match[3]) > 199 || !validSymbols.has(match[1])) continue;
+    const official = stockNamesBySymbol.get(match[1]);
+    if (typeof official !== 'string') continue;
+    const expected = normalizePttOfficialStockName(official);
+    if (expected !== null && normalizePttOfficialStockName(match[2]) === expected) symbols.add(match[1]);
+  }
+  return [...symbols];
+}
 function boundedStrings(value: unknown, max: number, pattern: RegExp): string[] | null {
   if (!Array.isArray(value)) return null;
   const length = Object.getOwnPropertyDescriptor(value, 'length')?.value;
@@ -89,6 +115,7 @@ function cleanLines(value: string): { body: string; quoted: boolean } {
     if (/^※\s*(引述|轉錄)|^\s*[:：>]/u.test(line)) { quoted = true; continue; }
     // Board instructions/examples are not the author's stock selection. Keep
     // actual numbered 標的/分析 fields, but discard their instructional examples.
+    if (/^(?:ex\.?|e\.g\.)\s*[:：]?\s*(?:\[\s*標的\s*\]|(?:\d+[.、]\s*)?標的\s*[:：])/iu.test(line)) continue;
     if (/範例|例如|\(\s*例|（\s*例|請勿刪除|發文前請|標的文(?:格式|範本)|以上(?:範本|模板)|板規|版規/u.test(line)) continue;
     if (/^※/u.test(line)) continue;
     output.push(line);
