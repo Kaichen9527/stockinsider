@@ -1,0 +1,201 @@
+{
+  "schema": "stockinsider-tpex-current-and-historical-trade-status-observation-v1",
+  "observations": [
+    {
+      "feed": "spendi_today",
+      "url": "https://www.tpex.org.tw/openapi/v1/tpex_spendi_today",
+      "observedAt": "2026-11-14T19:25:31.401323+00:00",
+      "sha256": "a528ac19658aa26cb1cffba9bc837a915268549f6ea7a7442f6121c25d28b463",
+      "bytes": 103,
+      "rows": 1,
+      "fields": [
+        "Date",
+        "SecuritiesCompanyCode",
+        "CompanyName",
+        "暫停交易",
+        "恢復交易"
+      ],
+      "targetMatches": [],
+      "sample": [],
+      "asOfFlags": [
+        "20261114"
+      ],
+      "emptySymbolRows": 1
+    },
+    {
+      "feed": "spendi_history",
+      "url": "https://www.tpex.org.tw/openapi/v1/tpex_spendi_history",
+      "observedAt": "2026-11-14T19:25:31.585217+00:00",
+      "sha256": "9304decac4d91517e9ae8128f2bb2a972ec4e4e47b810e91a580d07d9ed297be",
+      "bytes": 80226,
+      "rows": 365,
+      "fields": [
+        "Date",
+        "Serial",
+        "SecuritiesCompanyCode",
+        "CompanyName",
+        "DateOfSuspendedTrading",
+        "TimeOfSuspendedTrading",
+        "DateOfResumedTrading",
+        "TimeOfResumedTrading"
+      ],
+      "targetMatches": [],
+      "sample": [
+        {
+          "Date": "115",
+          "Serial": "1",
+          "SecuritiesCompanyCode": "1788",
+          "DateOfSuspendedTrading": "1150618",
+          "TimeOfSuspendedTrading": "080000",
+          "DateOfResumedTrading": "",
+          "TimeOfResumedTrading": ""
+        },
+        {
+          "Date": "115",
+          "Serial": "2",
+          "SecuritiesCompanyCode": "1788",
+          "DateOfSuspendedTrading": "",
+          "TimeOfSuspendedTrading": "",
+          "DateOfResumedTrading": "1150622",
+          "TimeOfResumedTrading": "080000"
+        }
+      ],
+      "asOfFlags": [
+        "115"
+      ],
+      "emptySymbolRows": 0
+    },
+    {
+      "feed": "cmode",
+      "url": "https://www.tpex.org.tw/openapi/v1/tpex_cmode",
+      "observedAt": "2026-11-14T19:25:31.524898+00:00",
+      "sha256": "4fb926365d4698505729663b6a98a356e744f97fa766c6280b79c44d48254581",
+      "bytes": 4604,
+      "rows": 21,
+      "fields": [
+        "Date",
+        "SecuritiesCompanyCode",
+        "CompanyName",
+        "AlteredTrading",
+        "PeriodicTrading",
+        "ManagedStock",
+        "MatchingFrequency",
+        "SuspensionOfTrading",
+        " FinancialAnnouncements"
+      ],
+      "targetMatches": [],
+      "sample": [
+        {
+          "Date": "1151113",
+          "SecuritiesCompanyCode": "2067",
+          "AlteredTrading": "Ｙ",
+          "PeriodicTrading": "",
+          "ManagedStock": "",
+          "MatchingFrequency": "",
+          "SuspensionOfTrading": "",
+          " FinancialAnnouncements": "Ｙ"
+        }
+      ],
+      "asOfFlags": [
+        "1151113"
+      ],
+      "emptySymbolRows": 0
+    },
+    {
+      "feed": "disposal_information",
+      "url": "https://www.tpex.org.tw/openapi/v1/tpex_disposal_information",
+      "observedAt": "2026-11-14T19:25:31.473423+00:00",
+      "sha256": "c506f7172683cf5573f3df4e03a32e89da5439bb4d2ec6be49e47f902c45a8de",
+      "bytes": 5444,
+      "rows": 5,
+      "fields": [
+        "Date",
+        "SecuritiesCompanyCode",
+        "CompanyName",
+        "DispositionPeriod",
+        "DispositionReasons",
+        "DisposalCondition"
+      ],
+      "targetMatches": [],
+      "sample": [],
+      "asOfFlags": [
+        "1151109",
+        "1151110",
+        "1151111"
+      ],
+      "emptySymbolRows": 0
+    },
+    {
+      "feed": "dated_disposal",
+      "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/disposal?startDate=2026%2F10%2F14&endDate=2026%2F11%2F13&response=json",
+      "observedAt": "2026-11-14T19:25:32.132815+00:00",
+      "sha256": "6f97c32e787a2d23d09e9b61a4ebb243881d00fb35001d501c4222376bee18cb",
+      "bytes": 71359,
+      "rows": 62,
+      "distinctSecurityRows": 56,
+      "fields": [
+        "編號",
+        "公布日期",
+        "證券代號",
+        "證券名稱",
+        "累計",
+        "處置起訖時間"
+      ],
+      "targetMatches": [],
+      "actualEquityPositive": [
+        [
+          "115/11/09",
+          "4542",
+          "115/11/10~115/11/16"
+        ],
+        [
+          "115/11/04",
+          "8099",
+          "115/11/05~115/11/11"
+        ],
+        [
+          "115/11/04",
+          "8272",
+          "115/11/05~115/11/11"
+        ],
+        [
+          "115/11/02",
+          "8291",
+          "115/11/03~115/11/09"
+        ],
+        [
+          "115/10/30",
+          "3374",
+          "115/11/02~115/11/10"
+        ],
+        [
+          "115/10/30",
+          "3691",
+          "115/11/02~115/11/06"
+        ],
+        [
+          "115/10/30",
+          "8099",
+          "115/11/02~115/11/06"
+        ],
+        [
+          "115/10/29",
+          "4577",
+          "115/10/30~115/11/05"
+        ]
+      ],
+      "publishedThrough": "115/11/11"
+    }
+  ],
+  "policyTestCases": {
+    "weekendEmptyCurrentDoesNotProvePriorSessionClear": true,
+    "haltAndResumeMustPairByInstrument": true,
+    "dispositionUsesEffectiveInclusiveInterval": true,
+    "missingIdentityIsNotActive": true
+  },
+  "scope": {
+    "laterObserved": true,
+    "establishesFormalAdmission": false,
+    "productionChanged": false
+  }
+}
