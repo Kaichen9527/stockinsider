@@ -1,0 +1,98 @@
+{
+  "build": {
+    "applicationSourceChanged": false,
+    "evidenceFromParentCommit": true,
+    "status": "BLOCKED_BASELINE_TYPES"
+  },
+  "callerBooleanOrReceiptGrantsRuntimeAuthority": false,
+  "cleanup": {
+    "ownedClustersReaped": true,
+    "ownedScratchRemoved": true,
+    "remainingOwnedPostgresProcesses": 0
+  },
+  "contaboAccessed": false,
+  "dbOnlyApiAcceptsCommandOrCallback": false,
+  "fixtureObservation": {
+    "appAcceptance": false,
+    "dailyValidSnapshots": 1,
+    "homeValidSnapshots": 1,
+    "newestContentDate": "2026-09-19",
+    "oldestContentDate": "2026-09-19",
+    "source": "GENERATED_PUBLIC_FIXTURE_NOT_ONSITE_DATA",
+    "staleSnapshots26h": 2,
+    "status": "OBSERVED_PUBLISHED_SNAPSHOT"
+  },
+  "fullReleaseAcceptance": false,
+  "generatedAtUtc": "2026-11-14T17:25:46.540645Z",
+  "genuineSnapshotAcceptance": "ONSITE_REQUIRED",
+  "independentReview": {
+    "durationSeconds": 12.405,
+    "focusedTestsPassed": 10,
+    "formalA1Acceptance": "NOT_CLAIMED",
+    "openBlockerOrHighFindings": 0
+  },
+  "nativeHoldRetained": true,
+  "nextRollback": "NOT_RUN",
+  "parentCommit": "bddce6ba2de5b1b81d94ab532624a365d556f8c7",
+  "postgresVersion": "17.11",
+  "postgrestAcceptance": "NOT_RUN",
+  "productionBackupOrKeyReceived": false,
+  "productionContinuity": "HOST_REQUIRED",
+  "rankingHealth": "NOT_ACCEPTED",
+  "remainingGaps": [
+    "onsite_current_backup_profile_acceptance",
+    "onsite_genuine_snapshot_schema_and_dates",
+    "clone_only_unprivileged_postgrest_authenticator_peer_map_and_select_rls",
+    "staging_only_jwt_and_rpc_restrictions",
+    "private_3302_rest_v1_proxy",
+    "verified_fixed_next_packages_and_new_radar_build",
+    "actual_same_clone_http_A_B_A_and_fault_rollback",
+    "onsite_production_continuity_comparison"
+  ],
+  "schema": "stockinsider-t18-validated-clone-readpoint-v1",
+  "scope": "CLOUD_GENERATED_PUBLIC_READER_PREFLIGHT_ONLY",
+  "serverVersionNum": "170011",
+  "sourceSha256": {
+    "deployment/staging/vnext/t17_keyfd/portable_restore_engine.py": "8c1ef24a2380d78196b511a12de7721dd6e264db099d5f619936c7539b44e906",
+    "deployment/staging/vnext/t17_keyfd/radar_reader_observation.py": "1a5d74c5fb80d2f300cc269b50a36269bed3790f82705127c02c42ca7af40c27",
+    "deployment/staging/vnext/t17_keyfd/stage_database_restore.py": "d8e6c884623a8d780dd2faece9211e599a5c2e887a08d99ea96e9664293f29ee",
+    "deployment/staging/vnext/t17_keyfd/stage_reader_preflight.py": "72f64bbfe81371c18b3dac8bb9118882bc3af9a76141801a33640a2fd43f20d9",
+    "docs/operations/2026-11-15/vnext/T18-VALIDATED-CLONE-READPOINT.md": "d92164b71d6fbbbc3cfa9306106326f181a156919b31cee1e246f4ead216c600",
+    "scripts/staging_restore_reader_preflight.py": "58fbd09ae2f7ebdcbea09df20cb8383870f241e7338984d45866dfaffce9d174",
+    "scripts/tests/test_t18_radar_reader_observation.py": "3110bd804509cf1bd72e3470ad40856e8919cc23f15d35eb3a2447d3a9b93b3e",
+    "scripts/tests/test_t18_validated_clone_readpoint.py": "01c87072eadfa17744fc84501f10d127e73125b4dc239a08b7d7f390f30b8f94"
+  },
+  "tests": {
+    "cases": [
+      "readpoint_only_after_all_actual_db_checks",
+      "violating_check_never_enters_reader",
+      "orphan_never_enters_reader",
+      "handle_invalidated_on_exit",
+      "observer_failure_cleans_real_cluster",
+      "boolean_receipt_callback_command_inputs_reject",
+      "actual_cloud_cli_admission_rejects_before_pg",
+      "absent_schema_no_tables_created",
+      "wrong_type_schema_gap",
+      "matching_empty_schema_gap",
+      "september19_dates_retained_and_stale",
+      "row_hash_unchanged",
+      "strict_bounded_date_count_projection"
+    ],
+    "combinedT17T18": {
+      "durationSeconds": 46.35,
+      "failed": 0,
+      "passed": 80,
+      "skipped": 0
+    },
+    "focusedT18": {
+      "durationSeconds": 11.968,
+      "failed": 0,
+      "passed": 10
+    },
+    "originalDisabledFacade": {
+      "failed": 0,
+      "passed": 12,
+      "sourceUnchanged": true
+    }
+  }
+}

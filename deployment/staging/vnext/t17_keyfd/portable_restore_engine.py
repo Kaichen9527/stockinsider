@@ -6,6 +6,7 @@ FULL authentication of kernel-held immutable ciphertext and trusted manifest.
 key and context; a Python callable by itself proves none of those prerequisites.
 No connection/database/SQL/binary overrides, service or application activation.
 """
+from contextlib import contextmanager
 import hashlib
 import json
 import os
@@ -73,7 +74,46 @@ def _limits(node=False,capture=False):
     if not node:resource.setrlimit(resource.RLIMIT_AS,(768*1024**2,768*1024**2))
 
 
+class _ValidatedClone:
+    """Private scoped handle issued only after this engine's actual DB checks.
+
+    Its receipt is descriptive, never authority. The only extra operation is a
+    source-fixed reader observation; no caller SQL/command/connection selector.
+    """
+    def __init__(self,sql,receipt):
+        self.__sql=sql
+        self.receipt=receipt
+
+    def observe_radar_reader(self):
+        if self.__sql is None:raise RestoreEngineRejected('verified_clone_scope_closed')
+        from .radar_reader_observation import assess_radar_reader
+        return assess_radar_reader(self.__sql)
+
+    def _close(self):
+        self.__sql=None
+
+
 def restore_owned_database(replay, work_root):
+    """Existing DB-only API: no callback, workflow or keep-alive argument."""
+    with _owned_validated_clone(replay,work_root) as clone:
+        receipt=clone.receipt
+    return receipt
+
+
+def observe_owned_radar_reader(replay, work_root):
+    """INTERNAL fixed reader preflight on the same fully verified clone.
+
+    The separately admitted entry authenticates source/key/OS first. This does
+    not start an app/PostgREST, publish a snapshot or grant runtime authority.
+    """
+    with _owned_validated_clone(replay,work_root) as clone:
+        observation=clone.observe_radar_reader()
+        receipt=clone.receipt
+    return {'database':receipt,'readerObservation':observation}
+
+
+@contextmanager
+def _owned_validated_clone(replay, work_root):
     """Restore/verify ONLY a new owned sandbox DB; always destroy it on return.
 
     Network/mount/cgroup/hostlock/key/artifact admission belongs to the parent
@@ -96,6 +136,7 @@ def restore_owned_database(replay, work_root):
     sock,data=root/'socket',root/'data'
     process=log=None
     diagnostic_error=None
+    clone=None
     deadline=time.monotonic()+900
     phase='setup'
     receipt={'schema':'stockinsider-owned-db-restore-v1','databaseRestored':False,
@@ -261,11 +302,17 @@ def restore_owned_database(replay, work_root):
           tocSha256=hashlib.sha256(toc).hexdigest(),filteredTocSha256=hashlib.sha256(filtered.read_bytes()).hexdigest(),
           restoredIdentityFenceDisabled=True,limitations=['declared constraints and seven fixed public row relations only',
           'no provider/key-escrow or full business-semantic validation','no Next rollback/service activation'])
+        # Sole yield point, after source/owner/RLS/grants/constraint/row checks.
+        # A fixed consumer finishes within this scope; cleanup always follows.
+        clone=_ValidatedClone(sql,receipt)
+        phase='validated_clone_readpoint'
+        yield clone
     except RestoreEngineRejected:
         raise
     except Exception:
         raise RestoreEngineRejected(phase+'_failed') from None
     finally:
+        if clone is not None:clone._close()
         if process:
             if process.poll() is None:process.terminate()
             try:process.wait(timeout=10)
@@ -279,4 +326,3 @@ def restore_owned_database(replay, work_root):
             diagnostic_error.diagnostic_cleanup=dict(receipt['cleanup'])
     if not all(receipt['cleanup'].values()):
         raise RestoreEngineRejected('engine_cleanup_failed')
-    return receipt

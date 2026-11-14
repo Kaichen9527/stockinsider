@@ -4,6 +4,7 @@ Host provisions sandbox and passes key3/cipher4/manifest5/lock6/hostdir7/image8.
 This NEW entry is distinct from all historical disabled facades. No production
 socket/DB/service/writer/timer is addressed; external acceptance stays separate.
 """
+from contextlib import contextmanager
 import argparse
 import ctypes
 import json
@@ -50,8 +51,9 @@ def _validate_receipt_counts(database):
         raise RestoreEngineRejected('sanitized_version_contract_rejected')
 
 
-def execute_staging_database_restore(work_root):
-    """Actual observation -> authenticate -> owned restore; never caller flags."""
+@contextmanager
+def _authenticated_staging_backup(work_root):
+    """Private shared lifecycle; every caller observes actual OS and fixed FDs."""
     protect_key_process()
     observations=observe_staging(work_root)  # actual OS, fixed FDs6/7/8
     manifest=read_manifest(5)  # private bounded capture; sourceFD closes
@@ -63,19 +65,25 @@ def execute_staging_database_restore(work_root):
     with owned_staging_key(3) as key:
         with VerifiedBackupStream(4,manifest,key) as backup:
             backup.authenticate()  # wrongkey/tag/digest never starts ANY PG child
-            database=restore_owned_database(backup.replay,Path(work_root))
-            _validate_receipt_counts(database)
-            return {'schema':'stockinsider-staging-database-restore-v1',
-                    'status':'DB_RESTORE_VERIFIED','observations':observations,
-                    'manifestSchema':manifest['schema'],
-                    'authenticatedPlaintextBytes':manifest['plaintextBytes'],
-                    'authenticatedPlaintextSha256':manifest['plaintextSha256'],
-                    'ciphertextSha256':backup.ciphertextSha256,
-                    'immutableCustody':backup.kind,'database':database,
-                    'providerRecovery':'NOT_RUN','nextRollback':'NOT_RUN',
-                    'serviceActivation':'NOT_RUN','productionContinuity':'HOST_REQUIRED',
-                    'nativeHoldRetained':True,
-                    'fullReleaseAcceptance':False}
+            yield observations,manifest,backup
+
+
+def execute_staging_database_restore(work_root):
+    """Actual observation -> authenticate -> owned restore; never caller flags."""
+    with _authenticated_staging_backup(work_root) as (observations,manifest,backup):
+        database=restore_owned_database(backup.replay,Path(work_root))
+        _validate_receipt_counts(database)
+        return {'schema':'stockinsider-staging-database-restore-v1',
+                'status':'DB_RESTORE_VERIFIED','observations':observations,
+                'manifestSchema':manifest['schema'],
+                'authenticatedPlaintextBytes':manifest['plaintextBytes'],
+                'authenticatedPlaintextSha256':manifest['plaintextSha256'],
+                'ciphertextSha256':backup.ciphertextSha256,
+                'immutableCustody':backup.kind,'database':database,
+                'providerRecovery':'NOT_RUN','nextRollback':'NOT_RUN',
+                'serviceActivation':'NOT_RUN','productionContinuity':'HOST_REQUIRED',
+                'nativeHoldRetained':True,
+                'fullReleaseAcceptance':False}
 
 
 def main():
