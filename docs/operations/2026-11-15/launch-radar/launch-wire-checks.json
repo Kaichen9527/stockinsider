@@ -1,0 +1,131 @@
+{
+  "schema": "stockinsider-launch-binary64-wire-checkpoint-v1",
+  "publicSourceCommit": "d68f5a33b8345e66fe324749101bd1f92abfdcc0",
+  "localValidationCommit": "bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c",
+  "sourceTree": "c0c297ff80d6debc2b015077695f8c111969bafb",
+  "sharedReceipt": {
+    "path": "launch-foundation-checks.json",
+    "sha256": "29ede9945eec6f9a3c3d60a354088301df1024675f90d854a2cf381e302353e8"
+  },
+  "arithmeticVersion": "binary64-v1",
+  "wireSchemas": [
+    "vnext-launch-ranking-read-v2",
+    "vnext-launch-ranking-snapshot-v2",
+    "vnext-launch-current-validity-v2",
+    "vnext-launch-ranking-write-v2"
+  ],
+  "policy": "stockinsider-launch-radar-v1",
+  "rules": "launch-radar-comparisons-v5",
+  "beforeFixActualNodeParser": {
+    "schema": "stockinsider-wire-arithmetic-before-fix-node-control-v1",
+    "observedAt": "2026-11-14T21:38:27.040451+00:00",
+    "source": "f79cfb4647ed3df60c379f0df24ccda9edf15db0",
+    "sameTreePublic": "96f4650bc4385301741db589344e0c91093eacb7",
+    "actualParser": true,
+    "postgresql": false,
+    "postgrest": false,
+    "syntheticOnly": true,
+    "mutatedRule": "trend_excess_return20_positive",
+    "stockReturn": 0.3,
+    "marketReturn": 0.2,
+    "outcomes": [
+      {
+        "wire": "decimal",
+        "value": 0.1,
+        "accepted": false
+      },
+      {
+        "wire": "binary64",
+        "value": 0.09999999999999998,
+        "accepted": true
+      }
+    ],
+    "nativeHold": "PRESERVED",
+    "productionActions": 0
+  },
+  "unit": {
+    "cases": 16,
+    "status": "PASS",
+    "check": {
+      "name": "wire_unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/launch-ranking-read.test.ts",
+        "web/src/lib/vnext/launch-ranking-wire.test.ts",
+        "web/scripts/launch-ranking-wire-replay.test.mjs"
+      ],
+      "start": "2026-11-14T22:25:06.027913+00:00",
+      "end": "2026-11-14T22:25:07.032531+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 28794880,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29561933824,
+        "/tmp": 9403543552
+      },
+      "resourceViolation": null,
+      "logSha256": "0e821c3516730318e482d5d25c744f3cd4d40a794b749e5c65c6a5b2b9d3155e"
+    }
+  },
+  "sourceSqlWitness": {
+    "path": "web/scripts/launch-ranking-binary64-vectors.sql",
+    "sha256": "94f4f3217fadfc3e5087aae800f0bb7bc5cab2f55c29354551d796f3019e77cb",
+    "vectors": 17,
+    "status": "EXTERNAL_SYNTHETIC_SELECT17_PASS_NOT_PRODUCT_MIGRATION",
+    "scope": "Full16-rule synthetic packets including +/- tiny, +/- thirds, thresholds, exact share cancellation and reverse-input equal-RS SQL ordering"
+  },
+  "consumer": {
+    "path": "web/scripts/launch-ranking-wire-replay.mjs",
+    "sha256": "adc24570ccdc1fedadc4731df43fdd66a97372ecac5803e9b45702d7f520abc1",
+    "stdinOnly": true,
+    "maximumBytes": 2097152,
+    "fatalUtf8": true,
+    "origin": "unverified_stdin",
+    "authority": false
+  },
+  "actualPostgrest": "NOT_RUN",
+  "actualSourceOrRanking": "NOT_RUN",
+  "noEpsilon": true,
+  "postRpcReadClock": true,
+  "zeroCanonicalization": "positive_zero_only",
+  "sourceNumericFacts": "UNCHANGED_EXACT_INTEGER_NUMERIC",
+  "nativeHold": "PRESERVED",
+  "cloudPostgreSql": "NOT_RUN_NATIVE_HOLD",
+  "externalSyntheticPostgreSql": {
+    "status": "PASS_17_OF_17",
+    "receipt": {
+      "commit": "61f25d67ee09be9dff754b66d00c2fac4a70d298",
+      "gitBlob": "2892ce9af6b237c94b5ae8d861451138d1fab9dd",
+      "path": "launch-wire-external-pg.json",
+      "sha256": "ba722c74b8b3d98e0c560c706b56dd14845e6201ae063780d8a07df04e105c39",
+      "scope": "EXTERNAL_ISOLATED_EMPTY_PG17_SYNTHETIC_SELECT_WIRE_ONLY",
+      "sourceCommit": "d68f5a33b8345e66fe324749101bd1f92abfdcc0",
+      "cloudReceivedOriginalPgBodies": false,
+      "reportedResults": 17,
+      "reportedPass": 17,
+      "receiptReportedRawBodyAndConsumerDigestsMatch": true,
+      "all8SourceFileGitAndSha256DigestsMatch": true
+    },
+    "pgVersion": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "nodeVersion": "v22.14.0",
+    "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+    "observedAt": "2026-11-14T22:35:04.645247+00:00",
+    "firstObservation": {
+      "nodeVersion": "v22.23.1",
+      "pinnedConsumerRequires": "v22.14.0",
+      "positivePacketsAccepted": 0,
+      "totalPackets": 17,
+      "outcome": "runtime_mismatch_first_attempt",
+      "temporaryClusterCleaned": true,
+      "applicationMigrationApplied": false
+    },
+    "negativeControls": {
+      "tamperedEqualRs63SymbolOrderExit": 1
+    },
+    "actualApplicationMigration": false,
+    "actualWriter": false
+  }
+}

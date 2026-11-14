@@ -1,5 +1,9 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## Current source foundation / wire / public citation checkpoint
+
+Public **d68f5a33b8345e66fe324749101bd1f92abfdcc0** equals locally validated **bd6bf3e56c4b7161ba7d76a4a65bc28289857f6c** tree;649units (625core/16wire/8citation),types/lint/build and33OIDC+10launch+6citation controlled browsers PASS. [Source behavior/deployment dependencies/failures](../../2026-11-15/launch-radar/LAUNCH-FOUNDATION.md), [separate wire](../../2026-11-15/launch-radar/LAUNCH-WIRE.md), [separate security](../../2026-11-15/launch-radar/PUBLIC-CITATION.md). External61f25d67 adds17/17 PG17.11 synthetic SELECT wire PASS with true-clock/digest binding and retained wrong-Node first attempt; no product migration/PostgREST/source/CAS approval. New source-fact and command/cutover code is default-disabled; full SQLscore/qualification/CAS/read remains separate WIP and not part of this tested source. Canonicalsource-first candidate UI/fixtures and actualfinancialroute preparation/ownedlease repair remain distinct followups. No current PRhead/nativeHOLD/A1/production/timer changes. Older labels retain their checkpoint scope.
+
 ## Current launch UI source checkpoint
 
 Public **96f4650bc4385301741db589344e0c91093eacb7**, identical whole-tree to local **f79cfb4647ed3df60c379f0df24ccda9edf15db0**, passes593/types/lint/build plus33controlledOIDC and10real-Next/synthetic-RPC desktop/mobile cases. [Behavior, history compatibility, failures and limits](../../2026-11-15/launch-radar/LAUNCH-UI.md), [receipt](../../2026-11-15/launch-radar/launch-ui-checks.json). Default-off same-version homepage/detail and120-second current-proof demotion are connected; old historical URLs remain original-reader. SQL source facts/newscore/qualification/CAS writer and21:30cutover remain inprogress, not actual publication acceptance. Native HOLD/A1/PRhead/production remain unchanged. Older labels below retain checkpoint-time scope.
