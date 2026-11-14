@@ -26,7 +26,7 @@ type FlowRow = { session: string; symbol: string; foreignNetShares: number; trus
 type Parsed = { page: Omit<Page, 'body'>; canonicalPayloadSha256: string; availableAt: string; schemaRevision: string | null; index: IndexRow[]; flow: FlowRow | null };
 type State = { cutoff: string; pages: Parsed[]; gaps: string[]; throughSessions: string[] };
 const states = new WeakMap<object, State>();
-const fail = (code: string): never => { throw Error(code); };
+function fail(code: string): never { throw Error(code); }
 const text = (v: unknown, max = 512): v is string => typeof v === 'string' && v.length > 0 && v.length <= max;
 const hash = (v: unknown): v is string => typeof v === 'string' && /^[a-f0-9]{64}$/u.test(v);
 const exact = (v: unknown, keys: string): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v)
@@ -184,19 +184,24 @@ export function parseLaunchOfficialReplay(value: unknown, files: ReadonlyMap<str
     || JSON.stringify(value.throughSessions) !== JSON.stringify(['2026-11-12', '2026-11-13'])
     || !exact(value.capture, 'repository sourceCommit workflowPath runId runAttempt startedAt completedAt')
     || !text(value.capture.repository) || !/^[a-f0-9]{40}$/u.test(String(value.capture.sourceCommit))
-    || !/^\.github\/workflows\/[A-Za-z0-9_-]+\.ya?ml$/u.test(String(value.capture.workflowPath)) || !/^\d{1,20}$/u.test(String(value.capture.runId))
-    || !Number.isSafeInteger(value.capture.runAttempt) || Number(value.capture.runAttempt) < 1
     || !known(value.capture.completedAt, String(value.cutoff)) || evidenceInstant(value.capture.completedAt)! >= evidenceInstant(value.cutoff)!
     || value.capture.startedAt !== null && !known(value.capture.startedAt, String(value.capture.completedAt))
     || !exact(value.indexMonths, 'TWSE TPEX') || !Array.isArray(value.flowSessions) || value.flowSessions.length > 21
     || value.flowSessions.some((day, i) => !isHistoryDate(day) || i > 0 && day <= (value.flowSessions as string[])[i - 1])
     || !Array.isArray(value.responses) || !Array.isArray(value.schemaEvidence) || value.schemaEvidence.length > 2
     || value.responses.length + value.schemaEvidence.length > MAX_PAGES) fail('official_replay_manifest_invalid');
+  const capture = value.capture;
+  const workflowAbsent = capture.workflowPath === null && capture.runId === null && capture.runAttempt === null;
+  const workflowPresent = typeof capture.workflowPath === 'string' && /^\.github\/workflows\/[A-Za-z0-9_-]+\.ya?ml$/u.test(capture.workflowPath)
+    && typeof capture.runId === 'string' && /^\d{1,20}$/u.test(capture.runId)
+    && Number.isSafeInteger(capture.runAttempt) && Number(capture.runAttempt) >= 1;
+  if (!workflowAbsent && !workflowPresent) fail('official_replay_capture_workflow_invalid');
   for (const market of ['TWSE', 'TPEX']) {
     const months = value.indexMonths[market];
     if (!Array.isArray(months) || months.length > 13 || months.some((month, i) => typeof month !== 'string' || !isHistoryDate(`${month}-01`) || i > 0 && month <= months[i - 1])) fail('official_replay_months_invalid');
   }
   const cutoff = value.cutoff as string, gaps: string[] = ['raw_replay_does_not_grant_source_or_redistribution_rights', 'selected_price_action_calendar_binding_not_connected'];
+  if (workflowAbsent) gaps.push('capture_workflow_identity_unverified');
   let bytes = 0; const identities = new Set<string>(), paths = new Set<string>(), pages: Parsed[] = []; let proof: string[][] | null = null;
   let schemaAvailableAt: string | null = null, schemaRevision: string | null = null;
   const reserve = (page: { bytes: number; body: Body }) => {

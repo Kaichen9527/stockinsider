@@ -101,6 +101,21 @@ test('missing grouped header proof leavesTPEx flow null while independentTWSE/in
   assert.ok(read.gaps.includes('tpex_complete_grouped_header_proof_missing'));
 });
 
+test('nonworkflow capture uses allnull workflow tuple without inventing identity; mixed tuples fail', () => {
+  const { manifest } = fixture();
+  const capture = manifest.capture as unknown as { workflowPath: string | null; runId: string | null; runAttempt: number | null };
+  capture.workflowPath = null; capture.runId = null; capture.runAttempt = null;
+  const read = parseLaunchOfficialReplay(manifest);
+  assert.ok(read.gaps.includes('capture_workflow_identity_unverified'));
+  assert.equal(read.sourceAuthority, false);
+  for (const property of ['workflowPath', 'runId', 'runAttempt'] as const) {
+    const mixed = fixture(); Object.assign(mixed.manifest.capture, { [property]: null });
+    assert.throws(() => parseLaunchOfficialReplay(mixed.manifest), /capture_workflow_invalid/u);
+  }
+  const late = structuredClone(manifest); late.capture.completedAt = late.cutoff;
+  assert.throws(() => parseLaunchOfficialReplay(late), /manifest_invalid/u);
+});
+
 test('property-like mutations reject sources, hashes, duplicate pages/rows, dates, cutoffs and unsupported header fields', () => {
   for (const change of ['source', 'order', 'hash', 'duplicate_page', 'date', 'duplicate_row', 'fractional', 'header', 'net', 'pair_missing', 'clock', 'before_start', 'cutoff'] as const) {
     const { manifest } = fixture();
