@@ -1,0 +1,102 @@
+{
+  "schema": "stockinsider-t17-disk-custody-source-v1",
+  "parentCommit": "4a206c8f2cd814869a9c0d088e2db1738a706a07",
+  "recordedAtUtc": "2026-11-14T14:55:46.395015+00:00",
+  "scope": "public_fixtures_only",
+  "diskProbe": {
+    "fixturePlaintextBytes": 33554432,
+    "kernelCustody": "REFUSED",
+    "kernelErrno": 25,
+    "maxCopyChunkBytes": 1048576
+  },
+  "fixedRunner": {
+    "cleanup": {
+      "ownedPostmasterReaped": true,
+      "privateTreeRemoved": true
+    },
+    "finishedUtc": "2026-11-14T14:57:12.086616+00:00",
+    "kernelErrno": 25,
+    "liveAuthority": false,
+    "nativeHoldRetained": true,
+    "pgStarted": false,
+    "reason": "fsverity_enable_required",
+    "restoreVerified": false,
+    "schema": "stockinsider-t17-disk-pg17-fixture-v1",
+    "scope": "fixed_public_fixture_only",
+    "startedUtc": "2026-11-14T14:57:12.084491+00:00",
+    "status": "REFUSED"
+  },
+  "checks": [
+    {
+      "name": "unit",
+      "exit": 0,
+      "expectedExit": 0,
+      "seconds": 3.058,
+      "logSha256": "a438e641f706a32ced821a7217a8585e510950996efe2120c5bd456a02696a9f"
+    },
+    {
+      "name": "fixtureRunner",
+      "exit": 2,
+      "expectedExit": 2,
+      "seconds": 0.073,
+      "logSha256": "26a93057a307a4f55be8cc1c0530d0b9b1cb5c65299a3dd95d58a789481a882c"
+    },
+    {
+      "name": "candidate",
+      "exit": 0,
+      "expectedExit": 0,
+      "seconds": 0.274,
+      "logSha256": "def3678d1cb19a52fe105860ee7057670b570751b97ace3daf9beac2db9cb383"
+    }
+  ],
+  "pythonTests": {
+    "pass": 24,
+    "fail": 0,
+    "skipped": 0,
+    "diskPositiveVerified": false
+  },
+  "candidateTests": {
+    "pass": 12,
+    "fail": 0
+  },
+  "observedToolVersions": {
+    "postgres": "17.11",
+    "pg_restore": "17.11",
+    "conventionalPgBinaryPathVerified": false
+  },
+  "hostReport": {
+    "source": "coordinator_report_not_independent_observation_or_admission",
+    "kernel": "6.8",
+    "postgres": "17.11",
+    "cgroup": "v2",
+    "scratchFilesystem": "ext4_without_verity_feature",
+    "freeDiskBytes": 28344692736,
+    "availableMemoryBytes": 4225351680,
+    "productionDatabaseApproxBytes": 3611817651,
+    "ciphertextSetApprox": "503 MB",
+    "databaseMemberCiphertextApprox": "491 MB",
+    "keyLocation": "existing_external_custody_not_Cloud",
+    "stagingSsh": "timed_out_not_retried"
+  },
+  "sourceCaps": {
+    "copyChunkBytes": 1048576,
+    "maxCiphertextBytes": 274877906944,
+    "cooperativeCopySeconds": 120,
+    "fixtureRunnerWallSeconds": 180
+  },
+  "liveFacadeChanged": false,
+  "nativeHoldRetained": true,
+  "T17Accepted": false,
+  "productionArtifactOrKeyReceived": false,
+  "contaboAction": false,
+  "positiveDiskCryptoAndPgPath": "NOT_RUN: kernel filesystem gate refused",
+  "fullExactBranchBuildTypesLint": "NOT_RUN: git CONNECT503",
+  "independentReview": "NOT_RUN",
+  "sha256": {
+    "deployment/staging/vnext/t17_keyfd/disk_custody.py": "6c6ec611f3ae4b26da2c924d0f43617918e7e3783624b31760fd5bafd0adb9cc",
+    "deployment/staging/vnext/t17_keyfd/stream_fixture_gcm.py": "50a0b83466b4d46f52c2d737ace18a1e25b78acfec4f61dcd9982561d9db7b1c",
+    "scripts/t17_disk_pg17_fixture.py": "034b9551a1e7e1e5c2c62c65dcb0dad4ca0ea9c08cd8e871fb0f387e0f01b49e",
+    "scripts/tests/test_t17_disk_custody.py": "a5dc3a7b2b89eff3be22367b2298ae8e5fa4cc76c797f6ee2207e41223d0977e",
+    "docs/operations/2026-11-14/vnext/T17-DISK-CUSTODY-SOURCE.md": "70cef42ecd0c284bd1d4b2de7b9d5a39aed2246748c0f9dd89e56c778f41988a"
+  }
+}
