@@ -1,0 +1,33 @@
+{
+  "repository": "mattpocock/skills",
+  "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+  "files": [
+    {
+      "path": ".agents/skills/grill-me/SKILL.md",
+      "upstreamBlob": "3947ff9c4ad980d14fc07fccbf659d47c114e81d",
+      "sha256": "caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637",
+      "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/productivity/grill-me/SKILL.md"
+    },
+    {
+      "path": ".agents/skills/grilling/SKILL.md",
+      "upstreamBlob": "d2f09a18e6a6c65c55f1271ba08dfeaf06f0bed3",
+      "sha256": "a146842ed93ca43d833550fa9adf02e58cb63c83fea9d4b4522995b82242d4e2",
+      "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/productivity/grilling/SKILL.md"
+    },
+    {
+      "path": ".agents/skills/to-spec/SKILL.md",
+      "upstreamBlob": "3f52599ae2a4347aee5a07432c2707518e691a7f",
+      "sha256": "43ad9cf318e5e7d3d1fa360253a37021796dc87a0c2e595ad262661a10f85088",
+      "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/engineering/to-spec/SKILL.md"
+    },
+    {
+      "path": ".agents/skills/to-tickets/SKILL.md",
+      "upstreamBlob": "9b77a01db9460c99c22d03c910c349f890f12c0e",
+      "sha256": "56ec23c5b2782785d4e65bff9e315b6d3aeb4ef977c174a219e99489fada1995",
+      "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/engineering/to-tickets/SKILL.md"
+    }
+  ],
+  "licenseBlob": "f1dd2c09108dde1a5f56097cee8461b3ea834499",
+  "sameNamedSkillsOverwritten": false,
+  "remoteCodeExecuted": false
+}

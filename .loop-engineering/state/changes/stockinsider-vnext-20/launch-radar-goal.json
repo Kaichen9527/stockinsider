@@ -1,0 +1,23 @@
+{
+  "schema": "stockinsider-launch-radar-goal-v1",
+  "goalIssue": 385,
+  "goalStatus": "ACTIVE_IMPLEMENTATION_SOURCE_ONLY",
+  "ticketRange": [386, 405],
+  "approvedSpec": "docs/operations/2026-11-14/launch-radar/APPROVED-SPEC-385.md",
+  "amendment": "openspec/changes/stockinsider-vnext-20/launch-radar-amendment.md",
+  "parentBodySha256": "aacd043d02434e5f6dc1a4ef749339cefc77cf62b8e98f556a52e6dbf4daacf9",
+  "requirementsAuthority": "EXPLICIT_USER_APPROVED_ISSUE_385",
+  "formalRequirementsDesignReview": "PENDING_NOT_SUBSTITUTED_BY_ENGINEERING_REVIEW",
+  "protectedExactReviewA1": "BLOCKED_EXISTING_BINDING_NOT_CHANGED",
+  "nativeRunner": "HOLD_NOT_RESUMED",
+  "boundedSourceFrontier": ["T01", "T06_OFFLINE_CORE"],
+  "T01ActualRuntimeModelAttestation": "NOT_OBSERVED",
+  "T02VerifiedOwnerSession": "NOT_IMPLEMENTED",
+  "T06RealProviderAndUI": "NOT_CONNECTED",
+  "launchRankingPolicy": "NOT_CONNECTED",
+  "productionScheduler": "NOT_CHANGED",
+  "autoMerge": false,
+  "autoDeploy": false,
+  "paidCallsEnabled": false,
+  "releaseGate": "INCOMPLETE"
+}
