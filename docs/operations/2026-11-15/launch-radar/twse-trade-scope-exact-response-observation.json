@@ -1,0 +1,200 @@
+{
+  "schema": "stockinsider-twse-turnover-feed-coverage-observation-v1",
+  "stockDay": [
+    {
+      "label": "stock-day",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261101&stockNo=2330&response=json",
+      "sha": "9442564d6fc5f850c0d0e0834cf0d4afbdad9c3d34a48b8aa6e3d3ef91d386ee",
+      "stat": "OK",
+      "title": "115年11月 2330 台積電           各日成交資訊",
+      "keys": [
+        "stat",
+        "date",
+        "title",
+        "fields",
+        "data",
+        "notes",
+        "total"
+      ],
+      "fields": [
+        "日期",
+        "成交股數",
+        "成交金額",
+        "開盤價",
+        "最高價",
+        "最低價",
+        "收盤價",
+        "漲跌價差",
+        "成交筆數",
+        "註記"
+      ],
+      "coverage": [
+        "當日統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。"
+      ],
+      "observedCandidateDates": [
+        "115/11/12",
+        "115/11/13"
+      ]
+    },
+    {
+      "label": "legacy-stock-day",
+      "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?date=20261101&stockNo=2330&response=json",
+      "sha": "9442564d6fc5f850c0d0e0834cf0d4afbdad9c3d34a48b8aa6e3d3ef91d386ee",
+      "stat": "OK",
+      "title": "115年11月 2330 台積電           各日成交資訊",
+      "keys": [
+        "stat",
+        "date",
+        "title",
+        "fields",
+        "data",
+        "notes",
+        "total"
+      ],
+      "fields": [
+        "日期",
+        "成交股數",
+        "成交金額",
+        "開盤價",
+        "最高價",
+        "最低價",
+        "收盤價",
+        "漲跌價差",
+        "成交筆數",
+        "註記"
+      ],
+      "coverage": [
+        "當日統計資訊含一般、零股、盤後定價、鉅額交易，不含拍賣、標購。"
+      ],
+      "observedCandidateDates": [
+        "115/11/12",
+        "115/11/13"
+      ]
+    }
+  ],
+  "institutionVariants": [
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261112&selectType=ALL&response=json",
+      "finalUrl": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261112&selectType=ALL&response=json",
+      "requestedDate": "20261112",
+      "effectiveDate": "20261112",
+      "selectedKind": "ALL",
+      "status": "OK",
+      "fieldCount": 19,
+      "bodySHA256": "398436083c232d0083668a6d784f895a3661d4e03a4e207b2510aef9d95f1226",
+      "coverageNotes": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "matched2330": 1,
+      "observedAt": "2026-11-14T19:36:24.622512+00:00"
+    },
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261113&selectType=ALL&response=json",
+      "finalUrl": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261113&selectType=ALL&response=json",
+      "requestedDate": "20261113",
+      "effectiveDate": "20261113",
+      "selectedKind": "ALL",
+      "status": "OK",
+      "fieldCount": 19,
+      "bodySHA256": "3ac1060d3c66c10e034d4fddc293df1bc3f04964dd8326ab9848059f41e8734e",
+      "coverageNotes": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "matched2330": 1,
+      "observedAt": "2026-11-14T19:36:25.640311+00:00"
+    },
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261112&selectType=ALLBUT0999&response=json",
+      "finalUrl": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261112&selectType=ALLBUT0999&response=json",
+      "requestedDate": "20261112",
+      "effectiveDate": "20261112",
+      "selectedKind": "ALLBUT0999",
+      "status": "OK",
+      "fieldCount": 19,
+      "bodySHA256": "1d4c8757afd6e0b0f2e5b859ba11f53e33a90cefb7b546567cf509f6d008396d",
+      "coverageNotes": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "matched2330": 1,
+      "observedAt": "2026-11-14T19:36:25.430883+00:00"
+    },
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261113&selectType=ALLBUT0999&response=json",
+      "finalUrl": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261113&selectType=ALLBUT0999&response=json",
+      "requestedDate": "20261113",
+      "effectiveDate": "20261113",
+      "selectedKind": "ALLBUT0999",
+      "status": "OK",
+      "fieldCount": 19,
+      "bodySHA256": "9c1df0d9247b6376b7ea6f7efc81868173ba223a46fd77e9895dfa60de105270",
+      "coverageNotes": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "matched2330": 1,
+      "observedAt": "2026-11-14T19:36:26.291852+00:00"
+    },
+    {
+      "url": "https://www.twse.com.tw/fund/T86?date=20261112&selectType=ALL&response=json",
+      "finalUrl": "https://www.twse.com.tw/fund/T86?date=20261112&selectType=ALL&response=json",
+      "requestedDate": "20261112",
+      "effectiveDate": "20261112",
+      "selectedKind": "ALL",
+      "status": "OK",
+      "fieldCount": 19,
+      "bodySHA256": "398436083c232d0083668a6d784f895a3661d4e03a4e207b2510aef9d95f1226",
+      "coverageNotes": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "matched2330": 1,
+      "observedAt": "2026-11-14T19:36:28.524370+00:00"
+    },
+    {
+      "url": "https://www.twse.com.tw/fund/T86?date=20261113&selectType=ALL&response=json",
+      "finalUrl": "https://www.twse.com.tw/fund/T86?date=20261113&selectType=ALL&response=json",
+      "requestedDate": "20261113",
+      "effectiveDate": "20261113",
+      "selectedKind": "ALL",
+      "status": "OK",
+      "fieldCount": 19,
+      "bodySHA256": "3ac1060d3c66c10e034d4fddc293df1bc3f04964dd8326ab9848059f41e8734e",
+      "coverageNotes": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "matched2330": 1,
+      "observedAt": "2026-11-14T19:36:29.192686+00:00"
+    },
+    {
+      "url": "https://www.twse.com.tw/fund/T86?date=20261112&selectType=ALLBUT0999&response=json",
+      "finalUrl": "https://www.twse.com.tw/fund/T86?date=20261112&selectType=ALLBUT0999&response=json",
+      "requestedDate": "20261112",
+      "effectiveDate": "20261112",
+      "selectedKind": "ALLBUT0999",
+      "status": "OK",
+      "fieldCount": 19,
+      "bodySHA256": "811aae31f26143f442c8a8a33fbb26fc626c8596e85960f1201e704177f4fc95",
+      "coverageNotes": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "matched2330": 1,
+      "observedAt": "2026-11-14T19:36:30.540548+00:00"
+    },
+    {
+      "url": "https://www.twse.com.tw/fund/T86?date=20261113&selectType=ALLBUT0999&response=json",
+      "finalUrl": "https://www.twse.com.tw/fund/T86?date=20261113&selectType=ALLBUT0999&response=json",
+      "requestedDate": "20261113",
+      "effectiveDate": "20261113",
+      "selectedKind": "ALLBUT0999",
+      "status": "OK",
+      "fieldCount": 19,
+      "bodySHA256": "a8fe2f08d39691edb2dcc473feda2156d9d296219ef730851b58f3c6c529c38c",
+      "coverageNotes": [
+        "本統計資訊含一般、零股、盤後定價、鉅額，不含拍賣、標購。"
+      ],
+      "matched2330": 1,
+      "observedAt": "2026-11-14T19:36:31.239557+00:00"
+    }
+  ],
+  "broaderCoverageOfficialNotesConflict": "Same report can have different coverage notes across responses; retain exact response's metadata and observed clock.",
+  "permissionEstablished": false,
+  "rawReproducedInGit": false
+}
