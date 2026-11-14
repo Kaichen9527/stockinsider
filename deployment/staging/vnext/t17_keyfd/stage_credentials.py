@@ -31,7 +31,9 @@ ADMISSION_ONLY=b'PUBLIC_T18_ADMISSION_ONLY_NO_AUTHORITY'
 
 
 class StageCredentialRejected(Exception):
-    def __init__(self):super().__init__('fixed_stage_credential_rejected')
+    def __init__(self,category='material'):
+        self.category=category if category in ('material','lifetime','handoff') else 'material'
+        super().__init__('fixed_stage_credential_'+self.category+'_rejected')
 
 
 def _b64(data):return base64.urlsafe_b64encode(data).rstrip(b'=').decode('ascii')
@@ -70,8 +72,8 @@ def validate_stage_token(secret,token,minimum_remaining=MIN_REMAINING):
             or claim['role']!='t18_reader' or claim['aud']!='stockinsider-t18'
             or type(claim['iat']) is not int or type(claim['exp']) is not int
             or claim['exp']-claim['iat']!=TOKEN_LIFETIME or claim['iat']>now+5
-            or claim['exp']<=now or claim['exp']-now<minimum_remaining
             or not hmac.compare_digest(parts[2],signature)):raise ValueError()
+        if claim['exp']<=now or claim['exp']-now<minimum_remaining:raise StageCredentialRejected('lifetime')
         return claim['exp']
     except (ValueError,TypeError,UnicodeError,KeyError):raise StageCredentialRejected() from None
 
@@ -90,7 +92,10 @@ def _decode(data):
         secret=bytearray(data[5:37]);token=data[39:].decode('ascii')
         validate_stage_token(secret,token)
         return secret,token
-    except (ValueError,TypeError,UnicodeError,struct.error,StageCredentialRejected):
+    except StageCredentialRejected:
+        if secret is not None:secret[:]=bytes(len(secret))
+        raise
+    except (ValueError,TypeError,UnicodeError,struct.error):
         if secret is not None:secret[:]=bytes(len(secret))
         raise StageCredentialRejected() from None
 
@@ -163,12 +168,14 @@ def receive_stage_fd(connection):
             except OSError:pass
 
 
-def serve_credential_once(listener,payload):
+def serve_credential_once(listener,payload,deadline=None):
     """Systemd credential-loader root peer only; exactly one bounded JWT+EOF."""
     if type(payload) is not bytes or not 1<=len(payload)<=MAX_TOKEN:raise StageCredentialRejected()
     connection,_=listener.accept()
     with connection:
-        connection.settimeout(5)
+        remaining=5 if deadline is None else min(5,deadline-time.monotonic())
+        if remaining<=0:raise StageCredentialRejected('handoff')
+        connection.settimeout(remaining)
         _,uid,_=struct.unpack('3i',connection.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,12))
         if uid!=0:raise StageCredentialRejected()
         connection.sendall(payload);connection.shutdown(socket.SHUT_WR)

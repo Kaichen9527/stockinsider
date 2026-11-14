@@ -14,13 +14,15 @@ The separate startup registration subjectcc0 retains46; its no-key admission was
 reported successful in16.118 seconds. See T18-STARTUP-REGISTRATION.md for the
 preserved initial intermittent failure and the bounded scheduling fix.
 
-The current candidate-detail preflight starts from exactcc0: apply the two
-replacements and one added module in
-[t18-candidate-detail-stage-manifest.json](t18-candidate-detail-stage-manifest.json),
-for47 required blobs. All other baseline sources, four historical migrations and
-original asset pins remain. The root launcher stays exactly the cc0 hash.
-The old native-credential stage manifest/receipt describe their original subject;
-use the current preflight receipt and T18-CANDIDATE-DETAIL-PREFLIGHT.md for scope.
+The detail subject f9fbcfdec7f5f65a1e3f74f35f599183cbe710a0 used47 exact
+blobs and rejected after612.455 seconds at validated_clone_readpoint_failed.
+Preserve its exact public receipt and the older successful7811aaa evidence.
+The post-restore credential subject starts from f9fbcfd; apply
+[t18-late-credential-stage-manifest.json](t18-late-credential-stage-manifest.json)
+for49 runtime/exemplar blobs, including two added modules. Four historical
+migrations and original asset pins remain unchanged. See
+[T18-LATE-CREDENTIAL-HANDOFF.md](T18-LATE-CREDENTIAL-HANDOFF.md) for the changed
+host/FD lifecycle and the remaining native onsite admission requirement.
 This adds no detail HTTP/RPC/grants. Three example units remain documentation;
 the launcher never installs or reads them. No build artifacts from Cloud are needed.
 
@@ -80,13 +82,19 @@ The listener accepts within 15 seconds and transfer is bounded by 5 seconds;
 APP startup has a 20-second limit. There is no credential-file source, caller
 path, callback, URL or secret in argv/environment/unit properties.
 
-Admission serves only PUBLIC_T18_ADMISSION_ONLY_NO_AUTHORITY. It creates no JWT
-HMAC, opens no backup/manifest, reads no backup key, starts no PG or app server,
+Initial APP startup in ALL modes serves only PUBLIC_T18_ADMISSION_ONLY_NO_AUTHORITY.
+Admission creates no JWT/HMAC, opens no backup/manifest, reads no backup key, starts no PG or app server,
 and still performs the actual source/assets/UID/group/namespace/cgroup checks.
 The placeholder cannot pass CONFIGURE authentication.
 
-Invalid/real modes instead create one fresh reader JWT plus a 32-byte staging-only
-HMAC. ONLY the JWT goes to systemd's memory-backed native credential. APP's fixed
+Invalid/real initially transfer only a sealed public marker. Only AFTER actual
+clone validation, fixed reader roles and owned socket activation can the controller
+request one fresh reader JWT plus a 32-byte staging-only HMAC. Root completely
+stops/collects the placeholder APP and verifies credential removal, reuses the
+same broker-parent inode, launches the same fixed APP unit with native LoadCredential,
+and reseals/reobserves the three isolated units. DB independently rebinds the
+new APP peer/cookie/groups/assets/budget before CONFIGURE. ONLY the JWT goes to
+systemd's memory-backed native credential. APP's fixed
 path is /run/credentials/stockinsider-t18-app.service; it checks the actual root
 ownership, 0550/0440 modes, named APP POSIX ACL, private 1 MiB readonly tmpfs and
 read-only flags. Unknown ACL grants/mounts reject. DB and REST retain explicit
@@ -114,30 +122,34 @@ The six backup-capability packet and its sender/receiver functions are unchanged
 
 AF_UNIX SOCK_SEQPACKET, root peer authentication, one V record and exactly six
 SCM_RIGHTS capabilities remain. AFTER that packet, a distinct T record carries
-ONE readonly root-owned anonymous sealed memfd for FD9. It holds only the staging
-HMAC/JWT, at most 4135 bytes; no backup key or data is included. The receiver
-protects FD9 above29 before mapping the original 3..8 slots, then maps9. Any
-malformed/truncated rights or exec failure closes all owned 3..9 descriptors.
+ONE readonly root-owned anonymous sealed memfd for FD9. Initially its exact103
+bytes are a public bootstrap marker, not a JWT/HMAC. The original authenticated
+root seqpacket connection is protected above89 and retained as FD10 through the
+fixed exec. FD10 becomes CLOEXEC before any PG child; it accepts no command,
+path, URL or Boolean. Backup FD3–8 and their admission are unchanged.
 
-The fixed DB entry observes actual FD9 root ownership, nlink 0, mode 0400, readonly
-access and all kernel seals before proceeding, and removes inheritance. The
-controller reads its bounded bytes only in the already-validated clone path.
-FD9 cannot grant restore authority: UID/namespace/cgroup/lock, original FD3–8,
-manifest, held verity ciphertext, two-phase GCM, PG/SQL/RLS/lineage gates remain.
-There is no additional caller FD selector or readiness flag. Existing CONFIGURE
-operations and their exact fields are unchanged.
+After all actual DB checks, reader-role installation and owned socket activation,
+the controller shuts down the placeholder APP and requests once on that original
+channel. Root rechecks the SAME DB pid/UID/cgroup/caps and reserves, fully collects
+APP and removes its native credential, mints the staging material, starts the
+same fixed APP with native LoadCredential, reseals its new child socket in the
+same parent inode, and reobserves all three units. A distinct T+one SCM_RIGHTS
+reply supplies the actual sealed FD9. DB validates root ownership, seals, readonly
+access and bounded material, replaces FD9, closes FD10 and independently binds
+fresh APP identity/cookie/groups/assets and the three cgroup budget before any
+CONFIGURE. A public marker or a source receipt cannot grant restore authority.
+Malformed rights/EOF/out-of-order material fail closed. Failure closes3..10 with
+host-lock FD6 last. Root permits one late request only.
 
-The old 30-second iat freshness check assumed generation AFTER restore and cannot
-serve a preloaded immutable credential. The reviewed replacement requires exact
-900-second exp-minus-iat, correct HS256 signature, t18_reader role, stockinsider-t18
-audience, issuance no more than5 seconds ahead, and at least 300 seconds remaining AFTER restore
-before CONFIGURE. A restore that consumes over roughly 600 seconds therefore
-refuses the app phase; it does not refresh, extend or silently replace the token.
-The fixed HTTP exercise remains bounded and checks the signed token unexpired
-again before accepting, so cached Next HTTP200 cannot extend credential lifetime.
-Root keeps no host secret file; HMAC never enters APP's systemd credential.
-Mutable secret copies are wiped where owned, FDs close on failure/cleanup; no
-claim is made to erase Python immutable strings or kernel IPC copies in place.
+The exact900-second lifetime and at least300 seconds remaining at CONFIGURE are
+unchanged. An old token still fails at601 seconds; the fix issues the FIRST signed
+token after the expensive restore, rather than extending/refreshing one issued
+before it. The fixed HTTP exercise checks unexpired again before acceptance.
+Root late work has one absolute75-second budget, shared across its fixed commands,
+stop/collection/loader/seal operations; DB send/receive has one90-second deadline.
+Overall DB/host/runtime/resource ceilings remain unchanged. Root keeps no host
+secret file; HMAC never enters APP's systemd credential. Mutable owned copies are
+wiped; no erasure claim covers Python immutable strings or kernel IPC copies.
 
 ## Invocation and phase meanings
 

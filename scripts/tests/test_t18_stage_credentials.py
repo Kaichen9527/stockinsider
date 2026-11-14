@@ -31,7 +31,7 @@ class StageCredentialTests(unittest.TestCase):
     def test_exact_900second_token_old_issuance_and_minimum_remaining(self):
         with patch.object(m.time,'time',return_value=100000):secret,token=m.create_stage_jwt()
         try:
-            for elapsed in (0,30,350,600):
+            for elapsed in (0,30,350,599,600):
                 with patch.object(m.time,'time',return_value=100000+elapsed):self.assertEqual(m.validate_stage_token(secret,token),100900)
             for elapsed in (601,899,900):
                 with patch.object(m.time,'time',return_value=100000+elapsed):

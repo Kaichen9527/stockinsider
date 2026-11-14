@@ -105,9 +105,13 @@ class _ValidatedClone:
 
     def observe_candidate_detail(self):
         if self.__sql is None:raise RestoreEngineRejected('verified_clone_scope_closed')
-        from .candidate_detail_observation import assess_candidate_detail,CandidateDetailObservationRejected
-        try:return assess_candidate_detail(self.__sql)
-        except CandidateDetailObservationRejected as error:raise RestoreEngineRejected(str(error)) from None
+        from .candidate_detail_observation import assess_candidate_detail
+        from .t18_readpoint_diagnostics import readpoint_phase,ReadpointRejected
+        try:
+            with readpoint_phase('candidate_detail_query'):return assess_candidate_detail(self.__sql)
+        except ReadpointRejected as error:
+            rejected=RestoreEngineRejected(str(error));rejected.readpoint_diagnostic=error.diagnostic
+            raise rejected from None
 
     def rehearse_fixed_next(self,app,rest,assets):
         if self.__sql is None or self.__rest_socket is None:
@@ -116,8 +120,13 @@ class _ValidatedClone:
         from .t18_reader_roles import FixedReaderRolesRejected
         from .t18_broker_transport import BrokerTransportRejected
         from .t18_app_broker import AppBrokerRejected
+        from .stage_credentials import StageCredentialRejected
+        from .t18_readpoint_diagnostics import ReadpointRejected
         try:return run_fixed_same_clone(self.__sql,self.__rest_socket,app,rest,assets)
-        except (FixedRollbackRejected,FixedReaderRolesRejected,BrokerTransportRejected,AppBrokerRejected) as error:
+        except ReadpointRejected as error:
+            rejected=RestoreEngineRejected(str(error));rejected.readpoint_diagnostic=error.diagnostic
+            raise rejected from None
+        except (FixedRollbackRejected,FixedReaderRolesRejected,BrokerTransportRejected,AppBrokerRejected,StageCredentialRejected) as error:
             raise RestoreEngineRejected(str(error)) from None
 
     def _close(self):
@@ -392,7 +401,8 @@ def _owned_validated_clone(replay, work_root):
         clone=_ValidatedClone(sql,receipt,activate_rest_socket)
         phase='validated_clone_readpoint'
         yield clone
-    except RestoreEngineRejected:
+    except RestoreEngineRejected as error:
+        if hasattr(error,'readpoint_diagnostic'):diagnostic_error=error
         raise
     except Exception:
         raise RestoreEngineRejected(phase+'_failed') from None

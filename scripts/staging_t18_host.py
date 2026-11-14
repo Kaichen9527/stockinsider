@@ -28,6 +28,7 @@ import threading
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from deployment.staging.vnext.t17_keyfd.t18_host_plan import build_unit_argv,SOURCE_HOST,ASSETS_HOST,DB_UNIT,APP_UNIT,REST_UNIT,BROKER_REFUSAL_MAX_BYTES,project_broker_refusal
 from deployment.staging.vnext.t17_keyfd.t18_fd_handoff import send_six_fds,HANDOFF_PARENT,HANDOFF_SOCKET
+from deployment.staging.vnext.t17_keyfd.late_stage_credentials import create_root_bootstrap,receive_ready,ROOT_PHASE_SECONDS
 from deployment.staging.vnext.t17_keyfd.stage_credentials import create_root_material,send_stage_fd,serve_credential_once,LOADER_PARENT,LOADER_SOCKET,APP_CREDENTIALS,ADMISSION_ONLY
 
 ORIGINAL=Path('/run/stockinsider-t17-5b65286')
@@ -49,15 +50,23 @@ class HostRejected(Exception):pass
 
 _STOP_REQUESTED=False
 _CLEANING=False
+_LATE_STAGE_DEADLINE=None
 
 
 def _check_stop():
     if _STOP_REQUESTED and not _CLEANING:raise HostRejected('host_interrupted')
+    if _LATE_STAGE_DEADLINE is not None and time.monotonic()>=_LATE_STAGE_DEADLINE:
+        raise HostRejected('late_stage_absolute_deadline')
+
+
+def _phase_timeout(seconds):
+    _check_stop()
+    return seconds if _LATE_STAGE_DEADLINE is None else min(seconds,max(.001,_LATE_STAGE_DEADLINE-time.monotonic()))
 
 
 def command(*args,timeout=30,stdin=None,pass_fds=()):
     _check_stop()
-    result=subprocess.run(args,stdin=stdin,text=True,capture_output=True,timeout=timeout,
+    result=subprocess.run(args,stdin=stdin,text=True,capture_output=True,timeout=_phase_timeout(timeout),
         env={'PATH':'/usr/sbin:/usr/bin:/sbin:/bin','LC_ALL':'C'},pass_fds=pass_fds)
     if result.returncode:raise HostRejected('fixed_host_command_failed')
     if len(result.stdout)>1024**2 or len(result.stderr)>1024**2:raise HostRejected('host_capture_limit')
@@ -218,15 +227,15 @@ def _root_inputs():
 
 def _unit_available(unit):
     result=subprocess.run(['systemctl','show',unit,'-p','LoadState','-p','ActiveState','-p','FragmentPath','-p','Transient'],
-        capture_output=True,text=True,timeout=10)
+        capture_output=True,text=True,timeout=_phase_timeout(10))
     values=dict(line.split('=',1) for line in result.stdout.splitlines() if '=' in line)
     if values.get('LoadState') not in (None,'not-found'):
         raise HostRejected('fixed_staging_unit_already_exists')
 
 
 def _stop_unit(unit):
-    subprocess.run(['systemctl','stop',unit],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=30)
-    value=subprocess.run(['systemctl','show',unit,'-p','ActiveState','--value'],capture_output=True,text=True,timeout=10).stdout.strip()
+    subprocess.run(['systemctl','stop',unit],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=_phase_timeout(30))
+    value=subprocess.run(['systemctl','show',unit,'-p','ActiveState','--value'],capture_output=True,text=True,timeout=_phase_timeout(10)).stdout.strip()
     if value not in ('','inactive','failed'):raise HostRejected('staging_unit_still_live')
     cg=Path('/sys/fs/cgroup/system.slice')/unit/'cgroup.procs'
     if cg.exists() and cg.read_text().strip():raise HostRejected('staging_cgroup_not_empty')
@@ -331,6 +340,62 @@ def _seal_controls(children):
         os.chown(parent,0,ipc);os.chmod(parent,0o750)
 
 
+def _run_late_stage(connection,accounts,children,captures):
+    global _LATE_STAGE_DEADLINE
+    _LATE_STAGE_DEADLINE=time.monotonic()+ROOT_PHASE_SECONDS
+    try:_fresh_stage_after_restore(connection,accounts,children,captures)
+    except HostRejected:raise
+    except Exception:raise HostRejected('late_stage_credential_handoff_failed') from None
+    finally:_LATE_STAGE_DEADLINE=None
+
+
+def _fresh_stage_after_restore(connection,accounts,children,captures):
+    """One fixed late handoff; never a caller command or restore admission.
+
+    Root retains its original EX lock. A controller request cannot start PG or
+    authorize a backup; all six capabilities and DB guards already preceded it.
+    """
+    receive_ready(connection);_peer(connection,accounts)
+    if disk('/var/tmp')<15*1024**3 or memory()<1536*1024**2:raise HostRejected('late_stage_host_reserve')
+    # The old APP used public placeholder only. Its SHUTDOWN response precedes
+    # READY, but systemd collection may lag; require complete stop/collection.
+    if children['APP'].wait(timeout=_phase_timeout(5))!=0:raise HostRejected('initial_app_shutdown_refused')
+    _stop_unit(APP_UNIT)
+    old_out,old_err=captures['APP'].finish();del captures['APP']
+    if old_out or old_err:raise HostRejected('initial_app_shutdown_refused')
+    deadline=time.monotonic()+5
+    while True:
+        try:_unit_available(APP_UNIT);break
+        except HostRejected:
+            _check_stop()
+            if time.monotonic()>deadline:raise HostRejected('initial_app_unit_collection_timeout') from None
+            time.sleep(.05)
+    if os.path.lexists(APP_CREDENTIALS):raise HostRejected('initial_app_credential_not_removed')
+    endpoint=Path('/run/t18-broker/control.sock');info=endpoint.lstat()
+    if (not stat.S_ISSOCK(info.st_mode) or info.st_uid!=0 or info.st_gid!=grp.getgrnam(IPC).gr_gid
+        or stat.S_IMODE(info.st_mode)!=0o660):raise HostRejected('initial_app_control_identity')
+    endpoint.unlink()
+    app=accounts['si-t18-app']
+    os.chown(endpoint.parent,app.pw_uid,app.pw_gid);os.chmod(endpoint.parent,0o700)
+    loader=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);material=None;payload=None
+    try:
+        # No signed staging material exists before the validated-clone request.
+        material,payload=create_root_material()
+        loader.bind(LOADER_SOCKET);os.chmod(LOADER_SOCKET,0o600);loader.listen(1);loader.settimeout(_phase_timeout(15))
+        children['APP']=subprocess.Popen(build_unit_argv('APP','real'),stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0,
+            env={'PATH':'/usr/sbin:/usr/bin:/sbin:/bin','LC_ALL':'C'})
+        captures['APP']=_Capture(children['APP'],BROKER_REFUSAL_MAX_BYTES)
+        serve_credential_once(loader,payload,deadline=_LATE_STAGE_DEADLINE);payload=None
+        _seal_controls(children);_peer(connection,accounts);_introspect_three_units(accounts)
+        if disk('/var/tmp')<15*1024**3 or memory()<1536*1024**2:raise HostRejected('late_stage_host_reserve')
+        connection.settimeout(_phase_timeout(2));_check_stop()
+        send_stage_fd(connection,material)
+    finally:
+        payload=None;loader.close()
+        if material is not None:os.close(material)
+
+
 def _digest(fd):
     digest=hashlib.sha256();offset=0
     while block:=os.pread(fd,256*1024,offset):offset+=len(block);digest.update(block)
@@ -378,7 +443,7 @@ def execute(mode,manifest_sha):
     peak={'minimumHostDiskBytes':disk('/var/tmp'),'minimumHostAvailableMemoryBytes':memory()}
     runner=None;cleanup_ok=False;state_ok=False;key_read_attempted=False;accounts_verified=False;started=time.monotonic()
     broker_diagnostics={}
-    credential_loader=None;stage_material=None;stage_payload=None
+    credential_loader=None;stage_material=None;stage_payload=None;late_connection=None
     try:
         for unit in UNITS:_unit_available(unit)
         if any(os.path.lexists(p) for p in DIRS):raise HostRejected('staging_path_already_exists')
@@ -440,9 +505,9 @@ def execute(mode,manifest_sha):
             os.chown(HANDOFF_SOCKET,0,grp.getgrnam(IPC).gr_gid);os.chmod(HANDOFF_SOCKET,0o660);broker.listen(1);broker.settimeout(15)
         # Root0700 one-shot channel contains only a fresh staging reader JWT.
         # Serve it before waiting for APP MainPID/socket: LoadCredential precedes exec.
-        if mode=='admission':stage_payload=ADMISSION_ONLY
-        else:
-            stage_material,stage_payload=create_root_material();fds.append(stage_material)
+        stage_payload=ADMISSION_ONLY
+        if mode!='admission':
+            stage_material=create_root_bootstrap();fds.append(stage_material)
         credential_loader=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM)
         credential_loader.bind(LOADER_SOCKET);os.chmod(LOADER_SOCKET,0o600)
         credential_loader.listen(1);credential_loader.settimeout(15)
@@ -461,6 +526,7 @@ def execute(mode,manifest_sha):
             if kind=='APP':
                 serve_credential_once(credential_loader,stage_payload)
                 credential_loader.close();credential_loader=None;stage_payload=None
+                os.unlink(LOADER_SOCKET)
         _seal_controls(children);_check_stop()
         if mode!='admission':
             conn,_=broker.accept();broker.close()
@@ -477,11 +543,18 @@ def execute(mode,manifest_sha):
                 os.close(key_w);fds.remove(key_w)
                 send_six_fds(conn,[key_r,sealed,manifest,lock,hostdir,backing])
                 send_stage_fd(conn,stage_material)
+                late_connection=conn.dup()
+                late_connection.settimeout(2)
                 os.close(stage_material);fds.remove(stage_material);stage_material=None
             os.close(key_r);fds.remove(key_r)
         deadline=time.monotonic()+1250
         while children['DB'].poll() is None:
             _check_stop()
+            if late_connection is not None and select.select([late_connection],[],[],0)[0]:
+                # Invalid/GAP/error closes the channel without requesting JWT.
+                if late_connection.recv(1,socket.MSG_PEEK):
+                    _run_late_stage(late_connection,accounts,children,captures)
+                late_connection.close();late_connection=None
             peak['minimumHostDiskBytes']=min(peak['minimumHostDiskBytes'],disk('/var/tmp'))
             peak['minimumHostAvailableMemoryBytes']=min(peak['minimumHostAvailableMemoryBytes'],memory())
             if storage:peak['minimumWorkFreeBytes']=min(peak.get('minimumWorkFreeBytes',2**40),disk('/run/t18-db-work'))
@@ -514,6 +587,7 @@ def execute(mode,manifest_sha):
                 except Exception:failures.append('unit_cleanup')
         if broker:broker.close()
         if credential_loader:credential_loader.close()
+        if late_connection:late_connection.close()
         stage_payload=None
         for fd in fds:
             try:os.close(fd)

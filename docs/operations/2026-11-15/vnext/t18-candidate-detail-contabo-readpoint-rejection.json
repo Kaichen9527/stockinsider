@@ -1,0 +1,76 @@
+{
+  "schema": "stockinsider-t18-candidate-detail-onsite-readpoint-rejection-v1",
+  "stagedRuntimeCommit": "f9fbcfdec7f5f65a1e3f74f35f599183cbe710a0",
+  "exactGitBlobs": 47,
+  "backupArchiveDate": "2026-09-19",
+  "processExit": 2,
+  "hostReceipt": {
+    "brokerDiagnostics": {
+      "APP": {
+        "role": "APP",
+        "schema": "stockinsider-t18-broker-refusal-v1",
+        "tag": "runtime_or_cleanup"
+      },
+      "REST": {
+        "role": "REST",
+        "schema": "stockinsider-t18-broker-refusal-v1",
+        "tag": "runtime_or_cleanup"
+      }
+    },
+    "durationSeconds": 624.762,
+    "keyRead": true,
+    "mode": "real",
+    "nativeHoldRetained": true,
+    "productionSignaturesUnchanged": true,
+    "resourceSample": {
+      "appMemoryPeakObservedBytes": 17698816,
+      "dbMemoryPeakObservedBytes": 805310464,
+      "minimumHostAvailableMemoryBytes": 3734495232,
+      "minimumHostDiskBytes": 17986043904,
+      "minimumWorkFreeBytes": 5950652416,
+      "restMemoryPeakObservedBytes": 17653760
+    },
+    "runner": {
+      "databaseRestored": false,
+      "durationSeconds": 612.455,
+      "nativeHoldRetained": true,
+      "reason": "validated_clone_readpoint_failed",
+      "schema": "stockinsider-staging-next-rollback-v1",
+      "status": "REJECTED"
+    },
+    "runnerExit": 2,
+    "schema": "stockinsider-t18-host-launcher-v1",
+    "stagingAccounts": "RESERVED_LOCKED_NOLOGIN",
+    "stagingResourcesCleaned": true
+  },
+  "outerRefusal": {
+    "schema": "stockinsider-t18-host-launcher-v1",
+    "status": "REJECTED",
+    "reason": "fixed_runner_outcome_unexpected",
+    "nativeHoldRetained": true
+  },
+  "stagingUnitJournalCounts": {
+    "stockinsider-t18-app.service": {
+      "other": 2,
+      "process_exit_failure": 1,
+      "start": 2
+    },
+    "stockinsider-t18-db.service": {
+      "other": 2,
+      "process_exit_failure": 1,
+      "start": 2
+    },
+    "stockinsider-t18-rest.service": {
+      "other": 2,
+      "process_exit_failure": 1,
+      "start": 2,
+      "stop": 2
+    }
+  },
+  "observedKernelOomTerms": 0,
+  "observedKernelIoTerms": 0,
+  "acceptedRollbackEvidenceForPreviousSubject": "3e49dfd23aba8c74d4cd36b74f9946992495dc6e",
+  "candidateDetailObservation": "NOT_EMITTED",
+  "stockDetailAcceptance": "NOT_RUN",
+  "note": "The engine entered its validated_clone_readpoint phase. The root output collapsed the rejection, no successful database/rollback receipt was emitted for this subject, and the exact substep remains unconfirmed. Broker resource observations do not substitute for a substep result."
+}

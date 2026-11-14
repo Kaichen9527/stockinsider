@@ -119,6 +119,26 @@ class HostLauncherTests(unittest.TestCase):
         with patch.object(host,'_loops_for',return_value={'/dev/loop7','/dev/loop9'}):
             self.assertEqual(host._owned_loops('/PUBLIC_NOT_REAL_IMAGE',{'/dev/loop7'},True),{'/dev/loop9'})
 
+    def test_late_absolute_deadline_clips_commands_and_refuses_expiry(self):
+        from unittest.mock import Mock
+        result=Mock(returncode=0,stdout='',stderr='')
+        with patch.object(host,'_LATE_STAGE_DEADLINE',101),patch.object(host.time,'monotonic',return_value=100.25), \
+             patch.object(host.subprocess,'run',return_value=result) as invoke:
+            host.command('systemctl','show',host.APP_UNIT,timeout=30)
+            self.assertEqual(invoke.call_args.kwargs['timeout'],.75)
+        with patch.object(host,'_LATE_STAGE_DEADLINE',101),patch.object(host.time,'monotonic',return_value=101), \
+             patch.object(host.subprocess,'run') as invoke:
+            with self.assertRaisesRegex(host.HostRejected,'^late_stage_absolute_deadline$'):
+                host.command('systemctl','show',host.APP_UNIT)
+            invoke.assert_not_called()
+
+    def test_late_wrapper_fixed_error_and_deadline_reset_without_runtime_admission(self):
+        with patch.object(host.time,'monotonic',return_value=100), \
+             patch.object(host,'_fresh_stage_after_restore',side_effect=OSError('PUBLIC_KEY_SQL_DO_NOT_EXPORT')):
+            with self.assertRaisesRegex(host.HostRejected,'^late_stage_credential_handoff_failed$'):
+                host._run_late_stage(None,None,None,None)
+        self.assertIsNone(host._LATE_STAGE_DEADLINE)
+
     def test_fixed_service_and_intake_contracts_have_no_selectors(self):
         self.assertEqual(host.SERVICES,('stockinsider-web-standalone.service','stockinsider-internal-worker.service',
             'stockinsider-postgrest.service','postgresql@17-stockinsider.service'))

@@ -17,6 +17,8 @@ from .t18_broker_transport import BrokerTransportRejected
 from .t18_runtime_observation import ThreeUidBudgetRejected
 from .t18_receipt import project_exercise,project_three_uid_budget
 from .stage_credentials import observe_stage_fd,StageCredentialRejected
+from .late_stage_credentials import observe_root_channel
+from .t18_readpoint_diagnostics import readpoint_after_cleanup
 from .candidate_detail_observation import project_candidate_detail_observation
 
 
@@ -40,7 +42,7 @@ def execute_staging_next_rollback(work_root):
     if str(work_root)!='/run/t18-db-work':
         raise StagingAdmissionRejected('fixed_t18_work_root_required')
     if pwd.getpwuid(os.getuid()).pw_name!='si-t18-db':raise StagingAdmissionRejected('fixed_t18_db_uid_required')
-    protect_key_process();_namespace_and_privileges();observe_stage_fd();_wait_fixed_broker_sockets()
+    protect_key_process();_namespace_and_privileges();observe_stage_fd();observe_root_channel();_wait_fixed_broker_sockets()
     with _authenticated_staging_backup(work_root) as (observations,manifest,backup):
         result=rehearse_owned_fixed_next(backup.replay,Path(work_root))
         _validate_receipt_counts(result['database'])
@@ -88,6 +90,8 @@ def main():
             diagnostic=diagnostic_after_cleanup(error)
             if diagnostic is not None:
                 receipt['constraintDiagnostics']=diagnostic
+        diagnostic=readpoint_after_cleanup(error)
+        if diagnostic is not None:receipt['readpointDiagnostics']=diagnostic
         code=2
     except BaseException:
         receipt={'schema':'stockinsider-staging-next-rollback-v1',
@@ -97,7 +101,7 @@ def main():
     finally:
         signal.alarm(0)
         # Engine must have stopped/reaped before EX host lock is released LAST.
-        for fd in (3,4,5,9,8,7,6):
+        for fd in (3,4,5,10,9,8,7,6):
             try:os.close(fd)
             except OSError:pass
     receipt['durationSeconds']=round(time.monotonic()-started,3)

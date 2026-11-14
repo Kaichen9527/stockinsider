@@ -113,6 +113,18 @@ def install_fixed_fds(fds):
     return tuple(range(3,9))
 
 
+def install_stage_and_channel(stage_fd,channel_fd):
+    """Consume collision-protected sources AFTER original six-FD installation."""
+    if (type(stage_fd) is not int or type(channel_fd) is not int
+        or stage_fd<30 or channel_fd<30 or stage_fd==channel_fd):raise FdHandoffRejected()
+    try:
+        os.dup2(stage_fd,9,inheritable=True)
+        os.dup2(channel_fd,10,inheritable=True)
+    except BaseException:
+        _close((9,10));raise FdHandoffRejected() from None
+    finally:_close((stage_fd,channel_fd))
+
+
 def _observe_fixed_endpoint():
     group=grp.getgrnam(IPC_GROUP).gr_gid
     parent=os.lstat(HANDOFF_PARENT);endpoint=os.lstat(HANDOFF_SOCKET)
@@ -124,7 +136,7 @@ def _observe_fixed_endpoint():
 
 def bootstrap_main():
     """No args. Authenticate fixed root socket, map FD3..8, exec exact entry."""
-    fds=None;stage_fd=None
+    fds=None;stage_fd=None;channel_fd=None
     try:
         if len(sys.argv)!=1 or os.getuid()==0 or os.geteuid()!=os.getuid() or pwd.getpwuid(os.getuid()).pw_name!='si-t18-db':
             raise FdHandoffRejected()
@@ -138,12 +150,14 @@ def bootstrap_main():
             _observe_fixed_endpoint()
             fds=receive_six_fds(connection)
             stage_fd=receive_stage_fd(connection)
+            channel_fd=fcntl.fcntl(connection.fileno(),fcntl.F_DUPFD_CLOEXEC,90)
         install_fixed_fds(fds);fds=None
-        os.dup2(stage_fd,9,inheritable=True);os.close(stage_fd);stage_fd=None
+        install_stage_and_channel(stage_fd,channel_fd);stage_fd=channel_fd=None
         os.execve(FIXED_EXEC[0],list(FIXED_EXEC),{'PATH':'/usr/bin:/bin','LC_ALL':'C','PYTHONDONTWRITEBYTECODE':'1'})
     except BaseException:
         if fds is not None:_close(fds)
         if stage_fd is not None:_close([stage_fd])
         # A failed exec must close the installed capability set too.
-        _close(range(3,10))
+        if channel_fd is not None:_close([channel_fd])
+        _close((3,4,5,10,9,8,7));_close((6,))
         return 2

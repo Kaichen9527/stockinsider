@@ -4,6 +4,7 @@ Only the engine invokes this with its scoped owned-clone dependencies after all
 T17 gates; separate-UID brokers and immutable assets are observed BEFORE PG is
 started. Fixture tests exercise mechanics, never provide runtime authority.
 """
+from contextlib import ExitStack
 import base64
 import datetime
 import hashlib
@@ -190,37 +191,60 @@ def _execute_fixed_sequence(app,rest,releases,dates):
 def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     """Only invoked by the already-validated engine, never a public CLI API."""
     from .radar_reader_observation import assess_radar_reader
-    observation=assess_radar_reader(sql)
+    from .late_stage_credentials import request_fresh_stage
+    from .t18_broker_transport import connect_fixed_app_broker
+    from .t18_runtime_observation import observe_three_uid_budget
+    from .t18_readpoint_diagnostics import readpoint_phase
+    with readpoint_phase('radar_readpoint'):observation=assess_radar_reader(sql)
     if (observation['status']!='OBSERVED_PUBLISHED_SNAPSHOT' or observation['homeValidSnapshots']<1
         or observation['dailyValidSnapshots']<1 or observation['missingContentDates']):
         return {'status':'GAP_GENUINE_SNAPSHOT_OR_SCHEMA','readerObservation':observation,
             'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN'}
-    before=_fingerprint(sql);dates=_expected_dates(sql)
-    roles=install_fixed_reader_roles(sql)
-    activate_rest_socket()
-    secret,token=read_stage_credentials()
+    with readpoint_phase('snapshot_fingerprint'):before=_fingerprint(sql)
+    with readpoint_phase('snapshot_dates'):dates=_expected_dates(sql)
+    with readpoint_phase('reader_role_install'):roles=install_fixed_reader_roles(sql)
+    with readpoint_phase('owned_socket_activation'):activate_rest_socket()
+    # The original pre-key APP was kernel/asset-verified with public placeholder
+    # only. Root must stop/recreate it; no credential file is rewritten in-place.
+    with readpoint_phase('initial_app_shutdown'):app.request('SHUTDOWN')
+    with readpoint_phase('stage_credential_handoff'):secret,token=request_fresh_stage()
     try:
-        for port in (3000,3301,3302):
-            if not _port_closed(port):raise FixedRollbackRejected('private_test_port_occupied')
-        encoded=base64.b64encode(secret).decode()
-        rest.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
-        app.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
-        with start_fixed_read_proxy(token) as proxy:
-            negatives=_negative_http(token)
-            sequence=_execute_fixed_sequence(app,rest,assets.releases,dates)
-            # A cached Next HTTP200 cannot extend the fixed JWT lifetime.
-            validate_stage_token(secret,token,minimum_remaining=0)
-            metrics=proxy.metrics
-    finally:
-        for i in range(len(secret)):secret[i]=0
-        cleanup_errors=False
-        for broker in (app,rest):
-            try:broker.request('SHUTDOWN')
-            except Exception:cleanup_errors=True
-        if cleanup_errors or any(not _port_closed(port) for port in (3000,3301,3302)):
-            raise FixedRollbackRejected('app_or_rest_cleanup_unconfirmed') from None
-    after=_fingerprint(sql)
-    if before!=after:raise FixedRollbackRejected('snapshot_rows_or_constraint_bits_changed')
+        with ExitStack() as stack:
+            with readpoint_phase('fresh_app_binding'):
+                fresh_app=stack.enter_context(connect_fixed_app_broker())
+                observe_three_uid_budget(fresh_app,rest)
+            primary_error=None
+            try:
+                with readpoint_phase('port_preconditions'):
+                    for port in (3000,3301,3302):
+                        if not _port_closed(port):raise FixedRollbackRejected('private_test_port_occupied')
+                encoded=base64.b64encode(secret).decode()
+                with readpoint_phase('rest_configure'):rest.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
+                with readpoint_phase('app_configure'):fresh_app.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
+                with readpoint_phase('fixed_http_exercise'):
+                    with start_fixed_read_proxy(token) as proxy:
+                        negatives=_negative_http(token)
+                        sequence=_execute_fixed_sequence(fresh_app,rest,assets.releases,dates)
+                        with readpoint_phase('final_token_check'):validate_stage_token(secret,token,minimum_remaining=0)
+                        metrics=proxy.metrics
+            except BaseException as error:
+                primary_error=error;raise
+            finally:
+                try:
+                    with readpoint_phase('broker_cleanup'):
+                        cleanup_errors=False
+                        for broker in (fresh_app,rest):
+                            try:broker.request('SHUTDOWN')
+                            except Exception:cleanup_errors=True
+                        if cleanup_errors or any(not _port_closed(port) for port in (3000,3301,3302)):
+                            raise FixedRollbackRejected('app_or_rest_cleanup_unconfirmed')
+                except Exception:
+                    # Keep the earliest refusal; host still verifies/stops units.
+                    if primary_error is None:raise
+    finally:secret[:]=bytes(len(secret))
+    with readpoint_phase('snapshot_final_check'):
+        after=_fingerprint(sql)
+        if before!=after:raise FixedRollbackRejected('snapshot_rows_or_constraint_bits_changed')
     return {'status':'FIXED_OLD_RELEASE_DAILY_ROLLBACK_VERIFIED','readerObservation':observation,
         'readerRoleChecks':roles,'negativeHttpChecks':negatives,'proxyMetrics':metrics,
         'rollback':sequence,'snapshotDataAndConstraintBitsUnchanged':True,
