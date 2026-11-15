@@ -1,0 +1,12 @@
+[Unit]
+Description=Run StockInsider launch radar background and publication at 08:15 and 21:30 Asia/Taipei
+
+[Timer]
+OnCalendar=*-*-* 08:15:00 Asia/Taipei
+OnCalendar=*-*-* 21:30:00 Asia/Taipei
+Persistent=true
+AccuracySec=1s
+Unit=stockinsider-research-cycle.service
+
+[Install]
+WantedBy=timers.target

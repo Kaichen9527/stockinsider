@@ -1,0 +1,10 @@
+# Launch radar schedule candidate
+
+These three systemd units are held for the reviewed launch release. The legacy installer reads units from `deployment/vps/systemd`. Install the candidate units together as a replacement during the release cutover, after the writer, data-plane manifest and server routes have passed the release gates.
+
+- `stockinsider-research-cycle.timer` is the single timer for publication and market background. It uses the existing service name with 08:15 and 21:30 Asia/Taipei calendars.
+- The candidate `stockinsider-research-cycle.service` takes the same write lock as the other production jobs. The runner checks the actual Taipei wall time after acquiring the lock. A missed morning run after 09:00 defers. An evening run drains the current date's final queue and checks that date again before requesting the protected launch cycle. The server and database enforce official trading dates, the fixed cutoffs and eligible snapshots.
+- The candidate `stockinsider-taiwan-data-preliminary.service` keeps the existing data refresh and preliminary drain. Its existing timer and the data freeze and reconcile units remain part of data preparation.
+- Both candidate services require the vNext and launch rank feature flags. The server independently rejects the launch-only action when the launch policy is disabled. The runner reports only its slot, date and result class.
+
+Before cutover, compare the effective installed units and overrides with the reviewed release. Verify the selected worker understands the launch route, the protected writer credentials are bound, and no older schedule can publish independently. Restore all three prior definitions as part of the release rollback. Weekly auditing and real publication admission must be verified separately before enabling this candidate.

@@ -32,7 +32,7 @@ async function fixture(t, bundledAssets = null) {
     await writeFile(path.join(bundledRoot, '.next', 'static', 'asset.js'), bundledAssets.static);
     await writeFile(path.join(bundledRoot, 'public', 'logo.txt'), bundledAssets.public);
   }
-  for (const name of ['call_internal_api.mjs', 'call_internal_api_sequence.mjs',
+  for (const name of ['call_internal_api.mjs', 'call_internal_api_sequence.mjs', 'run-launch-scheduled-cycle.mjs',
     'internal-api-sequence-policy.mjs',
     'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
     'contabo-deployment-inventory.mjs', 'contabo-cleanup-preflight.mjs',
@@ -68,6 +68,7 @@ test('packages only the standalone runtime and binds a full git identity', async
   assert.ok(receipt.manifest.files.some(item => item.path === 'app/public/logo.txt'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'deployment/vps/policy.json'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/internal-api-sequence-policy.mjs'));
+  assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/run-launch-scheduled-cycle.mjs'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/sync-official-trading-calendar.mjs'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/candidate_financial_parser_socket.py'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/candidate_financial_document_parser.py'));
