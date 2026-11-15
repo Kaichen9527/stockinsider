@@ -1,0 +1,149 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {evaluateLaunchOutcome,LAUNCH_SIMULATION_COSTS} from './web/src/lib/vnext/launch-outcomes.ts';
+
+const hash=(x)=>x.repeat(64);
+const iso=(n)=>new Date(Date.UTC(2025,0,n)).toISOString().slice(0,10);
+const signalRun='11111111-1111-4111-8111-111111111111';
+const fixture=(count=120,changes={})=>{
+  const sessions=Array.from({length:count},(_,i)=>{
+    const session=iso(i+2);return {session,openAt:session+'T09:00:00+08:00',closeAt:session+'T13:30:00+08:00',
+      knownAt:session+'T15:00:00+08:00',status:'completed'};
+  });
+  const bars=sessions.map(({session,knownAt})=>({session,availableAt:knownAt,priceRevision:hash('b'),basisRevision:hash('c'),
+    rawOpen:'100',open:'100',high:'100',low:'100',close:'100'}));
+  const input={scope:'published_rank',signal:{rankingRunId:signalRun,firstRankingRunId:signalRun,symbol:'1234',market:'TPEX',
+   session:iso(1),cutoff:iso(1)+'T21:30:00+08:00',inputHash:hash('d'),priceRevision:hash('a'),rawClose:'100',normalizedClose:'100'},
+   asOf:(sessions.at(-1)?.session??iso(1))+'T21:45:00+08:00',calendarRevision:hash('e'),basisRevision:hash('c'),
+   sessions,bars,opening:sessions[0]?{session:sessions[0].session,knownAt:sessions[0].knownAt,revision:hash('f'),status:'modeled_fill',rawOpen:'100',priceRevision:hash('b'),reason:null}:null};
+  return {...input,...changes};
+};
+const record=[];
+function test(name,fn){fn();record.push(name);}
+test('single identity across replay and evaluation cutoff',()=>{
+ const input=fixture();
+ const a=evaluateLaunchOutcome(input),b=evaluateLaunchOutcome(structuredClone(input));
+ assert.deepEqual(a,b);
+ assert.equal(a.research.barrier20.state,'not_hit');
+ assert.deepEqual(a.research.horizons.map(h=>[h.horizon,h.state,h.elapsedSessions]),[[20,'ready',20],[60,'ready',60],[120,'ready',120]]);
+ assert.equal(a.research.horizons[2].grossPriceReturnPct,0);
+ assert(a.execution.horizons[2].netSimulatedReturnPct<0);
+ assert.equal(a.costs.sellTaxPpm,3000);
+ assert.notEqual(evaluateLaunchOutcome({...input,scope:'historical_price_replay'}).key,a.key);
+ const repeated={...input,signal:{...input.signal,firstRankingRunId:'22222222-2222-4222-8222-222222222222'}};
+ assert.equal(evaluateLaunchOutcome(repeated).repeatSignal,true);
+});
+test('exact threshold inclusivity and distinct net simulator',()=>{
+ const i=fixture();Object.assign(i.bars[19],{high:'120',close:'120'});
+ const x=evaluateLaunchOutcome(i);
+ assert.equal(x.research.barrier20.state,'up_first');
+ assert.equal(x.research.barrier20.position,20);
+ assert.equal(x.execution.grossBarrier20.state,'up_first');
+ assert.equal(x.execution.netBarrier20.state,'not_hit');
+ assert.equal(x.research.horizons[0].grossPriceReturnPct,20);
+ assert(x.execution.horizons[0].netSimulatedReturnPct<20);
+});
+test('down first holds even after much higher recovery',()=>{
+ const i=fixture();i.bars[2].low='85';i.bars[3].high='130';
+ const x=evaluateLaunchOutcome(i);assert.equal(x.research.barrier20.state,'down_first');assert.equal(x.research.barrier20.position,3);
+});
+test('daily dual touch without event order stays unknown',()=>{
+ const i=fixture();i.bars[4].low='84';i.bars[4].high='121';
+ const x=evaluateLaunchOutcome(i);assert.deepEqual(x.research.barrier20,{state:'order_unknown',session:i.sessions[4].session,position:5,observed:'range'});
+});
+test('opening touch has priority over later range',()=>{
+ for(const [open,wanted] of [['120','up_first'],['85','down_first']]){
+  const i=fixture();Object.assign(i.bars[1],{open,rawOpen:open,low:'80',high:'130'});
+  const x=evaluateLaunchOutcome(i);assert.equal(x.research.barrier20.state,wanted);assert.equal(x.research.barrier20.observed,'open');
+ }
+});
+test('on day 21 is too late for +20/−15',()=>{
+ const i=fixture();i.bars[20].high='160';
+ assert.equal(evaluateLaunchOutcome(i).research.barrier20.state,'not_hit');
+});
+test('before maturity pending and missing periods remain distinct',()=>{
+ const i=fixture(119);const x=evaluateLaunchOutcome(i);
+ assert.deepEqual(x.research.horizons.map(h=>h.state),['ready','ready','pending']);
+ const incomplete=fixture(120);incomplete.bars.splice(17,1);
+ const a=evaluateLaunchOutcome(incomplete);
+ assert.equal(a.research.horizons[2].state,'price_data_gap');
+ assert.equal(a.research.horizons[2].terminalSession,incomplete.sessions[119].session);
+ const unknownCalendar=fixture(20);unknownCalendar.sessions[14].status='scheduled';
+ const b=evaluateLaunchOutcome(unknownCalendar);
+ assert.equal(b.research.barrier20.state,'calendar_gap');
+ assert.equal(b.research.horizons[0].state,'calendar_gap');
+});
+test('prior missing bar cannot confirm a later first hit',()=>{
+ const i=fixture();i.bars[10].high='180';i.bars.splice(2,1);
+ assert.equal(evaluateLaunchOutcome(i).research.barrier20.state,'price_data_gap');
+ const j=fixture();j.bars[1].high='130';j.bars.splice(2,1);
+ const x=evaluateLaunchOutcome(j);
+ assert.equal(x.research.barrier20.state,'up_first');
+ assert.equal(x.research.horizons[0].state,'price_data_gap');
+});
+test('cancelled market day is excluded and no later opening can replace the scheduled next session',()=>{
+ const i=fixture();
+ const cancelled='2025-01-02';
+ i.sessions[0].status='cancelled';i.bars.shift();i.opening=null;
+ const a=evaluateLaunchOutcome(i);
+ assert.equal(a.execution.nextSession,i.sessions[1].session);
+ assert.notEqual(a.execution.nextSession,cancelled);
+ i.opening={session:i.sessions[2].session,knownAt:i.sessions[2].knownAt,revision:hash('f'),status:'modeled_fill',rawOpen:'100',priceRevision:hash('b'),reason:null};
+ assert.throws(()=>evaluateLaunchOutcome(i),/opening_scope/);
+});
+test('confirmed unfillable first day stays unfillable across later valid days',()=>{
+ const i=fixture();
+ i.opening={session:i.sessions[0].session,knownAt:i.sessions[0].knownAt,revision:hash('f'),status:'unfillable',reason:'suspended',rawOpen:null,priceRevision:null};
+ const outcome=evaluateLaunchOutcome(i);
+ assert.equal(outcome.execution.status,'unfillable');
+ assert.equal(outcome.execution.fill,null);assert.equal(outcome.execution.grossBarrier20,null);
+ assert.equal(outcome.research.horizons[0].state,'ready');
+ assert.equal(evaluateLaunchOutcome({...i,opening:null}).execution.status,'opening_evidence_gap');
+});
+test('same session opening must bind raw actual print and price revision',()=>{
+ const i=fixture();i.opening.rawOpen='101';assert.throws(()=>evaluateLaunchOutcome(i),/opening_price_binding/);
+ i.opening.rawOpen='100';i.opening.priceRevision=hash('e');assert.throws(()=>evaluateLaunchOutcome(i),/opening_price_binding/);
+ i.opening.priceRevision=hash('b');i.opening.knownAt=i.signal.cutoff;assert.throws(()=>evaluateLaunchOutcome(i),/opening_scope/);
+});
+test('as-of cannot include later content or incompatible price basis',()=>{
+ const i=fixture(1);
+ i.bars[0].availableAt=i.asOf.replace('00+','00.000001+');
+ assert.throws(()=>evaluateLaunchOutcome(i),/bar_scope/);
+ i.bars[0].availableAt=i.sessions[0].knownAt;
+ i.bars[0].basisRevision=hash('e');assert.throws(()=>evaluateLaunchOutcome(i),/price_revision/);
+ i.bars[0].basisRevision=hash('c');i.bars.push(i.bars[0]);assert.throws(()=>evaluateLaunchOutcome(i),/bar_scope/);
+});
+test('keeping price basis can eliminate a false corporate-action stop',()=>{
+ const i=fixture(20);i.signal.rawClose='100';i.signal.normalizedClose='80';
+ for(const bar of i.bars) Object.assign(bar,{rawOpen:'80',open:'80',high:'81',low:'79',close:'80'});
+ i.opening.rawOpen='80';
+ const x=evaluateLaunchOutcome(i);
+ assert.equal(x.research.barrier20.state,'not_hit');
+ assert.equal(x.research.horizons[0].grossPriceReturnPct,0);
+ assert.equal(x.research.basis,'signal_close');
+});
+test('future scheduled next session preserves pending without inventing a fill',()=>{
+ const i=fixture(1);i.sessions[0].status='scheduled';i.sessions[0].knownAt=i.signal.cutoff;
+ i.asOf=i.signal.cutoff;i.bars=[];i.opening=null;
+ assert.equal(evaluateLaunchOutcome(i).execution.status,'pending');assert.equal(evaluateLaunchOutcome(i).research.barrier20.state,'pending');
+});
+
+test('public-safe signal projection contains a closed list of fields',()=>{
+ const i=fixture(1);i.signal.privateTitle='not a projection field';
+ assert(!Object.hasOwn(evaluateLaunchOutcome(i).signal,'privateTitle'));
+});
+
+const actual=JSON.parse(fs.readFileSync('market-outcome-control.json','utf8'));
+test('actual TPEx 5274 tracks later-observed gross research hit without simulating fill',()=>{
+ const x=evaluateLaunchOutcome(actual);
+ assert.equal(x.scope,'historical_price_replay');
+ assert.equal(x.research.barrier20.state,'down_first');
+ assert.equal(x.research.barrier20.session,'2026-11-10');
+ assert.equal(x.research.barrier20.position,3);
+ assert.equal(x.execution.nextSession,'2026-11-06');
+ assert.equal(x.execution.status,'opening_evidence_gap');
+ assert.equal(x.execution.fill,null);
+ assert.deepEqual(x.research.horizons.map(h=>[h.state,h.elapsedSessions]),[['pending',6],['pending',6],['pending',6]]);
+});
+console.log(JSON.stringify({node:process.version,nonRoot:process.getuid()!==0,tests:record,actualResearch:evaluateLaunchOutcome(actual).research.barrier20,
+ actualOpening:evaluateLaunchOutcome(actual).execution.status,costs:LAUNCH_SIMULATION_COSTS}));

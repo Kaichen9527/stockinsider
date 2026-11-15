@@ -1,0 +1,73 @@
+{
+  "task": "T09",
+  "baseline": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "patchSha256": "d4f3498d95fa685ef64f083c7576b14a2222a558fb53ed234c2155e5eaf9f371",
+  "githubBlobDependencies": {
+    "web/src/lib/vnext/evidence-clock.ts": "fa27138f5dd8f6ce823a91e2fd4be84cfe76fac9",
+    "web/src/lib/vnext/policy.ts": "a8441d87c99c1edf6ebfed991b58b346f917b32b"
+  },
+  "checks": {
+    "gitApply": true,
+    "typeScript": {
+      "typescript": "5.9.3",
+      "isolated": true,
+      "result": 0,
+      "diagnostics": ""
+    },
+    "proof": {
+      "node": "v22.23.1",
+      "nonRoot": true,
+      "tests": [
+        "single identity across replay and evaluation cutoff",
+        "exact threshold inclusivity and distinct net simulator",
+        "down first holds even after much higher recovery",
+        "daily dual touch without event order stays unknown",
+        "opening touch has priority over later range",
+        "on day 21 is too late for +20/−15",
+        "before maturity pending and missing periods remain distinct",
+        "prior missing bar cannot confirm a later first hit",
+        "cancelled market day is excluded and no later opening can replace the scheduled next session",
+        "confirmed unfillable first day stays unfillable across later valid days",
+        "same session opening must bind raw actual print and price revision",
+        "as-of cannot include later content or incompatible price basis",
+        "keeping price basis can eliminate a false corporate-action stop",
+        "future scheduled next session preserves pending without inventing a fill",
+        "public-safe signal projection contains a closed list of fields",
+        "actual TPEx 5274 tracks later-observed gross research hit without simulating fill"
+      ],
+      "actualResearch": {
+        "state": "down_first",
+        "session": "2026-11-10",
+        "position": 3,
+        "observed": "range"
+      },
+      "actualOpening": "opening_evidence_gap",
+      "costs": {
+        "version": "tw-equity-fixed-cost-v1",
+        "buyCommissionPpm": 1425,
+        "sellCommissionPpm": 1425,
+        "sellTaxPpm": 3000,
+        "slippagePerSidePpm": 1000
+      }
+    },
+    "at": "2026-11-15T10:25:33Z",
+    "official": [
+      {
+        "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F11%2F01&response=json",
+        "responseSha256": "476b845822d51a6676808fc5b4252bb550031806834e4de3ac57ee34008f5f27"
+      },
+      {
+        "url": "https://www.tpex.org.tw/www/zh-tw/indexInfo/inx?date=2026%2F11%2F01&response=json",
+        "responseSha256": "9c9b89170604568a93b0fdbc6629700acb3a11ebbf089ef7564d8c173bf41794"
+      }
+    ]
+  },
+  "horizons": [
+    20,
+    60,
+    120
+  ],
+  "sampleBoundary": "later-observed historical price replay, signal identity used just for this evaluator comparison. No launch or simulated fill.",
+  "actualPublication": false,
+  "productionChanged": false
+}

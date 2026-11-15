@@ -1,0 +1,195 @@
+diff --git a/web/src/lib/vnext/launch-outcomes.ts b/web/src/lib/vnext/launch-outcomes.ts
+new file mode 100644
+--- /dev/null
++++ b/web/src/lib/vnext/launch-outcomes.ts
+@@ -0,0 +1,190 @@
++import {evidenceInstant} from './evidence-clock.ts';
++import {inputHash} from './policy.ts';
++
++export const LAUNCH_OUTCOME_POLICY='launch-outcomes-v1';
++export const LAUNCH_OUTCOME_HORIZONS=[20,60,120] as const;
++export const LAUNCH_SIMULATION_COSTS=Object.freeze({
++  version:'tw-equity-fixed-cost-v1',
++  buyCommissionPpm:1425,sellCommissionPpm:1425,sellTaxPpm:3000,slippagePerSidePpm:1000,
++});
++type Market='TWSE'|'TPEX';
++type Signal={
++  rankingRunId:string; firstRankingRunId:string; symbol:string; market:Market; session:string;
++  cutoff:string; inputHash:string; priceRevision:string; rawClose:string; normalizedClose:string;
++};
++type Session={session:string;openAt:string;closeAt:string;knownAt:string;status:'completed'|'scheduled'|'cancelled'};
++type Bar={
++  session:string;availableAt:string;priceRevision:string;basisRevision:string;
++  rawOpen:string;open:string;high:string;low:string;close:string;
++};
++type Opening={
++  session:string;knownAt:string;revision:string;status:'modeled_fill'|'unfillable'|'unknown';
++  rawOpen:string|null;priceRevision:string|null;reason:'suspended'|'one_price_upper_limit'|'no_executable_open'|null;
++};
++/** Consumes only versioned server-selected observations. Completeness of the
++ * calendar, eligibility and the normalized price basis belong to the source
++ * readers. This evaluator cannot infer a fill from missing or nonflat OHLC. */
++export type LaunchOutcomeInput={
++  scope:'published_rank'|'historical_price_replay'; signal:Signal; asOf:string; calendarRevision:string;
++  basisRevision:string; sessions:Session[]; bars:Bar[]; opening:Opening|null;
++};
++type Prices={open:bigint;high:bigint;low:bigint;close:bigint};
++type Ratio={numerator:bigint;denominator:bigint};
++type Barrier={
++  state:'up_first'|'down_first'|'order_unknown'|'price_data_gap'|'calendar_gap'|'pending'|'not_hit';
++  session:string|null; position:number|null; observed:'open'|'range'|null;
++};
++const hash=(value:string)=>typeof value==='string'&&/^[a-f0-9]{64}$/u.test(value);
++const uuid=(value:string)=>typeof value==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/u.test(value);
++function time(value:string):bigint {
++  const instant=evidenceInstant(value);
++  if(instant===null)throw Error('launch_outcome_invalid_clock');
++  return instant;
++}
++function day(value:string) {
++  return /^\d{4}-\d{2}-\d{2}$/u.test(value)&&evidenceInstant(value+'T00:00:00Z')!==null;
++}
++/** Decimal prices stay exact through threshold settlement. All prices in a
++ * path must use the same upstream immutable adjusted-price normalization. */
++function decimal(value:string):bigint {
++  if(typeof value!=='string'||!/^(?:0|[1-9]\d{0,11})(?:\.\d{1,8})?$/u.test(value))throw Error('launch_outcome_invalid_price');
++  const [whole,fraction='']=value.split('.');
++  const units=BigInt(whole+fraction.padEnd(8,'0'));
++  if(units<=BigInt(0))throw Error('launch_outcome_invalid_price');
++  return units;
++}
++function returnRatio(price:bigint,entry:bigint,net:boolean):Ratio {
++  if(!net)return {numerator:price,denominator:entry};
++  const ppm=1_000_000, costs=LAUNCH_SIMULATION_COSTS;
++  return {
++    numerator:price*BigInt(ppm-costs.slippagePerSidePpm)*BigInt(ppm-costs.sellCommissionPpm-costs.sellTaxPpm),
++    denominator:entry*BigInt(ppm+costs.slippagePerSidePpm)*BigInt(ppm+costs.buyCommissionPpm),
++  };
++}
++function boundary(ratio:Ratio):'up_first'|'down_first'|null {
++  const numerator=ratio.numerator*BigInt(100);
++  if(numerator>=ratio.denominator*BigInt(120))return 'up_first';
++  if(numerator<=ratio.denominator*BigInt(85))return 'down_first';
++  return null;
++}
++function percent(ratio:Ratio):number {
++  return 100*Number(ratio.numerator-ratio.denominator)/Number(ratio.denominator);
++}
++function pickBar(bar:Bar,revision:string):Prices {
++  if(bar.basisRevision!==revision||!hash(bar.priceRevision))throw Error('launch_outcome_price_revision');
++  decimal(bar.rawOpen);
++  const open=decimal(bar.open),high=decimal(bar.high),low=decimal(bar.low),close=decimal(bar.close);
++  if(low>open||low>close||high<open||high<close)throw Error('launch_outcome_invalid_ohlc');
++  return {open,high,low,close};
++}
++function emptyBarrier(state:Barrier['state']):Barrier {
++  return {state,session:null,position:null,observed:null};
++}
++function labelWindow(days:Session[],prices:Map<string,Prices>,entry:bigint,net:boolean,asOf:bigint):Barrier {
++  let unknown:Barrier|null=null;
++  for(const [index,row] of days.entries()){
++    if(time(row.closeAt)>asOf)break;
++    const bar=prices.get(row.session);
++    if(row.status!=='completed'||!bar){
++      unknown??={...emptyBarrier(row.status==='completed'?'price_data_gap':'calendar_gap'),session:row.session,position:index+1};
++      continue;
++    }
++    if(unknown)continue;
++    const settledAtOpen=boundary(returnRatio(bar.open,entry,net));
++    if(settledAtOpen)return {state:settledAtOpen,session:row.session,position:index+1,observed:'open'};
++    const up=boundary(returnRatio(bar.high,entry,net))==='up_first';
++    const down=boundary(returnRatio(bar.low,entry,net))==='down_first';
++    if(up||down)return {state:up&&down?'order_unknown':up?'up_first':'down_first',session:row.session,position:index+1,observed:'range'};
++  }
++  return unknown??emptyBarrier(days.length===20&&days.every(day=>day.status==='completed'&&time(day.closeAt)<=asOf)?'not_hit':'pending');
++}
++function markHorizons(days:Session[],prices:Map<string,Prices>,entry:bigint,asOf:bigint,net:boolean){
++  return LAUNCH_OUTCOME_HORIZONS.map(horizon=>{
++    const window=days.slice(0,horizon);
++    const terminal=window[horizon-1];
++    const elapsedSessions=window.filter(row=>row.status==='completed'&&time(row.closeAt)<=asOf).length;
++    const elapsed=window.filter(row=>time(row.closeAt)<=asOf);
++    const state=elapsed.some(row=>row.status!=='completed')?'calendar_gap'
++      :elapsed.some(row=>!prices.has(row.session))?'price_data_gap'
++      :!terminal||elapsedSessions<horizon?'pending':'ready';
++    const final=terminal&&state==='ready'?prices.get(terminal.session):undefined;
++    return {
++      horizon,state,terminalSession:terminal?.session??null,elapsedSessions,
++      grossPriceReturnPct:final?percent(returnRatio(final.close,entry,false)):null,
++      netSimulatedReturnPct:final&&net?percent(returnRatio(final.close,entry,true)):null,
++    };
++  });
++}
++
++export function evaluateLaunchOutcome(input:LaunchOutcomeInput) {
++  const {signal}=input,asOf=time(input.asOf),signalCutoff=time(signal.cutoff);
++  if(!['published_rank','historical_price_replay'].includes(input.scope)||!uuid(signal.rankingRunId)||!uuid(signal.firstRankingRunId)||
++    !/^\d{4}$/u.test(signal.symbol)||!['TWSE','TPEX'].includes(signal.market)||!day(signal.session)||signalCutoff>asOf||
++    ![signal.inputHash,signal.priceRevision,input.basisRevision,input.calendarRevision].every(hash)||
++    input.sessions.length>180||input.bars.length>120)throw Error('launch_outcome_scope');
++  decimal(signal.rawClose);
++  const signalPrice=decimal(signal.normalizedClose);
++  let previous=signal.session;
++  let previousClose=signalCutoff;
++  const sessions=input.sessions.filter(row=>{
++    const open=time(row.openAt),close=time(row.closeAt),known=time(row.knownAt);
++    if(!day(row.session)||row.session<=previous||open<=previousClose||close<=open||
++      new Date(Number(close/BigInt(1_000))+8*60*60*1_000).toISOString().slice(0,10)!==row.session||
++      !['completed','scheduled','cancelled'].includes(row.status)||known>asOf||
++      row.status==='completed'&&(known<close||close>asOf))throw Error('launch_outcome_calendar_scope');
++    previous=row.session;
++    previousClose=close;
++    return row.status!=='cancelled';
++  }).slice(0,120);
++  const days=new Map(sessions.map(row=>[row.session,row]));
++  const bars=new Map<string,Bar>(),prices=new Map<string,Prices>();
++  for(const bar of input.bars){
++    const session=days.get(bar.session),known=time(bar.availableAt);
++    if(!session||bars.has(bar.session)||known<time(session.closeAt)||known>asOf)throw Error('launch_outcome_bar_scope');
++    bars.set(bar.session,bar);
++    if(session.status==='completed')prices.set(bar.session,pickBar(bar,input.basisRevision));
++  }
++  const next=sessions[0];
++  const nextSession=next?.session??null;
++  const opening=input.opening;
++  if(opening&&(!next||opening.session!==nextSession||!hash(opening.revision)||
++    !['modeled_fill','unfillable','unknown'].includes(opening.status)||time(opening.knownAt)>asOf||
++    (opening.status==='unfillable'?!['suspended','one_price_upper_limit','no_executable_open'].some(reason=>reason===opening.reason):opening.reason!==null)||
++    (opening.status==='modeled_fill'?!opening.rawOpen||!opening.priceRevision||!hash(opening.priceRevision)||time(opening.knownAt)<time(next.openAt):
++      opening.rawOpen!==null||opening.priceRevision!==null)))throw Error('launch_outcome_opening_scope');
++  let fillStatus:'pending'|'opening_evidence_gap'|'unfillable'|'modeled_fill'='pending';
++  let fillBasis: {rawOpen:string;normalizedOpen:string;priceRevision:string;openingRevision:string}|null=null;
++  if(next&&time(next.closeAt)<=asOf){
++    fillStatus='opening_evidence_gap';
++    if(opening&&next.status==='completed'){
++      if(opening.status==='unfillable')fillStatus='unfillable';
++      else if(opening.status==='modeled_fill'){
++        const bar=bars.get(next.session);
++        if(bar&&prices.has(next.session)){
++          if(decimal(opening.rawOpen!)!==decimal(bar.rawOpen)||opening.priceRevision!==bar.priceRevision)
++            throw Error('launch_outcome_opening_price_binding');
++          fillStatus='modeled_fill';
++          fillBasis={rawOpen:bar.rawOpen,normalizedOpen:bar.open,priceRevision:bar.priceRevision,openingRevision:opening.revision};
++        }
++      }
++    }
++  }
++  const firstTwenty=sessions.slice(0,20);
++  const simulated=fillBasis?decimal(fillBasis.normalizedOpen):null;
++  return {
++    policyVersion:LAUNCH_OUTCOME_POLICY,scope:input.scope,key:`${input.scope}:${signal.rankingRunId}:${signal.symbol}`,
++    signal:{rankingRunId:signal.rankingRunId,firstRankingRunId:signal.firstRankingRunId,symbol:signal.symbol,market:signal.market,
++      session:signal.session,cutoff:signal.cutoff,inputHash:signal.inputHash,priceRevision:signal.priceRevision,
++      rawClose:signal.rawClose,normalizedClose:signal.normalizedClose},
++    repeatSignal:signal.firstRankingRunId!==signal.rankingRunId,asOf:input.asOf,
++    calendarRevision:input.calendarRevision,basisRevision:input.basisRevision,
++    inputSnapshotHash:inputHash(input),costs:LAUNCH_SIMULATION_COSTS,
++    research:{basis:'signal_close' as const,barrier20:labelWindow(firstTwenty,prices,signalPrice,false,asOf),
++      horizons:markHorizons(sessions,prices,signalPrice,asOf,false)},
++    execution:{basis:'next_market_session_open' as const,nextSession,status:fillStatus,fill:fillBasis,
++      reason:fillStatus==='unfillable'?opening!.reason:null,openingRevision:opening?.revision??null,
++      grossBarrier20:simulated===null?null:labelWindow(firstTwenty,prices,simulated,false,asOf),
++      netBarrier20:simulated===null?null:labelWindow(firstTwenty,prices,simulated,true,asOf),
++      horizons:simulated===null?[]:markHorizons(sessions,prices,simulated,asOf,true)},
++  };
++}
