@@ -31,7 +31,7 @@ SOURCES = {
 }
 
 # Exact adjacent root-owned source; populated by the reviewed stage manifest.
-CONTROL_HELPER_SHA256 = '0684b92ce7a5e9f493bd923ce99a70f47c16a42a325c93e73b93e83dc1f2b07b'
+CONTROL_HELPER_SHA256 = '284000ee9797be26781a3c4d218d0d909819e11fdf4ddc1bdb02d3eb0c6c57f6'
 
 
 def atomic_output(output, name, payload):

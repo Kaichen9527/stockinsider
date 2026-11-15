@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unwired, nonroot post-capture samples. Original five-source collector untouched."""
+"""Bounded nonroot post-capture samples. Original five-source collector untouched."""
 import argparse
 import csv
 from datetime import date,datetime,time,timezone
@@ -174,46 +174,52 @@ def child_limits():
  resource.setrlimit(resource.RLIMIT_AS,(64*1024**2,64*1024**2));resource.setrlimit(resource.RLIMIT_NOFILE,(32,32));resource.setrlimit(resource.RLIMIT_FSIZE,(0,0))
 
 
-def runtime_budget(worker_process=False):
- """Read own kernel/cgroup/manager limits, never caller readiness assertions."""
+def verified_manager_profile(unit,session,worker_process):
+ """Verify a read-only unit credential supplied by the system manager."""
+ path='/run/credentials/'+unit
+ if not worker_process and os.environ.get('CREDENTIALS_DIRECTORY')!=path:return False
+ directory=os.open(path,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
  try:
+  fd=os.open('close-observer-profile',os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=directory)
+  try:
+   info=os.fstat(fd)
+   if not stat.S_ISREG(info.st_mode) or info.st_mode&0o222 or info.st_uid not in (0,os.geteuid()):return False
+   expected=f'v2|{unit}|{session}|90|134217728|12|control-group'.encode('ascii')
+   if info.st_size!=len(expected) or os.read(fd,len(expected)+1)!=expected:return False
+   if not os.fstatvfs(fd).f_flag&os.ST_RDONLY:return False
+   return True
+  finally:os.close(fd)
+ finally:os.close(directory)
+
+
+def runtime_budget(session,worker_process=False):
+ """Read own kernel limits and the reviewed manager-delivered profile."""
+ try:
+  uid=os.geteuid()
+  if uid==0 or uid!=os.getuid() or session not in SESSIONS:return None
   if not any(line.split(' - ',1)[1].startswith('cgroup2 ') and line.split(' - ',1)[0].split()[4]=='/sys/fs/cgroup' for line in Path('/proc/self/mountinfo').read_text().splitlines()):return None
   cg=Path('/proc/self/cgroup').read_text().strip()
-  if not re.fullmatch(r'0::/system\.slice/[A-Za-z0-9_.@:-]+\.service',cg):return None
-  relative=cg.removeprefix('0::');root=Path('/sys/fs/cgroup')/relative.lstrip('/')
+  match=re.fullmatch(r'0::/system\.slice/(stockinsider-stage-close-[a-z0-9-]+\.service)',cg)
+  if not match or not verified_manager_profile(match[1],session,worker_process):return None
+  root=Path('/sys/fs/cgroup/system.slice')/match[1]
   if int((root/'memory.max').read_text())!=134217728 or int((root/'pids.max').read_text())!=12:return None
-  reserve=16 if worker_process else 80;task_floor=10 if worker_process else 8
+  reserve=16 if worker_process else 80
+  task_floor=10 if worker_process else 8
   if int((root/'memory.current').read_text())>134217728-reserve*1024**2 or int((root/'pids.current').read_text())>task_floor:return None
-  started=int(Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19])/os.sysconf('SC_CLK_TCK')
-  if not worker_process and not 0<=clock.monotonic()-started<=50:return None
-  unit=relative.rsplit('/',1)[1]
-  keys=('Type','RuntimeMaxUSec','TimeoutStartUSec','MemoryMax','TasksMax','DynamicUser','KillMode','MainPID','ControlGroup','ExecMainStartTimestampMonotonic')
-  p=subprocess.run(['/usr/bin/systemctl','show',unit,'--no-pager',*('--property='+k for k in keys)],capture_output=True,text=True,timeout=2,env={'PATH':'/usr/bin:/bin','LC_ALL':'C'},close_fds=True)
-  if p.returncode or len(p.stdout)>4096:return None
-  values={}
-  for line in p.stdout.splitlines():
-   k,sep,v=line.partition('=')
-   if not sep or k not in keys or k in values:return None
-   values[k]=v
-  if set(values)!=set(keys):return None
-  expected={'Type':'exec','MemoryMax':'134217728','TasksMax':'12','DynamicUser':'yes','KillMode':'control-group','ControlGroup':relative,'MainPID':str(os.getppid() if worker_process else os.getpid())}
-  if any(values[k]!=v for k,v in expected.items()):return None
-  if any(values[k] not in ('1min 30s','90s','90000000') for k in ('RuntimeMaxUSec','TimeoutStartUSec')):return None
-  activated=int(values['ExecMainStartTimestampMonotonic'])/1000000
-  if not 0<activated<=clock.monotonic():return None
-  if not worker_process and abs(activated-started)>2:return None
-  remaining=min(activated+90-clock.monotonic(),(cutoff(now().astimezone(TAIPEI).date().isoformat())-now()).total_seconds())
-  if remaining<(8 if worker_process else 30):return None
-  if int((root/'memory.current').read_text())>134217728-reserve*1024**2 or int((root/'pids.current').read_text())>task_floor:return None
-  return remaining
- except (OSError,ValueError,KeyError,IndexError,subprocess.SubprocessError):return None
-
+  parent=Path('/proc')/str(os.getppid() if worker_process else os.getpid())
+  if parent.stat().st_uid!=uid or (parent/'cgroup').read_text().strip()!=cg:return None
+  started=int((parent/'stat').read_text().rsplit(')',1)[1].split()[19])/os.sysconf('SC_CLK_TCK')
+  age=clock.monotonic()-started
+  if not 0<=age<=90 or not worker_process and age>50:return None
+  remaining=min(90-age,(cutoff(session)-now()).total_seconds())
+  return remaining if remaining>=(8 if worker_process else 30) else None
+ except (OSError,ValueError,KeyError,IndexError):return None
 
 def bounded_worker(session):
  fallback=lambda status:{str(k):empty_sample(k,status) for k in HEADERS}
  observed=now()
  if not within(session,observed) or (cutoff(session)-observed).total_seconds()<WORKER_SECONDS+REAP_SECONDS+2:return fallback('OUTSIDE_WINDOW')
- remaining=runtime_budget()
+ remaining=runtime_budget(session)
  if remaining is None:return fallback('RUNTIME_BOUNDARY_UNVERIFIED')
  p=subprocess.Popen([sys.executable,'-I','-B',str(Path(__file__).resolve()),session,'--_worker'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,env={'PATH':'/usr/bin:/bin','LC_ALL':'C'},close_fds=True,preexec_fn=child_limits)
  try:
@@ -291,7 +297,7 @@ def main():
  try:
   if os.geteuid()==0:raise SampleRejected()
   if args._worker:
-   if not stat.S_ISFIFO(os.fstat(0).st_mode) or sys.stdin.buffer.read(64)!=b'fixed-close-samples-v1\n' or runtime_budget(True) is None:raise SampleRejected()
+   if not stat.S_ISFIFO(os.fstat(0).st_mode) or sys.stdin.buffer.read(64)!=b'fixed-close-samples-v1\n' or runtime_budget(args.session,True) is None:raise SampleRejected()
    value=worker(args.session);raw=json.dumps(value,separators=(',',':')).encode()
    if len(raw)>WIRE_BYTES:raise SampleRejected()
    sys.stdout.buffer.write(raw);return 0
