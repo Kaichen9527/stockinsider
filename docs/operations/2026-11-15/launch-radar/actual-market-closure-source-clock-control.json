@@ -1,0 +1,122 @@
+{
+  "schema": "stockinsider-actual-market-closure-source-clock-v1",
+  "scope": "current fetch of historical authority sources; no authority claim for earlier application knowledge",
+  "sourceCatalog": {
+    "cityHistorical": "https://data.gov.tw/dataset/132177",
+    "dgpaCap": "https://data.gov.tw/dataset/20457",
+    "license": "https://data.gov.tw/license",
+    "capFormat": "https://alerts.ncdr.nat.gov.tw/Document/AlertInfoDentifiedByFileHandler/CapDocument_WSC.pdf",
+    "platformFaq": "https://alerts.ncdr.nat.gov.tw/web/platform/faq"
+  },
+  "cityOfficialNotices": [
+    {
+      "source": "https://eoc.gov.taipei/News/Detail/909",
+      "eventLocalDate": "2026-07-10",
+      "sourcePublishedAt": "2026-07-09T20:00:00+08:00",
+      "websiteDateHeader": "Sun, 15 Nov 2026 01:57:54 GMT",
+      "collectedAtUtc": "2026-11-15T01:57:54.257634+00:00",
+      "byteCount": 64197,
+      "sha256": "e3dcdea007b342f3361c7855b8e2d4d4a8488bd0d57ab11d7de69a09d209d697",
+      "publishedBeforePreviousCloseCutoff": true,
+      "observedBeforePreviousCloseCutoff": false,
+      "timePrecision": "minute"
+    },
+    {
+      "source": "https://eoc.gov.taipei/News/Detail/1590",
+      "eventLocalDate": "2026-10-23",
+      "sourcePublishedAt": "2026-10-22T20:02:00+08:00",
+      "websiteDateHeader": "Sun, 15 Nov 2026 01:57:54 GMT",
+      "collectedAtUtc": "2026-11-15T01:57:54.271824+00:00",
+      "byteCount": 64111,
+      "sha256": "173c890a32a41781368c709e1c252ef116c40577ced8ad6d396ee9906abe32af",
+      "publishedBeforePreviousCloseCutoff": true,
+      "observedBeforePreviousCloseCutoff": false,
+      "timePrecision": "minute"
+    }
+  ],
+  "sourceFetches": [
+    {
+      "name": "cityHistory",
+      "url": "https://data.taipei/api/dataset/83b013c2-35f3-4470-98d7-03dd68a372cb/resource/7a0b00b7-988e-4a45-9f4b-c1f910fea57c/download",
+      "status": 200,
+      "mime": "text/csv",
+      "sourceLastModified": null,
+      "observedAt": "2026-11-15T01:56:34.516255+00:00",
+      "sha256": "17374d0331f207ea4d7c9d41fbb2fe16a7708a4ecc2fc0b4f6a0b554d407e9eb",
+      "bytes": 9843,
+      "header": [
+        "民國年",
+        "月",
+        "日",
+        "天然災害名稱",
+        "臺北市停止上班上課情形"
+      ],
+      "rowCount": 128,
+      "targetRows": [
+        [
+          "115",
+          "7",
+          "10",
+          "巴威颱風",
+          "7月10日停止上班及上課。"
+        ],
+        [
+          "115",
+          "10",
+          "23",
+          "薔琵颱風",
+          "10月23日停止上班及上課。"
+        ]
+      ]
+    },
+    {
+      "name": "actualDGPAFeed",
+      "url": "https://alerts.ncdr.nat.gov.tw/RssAtomFeed.ashx?AlertType=33",
+      "status": 200,
+      "mime": "application/xml",
+      "sourceLastModified": null,
+      "observedAt": "2026-11-15T01:56:22.068807+00:00",
+      "sha256": "db96f13b8fc6d00cc7738f9ceff385d4ebba9a9dd4ce85f7e5f975df5e35e9b7",
+      "bytes": 73,
+      "root": "WarningMessage",
+      "children": [
+        "Warning"
+      ],
+      "updated": null,
+      "entryCount": 0,
+      "firstEntryUpdated": null,
+      "lastEntryUpdated": null,
+      "entryLinkHosts": [],
+      "requested2026DatesFound": []
+    }
+  ],
+  "registeredCapResponse": "LOGIN_REQUIRED_NOT_EVIDENCE_OF_NO_ALERT",
+  "dgpaHistoricalPublicationDates": [
+    {
+      "event": "2026-07-10",
+      "archivePublishedDate": "2026-07-13",
+      "url": "https://www.dgpa.gov.tw/information?pid=13035&uid=374"
+    },
+    {
+      "event": "2026-10-23",
+      "archivePublishedDate": "2026-10-27",
+      "url": "https://www.dgpa.gov.tw/information?pid=13129&uid=374"
+    }
+  ],
+  "originalMarketRules": [
+    "https://www.twse.com.tw/zh/clearing/suspended.html",
+    "https://www.tpex.org.tw/storage/eb_data/11205/112005916711-1.pdf"
+  ],
+  "existingLiveStoredCalendarControl": "3e44928d19c6ba5ee5b1ad58989fe8f0aaf5d00d",
+  "historicalBackfillCanPreserveIssuerPublishedTime": true,
+  "liveAutomatedClosureProducerVerified": false,
+  "originalCutoffsClaimed": false,
+  "calendarOrProductionChanged": false,
+  "requiredConsumerControls": [
+    "timezone-aware sent/observed/applied clocks",
+    "whole Taipei city workplace suspension during exchange-defined period",
+    "district-only/school-only/Test/Draft alerts do not cancel an entire market day",
+    "Update lineage and explicit withdrawal",
+    "missing or login-required feed is not affirmative open evidence"
+  ]
+}
