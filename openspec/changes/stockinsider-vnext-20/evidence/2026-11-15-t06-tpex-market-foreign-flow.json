@@ -1,0 +1,66 @@
+{
+  "schema": "stockinsider-t06-t10-tpex-market-flow-evidence-v1",
+  "base": "765446b906b044c224e7b82663b97acb1a178763",
+  "source": {
+    "datasetId": 11743,
+    "searchMetadata": "https://data.gov.tw/dataset/11743",
+    "license": "https://data.gov.tw/license",
+    "requestBase": "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D",
+    "currency": "TWD",
+    "profile": "foreign_and_mainland_excluding_dealers"
+  },
+  "environment": {
+    "kind": "contabo_isolated_staging",
+    "unitNode": "22.23.1",
+    "cliNode": "22.14.0",
+    "freeDiskMiB": 25305,
+    "availableMemoryMiB": 4000
+  },
+  "result": {
+    "unitCasesPassed": 6,
+    "existingCliRegressionPassed": 15,
+    "actualCliReplayPassed": true,
+    "independentCsvTwdSumAgrees": true,
+    "actualCaptureNdts": 5,
+    "foreignDealerNonZeroDays": 0,
+    "originalNovember13CutoffRejected": true,
+    "fullCloudCiRun": false
+  },
+  "controlledReplayCutoff": "2026-11-15T12:50:56.911899+00:00",
+  "rawReports": [
+    {
+      "session": "2026-11-09",
+      "rawSha256": "9c97c3b57ff96c45e733e3216a40ccd937139b0c084191dced0a54dd53a299b9",
+      "rawBytes": 626,
+      "capturedAt": "2026-11-15T12:50:55.643761+00:00"
+    },
+    {
+      "session": "2026-11-10",
+      "rawSha256": "20fa8c4d887ac4a291adf8edbde01dcb21ba88695591e922dace0aa0c22fa599",
+      "rawBytes": 623,
+      "capturedAt": "2026-11-15T12:50:56.117374+00:00"
+    },
+    {
+      "session": "2026-11-11",
+      "rawSha256": "6950afa8608c5739a0266505abdf3c08ffbd2f98cd12f8b4084bd4fcc57adc9c",
+      "rawBytes": 626,
+      "capturedAt": "2026-11-15T12:50:56.267541+00:00"
+    },
+    {
+      "session": "2026-11-12",
+      "rawSha256": "e80b43d82abf70e6fa215398750e2e34b2934c9584e91c6aa39917e95502f50e",
+      "rawBytes": 626,
+      "capturedAt": "2026-11-15T12:50:56.638119+00:00"
+    },
+    {
+      "session": "2026-11-13",
+      "rawSha256": "22b9a1e263d2a929c73c18af54a3191fcc55e5fb5f9f3f5d93698c315f354441",
+      "rawBytes": 623,
+      "capturedAt": "2026-11-15T12:50:56.911546+00:00"
+    }
+  ],
+  "sourceAuthority": false,
+  "marketAuthority": false,
+  "publicationAuthority": false,
+  "productionMutation": false
+}

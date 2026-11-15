@@ -2,6 +2,7 @@
 /** OFFLINE exchange-source staging replay. No fetch/DB/writer/download. No
  * rights inferred. Output contains receipts/counts/gaps, never raw bodies. */
 import fs from 'node:fs';
+import { parseTpexMarketFlowReplay, TPEX_MARKET_FLOW_MAX_BYTES, TPEX_MARKET_FLOW_SCHEMA } from '../src/lib/vnext/launch-market-foreign-flow.ts';
 import path from 'node:path';
 import { parseLaunchOfficialReplay, parseLaunchLicensedCsvReplay, LICENSED_CSV_SCHEMA, officialReplayObservationPlan } from '../src/lib/vnext/launch-official-replay.ts';
 import { parseTpexNativeShareReplay, NATIVE_SHARE_SCHEMA } from '../src/lib/vnext/launch-native-volume.ts';
@@ -51,7 +52,9 @@ try {
     const institutionalVolume = input?.schema === INSTITUTIONAL_VOLUME_SCHEMA;
     const breadth = input?.schema === BREADTH_REPLAY_SCHEMA;
     const twseClose = input?.schema === TWSE_CLOSE_REPLAY_SCHEMA;
-    const limits = breadth || twseClose ? { pages: 30, pageBytes: 500000, totalBytes: 15000000 }
+    const marketFlow = input?.schema === TPEX_MARKET_FLOW_SCHEMA;
+    const limits = marketFlow ? { pages: 5, pageBytes: TPEX_MARKET_FLOW_MAX_BYTES, totalBytes: 5 * TPEX_MARKET_FLOW_MAX_BYTES }
+      : breadth || twseClose ? { pages: 30, pageBytes: 500000, totalBytes: 15000000 }
       : institutionalVolume ? { pages: 21, pageBytes: 3 * 1024 * 1024, totalBytes: 64 * 1024 * 1024 }
       : nativeShares ? { pages: 57, pageBytes: 500000, totalBytes: 32 * 1024 * 1024 }
         : { pages: 68, pageBytes: 5000000, totalBytes: 112 * 1024 * 1024 };
@@ -66,7 +69,8 @@ try {
       if (member.byteLength !== descriptor.bytes || (total += member.byteLength) > limits.totalBytes) throw Error('input');
       files.set(body.path, member);
     }
-    const read = twseClose ? parseTwseHistoricalCloseReplay(input, files) : breadth ? parseTpexBreadthReplay(input, files) : institutionalVolume ? parseTpexInstitutionalVolumeReplay(input, files) : nativeShares ? parseTpexNativeShareReplay(input, files)
+    const read = marketFlow ? parseTpexMarketFlowReplay(input, files)
+      : twseClose ? parseTwseHistoricalCloseReplay(input, files) : breadth ? parseTpexBreadthReplay(input, files) : institutionalVolume ? parseTpexInstitutionalVolumeReplay(input, files) : nativeShares ? parseTpexNativeShareReplay(input, files)
       : input?.schema === LICENSED_CSV_SCHEMA ? parseLaunchLicensedCsvReplay(input, files) : parseLaunchOfficialReplay(input, files);
     process.stdout.write(JSON.stringify(read) + '\n');
   }
