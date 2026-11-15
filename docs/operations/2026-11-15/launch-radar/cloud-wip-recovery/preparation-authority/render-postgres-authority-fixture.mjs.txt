@@ -1,0 +1,78 @@
+// Run in a disposable checkout of the pinned continuation commit.
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+
+const [evidencePath, fixturePath, migrationPath, probeJsonPath]=process.argv.slice(2);
+const json=name=>JSON.parse(fs.readFileSync(name,'utf8'));
+const proof=json(evidencePath);
+const checkHash=body=>createHash('sha256').update(body).digest('hex');
+const files=Object.fromEntries(proof.sourceMigrations.map(({path:name})=>[name,{text:fs.readFileSync(name,'utf8')}]));
+function functionBody(name, text) {
+ const start=text.indexOf('FUNCTION public.'+name+'(');
+ assert(start>=0,name);
+ const sql=text.slice(start);
+ const match=/\bAS (\$[a-zA-Z_0-9]*\$)([\s\S]*?)\1/u.exec(sql);
+ assert(match,name);
+ return match[2];
+}
+const base={
+ vnext_command_v1:functionBody('vnext_command_v1',files['migrations/20261022_stockinsider_vnext_20_v1.sql'].text),
+ vnext_provider_command_v1:'',
+ vnext_input_sources_current_v1:files['migrations/20261023_vnext_corporate_action_terms_v1.sql'].text.split('$successor1$')[1],
+ vnext_business_criteria_current_v1:functionBody('vnext_business_criteria_current_v1',files['migrations/20261023_vnext_business_criteria_v1.sql'].text),
+ vnext_thesis_publication_guard_v1:functionBody('vnext_thesis_publication_guard_v1',files['migrations/20261022_vnext_thesis_audit_v1.sql'].text),
+};
+function reconstruct(d,start,hash){
+ const result={...start};const h=[];const file=k=>d['migrations/'+k+'.sql'].text;const lines=(k,a,b)=>file(k).split('\n').slice(a-1,b).join('\n');
+ const pairRE=/\b(?:changed|changed_swap):=replace\((?:changed|original|swap_body|changed_swap),\s*\$((?:old\w*|\w+_old))\$([\s\S]*?)\$\1\$\s*,\s*\$((?:new\w*|\w+_new))\$([\s\S]*?)\$\3\$/gu;
+ const once=(body,old,next,name)=>{const found=body.split(old).length-1;if(found!==1)throw Error(JSON.stringify({name,found,old:old.slice(0,100)}));return body.replace(old,()=>next);};
+ const check=(body,name,count,want)=>{const got=hash(body);h.push({name,count,got,valid:got.startsWith(want)});if(!got.startsWith(want))throw Error(name+' '+got);return body;};
+ const apply=(body,name,sql,want)=>{let count=0;for(const [_,a,old,b,next] of sql.matchAll(pairRE)){body=once(body,old,next,name+' '+a);count++;}
+ return want?check(body,name,count,want):body;};
+ let core=result.vnext_command_v1,worker;
+ core=apply(core,'thesis audit',lines('20261022_vnext_thesis_audit_v1',18,32),'5dbab9e05b');
+ const cached=file('20261022_vnext_cached_admission_v2');
+ const tag=(sql,name)=>sql.split('$'+name+'$')[1];
+ const swapBody=core.slice(core.indexOf(tag(cached,'swap_start')),core.indexOf(tag(cached,'swap_end')));
+ let change=apply(swapBody,'cached admission',cached);
+ for(const [old,next] of [['12.5','(f.weight::numeric/2)'],[tag(cached,'old_other'),'policy<>v_comparison_policy'],[tag(cached,'old_same'),'policy=v_comparison_policy'],[tag(cached,'old_values'),'VALUES(v_symbol,v_incumbent.symbol,v_comparison_policy,s,n)']])change=change.replaceAll(old,next);
+ core=once(once(core,swapBody,change,'cached swap'),' s date; count_started integer;',' s date; v_comparison_policy text; count_started integer;','cached declaration');
+ check(core,'cached admission',8,'e27aa373d4');
+ core=apply(core,'terminal review',lines('20261022_vnext_terminal_failure_slots_v1',104,123),'47a8d22042');
+ core=apply(core,'target exit',lines('20261022_vnext_target_exit_v1',178,192),'b99885487f');
+ core=apply(core,'preparation read',lines('20261022_vnext_preparation_read_v1',35,39),'63f40aa176');
+ core=apply(core,'trading invalidity',lines('20261023_vnext_trading_invalidity_exit_v1',74,92),'c2df728571');
+ core=apply(core,'roster claim fence',lines('20261023_vnext_roster_current_fence_v1',50,63),'0a5ba7953b');
+ core=apply(core,'catalyst cancellation',lines('20261023_vnext_catalyst_cancellation_v1',153,217),'130fa80b87');
+ worker=check(tag(file('20261022_vnext_terminal_failure_slots_v1'),'replacement'),'terminal provider replacement',1,'47fdb26746');
+ worker=apply(worker,'issuer IR provider',lines('20261022_vnext_issuer_ir_sources_v1',96,103),'0e8121100e');
+ worker=apply(worker,'catalyst criteria',lines('20261022_vnext_catalyst_criteria_v1',159,168),'3ca260d5bf');
+ worker=apply(worker,'roster reserve fence',lines('20261023_vnext_roster_current_fence_v1',64,71),'14ffe7baa7');
+ worker=apply(worker,'provider cancellation',lines('20261023_vnext_catalyst_cancellation_v1',218,249),'d41813f927');
+ worker=apply(worker,'business criteria',lines('20261023_vnext_business_criteria_v1',140,161),'b541f6c8b7');
+ result.vnext_command_v1=core;result.vnext_provider_command_v1=worker;
+ return {result,history:h};
+}
+const {result: restored}=reconstruct(files,base,checkHash);
+
+// Select the openapi nativeCase in the earlier Node probe as described in the report.
+const packet=json(probeJsonPath).nativeCase;
+assert.equal(packet.label,'openapi');
+const replacements={
+ ...Object.fromEntries(Object.entries(restored).map(([name,body])=>['__PINNED_'+name.toUpperCase()+'_BODY__',body])),
+ __NODE_VERSIONED_EVIDENCE_JSON__:JSON.stringify(packet.bound.evidence),
+ __NODE_PLAIN_EVIDENCE_JSON__:JSON.stringify(packet.currentPlain.evidence),
+ __NODE_LEGACY_EVIDENCE_JSON__:JSON.stringify(packet.legacy.evidence),
+};
+for(const [tag,{sha256}] of Object.entries(proof.templateInputs))assert.equal(checkHash(replacements[tag]),sha256,tag);
+const fixture=json(fixturePath);
+for(const [part,source] of Object.entries(fixture)){
+ fixture[part]=source.replace(/__(?:PINNED|NODE)_[A-Z0-9_]+__/g,tag=>{
+  assert(Object.hasOwn(replacements,tag),tag);
+  return replacements[tag];
+ });
+}
+fixture.candidate=fs.readFileSync(migrationPath,'utf8');
+assert.equal(checkHash(fixture.candidate),proof.migrationSha256);
+process.stdout.write(JSON.stringify(fixture));

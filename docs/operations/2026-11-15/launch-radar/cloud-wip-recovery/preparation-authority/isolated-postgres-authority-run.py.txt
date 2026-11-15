@@ -1,0 +1,40 @@
+import hashlib, json, os, pathlib, resource, shutil, subprocess, tempfile
+import sys
+data=json.load(sys.stdin)
+mem=int(next(line for line in open('/proc/meminfo') if line.startswith('MemAvailable:')).split()[1])
+assert mem>=2621440 and shutil.disk_usage('/tmp').free>=15*1024**3
+bin='/usr/lib/postgresql/17/bin/'
+prefix=['unshare','--net','--','setpriv','--reuid=65534','--regid=65534','--clear-groups','--no-new-privs','--']
+env={'PATH':'/usr/bin:/bin','LANG':'C.UTF-8','TZ':'UTC','PGCONNECT_TIMEOUT':'3'}
+def run(args, **kwargs):
+ return subprocess.run(prefix+args,encoding='utf-8',capture_output=True,env=env,timeout=30,**kwargs)
+def expect(proc,name):
+ if proc.returncode: raise SystemExit(name+'\n'+proc.stderr[-4800:])
+with tempfile.TemporaryDirectory(prefix='si-stage-native-authority-',dir='/tmp') as tmp:
+ os.chown(tmp,65534,65534)
+ root=pathlib.Path(tmp)
+ host=root/'socket'
+ host.mkdir(mode=0o700)
+ os.chown(host,65534,65534)
+ home=root/'db'
+ options=f"-c listen_addresses='' -c unix_socket_directories={host} -c unix_socket_permissions=0700 -c shared_buffers=32MB -c work_mem=2MB -c max_connections=10"
+ expect(run([bin+'initdb','-A','trust','-D',str(home),'-U','postgres','--no-sync']),'initdb')
+ expect(run([bin+'pg_ctl','-D',str(home),'-l',str(root/'postgres.log'),'-o',options,'-w','-t','8','start']),'isolated pg_ctl')
+ try:
+  psql=[bin+'psql','-h',str(host),'-U','postgres','-d','postgres','-X','-q','-v','ON_ERROR_STOP=1']
+  sql=lambda text:run(psql,input=text)
+  alter=lambda next_expr: "DO $drift$ DECLARE current_body text; definition text; BEGIN SELECT prosrc,pg_get_functiondef(oid) INTO current_body,definition FROM pg_proc WHERE oid='public.vnext_command_v1(text,text,jsonb)'::regprocedure; EXECUTE replace(definition,current_body,"+next_expr+"); END $drift$;"
+  expect(sql(data['baseline']+data['beforeTest']),'setup verified predecessor')
+  expect(sql(alter("current_body||' '")),'simulate source drift')
+  rejected=sql(data['candidate'])
+  if rejected.returncode!=3 or 'financial_provider_predecessor_changed' not in rejected.stderr: raise SystemExit('expected fail-closed migration was not observed\n'+rejected.stderr[-4300:])
+  expect(sql(data['rollback']+alter("left(current_body,-1)")),'verify rollback and restore exact predecessor')
+  expect(sql(data['candidate']),'install isolated candidate')
+  result=sql(data['probes']);expect(result,'verify isolated owner and author path')
+  print(subprocess.check_output([bin+'postgres','--version'],text=True).strip())
+  print('migrationSha256='+hashlib.sha256(data['candidate'].encode()).hexdigest())
+  for line in result.stderr.splitlines():
+   if 'FINANCIAL_AUTHORITY_PROOF ' in line: print(line.split('FINANCIAL_AUTHORITY_PROOF ',1)[1])
+  print('metadataDriftRollbackVerified=true')
+ finally:
+  expect(run([bin+'pg_ctl','-D',str(home),'-m','fast','-w','-t','8','stop']),'isolated pg stop')

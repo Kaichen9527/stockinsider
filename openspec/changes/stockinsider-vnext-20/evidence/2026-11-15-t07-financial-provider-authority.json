@@ -1,0 +1,233 @@
+{
+  "task": "T07",
+  "date": "2026-11-15",
+  "baseline": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "previousProducer": "afa0051c5024c89db32371c51a9b2bb66f247ee0",
+  "migrationSha256": "14fe34293ff99756e7630e704e57d83a4897edae66f65fbe7f8db60c0d418e68",
+  "postgresVersion": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+  "metadataDriftRollback": true,
+  "results": {
+    "boundRows": 1,
+    "newFunctions": 11,
+    "completedJobRls": true,
+    "legacyHashIntact": true,
+    "authorScopeChecked": true,
+    "workContextNoAuditWrites": true,
+    "deniedDirectExecuteChecks": 44,
+    "versionedPrepareAndReplay": true,
+    "legacyPacketOnNewWriteRejected": true,
+    "originalHomeProjectionExcludesBinding": true
+  },
+  "scope": "Ephemeral Contabo PostgreSQL with isolated Unix socket. Five real function preimages, real forecast stock and as-of financial readers, real original homepage projection, synthetic application rows and other authority dependencies. No actual deployment or model call.",
+  "sourceMigrations": [
+    {
+      "path": "migrations/20261022_stockinsider_vnext_20_v1.sql",
+      "blob": "696343085c721f00fd44b4643c8c2ef2f90d189c"
+    },
+    {
+      "path": "migrations/20261022_vnext_cached_admission_v2.sql",
+      "blob": "50960bd581c57d72f7e33a42f8f4eb0fb379d6f9"
+    },
+    {
+      "path": "migrations/20261022_vnext_catalyst_criteria_v1.sql",
+      "blob": "f629331ff37ace13eec553560bfa55255deee8f3"
+    },
+    {
+      "path": "migrations/20261022_vnext_issuer_ir_sources_v1.sql",
+      "blob": "da5309c972857525d62fb9216b0697e1693d6e94"
+    },
+    {
+      "path": "migrations/20261022_vnext_preparation_read_v1.sql",
+      "blob": "a59d24fa24b08ebcf539bf5bca7f3df7c1e42b2b"
+    },
+    {
+      "path": "migrations/20261022_vnext_target_exit_v1.sql",
+      "blob": "37445ef384da91b86284e6e3cb08d54818e6a7bf"
+    },
+    {
+      "path": "migrations/20261022_vnext_terminal_failure_slots_v1.sql",
+      "blob": "e69affd5df8e4efbac0c30306bbf77a207eb5814"
+    },
+    {
+      "path": "migrations/20261022_vnext_thesis_audit_v1.sql",
+      "blob": "5ca5f9fa19f14e5a82090634bbbdc6ba699edce9"
+    },
+    {
+      "path": "migrations/20261023_vnext_business_criteria_v1.sql",
+      "blob": "a6fdebe2132d31b13cbd091a7baff4f027da2e75"
+    },
+    {
+      "path": "migrations/20261023_vnext_catalyst_cancellation_v1.sql",
+      "blob": "451d4c6a326c34955755127e1eb85b9262c478f5"
+    },
+    {
+      "path": "migrations/20261023_vnext_corporate_action_terms_v1.sql",
+      "blob": "1fa697189f466304289c6f6a4353c27efd369140"
+    },
+    {
+      "path": "migrations/20261023_vnext_roster_current_fence_v1.sql",
+      "blob": "109fa64efd00404a1f34ac9434709d1296c8165d"
+    },
+    {
+      "path": "migrations/20261023_vnext_trading_invalidity_exit_v1.sql",
+      "blob": "73598649234723fd285253b325ab6a482793c577"
+    }
+  ],
+  "transitions": [
+    {
+      "name": "thesis audit",
+      "count": 6,
+      "got": "5dbab9e05b90b7bb2c323c3862ed8b64ee9bbe0fc25ac268f736da1078c91a41",
+      "valid": true
+    },
+    {
+      "name": "cached admission",
+      "count": 8,
+      "got": "e27aa373d4a3d8b444c7bbec2585380329e98c21e35189746b56e72d522e121a",
+      "valid": true
+    },
+    {
+      "name": "terminal review",
+      "count": 1,
+      "got": "47a8d220420b10ac931118262032aac74bc66e94d437d9ac381ad3ab50226074",
+      "valid": true
+    },
+    {
+      "name": "target exit",
+      "count": 1,
+      "got": "b99885487f46bc01bd9375fb285620058eddda1aa23eb3c3043ce89ec6ca2a17",
+      "valid": true
+    },
+    {
+      "name": "preparation read",
+      "count": 1,
+      "got": "63f40aa176395df6a06dc7a50875e251f90714545fd20670b2e34eb39438f016",
+      "valid": true
+    },
+    {
+      "name": "trading invalidity",
+      "count": 1,
+      "got": "c2df728571a9b9914f87acc6cead6d444af2ea0c638e058db50da4bc74ef146c",
+      "valid": true
+    },
+    {
+      "name": "roster claim fence",
+      "count": 1,
+      "got": "0a5ba7953b1925b26a9ced99764786bb3e7d047bb33264d563447ab5e6353472",
+      "valid": true
+    },
+    {
+      "name": "catalyst cancellation",
+      "count": 6,
+      "got": "130fa80b87ece7cc9bfb59b5998078cfd76ebb852a12632706e3fc5cf7eefafb",
+      "valid": true
+    },
+    {
+      "name": "terminal provider replacement",
+      "count": 1,
+      "got": "47fdb26746e2d20a2d85348d2e15cf288c8e1e1af84b7b4b6b780d150811288d",
+      "valid": true
+    },
+    {
+      "name": "issuer IR provider",
+      "count": 2,
+      "got": "0e8121100eb0781d27e46f54d667cce39bbd061daa05a10efc4ebbb29a0312bd",
+      "valid": true
+    },
+    {
+      "name": "catalyst criteria",
+      "count": 1,
+      "got": "3ca260d5bf8fc594642564b07b7085e34e01c8a4e4b8bd179022650090cf6ea2",
+      "valid": true
+    },
+    {
+      "name": "roster reserve fence",
+      "count": 1,
+      "got": "14ffe7baa787f6808f2cb1e3250344766a51698ef722268361ef5512621cbcba",
+      "valid": true
+    },
+    {
+      "name": "provider cancellation",
+      "count": 2,
+      "got": "d41813f9270b75573d5d30fa366224fea48c9cb1807487c0ca668e4644100227",
+      "valid": true
+    },
+    {
+      "name": "business criteria",
+      "count": 2,
+      "got": "b541f6c8b7441a1165f6bd537a854b0ba3a849cefa6a45107da33e8f94efdff3",
+      "valid": true
+    }
+  ],
+  "exactBodies": [
+    {
+      "signature": "public.vnext_command_v1(text,text,jsonb)",
+      "predecessorSha256": "130fa80b87ece7cc9bfb59b5998078cfd76ebb852a12632706e3fc5cf7eefafb",
+      "successorSha256": "5c00756cd3d9c99f11db2e8eb5529f57a0fe161814e776d4450396e79afeb7d6"
+    },
+    {
+      "signature": "public.vnext_provider_command_v1(text,text,jsonb)",
+      "predecessorSha256": "b541f6c8b7441a1165f6bd537a854b0ba3a849cefa6a45107da33e8f94efdff3",
+      "successorSha256": "68dc31b9e67c22e3111e3da92ef5c2bfc909eda35ae8cadd1af544ed41fbd622"
+    },
+    {
+      "signature": "public.vnext_input_sources_current_v1(jsonb,text)",
+      "predecessorSha256": "912b039211f3624f82fa1940740b9cb47a8f0ed46817e108504b29d5a528b8e4",
+      "successorSha256": "e0ab34d30cde50709c2cc25b5ba19f7879808eeee722302f1be47de9597c270a"
+    },
+    {
+      "signature": "public.vnext_business_criteria_current_v1(uuid,text)",
+      "predecessorSha256": "b9e54d8adb331246d92d59336ea79f65929fd011591361aa35adf74f9cb7337a",
+      "successorSha256": "e774b54f1d0841348078ca5f87800cc10d95407b48aa4800147865f441ddabbc"
+    },
+    {
+      "signature": "public.vnext_thesis_publication_guard_v1()",
+      "predecessorSha256": "ea1f2e137320efb230a89d88d59fde65743425ffc97f8214764d8643cb2f9ee3",
+      "successorSha256": "bd56ab1e0b5f812236d4456fe9d6ae531f1a51a5ce676685ede62c2573ba964b"
+    }
+  ],
+  "templateInputs": {
+    "__PINNED_VNEXT_COMMAND_V1_BODY__": {
+      "kind": "sql_body",
+      "sha256": "130fa80b87ece7cc9bfb59b5998078cfd76ebb852a12632706e3fc5cf7eefafb",
+      "bytes": 45249
+    },
+    "__PINNED_VNEXT_PROVIDER_COMMAND_V1_BODY__": {
+      "kind": "sql_body",
+      "sha256": "b541f6c8b7441a1165f6bd537a854b0ba3a849cefa6a45107da33e8f94efdff3",
+      "bytes": 15382
+    },
+    "__PINNED_VNEXT_THESIS_PUBLICATION_GUARD_V1_BODY__": {
+      "kind": "sql_body",
+      "sha256": "ea1f2e137320efb230a89d88d59fde65743425ffc97f8214764d8643cb2f9ee3",
+      "bytes": 465
+    },
+    "__PINNED_VNEXT_BUSINESS_CRITERIA_CURRENT_V1_BODY__": {
+      "kind": "sql_body",
+      "sha256": "b9e54d8adb331246d92d59336ea79f65929fd011591361aa35adf74f9cb7337a",
+      "bytes": 12114
+    },
+    "__PINNED_VNEXT_INPUT_SOURCES_CURRENT_V1_BODY__": {
+      "kind": "sql_body",
+      "sha256": "912b039211f3624f82fa1940740b9cb47a8f0ed46817e108504b29d5a528b8e4",
+      "bytes": 1294
+    },
+    "__NODE_VERSIONED_EVIDENCE_JSON__": {
+      "kind": "node_probe_output",
+      "sha256": "24875d7ea77972e0d8df12d83b04f4ea1df32e736f852661a759b23d9fb9238e",
+      "bytes": 5236
+    },
+    "__NODE_PLAIN_EVIDENCE_JSON__": {
+      "kind": "node_probe_output",
+      "sha256": "c5864735136aebd64ed735a8916aeca49eaa094bfea22b4441e6b8d905e32310",
+      "bytes": 4127
+    },
+    "__NODE_LEGACY_EVIDENCE_JSON__": {
+      "kind": "node_probe_output",
+      "sha256": "c5864735136aebd64ed735a8916aeca49eaa094bfea22b4441e6b8d905e32310",
+      "bytes": 4127
+    }
+  },
+  "planHoldUnchanged": true,
+  "productionChanged": false
+}
