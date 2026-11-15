@@ -1,0 +1,173 @@
+{
+  "schema": "stockinsider-protected-review-live-ref-receipt-v1",
+  "protectedBase": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+  "originalPr": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "currentProtection": "067e9e9b5c3cef012afa926f6fd7d7cb72014619",
+  "workerBlobs": {
+    "protectedBase": "a707430e0ea1912282ab8d30c5c2fb06834fa9db",
+    "originalPr": "a707430e0ea1912282ab8d30c5c2fb06834fa9db",
+    "currentProtection": "a707430e0ea1912282ab8d30c5c2fb06834fa9db"
+  },
+  "graph": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+  "reviews": [
+    {
+      "check": "requirements",
+      "evidenceCommit": "cf942588ffa03c81c4af384bb7cc4442468cf13d",
+      "evidenceTree": "7c6b60d945f730f4f1afad566b5157fbce691717",
+      "ref": "evidence/source-led-opportunity-v3-requirements-v325-digest",
+      "objectId": "d514b6acf9f088662180d5219ff1fc14882897f0",
+      "fileSha256": "f798d4be6fb57099f883d92653f6d8fe694be951fc43e00a63c4758a8c26370f",
+      "githubSignatureMetadataVerified": false,
+      "recordedPassWording": true,
+      "recordedP0P1Zero": true,
+      "reviewedHead": "91c4c815619d2beda4336445a0ed6aae82ee4d04",
+      "reviewedTree": "71395de5a0efb67ea1da50148bf3d23665a11077",
+      "reviewedRange": [
+        "169aad1b6cfa747f78ae3464b614f43c0749d806",
+        "91c4c815619d2beda4336445a0ed6aae82ee4d04"
+      ],
+      "treeMatchesGit": true,
+      "rangeEndMatchesHead": true,
+      "reviewedHeadIsOnlyParent": true,
+      "diffOnlyAllowedFile": true,
+      "diffStatus": [
+        "added"
+      ],
+      "measuredActiveGraphMentioned": true,
+      "carriedBytes": {
+        "original_pr": {
+          "filePresent": true,
+          "bytesEqual": true
+        },
+        "current_protection": {
+          "filePresent": true,
+          "bytesEqual": true
+        }
+      }
+    },
+    {
+      "check": "architecture",
+      "evidenceCommit": "2a710eab65e8c60204493ae08848d47fec3faa9c",
+      "evidenceTree": "1efca9fb9ca106d6210ddc63c08bde0527ac6595",
+      "ref": "evidence/source-led-opportunity-v3-architecture-v325-digest",
+      "objectId": "ce017f8032884a63215c9fe0fa6d8c18bc06cf0b",
+      "fileSha256": "0dbeed80821fdeaf97ff920120dd519180cd230cea53540465f605d378552dee",
+      "githubSignatureMetadataVerified": false,
+      "recordedPassWording": true,
+      "recordedP0P1Zero": true,
+      "reviewedHead": "91c4c815619d2beda4336445a0ed6aae82ee4d04",
+      "reviewedTree": "71395de5a0efb67ea1da50148bf3d23665a11077",
+      "reviewedRange": [
+        "169aad1b6cfa747f78ae3464b614f43c0749d806",
+        "91c4c815619d2beda4336445a0ed6aae82ee4d04"
+      ],
+      "treeMatchesGit": true,
+      "rangeEndMatchesHead": true,
+      "reviewedHeadIsOnlyParent": true,
+      "diffOnlyAllowedFile": true,
+      "diffStatus": [
+        "added"
+      ],
+      "measuredActiveGraphMentioned": true,
+      "carriedBytes": {
+        "original_pr": {
+          "filePresent": true,
+          "bytesEqual": true
+        },
+        "current_protection": {
+          "filePresent": true,
+          "bytesEqual": true
+        }
+      }
+    }
+  ],
+  "exactReviewRefPresent": {
+    "originalPr": false,
+    "currentProtection": false
+  },
+  "protectedPipelineInvoked": false,
+  "originalJobs": [
+    {
+      "jobId": 120561768034,
+      "conclusion": "failure",
+      "head_sha": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "name": "architecture",
+      "steps": [
+        {
+          "conclusion": "failure",
+          "name": "Retrieve bootstrap and prepare detached subject"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Emit protected Architecture envelope"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Publish immutable Architecture envelope"
+        }
+      ],
+      "archivedFailedLog": {
+        "job": 120561768034,
+        "exit": 0,
+        "archiveAvailable": true,
+        "matchedExactCommitMissingRemoteRef": true,
+        "logSha256": "3b30330275ca4702481fa3176f26ea32dc62961146a3e0823f4798f73aff05f4"
+      }
+    },
+    {
+      "jobId": 120561768044,
+      "conclusion": "failure",
+      "head_sha": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "name": "requirements",
+      "steps": [
+        {
+          "conclusion": "failure",
+          "name": "Retrieve bootstrap and prepare detached subject"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Emit protected Requirements envelope"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Publish immutable Requirements envelope"
+        }
+      ],
+      "archivedFailedLog": {
+        "job": 120561768044,
+        "exit": 0,
+        "archiveAvailable": true,
+        "matchedExactCommitMissingRemoteRef": true,
+        "logSha256": "056f9568f6ec3ea696ed294ae1f96b8c6bfd8da497a64eb5b42cc55f57b8af3e"
+      }
+    },
+    {
+      "jobId": 120561768148,
+      "conclusion": "failure",
+      "head_sha": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+      "name": "exact-review",
+      "steps": [
+        {
+          "conclusion": "failure",
+          "name": "Retrieve bootstrap and prepare detached subject"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Emit protected exact-review envelope"
+        },
+        {
+          "conclusion": "skipped",
+          "name": "Publish immutable exact-review envelope"
+        }
+      ],
+      "archivedFailedLog": {
+        "job": 120561768148,
+        "exit": 0,
+        "archiveAvailable": true,
+        "matchedExactCommitMissingRemoteRef": true,
+        "logSha256": "130671aea7e0095f89b2c3d14f94bacbef498aaf94838aaea939e4f6b304697e"
+      }
+    }
+  ],
+  "limitation": "Existing verdicts are historical statements for the protected graph. Carried bytes do not certify reviewer authority or an exact review of the PR/protection commits. No protected job rerun, reviewer impersonation, ref creation, or HOLD release."
+}
