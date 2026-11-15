@@ -1,0 +1,70 @@
+{
+  "schema": "stockinsider-premarket-background-expiry-control-v1",
+  "observedAtUtc": "2026-11-15T00:44:07Z",
+  "source": "a00b73c3c13d2f32dbf8b76d8e45fdeecb675f3a",
+  "scope": "STATIC_CLOCK_AND_INTERFACE_COMPARISON_NOT_A_MARKET_DATA_RUN",
+  "priorLiveSourceReceipt": "15d02010dd928477a3d41fba8d7c6f858501728c",
+  "oldExpiryRule": "previous completed domestic market session at 08:15 Taipei plus one calendar day",
+  "scenarios": [
+    {
+      "id": "friday_to_monday",
+      "marketSession": "2026-11-13",
+      "slot": "2026-11-16T08:15:00+08:00",
+      "expiry": "2026-11-14T00:15:00.000Z",
+      "secondsAfterExpiry": 172800,
+      "marketJudgmentStale": true,
+      "maySatisfyStrictUnexpiredAtSlot": false
+    },
+    {
+      "id": "monday_to_tuesday_exact",
+      "marketSession": "2026-11-16",
+      "slot": "2026-11-17T08:15:00+08:00",
+      "expiry": "2026-11-17T00:15:00.000Z",
+      "secondsAfterExpiry": 0,
+      "marketJudgmentStale": false,
+      "maySatisfyStrictUnexpiredAtSlot": false
+    },
+    {
+      "id": "monday_to_tuesday_after_one_second",
+      "marketSession": "2026-11-16",
+      "slot": "2026-11-17T08:15:01+08:00",
+      "expiry": "2026-11-17T00:15:00.000Z",
+      "secondsAfterExpiry": 1,
+      "marketJudgmentStale": true,
+      "maySatisfyStrictUnexpiredAtSlot": false
+    },
+    {
+      "id": "monday_background_for_same_day_rank",
+      "marketSession": "2026-11-13",
+      "slot": "2026-11-16T21:30:00+08:00",
+      "expiry": "2026-11-14T00:15:00.000Z",
+      "secondsAfterExpiry": 220500,
+      "marketJudgmentStale": true,
+      "maySatisfyStrictUnexpiredAtSlot": false
+    }
+  ],
+  "legacyMarketJudgmentComparison": "expiresAt < evaluatedAt drops risk to unknown with market_stale, equality does not; independent interpretation requires expiry > Date.now.",
+  "newRank": {
+    "requiredSession": "same completed launch signal session",
+    "fixedCutoff": "21:30 Taipei",
+    "lateReceiptCutoffRemainsScheduled": true,
+    "requiresBothVenues": true,
+    "requiresSourceBoundMarketCompleteAndUnexpired": true,
+    "knownGap": "launch_market_breadth_and_flow_typed_producer_not_connected",
+    "morningBackgroundPermissionToSubstitute": false
+  },
+  "testsNeeded": [
+    "previous completed Friday with current Monday official calendar",
+    "consecutive trading sessions and one-second delayed execution",
+    "market holiday and unscheduled suspension",
+    "required source missing preserves last market date and explicit gap",
+    "21:30 market closure for new immutable ranking must use its own completed session and keep original cutoff"
+  ],
+  "boundaries": {
+    "newMarketRuns": 0,
+    "actualLiveSessionAcceptance": false,
+    "paidModelCalls": 0,
+    "holdChanged": false,
+    "productionWriteCalls": 0
+  }
+}
