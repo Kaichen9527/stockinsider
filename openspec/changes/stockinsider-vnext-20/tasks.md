@@ -288,3 +288,10 @@ Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-re
 - [x] Six actual-module/shared-lease VM cases with synthetic ports: busy/delay/fixed cutoff/retention/rejection/replay and market contention; no actual clock/timer/PG proof.
 - [ ] Actual purpose SQL/ACL/RLS/recovery/acquisition/parser, legacy complete-pending bridge/backlog,21:30 and08:10/08:15 timing/cutover remain incomplete. Existing A1/native/VN01–VN20/real-source/two-session gates unchanged.
 - [ ] Weekly date-only quote clock source repair must preserve civil session identities and use verified own observed/known instants; missing/future clock fail closed. No original native TAP first-cause attribution.
+
+## Weekly quote knowledge-clock source checkpoint
+
+- [x] Current thesis/valuation/target derives explicit observed/known instants; session/quoteAt/valuationAt remain existing civil identities; own financial/semantic/market clocks, no midnight/cutoff fallback, formal quote null. Source2928fe9 matches local7390267:2 STATIC/5×3TZ/138 related/types/lint/build PASS.
+- [x] First6969 shared-static failures and129PASS9FAIL related results retained; corrected JS replacement-template diagnosis, actual helper/AST dependencies and independently reviewed fail-fast driver. Original SQL candidate bytes/guards unchanged; no acceptance assertions relaxed.
+- [ ] Actual quote rights/actions, PostgreSQL timezone/ACL/native acceptance, original TAP causal assertion and protected A1 remain unverified. Changed native fixture NOT_RUN; old snapshots and production remain untouched.
+- [ ] Next520-session accumulation and explicit unscheduled closure provenance must address240/13month planning and400past-weekday annual truncation; Nov15 controls cannot qualify Nov13 historical publication.

@@ -30,3 +30,7 @@ See [bounded Linux restore / release amendment](linux-restore-release-amendment.
 ## T10 private preparation continuation
 
 [Private financial preparation amendment](financial-preparation-amendment.md) connects the actual limit-only scheduled handlers to current-purpose SQL and short owned phases while retaining cached-only research. Source/runtime-fixture checks do not approve SQL installation, legacy backlog, actual sources or physical cutover. Preserve exact21:30 input identity, old dates on missed readiness, shared lease and independent release gates.
+
+## Weekly quote knowledge clock repair
+
+[Clock amendment](weekly-quote-clock-amendment.md) separates civil identities from actual known instants, with independent evidence clocks and unchanged formal quote gaps. Pure TZ/static/related checks are separate from PostgreSQL/native/actual source acceptance. Preserve original failures and no assertion-free TAP first-cause attribution.
