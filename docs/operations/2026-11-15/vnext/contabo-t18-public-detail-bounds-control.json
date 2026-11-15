@@ -1,0 +1,53 @@
+{
+  "schema": "stockinsider-t18-public-detail-bounds-control-v1",
+  "scope": "EXACT_REVISION_CURRENT_PUBLIC_READ_ONLY_CONTROL",
+  "protectedCloneSubject": "fa22e9113dd5b289ee5ee948a3083b18932ee3ed",
+  "realCloneReceipt": "eeff55f3287227c0c8ff1d181fee93a3ef0c27b2",
+  "publicReaderSource": "dd59817f750684b093965f539dd4de466be13077",
+  "publicObservation": {
+    "observedAtUtc": "2026-11-15T00:26:00.178540+00:00",
+    "httpStatus": 200,
+    "samePublicSymbolAndRevision": true,
+    "bodyBytes": 13368,
+    "bodySha256": "c6eede46822fc7500fa8c80991b39c309b048aedd1ca0427a9ceb0375c9d3aeb",
+    "domainOnlyPublicControl": true,
+    "projectionDepthBoundedEquivalent": {
+      "valuation": "IN_BOUNDS",
+      "technical": "IN_BOUNDS",
+      "sections": "IN_BOUNDS",
+      "sourceLinks": "IN_BOUNDS",
+      "facts": "IN_BOUNDS"
+    },
+    "sectionCount": 6,
+    "factCount": 9,
+    "tradePlanPresent": false,
+    "privateMetadataMapExposed": false,
+    "privateProvenanceExposed": false,
+    "perFactPrivateDerivationExposed": false
+  },
+  "comparison": {
+    "limits": {
+      "depth": 12,
+      "numberAbsMax": 9007199254740991,
+      "stringUtf8Bytes": 65536,
+      "arrayItems": 2000,
+      "objectFields": 128,
+      "keyCharacters": 128
+    },
+    "stagedBoundsRunsBeforePublicReduction": true,
+    "publicValuationAndTechnicalPassed": true,
+    "transformedPublicSectionsLinksAndFactsNotRawFields": true,
+    "rawMarketDatasetMapReturned": false,
+    "rawDetailProvenanceAndFactDerivationReturned": false,
+    "publicResultDoesNotIdentifyRawFirstFailure": true,
+    "publicUrlPolicyOutOfScope": true
+  },
+  "limits": {
+    "productionWrites": 0,
+    "privateDataPublished": false,
+    "rawReportSaved": false,
+    "detailHttpInClone": "NOT_RUN",
+    "nativeHoldRetained": true
+  },
+  "followup": "Use the fixed private diagnostic to identify the first raw bound and allowlisted region. Evaluate a named field only when pinned consumer behavior and adversarial regression tests support a compatibility change."
+}
