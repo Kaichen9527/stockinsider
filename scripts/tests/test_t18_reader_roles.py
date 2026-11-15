@@ -103,5 +103,35 @@ class ReaderRoleTests(unittest.TestCase):
         for kwargs in ({'role':'service_role'},{'connection':'FORBIDDEN'},{'ready':True}):
             with self.assertRaises(TypeError):m.install_fixed_reader_roles(self.sql,**kwargs)
 
+    def test_launch_projection_missing_definitions_rolls_back_roles_and_existing_acl(self):
+        self.sql('CREATE ROLE stockinsider_vnext_owner NOLOGIN NOSUPERUSER NOBYPASSRLS;')
+        with self.assertRaisesRegex(RuntimeError,'launch_reader_projection_definition_rejected'):
+            m.install_fixed_reader_roles(self.sql,allow_launch_reads=True)
+        self.assertEqual(self.sql("SELECT count(*) FROM pg_roles WHERE rolname IN ('t18_authenticator','t18_reader')"),'0')
+        self.assertEqual(self.sql("SELECT has_table_privilege('anon','radar_public_snapshots','INSERT')"),'t')
+        self.assertEqual(m.install_fixed_reader_roles(self.sql),m.ROLE_COUNTS)
+
+    def test_launch_projection_names_and_owner_do_not_establish_definition(self):
+        self.sql("""
+          CREATE ROLE stockinsider_vnext_owner NOLOGIN NOSUPERUSER NOBYPASSRLS;
+          CREATE FUNCTION public.vnext_launch_ranking_read_v1(p_ranking_run_id uuid DEFAULT NULL,p_symbol text DEFAULT NULL)
+            RETURNS jsonb LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,public AS 'SELECT NULL::jsonb';
+          CREATE FUNCTION public.vnext_launch_outcome_public_v1(p_ranking_run_id uuid,p_symbol text)
+            RETURNS jsonb LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,public AS 'SELECT NULL::jsonb';
+          ALTER FUNCTION public.vnext_launch_ranking_read_v1(uuid,text) OWNER TO stockinsider_vnext_owner;
+          ALTER FUNCTION public.vnext_launch_outcome_public_v1(uuid,text) OWNER TO stockinsider_vnext_owner;
+        """)
+        with self.assertRaisesRegex(RuntimeError,'launch_reader_projection_definition_rejected'):
+            m.install_fixed_reader_roles(self.sql,allow_launch_reads=True)
+        self.assertEqual(self.sql("SELECT count(*) FROM pg_roles WHERE rolname IN ('t18_authenticator','t18_reader')"),'0')
+
+    def test_receipt_must_match_selected_privileges(self):
+        with self.assertRaises(m.FixedReaderRolesRejected):
+            m.install_fixed_reader_roles(lambda _:json.dumps(m.ROLE_COUNTS),allow_launch_reads=True)
+        with self.assertRaises(m.FixedReaderRolesRejected):
+            m.install_fixed_reader_roles(lambda _:json.dumps(m.LAUNCH_ROLE_COUNTS))
+        with self.assertRaises(m.FixedReaderRolesRejected):
+            m.install_fixed_reader_roles(lambda _:None,allow_launch_reads=1)
+
 
 if __name__=='__main__':unittest.main()
