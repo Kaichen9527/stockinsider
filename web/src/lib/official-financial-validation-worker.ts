@@ -2,6 +2,7 @@ import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts
 import { collectPagedAuthorityRows } from './candidate-research-policy.ts';
 import { validateOfficialFinancialFact, officialFinancialValidationSubjects, type OfficialValidationRow } from './official-financial-validation.ts';
 import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
+import {evidenceInstant} from './vnext/evidence-clock.ts';
 
 export type OfficialFinancialValidationFailure = {
   stockId: string;
@@ -31,7 +32,21 @@ export async function validatePendingOfficialFinancials(stockIds: string[], depe
   client?: ReturnType<typeof getOpportunityV3ServerClient>;
   now?: () => Date;
   runnerPrincipal?: () => string | null;
+  /** Restricts writes only; all original cohorts and consistency peers remain. */
+  subjectIdentities?:ReadonlyArray<{factId:string;recordedAt:string}>;
+  /** Prep-only acknowledgment of an actual unchanged persisted receipt. */
+  acknowledgeSubject?:(value:{factId:string;recordedAt:string;sourceSha256:string;inputHash:string})=>Promise<void>;
 } = {}) {
+  const identityKey=(id:unknown,at:unknown)=>typeof id==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/u.test(id)&&evidenceInstant(at)!==null?`${id}:${evidenceInstant(at)}`:null;
+  let selected:Set<string>|null=null;
+  if(dependencies.subjectIdentities!==undefined){
+    const ids=dependencies.subjectIdentities;
+    if(!Array.isArray(ids)||ids.length<1||ids.length>128)throw Error('official_validation_subject_scope_invalid');
+    const keys=ids.map(value=>value&&Object.keys(value).sort().join('|')==='factId|recordedAt'?identityKey(value.factId,value.recordedAt):null);
+    if(keys.some(key=>key===null)||new Set(keys).size!==keys.length)throw Error('official_validation_subject_scope_invalid');
+    selected=new Set(keys as string[]);
+  }
+  const matched=new Set<string>(),validatedSubjects=new Set<string>();
   const db = dependencies.client ?? getOpportunityV3ServerClient();
   const validatorPrincipal = dependencies.runnerPrincipal?.() ?? fixedRunnerPrincipal();
   if (!validatorPrincipal) throw new Error('official_validation_runner_principal_unavailable');
@@ -106,6 +121,9 @@ export async function validatePendingOfficialFinancials(stockIds: string[], depe
           || structurallyLinked.has(String(peer.fact_id));
       });
       for (const fact of batch) {
+        const subjectKey=selected?identityKey(fact.fact_id,fact.recorded_at):null;
+        if(selected&&(!subjectKey||!selected.has(subjectKey)))continue;
+        if(subjectKey)matched.add(subjectKey);
         const rawSource = provenance.find((p) => p.fact_id === fact.fact_id) || null;
         let source = rawSource;
         if (rawSource) {
@@ -140,7 +158,8 @@ export async function validatePendingOfficialFinancials(stockIds: string[], depe
             && priorStatus === receipt.status
             && fact.schema_valid === true && fact.unit_valid === true && fact.point_in_time_valid === true
             && fact.consistency_valid === true && acceptedHashes.has(`${fact.fact_id}:${receipt.inputHash}`)) {
-            counts.unchanged++; continue;
+            if(subjectKey&&dependencies.acknowledgeSubject)await dependencies.acknowledgeSubject({factId:String(fact.fact_id),recordedAt:String(fact.recorded_at),sourceSha256:String(source!.source_sha256),inputHash:receipt.inputHash});
+            counts.unchanged++;if(subjectKey)validatedSubjects.add(subjectKey); continue;
           }
         }
         const result = await db.rpc('record_official_financial_validation', {
@@ -163,10 +182,12 @@ export async function validatePendingOfficialFinancials(stockIds: string[], depe
           }
           throw new Error(`official_validation_write_failed:${result.error.message}`);
         }
-        if (result.data === true) counts.validated++; else counts.rejected++;
+        if (result.data === true) {counts.validated++;if(subjectKey)validatedSubjects.add(subjectKey);} else counts.rejected++;
       }
     }
   }
+  if(selected)return {...counts,failedItems,subjectScope:{expected:selected.size,matched:matched.size,validated:validatedSubjects.size,missing:selected.size-matched.size},
+    status:validatedSubjects.size===selected.size?'success' as const:'partial' as const};
   return { ...counts, failedItems,
     status: counts.failed > 0 || counts.rejected > 0 || counts.missingProvenance > 0 ? 'partial' as const : 'success' as const };
 }

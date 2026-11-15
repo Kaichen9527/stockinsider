@@ -1,3 +1,4 @@
+import {types} from 'node:util';
 import { verifyAdmittedResearch } from './vnext/runtime.ts';
 import { createHash } from 'node:crypto';
 import { spawn as spawnChild } from 'node:child_process';
@@ -194,7 +195,7 @@ async function runIsolatedSocketParser(input: {
  * A host must opt in with the reviewed virtualenv location; Vercel does not
  * meet this condition and therefore fails closed before spawning a process.
  */
-export async function runCandidateFinancialLocalParser(input: {
+type FinancialParserInput={
   bytes: Uint8Array;
   documentSha256: string;
   format: CandidateFinancialDocumentFormat;
@@ -204,8 +205,25 @@ export async function runCandidateFinancialLocalParser(input: {
   allowDocling?: boolean;
   expectedEntity?: string;
   expectedPeriodEnd?: string;
-}): Promise<CandidateFinancialLocalParserResult> {
+};
+export async function runCandidateFinancialLocalParser(input:FinancialParserInput):Promise<CandidateFinancialLocalParserResult>{
   await verifyAdmittedResearch(input.expectedEntity);
+  return runCandidateFinancialLocalParserCore(input);
+}
+/** Real preparation claim only; production cannot supply spawn/path overrides. */
+export async function runPreparedFinancialLocalParser(capability:unknown,input:Omit<FinancialParserInput,'spawn'|'pythonPath'|'parserScriptPath'|'allowDocling'>):Promise<CandidateFinancialLocalParserResult>{
+  if(!input||typeof input!=='object'||types.isProxy(input)||![Object.prototype,null].includes(Object.getPrototypeOf(input))||Object.getOwnPropertySymbols(input).length)throw Error('financial_preparation_parser_options_forbidden');
+  const descriptors=Object.getOwnPropertyDescriptors(input);
+  if(Object.keys(descriptors).sort().join('|')!=='bytes|documentSha256|expectedEntity|expectedPeriodEnd|format'||Object.values(descriptors).some(d=>!d.enumerable||!Object.hasOwn(d,'value'))||typeof input.expectedEntity!=='string'||typeof input.expectedPeriodEnd!=='string')throw Error('financial_preparation_parser_options_forbidden');
+  if(!(input.bytes instanceof Uint8Array)||input.bytes.byteLength<1||input.bytes.byteLength>MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES)throw Error('financial_preparation_parser_options_forbidden');
+  const snapshot={...input,bytes:Buffer.from(input.bytes)};
+  try{
+    const {verifyFinancialPreparation}=await import('./vnext/financial-preparation.ts');
+    await verifyFinancialPreparation(capability,{operation:'parse',symbol:snapshot.expectedEntity,artifactHash:snapshot.documentSha256,periodEnd:snapshot.expectedPeriodEnd,minimumRemainingMs:30000});
+    return await runCandidateFinancialLocalParserCore(snapshot);
+  }finally{snapshot.bytes.fill(0);}
+}
+async function runCandidateFinancialLocalParserCore(input:FinancialParserInput):Promise<CandidateFinancialLocalParserResult>{
   if (input.bytes.byteLength < 1 || input.bytes.byteLength > MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES
     || !/^[0-9a-f]{64}$/u.test(input.documentSha256)
     || createHash('sha256').update(input.bytes).digest('hex') !== input.documentSha256) throw new Error('candidate_financial_local_parser_input_invalid');

@@ -177,3 +177,40 @@ test('an unchanged SQL-effective rejection remains terminal when the local valid
   assert.equal(run.status, 'success'); assert.equal(run.unchangedRejected, 1);
   assert.equal(run.validated, 0); assert.equal(run.rejected, 0); assert.equal(fx.calls.length, 0);
 });
+
+test('preparation subject scope restricts only writes while preserving all original cohort peers and default result shape', async () => {
+  const first='00000000-0000-4000-8000-000000000601',second='00000000-0000-4000-8000-000000000602';
+  const facts=[{...base,fact_id:first},{...base,fact_id:second,fact_key:'quarterly_net_income',value:100000}];
+  const all=fixture({facts,rpcError:null}),scoped=fixture({facts,rpcError:null});
+  const original=await validatePendingOfficialFinancials([stockId],{client:all.client,now,runnerPrincipal});
+  assert.equal(Object.hasOwn(original,'subjectScope'),false);
+  const result=await validatePendingOfficialFinancials([stockId],{client:scoped.client,now,runnerPrincipal,subjectIdentities:[{factId:first,recordedAt:'2026-09-08T08:00:01+08:00'}]});
+  assert.equal(result.status,'success');assert.equal(result.checked,1);assert.equal(scoped.calls.length,1);assert.equal(scoped.calls[0].args.p_fact_id,first);
+  assert.deepEqual(scoped.calls[0].args.p_validation,all.calls.find(call=>call.args.p_fact_id===first)?.args.p_validation,'unselected cohort peers must remain in the original validation math');
+  assert.ok('subjectScope' in result);assert.deepEqual(result.subjectScope,{expected:1,matched:1,validated:1,missing:0});assert.equal(all.calls.length,2);
+});
+test('missing or microsecond-drifted preparation identities cannot become empty validation success or write foreign facts',async()=>{
+  const factId='00000000-0000-4000-8000-000000000603';
+  for(const selected of [{factId:'00000000-0000-4000-8000-000000000604',recordedAt},{factId,recordedAt:'2026-09-08T00:00:01.000002Z'}]){
+    const f=fixture({facts:[{...base,fact_id:factId,recorded_at:'2026-09-08T00:00:01.000001Z'}],rpcError:null});
+    const result=await validatePendingOfficialFinancials([stockId],{client:f.client,now,runnerPrincipal,subjectIdentities:[selected]});
+    assert.equal(result.status,'partial');assert.equal(result.checked,0);assert.ok('subjectScope' in result);assert.deepEqual(result.subjectScope,{expected:1,matched:0,validated:0,missing:1});assert.equal(f.calls.length,0);
+  }
+});
+test('preparation subject identity contract rejects duplicates/empty/extra fields before any validation writes',async()=>{
+  const factId='00000000-0000-4000-8000-000000000605',item={factId,recordedAt};
+  for(const subjectIdentities of [[],[item,item],[item,{factId,recordedAt:'2026-09-08T08:00:01+08:00'}],[{...item,approval:true}]]){
+    const f=fixture({rpcError:null});await assert.rejects(validatePendingOfficialFinancials([stockId],{client:f.client,now,runnerPrincipal,subjectIdentities}),/subject_scope_invalid/u);assert.equal(f.calls.length,0);
+  }
+});
+test('prep unchanged validation acknowledges exact existing receipt identity without forcing new validation writes',async()=>{
+ const factId='00000000-0000-4000-8000-000000000606';
+ const fact={...base,fact_id:factId,validation_status:'validated',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true};
+ const source={fact_id:factId,source_url:'https://mops.twse.com.tw/report.xhtml',source_sha256:sha,locator:{parser_evidence_id:`${factId}-evidence`},issuer_host_approved:false};
+ const receipt=validateOfficialFinancialFact(fact,[fact],source,now().toISOString());assert.equal(receipt.status,'validated');
+ const priorReceipts=[{fact_id:factId,input_hash:receipt.inputHash,validator_version:'official-financial-v2',validator_principal:runnerPrincipal(),effective_validation:{...receipt,validation_status:'validated'},receipt_sequence:1}];
+ const f=fixture({facts:[fact],priorReceipts,rpcError:null});const acknowledged:Array<Record<string,string>>=[];
+ const result=await validatePendingOfficialFinancials([stockId],{client:f.client,now,runnerPrincipal,subjectIdentities:[{factId,recordedAt}],acknowledgeSubject:async value=>{acknowledged.push(value);}});
+ assert.equal(result.status,'success');assert.equal(result.unchanged,1);assert.equal(f.calls.length,0);assert.deepEqual(acknowledged,[{factId,recordedAt,sourceSha256:sha,inputHash:receipt.inputHash}]);
+ await assert.rejects(validatePendingOfficialFinancials([stockId],{client:f.client,now,runnerPrincipal,subjectIdentities:[{factId,recordedAt}],acknowledgeSubject:async()=>{throw Error('synthetic_current_receipt_drift');}}),/current_receipt_drift/u);
+});
