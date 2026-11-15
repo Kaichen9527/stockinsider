@@ -1,0 +1,150 @@
+{
+  "schema": "stockinsider-contabo-close-supplement-admission-v1",
+  "sourceCommit": "6cacfcbee1e3b3c96261db7759c567acf0a57077",
+  "sourceSha256": "a4c7997f797eda1e5a057b2421746e5cf0eb11905d7a937fa6d32a6a999eede1",
+  "previousObserverEvidence": "4635daac5e545aa535be74ac1915a07879b887b0",
+  "scope": "transient isolated staging observations with registered domain and route; writer not called",
+  "existingBase": {
+    "scheduledLocal": "21:26 Asia/Taipei",
+    "originalTimersUnchanged": true,
+    "otherTimerInventorySha256": "070481e7ff77275ebfe5ce34fd281a41ea54e9cfd5cdf58120d637e3ff05b998"
+  },
+  "isolatedAdditions": [
+    {
+      "session": "2026-11-16",
+      "scheduledTaipei": "2026-11-16T21:28:00+08:00",
+      "startUTC": "2026-11-16T13:28:00Z",
+      "cutoffTaipei": "2026-11-16T21:30:00+08:00",
+      "active": true,
+      "expiresAfterOneScheduledRun": true,
+      "persistentCatchUp": false,
+      "runtimeMaxSeconds": 60,
+      "memoryMaxBytes": 100663296,
+      "tasksMax": 8,
+      "dynamicUser": true,
+      "observations": "PENDING"
+    },
+    {
+      "session": "2026-11-17",
+      "scheduledTaipei": "2026-11-17T21:28:00+08:00",
+      "startUTC": "2026-11-17T13:28:00Z",
+      "cutoffTaipei": "2026-11-17T21:30:00+08:00",
+      "active": true,
+      "expiresAfterOneScheduledRun": true,
+      "persistentCatchUp": false,
+      "runtimeMaxSeconds": 60,
+      "memoryMaxBytes": 100663296,
+      "tasksMax": 8,
+      "dynamicUser": true,
+      "observations": "PENDING"
+    }
+  ],
+  "admission": {
+    "pinnedSha256": "a4c7997f797eda1e5a057b2421746e5cf0eb11905d7a937fa6d32a6a999eede1",
+    "freeBytes": 26590457856,
+    "availableMemoryBytes": 4017434624,
+    "floorHostDiskGiB": 15,
+    "floorAvailableMemGiB": 1.5
+  },
+  "rehearsal": {
+    "schema": "stockinsider-close-supplement-v1",
+    "session": "2026-11-13",
+    "cutoff": "2026-11-13T21:30:00+08:00",
+    "startedAt": "2026-11-15T05:10:26.302469+00:00",
+    "rehearsal": true,
+    "rankAuthority": false,
+    "writerInvoked": false,
+    "sources": {
+      "twse_reported_close": {
+        "datasetId": 11764,
+        "requestedAt": "2026-11-15T05:10:26.303782+00:00",
+        "beforeCutoff": false,
+        "observedAt": "2026-11-15T05:10:28.100579+00:00",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "bytes": 79265,
+        "sha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+        "dataRows": 1086,
+        "sessionIdentity": "EXACT_PAYLOAD_DAY",
+        "usableRecords": 1085,
+        "timelySessionPayload": false,
+        "saved": true
+      },
+      "twse_disposition": {
+        "datasetId": 29082,
+        "requestedAt": "2026-11-15T05:10:26.305763+00:00",
+        "beforeCutoff": false,
+        "observedAt": "2026-11-15T05:10:27.544337+00:00",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "bytes": 6075,
+        "sha256": "2559aefc2ddbeb5a3e61c03127d0fb5ccc34db6d80564216c6673a6b5479323f",
+        "dataRows": 5,
+        "sessionIdentity": "DATED_QUERY_WITH_OVERLAPS",
+        "usableRecords": 5,
+        "completeAbsenceProved": false,
+        "timelySessionPayload": false
+      },
+      "tpex_disposition": {
+        "datasetId": 11396,
+        "requestedAt": "2026-11-15T05:10:27.548394+00:00",
+        "beforeCutoff": false,
+        "observedAt": "2026-11-15T05:10:27.880669+00:00",
+        "httpStatus": 200,
+        "contentType": "application/csv",
+        "bytes": 4987,
+        "sha256": "82c885e8691aea255aee10e990f0e4d0aa4bf2d6e8e1b0f1fa03f5fd21eb287f",
+        "dataRows": 5,
+        "sessionIdentity": "CURRENT_FEED_ANNOUNCED_OVERLAPS",
+        "usableRecords": 5,
+        "completeAbsenceProved": false,
+        "timelySessionPayload": false
+      },
+      "tpex_halt_notice": {
+        "datasetId": 48664,
+        "requestedAt": "2026-11-15T05:10:27.880993+00:00",
+        "beforeCutoff": false,
+        "observedAt": "2026-11-15T05:10:28.433928+00:00",
+        "httpStatus": 200,
+        "contentType": "application/csv",
+        "bytes": 90,
+        "sha256": "89966cd1488fcadbb8d8d7e87590ef2ef73e13897fb30c971855d28a1144f4e8",
+        "dataRows": 1,
+        "sessionIdentity": "UNKNOWN",
+        "usableRecords": 0,
+        "sourceDays": [
+          "2026-11-15"
+        ],
+        "completeAbsenceProved": false,
+        "timelySessionPayload": false
+      }
+    },
+    "completedAt": "2026-11-15T05:10:28.504115+00:00",
+    "privatePermissionsVerified": true,
+    "savedPayloadHashesChecked": 1
+  },
+  "negativeFutureStartRejectedBeforeCreatingDestination": true,
+  "licensedSourceScope": {
+    "twseDatedClose": 11764,
+    "twseDatedDisposition": 29082,
+    "tpexCurrentDisposition": 11396,
+    "tpexCurrentHalt": 48664
+  },
+  "degradeRules": {
+    "anyErrorOrNoExactCloseTimestampRetainsGap": true,
+    "completeDispositionAbsenceGranted": false,
+    "completeHaltAbsenceGranted": false,
+    "onlyVerifiedCloseCsvPrivateRetained": true,
+    "publicOutcomesComputed": false
+  },
+  "workState": {
+    "productAndCloudStagingTurns": "PLATFORM_USAGE_LIMIT",
+    "suggestedRetryDisplay": "Nov 20th, 2026 3:42 PM",
+    "timezoneInPlatformError": null,
+    "nextLocalFallbackDiskGiB": 9.20815658569336,
+    "san128Mounted": false,
+    "modelCostChanged": false
+  },
+  "productionChanges": 0,
+  "realReleaseSessionsEarned": 0
+}
