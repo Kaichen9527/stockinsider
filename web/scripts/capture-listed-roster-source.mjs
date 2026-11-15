@@ -9,6 +9,8 @@ import {
   LISTED_ROSTER_REPLAY_SCHEMA, LISTED_ROSTER_SOURCES, analyzeListedRosterReplay,
 } from '../src/lib/vnext/launch-listed-roster-replay.ts';
 
+import { inspectTpexDailyStatus, TPEX_DAILY_STATUS_SOURCE } from '../src/lib/vnext/launch-tpex-daily-status.ts';
+
 const TIMEOUT_MS = 20_000;
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
@@ -75,12 +77,24 @@ async function main(args) {
   const mode = rehearsal ? 'rehearsal' : 'live';
   const dir = join(base, rehearsal ? session + '-rehearsal-' + Date.now() : session);
   mkdirSync(dir, { mode: 0o700 });
-  const captured = await Promise.all(LISTED_ROSTER_SOURCES.map(collect));
+  const [captured, dailyStatus] = await Promise.all([
+    Promise.all(LISTED_ROSTER_SOURCES.map(collect)), collect(TPEX_DAILY_STATUS_SOURCE),
+  ]);
   const receipt = {
-    schema: 'stockinsider-stage-listed-roster-capture-v1', mode, session, cutoff,
+    schema: 'stockinsider-stage-listed-roster-capture-v2', mode, session, cutoff,
     sources: captured.map(item => item.receipt), replay: null, retainedProjectionSha256: null,
+    tpexDailyStatus: { fetch: dailyStatus.receipt, report: null },
     registryWrite: false, rankingAuthority: false, eligibleForRosterReview: false,
   };
+  let tpexStatus;
+  if (dailyStatus.descriptor) {
+    try {
+      tpexStatus = inspectTpexDailyStatus({ ...dailyStatus.descriptor, body: dailyStatus.bytes }, session, cutoff);
+      receipt.tpexDailyStatus.report = tpexStatus.summary;
+    } catch {
+      receipt.tpexDailyStatus.error = 'status_report_refused';
+    }
+  }
   if (captured.every(item => item.descriptor)) {
     try {
       const files = new Map(captured.map(item => [item.descriptor.body.path, item.bytes]));
@@ -90,8 +104,15 @@ async function main(args) {
       }, files);
       receipt.replay = summary;
       if (!rehearsal && summary.sameSessionByCutoff && reviews && Date.now() <= Date.parse(cutoff)) {
-        const projection = JSON.stringify({ schema: 'stockinsider-stage-listed-roster-review-v1', session, cutoff,
-          sourceHashes: summary.receipts.map(source => source.sha256), venues: reviews }) + '\n';
+        const venues = {
+          TWSE: reviews.TWSE,
+          TPEX: reviews.TPEX.map(row => ({
+            ...row, exchangeStatus: tpexStatus?.timelySuspensions.has(row.code) ? 'exchange_suspension_reported' : null,
+          })),
+        };
+        const projection = JSON.stringify({ schema: 'stockinsider-stage-listed-roster-review-v2', session, cutoff,
+          sourceHashes: summary.receipts.map(source => source.sha256),
+          tpexStatusHash: tpexStatus?.summary.sameSessionByCutoff ? tpexStatus.summary.sha256 : null, venues }) + '\n';
         writeFileSync(join(dir, 'listing-review.json'), projection, { flag: 'wx', mode: 0o600 });
         receipt.retainedProjectionSha256 = hash(projection);
         receipt.eligibleForRosterReview = true;
@@ -103,7 +124,7 @@ async function main(args) {
   receipt.finishedAt = new Date().toISOString();
   receipt.peakRssKiB = process.resourceUsage().maxRSS;
   writeFileSync(join(dir, 'receipt.json'), JSON.stringify(receipt, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
-  const { sources, replay, ...status } = receipt;
+  const { sources, replay, tpexDailyStatus, ...status } = receipt;
   process.stdout.write(JSON.stringify(status) + '\n');
   return receipt.failure || (!rehearsal && !receipt.eligibleForRosterReview) ? 2 : 0;
 }
