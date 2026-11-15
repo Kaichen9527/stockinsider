@@ -1,0 +1,61 @@
+{
+  "recordedAt": "2026-11-15T14:25:06.641297Z",
+  "baseCommit": "1ab881087ecc077c09a724ed24282fb6eca64b91",
+  "tasks": [
+    "T06",
+    "T10"
+  ],
+  "source": {
+    "datasetId": 11764,
+    "dataset": "https://data.gov.tw/dataset/11764",
+    "license": "https://data.gov.tw/license",
+    "onlyField": "raw_close",
+    "catalogKnownAt": "2026-11-15T03:05:42.583197Z",
+    "catalogEvidenceCommit": "01196220c166cbac9009a5095a2cfb9659958218",
+    "publisherRevision": null
+  },
+  "capture": {
+    "sourceUrl": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261113",
+    "reportDay": "2026-11-13",
+    "receivedAt": "2026-11-15T14:25:06.641297Z",
+    "bytes": 79265,
+    "sha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+    "sourceRows": 1086,
+    "nativePriceCandidateRows": 1086,
+    "typedFactsInFixtureRoster": 1,
+    "sourceKnownByOriginalClose": false,
+    "originalBytesRetained": false
+  },
+  "test": {
+    "environment": "Contabo staging, disposable network-isolated PostgreSQL 17.11",
+    "realCsv": true,
+    "fixtureCalendarAndRoster": true,
+    "fixturePolicy": true,
+    "checks": [
+      "column-only extraction",
+      "BOM and blank CSV rows",
+      "strict dates and duplicate keys",
+      "no floating or non-CSV exponent",
+      "unknown close remains null",
+      "private role boundary",
+      "proof catalog too late for November 13",
+      "pre-close and late bytes refused",
+      "byte hash mismatch",
+      "disabled current rule",
+      "historic identity after close refused",
+      "newer calendar cancellation refused",
+      "preparation clock cannot backdate"
+    ],
+    "result": "pass",
+    "migration": "migrations/20261116_14_vnext_launch_twse_close_prepare_v1.sql",
+    "vectors": "web/scripts/launch-twse-close-prepare-vectors.sql"
+  },
+  "pending": [
+    "Connect idempotent admission, append and ready ACK in the existing bounded licensed queue",
+    "Consume provenance-aware committed facts inside the market breadth gate",
+    "Verify real application sources and two full market sessions before release"
+  ],
+  "applicationWriterInvoked": false,
+  "productionMutation": false,
+  "marketGateOpened": false
+}
