@@ -1,0 +1,156 @@
+{
+  "schema": "stockinsider-pr384-quality-clock-source-trace-v1",
+  "observedAtUtc": "2026-11-15T00:38:55Z",
+  "scope": "ARCHIVED_CI_AND_EXACT_SOURCE_READ_ONLY",
+  "originalPr": {
+    "head": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "ciRunId": 39996620417,
+    "ciJobId": 120561693293,
+    "actualCheckout": "a8fbdfdbf55d77d2928a9134a396091001994769",
+    "mergeParents": [
+      "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "cbb581662e72942610ff85b0bf5e7e47ddddfa46"
+    ],
+    "sameTree": "6b83fe004f9f62b1bccb52617b4ac4387562c2ea",
+    "ciNode": "22.14.0"
+  },
+  "failures": {
+    "weeklyAudit": {
+      "name": "actual all-active audit persists separate deep evidence; corrected new fact IDs cause substantive drift",
+      "occurredAtUtc": "2026-10-23T17:41:02.3880653Z",
+      "assertionLineAvailable": false,
+      "sourceFinding": "Date-only quote.session is used as an instant by technical and valuation checks. At the recorded time Taipei's synthetic session date parses 6h19m later under JS. SQL casts bare date using session time zone. Changing the date guard or granting authority cannot be inferred from this trace.",
+      "recordedRunControl": {
+        "syntheticDayTaipei": "2026-10-24",
+        "recordedCutoffDiagnostic": "2026-10-23T17:41:02.3880653Z",
+        "jsDateOnlyInterpretedAsUtc": "2026-10-24T00:00:00.000Z",
+        "relativeSeconds": 22737.612,
+        "quoteObservationPassesLatenessCheck": false
+      },
+      "utcTaipeiBoundaryControls": [
+        {
+          "asOf": "2026-10-26T15:59:59Z",
+          "taipeiDay": "2026-10-26",
+          "dateOnlyObservedAt": "2026-10-26T00:00:00.000Z",
+          "passes": true
+        },
+        {
+          "asOf": "2026-10-26T16:00:00Z",
+          "taipeiDay": "2026-10-27",
+          "dateOnlyObservedAt": "2026-10-27T00:00:00.000Z",
+          "passes": false
+        },
+        {
+          "asOf": "2026-10-26T23:59:59Z",
+          "taipeiDay": "2026-10-27",
+          "dateOnlyObservedAt": "2026-10-27T00:00:00.000Z",
+          "passes": false
+        },
+        {
+          "asOf": "2026-10-27T00:00:00Z",
+          "taipeiDay": "2026-10-27",
+          "dateOnlyObservedAt": "2026-10-27T00:00:00.000Z",
+          "passes": true
+        }
+      ],
+      "actualFailureAttribution": "UNAVAILABLE_FROM_SANITIZED_TAP"
+    },
+    "cachedPreparation": {
+      "name": "running cached preparation HTTP read, actual committed response loss and explicit immutable read recovery",
+      "stage": "preflight",
+      "code": "ERR_ASSERTION",
+      "actualExpectedRedacted": true,
+      "exactMessageHash": "52c7cc08ab309eda6015c8991ffeedae7a5318ef3d8a3179bb2f016dea56d8aa",
+      "exactStaticSourceHashChecks": [
+        [
+          "base",
+          true
+        ],
+        [
+          "thesis",
+          true
+        ],
+        [
+          "cached_admission",
+          true
+        ],
+        [
+          "terminal_slots",
+          true
+        ],
+        [
+          "target_exit",
+          true
+        ],
+        [
+          "profile_predecessor",
+          true
+        ],
+        [
+          "profile_successor",
+          true
+        ],
+        [
+          "migration_hash",
+          true
+        ]
+      ],
+      "issuerIrLineageHashChecks": "WHOLE_FILE_AND_BOTH_SLICES_MATCH_EXACT_HEAD",
+      "knownLiteralHashMatches": [],
+      "actualInstallOrRuntimeAssertion": "UNKNOWN",
+      "siteTimerOrProductionBindingsChanged": false
+    }
+  },
+  "protectedSourceComparison": {
+    "head": "a00b73c3c13d2f32dbf8b76d8e45fdeecb675f3a",
+    "paths": {
+      "migrations/20261022_vnext_thesis_audit_v1.sql": {
+        "original": "5ca5f9fa19f14e5a82090634bbbdc6ba699edce9",
+        "protected": "5ca5f9fa19f14e5a82090634bbbdc6ba699edce9",
+        "equal": true
+      },
+      "scripts/vnext-preparation-http-fixture.mjs": {
+        "original": "82c8b19b971b4d43b8890666b2b42569c0e8e551",
+        "protected": "82c8b19b971b4d43b8890666b2b42569c0e8e551",
+        "equal": true
+      },
+      "scripts/vnext-preparation-http.test.mjs": {
+        "original": "efc4eb5b5908245d7db48d8f04db4761f3681aa3",
+        "protected": "efc4eb5b5908245d7db48d8f04db4761f3681aa3",
+        "equal": true
+      },
+      "scripts/vnext-preparation-resource-run.py": {
+        "original": "ae3e30cdbc04954099326621d938f4b12bebba61",
+        "protected": "ae3e30cdbc04954099326621d938f4b12bebba61",
+        "equal": true
+      },
+      "scripts/vnext-thesis-postgres.test.mjs": {
+        "original": "7b940566c367cf5b765227b86cc21c9647df46b1",
+        "protected": "7b940566c367cf5b765227b86cc21c9647df46b1",
+        "equal": true
+      },
+      "web/src/lib/vnext/thesis-audit.ts": {
+        "original": "31c91726b8f56ef24e9e74034c39d7f0e2b2ba69",
+        "protected": "31c91726b8f56ef24e9e74034c39d7f0e2b2ba69",
+        "equal": true
+      },
+      "web/src/lib/vnext/weekly-worker.ts": {
+        "original": "c77474d76e4fcb47664780531bb83e23ab0f8841",
+        "protected": "03703efccb885e59da378060cd7dc5abbf18607d",
+        "equal": false
+      }
+    }
+  },
+  "nextRegression": {
+    "dateClock": "Carry the actual authorized quote/evidence instant separately from its exchange session date. Verify Node and PostgreSQL UTC/Asia-Taipei agreement under exact evidence and reject a future or missing instant. The historical harness should use a clearly synthetic evidence instant, preserving real-session gates.",
+    "preflight": "Keep same-built source and existing SQL pins. Apply fixed stage names before build-source, static lineage, fixture creation, install and app readiness assertions. Diagnose privately without publishing raw database output or claiming the original preflight cause."
+  },
+  "limits": {
+    "oldNativeGateRerun": false,
+    "newNativeGateRun": false,
+    "formalHoldChanged": false,
+    "actualWeeklyPositiveProven": false,
+    "actualPreparationHttpProven": false,
+    "productionActions": 0
+  }
+}
