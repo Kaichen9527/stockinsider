@@ -1,0 +1,497 @@
+{
+  "schemaVersion": 1,
+  "task": "T07",
+  "related": [
+    "T08"
+  ],
+  "productCommit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "baselineEvidenceCommit": "b6986b6fa320144cf76aa5d7435a668821f8b4cf",
+  "replay": {
+    "source": {
+      "status": 200,
+      "mime": "text/plain",
+      "wireContentType": "; charset=iso-8859-1",
+      "attachmentFilename": "tifrs-fr1-m1-ci-cr-5274-2026Q3.html",
+      "bytes": 469661,
+      "sha256": "aca323d959623ca8d954f93b04a99fff3cd200733da5ee4d51a662f35e0503a0",
+      "observedAt": "2026-11-15T06:33:38.373484+00:00"
+    },
+    "databaseGate": {
+      "accountant": {
+        "actualValidatorInvoked": true,
+        "cohortFields": [
+          "stock_id",
+          "period_start",
+          "period_end",
+          "duration_kind",
+          "filing_restatement_id",
+          "provider"
+        ],
+        "stored": {
+          "count": 11,
+          "validated": 11,
+          "hashMatches": true,
+          "sourceMatches": true,
+          "principalMatches": true,
+          "officialVersionOnly": true
+        },
+        "localDecisions": [
+          {
+            "key": "quarterly_diluted_eps",
+            "periodStart": "2026-07-01",
+            "periodEnd": "2026-09-30",
+            "unit": "TWD_per_share",
+            "value": 48.09,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency"
+            ]
+          },
+          {
+            "key": "quarterly_noncontrolling_interest",
+            "periodStart": "2026-01-01",
+            "periodEnd": "2026-09-30",
+            "unit": "TWD",
+            "value": 4650000,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency"
+            ]
+          },
+          {
+            "key": "quarterly_net_income_attributable_to_common",
+            "periodStart": "2026-07-01",
+            "periodEnd": "2026-09-30",
+            "unit": "TWD",
+            "value": 2001401000,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency"
+            ]
+          },
+          {
+            "key": "quarterly_diluted_eps",
+            "periodStart": "2026-01-01",
+            "periodEnd": "2026-09-30",
+            "unit": "TWD_per_share",
+            "value": 126.28,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency"
+            ]
+          },
+          {
+            "key": "cash_and_equivalents",
+            "periodStart": null,
+            "periodEnd": "2026-09-30",
+            "unit": "TWD",
+            "value": 4624045000,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency",
+              "cash_not_above_assets"
+            ]
+          },
+          {
+            "key": "cash_and_equivalents",
+            "periodStart": null,
+            "periodEnd": "2026-09-30",
+            "unit": "TWD",
+            "value": 4624045000,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency",
+              "cash_not_above_assets"
+            ]
+          },
+          {
+            "key": "quarterly_basic_eps",
+            "periodStart": "2026-07-01",
+            "periodEnd": "2026-09-30",
+            "unit": "TWD_per_share",
+            "value": 48.13,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency"
+            ]
+          },
+          {
+            "key": "quarterly_net_income_attributable_to_common",
+            "periodStart": "2026-01-01",
+            "periodEnd": "2026-09-30",
+            "unit": "TWD",
+            "value": 5256542000,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency"
+            ]
+          },
+          {
+            "key": "quarterly_noncontrolling_interest",
+            "periodStart": "2026-07-01",
+            "periodEnd": "2026-09-30",
+            "unit": "TWD",
+            "value": 3766000,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency"
+            ]
+          },
+          {
+            "key": "quarterly_basic_eps",
+            "periodStart": "2026-01-01",
+            "periodEnd": "2026-09-30",
+            "unit": "TWD_per_share",
+            "value": 126.41,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency"
+            ]
+          },
+          {
+            "key": "total_assets",
+            "periodStart": null,
+            "periodEnd": "2026-09-30",
+            "unit": "TWD",
+            "value": 14750249000,
+            "status": "validated",
+            "reasons": [],
+            "checks": [
+              "source_identity",
+              "period_and_unit",
+              "availability_order",
+              "duplicate_consistency",
+              "cash_not_above_assets"
+            ]
+          }
+        ],
+        "rejectedWrite": [
+          {
+            "test": "wrong_source",
+            "error": "official_validation_provenance_missing",
+            "noAccountingReceipt": true
+          },
+          {
+            "test": "wrong_subject_version",
+            "error": "official_validation_subject_mismatch",
+            "noAccountingReceipt": true
+          },
+          {
+            "test": "wrong_principal",
+            "error": "principal_role_unavailable",
+            "noAccountingReceipt": true
+          }
+        ],
+        "beforeCollectionValidationRejected": 11,
+        "finalize": "validated|11|0|0",
+        "document": {
+          "gaps": [
+            "arelle_validation_errors",
+            "document_structural_validation_partial",
+            "document_structural_validation_incomplete"
+          ],
+          "status": "partial",
+          "financial": "validated"
+        },
+        "cutoffs": {
+          "beforeCollection": "0|0",
+          "beforeValidation": "11|0",
+          "afterValidation": "11|11"
+        },
+        "rerunPersistedReceiptCount": 11,
+        "fixturePrincipal": true
+      },
+      "positiveReceipt": "validation_pending|11|0",
+      "negativeControls": [
+        {
+          "label": "evidence_bound_to_exact_document",
+          "code": "candidate_financial_parser_evidence_document_mismatch",
+          "atomicRollback": true
+        },
+        {
+          "label": "scope_hash_tampering",
+          "code": "candidate_financial_error_manifest_hash_mismatch",
+          "atomicRollback": true
+        },
+        {
+          "label": "quarter_ytd_period_swap",
+          "code": "candidate_financial_document_fact_invalid",
+          "atomicRollback": true
+        }
+      ],
+      "bundle": {
+        "eps": [
+          {
+            "key": "quarterly_basic_eps",
+            "unit": "TWD_per_share",
+            "value": 126.41,
+            "periodEnd": "2026-09-30",
+            "periodStart": "2026-01-01",
+            "validationStatus": "pending"
+          },
+          {
+            "key": "quarterly_basic_eps",
+            "unit": "TWD_per_share",
+            "value": 48.13,
+            "periodEnd": "2026-09-30",
+            "periodStart": "2026-07-01",
+            "validationStatus": "pending"
+          },
+          {
+            "key": "quarterly_diluted_eps",
+            "unit": "TWD_per_share",
+            "value": 126.28,
+            "periodEnd": "2026-09-30",
+            "periodStart": "2026-01-01",
+            "validationStatus": "pending"
+          },
+          {
+            "key": "quarterly_diluted_eps",
+            "unit": "TWD_per_share",
+            "value": 48.09,
+            "periodEnd": "2026-09-30",
+            "periodStart": "2026-07-01",
+            "validationStatus": "pending"
+          }
+        ],
+        "errorCount": 200,
+        "proofCount": 11,
+        "documentReady": false,
+        "nativeVersion": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+        "documentStatus": "partial",
+        "manifestSha256": "5a7ae1bc97072be8cdc70d32f04286595a01b80d76b265f9b0084f12fc74b30b",
+        "sqlRecomputedSha256": "5a7ae1bc97072be8cdc70d32f04286595a01b80d76b265f9b0084f12fc74b30b"
+      },
+      "finalize": "pending|0|0|11",
+      "afterFinalize": "validation_pending|pending",
+      "replay": "validation_pending|0|11",
+      "finalCounts": "1|11|11",
+      "loopbackTcpDisabled": true,
+      "productionDataOrSecretsUsed": false,
+      "accountingReceiptCreated": true
+    },
+    "sqlAndTypescriptGitBlobs": [
+      "40065361e69d9204d91e5b117fbfa587698d33b1",
+      "d0ca523343377a595022b3d0d72bb638c4e8f135",
+      "d13b7c3a7ee5f7e47aa8bf93107219c1608de6b1",
+      "8f5ae1766069cebf9bef3ca2f8fc28022c4b148e",
+      "4ca69b9aa86396101c4fb2f2f294dfeaf89300f1",
+      "9892065568510912d332c2971fb14f656a450fd3",
+      "c7e561d73679dee2c3d17fe7bbc2affaaf781a14",
+      "b44487bdf4f664a179bc9ef69375328828fca071",
+      "cca8b820efbc4cdc8377ddf09997d9d664442c00",
+      "7e84abc27abaf37121e4803037ac264e2ae04d48",
+      "c136ff421021b4bb7df4aed5bcc82d943939e4ef"
+    ],
+    "scope": {
+      "symbol": "5274",
+      "periodEnd": "2026-09-30"
+    },
+    "reviewedTaxonomyArchiveSha256": "4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869",
+    "schemaSha256": "9c7839ab6a8b17204f1001c15e05bb514ec6dca08e0f92dfcf8d07fd2d7057fb",
+    "schemaVersion": "candidate-financial-document-parser-v2",
+    "parser": "arelle",
+    "runtimeVersion": "2.44.7",
+    "parserStatus": "partial",
+    "missingRequirements": [
+      "arelle_validation_errors"
+    ],
+    "validation": {
+      "errorCount": 200,
+      "errorCodes": [
+        "lxml.SCHEMAV_ELEMENT_CONTENT",
+        "ix11.15.1.2:tupleMemberOrderMissing",
+        "ix11.11.1.2:tupleMemberOrderMissing",
+        "ix11.10.1.2:tupleMemberOrderMissing",
+        "xmlSchema:elementOccurrencesError",
+        "ix:tupleContent",
+        "xbrldie:PrimaryItemDimensionallyInvalidError",
+        "stockinsider:conflictingFactDuplicates"
+      ],
+      "validFactCount": 11,
+      "errorsTruncated": false
+    },
+    "structuralFactCount": 11,
+    "emittedLocators": 33,
+    "documentFatal": false,
+    "errorManifestSha256": "5a7ae1bc97072be8cdc70d32f04286595a01b80d76b265f9b0084f12fc74b30b",
+    "eps": [
+      {
+        "xbrl_concept": "ifrs-full:BasicEarningsLossPerShare",
+        "value": "48.13",
+        "unit": "TWD_per_share",
+        "period_start": "2026-07-01",
+        "period_end": "2026-09-30",
+        "duration_kind": "quarterly",
+        "entity_identifier": "5274"
+      },
+      {
+        "xbrl_concept": "ifrs-full:BasicEarningsLossPerShare",
+        "value": "126.41",
+        "unit": "TWD_per_share",
+        "period_start": "2026-01-01",
+        "period_end": "2026-09-30",
+        "duration_kind": "quarterly",
+        "entity_identifier": "5274"
+      },
+      {
+        "xbrl_concept": "ifrs-full:DilutedEarningsLossPerShare",
+        "value": "48.09",
+        "unit": "TWD_per_share",
+        "period_start": "2026-07-01",
+        "period_end": "2026-09-30",
+        "duration_kind": "quarterly",
+        "entity_identifier": "5274"
+      },
+      {
+        "xbrl_concept": "ifrs-full:DilutedEarningsLossPerShare",
+        "value": "126.28",
+        "unit": "TWD_per_share",
+        "period_start": "2026-01-01",
+        "period_end": "2026-09-30",
+        "duration_kind": "quarterly",
+        "entity_identifier": "5274"
+      }
+    ],
+    "related": [
+      {
+        "xbrl_concept": "ifrs-full:ProfitLossAttributableToOwnersOfParent",
+        "value": "2001401000",
+        "unit": "TWD",
+        "period_start": "2026-07-01",
+        "period_end": "2026-09-30",
+        "duration_kind": "quarterly"
+      },
+      {
+        "xbrl_concept": "ifrs-full:ProfitLossAttributableToOwnersOfParent",
+        "value": "5256542000",
+        "unit": "TWD",
+        "period_start": "2026-01-01",
+        "period_end": "2026-09-30",
+        "duration_kind": "quarterly"
+      }
+    ],
+    "nonRoot": true,
+    "parserGitBlobs": [
+      "d9d9f9448d705609d3f2f55e52d635ac2a858576",
+      "7bf26154361b23e2bb3253303e31587c1023540e"
+    ],
+    "officialReceiptWritten": false,
+    "metrics": {
+      "wallSeconds": 78.353,
+      "userSeconds": 74.07,
+      "systemSeconds": 4.22,
+      "peakRssKiB": 1012276
+    },
+    "phaseTrace": [
+      [
+        "model_load_start",
+        1.022
+      ],
+      [
+        "model_load_end",
+        7.002
+      ],
+      [
+        "validate_start",
+        7.002
+      ],
+      [
+        "validate_end",
+        38.019
+      ],
+      [
+        "extract_start",
+        38.071
+      ],
+      [
+        "extract_end",
+        38.156
+      ],
+      [
+        "model_load_start",
+        38.2
+      ],
+      [
+        "model_load_end",
+        43.97
+      ],
+      [
+        "validate_start",
+        43.971
+      ],
+      [
+        "validate_end",
+        75.321
+      ]
+    ],
+    "manifestErrorCount": 200,
+    "manifestComplete": true,
+    "sourceValidationCompleted": true,
+    "extractedValidationCompleted": true,
+    "extractedInstanceSha256": "9726a954afa398deb83063fc363dfea0d5ad01de15e3d6050106f2d916d0ddbc",
+    "manifestErrorCountsByCode": {
+      "ix11.10.1.2:tupleMemberOrderMissing": 55,
+      "ix11.11.1.2:tupleMemberOrderMissing": 49,
+      "ix11.15.1.2:tupleMemberOrderMissing": 8,
+      "ix:tupleContent": 14,
+      "lxml.SCHEMAV_ELEMENT_CONTENT": 3,
+      "stockinsider:conflictingFactDuplicates": 13,
+      "xbrldie:PrimaryItemDimensionallyInvalidError": 30,
+      "xmlSchema:elementOccurrencesError": 28
+    },
+    "isolatedCpuCapSeconds": 115,
+    "isolatedMemoryCapMiB": 1280
+  },
+  "isolatedClusterAndRawFilesRemoved": true,
+  "usesDirectValidatorAndSqlHarness": true,
+  "productionServicesActiveAfterReplay": [
+    "stockinsider-web-standalone.service",
+    "postgresql@17-stockinsider.service",
+    "stockinsider-internal-worker.service"
+  ],
+  "productionDataWrites": false,
+  "rawFilingOrFullManifestCommitted": false,
+  "missingDilutedShareOperand": true,
+  "officialDocumentReceiptQualifiedForResearch": false
+}
