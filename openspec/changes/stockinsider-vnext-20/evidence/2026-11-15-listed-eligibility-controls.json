@@ -1,0 +1,542 @@
+{
+  "schema": "stockinsider-launch-listed-eligibility-controls-v1",
+  "numericRule": {
+    "twdMinimumMean": "50000000",
+    "count": 20,
+    "integerSumThresholdTwd": "1000000000"
+  },
+  "calendarSource": "84a975ebb20ef4aef1b6d21f5c28258ad569732d",
+  "writerComparatorSource": "f013b5b",
+  "monthlyOfficialHistorical": {
+    "docs": "https://www.twse.com.tw/zh/trading/historical/stock-day.html",
+    "scope": "regular, odd lots, after-hours fixed-price and block; excludes auctions",
+    "sourceStatus": "manual_read_crosscheck_pending_ingestion_rights",
+    "captures": [
+      {
+        "symbol": "4763",
+        "sources": [
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20260901&stockNo=4763",
+            "observedAt": "2026-11-15T02:39:15.540452+00:00",
+            "sha256": "244154d2e3e0bc7507de57ec87c152060e8f588ef97a68f42668b97d1c2d735f",
+            "bytes": 2694,
+            "rows": 20
+          },
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20261001&stockNo=4763",
+            "observedAt": "2026-11-15T02:39:16.480624+00:00",
+            "sha256": "4c192a5967acafbe33f19782a3937490af421cd351b41212f96e6d058a7c5285",
+            "bytes": 2594,
+            "rows": 19
+          },
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20261101&stockNo=4763",
+            "observedAt": "2026-11-15T02:39:17.571325+00:00",
+            "sha256": "ecd8ad12ea01c5c5a51ed601b01668e72a70ef8ef91988240893293bfade6c95",
+            "bytes": 1774,
+            "rows": 10
+          }
+        ],
+        "observations": [
+          {
+            "signal": "2026-11-06",
+            "exact20": [
+              "2026-10-07",
+              "2026-10-08",
+              "2026-10-12",
+              "2026-10-13",
+              "2026-10-14",
+              "2026-10-15",
+              "2026-10-16",
+              "2026-10-19",
+              "2026-10-20",
+              "2026-10-21",
+              "2026-10-22",
+              "2026-10-27",
+              "2026-10-28",
+              "2026-10-29",
+              "2026-10-30",
+              "2026-11-02",
+              "2026-11-03",
+              "2026-11-04",
+              "2026-11-05",
+              "2026-11-06"
+            ],
+            "totalTradingValue": "4155640672.0",
+            "meanTurnover": "207782033.6",
+            "meetsThreshold": true,
+            "meanCloseTimesVolume": "207462831.4375",
+            "tenorComplete": true,
+            "dayPrice": {
+              "shares": "7155086",
+              "turnover": "294283439",
+              "open": "38.70",
+              "high": "42.80",
+              "low": "38.60",
+              "close": "42.10"
+            },
+            "prior25High": "49.20",
+            "breakout": false
+          },
+          {
+            "signal": "2026-11-13",
+            "exact20": [
+              "2026-10-15",
+              "2026-10-16",
+              "2026-10-19",
+              "2026-10-20",
+              "2026-10-21",
+              "2026-10-22",
+              "2026-10-27",
+              "2026-10-28",
+              "2026-10-29",
+              "2026-10-30",
+              "2026-11-02",
+              "2026-11-03",
+              "2026-11-04",
+              "2026-11-05",
+              "2026-11-06",
+              "2026-11-09",
+              "2026-11-10",
+              "2026-11-11",
+              "2026-11-12",
+              "2026-11-13"
+            ],
+            "totalTradingValue": "3991040708.0",
+            "meanTurnover": "199552035.4",
+            "meetsThreshold": true,
+            "meanCloseTimesVolume": "199179233.105",
+            "tenorComplete": true,
+            "dayPrice": {
+              "shares": "3375567",
+              "turnover": "143913112",
+              "open": "42.25",
+              "high": "43.20",
+              "low": "42.10",
+              "close": "42.55"
+            },
+            "prior25High": "48.10",
+            "breakout": false
+          }
+        ]
+      },
+      {
+        "symbol": "3004",
+        "sources": [
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20260901&stockNo=3004",
+            "observedAt": "2026-11-15T02:39:18.428771+00:00",
+            "sha256": "78b73d185f9d4edeb8f00367849137ee7c8b5c87ab104bb42501b2842f9cd3e0",
+            "bytes": 2670,
+            "rows": 20
+          },
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20261001&stockNo=3004",
+            "observedAt": "2026-11-15T02:39:19.283124+00:00",
+            "sha256": "a71b7bbab86f861053ef42433304fc65b82cf5d0157684db5c9549580f5e042c",
+            "bytes": 2576,
+            "rows": 19
+          },
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20261101&stockNo=3004",
+            "observedAt": "2026-11-15T02:39:20.223007+00:00",
+            "sha256": "9da61fa1af3a0d5bf2a0499c93a97528c2dcff78eaf65e469ae376a82df143fe",
+            "bytes": 1772,
+            "rows": 10
+          }
+        ],
+        "observations": [
+          {
+            "signal": "2026-11-06",
+            "exact20": [
+              "2026-10-07",
+              "2026-10-08",
+              "2026-10-12",
+              "2026-10-13",
+              "2026-10-14",
+              "2026-10-15",
+              "2026-10-16",
+              "2026-10-19",
+              "2026-10-20",
+              "2026-10-21",
+              "2026-10-22",
+              "2026-10-27",
+              "2026-10-28",
+              "2026-10-29",
+              "2026-10-30",
+              "2026-11-02",
+              "2026-11-03",
+              "2026-11-04",
+              "2026-11-05",
+              "2026-11-06"
+            ],
+            "totalTradingValue": "856044267.00",
+            "meanTurnover": "42802213.35",
+            "meetsThreshold": false,
+            "meanCloseTimesVolume": "42964177.925",
+            "tenorComplete": true,
+            "dayPrice": {
+              "shares": "629646",
+              "turnover": "74244165",
+              "open": "115.00",
+              "high": "122.50",
+              "low": "115.00",
+              "close": "120.50"
+            },
+            "prior25High": "129.50",
+            "breakout": false
+          },
+          {
+            "signal": "2026-11-13",
+            "exact20": [
+              "2026-10-15",
+              "2026-10-16",
+              "2026-10-19",
+              "2026-10-20",
+              "2026-10-21",
+              "2026-10-22",
+              "2026-10-27",
+              "2026-10-28",
+              "2026-10-29",
+              "2026-10-30",
+              "2026-11-02",
+              "2026-11-03",
+              "2026-11-04",
+              "2026-11-05",
+              "2026-11-06",
+              "2026-11-09",
+              "2026-11-10",
+              "2026-11-11",
+              "2026-11-12",
+              "2026-11-13"
+            ],
+            "totalTradingValue": "980167270.0",
+            "meanTurnover": "49008363.5",
+            "meetsThreshold": false,
+            "meanCloseTimesVolume": "49090650.80",
+            "tenorComplete": true,
+            "dayPrice": {
+              "shares": "530150",
+              "turnover": "67480469",
+              "open": "124.00",
+              "high": "129.00",
+              "low": "124.00",
+              "close": "128.50"
+            },
+            "prior25High": "129.50",
+            "breakout": false
+          }
+        ]
+      },
+      {
+        "symbol": "1476",
+        "sources": [
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20260901&stockNo=1476",
+            "observedAt": "2026-11-15T02:39:21.032811+00:00",
+            "sha256": "3868675b4eb317e16965cdc4ae98fde3da3289241cc97cca1a4bdc581b27d92a",
+            "bytes": 2753,
+            "rows": 20
+          },
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20261001&stockNo=1476",
+            "observedAt": "2026-11-15T02:39:21.896866+00:00",
+            "sha256": "83899259cc5f294056a0bdb5048967ec468227635540c9b89f8bc87ca5563755",
+            "bytes": 2659,
+            "rows": 19
+          },
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20261101&stockNo=1476",
+            "observedAt": "2026-11-15T02:39:22.922145+00:00",
+            "sha256": "e1f88370815f579f797f94b4c3cbfbd2b0b30628a097af8e01330418ce77d17f",
+            "bytes": 1824,
+            "rows": 10
+          }
+        ],
+        "observations": [
+          {
+            "signal": "2026-11-06",
+            "exact20": [
+              "2026-10-07",
+              "2026-10-08",
+              "2026-10-12",
+              "2026-10-13",
+              "2026-10-14",
+              "2026-10-15",
+              "2026-10-16",
+              "2026-10-19",
+              "2026-10-20",
+              "2026-10-21",
+              "2026-10-22",
+              "2026-10-27",
+              "2026-10-28",
+              "2026-10-29",
+              "2026-10-30",
+              "2026-11-02",
+              "2026-11-03",
+              "2026-11-04",
+              "2026-11-05",
+              "2026-11-06"
+            ],
+            "totalTradingValue": "13374245944.0",
+            "meanTurnover": "668712297.2",
+            "meetsThreshold": true,
+            "meanCloseTimesVolume": "673663759.75",
+            "tenorComplete": true,
+            "dayPrice": {
+              "shares": "6615089",
+              "turnover": "2256381523",
+              "open": "322.50",
+              "high": "355.00",
+              "low": "321.50",
+              "close": "346.50"
+            },
+            "prior25High": "341.50",
+            "breakout": true
+          },
+          {
+            "signal": "2026-11-13",
+            "exact20": [
+              "2026-10-15",
+              "2026-10-16",
+              "2026-10-19",
+              "2026-10-20",
+              "2026-10-21",
+              "2026-10-22",
+              "2026-10-27",
+              "2026-10-28",
+              "2026-10-29",
+              "2026-10-30",
+              "2026-11-02",
+              "2026-11-03",
+              "2026-11-04",
+              "2026-11-05",
+              "2026-11-06",
+              "2026-11-09",
+              "2026-11-10",
+              "2026-11-11",
+              "2026-11-12",
+              "2026-11-13"
+            ],
+            "totalTradingValue": "15802830429.00",
+            "meanTurnover": "790141521.45",
+            "meetsThreshold": true,
+            "meanCloseTimesVolume": "796977686.775",
+            "tenorComplete": true,
+            "dayPrice": {
+              "shares": "4050953",
+              "turnover": "1536518054",
+              "open": "368.50",
+              "high": "390.00",
+              "low": "364.00",
+              "close": "386.50"
+            },
+            "prior25High": "372.00",
+            "breakout": true
+          }
+        ]
+      },
+      {
+        "symbol": "4771",
+        "sources": [
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20260901&stockNo=4771",
+            "observedAt": "2026-11-15T02:39:24.005797+00:00",
+            "sha256": "b9ad62f732b2f449da7d4b531540d9d0541d3ee708390186a8713746a8260f79",
+            "bytes": 2678,
+            "rows": 20
+          },
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20261001&stockNo=4771",
+            "observedAt": "2026-11-15T02:39:25.221917+00:00",
+            "sha256": "b848dcaf4ea203abcd892e27efd507efcb8edc5d880aef60f59759f156542949",
+            "bytes": 2567,
+            "rows": 19
+          },
+          {
+            "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20261101&stockNo=4771",
+            "observedAt": "2026-11-15T02:39:26.151298+00:00",
+            "sha256": "4607718183df25f34e62612928bb54a7f1e4faf6c09d10f85139eaadad1c2db5",
+            "bytes": 1771,
+            "rows": 10
+          }
+        ],
+        "observations": [
+          {
+            "signal": "2026-11-06",
+            "exact20": [
+              "2026-10-07",
+              "2026-10-08",
+              "2026-10-12",
+              "2026-10-13",
+              "2026-10-14",
+              "2026-10-15",
+              "2026-10-16",
+              "2026-10-19",
+              "2026-10-20",
+              "2026-10-21",
+              "2026-10-22",
+              "2026-10-27",
+              "2026-10-28",
+              "2026-10-29",
+              "2026-10-30",
+              "2026-11-02",
+              "2026-11-03",
+              "2026-11-04",
+              "2026-11-05",
+              "2026-11-06"
+            ],
+            "totalTradingValue": "719146717.00",
+            "meanTurnover": "35957335.85",
+            "meetsThreshold": false,
+            "meanCloseTimesVolume": "36115747.625",
+            "tenorComplete": true,
+            "dayPrice": {
+              "shares": "438823",
+              "turnover": "83254267",
+              "open": "182.50",
+              "high": "202.00",
+              "low": "182.50",
+              "close": "200.00"
+            },
+            "prior25High": "216.00",
+            "breakout": false
+          },
+          {
+            "signal": "2026-11-13",
+            "exact20": [
+              "2026-10-15",
+              "2026-10-16",
+              "2026-10-19",
+              "2026-10-20",
+              "2026-10-21",
+              "2026-10-22",
+              "2026-10-27",
+              "2026-10-28",
+              "2026-10-29",
+              "2026-10-30",
+              "2026-11-02",
+              "2026-11-03",
+              "2026-11-04",
+              "2026-11-05",
+              "2026-11-06",
+              "2026-11-09",
+              "2026-11-10",
+              "2026-11-11",
+              "2026-11-12",
+              "2026-11-13"
+            ],
+            "totalTradingValue": "1028363395.00",
+            "meanTurnover": "51418169.75",
+            "meetsThreshold": true,
+            "meanCloseTimesVolume": "51508367.825",
+            "tenorComplete": true,
+            "dayPrice": {
+              "shares": "120151",
+              "turnover": "21527404",
+              "open": "178.00",
+              "high": "181.00",
+              "low": "177.50",
+              "close": "178.50"
+            },
+            "prior25High": "213.50",
+            "breakout": false
+          }
+        ]
+      }
+    ]
+  },
+  "priorBarsBasis": "Raw prices; comparison excludes signal day. Missing action, limit, 50-session volume and other inputs leave full launch-pattern and score unknown.",
+  "pointInTime": {
+    "historicalReceiptObservedAfterBothCutoffs": true,
+    "knownAtCutoffClaimed": false,
+    "draftRankWriterUsed": false,
+    "twoLiveCloseSessionsSatisfied": false,
+    "identityNotes": {
+      "1476": "Author article published 2026-11-14; praised price move cannot populate either historical cutoff.",
+      "3004": "Author article first published 2026-11-07 on page; 11-06 is therefore just a price control. 11-13 price check fails mean turnover.",
+      "4763": "PTT article first observed as published 2026-11-14 14:02:55 Asia/Taipei; never eligible from that article in either sampled window.",
+      "4771": "Author article published 2026-11-14 and described downside, not a positive momentum signal."
+    }
+  },
+  "sameSourceSeparateEndpoints": {
+    "datedClose11764": [
+      {
+        "day": "2026-11-06",
+        "fileHash": "40709a6cfcffbe3ce9ba445f3ccaec58a43e0c7e15a6f947d9edb9f57ac49c8b",
+        "symbols": [
+          "4763",
+          "3004",
+          "1476",
+          "4771"
+        ],
+        "matched": 4
+      },
+      {
+        "day": "2026-11-13",
+        "fileHash": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+        "symbols": [
+          "4763",
+          "3004",
+          "1476",
+          "4771"
+        ],
+        "matched": 4
+      }
+    ],
+    "currentDaily11549": {
+      "source": "https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=open_data",
+      "observedAt": "2026-11-15T02:40:47.894478+00:00",
+      "sha256": "8fc1f6407bfc06a691fac6523a9095c18ddb095648aec82183a1f44c25594542",
+      "sourceDate": "2026-11-13",
+      "bytes": 137780,
+      "comparisons": [
+        [
+          "4763",
+          [
+            "shares",
+            "turnover",
+            "open",
+            "high",
+            "low",
+            "close"
+          ]
+        ],
+        [
+          "3004",
+          [
+            "shares",
+            "turnover",
+            "open",
+            "high",
+            "low",
+            "close"
+          ]
+        ],
+        [
+          "1476",
+          [
+            "shares",
+            "turnover",
+            "open",
+            "high",
+            "low",
+            "close"
+          ]
+        ],
+        [
+          "4771",
+          [
+            "shares",
+            "turnover",
+            "open",
+            "high",
+            "low",
+            "close"
+          ]
+        ]
+      ]
+    }
+  },
+  "knownWriterGap": "Existing SQL recognizes tpex_11370_all_sessions_v1 for turnover. Listed data needs its own exact market-scoped authorized source and date binding, never the OTC coverage token."
+}
