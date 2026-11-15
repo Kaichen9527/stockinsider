@@ -1,0 +1,34 @@
+{
+  "verifiedAt": "2026-11-15T05:50:41Z",
+  "scope": "deployment function body read from Contabo catalog in read-only transaction, executed in separate socket-only PostgreSQL 17.11 cluster as non-root with synthetic support catalog and principal",
+  "nativeReplay": {
+    "checks": {
+      "asof_new_venue_selected": true,
+      "asof_previous_venue_preserved": true,
+      "stock_id_stable_venue_changes": true,
+      "wrong_fixture_principal_refused": true,
+      "exact_replay_records_idempotent_audit": true,
+      "type_correction_retains_old_authority": true,
+      "exact_old_replay_no_new_authority_or_alias": true,
+      "new_timestamp_on_obsolete_venue_can_become_latest": true,
+      "sixty_fifth_distinct_revision_blocked_no_mutation": true
+    },
+    "engine": "170011",
+    "socketOnly": true,
+    "fixtureRoleOnly": true,
+    "functionBodyMd5": "c86e788022a64ce35fd01ad71facc62b",
+    "isolatedSandbox": true
+  },
+  "workspaceClean": true,
+  "boundary": {
+    "actualBusinessRecordsWritten": false,
+    "actualWriterRoleProved": false,
+    "actualTickersUsedAsControlLabelsOnly": true,
+    "formalGateChanged": false
+  },
+  "pr": "https://github.com/Kaichen9527/stockinsider/pull/384",
+  "predecessorEvidence": [
+    "01559b45fd82201726f75571a1ceb3f7be207434",
+    "347d211e229787cc271a1135e558135f70591881"
+  ]
+}
