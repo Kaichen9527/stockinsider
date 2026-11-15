@@ -1,9 +1,10 @@
 /** Invented PUBLIC transport packets, never source/producer/review authority.
  * The supplied dates name a synthetic calendar; no real ranking is claimed. */
+import {candidatePriceDisplayFrom} from '../candidate-price-history.ts';
 import {LAUNCH_RANKING_POLICY,LAUNCH_RANKING_RULES,LAUNCH_RANKING_SCHEMA,LAUNCH_RANKING_ARITHMETIC} from './launch-ranking-read.ts';
 const id=(value:number)=>`00000000-0000-4000-8000-${String(value).padStart(12,'0')}`;
 export const LAUNCH_TEST_RUN=id(1),LAUNCH_TEST_NOW='2026-11-13T13:30:30Z';
-export function launchRankingFixture(size=1,detail=false,clock?:string){
+export function launchRankingFixture(size=1,detail=false,clock?:string,withChart=false){
   const now=clock??LAUNCH_TEST_NOW;
   const current=new Date(now),taipeiDay=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(current);
   let publication=Date.parse(`${taipeiDay}T21:30:00+08:00`);
@@ -14,7 +15,7 @@ export function launchRankingFixture(size=1,detail=false,clock?:string){
   const members=Array.from({length:size},(_,i)=>{
     const revisionId=id(10+i),scoreRevision=id(100+i),launchQualificationRevision=id(200+i);
     return {rank:i+1,symbol:String(5274+i),revisionId,inputHash:'a'.repeat(64),scoreRevision,launchQualificationRevision,totalScore:100,availableWeight:100,technicalScore:70,relativeStrength63:.4-.1,
-      components:{...components},entryEligible:true,reasons:[] as string[],revisions:{research:revisionId,score:scoreRevision,qualification:launchQualificationRevision,price:`synthetic-price-${i}`,calendar:'synthetic-calendar',actions:'synthetic-actions',
+      components:{...components},entryEligible:true,reasons:[] as string[],revisions:{research:revisionId,score:scoreRevision,qualification:launchQualificationRevision,price:withChart?'e'.repeat(64):`synthetic-price-${i}`,calendar:withChart?'f'.repeat(64):'synthetic-calendar',actions:withChart?'7'.repeat(64):'synthetic-actions',
         technicalVolume:'synthetic-11371',institutionalVolume:'synthetic-11370',flow:'synthetic-11856',market:marketRevision},financial:null,valuation:null};
   });
   const rawRules=[
@@ -30,6 +31,22 @@ export function launchRankingFixture(size=1,detail=false,clock?:string){
     ['market_close_above_ma50','market',5,{close:150,ma50:140}],['market_close_above_ma200','market',5,{close:150,ma200:120}]
   ] as const;
   const selected=members[0];
+  const displayFrom=candidatePriceDisplayFrom(session);
+  const candles=[];
+  if(withChart&&selected){
+    // Weekdays only is a synthetic calendar for wire and browser tests.
+    let warmup=239;
+    for(let day=new Date(session+'T00:00:00Z');warmup>0;day.setUTCDate(day.getUTCDate()-1)){
+      const time=day.toISOString().slice(0,10);
+      if(time!==session&&(day.getUTCDay()===0||day.getUTCDay()===6))continue;
+      if(time<displayFrom)warmup--;
+      candles.push({time,open:100,high:106,low:98,close:102,volume:time===session?null:42000});
+    }
+    candles.reverse();
+  }
+  const chart=withChart&&selected?{schemaVersion:'launch-frozen-chart-v1',priceBasis:'adjusted_to_signal_session',
+    seriesRevision:'8'.repeat(64),priceRevision:selected.revisions.price,calendarRevision:selected.revisions.calendar,actionsRevision:selected.revisions.actions,
+    cutoff,throughSession:session,displayFrom,warmupSessions:239,candles}:null;
   return {schemaVersion:'vnext-launch-ranking-read-v2',arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,availability:'ready',reason:null as string|null,
     snapshot:{schemaVersion:LAUNCH_RANKING_SCHEMA,policyVersion:LAUNCH_RANKING_POLICY,rulesVersion:LAUNCH_RANKING_RULES,arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,rankingRunId:LAUNCH_TEST_RUN,previousRankingRunId:null as string|null,
       cutoff,inputCutoff:cutoff,session,publishedAt:cutoff,marketRevision,market:{session,risk:'risk_on',confidence:'complete',sourceAt:new Date(publication-3600000).toISOString(),expiresAt:new Date(publication+86400000).toISOString(),
@@ -39,5 +56,5 @@ export function launchRankingFixture(size=1,detail=false,clock?:string){
     detail:detail&&selected?{arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,rankingRunId:LAUNCH_TEST_RUN,symbol:selected.symbol,revisionId:selected.revisionId,scoreRevision:selected.scoreRevision,launchQualificationRevision:selected.launchQualificationRevision,inputHash:selected.inputHash,
       summary:'Synthetic public research summary. Financial and valuation observations remain unknown.',scoreEvidence:rawRules.map(([ruleId,group,weight,operands])=>({id:ruleId,group,weight,matches:true,points:weight,operands:{...operands},cutoff,throughSession:session,revisions:{...selected.revisions}})),
       citations:[{id:`licensed-dataset:11370:${id(370)}`,url:'https://data.gov.tw/dataset/11370',contentHash:'b'.repeat(64),sourceRevision:id(370),publicRights:{schemaVersion:'launch-public-rights-v1',datasetId:11370,
-        license:'Taiwan Open Government Data License 1.0',licenseUrl:'https://data.gov.tw/license',attribution:'Securities and Futures Bureau, Financial Supervisory Commission',rightsRevision:'c'.repeat(64)}}],chart:null}:null};
+        license:'Taiwan Open Government Data License 1.0',licenseUrl:'https://data.gov.tw/license',attribution:'Securities and Futures Bureau, Financial Supervisory Commission',rightsRevision:'c'.repeat(64)}}],chart}:null};
 }

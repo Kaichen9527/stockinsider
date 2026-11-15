@@ -1,6 +1,7 @@
 import { types } from 'node:util';
 import { vnextEnabled, taipeiDate } from './policy.ts';
 import { evidenceInstant } from './evidence-clock.ts';
+import { candidatePriceDisplayFrom } from '../candidate-price-history.ts';
 import {parseLaunchPublicCitation,type LaunchPublicCitation} from './launch-public-citation.ts';
 
 export const LAUNCH_RANKING_POLICY = 'stockinsider-launch-radar-v1';
@@ -28,8 +29,13 @@ export type LaunchRankingCurrent = {symbol:string;revisionId:string;inputHash:st
 type Operand = number|string|boolean|null;
 export type LaunchRankingRule = {id:string;group:Group;weight:number;matches:boolean;points:number;operands:Record<string,Operand>;
   cutoff:string;throughSession:string;revisions:LaunchRankingRevisions};
+type LaunchChartCandle = {time:string;open:number;high:number;low:number;close:number;volume:number|null};
+export type LaunchRankingChart = {
+  schemaVersion:'launch-frozen-chart-v1';priceBasis:'adjusted_to_signal_session';seriesRevision:string;priceRevision:string;calendarRevision:string;actionsRevision:string;
+  cutoff:string;throughSession:string;displayFrom:string;warmupSessions:239;candles:LaunchChartCandle[];
+};
 export type LaunchRankingDetail = {arithmeticVersion:typeof LAUNCH_RANKING_ARITHMETIC;rankingRunId:string;symbol:string;revisionId:string;scoreRevision:string;launchQualificationRevision:string;inputHash:string;
-  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:null};
+  summary:string|null;scoreEvidence:LaunchRankingRule[];citations:LaunchPublicCitation[];chart:LaunchRankingChart|null};
 export type LaunchRankingRead = {availability:'ready'|'not_published'|'producer_unavailable'|'not_found'|'schema_unavailable'|'unavailable';reason:string|null;
   readAt:string;snapshot:LaunchRankingSnapshot|null;current:LaunchRankingCurrent[];detail:LaunchRankingDetail|null};
 type Row=Record<string,unknown>;
@@ -144,6 +150,34 @@ function rules(value:unknown,snapshot:LaunchRankingSnapshot,selected:LaunchRanki
 }
 /** Pure allowlisted transport validation. SQL/source/formal review authority is
  * never created here, and frozen rankings never receive renewed UI proofs. */
+/** Public candles belong to the selected frozen run. Calendar/adjustment
+ * authority and completeness must be established by the writer before projection. */
+function frozenChart(value:unknown,snapshot:LaunchRankingSnapshot,selected:LaunchRankingMember):LaunchRankingChart|null {
+  if(value===null)return null;
+  const {cutoff,session}=snapshot;
+  const {price,calendar,actions}=selected.revisions;
+  const displayFrom=candidatePriceDisplayFrom(session);
+  if(!exact(value,'schemaVersion priceBasis seriesRevision priceRevision calendarRevision actionsRevision cutoff throughSession displayFrom warmupSessions candles')
+    ||value.schemaVersion!=='launch-frozen-chart-v1'||value.priceBasis!=='adjusted_to_signal_session'
+    ||!hash(value.seriesRevision)||!hash(price)||!hash(calendar)||!hash(actions)||value.priceRevision!==price||value.calendarRevision!==calendar||value.actionsRevision!==actions
+    ||value.cutoff!==cutoff||value.throughSession!==session||value.displayFrom!==displayFrom||value.warmupSessions!==239
+    ||!Array.isArray(value.candles)||value.candles.length<=239||value.candles.length>1320)invalid();
+  let prior='';
+  let warmup=0;
+  const candles=value.candles.map((item):LaunchChartCandle=>{
+    if(!exact(item,'time open high low close volume'))invalid();
+    const {time,open,high,low,close,volume}=item;
+    if(!date(time)||time<=prior||time>session||!number(open)||!number(high)||!number(low)||!number(close)
+      ||low<=0||low>Math.min(open,close)||high<Math.max(open,close)
+      ||volume!==null&&(!number(volume)||!Number.isSafeInteger(volume)||volume<0||volume>Math.floor(Number.MAX_SAFE_INTEGER/31)))invalid();
+    prior=time;
+    if(time<displayFrom)warmup++;
+    return {time,open,high,low,close,volume};
+  });
+  if(prior!==session||warmup!==239)invalid();
+  return {schemaVersion:'launch-frozen-chart-v1',priceBasis:'adjusted_to_signal_session',seriesRevision:value.seriesRevision,priceRevision:price,calendarRevision:calendar,actionsRevision:actions,
+    cutoff,throughSession:session,displayFrom,warmupSessions:239,candles};
+}
 export function parseLaunchRankingRead(value:unknown,query:{rankingRunId?:string;symbol?:string}={},now=new Date().toISOString()):LaunchRankingRead {
   envelope(value);
   if(!stamp(now)||query.rankingRunId!==undefined&&!uuid(query.rankingRunId)||query.symbol!==undefined&&!symbol(query.symbol))invalid();
@@ -182,10 +216,10 @@ export function parseLaunchRankingRead(value:unknown,query:{rankingRunId?:string
     const d=value.detail,selected=snapshot?.members.find(item=>item.symbol===query.symbol);
     if(!query.symbol||!snapshot||!selected||!exact(d,'arithmeticVersion rankingRunId symbol revisionId scoreRevision launchQualificationRevision inputHash summary scoreEvidence citations chart')
       ||d.arithmeticVersion!==LAUNCH_RANKING_ARITHMETIC||d.rankingRunId!==snapshot.rankingRunId||d.symbol!==selected.symbol||d.revisionId!==selected.revisionId||d.scoreRevision!==selected.scoreRevision
-      ||d.launchQualificationRevision!==selected.launchQualificationRevision||d.inputHash!==selected.inputHash||d.summary!==null&&!text(d.summary,2000)||d.chart!==null||!Array.isArray(d.citations)||d.citations.length>30)invalid();
+      ||d.launchQualificationRevision!==selected.launchQualificationRevision||d.inputHash!==selected.inputHash||d.summary!==null&&!text(d.summary,2000)||!Array.isArray(d.citations)||d.citations.length>30)invalid();
     const citations=d.citations.map(item=>{const citation=parseLaunchPublicCitation(item);if(!citation)invalid();return citation;});
     detail={arithmeticVersion:LAUNCH_RANKING_ARITHMETIC,rankingRunId:snapshot.rankingRunId,symbol:selected.symbol,revisionId:selected.revisionId,scoreRevision:selected.scoreRevision,launchQualificationRevision:selected.launchQualificationRevision,
-      inputHash:selected.inputHash,summary:d.summary as string|null,scoreEvidence:rules(d.scoreEvidence,snapshot,selected),citations,chart:null};
+      inputHash:selected.inputHash,summary:d.summary as string|null,scoreEvidence:rules(d.scoreEvidence,snapshot,selected),citations,chart:frozenChart(d.chart,snapshot,selected)};
   }
   return {availability:value.availability as LaunchRankingRead['availability'],reason:value.reason as string|null,readAt:now,snapshot,current:live,detail};
 }

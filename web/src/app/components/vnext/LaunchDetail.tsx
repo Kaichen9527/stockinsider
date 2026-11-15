@@ -4,6 +4,7 @@ import {launchAvailabilityText} from './LaunchTop10';
 import LaunchCurrentStatus from './LaunchCurrentStatus';
 import {readPublicLaunchOutcome} from '@/lib/vnext/launch-outcome-public';
 import LaunchOutcomeSummary from './LaunchOutcomeSummary';
+import StockChart from '@/components/StockChart';
 
 const ruleNames:Record<string,string>={trend_close_above_ma50:'收盤高於 MA50',trend_ma50_above_ma200:'MA50 高於 MA200',trend_ma200_rising_5sessions:'MA200 較五個交易日前上升',
   trend_excess_return20_positive:'20 個交易日報酬高於同市場',trend_excess_return63_positive:'63 個交易日報酬高於同市場',consolidation_depth_within15pct:'前 25 日區間深度 ≤15%',
@@ -31,7 +32,14 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
       <section aria-label="發動評分" className="rounded-xl border border-slate-300 p-4"><h2 className="font-semibold">已確認分數 {member.totalScore.toFixed(1)} / 100</h2>
         <p className="mt-2">技術 {member.technicalScore.toFixed(1)} / 70 · 籌碼 {member.components.chips.toFixed(1)} / 20 · 市場 {member.components.market.toFixed(1)} / 10。分數不是機率。</p>
         <p className="mt-2">基本面與估值：尚無可用資料，獨立於此分數呈現。</p>
-        <p className="mt-2">尚無經驗證的調整後圖表資料。</p>
+      </section>
+      <section aria-label="榜單價格圖表" className="min-w-0 rounded-xl border border-slate-300 p-4">
+        <h2 className="font-semibold">價格走勢</h2>
+        {detail.chart?<div className="mt-2 space-y-3">
+          <p className="text-sm">顯示期間 {detail.chart.displayFrom} 至 {detail.chart.throughSession}。價格依榜單交易日調整。</p>
+          <StockChart key={detail.chart.seriesRevision} data={detail.chart.candles}
+            rankingWindow={{cutoff:detail.chart.cutoff,displayFrom:detail.chart.displayFrom}}/>
+        </div>:<p className="mt-2">尚無經驗證的調整後圖表資料。</p>}
       </section>
       {outcome&&<LaunchOutcomeSummary outcome={outcome}/>}
       {detail.summary&&<section aria-label="公開研究摘要"><h2 className="font-semibold">研究摘要</h2><p className="mt-2 whitespace-pre-wrap break-words">{detail.summary}</p></section>}

@@ -16,6 +16,27 @@ test('real Home/stock route reads newpolicy Top10/nullfinance/16rules through ex
   const width=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:innerWidth}));expect(width.scroll).toBeLessThanOrEqual(width.viewport+1);
   await page.screenshot({path:info.outputPath('launch-version-bound-detail.png'),fullPage:true});
 });
+test('frozen detail charts switch daily, calendar week and month at the original cutoff',async({page,request})=>{
+  await request.post(bridge+'/__fixture/control',{headers,data:{mode:'chart'}});
+  await page.goto('/');
+  await page.getByRole('link',{name:'5274',exact:true}).click();
+  const section=page.getByRole('region',{name:'榜單價格圖表'});
+  await expect(section.getByRole('button',{name:'日線'})).toHaveAttribute('aria-pressed','true');
+  await expect(section.getByTestId('launch-price-chart').locator('canvas').first()).toBeVisible();
+  const before=await (await request.get(bridge+'/__fixture/stats')).json();
+  for(const [label,period] of [['週線','依台灣曆週聚合'],['月線','依台灣曆月聚合']]){
+    await section.getByRole('button',{name:label}).click();
+    await expect(section.getByRole('button',{name:label})).toHaveAttribute('aria-pressed','true');
+    await expect(section).toContainText(period);
+    await expect(section.getByTestId('launch-price-chart').locator('canvas').first()).toBeVisible();
+  }
+  const stats=await (await request.get(bridge+'/__fixture/stats')).json();
+  expect(stats.reads).toBe(before.reads);
+  expect(stats.companionReads).toBe(before.companionReads);
+  expect(stats.unsupported).toBe(0);
+  const width=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:innerWidth}));
+  expect(width.scroll).toBeLessThanOrEqual(width.viewport+1);
+});
 test('missing schema,missingproducer,notpublished and genuineTop0 remainvisiblydifferent',async({page,request})=>{
   for(const [mode,text] of [['schema_unavailable','資料服務尚未就緒'],['producer_unavailable','必要來源資料尚未完成驗證'],['not_published','尚無已發布的強勢發動榜單'],['empty','本版沒有符合完整證據與審查條件的標的']] as const){
     expect((await request.post(bridge+'/__fixture/control',{headers,data:{mode}})).ok()).toBeTruthy();await page.goto('/');

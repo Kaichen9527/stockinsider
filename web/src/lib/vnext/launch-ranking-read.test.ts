@@ -80,6 +80,37 @@ test('detail is exactrun/research/score16closedrules, including booleanhold and 
     assert.throws(()=>parseLaunchRankingRead(p,q,LAUNCH_TEST_NOW),/contract_invalid/u,mode);
   }
 });
+test('a three-year adjusted chart binds to the frozen score price, calendar and action versions',()=>{
+  const packet=launchRankingFixture(1,true,undefined,true),query={rankingRunId:LAUNCH_TEST_RUN,symbol:'5274'};
+  const chart=packet.detail!.chart!;
+  const historical=structuredClone(packet);
+  historical.current.members[0].checks.price=false;
+  const decoded=parseLaunchRankingRead(historical,query,LAUNCH_TEST_NOW).detail!.chart!;
+  assert.deepEqual(decoded,chart);
+  assert.equal(decoded.displayFrom,'2023-11-13');
+  assert.equal(decoded.candles.filter(row=>row.time<decoded.displayFrom).length,239);
+  assert.equal(decoded.candles.at(-1)!.time,'2026-11-13');
+  assert.equal(decoded.candles.at(-1)!.volume,null);
+  for(const [key,value] of Object.entries({seriesRevision:'unknown',priceRevision:'1'.repeat(64),calendarRevision:'1'.repeat(64),
+    actionsRevision:'1'.repeat(64),cutoff:'2026-11-12T13:30:00Z',throughSession:'2026-11-12',
+    displayFrom:'2024-11-13',warmupSessions:238,priceBasis:'raw'})){
+    const changed=structuredClone(packet);
+    Object.assign(changed.detail!.chart!,{[key]:value});
+    assert.throws(()=>parseLaunchRankingRead(changed,query,LAUNCH_TEST_NOW),/launch_ranking_contract_invalid/u,key);
+  }
+  for(const mutate of [
+    (rows:typeof chart.candles)=>rows.shift(),
+    (rows:typeof chart.candles)=>rows.pop(),
+    (rows:typeof chart.candles)=>rows[1].time=rows[0].time,
+    (rows:typeof chart.candles)=>rows[0].low=0,
+    (rows:typeof chart.candles)=>rows[0].volume=0.5,
+    (rows:typeof chart.candles)=>Object.assign(rows[0],{source_ref:'private'}),
+  ]){
+    const changed=structuredClone(packet);
+    mutate(changed.detail!.chart!.candles);
+    assert.throws(()=>parseLaunchRankingRead(changed,query,LAUNCH_TEST_NOW),/launch_ranking_contract_invalid/u);
+  }
+});
 test('onefixed newRPC preserves explicitmissing/versionerrors and sourceunavailability without legacyfetch or backgroundwork',async()=>{
   const calls:unknown[]=[];const client={rpc(name:string,args:unknown){calls.push({name,args});return Promise.resolve({data:launchRankingFixture(),error:null});}};
   const oldFetch=globalThis.fetch;let fetches=0;globalThis.fetch=async()=>{fetches++;throw Error('unexpected read IO');};
