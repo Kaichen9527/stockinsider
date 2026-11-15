@@ -51,7 +51,8 @@ try {
     const observation = projectPttBodyObservation(projected.provenance, item.documentUrl, item.observedAt, item.cutoff);
     rows.push({ label: item.label, htmlSha256: createHash('sha256').update(bytes).digest('hex'), parserVersion: projected.article.parserVersion,
       bodyStatus: projected.article.status, sourcePublishedAt: projected.article.sourcePublishedAt, clockConsistent: projected.article.clockConsistent,
-      cleanBodySha256: projected.article.cleanBodySha256, bodySymbols: [...projected.bodyExtracted.symbols], observationStatus: observation.status,
+      originKind: projected.article.originKind, clockDeltaSeconds: projected.article.clockDeltaSeconds,
+      cleanBodySha256: projected.article.cleanBodySha256, bodySymbols: [...projected.provenance.body_symbols], observationStatus: observation.status,
       reason: observation.reason, researchAdmissionAuthority: false, instrumentQualificationAuthority: false, queue: 'blocked_existing_metadata_scope' });
   }
   process.stdout.write(JSON.stringify({ kind: 'ptt-private-artifact-replay-v1', source: 'explicit_private_input_only',

@@ -64,7 +64,7 @@ test('T04 actual collector recognizes only same-line issuer financial summaries 
   const financialContext = { validSymbols: new Set(['4763','2330']), stockNamesBySymbol: new Map([['4763','合成材料*-KY'], ['2330','另一材料-KY']]), aliasesBySymbol: new Map<string, string[]>() };
   for (const line of ['4763合成材料-KY 115年 Q3:-1.25 累積:0', '４７６３合成材料－ＫＹ　１１５年　Ｑ３：０　累積：－２']) {
     const value = collector({ html: html(line), documentUrl: url, title: 'Synthetic unrelated title', observedAt, ...financialContext });
-    assert.deepEqual([...value.bodyExtracted.symbols], ['4763']); assert.equal(value.article.parserVersion, 'ptt-own-body-v2');
+    assert.deepEqual([...value.bodyExtracted.symbols], ['4763']); assert.equal(value.article.parserVersion, 'ptt-own-body-v3');
     const observation = projectPttBodyObservation(value.provenance, url, observedAt, observedAt);
     assert.equal(observation.status, 'ready_observation'); assert.equal(observation.researchAdmissionAuthority, false);
   }
@@ -87,6 +87,32 @@ test('T04 summary format refuses amounts, unknown authority, malformed quarter/y
   const line = '4763合成材料-KY 115年 Q3:1 累積:2';
   assert.deepEqual(matchPttFinancialSummarySymbols(line, new Set(), names), []);
   assert.deepEqual(matchPttFinancialSummarySymbols(line, valid, new Map()), []);
+});
+test('T04 newsroom and translation posts keep the PTT post time without a second original observation', () => {
+  for (const heading of ['[新聞] Synthetic', '［ 新聞 ］ Synthetic', '[編譯] Synthetic', '[轉載] Synthetic']) {
+    const value = collect('<p>原文連結：https://publisher.invalid/story</p><p>股票 4763 合成公司甲</p><p>心得：留給讀者判斷</p>', heading);
+    assert.equal(value.article.originKind, 'reply_or_repost');
+    assert.equal(value.article.status, 'body_read');
+    assert.equal(value.article.sourcePublishedAt, publishedAt);
+    assert.deepEqual([...value.provenance.body_symbols], []);
+    assert.equal(value.provenance.original_root_verified, false);
+    assert.equal(projectPttBodyObservation(value.provenance, url, observedAt, observedAt).reason, 'quoted_or_reposted_original_unresolved');
+  }
+});
+test('T04 recognises a republished template under another tag and preserves an original analysis with a citation', () => {
+  const citation = '<p>原文連結：https://publisher.invalid/story</p>';
+  const original = collect(citation + '<p>股票 4763 合成公司甲。作者另有觀察。</p>', '[情報] 原始分析 [新聞] 更新');
+  assert.equal(original.article.originKind, 'original');
+  assert.equal(projectPttBodyObservation(original.provenance, url, observedAt, observedAt).status, 'ready_observation');
+  const copy = collect(citation + '<p>2、原文內容：新聞轉述股票 4763 合成公司甲。</p>', '[情報] 轉貼來源');
+  assert.equal(copy.article.originKind, 'reply_or_repost');
+  assert.deepEqual([...copy.provenance.body_symbols], []);
+  assert.equal(projectPttBodyObservation(copy.provenance, url, observedAt, observedAt).status, 'blocked');
+});
+test('T04 v2 retained metadata cannot mark a repost as a v3 original', () => {
+  const value = collect('<p>股票 4763 合成公司甲</p>', '[新聞] Synthetic');
+  const oldRecord = { ...value.provenance, parser_version: 'ptt-own-body-v2', origin_kind: 'original', body_symbols: ['4763'], gaps: [] };
+  assert.equal(projectPttBodyObservation(oldRecord, url, observedAt, observedAt).reason, 'body_provenance_invalid');
 });
 test('T04 Re/Fw and quoted text never acquire original-root eligibility from a newer reply header', () => {
   for (const [body, title] of [['※ 引述《NONPRODUCTION》\n: 股票 2330 合成公司乙\n合成公司丙觀點', 'Re: [標的] 3443 股票'],

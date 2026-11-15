@@ -33,3 +33,9 @@ Further user clarification: T86 raw redistribution is not verified; its public e
 ## Verification
 
 Author and independent engineering review remain separate SolHigh executors; actual runtime model attestation is not inferred. Root owns serial Node22.14 unit/types/lint/fullbuild and any bounded public canary under existing resource admission (8GiB free floor+512MiB margin; sampled RSS<8GiB). Each bounded slice gets exact source/command/log-digest evidence, including failures; maxiterations5/samefailure2 and nativeHOLD remain unchanged. Fixtures cannot satisfy actual source, formal A1, two real ranking sessions or release acceptance.
+
+## News and translation reposts
+
+PTT Stock uses its news and translation categories for cited upstream material with forum commentary. The bounded own-body parser treats these categories and explicit repost tags as unresolved republications. It also detects source-link plus source-content sections under a different tag. A single source link in an original author analysis remains allowed. The parser does not verify upstream reports from PTT text, follow outgoing links, assign the forum publication clock to a source article, or turn repost mentions into fresh original-body symbols. [PTT Stock rules](https://www.ptt.cc/bbs/Stock/M.1667716869.A.C66.html)
+
+The new parser version requires re-observation of old metadata before using it as original-body evidence. The existing metadata-only policy and admission gate remain in effect. The staging replay recorded six unmodified public PTT pages and emitted only hashes, timestamps and classification results. Two news cases retained their PTT post clocks without producing a fresh original clue. A financial-discussion control still projected code 4763. Upstream rights, true source coverage and rights-qualified candidate admission need separate evidence.

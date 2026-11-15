@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { parse, type DefaultTreeAdapterTypes as Tree } from 'parse5';
 import { evidenceInstant, evidenceKnownAt } from './vnext/evidence-clock.ts';
 
-export const PTT_ARTICLE_PARSER = 'ptt-own-body-v2' as const;
+export const PTT_ARTICLE_PARSER = 'ptt-own-body-v3' as const;
 const MAX_HTML_BYTES = 524288, MAX_NODES = 20000, MAX_DEPTH = 64, MAX_BODY_BYTES = 32768;
 const CLOCK_TOLERANCE_SECONDS = 5;
 type Status = 'body_read' | 'body_missing' | 'html_overbound' | 'layout_unsupported' | 'body_overbound';
@@ -122,6 +122,24 @@ function cleanLines(value: string): { body: string; quoted: boolean } {
   }
   return { body: output.join('\n').replace(/\n{3,}/gu, '\n\n').trim(), quoted };
 }
+/** Stock board news and translations quote an external original even when the
+ * author adds commentary. A lone link in an original analysis is not enough. */
+function isPttReprint(title: string, body: string): boolean {
+  const heading = title.normalize('NFKC');
+  if (/^\s*(?:Re|Fw)\s*:/iu.test(heading) || /\[\s*(?:轉錄|轉載|轉貼)\s*\]/u.test(heading)
+    || /^\s*\[\s*(?:新聞|編譯)\s*\]/u.test(heading)) return true;
+
+  const sourceLink = /^(?:\d{1,2}[.、)]\s*)?(?:原文|原始|新聞)\s*(?:連結|網址)\s*:/u;
+  const sourceBody = /^(?:\d{1,2}[.、)]\s*)?(?:原文|新聞)\s*(?:內容|內文|全文)\s*:/u;
+  let sawSource = false;
+  for (const raw of body.split('\n')) {
+    const line = raw.normalize('NFKC').trimStart();
+    if (sawSource && sourceBody.test(line)) return true;
+    if (sourceLink.test(line)) sawSource = true;
+  }
+  return false;
+}
+
 export function parsePttArticleHtml(html: string, documentUrl: string): PttArticleRead {
   const identity = typeof documentUrl === 'string' && documentUrl.length <= 2048 ? articleIdentity(documentUrl) : null;
   const result: PttArticleRead = { parserVersion: PTT_ARTICLE_PARSER, status: 'layout_unsupported', canonicalUrl: identity?.canonicalUrl ?? null,
@@ -172,7 +190,7 @@ export function parsePttArticleHtml(html: string, documentUrl: string): PttArtic
       result.clockConsistent = Math.abs(result.clockDeltaSeconds) <= CLOCK_TOLERANCE_SECONDS;
     }
     const cleaned = cleanLines(body.join(''));
-    result.originKind = /^(?:\s*(?:Re|Fw)\s*:\s*)|\[轉錄\]/iu.test(result.title) || cleaned.quoted || htmlQuote ? 'reply_or_repost' : 'original';
+    result.originKind = cleaned.quoted || htmlQuote || isPttReprint(result.title, cleaned.body) ? 'reply_or_repost' : 'original';
     if (!result.sourcePublishedAt) result.gaps.push('source_publication_time_missing');
     else if (!result.clockConsistent) result.gaps.push('article_clock_conflict');
     if (result.originKind !== 'original') result.gaps.push('quoted_or_reposted_original_unresolved');
@@ -191,7 +209,7 @@ export function pttBodyProvenance(read: PttArticleRead, symbols: readonly string
     canonical_url: read.canonicalUrl, article_id: read.articleId, source_published_at: read.sourcePublishedAt, article_id_at: read.articleIdAt,
     clock_delta_seconds: read.clockDeltaSeconds, clock_consistent: read.clockConsistent, origin_kind: read.originKind,
     clean_body_sha256: read.cleanBodySha256, local_author_sha256: read.author ? sha(read.author) : null,
-    body_symbols: read.status === 'body_read' && bodySymbols.length <= 12 ? bodySymbols : [], body_retained: false, publisher_revision_verified: false,
+    body_symbols: read.status === 'body_read' && read.originKind === 'original' && bodySymbols.length <= 12 ? bodySymbols : [], body_retained: false, publisher_revision_verified: false,
     original_root_verified: false, gaps: [...read.gaps, ...(bodySymbols.length > 12 ? ['body_symbol_bound_exceeded'] : [])] };
 }
 /** Header and filename agreement never supersedes actual acquisition time. */
