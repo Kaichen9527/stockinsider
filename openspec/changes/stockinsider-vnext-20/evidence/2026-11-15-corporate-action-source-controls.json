@@ -1,0 +1,142 @@
+{
+  "schema": "stockinsider-corporate-action-source-controls-v1",
+  "purpose": "Read-only staged comparison of original report roles and market price bases",
+  "reportedRange": [
+    "2026-11-02",
+    "2026-11-13"
+  ],
+  "sources": {
+    "listedAdvanceCatalog": "https://data.gov.tw/dataset/89748",
+    "listedReferencePublicReport": "https://www.twse.com.tw/rwd/zh/exRight/TWT49U?response=json&startDate=20261102&endDate=20261113",
+    "listedReferencePaidProduct": "https://eshop.twse.com.tw/zh/product/detail/000000006f6a5e3401702cea7ba20041",
+    "listedRawCloseCatalog": "https://data.gov.tw/dataset/11764",
+    "otcReferenceCatalog": "https://data.gov.tw/dataset/11633",
+    "otcReferenceApiDocs": "https://www.tpex.org.tw/openapi/"
+  },
+  "controls": [
+    {
+      "label": "listed_notice_89748",
+      "observed": "2026-11-15T02:35:07.286462+00:00",
+      "bytes": 4537,
+      "mime": "text/csv",
+      "sha256": "fd2ebc57af3d89837de0df46b20582174baa85df7d0a091dd42375d39e42756b",
+      "rows": 53,
+      "control": [
+        {
+          "除權息日期": "1151118",
+          "股票代號": "2344",
+          "除權息": "息",
+          "無償配股率": "",
+          "現金增資配股率": "",
+          "現金增資認購價": "",
+          "現金股利": "2.000000"
+        },
+        {
+          "除權息日期": "1151118",
+          "股票代號": "5434",
+          "除權息": "權",
+          "無償配股率": "",
+          "現金增資配股率": "0.01288606",
+          "現金增資認購價": "400.0000",
+          "現金股利": "0"
+        }
+      ]
+    },
+    {
+      "label": "listed_actual_twt49u",
+      "observed": "2026-11-15T02:35:07.967775+00:00",
+      "bytes": 4040,
+      "mime": "application/json",
+      "sha256": "78467c5d4c7b3c4d17852a8b799bf8e4eaf91b79f32dd5234645d314d8b7bcfd",
+      "rows": 13,
+      "control": [
+        {
+          "資料日期": "115年11月02日",
+          "股票代號": "6165",
+          "除權息前收盤價": "47.90",
+          "除權息參考價": "42.90",
+          "權值+息值": "5.000000",
+          "權/息": "息",
+          "漲停價格": "47.15",
+          "跌停價格": "38.65",
+          "開盤競價基準": "42.90"
+        }
+      ]
+    },
+    {
+      "label": "otc_reference_11633",
+      "observed": "2026-11-15T02:35:08.169859+00:00",
+      "bytes": 2314,
+      "mime": "application/csv",
+      "sha256": "4f0ae99240ea0985b6f30bcf6082ad42b51b57c2828f4bc6212c82eda12ae3a2",
+      "rows": 10,
+      "control": [
+        {
+          "除權息日期": "1151116",
+          "代號": "5475",
+          "除權息前收盤價": "211.00",
+          "除權息參考價": "204.88",
+          "權或息": "除權",
+          "漲停價": "232.00",
+          "跌停價": "184.50",
+          "開始交易基準價": "211.00",
+          "現金股利": "0.00000000",
+          "現金增資認購價": "140.00"
+        }
+      ]
+    },
+    {
+      "label": "otc_reference_openapi",
+      "observed": "2026-11-15T02:35:08.390350+00:00",
+      "bytes": 6776,
+      "mime": "application/json",
+      "sha256": "7ed0f21580d9f6d176e994ba803b8cdbc77a5741907fa81c55c5b7c36a68b695",
+      "rows": 10,
+      "control": [
+        {
+          "Date": "1151116",
+          "SecuritiesCompanyCode": "5475",
+          "ClosePriceBeforeExRightsDiviend": "211.00",
+          "ExRightsDiviendQuote": "204.88",
+          "ExRightsDiviend": "除權",
+          "LimitUp": "232.00",
+          "LimitDown": "184.50",
+          "OpeningReferencePrice": "211.00",
+          "CashDivdend": "0.00000000",
+          "StockDivdendThousandShares": "0.00000000",
+          "CashCapitalIncreaseShares": "12000000",
+          "SubscriptionPricePerShare": "140.00"
+        }
+      ]
+    }
+  ],
+  "rangeControl": {
+    "observedAt": "2026-11-15T02:34:28.707714+00:00",
+    "sha256": "ed0333545f811ee9901933b8b1172271fb03bb7395c716c3befe042a7ad74b22",
+    "rows": 53,
+    "outOfRequestedRange": true,
+    "maximumReturnedDate": "2026-12-30"
+  },
+  "datedListedRawClose": [
+    {
+      "date": "2026-10-30",
+      "sha256": "954daeab710a5a3bf2f722c37b38375e6c06c49cce2e931c5ee60511eab17ffe",
+      "symbol": "6165",
+      "close": "47.90"
+    },
+    {
+      "date": "2026-11-02",
+      "sha256": "1007655d94647c4a7f935ad17ec68e809355bbdf7fec5a28b7b7b8c9f00b73fa",
+      "symbol": "6165",
+      "close": "40.50"
+    }
+  ],
+  "arithmetic": {
+    "relativeToPreviousClosePct": -15.44885177453027,
+    "relativeToOfficialReferencePct": -5.594405594405593,
+    "otcReferenceDiffersFromOpeningReference": true
+  },
+  "pointInTimeHistoricalAcceptance": false,
+  "officialActionTermsAuthority": false,
+  "writerApplied": false
+}
