@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "task": "T07",
+  "related": [
+    "T08"
+  ],
+  "issuer": "5274",
+  "periodEnd": "2026-09-30",
+  "productCommit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "execution": "isolated non-root processes on Contabo using public source documents",
+  "runtime": {
+    "node": "22.23.1",
+    "arelleRelease": "2.44.7",
+    "pdfplumber": "0.11.8",
+    "parserCpuLimitSeconds": 20,
+    "parserAddressSpaceLimitMiB": 768,
+    "socketTimeoutSeconds": 25,
+    "nodeParserTimeoutSeconds": 25,
+    "taxonomyArchiveSha256": "4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869",
+    "taxonomySchema": "tifrs-ci-cr-2026-03-31.xsd",
+    "kernelJournalOomEntriesInProbeWindow": 0
+  },
+  "pdf": {
+    "source": {
+      "status": 200,
+      "mime": "application/pdf",
+      "contentDisposition": false,
+      "bytes": 1403978,
+      "observedAt": "2026-11-15T06:04:44.791745+00:00",
+      "sha256": "74c0b165bc48cb173e2f57b339bacb926d54eedb37b5f31b6493bccb55fc2312"
+    },
+    "nativePdf": {
+      "status": "partial",
+      "parser": "pdfplumber",
+      "inputHashMatches": true,
+      "locators": 53,
+      "tableLocators": 4,
+      "pages": 49,
+      "lookupHasRequiredPages": true,
+      "numericMarkersOnPinnedPages": {
+        "7": true,
+        "32": true,
+        "33": true
+      },
+      "missingRequirements": [
+        "validated_pdf_manifest_required"
+      ],
+      "validatedFactCount": 0,
+      "hashMismatchRejectedBeforeParse": true
+    },
+    "structuredOfficialEndpoint": {
+      "status": 200,
+      "mime": "text/plain",
+      "contentDisposition": true,
+      "bytes": 469661,
+      "observedAt": "2026-11-15T06:04:44.366635+00:00",
+      "sha256": "aca323d959623ca8d954f93b04a99fff3cd200733da5ee4d51a662f35e0503a0",
+      "inlineXbrlMarker": true,
+      "schemaReferenceSuffix": "tifrs-ci-cr-2026-03-31.xsd"
+    },
+    "nonRoot": true,
+    "parserGitBlobs": [
+      "d9d9f9448d705609d3f2f55e52d635ac2a858576",
+      "7bf26154361b23e2bb3253303e31587c1023540e"
+    ],
+    "sourceFilesPersisted": false,
+    "officialReceiptWritten": false
+  },
+  "structured": {
+    "exactNodeTransportGate": {
+      "observedAt": "2026-11-15T06:13:17.773Z",
+      "status": 200,
+      "bytes": 469661,
+      "sha256": "aca323d959623ca8d954f93b04a99fff3cd200733da5ee4d51a662f35e0503a0",
+      "sameOfficialDocument": true,
+      "originalContentType": "; charset=iso-8859-1",
+      "terminalReason": null,
+      "verdict": {
+        "format": "xbrl",
+        "normalizedContentType": "application/xhtml+xml"
+      },
+      "pins": [
+        "078d202e9fcfed4de55074b8f3b8b1a1507ca37c",
+        "200feb47781543e59d942bb1bd56bddf98390605",
+        "d13b7c3a7ee5f7e47aa8bf93107219c1608de6b1"
+      ],
+      "nonRoot": true,
+      "node": "v22.23.1"
+    },
+    "unmodifiedParserWithResourceCounters": {
+      "runnerFailure": -9,
+      "source": {
+        "status": 200,
+        "mime": "text/plain",
+        "bytes": 469661,
+        "sha256": "aca323d959623ca8d954f93b04a99fff3cd200733da5ee4d51a662f35e0503a0",
+        "observedAt": "2026-11-15T06:09:53.492918+00:00"
+      },
+      "metrics": {
+        "wallSeconds": 22.301,
+        "userSeconds": 20.068,
+        "systemSeconds": 2.054,
+        "peakRssKiB": 439192
+      },
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mentionsTaxonomy": false,
+      "memoryError": false,
+      "digitsInTrace": false
+    },
+    "diagnosticTimingAroundArelleCallsWithSameLimits": {
+      "runnerFailure": -9,
+      "source": {
+        "status": 200,
+        "mime": "text/plain",
+        "wireContentType": "; charset=iso-8859-1",
+        "attachmentFilename": "tifrs-fr1-m1-ci-cr-5274-2026Q3.html",
+        "bytes": 469661,
+        "sha256": "aca323d959623ca8d954f93b04a99fff3cd200733da5ee4d51a662f35e0503a0",
+        "observedAt": "2026-11-15T06:11:52.194892+00:00"
+      },
+      "metrics": {
+        "wallSeconds": 21.769,
+        "userSeconds": 19.678,
+        "systemSeconds": 1.909,
+        "peakRssKiB": 439520
+      },
+      "stderrSha256": "be1c7ba1b2bebeca93eaff1bcfff8eaba94f591a96dcd49572d39ce70e5e26ef",
+      "mentionsTaxonomy": false,
+      "memoryError": false,
+      "digitsInTrace": false,
+      "phaseTrace": [
+        [
+          "model_load_start",
+          0.984
+        ],
+        [
+          "model_load_end",
+          7.741
+        ],
+        [
+          "validate_start",
+          7.742
+        ]
+      ]
+    },
+    "cutoffBackfillAllowed": false,
+    "validatedFactsEmitted": 0,
+    "officialReceiptWritten": false
+  },
+  "rawDocumentsCommitted": false,
+  "productionServiceOrDatabaseUsed": false
+}
