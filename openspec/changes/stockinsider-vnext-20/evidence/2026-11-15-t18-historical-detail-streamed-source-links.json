@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "task": "T18",
+  "observedOn": "2026-11-15",
+  "scope": "read-only pinned existing public release Http body; static stream structure; local in-memory href-substitution control",
+  "existingReceipt": "https://github.com/Kaichen9527/stockinsider/commit/92a7f70fe5dccb40ecaf22444d90a6b1841a568c",
+  "priorStagingVerifier": "https://github.com/Kaichen9527/stockinsider/blob/1d957e28/deployment/staging/vnext/t17_keyfd/t18_detail_http.py",
+  "sourceReadOnly": true,
+  "stageNamespaceAppReplayed": false,
+  "whitelistedSelectorCandidateLimit": 4,
+  "numberOfHistoricalPinsRetrieved": 4,
+  "anonymousRequests": true,
+  "bodyRetained": false,
+  "rawUrlOrRevisionExported": false,
+  "publicObservation": {
+    "apiMatchesPriorReceipt": true,
+    "api": {
+      "status": 200,
+      "sha256": "c6eede46822fc7500fa8c80991b39c309b048aedd1ca0427a9ceb0375c9d3aeb",
+      "contentType": "application/json",
+      "bytes": 13368
+    },
+    "web": {
+      "status": 200,
+      "sha256": "a50aa8989066c5baae7b2a99d6d941f686f216a22b11fc735750591b0c4972f7",
+      "contentType": "text/html",
+      "bytes": 94223
+    },
+    "snapshotSource": "published historical radar pin",
+    "matchingRevision": true,
+    "publishedAvailableTaipeiDate": "2026-09-14",
+    "candidateFacts": 9,
+    "candidateFactNonNullUrl": 9,
+    "sourceRows": 10,
+    "sourceLinkRows": 1,
+    "streamedAnchorStructure": {
+      "expectedAnchorInHiddenDiv": 11,
+      "recognizedHiddenSegments": 11,
+      "matchedAnchorsWithMainPlaceholderReplacement": 10,
+      "definedPlaceholders": 13,
+      "recognizedReplacementCalls": 13
+    },
+    "entireRawHtmlExpectedHrefMultiset": true,
+    "apiExpectedLinksOnPageButOutsideAllSections": 10,
+    "expectedAnchorsSectionPlacement": [
+      {
+        "knownHeading": [
+          "可追溯來源"
+        ],
+        "hasHeader": true,
+        "expectedHrefMatches": 1,
+        "totalHrefCount": 1
+      }
+    ],
+    "factOnlyUrlsNotAnchoredAnywhere": 0,
+    "expectedPublicHrefCount": 11,
+    "renderedSectionHrefCount": 1,
+    "multisetMatches": false,
+    "factOnlyUrlsNotAnchoredInSources": 3,
+    "sourceSectionRenderedListItems": 1,
+    "unavailableLinkLabelCount": 0,
+    "apiHrefEntriesAlsoAnywhereInHtml": 11,
+    "renderedHrefsInSourceLinks": 1,
+    "renderedHrefsInSources": 1,
+    "allExternalLinksBlankNoreferrer": true,
+    "unchangedLabelLinkReplacementRejectedByHrefComparison": true
+  },
+  "verifiedHrefScope": "raw streamed HTML, not a post-hydration browser DOM",
+  "holdRetained": true,
+  "productionChanged": false,
+  "nextAcceptance": [
+    "check API fact URLs and separately projected source-link records against the frozen post-policy read model",
+    "admit only exact expected anchors after resolving stream placeholders with a real browser",
+    "positives on both fixed Next.js versions and wrong-href/same-label negatives",
+    "do not relax source URL guard, private-host boundary or frozen revision checks"
+  ]
+}
