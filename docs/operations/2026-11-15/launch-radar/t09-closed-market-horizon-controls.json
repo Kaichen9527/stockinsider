@@ -1,0 +1,62 @@
+{
+  "schema": "stockinsider-t09-actual-closure-horizon-control-v1",
+  "through": "2026-11-13",
+  "cases": [
+    {
+      "hypotheticalSignalOnActualMarketSession": "2026-07-09",
+      "officialObservedIndexDates": {
+        "firstFollowingMarketSession": "2026-07-13",
+        "elapsedObservedMarketSessions": 85,
+        "horizonDates": {
+          "20": "2026-08-07",
+          "60": "2026-10-06",
+          "120": null
+        }
+      },
+      "contrastOnlyIfClosuresWereCounted": {
+        "firstFollowingMarketSession": "2026-07-10",
+        "elapsedObservedMarketSessions": 87,
+        "horizonDates": {
+          "20": "2026-08-06",
+          "60": "2026-10-05",
+          "120": null
+        }
+      }
+    },
+    {
+      "hypotheticalSignalOnActualMarketSession": "2026-10-22",
+      "officialObservedIndexDates": {
+        "firstFollowingMarketSession": "2026-10-27",
+        "elapsedObservedMarketSessions": 14,
+        "horizonDates": {
+          "20": null,
+          "60": null,
+          "120": null
+        }
+      },
+      "contrastOnlyIfClosuresWereCounted": {
+        "firstFollowingMarketSession": "2026-10-23",
+        "elapsedObservedMarketSessions": 15,
+        "horizonDates": {
+          "20": null,
+          "60": null,
+          "120": null
+        }
+      }
+    }
+  ],
+  "noSignalOrFillCreated": true,
+  "fillsRequireSeparateStockEvidence": true,
+  "observedAtUtc": "2026-11-15T01:02:33Z",
+  "scope": "CALENDAR_HORIZON_REFERENCE_CASES_USING_HISTORICAL_OFFICIAL_INDEX_DATES",
+  "dataEvidence": "a47bfcf8f959dd7c1736a713c779490a56fccb19",
+  "calendarEvidence": "f857025bd21762e45a467b295f8190f32416a3c6",
+  "rule": "Market-wide proven closed dates never consume 20/60/120 trading sessions or the one next-market-session execution test. Stock-only non-availability on an actual market session is handled by the execution model.",
+  "notes": {
+    "notMatureTerminologyPreserved": true,
+    "onceNoFillRemainsNoFill": true,
+    "sourceFirstHistoricalSignalCreated": false,
+    "actualProductOutcomeEngineRun": false,
+    "productionActions": 0
+  }
+}
