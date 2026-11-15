@@ -74,8 +74,28 @@ try {
   fail('internal endpoint returned non-JSON', { endpoint, status: response.status, body: bodyText.slice(0, 500) });
 }
 
+// The document worker reports a committed, accounting-validated subset as
+// HTTP 500 with ok:false. The recorded gaps still preclude full preparation.
+function recordedPartialFinancialDocument() {
+  if (endpoint !== '/api/internal/candidate-financial-documents/worker' || response.status !== 500
+    || body?.ok !== false || body.schemaVersion !== 'private-financial-preparation-v1'
+    || body.purpose !== 'private_financial_data_preparation' || body.error !== undefined
+    || body.qualificationAuthority !== false || body.rankingAuthority !== false
+    || !Array.isArray(body.gaps) || body.gaps.length !== 0
+    || !Array.isArray(body.results) || !Number.isInteger(body.claimed) || body.claimed < 0
+    || !Number.isInteger(body.recovered) || body.recovered < 0 || body.claimed + body.recovered !== body.results.length) {
+    return false;
+  }
+  return body.results.some((row) => row?.status === 'partial')
+    && body.results.every((row) => typeof row?.availableAt === 'string' && Number.isFinite(Date.parse(row.availableAt))
+      && ((row.status === 'validated' && ['success', 'existing_terminal_receipt'].includes(row.validation))
+        || (row.status === 'partial' && row.validation === 'success')));
+}
+
 process.stdout.write(`${JSON.stringify(body)}\n`);
-if (!response.ok || body?.ok !== true) {
+if (recordedPartialFinancialDocument()) {
+  process.stderr.write('financial document preparation recorded a validated subset with gaps\n');
+} else if (!response.ok || body?.ok !== true) {
   fail('internal endpoint failed', { endpoint, status: response.status, error: body?.error || null });
 }
 
