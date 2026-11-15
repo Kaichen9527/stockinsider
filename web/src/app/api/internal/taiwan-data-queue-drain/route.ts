@@ -39,7 +39,8 @@ export async function POST(request: Request) {
   let finMindToken:Promise<string>|undefined;
   const licensedSources:Array<{jobId:string;attemptId:string;status:string;captureId:string|null}>=[];
   const sourceDispatchErrors:Array<{jobId:string;error:string}>=[];
-  let sourcePrepass:{status:string;jobs:number;reason?:string;sourceAuthority:false}|null=null;
+  let sourcePrepass:{status:string;jobs:number;reason?:string;sourceAuthority:false;scope?:'current_and_history'|'history_only'|null;
+    currentPlanStatus?:'planned'|'deferred'|'no_active_pool';currentReason?:string|null;calendarAuthority?:false}|null=null;
   let sourceNoActivePool=false;
   if(launchSourcesEnabled()){
     const identity=vnextIdentity(request);
@@ -48,7 +49,8 @@ export async function POST(request: Request) {
       const plan=await prepareLaunchSources(identity);
       if(!('jobs' in plan)||!Number.isSafeInteger(plan.jobs))throw Error('launch_source_plan_unavailable');
       sourceNoActivePool=plan.status==='no_active_pool';
-      sourcePrepass={status:plan.status,jobs:Number(plan.jobs),sourceAuthority:false,...(plan.status==='deferred'?{reason:plan.reason!}:{})};
+      sourcePrepass={status:plan.status,jobs:Number(plan.jobs),sourceAuthority:false,...(plan.status==='deferred'?{reason:plan.reason!}:{}),
+        ...('scope' in plan?{scope:plan.scope,currentPlanStatus:plan.currentPlanStatus,currentReason:plan.currentReason,calendarAuthority:plan.calendarAuthority}:{})};
       // Only fresh planning defers. Independently classified existing jobs still
       // use their original bound adoption or unbound queue authority below.
       if(plan.status==='planned'){

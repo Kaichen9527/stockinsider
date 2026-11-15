@@ -8,6 +8,7 @@ import { tpexNativeShareCsvUrl } from './launch-native-volume.ts';
 import { tpexInstitutionalVolumeCsvUrl } from './launch-institutional-volume.ts';
 import { evidenceKnownAt } from './evidence-clock.ts';
 import { vnextEnabled } from './policy.ts';
+import { parseLaunchIndexBackfillPlan, type LaunchIndexBackfillPlan } from './launch-index-backfill.ts';
 
 type Row=Record<string,unknown>;
 type Client={rpc(name:string,body:Row):PromiseLike<{data:unknown;error:unknown}>};
@@ -154,7 +155,13 @@ async function production(identity:VnextIdentity):Promise<LaunchSourceDependenci
     registerArtifact:async(_owner,hash,length)=>{const result=await writer.supabase.rpc('register_private_artifact_receipt_v1',{
       p_artifact_hash:hash,p_byte_length:length,p_media_type:'text/csv',p_purpose:'diagnostic_attachment',p_metadata:{storage:'private_hash_store_v1',profile:'licensed-launch-csv-v1'}});
       if(result.error)throw Error('launch_source_artifact_registration_failed');},
-    command:async(owner,operation,request,bytes)=>{const result=await writer.supabase.rpc('vnext_launch_csv_command_v1',{
+    command:async(owner,operation,request,bytes)=>{
+      if(operation==='enqueue-history-current'){
+        if(Object.keys(request).length||bytes)throw Error('launch_index_backfill_closed_request');
+        const result=await writer.supabase.rpc('vnext_launch_csv_backfill_plan_v1',{p_principal:identity.principal,p_lease_owner:owner});
+        if(result.error)throw Error('launch_index_backfill_unavailable');return result.data;
+      }
+      const result=await writer.supabase.rpc('vnext_launch_csv_command_v1',{
       p_principal:identity.principal,p_lease_owner:owner,p_operation:operation,p_request:request,p_body:bytes?'\\x'+Buffer.from(bytes).toString('hex'):null});
       if(result.error)throw Error('launch_source_authority_rejected');return result.data;}};
 }
@@ -184,10 +191,12 @@ export function parseLaunchSourcePlan(value:unknown):LaunchSourcePlan{
 }
 /** Plans only from SQL's actual active pool/completed cached sessions. There is
  * no HTTP-supplied symbol list, date expansion, URL or profile binding. */
-export async function prepareLaunchSources(identity:VnextIdentity){
+export async function prepareLaunchSources(identity:VnextIdentity):Promise<LaunchIndexBackfillPlan|{status:'disabled';sourceAuthority:false}>{
   if(!launchSourcesEnabled())return {status:'disabled' as const,sourceAuthority:false as const};
   const deps=await production(identity);
-  return owned(deps,async owner=>parseLaunchSourcePlan(await deps.command(owner,'enqueue-current',{})));
+  // This new RPC reuses the old current planner/queue; missing installation is
+  // a deployment gap, never a fallback to a shorter claimed history window.
+  return owned(deps,async owner=>parseLaunchIndexBackfillPlan(await deps.command(owner,'enqueue-history-current',{})));
 }
 export async function adoptClaimedLaunchSource(identity:VnextIdentity,jobId:string,queueOwner:string){
   return adoptLaunchSourceWithDependencies(await production(identity),jobId,queueOwner);
