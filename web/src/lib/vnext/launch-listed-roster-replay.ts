@@ -22,6 +22,14 @@ const sources = {
   },
 } as const;
 
+export const LISTED_ROSTER_SOURCES = Object.freeze(
+  (['TWSE', 'TPEX', 'TDCC'] as const).map(source => Object.freeze({
+    datasetId: sources[source].id,
+    url: sources[source].url,
+    maxBytes: source === 'TDCC' ? LISTED_ROSTER_MAX_BYTES : MOPS_MAX_BYTES,
+  })),
+);
+
 const companyHeaders = [
   '出表日期', '公司代號', '公司名稱', '公司簡稱', '外國企業註冊地國', '產業別', '住址', '營利事業統一編號',
   '董事長', '總經理', '發言人', '發言人職稱', '代理發言人', '總機電話', '成立日期', '上市日期', '普通股每股面額',
@@ -130,27 +138,37 @@ function compareCatalogs(venue: Venue, companies: ReturnType<typeof readCompanyR
   alternate: ReturnType<typeof readCompanyRoster>, custody: ReturnType<typeof readCustodyRoster>, sourceDate: string) {
   const expected = sources[venue].custodyVenue;
   const confirmed: string[] = [];
+  const reviews = [];
   const gaps = { crossVenueCompanyClaim: 0, futureListing: 0, custodyMissing: 0, custodyMarketMismatch: 0,
     custodyStatusRestricted: 0, custodyOnly: 0 };
-  for (const [code, listingDate] of companies.listings) {
+  for (const [code, listingDate] of [...companies.listings].sort(([a], [b]) => a.localeCompare(b))) {
     const state = custody.entries.get(code);
-    if (alternate.listings.has(code)) gaps.crossVenueCompanyClaim++;
-    else if (listingDate > sourceDate) gaps.futureListing++;
-    else if (!state) gaps.custodyMissing++;
-    else if (state.market !== expected) gaps.custodyMarketMismatch++;
-    else if (state.status !== '正常') gaps.custodyStatusRestricted++;
-    else confirmed.push(code);
+    let finding: keyof typeof gaps | 'corroborated';
+    if (alternate.listings.has(code)) finding = 'crossVenueCompanyClaim';
+    else if (listingDate > sourceDate) finding = 'futureListing';
+    else if (!state) finding = 'custodyMissing';
+    else if (state.market !== expected) finding = 'custodyMarketMismatch';
+    else if (state.status !== '正常') finding = 'custodyStatusRestricted';
+    else finding = 'corroborated';
+    if (finding === 'corroborated') confirmed.push(code);
+    else gaps[finding]++;
+    reviews.push({ code, listingDate, finding, custodyMarket: state?.market ?? null });
   }
-  for (const [code, state] of custody.entries) {
-    if (state.market === expected && !companies.listings.has(code)) gaps.custodyOnly++;
+  for (const [code, state] of [...custody.entries].sort(([a], [b]) => a.localeCompare(b))) {
+    if (state.market !== expected || companies.listings.has(code)) continue;
+    gaps.custodyOnly++;
+    reviews.push({ code, listingDate: null, finding: 'custodyOnly', custodyMarket: state.market });
   }
   return {
-    companyRows: companies.rawRows,
-    companyCodes: companies.listings.size,
-    excludedOtherCodes: companies.rawRows - companies.listings.size,
-    corroboratedCodes: confirmed.length,
-    corroboratedSetHash: sha256(JSON.stringify([venue, ...confirmed.sort()])),
-    gaps,
+    summary: {
+      companyRows: companies.rawRows,
+      companyCodes: companies.listings.size,
+      excludedOtherCodes: companies.rawRows - companies.listings.size,
+      corroboratedCodes: confirmed.length,
+      corroboratedSetHash: sha256(JSON.stringify([venue, ...confirmed])),
+      gaps,
+    },
+    reviews,
   };
 }
 
@@ -158,7 +176,7 @@ function compareCatalogs(venue: Venue, companies: ReturnType<typeof readCompanyR
  * corroboration only. Neither a custody operation nor missing transport
  * evidence can create/revoke an exchange listing or admit a ranking input.
  */
-export function parseListedRosterReplay(value: unknown, files: ReadonlyMap<string, Uint8Array> = new Map()) {
+export function analyzeListedRosterReplay(value: unknown, files: ReadonlyMap<string, Uint8Array>) {
   exactObject(value, ['schema', 'targetSession', 'cutoff', 'responses']);
   if (value.schema !== LISTED_ROSTER_REPLAY_SCHEMA || typeof value.cutoff !== 'string') refuse();
   isoDate(value.targetSession);
@@ -177,7 +195,7 @@ export function parseListedRosterReplay(value: unknown, files: ReadonlyMap<strin
   const sourceDates = [twse.sourceDate, tpex.sourceDate, custody.sourceDate];
 
   const comparableSourceDates = new Set(sourceDates).size === 1;
-  const venues = comparableSourceDates ? {
+  const compared = comparableSourceDates ? {
     TWSE: compareCatalogs('TWSE', twse, tpex, custody, twse.sourceDate),
     TPEX: compareCatalogs('TPEX', tpex, twse, custody, tpex.sourceDate),
   } : null;
@@ -192,10 +210,16 @@ export function parseListedRosterReplay(value: unknown, files: ReadonlyMap<strin
     const instant = evidenceInstant(row.receivedAt)!;
     return instant <= cutoff && taipei(instant) === value.targetSession;
   });
-  return {
+  const summary = {
     schema: LISTED_ROSTER_REPLAY_SCHEMA, targetSession: value.targetSession, cutoff: value.cutoff,
     scope: 'company_and_custody_reconciliation', comparableSourceDates, sameSessionByCutoff,
     qualified: false, custodianRows: custody.rawRows, custodianOtherFourDigitRows: custody.nonCompanyFourDigit,
-    receipts, venues,
+    receipts, venues: compared ? { TWSE: compared.TWSE.summary, TPEX: compared.TPEX.summary } : null,
   };
+  const reviews = compared ? { TWSE: compared.TWSE.reviews, TPEX: compared.TPEX.reviews } : null;
+  return { summary, reviews };
+}
+
+export function parseListedRosterReplay(value: unknown, files: ReadonlyMap<string, Uint8Array> = new Map()) {
+  return analyzeListedRosterReplay(value, files).summary;
 }

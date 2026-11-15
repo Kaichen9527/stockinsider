@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { decodeLicensedCsvRecords } from './licensed-csv-decoder.ts';
-import { LISTED_ROSTER_REPLAY_SCHEMA, parseListedRosterReplay } from './launch-listed-roster-replay.ts';
+import { LISTED_ROSTER_REPLAY_SCHEMA, analyzeListedRosterReplay, parseListedRosterReplay } from './launch-listed-roster-replay.ts';
 
 const mops = [
   '出表日期', '公司代號', '公司名稱', '公司簡稱', '外國企業註冊地國', '產業別', '住址', '營利事業統一編號',
@@ -121,4 +121,23 @@ test('keeps the shared decoder default at 32 columns', () => {
   const line = Array<string>(33).fill('safe').join(',');
   assert.throws(() => decodeLicensedCsvRecords(line, 1), /column_bound/);
   assert.equal(decodeLicensedCsvRecords(line, 1, 33)[0].length, 33);
+});
+
+test('private review preserves code-level conflicts and strips names and raw custody fields', () => {
+  const { value, files } = fixture().write();
+  const { summary, reviews } = analyzeListedRosterReplay(value, files);
+  assert.deepEqual(summary, parseListedRosterReplay(value, files));
+  assert.deepEqual(reviews?.TWSE.find(row => row.code === '3333'), {
+    code: '3333', listingDate: '2000-11-23', finding: 'custodyMarketMismatch', custodyMarket: '終止上市櫃',
+  });
+  assert.deepEqual(reviews?.TWSE.find(row => row.code === '7384'), {
+    code: '7384', listingDate: null, finding: 'custodyOnly', custodyMarket: '上市',
+  });
+  assert.ok(!JSON.stringify(reviews).includes('SYNTHETIC'));
+  assert.ok(!JSON.stringify(reviews).includes('減資'));
+
+  const shifted = fixture();
+  for (const row of shifted.otc) row[0] = '1151112';
+  const invalid = shifted.write();
+  assert.equal(analyzeListedRosterReplay(invalid.value, invalid.files).reviews, null);
 });
