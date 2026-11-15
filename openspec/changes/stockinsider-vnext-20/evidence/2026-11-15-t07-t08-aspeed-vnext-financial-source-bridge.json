@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "tasks": [
+    "T07",
+    "T08"
+  ],
+  "productCommit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "baselineEvidenceCommit": "df88766b86c3175a09e08a5af3422e7c3e070742",
+  "source": {
+    "status": 200,
+    "mime": "text/plain",
+    "wireContentType": "; charset=iso-8859-1",
+    "attachmentFilename": "tifrs-fr1-m1-ci-cr-5274-2026Q3.html",
+    "bytes": 469661,
+    "sha256": "aca323d959623ca8d954f93b04a99fff3cd200733da5ee4d51a662f35e0503a0",
+    "observedAt": "2026-11-15T06:39:14.630807+00:00"
+  },
+  "parserEvidenceSha256": "5a7ae1bc97072be8cdc70d32f04286595a01b80d76b265f9b0084f12fc74b30b",
+  "manifestErrors": 200,
+  "asOfSource": "exact SQL read_financial_facts_as_of in disposable PostgreSQL 17.11, fixture schemas",
+  "actualOfficialAccounting": {
+    "count": 11,
+    "validated": 11,
+    "hashMatches": true,
+    "sourceMatches": true,
+    "principalMatches": true,
+    "officialVersionOnly": true
+  },
+  "bridge": {
+    "actualProjectionFunction": true,
+    "actualMopsUrlAccepted": true,
+    "actualPartialDocument": {
+      "projected": 0,
+      "receipts": 0,
+      "observations": 11,
+      "deferred": 11,
+      "reasons": [
+        "immutable_source_receipt_missing_or_conflicting"
+      ],
+      "gaps": [],
+      "observationsUnknownSource": 11,
+      "eps": []
+    },
+    "oneFieldInMemoryNonAuthoritativeControl": {
+      "projected": 10,
+      "receipts": 11,
+      "observations": 11,
+      "deferred": 0,
+      "reasons": [],
+      "gaps": [
+        "missing_sql_financial_interval_basis_parity"
+      ],
+      "observationsUnknownSource": 0,
+      "eps": [
+        {
+          "periodStart": "2026-07-01",
+          "periodEnd": "2026-09-30",
+          "basis": "diluted",
+          "value": 48.09,
+          "sourceBound": true,
+          "intervalAllowsComparison": false,
+          "denominator": null
+        },
+        {
+          "periodStart": "2026-01-01",
+          "periodEnd": "2026-09-30",
+          "basis": "diluted",
+          "value": 126.28,
+          "sourceBound": true,
+          "intervalAllowsComparison": false,
+          "denominator": null
+        },
+        {
+          "periodStart": "2026-01-01",
+          "periodEnd": "2026-09-30",
+          "basis": "basic",
+          "value": 126.41,
+          "sourceBound": true,
+          "intervalAllowsComparison": false,
+          "denominator": null
+        },
+        {
+          "periodStart": "2026-07-01",
+          "periodEnd": "2026-09-30",
+          "basis": "basic",
+          "value": 48.13,
+          "sourceBound": true,
+          "intervalAllowsComparison": false,
+          "denominator": null
+        }
+      ]
+    },
+    "actualPastCutoff": {
+      "projected": 0,
+      "receipts": 0,
+      "observations": 0,
+      "deferred": 0,
+      "reasons": [],
+      "gaps": [],
+      "observationsUnknownSource": 0,
+      "eps": []
+    },
+    "actualBeforeAccountingCutoff": {
+      "projected": 0,
+      "receipts": 0,
+      "observations": 11,
+      "deferred": 11,
+      "reasons": [
+        "validated_original_fact_required"
+      ],
+      "gaps": [],
+      "observationsUnknownSource": 11,
+      "eps": []
+    },
+    "scope": {
+      "fixtureAddedDocumentMetadata": true,
+      "fixtureAddedProvenanceIdentity": true,
+      "noWriteFromProjection": true,
+      "noPromotion": true
+    }
+  },
+  "actualDocumentStatusAfterTest": "partial",
+  "gitBlobs": [
+    "40065361e69d9204d91e5b117fbfa587698d33b1",
+    "d0ca523343377a595022b3d0d72bb638c4e8f135",
+    "d13b7c3a7ee5f7e47aa8bf93107219c1608de6b1",
+    "8f5ae1766069cebf9bef3ca2f8fc28022c4b148e",
+    "4ca69b9aa86396101c4fb2f2f294dfeaf89300f1",
+    "9892065568510912d332c2971fb14f656a450fd3",
+    "c7e561d73679dee2c3d17fe7bbc2affaaf781a14",
+    "b44487bdf4f664a179bc9ef69375328828fca071",
+    "cca8b820efbc4cdc8377ddf09997d9d664442c00",
+    "7e84abc27abaf37121e4803037ac264e2ae04d48",
+    "c136ff421021b4bb7df4aed5bcc82d943939e4ef",
+    "7a565b9fe6cf448aab878f1b410ac63ae0be5918",
+    "bc09446bcd1caee38039b8184f59d5b5aab5feb1",
+    "a8441d87c99c1edf6ebfed991b58b346f917b32b",
+    "2fb776e380e525bbdff780b2fd15ba14a49d9774",
+    "3543aef056d34dc7359026498e7ffd90cb781b4b",
+    "fa27138f5dd8f6ce823a91e2fd4be84cfe76fac9",
+    "c4f7ea17bc1415638b4ef782d147d580d2a190fa",
+    "066dc146fb3b5aa3f5bf789fdc7abbd7e192b751"
+  ],
+  "rawFilingOrManifestCommitted": false,
+  "temporaryClusterAndSourceRemoved": true,
+  "productionDataWrites": false
+}
