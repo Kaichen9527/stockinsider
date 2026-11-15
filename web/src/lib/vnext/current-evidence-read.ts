@@ -127,7 +127,7 @@ export function currentEvidenceRead(input: {
       ...(publication === 'missing' ? ['published_revision_missing'] : publication === 'input_changed' ? ['published_revision_input_changed'] : []),
       ...eligibility.missingAuthority])],
     financial: { revisions, receipts: financial.receipts.filter(r => ids.has(String(r.factId))) },
-    price: priceValid ? { sourceDatasetRevision: history!.sourceDatasetRevision, availableAt: history!.availableAt, session: input.signalSession, adjustmentEvidenceHash: history!.priceBasis!.adjustmentEvidenceHash } : null,
+    price: priceValid ? { sourceDatasetRevision: history!.sourceDatasetRevision, availableAt: history!.availableAt, session: input.signalSession, observedAt: history!.bars.at(-1)!.sourceTimestamp, adjustmentEvidenceHash: history!.priceBasis!.adjustmentEvidenceHash } : null,
     // Preserve the real quote as comparison evidence. The actual audit receives
     // no usable price while published-target/current-rights authority is absent.
     evidence: financialEvidence, comparisonPriceEvidence: priceEvidence,

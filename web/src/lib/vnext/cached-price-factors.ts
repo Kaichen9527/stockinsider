@@ -12,6 +12,7 @@ export function historicalPriceFactors(history:TwEntryHistoricalAuthorityResult)
  const mean=(n:number)=>valid?bars.slice(-n).reduce((sum,b)=>sum+b.close,0)/n:null;
  const volumes=valid?bars.slice(-20).map((b)=>b.volume).sort((a,b)=>a-b):[];const median=volumes.length===20?(volumes[9]+volumes[10])/2:null;
  return {valid,close:valid?current!.close:null,ma20:mean(20),ma60:mean(60),volume:valid?current!.volume:null,session:valid?current!.session:null,
+  observedAt:valid?current!.sourceTimestamp:null,availableAt:valid?history.availableAt:null,
   priceReturn20:observation(valid?current!.close/bars.at(-21)!.close-1:null,source,at),volumeRatio20:observation(valid && median!==null && median>0?current!.volume/median:null,source,at),
   trend20:observation(valid?current!.close/mean(20)!-1:null,source,at),trend60:observation(valid?current!.close/mean(60)!-1:null,source,at),provenance:valid?[history.sourceDatasetRevision,history.priceBasis!.adjustmentEvidenceHash]:[],gaps:history.missingData};
 }

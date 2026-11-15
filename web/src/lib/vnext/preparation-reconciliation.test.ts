@@ -125,10 +125,16 @@ test('shared frozen projection is byte/hash equivalent to the original admitted 
  assert.deepEqual(freezeFinancialPreparation(f.original,f.historical,sources,cutoff),{inputHash:inputHash(frozen),evidence:frozen});assert.equal(JSON.stringify(sources),before);
 });
 function controllers(f:ReturnType<typeof fixture>){
- const cache=new Map<string,Record<string,unknown>>();const allowed=new Set(['http.ts','store.ts','policy.ts','auth.ts','request.ts','research.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','evidence-clock.ts','worker-output.ts','research-failure.ts','preparation-reconciliation.ts','forecast-current.ts','disclosed-fiscal-forecast.ts','corporate-action-terms.ts','preparation-trading-identity.ts','cached-price-factors.ts']);
+ const cache=new Map<string,Record<string,unknown>>();const allowed=new Set(['http.ts','store.ts','policy.ts','auth.ts','request.ts','research.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','audit-quote-clock.ts','../candidate-price-history.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','evidence-clock.ts','worker-output.ts','research-failure.ts','preparation-reconciliation.ts','forecast-current.ts','disclosed-fiscal-forecast.ts','corporate-action-terms.ts','preparation-trading-identity.ts','cached-price-factors.ts']);
  const load=(name:string):Record<string,unknown>=>{
   if(!allowed.has(name))throw Error(`unexpected_preparation_source:${name}`);const prior=cache.get(name);if(prior)return prior;
-  const filename=new URL(name,import.meta.url);const compiled=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:name}).outputText;
+  const filename=new URL(name,import.meta.url);let source=fs.readFileSync(filename,'utf8');
+  if(name==='../candidate-price-history.ts'){
+   const parsed=ts.createSourceFile(filename.pathname,source,ts.ScriptTarget.Latest,true);
+   const declaration=parsed.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text==='isHistoryDate');
+   if(!declaration)throw Error('actual_history_date_validator_missing');source=declaration.getText(parsed);
+  }
+  const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:name}).outputText;
   const controllerModule={exports:{}};cache.set(name,controllerModule.exports);
   const require=(dependency:string):unknown=>{
    if(['node:crypto','node:async_hooks','node:util'].includes(dependency))return nativeRequire(dependency);
@@ -140,6 +146,7 @@ function controllers(f:ReturnType<typeof fixture>){
    if(dependency==='../taiwan-data-runtime')return {requireActiveVpsWriter:async()=>{f.calls.push('writer-metadata-read');return {ok:true,supabase:f.client};}};
    if(dependency==='../production-write-lease')return {acquireProductionWriteLease:async()=>{f.calls.push('lease-acquire');return 'synthetic-lease';},releaseProductionWriteLease:async()=>{f.calls.push('lease-release');}};
    if(dependency==='../tw-entry-plan-authority.ts')return {loadTwEntryHistoricalPriceAuthority:async(_client:unknown,request:Parameters<PreparationDependencies['historical']>[0])=>f.deps.historical(request)};
+   if(dependency==='../candidate-price-history.ts')return load(dependency);
    if(dependency.startsWith('./'))return load(dependency.slice(2));
    throw Error(`forbidden_preparation_dependency:${dependency}`);
   };

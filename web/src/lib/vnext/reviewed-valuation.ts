@@ -1,7 +1,8 @@
 import {deepFactors,type DeepInputs} from './factors.ts';
 import {validateArtifact,validateClaim,validateReview,type Artifact,type Evidence,type Review} from './research.ts';
 import type {AuditQuote} from './thesis-audit.ts';
-import {taipeiDate} from './policy.ts';
+import {AUDIT_QUOTE_CLOCK_VERSION,quoteClock,civilDateKnownAt} from './audit-quote-clock.ts';
+import {evidenceInstant} from './evidence-clock.ts';
 type Input={artifact:Artifact|null;review:Review|null;original:Evidence[];current?:Evidence[];quote:AuditQuote;cutoff:string};
 const methods=['forward_pe','forward_pb','normalized_pe','ev_ebitda','dcf'];
 const units=new Set(['TWD','TWD_per_share','TWD/share']);
@@ -10,11 +11,12 @@ const units=new Set(['TWD','TWD_per_share','TWD/share']);
  * this projection supplies a forecast, a multiple, or a missing scenario. */
 export function reviewedValuation(input:Input){
  const {artifact,review,quote,cutoff}=input;const evidence=input.current||input.original;const gaps:string[]=[];
- const known=Number.isFinite(Date.parse(cutoff));
+ const known=evidenceInstant(cutoff)!==null;const clock=quoteClock(quote,cutoff);
+ if(!clock)gaps.push('valuation_quote_clock_missing_or_future');
  if(!known || !artifact || !validateArtifact(artifact,input.original,artifact.inputHash).valid)gaps.push('valuation_artifact_invalid');
  if(!artifact || !review || review.approved!==true || validateReview(review,artifact,input.original).length)gaps.push('valuation_original_review_incomplete');
  const supported=(id:string)=>review?.claimChecks.filter((check)=>check.claimId===id && check.verdict==='supported').length===1;
- const usableClaim=(id:string)=>artifact?.claims.find((claim)=>claim.id===id && supported(id) && !validateClaim(claim,evidence).length && claim.evidenceIds.every((sourceId)=>{const source=evidence.find((row)=>row.id===sourceId);return source && Number.isFinite(Date.parse(source.availableAt)) && Date.parse(source.availableAt)<=Date.parse(cutoff);}));
+ const usableClaim=(id:string)=>artifact?.claims.find((claim)=>claim.id===id && supported(id) && !validateClaim(claim,evidence).length && claim.evidenceIds.every((sourceId)=>{const source=evidence.find((row)=>row.id===sourceId);return source && evidenceInstant(source.availableAt)!==null && evidenceInstant(cutoff)!==null && evidenceInstant(source.availableAt)!<=evidenceInstant(cutoff)!;}));
  const scenarios=['valuation_bear','valuation_base','valuation_bull'].map((key)=>{
   const matching=artifact?.claims.filter((claim)=>claim.numeric?.key===key)||[];
   const claim=matching.length===1?usableClaim(matching[0].id):undefined;
@@ -27,11 +29,11 @@ export function reviewedValuation(input:Input){
  if(scenarios.every((claim)=>claim?.numeric) && (new Set(scenarios.map((claim)=>claim!.numeric!.unit)).size!==1 || new Set(scenarios.map((claim)=>claim!.numeric!.period)).size!==1))gaps.push('valuation_scenario_unit_or_period_mismatch');
  const priceClaims=artifact?.claims.filter((claim)=>claim.numeric?.key==='current_price' && usableClaim(claim.id) && units.has(claim.numeric!.unit) && claim.numeric!.period===quote.session && claim.numeric!.value===quote.close)||[];
  if(!quote.adjusted || quote.close===null || !Number.isFinite(quote.close) || quote.close<=0 || !quote.session || !quote.source || priceClaims.length!==1)gaps.push('valuation_actual_reviewed_quote_missing');
- if(!known || !artifact || artifact.quoteDate!==quote.session || !Number.isFinite(Date.parse(artifact.valuationDate)) || artifact.valuationDate<String(quote.session||'') || artifact.valuationDate>taipeiDate(cutoff))gaps.push('valuation_dates_not_current_quote_asof');
+ if(!known || !artifact || artifact.quoteDate!==quote.session || !civilDateKnownAt(artifact.valuationDate,cutoff) || artifact.valuationDate<String(quote.session||''))gaps.push('valuation_dates_not_current_quote_asof');
  const bear=scenarios[0]?.numeric?.value??null,base=scenarios[1]?.numeric?.value??null,bull=scenarios[2]?.numeric?.value??null;
  const current=quote.adjusted?quote.close:null;
  if(current!==null && base!==null && base<=current)gaps.push('valuation_no_remaining_upside');
- const raw:DeepInputs['valuation']={current,bear,base,bull,method,quoteAt:quote.session||'',valuationAt:artifact?.valuationDate||'',provenance:quote.adjusted && quote.source?[quote.source,...(quote.provenance||[]),...scenarios.flatMap((claim)=>claim?.evidenceIds||[])]:[]};
+ const raw:DeepInputs['valuation']={current,bear,base,bull,method,quoteAt:quote.session||'',valuationAt:artifact?.valuationDate||'',quoteClockVersion:AUDIT_QUOTE_CLOCK_VERSION,quoteObservedAt:clock?.observedAt||'',quoteKnownAt:clock?.availableAt||'',provenance:quote.adjusted && quote.source?[quote.source,...(quote.provenance||[]),...scenarios.flatMap((claim)=>claim?.evidenceIds||[])]:[]};
  // Reuse the approved deep core's ordered, positive scenarios, dated quote,
  // positive downside and disclosed reward/risk calculation with original weights.
  const factor=deepFactors({cutoff,valuation:raw,profitabilityChecklist:{checks:[]},technicalChipsChecklist:{checks:[]},catalystChecklist:{checks:[]},marketLiquidityChecklist:{checks:[]}}).factors.valuation;

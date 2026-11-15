@@ -75,6 +75,8 @@ test('real cache envelope retains comparison quote/action lineage and refuses pu
   assert.ok(result.refusalReasons.includes('published_revision_input_changed'));
   assert.deepEqual(result.formalAudit.quote, { close: null, session: null, source: '', adjusted: false,
     volume: null, ma20: null, ma60: null, volumeRatio: null, institutionalFlow: null, provenance: [] });
+  assert.equal(result.price?.observedAt,h.bars.at(-1)!.sourceTimestamp); assert.equal(result.price?.availableAt,h.availableAt);
+  assert.equal(result.comparisonPriceFactors?.observedAt,h.bars.at(-1)!.sourceTimestamp); assert.equal(result.comparisonPriceFactors?.availableAt,h.availableAt);
   assert.equal(result.price?.sourceDatasetRevision, h.sourceDatasetRevision); assert.equal(result.price?.adjustmentEvidenceHash, h.priceBasis!.adjustmentEvidenceHash); assert.equal(result.comparisonPriceEvidence[0].value, 100);
   assert.equal(result.evidence.some(e => e.key === 'current_price'), false); assert.equal('proofHash' in result, false); assert.equal('expiresAt' in result, false);
   assert.ok(result.refusalReasons.includes('published_action_target_authority_missing')); assert.ok(result.refusalReasons.includes('financial_structural_hidden_newer_revision_unknown'));

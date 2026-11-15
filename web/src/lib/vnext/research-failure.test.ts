@@ -15,7 +15,7 @@ after(()=>{if(previousEnabled===undefined)delete process.env.STOCKINSIDER_VNEXT_
  * execution or official financial readiness is asserted by this fixture. */
 function fixture(mode='empty_financial'){
  const calls:Array<{action:string;body?:Row}>=[];const cache=new Map<string,Record<string,unknown>>();
- const allowed=new Set(['store.ts','policy.ts','research.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','evidence-clock.ts','worker-output.ts','research-failure.ts']);
+ const allowed=new Set(['store.ts','policy.ts','research.ts','catalyst-cancellation.ts','business-criteria.ts','semantic-criteria.ts','runtime.ts','factors.ts','audit-quote-clock.ts','../candidate-price-history.ts','screening.ts','artifact-financial-summary.ts','citations.ts','financial-evidence-sources.ts','evidence-clock.ts','worker-output.ts','research-failure.ts']);
  const identity={principal:'synthetic-author',role:'author' as const};
  const body={jobId:'00000000-0000-4000-8000-000000000001',executionId:'00000000-0000-4000-8000-000000000002'};
  const client={from(table:string){calls.push({action:`cache:${table}`});const query={select:()=>query,eq:()=>query,or:()=>query,lte:()=>query,order:()=>query,limit:()=>query,maybeSingle:async()=>table==='stocks'?{data:mode==='stock_missing'?null:{id:'synthetic-stock',symbol:'2330',name:'Synthetic',sector:'general'},error:mode==='stock_timeout'?{message:'timeout'}:null}:{data:mode==='trading_missing'?null:{exchange:'TWSE',valid_from:'2020-01-01'},error:mode==='trading_timeout'?{message:'timeout'}:null}};return query;},rpc(name:string,args:Row){
@@ -30,7 +30,13 @@ function fixture(mode='empty_financial'){
  }};
  function load(name:string):Record<string,unknown>{
   if(!allowed.has(name))throw Error(`unexpected_failure_source:${name}`);const prior=cache.get(name);if(prior)return prior;
-  const filename=new URL(name,import.meta.url);const compiled=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:name}).outputText;
+  const filename=new URL(name,import.meta.url);let source=fs.readFileSync(filename,'utf8');
+  if(name==='../candidate-price-history.ts'){
+   const parsed=ts.createSourceFile(filename.pathname,source,ts.ScriptTarget.Latest,true);
+   const declaration=parsed.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text==='isHistoryDate');
+   if(!declaration)throw Error('actual_history_date_validator_missing');source=declaration.getText(parsed);
+  }
+  const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:name}).outputText;
   const controllerModule={exports:{}};cache.set(name,controllerModule.exports);
   const require=(dependency:string):unknown=>{
    if(['node:crypto','node:async_hooks'].includes(dependency))return requireNative(dependency);
@@ -43,6 +49,7 @@ function fixture(mode='empty_financial'){
    if(dependency==='../official-financial-validation-worker')return {validatePendingOfficialFinancials:async()=>({status:'success'})};
    if(dependency==='../tw-entry-plan-authority.ts')return {loadTwEntryHistoricalPriceAuthority:async()=>({notEntryAuthority:true,nextSessionAuthority:false,completedSessions:[],bars:[],priceBasis:null,missingData:['synthetic_missing_price_authority']})};
    if(dependency==='../public-source-url.ts')return requireNative('../public-source-url.ts');
+   if(dependency==='../candidate-price-history.ts')return load(dependency);
    if(dependency.startsWith('./'))return load(dependency.slice(2));
    throw Error(`unexpected_failure_dependency:${dependency}`);
   };
