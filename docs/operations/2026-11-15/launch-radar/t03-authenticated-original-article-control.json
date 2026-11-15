@@ -1,0 +1,40 @@
+{
+  "schema": "stockinsider-t03-real-authenticated-member-reading-v1",
+  "scope": "manual private member reading and existing read-only Gmail integration",
+  "dateTaipei": "2026-11-15",
+  "source": "investanchors",
+  "mail": {
+    "recognizedMailerFrom": true,
+    "providerDkimPass": true,
+    "multipartAlternative": true,
+    "textAndHtmlBothPresent": true,
+    "exactNormalizedSubjectAndPageTitle": true,
+    "knownMailerRedirectFormPresent": true,
+    "matchedByTitleInsteadOfFollowingTrackingRedirect": true
+  },
+  "website": {
+    "matchedPubTitleUniqueAmongCandidates": true,
+    "publicationDayCameFromAuthenticatedListing": true,
+    "articlePublishedBeforeMailLocalDay": true,
+    "memberUrlShape": true,
+    "exactTitleVisible": true,
+    "signedInArticleVisible": true,
+    "nonEmptyBodyParagraphs": 18,
+    "bodyCharsFromParagraphs": 2595,
+    "paragraphsWithResearchTerms": 8,
+    "distinctMatchedTaiwanIssuerAliases": 7,
+    "paragraphsWithAliasAndResearchTerms": 6,
+    "fourDigitCodesInExplicitIssuerParentheses": 0,
+    "aliasCheckScope": "controlled alias lexicon and structural body counts; not final security identity resolution"
+  },
+  "noTrackingRedirectFollowed": true,
+  "credentialOrBodyPersisted": false,
+  "publicHtmlOrApiWritten": false,
+  "mailChanged": false,
+  "results": {
+    "realGmailNoticeToHumanReadOriginal": "PASS",
+    "automatedFullTextRights": "PENDING",
+    "scheduledBackgroundMailAndArticleAccess": "NOT_RUN",
+    "verifiedCandidateAndLedgerWrite": "NOT_RUN"
+  }
+}
