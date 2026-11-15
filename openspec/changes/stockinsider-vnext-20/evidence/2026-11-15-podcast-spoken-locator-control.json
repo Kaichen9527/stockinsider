@@ -1,0 +1,65 @@
+{
+  "verifiedAt": "2026-11-15T05:23:12Z",
+  "product": {
+    "commit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+    "path": "web/src/lib/podcast-rss.ts",
+    "gitBlob": "b6e4db39a123d269258bc5f9488fa77b5ecb4601",
+    "sha256": "222b2ab4d7592d240d0fa5afb2b14bbac1ea899ecad1fefd5f191f2a65a649c6"
+  },
+  "execution": "Contabo, non-root, standard input, 10-second limit, no DB or writer",
+  "inputKind": "six bounded synthetic format controls",
+  "result": {
+    "runtime": "v22.23.1",
+    "unprivileged": true,
+    "plain": [
+      [
+        0,
+        null
+      ]
+    ],
+    "html": [
+      [
+        0,
+        null
+      ]
+    ],
+    "validWebVtt": [
+      [
+        9,
+        12
+      ]
+    ],
+    "reversedWebVtt": [
+      [
+        12,
+        9
+      ]
+    ],
+    "jsonEmptyStart": [
+      [
+        0,
+        9
+      ]
+    ],
+    "transcriptSelectedForMultiFormatEpisode": "text/plain"
+  },
+  "expected": {
+    "plain": "no spoken locator",
+    "html": "preserve only independently verified cue times; untimed HTML is not positioned",
+    "validWebVtt": [
+      9,
+      12
+    ],
+    "reversedWebVtt": "reject",
+    "jsonEmptyStart": "reject",
+    "multiFormat": "prefer rights-scoped playable timed transcript"
+  },
+  "primaryReferences": {
+    "spec": "https://podcasting2.org/docs/podcast-namespace/tags/transcript",
+    "terms": "https://www.soundon.fm/terms/",
+    "reference": "https://github.com/huijoson/gooaye-agent/blob/1bc2f2ff5bc7dcfb78644237b38af5dba3796fce/docs/adr/0006-official-audio-asr-fallback.md"
+  },
+  "actualTargetEpisodeValidated": false,
+  "sourceRightsConfigured": false,
+  "launchGatePassed": false
+}
