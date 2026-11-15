@@ -1,0 +1,271 @@
+{
+  "schema": "stockinsider-breadth-signal-close-source-v1",
+  "observedAt": "2026-11-15T02:32:27.493487+00:00",
+  "publicSourceCommit": "b6d148adfffe75333a806aa318feeb01a3f31878",
+  "localValidationCommit": "2a3e1d42ad388d179e06bdb422d816ab19b3e292",
+  "wholeTree": "05456b3b153c44ecbb5951ebde10d7c9f6cb8048",
+  "webTree": "0d48ddea75bc9146848b5792d82991c6de59f9ec",
+  "publication": {
+    "transport": "configured GitHub connector",
+    "expectedParent": "aff882495af46c9c6afc068a7cde02f949c28218",
+    "force": false,
+    "wholeTreeEqualityVerified": true,
+    "testsRanPublicCommit": false
+  },
+  "sourceInventory": [
+    {
+      "path": "web/src/lib/market-breadth.ts",
+      "bytes": 2633,
+      "sha256": "2c6ceb4b0892d6cc35a070938ecd42cce3063a4636c84725c89e879e8b61ce95"
+    },
+    {
+      "path": "web/src/lib/market-breadth.test.ts",
+      "bytes": 9103,
+      "sha256": "86ef7b928f334f97ddb499bd1380c3632e14c8b4e7707919e97e69fe35c8007f"
+    },
+    {
+      "path": "web/src/lib/market-evidence.ts",
+      "bytes": 29219,
+      "sha256": "a4fc96460c978117d6af37f8632fc9954ce06ffd9f3d059f02301d255b69b38e"
+    },
+    {
+      "path": "web/src/lib/market-evidence.test.ts",
+      "bytes": 5645,
+      "sha256": "6c9afc544c1da6160dc5ee049cbe3941223042b8ddfbbe89e9cdfa3f35354f7f"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-breadth-replay.ts",
+      "bytes": 11336,
+      "sha256": "7e9a650a8efd21f99b7a29b3930f07535332f6d075901c022df1aab1f04f34be"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-breadth-replay.test.ts",
+      "bytes": 7488,
+      "sha256": "6cae7794755238d78c3ff8eb2edfc9b96ef7e59c85cfa48642c753129f19580c"
+    },
+    {
+      "path": "web/scripts/launch-official-replay.mjs",
+      "bytes": 4804,
+      "sha256": "eaa0e202d6b5d8231fdd534f3f22a26499b8e3f7e6383374043916263cf18c8d"
+    },
+    {
+      "path": "web/scripts/launch-official-replay.test.mjs",
+      "bytes": 23126,
+      "sha256": "80c3a4f40af7e70516fcd91dd42930d47f150a7391c3a15a588964efaedfc5f0"
+    }
+  ],
+  "checks": [
+    {
+      "name": "related_unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/market-breadth.test.ts",
+        "web/src/lib/market-evidence.test.ts",
+        "web/src/lib/market-evidence-format.test.ts",
+        "web/src/lib/vnext/launch-breadth-replay.test.ts",
+        "web/src/lib/vnext/launch-native-volume.test.ts",
+        "web/src/lib/vnext/launch-licensed-csv.test.ts"
+      ],
+      "start": "2026-11-15T02:29:48.858261+00:00",
+      "end": "2026-11-15T02:29:52.869457+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 34578432,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29399814144,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "50335784bb7cc875d0165d0c21c3a100d204b5fe2636f330f8d996976c0039ba"
+    },
+    {
+      "name": "actual_cli",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/scripts/launch-official-replay.test.mjs"
+      ],
+      "start": "2026-11-15T02:29:52.869815+00:00",
+      "end": "2026-11-15T02:29:57.881742+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 27340800,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29395845120,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "eaa3b647f77ebbeb0835b0f73ce931a31af0205778948a3af140f1fbb06cf1e5"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-15T02:29:57.882110+00:00",
+      "end": "2026-11-15T02:30:05.655950+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81539072,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29395841024,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-15T02:30:05.663371+00:00",
+      "end": "2026-11-15T02:30:25.714643+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81731584,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29395836928,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "19c877eafdc15415f5ad90d09b41a580c102658a544d359e3d8d1998689103b4"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-15T02:30:25.715011+00:00",
+      "end": "2026-11-15T02:30:37.512690+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81289216,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29377261568,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "541d771c3fb449d3df40b07948fcba3c75e5c6464d4702f58830524c72bd245b"
+    }
+  ],
+  "counts": {
+    "relatedUnit": 43,
+    "actualPrivateCli": 13,
+    "fail": 0,
+    "skip": 0
+  },
+  "engineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false
+  },
+  "actualCaller": "ingestOfficialMarketEvidence -> buildMarketEvidenceSnapshot",
+  "newModelVersion": "market-evidence-v2.0.1-signal-close",
+  "rules": {
+    "signalCloseRequired": true,
+    "latestDistinctValidWithinCompletedWindow": 20,
+    "maximumWindowSessions": 30,
+    "identicalDuplicatesCollapsed": true,
+    "conflictingHistoryExcluded": true,
+    "oldPositiveCacheCanBypass": false,
+    "zeroFreshMayReuseRetainedPositive": false,
+    "zeroObservedRatio": null,
+    "oneEachVenueRequired": [
+      "TWSE",
+      "TPEX"
+    ],
+    "coverageGate": "EXISTING_AGGREGATE_95_PERCENT_NOT_EACH_VENUE",
+    "oldModelSnapshotsChanged": false,
+    "oldHistoryBreadthAndProvenanceRelabelled": false
+  },
+  "offlineReplay": {
+    "schema": "launch-tpex-11371-breadth-observations-v1",
+    "maximumPages": 30,
+    "maximumPageBytes": 500000,
+    "maximumTotalBytes": 15000000,
+    "maximumRoster": 5000,
+    "datasetId": 11371,
+    "rawUnadjusted": true,
+    "officialCalendarAndRosterVerified": false,
+    "caComparableCoverage": null,
+    "qualifiedBreadth": null,
+    "aggregateMarketGate": null,
+    "sourceAuthority": false,
+    "publicationAuthority": false,
+    "marketAuthority": false,
+    "institutionalDenominatorAuthority": false
+  },
+  "preExecutionFindingsRepaired": [
+    "old complete cache bypass",
+    "fresh zero fallback to retained positive",
+    "zero observed NaN ratio",
+    "duplicate/missing venue mistaken for both sources"
+  ],
+  "externalControls": [
+    {
+      "commit": "397751d1a7282da284c62531fa190bb505ddc163",
+      "gitBlob": "fad7e54cbf95c59cd7de6bbc3d794f6841172086",
+      "scope": "late TPEx raw presence858/890, notCA or originalcutoff"
+    },
+    {
+      "commit": "84a975ebb20ef4aef1b6d21f5c28258ad569732d",
+      "gitBlob": "68ba7a1fc9f220a449d1f8c753ab75822469bfa0",
+      "scope": "licensed11764 narrowTWSEclose31actualdays; nextproducer notimplemented; notOHLC/cash/flow"
+    },
+    {
+      "commit": "16c26b5d1894a5efbc33f07ec0fa7e1a2399448a",
+      "gitBlob": "8ed82a892d69ec53ad4db22e8c94cc70e971f7d5",
+      "scope": "closure announcement vs later capture;CAPloginwarning unavailable; no newcancelproducer"
+    },
+    {
+      "commit": "e50842f3a7fd41a12d57fc9d7d1522dc19ffdc2a",
+      "gitBlob": "261c551774f27683df3ad4e96ec3d588925d39d1",
+      "scope": "EPS period vsPEvintage later control only; notnewvaluationfacts"
+    }
+  ],
+  "limits": {
+    "rawOfficialBytesRehashedInCloud": false,
+    "fixture890MeansRealReplay": false,
+    "actualProviderCalls": 0,
+    "actualSqlOrNative": "NOT_RUN_HOLD",
+    "fullRosterMaterializer": "DESIGN_ONLY_NOT_IMPLEMENTED",
+    "CAComparability": null,
+    "actualMarketReadyOrRanking": false,
+    "T06T10Complete": false,
+    "T07Source": "HELD_PREEXECUTION_PREPARATION_CALLER_REPAIR_NOT_TESTED",
+    "formalA1": "BLOCKED_UNCHANGED",
+    "nativeHold": "PRESERVED",
+    "originalPrHead": "UNCHANGED",
+    "productionActions": 0,
+    "timersChanged": false,
+    "paidCalls": 0
+  },
+  "preservation": {
+    "originalFiles": 283,
+    "changed": 0,
+    "missing": 0,
+    "archiveOrRecoveryVerified": false,
+    "reclaimedBytes": 0
+  }
+}

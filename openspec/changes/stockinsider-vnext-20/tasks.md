@@ -302,3 +302,9 @@ Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-re
 - [x] Callable bounded stdin immutable annual/cancel/withdrawal diagnostic, retains old identities beyond400, actual known clocks, conflicting/withdrawn observations remain gaps; authority always false, official completed/coverage null.
 - [ ] Real520/calendar source/cancellation/rights/applied-chunk/commit-witness/selector acceptance remains missing. Existing pinned annual apply protocol unchanged, no diagnostic injection or native retry.
 - [ ] Breadth follow-up: required signal-day close plus latest20 valid of30; report each venue counts, preserve original aggregate95 scope and both-source requirement. Raw unadjusted late backfill is not comparable breadth/real historical publication.
+
+## Breadth signal-close source checkpoint
+
+- [x] Actual ingest→build target-close/20distinct-of30, oldcache bypass/zero fallback repair, null zero ratio, exactoneTWSE+TPEX and unchanged aggregate95. Newmodel preserves old snapshots/history meanings. Sourceb6d148a exact local2a3e1d4:43related+13privateCLI/types/lint/build PASS.
+- [x] Existing offline CLI bounded11371 full-roster raw observations with exact dates/native units/actual clocks/hash; allauthorityfalse/qualifiedcoverageNULL.
+- [ ] New11764 narrowTWSEhistoricalCLOSE profile/rights and genuine immutable full-roster materializer/CA/calendar/foreignTWD/selector remain missing. NoOHLC/cash/flow/PEbasis inference. Native/A1/fullT06T10 not complete.

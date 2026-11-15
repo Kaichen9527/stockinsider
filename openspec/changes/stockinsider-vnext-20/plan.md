@@ -38,3 +38,7 @@ See [bounded Linux restore / release amendment](linux-restore-release-amendment.
 ## Bounded historical source continuation
 
 [History520 amendment](history520-calendar-amendment.md) connects the actual default-OFF source preparation to a bounded36-month plan and separates an immutable schedule/cancel diagnostic from calendar authority. Existing consumer floors/pins and native HOLD remain; raw dates do not certify sessions. Breadth diagnostics retain the existing aggregate95 scope, not a new per-market threshold.
+
+## Signal-close breadth continuation
+
+[Breadth source amendment](breadth-signal-close-amendment.md) repairs the existing actual ingest/build and keeps95% aggregate coverage while reporting each venue. The licensed11371 private CLI supplies raw observations only;11764 historical close and a real immutable purpose/roster/CA bridge need distinct exact review.
