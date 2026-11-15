@@ -2,8 +2,8 @@
 
 Fixed private-namespace loopback3302 -> loopback3301 only. Parent admission must
 establish OS isolation and the independently restricted staging JWT/DB role.
-Only the two exact Supabase snapshot-reader requests are permitted. No RPC,
-write, arbitrary URL/port, client credential passthrough, redirect or logs.
+Legacy snapshot reads and explicitly enabled fixed launch projections only.
+No writes, arbitrary RPCs, URLs, client credential passthrough or redirects.
 """
 from contextlib import contextmanager
 import http.client
@@ -27,6 +27,11 @@ REQUEST_WALL_SECONDS=12
 SNAPSHOT_SELECT='id,etag,content_as_of,published_at,payload_json'
 STATE_SELECT='status,last_attempt_at,terminal_reason'
 METRICS=('requests','allowedReads','blockedRequests','upstreamFailures','responseBytes')
+LAUNCH_RANKING_PATH='/rest/v1/rpc/vnext_launch_ranking_read_v1'
+LAUNCH_OUTCOME_PATH='/rest/v1/rpc/vnext_launch_outcome_public_v1'
+LAUNCH_PATHS=(LAUNCH_RANKING_PATH,LAUNCH_OUTCOME_PATH)
+LAUNCH_UUID=re.compile(r'[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}',re.ASCII)
+LAUNCH_SYMBOL=re.compile(r'[0-9]{4}',re.ASCII)
 
 
 class FixedReadProxyRejected(Exception):
@@ -72,6 +77,29 @@ def _fixed_target(raw):
     return path.removeprefix('/rest/v1')+'?'+urlencode(sorted(fields.items()))
 
 
+def _launch_target(path, body):
+    """Accept one frontend call shape and rebuild a fixed PostgREST GET."""
+    if path not in LAUNCH_PATHS or not 1<=len(body)<=128:return None
+
+    def unique_object(items):
+        fields={}
+        for key,value in items:
+            if key in fields:raise ValueError('repeated_projection_argument')
+            fields[key]=value
+        return fields
+
+    try:
+        arguments=json.loads(body.decode('utf-8'),object_pairs_hook=unique_object)
+    except (UnicodeError,ValueError):return None
+    if type(arguments) is not dict or set(arguments)!={'p_ranking_run_id','p_symbol'}:return None
+    run_id,symbol=arguments['p_ranking_run_id'],arguments['p_symbol']
+    if run_id is not None and (type(run_id) is not str or LAUNCH_UUID.fullmatch(run_id) is None):return None
+    if symbol is not None and (type(symbol) is not str or LAUNCH_SYMBOL.fullmatch(symbol) is None):return None
+    if path==LAUNCH_OUTCOME_PATH and (run_id is None or symbol is None):return None
+    query=urlencode([(key,arguments[key]) for key in ('p_ranking_run_id','p_symbol') if arguments[key] is not None])
+    return path.removeprefix('/rest/v1')+('?' + query if query else '')
+
+
 class _Handle:
     def __init__(self):
         self._counts={key:0 for key in METRICS}
@@ -81,16 +109,18 @@ class _Handle:
 
 
 @contextmanager
-def start_fixed_read_proxy(stage_jwt,detail_read=None):
+def start_fixed_read_proxy(stage_jwt,detail_read=None,*,allow_launch_reads=False):
     """Own/reap a fixed HTTP server thread; no listener or token in receipts.
 
     The token is an internal stage credential, not an admission flag. Caller
-    credentials are ignored and can never change the upstream authorization.
+    credentials can never change the upstream authorization. The optional launch
+    routes still require the independently restricted upstream database role.
     """
     with http_subphase('proxy_start'):
         if (type(stage_jwt) is not str or not 64<=len(stage_jwt)<=4096
                 or not re.fullmatch(r'[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+',stage_jwt)):
             raise FixedReadProxyRejected()
+        if type(allow_launch_reads) is not bool:raise FixedReadProxyRejected()
         if detail_read is not None:
             from .t18_detail_read_adapter import _DetailRead
             if type(detail_read) is not _DetailRead:raise FixedReadProxyRejected()
@@ -133,7 +163,7 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None):
                 if not self.parse_request():return
                 if not self.rfile.complete or self.server.request_expired(self.request):self._blocked(400);return
                 if self.path!=raw_target:self._blocked(400);return
-                if self.command not in (('GET','HEAD','POST') if detail_read is not None else ('GET','HEAD')):self._blocked(405);return
+                if self.command not in (('GET','HEAD','POST') if detail_read is not None or allow_launch_reads else ('GET','HEAD')):self._blocked(405);return
                 self._read()
                 self.wfile.flush()
             except (TimeoutError,OSError,http.client.HTTPException):
@@ -174,6 +204,23 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None):
             handle._counts['allowedReads']+=1;handle._counts['responseBytes']+=len(data)
             self._reply(200,data)
 
+        def _launch_read_target(self):
+            auth=self.headers.get_all('Authorization',[])
+            lengths=self.headers.get_all('Content-Length',[])
+            if (self.command!='POST' or len(auth)!=1 or len(lengths)!=1 or not lengths[0].isascii()
+                or not lengths[0].isdecimal() or len(lengths[0])>3 or not 1<=int(lengths[0])<=128
+                or not hmac.compare_digest(auth[0].encode('latin1'),('Bearer '+stage_jwt).encode('ascii'))
+                or self.headers.get_all('Content-Type',[])!=['application/json']
+                or self.headers.get_all('Accept',[]) not in ([],['*/*'],['application/json'])
+                or self.headers.get_all('Content-Profile',[]) not in ([],['public'])
+                or self.headers.get_all('Accept-Profile',[]) not in ([],['public'])
+                or any(self.headers.get(x) is not None for x in (
+                    'Range','Range-Unit','Prefer','Forwarded','X-HTTP-Method-Override'))):
+                return None
+            count=int(lengths[0])
+            body=self.rfile.read(count)
+            if len(body)!=count or self.server.request_expired(self.request):return None
+            return _launch_target(self.path,body)
         def _read(self):
             if self.server.request_expired(self.request):self._blocked(408);return
             if (len(self.headers)>HEADER_COUNT_LIMIT
@@ -183,10 +230,14 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None):
                 or self.command!='POST' and self.headers.get_all('Content-Length',[]) not in ([],['0'])):
                 self._blocked(400);return
             target=_fixed_target(self.path)
-            if target is None and detail_read is not None:
+            projection=allow_launch_reads and self.path in LAUNCH_PATHS
+            if projection:
+                target=self._launch_read_target()
+                if target is None:self._blocked();return
+            elif target is None and detail_read is not None:
                 self._detail_read();return
-            if target is None or self.command=='POST':self._blocked();return
-            accept=self.headers.get('Accept','application/json')
+            elif target is None or self.command=='POST':self._blocked();return
+            accept='application/json' if projection else self.headers.get('Accept','application/json')
             if accept not in ('application/json','application/vnd.pgrst.object+json','*/*'):
                 self._blocked(400);return
             handle._counts['allowedReads']+=1
@@ -206,7 +257,7 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None):
             timer=threading.Timer(UPSTREAM_WALL_SECONDS,expire);timer.daemon=True;timer.start()
             primary_error=None
             try:
-                connection.request(self.command,target,headers={'Host':'127.0.0.1:3301',
+                connection.request('GET' if projection else self.command,target,headers={'Host':'127.0.0.1:3301',
                   'Authorization':'Bearer '+stage_jwt,'Accept':accept,'Accept-Profile':'public',
                   'Accept-Encoding':'identity','Connection':'close'})
                 transport[0]=connection.sock
@@ -224,6 +275,15 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None):
                 content_type=response.getheader('Content-Type','application/json')
                 if (len(content_type)>128 or content_type.split(';',1)[0].strip() not in ('application/json','application/problem+json','application/vnd.pgrst.object+json')
                     or any(not 32<=ord(c)<127 for c in content_type)):raise FixedReadProxyRejected()
+                if projection and response.status>=400:
+                    code='fixed_launch_reader_unavailable'
+                    if response.status==404:
+                        try:failure=json.loads(body)
+                        except (UnicodeError,ValueError):failure=None
+                        if type(failure) is dict and failure.get('code') in ('PGRST202','PGRST205'):
+                            code=failure['code']
+                    body=json.dumps({'code':code},separators=(',',':')).encode()
+                    content_type='application/json'
                 self._reply(response.status,body,content_type)
                 handle._counts['responseBytes']+=len(body)
             except (OSError,http.client.HTTPException,FixedReadProxyRejected,ValueError):
