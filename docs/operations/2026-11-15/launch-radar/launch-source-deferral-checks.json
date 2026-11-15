@@ -1,0 +1,219 @@
+{
+  "schema": "stockinsider-fresh-source-deferral-checkpoint-v1",
+  "observedAt": "2026-11-15T00:01:18.458473+00:00",
+  "localValidationCommit": "a4641da891234b7c5bb67b9108205d48beaaa7ef",
+  "publicSourceCommit": "0c45a34163c7835f6307437289ff0f7f6985398b",
+  "wholeTree": "a7d76dd16c0d30ff6227b1412a0e5d86e464bcd3",
+  "webTree": "3c5f57c8f4cd1b11915561b27aa52bfc3a0f2598",
+  "publication": {
+    "transport": "configured GitHub connector",
+    "expectedParent": "87bc54f9fa16749412a3ffa1be3bdea322f3e95d",
+    "force": false,
+    "treeEqualityVerified": true,
+    "testsRanLocalIdenticalTree": true,
+    "testsRanPublicCommit": false
+  },
+  "sourceInventory": [
+    {
+      "path": "migrations/20261115_vnext_launch_source_facts_v1.sql",
+      "sha256": "c53482beea3af5cfeb553f664d91464372c38cb667a184f52292bbc223dd6005"
+    },
+    {
+      "path": "scripts/vnext-launch-prepass-source.test.mjs",
+      "sha256": "ce364594ebfb4db8c36ba15ed858d4940db0f6a6847afa4c6b5007cc4d52dcd9"
+    },
+    {
+      "path": "web/src/app/api/internal/taiwan-data-queue-drain/route.ts",
+      "sha256": "4a5826ac5d3cc957de35e13b74cd9f9dff7ad83b750c82fdcdf8581485c2f994"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-original-source-witness.test.ts",
+      "sha256": "4d4ba2dd5525afdfd0637b0c7033c632a2c203eb9d5616c5a07d4619e19fd906"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-original-source-witness.ts",
+      "sha256": "4272ea2e2a0b0242866b52f7aca4dcdacd69dc2f36d140b5454be00cb9a1a7cd"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-source-store.test.ts",
+      "sha256": "3d53147140acf0129913895be3b383aa0fccfb38fb25c1362c456218cb558bcf"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-source-store.ts",
+      "sha256": "ed2fdf63a5ef07043100b0e6c87dbeaea14362459e275246b248fb19c0216767"
+    }
+  ],
+  "checks": [
+    {
+      "name": "source_static",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--test",
+        "scripts/vnext-launch-prepass-source.test.mjs",
+        "scripts/vnext-launch-source-facts-source.test.mjs"
+      ],
+      "start": "2026-11-14T23:58:20.371927+00:00",
+      "end": "2026-11-14T23:58:20.622512+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29418348544,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "66b59d0532240bd6ceabd091b427344a4b85370e8dcb2b325248a5fc1eb24e2b"
+    },
+    {
+      "name": "witness_unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/launch-original-source-witness.test.ts",
+        "web/src/lib/vnext/launch-source-store.test.ts"
+      ],
+      "start": "2026-11-14T23:58:20.622943+00:00",
+      "end": "2026-11-14T23:58:21.878390+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 32591872,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29418332160,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "21a47aafe919c14f41eca10da49ab65dc2c58a95007370a899f1089ad85e2278"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-14T23:58:21.879524+00:00",
+      "end": "2026-11-14T23:58:26.146884+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81301504,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29418328064,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-14T23:58:26.147331+00:00",
+      "end": "2026-11-14T23:58:45.946264+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81788928,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29418319872,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "19c877eafdc15415f5ad90d09b41a580c102658a544d359e3d8d1998689103b4"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-14T23:58:45.946660+00:00",
+      "end": "2026-11-14T23:58:52.993716+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82366464,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29415952384,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "2e5567ac7dd84ac8d8ba2630dc4c2efcf658694eaa94a1625c75700f1661eb81"
+    }
+  ],
+  "counts": {
+    "relatedUnitCases": 21,
+    "privateWitnessCases": 11,
+    "sourceStoreCases": 10,
+    "staticSourceCases": 4
+  },
+  "actualRouteScope": "REAL_ROUTE_TRANSPILED_WITH_SYNTHETIC_PORTS_NO_ACTUAL_DB_SOURCE_OR_CALENDAR",
+  "sourcePrepass": {
+    "transport": "licensed-launch-csv-plan-v2",
+    "states": [
+      "planned",
+      "no_active_pool",
+      "deferred"
+    ],
+    "deferredReason": "awaiting_current_completed_session",
+    "authority": false,
+    "deferIsCalendarHolidayOrCoverageProof": false,
+    "deferKeepsExistingQueueClassificationAndOwnership": true,
+    "policyLeaseDbFailureFallback": false
+  },
+  "privateDiagnostic": {
+    "status": "blocked",
+    "authority": "none",
+    "realAdapter": "NOT_CONNECTED",
+    "actualOriginalFresh30Authority": false,
+    "missing": [
+      "mechanical extraction/revision bridge",
+      "independent current content-use-purpose binding"
+    ]
+  },
+  "engineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false
+  },
+  "localPreparationCorrection": {
+    "scope": "LOCAL_PREPARATION_ONLY_NO_TEST_RETRY",
+    "failedOperation": "fast-forward local342 to public87 rejected divergent metadata ancestry",
+    "shellContinued": "created localc3 witness commit on retained342 branch before verification",
+    "correction": "new codex branch from public87; cherry-pick exact two reviewed files into dc93; oldc3/ref retained",
+    "originalDataChanged": false,
+    "testsRanRejectedAncestry": false,
+    "validatedCommit": "dc93c5ccd38a040554852eb749e6ef3546395795"
+  },
+  "preservation": {
+    "originalFiles": 283,
+    "missing": 0,
+    "changed": 0,
+    "archiveOrRecoveryVerified": false,
+    "reclaimedBytes": 0
+  },
+  "limits": {
+    "actualSqlApply": "NOT_RUN_HOLD",
+    "actualPostgrestQueueAndSessions": "NOT_RUN",
+    "actual2130DailyThroughputAndCrossDayReuse": "NOT_RUN",
+    "actualNativeAcceptance": "BLOCKED_UNCHANGED",
+    "originalPrHead": "UNCHANGED",
+    "productionActions": 0,
+    "timersChanged": false,
+    "paidCalls": 0,
+    "actualRuntimeModel": "NOT_OBSERVED"
+  }
+}

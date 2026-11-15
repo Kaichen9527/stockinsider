@@ -1,5 +1,9 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## Current fresh-source queue checkpoint
+
+Source **0c45a34** equals local **a4641da** whole tree:21 related unit cases,4 STATIC checks/types/lint/build PASS. [Actual route deferral, private diagnostic and exact limits](../../2026-11-15/launch-radar/SOURCE-DEFERRAL.md). SQL v2 distinguishes waiting for current close from no active pool; only fresh preparation defers, existing independently classified queue work continues. Genuine lease/rights/DB errors remain blocked. Source inspector always blocked/authority:none without an actual adapter or extraction/use-purpose bridge. No actual SQL/queue/calendar/session/21:30 acceptance. T08 known-exclusion versus unknown writer source remains separate WIP. Original PR head/native HOLD/A1/services/flags/timers unchanged; earlier checkpoints retain their scope.
+
 ## Current candidate catalog / SQL source checkpoint
 
 Candidate source **32bd9df** equals locally tested **b806546** whole tree:38 related cases/types/lint/build and two actual Next.js unavailable desktop/mobile checks PASS. [Contract, preserved two failures and reviewed emitted-code repair](../../2026-11-15/launch-radar/CANDIDATE-CATALOG.md). Actual public metadata/mutation producer is missing and hard-disabled;21/20 positives are synthetic, not complete actual history.

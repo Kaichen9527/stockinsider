@@ -270,3 +270,9 @@ Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-re
 
 - [x] Canonical page/API immutable source-first projection,38 related cases/types/lint/build and2 actual unavailable desktop/mobile browser checks;32bd9df exact locally tested tree. Original two failures retained, material inlining repair independently reviewed before local retry.
 - [ ] Actual public metadata rights/mutation producer and true complete history remain missing/hard-disabled;21 clues/20 admissions are controlled fixtures only. Native HOLD/A1/original PR head unchanged.
+
+## Fresh-source prepass checkpoint
+
+- [x] Typed SQL v2 current-close deferral before fresh enqueue; actual route continues independently classified existing queue, no-pool distinct and errors blocked. Source0c45a34 exact tested tree:21 related unit/4 STATIC/types/lint/build PASS.
+- [x] Private original-link metadata diagnostic always blocked/authority:none, no actual adapter or permission bridge. Synthetic links do not grant fresh30/source/publication authority.
+- [ ] Actual SQL install/PostgREST/cold-start/cross-day queue/21:30 throughput and real source purpose/venue/action/market gates remain incomplete; no timers, flags or native HOLD changed.
