@@ -276,3 +276,8 @@ Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-re
 - [x] Typed SQL v2 current-close deferral before fresh enqueue; actual route continues independently classified existing queue, no-pool distinct and errors blocked. Source0c45a34 exact tested tree:21 related unit/4 STATIC/types/lint/build PASS.
 - [x] Private original-link metadata diagnostic always blocked/authority:none, no actual adapter or permission bridge. Synthetic links do not grant fresh30/source/publication authority.
 - [ ] Actual SQL install/PostgREST/cold-start/cross-day queue/21:30 throughput and real source purpose/venue/action/market gates remain incomplete; no timers, flags or native HOLD changed.
+
+## Known member rejection source checkpoint
+
+- [x] Actual SQL preflight before full score, proved venue/cash20 negative stays WAITING candidate, immutable exclusion/source/calendar pins with same CAS, final all-member drift recheck and read-only current demotion. Source9789483 equals local0a97c7a;20 STATIC/build PASS, unchanged web21-unit/types/lint evidence separate.
+- [ ] Actual SQL grammar/ACL/RLS/codecs/CAS/concurrency/replay/negative fixtures/PostgREST/retention and real score/rank remain NOT_RUN under HOLD. TWSE cash/disposal-positive/original-purpose/long-action/market producers incomplete; unknown retains prior/date, no source_ok bypass or T08 completion.

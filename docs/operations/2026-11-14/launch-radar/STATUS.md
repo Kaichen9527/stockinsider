@@ -1,5 +1,9 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## Current known-exclusion writer checkpoint
+
+Source **9789483** equals local **0a97c7a** whole tree:20 STATIC source checks (16 writer+4 source/prepass) and build PASS; unchanged web tree reuses separately bound21-unit/types/lint. [Known negatives, immutable exclusion pins and exact clocks](../../2026-11-15/launch-radar/KNOWN-REJECTIONS.md). Per-member proved venue/cash negatives remain waiting snapshot candidates while complete peers may continue; unknown required evidence/global market retains prior/date. No source_ok null was removed. TWSE cash, typed disposal/positive venue, source/use-purpose, long actions and market authority remain unconnected; actual SQL/ACL/RLS/CAS/PostgREST/negative fixtures/retention/score/rank NOT_RUN. Financial preparation is separate unreviewed WIP. Original PR head/native HOLD/A1/production/timers unchanged. Earlier checkpoints retain their exact historical scope.
+
 ## Current fresh-source queue checkpoint
 
 Source **0c45a34** equals local **a4641da** whole tree:21 related unit cases,4 STATIC checks/types/lint/build PASS. [Actual route deferral, private diagnostic and exact limits](../../2026-11-15/launch-radar/SOURCE-DEFERRAL.md). SQL v2 distinguishes waiting for current close from no active pool; only fresh preparation defers, existing independently classified queue work continues. Genuine lease/rights/DB errors remain blocked. Source inspector always blocked/authority:none without an actual adapter or extraction/use-purpose bridge. No actual SQL/queue/calendar/session/21:30 acceptance. T08 known-exclusion versus unknown writer source remains separate WIP. Original PR head/native HOLD/A1/services/flags/timers unchanged; earlier checkpoints retain their scope.

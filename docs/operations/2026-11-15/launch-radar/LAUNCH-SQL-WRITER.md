@@ -1,5 +1,7 @@
 # Launch SQL writer source checkpoint
 
+Current incremental source is [9789483 known-exclusion revision](KNOWN-REJECTIONS.md), separately bound to20 STATIC checks/build with unchanged validated web bytes. It remains an unapplied candidate with native/rights/producer gates. The763a0c6 checkpoint below is retained historical evidence.
+
 Public `763a0c676b48598196762cbe550e56675fcbfcd1` equals the complete locally checked
 `342c65d74cdbd1f9df82585c3f10975bacac67d5` tree
 `72b9e068facb93fd879d3ab7308c6bb684ccf4b4`. Its unchanged web tree

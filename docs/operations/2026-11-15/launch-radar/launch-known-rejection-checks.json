@@ -1,0 +1,150 @@
+{
+  "schema": "stockinsider-known-member-rejection-source-v1",
+  "observedAt": "2026-11-15T00:15:56.291633+00:00",
+  "localValidationCommit": "0a97c7a0ad8515ea78379212b2067a2ad2c8d70f",
+  "publicSourceCommit": "9789483dc29ae1f2517abf54581d3ec3423fc4ea",
+  "wholeTree": "84e6f7f149eec04196166bf9d32cad443d9bd43c",
+  "webTree": "3c5f57c8f4cd1b11915561b27aa52bfc3a0f2598",
+  "publication": {
+    "transport": "configured GitHub connector",
+    "expectedParent": "c6279e74ff0c619ea6bb59a2b9287a67656b7dcb",
+    "treeEqualityVerified": true,
+    "force": false,
+    "testsRanLocalIdenticalTree": true,
+    "testsRanPublicCommit": false
+  },
+  "sourceInventory": [
+    {
+      "path": "migrations/20261115_vnext_launch_ranking_v1.sql",
+      "sha256": "db84bf45650ff40658c82e906a058bc8dab82db46410842d790f133ec8698f4b"
+    },
+    {
+      "path": "scripts/vnext-launch-ranking-source.test.mjs",
+      "sha256": "3b907bff46e35417017606984c8bb01d30ef345026d8ec737f632e2954029ec4"
+    }
+  ],
+  "checks": [
+    {
+      "name": "sql_static",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--test",
+        "scripts/vnext-launch-ranking-source.test.mjs",
+        "scripts/vnext-launch-source-facts-source.test.mjs",
+        "scripts/vnext-launch-prepass-source.test.mjs"
+      ],
+      "start": "2026-11-15T00:13:08.540491+00:00",
+      "end": "2026-11-15T00:13:08.791021+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29415555072,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "3a43162567d029235a0c67d0c8f7fb70f66b1695ed744fd5841d0542de293981"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-15T00:13:08.791396+00:00",
+      "end": "2026-11-15T00:13:15.309347+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82284544,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29415391232,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "e7eab8d0c3af6ff2f11ea91fd95e1e3c97118abe9fd5b3a23af14fea3102bb2f"
+    }
+  ],
+  "staticCases": {
+    "total": 20,
+    "launchWriter": 16,
+    "sourceFacts": 3,
+    "sourcePrepass": 1
+  },
+  "staticScope": "TEXT_SOURCE_CONTRACTS_ONLY_NO_SQL_EXECUTION",
+  "runtimeReuse": {
+    "unchangedWebFrom": "a4641da891234b7c5bb67b9108205d48beaaa7ef",
+    "receipt": "launch-source-deferral-checks.json",
+    "claim": "21 related unit/types/lint apply to identical web bytes, not rerun here; current build independently PASS",
+    "newBrowserCases": 0
+  },
+  "implementedSource": [
+    "independent current venue hard-negative or exact official20 cash preflight before full score",
+    "known reject remains a waiting snapshot candidate; no pool exit or research budget work",
+    "immutable exclusion/input/identity/calendar/capture pins bound to the same CAS snapshot",
+    "all-member classification and qualification recheck before first durable append",
+    "read-only current demotion without mutation or qualification renewal"
+  ],
+  "preExecutionReviewDraft": {
+    "sqlSha256": "fb998cc7b3fe18e9c996df2d9bb798cacf175ab60a4f5dda547abe52005c09d4",
+    "testSha256": "f6caa79ee87a62edf2ae10564ffe5c0e029dc7b3b8253651306e5246f2415591",
+    "status": "SUPERSEDED_BEFORE_EXECUTION_CURRENT_RIGHTS_EXPIRY_REPAIR_NOT_RUNTIME_FAILURE",
+    "originalCompleteDraftCopy": "NOT_CLAIMED"
+  },
+  "clockContract": {
+    "cashAvailability": "fixed publication cutoff only",
+    "currentIdentity": "separate current knownAt, no backfill",
+    "currentRights": "clock_timestamp expiry with exact rights revision",
+    "stableDigest": "checkedAt/expiresAt excluded; source/identity/calendar evidence included",
+    "epsilon": false
+  },
+  "externalReference": {
+    "commit": "4bc0fbce7c1998c29a9a44dddb7a0055e34fe8e7",
+    "gitBlob": "54474f29cd3c5dfda391062816480102af7bb6b1",
+    "metadataSha256": "bc4b03a0895b58dc8fff5aed0d78ef3c1ca73e96f09a1106d8b081cc5596f9ff",
+    "cloudObservation": "SANITIZED_GITHUB_METADATA_ONLY_NOT_RAW_OFFICIAL_BODIES",
+    "actualCapture": "2026-11-14T23:06:24.788200+00:00 onward",
+    "use": "2455/3189 interval and2314 halt controls, not DB/source-rights/publication authority",
+    "importantNegative": "2314 last20 listed rows do not prove20 official completed sessions",
+    "corporateActionReference": "283eb49a05a4f6b6610969998482304ba2e11d21 raw history never assumed adjusted"
+  },
+  "gaps": [
+    "TWSE exact licensed cash20 producer",
+    "typed disposal/positive venue coverage producer29082/11677",
+    "mechanical original-source and independent use-purpose binding",
+    "typed company actions for consumed long adjusted price window",
+    "shared SQL-authorized market regime beyond index points",
+    "charts/support/counterevidence/fundamental/valuation/TWSE volume-flow product connections"
+  ],
+  "engineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false
+  },
+  "limits": {
+    "sourceOk": "NULL_UNTIL_REAL_PRODUCER",
+    "unknownRequiredInput": "RETAIN_PRIOR_RANKING_AND_DATE",
+    "globalUnknownMarket": "RETAIN_EVEN_ALL_KNOWN_REJECTED",
+    "actualSqlApplyGrammarAclRlsCodec": "NOT_RUN_HOLD",
+    "actualCasConcurrencyReplayRetention": "NOT_RUN",
+    "actualPostgrestAndOfficialNegativeFixtures": "NOT_RUN",
+    "actualScoreRankingPublication": "NOT_RUN",
+    "T08Complete": false,
+    "nativeHold": "PRESERVED",
+    "originalPrHead": "UNCHANGED",
+    "productionActions": 0,
+    "timersChanged": false,
+    "paidCalls": 0
+  },
+  "preservation": {
+    "originalFiles": 283,
+    "changed": 0,
+    "missing": 0,
+    "archiveOrRecoveryVerified": false,
+    "reclaimedBytes": 0
+  }
+}
