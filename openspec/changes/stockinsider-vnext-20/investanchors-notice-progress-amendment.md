@@ -1,0 +1,7 @@
+# InvestAnchors private notice progress
+
+The internal worker reuses the active production-writer lease and the private vNext audit table. It stores bounded progress for one Taipei mailbox day and operator. The durable result holds scoped notice matching keys and receiver timestamps only. Public source health and candidate readers receive no private mailbox fields. There is no second queue or table, and a mailbox notice never inserts an article extraction.
+
+The state reader uses the existing content and extraction inventory to compute remaining daily headroom, with the prior notice reads included for the receiver's limits. This headroom constrains the mailbox worker and does not reserve an article-extraction slot. A write rechecks the current processing day, context and headroom. A stale predecessor, duplicate processed key, raw fields, future timestamp, oversized payload or incorrect summary fails before append. The receipt compares the full submitted shape for an idempotent replay. A successful partial scan holds the checkpoint, and an interrupted or unacknowledged write re-enters through stored state when retried. The worker exposes only operational status and counts.
+
+This is a staged, default-uninvoked server path. It needs an already-authorized read-only Gmail provider before an internal job can call it. The member article must separately establish its original publication clock, source rights and full-content evidence under the existing admission rules.

@@ -1,0 +1,45 @@
+{
+  "schema": "stockinsider-t03-private-notice-progress-v1",
+  "task": "T03",
+  "baseCommit": "e4403c9290db18de51d599a52957809b416dd1af",
+  "recordedAt": "2026-11-15T15:45:31Z",
+  "migration": "migrations/20261116_18_vnext_investanchors_notice_progress_v1.sql",
+  "privateStorage": "existing public.vnext_audit_v1, restricted role and separate command",
+  "native": {
+    "runtime": "PostgreSQL 17.11 in a disposable Contabo staging network namespace",
+    "modeAndLeaseDependencies": "fixtures",
+    "passed": true,
+    "checks": [
+      "service-only RPC under exact operator and owned writer lease",
+      "no direct service/anonymous audit read",
+      "exact scoped digest fields, no raw member or message metadata",
+      "reject future or out-of-window notice clocks",
+      "same-day and operator separation",
+      "close, rebase, or hold the mailbox checkpoint",
+      "shared source headroom 200 total and 50 from InvestAnchors, distinct content dedup",
+      "two concurrent writes from one previous state allow one append",
+      "uncertain append can replay idempotently",
+      "notice receipts never insert article or extraction content"
+    ]
+  },
+  "node": {
+    "runtime": "22.14.0 isolated staging",
+    "casesPassed": 10,
+    "casesFailed": 0,
+    "includes": [
+      "continue from ledger-supplied keys",
+      "only counts in the outward status",
+      "failed scan does not write progress",
+      "unexpected acknowledgement does not trigger an automatic retry"
+    ]
+  },
+  "dependenciesRemaining": [
+    "background OAuth and exact ownership configuration",
+    "authorized member evidence acquisition and separate article ledger handoff",
+    "full Codex VM, protected review, CI and staging release validation"
+  ],
+  "newPublicRoutes": false,
+  "sourceAuthority": false,
+  "articleAuthority": false,
+  "productionChanged": false
+}

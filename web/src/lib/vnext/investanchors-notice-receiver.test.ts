@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { collectInvestAnchorsNotices, planInvestAnchorsMailboxDay } from './investanchors-notice-receiver.ts';
 
+import { continueInvestAnchorsNoticeScan } from './investanchors-notice-progress.ts';
+
 const day = '2026-11-12';
 const clock = '2026-11-13T00:02:00+08:00';
 const key = Buffer.alloc(32, 9);
@@ -148,4 +150,51 @@ test('broken credentials, cycles, inconsistent message identity, and clock rever
     assert.deepEqual(result.checkedKeys, []);
     assert.doesNotMatch(JSON.stringify(result), /secret token/u);
   }
+});
+
+test('ledger bridge resumes privately with stored checked keys and returns only summary counts', async () => {
+  const gmail = provider([mail('distinct_first', window.startMs), mail('distinct_next', window.startMs + 1)]);
+  const initial = await collectInvestAnchorsNotices(day, key, gmail, { ...dateOptions, readBudget: 1 });
+  const calls: unknown[] = [];
+  const result = await continueInvestAnchorsNoticeScan(day, key, gmail, async value => {
+    calls.push(value);
+    if (value === undefined) return { progressId: '23', checkedKeys: initial.checkedKeys, checkpointDay: null, readBudget: 1, articleAuthority: false };
+    assert.equal(value.baseProgressId, '23');
+    assert.equal(value.scanStatus, 'scanned');
+    assert.equal((value.notices as unknown[]).length, 1);
+    assert.equal((value.checkedKeys as unknown[]).length, 1);
+    return { progressId: '24', replay: false, articleAuthority: false };
+  });
+  assert.deepEqual(result, { scanStatus: 'scanned', checkpointDay: day, checked: 1, awaiting: 1, deferred: 0, rejected: 0, articleAuthority: false });
+  assert.doesNotMatch(JSON.stringify(result), /distinct_|noticeKey|subjectKey|articleKey|observedAt/u);
+  assert.equal(calls.length, 2);
+  assert.equal(gmail.reads(), 2);
+});
+
+test('ledger refuses unexpected authority and leaves a failed receiver scan uncommitted', async () => {
+  const gmail = provider([mail('distinct_first', window.startMs)]);
+  await assert.rejects(() => continueInvestAnchorsNoticeScan(day, key, gmail,
+    async () => ({ progressId: null, checkedKeys: [], checkpointDay: null, readBudget: 50, articleAuthority: true })), /progress_unavailable/u);
+  let calls = 0;
+  const result = await continueInvestAnchorsNoticeScan(day, key, { ...gmail, list: async () => { throw Error('provider'); } }, async value => {
+    assert.equal(value, undefined);
+    calls++;
+    return { progressId: null, checkedKeys: [], checkpointDay: null, readBudget: 50, articleAuthority: false };
+  });
+  assert.equal(calls, 1);
+  assert.equal(result.scanStatus, 'retry_required');
+  assert.equal(result.checkpointDay, null);
+  assert.equal(gmail.reads(), 0);
+});
+
+test('ledger acknowledgement uncertainty cannot trigger a second append or fresh email read', async () => {
+  const gmail = provider([mail('distinct_first', window.startMs)]);
+  let appends = 0;
+  await assert.rejects(() => continueInvestAnchorsNoticeScan(day, key, gmail, async value => {
+    if (!value) return { progressId: null, checkedKeys: [], checkpointDay: null, readBudget: 50, articleAuthority: false };
+    appends++;
+    return { progressId: null, replay: false, articleAuthority: false };
+  }), /progress_write_uncertain/u);
+  assert.equal(appends, 1);
+  assert.equal(gmail.reads(), 1);
 });
