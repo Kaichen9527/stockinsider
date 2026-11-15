@@ -45,6 +45,24 @@ function refused(result) {
   assert.equal(result.status, 1); assert.equal(result.stdout, '');
   assert.equal(result.stderr, 'official_exchange_replay_refused\n');
 }
+test('existing offline CLI dispatches30-page raw breadth observations without roster/CA/market authority or raw rows',()=>{
+ const f=breadthFixture(),result=run(f.root,'--manifest',f.input);assert.equal(result.status,0,result.stderr);
+ const output=JSON.parse(result.stdout);assert.equal(output.parsedSessions,30);assert.equal(output.decodedBytes,output.declaredBytes);
+ assert.equal(output.rawPricePresence.eligible,2);assert.equal(output.rawPricePresence.observed,2);assert.equal(output.rawPricePresence.strictLast20Present,2);
+ assert.equal(output.caComparableCoverage,null);assert.equal(output.qualifiedBreadth,null);assert.equal(output.aggregateMarketGate,null);
+ for(const key of ['sourceAuthority','marketAuthority','publicationAuthority','rosterAuthority','calendarAuthority','institutionalDenominatorAuthority'])assert.equal(output[key],false);
+ assert.equal(output.attribution.datasetId,11371);assert.equal(result.stdout.includes('SYNTHETIC_BREADTH_PRIVATE_ROW'),false);
+ assert.equal(result.stdout.includes('"close"'),false);assert.notEqual(output.responseReceipts[0].rawSha256,output.responseReceipts[0].csvRowsSha256);
+ const absent=breadthFixture({absent:true}),missing=run(absent.root,'--manifest',absent.input);assert.equal(missing.status,0,missing.stderr);
+ assert.equal(JSON.parse(missing.stdout).decodedBytes,0);assert.ok(JSON.parse(missing.stdout).gaps.includes('breadth_raw_body_or_planned_response_missing'));
+});
+test('breadth CLI preserves hash/date/30page/500k/nativeunit/symlink private-file refusals',()=>{
+ const changes=[f=>{f.manifest.responses[0].rawSha256='0'.repeat(64);},f=>{f.manifest.responses.push(f.manifest.responses[0]);},
+  f=>{f.manifest.responses[0].bytes=500001;},f=>{f.manifest.cutoff='2026-11-13T13:30:00Z';},
+  f=>{const target=path.join(f.root,f.manifest.responses[0].body.path);fs.unlinkSync(target);fs.symlinkSync(f.input,target);},
+  f=>{f.manifest.responses[0].sourceUrl=f.manifest.responses[0].sourceUrl.replace('&d=','&date=');}];
+ for(const change of changes){const f=breadthFixture();change(f);f.save();refused(run(f.root,'--manifest',f.input));}
+});
 function institutionalFixture({ absent=false, large=false }={}) {
   const f=nativeFixture();
   Object.assign(f.manifest,{schema:'launch-tpex-11370-institutional-volume-v1',datasetId:11370});
@@ -58,6 +76,20 @@ function institutionalFixture({ absent=false, large=false }={}) {
       bytes:Buffer.byteLength(bytes),rawSha256:createHash('sha256').update(bytes).digest('hex'),body:absent?{encoding:'absent'}:page.body});
   }
   f.save();return f;
+}
+function breadthFixture({absent=false}={}){
+ const f=nativeFixture(),sessions=Array.from({length:30},(_,i)=>new Date(Date.UTC(2026,10,13-29+i)).toISOString().slice(0,10));
+ const header=['資料日期','代號','名稱','收盤','漲跌','開盤','最高','最低','成交股數','成交金額','成交筆數','最後買價','最後賣價','發行股數','次日漲停價','次日跌停價'];
+ const responses=sessions.map((session,index)=>{
+  const roc=`115/${session.slice(5,7)}/${session.slice(8)}`,rows=['5274','6488'].map(symbol=>[roc,symbol,'SYNTHETIC_BREADTH_PRIVATE_ROW',String(100+index),'0','100','200','90','1,000','100,000','10','100','101','1,000,000','110','90']);
+  const bytes='\uFEFF'+[header,...rows].map(row=>row.map(cell=>`"${cell}"`).join(',')).join('\r\n')+'\r\n',filename=`bodies/breadth-${session}.csv`;
+  fs.writeFileSync(path.join(f.root,filename),bytes,{mode:0o600});
+  return {session,sourceUrl:`https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php?l=zh-tw&o=data&se=EW&d=115%2F${session.slice(5,7)}%2F${session.slice(8)}`,
+   observedAt:'2026-11-14T18:00:00Z',publisherPublishedAt:null,httpStatus:200,redirectCount:0,contentType:'text/csv',bytes:Buffer.byteLength(bytes),
+   rawSha256:createHash('sha256').update(bytes).digest('hex'),body:absent?{encoding:'absent'}:{encoding:'file',path:filename}};
+ });
+ delete f.manifest.symbol;Object.assign(f.manifest,{schema:'launch-tpex-11371-breadth-observations-v1',throughSession:sessions.at(-1),sessions,responses,
+  roster:{revision:'b'.repeat(64),availableAt:'2026-11-14T17:00:00Z',symbols:['5274','6488']}});f.save();return f;
 }
 test('offline CLI reads only explicit private work inputs and emits metadata, never raw data or rights', () => {
   const { root, input } = fixture(), result = run(root, '--receipt', input);
