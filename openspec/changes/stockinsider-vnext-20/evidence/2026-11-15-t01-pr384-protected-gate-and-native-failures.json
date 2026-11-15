@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "tasks": [
+    "T01",
+    "T19"
+  ],
+  "pr": 384,
+  "observationDate": "2026-11-15",
+  "classification": "authoritative_gitHub_evidence_local_read_only_metadata_and_hashes",
+  "exact": {
+    "base": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+    "subject": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "hostedQualityMerge": "a8fbdfdbf55d77d2928a9134a396091001994769",
+    "hostedQualityMergeParents": [
+      "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+      "cbb581662e72942610ff85b0bf5e7e47ddddfa46"
+    ],
+    "candidate": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+    "candidateIsDescendantOfSubject": true,
+    "candidateAheadBy": 81,
+    "candidateGitHubCheckRuns": 0,
+    "draft": true,
+    "mergeabilityState": "blocked"
+  },
+  "rule": {
+    "id": 20177392,
+    "enforcement": "active",
+    "appliesToDefaultBranch": true,
+    "statusCheck": "stockinsider-v3-gate-root",
+    "integrationId": 15368
+  },
+  "protected": {
+    "workflow": ".github/workflows/source-led-opportunity-external-gate.yml",
+    "event": "pull_request_target",
+    "runId": 39996616648,
+    "attempt": 1,
+    "finishedDate": "2026-10-23",
+    "bootstrap": "success",
+    "refs": [
+      {
+        "name": "evidence/source-led-opportunity-v3-exact-review-cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+        "httpStatus": 404
+      },
+      {
+        "name": "evidence/source-led-opportunity-v3-requirements-v325-digest",
+        "httpStatus": 200,
+        "oid": "cf942588ffa03c81c4af384bb7cc4442468cf13d"
+      },
+      {
+        "name": "evidence/source-led-opportunity-v3-architecture-v325-digest",
+        "httpStatus": 200,
+        "oid": "2a710eab65e8c60204493ae08848d47fec3faa9c"
+      }
+    ],
+    "commonFailure": "git fetch: couldn't find remote ref for subject-addressed exact-review",
+    "results": {
+      "requirements": "failure",
+      "architecture": "failure",
+      "exact-review": "failure",
+      "product-runtime-code-gate": "skipped",
+      "model-runner-code-gate": "skipped",
+      "stockinsider-v3-gate-root": "failure"
+    },
+    "verifiedRequirementsOrArchitectureEnvelope": false,
+    "artifactCount": 1
+  },
+  "quality": {
+    "workflow": ".github/workflows/stockinsider-vnext-quality.yml",
+    "event": "pull_request",
+    "runId": 39996620417,
+    "attempt": 1,
+    "conclusion": "failure",
+    "jobId": 120561693293,
+    "ordinaryTypesLintAndBuild": "success",
+    "failures": [
+      {
+        "entry": "scripts/vnext-thesis-postgres.test.mjs",
+        "stage": "actual all-active audit persists separate deep evidence; corrected new fact IDs cause substantive drift",
+        "assertionDetailAvailable": false,
+        "oldTestBlob": "7b940566c367cf5b765227b86cc21c9647df46b1",
+        "candidateTestBlob": "d2bf363de9ce9f21bbdd9613abc95f8558f03135"
+      },
+      {
+        "entry": "scripts/vnext-preparation-resource-run.py",
+        "delegate": "scripts/vnext-preparation-http.test.mjs",
+        "stage": "preflight",
+        "error": "ERR_ASSERTION",
+        "messageHash": "52c7cc08ab309eda6015c8991ffeedae7a5318ef3d8a3179bb2f016dea56d8aa",
+        "namedRuntimeWitnesses": 0,
+        "runnerAndTestBlobsUnchangedInCandidate": true,
+        "staticSqlBodyAndMigrationHashChecks": [
+          {
+            "ref": "a8fbdfdbf55d77d2928a9134a396091001994769",
+            "node": "v22.14.0",
+            "checks": 15,
+            "matched": 15,
+            "problems": []
+          },
+          {
+            "ref": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+            "node": "v22.14.0",
+            "checks": 15,
+            "matched": 15,
+            "problems": []
+          }
+        ]
+      }
+    ],
+    "sameBuildDesktopMobileBrowserStep": "skipped"
+  },
+  "flowsNotExecuted": [
+    "new workflow run",
+    "new protected review",
+    "staging or production release",
+    "candidate native execution"
+  ]
+}
