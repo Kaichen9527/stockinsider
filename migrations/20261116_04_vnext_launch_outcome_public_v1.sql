@@ -27,7 +27,10 @@ BEGIN
   'state',CASE WHEN item->>'state' IN('ready','pending','price_data_gap','calendar_gap') THEN item->>'state' END,
   'terminalSession',CASE WHEN item->>'terminalSession'~'^[0-9]{4}-[0-9]{2}-[0-9]{2}$' THEN item->>'terminalSession' END,
   'grossReturnPct',CASE WHEN item->>'state'='ready' AND jsonb_typeof(item->'grossPriceReturnPct')='number' THEN item->'grossPriceReturnPct' END,
-  'netReturnPct',CASE WHEN include_net AND item->>'state'='ready' AND jsonb_typeof(item->'netSimulatedReturnPct')='number' THEN item->'netSimulatedReturnPct' END
+  'netReturnPct',CASE WHEN include_net AND item->>'state'='ready' AND jsonb_typeof(item->'netSimulatedReturnPct')='number' THEN item->'netSimulatedReturnPct' END,
+  'benchmarkReturnPct',CASE WHEN item->>'state'='ready' AND jsonb_typeof(item->'benchmarkReturnPct')='number' THEN item->'benchmarkReturnPct' END,
+  'marketExcessPct',CASE WHEN item->>'state'='ready' AND jsonb_typeof(item->'marketExcessPct')='number' THEN item->'marketExcessPct' END,
+  'netMarketExcessPct',CASE WHEN include_net AND item->>'state'='ready' AND jsonb_typeof(item->'netMarketExcessPct')='number' THEN item->'netMarketExcessPct' END
  ) ORDER BY ordinal),'[]'::jsonb) INTO output FROM jsonb_array_elements(items) WITH ORDINALITY f(item,ordinal);
  RETURN output;
 END $$;

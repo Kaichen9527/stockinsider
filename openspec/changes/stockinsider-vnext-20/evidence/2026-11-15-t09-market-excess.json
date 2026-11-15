@@ -1,0 +1,84 @@
+{
+  "ticket": 394,
+  "base": "0a6befdc1b517360662587ed81d31d57d61742d5",
+  "candidateOnly": true,
+  "productionModified": false,
+  "scope": "isolated Contabo staging",
+  "officialSamples": [
+    {
+      "market": "TWSE",
+      "dataset": 11755,
+      "contentType": "text/csv",
+      "bytes": 610,
+      "observation": "2026-11-15T11:43:25.641+00:00",
+      "sha256": "e46d252591519b64b5e6d714584f7a6d8f4515fcd4bf165d0d2cb39f63e0a861",
+      "points": [
+        {
+          "sourceDate": "1151112",
+          "open": "44180.46",
+          "close": "43091.87"
+        },
+        {
+          "sourceDate": "1151113",
+          "open": "43719.75",
+          "close": "43675.12"
+        }
+      ]
+    },
+    {
+      "market": "TPEX",
+      "dataset": 11391,
+      "contentType": "application/csv",
+      "bytes": 617,
+      "observation": "2026-11-15T11:43:23.987+00:00",
+      "sha256": "de4d5ed331cc9dbb988382d40b1bc8f80fd26e0a97694f667d25968034ae926f",
+      "points": [
+        {
+          "sourceDate": "20261112",
+          "open": "344.58",
+          "close": "335.73"
+        },
+        {
+          "sourceDate": "20261113",
+          "open": "338.33",
+          "close": "342.41"
+        }
+      ]
+    }
+  ],
+  "postgres": {
+    "postgres": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "frozenMarketPinPreserved": true,
+    "sameVenueNoCrossFallback": true,
+    "lateMarketCorrectionExcludedAtPriorCutoff": true,
+    "unversionedOldPacketCompatible": true,
+    "terminalExcessInReadonlyProjection": true,
+    "sourceAndArtifactRowsPrivate": true,
+    "researchExcessPct": 10,
+    "executionGrossExcessPct": 15.238095238095237,
+    "executionNetExcessPct": 14.298734526410088,
+    "sqlSha256": "2d58ab629db4ac63a1dd32a56171b7b7510998c9a6668ba8b98d7b8f69ce9e81"
+  },
+  "node": {
+    "passed": 42,
+    "failed": 0,
+    "strictScopedTypeScript": "5.9.3",
+    "node": "22.23.1"
+  },
+  "changedFiles": {
+    "web/src/lib/vnext/launch-outcomes.ts": "80b532cd675acb8c76b40e303cd58d4decb46161871f37ffafd965a25e6f61ec",
+    "web/src/lib/vnext/launch-outcome-cycle.ts": "6f13601b7ee2e29a1acf3a0f9cf26167c42e5182ef06698ea66f987b92731f75",
+    "web/src/lib/vnext/launch-outcome-public.ts": "72f02b304b173c1ba66742067ef6fecbcc33b5f09ac2e7eb9aa5c6c72744dc11",
+    "web/src/app/components/vnext/LaunchOutcomeSummary.tsx": "1e13c52ea0d946c93a8b3010a85a7c51ab1e6b0cced9aa9a76f066786f349c21",
+    "web/src/lib/vnext/launch-outcome-public.test.ts": "e3f09a9535f63b85369dbfdc7e61c438990e431e5a849153a589547d74fc36b4",
+    "web/src/lib/vnext/launch-outcome-market.test.ts": "8e31d1200aac950c43201fee9488979658dc372d9b8eb22c10bc9ea9861e5073",
+    "migrations/20261116_02_vnext_launch_outcome_versions_v1.sql": "6f748d499d519c3b5b719ec7d7a1288f4a4bec80e5912bc165ae3dfed1bd9975",
+    "migrations/20261116_04_vnext_launch_outcome_public_v1.sql": "c3bec96e3524a9eab08cc53529440e4f0580cce035d79ba823b5059df620344a",
+    "migrations/20261116_05_vnext_launch_outcome_benchmark_v1.sql": "2d58ab629db4ac63a1dd32a56171b7b7510998c9a6668ba8b98d7b8f69ce9e81"
+  },
+  "knownProofLimits": [
+    "actual market data establish index fields only",
+    "stock evaluation uses synthetic candidate and price inputs",
+    "no full Cloud/browser/real published rank acceptance"
+  ]
+}

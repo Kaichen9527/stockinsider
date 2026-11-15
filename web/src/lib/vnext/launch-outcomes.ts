@@ -17,6 +17,8 @@ type Bar={
   session:string;availableAt:string;priceRevision:string;basisRevision:string;
   rawOpen:string;open:string;high:string;low:string;close:string;
 };
+export type LaunchOutcomeBenchmarkPoint={session:string;open:string|null;close:string;observedAt:string;availableAt:string;revision:string};
+export type LaunchOutcomeBenchmark={market:Market;frozenClose:LaunchOutcomeBenchmarkPoint|null;points:LaunchOutcomeBenchmarkPoint[]};
 type Opening={
   session:string;knownAt:string;revision:string;status:'modeled_fill'|'unfillable'|'unknown';
   rawOpen:string|null;priceRevision:string|null;reason:'suspended'|'one_price_upper_limit'|'no_executable_open'|null;
@@ -27,6 +29,7 @@ type Opening={
 export type LaunchOutcomeInput={
   scope:'published_rank'|'historical_price_replay'; signal:Signal; asOf:string; calendarRevision:string;
   basisRevision:string; sessions:Session[]; bars:Bar[]; opening:Opening|null;
+  benchmark?:LaunchOutcomeBenchmark;
 };
 type Prices={open:bigint;high:bigint;low:bigint;close:bigint};
 type Ratio={numerator:bigint;denominator:bigint};
@@ -98,7 +101,51 @@ function labelWindow(days:Session[],prices:Map<string,Prices>,entry:bigint,net:b
   }
   return unknown??emptyBarrier(days.length===20&&days.every(day=>day.status==='completed'&&time(day.closeAt)<=asOf)?'not_hit':'pending');
 }
-function markHorizons(days:Session[],prices:Map<string,Prices>,entry:bigint,asOf:bigint,net:boolean){
+function excessPct(stock:Ratio,market:Ratio){
+  return 100*Number(stock.numerator*market.denominator-market.numerator*stock.denominator)
+    /Number(stock.denominator*market.denominator);
+}
+
+function readBenchmark(input:LaunchOutcomeInput,days:Session[],asOf:bigint){
+  const benchmark=input.benchmark;
+  if(benchmark===undefined)return null;
+  if(!benchmark||benchmark.market!==input.signal.market||!Array.isArray(benchmark.points)||benchmark.points.length>4)
+    throw Error('launch_outcome_market_scope');
+  const normalize=(point:LaunchOutcomeBenchmarkPoint)=>{
+    if(!hash(point.revision)||time(point.observedAt)>time(point.availableAt))throw Error('launch_outcome_market_revision');
+    return {open:point.open===null?null:decimal(point.open),close:decimal(point.close)};
+  };
+  const frozen=benchmark.frozenClose;
+  if(frozen!==null&&(frozen.session!==input.signal.session||time(frozen.availableAt)>time(input.signal.cutoff)))
+    throw Error('launch_outcome_frozen_market_scope');
+  const frozenClose=frozen===null?null:normalize(frozen).close;
+  const selected=new Map<string,{open:bigint|null;close:bigint}>();
+  const byDay=new Map(days.map(row=>[row.session,row]));
+  let previous=input.signal.session;
+  for(const point of benchmark.points){
+    const session=byDay.get(point.session);
+    if(!session||session.status!=='completed'||point.session<=previous||
+      time(point.observedAt)<time(session.closeAt)||time(point.availableAt)>asOf)throw Error('launch_outcome_market_clock_scope');
+    selected.set(point.session,normalize(point));
+    previous=point.session;
+  }
+  return {frozenClose,points:selected};
+}
+
+/** Reuses the official session sequence already selected for this signal.
+ * Retrieve only the terminal dates and, when needed, the modeled opening date. */
+export function launchOutcomeBenchmarkDays(input:LaunchOutcomeInput){
+  const sessions=input.sessions.filter(row=>row.status!=='cancelled');
+  const terminal=LAUNCH_OUTCOME_HORIZONS.flatMap(days=>{
+    const row=sessions[days-1];
+    return row?.status==='completed'?[row.session]:[];
+  });
+  const next=sessions[0];
+  if(terminal.length&&next?.status==='completed'&&input.opening?.status==='modeled_fill')terminal.unshift(next.session);
+  return [...new Set(terminal)].sort();
+}
+
+function markHorizons(days:Session[],prices:Map<string,Prices>,entry:bigint,asOf:bigint,net:boolean,market?:{points:Map<string,{open:bigint|null;close:bigint}>;entry:bigint|null}){
   return LAUNCH_OUTCOME_HORIZONS.map(horizon=>{
     const window=days.slice(0,horizon);
     const terminal=window[horizon-1];
@@ -108,10 +155,19 @@ function markHorizons(days:Session[],prices:Map<string,Prices>,entry:bigint,asOf
       :elapsed.some(row=>!prices.has(row.session))?'price_data_gap'
       :!terminal||elapsedSessions<horizon?'pending':'ready';
     const final=terminal&&state==='ready'?prices.get(terminal.session):undefined;
+    const terminalMarket=final&&terminal?market?.points.get(terminal.session):undefined;
+    const benchmark=terminalMarket&&market?.entry?returnRatio(terminalMarket.close,market.entry,false):null;
+    const gross=final?returnRatio(final.close,entry,false):null;
+    const afterCosts=final&&net?returnRatio(final.close,entry,true):null;
     return {
       horizon,state,terminalSession:terminal?.session??null,elapsedSessions,
-      grossPriceReturnPct:final?percent(returnRatio(final.close,entry,false)):null,
-      netSimulatedReturnPct:final&&net?percent(returnRatio(final.close,entry,true)):null,
+      grossPriceReturnPct:gross?percent(gross):null,
+      netSimulatedReturnPct:afterCosts?percent(afterCosts):null,
+      ...(market?{
+        benchmarkReturnPct:benchmark?percent(benchmark):null,
+        marketExcessPct:gross&&benchmark?excessPct(gross,benchmark):null,
+        netMarketExcessPct:afterCosts&&benchmark?excessPct(afterCosts,benchmark):null,
+      }:{}),
     };
   });
 }
@@ -144,6 +200,7 @@ export function evaluateLaunchOutcome(input:LaunchOutcomeInput) {
     bars.set(bar.session,bar);
     if(session.status==='completed')prices.set(bar.session,pickBar(bar,input.basisRevision));
   }
+  const benchmark=readBenchmark(input,sessions,asOf);
   const next=sessions[0];
   const nextSession=next?.session??null;
   const opening=input.opening;
@@ -180,11 +237,12 @@ export function evaluateLaunchOutcome(input:LaunchOutcomeInput) {
     calendarRevision:input.calendarRevision,basisRevision:input.basisRevision,
     inputSnapshotHash:inputHash(input),costs:LAUNCH_SIMULATION_COSTS,
     research:{basis:'signal_close' as const,barrier20:labelWindow(firstTwenty,prices,signalPrice,false,asOf),
-      horizons:markHorizons(sessions,prices,signalPrice,asOf,false)},
+      horizons:markHorizons(sessions,prices,signalPrice,asOf,false,benchmark?{points:benchmark.points,entry:benchmark.frozenClose}:undefined)},
     execution:{basis:'next_market_session_open' as const,nextSession,status:fillStatus,fill:fillBasis,
       reason:fillStatus==='unfillable'?opening!.reason:null,openingRevision:opening?.revision??null,
       grossBarrier20:simulated===null?null:labelWindow(firstTwenty,prices,simulated,false,asOf),
       netBarrier20:simulated===null?null:labelWindow(firstTwenty,prices,simulated,true,asOf),
-      horizons:simulated===null?[]:markHorizons(sessions,prices,simulated,asOf,true)},
+      horizons:simulated===null?[]:markHorizons(sessions,prices,simulated,asOf,true,
+        benchmark?{points:benchmark.points,entry:nextSession?benchmark.points.get(nextSession)?.open??null:null}:undefined)},
   };
 }

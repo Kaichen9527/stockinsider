@@ -1,7 +1,7 @@
 import {loadTwLaunchOutcomeInput,type TwEntryAuthorityClient,type TwEntryForwardCalendar} from '../tw-entry-plan-authority.ts';
 import type {VnextIdentity} from './auth.ts';
 import {evidenceInstant} from './evidence-clock.ts';
-import {evaluateLaunchOutcome,LAUNCH_OUTCOME_POLICY} from './launch-outcomes.ts';
+import {evaluateLaunchOutcome,launchOutcomeBenchmarkDays,LAUNCH_OUTCOME_POLICY,type LaunchOutcomeBenchmark,type LaunchOutcomeBenchmarkPoint,type LaunchOutcomeInput} from './launch-outcomes.ts';
 
 type Row=Record<string,unknown>;
 type Market='TWSE'|'TPEX';
@@ -61,6 +61,35 @@ function replayFrom(value:unknown,ref:SignalRef,asOf:string,revision:string){
   return value.replay;
 }
 
+function benchmarkPoint(value:unknown):LaunchOutcomeBenchmarkPoint{
+  if(!object(value)||typeof value.session!=='string'||typeof value.close!=='string'
+    ||(value.open!==null&&typeof value.open!=='string')||typeof value.observedAt!=='string'
+    ||typeof value.availableAt!=='string'||!hash(value.revision))throw Error('launch_outcome_market_scope');
+  return {session:value.session,close:value.close,open:value.open,observedAt:value.observedAt,
+    availableAt:value.availableAt,revision:value.revision};
+}
+
+async function evaluateWithBenchmark(writer:Writer,signal:Row,packet:LaunchOutcomeInput){
+  const dates=launchOutcomeBenchmarkDays(packet);
+  if(dates.length){
+    try{
+      const {data,error}=await writer.rpc('vnext_launch_outcome_benchmark_v1',{...signal,p_as_of:packet.asOf,p_days:dates});
+      if(!error&&object(data)&&data.market===packet.signal.market&&Array.isArray(data.points)&&data.points.length<=dates.length){
+        const points=data.points.map(benchmarkPoint);
+        if(points.every(row=>dates.includes(row.session))){
+          const benchmark:LaunchOutcomeBenchmark={market:packet.signal.market,points,
+            frozenClose:data.frozenClose===null?null:benchmarkPoint(data.frozenClose)};
+          const enriched={...packet,benchmark};
+          return {packet:enriched,evaluation:evaluateLaunchOutcome(enriched)};
+        }
+      }
+    }catch{
+      // Missing or invalid market data does not change the absolute outcome.
+    }
+  }
+  return {packet,evaluation:evaluateLaunchOutcome(packet)};
+}
+
 /** Runs only with the caller's existing owned write lease and canonical post-close cutoff.
  * The RPC chooses frozen signals and applied calendar receipts. No request body
  * can supply a ranking outcome or an official price packet. */
@@ -85,8 +114,8 @@ export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,
     let packet:Awaited<ReturnType<typeof loadTwLaunchOutcomeInput>>;
     let evaluation:ReturnType<typeof evaluateLaunchOutcome>;
     try{
-      packet=await loadTwLaunchOutcomeInput(writer,anchor,asOf,calendar);
-      evaluation=evaluateLaunchOutcome(packet);
+      const stock=await loadTwLaunchOutcomeInput(writer,anchor,asOf,calendar);
+      ({packet,evaluation}=await evaluateWithBenchmark(writer,signal,stock));
     }catch{defer('official_data_unavailable');continue;}
     try{
       const result=await writer.rpc('vnext_launch_outcome_command_v1',{...signal,p_input:packet,p_result:evaluation});

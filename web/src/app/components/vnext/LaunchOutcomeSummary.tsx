@@ -21,6 +21,13 @@ function BarrierLabel({item}:{item:Barrier}){
   return <>{barrierLabels[item.state]}{item.session&&<> · <time dateTime={item.session}>{item.session}</time></>}</>;
 }
 
+const points=new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2,signDisplay:'exceptZero'});
+function Excess({value}:{value:number|null}){
+  return <span className="block text-xs font-normal text-slate-600 dark:text-slate-400">
+    {value===null?'大盤資料不足':`較同市場 ${points.format(value)} 個百分點`}
+  </span>;
+}
+
 function MarkTable({rows,net}:{rows:Horizon[];net:boolean}){
   return <table className="mt-3 w-full text-left text-sm">
     <thead><tr className="border-b border-slate-300 dark:border-slate-700">
@@ -30,8 +37,8 @@ function MarkTable({rows,net}:{rows:Horizon[];net:boolean}){
     </tr></thead>
     <tbody>{rows.map(row=><tr className={row.horizon===60?'border-b border-slate-200 font-semibold dark:border-slate-700':'border-b border-slate-200 dark:border-slate-700'} key={row.horizon}>
       <th scope="row" className="py-2 font-medium">{row.horizon} 日{row.terminalSession&&<time dateTime={row.terminalSession} className="block text-xs font-normal text-slate-600 dark:text-slate-400">{row.terminalSession}</time>}</th>
-      {row.state==='ready'?<><td className="py-2 text-right tabular-nums">{row.grossReturnPct===null?'資料不足':percentage.format(row.grossReturnPct/100)}</td>
-        {net&&<td className="py-2 text-right tabular-nums">{row.netReturnPct===null?'資料不足':percentage.format(row.netReturnPct/100)}</td>}</>
+      {row.state==='ready'?<><td className="py-2 text-right tabular-nums">{row.grossReturnPct===null?'資料不足':percentage.format(row.grossReturnPct/100)}<Excess value={row.marketExcessPct}/></td>
+        {net&&<td className="py-2 text-right tabular-nums">{row.netReturnPct===null?'資料不足':percentage.format(row.netReturnPct/100)}<Excess value={row.netMarketExcessPct}/></td>}</>
         :<td colSpan={net?2:1} className="py-2 text-right text-slate-600 dark:text-slate-400">{stateLabels[row.state]}</td>}
     </tr>)}</tbody>
   </table>;

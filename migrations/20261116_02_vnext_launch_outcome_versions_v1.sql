@@ -65,7 +65,8 @@ BEGIN
  IF jsonb_typeof(p_input) IS DISTINCT FROM 'object' OR jsonb_typeof(p_result) IS DISTINCT FROM 'object'
   OR octet_length(p_input::text)>256000 OR octet_length(p_result::text)>24000
   OR NOT(p_input ?& ARRAY['scope','signal','asOf','calendarRevision','basisRevision','sessions','bars','opening'])
-  OR (SELECT count(*) FROM jsonb_object_keys(p_input))<>8
+  OR (SELECT count(*) FROM jsonb_object_keys(p_input))<>(CASE WHEN p_input ? 'benchmark' THEN 9 ELSE 8 END)
+  OR (p_input ? 'benchmark' AND jsonb_typeof(p_input->'benchmark') IS DISTINCT FROM 'object')
   OR NOT(p_result ?& ARRAY['scope','signal','asOf','calendarRevision','basisRevision','inputSnapshotHash','costs','policyVersion','key','repeatSignal','research','execution'])
   OR (SELECT count(*) FROM jsonb_object_keys(p_result))<>12
   OR p_input->>'scope' IS DISTINCT FROM 'published_rank' OR p_result->>'scope' IS DISTINCT FROM 'published_rank'

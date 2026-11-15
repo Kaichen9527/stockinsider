@@ -10,13 +10,14 @@ const ref={rankingRunId:'00000000-0000-4000-8000-000000000003',symbol:'1234',sig
 const first='00000000-0000-4000-8000-000000000001';
 const base={...ref,schemaVersion:'vnext-launch-outcome-public-v1',policyVersion:'launch-outcomes-v1',firstRankingRunId:first,
   state:'ready',asOf:'2026-11-05T13:30:00+00:00',outcomeRevision:'a'.repeat(64)};
-const period={horizon:20,state:'ready',terminalSession:'2026-11-02',grossReturnPct:0,netReturnPct:null};
-const waiting={horizon:60,state:'pending',terminalSession:null,grossReturnPct:null,netReturnPct:null};
-const gap={horizon:120,state:'calendar_gap',terminalSession:null,grossReturnPct:null,netReturnPct:null};
+const unavailableBenchmark={benchmarkReturnPct:null,marketExcessPct:null,netMarketExcessPct:null};
+const period={...unavailableBenchmark,horizon:20,state:'ready',terminalSession:'2026-11-02',grossReturnPct:0,netReturnPct:null};
+const waiting={...unavailableBenchmark,horizon:60,state:'pending',terminalSession:null,grossReturnPct:null,netReturnPct:null};
+const gap={...unavailableBenchmark,horizon:120,state:'calendar_gap',terminalSession:null,grossReturnPct:null,netReturnPct:null};
 const barrier={state:'order_unknown',session:'2026-10-12'};
 const completed={...base,research:{barrier20:barrier,horizons:[period,waiting,gap]},
   execution:{status:'modeled_fill',nextSession:'2026-10-06',reason:null,grossBarrier20:barrier,
-    netBarrier20:{state:'down_first',session:'2026-10-09'},horizons:[{...period,grossReturnPct:20,netReturnPct:19.25},waiting,gap]}};
+    netBarrier20:{state:'down_first',session:'2026-10-09'},horizons:[{...period,grossReturnPct:20,netReturnPct:19.25,benchmarkReturnPct:10,marketExcessPct:10,netMarketExcessPct:9.25},waiting,gap]}};
 
 test('performance projection binds the frozen run, stock, and session and rejects nested private keys',()=>{
   const projected=parsePublicLaunchOutcome(completed,ref);
@@ -59,7 +60,7 @@ function render(outcome:PublicLaunchOutcome){
 
 test('actual outcome panel separates research from simulated returns and labels uncertainty and costs',()=>{
   const markup=render(parsePublicLaunchOutcome(completed,ref));
-  for(const value of ['發榜日收盤追蹤','次一交易日開盤模擬','連續上榜','觀測至','0%','+19.25%','尚未到期','交易日資料不足',
+  for(const value of ['發榜日收盤追蹤','次一交易日開盤模擬','連續上榜','觀測至','0%','+19.25%','較同市場 +9.25 個百分點','大盤資料不足','尚未到期','交易日資料不足',
     '同日觸及上下界，先後不明','60 日','0.1425','0.3','0.1'])assert.ok(markup.includes(value),value);
   assert.match(markup,/<table/u);
   assert.doesNotMatch(markup,/snapshotHash|rankingRunId|SYNTHETIC_PRIVATE_BLOCK/u);

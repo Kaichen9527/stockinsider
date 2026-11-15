@@ -10,7 +10,8 @@ const version='vnext-launch-outcome-public-v1';
 type Row=Record<string,unknown>;
 type Reference={rankingRunId:string;symbol:string;signalSession:string};
 type Barrier={state:typeof barriers[number];session:string|null};
-type Horizon={horizon:typeof windows[number];state:typeof states[number];terminalSession:string|null;grossReturnPct:number|null;netReturnPct:number|null};
+type Horizon={horizon:typeof windows[number];state:typeof states[number];terminalSession:string|null;grossReturnPct:number|null;netReturnPct:number|null;
+  benchmarkReturnPct:number|null;marketExcessPct:number|null;netMarketExcessPct:number|null};
 type Execution={status:typeof executionStatuses[number];nextSession:string|null;reason:typeof unfillableReasons[number]|null;
   grossBarrier20:Barrier|null;netBarrier20:Barrier|null;horizons:Horizon[]};
 type Published=Reference&{schemaVersion:typeof version;policyVersion:typeof LAUNCH_OUTCOME_POLICY};
@@ -41,13 +42,18 @@ function horizons(value:unknown,signalSession:string,includeNet:boolean):Horizon
   if(!Array.isArray(value)||value.length!==windows.length)return rejected();
   return value.map((row,index)=>{
     const horizon=windows[index];
-    if(!exact(row,'horizon state terminalSession grossReturnPct netReturnPct')||row.horizon!==horizon||
+    if(!exact(row,'horizon state terminalSession grossReturnPct netReturnPct benchmarkReturnPct marketExcessPct netMarketExcessPct')||row.horizon!==horizon||
       !enumValue(row.state,states)||!futureDay(row.terminalSession,signalSession))return rejected();
     if(row.state==='ready'){
       if(row.terminalSession===null||!finite(row.grossReturnPct)||(includeNet?!finite(row.netReturnPct):row.netReturnPct!==null))return rejected();
     }else if(row.grossReturnPct!==null||row.netReturnPct!==null)return rejected();
+    const {benchmarkReturnPct,marketExcessPct,netMarketExcessPct}=row;
+    if(row.state==='ready'&&benchmarkReturnPct!==null){
+      if(!finite(benchmarkReturnPct)||!finite(marketExcessPct)||(includeNet?!finite(netMarketExcessPct):netMarketExcessPct!==null))return rejected();
+    }else if(benchmarkReturnPct!==null||marketExcessPct!==null||netMarketExcessPct!==null)return rejected();
     return {horizon,state:row.state,terminalSession:row.terminalSession,
-      grossReturnPct:row.grossReturnPct as number|null,netReturnPct:row.netReturnPct as number|null};
+      grossReturnPct:row.grossReturnPct as number|null,netReturnPct:row.netReturnPct as number|null,
+      benchmarkReturnPct:benchmarkReturnPct as number|null,marketExcessPct:marketExcessPct as number|null,netMarketExcessPct:netMarketExcessPct as number|null};
   });
 }
 
