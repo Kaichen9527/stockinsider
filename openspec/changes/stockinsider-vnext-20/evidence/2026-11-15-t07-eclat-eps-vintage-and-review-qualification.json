@@ -1,0 +1,459 @@
+{
+  "schemaVersion": 1,
+  "task": "T07",
+  "relatedTasks": [
+    "T08",
+    "T11"
+  ],
+  "issuer": "1476 Eclat",
+  "releaseCodeRef": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "documents": {
+    "pdfSources": {
+      "financialPdf": {
+        "url": "https://eclatglobal.s3.amazonaws.com/uploads/2026/11/115%E5%B9%B4_%E5%84%92%E9%B4%BB_%E5%90%88%E4%BD%B5%E8%B2%A1%E5%8B%99%E5%A0%B1%E5%91%8A_Q3_zh.pdf",
+        "http": 200,
+        "observedAt": "2026-11-15T08:01:38.501810+00:00",
+        "bytes": 1287780,
+        "sha256": "ef1ac3b2062a867d81c2884f0fa2c34f40cc4741baf2f961c2e78434214dbf87",
+        "wireMime": "application/pdf",
+        "filename": null,
+        "lastModified": "Fri, 06 Nov 2026 02:40:04 GMT"
+      },
+      "slides": {
+        "url": "https://eclatglobal.s3.amazonaws.com/uploads/2026/11/2026_eclat_Investor-Conference-Slides_Q3_en.pdf",
+        "http": 200,
+        "observedAt": "2026-11-15T08:01:39.270969+00:00",
+        "bytes": 1336134,
+        "sha256": "28723ba66a9c821e3418eded33d1640b61c55f3d8c194e2c305449e417cbe9e1",
+        "wireMime": "application/pdf",
+        "filename": null,
+        "lastModified": "Tue, 10 Nov 2026 09:09:17 GMT"
+      }
+    },
+    "ixbrlSource": {
+      "url": "https://mopsov.twse.com.tw/server-java/FileDownLoad",
+      "params": {
+        "step": "9",
+        "functionName": "t164sb01",
+        "report_id": "C",
+        "co_id": "1476",
+        "year": "2026",
+        "season": "3"
+      },
+      "http": 200,
+      "observedAt": "2026-11-15T08:01:42.048893+00:00",
+      "bytes": 503284,
+      "sha256": "fcddc4aec7bf8d836c56f5303bfd129f06228e80f62336e88acaf3ffd0d0d46e",
+      "wireMime": "; charset=iso-8859-1",
+      "filename": "tifrs-fr1-m1-ci-cr-1476-2026Q3.html",
+      "lastModified": null
+    },
+    "wellFormedXml": true,
+    "duplicateXmlIdCount": 0,
+    "duplicateXmlIdLongestMultiplicity": 1,
+    "weightedAverageShareDeclarations": {},
+    "issuerNumerics": [
+      {
+        "concept": "ProfitLossAttributableToOwnersOfParent",
+        "text": "1,744,166",
+        "unitRef": "TWD",
+        "scale": "3",
+        "sign": null,
+        "decimals": "-3",
+        "entity": "1476",
+        "start": "2026-07-01",
+        "end": "2026-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "ProfitLossAttributableToOwnersOfParent",
+        "text": "1,652,383",
+        "unitRef": "TWD",
+        "scale": "3",
+        "sign": null,
+        "decimals": "-3",
+        "entity": "1476",
+        "start": "2025-07-01",
+        "end": "2025-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "ProfitLossAttributableToOwnersOfParent",
+        "text": "5,131,592",
+        "unitRef": "TWD",
+        "scale": "3",
+        "sign": null,
+        "decimals": "-3",
+        "entity": "1476",
+        "start": "2026-01-01",
+        "end": "2026-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "ProfitLossAttributableToOwnersOfParent",
+        "text": "3,932,957",
+        "unitRef": "TWD",
+        "scale": "3",
+        "sign": null,
+        "decimals": "-3",
+        "entity": "1476",
+        "start": "2025-01-01",
+        "end": "2025-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "BasicEarningsLossPerShare",
+        "text": "6.36",
+        "unitRef": "EarningsPerShare",
+        "scale": "0",
+        "sign": null,
+        "decimals": "2",
+        "entity": "1476",
+        "start": "2026-07-01",
+        "end": "2026-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "BasicEarningsLossPerShare",
+        "text": "6.02",
+        "unitRef": "EarningsPerShare",
+        "scale": "0",
+        "sign": null,
+        "decimals": "2",
+        "entity": "1476",
+        "start": "2025-07-01",
+        "end": "2025-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "BasicEarningsLossPerShare",
+        "text": "18.70",
+        "unitRef": "EarningsPerShare",
+        "scale": "0",
+        "sign": null,
+        "decimals": "2",
+        "entity": "1476",
+        "start": "2026-01-01",
+        "end": "2026-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "BasicEarningsLossPerShare",
+        "text": "14.33",
+        "unitRef": "EarningsPerShare",
+        "scale": "0",
+        "sign": null,
+        "decimals": "2",
+        "entity": "1476",
+        "start": "2025-01-01",
+        "end": "2025-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "DilutedEarningsLossPerShare",
+        "text": "6.35",
+        "unitRef": "EarningsPerShare",
+        "scale": "0",
+        "sign": null,
+        "decimals": "2",
+        "entity": "1476",
+        "start": "2026-07-01",
+        "end": "2026-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "DilutedEarningsLossPerShare",
+        "text": "6.02",
+        "unitRef": "EarningsPerShare",
+        "scale": "0",
+        "sign": null,
+        "decimals": "2",
+        "entity": "1476",
+        "start": "2025-07-01",
+        "end": "2025-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "DilutedEarningsLossPerShare",
+        "text": "18.69",
+        "unitRef": "EarningsPerShare",
+        "scale": "0",
+        "sign": null,
+        "decimals": "2",
+        "entity": "1476",
+        "start": "2026-01-01",
+        "end": "2026-09-30",
+        "typedOrExplicitMembers": 0
+      },
+      {
+        "concept": "DilutedEarningsLossPerShare",
+        "text": "14.33",
+        "unitRef": "EarningsPerShare",
+        "scale": "0",
+        "sign": null,
+        "decimals": "2",
+        "entity": "1476",
+        "start": "2025-01-01",
+        "end": "2025-09-30",
+        "typedOrExplicitMembers": 0
+      }
+    ]
+  },
+  "financialNote": {
+    "boardDate": "2026-11-05",
+    "datePrecision": "issuer date only",
+    "firstAvailabilityClockVerified": false,
+    "officialConferenceTaipei": "2026-11-10T14:30:00+08:00",
+    "pdfOneBasedLocators": {
+      "qualifiedReview": [
+        3,
+        4
+      ],
+      "incomeStatement": 6,
+      "boardDate": 9,
+      "earningsPerShareNote": 20
+    },
+    "earningsPerShareNote": [
+      {
+        "year": 2026,
+        "start": "2026-07-01",
+        "end": "2026-09-30",
+        "periodSemantics": "discrete_quarter",
+        "parentProfitKntd": 1744166,
+        "basicWeightedThousandsShares": 274367,
+        "dilutedWeightedThousandsShares": 274604,
+        "basic": "6.36",
+        "diluted": "6.35",
+        "recomputedBasic": "6.36",
+        "recomputedDiluted": "6.35"
+      },
+      {
+        "year": 2026,
+        "start": "2026-01-01",
+        "end": "2026-09-30",
+        "periodSemantics": "year_to_date",
+        "parentProfitKntd": 5131592,
+        "basicWeightedThousandsShares": 274367,
+        "dilutedWeightedThousandsShares": 274613,
+        "basic": "18.70",
+        "diluted": "18.69",
+        "recomputedBasic": "18.70",
+        "recomputedDiluted": "18.69"
+      },
+      {
+        "year": 2025,
+        "start": "2025-07-01",
+        "end": "2025-09-30",
+        "periodSemantics": "discrete_quarter",
+        "parentProfitKntd": 1652383,
+        "basicWeightedThousandsShares": 274367,
+        "dilutedWeightedThousandsShares": 274480,
+        "basic": "6.02",
+        "diluted": "6.02",
+        "recomputedBasic": "6.02",
+        "recomputedDiluted": "6.02"
+      },
+      {
+        "year": 2025,
+        "start": "2025-01-01",
+        "end": "2025-09-30",
+        "periodSemantics": "year_to_date",
+        "parentProfitKntd": 3932957,
+        "basicWeightedThousandsShares": 274367,
+        "dilutedWeightedThousandsShares": 274483,
+        "basic": "14.33",
+        "diluted": "14.33",
+        "recomputedBasic": "14.33",
+        "recomputedDiluted": "14.33"
+      }
+    ],
+    "assurance": {
+      "type": "qualified interim review conclusion",
+      "absoluteExclusionFromRankingApplied": false,
+      "partlyNotReviewedSubsidiaryAssetPct": 3.08,
+      "liabilityPct": 6.69,
+      "quarterComprehensiveLossKntd": -436705,
+      "quarterComprehensiveLossAsPercentOfTotal": -25.04,
+      "ytdComprehensiveLossAsPercentOfTotal": -23.52,
+      "doesNotImplyEpsAdjustmentKnown": true
+    }
+  },
+  "reportedTrailingCrossCheck": {
+    "basicEps": "24.47",
+    "dilutedEps": "24.45",
+    "annualReport": "https://eclatglobal.s3.amazonaws.com/uploads/2026/03/114_%E5%84%92%E9%B4%BB_%E5%90%88%E4%BD%B5%E8%B2%A1%E5%8B%99%E5%A0%B1%E5%91%8AQ4_zh.pdf",
+    "valuationCatalog": "https://data.gov.tw/dataset/91998",
+    "closeReceipt": {
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261101&stockNo=1476&response=json",
+      "httpStatus": 200,
+      "bytes": 1824,
+      "sha256": "e1f88370815f579f797f94b4c3cbfbd2b0b30628a097af8e01330418ce77d17f",
+      "observedAt": "2026-11-15T08:04:06.657945+00:00",
+      "contentType": "application/json;charset=UTF-8"
+    },
+    "issuerCurrentToCompare": 1476,
+    "statementIncludedPeriods": {
+      "lastFyBasic": "20.10",
+      "lastFyDiluted": "20.09",
+      "lastYear9mBasic": "14.33",
+      "lastYear9mDiluted": "14.33",
+      "current9mBasic": "18.70",
+      "current9mDiluted": "18.69"
+    },
+    "dateSeries": [
+      {
+        "requestedDay": "20261105",
+        "responseDate": "20261105",
+        "periodLabel": "2026Q2",
+        "close": "339.50",
+        "exchangePe": "14.06",
+        "basicTtmComputedPe": "13.87",
+        "dilutedTtmComputedPe": "13.89",
+        "basicWithinTwoDecimals": false,
+        "publicationTransport": {
+          "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261105",
+          "httpStatus": 200,
+          "bytes": 79377,
+          "sha256": "fc62d1f821fdce050820ab790206c1603c465efbac5cca2734d54ffd83c71386",
+          "observedAt": "2026-11-15T08:04:07.858226+00:00",
+          "contentType": "text/csv;charset=utf-8"
+        }
+      },
+      {
+        "requestedDay": "20261106",
+        "responseDate": "20261106",
+        "periodLabel": "2026Q3",
+        "close": "346.50",
+        "exchangePe": "14.16",
+        "basicTtmComputedPe": "14.16",
+        "dilutedTtmComputedPe": "14.17",
+        "basicWithinTwoDecimals": true,
+        "publicationTransport": {
+          "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261106",
+          "httpStatus": 200,
+          "bytes": 79360,
+          "sha256": "40709a6cfcffbe3ce9ba445f3ccaec58a43e0c7e15a6f947d9edb9f57ac49c8b",
+          "observedAt": "2026-11-15T08:04:07.867057+00:00",
+          "contentType": "text/csv;charset=utf-8"
+        }
+      },
+      {
+        "requestedDay": "20261109",
+        "responseDate": "20261109",
+        "periodLabel": "2026Q3",
+        "close": "356.00",
+        "exchangePe": "14.55",
+        "basicTtmComputedPe": "14.55",
+        "dilutedTtmComputedPe": "14.56",
+        "basicWithinTwoDecimals": true,
+        "publicationTransport": {
+          "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261109",
+          "httpStatus": 200,
+          "bytes": 79376,
+          "sha256": "98431c1a4e500be927b3a6a552e1d31d5a6b57c9166b44cc02d1fde3bbd27b74",
+          "observedAt": "2026-11-15T08:04:09.042028+00:00",
+          "contentType": "text/csv;charset=utf-8"
+        }
+      },
+      {
+        "requestedDay": "20261110",
+        "responseDate": "20261110",
+        "periodLabel": "2026Q3",
+        "close": "348.50",
+        "exchangePe": "14.24",
+        "basicTtmComputedPe": "14.24",
+        "dilutedTtmComputedPe": "14.25",
+        "basicWithinTwoDecimals": true,
+        "publicationTransport": {
+          "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261110",
+          "httpStatus": 200,
+          "bytes": 79392,
+          "sha256": "e6e0afe64b9030459f9da2989d0e6060a0cb6cb8cc63e9a2e9bd8ca4b99f77cb",
+          "observedAt": "2026-11-15T08:04:09.061994+00:00",
+          "contentType": "text/csv;charset=utf-8"
+        }
+      },
+      {
+        "requestedDay": "20261112",
+        "responseDate": "20261112",
+        "periodLabel": "2026Q3",
+        "close": "369.00",
+        "exchangePe": "15.08",
+        "basicTtmComputedPe": "15.08",
+        "dilutedTtmComputedPe": "15.09",
+        "basicWithinTwoDecimals": true,
+        "publicationTransport": {
+          "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261112",
+          "httpStatus": 200,
+          "bytes": 79277,
+          "sha256": "e33124a061b3b80d4bf66e6830ec7a5937421c0a1e045f9dd2a28635630579ef",
+          "observedAt": "2026-11-15T08:04:10.221190+00:00",
+          "contentType": "text/csv;charset=utf-8"
+        }
+      },
+      {
+        "requestedDay": "20261113",
+        "responseDate": "20261113",
+        "periodLabel": "2026Q3",
+        "close": "386.50",
+        "exchangePe": "15.79",
+        "basicTtmComputedPe": "15.79",
+        "dilutedTtmComputedPe": "15.81",
+        "basicWithinTwoDecimals": true,
+        "publicationTransport": {
+          "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261113",
+          "httpStatus": 200,
+          "bytes": 79265,
+          "sha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+          "observedAt": "2026-11-15T08:04:10.225718+00:00",
+          "contentType": "text/csv;charset=utf-8"
+        }
+      }
+    ]
+  },
+  "nativePdf": {
+    "returncode": 0,
+    "durationSeconds": 6.772,
+    "moduleBlobIds": [
+      "d9d9f9448d705609d3f2f55e52d635ac2a858576",
+      "7bf26154361b23e2bb3253303e31587c1023540e"
+    ],
+    "format": "PDF",
+    "nonRoot": true,
+    "productionSocketContacted": false,
+    "memAvailableKiBAtAdmission": 4014340,
+    "rootDiskAvailableBytes": 26577108992,
+    "parserResultKeys": [
+      "inputSha256",
+      "locators",
+      "missingRequirements",
+      "parser",
+      "schema",
+      "status"
+    ],
+    "status": "partial",
+    "reasonList": [
+      "validated_pdf_manifest_required"
+    ],
+    "locatedPages": 30,
+    "hasPdfPage3Or4": true,
+    "hasPdfPage20": true,
+    "rawLocatorsEmitted": 38,
+    "tableLocatorCount": 8,
+    "financialFactsCount": 0
+  },
+  "activeProductionDatabase": {
+    "readOnly": "on",
+    "jobCounts": [],
+    "uniqueStock": true,
+    "asObservedAt": "2026-11-15T09:05:02.201156+01:00",
+    "officialFacts": 0,
+    "fileReceiptCounts": [],
+    "officialFactsEligibleByNov13Cutoff": 0
+  },
+  "nativeInlinedXbrlTaxonomyValidationPerformed": false,
+  "wasModelCalled": false,
+  "decisionOrTargetPriceGenerated": false,
+  "dataWrittenToProduction": false,
+  "actualSourceFirstVisibilityReconstructed": false
+}
