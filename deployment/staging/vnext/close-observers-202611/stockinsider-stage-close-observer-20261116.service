@@ -1,0 +1,24 @@
+# This is a transient unit file, created programmatically via the systemd API. Do not edit.
+[Unit]
+Description=/usr/bin/python3 -I -B /run/stockinsider-stage-close-observer-202611/capture.py 2026-11-16 --output /var/lib/stockinsider-stage-close-observer-202611/2026-11-16
+CollectMode=inactive-or-failed
+
+[Service]
+DynamicUser=yes
+User=si-close-observer
+StateDirectory="stockinsider-stage-close-observer-202611"
+StateDirectoryMode=0700
+UMask=0077
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryMax=134217728
+TasksMax=12
+CPUQuota=25%
+Nice=10
+RuntimeMaxSec=1min 30s
+Type=exec
+ExecStart=
+ExecStart="/usr/bin/python3" "-I" "-B" "/var/lib/stockinsider-stage-close-observers-202611/close-observer.py" "2026-11-16" "--output" "/var/lib/stockinsider-stage-close-observer-202611/2026-11-16"

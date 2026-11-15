@@ -1,0 +1,13 @@
+# This is a transient unit file, created programmatically via the systemd API. Do not edit.
+[Unit]
+Description=/usr/bin/python3 -I -B /run/stockinsider-stage-close-observer-202611/capture.py 2026-11-17 --output /var/lib/stockinsider-stage-close-observer-202611/2026-11-17
+CollectMode=inactive-or-failed
+
+[Timer]
+OnCalendar=2026-11-17 21:26:00 Asia/Taipei
+AccuracySec=1s
+Persistent=no
+RemainAfterElapse=no
+
+[Install]
+WantedBy=timers.target

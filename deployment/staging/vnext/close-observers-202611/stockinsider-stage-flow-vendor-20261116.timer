@@ -1,0 +1,12 @@
+# This is a transient unit file, created programmatically via the systemd API. Do not edit.
+[Unit]
+Description=/usr/bin/python3 -I -B /run/stockinsider-stage-flow-vendor-202611/observe.py 2026-11-16
+
+[Timer]
+OnCalendar=2026-11-16 21:27:00 Asia/Taipei
+Persistent=no
+AccuracySec=1s
+RemainAfterElapse=no
+
+[Install]
+WantedBy=timers.target

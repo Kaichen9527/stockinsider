@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "task": "T10",
+  "scope": "Contabo staging-only reboot survival for two real data observations",
+  "install": {
+    "verifiedAt": "2026-11-15T07:40:59.154968+00:00",
+    "syntaxVerified": true,
+    "sameLiveTimers": true,
+    "sameProductionProcesses": true,
+    "bootLinks": [
+      "stockinsider-stage-close-observer-20261116.timer",
+      "stockinsider-stage-close-observer-20261117.timer",
+      "stockinsider-stage-close-supplement-20261116.timer",
+      "stockinsider-stage-close-supplement-20261117.timer",
+      "stockinsider-stage-flow-vendor-20261116.timer",
+      "stockinsider-stage-flow-vendor-20261117.timer"
+    ],
+    "rebootPerformed": false,
+    "timersStarted": 0,
+    "managerReloadPerformed": false,
+    "scripts": {
+      "close-observer": {
+        "sha256": "2d2d6e9652d3cc567d032bef8e8ef242d8b1186b8e89d305d4ceca16f2c89657",
+        "bytes": 9094,
+        "fileMode": "0444"
+      },
+      "flow-vendor": {
+        "sha256": "794b7fee83c4b3838720f5f9895d76eabcbc4c9b5044ba479a06497ae8c3d9ab",
+        "bytes": 5907,
+        "fileMode": "0444"
+      },
+      "close-supplement": {
+        "sha256": "114db9b87b117156a0230d1407f233072a4a97ff6d345ca00cba9d1c2fa9c559",
+        "bytes": 12727,
+        "fileMode": "0444"
+      }
+    },
+    "diskUnits": {
+      "stockinsider-stage-close-observer-20261116.service": {
+        "sha256": "bbd3d11bbdd6bf03060610767355bb834017c8b896b17cd93ebbeaa6929bb965",
+        "bytes": 861
+      },
+      "stockinsider-stage-close-observer-20261116.timer": {
+        "sha256": "b78c976b45961da2aa1061f2fc9dd703e603b673c107c140181262c1f76c422a",
+        "bytes": 439
+      },
+      "stockinsider-stage-flow-vendor-20261116.service": {
+        "sha256": "f20e2745053dd901da1ee68c8ab1e3a223398824a348b5ef4a7ce7aff5247b3e",
+        "bytes": 636
+      },
+      "stockinsider-stage-flow-vendor-20261116.timer": {
+        "sha256": "cf000ff1d0963f8831d888819da0f626639a73256f5370543869315dda316855",
+        "bytes": 335
+      },
+      "stockinsider-stage-close-supplement-20261116.service": {
+        "sha256": "5ad9eec3184c8df162553f5f24d78c791ac1723f87ba5764a2d4fcc0afbb5be8",
+        "bytes": 826
+      },
+      "stockinsider-stage-close-supplement-20261116.timer": {
+        "sha256": "c1cdc80ea7dcad6e5fc46752590e4384c75553ad5814d8481b0ab065b5486d00",
+        "bytes": 455
+      },
+      "stockinsider-stage-close-observer-20261117.service": {
+        "sha256": "b5e3c951a4886ff8772c9ab31be508ce6cc779763b23d6a83a21ec42c1aa14f7",
+        "bytes": 861
+      },
+      "stockinsider-stage-close-observer-20261117.timer": {
+        "sha256": "69f703b331b85d0ffa60fcef4a23748576f4ee5651e0dc542d53a12e78712006",
+        "bytes": 439
+      },
+      "stockinsider-stage-flow-vendor-20261117.service": {
+        "sha256": "46e545c26939fa7240b431432a0d1978dcdc03316da4438b6a75faee5d4d665b",
+        "bytes": 636
+      },
+      "stockinsider-stage-flow-vendor-20261117.timer": {
+        "sha256": "e6bdecc7bfca33853ba9d429b9673f7fb1091166de98eb3b881d364473cb7fe4",
+        "bytes": 335
+      },
+      "stockinsider-stage-close-supplement-20261117.service": {
+        "sha256": "f70c127d1fb8a3bfeb47f88773eb6ed0eeefd3ca0fd1544a4e420c65e3c4c510",
+        "bytes": 826
+      },
+      "stockinsider-stage-close-supplement-20261117.timer": {
+        "sha256": "8554495013bfb4571a691d54a1dd9752667ad3dad03b55715c22e63d8a8f55d8",
+        "bytes": 455
+      }
+    },
+    "installedBytes": 34832,
+    "expectedDateWindow": [
+      "2026-11-16",
+      "2026-11-17"
+    ]
+  },
+  "calendarVerification": [
+    {
+      "timer": "stockinsider-stage-close-observer-20261116.timer",
+      "stableScript": "close-observer.py",
+      "nextUTC": "Next elapse: Mon 2026-11-16 13:26:00 UTC",
+      "afterCutoff": "Next elapse: never",
+      "bootLinkMatches": true
+    },
+    {
+      "timer": "stockinsider-stage-close-observer-20261117.timer",
+      "stableScript": "close-observer.py",
+      "nextUTC": "Next elapse: Tue 2026-11-17 13:26:00 UTC",
+      "afterCutoff": "Next elapse: never",
+      "bootLinkMatches": true
+    },
+    {
+      "timer": "stockinsider-stage-close-supplement-20261116.timer",
+      "stableScript": "close-supplement.py",
+      "nextUTC": "Next elapse: Mon 2026-11-16 13:28:00 UTC",
+      "afterCutoff": "Next elapse: never",
+      "bootLinkMatches": true
+    },
+    {
+      "timer": "stockinsider-stage-close-supplement-20261117.timer",
+      "stableScript": "close-supplement.py",
+      "nextUTC": "Next elapse: Tue 2026-11-17 13:28:00 UTC",
+      "afterCutoff": "Next elapse: never",
+      "bootLinkMatches": true
+    },
+    {
+      "timer": "stockinsider-stage-flow-vendor-20261116.timer",
+      "stableScript": "flow-vendor.py",
+      "nextUTC": "Next elapse: Mon 2026-11-16 13:27:00 UTC",
+      "afterCutoff": "Next elapse: never",
+      "bootLinkMatches": true
+    },
+    {
+      "timer": "stockinsider-stage-flow-vendor-20261117.timer",
+      "stableScript": "flow-vendor.py",
+      "nextUTC": "Next elapse: Tue 2026-11-17 13:27:00 UTC",
+      "afterCutoff": "Next elapse: never",
+      "bootLinkMatches": true
+    }
+  ],
+  "hostCapacity": {
+    "observedDate": "2026-11-15",
+    "availableRootBytes": 26578374656,
+    "memAvailableKiB": 3995640
+  },
+  "identityReused": true,
+  "exactConfigurationRepositoryDirectory": "deployment/staging/vnext/close-observers-202611",
+  "controlledDynamicServiceUsers": true
+}
