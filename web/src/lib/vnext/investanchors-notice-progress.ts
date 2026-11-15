@@ -1,6 +1,6 @@
 import type { VnextIdentity } from './auth.ts';
 import { analysisWriter } from './analysis-runtime.ts';
-import { collectInvestAnchorsNotices } from './investanchors-notice-receiver.ts';
+import { collectInvestAnchorsNotices, planInvestAnchorsMailboxDay } from './investanchors-notice-receiver.ts';
 import { vnextEnabled } from './policy.ts';
 
 type Mailbox = Parameters<typeof collectInvestAnchorsNotices>[2];
@@ -45,19 +45,73 @@ export async function continueInvestAnchorsNoticeScan(
     awaiting: scan.notices.length, deferred: scan.deferred, rejected: scan.rejected, articleAuthority: false as const };
 }
 
-/** The caller supplies the already-authorized, read-only Gmail transport.
- * No public route, secret source, schedule or article writer is installed. */
-export async function runInvestAnchorsNoticeWorker(identity: VnextIdentity, day: string, key: Uint8Array, mailbox: Mailbox) {
+type Scan = Awaited<ReturnType<typeof continueInvestAnchorsNoticeScan>>;
+
+function scanPlan(value: unknown) {
+  if (!record(value, 'articleAuthority closedThrough day kind') || value.articleAuthority !== false
+    || typeof value.day !== 'string' || typeof value.closedThrough !== 'string'
+    || value.kind !== 'pending' && value.kind !== 'recheck'
+    || value.day > value.closedThrough || value.kind === 'recheck' && value.day !== value.closedThrough) {
+    throw Error('investanchors_notice_plan_unavailable');
+  }
+  planInvestAnchorsMailboxDay(value.day);
+  planInvestAnchorsMailboxDay(value.closedThrough);
+  return { day: value.day, closedThrough: value.closedThrough, kind: value.kind };
+}
+
+/** Make room for recovery on the same timer without opening an unbounded
+ * sequence of provider calls. A failed or budget-limited day stays pending. */
+export async function continueInvestAnchorsNoticeDays(
+  planNext: () => Promise<unknown>, scan: (day: string) => Promise<Scan>,
+) {
+  let plan = scanPlan(await planNext());
+  let checkpointDay: string | null = null;
+  const counts = { checked: 0, awaiting: 0, deferred: 0, rejected: 0 };
+  const summary = (scanStatus: Scan['scanStatus'], pendingDay: string | null) => ({
+    scanStatus, checkpointDay, pendingDay, ...counts, articleAuthority: false as const,
+  });
+  for (let index = 0; index < 2; index++) {
+    const result = await scan(plan.day);
+    counts.checked += result.checked;
+    counts.awaiting += result.awaiting;
+    counts.deferred += result.deferred;
+    counts.rejected += result.rejected;
+    if (result.scanStatus !== 'scanned') return summary(result.scanStatus, plan.day);
+    if (result.checkpointDay !== plan.day) throw Error('investanchors_notice_checkpoint_mismatch');
+    checkpointDay = plan.day;
+    if (plan.kind === 'recheck') return summary('scanned', null);
+
+    const next = scanPlan(await planNext());
+    if (next.closedThrough !== plan.closedThrough) return summary('deferred', next.day);
+    if (next.kind === 'recheck') return summary('scanned', null);
+    if (next.day <= plan.day) throw Error('investanchors_notice_plan_not_advanced');
+    plan = next;
+  }
+  return summary('deferred', plan.day);
+}
+
+/** The authorized caller provides a mailbox factory already restricted to the
+ * receiver. Plan and checkpoint operations use the same owned writer lease. */
+export async function runInvestAnchorsNoticeWorker(
+  identity: VnextIdentity, requestedDay: string | undefined, key: Uint8Array, openMailbox: (day: string) => Promise<Mailbox>,
+) {
   if (identity.role !== 'operator' || !vnextEnabled()) throw Error('investanchors_notice_operator_required');
   return analysisWriter(async leaseOwner => {
     const { getSupabaseServerClient } = await import('../supabase-server.ts');
     const client = getSupabaseServerClient();
-    return continueInvestAnchorsNoticeScan(day, key, mailbox, async payload => {
+    const binding = { p_principal: identity.principal, p_lease_owner: leaseOwner };
+    const scan = async (day: string) => continueInvestAnchorsNoticeScan(day, key, await openMailbox(day), async payload => {
       const result = await client.rpc('vnext_investanchors_notice_progress_v1', {
-        p_principal: identity.principal, p_lease_owner: leaseOwner, p_day: day, p_progress: payload ?? null,
+        ...binding, p_day: day, p_progress: payload ?? null,
       });
       if (result.error) throw Error(payload ? 'investanchors_progress_write_uncertain' : 'investanchors_progress_unavailable');
       return result.data;
     });
+    if (requestedDay !== undefined) return scan(requestedDay);
+    return continueInvestAnchorsNoticeDays(async () => {
+      const result = await client.rpc('vnext_investanchors_notice_plan_v1', binding);
+      if (result.error) throw Error('investanchors_notice_plan_unavailable');
+      return result.data;
+    }, scan);
   });
 }

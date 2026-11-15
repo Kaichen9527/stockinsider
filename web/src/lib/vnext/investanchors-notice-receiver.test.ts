@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { collectInvestAnchorsNotices, planInvestAnchorsMailboxDay } from './investanchors-notice-receiver.ts';
 
-import { continueInvestAnchorsNoticeScan } from './investanchors-notice-progress.ts';
+import { continueInvestAnchorsNoticeDays, continueInvestAnchorsNoticeScan } from './investanchors-notice-progress.ts';
 
 const day = '2026-11-12';
 const clock = '2026-11-13T00:02:00+08:00';
@@ -197,4 +197,82 @@ test('ledger acknowledgement uncertainty cannot trigger a second append or fresh
   }), /progress_write_uncertain/u);
   assert.equal(appends, 1);
   assert.equal(gmail.reads(), 1);
+});
+
+const earliest = '2026-11-10';
+const middle = '2026-11-11';
+const plan = (selected: string, kind: 'pending' | 'recheck' = 'pending', closedThrough = day) =>
+  ({ day: selected, kind, closedThrough, articleAuthority: false });
+type DayScan = Awaited<ReturnType<typeof continueInvestAnchorsNoticeScan>>;
+const scanned = (checkpointDay: string): DayScan =>
+  ({ scanStatus: 'scanned', checkpointDay, checked: 1, awaiting: 1, rejected: 0, deferred: 0, articleAuthority: false });
+
+test('closed-day recovery processes the two oldest days and retains its next pending date', async () => {
+  const outstanding = [earliest, middle, day];
+  const scans: string[] = [];
+  const next = async () => outstanding.length ? plan(outstanding[0]) : plan(day, 'recheck');
+  const scan = async (selected: string) => {
+    assert.equal(selected, outstanding.shift());
+    scans.push(selected);
+    return scanned(selected);
+  };
+  assert.deepEqual(await continueInvestAnchorsNoticeDays(next, scan), {
+    scanStatus: 'deferred', checkpointDay: middle, pendingDay: day,
+    checked: 2, awaiting: 2, rejected: 0, deferred: 0, articleAuthority: false,
+  });
+  assert.deepEqual(await continueInvestAnchorsNoticeDays(next, scan), {
+    scanStatus: 'scanned', checkpointDay: day, pendingDay: null,
+    checked: 1, awaiting: 1, rejected: 0, deferred: 0, articleAuthority: false,
+  });
+  assert.deepEqual(scans, [earliest, middle, day]);
+});
+
+test('deferred and retry-required scans stop at the oldest uncovered day', async () => {
+  for (const scanStatus of ['deferred', 'retry_required'] as const) {
+    let plans = 0;
+    const scan = async (selected: string): Promise<DayScan> => {
+      assert.equal(selected, earliest);
+      return { scanStatus, checkpointDay: null, checked: 0, awaiting: 0, rejected: 0,
+        deferred: 0, articleAuthority: false };
+    };
+    const summary = await continueInvestAnchorsNoticeDays(async () => { plans++; return plan(earliest); }, scan);
+    assert.equal(plans, 1);
+    assert.equal(summary.scanStatus, scanStatus);
+    assert.equal(summary.pendingDay, earliest);
+    assert.equal(summary.checkpointDay, null);
+  }
+});
+
+test('the daily recheck opens yesterday only once when no days are outstanding', async () => {
+  let plans = 0;
+  const scans: string[] = [];
+  const summary = await continueInvestAnchorsNoticeDays(async () => { plans++; return plan(day, 'recheck'); },
+    async selected => { scans.push(selected); return scanned(selected); });
+  assert.equal(plans, 1);
+  assert.deepEqual(scans, [day]);
+  assert.equal(summary.pendingDay, null);
+});
+
+test('invalid plan, wrong checkpoint, and a stagnant plan fail closed', async () => {
+  let scans = 0;
+  const scan = async (selected: string) => { scans++; return scanned(selected); };
+  await assert.rejects(continueInvestAnchorsNoticeDays(async () => plan(earliest, 'recheck'), scan),
+    /investanchors_notice_plan_unavailable/);
+  assert.equal(scans, 0);
+  await assert.rejects(continueInvestAnchorsNoticeDays(async () => plan(earliest), async () => scanned(day)),
+    /investanchors_notice_checkpoint_mismatch/);
+  await assert.rejects(continueInvestAnchorsNoticeDays(async () => plan(earliest), scan),
+    /investanchors_notice_plan_not_advanced/);
+  assert.equal(scans, 1);
+});
+
+test('a Taipei date rollover keeps the new pending date for the next invocation', async () => {
+  const plans = [plan(day), plan('2026-11-13', 'pending', '2026-11-13')];
+  const scans: string[] = [];
+  const summary = await continueInvestAnchorsNoticeDays(async () => plans.shift(),
+    async selected => { scans.push(selected); return scanned(selected); });
+  assert.deepEqual(scans, [day]);
+  assert.equal(summary.scanStatus, 'deferred');
+  assert.equal(summary.checkpointDay, day);
+  assert.equal(summary.pendingDay, '2026-11-13');
 });

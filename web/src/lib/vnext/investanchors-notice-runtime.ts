@@ -14,12 +14,12 @@ export async function runConfiguredInvestAnchorsNotices(identity: VnextIdentity,
     return { scanStatus: 'disabled' as const, articleAuthority: false as const };
   }
 
-  const latest = completedInvestAnchorsDay(new Date());
-  const day = requestedDay ?? latest;
-  const selected = planInvestAnchorsMailboxDay(day);
-  const recent = planInvestAnchorsMailboxDay(latest);
-  if (selected.startMs > recent.startMs || recent.startMs - selected.startMs > 29 * 86_400_000) {
-    throw Error('investanchors_notice_day_invalid');
+  if (requestedDay !== undefined) {
+    const latest = planInvestAnchorsMailboxDay(completedInvestAnchorsDay(new Date()));
+    const selected = planInvestAnchorsMailboxDay(requestedDay);
+    if (selected.startMs > latest.startMs || latest.startMs - selected.startMs > 29 * 86_400_000) {
+      throw Error('investanchors_notice_day_invalid');
+    }
   }
 
   const clientId = process.env.STOCKINSIDER_INVESTANCHORS_GMAIL_CLIENT_ID;
@@ -31,10 +31,10 @@ export async function runConfiguredInvestAnchorsNotices(identity: VnextIdentity,
     return { scanStatus: 'blocked' as const, reason: 'background_gmail_credentials_missing', articleAuthority: false as const };
   }
 
-  const mailbox = await openInvestAnchorsGmail({ clientId, clientSecret, refreshToken, mailboxSha256 }, day);
   const key = Buffer.from(privateKey, 'hex');
   try {
-    return await runInvestAnchorsNoticeWorker(identity, day, key, mailbox);
+    return await runInvestAnchorsNoticeWorker(identity, requestedDay, key,
+      day => openInvestAnchorsGmail({ clientId, clientSecret, refreshToken, mailboxSha256 }, day));
   } finally {
     key.fill(0);
   }

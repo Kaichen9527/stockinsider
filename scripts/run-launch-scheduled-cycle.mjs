@@ -76,7 +76,7 @@ export function runLaunchScheduledCycle({
     } finally {
       if (env.STOCKINSIDER_VNEXT_INVESTANCHORS_GMAIL_ENABLED === 'true') {
         try {
-          const notice = call(researchEndpoint, { action: 'investanchors-gmail-notices' }, 125_000, env);
+          const notice = call(researchEndpoint, { action: 'investanchors-gmail-notices' }, 225_000, env);
           const scanStatus = notice?.result?.scanStatus;
           noticeScan = notice?.ok === true && notice.policyVersion === launchPolicy && notice.result.articleAuthority === false
             && ['scanned', 'deferred', 'disabled', 'blocked', 'retry_required'].includes(scanStatus) ? scanStatus : 'failed';

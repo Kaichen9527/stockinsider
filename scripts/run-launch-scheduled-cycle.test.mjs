@@ -74,6 +74,7 @@ test('existing Taipei morning slot adds the private notice scan only when config
   const response = { ok: true, policyVersion, result: { scanStatus: 'scanned', articleAuthority: false } };
   const normal = plan(day + 'T00:15:00Z', [morning, response], { env });
   assert.equal(normal.run().noticeScan, 'scanned');
+  assert.equal(normal.calls.at(-1).timeoutMs, 225_000);
   assert.deepEqual(normal.calls.map(row => row.payload.action), ['market-background', 'investanchors-gmail-notices']);
   const unavailable = plan(day + 'T00:15:00Z', [morning, null], { env });
   assert.equal(unavailable.run().status, 'published');
