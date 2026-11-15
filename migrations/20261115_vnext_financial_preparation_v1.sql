@@ -24,10 +24,10 @@ BEGIN
   ('public.complete_candidate_financial_acquisition_job_v4(uuid,text,uuid,jsonb,text,integer,timestamptz)','1245aa3e6d451a4f6c0da1a2a37c51a0716bb139916e32e500069549b18cc974','artifact'),
   ('public.complete_candidate_financial_document_receipt_parser_v8(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamptz)','2aef0a0b8b49f6e8617bd2afe607c4468da22c9d33f365c1ca9c8bb15c0c6374','artifact'),
   ('public.complete_candidate_financial_document_receipt_parser_v10(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamptz)','3ead0d5245f7c6864d3532bb1ee6174a1b60759bdce5298defb4ec5f5db7279f','artifact'),
-  ('public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid)','b506712e9f05b22736fd76c8ec9fe85f70418f4fdca76d998a30ecd4ea4f2754','opportunity_v3_rpc_owner'),
+  ('public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid)','99b05c8cd70214b976da8e4946ee7f62f52f45f067abc14dda28a53040636d73','opportunity_v3_rpc_owner'),
   ('public.finalize_candidate_financial_document_validation_v8(uuid,uuid,timestamptz)','a9659c701f9206a60a996bb87353a0af1eb50eddcee74b237db2fdba0f983ef5','artifact'),
   ('public.reconcile_candidate_financial_document_job_v9(uuid,uuid,uuid)','fcdde0360c4db124ae7a27b56713b7b8353ccf696eced5a6379db388973f816a','artifact'),
-  ('public.fail_candidate_financial_acquisition_job_v6(uuid,text,text,timestamptz,boolean,boolean)','b115e62b7ec3a27fd248ed38d1eb5e215e1b8ea8cc6913bd5b3bc1d6fe77900a','artifact')) dependencies(signature,body_hash,owner_kind) LOOP
+  ('public.fail_candidate_financial_acquisition_job_v6(uuid,text,text,timestamptz,boolean,boolean)','a2135f31ef8cf6294b45fb7dde310a38b1a4fd3d44e96516b440a9f9447b2d7e','artifact')) dependencies(signature,body_hash,owner_kind) LOOP
   IF NOT EXISTS(SELECT FROM pg_proc WHERE oid=to_regprocedure(signature) AND prosecdef AND has_function_privilege(owner_id,oid,'EXECUTE')
    AND encode(sha256(convert_to(prosrc,'UTF8')),'hex')=expected_hash
    AND CASE WHEN expected_owner='artifact' THEN proowner=owner_id ELSE pg_get_userbyid(proowner)=expected_owner END)

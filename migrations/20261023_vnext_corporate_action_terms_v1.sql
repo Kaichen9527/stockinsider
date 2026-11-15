@@ -398,7 +398,7 @@ END $successor3$;
 END $action_patch_3$;
 
 DO $action_post$
-DECLARE before_state jsonb;after_state jsonb;entry record;old_row jsonb;new_row jsonb;relation oid:='public.vnext_action_terms_rights_v1'::regclass;
+DECLARE before_state jsonb;after_state jsonb;entry record;new_row jsonb;relation oid:='public.vnext_action_terms_rights_v1'::regclass;
  catalog_sql constant text:=$catalog$
  SELECT jsonb_build_object(
   'namespace',(SELECT to_jsonb(n) FROM pg_namespace n WHERE n.oid='public'::regnamespace),
@@ -423,10 +423,16 @@ BEGIN
  EXECUTE catalog_sql INTO after_state USING ARRAY['public.vnext_source_evidence_current_v1(jsonb,text)'::regprocedure::oid,'public.vnext_input_sources_current_v1(jsonb,text)'::regprocedure::oid,'public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)'::regprocedure::oid,'public.vnext_target_current_v1(text,uuid,text)'::regprocedure::oid],ARRAY[]::oid[],'{}'::jsonb;
  FOR entry IN SELECT * FROM jsonb_each(before_state) LOOP
   IF jsonb_typeof(entry.value)<>'array' THEN IF after_state->entry.key IS DISTINCT FROM entry.value THEN RAISE EXCEPTION 'vnext_action_original_catalog_changed:%',entry.key;END IF;CONTINUE;END IF;
-  FOR old_row IN SELECT value FROM jsonb_array_elements(entry.value) LOOP
-   IF NOT(after_state->entry.key @> jsonb_build_array(old_row)) THEN RAISE EXCEPTION 'vnext_action_original_catalog_changed:%',entry.key;END IF;
-  END LOOP;
-  FOR new_row IN SELECT value FROM jsonb_array_elements(after_state->entry.key) WHERE NOT(entry.value @> jsonb_build_array(value)) LOOP
+  IF EXISTS(
+   SELECT value FROM jsonb_array_elements(entry.value)
+   EXCEPT ALL
+   SELECT value FROM jsonb_array_elements(after_state->entry.key)
+  ) THEN RAISE EXCEPTION 'vnext_action_original_catalog_changed:%',entry.key;END IF;
+  FOR new_row IN
+   SELECT value FROM jsonb_array_elements(after_state->entry.key)
+   EXCEPT ALL
+   SELECT value FROM jsonb_array_elements(entry.value)
+  LOOP
    IF entry.key='routines' AND new_row->>'proname' IN('vnext_action_terms_rights_guard_v1','vnext_disclosed_action_terms_internal_v1','vnext_action_terms_current_internal_v1','vnext_action_terms_read_v1','vnext_action_terms_input_current_v1','vnext_action_evidence_current_v1','vnext_target_baseline_sources_current_v1','vnext_action_preparation_guard_v1') THEN CONTINUE;
    ELSIF entry.key='relations' AND new_row->>'relname' IN('vnext_action_terms_rights_v1','vnext_action_terms_rights_v1_pkey','vnext_action_terms_event_use_unique') THEN CONTINUE;
    ELSIF entry.key='types' AND new_row->>'typname' IN('vnext_action_terms_rights_v1','_vnext_action_terms_rights_v1') THEN CONTINUE;
