@@ -1,0 +1,560 @@
+{
+  "schema": "stockinsider-listed-market-foreign-money-fallback-control-v1",
+  "requestedData": "TaiwanStockTotalInstitutionalInvestors",
+  "exactLegacyMarketContract": "TWSE excluded foreign proprietary desk plus distinct TPEX declared treatment; retain dates and amount revisions",
+  "observation": "Historical late observations only, anonymous FinMind read-only diagnostic, no extra credentials or paid call, analyzed numbers remain unpublished.",
+  "sample": {
+    "finmind": {
+      "http": 200,
+      "mime": "application/json",
+      "responseClock": "Sun, 15 Nov 2026 02:24:58 GMT",
+      "bytes": 2908,
+      "sha256": "aff950940e6a962a3d4a6aba32ced4f9d16977e1c4a7466959dc04a58af1ffe9",
+      "observedAt": "2026-11-15T02:24:59.152385+00:00",
+      "rowCount": 36,
+      "observedKeys": [
+        "buy",
+        "date",
+        "name",
+        "sell"
+      ],
+      "uniqueDates": [
+        "2026-11-06",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13"
+      ],
+      "explicitVenueField": false
+    },
+    "officialTwse": [
+      {
+        "http": 200,
+        "mime": "application/json",
+        "responseClock": "Sun, 15 Nov 2026 02:24:59 GMT",
+        "bytes": 1573,
+        "sha256": "a52f56219c2301394fcf111e20448819a54945716ef71870580667c19a5785d2",
+        "observedAt": "2026-11-15T02:24:59.681393+00:00",
+        "venue": "TWSE",
+        "requestedDate": "2026-11-06",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      },
+      {
+        "http": 200,
+        "mime": "application/json",
+        "responseClock": "Sun, 15 Nov 2026 02:25:00 GMT",
+        "bytes": 1570,
+        "sha256": "6b335d1740da8ce2ab78d7502ac76c96b6be76ba85034fdb0e4497e2298336e6",
+        "observedAt": "2026-11-15T02:25:00.648242+00:00",
+        "venue": "TWSE",
+        "requestedDate": "2026-11-09",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      },
+      {
+        "http": 200,
+        "mime": "application/json",
+        "responseClock": "Sun, 15 Nov 2026 02:25:01 GMT",
+        "bytes": 1571,
+        "sha256": "ddeb58f65e31bfeedb7d3098be10c28bcdd80e21f594c476e955fb2627b477f2",
+        "observedAt": "2026-11-15T02:25:01.433415+00:00",
+        "venue": "TWSE",
+        "requestedDate": "2026-11-10",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      },
+      {
+        "http": 200,
+        "mime": "application/json",
+        "responseClock": "Sun, 15 Nov 2026 02:25:02 GMT",
+        "bytes": 1564,
+        "sha256": "9bee390685e987021ceb278bd9fbfe98854fd5c369c152dc9069d16fc893c397",
+        "observedAt": "2026-11-15T02:25:02.965189+00:00",
+        "venue": "TWSE",
+        "requestedDate": "2026-11-11",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      },
+      {
+        "http": 200,
+        "mime": "application/json",
+        "responseClock": "Sun, 15 Nov 2026 02:25:03 GMT",
+        "bytes": 1566,
+        "sha256": "2b11f7ea92301f6d9a05eeffe8f9b7fcd6321e0e69cb0a5a30b6ec326c8a1971",
+        "observedAt": "2026-11-15T02:25:03.804341+00:00",
+        "venue": "TWSE",
+        "requestedDate": "2026-11-12",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      },
+      {
+        "http": 200,
+        "mime": "application/json",
+        "responseClock": "Sun, 15 Nov 2026 02:25:04 GMT",
+        "bytes": 1565,
+        "sha256": "2b40a737ee5e9d2ab7cb4447710e8a21f22395b8fa693b7c1d3dcda119cc172a",
+        "observedAt": "2026-11-15T02:25:04.917588+00:00",
+        "venue": "TWSE",
+        "requestedDate": "2026-11-13",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      }
+    ],
+    "officialTpex": [
+      {
+        "http": 200,
+        "mime": "application/csv",
+        "responseClock": "Sun, 15 Nov 2026 02:24:59 GMT",
+        "bytes": 626,
+        "sha256": "fde022216259c300785a628b324da2c15ea59b9529d8b07ede95faf3970bc8ae",
+        "observedAt": "2026-11-15T02:24:59.190797+00:00",
+        "venue": "TPEX",
+        "requestedDate": "2026-11-06",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      },
+      {
+        "http": 200,
+        "mime": "application/csv",
+        "responseClock": "Sun, 15 Nov 2026 02:24:59 GMT",
+        "bytes": 626,
+        "sha256": "9c97c3b57ff96c45e733e3216a40ccd937139b0c084191dced0a54dd53a299b9",
+        "observedAt": "2026-11-15T02:24:59.664794+00:00",
+        "venue": "TPEX",
+        "requestedDate": "2026-11-09",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      },
+      {
+        "http": 200,
+        "mime": "application/csv",
+        "responseClock": "Sun, 15 Nov 2026 02:25:00 GMT",
+        "bytes": 623,
+        "sha256": "20fa8c4d887ac4a291adf8edbde01dcb21ba88695591e922dace0aa0c22fa599",
+        "observedAt": "2026-11-15T02:25:00.262058+00:00",
+        "venue": "TPEX",
+        "requestedDate": "2026-11-10",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      },
+      {
+        "http": 200,
+        "mime": "application/csv",
+        "responseClock": "Sun, 15 Nov 2026 02:25:00 GMT",
+        "bytes": 626,
+        "sha256": "6950afa8608c5739a0266505abdf3c08ffbd2f98cd12f8b4084bd4fcc57adc9c",
+        "observedAt": "2026-11-15T02:25:00.823328+00:00",
+        "venue": "TPEX",
+        "requestedDate": "2026-11-11",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      },
+      {
+        "http": 200,
+        "mime": "application/csv",
+        "responseClock": "Sun, 15 Nov 2026 02:25:01 GMT",
+        "bytes": 626,
+        "sha256": "e80b43d82abf70e6fa215398750e2e34b2934c9584e91c6aa39917e95502f50e",
+        "observedAt": "2026-11-15T02:25:01.376585+00:00",
+        "venue": "TPEX",
+        "requestedDate": "2026-11-12",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      },
+      {
+        "http": 200,
+        "mime": "application/csv",
+        "responseClock": "Sun, 15 Nov 2026 02:25:02 GMT",
+        "bytes": 623,
+        "sha256": "22b9a1e263d2a929c73c18af54a3191fcc55e5fb5f9f3f5d93698c315f354441",
+        "observedAt": "2026-11-15T02:25:02.966235+00:00",
+        "venue": "TPEX",
+        "requestedDate": "2026-11-13",
+        "sourceDateMatched": true,
+        "arithmeticChecked": 5
+      }
+    ],
+    "comparison": [
+      {
+        "date": "2026-11-06",
+        "category": "Foreign_Investor",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-06",
+        "category": "Foreign_Dealer_Self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": true,
+        "matchesJointPairs": true,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-06",
+        "category": "Investment_Trust",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-06",
+        "category": "Dealer_self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-06",
+        "category": "Dealer_Hedging",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-09",
+        "category": "Foreign_Investor",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-09",
+        "category": "Foreign_Dealer_Self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": true,
+        "matchesJointPairs": true,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-09",
+        "category": "Investment_Trust",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-09",
+        "category": "Dealer_self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-09",
+        "category": "Dealer_Hedging",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-10",
+        "category": "Foreign_Investor",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-10",
+        "category": "Foreign_Dealer_Self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": true,
+        "matchesJointPairs": true,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-10",
+        "category": "Investment_Trust",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-10",
+        "category": "Dealer_self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-10",
+        "category": "Dealer_Hedging",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-11",
+        "category": "Foreign_Investor",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-11",
+        "category": "Foreign_Dealer_Self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": true,
+        "matchesJointPairs": true,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-11",
+        "category": "Investment_Trust",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-11",
+        "category": "Dealer_self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-11",
+        "category": "Dealer_Hedging",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-12",
+        "category": "Foreign_Investor",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-12",
+        "category": "Foreign_Dealer_Self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": true,
+        "matchesJointPairs": true,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-12",
+        "category": "Investment_Trust",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-12",
+        "category": "Dealer_self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-12",
+        "category": "Dealer_Hedging",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-13",
+        "category": "Foreign_Investor",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-13",
+        "category": "Foreign_Dealer_Self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": true,
+        "matchesJointPairs": true,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-13",
+        "category": "Investment_Trust",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-13",
+        "category": "Dealer_self",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      },
+      {
+        "date": "2026-11-13",
+        "category": "Dealer_Hedging",
+        "vendorRowCount": 1,
+        "matchesTwsePairs": true,
+        "matchesTpexPairs": false,
+        "matchesJointPairs": false,
+        "twseNetMatch": true,
+        "officialTwseEntryPresent": true,
+        "officialTpexEntryPresent": true
+      }
+    ],
+    "credentialsUsed": false,
+    "sourceDataRedistributed": false,
+    "productionRightsProved": false,
+    "officialExchangeOrRankingWritten": false
+  },
+  "independentFindings": {
+    "matchedTwseBuySellPairs": 30,
+    "matchedDays": 6,
+    "matchedCategoriesPerDay": 5,
+    "foreignInvestorTwsePairDays": 6,
+    "foreignInvestorTpexPairDays": 0,
+    "foreignInvestorCombinedPairDays": 0,
+    "noVenueColumnsInFinMindRows": true,
+    "providerDocsStatedWeekdayRefreshTaipei": "15:00",
+    "exchangePublicationTaipei": {
+      "aggregateFirst": "14:50",
+      "aggregateIncludingBlockAndOmnibus": "19:40",
+      "individualFirst": "18:00",
+      "individualIncludingBlock": "20:00"
+    },
+    "initialFeedEqualsSettled": "NOT_PROVED_BY_LATE_QUERY",
+    "regulatoryAccess": "No specific applicable TWSE or user plan entitlement verified"
+  },
+  "catalog": {
+    "finmindChip": "https://finmind.github.io/tutor/TaiwanMarket/Chip/",
+    "finmindLicensing": "https://finmind.github.io/Disclaimer/",
+    "finmindCommercial": "https://finmind.github.io/CommercialUse/",
+    "finmindPricing": "https://finmind.github.io/Pricing/",
+    "officialMarketTwd": "https://eshop.twse.com.tw/zh/product/detail/d31c1b9570ae47058ec83a0bb1ffa419",
+    "officialStockShares": "https://eshop.twse.com.tw/zh/product/detail/c4c87ac184e44896a05fcab5a9d544ec",
+    "otcOfficialOpen": "https://data.gov.tw/dataset/11743",
+    "officialOpenRequests": [
+      "https://data.gov.tw/suggests/44238",
+      "https://data.gov.tw/suggests/137032"
+    ]
+  },
+  "listedPriceTwdPerMonthObserved": {
+    "a22Internal": 1000,
+    "a22External": 1500,
+    "a23Internal": 1500,
+    "a23External": 3000,
+    "finmindSponsorPro": 3330
+  },
+  "editorialBoundaries": [
+    "Official external data product language limits transmission to information users; public anonymous derived-output rights must be checked on the actual agreement.",
+    "FinMind free scope covers non-commercial use under provider terms; integration and raw redistribution restrictions are distinct.",
+    "Exclude raw vendor and exchange amounts from Git; hashes and comparisons only.",
+    "Current user account/plan rights not measured, no purchase or setup enabled."
+  ]
+}
