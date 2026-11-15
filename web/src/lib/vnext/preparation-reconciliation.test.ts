@@ -43,6 +43,22 @@ function fixture(mode='ready'){
  if(mode==='expired')state.deadline='2026-10-23T00:59:59.000Z';
  if(mode==='queued')state.state='queued';
  if(mode==='published_historical'){state.state='published_historical';state.authorArtifact={raw:'must not expose'};}
+ if(mode.startsWith('partial_mops')){
+  const r='00000000-0000-4000-8000-000000000020',doc='00000000-0000-4000-8000-000000000021',e='00000000-0000-4000-8000-000000000022';
+  const url='https://mopsov.twse.com.tw/server-java/FileDownLoad?step=9&functionName=t164sb01&report_id=C&co_id=2330&year=2026&season=2';
+  Object.assign(fact,{provider:'mops',source_ref:`issuer-document:${sha}:${'b'.repeat(64)}`,period_start:'2026-04-01',
+   filing_published_at:sourceAt,filing_restatement_id:null,upstream_provider:null,validation_recorded_at:sourceAt});
+  tables.candidate_financial_acquisition_jobs_v4[0].status=mode==='partial_mops_running'?'running':'queued';
+  if(mode==='partial_mops_other_queued')tables.candidate_financial_acquisition_jobs_v4.push({stock_id:stockId,job_id:'another-job',status:'queued'});
+  tables.candidate_financial_document_receipts_v6=[{receipt_id:r,stock_id:stockId,issuer_document_id:doc,
+   acquisition_job_id:'synthetic-original-acquisition',source_url:url,period_end:fact.period_end,document_sha256:sha,
+   receipt_status:'partial',parser_status:'complete',parser_evidence_id:e,financial_validation_status:'validated',published_at:null,accepted_at:sourceAt,completed_at:sourceAt}];
+  tables.candidate_financial_document_fact_links_v8=[{receipt_id:r,fact_id:fact.fact_id,fact_recorded_at:fact.recorded_at,evidence_id:e,created_at:sourceAt}];
+  tables.candidate_issuer_ir_document_queue_v4=[{document_id:doc,stock_id:stockId,document_url:url,document_sha256:sha,acquisition_status:'fetched',collected_at:sourceAt,recorded_at:sourceAt}];
+  tables.candidate_financial_parser_evidence_v8=[{evidence_id:e,receipt_id:r,document_sha256:sha,manifest_sha256:sha,recorded_at:sourceAt,evidence_schema_version:10}];
+  tables.candidate_financial_fact_provenance_v4=[{...tables.candidate_financial_fact_provenance_v4[0],acquisition_job_id:null,
+   issuer_document_id:doc,source_url:url,locator:{response_url:url,parser_evidence_id:e,manifest_sha256:sha}}];
+ }
  if(mode==='pending')tables.candidate_financial_document_receipts_v6=[{stock_id:stockId,receipt_id:'pending',receipt_status:'validation_pending',parser_status:'complete',financial_validation_status:'pending',accepted_at:sourceAt}];
  if(mode==='missing_stock')tables.stocks=[];
  if(mode==='future_instrument')tables.stock_instruments_v3[0].recorded_at='2099-01-01T00:00:00Z';
@@ -145,6 +161,25 @@ test('versioned financial preparation binds the original fact and receipt and re
   assert.equal(rejected.reason,reason);
   assert.equal(reads,expectedReads);
   assert.equal(changing.calls.includes('prepare'),false);
+ }
+});
+test('cached preparation permits the queued job of an independently verified partial MOPS receipt',async()=>{
+ for(const [mode,status] of [['partial_mops','prepared'],['partial_mops_running','unresolved'],['partial_mops_other_queued','unresolved'],['partial_mops_legacy','unresolved'],['partial_mops_capability_changed','unresolved']]){
+  const f=fixture(mode);
+  const original=f.deps.command;
+  let reads=0;
+  f.deps.command=async(action,body)=>{
+   const row=await original(action,body);
+   if(action!=='work-context')return row;
+   const enabled=mode!=='partial_mops_legacy' && (mode!=='partial_mops_capability_changed' || reads++===0);
+   return {...row,financialProviderProtocol:FINANCIAL_PROVIDER_PROTOCOL,...(enabled?{financialPartialMopsV10:true}:{})};
+  };
+  const result=await reconcilePreparation(author,{jobId},f.deps,true);
+  assert.equal(result.status,status,mode);
+  assert.equal(f.calls.includes('prepare'),status==='prepared',mode);
+  if(status==='prepared')assert.ok((f.readContext().gaps as string[]).includes('financial_partial_mops_filing'));
+  else if(mode==='partial_mops_capability_changed')assert.equal(result.reason,'financial_provider_protocol_changed');
+  else assert.equal(result.reason,'existing_cached_financial_work_pending');
  }
 });
 test('prepared replay observes immutable frozen state without cache or prepare; an existing invocation directs explicit recovery without exposing raw output',async()=>{

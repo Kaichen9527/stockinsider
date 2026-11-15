@@ -20,6 +20,13 @@ export function financialProtocolFromWorkContext(context:Row):FinancialProviderP
  if(context.financialProviderProtocol!==FINANCIAL_PROVIDER_PROTOCOL)throw Error('vnext_financial_provider_protocol_unknown');
  return FINANCIAL_PROVIDER_PROTOCOL;
 }
+export function partialMopsSymbolFromWorkContext(context: Row, symbol: string, protocol: FinancialProviderProtocol) {
+ if (!Object.hasOwn(context, 'financialPartialMopsV10')) return null;
+ if (context.financialPartialMopsV10 !== true || protocol !== FINANCIAL_PROVIDER_PROTOCOL || !/^\d{4}$/u.test(symbol)) {
+  throw Error('vnext_financial_partial_mops_context_invalid');
+ }
+ return symbol;
+}
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu;
 const hash=/^[a-f0-9]{64}$/u;
 const known=(value:unknown,cutoff:string)=>typeof value==='string' && Number.isFinite(Date.parse(value)) && Date.parse(value)<=Date.parse(cutoff);
@@ -61,7 +68,8 @@ function sameExecution(a:Row,b:Row){return ['jobId','symbol','state','executionI
 async function currentContext(deps:PreparationDependencies,state:Row){
  const context=await deps.command('work-context',{jobId:state.jobId,executionId:state.executionId});
  if(context.inputHash!==state.inputHash || !context.evidence || typeof context.evidence!=='object' || Array.isArray(context.evidence))throw Error('vnext_preparation_context_changed');
- return {evidence:context.evidence as Row,protocol:financialProtocolFromWorkContext(context)};
+ const protocol=financialProtocolFromWorkContext(context);
+ return {evidence:context.evidence as Row,protocol,partialMopsSymbol:partialMopsSymbolFromWorkContext(context,String(state.symbol),protocol)};
 }
 async function readJournal(deps:PreparationDependencies,state:Row,identity:VnextIdentity){
  const record=await deps.journal('read',{jobId:state.jobId,executionId:state.executionId});
@@ -95,7 +103,7 @@ async function signalSession(client:Client,exchange:string,cutoff:string){
  }
  return [...heads.values()].filter(row=>row.status==='completed' && known(row.close_at,cutoff)).map(row=>String(row.session_id)).sort().at(-1)||'';
 }
-async function cachedProjection(deps:PreparationDependencies,state:Row,original:Row,cutoff:string,identity:VnextIdentity,protocol:FinancialProviderProtocol){
+async function cachedProjection(deps:PreparationDependencies,state:Row,original:Row,cutoff:string,identity:VnextIdentity,protocol:FinancialProviderProtocol,partialMopsSymbol:string|null){
  const stocks=await deps.client.from('stocks').select('id,symbol,market').eq('symbol',String(state.symbol)).eq('market','TW').maybeSingle();
  if(stocks.error)throw Error('vnext_stock_authority_read_uncertain');
  if(!stocks.data)return {status:'gap',reason:'vnext_stock_authority_missing'};
@@ -112,14 +120,26 @@ async function cachedProjection(deps:PreparationDependencies,state:Row,original:
  // Stock-scoped cache observation, not proof of this execution's lineage.
  // Never claim, settle, validate or reschedule any of that existing work.
  const jobs=await deps.client.from('candidate_financial_acquisition_jobs_v4').select('job_id,status,terminal_reason').eq('stock_id',stockId).order('created_at').limit(1001);
- const receipts=await deps.client.from('candidate_financial_document_receipts_v6').select('receipt_id,receipt_status,parser_status,financial_validation_status').eq('stock_id',stockId).order('accepted_at').limit(1001);
+ const receipts=await deps.client.from('candidate_financial_document_receipts_v6').select('receipt_id,acquisition_job_id,receipt_status,parser_status,financial_validation_status').eq('stock_id',stockId).order('accepted_at').limit(1001);
  if(jobs.error || receipts.error || !Array.isArray(jobs.data) || !Array.isArray(receipts.data) || jobs.data.length>1000 || receipts.data.length>1000)throw Error('vnext_preparation_receipts_read_unresolved');
- if((jobs.data as Row[]).some(row=>row.status!=='terminal') || (receipts.data as Row[]).some(row=>row.parser_status!=='complete' || row.financial_validation_status==='pending'))return {status:'unresolved',reason:'existing_cached_financial_work_pending'};
+ const pendingJobs=(jobs.data as Row[]).filter(row=>row.status!=='terminal');
+ const pendingResult={status:'unresolved',reason:'existing_cached_financial_work_pending'};
+ if(pendingJobs.some(row=>!partialMopsSymbol||row.status!=='queued')
+  || (receipts.data as Row[]).some(row=>row.parser_status!=='complete' || row.financial_validation_status==='pending'))return pendingResult;
  const official=await deps.client.rpc('read_financial_facts_for_stocks_as_of',{p_cutoff:cutoff,p_stock_ids:[stockId]}).limit(2001);
  if(official.error || !Array.isArray(official.data) || official.data.length>2000)throw Error('vnext_preparation_verified_facts_unavailable');
  const facts=financialRowsAtCutoff(official.data,[stockId],cutoff);
  if(!facts)throw Error('vnext_preparation_verified_facts_unavailable');
- const financial=await resolveFinancialEvidenceSources(deps.client,facts,cutoff,protocol);
+ const financial=await resolveFinancialEvidenceSources(deps.client,facts,cutoff,protocol,partialMopsSymbol);
+ if(pendingJobs.length){
+  // A partial document can keep its acquisition queued. Only the exact linked
+  // receipt of a selected, validated fact can explain that pending job.
+  const selectedFacts=new Set(financial.evidence.map(item=>item.id));
+  const verifiedReceipts=new Set(financial.receipts.filter(row=>selectedFacts.has(String(row.factId))).map(row=>row.receiptId));
+  const explainedJobs=new Set((receipts.data as Row[]).filter(row=>row.receipt_status==='partial'
+   && typeof row.acquisition_job_id==='string' && verifiedReceipts.has(row.receipt_id)).map(row=>row.acquisition_job_id));
+  if(pendingJobs.some(job=>!explainedJobs.has(job.job_id)))return pendingResult;
+ }
  if(!financial.evidence.length)return {status:'gap',reason:'vnext_validated_financial_data_missing',gaps:financial.gaps};
  const session=await signalSession(deps.client,exchange,cutoff);
  const historical=await deps.historical({stockId,symbol:String(state.symbol),exchange,signalSession:session,cutoff});
@@ -153,12 +173,12 @@ export async function reconcilePreparation(identity:VnextIdentity,body:Row,deps:
  }
  if(journal.invocation_id)return unresolved('provider_invocation_already_exists',descriptor);
  let cached:Row;
- try{cached=await cachedProjection(deps,state,context.evidence,now(),identity,context.protocol);}catch{return unresolved('cached_financial_authority_unresolved',descriptor);}
+ try{cached=await cachedProjection(deps,state,context.evidence,now(),identity,context.protocol,context.partialMopsSymbol);}catch{return unresolved('cached_financial_authority_unresolved',descriptor);}
  // Recheck original rights/admission and the exact execution after all reads.
  let after:Row;
  try{
   const latest=await currentContext(deps,state);
-  if(latest.protocol!==context.protocol)return unresolved('financial_provider_protocol_changed',descriptor);
+  if(latest.protocol!==context.protocol||latest.partialMopsSymbol!==context.partialMopsSymbol)return unresolved('financial_provider_protocol_changed',descriptor);
   after=await deps.journal('inspect',{jobId});journal=await readJournal(deps,state,identity);
  }catch{return unresolved('active_work_context_changed',descriptor);}
  if(!sameExecution(state,after) || journal.invocation_id || Date.parse(state.deadline)<=Date.parse(now()))return unresolved('original_execution_changed_or_expired',descriptor);

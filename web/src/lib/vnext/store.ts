@@ -122,12 +122,13 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       const official = await writer.supabase.rpc('read_financial_facts_for_stocks_as_of', { p_cutoff: frozenAt, p_stock_ids: [stocks.data.id] }).limit(2001);
       const facts=financialRowsAtCutoff(official.data,[String(stocks.data.id)],frozenAt);
       if (official.error || !facts) throw new Error('vnext_preparation_verified_facts_unavailable');
-      const {financialProtocolFromWorkContext,freezeFinancialPreparation}=await import('./preparation-reconciliation.ts');
+      const {financialProtocolFromWorkContext,freezeFinancialPreparation,partialMopsSymbolFromWorkContext}=await import('./preparation-reconciliation.ts');
       const active=await command(identity,'work-context',{jobId:context.jobId,executionId:context.executionId});
       if(active.inputHash!==activeReceipt.inputHash)throw Error('vnext_preparation_context_changed');
       const protocol=financialProtocolFromWorkContext(active);
+      const partialMopsSymbol=partialMopsSymbolFromWorkContext(active,context.symbol,protocol);
       const {resolveFinancialEvidenceSources}=await import('./financial-evidence-sources.ts');
-      const financialSources=await resolveFinancialEvidenceSources(writer.supabase,facts,frozenAt,protocol);
+      const financialSources=await resolveFinancialEvidenceSources(writer.supabase,facts,frozenAt,protocol,partialMopsSymbol);
       if(financialSources.evidence.length===0)throw new Error('vnext_validated_financial_data_missing');
       const original = activeReceipt.evidence as Row;
       const {readCurrentForecasts}=await import('./forecast-current.ts');
@@ -138,7 +139,8 @@ export async function executeResearch(identity: VnextIdentity, body: Row) {
       if(actionTerms.stockId!==stocks.data.id||actionTerms.symbol!==context.symbol)throw new Error('vnext_action_issuer_binding');
       if(protocol){
         const latest=await command(identity,'work-context',{jobId:context.jobId,executionId:context.executionId});
-        if(latest.inputHash!==active.inputHash||financialProtocolFromWorkContext(latest)!==protocol)throw Error('vnext_preparation_context_changed');
+        const latestProtocol=financialProtocolFromWorkContext(latest);
+        if(latest.inputHash!==active.inputHash||latestProtocol!==protocol||partialMopsSymbolFromWorkContext(latest,context.symbol,latestProtocol)!==partialMopsSymbol)throw Error('vnext_preparation_context_changed');
       }
       const {inputHash:preparedHash,evidence:frozen}=freezeFinancialPreparation(original,historical,financialSources,new Date().toISOString(),forecasts,actionTerms,protocol);
       await command(identity, 'prepare', { jobId: context.jobId, executionId: context.executionId, inputHash: preparedHash, evidence: frozen });

@@ -7,3 +7,17 @@ Do not infer reporting frequency, share basis, company-action restatement, annua
 Existing SQL end/unit-only validator is unchanged and insufficient for new interval/basis semantics. Mandatory server-derived missing_sql_financial_interval_basis_parity prevents new current financial qualification regardless of caller DTO stripping; retain existing alreadyPublished/historical return. No new approval/role/rights authority, SQL apply or native retry. Real signed basis/supersession/currentrights/frequency/source/SQL/valuation/model protocol remains future independently reviewed work. Later9af10f/e50842f3 observations cannot fill older frozen cutoffs.
 
 Maintain writer/RLS/ledger/VN01–VN20, original PR head/A1/native HOLD and deployment gates. Exactsource and execution: docs/operations/2026-11-15/launch-radar/financial-period-checks.json. Current engineering tests are synthetic actual-module ports, not real financial or fullT07 acceptance.
+
+## MOPS facts from partial filings
+
+A MOPS attachment can contribute an individual financial fact when the server
+advertises v10 support, the filing URL matches its admitted symbol and reporting
+quarter, and the existing database as-of reader verifies the exact parser scope
+and a current official-financial-v2 validation. The source projection retains
+the parser evidence identity, collection and recording clocks, and the
+`financial_partial_mops_filing` gap. A stale or withdrawn validation prevents
+subsequent use. The original document and acquisition status still describe
+their full scope. Cached preparation can use such a fact while its linked
+acquisition remains queued. Other queued or in-progress work still holds the
+cached preparation. Reporting gaps, EPS denominator basis, SQL comparison parity,
+valuation and independent review continue to apply.
