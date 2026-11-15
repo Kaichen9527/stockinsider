@@ -7,7 +7,7 @@ import {readCurrentFinancialCache,currentEvidenceRead} from '../web/src/lib/vnex
 import {inputHash} from '../web/src/lib/vnext/policy.ts';
 const ts=createRequire(new URL('../web/package.json',import.meta.url))('typescript');
 const at='2026-10-23T01:00:00.000Z',id=n=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
-function lab({drift=false,sourceError=false,stockDrift=false,financial=false,factsError=false,invalidNewest=false,cachedPrice=false}={}){
+function lab({drift=false,sourceError=false,stockDrift=false,financial=false,factsError=false,invalidNewest=false,cachedPrice=false,launchStatus='due',launchEnabled=true,screenSession='2026-10-23'}={}){
  const evidence={id:`forecast:${id(1)}:${id(2)}`,key:'source_quarterly_diluted_eps_estimate',value:3.2,unit:'TWD_per_share',period:'2027-01-01/2027-03-31',contentHash:'a'.repeat(64),source:'https://issuer.example.com/public-guidance',sourceTier:'public',kind:'assumption',eventAt:'2026-10-22T01:00:00.000Z',availableAt:at};
  const receipt={schemaVersion:'vnext-forecast-source-receipt-v1',stockId:id(3),symbol:'2409',evidenceHash:inputHash(evidence),classification:'source_estimate_not_reported_or_fair_value',verificationId:id(2),revisionId:id(4),sourceHash:'b'.repeat(64),publisherAuthorityId:id(5),sourceAuthorityId:id(6),policyId:id(7),manifestHash:'c'.repeat(64),estimateKind:'analyst_estimate',estimateHorizon:'next_twelve_months',shareBasis:'source_diluted_eps_denominator_not_supplied',denominatorShares:null,annualEps:null,nextFourQuarterEps:null};
  const forecast={schemaVersion:'vnext-current-forecasts-v1',stockId:id(3),symbol:'2409',asOf:at,evidence:[evidence],receipts:[receipt],gaps:['forecast_annual_and_four_quarter_share_authority_missing']};
@@ -17,17 +17,18 @@ function lab({drift=false,sourceError=false,stockDrift=false,financial=false,fac
  if(financial)member.publication={revision_id:id(22),input_hash:member.inputHash,content:null,review:null,originalEvidence:{evidence:[{id:oldFact.fact_id,key:oldFact.fact_key,value:oldFact.value,unit:oldFact.unit,period:oldFact.period_end,source:'https://www.twse.com.tw/synthetic-financial',sourceTier:'official',kind:'fact',eventAt:oldFact.source_timestamp,availableAt:oldFact.recorded_at,contentHash:inputHash(oldFact)}]}};
  const sessions=Array.from({length:240},(_,i)=>new Date(Date.UTC(2026,0,i+1)).toISOString().slice(0,10));
  const history={notEntryAuthority:true,nextSessionAuthority:false,completedSessions:sessions,bars:sessions.map((session,i)=>({session,open:90,high:110,low:80,close:100,rawClose:100,volume:1000,observationId:id(i+100),availableAt:at,sourceRef:'b'.repeat(64),sourceTimestamp:at,recordedAt:at,sourceUrl:'https://www.twse.com.tw/'})),priceBasis:{kind:'adjusted_to_signal_session',anchorSession:sessions.at(-1),adjustmentVersion:'tw-corporate-action-v3.1',adjustmentEvidenceHash:'a'.repeat(64),status:'verified'},sourceDatasetRevision:`tw-entry-authority-v0.1:historical:${'c'.repeat(64)}`,availableAt:at,missingData:[]};
- const client={from(table){trace.push({table});let selected=[];const response=()=>({data:table==='stocks'?[{id:stockDrift?id(99):id(3),symbol:'2409'}]:table==='stock_instruments_v3'&&cachedPrice?[{stock_id:id(3),listing_status:'active',exchange:'TWSE'}]:table==='candidate_financial_fact_provenance_v4'&&selected.includes(corrected.fact_id)?[{provenance_id:id(23),fact_id:corrected.fact_id,acquisition_job_id:id(24),source_url:'https://www.twse.com.tw/synthetic-financial',source_sha256:'b'.repeat(64),locator:{source_ref:corrected.source_ref,period_end:corrected.period_end,fact_key:corrected.fact_key},extracted_at:at,recorded_at:at}]:table==='candidate_financial_acquisition_jobs_v4'?[{job_id:id(24),stock_id:id(3),period_end:corrected.period_end,status:'terminal',terminal_reason:'complete',response_sha256:'b'.repeat(64),source_url:'https://www.twse.com.tw/synthetic-financial',created_at:at,collected_at:at,updated_at:at}]:[],error:null});const chain={then:resolve=>Promise.resolve(response()).then(resolve)};for(const method of ['select','eq','lte','or','order'])chain[method]=()=>chain;chain.in=(_key,values)=>{selected=values;return chain;};chain.limit=async()=>response();return chain;},rpc(name,args){trace.push({rpc:name,args});if(name==='read_financial_facts_for_stocks_as_of')return {limit:async()=>({data:financial?[oldFact,corrected]:[],error:factsError?{message:'synthetic finance outage'}:null})};assert.equal(name,'vnext_forecast_active_read_v1');return Promise.resolve({data:{schemaVersion:'vnext-active-forecasts-v1',asOf:at,members:[{symbol:member.symbol,inputHash:drift?'e'.repeat(64):member.inputHash,forecast}]},error:sourceError?{message:'synthetic revoked'}:null});}};
+ const client={from(table){trace.push({table});let selected=[];const response=()=>({data:table==='stocks'?[{id:stockDrift?id(99):id(3),symbol:'2409'}]:table==='stock_instruments_v3'&&cachedPrice?[{stock_id:id(3),listing_status:'active',exchange:'TWSE'}]:table==='candidate_financial_fact_provenance_v4'&&selected.includes(corrected.fact_id)?[{provenance_id:id(23),fact_id:corrected.fact_id,acquisition_job_id:id(24),source_url:'https://www.twse.com.tw/synthetic-financial',source_sha256:'b'.repeat(64),locator:{source_ref:corrected.source_ref,period_end:corrected.period_end,fact_key:corrected.fact_key},extracted_at:at,recorded_at:at}]:table==='candidate_financial_acquisition_jobs_v4'?[{job_id:id(24),stock_id:id(3),period_end:corrected.period_end,status:'terminal',terminal_reason:'complete',response_sha256:'b'.repeat(64),source_url:'https://www.twse.com.tw/synthetic-financial',created_at:at,collected_at:at,updated_at:at}]:[],error:null});const chain={then:resolve=>Promise.resolve(response()).then(resolve)};for(const method of ['select','eq','lte','or','order'])chain[method]=()=>chain;chain.in=(_key,values)=>{selected=values;return chain;};chain.limit=async()=>response();return chain;},rpc(name,args){trace.push({rpc:name,args});if(name==='vnext_launch_weekly_audit_due_v1')return Promise.resolve({data:{status:launchStatus,session:'2026-10-23',weekStart:'2026-10-19',activeCount:1},error:null});if(name==='read_financial_facts_for_stocks_as_of')return {limit:async()=>({data:financial?[oldFact,corrected]:[],error:factsError?{message:'synthetic finance outage'}:null})};assert.equal(name,'vnext_forecast_active_read_v1');return Promise.resolve({data:{schemaVersion:'vnext-active-forecasts-v1',asOf:at,members:[{symbol:member.symbol,inputHash:drift?'e'.repeat(64):member.inputHash,forecast}]},error:sourceError?{message:'synthetic revoked'}:null});}};
  const modules={
   './current-evidence-read.ts':{readCurrentFinancialCache,currentEvidenceRead(input){const result=currentEvidenceRead(input),quote=result.formalAudit.quote;Object.defineProperty(result.formalAudit,'quote',{enumerable:true,get(){trace.push({formalQuote:'read'});return quote;}});return result;}},
-  './thesis-runtime.ts':{async thesisCommand(identity,action,body){trace.push({action});if(action==='context')return {members:[member]};if(action==='source-current')return {valid:[]};assert.equal(action,'record');records.push(body);return {reviewed:body.reports.length};}},
+  './thesis-runtime.ts':{async thesisCommand(identity,action,body){trace.push({action});if(action==='context')return {members:[member]};if(action==='source-current')return {valid:[]};assert.ok(['record','launch-weekly-record'].includes(action));records.push(body);return {reviewed:body.reports.length};}},
   './forecast-active.ts':{readActiveForecasts},'./thesis-cycle.ts':{auditThesisCycle},
-  './analysis-runtime.ts':{analysisWriter:work=>work(),analysisCommand:async()=>({})},'../supabase-server.ts':{getSupabaseServerClient:()=>client},'./calendar-sync.ts':{synchronizeCachedCalendar:async()=>({})},
-  './store.ts':{command:async()=>({session:'2026-10-23',priceSessions:cachedPrice?[sessions.at(-1)]:[],market:{risk:'unknown'}})},'../tw-entry-plan-authority.ts':{loadTwEntryHistoricalPriceAuthority(_client,request){assert.equal(request.cutoff,at);assert.equal(request.signalSession,sessions.at(-1));return history;}}
+  './analysis-runtime.ts':{analysisWriter:async work=>{trace.push({writer:'acquired'});return await work();},analysisCommand:async()=>({})},'../supabase-server.ts':{getSupabaseServerClient:()=>client},'./calendar-sync.ts':{synchronizeCachedCalendar:async()=>{trace.push({calendar:'synced'});return {};}},
+  './launch-ranking-read.ts':{launchRankingEnabled:()=>launchEnabled},
+  './store.ts':{command:async()=>({session:screenSession,priceSessions:cachedPrice?[sessions.at(-1)]:[],market:{risk:'unknown'}})},'../tw-entry-plan-authority.ts':{loadTwEntryHistoricalPriceAuthority(_client,request){assert.equal(request.cutoff,at);assert.equal(request.signalSession,sessions.at(-1));return history;}}
  };
  const filename='web/src/lib/vnext/weekly-worker.ts',source=fs.readFileSync(filename,'utf8');const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022},fileName:filename}).outputText;const output={exports:{}};
  vm.compileFunction(compiled,['exports','require','module'],{filename})(output.exports,name=>{assert.ok(Object.hasOwn(modules,name),'unexpected weekly dependency '+name);return modules[name];},output);
- return {run:output.exports.runWeeklyThesisAudit,trace,records,evidence,member,history};
+ return {run:output.exports.runWeeklyThesisAudit,runLaunch:output.exports.runLaunchWeeklyThesisAudit,trace,records,evidence,member,history};
 }
 test('actual weekly composition reads server-selected current forecasts before real audit/record with unchanged scoring authority',async()=>{
  const f=lab();const result=await f.run({role:'operator',principal:'synthetic-configured-operator'});assert.equal(result.reviewed,1);assert.equal(f.records.length,1);const report=f.records[0].reports[0];assert.ok(report.materialReasons.includes('current_source_forecast_changed'));assert.deepEqual(report.materialEvidence.forecasts,[{key:f.evidence.key,value:3.2,unit:'TWD_per_share',period:f.evidence.period,source:f.evidence.source,eventAt:f.evidence.eventAt}]);assert.equal(report.materialEvidence.factCount,0);assert.equal(report.deepInputs.valuation.base,null);assert.ok(result.cacheGaps.some(g=>g.includes('forecast_annual_and_four_quarter_share_authority_missing')));assert.ok(f.trace.findIndex(e=>e.rpc==='vnext_forecast_active_read_v1')<f.trace.findIndex(e=>e.action==='record'));assert.deepEqual(f.trace.find(e=>e.rpc==='vnext_forecast_active_read_v1').args,{p_principal:'synthetic-configured-operator'});assert.equal(f.trace.some(e=>['claim','prepare','reserve'].includes(e.action)),false);
@@ -41,9 +42,9 @@ test('actual weekly records no formal valuation/quote from an unavailable publis
  assert.ok(f.trace.findIndex(e=>e.formalQuote==='read')>=0);assert.ok(f.trace.findIndex(e=>e.formalQuote==='read')<f.trace.findIndex(e=>e.action==='record'));
  assert.deepEqual(f.trace.find(e=>e.rpc==='read_financial_facts_for_stocks_as_of').args,{p_cutoff:at,p_stock_ids:[id(3)]});assert.equal(f.trace.some(e=>['record-qualification','publish','claim','reserve'].includes(e.action)),false);
 });
-test('actual weekly consumes exact corrected formal cache/source lineage while retaining a comparison quote and immutable publication',async()=>{
+test('actual weekly retains corrected EPS observations and refuses cross-revision comparison without share basis',async()=>{
  const f=lab({financial:true,cachedPrice:true}),original=structuredClone(f.member.publication);const result=await f.run({role:'operator',principal:'synthetic-configured-operator'});const report=f.records[0].reports[0],envelope=result.currentEvidenceReads[0];
- assert.ok(report.materialReasons.includes('verified_financial_inputs_changed'));assert.equal(report.materialEvidence.factCount,1);assert.equal(report.materialEvidence.facts[0].value,2.1);
+ assert.equal(report.materialReasons.includes('verified_financial_inputs_changed'),false);assert.ok(report.gaps.includes('financial_period_or_share_basis_comparison_unavailable'));assert.equal(report.materialEvidence.factCount,1);assert.equal(report.materialEvidence.facts[0].value,2.1);
  assert.equal(envelope.financial.revisions[0].factId,id(21));assert.equal(envelope.financial.revisions[0].recordedAt,'2026-10-22T01:00:00.000002Z');assert.equal(envelope.financial.receipts[0].sourceSha256,'b'.repeat(64));assert.equal(envelope.price.sourceDatasetRevision,f.history.sourceDatasetRevision);assert.equal(envelope.comparisonPriceEvidence[0].value,100);
  assert.deepEqual({publication:envelope.formalAudit.eligibility.publication,financial:envelope.formalAudit.eligibility.financialComparison,price:envelope.formalAudit.eligibility.priceComparison,status:envelope.formalAudit.eligibility.status},{publication:'input_matches',financial:'available',price:'available',status:'blocked'});
  for(const reason of ['published_weekly_single_cutoff_authority_missing','published_price_dataset_binding_authority_missing'])assert.ok(result.cacheGaps.includes('2409:'+reason));
@@ -61,4 +62,33 @@ test('actual membership race or source refusal stops before caches/record and wr
 
 test('actual weekly composition rejects source/roster stock identity crosswire before recording an audit',async()=>{
  const f=lab({stockDrift:true});await assert.rejects(()=>f.run({role:'operator',principal:'synthetic-configured-operator'}),/vnext_forecast_issuer_binding/u);assert.equal(f.records.length,0);assert.equal(f.trace.some(e=>['claim','prepare','reserve','record'].includes(e.action)),false);
+});
+
+test('scheduled audit uses one writer and the launch record without exposing evidence or starting research', async () => {
+ const f=lab(),result=await f.runLaunch({role:'operator',principal:'synthetic-configured-operator'});
+ assert.deepEqual(JSON.parse(JSON.stringify(result)),{status:'recorded',reviewed:1});
+ assert.equal(f.trace.filter(e=>e.writer==='acquired').length,1);
+ assert.equal(f.records.length,1);
+ assert.equal(f.trace.filter(e=>e.action==='launch-weekly-record').length,1);
+ assert.equal(f.trace.some(e=>e.calendar||['record','claim','prepare','reserve'].includes(e.action)),false);
+});
+
+test('scheduled audit skips already current or deferred scopes before loading research data', async () => {
+ for(const launchStatus of ['current','deferred','empty']){
+  const f=lab({launchStatus}),result=await f.runLaunch({role:'operator',principal:'synthetic-configured-operator'});
+  assert.equal(result.reviewed,0);
+  assert.equal(result.status,launchStatus);
+  assert.deepEqual(f.trace.filter(e=>e.rpc).map(e=>e.rpc),['vnext_launch_weekly_audit_due_v1']);
+  assert.equal(f.records.length,0);
+ }
+});
+
+test('scheduled audit rejects disabled launch mode, wrong role and changed sessions', async () => {
+ const identity={role:'operator',principal:'synthetic-configured-operator'};
+ const f=lab({launchEnabled:false}),g=lab({screenSession:'2026-10-22'}),h=lab();
+ await assert.rejects(()=>f.runLaunch(identity),/launch_ranking_disabled/u);
+ await assert.rejects(()=>g.runLaunch(identity),/vnext_launch_weekly_session_changed/u);
+ await assert.rejects(()=>h.runLaunch({...identity,role:'author'}),/vnext_operator_required/u);
+ assert.equal(f.records.length+g.records.length+h.records.length,0);
+ assert.equal(f.trace.length+h.trace.length,0);
 });

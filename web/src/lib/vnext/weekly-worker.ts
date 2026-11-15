@@ -9,11 +9,37 @@ import type { ThesisAuditInput } from './thesis-audit.ts';
 import type { VnextIdentity } from './auth.ts';
 import type { Evidence,Artifact,Review } from './research.ts';
 type Row=Record<string,unknown>;
-export async function runWeeklyThesisAudit(identity:VnextIdentity,options:{screen?:boolean}={}){
+export function runWeeklyThesisAudit(identity:VnextIdentity,options:{screen?:boolean}={}){
+ return auditActiveTheses(identity,options,analysisWriter);
+}
+
+export async function runLaunchWeeklyThesisAudit(identity:VnextIdentity){
+ if(identity.role!=='operator'||!identity.principal)throw Error('vnext_operator_required');
+ const {launchRankingEnabled}=await import('./launch-ranking-read.ts');
+ if(!launchRankingEnabled())throw Error('launch_ranking_disabled');
+ return analysisWriter(async()=>{
+  const {getSupabaseServerClient}=await import('../supabase-server.ts');
+  const reply=await getSupabaseServerClient().rpc('vnext_launch_weekly_audit_due_v1',{p_principal:identity.principal});
+  const due=reply.data as Row|null;
+  if(reply.error||!due||!['due','empty','current','deferred'].includes(String(due.status))
+    ||typeof due.activeCount!=='number'||!Number.isInteger(due.activeCount)||due.activeCount<0||due.activeCount>20)
+   throw Error('vnext_launch_weekly_context_unavailable');
+  if(due.status!=='due')return {status:due.status,reviewed:0};
+  if(typeof due.session!=='string'||!/^\d{4}-\d{2}-\d{2}$/u.test(due.session)||due.activeCount===0)
+   throw Error('vnext_launch_weekly_context_unavailable');
+  const result=await auditActiveTheses(identity,{launchSession:due.session},work=>work());
+  if(result.reviewed!==due.activeCount||result.receipt?.reviewed!==due.activeCount)
+   throw Error('vnext_launch_weekly_receipt_uncertain');
+  return {status:'recorded',reviewed:result.reviewed};
+ });
+}
+
+async function auditActiveTheses(identity:VnextIdentity,options:{screen?:boolean;launchSession?:string},withWriter:typeof analysisWriter){
  if(identity.role!=='operator')throw new Error('vnext_operator_required');
  const {getSupabaseServerClient}=await import('../supabase-server.ts');const {command}=await import('./store.ts');const client=getSupabaseServerClient();let cutoff=new Date().toISOString();
- const [context,screen]=await Promise.all([thesisCommand(identity,'context',{}),analysisWriter(async()=>{await(await import('./calendar-sync.ts')).synchronizeCachedCalendar(identity);return command(identity,'screen-context',{});})]);const members=(context.members||[]) as Row[];const symbols=members.map((m)=>String(m.symbol));
- if(!symbols.length)return {reviewed:0,reports:[],reason:'no_active_members',admission:options.screen?await analysisWriter(()=>(import('./discovery.ts').then((module)=>module.scanCachedCandidates(identity)))):{jobs:[]}};
+ const [context,screen]=await Promise.all([thesisCommand(identity,'context',{}),withWriter(async()=>{if(!options.launchSession)await(await import('./calendar-sync.ts')).synchronizeCachedCalendar(identity);return command(identity,'screen-context',{});})]);const members=(context.members||[]) as Row[];const symbols=members.map((m)=>String(m.symbol));
+ if(options.launchSession&&screen.session!==options.launchSession)throw Error('vnext_launch_weekly_session_changed');
+ if(!symbols.length)return {reviewed:0,reports:[],reason:'no_active_members',admission:options.screen?await withWriter(()=>(import('./discovery.ts').then((module)=>module.scanCachedCandidates(identity)))):{jobs:[]}};
  const activeForecasts=await readActiveForecasts(client,identity);
  if(JSON.stringify(activeForecasts.members.map(m=>[m.symbol,m.inputHash]))!==JSON.stringify(members.map(m=>[String(m.symbol),String(m.inputHash)]).sort(([a],[b])=>a.localeCompare(b))))throw Error('vnext_forecast_membership_changed');
  cutoff=activeForecasts.asOf;
@@ -35,6 +61,6 @@ export async function runWeeklyThesisAudit(identity:VnextIdentity,options:{scree
   const quote=currentRead.formalAudit.quote;
   const frozen=member.evidence as Row;inputs.push({financialObservationInventory:currentRead.financial.observationInventory,businessReceipt:publication?.businessReceipt as BusinessReceipt|null||null,semanticReceipt:publication?.semanticReceipt as CatalystReceipt|null||null,symbol,inputHash:String(member.inputHash),revisionId:publication?String(publication.revision_id):null,publishedInputHash:publication?String(publication.input_hash):null,previousAudit:member.previousAudit as {materialEvidence?:Row}|null,artifact:publication?.content as Artifact|null||null,review:publication?.review as Review|null||null,original,current,newContent,quote,cutoff,session:String(screen.session),market:{risk:String((screen.market as Row)?.risk||'unknown'),snapshotHash:String((screen.market as Row)?.snapshotHash||'')||null},previousMarketHash:String(frozen.marketSnapshotHash||'')||null,tradingValid:instrument?instrument.listing_status==='active':null});
  }
- return analysisWriter(async()=>({...await auditThesisCycle(inputs,{record:(reports)=>thesisCommand(identity,'record',{reports}),...(options.screen?{screen:(audits)=>import('./discovery.ts').then((module)=>module.scanCachedCandidates(identity,undefined,audits))}:{})}),
+ return withWriter(async()=>({...await auditThesisCycle(inputs,{record:(reports)=>thesisCommand(identity,options.launchSession?'launch-weekly-record':'record',{reports}),...(options.screen?{screen:(audits)=>import('./discovery.ts').then((module)=>module.scanCachedCandidates(identity,undefined,audits))}:{})}),
   currentEvidenceReads,cacheGaps:[...activeForecasts.members.flatMap(m=>m.forecast.gaps.map(g=>`${m.symbol}:${g}`)),...currentEvidenceReads.flatMap(r=>r.refusalReasons.map(g=>`${r.symbol}:${g}`)),instruments.error?'instrument_cache_unavailable':null].filter(Boolean)}));
 }

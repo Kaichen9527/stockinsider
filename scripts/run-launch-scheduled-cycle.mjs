@@ -73,6 +73,15 @@ export function runLaunchScheduledCycle({
     return { slot, sessionDate, status: result.status === 'published' ? 'published' : 'retained' };
   }
 
+  const weekly = call(researchEndpoint, { action: 'launch-weekly-audit' }, 120_000, env);
+  const weeklyState = weekly?.result?.status;
+  const weeklyAudit = weekly?.ok === true && weekly.policyVersion === launchPolicy
+    && ['recorded', 'empty', 'current', 'deferred'].includes(weeklyState) ? weeklyState : 'failed';
+  const beforeDrain = launchScheduledSlot(clock());
+  if (beforeDrain.slot !== slot || beforeDrain.sessionDate !== sessionDate) {
+    return { slot, sessionDate, weeklyAudit, status: 'deferred', reason: 'launch_schedule_window_changed' };
+  }
+
   const { result: drain } = request(
     drainEndpoint, { ...drainScope, phase: 'final', sessionDate }, 2_700_000, 'launch_final_drain_failed',
   );
@@ -81,7 +90,7 @@ export function runLaunchScheduledCycle({
   }
   const current = launchScheduledSlot(clock());
   if (current.slot !== slot || current.sessionDate !== sessionDate) {
-    return { slot, sessionDate, status: 'deferred', reason: 'launch_schedule_window_changed' };
+    return { slot, sessionDate, weeklyAudit, status: 'deferred', reason: 'launch_schedule_window_changed' };
   }
   const { policyVersion, result } = request(
     researchEndpoint, { action: 'launch-cycle' }, 1_500_000, 'launch_cycle_failed',
@@ -90,12 +99,14 @@ export function runLaunchScheduledCycle({
     && (result?.status !== 'existing_reviewed_cache_only' || typeof result?.ranking?.published !== 'boolean'))) {
     throw new Error('launch_cycle_wrong_policy');
   }
-  return { slot, sessionDate, status: result.ranking?.published === true ? 'published' : 'retained' };
+  return { slot, sessionDate, weeklyAudit, status: result.ranking?.published === true ? 'published' : 'retained' };
 }
 
 if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
   try {
-    console.log(JSON.stringify(runLaunchScheduledCycle({ mode: process.argv[2] })));
+    const result = runLaunchScheduledCycle({ mode: process.argv[2] });
+    console.log(JSON.stringify(result));
+    if (result.weeklyAudit === 'failed') process.exitCode = 1;
   } catch (error) {
     console.error(JSON.stringify({ status: 'failed', reason: error.message }));
     process.exitCode = 1;

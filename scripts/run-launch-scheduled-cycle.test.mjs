@@ -8,10 +8,12 @@ const policyVersion = 'stockinsider-launch-radar-v1';
 const active = { STOCKINSIDER_VNEXT_ENABLED: 'true', STOCKINSIDER_LAUNCH_RANKING_ENABLED: 'true' };
 const morning = { ok: true, policyVersion, result: { session: day, status: 'published' } };
 const evening = { ok: true, policyVersion, result: { status: 'existing_reviewed_cache_only', ranking: { published: true } } };
+const currentWeek = { ok: true, policyVersion, result: { status: 'current', reviewed: 0 } };
 const complete = { ok: true, result: { sessionDate: day, researchReady: true } };
 
 function plan(at, responses = [], options = {}) {
   const calls = [];
+  const { weekly = currentWeek, ...runOptions } = options;
   const clock = Array.isArray(at)
     ? () => new Date(at.shift())
     : () => new Date(at);
@@ -21,9 +23,9 @@ function plan(at, responses = [], options = {}) {
     mode: 'schedule',
     call: (endpoint, payload, timeoutMs) => {
       calls.push({ endpoint, payload, timeoutMs });
-      return responses.shift();
+      return payload.action === 'launch-weekly-audit' ? weekly : responses.shift();
     },
-    ...options,
+    ...runOptions,
   });
   return { calls, run };
 }
@@ -74,8 +76,10 @@ test('morning refuses a publication receipt for a different session', () => {
 
 test('evening drains only the current Taipei date before calling the launch-only cycle', () => {
   const { calls, run } = plan(day + 'T13:40:39Z', [complete, evening]);
-  assert.deepEqual(run(), { slot: 'postclose', sessionDate: day, status: 'published' });
+  assert.deepEqual(run(), { slot: 'postclose', sessionDate: day, weeklyAudit: 'current', status: 'published' });
   assert.deepEqual(calls, [{
+    endpoint: '/api/internal/vnext-research', payload: { action: 'launch-weekly-audit' }, timeoutMs: 120_000,
+  }, {
     endpoint: '/api/internal/taiwan-data-queue-drain',
     payload: { limit: 100, maxBatches: 30, requireComplete: true, phase: 'final', sessionDate: day },
     timeoutMs: 2_700_000,
@@ -90,7 +94,7 @@ test('evening deferral or rank refusal retains the prior publication', () => {
     { status: 'existing_reviewed_cache_only', ranking: { published: false, retained: true } },
   ]) {
     const { run } = plan(day + 'T13:30:00Z', [complete, { ...evening, result }]);
-    assert.deepEqual(run(), { slot: 'postclose', sessionDate: day, status: 'retained' });
+    assert.deepEqual(run(), { slot: 'postclose', sessionDate: day, weeklyAudit: 'current', status: 'retained' });
   }
 });
 
@@ -103,14 +107,15 @@ test('incomplete or wrong-date drain never calls the cycle', () => {
   ]) {
     const { calls, run } = plan(day + 'T13:30:00Z', [reply]);
     assert.throws(run, { message });
-    assert.equal(calls.length, 1);
+    assert.equal(calls.length, 2);
+    assert.equal(calls[0].payload.action, 'launch-weekly-audit');
   }
 });
 
 test('a date rollover while draining does not publish a different session', () => {
-  const { calls, run } = plan([day + 'T15:56:00Z', day + 'T16:02:00Z'], [complete]);
+  const { calls, run } = plan([day + 'T15:56:00Z', day + 'T15:58:00Z', day + 'T16:02:00Z'], [complete]);
   assert.equal(run().reason, 'launch_schedule_window_changed');
-  assert.equal(calls.length, 1);
+  assert.equal(calls.length, 2);
 });
 
 test('an unrelated reply is not a successful cycle', () => {
@@ -151,8 +156,21 @@ test('the one candidate timer owns both Taipei slots and neither service calls t
 
 test('the protected launch-only endpoint refuses fallback before invoking the cycle', async () => {
   const source = await readFile(new URL('../web/src/lib/vnext/http.ts', import.meta.url), 'utf8');
-  const action = source.slice(source.indexOf("if(action==='launch-cycle')"), source.indexOf("if(action==='capture-opening-halts')"));
+  const action = source.slice(source.indexOf("if(action==='launch-cycle'||action==='launch-weekly-audit')"), source.indexOf("if(action==='capture-opening-halts')"));
   assert.match(action, /identity.role!=='operator'.*requireExactInternalBearer/);
   assert.match(action, /Object.keys\(body\).some\(key=>key!=='action'\)/);
-  assert.match(action, /if\(!launchRankingEnabled\(\)\)[\s\S]*status:503[\s\S]*runPostcloseResearchCycle\(identity\)/);
+  assert.match(action, /if\(!launchRankingEnabled\(\)\)[\s\S]*status:503[\s\S]*runLaunchWeeklyThesisAudit\(identity\)[\s\S]*runPostcloseResearchCycle\(identity\)/);
+});
+
+test('weekly error neither promotes an audit nor blocks a separate eligible publication', () => {
+  const { calls, run } = plan(day + 'T13:30:00Z', [complete, evening], { weekly: { ok: false } });
+  assert.deepEqual(run(), { slot: 'postclose', sessionDate: day, weeklyAudit: 'failed', status: 'published' });
+  assert.equal(calls.length, 3);
+  assert.equal(calls.at(-1).payload.action, 'launch-cycle');
+});
+
+test('a date rollover during the weekly audit does not start a final drain', () => {
+  const { calls, run } = plan([day + 'T15:59:00Z', day + 'T16:00:00Z']);
+  assert.equal(run().reason, 'launch_schedule_window_changed');
+  assert.deepEqual(calls.map(item => item.payload.action), ['launch-weekly-audit']);
 });
