@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "task": "T05",
+  "observedOn": "2026-11-15",
+  "officialEpisode": "https://podcasts.apple.com/tw/podcast/ep714/id1500839292?i=1000801859237",
+  "feed": {
+    "url": "https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml",
+    "httpStatus": 200,
+    "observedAtUtc": "2026-11-15T07:55:39.818829+00:00",
+    "bytes": 3250100,
+    "sha256": "ad362da8a0ac2753e80dc38fba025107346c76907fbbdf4c756b15b0f80d3731",
+    "bodyIsAudio": false,
+    "channelLicenseFields": 0,
+    "channelCopyrightFieldPresent": true,
+    "episodes": [
+      {
+        "episode": 712,
+        "publishedAtUtc": "2026-11-07T03:47:59+00:00",
+        "publishedAtTaipei": "2026-11-07T11:47:59+08:00",
+        "guidMatchesPlayerUrlEnding": true,
+        "permalinkIsOfficialSoundOnPlayer": true,
+        "officialEpisodeUrl": "https://player.soundon.fm/p/954689a5-3096-43a4-a80b-7810b219cef3/episodes/4fc7e5b8-4d4d-4e4c-ae20-96c2e0f9af45",
+        "audioEnclosurePresent": true,
+        "audioEnclosureMime": "audio/mpeg",
+        "declaredMediaBytes": 1,
+        "transcriptFields": 0,
+        "chapterOrCaptionFields": 0,
+        "hasPublisherDescription": true,
+        "containsAuthorLicenseTag": false,
+        "hasTimeCodedTextMetadata": false
+      },
+      {
+        "episode": 713,
+        "publishedAtUtc": "2026-11-11T07:21:09+00:00",
+        "publishedAtTaipei": "2026-11-11T15:21:09+08:00",
+        "guidMatchesPlayerUrlEnding": true,
+        "permalinkIsOfficialSoundOnPlayer": true,
+        "officialEpisodeUrl": "https://player.soundon.fm/p/954689a5-3096-43a4-a80b-7810b219cef3/episodes/5efa0892-4cb9-4f82-a1fc-21f0a49a2b9c",
+        "audioEnclosurePresent": true,
+        "audioEnclosureMime": "audio/mpeg",
+        "declaredMediaBytes": 1,
+        "transcriptFields": 0,
+        "chapterOrCaptionFields": 0,
+        "hasPublisherDescription": true,
+        "containsAuthorLicenseTag": false,
+        "hasTimeCodedTextMetadata": false
+      },
+      {
+        "episode": 714,
+        "publishedAtUtc": "2026-11-14T04:00:04+00:00",
+        "publishedAtTaipei": "2026-11-14T12:00:04+08:00",
+        "guidMatchesPlayerUrlEnding": true,
+        "permalinkIsOfficialSoundOnPlayer": true,
+        "officialEpisodeUrl": "https://player.soundon.fm/p/954689a5-3096-43a4-a80b-7810b219cef3/episodes/52dc3b92-2b06-49b6-ae34-821a9d632754",
+        "audioEnclosurePresent": true,
+        "audioEnclosureMime": "audio/mpeg",
+        "declaredMediaBytes": 1,
+        "transcriptFields": 0,
+        "chapterOrCaptionFields": 0,
+        "hasPublisherDescription": true,
+        "containsAuthorLicenseTag": false,
+        "hasTimeCodedTextMetadata": false
+      }
+    ],
+    "noMediaDownloaded": true,
+    "issuerClock": {
+      "issuerReleaseMinuteTaipei": "2026-11-12T21:48:00+08:00",
+      "secAcceptanceTaipei": "2026-11-12T21:52:41+08:00",
+      "comparisonCutoffTaipei": "2026-11-12T21:30:00+08:00",
+      "issuerReleaseAfterCutoffMinutes": 18,
+      "secFilingAfterCutoffSeconds": 1361,
+      "currentKnownDayBoardEvent": "2026-11-11"
+    }
+  },
+  "closure": {
+    "origin": {
+      "declaredHost": "rss.soundon.fm",
+      "declaredScheme": "https",
+      "declaredHasQuery": true,
+      "declaredBytes": "1",
+      "declaredType": "audio/mpeg"
+    },
+    "head": {
+      "rssSha256": "ad362da8a0ac2753e80dc38fba025107346c76907fbbdf4c756b15b0f80d3731",
+      "enclosureDeclaredBytes": "1",
+      "mediaBytesRead": 0,
+      "metadata": [
+        {
+          "host": "rss.soundon.fm",
+          "requestMade": true,
+          "method": "HEAD",
+          "status": 302,
+          "contentType": "text/plain",
+          "contentLength": null,
+          "acceptRanges": null,
+          "etagPresent": false
+        },
+        {
+          "host": "filesb.soundon.fm",
+          "requestMade": true,
+          "method": "HEAD",
+          "status": 200,
+          "contentType": "audio/mpeg",
+          "contentLength": 50845214,
+          "acceptRanges": "bytes",
+          "etagPresent": false
+        }
+      ]
+    }
+  },
+  "issuerAuthority": {
+    "issuer": "NVIDIA",
+    "ticker": "NVDA",
+    "market": "NASDAQ",
+    "storyEligibleAsTaiwanStock": false,
+    "eventType": "board accepted CEO resignation",
+    "issuerRelease": "https://www.globenewswire.com/news-release/2026/11/12/3401635/0/en/nvidia-announces-ceo-transition.html",
+    "filing": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000082/0001045810-26-000082-index.html",
+    "namedEntityOnlyDoesNotImplyAnyTaiwanSupplierImpact": true,
+    "issuerReleaseMinuteTaipei": "2026-11-12T21:48:00+08:00",
+    "secAcceptanceTaipei": "2026-11-12T21:52:41+08:00",
+    "comparisonCutoffTaipei": "2026-11-12T21:30:00+08:00",
+    "issuerReleaseAfterCutoffMinutes": 18,
+    "secFilingAfterCutoffSeconds": 1361,
+    "currentKnownDayBoardEvent": "2026-11-11"
+  },
+  "fixedTranscriber": {
+    "ref": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+    "link": "https://github.com/Kaichen9527/stockinsider/blob/f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43/web/src/lib/research-v2.ts#L5657-L5685",
+    "requestedRange": "bytes=0-26214400",
+    "maximumBytesIfRespected": 26214401,
+    "endpointEnclosurePercentIfRespected": 51.56,
+    "includesAbsoluteCueTimes": false,
+    "checksCoverageOfEntireEpisode": false,
+    "actualContentRangeNotRequested": true,
+    "recordedAudioProviderWasCalled": false
+  },
+  "rights": {
+    "terms": "https://www.soundon.fm/terms",
+    "canEnableScheduledAudioIngest": false,
+    "creatorSuppliedTimestampedTranscriptConfirmed": false,
+    "noAudioRetained": true,
+    "noAudioBytesRead": true,
+    "licenseTagAbsentIsNotProofOfNoGrant": true
+  },
+  "demonstrates": [
+    "separate event date, release clock, filing clock, podcast publication and later observation",
+    "do not credit issuer document or audio episode before it was available",
+    "head or bytes metadata does not prove full speech",
+    "do not infer Taiwan symbol or event impact from a US issuer event alone"
+  ]
+}
