@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""Fixed source-only descriptor; no approval, SQL, Docker or new lab operation."""
+import hashlib,json,os,re,sys
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+PRIVATE=Path('/tmp/stockinsider-vnext-oct22-private/rd-5c015ae8fbe6')
+CHECK=ROOT/'docs/operations/2026-10-25/retained-continuation-checkpoint'
+HISTORY='docs/operations/2026-10-25/capacity-replan/runs/20261025T060803-5c015ae8fbe6-retained-read/result.json'
+sha=lambda b:hashlib.sha256(b).hexdigest()
+def row(p):
+    b=(ROOT/p).read_bytes();return {'path':p,'bytes':len(b),'sha256':sha(b)}
+def main():
+    if len(sys.argv)!=1 or Path.cwd()!=ROOT:raise RuntimeError('fixed_original_source_builder_only')
+    assert sha((CHECK/'receipt.json').read_bytes())=='9915515961e50c3cd2d52dc01434e99a954bad00104af3d4f089164401a91629'
+    inventory=(CHECK/'raw-inventory.json').read_bytes();assert sha(inventory)=='2133c92f9b97a1ab728565433997260d11d6ee8c20a460f98bd77f5485f6db5a'
+    known={x['path']:x for x in json.loads(inventory)['files']}
+    def private(name):
+        actual=PRIVATE/name;expected=known[str(actual)];b=actual.read_bytes();assert len(b)==expected['bytes']and sha(b)==expected['sha256'];return {**expected,'path':name}
+    events=['docs/operations/2026-10-25/forecast-postcondition-candidate/candidate.sql','migrations/20261023_vnext_forecast_active_v1.sql','docs/operations/2026-10-25/corporate-postcondition-candidate/candidate.sql','migrations/20261023_vnext_disclosed_fiscal_forecast_v1.sql','migrations/20261024_vnext_major_contra_fence_v1.sql']
+    consumed=[]
+    for p in events:
+        e=private('step-event-'+p.replace('/','__')+'.json');v=json.loads((PRIVATE/e['path']).read_bytes());assert v['originalOrCandidatePath']==p;assert v['sqlHash']==row(p)['sha256'];assert v['knownCommit']and v['ready']=='I'and v['querySettled'];consumed.append({'path':p,'sqlHash':v['sqlHash'],'event':e})
+    history=row(HISTORY);assert history['sha256']=='981bffeb08012e25700b506739a56ad0ce673c150b56d49ea349a77adc78c3c0';h=json.loads((ROOT/HISTORY).read_bytes())
+    sqls=[('positive-contra-A1','docs/operations/2026-10-26/review-decisions/positive-contra-codec-acl-compat-candidate.sql'),('valuation','migrations/20261024_vnext_valuation_sources_v1.sql'),('complete-qualification','migrations/20261024_vnext_complete_qualification_v2.sql')]
+    base='scripts/opportunity-v3/vnext-retained-continuation-inputs-v2.json';base_manifest=json.loads((ROOT/base).read_bytes());paths={x['path']for x in base_manifest['inputs']}
+    for r in base_manifest['inputs']:assert row(r['path'])==r
+    explicit=[base,HISTORY,'.loop-engineering/state/changes/stockinsider-vnext-20/status.json','.loop-engineering/policy.yaml','.loop-engineering/commands.json','scripts/run-vnext-retained-read.py','scripts/run-vnext-pg-setup-calibration.py','scripts/vnext_capacity_policy.py','scripts/vnext_capacity_record.py','scripts/runtime/reviewed-runtime-release.js','scripts/opportunity-v3/gate-evidence.mjs','package.json','package-lock.json','node_modules/pg/package.json']
+    explicit+=['scripts/'+n for n in ['vnext-post-five-resume.mjs','run-vnext-post-five-resume.py','vnext-post-five-resume.test.mjs','prepare-vnext-post-five-resume.py','run-vnext-post-five-contracts.py']]
+    explicit+=['docs/operations/2026-10-26/review-decisions/'+n for n in ['REVIEW-SUBJECTS.json','ACL-CANDIDATE.json','positive-contra-codec-acl-compat-candidate.sql']]
+    explicit+=['scripts/opportunity-v3/vnext-major-contra-positive-profile-v1.json',str(CHECK.relative_to(ROOT))+'/raw-inventory.json',str(CHECK.relative_to(ROOT))+'/receipt.json']
+    paths.update(explicit);paths.update(p for _,p in sqls)
+    # Actual installed PG driver code, not only an npm version string. Resolve
+    # each finite production dependency with Node's ancestor-node_modules rule;
+    # no install, cache scan or optional pg-native execution.
+    packages=set();queue=[ROOT/'node_modules/pg'];library_bytes=0
+    while queue:
+        package=queue.pop()
+        if package in packages:continue
+        if len(packages)>=32:raise RuntimeError('pg_dependency_package_bound')
+        packages.add(package);meta=json.loads((package/'package.json').read_bytes())
+        for p in package.rglob('*'):
+            if 'node_modules'in p.relative_to(package).parts:continue
+            if p.is_symlink():raise RuntimeError('pg_dependency_symlink')
+            if p.is_file()and p.suffix in ['.js','.json','.mjs','.cjs']:
+                paths.add(str(p.relative_to(ROOT)));library_bytes+=p.stat().st_size
+                if library_bytes>4194304:raise RuntimeError('pg_dependency_byte_bound')
+        for name in {**meta.get('dependencies',{}),**meta.get('optionalDependencies',{})}:
+            matches=[parent/'node_modules'/name for parent in [package,*package.parents]if parent==ROOT or ROOT in parent.parents]
+            resolved=next((p for p in matches if(p/'package.json').is_file()),None)
+            if resolved is None:
+                if name in meta.get('optionalDependencies',{}):continue
+                raise RuntimeError('missing_pg_dependency:'+name)
+            queue.append(resolved)
+    # Closed local static/literal dynamic import closure. Generated TS files
+    # already have exact bytes in the inherited seal; do not normalize them.
+    pending=list(paths)
+    while pending:
+        p=pending.pop()
+        if not p.endswith(('.mjs','.js','.ts'))or p.startswith('node_modules/'):continue
+        for relative in re.findall(r'''(?:from\s*|import\s*\()\s*['"](\.[^'"]+)['"]''',(ROOT/p).read_text()):
+            candidate=os.path.normpath(str(Path(p).parent/relative))
+            if candidate.startswith('../'):raise RuntimeError('source_import_escape')
+            if not(ROOT/candidate).is_file():
+                # Existing TS uses extensionless imports; bind the unique real
+                # module rather than omit that edge or normalize source bytes.
+                matches=[candidate+s for s in ['.ts','.tsx','.js','.mjs','/index.ts','/index.tsx','/index.js']if(ROOT/(candidate+s)).is_file()]
+                if len(matches)!=1:raise RuntimeError('unresolved_or_ambiguous_literal_import:'+candidate)
+                candidate=matches[0]
+            if candidate not in paths:paths.add(candidate);pending.append(candidate)
+    inputs=[row(p)for p in sorted(paths)];d={'schemaVersion':'vnext-post-five-unenabled-resume-v1','enabled':False,'independentReview':None,'reviewRequirement':'A1 exact candidate/source/full predecessor and independent original Loop authority; no supported vNext verifier yet','historyRoot':str(PRIVATE),'historyResult':history,'stoppedCheckpoint':h['cleanup']['state'],'socket':'/tmp/stockinsider-vnext-oct22-private/worker-pg-socket-24/socket','freshSetupHistoryBytes':1021931520,'consumed':consumed,'failed':private('step-error-migrations__20261024_vnext_major_contra_positive_v1.sql.json'),'baseline':private('before-step-migrations__20261024_vnext_major_contra_positive_v1.sql.json'),'afterRollback':private('step-error-observer-migrations__20261024_vnext_major_contra_positive_v1.sql.json'),'afterFifth':private('after-step-migrations__20261024_vnext_major_contra_fence_v1.sql.json'),'positiveProfile':'scripts/opportunity-v3/vnext-major-contra-positive-profile-v1.json','next':[{'id':id,**row(p)}for id,p in sqls],'inputs':inputs,'inputHash':sha(json.dumps([[r['path'],r['sha256']]for r in inputs],separators=(',',':')).encode()),'externalTools':{'nodeVersion':'22.14.0','nodeSha256':'1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1','pg':'8.18.0 pinned root package-lock plus installed package metadata; native module loading NOT_RUN','PG':'17.11 original image/binary and locale; no new image or install'}}
+    target=ROOT/'scripts/opportunity-v3/vnext-post-five-resume-v1.json';raw=(json.dumps(d,indent=2)+'\n').encode();target.write_bytes(raw);print(json.dumps({'path':str(target.relative_to(ROOT)),'bytes':len(raw),'sha256':sha(raw),'inputs':len(inputs),'inputBytes':sum(r['bytes']for r in inputs),'inputHash':d['inputHash'],'enabled':False}))
+if __name__=='__main__':main()

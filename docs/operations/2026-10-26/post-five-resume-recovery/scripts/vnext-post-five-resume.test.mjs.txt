@@ -1,0 +1,72 @@
+/** NEW source/OS contracts. Extracted transport is synthetic, never PG/approval. */
+import test from 'node:test';import assert from 'node:assert/strict';
+import fs from 'node:fs';import path from 'node:path';
+import {createHash}from'node:crypto';import {pathToFileURL}from'node:url';import {spawnSync,spawn}from'node:child_process';
+import {verifyResumeSource,verifyRetainedBoundary,requireIndependentA1}from'./vnext-post-five-resume.mjs';
+const ROOT=process.cwd(),SRC=ROOT+'/scripts/vnext-post-five-resume.mjs',NODE=process.execPath,sha=b=>createHash('sha256').update(b).digest('hex');
+const output=process.env.VNEXT_POST_FIVE_TEST_OUTPUT;assert.match(output??'',/^\/workspace\/stockinsider-vnext-oct22\/docs\/operations\/2026-10-25\/capacity-replan\/runs\/[a-zA-Z0-9-]+\/fixture$/u);fs.mkdirSync(output,{mode:0o700});
+async function extracted(){
+ const source=fs.readFileSync(SRC,'utf8').replaceAll('import.meta.url',JSON.stringify(pathToFileURL(SRC).href))+'\nexport {pinnedRead,validateEvents,createJournal,executeFixed,queryReady,positiveRoutines};';
+ return import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+}
+const core=await extracted(),clone=x=>JSON.parse(JSON.stringify(x));
+function fixture(){
+ const base={catalog:{roles:['unchanged'],defaultAcls:[]},routines:[],rows:{ledger:{rows:[],count:0,sha256:sha('[]')}},ids:[],authority:{readonly:'on'}};
+ const calls=[],records=[];const steps=['positive-contra-A1','valuation','complete-qualification'].map((id,i)=>({id,path:'fixed-'+i,sha256:sha(Buffer.from('SQL-'+i))}));
+ const x={writer:{processID:11},observer:{processID:12},interrupted:()=>false,verifySource:()=>{},readStep:s=>Buffer.from('SQL-'+steps.indexOf(s)),positiveProfile:{routines:[],newPrivateRoutines:[]},snapshot:async()=>clone(base),statement:async(c,text)=>{calls.push(text);return {command:text==='SELECT 1 AS fresh_owned_probe'?'SELECT':'COMMIT'};},valuation:async()=>calls.push('VALUATION'),qualification:async()=>calls.push('QUALIFICATION')};
+ return {x,d:{next:steps},base,calls,records,record:(n,v)=>records.push([n,v])};
+}
+test('current complete source/history binding: five actual COMMIT/I,318 full tables, no replay selection',()=>{
+ const {descriptor:d,baseline}=verifyRetainedBoundary();assert.equal(Object.keys(baseline.rows).length,318);assert.equal(d.consumed.length,5);assert.deepEqual(d.next.map(s=>s.id),['positive-contra-A1','valuation','complete-qualification']);assert.equal(verifyResumeSource().inputHash,d.inputHash);
+});
+test('actual Node CLI refuses A1 before child/PG IO, including fake caller approval argument',()=>{
+ const guard=output+'/spawn-observer.mjs';fs.writeFileSync(guard,"import cp from 'node:child_process';import{syncBuiltinESMExports}from'node:module';for(const k of ['spawn','spawnSync','exec','execSync','execFile','execFileSync','fork'])cp[k]=()=>{console.error('FORBIDDEN_CHILD_IO');throw Error('FORBIDDEN_CHILD_IO')};syncBuiltinESMExports();\n",{flag:'wx',mode:0o600});
+ for(const args of [[],['--approved','true']]){const r=spawnSync(NODE,['--import',guard,SRC,...args],{cwd:ROOT,encoding:'utf8',timeout:10000});assert.equal(r.status,2);assert.equal(r.signal,null);assert.doesNotMatch(r.stderr,/FORBIDDEN_CHILD_IO/);assert.match(r.stderr,args.length?/closed no-option/:/A1_INDEPENDENT_REVIEW_PENDING/);fs.writeFileSync(output+'/node-cli-'+args.length+'.json',JSON.stringify({status:r.status,signal:r.signal,stdout:r.stdout,stderr:r.stderr})+'\n',{flag:'wx',mode:0o600});}
+});
+test('actual Python CLI rejects before subprocess; local status PASS still cannot mint independent approval',()=>{
+ const filename=ROOT+'/scripts/run-vnext-post-five-resume.py';
+ for(const fake of [false,true]){const program=`import runpy,subprocess,sys,json\nfrom pathlib import Path\ndef deny(*a,**k):raise RuntimeError('FORBIDDEN_CHILD_IO')\nsubprocess.Popen=deny\nsys.argv=[${JSON.stringify(filename)}]\n${fake?"old=Path.read_text\nPath.read_text=lambda self,*a,**k: json.dumps({'designGate':'PASS'}) if str(self).endswith('/stockinsider-vnext-20/status.json') else old(self,*a,**k)\n":''}runpy.run_path(${JSON.stringify(filename)},run_name='__main__')\n`;
+  const r=spawnSync('python',['-B','-c',program],{cwd:ROOT,encoding:'utf8',timeout:10000});assert.equal(r.status,2);assert.match(r.stderr,fake?/A1_SUPPORTED_INDEPENDENT_REVIEW_BINDING_UNAVAILABLE/:/A1_INDEPENDENT_REVIEW_PENDING/);assert.doesNotMatch(r.stderr,/FORBIDDEN_CHILD_IO/);fs.writeFileSync(output+'/python-cli-'+fake+'.json',JSON.stringify({status:r.status,signal:r.signal,stdout:r.stdout,stderr:r.stderr})+'\n',{flag:'wx',mode:0o600});}
+});
+test('extracted fixed one-use intent prevents cross-run retry even with a new artifact leaf',()=>{
+ const target=output+'/claim-root';fs.mkdirSync(target);
+ const program=`import runpy,json,sys\nfrom pathlib import Path\nm=runpy.run_path(${JSON.stringify(ROOT+'/scripts/run-vnext-post-five-resume.py')},run_name='extracted_contract')\nreal=Path\nm['reserve_once'].__globals__['Path']=lambda p:real(${JSON.stringify(target)}) if p=='/tmp/stockinsider-vnext-oct22-private' else real(p)\nd={'inputHash':'synthetic-source','stoppedCheckpoint':{'id':'synthetic-container'},'baseline':{'sha256':'synthetic-baseline'}}\nm['reserve_once'](d,real('pf-first'))\ntry:m['reserve_once'](d,real('pf-second'))\nexcept FileExistsError:print('CROSS_RUN_RESEND_REFUSED')\nelse:raise AssertionError('second intent accepted')\nprint(json.dumps(json.loads((real(${JSON.stringify(target)})/'post-five-A1-v1-claim.json').read_text())))\n`;
+ const r=spawnSync('python',['-B','-c',program],{cwd:ROOT,encoding:'utf8',timeout:10000});assert.equal(r.status,0,r.stderr);assert.match(r.stdout,/CROSS_RUN_RESEND_REFUSED/);assert.match(r.stdout,/pf-first/);assert.doesNotMatch(r.stdout,/pf-second/);fs.writeFileSync(output+'/cross-run-claim.json',JSON.stringify({status:r.status,stdout:r.stdout,stderr:r.stderr})+'\n',{flag:'wx',mode:0o600});
+});
+test('source inode/full-byte checks reject one-byte drift, symlink and hardlink; retain fixtures',()=>{
+ const root=output+'/sources';fs.mkdirSync(root);const p=root+'/fixed',bytes=Buffer.from('original');fs.writeFileSync(p,bytes,{flag:'wx'});const row={path:'fixed',bytes:bytes.length,sha256:sha(bytes)};assert.deepEqual(core.pinnedRead(root,row),bytes);
+ fs.writeFileSync(p,'Original');assert.throws(()=>core.pinnedRead(root,row));fs.symlinkSync(p,root+'/link');assert.throws(()=>core.pinnedRead(root,{...row,path:'link'}));fs.linkSync(p,root+'/hard');assert.throws(()=>core.pinnedRead(root,{...row,path:'hard'}));assert.throws(()=>core.pinnedRead(root,{...row,path:'../fixed'}));
+});
+test('actual source modification between opened read/fstat is refused',()=>{
+ const root=output+'/raced';fs.mkdirSync(root);const p=root+'/fixed';fs.writeFileSync(p,'original',{flag:'wx'});const original=fs.readFileSync;
+ fs.readFileSync=function(fd,...rest){const b=original.call(fs,fd,...rest);if(typeof fd==='number')fs.writeFileSync(p,'modified');return b;};
+ try{assert.throws(()=>core.pinnedRead(root,{path:'fixed',bytes:8,sha256:sha('original')}),/opened source changed/);}finally{fs.readFileSync=original;}
+});
+test('history corruption, changed SQL hash and absent rollback observer refuse',()=>{
+ const d=verifyResumeSource(),read=r=>fs.readFileSync(path.join(d.historyRoot,r.path));
+ for(const mode of ['event','rollback'])assert.throws(()=>core.validateEvents(d,r=>{if(mode==='event'&&r.path===d.consumed[0].event.path)return JSON.stringify({...JSON.parse(read(r)),sqlHash:'0'.repeat(64)});if(mode==='rollback'&&r.path===d.afterRollback.path)return '{}';return read(r);}));
+});
+test('synthetic transport fixed sequence only: positive,valuation,qualification, independent whole READ',async()=>{const f=fixture();const r=await core.executeFixed(f.x,f.d,f.base,f.record);assert.equal(f.calls.filter(c=>c.startsWith('SQL-')).length,1);assert.deepEqual(f.calls.slice(-2),['VALUATION','QUALIFICATION']);assert.equal(r.current18.startsWith('NOT_RUN'),true);assert.equal(f.records.filter(([n])=>n.endsWith('-committed')).length,3);});
+test('T/E entry errors untouched: no mutation,rollback,BEGIN or COMMIT',async()=>{for(const ready of ['T','E']){const f=fixture(),primary=Object.assign(Error('not fresh'),{observedReady:ready});f.x.statement=async()=>{f.calls.push('probe');throw primary;};await assert.rejects(core.executeFixed(f.x,f.d,f.base,f.record),e=>e===primary);assert.deepEqual(f.calls,['probe']);assert.equal(f.records.length,0);}});
+test('synthetic current predecessor row/ACL drift refuses before intent or mutation',async()=>{for(const key of ['rows','catalog']){const f=fixture();f.x.snapshot=async()=>({...clone(f.base),[key]:{changed:true}});await assert.rejects(core.executeFixed(f.x,f.d,f.base,f.record));assert.equal(f.calls.length,1);assert.equal(f.records.length,0);}});
+test('TOCTOU after observer read: source recheck refuses before SQL',async()=>{const f=fixture();let checked=0;f.x.verifySource=()=>{if(++checked===2)throw Error('source drift');};await assert.rejects(core.executeFixed(f.x,f.d,f.base,f.record),/source drift/);assert.equal(f.calls.length,1);assert.equal(f.records.length,1);});
+test('unknown mutation outcome preserves primary, independent READ, no rollback facade/no resend',async()=>{const f=fixture(),primary=Error('transport closed');f.x.statement=async(c,text)=>{f.calls.push(text);if(text.startsWith('SQL-'))throw primary;return {command:'SELECT'};};await assert.rejects(core.executeFixed(f.x,f.d,f.base,f.record),e=>e===primary);assert.equal(f.calls.filter(c=>c.startsWith('SQL-')).length,1);assert.ok(!f.calls.includes('ROLLBACK'));assert.equal(f.records.at(-1)[0],'positive-contra-A1-reconcile-read');});
+test('actual observed E rollback failure/read failure retained as secondary, never replace primary',async()=>{const f=fixture(),primary=Object.assign(Error('server reject'),{code:'P0001',observedReady:'E'});let n=0;f.x.snapshot=async()=>{if(++n>2)throw Error('read lost');return clone(f.base);};f.x.statement=async(c,text)=>{f.calls.push(text);if(text.startsWith('SQL-'))throw primary;if(text==='ROLLBACK')throw Error('rollback lost');return {command:'SELECT'};};await assert.rejects(core.executeFixed(f.x,f.d,f.base,f.record),e=>e===primary);assert.equal(primary.rollbackUncertain.message,'rollback lost');assert.equal(primary.readUncertain.message,'read lost');assert.equal(f.calls.filter(c=>c==='ROLLBACK').length,1);});
+test('whole-row mutation after COMMIT rejects before next installer; original history kept',async()=>{const f=fixture();let n=0;f.x.snapshot=async()=>{const s=clone(f.base);if(++n>=3)s.rows.ledger.rows.push({unexpected:1});return s;};await assert.rejects(core.executeFixed(f.x,f.d,f.base,f.record));assert.ok(!f.calls.includes('VALUATION'));});
+test('journal O_EXCL retains intent on interruption and forbids recreate/replay',()=>{const dir=output+'/journal',save=core.createJournal(dir);save('positive-contra-A1-intent'.toLowerCase(),{noAutomaticResend:true});assert.throws(()=>save('positive-contra-a1-intent',{}));assert.throws(()=>core.createJournal(dir));assert.equal(JSON.parse(fs.readFileSync(dir+'/positive-contra-a1-intent.json')).noAutomaticResend,true);});
+test('interruption before next mutation never advances sequence',async()=>{const f=fixture();f.x.interrupted=()=>true;await assert.rejects(core.executeFixed(f.x,f.d,f.base,f.record),/interrupted/);assert.equal(f.calls.length,1);assert.equal(f.records.length,0);});
+test('synthetic actual query promise+Ready are both required; terminal event cannot fake I',async()=>{
+ const {EventEmitter}=await import('node:events');
+ for(const mode of ['I','T','E','end']){const c=new EventEmitter();c.connection=new EventEmitter();c.end=async()=>{};let original;
+  c.query=async()=>{queueMicrotask(()=>mode==='end'?c.emit('end'):c.connection.emit('readyForQuery',{status:mode}));if(mode==='E'){original=Object.assign(Error('rejected'),{code:'P0001'});throw original;}return {command:'SELECT'};};
+  if(mode==='I')assert.equal((await core.queryReady(c,'SELECT 1')).command,'SELECT');else await assert.rejects(core.queryReady(c,'SELECT 1'),e=>mode==='E'?e===original&&e.observedReady==='E':true);
+  assert.equal(c.connection.listenerCount('readyForQuery'),0);assert.equal(c.listenerCount('end'),0);
+ }
+});
+test('caller values and fake approval never satisfy real A1 gate',()=>{for(const proof of [true,{approved:true},{verdict:'PASS'},null])assert.throws(()=>requireIndependentA1(proof),/A1_INDEPENDENT_REVIEW_PENDING/);});
+test('actual owned child SIGTERM settles terminal exit; no service or shared PID signalled',async()=>{
+ const c=spawn(NODE,['-e',"process.once('SIGTERM',()=>process.exit(23));process.stdout.write('OWNED_READY\\n');setInterval(()=>{},100)"],{stdio:['ignore','pipe','pipe']});let text='',error='',identity;
+ const timer=setTimeout(()=>{c.kill('SIGKILL');},5000);
+ c.stderr.on('data',b=>{error+=b;});c.stdout.on('data',b=>{text+=b;if(text==='OWNED_READY\n'){const fields=fs.readFileSync('/proc/'+c.pid+'/stat','utf8').split(') ')[1].split(' ');identity={pid:c.pid,start:fields[19]};const current=fs.readFileSync('/proc/'+c.pid+'/stat','utf8').split(') ')[1].split(' ');assert.equal(current[19],identity.start);c.kill('SIGTERM');}});
+ const result=await new Promise((resolve,reject)=>{c.once('error',reject);c.once('close',(code,signal)=>resolve({code,signal}));});clearTimeout(timer);assert.deepEqual(result,{code:23,signal:null});assert.ok(identity);fs.writeFileSync(output+'/owned-terminal.json',JSON.stringify({identity,result,stdout:text,stderr:error})+'\n',{flag:'wx',mode:0o600});
+});

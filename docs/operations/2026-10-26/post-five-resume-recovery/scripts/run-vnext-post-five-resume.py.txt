@@ -1,0 +1,108 @@
+#!/usr/bin/env python3
+"""UNENABLED exact worker24 post-five resume. No caller-selected target/SQL.
+
+Missing A1 supported independent-review binding refuses before any subprocess,
+PG start, source traversal or Lab constructor. It is not a production installer.
+The fixed lifecycle below is reviewable implementation, NOT native validation.
+"""
+import hashlib,json,os,sys,time
+from pathlib import Path
+
+ROOT=Path(__file__).resolve().parents[1]
+DESCRIPTOR=ROOT/'scripts/opportunity-v3/vnext-post-five-resume-v1.json'
+LOOP=ROOT/'.loop-engineering/state/changes/stockinsider-vnext-20/status.json'
+
+def require_independent_a1():
+    state=json.loads(LOOP.read_text())
+    if state.get('designGate')=='INDEPENDENT_REVIEW_PENDING':raise RuntimeError('A1_INDEPENDENT_REVIEW_PENDING')
+    # Existing exact-review Git validation only authenticates the original
+    # source-led structural subject. No existing vNext A1 independent issuer
+    # adapter/authorization is configured. A locally edited PASS is not one.
+    raise RuntimeError('A1_SUPPORTED_INDEPENDENT_REVIEW_BINDING_UNAVAILABLE')
+
+def reserve_once(descriptor,artifact):
+    # Stable across run directories: even start/transport/rollback uncertainty
+    # cannot be retried by allocating a different output leaf. Never deleted.
+    parent=Path('/tmp/stockinsider-vnext-oct22-private');claim=parent/'post-five-A1-v1-claim.json'
+    value={'schemaVersion':'vnext-post-five-one-use-claim-v1','inputHash':descriptor['inputHash'],'containerId':descriptor['stoppedCheckpoint']['id'],'baselineSha256':descriptor['baseline']['sha256'],'artifact':str(artifact)}
+    fd=os.open(claim,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
+    try:
+        with os.fdopen(fd,'w')as out:out.write(json.dumps(value)+'\n');out.flush();os.fsync(out.fileno())
+    finally:
+        directory=os.open(parent,os.O_RDONLY)
+        try:os.fsync(directory)
+        finally:os.close(directory)
+
+def candidate_main():
+    if len(sys.argv)!=1 or Path.cwd().resolve()!=ROOT:raise RuntimeError('closed_original_resume_entry_required')
+    require_independent_a1()  # intentionally cannot currently return
+    # Lazy imports prevent even process/Git/capacity child IO before approval.
+    from runpy import run_path
+    base=run_path(str(ROOT/'scripts/run-vnext-retained-read.py'),run_name='post_five_base_library')
+    RetainedRead=base['RetainedRead'];BatchStop=base['BatchStop'];DOCKER=base['DOCKER'];NODE=base['NODE'];CID=base['CID'];OWNER=base['OWNER'];SOCKET=base['SOCKET'];PARENT=base['PARENT']
+    from vnext_capacity_policy import timestamp
+    from vnext_capacity_record import record_capacity
+
+    class PostFive(RetainedRead):
+        def __init__(self):
+            super().__init__()
+            self.artifact=PARENT/('pf-'+self.run_token[-12:]);self.resource=Path(str(self.artifact)+'-resource')
+            self.save('post-five-output-identity',{'artifact':str(self.artifact),'resource':str(self.resource),'reviewState':'must be externally verified before constructor; not status boolean'})
+        def verified_history(self):
+            d=json.loads(DESCRIPTOR.read_text());h=d['historyResult'];p=ROOT/h['path'];raw=p.read_bytes()
+            if len(raw)!=h['bytes']or hashlib.sha256(raw).hexdigest()!=h['sha256']:raise BatchStop('post_five_history_changed')
+            history=json.loads(raw)
+            if history['containerId']!=CID or history['originalOwner']!=OWNER or history['nodeExit']!=1:raise BatchStop('original_retained_history_required')
+            if history['cleanup'].get('uncertain',False) or history['cleanup']['state']['state']!=d['stoppedCheckpoint']['state']:raise BatchStop('last_stop_checkpoint_changed')
+            return history
+        def execute(self):
+            if self.monitor.admission():raise BatchStop('post_five_not_admitted')
+            d=json.loads(DESCRIPTOR.read_text());history=self.verified_history()
+            self.observations['freshSetupHistory']={'bytes':1021931520,'scope':'original fresh setup, not warm increment upper bound'}
+            self.observations['postFiveHistory']={'originalFiveCommits':d['consumed'],'noResend':True}
+            for p,mode in [(PARENT,0o700),(SOCKET,0o700),(SOCKET/'socket',0o1775)]:
+                s=p.lstat()
+                if p.is_symlink()or not p.is_dir()or s.st_mode&0o7777!=mode:raise BatchStop('original_owned_path_changed')
+                if p!=SOCKET/'socket' and s.st_uid!=os.getuid():raise BatchStop('original_path_owner_changed')
+            if any(os.path.lexists(p)for p in [SOCKET/'socket/.s.PGSQL.5432',SOCKET/'socket/.s.PGSQL.5432.lock',self.artifact,self.resource]):raise BatchStop('owned_output_or_socket_conflict')
+            for root in [ROOT,ROOT/'web']:
+                if any((root/n).exists()for n in ['.env','.env.local','.env.production','.env.production.local']):raise BatchStop('secret_env_file_presence')
+            if hashlib.sha256(Path(NODE).read_bytes()).hexdigest()!=base['NODE_SHA']:raise BatchStop('original_pinned_node_required')
+            _,raw=self.command('post-five-stopped-inspect',DOCKER+['inspect','--format',base['INSPECT'],CID])
+            current=base['validate_identity'](json.loads(raw),OWNER,CID)
+            if current!=d['stoppedCheckpoint']or current!=history['cleanup']['state']:raise BatchStop('full_stopped_checkpoint_or_mounts_changed')
+            self.observations['beforeRestart']=current
+            _,image=self.command('post-five-image',DOCKER+['image','inspect','--format','{"id":{{json .Id}},"digests":{{json .RepoDigests}},"size":{{json .Size}}}',base['_BASE']['IMAGE']])
+            image=json.loads(image)
+            if image['id']!=base['_BASE']['IMAGE_ID']or image['size']!=437916335 or 'postgres@'+base['_BASE']['IMAGE'].split('@')[1]not in image['digests']:raise BatchStop('exact_retained_image_required')
+            if os.stat('/var/lib/docker').st_dev!=os.stat(ROOT).st_dev:raise BatchStop('docker_filesystem_changed')
+            self.command('post-five-source-check',[NODE,'--input-type=module','-e',"import{verifyRetainedBoundary}from'./scripts/vnext-post-five-resume.mjs';const b=verifyRetainedBoundary();console.log(b.descriptor.inputHash,Object.keys(b.baseline.rows).length)"])
+            reserve_once(d,self.artifact) # terminal one-use intent before restart
+            # Original full immutable histories and current source verified
+            # before arming inherited exact-ID host-stop. No create path here.
+            self.resource.mkdir(mode=0o700);self.cid=CID;self.created_intent=True
+            self.command('post-five-restart-original',DOCKER+['start',CID]);self.observations['afterRestart']=self.inspect()
+            until=time.monotonic()+45
+            while time.monotonic()<until:
+                code,_=self.command('post-five-ready',DOCKER+['exec','--user=postgres',CID,'pg_isready','-h','/var/run/postgresql','-U','postgres','-d','vnext_worker'],check=False)
+                if code==0 and self.metrics_latest:break
+                self.sample();time.sleep(.5)
+            else:raise BatchStop('post_five_ready_unknown')
+            _,binary=self.command('post-five-pg-binary',DOCKER+['exec','--user=postgres',CID,'sha256sum','/usr/lib/postgresql/17/bin/postgres'])
+            if binary.split()[0]!='f7d05a9a444dc63d93f6b6e329d31eaebae809e85c8479b5072d8aff595303ed':raise BatchStop('PG_binary_drift')
+            env=dict(self.env)
+            for key in list(env):
+                if key.startswith(('SUPABASE_','NEXT_PUBLIC_SUPABASE_','OPPORTUNITY_V3_','STOCKINSIDER_','RESEARCH_','INTERNAL_','CRON_','OPENAI_','ANTHROPIC_'))or key in {'PGHOST','PGPORT','PGUSER','PGDATABASE','PGPASSWORD','PGSERVICE','PGSERVICEFILE','PGPASSFILE'}:env.pop(key,None)
+            env.update(VNEXT_POST_FIVE_ARTIFACTS=str(self.artifact))
+            self.node_exit,_=self.command('post-five-fixed-engine',[NODE,'--experimental-strip-types','scripts/vnext-post-five-resume.mjs'],timeout=450,check=False,env=env)
+            if self.node_exit:raise BatchStop('post_five_engine_failed_no_resend:'+str(self.node_exit))
+            self.command('post-five-source-after',[NODE,'--input-type=module','-e',"import{verifyResumeSource}from'./scripts/vnext-post-five-resume.mjs';console.log(verifyResumeSource().inputHash)"])
+
+    lab=PostFive();return lab.run_read()
+
+if __name__=='__main__':
+    try:raise SystemExit(candidate_main())
+    except Exception as e:
+        blocked=str(e).startswith('A1_') or str(e)=='closed_original_resume_entry_required'
+        print(json.dumps({'result':'NOT_READY'if blocked else'FAIL','reason':str(e),'pgStarted':False if blocked else'UNKNOWN_SEE_RUN_RECEIPT','mutationSent':False if blocked else'UNKNOWN_SEE_JOURNAL','sourceOnlyCandidate':True}),file=sys.stderr)
+        raise SystemExit(2)

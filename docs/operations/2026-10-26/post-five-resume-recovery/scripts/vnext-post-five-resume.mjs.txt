@@ -1,0 +1,185 @@
+/** UNENABLED A1 candidate. Fixed retained worker24 only; no caller SQL/DB/path.
+ * The public entry cannot start PG: the existing Loop gate has no approved
+ * vNext A1 independent-review binding. Structural exact-review != authority.
+ * Internal transport routines are extracted in memory by source tests only.
+ */
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+import {isDeepStrictEqual} from 'node:util';
+
+const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const DESCRIPTOR='scripts/opportunity-v3/vnext-post-five-resume-v1.json';
+const LOOP='.loop-engineering/state/changes/stockinsider-vnext-20/status.json';
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const normal=s=>s.replace('public.','').replaceAll('timestamptz','timestamp with time zone').replaceAll(', ',',');
+// Compare EVERY original value, not a digest/count. Avoid assert's enormous
+// diagnostic diff of private23MiB catalog/rows on a deliberately bad snapshot.
+const exact=(actual,expected,label)=>assert.ok(isDeepStrictEqual(actual,expected),label);
+
+// Open, fstat, read and lstat the SAME regular inode. No symlink component,
+// hardlink, secret path, arbitrary root or caller-provided source selector.
+function pinnedRead(root,row){
+ assert.match(row.path,/^[A-Za-z0-9_.\[\]/-]+$/u);assert.ok(!row.path.split('/').includes('..'));
+ const full=path.resolve(root,row.path);assert.ok(full.startsWith(root+'/'));
+ let p=root;for(const part of row.path.split('/')){p=path.join(p,part);assert.ok(!fs.lstatSync(p).isSymbolicLink(),'symlink refused');}
+ const fd=fs.openSync(full,fs.constants.O_RDONLY|fs.constants.O_NOFOLLOW);
+ try{const a=fs.fstatSync(fd,{bigint:true});assert.ok(a.isFile()&&a.nlink===1n);const bytes=fs.readFileSync(fd),b=fs.fstatSync(fd,{bigint:true}),c=fs.lstatSync(full,{bigint:true});
+  for(const k of ['dev','ino','size','mtimeNs','ctimeNs']){assert.equal(b[k],a[k],'opened source changed');assert.equal(c[k],a[k],'pathname changed');}
+  assert.equal(bytes.length,row.bytes,row.path);assert.equal(sha(bytes),row.sha256,row.path);return bytes;
+ }finally{fs.closeSync(fd);}
+}
+
+export function verifyResumeSource(){
+ const d=JSON.parse(fs.readFileSync(path.join(ROOT,DESCRIPTOR)));
+ assert.equal(d.schemaVersion,'vnext-post-five-unenabled-resume-v1');assert.equal(d.enabled,false);
+ assert.equal(sha(JSON.stringify(d.inputs.map(r=>[r.path,r.sha256]))),d.inputHash);
+ for(const r of d.inputs)pinnedRead(ROOT,r);
+ assert.deepEqual(d.next.map(r=>r.id),['positive-contra-A1','valuation','complete-qualification']);
+ assert.equal(d.consumed.length,5);assert.equal(new Set(d.consumed.map(r=>r.path)).size,5);
+ assert.ok(d.next.every(r=>!d.consumed.some(p=>p.path===r.path||p.sqlHash===r.sha256)));
+ return d;
+}
+
+export function requireIndependentA1(){
+ const state=JSON.parse(fs.readFileSync(path.join(ROOT,LOOP)));
+ // Deliberately do not consume caller args/env, an arbitrary PASS file, or a
+ // maker-generated Git attestation. The original protected validator belongs
+ // to source-led-opportunity-engine-v3, not this Change or A1 subject.
+ if(state.designGate==='INDEPENDENT_REVIEW_PENDING')throw Object.assign(Error('A1_INDEPENDENT_REVIEW_PENDING'),{code:'NOT_READY'});
+ throw Object.assign(Error('A1_SUPPORTED_INDEPENDENT_REVIEW_BINDING_UNAVAILABLE'),{code:'NOT_READY'});
+}
+
+function validateEvents(d,read){
+ let prior='';
+ for(const row of d.consumed){const e=JSON.parse(read(row.event));
+  assert.equal(e.originalOrCandidatePath,row.path);assert.equal(e.sqlHash,row.sqlHash);
+  assert.equal(e.querySettled,true);assert.equal(e.ready,'I');assert.equal(e.knownCommit,true);
+  assert.ok(e.observedAt>prior);prior=e.observedAt;
+ }
+ const red=JSON.parse(read(d.failed));assert.equal(red.code,'P0001');assert.equal(red.message,'vnext_major_contra_dependency_metadata');
+ assert.equal(red.noAutomaticResend,true);
+ const baseline=JSON.parse(read(d.baseline));assert.equal(Object.keys(baseline.rows).length,318);
+ exact(JSON.parse(read(d.afterRollback)),baseline,'rollback observer whole state');
+ exact(JSON.parse(read(d.afterFifth)),baseline,'fifth COMMIT whole state');
+ return baseline;
+}
+export function verifyRetainedBoundary(){
+ const d=verifyResumeSource(),baseline=validateEvents(d,row=>pinnedRead(d.historyRoot,row));
+ const history=JSON.parse(pinnedRead(ROOT,d.historyResult));
+ assert.deepEqual(history.cleanup.state,d.stoppedCheckpoint);assert.equal(history.nodeExit,1);
+ assert.equal(history.containerId,d.stoppedCheckpoint.id);
+ return {descriptor:d,baseline};
+}
+
+function stableSnapshot(s){return {catalog:s.catalog,routines:s.routines,rows:s.rows,ids:s.ids,authority:s.authority};}
+function unchangedRows(before,after){
+ for(const [name,value]of Object.entries(before.rows))exact(after.rows[name],value,name);
+ for(const [name,value]of Object.entries(after.rows))if(!Object.hasOwn(before.rows,name))assert.deepEqual(value,{rows:[],count:0,sha256:sha('[]')},name);
+}
+function positiveRoutines(before,after,p){
+ assert.equal(after.routines.length,before.routines.length+p.newPrivateRoutines.length);
+ for(const b of before.routines){const a=after.routines.find(r=>r.oid===b.oid);assert.ok(a);const modified=p.routines.find(r=>normal(r.signature)===normal(b.signature));assert.equal(a.hash,modified?.successorBodySha256??b.hash);
+  const am={...a.metadata},bm={...b.metadata};delete am.prosrc;delete bm.prosrc;assert.deepEqual(am,bm,'OID/nonbody/ACL exact');}
+ for(const item of p.newPrivateRoutines){const matches=after.routines.filter(r=>normal(r.signature)===normal(item.signature));assert.equal(matches.length,1);assert.equal(matches[0].hash,item.bodySha256);}
+}
+
+// Durable intent precedes a mutation. Existing intent (even known rollback)
+// is never automatically sent again. Unknown is recovered by independent READ.
+function createJournal(directory){
+ fs.mkdirSync(directory,{mode:0o700});const st=fs.lstatSync(directory);assert.ok(st.isDirectory()&&!st.isSymbolicLink()&&st.uid===process.getuid());
+ return (name,value)=>{assert.match(name,/^[A-Za-z0-9-]+$/u);const fd=fs.openSync(path.join(directory,name+'.json'),fs.constants.O_CREAT|fs.constants.O_EXCL|fs.constants.O_WRONLY,0o600);
+  try{fs.writeFileSync(fd,JSON.stringify(value)+'\n');fs.fsyncSync(fd);}finally{fs.closeSync(fd);}const dir=fs.openSync(directory,fs.constants.O_RDONLY);try{fs.fsyncSync(dir);}finally{fs.closeSync(dir);}};
+}
+
+async function queryReady(client,text,values=[],status='I'){
+ let onReady,onError,onEnd,timer;
+ const protocol=new Promise((resolve,reject)=>{onReady=m=>resolve(m.status);onError=reject;onEnd=()=>reject(Error('owned_client_terminal_before_ready'));client.connection.once('readyForQuery',onReady);client.once('error',onError);client.once('end',onEnd);timer=setTimeout(()=>{void client.end().catch(()=>{});reject(Error('actual_ready_unknown'));},35000);});
+ try{const [query,ready]=await Promise.allSettled([client.query({text,values,query_timeout:35000}),protocol]);
+  if(query.status==='rejected'){Object.assign(query.reason,{observedReady:ready.status==='fulfilled'?ready.value:null,readyUncertain:ready.status==='rejected'?ready.reason.message:null});throw query.reason;}
+  assert.equal(ready.status,'fulfilled','actual Ready required');assert.equal(ready.value,status,'fresh transaction state required');return query.value;
+ }finally{clearTimeout(timer);client.connection.off('readyForQuery',onReady);client.off('error',onError);client.off('end',onEnd);}
+}
+
+async function executeFixed(x,d,baseline,record){
+ assert.notEqual(x.writer.processID,x.observer.processID);
+ // Probe FIRST. T/E caller transactions never reach BEGIN/ROLLBACK/COMMIT.
+ await x.statement(x.writer,'SELECT 1 AS fresh_owned_probe');
+ exact(stableSnapshot(await x.snapshot()),baseline,'exact current full predecessor before mutation');
+ for(const step of d.next){
+  if(x.interrupted())throw Error('owned_batch_interrupted');
+  x.verifySource();const bytes=x.readStep(step);assert.equal(sha(bytes),step.sha256);const before=await x.snapshot();
+  record(step.id+'-intent',{sourceSha256:step.sha256,predecessorSha256:sha(JSON.stringify(stableSnapshot(before))),noAutomaticResend:true});
+  // Recheck after observer IO; a changed pathname/source cannot use a cached
+  // readiness observation to dispatch a different install.
+  x.verifySource();assert.deepEqual(x.readStep(step),bytes);
+  try{
+   if(step.id==='positive-contra-A1'){
+    const result=await x.statement(x.writer,bytes.toString());assert.equal((Array.isArray(result)?result.at(-1):result).command,'COMMIT');
+    const after=await x.snapshot();positiveRoutines(before,after,x.positiveProfile);unchangedRows(before,after);
+   }else if(step.id==='valuation')await x.valuation();
+   else {assert.equal(step.id,'complete-qualification');await x.qualification();}
+   const after=await x.snapshot();unchangedRows(before,after);x.verifySource();
+   record(step.id+'-committed',{ready:'I',sourceSha256:step.sha256,snapshotSha256:sha(JSON.stringify(stableSnapshot(after))),knownCommit:true});
+  }catch(primary){
+   record(step.id+'-primary',{code:primary.code??null,message:primary.message,observedReady:primary.observedReady??null,automaticResend:false});
+   // Only an ACTUALLY observed transaction state permits owned rollback.
+   if(['T','E'].includes(primary.observedReady)){try{await x.statement(x.writer,'ROLLBACK');}catch(e){primary.rollbackUncertain=e;}}
+   try{record(step.id+'-reconcile-read',{snapshot:await x.snapshot(),resend:false});}catch(e){primary.readUncertain=e;}
+   throw primary;
+  }
+ }
+ return {installedIds:d.next.map(r=>r.id),caseAdmission:'READ_ONLY_OBSERVER_ONLY',current18:'NOT_RUN_REQUIRES_ORIGINAL_CASE_ISOLATION_AND_BUSINESS_GATES',profileEnabled:false};
+}
+
+// Native fixed collector and installers are lazily loaded only AFTER review.
+// Never import/call the old applyRemainingFromExactRead (replays five commits).
+async function nativeResume(d,output){
+ const claimPath='/tmp/stockinsider-vnext-oct22-private/post-five-A1-v1-claim.json',st=fs.lstatSync(claimPath);
+ assert.ok(st.isFile()&&!st.isSymbolicLink()&&st.nlink===1&&st.uid===process.getuid()&&(st.mode&0o777)===0o600&&st.size<2048);
+ const claim=JSON.parse(fs.readFileSync(claimPath));assert.deepEqual(Object.keys(claim).sort(),['artifact','baselineSha256','containerId','inputHash','schemaVersion']);
+ assert.equal(claim.schemaVersion,'vnext-post-five-one-use-claim-v1');assert.equal(claim.inputHash,d.inputHash);assert.equal(claim.containerId,d.stoppedCheckpoint.id);assert.equal(claim.baselineSha256,d.baseline.sha256);assert.equal(claim.artifact,output);
+ const {createRequire}=await import('node:module');const {Client}=createRequire(import.meta.url)('pg');
+ const {postguardQueries}=await import('./vnext-forecast-postguard-queries.mjs');
+ const {installValuationAfterExactPrefix}=await import('./vnext-retained-installer.mjs');
+ const {installCompleteQualification}=await import('./vnext-current-matrix-installer.mjs');
+ const q=postguardQueries(),clients=new Set();let writer,observer,interrupted=false;
+ const signal=()=>{interrupted=true;};process.on('SIGTERM',signal);process.on('SIGINT',signal);
+ const history=verifyRetainedBoundary().baseline,record=createJournal(output);
+ const readStep=step=>pinnedRead(ROOT,step);
+ async function connect(readonly){const c=new Client({host:d.socket,database:'vnext_worker',user:'postgres',ssl:false,statement_timeout:30000,lock_timeout:2000,connectionTimeoutMillis:3000,options:readonly?'-c default_transaction_read_only=on':undefined,application_name:'vnext_post_five_unenabled_candidate'});await c.connect();clients.add(c);return c;}
+ async function snapshot(){
+  await queryReady(observer,'BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY',[],'T');let primary;
+  try{const authority=(await queryReady(observer,"SELECT current_setting('transaction_read_only') AS readonly,current_setting('transaction_isolation') AS isolation,current_setting('statement_timeout') AS statement_timeout,current_setting('lock_timeout') AS lock_timeout",[],'T')).rows[0];assert.deepEqual(authority,history.authority);
+   const ids=(await queryReady(observer,"SELECT ARRAY[to_regprocedure('public.vnext_source_evidence_current_v1(jsonb,text)')::oid,to_regprocedure('public.vnext_input_sources_current_v1(jsonb,text)')::oid] AS ids",[],'T')).rows[0].ids;
+   const catalog=(await queryReady(observer,q.catalogue,[ids,[],{}],'T')).rows[0].jsonb_build_object;
+   const routines=(await queryReady(observer,"SELECT oid,oid::regprocedure::text AS signature,to_jsonb(p) AS metadata,pg_get_functiondef(oid) AS definition,encode(sha256(convert_to(prosrc,'UTF8')),'hex') AS hash FROM pg_proc p WHERE pronamespace='public'::regnamespace ORDER BY oid",[],'T')).rows;
+   const names=(await queryReady(observer,"SELECT tablename FROM pg_tables WHERE schemaname='public' ORDER BY tablename",[],'T')).rows.map(r=>r.tablename),rows={};assert.ok(names.length>=318&&names.length<=340);
+   for(const name of names){assert.match(name,/^[a-z0-9_]+$/u);const values=(await queryReady(observer,`SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY to_jsonb(t)::text),'[]'::jsonb) AS rows FROM public.${name} t`,[],'T')).rows[0].rows;rows[name]={rows:values,count:values.length,sha256:sha(JSON.stringify(values))};}
+   return {catalog,routines,rows,ids,authority};
+  }catch(e){primary=e;throw e;}finally{try{await queryReady(observer,'ROLLBACK');}catch(e){if(primary)primary.rollbackUncertain=e;else throw e;}}
+ }
+ let primary;
+ try{
+  observer=await connect(true);writer=await connect(false);
+  const identity=(await queryReady(observer,"SELECT current_database() AS database,current_user AS actor,current_setting('server_version') AS version,current_setting('lc_collate') AS collate,current_setting('lc_ctype') AS ctype,current_setting('statement_timeout') AS statement_timeout,current_setting('lock_timeout') AS lock_timeout,current_setting('transaction_read_only') AS readonly")).rows[0];
+  assert.equal(identity.database,'vnext_worker');assert.equal(identity.actor,'postgres');assert.match(identity.version,/^17\.11(?:\s|$)/u);assert.equal(identity.collate,'C.UTF-8');assert.equal(identity.ctype,'C.UTF-8');assert.equal(identity.statement_timeout,'30s');assert.equal(identity.lock_timeout,'2s');assert.equal(identity.readonly,'on');record('native-db-identity',identity);
+  const x={writer,observer,statement:queryReady,snapshot,save:(name,value)=>record(name.replaceAll('_','-'),value),connect:()=>connect(true),close:async c=>{await c.end();clients.delete(c);},readStep,verifySource:verifyResumeSource,interrupted:()=>interrupted,positiveProfile:JSON.parse(fs.readFileSync(path.join(ROOT,d.positiveProfile)))};
+  x.valuation=()=>installValuationAfterExactPrefix({...x,snapshot:async()=>(await snapshot()).rows},queryReady);
+  x.qualification=()=>installCompleteQualification(writer,observer,x.save);
+  const result=await executeFixed(x,d,history,record);record('final-complete-read',{result,snapshot:await snapshot(),sourceModelPost:0,namespaceApply:0});return result;
+ }catch(e){primary=e;throw e;}finally{let terminal;for(const c of clients){try{await c.end();}catch(e){terminal??=e;}}process.off('SIGTERM',signal);process.off('SIGINT',signal);if(terminal){if(primary)primary.clientCloseUncertain=terminal;else throw terminal;}}
+}
+
+export async function candidateMain(){
+ assert.equal(process.argv.length,2,'closed no-option candidate');assert.equal(process.cwd(),ROOT);
+ requireIndependentA1(); // FIRST: no manifest traversal, child, Docker, PG or mutation.
+ // No supported verifier currently returns from this boundary. A reviewed
+ // implementation of that adapter is required; changing status alone cannot.
+ const d=verifyResumeSource(),output=process.env.VNEXT_POST_FIVE_ARTIFACTS;
+ assert.match(output??'',/^\/tmp\/stockinsider-vnext-oct22-private\/pf-[a-f0-9]{12}$/u);
+ return nativeResume(d,output);
+}
+if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url))candidateMain().catch(e=>{console.error(JSON.stringify({result:e.code==='NOT_READY'?'NOT_READY':'FAIL',code:e.code??null,reason:e.message,pgStartAttemptedByThisNodeEntry:false,mutationSent:e.code==='NOT_READY'?false:'UNKNOWN_SEE_PRIVATE_JOURNAL'}));process.exitCode=2;});

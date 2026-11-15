@@ -1,0 +1,117 @@
+{
+  "observedDate": "2026-11-15",
+  "oldCloudTurn": "01a1771e-3461-70ca-9407-df2ee7231bcc",
+  "sourceTip": "1b2fbc49e4a14227ddf812d586ddca229c22f33b",
+  "evidenceTip": "9b579e90732d6505b63d0bf0e239fee90de0ebe7",
+  "originParent": "6c136dea835b6e4fce9fb35cd76cd9b52b79da02",
+  "originalEvidenceReceiptSha256": "555641f51ab03b8c955e0f0e8e51456cc38627b786e520dedc578067ada1518b",
+  "descriptor": {
+    "recordedSha256": "449dce919db716e1c7d53edf71c4a2a83819557aa786755de71af43512ebe1c2",
+    "enabled": false,
+    "recovered": false
+  },
+  "originalHistoricalSourceTests": {
+    "total": 19,
+    "pass": 19,
+    "fail": 0,
+    "nativeDatabaseStarted": false
+  },
+  "recoveredSourceFiles": {
+    "scripts/vnext-post-five-resume.mjs": {
+      "sha256": "e9a2233a117616563076564443aae95a5eb4042d45d23498820ca5f0c3786100",
+      "bytes": 16261
+    },
+    "scripts/run-vnext-post-five-resume.py": {
+      "sha256": "bf65fd14ba4dcbcd951ffc1a5839f6eb0aae5b37623b96dd5fcc616fd97047d6",
+      "bytes": 8747
+    },
+    "scripts/vnext-post-five-resume.test.mjs": {
+      "sha256": "88eb6ab11d6930d996aa94ef2d93f3f14b7b5626c31a4f2c01563d02786cf0c7",
+      "bytes": 13540
+    },
+    "scripts/prepare-vnext-post-five-resume.py": {
+      "sha256": "9b33787b36590c1bd1f7b5a1ce0f7caeb874d3e2e514d850da1752c91076236c",
+      "bytes": 8101
+    },
+    "scripts/run-vnext-post-five-contracts.py": {
+      "sha256": "8b54d50caeec84832414884917dc309e04b3a3344f582938e0cd00c18ad54d37",
+      "bytes": 4043
+    },
+    "docs/operations/2026-10-26/post-five-resume/HANDOFF.md": {
+      "sha256": "0bf1cc5d002ae01fd42b8b1db15c9367b3a267f9e7f82954a9d5e13fe499ca8c",
+      "bytes": 7973
+    },
+    "docs/operations/2026-10-26/post-five-resume/RESULTS.md": {
+      "sha256": "117b1490e65ca1924344d7d67932645e62fdd56bdea402c49b1b8efcb407a5e6",
+      "bytes": 6521
+    }
+  },
+  "pr384": {
+    "subject": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+    "bootstrap": {
+      "sha256": "83ecf0a9c8a2f2fc548b507ae1c3598b6684fce52d17337ecffcb058f235b070",
+      "attestation": {
+        "baseCommitSha": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+        "checkRun": "stockinsider-v3-gate-root",
+        "registryCommitSha": "93e44475cbb0c27beb26e4dcb68e382096a4e212",
+        "registryPath": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/external-gate-release-registry-v1.json",
+        "registrySha256": "bd1b4d2985de491411f003f591eb1b04d0f2b6af7e9904a42a2f0783e1356983",
+        "registryTreeSha": "fe30bedc11f231899418f845e57875c76c62c70c",
+        "releaseId": "stockinsider-v3-gate-root-v1",
+        "releaseSha256": "0efdb5f213ade24716d33a49ace1b57b05c1da171289cc930225df718c340f91",
+        "repository": "Kaichen9527/stockinsider",
+        "schema": "stockinsider-external-gate-attestation-v1",
+        "subjectCommitSha": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+        "subjectTreeSha": "6b83fe004f9f62b1bccb52617b4ac4387562c2ea",
+        "workflowPath": ".github/workflows/source-led-opportunity-external-gate.yml"
+      }
+    },
+    "canonicalBootstrapSha256": "ad0870ac8e6eeda8ddab8099e3d0fbe2fcc6844a960e99abd71b83bb40177fe2",
+    "graphReferences": 60,
+    "graph": {
+      "graphSha256": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+      "catalogSha256": "d0bed2c2d3db38d28145c903bdb0f9215f73266fbecf55826e25ee402dff5b64",
+      "catalogSchema": "opportunity-active-artifact-catalog-v2",
+      "blobsIndividuallyRehashed": 59,
+      "totalBytes": 1479990
+    },
+    "staticGraphReviews": [
+      {
+        "kind": "requirements",
+        "ref": "evidence/source-led-opportunity-v3-requirements-v325-digest",
+        "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v325-digest.md",
+        "subjectCarriedIdentical": true,
+        "evidenceHead": "cf942588ffa03c81c4af384bb7cc4442468cf13d",
+        "evidenceTree": "7c6b60d945f730f4f1afad566b5157fbce691717",
+        "oneEvidencePath": true,
+        "changedStatus": "added",
+        "recordedVerdictPass": true,
+        "recordedZeroCritical": true,
+        "reviewedGraph": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+        "reviewedHead": "91c4c815619d2beda4336445a0ed6aae82ee4d04",
+        "reviewedTree": "71395de5a0efb67ea1da50148bf3d23665a11077",
+        "treeMatches": true,
+        "parentIsReviewedHead": true
+      },
+      {
+        "kind": "architecture",
+        "ref": "evidence/source-led-opportunity-v3-architecture-v325-digest",
+        "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v325-digest.md",
+        "subjectCarriedIdentical": true,
+        "evidenceHead": "2a710eab65e8c60204493ae08848d47fec3faa9c",
+        "evidenceTree": "1efca9fb9ca106d6210ddc63c08bde0527ac6595",
+        "oneEvidencePath": true,
+        "changedStatus": "added",
+        "recordedVerdictPass": true,
+        "recordedZeroCritical": true,
+        "reviewedGraph": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+        "reviewedHead": "91c4c815619d2beda4336445a0ed6aae82ee4d04",
+        "reviewedTree": "71395de5a0efb67ea1da50148bf3d23665a11077",
+        "treeMatches": true,
+        "parentIsReviewedHead": true
+      }
+    ],
+    "formalProtectedCheckPassed": false,
+    "prSubjectExactReviewRefFound": false
+  }
+}

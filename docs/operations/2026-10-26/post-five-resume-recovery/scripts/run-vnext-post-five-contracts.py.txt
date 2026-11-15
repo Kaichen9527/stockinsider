@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+"""One fixed NEW source/OS contract suite, measured500ms; never starts a lab."""
+import hashlib,json,os,signal,subprocess,sys,time
+from pathlib import Path
+from vnext_capacity_policy import ROOT,CapacityMonitor,timestamp,process_identity
+from vnext_capacity_record import record_capacity
+NODE='/workspace/.tools/node22/node_modules/node/bin/node'
+def main():
+    if len(sys.argv)!=1 or Path.cwd()!=ROOT:raise RuntimeError('fixed_new_contract_suite_only')
+    monitor=CapacityMonitor('type');admission=monitor.admission()
+    if admission:print(json.dumps(admission));return 2
+    run=ROOT/'docs/operations/2026-10-25/capacity-replan/runs'/(timestamp()['utc'][:19].replace('-','').replace(':','')+'-post-five-contracts');run.mkdir(mode=0o700)
+    record_capacity('type','START',run,baseline=monitor.baseline,budget=monitor.budget,scope='new resume source/OS only; no old suites/no lab')
+    command=[NODE,'--test','--test-concurrency=1','scripts/vnext-post-five-resume.test.mjs']
+    env=dict(os.environ);env.update(VNEXT_POST_FIVE_TEST_OUTPUT=str(run/'fixture'),PYTHONDONTWRITEBYTECODE='1')
+    interrupted=False
+    def mark(*_):
+        nonlocal interrupted
+        interrupted=True
+    handlers={s:signal.signal(s,mark)for s in [signal.SIGINT,signal.SIGTERM]};child=None;primary=None;code=None;post=None
+    (run/'start.json').write_text(json.dumps({'time':timestamp(),'command':command,'capacity':monitor.report(),'sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'dirtyDiffSha256':hashlib.sha256(subprocess.check_output(['git','diff','--binary'])).hexdigest()},indent=2)+'\n')
+    try:
+        with (run/'tap.txt').open('xb')as out,(run/'samples.jsonl').open('x')as samples:
+            child=subprocess.Popen(command,cwd=ROOT,env=env,stdout=out,stderr=subprocess.STDOUT,start_new_session=True);identity=process_identity(child.pid);start=time.monotonic()
+            while True:
+                sample=monitor.sample([os.getpid(),child.pid],'case');samples.write(json.dumps(sample)+'\n');samples.flush();os.fsync(samples.fileno())
+                if monitor.violation or interrupted or time.monotonic()-start>120:raise RuntimeError('capacity_or_interruption_or_deadline')
+                if child.poll()is not None:break
+                time.sleep(.5)
+            code=child.wait()
+    except BaseException as error:primary={'class':type(error).__name__,'message':str(error)}
+    finally:
+        if child is not None and child.poll()is None:
+            current=process_identity(child.pid)
+            if current['start']!=identity['start']:raise RuntimeError('owned_child_identity_changed')
+            os.killpg(child.pid,signal.SIGTERM)
+            try:code=child.wait(timeout=3)
+            except subprocess.TimeoutExpired:os.killpg(child.pid,signal.SIGKILL);code=child.wait(timeout=3)
+        for s,h in handlers.items():signal.signal(s,h)
+        monitor.sample([os.getpid()],'seal')
+        if child:
+            try:post=process_identity(child.pid)
+            except FileNotFoundError:post={'pid':child.pid,'absent':True}
+        result={'time':timestamp(),'scope':'new source/OS contracts; extracted PG transport SYNTHETIC; no actual SQL/PGstart/review approval','command':command,'exit':code,'primary':primary,'ownedChildPost':post,'capacity':monitor.report(),'native':'NOT_RUN_A1_REVIEW_PENDING','sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()}
+        (run/'result.json').write_text(json.dumps(result,indent=2)+'\n')
+        record_capacity('type','END',run,result='PASS'if code==0 and not primary and not monitor.violation else'FAIL',exit=code,reason=primary,peaks=monitor.peak,resourceViolation=monitor.violation)
+        print(json.dumps({'run':str(run.relative_to(ROOT)),'exit':code,'primary':primary,'resourceViolation':monitor.violation,'peaks':monitor.peak}));print((run/'tap.txt').read_text()[-2500:])
+    return 0 if code==0 and not primary and not monitor.violation else 1
+if __name__=='__main__':raise SystemExit(main())
