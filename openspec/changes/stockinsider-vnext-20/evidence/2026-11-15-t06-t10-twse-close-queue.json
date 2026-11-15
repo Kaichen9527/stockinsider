@@ -1,0 +1,73 @@
+{
+  "recordedAt": "2026-11-15T14:38:24.703517Z",
+  "baseCommit": "4039367f9327f10678495fc59417a1759b62b22b",
+  "tasks": [
+    "T06",
+    "T10"
+  ],
+  "source": {
+    "datasetId": 11764,
+    "dataset": "https://data.gov.tw/dataset/11764",
+    "license": "https://data.gov.tw/license",
+    "onlyField": "raw_close",
+    "catalogKnownAt": "2026-11-15T03:05:42.583197Z",
+    "catalogEvidenceCommit": "01196220c166cbac9009a5095a2cfb9659958218",
+    "publisherRevision": null
+  },
+  "capture": {
+    "sourceUrl": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261113",
+    "reportDay": "2026-11-13",
+    "receivedAt": "2026-11-15T14:38:24.703517Z",
+    "bytes": 79265,
+    "sha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+    "sourceRows": 1086,
+    "sourceKnownByOriginalClose": false,
+    "originalBytesRetained": false
+  },
+  "tests": [
+    {
+      "environment": "Contabo staging, disposable network-isolated PostgreSQL 17.11",
+      "realCsv": true,
+      "fixtureDependencies": [
+        "calendar",
+        "roster",
+        "source rights",
+        "writer and lease adapter",
+        "artifact receipt adapter"
+      ],
+      "covers": [
+        "same-day enqueue replay and bounded recent reports",
+        "enforced 200-item licensed queue cap with replays allowed",
+        "accepted exact dated TWSE URL and text/csv",
+        "rejected missing registered artifact, changed hash, bad MIME, wrong URL, before-attempt observation and wrong owner",
+        "one private committed fact matching independent CSV parser",
+        "same-transaction readiness denied, post-commit readiness idempotent",
+        "one ready audit and receipt recovery",
+        "current rights change denied",
+        "private row-level security, write-once triggers and no generic facts"
+      ],
+      "committedCaptures": 1,
+      "committedPrivateFacts": 1,
+      "readyAcks": 1,
+      "genericFacts": 0,
+      "result": "pass",
+      "migration": "migrations/20261116_15_vnext_launch_twse_close_queue_v1.sql"
+    },
+    {
+      "environment": "Contabo staging, network-isolated Node v22.14.0, locked TypeScript 5.9.3",
+      "test": "web/src/lib/vnext/launch-source-store.test.ts",
+      "passed": 15,
+      "failed": 0,
+      "result": "pass"
+    }
+  ],
+  "pending": [
+    "Plan missing 11764 ranges automatically within the shared queue budget",
+    "Consume committed private facts with current authority and company-action checks in the broad market context",
+    "Run full Codex VM checks and two actual adjacent market sessions"
+  ],
+  "productionMutation": false,
+  "marketGateOpened": false,
+  "fullCiVerification": false,
+  "fullRealSessionAcceptance": false
+}

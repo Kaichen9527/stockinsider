@@ -1,0 +1,3 @@
+# TWSE 11764 queue verification
+
+2026-11-15 UTC. PostgreSQL 17.11 disposable staging test appended one private fact from the actual November 13 TWSE CSV using fixture roster, policy, writer, lease and artifact boundaries. The same transaction could not acknowledge itself, the subsequent acknowledgement was stable, a rights change was refused, and no generic facts were written. The network-isolated Node v22.14.0 source-store suite passed 15 tests. Production, Codex VM build and full acceptance remain pending. See the [OpenSpec test evidence](../../openspec/changes/stockinsider-vnext-20/evidence/2026-11-15-t06-t10-twse-close-queue.json).

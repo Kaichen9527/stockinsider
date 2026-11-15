@@ -1,0 +1,9 @@
+# TWSE 11764 private close queue
+
+The existing licensed CSV writer can explicitly enqueue a dated 11764 report once per Taipei date. It checks the latest completed TWSE session window, caps 11764 at the latest 30 sessions and caps all new bindings in this queue at 200 per Taipei date. Replays return the previous job. The worker pins the dated source URL and `text/csv`. It acquires the existing lease and stores and registers the bytes before asking SQL to derive private close-only facts. Report dates, instrument identities, unadjusted raw close, roster scope and source rights are validated by the preparation contract.
+
+The append records the historical report day and the actual selection and receipt clocks. It writes the scope and the per-stock facts in the same transaction as the capture and terminal result. The separate ready call witnesses commit visibility, verifies that the private facts match the stored count and rechecks current purpose-bound source rights. The same transaction cannot acknowledge its own capture. Recovery reuses the persisted receipt and ready acknowledgement. The generic price facts, ranking reader and public endpoints do not consume these facts.
+
+The accompanying evidence combines the genuine dated source response with fixture calendar, roster, policy, lease and artifact dependencies in a disposable staging PostgreSQL instance. The tests cover idempotent enrollment, daily budget, transport rejections, permissions, commit visibility, current rights and immutable facts. The source store tests run separately against mocked transport and SQL edges. Production deployment and full market-session acceptance remain pending.
+
+Automatic planning and the private broad-market reader remain follow-up work. The reader must enforce original report dates, current calendar and instrument authority, rights, company actions and the full registered ordinary-share coverage before emitting any comparable breadth measure.

@@ -7,13 +7,14 @@ import { officialLicensedCsvUrl } from './launch-official-replay.ts';
 import { tpexNativeShareCsvUrl } from './launch-native-volume.ts';
 import { tpexInstitutionalVolumeCsvUrl } from './launch-institutional-volume.ts';
 import { tpexMarketFlowCsvUrl, TPEX_MARKET_FLOW_MAX_BYTES } from './launch-market-foreign-flow.ts';
+import { twseHistoricalCloseCsvUrl } from './launch-breadth-replay.ts';
 import { evidenceKnownAt } from './evidence-clock.ts';
 import { vnextEnabled } from './policy.ts';
 import { parseLaunchIndexBackfillPlan, type LaunchIndexBackfillPlan } from './launch-index-backfill.ts';
 
 type Row=Record<string,unknown>;
 type Client={rpc(name:string,body:Row):PromiseLike<{data:unknown;error:unknown}>};
-type Job={jobId:string;attemptId:string;datasetId:11370|11371|11856|11391|11755|11743;requestKey:string;sourceUrl:string;deadlineAt:string};
+type Job={jobId:string;attemptId:string;datasetId:11370|11371|11856|11391|11755|11743|11764;requestKey:string;sourceUrl:string;deadlineAt:string};
 const uuid=(value:unknown):value is string=>typeof value==='string'&&/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/u.test(value);
 const row=(value:unknown):value is Row=>!!value&&typeof value==='object'&&!Array.isArray(value);
 const exact=(value:unknown,keys:string):value is Row=>row(value)&&Object.keys(value).sort().join(' ')===keys.split(' ').sort().join(' ');
@@ -21,7 +22,7 @@ export const launchSourcesEnabled=()=>vnextEnabled()&&process.env.STOCKINSIDER_V
 function profile(datasetId:unknown,key:unknown){
   if(typeof key!=='string')throw Error('launch_source_profile_invalid');
   const sourceUrl=datasetId===11370?tpexInstitutionalVolumeCsvUrl(key):datasetId===11371?tpexNativeShareCsvUrl(key)
-    :datasetId===11743?tpexMarketFlowCsvUrl(key):datasetId===11755||datasetId===11391||datasetId===11856?officialLicensedCsvUrl(datasetId,key):null;
+    :datasetId===11743?tpexMarketFlowCsvUrl(key):datasetId===11764?twseHistoricalCloseCsvUrl(key):datasetId===11755||datasetId===11391||datasetId===11856?officialLicensedCsvUrl(datasetId,key):null;
   if(!sourceUrl)throw Error('launch_source_profile_invalid');
   return {sourceUrl,maximumBytes:datasetId===11370?3*1024*1024:datasetId===11743?TPEX_MARKET_FLOW_MAX_BYTES:500000};
 }
@@ -80,7 +81,8 @@ async function consume(deps:LaunchSourceDependencies,owner:string,claimed:Job){
     const response=await deps.fetch(expected.sourceUrl,{redirect:'error',cache:'no-store',signal:AbortSignal.timeout(8000),
       headers:{accept:'text/csv, application/csv','user-agent':'StockInsider/licensed-launch-csv-v1'}});
     if(response.status!==200||response.redirected||response.url!==expected.sourceUrl
-      ||!/^(?:text|application)\/csv(?:\s*;[^\r\n]*)?$/iu.test(response.headers.get('content-type')||''))throw Error('launch_source_response_rejected');
+      ||!(claimed.datasetId===11764?/^text\/csv(?:\s*;[^\r\n]*)?$/iu:/^(?:text|application)\/csv(?:\s*;[^\r\n]*)?$/iu)
+        .test(response.headers.get('content-type')||''))throw Error('launch_source_response_rejected');
     bytes=await bytesOf(response,expected.maximumBytes);const observedAt=deps.now();
     if(!evidenceKnownAt(observedAt,claimed.deadlineAt))throw Error('launch_source_response_rejected');
     const hash=createHash('sha256').update(bytes).digest('hex');phase='artifact';
