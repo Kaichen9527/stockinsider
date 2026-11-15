@@ -1,0 +1,45 @@
+{
+  "ticket": 394,
+  "baseline": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "prerequisites": [
+    "168049d78cd0f15e31d20837cd3cc3adc72611f7 (launch-outcome evaluator candidate)",
+    "d339c5800af668bb0f1e45f94cad8cf43d468ee4 (frozen signal table candidate)"
+  ],
+  "validationEnvironment": "isolated Contabo staging, network namespace, nonprivileged Node.js v22.23.1",
+  "patchChecks": {
+    "applies": true,
+    "patchedSourceSha256": "ea78438695021ddf78d7bdfceca31a600e702b65ab6a8b69d00bb4a85806aa25",
+    "patchedTestSha256": "ae5fa9189eb069a3ba09aa91828ce2e5dfe16733d5876d5c5de123dc2951d396",
+    "patchSha256": "4813a00a569ace47df56ed07f09522b3f7bd6fe1114b7f85edfd1d7a911b8ac2"
+  },
+  "tests": {
+    "existing": 13,
+    "scope": "official calendar and price-data client fixture integration",
+    "additional": 5,
+    "pass": 18,
+    "fail": 0
+  },
+  "behavior": {
+    "preservesPinnedSignalClose": true,
+    "corporateActionBasisRoundingDecimalPlaces": 8,
+    "maxTradingSessions": 120,
+    "skipsUnprovedSessions": false,
+    "usesQuoteBeforeItWasKnown": false,
+    "inferredOpeningFillFromOhlc": false
+  },
+  "productionModified": false,
+  "candidateOnly": true,
+  "pending": [
+    "opening auction and trading status evidence",
+    "frozen signal and outcome persistence writer integration",
+    "real rank trace and two actual adjacent sessions",
+    "repository-wide CI and independent review"
+  ],
+  "typecheck": {
+    "scoped": true,
+    "strict": true,
+    "typescript": "5.9.3",
+    "lockfileVerifiedOfflineTarballs": 12,
+    "passed": true
+  }
+}
