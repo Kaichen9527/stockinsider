@@ -1,0 +1,40 @@
+{
+  "schema": "stockinsider-contabo-stage-close-observer-admission-v1",
+  "sourceCommit": "7a08e844779381327b9dbf8b858b0eb91a9cc3da",
+  "sourceSha256": "2d2d6e9652d3cc567d032bef8e8ef242d8b1186b8e89d305d4ceca16f2c89657",
+  "scope": "isolated public-source observer; no app credentials, database writer or published ranking",
+  "candidateSessions": [
+    {
+      "session": "2026-11-16",
+      "scheduledTaipei": "2026-11-16T21:26:00+08:00",
+      "cutoffTaipei": "2026-11-16T21:30:00+08:00",
+      "timezone": "Asia/Taipei",
+      "timerState": "active",
+      "capture": "PENDING"
+    },
+    {
+      "session": "2026-11-17",
+      "scheduledTaipei": "2026-11-17T21:26:00+08:00",
+      "cutoffTaipei": "2026-11-17T21:30:00+08:00",
+      "timezone": "Asia/Taipei",
+      "timerState": "active",
+      "capture": "PENDING"
+    }
+  ],
+  "rehearsal": {
+    "dynamicUserExit": 0,
+    "pinnedSourceSha256Verified": true,
+    "outputPayloadHashesVerified": 3,
+    "issuerPayloadsRetained": 0,
+    "directoryMode": "0700",
+    "fileMode": "0600",
+    "memoryPeakSystemd": "2.5M",
+    "expectedTimelyPayloads": 0
+  },
+  "freeDiskBytes": 26611732480,
+  "availableMemKiB": 4071592,
+  "otherTimerInventorySha256": "9368cc7ac1f2365d394709a0cf3bdf4d8d54fdf7b00ed4b309bf4ca77d269ec1",
+  "otherTimerInventoryUnchanged": true,
+  "lateCatchUp": false,
+  "appRunsCredited": 0
+}
