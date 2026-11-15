@@ -1,5 +1,9 @@
 # 強勢發動雷達 — active Goal, controlled browser / source checkpoint
 
+## Current financial preparation / writer contention checkpoint
+
+Source **bbb01e6** equals local **ae7ac877** whole tree:8 STATIC PASS;88 related cases=87 PASS/1 existing real-Arelle SKIP;types/lint/build PASS. [Actual two-route preparation/owned phase recovery, missing-period6h conservation, six shared-writer VM cases and retained first failures](../../2026-11-15/launch-radar/FINANCIAL-PREPARATION.md). This is a partial test matrix, not actual SQL/source/parser/backlog acceptance. Purpose migration-before-route and legacy complete-pending missing bridge remain blockers. Actual21:30/08:10–08:15 contention and wait/hold timing are not observed.508/41 external event rows may duplicate; no unique-job claim. Native HOLD/A1/original PR head/services/flags/timers unchanged. Weekly actual quote knowledge-clock correction follows independently; original TAP first cause remains unproven. Earlier labels retain their exact checkpoint scope.
+
 ## Current known-exclusion writer checkpoint
 
 Source **9789483** equals local **0a97c7a** whole tree:20 STATIC source checks (16 writer+4 source/prepass) and build PASS; unchanged web tree reuses separately bound21-unit/types/lint. [Known negatives, immutable exclusion pins and exact clocks](../../2026-11-15/launch-radar/KNOWN-REJECTIONS.md). Per-member proved venue/cash negatives remain waiting snapshot candidates while complete peers may continue; unknown required evidence/global market retains prior/date. No source_ok null was removed. TWSE cash, typed disposal/positive venue, source/use-purpose, long actions and market authority remain unconnected; actual SQL/ACL/RLS/CAS/PostgREST/negative fixtures/retention/score/rank NOT_RUN. Financial preparation is separate unreviewed WIP. Original PR head/native HOLD/A1/production/timers unchanged. Earlier checkpoints retain their exact historical scope.

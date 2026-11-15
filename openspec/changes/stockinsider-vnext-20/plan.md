@@ -26,3 +26,7 @@ See [V2 Top10 / Cloud / iCloud / Contabo amendment](v2-top10-cloud-amendment.md)
 ## 2026-11-08 Linux restore / release source slice
 
 See [bounded Linux restore / release amendment](linux-restore-release-amendment.md). Cloud work is source and NONPRODUCTION fixtures only; separate coordinator staging owns actual backup/PG17/Next rollback. Existing Mac authenticated-source reopening remains an execution blocker. No production artifact, key or private log is received; no native HOLD retry or original PR-head change.
+
+## T10 private preparation continuation
+
+[Private financial preparation amendment](financial-preparation-amendment.md) connects the actual limit-only scheduled handlers to current-purpose SQL and short owned phases while retaining cached-only research. Source/runtime-fixture checks do not approve SQL installation, legacy backlog, actual sources or physical cutover. Preserve exact21:30 input identity, old dates on missed readiness, shared lease and independent release gates.

@@ -281,3 +281,10 @@ Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-re
 
 - [x] Actual SQL preflight before full score, proved venue/cash20 negative stays WAITING candidate, immutable exclusion/source/calendar pins with same CAS, final all-member drift recheck and read-only current demotion. Source9789483 equals local0a97c7a;20 STATIC/build PASS, unchanged web21-unit/types/lint evidence separate.
 - [ ] Actual SQL grammar/ACL/RLS/codecs/CAS/concurrency/replay/negative fixtures/PostgREST/retention and real score/rank remain NOT_RUN under HOLD. TWSE cash/disposal-positive/original-purpose/long-action/market producers incomplete; unknown retains prior/date, no source_ok bypass or T08 completion.
+
+## Financial preparation / contention source checkpoint
+
+- [x] Two actual ON/OFF preparation routes, exact private purpose scope/phase-owned lease, genuine old queue/parser/fact/validation/reconcile delegation, immutable committed knowledge and bounded server recovery; same-job6h requested-period deferral. Sourcebbb01e6 exact localae7ac877 tree;8 STATIC/88unit(87PASS1SKIP)/types/lint/build. First3c2 compilation/lint failures and reviewed repair retained.
+- [x] Six actual-module/shared-lease VM cases with synthetic ports: busy/delay/fixed cutoff/retention/rejection/replay and market contention; no actual clock/timer/PG proof.
+- [ ] Actual purpose SQL/ACL/RLS/recovery/acquisition/parser, legacy complete-pending bridge/backlog,21:30 and08:10/08:15 timing/cutover remain incomplete. Existing A1/native/VN01–VN20/real-source/two-session gates unchanged.
+- [ ] Weekly date-only quote clock source repair must preserve civil session identities and use verified own observed/known instants; missing/future clock fail closed. No original native TAP first-cause attribution.

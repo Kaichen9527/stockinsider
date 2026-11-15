@@ -1,0 +1,463 @@
+{
+  "schema": "stockinsider-financial-preparation-contention-source-v1",
+  "observedAt": "2026-11-15T00:49:36.727404+00:00",
+  "localValidationCommit": "ae7ac8771a39d0896f443e8c6e21d655656e7b3c",
+  "publicSourceCommit": "bbb01e6de1ef12968fa6b00d8638feb87665c797",
+  "wholeTree": "0ada5c192224465b23e4258394113fcfc4637d20",
+  "webTree": "fce525a052d101fdff6b87fdd3e98aa38fe116f8",
+  "publication": {
+    "transport": "configured GitHub connector",
+    "expectedParent": "a00b73c3c13d2f32dbf8b76d8e45fdeecb675f3a",
+    "force": false,
+    "treeEqualityVerified": true,
+    "testsRanLocalIdenticalTree": true,
+    "testsRanPublicCommit": false
+  },
+  "sourceInventory": [
+    {
+      "path": "migrations/20261115_vnext_financial_preparation_v1.sql",
+      "sha256": "17b1b8d2c97f013b11a97568fbf7ec99d50036ce47659fe76972aae3b0157333"
+    },
+    {
+      "path": "scripts/vnext-financial-preparation-source.test.mjs",
+      "sha256": "63af17656a3bf7edfdf6fdc24bc671eb10baefc54fef27faa23255cac77a144c"
+    },
+    {
+      "path": "web/src/app/api/internal/candidate-financial-documents/worker/route.ts",
+      "sha256": "5f13a02db9baca121c322bf325682bed65bcd23366a7ed54cd35c237e6493441"
+    },
+    {
+      "path": "web/src/app/api/internal/candidate-financial-queue-drain/route.ts",
+      "sha256": "7630ee568e48bd97cd04e5bada2e3bc5ef638378b63a0ed2dcc70b871279cf19"
+    },
+    {
+      "path": "web/src/lib/candidate-financial-document-worker.ts",
+      "sha256": "33566e3d4c6616cb77209ed1c9ce691c8cd98718ef0d0e5a677a91848c76c4c2"
+    },
+    {
+      "path": "web/src/lib/candidate-financial-local-parser.ts",
+      "sha256": "639268a8542d10c486df910b6abdf97974c3c5d37b4b42e1e4ebe3af55b518ad"
+    },
+    {
+      "path": "web/src/lib/candidate-official-financials.ts",
+      "sha256": "7530ff0ec19d51d196749825c5e6db3a79da44b8366b2f603db7eca26d05c394"
+    },
+    {
+      "path": "web/src/lib/official-financial-validation-worker.test.ts",
+      "sha256": "dd1da40d9e4aaf51aed788e55ccfef737a5cea712996633e0ea41803727381cc"
+    },
+    {
+      "path": "web/src/lib/official-financial-validation-worker.ts",
+      "sha256": "b9309239e6831df1e058fbefe01532b9647d27ca303631552340802979de8f94"
+    },
+    {
+      "path": "web/src/lib/vnext/financial-preparation-contract.ts",
+      "sha256": "c181f07b48faefe446e9cb8a4eadb11decd93ca11b31dda94e3e00571c87907a"
+    },
+    {
+      "path": "web/src/lib/vnext/financial-preparation.test.ts",
+      "sha256": "bf5b822adb46126c4bf00b35d57eff23de49270073619e378e6e2fddf5f53571"
+    },
+    {
+      "path": "web/src/lib/vnext/financial-preparation.ts",
+      "sha256": "d15eed2946e0b5b8377fc55d6499b71234ccb73665f7701c442c2863c2f106bd"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-ranking-command-integration.test.ts",
+      "sha256": "b93b496f572febdae8e53341a82772e9a526bd7b76feb223640b780009739e6d"
+    }
+  ],
+  "checks": [
+    {
+      "name": "source_static",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--test",
+        "scripts/vnext-financial-preparation-source.test.mjs"
+      ],
+      "start": "2026-11-15T00:44:44.938353+00:00",
+      "end": "2026-11-15T00:44:45.188917+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29446017024,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "985804b4db6d2b2db33ba18d47d5d5c6bcee31e7462777e248289267e187440b"
+    },
+    {
+      "name": "related_unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/financial-preparation.test.ts",
+        "web/src/lib/vnext/launch-ranking-command-integration.test.ts",
+        "web/src/lib/vnext/launch-ranking-command.test.ts",
+        "web/src/lib/vnext/launch-cutover.test.ts",
+        "web/src/lib/official-financial-validation-worker.test.ts",
+        "web/src/lib/official-financial-validation.test.ts",
+        "web/src/lib/candidate-official-financials.test.ts",
+        "web/src/lib/candidate-financial-local-parser.test.ts",
+        "web/src/lib/candidate-financial-document-acquisition.test.ts",
+        "web/src/lib/candidate-financial-fact-acceptance.test.ts",
+        "web/src/lib/vnext/artifact-financial-summary.test.ts"
+      ],
+      "start": "2026-11-15T00:44:45.189332+00:00",
+      "end": "2026-11-15T00:44:47.702948+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 37449728,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29445988352,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "2e33a133e84d70984a97c5fc400dd51e34dfb07d5d62059e6fee60cb32309593"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-15T00:44:47.703347+00:00",
+      "end": "2026-11-15T00:44:50.464846+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81657856,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29445976064,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-15T00:44:50.465492+00:00",
+      "end": "2026-11-15T00:45:10.529924+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82128896,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29445967872,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "19c877eafdc15415f5ad90d09b41a580c102658a544d359e3d8d1998689103b4"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-15T00:45:10.530379+00:00",
+      "end": "2026-11-15T00:45:15.803501+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81580032,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29350600704,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "4adc51b2b74c3d8d2d032dc56bebb5827bff383abced57f5af2bc9662c5aa65e"
+    }
+  ],
+  "unitSummary": {
+    "total": 88,
+    "pass": 87,
+    "fail": 0,
+    "skip": "Arelle reviewed parser virtualenv unconfigured",
+    "status": "PARTIAL_EXISTING_REAL_PARSER_UNCONFIGURED",
+    "newActualRouteVmCases": 9,
+    "newValidatorScopeCases": 4,
+    "actualModuleContentionCases": 6
+  },
+  "staticCases": 8,
+  "firstCheck": {
+    "schema": "stockinsider-financial-preparation-first-check-v1",
+    "observedAt": "2026-11-15T00:39:23.942974+00:00",
+    "localSourceCommit": "3c2e8226852f356370fc9852c66330c5b41062a3",
+    "wholeTree": "639c7004034fc40a8ef0036d3778285953fb4540",
+    "webTree": "68e04ce2321e5fb10cde7ed0dbfe5cdd6b647526",
+    "checks": [
+      {
+        "name": "source_static",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--test",
+          "scripts/vnext-financial-preparation-source.test.mjs"
+        ],
+        "start": "2026-11-15T00:35:52.806371+00:00",
+        "end": "2026-11-15T00:35:53.056930+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 0,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29413707776,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "89b309135dd03124f677065ebf9d0a0110d7e2f8acca4d839821039245ba5385"
+      },
+      {
+        "name": "related_unit",
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "web/src/lib/vnext/financial-preparation.test.ts",
+          "web/src/lib/vnext/launch-ranking-command-integration.test.ts",
+          "web/src/lib/vnext/launch-ranking-command.test.ts",
+          "web/src/lib/vnext/launch-cutover.test.ts",
+          "web/src/lib/official-financial-validation-worker.test.ts",
+          "web/src/lib/official-financial-validation.test.ts",
+          "web/src/lib/candidate-official-financials.test.ts",
+          "web/src/lib/candidate-financial-local-parser.test.ts",
+          "web/src/lib/candidate-financial-document-acquisition.test.ts",
+          "web/src/lib/candidate-financial-fact-acceptance.test.ts",
+          "web/src/lib/vnext/artifact-financial-summary.test.ts"
+        ],
+        "start": "2026-11-15T00:35:53.057363+00:00",
+        "end": "2026-11-15T00:35:55.577240+00:00",
+        "exit": 0,
+        "status": "PASS",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 37216256,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29413679104,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "54235c49858979cab803655b03b05ce1196a0988b5a339de3909714124dc6ed2"
+      },
+      {
+        "name": "types",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "typecheck"
+        ],
+        "start": "2026-11-15T00:35:55.583479+00:00",
+        "end": "2026-11-15T00:36:03.614362+00:00",
+        "exit": 2,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81391616,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29413666816,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "f0b624d07fd8eecfefc13beaf534e75de95ef6043aa7705dd1a1ff7ced2a7225"
+      },
+      {
+        "name": "lint",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "lint"
+        ],
+        "start": "2026-11-15T00:36:03.614882+00:00",
+        "end": "2026-11-15T00:36:23.427757+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81403904,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29413666816,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "acb35f536733833cf9ed8cb4f4ac4ed44808659e5c2d2095f4d5fde82bb92424"
+      },
+      {
+        "name": "build",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "run",
+          "build"
+        ],
+        "start": "2026-11-15T00:36:23.428322+00:00",
+        "end": "2026-11-15T00:36:35.467185+00:00",
+        "exit": 1,
+        "status": "FAIL",
+        "sampledNotInstantaneous": true,
+        "peakTreeRssBytes": 81846272,
+        "minimumFreeBytes": {
+          "/workspace/stockinsider-launch-ui-nov15": 29413658624,
+          "/tmp": 9403478016
+        },
+        "resourceViolation": null,
+        "logSha256": "bfd5e0d297d60fcd454b87c72fa2653e335e6ac11618e0886331c034e0e6f2fb"
+      }
+    ],
+    "staticCases": 8,
+    "unitCases": {
+      "total": 87,
+      "pass": 86,
+      "fail": 0,
+      "skip": 1,
+      "skipReason": "Arelle reviewed parser virtualenv unconfigured"
+    },
+    "failureReasons": [
+      "TS2345 synthetic unauthorized header array inferred optional undefined values",
+      "eslint prefer-const for single-assignment VM module",
+      "build repeats the same TS2345 test compilation failure"
+    ],
+    "newSourceSemanticReviewAfterChecks": "requested period missing from latest-only JSON must preserve old6h deferral/no additional failure charge; not an observed runtime provider failure",
+    "sourceInventory": [
+      {
+        "path": "migrations/20261115_vnext_financial_preparation_v1.sql",
+        "sha256": "72b975ec514d4fb53217203b75b2958d53dc74210fea236f250284fdaa83f0b9"
+      },
+      {
+        "path": "scripts/vnext-financial-preparation-source.test.mjs",
+        "sha256": "37f190f70165c284b6c4187ad07158a209fde1d10cbf764414098d3d57f21763"
+      },
+      {
+        "path": "web/src/app/api/internal/candidate-financial-documents/worker/route.ts",
+        "sha256": "5f13a02db9baca121c322bf325682bed65bcd23366a7ed54cd35c237e6493441"
+      },
+      {
+        "path": "web/src/app/api/internal/candidate-financial-queue-drain/route.ts",
+        "sha256": "7630ee568e48bd97cd04e5bada2e3bc5ef638378b63a0ed2dcc70b871279cf19"
+      },
+      {
+        "path": "web/src/lib/candidate-financial-document-worker.ts",
+        "sha256": "33566e3d4c6616cb77209ed1c9ce691c8cd98718ef0d0e5a677a91848c76c4c2"
+      },
+      {
+        "path": "web/src/lib/candidate-financial-local-parser.ts",
+        "sha256": "639268a8542d10c486df910b6abdf97974c3c5d37b4b42e1e4ebe3af55b518ad"
+      },
+      {
+        "path": "web/src/lib/candidate-official-financials.ts",
+        "sha256": "7530ff0ec19d51d196749825c5e6db3a79da44b8366b2f603db7eca26d05c394"
+      },
+      {
+        "path": "web/src/lib/official-financial-validation-worker.test.ts",
+        "sha256": "dd1da40d9e4aaf51aed788e55ccfef737a5cea712996633e0ea41803727381cc"
+      },
+      {
+        "path": "web/src/lib/official-financial-validation-worker.ts",
+        "sha256": "b9309239e6831df1e058fbefe01532b9647d27ca303631552340802979de8f94"
+      },
+      {
+        "path": "web/src/lib/vnext/financial-preparation-contract.ts",
+        "sha256": "c181f07b48faefe446e9cb8a4eadb11decd93ca11b31dda94e3e00571c87907a"
+      },
+      {
+        "path": "web/src/lib/vnext/financial-preparation.test.ts",
+        "sha256": "433fbc0eb91eb3e60023028c2280fc0a6fa7314f0f08b0633269b549838a9d92"
+      },
+      {
+        "path": "web/src/lib/vnext/financial-preparation.ts",
+        "sha256": "9b99f0a2e6fcc90df7948b285f77f3b609ea9a78086f51ddc8dcd581a37cc7d2"
+      },
+      {
+        "path": "web/src/lib/vnext/launch-ranking-command-integration.test.ts",
+        "sha256": "b93b496f572febdae8e53341a82772e9a526bd7b76feb223640b780009739e6d"
+      }
+    ],
+    "publication": "NOT_PUSHED_PENDING_REPAIRS",
+    "localRetry": "HOLD_UNTIL_MATERIAL_FIX_AND_INDEPENDENT_REVIEW",
+    "formalNativeHold": "PRESERVED",
+    "actualSqlOrProvider": "NOT_RUN"
+  },
+  "repair": {
+    "sourceChangedFiles": 4,
+    "typedHeadersAndConstMain": "test fixtures only, same actual auth inputs and assertions",
+    "unusedImports": "removed, no authority changes",
+    "requestedPeriodMissing": "private complete-JSON missing exact frozen period only; same owned job queued6h; no new failure/provider counters or artifact/fact writes",
+    "semanticsFindingTiming": "AFTER first actual checks, not an observed real-provider failure",
+    "independentEngineeringReviewBeforeRetry": true
+  },
+  "implementedSource": [
+    "two actual limit-only preparation endpoints before generic research enqueue in ON and OFF modes",
+    "SQL-derived current admission/rights/identity/exact existing private MOPS and financial OpenAPI profiles",
+    "short exact owned claim/commit leases; bounded provider/local parser staging outside global lease",
+    "real old queue/parser/fact/validation/reconcile functions delegated without new writer or research charge",
+    "immutable attempts/commit/outcome/read-after-commit knowledge witness and attempt-bound validation receipt-id links",
+    "server-selected bounded recovery resumes existing commit/finish/witness without refetch/recommit",
+    "legacy complete-but-pending validation without mechanical bridge explicitly blocked"
+  ],
+  "syntheticProofLimits": {
+    "routePorts": "SYNTHETIC_NO_ACTUAL_DB_PROVIDER_AUTHORITY",
+    "writerContention": "ACTUAL_MODULE_CALL_GRAPH_WITH_MOCK_LEASE_RPC_NOT_MEASURED_HOST_TIMING",
+    "systemClockChanged": false,
+    "actualQueueAndModelCalls": false,
+    "actual0130Or2130Or0815SessionAcceptance": false
+  },
+  "externalTiming": {
+    "commit": "89c6f1ebe0ab4c9ff482d5104a51f397db249f4f",
+    "gitBlob": "b400177b0bb8052f76278b61427c6863866f03b9",
+    "cloudBytes": "SANITIZED_METADATA_ONLY_GIT_BLOB_VERIFIED",
+    "legacyCycleTaipei": "21:00 to21:40:39",
+    "leaseWaitHoldSplit": "NOT_OBSERVED",
+    "leaseRejectionEventRows": 508,
+    "fallbackBoundEventRows": 41,
+    "eventCountsMayDuplicate": true,
+    "uniqueJobCounts": "NOT_PROVEN",
+    "notUnionWithOlderCounts": true,
+    "prepass0c45": "DISTINCT_DEFECT"
+  },
+  "remainingGates": [
+    "uninstalled additive private purpose SQL and runtime grant/ownership prerequisites",
+    "actual PG grammar/ACL/RLS/COMMIT/queue recovery and period deferral proof",
+    "actual private provider/parser/current-rights artifacts",
+    "legacy validation backlog mechanical bridge",
+    "actual21:30 writer delay/missed-cutoff/idempotency and08:10\u201308:15 overlap",
+    "formal A1/original native HOLD/VN01\u2013VN20/real sources and two-session release acceptance"
+  ],
+  "limits": {
+    "nativeHold": "PRESERVED",
+    "actualSqlApply": "NOT_RUN",
+    "actualFinancialAcquisition": "NOT_RUN",
+    "actualArelleParser": "NOT_RUN_UNCONFIGURED",
+    "realBacklogComplete": false,
+    "T10Complete": false,
+    "formalA1": false,
+    "originalPrHead": "UNCHANGED",
+    "productionActions": 0,
+    "timersChanged": false,
+    "paidCalls": 0
+  },
+  "preservation": {
+    "originalFiles": 283,
+    "changed": 0,
+    "missing": 0,
+    "archiveOrRecoveryVerified": false,
+    "reclaimedBytes": 0
+  }
+}
