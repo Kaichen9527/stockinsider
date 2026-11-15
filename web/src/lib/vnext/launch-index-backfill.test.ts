@@ -25,10 +25,19 @@ test('closed v3 distinguishes planned, all-acquired, no-pool and no-completed wi
  }
  assert.equal(parseLaunchIndexBackfillPlan({...plan(),jobs:171,scope:'current_and_history',currentPlanStatus:'planned',currentReason:null}).jobs,171);
 });
+test('close job count extends the existing current plan and preserves both licensed budgets',()=>{
+ const current={...plan(),scope:'current_and_history',currentPlanStatus:'planned',currentReason:null};
+ assert.equal(parseLaunchIndexBackfillPlan({...current,jobs:176}).jobs,176);
+ assert.equal(parseLaunchIndexBackfillPlan({...current,jobs:200,twseCloseJobs:24}).twseCloseJobs,24);
+ assert.equal(parseLaunchIndexBackfillPlan({...current,jobs:102,twseCloseJobs:30}).twseCloseJobs,30);
+ for(const invalid of [{...current,jobs:71,twseCloseJobs:1},{...current,jobs:103,twseCloseJobs:31},{...current,twseCloseJobs:0},
+  {...current,twseCloseJobs:null},{...current,jobs:201,twseCloseJobs:25},{...plan(),jobs:73,twseCloseJobs:1}])
+  assert.throws(()=>parseLaunchIndexBackfillPlan(invalid),/plan_unavailable/u);
+});
 test('wire tampering, planned0, stale status conflation, clocks and caller hooks are closed',()=>{
  let hooks=0;const accessor={...plan()};Object.defineProperty(accessor,'jobs',{get(){hooks++;return 72;},enumerable:true});
  for(const bad of [{...plan(),jobs:201},{...plan(),jobs:0},{...plan(),jobs:73},
-  {...plan(),jobs:172,scope:'current_and_history',currentPlanStatus:'planned',currentReason:null},{...plan(),indexResources:71},{...plan(),calendarAuthority:true},
+  {...plan(),jobs:177,scope:'current_and_history',currentPlanStatus:'planned',currentReason:null},{...plan(),indexResources:71},{...plan(),calendarAuthority:true},
   {...plan(),status:'already_acquired',jobs:0,skippedIndexResources:71},{...plan(),currentPlanStatus:'planned'},
   {...plan(),session:'2026-11-16'},{...plan(),plannedAt:'invalid'},{...plan(),sourceUrl:'https://example.invalid'},accessor,new Proxy(plan(),{})])
   assert.throws(()=>parseLaunchIndexBackfillPlan(bad),/plan_unavailable/u);
@@ -40,7 +49,7 @@ async function prepareFixture(mode='enabled'){
  const source=await readFile(new URL('./launch-source-store.ts',import.meta.url),'utf8'),events:string[]=[],calls:unknown[]=[];
  const stubs:Record<string,unknown>={
   'node:crypto':{},'./auth.ts':{},'./launch-official-replay.ts':{},'./launch-native-volume.ts':{},'./launch-institutional-volume.ts':{},
-  './evidence-clock.ts':{},'./policy.ts':{vnextEnabled:()=>true},'./launch-index-backfill.ts':{parseLaunchIndexBackfillPlan},
+  './launch-market-foreign-flow.ts':{},'./launch-breadth-replay.ts':{},'./evidence-clock.ts':{},'./policy.ts':{vnextEnabled:()=>true},'./launch-index-backfill.ts':{parseLaunchIndexBackfillPlan},
   '../taiwan-data-runtime.ts':{requireActiveVpsWriter:async()=>{events.push('writer');return {ok:true,supabase:{rpc:async(name:string,body:unknown)=>{
    events.push('rpc');calls.push({name,body});return {data:mode==='invalid'?{...plan(),jobs:201}:plan(),error:mode==='missing'?{code:'uninstalled'}:null};}}};}},
   '../data-plane-runtime.ts':{stockInsiderDataPlaneMode:()=> 'contabo'},

@@ -33,17 +33,22 @@ export type LaunchIndexBackfillPlan = {
   scope: 'current_and_history' | 'history_only' | null;
   currentPlanStatus: 'planned' | 'deferred' | 'no_active_pool';
   currentReason: null | 'awaiting_current_completed_session';
-  indexResources: number; skippedIndexResources: number; sourceAuthority: false; calendarAuthority: false;
+  indexResources: number; skippedIndexResources: number; twseCloseJobs?: number; sourceAuthority: false; calendarAuthority: false;
 };
 export function parseLaunchIndexBackfillPlan(value: unknown): LaunchIndexBackfillPlan {
   function fail(): never { throw Error('launch_index_backfill_plan_unavailable'); }
-  if (!closed(value, 'schemaVersion status reason jobs session plannedAt scope currentPlanStatus currentReason indexResources skippedIndexResources sourceAuthority calendarAuthority')
-    || value.schemaVersion !== 'licensed-launch-csv-plan-v3' || value.sourceAuthority !== false || value.calendarAuthority !== false
+  const keys = 'schemaVersion status reason jobs session plannedAt scope currentPlanStatus currentReason indexResources skippedIndexResources sourceAuthority calendarAuthority';
+  if (!closed(value, keys) && !closed(value, keys + ' twseCloseJobs')) return fail();
+  if (value.schemaVersion !== 'licensed-launch-csv-plan-v3' || value.sourceAuthority !== false || value.calendarAuthority !== false
     || typeof value.plannedAt !== 'string' || evidenceInstant(value.plannedAt) === null
     || !Number.isSafeInteger(value.jobs) || Number(value.jobs) < 0 || Number(value.jobs) > 200
     || !Number.isSafeInteger(value.indexResources) || Number(value.indexResources) < 0 || Number(value.indexResources) > 200
     || !Number.isSafeInteger(value.skippedIndexResources) || Number(value.skippedIndexResources) < 0
     || Number(value.skippedIndexResources) > Number(value.indexResources)) return fail();
+  const reportsCloseJobs = Object.hasOwn(value, 'twseCloseJobs');
+  if (reportsCloseJobs && (!Number.isSafeInteger(value.twseCloseJobs) || Number(value.twseCloseJobs) < 1
+    || Number(value.twseCloseJobs) > 30 || value.status !== 'planned' || value.scope !== 'current_and_history')) return fail();
+  const nonCloseJobs = Number(value.jobs) - (reportsCloseJobs ? Number(value.twseCloseJobs) : 0);
   if (value.status === 'no_active_pool' || value.status === 'deferred') {
     if (value.jobs !== 0 || value.indexResources !== 0 || value.skippedIndexResources !== 0 || value.session !== null || value.scope !== null) return fail();
     if (value.status === 'no_active_pool') {
@@ -53,13 +58,13 @@ export function parseLaunchIndexBackfillPlan(value: unknown): LaunchIndexBackfil
   } else {
     if (!day(value.session) || value.session > new Date(Number(evidenceInstant(value.plannedAt)! / BigInt(1000)) + 28800000).toISOString().slice(0, 10)
       || value.reason !== null || Number(value.indexResources) < 72
-      || Number(value.jobs)+Number(value.skippedIndexResources)<Number(value.indexResources)) return fail();
+      || nonCloseJobs+Number(value.skippedIndexResources)<Number(value.indexResources)) return fail();
     if (value.scope === 'current_and_history') {
       if (value.currentPlanStatus !== 'planned' || value.currentReason !== null
-        || Number(value.jobs)+Number(value.skippedIndexResources)-Number(value.indexResources)>99) return fail();
+        || nonCloseJobs+Number(value.skippedIndexResources)-Number(value.indexResources)>104) return fail();
     } else if (value.scope !== 'history_only' || value.currentPlanStatus !== 'deferred'
       || value.currentReason !== 'awaiting_current_completed_session'
-      || Number(value.jobs)+Number(value.skippedIndexResources)!==Number(value.indexResources)) return fail();
+      || nonCloseJobs+Number(value.skippedIndexResources)!==Number(value.indexResources)) return fail();
     if (value.status === 'already_acquired') {
       if (value.jobs !== 0 || value.scope !== 'history_only' || value.skippedIndexResources !== value.indexResources) return fail();
     } else if (value.status !== 'planned' || Number(value.jobs) < 1) return fail();

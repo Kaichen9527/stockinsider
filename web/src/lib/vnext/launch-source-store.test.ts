@@ -95,7 +95,7 @@ test('explicit uncertainty recovery reads a persisted outcome then acknowledges 
 
 /** Execute the ACTUAL route after transpilation with every external edge
  * replaced. No actual environment, vault, DB, network or filesystem write. */
-async function routeFixture(mode:'unbound'|'bound'|'disabled'|'lookup_failure'|'multiple_bound'|'mixed'|'busy'|'no_pool'|'partial'|'prepass_uncertain'|'dry'|'pre_open'|'holiday'|'calendar_missing'|'deferred_bound'|'unauthorized'|'database_failure'|'history_only'|'already_acquired'){
+async function routeFixture(mode:'unbound'|'bound'|'disabled'|'lookup_failure'|'multiple_bound'|'mixed'|'busy'|'no_pool'|'partial'|'prepass_uncertain'|'dry'|'pre_open'|'holiday'|'calendar_missing'|'deferred_bound'|'unauthorized'|'database_failure'|'history_only'|'already_acquired'|'current_close'){
   const events:string[]=[],source=await readFile(new URL('../../app/api/internal/taiwan-data-queue-drain/route.ts',import.meta.url),'utf8');
   const parserSource=await readFile(new URL('../taiwan-candidate-refresh.ts',import.meta.url),'utf8');
   const parserAst=ts.createSourceFile('source-drain-options.ts',parserSource,ts.ScriptTarget.Latest,true);
@@ -122,6 +122,10 @@ async function routeFixture(mode:'unbound'|'bound'|'disabled'|'lookup_failure'|'
     '@/lib/vnext/auth':{vnextIdentity:()=>({role:'operator',principal:'SYNTHETIC_OPERATOR'})},
     '@/lib/vnext/launch-source-store':{launchSourcesEnabled:()=>!['unbound','disabled','lookup_failure','dry'].includes(mode),
       prepareLaunchSources:async()=>{events.push('prepare');if(mode==='busy'||mode==='database_failure')throw Error('synthetic guarded preparation unavailable');
+        if(mode==='current_close')return parseLaunchIndexBackfillPlan({schemaVersion:'licensed-launch-csv-plan-v3',
+          status:'planned',jobs:200,twseCloseJobs:24,session:'2026-11-15',plannedAt:'2026-11-15T13:00:00Z',
+          scope:'current_and_history',currentPlanStatus:'planned',currentReason:null,reason:null,
+          indexResources:72,skippedIndexResources:0,sourceAuthority:false,calendarAuthority:false});
         if(mode==='history_only'||mode==='already_acquired')return parseLaunchIndexBackfillPlan({schemaVersion:'licensed-launch-csv-plan-v3',
           status:mode==='already_acquired'?'already_acquired':'planned',jobs:mode==='already_acquired'?0:72,session:'2026-11-13',plannedAt:'2026-11-15T01:00:00Z',
           scope:'history_only',currentPlanStatus:'deferred',currentReason:'awaiting_current_completed_session',reason:null,
@@ -138,7 +142,7 @@ async function routeFixture(mode:'unbound'|'bound'|'disabled'|'lookup_failure'|'
   vm.runInNewContext(compiled,{module:exported,exports:exported.exports,require:(name:string)=>{
     if(!Object.hasOwn(stubs,name))throw Error('unexpected route dependency');return stubs[name];},Buffer,Date,Set,Map,Promise});
   type Reply={status:number;body:{ok:boolean;result?:{licensedSources:unknown[];completed?:number;sourcePrepass?:{status:string;reason?:string;sourceAuthority:false;
-    scope?:string|null;currentPlanStatus?:string;currentReason?:string|null;calendarAuthority?:false}}}};
+    scope?:string|null;jobs?:number;twseCloseJobs?:number;currentPlanStatus?:string;currentReason?:string|null;calendarAuthority?:false}}}};
   const post=exported.exports.POST as (request:Request)=>Promise<Reply>;
   const response=await post(new Request('https://fixture.invalid/',{method:'POST',body:JSON.stringify({limit:mode==='multiple_bound'||mode==='mixed'?2:1,...(mode==='dry'?{dryRun:true}:{})})}));
   return {events,response};
@@ -191,6 +195,12 @@ test('actual enabled drain defers only fresh planning while ordinary jobs contin
     const {events,response}=await routeFixture(mode);assert.deepEqual(events,mode==='unauthorized'?[]:['prepare']);
     assert.equal(response.status,mode==='unauthorized'?401:503);assert.equal(response.body.ok,false);
   }
+});
+test('actual queue route reports new TWSE close work without implying source authority',async()=>{
+ const {events,response}=await routeFixture('current_close'),plan=response.body.result!.sourcePrepass!;
+ assert.equal(response.status,200);assert.equal(plan.jobs,200);assert.equal(plan.twseCloseJobs,24);
+ assert.equal(plan.sourceAuthority,false);assert.equal(plan.calendarAuthority,false);
+ assert.deepEqual(events,['prepare','pre_drain','classify','licensed']);
 });
 test('actual v3 history-only and all-acquired route responses retain fresh deferral while ordinary queue dispatch continues',async()=>{
  for(const mode of ['history_only','already_acquired'] as const){
