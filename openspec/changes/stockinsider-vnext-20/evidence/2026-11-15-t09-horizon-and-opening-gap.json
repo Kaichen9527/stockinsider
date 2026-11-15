@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 1,
+  "task": "T09",
+  "issuer": "5274",
+  "scope": "real public historical price and calendar diagnostic, no historical signal or fill",
+  "indexCatalogs": {
+    "TWSE": "https://data.gov.tw/dataset/11755",
+    "TPEx": "https://data.gov.tw/dataset/11391",
+    "corporateActions": "https://data.gov.tw/dataset/11633"
+  },
+  "priceRead": {
+    "calendar": {
+      "exactTwoMarketMatch": true,
+      "total": 133,
+      "first": "2026-05-04",
+      "last": "2026-11-13"
+    },
+    "receipts": [
+      {
+        "source": "tpex",
+        "month": "2026-05",
+        "bytes": 1170,
+        "sha256": "38604e7f93a130cae3d582ad5566dad094cecde4cf1500c139e280dec94663c0",
+        "observedAt": "2026-11-15T06:51:41.792894+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/indexInfo/inx?response=data&date=2026%2F05%2F01",
+        "rowCount": 20
+      },
+      {
+        "source": "tpex",
+        "month": "2026-06",
+        "bytes": 1227,
+        "sha256": "6608968a49360b47cc4038a34d495868075a573eac4fce0b6698b1f6cfbb0495",
+        "observedAt": "2026-11-15T06:51:42.091109+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/indexInfo/inx?response=data&date=2026%2F06%2F01",
+        "rowCount": 21
+      },
+      {
+        "source": "tpex",
+        "month": "2026-07",
+        "bytes": 1286,
+        "sha256": "59d30fdc6ada1016e9a6f10ef4c6a067fbef6926f7ee1dd7a396802fb84c1b3c",
+        "observedAt": "2026-11-15T06:51:42.380175+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/indexInfo/inx?response=data&date=2026%2F07%2F01",
+        "rowCount": 22
+      },
+      {
+        "source": "tpex",
+        "month": "2026-08",
+        "bytes": 1221,
+        "sha256": "6b665380533d2e810546fe4b4ce3cc03f3b9757ef63c756c6d27f226ec2cffdc",
+        "observedAt": "2026-11-15T06:51:42.771764+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/indexInfo/inx?response=data&date=2026%2F08%2F01",
+        "rowCount": 21
+      },
+      {
+        "source": "tpex",
+        "month": "2026-09",
+        "bytes": 1170,
+        "sha256": "6b2955772ca9933c649a0f81dcc391f42869bf9ceffcde7b23ca17b79aa22eb8",
+        "observedAt": "2026-11-15T06:51:43.064749+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/indexInfo/inx?response=data&date=2026%2F09%2F01",
+        "rowCount": 20
+      },
+      {
+        "source": "tpex",
+        "month": "2026-10",
+        "bytes": 1116,
+        "sha256": "2da49ad0b6bc3063a7b5c2d7e0dc5bfdec8271fd9b93c72750b1dbb4598691c7",
+        "observedAt": "2026-11-15T06:51:43.251163+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/indexInfo/inx?response=data&date=2026%2F10%2F01",
+        "rowCount": 19
+      },
+      {
+        "source": "tpex",
+        "month": "2026-11",
+        "bytes": 617,
+        "sha256": "de4d5ed331cc9dbb988382d40b1bc8f80fd26e0a97694f667d25968034ae926f",
+        "observedAt": "2026-11-15T06:51:43.384521+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/indexInfo/inx?response=data&date=2026%2F11%2F01",
+        "rowCount": 10
+      },
+      {
+        "source": "twse",
+        "month": "2026-05",
+        "bytes": 1160,
+        "sha256": "77c10ad55c6b7d1eb246cc978586391403a2696cafc73cb808cd88aa947cc034",
+        "observedAt": "2026-11-15T06:51:42.227493+00:00",
+        "url": "https://www.twse.com.tw/indicesReport/MI_5MINS_HIST?response=open_data&date=20260501",
+        "rowCount": 20
+      },
+      {
+        "source": "twse",
+        "month": "2026-06",
+        "bytes": 1215,
+        "sha256": "598f2a2583b540cdf9fb4a344df60e657271452c8a453d78b4455cfc5744d0c5",
+        "observedAt": "2026-11-15T06:51:43.116462+00:00",
+        "url": "https://www.twse.com.tw/indicesReport/MI_5MINS_HIST?response=open_data&date=20260601",
+        "rowCount": 21
+      },
+      {
+        "source": "twse",
+        "month": "2026-07",
+        "bytes": 1270,
+        "sha256": "556ba65c552878d699a70886939d69e48975d00177e857d955d6580b8e863b5a",
+        "observedAt": "2026-11-15T06:51:43.905496+00:00",
+        "url": "https://www.twse.com.tw/indicesReport/MI_5MINS_HIST?response=open_data&date=20260701",
+        "rowCount": 22
+      },
+      {
+        "source": "twse",
+        "month": "2026-08",
+        "bytes": 1215,
+        "sha256": "8c54313e71197bbe688b4382160bb5d434e0ea986940f9518a0b3c792729eb9b",
+        "observedAt": "2026-11-15T06:51:44.797558+00:00",
+        "url": "https://www.twse.com.tw/indicesReport/MI_5MINS_HIST?response=open_data&date=20260801",
+        "rowCount": 21
+      },
+      {
+        "source": "twse",
+        "month": "2026-09",
+        "bytes": 1160,
+        "sha256": "24d6935b3a484d07e1ad5e25a48e83786d289c9a26c9962c69b392090ebbe6ad",
+        "observedAt": "2026-11-15T06:51:45.632318+00:00",
+        "url": "https://www.twse.com.tw/indicesReport/MI_5MINS_HIST?response=open_data&date=20260901",
+        "rowCount": 20
+      },
+      {
+        "source": "twse",
+        "month": "2026-10",
+        "bytes": 1105,
+        "sha256": "f6fdb0f037788c1e7bcc3e0bff917d01de78053314c911c829a41bd05fda5eeb",
+        "observedAt": "2026-11-15T06:51:46.401863+00:00",
+        "url": "https://www.twse.com.tw/indicesReport/MI_5MINS_HIST?response=open_data&date=20261001",
+        "rowCount": 19
+      },
+      {
+        "source": "twse",
+        "month": "2026-11",
+        "bytes": 610,
+        "sha256": "e46d252591519b64b5e6d714584f7a6d8f4515fcd4bf165d0d2cb39f63e0a861",
+        "observedAt": "2026-11-15T06:51:47.328510+00:00",
+        "url": "https://www.twse.com.tw/indicesReport/MI_5MINS_HIST?response=open_data&date=20261101",
+        "rowCount": 10
+      },
+      {
+        "source": "issuer",
+        "month": "2026-05",
+        "bytes": 2552,
+        "sha256": "f8702689d2e573dd275324c13e384157361225cf34ec8de6ceb6ee538830dc01",
+        "observedAt": "2026-11-15T06:51:41.908820+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F05%2F01&response=json",
+        "rowCount": 20
+      },
+      {
+        "source": "issuer",
+        "month": "2026-06",
+        "bytes": 2642,
+        "sha256": "b9d8d51a8117aaa1334bdf292bee51221cfb6d6363270bec9e8410ef46e3c307",
+        "observedAt": "2026-11-15T06:51:42.108752+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F06%2F01&response=json",
+        "rowCount": 21
+      },
+      {
+        "source": "issuer",
+        "month": "2026-07",
+        "bytes": 2743,
+        "sha256": "80c78fa5616b9b91a958ef7c39598584fbe5f1215dc9c066adf95b2772e42a42",
+        "observedAt": "2026-11-15T06:51:42.281386+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F07%2F01&response=json",
+        "rowCount": 22
+      },
+      {
+        "source": "issuer",
+        "month": "2026-08",
+        "bytes": 2638,
+        "sha256": "5a6a4c41d32826d2f34d97f7ce89c037f519437613a3cefb54859449befb8c7a",
+        "observedAt": "2026-11-15T06:51:42.874251+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F08%2F01&response=json",
+        "rowCount": 21
+      },
+      {
+        "source": "issuer",
+        "month": "2026-09",
+        "bytes": 2547,
+        "sha256": "d414113acc52bf8c4dc0830c448c826db419cc17b7ab5a4dc5cfcaf890cab705",
+        "observedAt": "2026-11-15T06:51:43.066429+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F09%2F01&response=json",
+        "rowCount": 20
+      },
+      {
+        "source": "issuer",
+        "month": "2026-10",
+        "bytes": 2457,
+        "sha256": "1f645440992e235a8e9fd856effc466d222a18a1e6dc5a8990d43331f043082a",
+        "observedAt": "2026-11-15T06:51:43.382639+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F10%2F01&response=json",
+        "rowCount": 19
+      },
+      {
+        "source": "issuer",
+        "month": "2026-11",
+        "bytes": 1579,
+        "sha256": "476b845822d51a6676808fc5b4252bb550031806834e4de3ac57ee34008f5f27",
+        "observedAt": "2026-11-15T06:51:43.561761+00:00",
+        "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=5274&date=2026%2F11%2F01&response=json",
+        "rowCount": 10
+      }
+    ],
+    "maturity": {
+      "anchor": "2026-05-20",
+      "oneSessionLater": "2026-05-21",
+      "nextSession": "2026-05-21",
+      "fullAt": "2026-11-13",
+      "before": "2026-11-12",
+      "atFull": {
+        "20": {
+          "observedTradingSessions": 20,
+          "nthTradingDate": "2026-06-17",
+          "state": "mature",
+          "missingStockDates": []
+        },
+        "60": {
+          "observedTradingSessions": 60,
+          "nthTradingDate": "2026-08-14",
+          "state": "mature",
+          "missingStockDates": []
+        },
+        "120": {
+          "observedTradingSessions": 120,
+          "nthTradingDate": "2026-11-13",
+          "state": "mature",
+          "missingStockDates": []
+        }
+      },
+      "oneDayEarlier": {
+        "observedTradingSessions": 119,
+        "nthTradingDate": null,
+        "state": "pending",
+        "missingStockDates": []
+      },
+      "laterSignal": {
+        "observedTradingSessions": 119,
+        "nthTradingDate": null,
+        "state": "pending",
+        "missingStockDates": []
+      },
+      "missingControlledSession": {
+        "observedTradingSessions": 120,
+        "nthTradingDate": "2026-11-13",
+        "state": "price_data_gap",
+        "missingStockDates": [
+          "2026-07-22"
+        ]
+      },
+      "replacementDateExists": "2026-07-23"
+    },
+    "costs": {
+      "feePerSide": "0.001425",
+      "sellTax": "0.003",
+      "slippagePerSide": "0.001",
+      "netMultiplier": "0.9921719940692904219878281840"
+    },
+    "gapDiagnostics": {
+      "upper": {
+        "hypotheticalSignalDate": "2026-09-01",
+        "nextSession": "2026-09-02",
+        "nextRawOpen": "17120.00",
+        "firstNetTouch": {
+          "date": "2026-09-22",
+          "ordinal": 15,
+          "upper": "20706.08737477150203464142645",
+          "lower": "14666.81189046314727453767707",
+          "bar": {
+            "opening": "21800.00",
+            "high": "21800.00",
+            "low": "20625.00",
+            "close": "20905.00",
+            "volumeLots": "363"
+          },
+          "status": "upper",
+          "openingBreachedSameSide": true,
+          "openingReturnPct": "26.33965812330917756620709350"
+        },
+        "firstGrossTouch": {
+          "date": "2026-09-22",
+          "ordinal": 15,
+          "upper": "20544.0000",
+          "lower": "14552.0000",
+          "bar": {
+            "opening": "21800.00",
+            "high": "21800.00",
+            "low": "20625.00",
+            "close": "20905.00",
+            "volumeLots": "363"
+          },
+          "status": "upper",
+          "openingBreachedSameSide": true,
+          "openingReturnPct": "27.33644859813084112149532710"
+        },
+        "preEventDates": [
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-04",
+          "2026-09-07",
+          "2026-09-08",
+          "2026-09-09",
+          "2026-09-10",
+          "2026-09-11",
+          "2026-09-14",
+          "2026-09-15",
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21"
+        ]
+      },
+      "lower": {
+        "hypotheticalSignalDate": "2026-09-23",
+        "nextSession": "2026-09-24",
+        "nextRawOpen": "20485.00",
+        "firstNetTouch": {
+          "date": "2026-10-08",
+          "ordinal": 9,
+          "upper": "24775.94625421695205488490776",
+          "lower": "17549.62859673700770554347633",
+          "bar": {
+            "opening": "16355.00",
+            "high": "17840.00",
+            "low": "15975.00",
+            "close": "17485.00",
+            "volumeLots": "1191"
+          },
+          "status": "lower",
+          "openingBreachedSameSide": true,
+          "openingReturnPct": "-20.78607291675252696309040786"
+        },
+        "firstGrossTouch": {
+          "date": "2026-10-08",
+          "ordinal": 9,
+          "upper": "24582.0000",
+          "lower": "17412.2500",
+          "bar": {
+            "opening": "16355.00",
+            "high": "17840.00",
+            "low": "15975.00",
+            "close": "17485.00",
+            "volumeLots": "1191"
+          },
+          "status": "lower",
+          "openingBreachedSameSide": true,
+          "openingReturnPct": "-20.16109348303636807420063461"
+        },
+        "preEventDates": [
+          "2026-09-24",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07"
+        ]
+      }
+    },
+    "nonRoot": true,
+    "valuesAreUnadjusted": true,
+    "releaseSignalOrExecutionCreated": false
+  },
+  "datedPublicCorporateActions": {
+    "dataset": "11633 historical date-ranged report",
+    "intervals": [
+      {
+        "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F05%2F20&endDate=2026%2F07%2F31&response=data",
+        "declaredInterval": [
+          "2026-05-20",
+          "2026-07-31"
+        ],
+        "rowCount": 528,
+        "firstReturned": "2026-05-20",
+        "lastReturned": "2026-07-31",
+        "sha256": "a24217876bd702cc203cdd30b9a1851f511f6b384bd1ac5c9f12b440c3d8558e",
+        "observedAt": "2026-11-15T06:53:05.822024+00:00",
+        "symbolMatches": [
+          {
+            "date": "2026-06-26",
+            "symbol": "5274",
+            "preClose": "17425.00",
+            "exchangeReference": "17345.00",
+            "kind": "除息",
+            "defaultOpeningReference": "17345.00",
+            "cashDividend": "80.00000000",
+            "freeSharesPer1000": "0.00000000"
+          },
+          {
+            "date": "2026-07-07",
+            "symbol": "5274",
+            "preClose": "16270.00",
+            "exchangeReference": "14790.91",
+            "kind": "除權",
+            "defaultOpeningReference": "14790.00",
+            "cashDividend": "0.00000000",
+            "freeSharesPer1000": "99.99998677"
+          }
+        ]
+      },
+      {
+        "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F08%2F01&endDate=2026%2F09%2F22&response=data",
+        "declaredInterval": [
+          "2026-08-01",
+          "2026-09-22"
+        ],
+        "rowCount": 258,
+        "firstReturned": "2026-08-03",
+        "lastReturned": "2026-09-22",
+        "sha256": "d4b0e62336c14b380845384a9ea319b4f24beaa91346a5c66e6e49ed47eb0d9c",
+        "observedAt": "2026-11-15T06:53:06.051524+00:00",
+        "symbolMatches": []
+      },
+      {
+        "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F09%2F23&endDate=2026%2F10%2F08&response=data",
+        "declaredInterval": [
+          "2026-09-23",
+          "2026-10-08"
+        ],
+        "rowCount": 21,
+        "firstReturned": "2026-09-23",
+        "lastReturned": "2026-10-07",
+        "sha256": "1abe9e4d770c5f99124be40cc7fa6c4cb4a5889b687ebf948c97ff9a24503e58",
+        "observedAt": "2026-11-15T06:53:05.988846+00:00",
+        "symbolMatches": []
+      },
+      {
+        "url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ?startDate=2026%2F10%2F09&endDate=2026%2F11%2F13&response=data",
+        "declaredInterval": [
+          "2026-10-09",
+          "2026-11-13"
+        ],
+        "rowCount": 75,
+        "firstReturned": "2026-10-12",
+        "lastReturned": "2026-11-12",
+        "sha256": "a095bf7e2a98497fff1c79b8c6df9855386460e93ac3aa83cf2d4be69bf2f5cc",
+        "observedAt": "2026-11-15T06:53:06.370801+00:00",
+        "symbolMatches": []
+      }
+    ],
+    "nonRoot": true,
+    "allCorporateActionTypesVerified": false
+  },
+  "remainingGates": {
+    "corporateActionNormalizedReturns": false,
+    "simulatedMarketFills": false,
+    "officialRankingSignal": false,
+    "currentProductT09Implemented": false
+  },
+  "productionDataWrites": false
+}
