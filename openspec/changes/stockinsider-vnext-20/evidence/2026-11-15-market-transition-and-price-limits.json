@@ -1,0 +1,301 @@
+{
+  "schema": "stockinsider-market-identity-and-next-session-controls-v1",
+  "sourceRouteDatasets": {
+    "twseNoLimitArchive": "https://data.gov.tw/dataset/11659",
+    "tpexNoLimitArchive": "https://data.gov.tw/dataset/27852",
+    "tpexEmerging": "https://data.gov.tw/dataset/11747",
+    "tpexIssuer": "https://data.gov.tw/dataset/25036",
+    "tpexHaltHistory": "https://data.gov.tw/dataset/48665",
+    "tpexNativeClose": "https://data.gov.tw/dataset/11371"
+  },
+  "newObservations": [
+    {
+      "name": "tpex_ipo_official_notice",
+      "url": "https://dsp.tpex.org.tw/web/announcement/announcement_detail.php?content_file=MTE1MDA4MDM2MDEuaHRtbA%3D%3D&content_number=MTE1MDA4MDM2MDE%3D",
+      "status": 200,
+      "mime": "text/html",
+      "observed": "2026-11-15T05:05:08.610143+00:00",
+      "size": 33362,
+      "sha256": "e2f1505b5ec648b47fd7f954db912bf1e9fdea1e8885d5061ad79eb22c90be99",
+      "document": {
+        "mentionsUpcoming16": true,
+        "mentionsPriorEmerging": true,
+        "hasNoLimitFiveDays": true,
+        "hasResumption": false,
+        "mentions7848": true,
+        "mentions4174": false,
+        "mentionedDates": [
+          "115年11月13日",
+          "115年11月16日"
+        ]
+      }
+    },
+    {
+      "name": "tpex_resumption_official_notice",
+      "url": "https://dsp.tpex.org.tw/web/announcement/announcement_detail.php?content_file=MTE1MDIwMzE2MjEuaHRtbA%3D%3D&content_number=MTE1MDIwMzE2MjE%3D",
+      "status": 200,
+      "mime": "text/html",
+      "observed": "2026-11-15T05:05:09.062304+00:00",
+      "size": 32262,
+      "sha256": "ebf0027bcc0ab39d1db2c3ce7ef33e5e0fae097e5e36f8eac4d74ea2f204dc6c",
+      "document": {
+        "mentionsUpcoming16": true,
+        "mentionsPriorEmerging": false,
+        "hasNoLimitFiveDays": false,
+        "hasResumption": true,
+        "mentions7848": false,
+        "mentions4174": true,
+        "mentionedDates": [
+          "115年11月13日",
+          "115年11月16日"
+        ]
+      }
+    },
+    {
+      "name": "tpex_27852",
+      "url": "https://www.tpex.org.tw/web/stock/aftertrading/fifth_day_info/nolimit5_result.php?l=zh-tw&o=data",
+      "status": 200,
+      "mime": "application/csv",
+      "observed": "2026-11-15T05:05:09.590139+00:00",
+      "size": 352,
+      "sha256": "642d3d7994b29cb86551a86e989a7549563ab6440ee259e9d1df3c1c4a1acf9f",
+      "reportRows": 1,
+      "fields": [
+        "資料日期",
+        "代號",
+        "名稱",
+        "穩定操作起始日",
+        "穩定操作截止日",
+        "承銷價格",
+        "過額配售數量",
+        "專戶種類",
+        "承銷商名稱",
+        "買賣別",
+        "成交價格",
+        "成交數量",
+        "當日累計成交數量"
+      ],
+      "subjects": {
+        "4174": [],
+        "7848": [],
+        "8426": []
+      }
+    },
+    {
+      "name": "twse_11659",
+      "url": "https://www.twse.com.tw/exchangeReport/TWT88U?response=open_data",
+      "status": 200,
+      "mime": "text/csv",
+      "observed": "2026-11-15T05:05:10.321402+00:00",
+      "size": 654,
+      "sha256": "7397ddfde9925ed426bdf5dbc444bb738e17bcd0741e7df566f938298f10e08a",
+      "reportRows": 5,
+      "fields": [
+        "證券代號",
+        "證券名稱",
+        "執行起始日",
+        "執行到期日",
+        "承銷價",
+        "過額配售數量",
+        "代碼別(註)",
+        "承銷商名稱",
+        "買賣別",
+        "成交價",
+        "成交數量",
+        "累積成交數量"
+      ],
+      "subjects": {
+        "4174": [],
+        "7848": [],
+        "8426": []
+      }
+    },
+    {
+      "name": "tpex_emerging_11747",
+      "url": "https://www.tpex.org.tw/web/emergingstock/lateststats/new_dl.php",
+      "status": 200,
+      "mime": "application/csv",
+      "observed": "2026-11-15T05:05:10.611240+00:00",
+      "size": 49063,
+      "sha256": "47f60511129db524ffd1d54c94cc87a9e73cbd10ab3b1bd15796d5a1bf4a0e6e",
+      "reportRows": 373,
+      "fields": [
+        "資料日期",
+        "資料時間",
+        "進度日期",
+        "上市櫃進度"
+      ],
+      "subjects": {
+        "4174": [],
+        "7848": [
+          {
+            "資料日期": "1151113",
+            "資料時間": "163005",
+            "進度日期": "20260826",
+            "上市櫃進度": "E"
+          }
+        ],
+        "8426": []
+      }
+    },
+    {
+      "name": "tpex_issuer_25036",
+      "url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+      "status": 200,
+      "mime": "text/csv",
+      "observed": "2026-11-15T05:05:11.877882+00:00",
+      "size": 553728,
+      "sha256": "cd13c1a635d725fc5c7fb6df6d08be221039d7075b476b1c9c286ecd1bd371f7",
+      "reportRows": 897,
+      "fields": [
+        "出表日期",
+        "上櫃日期"
+      ],
+      "subjects": {
+        "4174": [
+          {
+            "上櫃日期": "20150323",
+            "出表日期": "1151114"
+          }
+        ],
+        "7848": [],
+        "8426": [
+          {
+            "上櫃日期": "20111213",
+            "出表日期": "1151114"
+          }
+        ]
+      }
+    },
+    {
+      "name": "tpex_halts_48665",
+      "url": "https://www.tpex.org.tw/web/stock/aftertrading/spendi/sprc_result.php?l=zh-tw&o=data",
+      "status": 200,
+      "mime": "application/csv",
+      "observed": "2026-11-15T05:05:12.301459+00:00",
+      "size": 24867,
+      "sha256": "8154361432b10068670e2a2714e1d3bb4cde92b536b8abfa9f9a8aeb83e0acdd",
+      "reportRows": 365,
+      "fields": [
+        "資料日期",
+        "編號",
+        "證券代號",
+        "證券名稱",
+        "暫停交易日期",
+        "暫停交易時間",
+        "恢復交易日期",
+        "恢復交易時間"
+      ],
+      "subjects": {
+        "4174": [
+          {
+            "資料日期": "115",
+            "暫停交易日期": "1151113",
+            "暫停交易時間": "080000",
+            "恢復交易日期": "",
+            "恢復交易時間": ""
+          }
+        ],
+        "7848": [],
+        "8426": [
+          {
+            "資料日期": "115",
+            "暫停交易日期": "1151112",
+            "暫停交易時間": "080000",
+            "恢復交易日期": "",
+            "恢復交易時間": ""
+          },
+          {
+            "資料日期": "115",
+            "暫停交易日期": "",
+            "暫停交易時間": "",
+            "恢復交易日期": "1151113",
+            "恢復交易時間": "080000"
+          }
+        ]
+      }
+    }
+  ],
+  "retainedNativeCloseControls": [
+    {
+      "day": "2026-11-12",
+      "sha256": "eebb91fd70fd7394fb23bfcdfec42f3f1c21a74c71a35bb132de42251301e0a4",
+      "sourceDataset": 11371,
+      "rows": 1020,
+      "matches": {
+        "4174": [
+          {
+            "資料日期": "1151112",
+            "成交股數": "5146000",
+            "開盤": "62.20",
+            "最高": "66.50",
+            "最低": "60.10",
+            "收盤": "64.90",
+            "次日漲停價": "71.30",
+            "次日跌停價": "58.50"
+          }
+        ],
+        "7848": [],
+        "8426": [
+          {
+            "資料日期": "1151112",
+            "成交股數": "0",
+            "開盤": "----",
+            "最高": "----",
+            "最低": "----",
+            "收盤": "----",
+            "次日漲停價": "20.95",
+            "次日跌停價": "17.15"
+          }
+        ]
+      }
+    },
+    {
+      "day": "2026-11-13",
+      "sha256": "e67648bdd22dfb8f6828027cf91384813af24c6303c0ff40fa2f2d203a7b6a39",
+      "sourceDataset": 11371,
+      "rows": 1020,
+      "matches": {
+        "4174": [
+          {
+            "資料日期": "1151113",
+            "成交股數": "0",
+            "開盤": "----",
+            "最高": "----",
+            "最低": "----",
+            "收盤": "----",
+            "次日漲停價": "71.30",
+            "次日跌停價": "58.50"
+          }
+        ],
+        "7848": [],
+        "8426": [
+          {
+            "資料日期": "1151113",
+            "成交股數": "86000",
+            "開盤": "20.95",
+            "最高": "20.95",
+            "最低": "20.95",
+            "收盤": "20.95",
+            "次日漲停價": "23.00",
+            "次日跌停價": "18.90"
+          }
+        ]
+      }
+    }
+  ],
+  "controls": {
+    "scheduledFirstMainboardSessionFor7848": "2026-11-16",
+    "newListingNoDailyLimitAnnounced": true,
+    "priorEmergingIdentityIsSameSymbolButNotSameMarketScope": true,
+    "expectedValidatedPrelistingHistoryForMainboard20TradeCash": "0",
+    "usesStabilizationTradeDataAsCompleteNoLimitList": false,
+    "scheduledResumptionFor4174": "2026-11-16",
+    "resumptionAnnouncedBeforeDateButNotYetObserved": true,
+    "nonzeroNextPriceLimitProvesCurrentTradable": false,
+    "reopened8426AllFourPricesAtVerifiedPreviousNextLimit": true
+  },
+  "realUpcomingMarketSessionsCompleted": false,
+  "recordedExchangeRawBytesInRepository": false,
+  "productionChanges": 0
+}

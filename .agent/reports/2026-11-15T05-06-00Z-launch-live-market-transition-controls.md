@@ -1,0 +1,15 @@
+# Real market-transition, no-limit and resumption controls
+
+Contabo sampled seven official reports without authentication, then rehashed the two retained 11371 snapshots before filtering three exact stock identifiers.
+
+| Control | Evidence | Expected behavior |
+|---|---|---|
+| 7848 changes market on 11/16 | The TPEx 11/13 announcement schedules its first ordinary stock session for 11/16, with no daily price limit for the first five trading sessions. The 11/13 emerging snapshot 11747 contains 7848. The 11/12–13 mainboard snapshots and the pre-effective issuer roster omit it. | Use the listing effective date and exact territory. Preserve the distinct no-limit status. Same-symbol emerging history does not fill the mainboard 20 trading-day turnover window. No market trade or actual session has yet been observed on 11/16. |
+| 4174 halt and announced resume | TPEx 48665 carries its 11/13 08:00 halt. Native 11371 on 11/13 retained a same-symbol row with zero shares and blank OHLC, despite numeric fields labeled next-day limits. Official separate 11/13 notice schedules resumption for 11/16. | Do not infer when it can trade from row presence or next-day limits. Preserve separate announcement, effective event and observed date, then use the actual 11/16 trading result. |
+| 8426 traded again and closed locked | TPEx 48665 contains the 11/12 08:00 halt and 11/13 08:00 resume. In the retained 11/13 raw 11371 row, O/H/L/C were all 20.95, the preceding captured next-day upper limit. It recorded 86,000 shares. | A halt does not last forever. A later confirmed resume and a valid limit-locked bar are distinct. Presence of actual volume does not prove a simulation can obtain the opening fill. |
+
+The open reports titled “first-five-session no-limit” cover stabilization operations, as shown by their names and trade fields. The sampled OTC report did not contain the fresh 7848 listing notice. Treat absence as insufficient to establish the opposite status. For market transfers, use the explicit market rules and the listing type. The exchanges distinguish ordinary first listing from transfers between TWSE and TPEx. Resolve any exception from actual issue/session evidence before applying the published opening basis and valid tick size.
+
+No later cutoff was backdated. These are source and historical behavior controls only. The 11/16 and 11/17 timed runs, verified qualified rankings, and integration with recognized price limits remain open.
+
+[7848 official announcement](https://dsp.tpex.org.tw/web/announcement/announcement_detail.php?content_file=MTE1MDA4MDM2MDEuaHRtbA%3D%3D&content_number=MTE1MDA4MDM2MDE%3D) · [4174 official resumption](https://dsp.tpex.org.tw/web/announcement/announcement_detail.php?content_file=MTE1MDIwMzE2MjEuaHRtbA%3D%3D&content_number=MTE1MDIwMzE2MjE%3D) · [TPEx stabilization data](https://data.gov.tw/dataset/27852) · [TWSE stabilization data](https://data.gov.tw/dataset/11659) · [TPEx trading rules](https://www.tpex.org.tw/zh-tw/mainboard/trading/rules/system.html) · [TWSE article 63](https://twse-regulation.twse.com.tw/TW/law/DOC01.aspx?FLCODE=fl007304&FLNO=63).
