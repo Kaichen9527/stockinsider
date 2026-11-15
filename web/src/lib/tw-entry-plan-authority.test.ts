@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
-import { loadTwEntryPlanAuthority, type TwEntryAuthorityClient, type TwEntryAuthorityRequest } from './tw-entry-plan-authority.ts';
+import { loadTwEntryPlanAuthority, loadTwLaunchOutcomeInput, type TwEntryAuthorityClient, type TwEntryAuthorityRequest } from './tw-entry-plan-authority.ts';
+
+import { evaluateLaunchOutcome } from './vnext/launch-outcomes.ts';
+
+import { runLaunchOutcomeCycle, runLaunchOutcomesWithLease } from './vnext/launch-outcome-cycle.ts';
 
 type Row = Record<string, unknown>;
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -218,4 +222,189 @@ test('a recent share-changing action does not manufacture a comparable volume ra
   assert.deepEqual(result.missingData, ['volume_basis_changed_within_lookback']);
   assert.equal(result.priceBasis, null);
   assert.deepEqual(result.bars, []);
+});
+
+const outcomeAsOf = '2026-09-29T09:00:00Z';
+function outcomeFixture() {
+  const { data, request } = fixture();
+  const annual = request.forwardCalendar!;
+  annual.availableAt = '2026-09-29T08:00:00Z';
+  const last = data[tables.calendar].at(-1)!;
+  for (const [i, session] of ['2026-09-28', '2026-09-29', '2026-09-30'].entries()) {
+    const source = { ...annual.calendarSessions.at(-1)!, session,
+      status: i < 2 ? 'completed' : 'scheduled',
+      openAt: `${session}T01:00:00Z`, scheduledCloseAt: `${session}T05:30:00Z`,
+      sourceRef: `twse-annual-calendar:2026:${session}:${'b'.repeat(64)}` };
+    if (i === 0) annual.calendarSessions.pop();
+    annual.calendarSessions.push(source);
+    if (i === 2) continue;
+    const calendarId = id(31001 + i), snapshotId = id(32001 + i);
+    const observed = `${session}T06:00:00+00:00`, recordedAt = `${session}T07:00:00Z`;
+    const event = i === 1 ? { snapshot_id: snapshotId, event_ordinal: 0,
+      symbol: '2330', event_kind: 'par_value_change', pre_action_reference_price: 100, post_action_reference_price: 50,
+      feed_identity: feeds[2], daily_adjustment_factor: .5, source_row_ref: hash(['corporate-action-source-row-v3.1','TWSE',session,'2330','par_value_change',100,50,feeds[2]]),
+      recorded_at: recordedAt } : null;
+    const evidence = feeds.map((feed, ordinal) => ({ snapshot_id: snapshotId, feed_ordinal: ordinal, feed_identity: feed,
+      response_byte_count: 100, response_sha256: 'c'.repeat(64), parsed_row_count: Number(event !== null && ordinal === 2), recorded_at: recordedAt }));
+    const digest = hash(['corporate-action-snapshot-v3.1','TWSE',session,calendarId,'tw-corporate-action-v3.1','twse',observed,
+      evidence.map(row => [row.feed_identity,row.response_byte_count,row.response_sha256,row.parsed_row_count]),
+      event ? [[event.symbol,event.event_kind,event.pre_action_reference_price,event.post_action_reference_price,event.feed_identity,event.source_row_ref]] : []]);
+    data[tables.calendar].push({ ...last, session_authority_id: calendarId, session_id: session,
+      open_at: source.openAt, close_at: source.scheduledCloseAt, source_timestamp: observed, collected_at: observed,
+      recorded_at: recordedAt, source_ref: source.sourceRef });
+    data[tables.prices].push({ observation_id: id(33001 + i), stock_id: stockId, exchange: 'TWSE', session_id: session,
+      session_authority_id: calendarId, raw_open: i === 0 ? 104 : 55, raw_high: i === 0 ? 110 : 62, raw_low: i === 0 ? 100 : 51,
+      raw_close: i === 0 ? 108 : 60, provider: 'twse', source_timestamp: observed, collected_at: observed, recorded_at: recordedAt,
+      source_ref: `twse-openapi:${session}:2330` });
+    data[tables.snapshots].push({ snapshot_id: snapshotId, exchange: 'TWSE', session_id: session, session_authority_id: calendarId,
+      corporate_action_version: 'tw-corporate-action-v3.1', provider: 'twse', collected_at: observed,
+      recorded_at: recordedAt, declared_event_count: Number(event !== null), dataset_hash: digest });
+    data[tables.feeds].push(...evidence);
+    if (event) data[tables.events].push(event);
+  }
+  const original = data[tables.prices].find(row => row.session_id === request.signalSession)!;
+  data[tables.prices].push({ ...original, observation_id: id(34000), raw_close: 98, recorded_at: '2026-09-25T11:00:00Z' });
+  const anchor = { rankingRunId: id(35000), firstRankingRunId: id(34999), stockId, symbol: '2330', market: 'TWSE' as const,
+    session: request.signalSession, cutoff: request.cutoff, publishedAt: '2026-09-24T13:30:00Z',
+    inputHash: 'a'.repeat(64), priceRevision: 'b'.repeat(64), rawClose: '100.00',
+    closeObservationId: String(original.observation_id), calendarAuthorityId: String(original.session_authority_id),
+    calendarRevision: 'c'.repeat(64), actionsRevision: 'd'.repeat(64) };
+  return { anchor, annual, data };
+}
+
+test('outcomes pin frozen close, rebase the split exactly and leave execution unknown', async () => {
+  const { anchor, annual, data } = outcomeFixture();
+  const { client } = mockClient(data);
+  const input = await loadTwLaunchOutcomeInput(client, anchor, outcomeAsOf, annual);
+  assert.equal(input.signal.rawClose, '100.00');
+  assert.equal(input.signal.normalizedClose, '50.00000000');
+  assert.deepEqual(input.sessions.map(row => row.status), ['completed', 'completed', 'scheduled']);
+  assert.deepEqual(input.bars.map(row => [row.rawOpen, row.open, row.close]),
+    [['104.00000000', '52.00000000', '54.00000000'], ['55.00000000', '55.00000000', '60.00000000']]);
+  const result = evaluateLaunchOutcome(input);
+  assert.equal(result.research.barrier20.state, 'up_first');
+  assert.equal(result.research.barrier20.session, '2026-09-29');
+  assert.equal(result.execution.status, 'opening_evidence_gap');
+  assert.equal(result.repeatSignal, true);
+  assert.deepEqual(await loadTwLaunchOutcomeInput(client, anchor, outcomeAsOf, annual), input);
+});
+
+test('outcomes include a price correction only when it was available at cutoff', async () => {
+  const { anchor, annual, data } = outcomeFixture();
+  const head = data[tables.prices].find(row => row.session_id === '2026-09-29')!;
+  data[tables.prices].push({ ...head, observation_id: id(34001), raw_high: 59, raw_close: 58, recorded_at: '2026-09-29T09:30:00Z' });
+  const { client } = mockClient(data);
+  const before = await loadTwLaunchOutcomeInput(client, anchor, outcomeAsOf, annual);
+  const after = await loadTwLaunchOutcomeInput(client, anchor, '2026-09-29T10:00:00Z', annual);
+  assert.notEqual(before.bars.at(-1)?.priceRevision, after.bars.at(-1)?.priceRevision);
+  assert.equal(evaluateLaunchOutcome(before).research.barrier20.state, 'up_first');
+  assert.equal(evaluateLaunchOutcome(after).research.barrier20.state, 'pending');
+  assert.deepEqual(before.signal, after.signal);
+});
+
+test('outcomes reject a substituted frozen close and a missing corporate action feed', async () => {
+  const { anchor, annual, data } = outcomeFixture();
+  const { client } = mockClient(data);
+  await assert.rejects(loadTwLaunchOutcomeInput(client, { ...anchor, rawClose: '98' }, outcomeAsOf, annual), /launch_outcome_frozen_close_mismatch/);
+  data[tables.feeds].pop();
+  await assert.rejects(loadTwLaunchOutcomeInput(client, anchor, outcomeAsOf, annual), /corporate_action_evidence_incomplete/);
+});
+
+test('outcomes never skip an unproved trading session or an absent annual weekday', async () => {
+  const { anchor, annual, data } = outcomeFixture();
+  data[tables.calendar] = data[tables.calendar].filter(row => row.session_id !== '2026-09-28');
+  const { client } = mockClient(data);
+  const input = await loadTwLaunchOutcomeInput(client, anchor, outcomeAsOf, annual);
+  assert.deepEqual(input.sessions.map(row => [row.session, row.status]), [['2026-09-28', 'scheduled']]);
+  assert.equal(input.bars.length, 0);
+  assert.equal(evaluateLaunchOutcome(input).research.barrier20.state, 'calendar_gap');
+  annual.calendarSessions = annual.calendarSessions.filter(row => row.session !== '2026-09-28');
+  await assert.rejects(loadTwLaunchOutcomeInput(client, anchor, outcomeAsOf, annual), /launch_outcome_annual_calendar_gap/);
+});
+
+test('outcomes exclude an exchange cancellation and report a missing price without settling later data', async () => {
+  const { anchor, annual, data } = outcomeFixture();
+  const cancelled = data[tables.calendar].find(row => row.session_id === '2026-09-28')!;
+  cancelled.status = 'cancelled';
+  data[tables.prices] = data[tables.prices].filter(row => row.session_id !== '2026-09-29');
+  const { client } = mockClient(data);
+  const input = await loadTwLaunchOutcomeInput(client, anchor, outcomeAsOf, annual);
+  assert.deepEqual(input.sessions.map(row => row.status), ['cancelled', 'completed', 'scheduled']);
+  const result = evaluateLaunchOutcome(input);
+  assert.equal(result.research.barrier20.state, 'price_data_gap');
+  assert.equal(result.execution.nextSession, '2026-09-29');
+});
+
+const principal = 'stage-operator';
+const owner = '00000000-0000-4000-8000-065555555555';
+
+function outcomeBatchFixture() {
+  const { anchor, annual, data } = outcomeFixture();
+  const first = { rankingRunId: anchor.rankingRunId, symbol: anchor.symbol, market: anchor.market, session: anchor.session };
+  const second = { ...first, rankingRunId: id(35001), symbol: '1234', market: 'TPEX' };
+  const response = { schemaVersion: 'vnext-launch-outcome-batch-v1', asOf: outcomeAsOf,
+    available: 3, signals: [first, second], calendars: { TWSE: annual, TPEX: null } };
+  const { client, reads } = mockClient(data);
+  return { anchor, response, client, reads };
+}
+
+test('post-close outcomes use one authorized cutoff and write only evaluated official prices', async () => {
+  const { anchor, response, client, reads } = outcomeBatchFixture();
+  const calls: string[] = [];
+  const result = await runLaunchOutcomesWithLease({ ...client, async rpc(name, args) {
+    assert.equal(args.p_lease_owner, owner);
+    assert.equal(args.p_principal, principal);
+    if (name.endsWith('batch_v1')) {
+      assert.equal(args.p_as_of, outcomeAsOf);
+      calls.push('batch');
+      return { data: response, error: null };
+    }
+    assert.equal(args.p_run_id, anchor.rankingRunId);
+    assert.equal(args.p_symbol, anchor.symbol);
+    if (!Object.hasOwn(args, 'p_input')) {
+      calls.push('anchor');
+      return { data: anchor, error: null };
+    }
+    calls.push('write');
+    const packet = args.p_input as Parameters<typeof evaluateLaunchOutcome>[0];
+    assert.equal(packet.asOf, outcomeAsOf);
+    assert.equal(packet.signal.rawClose, '100.00');
+    const computed = evaluateLaunchOutcome(packet);
+    assert.deepEqual(args.p_result, computed);
+    assert.equal(computed.research.barrier20.state, 'up_first');
+    assert.equal(computed.execution.status, 'opening_evidence_gap');
+    return { data: { schemaVersion: 'vnext-launch-outcome-write-v1', rankingRunId: anchor.rankingRunId, symbol: anchor.symbol,
+      policyVersion: computed.policyVersion, inputSnapshotHash: computed.inputSnapshotHash, snapshotHash: 'd'.repeat(64),
+      asOf: outcomeAsOf.replace('Z', '+00:00'), replay: true }, error: null };
+  } }, principal, owner, outcomeAsOf);
+  assert.deepEqual(calls, ['batch', 'anchor', 'write']);
+  assert.ok(reads.includes(tables.prices));
+  assert.deepEqual(result, { status: 'evaluated', asOf: outcomeAsOf, available: 3, attempted: 2, backlog: 1,
+    written: 0, replayed: 1, deferred: { official_calendar_unavailable: 1 } });
+});
+
+test('post-close outcomes reject a batch that uses a different cutoff before reading prices', async () => {
+  const { response, client, reads } = outcomeBatchFixture();
+  const writer = { ...client, async rpc() { return { data: { ...response, asOf: '2026-09-29T09:00:01Z' }, error: null }; } };
+  await assert.rejects(runLaunchOutcomesWithLease(writer, principal, owner, outcomeAsOf), /launch_outcome_batch_unavailable/);
+  assert.deepEqual(reads, []);
+});
+
+test('post-close outcomes keep a missing frozen anchor and unknown write distinct', async () => {
+  const { anchor, response, client } = outcomeBatchFixture();
+  const [first] = response.signals;
+  const nextAnchor = { ...anchor, rankingRunId: id(35002) };
+  response.signals = [first, { ...first, rankingRunId: nextAnchor.rankingRunId }];
+  const result = await runLaunchOutcomesWithLease({ ...client, async rpc(name, args) {
+    if (name.endsWith('batch_v1')) return { data: response, error: null };
+    if (args.p_run_id === anchor.rankingRunId) return { data: null, error: 'missing' };
+    if (!Object.hasOwn(args, 'p_input')) return { data: nextAnchor, error: null };
+    return { data: { policyVersion: 'launch-outcomes-v1' }, error: null };
+  } }, principal, owner, outcomeAsOf);
+  assert.deepEqual(result.deferred, { frozen_anchor_unavailable: 1, write_unconfirmed: 1 });
+  assert.equal(result.written, 0);
+});
+
+test('post-close outcomes cannot run under an author identity', async () => {
+  await assert.rejects(runLaunchOutcomeCycle({ role: 'author', principal: 'stage-author' }, outcomeAsOf), /launch_outcome_operator_required/);
 });

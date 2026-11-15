@@ -20,9 +20,14 @@ function text(value:unknown):string {
 }
 /** Execute the ACTUAL page and both ACTUAL server-detail implementations.
  * Only their imports/readers are mocked; there is no duplicated dispatch gate. */
-function actualPages(newMode:boolean,oldGate=true){
+function actualPages(newMode:boolean,oldGate=true,withRank=false){
   let oldReads=0,newReads=0,otherReads=0;
+  const outcomeReads:unknown[]=[];
   const empty={availability:'not_published',reason:null,readAt:'2026-11-13T13:30:30Z',snapshot:null,current:[],detail:null};
+  const ranked={...empty,availability:'ready',snapshot:{rankingRunId:run,session:'2026-11-13',cutoff:'2026-11-13T13:30:00Z',policyVersion:'launch',
+    rulesVersion:'v1',members:[{symbol:'5274',revisionId:research,scoreRevision:score,launchQualificationRevision:score,
+      totalScore:88,technicalScore:60,components:{chips:18,market:10},revisions:{}}]},
+    detail:{scoreEvidence:[],citations:[],summary:null}};
   const Link=()=>null;
   const mock=(value:unknown)=>({__esModule:true,default:value});
   const modules:Record<string,unknown>={
@@ -30,7 +35,9 @@ function actualPages(newMode:boolean,oldGate=true){
     'next/link':mock(Link),
     '@/lib/vnext/policy':{vnextEnabled:()=>oldGate},
     '@/lib/vnext/launch-ranking-read':{launchRankingEnabled:()=>newMode,launchDetailQuery,launchRankingMemberCurrent:()=>false,
-      readLaunchRankingSnapshot:async()=>{newReads++;return empty;}},
+      readLaunchRankingSnapshot:async()=>{newReads++;return withRank?ranked:empty;}},
+    '@/lib/vnext/launch-outcome-public':{readPublicLaunchOutcome:async(ref:unknown)=>{outcomeReads.push(ref);return {state:'awaiting_observation'};}},
+    './LaunchOutcomeSummary':mock(()=>null),
     '@/lib/vnext/store':{readPublished:async()=>{oldReads++;return {history:[]};}},
     '@/lib/vnext/ranking-read':{rankingEnabled:()=>true,rankingMemberCurrent:()=>false,
       readRankingSnapshot:async()=>{oldReads++;return {snapshot:null,detail:null,currentHome:null,readAt:empty.readAt};}},
@@ -55,7 +62,7 @@ function actualPages(newMode:boolean,oldGate=true){
   const oldDetail=load('../../app/components/vnext/Detail.tsx'),newDetail=load('../../app/components/vnext/LaunchDetail.tsx');
   modules['@/app/components/vnext/Detail']=mock(oldDetail);modules['@/app/components/vnext/LaunchDetail']=mock(newDetail);
   const page=load('../../app/stock/[symbol]/page.tsx');
-  return {oldDetail,newDetail,counts:()=>({oldReads,newReads,otherReads}),async render(query:Record<string,string|string[]|undefined>){
+  return {oldDetail,newDetail,outcomeReads,counts:()=>({oldReads,newReads,otherReads}),async render(query:Record<string,string|string[]|undefined>){
     const selection=await page({params:Promise.resolve({symbol:'5274'}),searchParams:Promise.resolve(query)});
     assert.ok(selection.type===oldDetail||selection.type===newDetail,'actual page must choose a supported detail implementation');
     const rendered=await(selection.type as Component)(selection.props);
@@ -79,4 +86,14 @@ test('actual stock page explicitlaunch OFF remainsdisabled evenwhenlegacygateisO
 test('actual stock page unselected newmode usesnewlatestreader only',async()=>{
   const f=actualPages(true),rendered=await f.render({});
   assert.equal(rendered.selected,f.newDetail);assert.match(rendered.text,/NEW_POLICY_NOT_PUBLISHED/u);assert.deepEqual(f.counts(),{oldReads:0,newReads:1,otherReads:0});
+});
+
+test('actual detail reads performance for its frozen member and skips a mismatched revision',async()=>{
+  const f=actualPages(true,true,true);
+  const rendered=await f.render(launchQuery);
+  assert.equal(rendered.selected,f.newDetail);
+  assert.deepEqual(JSON.parse(JSON.stringify(f.outcomeReads)),[{rankingRunId:run,symbol:'5274',signalSession:'2026-11-13'}]);
+  const wrong=await f.render({...launchQuery,launchScoreRevision:research});
+  assert.match(wrong.text,/參數不一致/u);
+  assert.equal(f.outcomeReads.length,1);
 });

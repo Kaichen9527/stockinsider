@@ -61,6 +61,7 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       return NextResponse.json({ok:true,policyVersion:'stockinsider-vnext-20-v1',result});
     }
     if(['screen','weekly-audit','dispatch','cycle'].includes(action)){
+      if(action==='cycle'&&!(await import('../internal-auth.ts')).requireExactInternalBearer(request)) throw Error('vnext_internal_bearer_required');
       if(identity.role!=='operator')throw new Error('vnext_operator_required');
       if(Object.keys(body).some((key)=>key!=='action'))throw new Error('vnext_cycle_closed_body');
       const result=action==='dispatch'?await(await import('./research-dispatcher.ts')).dispatchResearchQueue(identity)

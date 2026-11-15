@@ -1,6 +1,8 @@
 import {NextResponse} from 'next/server';
 import {launchRankingEnabled,readLaunchRankingSnapshot} from '@/lib/vnext/launch-ranking-read';
 
+import {readPublicLaunchOutcome} from '@/lib/vnext/launch-outcome-public';
+
 export const dynamic='force-dynamic';
 export const runtime='nodejs';
 const headers={'cache-control':'no-store'};
@@ -21,6 +23,10 @@ export async function GET(request:Request){
   try{
     const result=await readLaunchRankingSnapshot(query);
     const status=result.availability==='not_found'?404:['schema_unavailable','unavailable','producer_unavailable'].includes(result.availability)?503:200;
+    if(status===200&&query.symbol&&result.detail&&result.snapshot&&result.detail.symbol===query.symbol){
+      const outcome=await readPublicLaunchOutcome({rankingRunId:result.snapshot.rankingRunId,symbol:query.symbol,signalSession:result.snapshot.session});
+      return reply({ok:true,result,outcome},status);
+    }
     return reply({ok:status===200,result},status);
   }catch{return reply({ok:false,error:'launch_ranking_read_unavailable'},503);}
 }

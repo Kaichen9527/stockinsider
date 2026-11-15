@@ -9,7 +9,8 @@ export async function runPostcloseResearchCycle(identity:VnextIdentity){
   const context=await readLaunchCycleAdmission(identity);
   if(!context.ready)return {status:'deferred',reason:context.reason??'launch_ranking_cycle_not_ready',policyVersion:LAUNCH_RANKING_POLICY,expensiveCalls:0,scheduleEnabled:false};
   const ranking=await publishCycleLaunchRanking(identity,context.session);
-  return {status:'existing_reviewed_cache_only',policyVersion:LAUNCH_RANKING_POLICY,ranking,dependencies:['legacy_author_preparation_dependency'],expensiveCalls:0,scheduleEnabled:false};
+  const outcomes=context.cutoff?await(await import('./launch-outcome-cycle.ts')).runLaunchOutcomeCycle(identity,context.cutoff):null;
+  return {status:'existing_reviewed_cache_only',policyVersion:LAUNCH_RANKING_POLICY,ranking,outcomes,dependencies:['legacy_author_preparation_dependency'],expensiveCalls:0,scheduleEnabled:false};
  }
  const {command}=await import('./store.ts');const context=await analysisWriter(async()=>{await(await import('./calendar-sync.ts')).synchronizeCachedCalendar(identity);return command(identity,'screen-context',{});});
  if(context.completed!==true || context.postclose!==true)return {status:'deferred',reason:'completed_postclose_session_required',scheduleEnabled:false};

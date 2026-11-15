@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { validAdjustedEvidence } from './generated/official-authority/official-market-authority-v314.js';
 import { loadOfficialTradingCalendarV314 } from './generated/official-authority/official-calendar-v314.js';
+import type { LaunchOutcomeInput } from './vnext/launch-outcomes.ts';
 import type { TwEntryBar, TwEntryCalendar, TwEntryPriceBasis } from './tw-entry-plan-contract.ts';
 import {evidenceInstant, evidenceKnownAt, compareEvidenceClocks} from './vnext/evidence-clock.ts';
 
@@ -115,27 +116,26 @@ function sharedAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthori
   }
   return cache.get(key)!;
 }
-async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<SharedAuthority> {
-  const { exchange, cutoff, signalSession } = request;
-  const lower = new Date(Date.parse(`${signalSession}T00:00:00Z`) - 550 * DAY).toISOString().slice(0, 10);
-  const upper = new Date(Date.parse(`${signalSession}T00:00:00Z`) + 30 * DAY).toISOString().slice(0, 10);
+async function readCalendarSelection(client: TwEntryAuthorityClient, exchange: Exchange, cutoff: string, lower: string, upper: string) {
   const calendarRows = await readRows((from, to) => client.from('tw_trading_sessions_v3')
     .select('session_authority_id,session_id,market,open_at,close_at,status,provider,source_timestamp,collected_at,source_ref,recorded_at')
     .eq('market', exchange).gte('session_id', lower).lte('session_id', upper)
     .lte('source_timestamp', cutoff).lte('collected_at', cutoff).lte('recorded_at', cutoff)
     .order('session_id').order('recorded_at', { ascending: false }).order('session_authority_id').range(from, to), 20_000);
-  requireAuthority(calendarRows.length, 'official_calendar_history_missing');
   for (const row of calendarRows) requireAuthority(date(row.session_id) && row.market === exchange && row.provider === exchange.toLowerCase()
     && UUID.test(text(row.session_authority_id)) && knownAt(row, cutoff)
     && ['completed', 'cancelled'].includes(text(row.status)) && evidenceInstant(row.open_at) !== null && evidenceInstant(row.close_at) !== null && compareEvidenceClocks(row.open_at, row.close_at) < 0
     && civilTaipei(row.open_at) === row.session_id && civilTaipei(row.close_at) === row.session_id && text(row.source_ref), 'official_calendar_authority_invalid');
   const heads = selectedHeads(calendarRows, 'session_id', ['recorded_at'], ['status', 'open_at', 'close_at', 'provider', 'source_timestamp', 'collected_at', 'source_ref']);
-  const sessions = [...heads].filter(([session, row]) => session <= signalSession && row.status === 'completed' && evidenceKnownAt(row.close_at, cutoff))
-    .map(([session]) => session).sort().slice(-HISTORY);
-  requireAuthority(sessions.length === HISTORY && sessions.at(-1) === signalSession, 'adjusted_history_below_240');
+  return { rows: calendarRows, heads };
+}
+
+async function readActionSelection(client: TwEntryAuthorityClient, exchange: Exchange, cutoff: string, anchor: string, sessions: string[], heads: Map<string, Row>) {
+  if (!sessions.length) return { actionHeads: new Map<string, Row>(), eventMap: new Map<string, Row[]>(),
+    selected: [], feeds: [], events: [] };
   const snapshots = await readRows((from, to) => client.from('opportunity_corporate_action_snapshots_v3')
     .select('snapshot_id,exchange,session_id,session_authority_id,corporate_action_version,provider,collected_at,declared_event_count,dataset_hash,recorded_at')
-    .eq('exchange', exchange).gt('session_id', sessions[0]).lte('session_id', signalSession)
+    .eq('exchange', exchange).gt('session_id', anchor).lte('session_id', sessions.at(-1)!)
     .lte('collected_at', cutoff).lte('recorded_at', cutoff)
     .order('session_id').order('collected_at', { ascending: false }).order('recorded_at', { ascending: false }).order('snapshot_id').range(from, to), 10_000);
   for (const row of snapshots) requireAuthority(knownAt(row, cutoff, ['collected_at', 'recorded_at'])
@@ -143,8 +143,8 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
     && UUID.test(text(row.snapshot_id)) && HASH.test(text(row.dataset_hash)), 'corporate_action_authority_invalid');
   const actionHeads = selectedHeads(snapshots.filter((row) => heads.get(text(row.session_id))?.session_authority_id === row.session_authority_id),
     'session_id', ['collected_at', 'recorded_at'], ['dataset_hash', 'declared_event_count', 'session_authority_id']);
-  requireAuthority(sessions.slice(1).every((session) => actionHeads.has(session)), 'corporate_action_authority_missing');
-  const selected = sessions.slice(1).map((session) => actionHeads.get(session)!);
+  requireAuthority(sessions.every((session) => actionHeads.has(session)), 'corporate_action_authority_missing');
+  const selected = sessions.map((session) => actionHeads.get(session)!);
   const ids = selected.map((row) => text(row.snapshot_id));
   const feeds: Row[] = []; const events: Row[] = [];
   // Keep IN URLs below common reverse-proxy request-line limits. All batches
@@ -186,17 +186,30 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
       snapshot.corporate_action_version, snapshot.provider, canonicalPgTimestamp(snapshot.collected_at), feedTuples, eventTuples]), 'corporate_action_hash_mismatch');
     eventMap.set(text(snapshot.snapshot_id), snapshotEvents);
   }
+  return { actionHeads, eventMap, selected, feeds, events };
+}
+
+async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<SharedAuthority> {
+  const { exchange, cutoff, signalSession } = request;
+  const lower = new Date(Date.parse(`${signalSession}T00:00:00Z`) - 550 * DAY).toISOString().slice(0, 10);
+  const upper = new Date(Date.parse(`${signalSession}T00:00:00Z`) + 30 * DAY).toISOString().slice(0, 10);
+  const { rows: calendarRows, heads } = await readCalendarSelection(client, exchange, cutoff, lower, upper);
+  requireAuthority(calendarRows.length, 'official_calendar_history_missing');
+  const sessions = [...heads].filter(([session, row]) => session <= signalSession && row.status === 'completed' && evidenceKnownAt(row.close_at, cutoff))
+    .map(([session]) => session).sort().slice(-HISTORY);
+  requireAuthority(sessions.length === HISTORY && sessions.at(-1) === signalSession, 'adjusted_history_below_240');
+  const { actionHeads, eventMap, selected, feeds, events } = await readActionSelection(client, exchange, cutoff, sessions[0], sessions.slice(1), heads);
   return { sessions, calendarRows: heads, calendarById: new Map(calendarRows.map((row) => [text(row.session_authority_id), row])), snapshots: actionHeads, events: eventMap,
     availableAt: maxTime(...sessions.map((session) => heads.get(session)!.recorded_at), ...selected.map((row) => row.recorded_at),
       ...feeds.map((row) => row.recorded_at), ...events.map((row) => row.recorded_at)) };
 }
 
-function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRequest): TwEntryCalendar {
+function selectAnnualCalendar(request: TwEntryAuthorityRequest, lower: string) {
   const evidence = request.forwardCalendar;
   requireAuthority(evidence?.schema === 'official-calendar-acquisition-v3.14'
     && evidenceKnownAt(evidence.availableAt, request.cutoff) && Array.isArray(evidence.calendarSessions)
     && evidence.calendarSessions.length <= 1200, 'official_next_session_missing');
-  const forward = evidence.calendarSessions.filter((row) => row.market === request.exchange && date(row.session) && row.session >= authority.sessions[0])
+  const forward = evidence.calendarSessions.filter((row) => row.market === request.exchange && date(row.session) && row.session >= lower)
     .sort((a, b) => text(a.session).localeCompare(text(b.session)));
   const byDate = new Map<string, Row>();
   for (const row of forward) {
@@ -209,6 +222,11 @@ function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRe
     requireAuthority(url.protocol === 'https:' && url.hostname === (request.exchange === 'TWSE' ? 'www.twse.com.tw' : 'www.tpex.org.tw'), 'official_next_calendar_invalid');
     byDate.set(text(row.session), row);
   }
+  return { evidence, byDate };
+}
+
+function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRequest): TwEntryCalendar {
+  const { evidence, byDate } = selectAnnualCalendar(request, authority.sessions[0]);
   const knownCancellations: Row[] = [];
   for (let instant = Date.parse(`${authority.sessions[0]}T00:00:00Z`); instant <= Date.parse(`${request.signalSession}T00:00:00Z`); instant += DAY) {
     const day = new Date(instant); const session = day.toISOString().slice(0, 10); const row = byDate.get(session);
@@ -392,6 +410,141 @@ export async function loadTwEntryHistoricalPriceAuthority(client: TwEntryAuthori
   } catch (error) {
     return { ...base, missingData: [error instanceof Error && /^[a-z0-9_]+$/u.test(error.message) ? error.message : 'entry_authority_read_failed'] };
   }
+}
+
+type LaunchOutcomeSignalRow = Omit<LaunchOutcomeInput['signal'], 'normalizedClose'> & {
+  stockId: string;
+  closeObservationId: string;
+  calendarAuthorityId: string;
+  calendarRevision: string;
+  actionsRevision: string;
+  publishedAt: string;
+};
+
+const OUTCOME_SCALE = BigInt(100_000_000);
+function outcomePriceUnits(value: unknown): bigint {
+  requireAuthority(finitePositive(value) && value < 1e12 && Number(value.toFixed(8)) === value, 'launch_outcome_raw_price_precision');
+  return BigInt(value.toFixed(8).replace('.', ''));
+}
+function outcomePrice(value: unknown, numerator = BigInt(1), denominator = BigInt(1)) {
+  const units = (outcomePriceUnits(value) * numerator + denominator / BigInt(2)) / denominator;
+  requireAuthority(units > BigInt(0) && units < OUTCOME_SCALE * BigInt(1e12), 'launch_outcome_adjusted_price_precision');
+  return `${units / OUTCOME_SCALE}.${String(units % OUTCOME_SCALE).padStart(8, '0')}`;
+}
+
+async function readOutcomePrices(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest,
+  anchor: LaunchOutcomeSignalRow, calendarRows: Row[], selected: string[]) {
+  const { stockId, exchange, cutoff, signalSession } = request;
+  const byId = new Map(calendarRows.map(row => [row.session_authority_id, row]));
+  const closes = new Set([signalSession, ...selected]);
+  const result = await readRows((from, to) => client.from('opportunity_price_observations_v3')
+    .select('observation_id,stock_id,exchange,session_id,session_authority_id,raw_open,raw_high,raw_low,raw_close,provider,source_timestamp,collected_at,source_ref,recorded_at')
+    .eq('stock_id', stockId).eq('exchange', exchange).eq('provider', exchange.toLowerCase())
+    .gte('session_id', signalSession).lte('session_id', selected.at(-1) ?? signalSession)
+    .lte('source_timestamp', cutoff).lte('collected_at', cutoff).lte('recorded_at', cutoff)
+    .order('session_id').order('source_timestamp', { ascending: false }).order('collected_at', { ascending: false })
+    .order('recorded_at', { ascending: false }).order('observation_id').range(from, to), 2400);
+  const rows = result.filter(row => closes.has(text(row.session_id)));
+  for (const row of rows) {
+    const calendar = byId.get(row.session_authority_id);
+    requireAuthority(row.stock_id === stockId && row.exchange === exchange && row.provider === exchange.toLowerCase()
+      && UUID.test(text(row.observation_id)) && text(row.source_ref).startsWith(`${exchange.toLowerCase()}-`)
+      && knownAt(row, cutoff) && calendar && calendar.session_id === row.session_id && calendar.status === 'completed'
+      && evidenceKnownAt(calendar.close_at, text(row.source_timestamp)), 'launch_outcome_raw_price_authority');
+  }
+  const frozen = rows.find(row => row.observation_id === anchor.closeObservationId);
+  requireAuthority(frozen && frozen.session_id === signalSession && frozen.session_authority_id === anchor.calendarAuthorityId
+    && knownAt(frozen, anchor.cutoff) && knownAt(byId.get(anchor.calendarAuthorityId)!, anchor.cutoff)
+    && outcomePrice(frozen.raw_close) === outcomePrice(Number(anchor.rawClose)), 'launch_outcome_frozen_close_mismatch');
+  return { frozen, rows };
+}
+
+/** Reads only official cache rows and the annual calendar evidence. Call from
+ * the writer with a trusted immutable signal row. The quote/corporate-action
+ * basis is pinned to the observation cutoff and never modifies the signal.
+ * OHLC alone conveys no opening execution eligibility. */
+export async function loadTwLaunchOutcomeInput(client: TwEntryAuthorityClient,
+  anchor: LaunchOutcomeSignalRow, asOf: string, annual: TwEntryForwardCalendar): Promise<LaunchOutcomeInput> {
+  const { stockId, symbol, market, session: signalSession, cutoff } = anchor;
+  requireAuthority([stockId, anchor.calendarAuthorityId, anchor.closeObservationId, anchor.rankingRunId, anchor.firstRankingRunId].every(id => UUID.test(id))
+    && [anchor.actionsRevision, anchor.calendarRevision, anchor.priceRevision, anchor.inputHash].every(revision => HASH.test(revision))
+    && /^\d{4}$/u.test(symbol) && ['TWSE', 'TPEX'].includes(market) && date(signalSession)
+    && /^(?:0|[1-9]\d{0,11})(?:\.\d{1,8})?$/u.test(anchor.rawClose)
+    && evidenceKnownAt(cutoff, anchor.publishedAt) && evidenceKnownAt(anchor.publishedAt, asOf)
+    && evidenceKnownAt(asOf, new Date().toISOString()), 'launch_outcome_authority_request');
+  const request: TwEntryAuthorityRequest = { stockId, symbol, exchange: market, signalSession, cutoff: asOf, forwardCalendar: annual };
+  const upper = new Date(Date.parse(`${signalSession}T00:00:00Z`) + 370 * DAY).toISOString().slice(0, 10);
+  const { byDate } = selectAnnualCalendar(request, signalSession);
+  const { rows: calendarRows, heads } = await readCalendarSelection(client, market, asOf, signalSession, upper);
+  const sessions: LaunchOutcomeInput['sessions'] = [];
+  const pins: Array<{ day: string; annual: Row; recorded: Row | null }> = [];
+  const completed: string[] = [];
+  let positions = 0;
+  for (let current = Date.parse(`${signalSession}T00:00:00Z`) + DAY; current <= Date.parse(`${upper}T00:00:00Z`); current += DAY) {
+    const civil = new Date(current);
+    const day = civil.toISOString().slice(0, 10);
+    const planned = byDate.get(day);
+    const recorded = heads.get(day);
+    if (!planned && !recorded && [0, 6].includes(civil.getUTCDay())) continue;
+    requireAuthority(planned, 'launch_outcome_annual_calendar_gap');
+    pins.push({ day, annual: planned, recorded: recorded ?? null });
+    if (planned.status === 'holiday') {
+      requireAuthority(recorded?.status !== 'completed', 'launch_outcome_calendar_conflict');
+      continue;
+    }
+    const openAt = text(recorded?.open_at ?? planned.openAt);
+    const closeAt = text(recorded?.close_at ?? planned.scheduledCloseAt);
+    requireAuthority(evidenceKnownAt(openAt, closeAt) && compareEvidenceClocks(openAt, closeAt) < 0
+      && civilTaipei(openAt) === day && civilTaipei(closeAt) === day, 'launch_outcome_calendar_clocks');
+    const status = recorded?.status === 'cancelled' ? 'cancelled'
+      : recorded?.status === 'completed' && evidenceKnownAt(closeAt, text(recorded.recorded_at)) ? 'completed' : 'scheduled';
+    requireAuthority(recorded?.status !== 'completed' || status === 'completed', 'launch_outcome_early_calendar_observation');
+    sessions.push({ session: day, openAt, closeAt, status, knownAt: maxTime(annual.availableAt, ...(recorded ? [recorded.recorded_at] : [])) });
+    if (status === 'cancelled') continue;
+    positions++;
+    // Keep the first unresolved session in the sequence. A later quote cannot
+    // bridge it, since an unseen corporate action would change the price basis.
+    if (status !== 'completed') break;
+    completed.push(day);
+    if (positions === 120) break;
+  }
+  requireAuthority((positions === 120 || sessions.at(-1)?.status === 'scheduled') && sessions.length <= 180, 'launch_outcome_calendar_window_missing');
+
+  const { actionHeads, eventMap, selected, feeds, events } = await readActionSelection(client, market, asOf, signalSession, completed, heads);
+  const { frozen, rows } = await readOutcomePrices(client, request, anchor, calendarRows, completed);
+  const forwardPrices = selectedHeads(rows.filter(row => completed.includes(text(row.session_id))
+    && heads.get(text(row.session_id))?.session_authority_id === row.session_authority_id),
+    'session_id', ['source_timestamp', 'collected_at', 'recorded_at'], ['raw_open', 'raw_high', 'raw_low', 'raw_close', 'session_authority_id']);
+  const basisRevision = hash(['tw-launch-outcome-price-basis-v1', market, symbol, anchor.closeObservationId, anchor.actionsRevision,
+    completed.map(day => {
+      const snapshot = actionHeads.get(day)!;
+      return [day, snapshot.snapshot_id, snapshot.session_authority_id, snapshot.dataset_hash];
+    })]);
+  const actionsKnownAt = maxTime(anchor.cutoff, ...selected.map(row => row.recorded_at), ...feeds.map(row => row.recorded_at), ...events.map(row => row.recorded_at));
+  const bars: LaunchOutcomeInput['bars'] = [];
+  let numerator = BigInt(1), denominator = BigInt(1);
+  for (const day of [...completed].reverse()) {
+    const row = forwardPrices.get(day);
+    if (row) bars.unshift({ session: day, basisRevision,
+      priceRevision: hash(['tw-launch-outcome-official-price-v1', row]),
+      availableAt: maxTime(row.recorded_at, heads.get(day)!.recorded_at, actionsKnownAt),
+      rawOpen: outcomePrice(row.raw_open), open: outcomePrice(row.raw_open, numerator, denominator),
+      high: outcomePrice(row.raw_high, numerator, denominator), low: outcomePrice(row.raw_low, numerator, denominator),
+      close: outcomePrice(row.raw_close, numerator, denominator) });
+    const snapshot = actionHeads.get(day)!;
+    const event = eventMap.get(text(snapshot.snapshot_id))!.find(item => item.symbol === symbol);
+    if (event) {
+      numerator *= outcomePriceUnits(event.post_action_reference_price);
+      denominator *= outcomePriceUnits(event.pre_action_reference_price);
+    }
+  }
+  return {
+    scope: 'published_rank', asOf, basisRevision, sessions, bars, opening: null,
+    calendarRevision: hash(['tw-launch-outcome-calendar-v1', anchor.calendarRevision, pins]),
+    signal: { rankingRunId: anchor.rankingRunId, firstRankingRunId: anchor.firstRankingRunId, symbol, market,
+      session: signalSession, cutoff, inputHash: anchor.inputHash, priceRevision: anchor.priceRevision,
+      rawClose: anchor.rawClose, normalizedClose: outcomePrice(frozen.raw_close, numerator, denominator) },
+  };
 }
 
 /** Additive selected-cache evidence for Launch Radar arithmetic. Existing

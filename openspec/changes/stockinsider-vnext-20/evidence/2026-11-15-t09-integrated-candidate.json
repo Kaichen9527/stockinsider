@@ -1,0 +1,62 @@
+{
+  "ticket": 394,
+  "pr": 384,
+  "prHead": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "base": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "evidenceHead": "9631b15498769d2a08ba4c810026cbfa7b9cc3d5",
+  "scope": "staged integration candidate with no production writes",
+  "code": {
+    "files": {
+      "web/src/lib/vnext/launch-outcomes.ts": "b092e9189a099d9524e225bb15c660a5096dca5b40e8f90d3bdc05f4c0b822e8",
+      "web/src/lib/tw-entry-plan-authority.ts": "ea78438695021ddf78d7bdfceca31a600e702b65ab6a8b69d00bb4a85806aa25",
+      "web/src/lib/vnext/launch-opening-halt.ts": "0cbedc56602d8024cf3f2e1385cb680b316c9929017ce7c179db82d65dd36ae9",
+      "web/src/lib/vnext/launch-opening-halt.test.ts": "f4e90ad9f9588d6bcb5f1fa111e09bf304a47adbb5ce9f50145ebc1783a6c285",
+      "web/src/lib/vnext/launch-outcome-cycle.ts": "6a29c46d94320025f8a65816706148a507735baccc8f890f1869b8c674fc0b0a",
+      "web/src/lib/vnext/research-cycle.ts": "1e3f7fbdc258b48a6f3c63fff7a778031417605bae477eb8551facf7f9a4414d",
+      "web/src/lib/tw-entry-plan-authority.test.ts": "171c6f15c88d39506cc1b0b89ad1a9faab1becc0de065e624573fc715a283040",
+      "web/src/lib/vnext/http.ts": "00baf291a69c83dad14dc52b89f686b0fa4a3df750d9f4843fb522095471904c",
+      "web/src/lib/vnext/launch-outcome-public.ts": "c59cad1da458e39fac3a6b56345da3b676b9b48095de98917cc6cd30c21b4251",
+      "web/src/app/components/vnext/LaunchOutcomeSummary.tsx": "4b07fd301cbc4f87afea04ab1e264036c754d27e5b2c9662b0345353eeb2defa",
+      "web/src/lib/vnext/launch-outcome-public.test.ts": "8854caa12fb43901b3723c756f97b957d8bbbf7d13a16e77b0acc0d70a280e90",
+      "web/src/app/components/vnext/LaunchDetail.tsx": "1671923437323a5420139b17943085e764cc697124b577b0e1aa8d86b16f84bc",
+      "web/src/app/api/launch-ranking/route.ts": "122c0c88f2207c67f653115b751b38819d95002fc777297958772411498f6ae3",
+      "web/src/lib/vnext/launch-public-api.test.ts": "485d7868b7583903191b6925cac9b3c745b828289c59010c39887956718666fb",
+      "web/src/lib/vnext/launch-page-dispatch.test.ts": "a02b809e6caadb4ba86a0ba8f625426acd6858ec84318189e2ad5572a7913b87",
+      "migrations/20261116_01_vnext_launch_outcome_signals_v1.sql": "f992d105153e12f94657325c8632b91e75ede1e02d93fa41aca6e765eea47b4e",
+      "migrations/20261116_02_vnext_launch_outcome_versions_v1.sql": "8a63202c50e1c99d864186dee17bf1433e641131d7ea0cebb1fd4c0ab345e36d",
+      "migrations/20261116_03_vnext_launch_outcome_batch_v1.sql": "d37d559d5e91125e1243e732f0254c6ccb6061d7cb34881ed911d9b0be388197",
+      "migrations/20261116_04_vnext_launch_outcome_public_v1.sql": "55ea118784a006e139e82af11a890edb836d5b5e79576f18976143d2bbce34f2"
+    },
+    "passed": 39,
+    "failed": 0,
+    "node": "22.23.1",
+    "strictScopedTypeScript": "5.9.3",
+    "dependencyArchivesVerified": 18
+  },
+  "database": {
+    "postgres": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "onlyUnixSocket": true,
+    "boundSignalAndCalendarBatch": true,
+    "publicBeforeAndAfterSameFrozenRun": true,
+    "sameCutoffNotReenqueued": true,
+    "sameSnapshotReceiptReplayed": true,
+    "seedCount": 1,
+    "migrationSha256": {
+      "signal.sql": "f992d105153e12f94657325c8632b91e75ede1e02d93fa41aca6e765eea47b4e",
+      "migration.sql": "8a63202c50e1c99d864186dee17bf1433e641131d7ea0cebb1fd4c0ab345e36d",
+      "batch.sql": "d37d559d5e91125e1243e732f0254c6ccb6061d7cb34881ed911d9b0be388197",
+      "public.sql": "55ea118784a006e139e82af11a890edb836d5b5e79576f18976143d2bbce34f2"
+    },
+    "exactEvaluatorInputHashPreserved": true
+  },
+  "cloudRuntimeModelProof": false,
+  "prodDeployment": false,
+  "incomplete": [
+    "live official opening capture and executable fill",
+    "market excess return",
+    "first-versus-repeat aggregate",
+    "throughput",
+    "Cloud full build/lint/VN01-VN20/browser",
+    "adjacent real close and protected review"
+  ]
+}

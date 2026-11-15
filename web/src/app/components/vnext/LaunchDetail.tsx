@@ -2,6 +2,8 @@ import Link from 'next/link';
 import {launchDetailQuery,launchRankingEnabled,launchRankingMemberCurrent,readLaunchRankingSnapshot,type LaunchRankingRead} from '@/lib/vnext/launch-ranking-read';
 import {launchAvailabilityText} from './LaunchTop10';
 import LaunchCurrentStatus from './LaunchCurrentStatus';
+import {readPublicLaunchOutcome} from '@/lib/vnext/launch-outcome-public';
+import LaunchOutcomeSummary from './LaunchOutcomeSummary';
 
 const ruleNames:Record<string,string>={trend_close_above_ma50:'收盤高於 MA50',trend_ma50_above_ma200:'MA50 高於 MA200',trend_ma200_rising_5sessions:'MA200 較五個交易日前上升',
   trend_excess_return20_positive:'20 個交易日報酬高於同市場',trend_excess_return63_positive:'63 個交易日報酬高於同市場',consolidation_depth_within15pct:'前 25 日區間深度 ≤15%',
@@ -17,6 +19,8 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
   }
   const member=read?.snapshot?.members.find(item=>item.symbol===symbol),detail=read?.detail;
   if(selection.status==='bound'&&member&&(member.revisionId!==selection.revisionId||member.scoreRevision!==selection.scoreRevision))invalid=true;
+  const outcome=!disabled&&!invalid&&read?.availability==='ready'&&read.snapshot&&member&&detail
+    ?await readPublicLaunchOutcome({rankingRunId:read.snapshot.rankingRunId,symbol,signalSession:read.snapshot.session}):null;
   return <main className="mx-auto max-w-4xl space-y-6 px-4 py-8 text-slate-900 dark:text-slate-100" data-testid="launch-detail">
     <Link href="/" className="underline">返回強勢發動雷達</Link><h1 className="text-2xl font-semibold">{symbol} 強勢發動研究</h1>
     {disabled?<p role="status">強勢發動雷達尚未啟用。</p>:invalid?<p role="status">指定榜單與研究版本不存在或參數不一致。</p>:!member||!detail||!read?<p role="status">{read&&read.availability!=='ready'?launchAvailabilityText(read.availability):'指定研究尚無可讀取的已發布版本。'}</p>:<>
@@ -29,6 +33,7 @@ export default async function LaunchDetail({symbol,query}:{symbol:string;query:R
         <p className="mt-2">基本面與估值：尚無可用資料，獨立於此分數呈現。</p>
         <p className="mt-2">尚無經驗證的調整後圖表資料。</p>
       </section>
+      {outcome&&<LaunchOutcomeSummary outcome={outcome}/>}
       {detail.summary&&<section aria-label="公開研究摘要"><h2 className="font-semibold">研究摘要</h2><p className="mt-2 whitespace-pre-wrap break-words">{detail.summary}</p></section>}
       <section aria-label="固定評分比較"><h2 className="font-semibold">固定評分比較與原始數值</h2><div className="mt-3 overflow-x-auto"><table className="w-full text-left text-sm"><thead><tr><th className="p-2">條件</th><th className="p-2">點數</th><th className="p-2">原始數值</th></tr></thead>
         <tbody>{detail.scoreEvidence.map(rule=><tr key={rule.id} className="border-t border-slate-300"><td className="min-w-40 p-2">{ruleNames[rule.id]}</td><td className="p-2">{rule.points} / {rule.weight}</td><td className="max-w-md break-words p-2">{Object.entries(rule.operands).map(([key,value])=><p key={key}>{key}：{value===null?'未知':typeof value==='boolean'?value?'成立':'未成立':String(value)}</p>)}</td></tr>)}</tbody></table></div>
