@@ -1,4 +1,6 @@
--- SOURCE CANDIDATE / NOT APPLIED. Separate launch policy; legacy financial
+-- SOURCE CANDIDATE / NOT APPLIED. Incremental qualification-outcome revision;
+-- original045240/763a source receipts retain their old meaning in Git.
+-- Separate launch policy; legacy financial
 -- ranking routines, published history, bodies/ACLs and native HOLD are intact.
 BEGIN ISOLATION LEVEL READ COMMITTED;
 SET LOCAL statement_timeout='30s'; SET LOCAL lock_timeout='2s';
@@ -15,6 +17,7 @@ BEGIN
  IF to_regclass('public.vnext_launch_csv_ready_acks_v1') IS NULL OR to_regprocedure('public.vnext_launch_csv_backend_v1(uuid,text,integer)') IS NULL
  OR to_regprocedure('public.vnext_input_sources_current_v1(jsonb,text)') IS NULL
  OR to_regprocedure('public.vnext_business_criteria_current_v1(uuid,text)') IS NULL
+ OR to_regprocedure('public.vnext_trading_invalid_current_v1(text,text)') IS NULL
  OR to_regprocedure('public.vnext_action_terms_current_internal_v1(uuid,text,timestamptz)') IS NULL
  OR to_regclass('public.vnext_publications_v1') IS NULL OR to_regclass('public.vnext_provider_invocations_v1') IS NULL
  THEN RAISE EXCEPTION 'launch_ranking_source_and_research_authority_required';END IF;
@@ -77,10 +80,29 @@ CREATE TABLE public.vnext_launch_score_action_pins_v1(
  score_revision uuid NOT NULL REFERENCES public.vnext_launch_score_evidence_v1,
  snapshot_id uuid NOT NULL REFERENCES public.opportunity_corporate_action_snapshots_v3(snapshot_id),PRIMARY KEY(score_revision,snapshot_id)
 );
+CREATE TABLE public.vnext_launch_rank_exclusions_v1(
+ exclusion_revision uuid PRIMARY KEY DEFAULT gen_random_uuid(),ranking_run_id uuid NOT NULL REFERENCES public.vnext_launch_ranking_snapshots_v1(ranking_run_id),
+ symbol text NOT NULL CHECK(symbol ~ '^[0-9]{4}$'),input_hash text NOT NULL CHECK(input_hash ~ '^[a-f0-9]{64}$'),
+ reason text NOT NULL CHECK(reason IN('non_ordinary','suspended','delisted','illiquid')),
+ input_cutoff timestamptz NOT NULL,checked_at timestamptz NOT NULL,expires_at timestamptz NOT NULL,
+ known_at timestamptz NOT NULL,cash_known_at timestamptz,knowledge_scope text NOT NULL CHECK(knowledge_scope IN('current_venue','cutoff_liquidity')),
+ classification_digest text NOT NULL CHECK(classification_digest ~ '^[a-f0-9]{64}$'),evidence jsonb NOT NULL,
+ instrument_id uuid NOT NULL REFERENCES public.stock_instruments_v3(instrument_authority_id),
+ frozen_instrument_id uuid REFERENCES public.stock_instruments_v3(instrument_authority_id),
+ UNIQUE(ranking_run_id,symbol),CHECK(expires_at>checked_at AND expires_at<=checked_at+interval '120 seconds'),
+ CHECK(known_at<=checked_at),CHECK(knowledge_scope<>'cutoff_liquidity' OR (cash_known_at IS NOT NULL AND cash_known_at<=input_cutoff))
+);
+CREATE TABLE public.vnext_launch_exclusion_source_pins_v1(
+ exclusion_revision uuid NOT NULL REFERENCES public.vnext_launch_rank_exclusions_v1(exclusion_revision),
+ capture_id uuid NOT NULL,session_date date NOT NULL,symbol text NOT NULL,
+ calendar_id uuid NOT NULL REFERENCES public.tw_trading_sessions_v3(session_authority_id),
+ PRIMARY KEY(exclusion_revision,capture_id,session_date,symbol),
+ FOREIGN KEY(capture_id,session_date,symbol) REFERENCES public.vnext_launch_csv_facts_v1(capture_id,session_date,symbol)
+);
 DO $tables$
 DECLARE name text;
 BEGIN
- FOREACH name IN ARRAY ARRAY['vnext_launch_ranking_mode_v1','vnext_launch_score_evidence_v1','vnext_launch_qualifications_v1','vnext_launch_ranking_snapshots_v1','vnext_launch_ranking_members_v1','vnext_launch_score_source_pins_v1','vnext_launch_score_price_pins_v1','vnext_launch_score_action_pins_v1'] LOOP
+ FOREACH name IN ARRAY ARRAY['vnext_launch_ranking_mode_v1','vnext_launch_score_evidence_v1','vnext_launch_qualifications_v1','vnext_launch_ranking_snapshots_v1','vnext_launch_ranking_members_v1','vnext_launch_score_source_pins_v1','vnext_launch_score_price_pins_v1','vnext_launch_score_action_pins_v1','vnext_launch_rank_exclusions_v1','vnext_launch_exclusion_source_pins_v1'] LOOP
   EXECUTE format('ALTER TABLE public.%I OWNER TO stockinsider_vnext_owner',name);
   EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY',name);
   EXECUTE format('REVOKE ALL ON public.%I FROM PUBLIC,anon,authenticated,service_role',name);
@@ -221,10 +243,10 @@ CREATE FUNCTION public.vnext_launch_source_fact_v1(dataset integer,day date,targ
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET timezone='UTC' SET extra_float_digits=3 AS $$
 DECLARE rows_json jsonb;selected jsonb;policy_hash text;fact jsonb;expected_key text;
 BEGIN
- IF dataset NOT IN(11370,11371,11856,11391,11755) OR day IS NULL OR cutoff IS NULL OR cutoff>statement_timestamp()
+ IF dataset NOT IN(11370,11371,11856,11391,11755) OR day IS NULL OR cutoff IS NULL OR cutoff>clock_timestamp()
  OR target IS NULL OR target!~'^(INDEX|[0-9]{4})$' THEN RETURN NULL;END IF;
  SELECT public.vnext_launch_csv_hash_v1(to_jsonb(policy)) INTO policy_hash FROM public.vnext_source_policies_v1 policy
- WHERE source='official' AND scope='official_original' AND enabled AND valid_until>statement_timestamp();
+ WHERE source='official' AND scope='official_original' AND enabled AND valid_until>clock_timestamp();
  IF policy_hash IS NULL THEN RETURN NULL;END IF;
  expected_key:=CASE WHEN dataset IN(11391,11755) THEN to_char(day,'YYYY-MM') ELSE day::text END;
  SELECT coalesce(jsonb_agg(packet ORDER BY available DESC,capture),'[]'::jsonb) INTO rows_json FROM(
@@ -318,7 +340,7 @@ LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET t
 DECLARE result jsonb;release text:=public.vnext_launch_calendar_release_v1();
 BEGIN
  IF market_name NOT IN('TWSE','TPEX') OR first_day IS NULL OR last_day<first_day OR last_day-first_day>2400
- OR cutoff IS NULL OR cutoff>statement_timestamp() OR release IS NULL THEN RETURN NULL;END IF;
+ OR cutoff IS NULL OR cutoff>clock_timestamp() OR release IS NULL THEN RETURN NULL;END IF;
  SELECT coalesce(jsonb_agg(candidate.packet ORDER BY candidate.session_order,candidate.applied_order DESC,candidate.job_order,candidate.chunk_order,candidate.row_order),'[]'::jsonb)
  INTO result FROM(
  SELECT jsonb_build_object('row',item.value,'chunkHash',chunk.chunk_hash,'jobId',chunk.job_id,
@@ -641,7 +663,7 @@ CREATE FUNCTION public.vnext_launch_instrument_v1(target text,cutoff timestamptz
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public AS $$
 DECLARE rows_json jsonb;selected jsonb;
 BEGIN
- IF target!~'^[0-9]{4}$' OR cutoff IS NULL OR cutoff>statement_timestamp() THEN RETURN NULL;END IF;
+ IF target!~'^[0-9]{4}$' OR cutoff IS NULL OR cutoff>clock_timestamp() THEN RETURN NULL;END IF;
  SELECT jsonb_agg(packet ORDER BY recorded_at DESC,instrument_authority_id) INTO rows_json FROM(
   SELECT jsonb_build_object('id',instrument_authority_id,'stockId',stock_id,'symbol',symbol,'exchange',exchange,
    'instrumentType',instrument_type,'listingStatus',listing_status,'provider',provider,'rosterVersion',roster_version,
@@ -655,8 +677,12 @@ BEGIN
  -- Select the full head BEFORE checking common/active/validity. An old active
  -- listing cannot hide a newer delisted, renamed or different-instrument row.
  IF selected->>'rosterVersion'<>'tw-instrument-roster-v3.0' OR selected->>'exchange' NOT IN('TWSE','TPEX')
-  OR selected->>'provider'<>lower(selected->>'exchange') OR (selected->>'validFrom')::timestamptz>cutoff
-  OR (selected->>'validTo' IS NOT NULL AND (selected->>'validTo')::timestamptz<=cutoff) THEN RETURN NULL;END IF;
+  OR selected->>'provider'<>lower(selected->>'exchange') OR NOT isfinite((selected->>'sourceAt')::timestamptz)
+  OR NOT isfinite((selected->>'recordedAt')::timestamptz) OR NOT isfinite((selected->>'validFrom')::timestamptz)
+  OR (selected->>'sourceAt')::timestamptz>(selected->>'recordedAt')::timestamptz OR (selected->>'validFrom')::timestamptz>cutoff
+  OR (selected->>'validTo' IS NOT NULL AND (NOT isfinite((selected->>'validTo')::timestamptz) OR (selected->>'validTo')::timestamptz<=cutoff)) THEN RETURN NULL;END IF;
+ IF EXISTS(SELECT FROM public.stock_instruments_v3 other WHERE other.stock_id=(selected->>'stockId')::uuid AND other.symbol<>target
+  AND other.recorded_at<=cutoff AND other.source_timestamp<=cutoff AND other.valid_from<=cutoff AND(other.valid_to IS NULL OR other.valid_to>cutoff)) THEN RETURN NULL;END IF;
  RETURN selected;
 END $$;
 
@@ -753,6 +779,153 @@ BEGIN
   'marketRevision',public.vnext_launch_csv_hash_v1(index_inventory));
 END $$;
 
+-- Independent qualification window:20 OFFICIAL sessions, not the last20
+-- listed/traded stock rows. No technical240/51/share-adjustment gate is weakened
+-- or borrowed. This private getter is owned by the existing authority owner.
+CREATE FUNCTION public.vnext_launch_cash_calendar_internal_v1(target text,stock uuid,venue text,signal_day date,cutoff timestamptz,observed_at timestamptz) RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET timezone='UTC' AS $$
+DECLARE identities jsonb;rows_json jsonb;heads jsonb;current_rows jsonb;current_heads jsonb;sessions jsonb;annual jsonb;annual_current jsonb;first_day date;day date;c jsonb;a jsonb;known_at timestamptz;
+BEGIN
+ IF target IS NULL OR target!~'^[0-9]{4}$' OR stock IS NULL OR venue IS NULL OR venue NOT IN('TWSE','TPEX') OR signal_day IS NULL OR cutoff IS NULL
+  OR observed_at IS NULL OR cutoff>observed_at OR observed_at>clock_timestamp() THEN RETURN NULL;END IF;
+ SELECT jsonb_agg(to_jsonb(r) ORDER BY recorded_at,instrument_authority_id) INTO identities FROM(
+  SELECT instrument_authority_id,stock_id,symbol,exchange,source_timestamp,recorded_at FROM public.stock_instruments_v3 WHERE symbol=target
+   AND recorded_at<=observed_at AND source_timestamp<=observed_at ORDER BY recorded_at DESC,instrument_authority_id LIMIT 1001
+ ) r;
+ IF identities IS NULL OR jsonb_array_length(identities)>1000 OR EXISTS(SELECT FROM jsonb_array_elements(identities) r
+  WHERE r->>'stock_id' IS DISTINCT FROM stock::text OR r->>'exchange' IS DISTINCT FROM venue
+   OR NOT isfinite((r->>'source_timestamp')::timestamptz) OR NOT isfinite((r->>'recorded_at')::timestamptz)
+   OR (r->>'source_timestamp')::timestamptz>(r->>'recorded_at')::timestamptz) THEN RETURN NULL;END IF;
+ SELECT jsonb_agg(to_jsonb(r) ORDER BY session_id,recorded_at DESC,session_authority_id) INTO rows_json FROM(
+  SELECT * FROM public.tw_trading_sessions_v3 WHERE market::text=venue AND session_id BETWEEN signal_day-180 AND signal_day
+   AND source_timestamp<=cutoff AND collected_at<=cutoff AND recorded_at<=cutoff
+  ORDER BY session_id DESC,recorded_at DESC,session_authority_id LIMIT 12001
+ ) r;
+ IF rows_json IS NULL OR jsonb_array_length(rows_json)>12000 THEN RETURN NULL;END IF;
+ IF EXISTS(WITH ranked AS(SELECT value,dense_rank() OVER(PARTITION BY value->>'session_id' ORDER BY (value->>'recorded_at')::timestamptz DESC) priority
+  FROM jsonb_array_elements(rows_json)) SELECT FROM ranked WHERE priority=1 GROUP BY value->>'session_id' HAVING count(DISTINCT(value-'session_authority_id'))>1) THEN RETURN NULL;END IF;
+ SELECT jsonb_agg(value ORDER BY value->>'session_id') INTO heads FROM(
+  SELECT DISTINCT ON(value->>'session_id') value FROM jsonb_array_elements(rows_json)
+  ORDER BY value->>'session_id',(value->>'recorded_at')::timestamptz DESC,value->>'session_authority_id'
+ ) selected;
+ SELECT jsonb_agg(value ORDER BY value->>'session_id') INTO sessions FROM(
+  SELECT value FROM jsonb_array_elements(heads) WHERE value->>'status'='completed' AND (value->>'close_at')::timestamptz<=cutoff
+  ORDER BY value->>'session_id' DESC LIMIT 20
+ ) selected;
+ IF sessions IS NULL OR jsonb_array_length(sessions)<>20 OR sessions->-1->>'session_id'<>signal_day::text THEN RETURN NULL;END IF;
+ first_day:=(sessions->0->>'session_id')::date;
+ -- A later official cancellation/correction cannot silently keep the older
+ -- cash-window negative current. It may demote to UNKNOWN, never backfill cash.
+ SELECT jsonb_agg(to_jsonb(r) ORDER BY session_id,recorded_at DESC,session_authority_id) INTO current_rows FROM(
+  SELECT * FROM public.tw_trading_sessions_v3 WHERE market::text=venue AND session_id BETWEEN first_day AND signal_day
+   AND source_timestamp<=observed_at AND collected_at<=observed_at AND recorded_at<=observed_at
+  ORDER BY session_id DESC,recorded_at DESC,session_authority_id LIMIT 12001
+ ) r;
+ IF current_rows IS NULL OR jsonb_array_length(current_rows)>12000 THEN RETURN NULL;END IF;
+ IF EXISTS(WITH ranked AS(SELECT value,dense_rank() OVER(PARTITION BY value->>'session_id' ORDER BY (value->>'recorded_at')::timestamptz DESC) priority
+  FROM jsonb_array_elements(current_rows)) SELECT FROM ranked WHERE priority=1 GROUP BY value->>'session_id' HAVING count(DISTINCT(value-'session_authority_id'))>1) THEN RETURN NULL;END IF;
+ SELECT jsonb_agg(value ORDER BY value->>'session_id') INTO current_heads FROM(
+  SELECT DISTINCT ON(value->>'session_id') value FROM jsonb_array_elements(current_rows)
+  ORDER BY value->>'session_id',(value->>'recorded_at')::timestamptz DESC,value->>'session_authority_id'
+ ) selected;
+ IF current_heads IS DISTINCT FROM(SELECT jsonb_agg(value ORDER BY value->>'session_id') FROM jsonb_array_elements(heads)
+  WHERE (value->>'session_id')::date>=first_day) THEN RETURN NULL;END IF;
+ annual:=public.vnext_launch_annual_rows_internal_v1(venue,first_day,signal_day,cutoff);
+ IF annual IS NULL OR jsonb_array_length(annual)=0 THEN RETURN NULL;END IF;
+ annual_current:=public.vnext_launch_annual_rows_internal_v1(venue,first_day,signal_day,observed_at);
+ IF annual_current IS DISTINCT FROM annual THEN RETURN NULL;END IF;
+ FOR day IN SELECT generate_series(first_day,signal_day,interval '1 day')::date LOOP
+  SELECT value INTO c FROM jsonb_array_elements(heads) r WHERE r->>'session_id'=day::text;
+  SELECT value INTO a FROM jsonb_array_elements(annual) r WHERE r->'row'->>'session'=day::text
+   ORDER BY (r->>'knownAt')::timestamptz DESC,r->>'jobId' LIMIT 1;
+  IF c IS NOT NULL AND(c->>'provider'<>lower(venue) OR c->>'status' NOT IN('completed','cancelled')
+   OR (c->>'source_timestamp')::timestamptz>(c->>'collected_at')::timestamptz OR (c->>'collected_at')::timestamptz>(c->>'recorded_at')::timestamptz
+   OR (c->>'open_at')::timestamptz>=(c->>'close_at')::timestamptz OR ((c->>'close_at')::timestamptz AT TIME ZONE 'Asia/Taipei')::date<>day) THEN RETURN NULL;END IF;
+  IF c->>'status'='cancelled' THEN CONTINUE;END IF;
+  IF a IS NULL THEN IF c IS NULL AND extract(isodow FROM day) IN(6,7) THEN CONTINUE;ELSE RETURN NULL;END IF;END IF;
+  IF EXISTS(SELECT FROM jsonb_array_elements(annual) other WHERE other->'row'->>'session'=day::text AND other->>'knownAt'=a->>'knownAt' AND other->'row' IS DISTINCT FROM a->'row') THEN RETURN NULL;END IF;
+  IF coalesce((a->'row'->>'provider'<>lower(venue) OR a->'row'->>'sourceSha256'!~'^[a-f0-9]{64}$'
+   OR a->'row'->>'sourceRef'<>lower(venue)||'-annual-calendar:'||extract(year FROM day)::integer::text||':'||day::text||':'||(a->'row'->>'sourceSha256')
+   OR a->'row'->>'sourceUrl'<>CASE venue WHEN 'TWSE' THEN 'https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date='||extract(year FROM day)::integer::text||'0101'
+    ELSE 'https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_'||(extract(year FROM day)::integer-1911)::text||'.htm' END
+   OR NOT(a->'row'->>'status' IN('completed','holiday')) OR (a->'row'->>'sourceTimestamp')::timestamptz>(a->'row'->>'collectedAt')::timestamptz
+   OR (a->'row'->>'collectedAt')::timestamptz>(a->>'knownAt')::timestamptz
+   OR (a->'row'->>'status'='completed') IS DISTINCT FROM(c IS NOT NULL AND c->>'status'='completed')),true) THEN RETURN NULL;END IF;
+ END LOOP;
+ SELECT greatest(max((r->>'recorded_at')::timestamptz),(SELECT max((a->>'knownAt')::timestamptz) FROM jsonb_array_elements(annual) a)) INTO known_at FROM jsonb_array_elements(sessions) r;
+ RETURN jsonb_build_object('sessions',sessions,'annual',annual,'identityRows',identities,'knownAt',known_at,
+  'identityKnownAt',(SELECT max(greatest((r->>'source_timestamp')::timestamptz,(r->>'recorded_at')::timestamptz)) FROM jsonb_array_elements(identities) r),'identityRevision',public.vnext_launch_csv_hash_v1(identities),
+  'calendarRevision',public.vnext_launch_csv_hash_v1(jsonb_build_array('launch-qualification-official20-v1',venue,signal_day,cutoff,sessions,annual)));
+END $$;
+
+CREATE FUNCTION public.vnext_launch_rank_preflight_v1(target text,input_digest text,signal_day date,cutoff timestamptz) RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET timezone='UTC' AS $$
+DECLARE at timestamptz:=clock_timestamp();member public.vnext_members_v1;current_instrument jsonb;frozen_instrument jsonb;invalidity jsonb;calendar jsonb;
+ c jsonb;f jsonb;current_fact jsonb;inventory jsonb:='[]'::jsonb;sum_ntd numeric:=0;cash_known boolean:=true;identity_known boolean:=false;
+ outcome text:='unknown';reason text;scope text;known_at timestamptz;cash_known_at timestamptz;identity_known_at timestamptz;venue text;reasons jsonb:='[]'::jsonb;basis jsonb;result jsonb;
+BEGIN
+ IF target IS NULL OR target!~'^[0-9]{4}$' OR input_digest IS NULL OR input_digest!~'^[a-f0-9]{64}$' OR signal_day IS NULL OR cutoff IS NULL OR cutoff>at THEN RETURN NULL;END IF;
+ SELECT * INTO member FROM public.vnext_members_v1 WHERE symbol=target;
+ IF member.symbol IS NULL OR member.state='exited' OR member.input_hash IS DISTINCT FROM input_digest THEN RETURN NULL;END IF;
+ current_instrument:=public.vnext_launch_instrument_v1(target,at);frozen_instrument:=public.vnext_launch_instrument_v1(target,cutoff);
+ IF current_instrument IS NOT NULL THEN
+  IF current_instrument->>'instrumentType'<>'common_stock' THEN reason:='non_ordinary';scope:='current_venue';
+  ELSIF current_instrument->>'listingStatus' IN('suspended','delisted') THEN
+   invalidity:=public.vnext_trading_invalid_current_v1(target,input_digest);
+   IF invalidity->>'schemaVersion'='stockinsider-vnext-trading-invalidity-v1' AND invalidity->>'symbol'=target AND invalidity->>'inputHash'=input_digest
+    AND invalidity->'instrument'->>'instrument_authority_id'=current_instrument->>'id'
+    AND invalidity->>'proofHash'=public.vnext_launch_csv_hash_v1(invalidity-'proofHash') THEN reason:=current_instrument->>'listingStatus';scope:='current_venue';END IF;
+  END IF;
+  IF reason IS NOT NULL THEN known_at:=greatest((current_instrument->>'recordedAt')::timestamptz,(current_instrument->>'sourceAt')::timestamptz);END IF;
+  identity_known:=frozen_instrument IS NOT NULL AND current_instrument->>'stockId'=frozen_instrument->>'stockId'
+   AND current_instrument->>'exchange'=frozen_instrument->>'exchange' AND current_instrument->>'instrumentType'='common_stock';
+ END IF;
+ -- Cash20 is independently attempted before folding UNKNOWN. A known low cash
+ -- gate may reject this candidate even with missing unrelated original/CA/score
+ -- evidence. Missing identity cannot choose a convenient old TPEX venue.
+ venue:=CASE WHEN identity_known THEN current_instrument->>'exchange' END;
+ IF venue='TPEX' THEN
+  calendar:=public.vnext_launch_cash_calendar_internal_v1(target,(current_instrument->>'stockId')::uuid,venue,signal_day,cutoff,at);
+  IF calendar IS NULL OR (current_instrument->>'validFrom')::timestamptz>(calendar->'sessions'->0->>'open_at')::timestamptz
+   OR (frozen_instrument->>'validFrom')::timestamptz>(calendar->'sessions'->0->>'open_at')::timestamptz THEN cash_known:=false;
+  ELSE
+   FOR c IN SELECT value FROM jsonb_array_elements(calendar->'sessions') LOOP
+    f:=public.vnext_launch_source_fact_v1(11370,(c->>'session_id')::date,target,input_digest,cutoff);
+    IF f IS NULL OR f->>'datasetId' IS DISTINCT FROM '11370' OR f->>'coverage' IS DISTINCT FROM 'tpex_11370_all_sessions_v1' OR f->'fact'->>'traded_ntd' IS NULL
+     OR (f->'fact'->>'traded_ntd')::numeric<0 OR (f->>'observedAt')::timestamptz<(c->>'close_at')::timestamptz THEN cash_known:=false;EXIT;END IF;
+    -- Later correction/withdrawal may invalidate this cutoff operand, but
+    -- cannot replace it with a newly captured postcutoff cash measurement.
+    current_fact:=public.vnext_launch_source_fact_v1(11370,(c->>'session_id')::date,target,input_digest,at);
+    IF current_fact IS DISTINCT FROM f THEN cash_known:=false;EXIT;END IF;
+    sum_ntd:=sum_ntd+(f->'fact'->>'traded_ntd')::numeric;
+    inventory:=inventory||jsonb_build_array(jsonb_build_object('source',f,'calendarId',c->>'session_authority_id'));
+   END LOOP;
+   IF jsonb_array_length(inventory)<>20 THEN cash_known:=false;END IF;
+  END IF;
+ ELSE cash_known:=false;END IF;
+ IF reason IS NULL AND cash_known AND sum_ntd<1000000000::numeric THEN
+  reason:='illiquid';scope:='cutoff_liquidity';
+  SELECT greatest((calendar->>'knownAt')::timestamptz,(frozen_instrument->>'recordedAt')::timestamptz,(frozen_instrument->>'sourceAt')::timestamptz,max((r->'source'->>'availableAt')::timestamptz)) INTO cash_known_at FROM jsonb_array_elements(inventory) r;
+  identity_known_at:=greatest((current_instrument->>'recordedAt')::timestamptz,(current_instrument->>'sourceAt')::timestamptz,(calendar->>'identityKnownAt')::timestamptz);
+  known_at:=greatest(cash_known_at,identity_known_at);
+ END IF;
+ IF reason IS NOT NULL THEN outcome:='known_reject';reasons:=jsonb_build_array('launch_qualification_'||reason);
+ ELSE
+  IF NOT identity_known THEN reasons:=reasons||'"launch_qualification_identity_unknown"'::jsonb;END IF;
+  IF NOT cash_known THEN reasons:=reasons||'"launch_qualification_cash20_unknown"'::jsonb;END IF;
+  -- No typed29082/11677 producer is installed by this change. An active roster
+  -- or trading_invalid deferred response is NOT positive disposition coverage.
+  reasons:=reasons||'"launch_positive_disposition_coverage_producer_not_connected"'::jsonb;
+ END IF;
+ basis:=jsonb_build_object('schemaVersion','launch-rank-preflight-v1','outcome',outcome,'symbol',target,'inputHash',input_digest,'signalSession',signal_day,'inputCutoff',cutoff,
+  'reason',reason,'knowledgeScope',scope,'knownAt',known_at,'cashKnownAt',cash_known_at,'currentIdentityKnownAt',identity_known_at,'instrument',current_instrument,'frozenInstrument',frozen_instrument,
+  'invalidity',invalidity,'cashCalendar',calendar,'cashCurrency','TWD','cashCoverage','tpex_11370_all_sessions_v1','cashKnown',cash_known,'cashTotalNtd',CASE WHEN cash_known THEN sum_ntd END,'cashInventory',inventory,
+  'calendarRevision',calendar->>'calendarRevision','identityRevision',calendar->>'identityRevision','reasons',reasons);
+ -- Checked/expiry clocks are intentionally OUTSIDE the stable state digest.
+ result:=basis||jsonb_build_object('classificationDigest',public.vnext_launch_csv_hash_v1(basis),'checkedAt',at,'expiresAt',at+interval '90 seconds');
+ RETURN result;
+END $$;
+
 -- Public links are a separate current-rights projection. Neither an arbitrary
 -- research citation, a safe hostname nor a matching hash grants public rights.
 CREATE FUNCTION public.vnext_launch_public_citations_v1(score_id uuid) RETURNS jsonb
@@ -842,6 +1015,7 @@ LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public SET timezone
 DECLARE requested uuid;expected uuid;request_digest text;prior public.vnext_launch_ranking_snapshots_v1;replay public.vnext_launch_ranking_snapshots_v1;
  mode public.vnext_launch_ranking_mode_v1;backend jsonb;context jsonb;cutoff timestamptz;day date;at timestamptz;
  member public.vnext_members_v1;publication public.vnext_publications_v1;instrument jsonb;selected jsonb;qualification jsonb;
+ preflight jsonb;fresh_preflight jsonb;preflights jsonb:='[]'::jsonb;exclusions jsonb:='[]'::jsonb;exclusion_id uuid;
  score_id uuid;qualification_id uuid;revisions jsonb;scored jsonb:='[]'::jsonb;candidates jsonb:='[]'::jsonb;changes jsonb:='[]'::jsonb;
  packet jsonb;item jsonb;old_item jsonb;market jsonb;market_revision text;document jsonb;ranked jsonb;score_rules jsonb;pool_revision text;count_active integer;bound_scored jsonb:='[]'::jsonb;
 BEGIN
@@ -882,10 +1056,18 @@ BEGIN
  SELECT count(*) INTO count_active FROM public.vnext_members_v1 WHERE state<>'exited';
  IF count_active>20 THEN RAISE EXCEPTION 'launch_existing_active_pool_bound';END IF;
  FOR member IN SELECT * FROM public.vnext_members_v1 WHERE state<>'exited' ORDER BY symbol LOOP
-  instrument:=public.vnext_launch_instrument_v1(member.symbol,cutoff);
-  IF member.contraindication IS TRUE OR (instrument IS NOT NULL AND (instrument->>'instrumentType'<>'common_stock' OR instrument->>'listingStatus' IN('suspended','delisted'))) THEN
-   candidates:=candidates||jsonb_build_array(jsonb_build_object('symbol',member.symbol,'state','exited','reasons',jsonb_build_array('launch_confirmed_terminal_current_ineligibility')));CONTINUE;
+  -- Independent hard negatives precede publication/fullscore/unknown folding.
+  -- A proved exclusion is a waiting snapshot observation, NEVER a pool exit.
+  preflight:=public.vnext_launch_rank_preflight_v1(member.symbol,member.input_hash,day,cutoff);
+  IF preflight IS NULL THEN RETURN public.vnext_launch_write_receipt_v1(requested,prior.ranking_run_id,false,'launch_active_preflight_unknown');END IF;
+  preflights:=preflights||jsonb_build_array(preflight);
+  IF preflight->>'outcome'='known_reject' THEN
+   exclusions:=exclusions||jsonb_build_array(preflight);
+   candidates:=candidates||jsonb_build_array(jsonb_build_object('symbol',member.symbol,'state','waiting','reasons',preflight->'reasons'));CONTINUE;
   END IF;
+  -- No known rejection is NOT approval. Existing fullscore/formal/source/venue
+  -- checks below must still resolve every required field positively.
+  instrument:=public.vnext_launch_instrument_v1(member.symbol,cutoff);
   -- Do not filter a missing candidate and thereby publish an artificialTop0,
   -- partial ranking, freshdate or a different competitor's apparentlyfull run.
   IF instrument IS NULL THEN RETURN public.vnext_launch_write_receipt_v1(requested,prior.ranking_run_id,false,'launch_active_instrument_unknown');END IF;
@@ -945,6 +1127,23 @@ BEGIN
   'market',jsonb_build_object('session',day,'risk',market->>'risk','confidence','complete','sourceAt',market->'sourceAt','expiresAt',market->'expiresAt',
    'reasons',jsonb_build_array('verified_legacy_market_520_context'),'conditions','[]'::jsonb,'gaps','[]'::jsonb),
   'members',ranked,'candidates',candidates,'changes',changes);
+ -- Re-observe EVERY classification under the same owned lease/CAS locks
+ -- before ANY durable append. Changed/late venue or cash heads retain the old
+ -- run atomically; no partially written peers or stale exclusion is accepted.
+ FOR preflight IN SELECT value FROM jsonb_array_elements(preflights) LOOP
+  PERFORM public.vnext_launch_csv_backend_v1(p_lease_owner);
+  fresh_preflight:=public.vnext_launch_rank_preflight_v1(preflight->>'symbol',preflight->>'inputHash',day,cutoff);
+  IF fresh_preflight IS NULL OR fresh_preflight->>'classificationDigest' IS DISTINCT FROM preflight->>'classificationDigest'
+   OR (preflight->>'expiresAt')::timestamptz<=clock_timestamp() THEN
+   RETURN public.vnext_launch_write_receipt_v1(requested,prior.ranking_run_id,false,'launch_preflight_changed_before_append');END IF;
+ END LOOP;
+ FOR item IN SELECT value FROM jsonb_array_elements(scored) LOOP
+  PERFORM public.vnext_launch_csv_backend_v1(p_lease_owner);
+  qualification:=public.vnext_launch_qualification_checks_v1(item->'packet'->>'symbol',(item->'packet'->>'revisionId')::uuid,item->'packet'->>'inputHash',item->'selected',cutoff);
+  IF qualification->>'qualified' IS DISTINCT FROM 'true' OR qualification->'checks' IS DISTINCT FROM item->'qualification'->'checks'
+   OR qualification->'instrument' IS DISTINCT FROM item->'qualification'->'instrument' THEN
+   RETURN public.vnext_launch_write_receipt_v1(requested,prior.ranking_run_id,false,'launch_current_qualification_changed_before_append');END IF;
+ END LOOP;
  FOR item IN SELECT value FROM jsonb_array_elements(scored) LOOP
   PERFORM public.vnext_launch_csv_backend_v1(p_lease_owner);
   packet:=item->'packet';selected:=item->'selected';qualification:=item->'qualification';score_id:=(packet->>'scoreRevision')::uuid;qualification_id:=(packet->>'launchQualificationRevision')::uuid;
@@ -958,7 +1157,17 @@ BEGIN
   INSERT INTO public.vnext_launch_score_action_pins_v1 SELECT score_id,(a->>'snapshotId')::uuid FROM jsonb_array_elements(selected->'price'->'actions') a;
  END LOOP;
  INSERT INTO public.vnext_launch_ranking_snapshots_v1(ranking_run_id,previous_ranking_run_id,request_hash,input_hash,input_cutoff,session_date,published_at,snapshot)
- VALUES(requested,expected,request_digest,public.vnext_launch_csv_hash_v1(jsonb_build_array(pool_revision,scored,market_revision)),cutoff,day,at,document);
+ VALUES(requested,expected,request_digest,public.vnext_launch_csv_hash_v1(jsonb_build_array(pool_revision,scored,exclusions,market_revision)),cutoff,day,at,document);
+ FOR preflight IN SELECT value FROM jsonb_array_elements(exclusions) LOOP
+  PERFORM public.vnext_launch_csv_backend_v1(p_lease_owner);exclusion_id:=gen_random_uuid();
+  INSERT INTO public.vnext_launch_rank_exclusions_v1(exclusion_revision,ranking_run_id,symbol,input_hash,reason,input_cutoff,checked_at,expires_at,
+   known_at,cash_known_at,knowledge_scope,classification_digest,evidence,instrument_id,frozen_instrument_id)
+  VALUES(exclusion_id,requested,preflight->>'symbol',preflight->>'inputHash',preflight->>'reason',cutoff,(preflight->>'checkedAt')::timestamptz,
+   (preflight->>'expiresAt')::timestamptz,(preflight->>'knownAt')::timestamptz,(preflight->>'cashKnownAt')::timestamptz,preflight->>'knowledgeScope',preflight->>'classificationDigest',preflight,(preflight->'instrument'->>'id')::uuid,(preflight->'frozenInstrument'->>'id')::uuid);
+  INSERT INTO public.vnext_launch_exclusion_source_pins_v1 SELECT exclusion_id,(r->'source'->>'captureId')::uuid,
+   (r->'source'->'fact'->>'session_date')::date,r->'source'->'fact'->>'symbol',(r->>'calendarId')::uuid
+  FROM jsonb_array_elements(preflight->'cashInventory') r;
+ END LOOP;
  INSERT INTO public.vnext_launch_ranking_members_v1 SELECT requested,p.packet->>'symbol',(ranked_member.member_packet->>'rank')::integer,(p.packet->>'revisionId')::uuid,
   (p.packet->>'scoreRevision')::uuid,(p.packet->>'launchQualificationRevision')::uuid,p.packet->>'inputHash' FROM jsonb_array_elements(scored) q
   CROSS JOIN LATERAL(SELECT q->'packet' packet) p LEFT JOIN LATERAL(SELECT value member_packet FROM jsonb_array_elements(ranked) r WHERE r->>'symbol'=p.packet->>'symbol') ranked_member ON true;
@@ -975,7 +1184,7 @@ LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET t
 DECLARE score_row public.vnext_launch_score_evidence_v1;frozen public.vnext_launch_qualifications_v1;selected jsonb;qualified jsonb;
  inventory jsonb;item jsonb;fresh jsonb;raw_rows jsonb;old_row jsonb;head jsonb;checks jsonb;reasons jsonb;state text;
  price_current boolean:=true;source_current boolean:=true;market_entry boolean:=false;at timestamptz:=statement_timestamp();market_name text;day date;today date;
- calendar_now jsonb;recent_rows jsonb;terms_now jsonb;
+ calendar_now jsonb;recent_rows jsonb;terms_now jsonb;preflight jsonb;
 BEGIN
  SELECT * INTO score_row FROM public.vnext_launch_score_evidence_v1 WHERE score_revision=score_id;
  SELECT * INTO frozen FROM public.vnext_launch_qualifications_v1 WHERE qualification_revision=qualification_id AND score_revision=score_id;
@@ -983,6 +1192,13 @@ BEGIN
  selected:=score_row.source_inputs;market_name:=selected->'calendar'->'sessions'->0->>'market';
  qualified:=public.vnext_launch_qualification_checks_v1(score_row.symbol,score_row.research_revision,score_row.input_hash,selected,score_row.input_cutoff);
  checks:=qualified->'checks';reasons:=qualified->'reasons';
+ preflight:=public.vnext_launch_rank_preflight_v1(score_row.symbol,score_row.input_hash,score_row.signal_session,score_row.input_cutoff);
+ IF preflight IS NULL THEN
+  checks:=checks||jsonb_build_object('venue',NULL);reasons:=reasons||'"launch_current_preflight_unknown"'::jsonb;
+ ELSIF preflight->>'outcome'='known_reject' THEN
+  reasons:=reasons||preflight->'reasons';
+  checks:=checks||CASE WHEN preflight->>'reason'='illiquid' THEN jsonb_build_object('liquidity',false) ELSE jsonb_build_object('venue',false) END;
+ END IF;
  IF public.vnext_launch_csv_hash_v1(selected)<>score_row.source_hash THEN source_current:=false;price_current:=false;END IF;
  inventory:=selected->'technicalInventory'||selected->'institutionalInventory'||selected->'flowInventory'||selected->'indexInventory';
  FOR item IN SELECT value FROM jsonb_array_elements(inventory) LOOP
@@ -1047,7 +1263,7 @@ BEGIN
   checks:=checks||jsonb_build_object('source',false);reasons:=reasons||'"launch_current_market_authority_incomplete"'::jsonb;
  ELSIF current_market->>'risk' IN('risk_on','selective') THEN market_entry:=true;
  ELSE reasons:=reasons||'"launch_market_wait"'::jsonb;END IF;
- state:=CASE WHEN checks->>'rights'='false' OR checks->>'venue'='false' THEN 'invalid'
+ state:=CASE WHEN preflight->>'outcome'='known_reject' OR checks->>'rights'='false' OR checks->>'venue'='false' THEN 'invalid'
   WHEN NOT EXISTS(SELECT FROM jsonb_each(checks) c WHERE c.value IS DISTINCT FROM 'true'::jsonb) AND frozen.entry_eligible AND market_entry THEN 'current' ELSE 'waiting' END;
  RETURN jsonb_build_object('symbol',score_row.symbol,'revisionId',score_row.research_revision,'inputHash',score_row.input_hash,
   'scoreRevision',score_row.score_revision,'launchQualificationRevision',frozen.qualification_revision,'revisions',frozen.revisions,
@@ -1108,7 +1324,7 @@ BEGIN
   'vnext_launch_integer_sum_v1(bigint[])','vnext_launch_atr64_v1(double precision[],double precision[],double precision[],integer)',
   'vnext_launch_source_fact_v1(integer,date,text,text,timestamptz)','vnext_launch_cycle_context_v1(text)',
   'vnext_launch_calendar_release_v1()','vnext_launch_rule_v1(text,text,integer,boolean,jsonb,timestamptz,date)',
-  'vnext_launch_market_context_v1(date,timestamptz)',
+  'vnext_launch_market_context_v1(date,timestamptz)','vnext_launch_rank_preflight_v1(text,text,date,timestamptz)',
   'vnext_launch_mechanical_v1(date[],double precision[],double precision[],double precision[],double precision[],bigint[],double precision[],bigint[],bigint[],bigint[],timestamptz)',
   'vnext_launch_price_v1(uuid,text,text,jsonb,timestamptz)','vnext_launch_selected_score_v1(text,text,jsonb,date,timestamptz)',
   'vnext_launch_public_citations_v1(uuid)','vnext_launch_qualification_checks_v1(text,uuid,text,jsonb,timestamptz)',
@@ -1122,7 +1338,7 @@ BEGIN
   'vnext_launch_today_calendar_internal_v1(date,timestamptz)','vnext_launch_annual_rows_internal_v1(text,date,date,timestamptz)',
   'vnext_launch_price_rows_internal_v1(uuid,text,date,date,timestamptz)',
   'vnext_launch_action_day_v1(text,uuid,date,text,timestamptz)','vnext_launch_calendar_v1(text,date,timestamptz,integer)',
-  'vnext_launch_instrument_v1(text,timestamptz)'
+  'vnext_launch_instrument_v1(text,timestamptz)','vnext_launch_cash_calendar_internal_v1(text,uuid,text,date,timestamptz,timestamptz)'
  ] LOOP
   EXECUTE 'ALTER FUNCTION public.'||signature||' OWNER TO opportunity_v3_rpc_owner';
   EXECUTE 'REVOKE ALL ON FUNCTION public.'||signature||' FROM PUBLIC,anon,authenticated,service_role';
