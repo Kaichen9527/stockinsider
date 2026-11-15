@@ -1,0 +1,138 @@
+{
+  "schema": "stockinsider-contabo-t18-real-market-metadata-compatibility-v1",
+  "subject": "319ff431bbc4bd4e39e3ccd69970f94d78234f17",
+  "delta": {
+    "before": "bf84f09651f5e21b5b183656aebd90bddd958627",
+    "after": "319ff431bbc4bd4e39e3ccd69970f94d78234f17",
+    "baselineBlobs": 51,
+    "successorBlobs": 51,
+    "changedPaths": [
+      "deployment/staging/vnext/t17_keyfd/t18_detail_read_adapter.py"
+    ]
+  },
+  "previousNativeEvidence": "bf84f09651f5e21b5b183656aebd90bddd958627",
+  "sourceTestsScope": "238 regression assertions and two independent reports; no packaged web build for that isolated VM",
+  "admission": {
+    "status": "HOST_PREREQUISITES_VERIFIED_ONLY",
+    "keyRead": false,
+    "fixedReleases": [
+      {
+        "buildId": "8ScL_J9rBSjyekr5pb9GV",
+        "fileCount": 2584,
+        "manifestSha256": "2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a",
+        "nextVersion": "16.3.4",
+        "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806"
+      },
+      {
+        "buildId": "e2WBkpZ_wkvn0YPEkko03",
+        "fileCount": 2586,
+        "manifestSha256": "344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a",
+        "nextVersion": "16.3.4",
+        "sourceCommit": "dd59817f750684b093965f539dd4de466be13077"
+      }
+    ],
+    "productionSignaturesUnchanged": true,
+    "cleanup": true
+  },
+  "wrongKey": {
+    "result": "backup_authentication_failed",
+    "keyRead": false,
+    "runnerExit": 2,
+    "restored": false,
+    "productionSignaturesUnchanged": true,
+    "cleanup": true
+  },
+  "real": {
+    "brokerDiagnostics": {},
+    "durationSeconds": 625.598,
+    "keyRead": true,
+    "mode": "real",
+    "nativeHoldRetained": true,
+    "productionSignaturesUnchanged": true,
+    "resourceSample": {
+      "appMemoryPeakObservedBytes": 95817728,
+      "dbMemoryPeakObservedBytes": 805310464,
+      "minimumHostAvailableMemoryBytes": 3848601600,
+      "minimumHostDiskBytes": 18015285248,
+      "minimumWorkFreeBytes": 5966016512,
+      "restMemoryPeakObservedBytes": 28622848
+    },
+    "runner": {
+      "databaseRestored": false,
+      "durationSeconds": 614.105,
+      "nativeHoldRetained": true,
+      "readpointDiagnostics": {
+        "errorClass": "timeout",
+        "ownedCloneCleanupVerified": true,
+        "phase": "fixed_http_exercise"
+      },
+      "reason": "t18_fixed_http_exercise_failed",
+      "schema": "stockinsider-staging-next-rollback-v1",
+      "status": "REJECTED"
+    },
+    "runnerExit": 2,
+    "schema": "stockinsider-t18-host-launcher-v1",
+    "stagingAccounts": "RESERVED_LOCKED_NOLOGIN",
+    "stagingResourcesCleaned": true
+  },
+  "unitJournalClosedCounts": {
+    "stockinsider-t18-db.service": {
+      "entries": 14,
+      "completed": true,
+      "classCounts": {
+        "oom": 0,
+        "timeout": 0,
+        "cpuquotalimit": 0,
+        "db_ready_text": 0,
+        "app_ready_text": 0,
+        "sigkill": 0,
+        "broker_rejection": 0
+      },
+      "remainingState": "inactive"
+    },
+    "stockinsider-t18-rest.service": {
+      "entries": 17,
+      "completed": true,
+      "classCounts": {
+        "oom": 0,
+        "timeout": 0,
+        "cpuquotalimit": 0,
+        "db_ready_text": 0,
+        "app_ready_text": 0,
+        "sigkill": 0,
+        "broker_rejection": 0
+      },
+      "remainingState": "inactive"
+    },
+    "stockinsider-t18-app.service": {
+      "entries": 19,
+      "completed": true,
+      "classCounts": {
+        "oom": 0,
+        "timeout": 0,
+        "cpuquotalimit": 0,
+        "db_ready_text": 0,
+        "app_ready_text": 0,
+        "sigkill": 0,
+        "broker_rejection": 0
+      },
+      "remainingState": "inactive"
+    }
+  },
+  "reclassification": {
+    "exactOutcome": "REJECTED_FIXED_HTTP_EXERCISE_TIMEOUT",
+    "nearestProtectedPhase": "fixed_http_exercise",
+    "detailPreparationOutcome": "NOT_EMITTED",
+    "detailHttpProbeSucceeded": "NOT_PROVEN",
+    "rawFactUrlPolicy": "NOT_EMITTED",
+    "rollbackSequenceCompleted": "NOT_PROVEN_BY_THIS_RUN",
+    "nextStep": "Trace closed child phase for proxy startup, REST negative probes, fixed release sequence and cleanup while retaining existing request and release constraints."
+  },
+  "neverChanged": [
+    "production database",
+    "production services and timers",
+    "release pointers",
+    "protected HOLD",
+    "public output"
+  ]
+}
