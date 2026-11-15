@@ -1,0 +1,189 @@
+{
+  "schema": "stockinsider-contabo-live-scheduler-cutover-timing-v1",
+  "observedAtUtc": "2026-11-15T00:15:26Z",
+  "scope": "READ_ONLY_EFFECTIVE_SYSTEMD_AND_SANITIZED_EXISTING_SERVICE_JOURNAL",
+  "window": {
+    "startTaipei": "2026-11-09T00:00:00+08:00",
+    "endExclusiveTaipei": "2026-11-15T00:00:00+08:00",
+    "cappedRowsPerUnit": 3000,
+    "interpretation": "visible service-manager events; no inference of missing activity or a complete market-session census"
+  },
+  "effectiveUnits": [
+    {
+      "unit": "taiwan-data-queue-drain",
+      "timerExpression": "*-*-* 00..17,22..23:10:00 Asia/Taipei",
+      "enabled": true,
+      "active": true,
+      "persistent": true,
+      "serviceTimeout": "15min 50s",
+      "sharesWriterLock": true,
+      "queueDrain": true,
+      "pipelineRun": false
+    },
+    {
+      "unit": "taiwan-data-final-reconcile",
+      "timerExpression": "*-*-* 20:40:00 Asia/Taipei",
+      "enabled": true,
+      "active": true,
+      "persistent": true,
+      "serviceTimeout": "1h 5min",
+      "sharesWriterLock": true,
+      "queueDrain": true,
+      "pipelineRun": false
+    },
+    {
+      "unit": "research-cycle",
+      "timerExpression": "*-*-* 21:00:00 Asia/Taipei",
+      "enabled": true,
+      "active": true,
+      "persistent": true,
+      "serviceTimeout": "2h 20min",
+      "sharesWriterLock": true,
+      "queueDrain": true,
+      "pipelineRun": true
+    }
+  ],
+  "serviceManagerEventCounts": {
+    "taiwan-data-queue-drain": {
+      "start": 77,
+      "failed": 64,
+      "ok": 13
+    },
+    "taiwan-data-final-reconcile": {
+      "start": 4,
+      "failed": 3,
+      "ok": 1
+    },
+    "research-cycle": {
+      "start": 4,
+      "failed": 3,
+      "ok": 1
+    }
+  },
+  "highlightedTaipeiSpans": {
+    "taiwan-data-queue-drain": [
+      {
+        "start": "2026-11-11T08:10:00+08:00",
+        "end": "2026-11-11T08:11:03+08:00",
+        "seconds": 62.8,
+        "result": "failed"
+      },
+      {
+        "start": "2026-11-12T08:10:00+08:00",
+        "end": "2026-11-12T08:10:22+08:00",
+        "seconds": 22.5,
+        "result": "failed"
+      },
+      {
+        "start": "2026-11-13T08:10:00+08:00",
+        "end": "2026-11-13T08:10:25+08:00",
+        "seconds": 25.2,
+        "result": "failed"
+      },
+      {
+        "start": "2026-11-14T08:10:00+08:00",
+        "end": "2026-11-14T08:10:58+08:00",
+        "seconds": 57.6,
+        "result": "failed"
+      }
+    ],
+    "taiwan-data-final-reconcile": [
+      {
+        "start": "2026-11-11T20:40:09+08:00",
+        "end": "2026-11-11T20:40:19+08:00",
+        "seconds": 9.8,
+        "result": "failed"
+      },
+      {
+        "start": "2026-11-12T20:40:00+08:00",
+        "end": "2026-11-12T20:40:11+08:00",
+        "seconds": 11,
+        "result": "failed"
+      },
+      {
+        "start": "2026-11-13T20:40:09+08:00",
+        "end": "2026-11-13T20:40:18+08:00",
+        "seconds": 9.2,
+        "result": "failed"
+      },
+      {
+        "start": "2026-11-14T20:40:00+08:00",
+        "end": "2026-11-14T20:40:02+08:00",
+        "seconds": 1.7,
+        "result": "ok"
+      }
+    ],
+    "research-cycle": [
+      {
+        "start": "2026-11-11T21:00:00+08:00",
+        "end": "2026-11-11T21:00:16+08:00",
+        "seconds": 15.5,
+        "result": "failed"
+      },
+      {
+        "start": "2026-11-12T21:00:00+08:00",
+        "end": "2026-11-12T21:00:10+08:00",
+        "seconds": 10.1,
+        "result": "failed"
+      },
+      {
+        "start": "2026-11-13T21:00:00+08:00",
+        "end": "2026-11-13T21:00:11+08:00",
+        "seconds": 11,
+        "result": "failed"
+      },
+      {
+        "start": "2026-11-14T21:00:00+08:00",
+        "end": "2026-11-14T21:40:39+08:00",
+        "seconds": 2438.8,
+        "result": "ok"
+      }
+    ]
+  },
+  "httpFailureHeaders": {
+    "queueDrainService": {
+      "/api/internal/candidate-financial-queue-drain:500:candidate_financial_acquisition_failures": 64
+    },
+    "finalReconcileService": {
+      "queue-drain:503:taiwan_refresh_scope_incomplete": 3
+    },
+    "researchCycleService": {
+      "queue-drain:503:taiwan_refresh_scope_incomplete": 3
+    }
+  },
+  "effectiveHourlyRouteOrder": [
+    "/api/internal/taiwan-data-queue-drain",
+    "/api/internal/candidate-financial-queue-drain",
+    "/api/internal/candidate-financial-documents/worker"
+  ],
+  "visibleFinancialFailures": {
+    "bodiesAvailable": 55,
+    "failedHttpHeaders": 64,
+    "entries": 552,
+    "categories": {
+      "BACKEND_LEASE_REQUIRED": 508,
+      "BOUND_VIOLATION": 41,
+      "OTHER": 1,
+      "EMPTY_OFFICIAL_OR_404": 2
+    },
+    "repeatAttemptsMayDuplicateEntries": true,
+    "otherCategoryDoesNotResolveCause": true,
+    "overlapsEarlierLeaseSample": true
+  },
+  "findings": {
+    "researchCycleSuccessServiceSpanCrossed2130": true,
+    "lockWaitAndHoldIntervalsMeasuredSeparately": false,
+    "productionWriterContentionObservedAt2130": false,
+    "market0815ObservedToBeBlocked": false,
+    "requiresStagingLockDelayAndCutoffTest": true,
+    "latestTuneWithSourceDeferral": "0c45a34163c7835f6307437289ff0f7f6985398b",
+    "financialAcquisitionFixVerified": false
+  },
+  "limitations": {
+    "sameSessionNewRadarAcceptance": false,
+    "formalHoldChanged": false,
+    "serviceOrTimerChanges": 0,
+    "productionWriteCalls": 0,
+    "privateJournalBodiesOrIdentifiersIncluded": false
+  }
+}
