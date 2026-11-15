@@ -1,5 +1,7 @@
 import {loadTwLaunchOutcomeInput,type TwEntryAuthorityClient,type TwEntryForwardCalendar} from '../tw-entry-plan-authority.ts';
 import type {VnextIdentity} from './auth.ts';
+import {readLaunchHaltCapture} from './launch-halt-capture.ts';
+import {inspectLaunchSuspendedOpening,type LaunchHaltCapture} from './launch-opening-halt.ts';
 import {evidenceInstant} from './evidence-clock.ts';
 import {evaluateLaunchOutcome,launchOutcomeBenchmarkDays,LAUNCH_OUTCOME_POLICY,type LaunchOutcomeBenchmark,type LaunchOutcomeBenchmarkPoint,type LaunchOutcomeInput} from './launch-outcomes.ts';
 
@@ -69,6 +71,25 @@ function benchmarkPoint(value:unknown):LaunchOutcomeBenchmarkPoint{
     availableAt:value.availableAt,revision:value.revision};
 }
 
+function openingFromReceipts(packet:LaunchOutcomeInput,newest:LaunchHaltCapture|null,previous:unknown):LaunchOutcomeInput['opening']{
+  const next=packet.sessions.find(day=>day.status!=='cancelled');
+  if(!next||next.status!=='completed'||packet.opening!==null)return packet.opening;
+  if(newest){
+    try{
+      const current=inspectLaunchSuspendedOpening(packet,newest);
+      if(current.opening||current.sameDayEvent)return current.opening;
+    }catch{return null;}
+  }
+  if(!object(previous)||!object(previous.opening))return null;
+  const {opening}=previous;
+  const priorAsOf=evidenceInstant(previous.asOf),knownAt=evidenceInstant(opening.knownAt),cutoff=evidenceInstant(packet.asOf);
+  if(priorAsOf===null||knownAt===null||cutoff===null||knownAt>priorAsOf||priorAsOf>=cutoff
+    ||opening.status!=='unfillable'||opening.reason!=='suspended'||opening.session!==next.session
+    ||typeof opening.knownAt!=='string'||!hash(opening.revision)||opening.rawOpen!==null||opening.priceRevision!==null)return null;
+  return {status:'unfillable',reason:'suspended',session:next.session,knownAt:opening.knownAt,
+    revision:opening.revision,rawOpen:null,priceRevision:null};
+}
+
 async function evaluateWithBenchmark(writer:Writer,signal:Row,packet:LaunchOutcomeInput){
   const dates=launchOutcomeBenchmarkDays(packet);
   if(dates.length){
@@ -99,22 +120,28 @@ export async function runLaunchOutcomesWithLease(writer:Writer,principal:string,
   if(selected.error)throw Error('launch_outcome_batch_unavailable');
   const batch=batchFrom(selected.data,asOf);
   let written=0,replayed=0;
+  const haltCaptures=new Map<Market,Promise<LaunchHaltCapture|null>>();
   const deferred:Partial<Record<'official_calendar_unavailable'|'frozen_anchor_unavailable'|'official_data_unavailable'|'write_unconfirmed',number>>={};
   const defer=(reason:keyof typeof deferred)=>{deferred[reason]=(deferred[reason]??0)+1;};
   for(const ref of batch.references){
     const calendar=batch.calendars.get(ref.market);
     if(!calendar){defer('official_calendar_unavailable');continue;}
     const signal={...lease,p_run_id:ref.rankingRunId,p_symbol:ref.symbol};
-    let anchor:Anchor;
+    let anchor:Anchor,previousSuspension:unknown;
     try{
       const selected=await writer.rpc('vnext_launch_outcome_command_v1',signal);
       if(selected.error)throw Error('launch_outcome_anchor_unavailable');
       anchor=anchorFrom(selected.data,ref);
+      previousSuspension=object(selected.data)?selected.data.previousSuspension:null;
     }catch{defer('frozen_anchor_unavailable');continue;}
     let packet:Awaited<ReturnType<typeof loadTwLaunchOutcomeInput>>;
     let evaluation:ReturnType<typeof evaluateLaunchOutcome>;
     try{
       const stock=await loadTwLaunchOutcomeInput(writer,anchor,asOf,calendar);
+      if(stock.sessions.find(day=>day.status!=='cancelled')?.status==='completed'){
+        if(!haltCaptures.has(ref.market))haltCaptures.set(ref.market,readLaunchHaltCapture(writer,principal,owner,ref.market,asOf));
+        stock.opening=openingFromReceipts(stock,await haltCaptures.get(ref.market)!,previousSuspension);
+      }
       ({packet,evaluation}=await evaluateWithBenchmark(writer,signal,stock));
     }catch{defer('official_data_unavailable');continue;}
     try{

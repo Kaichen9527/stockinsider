@@ -60,7 +60,12 @@ BEGIN
    'symbol',anchor.symbol,'stockId',anchor.stock_id,'market',anchor.market,'session',anchor.signal_session,
    'cutoff',anchor.input_cutoff,'publishedAt',anchor.published_at,'rawClose',anchor.raw_close::text,'inputHash',anchor.input_hash,
    'priceRevision',anchor.price_revision,'closeObservationId',anchor.close_observation_id,'calendarAuthorityId',anchor.calendar_authority_id,
-   'calendarRevision',anchor.calendar_revision,'actionsRevision',anchor.actions_revision);
+   'calendarRevision',anchor.calendar_revision,'actionsRevision',anchor.actions_revision,
+   'previousSuspension',(SELECT CASE WHEN v.input#>>'{opening,status}'='unfillable' AND v.input#>>'{opening,reason}'='suspended'
+      THEN jsonb_build_object('asOf',v.as_of,'opening',v.input->'opening') END
+    FROM public.vnext_launch_outcome_versions_v1 v
+    WHERE v.ranking_run_id=p_run_id AND v.symbol=p_symbol AND v.policy_version='launch-outcomes-v1'
+    ORDER BY v.as_of DESC LIMIT 1));
  END IF;
  IF jsonb_typeof(p_input) IS DISTINCT FROM 'object' OR jsonb_typeof(p_result) IS DISTINCT FROM 'object'
   OR octet_length(p_input::text)>256000 OR octet_length(p_result::text)>24000

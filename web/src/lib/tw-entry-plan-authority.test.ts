@@ -359,6 +359,7 @@ test('post-close outcomes use one authorized cutoff and write only evaluated off
       calls.push('batch');
       return { data: response, error: null };
     }
+    if(name==='vnext_launch_halt_command_v1')return {data:null,error:null};
     assert.equal(args.p_run_id, anchor.rankingRunId);
     assert.equal(args.p_symbol, anchor.symbol);
     if (!Object.hasOwn(args, 'p_input')) {
@@ -407,4 +408,29 @@ test('post-close outcomes keep a missing frozen anchor and unknown write distinc
 
 test('post-close outcomes cannot run under an author identity', async () => {
   await assert.rejects(runLaunchOutcomeCycle({ role: 'author', principal: 'stage-author' }, outcomeAsOf), /launch_outcome_operator_required/);
+});
+
+test('post-close worker uses authoritative halt receipts and preserves an earlier same-day halt when the report has moved on', async () => {
+  for(const kind of ['current','retained','contradictory']){
+    const {anchor,response,client}=outcomeBatchFixture();
+    response.signals=response.signals.slice(0,1);
+    const code=kind==='retained'?'1234':'2330',end=kind==='contradictory'?'080500':'110000';
+    const body=Buffer.from('編號,證券代號,證券名稱,暫停交易日期,暫停交易時間,恢復交易日期,恢復交易時間\n'
+      +`1,${code},測試,1150928,080000,1150928,${end}\n`);
+    const prior=kind==='current'?null:{asOf:'2026-09-28T13:30:00Z',opening:{status:'unfillable',reason:'suspended',
+      session:'2026-09-28',knownAt:'2026-09-28T07:00:00Z',revision:'8'.repeat(64),rawOpen:null,priceRevision:null}};
+    const result=await runLaunchOutcomesWithLease({...client,async rpc(name,args){
+      if(name==='vnext_launch_outcome_batch_v1')return {data:response,error:null};
+      if(name==='vnext_launch_halt_command_v1')return {data:{market:'TWSE',observedAt:'2026-09-29T07:30:00Z',
+        recordedAt:'2026-09-29T08:00:00Z',sha256:createHash('sha256').update(body).digest('hex'),bodyBase64:body.toString('base64')},error:null};
+      if(!Object.hasOwn(args,'p_input'))return {data:{...anchor,previousSuspension:prior},error:null};
+      const evaluated=args.p_result as ReturnType<typeof evaluateLaunchOutcome>;
+      assert.equal(evaluated.execution.status,kind==='contradictory'?'opening_evidence_gap':'unfillable');
+      assert.equal(evaluated.execution.nextSession,'2026-09-28');
+      assert.equal(evaluated.execution.fill,null);
+      return {data:{schemaVersion:'vnext-launch-outcome-write-v1',rankingRunId:anchor.rankingRunId,symbol:anchor.symbol,
+        policyVersion:evaluated.policyVersion,inputSnapshotHash:evaluated.inputSnapshotHash,snapshotHash:'8'.repeat(64),asOf:outcomeAsOf,replay:false},error:null};
+    }},principal,owner,outcomeAsOf);
+    assert.equal(result.written,1,kind);
+  }
 });

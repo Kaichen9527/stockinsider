@@ -17,6 +17,14 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       : entrypoint === 'candidate-dossier-outbox' && body.jobId ? 'claim'
       : entrypoint === 'candidate-dossier-submission' && body.artifact ? 'author'
       : entrypoint === 'candidate-dossier-bundle' && body.jobId ? 'bundle' : 'enqueue';
+    if(action==='capture-opening-halts'){
+      if(identity.role!=='operator'||!(await import('../internal-auth.ts')).requireExactInternalBearer(request))
+        throw Error('vnext_internal_bearer_required');
+      if(Object.keys(body).some(key=>key!=='action'))throw Error('vnext_cycle_closed_body');
+      if(!launchRankingEnabled())return NextResponse.json({ok:false,error:'launch_ranking_disabled'},{status:503});
+      const result=await(await import('./launch-halt-capture.ts')).captureLaunchOpeningHalts(identity);
+      return NextResponse.json({ok:true,policyVersion:LAUNCH_RANKING_POLICY,result});
+    }
     if (Array.isArray(body.symbols) && body.symbols.length === 0 && action!=='ranking-publish' && !(action==='cycle'&&launchRankingEnabled())) {
       return NextResponse.json({ ok: true, policyVersion: 'stockinsider-vnext-20-v1', result: { jobs: [], reason: 'empty_scope', expensiveCalls: 0 } });
     }

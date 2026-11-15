@@ -60,4 +60,24 @@ async function syncMonth(month) {
 
 const results = [];
 for (const month of [taipeiMonth(-1), taipeiMonth(0)]) results.push(await syncMonth(month));
-process.stdout.write(`${JSON.stringify({ ok: true, months: results })}\n`);
+let openingHalts;
+if (process.env.STOCKINSIDER_LAUNCH_RANKING_ENABLED === 'true') {
+  try {
+    const response = await fetch(`${appUrl}/api/internal/vnext-research`, {
+      method: 'POST',
+      headers: { authorization: `Bearer ${internalApiKey}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'capture-opening-halts' }),
+      signal: AbortSignal.timeout(35_000),
+    });
+    const payload = await response.json().catch(() => null);
+    if (!response.ok || payload?.ok !== true || !Array.isArray(payload.result?.captures) ||
+      payload.result.captures.length > 2 || !payload.result.captures.every(item =>
+        ['TWSE','TPEX'].includes(item?.market) && ['written','replay','deferred'].includes(item?.status))) {
+      throw new Error('capture_unavailable');
+    }
+    openingHalts = payload.result.captures.map(({ market, status }) => ({ market, status }));
+  } catch {
+    openingHalts = 'deferred';
+  }
+}
+process.stdout.write(`${JSON.stringify({ ok: true, months: results, ...(openingHalts===undefined?{}:{openingHalts}) })}\n`);

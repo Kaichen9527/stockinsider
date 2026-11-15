@@ -14,7 +14,7 @@ const maxRows=6000;
 const maxBytes=512*1024;
 type Market=keyof typeof feeds;
 type Row={symbol:string;startDate:string;startTime:string;endDate:string;endTime:string};
-type Capture={market:Market;url:string;observedAt:string;recordedAt:string;sha256:string;body:Uint8Array};
+export type LaunchHaltCapture={market:Market;url:string;observedAt:string;recordedAt:string;sha256:string;body:Uint8Array};
 type Event={kind:'suspend'|'resume';at:string};
 const sha=(value:Uint8Array|string)=>createHash('sha256').update(value).digest('hex');
 const isObject=(value:unknown):value is Record<string,unknown>=>!!value&&typeof value==='object'&&!Array.isArray(value);
@@ -35,6 +35,18 @@ function readRows(market:Market,body:Uint8Array):Row[]{
     return {symbol:String(row.SecuritiesCompanyCode),startDate:String(row.DateOfSuspendedTrading),
       startTime:String(row.TimeOfSuspendedTrading),endDate:String(row.DateOfResumedTrading),endTime:String(row.TimeOfResumedTrading)};
   });
+}
+
+export const launchHaltSource=(market:Market)=>feeds[market].url;
+
+function capturedRows(capture:LaunchHaltCapture){
+  if(capture.url!==feeds[capture.market].url||capture.body.length<2||capture.body.length>maxBytes||sha(capture.body)!==capture.sha256)
+    throw Error('launch_opening_halt_capture_invalid');
+  return readRows(capture.market,capture.body);
+}
+
+export function validateLaunchHaltCapture(capture:LaunchHaltCapture):void{
+  capturedRows(capture);
 }
 
 function parseClock(date:string,time:string):string|null{
@@ -78,22 +90,27 @@ function matchingInterval(rows:Row[],symbol:string,opening:bigint){
  * opening can prove this negative. A missing announcement or a daily price
  * cannot prove an auction fill. Caller supplies the stored capture's actual
  * observation and recording clocks from the trusted producer. */
-export function deriveLaunchSuspendedOpening(input:LaunchOutcomeInput,capture:Capture):LaunchOutcomeInput['opening'] {
+export function inspectLaunchSuspendedOpening(input:LaunchOutcomeInput,capture:LaunchHaltCapture):{opening:LaunchOutcomeInput['opening'];sameDayEvent:boolean} {
   const {market,symbol}=input.signal;
   const next=input.sessions.find(session=>session.status!=='cancelled');
   const asOf=evidenceInstant(input.asOf),observed=evidenceInstant(capture.observedAt),recorded=evidenceInstant(capture.recordedAt);
   if(!next||next.status!=='completed'||market!==capture.market||!/^\d{4}$/u.test(symbol)
-    ||asOf===null||observed===null||recorded===null||!(observed<=recorded&&recorded<=asOf))return null;
+    ||asOf===null||observed===null||recorded===null||!(observed<=recorded&&recorded<=asOf))return {opening:null,sameDayEvent:false};
   const opening=evidenceInstant(next.openAt),close=evidenceInstant(next.closeAt);
-  if(opening===null||close===null||opening>=close||close>asOf||opening>observed)return null;
-  if(capture.url!==feeds[market].url||capture.body.length<2||capture.body.length>maxBytes||sha(capture.body)!==capture.sha256)
-    throw Error('launch_opening_halt_capture_invalid');
-  const match=matchingInterval(readRows(market,capture.body),symbol,opening);
-  if(!match)return null;
+  if(opening===null||close===null||opening>=close||close>asOf||opening>observed)return {opening:null,sameDayEvent:false};
+  const rows=capturedRows(capture).filter(row=>row.symbol===symbol);
+  const sameDayEvent=rows.some(row=>parseClock(row.startDate,row.startTime)?.slice(0,10)===next.session
+    ||parseClock(row.endDate,row.endTime)?.slice(0,10)===next.session);
+  const match=matchingInterval(rows,symbol,opening);
+  if(!match)return {opening:null,sameDayEvent};
   if(evidenceInstant(match.until)!>=close&&input.bars.some(bar=>bar.session===next.session))
     throw Error('launch_opening_halt_full_session_conflicts_with_price');
   const revision=sha(JSON.stringify(['tw-exchange-halt-open-v1',market,feeds[market].dataset,
     capture.sha256,capture.observedAt,capture.recordedAt,symbol,next.session,next.openAt,match]));
-  return {session:next.session,knownAt:capture.recordedAt,revision,status:'unfillable',
-    rawOpen:null,priceRevision:null,reason:'suspended'};
+  return {opening:{session:next.session,knownAt:capture.recordedAt,revision,status:'unfillable',
+    rawOpen:null,priceRevision:null,reason:'suspended'},sameDayEvent};
+}
+
+export function deriveLaunchSuspendedOpening(input:LaunchOutcomeInput,capture:LaunchHaltCapture):LaunchOutcomeInput['opening']{
+  return inspectLaunchSuspendedOpening(input,capture).opening;
 }

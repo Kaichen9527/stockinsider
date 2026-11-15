@@ -1,0 +1,69 @@
+{
+  "ticket": 394,
+  "base": "aec26a46ac58f0225a09628e596727dfe8af226b",
+  "candidateOnly": true,
+  "productionModified": false,
+  "scope": "isolated Contabo PostgreSQL, Node and official origin capture; no permanent staging or production writer actions",
+  "sources": {
+    "captureStage": "live venue fetch with a simulated storage adapter",
+    "candidates": [
+      {
+        "market": "TPEX",
+        "bytes": 80226,
+        "sha256": "9304decac4d91517e9ae8128f2bb2a972ec4e4e47b810e91a580d07d9ed297be",
+        "observedAt": "2026-11-15T12:03:37.316Z"
+      },
+      {
+        "market": "TWSE",
+        "bytes": 169,
+        "sha256": "1bdd6daf1607f4485c8c021915b42ad0addc9ed4e39decbc5ee2c68c271a10f8",
+        "observedAt": "2026-11-15T12:03:37.522Z"
+      }
+    ],
+    "states": [
+      {
+        "market": "TWSE",
+        "status": "written"
+      },
+      {
+        "market": "TPEX",
+        "status": "written"
+      }
+    ]
+  },
+  "postgres": {
+    "postgres": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "ownedSlotAndReplayVerified": true,
+    "shaAndClockGuardsProved": true,
+    "priorAcceptedHaltReadByFrozenRun": true,
+    "newerCorrectionDoesNotResurrectOldHalt": true,
+    "noAssumedReceiptBeforeRecordedAt": true,
+    "rightsRevocationBlocksRead": true,
+    "privateBodyTableAccessDenied": true,
+    "identicalBodyStoredOnce": true,
+    "sqlSha256": "3097dcbff2f1e42f25c2a80eb92dea056d60b865cdbe5ac69eec3dd29804240a"
+  },
+  "node": {
+    "version": "22.23.1",
+    "tests": 53,
+    "passed": 53,
+    "failed": 0,
+    "scopedStrictTypescript": "5.9.3"
+  },
+  "checks": {
+    "newTimer": false,
+    "existingCalendarSyncReused": true,
+    "persistentProductionWrites": false
+  },
+  "fileHashes": {
+    "migrations/20261116_07_vnext_launch_halt_receipts_v1.sql": "3097dcbff2f1e42f25c2a80eb92dea056d60b865cdbe5ac69eec3dd29804240a",
+    "migrations/20261116_02_vnext_launch_outcome_versions_v1.sql": "e4ca75f2c263bbf6156e7c88bb889a36a167c99ce40b59731a5324eb1385ee6e",
+    "web/src/lib/vnext/launch-opening-halt.ts": "85d0f7e9a00e0dbdd65e0f9e8c9be307ce88dd026fcb7f8e025b67dbd9fa155b",
+    "web/src/lib/vnext/launch-halt-capture.ts": "471833ccd7a1162ac6aa5cfae5bb9e748c1fecbc16af73b963799a1774caab3c",
+    "web/src/lib/vnext/launch-halt-capture.test.ts": "fcd50e7f3e257f861bea1b972d256e4980a9a2a2ae195de14c2337dcd9419cf7",
+    "web/src/lib/vnext/launch-outcome-cycle.ts": "0cf50045caf32950941c7bd98c5f0a32b25e10af30b0585054ab0594b5878439",
+    "web/src/lib/tw-entry-plan-authority.test.ts": "106da0dcdfa0aba3da5c2f8998ad71fbc36a803cc902257f7c144e55e6578c06",
+    "web/src/lib/vnext/http.ts": "11f1048778ca5f4e49d75d22038a68fe0923ff9c415cbe57e195c6b23d0108b1",
+    "scripts/sync-official-trading-calendar.mjs": "305d08f7e2258146bdfe29b31915ac0374887c51eb23f6bbbb2f781faa659caf"
+  }
+}
