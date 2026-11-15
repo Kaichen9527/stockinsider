@@ -1,0 +1,11 @@
+# Registered active common-stock roster for market breadth
+
+The private market context now selects a completed native instrument-roster manifest known by its decision cutoff. It relies on the established registry, stream head and native conflict rules before filtering for active common stock. The selected native rows must reconcile with the sealed manifest. Both venue sessions must be completed and still have the same official authority. A later change to the active stock ID, symbol or venue set invalidates the roster. A later confirmation of the same active membership leaves the frozen result intact.
+
+The private market context receives the manifest revision and registered counts for each venue. Member IDs and symbols are confined to the private selector. This covers the registered instrument scope. Exchange-wide roster completeness, point-in-time price/source eligibility and corporate-action-comparable breadth still require approval. The ranking remains incomplete.
+
+PostgreSQL 17.11 in Contabo isolation executed the original registry validator and new migration with synthetic roster, manifest and market tables. Verified active common, ETF and suspension cases, later delisting and cancellation, conflicting roots and native head ties, old cutoff refusal, missing membership, ACL and the preserved rank gate. A 2,200-row synthetic sample with 2,000 eligible rows took 218 ms for one selected roster. This is a single fixture measurement.
+
+The [listed company dataset](https://data.gov.tw/dataset/18419) returned 1,099 rows including 1,093 distinct four-digit codes. The [OTC company dataset](https://data.gov.tw/dataset/25036) returned 897 rows with 897 distinct four-digit codes. Both actual CSVs report November 15 and were acquired that Sunday. They contain company metadata and provide an independent cross-check candidate. The bytes were kept out of Git and the later reports were not used to recreate November 13 trading status.
+
+The SQL was applied only to temporary staging fixtures. No production roster, service, timer, ranking, provider approval or source publication gate changed. Cloud build, actual full-universe matching, corporate-action comparison and original adjacent-session acceptance remain pending.
