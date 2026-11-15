@@ -1,0 +1,68 @@
+{
+  "schema": "stockinsider-external-11764-receipt-verification-v1",
+  "observedAt": "2026-11-15T03:13:00.576580+00:00",
+  "externalCommit": "01196220c166cbac9009a5095a2cfb9659958218",
+  "externalGitBlob": "f55fac858ef3d91aa64b4db090ae7fb23c3f712a",
+  "sourceCommit": "bad5c986174ed6bd00bf4e6f2fee1abffccecb86",
+  "sourceTree": "261e2a92d49c421da1c6d55aa393d486a10e4189",
+  "committedSourceFilesIndependentlyMatched": 20,
+  "metadataWindowPages": [
+    30,
+    30
+  ],
+  "identicalSharedReceiptRows": 29,
+  "uniqueReceiptRows": 31,
+  "originalRawBytesRehashedCloud": false,
+  "externalNodeVersion": "v22.14.0",
+  "negativeControls": {
+    "known-at-cutoff-negative": true,
+    "bad-digest-negative": true
+  },
+  "rawPresence": [
+    {
+      "signalSession": "2026-11-12",
+      "observed": 1079,
+      "eligible": 1089,
+      "rawAboveMa20": 139,
+      "coveragePct": 99.08172635445362
+    },
+    {
+      "signalSession": "2026-11-13",
+      "observed": 1079,
+      "eligible": 1089,
+      "rawAboveMa20": 218,
+      "coveragePct": 99.08172635445362
+    }
+  ],
+  "replayAnalysisCutoff": "2026-11-15T03:05:27.770485+00:00",
+  "catalogReview": {
+    "registry": {
+      "url": "https://data.gov.tw/dataset/11764",
+      "finalUrl": "https://data.gov.tw/dataset/11764",
+      "observedAt": "2026-11-15T03:05:42.209249+00:00",
+      "sha256": "80d3912b7ddd2cb1c22f4653bb2329245ee9f7f07b7d0af3fdbb41b642b15638",
+      "bytes": 530474,
+      "providerAgencyExplicit": true,
+      "originalExchangeExplicit": true,
+      "dataLicenseV1Explicit": true,
+      "officialCsvLinkExact": true,
+      "distinctApiOrigin": false,
+      "freeStatusExplicit": true,
+      "rawCloseFieldExplicit": true
+    },
+    "license": {
+      "url": "https://data.gov.tw/license",
+      "finalUrl": "https://data.gov.tw/license",
+      "observedAt": "2026-11-15T03:05:42.583197+00:00",
+      "sha256": "6d4108d8150f744ebe55822cb8c94aad0098a6bebfce5898d67c6846142d3c29",
+      "bytes": 484470,
+      "attributionRequired": true,
+      "commercialDerivationPermittedInGrant": true,
+      "additionalSignatureNotRequiredInGrant": true
+    },
+    "sourceDownload": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data"
+  },
+  "catalogKnownAfterReplayCutoff": true,
+  "publisherOwnRevision": null,
+  "actualDbWriterOrSqlAccepted": false
+}

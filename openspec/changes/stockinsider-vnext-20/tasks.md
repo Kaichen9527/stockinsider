@@ -320,3 +320,10 @@ Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-re
 - [x] ExistingprivateCLI distinct11764fixed9column/payload-date/rawclose-only profile, preservefullTPExprefix/API/revision; sourcebad5c98 equals locald1ffd7bb:50related+15CLI/typeslintbuild PASS.
 - [ ] Actual11764owner/license/current-purpose rights snapshot, rawprivatebytesreplay and immutableC/queue/roster/CA/calendar/foreignTWD/market/writer remain open. NoOHLC/cash/flow/PEbasis, no synthetic>95 authority.
 - [ ] Retain new independent actionreference/base/limit and11549daily vs20cash controls for later source-bound writer/native acceptance; originalHOLD/A1 unchanged.
+
+## Post-check source-consumer frontier
+
+- [x] Independently match external01196220 actual11764 source20 identities/29overlapmetadata; retain rawCloudNOTRUN and catalog/license clocks after replay cutoff.
+- [ ] Versioned non-strippable genuineDBfinancial source-description/provider reservation protocol; actual SQL11-key consumer compatibility is BLOCKED beyond completed worker tests. Comparisonparity stillmissing/currentqualificationdemoted.
+- [ ] Named11764 historical-close purpose candidate uses actualGovDataLicenseV1catalogreceipt known03:05:42+, no fakepublisherrevision/extra signature; Ccapture/immutable ordinaryroster/lease/witness/readiness source work pending.
+- [ ] FinanceNULL fresh preparation reachability and pre-cutoff research scheduling; samejob/ledger/formalreview, no late receipt backdating or qualification waiver.
