@@ -46,3 +46,7 @@ See [bounded Linux restore / release amendment](linux-restore-release-amendment.
 ## Financial observation continuation
 
 [Financial interval amendment](financial-period-amendment.md) keeps exact period/variant/receipt metadata in actual callers and prevents rejected-head revival before new freezes. SQL comparison parity remains missing; new financial qualification demotes independently of optional DTO fields. Actual share/CA/fiscal protocol and financial acceptance require a separate reviewed bridge.
+
+## 11764 private observer continuation
+
+[11764 close-only amendment](twse-close-observer-amendment.md) binds the real exact9column source schema to the existing private CLI, retaining null rights/qualified breadth. C must supply real existing-rights/head-first roster/captureACK/ownlease/immutable facts+witness/recovery before reader/writer integration. Resource planning remains<=200; this observer creates no acquisition jobs.

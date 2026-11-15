@@ -314,3 +314,9 @@ Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-re
 - [x] Exact interval/basic-diluted/variant observations through realcache/projector/frozenprep/weeklyaudit; all bounded rows selected before validation at BOTH actualpreparation callers, no rejected-head or defensive originalEPS revival. Source72482e1 equals local9bbe6e5:2STATIC/10new/182related/5×3TZ/types/lint/build PASS.
 - [x] New actual current financial qualification cannot bypass mandatory SQL-parity gap by stripping metadata/inventory; historical return unchanged.
 - [ ] Actual SQL interval/share-basis/frequency/supersession protocol and realfixedfiling/CA/rights/model/valuation/native evidence remain unimplemented; no fullT07 acceptance or latercapture backfill.
+
+## 11764 narrow historical-close checkpoint
+
+- [x] ExistingprivateCLI distinct11764fixed9column/payload-date/rawclose-only profile, preservefullTPExprefix/API/revision; sourcebad5c98 equals locald1ffd7bb:50related+15CLI/typeslintbuild PASS.
+- [ ] Actual11764owner/license/current-purpose rights snapshot, rawprivatebytesreplay and immutableC/queue/roster/CA/calendar/foreignTWD/market/writer remain open. NoOHLC/cash/flow/PEbasis, no synthetic>95 authority.
+- [ ] Retain new independent actionreference/base/limit and11549daily vs20cash controls for later source-bound writer/native acceptance; originalHOLD/A1 unchanged.
