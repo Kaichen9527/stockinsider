@@ -91,6 +91,40 @@ function breadthFixture({absent=false}={}){
  delete f.manifest.symbol;Object.assign(f.manifest,{schema:'launch-tpex-11371-breadth-observations-v1',throughSession:sessions.at(-1),sessions,responses,
   roster:{revision:'b'.repeat(64),availableAt:'2026-11-14T17:00:00Z',symbols:['5274','6488']}});f.save();return f;
 }
+function twseCloseFixture({absent=false}={}){
+ const f=breadthFixture(),header=['日期','證券代號','證券名稱','收盤價','殖利率(%)','股利年度','本益比','股價淨值比','財報年/季'];
+ Object.assign(f.manifest,{schema:'launch-twse-11764-close-observations-v1',datasetId:11764,
+  roster:{...f.manifest.roster,symbols:['2330','2345']}});
+ for(const [index,page] of f.manifest.responses.entries()){
+  const rows=['2330','2345'].map(symbol=>[page.session.replaceAll('-',''),symbol,'PRIVATE_11764_ROW_DO_NOT_EMIT',String(100+index),'UNVERIFIED','UNKNOWN','UNKNOWN_PE','UNKNOWN_PB','UNKNOWN_PERIOD']);
+  const bytes='\uFEFF'+[header,...rows].map(row=>row.map(cell=>`"${cell}"`).join(',')).join('\r\n')+'\r\n',filename=`bodies/twse-close-${page.session}.csv`;
+  fs.writeFileSync(path.join(f.root,filename),bytes,{mode:0o600});
+  Object.assign(page,{sourceUrl:`https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=${page.session.replaceAll('-','')}`,
+   bytes:Buffer.byteLength(bytes),rawSha256:createHash('sha256').update(bytes).digest('hex'),body:absent?{encoding:'absent'}:{encoding:'file',path:filename}});
+ }f.save();return f;
+}
+test('same offline CLI dispatches distinct11764 close-only bytes with null rights and no valuation/fullbar authority',()=>{
+ const f=twseCloseFixture(),result=run(f.root,'--manifest',f.input);assert.equal(result.status,0,result.stderr);
+ const output=JSON.parse(result.stdout);assert.equal(output.schema,'launch-twse-11764-close-observations-v1');assert.equal(output.datasetId,11764);
+ assert.equal(output.parsedSessions,30);assert.equal(output.rawPricePresence.observed,2);assert.equal(output.fieldBasis,'reported_close_only');
+ for(const key of ['owner','license','licenseUrl','licenseVersion','rightsRevision'])assert.equal(output.attribution[key],null);
+ assert.equal(output.rightsAuthority,false);assert.equal(output.marketAuthority,false);assert.equal(output.sourceAuthority,false);assert.equal(output.publicationAuthority,false);
+ assert.equal(output.caComparableCoverage,null);assert.equal(output.qualifiedBreadth,null);assert.equal(output.aggregateMarketGate,null);
+ assert.equal(result.stdout.includes('PRIVATE_11764_ROW_DO_NOT_EMIT'),false);assert.equal(result.stdout.includes('UNKNOWN_PE'),false);
+ assert.equal(Object.hasOwn(output,'open'),false);assert.notEqual(output.responseReceipts[0].rawSha256,output.responseReceipts[0].csvRowsSha256);
+ const missing=twseCloseFixture({absent:true}),absent=run(missing.root,'--manifest',missing.input);assert.equal(absent.status,0,absent.stderr);
+ assert.equal(JSON.parse(absent.stdout).decodedBytes,0);
+});
+test('11764 CLI retains exact-date/hash/closed-day/private-file/bounds refusals instead of a latest-only or empty fallback',()=>{
+ const rewrite=(f,change)=>{const page=f.manifest.responses[0],file=path.join(f.root,page.body.path),bytes=Buffer.from(change(fs.readFileSync(file,'utf8')));
+  fs.writeFileSync(file,bytes,{mode:0o600});page.bytes=bytes.length;page.rawSha256=createHash('sha256').update(bytes).digest('hex');};
+ for(const change of [f=>{f.manifest.responses[0].rawSha256='0'.repeat(64);},f=>rewrite(f,text=>text.replaceAll(f.manifest.sessions[0].replaceAll('-',''),'20261113')),
+  f=>rewrite(f,()=> '\r\n'),f=>{f.manifest.responses.push(f.manifest.responses[0]);},f=>{f.manifest.responses[0].bytes=500001;},
+  f=>{const file=path.join(f.root,f.manifest.responses[0].body.path);fs.unlinkSync(file);fs.symlinkSync(f.input,file);},
+  f=>{f.manifest.cutoff='2026-11-13T13:30:00Z';}]){
+  const f=twseCloseFixture();change(f);f.save();refused(run(f.root,'--manifest',f.input));
+ }
+});
 test('offline CLI reads only explicit private work inputs and emits metadata, never raw data or rights', () => {
   const { root, input } = fixture(), result = run(root, '--receipt', input);
   assert.equal(result.status, 0, result.stderr);
