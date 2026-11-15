@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-15",
+  "originalRecoveryCommit": "40fe8738cd5768b67269f7085e31014d2a84e0da",
+  "sourceLine": 116,
+  "observed": {
+    "version": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "sqlResult": {
+      "syntheticFacts": true,
+      "wrongValueAccepted": false,
+      "wrongPeriodAccepted": false,
+      "lateEvidenceAccepted": false,
+      "wrongReceiptHashAccepted": false,
+      "beforeExplicitFunctionACL": [
+        {
+          "rpc": "vnext_financial_provider_status_v1",
+          "definer": true,
+          "aclInherited": true,
+          "syntheticOrdinaryRoleExecute": true
+        },
+        {
+          "rpc": "vnext_financial_rows_internal_v1",
+          "definer": true,
+          "aclInherited": true,
+          "syntheticOrdinaryRoleExecute": true
+        }
+      ],
+      "missingProvenanceAccepted": false,
+      "originalDescriptorOutcome": "22P02",
+      "explicitArrayAppendOutcome": true
+    },
+    "errorCount": 0,
+    "safeErrors": [],
+    "backendExit": 0,
+    "sourceSha256": "2aad04a21eff76b7ab9192186c1d8f47751c3e4f8ca07e53bffc958df7d41047",
+    "admissionMemoryKiB": 3823408,
+    "admissionDiskBytes": 26572595200,
+    "productionSocketsTouched": false
+  },
+  "wholeMigrationApplied": false,
+  "unprivilegedDefinerInvoked": false,
+  "productionChanged": false,
+  "fullFinanceAccepted": false,
+  "independentReviewPassed": false
+}

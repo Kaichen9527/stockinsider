@@ -1,0 +1,8 @@
+diff --git a/migrations/20261115_vnext_financial_provider_input_v1.sql b/migrations/20261115_vnext_financial_provider_input_v1.sql
+--- a/migrations/20261115_vnext_financial_provider_input_v1.sql
++++ b/migrations/20261115_vnext_financial_provider_input_v1.sql
+@@ -115,3 +115,3 @@
+  IF f->>'source_ref' ~ '^(twse|tpex)-openapi:' THEN
+-  allowed:=allowed||'acquisitionJobId';
++  allowed:=array_append(allowed,'acquisitionJobId'::text);
+   IF d->>'sourceUrl'!~'^https://([A-Za-z0-9-]+\.)?(twse\.com\.tw|tpex\.org\.tw)/[^#]*$' OR d->>'sourceUrl'~'[@#]' THEN RETURN false;END IF;

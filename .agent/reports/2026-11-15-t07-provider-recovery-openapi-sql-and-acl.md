@@ -1,0 +1,9 @@
+# T07 — Recovered financial provider draft, OpenAPI and function privileges
+
+The exact SQL draft at recovery commit `40fe8738cd5768b67269f7085e31014d2a84e0da` was read back from GitHub. A fresh, disconnected Contabo PostgreSQL 17.11 Ubuntu cluster compiled selected routines. No production socket was used.
+
+The original OpenAPI descriptor failed on a complete synthetic TPEx receipt with SQLSTATE `22P02`. PostgreSQL treated the literal in `allowed || 'acquisitionJobId'` as an array operand. The candidate's outer packet catch turns that exception into a failed packet. An isolated copy with `array_append(allowed,'acquisitionJobId'::text)` accepted the matched row and continued to reject mismatched value, reporting period, receipt hash, missing provenance and a too-early cutoff. The tested one-line diff is attached for Cloud follow-up.
+
+The reconstructed draft also lacks explicit function ownership and execution privilege statements for the new routines. In the clean catalog, the new security-definer financial rows and provider-status routines inherited the default function EXECUTE grant. An ordinary synthetic role had EXECUTE according to catalog metadata. That role never called either routine. Before a full installation test, declare the intended restricted owner and exact function ACLs using the existing project conventions, and prove the authorized caller binding and ordinary-role denial. The reproducible catalog is an isolated default-privilege example. The actual target installer privileges are still pending verification.
+
+This probe tests only the descriptor with synthetic evidence and selected catalog metadata. Full worker/provider, actual issuer filing, permission-bound prepared-job integration and complete native acceptance remain pending. The previously recovered SQL was preserved unchanged.

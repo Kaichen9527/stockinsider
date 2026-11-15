@@ -1,0 +1,249 @@
+CREATE ROLE probe_unprivileged NOLOGIN;
+
+CREATE FUNCTION public.vnext_financial_wire_canonical_v1(value jsonb,depth integer DEFAULT 0) RETURNS text
+LANGUAGE plpgsql IMMUTABLE SET search_path=pg_catalog,public AS $$
+DECLARE result text;field record;n numeric;wire numeric;
+BEGIN
+ IF value IS NULL OR depth>12 THEN RETURN NULL;END IF;
+ IF depth=0 AND octet_length(convert_to(value::text,'UTF8'))>1048576 THEN RETURN NULL;END IF;
+ IF jsonb_typeof(value)='object' THEN
+  result:='{';FOR field IN SELECT * FROM jsonb_each(value) ORDER BY key COLLATE "C" LOOP
+   IF field.key NOT IN('acquisitionJobId','approvedAt','authorityTier','authority_tier','classification','collected_at','consistency_valid','corporateActionRevision','denominatorShares','durationKind','duration_kind','epsBasis','estimateHorizon','estimateKind','estimate_horizon','estimate_kind','extractedAt','factContentHash','factId','factRecordedAt','fact_id','fact_key','filingRevisionId','filing_published_at','filing_restatement_id','gaps','host','issuerApproval','issuerDocumentId','key','knownAt','manifestSha256','originalFact','parserEvidenceId','periodEnd','periodStart','periodType','period_end','period_start','point_in_time_valid','provenanceId','provider','receiptHash','receiptId','recorded_at','reportingFrequency','restatementBasis','schemaVersion','schema_valid','shareBasis','sourceKind','sourceRawSha256','sourceReceiptHash','sourceReceiptId','sourceRef','sourceSha256','sourceUrl','source_ref','source_timestamp','stockId','stock_id','storedDurationKind','unit','unit_valid','upstream_provider','validation_recorded_at','validation_status','value') THEN RETURN NULL;END IF;
+   IF result<>'{' THEN result:=result||',';END IF;
+   IF public.vnext_financial_wire_canonical_v1(field.value,depth+1) IS NULL THEN RETURN NULL;END IF;
+   result:=result||to_jsonb(field.key)::text||':'||public.vnext_financial_wire_canonical_v1(field.value,depth+1);
+  END LOOP;RETURN result||'}';
+ ELSIF jsonb_typeof(value)='array' THEN
+  IF jsonb_array_length(value)>2000 THEN RETURN NULL;END IF;result:='[';
+  FOR field IN SELECT v FROM jsonb_array_elements(value) v LOOP
+   IF public.vnext_financial_wire_canonical_v1(field.v,depth+1) IS NULL THEN RETURN NULL;END IF;
+   IF result<>'[' THEN result:=result||',';END IF;result:=result||public.vnext_financial_wire_canonical_v1(field.v,depth+1);
+  END LOOP;RETURN result||']';
+ ELSIF jsonb_typeof(value)='number' THEN
+  n:=(value::text)::numeric;
+  IF n<>0 AND (abs(n)<0.000001 OR abs(n)>=1000000000000000000000) THEN RETURN NULL;END IF;
+  -- Exact supported wire domain only; no epsilon/rounding to rescue a fact.
+  wire:=(to_jsonb(n::double precision)::text)::numeric;
+  IF wire IS DISTINCT FROM n THEN RETURN NULL;END IF;
+  RETURN CASE WHEN n=0 THEN '0' ELSE trim_scale(wire)::text END;
+ ELSE RETURN value::text;END IF;
+EXCEPTION WHEN invalid_text_representation OR numeric_value_out_of_range THEN RETURN NULL;
+END $$;
+
+CREATE FUNCTION public.vnext_financial_wire_hash_v1(value jsonb) RETURNS text
+LANGUAGE sql IMMUTABLE SET search_path=pg_catalog,public AS $$
+ SELECT encode(sha256(convert_to(public.vnext_financial_wire_canonical_v1(value),'UTF8')),'hex')
+$$;
+
+CREATE FUNCTION public.vnext_financial_wire_clock_v1(value text) RETURNS timestamptz
+LANGUAGE plpgsql IMMUTABLE SET search_path=pg_catalog SET timezone='UTC' AS $$
+DECLARE result timestamptz;
+BEGIN
+ IF value IS NULL OR value !~ '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?(Z|[+-]\d{2}:\d{2})$' THEN RETURN NULL;END IF;
+ result:=value::timestamptz;IF NOT isfinite(result) OR substring(value,12,2)::integer>23 OR substring(value,15,2)::integer>59 OR substring(value,18,2)::integer>59 THEN RETURN NULL;END IF;
+ RETURN result;
+EXCEPTION WHEN invalid_datetime_format OR datetime_field_overflow THEN RETURN NULL;
+END $$;
+
+CREATE FUNCTION public.vnext_financial_descriptor_v1(e jsonb,d jsonb,f jsonb,rows_json jsonb,cutoff timestamptz) RETURNS boolean
+LANGUAGE plpgsql STABLE SET search_path=pg_catalog,public SET timezone='UTC' AS $$
+DECLARE p jsonb;j jsonb;l jsonb;r jsonb;doc jsonb;parser jsonb;approval jsonb;classification jsonb;metadata jsonb;gaps jsonb;
+ known_at timestamptz;available_at timestamptz;observation_at timestamptz;metadata_at timestamptz;period_type text;eps text;allowed text[];
+BEGIN
+ IF e->>'kind'<>'fact' OR e->>'sourceTier'<>'official' OR e->>'id' IS DISTINCT FROM f->>'fact_id' OR e->>'key' IS DISTINCT FROM f->>'fact_key'
+  OR e->'value' IS DISTINCT FROM f->'value' OR e->>'unit' IS DISTINCT FROM f->>'unit' OR e->>'period' IS DISTINCT FROM f->>'period_end'
+  OR d->>'stockId' IS DISTINCT FROM f->>'stock_id' OR d->>'factId' IS DISTINCT FROM f->>'fact_id'
+  OR public.vnext_financial_wire_clock_v1(d->>'factRecordedAt') IS DISTINCT FROM (f->>'recorded_at')::timestamptz
+  OR d->>'sourceRef' IS DISTINCT FROM f->>'source_ref' OR d->>'sourceUrl' IS DISTINCT FROM e->>'source'
+  OR coalesce(d->>'sourceSha256','')!~'^[a-f0-9]{64}$' OR d->>'receiptHash' IS DISTINCT FROM public.vnext_financial_wire_hash_v1(d-'receiptHash')
+  OR public.vnext_financial_wire_clock_v1(e->>'eventAt') IS DISTINCT FROM (f->>'source_timestamp')::timestamptz THEN RETURN false;END IF;
+ classification:=jsonb_build_object('estimateKind',f->'estimate_kind','estimateHorizon',f->'estimate_horizon','periodStart',f->'period_start','periodEnd',f->'period_end','durationKind',f->'duration_kind','filingRevisionId',f->'filing_restatement_id','provider',f->'provider','authorityTier',f->'authority_tier');
+ IF d->'classification' IS DISTINCT FROM classification THEN RETURN false;END IF;
+ SELECT v INTO p FROM jsonb_array_elements(rows_json->'provenance')v WHERE v->>'provenance_id'=d->>'provenanceId' AND v->>'fact_id'=f->>'fact_id';
+ IF p IS NULL OR p->>'source_url' IS DISTINCT FROM d->>'sourceUrl' OR p->>'source_sha256' IS DISTINCT FROM d->>'sourceSha256'
+  OR (p->>'extracted_at')::timestamptz>cutoff OR (p->>'recorded_at')::timestamptz>cutoff THEN RETURN false;END IF;
+ known_at:=greatest((p->>'extracted_at')::timestamptz,(p->>'recorded_at')::timestamptz);
+ allowed:=ARRAY['stockId','factId','factRecordedAt','sourceRef','sourceUrl','sourceSha256','provenanceId','knownAt','classification','receiptHash'];
+ IF f->>'source_ref' ~ '^(twse|tpex)-openapi:' THEN
+  allowed:=allowed||'acquisitionJobId';
+  IF d->>'sourceUrl'!~'^https://([A-Za-z0-9-]+\.)?(twse\.com\.tw|tpex\.org\.tw)/[^#]*$' OR d->>'sourceUrl'~'[@#]' THEN RETURN false;END IF;
+  SELECT v INTO j FROM jsonb_array_elements(rows_json->'jobs')v WHERE v->>'job_id'=p->>'acquisition_job_id' AND v->>'job_id'=d->>'acquisitionJobId';
+  IF j IS NULL OR j->>'stock_id' IS DISTINCT FROM f->>'stock_id' OR j->>'period_end' IS DISTINCT FROM f->>'period_end' OR j->>'status'<>'terminal' OR j->>'terminal_reason'<>'complete'
+   OR j->>'response_sha256' IS DISTINCT FROM d->>'sourceSha256' OR j->>'source_url' IS DISTINCT FROM d->>'sourceUrl'
+   OR p->'locator'->>'source_ref' IS DISTINCT FROM f->>'source_ref' OR p->'locator'->>'period_end' IS DISTINCT FROM f->>'period_end' OR p->'locator'->>'fact_key' IS DISTINCT FROM f->>'fact_key'
+   OR EXISTS(SELECT FROM unnest(ARRAY['created_at','updated_at','collected_at'])k WHERE (j->>k)::timestamptz>cutoff OR j->>k IS NULL) THEN RETURN false;END IF;
+  known_at:=greatest(known_at,(j->>'created_at')::timestamptz,(j->>'updated_at')::timestamptz,(j->>'collected_at')::timestamptz);
+ ELSIF f->>'source_ref' ~ ('^issuer-document:'||(d->>'sourceSha256')||':[a-f0-9]+$') THEN
+  allowed:=allowed||ARRAY['receiptId','issuerDocumentId','parserEvidenceId','manifestSha256'];
+  SELECT v INTO l FROM jsonb_array_elements(rows_json->'links')v WHERE v->>'fact_id'=f->>'fact_id' AND (v->>'fact_recorded_at')::timestamptz=(f->>'recorded_at')::timestamptz AND v->>'receipt_id'=d->>'receiptId' AND v->>'evidence_id'=d->>'parserEvidenceId';
+  SELECT v INTO r FROM jsonb_array_elements(rows_json->'receipts')v WHERE v->>'receipt_id'=d->>'receiptId';
+  SELECT v INTO doc FROM jsonb_array_elements(rows_json->'documents')v WHERE v->>'document_id'=d->>'issuerDocumentId';
+  SELECT v INTO parser FROM jsonb_array_elements(rows_json->'parsers')v WHERE v->>'evidence_id'=d->>'parserEvidenceId';
+  IF l IS NULL OR r IS NULL OR doc IS NULL OR parser IS NULL OR r->>'stock_id' IS DISTINCT FROM f->>'stock_id' OR doc->>'stock_id' IS DISTINCT FROM f->>'stock_id'
+   OR r->>'period_end' IS DISTINCT FROM f->>'period_end' OR r->>'issuer_document_id' IS DISTINCT FROM doc->>'document_id' OR p->>'issuer_document_id' IS DISTINCT FROM doc->>'document_id'
+   OR r->>'document_sha256' IS DISTINCT FROM d->>'sourceSha256' OR doc->>'document_sha256' IS DISTINCT FROM d->>'sourceSha256' OR parser->>'document_sha256' IS DISTINCT FROM d->>'sourceSha256'
+   OR r->>'source_url' IS DISTINCT FROM d->>'sourceUrl' OR doc->>'document_url' IS DISTINCT FROM d->>'sourceUrl' OR doc->>'acquisition_status'<>'fetched'
+   OR r->>'receipt_status'<>'accepted' OR r->>'parser_status'<>'complete' OR r->>'parser_evidence_id' IS DISTINCT FROM parser->>'evidence_id' OR parser->>'receipt_id' IS DISTINCT FROM r->>'receipt_id'
+   OR p->'locator'->>'parser_evidence_id' IS DISTINCT FROM parser->>'evidence_id' OR p->'locator'->>'manifest_sha256' IS DISTINCT FROM d->>'manifestSha256' OR parser->>'manifest_sha256' IS DISTINCT FROM d->>'manifestSha256' OR p->'locator'->>'response_url' IS DISTINCT FROM d->>'sourceUrl'
+   OR coalesce(d->>'manifestSha256','')!~'^[a-f0-9]{64}$' THEN RETURN false;END IF;
+  known_at:=greatest(known_at,(l->>'created_at')::timestamptz,(r->>'accepted_at')::timestamptz,(r->>'completed_at')::timestamptz,(r->>'published_at')::timestamptz,(doc->>'collected_at')::timestamptz,(doc->>'recorded_at')::timestamptz,(parser->>'recorded_at')::timestamptz);
+  IF d->>'sourceUrl'!~'^https://([A-Za-z0-9-]+\.)?(twse\.com\.tw|tpex\.org\.tw)/[^#]*$' THEN
+   allowed:=allowed||ARRAY['sourceKind','issuerApproval','originalFact'];
+   SELECT v INTO approval FROM jsonb_array_elements(rows_json->'domains')v WHERE v->>'stock_id'=f->>'stock_id' AND v->>'host'=substring(d->>'sourceUrl' FROM '^https://([^/]+)/') AND (v->>'approved_at')::timestamptz<=cutoff;
+   IF approval IS NULL OR d->>'sourceKind'<>'approved_issuer_ir' OR d->>'sourceUrl'!~'^https://[a-z0-9][a-z0-9.-]+/[^#]+$' OR d->>'sourceUrl'~'[@#]'
+    OR f->>'provider'<>'mops' OR f->>'authority_tier'<>'official_filing' OR r->>'financial_validation_status'<>'validated' OR f->>'filing_published_at' IS NULL
+    OR d->'originalFact' IS NULL OR d->'issuerApproval'->>'stockId' IS DISTINCT FROM f->>'stock_id' OR d->'issuerApproval'->>'host' IS DISTINCT FROM approval->>'host'
+    OR public.vnext_financial_wire_clock_v1(d->'issuerApproval'->>'approvedAt') IS DISTINCT FROM (approval->>'approved_at')::timestamptz THEN RETURN false;END IF;
+   known_at:=greatest(known_at,(approval->>'approved_at')::timestamptz);
+  END IF;
+ ELSE RETURN false;END IF;
+ IF (SELECT count(*) FROM jsonb_object_keys(d))<>cardinality(allowed) OR NOT(d ?& allowed) OR known_at>cutoff
+  OR public.vnext_financial_wire_clock_v1(d->>'knownAt') IS DISTINCT FROM known_at THEN RETURN false;END IF;
+ observation_at:=(f->>'source_timestamp')::timestamptz;
+ available_at:=greatest(observation_at,(f->>'collected_at')::timestamptz,(f->>'recorded_at')::timestamptz,(f->>'filing_published_at')::timestamptz,(f->>'validation_recorded_at')::timestamptz,known_at);
+ IF available_at>cutoff OR public.vnext_financial_wire_clock_v1(e->>'availableAt') IS DISTINCT FROM available_at THEN RETURN false;END IF;
+ period_type:=CASE WHEN f->>'period_end' IS NULL THEN NULL WHEN f->>'duration_kind'='instant' AND f->>'period_start' IS NULL THEN 'instant' WHEN f->>'duration_kind' IN('monthly','quarterly','ttm') AND f->>'period_start' IS NOT NULL AND f->>'period_start'<=f->>'period_end' THEN 'duration' ELSE NULL END;
+ eps:=CASE f->>'fact_key' WHEN 'quarterly_basic_eps' THEN 'basic' WHEN 'quarterly_diluted_eps' THEN 'diluted' ELSE NULL END;
+ gaps:='["missing_sql_financial_interval_basis_parity"]';
+ IF period_type IS NULL THEN gaps:=gaps||'"financial_exact_period_metadata_unavailable"';END IF;
+ IF f->>'duration_kind'<>'instant' OR f->>'duration_kind' IS NULL THEN gaps:=gaps||'"financial_reporting_frequency_not_typed"';END IF;
+ IF f->>'unit' IN('TWD_per_share','TWD/share','share','thousand_shares') THEN gaps:=gaps||'"financial_share_basis_not_typed"';END IF;
+ IF eps IS NOT NULL THEN gaps:=gaps||'["eps_share_basis_not_typed","corporate_action_restatement_bridge_missing"]';
+  IF f->>'unit' NOT IN('TWD_per_share','TWD/share') THEN gaps:=gaps||'"eps_per_share_unit_unavailable"';END IF;END IF;
+ IF f->>'validation_recorded_at' IS NOT NULL AND (f->>'recorded_at')::timestamptz<=(f->>'validation_recorded_at')::timestamptz THEN metadata_at:=available_at;
+ ELSE gaps:=gaps||'"financial_fixed_source_receipt_unknown"';END IF;
+ -- Preserve the original packet's clock spelling AFTER exact instant equality.
+ metadata:=jsonb_build_object('schemaVersion','vnext-financial-observation-v1','factId',f->'fact_id','factContentHash',e->'contentHash','periodStart',f->'period_start','periodEnd',f->'period_end','storedDurationKind',f->'duration_kind','periodType',period_type,'reportingFrequency',NULL,'estimateKind',f->'estimate_kind','estimateHorizon',f->'estimate_horizon','epsBasis',eps,'filingRevisionId',f->'filing_restatement_id','shareBasis',NULL,'denominatorShares',NULL,'restatementBasis',NULL,'corporateActionRevision',NULL,
+  'sourceReceiptHash',CASE WHEN metadata_at IS NOT NULL THEN d->'receiptHash' ELSE 'null'::jsonb END,'sourceRawSha256',CASE WHEN metadata_at IS NOT NULL THEN d->'sourceSha256' ELSE 'null'::jsonb END,'sourceReceiptId',CASE WHEN metadata_at IS NOT NULL THEN coalesce(d->'receiptId','null') ELSE 'null'::jsonb END,'acquisitionJobId',CASE WHEN metadata_at IS NOT NULL THEN coalesce(d->'acquisitionJobId','null') ELSE 'null'::jsonb END,'provenanceId',CASE WHEN metadata_at IS NOT NULL THEN d->'provenanceId' ELSE 'null'::jsonb END,'knownAt',CASE WHEN metadata_at IS NOT NULL THEN e->'financial'->'knownAt' ELSE 'null'::jsonb END,'gaps',gaps);
+ IF metadata_at IS NOT NULL AND public.vnext_financial_wire_clock_v1(e->'financial'->>'knownAt') IS DISTINCT FROM metadata_at THEN RETURN false;END IF;
+ RETURN e->'financial'=metadata;
+END $$;
+
+CREATE FUNCTION public.vnext_financial_rows_internal_v1(stock uuid,cutoff timestamptz) RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public SET timezone='UTC' SET statement_timeout='30s' SET lock_timeout='2s' AS $$
+DECLARE original jsonb;current_rows jsonb;prov jsonb;links jsonb;jobs jsonb;receipts jsonb;documents jsonb;parsers jsonb;domains jsonb;prices jsonb;
+BEGIN
+ IF stock IS NULL OR cutoff IS NULL OR NOT isfinite(cutoff) OR cutoff>statement_timestamp() THEN RETURN NULL;END IF;
+ SELECT coalesce(jsonb_agg(to_jsonb(f)),'[]') INTO original FROM(SELECT * FROM public.read_financial_facts_for_stocks_as_of(cutoff,ARRAY[stock]) ORDER BY recorded_at,fact_id LIMIT 2001)f;
+ SELECT coalesce(jsonb_agg(to_jsonb(f)),'[]') INTO current_rows FROM(SELECT * FROM public.read_financial_facts_for_stocks_as_of(statement_timestamp(),ARRAY[stock]) ORDER BY recorded_at,fact_id LIMIT 2001)f;
+ IF jsonb_array_length(original)>2000 OR jsonb_array_length(current_rows)>2000 THEN RETURN NULL;END IF;
+ SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]') INTO prov FROM(SELECT * FROM public.candidate_financial_fact_provenance_v4 WHERE fact_id IN(SELECT (f->>'fact_id')::uuid FROM jsonb_array_elements(original)f) ORDER BY provenance_id LIMIT 2001)p;
+ SELECT coalesce(jsonb_agg(to_jsonb(l)),'[]') INTO links FROM(SELECT receipt_id,fact_id,fact_recorded_at,evidence_id,created_at FROM public.candidate_financial_document_fact_links_v8 WHERE fact_id IN(SELECT (f->>'fact_id')::uuid FROM jsonb_array_elements(original)f) ORDER BY fact_id,evidence_id LIMIT 2001)l;
+ SELECT coalesce(jsonb_agg(to_jsonb(j)),'[]') INTO jobs FROM(SELECT job_id,stock_id,period_end,status,terminal_reason,response_sha256,source_url,collected_at,created_at,updated_at FROM public.candidate_financial_acquisition_jobs_v4 WHERE job_id IN(SELECT (p->>'acquisition_job_id')::uuid FROM jsonb_array_elements(prov)p WHERE p->>'acquisition_job_id' IS NOT NULL) ORDER BY job_id LIMIT 2001)j;
+ SELECT coalesce(jsonb_agg(to_jsonb(r)),'[]') INTO receipts FROM(SELECT receipt_id,stock_id,issuer_document_id,source_url,period_end,document_sha256,receipt_status,parser_status,published_at,accepted_at,completed_at,parser_evidence_id,financial_validation_status FROM public.candidate_financial_document_receipts_v6 WHERE receipt_id IN(SELECT (l->>'receipt_id')::uuid FROM jsonb_array_elements(links)l) ORDER BY receipt_id LIMIT 2001)r;
+ SELECT coalesce(jsonb_agg(to_jsonb(d)),'[]') INTO documents FROM(SELECT document_id,stock_id,document_url,document_sha256,acquisition_status,collected_at,recorded_at FROM public.candidate_issuer_ir_document_queue_v4 WHERE document_id IN(SELECT (r->>'issuer_document_id')::uuid FROM jsonb_array_elements(receipts)r) ORDER BY document_id LIMIT 2001)d;
+ SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]') INTO parsers FROM(SELECT evidence_id,receipt_id,document_sha256,manifest_sha256,recorded_at FROM public.candidate_financial_parser_evidence_v8 WHERE receipt_id IN(SELECT (r->>'receipt_id')::uuid FROM jsonb_array_elements(receipts)r) ORDER BY evidence_id LIMIT 2001)p;
+ SELECT coalesce(jsonb_agg(to_jsonb(d)),'[]') INTO domains FROM(SELECT stock_id,host,approved_at FROM public.candidate_issuer_document_domains_v6 WHERE stock_id=stock ORDER BY host LIMIT 2001)d;
+ SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]') INTO prices FROM(SELECT observation_id,stock_id,session_id,raw_close,source_timestamp,recorded_at,source_ref FROM public.opportunity_price_observations_v3 WHERE stock_id=stock AND source_timestamp<=cutoff AND recorded_at<=cutoff ORDER BY session_id DESC,observation_id LIMIT 2001)p;
+ IF EXISTS(SELECT FROM unnest(ARRAY[prov,links,jobs,receipts,documents,parsers,domains,prices]) a WHERE jsonb_array_length(a)>2000) THEN RETURN NULL;END IF;
+ RETURN jsonb_build_object('facts',original,'current',current_rows,'provenance',prov,'links',links,'jobs',jobs,'receipts',receipts,'documents',documents,'parsers',parsers,'domains',domains,'prices',prices);
+END $$;
+
+CREATE FUNCTION public.vnext_financial_provider_status_v1(p_principal text) RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+BEGIN
+ IF NOT EXISTS(SELECT FROM public.vnext_mode_v1 WHERE enabled AND legacy_fenced) OR NOT EXISTS(SELECT FROM public.vnext_principals_v1 WHERE principal=p_principal AND role IN('author','reviewer') AND enabled) THEN RAISE EXCEPTION 'vnext_financial_provider_protocol_unavailable';END IF;
+ RETURN jsonb_build_object('schemaVersion','vnext-financial-provider-input-v1','available',true);
+END $$;
+
+CREATE FUNCTION public.vnext_financial_descriptor_append_probe_v1(e jsonb,d jsonb,f jsonb,rows_json jsonb,cutoff timestamptz) RETURNS boolean
+LANGUAGE plpgsql STABLE SET search_path=pg_catalog,public SET timezone='UTC' AS $$
+DECLARE p jsonb;j jsonb;l jsonb;r jsonb;doc jsonb;parser jsonb;approval jsonb;classification jsonb;metadata jsonb;gaps jsonb;
+ known_at timestamptz;available_at timestamptz;observation_at timestamptz;metadata_at timestamptz;period_type text;eps text;allowed text[];
+BEGIN
+ IF e->>'kind'<>'fact' OR e->>'sourceTier'<>'official' OR e->>'id' IS DISTINCT FROM f->>'fact_id' OR e->>'key' IS DISTINCT FROM f->>'fact_key'
+  OR e->'value' IS DISTINCT FROM f->'value' OR e->>'unit' IS DISTINCT FROM f->>'unit' OR e->>'period' IS DISTINCT FROM f->>'period_end'
+  OR d->>'stockId' IS DISTINCT FROM f->>'stock_id' OR d->>'factId' IS DISTINCT FROM f->>'fact_id'
+  OR public.vnext_financial_wire_clock_v1(d->>'factRecordedAt') IS DISTINCT FROM (f->>'recorded_at')::timestamptz
+  OR d->>'sourceRef' IS DISTINCT FROM f->>'source_ref' OR d->>'sourceUrl' IS DISTINCT FROM e->>'source'
+  OR coalesce(d->>'sourceSha256','')!~'^[a-f0-9]{64}$' OR d->>'receiptHash' IS DISTINCT FROM public.vnext_financial_wire_hash_v1(d-'receiptHash')
+  OR public.vnext_financial_wire_clock_v1(e->>'eventAt') IS DISTINCT FROM (f->>'source_timestamp')::timestamptz THEN RETURN false;END IF;
+ classification:=jsonb_build_object('estimateKind',f->'estimate_kind','estimateHorizon',f->'estimate_horizon','periodStart',f->'period_start','periodEnd',f->'period_end','durationKind',f->'duration_kind','filingRevisionId',f->'filing_restatement_id','provider',f->'provider','authorityTier',f->'authority_tier');
+ IF d->'classification' IS DISTINCT FROM classification THEN RETURN false;END IF;
+ SELECT v INTO p FROM jsonb_array_elements(rows_json->'provenance')v WHERE v->>'provenance_id'=d->>'provenanceId' AND v->>'fact_id'=f->>'fact_id';
+ IF p IS NULL OR p->>'source_url' IS DISTINCT FROM d->>'sourceUrl' OR p->>'source_sha256' IS DISTINCT FROM d->>'sourceSha256'
+  OR (p->>'extracted_at')::timestamptz>cutoff OR (p->>'recorded_at')::timestamptz>cutoff THEN RETURN false;END IF;
+ known_at:=greatest((p->>'extracted_at')::timestamptz,(p->>'recorded_at')::timestamptz);
+ allowed:=ARRAY['stockId','factId','factRecordedAt','sourceRef','sourceUrl','sourceSha256','provenanceId','knownAt','classification','receiptHash'];
+ IF f->>'source_ref' ~ '^(twse|tpex)-openapi:' THEN
+  allowed:=array_append(allowed,'acquisitionJobId'::text);
+  IF d->>'sourceUrl'!~'^https://([A-Za-z0-9-]+\.)?(twse\.com\.tw|tpex\.org\.tw)/[^#]*$' OR d->>'sourceUrl'~'[@#]' THEN RETURN false;END IF;
+  SELECT v INTO j FROM jsonb_array_elements(rows_json->'jobs')v WHERE v->>'job_id'=p->>'acquisition_job_id' AND v->>'job_id'=d->>'acquisitionJobId';
+  IF j IS NULL OR j->>'stock_id' IS DISTINCT FROM f->>'stock_id' OR j->>'period_end' IS DISTINCT FROM f->>'period_end' OR j->>'status'<>'terminal' OR j->>'terminal_reason'<>'complete'
+   OR j->>'response_sha256' IS DISTINCT FROM d->>'sourceSha256' OR j->>'source_url' IS DISTINCT FROM d->>'sourceUrl'
+   OR p->'locator'->>'source_ref' IS DISTINCT FROM f->>'source_ref' OR p->'locator'->>'period_end' IS DISTINCT FROM f->>'period_end' OR p->'locator'->>'fact_key' IS DISTINCT FROM f->>'fact_key'
+   OR EXISTS(SELECT FROM unnest(ARRAY['created_at','updated_at','collected_at'])k WHERE (j->>k)::timestamptz>cutoff OR j->>k IS NULL) THEN RETURN false;END IF;
+  known_at:=greatest(known_at,(j->>'created_at')::timestamptz,(j->>'updated_at')::timestamptz,(j->>'collected_at')::timestamptz);
+ ELSIF f->>'source_ref' ~ ('^issuer-document:'||(d->>'sourceSha256')||':[a-f0-9]+$') THEN
+  allowed:=allowed||ARRAY['receiptId','issuerDocumentId','parserEvidenceId','manifestSha256'];
+  SELECT v INTO l FROM jsonb_array_elements(rows_json->'links')v WHERE v->>'fact_id'=f->>'fact_id' AND (v->>'fact_recorded_at')::timestamptz=(f->>'recorded_at')::timestamptz AND v->>'receipt_id'=d->>'receiptId' AND v->>'evidence_id'=d->>'parserEvidenceId';
+  SELECT v INTO r FROM jsonb_array_elements(rows_json->'receipts')v WHERE v->>'receipt_id'=d->>'receiptId';
+  SELECT v INTO doc FROM jsonb_array_elements(rows_json->'documents')v WHERE v->>'document_id'=d->>'issuerDocumentId';
+  SELECT v INTO parser FROM jsonb_array_elements(rows_json->'parsers')v WHERE v->>'evidence_id'=d->>'parserEvidenceId';
+  IF l IS NULL OR r IS NULL OR doc IS NULL OR parser IS NULL OR r->>'stock_id' IS DISTINCT FROM f->>'stock_id' OR doc->>'stock_id' IS DISTINCT FROM f->>'stock_id'
+   OR r->>'period_end' IS DISTINCT FROM f->>'period_end' OR r->>'issuer_document_id' IS DISTINCT FROM doc->>'document_id' OR p->>'issuer_document_id' IS DISTINCT FROM doc->>'document_id'
+   OR r->>'document_sha256' IS DISTINCT FROM d->>'sourceSha256' OR doc->>'document_sha256' IS DISTINCT FROM d->>'sourceSha256' OR parser->>'document_sha256' IS DISTINCT FROM d->>'sourceSha256'
+   OR r->>'source_url' IS DISTINCT FROM d->>'sourceUrl' OR doc->>'document_url' IS DISTINCT FROM d->>'sourceUrl' OR doc->>'acquisition_status'<>'fetched'
+   OR r->>'receipt_status'<>'accepted' OR r->>'parser_status'<>'complete' OR r->>'parser_evidence_id' IS DISTINCT FROM parser->>'evidence_id' OR parser->>'receipt_id' IS DISTINCT FROM r->>'receipt_id'
+   OR p->'locator'->>'parser_evidence_id' IS DISTINCT FROM parser->>'evidence_id' OR p->'locator'->>'manifest_sha256' IS DISTINCT FROM d->>'manifestSha256' OR parser->>'manifest_sha256' IS DISTINCT FROM d->>'manifestSha256' OR p->'locator'->>'response_url' IS DISTINCT FROM d->>'sourceUrl'
+   OR coalesce(d->>'manifestSha256','')!~'^[a-f0-9]{64}$' THEN RETURN false;END IF;
+  known_at:=greatest(known_at,(l->>'created_at')::timestamptz,(r->>'accepted_at')::timestamptz,(r->>'completed_at')::timestamptz,(r->>'published_at')::timestamptz,(doc->>'collected_at')::timestamptz,(doc->>'recorded_at')::timestamptz,(parser->>'recorded_at')::timestamptz);
+  IF d->>'sourceUrl'!~'^https://([A-Za-z0-9-]+\.)?(twse\.com\.tw|tpex\.org\.tw)/[^#]*$' THEN
+   allowed:=allowed||ARRAY['sourceKind','issuerApproval','originalFact'];
+   SELECT v INTO approval FROM jsonb_array_elements(rows_json->'domains')v WHERE v->>'stock_id'=f->>'stock_id' AND v->>'host'=substring(d->>'sourceUrl' FROM '^https://([^/]+)/') AND (v->>'approved_at')::timestamptz<=cutoff;
+   IF approval IS NULL OR d->>'sourceKind'<>'approved_issuer_ir' OR d->>'sourceUrl'!~'^https://[a-z0-9][a-z0-9.-]+/[^#]+$' OR d->>'sourceUrl'~'[@#]'
+    OR f->>'provider'<>'mops' OR f->>'authority_tier'<>'official_filing' OR r->>'financial_validation_status'<>'validated' OR f->>'filing_published_at' IS NULL
+    OR d->'originalFact' IS NULL OR d->'issuerApproval'->>'stockId' IS DISTINCT FROM f->>'stock_id' OR d->'issuerApproval'->>'host' IS DISTINCT FROM approval->>'host'
+    OR public.vnext_financial_wire_clock_v1(d->'issuerApproval'->>'approvedAt') IS DISTINCT FROM (approval->>'approved_at')::timestamptz THEN RETURN false;END IF;
+   known_at:=greatest(known_at,(approval->>'approved_at')::timestamptz);
+  END IF;
+ ELSE RETURN false;END IF;
+ IF (SELECT count(*) FROM jsonb_object_keys(d))<>cardinality(allowed) OR NOT(d ?& allowed) OR known_at>cutoff
+  OR public.vnext_financial_wire_clock_v1(d->>'knownAt') IS DISTINCT FROM known_at THEN RETURN false;END IF;
+ observation_at:=(f->>'source_timestamp')::timestamptz;
+ available_at:=greatest(observation_at,(f->>'collected_at')::timestamptz,(f->>'recorded_at')::timestamptz,(f->>'filing_published_at')::timestamptz,(f->>'validation_recorded_at')::timestamptz,known_at);
+ IF available_at>cutoff OR public.vnext_financial_wire_clock_v1(e->>'availableAt') IS DISTINCT FROM available_at THEN RETURN false;END IF;
+ period_type:=CASE WHEN f->>'period_end' IS NULL THEN NULL WHEN f->>'duration_kind'='instant' AND f->>'period_start' IS NULL THEN 'instant' WHEN f->>'duration_kind' IN('monthly','quarterly','ttm') AND f->>'period_start' IS NOT NULL AND f->>'period_start'<=f->>'period_end' THEN 'duration' ELSE NULL END;
+ eps:=CASE f->>'fact_key' WHEN 'quarterly_basic_eps' THEN 'basic' WHEN 'quarterly_diluted_eps' THEN 'diluted' ELSE NULL END;
+ gaps:='["missing_sql_financial_interval_basis_parity"]';
+ IF period_type IS NULL THEN gaps:=gaps||'"financial_exact_period_metadata_unavailable"';END IF;
+ IF f->>'duration_kind'<>'instant' OR f->>'duration_kind' IS NULL THEN gaps:=gaps||'"financial_reporting_frequency_not_typed"';END IF;
+ IF f->>'unit' IN('TWD_per_share','TWD/share','share','thousand_shares') THEN gaps:=gaps||'"financial_share_basis_not_typed"';END IF;
+ IF eps IS NOT NULL THEN gaps:=gaps||'["eps_share_basis_not_typed","corporate_action_restatement_bridge_missing"]';
+  IF f->>'unit' NOT IN('TWD_per_share','TWD/share') THEN gaps:=gaps||'"eps_per_share_unit_unavailable"';END IF;END IF;
+ IF f->>'validation_recorded_at' IS NOT NULL AND (f->>'recorded_at')::timestamptz<=(f->>'validation_recorded_at')::timestamptz THEN metadata_at:=available_at;
+ ELSE gaps:=gaps||'"financial_fixed_source_receipt_unknown"';END IF;
+ -- Preserve the original packet's clock spelling AFTER exact instant equality.
+ metadata:=jsonb_build_object('schemaVersion','vnext-financial-observation-v1','factId',f->'fact_id','factContentHash',e->'contentHash','periodStart',f->'period_start','periodEnd',f->'period_end','storedDurationKind',f->'duration_kind','periodType',period_type,'reportingFrequency',NULL,'estimateKind',f->'estimate_kind','estimateHorizon',f->'estimate_horizon','epsBasis',eps,'filingRevisionId',f->'filing_restatement_id','shareBasis',NULL,'denominatorShares',NULL,'restatementBasis',NULL,'corporateActionRevision',NULL,
+  'sourceReceiptHash',CASE WHEN metadata_at IS NOT NULL THEN d->'receiptHash' ELSE 'null'::jsonb END,'sourceRawSha256',CASE WHEN metadata_at IS NOT NULL THEN d->'sourceSha256' ELSE 'null'::jsonb END,'sourceReceiptId',CASE WHEN metadata_at IS NOT NULL THEN coalesce(d->'receiptId','null') ELSE 'null'::jsonb END,'acquisitionJobId',CASE WHEN metadata_at IS NOT NULL THEN coalesce(d->'acquisitionJobId','null') ELSE 'null'::jsonb END,'provenanceId',CASE WHEN metadata_at IS NOT NULL THEN d->'provenanceId' ELSE 'null'::jsonb END,'knownAt',CASE WHEN metadata_at IS NOT NULL THEN e->'financial'->'knownAt' ELSE 'null'::jsonb END,'gaps',gaps);
+ IF metadata_at IS NOT NULL AND public.vnext_financial_wire_clock_v1(e->'financial'->>'knownAt') IS DISTINCT FROM metadata_at THEN RETURN false;END IF;
+ RETURN e->'financial'=metadata;
+END $$;
+
+DO $probe$
+DECLARE 
+ occurred text:='2026-10-22T06:00:00.000Z'; 
+ cutoff timestamptz:='2026-10-23T01:00:00.000Z';
+ stock text:='00000000-0000-4000-8000-000000000003'; factid text:='00000000-0000-4000-8000-000000000004';
+ origin text:='tpex-openapi:synthetic-original'; src text:='https://www.tpex.org.tw/synthetic-original.json';
+ raw_sha text:=repeat('a',64); f jsonb; receipt jsonb; rows jsonb; evidence jsonb; meta jsonb; old_status text; fix_ok boolean;
+ mismatch_value boolean; mismatch_period boolean; wrong_receipt_hash boolean; missing_receipt boolean; reordered boolean; prior_clock boolean; compare jsonb;
+BEGIN
+ f:=jsonb_build_object('fact_id',factid,'stock_id',stock,'fact_key','quarterly_revenue','period_start','2026-04-01','period_end','2026-06-30','duration_kind','quarterly','value',100,'unit','TWD','provider','tpex','authority_tier','official_filing','estimate_kind','reported','estimate_horizon','reported_period','source_ref',origin,'source_timestamp',occurred,'collected_at',occurred,'recorded_at',occurred,'validation_recorded_at',occurred);
+ receipt:=jsonb_build_object('stockId',stock,'factId',factid,'factRecordedAt',occurred,'sourceRef',origin,'sourceUrl',src,'sourceSha256',raw_sha,'provenanceId','synthetic-provenance','knownAt',occurred,'classification',jsonb_build_object('estimateKind','reported','estimateHorizon','reported_period','periodStart','2026-04-01','periodEnd','2026-06-30','durationKind','quarterly','filingRevisionId',NULL,'provider','tpex','authorityTier','official_filing'),'acquisitionJobId','synthetic-original-acquisition');
+ receipt:=receipt||jsonb_build_object('receiptHash',public.vnext_financial_wire_hash_v1(receipt));
+ rows:=jsonb_build_object('provenance',jsonb_build_array(jsonb_build_object('provenance_id','synthetic-provenance','fact_id',factid,'acquisition_job_id','synthetic-original-acquisition','source_url',src,'source_sha256',raw_sha,'extracted_at',occurred,'recorded_at',occurred,'locator',jsonb_build_object('source_ref',origin,'period_end','2026-06-30','fact_key','quarterly_revenue'))),'jobs',jsonb_build_array(jsonb_build_object('job_id','synthetic-original-acquisition','stock_id',stock,'period_end','2026-06-30','status','terminal','terminal_reason','complete','response_sha256',raw_sha,'source_url',src,'created_at',occurred,'collected_at',occurred,'updated_at',occurred)));
+ meta:=jsonb_build_object('schemaVersion','vnext-financial-observation-v1','factId',factid,'factContentHash',public.vnext_financial_wire_hash_v1(f),'periodStart','2026-04-01','periodEnd','2026-06-30','storedDurationKind','quarterly','periodType','duration','reportingFrequency',NULL,'estimateKind','reported','estimateHorizon','reported_period','epsBasis',NULL,'filingRevisionId',NULL,'shareBasis',NULL,'denominatorShares',NULL,'restatementBasis',NULL,'corporateActionRevision',NULL,'sourceReceiptHash',receipt->'receiptHash','sourceRawSha256',raw_sha,'sourceReceiptId',NULL,'acquisitionJobId','synthetic-original-acquisition','provenanceId','synthetic-provenance','knownAt',occurred,'gaps','["missing_sql_financial_interval_basis_parity","financial_reporting_frequency_not_typed"]'::jsonb);
+ evidence:=jsonb_build_object('id',factid,'key','quarterly_revenue','kind','fact','sourceTier','official','value',100,'unit','TWD','period','2026-06-30','source',src,'eventAt',occurred,'availableAt',occurred,'contentHash',public.vnext_financial_wire_hash_v1(f),'financial',meta);
+ BEGIN old_status:=public.vnext_financial_descriptor_v1(evidence,receipt,f,rows,cutoff)::text;
+ EXCEPTION WHEN invalid_text_representation THEN old_status:=SQLSTATE; END;
+ fix_ok:=public.vnext_financial_descriptor_append_probe_v1(evidence,receipt,f,rows,cutoff);
+ mismatch_value:=public.vnext_financial_descriptor_append_probe_v1(jsonb_set(evidence,'{value}','101'),receipt,f,rows,cutoff);
+ mismatch_period:=public.vnext_financial_descriptor_append_probe_v1(jsonb_set(evidence,'{period}','"2026-03-31"'),receipt,f,rows,cutoff);
+ wrong_receipt_hash:=public.vnext_financial_descriptor_append_probe_v1(evidence,jsonb_set(receipt,'{receiptHash}',to_jsonb(repeat('b',64))),f,rows,cutoff);
+ missing_receipt:=public.vnext_financial_descriptor_append_probe_v1(evidence,receipt,f,jsonb_set(rows,'{provenance}','[]'),cutoff);
+ prior_clock:=public.vnext_financial_descriptor_append_probe_v1(evidence,receipt,f,rows,'2026-10-21T23:00:00.000Z');
+ SELECT jsonb_agg(jsonb_build_object('definer',p.prosecdef,'rpc',p.proname,'syntheticOrdinaryRoleExecute',has_function_privilege('probe_unprivileged',p.oid,'EXECUTE'),'aclInherited',p.proacl IS NULL) ORDER BY p.proname) INTO compare FROM pg_proc p WHERE p.proname=ANY(ARRAY['vnext_financial_rows_internal_v1','vnext_financial_provider_status_v1']);
+ RAISE WARNING USING MESSAGE='FINANCE_PROVIDER_PROBE '||jsonb_build_object('originalDescriptorOutcome',old_status,'explicitArrayAppendOutcome',fix_ok,'wrongValueAccepted',mismatch_value,'wrongPeriodAccepted',mismatch_period,'wrongReceiptHashAccepted',wrong_receipt_hash,'missingProvenanceAccepted',missing_receipt,'lateEvidenceAccepted',prior_clock,'beforeExplicitFunctionACL',compare,'syntheticFacts',true)::text;
+END $probe$;
+
