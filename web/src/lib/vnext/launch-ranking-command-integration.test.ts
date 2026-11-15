@@ -20,6 +20,7 @@ function fixture(){
  const deferred=()=>{let resolve;const promise=new Promise(done=>{resolve=done});return {promise,resolve}};
  const state={calls:[],holder:null,gateAcquire:null,acquireReached:false,holdStarted:false,hold:deferred(),
   ready:true,cutoff:'${session}T21:30:00+08:00',contextError:false,commandError:false,retainReason:null,published:null,charges:0,
+  chartStatuses:['finished'],chartError:null,chartBadRank:false,
   current:{rankingRunId:'${priorRun}',previousRankingRunId:null,session:'2026-11-12',publishedAt:'2026-11-12T13:31:00Z'}};
  const receipt=(request,published,replay=false)=>({schemaVersion:'vnext-launch-ranking-write-v2',policyVersion:policy,rulesVersion:rules,arithmeticVersion:arithmetic,
   published,retained:!published,reason:published?null:state.retainReason,rankingRunId:published?request.rankingRunId:state.current.rankingRunId,
@@ -43,6 +44,12 @@ function fixture(){
    state.charges++;state.published={rankingRunId:args.p_request.rankingRunId,previousRankingRunId:args.p_request.expectedPreviousRankingRunId,
     session:'${session}',publishedAt:'${session}T13:40:39Z'};state.current=state.published;
    return {data:receipt(args.p_request,true),error:null};
+  }
+  if(name==='vnext_launch_chart_freeze_v1'){
+   if(state.holder!==args.p_lease_owner||state.published?.rankingRunId!==args.p_ranking_run_id)throw Error('synthetic_chart_scope');
+   if(state.chartError===args.p_rank)return {data:null,error:{message:'SYNTHETIC_CHART_PRIVATE_ERROR'}};
+   return {data:{schemaVersion:'launch-chart-freeze-receipt-v1',rankingRunId:args.p_ranking_run_id,rank:state.chartBadRank?0:args.p_rank,
+    status:state.chartStatuses[args.p_rank-1]??'finished'},error:null};
   }
   throw Error('unexpected_synthetic_rpc');
  }};
@@ -126,7 +133,8 @@ test('unready admission starts no lease/write and postlease missed-slot receipt 
  assert.equal(calls(unready,'acquire_production_write_lease').length,0);assert.equal(calls(unready,'vnext_launch_ranking_command_v1').length,0);
  const delayed=fixture(),before=delayed.snapshot().current;delayed.evaluate("state.retainReason='launch_slot_missed'");
  const result=await delayed.cycle();assert.equal(result.retained,true);assert.equal(result.rankingRunId,priorRun);
- assert.deepEqual(delayed.snapshot().current,before);assert.equal(delayed.snapshot().charges,0);assertLeasePairs(delayed);
+ assert.deepEqual(delayed.snapshot().current,before);assert.equal(delayed.snapshot().charges,0);
+ assert.equal(calls(delayed,'vnext_launch_chart_freeze_v1').length,0);assertLeasePairs(delayed);
 });
 test('postlease SQL context/deadline rejection releases once with no automatic retry or charge',async()=>{
  const f=fixture();f.evaluate('state.commandError=true');await assert.rejects(f.cycle,/publication_uncertain/u);
@@ -150,4 +158,31 @@ test('invented08:10 holder blocks actual08:15 market write entry through the sam
   assert.equal(calls(f,'vnext_launch_ranking_command_v1').length,0);assert.equal(f.snapshot().charges,0);
  }finally{f.evaluate('state.hold.resolve()');await holder;}
  assertLeasePairs(f);
+});
+
+test('published ranking freezes chart slots with the same lease and stops at the first unused rank',async()=>{
+ const f=fixture();f.evaluate("state.chartStatuses=['stored','missing_evidence','finished']");
+ const result=await f.cycle();
+ const charts=calls(f,'vnext_launch_chart_freeze_v1');
+ assert.deepEqual(charts.map(c=>c.args?.p_rank),[1,2,3]);
+ assert.ok(charts.every(c=>c.args?.p_lease_owner===calls(f,'vnext_launch_ranking_command_v1')[0].args?.p_lease_owner));
+ assert.ok(charts.every(c=>c.args?.p_ranking_run_id===result.rankingRunId));
+ assert.deepEqual(JSON.parse(JSON.stringify(result.chartPublication)),{processed:2,stored:1,replayed:0,missingEvidence:1,reason:null});
+ assertLeasePairs(f);
+ f.evaluate("state.chartStatuses=['replay','stored','finished']");
+ const replay=await f.cycle();
+ assert.deepEqual(JSON.parse(JSON.stringify(replay.chartPublication)),{processed:2,stored:1,replayed:1,missingEvidence:0,reason:null});
+ assert.equal(f.snapshot().charges,1);assertLeasePairs(f);
+});
+test('chart write errors leave a successful rank committed and unknown details private',async()=>{
+ for(const setting of ['state.chartError=1','state.chartBadRank=true']){
+  const f=fixture();f.evaluate(setting);
+  const result=await f.cycle();
+  assert.equal(result.published,true);
+  assert.equal((result.chartPublication as Row).reason,'chart_write_uncertain');
+  assert.equal(calls(f,'vnext_launch_chart_freeze_v1').length,1);
+  assert.equal(calls(f,'vnext_launch_ranking_command_v1').length,1);
+  assert.doesNotMatch(JSON.stringify(result),/SYNTHETIC_CHART_PRIVATE_ERROR/u);
+  assertLeasePairs(f);
+ }
 });

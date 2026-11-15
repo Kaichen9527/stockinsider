@@ -410,11 +410,111 @@ END $volume$;
 UPDATE public.vnext_launch_score_evidence_v1 s SET source_inputs=o.source_inputs, source_hash=o.source_hash
 FROM fixture_volume_original o WHERE s.score_revision=o.score_revision;
 `;
+const freezeSetup = `
+ALTER TABLE public.vnext_launch_ranking_members_v1 ADD PRIMARY KEY(ranking_run_id,symbol);
+ALTER TABLE public.vnext_launch_score_evidence_v1 ADD PRIMARY KEY(score_revision);
+ALTER TABLE public.opportunity_price_observations_v3 ADD PRIMARY KEY(observation_id);
+ALTER TABLE public.tw_trading_sessions_v3 ADD PRIMARY KEY(session_authority_id);
+ALTER TABLE public.vnext_launch_csv_ready_acks_v1 ADD UNIQUE(ack_id);
+ALTER TABLE public.vnext_launch_ranking_snapshots_v1 ADD COLUMN ordinal bigint GENERATED ALWAYS AS IDENTITY;
+ALTER TABLE public.vnext_launch_score_evidence_v1 ADD COLUMN score jsonb DEFAULT '{"rules":[]}';
+CREATE TABLE public.vnext_mode_v1(enabled boolean,legacy_fenced boolean);
+INSERT INTO public.vnext_mode_v1 VALUES(true,true);
+CREATE TABLE public.vnext_launch_ranking_mode_v1(singleton boolean,enabled boolean,required_writer_release text);
+INSERT INTO public.vnext_launch_ranking_mode_v1 VALUES(true,true,'fixture-release');
+GRANT SELECT ON public.vnext_mode_v1,public.vnext_launch_ranking_mode_v1 TO stockinsider_vnext_owner;
+
+-- Isolate the actual chart/ranking routines from unrelated operator
+-- credential and snapshot-qualification dependencies.
+CREATE FUNCTION public.vnext_launch_csv_backend_v1(owner_id uuid) RETURNS jsonb LANGUAGE plpgsql AS $$
+BEGIN
+ IF owner_id IS DISTINCT FROM md5('chart-writer')::uuid THEN RAISE EXCEPTION 'fixture_lease_invalid';END IF;
+ RETURN '{"writerRelease":"fixture-release"}'::jsonb;
+END $$;
+CREATE FUNCTION public.vnext_launch_csv_policy_v1(principal text) RETURNS jsonb LANGUAGE plpgsql AS $$
+BEGIN
+ IF principal IS DISTINCT FROM 'fixture-operator' THEN RAISE EXCEPTION 'fixture_operator_invalid';END IF;
+ RETURN '{}'::jsonb;
+END $$;
+CREATE FUNCTION public.enforce_production_writer_fence() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+ IF current_user<>'stockinsider_vnext_owner' THEN RAISE EXCEPTION 'fixture_writer_fenced';END IF;
+ IF TG_OP='DELETE' THEN RETURN OLD;END IF;
+ RETURN NEW;
+END $$;
+CREATE FUNCTION public.vnext_launch_market_context_v1(day date,cutoff timestamptz) RETURNS jsonb LANGUAGE sql STABLE AS $$ SELECT '{}'::jsonb $$;
+CREATE FUNCTION public.vnext_launch_live_v1(score_revision uuid,qualification_revision uuid,market jsonb) RETURNS jsonb
+LANGUAGE sql STABLE AS $$ SELECT '{"status":"current","reasons":[]}'::jsonb $$;
+CREATE FUNCTION public.vnext_launch_public_citations_v1(score_revision uuid) RETURNS jsonb LANGUAGE sql STABLE AS $$ SELECT '[]'::jsonb $$;
+
+UPDATE public.vnext_launch_ranking_snapshots_v1 s SET snapshot=s.snapshot||jsonb_build_object('market',jsonb_build_object('expiresAt','infinity'),
+ 'members',jsonb_build_array(jsonb_build_object('symbol',m.symbol,'revisionId',m.research_revision,'scoreRevision',m.score_revision,
+  'launchQualificationRevision',md5('fixture qualification')::uuid,'inputHash',m.input_hash)))
+ FROM public.vnext_launch_ranking_members_v1 m WHERE m.ranking_run_id=s.ranking_run_id;
+`;
+const verifyFreeze = `
+DO $freeze$
+DECLARE item public.vnext_launch_score_evidence_v1; price jsonb; chart jsonb; native jsonb; reply jsonb;
+ chart_id uuid:=md5('TPEXrun')::uuid; lease_id uuid:=md5('chart-writer')::uuid; row_count integer;
+BEGIN
+ SELECT * INTO item FROM public.vnext_launch_score_evidence_v1 WHERE score_revision=md5('TPEXscore')::uuid;
+ price:=public.vnext_launch_price_v1(md5('otc')::uuid,item.symbol,'TPEX',item.source_inputs->'calendar',item.input_cutoff);
+ IF price IS NULL OR price ? 'gap' THEN RAISE EXCEPTION 'fixture requires selected scoring price';END IF;
+ UPDATE public.vnext_launch_score_evidence_v1
+ SET source_inputs=item.source_inputs||jsonb_build_object('price',price),
+  source_hash=public.vnext_launch_csv_hash_v1(item.source_inputs||jsonb_build_object('price',price))
+ WHERE score_revision=item.score_revision;
+ IF public.vnext_launch_ranking_read_v1(chart_id,'2330')#>'{detail,chart}' IS DISTINCT FROM 'null'::jsonb
+  THEN RAISE EXCEPTION 'GET generated a chart';END IF;
+
+ BEGIN
+  PERFORM public.vnext_launch_chart_freeze_v1('fixture-operator',gen_random_uuid(),chart_id,1);
+  RAISE EXCEPTION 'accepted invalid lease';
+ EXCEPTION WHEN raise_exception THEN
+  IF SQLERRM<>'fixture_lease_invalid' THEN RAISE;END IF;
+ END;
+ IF public.vnext_launch_chart_freeze_v1('fixture-operator',lease_id,md5('TWSErun')::uuid,1)->>'status'<>'missing_evidence'
+  OR public.vnext_launch_chart_freeze_v1('fixture-operator',lease_id,chart_id,2)->>'status'<>'finished'
+  THEN RAISE EXCEPTION 'unsupported chart or empty ranking slot not preserved';END IF;
+ reply:=public.vnext_launch_chart_freeze_v1('fixture-operator',lease_id,chart_id,1);
+ IF reply->>'status' IS DISTINCT FROM 'stored' THEN RAISE EXCEPTION 'did not store official chart: %',reply;END IF;
+ chart:=public.vnext_launch_ranking_read_v1(chart_id,'2330')#>'{detail,chart}';
+ SELECT document INTO native FROM public.vnext_launch_frozen_charts_v1 WHERE ranking_run_id=chart_id AND symbol='2330';
+ IF chart IS NULL OR chart='null'::jsonb OR chart IS DISTINCT FROM native OR chart ? 'sourcePins' OR chart ? 'actionPins'
+  OR public.vnext_launch_ranking_read_v1(chart_id,NULL)->'detail' IS DISTINCT FROM 'null'::jsonb
+  THEN RAISE EXCEPTION 'public detail failed chart projection';END IF;
+ SELECT count(*) INTO row_count FROM public.vnext_launch_chart_day_pins_v1 WHERE ranking_run_id=chart_id;
+ IF row_count<>jsonb_array_length(chart->'candles') THEN RAISE EXCEPTION 'missing retention pins';END IF;
+
+ UPDATE public.vnext_launch_csv_facts_v1 SET shares=1234 WHERE session_date='2024-02-29';
+ IF public.vnext_launch_chart_freeze_v1('fixture-operator',lease_id,chart_id,1)->>'status'<>'replay'
+  OR public.vnext_launch_ranking_read_v1(chart_id,'2330')#>'{detail,chart}' IS DISTINCT FROM chart
+  OR (SELECT count(*) FROM public.vnext_launch_frozen_charts_v1)<>1
+  THEN RAISE EXCEPTION 'chart replay replaced a frozen chart';END IF;
+
+ UPDATE public.vnext_source_policies_v1 SET enabled=false;
+ IF public.vnext_launch_ranking_read_v1(chart_id,'2330')#>'{detail,chart}' IS DISTINCT FROM 'null'::jsonb
+  OR (SELECT count(*) FROM public.vnext_launch_frozen_charts_v1)<>1
+  THEN RAISE EXCEPTION 'revocation did not suppress public projection independently';END IF;
+ BEGIN
+  DELETE FROM public.vnext_launch_csv_facts_v1 
+  WHERE session_date='2024-02-29' AND symbol='2330';
+  RAISE EXCEPTION 'retention removed live chart source';
+ EXCEPTION WHEN foreign_key_violation THEN NULL;
+ END;
+ IF has_table_privilege('service_role','public.vnext_launch_frozen_charts_v1','SELECT')
+  OR has_table_privilege('service_role','public.vnext_launch_chart_day_pins_v1','INSERT')
+  OR has_function_privilege('authenticated','public.vnext_launch_chart_freeze_v1(text,uuid,uuid,integer)','EXECUTE')
+  OR NOT has_function_privilege('service_role','public.vnext_launch_chart_freeze_v1(text,uuid,uuid,integer)','EXECUTE')
+  THEN RAISE EXCEPTION 'unexpected permissions';END IF;
+END $freeze$;
+`;
 const baseline = fs.readFileSync(new URL('../migrations/20261115_vnext_launch_ranking_v1.sql',import.meta.url),'utf8');
 const migration = fs.readFileSync(new URL('../migrations/20261116_20_vnext_launch_chart_basis_v1.sql',import.meta.url),'utf8');
 const adjustment = fs.readFileSync(new URL('../migrations/20261116_21_vnext_launch_chart_adjustment_v1.sql',import.meta.url),'utf8');
 const source = fs.readFileSync(new URL('../migrations/20261115_vnext_launch_source_facts_v1.sql',import.meta.url),'utf8');
 const chartVolume = fs.readFileSync(new URL('../migrations/20261116_22_vnext_launch_chart_volume_v1.sql',import.meta.url),'utf8');
+const chartFreeze = fs.readFileSync(new URL('../migrations/20261116_23_vnext_launch_chart_freeze_v1.sql',import.meta.url),'utf8');
 const extractFunction = (name) => {
   const start = baseline.indexOf('CREATE FUNCTION public.'+name+'(');
   assert.ok(start >= 0, name);
@@ -423,7 +523,7 @@ const extractFunction = (name) => {
   return baseline.slice(start,end+8);
 };
 
-test('native launch chart preserves pricing cutoffs, CA-D1, licensed share volume and private ACLs',()=>{
+test('native launch chart preserves the cutoff, pins lineage, and gates the immutable published chart',()=>{
   const directory = fs.mkdtempSync(path.join(os.tmpdir(),'stockinsider-launch-chart-pg-'));
   const data = path.join(directory,'data');
   const socket = path.join(directory,'socket');
@@ -465,7 +565,19 @@ test('native launch chart preserves pricing cutoffs, CA-D1, licensed share volum
       volumeSetup + extractFunction('vnext_launch_source_fact_v1'));
     sql(chartVolume);
     sql(verifyVolume);
-    sql(verify);
+    sql('BEGIN;\n'+verify+'ROLLBACK;');
+    const immutableStart = source.indexOf('CREATE FUNCTION public.vnext_launch_csv_immutable_v1(');
+    const immutableEnd = source.indexOf('ALTER FUNCTION public.vnext_launch_csv_immutable_v1(',immutableStart);
+    assert.ok(immutableStart >= 0 && immutableEnd > immutableStart);
+    sql(freezeSetup + source.slice(immutableStart,immutableEnd) +
+      extractFunction('vnext_launch_ranking_read_v1') + '\n' +
+      'ALTER FUNCTION public.vnext_launch_ranking_read_v1(uuid,text) OWNER TO stockinsider_vnext_owner;\n' +
+      'REVOKE ALL ON FUNCTION public.vnext_launch_ranking_read_v1(uuid,text) FROM PUBLIC,anon,authenticated;\n' +
+      'GRANT EXECUTE ON FUNCTION public.vnext_launch_ranking_read_v1(uuid,text) TO service_role;\n');
+    sql(chartFreeze);
+    sql(verifyFreeze);
+    sql('UPDATE public.vnext_source_policies_v1 SET enabled=true');
+    assert.equal(sql("SET ROLE service_role;SELECT public.vnext_launch_ranking_read_v1(md5('TPEXrun')::uuid,'2330')#>>'{detail,chart,candles,-1,volume}'"),'0');
   } finally {
     if (started) run('pg_ctl',['-D',data,'-w','-m','immediate','stop']);
     fs.rmSync(directory,{recursive:true,force:true});

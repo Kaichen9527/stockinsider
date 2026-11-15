@@ -49,6 +49,41 @@ export async function readLaunchCycleAdmission(identity:VnextIdentity):Promise<A
   if(result.error)throw Error('launch_ranking_cycle_context_unavailable');
   return parseLaunchCycleAdmission(result.data);
 }
+type ChartPublication = {
+  processed: number;
+  stored: number;
+  replayed: number;
+  missingEvidence: number;
+  reason: 'lease_window' | 'chart_write_uncertain' | null;
+};
+
+async function freezeLaunchCharts(
+  rankingRunId: string,
+  leaseStarted: number,
+  freezeRank: (rank: number) => PromiseLike<{data: unknown;error: unknown}>,
+): Promise<ChartPublication> {
+  const summary: ChartPublication={processed:0,stored:0,replayed:0,missingEvidence:0,reason:null};
+  for(let rank=1;rank<=10;rank++){
+    // Leave a full database statement window inside the already-held lease.
+    if(Date.now()-leaseStarted>=270_000){summary.reason='lease_window';break;}
+    let result;
+    try{result=await freezeRank(rank);}catch{summary.reason='chart_write_uncertain';break;}
+    if(!result){summary.reason='chart_write_uncertain';break;}
+    const {data,error}=result;
+    if(error||!closed(data,'schemaVersion rankingRunId rank status')
+      ||data.schemaVersion!=='launch-chart-freeze-receipt-v1'||data.rankingRunId!==rankingRunId||data.rank!==rank
+      ||typeof data.status!=='string'||!['stored','replay','missing_evidence','finished'].includes(data.status)){
+      summary.reason='chart_write_uncertain';break;
+    }
+    if(data.status==='finished')break;
+    summary.processed++;
+    if(data.status==='stored')summary.stored++;
+    else if(data.status==='replay')summary.replayed++;
+    else summary.missingEvidence++;
+  }
+  return summary;
+}
+
 /** New policy writer, IDs/CAS only. SQL owns facts,16 rules, qualification and
  * publication. No old financial proof, caller points or JS brand is submitted. */
 export async function publishLaunchRanking(identity:VnextIdentity,value:unknown){
@@ -57,11 +92,16 @@ export async function publishLaunchRanking(identity:VnextIdentity,value:unknown)
   const {requireActiveVpsWriter}=await import('../taiwan-data-runtime.ts');
   const writer=await requireActiveVpsWriter();if(!writer.ok)throw Error('launch_ranking_writer_unavailable');
   const {acquireProductionWriteLease,releaseProductionWriteLease}=await import('../production-write-lease.ts');
+  const leaseStarted=Date.now();
   const owner=await acquireProductionWriteLease(300);if(!owner)throw Error('launch_ranking_owned_lease_unavailable');
   try{
     const result=await writer.supabase.rpc('vnext_launch_ranking_command_v1',{p_principal:identity.principal,p_lease_owner:owner,p_request:request});
     if(result.error)throw Error('launch_ranking_publication_uncertain');
-    return parseLaunchRankingWriteReceipt(result.data,request);
+    const receipt=parseLaunchRankingWriteReceipt(result.data,request);
+    if(!receipt.published)return receipt;
+    const chartPublication=await freezeLaunchCharts(request.rankingRunId,leaseStarted,rank=>
+      writer.supabase.rpc('vnext_launch_chart_freeze_v1',{p_principal:identity.principal,p_lease_owner:owner,p_ranking_run_id:request.rankingRunId,p_rank:rank}));
+    return {...receipt,chartPublication};
   }finally{await releaseProductionWriteLease(owner);}
 }
 export function cycleLaunchRankingRequest(session:unknown,previous:LaunchRankingSnapshot|null,existing?:LaunchRankingSnapshot|null){
