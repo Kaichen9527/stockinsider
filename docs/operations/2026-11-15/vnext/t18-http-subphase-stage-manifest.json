@@ -1,0 +1,73 @@
+{
+  "schema": "stockinsider-t18-http-subphase-stage-delta-v1",
+  "baselineCommit": "4758d3d469956d1ebeb4f12a3a4ae9cbe7a8454b",
+  "runtimeBaselineCommit": "319ff431bbc4bd4e39e3ccd69970f94d78234f17",
+  "baselineVerifiedBlobs": 51,
+  "expectedStagedBlobsAfter": 51,
+  "replace": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/fixed_read_proxy.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "bafb3829de71c80ca658bcef6a083f940b39c580",
+        "sha256": "863bf7c3ccfb282f7d128feac277f24e6b43d03401c9929f797f0d1c89554571"
+      },
+      "after": {
+        "gitBlob": "047d55649c7e1e704fdce14492f4c6bf4c745eef",
+        "sha256": "a9f5e61868aeff0d7630b070213d21dbf14e39c372acf78372ec0e8dc18320f6"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_same_clone.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "f355b632579b7c3058a90ba912739c3bc54496c8",
+        "sha256": "395377c1dd2aefd65cc2ca36b7c8952fd57c6e375f36b778aafbfd7d6dcb2913"
+      },
+      "after": {
+        "gitBlob": "54339416b9b08cd24eadcce55d46c07b2690d8b3",
+        "sha256": "174edba0e58993fad462370a39cbda7419820e7438afe5c88d0c2d1757b3d0c1"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_detail_http.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "af1bea3b7cdfea7a31accb65ab047a773bf91e60",
+        "sha256": "bad097fb6505ffbf634e61e2e5c562787bdae7677bd9e2f3e0d2a3d7a7d32ce7"
+      },
+      "after": {
+        "gitBlob": "77475141d47f80c0bfbe84a1784da93708caa4f0",
+        "sha256": "5301d227875a40bd5674b1023451b7525453aa42f91b4b41b5f14fba8f3b3981"
+      }
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_readpoint_diagnostics.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "c58110e55a0d9f078337ace0f7bafcf5d161c216",
+        "sha256": "73db2de9247dcc5f04f7e3ecc7bc967215fc847c92d3de9c8cc624f687897b6b"
+      },
+      "after": {
+        "gitBlob": "efd3801773c0338498726a8e10f867a4f80fe6f5",
+        "sha256": "9f081ead3f2904c2505d4c78b23164803b48682f64558b154de59aa1075e0eb8"
+      }
+    }
+  ],
+  "add": [],
+  "remove": [],
+  "preservedEvidence": {
+    "commit": "0b122de7e3e6c6921c141078b2eeb9422a6ae495",
+    "path": "docs/operations/2026-11-15/vnext/contabo-t18-market-metadata-real-http-timeout.json",
+    "gitBlob": "de91df54936bbab54987c10a87dfcc2922c16e40"
+  },
+  "fixedSourceRoot": "/run/stockinsider-t18-host-source",
+  "fixedSourceUnitRoot": "/readonly/t18-source",
+  "scope": "CLOSED_HTTP_CHILD_PHASES_AND_FIRST_ERROR_PRESERVING_CLEANUP",
+  "legacyDiagnosticReadable": true,
+  "diagnosticFlagsGrantAuthority": false,
+  "routesDeadlinesAuthVersionsAndResourceLimitsChanged": false,
+  "sqlUrlGrantRpcRootChanges": false,
+  "nativeHoldRetained": true,
+  "onsiteNewSubject": "NOT_RUN"
+}

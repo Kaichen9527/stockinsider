@@ -1,0 +1,203 @@
+{
+  "schema": "stockinsider-t18-http-subphase-source-receipt-v1",
+  "recordedAtUtc": "2026-11-15T02:38:44.123480Z",
+  "baselineCommit": "4758d3d469956d1ebeb4f12a3a4ae9cbe7a8454b",
+  "runtimeBaselineCommit": "319ff431bbc4bd4e39e3ccd69970f94d78234f17",
+  "scope": "CLOUD_SYNTHETIC_HTTP_PG_SOURCE_DIAGNOSTICS_ONLY",
+  "onsiteNewSubject": "NOT_RUN",
+  "nativeHoldRetained": true,
+  "preservedEvidence": {
+    "commit": "0b122de7e3e6c6921c141078b2eeb9422a6ae495",
+    "path": "docs/operations/2026-11-15/vnext/contabo-t18-market-metadata-real-http-timeout.json",
+    "gitBlob": "de91df54936bbab54987c10a87dfcc2922c16e40",
+    "notOverwrittenByDelta": true,
+    "actualOldNativePhase": "fixed_http_exercise",
+    "actualOldNativeClass": "timeout",
+    "actualOldNativeChildPhase": "UNKNOWN_UNCONFIRMED",
+    "actualMetadataUrlAndDetailHttpOutcome": "UNCONFIRMED_NOT_EMITTED",
+    "sourceMaskingPathsAreProvenHistoricalCause": false
+  },
+  "manifest": {
+    "path": "docs/operations/2026-11-15/vnext/t18-http-subphase-stage-manifest.json",
+    "sha256": "b3713d3e439e19698eee8cafaaf6e1e86054c8ef4edc34008159d30cf41e3daa",
+    "replace": 4,
+    "add": 0,
+    "expectedStagedBlobsAfter": 51
+  },
+  "runtimeAfter": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/fixed_read_proxy.py",
+      "gitBlob": "047d55649c7e1e704fdce14492f4c6bf4c745eef",
+      "sha256": "a9f5e61868aeff0d7630b070213d21dbf14e39c372acf78372ec0e8dc18320f6"
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_same_clone.py",
+      "gitBlob": "54339416b9b08cd24eadcce55d46c07b2690d8b3",
+      "sha256": "174edba0e58993fad462370a39cbda7419820e7438afe5c88d0c2d1757b3d0c1"
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_detail_http.py",
+      "gitBlob": "77475141d47f80c0bfbe84a1784da93708caa4f0",
+      "sha256": "5301d227875a40bd5674b1023451b7525453aa42f91b4b41b5f14fba8f3b3981"
+    },
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_readpoint_diagnostics.py",
+      "gitBlob": "efd3801773c0338498726a8e10f867a4f80fe6f5",
+      "sha256": "9f081ead3f2904c2505d4c78b23164803b48682f64558b154de59aa1075e0eb8"
+    }
+  ],
+  "diagnosticPolicy": {
+    "closedHttpSubphases": [
+      "aba_b_daily",
+      "aba_b_home",
+      "aba_b_start",
+      "aba_b_static",
+      "aba_b_static_select",
+      "aba_b_stop",
+      "aba_first_a_daily",
+      "aba_first_a_home",
+      "aba_first_a_start",
+      "aba_first_a_static",
+      "aba_first_a_static_select",
+      "aba_first_a_stop",
+      "aba_return_a_daily",
+      "aba_return_a_home",
+      "aba_return_a_start",
+      "aba_return_a_static",
+      "aba_return_a_static_select",
+      "aba_return_a_stop",
+      "app_broker_shutdown",
+      "app_transport_close",
+      "broker_ports_closed",
+      "detail_a_api",
+      "detail_a_identity",
+      "detail_a_page",
+      "detail_a_payload",
+      "detail_a_start",
+      "detail_a_stop",
+      "detail_b_api",
+      "detail_b_identity",
+      "detail_b_page",
+      "detail_b_payload",
+      "detail_b_start",
+      "detail_b_stop",
+      "detail_final_stop",
+      "fault_b_daily",
+      "fault_b_home",
+      "fault_b_start",
+      "fault_b_static",
+      "fault_b_static_select",
+      "fault_b_stop",
+      "fault_inject",
+      "fault_observe",
+      "proxy_denial_probes",
+      "proxy_start",
+      "proxy_stop",
+      "rest_broker_shutdown",
+      "rest_denial_probes",
+      "rest_target_readiness",
+      "rollback_a_daily",
+      "rollback_a_home",
+      "rollback_a_start",
+      "rollback_a_static",
+      "rollback_a_static_select",
+      "rollback_a_stop",
+      "sequence_final_stop"
+    ],
+    "fixedCompletionFlags": [
+      "detailPreparationCompleted",
+      "detailReadPrepared",
+      "detailPreparationGap",
+      "detailBoundsGap",
+      "proxyStarted",
+      "proxyStopped",
+      "proxyDenialsPassed",
+      "restTargetResponded",
+      "restDenialsPassed",
+      "firstAHealthPassed",
+      "bHealthPassed",
+      "returnAHealthPassed",
+      "faultBReady",
+      "faultObserved",
+      "rollbackAHealthPassed",
+      "detailHttpPassed",
+      "appShutdownAcknowledged",
+      "restShutdownAcknowledged",
+      "appTransportClosed"
+    ],
+    "exactBoolFlags": true,
+    "legacyTwoFieldDiagnosticsReadable": true,
+    "unknownKeysOrEnumsOrNonboolFlagsRefused": true,
+    "firstBodyPhaseClassAndChildPreserved": true,
+    "completionSnapshotRefreshedAfterCleanupAttempts": true,
+    "flagsReadForAuthorityOrRetryOrRouting": false,
+    "rawSqlUrlRowIdFilenameExceptionOrSecretExported": false,
+    "ownedCloneCleanupOutputGateUnchanged": true
+  },
+  "verification": {
+    "actualPostgresVersion": "PostgreSQL17.11 (Debian17.11-0+deb13u1)",
+    "existingFocusedRegression": {
+      "passed": 22,
+      "seconds": 20.238
+    },
+    "t18Regression": {
+      "passed": 176,
+      "seconds": 90.803
+    },
+    "t17Regression": {
+      "passed": 75,
+      "seconds": 25.549
+    },
+    "finalNewTestsWithAllPortsFaultAssertion": {
+      "passed": 13,
+      "seconds": 3.321
+    },
+    "independentReview": {
+      "passed": 13,
+      "seconds": 3.044,
+      "remainingP0": 0,
+      "remainingP1": 0,
+      "frozenFourRuntimeSha256Verified": true
+    },
+    "successfulBaselineHttpCallsCompared": 24,
+    "successfulBaselineBrokerOperationsAndResultsIdentical": true,
+    "unchangedAcceptanceValidatorAstAndFixedConstants": true,
+    "actualPublicPythonChildAbaAndFaultRecovery": "PASS_MECHANICS_ONLY_NOT_NEXT_POSTGREST_ADMISSION",
+    "actualPgBoundsGapVsPreparedReadThenTimeout": "PASS_SYNTHETIC_PRIVATE_CONTROL_HANDLES_ONLY",
+    "primaryTimeoutSurvivesStopProxyBrokerPortAndTransportCleanupErrors": true,
+    "proxyFailedThreadStartNoShutdownHang": true,
+    "allProxyAndPortCleanupAttemptsVerified": true,
+    "detailPageDecodeChildAndClosedParseClass": "PASS",
+    "oldBoundsAndNewHttpTimeoutConflated": false,
+    "ownedSyntheticPgAndProxyCleanupVerified": true,
+    "rootContaboTrueBackupOrProductionActions": false,
+    "webBuild": {
+      "exitCode": 127,
+      "status": "NEXT_EXECUTABLE_MISSING_IN_ISOLATED_CHECKOUT",
+      "canonicalBridge": "PASS_FIVE_CANONICAL_MODULES"
+    }
+  },
+  "receiveInbox": {
+    "checksDuringTask": 4,
+    "observedAtUtc": "2026-11-15T02:37:47.615774Z",
+    "targetPresent": false,
+    "sha256Verified": false,
+    "privatePathOrNameExported": false,
+    "partialDownloadPresent": false,
+    "contentsRead": false,
+    "fileMovedOrRemoved": false,
+    "browserDataOrKeysRead": false
+  },
+  "unchangedBoundaries": {
+    "routesAndRequestOrder": true,
+    "retryCountsSleepsAndDeadlines": true,
+    "authJwtLifetimeAndMinimumRemaining": true,
+    "fixedReleaseVersionsPinsAndBytes": true,
+    "requestResponseResourceLimits": true,
+    "sqlMetadataUrlRlsGrantsAndOriginalRpc": true,
+    "rootUnitsFdAndNamespaceAdmission": true,
+    "ownedPgAndHostCleanupGate": true
+  },
+  "realBackupDetailHttpAcceptance": "NOT_RUN_BY_THIS_SUBJECT",
+  "siteNewRadarAndFormalGatesRetained": true
+}

@@ -20,6 +20,7 @@ from urllib.parse import urlencode
 from .stage_credentials import read_stage_credentials,validate_stage_token,StageCredentialRejected
 from .t18_reader_roles import install_fixed_reader_roles
 from .fixed_read_proxy import start_fixed_read_proxy,SNAPSHOT_SELECT,STATE_SELECT,_BoundedResponse
+from .t18_readpoint_diagnostics import http_trace,http_subphase,http_completed
 
 MAX_HTTP=2*1024**2
 MAX_COUNT=8*1024**3
@@ -47,6 +48,7 @@ def _http(port,method,target,headers=None):
             except OSError:pass
         connection.close()
     timer=threading.Timer(8,stop);timer.start()
+    primary_error=None
     try:
         connection.request(method,target,headers={'Accept-Encoding':'identity','Connection':'close',**(headers or {})})
         active[0]=connection.sock
@@ -57,7 +59,14 @@ def _http(port,method,target,headers=None):
         body=response.read(MAX_HTTP+1)
         if len(body)>MAX_HTTP or expired.is_set():raise FixedRollbackRejected('http_size_or_deadline_rejected')
         return response.status,{k.lower():v for k,v in response.getheaders()},body
-    finally:timer.cancel();timer.join(timeout=1);connection.close()
+    except BaseException as error:primary_error=error;raise
+    finally:
+        cleanup_error=None
+        for action in (timer.cancel,lambda:timer.join(timeout=1),connection.close):
+            try:action()
+            except Exception as error:
+                if cleanup_error is None:cleanup_error=error
+        if primary_error is None and cleanup_error is not None:raise cleanup_error
 
 
 def _timestamp(value):
@@ -121,24 +130,31 @@ def _static_asset(release):
     raise FixedRollbackRejected('fixed_static_asset_missing')
 
 
-def _health(release,expected,deadline=None):
+def _health(release,expected,deadline=None,step='aba_first_a'):
     deadline=time.monotonic()+60 if deadline is None else deadline
-    target,expected_digest=_static_asset(release)
+    with http_subphase(step+'_static_select'):target,expected_digest=_static_asset(release)
     last=None
-    for _ in range(40):
-        if time.monotonic()>deadline:raise FixedRollbackRejected('fixed_rollback_deadline')
-        try:
-            status,headers,body=_http(3000,'GET','/api/radar/daily')
-            if status==200:break
-            last='http_status'
-        except (OSError,http.client.HTTPException):last='connection'
-        time.sleep(.1)
-    else:raise FixedRollbackRejected('next_daily_health_failed')
-    daily=_validate_stale_daily(headers,body,expected)
-    home,_,home_body=_http(3000,'GET','/')
-    static,_,static_body=_http(3000,'GET',target)
-    if home!=200 or static!=200 or hashlib.sha256(static_body).hexdigest()!=expected_digest:
-        raise FixedRollbackRejected('next_home_or_static_health_failed')
+    with http_subphase(step+'_daily'):
+        for _ in range(40):
+            if time.monotonic()>deadline:raise FixedRollbackRejected('fixed_rollback_deadline')
+            try:
+                status,headers,body=_http(3000,'GET','/api/radar/daily')
+                if status==200:break
+                last='http_status'
+            except (OSError,http.client.HTTPException) as error:last='timeout' if isinstance(error,TimeoutError) else 'connection'
+            time.sleep(.1)
+        else:
+            if last=='timeout':raise TimeoutError()
+            raise FixedRollbackRejected('next_daily_health_failed')
+        daily=_validate_stale_daily(headers,body,expected)
+    with http_subphase(step+'_home'):
+        home,_,home_body=_http(3000,'GET','/')
+    with http_subphase(step+'_static'):
+        static,_,static_body=_http(3000,'GET',target)
+    with http_subphase(step+'_home'):
+        if home!=200:raise FixedRollbackRejected('next_home_or_static_health_failed')
+    with http_subphase(step+'_static'):
+        if static!=200 or hashlib.sha256(static_body).hexdigest()!=expected_digest:raise FixedRollbackRejected('next_home_or_static_health_failed')
     return {'sourceCommit':release['sourceCommit'],'buildId':release['buildId'],'nextVersion':'16.3.4',
         'homeStatus':home,'homeBytes':len(home_body),'homeAcceptance':'HTTP_LIVENESS_ONLY',
         'dailyAcceptance':'STALE_READONLY_ORIGINAL_DATE_NO_AUTHORITY','staticStatus':static,'staticSha256':expected_digest,**daily}
@@ -148,14 +164,21 @@ def _negative_http(stage_jwt):
     snap='/rest/v1/radar_public_snapshots?'+urlencode({'select':SNAPSHOT_SELECT,'window_key':'eq.daily','status':'eq.valid','order':'published_at.desc','limit':'1'})
     probes=(('POST',snap),('PATCH',snap),('DELETE',snap),('GET','/rest/v1/rpc/publish_radar_public_snapshots'),
         ('POST','/rest/v1/rpc/publish_radar_public_snapshots'),('GET','http://127.0.0.1:3301/radar_public_snapshots'))
-    for method,path in probes:
-        if _http(3302,method,path)[0] not in (400,403,405):raise FixedRollbackRejected('fixed_get_boundary_failed')
+    with http_subphase('proxy_denial_probes'):
+        for method,path in probes:
+            if _http(3302,method,path)[0] not in (400,403,405):raise FixedRollbackRejected('fixed_get_boundary_failed')
+    http_completed('proxyDenialsPassed')
     # Direct raw PostgREST is reachable inside the private namespace. Its
     # authenticating role has no write grants or exposed EXECUTE functions.
-    for method,path in (('DELETE','/radar_public_snapshots?window_key=eq.__t18_never__'),
-        ('POST','/rpc/publish_radar_public_snapshots')):
-        if _http(3301,method,path,{'Authorization':'Bearer '+stage_jwt})[0] not in (400,401,403,404):
-            raise FixedRollbackRejected('postgrest_write_or_rpc_not_rejected')
+    with http_subphase('rest_denial_probes'):
+        for index,(method,path) in enumerate((('DELETE','/radar_public_snapshots?window_key=eq.__t18_never__'),
+            ('POST','/rpc/publish_radar_public_snapshots'))):
+            if index==0:
+                with http_subphase('rest_target_readiness'):response=_http(3301,method,path,{'Authorization':'Bearer '+stage_jwt})
+                http_completed('restTargetResponded')
+            else:response=_http(3301,method,path,{'Authorization':'Bearer '+stage_jwt})
+            if response[0] not in (400,401,403,404):raise FixedRollbackRejected('postgrest_write_or_rpc_not_rejected')
+    http_completed('restDenialsPassed')
     return {'proxyDenied':len(probes),'postgrestDenied':2}
 
 
@@ -167,25 +190,36 @@ def _port_closed(port):
 def _execute_fixed_sequence(app,rest,releases,dates):
     """Private mechanics helper. Tests are not kernel/broker admission."""
     steps=[];deadline=time.monotonic()+180
+    primary_error=None
     try:
-        for op,index in (('START_A',0),('START_B',1),('START_A',0)):
-            response=app.request(op)
-            if response['sourceCommit']!=releases[index]['sourceCommit']:raise FixedRollbackRejected('broker_release_binding_rejected')
-            steps.append(_health(releases[index],dates['daily'],deadline))
-            app.request('STOP_NEXT')
-        app.request('START_B');_health(releases[1],dates['daily'],deadline)
-        app.request('FAULT_NEXT')
-        try:
-            status,_,_=_http(3000,'GET','/api/radar/daily')
-            failed=status!=200
-        except (OSError,http.client.HTTPException):failed=True
-        if not failed:raise FixedRollbackRejected('injected_fault_not_observed')
+        for op,index,step,flag in (('START_A',0,'aba_first_a','firstAHealthPassed'),('START_B',1,'aba_b','bHealthPassed'),('START_A',0,'aba_return_a','returnAHealthPassed')):
+            with http_subphase(step+'_start'):
+                response=app.request(op)
+                if response['sourceCommit']!=releases[index]['sourceCommit']:raise FixedRollbackRejected('broker_release_binding_rejected')
+            steps.append(_health(releases[index],dates['daily'],deadline,step))
+            http_completed(flag)
+            with http_subphase(step+'_stop'):app.request('STOP_NEXT')
+        with http_subphase('fault_b_start'):app.request('START_B')
+        _health(releases[1],dates['daily'],deadline,'fault_b');http_completed('faultBReady')
+        with http_subphase('fault_inject'):app.request('FAULT_NEXT')
+        with http_subphase('fault_observe'):
+            try:
+                status,_,_=_http(3000,'GET','/api/radar/daily')
+                failed=status!=200
+            except (OSError,http.client.HTTPException):failed=True
+            if not failed:raise FixedRollbackRejected('injected_fault_not_observed')
+        http_completed('faultObserved')
         # Fixed automatic rollback; no operator assertion substitutes for HTTP.
-        app.request('START_A');recovered=_health(releases[0],dates['daily'],deadline)
+        with http_subphase('rollback_a_start'):app.request('START_A')
+        recovered=_health(releases[0],dates['daily'],deadline,'rollback_a');http_completed('rollbackAHealthPassed')
         return {'sequence':'A_B_A','steps':steps,'faultHealthFailed':True,
             'automaticRollback':'A','recovered':recovered}
+    except BaseException as error:primary_error=error;raise
     finally:
-        app.request('STOP_NEXT')
+        try:
+            with http_subphase('sequence_final_stop'):app.request('STOP_NEXT')
+        except Exception:
+            if primary_error is None:raise
 
 
 def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
@@ -212,40 +246,64 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     with readpoint_phase('initial_app_shutdown'):app.request('SHUTDOWN')
     with readpoint_phase('stage_credential_handoff'):secret,token=request_fresh_stage()
     try:
-        with ExitStack() as stack:
-            with readpoint_phase('fresh_app_binding'):
-                fresh_app=stack.enter_context(connect_fixed_app_broker())
-                observe_three_uid_budget(fresh_app,rest)
-            primary_error=None
+        with http_trace():
+            http_completed('detailPreparationCompleted')
+            http_completed('detailReadPrepared' if detail_read is not None else 'detailPreparationGap')
+            if (detail_read is None and detail_http.get('status')=='GAP_DETAIL_PUBLIC_JSON'
+                and detail_http.get('profileDiagnostic',{}).get('category')=='BOUNDS'
+                and detail_http['profileDiagnostic'].get('reason')=='BOUND_EXCEEDED'):http_completed('detailBoundsGap')
+            stack=ExitStack();primary_error=None
             try:
-                with readpoint_phase('port_preconditions'):
-                    for port in (3000,3301,3302):
-                        if not _port_closed(port):raise FixedRollbackRejected('private_test_port_occupied')
-                encoded=base64.b64encode(secret).decode()
-                with readpoint_phase('rest_configure'):rest.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
-                with readpoint_phase('app_configure'):fresh_app.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
-                with readpoint_phase('fixed_http_exercise'):
-                    with start_fixed_read_proxy(token,detail_read=detail_read) as proxy:
-                        negatives=_negative_http(token)
-                        sequence=_execute_fixed_sequence(fresh_app,rest,assets.releases,dates)
-                        if detail_read is not None:
-                            from .t18_detail_http import exercise_detail_http
-                            detail_http=exercise_detail_http(fresh_app,assets.releases,detail_read)
-                        with readpoint_phase('final_token_check'):validate_stage_token(secret,token,minimum_remaining=0)
-                        metrics=proxy.metrics
+                with readpoint_phase('fresh_app_binding'):
+                    fresh_app=stack.enter_context(connect_fixed_app_broker())
+                    observe_three_uid_budget(fresh_app,rest)
+                try:
+                    with readpoint_phase('port_preconditions'):
+                        for port in (3000,3301,3302):
+                            if not _port_closed(port):raise FixedRollbackRejected('private_test_port_occupied')
+                    encoded=base64.b64encode(secret).decode()
+                    with readpoint_phase('rest_configure'):rest.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
+                    with readpoint_phase('app_configure'):fresh_app.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
+                    with readpoint_phase('fixed_http_exercise'):
+                        with start_fixed_read_proxy(token,detail_read=detail_read) as proxy:
+                            negatives=_negative_http(token)
+                            sequence=_execute_fixed_sequence(fresh_app,rest,assets.releases,dates)
+                            if detail_read is not None:
+                                from .t18_detail_http import exercise_detail_http
+                                detail_http=exercise_detail_http(fresh_app,assets.releases,detail_read)
+                                http_completed('detailHttpPassed')
+                            with readpoint_phase('final_token_check'):validate_stage_token(secret,token,minimum_remaining=0)
+                            metrics=proxy.metrics
+                except BaseException as error:
+                    primary_error=error;raise
+                finally:
+                    cleanup_error=None
+                    for broker,label,flag in ((fresh_app,'app_broker_shutdown','appShutdownAcknowledged'),(rest,'rest_broker_shutdown','restShutdownAcknowledged')):
+                        try:
+                            with http_subphase(label):broker.request('SHUTDOWN')
+                            http_completed(flag)
+                        except Exception as error:
+                            if cleanup_error is None:cleanup_error=error
+                    try:
+                        with http_subphase('broker_ports_closed'):
+                            closed=[];port_error=None
+                            for port in (3000,3301,3302):
+                                try:closed.append(_port_closed(port))
+                                except Exception as error:
+                                    closed.append(False)
+                                    if port_error is None:port_error=error
+                            if port_error is not None:raise port_error
+                            if not all(closed):raise FixedRollbackRejected('app_or_rest_cleanup_unconfirmed')
+                    except Exception as error:
+                        if cleanup_error is None:cleanup_error=error
+                    if primary_error is None and cleanup_error is not None:raise cleanup_error
             except BaseException as error:
                 primary_error=error;raise
             finally:
                 try:
-                    with readpoint_phase('broker_cleanup'):
-                        cleanup_errors=False
-                        for broker in (fresh_app,rest):
-                            try:broker.request('SHUTDOWN')
-                            except Exception:cleanup_errors=True
-                        if cleanup_errors or any(not _port_closed(port) for port in (3000,3301,3302)):
-                            raise FixedRollbackRejected('app_or_rest_cleanup_unconfirmed')
+                    with http_subphase('app_transport_close'):stack.close()
+                    http_completed('appTransportClosed')
                 except Exception:
-                    # Keep the earliest refusal; host still verifies/stops units.
                     if primary_error is None:raise
     finally:secret[:]=bytes(len(secret))
     with readpoint_phase('snapshot_final_check'):

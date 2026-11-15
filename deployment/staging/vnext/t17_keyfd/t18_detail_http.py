@@ -4,7 +4,7 @@ import html.parser
 import json
 import re
 import time
-from .t18_readpoint_diagnostics import readpoint_phase
+from .t18_readpoint_diagnostics import readpoint_phase,http_subphase
 
 STATUSES=('GAP_DETAIL_SCOPE','GAP_AUGMENTED_DETAIL','GAP_DETAIL_BOUND','GAP_DETAIL_ACTION_SURFACE','GAP_DETAIL_PUBLIC_JSON','HISTORICAL_DETAIL_HTTP_VERIFIED')
 
@@ -54,45 +54,50 @@ def exercise_detail_http(app,releases,read):
  with readpoint_phase('candidate_detail_http'):
   primary_error=None
   try:
-   for op,release in zip(('START_A','START_B'),releases):
-    response=app.request(op)
-    if response['sourceCommit']!=release['sourceCommit']:raise FixedRollbackRejected('historical_detail_release_binding_failed')
-    last_timeout=False
-    for _ in range(40):
-     if time.monotonic()>deadline:raise TimeoutError()
-     try:
-      status,headers,body=_http(3000,'GET',api);last_timeout=False
-      if status==200:break
-     except TimeoutError:last_timeout=True
-     except OSError:last_timeout=False
-     time.sleep(.1)
-    else:
-     if last_timeout:raise TimeoutError()
-     raise FixedRollbackRejected('historical_detail_api_not_ready')
-    detail=_check_payload(body,rows)
-    status,_,markup=_http(3000,'GET',page)
-    parser=_VisibleText();parser.feed(markup.decode('utf-8'));visible=' '.join(parser.text)
-    def normalized(x):return re.sub(r'\s+',' ',x).strip()
-    def public_text(x):return re.sub(r'[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}','尚待確認',x,flags=re.I)
-    sections=[x for x in d['sections'] if x['key']!='sources']
-    from datetime import datetime,timezone,timedelta
-    dates=[datetime.fromisoformat(d[k].replace('Z','+00:00')).replace(tzinfo=timezone.utc) if k=='session_date' else datetime.fromisoformat(d[k].replace('Z','+00:00')) for k in ('session_date','as_of','available_at')]
-    labels=[str(x.astimezone(timezone(timedelta(hours=8))).year)+'/'+str(x.astimezone(timezone(timedelta(hours=8))).month)+'/'+str(x.astimezone(timezone(timedelta(hours=8))).day) for x in dates]
-    if (status!=200 or parser.articles<len(sections) or 'REVISION-BOUND RESEARCH' not in visible
-        or any(normalized(public_text(x[k])) not in normalized(visible) for x in sections for k in ('title','body'))
-        or symbol not in visible or any(x not in visible for x in labels)):raise FixedRollbackRejected('historical_detail_page_content_failed')
+   for op,release,step in zip(('START_A','START_B'),releases,('detail_a','detail_b')):
+    with http_subphase(step+'_start'):
+     response=app.request(op)
+     if response['sourceCommit']!=release['sourceCommit']:raise FixedRollbackRejected('historical_detail_release_binding_failed')
+    with http_subphase(step+'_api'):
+     last_timeout=False
+     for _ in range(40):
+      if time.monotonic()>deadline:raise TimeoutError()
+      try:
+       status,headers,body=_http(3000,'GET',api);last_timeout=False
+       if status==200:break
+      except TimeoutError:last_timeout=True
+      except OSError:last_timeout=False
+      time.sleep(.1)
+     else:
+      if last_timeout:raise TimeoutError()
+      raise FixedRollbackRejected('historical_detail_api_not_ready')
+    with http_subphase(step+'_payload'):detail=_check_payload(body,rows)
+    with http_subphase(step+'_page'):
+     status,_,markup=_http(3000,'GET',page)
+     parser=_VisibleText();parser.feed(markup.decode('utf-8'));visible=' '.join(parser.text)
+     def normalized(x):return re.sub(r'\s+',' ',x).strip()
+     def public_text(x):return re.sub(r'[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}','尚待確認',x,flags=re.I)
+     sections=[x for x in d['sections'] if x['key']!='sources']
+     from datetime import datetime,timezone,timedelta
+     dates=[datetime.fromisoformat(d[k].replace('Z','+00:00')).replace(tzinfo=timezone.utc) if k=='session_date' else datetime.fromisoformat(d[k].replace('Z','+00:00')) for k in ('session_date','as_of','available_at')]
+     labels=[str(x.astimezone(timezone(timedelta(hours=8))).year)+'/'+str(x.astimezone(timezone(timedelta(hours=8))).month)+'/'+str(x.astimezone(timezone(timedelta(hours=8))).day) for x in dates]
+     if (status!=200 or parser.articles<len(sections) or 'REVISION-BOUND RESEARCH' not in visible
+         or any(normalized(public_text(x[k])) not in normalized(visible) for x in sections for k in ('title','body'))
+         or symbol not in visible or any(x not in visible for x in labels)):raise FixedRollbackRejected('historical_detail_page_content_failed')
     other_symbol='0001' if symbol=='0000' else '0000'
     negatives=(api+'&revision='+revision,api.replace(revision,'invalid'),api.replace(revision,'00000000-0000-4000-8000-000000000000'),api.replace('/'+symbol+'/', '/'+other_symbol+'/'))
-    for index,target in enumerate(negatives):
-     denied,_,refusal=_http(3000,'GET',target)
-     if denied==200 or d['summary'].encode() in refusal:raise FixedRollbackRejected('historical_detail_revision_boundary_failed')
+    with http_subphase(step+'_identity'):
+     for index,target in enumerate(negatives):
+      denied,_,refusal=_http(3000,'GET',target)
+      if denied==200 or d['summary'].encode() in refusal:raise FixedRollbackRejected('historical_detail_revision_boundary_failed')
     steps.append({'sourceCommit':release['sourceCommit'],'apiStatus':200,'pageStatus':200,
      'apiSha256':hashlib.sha256(body).hexdigest(),'pageSha256':hashlib.sha256(markup).hexdigest(),
      'sections':len(detail['sections']),'facts':len(detail['facts']),'revisionNegatives':len(negatives)})
-    app.request('STOP_NEXT')
+    with http_subphase(step+'_stop'):app.request('STOP_NEXT')
   except BaseException as error:primary_error=error;raise
   finally:
-   try:app.request('STOP_NEXT')
+   try:
+    with http_subphase('detail_final_stop'):app.request('STOP_NEXT')
    except Exception:
     if primary_error is None:raise
  return {'status':'HISTORICAL_DETAIL_HTTP_VERIFIED','steps':steps,'originalDatesPreserved':True,

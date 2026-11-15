@@ -15,6 +15,7 @@ import re
 import socket
 import threading
 from urllib.parse import parse_qsl, urlencode
+from .t18_readpoint_diagnostics import http_subphase,http_completed
 
 REQUEST_LINE_LIMIT=4096
 HEADER_BYTES_LIMIT=8192
@@ -86,12 +87,13 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None):
     The token is an internal stage credential, not an admission flag. Caller
     credentials are ignored and can never change the upstream authorization.
     """
-    if (type(stage_jwt) is not str or not 64<=len(stage_jwt)<=4096
-            or not re.fullmatch(r'[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+',stage_jwt)):
-        raise FixedReadProxyRejected()
-    if detail_read is not None:
-        from .t18_detail_read_adapter import _DetailRead
-        if type(detail_read) is not _DetailRead:raise FixedReadProxyRejected()
+    with http_subphase('proxy_start'):
+        if (type(stage_jwt) is not str or not 64<=len(stage_jwt)<=4096
+                or not re.fullmatch(r'[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+',stage_jwt)):
+            raise FixedReadProxyRejected()
+        if detail_read is not None:
+            from .t18_detail_read_adapter import _DetailRead
+            if type(detail_read) is not _DetailRead:raise FixedReadProxyRejected()
     handle=_Handle();detail_started=[None];detail_requests=[0]
 
     class Handler(http.server.BaseHTTPRequestHandler):
@@ -202,6 +204,7 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None):
                     except OSError:pass
                 connection.close()
             timer=threading.Timer(UPSTREAM_WALL_SECONDS,expire);timer.daemon=True;timer.start()
+            primary_error=None
             try:
                 connection.request(self.command,target,headers={'Host':'127.0.0.1:3301',
                   'Authorization':'Bearer '+stage_jwt,'Accept':accept,'Accept-Profile':'public',
@@ -225,9 +228,16 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None):
                 handle._counts['responseBytes']+=len(body)
             except (OSError,http.client.HTTPException,FixedReadProxyRejected,ValueError):
                 handle._counts['upstreamFailures']+=1
-                self._reply(502,b'{"error":"fixed_reader_upstream_rejected"}')
+                try:self._reply(502,b'{"error":"fixed_reader_upstream_rejected"}')
+                except BaseException as error:primary_error=error;raise
+            except BaseException as error:primary_error=error;raise
             finally:
-                timer.cancel();timer.join(timeout=1);connection.close()
+                cleanup_error=None
+                for action in (timer.cancel,lambda:timer.join(timeout=1),connection.close):
+                    try:action()
+                    except Exception as error:
+                        if cleanup_error is None:cleanup_error=error
+                if primary_error is None and cleanup_error is not None:raise cleanup_error
 
     class Server(http.server.HTTPServer):
         allow_reuse_address=True
@@ -271,17 +281,34 @@ def start_fixed_read_proxy(stage_jwt,detail_read=None):
             for connection in active:self._shutdown_socket(connection)
         def handle_error(self,request,client_address):pass
 
-    server=None;thread=None
+    server=None;thread=None;primary_error=None
     try:
-        server=Server(('127.0.0.1',3302),Handler)
-        thread=threading.Thread(target=server.serve_forever,kwargs={'poll_interval':.05},daemon=False)
-        thread.start()
+        with http_subphase('proxy_start'):
+            server=Server(('127.0.0.1',3302),Handler)
+            thread=threading.Thread(target=server.serve_forever,kwargs={'poll_interval':.05},daemon=False)
+            thread.start()
+        http_completed('proxyStarted')
         yield handle
+    except BaseException as error:primary_error=error;raise
     finally:
-        if server:
-            server.shutdown_accepted()
-            if thread:server.shutdown()
-            server.server_close()
-        if thread:thread.join(timeout=2)
-        handle.closed=thread is None or not thread.is_alive()
-        if not handle.closed:raise FixedReadProxyRejected()
+        try:
+            with http_subphase('proxy_stop'):
+                cleanup_error=None
+                # shutdown() waits for serve_forever: never call it on a thread
+                # whose start failed. Every other close/reap attempt still runs.
+                actions=[]
+                if server:
+                    actions.append(server.shutdown_accepted)
+                    if thread is not None and thread.is_alive():actions.append(server.shutdown)
+                    actions.append(server.server_close)
+                if thread is not None and thread.ident is not None:actions.append(lambda:thread.join(timeout=2))
+                for action in actions:
+                    try:action()
+                    except Exception as error:
+                        if cleanup_error is None:cleanup_error=error
+                handle.closed=thread is None or not thread.is_alive()
+                if cleanup_error is not None:raise cleanup_error
+                if not handle.closed:raise FixedReadProxyRejected()
+            http_completed('proxyStopped')
+        except Exception:
+            if primary_error is None:raise
