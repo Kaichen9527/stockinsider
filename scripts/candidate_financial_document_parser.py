@@ -82,12 +82,14 @@ def disable_network():
     socket.create_connection = blocked
 
 
-def apply_limits():
+def apply_limits(extended_official_validation=False):
+    cpu_seconds = 115 if extended_official_validation else 20
+    address_space = (1280 if extended_official_validation else 768) * 1024 * 1024
     # Limits are a second containment layer behind the Node timeout. Values are
     # deliberately large enough for a 50 MiB filing but bounded for a worker.
     try:
-        resource.setrlimit(resource.RLIMIT_CPU, (20, 20))
-        resource.setrlimit(resource.RLIMIT_AS, (768 * 1024 * 1024, 768 * 1024 * 1024))
+        resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds))
+        resource.setrlimit(resource.RLIMIT_AS, (address_space, address_space))
         resource.setrlimit(resource.RLIMIT_FSIZE, (64 * 1024 * 1024, 64 * 1024 * 1024))
     except (ValueError, OSError):
         # Non-Unix development hosts retain the parent timeout and byte bounds.
@@ -490,6 +492,7 @@ def main():
     parser.add_argument("--taxonomy-sha256")
     parser.add_argument("--expected-entity")
     parser.add_argument("--expected-period-end")
+    parser.add_argument("--extended-official-validation", action="store_true")
     args = parser.parse_args()
     if len(args.sha256) != 64 or any(char not in "0123456789abcdef" for char in args.sha256):
         raise ValueError("invalid_sha256")
@@ -499,7 +502,10 @@ def main():
                 or not args.expected_period_end
                 or datetime.date.fromisoformat(args.expected_period_end).isoformat() != args.expected_period_end):
             raise ValueError("invalid_expected_context")
-    apply_limits()
+    if args.extended_official_validation and (args.format == "pdf" or args.allow_docling
+            or not args.taxonomy_path or not args.taxonomy_sha256 or args.expected_entity is None):
+        raise ValueError("extended_validation_requires_structured_official_context")
+    apply_limits(args.extended_official_validation)
     disable_network()
     payload = sys.stdin.buffer.read(args.max_bytes + 1)
     if not payload or len(payload) > args.max_bytes or hashlib.sha256(payload).hexdigest() != args.sha256:

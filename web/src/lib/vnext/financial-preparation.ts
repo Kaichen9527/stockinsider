@@ -46,9 +46,12 @@ export async function verifyFinancialPreparation(capability:unknown,expected:{op
  const scope=scopeOf(capability),a=scope.attempt;
  if(scope.phase!=='stage'||scope.lease!==null||a.operation!==expected.operation||expected.symbol!==undefined&&expected.symbol!==a.symbol||expected.sourceUrl!==undefined&&expected.sourceUrl!==a.sourceUrl
   ||expected.artifactHash!==undefined&&expected.artifactHash!==a.artifact?.hash||expected.periodEnd!==undefined&&expected.periodEnd!==a.periodEnd)fail('financial_preparation_scope_mismatch');
- const remaining=Number((evidenceInstant(a.deadline)??BigInt(0))-BigInt(Date.now())*BigInt(1000))/1000;
- if(remaining<(expected.minimumRemainingMs??1))fail('financial_preparation_deadline');
+ const deadline=Number(evidenceInstant(a.deadline)!/BigInt(1000));
+ if(deadline-Date.now()<(expected.minimumRemainingMs??1))fail('financial_preparation_deadline');
  const current=inspected(await rpc(scope,'inspect',{attemptId:a.attemptId}),scope);if(current.state!=='claimed')fail('financial_preparation_attempt_not_claimed');
+ const remaining=deadline-Date.now();
+ if(remaining<(expected.minimumRemainingMs??1))fail('financial_preparation_deadline');
+ return remaining;
 }
 async function owned<T>(scope:Pick<Scope,'client'|'operator'>,work:(lease:string)=>Promise<T>){
  const lease=await acquireProductionWriteLease(120).catch(()=>fail('financial_preparation_lease_unavailable'));
@@ -168,12 +171,15 @@ export async function handleFinancialDataPreparation(request:Request,operation:P
   const context=parsePreparationContext(await rpc(actor,'context',{}));
   if(context.mode!==(enabled?'vnext_on':'legacy_off')||context.releaseId!==writer.releaseId||context.runnerPrincipal!==fixedRunnerPrincipal())fail('financial_preparation_mode_or_backend_changed');
   const results:Row[]=[];const started=Date.now();const budget=Math.min(limit,20);let claimed=0,recovered=0;
+  const batchDurationMs = operation === 'parse' ? 210_000 : 120_000;
+  const claimWindowMs = operation === 'parse' ? 180_000 : 90_000;
+  const remainingBatch = () => batchDurationMs - (Date.now() - started);
   const recovery=await owned(actor,lease=>rpc(actor,`recover-${operation}`,{limit:budget},lease));
   if(!preparationExact(recovery,'context pending known blockedCount')||!sameContext(parsePreparationContext(recovery.context),context)||!Array.isArray(recovery.pending)||recovery.pending.length>budget||!Array.isArray(recovery.known)||recovery.known.length>20||!Number.isSafeInteger(recovery.blockedCount)||Number(recovery.blockedCount)<0)fail('financial_preparation_recovery_invalid');
   const known=recovery.known.map(value=>{if(!preparationExact(value,'attemptId status availableAt')||!preparationUuid(value.attemptId)||!['validated','acquired_pending_parse','partial','rejected','deferred'].includes(String(value.status))||typeof value.availableAt!=='string'||evidenceInstant(value.availableAt)===null)fail('financial_preparation_knowledge_invalid');return value;});
   for(const entry of recovery.pending){
    if(!preparationExact(entry,'attempt commit state')||!['committed','finished'].includes(String(entry.state)))fail('financial_preparation_recovery_invalid');
-   const attempt=parsePreparationAttempt(entry.attempt,context,operation),scope:Scope={...actor,attempt,context,lease:null,signal:AbortSignal.timeout(Math.max(1,120000-(Date.now()-started))),phase:'commit'};
+   const attempt=parsePreparationAttempt(entry.attempt,context,operation),scope:Scope={...actor,attempt,context,lease:null,signal:AbortSignal.timeout(Math.max(1,remainingBatch())),phase:'commit'};
    recovered++;
    try{
     if(entry.state==='finished'&&entry.commit===null){
@@ -183,12 +189,12 @@ export async function handleFinancialDataPreparation(request:Request,operation:P
     }else results.push(await finishCommitted(scope,commitEnvelope(entry.commit,attempt),entry.state as 'committed'|'finished'));
    }catch{results.push({attemptId:attempt.attemptId,status:'pending',availableAt:null,reason:'financial_preparation_recovery_pending'});}
   }
-  while(claimed+recovered<budget&&120000-(Date.now()-started)>=90000){
+  while(claimed+recovered<budget&&remainingBatch()>=claimWindowMs){
    const claimedResult=await owned(actor,lease=>rpc(actor,`claim-${operation}`,{limit:1},lease));
    if(!preparationExact(claimedResult,'context attempts')||!sameContext(parsePreparationContext(claimedResult.context),context)||!Array.isArray(claimedResult.attempts)||claimedResult.attempts.length>1)fail('financial_preparation_claim_invalid');
    if(!claimedResult.attempts.length)break;
    const attempt=parsePreparationAttempt(claimedResult.attempts[0],context,operation);claimed++;
-   results.push(await processAttempt({...actor,attempt,context,lease:null,signal:AbortSignal.timeout(Math.max(1,Math.min(120000-(Date.now()-started),Math.floor(Number(evidenceInstant(attempt.deadline)!/BigInt(1000))-Date.now())))),phase:'stage'}));
+   results.push(await processAttempt({...actor,attempt,context,lease:null,signal:AbortSignal.timeout(Math.max(1,Math.min(remainingBatch(),Math.floor(Number(evidenceInstant(attempt.deadline)!/BigInt(1000))-Date.now())))),phase:'stage'}));
   }
   const pending=Number(recovery.blockedCount)>0||results.some(r=>r.status==='pending'),partial=results.some(r=>r.status==='partial'||r.status==='rejected'||r.status==='deferred');
   return reply(pending?202:partial?500:200,{ok:!pending&&!partial,schemaVersion:FINANCIAL_PREPARATION_SCHEMA,purpose:'private_financial_data_preparation',mode:context.mode,requestedLimit:limit,claimed,recovered,known,results,

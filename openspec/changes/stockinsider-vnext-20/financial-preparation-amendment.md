@@ -11,7 +11,13 @@ before provider/artifact IO. Existing exact MOPS/FileDownLoad and financial Open
 processing profiles are distinct from the licensed market CSV registry. No FinMind/IR grant
 or other caller's live lease can satisfy this path.
 
-Fresh exact owned leases bound claim and commit, not official download/local parsing.
+Fresh exact owned leases govern claim and commit. Official downloads and local
+parsing run outside them. A structured MOPS parse receives a 180-second
+attempt deadline and matching receipt lease from the database. Acquisition
+and PDF parsing retain their 90-second attempt windows. The extended
+structured parser uses only a live server claim, pinned taxonomy, issuer and
+period. Its resource allowance does not alter per-fact admission, accounting
+validation, or the receipt's partial status.
 SQL derives selected jobs/input/raw/period/identity and delegates unchanged existing financial
 operations and math. A private capability follows only a genuine server claim. Immutable
 attempt/commit/outcome and separate post-commit knowledge records support server-selected

@@ -9,7 +9,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 ROOT = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("parser_socket", ROOT / "candidate_financial_parser_socket.py")
@@ -71,6 +71,29 @@ class SocketEnvironmentTest(unittest.TestCase):
                 worker.serve(server)
         self.assertEqual(len(leftovers), 1)
         self.assertFalse(leftovers[0].exists())
+
+    def test_disconnect_before_reply_keeps_accepting_requests(self):
+        with _pair() as (first, server1), _pair() as (second, server2):
+            first.close()
+            second.shutdown(socket.SHUT_WR)
+            second.settimeout(1)
+            listener = Mock()
+            listener.accept.side_effect = [(server1, ""), (server2, ""), StopIteration]
+            with patch.object(worker.socket, "fromfd", return_value=listener), self.assertRaises(StopIteration):
+                worker.main()
+            self.assertEqual(listener.accept.call_count, 3)
+            self.assertEqual(json.loads(second.recv(1024)), {"error": "parser_socket_header_invalid"})
+
+    def test_extended_profile_requires_structured_format_and_filing_context(self):
+        for request in (
+            {"format": "xbrl"},
+            {"format": "pdf", "expectedEntity": "5274", "expectedPeriodEnd": "2026-09-30"},
+        ):
+            with self.subTest(request=request), _pair() as (client, server):
+                header = {**request, "byteLength": 1, "sha256": "a" * 64, "profile": "extended-official"}
+                client.sendall(json.dumps(header).encode() + b"\nX")
+                with self.assertRaisesRegex(ValueError, "parser_socket_profile_invalid"):
+                    worker.receive_request(server)
 
     def test_xbrl_fails_closed_without_installed_taxonomy_identity(self):
         payload = (ROOT / "fixtures/candidate-financial-document-parser/validated-instance.xbrl").read_bytes()

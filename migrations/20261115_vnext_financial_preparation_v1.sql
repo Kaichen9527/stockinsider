@@ -325,7 +325,7 @@ BEGIN
   IF NOT public.financial_preparation_exact_v1(p_request,CASE a.operation WHEN 'acquire' THEN ARRAY['attemptId','artifactHash','byteLength','mediaType','observedAt','facts'] ELSE ARRAY['attemptId','artifactHash','byteLength','mediaType','observedAt','payload'] END)
   THEN RAISE EXCEPTION 'financial_preparation_closed_commit';END IF;
   hash:=p_request->>'artifactHash';bytes:=(p_request->>'byteLength')::integer;media:=p_request->>'mediaType';observed:=(p_request->>'observedAt')::timestamptz;
-  IF hash IS NULL OR bytes IS NULL OR media IS NULL OR observed IS NULL OR hash!~'^[a-f0-9]{64}$' OR bytes NOT BETWEEN 1 AND CASE a.operation WHEN 'acquire' THEN 12000000 ELSE 52428800 END OR observed<a.claimed_at OR observed>clock_timestamp()
+  IF hash IS NULL OR bytes IS NULL OR media IS NULL OR observed IS NULL OR hash!~'^[a-f0-9]{64}$' OR bytes NOT BETWEEN 1 AND (CASE a.operation WHEN 'acquire' THEN 12000000 ELSE 52428800 END) OR observed<a.claimed_at OR observed>clock_timestamp()
   OR(a.operation='parse' AND(hash IS DISTINCT FROM a.artifact->>'hash' OR bytes IS DISTINCT FROM(a.artifact->>'bytes')::integer OR media IS DISTINCT FROM a.artifact->>'mediaType')) THEN RAISE EXCEPTION 'financial_preparation_raw_binding_invalid';END IF;
   IF commit_row.attempt_id IS NOT NULL THEN
    IF commit_row.payload_hash IS DISTINCT FROM encode(sha256(convert_to(p_request::text,'UTF8')),'hex') THEN RAISE EXCEPTION 'financial_preparation_commit_conflict';END IF;
@@ -344,7 +344,7 @@ BEGIN
    IF jsonb_typeof(payload->'facts') IS DISTINCT FROM 'array' OR jsonb_array_length(payload->'facts')>128 THEN RAISE EXCEPTION 'financial_preparation_fact_bounds';END IF;
    FOR item IN SELECT * FROM jsonb_array_elements(payload->'facts') LOOP
     IF item->'input'->>'stock_id' IS DISTINCT FROM a.stock_id::text OR item->'input'->>'period_end' IS DISTINCT FROM a.period_end::text
-    OR item->'input'->>'provider' IS DISTINCT FROM CASE WHEN a.profile='mops-attachment-v1' THEN 'mops' ELSE lower(a.exchange) END
+    OR item->'input'->>'provider' IS DISTINCT FROM (CASE WHEN a.profile='mops-attachment-v1' THEN 'mops' ELSE lower(a.exchange) END)
     OR item->'input'->>'authority_tier' IS DISTINCT FROM 'official_filing' OR item->'input'->>'estimate_kind' IS DISTINCT FROM 'reported' OR item->'input'->>'estimate_horizon' IS DISTINCT FROM 'reported_period'
     OR(item->'input'->>'collected_at')::timestamptz IS DISTINCT FROM observed OR(item->'input'->>'source_timestamp')::timestamptz>observed
     THEN RAISE EXCEPTION 'financial_preparation_fact_source_period_binding';END IF;

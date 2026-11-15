@@ -338,8 +338,14 @@ export async function fetchCandidateMopsFiling(candidate: CandidateOfficialFinan
 /** Separate private-data-preparation authority; never fabricates research work. */
 export async function fetchPreparedCandidateMopsFiling(capability:unknown,candidate:CandidateOfficialFinancial,year:number,quarter:number){
   const {verifyFinancialPreparation}=await import('./vnext/financial-preparation.ts');
-  await verifyFinancialPreparation(capability,{operation:'acquire',symbol:candidate.symbol,sourceUrl:candidateMopsDownloadUrl(candidate.symbol,year,quarter),minimumRemainingMs:15000});
-  return fetchCandidateMopsFilingCore(candidate,year,quarter,async()=>verifyFinancialPreparation(capability,{operation:'acquire',symbol:candidate.symbol,sourceUrl:candidateMopsDownloadUrl(candidate.symbol,year,quarter),minimumRemainingMs:15000}));
+  const sourceUrl = candidateMopsDownloadUrl(candidate.symbol, year, quarter);
+  const preflight = async () => {
+    await verifyFinancialPreparation(capability, {
+      operation: 'acquire', symbol: candidate.symbol, sourceUrl, minimumRemainingMs: 15_000,
+    });
+  };
+  await preflight();
+  return fetchCandidateMopsFilingCore(candidate, year, quarter, preflight);
 }
 async function fetchCandidateMopsFilingCore(candidate:CandidateOfficialFinancial,year:number,quarter:number,preflight?:()=>Promise<void>){
   const sourceUrl = candidateMopsDownloadUrl(candidate.symbol,year,quarter);
