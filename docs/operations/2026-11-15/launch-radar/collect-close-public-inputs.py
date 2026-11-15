@@ -8,9 +8,13 @@ from decimal import Decimal, InvalidOperation
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
 import re
 import ssl
+import stat
+from time import monotonic
+import types
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, HTTPSHandler, Request, build_opener
 from concurrent.futures import ThreadPoolExecutor
@@ -25,6 +29,62 @@ SOURCES = {
     "tpex_issuers": (25036, "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv", "出表日期", "公司代號", None),
     "tpex_market_foreign_flow": (11743, "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D", "資料日期", "單位名稱", None),
 }
+
+# Exact adjacent root-owned source; populated by the reviewed stage manifest.
+CONTROL_HELPER_SHA256 = '0684b92ce7a5e9f493bd923ce99a70f47c16a42a325c93e73b93e83dc1f2b07b'
+
+
+def atomic_output(output, name, payload):
+    pending = output / (name + '.pending')
+    fd = os.open(pending, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600)
+    try:
+        with os.fdopen(fd, 'wb', closefd=False) as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+    finally:
+        os.close(fd)
+    os.replace(pending, output / name)
+    directory = os.open(output, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+    try: os.fsync(directory)
+    finally: os.close(directory)
+
+
+def maybe_control_samples(session, output):
+    # No new request enters the original three-worker queue. A cheap guard runs
+    # before importing anything extra; the helper then observes actual systemd
+    # start/limits and cgroup headroom again before its bounded child is created.
+    try:
+        if output is None or os.geteuid() == 0: return
+        started = int(Path('/proc/self/stat').read_text().rsplit(')', 1)[1].split()[19]) / os.sysconf('SC_CLK_TCK')
+        if not 0 <= monotonic() - started <= 50: return
+        cutoff = datetime.combine(date.fromisoformat(session), time(21, 30), tzinfo=TAIPEI)
+        if (cutoff - datetime.now(timezone.utc)).total_seconds() < 35: return
+        cg = Path('/proc/self/cgroup').read_text().strip()
+        if not re.fullmatch(r'0::/system\.slice/[A-Za-z0-9_.@:-]+\.service', cg): return
+        root = Path('/sys/fs/cgroup') / cg.removeprefix('0::').lstrip('/')
+        if int((root / 'memory.max').read_text()) != 134217728 or int((root / 'pids.max').read_text()) != 12: return
+        if int((root / 'memory.current').read_text()) > 134217728 - 80 * 1024**2 or int((root / 'pids.current').read_text()) > 8: return
+        helper = Path(__file__).absolute().with_name('collect-close-control-samples.py')
+        directory = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_CLOEXEC)
+        try:
+            for part in helper.parent.parts[1:]:
+                child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=directory)
+                os.close(directory); directory = child
+                info = os.fstat(directory)
+                if info.st_uid != 0 or (info.st_mode & 0o022 and not info.st_mode & stat.S_ISVTX): return
+            fd = os.open(helper.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=directory)
+            try:
+                info = os.fstat(fd)
+                if not stat.S_ISREG(info.st_mode) or info.st_uid != 0 or info.st_mode & 0o022 or info.st_nlink != 1 or info.st_size > 65536: return
+                source = os.read(fd, 65537)
+                if hashlib.sha256(source).hexdigest() != CONTROL_HELPER_SHA256: return
+            finally: os.close(fd)
+        finally: os.close(directory)
+        module = types.ModuleType('fixed_close_control_samples'); module.__file__ = str(helper)
+        exec(compile(source, 'FIXED_CLOSE_CONTROL_SOURCE', 'exec'), module.__dict__)
+        module.capture(session, output)
+    except Exception:
+        # Supplement failure never changes the five-source result or its exit.
+        return
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -170,8 +230,8 @@ def capture(session, output):
         output.mkdir(mode=0o700)
         for name, _, _, raw in rows:
             if raw is not None:
-                (output / (name + ".csv")).write_bytes(raw)
-        (output / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+                atomic_output(output, name + '.csv', raw)
+        atomic_output(output, 'receipt.json', (json.dumps(receipt, indent=2) + '\n').encode('utf-8'))
     return receipt
 
 
@@ -181,7 +241,8 @@ def main():
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     receipt = capture(args.session, args.output)
-    print(json.dumps(receipt))
+    print(json.dumps(receipt), flush=True)
+    maybe_control_samples(args.session, args.output)
     return 2 if any("error" in result for result in receipt["sources"].values()) else 0
 
 
