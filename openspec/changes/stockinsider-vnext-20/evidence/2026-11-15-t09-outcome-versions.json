@@ -1,0 +1,56 @@
+{
+  "ticket": 394,
+  "baseline": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "previousEvidenceHead": "77bf9163e6e21bd410c2551fc9e21de7e8514402",
+  "environment": "Contabo isolated staging",
+  "candidateOnly": true,
+  "productionModified": false,
+  "knownFixtureLimits": [
+    "backend assertion",
+    "lease and policy records",
+    "mock canonical serializer",
+    "synthetic market data"
+  ],
+  "test": {
+    "postgres": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "snapshotCount": 2,
+    "concurrentReplayPreserved": true,
+    "oldReplayAfterCorrection": true,
+    "sameCutoffMismatchRejected": true,
+    "pastCutoffRegressionRejected": true,
+    "frozenCloseMismatchRejected": true,
+    "prematureCutoffRejected": true,
+    "historicalReplayExcluded": true,
+    "staffRoleFence": true,
+    "rightFence": true,
+    "releaseFence": true,
+    "leaseFence": true,
+    "anonymousSqlExecuteDenied": true,
+    "serviceRoleTableSelectDenied": true,
+    "immutableOperationsRejected": 3,
+    "actualEvaluatorStates": [
+      "pending",
+      "up_first"
+    ],
+    "candidateSha256": "8a63202c50e1c99d864186dee17bf1433e641131d7ea0cebb1fd4c0ab345e36d",
+    "networkListener": false
+  },
+  "inputs": {
+    "baseline.sql": "b44dc19e5b6d80ebcacd72073a850d7f1132cb83eb5a4df653f0a1096ee9d949",
+    "signal.sql": "f992d105153e12f94657325c8632b91e75ede1e02d93fa41aca6e765eea47b4e",
+    "auth.sql": "3cc2e9e6567c4a650d109dac6f6bc61a5f10d093f19941895dcd6981856e6885",
+    "migration.sql": "8a63202c50e1c99d864186dee17bf1433e641131d7ea0cebb1fd4c0ab345e36d",
+    "seed.sql": "0d9f0614bf05f83111a91b086258b41e1f9263729327eb6f9ed9c54583eb7ab4",
+    "fixture.mjs": "03af145206f873da20814725a21fff49dfe61adcde3aff4d8a92887d39a304cf",
+    "launch-outcomes.ts": "b092e9189a099d9524e225bb15c660a5096dca5b40e8f90d3bdc05f4c0b822e8",
+    "policy.ts": "06b10f467752ad38cc8d80f5b93163aa446284f5cca5be6bb37fd186926ddab7",
+    "evidence-clock.ts": "bf587d9f77289610aa3a4c45285af5337f501aa8dd90b55ab37ac45cdc91ea2e"
+  },
+  "pending": [
+    "shared queue and trusted worker wiring",
+    "execution opening venue receipt",
+    "public historical outcome projection",
+    "qualified live rank with known official input version",
+    "full Cloud CI and independent release review"
+  ]
+}

@@ -1,0 +1,106 @@
+import concurrent.futures, hashlib, json, os, pathlib, resource, shutil, subprocess, tempfile, threading
+import sys
+keys=["baseline.sql","signal.sql","auth.sql","migration.sql","seed.sql","fixture.mjs","launch-outcomes.ts","policy.ts","evidence-clock.ts"]
+if len(sys.argv) != len(keys) + 1:
+    raise SystemExit("Pass the input files in this order: " + ", ".join(keys))
+files={key:pathlib.Path(value).read_text(encoding='utf-8') for key,value in zip(keys,sys.argv[1:])}
+assert int(next(line for line in open('/proc/meminfo') if line.startswith('MemAvailable:')).split()[1])>=2621440
+assert shutil.disk_usage('/tmp').free>=15*1024**3
+prefix=['unshare','--net','--','setpriv','--reuid=65534','--regid=65534','--clear-groups','--no-new-privs','--']
+pg='/usr/lib/postgresql/17/bin/'
+def cap():
+    resource.setrlimit(resource.RLIMIT_CPU,(30,30))
+    resource.setrlimit(resource.RLIMIT_FSIZE,(128*1024**2,128*1024**2))
+run='00000000-0000-4000-8000-000000000003'
+lease='00000000-0000-4000-8000-555555555555'
+release='d'*40
+signature='public.vnext_launch_outcome_command_v1(text,uuid,uuid,text,jsonb,jsonb)'
+def quoted(value):
+    return "'"+value.replace("'","''")+"'"
+with tempfile.TemporaryDirectory(dir='/tmp',prefix='si-outcome-journal-') as d:
+    root=pathlib.Path(d)
+    os.chown(root,65534,65534)
+    for name,content in files.items():
+        (root/name).write_text(content,encoding='utf-8')
+    env={'PATH':'/usr/bin:/bin','TZ':'UTC','LANG':'C.UTF-8','PGHOST':str(root),'PGPORT':'6589','PGDATABASE':'postgres','PGUSER':'nobody'}
+    def call(program, *args, sql=None, timeout=18):
+        return subprocess.run(prefix+[program,*args],cwd=root,env=env,input=sql,encoding='utf-8',capture_output=True,timeout=timeout,preexec_fn=cap)
+    node=call('/usr/bin/node','fixture.mjs')
+    if node.returncode: raise RuntimeError(node.stderr)
+    cases=json.loads(node.stdout)
+    init=call(pg+'initdb','-A','trust','--no-sync','-D',str(root/'db'))
+    if init.returncode: raise RuntimeError(init.stderr)
+    def psql(sql, error=None):
+        p=call(pg+'psql','-X','-A','-t','-q','-v','ON_ERROR_STOP=1',sql=sql)
+        if error:
+            assert p.returncode!=0 and error in p.stderr, (error,p.stdout,p.stderr)
+        elif p.returncode:
+            raise RuntimeError(p.stderr)
+        return p.stdout.strip()
+    options='-F -p 6589 -k '+str(root)+' -c listen_addresses= -c shared_buffers=32MB -c max_connections=8'
+    start=call(pg+'pg_ctl','-w','-t','10','-D',str(root/'db'),'-l',str(root/'postgres.log'),'-o',options,'start')
+    if start.returncode:
+        raise RuntimeError(start.stderr+(root/'postgres.log').read_text())
+    try:
+        version=psql('SHOW server_version;')
+        assert psql('SHOW listen_addresses;')==''
+        psql('\n\n'.join(files[name] for name in ['baseline.sql','signal.sql','auth.sql','migration.sql','seed.sql']))
+        def session(backend='valid',role='service_role',test_release=release,writer='present'):
+            headers=json.dumps({'x-stockinsider-writer-release':test_release})
+            return 'SET fixture.backend='+quoted(backend)+'; SET fixture.writer='+quoted(writer)+'; SET request.headers='+quoted(headers)+'; SET ROLE '+role+';\n'
+        def request(which=None,principal='stage-operator',target=run,owner=lease,symbol='1234'):
+            params=[quoted(principal),quoted(owner)+'::uuid',quoted(target)+'::uuid',quoted(symbol)]
+            if which:
+                params += [quoted(json.dumps(v,separators=(',',':')))+'::jsonb' for v in cases[which]]
+            return 'SELECT public.vnext_launch_outcome_command_v1('+','.join(params)+');\n'
+        anchor=json.loads(psql(session()+request()))
+        assert anchor['rankingRunId']==run and anchor['firstRankingRunId'].endswith('000001') and anchor['rawClose']=='100'
+        assert psql('SELECT count(*) FROM public.vnext_launch_outcome_versions_v1;')=='0'
+        psql(session(role='anon')+request(), 'permission denied for function')
+        psql(session(role='authenticated')+request(), 'permission denied for function')
+        psql(session(backend='bad')+request(), 'launch_csv_active_backend_required')
+        psql(session()+request(principal='stage-author'), 'launch_csv_operator_mode_required')
+        psql(session()+request(owner='00000000-0000-4000-8000-111111111111'), 'launch_csv_exact_owned_lease_required')
+        psql(session(test_release='1'*40)+request(), 'launch_csv_active_writer_release_required')
+        psql(session()+request(target='00000000-0000-4000-8000-000000000005'), 'launch_outcome_unknown_frozen_signal')
+        psql(session()+request('replay'), 'launch_outcome_packet_invalid')
+        psql(session()+request('early'), 'launch_outcome_cutoff_invalid')
+        psql(session()+request('wrongClose'), 'launch_outcome_frozen_signal_mismatch')
+        psql(session(writer='lost')+request('input'), 'stage_fixture_writer_fence')
+        psql("UPDATE public.vnext_launch_ranking_mode_v1 SET enabled=false;")
+        psql(session()+request(), 'launch_outcome_reviewed_writer_required')
+        psql("UPDATE public.vnext_launch_ranking_mode_v1 SET enabled=true;")
+        psql("UPDATE public.vnext_source_policies_v1 SET enabled=false;")
+        psql(session()+request(), 'launch_csv_current_official_rights_required')
+        psql("UPDATE public.vnext_source_policies_v1 SET enabled=true;")
+        barrier=threading.Barrier(2)
+        def submit():
+            barrier.wait(timeout=3)
+            wire=psql(session()+'BEGIN;\n'+request('input')+'SELECT pg_sleep(0.35);\nCOMMIT;')
+            return json.loads(wire.splitlines()[0])
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+            claim_a,claim_b=pool.submit(submit),pool.submit(submit)
+            receipts=[claim_a.result(),claim_b.result()]
+        assert {r['replay'] for r in receipts}=={True,False}
+        assert receipts[0]['snapshotHash']==receipts[1]['snapshotHash']
+        assert receipts[0]['inputSnapshotHash']==cases['input'][1]['inputSnapshotHash']
+        assert psql('SELECT count(*) FROM public.vnext_launch_outcome_versions_v1;')=='1'
+        psql(session()+request('correction'), 'launch_outcome_cutoff_conflict')
+        second=json.loads(psql(session()+request('next')))
+        assert second['replay'] is False and second['snapshotHash']!=receipts[0]['snapshotHash']
+        psql(session()+request('stale'), 'launch_outcome_cutoff_regression')
+        assert json.loads(psql(session()+request('input')))['replay'] is True
+        psql(session()+ 'SELECT result FROM public.vnext_launch_outcome_versions_v1;', 'permission denied for table')
+        psql("SET fixture.writer='present'; UPDATE public.vnext_launch_outcome_versions_v1 SET result='{}';", 'stage_fixture_immutable')
+        psql("SET fixture.writer='present'; DELETE FROM public.vnext_launch_outcome_versions_v1;", 'stage_fixture_immutable')
+        psql("TRUNCATE public.vnext_launch_outcome_versions_v1;", 'stage_fixture_immutable')
+        states=psql("SELECT string_agg(result#>>'{research,barrier20,state}',',' ORDER BY as_of) FROM public.vnext_launch_outcome_versions_v1;")
+        assert states=='pending,up_first', states
+        proof={'postgres':version,'snapshotCount':2,'concurrentReplayPreserved':True,'oldReplayAfterCorrection':True,'sameCutoffMismatchRejected':True,
+          'pastCutoffRegressionRejected':True,'frozenCloseMismatchRejected':True,'prematureCutoffRejected':True,'historicalReplayExcluded':True,'staffRoleFence':True,'rightFence':True,'releaseFence':True,'leaseFence':True,
+          'anonymousSqlExecuteDenied':True,'serviceRoleTableSelectDenied':True,'immutableOperationsRejected':3,'actualEvaluatorStates':states.split(','),
+          'candidateSha256':hashlib.sha256(files['migration.sql'].encode()).hexdigest(),'networkListener':False}
+        print(json.dumps(proof),flush=True)
+    finally:
+        stop=call(pg+'pg_ctl','-w','-t','10','-D',str(root/'db'),'-m','immediate','stop')
+        if stop.returncode: raise RuntimeError(stop.stderr)

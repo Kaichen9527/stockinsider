@@ -1,0 +1,74 @@
+-- Simulated identity, lease and source-rights state for the real policy/backend helpers.
+CREATE ROLE fixture_artifact_owner NOLOGIN NOSUPERUSER NOBYPASSRLS;
+CREATE TABLE public.vnext_launch_csv_mode_v1(singleton boolean,enabled boolean,required_writer_release text);
+CREATE TABLE public.vnext_source_policies_v1(source text,scope text,enabled boolean,valid_until timestamptz);
+CREATE TABLE public.vnext_mode_v1(enabled boolean,legacy_fenced boolean);
+CREATE TABLE public.vnext_principals_v1(principal text,role text,enabled boolean);
+CREATE TABLE public.private_artifact_receipts_v1(artifact_hash text,byte_length integer,purpose text,media_type text,recorded_at timestamptz);
+CREATE TABLE public.production_write_leases(lease_key text,owner_id uuid,expires_at timestamptz);
+CREATE TABLE public.production_writer_releases(release_id text,writer_kind text,active boolean);
+CREATE FUNCTION public.assert_stockinsider_backend_request_v1(p_active boolean) RETURNS uuid LANGUAGE sql STABLE AS $$
+ SELECT CASE WHEN p_active AND current_setting('fixture.backend',true)='valid' THEN '00000000-0000-4000-8000-999999999999'::uuid END
+$$;
+-- Stand-in for deterministic canonical UTF-8; only hash repeat/conflict is tested.
+CREATE FUNCTION public.vnext_catalog_canonical_v1(value jsonb) RETURNS text LANGUAGE sql IMMUTABLE AS $$ SELECT value::text $$;
+CREATE TABLE public.vnext_launch_ranking_mode_v1(
+ singleton boolean PRIMARY KEY DEFAULT true CHECK(singleton),enabled boolean NOT NULL DEFAULT false,
+ required_writer_release text CHECK(required_writer_release IS NULL OR required_writer_release ~ '^[a-f0-9]{40}$'),
+ required_calendar_producer_release text CHECK(required_calendar_producer_release IS NULL OR required_calendar_producer_release ~ '^[a-f0-9]{40}$'),
+ policy_version text NOT NULL DEFAULT 'stockinsider-launch-radar-v1' CHECK(policy_version='stockinsider-launch-radar-v1'),
+ rules_version text NOT NULL DEFAULT 'launch-radar-comparisons-v5' CHECK(rules_version='launch-radar-comparisons-v5'),
+ arithmetic_version text NOT NULL DEFAULT 'binary64-v1' CHECK(arithmetic_version='binary64-v1')
+);
+INSERT INTO public.vnext_launch_ranking_mode_v1 DEFAULT VALUES;
+UPDATE public.vnext_launch_ranking_mode_v1 SET enabled=true,required_writer_release=repeat('d',40);
+INSERT INTO public.vnext_launch_csv_mode_v1 VALUES(true,true,repeat('d',40));
+INSERT INTO public.vnext_source_policies_v1 VALUES('official','official_original',true,clock_timestamp()+interval '1 day');
+INSERT INTO public.vnext_mode_v1 VALUES(true,true);
+INSERT INTO public.vnext_principals_v1 VALUES('stage-operator','operator',true),('stage-author','author',true);
+INSERT INTO public.production_write_leases VALUES('production-data-plane','00000000-0000-4000-8000-555555555555',clock_timestamp()+interval '1 hour');
+INSERT INTO public.production_writer_releases VALUES(repeat('d',40),'vps',true);
+GRANT SELECT ON public.vnext_launch_ranking_mode_v1,public.vnext_launch_csv_mode_v1,public.vnext_source_policies_v1,
+ public.vnext_mode_v1,public.vnext_principals_v1 TO stockinsider_vnext_owner;
+GRANT SELECT,UPDATE ON public.production_write_leases TO fixture_artifact_owner;
+GRANT SELECT ON public.private_artifact_receipts_v1,public.production_writer_releases TO fixture_artifact_owner;
+CREATE FUNCTION public.vnext_launch_csv_policy_v1(principal text) RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+DECLARE mode public.vnext_launch_csv_mode_v1; policy public.vnext_source_policies_v1;
+BEGIN
+ SELECT * INTO mode FROM public.vnext_launch_csv_mode_v1 WHERE singleton;
+ IF NOT mode.enabled OR mode.required_writer_release IS NULL
+ OR NOT EXISTS(SELECT FROM public.vnext_mode_v1 WHERE enabled AND legacy_fenced)
+ OR NOT EXISTS(SELECT FROM public.vnext_principals_v1 p WHERE p.principal=vnext_launch_csv_policy_v1.principal AND p.enabled AND p.role='operator') THEN RAISE EXCEPTION 'launch_csv_operator_mode_required';END IF;
+ SELECT * INTO policy FROM public.vnext_source_policies_v1 WHERE source='official' AND scope='official_original' AND enabled AND valid_until>statement_timestamp();
+ IF policy.source IS NULL THEN RAISE EXCEPTION 'launch_csv_current_official_rights_required';END IF;
+ RETURN jsonb_build_object('requiredWriterRelease',mode.required_writer_release,'rightsBindingHash',encode(sha256(convert_to(public.vnext_catalog_canonical_v1(to_jsonb(policy)),'UTF8')),'hex'));
+END $$;
+ALTER FUNCTION public.vnext_launch_csv_policy_v1(text) OWNER TO stockinsider_vnext_owner;
+CREATE FUNCTION public.vnext_launch_csv_backend_v1(lease_owner uuid,artifact_hash text DEFAULT NULL,byte_length integer DEFAULT NULL) RETURNS jsonb
+LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+DECLARE backend uuid; receipt public.private_artifact_receipts_v1; lease_expiry timestamptz; headers jsonb;
+BEGIN
+ backend:=public.assert_stockinsider_backend_request_v1(true);
+ IF backend IS NULL OR lease_owner IS NULL THEN RAISE EXCEPTION 'launch_csv_active_backend_required';END IF;
+ SELECT expires_at INTO lease_expiry FROM public.production_write_leases WHERE lease_key='production-data-plane'
+ AND owner_id::text=lease_owner::text AND expires_at>clock_timestamp() FOR SHARE;
+ IF lease_expiry IS NULL THEN RAISE EXCEPTION 'launch_csv_exact_owned_lease_required';END IF;
+ headers:=coalesce(nullif(current_setting('request.headers',true),''),'{}')::jsonb;
+ IF (SELECT count(*) FROM public.production_writer_releases WHERE active)<>1 OR NOT EXISTS(SELECT FROM public.production_writer_releases
+  WHERE active AND writer_kind='vps' AND release_id=headers->>'x-stockinsider-writer-release') THEN RAISE EXCEPTION 'launch_csv_active_writer_release_required';END IF;
+ IF artifact_hash IS NOT NULL THEN
+  SELECT * INTO receipt FROM public.private_artifact_receipts_v1 a WHERE a.artifact_hash=vnext_launch_csv_backend_v1.artifact_hash;
+  IF receipt.artifact_hash IS NULL OR receipt.byte_length IS DISTINCT FROM byte_length OR receipt.purpose<>'diagnostic_attachment'
+  OR receipt.media_type<>'text/csv' THEN RAISE EXCEPTION 'launch_csv_artifact_receipt_mismatch';END IF;
+ END IF;
+ RETURN jsonb_build_object('backendId',backend,'writerRelease',headers->>'x-stockinsider-writer-release','leaseExpiresAt',lease_expiry,
+  'artifactRecordedAt',receipt.recorded_at);
+END $$;
+ALTER FUNCTION public.vnext_launch_csv_backend_v1(uuid,text,integer) OWNER TO fixture_artifact_owner;
+REVOKE ALL ON FUNCTION public.vnext_launch_csv_backend_v1(uuid,text,integer) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.vnext_launch_csv_backend_v1(uuid,text,integer) TO stockinsider_vnext_owner;
+CREATE FUNCTION public.vnext_launch_csv_hash_v1(value jsonb) RETURNS text LANGUAGE sql IMMUTABLE SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+ SELECT encode(sha256(convert_to(public.vnext_catalog_canonical_v1(value),'UTF8')),'hex')
+$$;
+ALTER FUNCTION public.vnext_launch_csv_hash_v1(jsonb) OWNER TO stockinsider_vnext_owner;
