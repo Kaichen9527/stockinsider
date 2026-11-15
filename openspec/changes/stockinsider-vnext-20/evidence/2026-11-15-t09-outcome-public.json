@@ -1,0 +1,56 @@
+{
+  "ticket": 394,
+  "base": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "previousEvidence": "7f7fa23a11dcf9ee990f0e47ec9567ddc55365e9",
+  "candidateOnly": true,
+  "productionModified": false,
+  "postgres": {
+    "postgres": "17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "noTrackingForUnrankedSymbol": true,
+    "historicalBeforeTrackingSeparated": true,
+    "noWriteInReadOnlyTransaction": true,
+    "latestVersionUnderSameFrozenRun": true,
+    "anonymousAndAuthenticatedDirectExecuteDenied": true,
+    "serviceRoleRawInputDenied": true,
+    "nestedPrivateDataExcluded": true,
+    "retainsSeparateExecution": true,
+    "networkListener": false,
+    "schemaSha256": "55ea118784a006e139e82af11a890edb836d5b5e79576f18976143d2bbce34f2"
+  },
+  "node": {
+    "node": "22.23.1",
+    "tests": 12,
+    "pass": 12,
+    "fail": 0,
+    "react": "19.2.3",
+    "scopedStrictTypeScript": "5.9.3",
+    "browserVerified": false,
+    "patchSha256": "ce1e8152a009040736a51a76398d10b60ccfdf22aa998d2f420d0ac5eb3193e5",
+    "candidateFileDigests": {
+      "web/src/lib/vnext/launch-outcome-public.ts": "c59cad1da458e39fac3a6b56345da3b676b9b48095de98917cc6cd30c21b4251",
+      "web/src/app/components/vnext/LaunchOutcomeSummary.tsx": "4b07fd301cbc4f87afea04ab1e264036c754d27e5b2c9662b0345353eeb2defa",
+      "web/src/lib/vnext/launch-outcome-public.test.ts": "8854caa12fb43901b3723c756f97b957d8bbbf7d13a16e77b0acc0d70a280e90",
+      "web/src/app/components/vnext/LaunchDetail.tsx": "1671923437323a5420139b17943085e764cc697124b577b0e1aa8d86b16f84bc",
+      "web/src/app/api/launch-ranking/route.ts": "122c0c88f2207c67f653115b751b38819d95002fc777297958772411498f6ae3",
+      "web/src/lib/vnext/launch-public-api.test.ts": "485d7868b7583903191b6925cac9b3c745b828289c59010c39887956718666fb",
+      "web/src/lib/vnext/launch-page-dispatch.test.ts": "a02b809e6caadb4ba86a0ba8f625426acd6858ec84318189e2ad5572a7913b87"
+    }
+  },
+  "inputs": {
+    "baseline.sql": "b44dc19e5b6d80ebcacd72073a850d7f1132cb83eb5a4df653f0a1096ee9d949",
+    "signal.sql": "f992d105153e12f94657325c8632b91e75ede1e02d93fa41aca6e765eea47b4e",
+    "auth.sql": "3cc2e9e6567c4a650d109dac6f6bc61a5f10d093f19941895dcd6981856e6885",
+    "migration.sql": "8a63202c50e1c99d864186dee17bf1433e641131d7ea0cebb1fd4c0ab345e36d",
+    "seed.sql": "0d9f0614bf05f83111a91b086258b41e1f9263729327eb6f9ed9c54583eb7ab4",
+    "fixture.mjs": "03af145206f873da20814725a21fff49dfe61adcde3aff4d8a92887d39a304cf",
+    "launch-outcomes.ts": "b092e9189a099d9524e225bb15c660a5096dca5b40e8f90d3bdc05f4c0b822e8",
+    "policy.ts": "06b10f467752ad38cc8d80f5b93163aa446284f5cca5be6bb37fd186926ddab7",
+    "evidence-clock.ts": "bf587d9f77289610aa3a4c45285af5337f501aa8dd90b55ab37ac45cdc91ea2e",
+    "public.sql": "55ea118784a006e139e82af11a890edb836d5b5e79576f18976143d2bbce34f2"
+  },
+  "knownProofLimits": [
+    "React SSR markup, not a browser",
+    "test quote and rank fixture",
+    "full app build and live deployment pending"
+  ]
+}
