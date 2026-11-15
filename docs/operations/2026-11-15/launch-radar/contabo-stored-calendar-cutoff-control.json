@@ -1,0 +1,112 @@
+{
+  "schema": "stockinsider-contabo-stored-venue-calendar-cutoff-v1",
+  "scope": "READ_ONLY_SELECTED_EXISTING_OFFICIAL_CALENDAR_HEAD_COUNTS",
+  "publicMarketSessionSource": "a47bfcf8f959dd7c1736a713c779490a56fccb19",
+  "confirmedClosureSource": "f857025bd21762e45a467b295f8190f32416a3c6",
+  "actualStoredCalendar": {
+    "readOnly": true,
+    "observedAtUtc": "2026-11-15T01:17:16.957628+00:00",
+    "actualSidWindows": [
+      {
+        "market": "TPEX",
+        "requested": 520,
+        "window_end": "2026-11-12",
+        "present_now": 520,
+        "stored_at_cutoff": 520,
+        "source_head_completed_now": 520,
+        "source_head_completed_at_cutoff": 520
+      },
+      {
+        "market": "TWSE",
+        "requested": 520,
+        "window_end": "2026-11-12",
+        "present_now": 520,
+        "stored_at_cutoff": 520,
+        "source_head_completed_now": 520,
+        "source_head_completed_at_cutoff": 520
+      },
+      {
+        "market": "TPEX",
+        "requested": 520,
+        "window_end": "2026-11-13",
+        "present_now": 520,
+        "stored_at_cutoff": 520,
+        "source_head_completed_now": 520,
+        "source_head_completed_at_cutoff": 520
+      },
+      {
+        "market": "TWSE",
+        "requested": 520,
+        "window_end": "2026-11-13",
+        "present_now": 520,
+        "stored_at_cutoff": 520,
+        "source_head_completed_now": 520,
+        "source_head_completed_at_cutoff": 520
+      }
+    ],
+    "confirmedClosureControls": [
+      {
+        "market": "TPEX",
+        "session": "2026-07-10",
+        "current_status": "completed",
+        "status_at_nov13_cutoff": "completed"
+      },
+      {
+        "market": "TWSE",
+        "session": "2026-07-10",
+        "current_status": "completed",
+        "status_at_nov13_cutoff": "completed"
+      },
+      {
+        "market": "TPEX",
+        "session": "2026-10-23",
+        "current_status": null,
+        "status_at_nov13_cutoff": null
+      },
+      {
+        "market": "TWSE",
+        "session": "2026-10-23",
+        "current_status": null,
+        "status_at_nov13_cutoff": null
+      }
+    ]
+  },
+  "closureObservationSourceClasses": [
+    {
+      "market": "TPEX",
+      "status": "completed",
+      "session_id": "2026-07-10",
+      "recorded_at": "2026-09-03T11:14:58.239437+00:00",
+      "source_class": "ANNUAL_CALENDAR",
+      "source_timestamp": "2026-09-03T11:05:39+00:00"
+    },
+    {
+      "market": "TWSE",
+      "status": "completed",
+      "session_id": "2026-07-10",
+      "recorded_at": "2026-09-03T11:14:58.236149+00:00",
+      "source_class": "ANNUAL_CALENDAR",
+      "source_timestamp": "2026-09-03T11:05:39+00:00"
+    }
+  ],
+  "queryAttempts": {
+    "first": "READ_ONLY_STATEMENT_TIMEOUT",
+    "substantiveChange": "one bounded materialized historical range and set-based current/prior heads instead of repeated lateral scans",
+    "same2500MsStatementTimeout": true,
+    "second": "READ_ONLY_COMPLETED"
+  },
+  "findings": {
+    "same520ExpectedCompletedDatesPresentByEachHistoricalCutoff": true,
+    "falseCompletedAnnualHappenedInStoredCalendar": true,
+    "anotherConfirmedClosureHasNoRow": true,
+    "latestRowCountsNotAppliedChunkProof": true,
+    "calendarSourceKnownBeforeNewReleaseNotConsumed": true
+  },
+  "limitations": {
+    "matchedExistingCalendarHeadsOnly": true,
+    "doesNotProveActualAnnualChunkBindingOrRawIndexAtCutoff": true,
+    "holdChanged": false,
+    "productionDatabaseWriteCalls": 0,
+    "realAdjacentSessionsAccepted": 0
+  }
+}
