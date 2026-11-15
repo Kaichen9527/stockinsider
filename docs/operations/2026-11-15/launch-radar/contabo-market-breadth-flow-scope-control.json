@@ -1,0 +1,535 @@
+{
+  "schema": "stockinsider-market-breadth-flow-scope-control-v1",
+  "observedAtUtc": "2026-11-15T01:09:23Z",
+  "fixedSource": "eb46a730177f7fa08d9252622d3d49c2211636d3",
+  "realIndexReceipt": "a47bfcf8f959dd7c1736a713c779490a56fccb19",
+  "sourceTransport": "CONTABO_UNPRIVILEGED_OFFICIAL_PUBLIC_CSV",
+  "governmentCatalog": {
+    "tpexInstitutionalTwd": "https://data.gov.tw/dataset/11743",
+    "twseDailyAdvances": "https://data.gov.tw/dataset/18409",
+    "license": "https://data.gov.tw/license"
+  },
+  "publicCsvControls": [
+    {
+      "label": "TPEX_11743_REGISTERED",
+      "url": "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D",
+      "httpStatus": 200,
+      "mime": "application/csv;charset=utf-8",
+      "bytes": 623,
+      "sha256": "22b9a1e263d2a929c73c18af54a3191fcc55e5fb5f9f3f5d93698c315f354441",
+      "observedAt": "2026-11-15T01:06:41.100539+00:00",
+      "redirected": false,
+      "header": [
+        "資料日期",
+        "單位名稱",
+        "買進金額",
+        "賣出金額",
+        "買賣超"
+      ],
+      "rowCount": 8,
+      "bodyDates": [
+        "1151113"
+      ],
+      "investorColumns": [
+        {
+          "category": "外資及陸資合計",
+          "netIdentityValid": true
+        },
+        {
+          "category": "　外資及陸資(不含自營商)",
+          "netIdentityValid": true
+        },
+        {
+          "category": "　外資自營商",
+          "netIdentityValid": true
+        },
+        {
+          "category": "投信",
+          "netIdentityValid": true
+        },
+        {
+          "category": "自營商合計",
+          "netIdentityValid": true
+        },
+        {
+          "category": "三大法人合計*",
+          "netIdentityValid": true
+        }
+      ],
+      "categoryNames": [
+        "外資及陸資合計",
+        "　外資及陸資(不含自營商)",
+        "　外資自營商",
+        "投信",
+        "自營商合計",
+        "三大法人合計*"
+      ]
+    },
+    {
+      "label": "TPEX_11743_DATED_12",
+      "url": "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D&d=115%2F11%2F12",
+      "httpStatus": 200,
+      "mime": "application/csv;charset=utf-8",
+      "bytes": 626,
+      "sha256": "e80b43d82abf70e6fa215398750e2e34b2934c9584e91c6aa39917e95502f50e",
+      "observedAt": "2026-11-15T01:06:41.592376+00:00",
+      "redirected": false,
+      "header": [
+        "資料日期",
+        "單位名稱",
+        "買進金額",
+        "賣出金額",
+        "買賣超"
+      ],
+      "rowCount": 8,
+      "bodyDates": [
+        "1151112"
+      ],
+      "investorColumns": [
+        {
+          "category": "外資及陸資合計",
+          "netIdentityValid": true
+        },
+        {
+          "category": "　外資及陸資(不含自營商)",
+          "netIdentityValid": true
+        },
+        {
+          "category": "　外資自營商",
+          "netIdentityValid": true
+        },
+        {
+          "category": "投信",
+          "netIdentityValid": true
+        },
+        {
+          "category": "自營商合計",
+          "netIdentityValid": true
+        },
+        {
+          "category": "三大法人合計*",
+          "netIdentityValid": true
+        }
+      ],
+      "categoryNames": [
+        "外資及陸資合計",
+        "　外資及陸資(不含自營商)",
+        "　外資自營商",
+        "投信",
+        "自營商合計",
+        "三大法人合計*"
+      ]
+    },
+    {
+      "label": "TPEX_11743_DATED_13",
+      "url": "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D&d=115%2F11%2F13",
+      "httpStatus": 200,
+      "mime": "application/csv;charset=utf-8",
+      "bytes": 623,
+      "sha256": "22b9a1e263d2a929c73c18af54a3191fcc55e5fb5f9f3f5d93698c315f354441",
+      "observedAt": "2026-11-15T01:06:41.710102+00:00",
+      "redirected": false,
+      "header": [
+        "資料日期",
+        "單位名稱",
+        "買進金額",
+        "賣出金額",
+        "買賣超"
+      ],
+      "rowCount": 8,
+      "bodyDates": [
+        "1151113"
+      ],
+      "investorColumns": [
+        {
+          "category": "外資及陸資合計",
+          "netIdentityValid": true
+        },
+        {
+          "category": "　外資及陸資(不含自營商)",
+          "netIdentityValid": true
+        },
+        {
+          "category": "　外資自營商",
+          "netIdentityValid": true
+        },
+        {
+          "category": "投信",
+          "netIdentityValid": true
+        },
+        {
+          "category": "自營商合計",
+          "netIdentityValid": true
+        },
+        {
+          "category": "三大法人合計*",
+          "netIdentityValid": true
+        }
+      ],
+      "categoryNames": [
+        "外資及陸資合計",
+        "　外資及陸資(不含自營商)",
+        "　外資自營商",
+        "投信",
+        "自營商合計",
+        "三大法人合計*"
+      ]
+    },
+    {
+      "label": "TPEX_MODERN_DATED_12",
+      "url": "https://www.tpex.org.tw/www/zh-tw/insti/summary?date=2026%2F11%2F12&response=data",
+      "httpStatus": 200,
+      "mime": "application/csv;charset=utf-8",
+      "bytes": 626,
+      "sha256": "e80b43d82abf70e6fa215398750e2e34b2934c9584e91c6aa39917e95502f50e",
+      "observedAt": "2026-11-15T01:06:41.864922+00:00",
+      "redirected": false,
+      "header": [
+        "資料日期",
+        "單位名稱",
+        "買進金額",
+        "賣出金額",
+        "買賣超"
+      ],
+      "rowCount": 8,
+      "bodyDates": [
+        "1151112"
+      ],
+      "investorColumns": [
+        {
+          "category": "外資及陸資合計",
+          "netIdentityValid": true
+        },
+        {
+          "category": "　外資及陸資(不含自營商)",
+          "netIdentityValid": true
+        },
+        {
+          "category": "　外資自營商",
+          "netIdentityValid": true
+        },
+        {
+          "category": "投信",
+          "netIdentityValid": true
+        },
+        {
+          "category": "自營商合計",
+          "netIdentityValid": true
+        },
+        {
+          "category": "三大法人合計*",
+          "netIdentityValid": true
+        }
+      ],
+      "categoryNames": [
+        "外資及陸資合計",
+        "　外資及陸資(不含自營商)",
+        "　外資自營商",
+        "投信",
+        "自營商合計",
+        "三大法人合計*"
+      ]
+    },
+    {
+      "label": "TWSE_18409_REGISTERED",
+      "url": "https://mopsfin.twse.com.tw/opendata/twtazu_od.csv",
+      "httpStatus": 200,
+      "mime": "text/csv",
+      "bytes": 206,
+      "sha256": "bc614999119ccd1f6a16349b09e6cb7803569df0f553ca54d347d1b584980073",
+      "observedAt": "2026-11-15T01:06:42.095199+00:00",
+      "redirected": false,
+      "header": [
+        "資料日期",
+        "類型",
+        "上漲",
+        "漲停",
+        "下跌",
+        "跌停",
+        "持平",
+        "未成交",
+        "無比價"
+      ],
+      "rowCount": 2,
+      "bodyDates": [
+        "1150605"
+      ],
+      "investorColumns": [],
+      "categoryNames": []
+    },
+    {
+      "label": "TWSE_18409_DATED_12",
+      "url": "https://mopsfin.twse.com.tw/opendata/twtazu_od.csv?date=20261112",
+      "httpStatus": 200,
+      "mime": "text/csv",
+      "bytes": 206,
+      "sha256": "bc614999119ccd1f6a16349b09e6cb7803569df0f553ca54d347d1b584980073",
+      "observedAt": "2026-11-15T01:06:42.310650+00:00",
+      "redirected": false,
+      "header": [
+        "資料日期",
+        "類型",
+        "上漲",
+        "漲停",
+        "下跌",
+        "跌停",
+        "持平",
+        "未成交",
+        "無比價"
+      ],
+      "rowCount": 2,
+      "bodyDates": [
+        "1150605"
+      ],
+      "investorColumns": [],
+      "categoryNames": []
+    }
+  ],
+  "actualTpexMoney": {
+    "sourceReceipts": [
+      {
+        "exchange": "TPEX",
+        "datasetId": 11743,
+        "session": "2026-11-06",
+        "url": "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D&d=115%2F11%2F06",
+        "observedAt": "2026-11-15T01:07:22.478117+00:00",
+        "sha256": "fde022216259c300785a628b324da2c15ea59b9529d8b07ede95faf3970bc8ae",
+        "bytes": 626,
+        "totalNetTwd": {
+          "combined": 7052832052,
+          "withoutForeignDealers": 7052832052,
+          "foreignDealers": 0
+        }
+      },
+      {
+        "exchange": "TPEX",
+        "datasetId": 11743,
+        "session": "2026-11-09",
+        "url": "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D&d=115%2F11%2F09",
+        "observedAt": "2026-11-15T01:07:22.703463+00:00",
+        "sha256": "9c97c3b57ff96c45e733e3216a40ccd937139b0c084191dced0a54dd53a299b9",
+        "bytes": 626,
+        "totalNetTwd": {
+          "combined": -2956219666,
+          "withoutForeignDealers": -2956219666,
+          "foreignDealers": 0
+        }
+      },
+      {
+        "exchange": "TPEX",
+        "datasetId": 11743,
+        "session": "2026-11-10",
+        "url": "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D&d=115%2F11%2F10",
+        "observedAt": "2026-11-15T01:07:22.981432+00:00",
+        "sha256": "20fa8c4d887ac4a291adf8edbde01dcb21ba88695591e922dace0aa0c22fa599",
+        "bytes": 623,
+        "totalNetTwd": {
+          "combined": 1094829285,
+          "withoutForeignDealers": 1094829285,
+          "foreignDealers": 0
+        }
+      },
+      {
+        "exchange": "TPEX",
+        "datasetId": 11743,
+        "session": "2026-11-11",
+        "url": "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D&d=115%2F11%2F11",
+        "observedAt": "2026-11-15T01:07:23.085180+00:00",
+        "sha256": "6950afa8608c5739a0266505abdf3c08ffbd2f98cd12f8b4084bd4fcc57adc9c",
+        "bytes": 626,
+        "totalNetTwd": {
+          "combined": -1921596348,
+          "withoutForeignDealers": -1921596348,
+          "foreignDealers": 0
+        }
+      },
+      {
+        "exchange": "TPEX",
+        "datasetId": 11743,
+        "session": "2026-11-12",
+        "url": "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D&d=115%2F11%2F12",
+        "observedAt": "2026-11-15T01:07:23.418671+00:00",
+        "sha256": "e80b43d82abf70e6fa215398750e2e34b2934c9584e91c6aa39917e95502f50e",
+        "bytes": 626,
+        "totalNetTwd": {
+          "combined": 662569455,
+          "withoutForeignDealers": 662569455,
+          "foreignDealers": 0
+        }
+      },
+      {
+        "exchange": "TPEX",
+        "datasetId": 11743,
+        "session": "2026-11-13",
+        "url": "https://www.tpex.org.tw/web/stock/3insti/3insti_SUMMARY/3itrdsum_result.php?l=zh-tw&o=data&t=D&d=115%2F11%2F13",
+        "observedAt": "2026-11-15T01:07:23.717456+00:00",
+        "sha256": "22b9a1e263d2a929c73c18af54a3191fcc55e5fb5f9f3f5d93698c315f354441",
+        "bytes": 623,
+        "totalNetTwd": {
+          "combined": 3790121589,
+          "withoutForeignDealers": 3790121589,
+          "foreignDealers": 0
+        }
+      }
+    ],
+    "throughWindows": {
+      "2026-11-12": {
+        "sessions": [
+          "2026-11-06",
+          "2026-11-09",
+          "2026-11-10",
+          "2026-11-11",
+          "2026-11-12"
+        ],
+        "oneDayTwd": {
+          "combined": 662569455,
+          "withoutForeignDealers": 662569455,
+          "foreignDealers": 0
+        },
+        "fiveDayTwd": {
+          "combined": 3932414778,
+          "withoutForeignDealers": 3932414778,
+          "foreignDealers": 0
+        }
+      },
+      "2026-11-13": {
+        "sessions": [
+          "2026-11-09",
+          "2026-11-10",
+          "2026-11-11",
+          "2026-11-12",
+          "2026-11-13"
+        ],
+        "oneDayTwd": {
+          "combined": 3790121589,
+          "withoutForeignDealers": 3790121589,
+          "foreignDealers": 0
+        },
+        "fiveDayTwd": {
+          "combined": 669704315,
+          "withoutForeignDealers": 669704315,
+          "foreignDealers": 0
+        }
+      }
+    }
+  },
+  "controlledLegacyContract": {
+    "sourceSha256": "349be5e3079e1a8b21f114e175153163eedc01be7277cc2775e1f7acdb348f60",
+    "exactFunctionSliceSha256": "b98792d63c8f887de2e0469f5dae637e252f4511ea8b1c48531b404fcd8943ad",
+    "runtime": "v22.23.1",
+    "actualLicensedIndexBars": {
+      "TWSE": 520,
+      "TPEX": 520
+    },
+    "controlledBreadthAndCombinedFlow": true,
+    "sessionDate": "2026-11-13",
+    "observedComparisonWindow": [
+      "2026-11-09",
+      "2026-11-10",
+      "2026-11-11",
+      "2026-11-12",
+      "2026-11-13"
+    ],
+    "cases": [
+      {
+        "name": "complete_control",
+        "status": "complete",
+        "providedFlowSessions": [
+          "2026-11-09",
+          "2026-11-10",
+          "2026-11-11",
+          "2026-11-12",
+          "2026-11-13"
+        ],
+        "declaredBreadthMarkets": [
+          "TWSE",
+          "TPEX"
+        ],
+        "missing": []
+      },
+      {
+        "name": "missing_target_session",
+        "status": "complete",
+        "providedFlowSessions": [
+          "2026-11-06",
+          "2026-11-09",
+          "2026-11-10",
+          "2026-11-11",
+          "2026-11-12"
+        ],
+        "declaredBreadthMarkets": [
+          "TWSE",
+          "TPEX"
+        ],
+        "missing": []
+      },
+      {
+        "name": "missing_middle_session",
+        "status": "complete",
+        "providedFlowSessions": [
+          "2026-11-06",
+          "2026-11-09",
+          "2026-11-10",
+          "2026-11-12",
+          "2026-11-13"
+        ],
+        "declaredBreadthMarkets": [
+          "TWSE",
+          "TPEX"
+        ],
+        "missing": []
+      },
+      {
+        "name": "only_same_market_breadth",
+        "status": "complete",
+        "providedFlowSessions": [
+          "2026-11-09",
+          "2026-11-10",
+          "2026-11-11",
+          "2026-11-12",
+          "2026-11-13"
+        ],
+        "declaredBreadthMarkets": [
+          "TWSE"
+        ],
+        "missing": []
+      },
+      {
+        "name": "four_flows_control",
+        "status": "data_incomplete",
+        "providedFlowSessions": null,
+        "declaredBreadthMarkets": [
+          "TWSE",
+          "TPEX"
+        ],
+        "missing": [
+          "twse_tpex_foreign_flow_1d_5d"
+        ]
+      }
+    ]
+  },
+  "findings": {
+    "tpexDailyOfficialAmountDistinctFromIndividualShareFlow": true,
+    "latestAndDated13BodyEqual": true,
+    "modernAndRegisteredDated12BodyEqual": true,
+    "realTestedDatesForeignDealerNetWasZero": true,
+    "categorySemanticsStillDiffer": true,
+    "twseAdvanceDeclineNotChartBreadth": true,
+    "twseAdvanceDeclineDateScopeRejected": true,
+    "twseRegisteredLicensedMatchingMoneySourceFound": false,
+    "legacyFlowDatesCanBeStaleOrNonContiguous": true,
+    "legacyBreadthAcceptsDuplicateMarketRows": true
+  },
+  "nextContract": {
+    "foreignAmount": "bind two sorted distinct venue receipts to each of the five exact authoritative trading sessions including the signal session; retain category scope and provider policy; any gap leaves day/5d incomplete",
+    "breadth": "one source-bound active-common roster and its 20-close population census per venue, exact signal-date close and conflicting head rejection, preserve 95% configured combined coverage requirement"
+  },
+  "limits": {
+    "officialRawBodiesInGit": false,
+    "actualTvCoverageOfBreadth": false,
+    "actualCombinedMarketFlow": false,
+    "actualSignalRegimeOrRanking": false,
+    "formalNativeGateRun": false,
+    "productionOrDbWriteCalls": 0
+  }
+}
