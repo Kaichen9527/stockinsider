@@ -1,0 +1,28 @@
+{
+  "task": "T18",
+  "base": "3c5715811b8a70f1963ca6d205c7c5bead7b66ee",
+  "observedAt": "2026-11-15T17:37:58Z",
+  "environment": "Contabo PG17.11 fixture tests, non-root in loopback-only namespace",
+  "cases": 6,
+  "passed": 6,
+  "wallLimitsSeconds": {
+    "toc": 600,
+    "restoreBefore": 600,
+    "restoreAfter": 720,
+    "ownedEngine": 900,
+    "hostSupervisor": 1250
+  },
+  "verified": [
+    "full public fixture restore uses the 600/720 second phases",
+    "real pg_restore child receives the simulated wall kill and reports restore_pg_restore_deadline",
+    "timeout fixture cleans private work tree",
+    "invalid archive, early stream failure, foreign key lineage checks and input guards remain enforced"
+  ],
+  "fullGenuineArchiveRunWithThisPatch": false,
+  "nativeHoldRetained": true,
+  "productionChanged": false,
+  "testedBlobs": {
+    "deployment/staging/vnext/t17_keyfd/portable_restore_engine.py": "0a6d84614166418259acda0536337480f1135c9b",
+    "scripts/tests/test_t17_portable_restore_engine.py": "5c1511f3983ffe1a9919d70ff033414d64bac7e9"
+  }
+}

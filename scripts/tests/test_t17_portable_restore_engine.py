@@ -12,6 +12,7 @@ import subprocess
 import tempfile
 import time
 import unittest
+from unittest.mock import patch
 from deployment.staging.vnext.t17_keyfd import portable_restore_engine as e
 from deployment.staging.vnext.t17_keyfd.portable_sql_fixture_adapter import (
     _tools, _pinned_sources, PINNED, FIXTURE_SQL)
@@ -130,14 +131,21 @@ class OwnedRestoreEngineTests(unittest.TestCase):
             archive=public_archive(directory)
             def replay(consumer):
                 for offset in range(0,len(archive),16384):consumer(archive[offset:offset+16384])
+            real_timer=e.threading.Timer
+            replay_limits=[]
+            def observed_timer(seconds,callback):
+                replay_limits.append(seconds)
+                return real_timer(seconds,callback)
             old={name:os.environ.get(name) for name in ('PGHOST','PGDATABASE','PGSERVICE','TMPDIR')}
             try:
                 os.environ.update(PGHOST='FORBIDDEN_EXTERNAL_CONNECTION',PGDATABASE='forbidden',PGSERVICE='forbidden',TMPDIR='/forbidden')
-                result=e.restore_owned_database(replay,Path(directory))
+                with patch.object(e.threading,'Timer',side_effect=observed_timer):
+                    result=e.restore_owned_database(replay,Path(directory))
             finally:
                 for name,value in old.items():
                     if value is None:os.environ.pop(name,None)
                     else:os.environ[name]=value
+            self.assertEqual(replay_limits,[600,720])
             self.assertTrue(result['databaseRestored'])
             self.assertTrue(result['portableContractVerified'])
             self.assertTrue(result['applicationObjectContractVerified'])
@@ -154,6 +162,33 @@ class OwnedRestoreEngineTests(unittest.TestCase):
             self.assertEqual(result['providerRecovery'],'NOT_RUN')
             self.assertEqual(list(Path(directory).iterdir()),[])
             print('OWNED_RESTORE_ENGINE_FIXTURE='+json.dumps({'fixture':'GENERATED_PUBLIC_STRUCTURAL_STUBS_NOT_REAL_APP',**result},sort_keys=True))
+
+    def test_real_pg_restore_wall_deadline_is_distinguished_and_cleans_up(self):
+        with tempfile.TemporaryDirectory(prefix='t17-engine-deadline-',dir='/tmp') as directory:
+            archive=public_archive(directory,large_rows=2)
+            real_timer=e.threading.Timer
+            restore_timer_fired=e.threading.Event()
+            calls=0
+            def shortened_restore_timer(seconds,callback):
+                if seconds < 700:
+                    return real_timer(seconds,callback)
+                def expire():
+                    callback()
+                    restore_timer_fired.set()
+                return real_timer(0.05,expire)
+            def replay(consume):
+                nonlocal calls
+                calls+=1
+                if calls==1:
+                    consume(archive)
+                    return
+                consume(archive[:1])
+                self.assertTrue(restore_timer_fired.wait(5))
+            with patch.object(e.threading,'Timer',side_effect=shortened_restore_timer):
+                with self.assertRaisesRegex(e.RestoreEngineRejected,'^restore_pg_restore_deadline$'):
+                    e.restore_owned_database(replay,Path(directory))
+            self.assertEqual(calls,2)
+            self.assertEqual(list(Path(directory).iterdir()),[])
 
     def test_bad_archive_and_stream_failure_reject_and_cleanup(self):
         with tempfile.TemporaryDirectory(prefix='t17-engine-test-',dir='/tmp') as directory:

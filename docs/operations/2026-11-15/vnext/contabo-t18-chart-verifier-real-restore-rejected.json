@@ -1,0 +1,76 @@
+{
+  "task": "T18",
+  "candidateCommit": "3c5715811b8a70f1963ca6d205c7c5bead7b66ee",
+  "observedOn": "2026-11-15",
+  "originalBackup": "authenticated fixed 2026-09-19 archive",
+  "native": [
+    {
+      "brokerDiagnostics": {
+        "APP": {
+          "role": "APP",
+          "schema": "stockinsider-t18-broker-refusal-v1",
+          "tag": "runtime_or_cleanup"
+        },
+        "REST": {
+          "role": "REST",
+          "schema": "stockinsider-t18-broker-refusal-v1",
+          "tag": "runtime_or_cleanup"
+        }
+      },
+      "durationSeconds": 647.99,
+      "keyRead": true,
+      "mode": "real",
+      "nativeHoldRetained": true,
+      "productionSignaturesUnchanged": true,
+      "resourceSample": {
+        "appMemoryPeakObservedBytes": 288432128,
+        "dbMemoryPeakObservedBytes": 805310464,
+        "minimumHostAvailableMemoryBytes": 3844284416,
+        "minimumHostDiskBytes": 17774354432,
+        "minimumWorkFreeBytes": 5984657408,
+        "restMemoryPeakObservedBytes": 17801216
+      },
+      "runner": {
+        "databaseRestored": false,
+        "durationSeconds": 630.304,
+        "nativeHoldRetained": true,
+        "reason": "restore_pg_restore_failed",
+        "schema": "stockinsider-staging-next-rollback-v1",
+        "status": "REJECTED"
+      },
+      "runnerExit": 2,
+      "schema": "stockinsider-t18-host-launcher-v1",
+      "stagingAccounts": "RESERVED_LOCKED_NOLOGIN",
+      "stagingResourcesCleaned": true
+    },
+    {
+      "schema": "stockinsider-t18-host-launcher-v1",
+      "status": "REJECTED",
+      "reason": "fixed_runner_outcome_unexpected",
+      "nativeHoldRetained": true
+    },
+    {
+      "sshExitCode": 2,
+      "stderrBytes": 0,
+      "durationSeconds": 650.654
+    }
+  ],
+  "serviceLogCounts": {
+    "journalAvailable": true,
+    "kernelJournalAvailable": false,
+    "t18DbServiceMessages": 5,
+    "dbOomIndicators": 0,
+    "kernelOomEventsAllObserved": 0,
+    "serviceTimeoutIndicators": 0,
+    "serviceProcessStatus2Present": true
+  },
+  "diagnosis": "Observed generic pg_restore exit after approximately the previous wall deadline. The previous runner discarded exact timer and signal attribution. Native cause remains unconfirmed.",
+  "reachedHistoricalDetails": false,
+  "productionChanged": false,
+  "headlessBinaryAvailable": {
+    "binaryReady": true,
+    "version": "143.0.7499.4",
+    "binaryBytes": 180833504,
+    "bundleFiles": 15
+  }
+}

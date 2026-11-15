@@ -1,0 +1,7 @@
+# T18 genuine archive replay and its deadline
+
+The chart verifier's genuine Contabo run stopped in the owned PostgreSQL reload, before either detail page. The runner reported the generic `restore_pg_restore_failed` after 630 seconds. Staging cleanup passed and production signatures stayed equal. The redacted service log had no positive OOM or timeout markers, and the filtered kernel query did not provide confirming evidence. Timing warrants testing the bounded replay window, with the exact cause still unknown. [Real receipt](../../docs/operations/2026-11-15/vnext/contabo-t18-chart-verifier-real-restore-rejected.json)
+
+The owned engine now labels a wall deadline that kills `pg_restore`, a different signal, and a positive exit distinctly. The restore stream can take 720 seconds in the existing 900-second engine budget. The TOC budget, overall host deadline, staging constraints, process CPU and file limits, validation SQL and production protections retain their prior bounds. Late Next credentials are still created after the clone passes validation.
+
+Six Contabo PostgreSQL 17 tests passed. They include a complete generated archive, an actual deadline kill of the fixture restore child, cleanup, stream failure, identity fences and orphan rejection. The genuine archive and two fixed Next.js detail pages still require the next native run. [Test receipt](../../docs/operations/2026-11-15/vnext/t18-pg-restore-deadline-source-tests.json)

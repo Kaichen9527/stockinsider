@@ -30,6 +30,8 @@ HISTORICAL = 'scripts/rehearse-contabo-database-restore.mjs'
 HISTORICAL_BLOB = 'd60414b8afa907e1326ae6e79b09e32e2aa8fdd4'
 MAX_CAPTURE = 1024**2
 MAX_ARCHIVE_PLAINTEXT = 8 * 1024**3
+_TOC_REPLAY_SECONDS = 600
+_RESTORE_REPLAY_SECONDS = 720
 MAX_INPUT_CHUNK = 1024**2
 # Fixed public schema edges from the reviewed StockInsider migration contract.
 # Nullable links are permitted, but every non-null value must identify a parent.
@@ -260,6 +262,14 @@ def _owned_validated_clone(replay, work_root):
 
     def replay_pg(args,allow_early_close=False):
         child=None;timer=None;input_error=None;written=0
+        replay_seconds=_TOC_REPLAY_SECONDS if allow_early_close else _RESTORE_REPLAY_SECONDS
+        deadline_sent_kill=threading.Event()
+
+        def stop_on_deadline():
+            if child is not None and child.poll() is None:
+                deadline_sent_kill.set()
+                child.kill()
+
         with tempfile.TemporaryFile(dir=root) as out,tempfile.TemporaryFile(dir=root) as err:
             try:
                 def consume(chunk):
@@ -271,7 +281,8 @@ def _owned_validated_clone(replay, work_root):
                     if child is None:
                         child=subprocess.Popen([str(pg_bin/'pg_restore'),*args],env=env,
                           stdin=subprocess.PIPE,stdout=out,stderr=err,preexec_fn=lambda:_limits(capture=True))
-                        timer=threading.Timer(min(600,max(.1,deadline-time.monotonic())),child.kill);timer.start()
+                        timer=threading.Timer(min(replay_seconds,max(.1,deadline-time.monotonic())),stop_on_deadline)
+                        timer.start()
                     child.stdin.write(chunk)
                 try:replay(consume)
                 except BaseException as error:input_error=error
@@ -281,7 +292,13 @@ def _owned_validated_clone(replay, work_root):
                 try:child.stdin.close()
                 except BrokenPipeError:
                     if input_error is None:input_error=BrokenPipeError()
-                status=child.wait(timeout=min(605,max(.1,deadline-time.monotonic())))
+                try:
+                    status=child.wait(timeout=min(replay_seconds+5,max(.1,deadline-time.monotonic())))
+                except subprocess.TimeoutExpired:
+                    raise RestoreEngineRejected(phase+'_pg_restore_deadline') from None
+                if status==-signal.SIGKILL and deadline_sent_kill.is_set():
+                    raise RestoreEngineRejected(phase+'_pg_restore_deadline')
+                if status<0:raise RestoreEngineRejected(phase+'_pg_restore_signal')
                 if status:raise RestoreEngineRejected(phase+'_pg_restore_failed')
                 if input_error and not (allow_early_close and isinstance(input_error,BrokenPipeError)):
                     raise RestoreEngineRejected('archive_stream_failed') from None
