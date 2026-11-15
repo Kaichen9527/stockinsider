@@ -1,0 +1,861 @@
+{
+  "checkoutObjectsAndNodePinVerified": true,
+  "runScope": "PRIVATE_OFFLINE_REAL_CSV_REPLAY",
+  "schema": "stockinsider-launch-native-listed-close-replay-v1",
+  "observedAt": "2026-11-15T03:05:27.770485+00:00",
+  "captureCollectedAt": "2026-11-15T02:19:13.721908+00:00",
+  "sourceCommit": "bad5c986174ed6bd00bf4e6f2fee1abffccecb86",
+  "sourceTree": "261e2a92d49c421da1c6d55aa393d486a10e4189",
+  "sourceInventory": [
+    {
+      "blob": "1683982f54a10c401cd0f7b521abc073bdb05ea1",
+      "sha256": "c1cd7bc6b391ee88137c792ab6b6b280e2f5ccad77d8e6e815b754d73d76cfbb",
+      "path": "scripts/runtime/codec.js"
+    },
+    {
+      "blob": "8a0ef915ed246e0d959639e814d5a50653140efd",
+      "sha256": "220147e99e54ecda8fdaad10f6bee026591f88dc144c3a19f886ab78dc2b668a",
+      "path": "scripts/runtime/official-calendar-v314.js"
+    },
+    {
+      "blob": "2c51103c241702c08f1219fc77cbc57c57626929",
+      "sha256": "c98d646163200ac28f2d835e6b19b44b4d38014e84110658a07d8267cf8ba9ce",
+      "path": "scripts/runtime/official-market-authority-v314.js"
+    },
+    {
+      "blob": "059dddce59b875af2dc257870abfcbbc24936af2",
+      "sha256": "9b154a6fc245b976507640aaea9b113c4396ac003a89483ef73b42c2eaaadb3c",
+      "path": "scripts/runtime/official-mops-v314.js"
+    },
+    {
+      "blob": "330820e0d0fb1ad15855657b0d42494b7e6fc55d",
+      "sha256": "a298fe9c55e51fd50ca61155af1c2facecdfc5825abc80352424fe3d7c1eac32",
+      "path": "scripts/runtime/official-twse-valuation.js"
+    },
+    {
+      "blob": "2d3d95f7f43934f0353a02a4565e95967327a428",
+      "sha256": "7a653c58b425ddd7909050f58f0e5d569404357ad0fb0af61b6a5be6aee50487",
+      "path": "web/package.json"
+    },
+    {
+      "blob": "b244c6207c089273092a36304e0eb37f657c2e99",
+      "sha256": "ca8d0acbac7c7de3e74da1f428349d4412a33282d317bd63e68d41a33ee8bf61",
+      "path": "web/scripts/launch-official-replay.mjs"
+    },
+    {
+      "blob": "6510554d4787ef4a178207d260194341b619e7e0",
+      "sha256": "d1e30d7e538d98ce5e5a012a0e007bb137bf7df829491d3b4ec5b5a316c5644d",
+      "path": "web/scripts/sync-official-authority.mjs"
+    },
+    {
+      "blob": "066dc146fb3b5aa3f5bf789fdc7abbd7e192b751",
+      "sha256": "29c216d09cab93f6a2571bd0c3acb3d81253e177845e478e1155421dbe759b0b",
+      "path": "web/src/lib/candidate-price-history.ts"
+    },
+    {
+      "blob": "fcf5e92b2ace0b7b45e8b75d266694b42312e15a",
+      "sha256": "2c6ceb4b0892d6cc35a070938ecd42cce3063a4636c84725c89e879e8b61ce95",
+      "path": "web/src/lib/market-breadth.ts"
+    },
+    {
+      "blob": "dc8906c61789da64a5fad39c272304b1757fc190",
+      "sha256": "f5413108bdb9e6f98b41392e61fc465a79b29e0a14cbe4a19fed4fa246829286",
+      "path": "web/src/lib/official-calendar-backfill.ts"
+    },
+    {
+      "blob": "430174979e522a35585d8f44d7cba798f995d32d",
+      "sha256": "477a34da818b8ef0618e5a61ebb173a368cd9018e2fa4a8aa2c895d9c52f0e24",
+      "path": "web/src/lib/opportunity-v3/canonical.ts"
+    },
+    {
+      "blob": "44402d6507f80fade3e8ccca68408435402f106e",
+      "sha256": "8150189d972742ce3a6f7b84289e9539ededb521b877137fc4127e33f03ac6e2",
+      "path": "web/src/lib/taiwan-data-provider.ts"
+    },
+    {
+      "blob": "a6f3036a39001304dafcd567034a53942d863f66",
+      "sha256": "290afa255217e8a8a191a9a24b3dbbe73417585e587cab6546322bc6a5461a3c",
+      "path": "web/src/lib/tw-entry-plan-authority.ts"
+    },
+    {
+      "blob": "fa27138f5dd8f6ce823a91e2fd4be84cfe76fac9",
+      "sha256": "bf587d9f77289610aa3a4c45285af5337f501aa8dd90b55ab37ac45cdc91ea2e",
+      "path": "web/src/lib/vnext/evidence-clock.ts"
+    },
+    {
+      "blob": "36866820b44b11580897b86f2dbd0ba55dcc21df",
+      "sha256": "4eafd39c1b20b15ddcfff4db35be37b9e85bffaf18f3576288c932174f795e20",
+      "path": "web/src/lib/vnext/launch-breadth-replay.ts"
+    },
+    {
+      "blob": "3ac9f969269dff33d0b94e61bc424769fd93cd19",
+      "sha256": "4f6570419c324c64574a2bfd575eb5a07050f6efa8bdb2ae222cf5d20b005199",
+      "path": "web/src/lib/vnext/launch-institutional-volume.ts"
+    },
+    {
+      "blob": "e525d909f6e40b9fa002ce56555b54b80884b2cb",
+      "sha256": "c55f21b8fda2c816762876c010a2d7474f40a54085c21b47f540624bedff181b",
+      "path": "web/src/lib/vnext/launch-native-volume.ts"
+    },
+    {
+      "blob": "310f90d26939741ea987c29b68ebb2b2f81a1e51",
+      "sha256": "7e535f94c5f4745c39f76630b934056000271ecc5d0209410cd7e7e536fad92a",
+      "path": "web/src/lib/vnext/launch-official-replay.ts"
+    },
+    {
+      "blob": "b3e914322f9acc8ba21a7df59c5a1b9a77da5207",
+      "sha256": "c64b1abfadcceb8ac95e12f5a825d5cacd2f586e3de831755452c2a1336b83f6",
+      "path": "web/src/lib/vnext/licensed-csv-decoder.ts"
+    }
+  ],
+  "lockedNodeModules": {
+    "parse5": {
+      "version": "7.3.0",
+      "resolved": "https://registry.npmjs.org/parse5/-/parse5-7.3.0.tgz",
+      "integrity": "sha512-IInvU7fabl34qmi9gY8XOVxhYyMyuH2xUNpb2q8/Y+7552KlejkRvqvD19nMoUW/uQGGbqNpA6Tufu5FL5BZgw==",
+      "lockPath": "node_modules/parse5"
+    },
+    "entities": {
+      "version": "6.0.1",
+      "resolved": "https://registry.npmjs.org/entities/-/entities-6.0.1.tgz",
+      "integrity": "sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==",
+      "lockPath": "node_modules/parse5/node_modules/entities"
+    }
+  },
+  "dependencyLockBlob": "8a564364f442f0642f47a8908d4f5c99050771bd",
+  "nodeVersion": "v22.14.0",
+  "nodeSha256": "1abce2374a485bddae3c27b17a3e3143e2780232026e627c4fe74ddde3f380a1",
+  "canonicalBridgeModules": 5,
+  "originalRawBodies": 31,
+  "actual": [
+    {
+      "schema": "launch-twse-11764-close-observations-v1",
+      "parserVersion": "twse-11764-reported-close-observer-v1",
+      "datasetId": 11764,
+      "market": "TWSE",
+      "attribution": {
+        "datasetId": 11764,
+        "datasetUrl": "https://data.gov.tw/dataset/11764",
+        "exchange": "TWSE",
+        "owner": null,
+        "license": null,
+        "licenseUrl": null,
+        "licenseVersion": null,
+        "rightsRevision": null
+      },
+      "purpose": "raw_market_breadth_close_observation",
+      "coverage": "twse_11764_reported_close_only_v1",
+      "priceBasis": "raw_unadjusted",
+      "fieldBasis": "reported_close_only",
+      "throughSession": "2026-11-12",
+      "cutoff": "2026-11-15T03:05:27.770485+00:00",
+      "rosterRevision": "e60ba78edd4d928b90cb48e646fbd186101576a8034c5da39983f87409940959",
+      "revisionId": "breadth-11764:f9a75bd8dd5ff64f60769d06262e020ef7ceaf70b0b11a0e3d24553cc9bc17c7",
+      "declaredBytes": 2377587,
+      "decodedBytes": 2377587,
+      "parsedSessions": 30,
+      "plannedSessions": 30,
+      "nullableCloseRows": 77,
+      "rawPricePresence": {
+        "eligible": 1089,
+        "observed": 1079,
+        "rawAboveMa20": 139,
+        "schemaVersion": "market-breadth-price-presence-v1",
+        "signalSession": "2026-11-12",
+        "windowSessions": 30,
+        "strictLast20Present": 1053,
+        "signalPlus20Of30": 1079,
+        "missingSignalClose": 10,
+        "shortHistory": 0,
+        "conflictingSessionRows": 0,
+        "excludedRows": 0,
+        "coveragePct": 99.08172635445362,
+        "priceBasis": "raw_unadjusted_observations",
+        "caComparability": null,
+        "sourceAuthority": false,
+        "marketAuthority": false,
+        "gaps": [
+          "breadth_ca_comparability_not_proven"
+        ]
+      },
+      "caComparableCoverage": null,
+      "qualifiedBreadth": null,
+      "aggregateMarketGate": null,
+      "institutionalDenominatorAuthority": false,
+      "rightsAuthority": false,
+      "sourceAuthority": false,
+      "publicationAuthority": false,
+      "marketAuthority": false,
+      "rosterAuthority": false,
+      "calendarAuthority": false,
+      "responseReceipts": [
+        {
+          "session": "2026-09-29",
+          "rawSha256": "37366c364d379c7fc91a6f3287874dcd7be9b1c9c18174d76fad015560bae617",
+          "csvRowsSha256": "57a7607686fdca57773bb78696e0a6b8f6ef88ec479a446c4e508e2765ea87c1",
+          "observedAt": "2026-11-15T02:18:26.006364+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1079
+        },
+        {
+          "session": "2026-09-30",
+          "rawSha256": "d692babcb6e3ebe4567eb5d197881e88f08cc7138fcb900980bc2549cd497c69",
+          "csvRowsSha256": "18471e045e9c097a4f573cc769f100cb2f547bf0256a2797ef51f2df8878435c",
+          "observedAt": "2026-11-15T02:18:27.506945+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1082
+        },
+        {
+          "session": "2026-10-01",
+          "rawSha256": "8e1b84b10fd7ca85abbc040993d6accffff483787e41fa86bcc671241ef57735",
+          "csvRowsSha256": "20b0e9f74bf1687c548b96b602750bc74d5afabeed99a4657e66210dca590905",
+          "observedAt": "2026-11-15T02:18:29.116276+00:00",
+          "reportedRows": 1082,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-10-02",
+          "rawSha256": "0f3a5eb4d3e9a9936461e5bbec214072ffd08a5b06948aa42e3ddb8759d8bd63",
+          "csvRowsSha256": "126e2fa6a20c88b94caf18a08706d52737ef5eb0f6abcd514c7e3e3e5d0b4a94",
+          "observedAt": "2026-11-15T02:18:30.538546+00:00",
+          "reportedRows": 1082,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1081
+        },
+        {
+          "session": "2026-10-05",
+          "rawSha256": "f065e833a9ff246264f95695c7b456333c85a101986ee851d9f8d71bd1f64213",
+          "csvRowsSha256": "ede85313c6f8144c25b18e93adb7652117c4c66c77c1514d99f1f95b7ae467d4",
+          "observedAt": "2026-11-15T02:18:32.271076+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1082
+        },
+        {
+          "session": "2026-10-06",
+          "rawSha256": "ff6c60b64c89b404eb4e8cf73d0e11cfac3f2ed02dd6947d1e166f0823aa2c98",
+          "csvRowsSha256": "99df3189e1dd2bcf8809ce8f7c48eef79a24e5210810b38165a7c226dc571108",
+          "observedAt": "2026-11-15T02:18:33.658339+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1082
+        },
+        {
+          "session": "2026-10-07",
+          "rawSha256": "4ac7dc1cf5e9d541e97329572a307221458e8fbc58248bd0d7cc605f2c260413",
+          "csvRowsSha256": "3f0ee870cce6d40235feb2d11fbeb184a50bba3c917f1cbdd6f2ec87300a6902",
+          "observedAt": "2026-11-15T02:18:35.163542+00:00",
+          "reportedRows": 1082,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1076
+        },
+        {
+          "session": "2026-10-08",
+          "rawSha256": "7afcee0f5bd4c6b2bb46736587a6ba34b95f3f3c02e340c462b61e12a3c3de54",
+          "csvRowsSha256": "340b1b92ec75597afd5244faf686a9f5f6e030833cac241476c8b2c8a3e35c49",
+          "observedAt": "2026-11-15T02:18:36.585808+00:00",
+          "reportedRows": 1082,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1078
+        },
+        {
+          "session": "2026-10-12",
+          "rawSha256": "ed77c51fc2fc262755d6f325fb1e726df1c3c3592dcb8480770a44f8600f7c28",
+          "csvRowsSha256": "f08dc07407e93422fad287b8d8a8d01537803be31081818afba354838b580221",
+          "observedAt": "2026-11-15T02:18:38.259853+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1079
+        },
+        {
+          "session": "2026-10-13",
+          "rawSha256": "9af53c313e2b319683b68b7add613f888626504ccd084a785e210cc071ae40cd",
+          "csvRowsSha256": "7a0e6a3c60cf121ecc02a1a37015a97ea00d5d213da45a11f222c709602e4631",
+          "observedAt": "2026-11-15T02:18:39.636298+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-10-14",
+          "rawSha256": "a13bd6e9945fb2319803f89907911ca8d1dec39ba8cf43bce51a6e8e3eb0c978",
+          "csvRowsSha256": "816321e9387b5e081ee60f17e8fa8fc9182ed22773c8f1a937af38ebe3672486",
+          "observedAt": "2026-11-15T02:18:42.280212+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1079
+        },
+        {
+          "session": "2026-10-15",
+          "rawSha256": "cb0fe95ac5505fab263ebbfd8a3371b60877ee07488e5600880ca2e3b8176bb7",
+          "csvRowsSha256": "429d26dbce8cf683dc3495bbb47ab247eb45300d79953dbec616d5a6c7fa3828",
+          "observedAt": "2026-11-15T02:18:43.360079+00:00",
+          "reportedRows": 1081,
+          "rosterRows": 1080,
+          "positiveCloseRows": 1078
+        },
+        {
+          "session": "2026-10-16",
+          "rawSha256": "a04f96f4afbd282effcab87f5f7c080675dc5ae3bc6eb968499dfa1ddbcc3ac5",
+          "csvRowsSha256": "aca99200af04c50901dc6fc0c76a1029c3979dbd0f1e9543d08f65552479bbbe",
+          "observedAt": "2026-11-15T02:18:44.775471+00:00",
+          "reportedRows": 1082,
+          "rosterRows": 1080,
+          "positiveCloseRows": 1075
+        },
+        {
+          "session": "2026-10-19",
+          "rawSha256": "8a81214aedaebcf2da86c6f17b4c6bfa854a2182913cfa7863b006c00c6a0978",
+          "csvRowsSha256": "d257a0ccfc9f807b7edf782fef763ab7a01011ff99ef6ec6ba00d0afe1c2013e",
+          "observedAt": "2026-11-15T02:18:46.030397+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1076
+        },
+        {
+          "session": "2026-10-20",
+          "rawSha256": "def84551f71af73c5514714cea964532d114e88dde220d0449b40f9048b567ca",
+          "csvRowsSha256": "2c24d55025ab4b988e01f9f3249f35b0e7f4aa9e65ed5b2b60e33b1438b1a831",
+          "observedAt": "2026-11-15T02:18:47.722310+00:00",
+          "reportedRows": 1084,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1078
+        },
+        {
+          "session": "2026-10-21",
+          "rawSha256": "2ca62c5e0ba3337809aa37cd78ae199178cabb807811dc7cdb787fbbed6ecee7",
+          "csvRowsSha256": "72e113913f092111f5d600ea52743b6cc2cb55bf4b67d80360a88661b3ef4165",
+          "observedAt": "2026-11-15T02:18:50.093929+00:00",
+          "reportedRows": 1084,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-10-22",
+          "rawSha256": "76f75844d9395124c6507174756ea51a82ece1cdc0e1892f83183eeca236037b",
+          "csvRowsSha256": "d945079ca6d7661bee68e7e914bce5547738862c72e7534b5200faac1e2d2966",
+          "observedAt": "2026-11-15T02:18:52.572328+00:00",
+          "reportedRows": 1084,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1074
+        },
+        {
+          "session": "2026-10-27",
+          "rawSha256": "9564fddc6575cf78c1ad5fe1392baa8f13bd549f0f7abecba0b55911c6b4059a",
+          "csvRowsSha256": "f8eb9a057ebd0e33cf04a28fa1f763839dc7a8dbade897231a555b10772c75cb",
+          "observedAt": "2026-11-15T02:18:53.972527+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1081
+        },
+        {
+          "session": "2026-10-28",
+          "rawSha256": "4d697d44e732d57909c50ceb65edd7dace44c3b783df2bbdf5ad5810b4969976",
+          "csvRowsSha256": "5be4b6fc136e372bf34c38e92b878d8797f92a6d4be55d3821d8477b102e5cc7",
+          "observedAt": "2026-11-15T02:18:55.081465+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1081
+        },
+        {
+          "session": "2026-10-29",
+          "rawSha256": "fca0bb7a2dac56ec493b40c8880fbc9d0231e1e25ef43a5e943993f511845bc1",
+          "csvRowsSha256": "8156f8086993aa31c5bbb52893b61d5fd85fcdfe2032e5270ef47743bd9d75ca",
+          "observedAt": "2026-11-15T02:18:56.742112+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1077
+        },
+        {
+          "session": "2026-10-30",
+          "rawSha256": "954daeab710a5a3bf2f722c37b38375e6c06c49cce2e931c5ee60511eab17ffe",
+          "csvRowsSha256": "d0088cf22834a3f015f4f53fdad877cdcf18ac0ed048a58068cc1819712e2f59",
+          "observedAt": "2026-11-15T02:18:58.213420+00:00",
+          "reportedRows": 1088,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1079
+        },
+        {
+          "session": "2026-11-02",
+          "rawSha256": "1007655d94647c4a7f935ad17ec68e809355bbdf7fec5a28b7b7b8c9f00b73fa",
+          "csvRowsSha256": "963c14fdaa5608b5df0f8f0f6d06ebd68e7b3a1217f1160df0036e4489d1e7bb",
+          "observedAt": "2026-11-15T02:18:59.401286+00:00",
+          "reportedRows": 1088,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-11-03",
+          "rawSha256": "8cbb4f73da836eeb0d7d360d6f3379a84be976d5735c8837d47ca7cbd07d23fd",
+          "csvRowsSha256": "d7df442aea954dcfb6741fd3d48572846f20a0e9145fda5853462f9f3b1eaa2a",
+          "observedAt": "2026-11-15T02:19:00.999531+00:00",
+          "reportedRows": 1088,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1077
+        },
+        {
+          "session": "2026-11-04",
+          "rawSha256": "cc6962e99a9c80a36cd3142501d474a45ee54e1f5fb64f1723a5f51ec3423b72",
+          "csvRowsSha256": "f44428bcd7e2047d4cce588e94f40f7d6bfa094496e9551df957affa08d84db3",
+          "observedAt": "2026-11-15T02:19:02.431820+00:00",
+          "reportedRows": 1088,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1083
+        },
+        {
+          "session": "2026-11-05",
+          "rawSha256": "fc62d1f821fdce050820ab790206c1603c465efbac5cca2734d54ffd83c71386",
+          "csvRowsSha256": "bf51f77d87fafbef741f5780de83b0dd708690448b59bf6b99667af0e96ca02c",
+          "observedAt": "2026-11-15T02:19:04.034919+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-11-06",
+          "rawSha256": "40709a6cfcffbe3ce9ba445f3ccaec58a43e0c7e15a6f947d9edb9f57ac49c8b",
+          "csvRowsSha256": "d0a107aa504562c04391db6e178e1d311a52967a72f6c45031f08074d58eb2b1",
+          "observedAt": "2026-11-15T02:19:05.451814+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-11-09",
+          "rawSha256": "98431c1a4e500be927b3a6a552e1d31d5a6b57c9166b44cc02d1fde3bbd27b74",
+          "csvRowsSha256": "e4d0371bb4d6558268f0025ed0a7a1ed7a10c00559c7411709a9f052369a9843",
+          "observedAt": "2026-11-15T02:19:07.304029+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1082
+        },
+        {
+          "session": "2026-11-10",
+          "rawSha256": "e6e0afe64b9030459f9da2989d0e6060a0cb6cb8cc63e9a2e9bd8ca4b99f77cb",
+          "csvRowsSha256": "9dcaf9dec657d2219d684b8e264f77edddfdc91579f41b361989be5ca4fa4436",
+          "observedAt": "2026-11-15T02:19:08.745845+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-11-11",
+          "rawSha256": "6a2b2cdb6acf736611968de50cb37008c1324c4ade5dee8e6212f1e0c6cb2d50",
+          "csvRowsSha256": "10f7a0bec9fc33c8e260828f5e53bc1531d5af36f37857dc8dd7e6812a2ec1fb",
+          "observedAt": "2026-11-15T02:19:10.171574+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1079
+        },
+        {
+          "session": "2026-11-12",
+          "rawSha256": "e33124a061b3b80d4bf66e6830ec7a5937421c0a1e045f9dd2a28635630579ef",
+          "csvRowsSha256": "7f308787bc3b628b2ae268a73386ae1a636076d05efc704d9572fc6ce93d1715",
+          "observedAt": "2026-11-15T02:19:11.227261+00:00",
+          "reportedRows": 1086,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1079
+        }
+      ],
+      "gaps": [
+        "twse_11764_resource_license_owner_snapshot_unverified",
+        "breadth_roster_and_calendar_metadata_unverified",
+        "breadth_ca_comparability_not_proven",
+        "breadth_purpose_receipt_bridge_not_connected",
+        "tpex_full_roster_fact_producer_not_connected",
+        "market_foreign_twd_source_rights_unverified",
+        "breadth_capture_workflow_identity_unverified",
+        "breadth_reported_close_missing_or_unparseable"
+      ]
+    },
+    {
+      "schema": "launch-twse-11764-close-observations-v1",
+      "parserVersion": "twse-11764-reported-close-observer-v1",
+      "datasetId": 11764,
+      "market": "TWSE",
+      "attribution": {
+        "datasetId": 11764,
+        "datasetUrl": "https://data.gov.tw/dataset/11764",
+        "exchange": "TWSE",
+        "owner": null,
+        "license": null,
+        "licenseUrl": null,
+        "licenseVersion": null,
+        "rightsRevision": null
+      },
+      "purpose": "raw_market_breadth_close_observation",
+      "coverage": "twse_11764_reported_close_only_v1",
+      "priceBasis": "raw_unadjusted",
+      "fieldBasis": "reported_close_only",
+      "throughSession": "2026-11-13",
+      "cutoff": "2026-11-15T03:05:27.770485+00:00",
+      "rosterRevision": "e60ba78edd4d928b90cb48e646fbd186101576a8034c5da39983f87409940959",
+      "revisionId": "breadth-11764:c88b916a16dbd4d19fc22f5ed9e8922baada48cf29a8a6ec47891eb1e2870397",
+      "declaredBytes": 2377714,
+      "decodedBytes": 2377714,
+      "parsedSessions": 30,
+      "plannedSessions": 30,
+      "nullableCloseRows": 75,
+      "rawPricePresence": {
+        "eligible": 1089,
+        "observed": 1079,
+        "rawAboveMa20": 218,
+        "schemaVersion": "market-breadth-price-presence-v1",
+        "signalSession": "2026-11-13",
+        "windowSessions": 30,
+        "strictLast20Present": 1053,
+        "signalPlus20Of30": 1079,
+        "missingSignalClose": 9,
+        "shortHistory": 1,
+        "conflictingSessionRows": 0,
+        "excludedRows": 0,
+        "coveragePct": 99.08172635445362,
+        "priceBasis": "raw_unadjusted_observations",
+        "caComparability": null,
+        "sourceAuthority": false,
+        "marketAuthority": false,
+        "gaps": [
+          "breadth_ca_comparability_not_proven"
+        ]
+      },
+      "caComparableCoverage": null,
+      "qualifiedBreadth": null,
+      "aggregateMarketGate": null,
+      "institutionalDenominatorAuthority": false,
+      "rightsAuthority": false,
+      "sourceAuthority": false,
+      "publicationAuthority": false,
+      "marketAuthority": false,
+      "rosterAuthority": false,
+      "calendarAuthority": false,
+      "responseReceipts": [
+        {
+          "session": "2026-09-30",
+          "rawSha256": "d692babcb6e3ebe4567eb5d197881e88f08cc7138fcb900980bc2549cd497c69",
+          "csvRowsSha256": "18471e045e9c097a4f573cc769f100cb2f547bf0256a2797ef51f2df8878435c",
+          "observedAt": "2026-11-15T02:18:27.506945+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1082
+        },
+        {
+          "session": "2026-10-01",
+          "rawSha256": "8e1b84b10fd7ca85abbc040993d6accffff483787e41fa86bcc671241ef57735",
+          "csvRowsSha256": "20b0e9f74bf1687c548b96b602750bc74d5afabeed99a4657e66210dca590905",
+          "observedAt": "2026-11-15T02:18:29.116276+00:00",
+          "reportedRows": 1082,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-10-02",
+          "rawSha256": "0f3a5eb4d3e9a9936461e5bbec214072ffd08a5b06948aa42e3ddb8759d8bd63",
+          "csvRowsSha256": "126e2fa6a20c88b94caf18a08706d52737ef5eb0f6abcd514c7e3e3e5d0b4a94",
+          "observedAt": "2026-11-15T02:18:30.538546+00:00",
+          "reportedRows": 1082,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1081
+        },
+        {
+          "session": "2026-10-05",
+          "rawSha256": "f065e833a9ff246264f95695c7b456333c85a101986ee851d9f8d71bd1f64213",
+          "csvRowsSha256": "ede85313c6f8144c25b18e93adb7652117c4c66c77c1514d99f1f95b7ae467d4",
+          "observedAt": "2026-11-15T02:18:32.271076+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1082
+        },
+        {
+          "session": "2026-10-06",
+          "rawSha256": "ff6c60b64c89b404eb4e8cf73d0e11cfac3f2ed02dd6947d1e166f0823aa2c98",
+          "csvRowsSha256": "99df3189e1dd2bcf8809ce8f7c48eef79a24e5210810b38165a7c226dc571108",
+          "observedAt": "2026-11-15T02:18:33.658339+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1082
+        },
+        {
+          "session": "2026-10-07",
+          "rawSha256": "4ac7dc1cf5e9d541e97329572a307221458e8fbc58248bd0d7cc605f2c260413",
+          "csvRowsSha256": "3f0ee870cce6d40235feb2d11fbeb184a50bba3c917f1cbdd6f2ec87300a6902",
+          "observedAt": "2026-11-15T02:18:35.163542+00:00",
+          "reportedRows": 1082,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1076
+        },
+        {
+          "session": "2026-10-08",
+          "rawSha256": "7afcee0f5bd4c6b2bb46736587a6ba34b95f3f3c02e340c462b61e12a3c3de54",
+          "csvRowsSha256": "340b1b92ec75597afd5244faf686a9f5f6e030833cac241476c8b2c8a3e35c49",
+          "observedAt": "2026-11-15T02:18:36.585808+00:00",
+          "reportedRows": 1082,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1078
+        },
+        {
+          "session": "2026-10-12",
+          "rawSha256": "ed77c51fc2fc262755d6f325fb1e726df1c3c3592dcb8480770a44f8600f7c28",
+          "csvRowsSha256": "f08dc07407e93422fad287b8d8a8d01537803be31081818afba354838b580221",
+          "observedAt": "2026-11-15T02:18:38.259853+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1079
+        },
+        {
+          "session": "2026-10-13",
+          "rawSha256": "9af53c313e2b319683b68b7add613f888626504ccd084a785e210cc071ae40cd",
+          "csvRowsSha256": "7a0e6a3c60cf121ecc02a1a37015a97ea00d5d213da45a11f222c709602e4631",
+          "observedAt": "2026-11-15T02:18:39.636298+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-10-14",
+          "rawSha256": "a13bd6e9945fb2319803f89907911ca8d1dec39ba8cf43bce51a6e8e3eb0c978",
+          "csvRowsSha256": "816321e9387b5e081ee60f17e8fa8fc9182ed22773c8f1a937af38ebe3672486",
+          "observedAt": "2026-11-15T02:18:42.280212+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1079
+        },
+        {
+          "session": "2026-10-15",
+          "rawSha256": "cb0fe95ac5505fab263ebbfd8a3371b60877ee07488e5600880ca2e3b8176bb7",
+          "csvRowsSha256": "429d26dbce8cf683dc3495bbb47ab247eb45300d79953dbec616d5a6c7fa3828",
+          "observedAt": "2026-11-15T02:18:43.360079+00:00",
+          "reportedRows": 1081,
+          "rosterRows": 1080,
+          "positiveCloseRows": 1078
+        },
+        {
+          "session": "2026-10-16",
+          "rawSha256": "a04f96f4afbd282effcab87f5f7c080675dc5ae3bc6eb968499dfa1ddbcc3ac5",
+          "csvRowsSha256": "aca99200af04c50901dc6fc0c76a1029c3979dbd0f1e9543d08f65552479bbbe",
+          "observedAt": "2026-11-15T02:18:44.775471+00:00",
+          "reportedRows": 1082,
+          "rosterRows": 1080,
+          "positiveCloseRows": 1075
+        },
+        {
+          "session": "2026-10-19",
+          "rawSha256": "8a81214aedaebcf2da86c6f17b4c6bfa854a2182913cfa7863b006c00c6a0978",
+          "csvRowsSha256": "d257a0ccfc9f807b7edf782fef763ab7a01011ff99ef6ec6ba00d0afe1c2013e",
+          "observedAt": "2026-11-15T02:18:46.030397+00:00",
+          "reportedRows": 1083,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1076
+        },
+        {
+          "session": "2026-10-20",
+          "rawSha256": "def84551f71af73c5514714cea964532d114e88dde220d0449b40f9048b567ca",
+          "csvRowsSha256": "2c24d55025ab4b988e01f9f3249f35b0e7f4aa9e65ed5b2b60e33b1438b1a831",
+          "observedAt": "2026-11-15T02:18:47.722310+00:00",
+          "reportedRows": 1084,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1078
+        },
+        {
+          "session": "2026-10-21",
+          "rawSha256": "2ca62c5e0ba3337809aa37cd78ae199178cabb807811dc7cdb787fbbed6ecee7",
+          "csvRowsSha256": "72e113913f092111f5d600ea52743b6cc2cb55bf4b67d80360a88661b3ef4165",
+          "observedAt": "2026-11-15T02:18:50.093929+00:00",
+          "reportedRows": 1084,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-10-22",
+          "rawSha256": "76f75844d9395124c6507174756ea51a82ece1cdc0e1892f83183eeca236037b",
+          "csvRowsSha256": "d945079ca6d7661bee68e7e914bce5547738862c72e7534b5200faac1e2d2966",
+          "observedAt": "2026-11-15T02:18:52.572328+00:00",
+          "reportedRows": 1084,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1074
+        },
+        {
+          "session": "2026-10-27",
+          "rawSha256": "9564fddc6575cf78c1ad5fe1392baa8f13bd549f0f7abecba0b55911c6b4059a",
+          "csvRowsSha256": "f8eb9a057ebd0e33cf04a28fa1f763839dc7a8dbade897231a555b10772c75cb",
+          "observedAt": "2026-11-15T02:18:53.972527+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1081
+        },
+        {
+          "session": "2026-10-28",
+          "rawSha256": "4d697d44e732d57909c50ceb65edd7dace44c3b783df2bbdf5ad5810b4969976",
+          "csvRowsSha256": "5be4b6fc136e372bf34c38e92b878d8797f92a6d4be55d3821d8477b102e5cc7",
+          "observedAt": "2026-11-15T02:18:55.081465+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1081
+        },
+        {
+          "session": "2026-10-29",
+          "rawSha256": "fca0bb7a2dac56ec493b40c8880fbc9d0231e1e25ef43a5e943993f511845bc1",
+          "csvRowsSha256": "8156f8086993aa31c5bbb52893b61d5fd85fcdfe2032e5270ef47743bd9d75ca",
+          "observedAt": "2026-11-15T02:18:56.742112+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1077
+        },
+        {
+          "session": "2026-10-30",
+          "rawSha256": "954daeab710a5a3bf2f722c37b38375e6c06c49cce2e931c5ee60511eab17ffe",
+          "csvRowsSha256": "d0088cf22834a3f015f4f53fdad877cdcf18ac0ed048a58068cc1819712e2f59",
+          "observedAt": "2026-11-15T02:18:58.213420+00:00",
+          "reportedRows": 1088,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1079
+        },
+        {
+          "session": "2026-11-02",
+          "rawSha256": "1007655d94647c4a7f935ad17ec68e809355bbdf7fec5a28b7b7b8c9f00b73fa",
+          "csvRowsSha256": "963c14fdaa5608b5df0f8f0f6d06ebd68e7b3a1217f1160df0036e4489d1e7bb",
+          "observedAt": "2026-11-15T02:18:59.401286+00:00",
+          "reportedRows": 1088,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-11-03",
+          "rawSha256": "8cbb4f73da836eeb0d7d360d6f3379a84be976d5735c8837d47ca7cbd07d23fd",
+          "csvRowsSha256": "d7df442aea954dcfb6741fd3d48572846f20a0e9145fda5853462f9f3b1eaa2a",
+          "observedAt": "2026-11-15T02:19:00.999531+00:00",
+          "reportedRows": 1088,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1077
+        },
+        {
+          "session": "2026-11-04",
+          "rawSha256": "cc6962e99a9c80a36cd3142501d474a45ee54e1f5fb64f1723a5f51ec3423b72",
+          "csvRowsSha256": "f44428bcd7e2047d4cce588e94f40f7d6bfa094496e9551df957affa08d84db3",
+          "observedAt": "2026-11-15T02:19:02.431820+00:00",
+          "reportedRows": 1088,
+          "rosterRows": 1083,
+          "positiveCloseRows": 1083
+        },
+        {
+          "session": "2026-11-05",
+          "rawSha256": "fc62d1f821fdce050820ab790206c1603c465efbac5cca2734d54ffd83c71386",
+          "csvRowsSha256": "bf51f77d87fafbef741f5780de83b0dd708690448b59bf6b99667af0e96ca02c",
+          "observedAt": "2026-11-15T02:19:04.034919+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-11-06",
+          "rawSha256": "40709a6cfcffbe3ce9ba445f3ccaec58a43e0c7e15a6f947d9edb9f57ac49c8b",
+          "csvRowsSha256": "d0a107aa504562c04391db6e178e1d311a52967a72f6c45031f08074d58eb2b1",
+          "observedAt": "2026-11-15T02:19:05.451814+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-11-09",
+          "rawSha256": "98431c1a4e500be927b3a6a552e1d31d5a6b57c9166b44cc02d1fde3bbd27b74",
+          "csvRowsSha256": "e4d0371bb4d6558268f0025ed0a7a1ed7a10c00559c7411709a9f052369a9843",
+          "observedAt": "2026-11-15T02:19:07.304029+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1082
+        },
+        {
+          "session": "2026-11-10",
+          "rawSha256": "e6e0afe64b9030459f9da2989d0e6060a0cb6cb8cc63e9a2e9bd8ca4b99f77cb",
+          "csvRowsSha256": "9dcaf9dec657d2219d684b8e264f77edddfdc91579f41b361989be5ca4fa4436",
+          "observedAt": "2026-11-15T02:19:08.745845+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1080
+        },
+        {
+          "session": "2026-11-11",
+          "rawSha256": "6a2b2cdb6acf736611968de50cb37008c1324c4ade5dee8e6212f1e0c6cb2d50",
+          "csvRowsSha256": "10f7a0bec9fc33c8e260828f5e53bc1531d5af36f37857dc8dd7e6812a2ec1fb",
+          "observedAt": "2026-11-15T02:19:10.171574+00:00",
+          "reportedRows": 1087,
+          "rosterRows": 1082,
+          "positiveCloseRows": 1079
+        },
+        {
+          "session": "2026-11-12",
+          "rawSha256": "e33124a061b3b80d4bf66e6830ec7a5937421c0a1e045f9dd2a28635630579ef",
+          "csvRowsSha256": "7f308787bc3b628b2ae268a73386ae1a636076d05efc704d9572fc6ce93d1715",
+          "observedAt": "2026-11-15T02:19:11.227261+00:00",
+          "reportedRows": 1086,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1079
+        },
+        {
+          "session": "2026-11-13",
+          "rawSha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+          "csvRowsSha256": "91470a3683ea4d93ae862d93b5a3c7f37de6d578ba248e913c6614edfd02f058",
+          "observedAt": "2026-11-15T02:19:12.791611+00:00",
+          "reportedRows": 1086,
+          "rosterRows": 1081,
+          "positiveCloseRows": 1080
+        }
+      ],
+      "gaps": [
+        "twse_11764_resource_license_owner_snapshot_unverified",
+        "breadth_roster_and_calendar_metadata_unverified",
+        "breadth_ca_comparability_not_proven",
+        "breadth_purpose_receipt_bridge_not_connected",
+        "tpex_full_roster_fact_producer_not_connected",
+        "market_foreign_twd_source_rights_unverified",
+        "breadth_capture_workflow_identity_unverified",
+        "breadth_reported_close_missing_or_unparseable"
+      ]
+    }
+  ],
+  "negativeControls": {
+    "known-at-cutoff-negative": true,
+    "bad-digest-negative": true
+  },
+  "selectedRosterFromReadOnlyStatementHash": "39e94b376dda0fb08cbde6b465d5ef0ccb3788ce8db20d5774ee306e4a217ec8",
+  "offlineNodeNamespace": true,
+  "disclosedPrivateRows": false,
+  "writerExecuted": false,
+  "sourceScheduleChanged": false,
+  "cleanup": true,
+  "registryReview": {
+    "registry": {
+      "url": "https://data.gov.tw/dataset/11764",
+      "finalUrl": "https://data.gov.tw/dataset/11764",
+      "observedAt": "2026-11-15T03:05:42.209249+00:00",
+      "sha256": "80d3912b7ddd2cb1c22f4653bb2329245ee9f7f07b7d0af3fdbb41b642b15638",
+      "bytes": 530474,
+      "providerAgencyExplicit": true,
+      "originalExchangeExplicit": true,
+      "dataLicenseV1Explicit": true,
+      "officialCsvLinkExact": true,
+      "distinctApiOrigin": false,
+      "freeStatusExplicit": true,
+      "rawCloseFieldExplicit": true
+    },
+    "license": {
+      "url": "https://data.gov.tw/license",
+      "finalUrl": "https://data.gov.tw/license",
+      "observedAt": "2026-11-15T03:05:42.583197+00:00",
+      "sha256": "6d4108d8150f744ebe55822cb8c94aad0098a6bebfce5898d67c6846142d3c29",
+      "bytes": 484470,
+      "attributionRequired": true,
+      "commercialDerivationPermittedInGrant": true,
+      "additionalSignatureNotRequiredInGrant": true
+    },
+    "sourceDownload": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data"
+  },
+  "scratchScope": {
+    "temporaryGeneratedBinaryRemovedBytes": 120177224,
+    "originalSourcesRemoved": 0,
+    "legacyArchivesRemoved": 0
+  },
+  "actualRankOrCutoffProved": false
+}

@@ -1,0 +1,18 @@
+# Registered historical closing-price replay
+
+The fixed Codex VM implementation at `bad5c98` was replayed against original TWSE responses in Contabo staging. The isolated runner verified 20 Git blobs against tree `261e2a9`, ran the repository's canonical authority bridge for five modules, installed only the two lockfile-pinned parser dependencies, and used verified Node v22.14.0. The first standalone preparation used the top-level entities package and stopped at module loading. The successful rerun used parse5's exact nested entities version from the lock. The real parser ran unprivileged with a fresh network namespace, with no writer, production migration or source request in the Node process.
+
+Original 11764 bytes were rehashed before preparing the two 30-session manifests. The union was 31 original files. The ordinary-share roster derives from the existing head-first read-only historical selection, with the original record clocks retained. The replay cutoff is the actual 2026-11-15 read-only check time. The acquisition manifest file time was after the earlier body observations. The manifests retain that late time; the CLI refused re-labeling these bodies as available at historical 21:30. A changed body hash was also refused.
+
+| Through session | Original CSVs parsed | Raw bytes | Roster | Signal-day close and at least 20 closes in 30 | All exact last 20 |
+|---|---:|---:|---:|---:|---:|
+| 2026-11-12 | 30 | 2,377,587 | 1,089 | 1,079 | 1,053 |
+| 2026-11-13 | 30 | 2,377,714 | 1,089 | 1,079 | 1,053 |
+
+The source computation matched the independent earlier count in both windows. Its company-action comparability, qualified breadth and aggregate rank gates stayed null, with every source/roster/calendar/rights/publication authority field false. No raw company lists, prices or private database rows went to Git. The generated staging directory and temporary pinned Node binary were removed. Original sources and archives were retained.
+
+## Dataset-specific attribution and purpose
+
+At the recorded check, the [11764 government registry](https://data.gov.tw/dataset/11764) names the Securities and Futures Bureau, Financial Supervisory Commission as the providing agency and Taiwan Stock Exchange as the publisher of the report. The catalog displays the exact dated-resource base `https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data`, lists raw close among its fields, and declares Open Government Data License 1.0. The exchange accepted the added `date=YYYYMMDD` for the 31 request dates. Keep exact path/parameter match and display attribution for public derivatives under the license. The checked government license permits reuse and derivative services under its terms without a separate written grant. This review covers the registered CSV's close field and proposed market-close observation purpose. It supplies evidence for the original purpose-and-source rights record; it does not configure that record or authorize another endpoint, paid market flow, historical turnover, adjusted-price eligibility or ranking terms.
+
+Suggested attribution fields when the existing rights and public citation contracts are wired are the providing agency, TWSE publisher, dataset 11764's exact catalog name, year and official license version/link. The source exposes no separate dataset version label in the inspected catalog. Use explicit resource identity and captured catalog revision for source binding rather than fabricating a publisher revision. Cite the dataset when displaying derivative material. [Government license and attribution exhibit](https://data.gov.tw/license).
