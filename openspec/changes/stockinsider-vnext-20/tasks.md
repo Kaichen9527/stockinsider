@@ -295,3 +295,10 @@ Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-re
 - [x] First6969 shared-static failures and129PASS9FAIL related results retained; corrected JS replacement-template diagnosis, actual helper/AST dependencies and independently reviewed fail-fast driver. Original SQL candidate bytes/guards unchanged; no acceptance assertions relaxed.
 - [ ] Actual quote rights/actions, PostgreSQL timezone/ACL/native acceptance, original TAP causal assertion and protected A1 remain unverified. Changed native fixture NOT_RUN; old snapshots and production remain untouched.
 - [ ] Next520-session accumulation and explicit unscheduled closure provenance must address240/13month planning and400past-weekday annual truncation; Nov15 controls cannot qualify Nov13 historical publication.
+
+## Historical index/calendar source checkpoint
+
+- [x] Actual default-OFF preparation caller, new guarded planner source36 months per venue/ordinary171 unique resources/hard200 bound; distinct history-only/current-deferred/no-pool/already-acquired and latest-head reuse semantics. Source633ddb4 matches locale58f599:7 STATIC/34 related/2 actual stdin CLI/types/lint/build PASS.
+- [x] Callable bounded stdin immutable annual/cancel/withdrawal diagnostic, retains old identities beyond400, actual known clocks, conflicting/withdrawn observations remain gaps; authority always false, official completed/coverage null.
+- [ ] Real520/calendar source/cancellation/rights/applied-chunk/commit-witness/selector acceptance remains missing. Existing pinned annual apply protocol unchanged, no diagnostic injection or native retry.
+- [ ] Breadth follow-up: required signal-day close plus latest20 valid of30; report each venue counts, preserve original aggregate95 scope and both-source requirement. Raw unadjusted late backfill is not comparable breadth/real historical publication.

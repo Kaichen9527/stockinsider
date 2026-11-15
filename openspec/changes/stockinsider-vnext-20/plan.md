@@ -34,3 +34,7 @@ See [bounded Linux restore / release amendment](linux-restore-release-amendment.
 ## Weekly quote knowledge clock repair
 
 [Clock amendment](weekly-quote-clock-amendment.md) separates civil identities from actual known instants, with independent evidence clocks and unchanged formal quote gaps. Pure TZ/static/related checks are separate from PostgreSQL/native/actual source acceptance. Preserve original failures and no assertion-free TAP first-cause attribution.
+
+## Bounded historical source continuation
+
+[History520 amendment](history520-calendar-amendment.md) connects the actual default-OFF source preparation to a bounded36-month plan and separates an immutable schedule/cancel diagnostic from calendar authority. Existing consumer floors/pins and native HOLD remain; raw dates do not certify sessions. Breadth diagnostics retain the existing aggregate95 scope, not a new per-market threshold.

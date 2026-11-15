@@ -1,0 +1,282 @@
+{
+  "schema": "stockinsider-history520-planner-calendar-source-v1",
+  "observedAt": "2026-11-15T02:08:52.645321+00:00",
+  "localValidationCommit": "e58f5990db3eee5fb35efaafab98ee52332ab8e8",
+  "publicSourceCommit": "633ddb41740898e9f0a67246ef1485a8fc1dc9f6",
+  "wholeTree": "3a5c9cbf2bdecbf646624cfc74004b56adb05fbc",
+  "webTree": "6667ea67bf2ad2b9b439eb6eeb5b92bfc349cb26",
+  "publication": {
+    "transport": "configured GitHub connector",
+    "expectedParent": "067e9e9b5c3cef012afa926f6fd7d7cb72014619",
+    "force": false,
+    "treeEqualityVerified": true,
+    "testsRanLocalIdenticalTree": true,
+    "testsRanPublicCommit": false
+  },
+  "sourceInventory": [
+    {
+      "path": "migrations/20261115_vnext_launch_index_backfill_v1.sql",
+      "sha256": "8aca7718c93619cd66c266321d48d915a9ac198e9a2d0cf9f0f0874d04d21c6b"
+    },
+    {
+      "path": "scripts/vnext-launch-index-backfill-source.test.mjs",
+      "sha256": "dce7feea381acc837220f6160167057d0256602f770225942f241d77a6eb9d8a"
+    },
+    {
+      "path": "web/scripts/launch-calendar-history.mjs",
+      "sha256": "5f63584dabedb420e2df2f2ed69bda3b7b812f1281b0997905d5397ca1cdefd8"
+    },
+    {
+      "path": "web/scripts/launch-calendar-history.test.mjs",
+      "sha256": "ee3d5a2df5d82bfde611c1557cbfae382b52b570d417b9039d0a528fbc0ecfa2"
+    },
+    {
+      "path": "web/src/app/api/internal/taiwan-data-queue-drain/route.ts",
+      "sha256": "ca3404c7a41fd19ffdfb162c300fe1790b58edc8fd960551f63577f3f9074d64"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-calendar-history.test.ts",
+      "sha256": "300aa729dba857427e5ecb765bc461c914b00d9ff83326c4079d1aa421182878"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-calendar-history.ts",
+      "sha256": "daa7fe833a3daa6f77dab5380cadf0aa2980c09c9e72525b8d2653121b006dae"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-index-backfill.test.ts",
+      "sha256": "b64eece53dce014265d34b69d2c2cc8d95a2e9e3af7413ba6e38eda29c25530f"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-index-backfill.ts",
+      "sha256": "9c228e08280b7b89d90b537b3bb9ba42f89aad1679478d3c91dd18c87d02beb5"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-source-store.test.ts",
+      "sha256": "3aa7c00d0720d5f2f1b694ed8ebef0a5303e08e5208f9603b1f43cabce98d2e4"
+    },
+    {
+      "path": "web/src/lib/vnext/launch-source-store.ts",
+      "sha256": "83b373c88d7bd5151711873fb0b65b32be7cfaef7d48b2572c8398b365d9861e"
+    }
+  ],
+  "checks": [
+    {
+      "name": "source_static",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--test",
+        "scripts/vnext-launch-index-backfill-source.test.mjs"
+      ],
+      "start": "2026-11-15T01:50:16.171707+00:00",
+      "end": "2026-11-15T01:50:16.422272+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 0,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29412450304,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "7c71f20c122e8b4e657a1014f724675faff23862ac96a87607bacb9dcafb3094"
+    },
+    {
+      "name": "related_unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/vnext/launch-index-backfill.test.ts",
+        "web/src/lib/vnext/launch-calendar-history.test.ts",
+        "web/src/lib/vnext/launch-source-store.test.ts",
+        "web/src/lib/vnext/launch-ranking-command.test.ts",
+        "web/src/lib/vnext/launch-ranking-command-integration.test.ts"
+      ],
+      "start": "2026-11-15T01:50:16.422615+00:00",
+      "end": "2026-11-15T01:50:18.186126+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 34947072,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29412429824,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "84b465d797fd1a4ea06d094d84d33ba2a31bac23b7c42bc058ba0e85eb711931"
+    },
+    {
+      "name": "actual_cli",
+      "command": [
+        "/workspace/.tools/node22/node_modules/node/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/scripts/launch-calendar-history.test.mjs"
+      ],
+      "start": "2026-11-15T01:50:18.186797+00:00",
+      "end": "2026-11-15T01:50:18.688122+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 27336704,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29412425728,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "b89edcd6bda633f728d71ebe6346e0a66c2b29aab7030a1ead0e0e72a77e4a49"
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-11-15T01:50:18.688454+00:00",
+      "end": "2026-11-15T01:50:22.948360+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82079744,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29412417536,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "a30d434355de6ad3bcf8c110402dcaffc8858d8d8e94fb462ae0fb8fb443184f"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start": "2026-11-15T01:50:22.948773+00:00",
+      "end": "2026-11-15T01:50:42.762598+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 82763776,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29412413440,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "19c877eafdc15415f5ad90d09b41a580c102658a544d359e3d8d1998689103b4"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start": "2026-11-15T01:50:42.763157+00:00",
+      "end": "2026-11-15T01:50:50.538697+00:00",
+      "exit": 0,
+      "status": "PASS",
+      "sampledNotInstantaneous": true,
+      "peakTreeRssBytes": 81719296,
+      "minimumFreeBytes": {
+        "/workspace/stockinsider-launch-ui-nov15": 29412405248,
+        "/tmp": 9403478016
+      },
+      "resourceViolation": null,
+      "logSha256": "b3ea646ac59d71b8a49e841877c37e9f463575eb2e9f9e62a789a3654a727ec3"
+    }
+  ],
+  "counts": {
+    "static": 7,
+    "relatedUnit": 34,
+    "actualStdinCli": 2,
+    "skip": 0
+  },
+  "resourcePlanner": {
+    "actualCaller": "prepareLaunchSources under existing default-OFF launch source fence",
+    "newRpc": "vnext_launch_csv_backfill_plan_v1",
+    "monthHorizon": 36,
+    "includesThroughMonth": true,
+    "ordinaryDailyResources": 99,
+    "ordinaryIndexResources": 72,
+    "ordinaryUnion": 171,
+    "hardUniqueUnionBound": 200,
+    "authority": false,
+    "oldCurrentPlannerUnchanged": true,
+    "currentDeferredHistoricalScope": "history_only with currentPlanStatus deferred, actual plannedAt",
+    "noPoolDeferredAlreadyAcquired": "distinct closed states",
+    "readySkip": "latest resource head before compatibility, exact profile/license/current rights/ACK/positive expected facts only",
+    "transportCountRefinement": "before any execution, exact historical equality and current remainder0..99"
+  },
+  "calendarDiagnostic": {
+    "actualCli": "web/scripts/launch-calendar-history.mjs",
+    "schema": "launch-calendar-history-diagnostic-v1",
+    "input": "stdin UTF8 JSON only <=1MiB; no URL/file arguments",
+    "maximumBatches": 8,
+    "maximumRowsPerBatch": 1200,
+    "maximumEvents": 256,
+    "retainsPriorObservationsBeyond400": true,
+    "knowledge": "actual supplied sourceCutoff/availableAt/observation/commit clocks as-of, no backdate",
+    "cancellation": "explicit cancel/withdrawal immutable chain; conflicting heads/withdrawal retain reconciliation gap",
+    "annualScheduleCounts": "unverified per-market observations, not official sessions",
+    "officialCompletedSessions": null,
+    "officialCoverage": null,
+    "sourceAuthority": false,
+    "calendarAuthority": false,
+    "publicationAuthority": false
+  },
+  "externalControls": [
+    {
+      "commit": "a47bfcf8f959dd7c1736a713c779490a56fccb19",
+      "gitBlob": "4ac65fe2d0da1326d488fd3f9751b4a7ab087cde",
+      "scope": "metadata only, external56rawCSV readback;555paired price dates/27months for520; old13months250days",
+      "observations": "2026-11-15T00:55:16.740681+00:00 to00:55:39.098473+00:00"
+    },
+    {
+      "commit": "f857025bd21762e45a467b295f8190f32416a3c6",
+      "gitBlob": "cc070529bd5e16361b2c7f38bd5197728b9954ab",
+      "scope": "metadata only, six actual annual pages377labelledcompleted/375pricejoins; externalconfirmedJuly10/October23closures expose false completed labels",
+      "observations": "2026-11-15T00:59:50.197Z to00:59:51.337Z",
+      "runtime": "external Node22.23.1, not Cloud parser/runtime proof"
+    }
+  ],
+  "engineeringReview": {
+    "openP0": 0,
+    "openP1": 0,
+    "formalA1": false
+  },
+  "remainingBridge": [
+    "real explicit cancellation raw acquisition/parser/current-purpose rights and immutable receipt/withdrawal journal",
+    "new accumulated-calendar schema/producer/applied chunk/commit knowledge bridge",
+    "existing apply_legacy_official_ingestion_chunk_v3_16_9_internal and vnext_launch_annual_rows_internal_v1 remain old pinned protocol, not diagnostic inputs",
+    "actual source520/price240/history1320 selector authority and real breadth/foreign-flow regime"
+  ],
+  "limits": {
+    "actualSqlApplyOrGrammarAclRlsCommit": "NOT_RUN_HOLD",
+    "actualHistoricalIndexOrCalendarAcquisition": "NOT_RUN_CLOUD",
+    "rawOfficialBytesRehashedInCloud": false,
+    "priceDateMeansOfficialSession": false,
+    "calendarCompletedOr520Accepted": false,
+    "newObservationsQualifyNov13": false,
+    "T06T10Complete": false,
+    "nativeHold": "PRESERVED",
+    "originalPrHead": "UNCHANGED",
+    "productionActions": 0,
+    "timersChanged": false,
+    "paidCalls": 0
+  },
+  "preservation": {
+    "originalFiles": 283,
+    "missing": 0,
+    "changed": 0,
+    "archiveOrRecoveryVerified": false,
+    "reclaimedBytes": 0
+  }
+}
