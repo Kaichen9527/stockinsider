@@ -1,0 +1,221 @@
+{
+  "observedDate": "2026-11-15",
+  "sourceCommit": "78f80388343e3b20463bd58c84c3b500e0f6c7fd",
+  "stagingOfflineTests": {
+    "exitCode": 0,
+    "elapsedSeconds": 0.658,
+    "python": "3.12.3",
+    "memoryAvailableKiB": 4012308,
+    "diskAvailableBytes": 26575429632,
+    "isolatedNetworkAndUidAsserted": true,
+    "testOutcomes": [
+      [
+        "test_capture_request_observation_cutoff_mime_hash_and_no_unlicensed_fallback",
+        "ok"
+      ],
+      [
+        "test_exact_three_registered_routes_date_selector_and_no_dated_tpex_site",
+        "ok"
+      ],
+      [
+        "test_metadata_only_rows_full_identity_counts_and_no_eligibility",
+        "ok"
+      ],
+      [
+        "test_no_base_wrong_owner_mode_or_symlink_never_starts_new_network",
+        "ok"
+      ],
+      [
+        "test_private_base_completion_and_output_do_not_modify_original",
+        "ok"
+      ],
+      [
+        "test_real_child_deadline_kills_reaps_and_preserves_base_pipeline",
+        "ok"
+      ],
+      [
+        "test_schema_encoding_dates_and_counts_refuse_without_rows_or_exceptions",
+        "ok"
+      ],
+      [
+        "test_sentinel_named_date_exact_scope_and_undated_csv_remains_unknown",
+        "ok"
+      ],
+      [
+        "test_strict_metadata_projection_rejects_extra_rows_unknown_status_and_authority",
+        "ok"
+      ],
+      [
+        "test_too_late_wrong_day_and_cli_errors_emit_only_closed_metadata",
+        "ok"
+      ],
+      [
+        "test_wrong_base_identity_or_time_never_reads_new_endpoints",
+        "ok"
+      ]
+    ],
+    "testCount": "11",
+    "diagnostics": [],
+    "sourceSha256": {
+      "scripts/tests/test_close_control_samples.py": "3f37fa7a03ef4926a0f4906da6ae4de6d41e0460485d2db70abffb90ab9b8caa",
+      "docs/operations/2026-11-15/launch-radar/collect-close-control-samples.py": "0684b92ce7a5e9f493bd923ce99a70f47c16a42a325c93e73b93e83dc1f2b07b",
+      "docs/operations/2026-11-15/launch-radar/collect-close-public-inputs.py": "95ea73b672ba436a82fd076b746560c911633a77bc714f6ee7406d61fab4b45d"
+    }
+  },
+  "hostRuntimeProbe": {
+    "exitCode": 0,
+    "probe": {
+      "dynamicNonRoot": true,
+      "separateNetworkNamespace": true,
+      "parentAccepted": false,
+      "parentRemainingSeconds": null,
+      "child": {
+        "accepted": false,
+        "remainingSeconds": null
+      },
+      "memoryMaxBytes": 134217728,
+      "tasksMax": 12,
+      "httpRequests": 0
+    },
+    "elapsedSeconds": 2.549,
+    "stderrBytes": 0,
+    "probeTemporaryServiceState": "inactive",
+    "memoryAvailableKiB": 3990716,
+    "diskAvailableBytes": 26575409152
+  },
+  "hostRuntimeParityProbe": {
+    "exitCode": 0,
+    "result": {
+      "parent": {
+        "accepted": false,
+        "seconds": null,
+        "lastLine": 192,
+        "managerExitCode": 1,
+        "managerFieldCount": 0,
+        "managerUnixTransportError": true
+      },
+      "child": {
+        "accepted": false,
+        "seconds": null,
+        "lastLine": 192,
+        "managerExitCode": 1,
+        "managerFieldCount": 0,
+        "managerUnixTransportError": true
+      },
+      "nonRoot": true
+    },
+    "networkAccess": "AF_UNIX only plus IPAddressDeny=any",
+    "httpRequests": 0,
+    "stateAfter": "inactive"
+  },
+  "dynamicAndStaticSystemBusMatrix": {
+    "dynamic_actual_sandbox": {
+      "exitCode": 0,
+      "probe": {
+        "isNonRoot": true,
+        "hasNssRecord": true,
+        "busSocketVisible": true,
+        "ownUnit": {
+          "status": 1,
+          "typeExec": false,
+          "managerError": "Failed to get properties: Transport endpoint is not connected",
+          "stderrPresent": true
+        },
+        "existingStagingUnit": {
+          "status": 1,
+          "typeExec": false,
+          "managerError": "Failed to get properties: Transport endpoint is not connected",
+          "stderrPresent": true
+        },
+        "explicitBus": {
+          "status": 1,
+          "typeExec": false,
+          "managerError": "Failed to get properties: Transport endpoint is not connected",
+          "stderrPresent": true
+        }
+      },
+      "stateAfter": "inactive"
+    },
+    "dynamic_basic": {
+      "exitCode": 0,
+      "probe": {
+        "isNonRoot": true,
+        "hasNssRecord": true,
+        "busSocketVisible": true,
+        "ownUnit": {
+          "status": 1,
+          "typeExec": false,
+          "managerError": "Failed to get properties: Transport endpoint is not connected",
+          "stderrPresent": true
+        },
+        "existingStagingUnit": {
+          "status": 1,
+          "typeExec": false,
+          "managerError": "Failed to get properties: Transport endpoint is not connected",
+          "stderrPresent": true
+        },
+        "explicitBus": {
+          "status": 1,
+          "typeExec": false,
+          "managerError": "Failed to get properties: Transport endpoint is not connected",
+          "stderrPresent": true
+        }
+      },
+      "stateAfter": "inactive"
+    },
+    "static_actual_sandbox": {
+      "exitCode": 0,
+      "probe": {
+        "isNonRoot": true,
+        "hasNssRecord": true,
+        "busSocketVisible": true,
+        "ownUnit": {
+          "status": 0,
+          "typeExec": true,
+          "managerError": null,
+          "stderrPresent": false
+        },
+        "existingStagingUnit": {
+          "status": 0,
+          "typeExec": true,
+          "managerError": null,
+          "stderrPresent": false
+        },
+        "explicitBus": {
+          "status": 0,
+          "typeExec": true,
+          "managerError": null,
+          "stderrPresent": false
+        }
+      },
+      "stateAfter": "inactive"
+    }
+  },
+  "existingObserverProperties": {
+    "type": "exec",
+    "dynamicUser": true,
+    "memoryMaxBytes": 134217728,
+    "tasksMax": 12,
+    "startAndRuntimeLimitSeconds": 90,
+    "privateNetwork": false,
+    "restrictAddressFamilies": [
+      "AF_INET",
+      "AF_INET6",
+      "AF_UNIX"
+    ]
+  },
+  "existingStagingScheduleDates": [
+    "2026-11-16",
+    "2026-11-17"
+  ],
+  "existingStagingScheduleLocalTimes": [
+    "21:26",
+    "21:27",
+    "21:28"
+  ],
+  "localTimeZone": "Asia/Taipei",
+  "verifiedAtActualClose": false,
+  "recoveredHelperInstalled": false,
+  "httpRequests": 0,
+  "productionWrite": false
+}
