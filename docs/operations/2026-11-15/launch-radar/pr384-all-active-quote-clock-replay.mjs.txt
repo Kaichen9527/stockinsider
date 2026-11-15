@@ -1,0 +1,37 @@
+import {createHash} from 'node:crypto';
+const sha=s=>createHash('sha256').update(s).digest('hex');
+const historicalCutoff='2026-10-23T17:41:02.388Z', session='2026-10-24';
+const corrected='00000000-0000-4000-8000-000000000099';
+const outputs=[];
+for(const version of ['original','continuation']){
+ const {auditPublishedThesis}=await import(`./${version}/web/src/lib/vnext/thesis-audit.ts`);
+ const {deepFactors}=await import(`./${version}/web/src/lib/vnext/factors.ts`);
+ const {input,authorOutput,reviewerOutput,ids}=await import(`./${version}/scripts/vnext-synthetic-research-vectors.mjs`);
+ const tests=version==='original'?[
+  ['historical_instant',historicalCutoff,'absent'],
+  ['after_utc_midnight_same_taipei_session','2026-10-24T00:00:01.000Z','absent']
+ ]:[
+  ['historical_exact_knowledge_instant',historicalCutoff,'exact'],
+  ['historical_missing_quote_clock',historicalCutoff,'absent'],
+  ['historical_post_cutoff_quote',historicalCutoff,'late']
+ ];
+ for(const [name,cutoff,clock] of tests){
+  for(const symbol of ['2409','2383']){
+   const fixture=input(symbol);
+   const before=new Date(Date.parse(cutoff)-1200).toISOString();
+   const original=fixture.evidence.map(r=>({...r,eventAt:before,availableAt:before}));
+   const current=original.map(e=>e.id===ids.cfo?{...e,id:corrected,value:200,contentHash:sha('synthetic-corrected-cfo200')}:e);
+   const artifact={...authorOutput(),quoteDate:session,valuationDate:session};
+   const review=reviewerOutput({authorArtifact:artifact,evidence:{evidence:original}});
+   const marketHash='b'.repeat(64);
+   const quote={close:20,session,source:'https://www.twse.com.tw/synthetic-audit-price',adjusted:true,volume:1000,ma20:18,ma60:17,volumeRatio:1.1,institutionalFlow:1};
+   if(clock!=='absent'){quote.observedAt=cutoff;quote.availableAt=clock==='late'?new Date(Date.parse(cutoff)+1).toISOString():cutoff;}
+   const r=auditPublishedThesis({symbol,inputHash:fixture.hash,revisionId:'11111111-1111-4111-8111-111111111111',publishedInputHash:fixture.hash,artifact,review,original,current,newContent:[],quote,cutoff,market:{risk:'selective',snapshotHash:marketHash},previousMarketHash:marketHash,tradingValid:true});
+   const mutated=structuredClone(r.deepInputs);
+   mutated.catalystChecklist.checks=mutated.catalystChecklist.checks.map(c=>({...c,met:true,provenance:['synthetic-unrelated-numeric-one']}));
+   const mutationScore=deepFactors(mutated);
+   outputs.push({summary:{version,name,symbol,cutoff,session,typescript:{available:r.deepScore.availableWeight,confirmed:r.deepScore.confirmedPoints,technical:r.deepScore.factors.technicalChips.value,mutatedAvailable:mutationScore.availableWeight,mutatedConfirmed:mutationScore.confirmedPoints},technicalClock:r.deepInputs.technicalChipsChecklist.checks[0].observedAt,driftToCorrectedFact:r.claimChecks.some(c=>c.status==='drift'&&c.changed.some(x=>x.currentId===corrected)),materialChanged:r.materialChanged,assertAuditCondition:r.deepScore.availableWeight>0&&r.deepScore.availableWeight<100},inputs:r.deepInputs,mutated});
+  }
+ }
+}
+console.log(JSON.stringify({node:process.version,nonRoot:process.getuid()!==0,outputs}));

@@ -1,0 +1,471 @@
+{
+  "observedDate": "2026-11-15",
+  "originalWorkflow": {
+    "run": 39996620417,
+    "job": 120561693293,
+    "mergeCommit": "a8fbdfdbf55d77d2928a9134a396091001994769",
+    "failingSubtest": "actual all-active audit persists separate deep evidence; corrected new fact IDs cause substantive drift",
+    "privateFailureLineAvailable": false
+  },
+  "continuation": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "sourceSha256": {
+    "original/web/src/lib/vnext/thesis-audit.ts": "987a681c986e4b4ba97a37b1f6d853c3a666792ddaa5da7b5cd0cc47f51c4b60",
+    "original/scripts/vnext-synthetic-research-vectors.mjs": "1a1eeb2d9cb83df3f30691f30b9c39d84ac23c0945daa2d06f8446eb586126b8",
+    "original/web/src/lib/vnext/business-criteria.ts": "af9e5d716ed0bbb1a1c3be65d4d1686bcbb29a87f33f472fd6d7dfd594f8779b",
+    "original/web/src/lib/vnext/semantic-criteria.ts": "49885889a32b34a27267331d2f30b3eb9f65d44250942fcb697c1cdd10ab41cd",
+    "original/web/src/lib/vnext/factors.ts": "9f4e6456df7e584d4d9ed90cf88386e8bf8707400a99c53b2a74e98696fef7c5",
+    "original/web/src/lib/vnext/research.ts": "1e7b0649e97970fe7a493217607ebeef6c3ef9b38b4e91e64fb279d8280df961",
+    "original/web/src/lib/vnext/policy.ts": "6920dd2267e5c974efd5b50841d19bc11a7b82b3fa480680ab5f1f0e41734e51",
+    "original/web/src/lib/vnext/reviewed-valuation.ts": "f3b69bc07ad77d87ca46bbd716d51db3017ec7c38bcf971bb82a1cfffba5424f",
+    "original/web/src/lib/vnext/worker-prompts.ts": "7b62c808ebcee10fbb268f7e2513376e74ce015e401fd106cf45d1bbac20ec70",
+    "original/web/src/lib/vnext/catalyst-cancellation.ts": "ecb344abfe0b4863d298e396842d88097ec1f3d52d80ba2d8664ede8b52c981a",
+    "original/web/src/lib/vnext/screening.ts": "c49381e3f0130dfdd27d2590521a22a9e040ffaf4f4f0e0544926f9adcb745f6",
+    "original/web/src/lib/vnext/artifact-financial-summary.ts": "020d44f773d0c845c4395eb41c9f2d5b4341156e91893e393bbece6ba939113c",
+    "continuation/web/src/lib/vnext/thesis-audit.ts": "c9abc1902b0bf325382adbb10e84a56988c061ade2a22bf3bbe39a9cf6755472",
+    "continuation/scripts/vnext-synthetic-research-vectors.mjs": "1a1eeb2d9cb83df3f30691f30b9c39d84ac23c0945daa2d06f8446eb586126b8",
+    "continuation/web/src/lib/vnext/financial-observation.ts": "739d4a605be1409403a9ec41570132850beb7d82a0b06c19c9036e28271a5274",
+    "continuation/web/src/lib/vnext/business-criteria.ts": "af9e5d716ed0bbb1a1c3be65d4d1686bcbb29a87f33f472fd6d7dfd594f8779b",
+    "continuation/web/src/lib/vnext/semantic-criteria.ts": "49885889a32b34a27267331d2f30b3eb9f65d44250942fcb697c1cdd10ab41cd",
+    "continuation/web/src/lib/vnext/factors.ts": "6521d5989ebc8f809f895794871f98243eb35307622ad6ab6fd00b56562b14e2",
+    "continuation/web/src/lib/vnext/research.ts": "0e98fa650e71c9542ca9752db5db6a182363808fc75351228e11bea7631983f4",
+    "continuation/web/src/lib/vnext/policy.ts": "06b10f467752ad38cc8d80f5b93163aa446284f5cca5be6bb37fd186926ddab7",
+    "continuation/web/src/lib/vnext/audit-quote-clock.ts": "01e3796de196cd561a4ab29c0f00aa846019881a56043684ac94db5e54b18652",
+    "continuation/web/src/lib/vnext/evidence-clock.ts": "bf587d9f77289610aa3a4c45285af5337f501aa8dd90b55ab37ac45cdc91ea2e",
+    "continuation/web/src/lib/vnext/reviewed-valuation.ts": "f6facac58e352c119b0202946dcacd4665db1c568b2cba21175d3cb226f810a7",
+    "continuation/web/src/lib/vnext/worker-prompts.ts": "7b62c808ebcee10fbb268f7e2513376e74ce015e401fd106cf45d1bbac20ec70",
+    "continuation/web/src/lib/candidate-price-history.ts": "29c216d09cab93f6a2571bd0c3acb3d81253e177845e478e1155421dbe759b0b",
+    "continuation/web/src/lib/vnext/catalyst-cancellation.ts": "ecb344abfe0b4863d298e396842d88097ec1f3d52d80ba2d8664ede8b52c981a",
+    "continuation/web/src/lib/vnext/screening.ts": "247d16a228daa74b6b790b67a3721325977ea562541c62e8f03a6792acdddb4f",
+    "continuation/web/src/lib/vnext/artifact-financial-summary.ts": "020d44f773d0c845c4395eb41c9f2d5b4341156e91893e393bbece6ba939113c"
+  },
+  "auditClockReplay": {
+    "node": "v22.23.1",
+    "nonRoot": true,
+    "summaries": [
+      {
+        "version": "original",
+        "name": "historical_instant",
+        "symbol": "2409",
+        "cutoff": "2026-10-23T17:41:02.388Z",
+        "session": "2026-10-24",
+        "typescript": {
+          "available": 0,
+          "confirmed": 0,
+          "technical": null,
+          "mutatedAvailable": 15,
+          "mutatedConfirmed": 15
+        },
+        "technicalClock": "2026-10-24",
+        "driftToCorrectedFact": true,
+        "materialChanged": true,
+        "assertAuditCondition": false
+      },
+      {
+        "version": "original",
+        "name": "historical_instant",
+        "symbol": "2383",
+        "cutoff": "2026-10-23T17:41:02.388Z",
+        "session": "2026-10-24",
+        "typescript": {
+          "available": 0,
+          "confirmed": 0,
+          "technical": null,
+          "mutatedAvailable": 15,
+          "mutatedConfirmed": 15
+        },
+        "technicalClock": "2026-10-24",
+        "driftToCorrectedFact": true,
+        "materialChanged": true,
+        "assertAuditCondition": false
+      },
+      {
+        "version": "original",
+        "name": "after_utc_midnight_same_taipei_session",
+        "symbol": "2409",
+        "cutoff": "2026-10-24T00:00:01.000Z",
+        "session": "2026-10-24",
+        "typescript": {
+          "available": 20,
+          "confirmed": 20,
+          "technical": 1,
+          "mutatedAvailable": 35,
+          "mutatedConfirmed": 35
+        },
+        "technicalClock": "2026-10-24",
+        "driftToCorrectedFact": true,
+        "materialChanged": true,
+        "assertAuditCondition": true
+      },
+      {
+        "version": "original",
+        "name": "after_utc_midnight_same_taipei_session",
+        "symbol": "2383",
+        "cutoff": "2026-10-24T00:00:01.000Z",
+        "session": "2026-10-24",
+        "typescript": {
+          "available": 20,
+          "confirmed": 20,
+          "technical": 1,
+          "mutatedAvailable": 35,
+          "mutatedConfirmed": 35
+        },
+        "technicalClock": "2026-10-24",
+        "driftToCorrectedFact": true,
+        "materialChanged": true,
+        "assertAuditCondition": true
+      },
+      {
+        "version": "continuation",
+        "name": "historical_exact_knowledge_instant",
+        "symbol": "2409",
+        "cutoff": "2026-10-23T17:41:02.388Z",
+        "session": "2026-10-24",
+        "typescript": {
+          "available": 20,
+          "confirmed": 20,
+          "technical": 1,
+          "mutatedAvailable": 35,
+          "mutatedConfirmed": 35
+        },
+        "technicalClock": "2026-10-23T17:41:02.388000Z",
+        "driftToCorrectedFact": false,
+        "materialChanged": false,
+        "assertAuditCondition": true
+      },
+      {
+        "version": "continuation",
+        "name": "historical_exact_knowledge_instant",
+        "symbol": "2383",
+        "cutoff": "2026-10-23T17:41:02.388Z",
+        "session": "2026-10-24",
+        "typescript": {
+          "available": 20,
+          "confirmed": 20,
+          "technical": 1,
+          "mutatedAvailable": 35,
+          "mutatedConfirmed": 35
+        },
+        "technicalClock": "2026-10-23T17:41:02.388000Z",
+        "driftToCorrectedFact": false,
+        "materialChanged": false,
+        "assertAuditCondition": true
+      },
+      {
+        "version": "continuation",
+        "name": "historical_missing_quote_clock",
+        "symbol": "2409",
+        "cutoff": "2026-10-23T17:41:02.388Z",
+        "session": "2026-10-24",
+        "typescript": {
+          "available": 0,
+          "confirmed": 0,
+          "technical": null,
+          "mutatedAvailable": 15,
+          "mutatedConfirmed": 15
+        },
+        "technicalClock": "",
+        "driftToCorrectedFact": false,
+        "materialChanged": false,
+        "assertAuditCondition": false
+      },
+      {
+        "version": "continuation",
+        "name": "historical_missing_quote_clock",
+        "symbol": "2383",
+        "cutoff": "2026-10-23T17:41:02.388Z",
+        "session": "2026-10-24",
+        "typescript": {
+          "available": 0,
+          "confirmed": 0,
+          "technical": null,
+          "mutatedAvailable": 15,
+          "mutatedConfirmed": 15
+        },
+        "technicalClock": "",
+        "driftToCorrectedFact": false,
+        "materialChanged": false,
+        "assertAuditCondition": false
+      },
+      {
+        "version": "continuation",
+        "name": "historical_post_cutoff_quote",
+        "symbol": "2409",
+        "cutoff": "2026-10-23T17:41:02.388Z",
+        "session": "2026-10-24",
+        "typescript": {
+          "available": 0,
+          "confirmed": 0,
+          "technical": null,
+          "mutatedAvailable": 15,
+          "mutatedConfirmed": 15
+        },
+        "technicalClock": "",
+        "driftToCorrectedFact": false,
+        "materialChanged": false,
+        "assertAuditCondition": false
+      },
+      {
+        "version": "continuation",
+        "name": "historical_post_cutoff_quote",
+        "symbol": "2383",
+        "cutoff": "2026-10-23T17:41:02.388Z",
+        "session": "2026-10-24",
+        "typescript": {
+          "available": 0,
+          "confirmed": 0,
+          "technical": null,
+          "mutatedAvailable": 15,
+          "mutatedConfirmed": 15
+        },
+        "technicalClock": "",
+        "driftToCorrectedFact": false,
+        "materialChanged": false,
+        "assertAuditCondition": false
+      }
+    ]
+  },
+  "comparablePeriodReseeding": [
+    {
+      "symbol": "2409",
+      "label": "same_period_fixed_receipt",
+      "status": "drift",
+      "factReplacementNamed": true,
+      "materialChanged": true,
+      "comparisonGap": false,
+      "availableWeight": 20
+    },
+    {
+      "symbol": "2409",
+      "label": "different_start_same_end",
+      "status": "gap",
+      "factReplacementNamed": false,
+      "materialChanged": false,
+      "comparisonGap": true,
+      "availableWeight": 20
+    },
+    {
+      "symbol": "2409",
+      "label": "same_period_missing_receipt",
+      "status": "gap",
+      "factReplacementNamed": false,
+      "materialChanged": false,
+      "comparisonGap": true,
+      "availableWeight": 20
+    },
+    {
+      "symbol": "2383",
+      "label": "same_period_fixed_receipt",
+      "status": "drift",
+      "factReplacementNamed": true,
+      "materialChanged": true,
+      "comparisonGap": false,
+      "availableWeight": 20
+    },
+    {
+      "symbol": "2383",
+      "label": "different_start_same_end",
+      "status": "gap",
+      "factReplacementNamed": false,
+      "materialChanged": false,
+      "comparisonGap": true,
+      "availableWeight": 20
+    },
+    {
+      "symbol": "2383",
+      "label": "same_period_missing_receipt",
+      "status": "gap",
+      "factReplacementNamed": false,
+      "materialChanged": false,
+      "comparisonGap": true,
+      "availableWeight": 20
+    }
+  ],
+  "sqlNativeParity": {
+    "backendExit": 0,
+    "markerCount": 2,
+    "errorCount": 0,
+    "nativeVersion": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "routineBodyHashes": [
+      "9c03345b2b4588c8361baa23dc605898dbb57f2441ef7987e18044aba3dfef62",
+      "12b3cf00b3558c1e80008c7ba905e6482e7c9ef4fc7f5f50df71fd644a27044c"
+    ],
+    "results": [
+      {
+        "rows": [
+          {
+            "name": "after_utc_midnight_same_taipei_session",
+            "fenced": 20,
+            "symbol": "2383",
+            "baseline": 20,
+            "oldScalar": 35,
+            "fencedScalar": 20
+          },
+          {
+            "name": "after_utc_midnight_same_taipei_session",
+            "fenced": 20,
+            "symbol": "2409",
+            "baseline": 20,
+            "oldScalar": 35,
+            "fencedScalar": 20
+          },
+          {
+            "name": "historical_exact_knowledge_instant",
+            "fenced": 20,
+            "symbol": "2383",
+            "baseline": 20,
+            "oldScalar": 35,
+            "fencedScalar": 20
+          },
+          {
+            "name": "historical_exact_knowledge_instant",
+            "fenced": 20,
+            "symbol": "2409",
+            "baseline": 20,
+            "oldScalar": 35,
+            "fencedScalar": 20
+          },
+          {
+            "name": "historical_instant",
+            "fenced": 0,
+            "symbol": "2383",
+            "baseline": 0,
+            "oldScalar": 15,
+            "fencedScalar": 0
+          },
+          {
+            "name": "historical_instant",
+            "fenced": 0,
+            "symbol": "2409",
+            "baseline": 0,
+            "oldScalar": 15,
+            "fencedScalar": 0
+          },
+          {
+            "name": "historical_missing_quote_clock",
+            "fenced": 0,
+            "symbol": "2383",
+            "baseline": 0,
+            "oldScalar": 15,
+            "fencedScalar": 0
+          },
+          {
+            "name": "historical_missing_quote_clock",
+            "fenced": 0,
+            "symbol": "2409",
+            "baseline": 0,
+            "oldScalar": 15,
+            "fencedScalar": 0
+          },
+          {
+            "name": "historical_post_cutoff_quote",
+            "fenced": 0,
+            "symbol": "2383",
+            "baseline": 0,
+            "oldScalar": 15,
+            "fencedScalar": 0
+          },
+          {
+            "name": "historical_post_cutoff_quote",
+            "fenced": 0,
+            "symbol": "2409",
+            "baseline": 0,
+            "oldScalar": 15,
+            "fencedScalar": 0
+          }
+        ],
+        "timezone": "UTC"
+      },
+      {
+        "rows": [
+          {
+            "name": "after_utc_midnight_same_taipei_session",
+            "fenced": 20,
+            "symbol": "2383",
+            "baseline": 20,
+            "oldScalar": 35,
+            "fencedScalar": 20
+          },
+          {
+            "name": "after_utc_midnight_same_taipei_session",
+            "fenced": 20,
+            "symbol": "2409",
+            "baseline": 20,
+            "oldScalar": 35,
+            "fencedScalar": 20
+          },
+          {
+            "name": "historical_exact_knowledge_instant",
+            "fenced": 20,
+            "symbol": "2383",
+            "baseline": 20,
+            "oldScalar": 35,
+            "fencedScalar": 20
+          },
+          {
+            "name": "historical_exact_knowledge_instant",
+            "fenced": 20,
+            "symbol": "2409",
+            "baseline": 20,
+            "oldScalar": 35,
+            "fencedScalar": 20
+          },
+          {
+            "name": "historical_instant",
+            "fenced": 20,
+            "symbol": "2383",
+            "baseline": 20,
+            "oldScalar": 35,
+            "fencedScalar": 20
+          },
+          {
+            "name": "historical_instant",
+            "fenced": 20,
+            "symbol": "2409",
+            "baseline": 20,
+            "oldScalar": 35,
+            "fencedScalar": 20
+          },
+          {
+            "name": "historical_missing_quote_clock",
+            "fenced": 0,
+            "symbol": "2383",
+            "baseline": 0,
+            "oldScalar": 15,
+            "fencedScalar": 0
+          },
+          {
+            "name": "historical_missing_quote_clock",
+            "fenced": 0,
+            "symbol": "2409",
+            "baseline": 0,
+            "oldScalar": 15,
+            "fencedScalar": 0
+          },
+          {
+            "name": "historical_post_cutoff_quote",
+            "fenced": 0,
+            "symbol": "2383",
+            "baseline": 0,
+            "oldScalar": 15,
+            "fencedScalar": 0
+          },
+          {
+            "name": "historical_post_cutoff_quote",
+            "fenced": 0,
+            "symbol": "2409",
+            "baseline": 0,
+            "oldScalar": 15,
+            "fencedScalar": 0
+          }
+        ],
+        "timezone": "Asia/Taipei"
+      }
+    ],
+    "nonRootNetworkIsolated": true,
+    "prodSocketContacted": false
+  },
+  "fullHostedNativeTestRun": false,
+  "productionServiceChanged": false,
+  "diagnosticScratchRemoved": true,
+  "realCloseAcceptance": false
+}
