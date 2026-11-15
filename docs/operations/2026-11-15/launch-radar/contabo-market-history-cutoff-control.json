@@ -1,0 +1,156 @@
+{
+  "schema": "stockinsider-contabo-market-history-cutoff-control-v1",
+  "scope": "NON_MUTATING_READ_ONLY_COUNTS_ON_CURRENT_MARKET_HISTORY_CACHE",
+  "historicalWindowReference": "a47bfcf8f959dd7c1736a713c779490a56fccb19",
+  "realCurrentCache": {
+    "readOnly": true,
+    "observedAtUtc": "2026-11-15T01:14:09.943687+00:00",
+    "cachePrimaryKey": "PRIMARY KEY (market, session_date)",
+    "storedSourceComparisons": [
+      {
+        "cutoff": "2026-11-12T13:30:00+00:00",
+        "market": "TPEX",
+        "signal": "2026-11-12",
+        "target_flow_rows": 1,
+        "stored_index_rows": 1388,
+        "target_breadth_rows": 0,
+        "newest_index_available_at": "2026-11-14T22:05:04.023+00:00",
+        "oldest_index_available_at": "2026-09-02T08:30:58.994+00:00",
+        "index_rows_visible_at_cutoff": 870,
+        "target_flow_visible_at_cutoff": 0,
+        "target_breadth_visible_at_cutoff": 0
+      },
+      {
+        "cutoff": "2026-11-12T13:30:00+00:00",
+        "market": "TWSE",
+        "signal": "2026-11-12",
+        "target_flow_rows": 1,
+        "stored_index_rows": 1388,
+        "target_breadth_rows": 0,
+        "newest_index_available_at": "2026-11-14T22:05:04.023+00:00",
+        "oldest_index_available_at": "2026-09-02T08:30:58.994+00:00",
+        "index_rows_visible_at_cutoff": 870,
+        "target_flow_visible_at_cutoff": 0,
+        "target_breadth_visible_at_cutoff": 0
+      },
+      {
+        "cutoff": "2026-11-13T13:30:00+00:00",
+        "market": "TPEX",
+        "signal": "2026-11-13",
+        "target_flow_rows": 1,
+        "stored_index_rows": 1389,
+        "target_breadth_rows": 1,
+        "newest_index_available_at": "2026-11-14T22:05:04.023+00:00",
+        "oldest_index_available_at": "2026-09-02T08:30:58.994+00:00",
+        "index_rows_visible_at_cutoff": 870,
+        "target_flow_visible_at_cutoff": 0,
+        "target_breadth_visible_at_cutoff": 0
+      },
+      {
+        "cutoff": "2026-11-13T13:30:00+00:00",
+        "market": "TWSE",
+        "signal": "2026-11-13",
+        "target_flow_rows": 1,
+        "stored_index_rows": 1389,
+        "target_breadth_rows": 1,
+        "newest_index_available_at": "2026-11-14T22:05:04.023+00:00",
+        "oldest_index_available_at": "2026-09-02T08:30:58.994+00:00",
+        "index_rows_visible_at_cutoff": 870,
+        "target_flow_visible_at_cutoff": 0,
+        "target_breadth_visible_at_cutoff": 0
+      }
+    ],
+    "observationAvailabilityForOldHistoricalRows": [
+      {
+        "count": 1626,
+        "available_at": "2026-09-02T08:30:58.994+00:00"
+      },
+      {
+        "count": 980,
+        "available_at": "2026-11-14T13:09:52.893+00:00"
+      },
+      {
+        "count": 38,
+        "available_at": "2026-11-14T22:05:02.212+00:00"
+      },
+      {
+        "count": 20,
+        "available_at": "2026-11-14T22:05:04.023+00:00"
+      },
+      {
+        "count": 18,
+        "available_at": "2026-09-02T12:53:04.852+00:00"
+      }
+    ]
+  },
+  "realExactWindows": {
+    "readOnly": true,
+    "observedAtUtc": "2026-11-15T01:14:44.403154+00:00",
+    "exactRequestedWindows": [
+      {
+        "cutoff": "2026-11-12T13:30:00+00:00",
+        "market": "TPEX",
+        "signal": "2026-11-12",
+        "expected_dates": 520,
+        "first_expected": "2024-09-19",
+        "present_index_rows": 520,
+        "visible_index_rows_at_cutoff": 2,
+        "present_but_recorded_after_cutoff": 518
+      },
+      {
+        "cutoff": "2026-11-12T13:30:00+00:00",
+        "market": "TWSE",
+        "signal": "2026-11-12",
+        "expected_dates": 520,
+        "first_expected": "2024-09-19",
+        "present_index_rows": 520,
+        "visible_index_rows_at_cutoff": 2,
+        "present_but_recorded_after_cutoff": 518
+      },
+      {
+        "cutoff": "2026-11-13T13:30:00+00:00",
+        "market": "TPEX",
+        "signal": "2026-11-13",
+        "expected_dates": 520,
+        "first_expected": "2024-09-20",
+        "present_index_rows": 520,
+        "visible_index_rows_at_cutoff": 1,
+        "present_but_recorded_after_cutoff": 519
+      },
+      {
+        "cutoff": "2026-11-13T13:30:00+00:00",
+        "market": "TWSE",
+        "signal": "2026-11-13",
+        "expected_dates": 520,
+        "first_expected": "2024-09-20",
+        "present_index_rows": 520,
+        "visible_index_rows_at_cutoff": 1,
+        "present_but_recorded_after_cutoff": 519
+      }
+    ]
+  },
+  "codeAt": "eb46a730177f7fa08d9252622d3d49c2211636d3",
+  "writeContract": {
+    "key": [
+      "market",
+      "session_date"
+    ],
+    "upsertReplacesPriorVersion": true,
+    "retainedHistoricalValuesAssignedNewEvaluatedAt": true,
+    "storedMarketTotalsNotAReleaseGate": true
+  },
+  "interpretation": {
+    "currentCacheCannotReconstructBothHistoricalCutoffs": true,
+    "noClaimAboutFirstHistoricalArrivalOfRawBars": true,
+    "needRetainedVersionedSourceReceipts": true,
+    "excludeAnyPostCutoffObservationFromEarlierRun": true
+  },
+  "limits": {
+    "productionDatabaseWriteCalls": 0,
+    "ordinaryWorkerCalls": 0,
+    "privateRowPayloadsOrIdentifiersExported": false,
+    "actualSiteRankingOrFormulaRun": false,
+    "previousPublishedSnapshotMutated": false,
+    "newSessionsAccepted": 0
+  }
+}
