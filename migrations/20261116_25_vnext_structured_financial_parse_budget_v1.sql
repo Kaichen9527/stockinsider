@@ -13,7 +13,7 @@ BEGIN
  SELECT prosrc,pg_get_functiondef(oid),to_jsonb(p)-'prosrc' INTO STRICT original,definition,catalog
  FROM pg_proc p WHERE oid=target AND prosecdef AND prokind='f'
  AND proowner=(SELECT relowner FROM pg_class WHERE oid='public.financial_preparation_attempts_v1'::regclass);
- IF encode(sha256(convert_to(original,'UTF8')),'hex')<>'adc78e5eaa22287e68bdc3e7c2efe60f57a8dcb4be935e6be254b978ca742586' THEN
+ IF encode(sha256(convert_to(original,'UTF8')),'hex')<>'1fd877e855b90343ad9adba775110a301c9c038a384e98bb03558b74d3e73f8d' THEN
   RAISE EXCEPTION 'financial_parse_budget_predecessor_changed';
  END IF;
  changed:=replace(original,$old_0$a public.financial_preparation_attempts_v1;j public.candidate_financial_acquisition_jobs_v4;r public.candidate_financial_document_receipts_v6;$old_0$,$new_0$a public.financial_preparation_attempts_v1;j public.candidate_financial_acquisition_jobs_v4;r public.candidate_financial_document_receipts_v6;
@@ -23,7 +23,7 @@ BEGIN
    END IF;
    UPDATE public.candidate_financial_document_receipts_v6 SET parser_status='running',parser_owner=attempt::text,parser_lease_expires_at=at+attempt_duration WHERE$new_1$);
  changed:=replace(changed,$old_2$artifact,at,at+interval '90 seconds') RETURNING * INTO a;$old_2$,$new_2$artifact,at,at+attempt_duration) RETURNING * INTO a;$new_2$);
- IF encode(sha256(convert_to(changed,'UTF8')),'hex')<>'11c8d19948f8b9a5a84d8e294925d369f201a1bcf74b1fddb213e97f6be769dd' THEN
+ IF encode(sha256(convert_to(changed,'UTF8')),'hex')<>'a025bdd483d08b3f54937c70ce07fe870d6dbbf5a354e04031a47ffd86876b85' THEN
   RAISE EXCEPTION 'financial_parse_budget_successor_changed';
  END IF;
 

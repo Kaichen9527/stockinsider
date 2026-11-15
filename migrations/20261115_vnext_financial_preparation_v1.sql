@@ -193,7 +193,7 @@ CREATE FUNCTION public.vnext_financial_preparation_v1(p_operator text,p_command 
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public,extensions SET statement_timeout='30s' SET lock_timeout='2s' AS $$
 DECLARE context jsonb;gate jsonb;a public.financial_preparation_attempts_v1;j public.candidate_financial_acquisition_jobs_v4;r public.candidate_financial_document_receipts_v6;
  commit_row public.financial_preparation_commits_v1;outcome public.financial_preparation_outcomes_v1;knowledge public.financial_preparation_knowledge_v1;
- stock public.stocks;requested_operation text;profile text;statement_kind text;attempt uuid;claimed record;receipt_result record;binding jsonb;artifact jsonb;subjects jsonb;payload jsonb;item jsonb;
+ stock public.stocks;requested_operation text;profile text;statement_kind text;attempt uuid;claimed record;commit_receipt_id uuid;binding jsonb;artifact jsonb;subjects jsonb;payload jsonb;item jsonb;
  candidate_ids uuid[];endpoint text;pending jsonb:='[]'::jsonb;known jsonb:='[]'::jsonb;blocked integer:=0;scanned integer:=0;recovery record;inspected jsonb;hash text;bytes integer;media text;observed timestamptz;validation_row public.official_financial_validation_receipts;all_validated boolean;procedure_result boolean;status text;at timestamptz;fact_row public.opportunity_financial_facts_v3;
 BEGIN
  IF current_setting('transaction_isolation') IS DISTINCT FROM 'read committed' OR jsonb_typeof(p_request) IS DISTINCT FROM 'object' OR octet_length(p_request::text)>4194304
@@ -334,10 +334,11 @@ BEGIN
   PERFORM * FROM public.register_private_artifact_receipt_v1(hash,bytes,media,'financial_document',jsonb_build_object('storage','private_hash_store_v1','financialPreparationAttempt',a.attempt_id));
   IF a.operation='acquire' AND a.profile='mops-attachment-v1' THEN
    IF p_request->'facts' IS DISTINCT FROM 'null'::jsonb OR media NOT IN('application/xhtml+xml','application/xml','text/xml','text/html') THEN RAISE EXCEPTION 'financial_preparation_mops_document_required';END IF;
-   SELECT * INTO receipt_result FROM public.record_candidate_financial_document_receipt_v6(a.stock_id,a.job_id,a.source_url,a.exchange,a.period_end,NULL,media,hash,'issuer/'||a.stock_id||'/'||a.period_end||'/'||hash,bytes,jsonb_build_object('writer_release_id',a.release_id,'acquisition','official_download','publication_time_basis','unknown_first_observed_is_available_at'));
+   SELECT recorded.receipt_id INTO commit_receipt_id FROM public.record_candidate_financial_document_receipt_v6(a.stock_id,a.job_id,a.source_url,a.exchange,a.period_end,NULL,media,hash,'issuer/'||a.stock_id||'/'||a.period_end||'/'||hash,bytes,jsonb_build_object('writer_release_id',a.release_id,'acquisition','official_download','publication_time_basis','unknown_first_observed_is_available_at')) recorded;
    subjects:='[]'::jsonb;
   ELSE
    IF a.operation='parse' THEN
+    commit_receipt_id:=a.receipt_id;
     payload:=p_request->'payload';
     IF NOT public.financial_preparation_exact_v1(payload,ARRAY['facts','locators','evidence','missing','rejections']) OR payload->'evidence'->>'documentSha256' IS DISTINCT FROM hash THEN RAISE EXCEPTION 'financial_preparation_closed_parser_protocol';END IF;
    ELSE payload:=jsonb_build_object('facts',p_request->'facts');END IF;
@@ -365,7 +366,7 @@ BEGIN
   END IF;
   IF clock_timestamp()>a.deadline THEN RAISE EXCEPTION 'financial_preparation_commit_deadline';END IF;
   INSERT INTO public.financial_preparation_commits_v1(attempt_id,artifact_hash,receipt_id,subject_identities,payload_hash,observed_at)
-   VALUES(a.attempt_id,hash,CASE WHEN a.operation='parse' THEN a.receipt_id WHEN a.profile='mops-attachment-v1' THEN receipt_result.receipt_id ELSE NULL END,subjects,encode(sha256(convert_to(p_request::text,'UTF8')),'hex'),observed) RETURNING * INTO commit_row;
+   VALUES(a.attempt_id,hash,commit_receipt_id,subjects,encode(sha256(convert_to(p_request::text,'UTF8')),'hex'),observed) RETURNING * INTO commit_row;
   RETURN jsonb_build_object('attemptId',a.attempt_id,'receiptId',commit_row.receipt_id,'subjectIdentities',commit_row.subject_identities);
  ELSIF p_command IN('validation-write','validation-ack') THEN
   IF NOT public.financial_preparation_exact_v1(p_request,ARRAY['attemptId','payload']) OR commit_row.attempt_id IS NULL OR outcome.attempt_id IS NOT NULL THEN RAISE EXCEPTION 'financial_preparation_validation_not_bound';END IF;

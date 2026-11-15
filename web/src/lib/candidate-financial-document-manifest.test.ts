@@ -44,7 +44,8 @@ test('clean structural facts yield pending accounting inputs for general, financ
     assert.equal(rows[0].value, Number(family.value));
     assert.equal(rows[0].filingPublishedAt, '2026-08-15T12:00:00.000Z');
     assert.equal(rows[0].validation, undefined, 'structural validation is not accounting validation');
-    assert.match(rows[0].sourceRef, new RegExp(`^issuer-document:${sha}:`));
+    assert.equal(rows[0].sourceRef.length, 120, 'fits the financial authority append limit');
+    assert.match(rows[0].sourceRef, new RegExp(`^issuer-document:${sha}:[0-9a-f]{39}$`));
   }
 });
 
