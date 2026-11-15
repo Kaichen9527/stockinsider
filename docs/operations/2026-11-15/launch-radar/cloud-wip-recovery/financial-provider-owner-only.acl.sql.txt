@@ -1,0 +1,26 @@
+-- Review fragment only. Apply inside the candidate migration transaction.
+-- The guarded work-context would negotiate version without a new service-role RPC.
+ALTER FUNCTION public.vnext_financial_wire_canonical_v1(jsonb,integer) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_wire_canonical_v1(jsonb,integer) FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_wire_hash_v1(jsonb) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_wire_hash_v1(jsonb) FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_wire_clock_v1(text) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_wire_clock_v1(text) FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_rows_internal_v1(uuid,timestamptz) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_rows_internal_v1(uuid,timestamptz) FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_grain_v1(jsonb) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_grain_v1(jsonb) FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_heads_v1(jsonb,jsonb) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_heads_v1(jsonb,jsonb) FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_descriptor_v1(jsonb,jsonb,jsonb,jsonb,timestamptz) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_descriptor_v1(jsonb,jsonb,jsonb,jsonb,timestamptz) FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_packet_v1(text,jsonb) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_packet_v1(text,jsonb) FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_bound_current_v1(uuid,text,jsonb) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_bound_current_v1(uuid,text,jsonb) FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_prepare_bind_v1() OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_prepare_bind_v1() FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_protocol_immutable_v1() OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_protocol_immutable_v1() FROM PUBLIC, anon, authenticated, service_role;
+ALTER FUNCTION public.vnext_financial_provider_status_v1(text) OWNER TO stockinsider_vnext_owner;
+REVOKE ALL ON FUNCTION public.vnext_financial_provider_status_v1(text) FROM PUBLIC, anon, authenticated, service_role;

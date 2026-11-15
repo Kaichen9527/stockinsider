@@ -1,0 +1,183 @@
+diff --git a/web/src/lib/vnext/financial-evidence-sources.ts b/web/src/lib/vnext/financial-evidence-sources.ts
+--- a/web/src/lib/vnext/financial-evidence-sources.ts
++++ b/web/src/lib/vnext/financial-evidence-sources.ts
+@@ -6,6 +6,9 @@
+ import {assertWorkerJsonCodec} from './worker-output.ts';
+ import {evidenceKnownAt as known,compareEvidenceClocks} from './evidence-clock.ts';
+ type Row=Record<string,unknown>;
++export const FINANCIAL_PROVIDER_PROTOCOL='vnext-financial-provider-input-v1' as const;
++type ProviderFact={factId:string;factRecordedAt:string;originalFact:Row;receiptHash:string};
++type FinancialProviderInput={schemaVersion:typeof FINANCIAL_PROVIDER_PROTOCOL;facts:ProviderFact[]};
+ type SourceRows={provenance:Row[];jobs:Row[];links:Row[];receipts:Row[];documents:Row[];issuerDomains?:Row[];parserEvidence?:Row[]};
+ const hash=/^[a-f0-9]{64}$/u;
+ const factColumns='fact_id stock_id fact_key period_start period_end duration_kind value unit provider authority_tier estimate_kind estimate_horizon filing_published_at source_timestamp collected_at filing_restatement_id source_ref recorded_at validation_status schema_valid unit_valid point_in_time_valid consistency_valid upstream_provider validation_recorded_at'.split(' ').sort();
+@@ -34,6 +37,7 @@
+ export function projectFinancialEvidenceSources(facts:Row[],rows:SourceRows,cutoff:string){
+  if(!Number.isFinite(Date.parse(cutoff)) || facts.length>2000)throw Error('vnext_financial_source_scope_unbounded');
+  const evidence:Evidence[]=[];const receipts:Row[]=[];const deferred:Row[]=[];
++ const providerFacts:ProviderFact[]=[];
+  const selection=selectFinancialObservationHeads(facts);
+  const selectedFacts=new Set(selection.heads.map(row=>String(row.fact_id)));
+  for(const fact of facts.filter(row=>selection.ambiguous.has(financialFactGrain(row))))deferred.push({factId:String(fact.fact_id),originalFactHash:inputHash(fact),key:fact.fact_key,value:fact.value,unit:fact.unit,period:fact.period_end,reason:'financial_eps_variant_selection_ambiguous'});
+@@ -54,9 +58,9 @@
+      const receipt=rows.receipts.find((row)=>row.receipt_id===link.receipt_id && row.stock_id===fact.stock_id && row.period_end===fact.period_end && row.document_sha256===documentHash && row.document_sha256===provenance.source_sha256 && row.source_url===sourceUrl && row.issuer_document_id===provenance.issuer_document_id && row.parser_status==='complete' && row.receipt_status==='accepted' && known(row.accepted_at,cutoff) && known(row.completed_at,cutoff) && (row.published_at===null || known(row.published_at,cutoff)));
+      const document=receipt && rows.documents.find((row)=>row.document_id===receipt.issuer_document_id && row.stock_id===fact.stock_id && row.document_sha256===documentHash && row.document_url===sourceUrl && row.acquisition_status==='fetched' && known(row.collected_at,cutoff) && known(row.recorded_at,cutoff));
+      if(!receipt || !document || !locator || locator.parser_evidence_id!==link.evidence_id || !hash.test(String(locator.manifest_sha256)) || locator.response_url!==sourceUrl)continue;
+-     const parser=issuerSource?rows.parserEvidence?.find(row=>row.evidence_id===link.evidence_id && row.receipt_id===receipt.receipt_id && row.document_sha256===documentHash && row.manifest_sha256===locator.manifest_sha256 && known(row.recorded_at,cutoff)):null;
+-     if(issuerSource && (!parser || receipt.parser_evidence_id!==link.evidence_id || receipt.financial_validation_status!=='validated' || !known(fact.filing_published_at,cutoff)))continue;
+-     candidates.push({factId:fact.fact_id,factRecordedAt:fact.recorded_at,sourceRef,sourceUrl,sourceSha256:documentHash,provenanceId:provenance.provenance_id,receiptId:receipt.receipt_id,issuerDocumentId:document.document_id,parserEvidenceId:link.evidence_id,manifestSha256:locator.manifest_sha256,...(issuerSource?{sourceKind:'approved_issuer_ir',issuerApproval:issuerSource.approval,originalFact:fact}:{}),knownAt:[provenance.extracted_at,provenance.recorded_at,link.created_at,receipt.accepted_at,receipt.completed_at,...(receipt.published_at===null?[]:[receipt.published_at]),document.collected_at,document.recorded_at,...(parser?[parser.recorded_at]:[]),...(issuerSource?[issuerSource.approval.approvedAt]:[])].map(String).sort(compareEvidenceClocks).at(-1)});
++     const parser=rows.parserEvidence?.find(row=>row.evidence_id===link.evidence_id && row.receipt_id===receipt.receipt_id && row.document_sha256===documentHash && row.manifest_sha256===locator.manifest_sha256 && known(row.recorded_at,cutoff));
++     if(!parser || receipt.parser_evidence_id!==link.evidence_id || (issuerSource && (receipt.financial_validation_status!=='validated' || !known(fact.filing_published_at,cutoff))))continue;
++     candidates.push({factId:fact.fact_id,factRecordedAt:fact.recorded_at,sourceRef,sourceUrl,sourceSha256:documentHash,provenanceId:provenance.provenance_id,receiptId:receipt.receipt_id,issuerDocumentId:document.document_id,parserEvidenceId:link.evidence_id,manifestSha256:locator.manifest_sha256,...(issuerSource?{sourceKind:'approved_issuer_ir',issuerApproval:issuerSource.approval,originalFact:fact}:{}),knownAt:[provenance.extracted_at,provenance.recorded_at,link.created_at,receipt.accepted_at,receipt.completed_at,...(receipt.published_at===null?[]:[receipt.published_at]),document.collected_at,document.recorded_at,parser.recorded_at,...(issuerSource?[issuerSource.approval.approvedAt]:[])].map(String).sort(compareEvidenceClocks).at(-1)});
+     }
+    }else if(/^(twse|tpex)-openapi:/u.test(sourceRef)){
+     const job=rows.jobs.find((row)=>row.job_id===provenance.acquisition_job_id && row.stock_id===fact.stock_id && row.period_end===fact.period_end && row.status==='terminal' && row.terminal_reason==='complete' && row.response_sha256===provenance.source_sha256 && row.source_url===sourceUrl && ['created_at','updated_at','collected_at'].every((key)=>known(row[key],cutoff)));
+@@ -66,11 +70,18 @@
+   }
+   const sources=new Set(candidates.map((candidate)=>JSON.stringify([candidate.sourceUrl,candidate.sourceSha256])));
+   if(sources.size!==1){reject(codecUnsupported?'approved_issuer_original_fact_codec_unsupported':rows.provenance.some((row)=>row.fact_id===fact.fact_id && !financialProviderSourceUrl(row.source_url))?'provider_official_host_source_unavailable':'immutable_source_receipt_missing_or_conflicting');continue;}
+-  const receipt:Row={stockId:fact.stock_id,...candidates.sort((a,b)=>inputHash(a).localeCompare(inputHash(b)))[0],classification:{estimateKind:fact.estimate_kind,estimateHorizon:fact.estimate_horizon,periodStart:fact.period_start??null,periodEnd:fact.period_end,durationKind:fact.duration_kind,filingRevisionId:fact.filing_restatement_id??null,provider:fact.provider,authorityTier:fact.authority_tier}};const boundReceipt={...receipt,receiptHash:inputHash(receipt)};receipts.push(boundReceipt);
++  const receipt:Row={stockId:fact.stock_id,...candidates.sort((a,b)=>inputHash(a).localeCompare(inputHash(b)))[0],classification:{estimateKind:fact.estimate_kind,estimateHorizon:fact.estimate_horizon,periodStart:fact.period_start??null,periodEnd:fact.period_end,durationKind:fact.duration_kind,filingRevisionId:fact.filing_restatement_id??null,provider:fact.provider,authorityTier:fact.authority_tier}};const receiptHash=inputHash(receipt);const boundReceipt={...receipt,receiptHash};receipts.push(boundReceipt);
+   const metadata=financialObservation(fact,boundReceipt,cutoff);
+-  if(selectedFacts.has(String(fact.fact_id)))evidence.push({id:String(fact.fact_id),key:String(fact.fact_key),value:fact.value,unit:String(fact.unit),period:String(fact.period_end),source:String(receipt.sourceUrl),sourceTier:'official',kind:'fact',eventAt:String(fact.source_timestamp),availableAt:[fact.source_timestamp,fact.collected_at,fact.recorded_at,...(fact.filing_published_at===undefined || fact.filing_published_at===null?[]:[fact.filing_published_at]),...(known(fact.validation_recorded_at,cutoff)?[fact.validation_recorded_at]:[]),receipt.knownAt].map(String).sort(compareEvidenceClocks).at(-1)!,contentHash:inputHash(fact),financial:metadata});
++  if(selectedFacts.has(String(fact.fact_id))){
++   evidence.push({id:String(fact.fact_id),key:String(fact.fact_key),value:fact.value,unit:String(fact.unit),period:String(fact.period_end),source:String(receipt.sourceUrl),sourceTier:'official',kind:'fact',eventAt:String(fact.source_timestamp),availableAt:[fact.source_timestamp,fact.collected_at,fact.recorded_at,...(fact.filing_published_at===undefined || fact.filing_published_at===null?[]:[fact.filing_published_at]),...(known(fact.validation_recorded_at,cutoff)?[fact.validation_recorded_at]:[]),receipt.knownAt].map(String).sort(compareEvidenceClocks).at(-1)!,contentHash:inputHash(fact),financial:metadata});
++   if(typeof fact.fact_id==='string' && typeof fact.recorded_at==='string' && originalFactCodec(fact)){
++    providerFacts.push({factId:fact.fact_id,factRecordedAt:fact.recorded_at,originalFact:{...fact},receiptHash});
++   }
++  }
+  }
+- return {evidence,receipts,observationInventory:financialObservationInventory(facts,receipts,selection.ambiguous,cutoff),deferredCount:deferred.length,deferredDigest:inputHash(deferred),deferredDetails:deferred.slice(0,64),gaps:[...(evidence.length?['missing_sql_financial_interval_basis_parity']:[]),...deferred.slice(0,64).map((row)=>`financial_source:${row.factId}:${row.reason}`)],deferredDetailsTruncated:deferred.length>64};
++ const providerInput:FinancialProviderInput|null=providerFacts.length===evidence.length
++  ?{schemaVersion:FINANCIAL_PROVIDER_PROTOCOL,facts:providerFacts}:null;
++ return {evidence,receipts,providerInput,observationInventory:financialObservationInventory(facts,receipts,selection.ambiguous,cutoff),deferredCount:deferred.length,deferredDigest:inputHash(deferred),deferredDetails:deferred.slice(0,64),gaps:[...(evidence.length?['missing_sql_financial_interval_basis_parity']:[]),...deferred.slice(0,64).map((row)=>`financial_source:${row.factId}:${row.reason}`)],deferredDetailsTruncated:deferred.length>64};
+ }
+ /** Bounded cache reads only, called after the existing admitted attempt begins.
+  * Original table grants/RLS and structural authority are unchanged. */
+@@ -89,6 +100,6 @@
+  const documents=await read('candidate_issuer_ir_document_queue_v4','document_id,stock_id,document_url,document_sha256,acquisition_status,collected_at,recorded_at','document_id',receipts.map((row)=>row.issuer_document_id),['collected_at','recorded_at']);
+  const irReceipts=receipts.filter(row=>!financialProviderSourceUrl(row.source_url));
+  const issuerDomains=await read('candidate_issuer_document_domains_v6','stock_id,host,approved_at','stock_id',irReceipts.map(row=>row.stock_id),['approved_at']);
+- const parserEvidence=await read('candidate_financial_parser_evidence_v8','evidence_id,receipt_id,document_sha256,manifest_sha256,recorded_at','evidence_id',irReceipts.map(row=>row.parser_evidence_id),['recorded_at']);
++ const parserEvidence=await read('candidate_financial_parser_evidence_v8','evidence_id,receipt_id,document_sha256,manifest_sha256,recorded_at','evidence_id',receipts.map(row=>row.parser_evidence_id),['recorded_at']);
+  return projectFinancialEvidenceSources(facts,{provenance,jobs,links,receipts,documents,issuerDomains,parserEvidence},cutoff);
+ }
+diff --git a/web/src/lib/vnext/preparation-reconciliation.ts b/web/src/lib/vnext/preparation-reconciliation.ts
+--- a/web/src/lib/vnext/preparation-reconciliation.ts
++++ b/web/src/lib/vnext/preparation-reconciliation.ts
+@@ -6,13 +6,20 @@
+ import type {VnextIdentity} from './auth.ts';
+ import type {Evidence} from './research.ts';
+ import {inputHash} from './policy.ts';
+-import {resolveFinancialEvidenceSources} from './financial-evidence-sources.ts';
++import {FINANCIAL_PROVIDER_PROTOCOL,resolveFinancialEvidenceSources} from './financial-evidence-sources.ts';
+ import {currentPriceEvidence} from './cached-price-factors.ts';
+ import {currentPreparationInstrument,PREPARATION_INSTRUMENT_COLUMNS} from './preparation-trading-identity.ts';
+ type Row=Record<string,unknown>;
+ type Client=ReturnType<typeof getSupabaseServerClient>;
+ type SourceProjection=Awaited<ReturnType<typeof resolveFinancialEvidenceSources>>;
+-type Sources=Omit<SourceProjection,'observationInventory'>&{observationInventory?:SourceProjection['observationInventory']};
++type Sources=Pick<SourceProjection,'evidence'|'receipts'|'gaps'|'deferredCount'|'deferredDigest'|'deferredDetails'|'deferredDetailsTruncated'>
++ & Partial<Pick<SourceProjection,'observationInventory'|'providerInput'>>;
++type FinancialProviderProtocol=typeof FINANCIAL_PROVIDER_PROTOCOL|null;
++export function financialProtocolFromWorkContext(context:Row):FinancialProviderProtocol{
++ if(!Object.hasOwn(context,'financialProviderProtocol'))return null;
++ if(context.financialProviderProtocol!==FINANCIAL_PROVIDER_PROTOCOL)throw Error('vnext_financial_provider_protocol_unknown');
++ return FINANCIAL_PROVIDER_PROTOCOL;
++}
+ const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu;
+ const hash=/^[a-f0-9]{64}$/u;
+ const known=(value:unknown,cutoff:string)=>typeof value==='string' && Number.isFinite(Date.parse(value)) && Date.parse(value)<=Date.parse(cutoff);
+@@ -23,7 +30,9 @@
+ }
+ /** Same frozen projection used by ordinary admitted preparation and cached
+  * reconciliation. Source descriptors stay outside the provider projection. */
+-export function freezeFinancialPreparation(original:Row,historical:TwEntryHistoricalAuthorityResult,financialSources:Sources,cutoff:string,forecasts?:CurrentForecasts,actionTerms?:CurrentActionTerms){
++export function freezeFinancialPreparation(original:Row,historical:TwEntryHistoricalAuthorityResult,financialSources:Sources,cutoff:string,forecasts?:CurrentForecasts,actionTerms?:CurrentActionTerms,protocol:FinancialProviderProtocol=null){
++ const providerInput=protocol===FINANCIAL_PROVIDER_PROTOCOL?financialSources.providerInput:null;
++ if(protocol && !providerInput)throw Error('vnext_financial_provider_source_binding_unavailable');
+  if(actionTerms)validateCurrentActionTerms(actionTerms);
+  const evidence=[...financialSources.evidence,...currentPriceEvidence(historical),...(forecasts?.evidence||[]),...(actionTerms?.evidence||[])];
+  if(forecasts&&Date.parse(forecasts.asOf)>Date.parse(cutoff))throw Error('vnext_forecast_future_snapshot');
+@@ -31,6 +40,7 @@
+  const currentPrice=historical.priceBasis?.status==='verified'?historical.bars.at(-1):undefined;
+  const priorFinancialIds=new Set(financialSources.receipts.map(row=>String(row.factId)));
+  const frozen={...original,cutoff,admissionHash:original.hash,priceAuthority:historical,financialSourceReceipts:financialSources.receipts,
++  ...(providerInput?{financialProviderInput:providerInput}:{}),
+   ...(forecasts?{forecastSourceReceipts:forecasts.receipts,forecastSourceAsOf:forecasts.asOf}:{}),
+   ...(actionTerms?{actionTermsReceipts:actionTerms.receipts,actionTermsAsOf:actionTerms.asOf,actionTermsGaps:actionTerms.gaps}:{}),
+   financialObservationInventory:financialSources.observationInventory??null,
+@@ -51,7 +61,7 @@
+ async function currentContext(deps:PreparationDependencies,state:Row){
+  const context=await deps.command('work-context',{jobId:state.jobId,executionId:state.executionId});
+  if(context.inputHash!==state.inputHash || !context.evidence || typeof context.evidence!=='object' || Array.isArray(context.evidence))throw Error('vnext_preparation_context_changed');
+- return context.evidence as Row;
++ return {evidence:context.evidence as Row,protocol:financialProtocolFromWorkContext(context)};
+ }
+ async function readJournal(deps:PreparationDependencies,state:Row,identity:VnextIdentity){
+  const record=await deps.journal('read',{jobId:state.jobId,executionId:state.executionId});
+@@ -85,7 +95,7 @@
+  }
+  return [...heads.values()].filter(row=>row.status==='completed' && known(row.close_at,cutoff)).map(row=>String(row.session_id)).sort().at(-1)||'';
+ }
+-async function cachedProjection(deps:PreparationDependencies,state:Row,original:Row,cutoff:string,identity:VnextIdentity){
++async function cachedProjection(deps:PreparationDependencies,state:Row,original:Row,cutoff:string,identity:VnextIdentity,protocol:FinancialProviderProtocol){
+  const stocks=await deps.client.from('stocks').select('id,symbol,market').eq('symbol',String(state.symbol)).eq('market','TW').maybeSingle();
+  if(stocks.error)throw Error('vnext_stock_authority_read_uncertain');
+  if(!stocks.data)return {status:'gap',reason:'vnext_stock_authority_missing'};
+@@ -118,7 +128,7 @@
+  const actionTerms=await readCurrentActionTerms(deps.client,identity,String(state.jobId),String(state.executionId));
+  if(actionTerms.stockId!==stockId||actionTerms.symbol!==state.symbol)throw Error('vnext_action_issuer_binding');
+  const frozenAt=(deps.now||(()=>new Date().toISOString()))();
+- return {status:'ready',...freezeFinancialPreparation(original,historical,financial,frozenAt,forecasts,actionTerms),financialFacts:financial.evidence.length,sourceReceipts:financial.receipts.length,priceAvailable:historical.priceBasis?.status==='verified'};
++ return {status:'ready',...freezeFinancialPreparation(original,historical,financial,frozenAt,forecasts,actionTerms,protocol),financialFacts:financial.evidence.length,sourceReceipts:financial.receipts.length,priceAvailable:historical.priceBasis?.status==='verified'};
+ }
+ /** READ is cache/journal observation only. The explicit resume uses exactly one
+  * original prepare command; an unknown mutation outcome is read-recovered.
+@@ -133,20 +143,24 @@
+  if(!uuid.test(String(state.executionId)) || !hash.test(String(state.inputHash)) || typeof state.deadline!=='string' || !Number.isFinite(Date.parse(state.deadline)))throw Error('vnext_preparation_execution_binding');
+  const now=deps.now||(()=>new Date().toISOString());
+  if(Date.parse(state.deadline)<=Date.parse(now()))return {status:'blocked',reason:'original_execution_expired',...descriptor,currentRights:'not_checked',automaticResume:false,reinvoke:false};
+- let original:Row;
+- try{original=await currentContext(deps,state);}catch{return unresolved('active_work_context_unavailable',descriptor);}
++ let context:Awaited<ReturnType<typeof currentContext>>;
++ try{context=await currentContext(deps,state);}catch{return unresolved('active_work_context_unavailable',descriptor);}
+  let journal:Row;
+  try{journal=await readJournal(deps,state,identity);}catch{return unresolved('provider_journal_read_unavailable',descriptor);}
+  if(state.prepared===true){
+-  if(inputHash(original)!==state.inputHash)return unresolved('frozen_preparation_binding_invalid',descriptor);
++  if(inputHash(context.evidence)!==state.inputHash)return unresolved('frozen_preparation_binding_invalid',descriptor);
+   return {status:'prepared',...descriptor,currentRights:'checked',preparationObservation:{inputHash:state.inputHash,source:'existing_job_and_work_context',immutableRowReceiptExposed:false},nextAction:journal.invocation_id?'recover':'automatic',automaticResume:false,reinvoke:false};
+  }
+  if(journal.invocation_id)return unresolved('provider_invocation_already_exists',descriptor);
+  let cached:Row;
+- try{cached=await cachedProjection(deps,state,original,now(),identity);}catch{return unresolved('cached_financial_authority_unresolved',descriptor);}
++ try{cached=await cachedProjection(deps,state,context.evidence,now(),identity,context.protocol);}catch{return unresolved('cached_financial_authority_unresolved',descriptor);}
+  // Recheck original rights/admission and the exact execution after all reads.
+  let after:Row;
+- try{await currentContext(deps,state);after=await deps.journal('inspect',{jobId});journal=await readJournal(deps,state,identity);}catch{return unresolved('active_work_context_changed',descriptor);}
++ try{
++  const latest=await currentContext(deps,state);
++  if(latest.protocol!==context.protocol)return unresolved('financial_provider_protocol_changed',descriptor);
++  after=await deps.journal('inspect',{jobId});journal=await readJournal(deps,state,identity);
++ }catch{return unresolved('active_work_context_changed',descriptor);}
+  if(!sameExecution(state,after) || journal.invocation_id || Date.parse(state.deadline)<=Date.parse(now()))return unresolved('original_execution_changed_or_expired',descriptor);
+  if(cached.status!=='ready')return {...descriptor,status:cached.status,reason:cached.reason,gaps:cached.gaps||[],scope:'current_cached_receipts_only',currentRights:'checked',nextAction:'preparation-read',automaticResume:false,reinvoke:false};
+  const summary={...descriptor,status:'ready',financialFacts:cached.financialFacts,sourceReceipts:cached.sourceReceipts,priceAvailable:cached.priceAvailable,entryEligible:false,currentRights:'checked',nextAction:'resume-preparation',automaticResume:false,reinvoke:false};
+diff --git a/web/src/lib/vnext/store.ts b/web/src/lib/vnext/store.ts
+--- a/web/src/lib/vnext/store.ts
++++ b/web/src/lib/vnext/store.ts
+@@ -132,8 +132,11 @@
+       const {readCurrentActionTerms}=await import('./corporate-action-terms.ts');
+       const actionTerms=await readCurrentActionTerms(writer.supabase,identity,String(context.jobId),String(context.executionId));
+       if(actionTerms.stockId!==stocks.data.id||actionTerms.symbol!==context.symbol)throw new Error('vnext_action_issuer_binding');
+-      const {freezeFinancialPreparation}=await import('./preparation-reconciliation.ts');
+-      const {inputHash:preparedHash,evidence:frozen}=freezeFinancialPreparation(original,historical,financialSources,new Date().toISOString(),forecasts,actionTerms);
++      const {financialProtocolFromWorkContext,freezeFinancialPreparation}=await import('./preparation-reconciliation.ts');
++      const active=await command(identity,'work-context',{jobId:context.jobId,executionId:context.executionId});
++      if(active.inputHash!==activeReceipt.inputHash)throw Error('vnext_preparation_context_changed');
++      const protocol=financialProtocolFromWorkContext(active);
++      const {inputHash:preparedHash,evidence:frozen}=freezeFinancialPreparation(original,historical,financialSources,new Date().toISOString(),forecasts,actionTerms,protocol);
+       await command(identity, 'prepare', { jobId: context.jobId, executionId: context.executionId, inputHash: preparedHash, evidence: frozen });
+       return { acquisition, parsing, validation, inputHash: preparedHash, evidence: frozen };
+     });

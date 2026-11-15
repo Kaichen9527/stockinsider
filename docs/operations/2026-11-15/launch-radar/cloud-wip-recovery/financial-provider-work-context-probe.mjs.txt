@@ -1,0 +1,193 @@
+import assert from 'node:assert/strict';
+import {executeResearch} from './web/src/lib/vnext/store.ts';
+process.env.STOCKINSIDER_VNEXT_ENABLED='true';
+import {projectFinancialEvidenceSources as projectLegacy} from './web/src/lib/vnext/financial-evidence-sources-legacy.ts';
+import {FINANCIAL_PROVIDER_PROTOCOL as version,projectFinancialEvidenceSources} from './web/src/lib/vnext/financial-evidence-sources.ts';
+import {inputHash} from './web/src/lib/vnext/policy.ts';
+import {financialProtocolFromWorkContext,freezeFinancialPreparation,reconcilePreparation} from './web/src/lib/vnext/preparation-reconciliation.ts';
+const stock='00000000-0000-4000-8000-000000000003',fid='00000000-0000-4000-8000-000000000004',doc='00000000-0000-4000-8000-000000000005',rid='00000000-0000-4000-8000-000000000006',parser='00000000-0000-4000-8000-000000000007',provenance='00000000-0000-4000-8000-000000000008',job='00000000-0000-4000-8000-000000000009';
+const at='2026-10-22T06:00:00.100001Z',later='2026-10-22T06:00:00.100002Z',cutoff='2026-10-22T07:00:00.000000Z';
+const afterCutoff='2026-10-22T07:00:00.000001Z', period='2026-06-30', hash='a'.repeat(64),manifest='b'.repeat(64);
+const examples=[
+ {label:'openapi',provider:'tpex',url:'https://www.tpex.org.tw/synthetic-source.json',parserTime:null,issuer:false},
+ {label:'official_document_same_clock',provider:'mops',url:'https://mopsfin.twse.com.tw/synthetic-source.xhtml',parserTime:at,issuer:false},
+ {label:'official_document_parser_later',provider:'mops',url:'https://mopsfin.twse.com.tw/synthetic-source.xhtml',parserTime:later,issuer:false},
+ {label:'official_document_parser_post_cutoff',provider:'mops',url:'https://mopsfin.twse.com.tw/synthetic-source.xhtml',parserTime:afterCutoff,issuer:false},
+ {label:'issuer_document_parser_later',provider:'mops',url:'https://www.nanya.com/synthetic-vnext-ir/source.xhtml',parserTime:later,issuer:true}
+];
+const outputs=[];
+for(const {label,provider,url,parserTime,issuer} of examples){
+ const sourceRef=parserTime?'issuer-document:'+hash+':'+ 'c'.repeat(64):'tpex-openapi:synthetic-original';
+ const fact={fact_id:fid,stock_id:stock,fact_key:'quarterly_revenue',period_start:'2026-04-01',period_end:period,duration_kind:'quarterly',value:100.25,unit:'TWD',provider,authority_tier:'official_filing',estimate_kind:'reported',estimate_horizon:'reported_period',filing_published_at:at,source_timestamp:at,collected_at:at,filing_restatement_id:null,source_ref:sourceRef,recorded_at:at,validation_status:'validated',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true,upstream_provider:null,validation_recorded_at:at};
+ const rows={provenance:[],jobs:[],links:[],receipts:[],documents:[],issuerDomains:[],parserEvidence:[]};
+ rows.provenance.push({provenance_id:provenance,fact_id:fid,acquisition_job_id:parserTime?null:job,issuer_document_id:parserTime?doc:null,source_url:url,source_sha256:hash,locator:parserTime?{parser_evidence_id:parser,manifest_sha256:manifest,response_url:url}:{source_ref:sourceRef,period_end:period,fact_key:fact.fact_key},extracted_at:at,recorded_at:at});
+ if(parserTime){
+  rows.links.push({receipt_id:rid,fact_id:fid,fact_recorded_at:at,evidence_id:parser,created_at:at});
+  rows.receipts.push({receipt_id:rid,stock_id:stock,issuer_document_id:doc,source_url:url,period_end:period,document_sha256:hash,receipt_status:'accepted',parser_status:'complete',published_at:at,accepted_at:at,completed_at:at,parser_evidence_id:parser,financial_validation_status:'validated'});
+  rows.documents.push({document_id:doc,stock_id:stock,document_url:url,document_sha256:hash,acquisition_status:'fetched',collected_at:at,recorded_at:at});
+  rows.parserEvidence.push({evidence_id:parser,receipt_id:rid,document_sha256:hash,manifest_sha256:manifest,recorded_at:parserTime});
+  if(issuer)rows.issuerDomains.push({stock_id:stock,host:'www.nanya.com',approved_at:at});
+ }else rows.jobs.push({job_id:job,stock_id:stock,period_end:period,status:'terminal',terminal_reason:'complete',response_sha256:hash,source_url:url,created_at:at,collected_at:at,updated_at:at});
+ 
+
+ const previous=projectLegacy([fact],rows,cutoff);
+ const projected=projectFinancialEvidenceSources([fact],rows,cutoff);
+ const owner={principal:'synthetic-author',role:'author'};
+ const jobId='11111111-1111-4111-8111-111111111111', execution='22222222-2222-4222-8222-222222222222';
+ const seed={symbol:'2408',hash:inputHash('synthetic-authority-admission'),evidence:[],gaps:[]};
+ const history={priceBasis:null,bars:[],missingData:[]};
+ const old=freezeFinancialPreparation(seed,history,previous,cutoff);
+ const plain=freezeFinancialPreparation(seed,history,projected,cutoff);
+ const next=freezeFinancialPreparation(seed,history,projected,cutoff,undefined,undefined,version);
+ assert(!Object.hasOwn(plain.evidence,'financialProviderInput'));
+ const providerPacket=next.evidence.financialProviderInput;
+ assert.equal(providerPacket.facts.length,projected.evidence.length);
+ assert.equal(next.inputHash,inputHash(next.evidence));
+ if(label==='official_document_parser_post_cutoff'){
+  assert.equal(providerPacket.facts.length,0);
+ }else{
+  assert.equal(providerPacket.facts.length,1);
+  assert.equal(inputHash(providerPacket.facts[0].originalFact),projected.evidence[0].contentHash);
+  assert.equal(providerPacket.facts[0].factRecordedAt,at);
+  assert.equal(providerPacket.facts[0].receiptHash,projected.receipts[0].receiptHash);
+ }
+ const out={label,evidence:projected.evidence.length,legacy:old,currentPlain:plain,bound:next,fixture:{fact,cutoff,sqlRows:{...rows,parsers:rows.parserEvidence,domains:rows.issuerDomains,facts:[fact],current:[fact],prices:[]}}};
+ outputs.push(out);
+ if(label!=='official_document_parser_later')continue;
+
+ const rawExtra={...fact,non_wire_column:true};
+ const unsupported=projectFinancialEvidenceSources([rawExtra],rows,cutoff);
+ assert.equal(unsupported.evidence.length,1);
+ assert.equal(unsupported.providerInput,null);
+ assert.throws(()=>freezeFinancialPreparation(seed,history,unsupported,cutoff,undefined,undefined,version),/vnext_financial_provider_source_binding_unavailable/);
+ assert.throws(()=>financialProtocolFromWorkContext({financialProviderProtocol:null}),/vnext_financial_provider_protocol_unknown/);
+ const before={...fact};
+ const copy=projectFinancialEvidenceSources([before],rows,cutoff);
+ before.value+=1;
+ assert.equal(copy.providerInput.facts[0].originalFact.value,fact.value);
+ const lateCorrection={...fact,fact_id:'00000000-0000-4000-8000-000000000011',recorded_at:later,value:101};
+ const olderRows=structuredClone(rows);
+ olderRows.provenance.push({...rows.provenance[0],fact_id:lateCorrection.fact_id});
+ olderRows.links.push({...rows.links[0],fact_id:lateCorrection.fact_id,fact_recorded_at:later});
+ const priorAndCurrent=projectFinancialEvidenceSources([fact,lateCorrection],olderRows,cutoff);
+ assert.equal(priorAndCurrent.receipts.length,2);
+ assert.equal(priorAndCurrent.evidence.length,1);
+ assert.deepEqual(priorAndCurrent.providerInput.facts.map(f=>f.factId),[lateCorrection.fact_id]);
+ assert.throws(()=>projectFinancialEvidenceSources([fact,fact],rows,cutoff),/financial_cache_binding_invalid/);
+
+ const projections={
+  stocks:{id:stock,symbol:'2408',market:'TW'},
+  stock_instruments_v3:[{instrument_authority_id:doc,stock_id:stock,symbol:'2408',exchange:'TWSE',instrument_type:'common_stock',listing_status:'active',provider:'twse',source_timestamp:at,valid_from:at,valid_to:null,roster_version:'tw-instrument-roster-v3.0',recorded_at:at}],
+  candidate_financial_acquisition_jobs_v4:rows.jobs,
+  candidate_financial_document_receipts_v6:rows.receipts,
+  candidate_financial_fact_provenance_v4:rows.provenance,
+  candidate_financial_document_fact_links_v8:rows.links,
+  candidate_issuer_ir_document_queue_v4:rows.documents,
+  candidate_financial_parser_evidence_v8:rows.parserEvidence,
+  candidate_issuer_document_domains_v6:rows.issuerDomains,
+  tw_trading_sessions_v3:[{session_id:'2026-10-22',market:'TWSE',status:'completed',provider:'twse',open_at:'2026-10-22T01:00:00Z',close_at:'2026-10-22T05:30:00Z',source_timestamp:at,collected_at:at,recorded_at:at}],
+ };
+ const validated={stockId:stock,symbol:'2408',asOf:cutoff,evidence:[],receipts:[],gaps:[]};
+ function query(data){
+  return {select(){return this},eq(){return this},or(){return this},lte(){return this},order(){return this},in(){return this},limit(){return this},maybeSingle(){return query(Array.isArray(data)?data[0]??null:data)},
+    then(resolve){return Promise.resolve({data,error:null}).then(resolve)}};
+ }
+ const rpcRows={
+  read_financial_facts_for_stocks_as_of:[fact],
+  vnext_forecast_read_v1:{schemaVersion:'vnext-current-forecasts-v1',...validated},
+  vnext_action_terms_read_v1:{schemaVersion:'vnext-current-action-terms-v1',...validated},
+ };
+ const results=[];
+ for(const sc of [
+  {name:'legacy_cached_resume',before:undefined,after:undefined,resume:true,status:'prepared',writes:1},
+  {name:'versioned_cached_read',before:version,after:version,resume:false,status:'ready',writes:0},
+  {name:'versioned_cached_resume',before:version,after:version,resume:true,status:'prepared',writes:1},
+  {name:'protocol_changes_during_reads',before:version,after:undefined,resume:true,status:'unresolved',reason:'financial_provider_protocol_changed',writes:0},
+  {name:'unknown_protocol',before:'unsupported',after:'unsupported',resume:true,status:'unresolved',reason:'active_work_context_unavailable',writes:0},
+  {name:'legacy_already_frozen',before:version,after:version,resume:true,status:'prepared',writes:0,prepared:old},
+  {name:'versioned_already_frozen',before:version,after:version,resume:true,status:'prepared',writes:0,prepared:next}
+ ]){
+  let reads=0,cacheReads=0;const writes=[];
+  const prepared=sc.prepared?.evidence??seed;
+  const hash=sc.prepared?.inputHash??seed.hash;
+  const state={jobId,symbol:'2408',state:'running',executionId:execution,inputHash:hash,deadline:'2026-10-22T07:10:00.000000Z',prepared:!!sc.prepared};
+  const deps={now:()=>cutoff,
+   client:{from(table){cacheReads++;assert(Object.hasOwn(projections,table),table);return query(projections[table]);},
+    rpc(name){cacheReads++;assert(Object.hasOwn(rpcRows,name),name);return query(rpcRows[name]);}},
+   async journal(action){return action==='inspect'?state:{dispatch:false};},
+   async historical(request){assert.equal(request.signalSession,'2026-10-22');return history;},
+   async command(action,body){
+    if(action==='work-context'){
+     const protocol=reads++===0?sc.before:sc.after;
+     return {inputHash:hash,evidence:prepared,...(protocol===undefined?{}:{financialProviderProtocol:protocol})};
+    }
+    assert.equal(action,'prepare');
+    writes.push(body);
+    return {inputHash:body.inputHash,frozen:true};
+   }
+  };
+  const result=await reconcilePreparation(owner,{jobId},deps,sc.resume);
+  assert.equal(result.status,sc.status,JSON.stringify({name:sc.name,result}));
+  if(sc.reason)assert.equal(result.reason,sc.reason);
+  assert.equal(writes.length,sc.writes);
+  if(writes.length){
+   const want=sc.before===version;
+   assert.equal(Object.hasOwn(writes[0].evidence,'financialProviderInput'),want);
+   assert.equal(writes[0].inputHash,inputHash(writes[0].evidence));
+   if(want)assert.deepEqual(writes[0].evidence.financialProviderInput,providerPacket);
+  }
+  if(sc.prepared){assert.equal(cacheReads,0);assert.equal(result.inputHash,sc.prepared.inputHash);}
+  assert(!Object.hasOwn(result,'financialProviderInput'));
+  assert(!Object.hasOwn(result,'evidence'));
+  results.push({name:sc.name,status:result.status,reason:result.reason??null,writes:writes.length,cacheReads});
+ }
+ out.reconciliation=results;
+
+ const metrics=[];
+ for(const sc of [
+   {name:'admitted_vnext_with_binding',advertised:version,writes:1},
+   {name:'admitted_legacy_database',advertised:undefined,writes:1},
+   {name:'admitted_unknown_binding_version',advertised:'unsupported',writes:0},
+   {name:'admitted_changed_context',advertised:version,hashChanged:true,writes:0},
+   {name:'admitted_non_author',advertised:version,role:'reviewer',writes:0},
+ ]){
+  const calls=[],writes=[];
+  const client={
+   from(table){assert(Object.hasOwn(projections,table),table);return query(projections[table]);},
+   rpc(name,body){
+    if(name!=='vnext_command_v1'){assert(Object.hasOwn(rpcRows,name),name);return query(rpcRows[name]);}
+    assert.equal(body.p_principal,owner.principal);
+    const action=body.p_command,request=body.p_request;
+    calls.push(action);
+    assert.equal(request.jobId,jobId);
+    if(action==='claim')return query({execute:true,jobId,executionId:execution,symbol:'2408',inputHash:seed.hash,evidence:seed});
+    assert.equal(request.executionId,execution);
+    if(action==='work-context')return query({inputHash:sc.hashChanged?'a'.repeat(64):seed.hash,evidence:seed,...(sc.advertised===undefined?{}:{financialProviderProtocol:sc.advertised})});
+    if(action==='prepare'){writes.push(request);return query({frozen:true,inputHash:request.inputHash});}
+    if(action==='fail')return query({failed:true});
+    throw Error(action);
+   }
+  };
+  globalThis.stockinsiderFixture={client,calls,history};
+  const result=await executeResearch({...owner,role:sc.role??owner.role},{jobId}).then(value=>({value}),err=>({error:err.message}));
+  assert.equal(writes.length,sc.writes,JSON.stringify({name:sc.name,calls,error:result.error}));
+  if(writes.length){
+   assert.deepEqual(calls,['lease','calendar','claim','acquire','parse','validate','historical','work-context','prepare','release']);
+   const write=writes[0];
+   assert.equal(write.inputHash,inputHash(write.evidence));
+   assert.equal(result.value.inputHash,write.inputHash);
+   assert.equal(Object.hasOwn(write.evidence,'financialProviderInput'),sc.advertised===version);
+   if(sc.advertised===version)assert.deepEqual(write.evidence.financialProviderInput,providerPacket);
+  }else{
+   assert.match(result.error,/vnext_financial_provider_protocol_unknown|vnext_preparation_context_changed|vnext_author_required/);
+   assert(!calls.includes('prepare'));
+   if(sc.role==='reviewer')assert.deepEqual(calls,[]);
+   else assert.equal(calls.at(-1),'release');
+  }
+  metrics.push({name:sc.name,writes:writes.length,reason:result.error??null});
+ }
+ out.admittedExecution=metrics;
+
+ out.negativeChecks={nonWireFactRefused:true,unknownVersionRefused:true,rawFactCopyFrozen:true,supersededReceiptPreservedOutsideCurrentFactArray:true,duplicateDoesNotCreateMultipleProviderFacts:true};
+}
+console.log(JSON.stringify({node:process.version,nonRoot:process.getuid()!==0,cases:outputs.map(({label,evidence,reconciliation,admittedExecution,negativeChecks})=>({label,evidence,reconciliation,admittedExecution,negativeChecks})),nativeCase:outputs.find(row=>row.label==='official_document_parser_later')}));

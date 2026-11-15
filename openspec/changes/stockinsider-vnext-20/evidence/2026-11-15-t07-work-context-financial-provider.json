@@ -1,0 +1,150 @@
+{
+  "date": "2026-11-15",
+  "task": "T07",
+  "issue": 392,
+  "baseline": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "patch": "e9ac7181312a48b59c3134cb7dd6f9be97ab19dfa6664436db77e70443a4f48e",
+  "baselineBlobs": {
+    "web/src/lib/vnext/financial-evidence-sources.ts": "7a565b9fe6cf448aab878f1b410ac63ae0be5918",
+    "web/src/lib/vnext/preparation-reconciliation.ts": "2f6ddfc2897a3dfcfca0798d7b067838ce4b4176",
+    "web/src/lib/vnext/store.ts": "6d3af1e44402e34dcb816f3f71bf49e99a1a3151"
+  },
+  "gitApplyCheck": true,
+  "node": {
+    "version": "v22.23.1",
+    "nonRoot": true,
+    "results": [
+      {
+        "label": "openapi",
+        "evidence": 1
+      },
+      {
+        "label": "official_document_same_clock",
+        "evidence": 1
+      },
+      {
+        "label": "official_document_parser_later",
+        "evidence": 1,
+        "reconciliation": [
+          {
+            "name": "legacy_cached_resume",
+            "status": "prepared",
+            "reason": null,
+            "writes": 1,
+            "cacheReads": 13
+          },
+          {
+            "name": "versioned_cached_read",
+            "status": "ready",
+            "reason": null,
+            "writes": 0,
+            "cacheReads": 13
+          },
+          {
+            "name": "versioned_cached_resume",
+            "status": "prepared",
+            "reason": null,
+            "writes": 1,
+            "cacheReads": 13
+          },
+          {
+            "name": "protocol_changes_during_reads",
+            "status": "unresolved",
+            "reason": "financial_provider_protocol_changed",
+            "writes": 0,
+            "cacheReads": 13
+          },
+          {
+            "name": "unknown_protocol",
+            "status": "unresolved",
+            "reason": "active_work_context_unavailable",
+            "writes": 0,
+            "cacheReads": 0
+          },
+          {
+            "name": "legacy_already_frozen",
+            "status": "prepared",
+            "reason": null,
+            "writes": 0,
+            "cacheReads": 0
+          },
+          {
+            "name": "versioned_already_frozen",
+            "status": "prepared",
+            "reason": null,
+            "writes": 0,
+            "cacheReads": 0
+          }
+        ],
+        "admittedExecution": [
+          {
+            "name": "admitted_vnext_with_binding",
+            "writes": 1,
+            "reason": null
+          },
+          {
+            "name": "admitted_legacy_database",
+            "writes": 1,
+            "reason": null
+          },
+          {
+            "name": "admitted_unknown_binding_version",
+            "writes": 0,
+            "reason": "vnext_financial_provider_protocol_unknown"
+          },
+          {
+            "name": "admitted_changed_context",
+            "writes": 0,
+            "reason": "vnext_preparation_context_changed"
+          },
+          {
+            "name": "admitted_non_author",
+            "writes": 0,
+            "reason": "vnext_author_required"
+          }
+        ],
+        "negativeChecks": {
+          "nonWireFactRefused": true,
+          "unknownVersionRefused": true,
+          "rawFactCopyFrozen": true,
+          "supersededReceiptPreservedOutsideCurrentFactArray": true,
+          "duplicateDoesNotCreateMultipleProviderFacts": true
+        }
+      },
+      {
+        "label": "official_document_parser_post_cutoff",
+        "evidence": 0
+      },
+      {
+        "label": "issuer_document_parser_later",
+        "evidence": 1
+      }
+    ],
+    "scope": "Actual candidate producer and entry points with synthetic database, calendar, model-free acquisition, parser, validation, price and lease dependencies."
+  },
+  "postgres": {
+    "version": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "sqlSha256": "b29aa7c073e28090b8abc22e43ec8f3e5c719496d4af89af0091fee06f9aae08",
+    "binder": {
+      "newBindingRows": 1,
+      "legacyBindingRows": 0,
+      "bindingIsImmutable": true,
+      "newBoundPacketAccepted": true,
+      "newMissingBothRejected": true,
+      "newMissingProviderRejected": true,
+      "newSubstitutedPacketAccepted": false,
+      "legacyImmutablePacketAccepted": true,
+      "legacySubstitutedPacketAccepted": false
+    },
+    "acl": {
+      "expectedOwners": 12,
+      "ownerCanReadStocks": false,
+      "directExecutionDenied": 48,
+      "permissionsTestedByCatalogOnly": true
+    },
+    "scope": "Disposable non-root PostgreSQL, private network namespace, synthetic stock scope and as-of data getter. ACL checked after binder scenario in the catalog, without invoking denied roles."
+  },
+  "status": "candidate_source_only",
+  "formalContaboChanged": false,
+  "releaseHold": "unchanged"
+}

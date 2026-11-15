@@ -1,0 +1,14 @@
+{
+  "package.json": "{\"type\":\"module\"}",
+  "web/src/lib/supabase-server": "export const getSupabaseServerClient=()=>globalThis.stockinsiderFixture.client;",
+  "web/src/lib/taiwan-data-runtime": "export const requireActiveVpsWriter=async()=>({ok:true,supabase:globalThis.stockinsiderFixture.client});",
+  "web/src/lib/production-write-lease": "export const acquireProductionWriteLease=async()=>{globalThis.stockinsiderFixture.calls.push('lease');return 'synthetic';};export const releaseProductionWriteLease=async()=>globalThis.stockinsiderFixture.calls.push('release');",
+  "web/src/lib/vnext/calendar-sync.ts": "export const synchronizeExecutionCalendar=async()=>{globalThis.stockinsiderFixture.calls.push('calendar');return {latestCompleted:'2026-10-22'};};",
+  "web/src/lib/candidate-official-financials": "export const refreshCandidateOfficialFinancials=async()=>{globalThis.stockinsiderFixture.calls.push('acquire');return {failures:[]};};",
+  "web/src/lib/candidate-financial-document-worker": "export const processCandidateFinancialDocumentReceipts=async()=>{globalThis.stockinsiderFixture.calls.push('parse');return {reconciliationErrors:[],results:[]};};",
+  "web/src/lib/official-financial-validation-worker": "export const validatePendingOfficialFinancials=async()=>{globalThis.stockinsiderFixture.calls.push('validate');return {status:'success'};};",
+  "web/src/lib/tw-entry-plan-authority.ts": "export const loadTwEntryHistoricalPriceAuthority=async()=>{globalThis.stockinsiderFixture.calls.push('historical');return globalThis.stockinsiderFixture.history;};",
+  "web/src/lib/vnext/screening.ts": "export const eligibleClue=()=>{throw Error('unexpected_fixture_call:eligibleClue');};",
+  "web/src/lib/vnext/factors.ts": "export const initialFactors=()=>{throw Error('unexpected_fixture_call:initialFactors');};\nexport const deepFactors=()=>{throw Error('unexpected_fixture_call:deepFactors');};",
+  "web/src/lib/vnext/research-failure.ts": "export const researchFailureDisposition=()=> 'retryable';"
+}
