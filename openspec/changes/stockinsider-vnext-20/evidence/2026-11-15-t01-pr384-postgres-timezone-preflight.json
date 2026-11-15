@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-15",
+  "pr": 384,
+  "originalJob": 120561693293,
+  "originalWorkflowRun": 39996620417,
+  "ciMergeCommit": "a8fbdfdbf55d77d2928a9134a396091001994769",
+  "ciSubject": "cbb581662e72942610ff85b0bf5e7e47ddddfa46",
+  "ciFailure": {
+    "stage": "preflight",
+    "code": "ERR_ASSERTION",
+    "messageSha256": "52c7cc08ab309eda6015c8991ffeedae7a5318ef3d8a3179bb2f016dea56d8aa",
+    "namedWitnesses": 0,
+    "taipeiDate": "2026-10-24",
+    "taipeiDay": "Saturday",
+    "originalArtifactId": 12520446589,
+    "artifactReadStatus": 404
+  },
+  "sourceCorrection": "c5b0c3ce5086156b24ad1f3588e5159052de2559",
+  "continuation": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "nodePublicFingerprintControl": {
+    "node": "v22.23.1",
+    "unprivileged": true,
+    "hashedCandidateErrors": 139,
+    "hits": [
+      {
+        "sig": "public.vnext_target_current_v1(text,uuid,text)",
+        "case": "insertion",
+        "i": 1,
+        "field": "TimeZone=UTC"
+      },
+      {
+        "sig": "public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)",
+        "case": "insertion",
+        "i": 1,
+        "field": "TimeZone=UTC"
+      }
+    ],
+    "weekdayHash": "d8e069eb68bc8145a3de8e19dd8f8162be511fc517bc0e873a51aac9beeb9cfb"
+  },
+  "nativeDeclarationOnlyProbe": {
+    "version": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "freshTemporaryCluster": true,
+    "singleUserNoSockets": true,
+    "syntheticBodies": true,
+    "exactFunctionDeclarations": true,
+    "actualConfig": [
+      {
+        "config": [
+          "search_path=pg_catalog, public",
+          "statement_timeout=30s",
+          "lock_timeout=2s"
+        ],
+        "signature": "public.vnext_target_current_v1(text,uuid,text)",
+        "securityDefiner": true,
+        "matchesFixedProfile": true,
+        "matchesOriginalProfile": true
+      },
+      {
+        "config": [
+          "search_path=pg_catalog, public"
+        ],
+        "signature": "public.vnext_read_v1(text)",
+        "securityDefiner": true,
+        "matchesFixedProfile": true,
+        "matchesOriginalProfile": true
+      },
+      {
+        "config": [
+          "search_path=pg_catalog, public",
+          "TimeZone=UTC",
+          "statement_timeout=30s",
+          "lock_timeout=2s"
+        ],
+        "signature": "public.vnext_target_quote_v1(uuid,text,text,date,timestamptz)",
+        "securityDefiner": true,
+        "matchesFixedProfile": true,
+        "matchesOriginalProfile": false
+      }
+    ],
+    "memoryAvailableKiBAtAdmission": 4018216,
+    "diskAvailableBytesAtAdmission": 26574245888,
+    "backendStatus": 0,
+    "errorCount": 0,
+    "safeErrorTypes": [],
+    "markerFound": true,
+    "sourceSqlSha256": "c7f36c69b0e191927079f5a035bc63b0d9238fd289d55cc353866227bd668cd7"
+  },
+  "originalProductMigrationExecuted": false,
+  "formalPreparationHttpReplayed": false,
+  "formalThesisReplayed": false,
+  "formalGateCleared": false
+}
