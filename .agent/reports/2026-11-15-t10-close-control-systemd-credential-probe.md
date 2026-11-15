@@ -7,7 +7,7 @@ Tested an alternative handoff using the installed systemd 255 `SetCredential` in
 | Probe | Parent | Child |
 | --- | --- | --- |
 | Matching profile and live cgroup | Verified, 88.894 s remaining | Verified, 88.598 s remaining |
-| Signed-off profile expected 128 MiB, live cgroup set to 96 MiB | Rejected at live cgroup check | Rejected at live cgroup check |
+| Profile specified 128 MiB, live cgroup set to 96 MiB | Rejected at live cgroup check | Rejected at live cgroup check |
 | Profile named a different unit | Rejected at unit check | Rejected at unit check |
 | Profile missing | Rejected | Rejected |
 
