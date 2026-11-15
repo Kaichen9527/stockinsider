@@ -2,7 +2,7 @@
 /** OFFLINE exchange-source staging replay. No fetch/DB/writer/download. No
  * rights inferred. Output contains receipts/counts/gaps, never raw bodies. */
 import fs from 'node:fs';
-import { parseTpexMarketFlowReplay, TPEX_MARKET_FLOW_MAX_BYTES, TPEX_MARKET_FLOW_SCHEMA } from '../src/lib/vnext/launch-market-foreign-flow.ts';
+import { parseMarketFlowPairReplay, parseTpexMarketFlowReplay, MARKET_FLOW_PAIR_SCHEMA, TPEX_MARKET_FLOW_MAX_BYTES, TPEX_MARKET_FLOW_SCHEMA, TWSE_MARKET_FLOW_MAX_BYTES } from '../src/lib/vnext/launch-market-foreign-flow.ts';
 import path from 'node:path';
 import { LISTED_ROSTER_MAX_BYTES, LISTED_ROSTER_REPLAY_SCHEMA, LISTED_ROSTER_TOTAL_BYTES, parseListedRosterReplay } from '../src/lib/vnext/launch-listed-roster-replay.ts';
 import { parseLaunchOfficialReplay, parseLaunchLicensedCsvReplay, LICENSED_CSV_SCHEMA, officialReplayObservationPlan } from '../src/lib/vnext/launch-official-replay.ts';
@@ -54,8 +54,10 @@ try {
     const breadth = input?.schema === BREADTH_REPLAY_SCHEMA;
     const twseClose = input?.schema === TWSE_CLOSE_REPLAY_SCHEMA;
     const marketFlow = input?.schema === TPEX_MARKET_FLOW_SCHEMA;
+    const pairedMarketFlow = input?.schema === MARKET_FLOW_PAIR_SCHEMA;
     const listedRoster = input?.schema === LISTED_ROSTER_REPLAY_SCHEMA;
     const limits = listedRoster ? { pages: 3, pageBytes: LISTED_ROSTER_MAX_BYTES, totalBytes: LISTED_ROSTER_TOTAL_BYTES }
+      : pairedMarketFlow ? { pages: 10, pageBytes: Math.max(TWSE_MARKET_FLOW_MAX_BYTES, TPEX_MARKET_FLOW_MAX_BYTES), totalBytes: 5 * (TWSE_MARKET_FLOW_MAX_BYTES + TPEX_MARKET_FLOW_MAX_BYTES) }
       : marketFlow ? { pages: 5, pageBytes: TPEX_MARKET_FLOW_MAX_BYTES, totalBytes: 5 * TPEX_MARKET_FLOW_MAX_BYTES }
       : breadth || twseClose ? { pages: 30, pageBytes: 500000, totalBytes: 15000000 }
       : institutionalVolume ? { pages: 21, pageBytes: 3 * 1024 * 1024, totalBytes: 64 * 1024 * 1024 }
@@ -73,6 +75,7 @@ try {
       files.set(body.path, member);
     }
     const read = listedRoster ? parseListedRosterReplay(input, files)
+      : pairedMarketFlow ? parseMarketFlowPairReplay(input, files)
       : marketFlow ? parseTpexMarketFlowReplay(input, files)
       : twseClose ? parseTwseHistoricalCloseReplay(input, files) : breadth ? parseTpexBreadthReplay(input, files) : institutionalVolume ? parseTpexInstitutionalVolumeReplay(input, files) : nativeShares ? parseTpexNativeShareReplay(input, files)
       : input?.schema === LICENSED_CSV_SCHEMA ? parseLaunchLicensedCsvReplay(input, files) : parseLaunchOfficialReplay(input, files);

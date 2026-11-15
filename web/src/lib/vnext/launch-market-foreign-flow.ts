@@ -139,3 +139,112 @@ export function parseTpexMarketFlowReplay(input: unknown, files: ReadonlyMap<str
       'launch_market_twse_daily_flow_rights_unverified', 'launch_market_flow_db_source_bridge_pending'],
   };
 }
+
+
+export const MARKET_FLOW_PAIR_SCHEMA = 'launch-twse-tpex-market-flow-replay-v1';
+export const TWSE_MARKET_FLOW_MAX_BYTES = 8_192;
+const twseHeaders = ['單位名稱', '買進金額', '賣出金額', '買賣差額', ''];
+const twseForeign = '外資及陸資(不含外資自營商)';
+const twseCategories = [
+  '自營商(自行買賣)', '自營商(避險)', '投信', twseForeign, '外資自營商', '合計',
+];
+
+export function twseMarketFlowCsvUrl(day: string) {
+  if (!sessionDate(day) || day < '2004-04-07') throw Error('launch_twse_market_flow_date_invalid');
+  return 'https://www.twse.com.tw/rwd/zh/fund/BFI82U?dayDate=' + day.replaceAll('-', '') + '&type=day&response=csv';
+}
+
+/** BFI82U has an undated UTF-8 export and a dated MS950 report. Only the
+ * latter binds the date inside the raw bytes for this replay. */
+export function parseTwseMarketFlowCsv(day: string, bytes: Uint8Array) {
+  const sourceUrl = twseMarketFlowCsvUrl(day);
+  try {
+    if (bytes.byteLength <= twseHeaders.length || bytes.byteLength > TWSE_MARKET_FLOW_MAX_BYTES) refuse();
+    const [title, header, ...rows] = decodeLicensedCsvRecords(new TextDecoder('big5', { fatal: true }).decode(bytes), 24, 5);
+    const rocDate = (Number(day.slice(0, 4)) - 1911) + '年' + day.slice(5, 7) + '月' + day.slice(8) + '日';
+    if (title?.length !== 1 || title[0] !== rocDate + ' 三大法人買賣金額統計表'
+      || header?.length !== twseHeaders.length || twseHeaders.some((field, i) => header[i] !== field)) refuse();
+
+    const data = rows.slice(0, twseCategories.length);
+    const notes = rows.slice(twseCategories.length);
+    if (data.length !== twseCategories.length || notes.length < 2 || notes[0][0] !== '說明:'
+      || notes.some(row => row.length !== 1)) refuse();
+    const types = new Map<string, Amounts>();
+    for (const row of data) {
+      const [category, buyText, sellText, netText, tail] = row;
+      if (row.length !== 5 || tail !== '' || !twseCategories.includes(category) || types.has(category)) refuse();
+      const buy = money(buyText, false), sell = money(sellText, false), net = money(netText, true);
+      if (buy - sell !== net) refuse();
+      types.set(category, { buy, sell, net });
+    }
+    const [dealerSelf, dealerHedge, trust, foreign, foreignDealer, total] = twseCategories.map(category => types.get(category)!);
+    // The TWSE report notes that dealer cash is already in dealer rows.
+    // Adding the standalone foreign-dealer row would count it twice.
+    validateSubtotal(total, [dealerSelf, dealerHedge, trust, foreign]);
+    const including = sumSafeMoney([foreign.net, foreignDealer.net]);
+    return { session: day, sourceUrl, rawSha256: createHash('sha256').update(bytes).digest('hex'), rawBytes: bytes.byteLength,
+      foreignExcludingDealersNetTwd: foreign.net, foreignIncludingDealersNetTwd: including };
+  } catch {
+    throw Error('launch_twse_market_flow_replay_refused');
+  }
+}
+
+function sumSafeMoney(amounts: number[]) {
+  const value = Number(amounts.reduce((sum, amount) => sum + BigInt(amount), 0n));
+  if (!Number.isSafeInteger(value)) refuse();
+  return value;
+}
+
+/** Diagnostic only. These exact dates and hashes are not independent calendar,
+ * collection-clock, TWSE rights or production market-score authority. */
+export function parseMarketFlowPairReplay(input: unknown, files: ReadonlyMap<string, Uint8Array>) {
+  const manifest = record(input, 'cutoff responses schema sessions');
+  const manifestCutoff = evidenceInstant(manifest.cutoff);
+  if (manifest.schema !== MARKET_FLOW_PAIR_SCHEMA || manifestCutoff === null
+    || !Array.isArray(manifest.sessions) || manifest.sessions.length !== 5
+    || !Array.isArray(manifest.responses) || manifest.responses.length !== 10) refuse();
+
+  const sessions: string[] = [];
+  const receipts = { TWSE: [] as ReturnType<typeof parsePairResponse>[], TPEX: [] as ReturnType<typeof parsePairResponse>[] };
+  for (const [index, day] of manifest.sessions.entries()) {
+    const previous = sessions.at(-1);
+    if (!sessionDate(day) || (previous && day <= previous)) refuse();
+    sessions.push(day);
+    for (const [offset, market] of (['TWSE', 'TPEX'] as const).entries()) {
+      receipts[market].push(parsePairResponse(market, day, manifest.responses[2 * index + offset]));
+    }
+  }
+
+  function parsePairResponse(market: 'TWSE' | 'TPEX', day: string, item: unknown) {
+    const response = record(item, 'body bytes capturedAt httpStatus market mediaType rawSha256 session sourceUrl');
+    const body = record(response.body, 'encoding path');
+    const sourceUrl = market === 'TWSE' ? twseMarketFlowCsvUrl(day) : tpexMarketFlowCsvUrl(day);
+    const media = market === 'TWSE' ? /^text\/csv\s*;\s*charset=ms950$/iu : /^application\/csv\s*;\s*charset=utf-8$/iu;
+    const captured = evidenceInstant(response.capturedAt);
+    const close = evidenceInstant(day + 'T13:30:00+08:00')!;
+    const expectedPath = 'bodies/' + market + '-' + day + '.csv';
+    if (response.market !== market || response.session !== day || response.sourceUrl !== sourceUrl || response.httpStatus !== 200
+      || typeof response.mediaType !== 'string' || !media.test(response.mediaType)
+      || captured === null || captured < close || captured > manifestCutoff!
+      || body.encoding !== 'file' || body.path !== expectedPath) refuse();
+    const bytes = files.get(expectedPath);
+    if (!bytes || bytes.byteLength !== response.bytes) refuse();
+    const parsed = market === 'TWSE' ? parseTwseMarketFlowCsv(day, bytes) : parseTpexMarketFlowCsv(day, bytes);
+    if (parsed.rawSha256 !== response.rawSha256) refuse();
+    return { ...parsed, capturedAt: response.capturedAt, officialPublishedAt: null };
+  }
+
+  const summarize = (market: 'TWSE' | 'TPEX') => ({
+    oneDayTwd: receipts[market].at(-1)!.foreignExcludingDealersNetTwd,
+    fiveDayTwd: sumSafeMoney(receipts[market].map(item => item.foreignExcludingDealersNetTwd)),
+  });
+  const TWSE = summarize('TWSE'), TPEX = summarize('TPEX');
+  return { schema: MARKET_FLOW_PAIR_SCHEMA, sessions, currency: 'TWD', series: 'foreign_and_mainland_excluding_dealers',
+    markets: { TWSE, TPEX },
+    combined: { oneDayTwd: sumSafeMoney([TWSE.oneDayTwd, TPEX.oneDayTwd]), fiveDayTwd: sumSafeMoney([TWSE.fiveDayTwd, TPEX.fiveDayTwd]) },
+    receipts, rights: { TWSE: 'unverified_for_automated_and_public_derivative_use', TPEX: 'dataset_11743' },
+    sourceAuthority: false, marketAuthority: false, publicationAuthority: false,
+    gaps: ['launch_market_flow_official_window_unverified', 'launch_market_flow_original_cutoff_unverified',
+      'launch_market_twse_daily_flow_rights_unverified', 'launch_market_flow_db_source_bridge_pending'],
+  };
+}
