@@ -429,8 +429,8 @@ BEGIN
    AND other->>'knownAt'=entry->>'knownAt' AND other->'row' IS DISTINCT FROM entry->'row') THEN RETURN NULL;END IF;
   IF entry->'row'->>'provider'<>lower(market_name) OR entry->'row'->>'sourceSha256'!~'^[a-f0-9]{64}$'
    OR entry->'row'->>'sourceRef'<>lower(market_name)||'-annual-calendar:'||extract(year FROM day)::text||':'||day::text||':'||(entry->'row'->>'sourceSha256')
-   OR entry->'row'->>'sourceUrl'<>CASE market_name WHEN 'TWSE' THEN 'https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date='||extract(year FROM day)::integer::text||'0101'
-    ELSE 'https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_'||(extract(year FROM day)::integer-1911)::text||'.htm' END
+   OR entry->'row'->>'sourceUrl'<>(CASE market_name WHEN 'TWSE' THEN 'https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date='||extract(year FROM day)::integer::text||'0101'
+    ELSE 'https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_'||(extract(year FROM day)::integer-1911)::text||'.htm' END)
    OR (entry->'row'->>'sourceTimestamp')::timestamptz>(entry->'row'->>'collectedAt')::timestamptz
    OR (entry->'row'->>'collectedAt')::timestamptz>(entry->>'knownAt')::timestamptz
    OR entry->'row'->>'status' NOT IN('completed','holiday') THEN RETURN NULL;END IF;
