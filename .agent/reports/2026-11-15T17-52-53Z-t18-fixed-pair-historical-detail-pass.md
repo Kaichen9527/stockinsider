@@ -1,0 +1,7 @@
+# T18 genuine fixed Next.js pair and historical detail
+
+Contabo used the original authenticated September 19 production backup and candidate `d3efc2da25fd18cdb43baa07ce05d9a24e259eb8` in its isolated environment. PG17.11 restored the database, verified 288 foreign keys and seven scoped relations, and found zero orphan rows. The reserve during the run stayed at or above 16.55 GiB of host disk and 3.62 GiB of available host memory.
+
+Both pinned Next.js 16.3.4 releases returned HTTP 200 for the historical detail API and HTML. The API payload hash matched between releases. The readpoint verified nine facts, six sections, original dates, safe source links and rendered chart attribution. The four denied links remained withheld. Each release rejected four invalid or mismatched revision requests. A/B/A read and static checks passed, and an injected B fault caused automatic rollback to A with recovered HTTP and static checks.
+
+The cloned data signature and constraint bits stayed equal during the exercise. Isolated services, encrypted workspace and listeners were cleaned. The host reported matching production signatures before and after. The native HOLD remains. This receipt covers the fixed historical pair and has no browser-layout, current Launch Radar, full business-data or release approval claim. [Sanitized native receipt](../../docs/operations/2026-11-15/vnext/contabo-t18-real-fixed-pair-detail-and-rollback.json)
