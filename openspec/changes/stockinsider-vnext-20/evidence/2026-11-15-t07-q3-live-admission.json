@@ -157,5 +157,50 @@
   "realAuthWriterCalled": false,
   "productionDataChanged": false,
   "sourceGrantChanged": false,
-  "fullFinancialModelAcceptance": false
+  "fullFinancialModelAcceptance": false,
+  "isolatedActualDeadlinePolicy": {
+    "node": "v22.23.1",
+    "publishedPolicy": [
+      {
+        "cutoff": "2026-11-12T21:30:00+08:00",
+        "year": 2026,
+        "quarter": 2,
+        "periodEnd": "2026-06-30",
+        "normalDeadlineAt": "2026-08-14T15:59:59.000Z"
+      },
+      {
+        "cutoff": "2026-11-13T21:30:00+08:00",
+        "year": 2026,
+        "quarter": 2,
+        "periodEnd": "2026-06-30",
+        "normalDeadlineAt": "2026-08-14T15:59:59.000Z"
+      },
+      {
+        "cutoff": "2026-11-14T23:59:58+08:00",
+        "year": 2026,
+        "quarter": 2,
+        "periodEnd": "2026-06-30",
+        "normalDeadlineAt": "2026-08-14T15:59:59.000Z"
+      },
+      {
+        "cutoff": "2026-11-14T23:59:59+08:00",
+        "year": 2026,
+        "quarter": 3,
+        "periodEnd": "2026-09-30",
+        "normalDeadlineAt": "2026-11-14T15:59:59.000Z"
+      },
+      {
+        "cutoff": "2026-11-15T11:17:03+08:00",
+        "year": 2026,
+        "quarter": 3,
+        "periodEnd": "2026-09-30",
+        "normalDeadlineAt": "2026-11-14T15:59:59.000Z"
+      }
+    ]
+  },
+  "upstreamAdmission": {
+    "callsites": "exact active Git tree: candidate-research.ts:595 and drain:98; refresh implementation not a caller",
+    "upstreamTargets": "proposed research universe, current field-period gaps, oldest acquisition cursor first, cap 30",
+    "implication": "Normal due coverage remained Q2 at both observed 21:30 cutoffs. Early verified issuer availability requires a separate time-valid admission signal in the existing writer, while absence did not constitute a then-due required field. Post-deadline absence still requires the next actual writer receipt."
+  }
 }
