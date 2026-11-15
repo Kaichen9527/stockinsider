@@ -42,3 +42,7 @@ See [bounded Linux restore / release amendment](linux-restore-release-amendment.
 ## Signal-close breadth continuation
 
 [Breadth source amendment](breadth-signal-close-amendment.md) repairs the existing actual ingest/build and keeps95% aggregate coverage while reporting each venue. The licensed11371 private CLI supplies raw observations only;11764 historical close and a real immutable purpose/roster/CA bridge need distinct exact review.
+
+## Financial observation continuation
+
+[Financial interval amendment](financial-period-amendment.md) keeps exact period/variant/receipt metadata in actual callers and prevents rejected-head revival before new freezes. SQL comparison parity remains missing; new financial qualification demotes independently of optional DTO fields. Actual share/CA/fiscal protocol and financial acceptance require a separate reviewed bridge.

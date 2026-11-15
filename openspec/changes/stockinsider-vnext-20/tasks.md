@@ -308,3 +308,9 @@ Evidence: docs/operations/2026-11-08/vnext/LINUX-RESTORE-RELEASE.md and linux-re
 - [x] Actual ingest→build target-close/20distinct-of30, oldcache bypass/zero fallback repair, null zero ratio, exactoneTWSE+TPEX and unchanged aggregate95. Newmodel preserves old snapshots/history meanings. Sourceb6d148a exact local2a3e1d4:43related+13privateCLI/types/lint/build PASS.
 - [x] Existing offline CLI bounded11371 full-roster raw observations with exact dates/native units/actual clocks/hash; allauthorityfalse/qualifiedcoverageNULL.
 - [ ] New11764 narrowTWSEhistoricalCLOSE profile/rights and genuine immutable full-roster materializer/CA/calendar/foreignTWD/selector remain missing. NoOHLC/cash/flow/PEbasis inference. Native/A1/fullT06T10 not complete.
+
+## Financial interval/preparation checkpoint
+
+- [x] Exact interval/basic-diluted/variant observations through realcache/projector/frozenprep/weeklyaudit; all bounded rows selected before validation at BOTH actualpreparation callers, no rejected-head or defensive originalEPS revival. Source72482e1 equals local9bbe6e5:2STATIC/10new/182related/5×3TZ/types/lint/build PASS.
+- [x] New actual current financial qualification cannot bypass mandatory SQL-parity gap by stripping metadata/inventory; historical return unchanged.
+- [ ] Actual SQL interval/share-basis/frequency/supersession protocol and realfixedfiling/CA/rights/model/valuation/native evidence remain unimplemented; no fullT07 acceptance or latercapture backfill.

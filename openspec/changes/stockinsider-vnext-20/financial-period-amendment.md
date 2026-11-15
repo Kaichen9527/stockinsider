@@ -1,0 +1,9 @@
+# Exact financial observations and fail-closed preparation
+
+Implements approved Goal385/T07 precision and existing point-in-time gates, not a new EPS model. Keep immutable reported period start/end/stored duration, basic/diluted key, estimate kind/horizon, fixed original raw/receipt/fact identity and actual source/collection/record/validation knowledge. Quarter and YTD sharing end cannot collapse. Select latest same-grain head before validation; both actual preparation callers must pass rejected rows, not resurrect old values. Changed intervals lack supersession FK and remain independent observations. Same-filing EPS ambiguity remains withheld; bounded full inventory digest precedes64 display clipping.
+
+Do not infer reporting frequency, share basis, company-action restatement, annual EPS or PE-vintage from a digest/date/metadata flag. Same-window nonEPS amount ratios are observations; unsupported temporal comparison remains null+gap, not contradiction. New frozen preparation may not defensively remerge withheld financial values; preserve source clues/forecasts/original stored bytes.
+
+Existing SQL end/unit-only validator is unchanged and insufficient for new interval/basis semantics. Mandatory server-derived missing_sql_financial_interval_basis_parity prevents new current financial qualification regardless of caller DTO stripping; retain existing alreadyPublished/historical return. No new approval/role/rights authority, SQL apply or native retry. Real signed basis/supersession/currentrights/frequency/source/SQL/valuation/model protocol remains future independently reviewed work. Later9af10f/e50842f3 observations cannot fill older frozen cutoffs.
+
+Maintain writer/RLS/ledger/VN01–VN20, original PR head/A1/native HOLD and deployment gates. Exactsource and execution: docs/operations/2026-11-15/launch-radar/financial-period-checks.json. Current engineering tests are synthetic actual-module ports, not real financial or fullT07 acceptance.
