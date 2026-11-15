@@ -1,0 +1,41 @@
+{
+  "schema": "stockinsider-tpex-market-cash-queue-candidate-v1",
+  "base": "4773aa7c04a7af87aaa7a43141e92b11924c337a",
+  "issues": [
+    391,
+    395
+  ],
+  "datasetId": 11743,
+  "verification": {
+    "environment": "contabo_isolated_staging",
+    "postgres": "17.11",
+    "node": "22.23.1",
+    "nodeTestsPassed": 19,
+    "nativeActualCsvReports": 5,
+    "syntheticOfficialCalendarAndBackend": true,
+    "realCurrencyFieldsComparedIndependently": true,
+    "earlierOriginalCutoffRefused": true,
+    "latestCancellationRefused": true,
+    "rightsRevocationRefused": true,
+    "uncommittedAckExcluded": true,
+    "privateMarketCashSeparateFromShares": true,
+    "sameDayPlanIdempotent": true,
+    "boundedNewProfile": 8192,
+    "legacyCaseSyntaxRepair": true,
+    "oldProfileResultPreserved": true,
+    "wholeCloudCi": false
+  },
+  "sourceCaptureDate": "2026-11-15",
+  "sourceCaptureRequestedDates": [
+    "2026-11-09",
+    "2026-11-10",
+    "2026-11-11",
+    "2026-11-12",
+    "2026-11-13"
+  ],
+  "rawCsvCommitted": false,
+  "productionMutation": false,
+  "fullMarketReady": false,
+  "rankingPublished": false,
+  "protectedReview": false
+}

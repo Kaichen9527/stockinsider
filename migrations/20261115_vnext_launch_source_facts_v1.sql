@@ -168,7 +168,7 @@ DECLARE n numeric;
 BEGIN
  IF length(value)>30 OR btrim(value) !~ '^-?([0-9]+|[0-9]{1,3}(,[0-9]{3})+)$' THEN RAISE EXCEPTION 'launch_csv_integer_invalid';END IF;
  n:=replace(btrim(value),',','')::numeric;
- IF n>9007199254740991 OR n<CASE WHEN signed_value THEN -9007199254740991 ELSE 0 END THEN RAISE EXCEPTION 'launch_csv_integer_invalid';END IF;
+ IF n>9007199254740991 OR n<(CASE WHEN signed_value THEN -9007199254740991 ELSE 0 END) THEN RAISE EXCEPTION 'launch_csv_integer_invalid';END IF;
  RETURN n::bigint;
 END $$;
 CREATE FUNCTION public.vnext_launch_csv_decimal_v1(value text) RETURNS numeric LANGUAGE plpgsql IMMUTABLE SET search_path=pg_catalog AS $$
@@ -246,7 +246,7 @@ BEGIN
  FOR row_item IN SELECT item FROM jsonb_array_elements(records) WITH ORDINALITY r(item,ordinal) WHERE ordinal>1 LOOP
   SELECT array_agg(value ORDER BY ordinal) INTO fields FROM jsonb_array_elements_text(row_item) WITH ORDINALITY f(value,ordinal);
   day:=public.vnext_launch_csv_date_v1(fields[1]);
-  IF CASE WHEN dataset IN(11391,11755) THEN to_char(day,'YYYY-MM')<>request_key ELSE to_char(day,'YYYY-MM-DD')<>request_key END THEN RAISE EXCEPTION 'launch_csv_row_session_mismatch';END IF;
+  IF (CASE WHEN dataset IN(11391,11755) THEN to_char(day,'YYYY-MM')<>request_key ELSE to_char(day,'YYYY-MM-DD')<>request_key END) THEN RAISE EXCEPTION 'launch_csv_row_session_mismatch';END IF;
   code:=CASE WHEN dataset IN(11391,11755) THEN 'INDEX' ELSE fields[2] END;
   IF code<>'INDEX' AND code !~ '^[0-9A-Za-z]{2,12}$' THEN RAISE EXCEPTION 'launch_csv_symbol_invalid';END IF;
   IF dataset NOT IN(11391,11755) AND (code !~ '^[0-9]{4}$' OR NOT EXISTS(SELECT FROM jsonb_array_elements(pool->'targets') t WHERE t->>'symbol'=code)) THEN CONTINUE;END IF;
