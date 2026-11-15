@@ -1,8 +1,10 @@
 """Fixed genuine Next API/page probes. Counts/hashes only; no body is exported."""
 from collections import Counter
+from datetime import date
 import hashlib
 import html.parser
 import json
+import math
 import re
 import time
 from urllib.parse import urlsplit,urlunsplit
@@ -11,21 +13,34 @@ from .t18_readpoint_diagnostics import readpoint_phase,http_subphase
 STATUSES=('GAP_DETAIL_SCOPE','GAP_AUGMENTED_DETAIL','GAP_DETAIL_BOUND','GAP_DETAIL_ACTION_SURFACE','GAP_DETAIL_PUBLIC_JSON','HISTORICAL_DETAIL_HTTP_VERIFIED')
 
 
+_CHART_ATTRIBUTION='https://www.tradingview.com/lightweight-charts/'
+_CHART_SECTIONS=('candidate-price-history','candidate-monthly-price-history','candidate-multiple-history')
+
+
 class _VisibleText(html.parser.HTMLParser):
  def __init__(self):
   super().__init__(convert_charrefs=True)
   self.skip=0;self.text=[];self.articles=0;self.anchors=[];self.invalid_anchor=False
+  self.sections=[];self.chart_anchors=[];self.invalid_chart_anchor=False
  def handle_starttag(self,tag,attrs):
   if tag in ('script','style'):self.skip+=1
   if tag=='article':self.articles+=1
+  if tag=='section' and not self.skip:
+   identifiers=[v for k,v in attrs if k=='aria-labelledby']
+   self.sections.append(identifiers[0] if len(identifiers)==1 and identifiers[0] in _CHART_SECTIONS else None)
   if tag=='a' and not self.skip:
    hrefs=[v for k,v in attrs if k=='href']
    external=any(v and re.match(r'^(https?:)?//',v,re.I) for v in hrefs)
    if external:
     if len(hrefs)!=1:self.invalid_anchor=True
+    elif self.sections and self.sections[-1] is not None:
+     expected={'class':'underline','href':_CHART_ATTRIBUTION,'target':'_blank','rel':'noreferrer'}
+     if len(attrs)!=len(expected) or dict(attrs)!=expected:self.invalid_chart_anchor=True
+     self.chart_anchors.append((self.sections[-1],hrefs[0]))
     else:self.anchors.append(hrefs[0])
  def handle_endtag(self,tag):
   if tag in ('script','style'):self.skip=max(0,self.skip-1)
+  if tag=='section' and not self.skip and self.sections:self.sections.pop()
  def handle_data(self,data):
   if not self.skip:self.text.append(data)
 
@@ -107,10 +122,37 @@ def _expected_sources(rows):
  return sources,separate
 
 
+def _expected_chart_attributions(detail):
+ """Pinned A/B React renderer emits one credit link for each populated chart."""
+ def history_date(value):
+  if type(value) is not str or not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}',value):return False
+  try:return date.fromisoformat(value).isoformat()==value
+  except ValueError:return False
+
+ def has_point(row,keys):
+  return any(type(row.get(k)) in (int,float) and math.isfinite(row[k]) for k in keys)
+
+ valuation=detail.get('valuation') or {}
+ prices=valuation.get('historicalPrices') or []
+ multiples=valuation.get('historicalMultiples') or []
+ daily=any(row.get('frequency')=='daily' and history_date(row.get('date') or row.get('month'))
+           and has_point(row,('close','ma5','ma20','ma60','ma120','ma240')) for row in prices)
+ monthly=any(row.get('frequency')=='monthly' and history_date(row.get('date') or row.get('month'))
+             and has_point(row,('close',)) for row in prices)
+ valuation_history=any(history_date(row.get('date')) and has_point(row,('peRatio','pbRatio')) for row in multiples)
+ return Counter((section,_CHART_ATTRIBUTION) for section,populated in
+                zip(_CHART_SECTIONS,(daily,monthly,valuation_history)) if populated)
+
+
 def _check_page_links(parser,detail,step=None):
  from .t18_same_clone import FixedRollbackRejected
  expected=Counter(source['url'] for field in ('sources','sourceLinks') for source in detail[field])
  observed=Counter(parser.anchors)
+ if parser.invalid_chart_anchor or Counter(parser.chart_anchors)!=_expected_chart_attributions(detail):
+  if step:
+   with http_subphase(step+'_page_chart_attribution'):
+    raise FixedRollbackRejected('historical_detail_chart_attribution_changed')
+  raise FixedRollbackRejected('historical_detail_chart_attribution_changed')
  if not parser.invalid_anchor and observed==expected:return
  if step:
   failure=('page_link_markup' if parser.invalid_anchor else

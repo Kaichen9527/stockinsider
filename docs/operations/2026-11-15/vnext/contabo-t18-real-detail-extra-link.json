@@ -1,0 +1,106 @@
+{
+  "task": "T18",
+  "candidateCommit": "1ecbb6b5b9f39fdeba9b4607d598fb317f4a0021",
+  "observedOn": "2026-11-15",
+  "preparedSource": {
+    "stagedRuntimeFiles": 51,
+    "exactUnmodifiedFiles": 49,
+    "replacements": 2,
+    "verifiedGitCommit": "1ecbb6b5b9f39fdeba9b4607d598fb317f4a0021"
+  },
+  "sourceBlobsBeforeAndAfter": {
+    "verifiedDiagnosticsBlobs": {
+      "deployment/staging/vnext/t17_keyfd/t18_detail_http.py": {
+        "gitBlob": "82367b7407d2b4b650ee320e0b83dda76432b713",
+        "sha256": "3aee418451f4ce8b3141c4113d5ee650d40fb40d97e19a16c355bdafafae0e1b"
+      },
+      "deployment/staging/vnext/t17_keyfd/t18_readpoint_diagnostics.py": {
+        "gitBlob": "95288662e5d445a330d4c679d5ac26fe06526ed4",
+        "sha256": "dbddccdd95c6bbfceec4bfe8c91fb18e6001ffba189ca58b0a5ad9bf7e2225bc"
+      }
+    },
+    "beforeDiagnosticsBlobs": {
+      "deployment/staging/vnext/t17_keyfd/t18_detail_http.py": {
+        "sha256": "633829fee24d86d2185111be74a198ee8453813d20c121fbcbc2a8ce4f91e7b5",
+        "gitBlob": "886aca2dd7b3fab917f9a7b3005cbf58d4f7f9d8",
+        "mode": "0o444"
+      },
+      "deployment/staging/vnext/t17_keyfd/t18_readpoint_diagnostics.py": {
+        "gitBlob": "efd3801773c0338498726a8e10f867a4f80fe6f5",
+        "sha256": "9f081ead3f2904c2505d4c78b23164803b48682f64558b154de59aa1075e0eb8",
+        "mode": "0o444"
+      }
+    }
+  },
+  "native": [
+    {
+      "brokerDiagnostics": {},
+      "durationSeconds": 687.554,
+      "keyRead": true,
+      "mode": "real",
+      "nativeHoldRetained": true,
+      "productionSignaturesUnchanged": true,
+      "resourceSample": {
+        "appMemoryPeakObservedBytes": 281210880,
+        "dbMemoryPeakObservedBytes": 805310464,
+        "minimumHostAvailableMemoryBytes": 3786317824,
+        "minimumHostDiskBytes": 17774354432,
+        "minimumWorkFreeBytes": 5950783488,
+        "restMemoryPeakObservedBytes": 29351936
+      },
+      "runner": {
+        "databaseRestored": false,
+        "durationSeconds": 673.048,
+        "nativeHoldRetained": true,
+        "readpointDiagnostics": {
+          "completedStages": {
+            "appShutdownAcknowledged": true,
+            "appTransportClosed": true,
+            "bHealthPassed": true,
+            "detailBoundsGap": false,
+            "detailHttpPassed": false,
+            "detailPreparationCompleted": true,
+            "detailPreparationGap": false,
+            "detailReadPrepared": true,
+            "faultBReady": true,
+            "faultObserved": true,
+            "firstAHealthPassed": true,
+            "proxyDenialsPassed": true,
+            "proxyStarted": true,
+            "proxyStopped": true,
+            "restDenialsPassed": true,
+            "restShutdownAcknowledged": true,
+            "restTargetResponded": true,
+            "returnAHealthPassed": true,
+            "rollbackAHealthPassed": true
+          },
+          "errorClass": "rejected",
+          "httpSubphase": "detail_a_page_links_unexpected",
+          "ownedCloneCleanupVerified": true,
+          "phase": "candidate_detail_http"
+        },
+        "reason": "t18_candidate_detail_http_failed",
+        "schema": "stockinsider-staging-next-rollback-v1",
+        "status": "REJECTED"
+      },
+      "runnerExit": 2,
+      "schema": "stockinsider-t18-host-launcher-v1",
+      "stagingAccounts": "RESERVED_LOCKED_NOLOGIN",
+      "stagingResourcesCleaned": true
+    },
+    {
+      "schema": "stockinsider-t18-host-launcher-v1",
+      "status": "REJECTED",
+      "reason": "fixed_runner_outcome_unexpected",
+      "nativeHoldRetained": true
+    },
+    {
+      "sshExitCode": 2,
+      "stderrBytes": 0,
+      "durationSeconds": 689.805
+    }
+  ],
+  "backupIdentity": "Same previously authenticated 2026-09-19 production artifact",
+  "externalLinkFailure": "A detail HTML contained additional HTTP links, with expected links present per exact prior verifier. It did not reach B detail.",
+  "productionChanged": false
+}

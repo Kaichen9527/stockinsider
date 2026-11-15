@@ -1,0 +1,61 @@
+{
+  "task": "T18",
+  "base": "1ecbb6b5b9f39fdeba9b4607d598fb317f4a0021",
+  "observedAt": "2026-11-15T17:19:38Z",
+  "pinnedReleases": [
+    "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "dd59817f750684b093965f539dd4de466be13077"
+  ],
+  "releaseSourceBlobs": [
+    [
+      {
+        "path": "web/src/app/stock/[symbol]/CandidateDetailView.tsx",
+        "sha": "20beb79a1bfbadc9e71d75b55bda1e05fe344a19"
+      },
+      {
+        "path": "web/src/lib/candidate-history-chart.tsx",
+        "sha": "f28bc5e3321c96d3960c2e00a297ee5b1e49fbb4"
+      },
+      {
+        "path": "web/src/lib/candidate-price-history.ts",
+        "sha": "f2b47abe7dd7c1dfbdb8445b837735f6b546e46d"
+      }
+    ],
+    [
+      {
+        "path": "web/src/app/stock/[symbol]/CandidateDetailView.tsx",
+        "sha": "20beb79a1bfbadc9e71d75b55bda1e05fe344a19"
+      },
+      {
+        "path": "web/src/lib/candidate-history-chart.tsx",
+        "sha": "f28bc5e3321c96d3960c2e00a297ee5b1e49fbb4"
+      },
+      {
+        "path": "web/src/lib/candidate-price-history.ts",
+        "sha": "f2b47abe7dd7c1dfbdb8445b837735f6b546e46d"
+      }
+    ]
+  ],
+  "sameChartSourceAcrossBothFixedReleases": true,
+  "knownRendererRule": "One exact TradingView attribution anchor per rendered daily, monthly or multiple chart, with the pinned section identity and link attributes",
+  "verification": [
+    "compute expected chart positions from the API-bound valuation history",
+    "require exact chart attribution URL and markup in each populated chart",
+    "keep original source link multiplicity",
+    "retain rejects for an attribution outside its chart, a replaced or repeated link, unknown external links, missing chart data and invalid dates"
+  ],
+  "tests": {
+    "passed": 13,
+    "failed": 0,
+    "environment": "Non-root Contabo staging, loopback-only network namespace, PG17 fixtures",
+    "testedBlobs": {
+      "deployment/staging/vnext/t17_keyfd/t18_detail_http.py": "642920d706d10f47d805f56c9c380132fda57c84",
+      "deployment/staging/vnext/t17_keyfd/t18_readpoint_diagnostics.py": "207611a00821d4e820f6f238dea5117d9d32cc10",
+      "scripts/tests/test_t18_detail_read_adapter.py": "bf8fc6bd4907b6aeb5d85aa57ed6093e58c3b731",
+      "deployment/staging/vnext/t17_keyfd/t18_detail_read_adapter.py": "bfbada5afe31f7ead52cc2bb63dc9fad9df5d101",
+      "scripts/tests/test_t18_http_subphases.py": "e3dc9d13f8b5f643a9d72db73ae703731ba6b268"
+    }
+  },
+  "nativeLiveWithThisPatch": false,
+  "nativeHoldRetained": true
+}

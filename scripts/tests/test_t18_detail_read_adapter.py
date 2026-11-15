@@ -193,6 +193,8 @@ class DetailReadAdapterTests(unittest.TestCase):
    ('page_links_missing',200,page.replace(f['source_url'],'/').encode()),
    ('page_links_changed',200,page.replace(f['source_url'],'https://unrecognized.invalid/').encode()),
    ('page_links_unexpected',200,page.replace('</main>','<a href="https://unrecognized.invalid/">extra</a></main>').encode()),
+   ('page_chart_attribution',200,page.replace('</main>',
+    '<section aria-labelledby="candidate-price-history"><a class="underline" href="https://www.tradingview.com/lightweight-charts/" target="_blank" rel="noreferrer">credit</a></section></main>').encode()),
    ('page_identity',200,page.replace('REVISION-BOUND RESEARCH','changed').encode()),
    ('page_sections',200,page.replace('article>','section>').encode()),
    ('page_prose',200,page.replace(fixture.MARKER,'PUBLIC_DIFFERENT').encode()),
@@ -348,6 +350,44 @@ class DetailSourceLinkChecks(unittest.TestCase):
      (['https://different.example/',*hrefs[1:]],False),(hrefs,True)):
    with self.assertRaisesRegex(FixedRollbackRejected,'historical_detail_page_links_changed'):
     _check_page_links(render(links,duplicates),detail)
+
+ def test_exact_chart_credits_per_rendered_chart_do_not_count_as_sources(self):
+  import html
+  from deployment.staging.vnext.t17_keyfd.t18_detail_http import _VisibleText,_check_page_links,_CHART_ATTRIBUTION
+  from deployment.staging.vnext.t17_keyfd.t18_same_clone import FixedRollbackRejected
+  detail=self.check(self.payload)
+  detail={**detail,'valuation':{'historicalPrices':[
+   {'frequency':'daily','date':'2026-09-10','close':None,'ma20':0},
+   {'frequency':'monthly','month':'2026-08-31','close':101}],
+   'historicalMultiples':[{'date':'2026-09-10','peRatio':10}]}}
+  hrefs=[source['url'] for field in ('sources','sourceLinks') for source in detail[field]]
+  evidence=''.join('<a href="'+html.escape(url,quote=True)+'">source</a>' for url in hrefs)
+  a='<a class="underline" href="'+_CHART_ATTRIBUTION+'" target="_blank" rel="noreferrer">credit</a>'
+  labels=['candidate-price-history','candidate-monthly-price-history','candidate-multiple-history']
+  def chart(label,credit):
+   return '<section aria-labelledby="'+label+'"><h3 id="'+label+'">chart</h3>'+credit+'</section>'
+  charts=[chart(label,a) for label in labels]
+  def parse(markup):
+   parsed=_VisibleText();parsed.feed('<div hidden>'+markup+'</div>');parsed.close();return parsed
+  _check_page_links(parse(evidence+''.join(charts)),detail)
+  for bad in (charts[:-1], [*charts,charts[0]], [charts[0].replace(_CHART_ATTRIBUTION,'https://research.example/leak'),*charts[1:]],
+    [charts[0].replace('class="underline"','class="unverified"'),*charts[1:]], [chart(labels[0],''),*charts[1:]]):
+   with self.assertRaisesRegex(FixedRollbackRejected,'historical_detail_chart_attribution_changed'):
+    _check_page_links(parse(evidence+''.join(bad)),detail)
+  with self.assertRaisesRegex(FixedRollbackRejected,'historical_detail_page_links_changed'):
+   _check_page_links(parse(evidence+''.join(charts)+a),detail)
+
+ def test_empty_or_invalid_chart_series_does_not_authorize_credit(self):
+  from deployment.staging.vnext.t17_keyfd.t18_detail_http import _expected_chart_attributions,_CHART_ATTRIBUTION
+  iv={'valuation':{'historicalPrices':[
+   {'frequency':'daily','date':'2026-02-30','close':100},
+   {'frequency':'weekly','date':'2026-09-11','close':100},
+   {'frequency':'monthly','date':'2026-08-31','ma20':13},
+   {'frequency':'daily','date':'2026-09-11','close':True}],
+   'historicalMultiples':[{'date':'2026-02-29','pbRatio':4},{'date':'2026-09-11','peRatio':None}]}}
+  self.assertEqual(_expected_chart_attributions(iv),{})
+  iv['valuation']['historicalPrices'].append({'frequency':'monthly','date':'2026-08-31','close':0})
+  self.assertEqual(_expected_chart_attributions(iv),{('candidate-monthly-price-history',_CHART_ATTRIBUTION):1})
 
 
 if __name__=='__main__':unittest.main()
