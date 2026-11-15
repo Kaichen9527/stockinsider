@@ -1,0 +1,40 @@
+{
+  "schema": "stockinsider-t03-investanchors-gmail-provider-v1",
+  "task": "T03",
+  "baseCommit": "9841892de0f3e8aa7ca0372921bcd14fe7d22c92",
+  "recordedAt": "2026-11-15T15:53:34Z",
+  "check": {
+    "environment": "Contabo staging network-isolated subprocess",
+    "node": "22.14.0",
+    "typescript": "5.9.3",
+    "strictScopedTransportTypes": true,
+    "focusedTestsPassed": 29,
+    "failed": 0,
+    "scenarios": [
+      "exact Google read-only grant",
+      "configured mailbox hash",
+      "bound Gmail search and message IDs",
+      "redirect, expiry, scope and HTTP response bounds",
+      "private credential fields absent from URLs/errors",
+      "existing morning timer and market-first ordering",
+      "notices continue on market failure, market retains its status on notice failure",
+      "existing evening ranking and preliminary behavior"
+    ],
+    "realGoogleOAuthExchange": false
+  },
+  "contaboConfiguration": {
+    "namedEnvironmentFilePresent": true,
+    "requiredFieldsConfigured": 0,
+    "requiredFields": 5,
+    "notificationScanEnabled": false,
+    "valuesReadToOutput": false
+  },
+  "productionChanges": false,
+  "fullVmAndCiAcceptance": false,
+  "gmailConnectorReadingIsSeparate": true,
+  "remaining": [
+    "owner-authorized background OAuth offline grant and fixed mailbox secret configuration",
+    "approved member article supply and original evidence",
+    "replay of a missed closed-day scan and genuine scheduled acceptance"
+  ]
+}

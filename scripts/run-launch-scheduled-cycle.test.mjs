@@ -69,6 +69,26 @@ test('morning uses only the closed market-background action', () => {
   }
 });
 
+test('existing Taipei morning slot adds the private notice scan only when configured', () => {
+  const env = { ...active, STOCKINSIDER_VNEXT_INVESTANCHORS_GMAIL_ENABLED: 'true' };
+  const response = { ok: true, policyVersion, result: { scanStatus: 'scanned', articleAuthority: false } };
+  const normal = plan(day + 'T00:15:00Z', [morning, response], { env });
+  assert.equal(normal.run().noticeScan, 'scanned');
+  assert.deepEqual(normal.calls.map(row => row.payload.action), ['market-background', 'investanchors-gmail-notices']);
+  const unavailable = plan(day + 'T00:15:00Z', [morning, null], { env });
+  assert.equal(unavailable.run().status, 'published');
+  const marketFailed = plan(day + 'T00:15:00Z', [null, response], { env });
+  assert.throws(marketFailed.run, /launch_market_background_failed/u);
+  assert.deepEqual(marketFailed.calls.map(row => row.payload.action), ['market-background', 'investanchors-gmail-notices']);
+});
+test('private notice request is an operator-only internal action with a closed request', async () => {
+  const http = await readFile(new URL('../web/src/lib/vnext/http.ts', import.meta.url), 'utf8');
+  const block = http.slice(http.indexOf("if(action==='investanchors-gmail-notices')"), http.indexOf("if(action==='market-background')"));
+  assert.match(block, /identity.role!=='operator'.*requireExactInternalBearer/u);
+  assert.match(block, /key!=='action'&&key!=='day'/u);
+  assert.match(block, /runConfiguredInvestAnchorsNotices\(identity,body.day\)/u);
+  assert.match(block, /'cache-control':'no-store'/u);
+});
 test('morning refuses a publication receipt for a different session', () => {
   const { run } = plan(day + 'T00:15:00Z', [{ ...morning, result: { ...morning.result, session: '2026-11-13' } }]);
   assert.throws(run, { message: 'launch_market_background_wrong_scope' });

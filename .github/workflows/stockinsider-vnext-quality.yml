@@ -59,6 +59,8 @@ jobs:
           node --experimental-strip-types web/src/lib/vnext/analysis-sources.test.ts | tee /tmp/stockinsider-vnext-ci/analysis-source.tap
           node --experimental-strip-types web/src/lib/vnext/source-backlog.test.ts | tee /tmp/stockinsider-vnext-ci/source-backlog.tap
           node --experimental-strip-types web/src/lib/vnext/investanchors-notice-receiver.test.ts | tee /tmp/stockinsider-vnext-ci/investanchors-notices.tap
+          node --experimental-strip-types web/src/lib/vnext/investanchors-gmail.test.ts | tee /tmp/stockinsider-vnext-ci/investanchors-gmail.tap
+          node scripts/run-launch-scheduled-cycle.test.mjs | tee /tmp/stockinsider-vnext-ci/launch-scheduled-cycle.tap
           node --experimental-strip-types scripts/vnext-source-window-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-window-source.tap
           node scripts/vnext-source-namespace-source.test.mjs | tee /tmp/stockinsider-vnext-ci/source-namespace-source.tap
           python3 -B scripts/vnext-reachability-annotation-source.test.py

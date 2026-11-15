@@ -63,14 +63,29 @@ export function runLaunchScheduledCycle({
   const { slot, sessionDate } = launchScheduledSlot(clock());
   if (slot === null) return { status: 'deferred', reason: 'outside_launch_schedule_window' };
   if (slot === 'morning') {
-    const { policyVersion, result } = request(
-      researchEndpoint, { action: 'market-background' }, 120_000, 'launch_market_background_failed',
-    );
-    if (policyVersion !== launchPolicy || !['published', 'deferred'].includes(result?.status)
-      || (result.status === 'published' && result.session !== sessionDate)) {
-      throw new Error('launch_market_background_wrong_scope');
+    let status, noticeScan;
+    try {
+      const { policyVersion, result } = request(
+        researchEndpoint, { action: 'market-background' }, 120_000, 'launch_market_background_failed',
+      );
+      if (policyVersion !== launchPolicy || !['published', 'deferred'].includes(result?.status)
+        || (result.status === 'published' && result.session !== sessionDate)) {
+        throw new Error('launch_market_background_wrong_scope');
+      }
+      status = result.status === 'published' ? 'published' : 'retained';
+    } finally {
+      if (env.STOCKINSIDER_VNEXT_INVESTANCHORS_GMAIL_ENABLED === 'true') {
+        try {
+          const notice = call(researchEndpoint, { action: 'investanchors-gmail-notices' }, 125_000, env);
+          const scanStatus = notice?.result?.scanStatus;
+          noticeScan = notice?.ok === true && notice.policyVersion === launchPolicy && notice.result.articleAuthority === false
+            && ['scanned', 'deferred', 'disabled', 'blocked', 'retry_required'].includes(scanStatus) ? scanStatus : 'failed';
+        } catch {
+          noticeScan = 'failed';
+        }
+      }
     }
-    return { slot, sessionDate, status: result.status === 'published' ? 'published' : 'retained' };
+    return { slot, sessionDate, status, ...(noticeScan ? { noticeScan } : {}) };
   }
 
   const weekly = call(researchEndpoint, { action: 'launch-weekly-audit' }, 120_000, env);
@@ -106,7 +121,7 @@ if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) 
   try {
     const result = runLaunchScheduledCycle({ mode: process.argv[2] });
     console.log(JSON.stringify(result));
-    if (result.weeklyAudit === 'failed') process.exitCode = 1;
+    if (result.weeklyAudit === 'failed' || ['failed', 'blocked', 'retry_required'].includes(result.noticeScan)) process.exitCode = 1;
   } catch (error) {
     console.error(JSON.stringify({ status: 'failed', reason: error.message }));
     process.exitCode = 1;
