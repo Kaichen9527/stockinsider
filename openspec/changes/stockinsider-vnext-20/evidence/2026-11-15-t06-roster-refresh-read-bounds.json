@@ -1,0 +1,112 @@
+{
+  "verifiedAt": "2026-11-15T05:45:59Z",
+  "subject": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "sourceGitBlobs": {
+    "web/src/lib/vnext/preparation-trading-identity.ts": "fe7bcc1e0c4c9fff871a5d4e2d6cf2d7f7d90f13",
+    "web/src/lib/vnext/screening-instrument-identity.ts": "c28b7751f68da47b24297607e2b0b74b22f53d96"
+  },
+  "existingDbReadOnlyCounts": {
+    "readOnly": "on",
+    "observedAt": "2026-11-15T06:43:24.488257+01:00",
+    "sampleSize": 220,
+    "binaryCutoffs": {
+      "maximumSharedHistoryRows": 1000,
+      "perSymbolRankingHistoryRows": 100
+    },
+    "actualHistoryBySymbol": 880,
+    "actualHistoryByIdentity": 880,
+    "maximumRowsSingleIdentity": 4,
+    "probeMonthlyAppendsAtFullCohort": [
+      {
+        "projectedBySymbol": 880,
+        "projectedByIdentity": 880,
+        "additionalFullSnapshots": 0
+      },
+      {
+        "projectedBySymbol": 1100,
+        "projectedByIdentity": 1100,
+        "additionalFullSnapshots": 1
+      },
+      {
+        "projectedBySymbol": 1320,
+        "projectedByIdentity": 1320,
+        "additionalFullSnapshots": 2
+      },
+      {
+        "projectedBySymbol": 1540,
+        "projectedByIdentity": 1540,
+        "additionalFullSnapshots": 3
+      }
+    ]
+  },
+  "existingDbReadOnlyCutoffHeadProjection": {
+    "cutoff": "2026-11-13T14:30:00+01:00",
+    "observedAt": "2026-11-15T06:45:05.181933+01:00",
+    "scopeCount": 220,
+    "queryReadOnly": "on",
+    "cutoffHeadRows": 220,
+    "crossScopeStreams": 0,
+    "equalHeadTimeRows": 0,
+    "separateStockSymbolStreams": 220,
+    "eligibleHistoricalInputRows": 880,
+    "unmatchedSourceCohortStreams": 0
+  },
+  "isolatedNativeConfiguration": {
+    "backend": "Contabo non-root Node with bytes from two verified Git objects; synthetic Supabase transport and rows, cohort dimensions tied to production read-only counts"
+  },
+  "nativeControlledReplay": {
+    "node": "v22.23.1",
+    "nonRoot": true,
+    "gitBlobsVerified": true,
+    "baselineResult": {
+      "identities": 220,
+      "missing": 0,
+      "gapReasons": [],
+      "exchanges": [
+        "TWSE"
+      ],
+      "stockAndTwoRosterIndexesQueried": true
+    },
+    "refreshedResult": {
+      "identities": 0,
+      "missing": 220,
+      "gapReasons": [
+        "shared_roster_cache_unbounded"
+      ],
+      "exchanges": [],
+      "stockAndTwoRosterIndexesQueried": true
+    },
+    "oldWithoutRevision": {
+      "identities": 1,
+      "missing": 0,
+      "gapReasons": [],
+      "exchanges": [
+        "TPEX"
+      ],
+      "stockAndTwoRosterIndexesQueried": true
+    },
+    "oldWithLaterRevision": {
+      "identities": 0,
+      "missing": 1,
+      "gapReasons": [
+        "vnext_preparation_instrument_clock_unavailable"
+      ],
+      "exchanges": [],
+      "stockAndTwoRosterIndexesQueried": true
+    },
+    "afterRevision": {
+      "identities": 1,
+      "missing": 0,
+      "gapReasons": [],
+      "exchanges": [
+        "TWSE"
+      ],
+      "stockAndTwoRosterIndexesQueried": true
+    }
+  },
+  "relatedSourceEvidence": "01559b45fd82201726f75571a1ceb3f7be207434",
+  "productionDbWrites": false,
+  "normalServiceInvoked": false,
+  "refreshedRosterActuallyApplied": false,
+  "completeRankOrMarketClassification": false
+}
