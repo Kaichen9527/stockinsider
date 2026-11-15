@@ -1,0 +1,31 @@
+import {resolveFinancialEvidenceSources} from './web/src/lib/vnext/financial-evidence-sources-probe.ts';
+import {inputHash} from './web/src/lib/vnext/policy.ts';
+const stock='00000000-0000-4000-8000-000000000003',fid='00000000-0000-4000-8000-000000000004',doc='00000000-0000-4000-8000-000000000005',rid='00000000-0000-4000-8000-000000000006',parser='00000000-0000-4000-8000-000000000007',provenance='00000000-0000-4000-8000-000000000008',job='00000000-0000-4000-8000-000000000009';
+const at='2026-10-22T06:00:00.100001Z',later='2026-10-22T06:00:00.100002Z',cutoff='2026-10-22T07:00:00.000000Z';
+const afterCutoff='2026-10-22T07:00:00.000001Z', period='2026-06-30', hash='a'.repeat(64),manifest='b'.repeat(64);
+const examples=[
+ {label:'openapi',provider:'tpex',url:'https://www.tpex.org.tw/synthetic-source.json',parserTime:null,issuer:false},
+ {label:'official_document_same_clock',provider:'mops',url:'https://mopsfin.twse.com.tw/synthetic-source.xhtml',parserTime:at,issuer:false},
+ {label:'official_document_parser_later',provider:'mops',url:'https://mopsfin.twse.com.tw/synthetic-source.xhtml',parserTime:later,issuer:false},
+ {label:'official_document_parser_post_cutoff',provider:'mops',url:'https://mopsfin.twse.com.tw/synthetic-source.xhtml',parserTime:afterCutoff,issuer:false},
+ {label:'issuer_document_parser_later',provider:'mops',url:'https://www.nanya.com/synthetic-vnext-ir/source.xhtml',parserTime:later,issuer:true}
+];
+const outputs=[];
+for(const {label,provider,url,parserTime,issuer} of examples){
+ const sourceRef=parserTime?'issuer-document:'+hash+':'+ 'c'.repeat(64):'tpex-openapi:synthetic-original';
+ const fact={fact_id:fid,stock_id:stock,fact_key:'quarterly_revenue',period_start:'2026-04-01',period_end:period,duration_kind:'quarterly',value:100.25,unit:'TWD',provider,authority_tier:'official_filing',estimate_kind:'reported',estimate_horizon:'reported_period',filing_published_at:at,source_timestamp:at,collected_at:at,filing_restatement_id:null,source_ref:sourceRef,recorded_at:at,validation_status:'validated',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true,upstream_provider:null,validation_recorded_at:at};
+ const rows={provenance:[],jobs:[],links:[],receipts:[],documents:[],issuerDomains:[],parserEvidence:[]};
+ rows.provenance.push({provenance_id:provenance,fact_id:fid,acquisition_job_id:parserTime?null:job,issuer_document_id:parserTime?doc:null,source_url:url,source_sha256:hash,locator:parserTime?{parser_evidence_id:parser,manifest_sha256:manifest,response_url:url}:{source_ref:sourceRef,period_end:period,fact_key:fact.fact_key},extracted_at:at,recorded_at:at});
+ if(parserTime){
+  rows.links.push({receipt_id:rid,fact_id:fid,fact_recorded_at:at,evidence_id:parser,created_at:at});
+  rows.receipts.push({receipt_id:rid,stock_id:stock,issuer_document_id:doc,source_url:url,period_end:period,document_sha256:hash,receipt_status:'accepted',parser_status:'complete',published_at:at,accepted_at:at,completed_at:at,parser_evidence_id:parser,financial_validation_status:'validated'});
+  rows.documents.push({document_id:doc,stock_id:stock,document_url:url,document_sha256:hash,acquisition_status:'fetched',collected_at:at,recorded_at:at});
+  rows.parserEvidence.push({evidence_id:parser,receipt_id:rid,document_sha256:hash,manifest_sha256:manifest,recorded_at:parserTime});
+  if(issuer)rows.issuerDomains.push({stock_id:stock,host:'www.nanya.com',approved_at:at});
+ }else rows.jobs.push({job_id:job,stock_id:stock,period_end:period,status:'terminal',terminal_reason:'complete',response_sha256:hash,source_url:url,created_at:at,collected_at:at,updated_at:at});
+ const reads=[]; const data={candidate_financial_fact_provenance_v4:rows.provenance,candidate_financial_document_fact_links_v8:rows.links,candidate_financial_acquisition_jobs_v4:rows.jobs,candidate_financial_document_receipts_v6:rows.receipts,candidate_issuer_ir_document_queue_v4:rows.documents,candidate_issuer_document_domains_v6:rows.issuerDomains,candidate_financial_parser_evidence_v8:rows.parserEvidence};
+ const client={from(name){if(!(name in data))throw Error('undeclared fixture read');let filters=data[name];const query={select(){return query;},in(key,ids){filters=filters.filter(row=>ids.includes(row[key]));return query;},lte(key,value){filters=filters.filter(row=>typeof row[key]==='string'&&row[key]<=value);return query;},order(){return query;},limit(){reads.push(name);return Promise.resolve({data:filters,error:null});}};return query;}};
+ const result=await resolveFinancialEvidenceSources(client,[fact],cutoff),receipt=result.receipts[0],e=result.evidence[0];
+ outputs.push({label,cutoff,fact,sqlRows:{...rows,parsers:rows.parserEvidence,domains:rows.issuerDomains},receipt,evidence:e,summary:{label,parserTableRead:reads.includes('candidate_financial_parser_evidence_v8'),producerEvidence:result.evidence.length,receipts:result.receipts.length,deferred:result.deferredCount,reason:result.deferredDetails[0]?.reason||null,issuedReceiptKnownAt:receipt?.knownAt??null,producerEvidenceAvailableAt:e?.availableAt??null,sourceKind:receipt?.sourceKind??(parserTime?'official_host_document':'exchange_openapi'),parserRecordedAt:parserTime,factHash:inputHash(fact)}});
+}
+console.log(JSON.stringify({node:process.version,nonRoot:process.getuid()!==0,outputs}));

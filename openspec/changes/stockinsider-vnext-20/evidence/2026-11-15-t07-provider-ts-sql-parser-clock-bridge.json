@@ -1,0 +1,288 @@
+{
+  "observedDate": "2026-11-15",
+  "sourceCommit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "recoveredDescriptorCommit": "40fe8738cd5768b67269f7085e31014d2a84e0da",
+  "immutableGitBlobs": {
+    "web/src/lib/vnext/financial-evidence-sources.ts": {
+      "oid": "7a565b9fe6cf448aab878f1b410ac63ae0be5918",
+      "bytes": 14017
+    },
+    "web/src/lib/vnext/financial-observation.ts": {
+      "oid": "bc09446bcd1caee38039b8184f59d5b5aab5feb1",
+      "bytes": 11536
+    },
+    "web/src/lib/vnext/policy.ts": {
+      "oid": "a8441d87c99c1edf6ebfed991b58b346f917b32b",
+      "bytes": 5423
+    },
+    "web/src/lib/vnext/citations.ts": {
+      "oid": "2fb776e380e525bbdff780b2fd15ba14a49d9774",
+      "bytes": 2780
+    },
+    "web/src/lib/vnext/worker-output.ts": {
+      "oid": "3543aef056d34dc7359026498e7ffd90cb781b4b",
+      "bytes": 5987
+    },
+    "web/src/lib/vnext/evidence-clock.ts": {
+      "oid": "fa27138f5dd8f6ce823a91e2fd4be84cfe76fac9",
+      "bytes": 1287
+    },
+    "web/src/lib/candidate-price-history.ts": {
+      "oid": "066dc146fb3b5aa3f5bf789fdc7abbd7e192b751",
+      "bytes": 8934
+    },
+    "web/src/lib/public-source-url.ts": {
+      "oid": "c4f7ea17bc1415638b4ef782d147d580d2a190fa",
+      "bytes": 1954
+    },
+    "web/src/lib/vnext/research.ts": {
+      "oid": "47e8b5d2d20aff851fae02900d29012c4f4e4e33",
+      "bytes": 11047
+    },
+    "web/src/lib/vnext/business-criteria.ts": {
+      "oid": "225b5eff80fe7972a2151f7142e61932487eda0c",
+      "bytes": 9102
+    },
+    "web/src/lib/vnext/catalyst-cancellation.ts": {
+      "oid": "db4bed5735d4788bad2167b1f85c2327fd4e801f",
+      "bytes": 10359
+    },
+    "web/src/lib/vnext/semantic-criteria.ts": {
+      "oid": "05c3b755af4f5f8f02eefd9aeb34b247285ccd6f",
+      "bytes": 10923
+    },
+    "web/src/lib/vnext/artifact-financial-summary.ts": {
+      "oid": "cf60612083e096e8a325df0b0d083654c5a4d0ee",
+      "bytes": 2994
+    }
+  },
+  "exactProducer": {
+    "node": "v22.23.1",
+    "nonRoot": true,
+    "labels": [
+      {
+        "label": "openapi",
+        "producerEvidence": 1,
+        "receipts": 1,
+        "deferred": 0,
+        "reason": null,
+        "issuedReceiptKnownAt": "2026-10-22T06:00:00.100001Z",
+        "producerEvidenceAvailableAt": "2026-10-22T06:00:00.100001Z",
+        "sourceKind": "exchange_openapi",
+        "parserRecordedAt": null,
+        "factHash": "adc505bde0d87dfb0dfab0454d0793364bf959966774df71c74b441e44c7d4d9"
+      },
+      {
+        "label": "official_document_same_clock",
+        "producerEvidence": 1,
+        "receipts": 1,
+        "deferred": 0,
+        "reason": null,
+        "issuedReceiptKnownAt": "2026-10-22T06:00:00.100001Z",
+        "producerEvidenceAvailableAt": "2026-10-22T06:00:00.100001Z",
+        "sourceKind": "official_host_document",
+        "parserRecordedAt": "2026-10-22T06:00:00.100001Z",
+        "factHash": "82b63a2b33157509189bad1b2ceee4534cc0c2346d63a26741d0f4bece4be7ef"
+      },
+      {
+        "label": "official_document_parser_later",
+        "producerEvidence": 1,
+        "receipts": 1,
+        "deferred": 0,
+        "reason": null,
+        "issuedReceiptKnownAt": "2026-10-22T06:00:00.100001Z",
+        "producerEvidenceAvailableAt": "2026-10-22T06:00:00.100001Z",
+        "sourceKind": "official_host_document",
+        "parserRecordedAt": "2026-10-22T06:00:00.100002Z",
+        "factHash": "82b63a2b33157509189bad1b2ceee4534cc0c2346d63a26741d0f4bece4be7ef"
+      },
+      {
+        "label": "official_document_parser_post_cutoff",
+        "producerEvidence": 1,
+        "receipts": 1,
+        "deferred": 0,
+        "reason": null,
+        "issuedReceiptKnownAt": "2026-10-22T06:00:00.100001Z",
+        "producerEvidenceAvailableAt": "2026-10-22T06:00:00.100001Z",
+        "sourceKind": "official_host_document",
+        "parserRecordedAt": "2026-10-22T07:00:00.000001Z",
+        "factHash": "82b63a2b33157509189bad1b2ceee4534cc0c2346d63a26741d0f4bece4be7ef"
+      },
+      {
+        "label": "issuer_document_parser_later",
+        "producerEvidence": 1,
+        "receipts": 1,
+        "deferred": 0,
+        "reason": null,
+        "issuedReceiptKnownAt": "2026-10-22T06:00:00.100002Z",
+        "producerEvidenceAvailableAt": "2026-10-22T06:00:00.100002Z",
+        "sourceKind": "approved_issuer_ir",
+        "parserRecordedAt": "2026-10-22T06:00:00.100002Z",
+        "factHash": "82b63a2b33157509189bad1b2ceee4534cc0c2346d63a26741d0f4bece4be7ef"
+      }
+    ]
+  },
+  "exactProducerSql": {
+    "version": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+    "backendExit": 0,
+    "proof": [
+      {
+        "label": "openapi",
+        "originalResult": "22P02",
+        "factHashMatches": true,
+        "afterArrayAppend": true,
+        "receiptHashMatches": true
+      },
+      {
+        "label": "official_document_same_clock",
+        "originalResult": "true",
+        "factHashMatches": true,
+        "afterArrayAppend": true,
+        "receiptHashMatches": true
+      },
+      {
+        "label": "official_document_parser_later",
+        "originalResult": "false",
+        "factHashMatches": true,
+        "afterArrayAppend": false,
+        "receiptHashMatches": true
+      },
+      {
+        "label": "official_document_parser_post_cutoff",
+        "originalResult": "false",
+        "factHashMatches": true,
+        "afterArrayAppend": false,
+        "receiptHashMatches": true
+      },
+      {
+        "label": "issuer_document_parser_later",
+        "originalResult": "true",
+        "factHashMatches": true,
+        "afterArrayAppend": true,
+        "receiptHashMatches": true
+      }
+    ],
+    "errorCount": 0,
+    "sqlSha256": "0f23054510b75d39343ffa6daa61580c7dae119d9c7f698113e279d5ae2fc2f4",
+    "offlineNonRoot": true,
+    "productionChanged": false
+  },
+  "proposedResolver": {
+    "node": "v22.23.1",
+    "nonRoot": true,
+    "labels": [
+      {
+        "label": "openapi",
+        "parserTableRead": false,
+        "producerEvidence": 1,
+        "receipts": 1,
+        "deferred": 0,
+        "reason": null,
+        "issuedReceiptKnownAt": "2026-10-22T06:00:00.100001Z",
+        "producerEvidenceAvailableAt": "2026-10-22T06:00:00.100001Z",
+        "sourceKind": "exchange_openapi",
+        "parserRecordedAt": null,
+        "factHash": "adc505bde0d87dfb0dfab0454d0793364bf959966774df71c74b441e44c7d4d9"
+      },
+      {
+        "label": "official_document_same_clock",
+        "parserTableRead": true,
+        "producerEvidence": 1,
+        "receipts": 1,
+        "deferred": 0,
+        "reason": null,
+        "issuedReceiptKnownAt": "2026-10-22T06:00:00.100001Z",
+        "producerEvidenceAvailableAt": "2026-10-22T06:00:00.100001Z",
+        "sourceKind": "official_host_document",
+        "parserRecordedAt": "2026-10-22T06:00:00.100001Z",
+        "factHash": "82b63a2b33157509189bad1b2ceee4534cc0c2346d63a26741d0f4bece4be7ef"
+      },
+      {
+        "label": "official_document_parser_later",
+        "parserTableRead": true,
+        "producerEvidence": 1,
+        "receipts": 1,
+        "deferred": 0,
+        "reason": null,
+        "issuedReceiptKnownAt": "2026-10-22T06:00:00.100002Z",
+        "producerEvidenceAvailableAt": "2026-10-22T06:00:00.100002Z",
+        "sourceKind": "official_host_document",
+        "parserRecordedAt": "2026-10-22T06:00:00.100002Z",
+        "factHash": "82b63a2b33157509189bad1b2ceee4534cc0c2346d63a26741d0f4bece4be7ef"
+      },
+      {
+        "label": "official_document_parser_post_cutoff",
+        "parserTableRead": true,
+        "producerEvidence": 0,
+        "receipts": 0,
+        "deferred": 1,
+        "reason": "immutable_source_receipt_missing_or_conflicting",
+        "issuedReceiptKnownAt": null,
+        "producerEvidenceAvailableAt": null,
+        "sourceKind": "official_host_document",
+        "parserRecordedAt": "2026-10-22T07:00:00.000001Z",
+        "factHash": "82b63a2b33157509189bad1b2ceee4534cc0c2346d63a26741d0f4bece4be7ef"
+      },
+      {
+        "label": "issuer_document_parser_later",
+        "parserTableRead": true,
+        "producerEvidence": 1,
+        "receipts": 1,
+        "deferred": 0,
+        "reason": null,
+        "issuedReceiptKnownAt": "2026-10-22T06:00:00.100002Z",
+        "producerEvidenceAvailableAt": "2026-10-22T06:00:00.100002Z",
+        "sourceKind": "approved_issuer_ir",
+        "parserRecordedAt": "2026-10-22T06:00:00.100002Z",
+        "factHash": "82b63a2b33157509189bad1b2ceee4534cc0c2346d63a26741d0f4bece4be7ef"
+      }
+    ]
+  },
+  "proposalSql": {
+    "backendExit": 0,
+    "proof": [
+      {
+        "label": "openapi",
+        "originalResult": "22P02",
+        "factHashMatches": true,
+        "afterArrayAppend": true,
+        "receiptHashMatches": true
+      },
+      {
+        "label": "official_document_same_clock",
+        "originalResult": "true",
+        "factHashMatches": true,
+        "afterArrayAppend": true,
+        "receiptHashMatches": true
+      },
+      {
+        "label": "official_document_parser_later",
+        "originalResult": "true",
+        "factHashMatches": true,
+        "afterArrayAppend": true,
+        "receiptHashMatches": true
+      },
+      {
+        "label": "official_document_parser_post_cutoff",
+        "originalResult": "not_issued",
+        "factHashMatches": true,
+        "afterArrayAppend": null,
+        "receiptHashMatches": null
+      },
+      {
+        "label": "issuer_document_parser_later",
+        "originalResult": "true",
+        "factHashMatches": true,
+        "afterArrayAppend": true,
+        "receiptHashMatches": true
+      }
+    ],
+    "errorCount": 0,
+    "sqlSha256": "5ab7fb81a1da75b545bfd82ed55e15bc703114b6ffb04e04da865a89606f9a14",
+    "offlineNonRoot": true
+  },
+  "syntheticOnly": true,
+  "fullProviderPacketValidated": false,
+  "formalGateCleared": false,
+  "scratchRemoved": true
+}
