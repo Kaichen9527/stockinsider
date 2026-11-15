@@ -1,0 +1,31 @@
+{
+  "schema": "stockinsider-t18-historical-detail-url-closure-v1",
+  "nativeEvidence": "6a4c9a289938b2d11af71ed665e6e6985b53c652",
+  "sourceCheck": {
+    "revisionExists": true,
+    "sourceReadOnly": true,
+    "closedUrlCategories": {
+      "no_query": 4,
+      "query_existing_vendor_family": 4,
+      "query_current_exchange_or_mops": 1
+    },
+    "detailFingerprintMatches": true,
+    "factSetFingerprintMatches": true
+  },
+  "rawDataExported": false,
+  "hostPolicyChanged": false,
+  "nextHttpRun": false,
+  "legacyTimeoutCauseProved": false,
+  "pinnedReleaseSource": {
+    "urlSanitizerGitBlobs": [
+      "6c58c75d99928ab95107a21690e3cb108c539a53",
+      "6c58c75d99928ab95107a21690e3cb108c539a53"
+    ],
+    "dossierContractGitBlobs": [
+      "0e561c4ea1ac24791e12a166687956ccf9b335bd",
+      "0e561c4ea1ac24791e12a166687956ccf9b335bd"
+    ],
+    "readerFactSourceUrlMayBeNull": true
+  },
+  "expectedApprovalScope": "native historical detail HTTP and its stricter staging URL policy; no vendor rights are assumed"
+}
