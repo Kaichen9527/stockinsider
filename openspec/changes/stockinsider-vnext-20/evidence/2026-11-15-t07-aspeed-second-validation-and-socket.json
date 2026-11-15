@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "task": "T07",
+  "previousEvidenceCommit": "c30663887deefc48f720389e08382dee9281c0d7",
+  "productCommit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "scope": {
+    "symbol": "5274",
+    "periodEnd": "2026-09-30"
+  },
+  "stagingDiagnostic": {
+    "isolated": true,
+    "nonRoot": true,
+    "nice": 16,
+    "cpuCount": 1,
+    "cpuLimitSeconds": 55,
+    "virtualMemoryLimitMiB": 768,
+    "parentWallTimeoutSeconds": 72,
+    "preflight": {
+      "availableMemoryKiB": 4015456,
+      "rootAvailableKiB": 25960964
+    },
+    "runtime": {
+      "arelleRelease": "2.44.7",
+      "taxonomyArchiveSha256": "4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869",
+      "parserGitBlob": "d9d9f9448d705609d3f2f55e52d635ac2a858576",
+      "factScopeGitBlob": "7bf26154361b23e2bb3253303e31587c1023540e"
+    },
+    "runnerFailure": 1,
+    "source": {
+      "status": 200,
+      "mime": "text/plain",
+      "wireContentType": "; charset=iso-8859-1",
+      "attachmentFilename": "tifrs-fr1-m1-ci-cr-5274-2026Q3.html",
+      "bytes": 469661,
+      "sha256": "aca323d959623ca8d954f93b04a99fff3cd200733da5ee4d51a662f35e0503a0",
+      "observedAt": "2026-11-15T06:16:56.117887+00:00"
+    },
+    "metrics": {
+      "wallSeconds": 55.117,
+      "userSeconds": 51.278,
+      "systemSeconds": 3.372,
+      "peakRssKiB": 764144
+    },
+    "stderrSha256": "c415ac196a7b2d0994221fa10ca904194da94f185e44348a3c74538a303964f7",
+    "mentionsTaxonomy": false,
+    "memoryError": true,
+    "digitsInTrace": true,
+    "phaseTrace": [
+      [
+        "model_load_start",
+        0.948
+      ],
+      [
+        "model_load_end",
+        7.216
+      ],
+      [
+        "validate_start",
+        7.216
+      ],
+      [
+        "validate_end",
+        40.682
+      ],
+      [
+        "extract_start",
+        40.755
+      ],
+      [
+        "extract_end",
+        40.862
+      ],
+      [
+        "model_load_start",
+        40.961
+      ]
+    ],
+    "timeout": false,
+    "isolatedCpuCapSeconds": 55,
+    "validatedFactsEmitted": 0,
+    "receiptWritten": false
+  },
+  "socketReadiness": {
+    "positiveControl": {
+      "accepted": 3,
+      "exit": "StopIteration",
+      "secondReply": {
+        "error": "parser_socket_header_invalid"
+      }
+    },
+    "clientDisconnectedBeforeReply": {
+      "accepted": 1,
+      "exit": "BrokenPipeError",
+      "secondReply": null
+    },
+    "exactBlob": "3e2783f832093e0d724950b38003ad0894748c39",
+    "actualUnixSocketPairs": true,
+    "nonRoot": true,
+    "productionSocketContacted": false
+  },
+  "productionMutations": false
+}
