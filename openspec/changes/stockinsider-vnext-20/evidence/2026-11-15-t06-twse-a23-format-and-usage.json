@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "tasks": [
+    "T06",
+    "T08",
+    "T19"
+  ],
+  "observedOn": "2026-11-15",
+  "scope": "current official catalog and declared rights; bounded public sample byte inspection; candidate SQL review",
+  "openApi": {
+    "url": "https://openapi.twse.com.tw/v1/swagger.json",
+    "httpStatus": 200,
+    "bytes": 309984,
+    "sha256": "6f47523aead8cf9da8bba6e9b511198eb1b491080c6cb2e20dda927cc31d8bac",
+    "mime": "application/json",
+    "observedAt": "2026-11-15T07:28:31.924759+00:00",
+    "paths": 143,
+    "matched": [
+      {
+        "path": "/fund/MI_QFIIS_cat",
+        "label": "集中市場外資及陸資投資類股持股比率表"
+      },
+      {
+        "path": "/fund/MI_QFIIS_sort_20",
+        "label": "集中市場外資及陸資持股前 20 名彙總表"
+      }
+    ]
+  },
+  "productUrl": "https://eshop.twse.com.tw/zh/product/detail/c4c87ac184e44896a05fcab5a9d544ec",
+  "publishedProduct": {
+    "code": "A23",
+    "market": "TWSE",
+    "frequency": "daily",
+    "dataStart": "2004-09-09",
+    "subscriptionUnit": "month",
+    "variants": [
+      {
+        "file": "TWT86UC",
+        "localProductionTime": "18:00",
+        "includesBlockTrades": false
+      },
+      {
+        "file": "TWTAIUC",
+        "localProductionTime": "20:00",
+        "includesBlockTrades": true
+      }
+    ],
+    "listedPricesTwdPerMonth": {
+      "internal": 1500,
+      "external": 3000
+    },
+    "actualTermsReceipt": {
+      "url": "https://eshop.twse.com.tw/zh/shopping/finishOrder?show=true",
+      "httpStatus": 200,
+      "bytes": 18576,
+      "sha256": "4be763db94a6b26863cd4d4d8856e6b339f21dabe025f4179e92b140d9a47b8e",
+      "mime": "text/html",
+      "observedAt": "2026-11-15T07:28:32.226220+00:00"
+    },
+    "termsSections": {
+      "explicitPriorWrittenConsentForDerivativeType": true,
+      "publicDisclosureRestriction": true,
+      "externalStandardScope": "transmission of subscribed content to its information users subject to terms"
+    },
+    "actualContractOrApprovedPublicUseVerified": false,
+    "orderPlaced": false
+  },
+  "technical": {
+    "textSamples": [
+      {
+        "sample": "TWT86UC",
+        "url": "https://eshop.twse.com.tw/uploadFile/upload/000000008d5db869018dcb2c87750086",
+        "httpStatus": 200,
+        "bytes": 1376576,
+        "sha256": "c9fb0cdfab3aef0045ffd2fc1fa2a1a11ab934526ea6ca62e80ce3c0a6b23a64",
+        "mime": "application/octet-stream",
+        "observedAt": "2026-11-15T07:29:07.682362+00:00",
+        "hasUTF8BOM": false,
+        "crlfCount": 8768,
+        "lineCount": 8768,
+        "lengthHistogram": {
+          "155": 8768
+        },
+        "headerDate": "20180831",
+        "headerRemainingBytesAreSpaces": true,
+        "goodFixedWidthRecords": 0,
+        "containsPhysicalProductCode": false,
+        "asciiOnly": false,
+        "filenameFromContentDisposition": null
+      },
+      {
+        "sample": "TWTAIUC",
+        "url": "https://eshop.twse.com.tw/uploadFile/upload/000000008d5db869018dcb2c98810087",
+        "httpStatus": 200,
+        "bytes": 1377204,
+        "sha256": "7ca1d53572914e586c31bdfd585f20ddcba9565fe14bfa561880b7f366eddc81",
+        "mime": "application/octet-stream",
+        "observedAt": "2026-11-15T07:29:09.289499+00:00",
+        "hasUTF8BOM": false,
+        "crlfCount": 8772,
+        "lineCount": 8772,
+        "lengthHistogram": {
+          "155": 8772
+        },
+        "headerDate": "20180831",
+        "headerRemainingBytesAreSpaces": true,
+        "goodFixedWidthRecords": 0,
+        "containsPhysicalProductCode": false,
+        "asciiOnly": false,
+        "filenameFromContentDisposition": null
+      }
+    ],
+    "layout": {
+      "bytes": 20972,
+      "url": "https://eshop.twse.com.tw/uploadFile/upload/000000008d5db869018dcb2cc1080088.docx",
+      "sha256": "d6e0d7437df14f53681a580ccd806a2e93dd2384f8c9c1cec71acd029d763335",
+      "declaredRecordLengthBytes": 150,
+      "selectedPositionsIncludingFileHeader": [
+        {
+          "name": "交易日期",
+          "position": "1 - 8"
+        },
+        {
+          "name": "證券代號",
+          "position": "1- 6"
+        },
+        {
+          "name": "外陸資買進股數(不含自營商)",
+          "position": "7- 12"
+        },
+        {
+          "name": "外陸資賣出股數(不含自營商)",
+          "position": "19- 12"
+        },
+        {
+          "name": "投信買進股數",
+          "position": "55- 12"
+        },
+        {
+          "name": "投信賣出股數",
+          "position": "67- 12"
+        }
+      ]
+    },
+    "excelLabelledSampleReceipts": [
+      {
+        "name": "TWT86UC-labelled-after-2024-02-01",
+        "url": "https://eshop.twse.com.tw/uploadFile/upload/000000008d5db869018dcb294e3b007e.XLS",
+        "bytes": 6361112,
+        "sha256": "f70dfe039205d56114b4d4aaac55b7c1ab3966eb85adb83332bb37dd435e6b31",
+        "mime": "application/vnd.ms-excel",
+        "isOleWorkbookContainer": false,
+        "isZip": false,
+        "observedAt": "2026-11-15T07:30:14.840738+00:00"
+      },
+      {
+        "name": "TWTAIUC-labelled-after-2024-02-20",
+        "url": "https://eshop.twse.com.tw/uploadFile/upload/000000008d5db869018dcb2c61ef0085.XLS",
+        "bytes": 5483976,
+        "sha256": "03b0f1e82eff93d345be0f8d8d14631f8b62d15d485f021770c7cd39cc0435b8",
+        "mime": "application/vnd.ms-excel",
+        "isOleWorkbookContainer": false,
+        "isZip": false,
+        "observedAt": "2026-11-15T07:30:23.935088+00:00"
+      }
+    ],
+    "excelLabelledMagic": [
+      {
+        "variant": "TWT86UC",
+        "status": 206,
+        "contentRangePresent": true,
+        "sampleBytesRead": 32768,
+        "signature": {
+          "xmlDeclaration": false,
+          "spreadsheetMlNamespace": false,
+          "htmlTable": true,
+          "htmlPreamble": true,
+          "excelOfficeMarkup": false,
+          "utf8Bom": false,
+          "utf16Bom": false
+        },
+        "firstDatePattern": null
+      },
+      {
+        "variant": "TWTAIUC",
+        "status": 206,
+        "contentRangePresent": true,
+        "sampleBytesRead": 32768,
+        "signature": {
+          "xmlDeclaration": false,
+          "spreadsheetMlNamespace": false,
+          "htmlTable": true,
+          "htmlPreamble": true,
+          "excelOfficeMarkup": false,
+          "utf8Bom": false,
+          "utf16Bom": false
+        },
+        "firstDatePattern": null
+      }
+    ],
+    "foundChineseInstitutionalHeaders": true,
+    "currentContractFormatVerified": false
+  },
+  "candidate": {
+    "rankingSql": "https://github.com/Kaichen9527/stockinsider/blob/f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43/migrations/20261115_vnext_launch_ranking_v1.sql#L737-L769",
+    "twseFlowAdapter": false,
+    "twseSameScopeDenominator": false,
+    "gaps": [
+      "launch_institutional_same_scope_20_or_capital_continuity_missing",
+      "launch_flow_20_exact_source_missing"
+    ]
+  },
+  "needed": [
+    "specific source authorization for scheduled retrieval, retention and derived scoring/output exposure",
+    "current provider sample with approved delivery and exact coverage",
+    "date, session, revision, observed_at, available_at and raw SHA-256 receipt",
+    "authorized same-coverage 20-day TWSE turnover denominator",
+    "reject historical sample, wrong variant, post-cutoff availability and shape mismatch",
+    "native replay and eligible score evidence"
+  ],
+  "productionChangePerformed": false
+}
