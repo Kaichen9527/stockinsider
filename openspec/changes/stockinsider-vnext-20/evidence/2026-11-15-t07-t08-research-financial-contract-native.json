@@ -1,0 +1,34 @@
+{
+  "verifiedAt": "2026-11-15T06:00:15Z",
+  "subject": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "caseScope": "Contabo isolated non-root Node replay using 15 verified product Git objects and engineered public fixture inputs",
+  "result": {
+    "node": "v22.23.1",
+    "nonRoot": true,
+    "gitBlobsVerified": 15,
+    "cases": {
+      "author_quote_only_with_unbound_valuation_date": "ACCEPTED",
+      "author_absence_with_null_valuation_date": "vnext_worker_author_invalid:dated_valuation_missing,summary_dates_not_original_asof",
+      "author_missing_business_and_valuation_sections": "vnext_worker_sections_closed_shape",
+      "approved_review_with_valuation_boolean_only": "ACCEPTED",
+      "approved_review_declaring_valuation_not_checked": "vnext_worker_review_invalid:review_checks_incomplete",
+      "approved_review_with_unmatched_original_evidence": "vnext_worker_review_source_binding",
+      "launch_rank_null_financial_and_valuation": "ACCEPTED",
+      "launch_rank_rejects_nonnull_financial": "launch_ranking_contract_invalid",
+      "launch_rank_rejects_nonnull_valuation": "launch_ranking_contract_invalid",
+      "launch_detail_null_chart": "ACCEPTED",
+      "launch_detail_rejects_bound_nonnull_chart": "launch_ranking_contract_invalid"
+    },
+    "fixtureOnly": true,
+    "dbOrProviderCalled": false
+  },
+  "SQLStaticFinding": {
+    "rankWritesFinancialNull": true,
+    "rankWritesValuationNull": true,
+    "detailWritesChartNull": true,
+    "originalSourcePositiveProducerConnected": false
+  },
+  "approvedRealIndependentReviewerInvoked": false,
+  "actualFinancialOrChartAuthorityConfirmed": false,
+  "actualPublishOrProductionChanged": false
+}
