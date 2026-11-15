@@ -6,6 +6,9 @@ import {publicCitation} from './citations.ts';
 import {assertWorkerJsonCodec} from './worker-output.ts';
 import {evidenceKnownAt as known,compareEvidenceClocks} from './evidence-clock.ts';
 type Row=Record<string,unknown>;
+export const FINANCIAL_PROVIDER_PROTOCOL='vnext-financial-provider-input-v1' as const;
+type ProviderFact={factId:string;factRecordedAt:string;originalFact:Row;receiptHash:string};
+type FinancialProviderInput={schemaVersion:typeof FINANCIAL_PROVIDER_PROTOCOL;facts:ProviderFact[]};
 type SourceRows={provenance:Row[];jobs:Row[];links:Row[];receipts:Row[];documents:Row[];issuerDomains?:Row[];parserEvidence?:Row[]};
 const hash=/^[a-f0-9]{64}$/u;
 const factColumns='fact_id stock_id fact_key period_start period_end duration_kind value unit provider authority_tier estimate_kind estimate_horizon filing_published_at source_timestamp collected_at filing_restatement_id source_ref recorded_at validation_status schema_valid unit_valid point_in_time_valid consistency_valid upstream_provider validation_recorded_at'.split(' ').sort();
@@ -31,9 +34,10 @@ export function financialProviderSourceUrl(value:unknown){
 /** Subjects must come from read_financial_facts_for_stocks_as_of. Its existing
  * immutable validation and structural as-of proof remain the fact authority;
  * this join resolves the original public citation, never a client URL. */
-export function projectFinancialEvidenceSources(facts:Row[],rows:SourceRows,cutoff:string){
+export function projectFinancialEvidenceSources(facts:Row[],rows:SourceRows,cutoff:string,protocol:typeof FINANCIAL_PROVIDER_PROTOCOL|null=null){
  if(!Number.isFinite(Date.parse(cutoff)) || facts.length>2000)throw Error('vnext_financial_source_scope_unbounded');
  const evidence:Evidence[]=[];const receipts:Row[]=[];const deferred:Row[]=[];
+ const providerFacts:ProviderFact[]=[];
  const selection=selectFinancialObservationHeads(facts);
  const selectedFacts=new Set(selection.heads.map(row=>String(row.fact_id)));
  for(const fact of facts.filter(row=>selection.ambiguous.has(financialFactGrain(row))))deferred.push({factId:String(fact.fact_id),originalFactHash:inputHash(fact),key:fact.fact_key,value:fact.value,unit:fact.unit,period:fact.period_end,reason:'financial_eps_variant_selection_ambiguous'});
@@ -54,8 +58,9 @@ export function projectFinancialEvidenceSources(facts:Row[],rows:SourceRows,cuto
      const receipt=rows.receipts.find((row)=>row.receipt_id===link.receipt_id && row.stock_id===fact.stock_id && row.period_end===fact.period_end && row.document_sha256===documentHash && row.document_sha256===provenance.source_sha256 && row.source_url===sourceUrl && row.issuer_document_id===provenance.issuer_document_id && row.parser_status==='complete' && row.receipt_status==='accepted' && known(row.accepted_at,cutoff) && known(row.completed_at,cutoff) && (row.published_at===null || known(row.published_at,cutoff)));
      const document=receipt && rows.documents.find((row)=>row.document_id===receipt.issuer_document_id && row.stock_id===fact.stock_id && row.document_sha256===documentHash && row.document_url===sourceUrl && row.acquisition_status==='fetched' && known(row.collected_at,cutoff) && known(row.recorded_at,cutoff));
      if(!receipt || !document || !locator || locator.parser_evidence_id!==link.evidence_id || !hash.test(String(locator.manifest_sha256)) || locator.response_url!==sourceUrl)continue;
-     const parser=issuerSource?rows.parserEvidence?.find(row=>row.evidence_id===link.evidence_id && row.receipt_id===receipt.receipt_id && row.document_sha256===documentHash && row.manifest_sha256===locator.manifest_sha256 && known(row.recorded_at,cutoff)):null;
-     if(issuerSource && (!parser || receipt.parser_evidence_id!==link.evidence_id || receipt.financial_validation_status!=='validated' || !known(fact.filing_published_at,cutoff)))continue;
+     const needsParser=!!issuerSource||protocol===FINANCIAL_PROVIDER_PROTOCOL;
+     const parser=needsParser?rows.parserEvidence?.find(row=>row.evidence_id===link.evidence_id && row.receipt_id===receipt.receipt_id && row.document_sha256===documentHash && row.manifest_sha256===locator.manifest_sha256 && known(row.recorded_at,cutoff)):null;
+     if((needsParser && (!parser || receipt.parser_evidence_id!==link.evidence_id)) || (issuerSource && (receipt.financial_validation_status!=='validated' || !known(fact.filing_published_at,cutoff))))continue;
      candidates.push({factId:fact.fact_id,factRecordedAt:fact.recorded_at,sourceRef,sourceUrl,sourceSha256:documentHash,provenanceId:provenance.provenance_id,receiptId:receipt.receipt_id,issuerDocumentId:document.document_id,parserEvidenceId:link.evidence_id,manifestSha256:locator.manifest_sha256,...(issuerSource?{sourceKind:'approved_issuer_ir',issuerApproval:issuerSource.approval,originalFact:fact}:{}),knownAt:[provenance.extracted_at,provenance.recorded_at,link.created_at,receipt.accepted_at,receipt.completed_at,...(receipt.published_at===null?[]:[receipt.published_at]),document.collected_at,document.recorded_at,...(parser?[parser.recorded_at]:[]),...(issuerSource?[issuerSource.approval.approvedAt]:[])].map(String).sort(compareEvidenceClocks).at(-1)});
     }
    }else if(/^(twse|tpex)-openapi:/u.test(sourceRef)){
@@ -66,15 +71,22 @@ export function projectFinancialEvidenceSources(facts:Row[],rows:SourceRows,cuto
   }
   const sources=new Set(candidates.map((candidate)=>JSON.stringify([candidate.sourceUrl,candidate.sourceSha256])));
   if(sources.size!==1){reject(codecUnsupported?'approved_issuer_original_fact_codec_unsupported':rows.provenance.some((row)=>row.fact_id===fact.fact_id && !financialProviderSourceUrl(row.source_url))?'provider_official_host_source_unavailable':'immutable_source_receipt_missing_or_conflicting');continue;}
-  const receipt:Row={stockId:fact.stock_id,...candidates.sort((a,b)=>inputHash(a).localeCompare(inputHash(b)))[0],classification:{estimateKind:fact.estimate_kind,estimateHorizon:fact.estimate_horizon,periodStart:fact.period_start??null,periodEnd:fact.period_end,durationKind:fact.duration_kind,filingRevisionId:fact.filing_restatement_id??null,provider:fact.provider,authorityTier:fact.authority_tier}};const boundReceipt={...receipt,receiptHash:inputHash(receipt)};receipts.push(boundReceipt);
+  const receipt:Row={stockId:fact.stock_id,...candidates.sort((a,b)=>inputHash(a).localeCompare(inputHash(b)))[0],classification:{estimateKind:fact.estimate_kind,estimateHorizon:fact.estimate_horizon,periodStart:fact.period_start??null,periodEnd:fact.period_end,durationKind:fact.duration_kind,filingRevisionId:fact.filing_restatement_id??null,provider:fact.provider,authorityTier:fact.authority_tier}};const receiptHash=inputHash(receipt);const boundReceipt={...receipt,receiptHash};receipts.push(boundReceipt);
   const metadata=financialObservation(fact,boundReceipt,cutoff);
-  if(selectedFacts.has(String(fact.fact_id)))evidence.push({id:String(fact.fact_id),key:String(fact.fact_key),value:fact.value,unit:String(fact.unit),period:String(fact.period_end),source:String(receipt.sourceUrl),sourceTier:'official',kind:'fact',eventAt:String(fact.source_timestamp),availableAt:[fact.source_timestamp,fact.collected_at,fact.recorded_at,...(fact.filing_published_at===undefined || fact.filing_published_at===null?[]:[fact.filing_published_at]),...(known(fact.validation_recorded_at,cutoff)?[fact.validation_recorded_at]:[]),receipt.knownAt].map(String).sort(compareEvidenceClocks).at(-1)!,contentHash:inputHash(fact),financial:metadata});
+  if(selectedFacts.has(String(fact.fact_id))){
+   evidence.push({id:String(fact.fact_id),key:String(fact.fact_key),value:fact.value,unit:String(fact.unit),period:String(fact.period_end),source:String(receipt.sourceUrl),sourceTier:'official',kind:'fact',eventAt:String(fact.source_timestamp),availableAt:[fact.source_timestamp,fact.collected_at,fact.recorded_at,...(fact.filing_published_at===undefined || fact.filing_published_at===null?[]:[fact.filing_published_at]),...(known(fact.validation_recorded_at,cutoff)?[fact.validation_recorded_at]:[]),receipt.knownAt].map(String).sort(compareEvidenceClocks).at(-1)!,contentHash:inputHash(fact),financial:metadata});
+   if(protocol===FINANCIAL_PROVIDER_PROTOCOL && typeof fact.fact_id==='string' && typeof fact.recorded_at==='string' && originalFactCodec(fact)){
+    providerFacts.push({factId:fact.fact_id,factRecordedAt:fact.recorded_at,originalFact:{...fact},receiptHash});
+   }
+  }
  }
- return {evidence,receipts,observationInventory:financialObservationInventory(facts,receipts,selection.ambiguous,cutoff),deferredCount:deferred.length,deferredDigest:inputHash(deferred),deferredDetails:deferred.slice(0,64),gaps:[...(evidence.length?['missing_sql_financial_interval_basis_parity']:[]),...deferred.slice(0,64).map((row)=>`financial_source:${row.factId}:${row.reason}`)],deferredDetailsTruncated:deferred.length>64};
+ const providerInput:FinancialProviderInput|null=protocol===FINANCIAL_PROVIDER_PROTOCOL && providerFacts.length===evidence.length
+  ?{schemaVersion:FINANCIAL_PROVIDER_PROTOCOL,facts:providerFacts}:null;
+ return {evidence,receipts,providerInput,observationInventory:financialObservationInventory(facts,receipts,selection.ambiguous,cutoff),deferredCount:deferred.length,deferredDigest:inputHash(deferred),deferredDetails:deferred.slice(0,64),gaps:[...(evidence.length?['missing_sql_financial_interval_basis_parity']:[]),...deferred.slice(0,64).map((row)=>`financial_source:${row.factId}:${row.reason}`)],deferredDetailsTruncated:deferred.length>64};
 }
 /** Bounded cache reads only, called after the existing admitted attempt begins.
  * Original table grants/RLS and structural authority are unchanged. */
-export async function resolveFinancialEvidenceSources(client:Pick<ReturnType<typeof getSupabaseServerClient>,'from'>,facts:Row[],cutoff:string){
+export async function resolveFinancialEvidenceSources(client:Pick<ReturnType<typeof getSupabaseServerClient>,'from'>,facts:Row[],cutoff:string,protocol:typeof FINANCIAL_PROVIDER_PROTOCOL|null=null){
  if(facts.length>2000)throw Error('vnext_financial_source_scope_unbounded');
  const read=async(table:string,columns:string,key:string,ids:unknown[],clocks:string[])=>{
   const selected=[...new Set(ids.filter((id):id is string=>typeof id==='string' && id.length>0))];const result:Row[]=[];
@@ -89,6 +101,6 @@ export async function resolveFinancialEvidenceSources(client:Pick<ReturnType<typ
  const documents=await read('candidate_issuer_ir_document_queue_v4','document_id,stock_id,document_url,document_sha256,acquisition_status,collected_at,recorded_at','document_id',receipts.map((row)=>row.issuer_document_id),['collected_at','recorded_at']);
  const irReceipts=receipts.filter(row=>!financialProviderSourceUrl(row.source_url));
  const issuerDomains=await read('candidate_issuer_document_domains_v6','stock_id,host,approved_at','stock_id',irReceipts.map(row=>row.stock_id),['approved_at']);
- const parserEvidence=await read('candidate_financial_parser_evidence_v8','evidence_id,receipt_id,document_sha256,manifest_sha256,recorded_at','evidence_id',irReceipts.map(row=>row.parser_evidence_id),['recorded_at']);
- return projectFinancialEvidenceSources(facts,{provenance,jobs,links,receipts,documents,issuerDomains,parserEvidence},cutoff);
+ const parserEvidence=await read('candidate_financial_parser_evidence_v8','evidence_id,receipt_id,document_sha256,manifest_sha256,recorded_at','evidence_id',(protocol===FINANCIAL_PROVIDER_PROTOCOL?receipts:irReceipts).map(row=>row.parser_evidence_id),['recorded_at']);
+ return projectFinancialEvidenceSources(facts,{provenance,jobs,links,receipts,documents,issuerDomains,parserEvidence},cutoff,protocol);
 }

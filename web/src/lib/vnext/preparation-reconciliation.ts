@@ -6,13 +6,20 @@ import type {TwEntryHistoricalAuthorityResult} from '../tw-entry-plan-authority.
 import type {VnextIdentity} from './auth.ts';
 import type {Evidence} from './research.ts';
 import {inputHash} from './policy.ts';
-import {resolveFinancialEvidenceSources} from './financial-evidence-sources.ts';
+import {FINANCIAL_PROVIDER_PROTOCOL,resolveFinancialEvidenceSources} from './financial-evidence-sources.ts';
 import {currentPriceEvidence} from './cached-price-factors.ts';
 import {currentPreparationInstrument,PREPARATION_INSTRUMENT_COLUMNS} from './preparation-trading-identity.ts';
 type Row=Record<string,unknown>;
 type Client=ReturnType<typeof getSupabaseServerClient>;
 type SourceProjection=Awaited<ReturnType<typeof resolveFinancialEvidenceSources>>;
-type Sources=Omit<SourceProjection,'observationInventory'>&{observationInventory?:SourceProjection['observationInventory']};
+type Sources=Pick<SourceProjection,'evidence'|'receipts'|'gaps'|'deferredCount'|'deferredDigest'|'deferredDetails'|'deferredDetailsTruncated'>
+ & Partial<Pick<SourceProjection,'observationInventory'|'providerInput'>>;
+type FinancialProviderProtocol=typeof FINANCIAL_PROVIDER_PROTOCOL|null;
+export function financialProtocolFromWorkContext(context:Row):FinancialProviderProtocol{
+ if(!Object.hasOwn(context,'financialProviderProtocol'))return null;
+ if(context.financialProviderProtocol!==FINANCIAL_PROVIDER_PROTOCOL)throw Error('vnext_financial_provider_protocol_unknown');
+ return FINANCIAL_PROVIDER_PROTOCOL;
+}
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu;
 const hash=/^[a-f0-9]{64}$/u;
 const known=(value:unknown,cutoff:string)=>typeof value==='string' && Number.isFinite(Date.parse(value)) && Date.parse(value)<=Date.parse(cutoff);
@@ -23,7 +30,9 @@ export function preparationRequest(identity:VnextIdentity,body:Row){
 }
 /** Same frozen projection used by ordinary admitted preparation and cached
  * reconciliation. Source descriptors stay outside the provider projection. */
-export function freezeFinancialPreparation(original:Row,historical:TwEntryHistoricalAuthorityResult,financialSources:Sources,cutoff:string,forecasts?:CurrentForecasts,actionTerms?:CurrentActionTerms){
+export function freezeFinancialPreparation(original:Row,historical:TwEntryHistoricalAuthorityResult,financialSources:Sources,cutoff:string,forecasts?:CurrentForecasts,actionTerms?:CurrentActionTerms,protocol:FinancialProviderProtocol=null){
+ const providerInput=protocol===FINANCIAL_PROVIDER_PROTOCOL?financialSources.providerInput:null;
+ if(protocol && !providerInput)throw Error('vnext_financial_provider_source_binding_unavailable');
  if(actionTerms)validateCurrentActionTerms(actionTerms);
  const evidence=[...financialSources.evidence,...currentPriceEvidence(historical),...(forecasts?.evidence||[]),...(actionTerms?.evidence||[])];
  if(forecasts&&Date.parse(forecasts.asOf)>Date.parse(cutoff))throw Error('vnext_forecast_future_snapshot');
@@ -31,6 +40,7 @@ export function freezeFinancialPreparation(original:Row,historical:TwEntryHistor
  const currentPrice=historical.priceBasis?.status==='verified'?historical.bars.at(-1):undefined;
  const priorFinancialIds=new Set(financialSources.receipts.map(row=>String(row.factId)));
  const frozen={...original,cutoff,admissionHash:original.hash,priceAuthority:historical,financialSourceReceipts:financialSources.receipts,
+  ...(providerInput?{financialProviderInput:providerInput}:{}),
   ...(forecasts?{forecastSourceReceipts:forecasts.receipts,forecastSourceAsOf:forecasts.asOf}:{}),
   ...(actionTerms?{actionTermsReceipts:actionTerms.receipts,actionTermsAsOf:actionTerms.asOf,actionTermsGaps:actionTerms.gaps}:{}),
   financialObservationInventory:financialSources.observationInventory??null,
@@ -51,7 +61,7 @@ function sameExecution(a:Row,b:Row){return ['jobId','symbol','state','executionI
 async function currentContext(deps:PreparationDependencies,state:Row){
  const context=await deps.command('work-context',{jobId:state.jobId,executionId:state.executionId});
  if(context.inputHash!==state.inputHash || !context.evidence || typeof context.evidence!=='object' || Array.isArray(context.evidence))throw Error('vnext_preparation_context_changed');
- return context.evidence as Row;
+ return {evidence:context.evidence as Row,protocol:financialProtocolFromWorkContext(context)};
 }
 async function readJournal(deps:PreparationDependencies,state:Row,identity:VnextIdentity){
  const record=await deps.journal('read',{jobId:state.jobId,executionId:state.executionId});
@@ -85,7 +95,7 @@ async function signalSession(client:Client,exchange:string,cutoff:string){
  }
  return [...heads.values()].filter(row=>row.status==='completed' && known(row.close_at,cutoff)).map(row=>String(row.session_id)).sort().at(-1)||'';
 }
-async function cachedProjection(deps:PreparationDependencies,state:Row,original:Row,cutoff:string,identity:VnextIdentity){
+async function cachedProjection(deps:PreparationDependencies,state:Row,original:Row,cutoff:string,identity:VnextIdentity,protocol:FinancialProviderProtocol){
  const stocks=await deps.client.from('stocks').select('id,symbol,market').eq('symbol',String(state.symbol)).eq('market','TW').maybeSingle();
  if(stocks.error)throw Error('vnext_stock_authority_read_uncertain');
  if(!stocks.data)return {status:'gap',reason:'vnext_stock_authority_missing'};
@@ -109,7 +119,7 @@ async function cachedProjection(deps:PreparationDependencies,state:Row,original:
  if(official.error || !Array.isArray(official.data) || official.data.length>2000)throw Error('vnext_preparation_verified_facts_unavailable');
  const facts=financialRowsAtCutoff(official.data,[stockId],cutoff);
  if(!facts)throw Error('vnext_preparation_verified_facts_unavailable');
- const financial=await resolveFinancialEvidenceSources(deps.client,facts,cutoff);
+ const financial=await resolveFinancialEvidenceSources(deps.client,facts,cutoff,protocol);
  if(!financial.evidence.length)return {status:'gap',reason:'vnext_validated_financial_data_missing',gaps:financial.gaps};
  const session=await signalSession(deps.client,exchange,cutoff);
  const historical=await deps.historical({stockId,symbol:String(state.symbol),exchange,signalSession:session,cutoff});
@@ -118,7 +128,7 @@ async function cachedProjection(deps:PreparationDependencies,state:Row,original:
  const actionTerms=await readCurrentActionTerms(deps.client,identity,String(state.jobId),String(state.executionId));
  if(actionTerms.stockId!==stockId||actionTerms.symbol!==state.symbol)throw Error('vnext_action_issuer_binding');
  const frozenAt=(deps.now||(()=>new Date().toISOString()))();
- return {status:'ready',...freezeFinancialPreparation(original,historical,financial,frozenAt,forecasts,actionTerms),financialFacts:financial.evidence.length,sourceReceipts:financial.receipts.length,priceAvailable:historical.priceBasis?.status==='verified'};
+ return {status:'ready',...freezeFinancialPreparation(original,historical,financial,frozenAt,forecasts,actionTerms,protocol),financialFacts:financial.evidence.length,sourceReceipts:financial.receipts.length,priceAvailable:historical.priceBasis?.status==='verified'};
 }
 /** READ is cache/journal observation only. The explicit resume uses exactly one
  * original prepare command; an unknown mutation outcome is read-recovered.
@@ -133,20 +143,24 @@ export async function reconcilePreparation(identity:VnextIdentity,body:Row,deps:
  if(!uuid.test(String(state.executionId)) || !hash.test(String(state.inputHash)) || typeof state.deadline!=='string' || !Number.isFinite(Date.parse(state.deadline)))throw Error('vnext_preparation_execution_binding');
  const now=deps.now||(()=>new Date().toISOString());
  if(Date.parse(state.deadline)<=Date.parse(now()))return {status:'blocked',reason:'original_execution_expired',...descriptor,currentRights:'not_checked',automaticResume:false,reinvoke:false};
- let original:Row;
- try{original=await currentContext(deps,state);}catch{return unresolved('active_work_context_unavailable',descriptor);}
+ let context:Awaited<ReturnType<typeof currentContext>>;
+ try{context=await currentContext(deps,state);}catch{return unresolved('active_work_context_unavailable',descriptor);}
  let journal:Row;
  try{journal=await readJournal(deps,state,identity);}catch{return unresolved('provider_journal_read_unavailable',descriptor);}
  if(state.prepared===true){
-  if(inputHash(original)!==state.inputHash)return unresolved('frozen_preparation_binding_invalid',descriptor);
+  if(inputHash(context.evidence)!==state.inputHash)return unresolved('frozen_preparation_binding_invalid',descriptor);
   return {status:'prepared',...descriptor,currentRights:'checked',preparationObservation:{inputHash:state.inputHash,source:'existing_job_and_work_context',immutableRowReceiptExposed:false},nextAction:journal.invocation_id?'recover':'automatic',automaticResume:false,reinvoke:false};
  }
  if(journal.invocation_id)return unresolved('provider_invocation_already_exists',descriptor);
  let cached:Row;
- try{cached=await cachedProjection(deps,state,original,now(),identity);}catch{return unresolved('cached_financial_authority_unresolved',descriptor);}
+ try{cached=await cachedProjection(deps,state,context.evidence,now(),identity,context.protocol);}catch{return unresolved('cached_financial_authority_unresolved',descriptor);}
  // Recheck original rights/admission and the exact execution after all reads.
  let after:Row;
- try{await currentContext(deps,state);after=await deps.journal('inspect',{jobId});journal=await readJournal(deps,state,identity);}catch{return unresolved('active_work_context_changed',descriptor);}
+ try{
+  const latest=await currentContext(deps,state);
+  if(latest.protocol!==context.protocol)return unresolved('financial_provider_protocol_changed',descriptor);
+  after=await deps.journal('inspect',{jobId});journal=await readJournal(deps,state,identity);
+ }catch{return unresolved('active_work_context_changed',descriptor);}
  if(!sameExecution(state,after) || journal.invocation_id || Date.parse(state.deadline)<=Date.parse(now()))return unresolved('original_execution_changed_or_expired',descriptor);
  if(cached.status!=='ready')return {...descriptor,status:cached.status,reason:cached.reason,gaps:cached.gaps||[],scope:'current_cached_receipts_only',currentRights:'checked',nextAction:'preparation-read',automaticResume:false,reinvoke:false};
  const summary={...descriptor,status:'ready',financialFacts:cached.financialFacts,sourceReceipts:cached.sourceReceipts,priceAvailable:cached.priceAvailable,entryEligible:false,currentRights:'checked',nextAction:'resume-preparation',automaticResume:false,reinvoke:false};

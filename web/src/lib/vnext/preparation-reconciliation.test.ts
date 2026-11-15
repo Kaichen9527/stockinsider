@@ -5,6 +5,7 @@ import vm from 'node:vm';
 import {createRequire} from 'node:module';
 import ts from 'typescript';
 import {freezeFinancialPreparation,reconcilePreparation,type PreparationDependencies} from './preparation-reconciliation.ts';
+import {FINANCIAL_PROVIDER_PROTOCOL} from './financial-evidence-sources.ts';
 import {inputHash} from './policy.ts';
 import type {Evidence} from './research.ts';
 type Row=Record<string,unknown>;
@@ -20,6 +21,7 @@ function fixture(mode='ready'){
  const state:Row={jobId,symbol:'2330',state:'running',executionId,inputHash:inputHash(original),prepared:false,deadline:'2026-10-23T01:01:00.000Z'};
  let context=original;
  const fact:Row={fact_id:'00000000-0000-4000-8000-000000000004',stock_id:stockId,fact_key:'quarterly_revenue',period_end:'2026-06-30',duration_kind:'quarterly',value:100,unit:'TWD',provider:'tpex',authority_tier:'official_filing',estimate_kind:'reported',estimate_horizon:'reported_period',source_ref:'tpex-openapi:synthetic-original',source_timestamp:sourceAt,collected_at:sourceAt,recorded_at:sourceAt,validation_status:'validated',schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true};
+ if(mode==='versioned')Object.assign(fact,{period_start:'2026-04-01',filing_published_at:sourceAt,filing_restatement_id:null,upstream_provider:null,validation_recorded_at:sourceAt});
  const facts:Row[]=[fact];
  const sourceUrl='https://www.tpex.org.tw/synthetic-original.json',sha='a'.repeat(64);
  const tables:Record<string,Row[]>={stocks:[{id:stockId,symbol:'2330',market:'TW'}],stock_instruments_v3:[{instrument_authority_id:'10000000-0000-4000-8000-000000000001',stock_id:stockId,symbol:'2330',exchange:'TWSE',listing_status:'active',instrument_type:'common_stock',provider:'twse',roster_version:'tw-instrument-roster-v3.0',valid_from:'2020-01-01T00:00:00Z',valid_to:null,recorded_at:sourceAt,source_timestamp:sourceAt}],
@@ -102,6 +104,48 @@ test('READ of ready immutable receipts has no mutation and exposes only readines
  assert.equal(result.status,'ready');assert.equal(result.entryEligible,false);assert.equal(result.nextAction,'resume-preparation');assert.equal(result.automaticResume,false);assert.equal(result.priceAvailable,false);assert.equal(result.financialFacts,1);
  assert.equal(f.calls.includes('prepare'),false);assert.equal(f.state.prepared,false);assert.equal('evidence' in result,false);assert.equal('frozen_request' in result,false);
  assert.deepEqual(f.calls.filter(c=>!c.startsWith('cache:')),['inspect','work-context','read','financial-asof','historical','forecast-current','action-current','work-context','inspect','read']);
+});
+test('versioned financial preparation binds the original fact and receipt and refuses a protocol change before writing',async()=>{
+ const f=fixture('versioned');
+ const command=f.deps.command;
+ f.deps.command=async(action,body)=>{
+  const result=await command(action,body);
+  return action==='work-context'?{...result,financialProviderProtocol:FINANCIAL_PROVIDER_PROTOCOL}:result;
+ };
+ const result=await reconcilePreparation(author,{jobId},f.deps,true);
+ assert.equal(result.status,'prepared');
+ assert.equal('financialProviderInput' in result,false);
+ const frozen=f.readContext();
+ assert.equal(result.inputHash,inputHash(frozen));
+ const binding=frozen.financialProviderInput as {schemaVersion:string;facts:{factId:string;factRecordedAt:string;originalFact:Row;receiptHash:string}[]};
+ assert.equal(binding.schemaVersion,FINANCIAL_PROVIDER_PROTOCOL);
+ assert.equal(binding.facts.length,1);
+ const fact=binding.facts[0];
+ const [receipt]=frozen.financialSourceReceipts as Row[];
+ const [evidence]=frozen.evidence as Evidence[];
+ assert.equal(fact.factId,evidence.id);
+ assert.equal(fact.factRecordedAt,sourceAt);
+ assert.equal(inputHash(fact.originalFact),evidence.contentHash);
+ assert.equal(fact.receiptHash,receipt.receiptHash);
+
+ for(const [version,reason,expectedReads] of [
+  [FINANCIAL_PROVIDER_PROTOCOL,'financial_provider_protocol_changed',2],
+  [null,'active_work_context_unavailable',1],
+ ] as const){
+  const changing=fixture('versioned');
+  const next=changing.deps.command;
+  let reads=0;
+  changing.deps.command=async(action,body)=>{
+   const response=await next(action,body);
+   if(action==='work-context' && reads++===0)return {...response,financialProviderProtocol:version};
+   return response;
+  };
+  const rejected=await reconcilePreparation(author,{jobId},changing.deps,true);
+  assert.equal(rejected.status,'unresolved');
+  assert.equal(rejected.reason,reason);
+  assert.equal(reads,expectedReads);
+  assert.equal(changing.calls.includes('prepare'),false);
+ }
 });
 test('prepared replay observes immutable frozen state without cache or prepare; an existing invocation directs explicit recovery without exposing raw output',async()=>{
  for(const mode of ['prepared','provider_present']){const f=fixture(mode);const result=await reconcilePreparation(author,{jobId},f.deps,true);assert.equal(result.status,'prepared');assert.equal(result.inputHash,f.state.inputHash);assert.equal(result.nextAction,mode==='prepared'?'automatic':'recover');assert.deepEqual(f.calls,['inspect','work-context','read']);assert.equal(JSON.stringify(result).includes('must not expose'),false);}
