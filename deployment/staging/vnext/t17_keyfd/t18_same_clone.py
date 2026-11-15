@@ -19,9 +19,42 @@ import time
 from urllib.parse import urlencode
 from .stage_credentials import read_stage_credentials,validate_stage_token,StageCredentialRejected
 from .t18_reader_roles import install_fixed_reader_roles
+from .t18_release_assets import is_launch_release_pair
 from .fixed_read_proxy import start_fixed_read_proxy,SNAPSHOT_SELECT,STATE_SELECT,_BoundedResponse
 from .t18_readpoint_diagnostics import http_trace,http_subphase,http_completed
 
+LAUNCH_SCHEMA_SQL=b"""
+BEGIN READ ONLY;
+SELECT (
+ to_regclass('public.vnext_mode_v1') IS NOT NULL AND
+ to_regclass('public.vnext_launch_ranking_mode_v1') IS NOT NULL AND
+ to_regclass('public.vnext_launch_ranking_snapshots_v1') IS NOT NULL AND
+ to_regclass('public.vnext_launch_ranking_members_v1') IS NOT NULL AND
+ to_regprocedure('public.vnext_launch_ranking_read_v1(uuid,text)') IS NOT NULL AND
+ to_regprocedure('public.vnext_launch_outcome_public_v1(uuid,text)') IS NOT NULL
+)::text;
+COMMIT;
+"""
+LAUNCH_HEAD_SQL=b"""
+BEGIN READ ONLY;
+WITH head AS (
+ SELECT ranking_run_id,session_date FROM public.vnext_launch_ranking_snapshots_v1
+ ORDER BY ordinal DESC LIMIT 1
+), ranked AS (
+ SELECT m.rank,m.symbol FROM public.vnext_launch_ranking_members_v1 m JOIN head h USING(ranking_run_id)
+ WHERE m.rank IS NOT NULL LIMIT 11
+)
+SELECT jsonb_build_object(
+ 'enabled',(EXISTS(SELECT FROM public.vnext_mode_v1 WHERE enabled AND legacy_fenced)
+            AND EXISTS(SELECT FROM public.vnext_launch_ranking_mode_v1 WHERE enabled)),
+ 'session',(SELECT to_char(session_date,'YYYY-MM-DD') FROM head),
+ 'ranked',(SELECT count(*) FROM ranked),
+ 'valid',(SELECT count(DISTINCT rank)=count(*) AND count(DISTINCT symbol)=count(*)
+              AND coalesce(bool_and(rank BETWEEN 1 AND 10 AND symbol~'^[0-9]{4}$'),true)
+              AND coalesce(max(rank),0)=count(*) FROM ranked)
+);
+COMMIT;
+"""
 MAX_HTTP=2*1024**2
 MAX_COUNT=8*1024**3
 FINGERPRINT_SQL=b"""SELECT json_build_object(
@@ -222,6 +255,41 @@ def _execute_fixed_sequence(app,rest,releases,dates):
             if primary_error is None:raise
 
 
+def _observe_launch_readpoint(sql):
+    """Observe only the current cloned ranking head. Do not grant or run the app."""
+    schema=sql(LAUNCH_SCHEMA_SQL)
+    if isinstance(schema,bytes):schema=schema.decode('ascii')
+    if type(schema) is not str or schema.strip() not in ('true','false'):
+        raise FixedRollbackRejected('launch_clone_schema_probe_rejected')
+    if schema.strip()=='false':
+        return {'status':'SCHEMA_MISSING','session':None,'ranked':None}
+    raw=sql(LAUNCH_HEAD_SQL)
+    if not isinstance(raw,(str,bytes)) or len(raw)>1024:
+        raise FixedRollbackRejected('launch_clone_head_probe_rejected')
+    try:value=json.loads(raw)
+    except (ValueError,UnicodeError):raise FixedRollbackRejected('launch_clone_head_probe_rejected') from None
+    if (type(value) is not dict or set(value)!={'enabled','session','ranked','valid'}
+        or type(value['enabled']) is not bool or type(value['ranked']) is not int
+        or type(value['valid']) is not bool or not 0<=value['ranked']<=11):
+        raise FixedRollbackRejected('launch_clone_head_probe_rejected')
+    date=value['session']
+    if date is not None:
+        if type(date) is not str or len(date)!=10:
+            raise FixedRollbackRejected('launch_clone_session_rejected')
+        try:canonical=datetime.date.fromisoformat(date).isoformat()
+        except ValueError:raise FixedRollbackRejected('launch_clone_session_rejected') from None
+        if canonical!=date:raise FixedRollbackRejected('launch_clone_session_rejected')
+    if not value['enabled']:
+        return {'status':'PRODUCER_DISABLED','session':None,'ranked':None}
+    if date is None:
+        if value['ranked']!=0:raise FixedRollbackRejected('launch_clone_head_probe_rejected')
+        return {'status':'NOT_PUBLISHED','session':None,'ranked':0}
+    if not value['valid'] or value['ranked']>10:
+        return {'status':'RANK_BINDING_INVALID','session':date,'ranked':None}
+    return {'status':'FROZEN_RANK_ROWS_OBSERVED' if value['ranked'] else 'TOP_ZERO',
+        'session':date,'ranked':value['ranked']}
+
+
 def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     """Only invoked by the already-validated engine, never a public CLI API."""
     from .radar_reader_observation import assess_radar_reader
@@ -229,6 +297,11 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     from .t18_broker_transport import connect_fixed_app_broker
     from .t18_runtime_observation import observe_three_uid_budget
     from .t18_readpoint_diagnostics import readpoint_phase
+    if is_launch_release_pair(assets.releases):
+        with readpoint_phase('radar_readpoint'):observation=_observe_launch_readpoint(sql)
+        return {'status':'LAUNCH_CLONE_READPOINT_ONLY','launchReadpoint':observation,
+            'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN',
+            'candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
     with readpoint_phase('radar_readpoint'):observation=assess_radar_reader(sql)
     if (observation['status']!='OBSERVED_PUBLISHED_SNAPSHOT' or observation['homeValidSnapshots']<1
         or observation['dailyValidSnapshots']<1 or observation['missingContentDates']):

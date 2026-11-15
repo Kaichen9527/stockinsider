@@ -22,7 +22,8 @@ import unittest
 
 from deployment.staging.vnext.t17_keyfd import t18_same_clone as m
 from deployment.staging.vnext.t17_keyfd import t18_app_broker as jwt
-from deployment.staging.vnext.t17_keyfd.t18_release_assets import RELEASE_PINS
+from deployment.staging.vnext.t17_keyfd.t18_release_assets import RELEASE_PINS,LAUNCH_RELEASE_PINS
+from deployment.staging.vnext.t17_keyfd.t18_receipt import project_exercise
 
 AS_OF='2026-09-19T04:00:00Z'
 PUBLISHED='2026-09-19T05:00:00Z'
@@ -130,6 +131,35 @@ class SameCloneMechanicsOnlyTests(unittest.TestCase):
     def assert_clean(self,broker):
         self.assertTrue(all(child.poll() is not None for child in broker.children))
         self.assertTrue(m._port_closed(3000))
+    def test_launch_pair_reports_clone_data_without_starting_http_or_granting_reader(self):
+        class Assets:
+            releases=[{'sourceCommit':sha,'manifestSha256':pin} for sha,pin in LAUNCH_RELEASE_PINS]
+        def unexpected(*_):
+            self.fail('launch_readpoint_triggered_runtime')
+        for schema,head,wanted in (
+            ('false',None,{'status':'SCHEMA_MISSING','session':None,'ranked':None}),
+            ('true',{'enabled':True,'session':None,'ranked':0,'valid':True},
+             {'status':'NOT_PUBLISHED','session':None,'ranked':0}),
+            ('true',{'enabled':True,'session':'2026-11-13','ranked':0,'valid':True},
+             {'status':'TOP_ZERO','session':'2026-11-13','ranked':0}),
+            ('true',{'enabled':True,'session':'2026-11-13','ranked':1,'valid':True},
+             {'status':'FROZEN_RANK_ROWS_OBSERVED','session':'2026-11-13','ranked':1}),
+        ):
+            calls=[]
+            def query(statement):
+                calls.append(statement)
+                if statement==m.LAUNCH_SCHEMA_SQL:return schema
+                if statement==m.LAUNCH_HEAD_SQL and head is not None:return json.dumps(head)
+                self.fail('unexpected_sql')
+            raw=m.run_fixed_same_clone(query,unexpected,object(),object(),Assets())
+            self.assertEqual(raw.pop('candidateDetailHttp'),{'status':'GAP_DETAIL_SCOPE'})
+            projected=project_exercise(raw)
+            self.assertEqual(projected['launchReadpoint'],wanted)
+            self.assertEqual(projected['nextRollback'],'NOT_RUN')
+            self.assertEqual(len(calls),1 if head is None else 2)
+            raw['launchReadpoint']['unreviewed']='PUBLIC_TEST_REJECTED'
+            self.assertIsNone(project_exercise(raw))
+
     def test_public_python_only_actual_http_A_B_A_and_killed_B_rollback(self):
         broker=self.broker()
         self.assertNotEqual(broker.programs[0].read_bytes(),broker.programs[1].read_bytes())

@@ -30,8 +30,32 @@ def _health(value,commit):
     return {k:value[k] for k in HEALTH_KEYS}
 
 
+def _project_launch_readpoint(value):
+    if type(value) is not dict or set(value)!={'status','session','ranked'}:return None
+    status,date,count=value['status'],value['session'],value['ranked']
+    if status in ('SCHEMA_MISSING','PRODUCER_DISABLED'):
+        return dict(value) if date is None and count is None else None
+    if status=='NOT_PUBLISHED':
+        return dict(value) if date is None and type(count) is int and count==0 else None
+    if status not in ('TOP_ZERO','FROZEN_RANK_ROWS_OBSERVED','RANK_BINDING_INVALID'):
+        return None
+    if type(date) is not str or len(date)!=10:return None
+    try:
+        if datetime.date.fromisoformat(date).isoformat()!=date:return None
+    except ValueError:return None
+    if status=='RANK_BINDING_INVALID':
+        return dict(value) if count is None else None
+    if type(count) is not int or not 0<=count<=10 or (count==0)!=(status=='TOP_ZERO'):return None
+    return dict(value)
+
+
 def project_exercise(value):
     if type(value) is not dict:return None
+    if value.get('status')=='LAUNCH_CLONE_READPOINT_ONLY':
+        if (set(value)!={'status','launchReadpoint','postgrestAcceptance','nextRollback'}
+            or value['postgrestAcceptance']!='NOT_RUN' or value['nextRollback']!='NOT_RUN'):return None
+        launch=_project_launch_readpoint(value['launchReadpoint'])
+        return {**value,'launchReadpoint':launch} if launch is not None else None
     observation=project_radar_reader_observation(value.get('readerObservation'))
     if observation is None:return None
     if value.get('status')=='GAP_GENUINE_SNAPSHOT_OR_SCHEMA':

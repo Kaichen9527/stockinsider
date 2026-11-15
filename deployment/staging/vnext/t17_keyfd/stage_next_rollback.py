@@ -12,7 +12,7 @@ from .portable_restore_engine import rehearse_owned_fixed_next,RestoreEngineReje
 from .constraint_diagnostics import diagnostic_after_cleanup
 from .staging_admission import StagingAdmissionRejected,_namespace_and_privileges
 from .verified_backup_stream import BackupStreamRejected
-from .t18_release_assets import ReleaseAssetsRejected,RELEASE_PINS,NODE_SHA256,POSTGREST_SHA256
+from .t18_release_assets import ReleaseAssetsRejected,RELEASE_PINS,LAUNCH_RELEASE_PINS,NODE_SHA256,POSTGREST_SHA256
 from .t18_broker_transport import BrokerTransportRejected
 from .t18_runtime_observation import ThreeUidBudgetRejected
 from .t18_receipt import project_exercise,project_three_uid_budget
@@ -54,12 +54,15 @@ def execute_staging_next_rollback(work_root):
         result['exercise']=exercise;result['threeUidBudget']=budget
         result['candidateDetailObservation']=detail
         result['candidateDetailHttp']=detail_http
-        return {'schema':'stockinsider-staging-next-rollback-v1','status':('DB_VERIFIED_T18_GAP' if exercise['status']=='GAP_GENUINE_SNAPSHOT_OR_SCHEMA' else 'DB_VERIFIED_FIXED_T18_EXERCISED'),
+        launch_observation=exercise['status']=='LAUNCH_CLONE_READPOINT_ONLY'
+        pins=LAUNCH_RELEASE_PINS if launch_observation else RELEASE_PINS
+        status='DB_VERIFIED_T18_GAP' if launch_observation or exercise['status']=='GAP_GENUINE_SNAPSHOT_OR_SCHEMA' else 'DB_VERIFIED_FIXED_T18_EXERCISED'
+        return {'schema':'stockinsider-staging-next-rollback-v1','status':status,
             'observations':observations,**result,'manifestSchema':manifest['schema'],
             'authenticatedPlaintextBytes':manifest['plaintextBytes'],
             'authenticatedPlaintextSha256':manifest['plaintextSha256'],
             'ciphertextSha256':backup.ciphertextSha256,'immutableCustody':backup.kind,
-            'fixedManifestBindings':[{'sourceCommit':commit,'manifestSha256':pin} for commit,pin in RELEASE_PINS],
+            'fixedManifestBindings':[{'sourceCommit':commit,'manifestSha256':pin} for commit,pin in pins],
             'nodeSha256':NODE_SHA256,'postgrestSha256':POSTGREST_SHA256,
             'nativeHoldRetained':True,'providerRecovery':'NOT_RUN',
             'stockDetailAcceptance':('HISTORICAL_CONTENT_DATE_IDENTITY_ONLY' if detail_http['status']=='HISTORICAL_DETAIL_HTTP_VERIFIED' else 'NOT_RUN_DETAIL_PROFILE_GAP'),
@@ -68,7 +71,7 @@ def execute_staging_next_rollback(work_root):
 
 
 def main():
-    parser=argparse.ArgumentParser(description='Fixed staging old-release daily rollback only')
+    parser=argparse.ArgumentParser(description='Fixed staging release rollback and launch-radar readpoint')
     parser.add_argument('--work-root',required=True)
     args=parser.parse_args()
     started=time.monotonic()

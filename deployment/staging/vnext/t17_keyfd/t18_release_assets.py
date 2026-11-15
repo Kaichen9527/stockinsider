@@ -20,6 +20,12 @@ RELEASE_PINS = (
  ('169aad1b6cfa747f78ae3464b614f43c0749d806','2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a'),
  ('dd59817f750684b093965f539dd4de466be13077','344489589e929158a73d658c968128a563dd53ed9a5eac6b37ee89553b9a0a4a'),
 )
+LAUNCH_RELEASE_PINS = (
+ ('f67548d87f2563608aa1469c14e6976d52a866cc','a980d41f1f76c6e96a9dcb7349df129606ec37c234850933297dca7b9bac266a'),
+ ('948bb9e448eda468bb618f78ec6b0ca1d691d0d5','7baa6bab4e6140c41b1fa7cb9ac96cac23e1746f2e017ef3be3291d42115b1be'),
+)
+_PINNED_RELEASE_PROFILES = (RELEASE_PINS, LAUNCH_RELEASE_PINS)
+_ALL_RELEASE_PINS = frozenset(RELEASE_PINS + LAUNCH_RELEASE_PINS)
 POSTGREST_SHA256 = '0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71'
 NODE_PATH='/usr/bin/node'
 NODE_VERSION='v22.23.1'
@@ -90,7 +96,7 @@ def _open_relative(rootfd,relative,directory=False):
 def _manifest_mode_allowed(mode,commit,pin):
     # Parsing permission only. The canonical manifest digest is checked first;
     # no file or executable is admitted by this structural predicate.
-    return not mode&0o022 or (mode==0o664 and (commit,pin) in RELEASE_PINS)
+    return not mode&0o022 or (mode==0o664 and (commit,pin) in _ALL_RELEASE_PINS)
 
 
 def _root_0664_metadata(info):
@@ -112,7 +118,7 @@ class _PinnedReadonlyRelease:
         self.mount_id=_fd_mount_id(held)
 
     def require_root(self,rootfd):
-        if self.held is None or (self.commit,self.pin) not in RELEASE_PINS:
+        if self.held is None or (self.commit,self.pin) not in _ALL_RELEASE_PINS:
             raise ReleaseAssetsRejected('pinned_readonly_release_required')
         for fd in (self.held,rootfd):
             info=os.fstat(fd)
@@ -137,7 +143,7 @@ def _observe_pinned_release(rootfd,commit,pin):
     # Public runtime accepts no path/pin override. This internal factory is
     # called only for the two compiled release pairs and observes the fixed RO
     # root before binding an independently opened fixed release to this FD.
-    if (commit,pin) not in RELEASE_PINS:
+    if (commit,pin) not in _ALL_RELEASE_PINS:
         raise ReleaseAssetsRejected('fixed_release_pair_required')
     _observe_root()
     fixed=None;held=None
@@ -251,7 +257,7 @@ def _tree(rootfd,root_owner=False,readonly_release=None):
 def _verify_release_contents(rootfd,commit,pin):
     # Unknown synthetic pins retain the original strict non-writable content
     # helper. The 0664 exception requires actual fixed-root admission even here.
-    lease=_observe_pinned_release(rootfd,commit,pin) if (commit,pin) in RELEASE_PINS else None
+    lease=_observe_pinned_release(rootfd,commit,pin) if (commit,pin) in _ALL_RELEASE_PINS else None
     try:
         _,data=_inspect_file(rootfd,'release-manifest.json',MAX_MANIFEST,capture=True)
         manifest,paths=_validate_manifest(_json(data),commit,pin)
@@ -352,6 +358,22 @@ class BorrowedReleaseAssets:
     node_fd: int
 
 
+def _fixed_release_pins_at_root(rootfd):
+    """Match one whole compiled pair. Never infer missing or mixed assets."""
+    observed=set()
+    for commit,_ in _ALL_RELEASE_PINS:
+        try:os.stat(commit,dir_fd=rootfd,follow_symlinks=False)
+        except FileNotFoundError:continue
+        observed.add(commit)
+    for pair in _PINNED_RELEASE_PROFILES:
+        if observed=={commit for commit,_ in pair}:return pair
+    raise ReleaseAssetsRejected('exact_pinned_release_pair_required')
+
+
+def is_launch_release_pair(releases):
+    return tuple((row['sourceCommit'],row['manifestSha256']) for row in releases)==LAUNCH_RELEASE_PINS
+
+
 @contextmanager
 def observe_fixed_release_assets():
     """Borrow only fixed root-owned RO assets; hold until all children stop."""
@@ -360,7 +382,7 @@ def observe_fixed_release_assets():
         _observe_root()
         rootfd=os.open(ASSET_ROOT,os.O_RDONLY|os.O_DIRECTORY|os.O_CLOEXEC|os.O_NOFOLLOW)
         held.append(rootfd);releases=[];release_fds=[]
-        for commit,pin in RELEASE_PINS:
+        for commit,pin in _fixed_release_pins_at_root(rootfd):
             fd=_open_relative(rootfd,commit,True);held.append(fd);release_fds.append(fd)
             identity=_verify_release_contents(fd,commit,pin)
             identity['directory']=ASSET_ROOT+'/'+commit
