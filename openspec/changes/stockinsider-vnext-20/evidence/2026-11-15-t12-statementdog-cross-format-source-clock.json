@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "task": "T12",
+  "productCommit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "parserBlob": "b6e4db39a123d269258bc5f9488fa77b5ecb4601",
+  "officialFeedReplay": {
+    "source": "https://feed.firstory.me/rss/user/clcftm46z000201z45w1c47fi",
+    "observedAt": "2026-11-15T07:04:04.107Z",
+    "bytes": 5316306,
+    "sha256": "60c5bdf361fffde23279151d15ad23b7e5c7b08421b8717bc2f2f54cc3d12a4e",
+    "httpStatus": 200,
+    "rssItems": 20,
+    "declaredChannelLanguage": null,
+    "outcomes": [
+      {
+        "episodeNumber": 575,
+        "guid": "cmw0vdrlz04jq01vhaovcfah4",
+        "link": "https://open.firstory.fm/story/cmw0vdrlz04jq01vhaovcfah4",
+        "firstoryId": "cmw0vdrlz04jq01vhaovcfah4",
+        "publishedAtUtc": "2026-11-03T23:02:04.000Z",
+        "publishedAtTaipei": "2026-11-04 07:02:04",
+        "publisherResearchLink": true,
+        "publisherDescriptionChapterNumbers": [
+          "00:07",
+          "03:04",
+          "21:50",
+          "29:29"
+        ],
+        "hasUnsignedDescriptionOnlyIssuerReference": false,
+        "audioEnclosurePresent": true,
+        "publisherTranscriptArtifact": false,
+        "publisherChaptersArtifact": false
+      },
+      {
+        "episodeNumber": 577,
+        "guid": "cmwdn5qya009x01s2230n6qej",
+        "link": "https://open.firstory.fm/story/cmwdn5qya009x01s2230n6qej",
+        "firstoryId": "cmwdn5qya009x01s2230n6qej",
+        "publishedAtUtc": "2026-11-12T23:02:07.000Z",
+        "publishedAtTaipei": "2026-11-13 07:02:07",
+        "publisherResearchLink": false,
+        "publisherDescriptionChapterNumbers": [
+          "06:54"
+        ],
+        "hasUnsignedDescriptionOnlyIssuerReference": true,
+        "audioEnclosurePresent": true,
+        "publisherTranscriptArtifact": false,
+        "publisherChaptersArtifact": false
+      }
+    ],
+    "ledgerAssumingOnlyPublisherArtifactAuthority": {
+      "indexUpdated": true,
+      "contentAnalyzable": false,
+      "validMatches": 0
+    },
+    "nonRoot": true,
+    "audioOrTranscriptDownloaded": false,
+    "writerCalled": false
+  },
+  "humanCorroboration": {
+    "reportUrl": "https://statementdog.com/industry_reports/53",
+    "reportedDate": "2026-10-26",
+    "hasReadBody": true,
+    "originalBodyVersionForReportedDateKnown": false,
+    "linkedEpisodeUrl": "https://statementdog.firstory.cc/episodes/cmw0vdrlz04jq01vhaovcfah4",
+    "boardDecisionUrl": "https://pr.tsmc.com/chinese/news/3352",
+    "boardDecisionDate": "2026-11-10",
+    "quarterUrl": "https://investor.tsmc.com/english/quarterly-results/2026/q3",
+    "umc": "https://www.umc.com/zh-TW/News/press_release/Content/investor/20261028",
+    "umcOfficialQuarterDate": "2026-10-28"
+  },
+  "freshnessTest": {
+    "cutoff": "2026-11-27",
+    "articleCalendarAge": 32,
+    "episodeCalendarAge": 23
+  },
+  "automatedArticleAccessEnabled": false,
+  "authorizedSpokenCueAccepted": false,
+  "paidPlanOrTrialEnabled": false,
+  "productionDataWrites": false
+}
