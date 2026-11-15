@@ -526,7 +526,7 @@
   },
   "limits": {
     "officialRawBodiesInGit": false,
-    "actualTvCoverageOfBreadth": false,
+    "actualFullMarketBreadthCoverage": false,
     "actualCombinedMarketFlow": false,
     "actualSignalRegimeOrRanking": false,
     "formalNativeGateRun": false,
