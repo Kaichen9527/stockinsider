@@ -13,6 +13,10 @@ BEGIN
   ('missing preceding close','capital_reduction',99,108,NULL,false,100,75,0,18,0,'TWD',NULL),
   ('mismatched preceding close','capital_reduction',99,108,99.05,false,100,75,0,18,0,'TWD',NULL),
   ('rounded reference','capital_reduction',99,107.99,99,false,100,75,0,18,0,'TWD',NULL),
+  -- Recorded report/issuer terms. Exact admission must not invent rounding or swap the auction tick.
+  ('published TWSE 1808 reduction reference','capital_reduction',31.00,36.25,31.00,false,893031743,714425393,0,2,0,'TWD',NULL),
+  ('published TWSE 3714 reduction reference','capital_reduction',56.70,96.15,56.70,false,737940460,400000000,0,4.579508488,0,'TWD',NULL),
+  ('TWSE 3714 auction tick is not the reduction reference','capital_reduction',56.70,96.20,56.70,false,737940460,400000000,0,4.579508488,0,'TWD',NULL),
   ('cash increase','ex_right_dividend',101.25,98.75,101.25,true,100,125,2.50,0,1,'TWD',NULL),
   ('dividend with changed shares','ex_right_dividend',101.25,79,101.25,true,100,125,2.50,0,0,'TWD',NULL),
   ('reduction with dividend','capital_reduction',100,108,100,false,100,75,1,18,0,'TWD',NULL),
@@ -31,4 +35,4 @@ BEGIN
   END IF;
  END LOOP;
 END $checks$;
-SELECT '15 breadth corporate-action comparison vectors passed' AS result;
+SELECT '18 breadth corporate-action comparison vectors passed' AS result;

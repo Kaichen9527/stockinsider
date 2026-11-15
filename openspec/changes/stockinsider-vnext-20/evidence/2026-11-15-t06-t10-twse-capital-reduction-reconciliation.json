@@ -1,0 +1,123 @@
+{
+  "recordedAt": "2026-11-15T14:14:35.748198Z",
+  "baseCommit": "dc20a15c8c4207623f9978a5b9b2453accdde788",
+  "tasks": [
+    "T06",
+    "T10"
+  ],
+  "purpose": "retrospective review of listed company/custody discrepancies and reference-price precision",
+  "sources": {
+    "operatingRulesArticle67_1": "https://twse-regulation.twse.com.tw/TW/law/DOC01.aspx?FLCODE=FL007304&FLNO=67-1",
+    "restartReport": {
+      "url": "https://www.twse.com.tw/exchangeReport/TWTAUU?startDate=20261116&endDate=20261123&response=json",
+      "bytes": 1335,
+      "sha256": "0476a3c9fe3224574ad5744c35a0cfbca0d2d8a9981430e5d228babb2b872281",
+      "receivedAt": "2026-11-15T14:14:33.967989Z"
+    },
+    "runLongPrimaryIssuerDisclosure": {
+      "url": "https://www.runlong.com.tw/upload/stakeholder/infor/infor/1150915_%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E7%8F%BE%E9%87%91%E6%B8%9B%E8%B3%87%E6%8F%9B%E7%99%BC%E8%82%A1%E7%A5%A8%E4%BD%9C%E6%A5%AD%E8%A8%88%E7%95%AB%E5%8F%8A%E6%B8%9B%E8%B3%87%E6%8F%9B%E7%A5%A8%E5%9F%BA%E6%BA%96%E6%97%A5%E7%AD%89%E7%9B%B8%E9%97%9C%E4%BA%8B%E5%AE%9C.pdf",
+      "bytes": 325851,
+      "sha256": "62eefab05d0203821a3ad84e779214aa363cd6203de17d53cc4aab99acc13911",
+      "receivedAt": "2026-11-15T14:14:32.224530Z"
+    },
+    "taifexEnnostarNotice": {
+      "url": "https://www.taifex.com.tw/file/taifex/CHINESE/11/attach/3714_20261116.pdf",
+      "bytes": 141169,
+      "sha256": "0890025cf9c3240096dbe8a7d5f668bda8e71b4f3639163c9cb14866c436d6f3",
+      "receivedAt": "2026-11-15T14:14:31.797592Z"
+    },
+    "datedTwseCloses": [
+      {
+        "datasetId": 11764,
+        "queryDay": "20261104",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261104",
+        "receivedAt": "2026-11-15T14:14:35.748198Z",
+        "bytes": 79466,
+        "sha256": "cc6962e99a9c80a36cd3142501d474a45ee54e1f5fb64f1723a5f51ec3423b72",
+        "rowCount": 1088,
+        "reportedCloses": {
+          "1808": "33.15",
+          "3714": "56.70"
+        }
+      },
+      {
+        "datasetId": 11764,
+        "queryDay": "20261111",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261111",
+        "receivedAt": "2026-11-15T14:14:34.898556Z",
+        "bytes": 79393,
+        "sha256": "6a2b2cdb6acf736611968de50cb37008c1324c4ade5dee8e6212f1e0c6cb2d50",
+        "rowCount": 1087,
+        "reportedCloses": {
+          "1808": "31.00"
+        }
+      },
+      {
+        "datasetId": 11764,
+        "queryDay": "20261113",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261113",
+        "receivedAt": "2026-11-15T14:14:35.400779Z",
+        "bytes": 79265,
+        "sha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+        "rowCount": 1086,
+        "reportedCloses": {}
+      }
+    ],
+    "closeCatalog": "https://data.gov.tw/dataset/11764"
+  },
+  "observations": [
+    {
+      "symbol": "1808",
+      "oldShares": 893031743,
+      "newShares": 714425393,
+      "declaredExchangeRatio": "0.8",
+      "refundPerOldShare": "2",
+      "lastCloseDay": "2026-11-11",
+      "preClose": "31.00",
+      "publishedReference": "36.25",
+      "auctionAnchor": "36.25",
+      "derivedFromIssuedCounts": "36.250000071036108874702330184391976112192865",
+      "issuerDisclosedStockSuspension": [
+        "2026-11-12",
+        "2026-11-20"
+      ],
+      "announcedRestart": "2026-11-23",
+      "exactBreadthAdmission": false
+    },
+    {
+      "symbol": "3714",
+      "oldShares": 737940460,
+      "newShares": 400000000,
+      "declaredExchangeRatio": "0.5420491512",
+      "refundPerOldShare": "4.579508488",
+      "lastCloseDay": "2026-11-04",
+      "preClose": "56.70",
+      "publishedReference": "96.15",
+      "auctionAnchor": "96.20",
+      "derivedFromIssuedCounts": "96.1545487044784388",
+      "taifexUnderlyingContractSuspension": [
+        "2026-11-05",
+        "2026-11-13"
+      ],
+      "announcedTwseStockRestart": "2026-11-16",
+      "exactBreadthAdmission": false
+    }
+  ],
+  "limits": {
+    "retrospective": true,
+    "knownBy20261113Cutoff": false,
+    "missingCloseProvesSuspension": false,
+    "issuerDelistingInferred": false,
+    "sourceQuantizationRuleVerified": false,
+    "currentUseAuthorityGranted": false,
+    "releaseSessionsEarned": 0
+  },
+  "test": {
+    "environment": "Contabo temporary network-isolated PostgreSQL 17.11",
+    "vectorFile": "web/scripts/launch-breadth-cash-action-vectors.sql",
+    "vectorCount": 18,
+    "newReportedCurrencyComparisonVectors": 3,
+    "result": "pass",
+    "productionMutation": false
+  }
+}
