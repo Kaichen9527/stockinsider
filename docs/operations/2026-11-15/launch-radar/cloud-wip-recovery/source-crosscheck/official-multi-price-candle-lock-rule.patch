@@ -1,0 +1,54 @@
+diff --git a/web/src/lib/vnext/launch-patterns.ts b/web/src/lib/vnext/launch-patterns.ts
+--- a/web/src/lib/vnext/launch-patterns.ts
++++ b/web/src/lib/vnext/launch-patterns.ts
+@@ -221,11 +221,17 @@
+   const ma20Overheated = aboveMa20 === null ? null : aboveMa20 > 1.15;
+   const breakoutOverheated = aboveOriginal === null ? null : aboveOriginal > 1.10;
+   const limit = input.officialLimit;
+-  const limitValid = valid && limit !== undefined && revisionKnown(limit)
++  const limitKnown = valid && limit !== undefined && revisionKnown(limit)
+     && limit.market === input.market && limit.session === current!.session && positive(limit.upperLimit) && typeof limit.onePriceLocked === 'boolean'
+-    && evidenceInstant(limit.availableAt)! >= evidenceInstant(sessions.at(-1)!.closeAt)!
+-    && (!limit.onePriceLocked || [current!.open, current!.high, current!.low, current!.close].every(value => value === limit.upperLimit));
+-  const onePriceLimitLocked = limitValid ? limit!.onePriceLocked : null;
++    && evidenceInstant(limit.availableAt)! >= evidenceInstant(sessions.at(-1)!.closeAt)!;
++  // A verified multi-price candle excludes a one-price session.
++  // Conflicting current authorities still leave the lock unresolved.
++  let onePriceLimitLocked: boolean | null = valid && current!.high > current!.low ? false : null;
++  if (limitKnown) {
++    const conflicts = limit.onePriceLocked && [current!.open, current!.high, current!.low, current!.close]
++      .some(value => value !== limit.upperLimit);
++    onePriceLimitLocked = conflicts ? null : limit.onePriceLocked;
++  }
+   if (onePriceLimitLocked === null) gaps.add('official_daily_limit_and_lock_evidence_missing');
+   const waitReasons = [ma20Overheated === true ? 'above_ma20_over_15_percent' : null,
+     breakoutOverheated === true ? 'above_original_breakout_over_10_percent' : null,
+diff --git a/migrations/20261115_vnext_launch_ranking_v1.sql b/migrations/20261115_vnext_launch_ranking_v1.sql
+--- a/migrations/20261115_vnext_launch_ranking_v1.sql
++++ b/migrations/20261115_vnext_launch_ranking_v1.sql
+@@ -693,7 +693,7 @@
+  technical_ok boolean:=true;institutional_ok boolean:=true;flow_ok boolean:=true;issued bigint;native_previous_issued bigint;institutional_previous_issued bigint;native_total numeric:=0;
+  sessions date[]:='{}';opens double precision[]:='{}';highs double precision[]:='{}';lows double precision[]:='{}';closes double precision[]:='{}';
+  technical bigint[]:='{}';denominator bigint[]:='{}';foreign_net bigint[]:='{}';trust_net bigint[]:='{}';index_close double precision[]:='{}';
+- gaps jsonb:='[]'::jsonb;score jsonb;known_at timestamptz;day date;i integer;ma20_ratio double precision;waiting jsonb;
++ gaps jsonb:='[]'::jsonb;score jsonb;known_at timestamptz;day date;i integer;ma20_ratio double precision;waiting jsonb;one_price_limit boolean;
+ BEGIN
+  IF target!~'^[0-9]{4}$' OR input_digest!~'^[a-f0-9]{64}$' OR instrument->>'symbol'<>target OR market_name NOT IN('TWSE','TPEX') THEN RETURN NULL;END IF;
+  calendar:=public.vnext_launch_calendar_v1(market_name,signal_day,cutoff);
+@@ -769,10 +769,14 @@
+  IF score IS NULL THEN RETURN jsonb_build_object('complete',false,'gaps',jsonb_build_array('launch_rule_operands_invalid'));END IF;
+  IF (score->>'availableWeight')::integer<>100 THEN gaps:=gaps||'"launch_full_100_weight_not_known"'::jsonb;END IF;
+  ma20_ratio:=public.vnext_launch_ratio64_v1(closes[240],public.vnext_launch_mean64_v1(closes,221,20));
+- waiting:=jsonb_build_array('launch_same_session_price_limit_authority_missing','launch_fixed_original_extension_authority_missing');
++ -- A positive lock requires a separate upper-limit authority.
++ -- Exact official raw high/low divergence proves the session traded at multiple prices.
++ one_price_limit:=CASE WHEN (bars->239->>'rawHigh')::numeric>(bars->239->>'rawLow')::numeric THEN false END;
++ waiting:=jsonb_build_array('launch_fixed_original_extension_authority_missing');
++ IF one_price_limit IS NULL THEN waiting:=jsonb_build_array('launch_same_session_price_limit_authority_missing')||waiting;END IF;
+  IF ma20_ratio>1.15::double precision THEN waiting:=waiting||'"launch_ma20_extension_above_15pct"'::jsonb;END IF;
+  RETURN jsonb_build_object('complete',gaps='[]'::jsonb,'gaps',gaps,'score',score,'price',price,'calendar',calendar,
+-  'entry',jsonb_build_object('eligible',false,'ma20Ratio',ma20_ratio,'fixedOriginalExtension',NULL,'sameSessionOnePriceLimit',NULL,'reasons',waiting),
++  'entry',jsonb_build_object('eligible',false,'ma20Ratio',ma20_ratio,'fixedOriginalExtension',NULL,'sameSessionOnePriceLimit',one_price_limit,'reasons',waiting),
+   'technicalInventory',native_inventory,'institutionalInventory',institutional_inventory,'flowInventory',flow_inventory,'indexInventory',index_inventory,
+   'knownAt',known_at,'technicalRevision',public.vnext_launch_csv_hash_v1(native_inventory),
+   'institutionalRevision',public.vnext_launch_csv_hash_v1(institutional_inventory),'flowRevision',public.vnext_launch_csv_hash_v1(flow_inventory),

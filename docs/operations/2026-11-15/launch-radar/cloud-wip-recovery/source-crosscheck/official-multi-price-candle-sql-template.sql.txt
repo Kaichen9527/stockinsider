@@ -1,0 +1,61 @@
+
+CREATE FUNCTION public.vnext_launch_calendar_v1(venue text, signal_day date, cutoff timestamptz) RETURNS jsonb
+LANGUAGE sql STABLE AS $$
+ SELECT jsonb_build_object('sessions',jsonb_agg(jsonb_build_object('close_at',(day::date+time '13:30') AT TIME ZONE 'Asia/Taipei') ORDER BY day))
+ FROM generate_series(signal_day-239,signal_day,interval '1 day') day
+$$;
+
+CREATE FUNCTION public.vnext_launch_price_v1(stock uuid,target text,venue text, calendar jsonb, cutoff timestamptz) RETURNS jsonb
+LANGUAGE sql STABLE AS $$
+ SELECT CASE WHEN cutoff >= __COLLECTED__::timestamptz THEN jsonb_build_object('knownAt',__COLLECTED__,'actions','[]'::jsonb,
+ 'bars',jsonb_agg(CASE WHEN i<>239 THEN jsonb_build_object('session',date '2026-11-10'+(i-239),
+ 'open',100,'high',100,'low',100,'close',100,'rawHigh',100,'rawLow',100)
+ ELSE jsonb_build_object('session',date '2026-11-10','open',100,'high',100,'low',100,'close',100)
+ || CASE WHEN current_setting('fixture.flat',true)='yes' THEN jsonb_build_object('rawHigh',100,'rawLow',100)
+ ELSE __REAL_BAR__::jsonb END END ORDER BY i)) ELSE NULL END
+ FROM generate_series(0,239) i
+$$;
+
+CREATE FUNCTION public.vnext_launch_source_fact_v1(dataset integer,d date,target text,digest text,cutoff timestamptz) RETURNS jsonb
+LANGUAGE sql STABLE AS $$
+ SELECT CASE WHEN target='INDEX' THEN jsonb_build_object('observedAt',__COLLECTED__,'availableAt',__COLLECTED__,'fact',jsonb_build_object('raw_close',100)) END
+$$;
+
+CREATE FUNCTION public.vnext_launch_binary64_v1(v numeric) RETURNS double precision LANGUAGE sql IMMUTABLE AS $$SELECT v::double precision$$;
+
+CREATE FUNCTION public.vnext_launch_mechanical_v1(date[],double precision[],double precision[],double precision[],double precision[],bigint[],double precision[],bigint[],bigint[],bigint[],timestamptz)
+RETURNS jsonb LANGUAGE sql IMMUTABLE AS $$SELECT '{"availableWeight":80}'::jsonb$$;
+
+CREATE FUNCTION public.vnext_launch_ratio64_v1(a double precision,b double precision) RETURNS double precision LANGUAGE sql IMMUTABLE AS $$SELECT a / nullif(b,0)$$;
+
+CREATE FUNCTION public.vnext_launch_mean64_v1(a double precision[],start integer,len integer) RETURNS double precision LANGUAGE sql IMMUTABLE
+AS $$ SELECT avg(v) FROM unnest(a[start:start+len-1]) v $$;
+
+CREATE FUNCTION public.vnext_launch_integer_sum_v1(a bigint[]) RETURNS numeric LANGUAGE sql IMMUTABLE AS $$SELECT sum(v) FROM unnest(a) v$$;
+
+CREATE FUNCTION public.vnext_launch_csv_hash_v1(value jsonb) RETURNS text LANGUAGE sql IMMUTABLE AS $$SELECT repeat('1',64)$$;
+
+__BASELINE_SELECTED_BODY__
+
+__CANDIDATE_SELECTED_BODY__
+
+
+DO $proof$
+DECLARE before jsonb;after jsonb;flat jsonb;early jsonb;s date:='2026-11-10';
+ instrument jsonb:='{"exchange":"TWSE","stockId":"00000000-0000-4000-8000-000000000001","symbol":"2308"}';
+ missing text:='launch_same_session_price_limit_authority_missing';
+BEGIN
+ before:=public.fixture_original_selected_score('2308',repeat('a',64),instrument,s,__COLLECTED__::timestamptz);
+ after:=public.vnext_launch_selected_score_v1('2308',repeat('a',64),instrument,s,__COLLECTED__::timestamptz);
+ PERFORM set_config('fixture.flat','yes',true);
+ flat:=public.vnext_launch_selected_score_v1('2308',repeat('a',64),instrument,s,__COLLECTED__::timestamptz);
+ early:=public.vnext_launch_selected_score_v1('2308',repeat('a',64),instrument,s,'2026-11-10T21:30:00+08:00');
+ IF before->'entry'->'sameSessionOnePriceLimit' IS DISTINCT FROM 'null'::jsonb OR NOT(before->'entry'->'reasons' ? missing)
+ OR after->'entry'->'sameSessionOnePriceLimit' IS DISTINCT FROM 'false'::jsonb OR after->'entry'->'reasons' ? missing
+ OR flat->'entry'->'sameSessionOnePriceLimit' IS DISTINCT FROM 'null'::jsonb OR NOT(flat->'entry'->'reasons' ? missing)
+ OR early ? 'entry' OR early->>'complete' IS DISTINCT FROM 'false'
+ OR after->'entry'->'eligible' IS DISTINCT FROM 'false'::jsonb
+ OR after-'entry' IS DISTINCT FROM before-'entry'
+ THEN RAISE EXCEPTION 'native lock projection parity failed';END IF;
+ RAISE WARNING USING MESSAGE='LOCK_PROOF '||jsonb_build_object('knownNonflat',true,'flatUnknown',true,'oldCutoffUnavailable',true,'scoreUnchanged',true,'entryEligible',false)::text;
+END $proof$;

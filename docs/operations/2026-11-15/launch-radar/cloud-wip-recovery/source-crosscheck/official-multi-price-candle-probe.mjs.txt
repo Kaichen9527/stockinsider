@@ -1,0 +1,29 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {launchPatternFixture} from './web/src/lib/vnext/launch-patterns.ts';
+const capture=JSON.parse(fs.readFileSync('market-test-input.json','utf8'));
+const bar={...capture.bar,sourceTimestamp:capture.collectedAt,recordedAt:capture.collectedAt,availableAt:capture.collectedAt,sourceUrl:'https://www.twse.com.tw/'};
+const hash=capture.sha256;
+const input={cutoff:capture.collectedAt,market:'TWSE',history:{
+ notEntryAuthority:true,nextSessionAuthority:false,completedSessions:[bar.session],bars:[bar],
+ priceBasis:{status:'verified',kind:'adjusted_to_signal_session',anchorSession:bar.session,adjustmentVersion:'one-session-fixture',adjustmentEvidenceHash:hash},
+ sourceDatasetRevision:hash,availableAt:capture.collectedAt,missingData:[],
+},calendar:{completeness:'complete_fixture',revisionId:'one-session-fixture',availableAt:capture.collectedAt,sessions:[{session:bar.session,closeAt:bar.session+'T13:30:00+08:00'}]},volumeBasis:null};
+assert.equal(bar.open,bar.high);
+assert.equal(bar.close,bar.high);
+assert(bar.low<bar.high);
+const observed=launchPatternFixture(input);
+assert.equal(observed.waiting.onePriceLimitLocked,false);
+assert(!observed.gaps.includes('official_daily_limit_and_lock_evidence_missing'));
+assert(!observed.rankingAuthority);
+const flat=structuredClone(input);flat.history.bars[0].low=bar.high;
+assert.equal(launchPatternFixture(flat).waiting.onePriceLimitLocked,null);
+flat.officialLimit={market:'TWSE',session:bar.session,upperLimit:bar.high,revisionId:'synthetic-typed-limit',availableAt:capture.collectedAt,onePriceLocked:true};
+assert.equal(launchPatternFixture(flat).waiting.onePriceLimitLocked,true);
+const early={...input,cutoff:bar.session+'T21:30:00+08:00'};
+assert.equal(launchPatternFixture(early).waiting.onePriceLimitLocked,null);
+const conflicting={...input,officialLimit:flat.officialLimit};
+assert.equal(launchPatternFixture(conflicting).waiting.onePriceLimitLocked,null);
+const invalid=structuredClone(input);invalid.history.bars[0].high=bar.low;
+assert.equal(launchPatternFixture(invalid).waiting.onePriceLimitLocked,null);
+console.log(JSON.stringify({node:process.version,nonRoot:process.getuid()!==0,observedOnePriceLocked:observed.waiting.onePriceLimitLocked,matchingHash:hash,cases:6}));

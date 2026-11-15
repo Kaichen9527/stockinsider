@@ -1,0 +1,134 @@
+{
+  "date": "2026-11-15",
+  "tasks": [
+    "T03",
+    "T05",
+    "T06",
+    "T12"
+  ],
+  "baseline": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "patchSha256": "fe38c83c688355ffb96b5f8ad4f194da0ae283feacb8399598a12dd4e4b4f1b4",
+  "baseBlobs": {
+    "web/src/lib/vnext/launch-patterns.ts": {
+      "sha": "8acd4f3b55f19832bcb2a93ed8dcdfdcc94f174a",
+      "size": 18762
+    },
+    "migrations/20261115_vnext_launch_ranking_v1.sql": {
+      "sha": "51199dcbcdeea3912a56b2b5937fff1632270aeb",
+      "size": 125806
+    }
+  },
+  "mail": {
+    "dateTaipei": "2026-11-15",
+    "senderDomain": "investanchors.com",
+    "newMatchingMessagesAtCheck": 0,
+    "scheduledGmailConnectorVerified": false
+  },
+  "podcast": {
+    "source": "https://podcasts.apple.com/tw/podcast/ep714/id1500839292?i=1000801859237",
+    "publishedAt": "2026-11-14T04:00:00Z",
+    "hostEpisode": "https://player.soundon.fm/p/954689a5-3096-43a4-a80b-7810b219cef3/episodes/52dc3b92-2b06-49b6-ae34-821a9d632754",
+    "appleTranscriptRules": "https://podcasters.apple.com/zh-tw/support/5316-transcripts-on-apple-podcasts",
+    "hostTerms": "https://www.soundon.fm/terms/",
+    "type": "index_only",
+    "authorizedTimedTranscriptAvailable": false
+  },
+  "statementdog": {
+    "terms": "https://statementdog.com/law/tos",
+    "contact": "https://statementdog.com/contact",
+    "automatedAcquisitionPermissionVerified": false,
+    "articles": [
+      {
+        "url": "https://statementdog.com/news/18020",
+        "publishedDay": "2026-11-10",
+        "publishedAt": null,
+        "primarySymbol": "2308",
+        "priorIssuerDisclosureDay": "2026-11-09",
+        "priorIssuerDisclosureUrl": "https://www.deltaww.com/en-US/press/41233",
+        "normalizedClaim": "Revenue disclosure is an earlier issuer event. Trading range is separate from the news headline. No synthetic publication instant or price-limit authority."
+      },
+      {
+        "url": "https://statementdog.com/news/18045",
+        "publishedDay": "2026-11-12",
+        "publishedAt": null,
+        "primarySymbol": "2467",
+        "conflictedBodyRelatedSymbol": "8046",
+        "linkedRelatedSymbol": "8064",
+        "tpexAuthority": "https://ic.tpex.org.tw/company_basic.php?stk_code=8064",
+        "ambiguousSecondaryMentionDecision": "retain_conflict_without_automatic_admission"
+      }
+    ]
+  },
+  "twse": [
+    {
+      "symbol": "2308",
+      "issuerName": "台達電",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261101&stockNo=2308&response=json",
+      "status": 200,
+      "responseSha256": "0c32d4d985188704a868efbfed7d4a31838098a491e5d72c1297e2db9837cf2f",
+      "matchingRows": 1,
+      "session": "2026-11-10",
+      "fullRangeWasSinglePrice": false,
+      "openedBelowSessionHigh": false,
+      "closedAtSessionHigh": true,
+      "sessionHighMatchedArticlePrice": true,
+      "collectedAt": "2026-11-15T10:11:50+00:00"
+    },
+    {
+      "symbol": "2467",
+      "issuerName": "志聖",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261101&stockNo=2467&response=json",
+      "status": 200,
+      "responseSha256": "09a410ff2d9b9adb861b2feecb611ddf916970d36c9c6968d383ce48c9ce2d2d",
+      "matchingRows": 1,
+      "session": "2026-11-12",
+      "fullRangeWasSinglePrice": false,
+      "openedBelowSessionHigh": true,
+      "closedAtSessionHigh": false,
+      "sessionHighMatchedArticlePrice": null,
+      "collectedAt": "2026-11-15T10:11:50+00:00"
+    },
+    {
+      "symbol": "8046",
+      "issuerName": "南電",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261101&stockNo=8046&response=json",
+      "status": 200,
+      "responseSha256": "362d75eed2a1e007f98c210f532a46f076a3d0c00f8da1ed610611ddf539d024",
+      "matchingRows": 1,
+      "session": "2026-11-12",
+      "fullRangeWasSinglePrice": false,
+      "openedBelowSessionHigh": true,
+      "closedAtSessionHigh": false,
+      "sessionHighMatchedArticlePrice": null,
+      "collectedAt": "2026-11-15T10:11:51+00:00"
+    }
+  ],
+  "replay": {
+    "actualSource": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20261101&stockNo=2308&response=json",
+    "captureSha256": "0c32d4d985188704a868efbfed7d4a31838098a491e5d72c1297e2db9837cf2f",
+    "collectedAt": "2026-11-15T10:16:02Z",
+    "node": {
+      "node": "v22.23.1",
+      "nonRoot": true,
+      "observedOnePriceLocked": false,
+      "matchingHash": "0c32d4d985188704a868efbfed7d4a31838098a491e5d72c1297e2db9837cf2f",
+      "cases": 6
+    },
+    "regressionSuite": {
+      "tests": 18,
+      "pass": 18,
+      "fail": 0
+    },
+    "postgres": {
+      "flatUnknown": true,
+      "knownNonflat": true,
+      "entryEligible": false,
+      "scoreUnchanged": true,
+      "oldCutoffUnavailable": true
+    },
+    "postgresVersion": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)"
+  },
+  "sourceAcceptanceComplete": false,
+  "rankingPublished": false,
+  "contaboProductionChanged": false
+}
