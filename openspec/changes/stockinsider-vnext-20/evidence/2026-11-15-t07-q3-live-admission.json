@@ -1,0 +1,161 @@
+{
+  "schema": "stockinsider-t07-actual-quarter-admission-observation-v1",
+  "activeAppReaderSource": "dd59817f750684b093965f539dd4de466be13077",
+  "protectedFinancialSource": "72482e18029c064936a37ab734d5a3fbf54a03ec",
+  "protectedFinancialTestReceipt": "27f5630f0e0e58f87705e9c0f250e3aed6346396",
+  "observedCounts": {
+    "scope": "private row counts only; production writer not called",
+    "readOnly": true,
+    "checkedAt": "2026-11-15T03:17:03.273426+00:00",
+    "issuerCount": 2,
+    "observations": [
+      {
+        "at": "2026-11-12T13:30:00+00:00",
+        "label": "2026-11-12T21:30+08",
+        "symbol": "2317",
+        "candidate": 15,
+        "period_end": "2026-06-30",
+        "eps_candidates": 1,
+        "marked_validated": 0,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-12T13:30:00+00:00",
+        "label": "2026-11-12T21:30+08",
+        "symbol": "2317",
+        "candidate": 0,
+        "period_end": "2026-09-30",
+        "eps_candidates": 0,
+        "marked_validated": 0,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-13T13:30:00+00:00",
+        "label": "2026-11-13T21:30+08",
+        "symbol": "2317",
+        "candidate": 15,
+        "period_end": "2026-06-30",
+        "eps_candidates": 1,
+        "marked_validated": 0,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-13T13:30:00+00:00",
+        "label": "2026-11-13T21:30+08",
+        "symbol": "2317",
+        "candidate": 0,
+        "period_end": "2026-09-30",
+        "eps_candidates": 0,
+        "marked_validated": 0,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-15T03:17:03.273426+00:00",
+        "label": "observed_now",
+        "symbol": "2317",
+        "candidate": 15,
+        "period_end": "2026-06-30",
+        "eps_candidates": 1,
+        "marked_validated": 0,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-15T03:17:03.273426+00:00",
+        "label": "observed_now",
+        "symbol": "2317",
+        "candidate": 0,
+        "period_end": "2026-09-30",
+        "eps_candidates": 0,
+        "marked_validated": 0,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-12T13:30:00+00:00",
+        "label": "2026-11-12T21:30+08",
+        "symbol": "5274",
+        "candidate": 29,
+        "period_end": "2026-06-30",
+        "eps_candidates": 2,
+        "marked_validated": 14,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-12T13:30:00+00:00",
+        "label": "2026-11-12T21:30+08",
+        "symbol": "5274",
+        "candidate": 0,
+        "period_end": "2026-09-30",
+        "eps_candidates": 0,
+        "marked_validated": 0,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-13T13:30:00+00:00",
+        "label": "2026-11-13T21:30+08",
+        "symbol": "5274",
+        "candidate": 29,
+        "period_end": "2026-06-30",
+        "eps_candidates": 2,
+        "marked_validated": 14,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-13T13:30:00+00:00",
+        "label": "2026-11-13T21:30+08",
+        "symbol": "5274",
+        "candidate": 0,
+        "period_end": "2026-09-30",
+        "eps_candidates": 0,
+        "marked_validated": 0,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-15T03:17:03.273426+00:00",
+        "label": "observed_now",
+        "symbol": "5274",
+        "candidate": 29,
+        "period_end": "2026-06-30",
+        "eps_candidates": 2,
+        "marked_validated": 14,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      },
+      {
+        "at": "2026-11-15T03:17:03.273426+00:00",
+        "label": "observed_now",
+        "symbol": "5274",
+        "candidate": 0,
+        "period_end": "2026-09-30",
+        "eps_candidates": 0,
+        "marked_validated": 0,
+        "validated_documents": 0,
+        "document_receipt_candidates": 0
+      }
+    ]
+  },
+  "quarterAcquisitionCounts": {
+    "scope": "2026-Q3",
+    "readOnly": true,
+    "checkedAt": "2026-11-15T04:17:38.72592+01:00",
+    "stockStatusCounts": []
+  },
+  "publicIssuerChecks": [
+    "e50842f3a7fd41a12d57fc9d7d1522dc19ffdc2a",
+    "019432593cdc157429c6cdc47ecb4d826864e512"
+  ],
+  "drainEnqueuesMissing": false,
+  "realAuthWriterCalled": false,
+  "productionDataChanged": false,
+  "sourceGrantChanged": false,
+  "fullFinancialModelAcceptance": false
+}
