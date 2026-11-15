@@ -1,0 +1,44 @@
+{
+  "schema": "stockinsider-supported-breadth-close-comparison-candidate-v1",
+  "base": "071ada6f24847abcbc1dae39d87678851822a6f6",
+  "issues": [
+    391,
+    395
+  ],
+  "environment": {
+    "kind": "contabo_isolated_staging",
+    "postgres": "17.11",
+    "freeDiskMiB": 25288,
+    "availableMemoryMiB": 3789
+  },
+  "proof": {
+    "actualAuthorityReaders": [
+      "opportunity_authority_selected_stream_count_v3_internal",
+      "vnext_launch_action_day_v1",
+      "vnext_launch_price_rows_internal_v1"
+    ],
+    "inputs": "synthetic_calendar_action_feed_terms_roster_closes",
+    "nativeTest": "pass",
+    "typedParValueAdjustment": true,
+    "priceConflictsRefused": true,
+    "missingOrAmbiguousTermsRefused": true,
+    "lateActionCorrectionRefused": true,
+    "signalCloseRequired": true,
+    "observedTwentyWithinThirty": true,
+    "originalAliasConflictReproducedAndRepaired": true,
+    "privateAccess": true,
+    "fullMarketReadiness": false
+  },
+  "performance": {
+    "registeredStocks": 2000,
+    "closeRows": 60000,
+    "observedPerVenue": 1000,
+    "elapsedMs": 5175,
+    "samples": 1
+  },
+  "fullCapitalCoverage": false,
+  "actualSourceAcceptance": false,
+  "cloudFullBuild": false,
+  "productionMutation": false,
+  "holdCleared": false
+}
