@@ -10,7 +10,7 @@ export const launchAvailabilityText = (availability: LaunchRankingRead['availabi
 export default function LaunchTop10({read}:{read:LaunchRankingRead}) {
   const snapshot=read.snapshot;
   return <div data-testid="launch-top10" data-ranking-run-id={snapshot?.rankingRunId||''}>
-    <div className="flex flex-wrap justify-between gap-2"><h2 id="launch-research-title" className="text-xl font-semibold">強勢發動 Top 10</h2><p>{snapshot?.members.length||0} / 10</p></div>
+    <div className="flex flex-wrap justify-between gap-2"><h2 id="launch-research-title" className="text-xl font-semibold">強勢發動 Top 10</h2><div className="flex items-center gap-3"><p>{snapshot?.members.length||0} / 10</p><Link href="/launch/performance" className="text-sm underline">上榜成效統計</Link></div></div>
     <p className="mt-2 text-sm">技術 70、籌碼 20、市場 10。分數不是機率；必要資料缺值不補分。基本面與估值獨立呈現。</p>
     {read.availability!=='ready'&&<p role="status" className="mt-3">{launchAvailabilityText(read.availability)}</p>}
     {snapshot&&<p className="mt-2 text-sm">原榜單時間：<time>{snapshot.cutoff}</time> · 台股交易日：{snapshot.session}{read.availability!=='ready'?' · 保留原版本':''}</p>}
