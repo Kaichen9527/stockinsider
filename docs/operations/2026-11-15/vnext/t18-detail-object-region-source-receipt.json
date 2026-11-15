@@ -1,0 +1,114 @@
+{
+  "schema": "stockinsider-t18-detail-object-region-source-receipt-v1",
+  "recordedAtUtc": "2026-11-15T01:08:03.222983Z",
+  "baselineCommit": "77593746d1ba30e0b33321d4e296d81a841c777e",
+  "runtimeBaselineCommit": "7c2cdbe9daf3c41cfaa8b9458cc985c0359e3a0a",
+  "scope": "CLOSED_OBJECT_COUNT_REGION_DIAGNOSTIC_ONLY",
+  "newOnsiteSubject": "NOT_RUN",
+  "nativeHoldRetained": true,
+  "preservedEvidence": {
+    "commit": "77593746d1ba30e0b33321d4e296d81a841c777e",
+    "path": "docs/operations/2026-11-15/vnext/contabo-t18-historical-detail-object-count.json",
+    "gitBlob": "dacd892082474beb257850086f498e535a6e04cd",
+    "branchIncludedBeforePublication": true,
+    "notOverwrittenByDelta": true,
+    "observedCategory": "BOUNDS",
+    "observedReason": "BOUND_EXCEEDED",
+    "observedSubtype": "OBJECT_COUNT",
+    "observedRawFactUrlPolicy": "NOT_OBSERVED",
+    "actualBoundRegion": "UNKNOWN_PENDING_ONSITE"
+  },
+  "manifest": {
+    "path": "docs/operations/2026-11-15/vnext/t18-detail-object-region-stage-manifest.json",
+    "sha256": "caee4a424801e07f98e1ff06028cb50a68fbb951568b9e65c1d89699492f1860",
+    "replace": 1,
+    "add": 0,
+    "expectedStagedBlobsAfter": 51
+  },
+  "runtimeSha256": "2305b5fcbc44abef1029149c4dcc5bd5ccc65a68ccc6ad382c3913b93fe573a5",
+  "boundRegions": [
+    "METADATA_DATASET_MAP",
+    "METADATA_OTHER",
+    "DETAIL_PROVENANCE",
+    "DETAIL_VALUATION",
+    "DETAIL_TECHNICAL",
+    "DETAIL_SECTIONS",
+    "FACT_PROVENANCE",
+    "FACT_DERIVATION",
+    "OTHER"
+  ],
+  "diagnosticConstraints": {
+    "onlyObjectCountMayHaveRegion": true,
+    "exactMapDistinguishedFromEntriesAndDescendants": true,
+    "rawPathsKeysCountsValuesUrlsIdsExceptionsExported": false,
+    "legacyTwoAndThreeFieldDiagnosticsReadable": true,
+    "unknownExtraOrMalformedFieldsRejected": true,
+    "secondTraversalOrSqlQueryAdded": false,
+    "boundRejectionRunsUrlProbe": false,
+    "diagnosticsGrantRuntimeAuthority": false
+  },
+  "verification": {
+    "actualPostgresVersion": "PostgreSQL17.11 (Debian17.11-0+deb13u1)",
+    "t18Regression": {
+      "passed": 150,
+      "seconds": 88.832
+    },
+    "t17Regression": {
+      "passed": 75,
+      "seconds": 25.009
+    },
+    "finalPrimitiveTests": {
+      "passed": 12,
+      "seconds": 0.481
+    },
+    "independentReview": {
+      "primitiveTests": 12,
+      "primitiveSeconds": 0.521,
+      "actualPgTestMethods": 1,
+      "actualPgRegions": 9,
+      "actualPgSeconds": 3.124,
+      "remainingP0": 0,
+      "remainingP1": 0,
+      "wrongShapeMapListAttributionCorrected": true,
+      "frozenSha256Verified": true
+    },
+    "boundedAstIdenticalAfterRemovingOnlyDiagnosticStateScopeAndKeywords": true,
+    "baselinePublicBlob": "50bfcc3d9d76758741e6c18981c0cd568d044c95",
+    "unchangedSqlQueryAndSizeConstants": 8,
+    "projectionSqlSha256": "ec8876222dbb422aea43e1485abd4faad70809877c3458e6be8b14f33d444a15",
+    "actualPgAllNineRegionsRefusedBeforeUrlProbe": true,
+    "dataGrantAndOriginalRpcNonMutationVerified": true,
+    "actualPgOwnedCleanupVerified": true,
+    "rootContaboTrueBackupOrProductionActions": false,
+    "webBuild": {
+      "exitCode": 127,
+      "status": "NEXT_EXECUTABLE_MISSING_IN_ISOLATED_CHECKOUT",
+      "canonicalBridge": "PASS_FIVE_CANONICAL_MODULES"
+    }
+  },
+  "sourceOnlyMetadataDesign": {
+    "path": "scripts/tests/t18_metadata_semantics_composition.cjs",
+    "fixedConsumerBlob": "d98636ebceeb53899f133bb8729cd899becc292c",
+    "verifiedInBothFixedReleaseSources": true,
+    "equivalenceCases": 51,
+    "negativeCases": 7,
+    "independentAdditionalSyntheticComparisons": 3456,
+    "finiteTerminalProfileOnly": true,
+    "includesSyntheticJsNonfiniteCoercionCases": true,
+    "liveImportedOrStaged": false,
+    "runtimeBoundRelaxed": false,
+    "privacyCollisionOrRuntimeAdmissionEstablished": false,
+    "actualMetadataRegion": "NOT_OBSERVED"
+  },
+  "unchangedBoundaries": {
+    "boundThresholdsAndTraversal": true,
+    "sqlAndUrlPolicies": true,
+    "grantsRolesOriginalRpc": true,
+    "rootUnitsBrokerAndFd": true,
+    "credentialLimitsAndHostBudget": true,
+    "releasePinsAndBytes": true,
+    "oldDbDailyChecksAndCleanup": true
+  },
+  "detailHttpAcceptance": "NOT_RUN_BY_THIS_SUBJECT",
+  "siteNewRadarAndFormalGatesRetained": true
+}

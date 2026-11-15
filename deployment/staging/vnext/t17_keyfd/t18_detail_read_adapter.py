@@ -5,6 +5,7 @@ receipt is descriptive. Unknown forwarded public JSON is a GAP. Audit-only
 provenance uses the explicit reduced context/locator projection, not invented data.
 """
 from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass,field
 import hashlib
 import json
@@ -63,10 +64,44 @@ PROFILE_REASONS=frozenset(('OBJECT_TYPE','UNSUPPORTED_FIELD','MISSING_FIELD','FI
 BOUND_SUBTYPES=frozenset(('DEPTH','JS_SAFE_NUMBER','STRING_BYTES','ARRAY_COUNT','OBJECT_COUNT','KEY_BOUND'))
 
 
+BOUND_REGIONS=frozenset(('METADATA_DATASET_MAP','METADATA_OTHER','DETAIL_PROVENANCE',
+ 'DETAIL_VALUATION','DETAIL_TECHNICAL','DETAIL_SECTIONS','FACT_PROVENANCE','FACT_DERIVATION','OTHER'))
+_BOUND_CONTEXT=ContextVar('fixed_bound_region',default=('ROOT','OTHER'))
+
+
+@contextmanager
+def _bound_scope(position,region):
+ token=_BOUND_CONTEXT.set((position,region))
+ try:yield
+ finally:_BOUND_CONTEXT.reset(token)
+
+
+def _bound_child(position,region,key):
+ # Called only AFTER the existing key bound, inside the original traversal.
+ # Return compiled states only; never retain a raw key/path/index.
+ if position=='ROOT':
+  if key=='metadata':return 'METADATA_ROW','METADATA_OTHER'
+  if key=='detail':return 'DETAIL_ROW','OTHER'
+  if key=='facts':return 'FACT_LIST','OTHER'
+ elif position=='METADATA_ROW':
+  if key=='datasetCompleteness':return 'METADATA_MAP','METADATA_DATASET_MAP'
+ elif position=='METADATA_MAP':return 'DESCENDANT','METADATA_OTHER'
+ elif position=='DETAIL_ROW':
+  if key=='provenance':return 'DESCENDANT','DETAIL_PROVENANCE'
+  if key=='valuation':return 'DESCENDANT','DETAIL_VALUATION'
+  if key=='technical':return 'DESCENDANT','DETAIL_TECHNICAL'
+  if key=='sections':return 'DESCENDANT','DETAIL_SECTIONS'
+ elif position=='FACT_ROW':
+  if key=='provenance':return 'DESCENDANT','FACT_PROVENANCE'
+  if key=='derivation':return 'DESCENDANT','FACT_DERIVATION'
+ return 'DESCENDANT',region
+
+
 class DetailAdapterRejected(Exception):
- def __init__(self,reason='INVALID_PROFILE',bound_subtype=None):
+ def __init__(self,reason='INVALID_PROFILE',bound_subtype=None,bound_region=None):
   self.category=None
   self.bound_subtype=bound_subtype
+  self.bound_region=bound_region
   self.reason=reason if type(reason) is str and reason in PROFILE_REASONS else 'INVALID_PROFILE'
   super().__init__('fixed_detail_read_adapter_rejected')
 
@@ -86,7 +121,7 @@ def _profile(category):
 
 def project_profile_diagnostic(value):
  """Closed enums ONLY, never an actual field name/type/value/exception string."""
- if (type(value) is not dict or set(value) not in ({'category','reason'},{'category','reason','boundSubtype'})
+ if (type(value) is not dict or set(value) not in ({'category','reason'},{'category','reason','boundSubtype'},{'category','reason','boundSubtype','boundRegion'})
      or type(value['category']) is not str or value['category'] not in PROFILE_CATEGORIES
      or type(value['reason']) is not str or value['reason'] not in PROFILE_REASONS):return None
  result={'category':value['category'],'reason':value['reason']}
@@ -95,6 +130,11 @@ def project_profile_diagnostic(value):
   if (value['category']!='BOUNDS' or value['reason']!='BOUND_EXCEEDED'
       or type(subtype) is not str or subtype not in BOUND_SUBTYPES):return None
   result['boundSubtype']=subtype
+ if 'boundRegion' in value:
+  region=value['boundRegion']
+  if (value['category']!='BOUNDS' or value['reason']!='BOUND_EXCEEDED' or value.get('boundSubtype')!='OBJECT_COUNT'
+      or type(region) is not str or region not in BOUND_REGIONS):return None
+  result['boundRegion']=region
  return result
 
 
@@ -130,6 +170,7 @@ def _raw_fact_url_policy(rows):
 def _json_gap(error,raw_fact_url_policy='NOT_OBSERVED'):
  diagnostic={'category':error.category,'reason':error.reason}
  if error.bound_subtype is not None:diagnostic['boundSubtype']=error.bound_subtype
+ if error.bound_region is not None:diagnostic['boundRegion']=error.bound_region
  value=project_profile_diagnostic(diagnostic)
  policy=project_raw_fact_url_policy(raw_fact_url_policy)
  if value is None or policy is None:raise DetailAdapterRejected()
@@ -148,6 +189,7 @@ def _json(raw):
 
 
 def _bounded(value,depth=0):
+ position,region=_BOUND_CONTEXT.get()
  if depth>12:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='DEPTH')
  if value is None or type(value) is bool:return
  if type(value) in (int,float):
@@ -157,12 +199,13 @@ def _bounded(value,depth=0):
   if re.search(r'-----BEGIN .*PRIVATE KEY|eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.',value):raise DetailAdapterRejected('SENSITIVE_PATTERN')
  elif type(value) is list:
   if len(value)>2000:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='ARRAY_COUNT')
-  for child in value:_bounded(child,depth+1)
+  for child in value:
+   with _bound_scope('FACT_ROW' if position=='FACT_LIST' else 'DESCENDANT','METADATA_OTHER' if position=='METADATA_MAP' else region):_bounded(child,depth+1)
  elif type(value) is dict:
-  if len(value)>128:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='OBJECT_COUNT')
+  if len(value)>128:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='OBJECT_COUNT',bound_region=region)
   for key,child in value.items():
    if type(key) is not str or len(key)>128:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='KEY_BOUND')
-   _bounded(child,depth+1)
+   with _bound_scope(*_bound_child(position,region,key)):_bounded(child,depth+1)
  else:raise DetailAdapterRejected('FIELD_TYPE')
 
 

@@ -70,9 +70,20 @@ class BoundSubtypePrimitiveTests(unittest.TestCase):
   source=subprocess.check_output(['git','cat-file','blob',BASELINE_BLOB]).decode()
   original=ast.parse(source);current=ast.parse(__import__('inspect').getsource(m))
   class StripDiagnosticKeyword(ast.NodeTransformer):
+   def visit_Assign(self,node):
+    if (isinstance(node.value,ast.Call) and isinstance(node.value.func,ast.Attribute)
+        and isinstance(node.value.func.value,ast.Name) and node.value.func.value.id=='_BOUND_CONTEXT'
+        and node.value.func.attr=='get'):return None
+    return self.generic_visit(node)
+   def visit_With(self,node):
+    self.generic_visit(node)
+    if (len(node.items)==1 and isinstance(node.items[0].context_expr,ast.Call)
+        and isinstance(node.items[0].context_expr.func,ast.Name) and node.items[0].context_expr.func.id=='_bound_scope'):
+     return node.body
+    return node
    def visit_Call(self,node):
     self.generic_visit(node)
-    if isinstance(node.func,ast.Name) and node.func.id=='DetailAdapterRejected':node.keywords=[x for x in node.keywords if x.arg!='bound_subtype']
+    if isinstance(node.func,ast.Name) and node.func.id=='DetailAdapterRejected':node.keywords=[x for x in node.keywords if x.arg not in ('bound_subtype','bound_region')]
     return node
   def bound_tree(tree):
    function=next(x for x in tree.body if isinstance(x,ast.FunctionDef) and x.name=='_bounded')
@@ -113,7 +124,11 @@ class BoundSubtypePgTests(unittest.TestCase):
    with patch.object(m,'_raw_fact_url_policy',side_effect=AssertionError('url_probe_must_not_run')) as probe:
     read,result=m.prepare_detail_read(self.sql);probe.assert_not_called()
    self.assertIsNone(read)
-   self.assertEqual(result,{'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':{'category':'BOUNDS','reason':'BOUND_EXCEEDED','boundSubtype':subtype},'rawFactUrlPolicy':'NOT_OBSERVED'})
+   if subtype=='OBJECT_COUNT':result_expected_region='DETAIL_VALUATION'
+   else:result_expected_region=None
+   expected={'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':{'category':'BOUNDS','reason':'BOUND_EXCEEDED','boundSubtype':subtype},'rawFactUrlPolicy':'NOT_OBSERVED'}
+   if result_expected_region:expected['profileDiagnostic']['boundRegion']=result_expected_region
+   self.assertEqual(result,expected)
    self.assertEqual(project_detail_http(result),result);self.assertNotIn(CANARY,json.dumps(result))
    self.assertEqual(self.fixture.fingerprint(),before)
    self.assertEqual(self.sql("SELECT count(*) FROM pg_roles WHERE rolname LIKE 't18%'"),'2')

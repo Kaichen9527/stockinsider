@@ -1,0 +1,36 @@
+{
+  "schema": "stockinsider-t18-detail-object-region-stage-delta-v1",
+  "baselineCommit": "77593746d1ba30e0b33321d4e296d81a841c777e",
+  "runtimeBaselineCommit": "7c2cdbe9daf3c41cfaa8b9458cc985c0359e3a0a",
+  "baselineVerifiedBlobs": 51,
+  "expectedStagedBlobsAfter": 51,
+  "replace": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_detail_read_adapter.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "1207b32b955a6dccd1dae6d33ea4c5f23172a4a1",
+        "sha256": "7b8f490c2bae519389c8d1fe145e6711bca0d3e6d85796073394c3eb0ce1f14b"
+      },
+      "after": {
+        "gitBlob": "c35819079907ef48a93f825477b14dbd6463697c",
+        "sha256": "2305b5fcbc44abef1029149c4dcc5bd5ccc65a68ccc6ad382c3913b93fe573a5"
+      }
+    }
+  ],
+  "add": [],
+  "remove": [],
+  "preservedEvidence": {
+    "commit": "77593746d1ba30e0b33321d4e296d81a841c777e",
+    "path": "docs/operations/2026-11-15/vnext/contabo-t18-historical-detail-object-count.json",
+    "gitBlob": "dacd892082474beb257850086f498e535a6e04cd"
+  },
+  "fixedSourceRoot": "/run/stockinsider-t18-host-source",
+  "fixedSourceUnitRoot": "/readonly/t18-source",
+  "scope": "CLOSED_OBJECT_COUNT_REGION_DIAGNOSTIC_ONLY",
+  "boundPolicyOrTraversalChanged": false,
+  "sourceOnlyMetadataCompositionStagedOrImported": false,
+  "sqlUrlGrantRpcRootChanges": false,
+  "nativeHoldRetained": true,
+  "onsiteNewSubject": "NOT_RUN"
+}
