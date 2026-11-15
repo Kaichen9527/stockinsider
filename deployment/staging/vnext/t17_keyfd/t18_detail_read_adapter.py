@@ -60,9 +60,13 @@ PROFILE_REASONS=frozenset(('OBJECT_TYPE','UNSUPPORTED_FIELD','MISSING_FIELD','FI
  'INVALID_PROFILE','URL_QUERY_HOST_POLICY','FACTOR_STATUS','FACTOR_GRADE','FACTOR_COUNT','FACTOR_RANGE'))
 
 
+BOUND_SUBTYPES=frozenset(('DEPTH','JS_SAFE_NUMBER','STRING_BYTES','ARRAY_COUNT','OBJECT_COUNT','KEY_BOUND'))
+
+
 class DetailAdapterRejected(Exception):
- def __init__(self,reason='INVALID_PROFILE'):
+ def __init__(self,reason='INVALID_PROFILE',bound_subtype=None):
   self.category=None
+  self.bound_subtype=bound_subtype
   self.reason=reason if type(reason) is str and reason in PROFILE_REASONS else 'INVALID_PROFILE'
   super().__init__('fixed_detail_read_adapter_rejected')
 
@@ -82,10 +86,16 @@ def _profile(category):
 
 def project_profile_diagnostic(value):
  """Closed enums ONLY, never an actual field name/type/value/exception string."""
- if (type(value) is not dict or set(value)!={'category','reason'}
+ if (type(value) is not dict or set(value) not in ({'category','reason'},{'category','reason','boundSubtype'})
      or type(value['category']) is not str or value['category'] not in PROFILE_CATEGORIES
      or type(value['reason']) is not str or value['reason'] not in PROFILE_REASONS):return None
- return {'category':value['category'],'reason':value['reason']}
+ result={'category':value['category'],'reason':value['reason']}
+ if 'boundSubtype' in value:
+  subtype=value['boundSubtype']
+  if (value['category']!='BOUNDS' or value['reason']!='BOUND_EXCEEDED'
+      or type(subtype) is not str or subtype not in BOUND_SUBTYPES):return None
+  result['boundSubtype']=subtype
+ return result
 
 
 RAW_FACT_URL_POLICIES=frozenset(('NOT_OBSERVED','ACCEPTED_URL_POLICY','REJECTED_URL_POLICY','REJECTED_QUERY_HOST_POLICY'))
@@ -118,7 +128,9 @@ def _raw_fact_url_policy(rows):
 
 
 def _json_gap(error,raw_fact_url_policy='NOT_OBSERVED'):
- value=project_profile_diagnostic({'category':error.category,'reason':error.reason})
+ diagnostic={'category':error.category,'reason':error.reason}
+ if error.bound_subtype is not None:diagnostic['boundSubtype']=error.bound_subtype
+ value=project_profile_diagnostic(diagnostic)
  policy=project_raw_fact_url_policy(raw_fact_url_policy)
  if value is None or policy is None:raise DetailAdapterRejected()
  return None,{'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':value,'rawFactUrlPolicy':policy}
@@ -136,20 +148,20 @@ def _json(raw):
 
 
 def _bounded(value,depth=0):
- if depth>12:raise DetailAdapterRejected('BOUND_EXCEEDED')
+ if depth>12:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='DEPTH')
  if value is None or type(value) is bool:return
  if type(value) in (int,float):
-  if not math.isfinite(value) or abs(value)>9007199254740991:raise DetailAdapterRejected('BOUND_EXCEEDED')
+  if not math.isfinite(value) or abs(value)>9007199254740991:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='JS_SAFE_NUMBER')
  elif type(value) is str:
-  if len(value.encode())>65536:raise DetailAdapterRejected('BOUND_EXCEEDED')
+  if len(value.encode())>65536:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='STRING_BYTES')
   if re.search(r'-----BEGIN .*PRIVATE KEY|eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.',value):raise DetailAdapterRejected('SENSITIVE_PATTERN')
  elif type(value) is list:
-  if len(value)>2000:raise DetailAdapterRejected('BOUND_EXCEEDED')
+  if len(value)>2000:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='ARRAY_COUNT')
   for child in value:_bounded(child,depth+1)
  elif type(value) is dict:
-  if len(value)>128:raise DetailAdapterRejected('BOUND_EXCEEDED')
+  if len(value)>128:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='OBJECT_COUNT')
   for key,child in value.items():
-   if type(key) is not str or len(key)>128:raise DetailAdapterRejected('BOUND_EXCEEDED')
+   if type(key) is not str or len(key)>128:raise DetailAdapterRejected('BOUND_EXCEEDED',bound_subtype='KEY_BOUND')
    _bounded(child,depth+1)
  else:raise DetailAdapterRejected('FIELD_TYPE')
 

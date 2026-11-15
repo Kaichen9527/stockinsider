@@ -1,0 +1,34 @@
+{
+  "schema": "stockinsider-t18-detail-bound-subtype-stage-delta-v1",
+  "baselineCommit": "eeff55f3287227c0c8ff1d181fee93a3ef0c27b2",
+  "runtimeBaselineCommit": "fa22e9113dd5b289ee5ee948a3083b18932ee3ed",
+  "baselineVerifiedBlobs": 51,
+  "expectedStagedBlobsAfter": 51,
+  "replace": [
+    {
+      "path": "deployment/staging/vnext/t17_keyfd/t18_detail_read_adapter.py",
+      "mode": "100644",
+      "before": {
+        "gitBlob": "50bfcc3d9d76758741e6c18981c0cd568d044c95",
+        "sha256": "7dfdb0c4617ac5c19c9ec08776238e92f254bbd892d34eda59bd686651a5cf83"
+      },
+      "after": {
+        "gitBlob": "1207b32b955a6dccd1dae6d33ea4c5f23172a4a1",
+        "sha256": "7b8f490c2bae519389c8d1fe145e6711bca0d3e6d85796073394c3eb0ce1f14b"
+      }
+    }
+  ],
+  "add": [],
+  "remove": [],
+  "preservedEvidence": {
+    "path": "docs/operations/2026-11-15/vnext/contabo-t18-historical-detail-first-bound.json",
+    "gitBlob": "27dda147e7c52aca58f463e6341ffdf4bcbaa73f"
+  },
+  "fixedSourceRoot": "/run/stockinsider-t18-host-source",
+  "fixedSourceUnitRoot": "/readonly/t18-source",
+  "scope": "CLOSED_BOUND_SUBTYPE_DIAGNOSTIC_ONLY",
+  "boundPolicyOrTraversalChanged": false,
+  "sqlUrlGrantRpcRootChanges": false,
+  "nativeHoldRetained": true,
+  "onsiteNewSubject": "NOT_RUN"
+}

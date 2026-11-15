@@ -1,0 +1,89 @@
+{
+  "schema": "stockinsider-t18-detail-bound-subtype-source-receipt-v1",
+  "recordedAtUtc": "2026-11-15T00:31:59.361276Z",
+  "baselineCommit": "eeff55f3287227c0c8ff1d181fee93a3ef0c27b2",
+  "runtimeBaselineCommit": "fa22e9113dd5b289ee5ee948a3083b18932ee3ed",
+  "scope": "CLOSED_SUBTYPE_DIAGNOSTICS_ONLY",
+  "newOnsiteSubject": "NOT_RUN",
+  "nativeHoldRetained": true,
+  "preservedEvidence": {
+    "branchIncludedBeforePublication": true,
+    "commit": "eeff55f3287227c0c8ff1d181fee93a3ef0c27b2",
+    "path": "docs/operations/2026-11-15/vnext/contabo-t18-historical-detail-first-bound.json",
+    "gitBlob": "27dda147e7c52aca58f463e6341ffdf4bcbaa73f",
+    "notOverwrittenByDelta": true,
+    "observedCategory": "BOUNDS",
+    "observedReason": "BOUND_EXCEEDED",
+    "observedRawFactUrlPolicy": "NOT_OBSERVED",
+    "actualBoundSubtype": "UNKNOWN_PENDING_ONSITE"
+  },
+  "manifest": {
+    "path": "docs/operations/2026-11-15/vnext/t18-detail-bound-subtype-stage-manifest.json",
+    "sha256": "0082e986b48864c913594731faa950a27c6e97ed941dad9c8a1a80b20ae100a7",
+    "replace": 1,
+    "add": 0,
+    "expectedStagedBlobsAfter": 51
+  },
+  "runtimeSha256": "7b8f490c2bae519389c8d1fe145e6711bca0d3e6d85796073394c3eb0ce1f14b",
+  "boundSubtypes": [
+    "ARRAY_COUNT",
+    "DEPTH",
+    "JS_SAFE_NUMBER",
+    "KEY_BOUND",
+    "OBJECT_COUNT",
+    "STRING_BYTES"
+  ],
+  "diagnosticConstraints": {
+    "onlyBoundsBoundExceededMayHaveSubtype": true,
+    "exactStringClosedEnumsOnly": true,
+    "legacyTwoFieldDiagnosticsReadable": true,
+    "unknownExtraOrMalformedFieldsRejected": true,
+    "observedValuesSizesKeysUrlsIdsExceptionsExported": false,
+    "boundRejectionRunsUrlProbe": false,
+    "diagnosticsGrantRuntimeAuthority": false
+  },
+  "verification": {
+    "actualPostgresVersion": "PostgreSQL17.11 (Debian17.11-0+deb13u1)",
+    "focusedDiagnosticAndAdapter": {
+      "passed": 31,
+      "seconds": 27.867
+    },
+    "combinedT17T18": {
+      "passed": 219,
+      "seconds": 100.062
+    },
+    "independentNewSubtypeTests": {
+      "passed": 9,
+      "seconds": 3.473
+    },
+    "independentSourceReview": {
+      "remainingP0": 0,
+      "remainingP1": 0,
+      "frozenSha256Verified": true
+    },
+    "boundedAstIdenticalAfterRemovingOnlyDiagnosticKeyword": true,
+    "baselinePublicBlob": "50bfcc3d9d76758741e6c18981c0cd568d044c95",
+    "unchangedSqlQueryAndSizeConstants": 8,
+    "projectionSqlSha256": "ec8876222dbb422aea43e1485abd4faad70809877c3458e6be8b14f33d444a15",
+    "actualPgAllSixSubtypesRefusedBeforeUrlProbe": true,
+    "dataGrantAndOriginalRpcNonMutationVerified": true,
+    "actualPgCleanupVerified": true,
+    "rootContaboTrueBackupOrProductionActions": false,
+    "webBuild": {
+      "exitCode": 127,
+      "status": "NEXT_EXECUTABLE_MISSING_IN_ISOLATED_CHECKOUT",
+      "canonicalBridge": "PASS"
+    }
+  },
+  "unchangedBoundaries": {
+    "boundThresholdsAndTraversal": true,
+    "sqlAndUrlPolicies": true,
+    "grantsRolesOriginalRpc": true,
+    "rootUnitsBrokerAndFd": true,
+    "credentialLimitsAndHostBudget": true,
+    "releasePinsAndBytes": true,
+    "oldDbDailyChecksAndCleanup": true
+  },
+  "detailHttpAcceptance": "NOT_RUN_BY_THIS_SUBJECT",
+  "siteNewRadarAndFormalGatesRetained": true
+}

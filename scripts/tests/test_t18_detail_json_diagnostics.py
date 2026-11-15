@@ -16,13 +16,14 @@ class DetailJsonDiagnosticTests(unittest.TestCase):
  def setUp(self):
   self.fixture=fixture.CandidateDetailObservationTests(methodName='test_actual_genuine_shape_public_pin_optional_dossier_rows_and_no_mutation')
   self.addCleanup(self.fixture.doCleanups);self.fixture.setUp();self.sql=self.fixture.sql
- def gap(self,query,category,reason,raw='ACCEPTED_URL_POLICY'):
+ def gap(self,query,category,reason,raw='ACCEPTED_URL_POLICY',subtype=None):
   before_roles=self.sql("SELECT count(*) FROM pg_roles WHERE rolname LIKE 't18%'")
   self.sql(query)
   before=self.fixture.fingerprint()
   read,result=m.prepare_detail_read(self.sql)
   self.assertIsNone(read)
   expected={'status':'GAP_DETAIL_PUBLIC_JSON','profileDiagnostic':{'category':category,'reason':reason},'rawFactUrlPolicy':raw}
+  if subtype is not None:expected['profileDiagnostic']['boundSubtype']=subtype
   self.assertEqual(result,expected);self.assertEqual(project_detail_http(result),expected)
   self.assertNotIn(CANARY,json.dumps(result));self.assertEqual(self.fixture.fingerprint(),before)
   self.assertEqual(self.sql("SELECT count(*) FROM pg_roles WHERE rolname LIKE 't18%'"),before_roles)
@@ -55,7 +56,7 @@ class DetailJsonDiagnosticTests(unittest.TestCase):
   for key,category in (('earningsBridge','EARNINGS_BRIDGE'),('forwardCommonIncomeBridge','COMMON_INCOME_BRIDGE'),('forwardCommonEquityBridge','EQUITY_BRIDGE')):
    self.gap(self.update('valuation',{key:{'status':'complete'}}),category,'UNSUPPORTED_SEMANTICS')
  def test_actual_bounds_sensitive_pattern_and_blank_stock_no_values_exported(self):
-  self.gap("UPDATE candidate_detail_snapshots SET title=repeat('X',65537);",'BOUNDS','BOUND_EXCEEDED','NOT_OBSERVED')
+  self.gap("UPDATE candidate_detail_snapshots SET title=repeat('X',65537);",'BOUNDS','BOUND_EXCEEDED','NOT_OBSERVED',subtype='STRING_BYTES')
   self.sql("UPDATE candidate_detail_snapshots SET title='PUBLIC';")
   self.gap("UPDATE candidate_detail_snapshots SET title='-----BEGIN PRIVATE KEY-----PUBLIC_ONLY';",'BOUNDS','SENSITIVE_PATTERN','NOT_OBSERVED')
   self.sql("UPDATE candidate_detail_snapshots SET title='PUBLIC';")
