@@ -55,7 +55,8 @@ def execute_staging_next_rollback(work_root):
         result['candidateDetailObservation']=detail
         result['candidateDetailHttp']=detail_http
         launch_observation=exercise['status']=='LAUNCH_CLONE_READPOINT_ONLY'
-        pins=LAUNCH_RELEASE_PINS if launch_observation else RELEASE_PINS
+        launch_verified=exercise['status']=='FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED'
+        pins=LAUNCH_RELEASE_PINS if launch_observation or launch_verified else RELEASE_PINS
         status='DB_VERIFIED_T18_GAP' if launch_observation or exercise['status']=='GAP_GENUINE_SNAPSHOT_OR_SCHEMA' else 'DB_VERIFIED_FIXED_T18_EXERCISED'
         return {'schema':'stockinsider-staging-next-rollback-v1','status':status,
             'observations':observations,**result,'manifestSchema':manifest['schema'],
@@ -65,8 +66,10 @@ def execute_staging_next_rollback(work_root):
             'fixedManifestBindings':[{'sourceCommit':commit,'manifestSha256':pin} for commit,pin in pins],
             'nodeSha256':NODE_SHA256,'postgrestSha256':POSTGREST_SHA256,
             'nativeHoldRetained':True,'providerRecovery':'NOT_RUN',
-            'stockDetailAcceptance':('HISTORICAL_CONTENT_DATE_IDENTITY_ONLY' if detail_http['status']=='HISTORICAL_DETAIL_HTTP_VERIFIED' else 'NOT_RUN_DETAIL_PROFILE_GAP'),
-            'freshnessActionAcceptance':'GAP_FIXED_UI_HAS_NO_AGE_FENCE','newRadarReleaseAcceptance':'NOT_RUN',
+            'stockDetailAcceptance':('FIXED_LAUNCH_RANKING_AND_REVISION_BOUND' if launch_verified else
+               'HISTORICAL_CONTENT_DATE_IDENTITY_ONLY' if detail_http['status']=='HISTORICAL_DETAIL_HTTP_VERIFIED' else 'NOT_RUN_DETAIL_PROFILE_GAP'),
+            'freshnessActionAcceptance':'NOT_RUN' if launch_verified or launch_observation else 'GAP_FIXED_UI_HAS_NO_AGE_FENCE',
+            'newRadarReleaseAcceptance':'FIXED_PAIR_BOUND_RANKING_AND_DETAIL_ROLLBACK' if launch_verified else 'NOT_RUN',
             'productionContinuity':'HOST_REQUIRED','fullReleaseAcceptance':False}
 
 

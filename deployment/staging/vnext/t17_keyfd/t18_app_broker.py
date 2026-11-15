@@ -26,7 +26,7 @@ from .portable_sql_fixture_adapter import _tools
 from .staging_admission import _namespace_and_privileges, _production_pg_inaccessible, _mounts, StagingAdmissionRejected
 from .t18_host_plan import BROKER_REFUSAL_TAGS,broker_refusal_bytes
 from .stage_credentials import APP_CREDENTIALS,APP_CREDENTIAL_NAME,MAX_TOKEN,create_stage_jwt,validate_stage_token,StageCredentialRejected
-from .t18_release_assets import observe_fixed_release_assets, RELEASE_PINS
+from .t18_release_assets import observe_fixed_release_assets, RELEASE_PINS,is_launch_release_pair
 from .t18_broker_transport import observe_network_namespace_cookie
 
 APP_USER='si-t18-app'
@@ -322,6 +322,8 @@ class _FixedChildren:
             STOCKINSIDER_WRITER_RELEASE_ID=self.release['sourceCommit'],CREDENTIALS_DIRECTORY=CREDENTIALS,
             STOCKINSIDER_POSTGREST_JWT_SHA256=hashlib.sha256(self.token.encode()).hexdigest(),
             RADAR_PUBLIC_SNAPSHOTS_ENABLED='enabled')
+        if is_launch_release_pair(self.assets.releases):
+            env.update(STOCKINSIDER_VNEXT_ENABLED='true',STOCKINSIDER_LAUNCH_RANKING_ENABLED='true')
         self.next=self._spawn([str(self.node),'--max-old-space-size=256',self.release['serverPath']],env)
     def close(self):
         self.stop_next()

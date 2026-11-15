@@ -55,6 +55,27 @@ SELECT jsonb_build_object(
 );
 COMMIT;
 """
+LAUNCH_BINDING_SQL=b"""
+BEGIN READ ONLY;
+WITH head AS (
+ SELECT ranking_run_id,session_date,input_cutoff,snapshot FROM public.vnext_launch_ranking_snapshots_v1
+ ORDER BY ordinal DESC LIMIT 1
+), ranked AS (
+ SELECT m.rank,m.symbol,m.research_revision,m.score_revision,m.qualification_revision,m.input_hash
+ FROM public.vnext_launch_ranking_members_v1 m JOIN head h USING(ranking_run_id)
+ WHERE m.rank IS NOT NULL ORDER BY m.rank LIMIT 11
+)
+SELECT jsonb_build_object('rankingRunId',ranking_run_id,'session',to_char(session_date,'YYYY-MM-DD'),
+ 'cutoff',input_cutoff,'headSha256',encode(sha256(convert_to(snapshot::text,'UTF8')),'hex'),
+ 'members',(SELECT jsonb_agg(jsonb_build_object('rank',rank,'symbol',symbol,'revisionId',research_revision,
+  'scoreRevision',score_revision,'launchQualificationRevision',qualification_revision,'inputHash',input_hash) ORDER BY rank) FROM ranked))
+FROM head;
+COMMIT;
+"""
+LAUNCH_API='/api/launch-ranking'
+LAUNCH_BINDING_KEYS=frozenset(('rank','symbol','revisionId','scoreRevision','launchQualificationRevision','inputHash'))
+LAUNCH_UUID=re.compile(r'[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}')
+LAUNCH_DIGEST=re.compile(r'[0-9a-f]{64}')
 MAX_HTTP=2*1024**2
 MAX_COUNT=8*1024**3
 FINGERPRINT_SQL=b"""SELECT json_build_object(
@@ -193,6 +214,100 @@ def _health(release,expected,deadline=None,step='aba_first_a'):
         'dailyAcceptance':'STALE_READONLY_ORIGINAL_DATE_NO_AUTHORITY','staticStatus':static,'staticSha256':expected_digest,**daily}
 
 
+def _launch_digest(value):
+    try:wire=json.dumps(value,sort_keys=True,ensure_ascii=True,separators=(',',':'),allow_nan=False)
+    except (TypeError,ValueError):raise FixedRollbackRejected('launch_frozen_projection_invalid') from None
+    return hashlib.sha256(wire.encode('ascii')).hexdigest()
+
+
+def _expected_launch_binding(sql,observation):
+    raw=sql(LAUNCH_BINDING_SQL)
+    if not isinstance(raw,(str,bytes)) or len(raw)>8192:
+        raise FixedRollbackRejected('launch_clone_binding_rejected')
+    try:value=json.loads(raw)
+    except (ValueError,UnicodeError):raise FixedRollbackRejected('launch_clone_binding_rejected') from None
+    if (type(value) is not dict or set(value)!={'rankingRunId','session','cutoff','headSha256','members'}
+        or value['session']!=observation['session'] or type(value['rankingRunId']) is not str
+        or LAUNCH_UUID.fullmatch(value['rankingRunId']) is None
+        or type(value['headSha256']) is not str or LAUNCH_DIGEST.fullmatch(value['headSha256']) is None
+        or type(value['members']) is not list or len(value['members'])!=observation['ranked']):
+        raise FixedRollbackRejected('launch_clone_binding_rejected')
+    cutoff=_timestamp(value['cutoff'])
+    if cutoff!=_timestamp(value['session']+'T21:30:00+08:00'):
+        raise FixedRollbackRejected('launch_clone_cutoff_rejected')
+    for rank,member in enumerate(value['members'],1):
+        if (type(member) is not dict or set(member)!=LAUNCH_BINDING_KEYS
+            or type(member['rank']) is not int or member['rank']!=rank or type(member['symbol']) is not str
+            or re.fullmatch(r'[0-9]{4}',member['symbol']) is None
+            or any(type(member[field]) is not str or LAUNCH_UUID.fullmatch(member[field]) is None
+                for field in ('revisionId','scoreRevision','launchQualificationRevision'))
+            or type(member['inputHash']) is not str or LAUNCH_DIGEST.fullmatch(member['inputHash']) is None):
+            raise FixedRollbackRejected('launch_clone_member_binding_rejected')
+    return value
+
+
+def _launch_result(response,expected):
+    status,headers,body=response
+    if status!=200 or 'no-store' not in headers.get('cache-control',''):
+        raise FixedRollbackRejected('launch_http_not_ready')
+    try:value=json.loads(body)
+    except (ValueError,UnicodeError):raise FixedRollbackRejected('launch_http_invalid') from None
+    if (type(value) is not dict or value.get('ok') is not True or type(value.get('result')) is not dict
+        or value['result'].get('availability')!='ready'):
+        raise FixedRollbackRejected('launch_http_invalid')
+    result=value['result'];snapshot=result.get('snapshot')
+    if (type(snapshot) is not dict or snapshot.get('rankingRunId')!=expected['rankingRunId']
+        or snapshot.get('session')!=expected['session'] or _timestamp(snapshot.get('cutoff'))!=_timestamp(expected['cutoff'])
+        or type(snapshot.get('members')) is not list or len(snapshot['members'])!=len(expected['members'])):
+        raise FixedRollbackRejected('launch_http_frozen_head_mismatch')
+    for member,pin in zip(snapshot['members'],expected['members']):
+        if type(member) is not dict or any(member.get(key)!=v for key,v in pin.items()):
+            raise FixedRollbackRejected('launch_http_member_pin_mismatch')
+    return result
+
+
+def _launch_health(release,expected,deadline,step):
+    with http_subphase(step+'_static_select'):target,asset_hash=_static_asset(release)
+    with http_subphase(step+'_daily'):
+        last=None
+        for _ in range(40):
+            if time.monotonic()>deadline:break
+            try:
+                last=_http(3000,'GET',LAUNCH_API)
+                if last[0]==200:break
+            except (OSError,http.client.HTTPException):pass
+            time.sleep(.1)
+        if last is None:raise FixedRollbackRejected('launch_http_start_failed')
+        current=_launch_result(last,expected)
+        first=expected['members'][0]
+        query=urlencode({'rankingRunId':expected['rankingRunId'],'symbol':first['symbol']})
+        selected=_launch_result(_http(3000,'GET',LAUNCH_API+'?'+query),expected)
+        detail=selected.get('detail')
+        if (type(detail) is not dict or detail.get('rankingRunId')!=expected['rankingRunId']
+            or any(detail.get(key)!=value for key,value in first.items() if key!='rank')):
+            raise FixedRollbackRejected('launch_http_detail_pin_mismatch')
+        snapshot_hash=_launch_digest(current['snapshot'])
+        if snapshot_hash!=_launch_digest(selected['snapshot']):
+            raise FixedRollbackRejected('launch_http_head_and_detail_disagree')
+        detail_hash=_launch_digest(detail)
+    with http_subphase(step+'_home'):
+        home_status,_,home=_http(3000,'GET','/')
+        query=urlencode({'launchRunId':expected['rankingRunId'],'launchResearchRevision':first['revisionId'],
+                        'launchScoreRevision':first['scoreRevision']})
+        detail_status,_,detail_page=_http(3000,'GET','/stock/'+first['symbol']+'?'+query)
+        if (home_status!=200 or detail_status!=200 or expected['rankingRunId'].encode('ascii') not in home
+            or b'data-testid="launch-ranking-binding"' not in detail_page):
+            raise FixedRollbackRejected('launch_html_binding_missing')
+    with http_subphase(step+'_static'):
+        static,_,body=_http(3000,'GET',target)
+        if static!=200 or hashlib.sha256(body).hexdigest()!=asset_hash:
+            raise FixedRollbackRejected('next_home_or_static_health_failed')
+    return {'sourceCommit':release['sourceCommit'],'buildId':release['buildId'],'nextVersion':'16.3.4',
+        'homeStatus':home_status,'detailStatus':detail_status,'staticStatus':static,'staticSha256':asset_hash,
+        'snapshotSha256':snapshot_hash,'detailSha256':detail_hash,'session':expected['session'],
+        'ranked':len(expected['members'])}
+
+
 def _negative_http(stage_jwt):
     snap='/rest/v1/radar_public_snapshots?'+urlencode({'select':SNAPSHOT_SELECT,'window_key':'eq.daily','status':'eq.valid','order':'published_at.desc','limit':'1'})
     probes=(('POST',snap),('PATCH',snap),('DELETE',snap),('GET','/rest/v1/rpc/publish_radar_public_snapshots'),
@@ -220,8 +335,11 @@ def _port_closed(port):
         sock.settimeout(.5);return sock.connect_ex(('127.0.0.1',port))!=0
 
 
-def _execute_fixed_sequence(app,rest,releases,dates):
+def _execute_fixed_sequence(app,rest,releases,dates,*,launch=False):
     """Private mechanics helper. Tests are not kernel/broker admission."""
+    health=_launch_health if launch else _health
+    expected=dates if launch else dates['daily']
+    target=LAUNCH_API if launch else '/api/radar/daily'
     steps=[];deadline=time.monotonic()+180
     primary_error=None
     try:
@@ -229,22 +347,22 @@ def _execute_fixed_sequence(app,rest,releases,dates):
             with http_subphase(step+'_start'):
                 response=app.request(op)
                 if response['sourceCommit']!=releases[index]['sourceCommit']:raise FixedRollbackRejected('broker_release_binding_rejected')
-            steps.append(_health(releases[index],dates['daily'],deadline,step))
+            steps.append(health(releases[index],expected,deadline,step))
             http_completed(flag)
             with http_subphase(step+'_stop'):app.request('STOP_NEXT')
         with http_subphase('fault_b_start'):app.request('START_B')
-        _health(releases[1],dates['daily'],deadline,'fault_b');http_completed('faultBReady')
+        health(releases[1],expected,deadline,'fault_b');http_completed('faultBReady')
         with http_subphase('fault_inject'):app.request('FAULT_NEXT')
         with http_subphase('fault_observe'):
             try:
-                status,_,_=_http(3000,'GET','/api/radar/daily')
+                status,_,_=_http(3000,'GET',target)
                 failed=status!=200
             except (OSError,http.client.HTTPException):failed=True
             if not failed:raise FixedRollbackRejected('injected_fault_not_observed')
         http_completed('faultObserved')
         # Fixed automatic rollback; no operator assertion substitutes for HTTP.
         with http_subphase('rollback_a_start'):app.request('START_A')
-        recovered=_health(releases[0],dates['daily'],deadline,'rollback_a');http_completed('rollbackAHealthPassed')
+        recovered=health(releases[0],expected,deadline,'rollback_a');http_completed('rollbackAHealthPassed')
         return {'sequence':'A_B_A','steps':steps,'faultHealthFailed':True,
             'automaticRollback':'A','recovered':recovered}
     except BaseException as error:primary_error=error;raise
@@ -297,22 +415,28 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     from .t18_broker_transport import connect_fixed_app_broker
     from .t18_runtime_observation import observe_three_uid_budget
     from .t18_readpoint_diagnostics import readpoint_phase
-    if is_launch_release_pair(assets.releases):
+    launch=is_launch_release_pair(assets.releases)
+    if launch:
         with readpoint_phase('radar_readpoint'):observation=_observe_launch_readpoint(sql)
-        return {'status':'LAUNCH_CLONE_READPOINT_ONLY','launchReadpoint':observation,
-            'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN',
-            'candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
-    with readpoint_phase('radar_readpoint'):observation=assess_radar_reader(sql)
-    if (observation['status']!='OBSERVED_PUBLISHED_SNAPSHOT' or observation['homeValidSnapshots']<1
-        or observation['dailyValidSnapshots']<1 or observation['missingContentDates']):
-        return {'status':'GAP_GENUINE_SNAPSHOT_OR_SCHEMA','readerObservation':observation,
-            'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN','candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
+        if observation['status']!='FROZEN_RANK_ROWS_OBSERVED':
+            return {'status':'LAUNCH_CLONE_READPOINT_ONLY','launchReadpoint':observation,
+                'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN',
+                'candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
+        with readpoint_phase('snapshot_dates'):dates=_expected_launch_binding(sql,observation)
+    else:
+        with readpoint_phase('radar_readpoint'):observation=assess_radar_reader(sql)
+        if (observation['status']!='OBSERVED_PUBLISHED_SNAPSHOT' or observation['homeValidSnapshots']<1
+            or observation['dailyValidSnapshots']<1 or observation['missingContentDates']):
+            return {'status':'GAP_GENUINE_SNAPSHOT_OR_SCHEMA','readerObservation':observation,
+                'postgrestAcceptance':'NOT_RUN','nextRollback':'NOT_RUN','candidateDetailHttp':{'status':'GAP_DETAIL_SCOPE'}}
+        with readpoint_phase('snapshot_dates'):dates=_expected_dates(sql)
     with readpoint_phase('snapshot_fingerprint'):before=_fingerprint(sql)
-    with readpoint_phase('snapshot_dates'):dates=_expected_dates(sql)
-    with readpoint_phase('reader_role_install'):roles=install_fixed_reader_roles(sql)
-    with readpoint_phase('candidate_detail_prepare'):
-        from .t18_detail_read_adapter import prepare_detail_read
-        detail_read,detail_http=prepare_detail_read(sql)
+    with readpoint_phase('reader_role_install'):roles=install_fixed_reader_roles(sql,allow_launch_reads=launch)
+    detail_read,detail_http=None,{'status':'GAP_DETAIL_SCOPE'}
+    if not launch:
+        with readpoint_phase('candidate_detail_prepare'):
+            from .t18_detail_read_adapter import prepare_detail_read
+            detail_read,detail_http=prepare_detail_read(sql)
     with readpoint_phase('owned_socket_activation'):activate_rest_socket()
     # The original pre-key APP was kernel/asset-verified with public placeholder
     # only. Root must stop/recreate it; no credential file is rewritten in-place.
@@ -320,11 +444,12 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     with readpoint_phase('stage_credential_handoff'):secret,token=request_fresh_stage()
     try:
         with http_trace():
-            http_completed('detailPreparationCompleted')
-            http_completed('detailReadPrepared' if detail_read is not None else 'detailPreparationGap')
-            if (detail_read is None and detail_http.get('status')=='GAP_DETAIL_PUBLIC_JSON'
-                and detail_http.get('profileDiagnostic',{}).get('category')=='BOUNDS'
-                and detail_http['profileDiagnostic'].get('reason')=='BOUND_EXCEEDED'):http_completed('detailBoundsGap')
+            if not launch:
+                http_completed('detailPreparationCompleted')
+                http_completed('detailReadPrepared' if detail_read is not None else 'detailPreparationGap')
+                if (detail_read is None and detail_http.get('status')=='GAP_DETAIL_PUBLIC_JSON'
+                    and detail_http.get('profileDiagnostic',{}).get('category')=='BOUNDS'
+                    and detail_http['profileDiagnostic'].get('reason')=='BOUND_EXCEEDED'):http_completed('detailBoundsGap')
             stack=ExitStack();primary_error=None
             try:
                 with readpoint_phase('fresh_app_binding'):
@@ -338,9 +463,9 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
                     with readpoint_phase('rest_configure'):rest.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
                     with readpoint_phase('app_configure'):fresh_app.request('CONFIGURE',stageJwt=token,hmacSecretB64=encoded)
                     with readpoint_phase('fixed_http_exercise'):
-                        with start_fixed_read_proxy(token,detail_read=detail_read) as proxy:
+                        with start_fixed_read_proxy(token,detail_read=detail_read,allow_launch_reads=launch) as proxy:
                             negatives=_negative_http(token)
-                            sequence=_execute_fixed_sequence(fresh_app,rest,assets.releases,dates)
+                            sequence=_execute_fixed_sequence(fresh_app,rest,assets.releases,dates,launch=launch)
                             if detail_read is not None:
                                 from .t18_detail_http import exercise_detail_http
                                 detail_http=exercise_detail_http(fresh_app,assets.releases,detail_read)
@@ -382,6 +507,15 @@ def run_fixed_same_clone(sql,activate_rest_socket,app,rest,assets):
     with readpoint_phase('snapshot_final_check'):
         after=_fingerprint(sql)
         if before!=after:raise FixedRollbackRejected('snapshot_rows_or_constraint_bits_changed')
+        if launch and _expected_launch_binding(sql,observation)!=dates:
+            raise FixedRollbackRejected('launch_frozen_clone_binding_changed')
+    if launch:
+        return {'candidateDetailHttp':detail_http,'status':'FIXED_LAUNCH_RELEASE_ROLLBACK_VERIFIED',
+            'launchReadpoint':observation,'readerRoleChecks':roles,'negativeHttpChecks':negatives,
+            'proxyMetrics':metrics,'rollback':sequence,'snapshotDataAndConstraintBitsUnchanged':True,
+            'postgrestAcceptance':'FIXED_LAUNCH_READER_ONLY','nextRollback':'FIXED_LAUNCH_PAIR_VERIFIED',
+            'namespaceKernelCookiesMatched':True,'threeDistinctOsUidsObserved':True,
+            'ownedListenersClosed':True,'hostUnitCleanup':'HOST_REQUIRED'}
     return {'candidateDetailHttp':detail_http,'status':'FIXED_OLD_RELEASE_DAILY_ROLLBACK_VERIFIED','readerObservation':observation,
         'readerRoleChecks':roles,'negativeHttpChecks':negatives,'proxyMetrics':metrics,
         'rollback':sequence,'snapshotDataAndConstraintBitsUnchanged':True,
