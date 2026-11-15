@@ -1,0 +1,664 @@
+{
+  "schema": "stockinsider-market-licensed-listed-close-warmup-v1",
+  "scope": "read-only real public endpoints and aggregate database query; no writer, ranking or production change",
+  "source": {
+    "schema": "stockinsider-licensed-listed-raw-close-range-v1",
+    "sourceRegistry": "https://data.gov.tw/dataset/11764",
+    "targetSessions": [
+      "2026-11-12",
+      "2026-11-13"
+    ],
+    "historicalSamples": [
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-09-29",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20260929",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:26.006364+00:00",
+        "bytes": 79138,
+        "sha256": "37366c364d379c7fc91a6f3287874dcd7be9b1c9c18174d76fad015560bae617",
+        "bodyDates": [
+          "20260929"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1083,
+        "positiveCloseCount": 1080,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-09-30",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20260930",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:27.506945+00:00",
+        "bytes": 79164,
+        "sha256": "d692babcb6e3ebe4567eb5d197881e88f08cc7138fcb900980bc2549cd497c69",
+        "bodyDates": [
+          "20260930"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1083,
+        "positiveCloseCount": 1083,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-01",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261001",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:29.116276+00:00",
+        "bytes": 79092,
+        "sha256": "8e1b84b10fd7ca85abbc040993d6accffff483787e41fa86bcc671241ef57735",
+        "bodyDates": [
+          "20261001"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1082,
+        "positiveCloseCount": 1081,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-02",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261002",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:30.538546+00:00",
+        "bytes": 79098,
+        "sha256": "0f3a5eb4d3e9a9936461e5bbec214072ffd08a5b06948aa42e3ddb8759d8bd63",
+        "bodyDates": [
+          "20261002"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1082,
+        "positiveCloseCount": 1082,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-05",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261005",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:32.271076+00:00",
+        "bytes": 79155,
+        "sha256": "f065e833a9ff246264f95695c7b456333c85a101986ee851d9f8d71bd1f64213",
+        "bodyDates": [
+          "20261005"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1083,
+        "positiveCloseCount": 1083,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-06",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261006",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:33.658339+00:00",
+        "bytes": 79160,
+        "sha256": "ff6c60b64c89b404eb4e8cf73d0e11cfac3f2ed02dd6947d1e166f0823aa2c98",
+        "bodyDates": [
+          "20261006"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1083,
+        "positiveCloseCount": 1083,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-07",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261007",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:35.163542+00:00",
+        "bytes": 79070,
+        "sha256": "4ac7dc1cf5e9d541e97329572a307221458e8fbc58248bd0d7cc605f2c260413",
+        "bodyDates": [
+          "20261007"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1082,
+        "positiveCloseCount": 1077,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-08",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261008",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:36.585808+00:00",
+        "bytes": 79079,
+        "sha256": "7afcee0f5bd4c6b2bb46736587a6ba34b95f3f3c02e340c462b61e12a3c3de54",
+        "bodyDates": [
+          "20261008"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1082,
+        "positiveCloseCount": 1079,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-12",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261012",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:38.259853+00:00",
+        "bytes": 79155,
+        "sha256": "ed77c51fc2fc262755d6f325fb1e726df1c3c3592dcb8480770a44f8600f7c28",
+        "bodyDates": [
+          "20261012"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1083,
+        "positiveCloseCount": 1080,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-13",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261013",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:39.636298+00:00",
+        "bytes": 79152,
+        "sha256": "9af53c313e2b319683b68b7add613f888626504ccd084a785e210cc071ae40cd",
+        "bodyDates": [
+          "20261013"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1083,
+        "positiveCloseCount": 1081,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-14",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261014",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:42.280212+00:00",
+        "bytes": 79157,
+        "sha256": "a13bd6e9945fb2319803f89907911ca8d1dec39ba8cf43bce51a6e8e3eb0c978",
+        "bodyDates": [
+          "20261014"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1083,
+        "positiveCloseCount": 1080,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-15",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261015",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:43.360079+00:00",
+        "bytes": 79006,
+        "sha256": "cb0fe95ac5505fab263ebbfd8a3371b60877ee07488e5600880ca2e3b8176bb7",
+        "bodyDates": [
+          "20261015"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1081,
+        "positiveCloseCount": 1079,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-16",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261016",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:44.775471+00:00",
+        "bytes": 79079,
+        "sha256": "a04f96f4afbd282effcab87f5f7c080675dc5ae3bc6eb968499dfa1ddbcc3ac5",
+        "bodyDates": [
+          "20261016"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1082,
+        "positiveCloseCount": 1077,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-19",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261019",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:46.030397+00:00",
+        "bytes": 79134,
+        "sha256": "8a81214aedaebcf2da86c6f17b4c6bfa854a2182913cfa7863b006c00c6a0978",
+        "bodyDates": [
+          "20261019"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1083,
+        "positiveCloseCount": 1078,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-20",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261020",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:47.722310+00:00",
+        "bytes": 79205,
+        "sha256": "def84551f71af73c5514714cea964532d114e88dde220d0449b40f9048b567ca",
+        "bodyDates": [
+          "20261020"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1084,
+        "positiveCloseCount": 1081,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-21",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261021",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:50.093929+00:00",
+        "bytes": 79226,
+        "sha256": "2ca62c5e0ba3337809aa37cd78ae199178cabb807811dc7cdb787fbbed6ecee7",
+        "bodyDates": [
+          "20261021"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1084,
+        "positiveCloseCount": 1083,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-22",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261022",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:52.572328+00:00",
+        "bytes": 79184,
+        "sha256": "76f75844d9395124c6507174756ea51a82ece1cdc0e1892f83183eeca236037b",
+        "bodyDates": [
+          "20261022"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1084,
+        "positiveCloseCount": 1077,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-27",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261027",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:53.972527+00:00",
+        "bytes": 79432,
+        "sha256": "9564fddc6575cf78c1ad5fe1392baa8f13bd549f0f7abecba0b55911c6b4059a",
+        "bodyDates": [
+          "20261027"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1087,
+        "positiveCloseCount": 1085,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-28",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261028",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:55.081465+00:00",
+        "bytes": 79443,
+        "sha256": "4d697d44e732d57909c50ceb65edd7dace44c3b783df2bbdf5ad5810b4969976",
+        "bodyDates": [
+          "20261028"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1087,
+        "positiveCloseCount": 1085,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-29",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261029",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:56.742112+00:00",
+        "bytes": 79416,
+        "sha256": "fca0bb7a2dac56ec493b40c8880fbc9d0231e1e25ef43a5e943993f511845bc1",
+        "bodyDates": [
+          "20261029"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1087,
+        "positiveCloseCount": 1081,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-10-30",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261030",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:58.213420+00:00",
+        "bytes": 79482,
+        "sha256": "954daeab710a5a3bf2f722c37b38375e6c06c49cce2e931c5ee60511eab17ffe",
+        "bodyDates": [
+          "20261030"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1088,
+        "positiveCloseCount": 1084,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-11-02",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261102",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:18:59.401286+00:00",
+        "bytes": 79484,
+        "sha256": "1007655d94647c4a7f935ad17ec68e809355bbdf7fec5a28b7b7b8c9f00b73fa",
+        "bodyDates": [
+          "20261102"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1088,
+        "positiveCloseCount": 1085,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-11-03",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261103",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:19:00.999531+00:00",
+        "bytes": 79435,
+        "sha256": "8cbb4f73da836eeb0d7d360d6f3379a84be976d5735c8837d47ca7cbd07d23fd",
+        "bodyDates": [
+          "20261103"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1088,
+        "positiveCloseCount": 1082,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-11-04",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261104",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:19:02.431820+00:00",
+        "bytes": 79466,
+        "sha256": "cc6962e99a9c80a36cd3142501d474a45ee54e1f5fb64f1723a5f51ec3423b72",
+        "bodyDates": [
+          "20261104"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1088,
+        "positiveCloseCount": 1088,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-11-05",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261105",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:19:04.034919+00:00",
+        "bytes": 79377,
+        "sha256": "fc62d1f821fdce050820ab790206c1603c465efbac5cca2734d54ffd83c71386",
+        "bodyDates": [
+          "20261105"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1087,
+        "positiveCloseCount": 1085,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-11-06",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261106",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:19:05.451814+00:00",
+        "bytes": 79360,
+        "sha256": "40709a6cfcffbe3ce9ba445f3ccaec58a43e0c7e15a6f947d9edb9f57ac49c8b",
+        "bodyDates": [
+          "20261106"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1087,
+        "positiveCloseCount": 1085,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-11-09",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261109",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:19:07.304029+00:00",
+        "bytes": 79376,
+        "sha256": "98431c1a4e500be927b3a6a552e1d31d5a6b57c9166b44cc02d1fde3bbd27b74",
+        "bodyDates": [
+          "20261109"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1087,
+        "positiveCloseCount": 1087,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-11-10",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261110",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:19:08.745845+00:00",
+        "bytes": 79392,
+        "sha256": "e6e0afe64b9030459f9da2989d0e6060a0cb6cb8cc63e9a2e9bd8ca4b99f77cb",
+        "bodyDates": [
+          "20261110"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1087,
+        "positiveCloseCount": 1085,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-11-11",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261111",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:19:10.171574+00:00",
+        "bytes": 79393,
+        "sha256": "6a2b2cdb6acf736611968de50cb37008c1324c4ade5dee8e6212f1e0c6cb2d50",
+        "bodyDates": [
+          "20261111"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1087,
+        "positiveCloseCount": 1084,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-11-12",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261112",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:19:11.227261+00:00",
+        "bytes": 79277,
+        "sha256": "e33124a061b3b80d4bf66e6830ec7a5937421c0a1e045f9dd2a28635630579ef",
+        "bodyDates": [
+          "20261112"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1086,
+        "positiveCloseCount": 1084,
+        "rawHashVerified": true
+      },
+      {
+        "datasetId": 11764,
+        "requestedSession": "2026-11-13",
+        "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261113",
+        "httpStatus": 200,
+        "contentType": "text/csv",
+        "sourceLastModified": null,
+        "observedAt": "2026-11-15T02:19:12.791611+00:00",
+        "bytes": 79265,
+        "sha256": "6b03cce558971759c4edc94c0ee39b434d5dd841002ec227140c490a94e8133c",
+        "bodyDates": [
+          "20261113"
+        ],
+        "profile": "MATCHED_DATE",
+        "rowCount": 1086,
+        "positiveCloseCount": 1085,
+        "rawHashVerified": true
+      }
+    ],
+    "acceptedDays": 31,
+    "bytesRetained": 2456852,
+    "closedDayNegativeControl": {
+      "datasetId": 11764,
+      "requestedSession": "2026-10-23",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=open_data&date=20261023",
+      "httpStatus": 200,
+      "contentType": "text/csv",
+      "sourceLastModified": null,
+      "observedAt": "2026-11-15T02:19:13.721846+00:00",
+      "bytes": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "profile": "HEADER_MISMATCH"
+    },
+    "negativePayloadRetained": false,
+    "companyActionAdjusted": false,
+    "issueDateIsObservationDate": false,
+    "kolOrRankingAuthority": false,
+    "producerCalled": false
+  },
+  "comparison": {
+    "readonlyDbStatementSha256": "39e94b376dda0fb08cbde6b465d5ef0ccb3788ce8db20d5774ee306e4a217ec8",
+    "observedDbAt": "2026-11-15T02:20:04.645697+00:00",
+    "comparedMarkets": [
+      "TWSE"
+    ],
+    "aggregateCoverage": {
+      "2026-11-12": {
+        "knownTimedRosterDiagnostic": 1089,
+        "breakdown": {
+          "all_exact_20": 1053,
+          "signal_close_and_20_of_30_only": 26,
+          "no_signal_date_close": 10
+        },
+        "selectedSignalCloseAnd20Of30": 1079,
+        "selectedCutoffAvailabilityProved": false
+      },
+      "2026-11-13": {
+        "knownTimedRosterDiagnostic": 1089,
+        "breakdown": {
+          "all_exact_20": 1053,
+          "signal_close_and_20_of_30_only": 26,
+          "no_signal_date_close": 9,
+          "signal_close_but_fewer_than_20": 1
+        },
+        "selectedSignalCloseAnd20Of30": 1079,
+        "selectedCutoffAvailabilityProved": false
+      }
+    },
+    "actualDailySourcesCompared": {
+      "quoteDataset": 11549,
+      "closeWithValuationDataset": 11764,
+      "sameSession": "2026-11-13",
+      "symbolsIntersect": 1086,
+      "bothPositive": 1085,
+      "bothPositiveClosesExactlyEqual": 1085,
+      "unequalCloses": 0,
+      "quotePositiveOnly": 0,
+      "valuationPositiveOnly": 0,
+      "quoteSha256": "8fc1f6407bfc06a691fac6523a9095c18ddb095648aec82183a1f44c25594542"
+    },
+    "observedCutoffAppliedToInstrumentIdentityOnly": true,
+    "companyActionAdjusted": false,
+    "productionMutated": false,
+    "rangOrWriterInvocation": false
+  },
+  "tpexComparisonCommit": "397751d1a7282da284c62531fa190bb505ddc163",
+  "commonSessionCounts": {
+    "session": "2026-11-13",
+    "twse": {
+      "complete": 1079,
+      "roster": 1089
+    },
+    "tpex": {
+      "complete": 858,
+      "roster": 890
+    },
+    "combinedLatestAnd20of30": {
+      "complete": 1937,
+      "roster": 1979,
+      "percentage": 97.8777
+    },
+    "combinedExact20": 1800
+  },
+  "use": "11764 dated response supplies validated TWSE raw close for historical breadth warmup; 11549 supplies the current full bar. Record each actual observation and match the retained active ordinary instrument authority.",
+  "outOfScope": [
+    "adjustments and correction versions for company actions",
+    "TWSE historical open high low volume turnover",
+    "TWSE total foreign trading money and coverage",
+    "formal calendar authority",
+    "historical original-cutoff product acceptance",
+    "new written source policy or database migration"
+  ]
+}
