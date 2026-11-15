@@ -165,13 +165,17 @@ class DetailReadAdapterTests(unittest.TestCase):
    'narrativeKind':'deterministic_fact','scores':d['provenance']['revision_context']['scores'],
    'asOf':d['as_of'],'availableAt':d['available_at'],'claims':[],
    'sections':[{'key':x['key'],'title':x['title'],'body':x['body']} for x in d['sections']],
-   'facts':[{'factKey':f['fact_key'],'periodEnd':f['period_end'],'value':f['value'],'unit':f['unit'],'availableAt':f['available_at']}]}}
+   'sources':[{'referenceNumber':1,'url':f['source_url'],'label':f['fact_key'],
+    'publishedAt':f['available_at'],'locator':'quarterly_revenue:2026-06-30'}],
+   'sourceLinks':[],
+   'facts':[{'factKey':f['fact_key'],'periodEnd':f['period_end'],'value':f['value'],'unit':f['unit'],
+    'availableAt':f['available_at'],'sourceUrl':f['source_url']}]}}
   releases=[{'sourceCommit':x[0]} for x in assets.RELEASE_PINS]
   class Broker:
    def request(self,op):return {'sourceCommit':assets.RELEASE_PINS[op=='START_B'][0]}
   def http(port,method,target):
    if target.startswith('/stock/'):
-    return 200,{},('<main>REVISION-BOUND RESEARCH 1111 2026/9/12<article>Public fixture '+fixture.MARKER+'</article></main>').encode()
+    return 200,{},('<main>REVISION-BOUND RESEARCH 1111 2026/9/12<article>Public fixture '+fixture.MARKER+'</article><div hidden><a href="'+f['source_url']+'">source</a></div></main>').encode()
    if target=='/api/stocks/1111/candidate-detail?revision='+fixture.REV:return 200,{},json.dumps(payload).encode()
    return 400,{},b'{"error":"PUBLIC_INVALID"}'
   with patch.object(controller,'_http',side_effect=http):result=checks.exercise_detail_http(Broker(),releases,read)
@@ -186,6 +190,82 @@ class DetailReadAdapterTests(unittest.TestCase):
  def test_receipt_projection_rejects_rows_extra_fields_and_fake_status(self):
   for bad in ({'status':'PREPARED_PRIVATE_HISTORICAL_DETAIL'},{'status':'GAP_DETAIL_SCOPE','rows':fixture.MARKER},True):self.assertIsNone(project_detail_http(bad))
   self.assertEqual(project_detail_http({'status':'GAP_DETAIL_SCOPE'}),{'status':'GAP_DETAIL_SCOPE'})
+
+
+class DetailSourceLinkChecks(unittest.TestCase):
+ def setUp(self):
+  self.day='2026-09-12'
+  self.when=self.day+'T01:02:03+00:00'
+  self.official='https://www.twse.com.tw/r?date=20260912&response=csv'
+  self.independent='https://research.example/'
+  f1={'fact_id':fixture.FACT,'fact_key':'official_revenue','period_end':'2026-06-30','value':12,'unit':'TWD',
+      'available_at':self.when,'source_url':self.official,'provenance':{'page':2},'stock_id':fixture.STOCK}
+  f2={**f1,'fact_id':'00000000-0000-4000-8000-000000000902','fact_key':'measured_balance','source_url':None}
+  independent={'label':'Historical official link','url':'https://research.example','platform':'official','published_at':self.when}
+  link={'label':'Exchange report','url':self.official,'factIds':[fixture.FACT]}
+  context={'revision_context':{'scores':{'discovery':5,'research':4,'actionability':0,'dataConfidence':10}}}
+  d={'id':fixture.REV,'session_date':self.day,'title':'fixture','summary':'fixture','lifecycle_stage':'found',
+     'detail_kind':'fact','as_of':self.when,'available_at':self.when,'sections':[],'technical':{},
+     'valuation':{},'provenance':context,'source_links':[link,independent],'fact_ids':[f1['fact_id'],f2['fact_id']]}
+  self.rows={'detail':d,'stock':{'symbol':'1111','name':'test company'},'facts':[f1,f2]}
+  p={'revisionId':d['id'],'symbol':'1111','chineseName':'test company','sessionDate':self.day,
+     'lifecycleStage':'found','detailKind':'fact','title':'fixture','summary':'fixture','technical':{},
+     'valuation':{},'scores':context['revision_context']['scores'],'asOf':self.when,'availableAt':self.when,
+     'narrativeKind':'deterministic_fact','sections':[],'claims':[],
+     'facts':[{'factKey':f['fact_key'],'periodEnd':f['period_end'],'value':f['value'],'unit':f['unit'],
+       'availableAt':f['available_at'],'sourceUrl':f['source_url']} for f in (f1,f2)],
+     'sourceLinks':[link,{**independent,'url':self.independent}],
+     'sources':[{'referenceNumber':1,'label':'Exchange report','url':self.official,'publishedAt':None},
+                {'referenceNumber':2,'label':'Historical official link','url':self.independent,'publishedAt':self.when},
+                {'referenceNumber':3,'label':'official_revenue','url':self.official,'publishedAt':self.when,'locator':'page:2'}]}
+  self.payload={'ok':True,'detail':p}
+
+ def check(self,payload):
+  return _check_payload(json.dumps(payload).encode(),self.rows)
+
+ def test_accepts_exact_fact_urls_and_numbered_and_separate_source_lists(self):
+  self.assertEqual(self.check(self.payload),self.payload['detail'])
+
+ def test_fact_url_is_bound_even_when_fact_values_and_labels_are_unchanged(self):
+  from deployment.staging.vnext.t17_keyfd.t18_same_clone import FixedRollbackRejected
+  for index,url in ((0,None),(0,'https://different.example'),(1,self.official)):
+   with self.subTest(index=index,url=url):
+    payload=copy.deepcopy(self.payload)
+    payload['detail']['facts'][index]['sourceUrl']=url
+    with self.assertRaisesRegex(FixedRollbackRejected,'historical_detail_fact_url_changed'):self.check(payload)
+  payload=copy.deepcopy(self.payload);del payload['detail']['facts'][1]['sourceUrl']
+  with self.assertRaisesRegex(FixedRollbackRejected,'historical_detail_fact_url_changed'):self.check(payload)
+
+ def test_extra_missing_replaced_or_relabelled_source_is_rejected_in_both_arrays(self):
+  from deployment.staging.vnext.t17_keyfd.t18_same_clone import FixedRollbackRejected
+  for field in ('sources','sourceLinks'):
+   for action in ('drop','add','replace','label'):
+    with self.subTest(field=field,action=action):
+     payload=copy.deepcopy(self.payload);links=payload['detail'][field]
+     if action=='drop':links.pop()
+     if action=='add':links.append(links[-1])
+     if action=='replace':links[0]['url']='https://different.example/'
+     if action=='label':links[0]['label']='A different source label'
+     with self.assertRaisesRegex(FixedRollbackRejected,'historical_detail_sources_changed'):self.check(payload)
+
+ def test_streamed_markup_checks_href_with_multiplicity_while_ignoring_internal_navigation(self):
+  import html
+  from deployment.staging.vnext.t17_keyfd.t18_detail_http import _VisibleText,_check_page_links
+  from deployment.staging.vnext.t17_keyfd.t18_same_clone import FixedRollbackRejected
+  detail=self.check(self.payload)
+  hrefs=[source['url'] for field in ('sources','sourceLinks') for source in detail[field]]
+  def render(links,duplicate_attr=False):
+   safe=[html.escape(url,quote=True) for url in links]
+   extras=' href="https://different.example/"' if duplicate_attr else ''
+   markup='<a href="/">home</a><div hidden id="S:0">'+''.join(
+    '<a href="'+url+'"'+(extras if i==0 else '')+'>same text</a>' for i,url in enumerate(safe))+'</div>'
+   parser=_VisibleText();parser.feed(markup);parser.close()
+   return parser
+  _check_page_links(render(hrefs),detail)
+  for links,duplicates in ((hrefs[:-1],False),([*hrefs,hrefs[0]],False),
+     (['https://different.example/',*hrefs[1:]],False),(hrefs,True)):
+   with self.assertRaisesRegex(FixedRollbackRejected,'historical_detail_page_links_changed'):
+    _check_page_links(render(links,duplicates),detail)
 
 
 if __name__=='__main__':unittest.main()

@@ -1,0 +1,30 @@
+{
+  "observedAt": "2026-11-15T16:31:13Z",
+  "baseline": "6a4c9a289938b2d11af71ed665e6e6985b53c652",
+  "task": "T18",
+  "scope": "Fixed historical candidate detail HTTP verifier, synthetic source rows with native PG17 and loopback-only proxy",
+  "testedGitBlobs": {
+    "deployment/staging/vnext/t17_keyfd/t18_detail_http.py": "85764ca97c5c2b0edf873cc074fd01d98c0136c3",
+    "scripts/tests/test_t18_detail_read_adapter.py": "63397a50d324e853941e67e75ffd4591fb0ec146"
+  },
+  "stableObservation": "954dafe166a226b23db9ca0ea32adddeed26e5e1",
+  "staging": {
+    "testsPassed": 7,
+    "testsFailed": 0,
+    "initialHarnessIssue": "Isolated namespace lacked loopback activation. Rerun brought up only loopback.",
+    "nonRoot": true,
+    "hostEgressFromTests": false
+  },
+  "criteria": [
+    "exact approved URL and null per fact",
+    "numbered source and separate link list membership and multiplicity",
+    "original fact identity, value, date and visible prose retained in validation",
+    "HTML source hyperlink comparison across streamed output including multiplicity",
+    "private SQL and read proxy focused regression"
+  ],
+  "nativeGenuineBackupRestoredThisIteration": false,
+  "realNextHttpRetestedThisIteration": false,
+  "historicalVendorUrlPolicyChanged": false,
+  "newRadarRollbackVerified": false,
+  "productionChanged": false
+}
