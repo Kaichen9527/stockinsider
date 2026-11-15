@@ -3,6 +3,7 @@ import test from 'node:test';
 import { collectInvestAnchorsNotices, planInvestAnchorsMailboxDay } from './investanchors-notice-receiver.ts';
 
 import { continueInvestAnchorsNoticeDays, continueInvestAnchorsNoticeScan } from './investanchors-notice-progress.ts';
+import { resolveInvestAnchorsNoticeDay } from './investanchors-notice-runtime.ts';
 
 const day = '2026-11-12';
 const clock = '2026-11-13T00:02:00+08:00';
@@ -275,4 +276,28 @@ test('a Taipei date rollover keeps the new pending date for the next invocation'
   assert.equal(summary.scanStatus, 'deferred');
   assert.equal(summary.checkpointDay, day);
   assert.equal(summary.pendingDay, '2026-11-13');
+});
+
+test('Taipei morning selects early notices while explicit replay stays on closed days', async () => {
+  const morning = '2026-11-12T00:15:00Z';
+  const at = new Date(morning);
+  assert.equal(resolveInvestAnchorsNoticeDay(at, undefined, 'current'), day);
+  assert.equal(resolveInvestAnchorsNoticeDay(at), undefined);
+  assert.equal(resolveInvestAnchorsNoticeDay(at, '2026-11-11'), '2026-11-11');
+  assert.throws(() => resolveInvestAnchorsNoticeDay(at, day), /notice_day_invalid/u);
+  assert.throws(() => resolveInvestAnchorsNoticeDay(at, '2026-11-11', 'current'), /notice_day_invalid/u);
+
+  const g = provider([mail('early', Date.parse(day + 'T01:44:00+08:00'))], morning);
+  const open = await collectInvestAnchorsNotices(day, key, g, dateOptions);
+  assert.equal(open.scanStatus, 'open_day');
+  assert.equal(open.checkpointDay, null);
+  assert.equal(open.notices.length, 1);
+  assert.equal(open.notices[0].status, 'awaiting_article_resolution');
+  const final = await collectInvestAnchorsNotices(day, key, {...g, now: () => clock}, {
+    readBudget: 50, checkedKeys: new Set(open.checkedKeys),
+  });
+  assert.equal(final.scanStatus, 'scanned');
+  assert.equal(final.checkpointDay, day);
+  assert.equal(final.notices.length, 0);
+  assert.equal(g.reads(), 1);
 });

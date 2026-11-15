@@ -69,25 +69,31 @@ test('morning uses only the closed market-background action', () => {
   }
 });
 
-test('existing Taipei morning slot adds the private notice scan only when configured', () => {
+test('existing Taipei morning slot checks both closed days and new mail with separate bounded requests', () => {
   const env = { ...active, STOCKINSIDER_VNEXT_INVESTANCHORS_GMAIL_ENABLED: 'true' };
   const response = { ok: true, policyVersion, result: { scanStatus: 'scanned', articleAuthority: false } };
-  const normal = plan(day + 'T00:15:00Z', [morning, response], { env });
-  assert.equal(normal.run().noticeScan, 'scanned');
-  assert.equal(normal.calls.at(-1).timeoutMs, 225_000);
-  assert.deepEqual(normal.calls.map(row => row.payload.action), ['market-background', 'investanchors-gmail-notices']);
-  const unavailable = plan(day + 'T00:15:00Z', [morning, null], { env });
-  assert.equal(unavailable.run().status, 'published');
-  const marketFailed = plan(day + 'T00:15:00Z', [null, response], { env });
+  const current = { ok: true, policyVersion, result: { scanStatus: 'open_day', checkpointDay: null, articleAuthority: false } };
+  const normal = plan(day + 'T00:15:00Z', [morning, response, current], { env });
+  assert.deepEqual(normal.run(), { slot: 'morning', sessionDate: day, status: 'published', noticeScan: 'scanned', currentNoticeScan: 'open_day' });
+  assert.deepEqual(normal.calls.slice(1).map(row => [row.payload, row.timeoutMs]), [
+    [{ action: 'investanchors-gmail-notices' }, 225_000],
+    [{ action: 'investanchors-gmail-notices', scope: 'current' }, 115_000],
+  ]);
+  const unavailable = plan(day + 'T00:15:00Z', [morning, null, current], { env });
+  assert.deepEqual(unavailable.run(), { slot: 'morning', sessionDate: day, status: 'published', noticeScan: 'failed', currentNoticeScan: 'open_day' });
+  const erroneousCheckpoint = { ...current, result: { ...current.result, checkpointDay: day } };
+  assert.equal(plan(day + 'T00:15:00Z', [morning, response, erroneousCheckpoint], { env }).run().currentNoticeScan, 'failed');
+  const marketFailed = plan(day + 'T00:15:00Z', [null, response, current], { env });
   assert.throws(marketFailed.run, /launch_market_background_failed/u);
-  assert.deepEqual(marketFailed.calls.map(row => row.payload.action), ['market-background', 'investanchors-gmail-notices']);
+  assert.deepEqual(marketFailed.calls.map(row => row.payload.action), ['market-background', 'investanchors-gmail-notices', 'investanchors-gmail-notices']);
 });
 test('private notice request is an operator-only internal action with a closed request', async () => {
   const http = await readFile(new URL('../web/src/lib/vnext/http.ts', import.meta.url), 'utf8');
   const block = http.slice(http.indexOf("if(action==='investanchors-gmail-notices')"), http.indexOf("if(action==='market-background')"));
   assert.match(block, /identity.role!=='operator'.*requireExactInternalBearer/u);
-  assert.match(block, /key!=='action'&&key!=='day'/u);
-  assert.match(block, /runConfiguredInvestAnchorsNotices\(identity,body.day\)/u);
+  assert.match(block, /key!=='action'&&key!=='day'&&key!=='scope'/u);
+  assert.match(block, /body\.scope!==undefined&&\(body\.scope!=='current'\|\|body\.day!==undefined\)/u);
+  assert.match(block, /runConfiguredInvestAnchorsNotices\(identity,body\.day,body\.scope==='current'\?'current':undefined\)/u);
   assert.match(block, /'cache-control':'no-store'/u);
 });
 test('morning refuses a publication receipt for a different session', () => {

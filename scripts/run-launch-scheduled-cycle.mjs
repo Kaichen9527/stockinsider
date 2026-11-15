@@ -63,7 +63,20 @@ export function runLaunchScheduledCycle({
   const { slot, sessionDate } = launchScheduledSlot(clock());
   if (slot === null) return { status: 'deferred', reason: 'outside_launch_schedule_window' };
   if (slot === 'morning') {
-    let status, noticeScan;
+    let status, noticeScan, currentNoticeScan;
+    const readNoticeStatus = (payload, timeoutMs, completed) => {
+      try {
+        const notice = call(researchEndpoint, payload, timeoutMs, env);
+        const result = notice?.result;
+        if (notice?.ok !== true || notice.policyVersion !== launchPolicy || result?.articleAuthority !== false) return 'failed';
+        if (result.scanStatus === completed) {
+          return completed === 'open_day' && result.checkpointDay !== null ? 'failed' : completed;
+        }
+        return ['deferred', 'disabled', 'blocked', 'retry_required'].includes(result.scanStatus) ? result.scanStatus : 'failed';
+      } catch {
+        return 'failed';
+      }
+    };
     try {
       const { policyVersion, result } = request(
         researchEndpoint, { action: 'market-background' }, 120_000, 'launch_market_background_failed',
@@ -75,17 +88,11 @@ export function runLaunchScheduledCycle({
       status = result.status === 'published' ? 'published' : 'retained';
     } finally {
       if (env.STOCKINSIDER_VNEXT_INVESTANCHORS_GMAIL_ENABLED === 'true') {
-        try {
-          const notice = call(researchEndpoint, { action: 'investanchors-gmail-notices' }, 225_000, env);
-          const scanStatus = notice?.result?.scanStatus;
-          noticeScan = notice?.ok === true && notice.policyVersion === launchPolicy && notice.result.articleAuthority === false
-            && ['scanned', 'deferred', 'disabled', 'blocked', 'retry_required'].includes(scanStatus) ? scanStatus : 'failed';
-        } catch {
-          noticeScan = 'failed';
-        }
+        noticeScan = readNoticeStatus({ action: 'investanchors-gmail-notices' }, 225_000, 'scanned');
+        currentNoticeScan = readNoticeStatus({ action: 'investanchors-gmail-notices', scope: 'current' }, 115_000, 'open_day');
       }
     }
-    return { slot, sessionDate, status, ...(noticeScan ? { noticeScan } : {}) };
+    return { slot, sessionDate, status, ...(noticeScan ? { noticeScan, currentNoticeScan } : {}) };
   }
 
   const weekly = call(researchEndpoint, { action: 'launch-weekly-audit' }, 120_000, env);
@@ -121,7 +128,9 @@ if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) 
   try {
     const result = runLaunchScheduledCycle({ mode: process.argv[2] });
     console.log(JSON.stringify(result));
-    if (result.weeklyAudit === 'failed' || ['failed', 'blocked', 'retry_required'].includes(result.noticeScan)) process.exitCode = 1;
+    if (result.weeklyAudit === 'failed' || [result.noticeScan, result.currentNoticeScan].some(
+      state => ['failed', 'blocked', 'retry_required'].includes(state),
+    )) process.exitCode = 1;
   } catch (error) {
     console.error(JSON.stringify({ status: 'failed', reason: error.message }));
     process.exitCode = 1;
