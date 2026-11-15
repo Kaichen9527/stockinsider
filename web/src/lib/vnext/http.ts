@@ -17,6 +17,14 @@ export async function vnextRoute(request: Request, entrypoint: string) {
       : entrypoint === 'candidate-dossier-outbox' && body.jobId ? 'claim'
       : entrypoint === 'candidate-dossier-submission' && body.artifact ? 'author'
       : entrypoint === 'candidate-dossier-bundle' && body.jobId ? 'bundle' : 'enqueue';
+    if(action==='market-background'){
+      if(identity.role!=='operator'||!(await import('../internal-auth.ts')).requireExactInternalBearer(request))
+        throw Error('vnext_internal_bearer_required');
+      if(Object.keys(body).some(key=>key!=='action'))throw Error('vnext_cycle_closed_body');
+      if(!launchRankingEnabled())return NextResponse.json({ok:false,error:'launch_ranking_disabled'},{status:503});
+      const result=await(await import('./launch-morning-background.ts')).publishLaunchMorningBackground(identity);
+      return NextResponse.json({ok:true,policyVersion:LAUNCH_RANKING_POLICY,result});
+    }
     if(action==='capture-opening-halts'){
       if(identity.role!=='operator'||!(await import('../internal-auth.ts')).requireExactInternalBearer(request))
         throw Error('vnext_internal_bearer_required');
