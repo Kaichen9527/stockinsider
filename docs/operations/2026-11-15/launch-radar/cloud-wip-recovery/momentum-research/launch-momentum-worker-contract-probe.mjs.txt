@@ -1,0 +1,114 @@
+import assert from 'node:assert/strict';
+import {normalizeLaunchMomentumAuthor,normalizeLaunchMomentumReview} from './web/src/lib/vnext/launch-momentum-research.ts';
+import {normalizeWorkerAuthor,normalizeWorkerReview} from './web/src/lib/vnext/worker-output.ts';
+import {REQUIRED_SECTIONS} from './web/src/lib/vnext/research.ts';
+import {inputHash} from './web/src/lib/vnext/policy.ts';
+
+const cutoff='2026-11-13T13:30:00.000000Z';
+const price={id:'00000000-0000-4000-8000-000000000001',key:'current_price',value:150,unit:'TWD',period:'2026-11-13',
+  source:'https://www.twse.com.tw/probe',kind:'fact',sourceTier:'official',eventAt:'2026-11-13T05:30:00.000000Z',availableAt:'2026-11-13T06:00:00.000000Z',contentHash:'1'.repeat(64)};
+const mention={id:'content:'+'2'.repeat(64),key:'reported_event',value:{symbol:'1234'},period:'2026-11-12',kind:'assumption',sourceTier:'public',
+  source:'https://example.com/probe',eventAt:'2026-11-12T12:00:00.000000Z',availableAt:'2026-11-12T12:10:00.000000Z',contentHash:'2'.repeat(64)};
+const evidence=[price,mention];
+const expected={schemaVersion:'launch-momentum-context-v1',symbol:'1234',inputHash:'a'.repeat(64),cutoff,quoteSession:price.period,
+  sourceEvidenceId:mention.id,quoteEvidenceId:price.id,evidenceHash:inputHash(evidence),
+  financialGap:{status:'verified_gap',reason:'validated_financial_evidence_missing',receiptHash:'f'.repeat(64)}};
+const binding={model:'fixture-model',modelVersion:'fixture-version-synthetic'};
+const raw={sections:{
+ conclusion:{text:'假設的來源觀察',claimIds:['source'],evidenceIds:[mention.id]},
+ technical:{text:'使用已封存行情',claimIds:['quote'],evidenceIds:[price.id]},
+ falsifiers:{text:'回看行情並查證',claimIds:['quote'],evidenceIds:[price.id]},
+ history:{text:'已知交易日收盤',claimIds:['quote'],evidenceIds:[price.id]},
+},claims:[
+ {id:'source',kind:'assumption',text:'合成的來源提及理由',evidenceIds:[mention.id]},
+ {id:'quote',kind:'fact',text:'合成的已驗證收盤價',evidenceIds:[price.id],numeric:{value:150,key:'current_price',unit:'TWD',period:price.period}},
+]};
+const clone=structuredClone;
+const author=(a=raw,c=expected,e=evidence)=>normalizeLaunchMomentumAuthor(a,binding,c,e);
+const result=author();
+const reviewRaw={approved:true,findings:[],factsChecked:true,valuationChecked:true,claimsChecked:true,
+ claimChecks:raw.claims.map(c=>({claimId:c.id,verdict:'supported',reason:'synthetic source and clock checked',
+   sources:c.evidenceIds.map(id=>({id,contentHash:evidence.find(e=>e.id===id).contentHash}))})),
+ financialGapAssessment:{verdict:'confirmed_unavailable',receiptHash:expected.financialGap.receiptHash,reason:'synthetic independent gap check'}};
+const review=(v=reviewRaw,a=result,c=expected,e=evidence)=>normalizeLaunchMomentumReview(v,'fixture-reviewer-model',a,c,e);
+const tests=[];
+const check=(name,fn)=>{fn();tests.push(name);};
+check('unchanged legacy research author and reviewer',()=>{
+ const oldRaw={sections:Object.fromEntries(REQUIRED_SECTIONS.map(k=>[k,clone(raw.sections.technical)])),claims:[raw.claims[1]],
+  quoteDate:price.period,valuationDate:price.period,annualEps:null,nextFourQuarterEps:null,
+  gaps:['annual_eps_missing','next_four_quarter_eps_missing']};
+ const oldArtifact=normalizeWorkerAuthor(oldRaw,binding,expected.inputHash,evidence);
+ assert.equal(oldArtifact.schemaVersion,'stockinsider-vnext-research-v1');
+ const {financialGapAssessment,...oldReview}=reviewRaw;
+ assert.equal(normalizeWorkerReview({...oldReview,claimChecks:[oldReview.claimChecks[1]]},'fixture-reviewer',oldArtifact,evidence).approved,true);
+});
+check('affirmative financial gap with honest null valuation',()=>{
+ assert.equal(result.schemaVersion,'stockinsider-launch-momentum-research-v1');
+ assert.equal(result.valuation,null);assert.equal(result.valuationDate,null);
+ assert.equal(result.annualEps,null);assert.equal(result.nextFourQuarterEps,null);
+ assert.equal(result.quoteDate,price.period);
+ assert.deepEqual(result.financialGap,expected.financialGap);
+ assert.equal(result.outputHash,inputHash({...result,outputHash:undefined}));
+ assert.equal(review().authorOutputHash,result.outputHash);
+});
+check('observed 0 volume remains usable',()=>{
+ const zero={...price,id:'volume-zero',key:'volume',value:0,unit:'shares'};
+ const v=[...evidence,zero], ctx={...expected,evidenceHash:inputHash(v)};
+ const a=clone(raw);a.claims.push({id:'volume',kind:'fact',text:'fixture observed zero',
+  numeric:{value:0,unit:'shares',key:'volume',period:zero.period},evidenceIds:[zero.id]});
+ a.sections.technical.claimIds.push('volume');a.sections.technical.evidenceIds.push(zero.id);
+ assert.equal(author(a,ctx,v).claims.at(-1).numeric.value,0);
+});
+check('model cannot invent valuation or gap fields',()=>{
+ assert.throws(()=>author({...raw,valuation:null}),/author_closed_shape/);
+ assert.throws(()=>author({...raw,financialGap:expected.financialGap}),/author_closed_shape/);
+});
+check('missing server gap context cannot select momentum',()=>{
+ assert.throws(()=>author(raw,{...expected,financialGap:null}),/context_invalid/);
+ assert.throws(()=>author(raw,{...expected,financialGap:{...expected.financialGap,status:'complete'}}),/context_invalid/);
+});
+check('equal millisecond but later microsecond evidence rejected',()=>{
+ const late=[price,{...mention,eventAt:cutoff,availableAt:'2026-11-13T13:30:00.000001Z'}];
+ assert.throws(()=>author(raw,{...expected,evidenceHash:inputHash(late)},late),/evidence_clock_or_scope/);
+});
+check('crossed or absent source identity rejected',()=>{
+ assert.throws(()=>author(raw,{...expected,sourceEvidenceId:'other'}),/quote_or_source_required/);
+ assert.throws(()=>author(raw,{...expected,quoteSession:'2026-11-12'}),/quote_or_source_required/);
+});
+check('same evidence IDs with modified content rejected',()=>{
+ const other=[price,{...mention,contentHash:'e'.repeat(64)}];
+ assert.throws(()=>author(raw,expected,other),/evidence_binding/);
+});
+check('cannot replace official quote with commentary',()=>{
+ const wrong=[{...price,sourceTier:'public'},mention];
+ assert.throws(()=>author(raw,{...expected,evidenceHash:inputHash(wrong)},wrong),/quote_or_source_required/);
+});
+check('financial claim and fake adjusted closing price rejected',()=>{
+ const a=clone(raw);
+ a.claims[1].numeric={value:200,unit:'TWD',period:price.period,key:'valuation_base'};
+ assert.throws(()=>author(a),/financial_claim_unavailable/);
+ a.claims[1].numeric.key='current_price';
+ assert.throws(()=>author(a),/claim_evidence_invalid/);
+});
+check('section cannot omit original quote or cite swapped claim',()=>{
+ const a=clone(raw);a.sections.technical=clone(raw.sections.conclusion);
+ assert.throws(()=>author(a),/source_or_quote_unchecked/);
+ a.sections.technical=clone(raw.sections.technical);a.sections.technical.evidenceIds=[mention.id];
+ assert.throws(()=>author(a),/section_claim_binding/);
+});
+check('independent reviewer cannot approve an unresolved gap',()=>{
+ const undecided={...reviewRaw,financialGapAssessment:{...reviewRaw.financialGapAssessment,verdict:'unresolved'}};
+ assert.throws(()=>review(undecided),/review_gap_binding/);
+ assert.equal(review({...undecided,approved:false,findings:['fixture gap could not be checked']}).approved,false);
+});
+check('independent reviewer needs exact gap receipt and original evidence hash',()=>{
+ assert.throws(()=>review({...reviewRaw,financialGapAssessment:{...reviewRaw.financialGapAssessment,receiptHash:'e'.repeat(64)}}),/review_gap_binding/);
+ const bad=clone(reviewRaw);bad.claimChecks[0].sources[0].contentHash='d'.repeat(64);
+ assert.throws(()=>review(bad),/review_source_binding/);
+});
+check('review pinned to exact context and artifact, including rehash',()=>{
+ const changed=clone(result);changed.quoteDate='2026-11-12';changed.outputHash=inputHash({...changed,outputHash:undefined});
+ assert.throws(()=>review(reviewRaw,changed),/review_artifact_binding/);
+ assert.throws(()=>review(reviewRaw,result,{...expected,inputHash:'b'.repeat(64)}),/review_artifact_binding/);
+});
+console.log(JSON.stringify({node:process.version,nonRoot:process.getuid()!==0,tests}));

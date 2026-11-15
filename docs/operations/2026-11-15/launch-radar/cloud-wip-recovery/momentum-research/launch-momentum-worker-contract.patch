@@ -1,0 +1,153 @@
+diff --git a/web/src/lib/vnext/worker-output.ts b/web/src/lib/vnext/worker-output.ts
+--- a/web/src/lib/vnext/worker-output.ts
++++ b/web/src/lib/vnext/worker-output.ts
+@@ -32,7 +32,7 @@
+  const validation=validateArtifact(artifact,evidence,inputHashValue); if (!validation.valid) throw new Error(`vnext_worker_author_invalid:${validation.reasons.join(',')}`);
+  return artifact;
+ }
+-export function normalizeWorkerReview(raw: unknown, modelVersion: string, artifact: Artifact, evidence: Evidence[]) {
++export function normalizeWorkerReview(raw: unknown, modelVersion: string, artifact: Pick<Artifact,'claims'|'outputHash'>, evidence: Evidence[]) {
+  if (!object(raw) || !keys(raw,['approved','findings','factsChecked','valuationChecked','claimsChecked','claimChecks']) || typeof raw.approved!=='boolean' || !['factsChecked','valuationChecked','claimsChecked'].every((key) => typeof raw[key]==='boolean')
+   || !Array.isArray(raw.findings) || !raw.findings.every((finding) => typeof finding==='string' && finding.length>0) || !Array.isArray(raw.claimChecks) || raw.claimChecks.length!==artifact.claims.length) throw new Error('vnext_worker_review_closed_shape');
+  const seen=new Set<string>();
+diff --git a/web/src/lib/vnext/research.ts b/web/src/lib/vnext/research.ts
+--- a/web/src/lib/vnext/research.ts
++++ b/web/src/lib/vnext/research.ts
+@@ -80,7 +80,7 @@
+ export type Review = { approved: boolean; authorOutputHash: string; modelVersion: string; findings: string[];
+   factsChecked: boolean; valuationChecked: boolean; claimsChecked: boolean;
+   claimChecks: Array<{ claimId: string; verdict: 'supported' | 'unsupported'; reason: string; semanticAssessment?:CatalystAssessment; cancellationAssessment?:CancellationAssessment; businessAssessment?:BusinessAssessment; sources: Array<{ id: string; contentHash: string }> }> };
+-export function validateReview(review: Review, artifact: Artifact, evidence: Evidence[]) {
++export function validateReview(review: Review, artifact: Pick<Artifact,'claims'|'outputHash'>, evidence: Evidence[]) {
+   const reasons: string[] = [];
+   if (!review || typeof review.approved !== 'boolean' || review.authorOutputHash !== artifact.outputHash || !review.modelVersion || !Array.isArray(review.findings) || !Array.isArray(review.claimChecks)) return ['review_artifact_binding_invalid'];
+   if (review.approved && (!review.factsChecked || !review.valuationChecked || !review.claimsChecked || review.findings.length)) reasons.push('review_checks_incomplete');
+diff --git a/web/src/lib/vnext/launch-momentum-research.ts b/web/src/lib/vnext/launch-momentum-research.ts
+new file mode 100644
+--- /dev/null
++++ b/web/src/lib/vnext/launch-momentum-research.ts
+@@ -0,0 +1,124 @@
++import {evidenceInstant} from './evidence-clock.ts';
++import {inputHash} from './policy.ts';
++import {validateClaim,type Claim,type Evidence} from './research.ts';
++import {assertWorkerJsonCodec,normalizeWorkerReview} from './worker-output.ts';
++
++const sectionNames=['conclusion','technical','falsifiers','history'] as const;
++type SectionName=typeof sectionNames[number];
++type Section={text:string;evidenceIds:string[];claimIds:string[]};
++const isHash=(value:unknown):value is string=>typeof value==='string'&&/^[a-f0-9]{64}$/u.test(value);
++const isText=(value:unknown,maximum:number):value is string=>
++  typeof value==='string'&&value.trim().length>0&&value.length<=maximum;
++const isDay=(value:unknown):value is string=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/u.test(value)&&
++  Number.isFinite(Date.parse(value+'T00:00:00Z'))&&new Date(value+'T00:00:00Z').toISOString().slice(0,10)===value;
++const row=(value:unknown):value is Record<string,unknown>=>Boolean(value)&&typeof value==='object'&&!Array.isArray(value);
++const closed=(value:unknown,required:readonly string[],optional:readonly string[]=[]):value is Record<string,unknown>=>
++  row(value)&&required.every(key=>Object.hasOwn(value,key))&&Object.keys(value).every(key=>required.includes(key)||optional.includes(key));
++const ids=(value:unknown,maximum:number):value is string[]=>Array.isArray(value)&&value.length>0&&value.length<=maximum&&
++  value.every(id=>isText(id,128))&&new Set(value).size===value.length;
++const priceKeys=['current_price','volume','traded_value','market_index_close','relative_strength'] as const;
++type FinancialGap={
++  status:'verified_gap';
++  reason:'validated_financial_evidence_missing'|'financial_period_comparison_incomplete';
++  receiptHash:string;
++};
++
++/** Expected from the admitted, sealed server context. No user or model may
++ * construct or choose this object. This contract validates wire consistency.
++ * The issuing authority independently validates source use and financial gaps. */
++export type LaunchMomentumContext={
++  schemaVersion:'launch-momentum-context-v1'; inputHash:string; symbol:string; cutoff:string; quoteSession:string;
++  quoteEvidenceId:string; sourceEvidenceId:string; evidenceHash:string; financialGap:FinancialGap;
++};
++export type LaunchMomentumArtifact={
++  schemaVersion:'stockinsider-launch-momentum-research-v1'; model:string; modelVersion:string; inputHash:string;
++  outputHash:string; contextHash:string; quoteDate:string; valuationDate:null; annualEps:null; nextFourQuarterEps:null;
++  valuation:null; financialGap:FinancialGap; sections:Record<SectionName,Section>; claims:Claim[];
++};
++
++function validatedContext(value:unknown,evidence:Evidence[]):LaunchMomentumContext {
++  if(!closed(value,['schemaVersion','inputHash','symbol','cutoff','quoteSession','quoteEvidenceId','sourceEvidenceId','evidenceHash','financialGap'])
++    ||value.schemaVersion!=='launch-momentum-context-v1'||!isHash(value.inputHash)||!isHash(value.evidenceHash)
++    ||typeof value.symbol!=='string'||!/^\d{4}$/u.test(value.symbol)||!isDay(value.quoteSession)
++    ||!isText(value.quoteEvidenceId,128)||!isText(value.sourceEvidenceId,128)||value.quoteEvidenceId===value.sourceEvidenceId
++    ||typeof value.cutoff!=='string'||!closed(value.financialGap,['status','reason','receiptHash'])
++    ||value.financialGap.status!=='verified_gap'||(value.financialGap.reason!=='validated_financial_evidence_missing'&&value.financialGap.reason!=='financial_period_comparison_incomplete')
++    ||!isHash(value.financialGap.receiptHash))throw Error('launch_momentum_context_invalid');
++  const cutoff=evidenceInstant(value.cutoff);
++  if(cutoff===null||!Array.isArray(evidence)||evidence.length===0||evidence.length>200
++    ||new Set(evidence.map(item=>item.id)).size!==evidence.length||inputHash(evidence)!==value.evidenceHash)
++    throw Error('launch_momentum_evidence_binding');
++  for(const item of evidence){
++    const event=evidenceInstant(item.eventAt),available=evidenceInstant(item.availableAt);
++    if(!isHash(item.contentHash)||event===null||available===null||event>available||available>cutoff||item.sourceTier==='operator')
++      throw Error('launch_momentum_evidence_clock_or_scope');
++  }
++  const price=evidence.find(item=>item.id===value.quoteEvidenceId);
++  const source=evidence.find(item=>item.id===value.sourceEvidenceId);
++  if(!price||price.key!=='current_price'||price.period!==value.quoteSession||price.kind!=='fact'||price.sourceTier!=='official'
++    ||typeof price.value!=='number'||!Number.isFinite(price.value)||price.value<=0||price.unit!=='TWD'||price.financial!==undefined
++    ||!source||source.key!=='reported_event'||!['public','official'].includes(String(source.sourceTier)))
++    throw Error('launch_momentum_quote_or_source_required');
++  return value as LaunchMomentumContext;
++}
++
++function parseClaims(value:unknown,evidence:Evidence[]):Claim[] {
++  if(!Array.isArray(value)||value.length<1||value.length>40)throw Error('launch_momentum_claims_invalid');
++  const claimIds=new Set<string>();
++  for(const claim of value){
++    if(!closed(claim,['id','text','kind','evidenceIds'],['numeric'])||!isText(claim.id,128)||claimIds.has(claim.id)
++      ||!isText(claim.text,4000)||!ids(claim.evidenceIds,20))throw Error('launch_momentum_claims_invalid');
++    const numeric=claim.numeric;
++    if(numeric!==undefined&&(!closed(numeric,['value','unit','period','key'])
++      ||!priceKeys.some(key=>key===numeric.key)))throw Error('launch_momentum_financial_claim_unavailable');
++    const candidate=claim as Claim;
++    if(validateClaim(candidate,evidence).length)throw Error('launch_momentum_claim_evidence_invalid');
++    claimIds.add(candidate.id);
++  }
++  return value as Claim[];
++}
++
++export function normalizeLaunchMomentumAuthor(raw:unknown,binding:{model:string;modelVersion:string},expected:unknown,evidence:Evidence[]):LaunchMomentumArtifact {
++  const context=validatedContext(expected,evidence);
++  if(!isText(binding.model,128)||!isText(binding.modelVersion,128)
++    ||!closed(raw,['sections','claims'])||!closed(raw.sections,sectionNames))throw Error('launch_momentum_author_closed_shape');
++  assertWorkerJsonCodec(raw);
++  const claims=parseClaims(raw.claims,evidence);
++  const sections={} as Record<SectionName,Section>;
++  for(const key of sectionNames){
++    const item=raw.sections[key];
++    if(!closed(item,['text','evidenceIds','claimIds'])||!isText(item.text,4000)||!ids(item.evidenceIds,20)||!ids(item.claimIds,40))
++      throw Error('launch_momentum_section_invalid');
++    const {text,evidenceIds,claimIds}=item;
++    const sectionClaims=claims.filter(claim=>claimIds.includes(claim.id));
++    const claimSources=new Set(sectionClaims.flatMap(claim=>claim.evidenceIds));
++    if(sectionClaims.length!==claimIds.length||evidenceIds.length!==claimSources.size
++      ||evidenceIds.some(id=>!claimSources.has(id)))throw Error('launch_momentum_section_claim_binding');
++    sections[key]={text,evidenceIds:[...evidenceIds],claimIds:[...claimIds]};
++  }
++  if(!sections.technical.evidenceIds.includes(context.quoteEvidenceId)||!sections.conclusion.evidenceIds.includes(context.sourceEvidenceId)
++    ||claims.some(claim=>!Object.values(sections).some(section=>section.claimIds.includes(claim.id))))
++    throw Error('launch_momentum_source_or_quote_unchecked');
++  const normalized={
++    schemaVersion:'stockinsider-launch-momentum-research-v1' as const,model:binding.model,modelVersion:binding.modelVersion,
++    inputHash:context.inputHash,contextHash:inputHash(context),quoteDate:context.quoteSession,valuationDate:null,
++    annualEps:null,nextFourQuarterEps:null,valuation:null,financialGap:structuredClone(context.financialGap),sections,claims:structuredClone(claims),
++  };
++  return {...normalized,outputHash:inputHash(normalized)};
++}
++
++export function normalizeLaunchMomentumReview(raw:unknown,modelVersion:string,artifact:LaunchMomentumArtifact,expected:unknown,evidence:Evidence[]){
++  const context=validatedContext(expected,evidence);
++  const normalized=normalizeLaunchMomentumAuthor(
++    {sections:artifact.sections,claims:artifact.claims},{model:artifact.model,modelVersion:artifact.modelVersion},context,evidence);
++  if(artifact.outputHash!==normalized.outputHash||inputHash(artifact)!==inputHash(normalized))
++    throw Error('launch_momentum_review_artifact_binding');
++  if(!isText(modelVersion,128)||!closed(raw,['approved','findings','factsChecked','valuationChecked','claimsChecked','claimChecks','financialGapAssessment'])
++    ||!closed(raw.financialGapAssessment,['verdict','receiptHash','reason'])||(raw.financialGapAssessment.verdict!=='confirmed_unavailable'&&raw.financialGapAssessment.verdict!=='unresolved')
++    ||raw.financialGapAssessment.receiptHash!==context.financialGap.receiptHash||!isText(raw.financialGapAssessment.reason,4000)
++    ||raw.approved===true&&raw.financialGapAssessment.verdict!=='confirmed_unavailable')throw Error('launch_momentum_review_gap_binding');
++  assertWorkerJsonCodec(raw);
++  const {financialGapAssessment,...standard}=raw;
++  const review=normalizeWorkerReview(standard,modelVersion,artifact,evidence);
++  return {...review,contextHash:artifact.contextHash,financialGapAssessment:structuredClone(financialGapAssessment)};
++}
