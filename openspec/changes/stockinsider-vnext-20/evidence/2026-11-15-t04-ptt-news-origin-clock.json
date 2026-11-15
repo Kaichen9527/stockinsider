@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "task": "T04",
+  "productCommit": "f8be9f28bcaf9f4e2d1e8257bad8d7d201b30a43",
+  "parserSourceBlobs": [
+    [
+      "14d1d0e2ede542659c00bc0af3d84601911cbddf",
+      "research-v2.ts"
+    ],
+    [
+      "040b0b24595d37ec2b1abfcc3b70d846dd7f059b",
+      "ptt-article-parser.ts"
+    ],
+    [
+      "fa27138f5dd8f6ce823a91e2fd4be84cfe76fac9",
+      "vnext/evidence-clock.ts"
+    ],
+    [
+      "52079d7c521055f2742c786f2415ccb9c2ff99fe",
+      "source-content-semantics.ts"
+    ]
+  ],
+  "execution": "isolated native Node on Contabo with existing isolated parse5 runtime",
+  "tests": {
+    "rows": [
+      {
+        "label": "news-financial-reprint",
+        "url": "https://www.ptt.cc/bbs/Stock/M.1793703041.A.B9E.html",
+        "expectedIssuer": "6488",
+        "httpStatus": 200,
+        "observedAt": "2026-11-15T06:59:37.811Z",
+        "htmlSha256": "6c5c98def9a15ce30446ac78c598b24c8a8661bbf9f79749829bcd6c3f7995ba",
+        "bodyHash": "94a4cb94ffb1284b87b717ebaf5193bf15d4ac8d99b2f55dbc6ffe96fef817dd",
+        "sourcePublishedAt": "2026-11-03T10:50:38.000Z",
+        "articleIdAt": "2026-11-03T10:50:41.000Z",
+        "clockConsistent": true,
+        "origin": "original",
+        "status": "body_read",
+        "stockMatches": [
+          "6488"
+        ],
+        "legacyMatches": [
+          "6488"
+        ],
+        "observationStatus": "ready_observation",
+        "observationReason": null,
+        "earlierAcquisitionCutoff": {
+          "status": "blocked",
+          "reason": "source_availability_clock_invalid"
+        },
+        "classifiedSemantics": "editorial_discussion",
+        "explicitCandidateEligibility": true,
+        "knownRawPageEvidence": {
+          "newsTitle": true,
+          "explicitReplyTitle": false,
+          "sourceLinkLabel": true,
+          "sourceTitleLabel": true,
+          "sourceContentLabel": true,
+          "reportedPublishedDates": [
+            "2026/11/03 17:41"
+          ],
+          "externalSourceHostnames": [
+            "fnc.ebc.net.tw"
+          ]
+        },
+        "rawBodyPersisted": false,
+        "bodyLineCount": 29
+      },
+      {
+        "label": "news-investment-reprint",
+        "url": "https://www.ptt.cc/bbs/Stock/M.1793855073.A.98B.html",
+        "expectedIssuer": "6488",
+        "httpStatus": 200,
+        "observedAt": "2026-11-15T06:59:37.739Z",
+        "htmlSha256": "d1d9dd25e78ce277bbdc06c75eaa89ade216c24f93448cc2cea52f51962663ba",
+        "bodyHash": "2d270caaa9c629d747e9c73f566c4d89052b32387ae08b3f6b8d8a3a09a0c345",
+        "sourcePublishedAt": "2026-11-05T05:04:27.000Z",
+        "articleIdAt": "2026-11-05T05:04:33.000Z",
+        "clockConsistent": false,
+        "origin": "original",
+        "status": "body_read",
+        "stockMatches": [
+          "6488"
+        ],
+        "legacyMatches": [
+          "6488"
+        ],
+        "observationStatus": "blocked",
+        "observationReason": "article_clock_conflict",
+        "earlierAcquisitionCutoff": {
+          "status": "blocked",
+          "reason": "article_clock_conflict"
+        },
+        "classifiedSemantics": "editorial_discussion",
+        "explicitCandidateEligibility": true,
+        "knownRawPageEvidence": {
+          "newsTitle": true,
+          "explicitReplyTitle": false,
+          "sourceLinkLabel": false,
+          "sourceTitleLabel": false,
+          "sourceContentLabel": false,
+          "reportedPublishedDates": [
+            "2026/11/05 02:00"
+          ],
+          "externalSourceHostnames": [
+            "inews.setn.com"
+          ]
+        },
+        "rawBodyPersisted": false,
+        "bodyLineCount": 70
+      },
+      {
+        "label": "forum-discussion",
+        "url": "https://www.ptt.cc/bbs/Stock/M.1793677676.A.AD1.html",
+        "expectedIssuer": "6488",
+        "httpStatus": 404,
+        "observedAt": "2026-11-15T06:59:37.577Z",
+        "status": "body_unavailable",
+        "rawBodyPersisted": false
+      },
+      {
+        "label": "forum-original-control",
+        "url": "https://www.ptt.cc/bbs/Stock/M.1794636177.A.3FD.html",
+        "expectedIssuer": "4763",
+        "httpStatus": 200,
+        "observedAt": "2026-11-15T06:59:37.618Z",
+        "htmlSha256": "88845a5df92b80b67afa3fe5dc6fa1f5a9fc8e0c1a0af81cb33f8a16d38f8362",
+        "bodyHash": "cc2d46c5dab868328e2f08cefde67e3420785fc56b279677b31be8a40788d91d",
+        "sourcePublishedAt": "2026-11-14T06:02:55.000Z",
+        "articleIdAt": "2026-11-14T06:02:57.000Z",
+        "clockConsistent": true,
+        "origin": "original",
+        "status": "body_read",
+        "stockMatches": [
+          "4763"
+        ],
+        "legacyMatches": [],
+        "observationStatus": "ready_observation",
+        "observationReason": null,
+        "earlierAcquisitionCutoff": {
+          "status": "blocked",
+          "reason": "source_availability_clock_invalid"
+        },
+        "classifiedSemantics": "editorial_discussion",
+        "explicitCandidateEligibility": true,
+        "knownRawPageEvidence": {
+          "newsTitle": false,
+          "explicitReplyTitle": false,
+          "sourceLinkLabel": false,
+          "sourceTitleLabel": false,
+          "sourceContentLabel": false,
+          "reportedPublishedDates": [],
+          "externalSourceHostnames": [
+            "mopsov.twse.com.tw"
+          ]
+        },
+        "rawBodyPersisted": false,
+        "bodyLineCount": 39
+      },
+      {
+        "label": "explicit-reply-control",
+        "url": "https://www.ptt.cc/bbs/Stock/M.1794662133.A.F4F.html",
+        "expectedIssuer": "4763",
+        "httpStatus": 200,
+        "observedAt": "2026-11-15T06:59:37.856Z",
+        "htmlSha256": "b323cc9fdb84fbfdee273d291033c007dbcdd29b2adbf391651bac28434cd223",
+        "bodyHash": "3ed47eb2b97401def28b7f63d3067afe0953086294a47c6595313d9eab3d9133",
+        "sourcePublishedAt": "2026-11-14T13:15:31.000Z",
+        "articleIdAt": "2026-11-14T13:15:33.000Z",
+        "clockConsistent": true,
+        "origin": "reply_or_repost",
+        "status": "body_read",
+        "stockMatches": [],
+        "legacyMatches": [],
+        "observationStatus": "blocked",
+        "observationReason": "quoted_or_reposted_original_unresolved",
+        "earlierAcquisitionCutoff": {
+          "status": "blocked",
+          "reason": "quoted_or_reposted_original_unresolved"
+        },
+        "classifiedSemantics": "editorial_discussion",
+        "explicitCandidateEligibility": true,
+        "knownRawPageEvidence": {
+          "newsTitle": false,
+          "explicitReplyTitle": true,
+          "sourceLinkLabel": false,
+          "sourceTitleLabel": false,
+          "sourceContentLabel": false,
+          "reportedPublishedDates": [],
+          "externalSourceHostnames": []
+        },
+        "rawBodyPersisted": false,
+        "bodyLineCount": 28
+      }
+    ],
+    "node": "v22.23.1",
+    "nonRoot": true,
+    "actualCandidateWriterCalled": false,
+    "rawArticleOrAuthorRetained": false
+  },
+  "publishers": {
+    "values": [
+      {
+        "url": "https://fnc.ebc.net.tw/fncnews/headline/222065",
+        "finalUrl": "https://fnc.ebc.net.tw/fncnews/headline/222065",
+        "status": 200,
+        "bodyBytes": 55320,
+        "sha256": "52d01411a859e4906e11355f186ae5f3656cf4d8e97f45a3ad552cb0fce15e11",
+        "observedAt": "2026-11-15T06:59:10.329809+00:00",
+        "explicitPublisherClock": "2026/11/03 17:41",
+        "declaresCompanyAndTicker": true
+      },
+      {
+        "url": "https://inews.setn.com/news/1933649",
+        "finalUrl": "https://inews.setn.com/news/1933649",
+        "status": 200,
+        "bodyBytes": 57811,
+        "sha256": "bbb510031c3f998f159e8de9ab83f8047e2e4dfd41a12d8a3c5b18bf07efedd5",
+        "observedAt": "2026-11-15T06:59:10.446309+00:00",
+        "explicitPublisherClock": "2026/11/05 02:00",
+        "declaresCompanyAndTicker": true
+      }
+    ],
+    "nonRoot": true
+  },
+  "sourceRootReadyObservationMisclassificationCount": 1,
+  "incorrectOriginKindCount": 2,
+  "temporaryFolderRemoved": true,
+  "productionServicesActive": true,
+  "actualRightsOrQueueAcceptance": false
+}
