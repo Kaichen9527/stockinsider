@@ -1,0 +1,102 @@
+{
+  "schema": "stockinsider-contabo-520-calendar-source-intersection-v1",
+  "cutoff": "2026-11-13T21:30:00+08:00",
+  "started": "2026-11-15T00:59:49.858Z",
+  "producerBytesSha256": "220147e99e54ecda8fdaad10f6bee026591f88dc144c3a19f886ab78dc2b668a",
+  "runtime": "v22.23.1",
+  "observations": [
+    {
+      "url": "https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_113.htm",
+      "status": 200,
+      "observedAt": "2026-11-15T00:59:50.197Z",
+      "mime": "text/html"
+    },
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20240101",
+      "status": 200,
+      "observedAt": "2026-11-15T00:59:50.725Z",
+      "mime": "application/json;charset=UTF-8"
+    },
+    {
+      "url": "https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_114.htm",
+      "status": 200,
+      "observedAt": "2026-11-15T00:59:50.804Z",
+      "mime": "text/html"
+    },
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20250101",
+      "status": 200,
+      "observedAt": "2026-11-15T00:59:51.009Z",
+      "mime": "application/json;charset=UTF-8"
+    },
+    {
+      "url": "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20260101",
+      "status": 200,
+      "observedAt": "2026-11-15T00:59:51.155Z",
+      "mime": "application/json;charset=UTF-8"
+    },
+    {
+      "url": "https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_115.htm",
+      "status": 200,
+      "observedAt": "2026-11-15T00:59:51.337Z",
+      "mime": "text/html"
+    }
+  ],
+  "status": "SOURCE_FUNCTION_RETURNED",
+  "annual": {
+    "completedCount": 377,
+    "first": "2025-05-05",
+    "last": "2026-11-13",
+    "sourceHashes": {
+      "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20240101": "af465bb1c10da0e4acfe99f9a6cc0edfdb96fa3f0d89835bed1316670a4de26d",
+      "https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_113.htm": "7d33b57379598a4baecf0e4179d7217c11b4adac3b3a5219b11517bcee8c821b",
+      "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20250101": "5c85396aa2c0bf45add08a257aa6343aac2d48f9d6bb54da17c7f88fefcb71f8",
+      "https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_114.htm": "549196c37f5545a9aac80c51e9993a4932981a92c82d0f157c0f0d9abf6acc6f",
+      "https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20260101": "7fefe785ea7155a5004a2eb74486ad865ea5c4b5f02ee0cffbbdacb1ca2ea390",
+      "https://www.tpex.org.tw/storage/zh-tw/web/bulletin/trading_date/trading_date_115.htm": "b7c0ae6990f4e14aff19decf1932243a0d867f1abbad51d5ebc28eb7c05d7432"
+    },
+    "comparisonCovered": 375,
+    "missingFromAnnual": 145,
+    "labelledCompletedWithoutBothObservedIndexBars": [
+      "2026-07-10",
+      "2026-10-23"
+    ]
+  },
+  "finished": "2026-11-15T00:59:51.345Z",
+  "validatedPublicIndexReceipt": "a47bfcf8f959dd7c1736a713c779490a56fccb19",
+  "pinnedCalendarSource": {
+    "commit": "eb46a730177f7fa08d9252622d3d49c2211636d3",
+    "path": "scripts/runtime/official-calendar-v314.js",
+    "execution": "exact published source in unprivileged Contabo; only existing crypto SHA256 dependency supplied; observed annual response bytes were not written to application database"
+  },
+  "actualMarketClosures": {
+    "dates": [
+      "2026-07-10",
+      "2026-10-23"
+    ],
+    "cityRecord": "https://dop.gov.taipei/cp.aspx?n=72E3AB3DA4700EF6",
+    "proof": [
+      "https://www.dgpa.gov.tw/information?pid=13035&uid=374",
+      "https://www.dgpa.gov.tw/information?pid=13129&uid=374"
+    ],
+    "venueRules": [
+      "https://www.twse.com.tw/zh/clearing/suspended.html",
+      "https://www.tpex.org.tw/storage/eb_data/11205/112005916711-1.pdf"
+    ],
+    "sameReportAbsenceInBothMarkets": true
+  },
+  "sourceDecision": {
+    "existingAnnualProducerLast400WeekdaysCannotAloneProve520": true,
+    "reconcileObservedClosuresBeforeTreatingAnnualScheduledDayAsCompleted": true,
+    "doNotInferClosureFromAbsenceAlone": true,
+    "retainAppliedChunkProofAndActualCollectionClock": true
+  },
+  "limitations": {
+    "sourceObservedAfterHistoricalCutoff": true,
+    "productionOrStagingDbWrites": 0,
+    "actualGateRun": false,
+    "actualStoredCalendarCoverageInspected": false,
+    "noLiveCloseResult": true,
+    "nativeHoldUnchanged": true
+  }
+}
