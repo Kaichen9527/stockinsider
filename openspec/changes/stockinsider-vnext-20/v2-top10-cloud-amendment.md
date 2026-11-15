@@ -48,6 +48,12 @@ Isolated staging must prove service/DB/schema/queue/storage/network/writer isola
 
 Inventory capacity/use/dependency/retention/restore before cleanup, retaining existing relations/pins, historical research/rankings, lineage, ledger, WIP, unique failures, rollback and current data. Encrypt VM cold archive with manifest/hash and independently secured key. iCloud browser: small-file upload → independent download → hash/decrypt, then bounded batches and clean-VM necessary restore verification. Remove only listed old copies/duplicate exports/rebuildable artifacts proven restorable and dependency-free. No broad prune/date-based table deletion. If iCloud/quota fails retain originals. No large Mac download; Mac remove-download only after confirmed sync.
 
+### Placement and Mac disk thresholds
+
+Use Codex VM and the authorized isolated Contabo staging environment for new StockInsider work files, caches, temporary data and verification downloads. Below **10 GB** available on the Mac internal volume, place no new project artifacts there. If free space is above 10 GB and local fallback is still necessary after checking the VM, first inventory project files and verify which copies have no current references and can be recovered. The existing **15 GiB** minimum for internal-disk development and bulk downloads still applies, including the simultaneous peak. Check the actual mount and available space of `SAN_128GB` before using any approved external fallback.
+
+Inspect APFS occupancy using allocated blocks and dataless flags before recommending cleanup. Moving a placeholder to Trash can remove a synced file while reclaiming negligible local space. For data that must be preserved, use the existing encrypted iCloud cold-archive workflow from a remote environment. Verify an independently downloaded copy and required restore before removing any manifest-approved redundant copy. Use Remove Download for a verified synced resident copy when the goal is to reclaim local space without removing the cloud copy.
+
 ## Executable slices and release barriers
 
 1. Constructor correction/source review and isolated error diagnosis; preserve HOLD.
