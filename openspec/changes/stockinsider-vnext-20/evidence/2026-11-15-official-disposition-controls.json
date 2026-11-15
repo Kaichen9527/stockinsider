@@ -1,0 +1,529 @@
+{
+  "schema": "stockinsider-launch-official-disposition-source-v1",
+  "sources": {
+    "TWSE": {
+      "disposition": "https://data.gov.tw/dataset/29082",
+      "suspensions": "https://data.gov.tw/dataset/11677"
+    },
+    "TPEX": {
+      "disposition": "https://data.gov.tw/dataset/11396",
+      "suspensionsToday": "https://data.gov.tw/dataset/48664",
+      "suspensionEvents": "https://data.gov.tw/dataset/48665"
+    }
+  },
+  "registeredDownloads": [
+    {
+      "label": "twse_disposition_29082",
+      "source": "https://www.twse.com.tw/announcement/punish?response=open_data",
+      "observedAt": "2026-11-15T02:45:14.214551+00:00",
+      "http": 200,
+      "mime": "text/csv",
+      "sha256": "3e18e3b0f0d1de5c15fca10c7c534fb11afada88179e464c42cf2ae8017a2c84",
+      "size": 2575,
+      "resolvedUrl": "https://www.twse.com.tw/announcement/punish?response=open_data",
+      "rowLengths": {
+        "10": 3
+      },
+      "header": [
+        "編號",
+        "公布日期",
+        "證券代號",
+        "證券名稱",
+        "累計",
+        "處置條件",
+        "處置起迄時間",
+        "處置措施",
+        "處置內容",
+        "備註"
+      ],
+      "rows": 2,
+      "samples": [
+        {
+          "公布日期": "1151110",
+          "證券代號": "2455",
+          "處置起迄時間": "115/11/11～115/11/17"
+        },
+        {
+          "公布日期": "1151109",
+          "證券代號": "3189",
+          "處置起迄時間": "115/11/10～115/11/16"
+        }
+      ],
+      "relevantRows": [
+        {
+          "公布日期": "1151110",
+          "證券代號": "2455",
+          "處置起迄時間": "115/11/11～115/11/17"
+        }
+      ],
+      "issuedOrDataDayExamples": [
+        "1151109",
+        "1151110"
+      ]
+    },
+    {
+      "label": "tpex_disposition_11396",
+      "source": "https://www.tpex.org.tw/web/bulletin/disposal_information/disposal_information_result.php?l=zh-tw&o=data",
+      "observedAt": "2026-11-15T02:45:14.338103+00:00",
+      "http": 200,
+      "mime": "application/csv",
+      "sha256": "82c885e8691aea255aee10e990f0e4d0aa4bf2d6e8e1b0f1fa03f5fd21eb287f",
+      "size": 4987,
+      "resolvedUrl": "https://www.tpex.org.tw/web/bulletin/disposal_information/disposal_information_result.php?l=zh-tw&o=data",
+      "rowLengths": {
+        "6": 6
+      },
+      "header": [
+        "公布日期",
+        "證券代號",
+        "證券名稱",
+        "處置起訖時間",
+        "處置原因",
+        "處置內容"
+      ],
+      "rows": 5,
+      "samples": [
+        {
+          "公布日期": "1151111",
+          "證券代號": "54642",
+          "處置起訖時間": "1151112~1151118"
+        },
+        {
+          "公布日期": "1151110",
+          "證券代號": "24552",
+          "處置起訖時間": "1151111~1151117"
+        },
+        {
+          "公布日期": "1151110",
+          "證券代號": "24553",
+          "處置起訖時間": "1151111~1151117"
+        },
+        {
+          "公布日期": "1151110",
+          "證券代號": "62075",
+          "處置起訖時間": "1151111~1151117"
+        },
+        {
+          "公布日期": "1151109",
+          "證券代號": "4542",
+          "處置起訖時間": "1151110~1151116"
+        }
+      ],
+      "relevantRows": [
+        {
+          "公布日期": "1151110",
+          "證券代號": "24552",
+          "處置起訖時間": "1151111~1151117"
+        }
+      ],
+      "issuedOrDataDayExamples": [
+        "1151109",
+        "1151110",
+        "1151111"
+      ]
+    },
+    {
+      "label": "twse_suspension_11677",
+      "source": "https://www.twse.com.tw/exchangeReport/TWTAWU?response=open_data",
+      "observedAt": "2026-11-15T02:45:15.028026+00:00",
+      "http": 200,
+      "mime": "text/csv",
+      "sha256": "1bdd6daf1607f4485c8c021915b42ad0addc9ed4e39decbc5ee2c68c271a10f8",
+      "size": 169,
+      "resolvedUrl": "https://www.twse.com.tw/exchangeReport/TWTAWU?response=open_data",
+      "rowLengths": {
+        "7": 2
+      },
+      "header": [
+        "編號",
+        "證券代號",
+        "證券名稱",
+        "暫停交易日期",
+        "暫停交易時間",
+        "恢復交易日期",
+        "恢復交易時間"
+      ],
+      "rows": 1,
+      "samples": [
+        {
+          "證券代號": "2314",
+          "暫停交易日期": "1151110",
+          "暫停交易時間": "080000",
+          "恢復交易日期": "1151111",
+          "恢復交易時間": "080000"
+        }
+      ],
+      "issuedOrDataDayExamples": []
+    },
+    {
+      "label": "tpex_suspension_today_48664",
+      "source": "https://www.tpex.org.tw/web/stock/aftertrading/spendi/sprc_today_result.php?l=zh-tw&o=data",
+      "observedAt": "2026-11-15T02:45:15.629292+00:00",
+      "http": 200,
+      "mime": "application/csv",
+      "sha256": "89966cd1488fcadbb8d8d7e87590ef2ef73e13897fb30c971855d28a1144f4e8",
+      "size": 90,
+      "resolvedUrl": "https://www.tpex.org.tw/web/stock/aftertrading/spendi/sprc_today_result.php?l=zh-tw&o=data",
+      "rowLengths": {
+        "5": 2
+      },
+      "header": [
+        "資料日期",
+        "證券代號",
+        "證券名稱",
+        "暫停交易",
+        "恢復交易"
+      ],
+      "rows": 0,
+      "samples": [],
+      "issuedOrDataDayExamples": []
+    },
+    {
+      "label": "tpex_suspension_hist_48665",
+      "source": "https://www.tpex.org.tw/web/stock/aftertrading/spendi/sprc_result.php?l=zh-tw&o=data",
+      "observedAt": "2026-11-15T02:45:15.821524+00:00",
+      "http": 200,
+      "mime": "application/csv",
+      "sha256": "8154361432b10068670e2a2714e1d3bb4cde92b536b8abfa9f9a8aeb83e0acdd",
+      "size": 24867,
+      "resolvedUrl": "https://www.tpex.org.tw/web/stock/aftertrading/spendi/sprc_result.php?l=zh-tw&o=data",
+      "rowLengths": {
+        "8": 366
+      },
+      "header": [
+        "資料日期",
+        "編號",
+        "證券代號",
+        "證券名稱",
+        "暫停交易日期",
+        "暫停交易時間",
+        "恢復交易日期",
+        "恢復交易時間"
+      ],
+      "rows": 365,
+      "samples": [
+        {
+          "資料日期": "115",
+          "證券代號": "1788",
+          "暫停交易日期": "1150618",
+          "暫停交易時間": "080000",
+          "恢復交易日期": "",
+          "恢復交易時間": ""
+        },
+        {
+          "資料日期": "115",
+          "證券代號": "1788",
+          "暫停交易日期": "",
+          "暫停交易時間": "",
+          "恢復交易日期": "1150622",
+          "恢復交易時間": "080000"
+        },
+        {
+          "資料日期": "115",
+          "證券代號": "1799",
+          "暫停交易日期": "1150312",
+          "暫停交易時間": "080000",
+          "恢復交易日期": "",
+          "恢復交易時間": ""
+        },
+        {
+          "資料日期": "115",
+          "證券代號": "1799",
+          "暫停交易日期": "",
+          "暫停交易時間": "",
+          "恢復交易日期": "1150313",
+          "恢復交易時間": "080000"
+        },
+        {
+          "資料日期": "115",
+          "證券代號": "19094",
+          "暫停交易日期": "1150812",
+          "暫停交易時間": "080000",
+          "恢復交易日期": "",
+          "恢復交易時間": ""
+        },
+        {
+          "資料日期": "115",
+          "證券代號": "19094",
+          "暫停交易日期": "",
+          "暫停交易時間": "",
+          "恢復交易日期": "1150813",
+          "恢復交易時間": "080000"
+        },
+        {
+          "資料日期": "115",
+          "證券代號": "3226",
+          "暫停交易日期": "1150109",
+          "暫停交易時間": "080000",
+          "恢復交易日期": "",
+          "恢復交易時間": ""
+        },
+        {
+          "資料日期": "115",
+          "證券代號": "3226",
+          "暫停交易日期": "",
+          "暫停交易時間": "",
+          "恢復交易日期": "1150112",
+          "恢復交易時間": "080000"
+        }
+      ],
+      "issuedOrDataDayExamples": [
+        "115"
+      ]
+    }
+  ],
+  "datedControls": [
+    {
+      "market": "TWSE",
+      "day": "20261106",
+      "source": "https://www.twse.com.tw/announcement/punish?response=open_data&startDate=20261106&endDate=20261106",
+      "observedAt": "2026-11-15T02:46:32.415956+00:00",
+      "mime": "text/csv",
+      "http": 200,
+      "size": 4925,
+      "sha256": "2a66104058ed836c4c75b77af4fadfb8127960314fa0959434064d9ff105a11b",
+      "rows": 4,
+      "symbols": [
+        "088008",
+        "2466",
+        "4526",
+        "6213"
+      ]
+    },
+    {
+      "market": "TWSE",
+      "day": "20261113",
+      "source": "https://www.twse.com.tw/announcement/punish?response=open_data&startDate=20261113&endDate=20261113",
+      "observedAt": "2026-11-15T02:46:33.154091+00:00",
+      "mime": "text/csv",
+      "http": 200,
+      "size": 6075,
+      "sha256": "2559aefc2ddbeb5a3e61c03127d0fb5ccc34db6d80564216c6673a6b5479323f",
+      "rows": 5,
+      "symbols": [
+        "064019",
+        "2360",
+        "2455",
+        "3189",
+        "3532"
+      ]
+    },
+    {
+      "market": "TPEX",
+      "day": "20261106",
+      "source": "https://www.tpex.org.tw/www/zh-tw/bulletin/disposal?response=json&startDate=2026%2F11%2F06&endDate=2026%2F11%2F06",
+      "observedAt": "2026-11-15T02:46:33.264170+00:00",
+      "mime": "application/json",
+      "http": 200,
+      "size": 11016,
+      "sha256": "df2ae454c93b792da9e0b83a5098a971e48ac3cbf77b71baad04c76d2cb1b89c",
+      "status": "ok",
+      "date": "20261106~20261106",
+      "rootKeys": [
+        "tables",
+        "date",
+        "stat"
+      ],
+      "tables": [
+        {
+          "title": "上櫃處置有價證券",
+          "date": null,
+          "subtitle": "證券個數:7 總累計次數: 8",
+          "total": null,
+          "fields": [
+            "編號",
+            "公布日期",
+            "證券代號",
+            "證券名稱",
+            "累計",
+            "處置起訖時間",
+            "處置原因",
+            "處置措施",
+            "處置內容",
+            "收盤價",
+            "本益比",
+            " "
+          ],
+          "rows": 9,
+          "symbols": [
+            "",
+            "8099",
+            "8272",
+            "8291",
+            "3374",
+            "3691",
+            "36913",
+            "8099",
+            "3441"
+          ]
+        }
+      ]
+    },
+    {
+      "market": "TPEX",
+      "day": "20261113",
+      "source": "https://www.tpex.org.tw/www/zh-tw/bulletin/disposal?response=json&startDate=2026%2F11%2F13&endDate=2026%2F11%2F13",
+      "observedAt": "2026-11-15T02:46:33.384220+00:00",
+      "mime": "application/json",
+      "http": 200,
+      "size": 7103,
+      "sha256": "10a6bc3a6a872ac71d3f160b9ada20af648076251ecb3e7048587158680309e9",
+      "status": "ok",
+      "date": "20261113~20261113",
+      "rootKeys": [
+        "tables",
+        "date",
+        "stat"
+      ],
+      "tables": [
+        {
+          "title": "上櫃處置有價證券",
+          "date": null,
+          "subtitle": "證券個數:5 總累計次數: 5",
+          "total": null,
+          "fields": [
+            "編號",
+            "公布日期",
+            "證券代號",
+            "證券名稱",
+            "累計",
+            "處置起訖時間",
+            "處置原因",
+            "處置措施",
+            "處置內容",
+            "收盤價",
+            "本益比",
+            " "
+          ],
+          "rows": 6,
+          "symbols": [
+            "",
+            "54642",
+            "24552",
+            "24553",
+            "62075",
+            "4542"
+          ]
+        }
+      ]
+    },
+    {
+      "market": "TPEX_OPEN",
+      "day": "latest",
+      "source": "https://www.tpex.org.tw/openapi/v1/tpex_spendi_today",
+      "observedAt": "2026-11-15T02:46:33.592140+00:00",
+      "mime": "application/json",
+      "http": 200,
+      "size": 103,
+      "sha256": "a528ac19658aa26cb1cffba9bc837a915268549f6ea7a7442f6121c25d28b463",
+      "rows": 1,
+      "fields": [
+        "Date",
+        "SecuritiesCompanyCode",
+        "CompanyName",
+        "暫停交易",
+        "恢復交易"
+      ]
+    }
+  ],
+  "parsedControl": [
+    {
+      "case": "listed_overlap",
+      "http": 200,
+      "sha256": "2559aefc2ddbeb5a3e61c03127d0fb5ccc34db6d80564216c6673a6b5479323f",
+      "observedAt": "2026-11-15T02:47:01.716212+00:00",
+      "dispositions": [
+        {
+          "公布日期": "1151106",
+          "證券代號": "064019",
+          "處置起迄時間": "115/11/09～115/11/13"
+        },
+        {
+          "公布日期": "1151106",
+          "證券代號": "2360",
+          "處置起迄時間": "115/11/09～115/11/13"
+        },
+        {
+          "公布日期": "1151110",
+          "證券代號": "2455",
+          "處置起迄時間": "115/11/11～115/11/17"
+        },
+        {
+          "公布日期": "1151109",
+          "證券代號": "3189",
+          "處置起迄時間": "115/11/10～115/11/16"
+        },
+        {
+          "公布日期": "1151106",
+          "證券代號": "3532",
+          "處置起迄時間": "115/11/09～115/11/13"
+        }
+      ]
+    },
+    {
+      "case": "otc_overlap",
+      "http": 200,
+      "sha256": "10a6bc3a6a872ac71d3f160b9ada20af648076251ecb3e7048587158680309e9",
+      "observedAt": "2026-11-15T02:47:01.884944+00:00",
+      "overlapWindow": "20261113~20261113",
+      "dispositions": [
+        {
+          "公布日期": "115/11/11",
+          "證券代號": "54642",
+          "處置起訖時間": "115/11/12~115/11/18"
+        },
+        {
+          "公布日期": "115/11/10",
+          "證券代號": "24552",
+          "處置起訖時間": "115/11/11~115/11/17"
+        },
+        {
+          "公布日期": "115/11/10",
+          "證券代號": "24553",
+          "處置起訖時間": "115/11/11~115/11/17"
+        },
+        {
+          "公布日期": "115/11/10",
+          "證券代號": "62075",
+          "處置起訖時間": "115/11/11~115/11/17"
+        },
+        {
+          "公布日期": "115/11/09",
+          "證券代號": "4542",
+          "處置起訖時間": "115/11/10~115/11/16"
+        }
+      ],
+      "placeholderCount": 1
+    },
+    {
+      "case": "otc_empty_day",
+      "http": 200,
+      "sha256": "a528ac19658aa26cb1cffba9bc837a915268549f6ea7a7442f6121c25d28b463",
+      "observedAt": "2026-11-15T02:47:02.918561+00:00",
+      "emptySentinel": [
+        {
+          "date": "20261114",
+          "hasSymbol": false,
+          "valueLength": [
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ],
+  "semantics": {
+    "listedHistoricalFalseNegative": [
+      "2360",
+      "3532"
+    ],
+    "falseNegativeCause": "defaults to current overlap window, not as-of history; both are active through the earlier day",
+    "otcEmptyAsOfDay": "2026-11-14",
+    "otcEmptyProofScope": "explicit no row only on source named day; no prior open halt cleared",
+    "exactIdentifierForBonds": true,
+    "fullSessionTradingGateUsesOfficialStatusAndEffectiveCalendar": true,
+    "sameDayKnownAtCutoff": false,
+    "rightsForOtcWebsiteDatedExtraRoute": "not presumed from CSV catalog",
+    "vmWriteOrPublish": false
+  }
+}
