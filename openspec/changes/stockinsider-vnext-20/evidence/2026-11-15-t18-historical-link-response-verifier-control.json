@@ -1,0 +1,41 @@
+{
+  "verifiedAt": "2026-11-15T05:28:01Z",
+  "adapterCommit": "1d957e28ddf4ec4995792f10fc3f8f0eaeb1a6c6",
+  "adapterGitBlobs": {
+    "t18_detail_http.py": "77475141d47f80c0bfbe84a1784da93708caa4f0",
+    "t18_detail_read_adapter.py": "9e50c9f93ffe93509074f2ffdd961232bbda71f2",
+    "t18_same_clone.py": "54339416b9b08cd24eadcce55d46c07b2690d8b3"
+  },
+  "pinnedReleases": [
+    "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "dd59817f750684b093965f539dd4de466be13077"
+  ],
+  "identicalPublicSanitizerGitBlob": "6c58c75d99928ab95107a21690e3cb108c539a53",
+  "identicalCandidateDetailViewGitBlob": "20beb79a1bfbadc9e71d75b55bda1e05fe344a19",
+  "evidenceScope": "Contabo stdin-only non-root execution of exact verifier/guard and browser-safe URL function with synthetic values; static pinned component inspection",
+  "verifierResult": {
+    "python": "3.12.3",
+    "nonRoot": true,
+    "sourceGitObjectHashesVerified": true,
+    "groundedFactWithOmittedUrl": "ACCEPTED",
+    "queryHostPolicy": "URL_QUERY_HOST_POLICY",
+    "unrecognizedExchangeParameter": "URL_POLICY",
+    "acceptedSafeExchangeUrl": "ACCEPTED",
+    "deniedUrlUnexpectedlyInFactResponse": "ACCEPTED",
+    "unexpectedSeparateSourceLink": "ACCEPTED",
+    "acceptedSafeSourceUrlMissingFromResponse": "ACCEPTED",
+    "changedNumericalFact": "REJECTED",
+    "htmlTextProbeDistinguishesHref": false
+  },
+  "readerUrlPathResult": {
+    "runtime": "v22.23.1",
+    "nonRoot": true,
+    "nullableFactSourcePreserved": true,
+    "allowedExchangeQueryPreserved": true,
+    "productSanitizerAcceptsOrdinaryVendorQuery": true,
+    "sensitiveParameterKeyRemoved": true
+  },
+  "activeProductionWritten": false,
+  "actualBackupRestoredThisTest": false,
+  "actualNextHttpRetested": false
+}
